@@ -1,0 +1,17 @@
+{
+  "name": "NeonWalletMobile",
+  "displayName": "NeonWalletMobile",
+  "expo": {
+    "name": "NeonWalletMobile",
+    "slug": "NeonWalletMobile",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
