@@ -1,9 +1,10 @@
+import {StackNavigationProp} from '@react-navigation/stack'
 import React, {Component} from 'react'
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native'
-import { StackNavigationProp } from '@react-navigation/stack'
+import tailwind from 'tailwind-rn'
 
 type HomeStackParametersList = {
-  PageOne: undefined
+  TouchIdTest: undefined
   PageTwo: undefined
 }
 
@@ -14,24 +15,33 @@ interface Props {
 export class Home extends Component<Props> {
   public render() {
     return (
-      <View style={this.styles.container}>
-        <Text>This is the Home</Text>
-        <TouchableHighlight onPress={() => this.props.navigation.navigate('PageOne')}>
-          <Text>Go to PageOne</Text>
+      <View style={tailwind('h-full bg-white items-center justify-center')}>
+        <Text style={tailwind('text-lg mb-4')}>This is the Home</Text>
+        <TouchableHighlight
+          style={[tailwind('mb-2'), this.styles.button]}
+          onPress={() => this.props.navigation.navigate('TouchIdTest')}
+        >
+          <Text style={this.styles.buttonText}>Go to TouchIdTest</Text>
         </TouchableHighlight>
-        <TouchableHighlight onPress={() => this.props.navigation.navigate('PageTwo')}>
-          <Text>Go to PageTwo</Text>
+        <TouchableHighlight
+          style={[tailwind('mb-2'), this.styles.button]}
+          onPress={() => this.props.navigation.navigate('PageTwo')}
+        >
+          <Text style={this.styles.buttonText}>Go to PageTwo</Text>
         </TouchableHighlight>
       </View>
     )
   }
 
   styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+    button: {
+      padding: 8,
+      backgroundColor: '#68a0cf',
+      borderRadius: 10,
+    },
+    buttonText: {
+      color: '#fff',
+      textAlign: 'center',
     },
   })
 }
