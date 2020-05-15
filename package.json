@@ -17,6 +17,7 @@
     "eslint": "^7.0.0",
     "eslint-config-universe": "^3.0.0",
     "expo": "~37.0.3",
+    "expo-local-authentication": "^9.0.0",
     "expo-updates": "~0.2.0",
     "prettier": "^2.0.5",
     "react": "~16.9.0",
