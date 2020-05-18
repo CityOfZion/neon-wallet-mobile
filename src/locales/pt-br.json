@@ -1,0 +1,10 @@
+{
+  "languages": {
+    "de": "Alemão",
+    "en": "Inglês",
+    "ptBR": "Português"
+  },
+  "home": {
+    "welcome": "Bem-vindo ao Neon Wallet!"
+  }
+}

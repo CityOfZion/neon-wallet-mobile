@@ -1,7 +1,10 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import React, {Component} from 'react'
+import React, {Component, useState} from 'react'
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native'
 import tailwind from 'tailwind-rn'
+import i18n from '../i18n'
+import {useDispatch, useSelector} from 'react-redux'
+import {setLocale} from '../store/actions/locale'
 
 type HomeStackParametersList = {
   TouchIdTest: undefined
@@ -12,36 +15,64 @@ interface Props {
   navigation: StackNavigationProp<HomeStackParametersList>
 }
 
-export class Home extends Component<Props> {
-  public render() {
-    return (
-      <View style={tailwind('h-full bg-white items-center justify-center')}>
-        <Text style={tailwind('text-lg mb-4')}>This is the Home</Text>
-        <TouchableHighlight
-          style={[tailwind('mb-2'), this.styles.button]}
-          onPress={() => this.props.navigation.navigate('TouchIdTest')}
-        >
-          <Text style={this.styles.buttonText}>Go to TouchIdTest</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          style={[tailwind('mb-2'), this.styles.button]}
-          onPress={() => this.props.navigation.navigate('PageTwo')}
-        >
-          <Text style={this.styles.buttonText}>Go to PageTwo</Text>
-        </TouchableHighlight>
-      </View>
-    )
+const styles = StyleSheet.create({
+  button: {
+    padding: 8,
+    backgroundColor: '#68a0cf',
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+  },
+})
+
+const Home = (props: Props) => {
+  const [currentLocale, setCurrentLocale] = useState('en')
+  const dispatch = useDispatch()
+
+  const changeLocale = (locale: string) => {
+    dispatch(setLocale(locale))
+    setCurrentLocale(locale)
   }
 
-  styles = StyleSheet.create({
-    button: {
-      padding: 8,
-      backgroundColor: '#68a0cf',
-      borderRadius: 10,
-    },
-    buttonText: {
-      color: '#fff',
-      textAlign: 'center',
-    },
-  })
+  return (
+    <View style={tailwind('h-full bg-white items-center justify-center')}>
+      <Text style={tailwind('text-lg mb-4')}>{i18n.t('home.welcome')}</Text>
+      <TouchableHighlight
+        style={[tailwind('mb-2'), styles.button]}
+        onPress={() => props.navigation.navigate('TouchIdTest')}
+      >
+        <Text style={styles.buttonText}>Go to TouchIdTest</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        style={[tailwind('mb-2'), styles.button]}
+        onPress={() => props.navigation.navigate('PageTwo')}
+      >
+        <Text style={styles.buttonText}>Go to PageTwo</Text>
+      </TouchableHighlight>
+      <View style={tailwind('mt-8 flex-row justify-around')}>
+        <TouchableHighlight
+          style={[tailwind('mx-2'), styles.button]}
+          onPress={() => changeLocale('en')}
+        >
+          <Text style={styles.buttonText}>{i18n.t('languages.en')}</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          style={[tailwind('mx-2'), styles.button]}
+          onPress={() => changeLocale('de')}
+        >
+          <Text style={styles.buttonText}>{i18n.t('languages.de')}</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          style={[tailwind('mx-2'), styles.button]}
+          onPress={() => changeLocale('ptBR')}
+        >
+          <Text style={styles.buttonText}>{i18n.t('languages.ptBR')}</Text>
+        </TouchableHighlight>
+      </View>
+    </View>
+  )
 }
+
+export default Home
