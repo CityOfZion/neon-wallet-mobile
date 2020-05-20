@@ -11,11 +11,13 @@ import SecondTabTestPage from './scenes/SecondTabTestPage'
 import {createStore, combineReducers} from 'redux'
 import {Provider} from 'react-redux'
 import {rootReducer} from './store/reducers/root'
+import {QrCodeGenerateTest} from './scenes/QrCodeGenerateTest'
 
 type RootStackParamList = {
   Home: undefined
   TouchIdTest: undefined
   PageTwo: undefined
+  QrCodeGenerateTest: undefined
 }
 
 const store = createStore(rootReducer)
@@ -30,6 +32,7 @@ function RootStackScreen() {
       <RootStack.Screen name="Home" component={Home} />
       <RootStack.Screen name="TouchIdTest" component={TouchIdTest} />
       <RootStack.Screen name="PageTwo" component={PageTwo} />
+      <RootStack.Screen name="QrCodeGenerateTest" component={QrCodeGenerateTest} />
     </RootStack.Navigator>
   )
 }
