@@ -5,6 +5,7 @@ import tailwind from 'tailwind-rn'
 import i18n from '../i18n'
 import {useDispatch, useSelector} from 'react-redux'
 import {setLocale} from '../store/actions/locale'
+import { expo } from '../../app.json';
 
 type HomeStackParametersList = {
   TouchIdTest: undefined
@@ -25,6 +26,16 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
   },
+  footer: {
+    color: '#fff',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
+    marginBottom: 10
+  },
+
 })
 
 const Home = (props: Props) => {
@@ -71,7 +82,12 @@ const Home = (props: Props) => {
           <Text style={styles.buttonText}>{i18n.t('languages.ptBR')}</Text>
         </TouchableHighlight>
       </View>
+      <View style={styles.footer}>
+        <Text> Version: {expo.version}</Text>
+
+      </View>
     </View>
+
   )
 }
 
