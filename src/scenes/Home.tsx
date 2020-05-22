@@ -10,6 +10,7 @@ import { expo } from '~/app.json'
 
 type HomeStackParametersList = {
   TouchIdTest: undefined
+  QRCodeScanTest: undefined
   QrCodeGenerateTest: undefined
   NeonJSTest: undefined
   ChartTest: undefined
@@ -58,6 +59,12 @@ const Home = (props: Props) => {
         onPress={() => props.navigation.navigate('TouchIdTest')}
       >
         <Text style={styles.buttonText}>Go to TouchIdTest</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        style={[tailwind('mb-2'), styles.button]}
+        onPress={() => props.navigation.navigate('QRCodeScanTest')}
+      >
+        <Text style={styles.buttonText}>QR Code Scan</Text>
       </TouchableHighlight>
       <TouchableHighlight
         style={[tailwind('mb-2'), styles.button]}

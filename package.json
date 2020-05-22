@@ -21,6 +21,7 @@
     "eslint": "^7.0.0",
     "eslint-config-universe": "^3.0.0",
     "expo": "~37.0.3",
+    "expo-barcode-scanner": "^8.1.0",
     "expo-local-authentication": "^9.0.0",
     "expo-updates": "~0.2.0",
     "i18n-js": "^3.5.1",
