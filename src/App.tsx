@@ -9,7 +9,7 @@ import {ROUTES} from '../constants'
 import Home from './scenes/Home'
 import NeonJSTest from './scenes/NeonJSTest'
 import QrCodeGenerateTest from './scenes/QrCodeGenerateTest'
-import SecondTabTestPage from './scenes/SecondTabTestPage'
+import Onboarding from './scenes/Onboarding'
 import TouchIdTest from './scenes/TouchIdTest'
 import {rootReducer} from './store/reducers/root'
 
@@ -52,7 +52,7 @@ export default function App() {
       <NavigationContainer>
         <Tab.Navigator>
           <Tab.Screen name="Main Tab" component={RootStackScreen} />
-          <Tab.Screen name="Second Tab" component={SecondTabTestPage} />
+          <Tab.Screen name="Onboarding" component={Onboarding} options={{tabBarVisible: false}} />
         </Tab.Navigator>
       </NavigationContainer>
     </Provider>
