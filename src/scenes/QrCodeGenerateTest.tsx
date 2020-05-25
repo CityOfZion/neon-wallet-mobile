@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react'
+import React, {Component} from 'react'
 import {
   StyleSheet,
   View,
@@ -34,7 +34,7 @@ export class QrCodeGenerateTest extends Component<IProps, IState> {
     }
   }
 
-  getTextInputValue = () => {
+  getTextInputValue() {
     const showQr = this.state.inputValue.length > 0
 
     if (showQr) {
