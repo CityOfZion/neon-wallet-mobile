@@ -1,9 +1,10 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import React, {Component, useState} from 'react'
+import React, {useState} from 'react'
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native'
+import {useDispatch} from 'react-redux'
 import tailwind from 'tailwind-rn'
+
 import i18n from '../i18n'
-import {useDispatch, useSelector} from 'react-redux'
 import {setLocale} from '../store/actions/locale'
 import { expo } from '../../app.json';
 
@@ -11,6 +12,7 @@ type HomeStackParametersList = {
   TouchIdTest: undefined
   PageTwo: undefined
   QrCodeGenerateTest: undefined
+  NeonJSTest: undefined
 }
 
 interface Props {
@@ -59,9 +61,9 @@ const Home = (props: Props) => {
       </TouchableHighlight>
       <TouchableHighlight
         style={[tailwind('mb-2'), styles.button]}
-        onPress={() => props.navigation.navigate('PageTwo')}
+        onPress={() => props.navigation.navigate('NeonJSTest')}
       >
-        <Text style={styles.buttonText}>Go to PageTwo</Text>
+        <Text style={styles.buttonText}>Go to NeonJsTest</Text>
       </TouchableHighlight>
 
       <TouchableHighlight

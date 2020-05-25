@@ -6,9 +6,11 @@
     "web": "expo start --web",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "rndebugger-open"
   },
   "dependencies": {
+    "@cityofzion/neon-js": "^4.8.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.4.5",
     "@react-navigation/native": "^5.3.0",
@@ -46,6 +48,7 @@
     "@types/react-native": "~0.61.23",
     "babel-preset-expo": "~8.1.0",
     "jest-expo": "~37.0.0",
+    "react-native-debugger-open": "^0.3.24",
     "typescript": "~3.8.3"
   },
   "jest": {

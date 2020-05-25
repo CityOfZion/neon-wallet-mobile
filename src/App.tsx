@@ -1,15 +1,14 @@
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import React from 'react'
+import {Provider} from 'react-redux'
+import {createStore, combineReducers} from 'redux'
 
 import Home from './scenes/Home'
-import PageTwo from './scenes/PageTwo'
-import {TouchIdTest} from './scenes/TouchIdTest'
+import {NeonJSTest} from './scenes/NeonJSTest'
 import SecondTabTestPage from './scenes/SecondTabTestPage'
-
-import {createStore, combineReducers} from 'redux'
-import {Provider} from 'react-redux'
+import {TouchIdTest} from './scenes/TouchIdTest'
 import {rootReducer} from './store/reducers/root'
 import {QrCodeGenerateTest} from './scenes/QrCodeGenerateTest'
 
@@ -18,6 +17,7 @@ type RootStackParamList = {
   TouchIdTest: undefined
   PageTwo: undefined
   QrCodeGenerateTest: undefined
+  NeonJSTest: undefined
 }
 
 const store = createStore(rootReducer)
@@ -33,6 +33,7 @@ function RootStackScreen() {
       <RootStack.Screen name="TouchIdTest" component={TouchIdTest} />
       <RootStack.Screen name="PageTwo" component={PageTwo} />
       <RootStack.Screen name="QrCodeGenerateTest" component={QrCodeGenerateTest} />
+      <RootStack.Screen name="NeonJSTest" component={NeonJSTest} />
     </RootStack.Navigator>
   )
 }
