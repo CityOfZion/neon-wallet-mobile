@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {useState} from 'react'
 import {
   StyleSheet,
   View,
@@ -8,77 +8,67 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native'
+// TODO: define a typed module for this dependency
+// @ts-ignore
 import {QRCode} from 'react-native-custom-qr-codes-expo'
 
-const DismissKeyboard = ({children}) => (
+const DismissKeyboard: React.FC<{children: React.ReactNode}> = ({
+  children,
+}: {
+  children: React.ReactNode
+}) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     {children}
   </TouchableWithoutFeedback>
 )
 
-interface IProps {}
+const QrCodeGenerateTest: React.FC<object> = () => {
+  const [inputValue, setInputValue] = useState('')
+  const [showQrCode, setShowQrCode] = useState(false)
+  const [valueForQr, setValueForQr] = useState('default')
 
-interface IState {
-  inputValue: string
-  valueForQRCode: string
-  showQrCode: boolean
-}
-
-export class QrCodeGenerateTest extends Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-    this.state = {
-      inputValue: '',
-      valueForQRCode: 'default',
-      showQrCode: false,
-    }
-  }
-
-  getTextInputValue() {
-    const showQr = this.state.inputValue.length > 0
+  function getTextInputValue() {
+    const showQr = inputValue.length > 0
 
     if (showQr) {
-      this.setState({valueForQRCode: this.state.inputValue})
+      setValueForQr(inputValue)
       Keyboard.dismiss()
     }
-
-    this.setState({showQrCode: showQr})
+    setShowQrCode(showQr)
   }
 
-  render() {
-    return (
-      <DismissKeyboard>
-        <View style={styles.MainContainer}>
-          {this.state.showQrCode && (
-            <QRCode
-              content={this.state.valueForQRCode}
-              size={250}
-              bgColor="#000"
-              fgColor="#fff"
-              logoSize={50}
-              logo={require('../image/neo-icon.png')}
-            />
-          )}
-
-          <TextInput
-            // Input to get the value to set on QRCode
-            style={styles.TextInputStyle}
-            onChangeText={(text) => this.setState({inputValue: text})}
-            underlineColorAndroid="transparent"
-            placeholder="Enter text to Generate QR Code"
+  return (
+    <DismissKeyboard>
+      <View style={styles.MainContainer}>
+        {showQrCode && (
+          <QRCode
+            content={valueForQr}
+            size={250}
+            bgColor="#000"
+            fgColor="#fff"
+            logoSize={50}
+            logo={require('../image/neo-icon.png')}
           />
+        )}
 
-          <TouchableOpacity
-            onPress={this.getTextInputValue}
-            activeOpacity={0.7}
-            style={styles.button}
-          >
-            <Text style={styles.TextStyle}> Generate QR Code </Text>
-          </TouchableOpacity>
-        </View>
-      </DismissKeyboard>
-    )
-  }
+        <TextInput
+          // Input to get the value to set on QRCode
+          style={styles.TextInputStyle}
+          onChangeText={(text) => setInputValue(text)}
+          underlineColorAndroid="transparent"
+          placeholder="Enter text to Generate QR Code"
+        />
+
+        <TouchableOpacity
+          onPress={getTextInputValue}
+          activeOpacity={0.7}
+          style={styles.button}
+        >
+          <Text style={styles.TextStyle}> Generate QR Code </Text>
+        </TouchableOpacity>
+      </View>
+    </DismissKeyboard>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -112,3 +102,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 })
+
+export default QrCodeGenerateTest
