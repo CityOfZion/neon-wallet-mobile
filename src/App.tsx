@@ -15,7 +15,6 @@ import {QrCodeGenerateTest} from './scenes/QrCodeGenerateTest'
 type RootStackParamList = {
   Home: undefined
   TouchIdTest: undefined
-  PageTwo: undefined
   QrCodeGenerateTest: undefined
   NeonJSTest: undefined
 }
@@ -31,7 +30,6 @@ function RootStackScreen() {
     <RootStack.Navigator initialRouteName="Home">
       <RootStack.Screen name="Home" component={Home} />
       <RootStack.Screen name="TouchIdTest" component={TouchIdTest} />
-      <RootStack.Screen name="PageTwo" component={PageTwo} />
       <RootStack.Screen name="QrCodeGenerateTest" component={QrCodeGenerateTest} />
       <RootStack.Screen name="NeonJSTest" component={NeonJSTest} />
     </RootStack.Navigator>
