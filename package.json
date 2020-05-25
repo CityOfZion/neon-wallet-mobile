@@ -6,8 +6,7 @@
     "web": "expo start --web",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint",
-    "postinstall": "rndebugger-open"
+    "lint": "eslint"
   },
   "dependencies": {
     "@cityofzion/neon-js": "^4.8.0",
@@ -49,7 +48,6 @@
     "babel-preset-expo": "~8.1.0",
     "eslint-plugin-react": "^7.20.0",
     "jest-expo": "~37.0.0",
-    "react-native-debugger-open": "^0.3.24",
     "typescript": "~3.8.3"
   },
   "jest": {

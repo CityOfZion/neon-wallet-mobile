@@ -10,7 +10,6 @@ import { expo } from '../../app.json';
 
 type HomeStackParametersList = {
   TouchIdTest: undefined
-  PageTwo: undefined
   QrCodeGenerateTest: undefined
   NeonJSTest: undefined
 }

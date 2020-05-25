@@ -16,7 +16,6 @@ import {rootReducer} from './store/reducers/root'
 type RootStackParamList = {
   Home: undefined
   TouchIdTest: undefined
-  PageTwo: undefined
   QrCodeGenerateTest: undefined
   NeonJSTest: undefined
 }
@@ -29,7 +28,7 @@ const Tab = createBottomTabNavigator()
 
 function RootStackScreen() {
   return (
-    <RootStack.Navigator initialRouteName="Home">
+    <RootStack.Navigator initialRouteName={ROUTES.HOME.name}>
       <RootStack.Screen name={ROUTES.HOME.name} component={Home} />
       <RootStack.Screen
         name={ROUTES.TOUCH_ID_TEST.name}
