@@ -10,6 +10,7 @@ import { expo } from '../../app.json';
 type HomeStackParametersList = {
   TouchIdTest: undefined
   PageTwo: undefined
+  QrCodeGenerateTest: undefined
 }
 
 interface Props {
@@ -62,6 +63,13 @@ const Home = (props: Props) => {
       >
         <Text style={styles.buttonText}>Go to PageTwo</Text>
       </TouchableHighlight>
+
+      <TouchableHighlight
+        style={[tailwind('mb-2'), styles.button]}
+        onPress={() => props.navigation.navigate('QrCodeGenerateTest')}
+      >
+        <Text style={styles.buttonText}>Go to generate QR code</Text>
+      </TouchableHighlight>
       <View style={tailwind('mt-8 flex-row justify-around')}>
         <TouchableHighlight
           style={[tailwind('mx-2'), styles.button]}
@@ -81,6 +89,7 @@ const Home = (props: Props) => {
         >
           <Text style={styles.buttonText}>{i18n.t('languages.ptBR')}</Text>
         </TouchableHighlight>
+
       </View>
       <View style={styles.footer}>
         <Text> Version: {expo.version}</Text>
