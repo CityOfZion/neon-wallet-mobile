@@ -1,39 +1,39 @@
-import * as LocalAuthentication from 'expo-local-authentication'
-import {Component} from 'react'
+import {wallet} from '@cityofzion/neon-core'
+import React, {Component} from 'react'
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native'
 import tailwind from 'tailwind-rn'
 
 interface IProps {}
 
 interface IState {
-  authenticated: boolean
+  account: wallet.Account | null
 }
 
-export class TouchIdTest extends Component<IProps, IState> {
+export class NeonJSTest extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
 
     this.state = {
-      authenticated: false,
+      account: null,
     }
   }
 
-  async askForAuthentication() {
-    const result = await LocalAuthentication.authenticateAsync()
-    this.setState({authenticated: result.success})
+  async createAccount() {
+    const account = new wallet.Account(wallet.generatePrivateKey())
+    this.setState({account})
   }
 
   public render() {
     return (
       <View style={tailwind('h-full bg-white items-center justify-center')}>
         <TouchableHighlight
-          onPress={() => this.askForAuthentication()}
+          onPress={() => this.createAccount()}
           style={[tailwind('mb-2'), this.styles.button]}
         >
-          <Text style={this.styles.buttonText}>Ask for Authentication</Text>
+          <Text style={this.styles.buttonText}>Create Account</Text>
         </TouchableHighlight>
         <Text>
-          {this.state.authenticated ? 'Authenticated' : 'Not Authenticated'}
+          {this.state.account?.address ?? 'No Account'}
         </Text>
       </View>
     )
