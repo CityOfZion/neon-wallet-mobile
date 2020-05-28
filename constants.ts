@@ -23,4 +23,8 @@ export const ROUTES = {
     id: 'CHART_TEST',
     name: 'ChartTest' as 'ChartTest',
   },
+  QR_CODE_SCAN_TEST: {
+    id: 'QR_CODE_SCAN_TEST',
+    name: 'QRCodeScanTest' as 'QRCodeScanTest',
+  },
 }

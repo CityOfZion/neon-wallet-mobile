@@ -9,6 +9,7 @@ import {ROUTES} from '~/constants'
 import Home from '~src/scenes/Home'
 import NeonJSTest from '~src/scenes/NeonJSTest'
 import QrCodeGenerateTest from '~src/scenes/QrCodeGenerateTest'
+import QRCodeScanTest from './scenes/QRCodeScanTest'
 import Onboarding from '~src/scenes/Onboarding'
 import ChartTestPage from '~src/scenes/ChartTestPage'
 import TouchIdTest from '~src/scenes/TouchIdTest'
@@ -17,6 +18,7 @@ import {rootReducer} from '~src/store/reducers/root'
 type RootStackParamList = {
   Home: undefined
   TouchIdTest: undefined
+  QRCodeScanTest: undefined
   QrCodeGenerateTest: undefined
   NeonJSTest: undefined
   ChartTest: undefined
@@ -47,6 +49,10 @@ function RootStackScreen() {
       <RootStack.Screen
         name={ROUTES.CHART_TEST.name}
         component={ChartTestPage}
+      />
+      <RootStack.Screen
+        name={ROUTES.QR_CODE_SCAN_TEST.name}
+        component={QRCodeScanTest}
       />
     </RootStack.Navigator>
   )
