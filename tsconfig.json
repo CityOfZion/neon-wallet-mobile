@@ -7,6 +7,14 @@
     "noEmit": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "strict": true
+    "strict": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./*"],
+      "~src/*": [
+        "src/*"
+      ]
+    }
   }
 }
