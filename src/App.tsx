@@ -12,12 +12,14 @@ import QrCodeGenerateTest from './scenes/QrCodeGenerateTest'
 import SecondTabTestPage from './scenes/SecondTabTestPage'
 import TouchIdTest from './scenes/TouchIdTest'
 import {rootReducer} from './store/reducers/root'
+import ChartTestPage from './scenes/ChartTestPage'
 
 type RootStackParamList = {
   Home: undefined
   TouchIdTest: undefined
   QrCodeGenerateTest: undefined
   NeonJSTest: undefined
+  ChartTest: undefined
 }
 
 const store = createStore(rootReducer)
@@ -41,6 +43,10 @@ function RootStackScreen() {
       <RootStack.Screen
         name={ROUTES.NEON_JS_TEST.name}
         component={NeonJSTest}
+      />
+      <RootStack.Screen
+        name={ROUTES.CHART_TEST.name}
+        component={ChartTestPage}
       />
     </RootStack.Navigator>
   )

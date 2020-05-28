@@ -19,4 +19,8 @@ export const ROUTES = {
     id: 'NEON_JS_TEST',
     name: 'NeonJSTest' as 'NeonJSTest',
   },
+  CHART_TEST: {
+    id: 'CHART_TEST',
+    name: 'ChartTest' as 'ChartTest',
+  },
 }
