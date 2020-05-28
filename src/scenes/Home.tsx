@@ -4,9 +4,9 @@ import {StyleSheet, Text, TouchableHighlight, View} from 'react-native'
 import {useDispatch} from 'react-redux'
 import tailwind from 'tailwind-rn'
 
-import i18n from '../i18n'
-import {setLocale} from '../store/actions/locale'
-import { expo } from '../../app.json';
+import i18n from '~src/i18n'
+import {setLocale} from '~src/store/actions/locale'
+import { expo } from '~/app.json'
 
 type HomeStackParametersList = {
   TouchIdTest: undefined

@@ -5,14 +5,14 @@ import React from 'react'
 import {Provider} from 'react-redux'
 import {createStore} from 'redux'
 
-import {ROUTES} from '../constants'
-import Home from './scenes/Home'
-import NeonJSTest from './scenes/NeonJSTest'
-import QrCodeGenerateTest from './scenes/QrCodeGenerateTest'
-import Onboarding from './scenes/Onboarding'
-import TouchIdTest from './scenes/TouchIdTest'
-import {rootReducer} from './store/reducers/root'
-import ChartTestPage from './scenes/ChartTestPage'
+import {ROUTES} from '~/constants'
+import Home from '~src/scenes/Home'
+import NeonJSTest from '~src/scenes/NeonJSTest'
+import QrCodeGenerateTest from '~src/scenes/QrCodeGenerateTest'
+import Onboarding from '~src/scenes/Onboarding'
+import ChartTestPage from '~src/scenes/ChartTestPage'
+import TouchIdTest from '~src/scenes/TouchIdTest'
+import {rootReducer} from '~src/store/reducers/root'
 
 type RootStackParamList = {
   Home: undefined
