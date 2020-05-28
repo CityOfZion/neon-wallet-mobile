@@ -28,6 +28,7 @@
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "~0.61.5",
+    "react-native-chart-kit": "^5.6.0",
     "react-native-custom-qr-codes-expo": "^2.2.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-reanimated": "^1.8.0",

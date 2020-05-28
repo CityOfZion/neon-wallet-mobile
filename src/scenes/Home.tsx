@@ -12,6 +12,7 @@ type HomeStackParametersList = {
   TouchIdTest: undefined
   QrCodeGenerateTest: undefined
   NeonJSTest: undefined
+  ChartTest: undefined
 }
 
 interface Props {
@@ -64,12 +65,17 @@ const Home = (props: Props) => {
       >
         <Text style={styles.buttonText}>Go to NeonJsTest</Text>
       </TouchableHighlight>
-
       <TouchableHighlight
         style={[tailwind('mb-2'), styles.button]}
         onPress={() => props.navigation.navigate('QrCodeGenerateTest')}
       >
         <Text style={styles.buttonText}>Go to generate QR code</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        style={[tailwind('mb-2'), styles.button]}
+        onPress={() => props.navigation.navigate('ChartTest')}
+      >
+        <Text style={styles.buttonText}>Go to Chart Test Page</Text>
       </TouchableHighlight>
       <View style={tailwind('mt-8 flex-row justify-around')}>
         <TouchableHighlight
