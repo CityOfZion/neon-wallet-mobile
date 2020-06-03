@@ -63,8 +63,12 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Tab.Navigator>
-          <Tab.Screen name="Main Tab" component={RootStackScreen} />
-          <Tab.Screen name="Onboarding" component={Onboarding} options={{tabBarVisible: false}} />
+          <Tab.Screen name="MainTab" component={RootStackScreen} />
+          <Tab.Screen
+            name="Onboarding"
+            component={Onboarding}
+            options={{tabBarVisible: false}}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     </Provider>
