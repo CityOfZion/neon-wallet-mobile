@@ -1,18 +1,22 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
+import {RequestConfig} from '@simpli/serialized-request'
 import React from 'react'
 import {Provider} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
+import 'reflect-metadata'
+
+import QRCodeScanTest from './scenes/QRCodeScanTest'
 
 import {ROUTES} from '~/constants'
+import {HttpConfig} from '~src/config/HttpConfig'
+import ChartTestPage from '~src/scenes/ChartTestPage'
 import Home from '~src/scenes/Home'
 import NeonJSTest from '~src/scenes/NeonJSTest'
-import QrCodeGenerateTest from '~src/scenes/QrCodeGenerateTest'
-import QRCodeScanTest from './scenes/QRCodeScanTest'
 import Onboarding from '~src/scenes/Onboarding'
-import ChartTestPage from '~src/scenes/ChartTestPage'
+import QrCodeGenerateTest from '~src/scenes/QrCodeGenerateTest'
 import TouchIdTest from '~src/scenes/TouchIdTest'
 import Wallet from '~src/scenes/Wallet'
 import {rootReducer} from '~src/store/reducers/root'
@@ -32,6 +36,9 @@ const store = createStore(rootReducer, applyMiddleware(thunk))
 const RootStack = createStackNavigator<RootStackParamList>()
 
 const Tab = createBottomTabNavigator()
+
+const httpConfig = new HttpConfig()
+RequestConfig.axios = httpConfig.axiosInstance
 
 function RootStackScreen() {
   return (
@@ -57,10 +64,7 @@ function RootStackScreen() {
         name={ROUTES.QR_CODE_SCAN_TEST.name}
         component={QRCodeScanTest}
       />
-      <RootStack.Screen
-        name={ROUTES.WALLET.name}
-        component={Wallet}
-      />
+      <RootStack.Screen name={ROUTES.WALLET.name} component={Wallet} />
     </RootStack.Navigator>
   )
 }

@@ -1,12 +1,13 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native'
 import {useDispatch} from 'react-redux'
 import tailwind from 'tailwind-rn'
 
+import {expo} from '~/app.json'
 import i18n from '~src/i18n'
 import {setLocale} from '~src/store/actions/locale'
-import { expo } from '~/app.json'
+import {NeoNode} from '~src/models/NeoNode'
 
 type HomeStackParametersList = {
   TouchIdTest: undefined
@@ -38,14 +39,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     bottom: 0,
-    marginBottom: 10
+    marginBottom: 10,
   },
-
 })
 
 const Home = (props: Props) => {
-  const [currentLocale, setCurrentLocale] = useState('en')
+  const [currentLocale, setCurrentLocale] = useState<string>('en')
+  const [nodes, setNodes] = useState<NeoNode[]>([])
+
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    populate()
+  }, [])
+
+  const populate = async () => {
+    setNodes(await NeoNode.getAllNodes())
+  }
 
   const changeLocale = (locale: string) => {
     dispatch(setLocale(locale))
@@ -110,14 +120,13 @@ const Home = (props: Props) => {
         >
           <Text style={styles.buttonText}>{i18n.t('languages.ptBR')}</Text>
         </TouchableHighlight>
-
       </View>
       <View style={styles.footer}>
+        <Text> First Node URL: {nodes[0] && nodes[0].url}</Text>
+        <Text> First Node Height: {nodes[0] && nodes[0].height}</Text>
         <Text> Version: {expo.version}</Text>
-
       </View>
     </View>
-
   )
 }
 

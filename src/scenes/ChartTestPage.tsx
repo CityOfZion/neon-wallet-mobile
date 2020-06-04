@@ -1,7 +1,7 @@
 import React from 'react'
 import {Dimensions, Text, View} from 'react-native'
-import tailwind from 'tailwind-rn'
 import {LineChart} from 'react-native-chart-kit'
+import tailwind from 'tailwind-rn'
 
 export default function ChartTestPage() {
   const mockData = Array.apply(null, Array(30)).map((x) => Math.random() * 100)
@@ -30,9 +30,9 @@ export default function ChartTestPage() {
           color: (opacity = 255) => `rgba(63, 208, 174, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(123, 208, 124, ${opacity})`,
           propsForDots: {
-            r: "4",
-            strokeWidth: "1",
-            stroke: "#394152"
+            r: '4',
+            strokeWidth: '1',
+            stroke: '#394152',
           },
           style: {
             borderRadius: 16,

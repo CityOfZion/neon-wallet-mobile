@@ -1,5 +1,5 @@
-import {ISetLocaleAction, SET_LOCALE} from '../actions/locale'
 import i18n from '../../i18n'
+import {ISetLocaleAction, SET_LOCALE} from '../actions/locale'
 
 interface ILocaleState {
   locale: string
@@ -9,7 +9,10 @@ const localeState: ILocaleState = {
   locale: 'en',
 }
 
-export const localeReducer = (state: ILocaleState = localeState, action: ISetLocaleAction) => {
+export const localeReducer = (
+  state: ILocaleState = localeState,
+  action: ISetLocaleAction
+) => {
   switch (action.type) {
     case SET_LOCALE:
       if (Object.keys(i18n.translations).includes(action.locale)) {

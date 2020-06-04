@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from 'react'
-import { Text, View, StyleSheet, Button } from 'react-native'
-import { BarCodeScanner } from 'expo-barcode-scanner'
+import {BarCodeScanner} from 'expo-barcode-scanner'
+import React, {useState, useEffect} from 'react'
+import {Text, View, StyleSheet, Button} from 'react-native'
 
 export default function QRCodeScanTest() {
   const [hasPermission, setHasPermission] = useState(true)
   const [scanned, setScanned] = useState(false)
 
   useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync()
+    ;(async () => {
+      const {status} = await BarCodeScanner.requestPermissionsAsync()
       setHasPermission(status === 'granted')
     })()
   }, [])
 
   // @ts-ignore
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = ({type, data}) => {
     if (!scanned) {
       setScanned(true)
+      // eslint-disable-next-line no-undef
       alert(`Bar code with type ${type} and data ${data} has been scanned!`)
     }
   }
@@ -33,13 +34,16 @@ export default function QRCodeScanTest() {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-end',
-      }}>
+      }}
+    >
       <BarCodeScanner
         onBarCodeScanned={handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
 
-      {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+      {scanned && (
+        <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />
+      )}
     </View>
   )
 }
