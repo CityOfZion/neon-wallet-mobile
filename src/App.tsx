@@ -13,6 +13,7 @@ import QRCodeScanTest from './scenes/QRCodeScanTest'
 import Onboarding from '~src/scenes/Onboarding'
 import ChartTestPage from '~src/scenes/ChartTestPage'
 import TouchIdTest from '~src/scenes/TouchIdTest'
+import Wallet from '~src/scenes/Wallet'
 import {rootReducer} from '~src/store/reducers/root'
 
 type RootStackParamList = {
@@ -22,6 +23,7 @@ type RootStackParamList = {
   QrCodeGenerateTest: undefined
   NeonJSTest: undefined
   ChartTest: undefined
+  Wallet: undefined
 }
 
 const store = createStore(rootReducer)
@@ -53,6 +55,10 @@ function RootStackScreen() {
       <RootStack.Screen
         name={ROUTES.QR_CODE_SCAN_TEST.name}
         component={QRCodeScanTest}
+      />
+      <RootStack.Screen
+        name={ROUTES.WALLET.name}
+        component={Wallet}
       />
     </RootStack.Navigator>
   )
