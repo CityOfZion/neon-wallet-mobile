@@ -58,7 +58,7 @@ const Onboarding = (props: Props) => {
             <OnboardingImageContainer>
               <OnboardingImage source={require('~src/image/onboarding-placeholder.png')} />
             </OnboardingImageContainer>
-            <GetStartedButton onPress={() => props.navigation.navigate('MainTab')}>
+            <GetStartedButton onPress={() => props.navigation.navigate(TABS.MAIN_TAB.name)}>
               <Text>Get started!</Text>
             </GetStartedButton>
           </OnboardingContainer>
