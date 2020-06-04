@@ -33,6 +33,17 @@ export const ROUTES = {
   },
 }
 
+export const TABS = {
+  MAIN_TAB: {
+    id: 'MAIN_TAB',
+    name: 'MainTab' as 'MainTab',
+  },
+  ONBOARDING: {
+    id: 'ONBOARDING',
+    name: 'Onboarding' as 'Onboarding',
+  },
+}
+
 export const EXPLORERS = {
   NEO_SCAN: 'Neoscan',
   NEO_TRACKER: 'Neotracker',

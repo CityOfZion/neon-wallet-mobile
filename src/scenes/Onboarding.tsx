@@ -1,4 +1,5 @@
 import React from 'react'
+import {TABS} from '~/constants'
 import {StyleSheet, Text, View} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {LinearGradient} from 'expo-linear-gradient'
@@ -19,13 +20,13 @@ const Onboarding = (props: Props) => {
     <OnboardingContainer>
       <LinearGradient
         style={{flex: 1}}
-        colors={['#495158', '#293036']}
+        colors={[colorTroutGray, colorOuterSpaceGray]}
         start={[0.1, 0.1]}
         end={[1, 1]}
       >
         <Swiper
-          dotColor="#767f86"
-          activeDotColor="#4cffb3"
+          dotColor={colorRollingStoneGray}
+          activeDotColor={colorAquamarineGreen}
           loop={false}
           showsButtons
           buttonWrapperStyle={styles.swiperButtonWrapperStyle}
@@ -34,19 +35,9 @@ const Onboarding = (props: Props) => {
         >
           <OnboardingContainer>
             <FeatureHeader marginTop={'12.5%'}>Feature 1</FeatureHeader>
-            <View style={{
-              height: '60%',
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 10,
-              },
-              shadowOpacity: 0.53,
-              shadowRadius: 13.97,
-              elevation: 21,
-            }}>
+            <OnboardingImageContainer>
               <OnboardingImage source={require('~src/image/onboarding-placeholder.png')} />
-            </View>
+            </OnboardingImageContainer>
             <FeatureHeader marginTop={'10%'}>This is a killer feature</FeatureHeader>
             <FeatureDescription marginHorizontal={'5%'}>
               Laudem et dolore disputandum putant sed ut de utilitatibus, nihil oportere exquisitis rationibus.
@@ -72,11 +63,19 @@ const Onboarding = (props: Props) => {
             </GetStartedButton>
           </OnboardingContainer>
         </Swiper>
-        <SkipButton onPress={() => props.navigation.navigate('MainTab')}>skip</SkipButton>
+        <SkipButton onPress={() => props.navigation.navigate(TABS.MAIN_TAB.name)}>skip</SkipButton>
       </LinearGradient>
     </OnboardingContainer>
   )
 }
+
+const colorWhite = '#fff'
+const colorEdwardGray = '#9ba0a1'
+const colorRollingStoneGray = '#767f86'
+const colorTroutGray = '#495158'
+const colorOuterSpaceGray = '#293036'
+const colorAquamarineGreen = '#4cffb3'
+const colorAquamarineGreen2 = '#78ffb3'
 
 const OnboardingContainer = styled.View`
   height: 100%;
@@ -91,18 +90,17 @@ const OnboardingImage = styled.Image`
 
 const OnboardingImageContainer = styled.View`
   height: 60%;
-  box-shadow: 100px 50px 50px red;
 `
 
 const FeatureHeader = styled.Text<{marginTop: string}>`
-  color: #fff;
+  color: ${colorWhite};
   font-weight: 700;
   font-size: 20px;
   margin-top: ${props => props.marginTop};
 `
 
 const FeatureDescription = styled.Text<{marginHorizontal: string}>`
-  color: #fff;
+  color: ${colorWhite};
   font-size: 12px;
   text-align: center;
   letter-spacing: 1.28px;
@@ -117,21 +115,21 @@ const GetStartedButton = styled.TouchableHighlight`
   width: 80%;
   height: 42px;
   border-radius: 9999px;
-  background-color: #4cffb3;
+  background-color: ${colorAquamarineGreen};
   flex-direction: row;
   justify-content: center;
   align-items: center;
 `
 
 const SwiperButton = styled.Text`
-  color: #78ffb3;
+  color: ${colorAquamarineGreen2};
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 1.71px;
 `
 
 const SkipButton = styled.Text`
-  color: #9ba0a1;
+  color: ${colorEdwardGray};
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 1.71px;
