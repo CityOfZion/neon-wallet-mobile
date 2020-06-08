@@ -4,7 +4,7 @@ export interface IAction {
   type: string
 }
 
-export interface ISetLocaleAction extends IAction{
+export interface ISetLocaleAction extends IAction {
   locale: string
 }
 

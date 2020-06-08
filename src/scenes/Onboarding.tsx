@@ -1,10 +1,11 @@
+import {StackNavigationProp} from '@react-navigation/stack'
+import {LinearGradient} from 'expo-linear-gradient'
 import React from 'react'
-import {TABS} from '~/constants'
 import {StyleSheet, Text, View} from 'react-native'
 import Swiper from 'react-native-swiper'
-import {LinearGradient} from 'expo-linear-gradient'
 import styled from 'styled-components/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+
+import {TABS} from '~/constants'
 
 type TabStackParamList = {
   MainTab: undefined
@@ -30,40 +31,60 @@ const Onboarding = (props: Props) => {
           loop={false}
           showsButtons
           buttonWrapperStyle={styles.swiperButtonWrapperStyle}
-          prevButton={<View/>}
+          prevButton={<View />}
           nextButton={<SwiperButton>next</SwiperButton>}
         >
           <OnboardingContainer>
             <FeatureHeader marginTop={'12.5%'}>Feature 1</FeatureHeader>
             <OnboardingImageContainer>
-              <OnboardingImage source={require('~src/image/onboarding-placeholder.png')} />
+              <OnboardingImage
+                source={require('~src/image/onboarding-placeholder.png')}
+              />
             </OnboardingImageContainer>
-            <FeatureHeader marginTop={'10%'}>This is a killer feature</FeatureHeader>
+            <FeatureHeader marginTop={'10%'}>
+              This is a killer feature
+            </FeatureHeader>
             <FeatureDescription marginHorizontal={'5%'}>
-              Laudem et dolore disputandum putant sed ut de utilitatibus, nihil oportere exquisitis rationibus.
+              Laudem et dolore disputandum putant sed ut de utilitatibus, nihil
+              oportere exquisitis rationibus.
             </FeatureDescription>
           </OnboardingContainer>
           <OnboardingContainer>
             <FeatureHeader marginTop={'12.5%'}>Feature 2</FeatureHeader>
             <OnboardingImageContainer>
-              <OnboardingImage source={require('~src/image/onboarding-placeholder.png')} />
+              <OnboardingImage
+                source={require('~src/image/onboarding-placeholder.png')}
+              />
             </OnboardingImageContainer>
-            <FeatureHeader marginTop={'10%'}>This is a killer feature</FeatureHeader>
+            <FeatureHeader marginTop={'10%'}>
+              This is a killer feature
+            </FeatureHeader>
             <FeatureDescription marginHorizontal={'5%'}>
-              Laudem et dolore disputandum putant sed ut de utilitatibus, nihil oportere exquisitis rationibus.
+              Laudem et dolore disputandum putant sed ut de utilitatibus, nihil
+              oportere exquisitis rationibus.
             </FeatureDescription>
           </OnboardingContainer>
           <OnboardingContainer>
-            <FeatureHeader marginTop={'12.5%'}>Time to get started!</FeatureHeader>
+            <FeatureHeader marginTop={'12.5%'}>
+              Time to get started!
+            </FeatureHeader>
             <OnboardingImageContainer>
-              <OnboardingImage source={require('~src/image/onboarding-placeholder.png')} />
+              <OnboardingImage
+                source={require('~src/image/onboarding-placeholder.png')}
+              />
             </OnboardingImageContainer>
-            <GetStartedButton onPress={() => props.navigation.navigate(TABS.MAIN_TAB.name)}>
+            <GetStartedButton
+              onPress={() => props.navigation.navigate(TABS.MAIN_TAB.name)}
+            >
               <Text>Get started!</Text>
             </GetStartedButton>
           </OnboardingContainer>
         </Swiper>
-        <SkipButton onPress={() => props.navigation.navigate(TABS.MAIN_TAB.name)}>skip</SkipButton>
+        <SkipButton
+          onPress={() => props.navigation.navigate(TABS.MAIN_TAB.name)}
+        >
+          skip
+        </SkipButton>
       </LinearGradient>
     </OnboardingContainer>
   )
@@ -96,7 +117,7 @@ const FeatureHeader = styled.Text<{marginTop: string}>`
   color: ${colorWhite};
   font-weight: 700;
   font-size: 20px;
-  margin-top: ${props => props.marginTop};
+  margin-top: ${(props: any) => props.marginTop};
 `
 
 const FeatureDescription = styled.Text<{marginHorizontal: string}>`
@@ -105,8 +126,8 @@ const FeatureDescription = styled.Text<{marginHorizontal: string}>`
   text-align: center;
   letter-spacing: 1.28px;
   margin-top: 12px;
-  margin-right: ${props => props.marginHorizontal};
-  margin-left: ${props => props.marginHorizontal};
+  margin-right: ${(props: any) => props.marginHorizontal};
+  margin-left: ${(props: any) => props.marginHorizontal};
 `
 
 const GetStartedButton = styled.TouchableHighlight`
@@ -150,8 +171,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     paddingVertical: '2.5%',
     justifyContent: 'space-between',
-    alignItems: 'flex-end'
-  }
+    alignItems: 'flex-end',
+  },
 })
 
 export default Onboarding

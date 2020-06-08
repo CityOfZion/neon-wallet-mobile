@@ -1,4 +1,5 @@
 {
+  "private": true,
   "main": "index.js",
   "scripts": {
     "android": "react-native run-android",
@@ -6,7 +7,8 @@
     "web": "expo start --web",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint"
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "dependencies": {
     "@cityofzion/neon-js": "^4.8.0",
@@ -15,11 +17,14 @@
     "@react-navigation/bottom-tabs": "^5.4.5",
     "@react-navigation/native": "^5.3.0",
     "@react-navigation/stack": "^5.3.3",
+    "@simpli/serialized-request": "^1.0.5",
     "@types/i18n-js": "^3.0.3",
     "@types/react-redux": "^7.1.8",
     "@types/styled-components": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "^2.32.0",
     "@typescript-eslint/parser": "^2.32.0",
+    "axios": "^0.19.2",
+    "class-transformer": "^0.2.3",
     "eslint": "^7.0.0",
     "eslint-config-universe": "^3.0.0",
     "expo": "~37.0.3",
@@ -46,11 +51,12 @@
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "reflect-metadata": "^0.1.13",
     "styled-components": "^5.1.1",
     "tailwind-rn": "^1.0.2"
   },
   "devDependencies": {
-    "@babel/core": "~7.9.0",
+    "@babel/core": "^7.10.2",
     "@types/jest": "^25.2.3",
     "@types/react": "~16.9.23",
     "@types/react-native": "~0.61.23",
@@ -67,10 +73,12 @@
     "verbose": true,
     "transformIgnorePatterns": [
       "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
+    ],
+    "setupFiles": [
+      "./jest.setup.ts"
     ]
   },
   "eslintConfig": {
     "extends": "universe"
-  },
-  "private": true
+  }
 }

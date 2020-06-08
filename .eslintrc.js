@@ -5,6 +5,10 @@ module.exports = {
     'plugin:react/recommended',
   ],
 
+  rules: {
+    'prettier/prettier': 'error',
+  },
+
   overrides: [
     {
       files: ['*.ts', '*.tsx', '*.d.ts'],
