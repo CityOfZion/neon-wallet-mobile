@@ -14,6 +14,7 @@ type HomeStackParametersList = {
   QrCodeGenerateTest: undefined
   NeonJSTest: undefined
   ChartTest: undefined
+  Wallet: undefined
 }
 
 interface Props {
@@ -65,6 +66,12 @@ const Home = (props: Props) => {
         onPress={() => props.navigation.navigate('QRCodeScanTest')}
       >
         <Text style={styles.buttonText}>QR Code Scan</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        style={[tailwind('mb-2'), styles.button]}
+        onPress={() => props.navigation.navigate('Wallet')}
+      >
+        <Text style={styles.buttonText}>Wallet</Text>
       </TouchableHighlight>
       <TouchableHighlight
         style={[tailwind('mb-2'), styles.button]}

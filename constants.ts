@@ -31,6 +31,10 @@ export const ROUTES = {
     id: 'QR_CODE_SCAN_TEST',
     name: 'QRCodeScanTest' as 'QRCodeScanTest',
   },
+  WALLET: {
+    id: 'WALLET',
+    name: 'Wallet' as 'Wallet',
+  },
 }
 
 export const TABS = {
@@ -69,3 +73,6 @@ export const TOKENS_TEST_NET = {
 
 export const NODES_MAIN_NET = nodesMainNet
 export const NODES_TEST_NET = nodesTestNet
+
+export const DEFAULT_CURRENCY = '$'
+

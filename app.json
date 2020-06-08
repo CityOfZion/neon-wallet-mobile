@@ -11,8 +11,8 @@
       "web"
     ],
     "splash": {
-      "image": "./src/image/splash.jpg",
-      "backgroundColor": "#ffffff"
+      "image": "./src/image/splash.png",
+      "resizeMode": "cover"
     },
     "assetBundlePatterns": [
       "**/*"
