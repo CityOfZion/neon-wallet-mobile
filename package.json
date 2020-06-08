@@ -44,6 +44,7 @@
     "react-navigation": "latest",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "styled-components": "^5.1.1",
     "tailwind-rn": "^1.0.2"
   },

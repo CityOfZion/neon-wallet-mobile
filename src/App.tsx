@@ -3,7 +3,8 @@ import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
 import {Provider} from 'react-redux'
-import {createStore} from 'redux'
+import {createStore, applyMiddleware} from 'redux'
+import thunk from 'redux-thunk'
 
 import {ROUTES} from '~/constants'
 import Home from '~src/scenes/Home'
@@ -24,7 +25,7 @@ type RootStackParamList = {
   ChartTest: undefined
 }
 
-const store = createStore(rootReducer)
+const store = createStore(rootReducer, applyMiddleware(thunk))
 
 const RootStack = createStackNavigator<RootStackParamList>()
 
