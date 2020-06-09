@@ -6,20 +6,21 @@ import React from 'react'
 import {Provider} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
+
+import '~src/window-crypto'
 import 'reflect-metadata'
-
-import QRCodeScanTest from './scenes/QRCodeScanTest'
-
 import {ROUTES} from '~/constants'
 import {HttpConfig} from '~src/config/HttpConfig'
+import {rootReducer} from '~src/store/reducers/root'
+
 import ChartTestPage from '~src/scenes/ChartTestPage'
 import Home from '~src/scenes/Home'
 import NeonJSTest from '~src/scenes/NeonJSTest'
 import Onboarding from '~src/scenes/Onboarding'
 import QrCodeGenerateTest from '~src/scenes/QrCodeGenerateTest'
+import QRCodeScanTest from './scenes/QRCodeScanTest'
 import TouchIdTest from '~src/scenes/TouchIdTest'
 import Wallet from '~src/scenes/Wallet'
-import {rootReducer} from '~src/store/reducers/root'
 
 type RootStackParamList = {
   Home: undefined
