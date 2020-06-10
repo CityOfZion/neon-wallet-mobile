@@ -63,7 +63,7 @@ const Home = (props: Props) => {
 
   return (
     <HomeView bg='background' alignItems='center' height='100%'>
-      <Text my={5} fontSize={2} color='text.0'>{i18n.t('home.welcome')}</Text>
+      <Text my={6} fontSize={2} color='text.0'>{i18n.t('home.welcome')}</Text>
       <HomeButton
         mb={3} p={3} bg='primary' borderRadius={4} minWidth={100}
         onPress={() => props.navigation.navigate('Wallet')}
@@ -88,7 +88,7 @@ const Home = (props: Props) => {
       >
         <Text color='text.1' textAlign='center'>Go to Theme Test Page</Text>
       </HomeButton>
-      <LanguagesContainer direction='horiz' mt={4}>
+      <LanguagesContainer direction='horiz' mt={5}>
         <HomeButton
           mx={3} p={3} bg='primary' borderRadius={4} minWidth={100}
           onPress={() => changeLocale('en')}
@@ -109,7 +109,7 @@ const Home = (props: Props) => {
         </HomeButton>
       </LanguagesContainer>
       <Footer
-        mb={4} position='absolute' bottom='0' alignItems='center' justifyContent='center'
+        mb={5} position='absolute' bottom='0' alignItems='center' justifyContent='center'
       >
         <Text color='text.0'> First Node URL: {nodes[0] && nodes[0].url}</Text>
         <Text color='text.0'> First Node Height: {nodes[0] && nodes[0].height}</Text>

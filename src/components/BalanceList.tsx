@@ -1,7 +1,21 @@
 import React, {useState} from 'react'
-import {FlatList, StyleSheet, View, Text, Image} from 'react-native'
+import {FlatList} from 'react-native'
+import styled from '~src/styles/styled-components'
+import {
+  color,
+  ColorProps,
+  flexbox, FlexboxProps,
+  layout,
+  LayoutProps,
+  space,
+  SpaceProps,
+  typography,
+  TypographyProps
+} from 'styled-system'
+import {direction, DirectionProps} from '~src/styles/styled-system.config'
 
 import {DEFAULT_CURRENCY} from '~/constants'
+
 
 //TODO Remove all hardcoded texts
 const BalanceList: React.FC<object> = () => {
@@ -49,7 +63,7 @@ const BalanceList: React.FC<object> = () => {
 
   //region functions
   function flatListItemSeparator() {
-    return <View style={styles.divider} />
+    return <Container bg='text.2' height={1} />
   }
 
   function renderImage(index: number) {
@@ -57,15 +71,15 @@ const BalanceList: React.FC<object> = () => {
     let uriImage: NodeRequire =
       mod == 0 && index < imageList.length ? imageList[index] : imageList[mod]
 
-    return <Image style={styles.columnImage} source={uriImage} />
+    return <ItemImage mr={4} source={uriImage} />
   }
 
   function renderElement(title: string, value: string) {
     return (
-      <View style={styles.column}>
-        <Text style={styles.textTitle}>{title}</Text>
-        <Text style={styles.textSubTitle}>{value}</Text>
-      </View>
+      <Container flex={1} direction='verti' mt={5} mb={4}>
+        <ItemText color='text.2' fontSize={1}>{title}</ItemText>
+        <ItemText color='text.0' fontSize={3}>{value}</ItemText>
+      </Container>
     )
   }
 
@@ -76,15 +90,15 @@ const BalanceList: React.FC<object> = () => {
   //endregion
 
   return (
-    <View style={styles.MainConteiner}>
-      <View style={styles.ListContainer}>
-        <Text style={styles.listTitle}>TOKEN VALUE</Text>
+    <Container bg='background' height='100%'>
+      <Container p={5}>
+        <ItemText color='text.2' fontSize={1}>TOKEN VALUE</ItemText>
         <FlatList
           data={flatList}
           keyExtractor={(item) => item.symbol}
           ItemSeparatorComponent={flatListItemSeparator}
           renderItem={({item, index}) => (
-            <View style={styles.row}>
+            <Container flex={1} direction='horiz' alignItems='center'>
               {renderImage(index)}
               {renderElement(item.name, item.symbol)}
               {renderElement('Holdings', item.holding)}
@@ -92,59 +106,30 @@ const BalanceList: React.FC<object> = () => {
                 'Value',
                 formatValue(item.value, item.symbolCurrency)
               )}
-            </View>
+            </Container>
           )}
         />
-      </View>
-    </View>
+      </Container>
+    </Container>
   )
 }
 
-const styles = StyleSheet.create({
-  ListContainer: {
-    padding: 15,
-  },
+const ItemText = styled.Text<ColorProps & TypographyProps>`
+  ${color}
+  ${typography}
+`
 
-  MainConteiner: {
-    backgroundColor: '#111',
-    flex: 1,
-  },
+const Container = styled.View<ColorProps & DirectionProps & SpaceProps & LayoutProps & FlexboxProps>`
+  ${color}
+  ${direction}
+  ${space}
+  ${layout}
+  ${flexbox}
+`
 
-  listTitle: {
-    fontSize: 14,
-    color: '#8ba0a9',
-  },
-
-  row: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  column: {
-    flex: 1,
-    marginTop: 17,
-    flexDirection: 'column',
-    marginBottom: 13,
-  },
-
-  columnImage: {
-    marginRight: 13,
-  },
-  textTitle: {
-    fontSize: 14,
-    color: '#8ba0a9',
-  },
-  textSubTitle: {
-    fontSize: 18,
-    color: '#fff',
-  },
-
-  divider: {
-    height: 1,
-    backgroundColor: '#8ba0a9',
-  },
-})
+const ItemImage = styled.Image<SpaceProps>`
+  ${space}
+`
 
 export default BalanceList
 

@@ -28,10 +28,10 @@ const weightConfig = {
 
 export const direction = system(directionConfig)
 export interface DirectionProps {
-  direction: 'horiz' | 'verti'
+  direction?: 'horiz' | 'verti'
 }
 
 export const weight = system(weightConfig)
 export interface WeightProps {
-  weight: number
+  weight?: number
 }
