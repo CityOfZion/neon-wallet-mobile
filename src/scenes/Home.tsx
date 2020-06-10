@@ -14,13 +14,18 @@ import {
   typography,
   border,
   position,
+  flexbox,
+  layout,
   TypographyProps,
   SpaceProps,
   ColorProps,
   PositionProps,
   BorderProps,
+  FlexboxProps,
+  LayoutProps,
 } from 'styled-system'
 import {DefaultTheme} from 'styled-components'
+import {direction, DirectionProps} from '~src/styles/styled-system.config'
 
 type HomeStackParametersList = {
   TouchIdTest: undefined
@@ -57,53 +62,55 @@ const Home = (props: Props) => {
   }
 
   return (
-    <HomeView bg='background'>
+    <HomeView bg='background' alignItems='center' height='100%'>
       <Text my={5} fontSize={2} color='text.0'>{i18n.t('home.welcome')}</Text>
       <HomeButton
-        mb={3} p={3} bg='primary' borderRadius={4}
+        mb={3} p={3} bg='primary' borderRadius={4} minWidth={100}
         onPress={() => props.navigation.navigate('Wallet')}
       >
         <Text color='text.1' textAlign='center'>Wallet</Text>
       </HomeButton>
       <HomeButton
-        mb={3} p={3} bg='primary' borderRadius={4}
+        mb={3} p={3} bg='primary' borderRadius={4} minWidth={100}
         onPress={() => props.navigation.navigate('NeonJSTest')}
       >
         <Text color='text.1' textAlign='center'>Go to NeonJsTest</Text>
       </HomeButton>
       <HomeButton
-        mb={3} p={3} bg='primary' borderRadius={4}
+        mb={3} p={3} bg='primary' borderRadius={4} minWidth={100}
         onPress={() => props.navigation.navigate('QrCodeGenerateTest')}
       >
         <Text color='text.1' textAlign='center'>Go to generate QR code</Text>
       </HomeButton>
       <HomeButton
-        mb={3} p={3} bg='primary' borderRadius={4}
+        mb={3} p={3} bg='primary' borderRadius={4} minWidth={100}
         onPress={() => props.navigation.navigate('ThemeTest')}
       >
         <Text color='text.1' textAlign='center'>Go to Theme Test Page</Text>
       </HomeButton>
-      <LanguagesContainer mt={4}>
+      <LanguagesContainer direction='horiz' mt={4}>
         <HomeButton
-          mx={3} p={3} bg='primary' borderRadius={4}
+          mx={3} p={3} bg='primary' borderRadius={4} minWidth={100}
           onPress={() => changeLocale('en')}
         >
           <Text color='text.1' textAlign='center'>{i18n.t('languages.en')}</Text>
         </HomeButton>
         <HomeButton
-          mx={3} p={3} bg='primary' borderRadius={4}
+          mx={3} p={3} bg='primary' borderRadius={4} minWidth={100}
           onPress={() => changeLocale('de')}
         >
           <Text color='text.1' textAlign='center'>{i18n.t('languages.de')}</Text>
         </HomeButton>
         <HomeButton
-          mx={3} p={3} bg='primary' borderRadius={4}
+          mx={3} p={3} bg='primary' borderRadius={4} minWidth={100}
           onPress={() => changeLocale('ptBR')}
         >
           <Text color='text.1' textAlign='center'>{i18n.t('languages.ptBR')}</Text>
         </HomeButton>
       </LanguagesContainer>
-      <Footer mb={4} position='absolute' bottom='0'>
+      <Footer
+        mb={4} position='absolute' bottom='0' alignItems='center' justifyContent='center'
+      >
         <Text color='text.0'> First Node URL: {nodes[0] && nodes[0].url}</Text>
         <Text color='text.0'> First Node Height: {nodes[0] && nodes[0].height}</Text>
         <Text color='text.0'> Version: {expo.version}</Text>
@@ -117,32 +124,27 @@ const Text = styled.Text<ColorProps & SpaceProps & TypographyProps>`
   ${typography}
 `
 
-const LanguagesContainer = styled.View<SpaceProps>`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+const LanguagesContainer = styled.View<SpaceProps & DirectionProps>`
+  ${direction}
   ${space}
 `
 
-const Footer = styled.View<SpaceProps & PositionProps>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const Footer = styled.View<SpaceProps & PositionProps & FlexboxProps>`
+  ${flexbox}
   ${space}
   ${position}
 `
 
-const HomeButton = styled.TouchableHighlight<ColorProps & SpaceProps & BorderProps>`
-  min-width: 100px;
+const HomeButton = styled.TouchableHighlight<ColorProps & SpaceProps & BorderProps & LayoutProps>`
+  ${layout}
   ${color}
   ${space}
   ${border}
 `
 
-const HomeView = styled.View<ColorProps>`
-  display: flex;
-  align-items: center;
-  height: 100%;
+const HomeView = styled.View<ColorProps & FlexboxProps & LayoutProps>`
+  ${layout}
+  ${flexbox}
   ${color}
 `
 
