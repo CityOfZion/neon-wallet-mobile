@@ -47,7 +47,7 @@ const QrCodeGenerateTest: React.FC<object> = () => {
             bgColor="#000"
             fgColor="#fff"
             logoSize={50}
-            logo={require('../image/neo-icon.png')}
+            logo={require('~src/assets/images/neo-icon.png')}
           />
         )}
 

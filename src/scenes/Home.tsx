@@ -1,13 +1,26 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useEffect, useState} from 'react'
-import {StyleSheet, Text, TouchableHighlight, View} from 'react-native'
 import {useDispatch} from 'react-redux'
-import tailwind from 'tailwind-rn'
 
 import {expo} from '~/app.json'
 import i18n from '~src/i18n'
 import {setLocale} from '~src/store/actions/locale'
 import {NeoNode} from '~src/models/NeoNode'
+
+import styled from '~src/styles/styled-components'
+import {
+  color,
+  space,
+  typography,
+  border,
+  position,
+  TypographyProps,
+  SpaceProps,
+  ColorProps,
+  PositionProps,
+  BorderProps,
+} from 'styled-system'
+import {DefaultTheme} from 'styled-components'
 
 type HomeStackParametersList = {
   TouchIdTest: undefined
@@ -15,33 +28,14 @@ type HomeStackParametersList = {
   QrCodeGenerateTest: undefined
   NeonJSTest: undefined
   ChartTest: undefined
+  ThemeTest: undefined
   Wallet: undefined
 }
 
 interface Props {
   navigation: StackNavigationProp<HomeStackParametersList>
+  theme: DefaultTheme
 }
-
-const styles = StyleSheet.create({
-  button: {
-    padding: 8,
-    backgroundColor: '#68a0cf',
-    borderRadius: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    textAlign: 'center',
-  },
-  footer: {
-    color: '#fff',
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 0,
-    marginBottom: 10,
-  },
-})
 
 const Home = (props: Props) => {
   const [currentLocale, setCurrentLocale] = useState<string>('en')
@@ -63,71 +57,93 @@ const Home = (props: Props) => {
   }
 
   return (
-    <View style={tailwind('h-full bg-white items-center justify-center')}>
-      <Text style={tailwind('text-lg mb-4')}>{i18n.t('home.welcome')}</Text>
-      <TouchableHighlight
-        style={[tailwind('mb-2'), styles.button]}
-        onPress={() => props.navigation.navigate('TouchIdTest')}
-      >
-        <Text style={styles.buttonText}>Go to TouchIdTest</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        style={[tailwind('mb-2'), styles.button]}
-        onPress={() => props.navigation.navigate('QRCodeScanTest')}
-      >
-        <Text style={styles.buttonText}>QR Code Scan</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        style={[tailwind('mb-2'), styles.button]}
+    <HomeView bg='background'>
+      <Text my={5} fontSize={2} color='text.0'>{i18n.t('home.welcome')}</Text>
+      <HomeButton
+        mb={3} p={3} bg='primary' borderRadius={4}
         onPress={() => props.navigation.navigate('Wallet')}
       >
-        <Text style={styles.buttonText}>Wallet</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        style={[tailwind('mb-2'), styles.button]}
+        <Text color='text.1' textAlign='center'>Wallet</Text>
+      </HomeButton>
+      <HomeButton
+        mb={3} p={3} bg='primary' borderRadius={4}
         onPress={() => props.navigation.navigate('NeonJSTest')}
       >
-        <Text style={styles.buttonText}>Go to NeonJsTest</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        style={[tailwind('mb-2'), styles.button]}
+        <Text color='text.1' textAlign='center'>Go to NeonJsTest</Text>
+      </HomeButton>
+      <HomeButton
+        mb={3} p={3} bg='primary' borderRadius={4}
         onPress={() => props.navigation.navigate('QrCodeGenerateTest')}
       >
-        <Text style={styles.buttonText}>Go to generate QR code</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        style={[tailwind('mb-2'), styles.button]}
-        onPress={() => props.navigation.navigate('ChartTest')}
+        <Text color='text.1' textAlign='center'>Go to generate QR code</Text>
+      </HomeButton>
+      <HomeButton
+        mb={3} p={3} bg='primary' borderRadius={4}
+        onPress={() => props.navigation.navigate('ThemeTest')}
       >
-        <Text style={styles.buttonText}>Go to Chart Test Page</Text>
-      </TouchableHighlight>
-      <View style={tailwind('mt-8 flex-row justify-around')}>
-        <TouchableHighlight
-          style={[tailwind('mx-2'), styles.button]}
+        <Text color='text.1' textAlign='center'>Go to Theme Test Page</Text>
+      </HomeButton>
+      <LanguagesContainer mt={4}>
+        <HomeButton
+          mx={3} p={3} bg='primary' borderRadius={4}
           onPress={() => changeLocale('en')}
         >
-          <Text style={styles.buttonText}>{i18n.t('languages.en')}</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          style={[tailwind('mx-2'), styles.button]}
+          <Text color='text.1' textAlign='center'>{i18n.t('languages.en')}</Text>
+        </HomeButton>
+        <HomeButton
+          mx={3} p={3} bg='primary' borderRadius={4}
           onPress={() => changeLocale('de')}
         >
-          <Text style={styles.buttonText}>{i18n.t('languages.de')}</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          style={[tailwind('mx-2'), styles.button]}
+          <Text color='text.1' textAlign='center'>{i18n.t('languages.de')}</Text>
+        </HomeButton>
+        <HomeButton
+          mx={3} p={3} bg='primary' borderRadius={4}
           onPress={() => changeLocale('ptBR')}
         >
-          <Text style={styles.buttonText}>{i18n.t('languages.ptBR')}</Text>
-        </TouchableHighlight>
-      </View>
-      <View style={styles.footer}>
-        <Text> First Node URL: {nodes[0] && nodes[0].url}</Text>
-        <Text> First Node Height: {nodes[0] && nodes[0].height}</Text>
-        <Text> Version: {expo.version}</Text>
-      </View>
-    </View>
+          <Text color='text.1' textAlign='center'>{i18n.t('languages.ptBR')}</Text>
+        </HomeButton>
+      </LanguagesContainer>
+      <Footer mb={4} position='absolute' bottom='0'>
+        <Text color='text.0'> First Node URL: {nodes[0] && nodes[0].url}</Text>
+        <Text color='text.0'> First Node Height: {nodes[0] && nodes[0].height}</Text>
+        <Text color='text.0'> Version: {expo.version}</Text>
+      </Footer>
+    </HomeView>
   )
 }
+const Text = styled.Text<ColorProps & SpaceProps & TypographyProps>`
+  ${color}
+  ${space}
+  ${typography}
+`
+
+const LanguagesContainer = styled.View<SpaceProps>`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  ${space}
+`
+
+const Footer = styled.View<SpaceProps & PositionProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ${space}
+  ${position}
+`
+
+const HomeButton = styled.TouchableHighlight<ColorProps & SpaceProps & BorderProps>`
+  min-width: 100px;
+  ${color}
+  ${space}
+  ${border}
+`
+
+const HomeView = styled.View<ColorProps>`
+  display: flex;
+  align-items: center;
+  height: 100%;
+  ${color}
+`
 
 export default Home

@@ -1,13 +1,14 @@
 import React from 'react'
 import {Dimensions, Text, View} from 'react-native'
 import {LineChart} from 'react-native-chart-kit'
-import tailwind from 'tailwind-rn'
+import styled from 'styled-components/native'
+import {color, ColorProps} from 'styled-system'
 
 export default function ChartTestPage() {
   const mockData = Array.apply(null, Array(30)).map((x) => Math.random() * 100)
 
   return (
-    <View style={tailwind('h-full bg-white items-center justify-center')}>
+    <ChartView bg='background'>
       <LineChart
         data={{
           labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -45,6 +46,14 @@ export default function ChartTestPage() {
           borderRadius: 16,
         }}
       />
-    </View>
+    </ChartView>
   )
 }
+
+const ChartView = styled.View<ColorProps>`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  ${color}
+`

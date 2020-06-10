@@ -1,5 +1,5 @@
-import i18n from '../../i18n'
-import {ISetLocaleAction, SET_LOCALE} from '../actions/locale'
+import i18n from '~src/i18n'
+import {ISetLocaleAction, SET_LOCALE} from '~src/store/actions/locale'
 
 interface ILocaleState {
   locale: string

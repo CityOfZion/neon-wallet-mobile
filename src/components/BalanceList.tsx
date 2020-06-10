@@ -33,9 +33,9 @@ const BalanceList: React.FC<object> = () => {
   let list = []
 
   let imageList = [
-    require('../image/ovalGreen.png'),
-    require('../image/ovalBlue.png'),
-    require('../image/ovalPurple.png'),
+    require('~src/assets/images/ovalGreen.png'),
+    require('~src/assets/images/ovalBlue.png'),
+    require('~src/assets/images/ovalPurple.png'),
   ]
 
   list.push(tokenValue1)

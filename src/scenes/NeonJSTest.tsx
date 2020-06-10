@@ -1,7 +1,8 @@
 import {wallet} from '@cityofzion/neon-core'
 import React, {useState} from 'react'
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native'
-import tailwind from 'tailwind-rn'
+import styled from 'styled-components/native'
+import {color, ColorProps} from 'styled-system'
 
 const NeonJSTest: React.FC<object> = () => {
   const [account, setAccount] = useState(new wallet.Account())
@@ -14,17 +15,25 @@ const NeonJSTest: React.FC<object> = () => {
   }
 
   return (
-    <View style={tailwind('h-full bg-white items-center justify-center')}>
+    <NeonJSView>
       <TouchableHighlight
         onPress={() => createAccount()}
-        style={[tailwind('mb-2'), styles.button]}
+        style={styles.button}
       >
         <Text style={styles.buttonText}>Create Account</Text>
       </TouchableHighlight>
       <Text>{account?.address ?? 'No Account'}</Text>
-    </View>
+    </NeonJSView>
   )
 }
+
+const NeonJSView = styled.View<ColorProps>`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  ${color}
+`
 
 const styles = StyleSheet.create({
   button: {

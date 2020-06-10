@@ -1,7 +1,8 @@
 import * as LocalAuthentication from 'expo-local-authentication'
 import React, {useState} from 'react'
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native'
-import tailwind from 'tailwind-rn'
+import styled from 'styled-components/native'
+import {color, ColorProps} from 'styled-system'
 
 const TouchIdTest: React.FC<object> = () => {
   const [authenticated, setAuthenticated] = useState(false)
@@ -12,17 +13,25 @@ const TouchIdTest: React.FC<object> = () => {
   }
 
   return (
-    <View style={tailwind('h-full bg-white items-center justify-center')}>
+    <TouchIdTestView bg='background'>
       <TouchableHighlight
         onPress={() => askForAuthentication()}
-        style={[tailwind('mb-2'), styles.button]}
+        style={styles.button}
       >
         <Text style={styles.buttonText}>Ask for Authentication</Text>
       </TouchableHighlight>
       <Text>{authenticated ? 'Authenticated' : 'Not Authenticated'}</Text>
-    </View>
+    </TouchIdTestView>
   )
 }
+
+const TouchIdTestView = styled.View<ColorProps>`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  ${color}
+`
 
 const styles = StyleSheet.create({
   button: {
