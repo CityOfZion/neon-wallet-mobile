@@ -1,13 +1,16 @@
 import {Config, system} from 'styled-system'
 
-const directionConfig = {
-  direction: {
+const orientationConfig = {
+  orientation: {
     property: 'display',
     defaultScale: ['horiz', 'verti'],
     transform: (val: string) => {
       return `
         flex;
-        flex-direction: ${val === 'horiz' ? 'row' : 'column'}
+        flex-direction: ${val === 'horiz' ? 'row' : 'column'};
+        > * {
+          flex-shrink: 0;
+        }
       `
     },
   },
@@ -26,9 +29,9 @@ const weightConfig = {
   },
 } as Config
 
-export const direction = system(directionConfig)
-export interface DirectionProps {
-  direction?: 'horiz' | 'verti'
+export const orientation = system(orientationConfig)
+export interface OrientationProps {
+  orientation?: 'horiz' | 'verti'
 }
 
 export const weight = system(weightConfig)

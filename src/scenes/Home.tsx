@@ -25,7 +25,7 @@ import {
   LayoutProps,
 } from 'styled-system'
 import {DefaultTheme} from 'styled-components'
-import {direction, DirectionProps} from '~src/styles/styled-system.config'
+import {orientation, OrientationProps} from '~src/styles/styled-system.config'
 
 type HomeStackParametersList = {
   TouchIdTest: undefined
@@ -88,7 +88,7 @@ const Home = (props: Props) => {
       >
         <Text color='text.1' textAlign='center'>Go to Theme Test Page</Text>
       </HomeButton>
-      <LanguagesContainer direction='horiz' mt={5}>
+      <LanguagesContainer orientation='horiz' mt={5}>
         <HomeButton
           mx={3} p={3} bg='primary' borderRadius={4} minWidth={100}
           onPress={() => changeLocale('en')}
@@ -124,8 +124,8 @@ const Text = styled.Text<ColorProps & SpaceProps & TypographyProps>`
   ${typography}
 `
 
-const LanguagesContainer = styled.View<SpaceProps & DirectionProps>`
-  ${direction}
+const LanguagesContainer = styled.View<SpaceProps & OrientationProps>`
+  ${orientation}
   ${space}
 `
 

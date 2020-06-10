@@ -12,7 +12,7 @@ import {
   typography,
   TypographyProps
 } from 'styled-system'
-import {direction, DirectionProps} from '~src/styles/styled-system.config'
+import {orientation, OrientationProps} from '~src/styles/styled-system.config'
 
 import {DEFAULT_CURRENCY} from '~/constants'
 
@@ -76,7 +76,7 @@ const BalanceList: React.FC<object> = () => {
 
   function renderElement(title: string, value: string) {
     return (
-      <Container flex={1} direction='verti' mt={5} mb={4}>
+      <Container width={100} orientation='verti' mt={5} mb={4}>
         <ItemText color='text.2' fontSize={1}>{title}</ItemText>
         <ItemText color='text.0' fontSize={3}>{value}</ItemText>
       </Container>
@@ -98,7 +98,7 @@ const BalanceList: React.FC<object> = () => {
           keyExtractor={(item) => item.symbol}
           ItemSeparatorComponent={flatListItemSeparator}
           renderItem={({item, index}) => (
-            <Container flex={1} direction='horiz' alignItems='center'>
+            <Container orientation='horiz' alignItems='center'>
               {renderImage(index)}
               {renderElement(item.name, item.symbol)}
               {renderElement('Holdings', item.holding)}
@@ -119,9 +119,9 @@ const ItemText = styled.Text<ColorProps & TypographyProps>`
   ${typography}
 `
 
-const Container = styled.View<ColorProps & DirectionProps & SpaceProps & LayoutProps & FlexboxProps>`
+const Container = styled.View<ColorProps & OrientationProps & SpaceProps & LayoutProps & FlexboxProps>`
   ${color}
-  ${direction}
+  ${orientation}
   ${space}
   ${layout}
   ${flexbox}
