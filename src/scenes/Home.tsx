@@ -1,13 +1,14 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useEffect, useState} from 'react'
-import {StyleSheet, Text, TouchableHighlight, View} from 'react-native'
 import {useDispatch} from 'react-redux'
-import tailwind from 'tailwind-rn'
 
 import {expo} from '~/app.json'
 import i18n from '~src/i18n'
 import {setLocale} from '~src/store/actions/locale'
 import {NeoNode} from '~src/models/NeoNode'
+
+import {LinearLayout, TextView, ButtonView} from '~src/styles/styled-components'
+import {DefaultTheme} from 'styled-components'
 
 type HomeStackParametersList = {
   TouchIdTest: undefined
@@ -15,33 +16,14 @@ type HomeStackParametersList = {
   QrCodeGenerateTest: undefined
   NeonJSTest: undefined
   ChartTest: undefined
+  ThemeTest: undefined
   Wallet: undefined
 }
 
 interface Props {
   navigation: StackNavigationProp<HomeStackParametersList>
+  theme: DefaultTheme
 }
-
-const styles = StyleSheet.create({
-  button: {
-    padding: 8,
-    backgroundColor: '#68a0cf',
-    borderRadius: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    textAlign: 'center',
-  },
-  footer: {
-    color: '#fff',
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 0,
-    marginBottom: 10,
-  },
-})
 
 const Home = (props: Props) => {
   const [currentLocale, setCurrentLocale] = useState<string>('en')
@@ -63,70 +45,60 @@ const Home = (props: Props) => {
   }
 
   return (
-    <View style={tailwind('h-full bg-white items-center justify-center')}>
-      <Text style={tailwind('text-lg mb-4')}>{i18n.t('home.welcome')}</Text>
-      <TouchableHighlight
-        style={[tailwind('mb-2'), styles.button]}
-        onPress={() => props.navigation.navigate('TouchIdTest')}
-      >
-        <Text style={styles.buttonText}>Go to TouchIdTest</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        style={[tailwind('mb-2'), styles.button]}
-        onPress={() => props.navigation.navigate('QRCodeScanTest')}
-      >
-        <Text style={styles.buttonText}>QR Code Scan</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        style={[tailwind('mb-2'), styles.button]}
+    <LinearLayout bg='background' alignItems='center' height='100%'>
+      <TextView my={6} fontSize={2} color='text.0'>{i18n.t('home.welcome')}</TextView>
+      <ButtonView
+        mb={3} p={3} bg='primary' borderRadius={4} minWidth={100}
         onPress={() => props.navigation.navigate('Wallet')}
       >
-        <Text style={styles.buttonText}>Wallet</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        style={[tailwind('mb-2'), styles.button]}
+        <TextView color='text.1' textAlign='center'>Wallet</TextView>
+      </ButtonView>
+      <ButtonView
+        mb={3} p={3} bg='primary' borderRadius={4} minWidth={100}
         onPress={() => props.navigation.navigate('NeonJSTest')}
       >
-        <Text style={styles.buttonText}>Go to NeonJsTest</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        style={[tailwind('mb-2'), styles.button]}
+        <TextView color='text.1' textAlign='center'>Go to NeonJsTest</TextView>
+      </ButtonView>
+      <ButtonView
+        mb={3} p={3} bg='primary' borderRadius={4} minWidth={100}
         onPress={() => props.navigation.navigate('QrCodeGenerateTest')}
       >
-        <Text style={styles.buttonText}>Go to generate QR code</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        style={[tailwind('mb-2'), styles.button]}
-        onPress={() => props.navigation.navigate('ChartTest')}
+        <TextView color='text.1' textAlign='center'>Go to generate QR code</TextView>
+      </ButtonView>
+      <ButtonView
+        mb={3} p={3} bg='primary' borderRadius={4} minWidth={100}
+        onPress={() => props.navigation.navigate('ThemeTest')}
       >
-        <Text style={styles.buttonText}>Go to Chart Test Page</Text>
-      </TouchableHighlight>
-      <View style={tailwind('mt-8 flex-row justify-around')}>
-        <TouchableHighlight
-          style={[tailwind('mx-2'), styles.button]}
+        <TextView color='text.1' textAlign='center'>Go to Theme Test Page</TextView>
+      </ButtonView>
+      <LinearLayout orientation='horiz' mt={5}>
+        <ButtonView
+          mx={3} p={3} bg='primary' borderRadius={4} minWidth={100}
           onPress={() => changeLocale('en')}
         >
-          <Text style={styles.buttonText}>{i18n.t('languages.en')}</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          style={[tailwind('mx-2'), styles.button]}
+          <TextView color='text.1' textAlign='center'>{i18n.t('languages.en')}</TextView>
+        </ButtonView>
+        <ButtonView
+          mx={3} p={3} bg='primary' borderRadius={4} minWidth={100}
           onPress={() => changeLocale('de')}
         >
-          <Text style={styles.buttonText}>{i18n.t('languages.de')}</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          style={[tailwind('mx-2'), styles.button]}
+          <TextView color='text.1' textAlign='center'>{i18n.t('languages.de')}</TextView>
+        </ButtonView>
+        <ButtonView
+          mx={3} p={3} bg='primary' borderRadius={4} minWidth={100}
           onPress={() => changeLocale('ptBR')}
         >
-          <Text style={styles.buttonText}>{i18n.t('languages.ptBR')}</Text>
-        </TouchableHighlight>
-      </View>
-      <View style={styles.footer}>
-        <Text> First Node URL: {nodes[0] && nodes[0].url}</Text>
-        <Text> First Node Height: {nodes[0] && nodes[0].height}</Text>
-        <Text> Version: {expo.version}</Text>
-      </View>
-    </View>
+          <TextView color='text.1' textAlign='center'>{i18n.t('languages.ptBR')}</TextView>
+        </ButtonView>
+      </LinearLayout>
+      <LinearLayout
+        mb={5} position='absolute' bottom='0' alignItems='center' justifyContent='center'
+      >
+        <TextView color='text.0'> First Node URL: {nodes[0] && nodes[0].url}</TextView>
+        <TextView color='text.0'> First Node Height: {nodes[0] && nodes[0].height}</TextView>
+        <TextView color='text.0'> Version: {expo.version}</TextView>
+      </LinearLayout>
+    </LinearLayout>
   )
 }
 

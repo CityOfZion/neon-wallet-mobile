@@ -11,7 +11,7 @@
       "web"
     ],
     "splash": {
-      "image": "./src/image/splash.png",
+      "image": "./src/assets/splash.png",
       "resizeMode": "cover"
     },
     "assetBundlePatterns": [

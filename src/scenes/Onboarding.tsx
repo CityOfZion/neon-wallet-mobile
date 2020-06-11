@@ -38,7 +38,7 @@ const Onboarding = (props: Props) => {
             <FeatureHeader marginTop={'12.5%'}>Feature 1</FeatureHeader>
             <OnboardingImageContainer>
               <OnboardingImage
-                source={require('~src/image/onboarding-placeholder.png')}
+                source={require('~src/assets/images/onboarding-placeholder.png')}
               />
             </OnboardingImageContainer>
             <FeatureHeader marginTop={'10%'}>
@@ -53,7 +53,7 @@ const Onboarding = (props: Props) => {
             <FeatureHeader marginTop={'12.5%'}>Feature 2</FeatureHeader>
             <OnboardingImageContainer>
               <OnboardingImage
-                source={require('~src/image/onboarding-placeholder.png')}
+                source={require('~src/assets/images/onboarding-placeholder.png')}
               />
             </OnboardingImageContainer>
             <FeatureHeader marginTop={'10%'}>
@@ -70,7 +70,7 @@ const Onboarding = (props: Props) => {
             </FeatureHeader>
             <OnboardingImageContainer>
               <OnboardingImage
-                source={require('~src/image/onboarding-placeholder.png')}
+                source={require('~src/assets/images/onboarding-placeholder.png')}
               />
             </OnboardingImageContainer>
             <GetStartedButton
@@ -114,10 +114,10 @@ const OnboardingImageContainer = styled.View`
 `
 
 const FeatureHeader = styled.Text<{marginTop: string}>`
-  color: ${colorWhite};
+  color: ${(props: any) => props.theme.colors.text};
   font-weight: 700;
   font-size: 20px;
-  margin-top: ${(props: any) => props.marginTop};
+  margin-top: ${props => props.marginTop};
 `
 
 const FeatureDescription = styled.Text<{marginHorizontal: string}>`
@@ -126,8 +126,8 @@ const FeatureDescription = styled.Text<{marginHorizontal: string}>`
   text-align: center;
   letter-spacing: 1.28px;
   margin-top: 12px;
-  margin-right: ${(props: any) => props.marginHorizontal};
-  margin-left: ${(props: any) => props.marginHorizontal};
+  margin-right: ${props => props.marginHorizontal};
+  margin-left: ${props => props.marginHorizontal};
 `
 
 const GetStartedButton = styled.TouchableHighlight`

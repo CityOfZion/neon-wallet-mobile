@@ -35,6 +35,10 @@ export const ROUTES = {
     id: 'WALLET',
     name: 'Wallet' as 'Wallet',
   },
+  THEME_TEST: {
+    id: 'THEME_TEST',
+    name: 'ThemeTest' as 'ThemeTest',
+  },
 }
 
 export const TABS = {
