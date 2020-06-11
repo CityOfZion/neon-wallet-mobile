@@ -5,8 +5,7 @@ import {border, BorderProps, color, ColorProps, space, SpaceProps} from 'styled-
 import {useDispatch, useSelector} from 'react-redux'
 import {setTheme} from '~src/store/actions/theme'
 import {RootState} from '~src/store/reducers/root'
-import styled from '~src/styles/styled-components'
-import DefaultTheme from '~src/styles/styled'
+import styled, {DefaultTheme} from '~src/styles/styled-components'
 
 const ThemeTestPage: React.FC<object> = () => {
   const dispatch = useDispatch()

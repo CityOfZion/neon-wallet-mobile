@@ -1,4 +1,4 @@
-import DefaultTheme from '~src/styles/styled'
+import {DefaultTheme} from '~src/styles/styled-components'
 
 export const SET_THEME = 'SET_THEME'
 
