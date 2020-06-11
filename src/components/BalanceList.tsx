@@ -1,18 +1,6 @@
 import React, {useState} from 'react'
 import {FlatList} from 'react-native'
-import styled from '~src/styles/styled-components'
-import {
-  color,
-  ColorProps,
-  flexbox, FlexboxProps,
-  layout,
-  LayoutProps,
-  space,
-  SpaceProps,
-  typography,
-  TypographyProps
-} from 'styled-system'
-import {orientation, OrientationProps} from '~src/styles/styled-system.config'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 import {DEFAULT_CURRENCY} from '~/constants'
 
@@ -63,7 +51,7 @@ const BalanceList: React.FC<object> = () => {
 
   //region functions
   function flatListItemSeparator() {
-    return <Container bg='text.2' height={1} />
+    return <LinearLayout bg='text.2' height={1} />
   }
 
   function renderImage(index: number) {
@@ -71,15 +59,15 @@ const BalanceList: React.FC<object> = () => {
     let uriImage: NodeRequire =
       mod == 0 && index < imageList.length ? imageList[index] : imageList[mod]
 
-    return <ItemImage mr={4} source={uriImage} />
+    return <ImageView mr={4} source={uriImage} />
   }
 
   function renderElement(title: string, value: string) {
     return (
-      <Container width={100} orientation='verti' mt={5} mb={4}>
-        <ItemText color='text.2' fontSize={1}>{title}</ItemText>
-        <ItemText color='text.0' fontSize={3}>{value}</ItemText>
-      </Container>
+      <LinearLayout width={100} orientation='verti' mt={5} mb={4}>
+        <TextView color='text.2' fontSize={1}>{title}</TextView>
+        <TextView color='text.0' fontSize={3}>{value}</TextView>
+      </LinearLayout>
     )
   }
 
@@ -90,15 +78,15 @@ const BalanceList: React.FC<object> = () => {
   //endregion
 
   return (
-    <Container bg='background' height='100%'>
-      <Container p={5}>
-        <ItemText color='text.2' fontSize={1}>TOKEN VALUE</ItemText>
+    <LinearLayout bg='background' height='100%'>
+      <LinearLayout p={5}>
+        <TextView color='text.2' fontSize={1}>TOKEN VALUE</TextView>
         <FlatList
           data={flatList}
           keyExtractor={(item) => item.symbol}
           ItemSeparatorComponent={flatListItemSeparator}
           renderItem={({item, index}) => (
-            <Container orientation='horiz' alignItems='center'>
+            <LinearLayout orientation='horiz' alignItems='center'>
               {renderImage(index)}
               {renderElement(item.name, item.symbol)}
               {renderElement('Holdings', item.holding)}
@@ -106,30 +94,13 @@ const BalanceList: React.FC<object> = () => {
                 'Value',
                 formatValue(item.value, item.symbolCurrency)
               )}
-            </Container>
+            </LinearLayout>
           )}
         />
-      </Container>
-    </Container>
+      </LinearLayout>
+    </LinearLayout>
   )
 }
-
-const ItemText = styled.Text<ColorProps & TypographyProps>`
-  ${color}
-  ${typography}
-`
-
-const Container = styled.View<ColorProps & OrientationProps & SpaceProps & LayoutProps & FlexboxProps>`
-  ${color}
-  ${orientation}
-  ${space}
-  ${layout}
-  ${flexbox}
-`
-
-const ItemImage = styled.Image<SpaceProps>`
-  ${space}
-`
 
 export default BalanceList
 

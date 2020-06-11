@@ -7,25 +7,8 @@ import i18n from '~src/i18n'
 import {setLocale} from '~src/store/actions/locale'
 import {NeoNode} from '~src/models/NeoNode'
 
-import styled from '~src/styles/styled-components'
-import {
-  color,
-  space,
-  typography,
-  border,
-  position,
-  flexbox,
-  layout,
-  TypographyProps,
-  SpaceProps,
-  ColorProps,
-  PositionProps,
-  BorderProps,
-  FlexboxProps,
-  LayoutProps,
-} from 'styled-system'
+import {LinearLayout, TextView, ButtonView} from '~src/styles/styled-components'
 import {DefaultTheme} from 'styled-components'
-import {orientation, OrientationProps} from '~src/styles/styled-system.config'
 
 type HomeStackParametersList = {
   TouchIdTest: undefined
@@ -62,90 +45,61 @@ const Home = (props: Props) => {
   }
 
   return (
-    <HomeView bg='background' alignItems='center' height='100%'>
-      <Text my={6} fontSize={2} color='text.0'>{i18n.t('home.welcome')}</Text>
-      <HomeButton
+    <LinearLayout bg='background' alignItems='center' height='100%'>
+      <TextView my={6} fontSize={2} color='text.0'>{i18n.t('home.welcome')}</TextView>
+      <ButtonView
         mb={3} p={3} bg='primary' borderRadius={4} minWidth={100}
         onPress={() => props.navigation.navigate('Wallet')}
       >
-        <Text color='text.1' textAlign='center'>Wallet</Text>
-      </HomeButton>
-      <HomeButton
+        <TextView color='text.1' textAlign='center'>Wallet</TextView>
+      </ButtonView>
+      <ButtonView
         mb={3} p={3} bg='primary' borderRadius={4} minWidth={100}
         onPress={() => props.navigation.navigate('NeonJSTest')}
       >
-        <Text color='text.1' textAlign='center'>Go to NeonJsTest</Text>
-      </HomeButton>
-      <HomeButton
+        <TextView color='text.1' textAlign='center'>Go to NeonJsTest</TextView>
+      </ButtonView>
+      <ButtonView
         mb={3} p={3} bg='primary' borderRadius={4} minWidth={100}
         onPress={() => props.navigation.navigate('QrCodeGenerateTest')}
       >
-        <Text color='text.1' textAlign='center'>Go to generate QR code</Text>
-      </HomeButton>
-      <HomeButton
+        <TextView color='text.1' textAlign='center'>Go to generate QR code</TextView>
+      </ButtonView>
+      <ButtonView
         mb={3} p={3} bg='primary' borderRadius={4} minWidth={100}
         onPress={() => props.navigation.navigate('ThemeTest')}
       >
-        <Text color='text.1' textAlign='center'>Go to Theme Test Page</Text>
-      </HomeButton>
-      <LanguagesContainer orientation='horiz' mt={5}>
-        <HomeButton
+        <TextView color='text.1' textAlign='center'>Go to Theme Test Page</TextView>
+      </ButtonView>
+      <LinearLayout orientation='horiz' mt={5}>
+        <ButtonView
           mx={3} p={3} bg='primary' borderRadius={4} minWidth={100}
           onPress={() => changeLocale('en')}
         >
-          <Text color='text.1' textAlign='center'>{i18n.t('languages.en')}</Text>
-        </HomeButton>
-        <HomeButton
+          <TextView color='text.1' textAlign='center'>{i18n.t('languages.en')}</TextView>
+        </ButtonView>
+        <ButtonView
           mx={3} p={3} bg='primary' borderRadius={4} minWidth={100}
           onPress={() => changeLocale('de')}
         >
-          <Text color='text.1' textAlign='center'>{i18n.t('languages.de')}</Text>
-        </HomeButton>
-        <HomeButton
+          <TextView color='text.1' textAlign='center'>{i18n.t('languages.de')}</TextView>
+        </ButtonView>
+        <ButtonView
           mx={3} p={3} bg='primary' borderRadius={4} minWidth={100}
           onPress={() => changeLocale('ptBR')}
         >
-          <Text color='text.1' textAlign='center'>{i18n.t('languages.ptBR')}</Text>
-        </HomeButton>
-      </LanguagesContainer>
-      <Footer
+          <TextView color='text.1' textAlign='center'>{i18n.t('languages.ptBR')}</TextView>
+        </ButtonView>
+      </LinearLayout>
+      <LinearLayout
         mb={5} position='absolute' bottom='0' alignItems='center' justifyContent='center'
       >
-        <Text color='text.0'> First Node URL: {nodes[0] && nodes[0].url}</Text>
-        <Text color='text.0'> First Node Height: {nodes[0] && nodes[0].height}</Text>
-        <Text color='text.0'> Version: {expo.version}</Text>
-      </Footer>
-    </HomeView>
+        <TextView color='text.0'> First Node URL: {nodes[0] && nodes[0].url}</TextView>
+        <TextView color='text.0'> First Node Height: {nodes[0] && nodes[0].height}</TextView>
+        <TextView color='text.0'> Version: {expo.version}</TextView>
+      </LinearLayout>
+    </LinearLayout>
   )
 }
-const Text = styled.Text<ColorProps & SpaceProps & TypographyProps>`
-  ${color}
-  ${space}
-  ${typography}
-`
-
-const LanguagesContainer = styled.View<SpaceProps & OrientationProps>`
-  ${orientation}
-  ${space}
-`
-
-const Footer = styled.View<SpaceProps & PositionProps & FlexboxProps>`
-  ${flexbox}
-  ${space}
-  ${position}
-`
-
-const HomeButton = styled.TouchableHighlight<ColorProps & SpaceProps & BorderProps & LayoutProps>`
-  ${layout}
-  ${color}
-  ${space}
-  ${border}
-`
-
-const HomeView = styled.View<ColorProps & FlexboxProps & LayoutProps>`
-  ${layout}
-  ${flexbox}
-  ${color}
-`
 
 export default Home

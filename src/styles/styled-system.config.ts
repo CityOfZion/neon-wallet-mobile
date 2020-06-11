@@ -24,6 +24,7 @@ const weightConfig = {
       return `
         ${val};
         flex-basis: 0;
+        flex-shrink: 1;
       `
     },
   },
