@@ -1,6 +1,8 @@
-import DefaultTheme from '~src/styles/styled'
+import {DefaultTheme, StyleConstants} from '~src/styles/styled-components'
 
 const light = {
+  ...StyleConstants,
+
   title: 'light',
   colors: {
     primary: '#293036',
@@ -14,8 +16,6 @@ const light = {
       '#8ba0a9'
     ],
   },
-  fontSizes: [12, 14, 16, 18, 20, 24, 32, 48, 64, 72],
-  space: [0, 2, 4, 8, 12, 16, 32, 64, 128, 256, 512],
 } as DefaultTheme
 
 export default light

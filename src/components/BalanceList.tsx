@@ -65,8 +65,8 @@ const BalanceList: React.FC<object> = () => {
   function renderElement(title: string, value: string) {
     return (
       <LinearLayout width={100} orientation='verti' mt={5} mb={4}>
-        <TextView color='text.2' fontSize={1}>{title}</TextView>
-        <TextView color='text.0' fontSize={3}>{value}</TextView>
+        <TextView color='text.2' fontSize='sm'>{title}</TextView>
+        <TextView color='text.0' fontSize='lg'>{value}</TextView>
       </LinearLayout>
     )
   }
@@ -80,7 +80,7 @@ const BalanceList: React.FC<object> = () => {
   return (
     <LinearLayout bg='background' height='100%'>
       <LinearLayout p={5}>
-        <TextView color='text.2' fontSize={1}>TOKEN VALUE</TextView>
+        <TextView color='text.2' fontSize='sm'>TOKEN VALUE</TextView>
         <FlatList
           data={flatList}
           keyExtractor={(item) => item.symbol}

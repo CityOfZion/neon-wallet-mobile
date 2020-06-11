@@ -46,7 +46,7 @@ const Home = (props: Props) => {
 
   return (
     <LinearLayout bg='background' alignItems='center' height='100%'>
-      <TextView my={6} fontSize={2} color='text.0'>{i18n.t('home.welcome')}</TextView>
+      <TextView my={6} fontSize='xl' color='text.0'>{i18n.t('home.welcome')}</TextView>
       <ButtonView
         mb={3} p={3} bg='primary' borderRadius={4} minWidth={100}
         onPress={() => props.navigation.navigate('Wallet')}
