@@ -1,6 +1,6 @@
 import {ISetThemeAction, SET_THEME} from '~src/store/actions/theme'
 import darkTheme from '~src/styles/themes/dark'
-import {DefaultTheme} from '~src/styles/styled'
+import {DefaultTheme} from '~src/styles/styled-components'
 
 
 interface IThemeState {
