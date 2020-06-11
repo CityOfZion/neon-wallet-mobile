@@ -10,7 +10,7 @@ import {
   typography, TypographyProps
 } from 'styled-system'
 
-const GenericTheme = {
+const StyleConstants = {
   fontSizes: {
     min: 10,
     xs: 12,
@@ -78,5 +78,5 @@ const ButtonView = styled.TouchableHighlight<ColorProps & SpaceProps & BorderPro
   ${border}
 `
 
-export {css, ThemeProvider, LinearLayout, TextView, ImageView, ButtonView, DefaultTheme, GenericTheme}
+export {css, ThemeProvider, LinearLayout, TextView, ImageView, ButtonView, DefaultTheme, StyleConstants}
 export default styled

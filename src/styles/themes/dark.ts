@@ -1,7 +1,7 @@
-import {DefaultTheme, GenericTheme} from '~src/styles/styled-components'
+import {DefaultTheme, StyleConstants} from '~src/styles/styled-components'
 
 const dark = {
-  ...GenericTheme,
+  ...StyleConstants,
 
   title: 'dark',
   colors: {
