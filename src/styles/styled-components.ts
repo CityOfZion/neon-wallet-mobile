@@ -46,6 +46,7 @@ const {
 } = styledComponents as styledComponents.ReactNativeThemedStyledComponentsModule<DefaultTheme>
 
 const TextView = styled.Text<ColorProps & OrientationProps & SpaceProps & LayoutProps & FlexboxProps & WeightProps & TypographyProps>`
+  font-family: 'sofiapro-regular';
   ${color}
   ${typography}
   ${space}

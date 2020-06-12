@@ -2,11 +2,13 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import {RequestConfig} from '@simpli/serialized-request'
-import React from 'react'
+import React, {useState} from 'react'
 import {ThemeProvider} from 'styled-components'
 import {Provider, useSelector} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
+import * as Font from 'expo-font'
+import {AppLoading} from 'expo'
 
 import '~src/window-crypto'
 import 'reflect-metadata'
@@ -38,6 +40,16 @@ type RootStackParamList = {
   Wallet: undefined
 }
 
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'sofiapro-bold': require('~src/assets/fonts/sofiapro-bold.otf'),
+    'sofiapro-medium': require('~src/assets/fonts/sofiapro-medium.otf'),
+    'sofiapro-regular': require('~src/assets/fonts/sofiapro-regular.otf'),
+    'sofiapro-regularitalic': require('~src/assets/fonts/sofiapro-regularitalic.otf'),
+    'sofiapro-semibold': require('~src/assets/fonts/sofiapro-semibold.otf'),
+  })
+}
+
 const store = createStore(rootReducer, applyMiddleware(thunk))
 
 const RootStack = createStackNavigator<RootStackParamList>()
@@ -49,6 +61,16 @@ RequestConfig.axios = httpConfig.axiosInstance
 
 function RootStackScreen() {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const [dataLoaded, setDataLoaded] = useState(false)
+
+  if (!dataLoaded) {
+    return (
+      <AppLoading
+        startAsync={fetchFonts}
+        onFinish={() => setDataLoaded(true)}
+      />
+    )
+  }
 
   return (
     <ThemeProvider theme={theme}>
