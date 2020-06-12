@@ -66,6 +66,8 @@
     "@types/react-test-renderer": "^16.9.2",
     "babel-preset-expo": "~8.1.0",
     "eslint-plugin-react": "^7.20.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.10",
     "jest-expo": "^37.0.0",
     "react-native-testing-library": "^1.14.0",
     "react-test-renderer": "^16.13.1",
@@ -83,5 +85,16 @@
   },
   "eslintConfig": {
     "extends": "universe"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "jest && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,vue,ts}": [
+      "eslint --fix .",
+      "git add ."
+    ]
   }
 }

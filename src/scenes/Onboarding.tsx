@@ -117,7 +117,7 @@ const FeatureHeader = styled.Text<{marginTop: string}>`
   color: ${(props: any) => props.theme.colors.text};
   font-weight: 700;
   font-size: 20px;
-  margin-top: ${props => props.marginTop};
+  margin-top: ${(props) => props.marginTop};
 `
 
 const FeatureDescription = styled.Text<{marginHorizontal: string}>`
@@ -126,8 +126,8 @@ const FeatureDescription = styled.Text<{marginHorizontal: string}>`
   text-align: center;
   letter-spacing: 1.28px;
   margin-top: 12px;
-  margin-right: ${props => props.marginHorizontal};
-  margin-left: ${props => props.marginHorizontal};
+  margin-right: ${(props) => props.marginHorizontal};
+  margin-left: ${(props) => props.marginHorizontal};
 `
 
 const GetStartedButton = styled.TouchableHighlight`

@@ -1,6 +1,6 @@
 import * as LocalAuthentication from 'expo-local-authentication'
 import React, {useState} from 'react'
-import {StyleSheet, Text, TouchableHighlight, View} from 'react-native'
+import {StyleSheet, Text, TouchableHighlight} from 'react-native'
 import styled from 'styled-components/native'
 import {color, ColorProps} from 'styled-system'
 
@@ -13,7 +13,7 @@ const TouchIdTest: React.FC<object> = () => {
   }
 
   return (
-    <TouchIdTestView bg='background'>
+    <TouchIdTestView bg="background">
       <TouchableHighlight
         onPress={() => askForAuthentication()}
         style={styles.button}

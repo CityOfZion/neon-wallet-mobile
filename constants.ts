@@ -79,4 +79,3 @@ export const NODES_MAIN_NET = nodesMainNet
 export const NODES_TEST_NET = nodesTestNet
 
 export const DEFAULT_CURRENCY = '$'
-

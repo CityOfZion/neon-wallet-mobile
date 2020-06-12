@@ -10,11 +10,7 @@ const dark = {
     tertiary: '#293036',
 
     background: '#495158',
-    text: [
-      '#fff',
-      '#333',
-      '#8ba0a9'
-    ],
+    text: ['#fff', '#333', '#8ba0a9'],
   },
 } as DefaultTheme
 

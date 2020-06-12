@@ -10,11 +10,7 @@ const light = {
     tertiary: '#4cffb3',
 
     background: '#ddd',
-    text: [
-      '#333',
-      '#fff',
-      '#8ba0a9'
-    ],
+    text: ['#333', '#fff', '#8ba0a9'],
   },
 } as DefaultTheme
 

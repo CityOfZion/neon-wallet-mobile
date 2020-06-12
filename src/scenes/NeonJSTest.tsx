@@ -1,6 +1,6 @@
 import {wallet} from '@cityofzion/neon-core'
 import React, {useState} from 'react'
-import {StyleSheet, Text, TouchableHighlight, View} from 'react-native'
+import {StyleSheet, Text, TouchableHighlight} from 'react-native'
 import styled from 'styled-components/native'
 import {color, ColorProps} from 'styled-system'
 
@@ -16,10 +16,7 @@ const NeonJSTest: React.FC<object> = () => {
 
   return (
     <NeonJSView>
-      <TouchableHighlight
-        onPress={() => createAccount()}
-        style={styles.button}
-      >
+      <TouchableHighlight onPress={() => createAccount()} style={styles.button}>
         <Text style={styles.buttonText}>Create Account</Text>
       </TouchableHighlight>
       <Text>{account?.address ?? 'No Account'}</Text>

@@ -1,14 +1,27 @@
 import * as styledComponents from 'styled-components/native'
-import {orientation, OrientationProps, weight, WeightProps} from '~src/styles/styled-system.config'
 import {
-  border, BorderProps,
-  color, ColorProps,
-  flexbox, FlexboxProps,
-  layout, LayoutProps,
-  position, PositionProps,
-  space, SpaceProps,
-  typography, TypographyProps
+  border,
+  BorderProps,
+  color,
+  ColorProps,
+  flexbox,
+  FlexboxProps,
+  layout,
+  LayoutProps,
+  position,
+  PositionProps,
+  space,
+  SpaceProps,
+  typography,
+  TypographyProps,
 } from 'styled-system'
+
+import {
+  orientation,
+  OrientationProps,
+  weight,
+  WeightProps,
+} from '~src/styles/styled-system.config'
 
 const StyleConstants = {
   fontSizes: {
@@ -26,26 +39,23 @@ const StyleConstants = {
   space: [0, 2, 4, 8, 12, 16, 32, 64, 128, 256, 512],
 }
 
-interface DefaultTheme {
-  title: string;
-
-  colors: {
-    primary: string;
-    secondary: string;
-    tertiary: string;
-
-    background: string;
-    text: string[];
-  }
-}
-
 const {
   default: styled,
   css,
-  ThemeProvider
-} = styledComponents as styledComponents.ReactNativeThemedStyledComponentsModule<DefaultTheme>
+  ThemeProvider,
+} = styledComponents as styledComponents.ReactNativeThemedStyledComponentsModule<
+  DefaultTheme
+>
 
-const TextView = styled.Text<ColorProps & OrientationProps & SpaceProps & LayoutProps & FlexboxProps & WeightProps & TypographyProps>`
+const TextView = styled.Text<
+  ColorProps &
+    OrientationProps &
+    SpaceProps &
+    LayoutProps &
+    FlexboxProps &
+    WeightProps &
+    TypographyProps
+>`
   font-family: 'sofiapro-regular';
   ${color}
   ${typography}
@@ -55,14 +65,24 @@ const TextView = styled.Text<ColorProps & OrientationProps & SpaceProps & Layout
   ${weight}
 `
 
-const ImageView = styled.Image<SpaceProps & LayoutProps & FlexboxProps & WeightProps>`
+const ImageView = styled.Image<
+  SpaceProps & LayoutProps & FlexboxProps & WeightProps
+>`
   ${space}
   ${layout}
   ${flexbox}
   ${weight}
 `
 
-const LinearLayout = styled.View<ColorProps & OrientationProps & SpaceProps & LayoutProps & FlexboxProps & WeightProps & PositionProps>`
+const LinearLayout = styled.View<
+  ColorProps &
+    OrientationProps &
+    SpaceProps &
+    LayoutProps &
+    FlexboxProps &
+    WeightProps &
+    PositionProps
+>`
   ${color}
   ${orientation}
   ${space}
@@ -72,12 +92,35 @@ const LinearLayout = styled.View<ColorProps & OrientationProps & SpaceProps & La
   ${position}
 `
 
-const ButtonView = styled.TouchableHighlight<ColorProps & SpaceProps & BorderProps & LayoutProps>`
+const ButtonView = styled.TouchableHighlight<
+  ColorProps & SpaceProps & BorderProps & LayoutProps
+>`
   ${layout}
   ${color}
   ${space}
   ${border}
 `
 
-export {css, ThemeProvider, LinearLayout, TextView, ImageView, ButtonView, DefaultTheme, StyleConstants}
+export interface DefaultTheme {
+  title: string
+
+  colors: {
+    primary: string
+    secondary: string
+    tertiary: string
+
+    background: string
+    text: string[]
+  }
+}
+
+export {
+  css,
+  ThemeProvider,
+  LinearLayout,
+  TextView,
+  ImageView,
+  ButtonView,
+  StyleConstants,
+}
 export default styled
