@@ -6,5 +6,35 @@
   },
   "home": {
     "welcome": "Bem-vindo ao Neon Wallet!"
+  },
+  "customColorPage": {
+    "title": "Selecione um cor personalizada para sua conta"
+  },
+  "paymentCard": {
+    "balance": "SALDO",
+    "address": "ENDEREÇO"
+  },
+  "boolean": {
+    "true": "Sim",
+    "false": "Não"
+  },
+  "dateFormat": {
+    "date": "DD/MM/YYYY",
+    "datetime": "DD/MM/YYYY HH:mm",
+    "time": "hh:mm"
+  },
+  "filter": {
+    "number": {
+      "decimal": ",",
+      "thousands": "."
+    },
+    "phone": {
+      "regex": "(\\d{2})(\\d{4,5})(\\d{4})$",
+      "format": "($1) $2-$3"
+    },
+    "zipcode": {
+      "regex": "(\\d{5})(\\d{3})$",
+      "format": "$1-$2"
+    }
   }
 }
