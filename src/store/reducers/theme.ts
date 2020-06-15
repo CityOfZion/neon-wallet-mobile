@@ -1,7 +1,6 @@
 import {ISetThemeAction, SET_THEME} from '~src/store/actions/theme'
-import darkTheme from '~src/styles/themes/dark'
 import {DefaultTheme} from '~src/styles/styled-components'
-
+import darkTheme from '~src/styles/themes/dark'
 
 interface IThemeState {
   theme: DefaultTheme
@@ -19,7 +18,7 @@ export const themeReducer = (
     case SET_THEME:
       return {
         ...state,
-        theme: {...state.theme, ...action.theme}
+        theme: {...state.theme, ...action.theme},
       }
     default:
       return state

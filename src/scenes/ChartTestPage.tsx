@@ -1,14 +1,14 @@
 import React from 'react'
-import {Dimensions, Text, View} from 'react-native'
+import {Dimensions} from 'react-native'
 import {LineChart} from 'react-native-chart-kit'
 import styled from 'styled-components/native'
 import {color, ColorProps} from 'styled-system'
 
 export default function ChartTestPage() {
-  const mockData = Array.apply(null, Array(30)).map((x) => Math.random() * 100)
+  const mockData = [null, Array(30)].map((x) => Math.random() * 100)
 
   return (
-    <ChartView bg='background'>
+    <ChartView bg="background">
       <LineChart
         data={{
           labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],

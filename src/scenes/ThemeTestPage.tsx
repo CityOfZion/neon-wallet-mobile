@@ -1,11 +1,19 @@
 import React, {useState} from 'react'
-import darkTheme from '~src/styles/themes/dark'
-import lightTheme from '~src/styles/themes/light'
-import {border, BorderProps, color, ColorProps, space, SpaceProps} from 'styled-system'
 import {useDispatch, useSelector} from 'react-redux'
+import {
+  border,
+  BorderProps,
+  color,
+  ColorProps,
+  space,
+  SpaceProps,
+} from 'styled-system'
+
 import {setTheme} from '~src/store/actions/theme'
 import {RootState} from '~src/store/reducers/root'
 import styled, {DefaultTheme} from '~src/styles/styled-components'
+import darkTheme from '~src/styles/themes/dark'
+import lightTheme from '~src/styles/themes/light'
 
 const ThemeTestPage: React.FC<object> = () => {
   const dispatch = useDispatch()
@@ -18,25 +26,29 @@ const ThemeTestPage: React.FC<object> = () => {
   }
 
   return (
-    <ThemeView bg='background'>
-      <Text color='text.0' mb={4}>Current theme: {theme.title}</Text>
-      {theme.title === 'light'
-        ? (
-          <ThemeButton
-            p={4} bg='primary' borderRadius={3}
-            onPress={() => changeTheme(darkTheme)}
-          >
-            <Text color='text.1'>Switch to Dark Theme</Text>
-          </ThemeButton>
-        )
-        : (
-          <ThemeButton
-            p={4} bg='primary' borderRadius={3}
-            onPress={() => changeTheme(lightTheme)}
-          >
-            <Text color='text.1'>Switch to Light Theme</Text>
-          </ThemeButton>
-        )}
+    <ThemeView bg="background">
+      <Text color="text.0" mb={4}>
+        Current theme: {theme.title}
+      </Text>
+      {theme.title === 'light' ? (
+        <ThemeButton
+          p={4}
+          bg="primary"
+          borderRadius={3}
+          onPress={() => changeTheme(darkTheme)}
+        >
+          <Text color="text.1">Switch to Dark Theme</Text>
+        </ThemeButton>
+      ) : (
+        <ThemeButton
+          p={4}
+          bg="primary"
+          borderRadius={3}
+          onPress={() => changeTheme(lightTheme)}
+        >
+          <Text color="text.1">Switch to Light Theme</Text>
+        </ThemeButton>
+      )}
     </ThemeView>
   )
 }
@@ -54,7 +66,9 @@ const ThemeView = styled.View<ColorProps>`
   ${color}
 `
 
-const ThemeButton = styled.TouchableHighlight<BorderProps & ColorProps & SpaceProps>`
+const ThemeButton = styled.TouchableHighlight<
+  BorderProps & ColorProps & SpaceProps
+>`
   ${border}
   ${color}
   ${space}

@@ -4,11 +4,13 @@ import {
   MAIN_NETWORK_LABEL,
   TEST_NETWORK_DEPRECATED_LABEL,
   TEST_NETWORK_ID,
-  TEST_NETWORK_LABEL
+  TEST_NETWORK_LABEL,
 } from '~/constants'
 
-export const isMainNetwork = (networkId: string) => networkId === MAIN_NETWORK_ID
-export const isTestNetwork = (networkId: string) => networkId === TEST_NETWORK_ID
+export const isMainNetwork = (networkId: string) =>
+  networkId === MAIN_NETWORK_ID
+export const isTestNetwork = (networkId: string) =>
+  networkId === TEST_NETWORK_ID
 
 export const getNetworks = () => [
   {
@@ -30,27 +32,29 @@ export const getNetworks = () => [
 type NetworkType = string
 
 type NetworkItemType = {
-  value: string,
-  id: string,
-  label: string,
-  network: NetworkType,
-  deprecatedLabel: string,
+  value: string
+  id: string
+  label: string
+  network: NetworkType
+  deprecatedLabel: string
 }
 
 export const findNetwork = (networkId: string): NetworkItemType => {
   const networks = getNetworks()
-  return networks.find(({ id }) => id === networkId) || networks[0]
+  return networks.find(({id}) => id === networkId) ?? networks[0]
 }
 
 export const findNetworkByLabel = (networkLabel: string): NetworkItemType => {
   const networks = getNetworks()
-  return networks.find(({ label }) => networkLabel === label) || networks[0]
+  return networks.find(({label}) => networkLabel === label) ?? networks[0]
 }
 
-export const findNetworkByDeprecatedLabel = (deprecatedLabel: string): NetworkItemType => {
+export const findNetworkByDeprecatedLabel = (
+  deprecatedLabel: string
+): NetworkItemType => {
   const networks = getNetworks()
   return (
-    networks.find(network => network.deprecatedLabel === deprecatedLabel) ||
+    networks.find((network) => network.deprecatedLabel === deprecatedLabel) ??
     networks[0]
   )
 }
