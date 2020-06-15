@@ -10,7 +10,13 @@ const dark = {
     tertiary: '#293036',
 
     background: '#495158',
-    text: ['#fff', '#333', '#8ba0a9'],
+
+    // eslint-disable-next-line prettier/prettier
+    text: [
+      '#fff',
+      '#333',
+      '#8ba0a9'
+    ],
   },
 } as DefaultTheme
 

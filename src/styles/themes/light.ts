@@ -10,7 +10,12 @@ const light = {
     tertiary: '#4cffb3',
 
     background: '#ddd',
-    text: ['#333', '#fff', '#8ba0a9'],
+    // eslint-disable-next-line prettier/prettier
+    text: [
+      '#333',
+      '#fff',
+      '#8ba0a9',
+    ],
   },
 } as DefaultTheme
 
