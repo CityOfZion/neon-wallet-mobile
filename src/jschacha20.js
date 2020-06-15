@@ -104,79 +104,14 @@ var JSChaCha20 = function (key, nonce, counter) {
   ]
 
   // init 64 byte keystream block //
-  this._keystream = [
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-  ]
+  this._keystream = Array(64).fill(0)
 
   // internal byte counter //
   this._byteCounter = 0
 }
 
 JSChaCha20.prototype._chacha = function () {
-  var mix = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  var mix = Array(16).fill(0)
   var i = 0
   var b = 0
 
