@@ -16,6 +16,7 @@ type HomeStackParametersList = {
   NeonJSTest: undefined
   ChartTest: undefined
   ThemeTest: undefined
+  CustomColor: undefined
   Wallet: undefined
 }
 
@@ -94,6 +95,18 @@ const Home = (props: Props) => {
       >
         <TextView color="text.1" textAlign="center">
           Go to Theme Test Page
+        </TextView>
+      </ButtonView>
+      <ButtonView
+        mb={3}
+        p={3}
+        bg="primary"
+        borderRadius={4}
+        minWidth={100}
+        onPress={() => props.navigation.navigate('CustomColor')}
+      >
+        <TextView color="text.1" textAlign="center">
+          Go to Custom Color Page
         </TextView>
       </ButtonView>
       <LinearLayout orientation="horiz" mt={5}>

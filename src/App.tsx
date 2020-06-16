@@ -18,6 +18,7 @@ import ThemeTestPage from './scenes/ThemeTestPage'
 import {ROUTES} from '~/constants'
 import {HttpConfig} from '~src/config/HttpConfig'
 import ChartTestPage from '~src/scenes/ChartTestPage'
+import CustomColorPage from '~src/scenes/CustomColorPage'
 import Home from '~src/scenes/Home'
 import NeonJSTest from '~src/scenes/NeonJSTest'
 import Onboarding from '~src/scenes/Onboarding'
@@ -36,6 +37,7 @@ type RootStackParamList = {
   NeonJSTest: undefined
   ChartTest: undefined
   ThemeTest: undefined
+  CustomColor: undefined
   Wallet: undefined
 }
 
@@ -94,6 +96,10 @@ function RootStackScreen() {
         <RootStack.Screen
           name={ROUTES.THEME_TEST.name}
           component={ThemeTestPage}
+        />
+        <RootStack.Screen
+          name={ROUTES.CUSTOM_COLOR.name}
+          component={CustomColorPage}
         />
         <RootStack.Screen
           name={ROUTES.QR_CODE_SCAN_TEST.name}

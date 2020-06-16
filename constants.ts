@@ -39,6 +39,10 @@ export const ROUTES = {
     id: 'THEME_TEST',
     name: 'ThemeTest' as 'ThemeTest',
   },
+  CUSTOM_COLOR: {
+    id: 'CUSTOM_COLOR',
+    name: 'CustomColor' as 'CustomColor',
+  },
 }
 
 export const TABS = {

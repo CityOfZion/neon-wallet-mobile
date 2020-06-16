@@ -6,5 +6,35 @@
   },
   "home": {
     "welcome": "Willkommen bei Neon Wallet!"
+  },
+  "customColorPage": {
+    "title": "#translateme"
+  },
+  "paymentCard": {
+    "balance": "#TRANSLATEME",
+    "address": "#TRANSLATEME"
+  },
+  "boolean": {
+    "true": "#translateme",
+    "false": "#translateme"
+  },
+  "dateFormat": {
+    "date": "DD/MM/YYYY",
+    "datetime": "DD/MM/YYYY HH:mm",
+    "time": "HH:mm"
+  },
+  "filter": {
+    "number": {
+      "decimal": ",",
+      "thousands": "."
+    },
+    "phone": {
+      "regex": "(\\d{3})(\\d{3})(\\d{4})$",
+      "format": "($1) $2-$3"
+    },
+    "zipcode": {
+      "regex": "(\\d{5})$",
+      "format": "$1"
+    }
   }
 }
