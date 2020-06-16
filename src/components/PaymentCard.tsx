@@ -2,7 +2,6 @@ import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
 import {StyleSheet, ImageBackground} from 'react-native'
-import {Asset} from 'react-native-unimodules'
 
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import i18n from '~src/i18n'
@@ -21,13 +20,45 @@ interface Props {
 }
 
 const PaymentCard: React.FC<Props> = (props) => {
-  const paymentCardStyle = () => ({
-    backgroundColor: props.color,
-    aspectRatio: 38 / 25,
+  const styles = StyleSheet.create({
+    paymentCard: {
+      backgroundColor: props.color,
+      aspectRatio: 38 / 25,
+    },
+    contentCard: {
+      zIndex: 100,
+    },
+    placeholderCard: {
+      position: 'absolute',
+      left: 0,
+      right: '30%',
+      top: '20%',
+      bottom: 0,
+      borderRadius: 17,
+      zIndex: 30,
+    },
+    gradientCard: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      borderRadius: 17,
+      zIndex: 20,
+    },
+    brightCard: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      borderRadius: 17,
+      zIndex: 10,
+    },
   })
 
   return (
-    <PaymentCardView style={paymentCardStyle()}>
+    <PaymentCardView width={'100%'} style={styles.paymentCard}>
       <LinearLayout
         orientation={'verti'}
         width={'100%'}
@@ -36,7 +67,12 @@ const PaymentCard: React.FC<Props> = (props) => {
         style={styles.contentCard}
       >
         <LinearLayout mb={3} orientation={'horiz'} width={'100%'}>
-          <ImageView width={24} height={24} my={2} source={{uri: cardNeo}} />
+          <ImageView
+            width={24}
+            height={24}
+            my={2}
+            source={require('~src/assets/images/card-neo.png')}
+          />
 
           <TextView
             weight={1}
@@ -49,7 +85,11 @@ const PaymentCard: React.FC<Props> = (props) => {
             {props.name}
           </TextView>
 
-          <ImageView width={32} height={32} source={{uri: cardQrCode}} />
+          <ImageView
+            width={32}
+            height={32}
+            source={require('~src/assets/images/card-qrcode.png')}
+          />
         </LinearLayout>
 
         <TextView
@@ -104,14 +144,14 @@ const PaymentCard: React.FC<Props> = (props) => {
             mt={-3}
             width={20}
             height={24}
-            source={{uri: cardCopy}}
+            source={require('~src/assets/images/card-copy.png')}
             style={{opacity: 0.5}}
           />
         </LinearLayout>
       </LinearLayout>
 
       <ImageBackground
-        source={{uri: cardPlaceholderUri}}
+        source={require('~src/assets/images/card-placeholder.png')}
         resizeMode="contain"
         style={styles.placeholderCard}
       />
@@ -149,53 +189,9 @@ PaymentCard.defaultProps = {
   color: '#00aaff',
 }
 
-const cardCopy = Asset.fromModule(require('~src/assets/images/card-copy.png'))
-  .uri
-const cardNeo = Asset.fromModule(require('~src/assets/images/card-neo.png')).uri
-const cardQrCode = Asset.fromModule(
-  require('~src/assets/images/card-qrcode.png')
-).uri
-const cardPlaceholderUri = Asset.fromModule(
-  require('~src/assets/images/card-placeholder.png')
-).uri
-
-const PaymentCardView = styled.View`
-  width: 100%;
+const PaymentCardView = styled(LinearLayout)`
   border-radius: 17px;
   box-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
 `
-
-const styles = StyleSheet.create({
-  contentCard: {
-    zIndex: 100,
-  },
-  placeholderCard: {
-    position: 'absolute',
-    left: 0,
-    right: '30%',
-    top: '20%',
-    bottom: 0,
-    borderRadius: 17,
-    zIndex: 30,
-  },
-  gradientCard: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    borderRadius: 17,
-    zIndex: 20,
-  },
-  brightCard: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    borderRadius: 17,
-    zIndex: 10,
-  },
-})
 
 export default PaymentCard

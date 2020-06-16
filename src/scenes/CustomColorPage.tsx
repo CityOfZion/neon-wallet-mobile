@@ -42,7 +42,7 @@ const CustomColorPage: React.FC<object> = () => {
   )
 }
 
-const ThemeView = styled.View<ColorProps>`
+const ThemeView = styled(LinearLayout)`
   display: flex;
   align-items: center;
   justify-content: center;

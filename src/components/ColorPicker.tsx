@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types'
 import React, {useState, useEffect} from 'react'
 import {GestureResponderEvent, LayoutChangeEvent} from 'react-native'
-import {Asset} from 'react-native-unimodules'
 
 import {FilterHelper} from '~src/helpers/FilterHelper'
-import styled from '~src/styles/styled-components'
+import styled, {LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
   onChange?: (hex: string) => void
@@ -120,16 +119,14 @@ const ColorPicker: React.FC<Props> = (props) => {
     return Math.round((Math.atan2(-x, y) * 180) / Math.PI)
   }
 
-  const HueView = styled.View`
-    position: absolute;
+  const HueView = styled(LinearLayout)`
     z-index: 10;
     top: ${viewHeight * 0.49 - getHueSelectorRadius() * 0.5}px;
     left: ${viewHeight * 0.445 - getHueSelectorRadius() * 0.5}px;
     transform: rotate(${hueAngle}deg);
   `
 
-  const HueSelectorView = styled.View`
-    position: relative;
+  const HueSelectorView = styled(LinearLayout)`
     border-radius: 9999px;
     box-shadow: 0 3px 2px rgba(0, 0, 0, 0.6);
     border: solid white ${getHueSelectorRadius() * 0.1}px;
@@ -139,16 +136,14 @@ const ColorPicker: React.FC<Props> = (props) => {
     height: ${getHueSelectorRadius()}px;
   `
 
-  const LuminosityView = styled.View`
-    position: absolute;
+  const LuminosityView = styled(LinearLayout)`
     z-index: 20;
     top: ${viewHeight * 0.49 - getLuminositySelectorRadius() * 0.5}px;
     left: ${viewHeight * 0.445 - getLuminositySelectorRadius() * 0.5}px;
     transform: rotate(${luminosityAngle}deg);
   `
 
-  const LuminositySelectorView = styled.View`
-    position: relative;
+  const LuminositySelectorView = styled(LinearLayout)`
     border-radius: 9999px;
     box-shadow: 0 3px 2px rgba(0, 0, 0, 0.6);
     border: solid white ${getLuminositySelectorRadius() * 0.1}px;
@@ -159,26 +154,35 @@ const ColorPicker: React.FC<Props> = (props) => {
   `
 
   return (
-    <ColorPickerView onLayout={layoutEvent} style={{aspectRatio: 8 / 9}}>
-      <HueView>
-        <HueSelectorView />
+    <ColorPickerView
+      onLayout={layoutEvent}
+      width={'100%'}
+      style={{aspectRatio: 8 / 9}}
+    >
+      <HueView position={'absolute'}>
+        <HueSelectorView position={'relative'} />
       </HueView>
 
-      <LuminosityView>
-        <LuminositySelectorView />
+      <LuminosityView position={'absolute'}>
+        <LuminositySelectorView position={'relative'} />
       </LuminosityView>
 
       <HueAreaView
+        position={'absolute'}
         onStartShouldSetResponder={hueAreaTouchEvent}
         onMoveShouldSetResponderCapture={hueAreaMoveEvent}
       />
 
       <LuminosityAreaView
+        position={'absolute'}
         onStartShouldSetResponder={luminosityAreaTouchEvent}
         onMoveShouldSetResponderCapture={luminosityAreaMoveEvent}
       />
 
-      <ColorPickerContainer source={{uri: cpContainer}} resizeMode="contain" />
+      <ColorPickerContainer
+        source={require('~src/assets/images/colorpicker-container.png')}
+        resizeMode="contain"
+      />
     </ColorPickerView>
   )
 }
@@ -188,16 +192,9 @@ ColorPicker.propTypes = {
   color: PropTypes.string,
 }
 
-const cpContainer = Asset.fromModule(
-  require('~src/assets/images/colorpicker-container.png')
-).uri
+const ColorPickerView = styled(LinearLayout)``
 
-const ColorPickerView = styled.View`
-  width: 100%;
-`
-
-const LuminosityAreaView = styled.View`
-  position: absolute;
+const LuminosityAreaView = styled(LinearLayout)`
   top: 24%;
   bottom: 25%;
   left: 22%;
@@ -206,8 +203,7 @@ const LuminosityAreaView = styled.View`
   z-index: 120;
 `
 
-const HueAreaView = styled.View`
-  position: absolute;
+const HueAreaView = styled(LinearLayout)`
   top: 0;
   bottom: 0;
   left: 0;
