@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {ButtonView, ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import styled from '~src/styles/styled-components'
+import i18n from '~src/i18n'
 
 interface NotificationProps {
   text: string
@@ -21,7 +22,9 @@ const Notification = (props: NotificationProps) => {
       bg='background.1'
       borderColor='primary'
     >
-      <TextView color='text.2' fontSize='10px' mb='4px'>NOTIFICATION</TextView>
+      <TextView color='text.2' fontSize='10px' mb='4px'>
+        {i18n.t('components.notification.title')}
+      </TextView>
       <LinearLayout orientation='horiz'>
         <TextView color='text.0' fontSize='14px' lineHeight='14px' weight={1}>
           {props.text}

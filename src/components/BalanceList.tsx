@@ -5,6 +5,7 @@ import {LinearLayout, TextView} from '~src/styles/styled-components'
 import {useSelector} from 'react-redux'
 import {RootState} from '~src/store/reducers/root'
 import {TokenValue} from '~src/models/TokenValue'
+import i18n from '~src/i18n'
 
 const TableData = (props: {header: string, content: string}) => {
   return (
@@ -28,8 +29,8 @@ const BalanceListItem = (props: {item: TokenValue}) => {
         bg={props.item.color}
       />
       <TableData header={props.item.name} content={props.item.symbol} />
-      <TableData header={'Holdings'} content={String(props.item.holding)} />
-      <TableData header={'Value'} content={`${currency}${props.item.value}`} />
+      <TableData header={i18n.t('components.balanceList.holdings')} content={String(props.item.holding)} />
+      <TableData header={i18n.t('components.balanceList.value')} content={`${currency}${props.item.value}`} />
     </LinearLayout>
   )
 }
@@ -37,7 +38,9 @@ const BalanceListItem = (props: {item: TokenValue}) => {
 const BalanceList = (props: {tokenAssets: TokenValue[]}) => {
   return (
     <LinearLayout p={5} height='100%'>
-      <TextView color='text.2' fontSize='sm'>TOKEN VALUE</TextView>
+      <TextView color='text.2' fontSize='sm'>
+        {i18n.t('components.balanceList.title')}
+      </TextView>
       <FlatList
         data={props.tokenAssets}
         keyExtractor={(item) => item.symbol}

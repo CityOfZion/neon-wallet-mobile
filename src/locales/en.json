@@ -36,5 +36,20 @@
       "regex": "(\\d{5})$",
       "format": "$1"
     }
+  },
+  "screens": {
+    "wallet": {
+      "changeSinceLastVisit": "CHANGE SINCE LAST VISIT %{date}"
+    }
+  },
+  "components": {
+    "notification": {
+      "title": "NOTIFICATION"
+    },
+    "balanceList": {
+      "title": "TOKEN VALUE",
+      "holdings": "Holdings",
+      "value": "Value"
+    }
   }
 }

@@ -13,6 +13,7 @@ const WalletCard = (props: WalletCardProps) => {
 
     return (
       <AccountCard
+        position={'absolute'}
         bottom={`${bottomOffset}px`}
         right={'6px'}
         height={'90%'}
@@ -44,13 +45,19 @@ const WalletCard = (props: WalletCardProps) => {
   return (
     <WalletCardRelativeContainer height={350} m='12px' bg={'#364046'}>
       { props.wallet.currentAssets.assets.map((a, i) => _renderAccountCard(i)) }
-      <WalletFrontImage source={require('~src/assets/images/wallet-card-front.png')} />
+      <WalletFrontImage
+        height={'100%'}
+        width={'100%'}
+        source={require('~src/assets/images/wallet-card-front.png')}
+      />
       <RelativeLayout
         bottom={130}
         height={58}
         width={4/5}
       >
         <WalletNameContainer
+          height={'100%'}
+          width={'100%'}
           source={require('~src/assets/images/wallet-card-label.png')}
         />
         <LinearLayout bottom={30} orientation='horiz' my={'auto'}>
@@ -67,6 +74,8 @@ const WalletCard = (props: WalletCardProps) => {
       </RelativeLayout>
       <RelativeLayout bottom={110} height={12} width={4/5}>
         <WalletAssetsBar
+          height={'80%'}
+          width={'100%'}
           source={require('~src/assets/images/wallet-card-label.png')}
         />
         <AssetsBar
@@ -84,20 +93,14 @@ const WalletCard = (props: WalletCardProps) => {
 }
 
 const WalletFrontImage = styled(ImageView)`
-  height: 100%;
-  width: 100%;
   resize-mode: stretch;
 `
 
 const WalletNameContainer = styled(ImageView)`
-  height: 100%;
-  width: 100%;
   resize-mode: contain;
 `
 
 const WalletAssetsBar = styled(ImageView)`
-  height: 80%;
-  width: 100%;
   resize-mode: cover;
   border-top-right-radius: 9999px;
   border-bottom-right-radius: 9999px;
@@ -113,7 +116,6 @@ const WalletCardRelativeContainer = styled(RelativeLayout)`
 `
 
 const AccountCard = styled(LinearLayout)`
-  position: absolute;
   border-radius: 18px;
 `
 

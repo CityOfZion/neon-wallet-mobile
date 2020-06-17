@@ -13,6 +13,8 @@ import WalletCard from '~src/components/WalletCard'
 import {mockWalletItems} from '~src/mockWalletItems'
 import {Wallet} from '~src/models/Wallet'
 import {layout, LayoutProps, space, SpaceProps} from 'styled-system'
+import i18n from '~src/i18n'
+import moment from 'moment'
 
 const SLIDER_WIDTH = Dimensions.get('window').width
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
@@ -34,7 +36,10 @@ const WalletView = (props: WalletProps) => {
     return (
       <LinearLayout orientation='verti' alignItems='center'>
         <TextView fontSize='11px' color='text.2'>
-          CHANGE SINCE LAST VISIT 07:40 - 20/03/2020
+          {i18n.t(
+            'screens.wallet.changeSinceLastVisit',
+            {date: moment(wallet.lastVisitedAt).format('HH:mm - DD/MM/YYYY')}
+            )}
         </TextView>
         <LinearLayout orientation='horiz'>
           <TextView fontSize='36px' color='text.0' fontFamily='medium'>
