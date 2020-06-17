@@ -1,7 +1,8 @@
-import {Wallet} from '~src/models/Wallet'
+import moment from 'moment'
+
 import {TokenBalance} from '~src/models/TokenBalance'
 import {TokenValue} from '~src/models/TokenValue'
-import moment from 'moment'
+import {Wallet} from '~src/models/Wallet'
 
 export const mockWalletItems = [
   new Wallet(

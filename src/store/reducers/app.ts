@@ -1,6 +1,6 @@
+import {DEFAULT_CURRENCY} from '~/constants'
 import i18n from '~src/i18n'
 import {IAppAction, SET_CURRENCY, SET_LOCALE} from '~src/store/actions/app'
-import {DEFAULT_CURRENCY} from '~/constants'
 
 interface IAppState {
   locale: string
@@ -9,13 +9,10 @@ interface IAppState {
 
 const appState: IAppState = {
   locale: 'en',
-  currency: DEFAULT_CURRENCY
+  currency: DEFAULT_CURRENCY,
 }
 
-export const appReducer = (
-  state: IAppState = appState,
-  action: IAppAction
-) => {
+export const appReducer = (state: IAppState = appState, action: IAppAction) => {
   switch (action.type) {
     case SET_LOCALE:
       if (Object.keys(i18n.translations).includes(action.locale)) {

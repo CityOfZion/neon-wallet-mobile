@@ -97,11 +97,11 @@ const LinearLayout = styled.View<
 
 const RelativeLayout = styled.View<
   ColorProps &
-  LayoutProps &
-  OrientationProps &
-  PositionProps &
-  SpaceProps &
-  WeightProps
+    LayoutProps &
+    OrientationProps &
+    PositionProps &
+    SpaceProps &
+    WeightProps
 >`
   position: relative;
   > * {
@@ -127,7 +127,7 @@ const ButtonView = styled.TouchableHighlight<
 
 export interface DefaultTheme {
   title: string
-  statusBarStyle: 'default' | 'light-content' | 'dark-content';
+  statusBarStyle: 'default' | 'light-content' | 'dark-content'
 
   colors: {
     primary: string

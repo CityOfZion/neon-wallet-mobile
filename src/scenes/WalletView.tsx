@@ -1,20 +1,25 @@
+import {StackNavigationProp} from '@react-navigation/stack'
+import {LinearGradient} from 'expo-linear-gradient'
+import moment from 'moment'
 import React, {useRef, useState} from 'react'
-
-import BalanceList from '~src/components/BalanceList'
-import styled, {DefaultTheme, ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {Dimensions, ScrollView, StatusBar, StyleSheet} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
-import {RootState} from '~src/store/reducers/root'
+import {layout, LayoutProps, space, SpaceProps} from 'styled-system'
+
+import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {LinearGradient} from 'expo-linear-gradient'
 import WalletCard from '~src/components/WalletCard'
+import i18n from '~src/i18n'
 import {mockWalletItems} from '~src/mockWalletItems'
 import {Wallet} from '~src/models/Wallet'
-import {layout, LayoutProps, space, SpaceProps} from 'styled-system'
-import i18n from '~src/i18n'
-import moment from 'moment'
+import {RootState} from '~src/store/reducers/root'
+import styled, {
+  DefaultTheme,
+  ImageView,
+  LinearLayout,
+  TextView,
+} from '~src/styles/styled-components'
 
 const SLIDER_WIDTH = Dimensions.get('window').width
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
@@ -34,20 +39,23 @@ const WalletView = (props: WalletProps) => {
 
   const _renderWalletChange = (wallet: Wallet) => {
     return (
-      <LinearLayout orientation='verti' alignItems='center'>
-        <TextView fontSize='11px' color='text.2'>
-          {i18n.t(
-            'screens.wallet.changeSinceLastVisit',
-            {date: moment(wallet.lastVisitedAt).format('HH:mm - DD/MM/YYYY')}
-            )}
+      <LinearLayout orientation="verti" alignItems="center">
+        <TextView fontSize="11px" color="text.2">
+          {i18n.t('screens.wallet.changeSinceLastVisit', {
+            date: moment(wallet.lastVisitedAt).format('HH:mm - DD/MM/YYYY'),
+          })}
         </TextView>
-        <LinearLayout orientation='horiz'>
-          <TextView fontSize='36px' color='text.0' fontFamily='medium'>
-            { `${currency}${wallet.currentValue.toFixed(2)}` }
+        <LinearLayout orientation="horiz">
+          <TextView fontSize="36px" color="text.0" fontFamily="medium">
+            {`${currency}${wallet.currentValue.toFixed(2)}`}
           </TextView>
-          <ImageView mt='8px' mx='4px' source={require('~src/assets/images/info-primary.png')} />
-          <TextView fontSize='36px' color='primary' fontFamily='semibold'>
-            { calculateChangePercentage(wallet) }
+          <ImageView
+            mt="8px"
+            mx="4px"
+            source={require('~src/assets/images/info-primary.png')}
+          />
+          <TextView fontSize="36px" color="primary" fontFamily="semibold">
+            {calculateChangePercentage(wallet)}
           </TextView>
         </LinearLayout>
       </LinearLayout>
@@ -55,8 +63,12 @@ const WalletView = (props: WalletProps) => {
   }
 
   const calculateChangePercentage = (wallet: Wallet) => {
-    const changePercentage = ((wallet.currentValue - wallet.previousValue) / wallet.previousValue) * 100
-    const resultString = `${changePercentage > 0 ? '+' : ''}${Math.round(changePercentage)}%`
+    const changePercentage =
+      ((wallet.currentValue - wallet.previousValue) / wallet.previousValue) *
+      100
+    const resultString = `${changePercentage > 0 ? '+' : ''}${Math.round(
+      changePercentage
+    )}%`
 
     return resultString
   }
@@ -68,15 +80,20 @@ const WalletView = (props: WalletProps) => {
       start={[0.1, 0.1]}
       end={[1, 1]}
     >
-      <LinearLayout orientation='verti'>
+      <LinearLayout orientation="verti">
         <ScrollView>
           <MoreButton
-            mt='40px'
-            alignSelf='flex-end'
+            mt="40px"
+            alignSelf="flex-end"
             height={'6px'}
             source={require('~src/assets/images/more-horiz.png')}
           />
-          <LinearLayout mt='12px' orientation='horiz' justifyContent='center' height={400}>
+          <LinearLayout
+            mt="12px"
+            orientation="horiz"
+            justifyContent="center"
+            height={400}
+          >
             <Carousel
               layout={'default'}
               ref={carouselRef}
@@ -89,15 +106,21 @@ const WalletView = (props: WalletProps) => {
               inactiveSlideShift={12}
               lockScrollWhileSnapping={true}
               lockScrollTimeoutDuration={200}
-              renderItem={ ({item}) => <WalletCard wallet={item} /> }
-              onSnapToItem = { index => setActiveIndex(index) }
+              renderItem={({item}) => <WalletCard wallet={item} />}
+              onSnapToItem={(index) => setActiveIndex(index)}
             />
           </LinearLayout>
-          { _renderWalletChange(wallets[activeIndex]) }
-          <LinearLayout mx='16px' mt='16px'>
-            <Notification text={'Tum dicere exorsus est et dolore magnam aliquam quaerat voluptatem ut de homine.'} />
+          {_renderWalletChange(wallets[activeIndex])}
+          <LinearLayout mx="16px" mt="16px">
+            <Notification
+              text={
+                'Tum dicere exorsus est et dolore magnam aliquam quaerat voluptatem ut de homine.'
+              }
+            />
           </LinearLayout>
-          <BalanceList tokenAssets={wallets[activeIndex].currentAssets.assets} />
+          <BalanceList
+            tokenAssets={wallets[activeIndex].currentAssets.assets}
+          />
         </ScrollView>
       </LinearLayout>
     </LinearGradient>

@@ -1,7 +1,12 @@
 import React, {useState} from 'react'
-import {ButtonView, ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import styled from '~src/styles/styled-components'
+
 import i18n from '~src/i18n'
+import styled, {
+  ButtonView,
+  ImageView,
+  LinearLayout,
+  TextView,
+} from '~src/styles/styled-components'
 
 interface NotificationProps {
   text: string
@@ -14,22 +19,22 @@ const Notification = (props: NotificationProps) => {
 
   return (
     <NotificationBox
-      orientation='verti'
+      orientation="verti"
       height={72}
-      width='100%'
-      py='8px'
-      px='11px'
-      bg='background.1'
-      borderColor='primary'
+      width="100%"
+      py="8px"
+      px="11px"
+      bg="background.1"
+      borderColor="primary"
     >
-      <TextView color='text.2' fontSize='10px' mb='4px'>
+      <TextView color="text.2" fontSize="10px" mb="4px">
         {i18n.t('components.notification.title')}
       </TextView>
-      <LinearLayout orientation='horiz'>
-        <TextView color='text.0' fontSize='14px' lineHeight='14px' weight={1}>
+      <LinearLayout orientation="horiz">
+        <TextView color="text.0" fontSize="14px" lineHeight="14px" weight={1}>
           {props.text}
         </TextView>
-        <ButtonView alignSelf='center' onPress={() => setSeen(true)}>
+        <ButtonView alignSelf="center" onPress={() => setSeen(true)}>
           <ImageView
             height={'9px'}
             width={'9px'}

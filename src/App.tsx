@@ -5,10 +5,10 @@ import {RequestConfig} from '@simpli/serialized-request'
 import {AppLoading} from 'expo'
 import * as Font from 'expo-font'
 import React, {useState} from 'react'
+import {StatusBar} from 'react-native'
 import {Provider as StoreProvider, useSelector} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
-import {StatusBar} from 'react-native'
 import {ThemeProvider} from 'styled-components'
 
 import '~src/window-crypto'
@@ -44,11 +44,11 @@ type RootStackParamList = {
 
 const fetchFonts = () => {
   return Font.loadAsync({
-    'bold': require('~src/assets/fonts/sofiapro-bold.otf'),
-    'medium': require('~src/assets/fonts/sofiapro-medium.otf'),
-    'regular': require('~src/assets/fonts/sofiapro-regular.otf'),
-    'italic': require('~src/assets/fonts/sofiapro-regularitalic.otf'),
-    'semibold': require('~src/assets/fonts/sofiapro-semibold.otf'),
+    bold: require('~src/assets/fonts/sofiapro-bold.otf'),
+    medium: require('~src/assets/fonts/sofiapro-medium.otf'),
+    regular: require('~src/assets/fonts/sofiapro-regular.otf'),
+    italic: require('~src/assets/fonts/sofiapro-regularitalic.otf'),
+    semibold: require('~src/assets/fonts/sofiapro-semibold.otf'),
   })
 }
 
@@ -86,7 +86,10 @@ function RootStackScreen() {
 
   return (
     <ThemeProvider theme={theme}>
-      <RootStack.Navigator initialRouteName={ROUTES.HOME.name} screenOptions={navbarOptions}>
+      <RootStack.Navigator
+        initialRouteName={ROUTES.HOME.name}
+        screenOptions={navbarOptions}
+      >
         <RootStack.Screen name={ROUTES.HOME.name} component={Home} />
         <RootStack.Screen
           name={ROUTES.TOUCH_ID_TEST.name}
@@ -131,7 +134,7 @@ const AppNavigation = () => {
         <StatusBar
           translucent
           barStyle={theme.statusBarStyle}
-          backgroundColor='transparent'
+          backgroundColor="transparent"
         />
         <Tab.Navigator>
           <Tab.Screen name="MainTab" component={RootStackScreen} />

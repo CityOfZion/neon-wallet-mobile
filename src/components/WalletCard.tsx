@@ -1,6 +1,12 @@
-import styled, {ImageView, LinearLayout, RelativeLayout, TextView} from '~src/styles/styled-components'
 import React from 'react'
+
 import {Wallet} from '~src/models/Wallet'
+import styled, {
+  ImageView,
+  LinearLayout,
+  RelativeLayout,
+  TextView,
+} from '~src/styles/styled-components'
 
 interface WalletCardProps {
   wallet: Wallet
@@ -9,7 +15,7 @@ interface WalletCardProps {
 const WalletCard = (props: WalletCardProps) => {
   const _renderAccountCard = (i: number) => {
     if (!props.wallet.currentAssets.assets[i] || i > 2) return null
-    const bottomOffset = 28 - (6 * i)
+    const bottomOffset = 28 - 6 * i
 
     return (
       <AccountCard
@@ -26,7 +32,8 @@ const WalletCard = (props: WalletCardProps) => {
 
   const _renderAssetsBarFills = () => {
     return props.wallet.currentAssets.assets.map((asset, i) => {
-      const percentageOfTotal = ((asset.value * asset.holding) / props.wallet.currentValue) * 100
+      const percentageOfTotal =
+        ((asset.value * asset.holding) / props.wallet.currentValue) * 100
 
       return (
         <LinearLayout
@@ -43,36 +50,32 @@ const WalletCard = (props: WalletCardProps) => {
   }
 
   return (
-    <WalletCardRelativeContainer height={350} m='12px' bg={'#364046'}>
-      { props.wallet.currentAssets.assets.map((a, i) => _renderAccountCard(i)) }
+    <WalletCardRelativeContainer height={350} m="12px" bg={'#364046'}>
+      {props.wallet.currentAssets.assets.map((a, i) => _renderAccountCard(i))}
       <WalletFrontImage
         height={'100%'}
         width={'100%'}
         source={require('~src/assets/images/wallet-card-front.png')}
       />
-      <RelativeLayout
-        bottom={130}
-        height={58}
-        width={4/5}
-      >
+      <RelativeLayout bottom={130} height={58} width={4 / 5}>
         <WalletNameContainer
           height={'100%'}
           width={'100%'}
           source={require('~src/assets/images/wallet-card-label.png')}
         />
-        <LinearLayout bottom={30} orientation='horiz' my={'auto'}>
+        <LinearLayout bottom={30} orientation="horiz" my={'auto'}>
           <ImageView
-            ml='12px'
+            ml="12px"
             width={28}
             height={24}
             source={require('~src/assets/images/wallet-icon.png')}
           />
-          <TextView ml='8px' fontSize='16px' fontFamily='bold' color='text.0'>
+          <TextView ml="8px" fontSize="16px" fontFamily="bold" color="text.0">
             {props.wallet.title.toUpperCase()}
           </TextView>
         </LinearLayout>
       </RelativeLayout>
-      <RelativeLayout bottom={110} height={12} width={4/5}>
+      <RelativeLayout bottom={110} height={12} width={4 / 5}>
         <WalletAssetsBar
           height={'80%'}
           width={'100%'}
@@ -85,7 +88,7 @@ const WalletCard = (props: WalletCardProps) => {
           px={'2px'}
           orientation={'horiz'}
         >
-          { _renderAssetsBarFills() }
+          {_renderAssetsBarFills()}
         </AssetsBar>
       </RelativeLayout>
     </WalletCardRelativeContainer>

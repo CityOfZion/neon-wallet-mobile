@@ -7,14 +7,23 @@ export class Wallet {
   lastVisitedAt: string
 
   get previousValue() {
-    return this.previousAssets.assets.map(t => t.holding * t.value).reduce((a, b) => a + b)
+    return this.previousAssets.assets
+      .map((t) => t.holding * t.value)
+      .reduce((a, b) => a + b)
   }
 
   get currentValue() {
-    return this.currentAssets.assets.map(t => t.holding * t.value).reduce((a, b) => a + b)
+    return this.currentAssets.assets
+      .map((t) => t.holding * t.value)
+      .reduce((a, b) => a + b)
   }
 
-  constructor(title: string, previousAssets: TokenBalance, currentAssets: TokenBalance, lastVisitedAt: string) {
+  constructor(
+    title: string,
+    previousAssets: TokenBalance,
+    currentAssets: TokenBalance,
+    lastVisitedAt: string
+  ) {
     this.title = title
     this.previousAssets = previousAssets
     this.currentAssets = currentAssets
