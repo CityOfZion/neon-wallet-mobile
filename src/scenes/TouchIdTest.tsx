@@ -13,7 +13,7 @@ const TouchIdTest: React.FC<object> = () => {
   }
 
   return (
-    <TouchIdTestView bg="background">
+    <TouchIdTestView bg="background.0">
       <TouchableHighlight
         onPress={() => askForAuthentication()}
         style={styles.button}

@@ -4,12 +4,17 @@ const light = {
   ...StyleConstants,
 
   title: 'light',
+  statusBarStyle: 'dark-content',
   colors: {
     primary: '#293036',
     secondary: '#0a84ff',
     tertiary: '#4cffb3',
 
-    background: '#ddd',
+    // eslint-disable-next-line prettier/prettier
+    background: [
+      '#ddd',
+      '#ccc'
+    ],
     // eslint-disable-next-line prettier/prettier
     text: [
       '#333',

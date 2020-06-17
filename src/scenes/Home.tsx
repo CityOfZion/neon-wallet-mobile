@@ -6,7 +6,7 @@ import {DefaultTheme} from 'styled-components'
 import {expo} from '~/app.json'
 import i18n from '~src/i18n'
 import {NeoNode} from '~src/models/NeoNode'
-import {setLocale} from '~src/store/actions/locale'
+import {setLocale} from '~src/store/actions/app'
 import {LinearLayout, TextView, ButtonView} from '~src/styles/styled-components'
 
 type HomeStackParametersList = {
@@ -45,7 +45,7 @@ const Home = (props: Props) => {
   }
 
   return (
-    <LinearLayout bg="background" alignItems="center" height="100%">
+    <LinearLayout bg="background.0" alignItems="center" height="100%">
       <TextView my={6} fontSize="xl" color="text.0">
         {i18n.t('home.welcome')}
       </TextView>

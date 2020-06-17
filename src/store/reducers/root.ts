@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux'
 
-import {localeReducer} from '~src/store/reducers/locale'
+import {appReducer} from '~src/store/reducers/app'
 import {themeReducer} from '~src/store/reducers/theme'
 
 export const rootReducer = combineReducers({
-  locale: localeReducer,
+  app: appReducer,
   themeReducer,
 })
 

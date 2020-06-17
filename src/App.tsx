@@ -5,9 +5,10 @@ import {RequestConfig} from '@simpli/serialized-request'
 import {AppLoading} from 'expo'
 import * as Font from 'expo-font'
 import React, {useState} from 'react'
-import {Provider, useSelector} from 'react-redux'
+import {Provider as StoreProvider, useSelector} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
+import {StatusBar} from 'react-native'
 import {ThemeProvider} from 'styled-components'
 
 import '~src/window-crypto'
@@ -25,7 +26,7 @@ import Onboarding from '~src/scenes/Onboarding'
 import QRCodeScanTest from '~src/scenes/QRCodeScanTest'
 import QrCodeGenerateTest from '~src/scenes/QrCodeGenerateTest'
 import TouchIdTest from '~src/scenes/TouchIdTest'
-import Wallet from '~src/scenes/Wallet'
+import WalletView from '~src/scenes/WalletView'
 import {rootReducer, RootState} from '~src/store/reducers/root'
 import dark from '~src/styles/themes/dark'
 
@@ -43,11 +44,11 @@ type RootStackParamList = {
 
 const fetchFonts = () => {
   return Font.loadAsync({
-    'sofiapro-bold': require('~src/assets/fonts/sofiapro-bold.otf'),
-    'sofiapro-medium': require('~src/assets/fonts/sofiapro-medium.otf'),
-    'sofiapro-regular': require('~src/assets/fonts/sofiapro-regular.otf'),
-    'sofiapro-regularitalic': require('~src/assets/fonts/sofiapro-regularitalic.otf'),
-    'sofiapro-semibold': require('~src/assets/fonts/sofiapro-semibold.otf'),
+    'bold': require('~src/assets/fonts/sofiapro-bold.otf'),
+    'medium': require('~src/assets/fonts/sofiapro-medium.otf'),
+    'regular': require('~src/assets/fonts/sofiapro-regular.otf'),
+    'italic': require('~src/assets/fonts/sofiapro-regularitalic.otf'),
+    'semibold': require('~src/assets/fonts/sofiapro-semibold.otf'),
   })
 }
 
@@ -73,9 +74,19 @@ function RootStackScreen() {
     )
   }
 
+  const navbarOptions = {
+    headerStyle: {
+      backgroundColor: theme.colors.background[0],
+      elevation: 0,
+      shadowOpacity: 0,
+      borderBottomWidth: 0,
+    },
+    headerTintColor: theme.colors.text[0],
+  }
+
   return (
     <ThemeProvider theme={theme}>
-      <RootStack.Navigator initialRouteName={ROUTES.HOME.name}>
+      <RootStack.Navigator initialRouteName={ROUTES.HOME.name} screenOptions={navbarOptions}>
         <RootStack.Screen name={ROUTES.HOME.name} component={Home} />
         <RootStack.Screen
           name={ROUTES.TOUCH_ID_TEST.name}
@@ -105,27 +116,40 @@ function RootStackScreen() {
           name={ROUTES.QR_CODE_SCAN_TEST.name}
           component={QRCodeScanTest}
         />
-        <RootStack.Screen name={ROUTES.WALLET.name} component={Wallet} />
+        <RootStack.Screen name={ROUTES.WALLET.name} component={WalletView} />
       </RootStack.Navigator>
     </ThemeProvider>
   )
 }
 
+const AppNavigation = () => {
+  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+
+  return (
+    <NavigationContainer>
+      <ThemeProvider theme={theme}>
+        <StatusBar
+          translucent
+          barStyle={theme.statusBarStyle}
+          backgroundColor='transparent'
+        />
+        <Tab.Navigator>
+          <Tab.Screen name="MainTab" component={RootStackScreen} />
+          <Tab.Screen
+            name="Onboarding"
+            component={Onboarding}
+            options={{tabBarVisible: false}}
+          />
+        </Tab.Navigator>
+      </ThemeProvider>
+    </NavigationContainer>
+  )
+}
+
 export default function App() {
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={dark}>
-        <NavigationContainer>
-          <Tab.Navigator>
-            <Tab.Screen name="MainTab" component={RootStackScreen} />
-            <Tab.Screen
-              name="Onboarding"
-              component={Onboarding}
-              options={{tabBarVisible: false}}
-            />
-          </Tab.Navigator>
-        </NavigationContainer>
-      </ThemeProvider>
-    </Provider>
+    <StoreProvider store={store}>
+      <AppNavigation />
+    </StoreProvider>
   )
 }
