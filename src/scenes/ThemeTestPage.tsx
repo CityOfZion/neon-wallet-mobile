@@ -26,7 +26,7 @@ const ThemeTestPage: React.FC<object> = () => {
   }
 
   return (
-    <ThemeView bg="background">
+    <ThemeView bg="background.0">
       <Text color="text.0" mb={4}>
         Current theme: {theme.title}
       </Text>

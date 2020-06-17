@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "target": "esnext",
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",

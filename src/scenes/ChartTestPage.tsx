@@ -8,7 +8,7 @@ export default function ChartTestPage() {
   const mockData = [null, Array(30)].map((x) => Math.random() * 100)
 
   return (
-    <ChartView bg="background">
+    <ChartView bg="background.0">
       <LineChart
         data={{
           labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],

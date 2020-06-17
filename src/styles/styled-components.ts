@@ -56,7 +56,7 @@ const TextView = styled.Text<
     WeightProps &
     TypographyProps
 >`
-  font-family: 'sofiapro-regular';
+  font-family: 'regular';
   ${color}
   ${typography}
   ${space}
@@ -66,16 +66,18 @@ const TextView = styled.Text<
 `
 
 const ImageView = styled.Image<
-  SpaceProps & LayoutProps & FlexboxProps & WeightProps
+  SpaceProps & LayoutProps & FlexboxProps & PositionProps & WeightProps
 >`
   ${space}
   ${layout}
   ${flexbox}
+  ${position}
   ${weight}
 `
 
 const LinearLayout = styled.View<
-  ColorProps &
+  BorderProps &
+    ColorProps &
     OrientationProps &
     SpaceProps &
     LayoutProps &
@@ -83,6 +85,7 @@ const LinearLayout = styled.View<
     WeightProps &
     PositionProps
 >`
+  ${border}  
   ${color}
   ${orientation}
   ${space}
@@ -92,24 +95,46 @@ const LinearLayout = styled.View<
   ${position}
 `
 
+const RelativeLayout = styled.View<
+  ColorProps &
+    LayoutProps &
+    OrientationProps &
+    PositionProps &
+    SpaceProps &
+    WeightProps
+>`
+  position: relative;
+  > * {
+    position: absolute;
+  }
+  ${color}
+  ${layout}
+  ${orientation}
+  ${position}
+  ${space}
+  ${weight}
+`
+
 const ButtonView = styled.TouchableHighlight<
-  ColorProps & SpaceProps & BorderProps & LayoutProps
+  ColorProps & FlexboxProps & SpaceProps & BorderProps & LayoutProps
 >`
   ${layout}
   ${color}
+  ${flexbox}
   ${space}
   ${border}
 `
 
 export interface DefaultTheme {
   title: string
+  statusBarStyle: 'default' | 'light-content' | 'dark-content'
 
   colors: {
     primary: string
     secondary: string
     tertiary: string
 
-    background: string
+    background: string[]
     text: string[]
   }
 }
@@ -118,6 +143,7 @@ export {
   css,
   ThemeProvider,
   LinearLayout,
+  RelativeLayout,
   TextView,
   ImageView,
   ButtonView,

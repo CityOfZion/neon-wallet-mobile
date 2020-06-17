@@ -1,8 +1,8 @@
 import i18n from 'i18n-js'
 
-import de from './locales/de.json'
-import en from './locales/en.json'
-import ptBR from './locales/pt-br.json'
+import de from '~src/locales/de.json'
+import en from '~src/locales/en.json'
+import ptBR from '~src/locales/pt-br.json'
 
 i18n.defaultLocale = 'en'
 i18n.locale = 'en'
