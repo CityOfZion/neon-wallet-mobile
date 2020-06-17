@@ -12,7 +12,7 @@ const CustomColorPage: React.FC<object> = () => {
   const colorPickerChangeEvent = (hex: string) => setColor(hex)
 
   return (
-    <ThemeView bg="background">
+    <ThemeView bg="background.0">
       <LinearLayout
         orientation={'verti'}
         alignItems={'center'}
