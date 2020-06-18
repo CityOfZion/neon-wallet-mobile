@@ -1,26 +1,35 @@
 import React, {useState} from 'react'
-import {color, ColorProps} from 'styled-system'
 
 import ColorPicker from '~src/components/ColorPicker'
 import PaymentCard from '~src/components/PaymentCard'
 import i18n from '~src/i18n'
-import styled, {LinearLayout, TextView} from '~src/styles/styled-components'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 const CustomColorPage: React.FC<object> = () => {
-  const [color, setColor] = useState<string>('#00aaff')
+  const defaultCardColor = '#00aaff'
+  const [color, setColor] = useState<string>(defaultCardColor)
 
-  const colorPickerChangeEvent = (hex: string) => setColor(hex)
+  const colorPickerChangeEvent = (hex: string) => {
+    setColor(hex)
+  }
 
   return (
-    <ThemeView bg="background.0">
+    <LinearLayout
+      bg={'background.0'}
+      orientation={'verti'}
+      alignItems={'center'}
+      justifyContent={'center'}
+      height={'100%'}
+    >
       <LinearLayout
         orientation={'verti'}
         alignItems={'center'}
         width={'100%'}
-        maxWidth={400}
+        maxWidth={360}
         p={4}
       >
         <LinearLayout mb={5}>
+          {/*TODO: change mock values*/}
           <PaymentCard
             name={'My First Account'}
             currency={'$'}
@@ -34,20 +43,12 @@ const CustomColorPage: React.FC<object> = () => {
           {i18n.t('customColorPage.title')}
         </TextView>
 
-        <LinearLayout width={220}>
+        <LinearLayout mx={6}>
           <ColorPicker color={color} onChange={colorPickerChangeEvent} />
         </LinearLayout>
       </LinearLayout>
-    </ThemeView>
+    </LinearLayout>
   )
 }
-
-const ThemeView = styled(LinearLayout)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  ${color}
-`
 
 export default CustomColorPage
