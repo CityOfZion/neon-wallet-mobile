@@ -43,6 +43,10 @@ export const ROUTES = {
     id: 'CUSTOM_COLOR',
     name: 'CustomColor' as 'CustomColor',
   },
+  SETTINGS: {
+    id: 'SETTINGS',
+    name: 'Settings' as 'Settings',
+  },
 }
 
 export const TABS = {
