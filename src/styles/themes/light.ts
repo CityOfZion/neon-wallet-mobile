@@ -20,6 +20,7 @@ const light = {
       '#333',
       '#fff',
       '#8ba0a9',
+      '#767f86',
     ],
   },
 } as DefaultTheme

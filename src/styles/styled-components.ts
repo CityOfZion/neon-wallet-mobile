@@ -54,7 +54,8 @@ const TextView = styled.Text<
     LayoutProps &
     FlexboxProps &
     WeightProps &
-    TypographyProps
+    TypographyProps &
+    PositionProps
 >`
   font-family: 'regular';
   ${color}
@@ -62,6 +63,7 @@ const TextView = styled.Text<
   ${space}
   ${layout}
   ${flexbox}
+  ${position}
   ${weight}
 `
 
@@ -116,13 +118,19 @@ const RelativeLayout = styled.View<
 `
 
 const ButtonView = styled.TouchableHighlight<
-  ColorProps & FlexboxProps & SpaceProps & BorderProps & LayoutProps
+  ColorProps &
+    FlexboxProps &
+    SpaceProps &
+    BorderProps &
+    LayoutProps &
+    OrientationProps
 >`
   ${layout}
   ${color}
   ${flexbox}
   ${space}
   ${border}
+  ${orientation}
 `
 
 export interface DefaultTheme {
