@@ -19,7 +19,6 @@ const orientationConfig = {
 const weightConfig = {
   weight: {
     property: 'flexGrow',
-    defaultScale: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     transform: (val: number) => {
       return `
         ${val};

@@ -1,5 +1,6 @@
 import React from 'react'
 
+import {TokenValue} from '~src/models/TokenValue'
 import {Wallet} from '~src/models/Wallet'
 import styled, {
   ImageView,
@@ -13,8 +14,8 @@ interface WalletCardProps {
 }
 
 const WalletCard = (props: WalletCardProps) => {
-  const _renderAccountCard = (i: number) => {
-    if (!props.wallet.currentAssets.assets[i] || i > 2) return null
+  const _renderAccountCard = (asset: TokenValue, i: number) => {
+    if (!asset || i > 2) return null
     const bottomOffset = 28 - 6 * i
 
     return (
@@ -24,7 +25,7 @@ const WalletCard = (props: WalletCardProps) => {
         right={'6px'}
         height={'90%'}
         width={'90%'}
-        bg={props.wallet.currentAssets.assets[i].color}
+        bg={asset.color}
         key={i}
       />
     )
@@ -32,14 +33,16 @@ const WalletCard = (props: WalletCardProps) => {
 
   const _renderAssetsBarFills = () => {
     return props.wallet.currentAssets.assets.map((asset, i) => {
-      const percentageOfTotal =
-        ((asset.value * asset.holding) / props.wallet.currentValue) * 100
+      const holdingValue = asset.holding * asset.value
+      const percentageOfTotal = (holdingValue / props.wallet.currentValue) * 100
+
+      if (!holdingValue) return null
 
       return (
         <LinearLayout
           height={'100%'}
-          width={`${percentageOfTotal}%`}
-          minWidth={'1px'}
+          weight={percentageOfTotal}
+          minWidth={'2px'}
           mx={'1px'}
           borderRadius={1}
           bg={asset.color}
@@ -50,8 +53,10 @@ const WalletCard = (props: WalletCardProps) => {
   }
 
   return (
-    <WalletCardRelativeContainer height={350} m="12px" bg={'#364046'}>
-      {props.wallet.currentAssets.assets.map((a, i) => _renderAccountCard(i))}
+    <WalletCardRelativeContainer height={350} m="12px" bg={colorLimedSpruce}>
+      {props.wallet.currentAssets.assets.map((a, i) =>
+        _renderAccountCard(a, i)
+      )}
       <WalletFrontImage
         height={'100%'}
         width={'100%'}
@@ -76,15 +81,15 @@ const WalletCard = (props: WalletCardProps) => {
         </LinearLayout>
       </RelativeLayout>
       <RelativeLayout bottom={110} height={12} width={4 / 5}>
-        <WalletAssetsBar
-          height={'80%'}
+        <AssetsBarBackground
+          height={'10px'}
           width={'100%'}
           source={require('~src/assets/images/wallet-card-label.png')}
         />
         <AssetsBar
-          bottom={'4%'}
-          width={'97%'}
-          height={'40%'}
+          bottom={'7px'}
+          height={'5px'}
+          width={'99.5%'}
           px={'2px'}
           orientation={'horiz'}
         >
@@ -95,6 +100,8 @@ const WalletCard = (props: WalletCardProps) => {
   )
 }
 
+const colorLimedSpruce = '#364046'
+
 const WalletFrontImage = styled(ImageView)`
   resize-mode: stretch;
 `
@@ -103,7 +110,7 @@ const WalletNameContainer = styled(ImageView)`
   resize-mode: contain;
 `
 
-const WalletAssetsBar = styled(ImageView)`
+const AssetsBarBackground = styled(ImageView)`
   resize-mode: cover;
   border-top-right-radius: 9999px;
   border-bottom-right-radius: 9999px;
@@ -122,8 +129,6 @@ const AccountCard = styled(LinearLayout)`
   border-radius: 18px;
 `
 
-const AssetsBar = styled(LinearLayout)`
-  overflow: hidden;
-`
+const AssetsBar = styled(LinearLayout)``
 
 export default WalletCard

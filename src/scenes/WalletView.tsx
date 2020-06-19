@@ -2,7 +2,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
 import moment from 'moment'
 import React, {useRef, useState} from 'react'
-import {Dimensions, ScrollView, StatusBar, StyleSheet} from 'react-native'
+import {Dimensions, ScrollView} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
 import {layout, LayoutProps, space, SpaceProps} from 'styled-system'
@@ -106,6 +106,9 @@ const WalletView = (props: WalletProps) => {
               inactiveSlideShift={12}
               lockScrollWhileSnapping={true}
               lockScrollTimeoutDuration={200}
+              activeSlideOffset={15}
+              swipeThreshold={15}
+              enableSnap={true}
               renderItem={({item}) => <WalletCard wallet={item} />}
               onSnapToItem={(index) => setActiveIndex(index)}
             />
