@@ -28,7 +28,6 @@ import QrCodeGenerateTest from '~src/scenes/QrCodeGenerateTest'
 import TouchIdTest from '~src/scenes/TouchIdTest'
 import WalletView from '~src/scenes/WalletView'
 import {rootReducer, RootState} from '~src/store/reducers/root'
-import dark from '~src/styles/themes/dark'
 
 type RootStackParamList = {
   Home: undefined

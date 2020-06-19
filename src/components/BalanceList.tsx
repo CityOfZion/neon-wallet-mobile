@@ -10,10 +10,10 @@ import {LinearLayout, TextView} from '~src/styles/styled-components'
 const TableData = (props: {header: string; content: string}) => {
   return (
     <LinearLayout width={100} orientation="verti" mt={5} mb={4}>
-      <TextView mb="-6px" color="text.2" fontSize="sm">
+      <TextView mb="-8px" color="text.2" fontSize="sm">
         {props.header}
       </TextView>
-      <TextView color="text.0" fontSize="lg">
+      <TextView color="text.0" fontSize="lg" fontFamily="medium">
         {props.content}
       </TextView>
     </LinearLayout>
