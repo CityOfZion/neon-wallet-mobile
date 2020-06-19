@@ -106,6 +106,9 @@ const WalletView = (props: WalletProps) => {
               inactiveSlideShift={12}
               lockScrollWhileSnapping={true}
               lockScrollTimeoutDuration={200}
+              activeSlideOffset={15}
+              swipeThreshold={15}
+              enableSnap={true}
               renderItem={({item}) => <WalletCard wallet={item} />}
               onSnapToItem={(index) => setActiveIndex(index)}
             />
