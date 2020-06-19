@@ -40,7 +40,6 @@ const OnboardingSlide = (props: OnboardingSlideProps) => {
         color={'text.0'}
         fontFamily={'bold'}
         fontSize={'20px'}
-        style={styles.shadows}
       >
         {props.header}
       </TextView>
@@ -52,7 +51,6 @@ const OnboardingSlide = (props: OnboardingSlideProps) => {
           source={props.image}
         />
       </SlideImage>
-
       {props.bottomContent}
     </LinearLayout>
   )
@@ -84,6 +82,8 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
 }
 
 const GetStartedButton = (props: {onPressFunc: () => void}) => {
+  const colorDarkShark = '#23272a'
+
   return (
     <ButtonView
       my={'auto'}
@@ -96,7 +96,9 @@ const GetStartedButton = (props: {onPressFunc: () => void}) => {
       borderRadius={9999}
       onPress={props.onPressFunc}
     >
-      <Text>Get started!</Text>
+      <TextView color={colorDarkShark} fontSize="16px" fontFamily="semibold">
+        Get started!
+      </TextView>
     </ButtonView>
   )
 }
