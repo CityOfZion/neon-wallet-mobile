@@ -19,6 +19,7 @@ type HomeStackParametersList = {
   CustomColor: undefined
   Wallet: undefined
   Settings: undefined
+  More: undefined
 }
 
 interface Props {
@@ -85,6 +86,18 @@ const Home = (props: Props) => {
       >
         <TextView color="text.1" textAlign="center">
           Go to Settings
+        </TextView>
+      </ButtonView>
+      <ButtonView
+        mb={3}
+        p={3}
+        bg="primary"
+        borderRadius={4}
+        minWidth={100}
+        onPress={() => props.navigation.navigate('More')}
+      >
+        <TextView color="text.1" textAlign="center">
+          Go to More
         </TextView>
       </ButtonView>
       <ButtonView

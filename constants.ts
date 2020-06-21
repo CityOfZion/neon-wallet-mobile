@@ -47,6 +47,10 @@ export const ROUTES = {
     id: 'SETTINGS',
     name: 'Settings' as 'Settings',
   },
+  MORE: {
+    id: 'MORE',
+    name: 'More' as 'More',
+  },
 }
 
 export const TABS = {

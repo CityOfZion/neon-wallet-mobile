@@ -21,6 +21,7 @@ import {HttpConfig} from '~src/config/HttpConfig'
 import ChartTestPage from '~src/scenes/ChartTestPage'
 import CustomColorPage from '~src/scenes/CustomColorPage'
 import Home from '~src/scenes/Home'
+import More from '~src/scenes/More'
 import NeonJSTest from '~src/scenes/NeonJSTest'
 import Onboarding from '~src/scenes/Onboarding'
 import QRCodeScanTest from '~src/scenes/QRCodeScanTest'
@@ -44,6 +45,7 @@ type RootStackParamList = {
   CustomColor: undefined
   Wallet: undefined
   Settings: undefined
+  More: undefined
 }
 
 const fetchFonts = () => {
@@ -148,6 +150,17 @@ function RootStackScreen() {
           options={() =>
             navbarOptions({
               title: ROUTES.SETTINGS.name,
+              image: require('~/src/assets/images/settings-white.png'),
+              showIcon: true,
+            })
+          }
+        />
+        <RootStack.Screen
+          name={ROUTES.MORE.name}
+          component={More}
+          options={() =>
+            navbarOptions({
+              title: ROUTES.MORE.name,
               image: require('~/src/assets/images/settings-white.png'),
               showIcon: true,
             })
