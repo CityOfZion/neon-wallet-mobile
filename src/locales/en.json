@@ -4,8 +4,18 @@
     "en": "English",
     "ptBR": "Portuguese"
   },
+  "routes": {
+    "Settings": "Settings"
+  },
   "home": {
     "welcome": "Welcome to Neon Wallet!"
+  },
+  "settings": {
+    "title": "Settings",
+    "myWallets": "My Wallets",
+    "security": "Security",
+    "currency": "Currency",
+    "language": "Language"
   },
   "customColorPage": {
     "title": "Select a custom color for your account"
@@ -51,5 +61,10 @@
       "holdings": "Holdings",
       "value": "Value"
     }
+  },
+  "currency": {
+    "usd" : "USD",
+    "brl" : "BRL",
+    "eur" : "EUR"
   }
 }
