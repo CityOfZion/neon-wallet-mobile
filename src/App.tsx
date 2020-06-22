@@ -123,7 +123,6 @@ function RootStackScreen() {
               image: require('~/src/assets/images/settings-white.png'),
               showIcon: true,
               iconMarginRight: 3,
-              iconMarginTop: 2,
               iconWidth: 20,
             })
           }

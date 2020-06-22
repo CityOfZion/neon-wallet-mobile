@@ -40,6 +40,7 @@ const HeaderBar = (headerProps: HeaderProps) => {
           fontFamily="semibold"
           color="white"
           fontSize={24}
+          style={{includeFontPadding: false}}
         >
           {headerProps.title}
         </TextView>
