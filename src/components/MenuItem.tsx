@@ -5,42 +5,55 @@ import {LayoutProps} from 'styled-system'
 import i18n from '~src/i18n'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
-export enum ArrowDirection {
+export enum RightIconType {
   NONE,
-  RIGHT,
-  DOWN,
+  ARROW_RIGHT,
+  ARROW_DOWN,
+  CHECK,
 }
 
 export interface MenuItemProps {
   title: string
   subtitle?: string
-  icon: any
+  icon?: any
   iconWidth?: number
   iconHeight?: number
   iconMarginRight?: number
   iconMarginLeft?: number
-  arrowDirection: ArrowDirection
+  arrowDirection: RightIconType
   onPress?: () => void
 }
 
 const MenuItem = (props: MenuItemProps) => {
   let arrowIcon = null
-  let [arrowWidth, arrowHeight] = [0, 0]
+  let [
+    rightIconWidth,
+    rightIconHeight,
+    rightIconRightMargin,
+    rightIconTopMargin,
+  ] = [0, 0, 0, 0]
   switch (props.arrowDirection) {
-    case ArrowDirection.DOWN:
+    case RightIconType.ARROW_DOWN:
       arrowIcon = require('~/src/assets/images/icon-arrow-down-green.png')
-      arrowWidth = 18
-      arrowHeight = 12
+      rightIconWidth = 18
+      rightIconHeight = 12
       break
-    case ArrowDirection.RIGHT:
+    case RightIconType.ARROW_RIGHT:
       arrowIcon = require('~/src/assets/images/icon-arrow-right-green.png')
-      arrowWidth = 12
-      arrowHeight = 19
+      rightIconWidth = 12
+      rightIconHeight = 19
+      break
+    case RightIconType.CHECK:
+      arrowIcon = require('~/src/assets/images/icon-check-green.png')
+      rightIconWidth = 23
+      rightIconHeight = 17
+      rightIconRightMargin = 3
+      rightIconTopMargin = 2
       break
   }
 
   return (
-    <TouchableHighlight underlayColor="transparent">
+    <TouchableHighlight underlayColor="transparent" onPress={props.onPress}>
       <LinearLayout orientation="verti" width="100%" pr={20} pl={20}>
         <LinearLayout
           alignItems="center"
@@ -49,13 +62,15 @@ const MenuItem = (props: MenuItemProps) => {
           width="100%"
           pl={1}
         >
-          <ImageView
-            height={props.iconHeight}
-            width={props.iconWidth}
-            ml={props.iconMarginLeft}
-            mr={props.iconMarginRight}
-            source={props.icon}
-          />
+          {props.icon && (
+            <ImageView
+              height={props.iconHeight}
+              width={props.iconWidth}
+              ml={props.iconMarginLeft}
+              mr={props.iconMarginRight}
+              source={props.icon}
+            />
+          )}
           <TextView color="white" fontSize={18} fontFamily="semibold">
             {props.title}
           </TextView>
@@ -65,8 +80,10 @@ const MenuItem = (props: MenuItemProps) => {
           </TextView>
           {arrowIcon && (
             <ImageView
-              width={arrowWidth}
-              height={arrowHeight}
+              width={rightIconWidth}
+              height={rightIconHeight}
+              mr={rightIconRightMargin}
+              mt={rightIconTopMargin}
               source={arrowIcon}
             />
           )}

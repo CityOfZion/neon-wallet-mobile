@@ -1,6 +1,12 @@
-import React from 'react'
+import React, {ReactComponentElement} from 'react'
+import {Dimensions, TouchableHighlight} from 'react-native'
 
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {
+  ImageView,
+  LinearLayout,
+  RelativeLayout,
+  TextView,
+} from '~src/styles/styled-components'
 
 export interface HeaderProps {
   title: string
@@ -9,32 +15,47 @@ export interface HeaderProps {
   iconMarginRight: number
   iconMarginTop: number
   iconWidth: number
+  closeButton?: ReactComponentElement<any>
+  showCloseButton?: boolean
+  visible?: boolean
 }
+
+const screenWidth = Dimensions.get('screen').width
 
 const HeaderBar = (headerProps: HeaderProps) => {
   const marginRight = headerProps.showIcon ? '32px' : '0px'
   return (
-    <LinearLayout alignItems="center" mr={marginRight}>
-      <LinearLayout height="38" orientation="horiz" alignItems="center">
-        {headerProps.showIcon && (
-          <ImageView
-            source={headerProps.image}
-            width={headerProps.iconWidth}
-            mr={headerProps.iconMarginRight}
-            mt={headerProps.iconMarginTop}
-            resizeMode="center"
-          />
-        )}
+    <LinearLayout orientation="horiz">
+      <LinearLayout alignItems="center" weight={5}>
+        <LinearLayout height="38" orientation="horiz" alignItems="center">
+          {headerProps.showIcon && (
+            <ImageView
+              source={headerProps.image}
+              width={headerProps.iconWidth}
+              mr={headerProps.iconMarginRight}
+              mt={headerProps.iconMarginTop}
+              resizeMode="center"
+            />
+          )}
 
-        <TextView
-          textAlign="center"
-          fontFamily="semibold"
-          color="white"
-          fontSize={24}
-        >
-          {headerProps.title}
-        </TextView>
+          <TextView
+            textAlign="center"
+            fontFamily="semibold"
+            color="white"
+            fontSize={24}
+          >
+            {headerProps.title}
+          </TextView>
+        </LinearLayout>
       </LinearLayout>
+      <TouchableHighlight>
+        <ImageView
+          source={require('~/src/assets/images/close.png')}
+          resizeMode="center"
+          weight={1}
+          pr={40}
+        />
+      </TouchableHighlight>
     </LinearLayout>
   )
 }

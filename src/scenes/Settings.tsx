@@ -6,7 +6,8 @@ import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 import {width} from 'styled-system'
 
-import MenuItem, {ArrowDirection} from '~src/components/MenuItem'
+import HeaderBar from '~src/components/HeaderBar'
+import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import {SettingsList} from '~src/components/SettingsList'
 import i18n from '~src/i18n'
 import {RootState} from '~src/store/reducers/root'
@@ -47,14 +48,38 @@ const Settings = (props: SettingsProps) => {
           colors={[theme.colors.background[0], theme.colors.background[2]]}
           end={[1, 0.75]}
         >
-          <SettingsList
-            items={idioms}
+          <HeaderBar
             title={i18n.t('settings.language')}
-            iconName={require('~/src/assets/images/language-icon-white.png')}
+            image={require('~/src/assets/images/language-icon-white.png')}
+            showIcon={true}
             iconMarginRight={3}
             iconMarginTop={1}
             iconWidth={25}
           />
+          <LinearLayout alignItems="center" height="100%">
+            <LinearLayout orientation="verti" width="100%" mt={20}>
+              <MenuItem
+                title={i18n.t('settings.myWallets')}
+                arrowDirection={RightIconType.CHECK}
+              />
+              <MenuItem
+                title={i18n.t('settings.security')}
+                icon={require('~/src/assets/images/security-icon-green.png')}
+                iconWidth={20}
+                iconMarginLeft={2}
+                iconMarginRight={18}
+                arrowDirection={RightIconType.NONE}
+              />
+              <MenuItem
+                title={i18n.t('settings.currency')}
+                icon={require('~/src/assets/images/currency-icon-green.png')}
+                iconWidth={26}
+                iconMarginRight={16}
+                arrowDirection={RightIconType.NONE}
+                subtitle={'USD'}
+              />
+            </LinearLayout>
+          </LinearLayout>
         </LinearGradient>
       </Modal>
       <LinearLayout alignItems="center" height="100%">
@@ -64,7 +89,7 @@ const Settings = (props: SettingsProps) => {
             icon={require('~/src/assets/images/wallet-icon-green.png')}
             iconMarginRight={12}
             iconHeight={28}
-            arrowDirection={ArrowDirection.RIGHT}
+            arrowDirection={RightIconType.ARROW_RIGHT}
           />
           <MenuItem
             title={i18n.t('settings.security')}
@@ -72,14 +97,14 @@ const Settings = (props: SettingsProps) => {
             iconWidth={20}
             iconMarginLeft={2}
             iconMarginRight={18}
-            arrowDirection={ArrowDirection.RIGHT}
+            arrowDirection={RightIconType.ARROW_RIGHT}
           />
           <MenuItem
             title={i18n.t('settings.currency')}
             icon={require('~/src/assets/images/currency-icon-green.png')}
             iconWidth={26}
             iconMarginRight={16}
-            arrowDirection={ArrowDirection.DOWN}
+            arrowDirection={RightIconType.ARROW_DOWN}
             subtitle={'USD'}
           />
           <MenuItem
@@ -88,7 +113,7 @@ const Settings = (props: SettingsProps) => {
             iconWidth={16}
             iconMarginLeft={2}
             iconMarginRight={22}
-            arrowDirection={ArrowDirection.DOWN}
+            arrowDirection={RightIconType.ARROW_DOWN}
             subtitle={i18n.t('languages.en')}
             onPress={() => setIsShowingIdiom(true)}
           />
