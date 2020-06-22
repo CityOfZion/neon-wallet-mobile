@@ -223,12 +223,14 @@ const ColorPicker: React.FC<Props> = (props) => {
         position={'absolute'}
         onTouchStart={hueAreaEvent}
         onTouchMove={hueAreaEvent}
+        pointerEvents={'box-only'}
       />
 
       <LuminosityAreaView
         position={'absolute'}
         onTouchStart={luminosityAreaEvent}
         onTouchMove={luminosityAreaEvent}
+        pointerEvents={'box-only'}
       />
 
       <LuminosityView position={'absolute'}>

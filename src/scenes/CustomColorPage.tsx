@@ -25,7 +25,7 @@ const CustomColorPage: React.FC<object> = () => {
         orientation={'verti'}
         alignItems={'center'}
         width={'100%'}
-        maxWidth={360}
+        maxWidth={400}
         p={4}
       >
         <LinearLayout mb={5}>
