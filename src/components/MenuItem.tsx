@@ -88,7 +88,11 @@ const MenuItem = (props: MenuItemProps) => {
             />
           )}
         </LinearLayout>
-        <LinearLayout height={1} backgroundColor="#667178" alignSelf="stretch" />
+        <LinearLayout
+          height={1}
+          backgroundColor="#667178"
+          alignSelf="stretch"
+        />
       </LinearLayout>
     </TouchableHighlight>
   )

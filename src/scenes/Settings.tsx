@@ -145,74 +145,71 @@ const Settings = (props: SettingsProps) => {
             iconWidth={26}
             onPressToClose={() => setIsShowingCurrency(false)}
           />
-          <LinearLayout>
-            <LinearLayout
-              orientation="verti"
-              width="100%"
-              mt={20}
-              alignItems="center"
-              height="100%"
-            >
-              {currencies.map((currency) => {
-                return (
-                  <MenuItem
-                    title={i18n.t(currency.title)}
-                    arrowDirection={
-                      currency.isSelected
-                        ? RightIconType.CHECK
-                        : RightIconType.NONE
-                    }
-                    onPress={currency.onItemSelected}
-                  />
-                )
-              })}
-            </LinearLayout>
+
+          <LinearLayout
+            orientation="verti"
+            width="100%"
+            mt={20}
+            alignItems="center"
+            height="100%"
+          >
+            {currencies.map((currency) => {
+              return (
+                <MenuItem
+                  title={i18n.t(currency.title)}
+                  arrowDirection={
+                    currency.isSelected
+                      ? RightIconType.CHECK
+                      : RightIconType.NONE
+                  }
+                  onPress={currency.onItemSelected}
+                />
+              )
+            })}
           </LinearLayout>
         </LinearGradient>
       </Modal>
-      <LinearLayout>
-        <LinearLayout
-          orientation="verti"
-          width="100%"
-          mt={headerHeight}
-          alignItems="center"
-          height="100%"
-        >
-          <MenuItem
-            title={i18n.t('settings.myWallets')}
-            icon={require('~/src/assets/images/wallet-icon-green.png')}
-            iconMarginRight={12}
-            iconHeight={28}
-            arrowDirection={RightIconType.ARROW_RIGHT}
-          />
-          <MenuItem
-            title={i18n.t('settings.security')}
-            icon={require('~/src/assets/images/security-icon-green.png')}
-            iconWidth={20}
-            iconMarginLeft={2}
-            iconMarginRight={18}
-            arrowDirection={RightIconType.ARROW_RIGHT}
-          />
-          <MenuItem
-            title={i18n.t('settings.currency')}
-            icon={require('~/src/assets/images/currency-icon-green.png')}
-            iconWidth={26}
-            iconMarginRight={16}
-            arrowDirection={RightIconType.ARROW_DOWN}
-            subtitle={'USD'}
-            onPress={() => setIsShowingCurrency(true)}
-          />
-          <MenuItem
-            title={i18n.t('settings.language')}
-            icon={require('~/src/assets/images/language-icon-green.png')}
-            iconWidth={16}
-            iconMarginLeft={2}
-            iconMarginRight={22}
-            arrowDirection={RightIconType.ARROW_DOWN}
-            subtitle={i18n.t('languages.en')}
-            onPress={() => setIsShowingIdiom(true)}
-          />
-        </LinearLayout>
+      <LinearLayout
+        orientation="verti"
+        width="100%"
+        mt={headerHeight}
+        alignItems="center"
+        height="100%"
+      >
+        <MenuItem
+          title={i18n.t('settings.myWallets')}
+          icon={require('~/src/assets/images/wallet-icon-green.png')}
+          iconMarginRight={12}
+          iconHeight={28}
+          arrowDirection={RightIconType.ARROW_RIGHT}
+        />
+        <MenuItem
+          title={i18n.t('settings.security')}
+          icon={require('~/src/assets/images/security-icon-green.png')}
+          iconWidth={20}
+          iconMarginLeft={2}
+          iconMarginRight={18}
+          arrowDirection={RightIconType.ARROW_RIGHT}
+        />
+        <MenuItem
+          title={i18n.t('settings.currency')}
+          icon={require('~/src/assets/images/currency-icon-green.png')}
+          iconWidth={26}
+          iconMarginRight={16}
+          arrowDirection={RightIconType.ARROW_DOWN}
+          subtitle={'USD'}
+          onPress={() => setIsShowingCurrency(true)}
+        />
+        <MenuItem
+          title={i18n.t('settings.language')}
+          icon={require('~/src/assets/images/language-icon-green.png')}
+          iconWidth={16}
+          iconMarginLeft={2}
+          iconMarginRight={22}
+          arrowDirection={RightIconType.ARROW_DOWN}
+          subtitle={i18n.t('languages.en')}
+          onPress={() => setIsShowingIdiom(true)}
+        />
       </LinearLayout>
     </LinearGradient>
   )
