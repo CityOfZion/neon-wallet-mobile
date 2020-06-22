@@ -1,4 +1,4 @@
-import {StackNavigationProp} from '@react-navigation/stack'
+import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import React, {useEffect, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
@@ -18,6 +18,8 @@ type HomeStackParametersList = {
   ThemeTest: undefined
   CustomColor: undefined
   Wallet: undefined
+  Settings: undefined
+  More: undefined
 }
 
 interface Props {
@@ -28,7 +30,7 @@ interface Props {
 const Home = (props: Props) => {
   const [currentLocale, setCurrentLocale] = useState<string>('en')
   const [nodes, setNodes] = useState<NeoNode[]>([])
-
+  const headerHeight = useHeaderHeight()
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -46,6 +48,7 @@ const Home = (props: Props) => {
 
   return (
     <LinearLayout bg="background.0" alignItems="center" height="100%">
+      <LinearLayout height={headerHeight} />
       <TextView my={6} fontSize="xl" color="text.0">
         {i18n.t('home.welcome')}
       </TextView>
@@ -71,6 +74,30 @@ const Home = (props: Props) => {
       >
         <TextView color="text.1" textAlign="center">
           Go to NeonJsTest
+        </TextView>
+      </ButtonView>
+      <ButtonView
+        mb={3}
+        p={3}
+        bg="primary"
+        borderRadius={4}
+        minWidth={100}
+        onPress={() => props.navigation.navigate('Settings')}
+      >
+        <TextView color="text.1" textAlign="center">
+          Go to Settings
+        </TextView>
+      </ButtonView>
+      <ButtonView
+        mb={3}
+        p={3}
+        bg="primary"
+        borderRadius={4}
+        minWidth={100}
+        onPress={() => props.navigation.navigate('More')}
+      >
+        <TextView color="text.1" textAlign="center">
+          Go to More
         </TextView>
       </ButtonView>
       <ButtonView
