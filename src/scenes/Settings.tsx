@@ -145,8 +145,14 @@ const Settings = (props: SettingsProps) => {
             iconWidth={26}
             onPressToClose={() => setIsShowingCurrency(false)}
           />
-          <LinearLayout alignItems="center" height="100%">
-            <LinearLayout orientation="verti" width="100%" mt={20}>
+          <LinearLayout>
+            <LinearLayout
+              orientation="verti"
+              width="100%"
+              mt={20}
+              alignItems="center"
+              height="100%"
+            >
               {currencies.map((currency) => {
                 return (
                   <MenuItem
@@ -164,8 +170,14 @@ const Settings = (props: SettingsProps) => {
           </LinearLayout>
         </LinearGradient>
       </Modal>
-      <LinearLayout alignItems="center" height="100%">
-        <LinearLayout orientation="verti" width="100%" mt={headerHeight}>
+      <LinearLayout>
+        <LinearLayout
+          orientation="verti"
+          width="100%"
+          mt={headerHeight}
+          alignItems="center"
+          height="100%"
+        >
           <MenuItem
             title={i18n.t('settings.myWallets')}
             icon={require('~/src/assets/images/wallet-icon-green.png')}
