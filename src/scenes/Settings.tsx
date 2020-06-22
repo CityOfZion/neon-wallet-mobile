@@ -8,7 +8,7 @@ import {DefaultTheme} from 'styled-components'
 import HeaderBar from '~src/components/HeaderBar'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import i18n from '~src/i18n'
-import {setLocale} from '~src/store/actions/app'
+import {setLocale, setCurrency} from '~src/store/actions/app'
 import {RootState} from '~src/store/reducers/root'
 import {LinearLayout} from '~src/styles/styled-components'
 
@@ -23,7 +23,9 @@ const Settings = (props: SettingsProps) => {
   const dispatch = useDispatch()
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
   const [isShowingIdiom, setIsShowingIdiom] = useState(false)
+  const [isShowingCurrency, setIsShowingCurrency] = useState(false)
   const [selectedIdiom, setSelectedIdiom] = useState('en')
+  const [selectedCurrency, setSelectedCurrency] = useState('usd')
   const idioms = [
     {
       title: 'languages.en',
@@ -51,8 +53,39 @@ const Settings = (props: SettingsProps) => {
     },
   ]
 
+  const currencies = [
+    {
+      title: 'currency.usd',
+      isSelected: selectedCurrency === 'usd',
+      onItemSelected: () => {
+        changeCurrency('usd')
+        setSelectedCurrency('usd')
+      },
+    },
+    {
+      title: 'currency.brl',
+      isSelected: selectedCurrency === 'brl',
+      onItemSelected: () => {
+        changeCurrency('brl')
+        setSelectedCurrency('brl')
+      },
+    },
+    {
+      title: 'currency.eur',
+      isSelected: selectedCurrency === 'eur',
+      onItemSelected: () => {
+        changeCurrency('eur')
+        setSelectedCurrency('eur')
+      },
+    },
+  ]
+
   const changeLocale = (locale: string) => {
     dispatch(setLocale(locale))
+  }
+
+  const changeCurrency = (currency: string) => {
+    dispatch(setCurrency(currency))
   }
 
   return (
@@ -61,6 +94,7 @@ const Settings = (props: SettingsProps) => {
       colors={[theme.colors.background[0], theme.colors.background[2]]}
       end={[1, 0.75]}
     >
+      {/*Select Idiom*/}
       <Modal animationType="slide" transparent={true} visible={isShowingIdiom}>
         <LinearGradient
           style={{flex: 1}}
@@ -95,6 +129,45 @@ const Settings = (props: SettingsProps) => {
           </LinearLayout>
         </LinearGradient>
       </Modal>
+      {/*Select Currency*/}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isShowingCurrency}
+      >
+        <LinearGradient
+          style={{flex: 1}}
+          colors={[theme.colors.background[0], theme.colors.background[2]]}
+          end={[1, 0.75]}
+        >
+          <HeaderBar
+            title={i18n.t('settings.currency')}
+            image={require('~/src/assets/images/currency-icon-white.png')}
+            showIcon={true}
+            iconMarginRight={3}
+            iconMarginTop={2}
+            iconWidth={26}
+            onPressToClose={() => setIsShowingCurrency(false)}
+          />
+          <LinearLayout alignItems="center" height="100%">
+            <LinearLayout orientation="verti" width="100%" mt={20}>
+              {currencies.map((currency) => {
+                return (
+                  <MenuItem
+                    title={i18n.t(currency.title)}
+                    arrowDirection={
+                      currency.isSelected
+                        ? RightIconType.CHECK
+                        : RightIconType.NONE
+                    }
+                    onPress={currency.onItemSelected}
+                  />
+                )
+              })}
+            </LinearLayout>
+          </LinearLayout>
+        </LinearGradient>
+      </Modal>
       <LinearLayout alignItems="center" height="100%">
         <LinearLayout orientation="verti" width="100%" mt={headerHeight}>
           <MenuItem
@@ -119,6 +192,7 @@ const Settings = (props: SettingsProps) => {
             iconMarginRight={16}
             arrowDirection={RightIconType.ARROW_DOWN}
             subtitle={'USD'}
+            onPress={() => setIsShowingCurrency(true)}
           />
           <MenuItem
             title={i18n.t('settings.language')}

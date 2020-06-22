@@ -61,5 +61,10 @@
       "holdings": "Holdings",
       "value": "Value"
     }
+  },
+  "currency": {
+    "usd" : "USD",
+    "brl" : "BRL",
+    "eur" : "EUR"
   }
 }
