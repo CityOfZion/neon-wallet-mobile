@@ -4,6 +4,9 @@
     "en": "English",
     "ptBR": "Portuguese"
   },
+  "routes": {
+    "Settings": "Settings"
+  },
   "home": {
     "welcome": "Welcome to Neon Wallet!"
   },

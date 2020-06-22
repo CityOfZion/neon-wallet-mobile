@@ -32,6 +32,7 @@ import WalletView from '~src/scenes/WalletView'
 import {rootReducer, RootState} from '~src/store/reducers/root'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import dark from '~src/styles/themes/dark'
+import i18n from "~src/i18n";
 
 type RootStackParamList = {
   Home: undefined
@@ -147,7 +148,7 @@ function RootStackScreen() {
           component={Settings}
           options={() =>
             navbarOptions({
-              title: ROUTES.SETTINGS.name,
+              title: i18n.t(`routes.${ROUTES.SETTINGS.name}`),
               image: require('~/src/assets/images/settings-white.png'),
               showIcon: true,
             })
