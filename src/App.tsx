@@ -18,6 +18,7 @@ import ThemeTestPage from './scenes/ThemeTestPage'
 
 import {ROUTES} from '~/constants'
 import {HttpConfig} from '~src/config/HttpConfig'
+import i18n from '~src/i18n'
 import ChartTestPage from '~src/scenes/ChartTestPage'
 import CustomColorPage from '~src/scenes/CustomColorPage'
 import Home from '~src/scenes/Home'
@@ -32,7 +33,7 @@ import WalletView from '~src/scenes/WalletView'
 import {rootReducer, RootState} from '~src/store/reducers/root'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import dark from '~src/styles/themes/dark'
-import i18n from "~src/i18n";
+import HeaderBar, {HeaderProps} from "~src/components/HeaderBar";
 
 type RootStackParamList = {
   Home: undefined
@@ -67,11 +68,6 @@ const Tab = createBottomTabNavigator()
 const httpConfig = new HttpConfig()
 RequestConfig.axios = httpConfig.axiosInstance
 
-type HeaderProps = {
-  title: string
-  image: any
-  showIcon: boolean
-}
 
 function RootStackScreen() {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
@@ -86,35 +82,8 @@ function RootStackScreen() {
     )
   }
 
-  const HeaderTitleBar = (headerProps: HeaderProps) => {
-    const marginRight = headerProps.showIcon ? '32px' : '0px'
-    return (
-      <LinearLayout alignItems="center" mr={marginRight}>
-        <LinearLayout height="38" orientation="horiz" alignItems="center">
-          {headerProps.showIcon && (
-            <ImageView
-              source={headerProps.image}
-              width={20}
-              mr="7px"
-              mt="2px"
-            />
-          )}
-
-          <TextView
-            textAlign="center"
-            fontFamily="semibold"
-            color="white"
-            fontSize={24}
-          >
-            {headerProps.title}
-          </TextView>
-        </LinearLayout>
-      </LinearLayout>
-    )
-  }
-
   const navbarOptions = (headerProps: HeaderProps) => ({
-    headerTitle: () => HeaderTitleBar(headerProps),
+    headerTitle: () => HeaderBar(headerProps),
     headerTransparent: true,
     headerStyle: {
       backgroundColor: theme.colors.background[0],
@@ -134,6 +103,9 @@ function RootStackScreen() {
     title: 'Home',
     image: require('~/src/assets/images/settings-white.png'),
     showIcon: false,
+    iconMarginRight: 0,
+    iconMarginTop: 0,
+    iconWidth: 0,
   }
 
   return (
@@ -151,6 +123,9 @@ function RootStackScreen() {
               title: i18n.t(`routes.${ROUTES.SETTINGS.name}`),
               image: require('~/src/assets/images/settings-white.png'),
               showIcon: true,
+              iconMarginRight: 3,
+              iconMarginTop: 2,
+              iconWidth: 20,
             })
           }
         />
