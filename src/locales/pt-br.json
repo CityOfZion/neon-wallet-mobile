@@ -7,6 +7,13 @@
   "home": {
     "welcome": "Bem-vindo ao Neon Wallet!"
   },
+  "settings": {
+    "title": "Configurações",
+    "myWallets": "Minhas Wallets",
+    "security": "Segurança",
+    "currency": "Moeda",
+    "language": "Idioma"
+  },
   "customColorPage": {
     "title": "Selecione um cor personalizada para sua conta"
   },

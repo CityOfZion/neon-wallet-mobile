@@ -33,7 +33,6 @@ import {rootReducer, RootState} from '~src/store/reducers/root'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import dark from '~src/styles/themes/dark'
 
-
 type RootStackParamList = {
   Home: undefined
   TouchIdTest: undefined
@@ -121,7 +120,6 @@ function RootStackScreen() {
       elevation: 0,
       shadowOpacity: 0,
       borderBottomWidth: 0,
-      alignContent: 'center',
     },
     headerTitleStyle: {
       textAlign: 'center',
