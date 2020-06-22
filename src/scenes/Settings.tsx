@@ -110,22 +110,18 @@ const Settings = (props: SettingsProps) => {
             iconWidth={28}
             onPressToClose={() => setIsShowingIdiom(false)}
           />
-          <LinearLayout alignItems="center" height="100%">
-            <LinearLayout orientation="verti" width="100%" mt={20}>
-              {idioms.map((idiom) => {
-                return (
-                  <MenuItem
-                    title={i18n.t(idiom.title)}
-                    arrowDirection={
-                      idiom.isSelected
-                        ? RightIconType.CHECK
-                        : RightIconType.NONE
-                    }
-                    onPress={idiom.onItemSelected}
-                  />
-                )
-              })}
-            </LinearLayout>
+          <LinearLayout orientation="verti" width="100%" mt={20} height="100%">
+            {idioms.map((idiom) => {
+              return (
+                <MenuItem
+                  title={i18n.t(idiom.title)}
+                  arrowDirection={
+                    idiom.isSelected ? RightIconType.CHECK : RightIconType.NONE
+                  }
+                  onPress={idiom.onItemSelected}
+                />
+              )
+            })}
           </LinearLayout>
         </LinearGradient>
       </Modal>
