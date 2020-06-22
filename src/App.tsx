@@ -121,7 +121,6 @@ function RootStackScreen() {
       elevation: 0,
       shadowOpacity: 0,
       borderBottomWidth: 0,
-      alignContent: 'center',
     },
     headerTitleStyle: {
       textAlign: 'center',

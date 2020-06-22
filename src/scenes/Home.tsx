@@ -4,10 +4,11 @@ import {useDispatch} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
 import {expo} from '~/app.json'
+import ThemedButton from '~src/components/ThemedButton'
 import i18n from '~src/i18n'
 import {NeoNode} from '~src/models/NeoNode'
 import {setLocale} from '~src/store/actions/app'
-import {LinearLayout, TextView, ButtonView} from '~src/styles/styled-components'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 type HomeStackParametersList = {
   TouchIdTest: undefined
@@ -52,128 +53,82 @@ const Home = (props: Props) => {
       <TextView my={6} fontSize="xl" color="text.0">
         {i18n.t('home.welcome')}
       </TextView>
-      <ButtonView
-        mb={3}
-        p={3}
-        bg="primary"
-        borderRadius={4}
-        minWidth={100}
-        onPress={() => props.navigation.navigate('Wallet')}
-      >
-        <TextView color="text.1" textAlign="center">
-          Wallet
-        </TextView>
-      </ButtonView>
-      <ButtonView
-        mb={3}
-        p={3}
-        bg="primary"
-        borderRadius={4}
-        minWidth={100}
-        onPress={() => props.navigation.navigate('NeonJSTest')}
-      >
-        <TextView color="text.1" textAlign="center">
-          Go to NeonJsTest
-        </TextView>
-      </ButtonView>
-      <ButtonView
-        mb={3}
-        p={3}
-        bg="primary"
-        borderRadius={4}
-        minWidth={100}
-        onPress={() => props.navigation.navigate('Settings')}
-      >
-        <TextView color="text.1" textAlign="center">
-          Go to Settings
-        </TextView>
-      </ButtonView>
-      <ButtonView
-        mb={3}
-        p={3}
-        bg="primary"
-        borderRadius={4}
-        minWidth={100}
-        onPress={() => props.navigation.navigate('More')}
-      >
-        <TextView color="text.1" textAlign="center">
-          Go to More
-        </TextView>
-      </ButtonView>
-      <ButtonView
-        mb={3}
-        p={3}
-        bg="primary"
-        borderRadius={4}
-        minWidth={100}
-        onPress={() => props.navigation.navigate('QrCodeGenerateTest')}
-      >
-        <TextView color="text.1" textAlign="center">
-          Go to generate QR code
-        </TextView>
-      </ButtonView>
-      <ButtonView
-        mb={3}
-        p={3}
-        bg="primary"
-        borderRadius={4}
-        minWidth={100}
-        onPress={() => props.navigation.navigate('ThemeTest')}
-      >
-        <TextView color="text.1" textAlign="center">
-          Go to Theme Test Page
-        </TextView>
-      </ButtonView>
-      <ButtonView
-        mb={3}
-        p={3}
-        bg="primary"
-        borderRadius={4}
-        minWidth={100}
-        onPress={() => props.navigation.navigate('CustomColor')}
-      >
-        <TextView color="text.1" textAlign="center">
-          Go to Custom Color Page
-        </TextView>
-      </ButtonView>
-      <LinearLayout orientation="horiz" mt={5}>
-        <ButtonView
-          mx={3}
-          p={3}
-          bg="primary"
-          borderRadius={4}
-          minWidth={100}
-          onPress={() => changeLocale('en')}
-        >
-          <TextView color="text.1" textAlign="center">
-            {i18n.t('languages.en')}
-          </TextView>
-        </ButtonView>
-        <ButtonView
-          mx={3}
-          p={3}
-          bg="primary"
-          borderRadius={4}
-          minWidth={100}
-          onPress={() => changeLocale('de')}
-        >
-          <TextView color="text.1" textAlign="center">
-            {i18n.t('languages.de')}
-          </TextView>
-        </ButtonView>
-        <ButtonView
-          mx={3}
-          p={3}
-          bg="primary"
-          borderRadius={4}
-          minWidth={100}
-          onPress={() => changeLocale('ptBR')}
-        >
-          <TextView color="text.1" textAlign="center">
-            {i18n.t('languages.ptBR')}
-          </TextView>
-        </ButtonView>
+
+      <LinearLayout m={3}>
+        <ThemedButton
+          onClick={() => props.navigation.navigate('Wallet')}
+          label={'Wallet'}
+        />
       </LinearLayout>
+
+      <LinearLayout m={3}>
+        <ThemedButton
+          onClick={() => props.navigation.navigate('NeonJSTest')}
+          label={'Go to NeonJsTest'}
+        />
+      </LinearLayout>
+
+      <LinearLayout m={3}>
+        <ThemedButton
+          onClick={() => props.navigation.navigate('Settings')}
+          label={'Go to Settings'}
+        />
+      </LinearLayout>
+
+      <LinearLayout m={3}>
+        <ThemedButton
+          onClick={() => props.navigation.navigate('More')}
+          label={'Go to More'}
+        />
+      </LinearLayout>
+
+      <LinearLayout m={3}>
+        <ThemedButton
+          onClick={() => props.navigation.navigate('QrCodeGenerateTest')}
+          label={'Go to generate QR code'}
+        />
+      </LinearLayout>
+
+      <LinearLayout m={3}>
+        <ThemedButton
+          onClick={() => props.navigation.navigate('ThemeTest')}
+          label={'Go to Theme Test Page'}
+        />
+      </LinearLayout>
+
+      <LinearLayout m={3}>
+        <ThemedButton
+          onClick={() => props.navigation.navigate('CustomColor')}
+          label={'Go to Custom Color Page'}
+        />
+      </LinearLayout>
+
+      <LinearLayout orientation="horiz" mt={5}>
+        <LinearLayout m={3}>
+          <ThemedButton
+            onClick={() => changeLocale('en')}
+            label={i18n.t('languages.en')}
+            rounded={false}
+          />
+        </LinearLayout>
+
+        <LinearLayout m={3}>
+          <ThemedButton
+            onClick={() => changeLocale('de')}
+            label={i18n.t('languages.de')}
+            rounded={false}
+          />
+        </LinearLayout>
+
+        <LinearLayout m={3}>
+          <ThemedButton
+            onClick={() => changeLocale('ptBR')}
+            label={i18n.t('languages.ptBR')}
+            rounded={false}
+          />
+        </LinearLayout>
+      </LinearLayout>
+
       <LinearLayout
         mb={5}
         position="absolute"
