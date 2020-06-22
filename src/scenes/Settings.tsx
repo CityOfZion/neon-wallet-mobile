@@ -1,17 +1,16 @@
 import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
 import React, {useState} from 'react'
-import {Alert, Modal, TouchableHighlight} from 'react-native'
-import {useSelector} from 'react-redux'
+import {Modal} from 'react-native'
+import {useDispatch, useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
-import {width} from 'styled-system'
 
 import HeaderBar from '~src/components/HeaderBar'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
-import {SettingsList} from '~src/components/SettingsList'
 import i18n from '~src/i18n'
+import {setLocale} from '~src/store/actions/app'
 import {RootState} from '~src/store/reducers/root'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {LinearLayout} from '~src/styles/styled-components'
 
 interface SettingsProps {
   navigation: StackNavigationProp<{Home: undefined}>
@@ -21,13 +20,40 @@ interface SettingsProps {
 
 const Settings = (props: SettingsProps) => {
   const headerHeight = useHeaderHeight()
+  const dispatch = useDispatch()
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
   const [isShowingIdiom, setIsShowingIdiom] = useState(false)
+  const [selectedIdiom, setSelectedIdiom] = useState('en')
   const idioms = [
-    {title: 'English', isSelected: true, onItemSelected: () => {}},
-    {title: 'Portuguese', isSelected: false, onItemSelected: () => {}},
-    {title: 'German', isSelected: false, onItemSelected: () => {}},
+    {
+      title: 'languages.en',
+      isSelected: selectedIdiom === 'en',
+      onItemSelected: () => {
+        changeLocale('en')
+        setSelectedIdiom('en')
+      },
+    },
+    {
+      title: 'languages.ptBR',
+      isSelected: selectedIdiom === 'ptBR',
+      onItemSelected: () => {
+        changeLocale('ptBR')
+        setSelectedIdiom('ptBR')
+      },
+    },
+    {
+      title: 'languages.de',
+      isSelected: selectedIdiom === 'de',
+      onItemSelected: () => {
+        changeLocale('de')
+        setSelectedIdiom('de')
+      },
+    },
   ]
+
+  const changeLocale = (locale: string) => {
+    dispatch(setLocale(locale))
+  }
 
   return (
     <LinearGradient
@@ -35,14 +61,7 @@ const Settings = (props: SettingsProps) => {
       colors={[theme.colors.background[0], theme.colors.background[2]]}
       end={[1, 0.75]}
     >
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isShowingIdiom}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.')
-        }}
-      >
+      <Modal animationType="slide" transparent={true} visible={isShowingIdiom}>
         <LinearGradient
           style={{flex: 1}}
           colors={[theme.colors.background[0], theme.colors.background[2]]}
@@ -54,30 +73,24 @@ const Settings = (props: SettingsProps) => {
             showIcon={true}
             iconMarginRight={3}
             iconMarginTop={1}
-            iconWidth={25}
+            iconWidth={28}
+            onPressToClose={() => setIsShowingIdiom(false)}
           />
           <LinearLayout alignItems="center" height="100%">
             <LinearLayout orientation="verti" width="100%" mt={20}>
-              <MenuItem
-                title={i18n.t('settings.myWallets')}
-                arrowDirection={RightIconType.CHECK}
-              />
-              <MenuItem
-                title={i18n.t('settings.security')}
-                icon={require('~/src/assets/images/security-icon-green.png')}
-                iconWidth={20}
-                iconMarginLeft={2}
-                iconMarginRight={18}
-                arrowDirection={RightIconType.NONE}
-              />
-              <MenuItem
-                title={i18n.t('settings.currency')}
-                icon={require('~/src/assets/images/currency-icon-green.png')}
-                iconWidth={26}
-                iconMarginRight={16}
-                arrowDirection={RightIconType.NONE}
-                subtitle={'USD'}
-              />
+              {idioms.map((idiom) => {
+                return (
+                  <MenuItem
+                    title={i18n.t(idiom.title)}
+                    arrowDirection={
+                      idiom.isSelected
+                        ? RightIconType.CHECK
+                        : RightIconType.NONE
+                    }
+                    onPress={idiom.onItemSelected}
+                  />
+                )
+              })}
             </LinearLayout>
           </LinearLayout>
         </LinearGradient>

@@ -17,6 +17,7 @@ import 'reflect-metadata'
 import ThemeTestPage from './scenes/ThemeTestPage'
 
 import {ROUTES} from '~/constants'
+import HeaderBar, {HeaderProps} from '~src/components/HeaderBar'
 import {HttpConfig} from '~src/config/HttpConfig'
 import i18n from '~src/i18n'
 import ChartTestPage from '~src/scenes/ChartTestPage'
@@ -33,7 +34,6 @@ import WalletView from '~src/scenes/WalletView'
 import {rootReducer, RootState} from '~src/store/reducers/root'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import dark from '~src/styles/themes/dark'
-import HeaderBar, {HeaderProps} from "~src/components/HeaderBar";
 
 type RootStackParamList = {
   Home: undefined
@@ -67,7 +67,6 @@ const Tab = createBottomTabNavigator()
 
 const httpConfig = new HttpConfig()
 RequestConfig.axios = httpConfig.axiosInstance
-
 
 function RootStackScreen() {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)

@@ -15,19 +15,15 @@ export interface HeaderProps {
   iconMarginRight: number
   iconMarginTop: number
   iconWidth: number
-  closeButton?: ReactComponentElement<any>
-  showCloseButton?: boolean
-  visible?: boolean
+  onPressToClose: () => void
 }
-
-const screenWidth = Dimensions.get('screen').width
 
 const HeaderBar = (headerProps: HeaderProps) => {
   const marginRight = headerProps.showIcon ? '32px' : '0px'
   return (
     <LinearLayout orientation="horiz">
       <LinearLayout alignItems="center" weight={5}>
-        <LinearLayout height="38" orientation="horiz" alignItems="center">
+        <LinearLayout height={38} orientation="horiz" alignItems="center">
           {headerProps.showIcon && (
             <ImageView
               source={headerProps.image}
@@ -48,7 +44,7 @@ const HeaderBar = (headerProps: HeaderProps) => {
           </TextView>
         </LinearLayout>
       </LinearLayout>
-      <TouchableHighlight>
+      <TouchableHighlight onPress={headerProps.onPressToClose}>
         <ImageView
           source={require('~/src/assets/images/close.png')}
           resizeMode="center"
