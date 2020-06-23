@@ -33,8 +33,6 @@ import Settings from '~src/scenes/Settings'
 import TouchIdTest from '~src/scenes/TouchIdTest'
 import WalletView from '~src/scenes/WalletView'
 import {rootReducer, RootState} from '~src/store/reducers/root'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import dark from '~src/styles/themes/dark'
 
 type RootStackParamList = {
   Home: undefined
@@ -176,6 +174,14 @@ function RootStackScreen() {
         <RootStack.Screen
           name={ROUTES.CUSTOM_COLOR.name}
           component={CustomColorPage}
+          options={() =>
+            navbarOptions({
+              title: i18n.t('customColorPage.title'),
+              image: require('~/src/assets/images/palette.png'),
+              showIcon: true,
+              iconMarginRight: 2,
+            })
+          }
         />
         <RootStack.Screen
           name={ROUTES.QR_CODE_SCAN_TEST.name}

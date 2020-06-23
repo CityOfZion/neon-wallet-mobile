@@ -38,7 +38,8 @@
     "language": "Language"
   },
   "customColorPage": {
-    "title": "Select a custom color for your account"
+    "title": "Custom Colour",
+    "subtitle": "Select a custom color for your account"
   },
   "paymentCard": {
     "balance": "BALANCE",

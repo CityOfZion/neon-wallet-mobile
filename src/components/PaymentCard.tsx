@@ -1,7 +1,7 @@
 import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
-import {ImageBackground} from 'react-native'
+import {ImageBackground, LayoutChangeEvent} from 'react-native'
 
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import i18n from '~src/i18n'
@@ -20,10 +20,20 @@ interface Props {
 }
 
 const PaymentCard: React.FC<Props> = (props) => {
+  const [viewHeight, setViewHeight] = useState<number>(0)
+  const unit = (viewHeight * 0.1) / 24
+
+  const layoutEvent = (event: LayoutChangeEvent) => {
+    const {height} = event.nativeEvent.layout
+    setViewHeight(height)
+  }
+
   return (
     <PaymentCardView
+      onLayout={layoutEvent}
       width={'100%'}
       style={{backgroundColor: props.color, aspectRatio: 38 / 25}}
+      borderRadius={17 * unit}
     >
       <BrightCard
         colors={[
@@ -35,45 +45,55 @@ const PaymentCard: React.FC<Props> = (props) => {
         locations={[0, 0.5, 0.5, 1]}
         start={[0, -0.6]}
         end={[1, 1.6]}
+        style={{borderRadius: 17 * unit}}
       />
 
-      <ShadowCard colors={['rgba(0, 0, 0, 0.15)', 'rgba(32, 32, 32, 0.7)']} />
+      <ShadowCard
+        colors={['rgba(0, 0, 0, 0.15)', 'rgba(32, 32, 32, 0.7)']}
+        style={{borderRadius: 17 * unit}}
+      />
 
       <StampCard
         source={require('~src/assets/images/card-placeholder.png')}
         resizeMode="contain"
+        style={{borderRadius: 17 * unit}}
       />
 
-      <LinearLayout orientation={'verti'} width={'100%'} height={'100%'} p={5}>
-        <LinearLayout mb={3} orientation={'horiz'} width={'100%'}>
+      <LinearLayout
+        orientation={'verti'}
+        width={'100%'}
+        height={'100%'}
+        p={15 * unit}
+      >
+        <LinearLayout mb={3 * unit} orientation={'horiz'} width={'100%'}>
           <ImageView
-            width={24}
-            height={24}
-            my={2}
+            width={24 * unit}
+            height={24 * unit}
+            my={2 * unit}
             source={require('~src/assets/images/card-neo.png')}
           />
 
           <TextView
             weight={1}
-            fontSize="2xl"
+            fontSize={24 * unit}
             color="white"
             textAlign="left"
             fontWeight="bold"
-            mx={4}
+            mx={10 * unit}
           >
             {props.name}
           </TextView>
 
           <ImageView
-            width={32}
-            height={32}
+            width={32 * unit}
+            height={32 * unit}
             source={require('~src/assets/images/card-qrcode.png')}
           />
         </LinearLayout>
 
         <TextView
-          mb={3}
-          fontSize="sm"
+          mb={3 * unit}
+          fontSize={14 * unit}
           color="white"
           textAlign="left"
           fontWeight="bold"
@@ -88,8 +108,8 @@ const PaymentCard: React.FC<Props> = (props) => {
           weight={1}
         >
           <TextView
-            mb={3}
-            fontSize="4xl"
+            mb={3 * unit}
+            fontSize={48 * unit}
             color="white"
             textAlign="center"
             fontWeight="bold"
@@ -99,8 +119,8 @@ const PaymentCard: React.FC<Props> = (props) => {
         </LinearLayout>
 
         <TextView
-          mb={2}
-          fontSize="sm"
+          mb={2 * unit}
+          fontSize={14 * unit}
           color="white"
           textAlign="left"
           fontWeight="bold"
@@ -111,7 +131,7 @@ const PaymentCard: React.FC<Props> = (props) => {
         <LinearLayout orientation={'horiz'} width={'100%'}>
           <TextView
             weight={1}
-            fontSize="sm"
+            fontSize={14 * unit}
             color="white"
             opacity={0.5}
             textAlign="left"
@@ -120,9 +140,9 @@ const PaymentCard: React.FC<Props> = (props) => {
           </TextView>
 
           <ImageView
-            mt={-3}
-            width={20}
-            height={24}
+            mt={-3 * unit}
+            width={20 * unit}
+            height={24 * unit}
             source={require('~src/assets/images/card-copy.png')}
             style={{opacity: 0.5}}
           />
@@ -145,8 +165,8 @@ PaymentCard.defaultProps = {
 }
 
 const PaymentCardView = styled(LinearLayout)`
-  border-radius: 17px;
   box-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
+  elevation: 8;
 `
 
 const BrightCard = styled(LinearGradient)`
@@ -155,7 +175,6 @@ const BrightCard = styled(LinearGradient)`
   right: 0;
   top: 0;
   bottom: 0;
-  border-radius: 17px;
 `
 
 const ShadowCard = styled(LinearGradient)`
@@ -164,7 +183,6 @@ const ShadowCard = styled(LinearGradient)`
   right: 0;
   top: 0;
   bottom: 0;
-  border-radius: 17px;
 `
 
 const StampCard = styled(ImageBackground)`
@@ -173,7 +191,6 @@ const StampCard = styled(ImageBackground)`
   right: 30%;
   top: 20%;
   bottom: 0;
-  border-radius: 17px;
 `
 
 export default PaymentCard

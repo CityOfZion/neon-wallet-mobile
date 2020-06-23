@@ -77,7 +77,7 @@ const WalletView = (props: WalletProps) => {
   return (
     <LinearGradient
       style={{flex: 1}}
-      colors={[theme.colors.background[0], theme.colors.background[2]]}
+      colors={[theme.colors.background[1], theme.colors.background[2]]}
       start={[0.1, 0.1]}
       end={[1, 1]}
     >
