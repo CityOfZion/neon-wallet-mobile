@@ -11,11 +11,13 @@ import {RootState} from '~src/store/reducers/root'
 import {DefaultTheme} from '~src/styles/styled-components'
 import Home from '~src/scenes/Home'
 import CustomColorPage from '~src/scenes/CustomColorPage'
+import Account from '~src/scenes/Account'
 
 type QuickToolsStackParamList = {
   Home: undefined
   ReceiveQRCode: undefined
   CustomColor: undefined
+  Account: undefined
 }
 
 const QuickToolsStack = createStackNavigator<QuickToolsStackParamList>()
@@ -61,6 +63,7 @@ const QuickToolsStackNavigation = () => {
             )
           }
         />
+        <QuickToolsStack.Screen name={ROUTES.ACCOUNT.name} component={Account} />
       </QuickToolsStack.Navigator>
     </ThemeProvider>
   )

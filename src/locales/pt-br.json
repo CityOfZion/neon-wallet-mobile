@@ -5,7 +5,8 @@
     "ptBR": "Português"
   },
   "routes": {
-    "Settings": "Configurações"
+    "Settings": "Configurações",
+    "Account": "Conta"
   },
   "home": {
     "welcome": "Bem-vindo ao Neon Wallet!"
@@ -20,6 +21,9 @@
   "customColorPage": {
     "title": "Personalizar Cor",
     "subtitle": "Selecione um cor personalizada para sua conta"
+  },
+  "account": {
+    "AddNewAccount": "Adicione uma nova conta"
   },
   "paymentCard": {
     "balance": "SALDO",

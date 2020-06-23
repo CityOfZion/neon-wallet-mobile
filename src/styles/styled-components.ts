@@ -47,19 +47,19 @@ const {
   ThemeProvider,
 } = styledComponents as styledComponents.ReactNativeThemedStyledComponentsModule<
   DefaultTheme
->
+  >
 
 const TextView = styled.Text<
   ColorProps &
-    OrientationProps &
-    SpaceProps &
-    LayoutProps &
-    FlexboxProps &
-    WeightProps &
-    TypographyProps &
-    PositionProps &
-    TextStyleProps
->`
+  OrientationProps &
+  SpaceProps &
+  LayoutProps &
+  FlexboxProps &
+  WeightProps &
+  TypographyProps &
+  PositionProps &
+  TextStyleProps
+  >`
   font-family: 'regular';
   ${color}
   ${typography}
@@ -72,7 +72,7 @@ const TextView = styled.Text<
 
 const ImageView = styled.Image<
   SpaceProps & LayoutProps & FlexboxProps & PositionProps & WeightProps
->`
+  >`
   ${space}
   ${layout}
   ${flexbox}
@@ -82,14 +82,14 @@ const ImageView = styled.Image<
 
 const LinearLayout = styled.View<
   BorderProps &
-    ColorProps &
-    OrientationProps &
-    SpaceProps &
-    LayoutProps &
-    FlexboxProps &
-    WeightProps &
-    PositionProps
->`
+  ColorProps &
+  OrientationProps &
+  SpaceProps &
+  LayoutProps &
+  FlexboxProps &
+  WeightProps &
+  PositionProps
+  >`
   ${border}  
   ${color}
   ${orientation}
@@ -102,12 +102,12 @@ const LinearLayout = styled.View<
 
 const RelativeLayout = styled.View<
   ColorProps &
-    LayoutProps &
-    OrientationProps &
-    PositionProps &
-    SpaceProps &
-    WeightProps
->`
+  LayoutProps &
+  OrientationProps &
+  PositionProps &
+  SpaceProps &
+  WeightProps
+  >`
   position: relative;
   > * {
     position: absolute;
@@ -122,14 +122,14 @@ const RelativeLayout = styled.View<
 
 const ButtonView = styled.TouchableHighlight<
   ColorProps &
-    FlexboxProps &
-    SpaceProps &
-    BorderProps &
-    LayoutProps &
-    OrientationProps &
-    PositionProps &
-    WeightProps
->`
+  FlexboxProps &
+  SpaceProps &
+  BorderProps &
+  LayoutProps &
+  OrientationProps &
+  PositionProps &
+  WeightProps
+  >`
   ${layout}
   ${color}
   ${flexbox}
@@ -142,7 +142,7 @@ const ButtonView = styled.TouchableHighlight<
 
 const LinearGradientLayout = styled(LinearGradient)<
   ColorProps & SpaceProps & LayoutProps & FlexboxProps
->`
+  >`
   ${layout}
   ${color}
   ${space}

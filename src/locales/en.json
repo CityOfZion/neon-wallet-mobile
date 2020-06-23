@@ -6,7 +6,8 @@
   },
   "routes": {
     "Settings": "Settings",
-    "ReceiveQRCode": "Receive QR Code"
+    "ReceiveQRCode": "Receive QR Code",
+    "Account": "Account"
   },
   "home": {
     "welcome": "Welcome to Neon Wallet!"
@@ -46,13 +47,16 @@
     "address": "ADDRESS"
   },
   "receive": {
-    "paymentRequestDetails" : "PAYMENT REQUEST DETAILS",
-    "token" : "Token",
-    "amount" : "Amount",
-    "value" : "Value",
-    "location" : "Location",
-    "address" : "Address",
-    "reference" : "Reference"
+    "paymentRequestDetails": "PAYMENT REQUEST DETAILS",
+    "token": "Token",
+    "amount": "Amount",
+    "value": "Value",
+    "location": "Location",
+    "address": "Address",
+    "reference": "Reference"
+  },
+  "account": {
+    "AddNewAccount": "Add new account"
   },
   "boolean": {
     "true": "Yes",
