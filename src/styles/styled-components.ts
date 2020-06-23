@@ -1,3 +1,4 @@
+import {LinearGradient} from 'expo-linear-gradient'
 import * as styledComponents from 'styled-components/native'
 import {
   border,
@@ -11,7 +12,7 @@ import {
   position,
   PositionProps,
   space,
-  SpaceProps,
+  SpaceProps, TextStyleProps,
   typography,
   TypographyProps,
 } from 'styled-system'
@@ -55,7 +56,8 @@ const TextView = styled.Text<
     FlexboxProps &
     WeightProps &
     TypographyProps &
-    PositionProps
+    PositionProps &
+    TextStyleProps
 >`
   font-family: 'regular';
   ${color}
@@ -133,6 +135,15 @@ const ButtonView = styled.TouchableHighlight<
   ${orientation}
 `
 
+const LinearGradientLayout = styled(LinearGradient)<
+  ColorProps & SpaceProps & LayoutProps & FlexboxProps
+>`
+  ${layout}
+  ${color}
+  ${space}
+  ${flexbox || 'flex: 1;'}
+`
+
 export interface DefaultTheme {
   title: string
   statusBarStyle: 'default' | 'light-content' | 'dark-content'
@@ -141,7 +152,6 @@ export interface DefaultTheme {
     primary: string
     secondary: string
     tertiary: string
-
     background: string[]
     text: string[]
   }
@@ -156,5 +166,6 @@ export {
   ImageView,
   ButtonView,
   StyleConstants,
+  LinearGradientLayout,
 }
 export default styled

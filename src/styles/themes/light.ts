@@ -9,6 +9,8 @@ const light = {
     primary: '#293036',
     secondary: '#0a84ff',
     tertiary: '#4cffb3',
+    lightGray: '#899fa8',
+    borderGray: '#979797',
 
     // eslint-disable-next-line prettier/prettier
     background: [

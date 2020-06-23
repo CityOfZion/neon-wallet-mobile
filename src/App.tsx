@@ -28,6 +28,7 @@ import NeonJSTest from '~src/scenes/NeonJSTest'
 import Onboarding from '~src/scenes/Onboarding'
 import QRCodeScanTest from '~src/scenes/QRCodeScanTest'
 import QrCodeGenerateTest from '~src/scenes/QrCodeGenerateTest'
+import ReceiveQRCode from '~src/scenes/ReceiveQRCode'
 import Settings from '~src/scenes/Settings'
 import TouchIdTest from '~src/scenes/TouchIdTest'
 import WalletView from '~src/scenes/WalletView'
@@ -47,6 +48,7 @@ type RootStackParamList = {
   Wallet: undefined
   Settings: undefined
   More: undefined
+  ReceiveQRCode: undefined
 }
 
 const fetchFonts = () => {
@@ -114,6 +116,19 @@ function RootStackScreen() {
         screenOptions={() => navbarOptions(defaultHeaderProps)}
       >
         <RootStack.Screen name={ROUTES.HOME.name} component={Home} />
+        <RootStack.Screen
+          name={ROUTES.RECEIVE_QR_CODE.name}
+          component={ReceiveQRCode}
+          options={() =>
+            navbarOptions({
+              title: i18n.t(`routes.${ROUTES.RECEIVE_QR_CODE.name}`),
+              image: require('~/src/assets/images/icon-qrcode-white.png'),
+              showIcon: true,
+              iconMarginRight: 3,
+              iconWidth: 20,
+            })
+          }
+        />
         <RootStack.Screen
           name={ROUTES.SETTINGS.name}
           component={Settings}

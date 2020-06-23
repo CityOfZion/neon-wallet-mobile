@@ -5,7 +5,8 @@
     "ptBR": "Portuguese"
   },
   "routes": {
-    "Settings": "Settings"
+    "Settings": "Settings",
+    "ReceiveQRCode": "Receive QR Code"
   },
   "home": {
     "welcome": "Welcome to Neon Wallet!"
@@ -42,6 +43,15 @@
   "paymentCard": {
     "balance": "BALANCE",
     "address": "ADDRESS"
+  },
+  "receive": {
+    "paymentRequestDetails" : "PAYMENT REQUEST DETAILS",
+    "token" : "Token",
+    "amount" : "Amount",
+    "value" : "Value",
+    "location" : "Location",
+    "address" : "Address",
+    "reference" : "Reference"
   },
   "boolean": {
     "true": "Yes",

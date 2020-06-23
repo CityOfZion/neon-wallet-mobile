@@ -21,6 +21,7 @@ type HomeStackParametersList = {
   Wallet: undefined
   Settings: undefined
   More: undefined
+  ReceiveQRCode: undefined
 }
 
 interface Props {
@@ -68,6 +69,12 @@ const Home = (props: Props) => {
         />
       </LinearLayout>
 
+      <LinearLayout m={3}>
+        <ThemedButton
+          onClick={() => props.navigation.navigate('ReceiveQRCode')}
+          label={'Go to ReceiveQRCode'}
+        />
+      </LinearLayout>
       <LinearLayout m={3}>
         <ThemedButton
           onClick={() => props.navigation.navigate('Settings')}

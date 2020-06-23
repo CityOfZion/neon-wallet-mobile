@@ -47,6 +47,10 @@ export const ROUTES = {
     id: 'SETTINGS',
     name: 'Settings' as 'Settings',
   },
+  RECEIVE_QR_CODE: {
+    id: 'RECEIVE_QR_CODE',
+    name: 'ReceiveQRCode' as 'ReceiveQRCode',
+  },
   MORE: {
     id: 'MORE',
     name: 'More' as 'More',

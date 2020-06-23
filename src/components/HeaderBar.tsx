@@ -12,8 +12,8 @@ export interface HeaderProps {
   title: string
   image: any
   showIcon: boolean
-  iconMarginRight: number
-  iconMarginTop: number
+  iconMarginRight?: number
+  iconMarginTop?: number
   iconWidth: number
   onPressToClose?: () => void
 }
