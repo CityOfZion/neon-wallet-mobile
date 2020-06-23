@@ -22,6 +22,7 @@ const dark = {
       '#333',
       '#8ba0a9',
       '#767f86',
+      '#bebebe',
     ],
   },
 } as DefaultTheme

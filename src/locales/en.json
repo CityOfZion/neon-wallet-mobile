@@ -10,6 +10,25 @@
   "home": {
     "welcome": "Welcome to Neon Wallet!"
   },
+  "onboarding": {
+    "feature1": {
+      "title": "The original wallet on the move",
+      "subtitle": "All the best features of our desktop wallet  plus more in the palm of you hand"
+    },
+    "feature2": {
+      "title": "First class user experience",
+      "subtitle": "Neon Wallet has been designed to make managing your crypto assets as intuitive as possible"
+    },
+    "feature3": {
+      "title": "BIP39 wallet",
+      "subtitle": "BIP39 wallet standard, create infinite child accounts using a single seed"
+    },
+    "getStarted": {
+      "title": "Packed pipeline of updates",
+      "subtitle": "The team is working around the clock to bring you the latest new features",
+      "buttonTitle": "Get Started!"
+    }
+  },
   "settings": {
     "title": "Settings",
     "myWallets": "My Wallets",
