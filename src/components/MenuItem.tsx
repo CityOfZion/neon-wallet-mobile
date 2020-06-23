@@ -69,6 +69,7 @@ const MenuItem = (props: MenuItemProps) => {
               ml={props.iconMarginLeft}
               mr={props.iconMarginRight}
               source={props.icon}
+              resizeMode="center"
             />
           )}
           <TextView color="white" fontSize={18} fontFamily="semibold">

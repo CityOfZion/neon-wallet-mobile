@@ -14,7 +14,9 @@ const dark = {
     background: [
       '#1E252A',
       '#283239',
-      '#293036'
+      '#293036',
+      '#899fa8',
+      '#979797'
     ],
     // eslint-disable-next-line prettier/prettier
     text: [

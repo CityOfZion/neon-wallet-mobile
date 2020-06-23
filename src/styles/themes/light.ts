@@ -13,7 +13,10 @@ const light = {
     // eslint-disable-next-line prettier/prettier
     background: [
       '#ddd',
-      '#ccc'
+      '#bbb',
+      '#ccc',
+      '#899fa8',
+      '#979797',
     ],
     // eslint-disable-next-line prettier/prettier
     text: [

@@ -20,11 +20,14 @@ interface Props {
   srcIcon?: ImageLoadEventData
   rounded?: boolean
   flat?: boolean
+  iconSize?: [number, number]
 }
 
 const ThemedButton: React.FC<Props> = (props) => {
   const labelColor = '#4cffb3'
   const baseBgColor = '#2d3941'
+  const width = props.iconSize ? props.iconSize[0] : 20
+  const height = props.iconSize ? props.iconSize[1] : 20
 
   const getBorderRadius = () => {
     if (props.rounded) {
@@ -41,6 +44,7 @@ const ThemedButton: React.FC<Props> = (props) => {
       }
     >
       <ButtonContentView
+        alignItems="center"
         backgroundColor={props.flat ? 'transparent' : baseBgColor}
         style={{borderRadius: getBorderRadius()}}
       >
@@ -66,7 +70,7 @@ const ThemedButton: React.FC<Props> = (props) => {
 
         <LinearLayout orientation={'horiz'} alignItems={'center'}>
           {props.srcIcon && (
-            <ImageView width={20} height={20} mr={3} source={props.srcIcon} />
+            <ImageView width={width} height={height} mr={3} source={props.srcIcon} />
           )}
 
           <LabelView color={labelColor}>{props.label}</LabelView>
@@ -101,7 +105,7 @@ const ButtonContentView = styled(RelativeLayout)`
 
 const LabelView = styled(TextView)`
   text-align: center;
-  font-size: 18px;
+  font-size: 22px;
   line-height: 38px;
 `
 
