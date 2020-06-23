@@ -18,7 +18,8 @@
     "language": "Idioma"
   },
   "customColorPage": {
-    "title": "Selecione um cor personalizada para sua conta"
+    "title": "Personalizar Cor",
+    "subtitle": "Selecione um cor personalizada para sua conta"
   },
   "paymentCard": {
     "balance": "SALDO",

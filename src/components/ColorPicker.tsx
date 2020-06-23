@@ -185,6 +185,7 @@ const ColorPicker: React.FC<Props> = (props) => {
   const HueSelectorView = styled(LinearLayout)`
     border-radius: 9999px;
     box-shadow: 0 3px 2px rgba(0, 0, 0, 0.6);
+    elevation: 8;
     border: solid white ${getHueSelectorRadius() * 0.1}px;
     background: ${getHex()};
     top: ${-getHueRadius()}px;
@@ -201,6 +202,7 @@ const ColorPicker: React.FC<Props> = (props) => {
   const LuminositySelectorView = styled(LinearLayout)`
     border-radius: 9999px;
     box-shadow: 0 3px 2px rgba(0, 0, 0, 0.6);
+    elevation: 8;
     border: solid white ${getLuminositySelectorRadius() * 0.1}px;
     background: ${getHex()};
     right: ${-getLuminosityRadius()}px;
@@ -212,12 +214,21 @@ const ColorPicker: React.FC<Props> = (props) => {
     <ColorPickerView
       onLayout={layoutEvent}
       width={'100%'}
+      height={'100%'}
       style={{aspectRatio: 8 / 9}}
     >
       <ColorPickerContainer
         source={require('~src/assets/images/colorpicker-container.png')}
         resizeMode="contain"
       />
+
+      <LuminosityView position={'absolute'}>
+        {!isColored() && <LuminositySelectorView position={'relative'} />}
+      </LuminosityView>
+
+      <HueView position={'absolute'}>
+        {isColored() && <HueSelectorView position={'relative'} />}
+      </HueView>
 
       <HueAreaView
         position={'absolute'}
@@ -232,14 +243,6 @@ const ColorPicker: React.FC<Props> = (props) => {
         onTouchMove={luminosityAreaEvent}
         pointerEvents={'box-only'}
       />
-
-      <LuminosityView position={'absolute'}>
-        {!isColored() && <LuminositySelectorView position={'relative'} />}
-      </LuminosityView>
-
-      <HueView position={'absolute'}>
-        {isColored() && <HueSelectorView position={'relative'} />}
-      </HueView>
     </ColorPickerView>
   )
 }

@@ -8,7 +8,8 @@
     "welcome": "Willkommen bei Neon Wallet!"
   },
   "customColorPage": {
-    "title": "#translateme"
+    "title": "#translateme",
+    "subtitle": "#translateme"
   },
   "paymentCard": {
     "balance": "#TRANSLATEME",
