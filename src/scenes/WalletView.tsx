@@ -20,6 +20,7 @@ import styled, {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
+import {FilterHelper} from '~src/helpers/FilterHelper'
 
 const SLIDER_WIDTH = Dimensions.get('window').width
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
@@ -47,7 +48,7 @@ const WalletView = (props: WalletProps) => {
         </TextView>
         <LinearLayout orientation="horiz">
           <TextView fontSize="36px" color="text.0" fontFamily="medium">
-            {`${currency}${wallet.currentValue.toFixed(2)}`}
+            {FilterHelper.currency(wallet.currentValue, currency, false, true)}
           </TextView>
           <ImageView
             mt="8px"
@@ -106,8 +107,8 @@ const WalletView = (props: WalletProps) => {
               inactiveSlideShift={12}
               lockScrollWhileSnapping={true}
               lockScrollTimeoutDuration={200}
-              activeSlideOffset={15}
-              swipeThreshold={15}
+              activeSlideOffset={5}
+              swipeThreshold={5}
               enableSnap={true}
               renderItem={({item}) => <WalletCard wallet={item} />}
               onSnapToItem={(index) => setActiveIndex(index)}

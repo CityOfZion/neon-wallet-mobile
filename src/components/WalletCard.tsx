@@ -44,7 +44,7 @@ const WalletCard = (props: WalletCardProps) => {
           weight={percentageOfTotal}
           minWidth={'2px'}
           mx={'1px'}
-          borderRadius={1}
+          borderRadius={9999}
           bg={asset.color}
           key={i}
         />
