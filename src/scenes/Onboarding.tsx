@@ -6,6 +6,7 @@ import Swiper from 'react-native-swiper'
 import {useSelector} from 'react-redux'
 
 import {TABS} from '~/constants'
+import i18n from '~/src/i18n'
 import {RootState} from '~src/store/reducers/root'
 import styled, {
   ButtonView,
@@ -35,18 +36,10 @@ const OnboardingSlide = (props: OnboardingSlideProps) => {
 
   return (
     <LinearLayout height={'100%'} alignItems={'center'}>
-      <TextView
-        mt={'12.5%'}
-        color={'text.0'}
-        fontFamily={'bold'}
-        fontSize={'20px'}
-      >
-        {props.header}
-      </TextView>
-      <SlideImage height={'60%'} position={'relative'}>
+      <SlideImage height={'75%'} position={'relative'}>
         <ImageView
           height={'100%'}
-          mt={'16px'}
+          mt={'24px'}
           resizeMode="contain"
           source={props.image}
         />
@@ -58,14 +51,15 @@ const OnboardingSlide = (props: OnboardingSlideProps) => {
 
 const FeatureText = (props: {title: string; subtitle: string}) => {
   const FeatureDescription = styled(TextView)`
-    font-size: 12px;
+    font-size: 15px;
     text-align: center;
     letter-spacing: 1.28px;
     line-height: 16px;
+    font-family: regular;
   `
 
   return (
-    <LinearLayout orientation={'verti'} mt={'10%'}>
+    <LinearLayout orientation={'verti'} mt={'4%'}>
       <TextView
         color={'text.0'}
         fontFamily={'semibold'}
@@ -74,7 +68,7 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
       >
         {props.title}
       </TextView>
-      <FeatureDescription mt={'12px'} mx={'5%'} color={'text.0'}>
+      <FeatureDescription mt={'8px'} mx={'5%'}  color={'text.4'}>
         {props.subtitle}
       </FeatureDescription>
     </LinearLayout>
@@ -97,7 +91,7 @@ const GetStartedButton = (props: {onPressFunc: () => void}) => {
       onPress={props.onPressFunc}
     >
       <TextView color={colorDarkShark} fontSize="16px" fontFamily="semibold">
-        Get started!
+        {i18n.t('onboarding.getStarted.buttonTitle')}
       </TextView>
     </ButtonView>
   )
@@ -128,27 +122,37 @@ const Onboarding = (props: {
         >
           <OnboardingSlide
             header={'Feature 1'}
-            image={require('~src/assets/images/onboarding-placeholder.png')}
+            image={require('~src/assets/images/onboarding-1.png')}
             bottomContent={
               <FeatureText
-                title={'This is a killer feature'}
-                subtitle={lorem}
+                title={i18n.t('onboarding.feature1.title')}
+                subtitle={i18n.t('onboarding.feature1.subtitle')}
               />
             }
           />
           <OnboardingSlide
             header={'Feature 2'}
-            image={require('~src/assets/images/onboarding-placeholder.png')}
+            image={require('~src/assets/images/onboarding-2.png')}
             bottomContent={
               <FeatureText
-                title={'This is another killer feature'}
-                subtitle={lorem}
+                title={i18n.t('onboarding.feature2.title')}
+                subtitle={i18n.t('onboarding.feature2.subtitle')}
+              />
+            }
+          />
+          <OnboardingSlide
+            header={'Feature 3'}
+            image={require('~src/assets/images/onboarding-3.png')}
+            bottomContent={
+              <FeatureText
+                title={i18n.t('onboarding.feature3.title')}
+                subtitle={i18n.t('onboarding.feature3.subtitle')}
               />
             }
           />
           <OnboardingSlide
             header={'Time to get started!'}
-            image={require('~src/assets/images/onboarding-placeholder.png')}
+            image={require('~src/assets/images/onboarding-4.png')}
             bottomContent={
               <GetStartedButton
                 onPressFunc={() =>
