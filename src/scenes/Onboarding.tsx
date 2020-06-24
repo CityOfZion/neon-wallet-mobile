@@ -68,7 +68,7 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
       >
         {props.title}
       </TextView>
-      <FeatureDescription mt={'8px'} mx={'5%'}  color={'text.4'}>
+      <FeatureDescription mt={'8px'} mx={'5%'} color={'text.4'}>
         {props.subtitle}
       </FeatureDescription>
     </LinearLayout>

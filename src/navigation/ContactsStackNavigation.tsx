@@ -1,0 +1,31 @@
+import {createStackNavigator} from '@react-navigation/stack'
+import React from 'react'
+import {useSelector} from 'react-redux'
+import {ThemeProvider} from 'styled-components'
+
+import {ROUTES} from '~/constants'
+import ContactsPage from '~src/scenes/ContactsPage'
+import {RootState} from '~src/store/reducers/root'
+
+type ContactsStackParamList = {
+  Contacts: undefined
+}
+
+const ContactsStack = createStackNavigator<ContactsStackParamList>()
+
+const ContactsStackNavigation = () => {
+  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+
+  return (
+    <ThemeProvider theme={theme}>
+      <ContactsStack.Navigator screenOptions={{headerShown: false}}>
+        <ContactsStack.Screen
+          name={ROUTES.CONTACTS.name}
+          component={ContactsPage}
+        />
+      </ContactsStack.Navigator>
+    </ThemeProvider>
+  )
+}
+
+export default ContactsStackNavigation
