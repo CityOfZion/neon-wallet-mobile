@@ -159,6 +159,7 @@ export interface DefaultTheme {
     tertiary: string
     background: string[]
     text: string[]
+    modal: string[]
   }
 }
 

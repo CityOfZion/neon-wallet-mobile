@@ -13,8 +13,18 @@ import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation
 import SettingsStackNavigation from '~src/navigation/SettingsStackNavigation'
 import WalletStackNavigation from '~src/navigation/WalletsStackNavigation'
 import {RootState} from '~src/store/reducers/root'
+import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
+import WalletView from '~src/scenes/WalletView'
+import TabNavigation from '~src/navigation/TabNavigation'
+import ModalStackNavigation from '~src/navigation/ModalStackNavigation'
+import {defaultScreenOptions} from '~src/App'
 
-const Tab = createBottomTabNavigator()
+type RootStackParamList = {
+  Tab: undefined
+  Modal: undefined
+}
+
+const RootStack = createStackNavigator<RootStackParamList>()
 
 const AppNavigation = () => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
@@ -22,30 +32,14 @@ const AppNavigation = () => {
   return (
     <NavigationContainer>
       <ThemeProvider theme={theme}>
-        <StatusBar
-          translucent
-          barStyle={theme.statusBarStyle}
-          backgroundColor="transparent"
-        />
-        <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>
-          <Tab.Screen
-            name={ROUTES.WALLET.name}
-            component={WalletStackNavigation}
-          />
-          <Tab.Screen
-            name={ROUTES.CONTACTS.name}
-            component={ContactsStackNavigation}
-          />
-          <Tab.Screen
-            name={ROUTES.QUICK_TOOLS.name}
-            component={QuickToolsStackNavigation}
-          />
-          <Tab.Screen
-            name={ROUTES.SETTINGS.name}
-            component={SettingsStackNavigation}
-          />
-          <Tab.Screen name={ROUTES.MORE.name} component={MoreStackNavigation} />
-        </Tab.Navigator>
+        <RootStack.Navigator
+          initialRouteName="Tab"
+          headerMode="none"
+          screenOptions={defaultScreenOptions}
+        >
+          <RootStack.Screen name="Tab" component={TabNavigation} />
+          <RootStack.Screen name="Modal" component={ModalStackNavigation} />
+        </RootStack.Navigator>
       </ThemeProvider>
     </NavigationContainer>
   )

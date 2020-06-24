@@ -25,6 +25,10 @@ const light = {
       '#8ba0a9',
       '#767f86',
     ],
+    // eslint-disable-next-line prettier/prettier
+    modal: [
+      '#777'
+    ]
   },
 } as DefaultTheme
 

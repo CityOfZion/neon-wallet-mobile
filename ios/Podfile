@@ -43,4 +43,6 @@ target 'NeonWalletMobile' do
 
   # react-native-cli autolinking
   use_native_modules!
+  pod 'react-native-blur', :path => '../node_modules/@react-native-community/blur'
+
 end

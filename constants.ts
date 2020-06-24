@@ -65,6 +65,10 @@ export const ROUTES = {
     id: 'MORE',
     name: 'More' as 'More',
   },
+  SAMPLE_MODAL: {
+    id: 'SAMPLE_MODAL',
+    name: 'SampleModal' as 'SampleModal',
+  },
 }
 
 export const TABS = {
