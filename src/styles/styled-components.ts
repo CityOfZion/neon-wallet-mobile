@@ -12,7 +12,8 @@ import {
   position,
   PositionProps,
   space,
-  SpaceProps, TextStyleProps,
+  SpaceProps,
+  TextStyleProps,
   typography,
   TypographyProps,
 } from 'styled-system'
@@ -125,7 +126,9 @@ const ButtonView = styled.TouchableHighlight<
     SpaceProps &
     BorderProps &
     LayoutProps &
-    OrientationProps
+    OrientationProps &
+    PositionProps &
+    WeightProps
 >`
   ${layout}
   ${color}
@@ -133,6 +136,8 @@ const ButtonView = styled.TouchableHighlight<
   ${space}
   ${border}
   ${orientation}
+  ${position}
+  ${weight}
 `
 
 const LinearGradientLayout = styled(LinearGradient)<

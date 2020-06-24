@@ -1,8 +1,9 @@
 import React from 'react'
-import {Dimensions} from 'react-native'
 import {LineChart} from 'react-native-chart-kit'
 import styled from 'styled-components/native'
 import {color, ColorProps} from 'styled-system'
+
+import {WINDOW_WIDTH} from '~/constants'
 
 export default function ChartTestPage() {
   const mockData = [null, Array(30)].map((x) => Math.random() * 100)
@@ -18,7 +19,7 @@ export default function ChartTestPage() {
             },
           ],
         }}
-        width={Dimensions.get('window').width - 16} // from react-native
+        width={WINDOW_WIDTH - 16} // from react-native
         height={260}
         yAxisSuffix={' GAS'}
         chartConfig={{

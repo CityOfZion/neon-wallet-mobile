@@ -2,14 +2,16 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
 import moment from 'moment'
 import React, {useRef, useState} from 'react'
-import {Dimensions, ScrollView} from 'react-native'
+import {ScrollView} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
 import {layout, LayoutProps, space, SpaceProps} from 'styled-system'
 
+import {WINDOW_WIDTH} from '~/constants'
 import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
+import {FilterHelper} from '~src/helpers/FilterHelper'
 import i18n from '~src/i18n'
 import {mockWalletItems} from '~src/mockWalletItems'
 import {Wallet} from '~src/models/Wallet'
@@ -20,9 +22,8 @@ import styled, {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {FilterHelper} from '~src/helpers/FilterHelper'
 
-const SLIDER_WIDTH = Dimensions.get('window').width
+const SLIDER_WIDTH = WINDOW_WIDTH
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
 
 interface WalletProps {

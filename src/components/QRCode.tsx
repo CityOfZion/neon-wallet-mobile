@@ -1,7 +1,7 @@
 import React from 'react'
-import {Dimensions} from 'react-native'
 import {QRCode} from 'react-native-custom-qr-codes-expo'
 
+import {WINDOW_WIDTH} from '~/constants'
 import {LinearLayout} from '~src/styles/styled-components'
 
 export interface QRCodeProps {
@@ -10,7 +10,7 @@ export interface QRCodeProps {
 }
 
 const NeonQRCode = (props: QRCodeProps) => {
-  const width = props.qrCodeWidth ? props.qrCodeWidth : Dimensions.get('window').width - 76
+  const width = props.qrCodeWidth ? props.qrCodeWidth : WINDOW_WIDTH - 76
   return (
     <LinearLayout orientation="verti" height={width}>
       <LinearLayout bg="transparent" orientation="verti" alignItems="center">

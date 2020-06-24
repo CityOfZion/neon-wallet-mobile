@@ -1,19 +1,16 @@
 import {useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
 import React from 'react'
-import {Dimensions, ScrollView} from 'react-native'
-import {QRCode} from 'react-native-custom-qr-codes-expo'
+import {ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
-import styled from 'styled-components'
 
+import {SCREEN_WIDTH} from '~/constants'
 import NeonQRCode from '~src/components/QRCode'
 import ThemedButton from '~src/components/ThemedButton'
 import i18n from '~src/i18n'
 import {RootState} from '~src/store/reducers/root'
 import {
-  ButtonView,
   ImageView,
-  LinearGradientLayout,
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
@@ -29,7 +26,7 @@ export interface ReceiveQRCodeProps {
   tokenLogo: any
 }
 
-const buttonWidth = Dimensions.get('screen').width - 76
+const buttonWidth = SCREEN_WIDTH - 76
 
 const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)

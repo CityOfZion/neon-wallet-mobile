@@ -70,7 +70,12 @@ const ThemedButton: React.FC<Props> = (props) => {
 
         <LinearLayout orientation={'horiz'} alignItems={'center'}>
           {props.srcIcon && (
-            <ImageView width={width} height={height} mr={3} source={props.srcIcon} />
+            <ImageView
+              width={width}
+              height={height}
+              mr={3}
+              source={props.srcIcon}
+            />
           )}
 
           <LabelView color={labelColor}>{props.label}</LabelView>

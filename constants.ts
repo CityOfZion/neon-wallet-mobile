@@ -1,3 +1,5 @@
+import {Dimensions} from 'react-native'
+
 import nodesMainNet from '~src/core/nodes-main-net.json'
 import nodesTestNet from '~src/core/nodes-test-net.json'
 import tokenList from '~src/core/tokenList.json'
@@ -26,6 +28,14 @@ export const ROUTES = {
   CHART_TEST: {
     id: 'CHART_TEST',
     name: 'ChartTest' as 'ChartTest',
+  },
+  CONTACTS: {
+    id: 'CONTACTS',
+    name: 'Contacts' as 'Contacts',
+  },
+  QUICK_TOOLS: {
+    id: 'QUICK_TOOLS',
+    name: 'QuickTools' as 'QuickTools',
   },
   QR_CODE_SCAN_TEST: {
     id: 'QR_CODE_SCAN_TEST',
@@ -95,3 +105,8 @@ export const NODES_MAIN_NET = nodesMainNet
 export const NODES_TEST_NET = nodesTestNet
 
 export const DEFAULT_CURRENCY = '$'
+
+export const WINDOW_WIDTH = Dimensions.get('window').width
+export const WINDOW_HEIGHT = Dimensions.get('window').height
+export const SCREEN_WIDTH = Dimensions.get('screen').width
+export const SCREEN_HEIGHT = Dimensions.get('screen').height
