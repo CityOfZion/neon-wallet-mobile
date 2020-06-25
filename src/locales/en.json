@@ -63,6 +63,20 @@
     "currency": "Currency",
     "language": "Language"
   },
+  "quickTools": {
+    "qrCode": {
+      "title": "Scan QR code",
+      "subtitle": "Launch QR code scanner"
+    },
+    "send": {
+      "title": "Send",
+      "subtitle": "Send tokens"
+    },
+    "receive": {
+      "title": "Receive",
+      "subtitle": "Receive tokens"
+    }
+  },
   "customColorPage": {
     "title": "Custom Colour",
     "subtitle": "Select a custom color for your account"
@@ -114,6 +128,19 @@
       "assets": "ASSETS",
       "transactions": "TRANSACTIONS",
       "claimAsset": "Claim %{assetAmount}"
+    },
+    "createAccount": {
+      "title": "Create account",
+      "subtitle": "Creating an account is easy, just give it a name below and you’re down!",
+      "accountInput": {
+        "title": "ACCOUNT NAME",
+        "placeholder": "Enter an account name"
+      },
+      "selectColor": "Select a colour for your new account card",
+      "navigation": {
+        "cancel": "Cancel",
+        "save": "Save"
+      }
     }
   },
   "components": {

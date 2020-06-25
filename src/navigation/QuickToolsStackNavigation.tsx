@@ -15,11 +15,14 @@ import ReceiveQRCode from '~src/scenes/ReceiveQRCode'
 import WelcomePage from '~src/scenes/WelcomePage'
 import {RootState} from '~src/store/reducers/root'
 import {DefaultTheme} from '~src/styles/styled-components'
+import QrCodeGenerateTest from '~src/scenes/QrCodeGenerateTest'
+import QRCodeScanTest from '~src/scenes/QRCodeScanTest'
 
 export type QuickToolsStackParamList = {
   Welcome: undefined
   Home: undefined
   ReceiveQRCode: undefined
+  QRCodeScanTest: undefined
   CustomColor: undefined
   Onboarding: undefined
   GetWallet: undefined
@@ -103,6 +106,22 @@ const QuickToolsStackNavigation = () => {
           }
         />
 
+        <QuickToolsStack.Screen
+          name={ROUTES.QR_CODE_SCAN_TEST.name}
+          component={QRCodeScanTest}
+          options={() =>
+            navbarOptions(
+              {
+                title: i18n.t(`routes.${ROUTES.QR_CODE_SCAN_TEST.name}`),
+                image: require('~src/assets/images/icon-qrcode-white.png'),
+                showIcon: true,
+                iconMarginRight: 3,
+                iconWidth: 20,
+              },
+              theme
+            )
+          }
+        />
         <QuickToolsStack.Screen
           name={ROUTES.GET_WALLET.name}
           component={GetWalletView}

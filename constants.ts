@@ -147,4 +147,5 @@ export const defaultScreenOptions = {
       backgroundColor: 'transparent',
     },
   }),
+  animationEnabled: false,
 }

@@ -9,6 +9,7 @@ const light = {
     primary: '#293036',
     secondary: '#0a84ff',
     tertiary: '#4cffb3',
+    quaternary: '#58717b',
 
     // eslint-disable-next-line prettier/prettier
     background: [
@@ -17,6 +18,9 @@ const light = {
       '#ccc',
       '#899fa8',
       '#979797',
+      '#888',
+      '#b4b4b4',
+      '#e1e1e1',
     ],
     // eslint-disable-next-line prettier/prettier
     text: [
