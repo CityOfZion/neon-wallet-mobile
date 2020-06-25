@@ -14,10 +14,10 @@ export default function SampleModal() {
   return (
     <SwiperPanel
       title="Modal Title"
-      left={<BackButton text="Back" />}
-      right={<CancelButton />}
-      onLeftClick={() => navigation.goBack()}
-      onRightClick={() => navigation.goBack()}
+      leftButton={<BackButton text="Back" />}
+      rightButton={<CancelButton />}
+      onLeftPress={() => navigation.goBack()}
+      onRightPress={() => navigation.goBack()}
       image={require('~/src/assets/images/card-neo.png')}
     >
       <TouchableHighlight

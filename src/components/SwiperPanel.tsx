@@ -23,10 +23,10 @@ const ANIMATION_VELOCITY_THRESHOLD = 0.5
 
 interface Props {
   padding: number
-  left?: JSX.Element
-  right?: JSX.Element
-  onLeftClick?: () => void
-  onRightClick?: () => void
+  leftButton?: JSX.Element
+  rightButton?: JSX.Element
+  onLeftPress?: () => void
+  onRightPress?: () => void
   image: ImageSourcePropType
   title: string
   children?: JSX.Element | JSX.Element[]
@@ -174,7 +174,7 @@ export default function SwiperPanel(props: Props) {
                   height: 4,
                   borderRadius: 2,
                   marginBottom: 36,
-                  backgroundColor: theme.colors.modal[0],
+                  backgroundColor: theme.colors.background[3],
                   alignSelf: 'center',
                 }}
               />
@@ -187,7 +187,7 @@ export default function SwiperPanel(props: Props) {
                 }}
               >
                 <TouchableWithoutFeedback
-                  onPress={() => props.onLeftClick && props.onLeftClick()}
+                  onPress={() => props.onLeftPress && props.onLeftPress()}
                 >
                   <View
                     style={{
@@ -195,7 +195,7 @@ export default function SwiperPanel(props: Props) {
                       paddingLeft: 10,
                     }}
                   >
-                    {props.left}
+                    {props.leftButton}
                   </View>
                 </TouchableWithoutFeedback>
 
@@ -224,7 +224,7 @@ export default function SwiperPanel(props: Props) {
                 </View>
 
                 <TouchableWithoutFeedback
-                  onPress={() => props.onRightClick && props.onRightClick()}
+                  onPress={() => props.onRightPress && props.onRightPress()}
                 >
                   <View
                     style={{
@@ -232,7 +232,7 @@ export default function SwiperPanel(props: Props) {
                       paddingRight: 10,
                     }}
                   >
-                    {props.right}
+                    {props.rightButton}
                   </View>
                 </TouchableWithoutFeedback>
               </View>

@@ -26,11 +26,6 @@ const dark = {
       '#767f86',
       '#bebebe',
     ],
-
-    // eslint-disable-next-line prettier/prettier
-    modal: [
-      '#899fa8'
-    ]
   },
 } as DefaultTheme
 
