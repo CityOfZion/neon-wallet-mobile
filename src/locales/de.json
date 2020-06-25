@@ -7,6 +7,10 @@
   "home": {
     "welcome": "Willkommen bei Neon Wallet!"
   },
+  "routes": {
+    "Settings": "#TRANSLATEME",
+    "Account": "#TRANSLATEME"
+  },
   "customColorPage": {
     "title": "#translateme",
     "subtitle": "#translateme"
@@ -14,6 +18,9 @@
   "paymentCard": {
     "balance": "#TRANSLATEME",
     "address": "#TRANSLATEME"
+  },
+  "account": {
+    "AddNewAccount": "#TRANSLATEME"
   },
   "boolean": {
     "true": "#translateme",

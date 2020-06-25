@@ -11,6 +11,10 @@ type HomeStackParametersList = {
   CustomColor: undefined
   ReceiveQRCode: undefined
   Modal: {screen: string}
+  Wallet: undefined
+  Settings: undefined
+  More: undefined
+  Account: undefined
 }
 
 interface Props {
@@ -55,11 +59,17 @@ const Home = (props: Props) => {
           label={'Go to Sample Modal Page'}
         />
       </LinearLayout>
-
+      <LinearLayout m={3}>
+        <ThemedButton
+          onClick={() => props.navigation.navigate('Account')}
+          label={'Account'}
+        />
+      </LinearLayout>
       <LinearLayout
         mb={5}
+        mt={5}
         position="absolute"
-        bottom="0"
+        bottom={0}
         alignItems="center"
         justifyContent="center"
       >
