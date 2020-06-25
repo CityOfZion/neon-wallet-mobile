@@ -10,6 +10,7 @@ import {LinearLayout, TextView} from '~src/styles/styled-components'
 type HomeStackParametersList = {
   CustomColor: undefined
   ReceiveQRCode: undefined
+  Modal: {screen: string}
 }
 
 interface Props {
@@ -43,6 +44,15 @@ const Home = (props: Props) => {
         <ThemedButton
           onClick={() => props.navigation.navigate('CustomColor')}
           label={'Go to Custom Color Page'}
+        />
+      </LinearLayout>
+
+      <LinearLayout m={3}>
+        <ThemedButton
+          onClick={() =>
+            props.navigation.navigate('Modal', {screen: 'SampleModal'})
+          }
+          label={'Go to Sample Modal Page'}
         />
       </LinearLayout>
 

@@ -10,8 +10,9 @@ import '~src/window-crypto'
 import 'reflect-metadata'
 
 import {HttpConfig} from '~src/config/HttpConfig'
-import AppNavigation from '~src/navigation/AppNavigation'
+import TabNavigation from '~src/navigation/TabNavigation'
 import {rootReducer} from '~src/store/reducers/root'
+import AppNavigation from '~src/navigation/AppNavigation'
 
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -21,6 +22,19 @@ const fetchFonts = () => {
     italic: require('~src/assets/fonts/sofiapro-regularitalic.otf'),
     semibold: require('~src/assets/fonts/sofiapro-semibold.otf'),
   })
+}
+
+export const defaultScreenOptions = {
+  cardStyle: {
+    backgroundColor: 'transparent',
+    opacity: 1,
+  },
+  transparentCard: true,
+  transitionConfig: () => ({
+    containerStyle: {
+      backgroundColor: 'transparent',
+    },
+  }),
 }
 
 const store = createStore(rootReducer, applyMiddleware(thunk))

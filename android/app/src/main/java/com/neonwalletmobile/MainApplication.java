@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.cmcewen.blurview.BlurViewPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -42,6 +43,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       List<ReactPackage> packages = new PackageList(this).getPackages();
       packages.add(new ModuleRegistryAdapter(mModuleRegistryProvider));
+      packages.add(new BlurViewPackage())
       return packages;
     }
 
