@@ -94,8 +94,7 @@ const AccountCardView: React.FC<Props> = (props) => {
           {i18n.t('paymentCard.address')}
         </TextView>
 
-        <LinearLayout orientation={'horiz'} width={'100%'}>
-          <TextView
+        <TextView
             weight={1}
             fontFamily="medium"
             fontSize="16"
@@ -105,7 +104,7 @@ const AccountCardView: React.FC<Props> = (props) => {
           >
             {props.account.address}
           </TextView>
-        </LinearLayout>
+
       </LinearLayout>
     </AccountCard>
   )

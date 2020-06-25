@@ -3,12 +3,12 @@ import {
   ImageView,
   LinearLayout,
   TextView,
+  LinearGradientLayout,
 } from '~src/styles/styled-components'
 
 import {Account} from '~src/models/Account'
 import AccountCardView from '~src/components/AccountCardView'
 import {ScrollView} from 'react-native'
-import {LinearGradient} from 'expo-linear-gradient'
 import i18n from '~src/i18n'
 import {useSelector} from 'react-redux'
 import {RootState} from '~src/store/reducers/root'
@@ -73,53 +73,48 @@ const AccountView: React.FC<object> = () => {
   })
 
   return (
-
-    <LinearGradient
-      style={{flex: 1}}
+    <LinearGradientLayout
       colors={[theme.colors.background[0], theme.colors.background[2]]}
-      end={[1, 0.75]}>
-        <LinearLayout
-          paddingRight={12}
-          paddingLeft={12}
-          paddingTop={30}
-          height="100%"
-          width="100%"
-          orientation={'verti'}
+      end={[1, 0.75]}
+      paddingRight={12}
+      paddingLeft={12}
+      paddingTop={30}
+      height="100%"
+      width="100%"
+    >
+      <LinearLayout height="100%" position="relative">
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{flexGrow: 1, height: scrollViewSize}}
         >
-          <LinearLayout height="100%" position="relative">
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{flexGrow: 1, height: scrollViewSize}}
-            >
-              {items}
+          {items}
 
-              <LinearLayout />
+          <LinearLayout />
 
-              <LinearLayout height={listHeightSize} />
+          <LinearLayout height={listHeightSize} />
 
-              <LinearLayout
-                alignItems="center"
-                justifyContent="center"
-                mb={addCardMb}
-                mt={addCardMt}
-                orientation="horiz"
-                height={addCardSize}
-                borderStyle="dashed"
-                borderColor="#ffffff"
-                borderRadius={17}
-                borderWidth={1}
-              >
-                <ImageView
-                  source={require('~src/assets/images/add_-_material.png')}
-                />
-                <TextView color="white" fontSize={18} ml={2} fontFamily="medium">
-                  {i18n.t('account.AddNewAccount')}
-                </TextView>
-              </LinearLayout>
-            </ScrollView>
+          <LinearLayout
+            alignItems="center"
+            justifyContent="center"
+            mb={addCardMb}
+            mt={addCardMt}
+            orientation="horiz"
+            height={addCardSize}
+            borderStyle="dashed"
+            borderColor="#ffffff"
+            borderRadius={17}
+            borderWidth={1}
+          >
+            <ImageView
+              source={require('~src/assets/images/add_-_material.png')}
+            />
+            <TextView color="white" fontSize={18} ml={2} fontFamily="medium">
+              {i18n.t('account.AddNewAccount')}
+            </TextView>
           </LinearLayout>
-        </LinearLayout>
-    </LinearGradient>
+        </ScrollView>
+      </LinearLayout>
+    </LinearGradientLayout>
   )
 }
 
