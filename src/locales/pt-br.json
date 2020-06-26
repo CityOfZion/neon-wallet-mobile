@@ -1,4 +1,9 @@
 {
+  "app": {
+    "neoBlockHeight": "NEO BLOCK HEIGHT",
+    "back": "Back",
+    "edit": "Edit"
+  },
   "languages": {
     "de": "Alemão",
     "en": "Inglês",
@@ -6,7 +11,8 @@
   },
   "routes": {
     "Settings": "Configurações",
-    "Account": "Conta"
+    "Account": "Conta",
+    "GetWallet": "Carteira"
   },
   "home": {
     "welcome": "Bem-vindo ao Neon Wallet!"
@@ -21,9 +27,6 @@
   "customColorPage": {
     "title": "Personalizar Cor",
     "subtitle": "Selecione um cor personalizada para sua conta"
-  },
-  "account": {
-    "AddNewAccount": "Adicione uma nova conta"
   },
   "paymentCard": {
     "balance": "SALDO",
@@ -53,8 +56,16 @@
     }
   },
   "screens": {
-    "wallet": {
+    "listWallets": {
       "changeSinceLastVisit": "CHANGE SINCE LAST VISIT %{date}"
+    },
+    "getWallet": {
+      "addNewAccount": "Add new account"
+    },
+    "getAccount": {
+      "assets": "ASSETS",
+      "transactions": "TRANSACTIONS",
+      "claimAsset": "Claim %{assetAmount}"
     }
   },
   "components": {

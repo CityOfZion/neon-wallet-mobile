@@ -120,7 +120,7 @@ const RelativeLayout = styled.View<
   ${weight}
 `
 
-const ButtonView = styled.TouchableHighlight<
+const ButtonView = styled.TouchableOpacity<
   ColorProps &
   FlexboxProps &
   SpaceProps &
@@ -149,6 +149,11 @@ const LinearGradientLayout = styled(LinearGradient)<
   ${flexbox || 'flex: 1;'}
 `
 
+const StyledScrollView = styled.ScrollView<LayoutProps & SpaceProps>`
+  ${layout}
+  ${space}
+`
+
 export interface DefaultTheme {
   title: string
   statusBarStyle: 'default' | 'light-content' | 'dark-content'
@@ -172,5 +177,6 @@ export {
   ButtonView,
   StyleConstants,
   LinearGradientLayout,
+  StyledScrollView
 }
 export default styled

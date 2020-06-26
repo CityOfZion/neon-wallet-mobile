@@ -21,6 +21,7 @@ interface Props {
   rounded?: boolean
   flat?: boolean
   iconSize?: [number, number]
+  fontSize?: number | string
 }
 
 const ThemedButton: React.FC<Props> = (props) => {
@@ -28,6 +29,7 @@ const ThemedButton: React.FC<Props> = (props) => {
   const baseBgColor = '#2d3941'
   const width = props.iconSize ? props.iconSize[0] : 20
   const height = props.iconSize ? props.iconSize[1] : 20
+  const fontSize = props.fontSize ?? 22
 
   const getBorderRadius = () => {
     if (props.rounded) {
@@ -78,7 +80,7 @@ const ThemedButton: React.FC<Props> = (props) => {
             />
           )}
 
-          <LabelView color={labelColor}>{props.label}</LabelView>
+          <LabelView color={labelColor} fontSize={fontSize}>{props.label}</LabelView>
         </LinearLayout>
       </ButtonContentView>
     </ButtonView>
@@ -110,7 +112,6 @@ const ButtonContentView = styled(RelativeLayout)`
 
 const LabelView = styled(TextView)`
   text-align: center;
-  font-size: 22px;
   line-height: 38px;
 `
 

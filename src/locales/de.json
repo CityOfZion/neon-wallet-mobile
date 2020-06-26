@@ -1,4 +1,9 @@
 {
+  "app": {
+    "neoBlockHeight": "NEO BLOCK HEIGHT",
+    "back": "Back",
+    "edit": "Edit"
+  },
   "languages": {
     "de": "Deutsch",
     "en": "Englisch",
@@ -9,7 +14,8 @@
   },
   "routes": {
     "Settings": "#TRANSLATEME",
-    "Account": "#TRANSLATEME"
+    "Account": "#TRANSLATEME",
+    "GetWallet": "Wallet"
   },
   "customColorPage": {
     "title": "#translateme",
@@ -18,9 +24,6 @@
   "paymentCard": {
     "balance": "#TRANSLATEME",
     "address": "#TRANSLATEME"
-  },
-  "account": {
-    "AddNewAccount": "#TRANSLATEME"
   },
   "boolean": {
     "true": "#translateme",
@@ -46,8 +49,16 @@
     }
   },
   "screens": {
-    "wallet": {
+    "listWallets": {
       "changeSinceLastVisit": "CHANGE SINCE LAST VISIT %{date}"
+    },
+    "getWallet": {
+      "addNewAccount": "Add new account"
+    },
+    "getAccount": {
+      "assets": "ASSETS",
+      "transactions": "TRANSACTIONS",
+      "claimAsset": "Claim %{assetAmount}"
     }
   },
   "components": {

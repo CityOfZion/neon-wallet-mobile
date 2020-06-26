@@ -4,11 +4,11 @@ import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {ROUTES} from '~/constants'
-import WalletView from '~src/scenes/WalletView'
+import ListWalletsView from '~src/scenes/ListWalletsView'
 import {RootState} from '~src/store/reducers/root'
 
 type WalletStackParamList = {
-  Wallet: undefined
+  ListWallets: undefined
 }
 
 const WalletStack = createStackNavigator<WalletStackParamList>()
@@ -19,7 +19,7 @@ const WalletStackNavigation = () => {
   return (
     <ThemeProvider theme={theme}>
       <WalletStack.Navigator>
-        <WalletStack.Screen name={ROUTES.WALLET.name} component={WalletView} />
+        <WalletStack.Screen name={ROUTES.LIST_WALLETS.name} component={ListWalletsView} />
       </WalletStack.Navigator>
     </ThemeProvider>
   )

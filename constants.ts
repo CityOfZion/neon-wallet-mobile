@@ -41,9 +41,9 @@ export const ROUTES = {
     id: 'QR_CODE_SCAN_TEST',
     name: 'QRCodeScanTest' as 'QRCodeScanTest',
   },
-  WALLET: {
-    id: 'WALLET',
-    name: 'Wallet' as 'Wallet',
+  LIST_WALLETS: {
+    id: 'LIST_WALLETS',
+    name: 'ListWallets' as 'ListWallets',
   },
   THEME_TEST: {
     id: 'THEME_TEST',
@@ -73,6 +73,14 @@ export const ROUTES = {
   ACCOUNT: {
     id: 'Account',
     name: 'Account' as 'Account',
+  },
+  GET_WALLET: {
+    id: 'GET_WALLET',
+    name: 'GetWallet' as 'GetWallet',
+  },
+  GET_ACCOUNT: {
+    id: 'GET_ACCOUNT',
+    name: 'GetAccount' as 'GetAccount',
   },
 }
 
