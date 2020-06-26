@@ -30,7 +30,11 @@
     },
     "feature3": {
       "title": "BIP39 wallet",
-      "subtitle": "BIP39 wallet standard, create infinite child accounts using a single seed"
+      "subtitle": "BIP39 wallet standard, create infinite child accounts using a single mnemonic"
+    },
+    "feature4": {
+      "title": "Packed pipeline of updates",
+      "subtitle": "The team is working around the clock to bring you the latest new features"
     },
     "getStarted": {
       "title": "Packed pipeline of updates",

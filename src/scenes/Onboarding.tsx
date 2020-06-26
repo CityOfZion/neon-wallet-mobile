@@ -1,17 +1,18 @@
-import {StackNavigationProp} from '@react-navigation/stack'
+import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
 import React from 'react'
 import {StyleSheet, Text, View} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {useSelector} from 'react-redux'
 
-import {TABS} from '~/constants'
+import {ROUTES, TABS} from '~/constants'
 import i18n from '~/src/i18n'
 import {RootState} from '~src/store/reducers/root'
 import styled, {
   ButtonView,
   ImageView,
   LinearLayout,
+  RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
 
@@ -27,39 +28,38 @@ interface OnboardingSlideProps {
 }
 
 const OnboardingSlide = (props: OnboardingSlideProps) => {
-  const SlideImage = styled(LinearLayout)`
-    shadow-offset: { width: 0, height: 6 };
-    shadow-opacity: 0.39;
-    shadow-radius: 8.3px;
-    elevation: 13;
-  `
-
   return (
-    <LinearLayout height={'100%'} alignItems={'center'}>
-      <SlideImage height={'75%'} position={'relative'}>
+    <LinearLayout orientation={'verti'} height={'100%'}>
+      <RelativeLayout weight={3} mt={100}>
         <ImageView
-          height={'100%'}
-          mt={'24px'}
+          style={{width: '100%', height: '100%'}}
           resizeMode="contain"
           source={props.image}
         />
-      </SlideImage>
-      {props.bottomContent}
+      </RelativeLayout>
+
+      <LinearLayout justifyContent={'center'} weight={2} mb={50}>
+        <LinearLayout width={'100%'} mb={20} alignItems={'center'}>
+          {props.bottomContent}
+        </LinearLayout>
+      </LinearLayout>
     </LinearLayout>
   )
 }
 
 const FeatureText = (props: {title: string; subtitle: string}) => {
+  const headerHeight = useHeaderHeight()
+  const unit = headerHeight * 0.015
+
   const FeatureDescription = styled(TextView)`
     font-size: 15px;
     text-align: center;
     letter-spacing: 1.28px;
-    line-height: 16px;
     font-family: regular;
   `
 
   return (
-    <LinearLayout orientation={'verti'} mt={'4%'}>
+    <LinearLayout orientation={'verti'} mx={'7%'}>
       <TextView
         color={'text.0'}
         fontFamily={'semibold'}
@@ -68,7 +68,12 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
       >
         {props.title}
       </TextView>
-      <FeatureDescription mt={'8px'} mx={'5%'} color={'text.4'}>
+
+      <FeatureDescription
+        mt={'2%'}
+        color={'text.4'}
+        style={{lineHeight: 18 * unit}}
+      >
         {props.subtitle}
       </FeatureDescription>
     </LinearLayout>
@@ -80,8 +85,7 @@ const GetStartedButton = (props: {onPressFunc: () => void}) => {
 
   return (
     <ButtonView
-      my={'auto'}
-      width={'80%'}
+      width={'100%'}
       height={'42px'}
       bg={'primary'}
       orientation={'horiz'}
@@ -101,15 +105,19 @@ const Onboarding = (props: {
   navigation: StackNavigationProp<TabStackParamList>
 }) => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
-  const lorem =
-    'Laudem et dolore disputandum putant sed ut de utilitatibus, nihil oportere exquisitis rationibus.'
 
   return (
-    <LinearLayout height={'100%'} alignItems={'center'}>
-      <LinearGradient
-        style={{flex: 1}}
-        colors={[theme.colors.background[0], theme.colors.background[2]]}
-        end={[1, 0.75]}
+    <LinearGradient
+      style={{flex: 1}}
+      colors={[theme.colors.background[1], theme.colors.background[2]]}
+      start={[0.1, 0.1]}
+      end={[1, 1]}
+    >
+      <LinearLayout
+        orientation={'verti'}
+        alignItems={'center'}
+        width={'100%'}
+        height={'100%'}
       >
         <Swiper
           dotColor={theme.colors.text[3]}
@@ -154,27 +162,40 @@ const Onboarding = (props: {
             header={'Time to get started!'}
             image={require('~src/assets/images/onboarding-4.png')}
             bottomContent={
-              <GetStartedButton
-                onPressFunc={() =>
-                  props.navigation.navigate(TABS.MAIN_TAB.name)
-                }
-              />
+              <LinearLayout width={'100%'} alignItems={'center'}>
+                <LinearLayout mb={'8%'}>
+                  <FeatureText
+                    title={i18n.t('onboarding.feature4.title')}
+                    subtitle={i18n.t('onboarding.feature4.subtitle')}
+                  />
+                </LinearLayout>
+
+                <LinearLayout width={'100%'} px={'7%'}>
+                  <GetStartedButton
+                    onPressFunc={() =>
+                      props.navigation.navigate(ROUTES.GET_WALLET.name)
+                    }
+                  />
+                </LinearLayout>
+              </LinearLayout>
             }
           />
         </Swiper>
+
         <SkipButton
           position={'absolute'}
+          left={0}
           color={'text.0'}
           opacity={0.5}
           bottom={0}
-          pb={'20px'}
-          pl={'30px'}
-          onPress={() => props.navigation.navigate(TABS.MAIN_TAB.name)}
+          pb={20}
+          pl={30}
+          onPress={() => props.navigation.navigate(ROUTES.GET_WALLET.name)}
         >
           skip
         </SkipButton>
-      </LinearGradient>
-    </LinearLayout>
+      </LinearLayout>
+    </LinearGradient>
   )
 }
 
