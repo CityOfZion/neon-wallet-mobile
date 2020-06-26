@@ -69,17 +69,16 @@ const GetWalletView = (props: GetWalletProps) => {
         >
           {_renderAccountCards()}
 
-          <LinearLayout />
-
-          <LinearLayout height={listHeightSize} />
-
           <LinearLayout
+            position="absolute"
+            top={listHeightSize}
             orientation="horiz"
+            width="100%"
+            height={accCardSize}
             alignItems="center"
             justifyContent="center"
             mb={accCardMb}
             mt={accCardMt}
-            height={accCardSize}
             borderStyle="dashed"
             borderColor="text.0"
             borderRadius={17}
@@ -88,7 +87,7 @@ const GetWalletView = (props: GetWalletProps) => {
             <ImageView
               source={require('~src/assets/images/add_-_material.png')}
             />
-            <TextView color="white" fontSize={18} ml={2} fontFamily="medium">
+            <TextView color="white" fontSize="18px" ml="4px" fontFamily="medium">
               {i18n.t('screens.getWallet.addNewAccount')}
             </TextView>
           </LinearLayout>

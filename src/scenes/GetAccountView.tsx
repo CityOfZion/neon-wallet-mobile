@@ -11,6 +11,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {NeoNode} from '~src/models/NeoNode'
 import {SafeAreaView} from 'react-native'
 import {FilterHelper} from '~src/helpers/FilterHelper'
+import i18n from '~src/i18n'
 
 const Header = (props: {goBack: () => void}) => {
   const [nodes, setNodes] = useState<NeoNode[]>([])
@@ -38,17 +39,21 @@ const Header = (props: {goBack: () => void}) => {
         alignItems="center"
       >
         <ImageView height="20px" width="12px" source={require('~src/assets/images/Chevron.png')} />
-        <TextView color="text.0" ml="6px" fontSize="18px">Back</TextView>
+        <TextView color="text.0" ml="6px" fontSize="18px">
+          {i18n.t('app.back')}
+        </TextView>
       </ButtonView>
       <LinearLayout orientation="verti" alignItems="center" justifyContent="center" mr="20px">
         <TextView color="text.3" textAlign="center" fontSize="10px">
-          NEO BLOCK HEIGHT
+          {i18n.t('app.neoBlockHeight')}
         </TextView>
         <TextView color="text.0" textAlign="center">
           {nodes[0] && FilterHelper.currency(nodes[0].height, '', false, false)}
         </TextView>
       </LinearLayout>
-      <TextView fontSize="18px" color="text.0" fontFamily="semibold">Edit</TextView>
+      <TextView fontSize="18px" color="text.0" fontFamily="semibold">
+        {i18n.t('app.edit')}
+      </TextView>
     </LinearLayout>
   )
 }
@@ -74,7 +79,7 @@ const TabSelector = (props: TabSelectorProps) => {
           fontFamily="semibold"
           color={props.isAssetsTabSelected ? "primary" : "text.0"}
         >
-          ASSETS
+          {i18n.t('screens.getAccount.assets')}
         </TextView>
       </ButtonView>
       <ButtonView
@@ -90,7 +95,7 @@ const TabSelector = (props: TabSelectorProps) => {
           fontFamily="semibold"
           color={!props.isAssetsTabSelected ? "primary" : "text.0"}
         >
-          TRANSACTIONS
+          {i18n.t('screens.getAccount.transactions')}
         </TextView>
       </ButtonView>
     </LinearLayout>
@@ -125,16 +130,17 @@ const GetAccountView = ({route, navigation}: GetAccountViewProps) => {
             lastCard={true}
           />
           <LinearLayout mt="28px" mx="auto">
-            <ThemedButton fontSize="16px" label={'Claim 0.0000123 GAS'} />
+            <ThemedButton
+              fontSize="16px"
+              label={i18n.t('screens.getAccount.claimAsset', {assetAmount: '0.0000123 GAS'})}
+            />
           </LinearLayout>
           <TabSelector
             isAssetsTabSelected={isAssetsTabSelected}
             setIsAssetsTabSelected={setIsAssetsTabSelected}
           />
           {isAssetsTabSelected &&
-            <LinearLayout my="16px">
-                <BalanceList tokenAssets={mockWalletItems[2].currentAssets.assets}/>
-            </LinearLayout>
+              <BalanceList my="16px" tokenAssets={mockWalletItems[2].currentAssets.assets}/>
           }
         </StyledScrollView>
       </LinearLayout>

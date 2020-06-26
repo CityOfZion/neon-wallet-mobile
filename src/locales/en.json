@@ -1,4 +1,9 @@
 {
+  "app": {
+    "neoBlockHeight": "NEO BLOCK HEIGHT",
+    "back": "Back",
+    "edit": "Edit"
+  },
   "languages": {
     "de": "German",
     "en": "English",
@@ -85,6 +90,11 @@
     },
     "getWallet": {
       "addNewAccount": "Add new account"
+    },
+    "getAccount": {
+      "assets": "ASSETS",
+      "transactions": "TRANSACTIONS",
+      "claimAsset": "Claim %{assetAmount}"
     }
   },
   "components": {

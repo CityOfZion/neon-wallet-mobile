@@ -123,11 +123,11 @@ const ListWalletsView = (props: WalletProps) => {
               }
             />
           </LinearLayout>
-          <LinearLayout m="16px">
-            <BalanceList
-              tokenAssets={wallets[activeIndex].currentAssets.assets}
-            />
-          </LinearLayout>
+          <BalanceList
+            my="16px"
+            mx="16px"
+            tokenAssets={wallets[activeIndex].currentAssets.assets}
+          />
         </ScrollView>
       </LinearLayout>
     </LinearGradient>
