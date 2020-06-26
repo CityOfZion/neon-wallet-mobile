@@ -3,11 +3,11 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {RootState} from '~src/store/reducers/root'
-import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
-import TabNavigation from '~src/navigation/TabNavigation'
-import ModalStackNavigation from '~src/navigation/ModalStackNavigation'
 import {defaultScreenOptions} from '~/constants'
+import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
+import ModalStackNavigation from '~src/navigation/ModalStackNavigation'
+import TabNavigation from '~src/navigation/TabNavigation'
+import {RootState} from '~src/store/reducers/root'
 
 type RootStackParamList = {
   Tab: undefined

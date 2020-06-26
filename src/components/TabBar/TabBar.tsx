@@ -21,14 +21,6 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
     <TabBarContainer height={66} width={WINDOW_WIDTH}>
       <RelativeLayout height="100%" width="100%">
         <ImageView
-          opacity={0.1}
-          position="absolute"
-          bottom={'100%'}
-          width={'100%'}
-          resizeMode={'cover'}
-          source={require('~src/assets/images/TabBarShadow.png')}
-        />
-        <ImageView
           position={'absolute'}
           bottom={0}
           width={'100%'}
@@ -105,7 +97,9 @@ const TabBarContainer = styled.SafeAreaView<LayoutProps>`
   ${layout}
 `
 
-const TabButton = styled.TouchableOpacity<LayoutProps & PositionProps & WeightProps>`
+const TabButton = styled.TouchableOpacity<
+  LayoutProps & PositionProps & WeightProps
+>`
   ${layout}
   ${position}
   ${weight}

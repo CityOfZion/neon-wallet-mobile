@@ -1,3 +1,4 @@
+import {useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
 import React, {useState} from 'react'
 import {useSelector} from 'react-redux'
@@ -10,6 +11,7 @@ import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 const CustomColorPage: React.FC<object> = () => {
   const defaultCardColor = '#00aaff'
+  const headerHeight = useHeaderHeight()
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
 
   const [color, setColor] = useState<string>(defaultCardColor)
@@ -31,12 +33,12 @@ const CustomColorPage: React.FC<object> = () => {
         width={'100%'}
         height={'100%'}
         p={4}
-        mt={80}
+        mt={headerHeight}
       >
-        <LinearLayout mb={5} maxWidth={380}>
+        <LinearLayout mb={5} maxWidth={320}>
           {/*TODO: change mock values*/}
           <PaymentCard
-            name={'My First Account'}
+            name={'Demo Card'}
             currency={'$'}
             balance={24985}
             address={'AN8iLVt18CKoATdexztCQj923hw5gkc41A'}
@@ -48,7 +50,7 @@ const CustomColorPage: React.FC<object> = () => {
           {i18n.t('customColorPage.subtitle')}
         </TextView>
 
-        <LinearLayout weight={1} mb={60} maxHeight={420}>
+        <LinearLayout weight={1} mb={headerHeight} maxHeight={420}>
           <ColorPicker color={color} onChange={colorPickerChangeEvent} />
         </LinearLayout>
       </LinearLayout>

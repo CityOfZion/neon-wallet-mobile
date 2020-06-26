@@ -115,6 +115,7 @@ const Settings = (props: SettingsProps) => {
               return (
                 <MenuItem
                   title={i18n.t(idiom.title)}
+                  key={0}
                   arrowDirection={
                     idiom.isSelected ? RightIconType.CHECK : RightIconType.NONE
                   }
@@ -157,6 +158,7 @@ const Settings = (props: SettingsProps) => {
               return (
                 <MenuItem
                   title={i18n.t(currency.title)}
+                  key={0}
                   arrowDirection={
                     currency.isSelected
                       ? RightIconType.CHECK

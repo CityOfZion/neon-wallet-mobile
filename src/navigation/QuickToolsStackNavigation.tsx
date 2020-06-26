@@ -6,13 +6,14 @@ import {ThemeProvider} from 'styled-components'
 import {ROUTES} from '~/constants'
 import HeaderBar, {HeaderProps} from '~src/components/HeaderBar'
 import i18n from '~src/i18n'
+import Account from '~src/scenes/Account'
+import CustomColorPage from '~src/scenes/CustomColorPage'
+import GetAccountView from '~src/scenes/GetAccountView'
+import GetWalletView from '~src/scenes/GetWalletView'
+import Home from '~src/scenes/Home'
 import ReceiveQRCode from '~src/scenes/ReceiveQRCode'
 import {RootState} from '~src/store/reducers/root'
 import {DefaultTheme} from '~src/styles/styled-components'
-import Home from '~src/scenes/Home'
-import CustomColorPage from '~src/scenes/CustomColorPage'
-import GetWalletView from '~src/scenes/GetWalletView'
-import GetAccountView from '~src/scenes/GetAccountView'
 
 export type QuickToolsStackParamList = {
   Home: undefined
@@ -48,7 +49,22 @@ const QuickToolsStackNavigation = () => {
     <ThemeProvider theme={theme}>
       <QuickToolsStack.Navigator>
         <QuickToolsStack.Screen name={ROUTES.HOME.name} component={Home} />
-        <QuickToolsStack.Screen name={ROUTES.CUSTOM_COLOR.name} component={CustomColorPage} />
+        <QuickToolsStack.Screen
+          name={ROUTES.CUSTOM_COLOR.name}
+          component={CustomColorPage}
+          options={() =>
+            navbarOptions(
+              {
+                title: i18n.t(`routes.${ROUTES.CUSTOM_COLOR.name}`),
+                image: require('~src/assets/images/palette.png'),
+                showIcon: true,
+                iconMarginRight: 3,
+                iconWidth: 20,
+              },
+              theme
+            )
+          }
+        />
         <QuickToolsStack.Screen
           name={ROUTES.RECEIVE_QR_CODE.name}
           component={ReceiveQRCode}
@@ -65,8 +81,14 @@ const QuickToolsStackNavigation = () => {
             )
           }
         />
-        <QuickToolsStack.Screen name={ROUTES.GET_WALLET.name} component={GetWalletView} />
-        <QuickToolsStack.Screen name={ROUTES.GET_ACCOUNT.name} component={GetAccountView} />
+        <QuickToolsStack.Screen
+          name={ROUTES.GET_WALLET.name}
+          component={GetWalletView}
+        />
+        <QuickToolsStack.Screen
+          name={ROUTES.GET_ACCOUNT.name}
+          component={GetAccountView}
+        />
       </QuickToolsStack.Navigator>
     </ThemeProvider>
   )

@@ -13,7 +13,8 @@
     "Settings": "Settings",
     "ReceiveQRCode": "Receive QR Code",
     "GetWallet": "Wallet",
-    "Account": "Account"
+    "Account": "Account",
+    "CustomColor": "Custom Colour"
   },
   "home": {
     "welcome": "Welcome to Neon Wallet!"
