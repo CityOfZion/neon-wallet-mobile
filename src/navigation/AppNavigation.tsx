@@ -1,23 +1,13 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {NavigationContainer} from '@react-navigation/native'
 import React from 'react'
-import {StatusBar} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {ROUTES} from '~/constants'
-import TabBar from '~src/components/TabBar/TabBar'
-import ContactsStackNavigation from '~src/navigation/ContactsStackNavigation'
-import MoreStackNavigation from '~src/navigation/MoreStackNavigation'
-import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation'
-import SettingsStackNavigation from '~src/navigation/SettingsStackNavigation'
-import WalletStackNavigation from '~src/navigation/WalletsStackNavigation'
 import {RootState} from '~src/store/reducers/root'
 import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
-import WalletView from '~src/scenes/WalletView'
 import TabNavigation from '~src/navigation/TabNavigation'
 import ModalStackNavigation from '~src/navigation/ModalStackNavigation'
-import {defaultScreenOptions} from '~src/App'
+import {defaultScreenOptions} from '~/constants'
 
 type RootStackParamList = {
   Tab: undefined

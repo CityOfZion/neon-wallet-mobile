@@ -24,19 +24,6 @@ const fetchFonts = () => {
   })
 }
 
-export const defaultScreenOptions = {
-  cardStyle: {
-    backgroundColor: 'transparent',
-    opacity: 1,
-  },
-  transparentCard: true,
-  transitionConfig: () => ({
-    containerStyle: {
-      backgroundColor: 'transparent',
-    },
-  }),
-}
-
 const store = createStore(rootReducer, applyMiddleware(thunk))
 
 const httpConfig = new HttpConfig()
