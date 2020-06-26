@@ -6,6 +6,7 @@ import {expo} from '~/app.json'
 import ThemedButton from '~src/components/ThemedButton'
 import {NeoNode} from '~src/models/NeoNode'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
+import {ROUTES} from '~/constants'
 
 type HomeStackParametersList = {
   CustomColor: undefined
@@ -14,7 +15,7 @@ type HomeStackParametersList = {
   Wallet: undefined
   Settings: undefined
   More: undefined
-  Account: undefined
+  GetWallet: undefined
 }
 
 interface Props {
@@ -61,7 +62,7 @@ const Home = (props: Props) => {
       </LinearLayout>
       <LinearLayout m={3}>
         <ThemedButton
-          onClick={() => props.navigation.navigate('Account')}
+          onClick={() => props.navigation.navigate(ROUTES.GET_WALLET.name)}
           label={'Account'}
         />
       </LinearLayout>

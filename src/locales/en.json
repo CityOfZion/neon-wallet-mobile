@@ -7,6 +7,7 @@
   "routes": {
     "Settings": "Settings",
     "ReceiveQRCode": "Receive QR Code",
+    "GetWallet": "Wallet",
     "Account": "Account"
   },
   "home": {
@@ -55,9 +56,6 @@
     "address": "Address",
     "reference": "Reference"
   },
-  "account": {
-    "AddNewAccount": "Add new account"
-  },
   "boolean": {
     "true": "Yes",
     "false": "No"
@@ -82,8 +80,11 @@
     }
   },
   "screens": {
-    "wallet": {
+    "listWallets": {
       "changeSinceLastVisit": "CHANGE SINCE LAST VISIT %{date}"
+    },
+    "getWallet": {
+      "addNewAccount": "Add new account"
     }
   },
   "components": {

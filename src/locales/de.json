@@ -9,7 +9,8 @@
   },
   "routes": {
     "Settings": "#TRANSLATEME",
-    "Account": "#TRANSLATEME"
+    "Account": "#TRANSLATEME",
+    "GetWallet": "Wallet"
   },
   "customColorPage": {
     "title": "#translateme",
@@ -18,9 +19,6 @@
   "paymentCard": {
     "balance": "#TRANSLATEME",
     "address": "#TRANSLATEME"
-  },
-  "account": {
-    "AddNewAccount": "#TRANSLATEME"
   },
   "boolean": {
     "true": "#translateme",
@@ -46,8 +44,11 @@
     }
   },
   "screens": {
-    "wallet": {
+    "listWallets": {
       "changeSinceLastVisit": "CHANGE SINCE LAST VISIT %{date}"
+    },
+    "getWallet": {
+      "addNewAccount": "Add new account"
     }
   },
   "components": {

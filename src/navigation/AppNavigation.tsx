@@ -8,7 +8,7 @@ import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
 import TabNavigation from '~src/navigation/TabNavigation'
 import ModalStackNavigation from '~src/navigation/ModalStackNavigation'
 
-const defaultScreenOptions = {
+export const defaultScreenOptions = {
   cardStyle: {
     backgroundColor: 'transparent',
     opacity: 1,

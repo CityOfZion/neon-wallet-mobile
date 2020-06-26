@@ -27,7 +27,7 @@ const TabNavigation = () => {
       />
       <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>
         <Tab.Screen
-          name={ROUTES.WALLET.name}
+          name={ROUTES.LIST_WALLETS.name}
           component={WalletStackNavigation}
         />
         <Tab.Screen

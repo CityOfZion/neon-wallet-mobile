@@ -38,7 +38,7 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
         <LinearLayout orientation="horiz" alignItems="center">
           <TabButton
             height="100%"
-            onPress={() => navigation.navigate(ROUTES.WALLET.name)}
+            onPress={() => navigation.navigate(ROUTES.LIST_WALLETS.name)}
             weight={1}
           >
             <ImageView

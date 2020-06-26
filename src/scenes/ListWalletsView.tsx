@@ -31,7 +31,7 @@ interface WalletProps {
   theme: DefaultTheme
 }
 
-const WalletView = (props: WalletProps) => {
+const ListWalletsView = (props: WalletProps) => {
   const [activeIndex, setActiveIndex] = useState(1)
   const [wallets, setWallets] = useState(mockWalletItems)
   const carouselRef = useRef(null)
@@ -43,7 +43,7 @@ const WalletView = (props: WalletProps) => {
     return (
       <LinearLayout orientation="verti" alignItems="center">
         <TextView fontSize="11px" color="text.2">
-          {i18n.t('screens.wallet.changeSinceLastVisit', {
+          {i18n.t('screens.listWallets.changeSinceLastVisit', {
             date: moment(wallet.lastVisitedAt).format('HH:mm - DD/MM/YYYY'),
           })}
         </TextView>
@@ -123,9 +123,11 @@ const WalletView = (props: WalletProps) => {
               }
             />
           </LinearLayout>
-          <BalanceList
-            tokenAssets={wallets[activeIndex].currentAssets.assets}
-          />
+          <LinearLayout m="16px">
+            <BalanceList
+              tokenAssets={wallets[activeIndex].currentAssets.assets}
+            />
+          </LinearLayout>
         </ScrollView>
       </LinearLayout>
     </LinearGradient>
@@ -138,4 +140,4 @@ const MoreButton = styled(ImageView)<LayoutProps & SpaceProps>`
   resize-mode: contain;
 `
 
-export default WalletView
+export default ListWalletsView

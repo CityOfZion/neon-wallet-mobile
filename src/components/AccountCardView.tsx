@@ -6,6 +6,7 @@ import {Account} from '~src/models/Account'
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import i18n from '~src/i18n'
 import styled, {
+  ButtonView,
   ImageView,
   LinearLayout,
   TextView,
@@ -13,88 +14,91 @@ import styled, {
 
 interface Props {
   account: Account
-  cardSize: number
-  index: number
-  marginTopForAbsolute: number
+  cardHeight: number | string
+  marginTop: number
   lastCard: boolean
+  position?: string
+  onPress?: () => void
 }
 const AccountCardView: React.FC<Props> = (props) => {
-  const marginTop = props.index * props.marginTopForAbsolute
 
   return (
-    <AccountCard
-      mt={marginTop}
-      width={'100%'}
-      height={props.cardSize}
-      style={{
-        backgroundColor: props.account.backgroundColor,
-        aspectRatio: 38 / 25,
-      }}
+    <ButtonView
+      onPress={props.onPress}
+      position={props.position}
+      mt={props.marginTop}
+      height={props.cardHeight}
+      width="100%"
     >
-      <BrightCard
-        colors={[
-          'rgba(255, 255, 255, 0.25)',
-          'rgba(255, 255, 255, 0.25)',
-          'rgba(255, 255, 255, 0)',
-          'rgba(255, 255, 255, 0)',
-        ]}
-        locations={[0, 0.5, 0.5, 1]}
-        start={[0, -0.6]}
-        end={[1, 1.6]}
-      />
-
-      <ShadowCard colors={['rgba(0, 0, 0, 0.15)', 'rgba(32, 32, 32, 0.7)']} />
-
-      {props.lastCard && (
-        <StampCard
-          source={require('~src/assets/images/card-placeholder.png')}
-          resizeMode="contain"
+      <AccountCard
+        width="100%"
+        height="100%"
+        bg={props.account.backgroundColor}
+      >
+        <BrightCard
+          colors={[
+            'rgba(255, 255, 255, 0.25)',
+            'rgba(255, 255, 255, 0.25)',
+            'rgba(255, 255, 255, 0)',
+            'rgba(255, 255, 255, 0)',
+          ]}
+          locations={[0, 0.5, 0.5, 1]}
+          start={[0, -0.6]}
+          end={[1, 1.6]}
         />
-      )}
 
-      <LinearLayout orientation={'verti'} width={'100%'} height={'100%'} p={5}>
-        <LinearLayout mb={3} orientation={'horiz'} width={'100%'}>
-          <ImageView
-            width={24}
-            height={24}
-            my={2}
-            source={require('~src/assets/images/card-neo.png')}
+        <ShadowCard colors={['rgba(0, 0, 0, 0.15)', 'rgba(32, 32, 32, 0.7)']} />
+
+        {props.lastCard && (
+          <StampCard
+            source={require('~src/assets/images/card-placeholder.png')}
+            resizeMode="contain"
           />
+        )}
+
+        <LinearLayout orientation={'verti'} width={'100%'} height={'100%'} p={5}>
+          <LinearLayout mb={3} orientation={'horiz'} width={'100%'}>
+            <ImageView
+              width={24}
+              height={24}
+              my={2}
+              source={require('~src/assets/images/card-neo.png')}
+            />
+
+            <TextView
+              weight={1}
+              fontSize={21}
+              color="white"
+              textAlign="left"
+              fontFamily="semibold"
+              mx={4}
+            >
+              {props.account.title}
+            </TextView>
+
+            <LinearLayout orientation="verti">
+              <TextView color="white" fontSize={12} fontFamily="bold">
+                {i18n.t('paymentCard.balance')}
+              </TextView>
+              <TextView color="white" fontSize={21} fontFamily="semibold">
+                {FilterHelper.currency(props.account.balance, '$', false, false)}
+              </TextView>
+            </LinearLayout>
+          </LinearLayout>
+
+          {props.lastCard && <LinearLayout weight={1} />}
 
           <TextView
-            weight={1}
-            fontSize={21}
+            mb={2}
+            fontSize={12}
             color="white"
             textAlign="left"
             fontFamily="semibold"
-            mx={4}
           >
-            {props.account.title}
+            {i18n.t('paymentCard.address')}
           </TextView>
 
-          <LinearLayout orientation="verti">
-            <TextView color="white" fontSize={12} fontFamily="bold">
-              {i18n.t('paymentCard.balance')}
-            </TextView>
-            <TextView color="white" fontSize={21} fontFamily="semibold">
-              {FilterHelper.currency(props.account.balance, '$', false, false)}
-            </TextView>
-          </LinearLayout>
-        </LinearLayout>
-
-        {props.lastCard && <LinearLayout weight={1} />}
-
-        <TextView
-          mb={2}
-          fontSize={12}
-          color="white"
-          textAlign="left"
-          fontFamily="semibold"
-        >
-          {i18n.t('paymentCard.address')}
-        </TextView>
-
-        <TextView
+          <TextView
             weight={1}
             fontFamily="medium"
             fontSize="16"
@@ -105,14 +109,14 @@ const AccountCardView: React.FC<Props> = (props) => {
             {props.account.address}
           </TextView>
 
-      </LinearLayout>
-    </AccountCard>
+        </LinearLayout>
+      </AccountCard>
+    </ButtonView>
   )
 }
 
 const AccountCard = styled(LinearLayout)`
   border-radius: 17px;
-  position: absolute;
   box-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
 `
 
