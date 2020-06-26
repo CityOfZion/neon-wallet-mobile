@@ -6,7 +6,19 @@ import {ThemeProvider} from 'styled-components'
 import {ROUTES} from '~/constants'
 import SampleModal from '~src/scenes/SampleModal'
 import {RootState} from '~src/store/reducers/root'
-import {defaultScreenOptions} from '~src/App'
+
+const defaultScreenOptions = {
+  cardStyle: {
+    backgroundColor: 'transparent',
+    opacity: 1,
+  },
+  transparentCard: true,
+  transitionConfig: () => ({
+    containerStyle: {
+      backgroundColor: 'transparent',
+    },
+  }),
+}
 
 type ModalStackParamList = {
   SampleModal: undefined

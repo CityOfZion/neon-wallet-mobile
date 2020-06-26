@@ -1,5 +1,4 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
-import {NavigationContainer} from '@react-navigation/native'
 import React from 'react'
 import {StatusBar} from 'react-native'
 import {useSelector} from 'react-redux'

@@ -1,6 +1,6 @@
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs'
 import React from 'react'
-import {layout, LayoutProps} from 'styled-system'
+import {layout, LayoutProps, position, PositionProps} from 'styled-system'
 
 import {ROUTES, WINDOW_WIDTH} from '~/constants'
 import styled, {
@@ -9,6 +9,7 @@ import styled, {
   LinearLayout,
   RelativeLayout,
 } from '~src/styles/styled-components'
+import {weight, WeightProps} from '~src/styles/styled-system.config'
 
 const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
   const focusedOptions = descriptors[state.routes[state.index].key].options
@@ -35,7 +36,7 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
           source={require('~src/assets/images/TabBar.png')}
         />
         <LinearLayout orientation="horiz" alignItems="center">
-          <ButtonView
+          <TabButton
             height="100%"
             onPress={() => navigation.navigate(ROUTES.WALLET.name)}
             weight={1}
@@ -45,8 +46,8 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
               resizeMode="cover"
               source={require('~src/assets/images/TabBarWalletsIcon.png')}
             />
-          </ButtonView>
-          <ButtonView
+          </TabButton>
+          <TabButton
             height="100%"
             onPress={() => navigation.navigate(ROUTES.CONTACTS.name)}
             weight={1}
@@ -56,8 +57,8 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
               resizeMode="contain"
               source={require('~src/assets/images/TabBarContactsIcon.png')}
             />
-          </ButtonView>
-          <ButtonView
+          </TabButton>
+          <TabButton
             mx="6px"
             bottom="8px"
             width={66}
@@ -70,8 +71,8 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
               resizeMode="contain"
               source={require('~src/assets/images/TabBarPlusIcon.png')}
             />
-          </ButtonView>
-          <ButtonView
+          </TabButton>
+          <TabButton
             height="100%"
             onPress={() => navigation.navigate(ROUTES.SETTINGS.name)}
             weight={1}
@@ -81,9 +82,10 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
               resizeMode="contain"
               source={require('~src/assets/images/TabBarSettingsIcon.png')}
             />
-          </ButtonView>
-          <ButtonView
+          </TabButton>
+          <TabButton
             height="100%"
+            top="4px"
             onPress={() => navigation.navigate(ROUTES.MORE.name)}
             weight={1}
           >
@@ -92,7 +94,7 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
               resizeMode="contain"
               source={require('~src/assets/images/TabBarMoreIcon.png')}
             />
-          </ButtonView>
+          </TabButton>
         </LinearLayout>
       </RelativeLayout>
     </TabBarContainer>
@@ -101,6 +103,12 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
 
 const TabBarContainer = styled.SafeAreaView<LayoutProps>`
   ${layout}
+`
+
+const TabButton = styled.TouchableOpacity<LayoutProps & PositionProps & WeightProps>`
+  ${layout}
+  ${position}
+  ${weight}
 `
 
 export default TabBar
