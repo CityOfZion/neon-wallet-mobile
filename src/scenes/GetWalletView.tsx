@@ -23,17 +23,18 @@ interface GetWalletProps {
 
 const GetWalletView = (props: GetWalletProps) => {
   const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
-
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  props.navigation.setOptions({headerTransparent: true, headerTintColor: theme.colors.text[0]})
+
   const cardHeight = 230
   const marginTopForAbsolute = 120
-  const accCardSize = 200
-  const accCardMb = 20
-  const accCardMt = 40
+  const addCardHeight = 200
+  const addCardMb = 28
+  const addCardMt = 40
 
   const listHeightSize =
     cardHeight + marginTopForAbsolute * (accounts.length - 1)
-  const scrollViewSize = listHeightSize + accCardSize + accCardMb + accCardMt
+  const scrollViewSize = listHeightSize + addCardHeight + addCardMb + addCardMt
 
   const _renderAccountCards = () => {
     return accounts.map((account: Account, i: number) => {
@@ -62,7 +63,7 @@ const GetWalletView = (props: GetWalletProps) => {
       height="100%"
       width="100%"
     >
-      <LinearLayout height="100%" position="relative">
+      <LinearLayout height="100%" position="relative" pt="48px">
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{flexGrow: 1, height: scrollViewSize}}
@@ -74,11 +75,11 @@ const GetWalletView = (props: GetWalletProps) => {
             top={listHeightSize}
             orientation="horiz"
             width="100%"
-            height={accCardSize}
+            height={addCardHeight}
             alignItems="center"
             justifyContent="center"
-            mb={accCardMb}
-            mt={accCardMt}
+            mb={addCardMb}
+            mt={addCardMt}
             borderStyle="dashed"
             borderColor="text.0"
             borderRadius={17}
