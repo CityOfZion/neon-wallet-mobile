@@ -3,22 +3,9 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {ROUTES} from '~/constants'
+import {defaultScreenOptions, ROUTES} from '~/constants'
 import SampleModal from '~src/scenes/SampleModal'
 import {RootState} from '~src/store/reducers/root'
-
-const defaultScreenOptions = {
-  cardStyle: {
-    backgroundColor: 'transparent',
-    opacity: 1,
-  },
-  transparentCard: true,
-  transitionConfig: () => ({
-    containerStyle: {
-      backgroundColor: 'transparent',
-    },
-  }),
-}
 
 type ModalStackParamList = {
   SampleModal: undefined

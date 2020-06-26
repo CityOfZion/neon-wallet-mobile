@@ -7,19 +7,7 @@ import {RootState} from '~src/store/reducers/root'
 import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
 import TabNavigation from '~src/navigation/TabNavigation'
 import ModalStackNavigation from '~src/navigation/ModalStackNavigation'
-
-const defaultScreenOptions = {
-  cardStyle: {
-    backgroundColor: 'transparent',
-    opacity: 1,
-  },
-  transparentCard: true,
-  transitionConfig: () => ({
-    containerStyle: {
-      backgroundColor: 'transparent',
-    },
-  }),
-}
+import {defaultScreenOptions} from '~/constants'
 
 type RootStackParamList = {
   Tab: undefined
