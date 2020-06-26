@@ -1,21 +1,21 @@
+import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
+import {ScrollView} from 'react-native'
+import {useSelector} from 'react-redux'
+
+import {ROUTES} from '~/constants'
+import AccountCardView from '~src/components/AccountCardView'
+import i18n from '~src/i18n'
+import {mockWalletAccounts} from '~src/mockWalletAccounts'
+import {Account} from '~src/models/Account'
+import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
+import {RootState} from '~src/store/reducers/root'
 import {
   ImageView,
   LinearLayout,
   TextView,
   LinearGradientLayout,
 } from '~src/styles/styled-components'
-
-import {Account} from '~src/models/Account'
-import AccountCardView from '~src/components/AccountCardView'
-import {ScrollView} from 'react-native'
-import i18n from '~src/i18n'
-import {useSelector} from 'react-redux'
-import {RootState} from '~src/store/reducers/root'
-import {mockWalletAccounts} from '~src/mockWalletAccounts'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
-import {ROUTES} from '~/constants'
 
 interface GetWalletProps {
   navigation: StackNavigationProp<QuickToolsStackParamList>
@@ -24,7 +24,10 @@ interface GetWalletProps {
 const GetWalletView = (props: GetWalletProps) => {
   const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
-  props.navigation.setOptions({headerTransparent: true, headerTintColor: theme.colors.text[0]})
+  props.navigation.setOptions({
+    headerTransparent: true,
+    headerTintColor: theme.colors.text[0],
+  })
 
   const cardHeight = 230
   const marginTopForAbsolute = 120
@@ -43,7 +46,10 @@ const GetWalletView = (props: GetWalletProps) => {
       return (
         <AccountCardView
           cardHeight={cardHeight}
-          onPress={() => props.navigation.navigate(ROUTES.GET_ACCOUNT.name, {account})}
+          key={0}
+          onPress={() =>
+            props.navigation.navigate(ROUTES.GET_ACCOUNT.name, {account})
+          }
           account={account}
           position="absolute"
           marginTop={marginTop}
@@ -88,7 +94,12 @@ const GetWalletView = (props: GetWalletProps) => {
             <ImageView
               source={require('~src/assets/images/add_-_material.png')}
             />
-            <TextView color="white" fontSize="18px" ml="4px" fontFamily="medium">
+            <TextView
+              color="white"
+              fontSize="18px"
+              ml="4px"
+              fontFamily="medium"
+            >
               {i18n.t('screens.getWallet.addNewAccount')}
             </TextView>
           </LinearLayout>

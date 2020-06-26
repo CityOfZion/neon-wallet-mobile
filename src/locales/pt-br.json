@@ -12,6 +12,7 @@
   "routes": {
     "Settings": "Configurações",
     "Account": "Conta",
+    "CustomColor": "Personalizar Cor",
     "GetWallet": "Carteira"
   },
   "home": {

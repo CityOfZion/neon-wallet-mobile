@@ -10,9 +10,9 @@ import '~src/window-crypto'
 import 'reflect-metadata'
 
 import {HttpConfig} from '~src/config/HttpConfig'
+import AppNavigation from '~src/navigation/AppNavigation'
 import TabNavigation from '~src/navigation/TabNavigation'
 import {rootReducer} from '~src/store/reducers/root'
-import AppNavigation from '~src/navigation/AppNavigation'
 
 const fetchFonts = () => {
   return Font.loadAsync({

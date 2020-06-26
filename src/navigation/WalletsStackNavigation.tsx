@@ -19,7 +19,10 @@ const WalletStackNavigation = () => {
   return (
     <ThemeProvider theme={theme}>
       <WalletStack.Navigator>
-        <WalletStack.Screen name={ROUTES.LIST_WALLETS.name} component={ListWalletsView} />
+        <WalletStack.Screen
+          name={ROUTES.LIST_WALLETS.name}
+          component={ListWalletsView}
+        />
       </WalletStack.Navigator>
     </ThemeProvider>
   )

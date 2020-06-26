@@ -45,9 +45,13 @@ const BalanceListItem = (props: {item: TokenValue}) => {
   )
 }
 
-const BalanceList = (props: {tokenAssets: TokenValue[], mx?: string, my?: string}) => {
+const BalanceList = (props: {
+  tokenAssets: TokenValue[]
+  mx?: string
+  my?: string
+}) => {
   return (
-    <LinearLayout height="100%" my={props.my ?? "0px"} mx={props.mx ?? "0px"}>
+    <LinearLayout height="100%" my={props.my ?? '0px'} mx={props.mx ?? '0px'}>
       <TextView color="text.2" fontSize="sm">
         {i18n.t('components.balanceList.title')}
       </TextView>

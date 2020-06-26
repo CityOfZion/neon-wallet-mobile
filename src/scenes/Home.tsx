@@ -3,10 +3,10 @@ import React, {useEffect, useState} from 'react'
 import {DefaultTheme} from 'styled-components'
 
 import {expo} from '~/app.json'
+import {ROUTES} from '~/constants'
 import ThemedButton from '~src/components/ThemedButton'
 import {NeoNode} from '~src/models/NeoNode'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-import {ROUTES} from '~/constants'
 
 type HomeStackParametersList = {
   CustomColor: undefined

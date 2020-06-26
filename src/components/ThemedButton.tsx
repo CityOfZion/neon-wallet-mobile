@@ -80,7 +80,9 @@ const ThemedButton: React.FC<Props> = (props) => {
             />
           )}
 
-          <LabelView color={labelColor} fontSize={fontSize}>{props.label}</LabelView>
+          <LabelView color={labelColor} fontSize={fontSize}>
+            {props.label}
+          </LabelView>
         </LinearLayout>
       </ButtonContentView>
     </ButtonView>
@@ -93,6 +95,8 @@ ThemedButton.propTypes = {
   srcIcon: PropTypes.any,
   rounded: PropTypes.bool,
   flat: PropTypes.bool,
+  iconSize: PropTypes.any,
+  fontSize: PropTypes.any,
 }
 
 ThemedButton.defaultProps = {

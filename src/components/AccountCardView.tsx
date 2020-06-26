@@ -1,10 +1,11 @@
 import {LinearGradient} from 'expo-linear-gradient'
+import PropTypes from 'prop-types'
 import React, {useState} from 'react'
-import {StyleSheet, ImageBackground} from 'react-native'
-import {Account} from '~src/models/Account'
+import {ImageBackground} from 'react-native'
 
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import i18n from '~src/i18n'
+import {Account} from '~src/models/Account'
 import styled, {
   ButtonView,
   ImageView,
@@ -20,8 +21,8 @@ interface Props {
   position?: string
   onPress?: () => void
 }
-const AccountCardView: React.FC<Props> = (props) => {
 
+const AccountCardView: React.FC<Props> = (props) => {
   return (
     <ButtonView
       onPress={props.onPress}
@@ -56,7 +57,12 @@ const AccountCardView: React.FC<Props> = (props) => {
           />
         )}
 
-        <LinearLayout orientation={'verti'} width={'100%'} height={'100%'} p={5}>
+        <LinearLayout
+          orientation={'verti'}
+          width={'100%'}
+          height={'100%'}
+          p={5}
+        >
           <LinearLayout mb={3} orientation={'horiz'} width={'100%'}>
             <ImageView
               width={24}
@@ -81,7 +87,12 @@ const AccountCardView: React.FC<Props> = (props) => {
                 {i18n.t('paymentCard.balance')}
               </TextView>
               <TextView color="white" fontSize={21} fontFamily="semibold">
-                {FilterHelper.currency(props.account.balance, '$', false, false)}
+                {FilterHelper.currency(
+                  props.account.balance,
+                  '$',
+                  false,
+                  false
+                )}
               </TextView>
             </LinearLayout>
           </LinearLayout>
@@ -108,11 +119,19 @@ const AccountCardView: React.FC<Props> = (props) => {
           >
             {props.account.address}
           </TextView>
-
         </LinearLayout>
       </AccountCard>
     </ButtonView>
   )
+}
+
+AccountCardView.propTypes = {
+  account: PropTypes.any.isRequired,
+  cardHeight: PropTypes.any.isRequired,
+  marginTop: PropTypes.number.isRequired,
+  lastCard: PropTypes.bool.isRequired,
+  position: PropTypes.string,
+  onPress: PropTypes.func,
 }
 
 const AccountCard = styled(LinearLayout)`

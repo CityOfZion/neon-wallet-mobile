@@ -15,7 +15,8 @@
   "routes": {
     "Settings": "#TRANSLATEME",
     "Account": "#TRANSLATEME",
-    "GetWallet": "Wallet"
+    "GetWallet": "Wallet",
+    "CustomColor": "#TRANSLATEME"
   },
   "customColorPage": {
     "title": "#translateme",

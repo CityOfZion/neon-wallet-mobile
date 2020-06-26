@@ -9,11 +9,7 @@ import NeonQRCode from '~src/components/QRCode'
 import ThemedButton from '~src/components/ThemedButton'
 import i18n from '~src/i18n'
 import {RootState} from '~src/store/reducers/root'
-import {
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface ReceiveQRCodeProps {
   tokenName: string

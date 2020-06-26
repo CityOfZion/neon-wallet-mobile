@@ -1,17 +1,24 @@
-import React, {useEffect, useState} from 'react'
-import {ButtonView, ImageView, LinearLayout, StyledScrollView, TextView} from '~src/styles/styled-components'
-import AccountCardView from '~src/components/AccountCardView'
 import {RouteProp} from '@react-navigation/native'
-import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
-import {SCREEN_HEIGHT} from '~/constants'
-import ThemedButton from '~src/components/ThemedButton'
-import BalanceList from '~src/components/BalanceList'
-import {mockWalletItems} from '~src/mockWalletItems'
 import {StackNavigationProp} from '@react-navigation/stack'
-import {NeoNode} from '~src/models/NeoNode'
+import React, {useEffect, useState} from 'react'
 import {SafeAreaView} from 'react-native'
+
+import {SCREEN_HEIGHT} from '~/constants'
+import AccountCardView from '~src/components/AccountCardView'
+import BalanceList from '~src/components/BalanceList'
+import ThemedButton from '~src/components/ThemedButton'
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import i18n from '~src/i18n'
+import {mockWalletItems} from '~src/mockWalletItems'
+import {NeoNode} from '~src/models/NeoNode'
+import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
+import {
+  ButtonView,
+  ImageView,
+  LinearLayout,
+  StyledScrollView,
+  TextView,
+} from '~src/styles/styled-components'
 
 const Header = (props: {goBack: () => void}) => {
   const [nodes, setNodes] = useState<NeoNode[]>([])
@@ -38,12 +45,21 @@ const Header = (props: {goBack: () => void}) => {
         orientation="horiz"
         alignItems="center"
       >
-        <ImageView height="20px" width="12px" source={require('~src/assets/images/Chevron.png')} />
+        <ImageView
+          height="20px"
+          width="12px"
+          source={require('~src/assets/images/Chevron.png')}
+        />
         <TextView color="text.0" ml="6px" fontSize="18px">
           {i18n.t('app.back')}
         </TextView>
       </ButtonView>
-      <LinearLayout orientation="verti" alignItems="center" justifyContent="center" mr="20px">
+      <LinearLayout
+        orientation="verti"
+        alignItems="center"
+        justifyContent="center"
+        mr="20px"
+      >
         <TextView color="text.3" textAlign="center" fontSize="10px">
           {i18n.t('app.neoBlockHeight')}
         </TextView>
@@ -70,14 +86,14 @@ const TabSelector = (props: TabSelectorProps) => {
         onPress={() => props.setIsAssetsTabSelected(true)}
         weight={1}
         alignItems="center"
-        borderBottomWidth={props.isAssetsTabSelected ? "1px" : "3px"}
+        borderBottomWidth={props.isAssetsTabSelected ? '1px' : '3px'}
         borderColor="text.0"
       >
         <TextView
           fontSize="16px"
           mb="8px"
           fontFamily="semibold"
-          color={props.isAssetsTabSelected ? "primary" : "text.0"}
+          color={props.isAssetsTabSelected ? 'primary' : 'text.0'}
         >
           {i18n.t('screens.getAccount.assets')}
         </TextView>
@@ -86,14 +102,14 @@ const TabSelector = (props: TabSelectorProps) => {
         onPress={() => props.setIsAssetsTabSelected(false)}
         weight={1}
         alignItems="center"
-        borderBottomWidth={!props.isAssetsTabSelected ? "1px" : "3px"}
+        borderBottomWidth={!props.isAssetsTabSelected ? '1px' : '3px'}
         borderColor="text.0"
       >
         <TextView
           fontSize="16px"
           mb="8px"
           fontFamily="semibold"
-          color={!props.isAssetsTabSelected ? "primary" : "text.0"}
+          color={!props.isAssetsTabSelected ? 'primary' : 'text.0'}
         >
           {i18n.t('screens.getAccount.transactions')}
         </TextView>
@@ -132,16 +148,21 @@ const GetAccountView = ({route, navigation}: GetAccountViewProps) => {
           <LinearLayout mt="28px" mx="auto">
             <ThemedButton
               fontSize="16px"
-              label={i18n.t('screens.getAccount.claimAsset', {assetAmount: '0.0000123 GAS'})}
+              label={i18n.t('screens.getAccount.claimAsset', {
+                assetAmount: '0.0000123 GAS',
+              })}
             />
           </LinearLayout>
           <TabSelector
             isAssetsTabSelected={isAssetsTabSelected}
             setIsAssetsTabSelected={setIsAssetsTabSelected}
           />
-          {isAssetsTabSelected &&
-              <BalanceList my="16px" tokenAssets={mockWalletItems[2].currentAssets.assets}/>
-          }
+          {isAssetsTabSelected && (
+            <BalanceList
+              my="16px"
+              tokenAssets={mockWalletItems[2].currentAssets.assets}
+            />
+          )}
         </StyledScrollView>
       </LinearLayout>
     </SafeAreaView>
