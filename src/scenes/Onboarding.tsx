@@ -15,11 +15,7 @@ import styled, {
   RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
-
-type TabStackParamList = {
-  MainTab: undefined
-  Onboarding: undefined
-}
+import {useAsyncStorage} from '@react-native-community/async-storage'
 
 interface OnboardingSlideProps {
   header: string
@@ -101,10 +97,14 @@ const GetStartedButton = (props: {onPressFunc: () => void}) => {
   )
 }
 
-const Onboarding = (props: {
-  navigation: StackNavigationProp<TabStackParamList>
-}) => {
+const Onboarding = (props: {seenSetter: React.Dispatch<React.SetStateAction<boolean>>}) => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const {setItem} = useAsyncStorage('@onboardingSeen')
+
+  const setAsSeen = () => {
+    setItem("true")
+    props.seenSetter(true)
+  }
 
   return (
     <LinearGradient
@@ -172,9 +172,7 @@ const Onboarding = (props: {
 
                 <LinearLayout width={'100%'} px={'7%'}>
                   <GetStartedButton
-                    onPressFunc={() =>
-                      props.navigation.navigate(ROUTES.GET_WALLET.name)
-                    }
+                    onPressFunc={() => setAsSeen()}
                   />
                 </LinearLayout>
               </LinearLayout>
@@ -190,7 +188,7 @@ const Onboarding = (props: {
           bottom={0}
           pb={20}
           pl={30}
-          onPress={() => props.navigation.navigate(ROUTES.GET_WALLET.name)}
+          onPress={() => setAsSeen()}
         >
           skip
         </SkipButton>
