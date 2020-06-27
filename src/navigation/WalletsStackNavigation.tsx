@@ -6,9 +6,13 @@ import {ThemeProvider} from 'styled-components'
 import {ROUTES} from '~/constants'
 import ListWalletsView from '~src/scenes/ListWalletsView'
 import {RootState} from '~src/store/reducers/root'
+import GetWalletView from '~src/scenes/GetWalletView'
+import GetAccountView from '~src/scenes/GetAccountView'
 
-type WalletStackParamList = {
+export type WalletStackParamList = {
   ListWallets: undefined
+  GetWallet: {wallet: Account[]}
+  GetAccount: {account: Account}
 }
 
 const WalletStack = createStackNavigator<WalletStackParamList>()
@@ -18,10 +22,18 @@ const WalletStackNavigation = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <WalletStack.Navigator>
+      <WalletStack.Navigator initialRouteName={ROUTES.LIST_WALLETS.name}>
         <WalletStack.Screen
           name={ROUTES.LIST_WALLETS.name}
           component={ListWalletsView}
+        />
+        <WalletStack.Screen
+          name={ROUTES.GET_WALLET.name}
+          component={GetWalletView}
+        />
+        <WalletStack.Screen
+          name={ROUTES.GET_ACCOUNT.name}
+          component={GetAccountView}
         />
       </WalletStack.Navigator>
     </ThemeProvider>

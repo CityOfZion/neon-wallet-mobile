@@ -1,19 +1,27 @@
-import React from 'react'
+import React, {useState} from 'react'
+import {useNavigation} from '@react-navigation/native'
 
 import {TokenValue} from '~src/models/TokenValue'
 import {Wallet} from '~src/models/Wallet'
 import styled, {
+  ButtonView,
   ImageView,
   LinearLayout,
   RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
+import {ROUTES} from '~/constants'
+import {Account} from '~src/models/Account'
+import {mockWalletAccounts} from '~src/mockWalletAccounts'
 
 interface WalletCardProps {
   wallet: Wallet
 }
 
 const WalletCard = (props: WalletCardProps) => {
+  const navigation = useNavigation()
+  const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
+
   const _renderAccountCard = (asset: TokenValue, i: number) => {
     if (!asset || i > 2) return null
     const bottomOffset = 28 - 6 * i
@@ -53,7 +61,13 @@ const WalletCard = (props: WalletCardProps) => {
   }
 
   return (
-    <WalletCardRelativeContainer height={350} m="12px" bg={colorLimedSpruce}>
+    <WalletCardRelativeContainer
+      position="relative"
+      height={350}
+      m="12px"
+      bg={colorLimedSpruce}
+      onPress={() => navigation.navigate(ROUTES.GET_WALLET.name, {wallet: accounts})}
+    >
       {props.wallet.currentAssets.assets.map((a, i) =>
         _renderAccountCard(a, i)
       )}
@@ -116,7 +130,7 @@ const AssetsBarBackground = styled(ImageView)`
   border-bottom-right-radius: 9999px;
 `
 
-const WalletCardRelativeContainer = styled(RelativeLayout)`
+const WalletCardRelativeContainer = styled(ButtonView)`
   border-radius: 18px;
   shadow-color: #fff;
   shadow-offset: { width: 0, height: 6 };
