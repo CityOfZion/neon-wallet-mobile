@@ -3,23 +3,23 @@ import {Account} from '~src/models/Account'
 export const mockWalletAccounts: Account[] = [
   new Account(
     '~src/assets/images/ovalBlue.png',
-    'NEO',
-    12312,
-    'oaihgofdhgo~hdõifhgõihsd',
-    '#e57670'
+    'My First Account',
+    24985,
+    'AN8iLVt18CKoATdexztCQj923hw5gkc41A',
+    '#0DD5B3'
   ),
   new Account(
     '~src/assets/images/ovalGreen.png',
-    'BTC',
-    157212,
-    'oaihasdasdhgxxaswsd',
-    '#2db744'
+    'My First Account',
+    24985,
+    'AN8iLVt18CKoATdexztCQj923hw5gkc41A',
+    '#1085C4'
   ),
   new Account(
     '~src/assets/images/ovalPurple.png',
-    'ETH',
-    122842,
-    'oaasdqwesgfhsahsd',
-    '#dd278b'
+    'My First Account',
+    24985,
+    'AN8iLVt18CKoATdexztCQj923hw5gkc41A',
+    '#5525C5'
   ),
 ]

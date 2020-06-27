@@ -46,7 +46,7 @@ const GetWalletView = (props: GetWalletProps) => {
       return (
         <AccountCardView
           cardHeight={cardHeight}
-          key={0}
+          key={i}
           onPress={() =>
             props.navigation.navigate(ROUTES.GET_ACCOUNT.name, {account})
           }
@@ -65,7 +65,7 @@ const GetWalletView = (props: GetWalletProps) => {
       end={[1, 0.75]}
       paddingRight={12}
       paddingLeft={12}
-      paddingTop={30}
+      paddingTop={70}
       height="100%"
       width="100%"
     >
