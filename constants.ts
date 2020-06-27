@@ -49,6 +49,10 @@ export const ROUTES = {
     id: 'THEME_TEST',
     name: 'ThemeTest' as 'ThemeTest',
   },
+  ONBOARDING: {
+    id: 'ONBOARDING',
+    name: 'Onboarding' as 'Onboarding',
+  },
   CUSTOM_COLOR: {
     id: 'CUSTOM_COLOR',
     name: 'CustomColor' as 'CustomColor',

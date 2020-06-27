@@ -9,6 +9,7 @@ import {NeoNode} from '~src/models/NeoNode'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 type HomeStackParametersList = {
+  Onboarding: undefined
   CustomColor: undefined
   ReceiveQRCode: undefined
   Modal: {screen: string}
@@ -36,12 +37,23 @@ const Home = (props: Props) => {
   }
 
   return (
-    <LinearLayout bg="background.0" alignItems="center" height="100%">
-      <LinearLayout height={headerHeight} />
+    <LinearLayout
+      bg="background.0"
+      pt={headerHeight}
+      alignItems="center"
+      height="100%"
+    >
       <LinearLayout m={3}>
         <ThemedButton
           onClick={() => props.navigation.navigate('ReceiveQRCode')}
           label={'Go to ReceiveQRCode'}
+        />
+      </LinearLayout>
+
+      <LinearLayout m={3}>
+        <ThemedButton
+          onClick={() => props.navigation.navigate('Onboarding')}
+          label={'Go to Onboarding'}
         />
       </LinearLayout>
 
@@ -60,12 +72,14 @@ const Home = (props: Props) => {
           label={'Go to Sample Modal Page'}
         />
       </LinearLayout>
+
       <LinearLayout m={3}>
         <ThemedButton
           onClick={() => props.navigation.navigate(ROUTES.GET_WALLET.name)}
           label={'Account'}
         />
       </LinearLayout>
+
       <LinearLayout
         mb={5}
         mt={5}

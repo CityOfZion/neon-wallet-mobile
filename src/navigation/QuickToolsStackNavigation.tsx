@@ -6,11 +6,11 @@ import {ThemeProvider} from 'styled-components'
 import {ROUTES} from '~/constants'
 import HeaderBar, {HeaderProps} from '~src/components/HeaderBar'
 import i18n from '~src/i18n'
-import Account from '~src/scenes/Account'
 import CustomColorPage from '~src/scenes/CustomColorPage'
 import GetAccountView from '~src/scenes/GetAccountView'
 import GetWalletView from '~src/scenes/GetWalletView'
 import Home from '~src/scenes/Home'
+import Onboarding from '~src/scenes/Onboarding'
 import ReceiveQRCode from '~src/scenes/ReceiveQRCode'
 import {RootState} from '~src/store/reducers/root'
 import {DefaultTheme} from '~src/styles/styled-components'
@@ -19,6 +19,7 @@ export type QuickToolsStackParamList = {
   Home: undefined
   ReceiveQRCode: undefined
   CustomColor: undefined
+  Onboarding: undefined
   GetWallet: undefined
   GetAccount: {account: Account}
 }
@@ -49,6 +50,11 @@ const QuickToolsStackNavigation = () => {
     <ThemeProvider theme={theme}>
       <QuickToolsStack.Navigator>
         <QuickToolsStack.Screen name={ROUTES.HOME.name} component={Home} />
+        <QuickToolsStack.Screen
+          name={ROUTES.ONBOARDING.name}
+          component={Onboarding}
+          options={() => navbarOptions({}, theme)}
+        />
         <QuickToolsStack.Screen
           name={ROUTES.CUSTOM_COLOR.name}
           component={CustomColorPage}
