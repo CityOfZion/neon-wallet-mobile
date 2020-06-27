@@ -15,6 +15,7 @@ import styled, {
   RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
+import {useAsyncStorage} from '@react-native-community/async-storage'
 
 interface OnboardingSlideProps {
   header: string
@@ -98,6 +99,12 @@ const GetStartedButton = (props: {onPressFunc: () => void}) => {
 
 const Onboarding = (props: {seenSetter: React.Dispatch<React.SetStateAction<boolean>>}) => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const {setItem} = useAsyncStorage('@onboardingSeen')
+
+  const setAsSeen = () => {
+    setItem("true")
+    props.seenSetter(true)
+  }
 
   return (
     <LinearGradient
@@ -165,7 +172,7 @@ const Onboarding = (props: {seenSetter: React.Dispatch<React.SetStateAction<bool
 
                 <LinearLayout width={'100%'} px={'7%'}>
                   <GetStartedButton
-                    onPressFunc={() => props.seenSetter(true)}
+                    onPressFunc={() => setAsSeen()}
                   />
                 </LinearLayout>
               </LinearLayout>
@@ -181,7 +188,7 @@ const Onboarding = (props: {seenSetter: React.Dispatch<React.SetStateAction<bool
           bottom={0}
           pb={20}
           pl={30}
-          onPress={() => props.seenSetter(true)}
+          onPress={() => setAsSeen()}
         >
           skip
         </SkipButton>
