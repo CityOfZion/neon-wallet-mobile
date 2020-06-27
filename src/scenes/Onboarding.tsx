@@ -16,11 +16,6 @@ import styled, {
   TextView,
 } from '~src/styles/styled-components'
 
-type TabStackParamList = {
-  MainTab: undefined
-  Onboarding: undefined
-}
-
 interface OnboardingSlideProps {
   header: string
   image: string
@@ -101,9 +96,7 @@ const GetStartedButton = (props: {onPressFunc: () => void}) => {
   )
 }
 
-const Onboarding = (props: {
-  navigation: StackNavigationProp<TabStackParamList>
-}) => {
+const Onboarding = (props: {seenSetter: React.Dispatch<React.SetStateAction<boolean>>}) => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
 
   return (
@@ -172,9 +165,7 @@ const Onboarding = (props: {
 
                 <LinearLayout width={'100%'} px={'7%'}>
                   <GetStartedButton
-                    onPressFunc={() =>
-                      props.navigation.navigate(ROUTES.GET_WALLET.name)
-                    }
+                    onPressFunc={() => props.seenSetter(true)}
                   />
                 </LinearLayout>
               </LinearLayout>
@@ -190,7 +181,7 @@ const Onboarding = (props: {
           bottom={0}
           pb={20}
           pl={30}
-          onPress={() => props.navigation.navigate(ROUTES.GET_WALLET.name)}
+          onPress={() => props.seenSetter(true)}
         >
           skip
         </SkipButton>
