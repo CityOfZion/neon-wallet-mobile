@@ -7,7 +7,7 @@ import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
 import {layout, LayoutProps, space, SpaceProps} from 'styled-system'
 
-import {WINDOW_WIDTH} from '~/constants'
+import {ROUTES, WINDOW_WIDTH} from '~/constants'
 import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
@@ -22,18 +22,22 @@ import styled, {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
+import {Account} from '~src/models/Account'
+import {mockWalletAccounts} from '~src/mockWalletAccounts'
+import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 
 const SLIDER_WIDTH = WINDOW_WIDTH
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
 
 interface WalletProps {
-  navigation: StackNavigationProp<{Home: undefined}>
+  navigation: StackNavigationProp<WalletStackParamList>
   theme: DefaultTheme
 }
 
 const ListWalletsView = (props: WalletProps) => {
   const [activeIndex, setActiveIndex] = useState(1)
   const [wallets, setWallets] = useState(mockWalletItems)
+  const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
   const carouselRef = useRef(null)
   const currency = useSelector((state: RootState) => state.app.currency)
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
