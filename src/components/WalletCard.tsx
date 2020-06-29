@@ -1,6 +1,9 @@
-import React, {useState} from 'react'
 import {useNavigation} from '@react-navigation/native'
+import React, {useState} from 'react'
 
+import {ROUTES} from '~/constants'
+import {mockWalletAccounts} from '~src/mockWalletAccounts'
+import {Account} from '~src/models/Account'
 import {TokenValue} from '~src/models/TokenValue'
 import {Wallet} from '~src/models/Wallet'
 import styled, {
@@ -10,9 +13,6 @@ import styled, {
   RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {ROUTES} from '~/constants'
-import {Account} from '~src/models/Account'
-import {mockWalletAccounts} from '~src/mockWalletAccounts'
 
 interface WalletCardProps {
   wallet: Wallet
@@ -66,7 +66,9 @@ const WalletCard = (props: WalletCardProps) => {
       height={350}
       m="12px"
       bg={colorLimedSpruce}
-      onPress={() => navigation.navigate(ROUTES.GET_WALLET.name, {wallet: accounts})}
+      onPress={() =>
+        navigation.navigate(ROUTES.GET_WALLET.name, {wallet: accounts})
+      }
     >
       {props.wallet.currentAssets.assets.map((a, i) =>
         _renderAccountCard(a, i)

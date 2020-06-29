@@ -13,8 +13,11 @@ import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import i18n from '~src/i18n'
+import {mockWalletAccounts} from '~src/mockWalletAccounts'
 import {mockWalletItems} from '~src/mockWalletItems'
+import {Account} from '~src/models/Account'
 import {Wallet} from '~src/models/Wallet'
+import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootState} from '~src/store/reducers/root'
 import styled, {
   DefaultTheme,
@@ -22,9 +25,6 @@ import styled, {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {Account} from '~src/models/Account'
-import {mockWalletAccounts} from '~src/mockWalletAccounts'
-import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 
 const SLIDER_WIDTH = WINDOW_WIDTH
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)

@@ -3,9 +3,8 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useEffect, useState} from 'react'
 import {SafeAreaView} from 'react-native'
 
-import {SCREEN_HEIGHT} from '~/constants'
-import AccountCardView from '~src/components/AccountCardView'
 import BalanceList from '~src/components/BalanceList'
+import AccountCard from '~src/components/AccountCard'
 import ThemedButton from '~src/components/ThemedButton'
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import i18n from '~src/i18n'
@@ -139,12 +138,10 @@ const GetAccountView = ({route, navigation}: GetAccountViewProps) => {
       >
         <Header goBack={() => navigation.goBack()} />
         <StyledScrollView width="100%" px="18px">
-          <AccountCardView
-            cardHeight={SCREEN_HEIGHT / 3}
-            account={account}
-            marginTop={20}
-            lastCard={true}
-          />
+          <LinearLayout marginTop={20}>
+            <AccountCard account={account} />
+          </LinearLayout>
+
           <LinearLayout mt="28px" mx="auto">
             <ThemedButton
               fontSize="16px"
