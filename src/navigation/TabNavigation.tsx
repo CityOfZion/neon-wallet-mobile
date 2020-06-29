@@ -1,3 +1,4 @@
+import {useAsyncStorage} from '@react-native-community/async-storage'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import React, {useEffect, useState} from 'react'
 import {StatusBar} from 'react-native'
@@ -11,9 +12,8 @@ import MoreStackNavigation from '~src/navigation/MoreStackNavigation'
 import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation'
 import SettingsStackNavigation from '~src/navigation/SettingsStackNavigation'
 import WalletStackNavigation from '~src/navigation/WalletsStackNavigation'
-import {RootState} from '~src/store/reducers/root'
-import {useAsyncStorage} from "@react-native-community/async-storage"
 import Onboarding from '~src/scenes/Onboarding'
+import {RootState} from '~src/store/reducers/root'
 
 const Tab = createBottomTabNavigator()
 

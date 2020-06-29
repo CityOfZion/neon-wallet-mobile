@@ -4,7 +4,7 @@ import {ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {ROUTES} from '~/constants'
-import AccountCardView from '~src/components/AccountCardView'
+import AccountCard from '~src/components/AccountCard'
 import i18n from '~src/i18n'
 import {mockWalletAccounts} from '~src/mockWalletAccounts'
 import {Account} from '~src/models/Account'
@@ -44,17 +44,14 @@ const GetWalletView = (props: GetWalletProps) => {
       const marginTop = i * marginTopForAbsolute
 
       return (
-        <AccountCardView
-          cardHeight={cardHeight}
-          key={i}
-          onPress={() =>
-            props.navigation.navigate(ROUTES.GET_ACCOUNT.name, {account})
-          }
-          account={account}
-          position="absolute"
-          marginTop={marginTop}
-          lastCard={i === accounts.length - 1}
-        />
+        <LinearLayout key={i} position="absolute" marginTop={marginTop}>
+          <AccountCard
+            account={account}
+            onPress={() =>
+              props.navigation.navigate(ROUTES.GET_ACCOUNT.name, {account})
+            }
+          />
+        </LinearLayout>
       )
     })
   }

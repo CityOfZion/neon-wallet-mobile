@@ -1,11 +1,11 @@
+import {useAsyncStorage} from '@react-native-community/async-storage'
 import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
 import React from 'react'
-import {StyleSheet, Text, View} from 'react-native'
+import {ImageLoadEventData, StyleSheet, Text, View} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {useSelector} from 'react-redux'
 
-import {ROUTES, TABS} from '~/constants'
 import i18n from '~/src/i18n'
 import {RootState} from '~src/store/reducers/root'
 import styled, {
@@ -15,11 +15,10 @@ import styled, {
   RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {useAsyncStorage} from '@react-native-community/async-storage'
 
 interface OnboardingSlideProps {
   header: string
-  image: string
+  image: ImageLoadEventData
   bottomContent: any
 }
 
@@ -97,12 +96,14 @@ const GetStartedButton = (props: {onPressFunc: () => void}) => {
   )
 }
 
-const Onboarding = (props: {seenSetter: React.Dispatch<React.SetStateAction<boolean>>}) => {
+const Onboarding = (props: {
+  seenSetter: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
   const {setItem} = useAsyncStorage('@onboardingSeen')
 
   const setAsSeen = () => {
-    setItem("true")
+    setItem('true')
     props.seenSetter(true)
   }
 
@@ -171,9 +172,7 @@ const Onboarding = (props: {seenSetter: React.Dispatch<React.SetStateAction<bool
                 </LinearLayout>
 
                 <LinearLayout width={'100%'} px={'7%'}>
-                  <GetStartedButton
-                    onPressFunc={() => setAsSeen()}
-                  />
+                  <GetStartedButton onPressFunc={() => setAsSeen()} />
                 </LinearLayout>
               </LinearLayout>
             }

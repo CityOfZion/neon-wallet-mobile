@@ -1,25 +1,31 @@
 import {Account} from '~src/models/Account'
 
 export const mockWalletAccounts: Account[] = [
-  new Account(
-    '~src/assets/images/ovalBlue.png',
-    'My First Account',
-    24985,
-    'AN8iLVt18CKoATdexztCQj923hw5gkc41A',
-    '#0DD5B3'
-  ),
-  new Account(
-    '~src/assets/images/ovalGreen.png',
-    'My Second Account',
-    38211,
-    '8tYaX4j3cTjjIAjbOjunNnPIds1Hgnnfce',
-    '#1085C4'
-  ),
-  new Account(
-    '~src/assets/images/ovalPurple.png',
-    'My Third Account',
-    88206,
-    'PbiI8k3RxiQm44xOKJ1Zs9mpBDrH0C0Mre',
-    '#5525C5'
-  ),
+  new Account(),
+  new Account(),
+  new Account(),
 ]
+
+mockWalletAccounts[0].srcIcon = require('~src/assets/images/card-neo.png')
+mockWalletAccounts[0].name = 'My First Account'
+mockWalletAccounts[0].currency = '$'
+mockWalletAccounts[0].balance = 24985
+mockWalletAccounts[0].address = 'AN8iLVt18CKoATdexztCQj923hw5gkc41A'
+mockWalletAccounts[0].backgroundColor = '#0DD5B3'
+mockWalletAccounts[0].isCompacted = true
+
+mockWalletAccounts[1].srcIcon = require('~src/assets/images/card-neo.png')
+mockWalletAccounts[1].name = 'My Second Account'
+mockWalletAccounts[1].currency = '$'
+mockWalletAccounts[1].balance = 38211
+mockWalletAccounts[1].address = '8tYaX4j3cTjjIAjbOjunNnPIds1Hgnnfce'
+mockWalletAccounts[1].backgroundColor = '#1085C4'
+mockWalletAccounts[1].isCompacted = true
+
+mockWalletAccounts[2].srcIcon = require('~src/assets/images/card-neo.png')
+mockWalletAccounts[2].name = 'My Third Account'
+mockWalletAccounts[2].currency = '$'
+mockWalletAccounts[2].balance = 88206
+mockWalletAccounts[2].address = 'PbiI8k3RxiQm44xOKJ1Zs9mpBDrH0C0Mre'
+mockWalletAccounts[2].backgroundColor = '#5525C5'
+mockWalletAccounts[2].isCompacted = true

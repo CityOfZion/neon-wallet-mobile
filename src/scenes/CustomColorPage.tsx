@@ -4,8 +4,9 @@ import React, {useState} from 'react'
 import {useSelector} from 'react-redux'
 
 import ColorPicker from '~src/components/ColorPicker'
-import PaymentCard from '~src/components/PaymentCard'
+import AccountCard from '~src/components/AccountCard'
 import i18n from '~src/i18n'
+import {Account} from '~src/models/Account'
 import {RootState} from '~src/store/reducers/root'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -15,6 +16,15 @@ const CustomColorPage: React.FC<object> = () => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
 
   const [color, setColor] = useState<string>(defaultCardColor)
+
+  // TODO: change mock values
+  const account = new Account()
+  account.srcIcon = require('~src/assets/images/card-neo.png')
+  account.name = 'Demo Card'
+  account.currency = '$'
+  account.balance = 24985
+  account.address = 'AN8iLVt18CKoATdexztCQj923hw5gkc41A'
+  account.backgroundColor = color
 
   const colorPickerChangeEvent = (hex: string) => {
     setColor(hex)
@@ -36,14 +46,7 @@ const CustomColorPage: React.FC<object> = () => {
         mt={headerHeight}
       >
         <LinearLayout mb={5} maxWidth={320}>
-          {/*TODO: change mock values*/}
-          <PaymentCard
-            name={'Demo Card'}
-            currency={'$'}
-            balance={24985}
-            address={'AN8iLVt18CKoATdexztCQj923hw5gkc41A'}
-            color={color}
-          />
+          <AccountCard account={account} />
         </LinearLayout>
 
         <TextView mb={3} color="text.0" textAlign={'center'} fontSize={'lg'}>

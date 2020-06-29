@@ -4,10 +4,10 @@ import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {ROUTES} from '~/constants'
+import GetAccountView from '~src/scenes/GetAccountView'
+import GetWalletView from '~src/scenes/GetWalletView'
 import ListWalletsView from '~src/scenes/ListWalletsView'
 import {RootState} from '~src/store/reducers/root'
-import GetWalletView from '~src/scenes/GetWalletView'
-import GetAccountView from '~src/scenes/GetAccountView'
 
 export type WalletStackParamList = {
   ListWallets: undefined
