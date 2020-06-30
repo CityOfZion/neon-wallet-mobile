@@ -24,6 +24,8 @@ const light = {
       '#fff',
       '#8ba0a9',
       '#767f86',
+      '#bebebe',
+      '#41474b',
     ],
   },
 } as DefaultTheme
