@@ -18,6 +18,7 @@ import {
   StyledScrollView,
   TextView,
 } from '~src/styles/styled-components'
+import TransactionsList from '~src/components/TransactionsList'
 
 const Header = (props: {goBack: () => void}) => {
   const [nodes, setNodes] = useState<NeoNode[]>([])
@@ -92,7 +93,7 @@ const TabSelector = (props: TabSelectorProps) => {
           fontSize="16px"
           mb="8px"
           fontFamily="semibold"
-          color={props.isAssetsTabSelected ? 'primary' : 'text.0'}
+          color={props.isAssetsTabSelected ? 'text.0' : 'primary'}
         >
           {i18n.t('screens.getAccount.assets')}
         </TextView>
@@ -108,7 +109,7 @@ const TabSelector = (props: TabSelectorProps) => {
           fontSize="16px"
           mb="8px"
           fontFamily="semibold"
-          color={!props.isAssetsTabSelected ? 'primary' : 'text.0'}
+          color={props.isAssetsTabSelected ? 'primary' : 'text.0'}
         >
           {i18n.t('screens.getAccount.transactions')}
         </TextView>
@@ -154,12 +155,15 @@ const GetAccountView = ({route, navigation}: GetAccountViewProps) => {
             isAssetsTabSelected={isAssetsTabSelected}
             setIsAssetsTabSelected={setIsAssetsTabSelected}
           />
-          {isAssetsTabSelected && (
-            <BalanceList
-              my="16px"
-              tokenAssets={mockWalletItems[2].currentAssets.assets}
-            />
-          )}
+          {isAssetsTabSelected
+            ? (
+              <BalanceList
+                my="16px"
+                tokenAssets={mockWalletItems[2].currentAssets.assets}
+              />
+            )
+            : <TransactionsList />
+          }
         </StyledScrollView>
       </LinearLayout>
     </SafeAreaView>

@@ -110,6 +110,12 @@
       "title": "TOKEN VALUE",
       "holdings": "Holdings",
       "value": "Value"
+    },
+    "transactionsList": {
+      "title": "PENDING TRANSACTIONS",
+      "pending": "Pending",
+      "sentTo": "Sent to",
+      "value": "Value"
     }
   },
   "currency": {
