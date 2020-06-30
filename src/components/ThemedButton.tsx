@@ -10,12 +10,11 @@ import {
 import styled, {
   ImageView,
   LinearLayout,
-  RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
 
 interface Props {
-  onClick?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
+  onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
   label: string
   srcIcon?: ImageLoadEventData
   rounded?: boolean
@@ -25,7 +24,6 @@ interface Props {
 }
 
 const ThemedButton: React.FC<Props> = (props) => {
-  const labelColor = '#4cffb3'
   const baseBgColor = '#2d3941'
   const width = props.iconSize ? props.iconSize[0] : 20
   const height = props.iconSize ? props.iconSize[1] : 20
@@ -33,7 +31,7 @@ const ThemedButton: React.FC<Props> = (props) => {
 
   const getBorderRadius = () => {
     if (props.rounded) {
-      return 22
+      return 26
     }
 
     return 5
@@ -42,7 +40,7 @@ const ThemedButton: React.FC<Props> = (props) => {
   return (
     <ButtonView
       onPress={(e: NativeSyntheticEvent<NativeTouchEvent>) =>
-        props.onClick?.(e)
+        props.onPress?.(e)
       }
     >
       <ButtonContentView
@@ -70,7 +68,12 @@ const ThemedButton: React.FC<Props> = (props) => {
           />
         )}
 
-        <LinearLayout orientation={'horiz'} alignItems={'center'}>
+        <LinearLayout
+          orientation={'horiz'}
+          alignItems={'center'}
+          height={'100%'}
+          mt={1}
+        >
           {props.srcIcon && (
             <ImageView
               width={width}
@@ -80,7 +83,14 @@ const ThemedButton: React.FC<Props> = (props) => {
             />
           )}
 
-          <LabelView color={labelColor} fontSize={fontSize}>
+          <LabelView
+            color={'primary'}
+            fontSize={fontSize}
+            fontFamily={props.flat ? 'bold' : 'regular'}
+            allowFontScaling={true}
+            adjustsFontSizeToFit={true}
+            numberOfLines={1}
+          >
             {props.label}
           </LabelView>
         </LinearLayout>
@@ -90,7 +100,7 @@ const ThemedButton: React.FC<Props> = (props) => {
 }
 
 ThemedButton.propTypes = {
-  onClick: PropTypes.func,
+  onPress: PropTypes.func,
   label: PropTypes.string.isRequired,
   srcIcon: PropTypes.any,
   rounded: PropTypes.bool,
@@ -108,15 +118,14 @@ const ButtonView = styled.TouchableOpacity`
   box-shadow: 0 -6px 6px rgba(255, 255, 255, 0.1);
 `
 
-const ButtonContentView = styled(RelativeLayout)`
+const ButtonContentView = styled(LinearLayout)`
   box-shadow: 0 6px 6px rgba(0, 0, 0, 0.4);
-  height: 42px;
+  height: 50px;
   padding: 0 20px;
 `
 
 const LabelView = styled(TextView)`
   text-align: center;
-  line-height: 38px;
 `
 
 const BrightButton = styled(LinearGradient)`

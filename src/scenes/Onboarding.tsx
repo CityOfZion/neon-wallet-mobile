@@ -1,8 +1,8 @@
 import {useAsyncStorage} from '@react-native-community/async-storage'
-import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
+import {useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
 import React from 'react'
-import {ImageLoadEventData, StyleSheet, Text, View} from 'react-native'
+import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {useSelector} from 'react-redux'
 
@@ -114,84 +114,87 @@ const Onboarding = (props: {
       start={[0.1, 0.1]}
       end={[1, 1]}
     >
-      <LinearLayout
-        orientation={'verti'}
-        alignItems={'center'}
-        width={'100%'}
-        height={'100%'}
-      >
-        <Swiper
-          dotColor={theme.colors.text[3]}
-          activeDotColor={theme.colors.primary}
-          loop={false}
-          showsButtons
-          buttonWrapperStyle={styles.swiperButtonWrapperStyle}
-          prevButton={<View />}
-          nextButton={<NextButton color={'primary'}>next</NextButton>}
+      <SafeAreaView>
+        <LinearLayout
+          orientation={'verti'}
+          alignItems={'center'}
+          width={'100%'}
+          height={'100%'}
         >
-          <OnboardingSlide
-            header={'Feature 1'}
-            image={require('~src/assets/images/onboarding-1.png')}
-            bottomContent={
-              <FeatureText
-                title={i18n.t('onboarding.feature1.title')}
-                subtitle={i18n.t('onboarding.feature1.subtitle')}
-              />
-            }
-          />
-          <OnboardingSlide
-            header={'Feature 2'}
-            image={require('~src/assets/images/onboarding-2.png')}
-            bottomContent={
-              <FeatureText
-                title={i18n.t('onboarding.feature2.title')}
-                subtitle={i18n.t('onboarding.feature2.subtitle')}
-              />
-            }
-          />
-          <OnboardingSlide
-            header={'Feature 3'}
-            image={require('~src/assets/images/onboarding-3.png')}
-            bottomContent={
-              <FeatureText
-                title={i18n.t('onboarding.feature3.title')}
-                subtitle={i18n.t('onboarding.feature3.subtitle')}
-              />
-            }
-          />
-          <OnboardingSlide
-            header={'Time to get started!'}
-            image={require('~src/assets/images/onboarding-4.png')}
-            bottomContent={
-              <LinearLayout width={'100%'} alignItems={'center'}>
-                <LinearLayout mb={'8%'}>
-                  <FeatureText
-                    title={i18n.t('onboarding.feature4.title')}
-                    subtitle={i18n.t('onboarding.feature4.subtitle')}
-                  />
-                </LinearLayout>
+          <Swiper
+            dotColor={theme.colors.text[3]}
+            activeDotColor={theme.colors.primary}
+            loop={false}
+            showsButtons
+            buttonWrapperStyle={styles.swiperButtonWrapperStyle}
+            prevButton={<View />}
+            nextButton={<NextButton color={'primary'}>next</NextButton>}
+          >
+            <OnboardingSlide
+              header={'Feature 1'}
+              image={require('~src/assets/images/onboarding-1.png')}
+              bottomContent={
+                <FeatureText
+                  title={i18n.t('onboarding.feature1.title')}
+                  subtitle={i18n.t('onboarding.feature1.subtitle')}
+                />
+              }
+            />
+            <OnboardingSlide
+              header={'Feature 2'}
+              image={require('~src/assets/images/onboarding-2.png')}
+              bottomContent={
+                <FeatureText
+                  title={i18n.t('onboarding.feature2.title')}
+                  subtitle={i18n.t('onboarding.feature2.subtitle')}
+                />
+              }
+            />
+            <OnboardingSlide
+              header={'Feature 3'}
+              image={require('~src/assets/images/onboarding-3.png')}
+              bottomContent={
+                <FeatureText
+                  title={i18n.t('onboarding.feature3.title')}
+                  subtitle={i18n.t('onboarding.feature3.subtitle')}
+                />
+              }
+            />
+            <OnboardingSlide
+              header={'Time to get started!'}
+              image={require('~src/assets/images/onboarding-4.png')}
+              bottomContent={
+                <LinearLayout width={'100%'} alignItems={'center'}>
+                  <LinearLayout mb={'8%'}>
+                    <FeatureText
+                      title={i18n.t('onboarding.feature4.title')}
+                      subtitle={i18n.t('onboarding.feature4.subtitle')}
+                    />
+                  </LinearLayout>
 
-                <LinearLayout width={'100%'} px={'7%'}>
-                  <GetStartedButton onPressFunc={() => setAsSeen()} />
+                  <LinearLayout width={'100%'} px={'7%'}>
+                    <GetStartedButton onPressFunc={() => setAsSeen()} />
+                  </LinearLayout>
                 </LinearLayout>
-              </LinearLayout>
-            }
-          />
-        </Swiper>
+              }
+            />
+          </Swiper>
 
-        <SkipButton
-          position={'absolute'}
-          left={0}
-          color={'text.0'}
-          opacity={0.5}
-          bottom={0}
-          pb={20}
-          pl={30}
-          onPress={() => setAsSeen()}
-        >
-          skip
-        </SkipButton>
-      </LinearLayout>
+          <SkipButton
+            position={'absolute'}
+            left={0}
+            color={'text.0'}
+            opacity={0.5}
+            bottom={0}
+            mb={'3.5%'}
+            ml={30}
+            onPress={() => setAsSeen()}
+            style={{textTransform: 'lowercase'}}
+          >
+            {i18n.t('app.skip')}
+          </SkipButton>
+        </LinearLayout>
+      </SafeAreaView>
     </LinearGradient>
   )
 }

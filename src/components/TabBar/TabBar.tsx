@@ -1,10 +1,16 @@
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs'
 import React from 'react'
-import {layout, LayoutProps, position, PositionProps} from 'styled-system'
+import {
+  color,
+  ColorProps,
+  layout,
+  LayoutProps,
+  position,
+  PositionProps,
+} from 'styled-system'
 
-import {ROUTES, WINDOW_WIDTH} from '~/constants'
+import {ROUTES} from '~/constants'
 import styled, {
-  ButtonView,
   ImageView,
   LinearLayout,
   RelativeLayout,
@@ -13,20 +19,22 @@ import {weight, WeightProps} from '~src/styles/styled-system.config'
 
 const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
   const focusedOptions = descriptors[state.routes[state.index].key].options
+
   if (focusedOptions.tabBarVisible === false) {
     return null
   }
 
   return (
-    <TabBarContainer height={66} width={WINDOW_WIDTH}>
-      <RelativeLayout height="100%" width="100%">
+    <TabBarContainer bg={'background.0'}>
+      <RelativeLayout height={66}>
         <ImageView
           position={'absolute'}
-          bottom={0}
           width={'100%'}
+          bottom={0}
           resizeMode={'cover'}
           source={require('~src/assets/images/TabBar.png')}
         />
+
         <LinearLayout orientation="horiz" alignItems="center">
           <TabButton
             height="100%"
@@ -93,8 +101,8 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
   )
 }
 
-const TabBarContainer = styled.SafeAreaView<LayoutProps>`
-  ${layout}
+const TabBarContainer = styled.SafeAreaView<ColorProps>`
+  ${color}
 `
 
 const TabButton = styled.TouchableOpacity<
