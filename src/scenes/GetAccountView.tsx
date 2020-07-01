@@ -140,7 +140,7 @@ const GetAccountView = ({route, navigation}: GetAccountViewProps) => {
         <Header goBack={() => navigation.goBack()} />
         <StyledScrollView width="100%" px="18px">
           <LinearLayout marginTop={20}>
-            <AccountCard account={account} />
+            <AccountCard account={account} isCompacted={true} />
           </LinearLayout>
 
           <LinearLayout mt="28px" mx="auto">

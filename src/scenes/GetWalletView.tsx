@@ -47,6 +47,8 @@ const GetWalletView = (props: GetWalletProps) => {
         <LinearLayout key={i} position="absolute" marginTop={marginTop}>
           <AccountCard
             account={account}
+            isCompacted={true}
+            isStackMode={i !== accounts.length - 1}
             onPress={() =>
               props.navigation.navigate(ROUTES.GET_ACCOUNT.name, {account})
             }

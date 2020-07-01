@@ -7,6 +7,4 @@ export class Account {
   currency?: string
   address?: string
   backgroundColor = '#00aaff'
-  isCompacted = false
-  isWatched = false
 }
