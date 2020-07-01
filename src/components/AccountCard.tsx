@@ -42,6 +42,8 @@ import {
 interface Props {
   onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
   account: Account
+  isCompacted: boolean
+  isStackMode: boolean
 }
 
 const AccountCard: React.FC<Props> = (props) => {
@@ -139,7 +141,7 @@ const AccountCard: React.FC<Props> = (props) => {
             </TextView>
           </LinearLayout>
 
-          {props.account.isCompacted && props.account.balance ? (
+          {props.isCompacted && props.account.balance ? (
             <LinearLayout ml={10 * unit} alignItems={'flex-start'}>
               <TextView
                 fontFamily={'bold'}
@@ -152,7 +154,7 @@ const AccountCard: React.FC<Props> = (props) => {
               </TextView>
 
               <TextView
-                mt={-8 * unit}
+                mt={-6 * unit}
                 fontFamily={'semibold'}
                 fontSize={21 * unit}
                 color="white"
@@ -177,7 +179,7 @@ const AccountCard: React.FC<Props> = (props) => {
           )}
         </LinearLayout>
 
-        {props.account.balance && !props.account.isCompacted && (
+        {props.account.balance && !props.isStackMode && !props.isCompacted && (
           <TextView
             mb={3 * unit}
             fontSize={14 * unit}
@@ -189,29 +191,31 @@ const AccountCard: React.FC<Props> = (props) => {
           </TextView>
         )}
 
-        <LinearLayout
-          orientation={'verti'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          weight={1}
-        >
-          {props.account.balance && !props.account.isCompacted && (
-            <TextView
-              mb={3 * unit}
-              fontSize={48 * unit}
-              color="white"
-              textAlign="center"
-              fontWeight="bold"
-            >
-              {FilterHelper.currency(
-                props.account.balance,
-                props.account.currency,
-                false,
-                false
-              )}
-            </TextView>
-          )}
-        </LinearLayout>
+        {!props.isStackMode && (
+          <LinearLayout
+            orientation={'verti'}
+            justifyContent={'center'}
+            alignItems={'center'}
+            weight={1}
+          >
+            {props.account.balance && !props.isCompacted && (
+              <TextView
+                mb={3 * unit}
+                fontSize={48 * unit}
+                color="white"
+                textAlign="center"
+                fontWeight="bold"
+              >
+                {FilterHelper.currency(
+                  props.account.balance,
+                  props.account.currency,
+                  false,
+                  false
+                )}
+              </TextView>
+            )}
+          </LinearLayout>
+        )}
 
         {props.account.address && (
           <LinearLayout orientation={'horiz'} alignItems={'flex-end'}>
@@ -236,22 +240,24 @@ const AccountCard: React.FC<Props> = (props) => {
               </TextView>
             </LinearLayout>
 
-            <TouchableOpacity
-              onPress={copyToClipboard}
-              style={{
-                paddingTop: 12 * unit,
-                paddingLeft: 12 * unit,
-                paddingBottom: 6 * unit,
-                paddingRight: 6 * unit,
-              }}
-            >
-              <ImageView
-                width={20 * unit}
-                height={24 * unit}
-                source={require('~src/assets/images/card-copy.png')}
-                style={{opacity: 0.5}}
-              />
-            </TouchableOpacity>
+            {!props.isStackMode && (
+              <TouchableOpacity
+                onPress={copyToClipboard}
+                style={{
+                  paddingTop: 12 * unit,
+                  paddingLeft: 12 * unit,
+                  paddingBottom: 6 * unit,
+                  paddingRight: 6 * unit,
+                }}
+              >
+                <ImageView
+                  width={20 * unit}
+                  height={24 * unit}
+                  source={require('~src/assets/images/card-copy.png')}
+                  style={{opacity: 0.5}}
+                />
+              </TouchableOpacity>
+            )}
           </LinearLayout>
         )}
       </LinearLayout>
@@ -262,10 +268,14 @@ const AccountCard: React.FC<Props> = (props) => {
 AccountCard.propTypes = {
   onPress: PropTypes.func,
   account: PropTypes.any.isRequired,
+  isCompacted: PropTypes.bool.isRequired,
+  isStackMode: PropTypes.bool.isRequired,
 }
 
 AccountCard.defaultProps = {
   account: new Account(),
+  isCompacted: false,
+  isStackMode: false,
 }
 
 const PaymentCardView = styled.TouchableOpacity<
