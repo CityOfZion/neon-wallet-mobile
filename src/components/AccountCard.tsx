@@ -100,49 +100,50 @@ const AccountCard: React.FC<Props> = (props) => {
         orientation={'verti'}
         width={'100%'}
         height={'100%'}
-        p={15 * unit}
+        px={15 * unit}
+        py={10 * unit}
       >
-        <LinearLayout mb={3 * unit} orientation={'horiz'} width={'100%'}>
-          {props.account.srcIcon && (
-            <ImageView
-              width={24 * unit}
-              height={24 * unit}
-              mt={5 * unit}
-              source={props.account.srcIcon}
-              mr={10 * unit}
-            />
-          )}
-
+        <LinearLayout
+          mb={3 * unit}
+          orientation={'horiz'}
+          alignItems={'flex-end'}
+          width={'100%'}
+        >
           <LinearLayout
             weight={1}
+            mb={3 * unit}
             orientation={'horiz'}
-            alignItems={'flex-start'}
+            alignItems={'center'}
           >
+            {props.account.srcIcon && (
+              <ImageView
+                width={24 * unit}
+                height={24 * unit}
+                source={props.account.srcIcon}
+                mr={10 * unit}
+              />
+            )}
+
             <TextView
-              fontSize={24 * unit}
+              weight={1}
+              mb={-2 * unit}
+              fontFamily={'semibold'}
+              fontSize={22 * unit}
               color="white"
               textAlign="left"
-              fontWeight="bold"
               numberOfLines={1}
+              allowFontScaling={true}
+              adjustsFontSizeToFit={true}
             >
               {props.account.name}
             </TextView>
-
-            {props.account.isWatched && (
-              <ImageView
-                width={20 * unit}
-                height={20 * unit}
-                source={require('~src/assets/images/icon-watch-white.png')}
-                mt={5 * unit}
-                ml={10 * unit}
-              />
-            )}
           </LinearLayout>
 
           {props.account.isCompacted && props.account.balance ? (
-            <LinearLayout alignItems={'flex-end'}>
+            <LinearLayout ml={10 * unit} alignItems={'flex-start'}>
               <TextView
-                fontSize={14 * unit}
+                fontFamily={'bold'}
+                fontSize={12 * unit}
                 color="white"
                 textAlign="left"
                 fontWeight="bold"
@@ -152,7 +153,8 @@ const AccountCard: React.FC<Props> = (props) => {
 
               <TextView
                 mt={-8 * unit}
-                fontSize={24 * unit}
+                fontFamily={'semibold'}
+                fontSize={21 * unit}
                 color="white"
                 textAlign="center"
                 fontWeight="bold"
