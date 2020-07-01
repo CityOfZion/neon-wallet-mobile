@@ -33,7 +33,7 @@ const GetWalletView = (props: GetWalletProps) => {
   const marginTopForAbsolute = 120
   const addCardHeight = 200
   const addCardMb = 28
-  const addCardMt = 40
+  const addCardMt = 60
 
   const listHeightSize =
     cardHeight + marginTopForAbsolute * (accounts.length - 1)
@@ -74,7 +74,6 @@ const GetWalletView = (props: GetWalletProps) => {
           {_renderAccountCards()}
 
           <LinearLayout
-            position="absolute"
             top={listHeightSize}
             orientation="horiz"
             width="100%"
