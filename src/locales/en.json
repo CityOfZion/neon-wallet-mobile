@@ -2,7 +2,8 @@
   "app": {
     "neoBlockHeight": "NEO BLOCK HEIGHT",
     "back": "Back",
-    "edit": "Edit"
+    "edit": "Edit",
+    "skip": "Skip"
   },
   "languages": {
     "de": "German",
@@ -18,6 +19,19 @@
   },
   "home": {
     "welcome": "Welcome to Neon Wallet!"
+  },
+  "welcome": {
+    "brand": "neonwallet",
+    "title": "Welcome",
+    "body_1_1": "To get you started we have created your first wallet for you. All the details and back up options for your wallet can be found in ",
+    "body_1_2": "Settings",
+    "body_1_3": " then ",
+    "body_1_4": "My wallets",
+    "body_2_0": "We strongly recommend that you back up your wallet to make sure its safe should you lose your phone",
+    "button_1": "Quick start options",
+    "button_2": "Import a wallet",
+    "button_3": "Add funds to your wallet",
+    "checkbox_1": "Don’t show this screen again"
   },
   "onboarding": {
     "feature1": {

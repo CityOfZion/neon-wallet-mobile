@@ -3,9 +3,10 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useEffect, useState} from 'react'
 import {SafeAreaView} from 'react-native'
 
-import BalanceList from '~src/components/BalanceList'
 import AccountCard from '~src/components/AccountCard'
+import BalanceList from '~src/components/BalanceList'
 import ThemedButton from '~src/components/ThemedButton'
+import TransactionsList from '~src/components/TransactionsList'
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import i18n from '~src/i18n'
 import {mockWalletItems} from '~src/mockWalletItems'
@@ -18,7 +19,6 @@ import {
   StyledScrollView,
   TextView,
 } from '~src/styles/styled-components'
-import TransactionsList from '~src/components/TransactionsList'
 
 const Header = (props: {goBack: () => void}) => {
   const [nodes, setNodes] = useState<NeoNode[]>([])
@@ -155,15 +155,14 @@ const GetAccountView = ({route, navigation}: GetAccountViewProps) => {
             isAssetsTabSelected={isAssetsTabSelected}
             setIsAssetsTabSelected={setIsAssetsTabSelected}
           />
-          {isAssetsTabSelected
-            ? (
-              <BalanceList
-                my="16px"
-                tokenAssets={mockWalletItems[2].currentAssets.assets}
-              />
-            )
-            : <TransactionsList />
-          }
+          {isAssetsTabSelected ? (
+            <BalanceList
+              my="16px"
+              tokenAssets={mockWalletItems[2].currentAssets.assets}
+            />
+          ) : (
+            <TransactionsList />
+          )}
         </StyledScrollView>
       </LinearLayout>
     </SafeAreaView>

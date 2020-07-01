@@ -1,8 +1,9 @@
 {
   "app": {
     "neoBlockHeight": "NEO BLOCK HEIGHT",
-    "back": "Back",
-    "edit": "Edit"
+    "back": "Voltar",
+    "edit": "Editar",
+    "skip": "Pular"
   },
   "languages": {
     "de": "Alemão",
@@ -17,6 +18,19 @@
   },
   "home": {
     "welcome": "Bem-vindo ao Neon Wallet!"
+  },
+  "welcome": {
+    "brand": "neonwallet",
+    "title": "Bem-vindo",
+    "body_1_1": "Para começar nós criamos sua primeira carteira para você. Todos os detalhes e opções de restauração para sua carteira pode ser encontrado em ",
+    "body_1_2": "Configurações",
+    "body_1_3": " e ",
+    "body_1_4": "Minha carteira",
+    "body_2_0": "Nós recomendamos fortemente que você faça o backup da sua carteira para ter certeza que estará seguro contra a perda deste celular. ",
+    "button_1": "Primeiros passos",
+    "button_2": "Importar uma carteira",
+    "button_3": "Adicionar fundos à sua carteira",
+    "checkbox_1": "Não mostrar essa tela novamente"
   },
   "settings": {
     "title": "Configurações",

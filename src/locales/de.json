@@ -1,8 +1,9 @@
 {
   "app": {
     "neoBlockHeight": "NEO BLOCK HEIGHT",
-    "back": "Back",
-    "edit": "Edit"
+    "back": "#translateme",
+    "edit": "#translateme",
+    "skip": "#translateme"
   },
   "languages": {
     "de": "Deutsch",
@@ -11,6 +12,19 @@
   },
   "home": {
     "welcome": "Willkommen bei Neon Wallet!"
+  },
+  "welcome": {
+    "brand": "neonwallet",
+    "title": "#translateme",
+    "body_1_1": "#translateme",
+    "body_1_2": "#translateme",
+    "body_1_3": " #translateme ",
+    "body_1_4": "#translateme",
+    "body_2_0": "#translateme",
+    "button_1": "#translateme",
+    "button_2": "#translateme",
+    "button_3": "#translateme",
+    "checkbox_1": "#translateme"
   },
   "routes": {
     "Settings": "#TRANSLATEME",

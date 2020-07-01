@@ -53,6 +53,10 @@ export const ROUTES = {
     id: 'ONBOARDING',
     name: 'Onboarding' as 'Onboarding',
   },
+  WELCOME: {
+    id: 'WELCOME',
+    name: 'Welcome' as 'Welcome',
+  },
   CUSTOM_COLOR: {
     id: 'CUSTOM_COLOR',
     name: 'CustomColor' as 'CustomColor',
