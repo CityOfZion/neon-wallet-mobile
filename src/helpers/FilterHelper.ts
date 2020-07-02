@@ -2,6 +2,9 @@ import moment from 'moment'
 
 import i18n from '~src/i18n'
 
+const SATURATION_FACTOR = 0.69 //nice
+const LUMINANCE_FACTOR = 0.58
+
 export type InputType = string | number | null
 
 export abstract class FilterHelper {
@@ -191,5 +194,14 @@ export abstract class FilterHelper {
     }
 
     return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)]
+  }
+
+  static toDarkerShade(color: string) {
+    const hsl = FilterHelper.hexToHsl(color)
+    return FilterHelper.hslToHex(
+      hsl[0],
+      hsl[1] * SATURATION_FACTOR,
+      hsl[2] * LUMINANCE_FACTOR
+    )
   }
 }

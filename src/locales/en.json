@@ -183,6 +183,9 @@
       "pending": "Pending",
       "sentTo": "Sent to",
       "value": "Value"
+    },
+    "colorSelector": {
+      "customColor": "Custom colour"
     }
   },
   "currency": {

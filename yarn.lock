@@ -1298,7 +1298,7 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@moonlight-io/asteroid-sdk-js@file:../asteroid-sdk-js/":
+"@moonlight-io/asteroid-sdk-js@file:../asteroid-sdk-js":
   version "0.16.0"
   dependencies:
     "@cityofzion/neon-js" "^4.7.1"

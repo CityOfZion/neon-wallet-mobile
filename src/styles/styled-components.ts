@@ -175,6 +175,7 @@ export interface DefaultTheme {
     quaternary: string
     background: string[]
     text: string[]
+    card: string[]
   }
 }
 
