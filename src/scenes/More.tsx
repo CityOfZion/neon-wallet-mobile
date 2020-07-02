@@ -1,7 +1,7 @@
 import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
 import React from 'react'
-import {StyleSheet, Text, View} from 'react-native'
+import {StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {DefaultTheme} from 'styled-components'
 import styled from 'styled-components/native'
@@ -9,7 +9,7 @@ import styled from 'styled-components/native'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface MoreProps {
-  navigation: StackNavigationProp<{Home: undefined}>
+  navigation: StackNavigationProp<{Modal: {screen: string}}>
   theme: DefaultTheme
   navigationOptions: object
 }
@@ -127,6 +127,36 @@ const More = (props: MoreProps) => {
           />
         </LinearLayout>
         <LinearLayout height={1} backgroundColor="#667178" width="100%" />
+      </LinearLayout>
+      <LinearLayout orientation="verti" width="100%" pr={20} pl={20}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            props.navigation.navigate('Modal', {screen: 'SampleModal'})
+          }}
+        >
+          <LinearLayout
+            alignItems="center"
+            orientation="horiz"
+            height={65}
+            width="100%"
+            mt={50}
+          >
+            <ImageView
+              height={28}
+              width={28}
+              source={require('~/src/assets/images/wallet-icon-green.png')}
+            />
+            <TextView ml={12} color="white" fontSize={18} fontFamily="semibold">
+              Sample Modal
+            </TextView>
+            <LinearLayout weight={1} />
+            <ImageView
+              width={12}
+              height={19}
+              source={require('~/src/assets/images/icon-arrow-right-green.png')}
+            />
+          </LinearLayout>
+        </TouchableWithoutFeedback>
       </LinearLayout>
     </LinearLayout>
   )

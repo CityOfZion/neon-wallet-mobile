@@ -9,6 +9,7 @@ const dark = {
     primary: '#4cffb3',
     secondary: '#0a84ff',
     tertiary: '#293036',
+    quaternary: '#58717b',
 
     // eslint-disable-next-line prettier/prettier
     background: [
@@ -16,7 +17,10 @@ const dark = {
       '#283239',
       '#293036',
       '#899fa8',
-      '#979797'
+      '#979797',
+      '#41474b',
+      '#495158',
+      '#1f272e',
     ],
     // eslint-disable-next-line prettier/prettier
     text: [
@@ -26,6 +30,7 @@ const dark = {
       '#767f86',
       '#bebebe',
       '#41474b',
+      '#899fa8',
     ],
   },
 } as DefaultTheme

@@ -1,41 +1,76 @@
-import {useNavigation} from '@react-navigation/native'
-import React from 'react'
-import {TouchableHighlight} from 'react-native'
+import {useNavigation, useRoute} from '@react-navigation/native'
+import React, {useState} from 'react'
+import {TouchableHighlight, View} from 'react-native'
+import {useSelector} from 'react-redux'
 
-import SwiperPanel, {
-  BackButton,
-  CancelButton,
-} from '~src/components/SwiperPanel'
-import {TextView} from '~src/styles/styled-components'
+import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import i18n from '~src/i18n'
+import {Account} from '~src/models/Account'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {RootState} from '~src/store/reducers/root'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
-export default function SampleModal() {
-  const navigation = useNavigation()
+interface Props {
+  navigation: StackNavigationProp<ModalStackParamList>
+}
+
+export default function SampleModal(props: Props) {
+  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const controller = useSwiperController(true)
+
+  const [name, setName] = useState<string>()
+  const [color, setColor] = useState<string>()
+
+  function persistAccount() {
+    // TODO: Store account info on redux/asyncStorage
+    if (name) {
+      // const account = new Account()
+      props.navigation.goBack()
+    } else {
+      // TODO: Validate account name field as empty
+    }
+  }
 
   return (
     <SwiperPanel
-      title="Modal Title"
-      leftButton={<BackButton text="Back" />}
-      rightButton={<CancelButton />}
-      onLeftPress={() => navigation.goBack()}
-      onRightPress={() => navigation.goBack()}
-      image={require('~/src/assets/images/card-neo.png')}
+      controller={controller}
+      fullSize={true}
+      paddingTop={36}
+      title={i18n.t('screens.createAccount.title')}
+      leftButton={i18n.t('screens.createAccount.navigation.cancel')}
+      rightButton={i18n.t('screens.createAccount.navigation.save')}
+      onLeftPress={() => controller.close()}
+      onRightPress={() => controller.close()}
+      onClose={() => props.navigation.goBack()}
+      image={require('~/src/assets/images/icon-plus-circle-white.png')}
     >
-      <TouchableHighlight
-        style={{
-          marginBottom: 250,
-          marginTop: 100,
-        }}
-        onPress={() => navigation.goBack()}
-      >
+      <LinearLayout width="100%" height="100%">
         <TextView
-          color="white"
-          fontSize={60}
-          fontFamily="semibold"
-          alignSelf="center"
+          mb={52}
+          color={theme.colors.text[0]}
+          fontSize={18}
+          fontFamily="medium"
+          textAlign="center"
         >
-          Close me
+          {i18n.t('screens.createAccount.subtitle')}
         </TextView>
-      </TouchableHighlight>
+        <TextView color={theme.colors.text[0]} mb={66}>
+          TODO: InputText {'\n'}
+          {i18n.t('screens.createAccount.accountInput.title')} {'\n'}
+          {i18n.t('screens.createAccount.accountInput.placeholder')} {'\n'}
+        </TextView>
+        <TextView
+          mb={52}
+          color={theme.colors.text[0]}
+          fontSize={18}
+          fontFamily="medium"
+          textAlign="center"
+        >
+          {i18n.t('screens.createAccount.selectColor')}
+        </TextView>
+        <TextView color={theme.colors.text[0]}>TODO: ColorSelector</TextView>
+      </LinearLayout>
     </SwiperPanel>
   )
 }

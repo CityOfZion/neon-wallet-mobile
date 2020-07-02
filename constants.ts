@@ -136,6 +136,8 @@ export const WINDOW_HEIGHT = Dimensions.get('window').height
 export const SCREEN_WIDTH = Dimensions.get('screen').width
 export const SCREEN_HEIGHT = Dimensions.get('screen').height
 
+export const TAB_BAR_HEIGHT = 66
+
 export const defaultScreenOptions = {
   cardStyle: {
     backgroundColor: 'transparent',
@@ -147,4 +149,5 @@ export const defaultScreenOptions = {
       backgroundColor: 'transparent',
     },
   }),
+  animationEnabled: false,
 }

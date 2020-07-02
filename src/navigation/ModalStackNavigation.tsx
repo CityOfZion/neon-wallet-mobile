@@ -7,7 +7,7 @@ import {defaultScreenOptions, ROUTES} from '~/constants'
 import SampleModal from '~src/scenes/SampleModal'
 import {RootState} from '~src/store/reducers/root'
 
-type ModalStackParamList = {
+export type ModalStackParamList = {
   SampleModal: undefined
 }
 
