@@ -10,6 +10,7 @@ import {
 import styled, {
   ImageView,
   LinearLayout,
+  normalize,
   TextView,
 } from '~src/styles/styled-components'
 
@@ -25,9 +26,9 @@ interface Props {
 
 const ThemedButton: React.FC<Props> = (props) => {
   const baseBgColor = '#2d3941'
-  const width = props.iconSize ? props.iconSize[0] : 20
-  const height = props.iconSize ? props.iconSize[1] : 20
-  const fontSize = props.fontSize ?? 22
+  const width = normalize(props.iconSize ? props.iconSize[0] : 20)
+  const height = normalize(props.iconSize ? props.iconSize[1] : 20)
+  const fontSize = normalize(props.fontSize ?? 22)
 
   const getBorderRadius = () => {
     if (props.rounded) {
@@ -46,7 +47,7 @@ const ThemedButton: React.FC<Props> = (props) => {
       <ButtonContentView
         alignItems="center"
         backgroundColor={props.flat ? 'transparent' : baseBgColor}
-        style={{borderRadius: getBorderRadius()}}
+        style={{borderRadius: getBorderRadius(), height: normalize(50)}}
       >
         {!props.flat && (
           <BrightButton
@@ -76,9 +77,10 @@ const ThemedButton: React.FC<Props> = (props) => {
         >
           {props.srcIcon && (
             <ImageView
-              width={width}
-              height={height}
+              width={width as number}
+              height={height as number}
               mr={3}
+              resizeMode="contain"
               source={props.srcIcon}
             />
           )}
@@ -120,7 +122,6 @@ const ButtonView = styled.TouchableOpacity`
 
 const ButtonContentView = styled(LinearLayout)`
   box-shadow: 0 6px 6px rgba(0, 0, 0, 0.4);
-  height: 50px;
   padding: 0 20px;
 `
 

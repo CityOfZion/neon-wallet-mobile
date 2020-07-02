@@ -2,14 +2,17 @@ import React from 'react'
 import {TouchableHighlight} from 'react-native'
 
 import {WINDOW_WIDTH} from '~/constants'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {
+  ImageView,
+  LinearLayout,
+  normalize,
+  TextView,
+} from '~src/styles/styled-components'
 
 export interface HeaderProps {
   title?: string
   image?: any
   showIcon?: boolean
-  iconMarginRight?: number
-  iconMarginTop?: number
   iconWidth?: number
   onPressToClose?: () => void
 }
@@ -32,17 +35,17 @@ const HeaderBar = (headerProps: HeaderProps) => {
         {headerProps.showIcon && (
           <ImageView
             source={headerProps.image}
-            width={headerProps.iconWidth}
-            mr={headerProps.iconMarginRight}
-            mt={headerProps.iconMarginTop}
-            resizeMode="center"
+            width={normalize(headerProps.iconWidth ?? 20) as number}
+            mr={3}
+            resizeMode="contain"
           />
         )}
 
         <TextView
+          pt={2}
           textAlign="center"
           color="text.0"
-          fontSize={24}
+          fontSize={normalize(24)}
           allowFontScaling={true}
           adjustsFontSizeToFit={true}
           numberOfLines={1}

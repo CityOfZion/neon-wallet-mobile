@@ -1,19 +1,14 @@
-import {useHeaderHeight} from '@react-navigation/stack'
-import {LinearGradient} from 'expo-linear-gradient'
 import React, {useState} from 'react'
-import {useSelector} from 'react-redux'
 
 import AccountCard from '~src/components/AccountCard'
 import ColorPicker from '~src/components/ColorPicker'
+import ScreenLayout from '~src/components/ScreenLayout'
 import i18n from '~src/i18n'
 import {Account} from '~src/models/Account'
-import {RootState} from '~src/store/reducers/root'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 const CustomColorPage: React.FC<object> = () => {
   const defaultCardColor = '#00aaff'
-  const headerHeight = useHeaderHeight()
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
 
   const [color, setColor] = useState<string>(defaultCardColor)
 
@@ -31,33 +26,27 @@ const CustomColorPage: React.FC<object> = () => {
   }
 
   return (
-    <LinearGradient
-      style={{flex: 1}}
-      colors={[theme.colors.background[1], theme.colors.background[2]]}
-      start={[0.1, 0.1]}
-      end={[1, 1]}
-    >
-      <LinearLayout
-        orientation={'verti'}
-        alignItems={'center'}
-        width={'100%'}
-        height={'100%'}
-        p={4}
-        mt={headerHeight}
-      >
-        <LinearLayout mb={5} maxWidth={320}>
-          <AccountCard account={account} />
-        </LinearLayout>
-
-        <TextView mb={3} color="text.0" textAlign={'center'} fontSize={'lg'}>
-          {i18n.t('customColorPage.subtitle')}
-        </TextView>
-
-        <LinearLayout weight={1} mb={headerHeight} maxHeight={420}>
-          <ColorPicker color={color} onChange={colorPickerChangeEvent} />
-        </LinearLayout>
+    <ScreenLayout autoScroll={false} alignX={'center'}>
+      <LinearLayout mb={5} maxWidth={320}>
+        <AccountCard account={account} />
       </LinearLayout>
-    </LinearGradient>
+
+      <TextView
+        mb={3}
+        color="text.0"
+        textAlign={'center'}
+        fontSize={'lg'}
+        allowFontScaling={true}
+        adjustsFontSizeToFit={true}
+        numberOfLines={1}
+      >
+        {i18n.t('customColorPage.subtitle')}
+      </TextView>
+
+      <LinearLayout weight={1}>
+        <ColorPicker color={color} onChange={colorPickerChangeEvent} />
+      </LinearLayout>
+    </ScreenLayout>
   )
 }
 

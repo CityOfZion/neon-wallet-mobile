@@ -57,6 +57,10 @@ export const ROUTES = {
     id: 'WELCOME',
     name: 'Welcome' as 'Welcome',
   },
+  CREATE_WALLET: {
+    id: 'CREATE_WALLET',
+    name: 'CreateWallet' as 'CreateWallet',
+  },
   CUSTOM_COLOR: {
     id: 'CUSTOM_COLOR',
     name: 'CustomColor' as 'CustomColor',

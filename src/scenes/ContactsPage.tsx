@@ -1,14 +1,15 @@
 import React from 'react'
 
+import ScreenLayout from '~src/components/ScreenLayout'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 const ContactsPage = () => {
   return (
-    <LinearLayout bg="background.0" height="100%" justifyContent="center">
-      <TextView color="text.0" fontSize="48px" textAlign="center">
+    <ScreenLayout useHeaderPadding={false}>
+      <TextView color="text.0" fontSize="3xl" textAlign="center">
         Contacts Page
       </TextView>
-    </LinearLayout>
+    </ScreenLayout>
   )
 }
 
