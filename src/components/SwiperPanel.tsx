@@ -301,9 +301,7 @@ export default function SwiperPanel(props: SwiperProps) {
         pointerEvents={'box-none'}
       >
         {controller.isShowing ? (
-          <TouchableWithoutFeedback
-            onPress={() => controller.close() }
-          >
+          <TouchableWithoutFeedback onPress={() => controller.close()}>
             <View
               style={{
                 width: '100%',

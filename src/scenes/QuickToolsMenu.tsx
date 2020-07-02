@@ -1,11 +1,12 @@
 import {useNavigation} from '@react-navigation/native'
+import i18n from 'i18n-js'
 import React from 'react'
 import {ImageSourcePropType, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {ROUTES, TAB_BAR_HEIGHT} from '~/constants'
+import {FOOTER_HEIGHT} from '~/constants'
+import {useRoutePath} from '~src/app/RouteUtils'
 import SwiperPanel, {SwiperController} from '~src/components/SwiperPanel'
-import i18n from '~src/i18n'
 import {RootState} from '~src/store/reducers/root'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -23,6 +24,7 @@ interface Props {
 export default function QuickToolsMenu(props: Props) {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
   const navigation = useNavigation()
+  const path = useRoutePath()
 
   const items: ListItem[] = [
     {
@@ -30,8 +32,8 @@ export default function QuickToolsMenu(props: Props) {
       subtitle: i18n.t('quickTools.qrCode.subtitle'),
       source: require('~src/assets/images/icon-circle-qr-primary.png'),
       onClick: () =>
-        navigation.navigate(ROUTES.QUICK_TOOLS.name, {
-          screen: ROUTES.QR_CODE_SCAN_TEST.name,
+        navigation.navigate(path.QuickTools.name, {
+          screen: path.QrCodeScanTest.name,
         }),
     },
     {
@@ -40,7 +42,7 @@ export default function QuickToolsMenu(props: Props) {
       source: require('~src/assets/images/icon-circle-send-primary.png'),
       onClick: () =>
         navigation.navigate('Modal', {
-          screen: ROUTES.SEND_WALLET_SELECTION_MODAL.name,
+          screen: path.SendWalletSelectionModal.name,
         }),
     },
     {
@@ -49,7 +51,7 @@ export default function QuickToolsMenu(props: Props) {
       source: require('~src/assets/images/icon-circle-receive-primary.png'),
       onClick: () =>
         navigation.navigate('Modal', {
-          screen: ROUTES.RECEIVE_WALLET_SELECTION_MODAL.name,
+          screen: path.ReceiveWalletSelectionModal.name,
         }),
     },
   ]
@@ -67,7 +69,7 @@ export default function QuickToolsMenu(props: Props) {
       paddingLeft={36}
       paddingRight={36}
       paddingTop={40}
-      paddingBottom={24 + TAB_BAR_HEIGHT}
+      paddingBottom={24 + FOOTER_HEIGHT}
     >
       {items.map((item, index) => (
         <TouchableWithoutFeedback

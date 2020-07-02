@@ -1,5 +1,5 @@
 import {LinearGradient} from 'expo-linear-gradient'
-import {PixelRatio, Platform} from 'react-native'
+import {PixelRatio, Platform, TextInputProps} from 'react-native'
 import * as styledComponents from 'styled-components/native'
 import {
   border,
@@ -14,6 +14,7 @@ import {
   PositionProps,
   space,
   SpaceProps,
+  textStyle,
   TextStyleProps,
   typography,
   TypographyProps,
@@ -51,117 +52,106 @@ const {
   DefaultTheme
 >
 
-const TextView = styled.Text<
-  ColorProps &
-    OrientationProps &
-    SpaceProps &
-    LayoutProps &
-    FlexboxProps &
-    WeightProps &
-    TypographyProps &
-    PositionProps &
-    TextStyleProps
->`
+export type TextViewProps = ColorProps &
+  OrientationProps &
+  SpaceProps &
+  LayoutProps &
+  FlexboxProps &
+  WeightProps &
+  TypographyProps &
+  PositionProps &
+  TextStyleProps
+
+const TextView = styled.Text<TextViewProps>`
   font-family: 'regular';
-  ${color}
-  ${typography}
-  ${space}
-  ${layout}
-  ${flexbox}
-  ${position}
-  ${weight}
+  ${color} ${typography} ${space} ${layout} ${flexbox} ${position} ${weight} ${textStyle}
 `
 
-const ImageView = styled.Image<
-  SpaceProps & LayoutProps & FlexboxProps & PositionProps & WeightProps
->`
-  ${space}
-  ${layout}
-  ${flexbox}
-  ${position}
-  ${weight}
-`
-
-const LinearLayout = styled.View<
+export type InputTextViewProps = TextInputProps &
   BorderProps &
-    ColorProps &
-    OrientationProps &
-    SpaceProps &
-    LayoutProps &
-    FlexboxProps &
-    WeightProps &
-    PositionProps
->`
-  ${border}  
-  ${color}
-  ${orientation}
-  ${space}
-  ${layout}
-  ${flexbox}
-  ${weight}
-  ${position}
+  ColorProps &
+  TypographyProps &
+  OrientationProps &
+  SpaceProps &
+  LayoutProps &
+  FlexboxProps &
+  WeightProps &
+  PositionProps &
+  TextStyleProps
+
+const InputTextView = styled.TextInput<InputTextViewProps>`
+  ${border} ${color} ${typography} ${orientation} ${space} ${layout} ${flexbox} ${weight} ${position} ${textStyle}
 `
 
-const RelativeLayout = styled.View<
-  BorderProps &
-    ColorProps &
-    OrientationProps &
-    SpaceProps &
-    LayoutProps &
-    FlexboxProps &
-    WeightProps &
-    PositionProps
->`
+export type ImageViewProps = SpaceProps &
+  LayoutProps &
+  FlexboxProps &
+  PositionProps &
+  WeightProps
+
+const ImageView = styled.Image<ImageViewProps>`
+  ${space} ${layout} ${flexbox} ${position} ${weight}
+`
+
+export type LinearLayoutProps = BorderProps &
+  ColorProps &
+  OrientationProps &
+  SpaceProps &
+  LayoutProps &
+  FlexboxProps &
+  WeightProps &
+  PositionProps
+
+const LinearLayout = styled.View<LinearLayoutProps>`
+  ${border} ${color} ${orientation} ${space} ${layout} ${flexbox} ${weight} ${position}
+`
+
+export type RelativeLayoutProps = BorderProps &
+  ColorProps &
+  OrientationProps &
+  SpaceProps &
+  LayoutProps &
+  FlexboxProps &
+  WeightProps &
+  PositionProps
+
+const RelativeLayout = styled.View<RelativeLayoutProps>`
   position: relative;
   > * {
     position: absolute;
   }
-  ${border}  
-  ${color}
-  ${orientation}
-  ${space}
-  ${layout}
-  ${flexbox}
-  ${weight}
-  ${position}
+  ${border} ${color} ${orientation} ${space} ${layout} ${flexbox} ${weight} ${position}
 `
 
-const ButtonView = styled.TouchableOpacity<
-  ColorProps &
-    FlexboxProps &
-    SpaceProps &
-    BorderProps &
-    LayoutProps &
-    OrientationProps &
-    PositionProps &
-    WeightProps
->`
-  ${layout}
-  ${color}
-  ${flexbox}
-  ${space}
-  ${border}
-  ${orientation}
-  ${position}
-  ${weight}
+export type ButtonViewProps = ColorProps &
+  FlexboxProps &
+  SpaceProps &
+  BorderProps &
+  LayoutProps &
+  OrientationProps &
+  PositionProps &
+  WeightProps
+
+const ButtonView = styled.TouchableOpacity<ButtonViewProps>`
+  ${layout} ${color} ${flexbox} ${space} ${border} ${orientation} ${position} ${weight}
 `
 
-const LinearGradientLayout = styled(LinearGradient)<
-  ColorProps & SpaceProps & LayoutProps & FlexboxProps
->`
-  ${layout}
-  ${color}
-  ${space}
-  ${flexbox || 'flex: 1;'}
+export type LinearGradientLayoutProps = ColorProps &
+  SpaceProps &
+  LayoutProps &
+  FlexboxProps
+
+const LinearGradientLayout = styled(LinearGradient)<LinearGradientLayoutProps>`
+  ${layout} ${color} ${space} ${flexbox || 'flex: 1;'}
 `
 
-const StyledScrollView = styled.ScrollView<
-  FlexboxProps & OrientationProps & LayoutProps & SpaceProps
->`
-  ${orientation}
-  ${flexbox}
-  ${layout}
-  ${space}
+export type StyledScrollViewProps = FlexboxProps &
+  OrientationProps &
+  LayoutProps &
+  SpaceProps
+
+const StyledScrollView = styled.ScrollView<StyledScrollViewProps>`
+  ${orientation} ${flexbox} ${layout} ${space}
 `
 
 export interface DefaultTheme {
@@ -179,7 +169,9 @@ export interface DefaultTheme {
   }
 }
 
-export function normalize(value: string | number) {
+export function normalize<T extends string | number>(
+  value?: string | number
+): T {
   let size
 
   if (typeof value === 'string') {
@@ -195,13 +187,13 @@ export function normalize(value: string | number) {
   const newSize = Number(size) * scale
 
   if (isNaN(newSize)) {
-    return value
+    return value as T
   }
 
   if (Platform.OS === 'ios') {
-    return Math.round(PixelRatio.roundToNearestPixel(newSize))
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) as T
   } else {
-    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+    return (Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2) as T
   }
 }
 
@@ -211,6 +203,7 @@ export {
   LinearLayout,
   RelativeLayout,
   TextView,
+  InputTextView,
   ImageView,
   ButtonView,
   StyleConstants,

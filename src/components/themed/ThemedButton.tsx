@@ -1,5 +1,6 @@
+import _ from 'lodash'
 import PropTypes from 'prop-types'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {
   ImageLoadEventData,
   NativeSyntheticEvent,
@@ -7,7 +8,7 @@ import {
   StyleProp,
 } from 'react-native'
 
-import ThemedCard from '~src/components/ThemedCard'
+import ThemedCard from '~src/components/themed/ThemedCard'
 import styled, {
   ImageView,
   LinearLayout,
@@ -20,12 +21,13 @@ interface Props {
     e: NativeSyntheticEvent<NativeTouchEvent>,
     active?: boolean
   ) => void
-  label: string
+  label?: string
   textColor?: string
   bgColor?: string
   srcIcon?: ImageLoadEventData
   toggleable?: boolean
   active?: boolean
+  disabled?: boolean
   rounded?: boolean
   flat?: boolean
   basic?: boolean
@@ -39,6 +41,10 @@ const ThemedButton: React.FC<Props> = (props) => {
   const width = normalize(props.iconSize ? props.iconSize[0] : 20)
   const height = normalize(props.iconSize ? props.iconSize[1] : 20)
   const fontSize = normalize(props.fontSize ?? 22)
+
+  useEffect(() => {
+    setActive(props.active ?? false)
+  }, [props.active])
 
   const getStyle = (): StyleProp<any> => {
     const style = {
@@ -54,11 +60,7 @@ const ThemedButton: React.FC<Props> = (props) => {
       borderWidth: 1,
     }
 
-    return Object.assign(
-      props.contentStyle ?? {},
-      style,
-      isActive ? styleActive : {}
-    )
+    return _.merge(style, isActive ? styleActive : {}, props.contentStyle ?? {})
   }
 
   const _renderLabel = () => {
@@ -68,23 +70,25 @@ const ThemedButton: React.FC<Props> = (props) => {
           <ImageView
             width={width as number}
             height={height as number}
-            mr={3}
+            mr={props.label ? 3 : undefined}
             resizeMode="contain"
             source={props.srcIcon}
           />
         )}
 
-        <LabelView
-          mt={2}
-          color={props.textColor}
-          fontSize={fontSize}
-          fontFamily={props.flat ? 'bold' : 'regular'}
-          allowFontScaling={true}
-          adjustsFontSizeToFit={true}
-          numberOfLines={1}
-        >
-          {props.label}
-        </LabelView>
+        {props.label && (
+          <LabelView
+            mt={2}
+            color={props.textColor}
+            fontSize={fontSize}
+            fontFamily={props.flat ? 'bold' : 'regular'}
+            allowFontScaling={true}
+            adjustsFontSizeToFit={true}
+            numberOfLines={1}
+          >
+            {props.label}
+          </LabelView>
+        )}
       </LinearLayout>
     )
   }
@@ -100,6 +104,8 @@ const ThemedButton: React.FC<Props> = (props) => {
           props.onPress(e, props.toggleable ? !isActive : undefined)
         }
       }}
+      style={{opacity: props.disabled ? 0.4 : undefined}}
+      disabled={props.disabled}
     >
       <ThemedCard
         contentStyle={getStyle()}
@@ -117,12 +123,13 @@ const ThemedButton: React.FC<Props> = (props) => {
 
 ThemedButton.propTypes = {
   onPress: PropTypes.func,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   textColor: PropTypes.string,
   bgColor: PropTypes.string,
   srcIcon: PropTypes.any,
   toggleable: PropTypes.bool,
   active: PropTypes.bool,
+  disabled: PropTypes.bool,
   rounded: PropTypes.bool,
   flat: PropTypes.bool,
   basic: PropTypes.bool,
@@ -135,6 +142,7 @@ ThemedButton.defaultProps = {
   textColor: 'primary',
   toggleable: false,
   active: false,
+  disabled: false,
   rounded: true,
   flat: false,
   basic: false,

@@ -1,18 +1,19 @@
+import i18n from 'i18n-js'
 import React, {useRef, useState} from 'react'
+import {ScrollView} from 'react-native'
+import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
 
+import {WINDOW_WIDTH} from '~/constants'
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {useRoutePath} from '~src/app/RouteUtils'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
-import i18n from '~src/i18n'
+import WalletCard from '~src/components/WalletCard'
+import {FilterHelper} from '~src/helpers/FilterHelper'
+import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootState} from '~src/store/reducers/root'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
-import Carousel from 'react-native-snap-carousel'
-import WalletCard from '~src/components/WalletCard'
-import {mockWalletItems} from '~src/mockWalletItems'
-import {ROUTES, WINDOW_WIDTH} from '~/constants'
-import {FilterHelper} from '~src/helpers/FilterHelper'
-import {ScrollView} from 'react-native'
+import {TextView} from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -24,6 +25,7 @@ const ReceiveWalletSelectionModal = (props: Props) => {
   const [wallets, setWallets] = useState(mockWalletItems)
   const carouselRef = useRef(null)
   const currency = useSelector((state: RootState) => state.app.currency)
+  const path = useRoutePath()
 
   return (
     <SwiperPanel
@@ -63,19 +65,29 @@ const ReceiveWalletSelectionModal = (props: Props) => {
           activeSlideOffset={5}
           swipeThreshold={5}
           enableSnap={true}
-          renderItem={({item}) =>
+          renderItem={({item}) => (
             <WalletCard
               onPress={() =>
-                props.navigation.navigate(ROUTES.RECEIVE_WALLET_SELECTION_MODAL.name)
+                props.navigation.navigate(path.ReceiveWalletSelectionModal.name)
               }
               height={330}
               wallet={item}
             />
-          }
+          )}
           onSnapToItem={(index) => setActiveIndex(index)}
         />
-        <TextView alignSelf="center" fontSize="36px" color="text.0" fontFamily="medium">
-          {FilterHelper.currency(wallets[activeIndex].currentValue, currency, false, true)}
+        <TextView
+          alignSelf="center"
+          fontSize="36px"
+          color="text.0"
+          fontFamily="medium"
+        >
+          {FilterHelper.currency(
+            wallets[activeIndex].currentValue,
+            currency,
+            false,
+            true
+          )}
         </TextView>
       </ScrollView>
     </SwiperPanel>

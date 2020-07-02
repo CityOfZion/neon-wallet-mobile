@@ -46,7 +46,7 @@ const ThemedCheckbox: React.FC<Props> = (props) => {
               width={24}
               height={24}
               resizeMode={'contain'}
-              source={require('~/src/assets/images/icon-check-green.png')}
+              source={require('~src/assets/images/icon-check-green.png')}
             />
           )}
         </CheckboxBoxView>

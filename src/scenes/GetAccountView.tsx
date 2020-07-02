@@ -1,15 +1,15 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React, {useEffect, useState} from 'react'
 import {SafeAreaView} from 'react-native'
 
 import AccountCard from '~src/components/AccountCard'
 import BalanceList from '~src/components/BalanceList'
-import ThemedButton from '~src/components/ThemedButton'
 import TransactionsList from '~src/components/TransactionsList'
+import ThemedButton from '~src/components/themed/ThemedButton'
 import {FilterHelper} from '~src/helpers/FilterHelper'
-import i18n from '~src/i18n'
-import {mockWalletItems} from '~src/mockWalletItems'
+import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {NeoNode} from '~src/models/NeoNode'
 import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
 import {

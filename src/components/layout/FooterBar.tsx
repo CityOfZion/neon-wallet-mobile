@@ -17,7 +17,8 @@ import {
   SpaceProps,
 } from 'styled-system'
 
-import {ROUTES, WINDOW_WIDTH, TAB_BAR_HEIGHT} from '~/constants'
+import {WINDOW_WIDTH, FOOTER_HEIGHT} from '~/constants'
+import {useRoutePath} from '~src/app/RouteUtils'
 import {useSwiperController} from '~src/components/SwiperPanel'
 import QuickToolsMenu from '~src/scenes/QuickToolsMenu'
 import {RootState} from '~src/store/reducers/root'
@@ -33,9 +34,10 @@ import {
   WeightProps,
 } from '~src/styles/styled-system.config'
 
-const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
+const FooterBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
   const focusedOptions = descriptors[state.routes[state.index].key].options
+  const path = useRoutePath()
 
   if (focusedOptions.tabBarVisible === false) {
     return null
@@ -84,7 +86,7 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
     >
       <QuickToolsMenu controller={controller} />
       <TabBarContainer
-        height={TAB_BAR_HEIGHT}
+        height={FOOTER_HEIGHT}
         width={WINDOW_WIDTH}
         bg={'background.0'}
       >
@@ -115,7 +117,7 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
           >
             <TabButton
               height="100%"
-              onPress={() => navigation.navigate(ROUTES.LIST_WALLETS.name)}
+              onPress={() => navigation.navigate(path.ListWallets.name)}
               weight={1}
             >
               <ImageView
@@ -126,7 +128,7 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
             </TabButton>
             <TabButton
               height="100%"
-              onPress={() => navigation.navigate(ROUTES.CONTACTS.name)}
+              onPress={() => navigation.navigate(path.Contacts.name)}
               weight={1}
             >
               <ImageView
@@ -164,7 +166,7 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
             </TabButton>
             <TabButton
               height="100%"
-              onPress={() => navigation.navigate(ROUTES.SETTINGS.name)}
+              onPress={() => navigation.navigate(path.Settings.name)}
               weight={1}
             >
               <ImageView
@@ -176,7 +178,7 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
             <TabButton
               height="100%"
               top="4px"
-              onPress={() => navigation.navigate(ROUTES.MORE.name)}
+              onPress={() => navigation.navigate(path.More.name)}
               weight={1}
             >
               <ImageView
@@ -201,8 +203,9 @@ const TabBarContainer = styled.SafeAreaView<
 `
 
 const TabButton = styled.TouchableOpacity<
-  LayoutProps & PositionProps & WeightProps
+  SpaceProps & LayoutProps & PositionProps & WeightProps
 >`
+  ${space} 
   ${layout}
   ${position}
   ${weight}
@@ -238,4 +241,4 @@ const AnimatedLinearLayout = styled(Animated.View)<
   ${position}
 `
 
-export default TabBar
+export default FooterBar

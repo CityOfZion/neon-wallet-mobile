@@ -1,5 +1,6 @@
+import i18n from 'i18n-js'
+
 import {DEFAULT_CURRENCY} from '~/constants'
-import i18n from '~src/i18n'
 import {IAppAction, SET_CURRENCY, SET_LOCALE} from '~src/store/actions/app'
 
 interface IAppState {

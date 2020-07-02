@@ -4,7 +4,7 @@ import React from 'react'
 import {SafeAreaView, ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {HEADER_HEIGHT, TAB_BAR_HEIGHT} from '~/constants'
+import {HEADER_HEIGHT, FOOTER_HEIGHT} from '~/constants'
 import {RootState} from '~src/store/reducers/root'
 import {LinearLayout, normalize} from '~src/styles/styled-components'
 
@@ -20,7 +20,7 @@ interface Props {
 
 const ScreenLayout: React.FC<Props> = (props) => {
   const headerHeight = props.useHeaderPadding ? HEADER_HEIGHT : 0
-  const tabBarHeight = props.useTabBarPadding ? TAB_BAR_HEIGHT : 0
+  const tabBarHeight = props.useTabBarPadding ? FOOTER_HEIGHT : 0
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
 
   return (
@@ -33,6 +33,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
         <ScrollView
           scrollEnabled={props.autoScroll}
           alwaysBounceVertical={false}
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={{flexGrow: 1}}
           style={{marginTop: headerHeight, marginBottom: tabBarHeight}}
         >

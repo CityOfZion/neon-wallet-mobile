@@ -1,9 +1,9 @@
+import i18n from 'i18n-js'
 import React, {useState} from 'react'
 
 import AccountCard from '~src/components/AccountCard'
-import ColorPicker from '~src/components/ColorPicker'
-import ScreenLayout from '~src/components/ScreenLayout'
-import i18n from '~src/i18n'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ColorPicker from '~src/components/misc/ColorPicker'
 import {Account} from '~src/models/Account'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 

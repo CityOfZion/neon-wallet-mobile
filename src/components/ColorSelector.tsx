@@ -1,11 +1,15 @@
 import {useNavigation} from '@react-navigation/native'
 import {LinearGradient as ExpoLinearGradient} from 'expo-linear-gradient'
+import i18n from 'i18n-js'
 import React, {Fragment} from 'react'
+import {TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 import styled from 'styled-components'
 import {layout, LayoutProps} from 'styled-system'
 
+import {useRoutePath} from '~src/app/RouteUtils'
 import {FilterHelper} from '~src/helpers/FilterHelper'
+import {UtilsHelper} from '~src/helpers/UtilsHelper'
 import {RootState} from '~src/store/reducers/root'
 import {
   ImageView,
@@ -13,10 +17,6 @@ import {
   RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {TouchableWithoutFeedback} from 'react-native'
-import {ROUTES} from '~/constants'
-import i18n from '~src/i18n'
-import {UtilsHelper} from '~src/helpers/UtilsHelper'
 
 interface Props {
   onSelect?: (hex: string) => void
@@ -25,6 +25,7 @@ interface Props {
 export default function ColorSelector(props: Props) {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
   const navigation = useNavigation()
+  const path = useRoutePath()
 
   // Each button
   const buttonList = theme.colors.card.map((color, key) => (
@@ -48,7 +49,7 @@ export default function ColorSelector(props: Props) {
   const customColorButton = (
     <TouchableWithoutFeedback
       onPress={() => {
-        navigation.navigate(ROUTES.CUSTOM_COLOR.name)
+        navigation.navigate(path.CustomColor.name)
       }}
     >
       <RelativeLayout width={71} height={71}>
@@ -88,7 +89,11 @@ export default function ColorSelector(props: Props) {
           justifyContent="space-between"
           key={key}
           mt={key === 0 ? 0 : 16 /* If first group of buttons, no top margin*/}
-          mb={key === buttonGroup.length - 1 ? 0 : 16 /* If last group of buttons, no bottom margin*/}
+          mb={
+            key === buttonGroup.length - 1
+              ? 0
+              : 16 /* If last group of buttons, no bottom margin*/
+          }
         >
           {button}
         </LinearLayout>

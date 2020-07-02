@@ -1,12 +1,9 @@
-import {useNavigation, useRoute} from '@react-navigation/native'
+import i18n from 'i18n-js'
 import React, {useState} from 'react'
-import {TouchableHighlight, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
-import i18n from '~src/i18n'
-import {Account} from '~src/models/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootState} from '~src/store/reducers/root'
 import {LinearLayout, TextView} from '~src/styles/styled-components'

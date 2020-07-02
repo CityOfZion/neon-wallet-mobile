@@ -1,4 +1,5 @@
 import {LinearGradient} from 'expo-linear-gradient'
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
 import {
@@ -25,7 +26,7 @@ import {
 } from 'styled-system'
 
 import {FilterHelper} from '~src/helpers/FilterHelper'
-import i18n from '~src/i18n'
+import {UtilsHelper} from '~src/helpers/UtilsHelper'
 import {Account} from '~src/models/Account'
 import styled, {
   ImageView,
@@ -53,12 +54,6 @@ const AccountCard: React.FC<Props> = (props) => {
   const layoutEvent = (event: LayoutChangeEvent) => {
     const {height} = event.nativeEvent.layout
     setViewHeight(height)
-  }
-
-  const copyToClipboard = () => {
-    if (props.account.address) {
-      Clipboard.setString(props.account.address)
-    }
   }
 
   return (
@@ -242,7 +237,9 @@ const AccountCard: React.FC<Props> = (props) => {
 
             {!props.isStackMode && (
               <TouchableOpacity
-                onPress={copyToClipboard}
+                onPress={() =>
+                  UtilsHelper.copyToClipboard(props.account.address)
+                }
                 style={{
                   paddingTop: 12 * unit,
                   paddingLeft: 12 * unit,

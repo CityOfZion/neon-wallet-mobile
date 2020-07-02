@@ -1,13 +1,13 @@
 import {useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
+import i18n from 'i18n-js'
 import React from 'react'
 import {ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {SCREEN_WIDTH} from '~/constants'
 import NeonQRCode from '~src/components/QRCode'
-import ThemedButton from '~src/components/ThemedButton'
-import i18n from '~src/i18n'
+import ThemedButton from '~src/components/themed/ThemedButton'
 import {RootState} from '~src/store/reducers/root'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 

@@ -1,13 +1,13 @@
 import {useAsyncStorage} from '@react-native-community/async-storage'
 import {useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
+import i18n from 'i18n-js'
 import React from 'react'
 import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {useSelector} from 'react-redux'
 
-import i18n from '~/src/i18n'
-import ThemedButton from '~src/components/ThemedButton'
+import ThemedButton from '~/src/components/themed/ThemedButton'
 import {RootState} from '~src/store/reducers/root'
 import styled, {
   ImageView,
@@ -75,7 +75,7 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
   )
 }
 
-const Onboarding = (props: {
+const OnboardingPage = (props: {
   seenSetter: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
@@ -211,4 +211,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Onboarding
+export default OnboardingPage

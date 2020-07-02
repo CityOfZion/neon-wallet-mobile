@@ -1,6 +1,6 @@
+import i18n from 'i18n-js'
 import React from 'react'
 
-import i18n from '~src/i18n'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 const mockNames = ['Tyler', 'Jack W']

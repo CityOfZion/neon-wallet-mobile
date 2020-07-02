@@ -1,4 +1,5 @@
 import {LinearGradient} from 'expo-linear-gradient'
+import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {StyleProp} from 'react-native'
@@ -57,10 +58,10 @@ const ThemedCard: React.FC<Props> = (props) => {
       elevation: 10,
     }
 
-    return Object.assign(
-      props.contentStyle ?? {},
+    return _.merge(
       style,
-      props.hasShadow ? styleShadow : {}
+      props.hasShadow ? styleShadow : {},
+      props.contentStyle ?? {}
     )
   }
 

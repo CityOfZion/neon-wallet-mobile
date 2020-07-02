@@ -1,8 +1,8 @@
+import i18n from 'i18n-js'
 import React from 'react'
 import {FlatList} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import i18n from '~src/i18n'
 import {TokenValue} from '~src/models/TokenValue'
 import {RootState} from '~src/store/reducers/root'
 import {LinearLayout, TextView} from '~src/styles/styled-components'

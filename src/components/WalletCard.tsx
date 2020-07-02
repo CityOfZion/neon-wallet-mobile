@@ -1,9 +1,5 @@
-import {useNavigation} from '@react-navigation/native'
-import React, {useState} from 'react'
+import React from 'react'
 
-import {ROUTES} from '~/constants'
-import {mockWalletAccounts} from '~src/mockWalletAccounts'
-import {Account} from '~src/models/Account'
 import {TokenValue} from '~src/models/TokenValue'
 import {Wallet} from '~src/models/Wallet'
 import styled, {
@@ -21,8 +17,6 @@ interface WalletCardProps {
 }
 
 const WalletCard = (props: WalletCardProps) => {
-  const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
-
   const _renderAccountCard = (asset: TokenValue, i: number) => {
     if (!asset || i > 2) return null
     const bottomOffset = 28 - 6 * i

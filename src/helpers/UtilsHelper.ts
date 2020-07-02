@@ -1,4 +1,6 @@
+import {classToClass, ClassTransformOptions} from 'class-transformer'
 import _ from 'lodash'
+import {Clipboard} from 'react-native'
 
 export abstract class UtilsHelper {
   static chunkPadded<T>(array: (T | null)[], n: number, padWith?: T | null) {
@@ -12,5 +14,15 @@ export abstract class UtilsHelper {
     }
 
     return arrayGroup
+  }
+
+  static copyToClipboard(content?: string) {
+    if (content) {
+      Clipboard.setString(content)
+    }
+  }
+
+  static clone<T>(fromEntity: T, options?: ClassTransformOptions): T {
+    return classToClass(fromEntity, options)
   }
 }

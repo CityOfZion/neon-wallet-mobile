@@ -3,7 +3,8 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {ROUTES} from '~/constants'
+import {useRoutePath} from '~src/app/RouteUtils'
+import {Account} from '~src/models/Account'
 import GetAccountView from '~src/scenes/GetAccountView'
 import GetWalletView from '~src/scenes/GetWalletView'
 import ListWalletsView from '~src/scenes/ListWalletsView'
@@ -19,20 +20,21 @@ const WalletStack = createStackNavigator<WalletStackParamList>()
 
 const WalletStackNavigation = () => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const path = useRoutePath()
 
   return (
     <ThemeProvider theme={theme}>
-      <WalletStack.Navigator initialRouteName={ROUTES.LIST_WALLETS.name}>
+      <WalletStack.Navigator initialRouteName={path.ListWallets.name}>
         <WalletStack.Screen
-          name={ROUTES.LIST_WALLETS.name}
+          name={path.ListWallets.name}
           component={ListWalletsView}
         />
         <WalletStack.Screen
-          name={ROUTES.GET_WALLET.name}
+          name={path.GetWallet.name}
           component={GetWalletView}
         />
         <WalletStack.Screen
-          name={ROUTES.GET_ACCOUNT.name}
+          name={path.GetAccount.name}
           component={GetAccountView}
         />
       </WalletStack.Navigator>

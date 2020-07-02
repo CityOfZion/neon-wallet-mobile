@@ -1,14 +1,19 @@
 import {useAsyncStorage} from '@react-native-community/async-storage'
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {TouchableOpacity} from 'react-native'
 
-import {ROUTES} from '~/constants'
-import ScreenLayout from '~src/components/ScreenLayout'
-import ThemedButton from '~src/components/ThemedButton'
-import ThemedCheckbox from '~src/components/ThemedCheckbox'
-import i18n from '~src/i18n'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {useRoutePath} from '~src/app/RouteUtils'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ThemedButton from '~src/components/themed/ThemedButton'
+import ThemedCheckbox from '~src/components/themed/ThemedCheckbox'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
+import {
+  ImageView,
+  LinearLayout,
+  normalize,
+  TextView,
+} from '~src/styles/styled-components'
 
 interface Props {
   onClose?: (routeTargetName?: string) => void
@@ -16,6 +21,7 @@ interface Props {
 
 const WelcomePage: React.FC<Props> = (props) => {
   const {setItem} = useAsyncStorage('@welcomeDontShow')
+  const path = useRoutePath()
 
   return (
     <ScreenLayout
@@ -44,7 +50,7 @@ const WelcomePage: React.FC<Props> = (props) => {
         {i18n.t('welcome.body_1_1')}
 
         <TextView
-          onPress={() => props.onClose?.(ROUTES.SETTINGS.name)}
+          onPress={() => props.onClose?.(path.Settings.name)}
           color={'primary'}
         >
           {i18n.t('welcome.body_1_2')}
@@ -53,7 +59,7 @@ const WelcomePage: React.FC<Props> = (props) => {
         {i18n.t('welcome.body_1_3')}
 
         <TextView
-          onPress={() => props.onClose?.(ROUTES.LIST_WALLETS.name)}
+          onPress={() => props.onClose?.(path.ListWallets.name)}
           color={'primary'}
         >
           {i18n.t('welcome.body_1_4')}
@@ -67,7 +73,7 @@ const WelcomePage: React.FC<Props> = (props) => {
       <LinearLayout mb={5} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
-          onPress={() => props.onClose?.(ROUTES.LIST_WALLETS.name)}
+          onPress={() => props.onClose?.(path.ListWallets.name)}
           label={i18n.t('welcome.button_1')}
           flat={true}
         />
@@ -76,7 +82,7 @@ const WelcomePage: React.FC<Props> = (props) => {
       <LinearLayout mb={6} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
-          onPress={() => props.onClose?.(ROUTES.LIST_WALLETS.name)}
+          onPress={() => props.onClose?.(path.ListWallets.name)}
           label={i18n.t('welcome.button_2')}
         />
       </LinearLayout>
@@ -84,7 +90,7 @@ const WelcomePage: React.FC<Props> = (props) => {
       <LinearLayout mb={7} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
-          onPress={() => props.onClose?.(ROUTES.LIST_WALLETS.name)}
+          onPress={() => props.onClose?.(path.ListWallets.name)}
           label={i18n.t('welcome.button_3')}
         />
       </LinearLayout>
@@ -96,21 +102,13 @@ const WelcomePage: React.FC<Props> = (props) => {
         />
       </LinearLayout>
 
-      <TouchableOpacity
-        onPress={() => props.onClose?.()}
-        style={{
-          position: 'absolute',
-          right: 0,
-          padding: 20,
-        }}
+      <LinearLayout
+        position={'absolute'}
+        right={normalize(5)}
+        top={normalize(5)}
       >
-        <ImageView
-          width={18}
-          height={18}
-          resizeMode={'contain'}
-          source={require('~/src/assets/images/close.png')}
-        />
-      </TouchableOpacity>
+        <ThemedCloseButton onPress={() => props.onClose?.()} />
+      </LinearLayout>
     </ScreenLayout>
   )
 }

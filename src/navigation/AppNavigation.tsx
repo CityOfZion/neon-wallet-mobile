@@ -9,7 +9,7 @@ import ModalStackNavigation from '~src/navigation/ModalStackNavigation'
 import TabNavigation from '~src/navigation/TabNavigation'
 import {RootState} from '~src/store/reducers/root'
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Tab: undefined
   Modal: undefined
 }

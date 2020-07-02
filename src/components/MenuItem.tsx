@@ -1,9 +1,12 @@
 import React from 'react'
 import {TouchableHighlight} from 'react-native'
-import {LayoutProps} from 'styled-system'
 
-import i18n from '~src/i18n'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {
+  ImageView,
+  LinearLayout,
+  normalize,
+  TextView,
+} from '~src/styles/styled-components'
 
 export enum RightIconType {
   NONE,
@@ -54,13 +57,13 @@ const MenuItem = (props: MenuItemProps) => {
 
   return (
     <TouchableHighlight underlayColor="transparent" onPress={props.onPress}>
-      <LinearLayout orientation="verti" width="100%" pr={20} pl={20}>
+      <LinearLayout orientation="verti" width="100%">
         <LinearLayout
           alignItems="center"
           orientation="horiz"
-          height={65}
+          height={normalize(65)}
           width="100%"
-          pl={1}
+          pl={normalize(1)}
         >
           {props.icon && (
             <ImageView
@@ -69,14 +72,19 @@ const MenuItem = (props: MenuItemProps) => {
               ml={props.iconMarginLeft}
               mr={props.iconMarginRight}
               source={props.icon}
-              resizeMode="center"
+              resizeMode="contain"
             />
           )}
-          <TextView color="white" fontSize={18} fontFamily="semibold">
+          <TextView color="white" fontSize={'lg'} fontFamily="semibold">
             {props.title}
           </TextView>
           <LinearLayout weight={1} />
-          <TextView fontSize={16} fontFamily="semibold" mr={3} color="#869ca5">
+          <TextView
+            fontSize={'md'}
+            fontFamily="semibold"
+            mr={normalize(3)}
+            color="#869ca5"
+          >
             {props.subtitle}
           </TextView>
           {arrowIcon && (

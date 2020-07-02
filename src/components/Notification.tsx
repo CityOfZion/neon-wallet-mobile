@@ -1,6 +1,6 @@
+import i18n from 'i18n-js'
 import React, {useState} from 'react'
 
-import i18n from '~src/i18n'
 import styled, {
   ButtonView,
   ImageView,

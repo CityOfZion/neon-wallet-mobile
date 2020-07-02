@@ -6,14 +6,14 @@ import {StatusBar} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {ROUTES} from '~/constants'
-import TabBar from '~src/components/TabBar/TabBar'
+import {useRoutePath} from '~src/app/RouteUtils'
+import FooterBar from '~src/components/layout/FooterBar'
 import ContactsStackNavigation from '~src/navigation/ContactsStackNavigation'
 import MoreStackNavigation from '~src/navigation/MoreStackNavigation'
 import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation'
 import SettingsStackNavigation from '~src/navigation/SettingsStackNavigation'
 import WalletStackNavigation from '~src/navigation/WalletsStackNavigation'
-import Onboarding from '~src/scenes/Onboarding'
+import OnboardingPage from '~src/scenes/OnboardingPage'
 import WelcomePage from '~src/scenes/WelcomePage'
 import {RootState} from '~src/store/reducers/root'
 
@@ -22,6 +22,7 @@ const Tab = createBottomTabNavigator()
 const TabNavigation = () => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
   const navigation = useNavigation()
+  const path = useRoutePath()
 
   const onboardingStorage = useAsyncStorage('@onboardingSeen')
   const welcomeStorage = useAsyncStorage('@welcomeDontShow')
@@ -49,7 +50,7 @@ const TabNavigation = () => {
   }
 
   if (!onboardingSeen) {
-    return <Onboarding seenSetter={setOnboardingSeen} />
+    return <OnboardingPage seenSetter={setOnboardingSeen} />
   } else if (!welcomeDontShow) {
     return <WelcomePage onClose={onCloseWelcomeEvent} />
   }
@@ -61,24 +62,24 @@ const TabNavigation = () => {
         barStyle={theme.statusBarStyle}
         backgroundColor="transparent"
       />
-      <Tab.Navigator tabBar={(props) => <TabBar {...props} />}>
+      <Tab.Navigator tabBar={(props) => <FooterBar {...props} />}>
         <Tab.Screen
-          name={ROUTES.LIST_WALLETS.name}
+          name={path.ListWallets.name}
           component={WalletStackNavigation}
         />
         <Tab.Screen
-          name={ROUTES.CONTACTS.name}
+          name={path.Contacts.name}
           component={ContactsStackNavigation}
         />
         <Tab.Screen
-          name={ROUTES.QUICK_TOOLS.name}
+          name={path.QuickTools.name}
           component={QuickToolsStackNavigation}
         />
         <Tab.Screen
-          name={ROUTES.SETTINGS.name}
+          name={path.Settings.name}
           component={SettingsStackNavigation}
         />
-        <Tab.Screen name={ROUTES.MORE.name} component={MoreStackNavigation} />
+        <Tab.Screen name={path.More.name} component={MoreStackNavigation} />
       </Tab.Navigator>
     </ThemeProvider>
   )
