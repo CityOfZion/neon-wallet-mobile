@@ -213,7 +213,7 @@ const ColorPicker: React.FC<Props> = (props) => {
   return (
     <ColorPickerView
       onLayout={layoutEvent}
-      width={'100%'}
+      maxWidth={'100%'}
       height={'100%'}
       style={{aspectRatio: 8 / 9}}
     >

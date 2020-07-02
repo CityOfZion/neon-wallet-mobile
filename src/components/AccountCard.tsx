@@ -42,8 +42,8 @@ import {
 interface Props {
   onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
   account: Account
-  isCompacted: boolean
-  isStackMode: boolean
+  isCompacted?: boolean
+  isStackMode?: boolean
 }
 
 const AccountCard: React.FC<Props> = (props) => {

@@ -47,7 +47,6 @@ const MoreStackNavigation = () => {
                 title: ROUTES.MORE.name,
                 image: require('~src/assets/images/more-horiz.png'),
                 showIcon: true,
-                iconMarginRight: 3,
                 iconWidth: 20,
               },
               theme

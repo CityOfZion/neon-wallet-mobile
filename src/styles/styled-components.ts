@@ -1,4 +1,5 @@
 import {LinearGradient} from 'expo-linear-gradient'
+import {PixelRatio, Platform} from 'react-native'
 import * as styledComponents from 'styled-components/native'
 import {
   border,
@@ -18,6 +19,7 @@ import {
   TypographyProps,
 } from 'styled-system'
 
+import {SCREEN_WIDTH} from '~/constants'
 import {
   orientation,
   OrientationProps,
@@ -27,18 +29,18 @@ import {
 
 const StyleConstants = {
   fontSizes: {
-    min: 10,
-    xs: 12,
-    sm: 14,
-    md: 16,
-    lg: 18,
-    xl: 20,
-    '2xl': 24,
-    '3xl': 32,
-    '4xl': 48,
-    '5xl': 64,
+    min: normalize(10),
+    xs: normalize(12),
+    sm: normalize(14),
+    md: normalize(16),
+    lg: normalize(18),
+    xl: normalize(20),
+    '2xl': normalize(24),
+    '3xl': normalize(32),
+    '4xl': normalize(48),
+    '5xl': normalize(64),
   },
-  space: [0, 2, 4, 8, 12, 16, 32, 64, 128, 256, 512],
+  space: [0, 2, 4, 8, 12, 16, 32, 64, 128, 256, 512].map((it) => normalize(it)),
 }
 
 const {
@@ -101,23 +103,27 @@ const LinearLayout = styled.View<
 `
 
 const RelativeLayout = styled.View<
-  ColorProps &
-    LayoutProps &
+  BorderProps &
+    ColorProps &
     OrientationProps &
-    PositionProps &
     SpaceProps &
-    WeightProps
+    LayoutProps &
+    FlexboxProps &
+    WeightProps &
+    PositionProps
 >`
   position: relative;
   > * {
     position: absolute;
   }
+  ${border}  
   ${color}
-  ${layout}
   ${orientation}
-  ${position}
   ${space}
+  ${layout}
+  ${flexbox}
   ${weight}
+  ${position}
 `
 
 const ButtonView = styled.TouchableOpacity<
@@ -165,6 +171,32 @@ export interface DefaultTheme {
     quaternary: string
     background: string[]
     text: string[]
+  }
+}
+
+export function normalize(value: string | number) {
+  let size
+
+  if (typeof value === 'string') {
+    const regex = /^(\d+)(?:px)?$/.exec(value)
+    if (regex?.[1]) {
+      size = Number(regex[1])
+    }
+  } else {
+    size = Number(value)
+  }
+
+  const scale = SCREEN_WIDTH / 414
+  const newSize = Number(size) * scale
+
+  if (isNaN(newSize)) {
+    return value
+  }
+
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize))
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
   }
 }
 

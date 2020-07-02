@@ -14,6 +14,7 @@
     "Settings": "Settings",
     "ReceiveQRCode": "Receive QR Code",
     "GetWallet": "Wallet",
+    "CreateWallet": "Create Wallet",
     "Account": "Account",
     "CustomColor": "Custom Colour"
   },
@@ -32,6 +33,9 @@
     "button_2": "Import a wallet",
     "button_3": "Add funds to your wallet",
     "checkbox_1": "Don’t show this screen again"
+  },
+  "createWallet": {
+    "title": "Create Wallet"
   },
   "onboarding": {
     "feature1": {

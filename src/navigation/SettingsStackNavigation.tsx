@@ -48,7 +48,6 @@ const SettingsStackNavigation = () => {
                 title: i18n.t(`routes.${ROUTES.SETTINGS.name}`),
                 image: require('~src/assets/images/settings-white.png'),
                 showIcon: true,
-                iconMarginRight: 3,
                 iconWidth: 20,
               },
               theme

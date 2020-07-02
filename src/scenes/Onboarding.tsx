@@ -7,11 +7,13 @@ import Swiper from 'react-native-swiper'
 import {useSelector} from 'react-redux'
 
 import i18n from '~/src/i18n'
+import ScreenLayout from '~src/components/ScreenLayout'
 import {RootState} from '~src/store/reducers/root'
 import styled, {
   ButtonView,
   ImageView,
   LinearLayout,
+  normalize,
   RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'

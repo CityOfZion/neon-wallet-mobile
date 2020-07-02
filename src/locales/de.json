@@ -26,10 +26,14 @@
     "button_3": "#translateme",
     "checkbox_1": "#translateme"
   },
+  "createWallet": {
+    "title": "#translateme"
+  },
   "routes": {
     "Settings": "#TRANSLATEME",
     "Account": "#TRANSLATEME",
-    "GetWallet": "Wallet",
+    "GetWallet": "#TRANSLATEME",
+    "CreateWallet": "#TRANSLATEME",
     "CustomColor": "#TRANSLATEME"
   },
   "customColorPage": {

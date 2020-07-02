@@ -14,7 +14,8 @@
     "Settings": "Configurações",
     "Account": "Conta",
     "CustomColor": "Personalizar Cor",
-    "GetWallet": "Carteira"
+    "GetWallet": "Carteira",
+    "CreateWallet": "Criar Carteira"
   },
   "home": {
     "welcome": "Bem-vindo ao Neon Wallet!"
@@ -31,6 +32,9 @@
     "button_2": "Importar uma carteira",
     "button_3": "Adicionar fundos à sua carteira",
     "checkbox_1": "Não mostrar essa tela novamente"
+  },
+  "createWallet": {
+    "title": "Criar Carteira"
   },
   "settings": {
     "title": "Configurações",

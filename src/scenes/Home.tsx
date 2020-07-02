@@ -6,6 +6,7 @@ import {DefaultTheme} from 'styled-components'
 
 import {expo} from '~/app.json'
 import {ROUTES} from '~/constants'
+import ScreenLayout from '~src/components/ScreenLayout'
 import ThemedButton from '~src/components/ThemedButton'
 import {NeoNode} from '~src/models/NeoNode'
 import {RootState} from '~src/store/reducers/root'
@@ -13,6 +14,7 @@ import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 type HomeStackParametersList = {
   Welcome: undefined
+  CreateWallet: undefined
   Onboarding: undefined
   CustomColor: undefined
   ReceiveQRCode: undefined
@@ -29,78 +31,51 @@ interface Props {
 }
 
 const Home = (props: Props) => {
-  const [nodes, setNodes] = useState<NeoNode[]>([])
-  const headerHeight = useHeaderHeight()
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
-
-  useEffect(() => {
-    populate()
-  }, [])
-
-  const populate = async () => {
-    setNodes(await NeoNode.getAllNodes())
-  }
-
   return (
-    <LinearGradient
-      style={{flex: 1}}
-      colors={[theme.colors.background[1], theme.colors.background[2]]}
-      start={[0.1, 0.1]}
-      end={[1, 1]}
-    >
-      <LinearLayout width={'100%'} height={'100%'}>
-        <LinearLayout weight={1} mt={headerHeight}>
-          <LinearLayout m={3}>
-            <ThemedButton
-              onPress={() => props.navigation.navigate('ReceiveQRCode')}
-              label={'Go to ReceiveQRCode'}
-            />
-          </LinearLayout>
-
-          <LinearLayout m={3}>
-            <ThemedButton
-              onPress={() => props.navigation.navigate('Onboarding')}
-              label={'Go to Onboarding'}
-            />
-          </LinearLayout>
-
-          <LinearLayout m={3}>
-            <ThemedButton
-              onPress={() => props.navigation.navigate('CustomColor')}
-              label={'Go to Custom Color Page'}
-            />
-          </LinearLayout>
-
-          <LinearLayout m={3}>
-            <ThemedButton
-              onPress={() =>
-                props.navigation.navigate('Modal', {screen: 'SampleModal'})
-              }
-              label={'Go to Sample Modal Page'}
-            />
-          </LinearLayout>
-
-          <LinearLayout m={3}>
-            <ThemedButton
-              onPress={() => props.navigation.navigate(ROUTES.GET_WALLET.name)}
-              label={'Account'}
-            />
-          </LinearLayout>
+    <ScreenLayout>
+      <LinearLayout weight={1} mb={4}>
+        <LinearLayout m={3}>
+          <ThemedButton
+            onPress={() => props.navigation.navigate('CreateWallet')}
+            label={'Create Wallet'}
+          />
         </LinearLayout>
 
-        <LinearLayout my={4} alignItems="center" justifyContent="center">
-          <TextView color="text.0">
-            {' '}
-            First Node URL: {nodes[0] && nodes[0].url}
-          </TextView>
-          <TextView color="text.0">
-            {' '}
-            First Node Height: {nodes[0] && nodes[0].height}
-          </TextView>
-          <TextView color="text.0"> Version: {expo.version}</TextView>
+        <LinearLayout m={3}>
+          <ThemedButton
+            onPress={() => props.navigation.navigate('ReceiveQRCode')}
+            label={'Receive QRCode'}
+          />
+        </LinearLayout>
+
+        <LinearLayout m={3}>
+          <ThemedButton
+            onPress={() => props.navigation.navigate('CustomColor')}
+            label={'Custom Color Page'}
+          />
+        </LinearLayout>
+
+        <LinearLayout m={3}>
+          <ThemedButton
+            onPress={() =>
+              props.navigation.navigate('Modal', {screen: 'SampleModal'})
+            }
+            label={'Sample Modal Page'}
+          />
+        </LinearLayout>
+
+        <LinearLayout m={3}>
+          <ThemedButton
+            onPress={() => props.navigation.navigate(ROUTES.GET_WALLET.name)}
+            label={'Account'}
+          />
         </LinearLayout>
       </LinearLayout>
-    </LinearGradient>
+
+      <LinearLayout alignItems="flex-end">
+        <TextView color="text.0"> Version: {expo.version}</TextView>
+      </LinearLayout>
+    </ScreenLayout>
   )
 }
 
