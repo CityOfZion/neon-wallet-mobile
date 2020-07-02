@@ -4,12 +4,9 @@ import React from 'react'
 import {SafeAreaView, ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
+import {TAB_BAR_HEIGHT} from '~/constants'
 import {RootState} from '~src/store/reducers/root'
-import {
-  LinearLayout,
-  normalize,
-  RelativeLayout,
-} from '~src/styles/styled-components'
+import {LinearLayout, normalize} from '~src/styles/styled-components'
 
 interface Props {
   children?: any
@@ -35,6 +32,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
           scrollEnabled={props.autoScroll}
           alwaysBounceVertical={false}
           contentContainerStyle={{flexGrow: 1}}
+          style={{marginBottom: TAB_BAR_HEIGHT}}
         >
           <LinearLayout style={{paddingTop: headerHeight}} height={'100%'}>
             <LinearLayout
