@@ -17,7 +17,7 @@ import {
   SpaceProps,
 } from 'styled-system'
 
-import {ROUTES, WINDOW_WIDTH} from '~/constants'
+import {ROUTES, WINDOW_WIDTH, TAB_BAR_HEIGHT} from '~/constants'
 import {useSwiperController} from '~src/components/SwiperPanel'
 import QuickToolsMenu from '~src/scenes/QuickToolsMenu'
 import {RootState} from '~src/store/reducers/root'
@@ -32,8 +32,6 @@ import {
   weight,
   WeightProps,
 } from '~src/styles/styled-system.config'
-
-export const TAB_BAR_HEIGHT = 66
 
 const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)

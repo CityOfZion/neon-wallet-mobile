@@ -1,11 +1,10 @@
 import {useNavigation} from '@react-navigation/native'
 import React from 'react'
-import {ImageSourcePropType, TouchableWithoutFeedback, View} from 'react-native'
+import {ImageSourcePropType, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {ROUTES} from '~/constants'
+import {ROUTES, TAB_BAR_HEIGHT} from '~/constants'
 import SwiperPanel, {SwiperController} from '~src/components/SwiperPanel'
-import {TAB_BAR_HEIGHT} from '~src/components/TabBar/TabBar'
 import i18n from '~src/i18n'
 import {RootState} from '~src/store/reducers/root'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -45,7 +44,10 @@ export default function QuickToolsMenu(props: Props) {
       title: i18n.t('quickTools.receive.title'),
       subtitle: i18n.t('quickTools.receive.subtitle'),
       source: require('~src/assets/images/icon-circle-receive-primary.png'),
-      onClick: () => navigation.navigate(ROUTES.RECEIVE_QR_CODE.name),
+      onClick: () =>
+        navigation.navigate(ROUTES.QUICK_TOOLS.name, {
+          screen: ROUTES.RECEIVE_QR_CODE.name,
+        }),
     },
   ]
 

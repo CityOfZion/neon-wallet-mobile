@@ -398,7 +398,7 @@ SwiperPanel.propTypes = {
   paddingTop: PropTypes.number,
   paddingBottom: PropTypes.number,
   image: PropTypes.node,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
 }
 
 SwiperPanel.defaultProps = {
