@@ -155,7 +155,11 @@ const LinearGradientLayout = styled(LinearGradient)<
   ${flexbox || 'flex: 1;'}
 `
 
-const StyledScrollView = styled.ScrollView<LayoutProps & SpaceProps>`
+const StyledScrollView = styled.ScrollView<
+  FlexboxProps & OrientationProps & LayoutProps & SpaceProps
+>`
+  ${orientation}
+  ${flexbox}
   ${layout}
   ${space}
 `

@@ -86,6 +86,10 @@ export const ROUTES = {
     id: 'SEND_WALLET_SELECTION_MODAL',
     name: 'SendWalletSelectionModal' as 'SendWalletSelectionModal',
   },
+  SEND_TRANSACTION_CONFIRMATION_MODAL: {
+    id: 'SEND_TRANSACTION_CONFIRMATION_MODAL',
+    name: 'SendTransactionConfirmationModal' as 'SendTransactionConfirmationModal',
+  },
   RECEIVE_WALLET_SELECTION_MODAL: {
     id: 'RECEIVE_WALLET_SELECTION_MODAL',
     name: 'ReceiveWalletSelectionModal' as 'ReceiveWalletSelectionModal',
