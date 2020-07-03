@@ -1,7 +1,7 @@
 import React from 'react'
 import {TouchableHighlight} from 'react-native'
 
-import {WINDOW_WIDTH} from '~/constants'
+import {HEADER_HEIGHT, WINDOW_WIDTH} from '~/constants'
 import {
   ImageView,
   LinearLayout,
@@ -22,11 +22,10 @@ const HeaderBar = (headerProps: HeaderProps) => {
   const marginLeft = headerProps.onPressToClose ? '3%' : 0
 
   return (
-    <LinearLayout orientation="horiz">
+    <LinearLayout orientation="horiz" height={HEADER_HEIGHT}>
       <LinearLayout weight={1} ml={marginLeft} />
 
       <LinearLayout
-        height={38}
         width={WINDOW_WIDTH - 220}
         orientation="horiz"
         alignItems="center"
