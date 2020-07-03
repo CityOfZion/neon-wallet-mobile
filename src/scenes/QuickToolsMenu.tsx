@@ -38,7 +38,10 @@ export default function QuickToolsMenu(props: Props) {
       title: i18n.t('quickTools.send.title'),
       subtitle: i18n.t('quickTools.send.subtitle'),
       source: require('~src/assets/images/icon-circle-send-primary.png'),
-      onClick: () => console.log(`TODO`),
+      onClick: () =>
+        navigation.navigate('Modal', {
+          screen: ROUTES.SEND_WALLET_SELECTION_MODAL.name,
+        }),
     },
     {
       title: i18n.t('quickTools.receive.title'),

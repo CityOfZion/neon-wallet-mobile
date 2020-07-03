@@ -82,6 +82,10 @@ export const ROUTES = {
     id: 'SAMPLE_MODAL',
     name: 'SampleModal' as 'SampleModal',
   },
+  SEND_WALLET_SELECTION_MODAL: {
+    id: 'SEND_WALLET_SELECTION_MODAL',
+    name: 'SendWalletSelectionModal' as 'SendWalletSelectionModal',
+  },
   RECEIVE_WALLET_SELECTION_MODAL: {
     id: 'RECEIVE_WALLET_SELECTION_MODAL',
     name: 'ReceiveWalletSelectionModal' as 'ReceiveWalletSelectionModal',
