@@ -45,8 +45,8 @@ export default function QuickToolsMenu(props: Props) {
       subtitle: i18n.t('quickTools.receive.subtitle'),
       source: require('~src/assets/images/icon-circle-receive-primary.png'),
       onClick: () =>
-        navigation.navigate(ROUTES.QUICK_TOOLS.name, {
-          screen: ROUTES.RECEIVE_QR_CODE.name,
+        navigation.navigate('Modal', {
+          screen: ROUTES.RECEIVE_WALLET_SELECTION_MODAL.name,
         }),
     },
   ]
