@@ -26,9 +26,6 @@ import styled, {
   TextView,
 } from '~src/styles/styled-components'
 
-const SLIDER_WIDTH = WINDOW_WIDTH
-const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
-
 interface WalletProps {
   navigation: StackNavigationProp<WalletStackParamList>
   theme: DefaultTheme
@@ -105,8 +102,8 @@ const ListWalletsView = (props: WalletProps) => {
               ref={carouselRef}
               data={wallets}
               firstItem={1}
-              sliderWidth={SLIDER_WIDTH}
-              itemWidth={ITEM_WIDTH}
+              sliderWidth={WINDOW_WIDTH}
+              itemWidth={Math.round(WINDOW_WIDTH * 0.7)}
               inactiveSlideScale={0.8}
               inactiveSlideOpacity={1}
               inactiveSlideShift={12}
@@ -115,7 +112,12 @@ const ListWalletsView = (props: WalletProps) => {
               activeSlideOffset={5}
               swipeThreshold={5}
               enableSnap={true}
-              renderItem={({item}) => <WalletCard wallet={item} />}
+              renderItem={({item}) =>
+                <WalletCard
+                  onPress={() => props.navigation.navigate(ROUTES.GET_WALLET.name, {wallet: accounts})}
+                  wallet={item}
+                />
+              }
               onSnapToItem={(index) => setActiveIndex(index)}
             />
           </LinearLayout>

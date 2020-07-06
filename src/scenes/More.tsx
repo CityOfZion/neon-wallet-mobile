@@ -1,10 +1,7 @@
 import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
-import {LinearGradient} from 'expo-linear-gradient'
 import React from 'react'
-import {StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native'
-import Swiper from 'react-native-swiper'
+import {TouchableWithoutFeedback} from 'react-native'
 import {DefaultTheme} from 'styled-components'
-import styled from 'styled-components/native'
 
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 

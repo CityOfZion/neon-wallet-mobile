@@ -3,7 +3,9 @@
     "neoBlockHeight": "NEO BLOCK HEIGHT",
     "back": "Back",
     "edit": "Edit",
-    "skip": "Skip"
+    "skip": "Skip",
+    "cancel": "Cancel",
+    "save": "Save"
   },
   "languages": {
     "de": "German",
@@ -144,6 +146,20 @@
       "navigation": {
         "cancel": "Cancel",
         "save": "Save"
+      }
+    }
+  },
+  "modals": {
+    "send": {
+      "title": "Send",
+      "walletSelection": {
+        "subtitle": "Please select a wallet to send from"
+      }
+    },
+    "receive": {
+      "title": "Receive",
+      "walletSelection": {
+        "subtitle": "Please select a wallet to receive to"
       }
     }
   },

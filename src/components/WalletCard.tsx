@@ -16,10 +16,11 @@ import styled, {
 
 interface WalletCardProps {
   wallet: Wallet
+  height?: number
+  onPress?: () => void
 }
 
 const WalletCard = (props: WalletCardProps) => {
-  const navigation = useNavigation()
   const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
 
   const _renderAccountCard = (asset: TokenValue, i: number) => {
@@ -63,12 +64,10 @@ const WalletCard = (props: WalletCardProps) => {
   return (
     <WalletCardRelativeContainer
       position="relative"
-      height={350}
+      height={props.height ?? 350}
       m="12px"
       bg={colorLimedSpruce}
-      onPress={() =>
-        navigation.navigate(ROUTES.GET_WALLET.name, {wallet: accounts})
-      }
+      onPress={() => props.onPress && props.onPress()}
     >
       {props.wallet.currentAssets.assets.map((a, i) =>
         _renderAccountCard(a, i)

@@ -6,9 +6,11 @@ import {ThemeProvider} from 'styled-components'
 import {defaultScreenOptions, ROUTES} from '~/constants'
 import SampleModal from '~src/scenes/SampleModal'
 import {RootState} from '~src/store/reducers/root'
+import ReceiveWalletSelectionModal from '~src/scenes/ReceiveWalletSelectionModal'
 
 export type ModalStackParamList = {
   SampleModal: undefined
+  ReceiveWalletSelectionModal: undefined
 }
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
@@ -26,6 +28,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={ROUTES.SAMPLE_MODAL.name}
           component={SampleModal}
+        />
+        <ModalStack.Screen
+          name={ROUTES.RECEIVE_WALLET_SELECTION_MODAL.name}
+          component={ReceiveWalletSelectionModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>
