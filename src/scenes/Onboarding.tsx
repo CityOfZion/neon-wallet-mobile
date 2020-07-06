@@ -7,13 +7,11 @@ import Swiper from 'react-native-swiper'
 import {useSelector} from 'react-redux'
 
 import i18n from '~/src/i18n'
-import ScreenLayout from '~src/components/ScreenLayout'
+import ThemedButton from '~src/components/ThemedButton'
 import {RootState} from '~src/store/reducers/root'
 import styled, {
-  ButtonView,
   ImageView,
   LinearLayout,
-  normalize,
   RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
@@ -74,27 +72,6 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
         {props.subtitle}
       </FeatureDescription>
     </LinearLayout>
-  )
-}
-
-const GetStartedButton = (props: {onPressFunc: () => void}) => {
-  const colorDarkShark = '#23272a'
-
-  return (
-    <ButtonView
-      width={'100%'}
-      height={'42px'}
-      bg={'primary'}
-      orientation={'horiz'}
-      alignItems={'center'}
-      justifyContent={'center'}
-      borderRadius={9999}
-      onPress={props.onPressFunc}
-    >
-      <TextView color={colorDarkShark} fontSize="16px" fontFamily="semibold">
-        {i18n.t('onboarding.getStarted.buttonTitle')}
-      </TextView>
-    </ButtonView>
   )
 }
 
@@ -175,7 +152,13 @@ const Onboarding = (props: {
                   </LinearLayout>
 
                   <LinearLayout width={'100%'} px={'7%'}>
-                    <GetStartedButton onPressFunc={() => setAsSeen()} />
+                    <ThemedButton
+                      onPress={() => setAsSeen()}
+                      label={i18n.t('onboarding.getStarted.buttonTitle')}
+                      basic={true}
+                      bgColor={'primary'}
+                      textColor={'black'}
+                    />
                   </LinearLayout>
                 </LinearLayout>
               }
