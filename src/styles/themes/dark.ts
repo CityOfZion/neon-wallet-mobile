@@ -31,6 +31,17 @@ const dark = {
       '#bebebe',
       '#41474b',
       '#899fa8',
+      '#8f9b9d',
+    ],
+    // eslint-disable-next-line prettier/prettier
+    card: [
+      '#00ddb4',
+      '#22b1ff',
+      '#7c4bfe',
+      '#d355e7',
+      '#fe872f',
+      '#fedd5b',
+      '#91abbc',
     ],
   },
 } as DefaultTheme

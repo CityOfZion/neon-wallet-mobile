@@ -101,6 +101,9 @@
       "pending": "Pending",
       "sentTo": "Sent to",
       "value": "Value"
+    },
+    "colorSelector": {
+      "customColor": "Cor personalizada"
     }
   }
 }
