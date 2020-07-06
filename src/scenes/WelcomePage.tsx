@@ -18,7 +18,12 @@ const WelcomePage: React.FC<Props> = (props) => {
   const {setItem} = useAsyncStorage('@welcomeDontShow')
 
   return (
-    <ScreenLayout useHeaderPadding={false} alignX={'center'} padding={30}>
+    <ScreenLayout
+      useHeaderPadding={false}
+      useTabBarPadding={false}
+      alignX={'center'}
+      padding={30}
+    >
       <LinearLayout mb={5} alignItems={'center'}>
         <ImageView source={require('~/src/assets/images/logo-small.png')} />
         <TextView

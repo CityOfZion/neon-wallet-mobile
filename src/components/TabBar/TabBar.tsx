@@ -83,15 +83,19 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
       pointerEvents={'box-none'}
     >
       <QuickToolsMenu controller={controller} />
-      <TabBarContainer height={TAB_BAR_HEIGHT} width={WINDOW_WIDTH} bg={'background.0'}>
+      <TabBarContainer
+        height={TAB_BAR_HEIGHT}
+        width={WINDOW_WIDTH}
+        bg={'background.0'}
+      >
         <RelativeLayout height="100%" width="100%">
           <View pointerEvents={'none'}>
             <ImageView
-              opacity={0.1}
+              opacity={0.25}
               position="absolute"
               bottom={'100%'}
               width={'100%'}
-              resizeMode={'cover'}
+              resizeMode={'contain'}
               source={require('~src/assets/images/TabBarShadow.png')}
             />
           </View>
@@ -103,6 +107,8 @@ const TabBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
             source={require('~src/assets/images/TabBar.png')}
           />
           <LinearLayout
+            position={'absolute'}
+            bottom={0}
             orientation="horiz"
             alignItems="center"
             pointerEvents={'box-none'}
