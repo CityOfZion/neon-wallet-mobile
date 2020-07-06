@@ -60,23 +60,30 @@ const WelcomePage: React.FC<Props> = (props) => {
       </TextView>
 
       <TextView mb={6} color={'text.0'} fontSize={'lg'} textAlign={'center'}>
-        {Facade.t('welcome.body_2_0')}
+        {Facade.t('welcome.body_2_1')}
+
+        <TextView fontFamily={'bold'}>{Facade.t('welcome.body_2_2')}</TextView>
+
+        {Facade.t('welcome.body_2_3')}
       </TextView>
 
-      <LinearLayout mb={5} width={'100%'}>
+      <TextView
+        color={'primary'}
+        fontSize={'xl'}
+        fontFamily={'bold'}
+        allowFontScaling={true}
+        adjustsFontSizeToFit={true}
+        numberOfLines={1}
+        mb={5}
+      >
+        {Facade.t('welcome.label_1')}
+      </TextView>
+
+      <LinearLayout mt={3} mb={6} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
           onPress={() => props.onClose?.(Facade.path.ListWallets.name)}
           label={Facade.t('welcome.button_1')}
-          flat={true}
-        />
-      </LinearLayout>
-
-      <LinearLayout mb={6} width={'100%'}>
-        {/*TODO: change navigation target*/}
-        <ThemedButton
-          onPress={() => props.onClose?.(Facade.path.ListWallets.name)}
-          label={Facade.t('welcome.button_2')}
         />
       </LinearLayout>
 
@@ -84,11 +91,11 @@ const WelcomePage: React.FC<Props> = (props) => {
         {/*TODO: change navigation target*/}
         <ThemedButton
           onPress={() => props.onClose?.(Facade.path.ListWallets.name)}
-          label={Facade.t('welcome.button_3')}
+          label={Facade.t('welcome.button_2')}
         />
       </LinearLayout>
 
-      <LinearLayout mb={6} width={'100%'}>
+      <LinearLayout mb={6}>
         <ThemedCheckbox
           onChange={(checked) => setItem(String(checked))}
           label={Facade.t('welcome.checkbox_1')}

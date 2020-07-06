@@ -55,7 +55,7 @@ const ThemedCard: React.FC<Props> = (props) => {
       },
       shadowOpacity: 0.4,
       shadowRadius: 6,
-      elevation: 10,
+      elevation: props.flat ? 0 : 10,
     }
 
     return Facade.lodash.merge(
