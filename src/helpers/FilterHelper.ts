@@ -1,11 +1,10 @@
+import i18n from 'i18n-js'
 import moment from 'moment'
 
-import i18n from '~src/i18n'
+export type InputType = string | number | null
 
 const SATURATION_FACTOR = 0.69 //nice
 const LUMINANCE_FACTOR = 0.58
-
-export type InputType = string | number | null
 
 export abstract class FilterHelper {
   static toString(input?: InputType) {
@@ -197,8 +196,8 @@ export abstract class FilterHelper {
   }
 
   static toDarkerShade(color: string) {
-    const hsl = FilterHelper.hexToHsl(color)
-    return FilterHelper.hslToHex(
+    const hsl = this.hexToHsl(color)
+    return this.hslToHex(
       hsl[0],
       hsl[1] * SATURATION_FACTOR,
       hsl[2] * LUMINANCE_FACTOR

@@ -3,13 +3,13 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {defaultScreenOptions} from '~/constants'
 import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
+import {Facade} from '~src/app/Facade'
 import ModalStackNavigation from '~src/navigation/ModalStackNavigation'
 import TabNavigation from '~src/navigation/TabNavigation'
 import {RootState} from '~src/store/reducers/root'
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Tab: undefined
   Modal: undefined
 }
@@ -25,7 +25,7 @@ const AppNavigation = () => {
         <RootStack.Navigator
           initialRouteName="Tab"
           headerMode="none"
-          screenOptions={defaultScreenOptions}
+          screenOptions={Facade.config.screen}
         >
           <RootStack.Screen name="Tab" component={TabNavigation} />
           <RootStack.Screen name="Modal" component={ModalStackNavigation} />

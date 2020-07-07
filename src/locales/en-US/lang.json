@@ -1,0 +1,250 @@
+{
+  "languages": {
+    "de": "German",
+    "enUS": "English",
+    "ptBR": "Portuguese"
+  },
+  "currency": {
+    "USD" : "USD",
+    "BRL" : "BRL",
+    "EUR" : "EUR"
+  },
+  "app": {
+    "neoBlockHeight": "NEO BLOCK HEIGHT",
+    "back": "Back",
+    "next": "Next",
+    "continue": "Continue",
+    "edit": "Edit",
+    "copy": "Copy",
+    "print": "Print",
+    "skip": "Skip",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close"
+  },
+  "routes": {
+    "GetWallet": "Wallet",
+    "Account": "Account",
+    "Settings": "Settings",
+    "ReceiveQrCode": "Receive QR Code",
+    "CustomColor": "Custom Colour",
+    "CreateWallet": "Create Wallet",
+    "Step1CreateWallet": "Create Wallet",
+    "Step2CreateWallet": "Create Wallet",
+    "Step3CreateWallet": "Create Wallet",
+    "Step4CreateWallet": "Create Wallet",
+    "Step5CreateWallet": "Create Wallet"
+  },
+  "home": {
+    "welcome": "Welcome to Neon Wallet!"
+  },
+  "welcome": {
+    "brand": "neonwallet",
+    "title": "Welcome",
+    "body_1_1": "To get you started we have created your first wallet for you. All the details and back up options for your wallet can be found in ",
+    "body_1_2": "Settings",
+    "body_1_3": " then ",
+    "body_1_4": "My wallets",
+    "body_2_0": "We strongly recommend that you back up your wallet to make sure its safe should you lose your phone",
+    "button_1": "Quick start options",
+    "button_2": "Import a wallet",
+    "button_3": "Add funds to your wallet",
+    "checkbox_1": "Don’t show this screen again"
+  },
+  "onboarding": {
+    "feature1": {
+      "title": "The original wallet on the move",
+      "subtitle": "All the best features of our desktop wallet  plus more in the palm of you hand"
+    },
+    "feature2": {
+      "title": "First class user experience",
+      "subtitle": "Neon Wallet has been designed to make managing your crypto assets as intuitive as possible"
+    },
+    "feature3": {
+      "title": "BIP39 wallet",
+      "subtitle": "BIP39 wallet standard, create infinite child accounts using a single mnemonic"
+    },
+    "feature4": {
+      "title": "Packed pipeline of updates",
+      "subtitle": "The team is working around the clock to bring you the latest new features"
+    },
+    "getStarted": {
+      "title": "Packed pipeline of updates",
+      "subtitle": "The team is working around the clock to bring you the latest new features",
+      "buttonTitle": "Get Started!"
+    }
+  },
+  "step1CreateWallet": {
+    "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",
+    "label_1": "Generate security phrase",
+    "body_1": "This set of secret words make it easy to back up and restore your account. This makes your wallet really secure ",
+    "label_2": "Confirm security phrase",
+    "body_2": "It’s really important you remember your phrase correctly so we will help you with that. If you’re in a rush you can do it another time.",
+    "label_3": "Give your wallet a name and create a Passphrase",
+    "body_3": "Give your wallet a memorable name and passphrase and your ready to go!",
+    "createWallet": "Create Wallet"
+  },
+  "step2CreateWallet": {
+    "oneOfThree": "1 of 3",
+    "label_1": "Generate security phrase",
+    "body_1": "Below you will find your secret phrase",
+    "body_2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it below but be sure to keep it safe.",
+    "body_3": "Anyone with this phrase will be able to steal your hard earned assets and you won’t be able to get them back! ",
+    "dialog_title": "Make sure you keep your security phrase safe",
+    "dialog_body": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
+    "dialog_dismiss": "OK, I understand"
+  },
+  "step3CreateWallet": {
+    "twoOfThree": "2 of 3",
+    "label_1": "Confirm security phrase",
+    "body_1": "Please select each phrase in the correct order to make sure you’ve got it right. ",
+    "body_2": "Don’t worry you can find your secret phrase in the settings for the wallet. Go ahead and skip this step if you really need to.",
+    "dialog_1_title": "Are you sure you want to skip back up confirmation?",
+    "dialog_1_body": "Confirming that you have correctly backed up your security phrase is highly recommended",
+    "dialog_2_title": "Incorrect word order",
+    "dialog_2_body": "Please try again to confirm your back up"
+  },
+  "step4CreateWallet": {
+    "threeOfThree": "3 of 3",
+    "label_1": "Give your wallet a name and create a Passphrase",
+    "body_1": "Give your wallet a memorable name, maybe it could be related to what you want to use the wallet for like “trading” or “investments”.",
+    "label_walletName": "Wallet Name",
+    "label_createPassphrase": "Create Passphrase",
+    "label_confirmPassphrase": "Confirm Passphrase",
+    "placeholder_walletName": "Please enter a name",
+    "placeholder_createPassphrase": "Please enter a passphrase",
+    "placeholder_confirmPassphrase": "Please repeat the passphrase"
+  },
+  "step5CreateWallet": {
+    "label_1": "Congratulations, You’re the proud owner of a shiny new wallet!",
+    "body_1": "Remember to keep your secret phrase safe, having several backups is always a good idea.",
+    "body_2": "If you need to find out a wallets secret phrase you can find it in the settings page for that wallet. ",
+    "viewWallet": "View wallet"
+  },
+  "settings": {
+    "title": "Settings",
+    "myWallets": "My Wallets",
+    "security": "Security",
+    "currency": "Currency",
+    "language": "Language"
+  },
+  "customColorPage": {
+    "title": "Custom Colour",
+    "subtitle": "Select a custom color for your account"
+  },
+  "quickTools": {
+    "qrCode": {
+      "title": "Scan QR code",
+      "subtitle": "Launch QR code scanner"
+    },
+    "send": {
+      "title": "Send",
+      "subtitle": "Send tokens"
+    },
+    "receive": {
+      "title": "Receive",
+      "subtitle": "Receive tokens"
+    }
+  },
+  "paymentCard": {
+    "balance": "BALANCE",
+    "address": "ADDRESS"
+  },
+  "receive": {
+    "paymentRequestDetails": "PAYMENT REQUEST DETAILS",
+    "token": "Token",
+    "amount": "Amount",
+    "value": "Value",
+    "location": "Location",
+    "address": "Address",
+    "reference": "Reference"
+  },
+  "screens": {
+    "listWallets": {
+      "changeSinceLastVisit": "CHANGE SINCE LAST VISIT %{date}"
+    },
+    "getWallet": {
+      "addNewAccount": "Add new account"
+    },
+    "getAccount": {
+      "assets": "ASSETS",
+      "transactions": "TRANSACTIONS",
+      "claimAsset": "Claim %{assetAmount}"
+    },
+    "createAccount": {
+      "title": "Create account",
+      "subtitle": "Creating an account is easy, just give it a name below and you’re down!",
+      "accountInput": {
+        "title": "ACCOUNT NAME",
+        "placeholder": "Enter an account name"
+      },
+      "selectColor": "Select a colour for your new account card",
+      "navigation": {
+        "cancel": "Cancel",
+        "save": "Save"
+      }
+    }
+  },
+  "modals": {
+    "send": {
+      "title": "Send",
+      "walletSelection": {
+        "subtitle": "Please select a wallet to send from"
+      },
+      "transactionConfirmation": {
+        "header": "Transaction successfully sent!",
+        "subheader": "Once your transaction has been confirmed it will appear in your transaction history",
+        "transactionId": "TRANSACTION ID"
+      }
+    },
+    "receive": {
+      "title": "Receive",
+      "walletSelection": {
+        "subtitle": "Please select a wallet to receive to"
+      }
+    }
+  },
+  "components": {
+    "notification": {
+      "title": "NOTIFICATION"
+    },
+    "balanceList": {
+      "title": "TOKEN VALUE",
+      "holdings": "Holdings",
+      "value": "Value"
+    },
+    "transactionsList": {
+      "title": "PENDING TRANSACTIONS",
+      "pending": "Pending",
+      "sentTo": "Sent to",
+      "value": "Value"
+    },
+    "colorSelector": {
+      "customColor": "Custom colour"
+    }
+  },
+  "boolean": {
+    "true": "Yes",
+    "false": "No"
+  },
+  "dateFormat": {
+    "date": "MM/DD/YYYY",
+    "datetime": "MM/DD/YYYY HH:mm",
+    "time": "HH:mm"
+  },
+  "filter": {
+    "number": {
+      "decimal": ".",
+      "thousands": ","
+    },
+    "phone": {
+      "regex": "(\\d{3})(\\d{3})(\\d{4})$",
+      "format": "($1) $2-$3"
+    },
+    "zipcode": {
+      "regex": "(\\d{5})$",
+      "format": "$1"
+    }
+  }
+}

@@ -1,11 +1,12 @@
 import {useNavigation} from '@react-navigation/native'
 import {LinearGradient as ExpoLinearGradient} from 'expo-linear-gradient'
 import React, {Fragment} from 'react'
+import {TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 import styled from 'styled-components'
 import {layout, LayoutProps} from 'styled-system'
 
-import {FilterHelper} from '~src/helpers/FilterHelper'
+import {Facade} from '~src/app/Facade'
 import {RootState} from '~src/store/reducers/root'
 import {
   ImageView,
@@ -13,10 +14,6 @@ import {
   RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {TouchableWithoutFeedback} from 'react-native'
-import {ROUTES} from '~/constants'
-import i18n from '~src/i18n'
-import {UtilsHelper} from '~src/helpers/UtilsHelper'
 
 interface Props {
   onSelect?: (hex: string) => void
@@ -38,7 +35,7 @@ export default function ColorSelector(props: Props) {
         <LinearGradient
           width="100%"
           height="100%"
-          colors={[color, FilterHelper.toDarkerShade(color)]}
+          colors={[color, Facade.filter.toDarkerShade(color)]}
         />
       </LinearLayout>
     </TouchableWithoutFeedback>
@@ -48,7 +45,7 @@ export default function ColorSelector(props: Props) {
   const customColorButton = (
     <TouchableWithoutFeedback
       onPress={() => {
-        navigation.navigate(ROUTES.CUSTOM_COLOR.name)
+        navigation.navigate(Facade.path.CustomColor.name)
       }}
     >
       <RelativeLayout width={71} height={71}>
@@ -67,7 +64,7 @@ export default function ColorSelector(props: Props) {
           color={theme.colors.text[7]}
           textAlign="center"
         >
-          {i18n.t('components.colorSelector.customColor')}
+          {Facade.t('components.colorSelector.customColor')}
         </TextView>
       </RelativeLayout>
     </TouchableWithoutFeedback>
@@ -78,7 +75,7 @@ export default function ColorSelector(props: Props) {
   const paddingButton = <LinearLayout width={71} height={71} />
 
   // Buttons grouped by 4
-  const buttonGroup = UtilsHelper.chunkPadded(buttonList, 4, paddingButton)
+  const buttonGroup = Facade.utils.chunkPadded(buttonList, 4, paddingButton)
   return (
     <Fragment>
       {buttonGroup.map((button, key) => (
@@ -88,7 +85,11 @@ export default function ColorSelector(props: Props) {
           justifyContent="space-between"
           key={key}
           mt={key === 0 ? 0 : 16 /* If first group of buttons, no top margin*/}
-          mb={key === buttonGroup.length - 1 ? 0 : 16 /* If last group of buttons, no bottom margin*/}
+          mb={
+            key === buttonGroup.length - 1
+              ? 0
+              : 16 /* If last group of buttons, no bottom margin*/
+          }
         >
           {button}
         </LinearLayout>

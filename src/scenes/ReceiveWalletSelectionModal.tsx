@@ -1,18 +1,16 @@
 import React, {useRef, useState} from 'react'
+import {ScrollView} from 'react-native'
+import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {Facade} from '~src/app/Facade'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
-import i18n from '~src/i18n'
+import WalletCard from '~src/components/WalletCard'
+import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootState} from '~src/store/reducers/root'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
-import Carousel from 'react-native-snap-carousel'
-import WalletCard from '~src/components/WalletCard'
-import {mockWalletItems} from '~src/mockWalletItems'
-import {ROUTES, WINDOW_WIDTH} from '~/constants'
-import {FilterHelper} from '~src/helpers/FilterHelper'
-import {ScrollView} from 'react-native'
+import {TextView} from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -32,7 +30,7 @@ const ReceiveWalletSelectionModal = (props: Props) => {
       paddingTop={24}
       paddingRight={0}
       paddingLeft={0}
-      title={i18n.t('modals.receive.title')}
+      title={Facade.t('modals.receive.title')}
       rightButton={'X    '}
       onRightPress={() => controller.close()}
       onClose={() => props.navigation.goBack()}
@@ -46,15 +44,15 @@ const ReceiveWalletSelectionModal = (props: Props) => {
           fontFamily="medium"
           textAlign="center"
         >
-          {i18n.t('modals.receive.walletSelection.subtitle')}
+          {Facade.t('modals.receive.walletSelection.subtitle')}
         </TextView>
         <Carousel
           layout={'default'}
           ref={carouselRef}
           data={wallets}
           firstItem={0}
-          sliderWidth={WINDOW_WIDTH}
-          itemWidth={Math.round(WINDOW_WIDTH * 0.7)}
+          sliderWidth={Facade.app.windowWidth}
+          itemWidth={Math.round(Facade.app.windowWidth * 0.7)}
           inactiveSlideScale={0.8}
           inactiveSlideOpacity={1}
           inactiveSlideShift={12}
@@ -63,19 +61,31 @@ const ReceiveWalletSelectionModal = (props: Props) => {
           activeSlideOffset={5}
           swipeThreshold={5}
           enableSnap={true}
-          renderItem={({item}) =>
+          renderItem={({item}) => (
             <WalletCard
               onPress={() =>
-                props.navigation.navigate(ROUTES.RECEIVE_WALLET_SELECTION_MODAL.name)
+                props.navigation.navigate(
+                  Facade.path.ReceiveWalletSelectionModal.name
+                )
               }
               height={330}
               wallet={item}
             />
-          }
+          )}
           onSnapToItem={(index) => setActiveIndex(index)}
         />
-        <TextView alignSelf="center" fontSize="36px" color="text.0" fontFamily="medium">
-          {FilterHelper.currency(wallets[activeIndex].currentValue, currency, false, true)}
+        <TextView
+          alignSelf="center"
+          fontSize="36px"
+          color="text.0"
+          fontFamily="medium"
+        >
+          {Facade.filter.currency(
+            wallets[activeIndex].currentValue,
+            currency,
+            false,
+            true
+          )}
         </TextView>
       </ScrollView>
     </SwiperPanel>

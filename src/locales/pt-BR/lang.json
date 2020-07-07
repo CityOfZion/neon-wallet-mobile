@@ -1,0 +1,225 @@
+{
+  "languages": {
+    "de": "Alemão",
+    "enUS": "Inglês",
+    "ptBR": "Português"
+  },
+  "currency": {
+    "USD" : "USD",
+    "BRL" : "BRL",
+    "EUR" : "EUR"
+  },
+  "app": {
+    "neoBlockHeight": "NEO BLOCK HEIGHT",
+    "back": "Voltar",
+    "next": "Próximo",
+    "continue": "Continuar",
+    "edit": "Editar",
+    "skip": "Pular",
+    "copy": "Copiar",
+    "print": "Imprimir",
+    "retry": "Tentar novamente"
+  },
+  "routes": {
+    "GetWallet": "Carteira",
+    "Account": "Conta",
+    "Settings": "Configurações",
+    "ReceiveQrCode": "Receive QR Code",
+    "CustomColor": "Personalizar Cor",
+    "CreateWallet": "Create Wallet",
+    "Step1CreateWallet": "Criar Carteira",
+    "Step2CreateWallet": "Criar Carteira",
+    "Step3CreateWallet": "Criar Carteira",
+    "Step4CreateWallet": "Criar Carteira",
+    "Step5CreateWallet": "Criar Carteira"
+  },
+  "home": {
+    "welcome": "Bem-vindo ao Neon Wallet!"
+  },
+  "welcome": {
+    "brand": "neonwallet",
+    "title": "Bem-vindo",
+    "body_1_1": "Para começar nós criamos sua primeira carteira para você. Todos os detalhes e opções de restauração para sua carteira pode ser encontrado em ",
+    "body_1_2": "Configurações",
+    "body_1_3": " e ",
+    "body_1_4": "Minha carteira",
+    "body_2_0": "Nós recomendamos fortemente que você faça o backup da sua carteira para ter certeza que estará seguro contra a perda deste celular. ",
+    "button_1": "Primeiros passos",
+    "button_2": "Importar uma carteira",
+    "button_3": "Adicionar fundos à sua carteira",
+    "checkbox_1": "Não mostrar essa tela novamente"
+  },
+  "onboarding": {
+    "feature1": {
+      "title": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "feature2": {
+      "title": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "feature3": {
+      "title": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "feature4": {
+      "title": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "getStarted": {
+      "title": "#translateme",
+      "subtitle": "#translateme",
+      "buttonTitle": "#translateme"
+    }
+  },
+  "step1CreateWallet": {
+    "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",
+    "label_1": "#translateme",
+    "body_1": "#translateme",
+    "label_2": "#translateme",
+    "body_2": "#translateme",
+    "label_3": "#translateme",
+    "body_3": "#translateme",
+    "createWallet": "#translateme"
+  },
+  "step2CreateWallet": {
+    "oneOfThree": "1 de 3",
+    "label_1": "#translateme",
+    "body_1": "#translateme",
+    "body_2": "#translateme",
+    "body_3": "#translateme"
+  },
+  "step3CreateWallet": {
+    "twoOfThree": "2 de 3",
+    "label_1": "#translateme",
+    "body_1": "#translateme",
+    "body_2": "#translateme",
+    "dialog_1_title": "#translateme",
+    "dialog_1_body": "#translateme",
+    "dialog_2_title": "#translateme",
+    "dialog_2_body": "#translateme"
+  },
+  "step4CreateWallet": {
+    "threeOfThree": "3 de 3",
+    "label_1": "#translateme",
+    "body_1": "#translateme",
+    "label_walletName": "#translateme",
+    "label_createPassphrase": "#translateme",
+    "label_confirmPassphrase": "#translateme",
+    "placeholder_walletName": "#translateme",
+    "placeholder_createPassphrase": "#translateme",
+    "placeholder_confirmPassphrase": "#translateme"
+  },
+  "step5CreateWallet": {
+    "label_1": "#translateme",
+    "body_1": "#translateme",
+    "body_2": "#translateme",
+    "viewWallet": "#translateme"
+  },
+  "settings": {
+    "title": "Configurações",
+    "myWallets": "Minhas Wallets",
+    "security": "Segurança",
+    "currency": "Moeda",
+    "language": "Idioma"
+  },
+  "customColorPage": {
+    "title": "Personalizar Cor",
+    "subtitle": "Selecione um cor personalizada para sua conta"
+  },
+  "quickTools": {
+    "qrCode": {
+      "title": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "send": {
+      "title": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "receive": {
+      "title": "#translateme",
+      "subtitle": "#translateme"
+    }
+  },
+  "paymentCard": {
+    "balance": "SALDO",
+    "address": "ENDEREÇO"
+  },
+  "receive": {
+    "paymentRequestDetails": "#translateme",
+    "token": "#translateme",
+    "amount": "#translateme",
+    "value": "#translateme",
+    "location": "#translateme",
+    "address": "#translateme",
+    "reference": "#translateme"
+  },
+  "screens": {
+    "listWallets": {
+      "changeSinceLastVisit": "#translateme"
+    },
+    "getWallet": {
+      "addNewAccount": "#translateme"
+    },
+    "getAccount": {
+      "assets": "#translateme",
+      "transactions": "#translateme",
+      "claimAsset": "#translateme"
+    },
+    "createAccount": {
+      "title": "#translateme",
+      "subtitle": "#translateme",
+      "accountInput": {
+        "title": "#translateme",
+        "placeholder": "#translateme"
+      },
+      "selectColor": "#translateme",
+      "navigation": {
+        "cancel": "#translateme",
+        "save": "#translateme"
+      }
+    }
+  },
+  "components": {
+    "notification": {
+      "title": "#translateme"
+    },
+    "balanceList": {
+      "title": "#translateme",
+      "holdings": "#translateme",
+      "value": "#translateme"
+    },
+    "transactionsList": {
+      "title": "#translateme",
+      "pending": "#translateme",
+      "sentTo": "#translateme",
+      "value": "#translateme"
+    },
+    "colorSelector": {
+      "customColor": "Cor personalizada"
+    }
+  },
+  "boolean": {
+    "true": "Sim",
+    "false": "Não"
+  },
+  "dateFormat": {
+    "date": "DD/MM/YYYY",
+    "datetime": "DD/MM/YYYY HH:mm",
+    "time": "hh:mm"
+  },
+  "filter": {
+    "number": {
+      "decimal": ",",
+      "thousands": "."
+    },
+    "phone": {
+      "regex": "(\\d{2})(\\d{4,5})(\\d{4})$",
+      "format": "($1) $2-$3"
+    },
+    "zipcode": {
+      "regex": "(\\d{5})(\\d{3})$",
+      "format": "$1-$2"
+    }
+  }
+}

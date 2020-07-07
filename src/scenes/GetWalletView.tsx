@@ -3,10 +3,9 @@ import React, {useState} from 'react'
 import {ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {ROUTES} from '~/constants'
+import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
-import i18n from '~src/i18n'
-import {mockWalletAccounts} from '~src/mockWalletAccounts'
+import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {Account} from '~src/models/Account'
 import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
 import {RootState} from '~src/store/reducers/root'
@@ -24,6 +23,7 @@ interface GetWalletProps {
 const GetWalletView = (props: GetWalletProps) => {
   const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
+
   props.navigation.setOptions({
     headerTransparent: true,
     headerTintColor: theme.colors.text[0],
@@ -50,7 +50,7 @@ const GetWalletView = (props: GetWalletProps) => {
             isCompacted={true}
             isStackMode={i !== accounts.length - 1}
             onPress={() =>
-              props.navigation.navigate(ROUTES.GET_ACCOUNT.name, {account})
+              props.navigation.navigate(Facade.path.GetAccount.name, {account})
             }
           />
         </LinearLayout>
@@ -98,7 +98,7 @@ const GetWalletView = (props: GetWalletProps) => {
               ml="4px"
               fontFamily="medium"
             >
-              {i18n.t('screens.getWallet.addNewAccount')}
+              {Facade.t('screens.getWallet.addNewAccount')}
             </TextView>
           </LinearLayout>
         </ScrollView>

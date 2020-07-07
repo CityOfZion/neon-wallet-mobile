@@ -5,9 +5,9 @@ import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
 import {expo} from '~/app.json'
-import {ROUTES} from '~/constants'
-import ScreenLayout from '~src/components/ScreenLayout'
-import ThemedButton from '~src/components/ThemedButton'
+import {Facade} from '~src/app/Facade'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ThemedButton from '~src/components/themed/ThemedButton'
 import {NeoNode} from '~src/models/NeoNode'
 import {RootState} from '~src/store/reducers/root'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
@@ -66,7 +66,9 @@ const Home = (props: Props) => {
 
         <LinearLayout m={3}>
           <ThemedButton
-            onPress={() => props.navigation.navigate(ROUTES.GET_WALLET.name)}
+            onPress={() =>
+              props.navigation.navigate(Facade.path.GetWallet.name)
+            }
             label={'Account'}
           />
         </LinearLayout>

@@ -3,7 +3,7 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {defaultScreenOptions, ROUTES} from '~/constants'
+import {Facade} from '~src/app/Facade'
 import CustomColorPage from '~src/scenes/CustomColorPage'
 import ReceiveWalletSelectionModal from '~src/scenes/ReceiveWalletSelectionModal'
 import SampleModal from '~src/scenes/SampleModal'
@@ -27,28 +27,28 @@ const ModalStackNavigation = () => {
   return (
     <ThemeProvider theme={theme}>
       <ModalStack.Navigator
-        initialRouteName={ROUTES.SAMPLE_MODAL.name}
+        initialRouteName={Facade.path.SampleModal.name}
         headerMode="none"
-        screenOptions={defaultScreenOptions}
+        screenOptions={Facade.config.screen}
       >
         <ModalStack.Screen
-          name={ROUTES.SAMPLE_MODAL.name}
+          name={Facade.path.SampleModal.name}
           component={SampleModal}
         />
         <ModalStack.Screen
-          name={ROUTES.RECEIVE_WALLET_SELECTION_MODAL.name}
+          name={Facade.path.ReceiveWalletSelectionModal.name}
           component={ReceiveWalletSelectionModal}
         />
         <ModalStack.Screen
-          name={ROUTES.SEND_WALLET_SELECTION_MODAL.name}
+          name={Facade.path.SendWalletSelectionModal.name}
           component={SendWalletSelectionModal}
         />
         <ModalStack.Screen
-          name={ROUTES.SEND_TRANSACTION_CONFIRMATION_MODAL.name}
+          name={Facade.path.SendTransactionConfirmationModal.name}
           component={SendTransactionConfirmationModal}
         />
         <ModalStack.Screen
-          name={ROUTES.CUSTOM_COLOR.name}
+          name={Facade.path.CustomColor.name}
           component={CustomColorPage}
         />
       </ModalStack.Navigator>

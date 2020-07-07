@@ -1,31 +1,24 @@
-import {
-  MAIN_NETWORK_DEPRECATED_LABEL,
-  MAIN_NETWORK_ID,
-  MAIN_NETWORK_LABEL,
-  TEST_NETWORK_DEPRECATED_LABEL,
-  TEST_NETWORK_ID,
-  TEST_NETWORK_LABEL,
-} from '~/constants'
+import {Facade} from '~src/app/Facade'
 
 export const isMainNetwork = (networkId: string) =>
-  networkId === MAIN_NETWORK_ID
+  networkId === Facade.app.mainNetworkId
 export const isTestNetwork = (networkId: string) =>
-  networkId === TEST_NETWORK_ID
+  networkId === Facade.app.testNetworkId
 
 export const getNetworks = () => [
   {
-    id: MAIN_NETWORK_ID,
-    value: MAIN_NETWORK_ID,
-    label: MAIN_NETWORK_LABEL,
-    deprecatedLabel: MAIN_NETWORK_DEPRECATED_LABEL,
-    network: MAIN_NETWORK_DEPRECATED_LABEL,
+    id: Facade.app.mainNetworkId,
+    value: Facade.app.mainNetworkId,
+    label: Facade.app.mainNetworkLabel,
+    deprecatedLabel: Facade.app.mainNetworkDeprecatedLabel,
+    network: Facade.app.mainNetworkDeprecatedLabel,
   },
   {
-    id: TEST_NETWORK_ID,
-    value: TEST_NETWORK_ID,
-    label: TEST_NETWORK_LABEL,
-    deprecatedLabel: TEST_NETWORK_DEPRECATED_LABEL,
-    network: TEST_NETWORK_DEPRECATED_LABEL,
+    id: Facade.app.testNetworkId,
+    value: Facade.app.testNetworkId,
+    label: Facade.app.testNetworkLabel,
+    deprecatedLabel: Facade.app.testNetworkDeprecatedLabel,
+    network: Facade.app.testNetworkDeprecatedLabel,
   },
 ]
 

@@ -1,13 +1,12 @@
 import {useAsyncStorage} from '@react-native-community/async-storage'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {TouchableOpacity} from 'react-native'
 
-import {ROUTES} from '~/constants'
-import ScreenLayout from '~src/components/ScreenLayout'
-import ThemedButton from '~src/components/ThemedButton'
-import ThemedCheckbox from '~src/components/ThemedCheckbox'
-import i18n from '~src/i18n'
+import {Facade} from '~src/app/Facade'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ThemedButton from '~src/components/themed/ThemedButton'
+import ThemedCheckbox from '~src/components/themed/ThemedCheckbox'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
@@ -20,7 +19,7 @@ const WelcomePage: React.FC<Props> = (props) => {
   return (
     <ScreenLayout
       useHeaderPadding={false}
-      useTabBarPadding={false}
+      useFooterPadding={false}
       alignX={'center'}
       padding={30}
     >
@@ -32,43 +31,43 @@ const WelcomePage: React.FC<Props> = (props) => {
           fontSize={'3xl'}
           letterSpacing={'3px'}
         >
-          {i18n.t('welcome.brand')}
+          {Facade.t('welcome.brand')}
         </TextView>
       </LinearLayout>
 
       <TextView mb={5} color={'text.0'} fontSize={36} fontFamily={'bold'}>
-        {i18n.t('welcome.title')}
+        {Facade.t('welcome.title')}
       </TextView>
 
       <TextView mb={6} color={'text.0'} fontSize={'lg'} textAlign={'center'}>
-        {i18n.t('welcome.body_1_1')}
+        {Facade.t('welcome.body_1_1')}
 
         <TextView
-          onPress={() => props.onClose?.(ROUTES.SETTINGS.name)}
+          onPress={() => props.onClose?.(Facade.path.Settings.name)}
           color={'primary'}
         >
-          {i18n.t('welcome.body_1_2')}
+          {Facade.t('welcome.body_1_2')}
         </TextView>
 
-        {i18n.t('welcome.body_1_3')}
+        {Facade.t('welcome.body_1_3')}
 
         <TextView
-          onPress={() => props.onClose?.(ROUTES.LIST_WALLETS.name)}
+          onPress={() => props.onClose?.(Facade.path.ListWallets.name)}
           color={'primary'}
         >
-          {i18n.t('welcome.body_1_4')}
+          {Facade.t('welcome.body_1_4')}
         </TextView>
       </TextView>
 
       <TextView mb={6} color={'text.0'} fontSize={'lg'} textAlign={'center'}>
-        {i18n.t('welcome.body_2_0')}
+        {Facade.t('welcome.body_2_0')}
       </TextView>
 
       <LinearLayout mb={5} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
-          onPress={() => props.onClose?.(ROUTES.LIST_WALLETS.name)}
-          label={i18n.t('welcome.button_1')}
+          onPress={() => props.onClose?.(Facade.path.ListWallets.name)}
+          label={Facade.t('welcome.button_1')}
           flat={true}
         />
       </LinearLayout>
@@ -76,41 +75,33 @@ const WelcomePage: React.FC<Props> = (props) => {
       <LinearLayout mb={6} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
-          onPress={() => props.onClose?.(ROUTES.LIST_WALLETS.name)}
-          label={i18n.t('welcome.button_2')}
+          onPress={() => props.onClose?.(Facade.path.ListWallets.name)}
+          label={Facade.t('welcome.button_2')}
         />
       </LinearLayout>
 
       <LinearLayout mb={7} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
-          onPress={() => props.onClose?.(ROUTES.LIST_WALLETS.name)}
-          label={i18n.t('welcome.button_3')}
+          onPress={() => props.onClose?.(Facade.path.ListWallets.name)}
+          label={Facade.t('welcome.button_3')}
         />
       </LinearLayout>
 
       <LinearLayout mb={6} width={'100%'}>
         <ThemedCheckbox
           onChange={(checked) => setItem(String(checked))}
-          label={i18n.t('welcome.checkbox_1')}
+          label={Facade.t('welcome.checkbox_1')}
         />
       </LinearLayout>
 
-      <TouchableOpacity
-        onPress={() => props.onClose?.()}
-        style={{
-          position: 'absolute',
-          right: 0,
-          padding: 20,
-        }}
+      <LinearLayout
+        position={'absolute'}
+        right={Facade.space(5)}
+        top={Facade.space(5)}
       >
-        <ImageView
-          width={18}
-          height={18}
-          resizeMode={'contain'}
-          source={require('~/src/assets/images/close.png')}
-        />
-      </TouchableOpacity>
+        <ThemedCloseButton onPress={() => props.onClose?.()} />
+      </LinearLayout>
     </ScreenLayout>
   )
 }

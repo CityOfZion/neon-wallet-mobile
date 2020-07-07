@@ -1,5 +1,7 @@
-import {DEFAULT_CURRENCY} from '~/constants'
-import i18n from '~src/i18n'
+import i18n from 'i18n-js'
+
+import {Facade} from '~src/app/Facade'
+import {Lang} from '~src/enums/Lang'
 import {IAppAction, SET_CURRENCY, SET_LOCALE} from '~src/store/actions/app'
 
 interface IAppState {
@@ -8,8 +10,8 @@ interface IAppState {
 }
 
 const appState: IAppState = {
-  locale: 'en',
-  currency: DEFAULT_CURRENCY,
+  locale: Lang.EN_US,
+  currency: Facade.app.defaultCurrency,
 }
 
 export const appReducer = (state: IAppState = appState, action: IAppAction) => {

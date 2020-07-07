@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
 
+import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
-import ColorPicker from '~src/components/ColorPicker'
-import ScreenLayout from '~src/components/ScreenLayout'
-import i18n from '~src/i18n'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ColorPicker from '~src/components/misc/ColorPicker'
 import {Account} from '~src/models/Account'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -40,7 +40,7 @@ const CustomColorPage: React.FC<object> = () => {
         adjustsFontSizeToFit={true}
         numberOfLines={1}
       >
-        {i18n.t('customColorPage.subtitle')}
+        {Facade.t('customColorPage.subtitle')}
       </TextView>
 
       <LinearLayout weight={1}>

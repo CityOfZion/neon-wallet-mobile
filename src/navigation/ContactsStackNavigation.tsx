@@ -3,11 +3,11 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {ROUTES} from '~/constants'
+import {Facade} from '~src/app/Facade'
 import ContactsPage from '~src/scenes/ContactsPage'
 import {RootState} from '~src/store/reducers/root'
 
-type ContactsStackParamList = {
+export type ContactsStackParamList = {
   Contacts: undefined
 }
 
@@ -20,7 +20,7 @@ const ContactsStackNavigation = () => {
     <ThemeProvider theme={theme}>
       <ContactsStack.Navigator screenOptions={{headerShown: false}}>
         <ContactsStack.Screen
-          name={ROUTES.CONTACTS.name}
+          name={Facade.path.Contacts.name}
           component={ContactsPage}
         />
       </ContactsStack.Navigator>

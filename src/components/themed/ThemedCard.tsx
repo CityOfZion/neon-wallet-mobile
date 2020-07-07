@@ -1,0 +1,146 @@
+import {LinearGradient} from 'expo-linear-gradient'
+import PropTypes from 'prop-types'
+import React from 'react'
+import {StyleProp} from 'react-native'
+
+import {Facade} from '~src/app/Facade'
+import styled, {LinearLayout} from '~src/styles/styled-components'
+
+interface Props {
+  children?: any
+  rounded?: boolean
+  flat?: boolean
+  alignX?: string
+  alignY?: string
+  padding?: number | string
+  baseBgColor?: string
+  contentStyle?: any
+  hasShadow?: boolean
+  hasBright?: boolean
+}
+
+const ThemedCard: React.FC<Props> = (props) => {
+  const getBorderRadius = () => {
+    if (props.rounded) {
+      return 26
+    }
+
+    return 5
+  }
+
+  const getStyle = (): StyleProp<any> => {
+    const styleShadow = {
+      shadowColor: '#ffffff',
+      shadowOffset: {
+        width: 0,
+        height: -6,
+      },
+      shadowOpacity: 0.1,
+      shadowRadius: 6,
+    }
+
+    return props.hasShadow ? styleShadow : {}
+  }
+
+  const getContentStyle = (): StyleProp<any> => {
+    const style = {
+      padding: Facade.space(props.padding!),
+    }
+
+    const styleShadow = {
+      shadowColor: '#000000',
+      shadowOffset: {
+        width: 0,
+        height: 6,
+      },
+      shadowOpacity: 0.4,
+      shadowRadius: 6,
+      elevation: 10,
+    }
+
+    return Facade.lodash.merge(
+      style,
+      props.hasShadow ? styleShadow : {},
+      props.contentStyle ?? {}
+    )
+  }
+
+  return (
+    <DarkCardView style={getStyle()}>
+      <DarkCardContentView
+        style={getContentStyle()}
+        backgroundColor={props.flat ? 'transparent' : props.baseBgColor}
+        borderRadius={getBorderRadius()}
+        alignItems={props.alignX}
+        justifyContent={props.alignY}
+      >
+        {props.hasBright && !props.flat && (
+          <DarkCardBright
+            colors={['rgba(255, 255, 255, 0.25)', 'rgba(255, 255, 255, 0)']}
+            locations={[0, 1]}
+            start={[1, 0]}
+            end={[1, 1]}
+            style={{borderRadius: getBorderRadius()}}
+          />
+        )}
+
+        {props.hasBright && !props.flat && (
+          <DarkCardShadow
+            colors={['rgba(52, 67, 75, 0.55)', 'rgba(0, 0, 0, 0.1)']}
+            locations={[0, 1]}
+            start={[1, 0]}
+            end={[1, 1]}
+            style={{borderRadius: getBorderRadius()}}
+          />
+        )}
+
+        {props.children}
+      </DarkCardContentView>
+    </DarkCardView>
+  )
+}
+
+ThemedCard.propTypes = {
+  children: PropTypes.any,
+  rounded: PropTypes.bool,
+  flat: PropTypes.bool,
+  alignX: PropTypes.string,
+  alignY: PropTypes.string,
+  padding: PropTypes.any,
+  baseBgColor: PropTypes.any,
+  contentStyle: PropTypes.any,
+  hasShadow: PropTypes.bool,
+  hasBright: PropTypes.bool,
+}
+
+ThemedCard.defaultProps = {
+  rounded: true,
+  flat: false,
+  alignX: 'center',
+  padding: 30,
+  baseBgColor: '#2d3941',
+  hasShadow: true,
+  hasBright: true,
+}
+
+const DarkCardView = styled(LinearLayout)``
+
+const DarkCardContentView = styled(LinearLayout)``
+
+const DarkCardBright = styled(LinearGradient)`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+`
+
+const DarkCardShadow = styled(LinearGradient)`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 1px;
+  bottom: 0;
+`
+
+export default ThemedCard

@@ -2,7 +2,7 @@ import React from 'react'
 import {FlatList} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import i18n from '~src/i18n'
+import {Facade} from '~src/app/Facade'
 import {TokenValue} from '~src/models/TokenValue'
 import {RootState} from '~src/store/reducers/root'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
@@ -34,11 +34,11 @@ const BalanceListItem = (props: {item: TokenValue}) => {
       />
       <TableData header={props.item.name} content={props.item.symbol} />
       <TableData
-        header={i18n.t('components.balanceList.holdings')}
+        header={Facade.t('components.balanceList.holdings')}
         content={String(props.item.holding)}
       />
       <TableData
-        header={i18n.t('components.balanceList.value')}
+        header={Facade.t('components.balanceList.value')}
         content={`${currency}${props.item.value}`}
       />
     </LinearLayout>
@@ -53,7 +53,7 @@ const BalanceList = (props: {
   return (
     <LinearLayout height="100%" my={props.my ?? '0px'} mx={props.mx ?? '0px'}>
       <TextView color="text.2" fontSize="sm">
-        {i18n.t('components.balanceList.title')}
+        {Facade.t('components.balanceList.title')}
       </TextView>
       <FlatList
         data={props.tokenAssets}

@@ -3,9 +3,8 @@ import React from 'react'
 import {ImageSourcePropType, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {ROUTES, TAB_BAR_HEIGHT} from '~/constants'
+import {Facade} from '~src/app/Facade'
 import SwiperPanel, {SwiperController} from '~src/components/SwiperPanel'
-import i18n from '~src/i18n'
 import {RootState} from '~src/store/reducers/root'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -26,30 +25,30 @@ export default function QuickToolsMenu(props: Props) {
 
   const items: ListItem[] = [
     {
-      title: i18n.t('quickTools.qrCode.title'),
-      subtitle: i18n.t('quickTools.qrCode.subtitle'),
+      title: Facade.t('quickTools.qrCode.title'),
+      subtitle: Facade.t('quickTools.qrCode.subtitle'),
       source: require('~src/assets/images/icon-circle-qr-primary.png'),
       onClick: () =>
-        navigation.navigate(ROUTES.QUICK_TOOLS.name, {
-          screen: ROUTES.QR_CODE_SCAN_TEST.name,
+        navigation.navigate(Facade.path.QuickTools.name, {
+          screen: Facade.path.QrCodeScanTest.name,
         }),
     },
     {
-      title: i18n.t('quickTools.send.title'),
-      subtitle: i18n.t('quickTools.send.subtitle'),
+      title: Facade.t('quickTools.send.title'),
+      subtitle: Facade.t('quickTools.send.subtitle'),
       source: require('~src/assets/images/icon-circle-send-primary.png'),
       onClick: () =>
         navigation.navigate('Modal', {
-          screen: ROUTES.SEND_WALLET_SELECTION_MODAL.name,
+          screen: Facade.path.SendWalletSelectionModal.name,
         }),
     },
     {
-      title: i18n.t('quickTools.receive.title'),
-      subtitle: i18n.t('quickTools.receive.subtitle'),
+      title: Facade.t('quickTools.receive.title'),
+      subtitle: Facade.t('quickTools.receive.subtitle'),
       source: require('~src/assets/images/icon-circle-receive-primary.png'),
       onClick: () =>
         navigation.navigate('Modal', {
-          screen: ROUTES.RECEIVE_WALLET_SELECTION_MODAL.name,
+          screen: Facade.path.ReceiveWalletSelectionModal.name,
         }),
     },
   ]
@@ -67,7 +66,7 @@ export default function QuickToolsMenu(props: Props) {
       paddingLeft={36}
       paddingRight={36}
       paddingTop={40}
-      paddingBottom={24 + TAB_BAR_HEIGHT}
+      paddingBottom={24 + Facade.app.footerHeight}
     >
       {items.map((item, index) => (
         <TouchableWithoutFeedback

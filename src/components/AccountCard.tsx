@@ -2,7 +2,6 @@ import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
 import {
-  Clipboard,
   ImageBackground,
   LayoutChangeEvent,
   NativeSyntheticEvent,
@@ -24,20 +23,14 @@ import {
   SpaceProps,
 } from 'styled-system'
 
-import {FilterHelper} from '~src/helpers/FilterHelper'
-import i18n from '~src/i18n'
+import {Facade} from '~src/app/Facade'
 import {Account} from '~src/models/Account'
 import styled, {
   ImageView,
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {
-  orientation,
-  OrientationProps,
-  weight,
-  WeightProps,
-} from '~src/styles/styled-system.config'
+import {orientation, weight} from '~src/styles/styled-system.config'
 
 interface Props {
   onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
@@ -53,12 +46,6 @@ const AccountCard: React.FC<Props> = (props) => {
   const layoutEvent = (event: LayoutChangeEvent) => {
     const {height} = event.nativeEvent.layout
     setViewHeight(height)
-  }
-
-  const copyToClipboard = () => {
-    if (props.account.address) {
-      Clipboard.setString(props.account.address)
-    }
   }
 
   return (
@@ -150,7 +137,7 @@ const AccountCard: React.FC<Props> = (props) => {
                 textAlign="left"
                 fontWeight="bold"
               >
-                {i18n.t('paymentCard.balance')}
+                {Facade.t('paymentCard.balance')}
               </TextView>
 
               <TextView
@@ -161,7 +148,7 @@ const AccountCard: React.FC<Props> = (props) => {
                 textAlign="center"
                 fontWeight="bold"
               >
-                {FilterHelper.currency(
+                {Facade.filter.currency(
                   props.account.balance,
                   props.account.currency,
                   false,
@@ -187,7 +174,7 @@ const AccountCard: React.FC<Props> = (props) => {
             textAlign="left"
             fontWeight="bold"
           >
-            {i18n.t('paymentCard.balance')}
+            {Facade.t('paymentCard.balance')}
           </TextView>
         )}
 
@@ -206,7 +193,7 @@ const AccountCard: React.FC<Props> = (props) => {
                 textAlign="center"
                 fontWeight="bold"
               >
-                {FilterHelper.currency(
+                {Facade.filter.currency(
                   props.account.balance,
                   props.account.currency,
                   false,
@@ -227,7 +214,7 @@ const AccountCard: React.FC<Props> = (props) => {
                 textAlign="left"
                 fontWeight="bold"
               >
-                {i18n.t('paymentCard.address')}
+                {Facade.t('paymentCard.address')}
               </TextView>
 
               <TextView
@@ -242,7 +229,9 @@ const AccountCard: React.FC<Props> = (props) => {
 
             {!props.isStackMode && (
               <TouchableOpacity
-                onPress={copyToClipboard}
+                onPress={() =>
+                  Facade.utils.copyToClipboard(props.account.address)
+                }
                 style={{
                   paddingTop: 12 * unit,
                   paddingLeft: 12 * unit,

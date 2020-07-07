@@ -1,7 +1,7 @@
 import React from 'react'
 
-import ScreenLayout from '~src/components/ScreenLayout'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
+import {TextView} from '~src/styles/styled-components'
 
 const ContactsPage = () => {
   return (

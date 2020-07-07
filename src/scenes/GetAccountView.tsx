@@ -3,13 +3,12 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useEffect, useState} from 'react'
 import {SafeAreaView} from 'react-native'
 
+import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import BalanceList from '~src/components/BalanceList'
-import ThemedButton from '~src/components/ThemedButton'
 import TransactionsList from '~src/components/TransactionsList'
-import {FilterHelper} from '~src/helpers/FilterHelper'
-import i18n from '~src/i18n'
-import {mockWalletItems} from '~src/mockWalletItems'
+import ThemedButton from '~src/components/themed/ThemedButton'
+import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {NeoNode} from '~src/models/NeoNode'
 import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
 import {
@@ -51,7 +50,7 @@ const Header = (props: {goBack: () => void}) => {
           source={require('~src/assets/images/Chevron.png')}
         />
         <TextView color="text.0" ml="6px" fontSize="18px">
-          {i18n.t('app.back')}
+          {Facade.t('app.back')}
         </TextView>
       </ButtonView>
       <LinearLayout
@@ -61,14 +60,15 @@ const Header = (props: {goBack: () => void}) => {
         mr="20px"
       >
         <TextView color="text.3" textAlign="center" fontSize="10px">
-          {i18n.t('app.neoBlockHeight')}
+          {Facade.t('app.neoBlockHeight')}
         </TextView>
         <TextView color="text.0" textAlign="center">
-          {nodes[0] && FilterHelper.currency(nodes[0].height, '', false, false)}
+          {nodes[0] &&
+            Facade.filter.currency(nodes[0].height, '', false, false)}
         </TextView>
       </LinearLayout>
       <TextView fontSize="18px" color="text.0" fontFamily="semibold">
-        {i18n.t('app.edit')}
+        {Facade.t('app.edit')}
       </TextView>
     </LinearLayout>
   )
@@ -95,7 +95,7 @@ const TabSelector = (props: TabSelectorProps) => {
           fontFamily="semibold"
           color={props.isAssetsTabSelected ? 'text.0' : 'primary'}
         >
-          {i18n.t('screens.getAccount.assets')}
+          {Facade.t('screens.getAccount.assets')}
         </TextView>
       </ButtonView>
       <ButtonView
@@ -111,7 +111,7 @@ const TabSelector = (props: TabSelectorProps) => {
           fontFamily="semibold"
           color={props.isAssetsTabSelected ? 'primary' : 'text.0'}
         >
-          {i18n.t('screens.getAccount.transactions')}
+          {Facade.t('screens.getAccount.transactions')}
         </TextView>
       </ButtonView>
     </LinearLayout>
@@ -146,7 +146,7 @@ const GetAccountView = ({route, navigation}: GetAccountViewProps) => {
           <LinearLayout mt="28px" mx="auto">
             <ThemedButton
               fontSize="16px"
-              label={i18n.t('screens.getAccount.claimAsset', {
+              label={Facade.t('screens.getAccount.claimAsset', {
                 assetAmount: '0.0000123 GAS',
               })}
             />
