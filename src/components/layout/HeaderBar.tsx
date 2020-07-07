@@ -2,7 +2,7 @@ import {StackHeaderTitleProps} from '@react-navigation/stack/lib/typescript/src/
 import React from 'react'
 import {Route} from 'react-native'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface HeaderProps {
@@ -18,16 +18,16 @@ export interface HeaderProps {
 const HeaderBar = (headerProps: HeaderProps, props: StackHeaderTitleProps) => {
   return (
     <LinearLayout
-      height={$.app.headerHeight}
-      width={$.app.windowWidth - $.space<number>(220)}
+      height={Facade.app.headerHeight}
+      width={Facade.app.windowWidth - Facade.space<number>(220)}
       orientation="horiz"
       alignItems="center"
       justifyContent={'center'}
     >
       {headerProps.showIcon && (
         <ImageView
-          width={$.space<number>(headerProps.iconWidth ?? 20)}
-          ml={-$.space<number>((headerProps.iconWidth ?? 20) + 9)}
+          width={Facade.space<number>(headerProps.iconWidth ?? 20)}
+          ml={-Facade.space<number>((headerProps.iconWidth ?? 20) + 9)}
           mr={3}
           source={headerProps.image}
           resizeMode="contain"
@@ -38,7 +38,7 @@ const HeaderBar = (headerProps: HeaderProps, props: StackHeaderTitleProps) => {
         pt={2}
         textAlign="center"
         color="text.0"
-        fontSize={$.space(24)}
+        fontSize={Facade.space(24)}
         allowFontScaling={true}
         adjustsFontSizeToFit={true}
         numberOfLines={1}

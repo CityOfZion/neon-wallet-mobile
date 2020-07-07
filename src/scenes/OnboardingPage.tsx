@@ -6,8 +6,8 @@ import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {useSelector} from 'react-redux'
 
-import {$} from '~/facade'
 import ThemedButton from '~/src/components/themed/ThemedButton'
+import {Facade} from '~src/app/Facade'
 import {RootState} from '~src/store/reducers/root'
 import styled, {
   ImageView,
@@ -114,8 +114,8 @@ const OnboardingPage = (props: {
               image={require('~src/assets/images/onboarding-1.png')}
               bottomContent={
                 <FeatureText
-                  title={$.t('onboarding.feature1.title')}
-                  subtitle={$.t('onboarding.feature1.subtitle')}
+                  title={Facade.t('onboarding.feature1.title')}
+                  subtitle={Facade.t('onboarding.feature1.subtitle')}
                 />
               }
             />
@@ -124,8 +124,8 @@ const OnboardingPage = (props: {
               image={require('~src/assets/images/onboarding-2.png')}
               bottomContent={
                 <FeatureText
-                  title={$.t('onboarding.feature2.title')}
-                  subtitle={$.t('onboarding.feature2.subtitle')}
+                  title={Facade.t('onboarding.feature2.title')}
+                  subtitle={Facade.t('onboarding.feature2.subtitle')}
                 />
               }
             />
@@ -134,8 +134,8 @@ const OnboardingPage = (props: {
               image={require('~src/assets/images/onboarding-3.png')}
               bottomContent={
                 <FeatureText
-                  title={$.t('onboarding.feature3.title')}
-                  subtitle={$.t('onboarding.feature3.subtitle')}
+                  title={Facade.t('onboarding.feature3.title')}
+                  subtitle={Facade.t('onboarding.feature3.subtitle')}
                 />
               }
             />
@@ -146,15 +146,15 @@ const OnboardingPage = (props: {
                 <LinearLayout width={'100%'} alignItems={'center'}>
                   <LinearLayout mb={'8%'}>
                     <FeatureText
-                      title={$.t('onboarding.feature4.title')}
-                      subtitle={$.t('onboarding.feature4.subtitle')}
+                      title={Facade.t('onboarding.feature4.title')}
+                      subtitle={Facade.t('onboarding.feature4.subtitle')}
                     />
                   </LinearLayout>
 
                   <LinearLayout width={'100%'} px={'7%'}>
                     <ThemedButton
                       onPress={() => setAsSeen()}
-                      label={$.t('onboarding.getStarted.buttonTitle')}
+                      label={Facade.t('onboarding.getStarted.buttonTitle')}
                       basic={true}
                       bgColor={'primary'}
                       textColor={'black'}
@@ -176,7 +176,7 @@ const OnboardingPage = (props: {
             onPress={() => setAsSeen()}
             style={{textTransform: 'lowercase'}}
           >
-            {$.t('app.skip')}
+            {Facade.t('app.skip')}
           </SkipButton>
         </LinearLayout>
       </SafeAreaView>

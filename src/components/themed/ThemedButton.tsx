@@ -7,7 +7,7 @@ import {
   StyleProp,
 } from 'react-native'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import ThemedCard from '~src/components/themed/ThemedCard'
 import styled, {
   ImageView,
@@ -37,9 +37,9 @@ interface Props {
 
 const ThemedButton: React.FC<Props> = (props) => {
   const [isActive, setActive] = useState<boolean>(props.active ?? false)
-  const width = $.space(props.iconSize ? props.iconSize[0] : 20)
-  const height = $.space(props.iconSize ? props.iconSize[1] : 20)
-  const fontSize = $.space(props.fontSize ?? 22)
+  const width = Facade.space(props.iconSize ? props.iconSize[0] : 20)
+  const height = Facade.space(props.iconSize ? props.iconSize[1] : 20)
+  const fontSize = Facade.space(props.fontSize ?? 22)
 
   useEffect(() => {
     setActive(props.active ?? false)
@@ -49,9 +49,9 @@ const ThemedButton: React.FC<Props> = (props) => {
     const style = {
       paddingTop: 0,
       paddingBottom: 0,
-      paddingLeft: $.space(20),
-      paddingRight: $.space(20),
-      height: $.space(50),
+      paddingLeft: Facade.space(20),
+      paddingRight: Facade.space(20),
+      height: Facade.space(50),
     }
 
     const styleActive = {
@@ -59,7 +59,7 @@ const ThemedButton: React.FC<Props> = (props) => {
       borderWidth: 1,
     }
 
-    return $.lodash.merge(
+    return Facade.lodash.merge(
       style,
       isActive ? styleActive : {},
       props.contentStyle ?? {}

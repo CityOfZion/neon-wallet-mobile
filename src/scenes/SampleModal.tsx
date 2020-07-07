@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import {useSelector} from 'react-redux'
 
-import {$} from '~/facade'
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {Facade} from '~src/app/Facade'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootState} from '~src/store/reducers/root'
@@ -34,9 +34,9 @@ export default function SampleModal(props: Props) {
       controller={controller}
       fullSize={true}
       paddingTop={36}
-      title={$.t('screens.createAccount.title')}
-      leftButton={$.t('screens.createAccount.navigation.cancel')}
-      rightButton={$.t('screens.createAccount.navigation.save')}
+      title={Facade.t('screens.createAccount.title')}
+      leftButton={Facade.t('screens.createAccount.navigation.cancel')}
+      rightButton={Facade.t('screens.createAccount.navigation.save')}
       onLeftPress={() => controller.close()}
       onRightPress={() => controller.close()}
       onClose={() => props.navigation.goBack()}
@@ -50,12 +50,12 @@ export default function SampleModal(props: Props) {
           fontFamily="medium"
           textAlign="center"
         >
-          {$.t('screens.createAccount.subtitle')}
+          {Facade.t('screens.createAccount.subtitle')}
         </TextView>
         <TextView color={theme.colors.text[0]} mb={66}>
           TODO: InputText {'\n'}
-          {$.t('screens.createAccount.accountInput.title')} {'\n'}
-          {$.t('screens.createAccount.accountInput.placeholder')} {'\n'}
+          {Facade.t('screens.createAccount.accountInput.title')} {'\n'}
+          {Facade.t('screens.createAccount.accountInput.placeholder')} {'\n'}
         </TextView>
         <TextView
           mb={52}
@@ -64,7 +64,7 @@ export default function SampleModal(props: Props) {
           fontFamily="medium"
           textAlign="center"
         >
-          {$.t('screens.createAccount.selectColor')}
+          {Facade.t('screens.createAccount.selectColor')}
         </TextView>
         <TextView color={theme.colors.text[0]}>TODO: ColorSelector</TextView>
       </LinearLayout>

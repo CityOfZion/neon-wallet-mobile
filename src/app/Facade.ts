@@ -7,7 +7,7 @@ import {Normalize} from '~src/app/Normalize'
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import {UtilsHelper} from '~src/helpers/UtilsHelper'
 
-export abstract class $ {
+export abstract class Facade {
   // App
   static readonly config = Config
 

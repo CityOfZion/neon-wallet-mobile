@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ColorPicker from '~src/components/misc/ColorPicker'
@@ -40,7 +40,7 @@ const CustomColorPage: React.FC<object> = () => {
         adjustsFontSizeToFit={true}
         numberOfLines={1}
       >
-        {$.t('customColorPage.subtitle')}
+        {Facade.t('customColorPage.subtitle')}
       </TextView>
 
       <LinearLayout weight={1}>

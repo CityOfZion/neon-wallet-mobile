@@ -17,7 +17,7 @@ import {
   SpaceProps,
 } from 'styled-system'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import {useSwiperController} from '~src/components/SwiperPanel'
 import QuickToolsMenu from '~src/scenes/QuickToolsMenu'
 import {RootState} from '~src/store/reducers/root'
@@ -79,8 +79,8 @@ const FooterBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
     >
       <QuickToolsMenu controller={controller} />
       <TabBarContainer
-        height={$.app.footerHeight}
-        width={$.app.windowWidth}
+        height={Facade.app.footerHeight}
+        width={Facade.app.windowWidth}
         bg={'background.0'}
       >
         <RelativeLayout height="100%" width="100%">
@@ -110,7 +110,7 @@ const FooterBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
           >
             <TabButton
               height="100%"
-              onPress={() => navigation.navigate($.path.ListWallets.name)}
+              onPress={() => navigation.navigate(Facade.path.ListWallets.name)}
               weight={1}
             >
               <ImageView
@@ -121,7 +121,7 @@ const FooterBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
             </TabButton>
             <TabButton
               height="100%"
-              onPress={() => navigation.navigate($.path.Contacts.name)}
+              onPress={() => navigation.navigate(Facade.path.Contacts.name)}
               weight={1}
             >
               <ImageView
@@ -159,7 +159,7 @@ const FooterBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
             </TabButton>
             <TabButton
               height="100%"
-              onPress={() => navigation.navigate($.path.Settings.name)}
+              onPress={() => navigation.navigate(Facade.path.Settings.name)}
               weight={1}
             >
               <ImageView
@@ -171,7 +171,7 @@ const FooterBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
             <TabButton
               height="100%"
               top="4px"
-              onPress={() => navigation.navigate($.path.More.name)}
+              onPress={() => navigation.navigate(Facade.path.More.name)}
               weight={1}
             >
               <ImageView

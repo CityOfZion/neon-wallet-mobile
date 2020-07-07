@@ -1,7 +1,7 @@
 import React from 'react'
 import {TouchableHighlight} from 'react-native'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export enum RightIconType {
@@ -57,9 +57,9 @@ const MenuItem = (props: MenuItemProps) => {
         <LinearLayout
           alignItems="center"
           orientation="horiz"
-          height={$.space(65)}
+          height={Facade.space(65)}
           width="100%"
-          pl={$.space(1)}
+          pl={Facade.space(1)}
         >
           {props.icon && (
             <ImageView
@@ -78,7 +78,7 @@ const MenuItem = (props: MenuItemProps) => {
           <TextView
             fontSize={'md'}
             fontFamily="semibold"
-            mr={$.space(3)}
+            mr={Facade.space(3)}
             color="#869ca5"
           >
             {props.subtitle}

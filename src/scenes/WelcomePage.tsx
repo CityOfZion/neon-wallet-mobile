@@ -2,7 +2,7 @@ import {useAsyncStorage} from '@react-native-community/async-storage'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCheckbox from '~src/components/themed/ThemedCheckbox'
@@ -31,43 +31,43 @@ const WelcomePage: React.FC<Props> = (props) => {
           fontSize={'3xl'}
           letterSpacing={'3px'}
         >
-          {$.t('welcome.brand')}
+          {Facade.t('welcome.brand')}
         </TextView>
       </LinearLayout>
 
       <TextView mb={5} color={'text.0'} fontSize={36} fontFamily={'bold'}>
-        {$.t('welcome.title')}
+        {Facade.t('welcome.title')}
       </TextView>
 
       <TextView mb={6} color={'text.0'} fontSize={'lg'} textAlign={'center'}>
-        {$.t('welcome.body_1_1')}
+        {Facade.t('welcome.body_1_1')}
 
         <TextView
-          onPress={() => props.onClose?.($.path.Settings.name)}
+          onPress={() => props.onClose?.(Facade.path.Settings.name)}
           color={'primary'}
         >
-          {$.t('welcome.body_1_2')}
+          {Facade.t('welcome.body_1_2')}
         </TextView>
 
-        {$.t('welcome.body_1_3')}
+        {Facade.t('welcome.body_1_3')}
 
         <TextView
-          onPress={() => props.onClose?.($.path.ListWallets.name)}
+          onPress={() => props.onClose?.(Facade.path.ListWallets.name)}
           color={'primary'}
         >
-          {$.t('welcome.body_1_4')}
+          {Facade.t('welcome.body_1_4')}
         </TextView>
       </TextView>
 
       <TextView mb={6} color={'text.0'} fontSize={'lg'} textAlign={'center'}>
-        {$.t('welcome.body_2_0')}
+        {Facade.t('welcome.body_2_0')}
       </TextView>
 
       <LinearLayout mb={5} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
-          onPress={() => props.onClose?.($.path.ListWallets.name)}
-          label={$.t('welcome.button_1')}
+          onPress={() => props.onClose?.(Facade.path.ListWallets.name)}
+          label={Facade.t('welcome.button_1')}
           flat={true}
         />
       </LinearLayout>
@@ -75,27 +75,31 @@ const WelcomePage: React.FC<Props> = (props) => {
       <LinearLayout mb={6} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
-          onPress={() => props.onClose?.($.path.ListWallets.name)}
-          label={$.t('welcome.button_2')}
+          onPress={() => props.onClose?.(Facade.path.ListWallets.name)}
+          label={Facade.t('welcome.button_2')}
         />
       </LinearLayout>
 
       <LinearLayout mb={7} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
-          onPress={() => props.onClose?.($.path.ListWallets.name)}
-          label={$.t('welcome.button_3')}
+          onPress={() => props.onClose?.(Facade.path.ListWallets.name)}
+          label={Facade.t('welcome.button_3')}
         />
       </LinearLayout>
 
       <LinearLayout mb={6} width={'100%'}>
         <ThemedCheckbox
           onChange={(checked) => setItem(String(checked))}
-          label={$.t('welcome.checkbox_1')}
+          label={Facade.t('welcome.checkbox_1')}
         />
       </LinearLayout>
 
-      <LinearLayout position={'absolute'} right={$.space(5)} top={$.space(5)}>
+      <LinearLayout
+        position={'absolute'}
+        right={Facade.space(5)}
+        top={Facade.space(5)}
+      >
         <ThemedCloseButton onPress={() => props.onClose?.()} />
       </LinearLayout>
     </ScreenLayout>

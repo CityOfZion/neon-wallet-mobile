@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import {StyleProp} from 'react-native'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import styled, {LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
@@ -44,7 +44,7 @@ const ThemedCard: React.FC<Props> = (props) => {
 
   const getContentStyle = (): StyleProp<any> => {
     const style = {
-      padding: $.space(props.padding!),
+      padding: Facade.space(props.padding!),
     }
 
     const styleShadow = {
@@ -58,7 +58,7 @@ const ThemedCard: React.FC<Props> = (props) => {
       elevation: 10,
     }
 
-    return $.lodash.merge(
+    return Facade.lodash.merge(
       style,
       props.hasShadow ? styleShadow : {},
       props.contentStyle ?? {}

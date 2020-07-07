@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
 import {expo} from '~/app.json'
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {NeoNode} from '~src/models/NeoNode'
@@ -66,7 +66,9 @@ const Home = (props: Props) => {
 
         <LinearLayout m={3}>
           <ThemedButton
-            onPress={() => props.navigation.navigate($.path.GetWallet.name)}
+            onPress={() =>
+              props.navigation.navigate(Facade.path.GetWallet.name)
+            }
             label={'Account'}
           />
         </LinearLayout>

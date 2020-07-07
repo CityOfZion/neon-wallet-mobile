@@ -6,7 +6,7 @@ import {StatusBar} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import FooterBar from '~src/components/layout/FooterBar'
 import ContactsStackNavigation from '~src/navigation/ContactsStackNavigation'
 import MoreStackNavigation from '~src/navigation/MoreStackNavigation'
@@ -63,22 +63,25 @@ const TabNavigation = () => {
       />
       <Tab.Navigator tabBar={(props) => <FooterBar {...props} />}>
         <Tab.Screen
-          name={$.path.ListWallets.name}
+          name={Facade.path.ListWallets.name}
           component={WalletStackNavigation}
         />
         <Tab.Screen
-          name={$.path.Contacts.name}
+          name={Facade.path.Contacts.name}
           component={ContactsStackNavigation}
         />
         <Tab.Screen
-          name={$.path.QuickTools.name}
+          name={Facade.path.QuickTools.name}
           component={QuickToolsStackNavigation}
         />
         <Tab.Screen
-          name={$.path.Settings.name}
+          name={Facade.path.Settings.name}
           component={SettingsStackNavigation}
         />
-        <Tab.Screen name={$.path.More.name} component={MoreStackNavigation} />
+        <Tab.Screen
+          name={Facade.path.More.name}
+          component={MoreStackNavigation}
+        />
       </Tab.Navigator>
     </ThemeProvider>
   )

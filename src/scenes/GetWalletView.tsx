@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 import {ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {Account} from '~src/models/Account'
@@ -50,7 +50,7 @@ const GetWalletView = (props: GetWalletProps) => {
             isCompacted={true}
             isStackMode={i !== accounts.length - 1}
             onPress={() =>
-              props.navigation.navigate($.path.GetAccount.name, {account})
+              props.navigation.navigate(Facade.path.GetAccount.name, {account})
             }
           />
         </LinearLayout>
@@ -98,7 +98,7 @@ const GetWalletView = (props: GetWalletProps) => {
               ml="4px"
               fontFamily="medium"
             >
-              {$.t('screens.getWallet.addNewAccount')}
+              {Facade.t('screens.getWallet.addNewAccount')}
             </TextView>
           </LinearLayout>
         </ScrollView>

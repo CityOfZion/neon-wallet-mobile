@@ -1,4 +1,4 @@
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import {TokenBalance} from '~src/models/TokenBalance'
 import {TokenValue} from '~src/models/TokenValue'
 import {Wallet} from '~src/models/Wallet'
@@ -18,7 +18,7 @@ export const mockWalletItems = [
       new TokenValue('MYCOIN', 'MC', 415, 1865, 'salmon'),
       new TokenValue('THECOIN', 'TC', 4511, 55, 'red'),
     ]),
-    $.moment().add('-85', 'hours').format()
+    Facade.moment().add('-85', 'hours').format()
   ),
   new Wallet(
     'Wallet 2',
@@ -34,7 +34,7 @@ export const mockWalletItems = [
       new TokenValue('MYCOIN', 'MC', 0, 55, '#555'),
       new TokenValue('THECOIN', 'TC', 0, 1865, 'red'),
     ]),
-    $.moment().add('-43', 'hours').format()
+    Facade.moment().add('-43', 'hours').format()
   ),
   new Wallet(
     'Wallet 3',
@@ -50,6 +50,6 @@ export const mockWalletItems = [
       new TokenValue('MYCOIN', 'MC', 25, 55, '#987654'),
       new TokenValue('THECOIN', 'TC', 315, 1865, '#287213'),
     ]),
-    $.moment().add('-35', 'hours').format()
+    Facade.moment().add('-35', 'hours').format()
   ),
 ]

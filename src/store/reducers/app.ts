@@ -1,6 +1,6 @@
 import i18n from 'i18n-js'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import {Lang} from '~src/enums/Lang'
 import {IAppAction, SET_CURRENCY, SET_LOCALE} from '~src/store/actions/app'
 
@@ -11,7 +11,7 @@ interface IAppState {
 
 const appState: IAppState = {
   locale: Lang.EN_US,
-  currency: $.app.defaultCurrency,
+  currency: Facade.app.defaultCurrency,
 }
 
 export const appReducer = (state: IAppState = appState, action: IAppAction) => {

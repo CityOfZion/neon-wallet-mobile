@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React, {useState} from 'react'
 import {Alert, FlatList} from 'react-native'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
@@ -30,18 +30,18 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
   ]
 
   const [formedWords, setFormedWords] = useState<string[]>([])
-  const [shuffledWords] = useState<string[]>($.lodash.shuffle(words))
+  const [shuffledWords] = useState<string[]>(Facade.lodash.shuffle(words))
 
   const validateAndNext = () => {
     if (formedWords.join() === words.join()) {
-      props.navigation.navigate($.path.Step4CreateWallet.name)
+      props.navigation.navigate(Facade.path.Step4CreateWallet.name)
     } else {
       Alert.alert(
-        $.t('step3CreateWallet.dialog_2_title'),
-        $.t('step3CreateWallet.dialog_2_body'),
+        Facade.t('step3CreateWallet.dialog_2_title'),
+        Facade.t('step3CreateWallet.dialog_2_body'),
         [
           {
-            text: $.t('app.retry'),
+            text: Facade.t('app.retry'),
             onPress: () => setFormedWords([]),
           },
         ]
@@ -73,16 +73,16 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
               fontSize={'lg'}
               fontFamily={'bold'}
             >
-              {$.t('step3CreateWallet.label_1')}
+              {Facade.t('step3CreateWallet.label_1')}
             </TextView>
 
             <TextView color={'primary'} fontSize={'lg'} fontFamily={'bold'}>
-              {$.t('step3CreateWallet.twoOfThree')}
+              {Facade.t('step3CreateWallet.twoOfThree')}
             </TextView>
           </LinearLayout>
 
           <TextView color={'text.0'} fontSize={'lg'}>
-            {$.t('step3CreateWallet.body_1')}
+            {Facade.t('step3CreateWallet.body_1')}
           </TextView>
         </LinearLayout>
 
@@ -116,14 +116,14 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
         </LinearLayout>
 
         <TextView mb={4} color={'text.0'} fontSize={'lg'}>
-          {$.t('step3CreateWallet.body_2')}
+          {Facade.t('step3CreateWallet.body_2')}
         </TextView>
       </LinearLayout>
 
       <LinearLayout mt={5} mb={6} px={5} width={'100%'}>
         <ThemedButton
           onPress={() => validateAndNext()}
-          label={$.t('app.continue')}
+          label={Facade.t('app.continue')}
           disabled={isDisabled()}
         />
       </LinearLayout>

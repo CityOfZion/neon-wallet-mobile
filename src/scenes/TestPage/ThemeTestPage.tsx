@@ -9,7 +9,7 @@ import {
   SpaceProps,
 } from 'styled-system'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import {setTheme} from '~src/store/actions/theme'
 import {RootState} from '~src/store/reducers/root'
 import styled from '~src/styles/styled-components'
@@ -17,7 +17,9 @@ import styled from '~src/styles/styled-components'
 const ThemeTestPage: React.FC<object> = () => {
   const dispatch = useDispatch()
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
-  const [currentTheme, setCurrentTheme] = useState<DefaultTheme>($.themeDark)
+  const [currentTheme, setCurrentTheme] = useState<DefaultTheme>(
+    Facade.themeDark
+  )
 
   const changeTheme = (theme: DefaultTheme) => {
     dispatch(setTheme(theme))
@@ -34,7 +36,7 @@ const ThemeTestPage: React.FC<object> = () => {
           p={4}
           bg="primary"
           borderRadius={3}
-          onPress={() => changeTheme($.themeDark)}
+          onPress={() => changeTheme(Facade.themeDark)}
         >
           <Text color="text.1">Switch to Dark Theme</Text>
         </ThemeButton>
@@ -43,7 +45,7 @@ const ThemeTestPage: React.FC<object> = () => {
           p={4}
           bg="primary"
           borderRadius={3}
-          onPress={() => changeTheme($.themeLight)}
+          onPress={() => changeTheme(Facade.themeLight)}
         >
           <Text color="text.1">Switch to Light Theme</Text>
         </ThemeButton>

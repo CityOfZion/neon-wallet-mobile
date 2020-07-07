@@ -3,8 +3,8 @@ import {ScrollView} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
 
-import {$} from '~/facade'
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {Facade} from '~src/app/Facade'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import WalletCard from '~src/components/WalletCard'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
@@ -30,7 +30,7 @@ const SendWalletSelectionModal = (props: Props) => {
       paddingTop={24}
       paddingRight={0}
       paddingLeft={0}
-      title={$.t('modals.send.title')}
+      title={Facade.t('modals.send.title')}
       rightButton={'X    '}
       onRightPress={() => controller.close()}
       onClose={() => props.navigation.goBack()}
@@ -44,15 +44,15 @@ const SendWalletSelectionModal = (props: Props) => {
           fontFamily="medium"
           textAlign="center"
         >
-          {$.t('modals.send.walletSelection.subtitle')}
+          {Facade.t('modals.send.walletSelection.subtitle')}
         </TextView>
         <Carousel
           layout={'default'}
           ref={carouselRef}
           data={wallets}
           firstItem={0}
-          sliderWidth={$.app.windowWidth}
-          itemWidth={Math.round($.app.windowWidth * 0.7)}
+          sliderWidth={Facade.app.windowWidth}
+          itemWidth={Math.round(Facade.app.windowWidth * 0.7)}
           inactiveSlideScale={0.8}
           inactiveSlideOpacity={1}
           inactiveSlideShift={12}
@@ -64,7 +64,9 @@ const SendWalletSelectionModal = (props: Props) => {
           renderItem={({item}) => (
             <WalletCard
               onPress={() =>
-                props.navigation.navigate($.path.SendWalletSelectionModal.name)
+                props.navigation.navigate(
+                  Facade.path.SendWalletSelectionModal.name
+                )
               }
               height={330}
               wallet={item}
@@ -78,7 +80,7 @@ const SendWalletSelectionModal = (props: Props) => {
           color="text.0"
           fontFamily="medium"
         >
-          {$.filter.currency(
+          {Facade.filter.currency(
             wallets[activeIndex].currentValue,
             currency,
             false,

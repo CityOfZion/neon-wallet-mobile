@@ -6,7 +6,7 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import HeaderActionButton, {
   ActionButtonOptions,
 } from '~src/components/layout/HeaderActionButton'
@@ -35,7 +35,7 @@ export type MoreStackParamList = {
 const MoreStack = createStackNavigator<MoreStackParamList>()
 
 const navbarOptions = (headerProps: HeaderProps): StackNavigationOptions => ({
-  headerBackTitle: $.t('app.back'),
+  headerBackTitle: Facade.t('app.back'),
   headerTitle: (props) => HeaderBar(headerProps, props),
   headerRight: () => HeaderActionButton(headerProps.route?.params),
   headerTransparent: true,
@@ -49,11 +49,11 @@ const MoreStackNavigation = () => {
     <ThemeProvider theme={theme}>
       <MoreStack.Navigator>
         <MoreStack.Screen
-          name={$.path.More.name}
+          name={Facade.path.More.name}
           component={MorePage}
           options={({route}) =>
             navbarOptions({
-              title: $.path.More.name,
+              title: Facade.path.More.name,
               image: require('~src/assets/images/more-horiz.png'),
               showIcon: true,
               iconWidth: 20,
@@ -64,11 +64,11 @@ const MoreStackNavigation = () => {
         />
 
         <MoreStack.Screen
-          name={$.path.Step1CreateWallet.name}
+          name={Facade.path.Step1CreateWallet.name}
           component={Step1CreateWalletPage}
           options={({route}) =>
             navbarOptions({
-              title: $.path.Step1CreateWallet.translate(),
+              title: Facade.path.Step1CreateWallet.translate(),
               image: require('~src/assets/images/icon-add-circle-outline-white.png'),
               showIcon: true,
               iconWidth: 20,
@@ -79,11 +79,11 @@ const MoreStackNavigation = () => {
         />
 
         <MoreStack.Screen
-          name={$.path.Step2CreateWallet.name}
+          name={Facade.path.Step2CreateWallet.name}
           component={Step2CreateWalletPage}
           options={({route}) =>
             navbarOptions({
-              title: $.path.Step2CreateWallet.translate(),
+              title: Facade.path.Step2CreateWallet.translate(),
               image: require('~src/assets/images/icon-add-circle-outline-white.png'),
               showIcon: true,
               iconWidth: 20,
@@ -94,11 +94,11 @@ const MoreStackNavigation = () => {
         />
 
         <MoreStack.Screen
-          name={$.path.Step3CreateWallet.name}
+          name={Facade.path.Step3CreateWallet.name}
           component={Step3CreateWalletPage}
           options={({route}) =>
             navbarOptions({
-              title: $.path.Step3CreateWallet.translate(),
+              title: Facade.path.Step3CreateWallet.translate(),
               image: require('~src/assets/images/icon-add-circle-outline-white.png'),
               showIcon: true,
               iconWidth: 20,
@@ -109,11 +109,11 @@ const MoreStackNavigation = () => {
         />
 
         <MoreStack.Screen
-          name={$.path.Step4CreateWallet.name}
+          name={Facade.path.Step4CreateWallet.name}
           component={Step4CreateWalletPage}
           options={({route}) =>
             navbarOptions({
-              title: $.path.Step4CreateWallet.translate(),
+              title: Facade.path.Step4CreateWallet.translate(),
               image: require('~src/assets/images/icon-add-circle-outline-white.png'),
               showIcon: true,
               iconWidth: 20,
@@ -124,11 +124,11 @@ const MoreStackNavigation = () => {
         />
 
         <MoreStack.Screen
-          name={$.path.Step5CreateWallet.name}
+          name={Facade.path.Step5CreateWallet.name}
           component={Step5CreateWalletPage}
           options={({route}) =>
             navbarOptions({
-              title: $.path.Step5CreateWallet.translate(),
+              title: Facade.path.Step5CreateWallet.translate(),
               image: require('~src/assets/images/icon-add-circle-outline-white.png'),
               showIcon: true,
               iconWidth: 20,
@@ -139,11 +139,11 @@ const MoreStackNavigation = () => {
         />
 
         <MoreStack.Screen
-          name={$.path.CustomColor.name}
+          name={Facade.path.CustomColor.name}
           component={CustomColorPage}
           options={({route}) =>
             navbarOptions({
-              title: $.path.CustomColor.translate(),
+              title: Facade.path.CustomColor.translate(),
               image: require('~src/assets/images/palette.png'),
               showIcon: true,
               iconWidth: 20,

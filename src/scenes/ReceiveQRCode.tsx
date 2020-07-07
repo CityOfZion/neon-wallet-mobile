@@ -4,7 +4,7 @@ import React from 'react'
 import {ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import NeonQRCode from '~src/components/QRCode'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {RootState} from '~src/store/reducers/root'
@@ -21,7 +21,7 @@ export interface ReceiveQRCodeProps {
   tokenLogo: any
 }
 
-const buttonWidth = $.app.screenWidth - 76
+const buttonWidth = Facade.app.screenWidth - 76
 
 const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
@@ -71,7 +71,7 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
                 mb={16}
                 style={{includeFontPadding: false}}
               >
-                {$.t('receive.paymentRequestDetails')}
+                {Facade.t('receive.paymentRequestDetails')}
               </TextView>
             </LinearLayout>
             <LinearLayout
@@ -88,7 +88,7 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
                   weight={1.4}
                   mt={1}
                 >
-                  {$.t('receive.token')}
+                  {Facade.t('receive.token')}
                 </TextView>
                 <LinearLayout orientation="horiz" weight={5}>
                   <ImageView
@@ -116,7 +116,7 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
                   weight={1.4}
                   style={{textAlignVertical: 'bottom'}}
                 >
-                  {$.t('receive.amount')}
+                  {Facade.t('receive.amount')}
                 </TextView>
                 <TextView
                   color="white"
@@ -134,7 +134,7 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
                   weight={1.4}
                   style={{textAlignVertical: 'bottom'}}
                 >
-                  {$.t('receive.value')}
+                  {Facade.t('receive.value')}
                 </TextView>
                 <TextView
                   color="white"
@@ -151,7 +151,7 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
                   color={theme.colors.background[3]}
                   weight={1.4}
                 >
-                  {$.t('receive.location')}
+                  {Facade.t('receive.location')}
                 </TextView>
                 <TextView
                   color="white"
@@ -171,7 +171,7 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
                   color={theme.colors.background[3]}
                   weight={1.4}
                 >
-                  {$.t('receive.address')}
+                  {Facade.t('receive.address')}
                 </TextView>
                 <TextView
                   color={theme.colors.primary}
@@ -191,7 +191,7 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
                   color={theme.colors.background[3]}
                   weight={1.4}
                 >
-                  {$.t('receive.reference')}
+                  {Facade.t('receive.reference')}
                 </TextView>
                 <TextView
                   color="white"

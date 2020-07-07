@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 const mockNames = ['Tyler', 'Jack W']
@@ -21,7 +21,7 @@ const Transaction = () => {
         />
         <LinearLayout orientation="verti" mr="24px">
           <TextView fontSize="14px" color="text.2" mb="-2px">
-            {$.t('components.transactionsList.pending')}
+            {Facade.t('components.transactionsList.pending')}
           </TextView>
           <TextView fontSize="16px" color="text.0">
             16:43
@@ -31,10 +31,10 @@ const Transaction = () => {
       <LinearLayout orientation="verti" weight={1}>
         <LinearLayout orientation="horiz" weight={1} mb="-2px">
           <TextView weight={2} fontSize="14px" color="text.2">
-            {$.t('components.transactionsList.sentTo')}
+            {Facade.t('components.transactionsList.sentTo')}
           </TextView>
           <TextView weight={3} fontSize="14px" color="text.2">
-            {$.t('components.transactionsList.value')}
+            {Facade.t('components.transactionsList.value')}
           </TextView>
         </LinearLayout>
         <LinearLayout orientation="horiz" weight={1}>
@@ -93,7 +93,7 @@ const TransactionsList = () => {
   return (
     <LinearLayout orientation="verti" my="28px">
       <TextView color="text.2" fontSize="14px" fontFamily="medium" mb="12px">
-        {$.t('components.transactionsList.title')}
+        {Facade.t('components.transactionsList.title')}
       </TextView>
       <Transaction />
       <Transaction />

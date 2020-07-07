@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import {Alert} from 'react-native'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCard from '~src/components/themed/ThemedCard'
@@ -33,14 +33,14 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
 
   const infoDialog = () => {
     Alert.alert(
-      $.t('step2CreateWallet.dialog_title'),
-      $.t('step2CreateWallet.dialog_body'),
+      Facade.t('step2CreateWallet.dialog_title'),
+      Facade.t('step2CreateWallet.dialog_body'),
       [
         {
-          text: $.t('step2CreateWallet.dialog_dismiss'),
+          text: Facade.t('step2CreateWallet.dialog_dismiss'),
           onPress: () =>
-            props.navigation.navigate($.path.Step3CreateWallet.name, {
-              actionTitle: $.t('app.skip'),
+            props.navigation.navigate(Facade.path.Step3CreateWallet.name, {
+              actionTitle: Facade.t('app.skip'),
               actionOnPress: () => skipDialog(),
             }),
         },
@@ -50,16 +50,16 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
 
   const skipDialog = () => {
     Alert.alert(
-      $.t('step3CreateWallet.dialog_1_title'),
-      $.t('step3CreateWallet.dialog_1_body'),
+      Facade.t('step3CreateWallet.dialog_1_title'),
+      Facade.t('step3CreateWallet.dialog_1_body'),
       [
         {
-          text: $.t('boolean.true'),
+          text: Facade.t('boolean.true'),
           onPress: () =>
-            props.navigation.navigate($.path.Step4CreateWallet.name),
+            props.navigation.navigate(Facade.path.Step4CreateWallet.name),
         },
         {
-          text: $.t('boolean.false'),
+          text: Facade.t('boolean.false'),
           style: 'cancel',
         },
       ]
@@ -91,16 +91,16 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
               fontSize={'lg'}
               fontFamily={'bold'}
             >
-              {$.t('step2CreateWallet.label_1')}
+              {Facade.t('step2CreateWallet.label_1')}
             </TextView>
 
             <TextView color={'primary'} fontSize={'lg'} fontFamily={'bold'}>
-              {$.t('step2CreateWallet.oneOfThree')}
+              {Facade.t('step2CreateWallet.oneOfThree')}
             </TextView>
           </LinearLayout>
 
           <TextView color={'text.0'} fontSize={'lg'}>
-            {$.t('step2CreateWallet.body_1')}
+            {Facade.t('step2CreateWallet.body_1')}
           </TextView>
         </LinearLayout>
 
@@ -108,10 +108,10 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
           <ThemedCard
             rounded={false}
             contentStyle={{
-              paddingTop: $.space(26),
-              paddingBottom: $.space(26),
-              paddingLeft: $.space(10),
-              paddingRight: $.space(10),
+              paddingTop: Facade.space(26),
+              paddingBottom: Facade.space(26),
+              paddingLeft: Facade.space(10),
+              paddingRight: Facade.space(10),
             }}
           >
             <LinearLayout
@@ -128,16 +128,16 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
 
         <LinearLayout mb={5} orientation={'horiz'} justifyContent={'flex-end'}>
           <ThemedButton
-            onPress={() => $.utils.copyToClipboard(words.join(' '))}
-            label={$.t('app.copy')}
+            onPress={() => Facade.utils.copyToClipboard(words.join(' '))}
+            label={Facade.t('app.copy')}
             srcIcon={require('~/src/assets/images/icon-copy-green.png')}
-            iconSize={[$.space(25), $.space(25)]}
+            iconSize={[Facade.space(25), Facade.space(25)]}
             fontSize={18}
             flat={true}
           />
 
           <ThemedButton
-            label={$.t('app.print')}
+            label={Facade.t('app.print')}
             srcIcon={require('~/src/assets/images/icon-print-green.png')}
             iconSize={[25, 25]}
             fontSize={18}
@@ -146,18 +146,18 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
         </LinearLayout>
 
         <TextView mb={4} color={'text.0'} fontSize={'lg'}>
-          {$.t('step2CreateWallet.body_2')}
+          {Facade.t('step2CreateWallet.body_2')}
         </TextView>
 
         <TextView mb={5} color={'text.0'} fontSize={'lg'}>
-          {$.t('step2CreateWallet.body_3')}
+          {Facade.t('step2CreateWallet.body_3')}
         </TextView>
       </LinearLayout>
 
       <LinearLayout mt={5} mb={6} px={5} width={'100%'}>
         <ThemedButton
           onPress={() => infoDialog()}
-          label={$.t('app.continue')}
+          label={Facade.t('app.continue')}
         />
       </LinearLayout>
     </ScreenLayout>

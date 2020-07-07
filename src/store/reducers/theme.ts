@@ -1,4 +1,4 @@
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import {ISetThemeAction, SET_THEME} from '~src/store/actions/theme'
 
 interface IThemeState {
@@ -6,7 +6,7 @@ interface IThemeState {
 }
 
 const themeState: IThemeState = {
-  theme: {...$.themeDark},
+  theme: {...Facade.themeDark},
 }
 
 export const themeReducer = (

@@ -3,7 +3,7 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import {Account} from '~src/models/Account'
 import GetAccountView from '~src/scenes/GetAccountView'
 import GetWalletView from '~src/scenes/GetWalletView'
@@ -23,17 +23,17 @@ const WalletStackNavigation = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <WalletStack.Navigator initialRouteName={$.path.ListWallets.name}>
+      <WalletStack.Navigator initialRouteName={Facade.path.ListWallets.name}>
         <WalletStack.Screen
-          name={$.path.ListWallets.name}
+          name={Facade.path.ListWallets.name}
           component={ListWalletsView}
         />
         <WalletStack.Screen
-          name={$.path.GetWallet.name}
+          name={Facade.path.GetWallet.name}
           component={GetWalletView}
         />
         <WalletStack.Screen
-          name={$.path.GetAccount.name}
+          name={Facade.path.GetAccount.name}
           component={GetAccountView}
         />
       </WalletStack.Navigator>

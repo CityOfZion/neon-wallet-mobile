@@ -6,7 +6,7 @@ import {useSelector} from 'react-redux'
 import styled from 'styled-components'
 import {layout, LayoutProps} from 'styled-system'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import {RootState} from '~src/store/reducers/root'
 import {
   ImageView,
@@ -35,7 +35,7 @@ export default function ColorSelector(props: Props) {
         <LinearGradient
           width="100%"
           height="100%"
-          colors={[color, $.filter.toDarkerShade(color)]}
+          colors={[color, Facade.filter.toDarkerShade(color)]}
         />
       </LinearLayout>
     </TouchableWithoutFeedback>
@@ -45,7 +45,7 @@ export default function ColorSelector(props: Props) {
   const customColorButton = (
     <TouchableWithoutFeedback
       onPress={() => {
-        navigation.navigate($.path.CustomColor.name)
+        navigation.navigate(Facade.path.CustomColor.name)
       }}
     >
       <RelativeLayout width={71} height={71}>
@@ -64,7 +64,7 @@ export default function ColorSelector(props: Props) {
           color={theme.colors.text[7]}
           textAlign="center"
         >
-          {$.t('components.colorSelector.customColor')}
+          {Facade.t('components.colorSelector.customColor')}
         </TextView>
       </RelativeLayout>
     </TouchableWithoutFeedback>
@@ -75,7 +75,7 @@ export default function ColorSelector(props: Props) {
   const paddingButton = <LinearLayout width={71} height={71} />
 
   // Buttons grouped by 4
-  const buttonGroup = $.utils.chunkPadded(buttonList, 4, paddingButton)
+  const buttonGroup = Facade.utils.chunkPadded(buttonList, 4, paddingButton)
   return (
     <Fragment>
       {buttonGroup.map((button, key) => (

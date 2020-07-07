@@ -6,7 +6,7 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar, {HeaderProps} from '~src/components/layout/HeaderBar'
 import {Account} from '~src/models/Account'
@@ -29,7 +29,7 @@ export type QuickToolsStackParamList = {
 const QuickToolsStack = createStackNavigator<QuickToolsStackParamList>()
 
 const navbarOptions = (headerProps: HeaderProps): StackNavigationOptions => ({
-  headerBackTitle: $.t('app.back'),
+  headerBackTitle: Facade.t('app.back'),
   headerTitle: (props) => HeaderBar(headerProps, props),
   headerRight: () => HeaderActionButton(headerProps.route?.params),
   headerTransparent: true,
@@ -43,11 +43,11 @@ const QuickToolsStackNavigation = () => {
     <ThemeProvider theme={theme}>
       <QuickToolsStack.Navigator>
         <QuickToolsStack.Screen
-          name={$.path.ReceiveQrCode.name}
+          name={Facade.path.ReceiveQrCode.name}
           component={ReceiveQRCode}
           options={({route}) =>
             navbarOptions({
-              title: $.path.ReceiveQrCode.translate(),
+              title: Facade.path.ReceiveQrCode.translate(),
               image: require('~src/assets/images/icon-qrcode-white.png'),
               showIcon: true,
               iconWidth: 20,
@@ -58,11 +58,11 @@ const QuickToolsStackNavigation = () => {
         />
 
         <QuickToolsStack.Screen
-          name={$.path.QrCodeScanTest.name}
+          name={Facade.path.QrCodeScanTest.name}
           component={QRCodeScanTest}
           options={({route}) =>
             navbarOptions({
-              title: $.t(`routes.${$.path.QrCodeScanTest.name}`),
+              title: Facade.t(`routes.${Facade.path.QrCodeScanTest.name}`),
               image: require('~src/assets/images/icon-qrcode-white.png'),
               showIcon: true,
               iconWidth: 20,

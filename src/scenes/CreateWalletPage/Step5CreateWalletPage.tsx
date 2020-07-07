@@ -2,7 +2,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
@@ -22,7 +22,7 @@ const Step5CreateWalletPage: React.FC<Props> = (props) => {
               mt={6}
               mb={4}
               source={require('~/src/assets/images/logo-3d.png')}
-              style={{marginLeft: $.space(60)}}
+              style={{marginLeft: Facade.space(60)}}
             />
           </LinearLayout>
 
@@ -31,9 +31,9 @@ const Step5CreateWalletPage: React.FC<Props> = (props) => {
             color={'text.0'}
             fontSize={'2xl'}
             textAlign={'center'}
-            lineHeight={$.space(24)}
+            lineHeight={Facade.space(24)}
           >
-            {$.t('step5CreateWallet.label_1')}
+            {Facade.t('step5CreateWallet.label_1')}
           </TextView>
 
           <TextView
@@ -41,18 +41,18 @@ const Step5CreateWalletPage: React.FC<Props> = (props) => {
             color={'text.2'}
             fontSize={'lg'}
             textAlign={'center'}
-            lineHeight={$.space(20)}
+            lineHeight={Facade.space(20)}
           >
-            {$.t('step5CreateWallet.body_1')}
+            {Facade.t('step5CreateWallet.body_1')}
           </TextView>
 
           <TextView
             color={'text.2'}
             fontSize={'lg'}
             textAlign={'center'}
-            lineHeight={$.space(20)}
+            lineHeight={Facade.space(20)}
           >
-            {$.t('step5CreateWallet.body_2')}
+            {Facade.t('step5CreateWallet.body_2')}
           </TextView>
         </LinearLayout>
       </LinearLayout>
@@ -62,11 +62,11 @@ const Step5CreateWalletPage: React.FC<Props> = (props) => {
           onPress={() => {
             props.navigation.reset({
               index: 0,
-              routes: [{name: $.path.More.name}],
+              routes: [{name: Facade.path.More.name}],
             })
-            props.navigation.navigate($.path.ListWallets.name)
+            props.navigation.navigate(Facade.path.ListWallets.name)
           }}
-          label={$.t('step5CreateWallet.viewWallet')}
+          label={Facade.t('step5CreateWallet.viewWallet')}
         />
       </LinearLayout>
     </ScreenLayout>

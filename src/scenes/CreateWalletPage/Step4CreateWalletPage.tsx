@@ -2,7 +2,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedInputText from '~src/components/themed/ThemedInputText'
@@ -39,22 +39,22 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
               fontSize={'lg'}
               fontFamily={'bold'}
             >
-              {$.t('step4CreateWallet.label_1')}
+              {Facade.t('step4CreateWallet.label_1')}
             </TextView>
 
             <TextView color={'primary'} fontSize={'lg'} fontFamily={'bold'}>
-              {$.t('step4CreateWallet.threeOfThree')}
+              {Facade.t('step4CreateWallet.threeOfThree')}
             </TextView>
           </LinearLayout>
 
           <TextView mb={6} color={'text.0'} fontSize={'lg'}>
-            {$.t('step4CreateWallet.body_1')}
+            {Facade.t('step4CreateWallet.body_1')}
           </TextView>
 
           <ThemedInputText
             mb={6}
-            label={$.t('step4CreateWallet.label_walletName')}
-            placeholder={$.t('step4CreateWallet.placeholder_walletName')}
+            label={Facade.t('step4CreateWallet.label_walletName')}
+            placeholder={Facade.t('step4CreateWallet.placeholder_walletName')}
             onChangeText={(value) => setWalletName(value)}
             value={walletName}
           />
@@ -63,8 +63,10 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
             mb={6}
             autoCompleteType={'password'}
             secureTextEntry={true}
-            label={$.t('step4CreateWallet.label_createPassphrase')}
-            placeholder={$.t('step4CreateWallet.placeholder_createPassphrase')}
+            label={Facade.t('step4CreateWallet.label_createPassphrase')}
+            placeholder={Facade.t(
+              'step4CreateWallet.placeholder_createPassphrase'
+            )}
             onChangeText={(value) => setPassphrase(value)}
             value={passphrase}
           />
@@ -72,8 +74,10 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
           <ThemedInputText
             autoCompleteType={'password'}
             secureTextEntry={true}
-            label={$.t('step4CreateWallet.label_confirmPassphrase')}
-            placeholder={$.t('step4CreateWallet.placeholder_confirmPassphrase')}
+            label={Facade.t('step4CreateWallet.label_confirmPassphrase')}
+            placeholder={Facade.t(
+              'step4CreateWallet.placeholder_confirmPassphrase'
+            )}
             onChangeText={(value) => setConfirmPassphrase(value)}
             value={confirmPassphrase}
           />
@@ -85,10 +89,10 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
           onPress={() => {
             props.navigation.reset({
               index: 0,
-              routes: [{name: $.path.Step5CreateWallet.name}],
+              routes: [{name: Facade.path.Step5CreateWallet.name}],
             })
           }}
-          label={$.t('app.continue')}
+          label={Facade.t('app.continue')}
           disabled={!isValid()}
         />
       </LinearLayout>

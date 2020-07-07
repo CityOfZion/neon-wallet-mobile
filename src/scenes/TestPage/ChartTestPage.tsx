@@ -3,7 +3,7 @@ import {LineChart} from 'react-native-chart-kit'
 import styled from 'styled-components/native'
 import {color, ColorProps} from 'styled-system'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 
 export default function ChartTestPage() {
   const mockData = [null, Array(30)].map((x) => Math.random() * 100)
@@ -19,7 +19,7 @@ export default function ChartTestPage() {
             },
           ],
         }}
-        width={$.app.windowWidth - 16} // from react-native
+        width={Facade.app.windowWidth - 16} // from react-native
         height={260}
         yAxisSuffix={' GAS'}
         chartConfig={{

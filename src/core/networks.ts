@@ -1,24 +1,24 @@
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 
 export const isMainNetwork = (networkId: string) =>
-  networkId === $.app.mainNetworkId
+  networkId === Facade.app.mainNetworkId
 export const isTestNetwork = (networkId: string) =>
-  networkId === $.app.testNetworkId
+  networkId === Facade.app.testNetworkId
 
 export const getNetworks = () => [
   {
-    id: $.app.mainNetworkId,
-    value: $.app.mainNetworkId,
-    label: $.app.mainNetworkLabel,
-    deprecatedLabel: $.app.mainNetworkDeprecatedLabel,
-    network: $.app.mainNetworkDeprecatedLabel,
+    id: Facade.app.mainNetworkId,
+    value: Facade.app.mainNetworkId,
+    label: Facade.app.mainNetworkLabel,
+    deprecatedLabel: Facade.app.mainNetworkDeprecatedLabel,
+    network: Facade.app.mainNetworkDeprecatedLabel,
   },
   {
-    id: $.app.testNetworkId,
-    value: $.app.testNetworkId,
-    label: $.app.testNetworkLabel,
-    deprecatedLabel: $.app.testNetworkDeprecatedLabel,
-    network: $.app.testNetworkDeprecatedLabel,
+    id: Facade.app.testNetworkId,
+    value: Facade.app.testNetworkId,
+    label: Facade.app.testNetworkLabel,
+    deprecatedLabel: Facade.app.testNetworkDeprecatedLabel,
+    network: Facade.app.testNetworkDeprecatedLabel,
   },
 ]
 

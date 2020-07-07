@@ -23,7 +23,7 @@ import {
   SpaceProps,
 } from 'styled-system'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import {Account} from '~src/models/Account'
 import styled, {
   ImageView,
@@ -137,7 +137,7 @@ const AccountCard: React.FC<Props> = (props) => {
                 textAlign="left"
                 fontWeight="bold"
               >
-                {$.t('paymentCard.balance')}
+                {Facade.t('paymentCard.balance')}
               </TextView>
 
               <TextView
@@ -148,7 +148,7 @@ const AccountCard: React.FC<Props> = (props) => {
                 textAlign="center"
                 fontWeight="bold"
               >
-                {$.filter.currency(
+                {Facade.filter.currency(
                   props.account.balance,
                   props.account.currency,
                   false,
@@ -174,7 +174,7 @@ const AccountCard: React.FC<Props> = (props) => {
             textAlign="left"
             fontWeight="bold"
           >
-            {$.t('paymentCard.balance')}
+            {Facade.t('paymentCard.balance')}
           </TextView>
         )}
 
@@ -193,7 +193,7 @@ const AccountCard: React.FC<Props> = (props) => {
                 textAlign="center"
                 fontWeight="bold"
               >
-                {$.filter.currency(
+                {Facade.filter.currency(
                   props.account.balance,
                   props.account.currency,
                   false,
@@ -214,7 +214,7 @@ const AccountCard: React.FC<Props> = (props) => {
                 textAlign="left"
                 fontWeight="bold"
               >
-                {$.t('paymentCard.address')}
+                {Facade.t('paymentCard.address')}
               </TextView>
 
               <TextView
@@ -229,7 +229,9 @@ const AccountCard: React.FC<Props> = (props) => {
 
             {!props.isStackMode && (
               <TouchableOpacity
-                onPress={() => $.utils.copyToClipboard(props.account.address)}
+                onPress={() =>
+                  Facade.utils.copyToClipboard(props.account.address)
+                }
                 style={{
                   paddingTop: 12 * unit,
                   paddingLeft: 12 * unit,

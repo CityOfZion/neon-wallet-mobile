@@ -5,7 +5,7 @@ import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
 import {layout, LayoutProps, space, SpaceProps} from 'styled-system'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
@@ -40,13 +40,13 @@ const ListWalletsView = (props: WalletProps) => {
     return (
       <LinearLayout orientation="verti" alignItems="center">
         <TextView fontSize="11px" color="text.2">
-          {$.t('screens.listWallets.changeSinceLastVisit', {
+          {Facade.t('screens.listWallets.changeSinceLastVisit', {
             date: moment(wallet.lastVisitedAt).format('HH:mm - DD/MM/YYYY'),
           })}
         </TextView>
         <LinearLayout orientation="horiz">
           <TextView fontSize="36px" color="text.0" fontFamily="medium">
-            {$.filter.currency(wallet.currentValue, currency, false, true)}
+            {Facade.filter.currency(wallet.currentValue, currency, false, true)}
           </TextView>
           <ImageView
             mt="8px"
@@ -92,8 +92,8 @@ const ListWalletsView = (props: WalletProps) => {
           ref={carouselRef}
           data={wallets}
           firstItem={1}
-          sliderWidth={$.app.windowWidth}
-          itemWidth={Math.round($.app.windowWidth * 0.7)}
+          sliderWidth={Facade.app.windowWidth}
+          itemWidth={Math.round(Facade.app.windowWidth * 0.7)}
           inactiveSlideScale={0.8}
           inactiveSlideOpacity={1}
           inactiveSlideShift={12}
@@ -105,7 +105,7 @@ const ListWalletsView = (props: WalletProps) => {
           renderItem={({item}) => (
             <WalletCard
               onPress={() =>
-                props.navigation.navigate($.path.GetWallet.name, {
+                props.navigation.navigate(Facade.path.GetWallet.name, {
                   wallet: accounts,
                 })
               }

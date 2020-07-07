@@ -1,8 +1,8 @@
 import React from 'react'
 import {ScrollView} from 'react-native'
 
-import {$} from '~/facade'
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {Facade} from '~src/app/Facade'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -22,7 +22,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
       paddingTop={24}
       paddingRight={0}
       paddingLeft={0}
-      title={$.t('modals.send.title')}
+      title={Facade.t('modals.send.title')}
       rightButton={'X    '}
       onRightPress={() => controller.close()}
       onClose={() => props.navigation.goBack()}
@@ -42,7 +42,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
             source={require('~src/assets/images/transaction-sent.png')}
           />
           <TextView color="text.0" fontSize="24px" fontFamily="medium" mb="5px">
-            {$.t('modals.send.transactionConfirmation.header')}
+            {Facade.t('modals.send.transactionConfirmation.header')}
           </TextView>
           <TextView
             color="text.2"
@@ -51,7 +51,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
             textAlign="center"
             mb="40px"
           >
-            {$.t('modals.send.transactionConfirmation.subheader')}
+            {Facade.t('modals.send.transactionConfirmation.subheader')}
           </TextView>
           <TextView
             color="text.2"
@@ -59,7 +59,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
             fontFamily="medium"
             mb="12px"
           >
-            {$.t('modals.send.transactionConfirmation.transactionId')}
+            {Facade.t('modals.send.transactionConfirmation.transactionId')}
           </TextView>
           <LinearLayout orientation="horiz" alignItems="center" mb="24px">
             <TextView
@@ -81,7 +81,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
             <ThemedButton
               onPress={() => controller.close()}
               fontSize="22px"
-              label={$.t('app.close')}
+              label={Facade.t('app.close')}
             />
           </LinearLayout>
         </LinearLayout>

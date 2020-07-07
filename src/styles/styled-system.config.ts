@@ -1,6 +1,8 @@
 import {system} from 'styled-system'
 
-import {$} from '~/facade'
+import {Facade} from '~src/app/Facade'
 
-export const orientation = system({orientation: $.config.style.orientation})
-export const weight = system({weight: $.config.style.weight})
+export const orientation = system({
+  orientation: Facade.config.style.orientation,
+})
+export const weight = system({weight: Facade.config.style.weight})
