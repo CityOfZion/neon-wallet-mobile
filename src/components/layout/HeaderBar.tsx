@@ -1,15 +1,9 @@
 import {StackHeaderTitleProps} from '@react-navigation/stack/lib/typescript/src/types'
 import React from 'react'
-import {Route, View} from 'react-native'
+import {Route} from 'react-native'
 
-import {HEADER_HEIGHT, WINDOW_WIDTH} from '~/constants'
-import {
-  DefaultTheme,
-  ImageView,
-  LinearLayout,
-  normalize,
-  TextView,
-} from '~src/styles/styled-components'
+import {$} from '~/facade'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface HeaderProps {
   title?: string
@@ -24,16 +18,16 @@ export interface HeaderProps {
 const HeaderBar = (headerProps: HeaderProps, props: StackHeaderTitleProps) => {
   return (
     <LinearLayout
-      height={HEADER_HEIGHT}
-      width={WINDOW_WIDTH - normalize<number>(220)}
+      height={$.app.headerHeight}
+      width={$.app.windowWidth - $.space<number>(220)}
       orientation="horiz"
       alignItems="center"
       justifyContent={'center'}
     >
       {headerProps.showIcon && (
         <ImageView
-          width={normalize<number>(headerProps.iconWidth ?? 20)}
-          ml={-normalize<number>((headerProps.iconWidth ?? 20) + 9)}
+          width={$.space<number>(headerProps.iconWidth ?? 20)}
+          ml={-$.space<number>((headerProps.iconWidth ?? 20) + 9)}
           mr={3}
           source={headerProps.image}
           resizeMode="contain"
@@ -44,7 +38,7 @@ const HeaderBar = (headerProps: HeaderProps, props: StackHeaderTitleProps) => {
         pt={2}
         textAlign="center"
         color="text.0"
-        fontSize={normalize(24)}
+        fontSize={$.space(24)}
         allowFontScaling={true}
         adjustsFontSizeToFit={true}
         numberOfLines={1}

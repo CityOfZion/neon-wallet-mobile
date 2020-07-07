@@ -1,15 +1,12 @@
-import i18n from 'i18n-js'
 import React, {useRef, useState} from 'react'
 import {ScrollView} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
 
-import {WINDOW_WIDTH} from '~/constants'
+import {$} from '~/facade'
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import {useRoutePath} from '~src/app/RouteUtils'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import WalletCard from '~src/components/WalletCard'
-import {FilterHelper} from '~src/helpers/FilterHelper'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootState} from '~src/store/reducers/root'
@@ -25,7 +22,6 @@ const SendWalletSelectionModal = (props: Props) => {
   const [wallets, setWallets] = useState(mockWalletItems)
   const carouselRef = useRef(null)
   const currency = useSelector((state: RootState) => state.app.currency)
-  const path = useRoutePath()
 
   return (
     <SwiperPanel
@@ -34,7 +30,7 @@ const SendWalletSelectionModal = (props: Props) => {
       paddingTop={24}
       paddingRight={0}
       paddingLeft={0}
-      title={i18n.t('modals.send.title')}
+      title={$.t('modals.send.title')}
       rightButton={'X    '}
       onRightPress={() => controller.close()}
       onClose={() => props.navigation.goBack()}
@@ -48,15 +44,15 @@ const SendWalletSelectionModal = (props: Props) => {
           fontFamily="medium"
           textAlign="center"
         >
-          {i18n.t('modals.send.walletSelection.subtitle')}
+          {$.t('modals.send.walletSelection.subtitle')}
         </TextView>
         <Carousel
           layout={'default'}
           ref={carouselRef}
           data={wallets}
           firstItem={0}
-          sliderWidth={WINDOW_WIDTH}
-          itemWidth={Math.round(WINDOW_WIDTH * 0.7)}
+          sliderWidth={$.app.windowWidth}
+          itemWidth={Math.round($.app.windowWidth * 0.7)}
           inactiveSlideScale={0.8}
           inactiveSlideOpacity={1}
           inactiveSlideShift={12}
@@ -68,7 +64,7 @@ const SendWalletSelectionModal = (props: Props) => {
           renderItem={({item}) => (
             <WalletCard
               onPress={() =>
-                props.navigation.navigate(path.SendWalletSelectionModal.name)
+                props.navigation.navigate($.path.SendWalletSelectionModal.name)
               }
               height={330}
               wallet={item}
@@ -82,7 +78,7 @@ const SendWalletSelectionModal = (props: Props) => {
           color="text.0"
           fontFamily="medium"
         >
-          {FilterHelper.currency(
+          {$.filter.currency(
             wallets[activeIndex].currentValue,
             currency,
             false,

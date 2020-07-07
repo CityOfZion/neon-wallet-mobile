@@ -2,12 +2,11 @@ import {
   createStackNavigator,
   StackNavigationOptions,
 } from '@react-navigation/stack'
-import i18n from 'i18n-js'
 import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {useRoutePath} from '~src/app/RouteUtils'
+import {$} from '~/facade'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar, {HeaderProps} from '~src/components/layout/HeaderBar'
 import SettingsPage from '~src/scenes/SettingsPage'
@@ -20,7 +19,7 @@ type SettingsStackParamList = {
 const SettingsStack = createStackNavigator<SettingsStackParamList>()
 
 const navbarOptions = (headerProps: HeaderProps): StackNavigationOptions => ({
-  headerBackTitle: i18n.t('app.back'),
+  headerBackTitle: $.t('app.back'),
   headerTitle: (props) => HeaderBar(headerProps, props),
   headerRight: () => HeaderActionButton(headerProps.route?.params),
   headerTransparent: true,
@@ -29,17 +28,16 @@ const navbarOptions = (headerProps: HeaderProps): StackNavigationOptions => ({
 
 const SettingsStackNavigation = () => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
-  const path = useRoutePath()
 
   return (
     <ThemeProvider theme={theme}>
       <SettingsStack.Navigator>
         <SettingsStack.Screen
-          name={path.Settings.name}
+          name={$.path.Settings.name}
           component={SettingsPage}
           options={({route}) =>
             navbarOptions({
-              title: path.Settings.translate(),
+              title: $.path.Settings.translate(),
               image: require('~src/assets/images/settings-white.png'),
               showIcon: true,
               iconWidth: 20,

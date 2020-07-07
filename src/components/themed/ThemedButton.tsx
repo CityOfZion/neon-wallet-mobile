@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React, {useEffect, useState} from 'react'
 import {
@@ -8,11 +7,11 @@ import {
   StyleProp,
 } from 'react-native'
 
+import {$} from '~/facade'
 import ThemedCard from '~src/components/themed/ThemedCard'
 import styled, {
   ImageView,
   LinearLayout,
-  normalize,
   TextView,
 } from '~src/styles/styled-components'
 
@@ -38,9 +37,9 @@ interface Props {
 
 const ThemedButton: React.FC<Props> = (props) => {
   const [isActive, setActive] = useState<boolean>(props.active ?? false)
-  const width = normalize(props.iconSize ? props.iconSize[0] : 20)
-  const height = normalize(props.iconSize ? props.iconSize[1] : 20)
-  const fontSize = normalize(props.fontSize ?? 22)
+  const width = $.space(props.iconSize ? props.iconSize[0] : 20)
+  const height = $.space(props.iconSize ? props.iconSize[1] : 20)
+  const fontSize = $.space(props.fontSize ?? 22)
 
   useEffect(() => {
     setActive(props.active ?? false)
@@ -50,9 +49,9 @@ const ThemedButton: React.FC<Props> = (props) => {
     const style = {
       paddingTop: 0,
       paddingBottom: 0,
-      paddingLeft: normalize(20),
-      paddingRight: normalize(20),
-      height: normalize(50),
+      paddingLeft: $.space(20),
+      paddingRight: $.space(20),
+      height: $.space(50),
     }
 
     const styleActive = {
@@ -60,7 +59,11 @@ const ThemedButton: React.FC<Props> = (props) => {
       borderWidth: 1,
     }
 
-    return _.merge(style, isActive ? styleActive : {}, props.contentStyle ?? {})
+    return $.lodash.merge(
+      style,
+      isActive ? styleActive : {},
+      props.contentStyle ?? {}
+    )
   }
 
   const _renderLabel = () => {

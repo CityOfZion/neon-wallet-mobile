@@ -2,8 +2,8 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import {NativeSyntheticEvent, NativeTouchEvent} from 'react-native'
 
+import {$} from '~/facade'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {normalize} from '~src/styles/styled-components'
 
 interface Props {
   onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
@@ -17,7 +17,7 @@ const ThemedCloseButton: React.FC<Props> = (props) => {
       textColor={'text.0'}
       rounded={false}
       flat={true}
-      contentStyle={{height: normalize(40)}}
+      contentStyle={{height: $.space(40)}}
     />
   )
 }

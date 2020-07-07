@@ -17,8 +17,7 @@ import {
   SpaceProps,
 } from 'styled-system'
 
-import {WINDOW_WIDTH, FOOTER_HEIGHT} from '~/constants'
-import {useRoutePath} from '~src/app/RouteUtils'
+import {$} from '~/facade'
 import {useSwiperController} from '~src/components/SwiperPanel'
 import QuickToolsMenu from '~src/scenes/QuickToolsMenu'
 import {RootState} from '~src/store/reducers/root'
@@ -27,17 +26,11 @@ import styled, {
   LinearLayout,
   RelativeLayout,
 } from '~src/styles/styled-components'
-import {
-  orientation,
-  OrientationProps,
-  weight,
-  WeightProps,
-} from '~src/styles/styled-system.config'
+import {orientation, weight} from '~src/styles/styled-system.config'
 
 const FooterBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
   const focusedOptions = descriptors[state.routes[state.index].key].options
-  const path = useRoutePath()
 
   if (focusedOptions.tabBarVisible === false) {
     return null
@@ -86,8 +79,8 @@ const FooterBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
     >
       <QuickToolsMenu controller={controller} />
       <TabBarContainer
-        height={FOOTER_HEIGHT}
-        width={WINDOW_WIDTH}
+        height={$.app.footerHeight}
+        width={$.app.windowWidth}
         bg={'background.0'}
       >
         <RelativeLayout height="100%" width="100%">
@@ -117,7 +110,7 @@ const FooterBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
           >
             <TabButton
               height="100%"
-              onPress={() => navigation.navigate(path.ListWallets.name)}
+              onPress={() => navigation.navigate($.path.ListWallets.name)}
               weight={1}
             >
               <ImageView
@@ -128,7 +121,7 @@ const FooterBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
             </TabButton>
             <TabButton
               height="100%"
-              onPress={() => navigation.navigate(path.Contacts.name)}
+              onPress={() => navigation.navigate($.path.Contacts.name)}
               weight={1}
             >
               <ImageView
@@ -166,7 +159,7 @@ const FooterBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
             </TabButton>
             <TabButton
               height="100%"
-              onPress={() => navigation.navigate(path.Settings.name)}
+              onPress={() => navigation.navigate($.path.Settings.name)}
               weight={1}
             >
               <ImageView
@@ -178,7 +171,7 @@ const FooterBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
             <TabButton
               height="100%"
               top="4px"
-              onPress={() => navigation.navigate(path.More.name)}
+              onPress={() => navigation.navigate($.path.More.name)}
               weight={1}
             >
               <ImageView

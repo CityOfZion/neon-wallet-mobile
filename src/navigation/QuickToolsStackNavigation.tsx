@@ -2,12 +2,11 @@ import {
   createStackNavigator,
   StackNavigationOptions,
 } from '@react-navigation/stack'
-import i18n from 'i18n-js'
 import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {useRoutePath} from '~src/app/RouteUtils'
+import {$} from '~/facade'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar, {HeaderProps} from '~src/components/layout/HeaderBar'
 import {Account} from '~src/models/Account'
@@ -30,7 +29,7 @@ export type QuickToolsStackParamList = {
 const QuickToolsStack = createStackNavigator<QuickToolsStackParamList>()
 
 const navbarOptions = (headerProps: HeaderProps): StackNavigationOptions => ({
-  headerBackTitle: i18n.t('app.back'),
+  headerBackTitle: $.t('app.back'),
   headerTitle: (props) => HeaderBar(headerProps, props),
   headerRight: () => HeaderActionButton(headerProps.route?.params),
   headerTransparent: true,
@@ -39,17 +38,16 @@ const navbarOptions = (headerProps: HeaderProps): StackNavigationOptions => ({
 
 const QuickToolsStackNavigation = () => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
-  const path = useRoutePath()
 
   return (
     <ThemeProvider theme={theme}>
       <QuickToolsStack.Navigator>
         <QuickToolsStack.Screen
-          name={path.ReceiveQrCode.name}
+          name={$.path.ReceiveQrCode.name}
           component={ReceiveQRCode}
           options={({route}) =>
             navbarOptions({
-              title: path.ReceiveQrCode.translate(),
+              title: $.path.ReceiveQrCode.translate(),
               image: require('~src/assets/images/icon-qrcode-white.png'),
               showIcon: true,
               iconWidth: 20,
@@ -60,11 +58,11 @@ const QuickToolsStackNavigation = () => {
         />
 
         <QuickToolsStack.Screen
-          name={path.QrCodeScanTest.name}
+          name={$.path.QrCodeScanTest.name}
           component={QRCodeScanTest}
           options={({route}) =>
             navbarOptions({
-              title: i18n.t(`routes.${path.QrCodeScanTest.name}`),
+              title: $.t(`routes.${$.path.QrCodeScanTest.name}`),
               image: require('~src/assets/images/icon-qrcode-white.png'),
               showIcon: true,
               iconWidth: 20,

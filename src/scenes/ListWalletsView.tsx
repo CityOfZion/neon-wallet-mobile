@@ -1,18 +1,15 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import i18n from 'i18n-js'
 import moment from 'moment'
 import React, {useRef, useState} from 'react'
 import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
 import {layout, LayoutProps, space, SpaceProps} from 'styled-system'
 
-import {WINDOW_WIDTH} from '~/constants'
-import {useRoutePath} from '~src/app/RouteUtils'
+import {$} from '~/facade'
 import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {FilterHelper} from '~src/helpers/FilterHelper'
 import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {Account} from '~src/models/Account'
@@ -20,7 +17,6 @@ import {Wallet} from '~src/models/Wallet'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootState} from '~src/store/reducers/root'
 import styled, {
-  DefaultTheme,
   ImageView,
   LinearLayout,
   TextView,
@@ -37,7 +33,6 @@ const ListWalletsView = (props: WalletProps) => {
   const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
   const carouselRef = useRef(null)
   const currency = useSelector((state: RootState) => state.app.currency)
-  const path = useRoutePath()
 
   props.navigation.setOptions({headerShown: false})
 
@@ -45,13 +40,13 @@ const ListWalletsView = (props: WalletProps) => {
     return (
       <LinearLayout orientation="verti" alignItems="center">
         <TextView fontSize="11px" color="text.2">
-          {i18n.t('screens.listWallets.changeSinceLastVisit', {
+          {$.t('screens.listWallets.changeSinceLastVisit', {
             date: moment(wallet.lastVisitedAt).format('HH:mm - DD/MM/YYYY'),
           })}
         </TextView>
         <LinearLayout orientation="horiz">
           <TextView fontSize="36px" color="text.0" fontFamily="medium">
-            {FilterHelper.currency(wallet.currentValue, currency, false, true)}
+            {$.filter.currency(wallet.currentValue, currency, false, true)}
           </TextView>
           <ImageView
             mt="8px"
@@ -97,8 +92,8 @@ const ListWalletsView = (props: WalletProps) => {
           ref={carouselRef}
           data={wallets}
           firstItem={1}
-          sliderWidth={WINDOW_WIDTH}
-          itemWidth={Math.round(WINDOW_WIDTH * 0.7)}
+          sliderWidth={$.app.windowWidth}
+          itemWidth={Math.round($.app.windowWidth * 0.7)}
           inactiveSlideScale={0.8}
           inactiveSlideOpacity={1}
           inactiveSlideShift={12}
@@ -110,7 +105,7 @@ const ListWalletsView = (props: WalletProps) => {
           renderItem={({item}) => (
             <WalletCard
               onPress={() =>
-                props.navigation.navigate(path.GetWallet.name, {
+                props.navigation.navigate($.path.GetWallet.name, {
                   wallet: accounts,
                 })
               }

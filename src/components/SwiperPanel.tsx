@@ -79,7 +79,7 @@ export const useSwiperController = (initial: boolean = false) => {
 
 export default function SwiperPanel(props: SwiperProps) {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
-  const MAX_HEIGHT = useWindowDimensions().height
+  const MAX_HEIGHT = useWindowDimensions?.().height
 
   const [height, setHeight] = useState<number>()
   const bgOpacity = useRef(new Animated.Value(0))

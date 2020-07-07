@@ -1,24 +1,20 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {Alert} from 'react-native'
 
-import {useRoutePath} from '~src/app/RouteUtils'
+import {$} from '~/facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCard from '~src/components/themed/ThemedCard'
-import {UtilsHelper} from '~src/helpers/UtilsHelper'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {TextView, LinearLayout, normalize} from '~src/styles/styled-components'
+import {TextView, LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<MoreStackParamList>
 }
 
 const Step2CreateWalletPage: React.FC<Props> = (props) => {
-  const path = useRoutePath()
-
   // TODO: Use asteroid js to create the words
   const words = [
     'jack',
@@ -37,14 +33,14 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
 
   const infoDialog = () => {
     Alert.alert(
-      i18n.t('step2CreateWallet.dialog_title'),
-      i18n.t('step2CreateWallet.dialog_body'),
+      $.t('step2CreateWallet.dialog_title'),
+      $.t('step2CreateWallet.dialog_body'),
       [
         {
-          text: i18n.t('step2CreateWallet.dialog_dismiss'),
+          text: $.t('step2CreateWallet.dialog_dismiss'),
           onPress: () =>
-            props.navigation.navigate(path.Step3CreateWallet.name, {
-              actionTitle: i18n.t('app.skip'),
+            props.navigation.navigate($.path.Step3CreateWallet.name, {
+              actionTitle: $.t('app.skip'),
               actionOnPress: () => skipDialog(),
             }),
         },
@@ -54,15 +50,16 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
 
   const skipDialog = () => {
     Alert.alert(
-      i18n.t('step3CreateWallet.dialog_1_title'),
-      i18n.t('step3CreateWallet.dialog_1_body'),
+      $.t('step3CreateWallet.dialog_1_title'),
+      $.t('step3CreateWallet.dialog_1_body'),
       [
         {
-          text: i18n.t('boolean.true'),
-          onPress: () => props.navigation.navigate(path.Step4CreateWallet.name),
+          text: $.t('boolean.true'),
+          onPress: () =>
+            props.navigation.navigate($.path.Step4CreateWallet.name),
         },
         {
-          text: i18n.t('boolean.false'),
+          text: $.t('boolean.false'),
           style: 'cancel',
         },
       ]
@@ -94,16 +91,16 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
               fontSize={'lg'}
               fontFamily={'bold'}
             >
-              {i18n.t('step2CreateWallet.label_1')}
+              {$.t('step2CreateWallet.label_1')}
             </TextView>
 
             <TextView color={'primary'} fontSize={'lg'} fontFamily={'bold'}>
-              {i18n.t('step2CreateWallet.oneOfThree')}
+              {$.t('step2CreateWallet.oneOfThree')}
             </TextView>
           </LinearLayout>
 
           <TextView color={'text.0'} fontSize={'lg'}>
-            {i18n.t('step2CreateWallet.body_1')}
+            {$.t('step2CreateWallet.body_1')}
           </TextView>
         </LinearLayout>
 
@@ -111,10 +108,10 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
           <ThemedCard
             rounded={false}
             contentStyle={{
-              paddingTop: normalize(26),
-              paddingBottom: normalize(26),
-              paddingLeft: normalize(10),
-              paddingRight: normalize(10),
+              paddingTop: $.space(26),
+              paddingBottom: $.space(26),
+              paddingLeft: $.space(10),
+              paddingRight: $.space(10),
             }}
           >
             <LinearLayout
@@ -131,16 +128,16 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
 
         <LinearLayout mb={5} orientation={'horiz'} justifyContent={'flex-end'}>
           <ThemedButton
-            onPress={() => UtilsHelper.copyToClipboard(words.join(' '))}
-            label={i18n.t('app.copy')}
+            onPress={() => $.utils.copyToClipboard(words.join(' '))}
+            label={$.t('app.copy')}
             srcIcon={require('~/src/assets/images/icon-copy-green.png')}
-            iconSize={[normalize(25), normalize(25)]}
+            iconSize={[$.space(25), $.space(25)]}
             fontSize={18}
             flat={true}
           />
 
           <ThemedButton
-            label={i18n.t('app.print')}
+            label={$.t('app.print')}
             srcIcon={require('~/src/assets/images/icon-print-green.png')}
             iconSize={[25, 25]}
             fontSize={18}
@@ -149,18 +146,18 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
         </LinearLayout>
 
         <TextView mb={4} color={'text.0'} fontSize={'lg'}>
-          {i18n.t('step2CreateWallet.body_2')}
+          {$.t('step2CreateWallet.body_2')}
         </TextView>
 
         <TextView mb={5} color={'text.0'} fontSize={'lg'}>
-          {i18n.t('step2CreateWallet.body_3')}
+          {$.t('step2CreateWallet.body_3')}
         </TextView>
       </LinearLayout>
 
       <LinearLayout mt={5} mb={6} px={5} width={'100%'}>
         <ThemedButton
           onPress={() => infoDialog()}
-          label={i18n.t('app.continue')}
+          label={$.t('app.continue')}
         />
       </LinearLayout>
     </ScreenLayout>

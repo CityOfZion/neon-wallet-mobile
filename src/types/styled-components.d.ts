@@ -1,0 +1,101 @@
+export declare global {
+  import {TextInputProps} from 'react-native'
+  import {
+    BorderProps,
+    ColorProps,
+    FlexboxProps,
+    LayoutProps,
+    PositionProps,
+    SpaceProps,
+    TextStyleProps,
+    TypographyProps,
+  } from 'styled-system'
+
+  interface DefaultTheme {
+    title: string
+    statusBarStyle: 'default' | 'light-content' | 'dark-content'
+
+    colors: {
+      primary: string
+      secondary: string
+      tertiary: string
+      quaternary: string
+      background: string[]
+      text: string[]
+      card: string[]
+    }
+  }
+
+  interface OrientationProps {
+    orientation?: 'horiz' | 'verti'
+  }
+
+  interface WeightProps {
+    weight?: number
+  }
+
+  type TextViewProps = ColorProps &
+    OrientationProps &
+    SpaceProps &
+    LayoutProps &
+    FlexboxProps &
+    WeightProps &
+    TypographyProps &
+    PositionProps &
+    TextStyleProps
+
+  type InputTextViewProps = TextInputProps &
+    BorderProps &
+    ColorProps &
+    TypographyProps &
+    OrientationProps &
+    SpaceProps &
+    LayoutProps &
+    FlexboxProps &
+    WeightProps &
+    PositionProps &
+    TextStyleProps
+
+  type ImageViewProps = SpaceProps &
+    LayoutProps &
+    FlexboxProps &
+    PositionProps &
+    WeightProps
+
+  type LinearLayoutProps = BorderProps &
+    ColorProps &
+    OrientationProps &
+    SpaceProps &
+    LayoutProps &
+    FlexboxProps &
+    WeightProps &
+    PositionProps
+
+  type RelativeLayoutProps = BorderProps &
+    ColorProps &
+    OrientationProps &
+    SpaceProps &
+    LayoutProps &
+    FlexboxProps &
+    WeightProps &
+    PositionProps
+
+  type ButtonViewProps = ColorProps &
+    FlexboxProps &
+    SpaceProps &
+    BorderProps &
+    LayoutProps &
+    OrientationProps &
+    PositionProps &
+    WeightProps
+
+  type LinearGradientLayoutProps = ColorProps &
+    SpaceProps &
+    LayoutProps &
+    FlexboxProps
+
+  type StyledScrollViewProps = FlexboxProps &
+    OrientationProps &
+    LayoutProps &
+    SpaceProps
+}

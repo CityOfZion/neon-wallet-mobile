@@ -1,5 +1,5 @@
 import i18n from 'i18n-js'
-import _ from 'lodash'
+import {snakeCase} from 'lodash'
 
 import {RouteConfig} from '~src/config/RouteConfig'
 
@@ -15,7 +15,7 @@ export class RoutePath<T extends string> {
 
   constructor(uniqueName: T) {
     this.name = uniqueName
-    this.id = _.snakeCase(uniqueName)
+    this.id = snakeCase(uniqueName)
   }
 
   translate() {

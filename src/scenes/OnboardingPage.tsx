@@ -1,12 +1,12 @@
 import {useAsyncStorage} from '@react-native-community/async-storage'
 import {useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
-import i18n from 'i18n-js'
 import React from 'react'
 import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {useSelector} from 'react-redux'
 
+import {$} from '~/facade'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {RootState} from '~src/store/reducers/root'
 import styled, {
@@ -114,8 +114,8 @@ const OnboardingPage = (props: {
               image={require('~src/assets/images/onboarding-1.png')}
               bottomContent={
                 <FeatureText
-                  title={i18n.t('onboarding.feature1.title')}
-                  subtitle={i18n.t('onboarding.feature1.subtitle')}
+                  title={$.t('onboarding.feature1.title')}
+                  subtitle={$.t('onboarding.feature1.subtitle')}
                 />
               }
             />
@@ -124,8 +124,8 @@ const OnboardingPage = (props: {
               image={require('~src/assets/images/onboarding-2.png')}
               bottomContent={
                 <FeatureText
-                  title={i18n.t('onboarding.feature2.title')}
-                  subtitle={i18n.t('onboarding.feature2.subtitle')}
+                  title={$.t('onboarding.feature2.title')}
+                  subtitle={$.t('onboarding.feature2.subtitle')}
                 />
               }
             />
@@ -134,8 +134,8 @@ const OnboardingPage = (props: {
               image={require('~src/assets/images/onboarding-3.png')}
               bottomContent={
                 <FeatureText
-                  title={i18n.t('onboarding.feature3.title')}
-                  subtitle={i18n.t('onboarding.feature3.subtitle')}
+                  title={$.t('onboarding.feature3.title')}
+                  subtitle={$.t('onboarding.feature3.subtitle')}
                 />
               }
             />
@@ -146,15 +146,15 @@ const OnboardingPage = (props: {
                 <LinearLayout width={'100%'} alignItems={'center'}>
                   <LinearLayout mb={'8%'}>
                     <FeatureText
-                      title={i18n.t('onboarding.feature4.title')}
-                      subtitle={i18n.t('onboarding.feature4.subtitle')}
+                      title={$.t('onboarding.feature4.title')}
+                      subtitle={$.t('onboarding.feature4.subtitle')}
                     />
                   </LinearLayout>
 
                   <LinearLayout width={'100%'} px={'7%'}>
                     <ThemedButton
                       onPress={() => setAsSeen()}
-                      label={i18n.t('onboarding.getStarted.buttonTitle')}
+                      label={$.t('onboarding.getStarted.buttonTitle')}
                       basic={true}
                       bgColor={'primary'}
                       textColor={'black'}
@@ -176,7 +176,7 @@ const OnboardingPage = (props: {
             onPress={() => setAsSeen()}
             style={{textTransform: 'lowercase'}}
           >
-            {i18n.t('app.skip')}
+            {$.t('app.skip')}
           </SkipButton>
         </LinearLayout>
       </SafeAreaView>

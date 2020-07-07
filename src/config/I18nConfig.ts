@@ -17,11 +17,4 @@ export class I18nConfig {
     [Lang.DE]: require('~src/locales/de/lang.json'),
     [Lang.PT_BR]: require('~src/locales/pt-BR/lang.json'),
   }
-
-  constructor() {
-    i18n.defaultLocale = this.defaultLocale
-    i18n.locale = this.locale
-    i18n.fallbacks = this.fallbacks
-    i18n.translations = this.translations
-  }
 }

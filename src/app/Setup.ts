@@ -1,9 +1,15 @@
 import {RequestConfig} from '@simpli/serialized-request'
+import i18n from 'i18n-js'
 
-import {Config} from '~src/app/Config'
+import {$} from '~/facade'
 
-export class Setup {
+export abstract class Setup {
   static init() {
-    RequestConfig.axios = Config.http.axiosInstance
+    RequestConfig.axios = $.config.http.axiosInstance
+
+    i18n.defaultLocale = $.config.i18n.defaultLocale
+    i18n.locale = $.config.i18n.locale
+    i18n.fallbacks = $.config.i18n.fallbacks
+    i18n.translations = $.config.i18n.translations
   }
 }

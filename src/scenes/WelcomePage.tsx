@@ -1,19 +1,13 @@
 import {useAsyncStorage} from '@react-native-community/async-storage'
-import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import {useRoutePath} from '~src/app/RouteUtils'
+import {$} from '~/facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCheckbox from '~src/components/themed/ThemedCheckbox'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import {
-  ImageView,
-  LinearLayout,
-  normalize,
-  TextView,
-} from '~src/styles/styled-components'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
   onClose?: (routeTargetName?: string) => void
@@ -21,12 +15,11 @@ interface Props {
 
 const WelcomePage: React.FC<Props> = (props) => {
   const {setItem} = useAsyncStorage('@welcomeDontShow')
-  const path = useRoutePath()
 
   return (
     <ScreenLayout
       useHeaderPadding={false}
-      useTabBarPadding={false}
+      useFooterPadding={false}
       alignX={'center'}
       padding={30}
     >
@@ -38,43 +31,43 @@ const WelcomePage: React.FC<Props> = (props) => {
           fontSize={'3xl'}
           letterSpacing={'3px'}
         >
-          {i18n.t('welcome.brand')}
+          {$.t('welcome.brand')}
         </TextView>
       </LinearLayout>
 
       <TextView mb={5} color={'text.0'} fontSize={36} fontFamily={'bold'}>
-        {i18n.t('welcome.title')}
+        {$.t('welcome.title')}
       </TextView>
 
       <TextView mb={6} color={'text.0'} fontSize={'lg'} textAlign={'center'}>
-        {i18n.t('welcome.body_1_1')}
+        {$.t('welcome.body_1_1')}
 
         <TextView
-          onPress={() => props.onClose?.(path.Settings.name)}
+          onPress={() => props.onClose?.($.path.Settings.name)}
           color={'primary'}
         >
-          {i18n.t('welcome.body_1_2')}
+          {$.t('welcome.body_1_2')}
         </TextView>
 
-        {i18n.t('welcome.body_1_3')}
+        {$.t('welcome.body_1_3')}
 
         <TextView
-          onPress={() => props.onClose?.(path.ListWallets.name)}
+          onPress={() => props.onClose?.($.path.ListWallets.name)}
           color={'primary'}
         >
-          {i18n.t('welcome.body_1_4')}
+          {$.t('welcome.body_1_4')}
         </TextView>
       </TextView>
 
       <TextView mb={6} color={'text.0'} fontSize={'lg'} textAlign={'center'}>
-        {i18n.t('welcome.body_2_0')}
+        {$.t('welcome.body_2_0')}
       </TextView>
 
       <LinearLayout mb={5} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
-          onPress={() => props.onClose?.(path.ListWallets.name)}
-          label={i18n.t('welcome.button_1')}
+          onPress={() => props.onClose?.($.path.ListWallets.name)}
+          label={$.t('welcome.button_1')}
           flat={true}
         />
       </LinearLayout>
@@ -82,31 +75,27 @@ const WelcomePage: React.FC<Props> = (props) => {
       <LinearLayout mb={6} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
-          onPress={() => props.onClose?.(path.ListWallets.name)}
-          label={i18n.t('welcome.button_2')}
+          onPress={() => props.onClose?.($.path.ListWallets.name)}
+          label={$.t('welcome.button_2')}
         />
       </LinearLayout>
 
       <LinearLayout mb={7} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
-          onPress={() => props.onClose?.(path.ListWallets.name)}
-          label={i18n.t('welcome.button_3')}
+          onPress={() => props.onClose?.($.path.ListWallets.name)}
+          label={$.t('welcome.button_3')}
         />
       </LinearLayout>
 
       <LinearLayout mb={6} width={'100%'}>
         <ThemedCheckbox
           onChange={(checked) => setItem(String(checked))}
-          label={i18n.t('welcome.checkbox_1')}
+          label={$.t('welcome.checkbox_1')}
         />
       </LinearLayout>
 
-      <LinearLayout
-        position={'absolute'}
-        right={normalize(5)}
-        top={normalize(5)}
-      >
+      <LinearLayout position={'absolute'} right={$.space(5)} top={$.space(5)}>
         <ThemedCloseButton onPress={() => props.onClose?.()} />
       </LinearLayout>
     </ScreenLayout>

@@ -1,11 +1,9 @@
 import {useNavigation} from '@react-navigation/native'
-import i18n from 'i18n-js'
 import React from 'react'
 import {ImageSourcePropType, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {FOOTER_HEIGHT} from '~/constants'
-import {useRoutePath} from '~src/app/RouteUtils'
+import {$} from '~/facade'
 import SwiperPanel, {SwiperController} from '~src/components/SwiperPanel'
 import {RootState} from '~src/store/reducers/root'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -24,34 +22,33 @@ interface Props {
 export default function QuickToolsMenu(props: Props) {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
   const navigation = useNavigation()
-  const path = useRoutePath()
 
   const items: ListItem[] = [
     {
-      title: i18n.t('quickTools.qrCode.title'),
-      subtitle: i18n.t('quickTools.qrCode.subtitle'),
+      title: $.t('quickTools.qrCode.title'),
+      subtitle: $.t('quickTools.qrCode.subtitle'),
       source: require('~src/assets/images/icon-circle-qr-primary.png'),
       onClick: () =>
-        navigation.navigate(path.QuickTools.name, {
-          screen: path.QrCodeScanTest.name,
+        navigation.navigate($.path.QuickTools.name, {
+          screen: $.path.QrCodeScanTest.name,
         }),
     },
     {
-      title: i18n.t('quickTools.send.title'),
-      subtitle: i18n.t('quickTools.send.subtitle'),
+      title: $.t('quickTools.send.title'),
+      subtitle: $.t('quickTools.send.subtitle'),
       source: require('~src/assets/images/icon-circle-send-primary.png'),
       onClick: () =>
         navigation.navigate('Modal', {
-          screen: path.SendWalletSelectionModal.name,
+          screen: $.path.SendWalletSelectionModal.name,
         }),
     },
     {
-      title: i18n.t('quickTools.receive.title'),
-      subtitle: i18n.t('quickTools.receive.subtitle'),
+      title: $.t('quickTools.receive.title'),
+      subtitle: $.t('quickTools.receive.subtitle'),
       source: require('~src/assets/images/icon-circle-receive-primary.png'),
       onClick: () =>
         navigation.navigate('Modal', {
-          screen: path.ReceiveWalletSelectionModal.name,
+          screen: $.path.ReceiveWalletSelectionModal.name,
         }),
     },
   ]
@@ -69,7 +66,7 @@ export default function QuickToolsMenu(props: Props) {
       paddingLeft={36}
       paddingRight={36}
       paddingTop={40}
-      paddingBottom={24 + FOOTER_HEIGHT}
+      paddingBottom={24 + $.app.footerHeight}
     >
       {items.map((item, index) => (
         <TouchableWithoutFeedback

@@ -1,15 +1,12 @@
 import {useNavigation} from '@react-navigation/native'
 import {LinearGradient as ExpoLinearGradient} from 'expo-linear-gradient'
-import i18n from 'i18n-js'
 import React, {Fragment} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 import styled from 'styled-components'
 import {layout, LayoutProps} from 'styled-system'
 
-import {useRoutePath} from '~src/app/RouteUtils'
-import {FilterHelper} from '~src/helpers/FilterHelper'
-import {UtilsHelper} from '~src/helpers/UtilsHelper'
+import {$} from '~/facade'
 import {RootState} from '~src/store/reducers/root'
 import {
   ImageView,
@@ -25,7 +22,6 @@ interface Props {
 export default function ColorSelector(props: Props) {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
   const navigation = useNavigation()
-  const path = useRoutePath()
 
   // Each button
   const buttonList = theme.colors.card.map((color, key) => (
@@ -39,7 +35,7 @@ export default function ColorSelector(props: Props) {
         <LinearGradient
           width="100%"
           height="100%"
-          colors={[color, FilterHelper.toDarkerShade(color)]}
+          colors={[color, $.filter.toDarkerShade(color)]}
         />
       </LinearLayout>
     </TouchableWithoutFeedback>
@@ -49,7 +45,7 @@ export default function ColorSelector(props: Props) {
   const customColorButton = (
     <TouchableWithoutFeedback
       onPress={() => {
-        navigation.navigate(path.CustomColor.name)
+        navigation.navigate($.path.CustomColor.name)
       }}
     >
       <RelativeLayout width={71} height={71}>
@@ -68,7 +64,7 @@ export default function ColorSelector(props: Props) {
           color={theme.colors.text[7]}
           textAlign="center"
         >
-          {i18n.t('components.colorSelector.customColor')}
+          {$.t('components.colorSelector.customColor')}
         </TextView>
       </RelativeLayout>
     </TouchableWithoutFeedback>
@@ -79,7 +75,7 @@ export default function ColorSelector(props: Props) {
   const paddingButton = <LinearLayout width={71} height={71} />
 
   // Buttons grouped by 4
-  const buttonGroup = UtilsHelper.chunkPadded(buttonList, 4, paddingButton)
+  const buttonGroup = $.utils.chunkPadded(buttonList, 4, paddingButton)
   return (
     <Fragment>
       {buttonGroup.map((button, key) => (

@@ -1,10 +1,10 @@
 import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
-import i18n from 'i18n-js'
 import React, {useState} from 'react'
 import {Modal} from 'react-native'
 import {useDispatch} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
+import {$} from '~/facade'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
@@ -96,7 +96,7 @@ const SettingsPage = (props: SettingsProps) => {
 
         {idioms.map((idiom) => (
           <MenuItem
-            title={i18n.t(idiom.title)}
+            title={$.t(idiom.title)}
             key={idiom.title}
             arrowDirection={
               idiom.isSelected ? RightIconType.CHECK : RightIconType.NONE
@@ -118,7 +118,7 @@ const SettingsPage = (props: SettingsProps) => {
         {currencies.map((currency) => {
           return (
             <MenuItem
-              title={i18n.t(currency.title)}
+              title={$.t(currency.title)}
               key={currency.title}
               arrowDirection={
                 currency.isSelected ? RightIconType.CHECK : RightIconType.NONE
@@ -137,7 +137,7 @@ const SettingsPage = (props: SettingsProps) => {
       {_modalCurrency()}
 
       <MenuItem
-        title={i18n.t('settings.myWallets')}
+        title={$.t('settings.myWallets')}
         icon={require('~/src/assets/images/wallet-icon-green.png')}
         iconMarginRight={12}
         iconHeight={28}
@@ -145,7 +145,7 @@ const SettingsPage = (props: SettingsProps) => {
       />
 
       <MenuItem
-        title={i18n.t('settings.security')}
+        title={$.t('settings.security')}
         icon={require('~/src/assets/images/security-icon-green.png')}
         iconWidth={20}
         iconMarginLeft={2}
@@ -154,7 +154,7 @@ const SettingsPage = (props: SettingsProps) => {
       />
 
       <MenuItem
-        title={i18n.t('settings.currency')}
+        title={$.t('settings.currency')}
         icon={require('~/src/assets/images/currency-icon-green.png')}
         iconWidth={26}
         iconMarginRight={16}
@@ -164,13 +164,13 @@ const SettingsPage = (props: SettingsProps) => {
       />
 
       <MenuItem
-        title={i18n.t('settings.language')}
+        title={$.t('settings.language')}
         icon={require('~/src/assets/images/language-icon-green.png')}
         iconWidth={16}
         iconMarginLeft={2}
         iconMarginRight={22}
         arrowDirection={RightIconType.ARROW_DOWN}
-        subtitle={i18n.t('languages.enUS')}
+        subtitle={$.t('languages.enUS')}
         onPress={() => setIsShowingIdiom(true)}
       />
     </ScreenLayout>

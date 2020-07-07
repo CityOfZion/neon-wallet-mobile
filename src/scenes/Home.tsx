@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
 import {expo} from '~/app.json'
-import {useRoutePath} from '~src/app/RouteUtils'
+import {$} from '~/facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {NeoNode} from '~src/models/NeoNode'
@@ -31,8 +31,6 @@ interface Props {
 }
 
 const Home = (props: Props) => {
-  const path = useRoutePath()
-
   return (
     <ScreenLayout>
       <LinearLayout weight={1} mb={4}>
@@ -68,7 +66,7 @@ const Home = (props: Props) => {
 
         <LinearLayout m={3}>
           <ThemedButton
-            onPress={() => props.navigation.navigate(path.GetWallet.name)}
+            onPress={() => props.navigation.navigate($.path.GetWallet.name)}
             label={'Account'}
           />
         </LinearLayout>

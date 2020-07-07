@@ -1,17 +1,19 @@
-import {DefaultTheme, StyleConstants} from '~src/styles/styled-components'
+/**
+ * Theme Configuration
+ */
+import {ThemeConfig} from '~src/config/ThemeConfig'
 
-const light = {
-  ...StyleConstants,
+export class ThemeLightConfig extends ThemeConfig implements DefaultTheme {
+  readonly title = 'light'
 
-  title: 'light',
-  statusBarStyle: 'dark-content',
-  colors: {
+  readonly statusBarStyle = 'dark-content'
+
+  readonly colors = {
     primary: '#293036',
     secondary: '#0a84ff',
     tertiary: '#4cffb3',
     quaternary: '#58717b',
 
-    // eslint-disable-next-line prettier/prettier
     background: [
       '#ddd',
       '#bbb',
@@ -22,7 +24,7 @@ const light = {
       '#b4b4b4',
       '#e1e1e1',
     ],
-    // eslint-disable-next-line prettier/prettier
+
     text: [
       '#333',
       '#fff',
@@ -30,8 +32,10 @@ const light = {
       '#767f86',
       '#bebebe',
       '#41474b',
+      '#899fa8',
+      '#8f9b9d',
     ],
-    // eslint-disable-next-line prettier/prettier
+
     card: [
       '#00ddb4',
       '#22b1ff',
@@ -41,7 +45,5 @@ const light = {
       '#fedd5b',
       '#91abbc',
     ],
-  },
-} as DefaultTheme
-
-export default light
+  }
+}

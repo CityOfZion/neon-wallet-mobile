@@ -1,40 +1,6 @@
-import {Config, system} from 'styled-system'
+import {system} from 'styled-system'
 
-const orientationConfig = {
-  orientation: {
-    property: 'display',
-    defaultScale: ['horiz', 'verti'],
-    transform: (val: string) => {
-      return `
-        flex;
-        flex-direction: ${val === 'horiz' ? 'row' : 'column'};
-        > * {
-          flex-shrink: 0;
-        }
-      `
-    },
-  },
-} as Config
+import {$} from '~/facade'
 
-const weightConfig = {
-  weight: {
-    property: 'flexGrow',
-    transform: (val: number) => {
-      return `
-        ${val};
-        flex-basis: 0;
-        flex-shrink: 1;
-      `
-    },
-  },
-} as Config
-
-export const orientation = system(orientationConfig)
-export interface OrientationProps {
-  orientation?: 'horiz' | 'verti'
-}
-
-export const weight = system(weightConfig)
-export interface WeightProps {
-  weight?: number
-}
+export const orientation = system({orientation: $.config.style.orientation})
+export const weight = system({weight: $.config.style.weight})

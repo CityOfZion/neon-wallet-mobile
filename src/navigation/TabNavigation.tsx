@@ -6,7 +6,7 @@ import {StatusBar} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {useRoutePath} from '~src/app/RouteUtils'
+import {$} from '~/facade'
 import FooterBar from '~src/components/layout/FooterBar'
 import ContactsStackNavigation from '~src/navigation/ContactsStackNavigation'
 import MoreStackNavigation from '~src/navigation/MoreStackNavigation'
@@ -22,7 +22,6 @@ const Tab = createBottomTabNavigator()
 const TabNavigation = () => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
   const navigation = useNavigation()
-  const path = useRoutePath()
 
   const onboardingStorage = useAsyncStorage('@onboardingSeen')
   const welcomeStorage = useAsyncStorage('@welcomeDontShow')
@@ -64,22 +63,22 @@ const TabNavigation = () => {
       />
       <Tab.Navigator tabBar={(props) => <FooterBar {...props} />}>
         <Tab.Screen
-          name={path.ListWallets.name}
+          name={$.path.ListWallets.name}
           component={WalletStackNavigation}
         />
         <Tab.Screen
-          name={path.Contacts.name}
+          name={$.path.Contacts.name}
           component={ContactsStackNavigation}
         />
         <Tab.Screen
-          name={path.QuickTools.name}
+          name={$.path.QuickTools.name}
           component={QuickToolsStackNavigation}
         />
         <Tab.Screen
-          name={path.Settings.name}
+          name={$.path.Settings.name}
           component={SettingsStackNavigation}
         />
-        <Tab.Screen name={path.More.name} component={MoreStackNavigation} />
+        <Tab.Screen name={$.path.More.name} component={MoreStackNavigation} />
       </Tab.Navigator>
     </ThemeProvider>
   )

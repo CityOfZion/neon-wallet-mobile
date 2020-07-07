@@ -1,6 +1,6 @@
-import i18n from 'i18n-js'
 import React, {useState} from 'react'
 
+import {$} from '~/facade'
 import styled, {
   ButtonView,
   ImageView,
@@ -28,7 +28,7 @@ const Notification = (props: NotificationProps) => {
       borderColor="primary"
     >
       <TextView color="text.2" fontSize="10px" mb="4px">
-        {i18n.t('components.notification.title')}
+        {$.t('components.notification.title')}
       </TextView>
       <LinearLayout orientation="horiz">
         <TextView color="text.0" fontSize="14px" lineHeight="14px" weight={1}>

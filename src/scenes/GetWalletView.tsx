@@ -1,10 +1,9 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import i18n from 'i18n-js'
 import React, {useState} from 'react'
 import {ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {useRoutePath} from '~src/app/RouteUtils'
+import {$} from '~/facade'
 import AccountCard from '~src/components/AccountCard'
 import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {Account} from '~src/models/Account'
@@ -24,7 +23,6 @@ interface GetWalletProps {
 const GetWalletView = (props: GetWalletProps) => {
   const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
-  const path = useRoutePath()
 
   props.navigation.setOptions({
     headerTransparent: true,
@@ -52,7 +50,7 @@ const GetWalletView = (props: GetWalletProps) => {
             isCompacted={true}
             isStackMode={i !== accounts.length - 1}
             onPress={() =>
-              props.navigation.navigate(path.GetAccount.name, {account})
+              props.navigation.navigate($.path.GetAccount.name, {account})
             }
           />
         </LinearLayout>
@@ -100,7 +98,7 @@ const GetWalletView = (props: GetWalletProps) => {
               ml="4px"
               fontFamily="medium"
             >
-              {i18n.t('screens.getWallet.addNewAccount')}
+              {$.t('screens.getWallet.addNewAccount')}
             </TextView>
           </LinearLayout>
         </ScrollView>

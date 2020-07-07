@@ -1,11 +1,9 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import i18n from 'i18n-js'
-import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
 import {Alert, FlatList} from 'react-native'
 
-import {useRoutePath} from '~src/app/RouteUtils'
+import {$} from '~/facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
@@ -16,8 +14,6 @@ interface Props {
 }
 
 const Step3CreateWalletPage: React.FC<Props> = (props) => {
-  const path = useRoutePath()
-
   const words = [
     'jack',
     'phone',
@@ -34,18 +30,18 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
   ]
 
   const [formedWords, setFormedWords] = useState<string[]>([])
-  const [shuffledWords] = useState<string[]>(_.shuffle(words))
+  const [shuffledWords] = useState<string[]>($.lodash.shuffle(words))
 
   const validateAndNext = () => {
     if (formedWords.join() === words.join()) {
-      props.navigation.navigate(path.Step4CreateWallet.name)
+      props.navigation.navigate($.path.Step4CreateWallet.name)
     } else {
       Alert.alert(
-        i18n.t('step3CreateWallet.dialog_2_title'),
-        i18n.t('step3CreateWallet.dialog_2_body'),
+        $.t('step3CreateWallet.dialog_2_title'),
+        $.t('step3CreateWallet.dialog_2_body'),
         [
           {
-            text: i18n.t('app.retry'),
+            text: $.t('app.retry'),
             onPress: () => setFormedWords([]),
           },
         ]
@@ -77,16 +73,16 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
               fontSize={'lg'}
               fontFamily={'bold'}
             >
-              {i18n.t('step3CreateWallet.label_1')}
+              {$.t('step3CreateWallet.label_1')}
             </TextView>
 
             <TextView color={'primary'} fontSize={'lg'} fontFamily={'bold'}>
-              {i18n.t('step3CreateWallet.twoOfThree')}
+              {$.t('step3CreateWallet.twoOfThree')}
             </TextView>
           </LinearLayout>
 
           <TextView color={'text.0'} fontSize={'lg'}>
-            {i18n.t('step3CreateWallet.body_1')}
+            {$.t('step3CreateWallet.body_1')}
           </TextView>
         </LinearLayout>
 
@@ -120,14 +116,14 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
         </LinearLayout>
 
         <TextView mb={4} color={'text.0'} fontSize={'lg'}>
-          {i18n.t('step3CreateWallet.body_2')}
+          {$.t('step3CreateWallet.body_2')}
         </TextView>
       </LinearLayout>
 
       <LinearLayout mt={5} mb={6} px={5} width={'100%'}>
         <ThemedButton
           onPress={() => validateAndNext()}
-          label={i18n.t('app.continue')}
+          label={$.t('app.continue')}
           disabled={isDisabled()}
         />
       </LinearLayout>

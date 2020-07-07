@@ -1,12 +1,8 @@
 import React from 'react'
 import {TouchableHighlight} from 'react-native'
 
-import {
-  ImageView,
-  LinearLayout,
-  normalize,
-  TextView,
-} from '~src/styles/styled-components'
+import {$} from '~/facade'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export enum RightIconType {
   NONE,
@@ -61,9 +57,9 @@ const MenuItem = (props: MenuItemProps) => {
         <LinearLayout
           alignItems="center"
           orientation="horiz"
-          height={normalize(65)}
+          height={$.space(65)}
           width="100%"
-          pl={normalize(1)}
+          pl={$.space(1)}
         >
           {props.icon && (
             <ImageView
@@ -82,7 +78,7 @@ const MenuItem = (props: MenuItemProps) => {
           <TextView
             fontSize={'md'}
             fontFamily="semibold"
-            mr={normalize(3)}
+            mr={$.space(3)}
             color="#869ca5"
           >
             {props.subtitle}

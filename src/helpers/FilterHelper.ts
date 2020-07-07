@@ -196,8 +196,8 @@ export abstract class FilterHelper {
   }
 
   static toDarkerShade(color: string) {
-    const hsl = FilterHelper.hexToHsl(color)
-    return FilterHelper.hslToHex(
+    const hsl = this.hexToHsl(color)
+    return this.hslToHex(
       hsl[0],
       hsl[1] * SATURATION_FACTOR,
       hsl[2] * LUMINANCE_FACTOR

@@ -1,6 +1,6 @@
-import i18n from 'i18n-js'
 import React, {useState} from 'react'
 
+import {$} from '~/facade'
 import AccountCard from '~src/components/AccountCard'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ColorPicker from '~src/components/misc/ColorPicker'
@@ -40,7 +40,7 @@ const CustomColorPage: React.FC<object> = () => {
         adjustsFontSizeToFit={true}
         numberOfLines={1}
       >
-        {i18n.t('customColorPage.subtitle')}
+        {$.t('customColorPage.subtitle')}
       </TextView>
 
       <LinearLayout weight={1}>

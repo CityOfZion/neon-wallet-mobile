@@ -2,7 +2,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import React from 'react'
 import {DefaultTheme} from 'styled-components'
 
-import {useRoutePath} from '~src/app/RouteUtils'
+import {$} from '~/facade'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
@@ -14,8 +14,6 @@ interface MoreProps {
 }
 
 const MorePage = (props: MoreProps) => {
-  const path = useRoutePath()
-
   return (
     <ScreenLayout padding={20}>
       <MenuItem
@@ -24,7 +22,7 @@ const MorePage = (props: MoreProps) => {
         iconMarginRight={12}
         arrowDirection={RightIconType.ARROW_RIGHT}
         onPress={() => {
-          props.navigation.navigate(path.Step1CreateWallet.name)
+          props.navigation.navigate($.path.Step1CreateWallet.name)
         }}
       />
 
@@ -53,7 +51,7 @@ const MorePage = (props: MoreProps) => {
         title={'Sample custom card color'}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
-          props.navigation.navigate(path.CustomColor.name)
+          props.navigation.navigate($.path.CustomColor.name)
         }}
       />
 

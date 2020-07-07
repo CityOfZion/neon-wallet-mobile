@@ -4,14 +4,14 @@ import React from 'react'
 import {SafeAreaView, ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {HEADER_HEIGHT, FOOTER_HEIGHT} from '~/constants'
+import {$} from '~/facade'
 import {RootState} from '~src/store/reducers/root'
-import {LinearLayout, normalize} from '~src/styles/styled-components'
+import {LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
   children?: any
   useHeaderPadding?: boolean
-  useTabBarPadding?: boolean
+  useFooterPadding?: boolean
   autoScroll?: boolean
   alignX?: string
   alignY?: string
@@ -19,8 +19,8 @@ interface Props {
 }
 
 const ScreenLayout: React.FC<Props> = (props) => {
-  const headerHeight = props.useHeaderPadding ? HEADER_HEIGHT : 0
-  const tabBarHeight = props.useTabBarPadding ? FOOTER_HEIGHT : 0
+  const headerHeight = props.useHeaderPadding ? $.app.headerHeight : 0
+  const tabBarHeight = props.useFooterPadding ? $.app.footerHeight : 0
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
 
   return (
@@ -40,7 +40,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
           <LinearLayout
             alignItems={props.alignX}
             justifyContent={props.alignY}
-            style={{padding: normalize(props.padding ?? 10)}}
+            style={{padding: $.space(props.padding ?? 10)}}
             position={'relative'}
             height={'100%'}
           >
@@ -55,7 +55,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
 ScreenLayout.propTypes = {
   children: PropTypes.any,
   useHeaderPadding: PropTypes.bool,
-  useTabBarPadding: PropTypes.bool,
+  useFooterPadding: PropTypes.bool,
   autoScroll: PropTypes.bool,
   alignX: PropTypes.string,
   alignY: PropTypes.string,
@@ -64,7 +64,7 @@ ScreenLayout.propTypes = {
 
 ScreenLayout.defaultProps = {
   useHeaderPadding: true,
-  useTabBarPadding: true,
+  useFooterPadding: true,
   autoScroll: true,
 }
 

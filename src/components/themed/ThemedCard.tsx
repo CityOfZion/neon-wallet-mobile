@@ -1,10 +1,10 @@
 import {LinearGradient} from 'expo-linear-gradient'
-import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {StyleProp} from 'react-native'
 
-import styled, {LinearLayout, normalize} from '~src/styles/styled-components'
+import {$} from '~/facade'
+import styled, {LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
   children?: any
@@ -44,7 +44,7 @@ const ThemedCard: React.FC<Props> = (props) => {
 
   const getContentStyle = (): StyleProp<any> => {
     const style = {
-      padding: normalize(props.padding!),
+      padding: $.space(props.padding!),
     }
 
     const styleShadow = {
@@ -58,7 +58,7 @@ const ThemedCard: React.FC<Props> = (props) => {
       elevation: 10,
     }
 
-    return _.merge(
+    return $.lodash.merge(
       style,
       props.hasShadow ? styleShadow : {},
       props.contentStyle ?? {}

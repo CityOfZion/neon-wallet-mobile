@@ -1,7 +1,7 @@
-import i18n from 'i18n-js'
 import React, {useState} from 'react'
 import {useSelector} from 'react-redux'
 
+import {$} from '~/facade'
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -34,9 +34,9 @@ export default function SampleModal(props: Props) {
       controller={controller}
       fullSize={true}
       paddingTop={36}
-      title={i18n.t('screens.createAccount.title')}
-      leftButton={i18n.t('screens.createAccount.navigation.cancel')}
-      rightButton={i18n.t('screens.createAccount.navigation.save')}
+      title={$.t('screens.createAccount.title')}
+      leftButton={$.t('screens.createAccount.navigation.cancel')}
+      rightButton={$.t('screens.createAccount.navigation.save')}
       onLeftPress={() => controller.close()}
       onRightPress={() => controller.close()}
       onClose={() => props.navigation.goBack()}
@@ -50,12 +50,12 @@ export default function SampleModal(props: Props) {
           fontFamily="medium"
           textAlign="center"
         >
-          {i18n.t('screens.createAccount.subtitle')}
+          {$.t('screens.createAccount.subtitle')}
         </TextView>
         <TextView color={theme.colors.text[0]} mb={66}>
           TODO: InputText {'\n'}
-          {i18n.t('screens.createAccount.accountInput.title')} {'\n'}
-          {i18n.t('screens.createAccount.accountInput.placeholder')} {'\n'}
+          {$.t('screens.createAccount.accountInput.title')} {'\n'}
+          {$.t('screens.createAccount.accountInput.placeholder')} {'\n'}
         </TextView>
         <TextView
           mb={52}
@@ -64,7 +64,7 @@ export default function SampleModal(props: Props) {
           fontFamily="medium"
           textAlign="center"
         >
-          {i18n.t('screens.createAccount.selectColor')}
+          {$.t('screens.createAccount.selectColor')}
         </TextView>
         <TextView color={theme.colors.text[0]}>TODO: ColorSelector</TextView>
       </LinearLayout>

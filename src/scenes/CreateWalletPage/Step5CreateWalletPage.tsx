@@ -1,26 +1,18 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import {useRoutePath} from '~src/app/RouteUtils'
+import {$} from '~/facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {
-  TextView,
-  LinearLayout,
-  ImageView,
-  normalize,
-} from '~src/styles/styled-components'
+import {TextView, LinearLayout, ImageView} from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<MoreStackParamList>
 }
 
 const Step5CreateWalletPage: React.FC<Props> = (props) => {
-  const path = useRoutePath()
-
   return (
     <ScreenLayout alignX={'center'}>
       <LinearLayout mt={5} weight={1}>
@@ -30,7 +22,7 @@ const Step5CreateWalletPage: React.FC<Props> = (props) => {
               mt={6}
               mb={4}
               source={require('~/src/assets/images/logo-3d.png')}
-              style={{marginLeft: normalize(60)}}
+              style={{marginLeft: $.space(60)}}
             />
           </LinearLayout>
 
@@ -39,9 +31,9 @@ const Step5CreateWalletPage: React.FC<Props> = (props) => {
             color={'text.0'}
             fontSize={'2xl'}
             textAlign={'center'}
-            lineHeight={normalize(24)}
+            lineHeight={$.space(24)}
           >
-            {i18n.t('step5CreateWallet.label_1')}
+            {$.t('step5CreateWallet.label_1')}
           </TextView>
 
           <TextView
@@ -49,18 +41,18 @@ const Step5CreateWalletPage: React.FC<Props> = (props) => {
             color={'text.2'}
             fontSize={'lg'}
             textAlign={'center'}
-            lineHeight={normalize(20)}
+            lineHeight={$.space(20)}
           >
-            {i18n.t('step5CreateWallet.body_1')}
+            {$.t('step5CreateWallet.body_1')}
           </TextView>
 
           <TextView
             color={'text.2'}
             fontSize={'lg'}
             textAlign={'center'}
-            lineHeight={normalize(20)}
+            lineHeight={$.space(20)}
           >
-            {i18n.t('step5CreateWallet.body_2')}
+            {$.t('step5CreateWallet.body_2')}
           </TextView>
         </LinearLayout>
       </LinearLayout>
@@ -70,11 +62,11 @@ const Step5CreateWalletPage: React.FC<Props> = (props) => {
           onPress={() => {
             props.navigation.reset({
               index: 0,
-              routes: [{name: path.More.name}],
+              routes: [{name: $.path.More.name}],
             })
-            props.navigation.navigate(path.ListWallets.name)
+            props.navigation.navigate($.path.ListWallets.name)
           }}
-          label={i18n.t('step5CreateWallet.viewWallet')}
+          label={$.t('step5CreateWallet.viewWallet')}
         />
       </LinearLayout>
     </ScreenLayout>
