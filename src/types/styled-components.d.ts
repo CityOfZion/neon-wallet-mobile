@@ -42,7 +42,8 @@ export declare global {
     WeightProps &
     TypographyProps &
     PositionProps &
-    TextStyleProps
+    TextStyleProps &
+    BorderProps
 
   type InputTextViewProps = TextInputProps &
     BorderProps &

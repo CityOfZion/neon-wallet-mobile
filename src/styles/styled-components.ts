@@ -21,6 +21,7 @@ const {
 
 export const TextView = styled.Text<TextViewProps>`
   font-family: 'regular';
+  ${border}
   ${color}
   ${typography}
   ${space}
