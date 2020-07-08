@@ -86,13 +86,17 @@ const TabSelector = (props: TabSelectorProps) => {
         onPress={() => props.setIsAssetsTabSelected(true)}
         weight={1}
         alignItems="center"
-        borderBottomWidth={props.isAssetsTabSelected ? '1px' : '3px'}
+        borderBottomWidth={props.isAssetsTabSelected ? '0px' : '3px'}
         borderColor="text.0"
       >
         <TextView
+          width={'100%'}
+          textAlign={'center'}
           fontSize="16px"
-          mb="8px"
+          pb="8px"
           fontFamily="semibold"
+          borderBottomWidth={'1px'}
+          borderColor="text.0"
           color={props.isAssetsTabSelected ? 'text.0' : 'primary'}
         >
           {Facade.t('screens.getAccount.assets')}
@@ -102,13 +106,17 @@ const TabSelector = (props: TabSelectorProps) => {
         onPress={() => props.setIsAssetsTabSelected(false)}
         weight={1}
         alignItems="center"
-        borderBottomWidth={!props.isAssetsTabSelected ? '1px' : '3px'}
+        borderBottomWidth={!props.isAssetsTabSelected ? '0px' : '3px'}
         borderColor="text.0"
       >
         <TextView
+          width={'100%'}
+          textAlign={'center'}
           fontSize="16px"
-          mb="8px"
+          pb="8px"
           fontFamily="semibold"
+          borderBottomWidth={'1px'}
+          borderColor="text.0"
           color={props.isAssetsTabSelected ? 'primary' : 'text.0'}
         >
           {Facade.t('screens.getAccount.transactions')}
@@ -155,14 +163,16 @@ const GetAccountView = ({route, navigation}: GetAccountViewProps) => {
             isAssetsTabSelected={isAssetsTabSelected}
             setIsAssetsTabSelected={setIsAssetsTabSelected}
           />
-          {isAssetsTabSelected ? (
-            <BalanceList
-              my="16px"
-              tokenAssets={mockWalletItems[2].currentAssets.assets}
-            />
-          ) : (
-            <TransactionsList />
-          )}
+          <LinearLayout mb="80px">
+            {isAssetsTabSelected ? (
+              <BalanceList
+                my="16px"
+                tokenAssets={mockWalletItems[2].currentAssets.assets}
+              />
+            ) : (
+              <TransactionsList />
+            )}
+          </LinearLayout>
         </StyledScrollView>
       </LinearLayout>
     </SafeAreaView>
