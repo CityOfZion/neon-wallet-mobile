@@ -15,6 +15,7 @@ interface Props {
   ) => void
   checked?: boolean
   label: string
+  singleRow?: boolean
 }
 
 const ThemedCheckbox: React.FC<Props> = (props) => {
@@ -52,7 +53,7 @@ const ThemedCheckbox: React.FC<Props> = (props) => {
         </CheckboxBoxView>
 
         <LabelView
-          weight={1}
+          weight={props.singleRow ? 1 : undefined}
           color={'text.0'}
           fontSize={'lg'}
           fontFamily={'bold'}
@@ -72,14 +73,17 @@ ThemedCheckbox.propTypes = {
   onChange: PropTypes.func,
   checked: PropTypes.bool,
   label: PropTypes.string.isRequired,
+  singleRow: PropTypes.bool,
 }
 
 ThemedCheckbox.defaultProps = {
   checked: false,
+  singleRow: false,
 }
 
 const CheckboxView = styled.TouchableOpacity`
   box-shadow: 0 -6px 6px rgba(255, 255, 255, 0.1);
+  max-width: 100%;
 `
 
 const CheckboxContentView = styled(LinearLayout)``

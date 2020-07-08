@@ -20,12 +20,14 @@ export class StyleConfig {
 
   readonly weight: ConfigStyle = {
     property: 'flexGrow',
-    transform: (val: number) => {
-      return `
+    transform: (val?: number) => {
+      if (val) {
+        return `
           ${val};
           flex-basis: 0;
           flex-shrink: 1;
         `
+      }
     },
   }
 }
