@@ -1,4 +1,4 @@
-import {Dimensions} from 'react-native'
+import {Dimensions, Platform} from 'react-native'
 
 import nodesMainNet from '~src/core/nodes-main-net.json'
 import nodesTestNet from '~src/core/nodes-test-net.json'
@@ -11,7 +11,7 @@ import {Currency} from '~src/enums/Currency'
 export class ApplicationConfig {
   readonly defaultCurrency = Currency.USD
 
-  readonly headerHeight = 40
+  readonly headerHeight = Platform.OS === 'ios' ? 40 : 72
   readonly footerHeight = 66
 
   readonly windowWidth = Dimensions.get('window').width
