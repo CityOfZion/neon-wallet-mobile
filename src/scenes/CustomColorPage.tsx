@@ -27,7 +27,7 @@ const CustomColorPage: React.FC<object> = () => {
 
   return (
     <ScreenLayout autoScroll={false} alignX={'center'}>
-      <LinearLayout mb={5} maxWidth={320}>
+      <LinearLayout mt={4} mb={5} maxWidth={320}>
         <AccountCard account={account} />
       </LinearLayout>
 

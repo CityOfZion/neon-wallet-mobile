@@ -1,14 +1,13 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import React, {useState} from 'react'
-import {useSelector} from 'react-redux'
+import React, {useEffect, useState} from 'react'
 
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {Account} from '~src/models/Account'
+import {NeoNode} from '~src/models/NeoNode'
 import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
-import {RootState} from '~src/store/reducers/root'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface GetWalletProps {
@@ -17,12 +16,30 @@ interface GetWalletProps {
 
 const GetWalletView = (props: GetWalletProps) => {
   const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const [nodes, setNodes] = useState<NeoNode[]>([])
 
-  props.navigation.setOptions({
-    headerTransparent: true,
-    headerTintColor: theme.colors.text[0],
-  })
+  useEffect(() => {
+    populate()
+  }, [])
+
+  const populate = async () => {
+    setNodes(await NeoNode.getAllNodes())
+  }
+
+  const _renderTitle: React.FC = () => {
+    return (
+      <LinearLayout alignItems="center" justifyContent="center">
+        <TextView color={'text.3'} textAlign={'center'} fontSize={10}>
+          {Facade.t('app.neoBlockHeight')}
+        </TextView>
+
+        <TextView color={'text.0'} textAlign={'center'}>
+          {nodes[0] &&
+            Facade.filter.currency(nodes[0].height, '', false, false)}
+        </TextView>
+      </LinearLayout>
+    )
+  }
 
   const _renderAccountCards = () => {
     return accounts.map((account: Account, i: number) => {
@@ -35,7 +52,13 @@ const GetWalletView = (props: GetWalletProps) => {
             isCompacted={true}
             isStackMode={i !== accounts.length - 1}
             onPress={() =>
-              props.navigation.navigate(Facade.path.GetAccount.name, {account})
+              props.navigation.navigate(Facade.path.GetAccount.name, {
+                account,
+                headerTitle: _renderTitle,
+                actionTitle: Facade.t('app.edit'),
+                // TODO: Edit event
+                actionOnPress: () => {},
+              })
             }
           />
         </LinearLayout>
@@ -44,8 +67,8 @@ const GetWalletView = (props: GetWalletProps) => {
   }
 
   return (
-    <ScreenLayout padding={15}>
-      {_renderAccountCards()}
+    <ScreenLayout>
+      <LinearLayout mt={4}>{_renderAccountCards()}</LinearLayout>
 
       <LinearLayout
         my={6}

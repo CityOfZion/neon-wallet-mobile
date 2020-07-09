@@ -25,6 +25,7 @@ const ContactsStackNavigation = () => {
           name={Facade.path.Contacts.name}
           initialParams={{
             actionButtonStyle: 'add',
+            // TODO: Add event
             actionOnPress: () => {},
           }}
           component={ContactsPage}

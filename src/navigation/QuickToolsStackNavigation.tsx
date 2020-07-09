@@ -1,16 +1,12 @@
-import {
-  createStackNavigator,
-  StackNavigationOptions,
-} from '@react-navigation/stack'
+import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
-import HeaderActionButton from '~src/components/layout/HeaderActionButton'
-import HeaderBackButton from '~src/components/layout/HeaderBackButton'
-import HeaderBar, {HeaderProps} from '~src/components/layout/HeaderBar'
+import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
+import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
 import {Account} from '~src/models/Account'
 import ReceiveQRCode from '~src/scenes/ReceiveQRCode'
 import QRCodeScanTest from '~src/scenes/TestPage/QRCodeScanTest'
@@ -25,7 +21,7 @@ export type QuickToolsStackParamList = {
   CustomColor: undefined
   Onboarding: undefined
   GetWallet: undefined
-  GetAccount: {account: Account}
+  GetAccount: {account: Account} & HeaderActionButtonProps & HeaderCustomProps
 }
 
 const QuickToolsStack = createStackNavigator<QuickToolsStackParamList>()

@@ -19,7 +19,10 @@ interface Props {
 }
 
 const ScreenLayout: React.FC<Props> = (props) => {
-  const headerHeight = props.useHeaderPadding ? Facade.app.headerHeight : 0
+  const extraHeight = Facade.utils.isAndroid ? 32 : 0
+  const headerHeight = props.useHeaderPadding
+    ? Facade.app.headerHeight
+    : extraHeight
   const tabBarHeight = props.useFooterPadding ? Facade.app.footerHeight : 0
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
 

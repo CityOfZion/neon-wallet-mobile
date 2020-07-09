@@ -6,22 +6,22 @@ import {Facade} from '~src/app/Facade'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface HeaderProps {
-  title?: string
+  title?: string | React.FC<HeaderProps> | Function
   image?: any
   iconWidth?: number
   theme?: DefaultTheme
   route?: Route
 }
 
-export interface CustomHeaderProps {
-  headerTitle?: string
+export interface HeaderCustomProps {
+  headerTitle?: string | React.FC<HeaderProps> | Function
 }
 
 const HeaderBar: React.FC<HeaderProps> = (
   headerProps: HeaderProps,
   props: StackHeaderTitleProps
 ) => {
-  const params: CustomHeaderProps = headerProps.route?.params
+  const params: HeaderCustomProps = headerProps.route?.params
 
   const getIconOffset = () => {
     return -Facade.space<number>((headerProps.iconWidth ?? 20) + 8)
@@ -35,6 +35,29 @@ const HeaderBar: React.FC<HeaderProps> = (
     }
 
     return windowWidth - Facade.space<number>(160)
+  }
+
+  const _renderTitle = () => {
+    if (params && params?.headerTitle instanceof Function) {
+      return params.headerTitle(headerProps)
+    } else if (headerProps.title instanceof Function) {
+      return headerProps.title(headerProps)
+    }
+
+    return (
+      <TextView
+        pt={2}
+        textAlign="center"
+        color="text.0"
+        fontSize={Facade.space(24)}
+        allowFontScaling={true}
+        adjustsFontSizeToFit={true}
+        numberOfLines={1}
+        style={{includeFontPadding: false}}
+      >
+        {params?.headerTitle ?? headerProps.title}
+      </TextView>
+    )
   }
 
   return (
@@ -56,18 +79,7 @@ const HeaderBar: React.FC<HeaderProps> = (
         />
       )}
 
-      <TextView
-        pt={2}
-        textAlign="center"
-        color="text.0"
-        fontSize={Facade.space(24)}
-        allowFontScaling={true}
-        adjustsFontSizeToFit={true}
-        numberOfLines={1}
-        style={{includeFontPadding: false}}
-      >
-        {params?.headerTitle ?? headerProps.title}
-      </TextView>
+      {_renderTitle()}
     </LinearLayout>
   )
 }

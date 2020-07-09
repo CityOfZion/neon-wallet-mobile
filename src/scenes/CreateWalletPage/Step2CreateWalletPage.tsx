@@ -41,6 +41,7 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
           onPress: () =>
             props.navigation.navigate(Facade.path.Step3CreateWallet.name, {
               actionTitle: Facade.t('app.skip'),
+              actionButtonStyle: 'highlight',
               actionOnPress: () => skipDialog(),
             }),
         },

@@ -65,8 +65,8 @@ export default function QuickToolsMenu(props: Props) {
       draggable={false}
       paddingLeft={Facade.space<number>(36)}
       paddingRight={Facade.space<number>(36)}
-      paddingTop={30}
-      paddingBottom={60 + Facade.app.footerHeight}
+      paddingTop={20}
+      paddingBottom={24 + Facade.app.footerHeight}
     >
       {items.map((item, index) => (
         <TouchableWithoutFeedback
