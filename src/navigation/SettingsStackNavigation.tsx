@@ -33,8 +33,6 @@ const SettingsStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               title: Facade.path.Settings.translate(),
               image: require('~src/assets/images/settings-white.png'),
-              showIcon: true,
-              iconWidth: 20,
               theme,
               route,
             })

@@ -1,6 +1,6 @@
 import {StackHeaderTitleProps} from '@react-navigation/stack/lib/typescript/src/types'
 import React from 'react'
-import {Platform, Route} from 'react-native'
+import {Route} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -8,17 +8,21 @@ import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 export interface HeaderProps {
   title?: string
   image?: any
-  showIcon?: boolean
   iconWidth?: number
   theme?: DefaultTheme
   route?: Route
-  onPressToClose?: () => void
+}
+
+export interface CustomHeaderProps {
+  headerTitle?: string
 }
 
 const HeaderBar: React.FC<HeaderProps> = (
   headerProps: HeaderProps,
   props: StackHeaderTitleProps
 ) => {
+  const params: CustomHeaderProps = headerProps.route?.params
+
   const getIconOffset = () => {
     return -Facade.space<number>((headerProps.iconWidth ?? 20) + 8)
   }
@@ -42,7 +46,7 @@ const HeaderBar: React.FC<HeaderProps> = (
       justifyContent={'center'}
       style={{alignSelf: 'center'}}
     >
-      {headerProps.showIcon && (
+      {headerProps.image && (
         <ImageView
           width={Facade.space<number>(headerProps.iconWidth ?? 20)}
           ml={getIconOffset()}
@@ -62,7 +66,7 @@ const HeaderBar: React.FC<HeaderProps> = (
         numberOfLines={1}
         style={{includeFontPadding: false}}
       >
-        {headerProps.title}
+        {params?.headerTitle ?? headerProps.title}
       </TextView>
     </LinearLayout>
   )

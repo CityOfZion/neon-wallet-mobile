@@ -42,8 +42,6 @@ const MoreStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               title: Facade.path.More.translate(),
               image: require('~src/assets/images/more-horiz.png'),
-              showIcon: true,
-              iconWidth: 20,
               theme,
               route,
             })
@@ -57,8 +55,6 @@ const MoreStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               title: Facade.path.Step1CreateWallet.translate(),
               image: require('~src/assets/images/icon-add-circle-outline-white.png'),
-              showIcon: true,
-              iconWidth: 20,
               theme,
               route,
             })
@@ -72,8 +68,6 @@ const MoreStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               title: Facade.path.Step2CreateWallet.translate(),
               image: require('~src/assets/images/icon-add-circle-outline-white.png'),
-              showIcon: true,
-              iconWidth: 20,
               theme,
               route,
             })
@@ -87,8 +81,6 @@ const MoreStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               title: Facade.path.Step3CreateWallet.translate(),
               image: require('~src/assets/images/icon-add-circle-outline-white.png'),
-              showIcon: true,
-              iconWidth: 20,
               theme,
               route,
             })
@@ -102,8 +94,6 @@ const MoreStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               title: Facade.path.Step4CreateWallet.translate(),
               image: require('~src/assets/images/icon-add-circle-outline-white.png'),
-              showIcon: true,
-              iconWidth: 20,
               theme,
               route,
             })
@@ -117,8 +107,6 @@ const MoreStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               title: Facade.path.Step5CreateWallet.translate(),
               image: require('~src/assets/images/icon-add-circle-outline-white.png'),
-              showIcon: true,
-              iconWidth: 20,
               theme,
               route,
             })
@@ -132,8 +120,6 @@ const MoreStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               title: Facade.path.CustomColor.translate(),
               image: require('~src/assets/images/palette.png'),
-              showIcon: true,
-              iconWidth: 20,
               theme,
               route,
             })

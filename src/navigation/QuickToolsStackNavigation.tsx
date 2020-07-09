@@ -43,8 +43,6 @@ const QuickToolsStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               title: Facade.path.ReceiveQrCode.translate(),
               image: require('~src/assets/images/icon-qrcode-white.png'),
-              showIcon: true,
-              iconWidth: 20,
               theme,
               route,
             })
@@ -58,8 +56,6 @@ const QuickToolsStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               title: Facade.t(`routes.${Facade.path.QrCodeScanTest.name}`),
               image: require('~src/assets/images/icon-qrcode-white.png'),
-              showIcon: true,
-              iconWidth: 20,
               theme,
               route,
             })

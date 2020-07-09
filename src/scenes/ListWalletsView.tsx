@@ -118,6 +118,7 @@ const ListWalletsView = (props: WalletProps) => {
               onPress={() =>
                 props.navigation.navigate(Facade.path.GetWallet.name, {
                   wallet: accounts,
+                  headerTitle: item.title,
                 })
               }
               wallet={item}
