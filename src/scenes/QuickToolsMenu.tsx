@@ -63,9 +63,9 @@ export default function QuickToolsMenu(props: Props) {
       controller={props.controller}
       noHeader={true}
       draggable={false}
-      paddingLeft={36}
-      paddingRight={36}
-      paddingTop={40}
+      paddingLeft={Facade.scale<number>(36)}
+      paddingRight={Facade.scale<number>(36)}
+      paddingTop={20}
       paddingBottom={24 + Facade.app.footerHeight}
     >
       {items.map((item, index) => (

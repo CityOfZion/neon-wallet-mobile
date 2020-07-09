@@ -9,9 +9,12 @@ import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
 import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {mockEmptyWallet, mockWalletItems} from '~src/mocks/mockWalletItems'
 import {Account} from '~src/models/Account'
+import {TokenBalance} from '~src/models/TokenBalance'
+import {TokenValue} from '~src/models/TokenValue'
 import {Wallet} from '~src/models/Wallet'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootState} from '~src/store/reducers/root'
@@ -21,8 +24,6 @@ import styled, {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {TokenBalance} from '~src/models/TokenBalance'
-import {TokenValue} from '~src/models/TokenValue'
 
 interface WalletProps {
   navigation: StackNavigationProp<WalletStackParamList>
@@ -48,7 +49,12 @@ const ListWalletsView = (props: WalletProps) => {
         </TextView>
         <LinearLayout orientation="horiz">
           <TextView fontSize="36px" color="text.0" fontFamily="medium">
-            {Facade.filter.currency(wallet.currentValue ?? 0, currency, false, false)}
+            {Facade.filter.currency(
+              wallet.currentValue ?? 0,
+              currency,
+              false,
+              false
+            )}
           </TextView>
           <ImageView
             mt="8px"
@@ -78,19 +84,9 @@ const ListWalletsView = (props: WalletProps) => {
 
   return (
     <ScreenLayout useHeaderPadding={false} padding={0}>
-      <ButtonView
-        onPress={() => setWallets([mockEmptyWallet])}
-        mt="40px"
-        height="6px"
-        p="8px"
-        alignSelf="flex-end"
-      >
-        <ImageView
-          height="6px"
-          resizeMode="contain"
-          source={require('~src/assets/images/more-horiz.png')}
-        />
-      </ButtonView>
+      <LinearLayout alignSelf={'flex-end'}>
+        <ThemedMoreButton onPress={() => setWallets([mockEmptyWallet])} />
+      </LinearLayout>
 
       <LinearLayout
         mt="12px"
@@ -118,6 +114,7 @@ const ListWalletsView = (props: WalletProps) => {
               onPress={() =>
                 props.navigation.navigate(Facade.path.GetWallet.name, {
                   wallet: accounts,
+                  headerTitle: item.title,
                 })
               }
               wallet={item}

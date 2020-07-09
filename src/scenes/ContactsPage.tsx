@@ -5,9 +5,9 @@ import {TextView} from '~src/styles/styled-components'
 
 const ContactsPage = () => {
   return (
-    <ScreenLayout useHeaderPadding={false}>
+    <ScreenLayout>
       <TextView color="text.0" fontSize="3xl" textAlign="center">
-        Contacts Page
+        Hello world
       </TextView>
     </ScreenLayout>
   )

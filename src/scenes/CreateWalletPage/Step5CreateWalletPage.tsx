@@ -22,7 +22,7 @@ const Step5CreateWalletPage: React.FC<Props> = (props) => {
               mt={6}
               mb={4}
               source={require('~/src/assets/images/logo-3d.png')}
-              style={{marginLeft: Facade.space(60)}}
+              style={{marginLeft: Facade.scale(60)}}
             />
           </LinearLayout>
 
@@ -31,7 +31,7 @@ const Step5CreateWalletPage: React.FC<Props> = (props) => {
             color={'text.0'}
             fontSize={'2xl'}
             textAlign={'center'}
-            lineHeight={Facade.space(24)}
+            lineHeight={Facade.scale(24)}
           >
             {Facade.t('step5CreateWallet.label_1')}
           </TextView>
@@ -41,7 +41,7 @@ const Step5CreateWalletPage: React.FC<Props> = (props) => {
             color={'text.2'}
             fontSize={'lg'}
             textAlign={'center'}
-            lineHeight={Facade.space(20)}
+            lineHeight={Facade.scale(20)}
           >
             {Facade.t('step5CreateWallet.body_1')}
           </TextView>
@@ -50,7 +50,7 @@ const Step5CreateWalletPage: React.FC<Props> = (props) => {
             color={'text.2'}
             fontSize={'lg'}
             textAlign={'center'}
-            lineHeight={Facade.space(20)}
+            lineHeight={Facade.scale(20)}
           >
             {Facade.t('step5CreateWallet.body_2')}
           </TextView>

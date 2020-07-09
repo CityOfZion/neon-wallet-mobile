@@ -1,19 +1,35 @@
 import React from 'react'
-import {NativeSyntheticEvent, NativeTouchEvent} from 'react-native'
+import {NativeSyntheticEvent, NativeTouchEvent, View} from 'react-native'
 
+import ThemedAddButton from '~src/components/themed/ThemedAddButton'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 
-export interface ActionButtonOptions {
-  actionTitle: string
-  actionOnPress?: (
-    e: NativeSyntheticEvent<NativeTouchEvent>,
-    active?: boolean
-  ) => void
+export interface HeaderActionButtonProps {
+  actionTitle?: string
+  actionButtonStyle?: 'default' | 'highlight' | 'close' | 'add'
+  actionOnPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
 }
 
-const HeaderActionButton = (props?: ActionButtonOptions) => {
-  return (
-    props?.actionTitle && (
+const HeaderActionButton: React.FC<HeaderActionButtonProps> = (
+  props?: HeaderActionButtonProps
+) => {
+  const actionButtonStyle = props?.actionButtonStyle ?? 'default'
+
+  if (actionButtonStyle === 'default' && props?.actionTitle) {
+    return (
+      <ThemedButton
+        onPress={props.actionOnPress}
+        label={props.actionTitle}
+        flat={true}
+        textColor={'text.0'}
+        fontSize={'lg'}
+      />
+    )
+  }
+
+  if (actionButtonStyle === 'highlight' && props?.actionTitle) {
+    return (
       <ThemedButton
         onPress={props.actionOnPress}
         label={props.actionTitle}
@@ -22,7 +38,21 @@ const HeaderActionButton = (props?: ActionButtonOptions) => {
         fontSize={'lg'}
       />
     )
-  )
+  }
+
+  if (actionButtonStyle === 'close') {
+    return <ThemedCloseButton onPress={props?.actionOnPress} />
+  }
+
+  if (actionButtonStyle === 'add') {
+    return <ThemedAddButton onPress={props?.actionOnPress} />
+  }
+
+  return <View />
+}
+
+HeaderActionButton.defaultProps = {
+  actionButtonStyle: 'default',
 }
 
 export default HeaderActionButton

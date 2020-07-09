@@ -19,7 +19,10 @@ interface Props {
 }
 
 const ScreenLayout: React.FC<Props> = (props) => {
-  const headerHeight = props.useHeaderPadding ? Facade.app.headerHeight : 0
+  const extraHeight = Facade.utils.isAndroid ? 32 : 0
+  const headerHeight = props.useHeaderPadding
+    ? Facade.app.headerHeight
+    : extraHeight
   const tabBarHeight = props.useFooterPadding ? Facade.app.footerHeight : 0
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
 
@@ -40,7 +43,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
           <LinearLayout
             alignItems={props.alignX}
             justifyContent={props.alignY}
-            style={{padding: Facade.space(props.padding ?? 10)}}
+            style={{padding: Facade.scale(props.padding ?? 10)}}
             position={'relative'}
             height={'100%'}
           >

@@ -1,8 +1,16 @@
 import {classToClass, ClassTransformOptions} from 'class-transformer'
 import {chunk} from 'lodash'
-import {Clipboard} from 'react-native'
+import {Clipboard, Platform} from 'react-native'
 
 export abstract class UtilsHelper {
+  static get isIos() {
+    return Platform.OS === 'ios'
+  }
+
+  static get isAndroid() {
+    return Platform.OS === 'android'
+  }
+
   static chunkPadded<T>(array: (T | null)[], n: number, padWith?: T | null) {
     const arrayGroup = chunk(array, n)
 

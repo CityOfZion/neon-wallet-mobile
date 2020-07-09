@@ -37,9 +37,9 @@ interface Props {
 
 const ThemedButton: React.FC<Props> = (props) => {
   const [isActive, setActive] = useState<boolean>(props.active ?? false)
-  const width = Facade.space(props.iconSize ? props.iconSize[0] : 20)
-  const height = Facade.space(props.iconSize ? props.iconSize[1] : 20)
-  const fontSize = Facade.space(props.fontSize ?? 22)
+  const width = Facade.scale(props.iconSize ? props.iconSize[0] : 20)
+  const height = Facade.scale(props.iconSize ? props.iconSize[1] : 20)
+  const fontSize = Facade.scale(props.fontSize ?? 22)
 
   useEffect(() => {
     setActive(props.active ?? false)
@@ -49,9 +49,9 @@ const ThemedButton: React.FC<Props> = (props) => {
     const style = {
       paddingTop: 0,
       paddingBottom: 0,
-      paddingLeft: Facade.space(20),
-      paddingRight: Facade.space(20),
-      height: Facade.space(50),
+      paddingLeft: Facade.scale(20),
+      paddingRight: Facade.scale(20),
+      height: Facade.scale(50),
     }
 
     const styleActive = {
@@ -68,7 +68,7 @@ const ThemedButton: React.FC<Props> = (props) => {
 
   const _renderLabel = () => {
     return (
-      <LinearLayout orientation={'horiz'} alignItems={'center'} height={'100%'}>
+      <LinearLayout orientation={'horiz'} alignItems={'center'}>
         {props.srcIcon && (
           <ImageView
             width={width as number}
@@ -81,7 +81,7 @@ const ThemedButton: React.FC<Props> = (props) => {
 
         {props.label && (
           <LabelView
-            mt={2}
+            mt={'2px'}
             color={props.textColor}
             fontSize={fontSize}
             fontFamily={props.flat ? 'bold' : 'regular'}
@@ -117,6 +117,7 @@ const ThemedButton: React.FC<Props> = (props) => {
         hasBright={!props.basic && !isActive}
         hasShadow={!props.basic && !isActive}
         baseBgColor={isActive ? 'transparent' : props.bgColor}
+        alignY={'center'}
       >
         {_renderLabel()}
       </ThemedCard>

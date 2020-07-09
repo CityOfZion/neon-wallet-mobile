@@ -6,46 +6,80 @@ import {Facade} from '~src/app/Facade'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface HeaderProps {
-  title?: string
+  title?: string | React.FC<HeaderProps> | Function
   image?: any
-  showIcon?: boolean
   iconWidth?: number
   theme?: DefaultTheme
   route?: Route
-  onPressToClose?: () => void
 }
 
-const HeaderBar = (headerProps: HeaderProps, props: StackHeaderTitleProps) => {
+export interface HeaderCustomProps {
+  headerTitle?: string | React.FC<HeaderProps> | Function
+}
+
+const HeaderBar: React.FC<HeaderProps> = (
+  headerProps: HeaderProps,
+  props: StackHeaderTitleProps
+) => {
+  const params: HeaderCustomProps = headerProps.route?.params
+
+  const getIconOffset = () => {
+    return -Facade.scale<number>((headerProps.iconWidth ?? 20) + 8)
+  }
+
+  const getHeaderWidth = () => {
+    const {windowWidth} = Facade.app
+
+    if (Facade.utils.isIos) {
+      return windowWidth - Facade.scale<number>(220)
+    }
+
+    return windowWidth - Facade.scale<number>(160)
+  }
+
+  const _renderTitle = () => {
+    if (params && params?.headerTitle instanceof Function) {
+      return params.headerTitle(headerProps)
+    } else if (headerProps.title instanceof Function) {
+      return headerProps.title(headerProps)
+    }
+
+    return (
+      <TextView
+        pt={2}
+        textAlign="center"
+        color="text.0"
+        fontSize={Facade.scale(24)}
+        allowFontScaling={true}
+        adjustsFontSizeToFit={true}
+        numberOfLines={1}
+        style={{includeFontPadding: false}}
+      >
+        {params?.headerTitle ?? headerProps.title}
+      </TextView>
+    )
+  }
+
   return (
     <LinearLayout
       height={Facade.app.headerHeight}
-      width={Facade.app.windowWidth - Facade.space<number>(220)}
+      width={getHeaderWidth()}
       orientation="horiz"
-      alignItems="center"
+      alignItems={'center'}
       justifyContent={'center'}
+      style={{alignSelf: 'center'}}
     >
-      {headerProps.showIcon && (
+      {headerProps.image && (
         <ImageView
-          width={Facade.space<number>(headerProps.iconWidth ?? 20)}
-          ml={-Facade.space<number>((headerProps.iconWidth ?? 20) + 9)}
+          width={Facade.scale<number>(headerProps.iconWidth ?? 20)}
+          ml={getIconOffset()}
           mr={3}
           source={headerProps.image}
           resizeMode="contain"
         />
       )}
 
-      <TextView
-        pt={2}
-        textAlign="center"
-        color="text.0"
-        fontSize={Facade.space(24)}
-        allowFontScaling={true}
-        adjustsFontSizeToFit={true}
-        numberOfLines={1}
-        style={{includeFontPadding: false}}
-      >
-        {headerProps.title}
-      </TextView>
+      {_renderTitle()}
     </LinearLayout>
   )
 }

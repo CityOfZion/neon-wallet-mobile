@@ -4,6 +4,8 @@ import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
+import {Navigator} from '~src/app/Navigator'
+import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
 import {Account} from '~src/models/Account'
 import GetAccountView from '~src/scenes/GetAccountView'
 import GetWalletView from '~src/scenes/GetWalletView'
@@ -12,8 +14,8 @@ import {RootState} from '~src/store/reducers/root'
 
 export type WalletStackParamList = {
   ListWallets: undefined
-  GetWallet: {wallet: Account[]}
-  GetAccount: {account: Account}
+  GetWallet: {wallet: Account[]} & HeaderCustomProps
+  GetAccount: {account: Account} & HeaderCustomProps
 }
 
 const WalletStack = createStackNavigator<WalletStackParamList>()
@@ -31,10 +33,22 @@ const WalletStackNavigation = () => {
         <WalletStack.Screen
           name={Facade.path.GetWallet.name}
           component={GetWalletView}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              theme,
+              route,
+            })
+          }
         />
         <WalletStack.Screen
           name={Facade.path.GetAccount.name}
           component={GetAccountView}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              theme,
+              route,
+            })
+          }
         />
       </WalletStack.Navigator>
     </ThemeProvider>

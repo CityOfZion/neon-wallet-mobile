@@ -57,9 +57,9 @@ const MenuItem = (props: MenuItemProps) => {
         <LinearLayout
           alignItems="center"
           orientation="horiz"
-          height={Facade.space(65)}
+          height={Facade.scale(65)}
           width="100%"
-          pl={Facade.space(1)}
+          pl={Facade.scale(1)}
         >
           {props.icon && (
             <ImageView
@@ -78,7 +78,7 @@ const MenuItem = (props: MenuItemProps) => {
           <TextView
             fontSize={'md'}
             fontFamily="semibold"
-            mr={Facade.space(3)}
+            mr={Facade.scale(3)}
             color="#869ca5"
           >
             {props.subtitle}

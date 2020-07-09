@@ -35,7 +35,12 @@ const WelcomePage: React.FC<Props> = (props) => {
         </TextView>
       </LinearLayout>
 
-      <TextView mb={5} color={'text.0'} fontSize={36} fontFamily={'bold'}>
+      <TextView
+        mb={5}
+        color={'text.0'}
+        fontSize={Facade.scale(36)}
+        fontFamily={'bold'}
+      >
         {Facade.t('welcome.title')}
       </TextView>
 
@@ -104,8 +109,8 @@ const WelcomePage: React.FC<Props> = (props) => {
 
       <LinearLayout
         position={'absolute'}
-        right={Facade.space(5)}
-        top={Facade.space(5)}
+        right={Facade.scale(5)}
+        top={Facade.scale(5)}
       >
         <ThemedCloseButton onPress={() => props.onClose?.()} />
       </LinearLayout>

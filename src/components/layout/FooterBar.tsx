@@ -28,7 +28,8 @@ import styled, {
 } from '~src/styles/styled-components'
 import {orientation, weight} from '~src/styles/styled-system.config'
 
-const FooterBar = ({state, descriptors, navigation}: BottomTabBarProps) => {
+const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
+  const {state, descriptors, navigation} = props
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
   const focusedOptions = descriptors[state.routes[state.index].key].options
 

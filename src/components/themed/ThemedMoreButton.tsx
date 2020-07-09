@@ -9,11 +9,12 @@ interface Props {
   onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
 }
 
-const ThemedCloseButton: React.FC<Props> = (props) => {
+const ThemedMoreButton: React.FC<Props> = (props) => {
   return (
     <ThemedButton
       onPress={props.onPress}
-      srcIcon={require('~src/assets/images/close.png')}
+      srcIcon={require('~src/assets/images/more-horiz.png')}
+      iconSize={[24, 24]}
       textColor={'text.0'}
       rounded={false}
       flat={true}
@@ -22,8 +23,8 @@ const ThemedCloseButton: React.FC<Props> = (props) => {
   )
 }
 
-ThemedCloseButton.propTypes = {
+ThemedMoreButton.propTypes = {
   onPress: PropTypes.func,
 }
 
-export default ThemedCloseButton
+export default ThemedMoreButton

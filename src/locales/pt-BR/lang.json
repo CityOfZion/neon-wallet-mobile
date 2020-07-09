@@ -22,6 +22,8 @@
   },
   "routes": {
     "GetWallet": "Carteira",
+    "Contacts": "Contatos",
+    "More": "Mais",
     "Account": "Conta",
     "Settings": "Configurações",
     "ReceiveQrCode": "Receive QR Code",

@@ -3,10 +3,10 @@ import {FlatList} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {TokenBalance} from '~src/models/TokenBalance'
 import {TokenValue} from '~src/models/TokenValue'
 import {RootState} from '~src/store/reducers/root'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-import {TokenBalance} from '~src/models/TokenBalance'
 
 const TableData = (props: {header: string; content: string}) => {
   return (
@@ -57,19 +57,23 @@ const BalanceList = (props: {
         {Facade.t('components.balanceList.title')}
       </TextView>
       {props.tokenAssets.totalValue ? (
-          <FlatList
-            data={props.tokenAssets.assets}
-            keyExtractor={(item) => item.symbol}
-            ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
-            renderItem={({item}) => <BalanceListItem item={item} />}
-          />
-        ) : (
-          <TextView my="32px" color="text.0" fontFamily="medium" fontSize="18px" textAlign="center">
-            {Facade.t('components.balanceList.empty')}
-          </TextView>
-        )
-      }
-
+        <FlatList
+          data={props.tokenAssets.assets}
+          keyExtractor={(item) => item.symbol}
+          ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
+          renderItem={({item}) => <BalanceListItem item={item} />}
+        />
+      ) : (
+        <TextView
+          my="32px"
+          color="text.0"
+          fontFamily="medium"
+          fontSize="18px"
+          textAlign="center"
+        >
+          {Facade.t('components.balanceList.empty')}
+        </TextView>
+      )}
     </LinearLayout>
   )
 }
