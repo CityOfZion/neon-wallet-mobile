@@ -63,8 +63,8 @@ export default function QuickToolsMenu(props: Props) {
       controller={props.controller}
       noHeader={true}
       draggable={false}
-      paddingLeft={Facade.space<number>(36)}
-      paddingRight={Facade.space<number>(36)}
+      paddingLeft={Facade.scale<number>(36)}
+      paddingRight={Facade.scale<number>(36)}
       paddingTop={20}
       paddingBottom={24 + Facade.app.footerHeight}
     >

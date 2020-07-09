@@ -109,10 +109,10 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
           <ThemedCard
             rounded={false}
             contentStyle={{
-              paddingTop: Facade.space(26),
-              paddingBottom: Facade.space(26),
-              paddingLeft: Facade.space(10),
-              paddingRight: Facade.space(10),
+              paddingTop: Facade.scale(26),
+              paddingBottom: Facade.scale(26),
+              paddingLeft: Facade.scale(10),
+              paddingRight: Facade.scale(10),
             }}
           >
             <LinearLayout
@@ -132,7 +132,7 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
             onPress={() => Facade.utils.copyToClipboard(words.join(' '))}
             label={Facade.t('app.copy')}
             srcIcon={require('~/src/assets/images/icon-copy-green.png')}
-            iconSize={[Facade.space(25), Facade.space(25)]}
+            iconSize={[Facade.scale(25), Facade.scale(25)]}
             fontSize={18}
             flat={true}
           />

@@ -43,7 +43,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
           <LinearLayout
             alignItems={props.alignX}
             justifyContent={props.alignY}
-            style={{padding: Facade.space(props.padding ?? 10)}}
+            style={{padding: Facade.scale(props.padding ?? 10)}}
             position={'relative'}
             height={'100%'}
           >

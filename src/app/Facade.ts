@@ -28,8 +28,8 @@ export abstract class Facade {
     return moment
   }
 
-  static get space() {
-    return Normalize.space
+  static get scale() {
+    return Normalize.scale
   }
 
   static get app() {

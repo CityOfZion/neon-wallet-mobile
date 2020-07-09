@@ -1,25 +1,25 @@
 import {Normalize} from '~src/app/Normalize'
 
-const space = Normalize.space
+const scale = Normalize.scale
 
 /**
  * Theme Configuration
  */
 export class ThemeConfig {
   readonly fontSizes = {
-    min: space(10),
-    xs: space(12),
-    sm: space(14),
-    md: space(16),
-    lg: space(18),
-    xl: space(20),
-    '2xl': space(24),
-    '3xl': space(32),
-    '4xl': space(48),
-    '5xl': space(64),
+    min: scale(10),
+    xs: scale(12),
+    sm: scale(14),
+    md: scale(16),
+    lg: scale(18),
+    xl: scale(20),
+    '2xl': scale(24),
+    '3xl': scale(32),
+    '4xl': scale(48),
+    '5xl': scale(64),
   }
 
   readonly space = [0, 2, 4, 8, 12, 16, 32, 64, 128, 256, 512].map((it) =>
-    space(it)
+    scale(it)
   )
 }

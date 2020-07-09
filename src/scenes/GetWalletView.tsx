@@ -43,7 +43,7 @@ const GetWalletView = (props: GetWalletProps) => {
 
   const _renderAccountCards = () => {
     return accounts.map((account: Account, i: number) => {
-      const marginTop = i !== 0 ? Facade.space(-130) : undefined
+      const marginTop = i !== 0 ? Facade.scale(-130) : undefined
 
       return (
         <LinearLayout key={i} marginTop={marginTop}>

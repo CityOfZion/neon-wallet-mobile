@@ -19,9 +19,9 @@ const Step1CreateWalletPage: React.FC<Props> = (props) => {
         <LinearLayout
           mt={1}
           mr={3}
-          height={Facade.space(26)}
-          width={Facade.space(26)}
-          borderRadius={Facade.space(13)}
+          height={Facade.scale(26)}
+          width={Facade.scale(26)}
+          borderRadius={Facade.scale(13)}
           bg={'primary'}
           alignItems={'center'}
         >

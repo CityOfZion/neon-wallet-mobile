@@ -24,17 +24,17 @@ const HeaderBar: React.FC<HeaderProps> = (
   const params: HeaderCustomProps = headerProps.route?.params
 
   const getIconOffset = () => {
-    return -Facade.space<number>((headerProps.iconWidth ?? 20) + 8)
+    return -Facade.scale<number>((headerProps.iconWidth ?? 20) + 8)
   }
 
   const getHeaderWidth = () => {
     const {windowWidth} = Facade.app
 
     if (Facade.utils.isIos) {
-      return windowWidth - Facade.space<number>(220)
+      return windowWidth - Facade.scale<number>(220)
     }
 
-    return windowWidth - Facade.space<number>(160)
+    return windowWidth - Facade.scale<number>(160)
   }
 
   const _renderTitle = () => {
@@ -49,7 +49,7 @@ const HeaderBar: React.FC<HeaderProps> = (
         pt={2}
         textAlign="center"
         color="text.0"
-        fontSize={Facade.space(24)}
+        fontSize={Facade.scale(24)}
         allowFontScaling={true}
         adjustsFontSizeToFit={true}
         numberOfLines={1}
@@ -71,7 +71,7 @@ const HeaderBar: React.FC<HeaderProps> = (
     >
       {headerProps.image && (
         <ImageView
-          width={Facade.space<number>(headerProps.iconWidth ?? 20)}
+          width={Facade.scale<number>(headerProps.iconWidth ?? 20)}
           ml={getIconOffset()}
           mr={3}
           source={headerProps.image}

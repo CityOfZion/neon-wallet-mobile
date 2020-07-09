@@ -71,7 +71,7 @@ export default function ColorSelector(props: Props) {
   )
   buttonList.push(customColorButton)
 
-  // Padding button (invisible area for padding space)
+  // Padding button (invisible area for padding scale)
   const paddingButton = <LinearLayout width={71} height={71} />
 
   // Buttons grouped by 4

@@ -18,7 +18,7 @@ const ThemedMoreButton: React.FC<Props> = (props) => {
       textColor={'text.0'}
       rounded={false}
       flat={true}
-      contentStyle={{height: Facade.space(40)}}
+      contentStyle={{height: Facade.scale(40)}}
     />
   )
 }

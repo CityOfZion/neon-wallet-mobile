@@ -44,7 +44,7 @@ const ThemedCard: React.FC<Props> = (props) => {
 
   const getContentStyle = (): StyleProp<any> => {
     const style = {
-      padding: Facade.space(props.padding!),
+      padding: Facade.scale(props.padding!),
     }
 
     const styleShadow = {
