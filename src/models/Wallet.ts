@@ -7,15 +7,15 @@ export class Wallet {
   lastVisitedAt: string
 
   get previousValue() {
-    return this.previousAssets.assets
-      .map((t) => t.holding * t.value)
-      .reduce((a, b) => a + b)
+    if (!this.currentAssets.assets.length) return 0
+
+    return this.previousAssets.totalValue
   }
 
   get currentValue() {
-    return this.currentAssets.assets
-      .map((t) => t.holding * t.value)
-      .reduce((a, b) => a + b)
+    if (!this.currentAssets.assets.length) return 0
+
+    return this.currentAssets.totalValue
   }
 
   constructor(

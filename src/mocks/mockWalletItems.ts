@@ -3,6 +3,17 @@ import {TokenBalance} from '~src/models/TokenBalance'
 import {TokenValue} from '~src/models/TokenValue'
 import {Wallet} from '~src/models/Wallet'
 
+export const mockEmptyWallet = new Wallet(
+  'Empty Wallet',
+  new TokenBalance([
+    new TokenValue('NEO', 'NEO', 0, 0, 'primary'),
+  ]),
+  new TokenBalance([
+    new TokenValue('NEO', 'NEO', 0, 0, 'primary'),
+  ]),
+  ''
+)
+
 export const mockWalletItems = [
   new Wallet(
     'Wallet 1',

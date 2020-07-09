@@ -189,7 +189,8 @@
     "balanceList": {
       "title": "#translateme",
       "holdings": "#translateme",
-      "value": "#translateme"
+      "value": "#translateme",
+      "empty": "#translateme"
     },
     "transactionsList": {
       "title": "#translateme",

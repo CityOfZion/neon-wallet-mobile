@@ -6,6 +6,7 @@ import {Facade} from '~src/app/Facade'
 import {TokenValue} from '~src/models/TokenValue'
 import {RootState} from '~src/store/reducers/root'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
+import {TokenBalance} from '~src/models/TokenBalance'
 
 const TableData = (props: {header: string; content: string}) => {
   return (
@@ -46,7 +47,7 @@ const BalanceListItem = (props: {item: TokenValue}) => {
 }
 
 const BalanceList = (props: {
-  tokenAssets: TokenValue[]
+  tokenAssets: TokenBalance
   mx?: string
   my?: string
 }) => {
@@ -55,12 +56,20 @@ const BalanceList = (props: {
       <TextView color="text.2" fontSize="sm">
         {Facade.t('components.balanceList.title')}
       </TextView>
-      <FlatList
-        data={props.tokenAssets}
-        keyExtractor={(item) => item.symbol}
-        ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
-        renderItem={({item}) => <BalanceListItem item={item} />}
-      />
+      {props.tokenAssets.totalValue ? (
+          <FlatList
+            data={props.tokenAssets.assets}
+            keyExtractor={(item) => item.symbol}
+            ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
+            renderItem={({item}) => <BalanceListItem item={item} />}
+          />
+        ) : (
+          <TextView my="32px" color="text.0" fontFamily="medium" fontSize="18px" textAlign="center">
+            {Facade.t('components.balanceList.empty')}
+          </TextView>
+        )
+      }
+
     </LinearLayout>
   )
 }

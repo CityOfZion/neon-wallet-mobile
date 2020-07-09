@@ -214,7 +214,8 @@
     "balanceList": {
       "title": "TOKEN VALUE",
       "holdings": "Holdings",
-      "value": "Value"
+      "value": "Value",
+      "empty": "Your wallet is currently empty, why not add some funds today?"
     },
     "transactionsList": {
       "title": "PENDING TRANSACTIONS",

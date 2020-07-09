@@ -3,7 +3,6 @@ import moment from 'moment'
 import React, {useRef, useState} from 'react'
 import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
-import {layout, LayoutProps, space, SpaceProps} from 'styled-system'
 
 import {Facade} from '~src/app/Facade'
 import BalanceList from '~src/components/BalanceList'
@@ -11,16 +10,19 @@ import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
-import {mockWalletItems} from '~src/mocks/mockWalletItems'
+import {mockEmptyWallet, mockWalletItems} from '~src/mocks/mockWalletItems'
 import {Account} from '~src/models/Account'
 import {Wallet} from '~src/models/Wallet'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootState} from '~src/store/reducers/root'
 import styled, {
+  ButtonView,
   ImageView,
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
+import {TokenBalance} from '~src/models/TokenBalance'
+import {TokenValue} from '~src/models/TokenValue'
 
 interface WalletProps {
   navigation: StackNavigationProp<WalletStackParamList>
@@ -28,7 +30,7 @@ interface WalletProps {
 }
 
 const ListWalletsView = (props: WalletProps) => {
-  const [activeIndex, setActiveIndex] = useState(1)
+  const [activeIndex, setActiveIndex] = useState(0)
   const [wallets, setWallets] = useState(mockWalletItems)
   const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
   const carouselRef = useRef(null)
@@ -46,16 +48,18 @@ const ListWalletsView = (props: WalletProps) => {
         </TextView>
         <LinearLayout orientation="horiz">
           <TextView fontSize="36px" color="text.0" fontFamily="medium">
-            {Facade.filter.currency(wallet.currentValue, currency, false, true)}
+            {Facade.filter.currency(wallet.currentValue ?? 0, currency, false, false)}
           </TextView>
           <ImageView
             mt="8px"
             mx="4px"
             source={require('~src/assets/images/info-primary.png')}
           />
-          <TextView fontSize="36px" color="primary" fontFamily="semibold">
-            {calculateChangePercentage(wallet)}
-          </TextView>
+          {wallet.previousValue ? (
+            <TextView fontSize="36px" color="primary" fontFamily="semibold">
+              {calculateChangePercentage(wallet)}
+            </TextView>
+          ) : null}
         </LinearLayout>
       </LinearLayout>
     )
@@ -74,12 +78,19 @@ const ListWalletsView = (props: WalletProps) => {
 
   return (
     <ScreenLayout useHeaderPadding={false} padding={0}>
-      <MoreButton
+      <ButtonView
+        onPress={() => setWallets([mockEmptyWallet])}
         mt="40px"
+        height="6px"
+        p="8px"
         alignSelf="flex-end"
-        height={'6px'}
-        source={require('~src/assets/images/more-horiz.png')}
-      />
+      >
+        <ImageView
+          height="6px"
+          resizeMode="contain"
+          source={require('~src/assets/images/more-horiz.png')}
+        />
+      </ButtonView>
 
       <LinearLayout
         mt="12px"
@@ -91,7 +102,7 @@ const ListWalletsView = (props: WalletProps) => {
           layout={'default'}
           ref={carouselRef}
           data={wallets}
-          firstItem={1}
+          firstItem={0}
           sliderWidth={Facade.app.windowWidth}
           itemWidth={Math.round(Facade.app.windowWidth * 0.7)}
           inactiveSlideScale={0.8}
@@ -129,16 +140,10 @@ const ListWalletsView = (props: WalletProps) => {
       <BalanceList
         my="16px"
         mx="16px"
-        tokenAssets={wallets[activeIndex].currentAssets.assets}
+        tokenAssets={wallets[activeIndex].currentAssets}
       />
     </ScreenLayout>
   )
 }
-
-const MoreButton = styled(ImageView)<LayoutProps & SpaceProps>`
-  ${layout}
-  ${space}
-  resize-mode: contain;
-`
 
 export default ListWalletsView
