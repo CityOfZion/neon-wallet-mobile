@@ -7,7 +7,9 @@ import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
+import {Navigator} from '~src/app/Navigator'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
+import HeaderBackButton from '~src/components/layout/HeaderBackButton'
 import HeaderBar, {HeaderProps} from '~src/components/layout/HeaderBar'
 import SettingsPage from '~src/scenes/SettingsPage'
 import {RootState} from '~src/store/reducers/root'
@@ -17,14 +19,6 @@ type SettingsStackParamList = {
 }
 
 const SettingsStack = createStackNavigator<SettingsStackParamList>()
-
-const navbarOptions = (headerProps: HeaderProps): StackNavigationOptions => ({
-  headerBackTitle: Facade.t('app.back'),
-  headerTitle: (props) => HeaderBar(headerProps, props),
-  headerRight: () => HeaderActionButton(headerProps.route?.params),
-  headerTransparent: true,
-  headerTintColor: headerProps.theme?.colors.text[0],
-})
 
 const SettingsStackNavigation = () => {
   const theme = useSelector((state: RootState) => state.themeReducer.theme)
@@ -36,7 +30,7 @@ const SettingsStackNavigation = () => {
           name={Facade.path.Settings.name}
           component={SettingsPage}
           options={({route}) =>
-            navbarOptions({
+            Navigator.defaultStackNavigatorOptions({
               title: Facade.path.Settings.translate(),
               image: require('~src/assets/images/settings-white.png'),
               showIcon: true,

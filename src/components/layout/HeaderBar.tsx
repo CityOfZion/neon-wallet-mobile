@@ -1,6 +1,6 @@
 import {StackHeaderTitleProps} from '@react-navigation/stack/lib/typescript/src/types'
 import React from 'react'
-import {Route} from 'react-native'
+import {Platform, Route} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -15,19 +15,37 @@ export interface HeaderProps {
   onPressToClose?: () => void
 }
 
-const HeaderBar = (headerProps: HeaderProps, props: StackHeaderTitleProps) => {
+const HeaderBar: React.FC<HeaderProps> = (
+  headerProps: HeaderProps,
+  props: StackHeaderTitleProps
+) => {
+  const getIconOffset = () => {
+    return -Facade.space<number>((headerProps.iconWidth ?? 20) + 8)
+  }
+
+  const getHeaderWidth = () => {
+    const {windowWidth} = Facade.app
+
+    if (Facade.utils.isIos) {
+      return windowWidth - Facade.space<number>(220)
+    }
+
+    return windowWidth - Facade.space<number>(160)
+  }
+
   return (
     <LinearLayout
       height={Facade.app.headerHeight}
-      width={Facade.app.windowWidth - Facade.space<number>(220)}
+      width={getHeaderWidth()}
       orientation="horiz"
-      alignItems="center"
+      alignItems={'center'}
       justifyContent={'center'}
+      style={{alignSelf: 'center'}}
     >
       {headerProps.showIcon && (
         <ImageView
           width={Facade.space<number>(headerProps.iconWidth ?? 20)}
-          ml={-Facade.space<number>((headerProps.iconWidth ?? 20) + 9)}
+          ml={getIconOffset()}
           mr={3}
           source={headerProps.image}
           resizeMode="contain"

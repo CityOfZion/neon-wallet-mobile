@@ -35,7 +35,12 @@ const WelcomePage: React.FC<Props> = (props) => {
         </TextView>
       </LinearLayout>
 
-      <TextView mb={5} color={'text.0'} fontSize={36} fontFamily={'bold'}>
+      <TextView
+        mb={5}
+        color={'text.0'}
+        fontSize={Facade.space(36)}
+        fontFamily={'bold'}
+      >
         {Facade.t('welcome.title')}
       </TextView>
 

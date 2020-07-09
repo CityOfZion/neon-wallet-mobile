@@ -11,6 +11,7 @@ import {
   typography,
 } from 'styled-system'
 
+import {Facade} from '~src/app/Facade'
 import {orientation, weight} from '~src/styles/styled-system.config'
 
 const {
@@ -21,6 +22,8 @@ const {
 
 export const TextView = styled.Text<TextViewProps>`
   font-family: 'regular';
+  include-font-padding: false;
+  ${Facade.utils.isAndroid ? 'margin-bottom: 5px' : ''}
   ${border}
   ${color}
   ${typography}

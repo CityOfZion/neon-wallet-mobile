@@ -22,6 +22,8 @@
   },
   "routes": {
     "GetWallet": "#translateme",
+    "Contacts": "#translateme",
+    "More": "#translateme",
     "Account": "#translateme",
     "Settings": "#translateme",
     "ReceiveQrCode": "#translateme",

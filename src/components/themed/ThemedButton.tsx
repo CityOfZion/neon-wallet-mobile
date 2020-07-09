@@ -68,7 +68,7 @@ const ThemedButton: React.FC<Props> = (props) => {
 
   const _renderLabel = () => {
     return (
-      <LinearLayout orientation={'horiz'} alignItems={'center'} height={'100%'}>
+      <LinearLayout orientation={'horiz'} alignItems={'center'}>
         {props.srcIcon && (
           <ImageView
             width={width as number}
@@ -81,7 +81,7 @@ const ThemedButton: React.FC<Props> = (props) => {
 
         {props.label && (
           <LabelView
-            mt={2}
+            mt={'2px'}
             color={props.textColor}
             fontSize={fontSize}
             fontFamily={props.flat ? 'bold' : 'regular'}
@@ -117,6 +117,7 @@ const ThemedButton: React.FC<Props> = (props) => {
         hasBright={!props.basic && !isActive}
         hasShadow={!props.basic && !isActive}
         baseBgColor={isActive ? 'transparent' : props.bgColor}
+        alignY={'center'}
       >
         {_renderLabel()}
       </ThemedCard>
