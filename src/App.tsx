@@ -3,12 +3,21 @@ import * as Font from 'expo-font'
 import React, {useState} from 'react'
 import {Provider as StoreProvider} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
+import {composeWithDevTools} from 'redux-devtools-extension'
+import {createLogger} from 'redux-logger'
 import thunk from 'redux-thunk'
 
 import AppNavigation from '~src/navigation/AppNavigation'
 import {rootReducer} from '~src/store/reducers/root'
 
-const store = createStore(rootReducer, applyMiddleware(thunk))
+const loggerMiddleware = createLogger()
+const store = createStore(
+  rootReducer,
+  {},
+  process.env.NODE_ENV === 'production'
+    ? applyMiddleware(thunk)
+    : composeWithDevTools(applyMiddleware(thunk, loggerMiddleware))
+)
 
 const fetchFonts = () =>
   Font.loadAsync({

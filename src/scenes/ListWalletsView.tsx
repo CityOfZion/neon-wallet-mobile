@@ -1,8 +1,8 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import moment from 'moment'
-import React, {useRef, useState} from 'react'
+import React, {useRef, useState, useEffect} from 'react'
 import Carousel from 'react-native-snap-carousel'
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import BalanceList from '~src/components/BalanceList'
@@ -17,6 +17,11 @@ import {TokenBalance} from '~src/models/TokenBalance'
 import {TokenValue} from '~src/models/TokenValue'
 import {Wallet} from '~src/models/Wallet'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
+import {
+  setLoading,
+  setLoadingProgress,
+  clearLoading,
+} from '~src/store/actions/loading'
 import {RootState} from '~src/store/reducers/root'
 import styled, {
   ButtonView,
@@ -36,38 +41,61 @@ const ListWalletsView = (props: WalletProps) => {
   const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
   const carouselRef = useRef(null)
   const currency = useSelector((state: RootState) => state.app.currency)
+  const dispatch = useDispatch()
+
+  // Uncomment to view demo loading overlay UX
+  useEffect(() => {
+    dispatch(setLoading(true, 'This is a loading overlay Demo!'))
+    let progress = 0
+    let intervalId: number = 0
+
+    window.setTimeout(() => {
+      intervalId = window.setInterval((): void => {
+        progress += 0.1
+        if (progress > 1) {
+          progress = 1
+          dispatch(clearLoading())
+          clearInterval(intervalId)
+        } else {
+          dispatch(setLoadingProgress(progress))
+        }
+      }, 500)
+    }, 1500)
+  })
 
   props.navigation.setOptions({headerShown: false})
 
   const _renderWalletChange = (wallet: Wallet) => {
     return (
-      <LinearLayout orientation="verti" alignItems="center">
-        <TextView fontSize="11px" color="text.2">
-          {Facade.t('screens.listWallets.changeSinceLastVisit', {
-            date: moment(wallet.lastVisitedAt).format('HH:mm - DD/MM/YYYY'),
-          })}
-        </TextView>
-        <LinearLayout orientation="horiz">
-          <TextView fontSize="36px" color="text.0" fontFamily="medium">
-            {Facade.filter.currency(
-              wallet.currentValue ?? 0,
-              currency,
-              false,
-              false
-            )}
+      <>
+        <LinearLayout orientation="verti" alignItems="center">
+          <TextView fontSize="11px" color="text.2">
+            {Facade.t('screens.listWallets.changeSinceLastVisit', {
+              date: moment(wallet.lastVisitedAt).format('HH:mm - DD/MM/YYYY'),
+            })}
           </TextView>
-          <ImageView
-            mt="8px"
-            mx="4px"
-            source={require('~src/assets/images/info-primary.png')}
-          />
-          {wallet.previousValue ? (
-            <TextView fontSize="36px" color="primary" fontFamily="semibold">
-              {calculateChangePercentage(wallet)}
+          <LinearLayout orientation="horiz">
+            <TextView fontSize="36px" color="text.0" fontFamily="medium">
+              {Facade.filter.currency(
+                wallet.currentValue ?? 0,
+                currency,
+                false,
+                false
+              )}
             </TextView>
-          ) : null}
+            <ImageView
+              mt="8px"
+              mx="4px"
+              source={require('~src/assets/images/info-primary.png')}
+            />
+            {wallet.previousValue ? (
+              <TextView fontSize="36px" color="primary" fontFamily="semibold">
+                {calculateChangePercentage(wallet)}
+              </TextView>
+            ) : null}
+          </LinearLayout>
         </LinearLayout>
-      </LinearLayout>
+      </>
     )
   }
 
