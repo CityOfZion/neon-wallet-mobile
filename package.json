@@ -14,7 +14,6 @@
     "@cityofzion/neon-js": "^4.8.0",
     "@moonlight-io/asteroid-sdk-js": "file:..\\asteroid-sdk-js\\",
     "@react-native-community/async-storage": "^1.11.0",
-    "@react-native-community/blur": "^3.6.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.4.5",
     "@react-navigation/native": "^5.3.0",
