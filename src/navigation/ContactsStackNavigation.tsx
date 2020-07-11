@@ -7,7 +7,6 @@ import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import ContactsPage from '~src/scenes/ContactsPage'
-import {RootState} from '~src/store/reducers/root'
 
 export type ContactsStackParamList = {
   Contacts: HeaderActionButtonProps
@@ -16,13 +15,13 @@ export type ContactsStackParamList = {
 const ContactsStack = createStackNavigator<ContactsStackParamList>()
 
 const ContactsStackNavigation = () => {
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
 
   return (
     <ThemeProvider theme={theme}>
       <ContactsStack.Navigator>
         <ContactsStack.Screen
-          name={Facade.path.Contacts.name}
+          name={Facade.route.Contacts.name}
           initialParams={{
             actionButtonStyle: 'add',
             // TODO: Add event
@@ -31,7 +30,7 @@ const ContactsStackNavigation = () => {
           component={ContactsPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.path.Contacts.name,
+              title: Facade.route.Contacts.name,
               theme,
               route,
             })

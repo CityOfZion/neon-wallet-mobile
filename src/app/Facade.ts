@@ -4,11 +4,13 @@ import moment from 'moment'
 
 import {Config} from '~src/app/Config'
 import {Normalize} from '~src/app/Normalize'
+import {ApplicationWrapper} from '~src/app/wrapper/ApplicationWrapper'
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import {UtilsHelper} from '~src/helpers/UtilsHelper'
 
 export abstract class Facade {
-  // App
+  static readonly wrapper = new ApplicationWrapper()
+
   static readonly config = Config
 
   // Helpers
@@ -28,27 +30,27 @@ export abstract class Facade {
     return moment
   }
 
-  static get scale() {
-    return Normalize.scale
+  static get storage() {
+    return this.wrapper.storage
+  }
+
+  static get theme() {
+    return this.wrapper.theme
+  }
+
+  static get route() {
+    return this.wrapper.route
   }
 
   static get app() {
     return this.config.application
   }
 
-  static get path() {
-    return this.config.route.path
-  }
-
-  static get themeDark() {
-    return this.config.themeDark
-  }
-
-  static get themeLight() {
-    return this.config.themeLight
-  }
-
   static get axios() {
     return this.config.http.axiosInstance
+  }
+
+  static get scale() {
+    return Normalize.scale
   }
 }

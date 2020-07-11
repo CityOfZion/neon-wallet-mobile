@@ -10,7 +10,6 @@ import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
 import {Account} from '~src/models/Account'
 import ReceiveQRCode from '~src/scenes/ReceiveQRCode'
 import QRCodeScanTest from '~src/scenes/TestPage/QRCodeScanTest'
-import {RootState} from '~src/store/reducers/root'
 
 export type QuickToolsStackParamList = {
   Home: undefined
@@ -27,17 +26,17 @@ export type QuickToolsStackParamList = {
 const QuickToolsStack = createStackNavigator<QuickToolsStackParamList>()
 
 const QuickToolsStackNavigation = () => {
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
 
   return (
     <ThemeProvider theme={theme}>
       <QuickToolsStack.Navigator>
         <QuickToolsStack.Screen
-          name={Facade.path.ReceiveQrCode.name}
+          name={Facade.route.ReceiveQrCode.name}
           component={ReceiveQRCode}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.path.ReceiveQrCode.translate(),
+              title: Facade.route.ReceiveQrCode.translate(),
               image: require('~src/assets/images/icon-qrcode-white.png'),
               theme,
               route,
@@ -46,11 +45,11 @@ const QuickToolsStackNavigation = () => {
         />
 
         <QuickToolsStack.Screen
-          name={Facade.path.QrCodeScanTest.name}
+          name={Facade.route.QrCodeScanTest.name}
           component={QRCodeScanTest}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.t(`routes.${Facade.path.QrCodeScanTest.name}`),
+              title: Facade.t(`routes.${Facade.route.QrCodeScanTest.name}`),
               image: require('~src/assets/images/icon-qrcode-white.png'),
               theme,
               route,

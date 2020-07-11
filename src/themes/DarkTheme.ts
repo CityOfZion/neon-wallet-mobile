@@ -1,33 +1,36 @@
 /**
  * Theme Configuration
  */
-import {ThemeConfig} from '~src/config/ThemeConfig'
+import {Theme} from '~src/enums/Theme'
+import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
-export class ThemeLightConfig extends ThemeConfig implements DefaultTheme {
-  readonly title = 'light'
+export class DarkTheme extends ApplicationTheme {
+  readonly id = Theme.DARK
 
-  readonly statusBarStyle = 'dark-content'
+  readonly title = 'dark'
+
+  readonly statusBarStyle = 'light-content'
 
   readonly colors = {
-    primary: '#293036',
+    primary: '#4cffb3',
     secondary: '#0a84ff',
-    tertiary: '#4cffb3',
+    tertiary: '#293036',
     quaternary: '#58717b',
 
     background: [
-      '#ddd',
-      '#bbb',
-      '#ccc',
+      '#1E252A',
+      '#283239',
+      '#293036',
       '#899fa8',
       '#979797',
-      '#888',
-      '#b4b4b4',
-      '#e1e1e1',
+      '#41474b',
+      '#495158',
+      '#1f272e',
     ],
 
     text: [
-      '#333',
       '#fff',
+      '#333',
       '#8ba0a9',
       '#767f86',
       '#bebebe',

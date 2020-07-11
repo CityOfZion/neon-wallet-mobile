@@ -1,15 +1,16 @@
 import {NavigationContainer} from '@react-navigation/native'
-import React from 'react'
-import {useSelector} from 'react-redux'
+import React, {useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import LoadingOverlay from '../components/LoadingOverlay'
 
 import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
 import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
 import ModalStackNavigation from '~src/navigation/ModalStackNavigation'
 import TabNavigation from '~src/navigation/TabNavigation'
-import {RootState} from '~src/store/reducers/root'
+import {RootStore} from '~src/store/RootStore'
 
 export type RootStackParamList = {
   Tab: undefined
@@ -19,9 +20,33 @@ export type RootStackParamList = {
 const RootStack = createStackNavigator<RootStackParamList>()
 
 const AppNavigation = () => {
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const loadingOverlayState = useSelector((state: RootState) => state.loading)
   const {progress, loadingText, isLoading} = loadingOverlayState
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    populate()
+  }, [])
+
+  const populate = async () => {
+    const currency = await Storage.currency.load()
+    const language = await Storage.language.load()
+    const theme = await Storage.theme.load()
+
+    if (currency) {
+      dispatch(RootStore.app.actions.setCurrency(currency))
+    }
+
+    if (language) {
+      dispatch(RootStore.app.actions.setLanguage(language))
+    }
+
+    if (theme) {
+      dispatch(RootStore.app.actions.setTheme(theme))
+    }
+  }
 
   return (
     <>

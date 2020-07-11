@@ -7,7 +7,6 @@ import {useSelector} from 'react-redux'
 import {Facade} from '~src/app/Facade'
 import NeonQRCode from '~src/components/QRCode'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {RootState} from '~src/store/reducers/root'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface ReceiveQRCodeProps {
@@ -24,7 +23,7 @@ export interface ReceiveQRCodeProps {
 const buttonWidth = Facade.app.screenWidth - 76
 
 const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const headerHeight = useHeaderHeight()
   const qrCodeContent = props.address //TODO put tx URI
   props = {

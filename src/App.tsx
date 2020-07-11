@@ -2,17 +2,18 @@ import {AppLoading} from 'expo'
 import * as Font from 'expo-font'
 import React, {useState} from 'react'
 import {Provider as StoreProvider} from 'react-redux'
-import {createStore, applyMiddleware} from 'redux'
+import {createStore, applyMiddleware, Store} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import {createLogger} from 'redux-logger'
 import thunk from 'redux-thunk'
 
 import AppNavigation from '~src/navigation/AppNavigation'
-import {rootReducer} from '~src/store/reducers/root'
+import {RootStore} from '~src/store/RootStore'
 
 const loggerMiddleware = createLogger()
+
 const store = createStore(
-  rootReducer,
+  RootStore.reducers,
   {},
   process.env.NODE_ENV === 'production'
     ? applyMiddleware(thunk)

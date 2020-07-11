@@ -1,13 +1,22 @@
-import {RoutePath, RoutePathMap} from '~src/app/RoutePath'
-
 /**
- * Route Configuration
+ * Wrapper Configuration
  */
-export class RouteConfig {
-  /**
-   * Register all paths here
-   */
-  readonly pathNames = [
+import {DarkTheme} from '~src/themes/DarkTheme'
+import {LightTheme} from '~src/themes/LightTheme'
+
+export class WrapperConfig {
+  readonly themes = [DarkTheme, LightTheme] as const
+
+  readonly dataKeys = [
+    '@language',
+    '@currency',
+    '@theme',
+    '@onboarding_seen',
+    '@welcome_hidden',
+    '@wallets',
+  ] as const
+
+  readonly routes = [
     'QuickTools',
     'ListWallets',
     'Contacts',
@@ -28,16 +37,4 @@ export class RouteConfig {
     'SendWalletSelectionModal',
     'SendTransactionConfirmationModal',
   ] as const
-
-  readonly path: RoutePathMap
-
-  constructor() {
-    const path: any = {}
-
-    this.pathNames.forEach((it) => {
-      path[it] = new RoutePath(it)
-    })
-
-    this.path = path
-  }
 }

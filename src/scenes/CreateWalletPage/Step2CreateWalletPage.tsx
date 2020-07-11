@@ -39,7 +39,7 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
         {
           text: Facade.t('step2CreateWallet.dialog_dismiss'),
           onPress: () =>
-            props.navigation.navigate(Facade.path.Step3CreateWallet.name, {
+            props.navigation.navigate(Facade.route.Step3CreateWallet.name, {
               actionTitle: Facade.t('app.skip'),
               actionButtonStyle: 'highlight',
               actionOnPress: () => skipDialog(),
@@ -57,7 +57,7 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
         {
           text: Facade.t('boolean.true'),
           onPress: () =>
-            props.navigation.navigate(Facade.path.Step4CreateWallet.name),
+            props.navigation.navigate(Facade.route.Step4CreateWallet.name),
         },
         {
           text: Facade.t('boolean.false'),

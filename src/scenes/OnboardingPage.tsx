@@ -1,4 +1,3 @@
-import {useAsyncStorage} from '@react-native-community/async-storage'
 import {useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
 import React from 'react'
@@ -8,7 +7,7 @@ import {useSelector} from 'react-redux'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {Facade} from '~src/app/Facade'
-import {RootState} from '~src/store/reducers/root'
+import {Storage} from '~src/app/Storage'
 import styled, {
   ImageView,
   LinearLayout,
@@ -78,12 +77,11 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
 const OnboardingPage = (props: {
   seenSetter: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
-  const {setItem} = useAsyncStorage('@onboardingSeen')
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
 
-  const setAsSeen = () => {
-    setItem('true')
-    props.seenSetter(true)
+  const persist = async (value: boolean) => {
+    await Storage.onboardingSeen.save(value)
+    props.seenSetter(value)
   }
 
   return (
@@ -153,7 +151,7 @@ const OnboardingPage = (props: {
 
                   <LinearLayout width={'100%'} px={'7%'}>
                     <ThemedButton
-                      onPress={() => setAsSeen()}
+                      onPress={() => persist(true)}
                       label={Facade.t('onboarding.getStarted.buttonTitle')}
                       basic={true}
                       bgColor={'primary'}
@@ -173,7 +171,7 @@ const OnboardingPage = (props: {
             bottom={0}
             mb={'3.5%'}
             ml={30}
-            onPress={() => setAsSeen()}
+            onPress={() => persist(true)}
             style={{textTransform: 'lowercase'}}
           >
             {Facade.t('app.skip')}

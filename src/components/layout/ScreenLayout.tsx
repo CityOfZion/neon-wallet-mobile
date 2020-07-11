@@ -5,7 +5,6 @@ import {SafeAreaView, ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import {RootState} from '~src/store/reducers/root'
 import {LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
@@ -24,7 +23,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
     ? Facade.app.headerHeight
     : extraHeight
   const tabBarHeight = props.useFooterPadding ? Facade.app.footerHeight : 0
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
 
   return (
     <LinearGradient

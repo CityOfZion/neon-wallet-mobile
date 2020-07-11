@@ -1,6 +1,6 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import moment from 'moment'
-import React, {useRef, useState, useEffect} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import Carousel from 'react-native-snap-carousel'
 import {useSelector, useDispatch} from 'react-redux'
 
@@ -13,29 +13,18 @@ import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
 import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {mockEmptyWallet, mockWalletItems} from '~src/mocks/mockWalletItems'
 import {Account} from '~src/models/Account'
-import {TokenBalance} from '~src/models/TokenBalance'
-import {TokenValue} from '~src/models/TokenValue'
 import {Wallet} from '~src/models/Wallet'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
-import {
-  setLoading,
-  setLoadingProgress,
-  clearLoading,
-} from '~src/store/actions/loading'
-import {RootState} from '~src/store/reducers/root'
-import styled, {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {ApplicationTheme} from '~src/themes/ApplicationTheme'
+import {clearLoading, setLoading, setLoadingProgress} from '~src/store/loading/actions/loading'
 
 interface WalletProps {
   navigation: StackNavigationProp<WalletStackParamList>
-  theme: DefaultTheme
+  theme: ApplicationTheme
 }
 
-const ListWalletsView = (props: WalletProps) => {
+const ListWalletView = (props: WalletProps) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const [wallets, setWallets] = useState(mockWalletItems)
   const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
@@ -44,26 +33,24 @@ const ListWalletsView = (props: WalletProps) => {
   const dispatch = useDispatch()
 
   // Uncomment to view demo loading overlay UX
-  // useEffect(() => {
-  //   dispatch(setLoading(true, 'This is a loading overlay Demo!'))
-  //   let progress = 0
-  //   let intervalId: number = 0
+  useEffect(() => {
+    dispatch(setLoading(true, 'This is a loading overlay Demo!'))
+    let progress = 0
+    let intervalId: number = 0
 
-  //   window.setTimeout(() => {
-  //     intervalId = window.setInterval((): void => {
-  //       progress += 0.1
-  //       if (progress > 1) {
-  //         progress = 1
-  //         dispatch(clearLoading())
-  //         clearInterval(intervalId)
-  //       } else {
-  //         dispatch(setLoadingProgress(progress))
-  //       }
-  //     }, 500)
-  //   }, 1500)
-  // })
-
-  props.navigation.setOptions({headerShown: false})
+    window.setTimeout(() => {
+      intervalId = window.setInterval((): void => {
+        progress += 0.1
+        if (progress > 1) {
+          progress = 1
+          dispatch(clearLoading())
+          clearInterval(intervalId)
+        } else {
+          dispatch(setLoadingProgress(progress))
+        }
+      }, 500)
+    }, 1500)
+  })
 
   const _renderWalletChange = (wallet: Wallet) => {
     return (
@@ -140,7 +127,7 @@ const ListWalletsView = (props: WalletProps) => {
           renderItem={({item}) => (
             <WalletCard
               onPress={() =>
-                props.navigation.navigate(Facade.path.GetWallet.name, {
+                props.navigation.navigate(Facade.route.GetWallet.name, {
                   wallet: accounts,
                   headerTitle: item.title,
                 })
@@ -171,4 +158,4 @@ const ListWalletsView = (props: WalletProps) => {
   )
 }
 
-export default ListWalletsView
+export default ListWalletView

@@ -2,10 +2,12 @@ import {Normalize} from '~src/app/Normalize'
 
 const scale = Normalize.scale
 
-/**
- * Theme Configuration
- */
-export class ThemeConfig {
+export abstract class ApplicationTheme {
+  abstract id: string
+  abstract title: string
+  abstract statusBarStyle: 'default' | 'light-content' | 'dark-content'
+  abstract colors: ColorTheme
+
   readonly fontSizes = {
     min: scale(10),
     xs: scale(12),
