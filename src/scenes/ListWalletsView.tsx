@@ -44,24 +44,24 @@ const ListWalletsView = (props: WalletProps) => {
   const dispatch = useDispatch()
 
   // Uncomment to view demo loading overlay UX
-  useEffect(() => {
-    dispatch(setLoading(true, 'This is a loading overlay Demo!'))
-    let progress = 0
-    let intervalId: number = 0
+  // useEffect(() => {
+  //   dispatch(setLoading(true, 'This is a loading overlay Demo!'))
+  //   let progress = 0
+  //   let intervalId: number = 0
 
-    window.setTimeout(() => {
-      intervalId = window.setInterval((): void => {
-        progress += 0.1
-        if (progress > 1) {
-          progress = 1
-          dispatch(clearLoading())
-          clearInterval(intervalId)
-        } else {
-          dispatch(setLoadingProgress(progress))
-        }
-      }, 500)
-    }, 1500)
-  })
+  //   window.setTimeout(() => {
+  //     intervalId = window.setInterval((): void => {
+  //       progress += 0.1
+  //       if (progress > 1) {
+  //         progress = 1
+  //         dispatch(clearLoading())
+  //         clearInterval(intervalId)
+  //       } else {
+  //         dispatch(setLoadingProgress(progress))
+  //       }
+  //     }, 500)
+  //   }, 1500)
+  // })
 
   props.navigation.setOptions({headerShown: false})
 
