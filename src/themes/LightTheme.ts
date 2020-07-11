@@ -26,6 +26,7 @@ export class LightTheme extends ApplicationTheme {
       '#888',
       '#b4b4b4',
       '#e1e1e1',
+      '#4cffb3',
     ],
 
     text: [

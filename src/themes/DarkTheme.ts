@@ -26,6 +26,7 @@ export class DarkTheme extends ApplicationTheme {
       '#41474b',
       '#495158',
       '#1f272e',
+      '#2d3941',
     ],
 
     text: [

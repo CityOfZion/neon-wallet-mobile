@@ -1,8 +1,8 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import moment from 'moment'
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useRef, useState} from 'react'
 import Carousel from 'react-native-snap-carousel'
-import {useSelector, useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import BalanceList from '~src/components/BalanceList'
@@ -17,7 +17,6 @@ import {Wallet} from '~src/models/Wallet'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
-import {clearLoading, setLoading, setLoadingProgress} from '~src/store/loading/actions/loading'
 
 interface WalletProps {
   navigation: StackNavigationProp<WalletStackParamList>
@@ -33,24 +32,24 @@ const ListWalletView = (props: WalletProps) => {
   const dispatch = useDispatch()
 
   // Uncomment to view demo loading overlay UX
-  useEffect(() => {
-    dispatch(setLoading(true, 'This is a loading overlay Demo!'))
-    let progress = 0
-    let intervalId: number = 0
-
-    window.setTimeout(() => {
-      intervalId = window.setInterval((): void => {
-        progress += 0.1
-        if (progress > 1) {
-          progress = 1
-          dispatch(clearLoading())
-          clearInterval(intervalId)
-        } else {
-          dispatch(setLoadingProgress(progress))
-        }
-      }, 500)
-    }, 1500)
-  })
+  // useEffect(() => {
+  //   dispatch(setLoading(true, 'This is a loading overlay Demo!'))
+  //   let progress = 0
+  //   let intervalId: number = 0
+  //
+  //   window.setTimeout(() => {
+  //     intervalId = window.setInterval((): void => {
+  //       progress += 0.1
+  //       if (progress > 1) {
+  //         progress = 1
+  //         dispatch(clearLoading())
+  //         clearInterval(intervalId)
+  //       } else {
+  //         dispatch(setLoadingProgress(progress))
+  //       }
+  //     }, 500)
+  //   }, 1500)
+  // })
 
   const _renderWalletChange = (wallet: Wallet) => {
     return (
@@ -90,15 +89,15 @@ const ListWalletView = (props: WalletProps) => {
     const changePercentage =
       ((wallet.currentValue - wallet.previousValue) / wallet.previousValue) *
       100
-    const resultString = `${changePercentage > 0 ? '+' : ''}${Math.round(
-      changePercentage
-    )}%`
-
-    return resultString
+    return `${changePercentage > 0 ? '+' : ''}${Math.round(changePercentage)}%`
   }
 
   return (
-    <ScreenLayout useHeaderPadding={false} padding={0}>
+    <ScreenLayout
+      useHeaderPadding={false}
+      useHeaderExtraPadding={true}
+      padding={0}
+    >
       <LinearLayout alignSelf={'flex-end'}>
         <ThemedMoreButton onPress={() => setWallets([mockEmptyWallet])} />
       </LinearLayout>

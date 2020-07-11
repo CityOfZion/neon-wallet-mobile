@@ -5,6 +5,7 @@ import {StyleProp} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import styled, {LinearLayout} from '~src/styles/styled-components'
+import {useSelector} from 'react-redux'
 
 interface Props {
   children?: any
@@ -20,6 +21,8 @@ interface Props {
 }
 
 const ThemedCard: React.FC<Props> = (props) => {
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+
   const getBorderRadius = () => {
     if (props.rounded) {
       return 26
@@ -69,7 +72,11 @@ const ThemedCard: React.FC<Props> = (props) => {
     <DarkCardView style={getStyle()}>
       <DarkCardContentView
         style={getContentStyle()}
-        backgroundColor={props.flat ? 'transparent' : props.baseBgColor}
+        backgroundColor={
+          props.flat
+            ? 'transparent'
+            : props.baseBgColor ?? theme.colors.background[8]
+        }
         borderRadius={getBorderRadius()}
         alignItems={props.alignX}
         justifyContent={props.alignY}
@@ -90,7 +97,7 @@ const ThemedCard: React.FC<Props> = (props) => {
             locations={[0, 1]}
             start={[1, 0]}
             end={[1, 1]}
-            style={{borderRadius: getBorderRadius()}}
+            style={{borderRadius: getBorderRadius() - (props.rounded ? 2 : 0)}}
           />
         )}
 
@@ -118,7 +125,6 @@ ThemedCard.defaultProps = {
   flat: false,
   alignX: 'center',
   padding: 30,
-  baseBgColor: '#2d3941',
   hasShadow: true,
   hasBright: true,
 }

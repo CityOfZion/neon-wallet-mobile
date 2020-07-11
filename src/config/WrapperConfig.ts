@@ -13,6 +13,7 @@ export class WrapperConfig {
     '@theme',
     '@onboarding_seen',
     '@welcome_hidden',
+    '@account',
     '@wallets',
   ] as const
 

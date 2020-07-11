@@ -82,7 +82,11 @@ const SettingsPage = (props: SettingsProps) => {
 
   const changeLanguage = async (val: Lang) => {
     dispatch(RootStore.app.actions.setLanguage(val))
-    await Storage.language.save(val)
+    await Facade.await.run(
+      'application',
+      () => Storage.language.save(val),
+      1000
+    )
   }
 
   const changeCurrency = async (val: Currency) => {

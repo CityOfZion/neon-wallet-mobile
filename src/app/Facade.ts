@@ -3,12 +3,14 @@ import _ from 'lodash'
 import moment from 'moment'
 
 import {Config} from '~src/app/Config'
+import {EventBus} from '~src/app/EventBus'
 import {Normalize} from '~src/app/Normalize'
 import {ApplicationWrapper} from '~src/app/wrapper/ApplicationWrapper'
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import {UtilsHelper} from '~src/helpers/UtilsHelper'
 
 export abstract class Facade {
+  static readonly bus = new EventBus()
   static readonly wrapper = new ApplicationWrapper()
 
   static readonly config = Config
@@ -28,6 +30,10 @@ export abstract class Facade {
 
   static get moment() {
     return moment
+  }
+
+  static get await() {
+    return this.wrapper.await
   }
 
   static get storage() {

@@ -8,6 +8,8 @@ import {ThemeProvider} from 'styled-components'
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import FooterBar from '~src/components/layout/FooterBar'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
+import AwaitActivity from '~src/components/misc/AwaitActivity'
 import ContactsStackNavigation from '~src/navigation/ContactsStackNavigation'
 import MoreStackNavigation from '~src/navigation/MoreStackNavigation'
 import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation'
@@ -34,7 +36,7 @@ const TabNavigation = () => {
   }
 
   useEffect(() => {
-    populate()
+    Facade.await.run('tabNavigation', populate)
   }, [])
 
   const onCloseWelcomeEvent = async (routeTargetName?: string) => {
@@ -54,35 +56,37 @@ const TabNavigation = () => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <StatusBar
-        translucent
-        barStyle={theme.statusBarStyle}
-        backgroundColor="transparent"
-      />
-      <Tab.Navigator tabBar={(props) => <FooterBar {...props} />}>
-        <Tab.Screen
-          name={Facade.route.ListWallets.name}
-          component={WalletStackNavigation}
+    <AwaitActivity name={'tabNavigation'} loadingView={<ScreenLoader />}>
+      <ThemeProvider theme={theme}>
+        <StatusBar
+          translucent
+          barStyle={theme.statusBarStyle}
+          backgroundColor="transparent"
         />
-        <Tab.Screen
-          name={Facade.route.Contacts.name}
-          component={ContactsStackNavigation}
-        />
-        <Tab.Screen
-          name={Facade.route.QuickTools.name}
-          component={QuickToolsStackNavigation}
-        />
-        <Tab.Screen
-          name={Facade.route.Settings.name}
-          component={SettingsStackNavigation}
-        />
-        <Tab.Screen
-          name={Facade.route.More.name}
-          component={MoreStackNavigation}
-        />
-      </Tab.Navigator>
-    </ThemeProvider>
+        <Tab.Navigator tabBar={(props) => <FooterBar {...props} />}>
+          <Tab.Screen
+            name={Facade.route.ListWallets.name}
+            component={WalletStackNavigation}
+          />
+          <Tab.Screen
+            name={Facade.route.Contacts.name}
+            component={ContactsStackNavigation}
+          />
+          <Tab.Screen
+            name={Facade.route.QuickTools.name}
+            component={QuickToolsStackNavigation}
+          />
+          <Tab.Screen
+            name={Facade.route.Settings.name}
+            component={SettingsStackNavigation}
+          />
+          <Tab.Screen
+            name={Facade.route.More.name}
+            component={MoreStackNavigation}
+          />
+        </Tab.Navigator>
+      </ThemeProvider>
+    </AwaitActivity>
   )
 }
 

@@ -20,15 +20,15 @@ export class DataStorage {
     return new Data<T[]>(this, dataType as DataType<any>)
   }
 
-  asString<T = string>() {
+  asString<T extends string = string>() {
     return new Data<T>(this)
   }
 
-  asNumber<T = number>() {
+  asNumber<T extends number = number>() {
     return new Data<T>(this)
   }
 
-  asBoolean<T = boolean>() {
+  asBoolean<T extends boolean = boolean>() {
     return new Data<T>(this)
   }
 
