@@ -33,4 +33,9 @@ export abstract class UtilsHelper {
   static clone<T>(fromEntity: T, options?: ClassTransformOptions): T {
     return classToClass(fromEntity, options)
   }
+
+  static sleep(ms: number) {
+    // eslint-disable-next-line no-undef
+    return new Promise((resolve) => setTimeout(resolve, ms))
+  }
 }
