@@ -1,12 +1,9 @@
 import {Config} from '~src/app/Config'
 import {Route} from '~src/app/Route'
-import {DataKey} from '~src/app/data/DataKey'
-import {AwaitWrapper} from '~src/app/wrapper/AwaitWrapper'
+import {DataKey} from '~src/app/DataKey'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
 export class ApplicationWrapper {
-  readonly await = new AwaitWrapper()
-
   readonly theme: ThemeWrapper
   readonly storage: StorageWrapper
   readonly route: RouteWrapper

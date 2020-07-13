@@ -1,4 +1,5 @@
 import {StackNavigationProp} from '@react-navigation/stack'
+import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useState} from 'react'
 import {Modal} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
@@ -139,6 +140,10 @@ const SettingsPage = (props: SettingsProps) => {
             />
           )
         })}
+
+        <LinearLayout mt={5}>
+          <AwaitActivity name={'save@currency'} />
+        </LinearLayout>
       </ScreenLayout>
     </Modal>
   )
@@ -162,6 +167,10 @@ const SettingsPage = (props: SettingsProps) => {
             />
           )
         })}
+
+        <LinearLayout mt={5}>
+          <AwaitActivity name={'save@theme'} />
+        </LinearLayout>
       </ScreenLayout>
     </Modal>
   )

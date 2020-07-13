@@ -1,4 +1,4 @@
-import {DispatcherWrapper} from '~src/app/wrapper/DispatcherWrapper'
+import {DispatcherWrapper} from '@simpli/redux-wrapper'
 
 export class ThemeDispatcher extends DispatcherWrapper<
   AppType,

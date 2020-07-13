@@ -1,5 +1,6 @@
+import {ReducerWrapper} from '@simpli/redux-wrapper'
+
 import {Facade} from '~src/app/Facade'
-import {ReducerWrapper} from '~src/app/wrapper/ReducerWrapper'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {Theme} from '~src/enums/Theme'

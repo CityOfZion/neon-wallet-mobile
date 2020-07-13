@@ -1,6 +1,7 @@
+import {DispatcherWrapper} from '@simpli/redux-wrapper'
+
 import {Facade} from '~src/app/Facade'
 import {Setup} from '~src/app/Setup'
-import {DispatcherWrapper} from '~src/app/wrapper/DispatcherWrapper'
 
 export class LanguageDispatcher extends DispatcherWrapper<
   AppType,

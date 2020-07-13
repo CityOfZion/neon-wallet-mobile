@@ -1485,6 +1485,24 @@
     color "^3.1.2"
     react-native-iphone-x-helper "^1.2.1"
 
+"@simpli/react-native-await@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@simpli/react-native-await/-/react-native-await-0.2.1.tgz#8f9819ecd54f602ca4cfefceac09e7a822ccf6e0"
+  integrity sha512-7rQpLmopytWgFOTa338nDVdmdhuiM7QdvJ9WKYsVk1Xvjkjtp/oONFyuqkZHXxzXj/CB4C6xwkOkA2sWNyq1JQ==
+
+"@simpli/react-native-storage@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@simpli/react-native-storage/-/react-native-storage-0.1.1.tgz#9368dd1ffa83089916954dd684966bdf73dfc1db"
+  integrity sha512-cjfrhU9RlLM26s4EBhEq49zw0m81Vra4cb4buBzGAuEKNXSX3YeWSQDoge9yIFDQ5GnCgdEdNPqLqaiZbNhu/g==
+  dependencies:
+    "@react-native-community/async-storage" "^1.11.0"
+    class-transformer "^0.2.3"
+
+"@simpli/redux-wrapper@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@simpli/redux-wrapper/-/redux-wrapper-0.1.1.tgz#310a05bc081d10069106170124e2a16a4e25da36"
+  integrity sha512-OAfCD9BgsnYycVXDCXIgT890X2FkiEXNYM8deeChPy0h4ApxW+Z1RP4pqv3jYqUGc5J0IjXjnWqUML7FmCsxZA==
+
 "@simpli/serialized-request@^1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@simpli/serialized-request/-/serialized-request-1.0.5.tgz#1a0aef8d16c83131fd7e6136e148ab14e561ba51"

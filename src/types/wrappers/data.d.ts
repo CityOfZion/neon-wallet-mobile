@@ -1,9 +1,7 @@
-import {ClassType} from 'class-transformer/ClassTransformer'
-import {DataKey} from '~src/app/data/DataKey'
+import {DataKey} from '~src/app/DataKey'
 import {WrapperConfig} from '~src/config/WrapperConfig'
 
 export declare global {
-  type DataType<T> = ClassType<T> | T
   type EnumType<E> = Record<keyof E, number | string> & {[k: number]: string}
 
   export interface Dictionary<T> {
