@@ -1,4 +1,11 @@
 module.exports = {
+  globals: {
+    setTimeout: true,
+    setInterval: true,
+    process: true,
+    clearInterval: true,
+    window: true,
+  },
   extends: [
     'universe',
     'universe/shared/typescript-analysis',
