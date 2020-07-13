@@ -20,7 +20,6 @@ import {
 import {Facade} from '~src/app/Facade'
 import {useSwiperController} from '~src/components/SwiperPanel'
 import QuickToolsMenu from '~src/scenes/QuickToolsMenu'
-import {RootState} from '~src/store/reducers/root'
 import styled, {
   ImageView,
   LinearLayout,
@@ -30,7 +29,7 @@ import {orientation, weight} from '~src/styles/styled-system.config'
 
 const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   const {state, descriptors, navigation} = props
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const focusedOptions = descriptors[state.routes[state.index].key].options
 
   if (focusedOptions.tabBarVisible === false) {
@@ -112,7 +111,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
           >
             <TabButton
               height="100%"
-              onPress={() => navigation.navigate(Facade.path.ListWallets.name)}
+              onPress={() => navigation.navigate(Facade.route.ListWallets.name)}
               weight={1}
             >
               <ImageView
@@ -123,7 +122,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
             </TabButton>
             <TabButton
               height="100%"
-              onPress={() => navigation.navigate(Facade.path.Contacts.name)}
+              onPress={() => navigation.navigate(Facade.route.Contacts.name)}
               weight={1}
             >
               <ImageView
@@ -161,7 +160,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
             </TabButton>
             <TabButton
               height="100%"
-              onPress={() => navigation.navigate(Facade.path.Settings.name)}
+              onPress={() => navigation.navigate(Facade.route.Settings.name)}
               weight={1}
             >
               <ImageView
@@ -173,7 +172,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
             <TabButton
               height="100%"
               top="4px"
-              onPress={() => navigation.navigate(Facade.path.More.name)}
+              onPress={() => navigation.navigate(Facade.route.More.name)}
               weight={1}
             >
               <ImageView

@@ -3,13 +3,13 @@ import {Dimensions, Platform} from 'react-native'
 import nodesMainNet from '~src/core/nodes-main-net.json'
 import nodesTestNet from '~src/core/nodes-test-net.json'
 import tokenList from '~src/core/tokenList.json'
-import {Currency} from '~src/enums/Currency'
+import {Theme} from '~src/enums/Theme'
 
 /**
  * Application Configuration
  */
 export class ApplicationConfig {
-  readonly defaultCurrency = Currency.USD
+  readonly defaultTheme = Theme.DARK
 
   readonly headerHeight = Platform.OS === 'ios' ? 40 : 72
   readonly footerHeight = 66

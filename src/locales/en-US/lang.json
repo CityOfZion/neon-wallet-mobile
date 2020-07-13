@@ -1,13 +1,17 @@
 {
   "languages": {
     "de": "German",
-    "enUS": "English",
-    "ptBR": "Portuguese"
+    "en-US": "English",
+    "pt-BR": "Portuguese"
   },
-  "currency": {
-    "USD" : "USD",
+  "currencies": {
+    "USD" : "$",
     "BRL" : "BRL",
     "EUR" : "EUR"
+  },
+  "themes": {
+    "DARK": "Dark",
+    "LIGHT": "Light"
   },
   "app": {
     "neoBlockHeight": "NEO BLOCK HEIGHT",
@@ -131,7 +135,8 @@
     "myWallets": "My Wallets",
     "security": "Security",
     "currency": "Currency",
-    "language": "Language"
+    "language": "Language",
+    "theme": "Theme"
   },
   "customColorPage": {
     "title": "Custom Colour",

@@ -77,7 +77,7 @@ const Step1CreateWalletPage: React.FC<Props> = (props) => {
       <LinearLayout mt={5} mb={6} px={5} width={'100%'}>
         <ThemedButton
           onPress={() =>
-            props.navigation.navigate(Facade.path.Step2CreateWallet.name)
+            props.navigation.navigate(Facade.route.Step2CreateWallet.name)
           }
           label={Facade.t('step1CreateWallet.createWallet')}
         />

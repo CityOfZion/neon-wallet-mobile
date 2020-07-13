@@ -1,8 +1,8 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import moment from 'moment'
-import React, {useRef, useState, useEffect} from 'react'
+import React, {useRef, useState} from 'react'
 import Carousel from 'react-native-snap-carousel'
-import {useSelector, useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import BalanceList from '~src/components/BalanceList'
@@ -13,29 +13,17 @@ import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
 import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {mockEmptyWallet, mockWalletItems} from '~src/mocks/mockWalletItems'
 import {Account} from '~src/models/Account'
-import {TokenBalance} from '~src/models/TokenBalance'
-import {TokenValue} from '~src/models/TokenValue'
 import {Wallet} from '~src/models/Wallet'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
-import {
-  setLoading,
-  setLoadingProgress,
-  clearLoading,
-} from '~src/store/actions/loading'
-import {RootState} from '~src/store/reducers/root'
-import styled, {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
 interface WalletProps {
   navigation: StackNavigationProp<WalletStackParamList>
-  theme: DefaultTheme
+  theme: ApplicationTheme
 }
 
-const ListWalletsView = (props: WalletProps) => {
+const ListWalletView = (props: WalletProps) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const [wallets, setWallets] = useState(mockWalletItems)
   const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
@@ -48,7 +36,7 @@ const ListWalletsView = (props: WalletProps) => {
   //   dispatch(setLoading(true, 'This is a loading overlay Demo!'))
   //   let progress = 0
   //   let intervalId: number = 0
-
+  //
   //   window.setTimeout(() => {
   //     intervalId = window.setInterval((): void => {
   //       progress += 0.1
@@ -62,8 +50,6 @@ const ListWalletsView = (props: WalletProps) => {
   //     }, 500)
   //   }, 1500)
   // })
-
-  props.navigation.setOptions({headerShown: false})
 
   const _renderWalletChange = (wallet: Wallet) => {
     return (
@@ -103,15 +89,15 @@ const ListWalletsView = (props: WalletProps) => {
     const changePercentage =
       ((wallet.currentValue - wallet.previousValue) / wallet.previousValue) *
       100
-    const resultString = `${changePercentage > 0 ? '+' : ''}${Math.round(
-      changePercentage
-    )}%`
-
-    return resultString
+    return `${changePercentage > 0 ? '+' : ''}${Math.round(changePercentage)}%`
   }
 
   return (
-    <ScreenLayout useHeaderPadding={false} padding={0}>
+    <ScreenLayout
+      useHeaderPadding={false}
+      useHeaderExtraPadding={true}
+      padding={0}
+    >
       <LinearLayout alignSelf={'flex-end'}>
         <ThemedMoreButton onPress={() => setWallets([mockEmptyWallet])} />
       </LinearLayout>
@@ -140,7 +126,7 @@ const ListWalletsView = (props: WalletProps) => {
           renderItem={({item}) => (
             <WalletCard
               onPress={() =>
-                props.navigation.navigate(Facade.path.GetWallet.name, {
+                props.navigation.navigate(Facade.route.GetWallet.name, {
                   wallet: accounts,
                   headerTitle: item.title,
                 })
@@ -171,4 +157,4 @@ const ListWalletsView = (props: WalletProps) => {
   )
 }
 
-export default ListWalletsView
+export default ListWalletView

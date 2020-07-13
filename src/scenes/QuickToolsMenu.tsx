@@ -5,7 +5,6 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {SwiperController} from '~src/components/SwiperPanel'
-import {RootState} from '~src/store/reducers/root'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface ListItem {
@@ -20,7 +19,7 @@ interface Props {
 }
 
 export default function QuickToolsMenu(props: Props) {
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const navigation = useNavigation()
 
   const items: ListItem[] = [
@@ -29,8 +28,8 @@ export default function QuickToolsMenu(props: Props) {
       subtitle: Facade.t('quickTools.qrCode.subtitle'),
       source: require('~src/assets/images/icon-circle-qr-primary.png'),
       onClick: () =>
-        navigation.navigate(Facade.path.QuickTools.name, {
-          screen: Facade.path.QrCodeScanTest.name,
+        navigation.navigate(Facade.route.QuickTools.name, {
+          screen: Facade.route.QrCodeScanTest.name,
         }),
     },
     {
@@ -39,7 +38,7 @@ export default function QuickToolsMenu(props: Props) {
       source: require('~src/assets/images/icon-circle-send-primary.png'),
       onClick: () =>
         navigation.navigate('Modal', {
-          screen: Facade.path.SendWalletSelectionModal.name,
+          screen: Facade.route.SendWalletSelectionModal.name,
         }),
     },
     {
@@ -48,7 +47,7 @@ export default function QuickToolsMenu(props: Props) {
       source: require('~src/assets/images/icon-circle-receive-primary.png'),
       onClick: () =>
         navigation.navigate('Modal', {
-          screen: Facade.path.ReceiveWalletSelectionModal.name,
+          screen: Facade.route.ReceiveWalletSelectionModal.name,
         }),
     },
   ]

@@ -11,19 +11,14 @@ export declare global {
     TypographyProps,
   } from 'styled-system'
 
-  interface DefaultTheme {
-    title: string
-    statusBarStyle: 'default' | 'light-content' | 'dark-content'
-
-    colors: {
-      primary: string
-      secondary: string
-      tertiary: string
-      quaternary: string
-      background: string[]
-      text: string[]
-      card: string[]
-    }
+  interface ColorTheme {
+    primary: string
+    secondary: string
+    tertiary: string
+    quaternary: string
+    background: string[]
+    text: string[]
+    card: string[]
   }
 
   interface OrientationProps {

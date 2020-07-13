@@ -89,7 +89,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
           onPress={() => {
             props.navigation.reset({
               index: 0,
-              routes: [{name: Facade.path.Step5CreateWallet.name}],
+              routes: [{name: Facade.route.Step5CreateWallet.name}],
             })
           }}
           label={Facade.t('app.continue')}

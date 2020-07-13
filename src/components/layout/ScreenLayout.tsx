@@ -5,12 +5,12 @@ import {SafeAreaView, ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import {RootState} from '~src/store/reducers/root'
 import {LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
-  children?: any
+  children?: React.ReactNode | React.ReactNodeArray
   useHeaderPadding?: boolean
+  useHeaderExtraPadding?: boolean
   useFooterPadding?: boolean
   autoScroll?: boolean
   alignX?: string
@@ -19,12 +19,12 @@ interface Props {
 }
 
 const ScreenLayout: React.FC<Props> = (props) => {
-  const extraHeight = Facade.utils.isAndroid ? 32 : 0
-  const headerHeight = props.useHeaderPadding
-    ? Facade.app.headerHeight
-    : extraHeight
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+
+  const headerHeight = props.useHeaderPadding ? Facade.app.headerHeight : 0
   const tabBarHeight = props.useFooterPadding ? Facade.app.footerHeight : 0
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const headerExtraHeight =
+    props.useHeaderExtraPadding && Facade.utils.isAndroid ? 32 : 0
 
   return (
     <LinearGradient
@@ -38,7 +38,10 @@ const ScreenLayout: React.FC<Props> = (props) => {
           alwaysBounceVertical={false}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{flexGrow: 1}}
-          style={{marginTop: headerHeight, marginBottom: tabBarHeight}}
+          style={{
+            marginTop: headerHeight + headerExtraHeight,
+            marginBottom: tabBarHeight,
+          }}
         >
           <LinearLayout
             alignItems={props.alignX}
@@ -58,6 +61,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
 ScreenLayout.propTypes = {
   children: PropTypes.any,
   useHeaderPadding: PropTypes.bool,
+  useHeaderExtraPadding: PropTypes.bool,
   useFooterPadding: PropTypes.bool,
   autoScroll: PropTypes.bool,
   alignX: PropTypes.string,
@@ -67,6 +71,7 @@ ScreenLayout.propTypes = {
 
 ScreenLayout.defaultProps = {
   useHeaderPadding: true,
+  useHeaderExtraPadding: false,
   useFooterPadding: true,
   autoScroll: true,
 }

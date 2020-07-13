@@ -9,7 +9,6 @@ import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import WalletCard from '~src/components/WalletCard'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {RootState} from '~src/store/reducers/root'
 import {TextView} from '~src/styles/styled-components'
 
 interface Props {
@@ -65,7 +64,7 @@ const ReceiveWalletSelectionModal = (props: Props) => {
             <WalletCard
               onPress={() =>
                 props.navigation.navigate(
-                  Facade.path.ReceiveWalletSelectionModal.name
+                  Facade.route.ReceiveWalletSelectionModal.name
                 )
               }
               height={330}

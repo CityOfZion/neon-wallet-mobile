@@ -7,7 +7,6 @@ import styled from 'styled-components'
 import {layout, LayoutProps} from 'styled-system'
 
 import {Facade} from '~src/app/Facade'
-import {RootState} from '~src/store/reducers/root'
 import {
   ImageView,
   LinearLayout,
@@ -20,7 +19,7 @@ interface Props {
 }
 
 export default function ColorSelector(props: Props) {
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const navigation = useNavigation()
 
   // Each button
@@ -45,7 +44,7 @@ export default function ColorSelector(props: Props) {
   const customColorButton = (
     <TouchableWithoutFeedback
       onPress={() => {
-        navigation.navigate(Facade.path.CustomColor.name)
+        navigation.navigate(Facade.route.CustomColor.name)
       }}
     >
       <RelativeLayout width={71} height={71}>

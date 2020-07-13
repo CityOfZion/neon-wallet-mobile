@@ -52,7 +52,7 @@ const GetWalletView = (props: GetWalletProps) => {
             isCompacted={true}
             isStackMode={i !== accounts.length - 1}
             onPress={() =>
-              props.navigation.navigate(Facade.path.GetAccount.name, {
+              props.navigation.navigate(Facade.route.GetAccount.name, {
                 account,
                 headerTitle: _renderTitle,
                 actionTitle: Facade.t('app.edit'),

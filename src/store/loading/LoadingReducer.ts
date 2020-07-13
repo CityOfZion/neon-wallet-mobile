@@ -3,7 +3,7 @@ import {
   SET_LOADING,
   SET_LOADING_PROGRESS,
   CLEAR_LOADING,
-} from '~src/store/actions/loading'
+} from '~src/store/loading/actions/loading'
 
 interface ILoadingState {
   progress: number

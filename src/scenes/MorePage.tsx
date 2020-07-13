@@ -22,7 +22,7 @@ const MorePage = (props: MoreProps) => {
         iconMarginRight={12}
         arrowDirection={RightIconType.ARROW_RIGHT}
         onPress={() => {
-          props.navigation.navigate(Facade.path.Step1CreateWallet.name)
+          props.navigation.navigate(Facade.route.Step1CreateWallet.name)
         }}
       />
 
@@ -51,7 +51,7 @@ const MorePage = (props: MoreProps) => {
         title={'Sample custom card color'}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
-          props.navigation.navigate(Facade.path.CustomColor.name)
+          props.navigation.navigate(Facade.route.CustomColor.name)
         }}
       />
 

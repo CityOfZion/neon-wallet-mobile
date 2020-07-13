@@ -34,7 +34,7 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
 
   const validateAndNext = () => {
     if (formedWords.join() === words.join()) {
-      props.navigation.navigate(Facade.path.Step4CreateWallet.name)
+      props.navigation.navigate(Facade.route.Step4CreateWallet.name)
     } else {
       Alert.alert(
         Facade.t('step3CreateWallet.dialog_2_title'),

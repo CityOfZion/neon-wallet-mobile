@@ -1,14 +1,12 @@
-import i18n from 'i18n-js'
-
+import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 
 /**
  * Locale Configuration
  */
-export class I18nConfig {
-  readonly defaultLocale = Lang.EN_US
-
-  readonly locale = Lang.EN_US
+export class LocaleConfig {
+  readonly defaultCurrency = Currency.USD
+  readonly defaultLanguage = Lang.EN_US
 
   readonly fallbacks = true
 

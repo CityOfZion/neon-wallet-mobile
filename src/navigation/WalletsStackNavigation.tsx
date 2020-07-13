@@ -9,8 +9,7 @@ import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
 import {Account} from '~src/models/Account'
 import GetAccountView from '~src/scenes/GetAccountView'
 import GetWalletView from '~src/scenes/GetWalletView'
-import ListWalletsView from '~src/scenes/ListWalletsView'
-import {RootState} from '~src/store/reducers/root'
+import ListWalletView from '~src/scenes/ListWalletView'
 
 export type WalletStackParamList = {
   ListWallets: undefined
@@ -21,17 +20,23 @@ export type WalletStackParamList = {
 const WalletStack = createStackNavigator<WalletStackParamList>()
 
 const WalletStackNavigation = () => {
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
 
   return (
     <ThemeProvider theme={theme}>
-      <WalletStack.Navigator initialRouteName={Facade.path.ListWallets.name}>
+      <WalletStack.Navigator initialRouteName={Facade.route.ListWallets.name}>
         <WalletStack.Screen
-          name={Facade.path.ListWallets.name}
-          component={ListWalletsView}
+          name={Facade.route.ListWallets.name}
+          component={ListWalletView}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              theme,
+              route,
+            })
+          }
         />
         <WalletStack.Screen
-          name={Facade.path.GetWallet.name}
+          name={Facade.route.GetWallet.name}
           component={GetWalletView}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
@@ -41,7 +46,7 @@ const WalletStackNavigation = () => {
           }
         />
         <WalletStack.Screen
-          name={Facade.path.GetAccount.name}
+          name={Facade.route.GetAccount.name}
           component={GetAccountView}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({

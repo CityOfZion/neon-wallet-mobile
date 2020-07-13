@@ -5,7 +5,6 @@ import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/ty
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {RootState} from '~src/store/reducers/root'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
@@ -13,7 +12,7 @@ interface Props {
 }
 
 export default function SampleModal(props: Props) {
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const controller = useSwiperController(true)
 
   const [name, setName] = useState<string>()

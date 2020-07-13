@@ -1,6 +1,5 @@
 import {
   createStackNavigator,
-  StackNavigationOptions,
 } from '@react-navigation/stack'
 import React from 'react'
 import {useSelector} from 'react-redux'
@@ -8,11 +7,7 @@ import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
-import HeaderActionButton from '~src/components/layout/HeaderActionButton'
-import HeaderBackButton from '~src/components/layout/HeaderBackButton'
-import HeaderBar, {HeaderProps} from '~src/components/layout/HeaderBar'
 import SettingsPage from '~src/scenes/SettingsPage'
-import {RootState} from '~src/store/reducers/root'
 
 type SettingsStackParamList = {
   Settings: undefined
@@ -21,17 +16,17 @@ type SettingsStackParamList = {
 const SettingsStack = createStackNavigator<SettingsStackParamList>()
 
 const SettingsStackNavigation = () => {
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
 
   return (
     <ThemeProvider theme={theme}>
       <SettingsStack.Navigator>
         <SettingsStack.Screen
-          name={Facade.path.Settings.name}
+          name={Facade.route.Settings.name}
           component={SettingsPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.path.Settings.translate(),
+              title: Facade.route.Settings.translate(),
               image: require('~src/assets/images/settings-white.png'),
               theme,
               route,

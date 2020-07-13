@@ -62,9 +62,9 @@ const Step5CreateWalletPage: React.FC<Props> = (props) => {
           onPress={() => {
             props.navigation.reset({
               index: 0,
-              routes: [{name: Facade.path.More.name}],
+              routes: [{name: Facade.route.More.name}],
             })
-            props.navigation.navigate(Facade.path.ListWallets.name)
+            props.navigation.navigate(Facade.route.ListWallets.name)
           }}
           label={Facade.t('step5CreateWallet.viewWallet')}
         />

@@ -3,7 +3,6 @@ import React from 'react'
 
 import {
   InputTextView,
-  InputTextViewProps,
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'

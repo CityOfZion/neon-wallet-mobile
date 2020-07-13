@@ -1,16 +1,19 @@
-import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
+import {StackNavigationProp} from '@react-navigation/stack'
+import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useState} from 'react'
 import {Modal} from 'react-native'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
-import {setLocale, setCurrency} from '~src/store/actions/app'
+import {Theme} from '~src/enums/Theme'
+import {RootStore} from '~src/store/RootStore'
 import {LinearLayout} from '~src/styles/styled-components'
 
 interface SettingsProps {
@@ -20,81 +23,91 @@ interface SettingsProps {
 }
 
 const SettingsPage = (props: SettingsProps) => {
+  const {language, currency, theme} = useSelector(
+    (state: RootState) => state.app
+  )
   const dispatch = useDispatch()
-  const [isShowingIdiom, setIsShowingIdiom] = useState(false)
-  const [isShowingCurrency, setIsShowingCurrency] = useState(false)
-  const [selectedIdiom, setSelectedIdiom] = useState(Lang.EN_US)
-  const [selectedCurrency, setSelectedCurrency] = useState(Currency.USD)
-  const idioms = [
+
+  const [isShowingLanguage, setShowingLanguage] = useState(false)
+  const [isShowingCurrency, setShowingCurrency] = useState(false)
+  const [isShowingTheme, setShowingTheme] = useState(false)
+
+  const languages = [
     {
-      title: 'languages.enUS',
-      isSelected: selectedIdiom === Lang.EN_US,
-      onItemSelected: () => {
-        changeLocale(Lang.EN_US)
-        setSelectedIdiom(Lang.EN_US)
-      },
+      title: 'languages.en-US',
+      isSelected: language === Lang.EN_US,
+      onItemSelected: () => changeLanguage(Lang.EN_US),
     },
     {
-      title: 'languages.ptBR',
-      isSelected: selectedIdiom === Lang.PT_BR,
-      onItemSelected: () => {
-        changeLocale(Lang.PT_BR)
-        setSelectedIdiom(Lang.PT_BR)
-      },
+      title: 'languages.pt-BR',
+      isSelected: language === Lang.PT_BR,
+      onItemSelected: () => changeLanguage(Lang.PT_BR),
     },
     {
       title: 'languages.de',
-      isSelected: selectedIdiom === Lang.DE,
-      onItemSelected: () => {
-        changeLocale(Lang.DE)
-        setSelectedIdiom(Lang.DE)
-      },
+      isSelected: language === Lang.DE,
+      onItemSelected: () => changeLanguage(Lang.DE),
     },
   ]
 
   const currencies = [
     {
-      title: 'currency.USD',
-      isSelected: selectedCurrency === Currency.USD,
-      onItemSelected: () => {
-        changeCurrency(Currency.USD)
-        setSelectedCurrency(Currency.USD)
-      },
+      title: Currency.USD,
+      isSelected: currency === Currency.USD,
+      onItemSelected: () => changeCurrency(Currency.USD),
     },
     {
-      title: 'currency.BRL',
-      isSelected: selectedCurrency === Currency.BRL,
-      onItemSelected: () => {
-        changeCurrency(Currency.BRL)
-        setSelectedCurrency(Currency.BRL)
-      },
+      title: Currency.BRL,
+      isSelected: currency === Currency.BRL,
+      onItemSelected: () => changeCurrency(Currency.BRL),
     },
     {
-      title: 'currency.EUR',
-      isSelected: selectedCurrency === Currency.EUR,
-      onItemSelected: () => {
-        changeCurrency(Currency.EUR)
-        setSelectedCurrency(Currency.EUR)
-      },
+      title: Currency.EUR,
+      isSelected: currency === Currency.EUR,
+      onItemSelected: () => changeCurrency(Currency.EUR),
     },
   ]
 
-  const changeLocale = (locale: string) => {
-    dispatch(setLocale(locale))
+  const themes = [
+    {
+      title: 'themes.DARK',
+      isSelected: theme === Theme.DARK,
+      onItemSelected: () => changeTheme(Theme.DARK),
+    },
+    {
+      title: 'themes.LIGHT',
+      isSelected: theme === Theme.LIGHT,
+      onItemSelected: () => changeTheme(Theme.LIGHT),
+    },
+  ]
+
+  const changeLanguage = async (val: Lang) => {
+    dispatch(RootStore.app.actions.setLanguage(val))
+    await Facade.await.run(
+      'application',
+      () => Storage.language.save(val),
+      1000
+    )
   }
 
-  const changeCurrency = (currency: string) => {
-    dispatch(setCurrency(currency))
+  const changeCurrency = async (val: Currency) => {
+    dispatch(RootStore.app.actions.setCurrency(val))
+    await Storage.currency.save(val)
   }
 
-  const _modalIdiom = () => (
-    <Modal animationType="slide" transparent={true} visible={isShowingIdiom}>
+  const changeTheme = async (val: Theme) => {
+    dispatch(RootStore.app.actions.setTheme(val))
+    await Storage.theme.save(val)
+  }
+
+  const _modalLanguage = () => (
+    <Modal animationType="slide" transparent={true} visible={isShowingLanguage}>
       <ScreenLayout useHeaderPadding={false}>
         <LinearLayout alignItems={'flex-end'}>
-          <ThemedCloseButton onPress={() => setIsShowingIdiom(false)} />
+          <ThemedCloseButton onPress={() => setShowingLanguage(false)} />
         </LinearLayout>
 
-        {idioms.map((idiom) => (
+        {languages.map((idiom) => (
           <MenuItem
             title={Facade.t(idiom.title)}
             key={idiom.title}
@@ -112,13 +125,13 @@ const SettingsPage = (props: SettingsProps) => {
     <Modal animationType="slide" transparent={true} visible={isShowingCurrency}>
       <ScreenLayout useHeaderPadding={false}>
         <LinearLayout alignItems={'flex-end'}>
-          <ThemedCloseButton onPress={() => setIsShowingCurrency(false)} />
+          <ThemedCloseButton onPress={() => setShowingCurrency(false)} />
         </LinearLayout>
 
         {currencies.map((currency) => {
           return (
             <MenuItem
-              title={Facade.t(currency.title)}
+              title={currency.title}
               key={currency.title}
               arrowDirection={
                 currency.isSelected ? RightIconType.CHECK : RightIconType.NONE
@@ -127,14 +140,46 @@ const SettingsPage = (props: SettingsProps) => {
             />
           )
         })}
+
+        <LinearLayout mt={5}>
+          <AwaitActivity name={'save@currency'} />
+        </LinearLayout>
+      </ScreenLayout>
+    </Modal>
+  )
+
+  const _modalTheme = () => (
+    <Modal animationType="slide" transparent={true} visible={isShowingTheme}>
+      <ScreenLayout useHeaderPadding={false}>
+        <LinearLayout alignItems={'flex-end'}>
+          <ThemedCloseButton onPress={() => setShowingTheme(false)} />
+        </LinearLayout>
+
+        {themes.map((theme) => {
+          return (
+            <MenuItem
+              title={Facade.t(theme.title)}
+              key={theme.title}
+              arrowDirection={
+                theme.isSelected ? RightIconType.CHECK : RightIconType.NONE
+              }
+              onPress={theme.onItemSelected}
+            />
+          )
+        })}
+
+        <LinearLayout mt={5}>
+          <AwaitActivity name={'save@theme'} />
+        </LinearLayout>
       </ScreenLayout>
     </Modal>
   )
 
   return (
     <ScreenLayout padding={20}>
-      {_modalIdiom()}
+      {_modalLanguage()}
       {_modalCurrency()}
+      {_modalTheme()}
 
       <MenuItem
         title={Facade.t('settings.myWallets')}
@@ -159,8 +204,8 @@ const SettingsPage = (props: SettingsProps) => {
         iconWidth={26}
         iconMarginRight={16}
         arrowDirection={RightIconType.ARROW_DOWN}
-        subtitle={'USD'}
-        onPress={() => setIsShowingCurrency(true)}
+        subtitle={currency}
+        onPress={() => setShowingCurrency(true)}
       />
 
       <MenuItem
@@ -170,8 +215,15 @@ const SettingsPage = (props: SettingsProps) => {
         iconMarginLeft={2}
         iconMarginRight={22}
         arrowDirection={RightIconType.ARROW_DOWN}
-        subtitle={Facade.t('languages.enUS')}
-        onPress={() => setIsShowingIdiom(true)}
+        subtitle={Facade.t(`languages.${language}`)}
+        onPress={() => setShowingLanguage(true)}
+      />
+
+      <MenuItem
+        title={Facade.t('settings.theme')}
+        arrowDirection={RightIconType.ARROW_DOWN}
+        subtitle={Facade.t(`themes.${theme}`)}
+        onPress={() => setShowingTheme(true)}
       />
     </ScreenLayout>
   )

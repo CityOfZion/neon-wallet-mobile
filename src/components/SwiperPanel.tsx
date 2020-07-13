@@ -15,8 +15,8 @@ import {
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {RootState} from '~src/store/reducers/root'
 import {TextView, ImageView} from '~src/styles/styled-components'
+import {Facade} from '~src/app/Facade'
 
 const PANEL_OFFSET = 50
 const ANIMATION_DELTA_THRESHOLD = 50
@@ -78,7 +78,7 @@ export const useSwiperController = (initial: boolean = false) => {
 }
 
 export default function SwiperPanel(props: SwiperProps) {
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const MAX_HEIGHT = useWindowDimensions?.().height
 
   const [height, setHeight] = useState<number>()
@@ -423,7 +423,7 @@ export function CancelButton() {
 }
 
 export function BackButton(props: {text?: string}) {
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   return (
     <View
       style={{

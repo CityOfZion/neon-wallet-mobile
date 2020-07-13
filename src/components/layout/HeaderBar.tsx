@@ -4,12 +4,13 @@ import {Route} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
 export interface HeaderProps {
   title?: string | React.FC<HeaderProps> | Function
   image?: any
   iconWidth?: number
-  theme?: DefaultTheme
+  theme?: ApplicationTheme
   route?: Route
 }
 
@@ -22,10 +23,6 @@ const HeaderBar: React.FC<HeaderProps> = (
   props: StackHeaderTitleProps
 ) => {
   const params: HeaderCustomProps = headerProps.route?.params
-
-  const getIconOffset = () => {
-    return -Facade.scale<number>((headerProps.iconWidth ?? 20) + 8)
-  }
 
   const getHeaderWidth = () => {
     const {windowWidth} = Facade.app
@@ -72,7 +69,6 @@ const HeaderBar: React.FC<HeaderProps> = (
       {headerProps.image && (
         <ImageView
           width={Facade.scale<number>(headerProps.iconWidth ?? 20)}
-          ml={getIconOffset()}
           mr={3}
           source={headerProps.image}
           resizeMode="contain"

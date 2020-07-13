@@ -13,11 +13,12 @@ import {
 
 import {Facade} from '~src/app/Facade'
 import {orientation, weight} from '~src/styles/styled-system.config'
+import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
 const {
   default: styled,
 } = styledComponents as styledComponents.ReactNativeThemedStyledComponentsModule<
-  DefaultTheme
+  ApplicationTheme
 >
 
 export const TextView = styled.Text<TextViewProps>`

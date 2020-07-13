@@ -9,7 +9,6 @@ import ReceiveWalletSelectionModal from '~src/scenes/ReceiveWalletSelectionModal
 import SampleModal from '~src/scenes/SampleModal'
 import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionConfirmationModal'
 import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
-import {RootState} from '~src/store/reducers/root'
 
 export type ModalStackParamList = {
   SampleModal: undefined
@@ -22,33 +21,33 @@ export type ModalStackParamList = {
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
 const ModalStackNavigation = () => {
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
 
   return (
     <ThemeProvider theme={theme}>
       <ModalStack.Navigator
-        initialRouteName={Facade.path.SampleModal.name}
+        initialRouteName={Facade.route.SampleModal.name}
         headerMode="none"
         screenOptions={Facade.config.screen}
       >
         <ModalStack.Screen
-          name={Facade.path.SampleModal.name}
+          name={Facade.route.SampleModal.name}
           component={SampleModal}
         />
         <ModalStack.Screen
-          name={Facade.path.ReceiveWalletSelectionModal.name}
+          name={Facade.route.ReceiveWalletSelectionModal.name}
           component={ReceiveWalletSelectionModal}
         />
         <ModalStack.Screen
-          name={Facade.path.SendWalletSelectionModal.name}
+          name={Facade.route.SendWalletSelectionModal.name}
           component={SendWalletSelectionModal}
         />
         <ModalStack.Screen
-          name={Facade.path.SendTransactionConfirmationModal.name}
+          name={Facade.route.SendTransactionConfirmationModal.name}
           component={SendTransactionConfirmationModal}
         />
         <ModalStack.Screen
-          name={Facade.path.CustomColor.name}
+          name={Facade.route.CustomColor.name}
           component={CustomColorPage}
         />
       </ModalStack.Navigator>

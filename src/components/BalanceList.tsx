@@ -5,7 +5,6 @@ import {useSelector} from 'react-redux'
 import {Facade} from '~src/app/Facade'
 import {TokenBalance} from '~src/models/TokenBalance'
 import {TokenValue} from '~src/models/TokenValue'
-import {RootState} from '~src/store/reducers/root'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 const TableData = (props: {header: string; content: string}) => {
