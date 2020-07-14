@@ -1,0 +1,70 @@
+version: 2.1
+jobs:
+  test:
+    working_directory: ~/neon-wallet-mobile
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - checkout
+      - restore_cache:
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: install dependencies
+          command: yarn install --ignore-engines --frozen-lockfile
+      - save_cache:
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+      - run:
+          name: type check
+          command: npm run ts-buld
+      - run:
+          name: lint
+          command: npm run lint
+      - run:
+          name: test
+          command: npm run test
+  # deploy:
+  #   docker:
+  #     - image: circleci/node:10.16.3
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         key: yarn-packages-{{ checksum "yarn.lock" }}
+  #     - run:
+  #         name: install dependencies
+  #         command: yarn install --ignore-engines --frozen-lockfile
+  #     - save_cache:
+  #         key: yarn-packages-{{ checksum "yarn.lock" }}
+  #         paths:
+  #           - ~/.cache/yarn
+  #     - run:
+  #         name: Login into Expo
+  #         command: npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+  #     - run:
+  #         name: Save current branch name to an env variable
+  #         command: |
+  #           if [ "${CIRCLE_BRANCH}" == "master" ]; then
+  #             echo 'export EXPO_RELEASE_CHANNEL="default"' >> $BASH_ENV
+  #           else
+  #             echo 'export EXPO_RELEASE_CHANNEL=$CIRCLE_BRANCH' >> $BASH_ENV
+  #           fi
+  #     - run:
+  #         name: Publish to Expo
+  #         command: npx expo publish --non-interactive --max-workers 1 --release-channel $EXPO_RELEASE_CHANNEL
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - test
+      # - deploy:
+      #     requires:
+      #       - test
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master
+      #           # Branches prefixed with "rc-" will be deployed to their own unique
+      #           # expo release channel available at https://expo.io/@<expo user name>/<expo application name>?release-channel=<branch-name>
+      #           - /rc-.*/
