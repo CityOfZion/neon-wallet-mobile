@@ -11,6 +11,8 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
 import {ButtonView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {mockAccountAssetDetails} from '~src/mocks/mockAccountAssetDetails'
+import {TransactionModel} from '~src/models/TransactionModel'
 
 interface TabSelectorProps {
   isAssetsTabSelected: boolean
@@ -69,14 +71,27 @@ interface GetAccountViewProps {
   navigation: StackNavigationProp<QuickToolsStackParamList>
 }
 
-const GetAccountView = ({route}: GetAccountViewProps) => {
-  const {account} = route.params
+const GetAccountView = (props: GetAccountViewProps) => {
+  const {account} = props.route.params
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
+
+  const  _renderTransactionViewElement = () => {
+
+
+    return mockAccountAssetDetails.map((transActionModel: TransactionModel, i: number) =>{
+
+      return <TransactionsList key={i} isHistory={false} transactionModel={transActionModel} index={i}/>
+
+    })
+
+  }
 
   return (
     <ScreenLayout>
       <LinearLayout mt={4}>
-        <AccountCard account={account} isCompacted={true} />
+        <AccountCard account={account} isCompacted={true} onPress={() =>
+          props.navigation.navigate(Facade.route.AccountAssetDetail.name, {account })
+        }/>
       </LinearLayout>
 
       <LinearLayout mt="28px" mx="auto">
@@ -100,7 +115,7 @@ const GetAccountView = ({route}: GetAccountViewProps) => {
             tokenAssets={mockWalletItems[2].currentAssets.assets}
           />
         ) : (
-          <TransactionsList />
+          _renderTransactionViewElement()
         )}
       </LinearLayout>
     </ScreenLayout>

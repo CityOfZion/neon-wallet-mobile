@@ -2,7 +2,7 @@ import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
-
+import {RootState} from '~src/store/reducers/root'
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
@@ -10,6 +10,7 @@ import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
 import {Account} from '~src/models/Account'
 import ReceiveQRCode from '~src/scenes/ReceiveQRCode'
 import QRCodeScanTest from '~src/scenes/TestPage/QRCodeScanTest'
+import AccountAssetDetail from '~src/scenes/AccountAssetDetail'
 
 export type QuickToolsStackParamList = {
   Home: undefined
@@ -21,6 +22,7 @@ export type QuickToolsStackParamList = {
   Onboarding: undefined
   GetWallet: undefined
   GetAccount: {account: Account} & HeaderActionButtonProps & HeaderCustomProps
+  AccountAssetDetail: {account: Account} & HeaderCustomProps
 }
 
 const QuickToolsStack = createStackNavigator<QuickToolsStackParamList>()
@@ -56,7 +58,20 @@ const QuickToolsStackNavigation = () => {
             })
           }
         />
+
+        <QuickToolsStack.Screen
+          name={Facade.route.AccountAssetDetail.name}
+          component={AccountAssetDetail}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              theme,
+              route,
+            })
+          }
+        />
+
       </QuickToolsStack.Navigator>
+
     </ThemeProvider>
   )
 }

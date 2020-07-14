@@ -1,102 +1,168 @@
 import React from 'react'
 
 import {Facade} from '~src/app/Facade'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {
+  ImageView,
+  LinearLayout,
+  TextView,
+} from '~src/styles/styled-components'
+import {
+  Receiver,
+  Transaction,
+  TransactionModel,
+  Asset,
+} from '~src/models/TransactionModel'
+import moment from 'moment'
 
-const mockNames = ['Tyler', 'Jack W']
-
-const Transaction = () => {
-  return (
-    <LinearLayout
-      orientation="horiz"
-      py="12px"
-      borderColor="text.5"
-      borderBottomWidth="1px"
-    >
-      <LinearLayout orientation="horiz" height="40px">
-        <ImageView
-          alignSelf="center"
-          mr="8px"
-          source={require('~src/assets/images/clock-white.png')}
-        />
-        <LinearLayout orientation="verti" mr="24px">
-          <TextView fontSize="14px" color="text.2" mb="-2px">
-            {Facade.t('components.transactionsList.pending')}
-          </TextView>
-          <TextView fontSize="16px" color="text.0">
-            16:43
-          </TextView>
-        </LinearLayout>
-      </LinearLayout>
-      <LinearLayout orientation="verti" weight={1}>
-        <LinearLayout orientation="horiz" weight={1} mb="-2px">
-          <TextView weight={2} fontSize="14px" color="text.2">
-            {Facade.t('components.transactionsList.sentTo')}
-          </TextView>
-          <TextView weight={3} fontSize="14px" color="text.2">
-            {Facade.t('components.transactionsList.value')}
-          </TextView>
-        </LinearLayout>
-        <LinearLayout orientation="horiz" weight={1}>
-          <TextView weight={2} fontSize="16px" color="text.0">
-            {mockNames[0]}
-          </TextView>
-          <LinearLayout orientation="verti" weight={3}>
-            <LinearLayout orientation="horiz" weight={1}>
-              <ImageView
-                alignSelf="center"
-                mr="4px"
-                source={require('~src/assets/logos/logo-neo.png')}
-              />
-              <TextView fontSize="16px" color="text.0">
-                NEO
-              </TextView>
-              <TextView fontSize="14px" color="text.2" ml="auto">
-                0.812345
-              </TextView>
-            </LinearLayout>
-          </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-          orientation="horiz"
-          mt="4px"
-          pt="4px"
-          weight={1}
-          borderColor="text.5"
-          borderTopWidth="1px"
-        >
-          <TextView weight={2} fontSize="16px" color="text.0">
-            {mockNames[1]}
-          </TextView>
-          <LinearLayout orientation="verti" weight={3}>
-            <LinearLayout orientation="horiz" weight={1}>
-              <ImageView
-                alignSelf="center"
-                mr="4px"
-                source={require('~src/assets/logos/logo-neo.png')}
-              />
-              <TextView fontSize="16px" color="text.0">
-                NEO
-              </TextView>
-              <TextView fontSize="14px" color="text.2" ml="auto">
-                20.812345
-              </TextView>
-            </LinearLayout>
-          </LinearLayout>
-        </LinearLayout>
-      </LinearLayout>
-    </LinearLayout>
-  )
+interface Props {
+  transactionModel: TransactionModel | null
+  isHistory?: boolean
+  index?: number | 0
 }
+const TransactionsList: React.FC<Props> = (props) => {
 
-const TransactionsList = () => {
+  const _renderTransaction = () => {
+    if (props.transactionModel && props.transactionModel.transactions) {
+      return props.transactionModel.transactions.map(
+        (transaction: Transaction, index: number) => {
+          return (
+            <LinearLayout orientation="horiz">
+              <LinearLayout orientation="vert" mr="8px" mt='5px'>
+                {index == 0 && (
+                  <ImageView
+                    alignSelf="center"
+                    source={
+                      props.transactionModel && props.transactionModel.srcIcon
+                        ? props.transactionModel.srcIcon
+                        : require('~src/assets/images/clock-white.png')
+                    }
+                  />
+                )}
+              </LinearLayout>
+              <LinearLayout weight={1} orientation="vert">
+                {index == 0 && (
+                  <LinearLayout orientation="vert">
+                    <TextView fontSize="14px" color="text.2" mb="-2px">
+                      {props.isHistory && props.transactionModel
+                        ? 'Sent'
+                        : Facade.t('components.transactionsList.pending')}
+                    </TextView>
+                    <TextView fontSize="16px" color="text.0">
+                      {props.isHistory &&
+                      props.transactionModel &&
+                      props.transactionModel.date
+                        ? '22:09'
+                        : '00:00'}
+                    </TextView>
+                  </LinearLayout>
+                )}
+              </LinearLayout>
+
+              <LinearLayout weight={3} orientation="vert">
+                {index == 0 && (
+                  <LinearLayout orientation="horiz">
+                    <TextView weight={1} fontSize="14px" color="text.2">
+                      {Facade.t('components.transactionsList.sentTo')}
+                    </TextView>
+                    <TextView weight={1.1} fontSize="14px" color="text.2">
+                      {Facade.t('components.transactionsList.value')}
+                    </TextView>
+                  </LinearLayout>
+                )}
+
+                {_renderReceivers(transaction, index)}
+              </LinearLayout>
+            </LinearLayout>
+          )
+        }
+      )
+    }
+  }
+
+
+
+  const _renderReceivers = (transaction: Transaction, indexTrans: number) => {
+    if (transaction && transaction.receiver) {
+      return transaction.receiver.map((receiver: Receiver, index: number) => {
+        return (
+          <LinearLayout orientation="verti">
+            {transaction &&
+              transaction.receiver &&
+            (index > 0 ||
+              indexTrans > 0 )&&
+              transaction.receiver.length > 1 && (
+                <LinearLayout
+                  mt="10px"
+                  mb="10px"
+                  borderStyle="dotted"
+                  borderColor="text.0"
+                  borderWidth={0.4}
+                />
+              )}
+            <LinearLayout orientation="horiz">
+              {receiver.isAddress ? (
+                <TextView
+                  mr="10px"
+                  numberOfLines={1}
+                  ellipsizeMode="middle"
+                  weight={1}
+                  fontSize="16px"
+                  color="primary"
+                >
+                  {receiver.nameOrAdress}
+                </TextView>
+              ) : (
+                <TextView weight={1} fontSize="16px" color="text.0">
+                  {receiver.nameOrAdress}
+                </TextView>
+              )}
+              <LinearLayout orientation="verti">
+                {_renderAssets(receiver)}
+              </LinearLayout>
+            </LinearLayout>
+          </LinearLayout>
+        )
+      })
+    }
+  }
+
+  const _renderAssets = (rec: Receiver) => {
+    if (rec.assets) {
+      return rec.assets.map((asset: Asset, i: number) => {
+        return (
+          <LinearLayout orientation="horiz" mb='5px'>
+            <ImageView height='17px' width='17px' alignSelf="center" mr="4px" source={asset.srcIcon} />
+            <TextView fontSize="16px" color="text.0" marginRight="30px">
+              {asset.nameSymbol}
+            </TextView>
+            <TextView fontSize="14px" color="text.2">
+              {asset.value}
+            </TextView>
+          </LinearLayout>
+        )
+      })
+    }
+  }
+
   return (
-    <LinearLayout orientation="verti" my="28px">
-      <TextView color="text.2" fontSize="14px" fontFamily="medium" mb="12px">
-        {Facade.t('components.transactionsList.title')}
-      </TextView>
-      <Transaction />
-      <Transaction />
+    <LinearLayout orientation="verti" >
+      {props.index == 0 && (
+        <TextView color="text.2" fontSize="14px" fontFamily="medium" mb="12px" mt='12px'>
+          {props.isHistory &&
+          props.transactionModel &&
+          props.transactionModel.date
+            ? moment(props.transactionModel.date).format('MMMM Do, YYYY')
+            : Facade.t('components.transactionsList.title')}
+        </TextView>
+      )}
+      {_renderTransaction()}
+      <LinearLayout
+        mt="10px"
+        mb="10px"
+        borderStyle="solid"
+        borderColor="text.0"
+        borderWidth={0.4}
+      />
     </LinearLayout>
   )
 }
