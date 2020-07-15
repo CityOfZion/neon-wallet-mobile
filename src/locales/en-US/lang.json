@@ -60,6 +60,13 @@
     "button_2": "Add funds to your wallet",
     "checkbox_1": "Don’t show this screen again"
   },
+  "login": {
+    "brand": "neonwallet",
+    "title": "Welcome to neonwallet",
+    "body": "We are creating your first wallet, would you like to set up security to keep your assets protected?",
+    "continue": "Continue",
+    "skip": "skip"
+  },
   "onboarding": {
     "feature1": {
       "title": "The original wallet on the move",

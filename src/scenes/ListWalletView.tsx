@@ -95,7 +95,7 @@ const ListWalletView = (props: WalletProps) => {
   return (
     <ScreenLayout
       useHeaderPadding={false}
-      useHeaderExtraPadding={true}
+      useStatusBarPadding={true}
       padding={0}
     >
       <LinearLayout alignSelf={'flex-end'}>

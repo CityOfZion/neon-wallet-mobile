@@ -21,6 +21,8 @@ const {
   ApplicationTheme
 >
 
+// iOS has a natural margin at the bottom of the text view,
+// so a margin is added on Android to keep it consistent
 export const TextView = styled.Text<TextViewProps>`
   font-family: 'regular';
   include-font-padding: false;

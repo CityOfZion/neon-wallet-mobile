@@ -57,6 +57,13 @@
     "button_2": "Adicionar fundos à sua carteira",
     "checkbox_1": "Não mostrar essa tela novamente"
   },
+  "login": {
+    "brand": "neonwallet",
+    "title": "#translateme",
+    "body": "#translateme",
+    "continue": "#translateme",
+    "skip": "#translateme"
+  },
   "onboarding": {
     "feature1": {
       "title": "#translateme",
