@@ -1,3 +1,4 @@
+import Constants from 'expo-constants'
 import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -10,7 +11,7 @@ import {LinearLayout} from '~src/styles/styled-components'
 interface Props {
   children?: React.ReactNode | React.ReactNodeArray
   useHeaderPadding?: boolean
-  useHeaderExtraPadding?: boolean
+  useStatusBarPadding?: boolean
   useFooterPadding?: boolean
   autoScroll?: boolean
   alignX?: string
@@ -24,7 +25,9 @@ const ScreenLayout: React.FC<Props> = (props) => {
   const headerHeight = props.useHeaderPadding ? Facade.app.headerHeight : 0
   const tabBarHeight = props.useFooterPadding ? Facade.app.footerHeight : 0
   const headerExtraHeight =
-    props.useHeaderExtraPadding && Facade.utils.isAndroid ? 32 : 0
+    props.useStatusBarPadding && Facade.utils.isAndroid
+      ? Constants.statusBarHeight
+      : 0
 
   return (
     <LinearGradient
@@ -61,7 +64,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
 ScreenLayout.propTypes = {
   children: PropTypes.any,
   useHeaderPadding: PropTypes.bool,
-  useHeaderExtraPadding: PropTypes.bool,
+  useStatusBarPadding: PropTypes.bool,
   useFooterPadding: PropTypes.bool,
   autoScroll: PropTypes.bool,
   alignX: PropTypes.string,
@@ -71,7 +74,7 @@ ScreenLayout.propTypes = {
 
 ScreenLayout.defaultProps = {
   useHeaderPadding: true,
-  useHeaderExtraPadding: false,
+  useStatusBarPadding: false,
   useFooterPadding: true,
   autoScroll: true,
 }

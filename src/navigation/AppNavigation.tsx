@@ -10,6 +10,7 @@ import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
+import LoginStackNavigation from '~src/navigation/LoginStackNavigation'
 import ModalStackNavigation from '~src/navigation/ModalStackNavigation'
 import TabNavigation from '~src/navigation/TabNavigation'
 import {RootStore} from '~src/store/RootStore'
@@ -17,6 +18,7 @@ import {RootStore} from '~src/store/RootStore'
 export type RootStackParamList = {
   Tab: undefined
   Modal: {screen: string}
+  Login: undefined
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()
@@ -60,11 +62,15 @@ const AppNavigation = () => {
             )}
             <ThemeProvider theme={theme}>
               <RootStack.Navigator
-                initialRouteName="Tab"
+                initialRouteName={Facade.route.Login.name}
                 headerMode="none"
                 screenOptions={Facade.config.screen}
               >
                 <RootStack.Screen name="Tab" component={TabNavigation} />
+                <RootStack.Screen
+                  name={Facade.route.Login.name}
+                  component={LoginStackNavigation}
+                />
                 <RootStack.Screen
                   name="Modal"
                   component={ModalStackNavigation}

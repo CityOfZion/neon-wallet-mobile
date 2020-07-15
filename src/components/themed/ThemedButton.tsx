@@ -32,6 +32,7 @@ interface Props {
   basic?: boolean
   iconSize?: [number, number]
   fontSize?: number | string
+  fontFamily?: 'bold' | 'medium' | 'regular' | 'italic' | 'semibold'
   contentStyle?: any
 }
 
@@ -84,7 +85,7 @@ const ThemedButton: React.FC<Props> = (props) => {
             mt={'2px'}
             color={props.textColor}
             fontSize={fontSize}
-            fontFamily={props.flat ? 'bold' : 'regular'}
+            fontFamily={props.fontFamily ?? (props.flat ? 'bold' : 'regular')}
             allowFontScaling={true}
             adjustsFontSizeToFit={true}
             numberOfLines={1}
@@ -139,6 +140,7 @@ ThemedButton.propTypes = {
   basic: PropTypes.bool,
   iconSize: PropTypes.any,
   fontSize: PropTypes.any,
+  fontFamily: PropTypes.any,
   contentStyle: PropTypes.any,
 }
 

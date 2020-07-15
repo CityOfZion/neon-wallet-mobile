@@ -27,6 +27,7 @@ export class LightTheme extends ApplicationTheme {
       '#b4b4b4',
       '#e1e1e1',
       '#4cffb3',
+      '#c9bfb9',
     ],
 
     text: [
@@ -38,6 +39,8 @@ export class LightTheme extends ApplicationTheme {
       '#41474b',
       '#899fa8',
       '#8f9b9d',
+      '#9ba0a1',
+      '#23272a',
     ],
 
     card: [
