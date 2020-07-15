@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native'
 import {LinearGradient as ExpoLinearGradient} from 'expo-linear-gradient'
-import React, {Fragment} from 'react'
+import React, {Fragment, useState} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 import styled from 'styled-components'
@@ -21,9 +21,14 @@ interface Props {
 export default function ColorSelector(props: Props) {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const navigation = useNavigation()
+  const [color, setColor] = useState<string>()
+  const colorsList = Facade.lodash.clone(theme.colors.card)
+
+  // If color selected from color picker, adds to the list
+  color && colorsList.push(color)
 
   // Each button
-  const buttonList = theme.colors.card.map((color, key) => (
+  const buttonList = colorsList.map((color, key) => (
     <TouchableWithoutFeedback
       key={key}
       onPress={() => {
@@ -44,7 +49,9 @@ export default function ColorSelector(props: Props) {
   const customColorButton = (
     <TouchableWithoutFeedback
       onPress={() => {
-        navigation.navigate(Facade.route.CustomColor.name)
+        navigation.navigate(Facade.route.CustomColor.name, {
+          onColorPicked: (hex: string) => setColor(hex),
+        })
       }}
     >
       <RelativeLayout width={71} height={71}>

@@ -15,7 +15,7 @@ export type ModalStackParamList = {
   ReceiveWalletSelectionModal: undefined
   SendWalletSelectionModal: undefined
   SendTransactionConfirmationModal: undefined
-  CustomColor: undefined
+  CustomColor: {onColorPicked: (hex: string) => void}
 }
 
 const ModalStack = createStackNavigator<ModalStackParamList>()

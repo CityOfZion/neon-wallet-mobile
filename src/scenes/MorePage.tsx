@@ -48,14 +48,6 @@ const MorePage = (props: MoreProps) => {
       />
 
       <MenuItem
-        title={'Sample custom card color'}
-        arrowDirection={RightIconType.NONE}
-        onPress={() => {
-          props.navigation.navigate(Facade.route.CustomColor.name)
-        }}
-      />
-
-      <MenuItem
         title={'Sample modal'}
         arrowDirection={RightIconType.NONE}
         onPress={() => {

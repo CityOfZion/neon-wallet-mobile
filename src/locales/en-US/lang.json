@@ -140,7 +140,11 @@
   },
   "customColorPage": {
     "title": "Custom Colour",
-    "subtitle": "Select a custom color for your account"
+    "subtitle": "Select a custom color for your account",
+    "navigation": {
+      "cancel": "Cancel",
+      "done": "Done"
+    }
   },
   "quickTools": {
     "qrCode": {
