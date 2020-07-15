@@ -25,7 +25,7 @@ export default function WalletContextModal(props: Props) {
 
   const items: ListItem[] = [
     {
-      title: 'Create new wallet',
+      title: Facade.t('modals.walletContext.create'),
       source: require('~src/assets/images/icon-circle-plus-green.png'),
       onClick: () => {
         props.navigation.navigate(Facade.route.More.name, {
@@ -34,7 +34,7 @@ export default function WalletContextModal(props: Props) {
       },
     },
     {
-      title: 'Reorder wallets',
+      title: Facade.t('modals.walletContext.reorder'),
       source: require('~src/assets/images/icon-circle-swap-green.png'),
       onClick: () => {
         console.log('TODO')
@@ -99,7 +99,7 @@ export default function WalletContextModal(props: Props) {
             fontSize={22}
             textAlign="center"
           >
-            Cancel
+            {Facade.t('modals.walletContext.cancel')}
           </TextView>
         </TouchableWithoutFeedback>
       </Fragment>
