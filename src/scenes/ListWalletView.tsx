@@ -17,9 +17,10 @@ import {Wallet} from '~src/models/Wallet'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 
 interface WalletProps {
-  navigation: StackNavigationProp<WalletStackParamList>
+  navigation: StackNavigationProp<WalletStackParamList | RootStackParamList>
   theme: ApplicationTheme
 }
 
@@ -99,7 +100,7 @@ const ListWalletView = (props: WalletProps) => {
       padding={0}
     >
       <LinearLayout alignSelf={'flex-end'}>
-        <ThemedMoreButton onPress={() => setWallets([mockEmptyWallet])} />
+        <ThemedMoreButton onPress={() => props.navigation.navigate('Modal', {screen: Facade.route.WalletContextModal.name})} />
       </LinearLayout>
 
       <LinearLayout

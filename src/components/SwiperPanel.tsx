@@ -146,6 +146,7 @@ export default function SwiperPanel(props: SwiperProps) {
         toValue: {x: 0, y: 0},
         restSpeedThreshold: 100,
         restDisplacementThreshold: 40,
+        friction: 100,
       }),
       Animated.timing(bgOpacity.current, {
         toValue: 1,
@@ -165,6 +166,7 @@ export default function SwiperPanel(props: SwiperProps) {
         toValue: {x: 0, y: height ?? MAX_HEIGHT},
         restSpeedThreshold: 100,
         restDisplacementThreshold: 40,
+        friction: 100,
       }),
       Animated.timing(bgOpacity.current, {
         toValue: 0,
@@ -178,19 +180,25 @@ export default function SwiperPanel(props: SwiperProps) {
     setState(State.CLOSED)
   }
 
+  function DragBar() {
+    return (
+      <View
+        style={{
+          width: 67,
+          height: 4,
+          borderRadius: 2,
+          margin: 12,
+          backgroundColor: theme.colors.background[3],
+          alignSelf: 'center',
+          marginBottom: props.noHeader ? paddingTop : 0,
+        }}
+      />
+    )
+  }
+
   function Header(props: SwiperProps) {
     return (
       <Fragment>
-        <View
-          style={{
-            width: 67,
-            height: 4,
-            borderRadius: 2,
-            margin: 12,
-            backgroundColor: theme.colors.background[3],
-            alignSelf: 'center',
-          }}
-        />
         <View
           style={{
             alignItems: 'center',
@@ -350,11 +358,12 @@ export default function SwiperPanel(props: SwiperProps) {
                 {
                   paddingLeft,
                   paddingRight,
-                  paddingTop: props.noHeader ? paddingTop : 0,
+                  paddingTop: props.noHeader && !props.draggable ? paddingTop : 0,
                 },
                 props.fullSize ? {height: MAX_HEIGHT} : {},
               ]}
             >
+              {props.draggable ? DragBar() : undefined}
               {props.noHeader ? undefined : Header(props)}
               <ScrollView
                 ref={scrollView}

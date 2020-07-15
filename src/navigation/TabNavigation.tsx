@@ -12,6 +12,10 @@ import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation
 import SettingsStackNavigation from '~src/navigation/SettingsStackNavigation'
 import WalletStackNavigation from '~src/navigation/WalletsStackNavigation'
 
+export type TabStackParamList = {
+  More: {screen: string}
+}
+
 const Tab = createBottomTabNavigator()
 
 const TabNavigation = () => {
