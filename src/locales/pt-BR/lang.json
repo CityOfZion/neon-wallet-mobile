@@ -134,7 +134,11 @@
   },
   "customColorPage": {
     "title": "Personalizar Cor",
-    "subtitle": "Selecione um cor personalizada para sua conta"
+    "subtitle": "Selecione um cor personalizada para sua conta",
+    "navigation": {
+      "cancel": "Cancelar",
+      "done": "Concluído"
+    }
   },
   "quickTools": {
     "qrCode": {

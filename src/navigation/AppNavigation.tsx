@@ -16,7 +16,7 @@ import {RootStore} from '~src/store/RootStore'
 
 export type RootStackParamList = {
   Tab: undefined
-  Modal: undefined
+  Modal: {screen: string}
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()

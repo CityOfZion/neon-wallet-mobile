@@ -1,5 +1,6 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useEffect, useState} from 'react'
+import {TouchableWithoutFeedback} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
@@ -7,11 +8,12 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {Account} from '~src/models/Account'
 import {NeoNode} from '~src/models/NeoNode'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface GetWalletProps {
-  navigation: StackNavigationProp<QuickToolsStackParamList>
+  navigation: StackNavigationProp<QuickToolsStackParamList & RootStackParamList>
 }
 
 const GetWalletView = (props: GetWalletProps) => {
@@ -70,26 +72,42 @@ const GetWalletView = (props: GetWalletProps) => {
     <ScreenLayout>
       <LinearLayout mt={4}>{_renderAccountCards()}</LinearLayout>
 
-      <LinearLayout
-        my={6}
-        orientation="horiz"
-        width="100%"
-        alignItems="center"
-        justifyContent="center"
-        borderStyle="dashed"
-        borderColor="text.0"
-        borderRadius={17}
-        borderWidth={1}
-        style={{
-          aspectRatio: 38 / 25,
-        }}
+      <TouchableWithoutFeedback
+        onPress={() =>
+          props.navigation.navigate('Modal', {
+            screen: Facade.route.SampleModal.name,
+          })
+        }
       >
-        <ImageView source={require('~src/assets/images/icon-plus-white.png')} />
+        <LinearLayout
+          my={6}
+          orientation="horiz"
+          width="100%"
+          alignItems="center"
+          justifyContent="center"
+          borderStyle="dashed"
+          borderColor="text.0"
+          borderRadius={17}
+          borderWidth={1}
+          style={{
+            aspectRatio: 38 / 25,
+          }}
+        >
+          <ImageView
+            source={require('~src/assets/images/icon-plus-white.png')}
+          />
 
-        <TextView color="white" fontSize={18} mt={2} ml={3} fontFamily="medium">
-          {Facade.t('screens.getWallet.addNewAccount')}
-        </TextView>
-      </LinearLayout>
+          <TextView
+            color="white"
+            fontSize={18}
+            mt={2}
+            ml={3}
+            fontFamily="medium"
+          >
+            {Facade.t('screens.getWallet.addNewAccount')}
+          </TextView>
+        </LinearLayout>
+      </TouchableWithoutFeedback>
     </ScreenLayout>
   )
 }

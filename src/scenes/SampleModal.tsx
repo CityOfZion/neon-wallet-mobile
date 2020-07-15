@@ -6,6 +6,7 @@ import {Facade} from '~src/app/Facade'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
+import ColorSelector from '~src/components/ColorSelector'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -65,7 +66,7 @@ export default function SampleModal(props: Props) {
         >
           {Facade.t('screens.createAccount.selectColor')}
         </TextView>
-        <TextView color={theme.colors.text[0]}>TODO: ColorSelector</TextView>
+        <ColorSelector />
       </LinearLayout>
     </SwiperPanel>
   )

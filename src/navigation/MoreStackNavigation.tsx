@@ -22,7 +22,6 @@ export type MoreStackParamList = {
   Step4CreateWallet: undefined
   Step5CreateWallet: undefined
   ListWallets: undefined
-  CustomColor: undefined
   Modal: {screen: string}
 }
 
@@ -106,19 +105,6 @@ const MoreStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.Step5CreateWallet.translate(),
               image: require('~src/assets/images/icon-add-circle-outline-white.png'),
-              theme,
-              route,
-            })
-          }
-        />
-
-        <MoreStack.Screen
-          name={Facade.route.CustomColor.name}
-          component={CustomColorPage}
-          options={({route}) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.CustomColor.translate(),
-              image: require('~src/assets/images/palette.png'),
               theme,
               route,
             })

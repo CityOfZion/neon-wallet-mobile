@@ -1,13 +1,22 @@
+import {RouteProp} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
 
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
-import ScreenLayout from '~src/components/layout/ScreenLayout'
+import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ColorPicker from '~src/components/misc/ColorPicker'
 import {Account} from '~src/models/Account'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
-const CustomColorPage: React.FC<object> = () => {
+interface Props {
+  navigation: StackNavigationProp<any>
+  route: RouteProp<ModalStackParamList, 'CustomColor'>
+}
+
+const CustomColorPage = (props: Props) => {
+  const controller = useSwiperController(true)
   const defaultCardColor = '#00aaff'
 
   const [color, setColor] = useState<string>(defaultCardColor)
@@ -25,28 +34,47 @@ const CustomColorPage: React.FC<object> = () => {
     setColor(hex)
   }
 
+  const pickAndClose = () => {
+    props.route.params.onColorPicked(color)
+    controller.close()
+  }
+
   return (
-    <ScreenLayout autoScroll={false} alignX={'center'}>
-      <LinearLayout mt={4} mb={5} maxWidth={320}>
-        <AccountCard account={account} />
-      </LinearLayout>
+    <SwiperPanel
+      controller={controller}
+      fullSize={true}
+      title={Facade.t('customColorPage.title')}
+      image={require('~src/assets/images/palette.png')}
+      leftButton={Facade.t('customColorPage.navigation.cancel')}
+      rightButton={Facade.t('customColorPage.navigation.done')}
+      onLeftPress={controller.close}
+      onRightPress={pickAndClose}
+      padding={16}
+      paddingTop={20}
+      onClose={() => props.navigation.goBack()}
+    >
+      <LinearLayout height="100%">
+        <LinearLayout mb={5} maxWidth={320} alignSelf="center">
+          <AccountCard account={account} />
+        </LinearLayout>
 
-      <TextView
-        mb={3}
-        color="text.0"
-        textAlign={'center'}
-        fontSize={'lg'}
-        allowFontScaling={true}
-        adjustsFontSizeToFit={true}
-        numberOfLines={1}
-      >
-        {Facade.t('customColorPage.subtitle')}
-      </TextView>
+        <TextView
+          mb={3}
+          color="text.0"
+          textAlign={'center'}
+          fontSize={'lg'}
+          allowFontScaling={true}
+          adjustsFontSizeToFit={true}
+          numberOfLines={1}
+        >
+          {Facade.t('customColorPage.subtitle')}
+        </TextView>
 
-      <LinearLayout weight={1}>
-        <ColorPicker color={color} onChange={colorPickerChangeEvent} />
+        <LinearLayout height={320} alignItems="center">
+          <ColorPicker color={color} onChange={colorPickerChangeEvent} />
+        </LinearLayout>
       </LinearLayout>
-    </ScreenLayout>
+    </SwiperPanel>
   )
 }
 
