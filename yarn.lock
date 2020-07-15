@@ -3957,10 +3957,10 @@ expo-linking@~1.0.0:
     qs "^6.5.0"
     url-parse "^1.4.4"
 
-expo-local-authentication@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/expo-local-authentication/-/expo-local-authentication-9.0.0.tgz#2e60f2a93424be93506bede11be7d2914503820b"
-  integrity sha512-ciRRpmDCHG/RMbyaQso4xjHGAfOvr3KsJdUz4Jx2wDPPTN3qwan2Rjgs87Ngpr7T8lBt6DaMCydhRItlF3FOcA==
+expo-local-authentication@^9.2.0:
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/expo-local-authentication/-/expo-local-authentication-9.2.0.tgz#7e52c34aba156c59b28b3833d93763e4dd0ca951"
+  integrity sha512-bg3yNx5E0AX7r3oJ6BdHMReNv1LX6ZfDqiDuugOxOgzycP+1oIY/LwU8nET6O3gSk4JiVogwjg3hFrtI+ksFJQ==
   dependencies:
     invariant "^2.2.4"
 

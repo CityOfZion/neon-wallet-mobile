@@ -7,10 +7,11 @@ import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {LoginStackParamList} from '~src/navigation/LoginStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList>
+  navigation: StackNavigationProp<RootStackParamList & LoginStackParamList>
 }
 
 export default function LoginPage(props: Props) {
@@ -62,7 +63,7 @@ export default function LoginPage(props: Props) {
             basic={true}
             label={Facade.t('login.continue')}
             fontFamily={'medium'}
-            onPress={() => console.log('TODO')}
+            onPress={() => props.navigation.replace(Facade.route.Passcode.name)}
           />
         </LinearLayout>
 

@@ -19,6 +19,12 @@ import WalletStackNavigation from '~src/navigation/WalletsStackNavigation'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 import WelcomePage from '~src/scenes/WelcomePage'
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
+import PasscodePage from '~src/scenes/LoginPage/PasscodePage'
+
+export type LoginStackParamList = {
+  Login: undefined
+  Passcode: undefined
+}
 
 const LoginStack = createStackNavigator()
 
@@ -73,6 +79,10 @@ const LoginStackNavigation = () => {
           <LoginStack.Screen
             name={Facade.route.Login.name}
             component={LoginPage}
+          />
+          <LoginStack.Screen
+            name={Facade.route.Passcode.name}
+            component={PasscodePage}
           />
         </LoginStack.Navigator>
       </ThemeProvider>
