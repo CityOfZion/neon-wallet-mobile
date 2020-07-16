@@ -347,6 +347,7 @@ export default function SwiperPanel(props: SwiperProps) {
           <View
             style={{
               width: '100%',
+
               borderTopLeftRadius: 30,
               borderTopRightRadius: 30,
               overflow: 'hidden',

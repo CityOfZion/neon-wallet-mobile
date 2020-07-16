@@ -3,6 +3,7 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {ROUTES} from '~/constants'
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
@@ -12,7 +13,12 @@ import Step3CreateWalletPage from '~src/scenes/CreateWalletPage/Step3CreateWalle
 import Step4CreateWalletPage from '~src/scenes/CreateWalletPage/Step4CreateWalletPage'
 import Step5CreateWalletPage from '~src/scenes/CreateWalletPage/Step5CreateWalletPage'
 import CustomColorPage from '~src/scenes/CustomColorPage'
+import CustomizeAccount from '~src/scenes/CustomizeAccount'
+import ImportKey from '~src/scenes/ImportKey'
+import ImportReadAccount from '~src/scenes/ImportReadAccount'
+import More from '~src/scenes/More'
 import MorePage from '~src/scenes/MorePage'
+import Passphrase from '~src/scenes/Passphrase'
 
 export type MoreStackParamList = {
   More: undefined
@@ -23,6 +29,12 @@ export type MoreStackParamList = {
   Step5CreateWallet: undefined
   ListWallets: undefined
   Modal: {screen: string}
+  ImportKey: undefined
+  CustomizeReadAccount: undefined
+  ImportReadAccount: undefined
+  Passphrase: undefined
+  CustomizeAccount: undefined
+  CustomColor: undefined
 }
 
 const MoreStack = createStackNavigator<MoreStackParamList>()
@@ -101,6 +113,79 @@ const MoreStackNavigation = () => {
         <MoreStack.Screen
           name={Facade.route.Step5CreateWallet.name}
           component={Step5CreateWalletPage}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.Step5CreateWallet.translate(),
+              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+              theme,
+              route,
+            })
+          }
+        />
+
+        <MoreStack.Screen
+          name={ROUTES.MORE.name}
+          component={More}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.Step5CreateWallet.translate(),
+              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+              theme,
+              route,
+            })
+          }
+        />
+        <MoreStack.Screen
+          name={ROUTES.IMPORT_KEY.name}
+          component={ImportKey}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.Step5CreateWallet.translate(),
+              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+              theme,
+              route,
+            })
+          }
+        />
+        <MoreStack.Screen
+          name={ROUTES.PASSPHRASE.name}
+          component={Passphrase}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.Step5CreateWallet.translate(),
+              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+              theme,
+              route,
+            })
+          }
+        />
+        <MoreStack.Screen
+          name={ROUTES.IMPORT_READ_ACCOUNT.name}
+          component={ImportReadAccount}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.Step5CreateWallet.translate(),
+              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+              theme,
+              route,
+            })
+          }
+        />
+        <MoreStack.Screen
+          name={ROUTES.CUSTOMIZE_ACCOUNT.name}
+          component={CustomizeAccount}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.Step5CreateWallet.translate(),
+              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+              theme,
+              route,
+            })
+          }
+        />
+        <MoreStack.Screen
+          name={ROUTES.CUSTOM_COLOR.name}
+          component={CustomColorPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.Step5CreateWallet.translate(),
