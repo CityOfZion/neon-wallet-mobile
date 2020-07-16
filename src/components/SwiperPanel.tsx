@@ -234,7 +234,13 @@ export default function SwiperPanel(props: SwiperProps) {
             }}
           >
             {props.image ? (
-              <ImageView height={20} width={20} mr="6px" source={props.image} />
+              <ImageView
+                resizeMode="contain"
+                height={20}
+                width={20}
+                mr="6px"
+                source={props.image}
+              />
             ) : undefined}
 
             <TextView
@@ -358,7 +364,8 @@ export default function SwiperPanel(props: SwiperProps) {
                 {
                   paddingLeft,
                   paddingRight,
-                  paddingTop: props.noHeader && !props.draggable ? paddingTop : 0,
+                  paddingTop:
+                    props.noHeader && !props.draggable ? paddingTop : 0,
                 },
                 props.fullSize ? {height: MAX_HEIGHT} : {},
               ]}
