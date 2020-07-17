@@ -15,8 +15,6 @@ interface Props {
 }
 
 export default function LoginPage(props: Props) {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
-
   return (
     <ScreenLayout
       useHeaderPadding={false}
@@ -63,7 +61,7 @@ export default function LoginPage(props: Props) {
             basic={true}
             label={Facade.t('login.continue')}
             fontFamily={'medium'}
-            onPress={() => props.navigation.replace(Facade.route.Passcode.name)}
+            onPress={() => props.navigation.navigate(Facade.route.Passcode.name)}
           />
         </LinearLayout>
 

@@ -11,19 +11,16 @@ import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import FooterBar from '~src/components/layout/FooterBar'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import ContactsStackNavigation from '~src/navigation/ContactsStackNavigation'
-import MoreStackNavigation from '~src/navigation/MoreStackNavigation'
-import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation'
-import SettingsStackNavigation from '~src/navigation/SettingsStackNavigation'
-import WalletStackNavigation from '~src/navigation/WalletsStackNavigation'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 import WelcomePage from '~src/scenes/WelcomePage'
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import PasscodePage from '~src/scenes/LoginPage/PasscodePage'
+import ConfirmPasscodePage from '~src/scenes/LoginPage/ConfirmPasscodePage'
 
 export type LoginStackParamList = {
   Login: undefined
-  Passcode: undefined
+  Passcode: {showError: boolean}
+  ConfirmPasscode: {passcode: number[]}
 }
 
 const LoginStack = createStackNavigator()
@@ -84,7 +81,11 @@ const LoginStackNavigation = () => {
             name={Facade.route.Passcode.name}
             component={PasscodePage}
           />
-        </LoginStack.Navigator>
+          <LoginStack.Screen
+            name={Facade.route.ConfirmPasscode.name}
+            component={ConfirmPasscodePage}
+          />
+      </LoginStack.Navigator>
       </ThemeProvider>
     </AwaitActivity>
   )

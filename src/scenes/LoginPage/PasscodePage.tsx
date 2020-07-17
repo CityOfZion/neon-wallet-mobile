@@ -1,21 +1,66 @@
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import React from 'react'
-import {Text, TouchableWithoutFeedback} from 'react-native'
+import React, {useState, useEffect} from 'react'
+import {TouchableOpacity, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import Keypad from '~src/components/Keypad'
+import PasscodeBar from '~src/components/PasscodeBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import ThemedButton from '~src/components/themed/ThemedButton'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ImageView, LinearLayout, RelativeLayout, TextView} from '~src/styles/styled-components'
-import { NativeModulesProxy } from '@unimodules/core';
+import {LoginStackParamList} from '~src/navigation/LoginStackNavigation'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList>
+  navigation: StackNavigationProp<LoginStackParamList & RootStackParamList>
+  route: RouteProp<LoginStackParamList, 'Passcode'>
 }
 
-export default function PasscodePage(props: Props) {
+export const PASSCODE_LENGTH = 5
+
+export const PasscodeHeader = (props: {
+  navigation: StackNavigationProp<any>
+}) => {
+  return (
+    <LinearLayout mt={32} mb={68} orientation="horiz">
+      <LinearLayout flex={1} />
+      <ImageView source={require('~/src/assets/images/icon-lock.png')} />
+      <LinearLayout flex={1} alignItems="flex-end" justifyContent="center">
+        <TouchableWithoutFeedback onPress={props.navigation.goBack}>
+          <TextView py="4px" fontSize={16} color="text.0">
+            {Facade.t('passcode.cancel')}
+          </TextView>
+        </TouchableWithoutFeedback>
+      </LinearLayout>
+    </LinearLayout>
+  )
+}
+
+const PasscodePage = (props: Props) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const [passcode, setPasscode] = useState<number[]>([])
+  const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false)
+  console.log(props.route.params?.showError)
+
+  useEffect(() => {
+    if (passcode.length === PASSCODE_LENGTH) {
+      setPasscode([])
+      props.navigation.navigate(Facade.route.ConfirmPasscode.name, {
+        passcode,
+      })
+    }
+  }, [passcode])
+
+  useEffect(() => {
+    setShowErrorMessage(
+      (props.route.params?.showError ?? false) && passcode.length === 0
+    )
+  })
+
+  const clickKey = (number: number) => {
+    setPasscode(passcode.concat(number))
+  }
 
   return (
     <ScreenLayout
@@ -25,21 +70,28 @@ export default function PasscodePage(props: Props) {
       alignX="center"
       padding={16}
     >
-      <LinearLayout
-        mt={32}
-        orientation="horiz">
-        <LinearLayout flex={1} />
-        <ImageView source={require('~/src/assets/images/icon-lock.png')} />
-        <LinearLayout flex={1} alignItems="flex-end" justifyContent="center">
-          <TextView
-            fontSize={16}
-            color="text.0"
-          >Cancel</TextView>
-        </LinearLayout>
+      <PasscodeHeader navigation={props.navigation} />
+
+      <TextView fontSize={22} color="text.0" mb={18}>
+        {Facade.t('passcode.enter')}
+      </TextView>
+
+      <PasscodeBar data={passcode} length={PASSCODE_LENGTH} />
+
+      <LinearLayout height="148px" pt="24px">
+        {showErrorMessage ? (
+          <TextView color="primary" fontSize={22}>
+            {Facade.t('passcode.error')}
+          </TextView>
+        ) : undefined}
       </LinearLayout>
-      <TouchableWithoutFeedback onPress={() => NativeModulesProxy.ExpoLocalAuthentication.authenticateAsync().then(value => console.log(value))}>
-        <LinearLayout bg={'red'} height={50} width={600} />
-      </TouchableWithoutFeedback>
+
+      <Keypad
+        onClick={clickKey}
+        disabled={passcode.length >= PASSCODE_LENGTH}
+      />
     </ScreenLayout>
   )
 }
+
+export default PasscodePage

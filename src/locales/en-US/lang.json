@@ -67,6 +67,12 @@
     "continue": "Continue",
     "skip": "skip"
   },
+  "passcode": {
+    "enter": "Enter Passcode",
+    "confirm": "Confirm Passcode",
+    "error": "Passcodes did not match. Try again",
+    "cancel": "Cancel"
+  },
   "onboarding": {
     "feature1": {
       "title": "The original wallet on the move",
