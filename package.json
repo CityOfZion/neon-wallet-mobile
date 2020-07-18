@@ -39,7 +39,7 @@
     "expo-blur": "^8.1.2",
     "expo-font": "^8.1.1",
     "expo-linear-gradient": "^8.1.0",
-    "expo-local-authentication": "^9.0.0",
+    "expo-local-authentication": "^9.2.0",
     "expo-updates": "~0.2.0",
     "i18n-js": "^3.5.1",
     "lodash": "^4.17.15",

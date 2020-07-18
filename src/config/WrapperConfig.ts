@@ -38,6 +38,8 @@ export class WrapperConfig {
     'SendWalletSelectionModal',
     'SendTransactionConfirmationModal',
     'Login',
+    'Passcode',
+    'ConfirmPasscode',
     'WalletContextModal'
   ] as const
 }
