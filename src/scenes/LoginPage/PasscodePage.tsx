@@ -54,7 +54,7 @@ const PasscodePage = (props: Props) => {
 
   useEffect(() => {
     setShowErrorMessage(
-      (props.route.params?.showError ?? false) && passcode.length === 0
+      (props.route.params?.showError ?? false)
     )
   })
 
@@ -78,7 +78,7 @@ const PasscodePage = (props: Props) => {
 
       <PasscodeBar data={passcode} length={PASSCODE_LENGTH} />
 
-      <LinearLayout height="148px" pt="24px">
+      <LinearLayout pt="24px">
         {showErrorMessage ? (
           <TextView color="primary" fontSize={22}>
             {Facade.t('passcode.error')}

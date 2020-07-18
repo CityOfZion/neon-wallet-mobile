@@ -57,7 +57,7 @@ const ConfirmPasscodePage = (props: Props) => {
 
       <PasscodeBar data={passcode} length={PASSCODE_LENGTH} />
 
-      <LinearLayout height="148px" pt="24px" />
+      <LinearLayout pt="24px" />
 
       <Keypad onClick={clickKey} disabled={passcode.length >= PASSCODE_LENGTH} />
 

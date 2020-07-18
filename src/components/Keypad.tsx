@@ -1,7 +1,7 @@
-import React, {Fragment} from 'react'
-import {TouchableOpacity} from 'react-native'
-
 import PropTypes from 'prop-types'
+import React, {Fragment} from 'react'
+import {TouchableOpacity, View} from 'react-native'
+
 import {Facade} from '~src/app/Facade'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -83,7 +83,7 @@ const Keypad = (props: Props) => {
           <LinearLayout
             width="75px"
             height="75px"
-            bg="background.11"
+            bg="background.10"
             opacity={0.28}
             borderRadius="9999px"
             position="relative"
