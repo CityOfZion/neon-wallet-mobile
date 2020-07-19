@@ -87,7 +87,6 @@ export default function SwiperPanel(props: SwiperProps) {
   const [state, setState] = useState(State.CLOSED)
 
   const scrollView = useRef<ScrollView>(null)
-
   const paddingLeft = props.paddingLeft ?? props.padding
   const paddingRight = props.paddingRight ?? props.padding
   const paddingTop = props.paddingTop ?? props.padding
@@ -382,6 +381,7 @@ export default function SwiperPanel(props: SwiperProps) {
                   flexDirection: 'column',
                   justifyContent: 'flex-start',
                 }}
+                alwaysBounceVertical={false}
               >
                 <TouchableHighlight>
                   <Fragment>
