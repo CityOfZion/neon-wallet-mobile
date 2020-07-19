@@ -44,6 +44,7 @@
     "expo-updates": "~0.2.0",
     "i18n-js": "^3.5.1",
     "lodash": "^4.17.15",
+    "moment": "^2.27.0",
     "prettier": "^2.0.5",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",

@@ -14,10 +14,10 @@ import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {mockEmptyWallet, mockWalletItems} from '~src/mocks/mockWalletItems'
 import {Account} from '~src/models/Account'
 import {Wallet} from '~src/models/Wallet'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
 
 interface WalletProps {
   navigation: StackNavigationProp<WalletStackParamList | RootStackParamList>
@@ -100,7 +100,13 @@ const ListWalletView = (props: WalletProps) => {
       padding={0}
     >
       <LinearLayout alignSelf={'flex-end'}>
-        <ThemedMoreButton onPress={() => props.navigation.navigate('Modal', {screen: Facade.route.WalletContextModal.name})} />
+        <ThemedMoreButton
+          onPress={() =>
+            props.navigation.navigate('Modal', {
+              screen: Facade.route.WalletContextModal.name,
+            })
+          }
+        />
       </LinearLayout>
 
       <LinearLayout

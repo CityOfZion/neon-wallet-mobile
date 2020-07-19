@@ -3,10 +3,10 @@ import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
+import ColorSelector from '~src/components/ColorSelector'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-import ColorSelector from '~src/components/ColorSelector'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>

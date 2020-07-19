@@ -8,8 +8,10 @@ import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
 import {Account} from '~src/models/Account'
+import AccountAssetDetail from '~src/scenes/AccountAssetDetail'
 import ReceiveQRCode from '~src/scenes/ReceiveQRCode'
 import QRCodeScanTest from '~src/scenes/TestPage/QRCodeScanTest'
+import {RootState} from '~src/store/reducers/root'
 
 export type QuickToolsStackParamList = {
   Home: undefined
@@ -21,6 +23,7 @@ export type QuickToolsStackParamList = {
   Onboarding: undefined
   GetWallet: undefined
   GetAccount: {account: Account} & HeaderActionButtonProps & HeaderCustomProps
+  AccountAssetDetail: {account: Account} & HeaderCustomProps
 }
 
 const QuickToolsStack = createStackNavigator<QuickToolsStackParamList>()
@@ -51,6 +54,17 @@ const QuickToolsStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               title: Facade.t(`routes.${Facade.route.QrCodeScanTest.name}`),
               image: require('~src/assets/images/icon-qrcode-white.png'),
+              theme,
+              route,
+            })
+          }
+        />
+
+        <QuickToolsStack.Screen
+          name={Facade.route.AccountAssetDetail.name}
+          component={AccountAssetDetail}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
               theme,
               route,
             })

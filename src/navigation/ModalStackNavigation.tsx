@@ -6,11 +6,11 @@ import {ThemeProvider} from 'styled-components'
 import {Facade} from '~src/app/Facade'
 import CustomColorPage from '~src/scenes/CustomColorPage'
 import ReceiveWalletSelectionModal from '~src/scenes/ReceiveWalletSelectionModal'
+import ReoderWalletModal from '~src/scenes/ReorderWalletModal'
 import SampleModal from '~src/scenes/SampleModal'
+import WalletContextModal from '~src/scenes/WalletContextModal'
 import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionConfirmationModal'
 import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
-import WalletContextModal from '~src/scenes/WalletContextModal'
-import ReoderWalletModal from '~src/scenes/ReorderWalletModal'
 
 export type ModalStackParamList = {
   SampleModal: undefined

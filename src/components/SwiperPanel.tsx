@@ -15,8 +15,8 @@ import {
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {TextView, ImageView} from '~src/styles/styled-components'
 import {Facade} from '~src/app/Facade'
+import {TextView, ImageView} from '~src/styles/styled-components'
 
 const PANEL_OFFSET = 50
 const ANIMATION_DELTA_THRESHOLD = 50

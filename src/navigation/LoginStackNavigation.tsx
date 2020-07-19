@@ -11,11 +11,11 @@ import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import FooterBar from '~src/components/layout/FooterBar'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import OnboardingPage from '~src/scenes/OnboardingPage'
-import WelcomePage from '~src/scenes/WelcomePage'
+import ConfirmPasscodePage from '~src/scenes/LoginPage/ConfirmPasscodePage'
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import PasscodePage from '~src/scenes/LoginPage/PasscodePage'
-import ConfirmPasscodePage from '~src/scenes/LoginPage/ConfirmPasscodePage'
+import OnboardingPage from '~src/scenes/OnboardingPage'
+import WelcomePage from '~src/scenes/WelcomePage'
 
 export type LoginStackParamList = {
   Login: undefined
@@ -85,7 +85,7 @@ const LoginStackNavigation = () => {
             name={Facade.route.ConfirmPasscode.name}
             component={ConfirmPasscodePage}
           />
-      </LoginStack.Navigator>
+        </LoginStack.Navigator>
       </ThemeProvider>
     </AwaitActivity>
   )

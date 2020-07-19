@@ -1,6 +1,4 @@
-import {
-  createStackNavigator,
-} from '@react-navigation/stack'
+import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
