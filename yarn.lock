@@ -1790,6 +1790,14 @@
     "@types/react" "*"
     "@types/react-native" "*"
 
+"@types/react-native-sortable-list@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@types/react-native-sortable-list/-/react-native-sortable-list-0.0.9.tgz#ab8242aff250e464c425ec53898bb5a3d89510a3"
+  integrity sha512-Do8xXJ+1QL0m2jKjawRmcE5ySsveXXB1TzCvxdtjiDJCHvLyrRhpzDHjWn9kt9fmTJJswmm65URPZXC4FDMYLw==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native@*":
   version "0.62.12"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.62.12.tgz#24407983b527749f37b512cd5d2bdc6133810b17"
@@ -7399,6 +7407,13 @@ react-native-snap-carousel@^3.9.1:
   dependencies:
     prop-types "^15.6.1"
     react-addons-shallow-compare "15.6.2"
+
+react-native-sortable-list@^0.0.24:
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/react-native-sortable-list/-/react-native-sortable-list-0.0.24.tgz#b71e469fd34f77ec87d827a8a29b94f9e0197978"
+  integrity sha512-UomAYeTeTpkuPmcRcqFd3mzKioVaD/+yDAlsivKjBnQoV9aEBd2SNthoxaSsYWTwoadBOStthZj2vIXMMC3+XQ==
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-svg@^12.1.0:
   version "12.1.0"

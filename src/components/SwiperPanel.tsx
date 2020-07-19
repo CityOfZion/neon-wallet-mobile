@@ -87,7 +87,6 @@ export default function SwiperPanel(props: SwiperProps) {
   const [state, setState] = useState(State.CLOSED)
 
   const scrollView = useRef<ScrollView>(null)
-
   const paddingLeft = props.paddingLeft ?? props.padding
   const paddingRight = props.paddingRight ?? props.padding
   const paddingTop = props.paddingTop ?? props.padding
@@ -234,7 +233,13 @@ export default function SwiperPanel(props: SwiperProps) {
             }}
           >
             {props.image ? (
-              <ImageView height={20} width={20} mr="6px" source={props.image} />
+              <ImageView
+                resizeMode="contain"
+                height={20}
+                width={20}
+                mr="6px"
+                source={props.image}
+              />
             ) : undefined}
 
             <TextView
@@ -358,7 +363,8 @@ export default function SwiperPanel(props: SwiperProps) {
                 {
                   paddingLeft,
                   paddingRight,
-                  paddingTop: props.noHeader && !props.draggable ? paddingTop : 0,
+                  paddingTop:
+                    props.noHeader && !props.draggable ? paddingTop : 0,
                 },
                 props.fullSize ? {height: MAX_HEIGHT} : {},
               ]}
@@ -375,6 +381,7 @@ export default function SwiperPanel(props: SwiperProps) {
                   flexDirection: 'column',
                   justifyContent: 'flex-start',
                 }}
+                alwaysBounceVertical={false}
               >
                 <TouchableHighlight>
                   <Fragment>

@@ -83,7 +83,7 @@ const Keypad = (props: Props) => {
           <LinearLayout
             width="75px"
             height="75px"
-            bg="background.10"
+            bg="background.11"
             opacity={0.28}
             borderRadius="9999px"
             position="relative"
