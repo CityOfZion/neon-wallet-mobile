@@ -7,11 +7,11 @@ import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
 import {Account} from '~src/models/Account'
+import AccountAssetDetail from '~src/scenes/AccountAssetDetail'
 import GetAccountView from '~src/scenes/GetAccountView'
 import GetWalletView from '~src/scenes/GetWalletView'
 import ListWalletView from '~src/scenes/ListWalletView'
 import {RootState} from '~src/store/reducers/root'
-import AccountAssetDetail from '~src/scenes/AccountAssetDetail'
 
 export type WalletStackParamList = {
   ListWallets: undefined
@@ -19,9 +19,6 @@ export type WalletStackParamList = {
   GetAccount: {account: Account} & HeaderCustomProps
   AccountAssetDetail: {account: Account} & HeaderCustomProps
 }
-
-
-
 
 const WalletStack = createStackNavigator<WalletStackParamList>()
 

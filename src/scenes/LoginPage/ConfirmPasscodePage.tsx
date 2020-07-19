@@ -1,20 +1,20 @@
-import {StackNavigationProp} from '@react-navigation/stack'
 import {RouteProp} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState, useEffect} from 'react'
-import { TouchableWithoutFeedback} from 'react-native'
+import {TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import Keypad from '~src/components/Keypad'
 import PasscodeBar from '~src/components/PasscodeBar'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {LoginStackParamList} from '~src/navigation/LoginStackNavigation'
 import {
   PasscodeHeader,
   PASSCODE_LENGTH,
 } from '~src/scenes/LoginPage/PasscodePage'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<LoginStackParamList & RootStackParamList>
@@ -59,8 +59,10 @@ const ConfirmPasscodePage = (props: Props) => {
 
       <LinearLayout pt="24px" />
 
-      <Keypad onClick={clickKey} disabled={passcode.length >= PASSCODE_LENGTH} />
-
+      <Keypad
+        onClick={clickKey}
+        disabled={passcode.length >= PASSCODE_LENGTH}
+      />
     </ScreenLayout>
   )
 }

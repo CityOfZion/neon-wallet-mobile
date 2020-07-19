@@ -1,18 +1,14 @@
+import moment from 'moment'
 import React from 'react'
 
 import {Facade} from '~src/app/Facade'
-import {
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
 import {
   Receiver,
   Transaction,
   TransactionModel,
   Asset,
 } from '~src/models/TransactionModel'
-import moment from 'moment'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
   transactionModel: TransactionModel | null
@@ -20,14 +16,13 @@ interface Props {
   index?: number | 0
 }
 const TransactionsList: React.FC<Props> = (props) => {
-
   const _renderTransaction = () => {
     if (props.transactionModel && props.transactionModel.transactions) {
       return props.transactionModel.transactions.map(
         (transaction: Transaction, index: number) => {
           return (
             <LinearLayout orientation="horiz">
-              <LinearLayout orientation="vert" mr="8px" mt='5px'>
+              <LinearLayout orientation="vert" mr="8px" mt="5px">
                 {index == 0 && (
                   <ImageView
                     alignSelf="center"
@@ -79,17 +74,13 @@ const TransactionsList: React.FC<Props> = (props) => {
     }
   }
 
-
-
   const _renderReceivers = (transaction: Transaction, indexTrans: number) => {
-    if (transaction && transaction.receiver) {
+    if (transaction?.receiver) {
       return transaction.receiver.map((receiver: Receiver, index: number) => {
         return (
           <LinearLayout orientation="verti">
-            {transaction &&
-              transaction.receiver &&
-            (index > 0 ||
-              indexTrans > 0 )&&
+            {transaction?.receiver &&
+              (index > 0 || indexTrans > 0) &&
               transaction.receiver.length > 1 && (
                 <LinearLayout
                   mt="10px"
@@ -130,8 +121,14 @@ const TransactionsList: React.FC<Props> = (props) => {
     if (rec.assets) {
       return rec.assets.map((asset: Asset, i: number) => {
         return (
-          <LinearLayout orientation="horiz" mb='5px'>
-            <ImageView height='17px' width='17px' alignSelf="center" mr="4px" source={asset.srcIcon} />
+          <LinearLayout orientation="horiz" mb="5px">
+            <ImageView
+              height="17px"
+              width="17px"
+              alignSelf="center"
+              mr="4px"
+              source={asset.srcIcon}
+            />
             <TextView fontSize="16px" color="text.0" marginRight="30px">
               {asset.nameSymbol}
             </TextView>
@@ -145,9 +142,15 @@ const TransactionsList: React.FC<Props> = (props) => {
   }
 
   return (
-    <LinearLayout orientation="verti" >
+    <LinearLayout orientation="verti">
       {props.index == 0 && (
-        <TextView color="text.2" fontSize="14px" fontFamily="medium" mb="12px" mt='12px'>
+        <TextView
+          color="text.2"
+          fontSize="14px"
+          fontFamily="medium"
+          mb="12px"
+          mt="12px"
+        >
           {props.isHistory &&
           props.transactionModel &&
           props.transactionModel.date

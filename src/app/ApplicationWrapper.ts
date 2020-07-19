@@ -1,6 +1,6 @@
 import {Config} from '~src/app/Config'
-import {Route} from '~src/app/Route'
 import {DataKey} from '~src/app/DataKey'
+import {Route} from '~src/app/Route'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
 export class ApplicationWrapper {

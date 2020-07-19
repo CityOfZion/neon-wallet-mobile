@@ -64,16 +64,7 @@ const Home = (props: Props) => {
             label={'Sample Modal Page'}
           />
         </LinearLayout>
-
-
-
-
-
       </LinearLayout>
-
-
-
-
       <LinearLayout alignItems="flex-end">
         <TextView color="text.0"> Version: {expo.version}</TextView>
       </LinearLayout>

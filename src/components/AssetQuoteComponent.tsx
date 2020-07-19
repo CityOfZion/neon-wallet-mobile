@@ -1,7 +1,8 @@
 import React from 'react'
+
+import {FilterHelper} from '~src/helpers/FilterHelper'
 import {AssetQuoteModel} from '~src/models/AssetQuoteModel'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import {FilterHelper} from '~src/helpers/FilterHelper'
 
 interface Props {
   assetQuote: AssetQuoteModel
@@ -13,18 +14,23 @@ const AssetQuoteComponent: React.FC<Props> = (props) => {
   const quoteText = `${props.assetQuote.name} 1 = ${
     props.assetQuote.currencySymbol
   } ${FilterHelper.decimal(quoteOfAsset, 2)}`
-  const valueText = `${props.assetQuote.currencySymbol} ${FilterHelper.decimal(quoteOfAsset, 2)}`
+  const valueText = `${props.assetQuote.currencySymbol} ${FilterHelper.decimal(
+    quoteOfAsset,
+    2
+  )}`
 
   return (
-    <LinearLayout orientation={'horiz'}
-                  width={'100%'} height={50}
-                  marginTop={15}
-                  alignItems='center'>
+    <LinearLayout
+      orientation={'horiz'}
+      width={'100%'}
+      height={50}
+      marginTop={15}
+      alignItems="center"
+    >
       <ImageView
         width={35}
         height={35}
-
-        marginRight='10px'
+        marginRight="10px"
         source={require('~src/assets/images/Bitmap_Copy.png')}
       />
 
@@ -49,7 +55,13 @@ const AssetQuoteComponent: React.FC<Props> = (props) => {
         </TextView>
       </LinearLayout>
 
-      <LinearLayout alignItems='flex-end' weight={2} orientation={'verti'} width={'100%'} height={'100%'}>
+      <LinearLayout
+        alignItems="flex-end"
+        weight={2}
+        orientation={'verti'}
+        width={'100%'}
+        height={'100%'}
+      >
         <TextView
           fontFamily={'medium'}
           fontSize={18}
@@ -76,7 +88,5 @@ const AssetQuoteComponent: React.FC<Props> = (props) => {
     </LinearLayout>
   )
 }
-
-
 
 export default AssetQuoteComponent

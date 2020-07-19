@@ -2,10 +2,10 @@ import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {StyleProp} from 'react-native'
+import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import styled, {LinearLayout} from '~src/styles/styled-components'
-import {useSelector} from 'react-redux'
 
 interface Props {
   children?: any

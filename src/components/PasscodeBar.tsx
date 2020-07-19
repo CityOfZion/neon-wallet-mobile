@@ -25,11 +25,7 @@ const PasscodeBar = (props: Props) => {
       />
     )
   }
-  return (
-    <LinearLayout orientation="horiz">
-      {elements}
-    </LinearLayout>
-  )
+  return <LinearLayout orientation="horiz">{elements}</LinearLayout>
 }
 
 PasscodeBar.propTypes = {

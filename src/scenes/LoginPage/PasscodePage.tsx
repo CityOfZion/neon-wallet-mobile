@@ -53,9 +53,7 @@ const PasscodePage = (props: Props) => {
   }, [passcode])
 
   useEffect(() => {
-    setShowErrorMessage(
-      (props.route.params?.showError ?? false)
-    )
+    setShowErrorMessage(props.route.params?.showError ?? false)
   })
 
   const clickKey = (number: number) => {

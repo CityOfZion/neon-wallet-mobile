@@ -7,14 +7,13 @@ export class TransactionModel {
 }
 
 export class Transaction {
-  receiver ?: Receiver[]
+  receiver?: Receiver[]
 }
 
-export class Receiver{
+export class Receiver {
   isAddress?: boolean
   nameOrAdress?: string
   assets?: Asset[]
-
 }
 
 export class Asset {
@@ -22,4 +21,3 @@ export class Asset {
   nameSymbol?: string
   value?: number
 }
-

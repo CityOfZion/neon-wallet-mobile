@@ -8,11 +8,11 @@ import BalanceList from '~src/components/BalanceList'
 import TransactionsList from '~src/components/TransactionsList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {mockAccountAssetDetails} from '~src/mocks/mockAccountAssetDetails'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
+import {TransactionModel} from '~src/models/TransactionModel'
 import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
 import {ButtonView, LinearLayout, TextView} from '~src/styles/styled-components'
-import {mockAccountAssetDetails} from '~src/mocks/mockAccountAssetDetails'
-import {TransactionModel} from '~src/models/TransactionModel'
 
 interface TabSelectorProps {
   isAssetsTabSelected: boolean
@@ -75,23 +75,33 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const {account} = props.route.params
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
 
-  const  _renderTransactionViewElement = () => {
-
-
-    return mockAccountAssetDetails.map((transActionModel: TransactionModel, i: number) =>{
-
-      return <TransactionsList key={i} isHistory={false} transactionModel={transActionModel} index={i}/>
-
-    })
-
+  const _renderTransactionViewElement = () => {
+    return mockAccountAssetDetails.map(
+      (transActionModel: TransactionModel, i: number) => {
+        return (
+          <TransactionsList
+            key={i}
+            isHistory={false}
+            transactionModel={transActionModel}
+            index={i}
+          />
+        )
+      }
+    )
   }
 
   return (
     <ScreenLayout>
       <LinearLayout mt={4}>
-        <AccountCard account={account} isCompacted={true} onPress={() =>
-          props.navigation.navigate(Facade.route.AccountAssetDetail.name, {account })
-        }/>
+        <AccountCard
+          account={account}
+          isCompacted={true}
+          onPress={() =>
+            props.navigation.navigate(Facade.route.AccountAssetDetail.name, {
+              account,
+            })
+          }
+        />
       </LinearLayout>
 
       <LinearLayout mt="28px" mx="auto">
