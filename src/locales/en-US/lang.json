@@ -67,6 +67,12 @@
     "continue": "Continue",
     "skip": "skip"
   },
+  "passcode": {
+    "enter": "Enter Passcode",
+    "confirm": "Confirm Passcode",
+    "error": "Passcodes did not match. Try again",
+    "cancel": "Cancel"
+  },
   "onboarding": {
     "feature1": {
       "title": "The original wallet on the move",
@@ -228,6 +234,12 @@
       "create": "Create new wallet",
       "reorder": "Reorder wallets",
       "cancel": "Cancel"
+    },
+    "reorderWallet": {
+      "title": "Reorder wallets",
+      "subtitle": "Drag a wallet to a new position to reorder",
+      "cancel": "Cancel",
+      "save": "Save"
     }
   },
   "components": {

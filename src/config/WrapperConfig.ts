@@ -40,6 +40,8 @@ export class WrapperConfig {
     'Login',
     'WalletContextModal',
     'AccountAssetDetail'
-
+    'ReoderWalletModal',
+    'Passcode',
+    'ConfirmPasscode',
   ] as const
 }

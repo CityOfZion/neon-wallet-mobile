@@ -10,6 +10,7 @@ import SampleModal from '~src/scenes/SampleModal'
 import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionConfirmationModal'
 import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
 import WalletContextModal from '~src/scenes/WalletContextModal'
+import ReoderWalletModal from '~src/scenes/ReorderWalletModal'
 
 export type ModalStackParamList = {
   SampleModal: undefined
@@ -18,6 +19,7 @@ export type ModalStackParamList = {
   SendTransactionConfirmationModal: undefined
   CustomColor: {onColorPicked: (hex: string) => void}
   WalletContextModal: undefined
+  ReoderWalletModal: undefined
 }
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
@@ -55,6 +57,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={Facade.route.WalletContextModal.name}
           component={WalletContextModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.ReoderWalletModal.name}
+          component={ReoderWalletModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

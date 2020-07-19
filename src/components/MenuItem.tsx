@@ -95,7 +95,7 @@ const MenuItem = (props: MenuItemProps) => {
         </LinearLayout>
         <LinearLayout
           height={1}
-          backgroundColor="#667178"
+          bg="background.10"
           alignSelf="stretch"
         />
       </LinearLayout>
