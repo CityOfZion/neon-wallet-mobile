@@ -52,12 +52,15 @@ const ConfirmPasscodePage = (props: Props) => {
       <PasscodeHeader navigation={props.navigation} />
 
       <TextView fontSize={22} color="text.0" mb={18}>
-        Confirm passcode
+        {Facade.t('passcode.confirm')}
       </TextView>
 
       <PasscodeBar data={passcode} length={PASSCODE_LENGTH} />
 
-      <LinearLayout pt="24px" />
+      {/*Opacity is always zero, just to reserve the space so the keypad doesn't bounce*/}
+      <TextView color="primary" fontSize={22} opacity={0} my={18}>
+        {Facade.t('passcode.error')}
+      </TextView>
 
       <Keypad
         onClick={clickKey}

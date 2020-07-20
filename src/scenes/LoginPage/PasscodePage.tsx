@@ -53,7 +53,9 @@ const PasscodePage = (props: Props) => {
   }, [passcode])
 
   useEffect(() => {
-    setShowErrorMessage(props.route.params?.showError ?? false)
+    setShowErrorMessage(
+      (props.route.params?.showError ?? false) && passcode.length === 0
+    )
   })
 
   const clickKey = (number: number) => {
@@ -76,13 +78,14 @@ const PasscodePage = (props: Props) => {
 
       <PasscodeBar data={passcode} length={PASSCODE_LENGTH} />
 
-      <LinearLayout pt="24px">
-        {showErrorMessage ? (
-          <TextView color="primary" fontSize={22}>
-            {Facade.t('passcode.error')}
-          </TextView>
-        ) : undefined}
-      </LinearLayout>
+      <TextView
+        color="primary"
+        fontSize={22}
+        opacity={showErrorMessage ? 1 : 0}
+        my={18}
+      >
+        {Facade.t('passcode.error')}
+      </TextView>
 
       <Keypad
         onClick={clickKey}
