@@ -1298,17 +1298,18 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@moonlight-io/asteroid-sdk-js@file:../asteroid-sdk-js":
-  version "0.16.0"
+"@moonlight-io/asteroid-sdk-js@git+https://github.com/Moonlight-io/asteroid-sdk-js":
+  version "0.20.1"
+  resolved "git+https://github.com/Moonlight-io/asteroid-sdk-js#99296bf6d2ffe8731ef72056d0601b81080d6c6f"
   dependencies:
     "@cityofzion/neon-js" "^4.7.1"
-    "@types/lodash" "^4.14.149"
-    axios "^0.19.0"
+    "@types/lodash" "^4.14.157"
+    axios "^0.19.2"
     bip39 "^3.0.2"
     bs58 "^4.0.1"
     build-url "^2.0.0"
     crypto "^1.0.1"
-    elliptic "^6.5.2"
+    elliptic "^6.5.3"
     json-rpc-error "^2.0.0"
     lodash "^4.17.15"
     node-log-it "^2.0.0"
@@ -1740,7 +1741,7 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.155.tgz#e2b4514f46a261fd11542e47519c20ebce7bc23a"
   integrity sha512-vEcX7S7aPhsBCivxMwAANQburHBtfN9RdyXFk84IJmu2Z4Hkg1tOFgaslRiEqqvoLtbCBi6ika1EMspE+NZ9Lg==
 
-"@types/lodash@^4.14.149":
+"@types/lodash@^4.14.157":
   version "4.14.157"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.157.tgz#fdac1c52448861dfde1a2e1515dbc46e54926dc8"
   integrity sha512-Ft5BNFmv2pHDgxV5JDsndOWTRJ+56zte0ZpYLowp03tW+K+t8u8YMOzAnpuqPgzX6WO1XpDIUm7u04M8vdDiVQ==
@@ -2288,7 +2289,7 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.10.0.tgz#a17b3a8ea811060e74d47d306122400ad4497ae2"
   integrity sha512-3YDiu347mtVtjpyV3u5kVqQLP242c06zwDOgpeRnybmXlYYsLbtTrUBUm8i8srONt+FWobl5aibnU1030PeeuA==
 
-axios@0.19.2, axios@^0.19.0, axios@^0.19.2:
+axios@0.19.2, axios@^0.19.2:
   version "0.19.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
   integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
@@ -3476,7 +3477,7 @@ elliptic@6.5.2:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.0"
 
-elliptic@^6.5.2:
+elliptic@^6.5.3:
   version "6.5.3"
   resolved "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.3.tgz#cb59eb2efdaf73a0bd78ccd7015a62ad6e0f93d6"
   integrity sha512-IMqzv5wNQf+E6aHeIqATs0tOLeOTwj1QKbRcS3jBbYkl5oLAserA8yJTT7/VyHUYG91PRmPyeQDObKLPpeS4dw==
