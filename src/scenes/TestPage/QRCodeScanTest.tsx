@@ -1,49 +1,41 @@
-import {BarCodeScanner} from 'expo-barcode-scanner'
-import React, {useState, useEffect} from 'react'
-import {Text, View, StyleSheet, Button} from 'react-native'
+import React from 'react';
 
-export default function QRCodeScanTest() {
-  const [hasPermission, setHasPermission] = useState(true)
-  const [scanned, setScanned] = useState(false)
+import {StyleSheet, Button, View, SafeAreaView, Text, Alert, Image} from 'react-native';
+import {TextView} from '~src/styles/styled-components'
+import ScreenLayout from "~src/components/layout/ScreenLayout";
+import Constants from 'expo-constants';
+import { BlurView } from 'expo-blur';
+import {alignItems, alignSelf, bottom} from "styled-system";
 
-  useEffect(() => {
-    ;(async () => {
-      const {status} = await BarCodeScanner.requestPermissionsAsync()
-      setHasPermission(status === 'granted')
-    })()
-  }, [])
 
-  // @ts-ignore
-  const handleBarCodeScanned = ({type, data}) => {
-    if (!scanned) {
-      setScanned(true)
-      // eslint-disable-next-line no-undef
-      alert(`Bar code with type ${type} and data ${data} has been scanned!`)
-    }
-  }
+const QrCodePage = () => (
+    <ScreenLayout>
+        <View>
+            <Image
+                style={styles.logo}
+                source={require('~src/assets/images/qr-code-frame.png')}
+            />
+        </View>
+        <View style = {styles.container}>
+            <Button
+                color="#CDCDCD"
+                title="Cancel"
+                onPress={() => Alert.alert('Cancel')}
+            />
+        </View>
+    </ScreenLayout>
+);
 
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>
-  } else if (hasPermission === false) {
-    return <Text>No access to camera</Text>
-  }
+const styles = StyleSheet.create({
+    container: {
+        paddingTop: 187,
+    },
+    colour:{
+        color:"green"
+    },
+    logo: {
+        alignSelf:"center",
+    },
+});
 
-  return (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'flex-end',
-      }}
-    >
-      <BarCodeScanner
-        onBarCodeScanned={handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
-      />
-
-      {scanned && (
-        <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />
-      )}
-    </View>
-  )
-}
+export default QrCodePage;
