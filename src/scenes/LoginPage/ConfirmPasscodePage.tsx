@@ -22,7 +22,6 @@ interface Props {
 }
 
 const ConfirmPasscodePage = (props: Props) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const [passcode, setPasscode] = useState<number[]>([])
   const originalPasscode = props.route.params.passcode
 
@@ -62,10 +61,14 @@ const ConfirmPasscodePage = (props: Props) => {
         {Facade.t('passcode.error')}
       </TextView>
 
+      <LinearLayout weight={1} width="100%" />
+
       <Keypad
         onClick={clickKey}
         disabled={passcode.length >= PASSCODE_LENGTH}
       />
+
+      <LinearLayout weight={2} maxHeight="180px" width="100%" />
     </ScreenLayout>
   )
 }

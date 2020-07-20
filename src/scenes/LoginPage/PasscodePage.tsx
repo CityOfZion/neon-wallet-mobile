@@ -38,7 +38,6 @@ export const PasscodeHeader = (props: {
 }
 
 const PasscodePage = (props: Props) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const [passcode, setPasscode] = useState<number[]>([])
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false)
   console.log(props.route.params?.showError)
@@ -87,10 +86,14 @@ const PasscodePage = (props: Props) => {
         {Facade.t('passcode.error')}
       </TextView>
 
+      <LinearLayout weight={1} width="100%" />
+
       <Keypad
         onClick={clickKey}
         disabled={passcode.length >= PASSCODE_LENGTH}
       />
+
+      <LinearLayout weight={2} maxHeight="180px" width="100%" />
     </ScreenLayout>
   )
 }
