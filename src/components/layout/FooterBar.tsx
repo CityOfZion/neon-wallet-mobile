@@ -1,6 +1,6 @@
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs'
 import React, {useEffect, useRef} from 'react'
-import {Animated, View, Easing} from 'react-native'
+import {Animated, View, Easing, ImageSourcePropType} from 'react-native'
 import {useSelector} from 'react-redux'
 import {
   border,
@@ -18,6 +18,7 @@ import {
 } from 'styled-system'
 
 import {Facade} from '~src/app/Facade'
+import {Route} from '~src/app/Route'
 import {useSwiperController} from '~src/components/SwiperPanel'
 import QuickToolsMenu from '~src/scenes/QuickToolsMenu'
 import styled, {
@@ -26,6 +27,12 @@ import styled, {
   RelativeLayout,
 } from '~src/styles/styled-components'
 import {orientation, weight} from '~src/styles/styled-system.config'
+
+interface TabButtonContent {
+  enabledSource: ImageSourcePropType
+  disabledSource: ImageSourcePropType
+  route: Route<RouteName>
+}
 
 const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   const {state, descriptors, navigation} = props
@@ -49,6 +56,50 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   })
 
   const controller = useSwiperController()
+
+  const walletButton = {
+    enabledSource: require('~src/assets/images/button-wallet-primary.png'),
+    disabledSource: require('~src/assets/images/button-wallet-disabled.png'),
+    route: Facade.route.ListWallets,
+  }
+  const contactsButton = {
+    enabledSource: require('~src/assets/images/button-contacts-primary.png'),
+    disabledSource: require('~src/assets/images/button-contacts-disabled.png'),
+    route: Facade.route.Contacts,
+  }
+  const settingsButton = {
+    enabledSource: require('~src/assets/images/button-settings-primary.png'),
+    disabledSource: require('~src/assets/images/button-settings-disabled.png'),
+    route: Facade.route.Settings,
+  }
+  const moreButton = {
+    enabledSource: require('~src/assets/images/button-more-primary.png'),
+    disabledSource: require('~src/assets/images/button-more-disabled.png'),
+    route: Facade.route.More,
+  }
+
+  const TabButton = (props: {button: TabButtonContent}) => {
+    return (
+      <StyledTouchable
+        height="100%"
+        onPress={() => {
+          controller.close()
+          navigation.navigate(props.button.route.name)
+        }}
+        weight={1}
+      >
+        <ImageView
+          m="auto"
+          resizeMode="cover"
+          source={
+            state.routes[state.index].name === props.button.route.name
+              ? props.button.enabledSource
+              : props.button.disabledSource
+          }
+        />
+      </StyledTouchable>
+    )
+  }
 
   function animateQuickToolsButton() {
     Animated.parallel([
@@ -102,6 +153,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
             resizeMode={'cover'}
             source={require('~src/assets/images/TabBar.png')}
           />
+
           <LinearLayout
             position={'absolute'}
             bottom={0}
@@ -109,31 +161,11 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
             alignItems="center"
             pointerEvents={'box-none'}
           >
-            <TabButton
-              height="100%"
-              onPress={() => navigation.navigate(Facade.route.ListWallets.name)}
-              weight={1}
-            >
-              <ImageView
-                m="auto"
-                resizeMode="cover"
-                source={require('~src/assets/images/TabBarWalletsIcon.png')}
-              />
-            </TabButton>
-            <TabButton
-              height="100%"
-              onPress={() => navigation.navigate(Facade.route.Contacts.name)}
-              weight={1}
-            >
-              <ImageView
-                m="auto"
-                resizeMode="contain"
-                source={require('~src/assets/images/TabBarContactsIcon.png')}
-              />
-            </TabButton>
-            <TabButton
+            <TabButton button={walletButton} />
+            <TabButton button={contactsButton} />
+            <StyledTouchable
               mx="6px"
-              bottom="8px"
+              bottom="10px"
               width={66}
               height={66}
               onPress={() => {
@@ -157,30 +189,9 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
                   }}
                 />
               </AnimatedLinearLayout>
-            </TabButton>
-            <TabButton
-              height="100%"
-              onPress={() => navigation.navigate(Facade.route.Settings.name)}
-              weight={1}
-            >
-              <ImageView
-                m="auto"
-                resizeMode="contain"
-                source={require('~src/assets/images/TabBarSettingsIcon.png')}
-              />
-            </TabButton>
-            <TabButton
-              height="100%"
-              top="4px"
-              onPress={() => navigation.navigate(Facade.route.More.name)}
-              weight={1}
-            >
-              <ImageView
-                m="auto"
-                resizeMode="contain"
-                source={require('~src/assets/images/TabBarMoreIcon.png')}
-              />
-            </TabButton>
+            </StyledTouchable>
+            <TabButton button={settingsButton} />
+            <TabButton button={moreButton} />
           </LinearLayout>
         </RelativeLayout>
       </TabBarContainer>
@@ -196,7 +207,7 @@ const TabBarContainer = styled.SafeAreaView<
   ${position}
 `
 
-const TabButton = styled.TouchableOpacity<
+const StyledTouchable = styled.TouchableOpacity<
   SpaceProps & LayoutProps & PositionProps & WeightProps
 >`
   ${space} 
