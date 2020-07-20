@@ -3,7 +3,6 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {ROUTES} from '~/constants'
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
@@ -16,7 +15,6 @@ import CustomColorPage from '~src/scenes/CustomColorPage'
 import CustomizeAccount from '~src/scenes/CustomizeAccount'
 import ImportKey from '~src/scenes/ImportKey'
 import ImportReadAccount from '~src/scenes/ImportReadAccount'
-import More from '~src/scenes/More'
 import MorePage from '~src/scenes/MorePage'
 import Passphrase from '~src/scenes/Passphrase'
 
@@ -124,19 +122,7 @@ const MoreStackNavigation = () => {
         />
 
         <MoreStack.Screen
-          name={ROUTES.MORE.name}
-          component={More}
-          options={({route}) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.Step5CreateWallet.translate(),
-              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
-              theme,
-              route,
-            })
-          }
-        />
-        <MoreStack.Screen
-          name={ROUTES.IMPORT_KEY.name}
+          name={Facade.route.ImportKey.name}
           component={ImportKey}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
@@ -148,7 +134,7 @@ const MoreStackNavigation = () => {
           }
         />
         <MoreStack.Screen
-          name={ROUTES.PASSPHRASE.name}
+          name={Facade.route.Passphrase.name}
           component={Passphrase}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
@@ -160,7 +146,7 @@ const MoreStackNavigation = () => {
           }
         />
         <MoreStack.Screen
-          name={ROUTES.IMPORT_READ_ACCOUNT.name}
+          name={Facade.route.ImportReadAccount.name}
           component={ImportReadAccount}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
@@ -172,7 +158,7 @@ const MoreStackNavigation = () => {
           }
         />
         <MoreStack.Screen
-          name={ROUTES.CUSTOMIZE_ACCOUNT.name}
+          name={Facade.route.CustomizeAccount.name}
           component={CustomizeAccount}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
@@ -184,7 +170,7 @@ const MoreStackNavigation = () => {
           }
         />
         <MoreStack.Screen
-          name={ROUTES.CUSTOM_COLOR.name}
+          name={Facade.route.CustomColor.name}
           component={CustomColorPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({

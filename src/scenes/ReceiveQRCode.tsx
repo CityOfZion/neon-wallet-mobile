@@ -4,7 +4,6 @@ import React from 'react'
 import {ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {SCREEN_WIDTH} from '~/constants'
 import {Facade} from '~src/app/Facade'
 import InputLabel from '~src/components/InputLabel'
 import NeonQRCode from '~src/components/QRCode'
@@ -184,5 +183,3 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
     </LinearGradient>
   )
 }
-
-export default ReceiveQRCode
