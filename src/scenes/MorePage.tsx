@@ -57,7 +57,6 @@ const MorePage = (props: MoreProps) => {
         iconMarginRight={17}
         arrowDirection={RightIconType.NONE}
       />
-
     </ScreenLayout>
   )
 }

@@ -1,9 +1,6 @@
 import React from 'react'
 import {useSelector} from 'react-redux'
-import {textColor} from 'styled-system'
-
-import i18n from '~src/i18n'
-import {RootState} from '~src/store/reducers/root'
+import {Facade} from '~src/app/Facade'
 import {TextView} from '~src/styles/styled-components'
 
 const InputLabel = (props: {
@@ -13,7 +10,7 @@ const InputLabel = (props: {
   marginBottom?: number
   marginTop?: number
 }) => {
-  const theme = useSelector((state: RootState) => state.themeReducer.theme)
+  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const marginBottom = props.marginBottom ? props.marginBottom : 0
   const marginTop = props.marginTop ? props.marginTop : 1
   if (props.weight) {

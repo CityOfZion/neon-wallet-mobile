@@ -12,6 +12,7 @@ import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputTextWithValidation'
 import SwiperPanel from '~src/components/SwiperPanel'
 import WalletCard from '~src/components/WalletCard'
+import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {Account} from '~src/models/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
@@ -41,6 +42,14 @@ class ColorButton {
 
 export default function CustomizeAccount(props: Props) {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const account = new Account()
+
+  account.srcIcon = require('~src/assets/images/card-neo.png')
+  account.name = 'My First Account'
+  account.currency = '$'
+  account.balance = 24985
+  account.address = 'AN8iLVt18CKoATdexztCQj923hw5gkc41A'
+  account.backgroundColor = '#0DD5B3'
 
   const [name, setName] = useState<string>('')
   const [color, setColor] = useState<string>('#280480')
@@ -126,12 +135,7 @@ export default function CustomizeAccount(props: Props) {
             textAlignVertical={'top'}
             marginBottom={4}
           />
-          <WalletCard
-            color={color}
-            balance={queryBalance()}
-            currency={'$'}
-            name={name}
-          />
+          <AccountCard account={account} isCompacted={true} />
           <InputLabel title="Account Name" marginTop={4} />
           <InputWithValidation
             onChangeText={setName}

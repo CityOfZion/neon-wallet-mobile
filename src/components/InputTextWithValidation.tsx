@@ -8,7 +8,7 @@ import {
   ImageView,
   LinearLayout,
   TextView,
-  InputTextView
+  InputTextView,
 } from '~src/styles/styled-components'
 
 function InputWithValidation(props: {
