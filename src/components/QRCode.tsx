@@ -1,4 +1,5 @@
 import React from 'react'
+// @ts-ignore
 import {QRCode} from 'react-native-custom-qr-codes-expo'
 
 import {Facade} from '~src/app/Facade'
@@ -23,7 +24,7 @@ const NeonQRCode = (props: QRCodeProps) => {
             logo={require('../assets/images/icon-neon-white.png')}
             ecl="H"
             padding={2}
-            size={(width, width)}
+            size={[width, width]}
           />
         </LinearLayout>
       </LinearLayout>
