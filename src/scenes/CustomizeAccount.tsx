@@ -135,7 +135,7 @@ export default function CustomizeAccount(props: Props) {
             textAlignVertical={'top'}
             marginBottom={4}
           />
-          <AccountCard account={account} isCompacted={true} />
+          <AccountCard account={account} isStackMode={true} />
           <InputLabel title="Account Name" marginTop={4} />
           <InputWithValidation
             onChangeText={setName}
