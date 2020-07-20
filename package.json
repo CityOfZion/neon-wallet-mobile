@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@cityofzion/neon-js": "^4.8.0",
-    "@moonlight-io/asteroid-sdk-js": "file:..\\asteroid-sdk-js\\",
+    "@moonlight-io/asteroid-sdk-js": "git+https://github.com/Moonlight-io/asteroid-sdk-js",
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.4.5",
