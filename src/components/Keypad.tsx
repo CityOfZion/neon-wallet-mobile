@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, {Fragment} from 'react'
-import {TouchableOpacity, View} from 'react-native'
+import {TouchableOpacity, Platform} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
@@ -90,7 +90,12 @@ const Keypad = (props: Props) => {
           />
 
           <LinearLayout position="absolute">
-            <TextView color="text.0" textAlign="center" fontSize="36px">
+            <TextView
+              marginBottom={Platform.OS === 'ios' ? -4 : 0}
+              color="text.0"
+              textAlign="center"
+              fontSize="36px"
+            >
               {key.number}
             </TextView>
             {key.text !== undefined ? (
