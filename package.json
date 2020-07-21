@@ -9,7 +9,7 @@
     "test": "jest",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "ts-buld": "tsc -b"
+    "ts-build": "tsc -b"
   },
   "dependencies": {
     "@cityofzion/neon-js": "^4.8.0",
