@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Neon Wallet Mobile",
-    "slug": "neon-wallet-mobile",
+    "name": "Neon",
+    "slug": "neon",
     "version": "0.0.1",
     "android": {
-      "package": "io.cityofzion.neonwallet",
+      "package": "io.cityofzion.neon",
       "versionCode": 1
     },
     "splash": {
