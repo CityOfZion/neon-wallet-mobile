@@ -2,7 +2,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import * as LocalAuthentication from 'expo-local-authentication'
 import ExpoLocalAuthentication from 'expo-local-authentication/src/ExpoLocalAuthentication'
 import React, {useState} from 'react'
-import {Alert, TouchableWithoutFeedback} from 'react-native'
+import {Alert, Platform, TouchableWithoutFeedback} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -24,7 +24,13 @@ export default function LoginPage(props: Props) {
     const canUseHardware = await LocalAuthentication.hasHardwareAsync()
 
     if (canUseHardware) {
-      const result = await ExpoLocalAuthentication.authenticateAsync()
+      let result
+
+      if (Platform.OS === 'ios') {
+        result = await LocalAuthentication.authenticateAsync()
+      } else {
+        result = await ExpoLocalAuthentication.authenticateAsync()
+      }
 
       if (!result.success) {
         setErrorCounter(errorCounter + 1)

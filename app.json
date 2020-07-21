@@ -7,6 +7,11 @@
       "package": "io.cityofzion.neon",
       "versionCode": 1
     },
+    "ios": {
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "This app uses face ID to authenticate the user when dealing with sensitive transactions."
+      }
+    },
     "splash": {
       "image": "src/assets/splash.png",
       "resizeMode": "contain",
