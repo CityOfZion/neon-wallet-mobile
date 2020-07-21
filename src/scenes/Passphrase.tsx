@@ -48,7 +48,6 @@ function verifyPassword(
   setState: (state: boolean) => void
 ) {
   const newAccount = new wallet.Account(nep2) as wallet.Account
-  console.log('Abrindo')
   newAccount
     .decrypt(password)
     .then((account) => {
