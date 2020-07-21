@@ -66,7 +66,7 @@ function nextScreen(
 const ImportKey = (props: ImportKeyProps) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const [inputValue, setInputValue] = useState(
-    'Ad83tfsuWxxexhefPzXVpn5vv6oCbLKFEx'
+    ''
   )
   const headerHeight = useHeaderHeight()
   const inputIsValid = isValidInput(inputValue)
