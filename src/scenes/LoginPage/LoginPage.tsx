@@ -1,7 +1,8 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import React from 'react'
-import {Alert, Text, TouchableWithoutFeedback} from 'react-native'
-import {useSelector} from 'react-redux'
+import * as LocalAuthentication from 'expo-local-authentication'
+import ExpoLocalAuthentication from 'expo-local-authentication/src/ExpoLocalAuthentication'
+import React, {useState} from 'react'
+import {Alert, TouchableWithoutFeedback} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -9,38 +10,58 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {LoginStackParamList} from '~src/navigation/LoginStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import * as LocalAuthentication from 'expo-local-authentication'
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList & LoginStackParamList>
 }
 
+const MAX_ERROR_COUNTER = 3
+
 export default function LoginPage(props: Props) {
+  const [errorCounter, setErrorCounter] = useState(0)
+
   const continueButton = async () => {
     const canUseHardware = await LocalAuthentication.hasHardwareAsync()
-    const hasAuthenticationSet = await LocalAuthentication.isEnrolledAsync()
-    if (canUseHardware && hasAuthenticationSet) {
-      const result = await LocalAuthentication.authenticateAsync()
+
+    if (canUseHardware) {
+      const result = await ExpoLocalAuthentication.authenticateAsync()
+
+      console.log(result)
 
       if (!result.success) {
-        Alert.alert(
-          'Alert Title',
-          'My Alert Msg',
-          [
-            {
-              text: 'Cancel',
-              onPress: () => console.log('Cancel Pressed'),
-              style: 'cancel',
-            },
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
-          ],
-          {cancelable: false}
-        )
+        setErrorCounter(errorCounter + 1)
+
+        if (errorCounter >= MAX_ERROR_COUNTER) {
+          alertDialog()
+        }
+      } else {
+        props.navigation.replace('Tab')
       }
     } else {
       props.navigation.navigate(Facade.route.Passcode.name)
     }
   }
+
+  const alertDialog = () =>
+    Alert.alert(
+      Facade.t('login.dialog.title'),
+      Facade.t('login.dialog.subtitle'),
+      [
+        {
+          text: Facade.t('login.dialog.usePasscode'),
+          onPress: () => props.navigation.navigate(Facade.route.Passcode.name),
+        },
+        {
+          text: Facade.t('login.dialog.cancel'),
+          style: 'cancel',
+        },
+        {
+          text: Facade.t('login.dialog.tryAgain'),
+          onPress: continueButton,
+        },
+      ],
+      {cancelable: false}
+    )
 
   return (
     <ScreenLayout

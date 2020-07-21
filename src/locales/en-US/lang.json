@@ -65,7 +65,14 @@
     "title": "Welcome to neonwallet",
     "body": "We are creating your first wallet, would you like to set up security to keep your assets protected?",
     "continue": "Continue",
-    "skip": "skip"
+    "skip": "skip",
+    "dialog": {
+      "title": "Too many wrong attempts",
+      "subtitle": "Use a different authentication method?",
+      "cancel": "Cancel",
+      "tryAgain": "Try again",
+      "usePasscode": "Use passcode"
+    }
   },
   "passcode": {
     "enter": "Enter Passcode",
