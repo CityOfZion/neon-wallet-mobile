@@ -1,7 +1,8 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import React from 'react'
-import {Text, TouchableWithoutFeedback} from 'react-native'
-import {useSelector} from 'react-redux'
+import * as LocalAuthentication from 'expo-local-authentication'
+import ExpoLocalAuthentication from 'expo-local-authentication/src/ExpoLocalAuthentication'
+import React, {useState} from 'react'
+import {Alert, TouchableWithoutFeedback} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -14,7 +15,52 @@ interface Props {
   navigation: StackNavigationProp<RootStackParamList & LoginStackParamList>
 }
 
+const MAX_ERROR_COUNTER = 3
+
 export default function LoginPage(props: Props) {
+  const [errorCounter, setErrorCounter] = useState(0)
+
+  const continueButton = async () => {
+    const canUseHardware = await LocalAuthentication.hasHardwareAsync()
+
+    if (canUseHardware) {
+      const result = await ExpoLocalAuthentication.authenticateAsync()
+
+      if (!result.success) {
+        setErrorCounter(errorCounter + 1)
+
+        if (errorCounter >= MAX_ERROR_COUNTER) {
+          alertDialog()
+        }
+      } else {
+        props.navigation.replace('Tab')
+      }
+    } else {
+      props.navigation.navigate(Facade.route.Passcode.name)
+    }
+  }
+
+  const alertDialog = () =>
+    Alert.alert(
+      Facade.t('login.dialog.title'),
+      Facade.t('login.dialog.subtitle'),
+      [
+        {
+          text: Facade.t('login.dialog.usePasscode'),
+          onPress: () => props.navigation.navigate(Facade.route.Passcode.name),
+        },
+        {
+          text: Facade.t('login.dialog.cancel'),
+          style: 'cancel',
+        },
+        {
+          text: Facade.t('login.dialog.tryAgain'),
+          onPress: continueButton,
+        },
+      ],
+      {cancelable: false}
+    )
+
   return (
     <ScreenLayout
       useHeaderPadding={false}
@@ -61,9 +107,7 @@ export default function LoginPage(props: Props) {
             basic={true}
             label={Facade.t('login.continue')}
             fontFamily={'medium'}
-            onPress={() =>
-              props.navigation.navigate(Facade.route.Passcode.name)
-            }
+            onPress={continueButton}
           />
         </LinearLayout>
 
