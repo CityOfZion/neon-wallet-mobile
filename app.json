@@ -12,7 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#364046"
     },
-    "icon": "src/assets/images/ic_launcher.png",
+    "icon": "src/assets/ic_launcher.png",
     "primaryColor": "#4cffb3",
     "assetBundlePatterns": [
       "**/*"
