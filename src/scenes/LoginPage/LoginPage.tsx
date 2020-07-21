@@ -26,8 +26,6 @@ export default function LoginPage(props: Props) {
     if (canUseHardware) {
       const result = await ExpoLocalAuthentication.authenticateAsync()
 
-      console.log(result)
-
       if (!result.success) {
         setErrorCounter(errorCounter + 1)
 
