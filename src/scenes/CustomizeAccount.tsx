@@ -8,6 +8,7 @@ import {useSelector} from 'react-redux'
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
+import ColorSelector from '~src/components/ColorSelector'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputTextWithValidation'
 import SwiperPanel from '~src/components/SwiperPanel'
@@ -52,48 +53,6 @@ export default function CustomizeAccount(props: Props) {
   account.backgroundColor = '#0DD5B3'
 
   const [name, setName] = useState<string>('')
-  const [color, setColor] = useState<string>('#280480')
-  const colorPresets: ColorButton[] = [
-    {
-      colorTop: '#00DCB4',
-      colorBot: '#00BAA4',
-    },
-    {
-      colorTop: '#20AEFB',
-      colorBot: '#026397',
-    },
-    {
-      colorTop: '#7646F6',
-      colorBot: '#38099B',
-    },
-    {
-      colorTop: '#C94FDC',
-      colorBot: '#801F90',
-    },
-  ]
-  const colorPresets2: ColorButton[] = [
-    {
-      colorTop: '#FB852D',
-      colorBot: '#BA5103',
-    },
-    {
-      colorTop: '#FBDA59',
-      colorBot: '#C0A435',
-    },
-    {
-      colorTop: '#8EA8B9',
-      colorBot: '#4C5E6A',
-    },
-    {
-      colorTop: 'transparent',
-      colorBot: 'transparent',
-      onClick: () => {
-        console.log('Click')
-      },
-    },
-  ]
-
-  const colorMap = [colorPresets, colorPresets2]
 
   const queryBalance = () => {
     return 124.44
@@ -155,76 +114,7 @@ export default function CustomizeAccount(props: Props) {
             marginBottom={4}
           />
 
-          {colorMap.map((colors) => {
-            return (
-              <LinearLayout
-                flexWrap="wrap"
-                width="100%"
-                orientation={'horiz'}
-                justifyContent="space-between"
-                mb={4}
-              >
-                {colors.map((color) => {
-                  const isLastColor =
-                    colors.indexOf(color) == colors.length - 1 &&
-                    colorMap.indexOf(colors) == colorMap.length - 1
-
-                  const paddingRight = isLastColor ? '0%' : '0%'
-
-                  if (!isLastColor) {
-                    return (
-                      <View>
-                        <LinearLayout
-                          width={71}
-                          height={71}
-                          pr={paddingRight}
-                          borderRadius={45}
-                          weight={1}
-                        >
-                          <LinearGradient
-                            colors={[color.colorTop, color.colorBot]}
-                            end={[1, 1]}
-                            style={{borderRadius: 9}}
-                          />
-                        </LinearLayout>
-                      </View>
-                    )
-                  } else {
-                    return (
-                      <View>
-                        <LinearLayout
-                          width={71}
-                          height={71}
-                          pr={paddingRight}
-                          borderRadius={45}
-                          weight={1}
-                        >
-                          <LinearGradient
-                            colors={[color.colorTop, color.colorBot]}
-                            end={[1, 1]}
-                            style={{
-                              borderRadius: 9,
-                            }}
-                          >
-                            <ButtonView
-                              onPress={() =>
-                                props.navigation.navigate('CustomColor')
-                              }
-                            >
-                              <ImageView
-                                resizeMode="stretch"
-                                source={require('~/src/assets/images/border-select-color.png')}
-                              ></ImageView>
-                            </ButtonView>
-                          </LinearGradient>
-                        </LinearLayout>
-                      </View>
-                    )
-                  }
-                })}
-              </LinearLayout>
-            )
-          })}
+          <ColorSelector />
         </LinearLayout>
       </ScrollView>
     </LinearGradient>

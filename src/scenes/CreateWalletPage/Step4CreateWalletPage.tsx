@@ -55,7 +55,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
             mb={6}
             label={Facade.t('step4CreateWallet.label_walletName')}
             placeholder={Facade.t('step4CreateWallet.placeholder_walletName')}
-            onChangeText={(value) => setWalletName(value)}
+            onChangeText={(value: string) => setWalletName(value)}
             value={walletName}
           />
 
