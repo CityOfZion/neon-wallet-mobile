@@ -2,6 +2,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
 import {Alert, FlatList} from 'react-native'
+import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -14,21 +15,9 @@ interface Props {
 }
 
 const Step3CreateWalletPage: React.FC<Props> = (props) => {
-  const words = [
-    'jack',
-    'phone',
-    'burn',
-    'tab',
-    'cone',
-    'kilo',
-    'roach',
-    'key',
-    'gate',
-    'forest',
-    'mirror',
-    'stone',
-  ]
-
+  const words = useSelector((state: RootState) =>
+    (state.wallet.securityPhrase ?? '').split(' ')
+  )
   const [formedWords, setFormedWords] = useState<string[]>([])
   const [shuffledWords] = useState<string[]>(Facade.lodash.shuffle(words))
 

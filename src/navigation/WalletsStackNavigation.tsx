@@ -14,9 +14,10 @@ import ListWalletView from '~src/scenes/ListWalletView'
 
 export type WalletStackParamList = {
   ListWallets: undefined
-  GetWallet: {wallet: Account[]} & HeaderCustomProps
+  GetWallet: {wallet: Account[]; headerTitle: string} & HeaderCustomProps
   GetAccount: {account: Account} & HeaderCustomProps
   AccountAssetDetail: {account: Account} & HeaderCustomProps
+  Modal: {screen: RouteName}
 }
 
 const WalletStack = createStackNavigator<WalletStackParamList>()
