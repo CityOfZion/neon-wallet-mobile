@@ -1,6 +1,6 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import React from 'react'
-import {Text, TouchableWithoutFeedback} from 'react-native'
+import {Alert, Text, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -9,12 +9,39 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {LoginStackParamList} from '~src/navigation/LoginStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import * as LocalAuthentication from 'expo-local-authentication'
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList & LoginStackParamList>
 }
 
 export default function LoginPage(props: Props) {
+  const continueButton = async () => {
+    const canUseHardware = await LocalAuthentication.hasHardwareAsync()
+    const hasAuthenticationSet = await LocalAuthentication.isEnrolledAsync()
+    if (canUseHardware && hasAuthenticationSet) {
+      const result = await LocalAuthentication.authenticateAsync()
+
+      if (!result.success) {
+        Alert.alert(
+          'Alert Title',
+          'My Alert Msg',
+          [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ],
+          {cancelable: false}
+        )
+      }
+    } else {
+      props.navigation.navigate(Facade.route.Passcode.name)
+    }
+  }
+
   return (
     <ScreenLayout
       useHeaderPadding={false}
@@ -61,9 +88,7 @@ export default function LoginPage(props: Props) {
             basic={true}
             label={Facade.t('login.continue')}
             fontFamily={'medium'}
-            onPress={() =>
-              props.navigation.navigate(Facade.route.Passcode.name)
-            }
+            onPress={continueButton}
           />
         </LinearLayout>
 
