@@ -1,20 +1,19 @@
 {
-  "name": "NeonWalletMobile",
-  "displayName": "Neon Wallet Mobile",
   "expo": {
-    "name": "NeonWalletMobile",
-    "slug": "NeonWalletMobile",
-    "version": "1.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "name": "Neon Wallet Mobile",
+    "slug": "neon-wallet-mobile",
+    "version": "0.0.1",
+    "android": {
+      "package": "io.cityofzion.neonwallet",
+      "versionCode": 1
+    },
     "splash": {
-      "image": "./src/assets/splash.png",
+      "image": "src/assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#364046"
     },
+    "icon": "src/assets/images/ic_launcher.png",
+    "primaryColor": "#4cffb3",
     "assetBundlePatterns": [
       "**/*"
     ]
