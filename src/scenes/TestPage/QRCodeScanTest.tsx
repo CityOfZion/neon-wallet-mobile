@@ -38,17 +38,19 @@ export default function QRCodeScanTest() {
             style={{
                 flex: 1,
                 flexDirection: 'column',
-                justifyContent: 'flex-end',
+                justifyContent: 'center',
+                alignItems: 'center'
             }}
         >
-            <ImageView position='absolute' width='52px'
-                       source={require('~src/assets/images/qr-code-frame.png')}
-            />
+
             <BarCodeScanner
                 onBarCodeScanned={handleBarCodeScanned}
                 style={StyleSheet.absoluteFillObject}
 
 
+            />
+            <ImageView position='absolute'
+                       source={require('~src/assets/images/qr-code-frame.png')}
             />
 
 
