@@ -22,7 +22,11 @@
     "skip": "Pular",
     "copy": "Copiar",
     "print": "Imprimir",
-    "retry": "Tentar novamente"
+    "retry": "Tentar novamente",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "done": "Feito",
+    "close": "Fechar"
   },
   "routes": {
     "GetWallet": "Carteira",
@@ -33,11 +37,16 @@
     "ReceiveQrCode": "Receive QR Code",
     "CustomColor": "Personalizar Cor",
     "CreateWallet": "Create Wallet",
-    "Step1CreateWallet": "Criar Carteira",
-    "Step2CreateWallet": "Criar Carteira",
-    "Step3CreateWallet": "Criar Carteira",
-    "Step4CreateWallet": "Criar Carteira",
-    "Step5CreateWallet": "Criar Carteira"
+    "MyWallets": "Minhas Carteiras",
+    "Step1CreateWallet": "Criar carteira",
+    "Step2CreateWallet": "Criar carteira",
+    "Step3CreateWallet": "Criar carteira",
+    "Step4CreateWallet": "Criar carteira",
+    "Step5CreateWallet": "Criar carteira",
+    "Step1BackupWallet": "Backup da carteira",
+    "Step2BackupWallet": "Backup da carteira",
+    "Step3BackupWallet": "Backup da carteira",
+    "Step4BackupWallet": "Backup da carteira"
   },
   "home": {
     "welcome": "Bem-vindo ao Neon Wallet!"
@@ -86,6 +95,10 @@
       "subtitle": "#translateme",
       "buttonTitle": "#translateme"
     }
+  },
+  "myWalletOptions": {
+    "details": "Detalhes",
+    "backupWallet": "Backup da carteira"
   },
   "step1CreateWallet": {
     "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",

@@ -25,6 +25,7 @@
     "retry": "Retry",
     "cancel": "Cancel",
     "save": "Save",
+    "done": "Done",
     "close": "Close"
   },
   "routes": {
@@ -36,11 +37,16 @@
     "ReceiveQrCode": "Receive QR Code",
     "CustomColor": "Custom Colour",
     "CreateWallet": "Create Wallet",
-    "Step1CreateWallet": "Create Wallet",
-    "Step2CreateWallet": "Create Wallet",
-    "Step3CreateWallet": "Create Wallet",
-    "Step4CreateWallet": "Create Wallet",
-    "Step5CreateWallet": "Create Wallet",
+    "MyWallets": "My Wallets",
+    "Step1CreateWallet": "Create wallet",
+    "Step2CreateWallet": "Create wallet",
+    "Step3CreateWallet": "Create wallet",
+    "Step4CreateWallet": "Create wallet",
+    "Step5CreateWallet": "Create wallet",
+    "Step1BackupWallet": "Backup wallet",
+    "Step2BackupWallet": "Backup wallet",
+    "Step3BackupWallet": "Backup wallet",
+    "Step4BackupWallet": "Backup wallet",
     "ImportKey": "Import",
     "Passphrase": "Create Wallet",
     "ImportReadAccount": "Add a watch",
@@ -107,6 +113,10 @@
       "buttonTitle": "Get Started!"
     }
   },
+  "myWalletOptions": {
+    "details": "Details",
+    "backupWallet": "Backup Wallet"
+  },
   "step1CreateWallet": {
     "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",
     "label_1": "Generate security phrase",
@@ -153,6 +163,26 @@
     "body_1": "Remember to keep your secret phrase safe, having several backups is always a good idea.",
     "body_2": "If you need to find out a wallets secret phrase you can find it in the settings page for that wallet. ",
     "viewWallet": "View wallet"
+  },
+  "step1BackupWallet": {
+    "oneOfThree": "1 of 3",
+    "label_1": "Security phrase",
+    "body_1": "Below you will find your secret phrase",
+    "body_2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it below but be sure to keep it safe.",
+    "body_3": "Anyone with this phrase will be able to steal your hard earned assets and you won’t be able to get them back!",
+    "dialog_title": "Make sure you keep your security phrase safe",
+    "dialog_body": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
+    "dialog_dismiss": "OK, I understand"
+  },
+  "step2BackupWallet": {
+    "twoOfThree": "2 of 3",
+    "label_1": "Confirm back up",
+    "body_1": "To confirm you have backed up you key words please select your words in the correct order from the list below.",
+    "dialog_1_title": "Incorrect word order",
+    "dialog_1_body": "Please try again to confirm your back up"
+  },
+  "step3BackupWallet": {
+    "label_1": "Congratulations, You have confirmed your back up"
   },
   "more": {
     "createWallet": "Create wallet",

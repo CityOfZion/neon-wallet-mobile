@@ -22,7 +22,11 @@
     "skip": "#translateme",
     "copy": "#translateme",
     "print": "#translateme",
-    "retry": "#translateme"
+    "retry": "#translateme",
+    "cancel": "#translateme",
+    "save": "#translateme",
+    "done": "#translateme",
+    "close": "#translateme"
   },
   "routes": {
     "GetWallet": "#translateme",
@@ -33,11 +37,16 @@
     "ReceiveQrCode": "#translateme",
     "CustomColor": "#translateme",
     "CreateWallet": "#translateme",
+    "MyWallets": "#translateme",
     "Step1CreateWallet": "#translateme",
     "Step2CreateWallet": "#translateme",
     "Step3CreateWallet": "#translateme",
     "Step4CreateWallet": "#translateme",
-    "Step5CreateWallet": "#translateme"
+    "Step5CreateWallet": "#translateme",
+    "Step1BackupWallet": "#translateme",
+    "Step2BackupWallet": "#translateme",
+    "Step3BackupWallet": "#translateme",
+    "Step4BackupWallet": "#translateme"
   },
   "home": {
     "welcome": "Willkommen bei Neon Wallet!"
@@ -77,6 +86,10 @@
       "subtitle": "#translateme",
       "buttonTitle": "#translateme"
     }
+  },
+  "myWalletOptions": {
+    "details": "#translateme",
+    "backupWallet": "#translateme"
   },
   "step1CreateWallet": {
     "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",
