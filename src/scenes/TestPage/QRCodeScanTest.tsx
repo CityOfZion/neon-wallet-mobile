@@ -1,9 +1,10 @@
 import {BarCodeScanner} from 'expo-barcode-scanner'
 import React, {useState, useEffect} from 'react'
-import {Text, View, StyleSheet, Button, Image} from 'react-native'
-import {ImageView} from "~src/styles/styled-components";
-
-
+import {Text, View, StyleSheet, Button} from 'react-native'
+import {ImageView, LinearLayout} from "~src/styles/styled-components";
+import ThemedButton from "~src/components/themed/ThemedButton";
+import {Facade} from "~src/app/Facade";
+import ScreenLayout from "~src/components/layout/ScreenLayout";
 
 
 export default function QRCodeScanTest() {
@@ -39,27 +40,27 @@ export default function QRCodeScanTest() {
                 flex: 1,
                 flexDirection: 'column',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems:'center'
             }}
         >
-
             <BarCodeScanner
                 onBarCodeScanned={handleBarCodeScanned}
                 style={StyleSheet.absoluteFillObject}
-
-
             />
-            <ImageView position='absolute'
+            <ImageView rigth='110'
                        source={require('~src/assets/images/qr-code-frame.png')}
             />
-
 
             {scanned && (
                 <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />
             )}
-
-        </View>
-
-
-    )
+            <LinearLayout paddingTop={100}  width={'100%'}>
+                <ThemedButton
+                    label={Facade.t('passcode.cancel')}
+                />
+            </LinearLayout>
+    </View>
+)
 }
+
+
