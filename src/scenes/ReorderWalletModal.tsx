@@ -68,7 +68,11 @@ export default function ReoderWalletModal(props: Props) {
       padding={24}
       onClose={props.navigation.goBack}
       leftButton={Facade.t('modals.reorderWallet.cancel')}
-      rightButton={Facade.t('modals.reorderWallet.save')}
+      rightButton={
+        <TextView color="primary" fontSize={16} fontFamily="regular">
+          {Facade.t('modals.reorderWallet.save')}
+        </TextView>
+      }
       onLeftPress={controller.close}
       onRightPress={commitAndClose}
     >

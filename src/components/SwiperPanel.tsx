@@ -16,7 +16,7 @@ import {
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import {TextView, ImageView} from '~src/styles/styled-components'
+import {TextView, ImageView, LinearLayout} from '~src/styles/styled-components'
 
 const PANEL_OFFSET = 50
 const ANIMATION_DELTA_THRESHOLD = 50
@@ -197,17 +197,14 @@ export default function SwiperPanel(props: SwiperProps) {
 
   function Header(props: SwiperProps) {
     return (
-      <Fragment>
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            flexShrink: 0,
-            marginTop: 24,
-            marginBottom: paddingTop,
-          }}
-        >
+      <LinearLayout
+        alignItems="center"
+        justifyContent="space-between"
+        orientation="horiz"
+        mt="24px"
+        mb={paddingTop}
+      >
+        <LinearLayout weight={1} alignItems="flex-start">
           <TouchableWithoutFeedback
             onPress={() => props.onLeftPress && props.onLeftPress()}
           >
@@ -223,35 +220,37 @@ export default function SwiperPanel(props: SwiperProps) {
                 : props.leftButton}
             </View>
           </TouchableWithoutFeedback>
+        </LinearLayout>
 
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row',
-              flexShrink: 0,
-            }}
+        <LinearLayout
+          weight={1}
+          width="100%"
+          orientation="horiz"
+          alignItems="center"
+          justifyContent="center"
+          position="absolute"
+        >
+          {props.image ? (
+            <ImageView
+              resizeMode="contain"
+              height={20}
+              width={20}
+              mr="6px"
+              source={props.image}
+            />
+          ) : undefined}
+
+          <TextView
+            color={theme.colors.text[0]}
+            fontSize={24}
+            fontFamily="semibold"
+            alignSelf="center"
           >
-            {props.image ? (
-              <ImageView
-                resizeMode="contain"
-                height={20}
-                width={20}
-                mr="6px"
-                source={props.image}
-              />
-            ) : undefined}
+            {props.title}
+          </TextView>
+        </LinearLayout>
 
-            <TextView
-              color={theme.colors.text[0]}
-              fontSize={24}
-              fontFamily="semibold"
-              alignSelf="center"
-            >
-              {props.title}
-            </TextView>
-          </View>
-
+        <LinearLayout weight={1} alignItems="flex-end">
           <TouchableWithoutFeedback
             onPress={() => props.onRightPress && props.onRightPress()}
           >
@@ -267,8 +266,8 @@ export default function SwiperPanel(props: SwiperProps) {
                 : props.rightButton}
             </View>
           </TouchableWithoutFeedback>
-        </View>
-      </Fragment>
+        </LinearLayout>
+      </LinearLayout>
     )
   }
 
