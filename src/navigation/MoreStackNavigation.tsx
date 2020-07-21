@@ -12,7 +12,11 @@ import Step3CreateWalletPage from '~src/scenes/CreateWalletPage/Step3CreateWalle
 import Step4CreateWalletPage from '~src/scenes/CreateWalletPage/Step4CreateWalletPage'
 import Step5CreateWalletPage from '~src/scenes/CreateWalletPage/Step5CreateWalletPage'
 import CustomColorPage from '~src/scenes/CustomColorPage'
+import CustomizeAccount from '~src/scenes/CustomizeAccount'
+import ImportKey from '~src/scenes/ImportKey'
+import ImportReadAccount from '~src/scenes/ImportReadAccount'
 import MorePage from '~src/scenes/MorePage'
+import Passphrase from '~src/scenes/Passphrase'
 
 export type MoreStackParamList = {
   More: undefined
@@ -23,6 +27,12 @@ export type MoreStackParamList = {
   Step5CreateWallet: undefined
   ListWallets: undefined
   Modal: {screen: string}
+  ImportKey: undefined
+  CustomizeReadAccount: undefined
+  ImportReadAccount: undefined
+  Passphrase: undefined
+  CustomizeAccount: undefined
+  CustomColor: undefined
 }
 
 const MoreStack = createStackNavigator<MoreStackParamList>()
@@ -101,6 +111,67 @@ const MoreStackNavigation = () => {
         <MoreStack.Screen
           name={Facade.route.Step5CreateWallet.name}
           component={Step5CreateWalletPage}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.Step5CreateWallet.translate(),
+              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+              theme,
+              route,
+            })
+          }
+        />
+
+        <MoreStack.Screen
+          name={Facade.route.ImportKey.name}
+          component={ImportKey}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.Step5CreateWallet.translate(),
+              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+              theme,
+              route,
+            })
+          }
+        />
+        <MoreStack.Screen
+          name={Facade.route.Passphrase.name}
+          component={Passphrase}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.Step5CreateWallet.translate(),
+              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+              theme,
+              route,
+            })
+          }
+        />
+        <MoreStack.Screen
+          name={Facade.route.ImportReadAccount.name}
+          component={ImportReadAccount}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.Step5CreateWallet.translate(),
+              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+              theme,
+              route,
+            })
+          }
+        />
+        <MoreStack.Screen
+          name={Facade.route.CustomizeAccount.name}
+          component={CustomizeAccount}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.Step5CreateWallet.translate(),
+              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+              theme,
+              route,
+            })
+          }
+        />
+        <MoreStack.Screen
+          name={Facade.route.CustomColor.name}
+          component={CustomColorPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.Step5CreateWallet.translate(),

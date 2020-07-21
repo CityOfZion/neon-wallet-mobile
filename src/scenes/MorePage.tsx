@@ -6,6 +6,7 @@ import {Facade} from '~src/app/Facade'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import {LinearLayout} from '~src/styles/styled-components'
 
 interface MoreProps {
   navigation: StackNavigationProp<MoreStackParamList>
@@ -17,42 +18,44 @@ const MorePage = (props: MoreProps) => {
   return (
     <ScreenLayout padding={20}>
       <MenuItem
-        title={'Create wallet'}
+        title={Facade.t('more.createWallet')}
         icon={require('~/src/assets/images/wallet-icon-green.png')}
         iconMarginRight={12}
-        arrowDirection={RightIconType.ARROW_RIGHT}
+        iconHeight={28}
+        arrowDirection={RightIconType.NONE}
         onPress={() => {
           props.navigation.navigate(Facade.route.Step1CreateWallet.name)
         }}
       />
-
       <MenuItem
-        title={'Create watch account'}
-        icon={require('~/src/assets/images/wallet-icon-green.png')}
-        iconMarginRight={12}
-        arrowDirection={RightIconType.ARROW_RIGHT}
-      />
-
-      <MenuItem
-        title={'Import'}
-        icon={require('~/src/assets/images/wallet-icon-green.png')}
-        iconMarginRight={12}
-        arrowDirection={RightIconType.ARROW_RIGHT}
-      />
-
-      <MenuItem
-        title={'Help'}
-        icon={require('~/src/assets/images/wallet-icon-green.png')}
-        iconMarginRight={12}
-        arrowDirection={RightIconType.ARROW_RIGHT}
-      />
-
-      <MenuItem
-        title={'Sample modal'}
+        title={Facade.t('more.createWatchAccount')}
+        icon={require('~/src/assets/images/icon-watch-green.png')}
+        iconWidth={20}
+        iconMarginLeft={2}
+        iconMarginRight={18}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
-          props.navigation.navigate('Modal', {screen: 'SampleModal'})
+          props.navigation.navigate('ImportReadAccount')
         }}
+      />
+      <MenuItem
+        title={Facade.t('more.import')}
+        icon={require('~/src/assets/images/icon-import-green.png')}
+        iconWidth={26}
+        iconMarginRight={15}
+        iconMarginLeft={1}
+        arrowDirection={RightIconType.NONE}
+        onPress={() => {
+          props.navigation.navigate('ImportKey')
+        }}
+      />
+      <MenuItem
+        title={Facade.t('more.help')}
+        icon={require('~/src/assets/images/icon-help-green.png')}
+        iconWidth={25}
+        iconMarginLeft={1}
+        iconMarginRight={17}
+        arrowDirection={RightIconType.NONE}
       />
     </ScreenLayout>
   )
