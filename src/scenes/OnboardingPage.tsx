@@ -1,6 +1,6 @@
 import {useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
-import React from 'react'
+import React, {useState} from 'react'
 import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {useSelector} from 'react-redux'
@@ -78,10 +78,16 @@ const OnboardingPage = (props: {
   seenSetter: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const [isLastPage, setIsLastPage] = useState(false)
 
   const persist = async (value: boolean) => {
     await Storage.onboardingSeen.save(value)
     props.seenSetter(value)
+  }
+
+  const onIndexChanged = function (index: number) {
+    if (index == 3) setIsLastPage(true)
+    else setIsLastPage(false)
   }
 
   return (
@@ -99,6 +105,7 @@ const OnboardingPage = (props: {
           height={'100%'}
         >
           <Swiper
+            onIndexChanged={onIndexChanged}
             dotColor={theme.colors.text[3]}
             activeDotColor={theme.colors.primary}
             loop={false}
@@ -163,19 +170,21 @@ const OnboardingPage = (props: {
             />
           </Swiper>
 
-          <SkipButton
-            position={'absolute'}
-            left={0}
-            color={'text.0'}
-            opacity={0.5}
-            bottom={0}
-            mb={'3.5%'}
-            ml={30}
-            onPress={() => persist(true)}
-            style={{textTransform: 'lowercase'}}
-          >
-            {Facade.t('app.skip')}
-          </SkipButton>
+          {!isLastPage && (
+            <SkipButton
+              position={'absolute'}
+              left={0}
+              color={'text.0'}
+              opacity={0.5}
+              bottom={0}
+              mb={'3.5%'}
+              ml={30}
+              onPress={() => persist(true)}
+              style={{textTransform: 'lowercase'}}
+            >
+              {Facade.t('app.skip')}
+            </SkipButton>
+          )}
         </LinearLayout>
       </SafeAreaView>
     </LinearGradient>
