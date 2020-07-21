@@ -22,7 +22,9 @@ export default function ColorSelector(props: Props) {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const navigation = useNavigation()
   const [color, setColor] = useState<string>()
-  const colorsList = Facade.lodash.clone(theme.colors.card)
+  const colorsList = Facade.lodash.clone(
+    Object.values(theme.colors.card) as string[]
+  )
 
   // If color selected from color picker, adds to the list
   color && colorsList.push(color)
