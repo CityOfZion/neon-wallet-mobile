@@ -60,6 +60,7 @@ const AccountCard: React.FC<Props> = (props) => {
         aspectRatio: 38 / 25,
       }}
       borderRadius={17 * unit}
+      activeOpacity={1}
     >
       <BrightCard
         colors={[

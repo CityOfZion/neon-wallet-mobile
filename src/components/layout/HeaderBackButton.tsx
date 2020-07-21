@@ -1,6 +1,6 @@
 import {StackHeaderLeftButtonProps} from '@react-navigation/stack'
 import React from 'react'
-import {TouchableOpacity, View} from 'react-native'
+import {TouchableHighlight, View} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -9,7 +9,10 @@ const HeaderBackButton = (props: StackHeaderLeftButtonProps) => {
   return (
     <View>
       {props.canGoBack && (
-        <TouchableOpacity onPress={props.onPress}>
+        <TouchableHighlight
+          underlayColor={'transparent'}
+          onPress={props.onPress}
+        >
           <LinearLayout orientation={'horiz'} alignItems={'center'}>
             <ImageView
               ml={4}
@@ -21,7 +24,7 @@ const HeaderBackButton = (props: StackHeaderLeftButtonProps) => {
               {Facade.t('app.back')}
             </TextView>
           </LinearLayout>
-        </TouchableOpacity>
+        </TouchableHighlight>
       )}
     </View>
   )
