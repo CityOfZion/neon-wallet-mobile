@@ -100,6 +100,8 @@ const Keypad = (props: Props) => {
             </TextView>
             {key.text !== undefined ? (
               <TextView
+                mt="-6px"
+                mb="6px"
                 color="text.0"
                 textAlign="center"
                 fontSize="10px"
