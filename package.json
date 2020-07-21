@@ -8,7 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "ts-build": "tsc -b"
   },
   "dependencies": {
     "@cityofzion/neon-js": "^4.8.0",
