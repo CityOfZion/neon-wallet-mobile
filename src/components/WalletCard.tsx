@@ -62,6 +62,7 @@ const WalletCard = (props: WalletCardProps) => {
       m="12px"
       bg={colorLimedSpruce}
       onPress={() => props.onPress && props.onPress()}
+      activeOpacity={1}
     >
       {props.wallet.currentAssets.assets.map((a, i) =>
         _renderAccountCard(a, i)

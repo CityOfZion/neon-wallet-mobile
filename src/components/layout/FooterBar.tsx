@@ -81,6 +81,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   const TabButton = (props: {button: TabButtonContent}) => {
     return (
       <StyledTouchable
+        underlayColor={'transparent'}
         height="100%"
         onPress={() => {
           controller.close()
@@ -164,6 +165,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
             <TabButton button={walletButton} />
             <TabButton button={contactsButton} />
             <StyledTouchable
+              underlayColor={'transparent'}
               mx="6px"
               bottom="10px"
               width={66}
@@ -207,7 +209,7 @@ const TabBarContainer = styled.SafeAreaView<
   ${position}
 `
 
-const StyledTouchable = styled.TouchableOpacity<
+const StyledTouchable = styled.TouchableHighlight<
   SpaceProps & LayoutProps & PositionProps & WeightProps
 >`
   ${space} 
