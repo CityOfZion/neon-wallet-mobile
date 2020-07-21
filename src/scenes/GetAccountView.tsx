@@ -23,6 +23,7 @@ const TabSelector = (props: TabSelectorProps) => {
   return (
     <LinearLayout orientation="horiz" mt="36px">
       <ButtonView
+        activeOpacity={1}
         onPress={() => props.setIsAssetsTabSelected(true)}
         weight={1}
         alignItems="center"
@@ -43,6 +44,7 @@ const TabSelector = (props: TabSelectorProps) => {
         </TextView>
       </ButtonView>
       <ButtonView
+        activeOpacity={1}
         onPress={() => props.setIsAssetsTabSelected(false)}
         weight={1}
         alignItems="center"

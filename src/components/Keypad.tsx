@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, {Fragment} from 'react'
-import {TouchableOpacity, Platform} from 'react-native'
+import {TouchableHighlight, Platform} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
@@ -70,7 +70,8 @@ const Keypad = (props: Props) => {
 
   const KeyComponent = (key: Key) => {
     return (
-      <TouchableOpacity
+      <TouchableHighlight
+        underlayColor={'transparent'}
         disabled={props.disabled}
         onPress={() => props.onClick?.(key.number)}
       >
@@ -112,7 +113,7 @@ const Keypad = (props: Props) => {
             ) : undefined}
           </LinearLayout>
         </LinearLayout>
-      </TouchableOpacity>
+      </TouchableHighlight>
     )
   }
 
