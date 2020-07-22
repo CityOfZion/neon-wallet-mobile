@@ -4,8 +4,11 @@ import React, {useState} from 'react'
 import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {useSelector} from 'react-redux'
+
+// TODO: remove testing code
 // @ts-ignore
 import {Keychain} from '../asteroid-sdk'
+import {wallet} from '@cityofzion/neon-js'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {Facade} from '~src/app/Facade'
@@ -85,9 +88,31 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const [isLastPage, setIsLastPage] = useState(false)
 
-  const keychain = new Keychain()
-  const mnemonic = keychain.mnemonic
-  console.log(mnemonic)
+  // TODO: remove testing code
+  const testMnemonic = async () => {
+    console.log(`== Keychain - Create NEO Address ==`)
+    const derivationPath = "m/44'/888'/0'/0/0"
+    const mnemonicKeywords =
+      'online ramp onion faculty trap clerk near rabbit busy gravity prize employ exit horse found slogan effort dash siren buzz sport pig coconut element'
+    const secretKey = 'a seek' // NOTE: If this method isn't called, the default seed is used (ok in most cases)
+    const platform = 'neo'
+    const keychain = new Keychain()
+    keychain.importMnemonic(mnemonicKeywords)
+    console.log('mnemonicBuffer:', keychain.mnemonic)
+    const encryptedBuffer = keychain.generateSeed(secretKey)
+    console.log('encryptedBuffer:', encryptedBuffer)
+    const childKey = keychain.generateChildKey(platform, derivationPath)
+    // console.log('childKey:', childKey)
+    const wif = childKey.getWIF()
+    console.log('wif:', wif)
+    const neoAccount = new wallet.Account(wif)
+    // console.log('neoAccount:', neoAccount)
+    console.log('neoAccont.WIF:', neoAccount.WIF)
+    console.log('neoAccont.publicKey:', neoAccount.publicKey)
+    console.log('neoAccont.address:', neoAccount.address)
+    console.log('== THE END ==')
+  }
+  // testMnemonic()
 
   const finish = async () => {
     await Storage.onboardingSeen.save(true)
