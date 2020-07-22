@@ -18,6 +18,10 @@ export class WrapperConfig {
   ] as const
 
   readonly routes = [
+    'Modal',
+    'Tab',
+    'Onboarding',
+    'WelcomeModal',
     'QuickTools',
     'ListWallets',
     'Contacts',

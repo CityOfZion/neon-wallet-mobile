@@ -11,7 +11,6 @@ import AccountAssetDetail from '~src/scenes/AccountAssetDetail'
 import GetAccountView from '~src/scenes/GetAccountView'
 import GetWalletView from '~src/scenes/GetWalletView'
 import ListWalletView from '~src/scenes/ListWalletView'
-import {RootState} from '~src/store/reducers/root'
 
 export type WalletStackParamList = {
   ListWallets: undefined

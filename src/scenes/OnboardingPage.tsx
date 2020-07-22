@@ -1,4 +1,4 @@
-import {useHeaderHeight} from '@react-navigation/stack'
+import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
 import React, {useState} from 'react'
 import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
@@ -8,6 +8,7 @@ import {useSelector} from 'react-redux'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import styled, {
   ImageView,
   LinearLayout,
@@ -19,6 +20,10 @@ interface OnboardingSlideProps {
   header: string
   image: ImageLoadEventData
   bottomContent: any
+}
+
+interface OnboardingPageProps {
+  navigation: StackNavigationProp<RootStackParamList>
 }
 
 const OnboardingSlide = (props: OnboardingSlideProps) => {
@@ -74,19 +79,18 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
   )
 }
 
-const OnboardingPage = (props: {
-  seenSetter: React.Dispatch<React.SetStateAction<boolean>>
-}) => {
+const OnboardingPage = (props: OnboardingPageProps) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const [isLastPage, setIsLastPage] = useState(false)
 
-  const persist = async (value: boolean) => {
-    await Storage.onboardingSeen.save(value)
-    props.seenSetter(value)
+  const finish = async () => {
+    await Storage.onboardingSeen.save(true)
+
+    props.navigation.replace(Facade.route.Login.name)
   }
 
   const onIndexChanged = function (index: number) {
-    if (index == 3) setIsLastPage(true)
+    if (index === 3) setIsLastPage(true)
     else setIsLastPage(false)
   }
 
@@ -158,7 +162,7 @@ const OnboardingPage = (props: {
 
                   <LinearLayout width={'100%'} px={'7%'}>
                     <ThemedButton
-                      onPress={() => persist(true)}
+                      onPress={() => finish()}
                       label={Facade.t('onboarding.getStarted.buttonTitle')}
                       basic={true}
                       bgColor={'primary'}
@@ -179,7 +183,7 @@ const OnboardingPage = (props: {
               bottom={0}
               mb={'3.5%'}
               ml={30}
-              onPress={() => persist(true)}
+              onPress={() => finish()}
               style={{textTransform: 'lowercase'}}
             >
               {Facade.t('app.skip')}

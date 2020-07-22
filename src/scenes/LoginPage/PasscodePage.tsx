@@ -2,7 +2,6 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState, useEffect} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
-import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import Keypad from '~src/components/Keypad'
@@ -40,7 +39,6 @@ export const PasscodeHeader = (props: {
 const PasscodePage = (props: Props) => {
   const [passcode, setPasscode] = useState<number[]>([])
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false)
-  console.log(props.route.params?.showError)
 
   useEffect(() => {
     if (passcode.length === PASSCODE_LENGTH) {
