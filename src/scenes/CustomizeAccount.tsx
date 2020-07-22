@@ -59,13 +59,7 @@ export default function CustomizeAccount(props: Props) {
   }
 
   function persistAccount() {
-    // TODO: Store account info on redux/asyncStorage
-    if (name) {
-      //const account = new Account(name, color)
-      props.navigation.goBack()
-    } else {
-      // TODO: Validate account name field as empty
-    }
+    // TODO: NW-197
   }
 
   const headerSize = useHeaderHeight()
@@ -103,8 +97,6 @@ export default function CustomizeAccount(props: Props) {
             value={name}
             inputIsValid={true}
             separatorColor={theme.colors.background[3]}
-            //TODO Why it doesn't accept 0?
-            sideMargins={0.0001}
             hidePaste={true}
             hideScan={true}
           />
