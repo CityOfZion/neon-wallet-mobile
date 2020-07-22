@@ -303,74 +303,72 @@ const SendTransactionInputModal = (props: Props) => {
       onClose={() => props.navigation.goBack()}
       image={require('~/src/assets/images/upload-white.png')}
     >
-      <ScrollView>
-        <LinearLayout height="100%" width="100%" px="15px" orientation="verti">
-          <TextView
-            mb="24px"
+      <LinearLayout height="100%" width="100%" px="15px" orientation="verti">
+        <TextView
+          mb="24px"
+          alignSelf="center"
+          color="text.3"
+          fontSize="md"
+          fontFamily="bold"
+        >
+          {mockWalletItems[1].title}
+        </TextView>
+        <AccountCard account={account} />
+        <TouchableWithoutFeedback>
+          <LinearLayout
+            orientation="horiz"
             alignSelf="center"
-            color="text.3"
-            fontSize="md"
-            fontFamily="bold"
-          >
-            {mockWalletItems[1].title}
-          </TextView>
-          <AccountCard account={account} />
-          <TouchableWithoutFeedback>
-            <LinearLayout
-              orientation="horiz"
-              alignSelf="center"
-              alignItems="center"
-              mt="40px"
-            >
-              <ImageView
-                source={require('~/src/assets/images/icon-reselect-green.png')}
-              />
-              <TextView ml="6px" color="primary" fontFamily="medium">
-                {Facade.t(
-                  'modals.send.transactionInput.selectDifferentAccount'
-                )}
-              </TextView>
-            </LinearLayout>
-          </TouchableWithoutFeedback>
-          <TextView
+            alignItems="center"
             mt="40px"
-            alignSelf="center"
-            color="text.3"
-            fontSize="md"
-            fontFamily="bold"
           >
-            {Facade.t('modals.send.transactionInput.transactionDetails')}
-          </TextView>
-          <DestinationAddressField
-            theme={theme}
-            address={text}
-            setAddress={setText}
-          />
-          <TokenField theme={theme} token={'NEO'} />
-          <AmountField theme={theme} amount={amount} setAmount={setAmount} />
-          <TextView
-            mt="56px"
-            mb="24px"
-            fontFamily="semibold"
-            color="text.0"
-            alignSelf="center"
-            fontSize="14px"
-          >
-            {Facade.t('modals.send.transactionInput.prioritiseTransfer')}
-          </TextView>
-          <PriorityTab />
-          <LinearLayout mb="58px" px="24px" alignSelf="center" width="100%">
-            <ThemedButton
-              label={Facade.t('app.next')}
-              onPress={() =>
-                props.navigation.navigate(
-                  Facade.route.SendTransactionReviewModal.name
-                )
-              }
+            <ImageView
+              source={require('~/src/assets/images/icon-reselect-green.png')}
             />
+            <TextView ml="6px" color="primary" fontFamily="medium">
+              {Facade.t(
+                'modals.send.transactionInput.selectDifferentAccount'
+              )}
+            </TextView>
           </LinearLayout>
+        </TouchableWithoutFeedback>
+        <TextView
+          mt="40px"
+          alignSelf="center"
+          color="text.3"
+          fontSize="md"
+          fontFamily="bold"
+        >
+          {Facade.t('modals.send.transactionInput.transactionDetails')}
+        </TextView>
+        <DestinationAddressField
+          theme={theme}
+          address={text}
+          setAddress={setText}
+        />
+        <TokenField theme={theme} token={'NEO'} />
+        <AmountField theme={theme} amount={amount} setAmount={setAmount} />
+        <TextView
+          mt="56px"
+          mb="24px"
+          fontFamily="semibold"
+          color="text.0"
+          alignSelf="center"
+          fontSize="14px"
+        >
+          {Facade.t('modals.send.transactionInput.prioritiseTransfer')}
+        </TextView>
+        <PriorityTab />
+        <LinearLayout mb="58px" px="24px" alignSelf="center" width="100%">
+          <ThemedButton
+            label={Facade.t('app.next')}
+            onPress={() =>
+              props.navigation.navigate(
+                Facade.route.SendTransactionReviewModal.name
+              )
+            }
+          />
         </LinearLayout>
-      </ScrollView>
+      </LinearLayout>
     </SwiperPanel>
   )
 }
