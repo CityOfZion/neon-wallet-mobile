@@ -1,32 +1,13 @@
-import {TokenBalance} from '~src/models/TokenBalance'
+import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 
+@HttpExclude()
 export class Wallet {
-  title: string
-  previousAssets: TokenBalance
-  currentAssets: TokenBalance
-  lastVisitedAt: string
+  @HttpExpose()
+  name: string | null = null
 
-  get previousValue() {
-    if (!this.currentAssets.assets.length) return 0
+  @HttpExpose()
+  securityPhrase: string | null = null
 
-    return this.previousAssets.totalValue
-  }
-
-  get currentValue() {
-    if (!this.currentAssets.assets.length) return 0
-
-    return this.currentAssets.totalValue
-  }
-
-  constructor(
-    title: string,
-    previousAssets: TokenBalance,
-    currentAssets: TokenBalance,
-    lastVisitedAt: string
-  ) {
-    this.title = title
-    this.previousAssets = previousAssets
-    this.currentAssets = currentAssets
-    this.lastVisitedAt = lastVisitedAt
-  }
+  @HttpExpose()
+  passphrase: string | null = null
 }

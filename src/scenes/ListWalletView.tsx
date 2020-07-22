@@ -5,6 +5,7 @@ import Carousel from 'react-native-snap-carousel'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
 import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
@@ -13,8 +14,7 @@ import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
 import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {Account} from '~src/models/Account'
-import {Wallet} from '~src/models/Wallet'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {WalletMock} from '~src/models/WalletMock'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
@@ -32,9 +32,19 @@ const ListWalletView = (props: WalletProps) => {
   const currency = useSelector((state: RootState) => state.app.currency)
   const dispatch = useDispatch()
 
+  const populate = async () => {
+    const wallets = await Storage.wallets.load()
+    // TODO: implement wallets storage
+  }
+
   // Uncomment to view demo loading overlay UX
   // useEffect(() => {
-  //   dispatch(setLoading(true, 'This is a loading overlay Demo!'))
+  //   dispatch(
+  //     RootStore.loading.actions.setLoading(
+  //       true,
+  //       'This is a loading overlay Demo!'
+  //     )
+  //   )
   //   let progress = 0
   //   let intervalId: number = 0
   //
@@ -43,19 +53,23 @@ const ListWalletView = (props: WalletProps) => {
   //       progress += 0.1
   //       if (progress > 1) {
   //         progress = 1
-  //         dispatch(clearLoading())
+  //         dispatch(RootStore.loading.actions.clearLoading())
   //         clearInterval(intervalId)
   //       } else {
-  //         dispatch(setLoadingProgress(progress))
+  //         dispatch(RootStore.loading.actions.setLoadingProgress(progress))
   //       }
   //     }, 500)
   //   }, 1500)
   // })
 
-  const _renderWalletChange = (wallet: Wallet) => {
+  const _renderWalletChange = (wallet: WalletMock) => {
     return (
       <>
-        <LinearLayout orientation="verti" alignItems="center">
+        <LinearLayout
+          onLayout={() => populate()}
+          orientation="verti"
+          alignItems="center"
+        >
           <TextView fontSize="11px" color="text.2">
             {Facade.t('screens.listWallets.changeSinceLastVisit', {
               date: moment(wallet.lastVisitedAt).format('HH:mm - DD/MM/YYYY'),
@@ -86,7 +100,7 @@ const ListWalletView = (props: WalletProps) => {
     )
   }
 
-  const calculateChangePercentage = (wallet: Wallet) => {
+  const calculateChangePercentage = (wallet: WalletMock) => {
     const changePercentage =
       ((wallet.currentValue - wallet.previousValue) / wallet.previousValue) *
       100

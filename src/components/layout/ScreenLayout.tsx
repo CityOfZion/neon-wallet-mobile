@@ -2,13 +2,14 @@ import Constants from 'expo-constants'
 import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {SafeAreaView, ScrollView} from 'react-native'
+import {LayoutChangeEvent, SafeAreaView, ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import {LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
+  onLayout?: (event: LayoutChangeEvent) => void
   children?: React.ReactNode | React.ReactNodeArray
   useHeaderPadding?: boolean
   useStatusBarPadding?: boolean
@@ -31,6 +32,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
 
   return (
     <LinearGradient
+      onLayout={props.onLayout}
       colors={[theme.colors.background[1], theme.colors.background[2]]}
       start={[1, 0]}
       end={[1, 1]}
@@ -62,6 +64,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
 }
 
 ScreenLayout.propTypes = {
+  onLayout: PropTypes.func,
   children: PropTypes.any,
   useHeaderPadding: PropTypes.bool,
   useStatusBarPadding: PropTypes.bool,

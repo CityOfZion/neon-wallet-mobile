@@ -1,7 +1,7 @@
 import React from 'react'
 
 import {TokenValue} from '~src/models/TokenValue'
-import {Wallet} from '~src/models/Wallet'
+import {WalletMock} from '~src/models/WalletMock'
 import styled, {
   ButtonView,
   ImageView,
@@ -11,7 +11,7 @@ import styled, {
 } from '~src/styles/styled-components'
 
 interface WalletCardProps {
-  wallet: Wallet
+  wallet: WalletMock
   height?: number
   onPress?: () => void
 }
@@ -35,7 +35,7 @@ const WalletCard = (props: WalletCardProps) => {
   }
 
   const _renderAssetsBarFills = () => {
-    return props.wallet.currentAssets.assets.map((asset, i) => {
+    return props.wallet.currentAssets?.assets.map((asset, i) => {
       const holdingValue = asset.holding * asset.value
       const percentageOfTotal = (holdingValue / props.wallet.currentValue) * 100
 
@@ -64,7 +64,7 @@ const WalletCard = (props: WalletCardProps) => {
       onPress={() => props.onPress && props.onPress()}
       activeOpacity={1}
     >
-      {props.wallet.currentAssets.assets.map((a, i) =>
+      {props.wallet.currentAssets?.assets.map((a, i) =>
         _renderAccountCard(a, i)
       )}
       <WalletFrontImage

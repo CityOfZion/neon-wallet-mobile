@@ -1,12 +1,15 @@
 import {StackNavigationProp} from '@react-navigation/stack'
+import {AwaitActivity} from '@simpli/react-native-await'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
+import {useDispatch} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedInputText from '~src/components/themed/ThemedInputText'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import {RootStore} from '~src/store/RootStore'
 import {TextView, LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
@@ -14,9 +17,23 @@ interface Props {
 }
 
 const Step4CreateWalletPage: React.FC<Props> = (props) => {
+  const dispatch = useDispatch()
   const [walletName, setWalletName] = useState<string>()
   const [passphrase, setPassphrase] = useState<string>()
   const [confirmPassphrase, setConfirmPassphrase] = useState<string>()
+
+  const submit = async () => {
+    if (!walletName || !passphrase || !isValid()) return
+
+    dispatch(RootStore.wallet.actions.setName(walletName))
+    dispatch(RootStore.wallet.actions.setPassphrase(passphrase))
+    await dispatch(RootStore.wallet.actions.createAndSave())
+
+    props.navigation.reset({
+      index: 0,
+      routes: [{name: Facade.route.Step5CreateWallet.name}],
+    })
+  }
 
   const isValid = () => {
     const conditions = [
@@ -67,7 +84,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
             placeholder={Facade.t(
               'step4CreateWallet.placeholder_createPassphrase'
             )}
-            onChangeText={(value) => setPassphrase(value)}
+            onChangeText={(value: string) => setPassphrase(value)}
             value={passphrase}
           />
 
@@ -78,23 +95,20 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
             placeholder={Facade.t(
               'step4CreateWallet.placeholder_confirmPassphrase'
             )}
-            onChangeText={(value) => setConfirmPassphrase(value)}
+            onChangeText={(value: string) => setConfirmPassphrase(value)}
             value={confirmPassphrase}
           />
         </LinearLayout>
       </LinearLayout>
 
       <LinearLayout mt={5} mb={6} px={5} width={'100%'}>
-        <ThemedButton
-          onPress={() => {
-            props.navigation.reset({
-              index: 0,
-              routes: [{name: Facade.route.Step5CreateWallet.name}],
-            })
-          }}
-          label={Facade.t('app.continue')}
-          disabled={!isValid()}
-        />
+        <AwaitActivity name={'submit'} size={'large'}>
+          <ThemedButton
+            onPress={() => Facade.await.run('submit', submit, 1000)}
+            label={Facade.t('app.continue')}
+            disabled={!isValid()}
+          />
+        </AwaitActivity>
       </LinearLayout>
     </ScreenLayout>
   )
