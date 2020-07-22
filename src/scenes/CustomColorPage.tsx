@@ -54,8 +54,8 @@ const CustomColorPage = (props: Props) => {
       onClose={() => props.navigation.goBack()}
     >
       <LinearLayout height="100%">
-        <LinearLayout mb={5} maxWidth={320} alignSelf="center">
-          <AccountCard account={account} />
+        <LinearLayout mb={5} maxHeight="180px" alignSelf="center">
+          <AccountCard orientBy="height" account={account} />
         </LinearLayout>
 
         <TextView
@@ -70,7 +70,7 @@ const CustomColorPage = (props: Props) => {
           {Facade.t('customColorPage.subtitle')}
         </TextView>
 
-        <LinearLayout height={320} alignItems="center">
+        <LinearLayout width="100%" weight={1} alignItems="center">
           <ColorPicker color={color} onChange={colorPickerChangeEvent} />
         </LinearLayout>
       </LinearLayout>
