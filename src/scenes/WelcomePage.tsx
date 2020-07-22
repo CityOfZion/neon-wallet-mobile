@@ -23,12 +23,11 @@ const WelcomePage: React.FC<Props> = (props) => {
       useHeaderPadding={false}
       useFooterPadding={false}
       alignX={'center'}
-      padding={30}
     >
       <LinearLayout mb={5} alignItems={'center'}>
         <ImageView source={require('~/src/assets/images/logo-small.png')} />
         <TextView
-          mt={-2}
+          mt={'-4%'}
           color={'text.0'}
           fontSize={'3xl'}
           letterSpacing={'3px'}
@@ -38,15 +37,15 @@ const WelcomePage: React.FC<Props> = (props) => {
       </LinearLayout>
 
       <TextView
-        mb={5}
+        mt={'-4%'}
         color={'text.0'}
-        fontSize={Facade.scale(36)}
+        fontSize={Facade.scale(34)}
         fontFamily={'bold'}
       >
         {Facade.t('welcome.title')}
       </TextView>
 
-      <TextView mb={6} color={'text.0'} fontSize={'lg'} textAlign={'center'}>
+      <TextView mb={'1%'} color={'text.0'} fontSize={'md'} textAlign={'center'}>
         {Facade.t('welcome.body_1_1')}
 
         <TextView
@@ -66,7 +65,7 @@ const WelcomePage: React.FC<Props> = (props) => {
         </TextView>
       </TextView>
 
-      <TextView mb={6} color={'text.0'} fontSize={'lg'} textAlign={'center'}>
+      <TextView mb={'5%'} color={'text.0'} fontSize={'md'} textAlign={'center'}>
         {Facade.t('welcome.body_2_1')}
 
         <TextView fontFamily={'bold'}>{Facade.t('welcome.body_2_2')}</TextView>
@@ -81,12 +80,12 @@ const WelcomePage: React.FC<Props> = (props) => {
         allowFontScaling={true}
         adjustsFontSizeToFit={true}
         numberOfLines={1}
-        mb={5}
+        mb={'3%'}
       >
         {Facade.t('welcome.label_1')}
       </TextView>
 
-      <LinearLayout mt={3} mb={6} width={'100%'}>
+      <LinearLayout mt={'1%'} mb={'3%'} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
           onPress={() => props.onClose?.(Facade.route.ListWallets.name)}
@@ -94,7 +93,7 @@ const WelcomePage: React.FC<Props> = (props) => {
         />
       </LinearLayout>
 
-      <LinearLayout mb={7} width={'100%'}>
+      <LinearLayout mb={'5%'} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
           onPress={() => props.onClose?.(Facade.route.ListWallets.name)}
