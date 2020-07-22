@@ -27,7 +27,7 @@ interface AccountAssetDetailProps {
 
 const AccountAssetDetail = (props: AccountAssetDetailProps) => {
   const assetModel = new AssetQuoteModel()
-  assetModel.name = 'NEO'
+  assetModel.name = 'Neo'
   assetModel.fullName = 'NEO'
   assetModel.price = 123456
   assetModel.currencySymbol = 'USD'
@@ -35,38 +35,9 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
 
   const [account, setAccount] = useState<AccountMock>(props.account)
   const [asset, setAsset] = useState<AssetQuoteModel>(assetModel)
-  props.navigation.setOptions({headerShown: false})
-
-  const Header = (props: {goBack: () => void}) => {
-    return (
-      <LinearLayout
-        orientation="horiz"
-        width="100%"
-        mb="12px"
-        px="5px"
-        alignItems="center"
-        marginTop="20px"
-        justifyContent="space-between"
-      >
-        <ButtonView
-          onPress={props.goBack}
-          orientation="horiz"
-          alignItems="center"
-        >
-          <ImageView
-            height="20px"
-            width="12px"
-            source={require('~src/assets/images/Chevron.png')}
-          />
-          <TextView color="text.0" ml="6px" fontSize="18px">
-            {Facade.t('app.back')}
-          </TextView>
-        </ButtonView>
-      </LinearLayout>
-    )
-  }
 
   const _renderTransactionViewElement = () => {
+    let lastIndex = mockAccountAssetDetails.length - 1
     return mockAccountAssetDetails.map(
       (transActionModel: TransactionModel, i: number) => {
         return (
@@ -75,6 +46,7 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
             isHistory={true}
             transactionModel={transActionModel}
             index={i}
+            lastIndex={lastIndex}
           />
         )
       }

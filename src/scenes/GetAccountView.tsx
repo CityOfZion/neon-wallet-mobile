@@ -82,6 +82,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   })
 
   const _renderTransactionViewElement = () => {
+    let lastIndex = mockAccountAssetDetails.length - 1
     return mockAccountAssetDetails.map(
       (transActionModel: TransactionModel, i: number) => {
         return (
@@ -90,6 +91,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
             isHistory={false}
             transactionModel={transActionModel}
             index={i}
+            lastIndex={lastIndex}
           />
         )
       }
