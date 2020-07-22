@@ -64,7 +64,7 @@ const SendWalletSelectionModal = (props: Props) => {
             <WalletCard
               onPress={() =>
                 props.navigation.navigate(
-                  Facade.route.SendWalletSelectionModal.name
+                  Facade.route.SendTransactionInputModal.name
                 )
               }
               height={330}

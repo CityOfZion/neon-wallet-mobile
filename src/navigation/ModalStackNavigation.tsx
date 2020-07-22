@@ -14,12 +14,14 @@ import WelcomePage from '~src/scenes/WelcomePage'
 import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionConfirmationModal'
 import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
+import SendTransactionInputModal from '~src/scenes/send/SendTransactionInputModal'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
   SampleModal: undefined
   ReceiveWalletSelectionModal: undefined
   SendWalletSelectionModal: undefined
+  SendTransactionInputModal: undefined
   SendTransactionConfirmationModal: undefined
   CustomColor: {onColorPicked: (hex: string) => void}
   WalletContextModal: undefined
@@ -57,6 +59,10 @@ const ModalStackNavigation = (props: Props) => {
         <ModalStack.Screen
           name={Facade.route.SendWalletSelectionModal.name}
           component={SendWalletSelectionModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.SendTransactionInputModal.name}
+          component={SendTransactionInputModal}
         />
         <ModalStack.Screen
           name={Facade.route.SendTransactionConfirmationModal.name}
