@@ -4,6 +4,8 @@ import React, {useState} from 'react'
 import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {useSelector} from 'react-redux'
+// @ts-ignore
+import {Keychain} from '../asteroid-sdk'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {Facade} from '~src/app/Facade'
@@ -82,6 +84,10 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
 const OnboardingPage = (props: OnboardingPageProps) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const [isLastPage, setIsLastPage] = useState(false)
+
+  const keychain = new Keychain()
+  const mnemonic = keychain.mnemonic
+  console.log(mnemonic)
 
   const finish = async () => {
     await Storage.onboardingSeen.save(true)
