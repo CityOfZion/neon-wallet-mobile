@@ -16,7 +16,7 @@ import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionCo
 import SendTransactionInputModal from '~src/scenes/send/SendTransactionInputModal'
 import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
 import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
-import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
+import ListTokenModal from '~src/scenes/ListTokenModal'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
@@ -29,6 +29,7 @@ export type ModalStackParamList = {
   CustomColor: {onColorPicked: (hex: string) => void}
   WalletContextModal: undefined
   ReoderWalletModal: undefined
+  ListTokenModal: undefined
 }
 
 interface Props {
@@ -87,6 +88,10 @@ const ModalStackNavigation = (props: Props) => {
         <ModalStack.Screen
           name={Facade.route.ReoderWalletModal.name}
           component={ReoderWalletModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.ListTokenModal.name}
+          component={ListTokenModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

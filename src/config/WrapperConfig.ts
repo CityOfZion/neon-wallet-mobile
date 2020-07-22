@@ -58,5 +58,6 @@ export class WrapperConfig {
     'Passphrase',
     'ImportReadAccount',
     'CustomizeAccount',
+    'ListTokenModal',
   ] as const
 }
