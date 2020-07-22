@@ -40,7 +40,11 @@
     "Step2CreateWallet": "Create Wallet",
     "Step3CreateWallet": "Create Wallet",
     "Step4CreateWallet": "Create Wallet",
-    "Step5CreateWallet": "Create Wallet"
+    "Step5CreateWallet": "Create Wallet",
+    "ImportKey": "Import",
+    "Passphrase": "Create Wallet",
+    "ImportReadAccount": "Add a watch",
+    "CustomizeAccount": "Customize account"
   },
   "home": {
     "welcome": "Welcome to Neon Wallet!"
@@ -158,10 +162,6 @@
   },
   "importKey": {
     "enterAnAddress": "Enter an address, encrypted key, or private key",
-    "inputPlaceholder": "Please enter information",
-    "paste": "Paste",
-    "scan": "Scan",
-    "incorrectFormat": "Incorrect format"
   },
   "importReadAccount": {
     "headerText": "Enter an address you would like to watch.\nPlease be aware the following functionality will be disabled for this account:",
@@ -300,6 +300,12 @@
     },
     "colorSelector": {
       "customColor": "Custom colour"
+    },
+    "inputTextWithValidation": {
+      "inputPlaceholder": "Please enter information",
+      "paste": "Paste",
+      "scan": "Scan",
+      "incorrectFormat": "Incorrect format"
     }
   },
   "boolean": {

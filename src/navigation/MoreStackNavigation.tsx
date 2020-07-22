@@ -126,8 +126,8 @@ const MoreStackNavigation = () => {
           component={ImportKey}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.Step5CreateWallet.translate(),
-              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+              title: Facade.route.ImportKey.translate(),
+              image: require('~src/assets/images/icon-import-white.png'),
               theme,
               route,
             })
@@ -138,8 +138,8 @@ const MoreStackNavigation = () => {
           component={Passphrase}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.Step5CreateWallet.translate(),
-              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+              title: Facade.route.Passphrase.translate(),
+              image: require('~src/assets/images/icon-import-white.png'),
               theme,
               route,
             })
@@ -150,8 +150,8 @@ const MoreStackNavigation = () => {
           component={ImportReadAccount}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.Step5CreateWallet.translate(),
-              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+              title: Facade.route.ImportReadAccount.translate(),
+              image: require('~src/assets/images/icon-watch-white.png'),
               theme,
               route,
             })
@@ -162,19 +162,7 @@ const MoreStackNavigation = () => {
           component={CustomizeAccount}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.Step5CreateWallet.translate(),
-              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
-              theme,
-              route,
-            })
-          }
-        />
-        <MoreStack.Screen
-          name={Facade.route.CustomColor.name}
-          component={CustomColorPage}
-          options={({route}) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.Step5CreateWallet.translate(),
+              title: Facade.route.CustomizeAccount.translate(),
               image: require('~src/assets/images/icon-add-circle-outline-white.png'),
               theme,
               route,

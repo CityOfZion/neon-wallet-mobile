@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -11,17 +11,21 @@ import {
   InputTextView,
 } from '~src/styles/styled-components'
 
-function InputWithValidation(props: {
+interface Props {
   onChangeText: (text: string) => void
   color: string
   fontStyle: string
   value: string
   inputIsValid: boolean
+  invalidMessage?: string
   separatorColor: string
   sideMargins?: number
   hidePaste?: boolean
   hideScan?: boolean
-}) {
+  placeholder?: string
+}
+
+const InputWithValidation = (props: Props) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const sideMargins = props.sideMargins ?? 20
   return (
@@ -32,7 +36,10 @@ function InputWithValidation(props: {
           color={props.color}
           placeholderTextColor={theme.colors.background[3]}
           underlineColorAndroid="transparent"
-          placeholder={Facade.t('importKey.inputPlaceholder')}
+          placeholder={
+            props.placeholder ??
+            Facade.t('components.inputTextWithValidation.inputPlaceholder')
+          }
           fontFamily="regular"
           fontStyle={props.fontStyle}
           fontSize={18}
@@ -57,7 +64,8 @@ function InputWithValidation(props: {
           textAlign="right"
           mt={2}
         >
-          {Facade.t('importKey.incorrectFormat')}
+          {props.invalidMessage ??
+            Facade.t('components.inputTextWithValidation.incorrectFormat')}
         </TextView>
       )}
       <LinearLayout orientation="horiz" mt={5}>
@@ -78,7 +86,7 @@ function InputWithValidation(props: {
                 fontSize={16}
                 mr={6}
               >
-                {Facade.t('importKey.paste')}
+                {Facade.t('components.inputTextWithValidation.paste')}
               </TextView>
             </LinearLayout>
           </ButtonView>
@@ -98,7 +106,7 @@ function InputWithValidation(props: {
                 fontFamily="semibold"
                 fontSize={16}
               >
-                {Facade.t('importKey.scan')}
+                {Facade.t('components.inputTextWithValidation.scan')}
               </TextView>
             </LinearLayout>
           </ButtonView>

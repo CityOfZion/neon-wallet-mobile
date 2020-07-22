@@ -26,16 +26,6 @@ import {
   ButtonView,
 } from '~src/styles/styled-components'
 
-const DismissKeyboard: React.FC<{children: React.ReactNode}> = ({
-  children,
-}: {
-  children: React.ReactNode
-}) => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    {children}
-  </TouchableWithoutFeedback>
-)
-
 export interface ImportReadAccountProps {
   navigation: StackNavigationProp<{
     More: undefined
