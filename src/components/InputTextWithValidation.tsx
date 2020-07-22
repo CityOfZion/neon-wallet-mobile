@@ -23,7 +23,7 @@ function InputWithValidation(props: {
   hideScan?: boolean
 }) {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
-  const sideMargins = props.sideMargins ? props.sideMargins : 20
+  const sideMargins = props.sideMargins ?? 20
   return (
     <LinearLayout orientation="verti" ml={sideMargins} mr={sideMargins}>
       <LinearLayout orientation="horiz">

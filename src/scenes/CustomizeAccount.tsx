@@ -96,6 +96,7 @@ export default function CustomizeAccount(props: Props) {
             fontStyle={'normal'}
             value={name}
             inputIsValid={true}
+            sideMargins={0}
             separatorColor={theme.colors.background[3]}
             hidePaste={true}
             hideScan={true}

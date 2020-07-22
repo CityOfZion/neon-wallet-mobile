@@ -25,6 +25,7 @@ import {
   ButtonView,
   InputTextView,
 } from '~src/styles/styled-components'
+import ScreenLayout from "~src/components/layout/ScreenLayout";
 
 const DismissKeyboard: React.FC<{children: React.ReactNode}> = ({
   children,
@@ -40,6 +41,7 @@ export interface PassphraseProps {
   navigation: StackNavigationProp<{
     CustomizeAccount: undefined
   }>
+  encryptedKey: string
 }
 
 function verifyPassword(
@@ -72,8 +74,6 @@ function shouldClearTextInput(
 
 const Passphrase = (props: PassphraseProps) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
-  const encryptedKey =
-    '6PYLmjBYJ4wQTCEfqvnznGJwZeW9pfUcV5m5oreHxqryUgqKpTRAFt9L8Y'
   const [inputValue, setInputValue] = useState('')
   const [inputIsValid, setInputIsValid] = useState(true)
   const headerHeight = useHeaderHeight()
@@ -82,11 +82,7 @@ const Passphrase = (props: PassphraseProps) => {
     : theme.colors.background[5]
 
   return (
-    <LinearGradient
-      style={{flex: 1}}
-      colors={[theme.colors.background[0], theme.colors.background[2]]}
-      end={[1, 0.75]}
-    >
+    <ScreenLayout>
       <LinearLayout orientation="verti" width="100%" mt={headerHeight}>
         <TextView
           textAlign="center"
@@ -172,14 +168,13 @@ const Passphrase = (props: PassphraseProps) => {
             <ThemedButton
               label={Facade.t('passphrase.next')}
               onPress={() => {
-                console.log('Click')
-                verifyPassword(encryptedKey, inputValue, setInputIsValid)
+                verifyPassword(props.encryptedKey, inputValue, setInputIsValid)
               }}
             />
           )}
         </LinearLayout>
       </LinearLayout>
-    </LinearGradient>
+    </ScreenLayout>
   )
 }
 

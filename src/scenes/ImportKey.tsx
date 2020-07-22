@@ -26,6 +26,7 @@ import {
   ImageView,
   ButtonView,
 } from '~src/styles/styled-components'
+import {Route} from "~src/app/Route";
 
 const DismissKeyboard: React.FC<{children: React.ReactNode}> = ({
   children,
@@ -50,24 +51,20 @@ function isValidInput(text: string) {
   return wallet.isAddress(text) || wallet.isNEP2(text) || wallet.isWIF(text)
 }
 
-function nextScreen(
-  text: string
-): 'ImportReadAccount' | 'Passphrase' | 'CustomizeAccount' {
+function nextScreen(text: string): RouteName {
   if (wallet.isAddress(text)) {
-    return 'ImportReadAccount'
+    return Facade.route.ImportReadAccount.name
   } else if (wallet.isNEP2(text)) {
-    return 'Passphrase'
+    return Facade.route.Passphrase.name
   } else if (wallet.isWIF(text)) {
-    return 'CustomizeAccount'
+    return Facade.route.CustomizeAccount.name
   }
-  return 'Passphrase'
+  return Facade.route.Passphrase.name
 }
 
 const ImportKey = (props: ImportKeyProps) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
-  const [inputValue, setInputValue] = useState(
-    ''
-  )
+  const [inputValue, setInputValue] = useState('')
   const headerHeight = useHeaderHeight()
   const inputIsValid = isValidInput(inputValue)
   const inputStyle = inputIsValid ? 'normal' : 'italic'
