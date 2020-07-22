@@ -6,8 +6,8 @@
   },
   "currencies": {
     "USD": "$",
-    "BRL": "BRL",
-    "EUR": "EUR"
+    "BRL": "R$",
+    "EUR": "€"
   },
   "themes": {
     "DARK": "Dark",
