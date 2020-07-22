@@ -54,7 +54,7 @@ const CustomColorPage = (props: Props) => {
       onClose={() => props.navigation.goBack()}
     >
       <LinearLayout height="100%">
-        <LinearLayout mb={5} maxHeight="180px" alignSelf="center">
+        <LinearLayout mb={5} maxHeight="35%" alignSelf="center">
           <AccountCard orientBy="height" account={account} />
         </LinearLayout>
 
