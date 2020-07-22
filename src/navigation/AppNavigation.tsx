@@ -1,6 +1,6 @@
 import {NavigationContainer} from '@react-navigation/native'
 import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
@@ -13,12 +13,14 @@ import ScreenLoader from '~src/components/loader/ScreenLoader'
 import LoginStackNavigation from '~src/navigation/LoginStackNavigation'
 import ModalStackNavigation from '~src/navigation/ModalStackNavigation'
 import TabNavigation from '~src/navigation/TabNavigation'
+import OnboardingPage from '~src/scenes/OnboardingPage'
 import {RootStore} from '~src/store/RootStore'
 
 export type RootStackParamList = {
-  Tab: undefined
-  Modal: {screen: string}
+  Tab: (DefaultNavigationParam & Partial<{welcomeHidden?: boolean}>) | undefined
+  Modal: DefaultNavigationParam | undefined
   Login: undefined
+  Onboarding: undefined
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()
@@ -28,12 +30,17 @@ const AppNavigation = () => {
   const loadingOverlayState = useSelector((state: RootState) => state.loading)
   const {progress, loadingText, isLoading} = loadingOverlayState
 
+  const [onboardingSeen, setOnboardingSeen] = useState(true)
+  const [welcomeHidden, setWelcomeHidden] = useState(true)
+
   const dispatch = useDispatch()
 
   const populate = async () => {
     const currency = await Storage.currency.load()
     const language = await Storage.language.load()
     const theme = await Storage.theme.load()
+    const onboardingSeen = await Storage.onboardingSeen.load()
+    const welcomeHidden = await Storage.welcomeHidden.load()
 
     if (currency) {
       dispatch(RootStore.app.actions.setCurrency(currency))
@@ -46,6 +53,9 @@ const AppNavigation = () => {
     if (theme) {
       dispatch(RootStore.app.actions.setTheme(theme))
     }
+
+    setOnboardingSeen(onboardingSeen ?? false)
+    setWelcomeHidden(welcomeHidden ?? false)
   }
 
   useEffect(() => {
@@ -62,11 +72,23 @@ const AppNavigation = () => {
             )}
             <ThemeProvider theme={theme}>
               <RootStack.Navigator
-                initialRouteName={Facade.route.Login.name}
+                initialRouteName={
+                  onboardingSeen
+                    ? Facade.route.Login.name
+                    : Facade.route.Onboarding.name
+                }
                 headerMode="none"
                 screenOptions={Facade.config.screen}
               >
-                <RootStack.Screen name="Tab" component={TabNavigation} />
+                <RootStack.Screen
+                  name="Tab"
+                  component={TabNavigation}
+                  initialParams={{welcomeHidden}}
+                />
+                <RootStack.Screen
+                  name={Facade.route.Onboarding.name}
+                  component={OnboardingPage}
+                />
                 <RootStack.Screen
                   name={Facade.route.Login.name}
                   component={LoginStackNavigation}

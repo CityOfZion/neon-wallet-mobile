@@ -19,7 +19,7 @@ import {Facade} from '~src/app/Facade'
 import {TextView, ImageView, LinearLayout} from '~src/styles/styled-components'
 
 const PANEL_OFFSET = 50
-const ANIMATION_DELTA_THRESHOLD = 50
+const ANIMATION_DELTA_THRESHOLD = 0.5
 const ANIMATION_VELOCITY_THRESHOLD = 0.5
 
 interface SwiperProps {
@@ -109,10 +109,11 @@ export default function SwiperPanel(props: SwiperProps) {
         onPanResponderRelease: (evt, gestureState) => {
           pan.current.flattenOffset()
 
-          // If delta Y is greater than ANIMATION_DELTA_THRESHOLD or movement is faster than ANIMATION_VELOCITY_THRESHOLD,
-          // closes panel
+          // If delta Y is greater than ANIMATION_DELTA_THRESHOLD * PANEL_HEIGHT
+          // or movement is faster than ANIMATION_VELOCITY_THRESHOLD, closes panel
           if (
-            gestureState.dy > ANIMATION_DELTA_THRESHOLD ||
+            gestureState.dy >
+              (height ?? MAX_HEIGHT) * ANIMATION_DELTA_THRESHOLD ||
             gestureState.vy > ANIMATION_VELOCITY_THRESHOLD
           ) {
             controller.close()
@@ -163,13 +164,13 @@ export default function SwiperPanel(props: SwiperProps) {
     Animated.parallel([
       Animated.spring(pan.current, {
         toValue: {x: 0, y: height ?? MAX_HEIGHT},
-        restSpeedThreshold: 100,
-        restDisplacementThreshold: 40,
+        restSpeedThreshold: 150,
+        restDisplacementThreshold: 100,
         friction: 100,
       }),
       Animated.timing(bgOpacity.current, {
         toValue: 0,
-        duration: 500,
+        duration: 200,
       }),
     ]).start(() => {
       props.onClose && props.onClose()

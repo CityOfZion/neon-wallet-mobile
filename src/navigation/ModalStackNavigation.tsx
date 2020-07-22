@@ -9,10 +9,12 @@ import ReceiveWalletSelectionModal from '~src/scenes/ReceiveWalletSelectionModal
 import ReoderWalletModal from '~src/scenes/ReorderWalletModal'
 import SampleModal from '~src/scenes/SampleModal'
 import WalletContextModal from '~src/scenes/WalletContextModal'
+import WelcomePage from '~src/scenes/WelcomePage'
 import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionConfirmationModal'
 import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
 
 export type ModalStackParamList = {
+  WelcomeModal: undefined
   SampleModal: undefined
   ReceiveWalletSelectionModal: undefined
   SendWalletSelectionModal: undefined
@@ -34,6 +36,10 @@ const ModalStackNavigation = () => {
         headerMode="none"
         screenOptions={Facade.config.screen}
       >
+        <ModalStack.Screen
+          name={Facade.route.WelcomeModal.name}
+          component={WelcomePage}
+        />
         <ModalStack.Screen
           name={Facade.route.SampleModal.name}
           component={SampleModal}

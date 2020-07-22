@@ -1,3 +1,5 @@
+import {WrapperConfig} from '~src/config/WrapperConfig'
+
 export declare global {
   // react-native-sortable-list
   interface DataByNumber<T> {
@@ -18,5 +20,11 @@ export declare global {
       event: GestureResponderEvent,
       gestureState?: PanResponderGestureState
     ) => void
+  }
+
+  // Navigation param list
+  interface DefaultNavigationParam {
+    screen: RouteName
+    initial?: boolean
   }
 }
