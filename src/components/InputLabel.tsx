@@ -10,6 +10,7 @@ const InputLabel = (props: {
   weight?: number
   marginBottom?: number
   marginTop?: number
+  color?: string
 }) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const marginBottom = props.marginBottom ?? 0
@@ -19,7 +20,7 @@ const InputLabel = (props: {
     <TextView
       fontSize={14}
       fontFamily="medium"
-      color={theme.colors.background[3]}
+      color={props.color ?? theme.colors.background[3]}
       weight={props.weight ?? undefined}
       mb={marginBottom}
       mt={marginTop}

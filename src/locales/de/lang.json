@@ -187,6 +187,50 @@
       }
     }
   },
+  "modals": {
+    "send": {
+      "title": "Send",
+      "walletSelection": {
+        "subtitle": "Please select a wallet to send from"
+      },
+      "transactionConfirmation": {
+        "header": "Transaction successfully sent!",
+        "subheader": "Once your transaction has been confirmed it will appear in your transaction history",
+        "transactionId": "TRANSACTION ID"
+      },
+      "transactionInput": {
+        "selectDifferentAccount": "Select a different Account",
+        "transactionDetails": "TRANSACTION DETAILS",
+        "prioritiseTransfer": "PRIORITISE YOUR TRANSFER WITH A FEE?",
+        "enterAmount": "Enter amount",
+        "selectToken": "Select token to send",
+        "enterDestination": "Enter destination address",
+        "destinationAddress": "DESTINATION ADDRESS",
+        "token": "TOKEN",
+        "amount": "AMOUNT",
+        "contacts": "Contacts",
+        "paste": "Paste",
+        "scan": "Scan"
+      }
+    },
+    "receive": {
+      "title": "Receive",
+      "walletSelection": {
+        "subtitle": "Please select a wallet to receive to"
+      }
+    },
+    "walletContext": {
+      "create": "Create new wallet",
+      "reorder": "Reorder wallets",
+      "cancel": "Cancel"
+    },
+    "reorderWallet": {
+      "title": "Reorder wallets",
+      "subtitle": "Drag a wallet to a new position to reorder",
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  },
   "components": {
     "notification": {
       "title": "#translateme"

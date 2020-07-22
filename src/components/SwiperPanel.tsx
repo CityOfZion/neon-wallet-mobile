@@ -430,7 +430,7 @@ SwiperPanel.defaultProps = {
   paddingBottom: undefined,
 }
 
-export function CancelButton() {
+export function CloseButton() {
   return (
     <ImageView
       width={20}
