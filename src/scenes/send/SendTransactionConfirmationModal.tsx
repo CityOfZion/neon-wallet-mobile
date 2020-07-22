@@ -10,9 +10,10 @@ import SwiperPanel, {
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 
 interface Props {
-  navigation: StackNavigationProp<ModalStackParamList>
+  navigation: StackNavigationProp<ModalStackParamList & WalletStackParamList>
 }
 
 const SendTransactionConfirmationModal = (props: Props) => {

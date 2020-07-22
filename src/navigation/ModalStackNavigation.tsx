@@ -35,7 +35,7 @@ interface Props {
   route?: RouteProp<RootStackParamList, 'Modal'>
 }
 
-const ModalStack = createStackNavigator<ModalStackParamList & WalletStackParamList>()
+const ModalStack = createStackNavigator<ModalStackParamList>()
 
 const ModalStackNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
