@@ -1,57 +1,25 @@
 import {wallet} from '@cityofzion/neon-core'
-import Clipboard from '@react-native-community/clipboard'
 import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
-import {LinearGradient} from 'expo-linear-gradient'
 import React, {useState} from 'react'
-import {
-  Keyboard,
-  Text,
-  TextInput,
-  TouchableHighlight,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native'
 import {useSelector} from 'react-redux'
-import {fontFamily} from 'styled-system'
 
 import {Facade} from '~src/app/Facade'
-import InputWithValidation from '~src/components/InputTextWithValidation'
+import InputWithValidation from '~src/components/InputWithValidation'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {ImportReadAccountProps} from '~src/scenes/ImportReadAccount'
+import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootState} from '~src/store/RootStore'
-import {
-  LinearLayout,
-  TextView,
-  ImageView,
-  ButtonView,
-} from '~src/styles/styled-components'
-import {Route} from "~src/app/Route";
-
-const DismissKeyboard: React.FC<{children: React.ReactNode}> = ({
-  children,
-}: {
-  children: React.ReactNode
-}) => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    {children}
-  </TouchableWithoutFeedback>
-)
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface ImportKeyProps {
-  navigation: StackNavigationProp<{
-    More: undefined
-    Passphrase: undefined
-    ImportReadAccount: ImportReadAccountProps | undefined
-    CustomizeAccount: undefined
-  }>
+  navigation: StackNavigationProp<MoreStackParamList>
 }
 
-function isValidInput(text: string) {
+const validator = (text: string) => {
   return wallet.isAddress(text) || wallet.isNEP2(text) || wallet.isWIF(text)
 }
 
-function nextScreen(text: string): RouteName {
+function nextScreen(text: string): keyof MoreStackParamList {
   if (wallet.isAddress(text)) {
     return Facade.route.ImportReadAccount.name
   } else if (wallet.isNEP2(text)) {
@@ -66,30 +34,13 @@ const ImportKey = (props: ImportKeyProps) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const [inputValue, setInputValue] = useState('')
   const headerHeight = useHeaderHeight()
-  const inputIsValid = isValidInput(inputValue)
-  const inputStyle = inputIsValid ? 'normal' : 'italic'
-  const inputColor = inputIsValid
-    ? theme.colors.text[0]
-    : theme.colors.background[3]
-
-  const separatorColor =
-    !inputIsValid && inputValue.length > 0
-      ? theme.colors.background[5]
-      : theme.colors.background[4]
+  const inputIsValid = validator(inputValue)
 
   const screenName = nextScreen(inputValue)
 
-  const pasteFromClipboard = () => {
-    Clipboard.getString().then((text) => setInputValue(text))
-  }
-
   return (
-    <LinearGradient
-      style={{flex: 1}}
-      colors={[theme.colors.background[0], theme.colors.background[2]]}
-      end={[1, 0.75]}
-    >
-      <LinearLayout orientation="verti" width="100%" mt={headerHeight}>
+    <ScreenLayout>
+      <LinearLayout orientation="verti" width="100%">
         <TextView
           textAlign="center"
           fontSize={18}
@@ -104,11 +55,12 @@ const ImportKey = (props: ImportKeyProps) => {
 
         <InputWithValidation
           onChangeText={(text) => setInputValue(text)}
-          color={inputColor}
-          fontStyle={inputStyle}
+          color={theme.colors.text[0]}
+          invalidColor={theme.colors.background[3]}
           value={inputValue}
-          inputIsValid={inputIsValid}
-          separatorColor={separatorColor}
+          validator={validator}
+          separatorColor={theme.colors.background[5]}
+          invalidSeparatorColor={theme.colors.background[4]}
         />
 
         {inputIsValid && (
@@ -122,7 +74,7 @@ const ImportKey = (props: ImportKeyProps) => {
           </LinearLayout>
         )}
       </LinearLayout>
-    </LinearGradient>
+    </ScreenLayout>
   )
 }
 

@@ -161,12 +161,18 @@
     "help": "Help"
   },
   "importKey": {
-    "enterAnAddress": "Enter an address, encrypted key, or private key",
+    "enterAnAddress": "Enter an address, encrypted key, or private key"
+  },
+  "passphrase": {
+    "enterPassphrase": "Enter a Passphrase for your encrypted key",
+    "inputPlaceholder": "Please enter Passphrase",
+    "next": "Next"
   },
   "importReadAccount": {
     "headerText": "Enter an address you would like to watch.\nPlease be aware the following functionality will be disabled for this account:",
     "inputPlaceholder": "Please enter information",
-    "disabledFeature": "Function lorem ipsum sid dolar"
+    "disabledFeature": "Function lorem ipsum sid dolar",
+    "next": "Next"
   },
   "settings": {
     "title": "Settings",

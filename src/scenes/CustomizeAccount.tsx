@@ -10,31 +10,31 @@ import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import ColorSelector from '~src/components/ColorSelector'
 import InputLabel from '~src/components/InputLabel'
-import InputWithValidation from '~src/components/InputTextWithValidation'
+import InputWithValidation from '~src/components/InputWithValidation'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {Account} from '~src/models/Account'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootState} from '~src/store/RootStore'
-import {
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
-import ScreenLayout from '~src/components/layout/ScreenLayout'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<MoreStackParamList>
   address: string
 }
 
-export default function CustomizeAccount(props: Props) {
+const CustomizeAccount = (props: Props) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const account = new Account()
+  const [color, setColor] = useState<string>(theme.colors.card[0])
 
   account.srcIcon = require('~src/assets/images/card-neo.png')
+  account.backgroundColor = color
+
+  // TODO: Remove placeholders
   account.name = 'My First Account'
   account.currency = '$'
   account.balance = 24985
   account.address = 'AN8iLVt18CKoATdexztCQj923hw5gkc41A'
-  account.backgroundColor = '#0DD5B3'
 
   const [name, setName] = useState<string>('')
 
@@ -42,7 +42,6 @@ export default function CustomizeAccount(props: Props) {
     // TODO: NW-197
   }
 
-  const headerSize = useHeaderHeight()
   return (
     <ScreenLayout>
       <LinearLayout width="100%" height="100%" pl={20} pr={20}>
@@ -64,13 +63,18 @@ export default function CustomizeAccount(props: Props) {
           marginBottom={4}
         />
         <AccountCard account={account} isStackMode={true} />
-        <InputLabel title="Account Name" marginTop={4} />
+        <InputLabel
+          title={Facade.t('screens.customizeAccount.accountInput.title')}
+          marginTop={4}
+        />
         <InputWithValidation
           onChangeText={setName}
+          placeholder={Facade.t(
+            'screens.customizeAccount.accountInput.placeholder'
+          )}
           color={theme.colors.text[0]}
-          fontStyle={'normal'}
           value={name}
-          inputIsValid={true}
+          validator={() => true}
           sideMargins={0}
           separatorColor={theme.colors.background[3]}
           hidePaste={true}
@@ -82,8 +86,10 @@ export default function CustomizeAccount(props: Props) {
           marginBottom={4}
         />
 
-        <ColorSelector />
+        <ColorSelector onSelect={setColor} />
       </LinearLayout>
     </ScreenLayout>
   )
 }
+
+export default CustomizeAccount

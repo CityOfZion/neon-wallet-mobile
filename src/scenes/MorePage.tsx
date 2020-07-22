@@ -35,7 +35,7 @@ const MorePage = (props: MoreProps) => {
         iconMarginRight={18}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
-          props.navigation.navigate('ImportReadAccount')
+          props.navigation.navigate(Facade.route.ImportReadAccount.name)
         }}
       />
       <MenuItem

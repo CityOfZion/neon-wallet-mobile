@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import React from 'react'
+import {NativeSyntheticEvent, TargetedEvent} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -14,26 +15,39 @@ import {
 interface Props {
   onChangeText: (text: string) => void
   color: string
-  fontStyle: string
+  invalidColor?: string
+  fontStyle?: string
   value: string
-  inputIsValid: boolean
+  validator: (text: string) => boolean
   invalidMessage?: string
   separatorColor: string
+  invalidSeparatorColor?: string
   sideMargins?: number
   hidePaste?: boolean
   hideScan?: boolean
   placeholder?: string
+  secure?: boolean
+  onFocus?: (e: NativeSyntheticEvent<TargetedEvent>) => void
 }
 
 const InputWithValidation = (props: Props) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const sideMargins = props.sideMargins ?? 20
+  const fontStyle =
+    props.value && props.validator(props.value)
+      ? props.fontStyle ?? 'normal'
+      : 'italic'
+
+  const isValid = props.validator(props.value) || !props.value
+
   return (
     <LinearLayout orientation="verti" ml={sideMargins} mr={sideMargins}>
       <LinearLayout orientation="horiz">
         <InputTextView
           onChangeText={props.onChangeText}
-          color={props.color}
+          color={
+            props.validator(props.value) ? props.color : props.invalidColor
+          }
           placeholderTextColor={theme.colors.background[3]}
           underlineColorAndroid="transparent"
           placeholder={
@@ -41,12 +55,15 @@ const InputWithValidation = (props: Props) => {
             Facade.t('components.inputTextWithValidation.inputPlaceholder')
           }
           fontFamily="regular"
-          fontStyle={props.fontStyle}
+          fontStyle={fontStyle}
           fontSize={18}
           value={props.value}
           weight={1}
+          autoCompleteType={props.secure ? 'password' : undefined}
+          secureTextEntry={props.secure ?? false}
+          onFocus={props.onFocus}
         />
-        {props.value.length > 0 && !props.inputIsValid && (
+        {!isValid && (
           <ImageView
             resizeMode={'center'}
             alignSelf="center"
@@ -54,8 +71,17 @@ const InputWithValidation = (props: Props) => {
           />
         )}
       </LinearLayout>
-      <LinearLayout mt={3} bg={props.separatorColor} height={1} width="100%" />
-      {props.value.length > 0 && !props.inputIsValid && (
+      <LinearLayout
+        mt={3}
+        bg={
+          props.validator(props.value)
+            ? props.separatorColor
+            : props.invalidSeparatorColor
+        }
+        height={1}
+        width="100%"
+      />
+      {!isValid && (
         <TextView
           fontStyle="italic"
           color={theme.colors.background[5]}

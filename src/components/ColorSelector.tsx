@@ -53,7 +53,10 @@ export default function ColorSelector(props: Props) {
       onPress={() => {
         navigation.navigate('Modal', {
           screen: Facade.route.CustomColor.name,
-          onColorPicked: (hex: string) => setColor(hex),
+          onColorPicked: (hex: string) => {
+            setColor(hex)
+            props.onSelect && props.onSelect(hex)
+          },
         })
       }}
     >
