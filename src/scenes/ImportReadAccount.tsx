@@ -53,7 +53,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   const headerHeight = useHeaderHeight()
 
   return (
-    <ScreenLayout useHeaderPadding={false}>
+    <ScreenLayout>
       <LinearLayout orientation="verti" width="100%" mt={headerHeight}>
         <TextView
           textAlign="center"
