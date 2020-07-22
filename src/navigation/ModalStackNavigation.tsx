@@ -1,3 +1,4 @@
+import {RouteProp} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
 import {useSelector} from 'react-redux'
@@ -12,6 +13,7 @@ import WalletContextModal from '~src/scenes/WalletContextModal'
 import WelcomePage from '~src/scenes/WelcomePage'
 import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionConfirmationModal'
 import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
@@ -24,9 +26,13 @@ export type ModalStackParamList = {
   ReoderWalletModal: undefined
 }
 
+interface Props {
+  route?: RouteProp<RootStackParamList, 'Modal'>
+}
+
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
-const ModalStackNavigation = () => {
+const ModalStackNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
 
   return (
@@ -59,6 +65,7 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={Facade.route.CustomColor.name}
           component={CustomColorPage}
+          initialParams={props.route?.params}
         />
         <ModalStack.Screen
           name={Facade.route.WalletContextModal.name}

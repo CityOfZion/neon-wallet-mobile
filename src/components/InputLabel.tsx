@@ -12,44 +12,22 @@ const InputLabel = (props: {
   marginTop?: number
 }) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
-  const marginBottom = props.marginBottom ? props.marginBottom : 0
-  const marginTop = props.marginTop ? props.marginTop : 1
-  if (props.weight) {
-    return (
-      <TextView
-        fontSize={14}
-        fontFamily="medium"
-        color={theme.colors.background[3]}
-        weight={props.weight}
-        mb={marginBottom}
-        mt={marginTop}
-        style={{
-          textAlignVertical: props.textAlignVertical
-            ? props.textAlignVertical
-            : 'center',
-        }}
-      >
-        {props.title}
-      </TextView>
-    )
-  } else {
-    return (
-      <TextView
-        fontSize={14}
-        fontFamily="medium"
-        color={theme.colors.background[3]}
-        mb={marginBottom}
-        mt={marginTop}
-        style={{
-          textAlignVertical: props.textAlignVertical
-            ? props.textAlignVertical
-            : 'center',
-        }}
-      >
-        {props.title}
-      </TextView>
-    )
-  }
+  const marginBottom = props.marginBottom ?? 0
+  const marginTop = props.marginTop ?? 1
+
+  return (
+    <TextView
+      fontSize={14}
+      fontFamily="medium"
+      color={theme.colors.background[3]}
+      weight={props.weight ?? undefined}
+      mb={marginBottom}
+      mt={marginTop}
+      alignItems={'center'}
+    >
+      {props.title}
+    </TextView>
+  )
 }
 
 export default InputLabel

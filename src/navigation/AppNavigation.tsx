@@ -1,4 +1,4 @@
-import {NavigationContainer} from '@react-navigation/native'
+import {NavigationContainer, RouteProp} from '@react-navigation/native'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
@@ -18,14 +18,20 @@ import {RootStore} from '~src/store/RootStore'
 
 export type RootStackParamList = {
   Tab: (DefaultNavigationParam & Partial<{welcomeHidden?: boolean}>) | undefined
-  Modal: DefaultNavigationParam | undefined
+  Modal:
+    | (DefaultNavigationParam & Partial<{onColorPicked: (hex: string) => void}>)
+    | undefined
   Login: undefined
   Onboarding: undefined
 }
 
+interface Props {
+  route?: RouteProp<RootStackParamList, 'Modal'>
+}
+
 const RootStack = createStackNavigator<RootStackParamList>()
 
-const AppNavigation = () => {
+const AppNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const loadingOverlayState = useSelector((state: RootState) => state.loading)
   const {progress, loadingText, isLoading} = loadingOverlayState
@@ -96,6 +102,7 @@ const AppNavigation = () => {
                 <RootStack.Screen
                   name="Modal"
                   component={ModalStackNavigation}
+                  initialParams={props.route?.params}
                 />
               </RootStack.Navigator>
             </ThemeProvider>

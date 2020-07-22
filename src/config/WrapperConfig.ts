@@ -47,7 +47,6 @@ export class WrapperConfig {
     'ReoderWalletModal',
     'Passcode',
     'ConfirmPasscode',
-    'More',
     'ImportKey',
     'Passphrase',
     'ImportReadAccount',
