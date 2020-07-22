@@ -20,7 +20,7 @@ const ReceiveWalletSelectionModal = (props: Props) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const [wallets, setWallets] = useState(mockWalletItems)
   const carouselRef = useRef(null)
-  const currency = useSelector((state: RootState) => state.app.currency)
+  const currency = useSelector((state: RootState) => state.settings.currency)
 
   return (
     <SwiperPanel

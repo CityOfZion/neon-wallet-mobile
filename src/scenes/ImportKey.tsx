@@ -31,7 +31,9 @@ function nextScreen(text: string): keyof MoreStackParamList {
 }
 
 const ImportKey = (props: ImportKeyProps) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const [inputValue, setInputValue] = useState('')
   const headerHeight = useHeaderHeight()
   const inputIsValid = validator(inputValue)

@@ -80,7 +80,7 @@ const ThemedButton: React.FC<Props> = (props) => {
           />
         )}
 
-        {props.label && (
+        {Boolean(props.label) && (
           <LabelView
             mt={'2px'}
             color={props.textColor}

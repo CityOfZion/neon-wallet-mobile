@@ -20,11 +20,11 @@ interface Props {
 const ThemePickerModal = (props: Props) => {
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
-  const {theme} = useSelector((state: RootState) => state.app)
+  const {theme} = useSelector((state: RootState) => state.settings)
 
   const changeTheme = async (val: Theme) => {
-    dispatch(RootStore.app.actions.setTheme(val))
-    await Storage.theme.save(val)
+    dispatch(RootStore.settings.actions.setTheme(val))
+    dispatch(RootStore.settings.actions.save())
   }
 
   const isSelected = (t: Theme) => t === theme

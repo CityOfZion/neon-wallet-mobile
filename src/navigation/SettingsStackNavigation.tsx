@@ -7,7 +7,7 @@ import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
-import {Wallet} from '~src/models/Wallet'
+import {Wallet} from '~src/models/redux/Wallet'
 import Step1BackupWalletPage from '~src/scenes/BackupWalletPage/Step1BackupWalletPage'
 import Step2BackupWalletPage from '~src/scenes/BackupWalletPage/Step2BackupWalletPage'
 import Step3BackupWalletPage from '~src/scenes/BackupWalletPage/Step3BackupWalletPage'
@@ -27,7 +27,9 @@ export type SettingsStackParamList = {
 const SettingsStack = createStackNavigator<SettingsStackParamList>()
 
 const SettingsStackNavigation = () => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
 
   return (
     <ThemeProvider theme={theme}>

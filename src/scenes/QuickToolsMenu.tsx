@@ -19,7 +19,9 @@ interface Props {
 }
 
 export default function QuickToolsMenu(props: Props) {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const navigation = useNavigation()
 
   const items: ListItem[] = [

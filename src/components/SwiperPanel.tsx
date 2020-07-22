@@ -17,6 +17,7 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import {TextView, ImageView, LinearLayout} from '~src/styles/styled-components'
+import {AwaitActivity} from '@simpli/react-native-await'
 
 export const PANEL_OFFSET = 50
 const ANIMATION_DELTA_THRESHOLD = 0.5
@@ -87,7 +88,9 @@ export const useSwiperController = (initial: boolean = false) => {
 }
 
 export default function SwiperPanel(props: SwiperProps) {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const MAX_HEIGHT = useWindowDimensions?.().height
 
   const [height, setHeight] = useState<number>()
@@ -214,23 +217,25 @@ export default function SwiperPanel(props: SwiperProps) {
         mt="24px"
         mb={paddingTop}
       >
-        <LinearLayout weight={1} alignItems="flex-start">
-          <TouchableWithoutFeedback
-            onPress={() => props.onLeftPress && props.onLeftPress()}
-          >
-            <View
-              style={{
-                marginLeft: -10,
-                paddingLeft: 10,
-              }}
+        <AwaitActivity name={'swiperLeft'}>
+          <LinearLayout weight={1} alignItems="flex-start">
+            <TouchableWithoutFeedback
+              onPress={() => props.onLeftPress && props.onLeftPress()}
             >
-              {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
-              {typeof props.leftButton === 'string'
-                ? TextButton(props.leftButton)
-                : props.leftButton}
-            </View>
-          </TouchableWithoutFeedback>
-        </LinearLayout>
+              <View
+                style={{
+                  marginLeft: -10,
+                  paddingLeft: 10,
+                }}
+              >
+                {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
+                {typeof props.leftButton === 'string'
+                  ? TextButton(props.leftButton)
+                  : props.leftButton}
+              </View>
+            </TouchableWithoutFeedback>
+          </LinearLayout>
+        </AwaitActivity>
 
         <LinearLayout
           weight={1}
@@ -260,23 +265,25 @@ export default function SwiperPanel(props: SwiperProps) {
           </TextView>
         </LinearLayout>
 
-        <LinearLayout weight={1} alignItems="flex-end">
-          <TouchableWithoutFeedback
-            onPress={() => props.onRightPress && props.onRightPress()}
-          >
-            <View
-              style={{
-                marginRight: -10,
-                paddingRight: 10,
-              }}
+        <AwaitActivity name={'swiperRight'}>
+          <LinearLayout weight={1} alignItems="flex-end">
+            <TouchableWithoutFeedback
+              onPress={() => props.onRightPress && props.onRightPress()}
             >
-              {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
-              {typeof props.rightButton === 'string'
-                ? TextButton(props.rightButton)
-                : props.rightButton}
-            </View>
-          </TouchableWithoutFeedback>
-        </LinearLayout>
+              <View
+                style={{
+                  marginRight: -10,
+                  paddingRight: 10,
+                }}
+              >
+                {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
+                {typeof props.rightButton === 'string'
+                  ? TextButton(props.rightButton)
+                  : props.rightButton}
+              </View>
+            </TouchableWithoutFeedback>
+          </LinearLayout>
+        </AwaitActivity>
       </LinearLayout>
     )
   }
@@ -455,7 +462,9 @@ export function CloseButton() {
 }
 
 export function BackButton(props: {text?: string}) {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   return (
     <View
       style={{

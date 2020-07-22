@@ -18,7 +18,7 @@ interface SettingsProps {
 
 const SettingsPage = (props: SettingsProps) => {
   const {language, currency, theme} = useSelector(
-    (state: RootState) => state.app
+    (state: RootState) => state.settings
   )
 
   const openModal = (modal: keyof ModalStackParamList) => {

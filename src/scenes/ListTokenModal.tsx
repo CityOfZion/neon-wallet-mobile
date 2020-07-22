@@ -1,12 +1,16 @@
+import {StackNavigationProp} from '@react-navigation/stack'
 import React from 'react'
 import {FlatList} from 'react-native'
-import {TokenValue} from '~src/models/TokenValue'
+
+import {Facade} from '~src/app/Facade'
+import SwiperPanel, {
+  CloseButton,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
 import {mockListTokenModal} from '~src/mocks/mockListTokenModal'
-import {StackNavigationProp} from '@react-navigation/stack'
-import SwiperPanel, {CloseButton, useSwiperController} from '~src/components/SwiperPanel'
+import {TokenValue} from '~src/models/TokenValue'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import {Facade} from '~src/app/Facade'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -17,7 +21,7 @@ const ListTokenModal = (props: Props) => {
 
   const Item = (item: TokenValue) => {
     return (
-      <LinearLayout  py = "12px" orientation="horiz" alignItems="center">
+      <LinearLayout py="12px" orientation="horiz" alignItems="center">
         <ImageView
           height="29px"
           width="29px"
@@ -37,7 +41,6 @@ const ListTokenModal = (props: Props) => {
             color="text.2"
           >
             {Facade.t('modals.listTokenModal.holding')}
-
           </TextView>
 
           <TextView fontFamily="bold" fontSize="18px" color="text.0">
@@ -96,6 +99,5 @@ const ListTokenModal = (props: Props) => {
     </SwiperPanel>
   )
 }
-
 
 export default ListTokenModal

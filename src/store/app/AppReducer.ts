@@ -1,37 +1,56 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 
-import {Facade} from '~src/app/Facade'
-import {Currency} from '~src/enums/Currency'
-import {Lang} from '~src/enums/Lang'
-import {Theme} from '~src/enums/Theme'
-import {CurrencyDispatcher} from '~src/store/app/dispatchers/CurrencyDispatcher'
-import {LanguageDispatcher} from '~src/store/app/dispatchers/LanguageDispatcher'
-import {ThemeDispatcher} from '~src/store/app/dispatchers/ThemeDispatcher'
+import {Model} from '~src/app/Model'
+import {Storage} from '~src/app/Storage'
+import {App} from '~src/models/redux/App'
+import {Wallet} from '~src/models/redux/Wallet'
+import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
+import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
 
 export class AppReducer extends ReducerWrapper<AppType, AppState, AppAction> {
-  protected readonly initialState: AppState = {
-    language: Facade.config.locale.defaultLanguage,
-    currency: Facade.config.locale.defaultCurrency,
-    theme: Facade.config.application.defaultTheme,
-  }
+  protected readonly initialState = Model.parse<AppState>(App)
 
-  protected readonly dispatchers = [
-    LanguageDispatcher,
-    CurrencyDispatcher,
-    ThemeDispatcher,
-  ]
+  protected readonly dispatchers = [WalletsDispatcher, AccountsDispatcher]
 
   readonly actions = {
-    setLanguage: (language: Lang) => {
-      return this.commit('SET_LANGUAGE', {language})
+    syncWallets: (): AsyncAction => {
+      return async (dispatch, getState) => {
+        const wallets = await Storage.wallets.load()
+        if (wallets) {
+          dispatch(this.commit('SET_WALLETS', {wallets}))
+        }
+      }
     },
 
-    setCurrency: (currency: Currency) => {
-      return this.commit('SET_CURRENCY', {currency})
+    saveWallets: (): AsyncAction => {
+      return async (dispatch, getState) => {
+        const {wallets} = getState().app
+        await Storage.wallets.save(wallets)
+      }
     },
 
-    setTheme: (theme: Theme) => {
-      return this.commit('SET_THEME', {theme})
+    updateWallet: (wallet: Wallet): AsyncAction => {
+      return async (dispatch, getState) => {
+        const wallets = getState().app.wallets.map((it) => {
+          if (it.id === wallet.id) {
+            wallet.securityPhrase = it.securityPhrase
+            return wallet
+          }
+
+          return it
+        })
+
+        dispatch(this.commit('SET_WALLETS', {wallets}))
+      }
+    },
+
+    syncAccounts: (): AsyncAction => {
+      return async (dispatch, getState) => {
+        const accounts = await Storage.accounts.load()
+        if (accounts) {
+          dispatch(this.commit('SET_ACCOUNTS', {accounts}))
+        }
+      }
     },
   }
 }

@@ -31,7 +31,9 @@ interface Props {
 }
 
 const InputWithValidation = (props: Props) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const sideMargins = props.sideMargins ?? 20
   const fontStyle =
     props.value && props.validator(props.value)

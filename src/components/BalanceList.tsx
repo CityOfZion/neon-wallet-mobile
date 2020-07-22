@@ -21,7 +21,7 @@ const TableData = (props: {header: string; content: string}) => {
 }
 
 const BalanceListItem = (props: {item: TokenValue}) => {
-  const currency = useSelector((state: RootState) => state.app.currency)
+  const currency = useSelector((state: RootState) => state.settings.currency)
 
   return (
     <LinearLayout orientation="horiz" alignItems="center">
@@ -46,7 +46,7 @@ const BalanceListItem = (props: {item: TokenValue}) => {
 }
 
 const BalanceList = (props: {
-  tokenAssets: TokenBalance
+  tokenAssets?: TokenBalance
   mx?: string
   my?: string
 }) => {
@@ -55,7 +55,7 @@ const BalanceList = (props: {
       <TextView color="text.2" fontSize="sm">
         {Facade.t('components.balanceList.title')}
       </TextView>
-      {props.tokenAssets.totalValue ? (
+      {props.tokenAssets?.totalValue ? (
         <FlatList
           data={props.tokenAssets.assets}
           keyExtractor={(item) => item.symbol}

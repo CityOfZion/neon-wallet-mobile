@@ -24,7 +24,9 @@ export type LoginStackParamList = {
 const LoginStack = createStackNavigator<LoginStackParamList>()
 
 const LoginStackNavigation = () => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
 
   return (
     <ThemeProvider theme={theme}>

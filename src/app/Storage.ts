@@ -1,32 +1,9 @@
 import {Facade} from '~src/app/Facade'
-import {Currency} from '~src/enums/Currency'
-import {Lang} from '~src/enums/Lang'
-import {Theme} from '~src/enums/Theme'
-import {Account} from '~src/models/Account'
-import {Wallet} from '~src/models/Wallet'
+import {Account} from '~src/models/redux/Account'
+import {Settings} from '~src/models/redux/Settings'
+import {Wallet} from '~src/models/redux/Wallet'
 
 export abstract class Storage {
-  /**
-   * User language preference
-   */
-  static get language() {
-    return Facade.storage['@language'].bind().as<Lang>()
-  }
-
-  /**
-   * User currency preference
-   */
-  static get currency() {
-    return Facade.storage['@currency'].bind().as<Currency>()
-  }
-
-  /**
-   * User theme preference
-   */
-  static get theme() {
-    return Facade.storage['@theme'].bind().as<Theme>()
-  }
-
   /**
    * Controls the span of onboarding screen
    */
@@ -42,10 +19,10 @@ export abstract class Storage {
   }
 
   /**
-   * Account's user data
+   * Settings' user data
    */
-  static get account() {
-    return Facade.storage['@account'].bind().as(Account)
+  static get settings() {
+    return Facade.storage['@settings'].bind().as(Settings)
   }
 
   /**
@@ -53,5 +30,12 @@ export abstract class Storage {
    */
   static get wallets() {
     return Facade.storage['@wallets'].bind().asArrayOf(Wallet)
+  }
+
+  /**
+   * Accounts' user data
+   */
+  static get accounts() {
+    return Facade.storage['@accounts'].bind().asArrayOf(Account)
   }
 }

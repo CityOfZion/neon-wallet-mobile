@@ -218,7 +218,11 @@ const DestinationAddressField = (props: {
   )
 }
 
-const TokenField = (props: {theme: ApplicationTheme; token: string; nav: StackNavigationProp<ModalStackParamList>}) => {
+const TokenField = (props: {
+  theme: ApplicationTheme
+  token: string
+  nav: StackNavigationProp<ModalStackParamList>
+}) => {
   return (
     <Fragment>
       <InputLabel
@@ -228,9 +232,11 @@ const TokenField = (props: {theme: ApplicationTheme; token: string; nav: StackNa
         marginBottom={20}
       />
 
-      <ButtonView onPress={() => {
-        props.nav.navigate(Facade.route.ListTokenModal.name)
-      }}>
+      <ButtonView
+        onPress={() => {
+          props.nav.navigate(Facade.route.ListTokenModal.name)
+        }}
+      >
         <LinearLayout position="relative">
           <InputWithValidation
             color={props.theme.colors.text[0]}
@@ -330,9 +336,7 @@ const SendTransactionInputModal = (props: Props) => {
               source={require('~/src/assets/images/icon-reselect-green.png')}
             />
             <TextView ml="6px" color="primary" fontFamily="medium">
-              {Facade.t(
-                'modals.send.transactionInput.selectDifferentAccount'
-              )}
+              {Facade.t('modals.send.transactionInput.selectDifferentAccount')}
             </TextView>
           </LinearLayout>
         </TouchableWithoutFeedback>

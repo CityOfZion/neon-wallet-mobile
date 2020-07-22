@@ -6,20 +6,20 @@ import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
+import CurrencyPickerModal from '~src/scenes/CurrencyPickerModal'
 import CustomColorPage from '~src/scenes/CustomColorPage'
+import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
+import ListTokenModal from '~src/scenes/ListTokenModal'
 import ReceiveWalletSelectionModal from '~src/scenes/ReceiveWalletSelectionModal'
 import ReoderWalletModal from '~src/scenes/ReorderWalletModal'
 import SampleModal from '~src/scenes/SampleModal'
+import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import WalletContextModal from '~src/scenes/WalletContextModal'
 import WelcomePage from '~src/scenes/WelcomePage'
 import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionConfirmationModal'
 import SendTransactionInputModal from '~src/scenes/send/SendTransactionInputModal'
 import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
 import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
-import ListTokenModal from '~src/scenes/ListTokenModal'
-import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
-import CurrencyPickerModal from '~src/scenes/CurrencyPickerModal'
-import ThemePickerModal from '~src/scenes/ThemePickerModal'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
@@ -45,7 +45,9 @@ interface Props {
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
 const ModalStackNavigation = (props: Props) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
 
   return (
     <ThemeProvider theme={theme}>

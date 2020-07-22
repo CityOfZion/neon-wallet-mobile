@@ -15,8 +15,8 @@ interface Props {
 }
 
 const Step3CreateWalletPage: React.FC<Props> = (props) => {
-  const words = useSelector((state: RootState) =>
-    (state.wallet.securityPhrase ?? '').split(' ')
+  const words = useSelector(
+    (state: RootState) => state.wallet.securityPhrase?.split(' ') ?? []
   )
   const [formedWords, setFormedWords] = useState<string[]>([])
   const [shuffledWords] = useState<string[]>(Facade.lodash.shuffle(words))
@@ -83,7 +83,7 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
           justifyContent={'center'}
           width={'100%'}
         >
-          <FlatList
+          <FlatList<string>
             data={shuffledWords}
             horizontal={false}
             scrollEnabled={false}

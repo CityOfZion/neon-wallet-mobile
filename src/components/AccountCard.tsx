@@ -24,7 +24,7 @@ import {
 } from 'styled-system'
 
 import {Facade} from '~src/app/Facade'
-import {Account} from '~src/models/Account'
+import {Account} from '~src/models/redux/Account'
 import styled, {
   ImageView,
   LinearLayout,
@@ -37,7 +37,7 @@ interface Props {
   account: Account
   isCompacted?: boolean
   isStackMode?: boolean
-  orientBy: 'height' | 'width'
+  orientBy?: 'height' | 'width'
 }
 
 const AccountCard: React.FC<Props> = (props) => {
@@ -131,7 +131,7 @@ const AccountCard: React.FC<Props> = (props) => {
             </TextView>
           </LinearLayout>
 
-          {props.isCompacted && props.account.balance ? (
+          {props.isCompacted && props.account.balance !== null ? (
             <LinearLayout ml={10 * unit} alignItems={'flex-start'}>
               <TextView
                 fontFamily={'bold'}
@@ -153,7 +153,7 @@ const AccountCard: React.FC<Props> = (props) => {
               >
                 {Facade.filter.currency(
                   props.account.balance,
-                  props.account.currency,
+                  props.account.currency ?? '?',
                   false,
                   false
                 )}
@@ -169,17 +169,19 @@ const AccountCard: React.FC<Props> = (props) => {
           )}
         </LinearLayout>
 
-        {props.account.balance && !props.isStackMode && !props.isCompacted && (
-          <TextView
-            mb={3 * unit}
-            fontSize={14 * unit}
-            color="white"
-            textAlign="left"
-            fontWeight="bold"
-          >
-            {Facade.t('paymentCard.balance')}
-          </TextView>
-        )}
+        {props.account.balance !== null &&
+          !props.isStackMode &&
+          !props.isCompacted && (
+            <TextView
+              mb={3 * unit}
+              fontSize={14 * unit}
+              color="white"
+              textAlign="left"
+              fontWeight="bold"
+            >
+              {Facade.t('paymentCard.balance')}
+            </TextView>
+          )}
 
         {!props.isStackMode && (
           <LinearLayout
@@ -188,7 +190,7 @@ const AccountCard: React.FC<Props> = (props) => {
             alignItems={'center'}
             weight={1}
           >
-            {props.account.balance && !props.isCompacted && (
+            {props.account.balance !== null && !props.isCompacted && (
               <TextView
                 mb={3 * unit}
                 fontSize={48 * unit}
@@ -198,7 +200,7 @@ const AccountCard: React.FC<Props> = (props) => {
               >
                 {Facade.filter.currency(
                   props.account.balance,
-                  props.account.currency,
+                  props.account.currency ?? '?',
                   false,
                   false
                 )}
@@ -232,9 +234,11 @@ const AccountCard: React.FC<Props> = (props) => {
 
             {!props.isStackMode && (
               <TouchableOpacity
-                onPress={() =>
-                  Facade.utils.copyToClipboard(props.account.address)
-                }
+                onPress={() => {
+                  if (props.account.address) {
+                    Facade.utils.copyToClipboard(props.account.address)
+                  }
+                }}
                 style={{
                   paddingTop: 12 * unit,
                   paddingLeft: 12 * unit,
@@ -262,7 +266,7 @@ AccountCard.propTypes = {
   account: PropTypes.any.isRequired,
   isCompacted: PropTypes.bool.isRequired,
   isStackMode: PropTypes.bool.isRequired,
-  orientBy: PropTypes.string,
+  orientBy: PropTypes.any,
 }
 
 AccountCard.defaultProps = {

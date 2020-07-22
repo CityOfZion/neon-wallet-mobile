@@ -19,7 +19,9 @@ interface Props {
 }
 
 export default function ColorSelector(props: Props) {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const navigation = useNavigation()
   const [color, setColor] = useState<string>()
   const colorsList = Facade.lodash.clone(

@@ -9,8 +9,8 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList & WalletStackParamList>
@@ -56,12 +56,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
         >
           {Facade.t('modals.send.transactionConfirmation.subheader')}
         </TextView>
-        <TextView
-          color="text.2"
-          fontSize="14px"
-          fontFamily="medium"
-          mb="12px"
-        >
+        <TextView color="text.2" fontSize="14px" fontFamily="medium" mb="12px">
           {Facade.t('modals.send.transactionConfirmation.transactionId')}
         </TextView>
         <LinearLayout orientation="horiz" alignItems="center" mb="24px">

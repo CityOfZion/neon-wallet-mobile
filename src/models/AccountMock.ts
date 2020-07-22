@@ -1,6 +1,6 @@
 import {ImageLoadEventData} from 'react-native'
 
-export class Account {
+export class AccountMock {
   srcIcon?: ImageLoadEventData
   name?: string
   balance?: number

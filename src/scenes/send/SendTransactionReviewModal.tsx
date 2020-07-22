@@ -9,8 +9,8 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {Priority} from '~src/scenes/send/SendTransactionInputModal'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -150,12 +150,7 @@ const SendTransactionReviewModal = (props: Props) => {
         orientation="verti"
         alignItems="center"
       >
-        <TextView
-          color="text.0"
-          fontFamily="medium"
-          fontSize="18px"
-          mb="48px"
-        >
+        <TextView color="text.0" fontFamily="medium" fontSize="18px" mb="48px">
           {Facade.t('modals.send.transactionReview.pleaseReview')}
         </TextView>
         <TransactionSummaryContainer />

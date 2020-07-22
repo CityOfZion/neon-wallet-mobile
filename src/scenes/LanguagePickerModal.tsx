@@ -20,13 +20,13 @@ interface Props {
 const LanguagePickerModal = (props: Props) => {
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
-  const {language} = useSelector((state: RootState) => state.app)
+  const {language} = useSelector((state: RootState) => state.settings)
 
   const changeLanguage = async (val: Lang) => {
-    dispatch(RootStore.app.actions.setLanguage(val))
+    dispatch(RootStore.settings.actions.setLanguage(val))
     await Facade.await.run(
       'application',
-      () => Storage.language.save(val),
+      async () => await dispatch(RootStore.settings.actions.save()),
       1000
     )
   }

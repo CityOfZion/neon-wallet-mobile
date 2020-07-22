@@ -24,7 +24,9 @@ export interface ReceiveQRCodeProps {
 const buttonWidth = Facade.app.screenWidth - 76
 
 const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const headerHeight = useHeaderHeight()
   const qrCodeContent = props.address //TODO put tx URI
   props = {
@@ -183,3 +185,5 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
     </LinearGradient>
   )
 }
+
+export default ReceiveQRCode

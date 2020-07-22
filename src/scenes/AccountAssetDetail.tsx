@@ -8,7 +8,7 @@ import AssetQuoteComponent from '~src/components/AssetQuoteComponent'
 import TransactionsList from '~src/components/TransactionsList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {mockAccountAssetDetails} from '~src/mocks/mockAccountAssetDetails'
-import {Account} from '~src/models/Account'
+import {AccountMock} from '~src/models/AccountMock'
 import {AssetQuoteModel} from '~src/models/AssetQuoteModel'
 import {TransactionModel} from '~src/models/TransactionModel'
 import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
@@ -21,7 +21,7 @@ import {
 } from '~src/styles/styled-components'
 
 interface AccountAssetDetailProps {
-  account: Account
+  account: AccountMock
   navigation: StackNavigationProp<QuickToolsStackParamList>
 }
 
@@ -33,7 +33,7 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
   assetModel.currencySymbol = 'USD'
   //assetModel.srcIcon = props.account.srcIcon
 
-  const [account, setAccount] = useState<Account>(props.account)
+  const [account, setAccount] = useState<AccountMock>(props.account)
   const [asset, setAsset] = useState<AssetQuoteModel>(assetModel)
   props.navigation.setOptions({headerShown: false})
 

@@ -2,12 +2,14 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {Model} from '~src/app/Model'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedInputText from '~src/components/themed/ThemedInputText'
+import {Wallet} from '~src/models/redux/Wallet'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {TextView, LinearLayout} from '~src/styles/styled-components'
@@ -17,17 +19,22 @@ interface Props {
 }
 
 const Step4CreateWalletPage: React.FC<Props> = (props) => {
-  const dispatch = useDispatch()
   const [walletName, setWalletName] = useState<string>()
   const [passphrase, setPassphrase] = useState<string>()
   const [confirmPassphrase, setConfirmPassphrase] = useState<string>()
+
+  const dispatch = useDispatch()
 
   const submit = async () => {
     if (!walletName || !passphrase || !isValid()) return
 
     dispatch(RootStore.wallet.actions.setName(walletName))
     dispatch(RootStore.wallet.actions.setPassphrase(passphrase))
+
     await dispatch(RootStore.wallet.actions.createAndSave())
+    await dispatch(RootStore.app.actions.syncWallets())
+
+    await dispatch(RootStore.wallet.actions.clearState())
 
     props.navigation.reset({
       index: 0,
