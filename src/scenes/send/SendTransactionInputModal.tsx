@@ -30,7 +30,7 @@ interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
 }
 
-enum Priority {
+export enum Priority {
   FAST,
   FASTER,
   FASTEST,

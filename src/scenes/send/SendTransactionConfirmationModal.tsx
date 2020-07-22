@@ -31,68 +31,66 @@ const SendTransactionConfirmationModal = (props: Props) => {
       onClose={() => props.navigation.goBack()}
       image={require('~/src/assets/images/upload-white.png')}
     >
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <LinearLayout
-          height="100%"
-          width="100%"
-          px="15px"
-          orientation="verti"
-          alignItems="center"
+      <LinearLayout
+        height="100%"
+        width="100%"
+        px="15px"
+        orientation="verti"
+        alignItems="center"
+      >
+        <ImageView
+          width="66%"
+          resizeMode="contain"
+          source={require('~src/assets/images/transaction-sent.png')}
+        />
+        <TextView color="text.0" fontSize="24px" fontFamily="medium" mb="5px">
+          {Facade.t('modals.send.transactionConfirmation.header')}
+        </TextView>
+        <TextView
+          color="text.2"
+          fontSize="18px"
+          fontFamily="medium"
+          textAlign="center"
+          mb="40px"
         >
-          <ImageView
-            width="66%"
-            resizeMode="contain"
-            source={require('~src/assets/images/transaction-sent.png')}
-          />
-          <TextView color="text.0" fontSize="24px" fontFamily="medium" mb="5px">
-            {Facade.t('modals.send.transactionConfirmation.header')}
-          </TextView>
+          {Facade.t('modals.send.transactionConfirmation.subheader')}
+        </TextView>
+        <TextView
+          color="text.2"
+          fontSize="14px"
+          fontFamily="medium"
+          mb="12px"
+        >
+          {Facade.t('modals.send.transactionConfirmation.transactionId')}
+        </TextView>
+        <LinearLayout orientation="horiz" alignItems="center" mb="24px">
           <TextView
-            color="text.2"
-            fontSize="18px"
-            fontFamily="medium"
-            textAlign="center"
-            mb="40px"
-          >
-            {Facade.t('modals.send.transactionConfirmation.subheader')}
-          </TextView>
-          <TextView
-            color="text.2"
+            maxWidth="80%"
+            color="primary"
             fontSize="14px"
             fontFamily="medium"
-            mb="12px"
+            mr="16px"
           >
-            {Facade.t('modals.send.transactionConfirmation.transactionId')}
+            AN8iLVt18CKoATdexztCQj923hw5gkc41A
           </TextView>
-          <LinearLayout orientation="horiz" alignItems="center" mb="24px">
-            <TextView
-              maxWidth="80%"
-              color="primary"
-              fontSize="14px"
-              fontFamily="medium"
-              mr="16px"
-            >
-              AN8iLVt18CKoATdexztCQj923hw5gkc41A
-            </TextView>
-            <ImageView
-              width="16px"
-              resizeMode="contain"
-              source={require('~src/assets/images/icon-copy-green.png')}
-            />
-          </LinearLayout>
-          <LinearLayout mt="auto" px="20px" width="100%">
-            <ThemedButton
-              onPress={() => {
-                controller.close()
-                // TODO: make the entire SendTransaction flux be inside a single modal and remove the line below
-                props.navigation.navigate(Facade.route.ListWallets.name)
-              }}
-              fontSize="22px"
-              label={Facade.t('app.close')}
-            />
-          </LinearLayout>
+          <ImageView
+            width="16px"
+            resizeMode="contain"
+            source={require('~src/assets/images/icon-copy-green.png')}
+          />
         </LinearLayout>
-      </ScrollView>
+        <LinearLayout mt="auto" px="20px" width="100%">
+          <ThemedButton
+            onPress={() => {
+              controller.close()
+              // TODO: make the entire SendTransaction flux be inside a single modal and remove the line below
+              props.navigation.navigate(Facade.route.ListWallets.name)
+            }}
+            fontSize="22px"
+            label={Facade.t('app.close')}
+          />
+        </LinearLayout>
+      </LinearLayout>
     </SwiperPanel>
   )
 }

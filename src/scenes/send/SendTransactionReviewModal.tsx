@@ -10,6 +10,7 @@ import SwiperPanel, {
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {Priority} from '~src/scenes/send/SendTransactionInputModal'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -31,7 +32,7 @@ const TransactionSummaryContainer = () => {
         Tyler A
       </TextView>
       <TextView color="primary" fontSize="18px" fontFamily="medium">
-        asdhsaHDHSHDHhdshadsfaA
+        a0x9EbitG5amU0C4wHjgWUhwWL
       </TextView>
       <LinearLayout mt="18px" mb="22px" orientation="horiz" alignItems="center">
         <TextView
@@ -114,7 +115,7 @@ const TransactionSummaryContainer = () => {
           fontSize="18px"
           mr="8px"
         >
-          FAST
+          {Priority[Priority.FAST]}
         </TextView>
         <TextView color="text.0" fontSize="18px">
           {Facade.t('modals.send.transactionReview.feeAmount', {
@@ -142,35 +143,33 @@ const SendTransactionReviewModal = (props: Props) => {
       onClose={() => props.navigation.goBack()}
       image={require('~/src/assets/images/upload-white.png')}
     >
-      <ScrollView>
-        <LinearLayout
-          height="100%"
-          width="100%"
-          px="15px"
-          orientation="verti"
-          alignItems="center"
+      <LinearLayout
+        height="100%"
+        width="100%"
+        px="15px"
+        orientation="verti"
+        alignItems="center"
+      >
+        <TextView
+          color="text.0"
+          fontFamily="medium"
+          fontSize="18px"
+          mb="48px"
         >
-          <TextView
-            color="text.0"
-            fontFamily="medium"
-            fontSize="18px"
-            mb="48px"
-          >
-            {Facade.t('modals.send.transactionReview.pleaseReview')}
-          </TextView>
-          <TransactionSummaryContainer />
-          <LinearLayout width="100%" mt="32px">
-            <ThemedButton
-              label={Facade.t('app.send')}
-              onPress={() =>
-                props.navigation.navigate(
-                  Facade.route.SendTransactionConfirmationModal.name
-                )
-              }
-            />
-          </LinearLayout>
+          {Facade.t('modals.send.transactionReview.pleaseReview')}
+        </TextView>
+        <TransactionSummaryContainer />
+        <LinearLayout width="100%" mt="32px">
+          <ThemedButton
+            label={Facade.t('app.send')}
+            onPress={() =>
+              props.navigation.navigate(
+                Facade.route.SendTransactionConfirmationModal.name
+              )
+            }
+          />
         </LinearLayout>
-      </ScrollView>
+      </LinearLayout>
     </SwiperPanel>
   )
 }

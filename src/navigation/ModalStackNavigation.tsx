@@ -16,9 +16,9 @@ import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionCo
 import SendTransactionInputModal from '~src/scenes/send/SendTransactionInputModal'
 import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
 import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
+import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 
 export type ModalStackParamList = {
-  ListWallets: undefined
   WelcomeModal: undefined
   SampleModal: undefined
   ReceiveWalletSelectionModal: undefined
@@ -35,7 +35,7 @@ interface Props {
   route?: RouteProp<RootStackParamList, 'Modal'>
 }
 
-const ModalStack = createStackNavigator<ModalStackParamList>()
+const ModalStack = createStackNavigator<ModalStackParamList & WalletStackParamList>()
 
 const ModalStackNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
