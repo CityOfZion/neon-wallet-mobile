@@ -65,11 +65,7 @@ const ListWalletView = (props: WalletProps) => {
   const _renderWalletChange = (wallet: WalletMock) => {
     return (
       <>
-        <LinearLayout
-          onLayout={() => populate()}
-          orientation="verti"
-          alignItems="center"
-        >
+        <LinearLayout orientation="verti" alignItems="center">
           <TextView fontSize="11px" color="text.2">
             {Facade.t('screens.listWallets.changeSinceLastVisit', {
               date: moment(wallet.lastVisitedAt).format('HH:mm - DD/MM/YYYY'),
@@ -109,6 +105,7 @@ const ListWalletView = (props: WalletProps) => {
 
   return (
     <ScreenLayout
+      onLayout={() => populate()}
       useHeaderPadding={false}
       useStatusBarPadding={true}
       padding={0}

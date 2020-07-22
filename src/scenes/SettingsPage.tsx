@@ -13,11 +13,12 @@ import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {Theme} from '~src/enums/Theme'
+import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {LinearLayout} from '~src/styles/styled-components'
 
 interface SettingsProps {
-  navigation: StackNavigationProp<{Home: undefined}>
+  navigation: StackNavigationProp<SettingsStackParamList>
   theme: DefaultTheme
   navigationOptions: object
 }
@@ -187,6 +188,7 @@ const SettingsPage = (props: SettingsProps) => {
         iconMarginRight={12}
         iconHeight={28}
         arrowDirection={RightIconType.ARROW_RIGHT}
+        onPress={() => props.navigation.navigate(Facade.route.MyWallets.name)}
       />
 
       <MenuItem

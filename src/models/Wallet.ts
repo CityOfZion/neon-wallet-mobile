@@ -10,4 +10,8 @@ export class Wallet {
 
   @HttpExpose()
   passphrase: string | null = null
+
+  get securityWords() {
+    return this.securityPhrase?.split(' ') ?? []
+  }
 }
