@@ -383,6 +383,8 @@ export default function SwiperPanel(props: SwiperProps) {
                   justifyContent: 'flex-start',
                 }}
                 alwaysBounceVertical={false}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
               >
                 <TouchableHighlight>
                   <Fragment>
