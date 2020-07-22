@@ -5,15 +5,9 @@
     "pt-BR": "Portuguese"
   },
   "currencies": {
-<<<<<<< HEAD
     "USD": "$",
-    "BRL": "BRL",
-    "EUR": "EUR"
-=======
-    "USD" : "$",
-    "BRL" : "R$",
-    "EUR" : "€"
->>>>>>> d62617d... NW-154 Aplicar tradução a siglas
+    "BRL": "R$",
+    "EUR": "€"
   },
   "themes": {
     "DARK": "Dark",
