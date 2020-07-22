@@ -7,7 +7,7 @@ import {useSelector} from 'react-redux'
 
 // TODO: remove testing code
 // @ts-ignore
-import {Keychain} from '../asteroid-sdk'
+import {Keychain} from '../vendor/asteroid-sdk'
 import {wallet} from '@cityofzion/neon-js'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
