@@ -37,6 +37,7 @@ interface Props {
   account: Account
   isCompacted?: boolean
   isStackMode?: boolean
+  orientBy: 'height' | 'width'
 }
 
 const AccountCard: React.FC<Props> = (props) => {
@@ -54,7 +55,8 @@ const AccountCard: React.FC<Props> = (props) => {
       onPress={(e: NativeSyntheticEvent<NativeTouchEvent>) =>
         props.onPress?.(e)
       }
-      width={'100%'}
+      width={props.orientBy === 'width' ? '100%' : undefined}
+      height={props.orientBy === 'height' ? '100%' : undefined}
       style={{
         backgroundColor: props.account.backgroundColor,
         aspectRatio: 38 / 25,
@@ -260,12 +262,14 @@ AccountCard.propTypes = {
   account: PropTypes.any.isRequired,
   isCompacted: PropTypes.bool.isRequired,
   isStackMode: PropTypes.bool.isRequired,
+  orientBy: PropTypes.string,
 }
 
 AccountCard.defaultProps = {
   account: new Account(),
   isCompacted: false,
   isStackMode: false,
+  orientBy: 'width',
 }
 
 const PaymentCardView = styled.TouchableOpacity<

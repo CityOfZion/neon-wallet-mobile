@@ -381,20 +381,14 @@ export default function SwiperPanel(props: SwiperProps) {
                   flexGrow: 1,
                   flexDirection: 'column',
                   justifyContent: 'flex-start',
+                  paddingBottom: PANEL_OFFSET + paddingBottom,
                 }}
                 alwaysBounceVertical={false}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
               >
                 <TouchableHighlight>
-                  <Fragment>
-                    {props.children}
-                    <View
-                      style={{
-                        height: PANEL_OFFSET + paddingBottom,
-                      }}
-                    />
-                  </Fragment>
+                  <Fragment>{props.children}</Fragment>
                 </TouchableHighlight>
               </ScrollView>
             </LinearGradient>
