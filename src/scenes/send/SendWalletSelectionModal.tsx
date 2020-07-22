@@ -5,7 +5,10 @@ import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import SwiperPanel, {
+  CloseButton,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
 import WalletCard from '~src/components/WalletCard'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -30,7 +33,7 @@ const SendWalletSelectionModal = (props: Props) => {
       paddingRight={0}
       paddingLeft={0}
       title={Facade.t('modals.send.title')}
-      rightButton={'X    '}
+      rightButton={CloseButton()}
       onRightPress={() => controller.close()}
       onClose={() => props.navigation.goBack()}
       image={require('~/src/assets/images/upload-white.png')}

@@ -45,6 +45,7 @@ export class WrapperConfig {
     'SampleModal',
     'ReceiveWalletSelectionModal',
     'SendWalletSelectionModal',
+    'SendTransactionReviewModal',
     'SendTransactionInputModal',
     'SendTransactionConfirmationModal',
     'Login',
