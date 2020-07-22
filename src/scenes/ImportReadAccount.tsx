@@ -1,45 +1,27 @@
 import {wallet} from '@cityofzion/neon-core'
-import Clipboard from '@react-native-community/clipboard'
-import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
-import {LinearGradient} from 'expo-linear-gradient'
+import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
-import {
-  Keyboard,
-  Text,
-  TextInput,
-  TouchableHighlight,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native'
 import {useSelector} from 'react-redux'
-import {fontFamily} from 'styled-system'
 
 import {Facade} from '~src/app/Facade'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {Account} from '~src/models/redux/Account'
+import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootState} from '~src/store/RootStore'
 import {
   LinearLayout,
   TextView,
   ImageView,
-  ButtonView,
 } from '~src/styles/styled-components'
 
 export interface ImportReadAccountProps {
-  navigation: StackNavigationProp<{
-    More: undefined
-    Passphrase: undefined
-    CustomizeReadAccount: undefined
-    CustomizeAccount: undefined
-  }>
-  allowChanges: boolean
-  address: string
+  navigation: StackNavigationProp<MoreStackParamList>
 }
 
 const validator = (text: string) => {
-  return wallet.isAddress(text)
+  return wallet.isAddress(text) || !text
 }
 
 const ImportReadAccount = (props: ImportReadAccountProps) => {
@@ -49,14 +31,26 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const [inputValue, setInputValue] = useState(
-    props.address ?? defaultDebugAddress
-  )
-  const headerHeight = useHeaderHeight()
+  const [inputValue, setInputValue] = useState(defaultDebugAddress)
+  const {currency} = useSelector((state: RootState) => state.app)
+
+  const persist = () => {
+    // TODO: NW-215
+    const account = new Account()
+    account.address = inputValue
+    account.balance = 0
+    account.currency = currency
+    account.srcIcon = require('~src/assets/images/card-neo.png')
+
+    props.navigation.navigate(Facade.route.CustomizeAccount.name, {
+      source: Facade.route.ImportReadAccount.name,
+      account,
+    })
+  }
 
   return (
-    <ScreenLayout>
-      <LinearLayout orientation="verti" width="100%" mt={headerHeight}>
+    <ScreenLayout useHeaderPadding={true}>
+      <LinearLayout orientation="verti" width="100%">
         <TextView
           textAlign="center"
           fontSize={18}
@@ -151,9 +145,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
           <LinearLayout mt={20} width="90%" alignSelf="center">
             <ThemedButton
               label={Facade.t('importReadAccount.next')}
-              onPress={() =>
-                props.navigation.navigate(Facade.route.CustomizeAccount.name)
-              }
+              onPress={persist}
             />
           </LinearLayout>
         )}

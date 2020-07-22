@@ -17,10 +17,6 @@ import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 // Why are you like this, Typescript
 type ParamList = LoginStackParamList & TabStackParamList & RootStackParamList
-type RouteName = keyof ParamList
-type NavParam = ParamList[RouteName] extends undefined
-  ? [RouteName] | [RouteName, ParamList[RouteName]]
-  : [RouteName, ParamList[RouteName]]
 
 interface Props {
   navigation: StackNavigationProp<ParamList>
@@ -35,7 +31,7 @@ const WelcomePage = (props: Props) => {
     await Storage.welcomeHidden.save(value)
   }
 
-  const closeTo = (...arg: NavParam) => {
+  const closeTo = (...arg: NavParam<ParamList>) => {
     setAction(CommonActions.navigate(...arg))
     controller.close()
   }

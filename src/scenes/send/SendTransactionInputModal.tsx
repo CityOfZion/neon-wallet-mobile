@@ -6,7 +6,7 @@ import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/ty
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import InputLabel from '~src/components/InputLabel'
-import InputWithValidation from '~src/components/InputTextWithValidation'
+import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
@@ -174,10 +174,9 @@ const DestinationAddressField = (props: {
       <InputWithValidation
         onChangeText={props.setAddress}
         color={props.theme.colors.text[3]}
-        fontStyle={'normal'}
         value={props.address}
         placeholder={Facade.t('modals.send.transactionInput.enterDestination')}
-        inputIsValid={true}
+        validator={() => true}
         separatorColor={props.theme.colors.background[3]}
         sideMargins={0}
         hidePaste={true}
@@ -247,7 +246,7 @@ const TokenField = (props: {
             fontStyle={'normal'}
             value={props.token?.name ?? ''}
             placeholder={Facade.t('modals.send.transactionInput.selectToken')}
-            inputIsValid={true}
+            validator={() => true}
             separatorColor={props.theme.colors.background[3]}
             sideMargins={0}
             hidePaste={true}
@@ -287,7 +286,7 @@ const AmountField = (props: {
         fontStyle={'normal'}
         value={String(props.amount)}
         placeholder={Facade.t('modals.send.transactionInput.enterAmount')}
-        inputIsValid={true}
+        validator={() => true}
         separatorColor={props.theme.colors.background[3]}
         sideMargins={0}
         hidePaste={true}

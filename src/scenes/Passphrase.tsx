@@ -1,5 +1,6 @@
 import {wallet} from '@cityofzion/neon-core'
-import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
+import {RouteProp} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
 import {useSelector} from 'react-redux'
 
@@ -7,28 +8,31 @@ import {Facade} from '~src/app/Facade'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {Account} from '~src/models/redux/Account'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootState} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface PassphraseProps {
   navigation: StackNavigationProp<MoreStackParamList>
-  encryptedKey: string
+  route: RouteProp<MoreStackParamList, 'Passphrase'>
 }
 
 function verifyPassword(
   nep2: string,
   password: string,
-  setState: (state: boolean) => void
+  onSuccess: () => void,
+  onFailure: () => void
 ) {
+  console.log(nep2)
   const newAccount = new wallet.Account(nep2)
   newAccount
     .decrypt(password)
     .then((account) => {
-      setState(true)
+      onSuccess()
     })
     .catch((error) => {
-      setState(false)
+      onFailure()
     })
 }
 
@@ -36,8 +40,17 @@ const Passphrase = (props: PassphraseProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
+  const {currency} = useSelector((state: RootState) => state.settings)
   const [inputValue, setInputValue] = useState('')
   const [inputIsValid, setInputIsValid] = useState(true)
+  const encryptedKey = props.route.params.encryptedKey
+
+  // TODO: NW-215
+  const account = new Account()
+  account.address = 'ThisIsAPlaceholderAddress'
+  account.balance = 0
+  account.currency = currency
+  account.srcIcon = require('~src/assets/images/card-neo.png')
 
   const clearOnFocus = () => {
     if (!inputIsValid) {
@@ -64,7 +77,7 @@ const Passphrase = (props: PassphraseProps) => {
         <InputWithValidation
           value={inputValue}
           onChangeText={setInputValue}
-          validator={() => inputIsValid}
+          validator={(text) => inputIsValid || !text}
           color={theme.colors.primary}
           invalidColor={theme.colors.primary}
           separatorColor={theme.colors.background[4]}
@@ -79,7 +92,23 @@ const Passphrase = (props: PassphraseProps) => {
             <ThemedButton
               label={Facade.t('passphrase.next')}
               onPress={() => {
-                verifyPassword(props.encryptedKey, inputValue, setInputIsValid)
+                verifyPassword(
+                  encryptedKey,
+                  inputValue,
+                  () => {
+                    setInputIsValid(true)
+                    props.navigation.navigate(
+                      Facade.route.CustomizeAccount.name,
+                      {
+                        source: Facade.route.ImportKey.name,
+                        account,
+                      }
+                    )
+                  },
+                  () => {
+                    setInputIsValid(false)
+                  }
+                )
               }}
             />
           )}

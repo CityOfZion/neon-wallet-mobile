@@ -1,91 +1,151 @@
-import {useNavigation, useRoute} from '@react-navigation/native'
-import {useHeaderHeight} from '@react-navigation/stack'
-import {LinearGradient} from 'expo-linear-gradient'
+import {RouteProp} from '@react-navigation/native'
 import React, {useState} from 'react'
-import {ScrollView, TouchableHighlight, View} from 'react-native'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {ImageSourcePropType} from '~/node_modules/@types/react-native'
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import ColorSelector from '~src/components/ColorSelector'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
+import HeaderActionButton from '~src/components/layout/HeaderActionButton'
+import HeaderBar from '~src/components/layout/HeaderBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {AccountMock} from '~src/models/AccountMock'
+import {Account} from '~src/models/redux/Account'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {RootState} from '~src/store/RootStore'
+import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {Wallet} from '~src/models/redux/Wallet'
+import {Currency} from '~src/enums/Currency'
 
 interface Props {
-  navigation: StackNavigationProp<MoreStackParamList>
-  address: string
+  navigation: StackNavigationProp<MoreStackParamList & RootStackParamList>
+  route: RouteProp<MoreStackParamList, 'CustomizeAccount'>
+}
+
+interface ContentParams {
+  title: string
+  icon: ImageSourcePropType
+  subtitle: string
+}
+
+type ContentCollection = {
+  [key in keyof Partial<MoreStackParamList>]: ContentParams
 }
 
 const CustomizeAccount = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const account = new AccountMock()
-  const [color, setColor] = useState<string>(theme.colors.card[0])
 
-  account.srcIcon = require('~src/assets/images/card-neo.png')
+  const dispatch = useDispatch()
+
+  const account = props.route.params.account ?? new Account()
+  const [name, setName] = useState<string>('')
+  const [color, setColor] = useState<string>(theme.colors.card[0])
+  const [showInvalid, setShowInvalid] = useState<boolean>(false)
+
+  account.name = name
   account.backgroundColor = color
 
-  // TODO: Remove placeholders
-  account.name = 'My First Account'
-  account.currency = '$'
-  account.balance = 24985
-  account.address = 'AN8iLVt18CKoATdexztCQj923hw5gkc41A'
 
-  const [name, setName] = useState<string>('')
-
-  function persistAccount() {
-    // TODO: NW-197
+  const contentMap: ContentCollection = {
+    ImportKey: {
+      title: Facade.route.ImportKey.translate(),
+      icon: require('~src/assets/images/icon-import-white.png'),
+      subtitle: Facade.t('screens.customizeAccount.subtitle.importKey'),
+    },
+    ImportReadAccount: {
+      title: Facade.route.ImportReadAccount.translate(),
+      icon: require('~src/assets/images/icon-import-white.png'),
+      subtitle: Facade.t('screens.customizeAccount.subtitle.importReadAccount'),
+    },
   }
 
+  const submit = async () => {
+    if (!isValid()) return
+
+    dispatch(RootStore.account.actions.setName(name))
+    // TODO: NW-215
+    dispatch(RootStore.account.actions.setBalance(0))
+    dispatch(RootStore.account.actions.setCurrency(Currency.USD))
+    dispatch(RootStore.account.actions.setAddress(account.address!))
+    if (color) dispatch(RootStore.account.actions.setBackgroundColor(color))
+
+    await dispatch(RootStore.account.actions.createAndSave())
+    await dispatch(RootStore.app.actions.syncAccounts())
+
+    props.navigation.replace(Facade.route.Tab.name, undefined)
+  }
+
+  const isValid = () => {
+    const conditions: boolean[] = [account.address !== null]
+
+    return conditions.every((it) => it)
+  }
+
+  // TODO: NW-216
+  props.navigation.setOptions({
+    headerTitle: () =>
+      HeaderBar({
+        title: contentMap[props.route.params.source]?.title ?? '',
+        image: contentMap[props.route.params.source]?.icon,
+      }),
+    headerRight: () =>
+      HeaderActionButton({
+        actionTitle: Facade.t('screens.customizeAccount.navigation.save'),
+        actionButtonStyle: 'highlight',
+        actionOnPress: submit,
+      }),
+  })
+
   return (
-    <ScreenLayout>
-      <LinearLayout width="100%" height="100%" pl={20} pr={20}>
+    <ScreenLayout padding={16}>
+      <LinearLayout width="100%" height="100%" pt={24}>
         <TextView
-          mt={6}
-          pl={40}
-          pr={40}
-          mb={24}
+          mb="32px"
           color={theme.colors.text[0]}
           fontSize={18}
           fontFamily="medium"
           textAlign="center"
         >
-          {Facade.t('screens.customizeAccount.subtitle')}
+          {contentMap[props.route.params.source]?.subtitle ?? ''}
         </TextView>
         <InputLabel
           title={Facade.t('screens.customizeAccount.preview')}
-          textAlignVertical={'top'}
-          marginBottom={4}
+          capitalize={true}
+          marginBottom="24px"
         />
-        <AccountCard account={account} isStackMode={true} />
+
+        <AccountCard account={account} isStackMode={false} />
+
         <InputLabel
           title={Facade.t('screens.customizeAccount.accountInput.title')}
-          marginTop={4}
+          capitalize={true}
+          marginTop="48px"
+          marginBottom="10px"
         />
         <InputWithValidation
-          onChangeText={setName}
-          placeholder={Facade.t(
-            'screens.customizeAccount.accountInput.placeholder'
-          )}
-          color={theme.colors.text[0]}
           value={name}
-          validator={() => true}
-          sideMargins={0}
-          separatorColor={theme.colors.background[3]}
+          validator={(text) => !(showInvalid && !text)}
+          onChangeText={setName}
+          onClearPress={() => setName('')}
+          onFocus={() => setShowInvalid(false)}
+          color={theme.colors.text[0]}
+          invalidColor={theme.colors.background[3]}
+          separatorColor={theme.colors.background[5]}
           hidePaste={true}
           hideScan={true}
+          sideMargins={0}
         />
+
         <InputLabel
-          title={Facade.t('screens.customizeAccount.selectAColor')}
-          textAlignVertical={'top'}
-          marginBottom={4}
+          title={Facade.t('screens.customizeAccount.selectColor')}
+          capitalize={true}
+          marginTop="12px"
+          marginBottom="24px"
         />
 
         <ColorSelector onSelect={setColor} />

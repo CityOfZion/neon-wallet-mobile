@@ -1,5 +1,9 @@
 import React from 'react'
-import {NativeSyntheticEvent, TargetedEvent} from 'react-native'
+import {
+  KeyboardTypeOptions,
+  NativeSyntheticEvent,
+  TargetedEvent, TouchableWithoutFeedback,
+} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -13,7 +17,7 @@ import {
 } from '~src/styles/styled-components'
 
 interface Props {
-  onChangeText: (text: string) => void
+  onChangeText?: (text: string) => void
   color: string
   invalidColor?: string
   fontStyle?: string
@@ -25,9 +29,12 @@ interface Props {
   sideMargins?: number
   hidePaste?: boolean
   hideScan?: boolean
+  onClearPress?: () => void
   placeholder?: string
   secure?: boolean
   onFocus?: (e: NativeSyntheticEvent<TargetedEvent>) => void
+  editable?: boolean
+  keyboardType?: KeyboardTypeOptions
 }
 
 const InputWithValidation = (props: Props) => {
@@ -39,18 +46,17 @@ const InputWithValidation = (props: Props) => {
     props.value && props.validator(props.value)
       ? props.fontStyle ?? 'normal'
       : 'italic'
+  const fontColor = props.validator(props.value) && props.value ? props.color : props.invalidColor
 
-  const isValid = props.validator(props.value) || !props.value
+  const isValid = props.validator(props.value)
 
   return (
     <LinearLayout orientation="verti" ml={sideMargins} mr={sideMargins}>
       <LinearLayout orientation="horiz">
         <InputTextView
           onChangeText={props.onChangeText}
-          color={
-            props.validator(props.value) ? props.color : props.invalidColor
-          }
-          placeholderTextColor={theme.colors.background[3]}
+          color={fontColor}
+          placeholderTextColor={fontColor}
           underlineColorAndroid="transparent"
           placeholder={
             props.placeholder ??
@@ -64,6 +70,8 @@ const InputWithValidation = (props: Props) => {
           autoCompleteType={props.secure ? 'password' : undefined}
           secureTextEntry={props.secure ?? false}
           onFocus={props.onFocus}
+          editable={props.editable ?? true}
+          keyboardType={props.keyboardType}
         />
         {!isValid && (
           <ImageView
@@ -72,18 +80,30 @@ const InputWithValidation = (props: Props) => {
             source={require('~/src/assets/images/icon-alert-purple.png')}
           />
         )}
+        {props.onClearPress && (
+          <TouchableWithoutFeedback onPress={props.onClearPress}>
+            <ImageView
+              width="34px"
+              height="34px"
+              resizeMode={'center'}
+              alignSelf="center"
+              source={require('~/src/assets/images/icon-cancel-grey.png')}
+            />
+          </TouchableWithoutFeedback>
+        )}
       </LinearLayout>
       <LinearLayout
         mt={3}
         bg={
           props.validator(props.value)
             ? props.separatorColor
-            : props.invalidSeparatorColor
+            : props.invalidSeparatorColor ?? props.separatorColor
         }
         height={1}
         width="100%"
       />
-      {!isValid && (
+
+      <LinearLayout height="12px" justifyContent="flex-start">
         <TextView
           fontStyle="italic"
           color={theme.colors.background[5]}
@@ -91,11 +111,13 @@ const InputWithValidation = (props: Props) => {
           fontFamily="regular"
           textAlign="right"
           mt={2}
+          opacity={isValid ? 0 : 1}
         >
           {props.invalidMessage ??
             Facade.t('components.inputTextWithValidation.incorrectFormat')}
         </TextView>
-      )}
+      </LinearLayout>
+
       <LinearLayout orientation="horiz" mt={5}>
         <LinearLayout weight={1} />
         {!props.hidePaste && (

@@ -31,7 +31,7 @@ const ConfirmPasscodePage = (props: Props) => {
         props.navigation.navigate(Facade.route.Passcode.name, {showError: true})
       } else {
         // TODO: Store password
-        props.navigation.replace('Tab')
+        props.navigation.replace('Tab', undefined)
       }
     }
   }, [passcode])
