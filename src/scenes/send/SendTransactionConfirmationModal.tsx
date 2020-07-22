@@ -3,7 +3,10 @@ import {ScrollView} from 'react-native'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import SwiperPanel, {
+  CloseButton,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -23,12 +26,12 @@ const SendTransactionConfirmationModal = (props: Props) => {
       paddingRight={0}
       paddingLeft={0}
       title={Facade.t('modals.send.title')}
-      rightButton={'X    '}
+      rightButton={CloseButton()}
       onRightPress={() => controller.close()}
       onClose={() => props.navigation.goBack()}
       image={require('~/src/assets/images/upload-white.png')}
     >
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <LinearLayout
           height="100%"
           width="100%"
@@ -79,7 +82,11 @@ const SendTransactionConfirmationModal = (props: Props) => {
           </LinearLayout>
           <LinearLayout mt="auto" px="20px" width="100%">
             <ThemedButton
-              onPress={() => controller.close()}
+              onPress={() => {
+                controller.close()
+                // TODO: make the entire SendTransaction flux be inside a single modal and remove the line below
+                props.navigation.navigate(Facade.route.ListWallets.name)
+              }}
               fontSize="22px"
               label={Facade.t('app.close')}
             />

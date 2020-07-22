@@ -25,8 +25,9 @@
     "retry": "Retry",
     "cancel": "Cancel",
     "save": "Save",
-    "done": "Done",
-    "close": "Close"
+    "close": "Close",
+    "send": "Send",
+    "done": "Done"
   },
   "routes": {
     "GetWallet": "Wallet",
@@ -312,6 +313,16 @@
         "contacts": "Contacts",
         "paste": "Paste",
         "scan": "Scan"
+      },
+      "transactionReview": {
+        "token": "Token",
+        "amount": "Amount",
+        "remainingInWallet": "(%{token} in wallet)",
+        "value": "Value",
+        "price": "Price",
+        "priority": "Priority",
+        "feeAmount": "(Fee %{amount})",
+        "pleaseReview": "Please review transaction"
       }
     },
     "receive": {

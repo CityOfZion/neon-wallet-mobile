@@ -17,6 +17,7 @@ import {fontFamily} from 'styled-system'
 
 import {Facade} from '~src/app/Facade'
 import InputWithValidation from '~src/components/InputWithValidation'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {RootState} from '~src/store/RootStore'
 import {
@@ -25,7 +26,6 @@ import {
   ImageView,
   ButtonView,
 } from '~src/styles/styled-components'
-import ScreenLayout from '~src/components/layout/ScreenLayout'
 
 export interface ImportReadAccountProps {
   navigation: StackNavigationProp<{
@@ -98,12 +98,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
             {Facade.t('importReadAccount.disabledFeature')}
           </TextView>
         </LinearLayout>
-        <LinearLayout
-          orientation="horiz"
-          mx={20}
-          alignSelf="center"
-          mt={5}
-        >
+        <LinearLayout orientation="horiz" mx={20} alignSelf="center" mt={5}>
           <ImageView
             source={require('~/src/assets/images/icon-disabled-green.png')}
             resizeMode="center"
