@@ -10,8 +10,9 @@ import CurrencyPickerModal from '~src/scenes/CurrencyPickerModal'
 import CustomColorPage from '~src/scenes/CustomColorPage'
 import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
 import ListTokenModal from '~src/scenes/ListTokenModal'
-import ReceiveWalletSelectionModal from '~src/scenes/ReceiveWalletSelectionModal'
-import ReoderWalletModal from '~src/scenes/ReorderWalletModal'
+import ReceiveToAccountModal from '~src/scenes/receive/ReceiveToAccountModal'
+import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
+import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
 import SampleModal from '~src/scenes/SampleModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import WalletContextModal from '~src/scenes/WalletContextModal'
@@ -25,13 +26,14 @@ export type ModalStackParamList = {
   WelcomeModal: undefined
   SampleModal: undefined
   ReceiveWalletSelectionModal: undefined
+  ReceiveToAccountModal: undefined
   SendWalletSelectionModal: undefined
   SendTransactionReviewModal: undefined
   SendTransactionInputModal: undefined
   SendTransactionConfirmationModal: undefined
   CustomColor: {onColorPicked: (hex: string) => void}
   WalletContextModal: undefined
-  ReoderWalletModal: undefined
+  ReorderWalletModal: undefined
   ListTokenModal: undefined
   LanguagePickerModal: undefined
   CurrencyPickerModal: undefined
@@ -69,6 +71,10 @@ const ModalStackNavigation = (props: Props) => {
           component={ReceiveWalletSelectionModal}
         />
         <ModalStack.Screen
+          name={Facade.route.ReceiveToAccountModal.name}
+          component={ReceiveToAccountModal}
+        />
+        <ModalStack.Screen
           name={Facade.route.SendWalletSelectionModal.name}
           component={SendWalletSelectionModal}
         />
@@ -94,8 +100,8 @@ const ModalStackNavigation = (props: Props) => {
           component={WalletContextModal}
         />
         <ModalStack.Screen
-          name={Facade.route.ReoderWalletModal.name}
-          component={ReoderWalletModal}
+          name={Facade.route.ReorderWalletModal.name}
+          component={ReorderWalletModal}
         />
         <ModalStack.Screen
           name={Facade.route.ListTokenModal.name}

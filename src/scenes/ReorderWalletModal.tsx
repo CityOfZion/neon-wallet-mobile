@@ -14,7 +14,7 @@ interface Props {
   navigation: StackNavigationProp<ModalStackParamList & TabStackParamList>
 }
 
-export default function ReoderWalletModal(props: Props) {
+export default function ReorderWalletModal(props: Props) {
   const controller = useSwiperController(true)
 
   const [wallets, setWallets] = useState(mockWalletItems)

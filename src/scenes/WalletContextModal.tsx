@@ -39,7 +39,7 @@ export default function WalletContextModal(props: Props) {
       title: Facade.t('modals.walletContext.reorder'),
       source: require('~src/assets/images/icon-circle-swap-green.png'),
       onClick: () => {
-        props.navigation.navigate(Facade.route.ReoderWalletModal.name)
+        props.navigation.navigate(Facade.route.ReorderWalletModal.name)
       },
     },
   ]

@@ -27,7 +27,8 @@
     "save": "Save",
     "close": "Close",
     "send": "Send",
-    "done": "Done"
+    "done": "Done",
+    "copyToClipboard": "Copy to clipboard"
   },
   "routes": {
     "GetWallet": "Wallet",
@@ -330,6 +331,15 @@
       "title": "Receive",
       "walletSelection": {
         "subtitle": "Please select a wallet to receive to"
+      },
+      "toAccount": {
+        "yourAddress": "Your Address",
+        "requestTokens": "Request Tokens",
+        "selectTokenToReceive": "Select token to receive",
+        "enterAmount": "Enter amount",
+        "addReference": "Add a reference",
+        "reference": "Reference",
+        "generateQrCode": "Generate QR Code"
       }
     },
     "listTokenModal": {
