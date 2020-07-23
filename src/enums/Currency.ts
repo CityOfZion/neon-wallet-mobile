@@ -8,6 +8,7 @@ export enum Currency {
    * United States dollar
    */
   USD = 'USD',
+  DOLLAR = "$",
 
   /**
    * Euro

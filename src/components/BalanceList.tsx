@@ -6,6 +6,8 @@ import {Facade} from '~src/app/Facade'
 import {TokenBalance} from '~src/models/TokenBalance'
 import {TokenValue} from '~src/models/TokenValue'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
+import i18n from "i18n-js";
+import {Currency} from "~src/enums/Currency";
 
 const TableData = (props: {header: string; content: string}) => {
   return (
@@ -21,8 +23,7 @@ const TableData = (props: {header: string; content: string}) => {
 }
 
 const BalanceListItem = (props: {item: TokenValue}) => {
-  const currency = useSelector((state: RootState) => state.settings.currency)
-
+  const currency = Currency.DOLLAR
   return (
     <LinearLayout orientation="horiz" alignItems="center">
       <LinearLayout
