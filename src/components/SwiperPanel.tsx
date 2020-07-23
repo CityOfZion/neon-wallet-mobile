@@ -18,7 +18,7 @@ import {useSelector} from 'react-redux'
 import {Facade} from '~src/app/Facade'
 import {TextView, ImageView, LinearLayout} from '~src/styles/styled-components'
 
-const PANEL_OFFSET = 50
+export const PANEL_OFFSET = 50
 const ANIMATION_DELTA_THRESHOLD = 0.5
 const ANIMATION_VELOCITY_THRESHOLD = 0.5
 
@@ -38,8 +38,17 @@ interface SwiperProps {
   onRightPress?: () => void
   onClose?: () => void
   image?: ImageSourcePropType
+  imageSize: [number, number]
   title?: string
   children?: JSX.Element | JSX.Element[]
+
+  // Important! If you wish to disable the default scroll view,
+  // make sure your layout has enough padding at the bottom to compensate for the
+  // part of the modal that is draggable.
+  // You can do so by adding a marginBottom of PANEL_OFFSET.
+  // It's not there by default in case the content is a scrollable list, or it would look weird
+  // (ask Joao if any questions)
+  disableDefaultScrollView?: boolean
 }
 
 enum State {
@@ -234,8 +243,8 @@ export default function SwiperPanel(props: SwiperProps) {
           {props.image ? (
             <ImageView
               resizeMode="contain"
-              height={20}
-              width={20}
+              height={props.imageSize[0]}
+              width={props.imageSize[1]}
               mr="6px"
               source={props.image}
             />
@@ -372,25 +381,31 @@ export default function SwiperPanel(props: SwiperProps) {
             >
               {props.draggable ? DragBar() : undefined}
               {props.noHeader ? undefined : Header(props)}
-              <ScrollView
-                ref={scrollView}
-                style={{
-                  width: '100%',
-                }}
-                contentContainerStyle={{
-                  flexGrow: 1,
-                  flexDirection: 'column',
-                  justifyContent: 'flex-start',
-                  paddingBottom: PANEL_OFFSET + paddingBottom,
-                }}
-                alwaysBounceVertical={false}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-              >
+              {props.disableDefaultScrollView ? (
                 <TouchableHighlight>
                   <Fragment>{props.children}</Fragment>
                 </TouchableHighlight>
-              </ScrollView>
+              ) : (
+                <ScrollView
+                  ref={scrollView}
+                  style={{
+                    width: '100%',
+                  }}
+                  contentContainerStyle={{
+                    flexGrow: 1,
+                    flexDirection: 'column',
+                    justifyContent: 'flex-start',
+                    paddingBottom: PANEL_OFFSET + paddingBottom,
+                  }}
+                  alwaysBounceVertical={false}
+                  showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
+                >
+                  <TouchableHighlight>
+                    <Fragment>{props.children}</Fragment>
+                  </TouchableHighlight>
+                </ScrollView>
+              )}
             </LinearGradient>
           </View>
         </Animated.View>
@@ -409,7 +424,9 @@ SwiperPanel.propTypes = {
   paddingTop: PropTypes.number,
   paddingBottom: PropTypes.number,
   image: PropTypes.node,
+  imageSize: PropTypes.arrayOf(PropTypes.number),
   title: PropTypes.string,
+  disableScrolling: PropTypes.bool,
 }
 
 SwiperPanel.defaultProps = {
@@ -422,6 +439,8 @@ SwiperPanel.defaultProps = {
   paddingRight: undefined,
   paddingTop: undefined,
   paddingBottom: undefined,
+  disableScrolling: false,
+  imageSize: [20, 20],
 }
 
 export function CloseButton() {
