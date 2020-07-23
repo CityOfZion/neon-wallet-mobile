@@ -16,6 +16,7 @@ import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputTextWithValidation'
 import {useSelector} from 'react-redux'
+import {TokenValue} from '~src/models/TokenValue'
 
 const AddressContent = () => {
   return (
@@ -34,7 +35,8 @@ const AddressContent = () => {
 
 const TokenField = (props: {
   theme: ApplicationTheme
-  token: string
+  token: TokenValue | null
+  setToken: React.Dispatch<React.SetStateAction<TokenValue | null>>
   nav: StackNavigationProp<ModalStackParamList>
 }) => {
   return (
@@ -47,13 +49,16 @@ const TokenField = (props: {
       />
 
       <ButtonView onPress={() => {
-        props.nav.navigate(Facade.route.ListTokenModal.name)
+        props.nav.navigate(Facade.route.ListTokenModal.name, {
+          selectedToken: props.token ?? null,
+          setToken: props.setToken
+        })
       }}>
         <LinearLayout position="relative">
           <InputWithValidation
             color={props.theme.colors.text[0]}
             fontStyle={'normal'}
-            value={props.token}
+            value={props.token?.name ?? ''}
             placeholder={Facade.t('modals.receive.toAccount.selectTokenToReceive')}
             inputIsValid={true}
             separatorColor={props.theme.colors.background[3]}
@@ -141,11 +146,14 @@ interface Props {
 
 const ReceiveToAccountModal = (props: Props) => {
   const controller = useSwiperController(true)
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const [account, setAccount] = useState<Account>(mockWalletAccounts[0])
   const [isAddressTabSelected, setAddressTabAsSelected] = useState<boolean>(true)
   const [amount, setAmount] = useState<number>(0)
   const [reference, setReference] = useState<string>('')
+  const [token, setToken] = useState<TokenValue | null>(null)
 
   return (
     <SwiperPanel
@@ -182,7 +190,7 @@ const ReceiveToAccountModal = (props: Props) => {
           ? <AddressContent />
           : (
             <LinearLayout orientation="verti" justifyContent="space-between">
-              <TokenField theme={theme} token={'NEO'} nav={props.navigation} />
+              <TokenField theme={theme} token={token} setToken={setToken} nav={props.navigation} />
               <AmountField theme={theme} amount={amount} setAmount={setAmount} />
               <ReferenceField theme={theme} reference={reference} setReference={setReference} />
               <LinearLayout width={'100%'} height={54} my={34}>

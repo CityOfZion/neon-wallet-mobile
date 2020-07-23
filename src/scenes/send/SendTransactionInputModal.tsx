@@ -14,7 +14,6 @@ import SwiperPanel, {
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
-import {Account} from '~src/models/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
 import {
@@ -25,6 +24,7 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
+import {TokenValue} from '~src/models/TokenValue'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -220,7 +220,8 @@ const DestinationAddressField = (props: {
 
 const TokenField = (props: {
   theme: ApplicationTheme
-  token: string
+  token: TokenValue | null
+  setToken: React.Dispatch<React.SetStateAction<TokenValue | null>>
   nav: StackNavigationProp<ModalStackParamList>
 }) => {
   return (
@@ -234,14 +235,17 @@ const TokenField = (props: {
 
       <ButtonView
         onPress={() => {
-          props.nav.navigate(Facade.route.ListTokenModal.name)
+          props.nav.navigate(Facade.route.ListTokenModal.name, {
+            selectedToken: props.token ?? null,
+            setToken: props.setToken
+          })
         }}
       >
         <LinearLayout position="relative">
           <InputWithValidation
             color={props.theme.colors.text[0]}
             fontStyle={'normal'}
-            value={props.token}
+            value={props.token?.name ?? ''}
             placeholder={Facade.t('modals.send.transactionInput.selectToken')}
             inputIsValid={true}
             separatorColor={props.theme.colors.background[3]}
@@ -296,10 +300,13 @@ const AmountField = (props: {
 
 const SendTransactionInputModal = (props: Props) => {
   const controller = useSwiperController(true)
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const [account, setAccount] = useState<Account>(mockWalletAccounts[0])
   const [text, setText] = useState('')
   const [amount, setAmount] = useState(0)
+  const [token, setToken] = useState<TokenValue | null>(null)
 
   return (
     <SwiperPanel
@@ -354,7 +361,7 @@ const SendTransactionInputModal = (props: Props) => {
           address={text}
           setAddress={setText}
         />
-        <TokenField theme={theme} token={'NEO'} nav={props.navigation} />
+        <TokenField theme={theme} token={token} setToken={setToken} nav={props.navigation} />
         <AmountField theme={theme} amount={amount} setAmount={setAmount} />
         <TextView
           mt="56px"
