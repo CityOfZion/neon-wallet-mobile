@@ -25,7 +25,9 @@ function InputWithValidation(props: {
   editable?: boolean
   keyboardType?: string
 }) {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const sideMargins = props.sideMargins ?? 20
   return (
     <LinearLayout orientation="verti" ml={sideMargins} mr={sideMargins}>

@@ -21,6 +21,7 @@ import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionCo
 import SendTransactionInputModal from '~src/scenes/send/SendTransactionInputModal'
 import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
 import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
+import {TokenValue} from '~src/models/TokenValue'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
@@ -34,7 +35,10 @@ export type ModalStackParamList = {
   CustomColor: {onColorPicked: (hex: string) => void}
   WalletContextModal: undefined
   ReorderWalletModal: undefined
-  ListTokenModal: undefined
+  ListTokenModal: {
+    selectedToken: TokenValue | null
+    setToken: React.Dispatch<React.SetStateAction<TokenValue | null>>
+  }
   LanguagePickerModal: undefined
   CurrencyPickerModal: undefined
   ThemePickerModal: undefined
@@ -106,6 +110,7 @@ const ModalStackNavigation = (props: Props) => {
         <ModalStack.Screen
           name={Facade.route.ListTokenModal.name}
           component={ListTokenModal}
+          initialParams={props.route?.params}
         />
         <ModalStack.Screen
           name={Facade.route.LanguagePickerModal.name}

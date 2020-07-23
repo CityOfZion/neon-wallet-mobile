@@ -10,10 +10,12 @@ import SwiperPanel, {
 import {mockListTokenModal} from '~src/mocks/mockListTokenModal'
 import {TokenValue} from '~src/models/TokenValue'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {ButtonView, ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {RouteProp} from '@react-navigation/native'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
+  route: RouteProp<ModalStackParamList, 'ListTokenModal'>
 }
 
 const ListTokenModal = (props: Props) => {
@@ -21,7 +23,15 @@ const ListTokenModal = (props: Props) => {
 
   const Item = (item: TokenValue) => {
     return (
-      <LinearLayout py="12px" orientation="horiz" alignItems="center">
+      <ButtonView
+        py="12px"
+        orientation="horiz"
+        alignItems="center"
+        onPress={() => {
+          props.route.params.setToken(item)
+          controller.close()
+        }}
+      >
         <ImageView
           height="29px"
           width="29px"
@@ -49,7 +59,7 @@ const ListTokenModal = (props: Props) => {
         </LinearLayout>
 
         <ImageView source={require('~src/assets/images/green_plus.png')} />
-      </LinearLayout>
+      </ButtonView>
     )
   }
 
