@@ -19,10 +19,14 @@ interface Props {
 }
 
 export default function ColorSelector(props: Props) {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const navigation = useNavigation()
   const [color, setColor] = useState<string>()
-  const colorsList = Facade.lodash.clone(theme.colors.card)
+  const colorsList = Facade.lodash.clone(
+    Object.values(theme.colors.card) as string[]
+  )
 
   // If color selected from color picker, adds to the list
   color && colorsList.push(color)
@@ -49,8 +53,12 @@ export default function ColorSelector(props: Props) {
   const customColorButton = (
     <TouchableWithoutFeedback
       onPress={() => {
-        navigation.navigate(Facade.route.CustomColor.name, {
-          onColorPicked: (hex: string) => setColor(hex),
+        navigation.navigate('Modal', {
+          screen: Facade.route.CustomColor.name,
+          onColorPicked: (hex: string) => {
+            setColor(hex)
+            props.onSelect && props.onSelect(hex)
+          },
         })
       }}
     >

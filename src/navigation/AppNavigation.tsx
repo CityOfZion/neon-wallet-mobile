@@ -1,6 +1,6 @@
-import {NavigationContainer} from '@react-navigation/native'
+import {NavigationContainer, RouteProp} from '@react-navigation/native'
 import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
@@ -9,43 +9,48 @@ import LoadingOverlay from '../components/LoadingOverlay'
 import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
+import {Sync} from '~src/app/Sync'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import LoginStackNavigation from '~src/navigation/LoginStackNavigation'
 import ModalStackNavigation from '~src/navigation/ModalStackNavigation'
-import TabNavigation from '~src/navigation/TabNavigation'
-import {RootStore} from '~src/store/RootStore'
+import TabNavigation, {TabStackParamList} from '~src/navigation/TabNavigation'
+import OnboardingPage from '~src/scenes/OnboardingPage'
 
 export type RootStackParamList = {
-  Tab: undefined
-  Modal: {screen: string}
+  Tab: (DefaultNavigationParam & Partial<{welcomeHidden?: boolean}>) | undefined
+  Modal:
+    | (DefaultNavigationParam & Partial<{onColorPicked: (hex: string) => void}>)
+    | undefined
   Login: undefined
+  Onboarding: undefined
+} & TabStackParamList
+
+interface Props {
+  route?: RouteProp<RootStackParamList, 'Modal'>
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()
 
-const AppNavigation = () => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+const AppNavigation = (props: Props) => {
+  const theme = useSelector((state: RootState) => {
+    return Facade.theme[state.settings.theme]
+  })
   const loadingOverlayState = useSelector((state: RootState) => state.loading)
   const {progress, loadingText, isLoading} = loadingOverlayState
+
+  const [onboardingSeen, setOnboardingSeen] = useState(true)
+  const [welcomeHidden, setWelcomeHidden] = useState(true)
 
   const dispatch = useDispatch()
 
   const populate = async () => {
-    const currency = await Storage.currency.load()
-    const language = await Storage.language.load()
-    const theme = await Storage.theme.load()
+    const onboardingSeen = await Storage.onboardingSeen.load()
+    const welcomeHidden = await Storage.welcomeHidden.load()
 
-    if (currency) {
-      dispatch(RootStore.app.actions.setCurrency(currency))
-    }
+    setOnboardingSeen(onboardingSeen ?? false)
+    setWelcomeHidden(welcomeHidden ?? false)
 
-    if (language) {
-      dispatch(RootStore.app.actions.setLanguage(language))
-    }
-
-    if (theme) {
-      dispatch(RootStore.app.actions.setTheme(theme))
-    }
+    await Sync.init(dispatch)
   }
 
   useEffect(() => {
@@ -62,18 +67,31 @@ const AppNavigation = () => {
             )}
             <ThemeProvider theme={theme}>
               <RootStack.Navigator
-                initialRouteName={Facade.route.Login.name}
+                initialRouteName={
+                  onboardingSeen
+                    ? Facade.route.Login.name
+                    : Facade.route.Onboarding.name
+                }
                 headerMode="none"
                 screenOptions={Facade.config.screen}
               >
-                <RootStack.Screen name="Tab" component={TabNavigation} />
+                <RootStack.Screen
+                  name="Tab"
+                  component={TabNavigation}
+                  initialParams={{welcomeHidden}}
+                />
+                <RootStack.Screen
+                  name={Facade.route.Onboarding.name}
+                  component={OnboardingPage}
+                />
                 <RootStack.Screen
                   name={Facade.route.Login.name}
                   component={LoginStackNavigation}
                 />
                 <RootStack.Screen
-                  name="Modal"
+                  name={Facade.route.Modal.name}
                   component={ModalStackNavigation}
+                  initialParams={props.route?.params}
                 />
               </RootStack.Navigator>
             </ThemeProvider>

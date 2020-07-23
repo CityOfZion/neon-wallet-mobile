@@ -6,7 +6,7 @@ import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ColorPicker from '~src/components/misc/ColorPicker'
-import {Account} from '~src/models/Account'
+import {AccountMock} from '~src/models/AccountMock'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -22,7 +22,7 @@ const CustomColorPage = (props: Props) => {
   const [color, setColor] = useState<string>(defaultCardColor)
 
   // TODO: change mock values
-  const account = new Account()
+  const account = new AccountMock()
   account.srcIcon = require('~src/assets/images/card-neo.png')
   account.name = 'Demo Card'
   account.currency = '$'
@@ -44,7 +44,7 @@ const CustomColorPage = (props: Props) => {
       controller={controller}
       fullSize={true}
       title={Facade.t('customColorPage.title')}
-      image={require('~src/assets/images/palette.png')}
+      image={require('~src/assets/images/icon-palette-white.png')}
       leftButton={Facade.t('customColorPage.navigation.cancel')}
       rightButton={Facade.t('customColorPage.navigation.done')}
       onLeftPress={controller.close}
@@ -54,8 +54,8 @@ const CustomColorPage = (props: Props) => {
       onClose={() => props.navigation.goBack()}
     >
       <LinearLayout height="100%">
-        <LinearLayout mb={5} maxWidth={320} alignSelf="center">
-          <AccountCard account={account} />
+        <LinearLayout mb={5} maxHeight="35%" alignSelf="center">
+          <AccountCard orientBy="height" account={account} />
         </LinearLayout>
 
         <TextView
@@ -70,7 +70,7 @@ const CustomColorPage = (props: Props) => {
           {Facade.t('customColorPage.subtitle')}
         </TextView>
 
-        <LinearLayout height={320} alignItems="center">
+        <LinearLayout width="100%" weight={1} alignItems="center">
           <ColorPicker color={color} onChange={colorPickerChangeEvent} />
         </LinearLayout>
       </LinearLayout>

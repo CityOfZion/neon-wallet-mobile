@@ -1,11 +1,14 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
-import React from 'react'
+import {RouteProp} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
+import React, {useEffect, useState} from 'react'
 import {StatusBar} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
 import FooterBar from '~src/components/layout/FooterBar'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import ContactsStackNavigation from '~src/navigation/ContactsStackNavigation'
 import MoreStackNavigation from '~src/navigation/MoreStackNavigation'
 import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation'
@@ -13,13 +16,36 @@ import SettingsStackNavigation from '~src/navigation/SettingsStackNavigation'
 import WalletStackNavigation from '~src/navigation/WalletsStackNavigation'
 
 export type TabStackParamList = {
-  More: {screen: string}
+  ListWallets: undefined
+  Contacts: undefined
+  Settings: undefined
+  More: DefaultNavigationParam | undefined
+}
+
+interface Props {
+  navigation: StackNavigationProp<RootStackParamList>
+  route: RouteProp<RootStackParamList, 'Tab'>
 }
 
 const Tab = createBottomTabNavigator()
 
-const TabNavigation = () => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+const TabNavigation = (props: Props) => {
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
+
+  const [welcomeHidden, setWelcomeHidden] = useState(
+    props.route.params?.welcomeHidden ?? true
+  )
+
+  useEffect(() => {
+    if (!welcomeHidden) {
+      props.navigation.navigate(Facade.route.Modal.name, {
+        screen: Facade.route.WelcomeModal.name,
+      })
+      setWelcomeHidden(true)
+    }
+  }, [welcomeHidden])
 
   return (
     <ThemeProvider theme={theme}>

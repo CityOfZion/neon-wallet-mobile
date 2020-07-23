@@ -1,13 +1,19 @@
-import {useHeaderHeight} from '@react-navigation/stack'
+import {wallet} from '@cityofzion/neon-js'
+import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
-import React from 'react'
+import React, {useState} from 'react'
 import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {useSelector} from 'react-redux'
 
+// TODO: remove testing code
+// @ts-ignore
+import {Keychain} from '../vendor/asteroid-sdk'
+
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import styled, {
   ImageView,
   LinearLayout,
@@ -19,6 +25,10 @@ interface OnboardingSlideProps {
   header: string
   image: ImageLoadEventData
   bottomContent: any
+}
+
+interface OnboardingPageProps {
+  navigation: StackNavigationProp<RootStackParamList>
 }
 
 const OnboardingSlide = (props: OnboardingSlideProps) => {
@@ -74,14 +84,47 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
   )
 }
 
-const OnboardingPage = (props: {
-  seenSetter: React.Dispatch<React.SetStateAction<boolean>>
-}) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+const OnboardingPage = (props: OnboardingPageProps) => {
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
+  const [isLastPage, setIsLastPage] = useState(false)
 
-  const persist = async (value: boolean) => {
-    await Storage.onboardingSeen.save(value)
-    props.seenSetter(value)
+  // TODO: remove testing code
+  const testMnemonic = async () => {
+    console.log(`== Keychain - Create NEO Address ==`)
+    const derivationPath = "m/44'/888'/0'/0/0"
+    const mnemonicKeywords =
+      'online ramp onion faculty trap clerk near rabbit busy gravity prize employ exit horse found slogan effort dash siren buzz sport pig coconut element'
+    const secretKey = 'a seek' // NOTE: If this method isn't called, the default seed is used (ok in most cases)
+    const platform = 'neo'
+    const keychain = new Keychain()
+    keychain.importMnemonic(mnemonicKeywords)
+    console.log('mnemonicBuffer:', keychain.mnemonic)
+    const encryptedBuffer = keychain.generateSeed(secretKey)
+    console.log('encryptedBuffer:', encryptedBuffer)
+    const childKey = keychain.generateChildKey(platform, derivationPath)
+    // console.log('childKey:', childKey)
+    const wif = childKey.getWIF()
+    console.log('wif:', wif)
+    const neoAccount = new wallet.Account(wif)
+    // console.log('neoAccount:', neoAccount)
+    console.log('neoAccont.WIF:', neoAccount.WIF)
+    console.log('neoAccont.publicKey:', neoAccount.publicKey)
+    console.log('neoAccont.address:', neoAccount.address)
+    console.log('== THE END ==')
+  }
+  // testMnemonic()
+
+  const finish = async () => {
+    await Storage.onboardingSeen.save(true)
+
+    props.navigation.replace(Facade.route.Login.name)
+  }
+
+  const onIndexChanged = function (index: number) {
+    if (index === 3) setIsLastPage(true)
+    else setIsLastPage(false)
   }
 
   return (
@@ -99,6 +142,7 @@ const OnboardingPage = (props: {
           height={'100%'}
         >
           <Swiper
+            onIndexChanged={onIndexChanged}
             dotColor={theme.colors.text[3]}
             activeDotColor={theme.colors.primary}
             loop={false}
@@ -151,7 +195,7 @@ const OnboardingPage = (props: {
 
                   <LinearLayout width={'100%'} px={'7%'}>
                     <ThemedButton
-                      onPress={() => persist(true)}
+                      onPress={() => finish()}
                       label={Facade.t('onboarding.getStarted.buttonTitle')}
                       basic={true}
                       bgColor={'primary'}
@@ -163,19 +207,21 @@ const OnboardingPage = (props: {
             />
           </Swiper>
 
-          <SkipButton
-            position={'absolute'}
-            left={0}
-            color={'text.0'}
-            opacity={0.5}
-            bottom={0}
-            mb={'3.5%'}
-            ml={30}
-            onPress={() => persist(true)}
-            style={{textTransform: 'lowercase'}}
-          >
-            {Facade.t('app.skip')}
-          </SkipButton>
+          {!isLastPage && (
+            <SkipButton
+              position={'absolute'}
+              left={0}
+              color={'text.0'}
+              opacity={0.5}
+              bottom={0}
+              mb={'3.5%'}
+              ml={30}
+              onPress={() => finish()}
+              style={{textTransform: 'lowercase'}}
+            >
+              {Facade.t('app.skip')}
+            </SkipButton>
+          )}
         </LinearLayout>
       </SafeAreaView>
     </LinearGradient>

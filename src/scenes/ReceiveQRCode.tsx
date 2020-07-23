@@ -5,6 +5,7 @@ import {ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import InputLabel from '~src/components/InputLabel'
 import NeonQRCode from '~src/components/QRCode'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -23,7 +24,9 @@ export interface ReceiveQRCodeProps {
 const buttonWidth = Facade.app.screenWidth - 76
 
 const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const headerHeight = useHeaderHeight()
   const qrCodeContent = props.address //TODO put tx URI
   props = {
@@ -81,14 +84,8 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
               borderColor={theme.colors.background[4]}
             >
               <LinearLayout orientation="horiz" width="100%" mb={14}>
-                <TextView
-                  fontFamily="medium"
-                  color={theme.colors.background[3]}
-                  weight={1.4}
-                  mt={1}
-                >
-                  {Facade.t('receive.token')}
-                </TextView>
+                <InputLabel title={Facade.t('receive.token')} weight={1.4} />
+
                 <LinearLayout orientation="horiz" weight={5}>
                   <ImageView
                     alignSelf="center"
@@ -109,14 +106,8 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
                 </LinearLayout>
               </LinearLayout>
               <LinearLayout orientation="horiz" width="100%" mb={14}>
-                <TextView
-                  fontFamily="medium"
-                  color={theme.colors.background[3]}
-                  weight={1.4}
-                  style={{textAlignVertical: 'bottom'}}
-                >
-                  {Facade.t('receive.amount')}
-                </TextView>
+                <InputLabel title={Facade.t('receive.amount')} weight={1.4} />
+
                 <TextView
                   color="white"
                   fontFamily="semibold"
@@ -127,14 +118,8 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
                 </TextView>
               </LinearLayout>
               <LinearLayout orientation="horiz" width="100%" mb={14}>
-                <TextView
-                  fontFamily="medium"
-                  color={theme.colors.background[3]}
-                  weight={1.4}
-                  style={{textAlignVertical: 'bottom'}}
-                >
-                  {Facade.t('receive.value')}
-                </TextView>
+                <InputLabel title={Facade.t('receive.value')} weight={1.4} />
+
                 <TextView
                   color="white"
                   fontFamily="semibold"
@@ -144,14 +129,10 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
                   {props.formatedValue}
                 </TextView>
               </LinearLayout>
+
               <LinearLayout orientation="horiz" width="100%" mb={14}>
-                <TextView
-                  fontFamily="medium"
-                  color={theme.colors.background[3]}
-                  weight={1.4}
-                >
-                  {Facade.t('receive.location')}
-                </TextView>
+                <InputLabel title={Facade.t('receive.location')} weight={1.4} />
+
                 <TextView
                   color="white"
                   fontFamily="semibold"
@@ -165,13 +146,8 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
                 </TextView>
               </LinearLayout>
               <LinearLayout orientation="horiz" width="100%" mb={14}>
-                <TextView
-                  fontFamily="medium"
-                  color={theme.colors.background[3]}
-                  weight={1.4}
-                >
-                  {Facade.t('receive.address')}
-                </TextView>
+                <InputLabel title={Facade.t('receive.address')} weight={1.4} />
+
                 <TextView
                   color={theme.colors.primary}
                   fontFamily="medium"
@@ -185,13 +161,11 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
                 </TextView>
               </LinearLayout>
               <LinearLayout orientation="horiz" width="100%" mb={20}>
-                <TextView
-                  fontFamily="medium"
-                  color={theme.colors.background[3]}
+                <InputLabel
+                  title={Facade.t('receive.reference')}
                   weight={1.4}
-                >
-                  {Facade.t('receive.reference')}
-                </TextView>
+                />
+
                 <TextView
                   color="white"
                   fontFamily="semibold"

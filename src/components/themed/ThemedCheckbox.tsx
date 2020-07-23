@@ -27,7 +27,7 @@ const ThemedCheckbox: React.FC<Props> = (props) => {
   }
 
   return (
-    <CheckboxView onPress={onChangeEvent}>
+    <CheckboxView onPress={onChangeEvent} underlayColor={'transparent'}>
       <CheckboxContentView
         orientation={'horiz'}
         alignItems={'center'}
@@ -81,7 +81,7 @@ ThemedCheckbox.defaultProps = {
   singleRow: false,
 }
 
-const CheckboxView = styled.TouchableOpacity`
+const CheckboxView = styled.TouchableHighlight`
   box-shadow: 0 -6px 6px rgba(255, 255, 255, 0.1);
   max-width: 100%;
 `

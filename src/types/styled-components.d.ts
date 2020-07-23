@@ -16,9 +16,13 @@ export declare global {
     secondary: string
     tertiary: string
     quaternary: string
-    background: string[]
-    text: string[]
-    card: string[]
+    background: ColorGroup
+    text: ColorGroup
+    card: ColorGroup
+  }
+
+  interface ColorGroup {
+    [key: number]: string
   }
 
   interface OrientationProps {

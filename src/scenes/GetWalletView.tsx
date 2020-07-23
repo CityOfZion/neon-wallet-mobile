@@ -1,31 +1,68 @@
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import {AwaitActivity} from '@simpli/react-native-await'
+import moment from 'moment'
 import React, {useEffect, useState} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
-import {Account} from '~src/models/Account'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {NeoNode} from '~src/models/NeoNode'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
+import {Account} from '~src/models/redux/Account'
+import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
+import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface GetWalletProps {
-  navigation: StackNavigationProp<QuickToolsStackParamList & RootStackParamList>
+  route: RouteProp<WalletStackParamList, 'GetWallet'>
+  navigation: StackNavigationProp<WalletStackParamList>
 }
 
 const GetWalletView = (props: GetWalletProps) => {
-  const [accounts, setAccounts] = useState<Account[]>(mockWalletAccounts)
   const [nodes, setNodes] = useState<NeoNode[]>([])
+  const [accounts, setAccounts] = useState<Account[]>([])
+  const accountsPool = useSelector((state: RootState) => state.app.accounts)
+
+  const {wallet} = props.route.params
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    populate()
-  }, [])
+    Facade.await.run('populate', populate)
+  }, [accountsPool])
 
   const populate = async () => {
+    setAccounts(wallet.getAccounts(accountsPool))
     setNodes(await NeoNode.getAllNodes())
+
+    wallet.lastVisitedAt = moment().format()
+
+    await dispatch(RootStore.app.actions.updateWallet(wallet))
+    await dispatch(RootStore.app.actions.saveWallets())
+  }
+
+  const selectEvent = async (account: Account) => {
+    props.navigation.navigate(Facade.route.GetAccount.name, {
+      account,
+      headerTitle: _renderTitle,
+      actionTitle: Facade.t('app.edit'),
+      // TODO: Edit event
+      actionOnPress: () => {},
+    })
+  }
+
+  const createEvent = async () => {
+    if (wallet.id) {
+      dispatch(RootStore.account.actions.clearState())
+      dispatch(RootStore.account.actions.setIdWallet(wallet.id))
+
+      props.navigation.navigate(Facade.route.Modal.name, {
+        screen: Facade.route.SampleModal.name,
+      })
+    }
   }
 
   const _renderTitle: React.FC = () => {
@@ -53,15 +90,7 @@ const GetWalletView = (props: GetWalletProps) => {
             account={account}
             isCompacted={true}
             isStackMode={i !== accounts.length - 1}
-            onPress={() =>
-              props.navigation.navigate(Facade.route.GetAccount.name, {
-                account,
-                headerTitle: _renderTitle,
-                actionTitle: Facade.t('app.edit'),
-                // TODO: Edit event
-                actionOnPress: () => {},
-              })
-            }
+            onPress={() => selectEvent(account)}
           />
         </LinearLayout>
       )
@@ -70,44 +99,40 @@ const GetWalletView = (props: GetWalletProps) => {
 
   return (
     <ScreenLayout>
-      <LinearLayout mt={4}>{_renderAccountCards()}</LinearLayout>
+      <AwaitActivity name={'populate'} loadingView={<ScreenLoader />}>
+        <LinearLayout mt={4}>{_renderAccountCards()}</LinearLayout>
 
-      <TouchableWithoutFeedback
-        onPress={() =>
-          props.navigation.navigate('Modal', {
-            screen: Facade.route.SampleModal.name,
-          })
-        }
-      >
-        <LinearLayout
-          my={6}
-          orientation="horiz"
-          width="100%"
-          alignItems="center"
-          justifyContent="center"
-          borderStyle="dashed"
-          borderColor="text.0"
-          borderRadius={17}
-          borderWidth={1}
-          style={{
-            aspectRatio: 38 / 25,
-          }}
-        >
-          <ImageView
-            source={require('~src/assets/images/icon-plus-white.png')}
-          />
-
-          <TextView
-            color="white"
-            fontSize={18}
-            mt={2}
-            ml={3}
-            fontFamily="medium"
+        <TouchableWithoutFeedback onPress={() => createEvent()}>
+          <LinearLayout
+            my={6}
+            orientation="horiz"
+            width="100%"
+            alignItems="center"
+            justifyContent="center"
+            borderStyle="dashed"
+            borderColor="text.0"
+            borderRadius={17}
+            borderWidth={1}
+            style={{
+              aspectRatio: 38 / 25,
+            }}
           >
-            {Facade.t('screens.getWallet.addNewAccount')}
-          </TextView>
-        </LinearLayout>
-      </TouchableWithoutFeedback>
+            <ImageView
+              source={require('~src/assets/images/icon-plus-white.png')}
+            />
+
+            <TextView
+              color="white"
+              fontSize={18}
+              mt={2}
+              ml={3}
+              fontFamily="medium"
+            >
+              {Facade.t('screens.getWallet.addNewAccount')}
+            </TextView>
+          </LinearLayout>
+        </TouchableWithoutFeedback>
+      </AwaitActivity>
     </ScreenLayout>
   )
 }

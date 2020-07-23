@@ -5,7 +5,7 @@ import SortableList from 'react-native-sortable-list'
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
-import {Wallet} from '~src/models/Wallet'
+import {WalletMock} from '~src/models/WalletMock'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -14,7 +14,7 @@ interface Props {
   navigation: StackNavigationProp<ModalStackParamList & TabStackParamList>
 }
 
-export default function ReoderWalletModal(props: Props) {
+export default function ReorderWalletModal(props: Props) {
   const controller = useSwiperController(true)
 
   const [wallets, setWallets] = useState(mockWalletItems)
@@ -48,7 +48,7 @@ export default function ReoderWalletModal(props: Props) {
   }
 
   function commitAndClose() {
-    const newWalletList: Wallet[] = []
+    const newWalletList: WalletMock[] = []
     order.forEach((i) => newWalletList.push(wallets[i]))
 
     // Here is where it would save the order onto local store
@@ -68,7 +68,11 @@ export default function ReoderWalletModal(props: Props) {
       padding={24}
       onClose={props.navigation.goBack}
       leftButton={Facade.t('modals.reorderWallet.cancel')}
-      rightButton={Facade.t('modals.reorderWallet.save')}
+      rightButton={
+        <TextView color="primary" fontSize={16} fontFamily="regular">
+          {Facade.t('modals.reorderWallet.save')}
+        </TextView>
+      }
       onLeftPress={controller.close}
       onRightPress={commitAndClose}
     >

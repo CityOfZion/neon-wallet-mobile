@@ -7,11 +7,10 @@ import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
-import {Account} from '~src/models/Account'
+import {AccountMock} from '~src/models/AccountMock'
 import AccountAssetDetail from '~src/scenes/AccountAssetDetail'
 import ReceiveQRCode from '~src/scenes/ReceiveQRCode'
 import QRCodeScanTest from '~src/scenes/TestPage/QRCodeScanTest'
-import {RootState} from '~src/store/reducers/root'
 
 export type QuickToolsStackParamList = {
   Home: undefined
@@ -22,14 +21,17 @@ export type QuickToolsStackParamList = {
   CustomColor: undefined
   Onboarding: undefined
   GetWallet: undefined
-  GetAccount: {account: Account} & HeaderActionButtonProps & HeaderCustomProps
-  AccountAssetDetail: {account: Account} & HeaderCustomProps
+  GetAccount: {account: AccountMock} & HeaderActionButtonProps &
+    HeaderCustomProps
+  AccountAssetDetail: {account: AccountMock} & HeaderCustomProps
 }
 
 const QuickToolsStack = createStackNavigator<QuickToolsStackParamList>()
 
 const QuickToolsStackNavigation = () => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector((state: RootState) => {
+    return Facade.theme[state.settings.theme]
+  })
 
   return (
     <ThemeProvider theme={theme}>

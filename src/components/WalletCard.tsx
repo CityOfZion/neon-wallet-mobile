@@ -1,7 +1,7 @@
 import React from 'react'
 
 import {TokenValue} from '~src/models/TokenValue'
-import {Wallet} from '~src/models/Wallet'
+import {Wallet} from '~src/models/redux/Wallet'
 import styled, {
   ButtonView,
   ImageView,
@@ -35,7 +35,7 @@ const WalletCard = (props: WalletCardProps) => {
   }
 
   const _renderAssetsBarFills = () => {
-    return props.wallet.currentAssets.assets.map((asset, i) => {
+    return props.wallet.currentAssets?.assets.map((asset, i) => {
       const holdingValue = asset.holding * asset.value
       const percentageOfTotal = (holdingValue / props.wallet.currentValue) * 100
 
@@ -62,8 +62,9 @@ const WalletCard = (props: WalletCardProps) => {
       m="12px"
       bg={colorLimedSpruce}
       onPress={() => props.onPress && props.onPress()}
+      activeOpacity={1}
     >
-      {props.wallet.currentAssets.assets.map((a, i) =>
+      {props.wallet.currentAssets?.assets.map((a, i) =>
         _renderAccountCard(a, i)
       )}
       <WalletFrontImage
@@ -85,7 +86,7 @@ const WalletCard = (props: WalletCardProps) => {
             source={require('~src/assets/images/wallet-icon.png')}
           />
           <TextView ml="8px" fontSize="16px" fontFamily="bold" color="text.0">
-            {props.wallet.title.toUpperCase()}
+            {props.wallet.name?.toUpperCase()}
           </TextView>
         </LinearLayout>
       </RelativeLayout>

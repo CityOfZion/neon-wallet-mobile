@@ -20,7 +20,9 @@ interface ListItem {
 }
 
 export default function WalletContextModal(props: Props) {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const controller = useSwiperController(true)
 
   const items: ListItem[] = [
@@ -37,7 +39,7 @@ export default function WalletContextModal(props: Props) {
       title: Facade.t('modals.walletContext.reorder'),
       source: require('~src/assets/images/icon-circle-swap-green.png'),
       onClick: () => {
-        props.navigation.navigate(Facade.route.ReoderWalletModal.name)
+        props.navigation.navigate(Facade.route.ReorderWalletModal.name)
       },
     },
   ]

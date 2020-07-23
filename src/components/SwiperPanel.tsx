@@ -16,10 +16,11 @@ import {
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import {TextView, ImageView} from '~src/styles/styled-components'
+import {TextView, ImageView, LinearLayout} from '~src/styles/styled-components'
+import {AwaitActivity} from '@simpli/react-native-await'
 
-const PANEL_OFFSET = 50
-const ANIMATION_DELTA_THRESHOLD = 50
+export const PANEL_OFFSET = 50
+const ANIMATION_DELTA_THRESHOLD = 0.5
 const ANIMATION_VELOCITY_THRESHOLD = 0.5
 
 interface SwiperProps {
@@ -38,8 +39,17 @@ interface SwiperProps {
   onRightPress?: () => void
   onClose?: () => void
   image?: ImageSourcePropType
+  imageSize: [number, number]
   title?: string
   children?: JSX.Element | JSX.Element[]
+
+  // Important! If you wish to disable the default scroll view,
+  // make sure your layout has enough padding at the bottom to compensate for the
+  // part of the modal that is draggable.
+  // You can do so by adding a marginBottom of PANEL_OFFSET.
+  // It's not there by default in case the content is a scrollable list, or it would look weird
+  // (ask Joao if any questions)
+  disableDefaultScrollView?: boolean
 }
 
 enum State {
@@ -78,7 +88,9 @@ export const useSwiperController = (initial: boolean = false) => {
 }
 
 export default function SwiperPanel(props: SwiperProps) {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const MAX_HEIGHT = useWindowDimensions?.().height
 
   const [height, setHeight] = useState<number>()
@@ -109,10 +121,11 @@ export default function SwiperPanel(props: SwiperProps) {
         onPanResponderRelease: (evt, gestureState) => {
           pan.current.flattenOffset()
 
-          // If delta Y is greater than ANIMATION_DELTA_THRESHOLD or movement is faster than ANIMATION_VELOCITY_THRESHOLD,
-          // closes panel
+          // If delta Y is greater than ANIMATION_DELTA_THRESHOLD * PANEL_HEIGHT
+          // or movement is faster than ANIMATION_VELOCITY_THRESHOLD, closes panel
           if (
-            gestureState.dy > ANIMATION_DELTA_THRESHOLD ||
+            gestureState.dy >
+              (height ?? MAX_HEIGHT) * ANIMATION_DELTA_THRESHOLD ||
             gestureState.vy > ANIMATION_VELOCITY_THRESHOLD
           ) {
             controller.close()
@@ -163,13 +176,13 @@ export default function SwiperPanel(props: SwiperProps) {
     Animated.parallel([
       Animated.spring(pan.current, {
         toValue: {x: 0, y: height ?? MAX_HEIGHT},
-        restSpeedThreshold: 100,
-        restDisplacementThreshold: 40,
+        restSpeedThreshold: 150,
+        restDisplacementThreshold: 100,
         friction: 100,
       }),
       Animated.timing(bgOpacity.current, {
         toValue: 0,
-        duration: 500,
+        duration: 200,
       }),
     ]).start(() => {
       props.onClose && props.onClose()
@@ -197,78 +210,81 @@ export default function SwiperPanel(props: SwiperProps) {
 
   function Header(props: SwiperProps) {
     return (
-      <Fragment>
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            flexShrink: 0,
-            marginTop: 24,
-            marginBottom: paddingTop,
-          }}
+      <LinearLayout
+        alignItems="center"
+        justifyContent="space-between"
+        orientation="horiz"
+        mt="24px"
+        mb={paddingTop}
+      >
+        <AwaitActivity name={'swiperLeft'}>
+          <LinearLayout weight={1} alignItems="flex-start">
+            <TouchableWithoutFeedback
+              onPress={() => props.onLeftPress && props.onLeftPress()}
+            >
+              <View
+                style={{
+                  marginLeft: -10,
+                  paddingLeft: 10,
+                }}
+              >
+                {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
+                {typeof props.leftButton === 'string'
+                  ? TextButton(props.leftButton)
+                  : props.leftButton}
+              </View>
+            </TouchableWithoutFeedback>
+          </LinearLayout>
+        </AwaitActivity>
+
+        <LinearLayout
+          weight={1}
+          width="100%"
+          orientation="horiz"
+          alignItems="center"
+          justifyContent="center"
+          position="absolute"
         >
-          <TouchableWithoutFeedback
-            onPress={() => props.onLeftPress && props.onLeftPress()}
-          >
-            <View
-              style={{
-                marginLeft: -10,
-                paddingLeft: 10,
-              }}
-            >
-              {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
-              {typeof props.leftButton === 'string'
-                ? TextButton(props.leftButton)
-                : props.leftButton}
-            </View>
-          </TouchableWithoutFeedback>
+          {props.image ? (
+            <ImageView
+              resizeMode="contain"
+              height={props.imageSize[0]}
+              width={props.imageSize[1]}
+              mr="6px"
+              source={props.image}
+            />
+          ) : undefined}
 
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row',
-              flexShrink: 0,
-            }}
+          <TextView
+            color={theme.colors.text[0]}
+            fontSize={24}
+            fontFamily="semibold"
+            alignSelf="center"
           >
-            {props.image ? (
-              <ImageView
-                resizeMode="contain"
-                height={20}
-                width={20}
-                mr="6px"
-                source={props.image}
-              />
-            ) : undefined}
+            {props.title}
+          </TextView>
+        </LinearLayout>
 
-            <TextView
-              color={theme.colors.text[0]}
-              fontSize={24}
-              fontFamily="semibold"
-              alignSelf="center"
+        <AwaitActivity name={'swiperRight'}>
+          <LinearLayout weight={1} alignItems="flex-end">
+            <TouchableWithoutFeedback
+              onPress={() => props.onRightPress && props.onRightPress()}
             >
-              {props.title}
-            </TextView>
-          </View>
-
-          <TouchableWithoutFeedback
-            onPress={() => props.onRightPress && props.onRightPress()}
-          >
-            <View
-              style={{
-                marginRight: -10,
-                paddingRight: 10,
-              }}
-            >
-              {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
-              {typeof props.rightButton === 'string'
-                ? TextButton(props.rightButton)
-                : props.rightButton}
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </Fragment>
+              <View
+                style={{
+                  marginRight: -10,
+                  paddingRight: 10,
+                }}
+              >
+                {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
+                {typeof props.rightButton === 'string'
+                  ? TextButton(props.rightButton)
+                  : props.rightButton}
+              </View>
+            </TouchableWithoutFeedback>
+          </LinearLayout>
+        </AwaitActivity>
+      </LinearLayout>
     )
   }
 
@@ -348,6 +364,7 @@ export default function SwiperPanel(props: SwiperProps) {
           <View
             style={{
               width: '100%',
+
               borderTopLeftRadius: 30,
               borderTopRightRadius: 30,
               overflow: 'hidden',
@@ -371,29 +388,31 @@ export default function SwiperPanel(props: SwiperProps) {
             >
               {props.draggable ? DragBar() : undefined}
               {props.noHeader ? undefined : Header(props)}
-              <ScrollView
-                ref={scrollView}
-                style={{
-                  width: '100%',
-                }}
-                contentContainerStyle={{
-                  flexGrow: 1,
-                  flexDirection: 'column',
-                  justifyContent: 'flex-start',
-                }}
-                alwaysBounceVertical={false}
-              >
+              {props.disableDefaultScrollView ? (
                 <TouchableHighlight>
-                  <Fragment>
-                    {props.children}
-                    <View
-                      style={{
-                        height: PANEL_OFFSET + paddingBottom,
-                      }}
-                    />
-                  </Fragment>
+                  <Fragment>{props.children}</Fragment>
                 </TouchableHighlight>
-              </ScrollView>
+              ) : (
+                <ScrollView
+                  ref={scrollView}
+                  style={{
+                    width: '100%',
+                  }}
+                  contentContainerStyle={{
+                    flexGrow: 1,
+                    flexDirection: 'column',
+                    justifyContent: 'flex-start',
+                    paddingBottom: PANEL_OFFSET + paddingBottom,
+                  }}
+                  alwaysBounceVertical={false}
+                  showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
+                >
+                  <TouchableHighlight>
+                    <Fragment>{props.children}</Fragment>
+                  </TouchableHighlight>
+                </ScrollView>
+              )}
             </LinearGradient>
           </View>
         </Animated.View>
@@ -412,7 +431,9 @@ SwiperPanel.propTypes = {
   paddingTop: PropTypes.number,
   paddingBottom: PropTypes.number,
   image: PropTypes.node,
+  imageSize: PropTypes.arrayOf(PropTypes.number),
   title: PropTypes.string,
+  disableScrolling: PropTypes.bool,
 }
 
 SwiperPanel.defaultProps = {
@@ -425,9 +446,11 @@ SwiperPanel.defaultProps = {
   paddingRight: undefined,
   paddingTop: undefined,
   paddingBottom: undefined,
+  disableScrolling: false,
+  imageSize: [20, 20],
 }
 
-export function CancelButton() {
+export function CloseButton() {
   return (
     <ImageView
       width={20}
@@ -439,7 +462,9 @@ export function CancelButton() {
 }
 
 export function BackButton(props: {text?: string}) {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   return (
     <View
       style={{

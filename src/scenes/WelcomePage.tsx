@@ -1,29 +1,55 @@
+import {RouteProp, CommonActions} from '@react-navigation/native'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, {useState} from 'react'
 
+import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
-import ScreenLayout from '~src/components/layout/ScreenLayout'
+import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCheckbox from '~src/components/themed/ThemedCheckbox'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {LoginStackParamList} from '~src/navigation/LoginStackNavigation'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
+// Why are you like this, Typescript
+type ParamList = LoginStackParamList & TabStackParamList & RootStackParamList
+type RouteName = keyof ParamList
+type NavParam = ParamList[RouteName] extends undefined
+  ? [RouteName] | [RouteName, ParamList[RouteName]]
+  : [RouteName, ParamList[RouteName]]
+
 interface Props {
-  onClose?: (routeTargetName?: string) => void
+  navigation: StackNavigationProp<ParamList>
+  route: RouteProp<ModalStackParamList, keyof ModalStackParamList>
 }
 
-const WelcomePage: React.FC<Props> = (props) => {
+const WelcomePage = (props: Props) => {
+  const controller = useSwiperController(true)
+  const [action, setAction] = useState<CommonActions.Action>()
+
   const persist = async (value: boolean) => {
     await Storage.welcomeHidden.save(value)
   }
 
+  const closeTo = (...arg: NavParam) => {
+    setAction(CommonActions.navigate(...arg))
+    controller.close()
+  }
+
   return (
-    <ScreenLayout
-      useHeaderPadding={false}
-      useFooterPadding={false}
-      alignX={'center'}
-      padding={30}
+    <SwiperPanel
+      controller={controller}
+      fullSize={true}
+      paddingTop={20}
+      noHeader={true}
+      onClose={() =>
+        action ? props.navigation.dispatch(action) : props.navigation.goBack()
+      }
+      image={require('~/src/assets/images/icon-plus-circle-white.png')}
     >
       <LinearLayout mb={5} alignItems={'center'}>
         <ImageView source={require('~/src/assets/images/logo-small.png')} />
@@ -42,6 +68,7 @@ const WelcomePage: React.FC<Props> = (props) => {
         color={'text.0'}
         fontSize={Facade.scale(36)}
         fontFamily={'bold'}
+        textAlign="center"
       >
         {Facade.t('welcome.title')}
       </TextView>
@@ -50,7 +77,12 @@ const WelcomePage: React.FC<Props> = (props) => {
         {Facade.t('welcome.body_1_1')}
 
         <TextView
-          onPress={() => props.onClose?.(Facade.route.Settings.name)}
+          onPress={() =>
+            closeTo(Facade.route.Tab.name, {
+              screen: Facade.route.Settings.name,
+              initial: false,
+            })
+          }
           color={'primary'}
         >
           {Facade.t('welcome.body_1_2')}
@@ -59,7 +91,11 @@ const WelcomePage: React.FC<Props> = (props) => {
         {Facade.t('welcome.body_1_3')}
 
         <TextView
-          onPress={() => props.onClose?.(Facade.route.ListWallets.name)}
+          onPress={() =>
+            closeTo(Facade.route.Tab.name, {
+              screen: Facade.route.ListWallets.name,
+            })
+          }
           color={'primary'}
         >
           {Facade.t('welcome.body_1_4')}
@@ -80,8 +116,8 @@ const WelcomePage: React.FC<Props> = (props) => {
         fontFamily={'bold'}
         allowFontScaling={true}
         adjustsFontSizeToFit={true}
-        numberOfLines={1}
         mb={5}
+        textAlign="center"
       >
         {Facade.t('welcome.label_1')}
       </TextView>
@@ -89,7 +125,11 @@ const WelcomePage: React.FC<Props> = (props) => {
       <LinearLayout mt={3} mb={6} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
-          onPress={() => props.onClose?.(Facade.route.ListWallets.name)}
+          onPress={() =>
+            closeTo(Facade.route.Tab.name, {
+              screen: Facade.route.ListWallets.name,
+            })
+          }
           label={Facade.t('welcome.button_1')}
         />
       </LinearLayout>
@@ -97,7 +137,11 @@ const WelcomePage: React.FC<Props> = (props) => {
       <LinearLayout mb={7} width={'100%'}>
         {/*TODO: change navigation target*/}
         <ThemedButton
-          onPress={() => props.onClose?.(Facade.route.ListWallets.name)}
+          onPress={() =>
+            closeTo(Facade.route.Tab.name, {
+              screen: Facade.route.ListWallets.name,
+            })
+          }
           label={Facade.t('welcome.button_2')}
         />
       </LinearLayout>
@@ -114,9 +158,17 @@ const WelcomePage: React.FC<Props> = (props) => {
         right={Facade.scale(5)}
         top={Facade.scale(5)}
       >
-        <ThemedCloseButton onPress={() => props.onClose?.()} />
+        <ThemedCloseButton
+          onPress={() =>
+            closeTo(
+              // TODO: figure out a way to remove the explicity of 'undefined'
+              Facade.route.Tab.name,
+              undefined
+            )
+          }
+        />
       </LinearLayout>
-    </ScreenLayout>
+    </SwiperPanel>
   )
 }
 

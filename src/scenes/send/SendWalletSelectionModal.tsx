@@ -5,7 +5,10 @@ import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import SwiperPanel, {
+  CloseButton,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
 import WalletCard from '~src/components/WalletCard'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -20,7 +23,7 @@ const SendWalletSelectionModal = (props: Props) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const [wallets, setWallets] = useState(mockWalletItems)
   const carouselRef = useRef(null)
-  const currency = useSelector((state: RootState) => state.app.currency)
+  const currency = useSelector((state: RootState) => state.settings.currency)
 
   return (
     <SwiperPanel
@@ -30,7 +33,7 @@ const SendWalletSelectionModal = (props: Props) => {
       paddingRight={0}
       paddingLeft={0}
       title={Facade.t('modals.send.title')}
-      rightButton={'X    '}
+      rightButton={CloseButton()}
       onRightPress={() => controller.close()}
       onClose={() => props.navigation.goBack()}
       image={require('~/src/assets/images/upload-white.png')}
@@ -64,7 +67,7 @@ const SendWalletSelectionModal = (props: Props) => {
             <WalletCard
               onPress={() =>
                 props.navigation.navigate(
-                  Facade.route.SendWalletSelectionModal.name
+                  Facade.route.SendTransactionInputModal.name
                 )
               }
               height={330}

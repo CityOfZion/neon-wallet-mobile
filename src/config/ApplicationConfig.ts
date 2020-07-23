@@ -19,6 +19,9 @@ export class ApplicationConfig {
   readonly screenWidth = Dimensions.get('screen').width
   readonly screenHeight = Dimensions.get('screen').height
 
+  readonly derivationPath = "m/44'/888'/0'/0/0"
+  readonly platform = 'neo'
+
   readonly mainNetworkId = '1'
   readonly mainNetworkLabel = '2.x MainNet'
   readonly mainNetworkDeprecatedLabel = 'MainNet'

@@ -1,8 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState, useEffect} from 'react'
-import {TouchableOpacity, TouchableWithoutFeedback} from 'react-native'
-import {useSelector} from 'react-redux'
+import {TouchableWithoutFeedback} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import Keypad from '~src/components/Keypad'
@@ -38,10 +37,8 @@ export const PasscodeHeader = (props: {
 }
 
 const PasscodePage = (props: Props) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
   const [passcode, setPasscode] = useState<number[]>([])
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false)
-  console.log(props.route.params?.showError)
 
   useEffect(() => {
     if (passcode.length === PASSCODE_LENGTH) {
@@ -53,7 +50,9 @@ const PasscodePage = (props: Props) => {
   }, [passcode])
 
   useEffect(() => {
-    setShowErrorMessage(props.route.params?.showError ?? false)
+    setShowErrorMessage(
+      (props.route.params?.showError ?? false) && passcode.length === 0
+    )
   })
 
   const clickKey = (number: number) => {
@@ -76,18 +75,23 @@ const PasscodePage = (props: Props) => {
 
       <PasscodeBar data={passcode} length={PASSCODE_LENGTH} />
 
-      <LinearLayout pt="24px">
-        {showErrorMessage ? (
-          <TextView color="primary" fontSize={22}>
-            {Facade.t('passcode.error')}
-          </TextView>
-        ) : undefined}
-      </LinearLayout>
+      <TextView
+        color="primary"
+        fontSize={22}
+        opacity={showErrorMessage ? 1 : 0}
+        my={18}
+      >
+        {Facade.t('passcode.error')}
+      </TextView>
+
+      <LinearLayout weight={1} width="100%" />
 
       <Keypad
         onClick={clickKey}
         disabled={passcode.length >= PASSCODE_LENGTH}
       />
+
+      <LinearLayout weight={2} maxHeight="180px" width="100%" />
     </ScreenLayout>
   )
 }

@@ -1,9 +1,9 @@
-import {Account} from '~src/models/Account'
+import {AccountMock} from '~src/models/AccountMock'
 
-export const mockWalletAccounts: Account[] = [
-  new Account(),
-  new Account(),
-  new Account(),
+export const mockWalletAccounts: AccountMock[] = [
+  new AccountMock(),
+  new AccountMock(),
+  new AccountMock(),
 ]
 
 mockWalletAccounts[0].srcIcon = require('~src/assets/images/card-neo.png')

@@ -1,8 +1,10 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import React from 'react'
-import {Text, TouchableWithoutFeedback} from 'react-native'
-import {useSelector} from 'react-redux'
+import * as LocalAuthentication from 'expo-local-authentication'
+import ExpoLocalAuthentication from 'expo-local-authentication/src/ExpoLocalAuthentication'
+import React, {useState} from 'react'
+import {Alert, Platform, TouchableWithoutFeedback} from 'react-native'
 
+import {LocalAuthenticationResult} from '~/node_modules/expo-local-authentication/src/LocalAuthentication.types'
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
@@ -14,7 +16,63 @@ interface Props {
   navigation: StackNavigationProp<RootStackParamList & LoginStackParamList>
 }
 
+const MAX_ERROR_COUNTER = 3
+
 export default function LoginPage(props: Props) {
+  const [errorCounter, setErrorCounter] = useState(0)
+
+  const continueButton = async () => {
+    const canUseHardware = await LocalAuthentication.hasHardwareAsync()
+
+    if (canUseHardware) {
+      let result: LocalAuthenticationResult
+
+      if (Platform.OS === 'ios') {
+        result = await LocalAuthentication.authenticateAsync()
+      } else {
+        result = await ExpoLocalAuthentication.authenticateAsync()
+      }
+
+      if (!result.success) {
+        // If user doesn't have the hardware configured, redirects to passcode
+        if (result.error === 'not_enrolled') {
+          props.navigation.navigate(Facade.route.Passcode.name)
+        } else {
+          setErrorCounter(errorCounter + 1)
+
+          if (errorCounter >= MAX_ERROR_COUNTER) {
+            alertDialog()
+          }
+        }
+      } else {
+        props.navigation.replace(Facade.route.Tab.name, undefined)
+      }
+    } else {
+      props.navigation.navigate(Facade.route.Passcode.name)
+    }
+  }
+
+  const alertDialog = () =>
+    Alert.alert(
+      Facade.t('login.dialog.title'),
+      Facade.t('login.dialog.subtitle'),
+      [
+        {
+          text: Facade.t('login.dialog.usePasscode'),
+          onPress: () => props.navigation.navigate(Facade.route.Passcode.name),
+        },
+        {
+          text: Facade.t('login.dialog.cancel'),
+          style: 'cancel',
+        },
+        {
+          text: Facade.t('login.dialog.tryAgain'),
+          onPress: continueButton,
+        },
+      ],
+      {cancelable: false}
+    )
+
   return (
     <ScreenLayout
       useHeaderPadding={false}
@@ -33,7 +91,9 @@ export default function LoginPage(props: Props) {
         {Facade.t('login.brand')}
       </TextView>
 
-      <LinearLayout position={'absolute'} bottom={0} alignItems={'center'}>
+      <LinearLayout weight={1} width="100%" minHeight="12px" />
+
+      <LinearLayout width="100%" alignItems={'center'}>
         <TextView
           mb={24}
           color={'primary'}
@@ -45,7 +105,6 @@ export default function LoginPage(props: Props) {
         </TextView>
 
         <TextView
-          mb={60}
           color={'text.0'}
           fontSize={'18px'}
           letterSpacing={0.2}
@@ -53,6 +112,12 @@ export default function LoginPage(props: Props) {
         >
           {Facade.t('login.body')}
         </TextView>
+        <LinearLayout
+          weight={1}
+          width="100%"
+          minHeight="24px"
+          maxHeight="60px"
+        />
 
         <LinearLayout width={'100%'}>
           <ThemedButton
@@ -61,18 +126,23 @@ export default function LoginPage(props: Props) {
             basic={true}
             label={Facade.t('login.continue')}
             fontFamily={'medium'}
-            onPress={() =>
-              props.navigation.navigate(Facade.route.Passcode.name)
-            }
+            onPress={continueButton}
           />
         </LinearLayout>
 
+        <LinearLayout
+          weight={1}
+          width="100%"
+          minHeight="24px"
+          maxHeight="42px"
+        />
+
         <TouchableWithoutFeedback
-          onPress={() => props.navigation.replace('Tab')}
+          onPress={() =>
+            props.navigation.replace(Facade.route.Tab.name, undefined)
+          }
         >
           <TextView
-            mt={42}
-            mb={16}
             p={16}
             color={'text.8'}
             fontSize={'18px'}
@@ -83,10 +153,17 @@ export default function LoginPage(props: Props) {
           </TextView>
         </TouchableWithoutFeedback>
 
+        <LinearLayout
+          weight={1}
+          width="100%"
+          minHeight="12px"
+          maxHeight="16px"
+        />
+
         <ImageView
           width={98}
           height={30}
-          mb={18}
+          mb={12}
           source={require('~src/assets/logos/logo-coz.png')}
         />
       </LinearLayout>

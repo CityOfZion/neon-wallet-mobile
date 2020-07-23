@@ -2,25 +2,28 @@
   "private": true,
   "main": "index.js",
   "scripts": {
+    "serve": "expo start",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "web": "expo start --web",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "ts-build": "tsc -b"
   },
   "dependencies": {
     "@cityofzion/neon-js": "^4.8.0",
     "@moonlight-io/asteroid-sdk-js": "git+https://github.com/Moonlight-io/asteroid-sdk-js",
     "@react-native-community/async-storage": "^1.11.0",
+    "@react-native-community/clipboard": "^1.2.2",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.4.5",
     "@react-navigation/native": "^5.3.0",
     "@react-navigation/stack": "^5.3.3",
     "@simpli/react-native-await": "^0.2.1",
     "@simpli/react-native-storage": "^0.1.1",
-    "@simpli/redux-wrapper": "^0.1.1",
+    "@simpli/redux-wrapper": "^0.1.2",
     "@simpli/serialized-request": "^1.0.5",
     "@types/i18n-js": "^3.0.3",
     "@types/react-native-snap-carousel": "^3.8.1",
@@ -83,6 +86,7 @@
     "husky": "^4.2.5",
     "jest-expo": "^37.0.0",
     "lint-staged": "^10.2.10",
+    "react-devtools": "^3.6.3",
     "react-native-testing-library": "^1.14.0",
     "react-test-renderer": "^16.13.1",
     "typescript": "~3.8.3"

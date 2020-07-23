@@ -5,9 +5,9 @@
     "pt-BR": "Português"
   },
   "currencies": {
-    "USD" : "USD",
+    "USD" : "$",
     "BRL" : "R$",
-    "EUR" : "EUR"
+    "EUR" : "€"
   },
   "themes": {
     "DARK": "Escuro",
@@ -22,7 +22,12 @@
     "skip": "Pular",
     "copy": "Copiar",
     "print": "Imprimir",
-    "retry": "Tentar novamente"
+    "retry": "Tentar novamente",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "done": "Feito",
+    "close": "Fechar",
+    "copyToClipboard": "Copy to clipboard"
   },
   "routes": {
     "GetWallet": "Carteira",
@@ -33,11 +38,16 @@
     "ReceiveQrCode": "Receive QR Code",
     "CustomColor": "Personalizar Cor",
     "CreateWallet": "Create Wallet",
-    "Step1CreateWallet": "Criar Carteira",
-    "Step2CreateWallet": "Criar Carteira",
-    "Step3CreateWallet": "Criar Carteira",
-    "Step4CreateWallet": "Criar Carteira",
-    "Step5CreateWallet": "Criar Carteira"
+    "MyWallets": "Minhas Carteiras",
+    "Step1CreateWallet": "Criar carteira",
+    "Step2CreateWallet": "Criar carteira",
+    "Step3CreateWallet": "Criar carteira",
+    "Step4CreateWallet": "Criar carteira",
+    "Step5CreateWallet": "Criar carteira",
+    "Step1BackupWallet": "Backup da carteira",
+    "Step2BackupWallet": "Backup da carteira",
+    "Step3BackupWallet": "Backup da carteira",
+    "Step4BackupWallet": "Backup da carteira"
   },
   "home": {
     "welcome": "Bem-vindo ao Neon Wallet!"
@@ -86,6 +96,10 @@
       "subtitle": "#translateme",
       "buttonTitle": "#translateme"
     }
+  },
+  "myWalletOptions": {
+    "details": "Detalhes",
+    "backupWallet": "Backup da carteira"
   },
   "step1CreateWallet": {
     "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",
@@ -176,7 +190,8 @@
   },
   "screens": {
     "listWallets": {
-      "changeSinceLastVisit": "#translateme"
+      "changeSinceLastVisit": "#translateme",
+      "createFirstWallet": "Criar primeira carteira"
     },
     "getWallet": {
       "addNewAccount": "#translateme"
@@ -200,6 +215,75 @@
       }
     }
   },
+  "modals": {
+    "send": {
+      "title": "Send",
+      "walletSelection": {
+        "subtitle": "Please select a wallet to send from"
+      },
+      "transactionConfirmation": {
+        "header": "Transaction successfully sent!",
+        "subheader": "Once your transaction has been confirmed it will appear in your transaction history",
+        "transactionId": "TRANSACTION ID"
+      },
+      "transactionInput": {
+        "selectDifferentAccount": "Select a different Account",
+        "transactionDetails": "TRANSACTION DETAILS",
+        "prioritiseTransfer": "PRIORITISE YOUR TRANSFER WITH A FEE?",
+        "enterAmount": "Enter amount",
+        "selectToken": "Select token to send",
+        "enterDestination": "Enter destination address",
+        "destinationAddress": "DESTINATION ADDRESS",
+        "token": "TOKEN",
+        "amount": "AMOUNT",
+        "contacts": "Contacts",
+        "paste": "Paste",
+        "scan": "Scan"
+      },
+      "transactionReview": {
+        "token": "Token",
+        "amount": "Amount",
+        "remainingInWallet": "(%{token} in wallet)",
+        "value": "Value",
+        "price": "Price",
+        "priority": "Priority",
+        "feeAmount": "(Fee %{amount})",
+        "pleaseReview": "Please review transaction"
+      }
+    },
+    "receive": {
+      "title": "Receive",
+      "walletSelection": {
+        "subtitle": "Please select a wallet to receive to"
+      },
+      "toAccount": {
+        "yourAddress": "Your Address",
+        "requestTokens": "Request Tokens",
+        "selectTokenToReceive": "Select token to receive",
+        "enterAmount": "Enter amount",
+        "addReference": "Add a reference",
+        "reference": "Reference",
+        "generateQrCode": "Generate QR Code"
+      }
+    },
+    "walletContext": {
+      "create": "Create new wallet",
+      "reorder": "Reorder wallets",
+      "cancel": "Cancel"
+    },
+    "listTokenModal": {
+      "holding": "Holdings",
+      "tokens": "Tokens",
+      "selectToken": "Select a token to send to",
+      "value": "#translateme"
+    },
+    "reorderWallet": {
+      "title": "Reorder wallets",
+      "subtitle": "Drag a wallet to a new position to reorder",
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  },
   "components": {
     "notification": {
       "title": "#translateme"
@@ -215,6 +299,21 @@
       "pending": "#translateme",
       "sentTo": "#translateme",
       "value": "#translateme"
+    },
+
+    "transactionInput": {
+      "selectDifferentAccount": "Select a different Account",
+      "transactionDetails": "TRANSACTION DETAILS",
+      "prioritiseTransfer": "PRIORITISE YOUR TRANSFER WITH A FEE?",
+      "enterAmount": "Enter amount",
+      "selectToken": "Select token to send",
+      "enterDestination": "Enter destination address",
+      "destinationAddress": "DESTINATION ADDRESS",
+      "token": "TOKEN",
+      "amount": "AMOUNT",
+      "contacts": "Contacts",
+      "paste": "Paste",
+      "scan": "Scan"
     },
     "colorSelector": {
       "customColor": "Cor personalizada"

@@ -80,7 +80,7 @@ const ThemedButton: React.FC<Props> = (props) => {
           />
         )}
 
-        {props.label && (
+        {Boolean(props.label) && (
           <LabelView
             mt={'2px'}
             color={props.textColor}
@@ -99,6 +99,7 @@ const ThemedButton: React.FC<Props> = (props) => {
 
   return (
     <ButtonView
+      underlayColor={'transparent'}
       onPress={(e: NativeSyntheticEvent<NativeTouchEvent>) => {
         if (props.toggleable) {
           setActive(!isActive)
@@ -154,7 +155,7 @@ ThemedButton.defaultProps = {
   basic: false,
 }
 
-const ButtonView = styled.TouchableOpacity``
+const ButtonView = styled.TouchableHighlight``
 
 const LabelView = styled(TextView)`
   text-align: center;

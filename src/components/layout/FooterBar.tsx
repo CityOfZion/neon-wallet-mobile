@@ -36,7 +36,9 @@ interface TabButtonContent {
 
 const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   const {state, descriptors, navigation} = props
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const focusedOptions = descriptors[state.routes[state.index].key].options
 
   if (focusedOptions.tabBarVisible === false) {
@@ -81,6 +83,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   const TabButton = (props: {button: TabButtonContent}) => {
     return (
       <StyledTouchable
+        underlayColor={'transparent'}
         height="100%"
         onPress={() => {
           controller.close()
@@ -89,8 +92,10 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
         weight={1}
       >
         <ImageView
-          m="auto"
           resizeMode="cover"
+          mx="auto"
+          mt="auto"
+          mb="10px"
           source={
             state.routes[state.index].name === props.button.route.name
               ? props.button.enabledSource
@@ -154,6 +159,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
             source={require('~src/assets/images/TabBar.png')}
           />
 
+          {/*This should be absolute to float above of outbounds area*/}
           <LinearLayout
             position={'absolute'}
             bottom={0}
@@ -164,6 +170,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
             <TabButton button={walletButton} />
             <TabButton button={contactsButton} />
             <StyledTouchable
+              underlayColor={'transparent'}
               mx="6px"
               bottom="10px"
               width={66}
@@ -207,7 +214,7 @@ const TabBarContainer = styled.SafeAreaView<
   ${position}
 `
 
-const StyledTouchable = styled.TouchableOpacity<
+const StyledTouchable = styled.TouchableHighlight<
   SpaceProps & LayoutProps & PositionProps & WeightProps
 >`
   ${space} 

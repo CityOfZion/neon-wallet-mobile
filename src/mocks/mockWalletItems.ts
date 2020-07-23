@@ -1,9 +1,9 @@
 import {Facade} from '~src/app/Facade'
 import {TokenBalance} from '~src/models/TokenBalance'
 import {TokenValue} from '~src/models/TokenValue'
-import {Wallet} from '~src/models/Wallet'
+import {WalletMock} from '~src/models/WalletMock'
 
-export const mockEmptyWallet = new Wallet(
+export const mockEmptyWallet = new WalletMock(
   'Empty Wallet',
   new TokenBalance([new TokenValue('NEO', 'NEO', 0, 0, 'primary')]),
   new TokenBalance([new TokenValue('NEO', 'NEO', 0, 0, 'primary')]),
@@ -11,7 +11,7 @@ export const mockEmptyWallet = new Wallet(
 )
 
 export const mockWalletItems = [
-  new Wallet(
+  new WalletMock(
     'Wallet 1',
     new TokenBalance([
       new TokenValue('NEO', 'NEO', 199, 2111.39, 'primary'),
@@ -27,7 +27,7 @@ export const mockWalletItems = [
     ]),
     Facade.moment().add('-85', 'hours').format()
   ),
-  new Wallet(
+  new WalletMock(
     'Wallet 2',
     new TokenBalance([
       new TokenValue('NEO', 'NEO', 199, 2111.39),
@@ -43,7 +43,7 @@ export const mockWalletItems = [
     ]),
     Facade.moment().add('-43', 'hours').format()
   ),
-  new Wallet(
+  new WalletMock(
     'Wallet 3',
     new TokenBalance([
       new TokenValue('NEO', 'NEO', 19, 2111.39),
