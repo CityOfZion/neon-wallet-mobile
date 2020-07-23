@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import SwiperPanel, {CloseButton, useSwiperController} from '~src/components/SwiperPanel'
 import WalletCard from '~src/components/WalletCard'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -30,10 +30,10 @@ const ReceiveWalletSelectionModal = (props: Props) => {
       paddingRight={0}
       paddingLeft={0}
       title={Facade.t('modals.receive.title')}
-      rightButton={'X    '}
+      rightButton={CloseButton()}
       onRightPress={() => controller.close()}
       onClose={() => props.navigation.goBack()}
-      image={require('~/src/assets/images/download-white.png')}
+      image={require('~src/assets/images/download-white.png')}
     >
       <ScrollView height="100%" width="100%">
         <TextView
@@ -64,7 +64,7 @@ const ReceiveWalletSelectionModal = (props: Props) => {
             <WalletCard
               onPress={() =>
                 props.navigation.navigate(
-                  Facade.route.ReceiveWalletSelectionModal.name
+                  Facade.route.ReceiveToAccountModal.name
                 )
               }
               height={330}

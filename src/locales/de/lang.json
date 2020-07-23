@@ -26,7 +26,8 @@
     "cancel": "#translateme",
     "save": "#translateme",
     "done": "#translateme",
-    "close": "#translateme"
+    "close": "#translateme",
+    "copyToClipboard": "Copy to clipboard"
   },
   "routes": {
     "GetWallet": "#translateme",
@@ -241,6 +242,15 @@
       "title": "Receive",
       "walletSelection": {
         "subtitle": "Please select a wallet to receive to"
+      },
+      "toAccount": {
+        "yourAddress": "Your Address",
+        "requestTokens": "Request Tokens",
+        "selectTokenToReceive": "Select token to receive",
+        "enterAmount": "Enter amount",
+        "addReference": "Add a reference",
+        "reference": "Reference",
+        "generateQrCode": "Generate QR Code"
       }
     },
     "walletContext": {
