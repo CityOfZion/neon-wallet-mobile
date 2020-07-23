@@ -90,8 +90,10 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
         weight={1}
       >
         <ImageView
-          m="auto"
           resizeMode="cover"
+          mx="auto"
+          mt="auto"
+          mb="10px"
           source={
             state.routes[state.index].name === props.button.route.name
               ? props.button.enabledSource
@@ -155,13 +157,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
             source={require('~src/assets/images/TabBar.png')}
           />
 
-          <LinearLayout
-            position={'absolute'}
-            bottom={0}
-            orientation="horiz"
-            alignItems="center"
-            pointerEvents={'box-none'}
-          >
+          <LinearLayout orientation="horiz" pointerEvents={'box-none'}>
             <TabButton button={walletButton} />
             <TabButton button={contactsButton} />
             <StyledTouchable
