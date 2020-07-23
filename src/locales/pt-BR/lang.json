@@ -189,7 +189,8 @@
   },
   "screens": {
     "listWallets": {
-      "changeSinceLastVisit": "#translateme"
+      "changeSinceLastVisit": "#translateme",
+      "createFirstWallet": "Criar primeira carteira"
     },
     "getWallet": {
       "addNewAccount": "#translateme"

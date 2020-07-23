@@ -20,7 +20,9 @@ interface ListItem {
 }
 
 export default function WalletContextModal(props: Props) {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const controller = useSwiperController(true)
 
   const items: ListItem[] = [

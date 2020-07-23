@@ -1,3 +1,4 @@
+import {wallet} from '@cityofzion/neon-js'
 import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
 import React, {useState} from 'react'
@@ -8,7 +9,6 @@ import {useSelector} from 'react-redux'
 // TODO: remove testing code
 // @ts-ignore
 import {Keychain} from '../vendor/asteroid-sdk'
-import {wallet} from '@cityofzion/neon-js'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {Facade} from '~src/app/Facade'
@@ -85,7 +85,9 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
 }
 
 const OnboardingPage = (props: OnboardingPageProps) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const [isLastPage, setIsLastPage] = useState(false)
 
   // TODO: remove testing code

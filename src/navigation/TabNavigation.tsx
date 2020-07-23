@@ -30,7 +30,9 @@ interface Props {
 const Tab = createBottomTabNavigator()
 
 const TabNavigation = (props: Props) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
 
   const [welcomeHidden, setWelcomeHidden] = useState(
     props.route.params?.welcomeHidden ?? true

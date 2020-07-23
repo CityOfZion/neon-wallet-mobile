@@ -20,11 +20,11 @@ interface Props {
 const CurrencyPickerModal = (props: Props) => {
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
-  const {currency} = useSelector((state: RootState) => state.app)
+  const {currency} = useSelector((state: RootState) => state.settings)
 
   const changeCurrency = async (val: Currency) => {
-    dispatch(RootStore.app.actions.setCurrency(val))
-    await Storage.currency.save(val)
+    dispatch(RootStore.settings.actions.setCurrency(val))
+    dispatch(RootStore.settings.actions.save())
   }
 
   const isSelected = (c: Currency) => c === currency

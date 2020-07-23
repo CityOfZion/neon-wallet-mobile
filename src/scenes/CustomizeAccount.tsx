@@ -12,7 +12,7 @@ import ColorSelector from '~src/components/ColorSelector'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {Account} from '~src/models/Account'
+import {AccountMock} from '~src/models/AccountMock'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootState} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
@@ -23,8 +23,10 @@ interface Props {
 }
 
 const CustomizeAccount = (props: Props) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
-  const account = new Account()
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
+  const account = new AccountMock()
   const [color, setColor] = useState<string>(theme.colors.card[0])
 
   account.srcIcon = require('~src/assets/images/card-neo.png')

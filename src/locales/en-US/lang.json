@@ -250,7 +250,8 @@
   },
   "screens": {
     "listWallets": {
-      "changeSinceLastVisit": "CHANGE SINCE LAST VISIT %{date}"
+      "changeSinceLastVisit": "CHANGE SINCE LAST VISIT %{date}",
+      "createFirstWallet": "Create first wallet"
     },
     "getWallet": {
       "addNewAccount": "Add new account"

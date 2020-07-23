@@ -46,7 +46,9 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   // TODO: Remove
   const defaultDebugAddress = 'Ad83tfsuWxxexhefPzXVpn5vv6oCbLKFEx'
 
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const [inputValue, setInputValue] = useState(
     props.address ?? defaultDebugAddress
   )

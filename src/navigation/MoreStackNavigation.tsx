@@ -38,7 +38,9 @@ export type MoreStackParamList = {
 const MoreStack = createStackNavigator<MoreStackParamList>()
 
 const MoreStackNavigation = () => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
 
   return (
     <ThemeProvider theme={theme}>

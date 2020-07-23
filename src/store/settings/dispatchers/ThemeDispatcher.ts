@@ -1,13 +1,13 @@
 import {DispatcherWrapper} from '@simpli/redux-wrapper'
 
 export class ThemeDispatcher extends DispatcherWrapper<
-  AppType,
-  AppState,
-  AppAction
+  SettingsType,
+  SettingsState,
+  SettingsAction
 > {
   readonly type = 'SET_THEME'
 
-  readonly reducer: AppReducer = (state, action) => {
+  readonly reducer: SettingsReducer = (state, action) => {
     const {theme} = action
 
     return this.set(state, {theme})

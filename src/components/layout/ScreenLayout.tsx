@@ -21,7 +21,9 @@ interface Props {
 }
 
 const ScreenLayout: React.FC<Props> = (props) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
 
   const headerHeight = props.useHeaderPadding ? Facade.app.headerHeight : 0
   const tabBarHeight = props.useFooterPadding ? Facade.app.footerHeight : 0

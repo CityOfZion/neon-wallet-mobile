@@ -6,7 +6,7 @@ import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ColorPicker from '~src/components/misc/ColorPicker'
-import {Account} from '~src/models/Account'
+import {AccountMock} from '~src/models/AccountMock'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -22,7 +22,7 @@ const CustomColorPage = (props: Props) => {
   const [color, setColor] = useState<string>(defaultCardColor)
 
   // TODO: change mock values
-  const account = new Account()
+  const account = new AccountMock()
   account.srcIcon = require('~src/assets/images/card-neo.png')
   account.name = 'Demo Card'
   account.currency = '$'

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import {TokenValue} from '~src/models/TokenValue'
-import {WalletMock} from '~src/models/WalletMock'
+import {Wallet} from '~src/models/redux/Wallet'
 import styled, {
   ButtonView,
   ImageView,
@@ -11,7 +11,7 @@ import styled, {
 } from '~src/styles/styled-components'
 
 interface WalletCardProps {
-  wallet: WalletMock
+  wallet: Wallet
   height?: number
   onPress?: () => void
 }
@@ -86,7 +86,7 @@ const WalletCard = (props: WalletCardProps) => {
             source={require('~src/assets/images/wallet-icon.png')}
           />
           <TextView ml="8px" fontSize="16px" fontFamily="bold" color="text.0">
-            {props.wallet.title.toUpperCase()}
+            {props.wallet.name?.toUpperCase()}
           </TextView>
         </LinearLayout>
       </RelativeLayout>

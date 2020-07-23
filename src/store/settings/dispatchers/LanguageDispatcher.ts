@@ -4,13 +4,13 @@ import {Facade} from '~src/app/Facade'
 import {Setup} from '~src/app/Setup'
 
 export class LanguageDispatcher extends DispatcherWrapper<
-  AppType,
-  AppState,
-  AppAction
+  SettingsType,
+  SettingsState,
+  SettingsAction
 > {
   readonly type = 'SET_LANGUAGE'
 
-  readonly reducer: AppReducer = (state, action) => {
+  readonly reducer: SettingsReducer = (state, action) => {
     const {language} = action
 
     const keys = Object.keys(Facade.config.locale.translations)

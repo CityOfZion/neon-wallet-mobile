@@ -12,7 +12,9 @@ const InputLabel = (props: {
   marginTop?: number
   color?: string
 }) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const marginBottom = props.marginBottom ?? 0
   const marginTop = props.marginTop ?? 1
 

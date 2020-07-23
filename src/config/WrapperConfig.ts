@@ -8,13 +8,11 @@ export class WrapperConfig {
   readonly themes = [DarkTheme, LightTheme] as const
 
   readonly dataKeys = [
-    '@language',
-    '@currency',
-    '@theme',
     '@onboarding_seen',
     '@welcome_hidden',
-    '@account',
+    '@settings',
     '@wallets',
+    '@accounts',
   ] as const
 
   readonly routes = [

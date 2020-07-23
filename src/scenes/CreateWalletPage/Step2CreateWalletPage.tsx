@@ -10,6 +10,7 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCard from '~src/components/themed/ThemedCard'
+import {AsteroidHelper} from '~src/helpers/AsteroidHelper'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {TextView, LinearLayout} from '~src/styles/styled-components'
@@ -27,25 +28,12 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
   }, [])
 
   const populate = async () => {
-    // TODO: Use asteroid js to create the words
-    const words = [
-      'jack',
-      'phone',
-      'burn',
-      'tab',
-      'cone',
-      'kilo',
-      'roach',
-      'key',
-      'gate',
-      'forest',
-      'mirror',
-      'stone',
-    ]
+    const words = AsteroidHelper.generateMnemonicWords() ?? []
 
     await setWords(words)
 
-    dispatch(RootStore.wallet.actions.setSecurityPhrase(words.join(' ')))
+    await dispatch(RootStore.wallet.actions.clearState())
+    await dispatch(RootStore.wallet.actions.setSecurityPhrase(words.join(' ')))
   }
 
   const infoDialog = () => {

@@ -1,16 +1,14 @@
 import {Action} from 'redux'
-import {Lang} from '~src/enums/Lang'
-import {Currency} from '~src/enums/Currency'
-import {Theme} from '~src/enums/Theme'
 import {ReducerApplied} from '@simpli/redux-wrapper'
+import {Wallet} from '~src/models/redux/Wallet'
+import {Account} from '~src/models/redux/Account'
 
 export declare global {
-  type AppType = 'SET_LANGUAGE' | 'SET_CURRENCY' | 'SET_THEME'
+  type AppType = 'SET_WALLETS' | 'SET_ACCOUNTS'
 
   interface AppState {
-    language: Lang
-    currency: Currency
-    theme: Theme
+    wallets: Wallet[]
+    accounts: Account[]
   }
 
   type AppAction = AppState & Action<AppType>

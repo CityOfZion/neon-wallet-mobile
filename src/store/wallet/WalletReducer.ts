@@ -1,28 +1,29 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
-import {ThunkAction} from 'redux-thunk'
+import {plainToClass} from 'class-transformer'
 
-import {Wallet} from '~/src/models/Wallet'
-import {Facade} from '~src/app/Facade'
+import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
+import {Wallet} from '~src/models/redux/Wallet'
+import {ClearStateDispatcher} from '~src/store/wallet/dispatchers/ClearStateDispatcher'
 import {NameDispatcher} from '~src/store/wallet/dispatchers/NameDispatcher'
 import {PassphraseDispatcher} from '~src/store/wallet/dispatchers/PassphraseDispatcher'
 import {SecurityPhraseDispatcher} from '~src/store/wallet/dispatchers/SecurityPhraseDispatcher'
+import {Facade} from '~src/app/Facade'
+
+const uuidv4 = require('uuid/v4')
 
 export class WalletReducer extends ReducerWrapper<
   WalletType,
   WalletState,
   WalletAction
 > {
-  protected readonly initialState: WalletState = {
-    name: null,
-    passphrase: null,
-    securityPhrase: null,
-  }
+  protected readonly initialState = Model.parse<WalletState>(Wallet)
 
   protected readonly dispatchers = [
     NameDispatcher,
     PassphraseDispatcher,
     SecurityPhraseDispatcher,
+    ClearStateDispatcher,
   ]
 
   readonly actions = {
@@ -35,16 +36,17 @@ export class WalletReducer extends ReducerWrapper<
     setSecurityPhrase: (securityPhrase: string) => {
       return this.commit('SET_SECURITY_PHRASE', {securityPhrase})
     },
-    createAndSave: (): ThunkAction<void, RootState, any, any> => {
+    clearState: () => {
+      return this.commit('CLEAR_STATE', {})
+    },
+    createAndSave: (): AsyncAction => {
       return async (dispatch, getState) => {
-        const state = getState()
-
-        const wallet = new Wallet()
-        wallet.name = state.wallet.name
-        wallet.passphrase = state.wallet.passphrase
-        wallet.securityPhrase = state.wallet.securityPhrase
-
         const wallets = (await Storage.wallets.load()) ?? []
+
+        const wallet = plainToClass(Wallet, getState().wallet)
+        // TODO: Review ID generator
+        wallet.id = Facade.utils.uuid()
+
         wallets.push(wallet)
 
         await Storage.wallets.save(wallets)

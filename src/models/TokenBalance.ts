@@ -9,7 +9,7 @@ export class TokenBalance {
     return this.assets.map((t) => t.holding * t.value).reduce((a, b) => a + b)
   }
 
-  constructor(assets: TokenValue[]) {
-    this.assets = assets
+  constructor(assets?: TokenValue[]) {
+    this.assets = assets ?? []
   }
 }

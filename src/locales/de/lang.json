@@ -176,7 +176,8 @@
   },
   "screens": {
     "listWallets": {
-      "changeSinceLastVisit": "#translateme"
+      "changeSinceLastVisit": "#translateme",
+      "createFirstWallet": "#translateme"
     },
     "getWallet": {
       "addNewAccount": "#translateme"

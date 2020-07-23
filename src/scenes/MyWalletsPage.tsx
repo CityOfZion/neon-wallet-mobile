@@ -8,9 +8,9 @@ import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {Wallet} from '~src/models/Wallet'
-import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
+import {Wallet} from '~src/models/redux/Wallet'
+import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 
 interface Props {
   navigation: StackNavigationProp<SettingsStackParamList>

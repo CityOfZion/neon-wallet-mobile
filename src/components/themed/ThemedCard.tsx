@@ -21,7 +21,9 @@ interface Props {
 }
 
 const ThemedCard: React.FC<Props> = (props) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
 
   const getBorderRadius = () => {
     if (props.rounded) {

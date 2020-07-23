@@ -33,7 +33,9 @@ function verifyPassword(
 }
 
 const Passphrase = (props: PassphraseProps) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const [inputValue, setInputValue] = useState('')
   const [inputIsValid, setInputIsValid] = useState(true)
 

@@ -1,11 +1,14 @@
 import React, {useState} from 'react'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
 import ColorSelector from '~src/components/ColorSelector'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import {Currency} from '~src/enums/Currency'
+import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
@@ -13,20 +16,47 @@ interface Props {
 }
 
 export default function SampleModal(props: Props) {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
+  const {idWallet} = useSelector((state: RootState) => state.account)
+  const walletsPool = useSelector((state: RootState) => state.app.wallets)
+
+  const [color, setColor] = useState<string>()
   const controller = useSwiperController(true)
 
-  const [name, setName] = useState<string>()
-  const [color, setColor] = useState<string>()
+  const dispatch = useDispatch()
 
-  function persistAccount() {
-    // TODO: Store account info on redux/asyncStorage
-    if (name) {
-      // const account = new Account()
-      props.navigation.goBack()
-    } else {
-      // TODO: Validate account name field as empty
-    }
+  const generateNeoAccount = () => {
+    const wallet = Wallet.find(idWallet ?? '', walletsPool)
+    return wallet?.generateNeoAccount() ?? null
+  }
+
+  const submit = async () => {
+    const neoAccount = generateNeoAccount()
+
+    if (!isValid() || !neoAccount) return
+
+    // TODO: Input values in fields
+    dispatch(RootStore.account.actions.setName('TODO: Set name'))
+    dispatch(RootStore.account.actions.setBalance(0))
+    dispatch(RootStore.account.actions.setCurrency(Currency.USD))
+    dispatch(RootStore.account.actions.setAddress(neoAccount.address))
+    if (color) dispatch(RootStore.account.actions.setBackgroundColor(color))
+
+    await dispatch(RootStore.account.actions.createAndSave())
+    await dispatch(RootStore.app.actions.syncAccounts())
+
+    controller.close()
+  }
+
+  const isValid = () => {
+    const conditions: boolean[] = [
+      // TODO: Validate account fields
+      true,
+    ]
+
+    return conditions.every((it) => it)
   }
 
   return (
@@ -38,7 +68,7 @@ export default function SampleModal(props: Props) {
       leftButton={Facade.t('screens.createAccount.navigation.cancel')}
       rightButton={Facade.t('screens.createAccount.navigation.save')}
       onLeftPress={() => controller.close()}
-      onRightPress={() => controller.close()}
+      onRightPress={() => Facade.await.run('swiperRight', submit)}
       onClose={() => props.navigation.goBack()}
       image={require('~/src/assets/images/icon-plus-circle-white.png')}
     >
@@ -66,7 +96,8 @@ export default function SampleModal(props: Props) {
         >
           {Facade.t('screens.createAccount.selectColor')}
         </TextView>
-        <ColorSelector />
+
+        <ColorSelector onSelect={setColor} />
       </LinearLayout>
     </SwiperPanel>
   )

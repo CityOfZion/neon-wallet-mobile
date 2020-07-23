@@ -15,7 +15,9 @@ export type ContactsStackParamList = {
 const ContactsStack = createStackNavigator<ContactsStackParamList>()
 
 const ContactsStackNavigation = () => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
 
   return (
     <ThemeProvider theme={theme}>

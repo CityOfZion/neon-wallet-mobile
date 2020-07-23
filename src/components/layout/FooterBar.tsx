@@ -36,7 +36,9 @@ interface TabButtonContent {
 
 const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   const {state, descriptors, navigation} = props
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const focusedOptions = descriptors[state.routes[state.index].key].options
 
   if (focusedOptions.tabBarVisible === false) {
@@ -157,7 +159,14 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
             source={require('~src/assets/images/TabBar.png')}
           />
 
-          <LinearLayout orientation="horiz" pointerEvents={'box-none'}>
+          {/*This should be absolute to float above of outbounds area*/}
+          <LinearLayout
+            position={'absolute'}
+            bottom={0}
+            orientation="horiz"
+            alignItems="center"
+            pointerEvents={'box-none'}
+          >
             <TabButton button={walletButton} />
             <TabButton button={contactsButton} />
             <StyledTouchable

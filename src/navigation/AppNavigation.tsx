@@ -9,12 +9,12 @@ import LoadingOverlay from '../components/LoadingOverlay'
 import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
+import {Sync} from '~src/app/Sync'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import LoginStackNavigation from '~src/navigation/LoginStackNavigation'
 import ModalStackNavigation from '~src/navigation/ModalStackNavigation'
-import TabNavigation from '~src/navigation/TabNavigation'
+import TabNavigation, {TabStackParamList} from '~src/navigation/TabNavigation'
 import OnboardingPage from '~src/scenes/OnboardingPage'
-import {RootStore} from '~src/store/RootStore'
 
 export type RootStackParamList = {
   Tab: (DefaultNavigationParam & Partial<{welcomeHidden?: boolean}>) | undefined
@@ -23,7 +23,7 @@ export type RootStackParamList = {
     | undefined
   Login: undefined
   Onboarding: undefined
-}
+} & TabStackParamList
 
 interface Props {
   route?: RouteProp<RootStackParamList, 'Modal'>
@@ -32,7 +32,9 @@ interface Props {
 const RootStack = createStackNavigator<RootStackParamList>()
 
 const AppNavigation = (props: Props) => {
-  const theme = useSelector((state: RootState) => Facade.theme[state.app.theme])
+  const theme = useSelector((state: RootState) => {
+    return Facade.theme[state.settings.theme]
+  })
   const loadingOverlayState = useSelector((state: RootState) => state.loading)
   const {progress, loadingText, isLoading} = loadingOverlayState
 
@@ -42,26 +44,13 @@ const AppNavigation = (props: Props) => {
   const dispatch = useDispatch()
 
   const populate = async () => {
-    const currency = await Storage.currency.load()
-    const language = await Storage.language.load()
-    const theme = await Storage.theme.load()
     const onboardingSeen = await Storage.onboardingSeen.load()
     const welcomeHidden = await Storage.welcomeHidden.load()
 
-    if (currency) {
-      dispatch(RootStore.app.actions.setCurrency(currency))
-    }
-
-    if (language) {
-      dispatch(RootStore.app.actions.setLanguage(language))
-    }
-
-    if (theme) {
-      dispatch(RootStore.app.actions.setTheme(theme))
-    }
-
     setOnboardingSeen(onboardingSeen ?? false)
     setWelcomeHidden(welcomeHidden ?? false)
+
+    await Sync.init(dispatch)
   }
 
   useEffect(() => {
@@ -100,7 +89,7 @@ const AppNavigation = (props: Props) => {
                   component={LoginStackNavigation}
                 />
                 <RootStack.Screen
-                  name="Modal"
+                  name={Facade.route.Modal.name}
                   component={ModalStackNavigation}
                   initialParams={props.route?.params}
                 />
