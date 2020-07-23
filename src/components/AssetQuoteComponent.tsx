@@ -3,6 +3,7 @@ import React from 'react'
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import {AssetQuoteModel} from '~src/models/AssetQuoteModel'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {Currency} from "~src/enums/Currency";
 
 interface Props {
   assetQuote: AssetQuoteModel
@@ -12,9 +13,9 @@ const AssetQuoteComponent: React.FC<Props> = (props) => {
   //TODO get the real value of asset
   const quoteOfAsset = 12345
   const quoteText = `${props.assetQuote.name} 1 = ${
-    props.assetQuote.currencySymbol
+    Currency.DOLLAR
   } ${FilterHelper.decimal(quoteOfAsset, 2)}`
-  const valueText = `${props.assetQuote.currencySymbol} ${FilterHelper.decimal(
+  const valueText = `${Currency.DOLLAR} ${FilterHelper.decimal(
     quoteOfAsset,
     2
   )}`
