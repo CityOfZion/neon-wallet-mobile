@@ -44,7 +44,7 @@ const CustomColorPage = (props: Props) => {
       controller={controller}
       fullSize={true}
       title={Facade.t('customColorPage.title')}
-      image={require('~src/assets/images/palette.png')}
+      image={require('~src/assets/images/icon-palette-white.png')}
       leftButton={Facade.t('customColorPage.navigation.cancel')}
       rightButton={Facade.t('customColorPage.navigation.done')}
       onLeftPress={controller.close}

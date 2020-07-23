@@ -59,5 +59,8 @@ export class WrapperConfig {
     'ImportReadAccount',
     'CustomizeAccount',
     'ListTokenModal',
+    'LanguagePickerModal',
+    'CurrencyPickerModal',
+    'ThemePickerModal',
   ] as const
 }

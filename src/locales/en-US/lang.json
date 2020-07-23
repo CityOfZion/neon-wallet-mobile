@@ -346,6 +346,15 @@
       "subtitle": "Drag a wallet to a new position to reorder",
       "cancel": "Cancel",
       "save": "Save"
+    },
+    "language": {
+      "title": "Language"
+    },
+    "currency": {
+      "title": "Currency"
+    },
+    "theme": {
+      "title": "Theme"
     }
   },
   "components": {

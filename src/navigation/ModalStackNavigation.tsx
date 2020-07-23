@@ -17,6 +17,9 @@ import SendTransactionInputModal from '~src/scenes/send/SendTransactionInputModa
 import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
 import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
 import ListTokenModal from '~src/scenes/ListTokenModal'
+import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
+import CurrencyPickerModal from '~src/scenes/CurrencyPickerModal'
+import ThemePickerModal from '~src/scenes/ThemePickerModal'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
@@ -30,6 +33,9 @@ export type ModalStackParamList = {
   WalletContextModal: undefined
   ReoderWalletModal: undefined
   ListTokenModal: undefined
+  LanguagePickerModal: undefined
+  CurrencyPickerModal: undefined
+  ThemePickerModal: undefined
 }
 
 interface Props {
@@ -92,6 +98,18 @@ const ModalStackNavigation = (props: Props) => {
         <ModalStack.Screen
           name={Facade.route.ListTokenModal.name}
           component={ListTokenModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.LanguagePickerModal.name}
+          component={LanguagePickerModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.CurrencyPickerModal.name}
+          component={CurrencyPickerModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.ThemePickerModal.name}
+          component={ThemePickerModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>
