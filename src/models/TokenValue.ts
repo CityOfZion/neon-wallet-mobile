@@ -1,4 +1,4 @@
-import {ImageLoadEventData} from '~/node_modules/@types/react-native'
+import {ImageLoadEventData} from 'react-native'
 
 export class TokenValue {
   name: string
