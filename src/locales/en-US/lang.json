@@ -331,6 +331,11 @@
         "subtitle": "Please select a wallet to receive to"
       }
     },
+    "listTokenModal": {
+      "holding": "Holdings",
+      "tokens": "Tokens",
+      "selectToken": "Select a token to send to"
+    },
     "walletContext": {
       "create": "Create new wallet",
       "reorder": "Reorder wallets",

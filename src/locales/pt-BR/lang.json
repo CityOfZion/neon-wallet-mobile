@@ -260,6 +260,12 @@
       "reorder": "Reorder wallets",
       "cancel": "Cancel"
     },
+    "listTokenModal": {
+      "holding": "Holdings",
+      "tokens": "Tokens",
+      "selectToken": "Select a token to send to",
+      "value": "#translateme"
+    },
     "reorderWallet": {
       "title": "Reorder wallets",
       "subtitle": "Drag a wallet to a new position to reorder",
@@ -283,6 +289,7 @@
       "sentTo": "#translateme",
       "value": "#translateme"
     },
+
     "transactionInput": {
       "selectDifferentAccount": "Select a different Account",
       "transactionDetails": "TRANSACTION DETAILS",

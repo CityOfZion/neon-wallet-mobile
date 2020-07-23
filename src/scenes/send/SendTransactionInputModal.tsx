@@ -218,7 +218,7 @@ const DestinationAddressField = (props: {
   )
 }
 
-const TokenField = (props: {theme: ApplicationTheme; token: string}) => {
+const TokenField = (props: {theme: ApplicationTheme; token: string; nav: StackNavigationProp<ModalStackParamList>}) => {
   return (
     <Fragment>
       <InputLabel
@@ -227,28 +227,33 @@ const TokenField = (props: {theme: ApplicationTheme; token: string}) => {
         marginTop={30}
         marginBottom={20}
       />
-      <LinearLayout position="relative">
-        <InputWithValidation
-          color={props.theme.colors.text[0]}
-          fontStyle={'normal'}
-          value={props.token}
-          placeholder={Facade.t('modals.send.transactionInput.selectToken')}
-          inputIsValid={true}
-          separatorColor={props.theme.colors.background[3]}
-          sideMargins={0}
-          hidePaste={true}
-          hideScan={true}
-          editable={false}
-        />
-        <ImageView
-          position="absolute"
-          top="10px"
-          right="15px"
-          resizeMode="contain"
-          width="12px"
-          source={require('~/src/assets/images/icon-arrow-down-green.png')}
-        />
-      </LinearLayout>
+
+      <ButtonView onPress={() => {
+        props.nav.navigate(Facade.route.ListTokenModal.name)
+      }}>
+        <LinearLayout position="relative">
+          <InputWithValidation
+            color={props.theme.colors.text[0]}
+            fontStyle={'normal'}
+            value={props.token}
+            placeholder={Facade.t('modals.send.transactionInput.selectToken')}
+            inputIsValid={true}
+            separatorColor={props.theme.colors.background[3]}
+            sideMargins={0}
+            hidePaste={true}
+            hideScan={true}
+            editable={false}
+          />
+          <ImageView
+            position="absolute"
+            top="10px"
+            right="15px"
+            resizeMode="contain"
+            width="12px"
+            source={require('~/src/assets/images/icon-arrow-down-green.png')}
+          />
+        </LinearLayout>
+      </ButtonView>
     </Fragment>
   )
 }
@@ -345,7 +350,7 @@ const SendTransactionInputModal = (props: Props) => {
           address={text}
           setAddress={setText}
         />
-        <TokenField theme={theme} token={'NEO'} />
+        <TokenField theme={theme} token={'NEO'} nav={props.navigation} />
         <AmountField theme={theme} amount={amount} setAmount={setAmount} />
         <TextView
           mt="56px"
