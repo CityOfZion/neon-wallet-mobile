@@ -1,4 +1,7 @@
-import {createStackNavigator} from '@react-navigation/stack'
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack'
 import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
@@ -6,15 +9,20 @@ import {ThemeProvider} from 'styled-components'
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import ContactsPage from '~src/scenes/ContactsPage'
 
 export type ContactsStackParamList = {
   Contacts: HeaderActionButtonProps
 }
 
+interface ContactsStackProps {
+  navigation: StackNavigationProp<RootStackParamList>
+}
+
 const ContactsStack = createStackNavigator<ContactsStackParamList>()
 
-const ContactsStackNavigation = () => {
+const ContactsStackNavigation = (props: ContactsStackProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
@@ -27,7 +35,11 @@ const ContactsStackNavigation = () => {
           initialParams={{
             actionButtonStyle: 'add',
             // TODO: Add event
-            actionOnPress: () => {},
+            actionOnPress: () => {
+              props.navigation.navigate(Facade.route.Modal.name, {
+                screen: Facade.route.AddContact.name,
+              })
+            },
           }}
           component={ContactsPage}
           options={({route}) =>

@@ -65,5 +65,6 @@ export class WrapperConfig {
     'LanguagePickerModal',
     'CurrencyPickerModal',
     'ThemePickerModal',
+    'AddContact',
   ] as const
 }

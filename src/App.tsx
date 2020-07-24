@@ -1,7 +1,7 @@
 import {AppLoading} from 'expo'
 import * as Font from 'expo-font'
 import React, {useState} from 'react'
-import {StatusBar} from 'react-native'
+import {AsyncStorage, StatusBar} from 'react-native'
 import {Provider as StoreProvider} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
@@ -32,7 +32,7 @@ const fetchFonts = () =>
 
 const App = () => {
   const [dataLoaded, setDataLoaded] = useState(false)
-
+  AsyncStorage.clear()
   if (!dataLoaded) {
     return (
       <AppLoading
