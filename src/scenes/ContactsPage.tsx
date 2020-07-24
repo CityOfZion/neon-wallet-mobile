@@ -98,20 +98,29 @@ const renderSectionHeader = (info: {section: SectionListData<Contact>}) => {
   )
 }
 
-const renderItem = (info: SectionListRenderItemInfo<Contact>) => {
+const renderItem = (
+  onClick: () => void,
+  info: SectionListRenderItemInfo<Contact>
+) => {
   return (
-    <LinearLayout pl={'14px'} mt={'21px'} mb={'21px'}>
-      <TextView font={'semi-bold'} color={'text.0'} fontSize={20}>
-        {info.item.name}
-      </TextView>
-      <TextView font={'medium'} color={'primary'} fontSize={16}>
-        {info.item.address}
-      </TextView>
-    </LinearLayout>
+    <ButtonView>
+      <LinearLayout pl={'14px'} mt={'21px'} mb={'21px'}>
+        <TextView font={'semi-bold'} color={'text.0'} fontSize={20}>
+          {info.item.name}
+        </TextView>
+        <TextView font={'medium'} color={'primary'} fontSize={16}>
+          {info.item.address}
+        </TextView>
+      </LinearLayout>
+    </ButtonView>
   )
 }
 
-const contactList = (theme: any, contacts: Contact[]) => {
+const contactList = (
+  theme: ApplicationTheme,
+  contacts: Contact[],
+  navigation: StackNavigationProp<RootStackParamList>
+) => {
   const contactsMap: Map<string, Contact[]> = new Map()
   contacts.forEach((contact) => {
     if (contactsMap.has(contact.name[0])) {
@@ -133,6 +142,10 @@ const contactList = (theme: any, contacts: Contact[]) => {
 
     sections.push(section)
   })
+
+  const onContactClick = () =>{
+    navigation.navigate()
+  }
 
   return (
     <ScreenLayout padding={0}>
@@ -164,7 +177,9 @@ const ContactsPage = (props: ContactsProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  let contacts: Contact[] = []
+  let contacts: Contact[] = mockedContacts.sort((c1, c2) =>
+    c1.name.localeCompare(c2.name)
+  )
 
   useFocusEffect(() => {
     contacts = mockedContacts.sort((c1, c2) => c1.name.localeCompare(c2.name))
