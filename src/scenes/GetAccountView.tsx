@@ -76,7 +76,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
           props.navigation.navigate(Facade.route.Modal.name, {
             screen: Facade.route.EditAccountModal.name,
             account,
-            onDelete: () => setAsDeleted(true),
           })
         },
       }),
