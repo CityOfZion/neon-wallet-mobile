@@ -1,12 +1,9 @@
 import {StorageListener} from '@simpli/react-native-storage'
 import {RequestConfig, RequestListener} from '@simpli/serialized-request'
 import i18n from 'i18n-js'
-import {Dispatch} from 'redux'
 
 import {Facade} from '~src/app/Facade'
-import {Storage} from '~src/app/Storage'
 import {Lang} from '~src/enums/Lang'
-import {RootStore} from '~src/store/RootStore'
 
 export abstract class Setup {
   static async init() {

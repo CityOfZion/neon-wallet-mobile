@@ -88,7 +88,7 @@ ScreenLayout.defaultProps = {
   useStatusBarPadding: false,
   useFooterPadding: true,
   autoScroll: true,
-  transparent: false
+  transparent: false,
 }
 
 export default ScreenLayout
