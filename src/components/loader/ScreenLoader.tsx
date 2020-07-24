@@ -5,13 +5,13 @@ import {useSelector} from 'react-redux'
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 
-const ScreenLoader = () => {
+const ScreenLoader = (props?: {transparent?: boolean}) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
 
   return (
-    <ScreenLayout alignY={'center'}>
+    <ScreenLayout alignY={'center'} transparent={props?.transparent ?? false}>
       <ActivityIndicator size={'large'} color={theme.colors.text[0]} />
     </ScreenLayout>
   )

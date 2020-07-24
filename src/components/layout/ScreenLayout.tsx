@@ -18,6 +18,7 @@ interface Props {
   alignX?: string
   alignY?: string
   padding?: number | string
+  transparent?: boolean
 }
 
 const ScreenLayout: React.FC<Props> = (props) => {
@@ -35,7 +36,11 @@ const ScreenLayout: React.FC<Props> = (props) => {
   return (
     <LinearGradient
       onLayout={props.onLayout}
-      colors={[theme.colors.background[1], theme.colors.background[2]]}
+      colors={
+        props.transparent
+          ? ['#00000000', '#00000000']
+          : [theme.colors.background[1], theme.colors.background[2]]
+      }
       start={[1, 0]}
       end={[1, 1]}
     >
@@ -75,6 +80,7 @@ ScreenLayout.propTypes = {
   alignX: PropTypes.string,
   alignY: PropTypes.string,
   padding: PropTypes.any,
+  transparent: PropTypes.bool,
 }
 
 ScreenLayout.defaultProps = {
@@ -82,6 +88,7 @@ ScreenLayout.defaultProps = {
   useStatusBarPadding: false,
   useFooterPadding: true,
   autoScroll: true,
+  transparent: false
 }
 
 export default ScreenLayout
