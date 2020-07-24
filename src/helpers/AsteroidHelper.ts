@@ -6,6 +6,12 @@ import {Facade} from '~src/app/Facade'
 const SDK: typeof AsteroidSDK = require('~src/vendor/asteroid-sdk')
 
 export abstract class AsteroidHelper {
+  static getKeychainFromMnemonicWords(words: string) {
+    const keychain = new SDK.Keychain()
+    keychain.importMnemonic(words)
+    return keychain
+  }
+
   static generateMnemonicWords() {
     const keychain = new SDK.Keychain()
 
@@ -14,18 +20,12 @@ export abstract class AsteroidHelper {
   }
 
   static generateNeoAccount(mnemonicWords: string) {
-    const wif = this.getWifFromMnemonicWords(mnemonicWords)
+    const wif = this.generateWif(mnemonicWords)
     return new wallet.Account(wif)
   }
 
-  static getKeychainFromMnemonicWords(words: string) {
-    const keychain = new SDK.Keychain()
-    keychain.importMnemonic(words)
-    return keychain
-  }
-
-  static getWifFromMnemonicWords(words: string) {
-    const keychain = this.getKeychainFromMnemonicWords(words)
+  static generateWif(mnemonicWords: string) {
+    const keychain = this.getKeychainFromMnemonicWords(mnemonicWords)
 
     const childKey = keychain.generateChildKey(
       Facade.app.platform,

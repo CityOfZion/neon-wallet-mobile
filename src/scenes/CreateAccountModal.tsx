@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import ColorSelector from '~src/components/ColorSelector'
@@ -13,7 +14,6 @@ import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -43,7 +43,6 @@ export default function CreateAccountModal(props: Props) {
   }
 
   const submit = async () => {
-
     const neoAccount = generateNeoAccount()
 
     if (!neoAccount) return
