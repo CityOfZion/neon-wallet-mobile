@@ -1,4 +1,6 @@
+import {RouteProp} from '@react-navigation/native'
 import React, {Fragment, useState} from 'react'
+import {TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
@@ -13,14 +15,16 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import TabSelector from '~src/components/TabSelector'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {TokenValue} from '~src/models/TokenValue'
-import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {ButtonView, ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {
+  ButtonView,
+  ImageView,
+  LinearLayout,
+  TextView,
+} from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
-import {TouchableWithoutFeedback} from 'react-native'
 
 const AddressContent = () => {
   return (
@@ -158,6 +162,7 @@ const ReferenceField = (props: {
 }
 
 interface Props {
+  route: RouteProp<ModalStackParamList, 'ReceiveToAccountModal'>
   navigation: StackNavigationProp<ModalStackParamList>
 }
 
@@ -166,13 +171,14 @@ const ReceiveToAccountModal = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const [account, setAccount] = useState<Account>(mockWalletAccounts[0])
   const [isAddressTabSelected, setAddressTabAsSelected] = useState<boolean>(
     true
   )
   const [amount, setAmount] = useState<number>(0)
   const [reference, setReference] = useState<string>('')
   const [token, setToken] = useState<TokenValue | null>(null)
+
+  const {account} = props.route.params
 
   return (
     <SwiperPanel

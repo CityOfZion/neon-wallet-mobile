@@ -1,4 +1,6 @@
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import PropTypes from 'prop-types'
 import React from 'react'
 import {FlatList} from 'react-native'
 
@@ -10,15 +12,19 @@ import SwiperPanel, {
 import {mockListTokenModal} from '~src/mocks/mockListTokenModal'
 import {TokenValue} from '~src/models/TokenValue'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {ButtonView, ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import {RouteProp} from '@react-navigation/native'
+import {
+  ButtonView,
+  ImageView,
+  LinearLayout,
+  TextView,
+} from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
   route: RouteProp<ModalStackParamList, 'ListTokenModal'>
 }
 
-const ListTokenModal = (props: Props) => {
+const ListTokenModal: React.FC<Props> = (props: Props) => {
   const controller = useSwiperController(true)
 
   const Item = (item: TokenValue) => {
@@ -108,6 +114,11 @@ const ListTokenModal = (props: Props) => {
       </LinearLayout>
     </SwiperPanel>
   )
+}
+
+ListTokenModal.propTypes = {
+  navigation: PropTypes.any,
+  route: PropTypes.any,
 }
 
 export default ListTokenModal

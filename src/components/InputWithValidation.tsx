@@ -2,7 +2,8 @@ import React from 'react'
 import {
   KeyboardTypeOptions,
   NativeSyntheticEvent,
-  TargetedEvent, TouchableWithoutFeedback,
+  TargetedEvent,
+  TouchableWithoutFeedback,
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -46,7 +47,10 @@ const InputWithValidation = (props: Props) => {
     props.value && props.validator(props.value)
       ? props.fontStyle ?? 'normal'
       : 'italic'
-  const fontColor = props.validator(props.value) && props.value ? props.color : props.invalidColor
+  const fontColor =
+    props.validator(props.value) && props.value
+      ? props.color
+      : props.invalidColor
 
   const isValid = props.validator(props.value)
 

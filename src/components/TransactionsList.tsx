@@ -1,4 +1,5 @@
 import moment from 'moment'
+import PropTypes from 'prop-types'
 import React from 'react'
 
 import {Facade} from '~src/app/Facade'
@@ -11,9 +12,9 @@ import {
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
-  transactionModel: TransactionModel | null
+  transactionModel?: TransactionModel
   isHistory?: boolean
-  index?: number | 0
+  index?: number
 }
 const TransactionsList: React.FC<Props> = (props) => {
   const _renderTransaction = () => {
@@ -21,9 +22,9 @@ const TransactionsList: React.FC<Props> = (props) => {
       return props.transactionModel.transactions.map(
         (transaction: Transaction, index: number) => {
           return (
-            <LinearLayout orientation="horiz">
+            <LinearLayout orientation="horiz" key={index}>
               <LinearLayout orientation="vert" mr="8px" mt="5px">
-                {index == 0 && (
+                {index === 0 && (
                   <ImageView
                     alignSelf="center"
                     source={
@@ -35,7 +36,7 @@ const TransactionsList: React.FC<Props> = (props) => {
                 )}
               </LinearLayout>
               <LinearLayout weight={1} orientation="vert">
-                {index == 0 && (
+                {index === 0 && (
                   <LinearLayout orientation="vert">
                     <TextView fontSize="14px" color="text.2" mb="-2px">
                       {props.isHistory && props.transactionModel
@@ -54,7 +55,7 @@ const TransactionsList: React.FC<Props> = (props) => {
               </LinearLayout>
 
               <LinearLayout weight={3} orientation="vert">
-                {index == 0 && (
+                {index === 0 && (
                   <LinearLayout orientation="horiz">
                     <TextView weight={1} fontSize="14px" color="text.2">
                       {Facade.t('components.transactionsList.sentTo')}
@@ -78,7 +79,7 @@ const TransactionsList: React.FC<Props> = (props) => {
     if (transaction?.receiver) {
       return transaction.receiver.map((receiver: Receiver, index: number) => {
         return (
-          <LinearLayout orientation="verti">
+          <LinearLayout orientation="verti" key={index}>
             {transaction?.receiver &&
               (index > 0 || indexTrans > 0) &&
               transaction.receiver.length > 1 && (
@@ -119,9 +120,9 @@ const TransactionsList: React.FC<Props> = (props) => {
 
   const _renderAssets = (rec: Receiver) => {
     if (rec.assets) {
-      return rec.assets.map((asset: Asset, i: number) => {
+      return rec.assets.map((asset: Asset, index: number) => {
         return (
-          <LinearLayout orientation="horiz" mb="5px">
+          <LinearLayout orientation="horiz" mb="5px" key={index}>
             <ImageView
               height="17px"
               width="17px"
@@ -143,7 +144,7 @@ const TransactionsList: React.FC<Props> = (props) => {
 
   return (
     <LinearLayout orientation="verti">
-      {props.index == 0 && (
+      {props.index === 0 && (
         <TextView
           color="text.2"
           fontSize="14px"
@@ -168,6 +169,16 @@ const TransactionsList: React.FC<Props> = (props) => {
       />
     </LinearLayout>
   )
+}
+
+TransactionsList.propTypes = {
+  transactionModel: PropTypes.instanceOf(TransactionModel),
+  isHistory: PropTypes.bool,
+  index: PropTypes.number,
+}
+
+TransactionsList.defaultProps = {
+  index: 0,
 }
 
 export default TransactionsList

@@ -31,7 +31,7 @@ function verifyPassword(
     .then((account) => {
       onSuccess()
     })
-    .catch((error) => {
+    .catch(() => {
       onFailure()
     })
 }

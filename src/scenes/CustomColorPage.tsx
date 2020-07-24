@@ -6,10 +6,10 @@ import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ColorPicker from '~src/components/misc/ColorPicker'
+import {Currency} from '~src/enums/Currency'
+import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-import {Account} from '~src/models/redux/Account'
-import {Currency} from '~src/enums/Currency'
 
 export interface CustomColorPageParam {
   onColorPicked: (hex: string) => void

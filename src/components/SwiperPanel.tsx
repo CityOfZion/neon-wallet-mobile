@@ -1,4 +1,5 @@
 import {useFocusEffect, useNavigationState} from '@react-navigation/native'
+import {AwaitActivity} from '@simpli/react-native-await'
 import {BlurView} from 'expo-blur'
 import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
@@ -17,7 +18,6 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import {TextView, ImageView, LinearLayout} from '~src/styles/styled-components'
-import {AwaitActivity} from '@simpli/react-native-await'
 
 export const PANEL_OFFSET = 50
 const STACKPANEL_OFFSET = 28

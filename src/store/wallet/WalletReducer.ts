@@ -1,6 +1,7 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {plainToClass} from 'class-transformer'
 
+import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -8,7 +9,6 @@ import {ClearStateDispatcher} from '~src/store/wallet/dispatchers/ClearStateDisp
 import {NameDispatcher} from '~src/store/wallet/dispatchers/NameDispatcher'
 import {PassphraseDispatcher} from '~src/store/wallet/dispatchers/PassphraseDispatcher'
 import {SecurityPhraseDispatcher} from '~src/store/wallet/dispatchers/SecurityPhraseDispatcher'
-import {Facade} from '~src/app/Facade'
 
 const uuidv4 = require('uuid/v4')
 
