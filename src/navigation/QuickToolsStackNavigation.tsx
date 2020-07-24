@@ -13,16 +13,8 @@ import ReceiveQRCode from '~src/scenes/ReceiveQRCode'
 import QRCodeScanTest from '~src/scenes/TestPage/QRCodeScanTest'
 
 export type QuickToolsStackParamList = {
-  Home: undefined
-  Welcome: undefined
-  CreateWallet: undefined
   ReceiveQrCode: undefined
   QrCodeScanTest: undefined
-  CustomColor: undefined
-  Onboarding: undefined
-  GetWallet: undefined
-  GetAccount: {account: AccountMock} & HeaderActionButtonProps &
-    HeaderCustomProps
   AccountAssetDetail: {account: AccountMock} & HeaderCustomProps
 }
 

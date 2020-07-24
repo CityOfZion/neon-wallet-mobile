@@ -22,6 +22,10 @@ export type TabStackParamList = {
   More: DefaultNavigationParam | undefined
 }
 
+export type TabParams =
+  | (DefaultNavigationParam & Partial<{welcomeHidden?: boolean}>)
+  | undefined
+
 interface Props {
   navigation: StackNavigationProp<RootStackParamList>
   route: RouteProp<RootStackParamList, 'Tab'>

@@ -34,6 +34,8 @@ interface Props {
   fontSize?: number | string
   fontFamily?: 'bold' | 'medium' | 'regular' | 'italic' | 'semibold'
   contentStyle?: any
+  borderThickness?: number | string
+  borderColor?: string
 }
 
 const ThemedButton: React.FC<Props> = (props) => {
@@ -120,6 +122,8 @@ const ThemedButton: React.FC<Props> = (props) => {
         hasShadow={!props.basic && !isActive}
         baseBgColor={isActive ? 'transparent' : props.bgColor}
         alignY={'center'}
+        borderThickness={props.borderThickness}
+        borderColor={props.borderColor}
       >
         {_renderLabel()}
       </ThemedCard>
@@ -143,6 +147,8 @@ ThemedButton.propTypes = {
   fontSize: PropTypes.any,
   fontFamily: PropTypes.any,
   contentStyle: PropTypes.any,
+  borderThickness: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  borderColor: PropTypes.string,
 }
 
 ThemedButton.defaultProps = {

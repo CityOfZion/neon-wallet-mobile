@@ -18,6 +18,8 @@ interface Props {
   contentStyle?: any
   hasShadow?: boolean
   hasBright?: boolean
+  borderThickness?: number | string
+  borderColor?: string
 }
 
 const ThemedCard: React.FC<Props> = (props) => {
@@ -79,6 +81,8 @@ const ThemedCard: React.FC<Props> = (props) => {
             ? 'transparent'
             : props.baseBgColor ?? theme.colors.background[8]
         }
+        border={props.flat ? props.borderThickness : undefined}
+        borderColor={props.flat ? props.borderColor : undefined}
         borderRadius={getBorderRadius()}
         alignItems={props.alignX}
         justifyContent={props.alignY}
@@ -120,6 +124,8 @@ ThemedCard.propTypes = {
   contentStyle: PropTypes.any,
   hasShadow: PropTypes.bool,
   hasBright: PropTypes.bool,
+  borderThickness: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  borderColor: PropTypes.string,
 }
 
 ThemedCard.defaultProps = {

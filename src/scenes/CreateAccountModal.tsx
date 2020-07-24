@@ -42,7 +42,6 @@ export default function CreateAccountModal(props: Props) {
   }
 
   const submit = async () => {
-    console.log('entrou')
     const neoAccount = generateNeoAccount()
 
     if (!isValid() || !neoAccount) return
@@ -107,6 +106,7 @@ export default function CreateAccountModal(props: Props) {
         <InputWithValidation
           value={name}
           validator={(text) => !(showInvalid && !text)}
+          placeholder={Facade.t('modals.createAccount.accountInput.title')}
           onChangeText={setName}
           onClearPress={() => setName('')}
           onFocus={() => setShowInvalid(false)}

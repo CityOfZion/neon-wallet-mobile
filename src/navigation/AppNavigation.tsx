@@ -12,15 +12,18 @@ import {Storage} from '~src/app/Storage'
 import {Sync} from '~src/app/Sync'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import LoginStackNavigation from '~src/navigation/LoginStackNavigation'
-import ModalStackNavigation from '~src/navigation/ModalStackNavigation'
-import TabNavigation, {TabStackParamList} from '~src/navigation/TabNavigation'
+import ModalStackNavigation, {
+  ModalParams,
+} from '~src/navigation/ModalStackNavigation'
+import TabNavigation, {
+  TabParams,
+  TabStackParamList,
+} from '~src/navigation/TabNavigation'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 
 export type RootStackParamList = {
-  Tab: (DefaultNavigationParam & Partial<{welcomeHidden?: boolean}>) | undefined
-  Modal:
-    | (DefaultNavigationParam & Partial<{onColorPicked: (hex: string) => void}>)
-    | undefined
+  Tab: TabParams
+  Modal: ModalParams
   Login: undefined
   Onboarding: undefined
 } & TabStackParamList

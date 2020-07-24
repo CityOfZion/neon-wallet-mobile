@@ -11,6 +11,10 @@ import {LinearLayout, TextView} from '~src/styles/styled-components'
 import {Account} from '~src/models/redux/Account'
 import {Currency} from '~src/enums/Currency'
 
+export interface CustomColorPageParam {
+  onColorPicked: (hex: string) => void
+}
+
 interface Props {
   navigation: StackNavigationProp<any>
   route: RouteProp<ModalStackParamList, 'CustomColor'>
