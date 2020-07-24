@@ -13,6 +13,7 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {TokenValue} from '~src/models/TokenValue'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {
   ButtonView,
@@ -21,7 +22,6 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
-import {TokenValue} from '~src/models/TokenValue'
 
 export enum Priority {
   FAST,

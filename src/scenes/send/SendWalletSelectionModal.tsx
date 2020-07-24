@@ -68,8 +68,9 @@ const SendWalletSelectionModal = (props: Props) => {
               <WalletCard
                 onPress={() =>
                   props.navigation.navigate(
-                    Facade.route.SendAccountSelectionModal.name, {
-                      wallet: item
+                    Facade.route.SendAccountSelectionModal.name,
+                    {
+                      wallet: item,
                     }
                   )
                 }

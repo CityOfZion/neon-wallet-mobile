@@ -1,23 +1,23 @@
-import React, {useEffect, useState} from 'react'
-
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import {cloneDeep} from 'lodash'
+import React, {useEffect, useState} from 'react'
+import {useSelector} from 'react-redux'
+
 import {Facade} from '~src/app/Facade'
+import AccountCard from '~src/components/AccountCard'
+import BalanceList from '~src/components/BalanceList'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~src/components/SwiperPanel'
+import ThemedButton from '~src/components/themed/ThemedButton'
+import {Balance} from '~src/models/Balance'
+import {TokenBalance} from '~src/models/TokenBalance'
+import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-import BalanceList from '~src/components/BalanceList'
-import AccountCard from '~src/components/AccountCard'
-import {Account} from '~src/models/redux/Account'
-import {useSelector} from 'react-redux'
-import {RouteProp} from '@react-navigation/native'
-import {Balance} from '~src/models/Balance'
-import {TokenBalance} from '~src/models/TokenBalance'
-import ThemedButton from '~src/components/themed/ThemedButton'
-import {cloneDeep} from 'lodash'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList & WalletStackParamList>
@@ -62,8 +62,8 @@ const SendAccountSelectionModal = (props: Props) => {
   }
 
   const selectEvent = async () => {
-    let size = accounts.length - 1
-    let lastItem = accounts[size]
+    const size = accounts.length - 1
+    const lastItem = accounts[size]
     setSelectedAccount(cloneDeep(accounts[0]))
 
     accounts.pop()
@@ -94,20 +94,17 @@ const SendAccountSelectionModal = (props: Props) => {
         orientation="verti"
         alignItems="center"
       >
-        <TextView color="text.3" fontSize="md" fontFamily="bold" mb='20px'>
+        <TextView color="text.3" fontSize="md" fontFamily="bold" mb="20px">
           {props.route.params.wallet.name?.toUpperCase()}
         </TextView>
 
-        <TextView color='text.0' fontSize='18px' fontFamily='medium' mb='22px'>
+        <TextView color="text.0" fontSize="18px" fontFamily="medium" mb="22px">
           {Facade.t('modals.send.accountSelection.subtitle')}
         </TextView>
 
         <LinearLayout mt={4}>{_renderAccountCards()}</LinearLayout>
 
-        <BalanceList
-          my="44px"
-          tokenAssets={new TokenBalance()}
-        />
+        <BalanceList my="44px" tokenAssets={new TokenBalance()} />
 
         <LinearLayout
           position="absolute"
@@ -116,17 +113,18 @@ const SendAccountSelectionModal = (props: Props) => {
           alignSelf="center"
           width="100%"
         >
-            <ThemedButton
-                label={Facade.t('app.next')}
-                onPress={() =>
-                  props.navigation.navigate(
-                    Facade.route.SendTransactionInputModal.name, {
-                      walletTitle: props.route.params.wallet.name ?? '',
-                      account: selectedAccount ?? new Account()
-                    }
-                  )
+          <ThemedButton
+            label={Facade.t('app.next')}
+            onPress={() =>
+              props.navigation.navigate(
+                Facade.route.SendTransactionInputModal.name,
+                {
+                  walletTitle: props.route.params.wallet.name ?? '',
+                  account: selectedAccount ?? new Account(),
                 }
-            />
+              )
+            }
+          />
         </LinearLayout>
       </LinearLayout>
     </SwiperPanel>
