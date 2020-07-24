@@ -13,6 +13,7 @@ import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
+import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -42,9 +43,10 @@ export default function CreateAccountModal(props: Props) {
   }
 
   const submit = async () => {
+
     const neoAccount = generateNeoAccount()
 
-    if (!isValid() || !neoAccount) return
+    if (!neoAccount) return
 
     dispatch(RootStore.account.actions.setName(name))
     // TODO: NW-215
@@ -65,6 +67,15 @@ export default function CreateAccountModal(props: Props) {
     return conditions.every((it) => it)
   }
 
+  const save = () => {
+    if (!isValid()) {
+      setShowInvalid(true)
+      return
+    }
+
+    Facade.await.run('swiperRight', submit, 300)
+  }
+
   return (
     <SwiperPanel
       controller={controller}
@@ -75,58 +86,60 @@ export default function CreateAccountModal(props: Props) {
       leftButton={Facade.t('modals.createAccount.navigation.cancel')}
       rightButton={Facade.t('modals.createAccount.navigation.save')}
       onLeftPress={() => controller.close()}
-      onRightPress={() => Facade.await.run('swiperRight', submit)}
+      onRightPress={save}
       onClose={() => props.navigation.goBack()}
       image={require('~/src/assets/images/icon-plus-circle-white.png')}
     >
-      <LinearLayout width="100%" height="100%">
-        <TextView
-          mb="32px"
-          color={theme.colors.text[0]}
-          fontSize={18}
-          fontFamily="medium"
-          textAlign="center"
-        >
-          {Facade.t('modals.createAccount.subtitle')}
-        </TextView>
-        <InputLabel
-          title={Facade.t('modals.createAccount.preview')}
-          capitalize={true}
-          marginBottom="24px"
-        />
+      <AwaitActivity name={'swiperRight'}>
+        <LinearLayout width="100%" height="100%">
+          <TextView
+            mb="32px"
+            color={theme.colors.text[0]}
+            fontSize={18}
+            fontFamily="medium"
+            textAlign="center"
+          >
+            {Facade.t('modals.createAccount.subtitle')}
+          </TextView>
+          <InputLabel
+            title={Facade.t('modals.createAccount.preview')}
+            capitalize={true}
+            marginBottom="24px"
+          />
 
-        <AccountCard account={account} isStackMode={false} />
+          <AccountCard account={account} isStackMode={false} />
 
-        <InputLabel
-          title={Facade.t('modals.createAccount.accountInput.title')}
-          capitalize={true}
-          marginTop="48px"
-          marginBottom="10px"
-        />
-        <InputWithValidation
-          value={name}
-          validator={(text) => !(showInvalid && !text)}
-          placeholder={Facade.t('modals.createAccount.accountInput.title')}
-          onChangeText={setName}
-          onClearPress={() => setName('')}
-          onFocus={() => setShowInvalid(false)}
-          color={theme.colors.text[0]}
-          invalidColor={theme.colors.background[3]}
-          separatorColor={theme.colors.background[5]}
-          hidePaste={true}
-          hideScan={true}
-          sideMargins={0}
-        />
+          <InputLabel
+            title={Facade.t('modals.createAccount.accountInput.title')}
+            capitalize={true}
+            marginTop="48px"
+            marginBottom="10px"
+          />
+          <InputWithValidation
+            value={name}
+            validator={(text) => !(showInvalid && !text)}
+            placeholder={Facade.t('modals.createAccount.accountInput.title')}
+            onChangeText={setName}
+            onClearPress={() => setName('')}
+            onFocus={() => setShowInvalid(false)}
+            color={theme.colors.text[0]}
+            invalidColor={theme.colors.background[3]}
+            separatorColor={theme.colors.background[5]}
+            hidePaste={true}
+            hideScan={true}
+            sideMargins={0}
+          />
 
-        <InputLabel
-          title={Facade.t('modals.createAccount.selectColor')}
-          capitalize={true}
-          marginTop="12px"
-          marginBottom="24px"
-        />
+          <InputLabel
+            title={Facade.t('modals.createAccount.selectColor')}
+            capitalize={true}
+            marginTop="12px"
+            marginBottom="24px"
+          />
 
-        <ColorSelector onSelect={setColor} />
-      </LinearLayout>
+          <ColorSelector onSelect={setColor} />
+        </LinearLayout>
+      </AwaitActivity>
     </SwiperPanel>
   )
 }
