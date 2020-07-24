@@ -22,7 +22,7 @@ const TableData = (props: {header: string; content: string}) => {
 }
 
 const BalanceListItem = (props: {item: TokenValue}) => {
-  const currency = Currency.DOLLAR
+  const currency = Facade.t(`currencies.${Currency.USD}`)
 
   return (
     <LinearLayout orientation="horiz" alignItems="center">
