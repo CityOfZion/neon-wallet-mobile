@@ -1,4 +1,5 @@
 import {WrapperConfig} from '~src/config/WrapperConfig'
+import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 
 export declare global {
   // react-native-sortable-list
@@ -27,4 +28,9 @@ export declare global {
     screen: RouteName
     initial?: boolean
   }
+
+  // Navigation param type
+  type NavParam<ParamList> = ParamList[keyof ParamList] extends undefined
+    ? [keyof ParamList] | [keyof ParamList, ParamList[keyof ParamList]]
+    : [keyof ParamList, ParamList[keyof ParamList]]
 }

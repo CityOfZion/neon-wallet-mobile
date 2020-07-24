@@ -266,7 +266,7 @@ AccountCard.propTypes = {
   account: PropTypes.any.isRequired,
   isCompacted: PropTypes.bool.isRequired,
   isStackMode: PropTypes.bool.isRequired,
-  orientBy: PropTypes.any,
+  orientBy: PropTypes.oneOf(['height', 'width']),
 }
 
 AccountCard.defaultProps = {

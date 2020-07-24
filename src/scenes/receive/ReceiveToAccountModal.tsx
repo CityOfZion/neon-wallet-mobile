@@ -1,27 +1,33 @@
 import React, {Fragment, useState} from 'react'
+import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
-import SwiperPanel, {CloseButton, useSwiperController} from '~src/components/SwiperPanel'
+import AccountCard from '~src/components/AccountCard'
+import InputLabel from '~src/components/InputLabel'
+import InputWithValidation from '~src/components/InputWithValidation'
+import NeonQRCode from '~src/components/QRCode'
+import SwiperPanel, {
+  CloseButton,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
+import TabSelector from '~src/components/TabSelector'
+import ThemedButton from '~src/components/themed/ThemedButton'
+import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
+import {TokenValue} from '~src/models/TokenValue'
+import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ButtonView, ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import AccountCard from '~src/components/AccountCard'
-import {Account} from '~src/models/Account'
-import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
-import TabSelector from '~src/components/TabSelector'
-import NeonQRCode from '~src/components/QRCode'
-import ThemedButton from '~src/components/themed/ThemedButton'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
-import InputLabel from '~src/components/InputLabel'
-import InputWithValidation from '~src/components/InputTextWithValidation'
-import {useSelector} from 'react-redux'
-import {TokenValue} from '~src/models/TokenValue'
 
 const AddressContent = () => {
   return (
     <Fragment>
-      <NeonQRCode content={'AN8iLVt18CKoATdexztCQj923hw5gkc41A'} qrCodeWidth={300} />
+      <NeonQRCode
+        content={'AN8iLVt18CKoATdexztCQj923hw5gkc41A'}
+        qrCodeWidth={300}
+      />
       <LinearLayout width={'100%'} height={54} mt={34}>
         <ThemedButton
           label={Facade.t('app.copyToClipboard')}
@@ -46,22 +52,28 @@ const TokenField = (props: {
         color={'text.0'}
         marginTop={0}
         marginBottom={20}
+        capitalize={true}
       />
 
-      <ButtonView onPress={() => {
-        props.nav.navigate(Facade.route.ListTokenModal.name, {
-          selectedToken: props.token ?? null,
-          setToken: props.setToken
-        })
-      }}>
+      <ButtonView
+        onPress={() => {
+          props.nav.navigate(Facade.route.ListTokenModal.name, {
+            selectedToken: props.token ?? null,
+            setToken: props.setToken,
+          })
+        }}
+      >
         <LinearLayout position="relative">
           <InputWithValidation
             color={props.theme.colors.text[0]}
+            invalidColor={props.theme.colors.text[10]}
             fontStyle={'normal'}
             value={props.token?.name ?? ''}
-            placeholder={Facade.t('modals.receive.toAccount.selectTokenToReceive')}
-            inputIsValid={true}
-            separatorColor={props.theme.colors.background[3]}
+            placeholder={Facade.t(
+              'modals.receive.toAccount.selectTokenToReceive'
+            )}
+            validator={() => true}
+            separatorColor={props.theme.colors.background[13]}
             sideMargins={0}
             hidePaste={true}
             hideScan={true}
@@ -93,15 +105,17 @@ const AmountField = (props: {
         color={'text.0'}
         marginTop={42}
         marginBottom={20}
+        capitalize={true}
       />
       <InputWithValidation
         onChangeText={(text) => props.setAmount(Number(text))}
-        color={props.theme.colors.text[3]}
+        color={props.theme.colors.text[0]}
+        invalidColor={props.theme.colors.text[10]}
         fontStyle={'normal'}
         value={String(props.amount)}
         placeholder={Facade.t('modals.receive.toAccount.enterAmount')}
-        inputIsValid={true}
-        separatorColor={props.theme.colors.background[3]}
+        validator={() => true}
+        separatorColor={props.theme.colors.background[13]}
         sideMargins={0}
         hidePaste={true}
         hideScan={true}
@@ -123,15 +137,17 @@ const ReferenceField = (props: {
         color={'text.0'}
         marginTop={42}
         marginBottom={20}
+        capitalize={true}
       />
       <InputWithValidation
         onChangeText={props.setReference}
-        color={props.theme.colors.text[3]}
+        color={props.theme.colors.text[0]}
+        invalidColor={props.theme.colors.text[10]}
         fontStyle={'normal'}
         value={props.reference}
         placeholder={Facade.t('modals.receive.toAccount.addReference')}
-        inputIsValid={true}
-        separatorColor={props.theme.colors.background[3]}
+        validator={() => true}
+        separatorColor={props.theme.colors.background[13]}
         sideMargins={0}
         hidePaste={true}
         hideScan={true}
@@ -150,7 +166,9 @@ const ReceiveToAccountModal = (props: Props) => {
     (state: RootState) => Facade.theme[state.settings.theme]
   )
   const [account, setAccount] = useState<Account>(mockWalletAccounts[0])
-  const [isAddressTabSelected, setAddressTabAsSelected] = useState<boolean>(true)
+  const [isAddressTabSelected, setAddressTabAsSelected] = useState<boolean>(
+    true
+  )
   const [amount, setAmount] = useState<number>(0)
   const [reference, setReference] = useState<string>('')
   const [token, setToken] = useState<TokenValue | null>(null)
@@ -176,7 +194,7 @@ const ReceiveToAccountModal = (props: Props) => {
           fontSize="md"
           fontFamily="bold"
         >
-          {mockWalletItems[1].title}
+          {mockWalletItems[1].title.toUpperCase()}
         </TextView>
         <AccountCard account={account} />
         <TabSelector
@@ -185,24 +203,33 @@ const ReceiveToAccountModal = (props: Props) => {
           firstTabLabel={Facade.t('modals.receive.toAccount.yourAddress')}
           secondTabLabel={Facade.t('modals.receive.toAccount.requestTokens')}
           mb={isAddressTabSelected ? 38 : 46}
+          capitalize={true}
         />
-        {isAddressTabSelected
-          ? <AddressContent />
-          : (
-            <LinearLayout orientation="verti" justifyContent="space-between">
-              <TokenField theme={theme} token={token} setToken={setToken} nav={props.navigation} />
-              <AmountField theme={theme} amount={amount} setAmount={setAmount} />
-              <ReferenceField theme={theme} reference={reference} setReference={setReference} />
-              <LinearLayout width={'100%'} height={54} my={34}>
-                <ThemedButton
-                  label={Facade.t('modals.receive.toAccount.generateQrCode')}
-                  srcIcon={require('~/src/assets/images/icon-qrcode-green.png')}
-                  iconSize={[19, 23]}
-                />
-              </LinearLayout>
+        {isAddressTabSelected ? (
+          <AddressContent />
+        ) : (
+          <LinearLayout orientation="verti" justifyContent="space-between">
+            <TokenField
+              theme={theme}
+              token={token}
+              setToken={setToken}
+              nav={props.navigation}
+            />
+            <AmountField theme={theme} amount={amount} setAmount={setAmount} />
+            <ReferenceField
+              theme={theme}
+              reference={reference}
+              setReference={setReference}
+            />
+            <LinearLayout width={'100%'} height={54} my={34}>
+              <ThemedButton
+                label={Facade.t('modals.receive.toAccount.generateQrCode')}
+                srcIcon={require('~/src/assets/images/icon-qrcode-green.png')}
+                iconSize={[19, 23]}
+              />
             </LinearLayout>
-          )
-        }
+          </LinearLayout>
+        )}
       </LinearLayout>
     </SwiperPanel>
   )

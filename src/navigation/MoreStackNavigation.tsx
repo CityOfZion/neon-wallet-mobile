@@ -6,12 +6,12 @@ import {ThemeProvider} from 'styled-components'
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
+import {Account} from '~src/models/redux/Account'
 import Step1CreateWalletPage from '~src/scenes/CreateWalletPage/Step1CreateWalletPage'
 import Step2CreateWalletPage from '~src/scenes/CreateWalletPage/Step2CreateWalletPage'
 import Step3CreateWalletPage from '~src/scenes/CreateWalletPage/Step3CreateWalletPage'
 import Step4CreateWalletPage from '~src/scenes/CreateWalletPage/Step4CreateWalletPage'
 import Step5CreateWalletPage from '~src/scenes/CreateWalletPage/Step5CreateWalletPage'
-import CustomColorPage from '~src/scenes/CustomColorPage'
 import CustomizeAccount from '~src/scenes/CustomizeAccount'
 import ImportKey from '~src/scenes/ImportKey'
 import ImportReadAccount from '~src/scenes/ImportReadAccount'
@@ -30,8 +30,8 @@ export type MoreStackParamList = {
   ImportKey: undefined
   CustomizeReadAccount: undefined
   ImportReadAccount: undefined
-  Passphrase: undefined
-  CustomizeAccount: undefined
+  Passphrase: {encryptedKey: string}
+  CustomizeAccount: {account: Account; source: keyof MoreStackParamList}
   CustomColor: undefined
 }
 
@@ -74,14 +74,11 @@ const MoreStackNavigation = () => {
         <MoreStack.Screen
           name={Facade.route.Step2CreateWallet.name}
           component={Step2CreateWalletPage}
-          options={({route}) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.Step2CreateWallet.translate(),
-              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
-              theme,
-              route,
-            })
-          }
+          options={Navigator.defaultStackNavigatorOptions({
+            title: Facade.route.Step2CreateWallet.translate(),
+            image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+            theme,
+          })}
         />
 
         <MoreStack.Screen
@@ -140,7 +137,7 @@ const MoreStackNavigation = () => {
           component={Passphrase}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.Passphrase.translate(),
+              title: Facade.route.ImportKey.translate(),
               image: require('~src/assets/images/icon-import-white.png'),
               theme,
               route,

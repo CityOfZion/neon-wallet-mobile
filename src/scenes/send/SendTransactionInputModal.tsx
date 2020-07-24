@@ -6,7 +6,7 @@ import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/ty
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import InputLabel from '~src/components/InputLabel'
-import InputWithValidation from '~src/components/InputTextWithValidation'
+import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
@@ -15,11 +15,9 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
 import {
   ButtonView,
   ImageView,
-  InputTextView,
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
@@ -170,15 +168,16 @@ const DestinationAddressField = (props: {
         color={'text.0'}
         marginTop={30}
         marginBottom={20}
+        capitalize={true}
       />
       <InputWithValidation
         onChangeText={props.setAddress}
-        color={props.theme.colors.text[3]}
-        fontStyle={'normal'}
+        color={props.theme.colors.text[0]}
+        invalidColor={props.theme.colors.text[10]}
         value={props.address}
         placeholder={Facade.t('modals.send.transactionInput.enterDestination')}
-        inputIsValid={true}
-        separatorColor={props.theme.colors.background[3]}
+        validator={() => true}
+        separatorColor={props.theme.colors.background[13]}
         sideMargins={0}
         hidePaste={true}
         hideScan={true}
@@ -231,24 +230,26 @@ const TokenField = (props: {
         color={'text.0'}
         marginTop={30}
         marginBottom={20}
+        capitalize={true}
       />
 
       <ButtonView
         onPress={() => {
           props.nav.navigate(Facade.route.ListTokenModal.name, {
             selectedToken: props.token ?? null,
-            setToken: props.setToken
+            setToken: props.setToken,
           })
         }}
       >
         <LinearLayout position="relative">
           <InputWithValidation
             color={props.theme.colors.text[0]}
+            invalidColor={props.theme.colors.text[10]}
             fontStyle={'normal'}
             value={props.token?.name ?? ''}
             placeholder={Facade.t('modals.send.transactionInput.selectToken')}
-            inputIsValid={true}
-            separatorColor={props.theme.colors.background[3]}
+            validator={() => true}
+            separatorColor={props.theme.colors.background[13]}
             sideMargins={0}
             hidePaste={true}
             hideScan={true}
@@ -280,15 +281,16 @@ const AmountField = (props: {
         color={'text.0'}
         marginTop={30}
         marginBottom={20}
+        capitalize={true}
       />
       <InputWithValidation
         onChangeText={(text) => props.setAmount(Number(text))}
-        color={props.theme.colors.text[3]}
-        fontStyle={'normal'}
+        color={props.theme.colors.text[0]}
+        invalidColor={props.theme.colors.text[10]}
         value={String(props.amount)}
         placeholder={Facade.t('modals.send.transactionInput.enterAmount')}
-        inputIsValid={true}
-        separatorColor={props.theme.colors.background[3]}
+        validator={() => true}
+        separatorColor={props.theme.colors.background[13]}
         sideMargins={0}
         hidePaste={true}
         hideScan={true}
@@ -361,7 +363,12 @@ const SendTransactionInputModal = (props: Props) => {
           address={text}
           setAddress={setText}
         />
-        <TokenField theme={theme} token={token} setToken={setToken} nav={props.navigation} />
+        <TokenField
+          theme={theme}
+          token={token}
+          setToken={setToken}
+          nav={props.navigation}
+        />
         <AmountField theme={theme} amount={amount} setAmount={setAmount} />
         <TextView
           mt="56px"
@@ -371,7 +378,9 @@ const SendTransactionInputModal = (props: Props) => {
           alignSelf="center"
           fontSize="14px"
         >
-          {Facade.t('modals.send.transactionInput.prioritiseTransfer')}
+          {Facade.t(
+            'modals.send.transactionInput.prioritiseTransfer'
+          ).toUpperCase()}
         </TextView>
         <PriorityTab />
         <LinearLayout mb="58px" px="24px" alignSelf="center" width="100%">

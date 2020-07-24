@@ -13,7 +13,7 @@ import ListTokenModal from '~src/scenes/ListTokenModal'
 import ReceiveToAccountModal from '~src/scenes/receive/ReceiveToAccountModal'
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
 import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
-import SampleModal from '~src/scenes/SampleModal'
+import CreateAccountModal from '~src/scenes/CreateAccountModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import WalletContextModal from '~src/scenes/WalletContextModal'
 import WelcomePage from '~src/scenes/WelcomePage'
@@ -25,7 +25,7 @@ import {TokenValue} from '~src/models/TokenValue'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
-  SampleModal: undefined
+  CreateAccountModal: undefined
   ReceiveWalletSelectionModal: undefined
   ReceiveToAccountModal: undefined
   SendWalletSelectionModal: undefined
@@ -58,7 +58,7 @@ const ModalStackNavigation = (props: Props) => {
   return (
     <ThemeProvider theme={theme}>
       <ModalStack.Navigator
-        initialRouteName={Facade.route.SampleModal.name}
+        initialRouteName={Facade.route.CreateAccountModal.name}
         headerMode="none"
         screenOptions={Facade.config.screen}
       >
@@ -67,8 +67,8 @@ const ModalStackNavigation = (props: Props) => {
           component={WelcomePage}
         />
         <ModalStack.Screen
-          name={Facade.route.SampleModal.name}
-          component={SampleModal}
+          name={Facade.route.CreateAccountModal.name}
+          component={CreateAccountModal}
         />
         <ModalStack.Screen
           name={Facade.route.ReceiveWalletSelectionModal.name}

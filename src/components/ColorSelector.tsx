@@ -64,11 +64,12 @@ export default function ColorSelector(props: Props) {
     >
       <RelativeLayout width={71} height={71}>
         <ImageView
-          m="auto"
-          resizeMode="contain"
+          width={71}
+          height={71}
           source={require('~src/assets/images/button-custom-color.png')}
-          position="absolute"
+          resizeMode="contain"
         />
+
         <TextView
           fontSize="12px"
           width="100%"

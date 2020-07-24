@@ -1,4 +1,4 @@
-import {useFocusEffect} from '@react-navigation/native'
+import {useFocusEffect, useNavigationState} from '@react-navigation/native'
 import {BlurView} from 'expo-blur'
 import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
@@ -20,6 +20,7 @@ import {TextView, ImageView, LinearLayout} from '~src/styles/styled-components'
 import {AwaitActivity} from '@simpli/react-native-await'
 
 export const PANEL_OFFSET = 50
+const STACKPANEL_OFFSET = 28
 const ANIMATION_DELTA_THRESHOLD = 0.5
 const ANIMATION_VELOCITY_THRESHOLD = 0.5
 

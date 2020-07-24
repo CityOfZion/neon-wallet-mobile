@@ -20,7 +20,8 @@ export interface HeaderCustomProps {
 
 const HeaderBar: React.FC<HeaderProps> = (
   headerProps: HeaderProps,
-  props: StackHeaderTitleProps
+  // TODO: Remove in NW-216
+  props?: StackHeaderTitleProps
 ) => {
   const params: HeaderCustomProps = headerProps.route?.params
 

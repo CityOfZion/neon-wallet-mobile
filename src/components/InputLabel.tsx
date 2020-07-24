@@ -8,9 +8,10 @@ const InputLabel = (props: {
   title: string
   textAlignVertical?: string
   weight?: number
-  marginBottom?: number
-  marginTop?: number
+  marginBottom?: number | string
+  marginTop?: number | string
   color?: string
+  capitalize?: boolean
 }) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
@@ -21,14 +22,14 @@ const InputLabel = (props: {
   return (
     <TextView
       fontSize={14}
-      fontFamily="medium"
+      fontFamily="bold"
       color={props.color ?? theme.colors.background[3]}
       weight={props.weight ?? undefined}
       mb={marginBottom}
       mt={marginTop}
       alignItems={'center'}
     >
-      {props.title}
+      {props.capitalize ? props.title.toUpperCase() : props.title}
     </TextView>
   )
 }
