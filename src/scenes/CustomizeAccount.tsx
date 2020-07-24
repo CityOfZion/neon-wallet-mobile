@@ -130,6 +130,9 @@ const CustomizeAccount = (props: Props) => {
         <InputWithValidation
           value={name}
           validator={(text) => !(showInvalid && !text)}
+          placeholder={Facade.t(
+            'screens.customizeAccount.accountInput.placeholder'
+          )}
           onChangeText={setName}
           onClearPress={() => setName('')}
           onFocus={() => setShowInvalid(false)}

@@ -22,7 +22,6 @@ interface GetWalletProps {
 }
 
 const GetWalletView = (props: GetWalletProps) => {
-  const [nodes, setNodes] = useState<NeoNode[]>([])
   const [accounts, setAccounts] = useState<Account[]>([])
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
 
@@ -36,7 +35,6 @@ const GetWalletView = (props: GetWalletProps) => {
 
   const populate = async () => {
     setAccounts(wallet.getAccounts(accountsPool))
-    setNodes(await NeoNode.getAllNodes())
 
     wallet.lastVisitedAt = moment().format()
 
@@ -45,13 +43,7 @@ const GetWalletView = (props: GetWalletProps) => {
   }
 
   const selectEvent = async (account: Account) => {
-    props.navigation.navigate(Facade.route.GetAccount.name, {
-      account,
-      headerTitle: _renderTitle,
-      actionTitle: Facade.t('app.edit'),
-      // TODO: Edit event
-      actionOnPress: () => {},
-    })
+    props.navigation.navigate(Facade.route.GetAccount.name, {account})
   }
 
   const createEvent = async () => {
@@ -63,21 +55,6 @@ const GetWalletView = (props: GetWalletProps) => {
         screen: Facade.route.CreateAccountModal.name,
       })
     }
-  }
-
-  const _renderTitle: React.FC = () => {
-    return (
-      <LinearLayout alignItems="center" justifyContent="center">
-        <TextView color={'text.3'} textAlign={'center'} fontSize={10}>
-          {Facade.t('app.neoBlockHeight')}
-        </TextView>
-
-        <TextView color={'text.0'} textAlign={'center'}>
-          {nodes[0] &&
-            Facade.filter.currency(nodes[0].height, '', false, false)}
-        </TextView>
-      </LinearLayout>
-    )
   }
 
   const _renderAccountCards = () => {

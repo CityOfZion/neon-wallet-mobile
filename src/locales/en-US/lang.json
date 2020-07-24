@@ -295,6 +295,23 @@
         "save": "Save"
       }
     },
+    "editAccount": {
+      "title": "Edit",
+      "preview": "Preview",
+      "accountInput": {
+        "title": "Account name",
+        "placeholder": "Enter an account name"
+      },
+      "deleteAccount": {
+        "title": "Delete account",
+        "subtitle": "Tum dicere exorsus est et dolore magnam aliquam quaerat voluptatem."
+      },
+      "selectColor": "Select a colour for your new account card",
+      "navigation": {
+        "cancel": "Cancel",
+        "save": "Save"
+      }
+    },
     "send": {
       "title": "Send",
       "walletSelection": {

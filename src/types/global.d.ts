@@ -1,5 +1,4 @@
-import {WrapperConfig} from '~src/config/WrapperConfig'
-import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import {GestureResponderEvent, PanResponderGestureState} from 'react-native'
 
 export declare global {
   // react-native-sortable-list

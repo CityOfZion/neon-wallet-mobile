@@ -5,27 +5,33 @@ import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
+import {TokenValue} from '~src/models/TokenValue'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
+import CreateAccountModal from '~src/scenes/CreateAccountModal'
 import CurrencyPickerModal from '~src/scenes/CurrencyPickerModal'
-import CustomColorPage from '~src/scenes/CustomColorPage'
+import CustomColorPage, {
+  CustomColorPageParam,
+} from '~src/scenes/CustomColorPage'
+import EditAccountModal, {
+  EditAccountModalParam,
+} from '~src/scenes/EditAccountModal'
 import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
 import ListTokenModal from '~src/scenes/ListTokenModal'
-import ReceiveToAccountModal from '~src/scenes/receive/ReceiveToAccountModal'
-import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
 import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
-import CreateAccountModal from '~src/scenes/CreateAccountModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import WalletContextModal from '~src/scenes/WalletContextModal'
 import WelcomePage from '~src/scenes/WelcomePage'
+import ReceiveToAccountModal from '~src/scenes/receive/ReceiveToAccountModal'
+import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
 import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionConfirmationModal'
 import SendTransactionInputModal from '~src/scenes/send/SendTransactionInputModal'
 import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
 import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
-import {TokenValue} from '~src/models/TokenValue'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
   CreateAccountModal: undefined
+  EditAccountModal: EditAccountModalParam
   ReceiveWalletSelectionModal: undefined
   ReceiveToAccountModal: undefined
   SendWalletSelectionModal: undefined
@@ -43,6 +49,12 @@ export type ModalStackParamList = {
   CurrencyPickerModal: undefined
   ThemePickerModal: undefined
 }
+
+export type ModalParams =
+  | (DefaultNavigationParam &
+      Partial<CustomColorPageParam> &
+      Partial<EditAccountModalParam>)
+  | undefined
 
 interface Props {
   route?: RouteProp<RootStackParamList, 'Modal'>
@@ -69,6 +81,11 @@ const ModalStackNavigation = (props: Props) => {
         <ModalStack.Screen
           name={Facade.route.CreateAccountModal.name}
           component={CreateAccountModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.EditAccountModal.name}
+          component={EditAccountModal}
+          initialParams={props.route?.params}
         />
         <ModalStack.Screen
           name={Facade.route.ReceiveWalletSelectionModal.name}
@@ -110,7 +127,6 @@ const ModalStackNavigation = (props: Props) => {
         <ModalStack.Screen
           name={Facade.route.ListTokenModal.name}
           component={ListTokenModal}
-          initialParams={props.route?.params}
         />
         <ModalStack.Screen
           name={Facade.route.LanguagePickerModal.name}
