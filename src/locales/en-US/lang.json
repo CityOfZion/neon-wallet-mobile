@@ -5,9 +5,9 @@
     "pt-BR": "Portuguese"
   },
   "currencies": {
-    "USD": "$",
-    "BRL": "R$",
-    "EUR": "€"
+    "USD" : "$",
+    "BRL" : "R$",
+    "EUR" : "€"
   },
   "themes": {
     "DARK": "Dark",

@@ -92,14 +92,14 @@ export abstract class FilterHelper {
 
   static currency(
     input?: InputType,
-    prefix = '?',
+    prefix = '',
     inCents = true,
     decimal = true
   ) {
     const precision = decimal ? 2 : 0
     const val = inCents ? (Number(input) / 100).toString() : input
-
-    return `${prefix.substring(0, 3)}${this.decimal(val, precision)}`.replace(
+    const translatedPrefix = prefix ? i18n.t(`currencies.${prefix}`) : ''
+    return `${translatedPrefix.substring(0, 3)}${this.decimal(val, precision)}`.replace(
       /\B(?=(\d{3})+(?!\d))/g,
       i18n.t('filter.number.thousands') as string
     )

@@ -6,6 +6,7 @@ import {Facade} from '~src/app/Facade'
 import {TokenBalance} from '~src/models/TokenBalance'
 import {TokenValue} from '~src/models/TokenValue'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
+import {Currency} from '~src/enums/Currency'
 
 const TableData = (props: {header: string; content: string}) => {
   return (
@@ -21,7 +22,7 @@ const TableData = (props: {header: string; content: string}) => {
 }
 
 const BalanceListItem = (props: {item: TokenValue}) => {
-  const currency = useSelector((state: RootState) => state.settings.currency)
+  const currency = Facade.t(`currencies.${Currency.USD}`)
 
   return (
     <LinearLayout orientation="horiz" alignItems="center">
