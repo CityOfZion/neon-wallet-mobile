@@ -17,6 +17,7 @@ import TabSelector from '~src/components/TabSelector'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {TokenValue} from '~src/models/TokenValue'
+import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {
   ButtonView,
@@ -162,8 +163,8 @@ const ReferenceField = (props: {
 }
 
 interface Props {
-  route: RouteProp<ModalStackParamList, 'ReceiveToAccountModal'>
   navigation: StackNavigationProp<ModalStackParamList>
+  route: RouteProp<ModalStackParamList, 'ReceiveToAccountModal'>
 }
 
 const ReceiveToAccountModal = (props: Props) => {
@@ -177,8 +178,6 @@ const ReceiveToAccountModal = (props: Props) => {
   const [amount, setAmount] = useState<number>(0)
   const [reference, setReference] = useState<string>('')
   const [token, setToken] = useState<TokenValue | null>(null)
-
-  const {account} = props.route.params
 
   return (
     <SwiperPanel
@@ -201,10 +200,10 @@ const ReceiveToAccountModal = (props: Props) => {
           fontSize="md"
           fontFamily="bold"
         >
-          {mockWalletItems[1].title.toUpperCase()}
+          {props.route.params.walletTitle.toUpperCase()}
         </TextView>
-        <AccountCard account={account} />
-        <TouchableWithoutFeedback>
+        <AccountCard account={props.route.params.account} />
+        <TouchableWithoutFeedback onPress={() => props.navigation.goBack()}>
           <LinearLayout
             orientation="horiz"
             alignSelf="center"

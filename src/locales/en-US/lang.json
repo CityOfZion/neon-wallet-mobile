@@ -313,6 +313,9 @@
       "walletSelection": {
         "subtitle": "Please select a wallet to send from"
       },
+      "accountSelection": {
+        "subtitle": "Please select an account to send from"
+      },
       "transactionConfirmation": {
         "header": "Transaction successfully sent!",
         "subheader": "Once your transaction has been confirmed it will appear in your transaction history",
@@ -320,7 +323,7 @@
       },
       "transactionInput": {
         "selectDifferentAccount": "Select a different Account",
-        "transactionDetails": "Transaction Details",
+        "transactionDetails": "TRANSACTION DETAILS",
         "prioritiseTransfer": "Prioritise your transfer with a fee?",
         "enterAmount": "Enter amount",
         "selectToken": "Select token to send",
@@ -347,6 +350,9 @@
       "title": "Receive",
       "walletSelection": {
         "subtitle": "Please select a wallet to receive to"
+      },
+      "accountSelection": {
+        "subtitle": "Please select an account to receive to"
       },
       "toAccount": {
         "yourAddress": "Your Address",

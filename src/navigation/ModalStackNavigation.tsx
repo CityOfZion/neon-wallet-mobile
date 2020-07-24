@@ -7,6 +7,7 @@ import {ThemeProvider} from 'styled-components'
 import {Facade} from '~src/app/Facade'
 import {TokenValue} from '~src/models/TokenValue'
 import {Account} from '~src/models/redux/Account'
+import {Wallet} from '~src/models/redux/Wallet'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import CreateAccountModal from '~src/scenes/CreateAccountModal'
 import CurrencyPickerModal from '~src/scenes/CurrencyPickerModal'
@@ -22,8 +23,10 @@ import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import WalletContextModal from '~src/scenes/WalletContextModal'
 import WelcomePage from '~src/scenes/WelcomePage'
+import ReceiveAccountSelectionModal from '~src/scenes/receive/ReceiveAccountSelectionModal'
 import ReceiveToAccountModal from '~src/scenes/receive/ReceiveToAccountModal'
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
+import SendAccountSelectionModal from '~src/scenes/send/SendAccountSelectionModal'
 import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionConfirmationModal'
 import SendTransactionInputModal from '~src/scenes/send/SendTransactionInputModal'
 import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
@@ -34,10 +37,18 @@ export type ModalStackParamList = {
   CreateAccountModal: undefined
   EditAccountModal: EditAccountModalParam
   ReceiveWalletSelectionModal: undefined
-  ReceiveToAccountModal: {account: Account}
+  ReceiveAccountSelectionModal: {wallet: Wallet}
+  ReceiveToAccountModal: {
+    walletTitle: string
+    account: Account
+  }
   SendWalletSelectionModal: undefined
+  SendAccountSelectionModal: {wallet: Wallet}
+  SendTransactionInputModal: {
+    walletTitle: string
+    account: Account
+  }
   SendTransactionReviewModal: undefined
-  SendTransactionInputModal: {account: Account}
   SendTransactionConfirmationModal: undefined
   CustomColor: {onColorPicked: (hex: string) => void}
   WalletContextModal: undefined
@@ -93,12 +104,20 @@ const ModalStackNavigation = (props: Props) => {
           component={ReceiveWalletSelectionModal}
         />
         <ModalStack.Screen
+          name={Facade.route.ReceiveAccountSelectionModal.name}
+          component={ReceiveAccountSelectionModal}
+        />
+        <ModalStack.Screen
           name={Facade.route.ReceiveToAccountModal.name}
           component={ReceiveToAccountModal}
         />
         <ModalStack.Screen
           name={Facade.route.SendWalletSelectionModal.name}
           component={SendWalletSelectionModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.SendAccountSelectionModal.name}
+          component={SendAccountSelectionModal}
         />
         <ModalStack.Screen
           name={Facade.route.SendTransactionReviewModal.name}
