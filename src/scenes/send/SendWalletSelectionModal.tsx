@@ -20,9 +20,8 @@ interface Props {
 
 const SendWalletSelectionModal = (props: Props) => {
   const controller = useSwiperController(true)
-  const [activeIndex, setActiveIndex] = useState(0)
   const carouselRef = useRef(null)
-
+  const [activeIndex, setActiveIndex] = useState(0)
   const wallets = useSelector((state: RootState) => state.app.wallets)
   const currency = useSelector((state: RootState) => state.settings.currency)
 
@@ -69,7 +68,9 @@ const SendWalletSelectionModal = (props: Props) => {
               <WalletCard
                 onPress={() =>
                   props.navigation.navigate(
-                    Facade.route.SendTransactionInputModal.name
+                    Facade.route.SendAccountSelectionModal.name, {
+                      wallet: item
+                    }
                   )
                 }
                 height={330}

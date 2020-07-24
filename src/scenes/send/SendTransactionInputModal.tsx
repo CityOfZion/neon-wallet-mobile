@@ -13,11 +13,7 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
-import {mockWalletItems} from '~src/mocks/mockWalletItems'
-import {TokenValue} from '~src/models/TokenValue'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {
   ButtonView,
   ImageView,
@@ -25,6 +21,7 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
+import {TokenValue} from '~src/models/TokenValue'
 
 export enum Priority {
   FAST,
@@ -299,8 +296,8 @@ const AmountField = (props: {
 }
 
 interface Props {
-  route: RouteProp<ModalStackParamList, 'SendTransactionInputModal'>
   navigation: StackNavigationProp<ModalStackParamList>
+  route: RouteProp<ModalStackParamList, 'SendTransactionInputModal'>
 }
 
 const SendTransactionInputModal = (props: Props) => {
@@ -311,8 +308,6 @@ const SendTransactionInputModal = (props: Props) => {
   const [text, setText] = useState('')
   const [amount, setAmount] = useState(0)
   const [token, setToken] = useState<TokenValue | null>(null)
-
-  const {account} = props.route.params
 
   return (
     <SwiperPanel
@@ -335,10 +330,10 @@ const SendTransactionInputModal = (props: Props) => {
           fontSize="md"
           fontFamily="bold"
         >
-          {mockWalletItems[1].title}
+          {props.route.params.walletTitle}
         </TextView>
-        <AccountCard account={account} />
-        <TouchableWithoutFeedback>
+        <AccountCard account={props.route.params.account} />
+        <TouchableWithoutFeedback onPress={() => props.navigation.goBack()}>
           <LinearLayout
             orientation="horiz"
             alignSelf="center"

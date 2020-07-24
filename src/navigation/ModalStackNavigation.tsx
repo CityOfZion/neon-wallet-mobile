@@ -28,16 +28,27 @@ import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionCo
 import SendTransactionInputModal from '~src/scenes/send/SendTransactionInputModal'
 import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
 import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
+import ReceiveAccountSelectionModal from '~src/scenes/receive/ReceiveAccountSelectionModal'
+import {Wallet} from '~src/models/redux/Wallet'
+import SendAccountSelectionModal from '~src/scenes/send/SendAccountSelectionModal'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
   CreateAccountModal: undefined
   EditAccountModal: EditAccountModalParam
   ReceiveWalletSelectionModal: undefined
-  ReceiveToAccountModal: {account: Account}
+  ReceiveAccountSelectionModal: {wallet: Wallet}
+  ReceiveToAccountModal: {
+    walletTitle: string
+    account: Account
+  }
   SendWalletSelectionModal: undefined
+  SendAccountSelectionModal: {wallet: Wallet}
+  SendTransactionInputModal: {
+    walletTitle: string
+    account: Account
+  }
   SendTransactionReviewModal: undefined
-  SendTransactionInputModal: {account: Account}
   SendTransactionConfirmationModal: undefined
   CustomColor: {onColorPicked: (hex: string) => void}
   WalletContextModal: undefined
@@ -93,12 +104,20 @@ const ModalStackNavigation = (props: Props) => {
           component={ReceiveWalletSelectionModal}
         />
         <ModalStack.Screen
+          name={Facade.route.ReceiveAccountSelectionModal.name}
+          component={ReceiveAccountSelectionModal}
+        />
+        <ModalStack.Screen
           name={Facade.route.ReceiveToAccountModal.name}
           component={ReceiveToAccountModal}
         />
         <ModalStack.Screen
           name={Facade.route.SendWalletSelectionModal.name}
           component={SendWalletSelectionModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.SendAccountSelectionModal.name}
+          component={SendAccountSelectionModal}
         />
         <ModalStack.Screen
           name={Facade.route.SendTransactionReviewModal.name}
