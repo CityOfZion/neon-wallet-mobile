@@ -20,6 +20,7 @@ import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ButtonView, ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
+import {TouchableWithoutFeedback} from 'react-native'
 
 const AddressContent = () => {
   return (
@@ -28,7 +29,7 @@ const AddressContent = () => {
         content={'AN8iLVt18CKoATdexztCQj923hw5gkc41A'}
         qrCodeWidth={300}
       />
-      <LinearLayout width={'100%'} height={54} mt={34}>
+      <LinearLayout width={'100%'} height={54} my={34}>
         <ThemedButton
           label={Facade.t('app.copyToClipboard')}
           srcIcon={require('~/src/assets/images/icon-copy-green.png')}
@@ -197,6 +198,21 @@ const ReceiveToAccountModal = (props: Props) => {
           {mockWalletItems[1].title.toUpperCase()}
         </TextView>
         <AccountCard account={account} />
+        <TouchableWithoutFeedback>
+          <LinearLayout
+            orientation="horiz"
+            alignSelf="center"
+            alignItems="center"
+            mt="40px"
+          >
+            <ImageView
+              source={require('~/src/assets/images/icon-reselect-green.png')}
+            />
+            <TextView ml="6px" color="primary" fontFamily="medium">
+              {Facade.t('modals.send.transactionInput.selectDifferentAccount')}
+            </TextView>
+          </LinearLayout>
+        </TouchableWithoutFeedback>
         <TabSelector
           isFirstTabSelected={isAddressTabSelected}
           setFirstTabAsSelected={setAddressTabAsSelected}
