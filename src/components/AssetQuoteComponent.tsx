@@ -1,5 +1,5 @@
 import React from 'react'
-
+import {Currency} from '~src/enums/Currency'
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import {AssetQuoteModel} from '~src/models/AssetQuoteModel'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
