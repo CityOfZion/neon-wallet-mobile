@@ -47,7 +47,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }, [wasDeleted])
 
   const populate = async () => {
-    console.log('here')
     setNodes(await NeoNode.getAllNodes())
   }
 

@@ -10,7 +10,6 @@ export declare global {
     | 'SET_SRC_ICON'
     | 'SET_BALANCE'
     | 'SET_CURRENCY'
-    | 'SET_ADDRESS'
     | 'SET_BACKGROUND_COLOR'
     | 'CLEAR_STATE'
 

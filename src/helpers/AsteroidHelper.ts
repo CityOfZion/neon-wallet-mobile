@@ -19,19 +19,19 @@ export abstract class AsteroidHelper {
     return list?.split(' ') ?? null
   }
 
-  static generateNeoAccount(mnemonicWords: string) {
-    const wif = this.generateWif(mnemonicWords)
-    return new wallet.Account(wif)
-  }
-
-  static generateWif(mnemonicWords: string) {
+  static generateWif(mnemonicWords: string, index: number) {
     const keychain = this.getKeychainFromMnemonicWords(mnemonicWords)
 
     const childKey = keychain.generateChildKey(
       Facade.app.platform,
-      Facade.app.derivationPath
+      Facade.app.derivationPath.replace(/\?$/, index.toString())
     )
 
     return childKey.getWIF()
+  }
+
+  static generateNeoAccount(mnemonicWords: string, index: number) {
+    const wif = this.generateWif(mnemonicWords, index)
+    return new wallet.Account(wif)
   }
 }

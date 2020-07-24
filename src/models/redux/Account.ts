@@ -2,12 +2,20 @@ import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 import {ImageLoadEventData} from 'react-native'
 
 import {Currency} from '~src/enums/Currency'
+import {Wallet} from '~src/models/redux/Wallet'
 
 @HttpExclude()
 export class Account implements AccountState {
   @HttpExpose()
   idWallet: string | null = null
 
+  /**
+   * Used for derivationPath
+   */
+  @HttpExpose()
+  index: number | null = null
+
+  @HttpExpose()
   srcIcon: ImageLoadEventData | null = null
 
   @HttpExpose()
@@ -24,4 +32,12 @@ export class Account implements AccountState {
 
   @HttpExpose()
   backgroundColor = '#00aaff'
+
+  getWallet(pool: Wallet[]) {
+    return pool.find((it) => it.id === this.idWallet)
+  }
+
+  getAccountsWithSameWallet(pool: Account[]) {
+    return pool.filter((it) => it.idWallet === this.idWallet)
+  }
 }

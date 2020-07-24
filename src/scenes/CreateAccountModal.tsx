@@ -37,25 +37,17 @@ export default function CreateAccountModal(props: Props) {
   account.backgroundColor = color
   account.name = name
 
-  const generateNeoAccount = () => {
-    const wallet = Wallet.find(idWallet ?? '', walletsPool)
-    return wallet?.generateNeoAccount() ?? null
-  }
-
   const submit = async () => {
-    const neoAccount = generateNeoAccount()
-
-    if (!neoAccount) return
-
     dispatch(RootStore.account.actions.setName(name))
     // TODO: NW-215
     dispatch(RootStore.account.actions.setBalance(0))
     dispatch(RootStore.account.actions.setCurrency(currency))
-    dispatch(RootStore.account.actions.setAddress(neoAccount.address))
     if (color) dispatch(RootStore.account.actions.setBackgroundColor(color))
 
     await dispatch(RootStore.account.actions.createAndSave())
     await dispatch(RootStore.app.actions.syncAccounts())
+
+    dispatch(RootStore.account.actions.clearState())
 
     controller.close()
   }

@@ -65,16 +65,16 @@ export class Wallet implements WalletState {
     return pool.filter((it) => it.idWallet === this.id)
   }
 
-  generateWif() {
+  generateWif(index: number) {
     const {securityPhrase} = this
     if (!securityPhrase) return null
-    return AsteroidHelper.generateWif(securityPhrase)
+    return AsteroidHelper.generateWif(securityPhrase, index)
   }
 
-  generateNeoAccount() {
+  generateNeoAccount(index: number) {
     const {securityPhrase} = this
     if (!securityPhrase) return null
 
-    return AsteroidHelper.generateNeoAccount(securityPhrase)
+    return AsteroidHelper.generateNeoAccount(securityPhrase, index)
   }
 }

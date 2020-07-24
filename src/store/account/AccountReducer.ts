@@ -6,7 +6,7 @@ import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {Currency} from '~src/enums/Currency'
 import {Account} from '~src/models/redux/Account'
-import {AddressDispatcher} from '~src/store/account/dispatchers/AddressDispatcher'
+import {Wallet} from '~src/models/redux/Wallet'
 import {BackgroundDispatcher} from '~src/store/account/dispatchers/BackgroundDispatcher'
 import {BalanceDispatcher} from '~src/store/account/dispatchers/BalanceDispatcher'
 import {ClearStateDispatcher} from '~src/store/account/dispatchers/ClearStateDispatcher'
@@ -28,7 +28,6 @@ export class AccountReducer extends ReducerWrapper<
     SrcIconDispatcher,
     BalanceDispatcher,
     CurrencyDispatcher,
-    AddressDispatcher,
     BackgroundDispatcher,
     ClearStateDispatcher,
   ]
@@ -49,9 +48,6 @@ export class AccountReducer extends ReducerWrapper<
     setCurrency: (currency: Currency) => {
       return this.commit('SET_CURRENCY', {currency})
     },
-    setAddress: (address: string) => {
-      return this.commit('SET_ADDRESS', {address})
-    },
     setBackgroundColor: (backgroundColor: string) => {
       return this.commit('SET_BACKGROUND_COLOR', {backgroundColor})
     },
@@ -63,9 +59,25 @@ export class AccountReducer extends ReducerWrapper<
         const accounts = (await Storage.accounts.load()) ?? []
 
         const account = plainToClass(Account, getState().account)
-        accounts.push(account)
+        const wallet = account.getWallet(getState().app.wallets)
 
-        await Storage.accounts.save(accounts)
+        const indexes = account
+          .getAccountsWithSameWallet(getState().app.accounts)
+          .map((it) => it.index ?? 0)
+
+        account.index = indexes.length ? Math.max(...indexes) + 1 : 0
+
+        if (wallet) {
+          const neoAccount = wallet.generateNeoAccount(account.index)
+
+          if (neoAccount) {
+            account.address = neoAccount.address
+
+            accounts.push(account)
+
+            await Storage.accounts.save(accounts)
+          }
+        }
       }
     },
     updateAndSave: (): AsyncAction => {

@@ -10,8 +10,6 @@ import {NameDispatcher} from '~src/store/wallet/dispatchers/NameDispatcher'
 import {PassphraseDispatcher} from '~src/store/wallet/dispatchers/PassphraseDispatcher'
 import {SecurityPhraseDispatcher} from '~src/store/wallet/dispatchers/SecurityPhraseDispatcher'
 
-const uuidv4 = require('uuid/v4')
-
 export class WalletReducer extends ReducerWrapper<
   WalletType,
   WalletState,
@@ -39,7 +37,7 @@ export class WalletReducer extends ReducerWrapper<
     clearState: () => {
       return this.commit('CLEAR_STATE', {})
     },
-    createAndSave: (): AsyncAction => {
+    createAndSave: (): AsyncAction<string> => {
       return async (dispatch, getState) => {
         const wallets = (await Storage.wallets.load()) ?? []
 
@@ -50,6 +48,8 @@ export class WalletReducer extends ReducerWrapper<
         wallets.push(wallet)
 
         await Storage.wallets.save(wallets)
+
+        return wallet.id
       }
     },
   }

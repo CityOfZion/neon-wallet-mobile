@@ -5,11 +5,9 @@ import React, {useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import {Model} from '~src/app/Model'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedInputText from '~src/components/themed/ThemedInputText'
-import {Wallet} from '~src/models/redux/Wallet'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {TextView, LinearLayout} from '~src/styles/styled-components'
@@ -23,7 +21,11 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
   const [passphrase, setPassphrase] = useState<string>()
   const [confirmPassphrase, setConfirmPassphrase] = useState<string>()
 
-  const dispatch = useDispatch()
+  const currency = useSelector((state: RootState) => state.settings.currency)
+
+  const dispatch = useDispatch<SyncDispatch>()
+  const dispatchAsync = useDispatch<AsyncDispatch>()
+  const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
 
   const submit = async () => {
     if (!walletName || !passphrase || !isValid()) return
@@ -31,10 +33,24 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
     dispatch(RootStore.wallet.actions.setName(walletName))
     dispatch(RootStore.wallet.actions.setPassphrase(passphrase))
 
-    await dispatch(RootStore.wallet.actions.createAndSave())
-    await dispatch(RootStore.app.actions.syncWallets())
+    const id = await dispatchAsyncString(
+      RootStore.wallet.actions.createAndSave()
+    )
+    await dispatchAsync(RootStore.app.actions.syncWallets())
 
-    await dispatch(RootStore.wallet.actions.clearState())
+    // Create first Wallet automatically
+    dispatch(RootStore.account.actions.clearState())
+
+    dispatch(RootStore.account.actions.setIdWallet(id))
+    dispatch(RootStore.account.actions.setName('My account 1'))
+    dispatch(RootStore.account.actions.setBalance(0))
+    dispatch(RootStore.account.actions.setCurrency(currency))
+
+    await dispatchAsync(RootStore.account.actions.createAndSave())
+    await dispatchAsync(RootStore.app.actions.syncAccounts())
+
+    dispatch(RootStore.wallet.actions.clearState())
+    dispatch(RootStore.account.actions.clearState())
 
     props.navigation.reset({
       index: 0,
