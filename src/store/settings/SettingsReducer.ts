@@ -6,10 +6,10 @@ import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {Theme} from '~src/enums/Theme'
 import {Settings} from '~src/models/redux/Settings'
+import {RootStore} from '~src/store/RootStore'
 import {CurrencyDispatcher} from '~src/store/settings/dispatchers/CurrencyDispatcher'
 import {LanguageDispatcher} from '~src/store/settings/dispatchers/LanguageDispatcher'
 import {ThemeDispatcher} from '~src/store/settings/dispatchers/ThemeDispatcher'
-import {RootStore} from '~src/store/RootStore'
 
 export class SettingsReducer extends ReducerWrapper<
   SettingsType,

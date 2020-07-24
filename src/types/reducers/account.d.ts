@@ -17,7 +17,7 @@ export declare global {
   interface AccountState {
     idWallet: string | null
     name: string | null
-    srcIcon: string | null
+    srcIcon: ImageLoadEventData | null
     balance: number | null
     currency: Currency | null
     address: string | null

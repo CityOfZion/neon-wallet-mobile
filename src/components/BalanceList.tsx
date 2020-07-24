@@ -1,12 +1,11 @@
 import React from 'react'
 import {FlatList} from 'react-native'
-import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {Currency} from '~src/enums/Currency'
 import {TokenBalance} from '~src/models/TokenBalance'
 import {TokenValue} from '~src/models/TokenValue'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-import {Currency} from '~src/enums/Currency'
 
 const TableData = (props: {header: string; content: string}) => {
   return (

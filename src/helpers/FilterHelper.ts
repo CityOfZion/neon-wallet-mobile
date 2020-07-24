@@ -99,7 +99,10 @@ export abstract class FilterHelper {
     const precision = decimal ? 2 : 0
     const val = inCents ? (Number(input) / 100).toString() : input
     const translatedPrefix = prefix ? i18n.t(`currencies.${prefix}`) : ''
-    return `${translatedPrefix.substring(0, 3)}${this.decimal(val, precision)}`.replace(
+    return `${translatedPrefix.substring(0, 3)}${this.decimal(
+      val,
+      precision
+    )}`.replace(
       /\B(?=(\d{3})+(?!\d))/g,
       i18n.t('filter.number.thousands') as string
     )

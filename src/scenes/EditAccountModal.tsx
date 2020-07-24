@@ -137,7 +137,7 @@ const EditAccountModal = (props: Props) => {
         <ColorSelector onSelect={setColor} />
 
         <RelativeLayout weight={1} width="100%" justifyContent="flex-end">
-          <LinearLayout bg={'background.5'} width="100%" height="1px" my={32}/>
+          <LinearLayout bg={'background.5'} width="100%" height="1px" my={32} />
 
           <InputLabel
             title={Facade.t('modals.editAccount.deleteAccount.title')}

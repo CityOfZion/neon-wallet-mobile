@@ -1,4 +1,4 @@
-import {Currency} from "~src/enums/Currency";
+import {Currency} from '~src/enums/Currency'
 import {AccountMock} from '~src/models/AccountMock'
 
 export const mockWalletAccounts: AccountMock[] = [

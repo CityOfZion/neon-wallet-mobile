@@ -1,4 +1,5 @@
 import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
+import {ImageLoadEventData} from 'react-native'
 
 import {Currency} from '~src/enums/Currency'
 
@@ -7,7 +8,7 @@ export class Account implements AccountState {
   @HttpExpose()
   idWallet: string | null = null
 
-  srcIcon: string | null = null
+  srcIcon: ImageLoadEventData | null = null
 
   @HttpExpose()
   name: string | null = null

@@ -132,7 +132,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           {isAssetsTabSelected ? (
             <BalanceList
               my="16px"
-              tokenAssets={mockWalletItems[2].currentAssets.assets}
+              tokenAssets={mockWalletItems[2].currentAssets}
             />
           ) : (
             _renderTransactionViewElement()

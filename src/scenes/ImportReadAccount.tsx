@@ -10,11 +10,7 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import {Account} from '~src/models/redux/Account'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootState} from '~src/store/RootStore'
-import {
-  LinearLayout,
-  TextView,
-  ImageView,
-} from '~src/styles/styled-components'
+import {LinearLayout, TextView, ImageView} from '~src/styles/styled-components'
 
 export interface ImportReadAccountProps {
   navigation: StackNavigationProp<MoreStackParamList>
@@ -32,7 +28,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
     (state: RootState) => Facade.theme[state.settings.theme]
   )
   const [inputValue, setInputValue] = useState(defaultDebugAddress)
-  const {currency} = useSelector((state: RootState) => state.app)
+  const {currency} = useSelector((state: RootState) => state.settings)
 
   const persist = () => {
     // TODO: NW-215

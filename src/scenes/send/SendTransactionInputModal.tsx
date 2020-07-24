@@ -1,3 +1,4 @@
+import {RouteProp} from '@react-navigation/native'
 import React, {Fragment, useState} from 'react'
 import {ScrollView, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
@@ -14,7 +15,9 @@ import SwiperPanel, {
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {mockWalletAccounts} from '~src/mocks/mockWalletAccounts'
 import {mockWalletItems} from '~src/mocks/mockWalletItems'
+import {TokenValue} from '~src/models/TokenValue'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {
   ButtonView,
   ImageView,
@@ -22,11 +25,6 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
-import {TokenValue} from '~src/models/TokenValue'
-
-interface Props {
-  navigation: StackNavigationProp<ModalStackParamList>
-}
 
 export enum Priority {
   FAST,
@@ -300,15 +298,21 @@ const AmountField = (props: {
   )
 }
 
+interface Props {
+  route: RouteProp<ModalStackParamList, 'SendTransactionInputModal'>
+  navigation: StackNavigationProp<ModalStackParamList>
+}
+
 const SendTransactionInputModal = (props: Props) => {
   const controller = useSwiperController(true)
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const [account, setAccount] = useState<Account>(mockWalletAccounts[0])
   const [text, setText] = useState('')
   const [amount, setAmount] = useState(0)
   const [token, setToken] = useState<TokenValue | null>(null)
+
+  const {account} = props.route.params
 
   return (
     <SwiperPanel

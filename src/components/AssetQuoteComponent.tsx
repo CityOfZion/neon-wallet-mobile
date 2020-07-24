@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types'
 import React from 'react'
+
+import {Facade} from '~src/app/Facade'
 import {Currency} from '~src/enums/Currency'
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import {AssetQuoteModel} from '~src/models/AssetQuoteModel'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import {Facade} from "~src/app/Facade";
 
 interface Props {
   assetQuote: AssetQuoteModel
@@ -12,14 +14,12 @@ interface Props {
 const AssetQuoteComponent: React.FC<Props> = (props) => {
   //TODO get the real value of asset
   const quoteOfAsset = 12345
-  const quoteText = `${props.assetQuote.name} 1 = ${
-    Facade.t(`currencies.${Currency.USD}`)
-    
-  } ${FilterHelper.decimal(quoteOfAsset, 2)}`
-  const valueText = `${Facade.t(`currencies.${Currency.USD}`)} ${FilterHelper.decimal(
-    quoteOfAsset,
-    2
-  )}`
+  const quoteText = `${props.assetQuote.name} 1 = ${Facade.t(
+    `currencies.${Currency.USD}`
+  )} ${FilterHelper.decimal(quoteOfAsset, 2)}`
+  const valueText = `${Facade.t(
+    `currencies.${Currency.USD}`
+  )} ${FilterHelper.decimal(quoteOfAsset, 2)}`
 
   return (
     <LinearLayout
@@ -89,6 +89,10 @@ const AssetQuoteComponent: React.FC<Props> = (props) => {
       </LinearLayout>
     </LinearLayout>
   )
+}
+
+AssetQuoteComponent.propTypes = {
+  assetQuote: PropTypes.instanceOf(AssetQuoteModel).isRequired,
 }
 
 export default AssetQuoteComponent

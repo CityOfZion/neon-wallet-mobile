@@ -6,6 +6,7 @@ import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
 import {TokenValue} from '~src/models/TokenValue'
+import {Account} from '~src/models/redux/Account'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import CreateAccountModal from '~src/scenes/CreateAccountModal'
 import CurrencyPickerModal from '~src/scenes/CurrencyPickerModal'
@@ -33,10 +34,10 @@ export type ModalStackParamList = {
   CreateAccountModal: undefined
   EditAccountModal: EditAccountModalParam
   ReceiveWalletSelectionModal: undefined
-  ReceiveToAccountModal: undefined
+  ReceiveToAccountModal: {account: Account}
   SendWalletSelectionModal: undefined
   SendTransactionReviewModal: undefined
-  SendTransactionInputModal: undefined
+  SendTransactionInputModal: {account: Account}
   SendTransactionConfirmationModal: undefined
   CustomColor: {onColorPicked: (hex: string) => void}
   WalletContextModal: undefined

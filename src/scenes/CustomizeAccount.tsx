@@ -12,13 +12,13 @@ import InputWithValidation from '~src/components/InputWithValidation'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
+import {Currency} from '~src/enums/Currency'
 import {Account} from '~src/models/redux/Account'
+import {Wallet} from '~src/models/redux/Wallet'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {Wallet} from '~src/models/redux/Wallet'
-import {Currency} from '~src/enums/Currency'
 
 interface Props {
   navigation: StackNavigationProp<MoreStackParamList & RootStackParamList>
@@ -49,7 +49,6 @@ const CustomizeAccount = (props: Props) => {
 
   account.name = name
   account.backgroundColor = color
-
 
   const contentMap: ContentCollection = {
     ImportKey: {

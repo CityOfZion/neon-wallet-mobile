@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {ButtonView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface TabSelectorProps {
