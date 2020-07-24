@@ -5,6 +5,7 @@ import React from 'react'
 import {Alert} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
+import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCard from '~src/components/themed/ThemedCard'
@@ -19,6 +20,23 @@ interface Props {
 const Step1BackupWalletPage: React.FC<Props> = (props) => {
   const {wallet} = props.route.params
 
+  props.navigation.setOptions({
+    headerRight: () =>
+      HeaderActionButton({
+        actionTitle: Facade.t('app.cancel'),
+        actionButtonStyle: 'highlight',
+        actionOnPress: () => {
+          props.navigation.reset({
+            index: 2,
+            routes: [{name: Facade.route.Settings.name}],
+          })
+          props.navigation.navigate(Facade.route.MyWalletOptions.name, {
+            wallet,
+          })
+        },
+      }),
+  })
+
   const infoDialog = () => {
     Alert.alert(
       Facade.t('step1BackupWallet.dialog_title'),
@@ -29,17 +47,6 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
           onPress: () =>
             props.navigation.navigate(Facade.route.Step2BackupWallet.name, {
               wallet,
-              actionTitle: Facade.t('app.cancel'),
-              actionButtonStyle: 'highlight',
-              actionOnPress: () => {
-                props.navigation.reset({
-                  index: 2,
-                  routes: [{name: Facade.route.Settings.name}],
-                })
-                props.navigation.navigate(Facade.route.MyWalletOptions.name, {
-                  wallet,
-                })
-              },
             }),
         },
       ]

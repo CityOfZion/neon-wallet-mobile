@@ -5,6 +5,7 @@ import {Alert, FlatList} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
@@ -20,6 +21,33 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
   )
   const [formedWords, setFormedWords] = useState<string[]>([])
   const [shuffledWords] = useState<string[]>(Facade.lodash.shuffle(words))
+
+  props.navigation.setOptions({
+    headerRight: () =>
+      HeaderActionButton({
+        actionTitle: Facade.t('app.skip'),
+        actionButtonStyle: 'highlight',
+        actionOnPress: () => skipDialog(),
+      }),
+  })
+
+  const skipDialog = () => {
+    Alert.alert(
+      Facade.t('step3CreateWallet.dialog_1_title'),
+      Facade.t('step3CreateWallet.dialog_1_body'),
+      [
+        {
+          text: Facade.t('boolean.true'),
+          onPress: () =>
+            props.navigation.navigate(Facade.route.Step4CreateWallet.name),
+        },
+        {
+          text: Facade.t('boolean.false'),
+          style: 'cancel',
+        },
+      ]
+    )
+  }
 
   const validateAndNext = () => {
     if (formedWords.join() === words.join()) {

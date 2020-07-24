@@ -78,14 +78,23 @@ const WalletCard = (props: WalletCardProps) => {
           width={'100%'}
           source={require('~src/assets/images/wallet-card-label.png')}
         />
-        <LinearLayout bottom={30} orientation="horiz" my={'auto'}>
+        <LinearLayout bottom={'40px'} orientation="horiz" alignItems={'center'}>
           <ImageView
             ml="12px"
             width={28}
             height={24}
             source={require('~src/assets/images/wallet-icon.png')}
           />
-          <TextView ml="8px" fontSize="16px" fontFamily="bold" color="text.0">
+          <TextView
+            ml="8px"
+            width={'70%'}
+            fontSize="16px"
+            fontFamily="bold"
+            color="text.0"
+            allowFontScaling={true}
+            adjustsFontSizeToFit={true}
+            numberOfLines={1}
+          >
             {props.wallet.name?.toUpperCase()}
           </TextView>
         </LinearLayout>

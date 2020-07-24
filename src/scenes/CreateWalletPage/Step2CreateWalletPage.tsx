@@ -44,29 +44,7 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
         {
           text: Facade.t('step2CreateWallet.dialog_dismiss'),
           onPress: () =>
-            props.navigation.navigate(Facade.route.Step3CreateWallet.name, {
-              actionTitle: Facade.t('app.skip'),
-              actionButtonStyle: 'highlight',
-              actionOnPress: () => skipDialog(),
-            }),
-        },
-      ]
-    )
-  }
-
-  const skipDialog = () => {
-    Alert.alert(
-      Facade.t('step3CreateWallet.dialog_1_title'),
-      Facade.t('step3CreateWallet.dialog_1_body'),
-      [
-        {
-          text: Facade.t('boolean.true'),
-          onPress: () =>
-            props.navigation.navigate(Facade.route.Step4CreateWallet.name),
-        },
-        {
-          text: Facade.t('boolean.false'),
-          style: 'cancel',
+            props.navigation.navigate(Facade.route.Step3CreateWallet.name),
         },
       ]
     )

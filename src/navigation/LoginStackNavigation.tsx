@@ -1,18 +1,13 @@
-import {useNavigation} from '@react-navigation/native'
-import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import {StatusBar} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
 import {Facade} from '~src/app/Facade'
-import {Storage} from '~src/app/Storage'
-import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ConfirmPasscodePage from '~src/scenes/LoginPage/ConfirmPasscodePage'
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import PasscodePage from '~src/scenes/LoginPage/PasscodePage'
-import WelcomePage from '~src/scenes/WelcomePage'
 
 export type LoginStackParamList = {
   Welcome: undefined

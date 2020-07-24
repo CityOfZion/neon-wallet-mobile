@@ -1,14 +1,12 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import {AwaitActivity} from '@simpli/react-native-await'
 import PropTypes from 'prop-types'
-import React, {useState} from 'react'
+import React from 'react'
+import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
-import {Storage} from '~src/app/Storage'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {Wallet} from '~src/models/redux/Wallet'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 
@@ -18,15 +16,7 @@ interface Props {
 }
 
 const MyWalletsPage = (props: Props) => {
-  const [wallets, setWallets] = useState<Wallet[]>([])
-
-  const populate = async () => {
-    const wallets = await Storage.wallets.load()
-
-    if (wallets) {
-      setWallets(wallets)
-    }
-  }
+  const wallets = useSelector((state: RootState) => state.app.wallets)
 
   const _menuItem = (wallet: Wallet) => {
     return (
@@ -36,7 +26,6 @@ const MyWalletsPage = (props: Props) => {
         onPress={() =>
           props.navigation.navigate(Facade.route.MyWalletOptions.name, {
             wallet,
-            headerTitle: wallet.name ?? '?',
           })
         }
       />
@@ -44,17 +33,8 @@ const MyWalletsPage = (props: Props) => {
   }
 
   return (
-    <ScreenLayout
-      onLayout={() => Facade.await.run('populate', populate)}
-      padding={20}
-    >
-      <AwaitActivity
-        name={'populate'}
-        size={'large'}
-        loadingView={<ScreenLoader />}
-      >
-        {wallets.map((it) => _menuItem(it))}
-      </AwaitActivity>
+    <ScreenLayout padding={20}>
+      {wallets.map((it) => _menuItem(it))}
     </ScreenLayout>
   )
 }

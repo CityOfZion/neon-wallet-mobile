@@ -2,14 +2,12 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import {Model} from '~src/app/Model'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedInputText from '~src/components/themed/ThemedInputText'
-import {Wallet} from '~src/models/redux/Wallet'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {TextView, LinearLayout} from '~src/styles/styled-components'
@@ -81,6 +79,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
             placeholder={Facade.t('step4CreateWallet.placeholder_walletName')}
             onChangeText={(value: string) => setWalletName(value)}
             value={walletName}
+            maxLength={32}
           />
 
           <ThemedInputText
@@ -93,6 +92,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
             )}
             onChangeText={(value: string) => setPassphrase(value)}
             value={passphrase}
+            maxLength={16}
           />
 
           <ThemedInputText
@@ -104,6 +104,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
             )}
             onChangeText={(value: string) => setConfirmPassphrase(value)}
             value={confirmPassphrase}
+            maxLength={16}
           />
         </LinearLayout>
       </LinearLayout>
