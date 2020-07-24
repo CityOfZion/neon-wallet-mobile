@@ -60,7 +60,7 @@ const GetWalletView = (props: GetWalletProps) => {
       dispatch(RootStore.account.actions.setIdWallet(wallet.id))
 
       props.navigation.navigate(Facade.route.Modal.name, {
-        screen: Facade.route.SampleModal.name,
+        screen: Facade.route.CreateAccountModal.name,
       })
     }
   }

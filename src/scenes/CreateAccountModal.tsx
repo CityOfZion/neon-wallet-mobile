@@ -8,7 +8,6 @@ import ColorSelector from '~src/components/ColorSelector'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
-import {Currency} from '~src/enums/Currency'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -19,7 +18,7 @@ interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
 }
 
-export default function SampleModal(props: Props) {
+export default function CreateAccountModal(props: Props) {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )

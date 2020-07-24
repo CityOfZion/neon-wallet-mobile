@@ -40,7 +40,7 @@ export class WrapperConfig {
     'CustomColor',
     'ReceiveQrCode',
     'QrCodeScanTest',
-    'SampleModal',
+    'CreateAccountModal',
     'ReceiveWalletSelectionModal',
     'ReceiveToAccountModal',
     'SendWalletSelectionModal',

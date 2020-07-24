@@ -169,7 +169,7 @@ const AccountCard: React.FC<Props> = (props) => {
           )}
         </LinearLayout>
 
-        {props.account.balance !== undefined &&
+        {props.account.balance !== null &&
           !props.isStackMode &&
           !props.isCompacted && (
             <TextView

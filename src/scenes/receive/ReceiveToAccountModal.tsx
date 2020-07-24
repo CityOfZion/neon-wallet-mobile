@@ -52,6 +52,7 @@ const TokenField = (props: {
         color={'text.0'}
         marginTop={0}
         marginBottom={20}
+        capitalize={true}
       />
 
       <ButtonView
@@ -65,13 +66,14 @@ const TokenField = (props: {
         <LinearLayout position="relative">
           <InputWithValidation
             color={props.theme.colors.text[0]}
+            invalidColor={props.theme.colors.text[10]}
             fontStyle={'normal'}
             value={props.token?.name ?? ''}
             placeholder={Facade.t(
               'modals.receive.toAccount.selectTokenToReceive'
             )}
             validator={() => true}
-            separatorColor={props.theme.colors.background[3]}
+            separatorColor={props.theme.colors.background[13]}
             sideMargins={0}
             hidePaste={true}
             hideScan={true}
@@ -103,15 +105,17 @@ const AmountField = (props: {
         color={'text.0'}
         marginTop={42}
         marginBottom={20}
+        capitalize={true}
       />
       <InputWithValidation
         onChangeText={(text) => props.setAmount(Number(text))}
-        color={props.theme.colors.text[3]}
+        color={props.theme.colors.text[0]}
+        invalidColor={props.theme.colors.text[10]}
         fontStyle={'normal'}
         value={String(props.amount)}
         placeholder={Facade.t('modals.receive.toAccount.enterAmount')}
         validator={() => true}
-        separatorColor={props.theme.colors.background[3]}
+        separatorColor={props.theme.colors.background[13]}
         sideMargins={0}
         hidePaste={true}
         hideScan={true}
@@ -133,15 +137,17 @@ const ReferenceField = (props: {
         color={'text.0'}
         marginTop={42}
         marginBottom={20}
+        capitalize={true}
       />
       <InputWithValidation
         onChangeText={props.setReference}
-        color={props.theme.colors.text[3]}
+        color={props.theme.colors.text[0]}
+        invalidColor={props.theme.colors.text[10]}
         fontStyle={'normal'}
         value={props.reference}
         placeholder={Facade.t('modals.receive.toAccount.addReference')}
         validator={() => true}
-        separatorColor={props.theme.colors.background[3]}
+        separatorColor={props.theme.colors.background[13]}
         sideMargins={0}
         hidePaste={true}
         hideScan={true}
@@ -188,7 +194,7 @@ const ReceiveToAccountModal = (props: Props) => {
           fontSize="md"
           fontFamily="bold"
         >
-          {mockWalletItems[1].title}
+          {mockWalletItems[1].title.toUpperCase()}
         </TextView>
         <AccountCard account={account} />
         <TabSelector
@@ -197,6 +203,7 @@ const ReceiveToAccountModal = (props: Props) => {
           firstTabLabel={Facade.t('modals.receive.toAccount.yourAddress')}
           secondTabLabel={Facade.t('modals.receive.toAccount.requestTokens')}
           mb={isAddressTabSelected ? 38 : 46}
+          capitalize={true}
         />
         {isAddressTabSelected ? (
           <AddressContent />

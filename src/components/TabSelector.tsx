@@ -7,6 +7,7 @@ interface TabSelectorProps {
   firstTabLabel: string
   secondTabLabel: string
   mb?: number
+  capitalize?: boolean
 }
 
 const TabSelector = (props: TabSelectorProps) => {
@@ -30,7 +31,9 @@ const TabSelector = (props: TabSelectorProps) => {
           borderColor="text.0"
           color={props.isFirstTabSelected ? 'text.0' : 'primary'}
         >
-          {props.firstTabLabel}
+          {props.capitalize
+            ? props.firstTabLabel.toUpperCase()
+            : props.firstTabLabel}
         </TextView>
       </ButtonView>
       <ButtonView
@@ -51,7 +54,9 @@ const TabSelector = (props: TabSelectorProps) => {
           borderColor="text.0"
           color={props.isFirstTabSelected ? 'primary' : 'text.0'}
         >
-          {props.secondTabLabel}
+          {props.capitalize
+            ? props.secondTabLabel.toUpperCase()
+            : props.secondTabLabel}
         </TextView>
       </ButtonView>
     </LinearLayout>
