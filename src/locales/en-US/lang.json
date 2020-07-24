@@ -341,7 +341,7 @@
         "selectTokenToReceive": "Select token to receive",
         "enterAmount": "Enter amount",
         "addReference": "Add a reference",
-        "reference": "REFERENCE",
+        "reference": "Reference",
         "generateQrCode": "Generate QR Code"
       }
     },

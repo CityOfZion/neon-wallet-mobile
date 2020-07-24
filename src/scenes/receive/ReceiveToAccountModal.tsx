@@ -134,7 +134,7 @@ const ReferenceField = (props: {
   return (
     <Fragment>
       <InputLabel
-        title={Facade.t('modals.receive.toAccount.reference')}
+        title={Facade.t('modals.receive.toAccount.reference').toUpperCase()}
         color={'text.0'}
         marginTop={42}
         marginBottom={20}
