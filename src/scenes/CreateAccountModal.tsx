@@ -39,8 +39,6 @@ export default function CreateAccountModal(props: Props) {
 
   const submit = async () => {
     dispatch(RootStore.account.actions.setName(name))
-    // TODO: NW-215
-    dispatch(RootStore.account.actions.setBalance(0))
     dispatch(RootStore.account.actions.setCurrency(currency))
     if (color) dispatch(RootStore.account.actions.setBackgroundColor(color))
 

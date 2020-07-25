@@ -29,16 +29,21 @@ const GetWalletView = (props: GetWalletProps) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    Facade.await.run('populate', populate)
+    Facade.await.run('populate', populate, 500)
   }, [accountsPool])
 
   const populate = async () => {
-    setAccounts(wallet.getAccounts(accountsPool))
-
     wallet.lastVisitedAt = moment().format()
 
     await dispatch(RootStore.app.actions.updateWallet(wallet))
     await dispatch(RootStore.app.actions.saveWallets())
+
+    const accounts = wallet.getAccounts(accountsPool)
+
+    const promises = accounts.map((it) => it.populateBalanceHistory())
+    await Promise.all(promises)
+
+    setAccounts(accounts)
   }
 
   const selectEvent = async (account: Account) => {

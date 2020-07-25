@@ -1,6 +1,9 @@
 import i18n from 'i18n-js'
 import moment from 'moment'
 
+import {Currency} from '~src/enums/Currency'
+import {Lang} from '~src/enums/Lang'
+
 export type InputType = string | number | null
 
 const SATURATION_FACTOR = 0.69 //nice
@@ -73,39 +76,49 @@ export abstract class FilterHelper {
     return value
   }
 
-  static decimal(input?: InputType, precision?: number) {
+  static decimal(
+    input?: InputType,
+    language = Lang.EN_US,
+    minimumFractionDigits = 0
+  ) {
     const num = Number(input)
 
-    let result = this.toString(input)
-    if (precision !== undefined) {
-      result = num.toFixed(precision)
+    try {
+      if (!isNaN(num)) {
+        return num.toLocaleString(language, {
+          style: 'decimal',
+          minimumFractionDigits,
+        })
+      }
+
+      return String(input)
+    } catch {
+      return String(input)
     }
-
-    const separator = i18n.t('filter.number.decimal') as string
-
-    if (separator === ',') {
-      return result.replace(/\./g, ',')
-    }
-
-    return result.replace(/,/g, '.')
   }
 
   static currency(
     input?: InputType,
-    prefix = '',
-    inCents = true,
-    decimal = true
+    currency?: Currency | string | null,
+    language = Lang.EN_US,
+    minimumFractionDigits = 2
   ) {
-    const precision = decimal ? 2 : 0
-    const val = inCents ? (Number(input) / 100).toString() : input
-    const translatedPrefix = prefix ? i18n.t(`currencies.${prefix}`) : ''
-    return `${translatedPrefix.substring(0, 3)}${this.decimal(
-      val,
-      precision
-    )}`.replace(
-      /\B(?=(\d{3})+(?!\d))/g,
-      i18n.t('filter.number.thousands') as string
-    )
+    const num = Number(input)
+
+    try {
+      if (!isNaN(num)) {
+        return num.toLocaleString(language, {
+          style: 'currency',
+          currency: currency ?? undefined,
+          minimumFractionDigits,
+          maximumFractionDigits: 10,
+        })
+      }
+
+      return String(input)
+    } catch {
+      return String(input)
+    }
   }
 
   static hslToHex(h: number, s: number, l: number) {

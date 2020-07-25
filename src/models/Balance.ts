@@ -16,7 +16,7 @@ export class Balance {
   amount: number | null = null
 
   @HttpExpose('asset_symbol')
-  assetSymbol: number | null = null
+  assetSymbol: string | null = null
 
   @HttpExpose('asset_hash')
   assetHash: number | null = null

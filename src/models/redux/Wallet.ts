@@ -26,10 +26,6 @@ export class Wallet implements WalletState {
   previousAssets: TokenBalance = new TokenBalance()
   currentAssets: TokenBalance = new TokenBalance()
 
-  static find(id: string, pool: Wallet[]) {
-    return pool.find((it) => it.id === id) ?? null
-  }
-
   get formattedLastVisitedAt() {
     if (!moment(this.lastVisitedAt).isValid()) return null
 

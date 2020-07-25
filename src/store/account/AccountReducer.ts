@@ -6,9 +6,7 @@ import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {Currency} from '~src/enums/Currency'
 import {Account} from '~src/models/redux/Account'
-import {Wallet} from '~src/models/redux/Wallet'
 import {BackgroundDispatcher} from '~src/store/account/dispatchers/BackgroundDispatcher'
-import {BalanceDispatcher} from '~src/store/account/dispatchers/BalanceDispatcher'
 import {ClearStateDispatcher} from '~src/store/account/dispatchers/ClearStateDispatcher'
 import {CurrencyDispatcher} from '~src/store/account/dispatchers/CurrencyDispatcher'
 import {IdWalletDispatcher} from '~src/store/account/dispatchers/IdWalletDispatcher'
@@ -26,7 +24,6 @@ export class AccountReducer extends ReducerWrapper<
     IdWalletDispatcher,
     NameDispatcher,
     SrcIconDispatcher,
-    BalanceDispatcher,
     CurrencyDispatcher,
     BackgroundDispatcher,
     ClearStateDispatcher,
@@ -42,9 +39,6 @@ export class AccountReducer extends ReducerWrapper<
     setSrcIcon: (srcIcon: ImageLoadEventData | null) => {
       return this.commit('SET_SRC_ICON', {srcIcon})
     },
-    setBalance: (balance: number) => {
-      return this.commit('SET_BALANCE', {balance})
-    },
     setCurrency: (currency: Currency) => {
       return this.commit('SET_CURRENCY', {currency})
     },
@@ -54,7 +48,7 @@ export class AccountReducer extends ReducerWrapper<
     clearState: () => {
       return this.commit('CLEAR_STATE', {})
     },
-    createAndSave: (): AsyncAction => {
+    createAndSave: (): AsyncAction<string> => {
       return async (dispatch, getState) => {
         const accounts = (await Storage.accounts.load()) ?? []
 
@@ -76,8 +70,12 @@ export class AccountReducer extends ReducerWrapper<
             accounts.push(account)
 
             await Storage.accounts.save(accounts)
+
+            return account.address
           }
         }
+
+        throw Error('Something went wrong')
       }
     },
     updateAndSave: (): AsyncAction => {

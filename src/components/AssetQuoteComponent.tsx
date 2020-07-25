@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import {Currency} from '~src/enums/Currency'
@@ -12,14 +13,18 @@ interface Props {
 }
 
 const AssetQuoteComponent: React.FC<Props> = (props) => {
+  const {language} = useSelector((state: RootState) => state.settings)
+
   //TODO get the real value of asset
   const quoteOfAsset = 12345
-  const quoteText = `${props.assetQuote.name} 1 = ${Facade.t(
-    `currencies.${Currency.USD}`
-  )} ${FilterHelper.decimal(quoteOfAsset, 2)}`
-  const valueText = `${Facade.t(
-    `currencies.${Currency.USD}`
-  )} ${FilterHelper.decimal(quoteOfAsset, 2)}`
+
+  const quoteText = `${props.assetQuote.name} 1 = ${Facade.filter.currency(
+    quoteOfAsset,
+    Currency.USD,
+    language
+  )}`
+
+  const valueText = Facade.filter.currency(quoteOfAsset, Currency.USD, language)
 
   return (
     <LinearLayout

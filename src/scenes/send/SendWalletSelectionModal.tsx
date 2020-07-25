@@ -23,7 +23,7 @@ const SendWalletSelectionModal = (props: Props) => {
   const carouselRef = useRef(null)
   const [activeIndex, setActiveIndex] = useState(0)
   const wallets = useSelector((state: RootState) => state.app.wallets)
-  const currency = useSelector((state: RootState) => state.settings.currency)
+  const {currency, language} = useSelector((state: RootState) => state.settings)
 
   return (
     <SwiperPanel
@@ -89,8 +89,7 @@ const SendWalletSelectionModal = (props: Props) => {
             {Facade.filter.currency(
               wallets[activeIndex].currentValue,
               currency,
-              false,
-              true
+              language
             )}
           </TextView>
         </ScrollView>

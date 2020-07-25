@@ -44,7 +44,7 @@ const AppNavigation = (props: Props) => {
   const [onboardingSeen, setOnboardingSeen] = useState(true)
   const [welcomeHidden, setWelcomeHidden] = useState(true)
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AsyncDispatch>()
 
   const populate = async () => {
     const onboardingSeen = await Storage.onboardingSeen.load()
@@ -53,6 +53,7 @@ const AppNavigation = (props: Props) => {
     setOnboardingSeen(onboardingSeen ?? false)
     setWelcomeHidden(welcomeHidden ?? false)
 
+    // Synchronize app reducer with async-storage
     await Sync.init(dispatch)
   }
 

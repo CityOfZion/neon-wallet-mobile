@@ -7,7 +7,7 @@ export declare global {
 
   type AsyncAction<
     Return = void,
-    A extends Action = AnyAction,
+    A extends Action = any,
     E = any
   > = ThunkAction<Promise<Return>, RootState, E, A>
 

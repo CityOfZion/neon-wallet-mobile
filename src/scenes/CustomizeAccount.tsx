@@ -67,8 +67,6 @@ const CustomizeAccount = (props: Props) => {
     if (!isValid()) return
 
     dispatch(RootStore.account.actions.setName(name))
-    // TODO: NW-215
-    dispatch(RootStore.account.actions.setBalance(0))
     dispatch(RootStore.account.actions.setCurrency(Currency.USD))
     if (color) dispatch(RootStore.account.actions.setBackgroundColor(color))
 

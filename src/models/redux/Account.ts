@@ -2,18 +2,30 @@ import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 import {ImageLoadEventData} from 'react-native'
 
 import {Currency} from '~src/enums/Currency'
+import {Lang} from '~src/enums/Lang'
+import {Balance} from '~src/models/Balance'
 import {Wallet} from '~src/models/redux/Wallet'
+import {AddressRequest} from '~src/models/request/AddressRequest'
 
 @HttpExclude()
 export class Account implements AccountState {
+  /**
+   * Used as ID
+   */
   @HttpExpose()
-  idWallet: string | null = null
+  address: string | null = null
 
   /**
    * Used for derivationPath
    */
   @HttpExpose()
   index: number | null = null
+
+  /**
+   * Parent reference
+   */
+  @HttpExpose()
+  idWallet: string | null = null
 
   @HttpExpose()
   srcIcon: ImageLoadEventData | null = null
@@ -22,16 +34,25 @@ export class Account implements AccountState {
   name: string | null = null
 
   @HttpExpose()
-  balance: number | null = null
-
-  @HttpExpose()
   currency: Currency | null = null
 
   @HttpExpose()
-  address: string | null = null
+  backgroundColor = '#00aaff'
 
   @HttpExpose()
-  backgroundColor = '#00aaff'
+  balanceHistory: Balance[] = []
+
+  get lastBalance(): Balance | null {
+    return this.balanceHistory[0]
+  }
+
+  get assetSymbol() {
+    return this.lastBalance?.assetSymbol ?? null
+  }
+
+  get balanceAmount() {
+    return this.lastBalance?.amount ?? 0
+  }
 
   getWallet(pool: Wallet[]) {
     return pool.find((it) => it.id === this.idWallet)
@@ -39,5 +60,14 @@ export class Account implements AccountState {
 
   getAccountsWithSameWallet(pool: Account[]) {
     return pool.filter((it) => it.idWallet === this.idWallet)
+  }
+
+  async populateBalanceHistory() {
+    if (!this.address) return
+
+    const request = new AddressRequest(this.address)
+    const response = await request.getBalance()
+
+    this.balanceHistory = response.balance
   }
 }

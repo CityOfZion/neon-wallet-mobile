@@ -28,7 +28,7 @@ const ListWalletView = (props: WalletProps) => {
   const carouselRef = useRef(null)
 
   const wallets = useSelector((state: RootState) => state.app.wallets)
-  const currency = useSelector((state: RootState) => state.settings.currency)
+  const {currency, language} = useSelector((state: RootState) => state.settings)
 
   const getActiveWallet = (): Wallet | null => {
     return wallets[activeIndex] ?? null
@@ -63,8 +63,7 @@ const ListWalletView = (props: WalletProps) => {
               {Facade.filter.currency(
                 wallet.currentValue ?? 0,
                 currency,
-                false,
-                false
+                language
               )}
             </TextView>
             <ImageView

@@ -24,7 +24,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
   const currency = useSelector((state: RootState) => state.settings.currency)
 
   const dispatch = useDispatch<SyncDispatch>()
-  const dispatchAsync = useDispatch<AsyncDispatch>()
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
 
   const submit = async () => {
@@ -43,10 +43,9 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
 
     dispatch(RootStore.account.actions.setIdWallet(id))
     dispatch(RootStore.account.actions.setName('My account 1'))
-    dispatch(RootStore.account.actions.setBalance(0))
     dispatch(RootStore.account.actions.setCurrency(currency))
 
-    await dispatchAsync(RootStore.account.actions.createAndSave())
+    await dispatchAsyncString(RootStore.account.actions.createAndSave())
     await dispatchAsync(RootStore.app.actions.syncAccounts())
 
     dispatch(RootStore.wallet.actions.clearState())
