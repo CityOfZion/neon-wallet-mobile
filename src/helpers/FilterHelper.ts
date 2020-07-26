@@ -101,7 +101,8 @@ export abstract class FilterHelper {
     input?: InputType,
     currency?: Currency | string | null,
     language = Lang.EN_US,
-    minimumFractionDigits = 2
+    minimumFractionDigits = 2,
+    maximumFractionDigits = 2
   ) {
     const num = Number(input)
 
@@ -111,7 +112,7 @@ export abstract class FilterHelper {
           style: 'currency',
           currency: currency ?? undefined,
           minimumFractionDigits,
-          maximumFractionDigits: 10,
+          maximumFractionDigits,
         })
       }
 

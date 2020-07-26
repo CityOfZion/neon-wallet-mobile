@@ -4,12 +4,6 @@
     "en-US": "Inglês",
     "pt-BR": "Português"
   },
-  "currencies": {
-    "USD": "$",
-    "BRL": "R$",
-    "EUR": "€",
-    "GAS": "GAS"
-  },
   "themes": {
     "DARK": "Escuro",
     "LIGHT": "Claro"

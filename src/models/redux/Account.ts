@@ -1,11 +1,13 @@
 import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 import {ImageLoadEventData} from 'react-native'
 
+import {Facade} from '~src/app/Facade'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {Balance} from '~src/models/Balance'
 import {Wallet} from '~src/models/redux/Wallet'
 import {AddressRequest} from '~src/models/request/AddressRequest'
+import {Exchange} from '~src/types/exchange'
 
 @HttpExclude()
 export class Account implements AccountState {
@@ -60,6 +62,41 @@ export class Account implements AccountState {
 
   getAccountsWithSameWallet(pool: Account[]) {
     return pool.filter((it) => it.idWallet === this.idWallet)
+  }
+
+  exchangeBalanceAmount(currency: Currency, exchange: Exchange) {
+    const {assetSymbol} = this
+
+    if (!assetSymbol) return null
+
+    const ratio = exchange[assetSymbol].to[currency]
+
+    if (!ratio) return null
+
+    return this.balanceAmount * ratio
+  }
+
+  formattedBalanceAmount(
+    currency: Currency,
+    language: Lang,
+    exchange: Exchange
+  ) {
+    // Fallback when balance amount is 0
+    if (this.balanceAmount === 0) {
+      return Facade.filter.currency(this.balanceAmount, currency, language)
+    }
+
+    const amount = this.exchangeBalanceAmount(currency, exchange)
+    if (amount) {
+      return Facade.filter.currency(amount, currency, language)
+    }
+
+    // Fallback in case it fails to calculate the exchange
+    return Facade.filter.currency(
+      this.balanceAmount,
+      this.assetSymbol,
+      language
+    )
   }
 
   async populateBalanceHistory() {

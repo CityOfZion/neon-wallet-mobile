@@ -9,9 +9,11 @@ export type SyncResult = {
 export abstract class Sync {
   static async init(dispatch: AsyncDispatch<any>): Promise<SyncResult> {
     const settings = await dispatch(RootStore.settings.actions.syncSettings())
+
+    const exchange = await dispatch(RootStore.app.actions.syncExchange())
     const wallets = await dispatch(RootStore.app.actions.syncWallets())
     const accounts = await dispatch(RootStore.app.actions.syncAccounts())
 
-    return {settings, wallets, accounts}
+    return {settings, exchange, wallets, accounts}
   }
 }

@@ -42,7 +42,8 @@ interface Props {
 }
 
 const AccountCard: React.FC<Props> = (props) => {
-  const {language} = useSelector((state: RootState) => state.settings)
+  const {exchange} = useSelector((state: RootState) => state.app)
+  const {language, currency} = useSelector((state: RootState) => state.settings)
 
   const [viewHeight, setViewHeight] = useState<number>(0)
   const unit = (viewHeight * 0.1) / 24
@@ -154,10 +155,10 @@ const AccountCard: React.FC<Props> = (props) => {
                 textAlign="center"
                 fontWeight="bold"
               >
-                {Facade.filter.currency(
-                  props.account.balanceAmount,
-                  props.account.assetSymbol,
-                  language
+                {props.account.formattedBalanceAmount(
+                  currency,
+                  language,
+                  exchange
                 )}
               </TextView>
             </LinearLayout>
@@ -198,10 +199,10 @@ const AccountCard: React.FC<Props> = (props) => {
                 textAlign="center"
                 fontWeight="bold"
               >
-                {Facade.filter.currency(
-                  props.account.balanceAmount,
-                  props.account.assetSymbol,
-                  language
+                {props.account.formattedBalanceAmount(
+                  currency,
+                  language,
+                  exchange
                 )}
               </TextView>
             )}

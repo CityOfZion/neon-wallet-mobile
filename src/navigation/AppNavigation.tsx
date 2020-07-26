@@ -46,19 +46,19 @@ const AppNavigation = (props: Props) => {
 
   const dispatch = useDispatch<AsyncDispatch>()
 
-  const populate = async () => {
+  const startApplication = async () => {
     const onboardingSeen = await Storage.onboardingSeen.load()
     const welcomeHidden = await Storage.welcomeHidden.load()
 
     setOnboardingSeen(onboardingSeen ?? false)
     setWelcomeHidden(welcomeHidden ?? false)
 
-    // Synchronize app reducer with async-storage
+    // Synchronize app reducer
     await Sync.init(dispatch)
   }
 
   useEffect(() => {
-    Facade.await.run('application', populate, 1000)
+    Facade.await.run('application', startApplication, 1000)
   }, [])
 
   return (
