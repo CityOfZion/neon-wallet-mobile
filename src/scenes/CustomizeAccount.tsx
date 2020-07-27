@@ -67,14 +67,13 @@ const CustomizeAccount = (props: Props) => {
     if (!isValid()) return
 
     dispatch(RootStore.account.actions.setName(name))
-    // TODO: NW-215
-    dispatch(RootStore.account.actions.setBalance(0))
     dispatch(RootStore.account.actions.setCurrency(Currency.USD))
-    dispatch(RootStore.account.actions.setAddress(account.address!))
     if (color) dispatch(RootStore.account.actions.setBackgroundColor(color))
 
     await dispatch(RootStore.account.actions.createAndSave())
     await dispatch(RootStore.app.actions.syncAccounts())
+
+    dispatch(RootStore.account.actions.clearState())
 
     props.navigation.replace(Facade.route.Tab.name, undefined)
   }

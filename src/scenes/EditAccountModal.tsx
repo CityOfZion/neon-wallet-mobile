@@ -49,12 +49,13 @@ const EditAccountModal = (props: Props) => {
     if (!isValid()) return
 
     dispatch(RootStore.account.actions.setName(name))
-    dispatch(RootStore.account.actions.setAddress(account.address!))
     dispatch(RootStore.account.actions.setBackgroundColor(color))
     dispatch(RootStore.account.actions.setCurrency(currency))
 
     await dispatch(RootStore.account.actions.updateAndSave())
     await dispatch(RootStore.app.actions.syncAccounts())
+
+    dispatch(RootStore.account.actions.clearState())
 
     controller.close()
   }

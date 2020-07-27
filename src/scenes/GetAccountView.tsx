@@ -2,6 +2,7 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useState, useEffect} from 'react'
+import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
@@ -36,6 +37,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
   const [wasDeleted, setAsDeleted] = useState<boolean>(false)
 
+  const {language} = useSelector((state: RootState) => state.settings)
+
   useEffect(() => {
     Facade.await.run('populate', populate)
   }, [account])
@@ -47,7 +50,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }, [wasDeleted])
 
   const populate = async () => {
-    console.log('here')
     setNodes(await NeoNode.getAllNodes())
   }
 
@@ -59,8 +61,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         </TextView>
 
         <TextView color={'text.0'} textAlign={'center'}>
-          {nodes[0] &&
-            Facade.filter.currency(nodes[0].height, '', false, false)}
+          {nodes[0] && Facade.filter.decimal(nodes[0].height, language)}
         </TextView>
       </LinearLayout>
     )

@@ -26,10 +26,6 @@ export class Wallet implements WalletState {
   previousAssets: TokenBalance = new TokenBalance()
   currentAssets: TokenBalance = new TokenBalance()
 
-  static find(id: string, pool: Wallet[]) {
-    return pool.find((it) => it.id === id) ?? null
-  }
-
   get formattedLastVisitedAt() {
     if (!moment(this.lastVisitedAt).isValid()) return null
 
@@ -65,16 +61,16 @@ export class Wallet implements WalletState {
     return pool.filter((it) => it.idWallet === this.id)
   }
 
-  generateWif() {
+  generateWif(index: number) {
     const {securityPhrase} = this
     if (!securityPhrase) return null
-    return AsteroidHelper.generateWif(securityPhrase)
+    return AsteroidHelper.generateWif(securityPhrase, index)
   }
 
-  generateNeoAccount() {
+  generateNeoAccount(index: number) {
     const {securityPhrase} = this
     if (!securityPhrase) return null
 
-    return AsteroidHelper.generateNeoAccount(securityPhrase)
+    return AsteroidHelper.generateNeoAccount(securityPhrase, index)
   }
 }

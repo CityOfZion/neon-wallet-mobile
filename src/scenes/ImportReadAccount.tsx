@@ -34,7 +34,6 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
     // TODO: NW-215
     const account = new Account()
     account.address = inputValue
-    account.balance = 0
     account.currency = currency
     account.srcIcon = require('~src/assets/images/card-neo.png')
 

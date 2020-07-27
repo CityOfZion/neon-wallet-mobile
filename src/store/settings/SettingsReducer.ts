@@ -37,7 +37,7 @@ export class SettingsReducer extends ReducerWrapper<
       return this.commit('SET_THEME', {theme})
     },
 
-    syncSettings: (): AsyncAction => {
+    syncSettings: (): AsyncAction<Settings> => {
       return async (dispatch, getState) => {
         const settings = await Storage.settings.load()
 
@@ -48,6 +48,8 @@ export class SettingsReducer extends ReducerWrapper<
           dispatch(this.commit('SET_CURRENCY', {currency}))
           dispatch(this.commit('SET_THEME', {theme}))
         }
+
+        return settings ?? new Settings()
       }
     },
 

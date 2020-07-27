@@ -8,6 +8,7 @@ import {
   NativeTouchEvent,
   TouchableOpacity,
 } from 'react-native'
+import {useSelector} from 'react-redux'
 import {
   border,
   BorderProps,
@@ -41,6 +42,9 @@ interface Props {
 }
 
 const AccountCard: React.FC<Props> = (props) => {
+  const {exchange} = useSelector((state: RootState) => state.app)
+  const {language, currency} = useSelector((state: RootState) => state.settings)
+
   const [viewHeight, setViewHeight] = useState<number>(0)
   const unit = (viewHeight * 0.1) / 24
 
@@ -131,7 +135,7 @@ const AccountCard: React.FC<Props> = (props) => {
             </TextView>
           </LinearLayout>
 
-          {props.isCompacted && props.account.balance !== null ? (
+          {props.isCompacted ? (
             <LinearLayout ml={10 * unit} alignItems={'flex-start'}>
               <TextView
                 fontFamily={'bold'}
@@ -151,11 +155,10 @@ const AccountCard: React.FC<Props> = (props) => {
                 textAlign="center"
                 fontWeight="bold"
               >
-                {Facade.filter.currency(
-                  props.account.balance,
-                  props.account.currency ?? '?',
-                  false,
-                  false
+                {props.account.formattedBalanceAmount(
+                  currency,
+                  language,
+                  exchange
                 )}
               </TextView>
             </LinearLayout>
@@ -169,19 +172,17 @@ const AccountCard: React.FC<Props> = (props) => {
           )}
         </LinearLayout>
 
-        {props.account.balance !== null &&
-          !props.isStackMode &&
-          !props.isCompacted && (
-            <TextView
-              mb={3 * unit}
-              fontSize={14 * unit}
-              color="white"
-              textAlign="left"
-              fontWeight="bold"
-            >
-              {Facade.t('paymentCard.balance')}
-            </TextView>
-          )}
+        {!props.isStackMode && !props.isCompacted && (
+          <TextView
+            mb={3 * unit}
+            fontSize={14 * unit}
+            color="white"
+            textAlign="left"
+            fontWeight="bold"
+          >
+            {Facade.t('paymentCard.balance')}
+          </TextView>
+        )}
 
         {!props.isStackMode && (
           <LinearLayout
@@ -190,7 +191,7 @@ const AccountCard: React.FC<Props> = (props) => {
             alignItems={'center'}
             weight={1}
           >
-            {props.account.balance !== null && !props.isCompacted && (
+            {!props.isCompacted && (
               <TextView
                 mb={3 * unit}
                 fontSize={48 * unit}
@@ -198,11 +199,10 @@ const AccountCard: React.FC<Props> = (props) => {
                 textAlign="center"
                 fontWeight="bold"
               >
-                {Facade.filter.currency(
-                  props.account.balance,
-                  props.account.currency ?? '?',
-                  false,
-                  false
+                {props.account.formattedBalanceAmount(
+                  currency,
+                  language,
+                  exchange
                 )}
               </TextView>
             )}

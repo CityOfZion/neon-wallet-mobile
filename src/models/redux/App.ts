@@ -2,9 +2,13 @@ import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
+import {Exchange} from '~src/types/exchange'
 
 @HttpExclude()
 export class App implements AppState {
+  @HttpExpose()
+  exchange: Exchange = {}
+
   @HttpExpose()
   wallets: Wallet[] = []
 

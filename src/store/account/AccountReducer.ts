@@ -6,9 +6,7 @@ import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {Currency} from '~src/enums/Currency'
 import {Account} from '~src/models/redux/Account'
-import {AddressDispatcher} from '~src/store/account/dispatchers/AddressDispatcher'
 import {BackgroundDispatcher} from '~src/store/account/dispatchers/BackgroundDispatcher'
-import {BalanceDispatcher} from '~src/store/account/dispatchers/BalanceDispatcher'
 import {ClearStateDispatcher} from '~src/store/account/dispatchers/ClearStateDispatcher'
 import {CurrencyDispatcher} from '~src/store/account/dispatchers/CurrencyDispatcher'
 import {IdWalletDispatcher} from '~src/store/account/dispatchers/IdWalletDispatcher'
@@ -26,9 +24,7 @@ export class AccountReducer extends ReducerWrapper<
     IdWalletDispatcher,
     NameDispatcher,
     SrcIconDispatcher,
-    BalanceDispatcher,
     CurrencyDispatcher,
-    AddressDispatcher,
     BackgroundDispatcher,
     ClearStateDispatcher,
   ]
@@ -43,14 +39,8 @@ export class AccountReducer extends ReducerWrapper<
     setSrcIcon: (srcIcon: ImageLoadEventData | null) => {
       return this.commit('SET_SRC_ICON', {srcIcon})
     },
-    setBalance: (balance: number) => {
-      return this.commit('SET_BALANCE', {balance})
-    },
     setCurrency: (currency: Currency) => {
       return this.commit('SET_CURRENCY', {currency})
-    },
-    setAddress: (address: string) => {
-      return this.commit('SET_ADDRESS', {address})
     },
     setBackgroundColor: (backgroundColor: string) => {
       return this.commit('SET_BACKGROUND_COLOR', {backgroundColor})
@@ -58,14 +48,34 @@ export class AccountReducer extends ReducerWrapper<
     clearState: () => {
       return this.commit('CLEAR_STATE', {})
     },
-    createAndSave: (): AsyncAction => {
+    createAndSave: (): AsyncAction<string> => {
       return async (dispatch, getState) => {
         const accounts = (await Storage.accounts.load()) ?? []
 
         const account = plainToClass(Account, getState().account)
-        accounts.push(account)
+        const wallet = account.getWallet(getState().app.wallets)
 
-        await Storage.accounts.save(accounts)
+        const indexes = account
+          .getAccountsWithSameWallet(getState().app.accounts)
+          .map((it) => it.index ?? 0)
+
+        account.index = indexes.length ? Math.max(...indexes) + 1 : 0
+
+        if (wallet) {
+          const neoAccount = wallet.generateNeoAccount(account.index)
+
+          if (neoAccount) {
+            account.address = neoAccount.address
+
+            accounts.push(account)
+
+            await Storage.accounts.save(accounts)
+
+            return account.address
+          }
+        }
+
+        throw Error('Something went wrong')
       }
     },
     updateAndSave: (): AsyncAction => {

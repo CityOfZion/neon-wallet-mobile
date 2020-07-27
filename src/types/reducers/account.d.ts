@@ -8,19 +8,17 @@ export declare global {
     | 'SET_ID_WALLET'
     | 'SET_NAME'
     | 'SET_SRC_ICON'
-    | 'SET_BALANCE'
     | 'SET_CURRENCY'
-    | 'SET_ADDRESS'
     | 'SET_BACKGROUND_COLOR'
     | 'CLEAR_STATE'
 
   interface AccountState {
+    address: string | null
+    index: number | null
     idWallet: string | null
     name: string | null
     srcIcon: ImageLoadEventData | null
-    balance: number | null
     currency: Currency | null
-    address: string | null
     backgroundColor: string | null
   }
 
