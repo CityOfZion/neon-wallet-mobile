@@ -5,7 +5,7 @@ module.exports = {
     process: true,
     clearInterval: true,
     window: true,
-    TextDecoder: true,
+    Intl: true,
   },
   extends: [
     'universe',

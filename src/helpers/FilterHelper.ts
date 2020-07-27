@@ -85,10 +85,10 @@ export abstract class FilterHelper {
 
     try {
       if (!isNaN(num)) {
-        return num.toLocaleString(language, {
+        return new Intl.NumberFormat(language, {
           style: 'decimal',
           minimumFractionDigits,
-        })
+        }).format(num)
       }
 
       return String(input)
@@ -108,12 +108,12 @@ export abstract class FilterHelper {
 
     try {
       if (!isNaN(num)) {
-        return num.toLocaleString(language, {
+        return new Intl.NumberFormat(language, {
           style: 'currency',
           currency: currency ?? undefined,
           minimumFractionDigits,
           maximumFractionDigits,
-        })
+        }).format(num)
       }
 
       return String(input)

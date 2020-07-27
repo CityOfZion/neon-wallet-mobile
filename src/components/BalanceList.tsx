@@ -1,5 +1,6 @@
 import React from 'react'
 import {FlatList} from 'react-native'
+import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import {Currency} from '~src/enums/Currency'
@@ -21,7 +22,7 @@ const TableData = (props: {header: string; content: string}) => {
 }
 
 const BalanceListItem = (props: {item: TokenValue}) => {
-  const currency = Facade.t(`currencies.${Currency.USD}`)
+  const {language} = useSelector((state: RootState) => state.settings)
 
   return (
     <LinearLayout orientation="horiz" alignItems="center">
@@ -39,7 +40,11 @@ const BalanceListItem = (props: {item: TokenValue}) => {
       />
       <TableData
         header={Facade.t('components.balanceList.value')}
-        content={`${currency}${props.item.value}`}
+        content={Facade.filter.currency(
+          props.item.value,
+          Currency.USD,
+          language
+        )}
       />
     </LinearLayout>
   )
