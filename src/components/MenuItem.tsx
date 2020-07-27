@@ -71,10 +71,19 @@ const MenuItem = (props: MenuItemProps) => {
               resizeMode="contain"
             />
           )}
-          <TextView color="text.0" fontSize={'lg'} fontFamily="semibold">
+
+          <TextView
+            weight={1}
+            color="text.0"
+            fontSize={'lg'}
+            fontFamily="semibold"
+            allowFontScaling={true}
+            adjustsFontSizeToFit={true}
+            numberOfLines={1}
+          >
             {props.title}
           </TextView>
-          <LinearLayout weight={1} />
+
           <TextView
             fontSize={'md'}
             fontFamily="semibold"

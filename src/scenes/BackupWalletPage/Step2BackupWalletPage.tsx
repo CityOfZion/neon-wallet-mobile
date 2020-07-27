@@ -5,6 +5,7 @@ import React, {useState} from 'react'
 import {Alert, FlatList} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
+import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
@@ -22,11 +23,10 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
   const [formedWords, setFormedWords] = useState<string[]>([])
   const [shuffledWords] = useState<string[]>(Facade.lodash.shuffle(words))
 
-  const validateAndNext = () => {
-    if (formedWords.join() === words.join()) {
-      props.navigation.navigate(Facade.route.Step3BackupWallet.name, {
-        wallet,
-        actionTitle: Facade.t('app.done'),
+  props.navigation.setOptions({
+    headerRight: () =>
+      HeaderActionButton({
+        actionTitle: Facade.t('app.cancel'),
         actionButtonStyle: 'highlight',
         actionOnPress: () => {
           props.navigation.reset({
@@ -37,6 +37,14 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
             wallet,
           })
         },
+      }),
+  })
+
+  const validateAndNext = () => {
+    if (formedWords.join() === words.join()) {
+      props.navigation.reset({
+        index: 0,
+        routes: [{name: Facade.route.Step3BackupWallet.name, params: {wallet}}],
       })
     } else {
       Alert.alert(

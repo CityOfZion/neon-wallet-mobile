@@ -5,6 +5,7 @@ import {DefaultTheme} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
+import HeaderBar from '~src/components/layout/HeaderBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 
@@ -16,6 +17,13 @@ interface Props {
 
 const MyWalletOptionsPage = (props: Props) => {
   const {wallet} = props.route.params
+
+  props.navigation.setOptions({
+    headerTitle: () =>
+      HeaderBar({
+        title: wallet.name ?? '',
+      }),
+  })
 
   return (
     <ScreenLayout padding={20}>
@@ -35,17 +43,6 @@ const MyWalletOptionsPage = (props: Props) => {
         onPress={() =>
           props.navigation.navigate(Facade.route.Step1BackupWallet.name, {
             wallet,
-            actionTitle: Facade.t('app.cancel'),
-            actionButtonStyle: 'highlight',
-            actionOnPress: () => {
-              props.navigation.reset({
-                index: 2,
-                routes: [{name: Facade.route.Settings.name}],
-              })
-              props.navigation.navigate(Facade.route.MyWalletOptions.name, {
-                wallet,
-              })
-            },
           })
         }
       />
