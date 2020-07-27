@@ -15,6 +15,7 @@ interface Props {
   transactionModel?: TransactionModel
   isHistory?: boolean
   index?: number
+  lastIndex?: number
 }
 const TransactionsList: React.FC<Props> = (props) => {
   const _renderTransaction = () => {
@@ -28,7 +29,7 @@ const TransactionsList: React.FC<Props> = (props) => {
                   <ImageView
                     alignSelf="center"
                     source={
-                      props.transactionModel && props.transactionModel.srcIcon
+                      props.transactionModel && props.transactionModel.srcIcon && props.isHistory
                         ? props.transactionModel.srcIcon
                         : require('~src/assets/images/clock-white.png')
                     }
@@ -87,7 +88,7 @@ const TransactionsList: React.FC<Props> = (props) => {
                   mt="10px"
                   mb="10px"
                   borderStyle="dotted"
-                  borderColor="text.0"
+                  borderColor="text.2"
                   borderWidth={0.4}
                 />
               )}
@@ -150,7 +151,7 @@ const TransactionsList: React.FC<Props> = (props) => {
           fontSize="14px"
           fontFamily="medium"
           mb="12px"
-          mt="12px"
+          mt="26px"
         >
           {props.isHistory &&
           props.transactionModel &&
@@ -160,13 +161,14 @@ const TransactionsList: React.FC<Props> = (props) => {
         </TextView>
       )}
       {_renderTransaction()}
+      {props.index != props.lastIndex && (
       <LinearLayout
         mt="10px"
         mb="10px"
         borderStyle="solid"
-        borderColor="text.0"
+        borderColor="text.2"
         borderWidth={0.4}
-      />
+      />)}
     </LinearLayout>
   )
 }
@@ -175,10 +177,12 @@ TransactionsList.propTypes = {
   transactionModel: PropTypes.instanceOf(TransactionModel),
   isHistory: PropTypes.bool,
   index: PropTypes.number,
+  lastIndex: PropTypes.number,
 }
 
 TransactionsList.defaultProps = {
   index: 0,
+  lastIndex: 0,
 }
 
 export default TransactionsList
