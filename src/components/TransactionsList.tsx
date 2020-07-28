@@ -29,7 +29,9 @@ const TransactionsList: React.FC<Props> = (props) => {
                   <ImageView
                     alignSelf="center"
                     source={
-                      props.transactionModel && props.transactionModel.srcIcon && props.isHistory
+                      props.transactionModel &&
+                      props.transactionModel.srcIcon &&
+                      props.isHistory
                         ? props.transactionModel.srcIcon
                         : require('~src/assets/images/clock-white.png')
                     }
@@ -162,13 +164,14 @@ const TransactionsList: React.FC<Props> = (props) => {
       )}
       {_renderTransaction()}
       {props.index != props.lastIndex && (
-      <LinearLayout
-        mt="10px"
-        mb="10px"
-        borderStyle="solid"
-        borderColor="text.2"
-        borderWidth={0.4}
-      />)}
+        <LinearLayout
+          mt="10px"
+          mb="10px"
+          borderStyle="solid"
+          borderColor="text.2"
+          borderWidth={0.4}
+        />
+      )}
     </LinearLayout>
   )
 }
