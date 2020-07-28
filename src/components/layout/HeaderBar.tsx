@@ -45,13 +45,16 @@ const HeaderBar: React.FC<HeaderProps> = (
     return (
       <TextView
         pt={2}
+        mt={Facade.utils.isAndroid ? -2 : 0}
         textAlign="center"
         color="text.0"
         fontSize={Facade.scale(24)}
         allowFontScaling={true}
         adjustsFontSizeToFit={true}
         numberOfLines={1}
-        style={{includeFontPadding: false}}
+        style={{
+          includeFontPadding: false,
+        }}
       >
         {params?.headerTitle ?? headerProps.title}
       </TextView>
