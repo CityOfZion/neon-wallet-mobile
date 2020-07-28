@@ -1,4 +1,8 @@
-import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
+import {
+  HttpExclude,
+  HttpExpose,
+  ResponseSerialize,
+} from '@simpli/serialized-request'
 import {ImageLoadEventData} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
@@ -42,10 +46,11 @@ export class Account implements AccountState {
   backgroundColor = '#00aaff'
 
   @HttpExpose()
+  @ResponseSerialize(Balance)
   balanceHistory: Balance[] = []
 
   get lastBalance(): Balance | null {
-    return this.balanceHistory[0]
+    return this.balanceHistory?.[0]
   }
 
   get assetSymbol() {

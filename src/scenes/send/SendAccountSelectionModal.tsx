@@ -12,7 +12,6 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {Balance} from '~src/models/Balance'
 import {TokenBalance} from '~src/models/TokenBalance'
 import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -29,9 +28,7 @@ const SendAccountSelectionModal = (props: Props) => {
 
   const [accounts, setAccounts] = useState<Account[]>([])
   const [selectedAccount, setSelectedAccount] = useState<Account>()
-  const [balanceList, setBalanceList] = useState<Balance[]>([])
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const [tokenBalance, setTokenBalance] = useState<Balance>()
 
   useEffect(() => {
     Facade.await.run('populate', populate)
@@ -70,8 +67,6 @@ const SendAccountSelectionModal = (props: Props) => {
     accounts.unshift(lastItem)
 
     setAccounts(accounts)
-    // TODO: NW-228 Integrate Account Card with its Balance, getting it from the WS
-    setTokenBalance(new Balance())
   }
 
   return (
