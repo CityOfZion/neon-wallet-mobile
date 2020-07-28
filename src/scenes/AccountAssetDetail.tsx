@@ -37,7 +37,7 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
   const [asset, setAsset] = useState<AssetQuoteModel>(assetModel)
 
   const _renderTransactionViewElement = () => {
-    let lastIndex = mockAccountAssetDetails.length - 1
+    const lastIndex = mockAccountAssetDetails.length - 1
     return mockAccountAssetDetails.map(
       (transActionModel: TransactionModel, i: number) => {
         return (
