@@ -14,12 +14,24 @@ import MoreStackNavigation from '~src/navigation/MoreStackNavigation'
 import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation'
 import SettingsStackNavigation from '~src/navigation/SettingsStackNavigation'
 import WalletStackNavigation from '~src/navigation/WalletsStackNavigation'
+import {CustomizeAccountParams} from '~src/scenes/CustomizeAccount'
+import {ImportReadAccountParams} from '~src/scenes/ImportReadAccount'
+import {PassphraseParams} from '~src/scenes/Passphrase'
 
 export type TabStackParamList = {
   ListWallets: undefined
   Contacts: undefined
   Settings: undefined
-  More: DefaultNavigationParam | undefined
+  More:
+    | DefaultNavigationParam<
+        DefaultNavigationParam<
+          | Partial<CustomizeAccountParams>
+          | ImportReadAccountParams
+          | PassphraseParams
+          | undefined
+        >
+      >
+    | undefined
 }
 
 export type TabParams =

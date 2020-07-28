@@ -21,6 +21,7 @@ import TabNavigation, {
   TabStackParamList,
 } from '~src/navigation/TabNavigation'
 import OnboardingPage from '~src/scenes/OnboardingPage'
+import QRCodeScan from '~src/scenes/QRCodeScan'
 import {RootStore} from '~src/store/RootStore'
 
 export type RootStackParamList = {
@@ -28,7 +29,8 @@ export type RootStackParamList = {
   Modal: ModalParams
   Login: undefined
   Onboarding: undefined
-} & TabStackParamList
+  QRCodeScan: undefined
+}
 
 interface Props {
   route?: RouteProp<RootStackParamList, 'Modal'>
@@ -126,6 +128,10 @@ const AppNavigation = (props: Props) => {
                 <RootStack.Screen
                   name={Facade.route.Onboarding.name}
                   component={OnboardingPage}
+                />
+                <RootStack.Screen
+                  name={Facade.route.QRCodeScan.name}
+                  component={QRCodeScan}
                 />
                 <RootStack.Screen
                   name={Facade.route.Login.name}

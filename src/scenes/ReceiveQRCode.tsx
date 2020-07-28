@@ -185,5 +185,4 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
     </LinearGradient>
   )
 }
-
 export default ReceiveQRCode

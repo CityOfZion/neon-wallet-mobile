@@ -13,7 +13,11 @@ import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootState} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
-export interface PassphraseProps {
+export interface PassphraseParams {
+  encryptedKey: string
+}
+
+interface PassphraseProps {
   navigation: StackNavigationProp<MoreStackParamList>
   route: RouteProp<MoreStackParamList, 'Passphrase'>
 }

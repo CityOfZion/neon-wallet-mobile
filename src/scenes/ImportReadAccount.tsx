@@ -12,7 +12,11 @@ import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootState} from '~src/store/RootStore'
 import {LinearLayout, TextView, ImageView} from '~src/styles/styled-components'
 
-export interface ImportReadAccountProps {
+export interface ImportReadAccountParams {
+  address?: string
+}
+
+interface ImportReadAccountProps {
   navigation: StackNavigationProp<MoreStackParamList>
 }
 

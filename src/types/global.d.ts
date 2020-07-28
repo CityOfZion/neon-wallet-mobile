@@ -23,9 +23,10 @@ export declare global {
   }
 
   // Navigation param list
-  interface DefaultNavigationParam {
+  interface DefaultNavigationParam<T = undefined> {
     screen: RouteName
     initial?: boolean
+    params?: T
   }
 
   // Navigation param type

@@ -29,17 +29,14 @@ export default function QuickToolsMenu(props: Props) {
       title: Facade.t('quickTools.qrCode.title'),
       subtitle: Facade.t('quickTools.qrCode.subtitle'),
       source: require('~src/assets/images/icon-circle-qr-primary.png'),
-      onClick: () =>
-        navigation.navigate(Facade.route.QuickTools.name, {
-          screen: Facade.route.QrCodeScanTest.name,
-        }),
+      onClick: () => navigation.navigate(Facade.route.QRCodeScan.name),
     },
     {
       title: Facade.t('quickTools.send.title'),
       subtitle: Facade.t('quickTools.send.subtitle'),
       source: require('~src/assets/images/icon-circle-send-primary.png'),
       onClick: () =>
-        navigation.navigate('Modal', {
+        navigation.navigate(Facade.route.Modal.name, {
           screen: Facade.route.SendWalletSelectionModal.name,
         }),
     },
@@ -48,7 +45,7 @@ export default function QuickToolsMenu(props: Props) {
       subtitle: Facade.t('quickTools.receive.subtitle'),
       source: require('~src/assets/images/icon-circle-receive-primary.png'),
       onClick: () =>
-        navigation.navigate('Modal', {
+        navigation.navigate(Facade.route.Modal.name, {
           screen: Facade.route.ReceiveWalletSelectionModal.name,
         }),
     },
