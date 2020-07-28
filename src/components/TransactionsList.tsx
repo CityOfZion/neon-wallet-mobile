@@ -60,10 +60,10 @@ const TransactionsList: React.FC<Props> = (props) => {
               <LinearLayout weight={3} orientation="vert">
                 {index === 0 && (
                   <LinearLayout orientation="horiz">
-                    <TextView weight={1} fontSize="14px" color="text.2">
+                    <TextView weight={1} fontSize="14px" color="text.2" width='50%'>
                       {Facade.t('components.transactionsList.sentTo')}
                     </TextView>
-                    <TextView weight={1.1} fontSize="14px" color="text.2">
+                    <TextView weight={1} fontSize="14px" color="text.2"  width='50%'>
                       {Facade.t('components.transactionsList.value')}
                     </TextView>
                   </LinearLayout>
@@ -99,6 +99,7 @@ const TransactionsList: React.FC<Props> = (props) => {
                 <TextView
                   mr="10px"
                   numberOfLines={1}
+                  width='50%'
                   ellipsizeMode="middle"
                   weight={1}
                   fontSize="16px"
@@ -107,11 +108,11 @@ const TransactionsList: React.FC<Props> = (props) => {
                   {receiver.nameOrAdress}
                 </TextView>
               ) : (
-                <TextView weight={1} fontSize="16px" color="text.0">
+                <TextView weight={1}  width='50%' fontSize="16px" color="text.0">
                   {receiver.nameOrAdress}
                 </TextView>
               )}
-              <LinearLayout orientation="verti">
+              <LinearLayout orientation="verti"  width='50%'>
                 {_renderAssets(receiver)}
               </LinearLayout>
             </LinearLayout>
