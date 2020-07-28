@@ -16,6 +16,7 @@ export declare global {
     secondary: string
     tertiary: string
     quaternary: string
+    quinary: string
     background: ColorGroup
     text: ColorGroup
     card: ColorGroup
