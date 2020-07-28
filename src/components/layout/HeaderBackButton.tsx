@@ -21,12 +21,11 @@ const HeaderBackButton = (props: StackHeaderLeftButtonProps) => {
             />
 
             <TextView
-              mt={2}
+              mt={Facade.utils.isAndroid ? -2 : 2}
               fontSize={'lg'}
               color={'text.0'}
               style={{
                 includeFontPadding: false,
-                marginTop: Facade.utils.isAndroid ? -2 : 0,
               }}
             >
               {Facade.t('app.back')}
