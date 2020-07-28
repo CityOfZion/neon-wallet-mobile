@@ -25,7 +25,13 @@ const Step1CreateWalletPage: React.FC<Props> = (props) => {
           bg={'primary'}
           alignItems={'center'}
         >
-          <TextView mt={1} color={'black'} fontSize={'md'} fontFamily={'bold'}>
+          <TextView
+            mt={1}
+            color={'black'}
+            fontSize={'md'}
+            fontFamily={'bold'}
+            style={{includeFontPadding: false}}
+          >
             {index}
           </TextView>
         </LinearLayout>

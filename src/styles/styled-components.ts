@@ -24,7 +24,6 @@ const {
 // TODO: iOS has a natural margin at the bottom of the text view, so we need to think of a solution to make both OS the same
 export const TextView = styled.Text<TextViewProps>`
   font-family: 'regular';
-  include-font-padding: false;
   ${border}
   ${color}
   ${typography}

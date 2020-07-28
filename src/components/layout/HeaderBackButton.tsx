@@ -20,7 +20,15 @@ const HeaderBackButton = (props: StackHeaderLeftButtonProps) => {
               source={require('~src/assets/images/icon_arrow_left_white.png')}
             />
 
-            <TextView mt={2} fontSize={'lg'} color={'text.0'}>
+            <TextView
+              mt={2}
+              fontSize={'lg'}
+              color={'text.0'}
+              style={{
+                includeFontPadding: false,
+                marginTop: Facade.utils.isAndroid ? -2 : 0,
+              }}
+            >
               {Facade.t('app.back')}
             </TextView>
           </LinearLayout>

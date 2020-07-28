@@ -165,6 +165,8 @@ const ButtonView = styled.TouchableHighlight``
 
 const LabelView = styled(TextView)`
   text-align: center;
+  include-font-padding: false;
+  margin-top: ${Facade.utils.isAndroid ? '-2px' : '0'};
 `
 
 export default ThemedButton

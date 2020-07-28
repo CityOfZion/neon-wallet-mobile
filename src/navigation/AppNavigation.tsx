@@ -11,6 +11,7 @@ import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import {Sync} from '~src/app/Sync'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
+import {AsteroidHelper} from '~src/helpers/AsteroidHelper'
 import LoginStackNavigation from '~src/navigation/LoginStackNavigation'
 import ModalStackNavigation, {
   ModalParams,
@@ -20,6 +21,7 @@ import TabNavigation, {
   TabStackParamList,
 } from '~src/navigation/TabNavigation'
 import OnboardingPage from '~src/scenes/OnboardingPage'
+import {RootStore} from '~src/store/RootStore'
 
 export type RootStackParamList = {
   Tab: TabParams
@@ -44,7 +46,9 @@ const AppNavigation = (props: Props) => {
   const [onboardingSeen, setOnboardingSeen] = useState(true)
   const [welcomeHidden, setWelcomeHidden] = useState(true)
 
-  const dispatch = useDispatch<AsyncDispatch>()
+  const dispatch = useDispatch<SyncDispatch>()
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
 
   const startApplication = async () => {
     const onboardingSeen = await Storage.onboardingSeen.load()
@@ -54,7 +58,42 @@ const AppNavigation = (props: Props) => {
     setWelcomeHidden(welcomeHidden ?? false)
 
     // Synchronize app reducer
-    await Sync.init(dispatch)
+    const result = await Sync.init(dispatchAsync)
+
+    if (result.wallets.length === 0) {
+      // NW-221 The app must create a wallet for the user when it first runs
+      await createFirstWallet()
+    }
+  }
+
+  const createFirstWallet = async () => {
+    const words = AsteroidHelper.generateMnemonicWords() ?? []
+
+    dispatch(RootStore.wallet.actions.clearState())
+
+    dispatch(RootStore.wallet.actions.setName('My First Wallet'))
+    dispatch(RootStore.wallet.actions.setSecurityPhrase(words.join(' ')))
+
+    const id = await dispatchAsyncString(
+      RootStore.wallet.actions.createAndSave()
+    )
+    await dispatchAsync(RootStore.app.actions.syncWallets())
+
+    dispatch(RootStore.wallet.actions.clearState())
+
+    await createFirstAccount(id)
+  }
+
+  const createFirstAccount = async (id: string) => {
+    dispatch(RootStore.account.actions.clearState())
+
+    dispatch(RootStore.account.actions.setIdWallet(id))
+    dispatch(RootStore.account.actions.setName('My account 1'))
+
+    await dispatchAsyncString(RootStore.account.actions.createAndSave())
+    await dispatchAsync(RootStore.app.actions.syncAccounts())
+
+    dispatch(RootStore.account.actions.clearState())
   }
 
   useEffect(() => {

@@ -143,6 +143,7 @@ const AccountCard: React.FC<Props> = (props) => {
                 color="white"
                 textAlign="left"
                 fontWeight="bold"
+                includeFontPadding={true}
               >
                 {Facade.t('paymentCard.balance')}
               </TextView>
@@ -210,10 +211,13 @@ const AccountCard: React.FC<Props> = (props) => {
         )}
 
         {props.account.address && (
-          <LinearLayout orientation={'horiz'} alignItems={'flex-end'}>
+          <LinearLayout
+            mt={10 * unit}
+            orientation={'horiz'}
+            alignItems={'flex-end'}
+          >
             <LinearLayout weight={1}>
               <TextView
-                mb={2 * unit}
                 fontSize={14 * unit}
                 color="white"
                 textAlign="left"
@@ -232,28 +236,26 @@ const AccountCard: React.FC<Props> = (props) => {
               </TextView>
             </LinearLayout>
 
-            {!props.isStackMode && (
-              <TouchableOpacity
-                onPress={() => {
-                  if (props.account.address) {
-                    Facade.utils.copyToClipboard(props.account.address)
-                  }
-                }}
-                style={{
-                  paddingTop: 12 * unit,
-                  paddingLeft: 12 * unit,
-                  paddingBottom: 6 * unit,
-                  paddingRight: 6 * unit,
-                }}
-              >
-                <ImageView
-                  width={20 * unit}
-                  height={24 * unit}
-                  source={require('~src/assets/images/card-copy.png')}
-                  style={{opacity: 0.5}}
-                />
-              </TouchableOpacity>
-            )}
+            <TouchableOpacity
+              onPress={() => {
+                if (props.account.address) {
+                  Facade.utils.copyToClipboard(props.account.address)
+                }
+              }}
+              style={{
+                paddingTop: 12 * unit,
+                paddingLeft: 12 * unit,
+                paddingBottom: 6 * unit,
+                paddingRight: 6 * unit,
+              }}
+            >
+              <ImageView
+                width={20 * unit}
+                height={24 * unit}
+                source={require('~src/assets/images/card-copy.png')}
+                style={{opacity: 0.5}}
+              />
+            </TouchableOpacity>
           </LinearLayout>
         )}
       </LinearLayout>
@@ -296,6 +298,7 @@ const PaymentCardView = styled.TouchableOpacity<
   ${weight}
   box-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
   elevation: 8;
+  overflow: hidden;
 `
 
 const BrightCard = styled(LinearGradient)`
