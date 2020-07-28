@@ -25,6 +25,7 @@ interface Props {
   value: string
   validator: (text: string) => boolean
   invalidMessage?: string
+  invalidMessageColor?: string
   separatorColor: string
   invalidSeparatorColor?: string
   sideMargins?: number
@@ -84,16 +85,23 @@ const InputWithValidation = (props: Props) => {
             source={require('~/src/assets/images/icon-alert-purple.png')}
           />
         )}
-        {props.onClearPress && (
-          <TouchableWithoutFeedback onPress={props.onClearPress}>
+        {props.onClearPress && props.value.length > 0 ? (
+          <TouchableWithoutFeedback
+            onPress={props.onClearPress}
+            disabled={!props.value}
+          >
             <ImageView
+              opacity={props.value ? 1 : 0}
               width="34px"
               height="34px"
+              mb="-6px"
               resizeMode={'center'}
               alignSelf="center"
               source={require('~/src/assets/images/icon-cancel-grey.png')}
             />
           </TouchableWithoutFeedback>
+        ) : (
+          <LinearLayout height="34px" mb="-6px" />
         )}
       </LinearLayout>
       <LinearLayout
@@ -110,7 +118,7 @@ const InputWithValidation = (props: Props) => {
       <LinearLayout height="12px" justifyContent="flex-start">
         <TextView
           fontStyle="italic"
-          color={theme.colors.background[5]}
+          color={props.invalidMessageColor ?? theme.colors.background[5]}
           fontSize={12}
           fontFamily="regular"
           textAlign="right"

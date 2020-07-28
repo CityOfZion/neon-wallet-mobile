@@ -25,8 +25,6 @@ export default function CreateAccountModal(props: Props) {
   )
   const currency = useSelector((state: RootState) => state.settings.currency)
   const controller = useSwiperController(true)
-  const {idWallet} = useSelector((state: RootState) => state.account)
-  const walletsPool = useSelector((state: RootState) => state.app.wallets)
   const dispatch = useDispatch()
 
   const [name, setName] = useState<string>('')
@@ -114,6 +112,8 @@ export default function CreateAccountModal(props: Props) {
             color={theme.colors.text[0]}
             invalidColor={theme.colors.background[3]}
             separatorColor={theme.colors.background[5]}
+            invalidSeparatorColor={theme.colors.quinary}
+            invalidMessageColor={theme.colors.quinary}
             hidePaste={true}
             hideScan={true}
             sideMargins={0}

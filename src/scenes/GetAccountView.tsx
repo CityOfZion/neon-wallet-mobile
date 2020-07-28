@@ -1,7 +1,7 @@
-import {RouteProp} from '@react-navigation/native'
+import {RouteProp, useFocusEffect} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useCallback} from 'react'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -32,24 +32,25 @@ interface GetAccountViewProps {
 }
 
 const GetAccountView = (props: GetAccountViewProps) => {
-  const account = props.route.params.account
+  const accountsPool = useSelector((state: RootState) => state.app.accounts)
+
+  const [account, setAccount] = useState<Account>(props.route.params.account)
   const [nodes, setNodes] = useState<NeoNode[]>([])
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
-  const [wasDeleted, setAsDeleted] = useState<boolean>(false)
 
   const {language} = useSelector((state: RootState) => state.settings)
 
-  useEffect(() => {
-    Facade.await.run('populate', populate)
-  }, [account])
-
-  useEffect(() => {
-    if (wasDeleted) {
-      props.navigation.goBack()
-    }
-  }, [wasDeleted])
+  useFocusEffect(
+    useCallback(() => {
+      Facade.await.run('populate', populate)
+    }, [accountsPool])
+  )
 
   const populate = async () => {
+    setAccount(
+      accountsPool.find((acc) => acc.address === account?.address) ??
+        new Account()
+    )
     setNodes(await NeoNode.getAllNodes())
   }
 
@@ -83,7 +84,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   })
 
   const _renderTransactionViewElement = () => {
-    let lastIndex = mockAccountAssetDetails.length - 1
+    const lastIndex = mockAccountAssetDetails.length - 1
     return mockAccountAssetDetails.map(
       (transActionModel: TransactionModel, i: number) => {
         return (

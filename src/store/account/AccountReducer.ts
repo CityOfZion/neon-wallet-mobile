@@ -78,13 +78,14 @@ export class AccountReducer extends ReducerWrapper<
         throw Error('Something went wrong')
       }
     },
-    updateAndSave: (): AsyncAction => {
+    updateAndSave: (address: string): AsyncAction => {
       return async (dispatch, getState) => {
         const accounts = (await Storage.accounts.load()) ?? []
 
         const edited = plainToClass(Account, getState().account)
+
         const account = accounts.find(
-          (acc) => acc.address && acc.address === edited.address
+          (acc) => acc.address && acc.address === address
         )
 
         if (account) {

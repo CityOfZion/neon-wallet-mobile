@@ -52,7 +52,7 @@ const EditAccountModal = (props: Props) => {
     dispatch(RootStore.account.actions.setBackgroundColor(color))
     dispatch(RootStore.account.actions.setCurrency(currency))
 
-    await dispatch(RootStore.account.actions.updateAndSave())
+    await dispatch(RootStore.account.actions.updateAndSave(account.address!))
     await dispatch(RootStore.app.actions.syncAccounts())
 
     dispatch(RootStore.account.actions.clearState())
@@ -120,6 +120,8 @@ const EditAccountModal = (props: Props) => {
             color={theme.colors.text[0]}
             invalidColor={theme.colors.background[3]}
             separatorColor={theme.colors.background[5]}
+            invalidSeparatorColor={theme.colors.quinary}
+            invalidMessageColor={theme.colors.quinary}
             hidePaste={true}
             hideScan={true}
             sideMargins={0}
