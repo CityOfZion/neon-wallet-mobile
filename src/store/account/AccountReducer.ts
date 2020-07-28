@@ -82,17 +82,11 @@ export class AccountReducer extends ReducerWrapper<
       return async (dispatch, getState) => {
         const accounts = (await Storage.accounts.load()) ?? []
 
-        console.log(accounts)
-
         const edited = plainToClass(Account, getState().account)
-
-        console.log(edited)
 
         const account = accounts.find(
           (acc) => acc.address && acc.address === address
         )
-
-        console.log(account)
 
         if (account) {
           account.name = edited.name
