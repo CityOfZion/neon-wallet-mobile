@@ -251,6 +251,7 @@ export default function SwiperPanel(props: SwiperProps) {
               resizeMode="contain"
               height={props.imageSize[0]}
               width={props.imageSize[1]}
+              mt={2}
               mr="6px"
               source={props.image}
             />
