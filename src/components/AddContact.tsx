@@ -1,6 +1,7 @@
 import {wallet} from '@cityofzion/neon-core'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
+import {useDispatch} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import InputLabel from '~src/components/InputLabel'
@@ -9,6 +10,7 @@ import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {Contact} from '~src/models/Contact'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {RootStore} from '~src/store/RootStore'
 import {LinearLayout} from '~src/styles/styled-components'
 
 interface AddContactProps {
@@ -16,12 +18,19 @@ interface AddContactProps {
 }
 
 export const AddContact = (props: AddContactProps) => {
+  const dispatch = useDispatch()
   const [name, setName] = useState('')
   const [address, setAddress] = useState('')
   const controller = useSwiperController(true)
 
-  const createNewContact = () => {
+  const createNewContact = async () => {
     const contact = new Contact(name, address)
+    dispatch(RootStore.contacts.actions.addContact(contact))
+    await Facade.await.run(
+      'application',
+      async () => await dispatch(RootStore.settings.actions.save()),
+      1000
+    )
     controller.close()
   }
   return (
