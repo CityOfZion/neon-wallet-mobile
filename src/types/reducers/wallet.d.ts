@@ -6,6 +6,7 @@ export declare global {
     | 'SET_NAME'
     | 'SET_PASSPHRASE'
     | 'SET_SECURITY_PHRASE'
+    | 'SET_WALLET_TYPE'
     | 'CLEAR_STATE'
 
   interface WalletState {
@@ -13,6 +14,7 @@ export declare global {
     name: string | null
     passphrase: string | null
     securityPhrase: string | null
+    walletType: 'standard' | 'watch' | 'legacy' | null
     lastVisitedAt: string | null
   }
 

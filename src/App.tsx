@@ -13,13 +13,7 @@ import {RootStore} from '~src/store/RootStore'
 
 const loggerMiddleware = createLogger()
 
-const store = createStore(
-  RootStore.reducers,
-  {},
-  process.env.NODE_ENV === 'production'
-    ? applyMiddleware(thunk)
-    : composeWithDevTools(applyMiddleware(thunk, loggerMiddleware))
-)
+const store = createStore(RootStore.reducers, {}, applyMiddleware(thunk))
 
 const fetchFonts = () =>
   Font.loadAsync({

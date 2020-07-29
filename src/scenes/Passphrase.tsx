@@ -25,15 +25,14 @@ interface PassphraseProps {
 function verifyPassword(
   nep2: string,
   password: string,
-  onSuccess: () => void,
+  onSuccess: (address: string) => void,
   onFailure: () => void
 ) {
-  console.log(nep2)
   const newAccount = new wallet.Account(nep2)
   newAccount
     .decrypt(password)
     .then((account) => {
-      onSuccess()
+      onSuccess(account.address)
     })
     .catch(() => {
       onFailure()
@@ -98,13 +97,14 @@ const Passphrase = (props: PassphraseProps) => {
                 verifyPassword(
                   encryptedKey,
                   inputValue,
-                  () => {
+                  (address) => {
                     setInputIsValid(true)
                     props.navigation.navigate(
                       Facade.route.CustomizeAccount.name,
                       {
                         source: Facade.route.ImportKey.name,
-                        account,
+                        address,
+                        legacy: true,
                       }
                     )
                   },

@@ -97,20 +97,23 @@ export class AccountReducer extends ReducerWrapper<
         await Storage.accounts.save(accounts)
       }
     },
-    deleteAndSave: (): AsyncAction => {
+    addAndSave: (address: string): AsyncAction => {
       return async (dispatch, getState) => {
         const accounts = (await Storage.accounts.load()) ?? []
 
-        const removed = plainToClass(Account, getState().account)
-        const index = accounts.findIndex(
-          (acc) => acc.address && acc.address === removed.address
-        )
+        const account = plainToClass(Account, getState().account)
+        account.address = address
 
-        if (index >= 0) {
-          accounts.splice(index, 1)
+        const wallet = account.getWallet(getState().app.wallets)
+
+        if (wallet) {
+          accounts.push(account)
+
+          await Storage.accounts.save(accounts)
+          return
         }
 
-        await Storage.accounts.save(accounts)
+        throw Error('Something went wrong')
       }
     },
   }

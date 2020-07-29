@@ -34,4 +34,8 @@ export abstract class AsteroidHelper {
     const wif = this.generateWif(mnemonicWords, index)
     return new wallet.Account(wif)
   }
+
+  static generateNeoAccountFromWif(wif: string) {
+    return new wallet.Account(wif)
+  }
 }

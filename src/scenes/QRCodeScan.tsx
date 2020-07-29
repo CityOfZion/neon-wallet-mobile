@@ -72,6 +72,7 @@ const QRCodeScan = (props: Props) => {
           screen: Facade.route.More.name,
           params: {
             screen: Facade.route.ImportReadAccount.name,
+            initial: false,
             params: {
               address: key,
             },
@@ -85,6 +86,7 @@ const QRCodeScan = (props: Props) => {
           screen: Facade.route.More.name,
           params: {
             screen: Facade.route.Passphrase.name,
+            initial: false,
             params: {
               encryptedKey: key,
             },
@@ -98,8 +100,11 @@ const QRCodeScan = (props: Props) => {
           screen: Facade.route.More.name,
           params: {
             screen: Facade.route.CustomizeAccount.name,
+            initial: false,
             params: {
-              wif: key,
+              source: Facade.route.ImportReadAccount.name,
+              address: key,
+              legacy: true,
             },
           },
         },
@@ -108,8 +113,6 @@ const QRCodeScan = (props: Props) => {
   }
 
   const handleBarCodeScanned = (evt: BarCodeEvent) => {
-    console.log(evt.data)
-
     const destination = goTo(evt.data)
 
     if (destination) {
@@ -134,7 +137,7 @@ const QRCodeScan = (props: Props) => {
       />
 
       <ImageView
-        width="50%"
+        width="100%"
         resizeMode="contain"
         source={require('~src/assets/images/qr-code-frame.png')}
       />

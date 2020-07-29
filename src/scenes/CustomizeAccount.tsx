@@ -1,8 +1,9 @@
 import {RouteProp} from '@react-navigation/native'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
 import {ImageSourcePropType} from '~/node_modules/@types/react-native'
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
@@ -12,6 +13,7 @@ import InputWithValidation from '~src/components/InputWithValidation'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {Currency} from '~src/enums/Currency'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -21,9 +23,9 @@ import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface CustomizeAccountParams {
-  account: Account
+  address: string
   source: keyof MoreStackParamList
-  wif?: string
+  legacy?: boolean
 }
 
 interface Props {
@@ -46,15 +48,30 @@ const CustomizeAccount = (props: Props) => {
     (state: RootState) => Facade.theme[state.settings.theme]
   )
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<SyncDispatch>()
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
 
-  const account = props.route.params.account ?? new Account()
   const [name, setName] = useState<string>('')
   const [color, setColor] = useState<string>(theme.colors.card[0])
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
+  const [loaded, setLoaded] = useState(false)
 
+  const account = new Account()
+  account.address = props.route.params.address
   account.name = name
   account.backgroundColor = color
+
+  useEffect(() => {
+    if (!loaded) {
+      load()
+    }
+  }, [loaded])
+
+  const load = async () => {
+    await account.populateBalanceHistory()
+    setLoaded(true)
+  }
 
   const contentMap: ContentCollection = {
     ImportKey: {
@@ -72,20 +89,53 @@ const CustomizeAccount = (props: Props) => {
   const submit = async () => {
     if (!isValid()) return
 
-    dispatch(RootStore.account.actions.setName(name))
-    dispatch(RootStore.account.actions.setCurrency(Currency.USD))
-    if (color) dispatch(RootStore.account.actions.setBackgroundColor(color))
+    // Creates a wallet
+    const walletId = await createWallet()
 
-    await dispatch(RootStore.account.actions.createAndSave())
-    await dispatch(RootStore.app.actions.syncAccounts())
-
-    dispatch(RootStore.account.actions.clearState())
+    // Adds the account to the wallet
+    await createAccount(walletId)
 
     props.navigation.replace(Facade.route.Tab.name, undefined)
   }
 
+  const createWallet = async () => {
+    dispatch(RootStore.wallet.actions.clearState())
+    dispatch(RootStore.wallet.actions.setName(name))
+
+    // Creates a legacy or watch wallet, depending if address
+    // was obtained from a private key (WIF)
+    dispatch(
+      RootStore.wallet.actions.setType(
+        props.route.params.legacy ? 'legacy' : 'watch'
+      )
+    )
+
+    const walletId = await dispatchAsyncString(
+      RootStore.wallet.actions.createAndSave()
+    )
+    await dispatchAsync(RootStore.app.actions.syncWallets())
+
+    dispatch(RootStore.wallet.actions.clearState())
+
+    return walletId
+  }
+
+  const createAccount = async (walletId: string) => {
+    dispatch(RootStore.account.actions.clearState())
+
+    dispatch(RootStore.account.actions.setIdWallet(walletId))
+    dispatch(RootStore.account.actions.setName(name))
+    dispatch(RootStore.account.actions.setCurrency(Currency.USD))
+    dispatch(RootStore.account.actions.setBackgroundColor(color))
+
+    await dispatchAsync(RootStore.account.actions.addAndSave(account.address!))
+    await dispatchAsync(RootStore.app.actions.syncAccounts())
+
+    dispatch(RootStore.account.actions.clearState())
+  }
+
   const isValid = () => {
-    const conditions: boolean[] = [account.address !== null]
+    const conditions: boolean[] = [!!account.address, !!name]
 
     return conditions.every((it) => it)
   }
@@ -107,56 +157,61 @@ const CustomizeAccount = (props: Props) => {
 
   return (
     <ScreenLayout padding={16}>
-      <LinearLayout width="100%" height="100%" pt={24}>
-        <TextView
-          mb="32px"
-          color={theme.colors.text[0]}
-          fontSize={18}
-          fontFamily="medium"
-          textAlign="center"
-        >
-          {contentMap[props.route.params.source]?.subtitle ?? ''}
-        </TextView>
-        <InputLabel
-          title={Facade.t('screens.customizeAccount.preview')}
-          capitalize={true}
-          marginBottom="24px"
-        />
+      <AwaitActivity
+        name={'balance'}
+        loadingView={<ScreenLoader transparent={true} />}
+      >
+        <LinearLayout width="100%" height="100%" pt={24}>
+          <TextView
+            mb="32px"
+            color={theme.colors.text[0]}
+            fontSize={18}
+            fontFamily="medium"
+            textAlign="center"
+          >
+            {contentMap[props.route.params.source]?.subtitle ?? ''}
+          </TextView>
+          <InputLabel
+            title={Facade.t('screens.customizeAccount.preview')}
+            capitalize={true}
+            marginBottom="24px"
+          />
 
-        <AccountCard account={account} isStackMode={false} />
+          <AccountCard account={account} isStackMode={false} />
 
-        <InputLabel
-          title={Facade.t('screens.customizeAccount.accountInput.title')}
-          capitalize={true}
-          marginTop="48px"
-          marginBottom="10px"
-        />
-        <InputWithValidation
-          value={name}
-          validator={(text) => !(showInvalid && !text)}
-          placeholder={Facade.t(
-            'screens.customizeAccount.accountInput.placeholder'
-          )}
-          onChangeText={setName}
-          onClearPress={() => setName('')}
-          onFocus={() => setShowInvalid(false)}
-          color={theme.colors.text[0]}
-          invalidColor={theme.colors.background[3]}
-          separatorColor={theme.colors.background[5]}
-          hidePaste={true}
-          hideScan={true}
-          sideMargins={0}
-        />
+          <InputLabel
+            title={Facade.t('screens.customizeAccount.accountInput.title')}
+            capitalize={true}
+            marginTop="48px"
+            marginBottom="10px"
+          />
+          <InputWithValidation
+            value={name}
+            validator={(text) => !(showInvalid && !text)}
+            placeholder={Facade.t(
+              'screens.customizeAccount.accountInput.placeholder'
+            )}
+            onChangeText={setName}
+            onClearPress={() => setName('')}
+            onFocus={() => setShowInvalid(false)}
+            color={theme.colors.text[0]}
+            invalidColor={theme.colors.background[3]}
+            separatorColor={theme.colors.background[5]}
+            hidePaste={true}
+            hideScan={true}
+            sideMargins={0}
+          />
 
-        <InputLabel
-          title={Facade.t('screens.customizeAccount.selectColor')}
-          capitalize={true}
-          marginTop="12px"
-          marginBottom="24px"
-        />
+          <InputLabel
+            title={Facade.t('screens.customizeAccount.selectColor')}
+            capitalize={true}
+            marginTop="12px"
+            marginBottom="24px"
+          />
 
-        <ColorSelector onSelect={setColor} />
-      </LinearLayout>
+          <ColorSelector onSelect={setColor} />
+        </LinearLayout>
+      </AwaitActivity>
     </ScreenLayout>
   )
 }

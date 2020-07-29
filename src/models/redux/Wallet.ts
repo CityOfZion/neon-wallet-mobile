@@ -23,6 +23,9 @@ export class Wallet implements WalletState {
   @HttpExpose()
   lastVisitedAt: string | null = null
 
+  @HttpExpose()
+  walletType: 'standard' | 'watch' | 'legacy' | null = null
+
   previousAssets: TokenBalance = new TokenBalance()
   currentAssets: TokenBalance = new TokenBalance()
 
