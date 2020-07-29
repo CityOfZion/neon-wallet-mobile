@@ -36,6 +36,7 @@ import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
 export type ModalStackParamList = {
   WelcomeModal: undefined
   CreateAccountModal: undefined
+  EditAccountModal: EditAccountModalParam
   ReceiveWalletSelectionModal: undefined
   ReceiveAccountSelectionModal: {wallet: Wallet}
   ReceiveToAccountModal: {
@@ -149,7 +150,6 @@ const ModalStackNavigation = (props: Props) => {
         <ModalStack.Screen
           name={Facade.route.ListTokenModal.name}
           component={ListTokenModal}
-          initialParams={props.route?.params}
         />
         <ModalStack.Screen
           name={Facade.route.LanguagePickerModal.name}
