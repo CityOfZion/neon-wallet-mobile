@@ -245,6 +245,9 @@
     "reference": "Reference"
   },
   "screens": {
+    "contactDetails" : {
+      "walletAddress" : "WALLET ADDRESS"
+    },
     "contacts": {
       "empty": "No contacts",
       "addContact": "Add new contact"

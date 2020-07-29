@@ -31,11 +31,11 @@ interface ContactsProps {
   navigation: StackNavigationProp<ContactsStackParamList & RootStackParamList>
 }
 
-const ContactsPage = (props: ContactsProps) => {
+const ContactsPage = (prop: ContactsProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const navigation = props.navigation
+  const navigation = prop.navigation
   let contacts: Contact[] = mockedContacts.sort((c1, c2) =>
     c1.name.localeCompare(c2.name)
   )
@@ -126,7 +126,7 @@ const ContactsPage = (props: ContactsProps) => {
           </TextView>
           <ButtonView
             onPress={() => {
-              props.navigation.navigate(Facade.route.Modal.name, {
+              prop.navigation.navigate(Facade.route.Modal.name, {
                 screen: Facade.route.AddContact.name,
               })
             }}
