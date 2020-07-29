@@ -106,7 +106,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         <LinearLayout mt={4}>
           <AccountCard
             account={account}
-            isCompacted={true}
+            isStackMode={false}
             onPress={() =>
               props.navigation.navigate(Facade.route.AccountAssetDetail.name, {
                 account,

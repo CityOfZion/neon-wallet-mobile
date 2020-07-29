@@ -27,6 +27,7 @@ import {
 import {Facade} from '~src/app/Facade'
 import {Account} from '~src/models/redux/Account'
 import styled, {
+  ButtonView,
   ImageView,
   LinearLayout,
   TextView,
@@ -35,6 +36,7 @@ import {orientation, weight} from '~src/styles/styled-system.config'
 
 interface Props {
   onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
+  onPressQRCode?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
   account: Account
   isCompacted?: boolean
   isStackMode?: boolean
@@ -164,12 +166,14 @@ const AccountCard: React.FC<Props> = (props) => {
               </TextView>
             </LinearLayout>
           ) : (
-            <ImageView
-              ml={10 * unit}
-              width={32 * unit}
-              height={32 * unit}
-              source={require('~src/assets/images/card-qrcode.png')}
-            />
+            <ButtonView>
+              <ImageView
+                ml={10 * unit}
+                width={32 * unit}
+                height={32 * unit}
+                source={require('~src/assets/images/card-qrcode.png')}
+              />
+            </ButtonView>
           )}
         </LinearLayout>
 
