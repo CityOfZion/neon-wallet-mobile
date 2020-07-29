@@ -28,7 +28,8 @@ export type TabStackParamList = {
 }
 
 export type TabParams =
-  | (DefaultNavigationParam & Partial<{welcomeHidden?: boolean}>)
+  | (DefaultNavigationParam<MoreStackParam | undefined> &
+      Partial<{welcomeHidden?: boolean}>)
   | undefined
 
 interface Props {

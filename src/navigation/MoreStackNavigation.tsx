@@ -28,12 +28,10 @@ import Passphrase, {PassphraseParams} from '~src/scenes/Passphrase'
 
 export type MoreStackParam =
   | DefaultNavigationParam<
-      DefaultNavigationParam<
-        | Partial<CustomizeAccountParams>
-        | ImportReadAccountParams
-        | PassphraseParams
-        | undefined
-      >
+      | Partial<CustomizeAccountParams>
+      | ImportReadAccountParams
+      | PassphraseParams
+      | undefined
     >
   | undefined
 
