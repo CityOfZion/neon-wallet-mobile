@@ -4,7 +4,7 @@ export class AddressDispatcher extends DispatcherWrapper<
   ContactType,
   ContactState,
   ContactAction
-  > {
+> {
   readonly type = 'SET_ADDRESS'
 
   readonly reducer: ContactReducer = (state, action) => {

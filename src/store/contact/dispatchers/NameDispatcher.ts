@@ -4,7 +4,7 @@ export class NameDispatcher extends DispatcherWrapper<
   ContactType,
   ContactState,
   ContactAction
-  > {
+> {
   readonly type = 'SET_NAME'
 
   readonly reducer: ContactReducer = (state, action) => {

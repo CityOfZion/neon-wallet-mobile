@@ -57,7 +57,7 @@ export const AddContact = (props: AddContactProps) => {
 
         <InputWithValidation
           placeholder={Facade.t('createContact.namePlaceholder')}
-          onChangeText={val => setName(val)}
+          onChangeText={(val) => setName(val)}
           color={'background.4'}
           value={name}
           validator={(val) => val.length >= 2 && val.length <= 20}
@@ -76,7 +76,7 @@ export const AddContact = (props: AddContactProps) => {
 
         <InputWithValidation
           placeholder={Facade.t('createContact.addressPlaceholder')}
-          onChangeText={val => setAddress(val)}
+          onChangeText={(val) => setAddress(val)}
           color={'background.4'}
           value={address}
           invalidColor={'background.3'}

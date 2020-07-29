@@ -6,7 +6,11 @@ import {Exchange} from '~src/types/exchange'
 import {Contact} from '~src/models/redux/Contact'
 
 export declare global {
-  type AppType = 'SET_EXCHANGE' | 'SET_WALLETS' | 'SET_ACCOUNTS' | 'SET_CONTACTS'
+  type AppType =
+    | 'SET_EXCHANGE'
+    | 'SET_WALLETS'
+    | 'SET_ACCOUNTS'
+    | 'SET_CONTACTS'
 
   interface AppState {
     exchange: Exchange

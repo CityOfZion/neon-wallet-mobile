@@ -1,10 +1,10 @@
 import {Account} from '~src/models/redux/Account'
 import {App} from '~src/models/redux/App'
+import {Contact} from '~src/models/redux/Contact'
 import {Settings} from '~src/models/redux/Settings'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStore} from '~src/store/RootStore'
 import {Exchange} from '~src/types/exchange'
-import {Contact} from '~src/models/redux/Contact'
 
 export type SyncResult = {
   settings: Settings

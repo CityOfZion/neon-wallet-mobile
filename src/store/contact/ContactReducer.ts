@@ -1,12 +1,12 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
+import {plainToClass} from 'class-transformer'
 
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {Contact} from '~src/models/redux/Contact'
-import {plainToClass} from "class-transformer"
-import {NameDispatcher} from '~src/store/contact/dispatchers/NameDispatcher'
-import {ClearStateDispatcher} from '~src/store/contact/dispatchers/ClearStateDispatcher'
 import {AddressDispatcher} from '~src/store/contact/dispatchers/AddressDispatcher'
+import {ClearStateDispatcher} from '~src/store/contact/dispatchers/ClearStateDispatcher'
+import {NameDispatcher} from '~src/store/contact/dispatchers/NameDispatcher'
 
 export class ContactReducer extends ReducerWrapper<
   ContactType,
