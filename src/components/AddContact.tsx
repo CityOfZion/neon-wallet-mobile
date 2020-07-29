@@ -1,27 +1,26 @@
 import {wallet} from '@cityofzion/neon-core'
+import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
 
 import {Facade} from '~src/app/Facade'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import {Contact} from '~src/models/Contact'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout} from '~src/styles/styled-components'
-import {StackNavigationProp} from "@react-navigation/stack";
-import {RootStackParamList} from "~src/navigation/AppNavigation";
-import {ModalStackParamList} from "~src/navigation/ModalStackNavigation";
-import {Contact} from "~src/models/Contact";
 
 interface AddContactProps {
   navigation: StackNavigationProp<ModalStackParamList>
 }
-
 
 export const AddContact = (props: AddContactProps) => {
   const [name, setName] = useState('')
   const [address, setAddress] = useState('')
   const controller = useSwiperController(true)
 
-  const createNewContact = () =>{
+  const createNewContact = () => {
     const contact = new Contact(name, address)
     controller.close()
   }

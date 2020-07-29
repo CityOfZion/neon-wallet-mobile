@@ -1,6 +1,7 @@
+import React from 'react'
+
 import {Contact} from '~src/models/Contact'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-import React from "react";
 
 export interface ContactDetailsProps {
   contact: Contact
