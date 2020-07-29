@@ -10,6 +10,10 @@ import {TokenValue} from '~src/models/TokenValue'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {
+  AccountQRCode,
+  AccountQRCodeParams,
+} from '~src/scenes/Account/AccountQRCode'
 import CreateAccountModal from '~src/scenes/CreateAccountModal'
 import CurrencyPickerModal from '~src/scenes/CurrencyPickerModal'
 import CustomColorPage, {
@@ -38,6 +42,7 @@ export type ModalStackParamList = {
   CreateAccountModal: undefined
   EditAccountModal: EditAccountModalParam
   ReceiveWalletSelectionModal: undefined
+  AccountQRCode: AccountQRCodeParams
   ReceiveAccountSelectionModal: {wallet: Wallet}
   ReceiveToAccountModal: {
     walletTitle: string
@@ -66,9 +71,10 @@ export type ModalStackParamList = {
 }
 
 export type ModalParams =
-  | (DefaultNavigationParam &
+  | ((DefaultNavigationParam &
       Partial<CustomColorPageParam> &
-      Partial<EditAccountModalParam>)
+      Partial<EditAccountModalParam>) &
+      Partial<AccountQRCodeParams>)
   | undefined
 
 interface Props {
@@ -166,6 +172,10 @@ const ModalStackNavigation = (props: Props) => {
         <ModalStack.Screen
           name={Facade.route.AddContact.name}
           component={AddContact}
+        />
+        <ModalStack.Screen
+          name={Facade.route.AccountQRCode.name}
+          component={AccountQRCode}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

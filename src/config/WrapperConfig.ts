@@ -67,5 +67,6 @@ export class WrapperConfig {
     'ThemePickerModal',
     'AddContact',
     'ContactDetails',
+    'AccountQRCode',
   ] as const
 }

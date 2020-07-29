@@ -72,7 +72,7 @@ export const AddContact = (props: AddContactProps) => {
           invalidColor={'background.3'}
           invalidSeparatorColor={'background.3'}
           validator={() => {
-            return wallet.isAddress(address) || address?.length == 0
+            return wallet.isAddress(address) || address?.length === 0
           }}
           separatorColor={'background.3'}
           sideMargins={0}

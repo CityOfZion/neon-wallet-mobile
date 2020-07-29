@@ -19,6 +19,7 @@ import {NeoNode} from '~src/models/NeoNode'
 import {TransactionModel} from '~src/models/TransactionModel'
 import {Account} from '~src/models/redux/Account'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -27,7 +28,9 @@ export interface GetAccountParams {
 }
 
 interface GetAccountViewProps {
-  navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>
+  navigation: StackNavigationProp<
+    WalletStackParamList & RootStackParamList & ModalStackParamList
+  >
   route: RouteProp<WalletStackParamList, 'GetAccount'>
 }
 
@@ -106,7 +109,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         <LinearLayout mt={4}>
           <AccountCard
             account={account}
-            isCompacted={true}
+            isStackMode={false}
             onPress={() =>
               props.navigation.navigate(Facade.route.AccountAssetDetail.name, {
                 account,

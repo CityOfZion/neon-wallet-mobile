@@ -290,6 +290,9 @@
     }
   },
   "modals": {
+    "accountQRCode": {
+      "address": "Address"
+    },
     "createAccount": {
       "title": "Create account",
       "subtitle": "Creating an account is easy, just give it a name below and you’re down!",

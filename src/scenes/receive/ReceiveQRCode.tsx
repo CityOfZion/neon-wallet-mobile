@@ -31,7 +31,7 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
   const qrCodeContent = props.address //TODO put tx URI
   props = {
     accountName: 'My Account 1',
-    tokenLogo: require('~/src/assets/logos/logo-neo.png'),
+    tokenLogo: require('~src/assets/logos/logo-neo.png'),
     tokenName: 'NEO',
     walletName: 'My First Wallet',
     address: 'AN8iLVt18CKoATdexztCQj923hw5gkc41A',
@@ -51,7 +51,7 @@ const ReceiveQRCode = (props: ReceiveQRCodeProps) => {
           <LinearLayout width={buttonWidth} height={54} mt={34}>
             <ThemedButton
               label="Copy to clipboard"
-              srcIcon={require('~/src/assets/images/icon-copy-green.png')}
+              srcIcon={require('~src/assets/images/icon-copy-green.png')}
               iconSize={[19, 23]}
             />
           </LinearLayout>

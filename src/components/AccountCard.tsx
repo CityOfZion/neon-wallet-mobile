@@ -1,3 +1,5 @@
+import {useNavigation} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack/lib/typescript/src/types'
 import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
@@ -26,7 +28,9 @@ import {
 
 import {Facade} from '~src/app/Facade'
 import {Account} from '~src/models/redux/Account'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import styled, {
+  ButtonView,
   ImageView,
   LinearLayout,
   TextView,
@@ -44,7 +48,7 @@ interface Props {
 const AccountCard: React.FC<Props> = (props) => {
   const {exchange} = useSelector((state: RootState) => state.app)
   const {language, currency} = useSelector((state: RootState) => state.settings)
-
+  const navigation = useNavigation()
   const [viewHeight, setViewHeight] = useState<number>(0)
   const unit = (viewHeight * 0.1) / 24
 
@@ -164,12 +168,23 @@ const AccountCard: React.FC<Props> = (props) => {
               </TextView>
             </LinearLayout>
           ) : (
-            <ImageView
-              ml={10 * unit}
-              width={32 * unit}
-              height={32 * unit}
-              source={require('~src/assets/images/card-qrcode.png')}
-            />
+            <ButtonView
+              onPress={() => {
+                navigation.navigate(Facade.route.Modal.name, {
+                  screen: Facade.route.AccountQRCode.name,
+                  params: {
+                    account: props.account,
+                  },
+                })
+              }}
+            >
+              <ImageView
+                ml={10 * unit}
+                width={32 * unit}
+                height={32 * unit}
+                source={require('~src/assets/images/card-qrcode.png')}
+              />
+            </ButtonView>
           )}
         </LinearLayout>
 
