@@ -115,7 +115,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
                 account,
               })
             }
-            navigation={props.navigation}
           />
         </LinearLayout>
 

@@ -185,10 +185,7 @@ const ReceiveToAccountModal = (props: Props) => {
         >
           {props.route.params.walletTitle.toUpperCase()}
         </TextView>
-        <AccountCard
-          account={props.route.params.account}
-          navigation={props.navigation}
-        />
+        <AccountCard account={props.route.params.account} />
         <TouchableWithoutFeedback onPress={() => props.navigation.goBack()}>
           <LinearLayout
             orientation="horiz"
