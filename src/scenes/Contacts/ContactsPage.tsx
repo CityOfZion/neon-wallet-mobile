@@ -13,7 +13,7 @@ import {useSelector} from 'react-redux'
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {mockedContacts} from '~src/mocks/mockContacts'
-import {Contact} from '~src/models/Contact'
+import {Contact} from '~src/models/redux/Contact'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ContactsStackParamList} from '~src/navigation/ContactsStackNavigation'
 import {ContactDetails} from '~src/scenes/Contacts/ContactsDetails'
@@ -25,7 +25,6 @@ import {
   RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
 interface ContactsProps {
   navigation: StackNavigationProp<ContactsStackParamList & RootStackParamList>
@@ -36,13 +35,7 @@ const ContactsPage = (prop: ContactsProps) => {
     (state: RootState) => Facade.theme[state.settings.theme]
   )
   const navigation = prop.navigation
-  let contacts: Contact[] = mockedContacts.sort((c1, c2) =>
-    c1.name.localeCompare(c2.name)
-  )
-
-  useFocusEffect(() => {
-    contacts = mockedContacts.sort((c1, c2) => c1.name.localeCompare(c2.name))
-  })
+  const contacts = useSelector((state: RootState) => state.app.contacts)
 
   const contactList = () => {
     const contactsMap: Map<string, Contact[]> = new Map()

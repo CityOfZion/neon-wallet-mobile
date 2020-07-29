@@ -3,7 +3,7 @@ import React from 'react'
 
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {Contact} from '~src/models/Contact'
+import {Contact} from '~src/models/redux/Contact'
 import {ContactsStackParamList} from '~src/navigation/ContactsStackNavigation'
 import {
   ButtonView,

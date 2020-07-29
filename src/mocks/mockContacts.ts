@@ -1,4 +1,4 @@
-import {Contact} from '~src/models/Contact'
+import {Contact} from '~src/models/redux/Contact'
 
 const tyler = {
   name: 'Tyler',

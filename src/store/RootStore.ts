@@ -2,7 +2,7 @@ import {combineReducers} from 'redux'
 
 import {AccountReducer} from '~src/store/account/AccountReducer'
 import {AppReducer} from '~src/store/app/AppReducer'
-import {ContactsReducer} from '~src/store/contacts/ContactsReducer'
+import {ContactReducer} from '~src/store/contact/ContactReducer'
 import {LoadingReducer} from '~src/store/loading/LoadingReducer'
 import {SettingsReducer} from '~src/store/settings/SettingsReducer'
 import {WalletReducer} from '~src/store/wallet/WalletReducer'
@@ -15,7 +15,7 @@ export abstract class RootStore {
   static readonly wallet = new WalletReducer()
   static readonly account = new AccountReducer()
   static readonly loading = new LoadingReducer()
-  static readonly contacts = new ContactsReducer()
+  static readonly contact = new ContactReducer()
 
   static readonly reducers = combineReducers({
     app: RootStore.app.reducer,
@@ -23,6 +23,6 @@ export abstract class RootStore {
     wallet: RootStore.wallet.reducer,
     account: RootStore.account.reducer,
     loading: RootStore.loading.reducer,
-    contacts: RootStore.contacts.reducer,
+    contact: RootStore.contact.reducer,
   })
 }

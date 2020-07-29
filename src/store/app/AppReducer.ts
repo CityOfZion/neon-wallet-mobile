@@ -12,6 +12,7 @@ import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
 import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
 import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
 import {Exchange, ExchangeResponse} from '~src/types/exchange'
+import {Contact} from '~src/models/redux/Contact'
 
 export class AppReducer extends ReducerWrapper<AppType, AppState, AppAction> {
   protected readonly initialState = Model.parse<AppState>(App)
@@ -99,6 +100,16 @@ export class AppReducer extends ReducerWrapper<AppType, AppState, AppAction> {
         }
 
         return accounts ?? []
+      }
+    },
+
+    syncContacts: (): AsyncAction<Contact[]> => {
+      return async (dispatch, getState) => {
+        const contacts = await Storage.contacts.load()
+        if (contacts) {
+          dispatch(this.commit('SET_CONTACTS', {contacts}))
+        }
+        return contacts ?? []
       }
     },
   }

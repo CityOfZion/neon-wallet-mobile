@@ -1,5 +1,5 @@
 import {Facade} from '~src/app/Facade'
-import {Contact} from '~src/models/Contact'
+import {Contact} from '~src/models/redux/Contact'
 import {Account} from '~src/models/redux/Account'
 import {Settings} from '~src/models/redux/Settings'
 import {Wallet} from '~src/models/redux/Wallet'
