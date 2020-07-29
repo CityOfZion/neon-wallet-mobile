@@ -132,7 +132,7 @@ const ReferenceField = (props: {
         onChangeText={props.setReference}
         color={props.theme.colors.text[0]}
         invalidColor={props.theme.colors.text[10]}
-        fontStyle={'normal'}
+        fontStyle={'regular-italic'}
         value={props.reference}
         placeholder={Facade.t('modals.receive.toAccount.addReference')}
         validator={() => true}
@@ -167,7 +167,7 @@ const ReceiveToAccountModal = (props: Props) => {
       controller={controller}
       fullSize={true}
       paddingTop={24}
-      paddingRight={0}
+      paddingRight={8}
       paddingLeft={0}
       title={Facade.t('modals.receive.title')}
       rightButton={CloseButton()}
