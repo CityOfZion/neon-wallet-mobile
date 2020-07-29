@@ -22,7 +22,7 @@ import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {RootState} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
-export interface ImportKeyProps {
+interface ImportKeyProps {
   navigation: StackNavigationProp<MoreStackParamList>
 }
 

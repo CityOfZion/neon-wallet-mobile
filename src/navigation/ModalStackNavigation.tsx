@@ -60,6 +60,7 @@ export type ModalStackParamList = {
   LanguagePickerModal: undefined
   CurrencyPickerModal: undefined
   ThemePickerModal: undefined
+  QRCodeScan: undefined
 }
 
 export type ModalParams =

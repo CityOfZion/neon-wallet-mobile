@@ -10,20 +10,26 @@ import {Facade} from '~src/app/Facade'
 import FooterBar from '~src/components/layout/FooterBar'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import ContactsStackNavigation from '~src/navigation/ContactsStackNavigation'
-import MoreStackNavigation from '~src/navigation/MoreStackNavigation'
+import MoreStackNavigation, {
+  MoreStackParam,
+} from '~src/navigation/MoreStackNavigation'
 import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation'
 import SettingsStackNavigation from '~src/navigation/SettingsStackNavigation'
 import WalletStackNavigation from '~src/navigation/WalletsStackNavigation'
+import {CustomizeAccountParams} from '~src/scenes/CustomizeAccount'
+import {ImportReadAccountParams} from '~src/scenes/ImportReadAccount'
+import {PassphraseParams} from '~src/scenes/Passphrase'
 
 export type TabStackParamList = {
   ListWallets: undefined
   Contacts: undefined
   Settings: undefined
-  More: DefaultNavigationParam | undefined
+  More: MoreStackParam
 }
 
 export type TabParams =
-  | (DefaultNavigationParam & Partial<{welcomeHidden?: boolean}>)
+  | (DefaultNavigationParam<MoreStackParam | undefined> &
+      Partial<{welcomeHidden?: boolean}>)
   | undefined
 
 interface Props {

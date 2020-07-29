@@ -20,6 +20,12 @@ import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
+export interface CustomizeAccountParams {
+  account: Account
+  source: keyof MoreStackParamList
+  wif?: string
+}
+
 interface Props {
   navigation: StackNavigationProp<MoreStackParamList & RootStackParamList>
   route: RouteProp<MoreStackParamList, 'CustomizeAccount'>

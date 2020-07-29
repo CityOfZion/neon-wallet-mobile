@@ -273,6 +273,13 @@
         "save": "Save"
       },
       "preview": "Preview"
+    },
+    "scanQrCode": {
+      "success": "Success!",
+      "requesting": "Requesting for camera permission",
+      "noAccess": "No access to camera",
+      "cancel": "Cancel",
+      "tryAgain": "Try again"
     }
   },
   "modals": {

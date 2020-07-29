@@ -1,25 +1,42 @@
+import {RouteProp} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {StackNavigationProp} from '~/node_modules/@react-navigation/stack'
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import {Account} from '~src/models/redux/Account'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {TabStackParamList} from '~src/navigation/TabNavigation'
 import Step1CreateWalletPage from '~src/scenes/CreateWalletPage/Step1CreateWalletPage'
 import Step2CreateWalletPage from '~src/scenes/CreateWalletPage/Step2CreateWalletPage'
 import Step3CreateWalletPage from '~src/scenes/CreateWalletPage/Step3CreateWalletPage'
 import Step4CreateWalletPage from '~src/scenes/CreateWalletPage/Step4CreateWalletPage'
 import Step5CreateWalletPage from '~src/scenes/CreateWalletPage/Step5CreateWalletPage'
-import CustomizeAccount from '~src/scenes/CustomizeAccount'
+import CustomizeAccount, {
+  CustomizeAccountParams,
+} from '~src/scenes/CustomizeAccount'
 import ImportKey from '~src/scenes/ImportKey'
-import ImportReadAccount from '~src/scenes/ImportReadAccount'
+import ImportReadAccount, {
+  ImportReadAccountParams,
+} from '~src/scenes/ImportReadAccount'
 import MorePage from '~src/scenes/MorePage'
-import Passphrase from '~src/scenes/Passphrase'
+import Passphrase, {PassphraseParams} from '~src/scenes/Passphrase'
+
+export type MoreStackParam =
+  | DefaultNavigationParam<
+      | Partial<CustomizeAccountParams>
+      | ImportReadAccountParams
+      | PassphraseParams
+      | undefined
+    >
+  | undefined
 
 export type MoreStackParamList = {
-  More: undefined
+  MorePage: undefined
   Step1CreateWallet: undefined
   Step2CreateWallet: undefined
   Step3CreateWallet: HeaderActionButtonProps
@@ -30,8 +47,8 @@ export type MoreStackParamList = {
   ImportKey: undefined
   CustomizeReadAccount: undefined
   ImportReadAccount: undefined
-  Passphrase: {encryptedKey: string}
-  CustomizeAccount: {account: Account; source: keyof MoreStackParamList}
+  Passphrase: PassphraseParams
+  CustomizeAccount: CustomizeAccountParams
   CustomColor: undefined
 }
 
@@ -46,7 +63,7 @@ const MoreStackNavigation = () => {
     <ThemeProvider theme={theme}>
       <MoreStack.Navigator>
         <MoreStack.Screen
-          name={Facade.route.More.name}
+          name={Facade.route.MorePage.name}
           component={MorePage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
