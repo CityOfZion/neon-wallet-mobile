@@ -25,18 +25,16 @@ const TransactionsList: React.FC<Props> = (props) => {
           return (
             <LinearLayout orientation="horiz" key={index}>
               <LinearLayout orientation="vert" mr="8px" mt="5px">
-                {index === 0 && (
-                  <ImageView
-                    alignSelf="center"
-                    source={
-                      props.transactionModel &&
-                      props.transactionModel.srcIcon &&
-                      props.isHistory
-                        ? props.transactionModel.srcIcon
-                        : require('~src/assets/images/clock-white.png')
-                    }
-                  />
-                )}
+                <ImageView
+                  style={index != 0 && {opacity: 0}}
+                  source={
+                    props.transactionModel &&
+                    props.transactionModel.srcIcon &&
+                    props.isHistory
+                      ? props.transactionModel.srcIcon
+                      : require('~src/assets/images/clock-white.png')
+                  }
+                />
               </LinearLayout>
               <LinearLayout weight={1} orientation="vert">
                 {index === 0 && (
@@ -60,10 +58,20 @@ const TransactionsList: React.FC<Props> = (props) => {
               <LinearLayout weight={3} orientation="vert">
                 {index === 0 && (
                   <LinearLayout orientation="horiz">
-                    <TextView weight={1} fontSize="14px" color="text.2" width='50%'>
+                    <TextView
+                      weight={1}
+                      fontSize="14px"
+                      color="text.2"
+                      width="50%"
+                    >
                       {Facade.t('components.transactionsList.sentTo')}
                     </TextView>
-                    <TextView weight={1} fontSize="14px" color="text.2"  width='50%'>
+                    <TextView
+                      weight={1}
+                      fontSize="14px"
+                      color="text.2"
+                      width="50%"
+                    >
                       {Facade.t('components.transactionsList.value')}
                     </TextView>
                   </LinearLayout>
@@ -90,29 +98,35 @@ const TransactionsList: React.FC<Props> = (props) => {
                   mt="10px"
                   mb="10px"
                   borderStyle="dotted"
-                  borderColor="text.2"
+                  borderColor="text.0"
                   borderWidth={0.4}
                 />
               )}
             <LinearLayout orientation="horiz">
               {receiver.isAddress ? (
                 <TextView
-                  mr="10px"
-                  numberOfLines={1}
-                  width='50%'
-                  ellipsizeMode="middle"
                   weight={1}
+                  numberOfLines={1}
+                  ellipsizeMode="middle"
+                  width="50%"
+                  mr="10px"
                   fontSize="16px"
                   color="primary"
                 >
                   {receiver.nameOrAdress}
                 </TextView>
               ) : (
-                <TextView weight={1}  width='50%' fontSize="16px" color="text.0">
+                <TextView
+                  weight={1}
+                  width="50%"
+                  mr="10px"
+                  fontSize="16px"
+                  color="text.0"
+                >
                   {receiver.nameOrAdress}
                 </TextView>
               )}
-              <LinearLayout orientation="verti"  width='50%'>
+              <LinearLayout orientation="verti">
                 {_renderAssets(receiver)}
               </LinearLayout>
             </LinearLayout>
@@ -128,8 +142,8 @@ const TransactionsList: React.FC<Props> = (props) => {
         return (
           <LinearLayout orientation="horiz" mb="5px" key={index}>
             <ImageView
-              height="17px"
-              width="17px"
+              height="15px"
+              width="15px"
               alignSelf="center"
               mr="4px"
               source={asset.srcIcon}

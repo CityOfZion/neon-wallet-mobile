@@ -32,8 +32,8 @@ receiverWithNameOne.assets = [assetNeo, assetDbc, assetOnt]
 
 const receiverWithNameTwo = new Receiver()
 receiverWithNameTwo.isAddress = false
-receiverWithNameTwo.nameOrAdress = 'Jack W'
-receiverWithNameTwo.assets = [assetOnt]
+receiverWithNameTwo.nameOrAdress = 'Jack Wallets'
+receiverWithNameTwo.assets = [assetOnt, assetDbc]
 
 const receiverWithNameThree = new Receiver()
 receiverWithNameThree.isAddress = false
@@ -53,7 +53,7 @@ receiverAddressTwo.assets = [assetDbc, assetOnt]
 const receiverAddressThree = new Receiver()
 receiverAddressThree.isAddress = true
 receiverAddressThree.nameOrAdress = 'CN8iLVt18CKoATdexztCQj923hw5gkc41A'
-receiverAddressThree.assets = [assetNeo]
+receiverAddressThree.assets = [assetNeo, assetOnt]
 
 const transactionToday = new Transaction()
 transactionToday.receiver = [receiverWithNameOne, receiverAddressOne]
