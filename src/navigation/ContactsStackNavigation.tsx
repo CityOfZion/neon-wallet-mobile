@@ -10,12 +10,15 @@ import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ContactDetails} from '~src/scenes/Contacts/ContactsDetails'
+import {
+  ContactDetails,
+  ContactDetailsParams,
+} from '~src/scenes/Contacts/ContactsDetails'
 import ContactsPage from '~src/scenes/Contacts/ContactsPage'
 
 export type ContactsStackParamList = {
   Contacts: HeaderActionButtonProps
-  ContactDetails: undefined
+  ContactDetails: ContactDetailsParams
 }
 
 interface ContactsStackProps {
@@ -31,7 +34,7 @@ const ContactsStackNavigation = (props: ContactsStackProps) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <ContactsStack.Navigator>
+      <ContactsStack.Navigator initialRouteName={Facade.route.Contacts.name}>
         <ContactsStack.Screen
           name={Facade.route.Contacts.name}
           initialParams={{
@@ -54,6 +57,14 @@ const ContactsStackNavigation = (props: ContactsStackProps) => {
         <ContactsStack.Screen
           name={Facade.route.ContactDetails.name}
           component={ContactDetails}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.Contacts.translate(),
+              image: require('~src/assets/images/icon-contacts-white.png'),
+              theme,
+              route,
+            })
+          }
         />
       </ContactsStack.Navigator>
     </ThemeProvider>

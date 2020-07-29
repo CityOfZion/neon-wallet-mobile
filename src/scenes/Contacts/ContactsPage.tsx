@@ -1,5 +1,6 @@
 import {useFocusEffect} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import PropTypes from 'prop-types'
 import React, {useState} from 'react'
 import {
   SectionList,
@@ -14,6 +15,7 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {mockedContacts} from '~src/mocks/mockContacts'
 import {Contact} from '~src/models/Contact'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {ContactsStackParamList} from '~src/navigation/ContactsStackNavigation'
 import {ContactDetails} from '~src/scenes/Contacts/ContactsDetails'
 import {RootState} from '~src/store/RootStore'
 import {
@@ -25,153 +27,15 @@ import {
 } from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
-const noContactsView = (
-  theme: ApplicationTheme,
-  navigation: StackNavigationProp<RootStackParamList>
-) => {
-  return (
-    <ScreenLayout>
-      <LinearLayout orientation="verti" pt={200}>
-        <TextView
-          color={theme.colors.background[3]}
-          fontSize={24}
-          alignSelf="center"
-          font={'medium'}
-          mb={4}
-        >
-          {Facade.t('screens.contacts.empty')}
-        </TextView>
-        <ButtonView
-          onPress={() => {
-            navigation.navigate(Facade.route.Modal.name, {
-              screen: Facade.route.AddContact.name,
-            })
-          }}
-        >
-          <ImageView
-            m="auto"
-            resizeMode="contain"
-            source={require('~src/assets/images/add-new-contact-dashed-button.png')}
-          />
-          <LinearLayout alignItems={'center'} mt={-38}>
-            <LinearLayout orientation={'horiz'}>
-              <ImageView
-                alignSelf={'center'}
-                source={require('~src/assets/images/add-contact-white.png')}
-                mr={4}
-              />
-              <TextView
-                fontSize="16px"
-                bottom={0}
-                color={theme.colors.text[0]}
-                textAlign="center"
-              >
-                {Facade.t('screens.contacts.addContact')}
-              </TextView>
-            </LinearLayout>
-          </LinearLayout>
-        </ButtonView>
-      </LinearLayout>
-    </ScreenLayout>
-  )
-}
-
-const renderSectionHeader = (info: {section: SectionListData<Contact>}) => {
-  return (
-    <TextView
-      pt={'9px'}
-      pb={'9px'}
-      pl={'14px'}
-      font={'medium'}
-      color={'primary'}
-      fontSize={14}
-      bg={'background.12'}
-    >
-      {info.section.key}
-    </TextView>
-  )
-}
-
-const renderItem = (info: SectionListRenderItemInfo<Contact>) => {
-  return (
-    <ButtonView>
-      <LinearLayout pl={'14px'} mt={'21px'} mb={'21px'}>
-        <TextView font={'semi-bold'} color={'text.0'} fontSize={20}>
-          {info.item.name}
-        </TextView>
-        <TextView font={'medium'} color={'primary'} fontSize={16}>
-          {info.item.address}
-        </TextView>
-      </LinearLayout>
-    </ButtonView>
-  )
-}
-
-const contactList = (
-  theme: ApplicationTheme,
-  contacts: Contact[],
-  navigation: StackNavigationProp<RootStackParamList>
-) => {
-  const contactsMap: Map<string, Contact[]> = new Map()
-
-  const onContactClick = (contact: Contact) => {
-    navigation.navigate(Facade.route.Tab.name, {
-      screen: Facade.route.Contacts.name,
-    })
-  }
-
-  contacts.forEach((contact) => {
-    contact.onClick = () => onContactClick(contact)
-    if (contactsMap.has(contact.name[0])) {
-      const contacts = contactsMap.get(contact.name[0])
-      contacts?.push(contact)
-    } else {
-      const contacts: Contact[] = [contact]
-      contactsMap.set(contact.name[0], contacts)
-    }
-  })
-
-  const sections: SectionListData<Contact>[] = []
-
-  contactsMap.forEach((c, k) => {
-    const section: SectionListData<Contact> = {
-      key: k,
-      data: c,
-    }
-
-    sections.push(section)
-  })
-
-  return (
-    <ScreenLayout padding={0}>
-      <SectionList
-        style={{width: '100%', height: '100%'}}
-        sections={sections}
-        renderItem={renderItem}
-        renderSectionHeader={renderSectionHeader}
-        ItemSeparatorComponent={() => {
-          return (
-            <LinearLayout
-              height={'1px'}
-              ml={'16px'}
-              mr={'16px'}
-              bg={'background.10'}
-            />
-          )
-        }}
-      />
-    </ScreenLayout>
-  )
-}
-
 interface ContactsProps {
-  navigation: StackNavigationProp<RootStackParamList>
+  navigation: StackNavigationProp<ContactsStackParamList & RootStackParamList>
 }
 
 const ContactsPage = (props: ContactsProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
+  const navigation = props.navigation
   let contacts: Contact[] = mockedContacts.sort((c1, c2) =>
     c1.name.localeCompare(c2.name)
   )
@@ -180,15 +44,146 @@ const ContactsPage = (props: ContactsProps) => {
     contacts = mockedContacts.sort((c1, c2) => c1.name.localeCompare(c2.name))
   })
 
-  props.navigation.navigate('ContactDetails')
+  const contactList = () => {
+    const contactsMap: Map<string, Contact[]> = new Map()
 
-  return <ContactDetails contact={contacts[0]} />
+    contacts.forEach((contact) => {
+      if (contactsMap.has(contact.name[0])) {
+        const contacts = contactsMap.get(contact.name[0])
+        contacts?.push(contact)
+      } else {
+        const contacts: Contact[] = [contact]
+        contactsMap.set(contact.name[0], contacts)
+      }
+    })
 
-  // if (!contacts || contacts.length == 0) {
-  //   return noContactsView(theme, props.navigation)
-  // } else {
-  //   return contactList(theme, contacts, props.navigation)
-  // }
+    const sections: SectionListData<Contact>[] = []
+
+    contactsMap.forEach((c, k) => {
+      const section: SectionListData<Contact> = {
+        key: k,
+        data: c,
+      }
+
+      sections.push(section)
+    })
+
+    const renderItem = (info: SectionListRenderItemInfo<Contact>) => {
+      return (
+        <ButtonView
+          onPress={() => {
+            navigation.navigate(Facade.route.ContactDetails.name, {
+              contact: info.item,
+            })
+          }}
+        >
+          <LinearLayout pl={'14px'} mt={'21px'} mb={'21px'}>
+            <TextView font={'semi-bold'} color={'text.0'} fontSize={20}>
+              {info.item.name}
+            </TextView>
+            <TextView font={'medium'} color={'primary'} fontSize={16}>
+              {info.item.address}
+            </TextView>
+          </LinearLayout>
+        </ButtonView>
+      )
+    }
+
+    return (
+      <ScreenLayout padding={0}>
+        <SectionList
+          style={{width: '100%', height: '100%'}}
+          sections={sections}
+          renderItem={renderItem}
+          renderSectionHeader={renderSectionHeader}
+          ItemSeparatorComponent={() => {
+            return (
+              <LinearLayout
+                height={'1px'}
+                ml={'16px'}
+                mr={'16px'}
+                bg={'background.10'}
+              />
+            )
+          }}
+        />
+      </ScreenLayout>
+    )
+  }
+
+  const noContactsView = () => {
+    return (
+      <ScreenLayout>
+        <LinearLayout orientation="verti" pt={200}>
+          <TextView
+            color={theme.colors.background[3]}
+            fontSize={24}
+            alignSelf="center"
+            font={'medium'}
+            mb={4}
+          >
+            {Facade.t('screens.contacts.empty')}
+          </TextView>
+          <ButtonView
+            onPress={() => {
+              props.navigation.navigate(Facade.route.Modal.name, {
+                screen: Facade.route.AddContact.name,
+              })
+            }}
+          >
+            <ImageView
+              m="auto"
+              resizeMode="contain"
+              source={require('~src/assets/images/add-new-contact-dashed-button.png')}
+            />
+            <LinearLayout alignItems={'center'} mt={-38}>
+              <LinearLayout orientation={'horiz'}>
+                <ImageView
+                  alignSelf={'center'}
+                  source={require('~src/assets/images/add-contact-white.png')}
+                  mr={4}
+                />
+                <TextView
+                  fontSize="16px"
+                  bottom={0}
+                  color={theme.colors.text[0]}
+                  textAlign="center"
+                >
+                  {Facade.t('screens.contacts.addContact')}
+                </TextView>
+              </LinearLayout>
+            </LinearLayout>
+          </ButtonView>
+        </LinearLayout>
+      </ScreenLayout>
+    )
+  }
+
+  const renderSectionHeader = (info: {section: SectionListData<Contact>}) => {
+    return (
+      <TextView
+        pt={'9px'}
+        pb={'9px'}
+        pl={'14px'}
+        font={'medium'}
+        color={'primary'}
+        fontSize={14}
+        bg={'background.12'}
+      >
+        {info.section.key}
+      </TextView>
+    )
+  }
+
+  if (!contacts || contacts.length == 0) {
+    return noContactsView()
+  } else {
+    return contactList()
+  }
+}
+
+ContactsPage.propTypes = {
+  navigation: PropTypes.object,
 }
 
 export default ContactsPage
