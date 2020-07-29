@@ -10,7 +10,9 @@ import {Facade} from '~src/app/Facade'
 import FooterBar from '~src/components/layout/FooterBar'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import ContactsStackNavigation from '~src/navigation/ContactsStackNavigation'
-import MoreStackNavigation from '~src/navigation/MoreStackNavigation'
+import MoreStackNavigation, {
+  MoreStackParam,
+} from '~src/navigation/MoreStackNavigation'
 import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation'
 import SettingsStackNavigation from '~src/navigation/SettingsStackNavigation'
 import WalletStackNavigation from '~src/navigation/WalletsStackNavigation'
@@ -22,16 +24,7 @@ export type TabStackParamList = {
   ListWallets: undefined
   Contacts: undefined
   Settings: undefined
-  More:
-    | DefaultNavigationParam<
-        DefaultNavigationParam<
-          | Partial<CustomizeAccountParams>
-          | ImportReadAccountParams
-          | PassphraseParams
-          | undefined
-        >
-      >
-    | undefined
+  More: MoreStackParam
 }
 
 export type TabParams =

@@ -7,8 +7,6 @@ import {StyleSheet, Animated} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {
   ButtonView,
@@ -20,7 +18,7 @@ import {
 const {BarCodeType} = ExpoBarCodeScannerModule
 
 export interface Props {
-  navigation: StackNavigationProp<RootStackParamList>
+  navigation: StackNavigationProp<RootStackParamList & TabStackParamList>
 }
 
 const QRCodeScan = (props: Props) => {
@@ -67,7 +65,9 @@ const QRCodeScan = (props: Props) => {
     setHasPermission(granted)
   }
 
-  const goTo = (key: string): NavParam<RootStackParamList> | undefined => {
+  const goTo = (
+    key: string
+  ): NavParam<RootStackParamList & TabStackParamList> | undefined => {
     if (wallet.isAddress(key)) {
       return [
         Facade.route.Tab.name,

@@ -20,9 +20,22 @@ import CustomizeAccount, {
   CustomizeAccountParams,
 } from '~src/scenes/CustomizeAccount'
 import ImportKey from '~src/scenes/ImportKey'
-import ImportReadAccount from '~src/scenes/ImportReadAccount'
+import ImportReadAccount, {
+  ImportReadAccountParams,
+} from '~src/scenes/ImportReadAccount'
 import MorePage from '~src/scenes/MorePage'
 import Passphrase, {PassphraseParams} from '~src/scenes/Passphrase'
+
+export type MoreStackParam =
+  | DefaultNavigationParam<
+      DefaultNavigationParam<
+        | Partial<CustomizeAccountParams>
+        | ImportReadAccountParams
+        | PassphraseParams
+        | undefined
+      >
+    >
+  | undefined
 
 export type MoreStackParamList = {
   More: undefined
