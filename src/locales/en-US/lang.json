@@ -245,6 +245,13 @@
     "reference": "Reference"
   },
   "screens": {
+    "contactDetails": {
+      "walletAddress": "WALLET ADDRESS"
+    },
+    "contacts": {
+      "empty": "No contacts",
+      "addContact": "Add new contact"
+    },
     "listWallets": {
       "changeSinceLastVisit": "CHANGE SINCE LAST VISIT %{date}",
       "createFirstWallet": "Create first wallet"
@@ -440,5 +447,14 @@
       "regex": "(\\d{5})$",
       "format": "$1"
     }
+  },
+  "createContact": {
+    "title": "Create contact",
+    "name": "NAME",
+    "namePlaceholder": "Enter contact name",
+    "address": "ADDRESS",
+    "addressPlaceholder": "Enter contact address",
+    "save": "Save",
+    "cancel": "Cancel"
   }
 }

@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
+import {AddContact} from '~src/components/AddContact'
 import {TokenValue} from '~src/models/TokenValue'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -60,6 +61,7 @@ export type ModalStackParamList = {
   LanguagePickerModal: undefined
   CurrencyPickerModal: undefined
   ThemePickerModal: undefined
+  AddContact: undefined
   QRCodeScan: undefined
 }
 
@@ -160,6 +162,10 @@ const ModalStackNavigation = (props: Props) => {
         <ModalStack.Screen
           name={Facade.route.ThemePickerModal.name}
           component={ThemePickerModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.AddContact.name}
+          component={AddContact}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

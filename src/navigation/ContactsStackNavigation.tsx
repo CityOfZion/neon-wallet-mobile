@@ -1,4 +1,7 @@
-import {createStackNavigator} from '@react-navigation/stack'
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack'
 import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
@@ -6,33 +9,58 @@ import {ThemeProvider} from 'styled-components'
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
-import ContactsPage from '~src/scenes/ContactsPage'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {
+  ContactDetails,
+  ContactDetailsParams,
+} from '~src/scenes/Contacts/ContactsDetails'
+import ContactsPage from '~src/scenes/Contacts/ContactsPage'
 
 export type ContactsStackParamList = {
   Contacts: HeaderActionButtonProps
+  ContactDetails: ContactDetailsParams
+}
+
+interface ContactsStackProps {
+  navigation: StackNavigationProp<RootStackParamList>
 }
 
 const ContactsStack = createStackNavigator<ContactsStackParamList>()
 
-const ContactsStackNavigation = () => {
+const ContactsStackNavigation = (props: ContactsStackProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
 
   return (
     <ThemeProvider theme={theme}>
-      <ContactsStack.Navigator>
+      <ContactsStack.Navigator initialRouteName={Facade.route.Contacts.name}>
         <ContactsStack.Screen
           name={Facade.route.Contacts.name}
           initialParams={{
             actionButtonStyle: 'add',
-            // TODO: Add event
-            actionOnPress: () => {},
+            actionOnPress: () => {
+              props.navigation.navigate(Facade.route.Modal.name, {
+                screen: Facade.route.AddContact.name,
+              })
+            },
           }}
           component={ContactsPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.Contacts.name,
+              theme,
+              route,
+            })
+          }
+        />
+        <ContactsStack.Screen
+          name={Facade.route.ContactDetails.name}
+          component={ContactDetails}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.Contacts.translate(),
+              image: require('~src/assets/images/icon-contacts-white.png'),
               theme,
               route,
             })
