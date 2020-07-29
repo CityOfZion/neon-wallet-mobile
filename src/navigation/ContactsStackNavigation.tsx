@@ -10,10 +10,12 @@ import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import ContactsPage from '~src/scenes/ContactsPage'
+import {ContactDetails} from '~src/scenes/Contacts/ContactsDetails'
+import ContactsPage from '~src/scenes/Contacts/ContactsPage'
 
 export type ContactsStackParamList = {
   Contacts: HeaderActionButtonProps
+  ContactDetails: undefined
 }
 
 interface ContactsStackProps {
@@ -34,7 +36,6 @@ const ContactsStackNavigation = (props: ContactsStackProps) => {
           name={Facade.route.Contacts.name}
           initialParams={{
             actionButtonStyle: 'add',
-            // TODO: Add event
             actionOnPress: () => {
               props.navigation.navigate(Facade.route.Modal.name, {
                 screen: Facade.route.AddContact.name,
@@ -49,6 +50,10 @@ const ContactsStackNavigation = (props: ContactsStackProps) => {
               route,
             })
           }
+        />
+        <ContactsStack.Screen
+          name={Facade.route.ContactDetails.name}
+          component={ContactDetails}
         />
       </ContactsStack.Navigator>
     </ThemeProvider>

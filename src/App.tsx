@@ -32,7 +32,6 @@ const fetchFonts = () =>
 
 const App = () => {
   const [dataLoaded, setDataLoaded] = useState(false)
-  AsyncStorage.clear()
   if (!dataLoaded) {
     return (
       <AppLoading

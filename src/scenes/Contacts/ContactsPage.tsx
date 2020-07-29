@@ -8,19 +8,13 @@ import {
   TouchableHighlight,
 } from 'react-native'
 import {useSelector} from 'react-redux'
-import {marginBottom} from 'styled-system'
 
 import {Facade} from '~src/app/Facade'
-import {AddContact} from '~src/components/AddContact'
-import InputLabel from '~src/components/InputLabel'
-import InputWithValidation from '~src/components/InputWithValidation'
-import SwiperPanel from '~src/components/SwiperPanel'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {mockedContacts} from '~src/mocks/mockContacts'
 import {Contact} from '~src/models/Contact'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
+import {ContactDetails} from '~src/scenes/Contacts/ContactsDetails'
 import {RootState} from '~src/store/RootStore'
 import {
   ButtonView,
@@ -63,7 +57,7 @@ const noContactsView = (
             <LinearLayout orientation={'horiz'}>
               <ImageView
                 alignSelf={'center'}
-                source={require('~/src/assets/images/add-contact-white.png')}
+                source={require('~src/assets/images/add-contact-white.png')}
                 mr={4}
               />
               <TextView
@@ -98,10 +92,7 @@ const renderSectionHeader = (info: {section: SectionListData<Contact>}) => {
   )
 }
 
-const renderItem = (
-  onClick: () => void,
-  info: SectionListRenderItemInfo<Contact>
-) => {
+const renderItem = (info: SectionListRenderItemInfo<Contact>) => {
   return (
     <ButtonView>
       <LinearLayout pl={'14px'} mt={'21px'} mb={'21px'}>
@@ -122,7 +113,15 @@ const contactList = (
   navigation: StackNavigationProp<RootStackParamList>
 ) => {
   const contactsMap: Map<string, Contact[]> = new Map()
+
+  const onContactClick = (contact: Contact) => {
+    navigation.navigate(Facade.route.Tab.name, {
+      screen: Facade.route.Contacts.name,
+    })
+  }
+
   contacts.forEach((contact) => {
+    contact.onClick = () => onContactClick(contact)
     if (contactsMap.has(contact.name[0])) {
       const contacts = contactsMap.get(contact.name[0])
       contacts?.push(contact)
@@ -142,10 +141,6 @@ const contactList = (
 
     sections.push(section)
   })
-
-  const onContactClick = () =>{
-    navigation.navigate()
-  }
 
   return (
     <ScreenLayout padding={0}>
@@ -185,11 +180,15 @@ const ContactsPage = (props: ContactsProps) => {
     contacts = mockedContacts.sort((c1, c2) => c1.name.localeCompare(c2.name))
   })
 
-  if (!contacts || contacts.length == 0) {
-    return noContactsView(theme, props.navigation)
-  } else {
-    return contactList(theme, contacts)
-  }
+  props.navigation.navigate('ContactDetails')
+
+  return <ContactDetails contact={contacts[0]} />
+
+  // if (!contacts || contacts.length == 0) {
+  //   return noContactsView(theme, props.navigation)
+  // } else {
+  //   return contactList(theme, contacts, props.navigation)
+  // }
 }
 
 export default ContactsPage
