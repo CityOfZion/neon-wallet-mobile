@@ -14,12 +14,16 @@ import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
 interface WalletProps {
-  navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>
+  navigation: StackNavigationProp<
+    WalletStackParamList & MoreStackParamList & TabStackParamList
+  >
   theme: ApplicationTheme
 }
 

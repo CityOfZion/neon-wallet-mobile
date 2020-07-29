@@ -36,7 +36,7 @@ export type MoreStackParam =
   | undefined
 
 export type MoreStackParamList = {
-  More: undefined
+  MorePage: undefined
   Step1CreateWallet: undefined
   Step2CreateWallet: undefined
   Step3CreateWallet: HeaderActionButtonProps
@@ -63,7 +63,7 @@ const MoreStackNavigation = () => {
     <ThemeProvider theme={theme}>
       <MoreStack.Navigator>
         <MoreStack.Screen
-          name={Facade.route.More.name}
+          name={Facade.route.MorePage.name}
           component={MorePage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({

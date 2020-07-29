@@ -29,6 +29,7 @@ export class WrapperConfig {
     'GetAccount',
     'MyWallets',
     'MyWalletOptions',
+    'MorePage',
     'Step1CreateWallet',
     'Step2CreateWallet',
     'Step3CreateWallet',
