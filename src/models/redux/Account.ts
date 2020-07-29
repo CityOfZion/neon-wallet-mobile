@@ -74,7 +74,7 @@ export class Account implements AccountState {
 
     if (!assetSymbol) return null
 
-    const ratio = exchange[assetSymbol].to[currency]
+    const ratio = exchange[assetSymbol]?.to[currency] ?? null
 
     if (!ratio) return null
 

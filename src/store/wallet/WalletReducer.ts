@@ -9,6 +9,7 @@ import {ClearStateDispatcher} from '~src/store/wallet/dispatchers/ClearStateDisp
 import {NameDispatcher} from '~src/store/wallet/dispatchers/NameDispatcher'
 import {PassphraseDispatcher} from '~src/store/wallet/dispatchers/PassphraseDispatcher'
 import {SecurityPhraseDispatcher} from '~src/store/wallet/dispatchers/SecurityPhraseDispatcher'
+import {WalletTypeDispatcher} from '~src/store/wallet/dispatchers/WalletTypeDispatcher'
 
 export class WalletReducer extends ReducerWrapper<
   WalletType,
@@ -21,6 +22,7 @@ export class WalletReducer extends ReducerWrapper<
     NameDispatcher,
     PassphraseDispatcher,
     SecurityPhraseDispatcher,
+    WalletTypeDispatcher,
     ClearStateDispatcher,
   ]
 
@@ -33,6 +35,9 @@ export class WalletReducer extends ReducerWrapper<
     },
     setSecurityPhrase: (securityPhrase: string) => {
       return this.commit('SET_SECURITY_PHRASE', {securityPhrase})
+    },
+    setType: (walletType: 'standard' | 'watch' | 'legacy') => {
+      return this.commit('SET_WALLET_TYPE', {walletType})
     },
     clearState: () => {
       return this.commit('CLEAR_STATE', {})

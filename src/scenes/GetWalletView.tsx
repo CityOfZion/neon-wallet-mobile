@@ -2,7 +2,7 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import moment from 'moment'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, Fragment} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
@@ -83,36 +83,40 @@ const GetWalletView = (props: GetWalletProps) => {
       <AwaitActivity name={'populate'} loadingView={<ScreenLoader />}>
         <LinearLayout mt={4}>{_renderAccountCards()}</LinearLayout>
 
-        <TouchableWithoutFeedback onPress={() => createEvent()}>
-          <LinearLayout
-            my={6}
-            orientation="horiz"
-            width="100%"
-            alignItems="center"
-            justifyContent="center"
-            borderStyle="dashed"
-            borderColor="text.0"
-            borderRadius={17}
-            borderWidth={1}
-            style={{
-              aspectRatio: 38 / 25,
-            }}
-          >
-            <ImageView
-              source={require('~src/assets/images/icon-plus-white.png')}
-            />
-
-            <TextView
-              color="white"
-              fontSize={18}
-              mt={2}
-              ml={3}
-              fontFamily="medium"
+        {wallet.walletType === 'watch' || wallet.walletType === 'legacy' ? (
+          <Fragment />
+        ) : (
+          <TouchableWithoutFeedback onPress={() => createEvent()}>
+            <LinearLayout
+              my={6}
+              orientation="horiz"
+              width="100%"
+              alignItems="center"
+              justifyContent="center"
+              borderStyle="dashed"
+              borderColor="text.0"
+              borderRadius={17}
+              borderWidth={1}
+              style={{
+                aspectRatio: 38 / 25,
+              }}
             >
-              {Facade.t('screens.getWallet.addNewAccount')}
-            </TextView>
-          </LinearLayout>
-        </TouchableWithoutFeedback>
+              <ImageView
+                source={require('~src/assets/images/icon-plus-white.png')}
+              />
+
+              <TextView
+                color="white"
+                fontSize={18}
+                mt={2}
+                ml={3}
+                fontFamily="medium"
+              >
+                {Facade.t('screens.getWallet.addNewAccount')}
+              </TextView>
+            </LinearLayout>
+          </TouchableWithoutFeedback>
+        )}
       </AwaitActivity>
     </ScreenLayout>
   )

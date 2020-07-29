@@ -46,7 +46,7 @@ export type MoreStackParamList = {
   Modal: {screen: string}
   ImportKey: undefined
   CustomizeReadAccount: undefined
-  ImportReadAccount: undefined
+  ImportReadAccount: ImportReadAccountParams
   Passphrase: PassphraseParams
   CustomizeAccount: CustomizeAccountParams
   CustomColor: undefined
@@ -61,7 +61,7 @@ const MoreStackNavigation = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <MoreStack.Navigator>
+      <MoreStack.Navigator initialRouteName={Facade.route.MorePage.name}>
         <MoreStack.Screen
           name={Facade.route.MorePage.name}
           component={MorePage}
@@ -176,14 +176,11 @@ const MoreStackNavigation = () => {
         <MoreStack.Screen
           name={Facade.route.CustomizeAccount.name}
           component={CustomizeAccount}
-          options={({route}) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.CustomizeAccount.translate(),
-              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
-              theme,
-              route,
-            })
-          }
+          options={Navigator.defaultStackNavigatorOptions({
+            title: Facade.route.CustomizeAccount.translate(),
+            image: require('~src/assets/images/icon-add-circle-outline-white.png'),
+            theme,
+          })}
         />
       </MoreStack.Navigator>
     </ThemeProvider>

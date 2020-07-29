@@ -51,6 +51,7 @@ export default function ReorderWalletModal(props: Props) {
     const newWalletList: WalletMock[] = []
     order.forEach((i) => newWalletList.push(wallets[i]))
 
+    // TODO: NW-245
     // Here is where it would save the order onto local store
     console.log(
       `TODO: Order list = ${newWalletList.map((w) => w.title).join(', ')}`

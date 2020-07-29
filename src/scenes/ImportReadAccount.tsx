@@ -1,4 +1,5 @@
 import {wallet} from '@cityofzion/neon-core'
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
 import {useSelector} from 'react-redux'
@@ -7,7 +8,6 @@ import {Facade} from '~src/app/Facade'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {Account} from '~src/models/redux/Account'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootState} from '~src/store/RootStore'
 import {LinearLayout, TextView, ImageView} from '~src/styles/styled-components'
@@ -18,6 +18,7 @@ export interface ImportReadAccountParams {
 
 interface ImportReadAccountProps {
   navigation: StackNavigationProp<MoreStackParamList>
+  route: RouteProp<MoreStackParamList, 'ImportReadAccount'>
 }
 
 const validator = (text: string) => {
@@ -25,26 +26,27 @@ const validator = (text: string) => {
 }
 
 const ImportReadAccount = (props: ImportReadAccountProps) => {
-  // TODO: Remove
-  const defaultDebugAddress = 'Ad83tfsuWxxexhefPzXVpn5vv6oCbLKFEx'
-
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const [inputValue, setInputValue] = useState(defaultDebugAddress)
+  const [inputValue, setInputValue] = useState(
+    props.route.params?.address ?? ''
+  )
   const {currency} = useSelector((state: RootState) => state.settings)
 
   const persist = () => {
-    // TODO: NW-215
-    const account = new Account()
-    account.address = inputValue
-    account.currency = currency
-    account.srcIcon = require('~src/assets/images/card-neo.png')
+    if (!isValid()) return
 
     props.navigation.navigate(Facade.route.CustomizeAccount.name, {
       source: Facade.route.ImportReadAccount.name,
-      account,
+      address: inputValue,
     })
+  }
+
+  const isValid = () => {
+    const conditions: boolean[] = [validator(inputValue)]
+
+    return conditions.every((it) => it)
   }
 
   return (
