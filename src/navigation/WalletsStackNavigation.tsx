@@ -9,7 +9,9 @@ import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import AccountAssetDetail from '~src/scenes/Account/AccountAssetDetail'
-import GetAccountView, {GetAccountParams} from '~src/scenes/Account/GetAccountView'
+import GetAccountView, {
+  GetAccountParams,
+} from '~src/scenes/Account/GetAccountView'
 import GetWalletView from '~src/scenes/GetWalletView'
 import ListWalletView from '~src/scenes/ListWalletView'
 

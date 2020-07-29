@@ -1,5 +1,4 @@
-import react, {Fragment} from 'react'
-import React from 'react'
+import React, {Fragment} from 'react'
 
 import {Facade} from '~src/app/Facade'
 import NeonQRCode from '~src/components/QRCode'
@@ -19,6 +18,9 @@ export const QRCodeWithCopyButton = (props: QRCodeWithCopyButtonProps) => {
           label={Facade.t('app.copyToClipboard')}
           srcIcon={require('~/src/assets/images/icon-copy-green.png')}
           iconSize={[19, 23]}
+          onPress={() => {
+            Facade.utils.copyToClipboard(props.qrCodeValue)
+          }}
         />
       </LinearLayout>
     </Fragment>

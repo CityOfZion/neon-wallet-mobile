@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack/lib/typescript/src/types'
 import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
@@ -35,7 +36,6 @@ import styled, {
   TextView,
 } from '~src/styles/styled-components'
 import {orientation, weight} from '~src/styles/styled-system.config'
-import {useNavigation} from "@react-navigation/native";
 
 interface Props {
   onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
@@ -170,8 +170,12 @@ const AccountCard: React.FC<Props> = (props) => {
           ) : (
             <ButtonView
               onPress={() => {
-                console.log('hi mark')
-                navigation?.navigate(Facade.route.AccountQRCode.name)
+                navigation.navigate(Facade.route.Modal.name, {
+                  screen: Facade.route.AccountQRCode.name,
+                  params: {
+                    account: props.account,
+                  },
+                })
               }}
             >
               <ImageView
@@ -276,7 +280,6 @@ const AccountCard: React.FC<Props> = (props) => {
 
 AccountCard.propTypes = {
   onPress: PropTypes.func,
-  navigation: PropTypes.any,
   account: PropTypes.any.isRequired,
   isCompacted: PropTypes.bool.isRequired,
   isStackMode: PropTypes.bool.isRequired,

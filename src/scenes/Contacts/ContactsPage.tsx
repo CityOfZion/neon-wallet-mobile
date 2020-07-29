@@ -49,11 +49,10 @@ const ContactsPage = (prop: ContactsProps) => {
 
     contacts.forEach((contact) => {
       if (contactsMap.has(contact.name[0])) {
-        const contacts = contactsMap.get(contact.name[0])
-        contacts?.push(contact)
+        // eslint-disable-next-line no-unused-expressions
+        contactsMap.get(contact.name[0])?.push(contact)
       } else {
-        const contacts: Contact[] = [contact]
-        contactsMap.set(contact.name[0], contacts)
+        contactsMap.set(contact.name[0], [contact])
       }
     })
 
@@ -175,7 +174,7 @@ const ContactsPage = (prop: ContactsProps) => {
     )
   }
 
-  if (!contacts || contacts.length == 0) {
+  if (!contacts || contacts.length === 0) {
     return noContactsView()
   } else {
     return contactList()

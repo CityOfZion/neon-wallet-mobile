@@ -163,7 +163,7 @@ const TransactionsList: React.FC<Props> = (props) => {
         </TextView>
       )}
       {_renderTransaction()}
-      {props.index != props.lastIndex && (
+      {props.index !== props.lastIndex && (
         <LinearLayout
           mt="10px"
           mb="10px"
