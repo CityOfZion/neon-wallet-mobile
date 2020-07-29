@@ -167,7 +167,7 @@ const ReceiveToAccountModal = (props: Props) => {
       controller={controller}
       fullSize={true}
       paddingTop={24}
-      paddingRight={8}
+      paddingRight={30}
       paddingLeft={0}
       title={Facade.t('modals.receive.title')}
       rightButton={CloseButton()}
