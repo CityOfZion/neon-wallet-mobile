@@ -245,8 +245,8 @@
     "reference": "Reference"
   },
   "screens": {
-    "contactDetails" : {
-      "walletAddress" : "WALLET ADDRESS"
+    "contactDetails": {
+      "walletAddress": "WALLET ADDRESS"
     },
     "contacts": {
       "empty": "No contacts",
@@ -448,7 +448,7 @@
       "format": "$1"
     }
   },
-  "createContact" : {
+  "createContact": {
     "title": "Create contact",
     "name": "NAME",
     "namePlaceholder": "Enter contact name",
@@ -456,5 +456,5 @@
     "addressPlaceholder": "Enter contact address",
     "save": "Save",
     "cancel": "Cancel"
-  },
+  }
 }
