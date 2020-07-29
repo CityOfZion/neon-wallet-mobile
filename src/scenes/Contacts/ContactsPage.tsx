@@ -12,11 +12,9 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {mockedContacts} from '~src/mocks/mockContacts'
 import {Contact} from '~src/models/redux/Contact'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ContactsStackParamList} from '~src/navigation/ContactsStackNavigation'
-import {ContactDetails} from '~src/scenes/Contacts/ContactsDetails'
 import {RootState} from '~src/store/RootStore'
 import {
   ButtonView,

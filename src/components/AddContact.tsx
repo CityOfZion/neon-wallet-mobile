@@ -22,7 +22,6 @@ export const AddContact = (props: AddContactProps) => {
 
   const dispatch = useDispatch<SyncDispatch>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const contacts = useSelector((state: RootState) => state.app.contacts)
 
   const createNewContact = async () => {
     dispatch(RootStore.contact.actions.clearState())
