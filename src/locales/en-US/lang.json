@@ -278,7 +278,8 @@
       "success": "Success!",
       "requesting": "Requesting for camera permission",
       "noAccess": "No access to camera",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "tryAgain": "Try again"
     }
   },
   "modals": {

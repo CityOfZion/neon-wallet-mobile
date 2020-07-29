@@ -116,7 +116,7 @@ const QRCodeScan = (props: Props) => {
       setMessage(Facade.t('screens.scanQrCode.success'))
       props.navigation.navigate(...destination)
     } else {
-      setMessage('Try again.')
+      setMessage(Facade.t('screens.scanQrCode.tryAgain'))
     }
   }
 
