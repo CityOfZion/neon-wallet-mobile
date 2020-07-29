@@ -30,7 +30,7 @@ const SendWalletSelectionModal = (props: Props) => {
       controller={controller}
       fullSize={true}
       paddingTop={24}
-      paddingRight={0}
+      paddingRight={8}
       paddingLeft={0}
       title={Facade.t('modals.send.title')}
       rightButton={CloseButton()}
