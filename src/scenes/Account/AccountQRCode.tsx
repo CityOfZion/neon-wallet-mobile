@@ -33,7 +33,7 @@ export const AccountQRCode = (props: AccountQRCodeProps) => {
       controller={controller}
       onClose={props.navigation.goBack}
       title={props.route.params.account.name ?? ''}
-      image={props.route.params.account.srcIcon ?? undefined}
+      image={props.route.params.account.srcIcon ?? require("~/src/assets/images/icon-neo-white.png")}
     >
       <InputLabel
         capitalize={true}
@@ -42,8 +42,8 @@ export const AccountQRCode = (props: AccountQRCodeProps) => {
       <TextView
         color={'primary'}
         fontFamily={'medium'}
-        fontSize={'18px'}
-        mb={'40px'}
+        fontSize={'17px'}
+        mb={'12%'}
       >
         {props.route.params.account.address}
       </TextView>
