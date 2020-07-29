@@ -162,7 +162,7 @@ const DestinationAddressField = (props: {
         title={Facade.t('modals.send.transactionInput.destinationAddress')}
         color={'text.0'}
         marginTop={30}
-        marginBottom={20}
+        marginBottom={30}
         capitalize={true}
       />
       <InputWithValidation
@@ -223,8 +223,8 @@ const TokenField = (props: {
       <InputLabel
         title={Facade.t('modals.send.transactionInput.token')}
         color={'text.0'}
-        marginTop={30}
-        marginBottom={20}
+        marginTop={50}
+        marginBottom={30}
         capitalize={true}
       />
 
@@ -314,7 +314,7 @@ const SendTransactionInputModal = (props: Props) => {
       controller={controller}
       fullSize={true}
       paddingTop={24}
-      paddingRight={0}
+      paddingRight={8}
       paddingLeft={0}
       title={Facade.t('modals.send.title')}
       rightButton={CloseButton()}
