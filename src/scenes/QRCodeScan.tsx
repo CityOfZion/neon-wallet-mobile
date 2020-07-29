@@ -47,7 +47,7 @@ const QRCodeScan = (props: Props) => {
           duration: 200,
           delay: 3000,
         }),
-      ]).start()
+      ]).start(() => setMessage(undefined))
     }
   }
 
