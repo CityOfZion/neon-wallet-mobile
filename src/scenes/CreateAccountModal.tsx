@@ -94,7 +94,11 @@ export default function CreateAccountModal(props: Props) {
             marginBottom="24px"
           />
 
-          <AccountCard account={account} isStackMode={false} />
+          <AccountCard
+            account={account}
+            isStackMode={false}
+            navigation={props.navigation}
+          />
 
           <InputLabel
             title={Facade.t('modals.createAccount.accountInput.title')}

@@ -1,3 +1,4 @@
+import {StackNavigationProp} from '@react-navigation/stack/lib/typescript/src/types'
 import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
@@ -26,6 +27,7 @@ import {
 
 import {Facade} from '~src/app/Facade'
 import {Account} from '~src/models/redux/Account'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import styled, {
   ButtonView,
   ImageView,
@@ -33,10 +35,10 @@ import styled, {
   TextView,
 } from '~src/styles/styled-components'
 import {orientation, weight} from '~src/styles/styled-system.config'
+import {useNavigation} from "@react-navigation/native";
 
 interface Props {
   onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
-  onPressQRCode?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
   account: Account
   isCompacted?: boolean
   isStackMode?: boolean
@@ -46,7 +48,7 @@ interface Props {
 const AccountCard: React.FC<Props> = (props) => {
   const {exchange} = useSelector((state: RootState) => state.app)
   const {language, currency} = useSelector((state: RootState) => state.settings)
-
+  const navigation = useNavigation()
   const [viewHeight, setViewHeight] = useState<number>(0)
   const unit = (viewHeight * 0.1) / 24
 
@@ -166,7 +168,12 @@ const AccountCard: React.FC<Props> = (props) => {
               </TextView>
             </LinearLayout>
           ) : (
-            <ButtonView>
+            <ButtonView
+              onPress={() => {
+                console.log('hi mark')
+                navigation?.navigate(Facade.route.AccountQRCode.name)
+              }}
+            >
               <ImageView
                 ml={10 * unit}
                 width={32 * unit}
@@ -269,6 +276,7 @@ const AccountCard: React.FC<Props> = (props) => {
 
 AccountCard.propTypes = {
   onPress: PropTypes.func,
+  navigation: PropTypes.any,
   account: PropTypes.any.isRequired,
   isCompacted: PropTypes.bool.isRequired,
   isStackMode: PropTypes.bool.isRequired,

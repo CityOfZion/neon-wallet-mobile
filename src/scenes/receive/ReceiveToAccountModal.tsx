@@ -9,6 +9,7 @@ import AccountCard from '~src/components/AccountCard'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import NeonQRCode from '~src/components/QRCode'
+import {QRCodeWithCopyButton} from '~src/components/QRCodeWithCopyButton'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
@@ -26,24 +27,6 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
-
-const AddressContent = () => {
-  return (
-    <Fragment>
-      <NeonQRCode
-        content={'AN8iLVt18CKoATdexztCQj923hw5gkc41A'}
-        qrCodeWidth={300}
-      />
-      <LinearLayout width={'100%'} height={54} my={34}>
-        <ThemedButton
-          label={Facade.t('app.copyToClipboard')}
-          srcIcon={require('~/src/assets/images/icon-copy-green.png')}
-          iconSize={[19, 23]}
-        />
-      </LinearLayout>
-    </Fragment>
-  )
-}
 
 const TokenField = (props: {
   theme: ApplicationTheme
@@ -202,7 +185,10 @@ const ReceiveToAccountModal = (props: Props) => {
         >
           {props.route.params.walletTitle.toUpperCase()}
         </TextView>
-        <AccountCard account={props.route.params.account} />
+        <AccountCard
+          account={props.route.params.account}
+          navigation={props.navigation}
+        />
         <TouchableWithoutFeedback onPress={() => props.navigation.goBack()}>
           <LinearLayout
             orientation="horiz"
@@ -227,7 +213,9 @@ const ReceiveToAccountModal = (props: Props) => {
           capitalize={true}
         />
         {isAddressTabSelected ? (
-          <AddressContent />
+          <QRCodeWithCopyButton
+            qrCodeValue={props.route.params.account.address ?? ''}
+          />
         ) : (
           <LinearLayout orientation="verti" justifyContent="space-between">
             <TokenField

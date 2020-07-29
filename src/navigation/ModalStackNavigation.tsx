@@ -32,12 +32,14 @@ import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionCo
 import SendTransactionInputModal from '~src/scenes/send/SendTransactionInputModal'
 import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
 import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
+import {AccountQRCodeParams} from "~src/scenes/Account/AccountQRCode";
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
   CreateAccountModal: undefined
   EditAccountModal: EditAccountModalParam
   ReceiveWalletSelectionModal: undefined
+  AccountQRCode: AccountQRCodeParams
   ReceiveAccountSelectionModal: {wallet: Wallet}
   ReceiveToAccountModal: {
     walletTitle: string

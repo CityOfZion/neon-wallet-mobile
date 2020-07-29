@@ -8,9 +8,9 @@ import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
 import {AccountMock} from '~src/models/AccountMock'
-import AccountAssetDetail from '~src/scenes/AccountAssetDetail'
+import AccountAssetDetail from '~src/scenes/Account/AccountAssetDetail'
 import QRCodeScan from '~src/scenes/QRCodeScan'
-import ReceiveQRCode from '~src/scenes/ReceiveQRCode'
+import ReceiveQRCode from '~src/scenes/receive/ReceiveQRCode'
 
 export type QuickToolsStackParamList = {
   ReceiveQrCode: undefined
