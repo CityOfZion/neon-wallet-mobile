@@ -26,7 +26,7 @@ const TransactionsList: React.FC<Props> = (props) => {
             <LinearLayout orientation="horiz" key={index}>
               <LinearLayout orientation="vert" mr="8px" mt="5px">
                 <ImageView
-                  style={index != 0 && {opacity: 0}}
+                  style={index !== 0 && {opacity: 0}}
                   source={
                     props.transactionModel &&
                     props.transactionModel.srcIcon &&
@@ -58,16 +58,11 @@ const TransactionsList: React.FC<Props> = (props) => {
               <LinearLayout weight={3} orientation="vert">
                 {index === 0 && (
                   <LinearLayout orientation="horiz">
-                    <TextView
-
-                      fontSize="14px"
-                      color="text.2"
-                      width="50%"
-                    >
+                    <TextView fontSize="14px" color="text.2" width="50%">
                       {Facade.t('components.transactionsList.sentTo')}
                     </TextView>
                     <TextView
-                      ml='10px'
+                      ml="10px"
                       fontSize="14px"
                       color="text.2"
                       width="50%"
@@ -105,7 +100,6 @@ const TransactionsList: React.FC<Props> = (props) => {
             <LinearLayout orientation="horiz">
               {receiver.isAddress ? (
                 <TextView
-
                   numberOfLines={1}
                   ellipsizeMode="middle"
                   width="50%"
@@ -116,13 +110,7 @@ const TransactionsList: React.FC<Props> = (props) => {
                   {receiver.nameOrAdress}
                 </TextView>
               ) : (
-                <TextView
-
-                  width="50%"
-                  mr="10px"
-                  fontSize="16px"
-                  color="text.0"
-                >
+                <TextView width="50%" mr="10px" fontSize="16px" color="text.0">
                   {receiver.nameOrAdress}
                 </TextView>
               )}
