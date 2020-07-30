@@ -39,11 +39,11 @@ const ContactsPage = (prop: ContactsProps) => {
     const contactsMap: Map<string, Contact[]> = new Map()
 
     contacts.forEach((contact) => {
-      if (contactsMap.has(contact.name[0])) {
+      if (contactsMap.has(contact.name?.[0] ?? '')) {
         // eslint-disable-next-line no-unused-expressions
-        contactsMap.get(contact.name[0])?.push(contact)
+        contactsMap.get(contact.name?.[0] ?? '')?.push(contact)
       } else {
-        contactsMap.set(contact.name[0], [contact])
+        contactsMap.set(contact.name?.[0] ?? '', [contact])
       }
     })
 
