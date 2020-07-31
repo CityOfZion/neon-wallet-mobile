@@ -45,7 +45,7 @@ export const ContactDetails = (prop: ContactDetailsProps) => {
           alignSelf={'center'}
           width={'100%'}
           onPress={() => {
-            Facade.utils.copyToClipboard(contact.address)
+            if (contact.address) Facade.utils.copyToClipboard(contact.address)
           }}
           orientation={'horiz'}
           alignItems={'center'}
