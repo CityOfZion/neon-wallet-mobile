@@ -1,12 +1,14 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import {AwaitActivity} from '@simpli/react-native-await'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {Alert} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCard from '~src/components/themed/ThemedCard'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
@@ -18,7 +20,21 @@ interface Props {
 }
 
 const Step1BackupWalletPage: React.FC<Props> = (props) => {
+  const [words, setWords] = useState<string[]>([])
+
   const {wallet} = props.route.params
+
+  useEffect(() => {
+    Facade.await.run('populateStep1', populate)
+  }, [wallet.id])
+
+  const populate = async () => {
+    const mnemonic = await wallet.getMnemonic()
+
+    if (mnemonic) {
+      setWords(mnemonic.split(' '))
+    }
+  }
 
   props.navigation.setOptions({
     headerRight: () =>
@@ -70,95 +86,101 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
 
   return (
     <ScreenLayout alignX={'center'}>
-      <TextView
-        alignSelf={'flex-start'}
-        color={'text.0'}
-        fontSize={'lg'}
-        fontFamily={'bold'}
-      >
-        {wallet.name}
-      </TextView>
+      <AwaitActivity name={'populateStep1'} loadingView={<ScreenLoader />}>
+        <TextView
+          alignSelf={'flex-start'}
+          color={'text.0'}
+          fontSize={'lg'}
+          fontFamily={'bold'}
+        >
+          {wallet.name}
+        </TextView>
 
-      <LinearLayout mt={5} weight={1}>
-        <LinearLayout mb={6} width={'100%'}>
-          <LinearLayout width={'100%'} orientation={'horiz'}>
-            <TextView
-              weight={1}
-              color={'primary'}
-              fontSize={'lg'}
-              fontFamily={'bold'}
-            >
-              {Facade.t('step1BackupWallet.label_1')}
-            </TextView>
+        <LinearLayout mt={5} weight={1}>
+          <LinearLayout mb={6} width={'100%'}>
+            <LinearLayout width={'100%'} orientation={'horiz'}>
+              <TextView
+                weight={1}
+                color={'primary'}
+                fontSize={'lg'}
+                fontFamily={'bold'}
+              >
+                {Facade.t('step1BackupWallet.label_1')}
+              </TextView>
 
-            <TextView color={'primary'} fontSize={'lg'} fontFamily={'bold'}>
-              {Facade.t('step1BackupWallet.oneOfThree')}
+              <TextView color={'primary'} fontSize={'lg'} fontFamily={'bold'}>
+                {Facade.t('step1BackupWallet.oneOfThree')}
+              </TextView>
+            </LinearLayout>
+
+            <TextView color={'text.0'} fontSize={'lg'}>
+              {Facade.t('step1BackupWallet.body_1')}
             </TextView>
           </LinearLayout>
 
-          <TextView color={'text.0'} fontSize={'lg'}>
-            {Facade.t('step1BackupWallet.body_1')}
+          <LinearLayout mb={5}>
+            <ThemedCard
+              rounded={false}
+              contentStyle={{
+                paddingTop: Facade.scale(26),
+                paddingBottom: Facade.scale(26),
+                paddingLeft: Facade.scale(10),
+                paddingRight: Facade.scale(10),
+              }}
+            >
+              <LinearLayout
+                orientation={'horiz'}
+                flexWrap={'wrap'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                width={'100%'}
+              >
+                {words.map((it) => _renderWord(it))}
+              </LinearLayout>
+            </ThemedCard>
+          </LinearLayout>
+
+          <LinearLayout
+            mb={5}
+            orientation={'horiz'}
+            justifyContent={'flex-end'}
+          >
+            <ThemedButton
+              onPress={() =>
+                Facade.utils.copyToClipboard(wallet.securityPhrase ?? '')
+              }
+              label={Facade.t('app.copy')}
+              srcIcon={require('~/src/assets/images/icon-copy-green.png')}
+              iconSize={[Facade.scale(25), Facade.scale(25)]}
+              fontSize={18}
+              flat={true}
+            />
+
+            <ThemedButton
+              label={Facade.t('app.print')}
+              srcIcon={require('~/src/assets/images/icon-print-green.png')}
+              iconSize={[25, 25]}
+              fontSize={18}
+              flat={true}
+            />
+          </LinearLayout>
+
+          <TextView mb={4} color={'text.0'} fontSize={'lg'}>
+            {Facade.t('step1BackupWallet.body_2')}
+          </TextView>
+
+          <TextView mb={5} color={'text.0'} fontSize={'lg'}>
+            {Facade.t('step1BackupWallet.body_3')}
           </TextView>
         </LinearLayout>
 
-        <LinearLayout mb={5}>
-          <ThemedCard
-            rounded={false}
-            contentStyle={{
-              paddingTop: Facade.scale(26),
-              paddingBottom: Facade.scale(26),
-              paddingLeft: Facade.scale(10),
-              paddingRight: Facade.scale(10),
-            }}
-          >
-            <LinearLayout
-              orientation={'horiz'}
-              flexWrap={'wrap'}
-              alignItems={'center'}
-              justifyContent={'center'}
-              width={'100%'}
-            >
-              {wallet.securityWords.map((it) => _renderWord(it))}
-            </LinearLayout>
-          </ThemedCard>
-        </LinearLayout>
-
-        <LinearLayout mb={5} orientation={'horiz'} justifyContent={'flex-end'}>
+        <LinearLayout mt={5} mb={6} px={5} width={'100%'}>
           <ThemedButton
-            onPress={() =>
-              Facade.utils.copyToClipboard(wallet.securityPhrase ?? '')
-            }
-            label={Facade.t('app.copy')}
-            srcIcon={require('~/src/assets/images/icon-copy-green.png')}
-            iconSize={[Facade.scale(25), Facade.scale(25)]}
-            fontSize={18}
-            flat={true}
-          />
-
-          <ThemedButton
-            label={Facade.t('app.print')}
-            srcIcon={require('~/src/assets/images/icon-print-green.png')}
-            iconSize={[25, 25]}
-            fontSize={18}
-            flat={true}
+            onPress={() => infoDialog()}
+            label={Facade.t('app.continue')}
           />
         </LinearLayout>
-
-        <TextView mb={4} color={'text.0'} fontSize={'lg'}>
-          {Facade.t('step1BackupWallet.body_2')}
-        </TextView>
-
-        <TextView mb={5} color={'text.0'} fontSize={'lg'}>
-          {Facade.t('step1BackupWallet.body_3')}
-        </TextView>
-      </LinearLayout>
-
-      <LinearLayout mt={5} mb={6} px={5} width={'100%'}>
-        <ThemedButton
-          onPress={() => infoDialog()}
-          label={Facade.t('app.continue')}
-        />
-      </LinearLayout>
+      </AwaitActivity>
     </ScreenLayout>
   )
 }

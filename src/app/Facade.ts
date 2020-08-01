@@ -6,7 +6,9 @@ import moment from 'moment'
 import {ApplicationWrapper} from '~src/app/ApplicationWrapper'
 import {Config} from '~src/app/Config'
 import {Normalize} from '~src/app/Normalize'
+import {AsteroidHelper} from '~src/helpers/AsteroidHelper'
 import {FilterHelper} from '~src/helpers/FilterHelper'
+import {SecurityHelper} from '~src/helpers/SecurityHelper'
 import {UtilsHelper} from '~src/helpers/UtilsHelper'
 
 export abstract class Facade {
@@ -17,7 +19,9 @@ export abstract class Facade {
   static readonly await = Await
 
   // Helpers
+  static readonly asteroid = AsteroidHelper
   static readonly filter = FilterHelper
+  static readonly security = SecurityHelper
   static readonly utils = UtilsHelper
 
   // Alias

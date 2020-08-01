@@ -2,7 +2,6 @@ import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 import moment from 'moment'
 
 import {Facade} from '~src/app/Facade'
-import {AsteroidHelper} from '~src/helpers/AsteroidHelper'
 import {TokenBalance} from '~src/models/TokenBalance'
 import {Account} from '~src/models/redux/Account'
 
@@ -18,13 +17,14 @@ export class Wallet implements WalletState {
   passphrase: string | null = null
 
   @HttpExpose()
-  securityPhrase: string | null = null
-
-  @HttpExpose()
   lastVisitedAt: string | null = null
 
   @HttpExpose()
   walletType: 'standard' | 'watch' | 'legacy' | null = null
+
+  // Do not expose security phrase
+  @HttpExclude()
+  securityPhrase: string | null = null
 
   previousAssets: TokenBalance = new TokenBalance()
   currentAssets: TokenBalance = new TokenBalance()
@@ -54,26 +54,29 @@ export class Wallet implements WalletState {
     return this.securityPhrase?.split(' ') ?? []
   }
 
-  get keychain() {
-    const {securityPhrase} = this
-    if (!securityPhrase) return null
-    return AsteroidHelper.getKeychainFromMnemonicWords(securityPhrase)
-  }
-
   getAccounts(pool: Account[]) {
     return pool.filter((it) => it.idWallet === this.id)
   }
 
-  generateWif(index: number) {
-    const {securityPhrase} = this
-    if (!securityPhrase) return null
-    return AsteroidHelper.generateWif(securityPhrase, index)
+  async getMnemonic() {
+    return (await Facade.security.loadMnemonic(this.id ?? '')) ?? null
   }
 
-  generateNeoAccount(index: number) {
-    const {securityPhrase} = this
-    if (!securityPhrase) return null
+  async getKeychain() {
+    const mnemonic = await this.getMnemonic()
+    if (!mnemonic) return null
+    return Facade.asteroid.getKeychainFromMnemonic(mnemonic)
+  }
 
-    return AsteroidHelper.generateNeoAccount(securityPhrase, index)
+  async generateWif(index: number) {
+    const mnemonic = await this.getMnemonic()
+    if (!mnemonic) return null
+    return Facade.asteroid.generateWif(mnemonic, index)
+  }
+
+  async generateNeoAccount(index: number) {
+    const mnemonic = await this.getMnemonic()
+    if (!mnemonic) return null
+    return Facade.asteroid.generateNeoAccount(mnemonic, index)
   }
 }

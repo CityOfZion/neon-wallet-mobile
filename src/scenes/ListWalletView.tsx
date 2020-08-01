@@ -1,6 +1,6 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useRef, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {TouchableWithoutFeedback, View} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
@@ -10,10 +10,8 @@ import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
 import {Wallet} from '~src/models/redux/Wallet'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
@@ -28,11 +26,18 @@ interface WalletProps {
 }
 
 const ListWalletView = (props: WalletProps) => {
-  const [activeIndex, setActiveIndex] = useState(0)
   const carouselRef = useRef(null)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [walletAmount, setWalletAmount] = useState<number>()
 
-  const wallets = useSelector((state: RootState) => state.app.wallets)
+  const {wallets, accounts, exchange} = useSelector(
+    (state: RootState) => state.app
+  )
   const {currency, language} = useSelector((state: RootState) => state.settings)
+
+  useEffect(() => {
+    Facade.await.run('calculateWalletAmount', calculateWalletAmount, 1000)
+  }, [activeIndex])
 
   const getActiveWallet = (): Wallet | null => {
     return wallets[activeIndex] ?? null
@@ -40,6 +45,23 @@ const ListWalletView = (props: WalletProps) => {
 
   const isListNotEmpty = () => {
     return Boolean(wallets.length)
+  }
+
+  const calculateWalletAmount = async () => {
+    const wallet = getActiveWallet()
+
+    if (wallet) {
+      const walletAccounts = wallet.getAccounts(accounts)
+      const promises = walletAccounts.map((it) => it.populateBalanceHistory())
+      await Promise.all(promises)
+
+      const walletAmount = Facade.lodash.sumBy(
+        walletAccounts,
+        (it) => it.exchangeBalanceAmount(currency, exchange) ?? 0
+      )
+
+      setWalletAmount(walletAmount)
+    }
   }
 
   const selectEvent = async (wallet: Wallet) => {
@@ -62,24 +84,34 @@ const ListWalletView = (props: WalletProps) => {
               {wallet.formattedLastVisitedAt}
             </TextView>
           }
-          <LinearLayout orientation="horiz">
-            <TextView fontSize="36px" color="text.0" fontFamily="medium">
-              {Facade.filter.currency(
-                wallet.currentValue ?? 0,
-                currency,
-                language
-              )}
-            </TextView>
-            <ImageView
-              mt="8px"
-              mx="4px"
-              source={require('~src/assets/images/info-primary.png')}
-            />
-            {wallet.previousValue ? (
-              <TextView fontSize="36px" color="primary" fontFamily="semibold">
-                {calculateChangePercentage(wallet)}
-              </TextView>
-            ) : null}
+
+          <LinearLayout orientation="horiz" minHeight={56}>
+            <AwaitActivity name={'calculateWalletAmount'} size={'large'}>
+              <>
+                <TextView fontSize="36px" color="text.0" fontFamily="medium">
+                  {Facade.filter.currency(
+                    walletAmount ?? 0,
+                    currency,
+                    language
+                  )}
+                </TextView>
+
+                <ImageView
+                  mt="8px"
+                  mx="4px"
+                  source={require('~src/assets/images/info-primary.png')}
+                />
+                {wallet.previousValue ? (
+                  <TextView
+                    fontSize="36px"
+                    color="primary"
+                    fontFamily="semibold"
+                  >
+                    {calculateChangePercentage(wallet)}
+                  </TextView>
+                ) : null}
+              </>
+            </AwaitActivity>
           </LinearLayout>
         </LinearLayout>
       </>

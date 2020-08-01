@@ -29,6 +29,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
     if (!walletName || !passphrase || !isValid()) return
 
     dispatch(RootStore.wallet.actions.setName(walletName))
+    dispatch(RootStore.wallet.actions.setType('standard'))
     dispatch(RootStore.wallet.actions.setPassphrase(passphrase))
 
     const id = await dispatchAsyncString(

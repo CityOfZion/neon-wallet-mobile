@@ -47,12 +47,21 @@ export class WalletReducer extends ReducerWrapper<
         const wallets = (await Storage.wallets.load()) ?? []
 
         const wallet = plainToClass(Wallet, getState().wallet)
+        const {securityPhrase} = getState().wallet
+
+        if (securityPhrase === null) {
+          return Promise.reject(
+            new Error("Can't create a wallet without a security phrase")
+          )
+        }
+
         // TODO: Review ID generator
         wallet.id = Facade.utils.uuid()
 
         wallets.push(wallet)
 
         await Storage.wallets.save(wallets)
+        await Facade.security.saveMnemonic(wallet.id, securityPhrase)
 
         return wallet.id
       }

@@ -4,22 +4,17 @@ import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import LoadingOverlay from '../components/LoadingOverlay'
-
 import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import {Sync} from '~src/app/Sync'
+import LoadingOverlay from '~src/components/LoadingOverlay'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import {AsteroidHelper} from '~src/helpers/AsteroidHelper'
 import LoginStackNavigation from '~src/navigation/LoginStackNavigation'
 import ModalStackNavigation, {
   ModalParams,
 } from '~src/navigation/ModalStackNavigation'
-import TabNavigation, {
-  TabParams,
-  TabStackParamList,
-} from '~src/navigation/TabNavigation'
+import TabNavigation, {TabParams} from '~src/navigation/TabNavigation'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 import QRCodeScan from '~src/scenes/QRCodeScan'
 import {RootStore} from '~src/store/RootStore'
@@ -69,11 +64,12 @@ const AppNavigation = (props: Props) => {
   }
 
   const createFirstWallet = async () => {
-    const words = AsteroidHelper.generateMnemonicWords() ?? []
+    const words = Facade.asteroid.generateMnemonic() ?? []
 
     dispatch(RootStore.wallet.actions.clearState())
 
     dispatch(RootStore.wallet.actions.setName('My First Wallet'))
+    dispatch(RootStore.wallet.actions.setType('standard'))
     dispatch(RootStore.wallet.actions.setSecurityPhrase(words.join(' ')))
 
     const id = await dispatchAsyncString(

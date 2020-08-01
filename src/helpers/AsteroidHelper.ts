@@ -1,37 +1,38 @@
 import {wallet} from '@cityofzion/neon-js'
 import type * as AsteroidSDK from '@moonlight-io/asteroid-sdk-js'
 
-import {Facade} from '~src/app/Facade'
+import {Config} from '~src/app/Config'
 
 const SDK: typeof AsteroidSDK = require('~src/vendor/asteroid-sdk')
 
 export abstract class AsteroidHelper {
-  static getKeychainFromMnemonicWords(words: string) {
+  static getKeychainFromMnemonic(words: string) {
     const keychain = new SDK.Keychain()
     keychain.importMnemonic(words)
     return keychain
   }
 
-  static generateMnemonicWords() {
+  static generateMnemonic() {
     const keychain = new SDK.Keychain()
+    keychain.generateMnemonic(128) // 12 words
 
     const list = keychain.mnemonic?.toString() ?? null
     return list?.split(' ') ?? null
   }
 
-  static generateWif(mnemonicWords: string, index: number) {
-    const keychain = this.getKeychainFromMnemonicWords(mnemonicWords)
+  static generateWif(mnemonic: string, index: number) {
+    const keychain = this.getKeychainFromMnemonic(mnemonic)
 
     const childKey = keychain.generateChildKey(
-      Facade.app.platform,
-      Facade.app.derivationPath.replace(/\?$/, index.toString())
+      Config.application.platform,
+      Config.application.derivationPath.replace(/\?$/, index.toString())
     )
 
     return childKey.getWIF()
   }
 
-  static generateNeoAccount(mnemonicWords: string, index: number) {
-    const wif = this.generateWif(mnemonicWords, index)
+  static generateNeoAccount(mnemonic: string, index: number) {
+    const wif = this.generateWif(mnemonic, index)
     return new wallet.Account(wif)
   }
 
