@@ -45,6 +45,7 @@
     "expo-font": "^8.1.1",
     "expo-linear-gradient": "^8.1.0",
     "expo-local-authentication": "^9.2.0",
+    "expo-secure-store": "^9.1.0",
     "expo-updates": "~0.2.0",
     "i18n-js": "^3.5.1",
     "intl": "^1.2.5",

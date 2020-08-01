@@ -7244,6 +7244,11 @@ expo-pwa@0.0.27:
     fs-extra "9.0.0"
     update-check "1.5.3"
 
+expo-secure-store@^9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/expo-secure-store/-/expo-secure-store-9.1.0.tgz#0dc97c04647c0780675bf895296ed7f73b17a16a"
+  integrity sha512-2EHe+9JMb3Ok6xDXk7flboulXkSZrfq6yTPyzpIEyRxBVMIEvpwleCHSgwpC9V+BZ59bH9I8U01zARw/Mhwstg==
+
 expo-sqlite@~8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/expo-sqlite/-/expo-sqlite-8.1.0.tgz#858eb28e1143db281de8a49c99b4a953a81d0834"

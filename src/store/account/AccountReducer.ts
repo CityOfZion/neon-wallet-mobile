@@ -62,7 +62,7 @@ export class AccountReducer extends ReducerWrapper<
         account.index = indexes.length ? Math.max(...indexes) + 1 : 0
 
         if (wallet) {
-          const neoAccount = wallet.generateNeoAccount(account.index)
+          const neoAccount = await wallet.generateNeoAccount(account.index)
 
           if (neoAccount) {
             account.address = neoAccount.address

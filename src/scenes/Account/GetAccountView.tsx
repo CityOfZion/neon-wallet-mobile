@@ -1,7 +1,7 @@
 import {RouteProp, useFocusEffect} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useState, useCallback} from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -45,28 +45,33 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   useFocusEffect(
     useCallback(() => {
-      Facade.await.run('populate', populate)
+      setAccount(
+        accountsPool.find((acc) => acc.address === account?.address) ??
+          new Account()
+      )
     }, [accountsPool])
   )
 
-  const populate = async () => {
-    setAccount(
-      accountsPool.find((acc) => acc.address === account?.address) ??
-        new Account()
-    )
+  useEffect(() => {
+    populateAllNodes()
+  }, [])
+
+  const populateAllNodes = async () => {
     setNodes(await NeoNode.getAllNodes())
   }
 
   const _renderTitle: React.FC = () => {
     return (
       <LinearLayout alignItems="center" justifyContent="center">
-        <TextView color={'text.3'} textAlign={'center'} fontSize={10}>
-          {Facade.t('app.neoBlockHeight')}
-        </TextView>
+        <AwaitActivity name={'getAllNodes'}>
+          <TextView color={'text.3'} textAlign={'center'} fontSize={10}>
+            {Facade.t('app.neoBlockHeight')}
+          </TextView>
 
-        <TextView color={'text.0'} textAlign={'center'}>
-          {nodes[0] && Facade.filter.decimal(nodes[0].height, language)}
-        </TextView>
+          <TextView color={'text.0'} textAlign={'center'}>
+            {nodes[0] && Facade.filter.decimal(nodes[0].height, language)}
+          </TextView>
+        </AwaitActivity>
       </LinearLayout>
     )
   }

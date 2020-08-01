@@ -7,9 +7,7 @@ import {Facade} from '~src/app/Facade'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {AsteroidHelper} from '~src/helpers/AsteroidHelper'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface ImportKeyProps {
@@ -35,7 +33,7 @@ const ImportKey = (props: ImportKeyProps) => {
     } else if (wallet.isNEP2(inputValue)) {
       destination = [Facade.route.Passphrase.name, {encryptedKey: inputValue}]
     } else if (wallet.isWIF(inputValue)) {
-      const neoAccount = AsteroidHelper.generateNeoAccountFromWif(inputValue)
+      const neoAccount = Facade.asteroid.generateNeoAccountFromWif(inputValue)
 
       if (neoAccount) {
         destination = [
