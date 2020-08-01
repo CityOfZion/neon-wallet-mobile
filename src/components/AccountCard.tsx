@@ -125,7 +125,6 @@ const AccountCard: React.FC<Props> = (props) => {
             )}
 
             <TextView
-              weight={1}
               mb={-2 * unit}
               fontFamily={'semibold'}
               fontSize={22 * unit}
@@ -137,6 +136,15 @@ const AccountCard: React.FC<Props> = (props) => {
             >
               {props.account.name}
             </TextView>
+
+            {props.account.accountType == 'watch' && (
+              <ImageView
+                width={24 * unit}
+                height={24 * unit}
+                source={require('~/src/assets/images/icon-watch-white.png')}
+                ml={10 * unit}
+              />
+            )}
           </LinearLayout>
 
           {props.isCompacted ? (

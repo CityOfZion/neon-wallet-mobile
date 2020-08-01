@@ -83,7 +83,12 @@ const WalletCard = (props: WalletCardProps) => {
             ml="12px"
             width={28}
             height={24}
-            source={require('~src/assets/images/wallet-icon.png')}
+            resizeMode={'contain'}
+            source={
+              props.wallet.walletType === 'watch'
+                ? require('~src/assets/images/icon-watch-green.png')
+                : require('~src/assets/images/wallet-icon.png')
+            }
           />
           <TextView
             ml="8px"
