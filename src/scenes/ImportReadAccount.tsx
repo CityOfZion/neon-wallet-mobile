@@ -147,7 +147,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
         {wallet.isAddress(inputValue) && (
           <LinearLayout mt={20} width="90%" alignSelf="center">
             <ThemedButton
-              label={Facade.t('importReadAccount.next')}
+              label={Facade.t('importReadAccount.add')}
               onPress={persist}
             />
           </LinearLayout>

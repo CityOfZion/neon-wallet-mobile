@@ -199,7 +199,7 @@
     "headerText": "Enter an address you would like to watch.\nPlease be aware the following functionality will be disabled for this account:",
     "inputPlaceholder": "Please enter information",
     "disabledFeature": "Function lorem ipsum sid dolar",
-    "next": "Next"
+    "add": "Add"
   },
   "settings": {
     "title": "Settings",
