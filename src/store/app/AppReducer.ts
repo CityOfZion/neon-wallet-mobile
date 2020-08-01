@@ -7,6 +7,7 @@ import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {Account} from '~src/models/redux/Account'
 import {App} from '~src/models/redux/App'
+import {Contact} from '~src/models/redux/Contact'
 import {Wallet} from '~src/models/redux/Wallet'
 import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
 import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
@@ -99,6 +100,16 @@ export class AppReducer extends ReducerWrapper<AppType, AppState, AppAction> {
         }
 
         return accounts ?? []
+      }
+    },
+
+    syncContacts: (): AsyncAction<Contact[]> => {
+      return async (dispatch, getState) => {
+        const contacts = await Storage.contacts.load()
+        if (contacts) {
+          dispatch(this.commit('SET_CONTACTS', {contacts}))
+        }
+        return contacts ?? []
       }
     },
   }

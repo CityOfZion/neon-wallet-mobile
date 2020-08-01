@@ -1,5 +1,6 @@
 import {Facade} from '~src/app/Facade'
 import {Account} from '~src/models/redux/Account'
+import {Contact} from '~src/models/redux/Contact'
 import {Settings} from '~src/models/redux/Settings'
 import {Wallet} from '~src/models/redux/Wallet'
 
@@ -37,5 +38,12 @@ export abstract class Storage {
    */
   static get accounts() {
     return Facade.storage['@accounts'].bind().asArrayOf(Account)
+  }
+
+  /**
+   * User contacts
+   */
+  static get contacts() {
+    return Facade.storage['@contacts'].bind().asArrayOf(Contact)
   }
 }

@@ -1,5 +1,6 @@
 import {Account} from '~src/models/redux/Account'
 import {App} from '~src/models/redux/App'
+import {Contact} from '~src/models/redux/Contact'
 import {Settings} from '~src/models/redux/Settings'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStore} from '~src/store/RootStore'
@@ -24,11 +25,14 @@ export abstract class Sync {
     const accounts: Account[] = await dispatch(
       RootStore.app.actions.syncAccounts()
     )
+    const contacts: Contact[] = await dispatch(
+      RootStore.app.actions.syncContacts()
+    )
 
     // Synchronize balance from WS
     const promises = accounts.map((it) => it.populateBalanceHistory())
     await Promise.all(promises)
 
-    return {settings, exchange, wallets, accounts}
+    return {settings, exchange, wallets, accounts, contacts}
   }
 }

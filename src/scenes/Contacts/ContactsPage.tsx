@@ -12,11 +12,9 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {mockedContacts} from '~src/mocks/mockContacts'
-import {Contact} from '~src/models/Contact'
+import {Contact} from '~src/models/redux/Contact'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ContactsStackParamList} from '~src/navigation/ContactsStackNavigation'
-import {ContactDetails} from '~src/scenes/Contacts/ContactsDetails'
 import {RootState} from '~src/store/RootStore'
 import {
   ButtonView,
@@ -25,7 +23,6 @@ import {
   RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
 interface ContactsProps {
   navigation: StackNavigationProp<ContactsStackParamList & RootStackParamList>
@@ -36,23 +33,17 @@ const ContactsPage = (prop: ContactsProps) => {
     (state: RootState) => Facade.theme[state.settings.theme]
   )
   const navigation = prop.navigation
-  let contacts: Contact[] = mockedContacts.sort((c1, c2) =>
-    c1.name.localeCompare(c2.name)
-  )
-
-  useFocusEffect(() => {
-    contacts = mockedContacts.sort((c1, c2) => c1.name.localeCompare(c2.name))
-  })
+  const contacts = useSelector((state: RootState) => state.app.contacts)
 
   const contactList = () => {
     const contactsMap: Map<string, Contact[]> = new Map()
 
     contacts.forEach((contact) => {
-      if (contactsMap.has(contact.name[0])) {
+      if (contactsMap.has(contact.name?.[0] ?? '')) {
         // eslint-disable-next-line no-unused-expressions
-        contactsMap.get(contact.name[0])?.push(contact)
+        contactsMap.get(contact.name?.[0] ?? '')?.push(contact)
       } else {
-        contactsMap.set(contact.name[0], [contact])
+        contactsMap.set(contact.name?.[0] ?? '', [contact])
       }
     })
 

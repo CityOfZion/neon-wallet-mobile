@@ -1,14 +1,14 @@
 import {wallet} from '@cityofzion/neon-core'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
-import {Contact} from '~src/models/Contact'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout} from '~src/styles/styled-components'
 
 interface AddContactProps {
@@ -20,8 +20,19 @@ export const AddContact = (props: AddContactProps) => {
   const [address, setAddress] = useState('')
   const controller = useSwiperController(true)
 
-  const createNewContact = () => {
-    const contact = new Contact(name, address)
+  const dispatch = useDispatch<SyncDispatch>()
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+
+  const createNewContact = async () => {
+    dispatch(RootStore.contact.actions.clearState())
+
+    dispatch(RootStore.contact.actions.setName(name))
+    dispatch(RootStore.contact.actions.setAddress(address))
+
+    await dispatchAsync(RootStore.contact.actions.createAndSave())
+    dispatch(RootStore.contact.actions.clearState())
+
+    await dispatchAsync(RootStore.app.actions.syncContacts())
     controller.close()
   }
   return (
@@ -45,12 +56,10 @@ export const AddContact = (props: AddContactProps) => {
 
         <InputWithValidation
           placeholder={Facade.t('createContact.namePlaceholder')}
-          onChangeText={setName}
+          onChangeText={(val) => setName(val)}
           color={'background.4'}
           value={name}
-          validator={() => {
-            return true
-          }}
+          validator={(val) => val.length >= 2 && val.length <= 20}
           separatorColor={'background.3'}
           invalidColor={'background.3'}
           sideMargins={0}
@@ -66,7 +75,7 @@ export const AddContact = (props: AddContactProps) => {
 
         <InputWithValidation
           placeholder={Facade.t('createContact.addressPlaceholder')}
-          onChangeText={setAddress}
+          onChangeText={(val) => setAddress(val)}
           color={'background.4'}
           value={address}
           invalidColor={'background.3'}
