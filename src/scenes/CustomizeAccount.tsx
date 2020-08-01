@@ -56,15 +56,17 @@ const CustomizeAccount = (props: Props) => {
   const [color, setColor] = useState<string>(theme.colors.card[0])
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
   const [loaded, setLoaded] = useState(false)
+  const [saving, setSaving] = useState(false)
 
-  const account = new Account()
+  const [account, setAccount] = useState(new Account())
+
   account.address = props.route.params.address
   account.name = name
   account.backgroundColor = color
 
   useEffect(() => {
     if (!loaded) {
-      load()
+      Facade.await.run('customizeAccount', load)
     }
   }, [loaded])
 
@@ -140,6 +142,15 @@ const CustomizeAccount = (props: Props) => {
     return conditions.every((it) => it)
   }
 
+  const save = () => {
+    if (!isValid()) {
+      setShowInvalid(true)
+      return
+    }
+
+    Facade.await.run('customizeAccount', submit, 300)
+  }
+
   // TODO: NW-216
   props.navigation.setOptions({
     headerTitle: () =>
@@ -151,15 +162,17 @@ const CustomizeAccount = (props: Props) => {
       HeaderActionButton({
         actionTitle: Facade.t('screens.customizeAccount.navigation.save'),
         actionButtonStyle: 'highlight',
-        actionOnPress: submit,
+        actionOnPress: () => !saving && save(),
       }),
   })
 
   return (
     <ScreenLayout padding={16}>
       <AwaitActivity
-        name={'balance'}
+        name={'customizeAccount'}
         loadingView={<ScreenLoader transparent={true} />}
+        onLoadingStart={() => setSaving(true)}
+        onLoadingEnd={() => setSaving(false)}
       >
         <LinearLayout width="100%" height="100%" pt={24}>
           <TextView
@@ -197,6 +210,8 @@ const CustomizeAccount = (props: Props) => {
             color={theme.colors.text[0]}
             invalidColor={theme.colors.background[3]}
             separatorColor={theme.colors.background[5]}
+            invalidSeparatorColor={theme.colors.quinary}
+            invalidMessageColor={theme.colors.quinary}
             hidePaste={true}
             hideScan={true}
             sideMargins={0}
