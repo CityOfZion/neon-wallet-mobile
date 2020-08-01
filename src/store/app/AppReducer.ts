@@ -96,6 +96,12 @@ export class AppReducer extends ReducerWrapper<AppType, AppState, AppAction> {
       return async (dispatch, getState) => {
         const accounts = await Storage.accounts.load()
         if (accounts) {
+          const wallets = await Storage.wallets.load()
+          if (wallets) {
+            accounts.forEach((it) => {
+              it.accountType = it.getWallet(wallets)?.walletType ?? null
+            })
+          }
           dispatch(this.commit('SET_ACCOUNTS', {accounts}))
         }
 

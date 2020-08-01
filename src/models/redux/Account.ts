@@ -49,6 +49,9 @@ export class Account implements AccountState {
   @ResponseSerialize(Balance)
   balanceHistory: Balance[] = []
 
+  @HttpExpose()
+  accountType: 'standard' | 'watch' | 'legacy' | null = null
+
   get lastBalance(): Balance | null {
     return this.balanceHistory?.[0]
   }

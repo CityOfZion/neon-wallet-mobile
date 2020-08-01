@@ -1,7 +1,7 @@
 import {wallet} from '@cityofzion/neon-core'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -21,10 +21,6 @@ interface ImportReadAccountProps {
   route: RouteProp<MoreStackParamList, 'ImportReadAccount'>
 }
 
-const validator = (text: string) => {
-  return wallet.isAddress(text) || !text
-}
-
 const ImportReadAccount = (props: ImportReadAccountProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
@@ -32,10 +28,15 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   const [inputValue, setInputValue] = useState(
     props.route.params?.address ?? ''
   )
-  const {currency} = useSelector((state: RootState) => state.settings)
+
+  useEffect(() => {
+    setInputValue(props.route.params?.address ?? '')
+  }, [props.route.params?.address])
 
   const persist = () => {
-    if (!isValid()) return
+    if (!isValid()) {
+      return
+    }
 
     props.navigation.navigate(Facade.route.CustomizeAccount.name, {
       source: Facade.route.ImportReadAccount.name,
@@ -44,7 +45,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   }
 
   const isValid = () => {
-    const conditions: boolean[] = [validator(inputValue)]
+    const conditions: boolean[] = [wallet.isAddress(inputValue)]
 
     return conditions.every((it) => it)
   }
@@ -137,15 +138,16 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
           color={theme.colors.text[0]}
           invalidColor={theme.colors.background[3]}
           value={inputValue}
-          validator={validator}
+          validator={() => wallet.isAddress(inputValue) || !inputValue}
           separatorColor={theme.colors.background[5]}
-          invalidSeparatorColor={theme.colors.background[4]}
+          invalidSeparatorColor={theme.colors.quinary}
+          invalidMessageColor={theme.colors.quinary}
         />
 
-        {validator(inputValue) && (
+        {wallet.isAddress(inputValue) && (
           <LinearLayout mt={20} width="90%" alignSelf="center">
             <ThemedButton
-              label={Facade.t('importReadAccount.next')}
+              label={Facade.t('importReadAccount.add')}
               onPress={persist}
             />
           </LinearLayout>
