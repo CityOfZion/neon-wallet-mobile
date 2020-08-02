@@ -65,6 +65,27 @@ const ListWalletView = (props: WalletProps) => {
   }
 
   const selectEvent = async (wallet: Wallet) => {
+    if (wallet.walletType !== 'standard') {
+      goToFirstAccount(wallet)
+    } else {
+      goToWallet(wallet)
+    }
+  }
+
+  const goToFirstAccount = (wallet: Wallet) => {
+    const accountsFromWallet = wallet.getAccounts(accounts)
+
+    if (accountsFromWallet.length > 0) {
+      props.navigation.navigate(Facade.route.GetAccount.name, {
+        account: accountsFromWallet[0],
+      })
+    } else {
+      // Fall back
+      goToWallet(wallet)
+    }
+  }
+
+  const goToWallet = (wallet: Wallet) => {
     props.navigation.navigate(Facade.route.GetWallet.name, {
       wallet,
     })
