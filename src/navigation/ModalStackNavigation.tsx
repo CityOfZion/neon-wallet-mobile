@@ -28,32 +28,36 @@ import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import WalletContextModal from '~src/scenes/WalletContextModal'
 import WelcomePage from '~src/scenes/WelcomePage'
-import ReceiveAccountSelectionModal from '~src/scenes/receive/ReceiveAccountSelectionModal'
-import ReceiveToAccountModal from '~src/scenes/receive/ReceiveToAccountModal'
+import ReceiveAccountSelectionModal, {
+  ReceiveAccountSelectionParams,
+} from '~src/scenes/receive/ReceiveAccountSelectionModal'
+import ReceiveToAccountModal, {
+  ReceiveToAccountModalParams,
+} from '~src/scenes/receive/ReceiveToAccountModal'
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
-import SendAccountSelectionModal from '~src/scenes/send/SendAccountSelectionModal'
+import SendAccountSelectionModal, {
+  SendAccountSelectionModalParams,
+} from '~src/scenes/send/SendAccountSelectionModal'
 import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionConfirmationModal'
-import SendTransactionInputModal from '~src/scenes/send/SendTransactionInputModal'
+import SendTransactionInputModal, {
+  SendTransactionInputModalParams,
+} from '~src/scenes/send/SendTransactionInputModal'
 import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
-import SendWalletSelectionModal from '~src/scenes/send/SendWalletSelectionModal'
+import SendWalletSelectionModal, {
+  SendWalletSelectionModalParams,
+} from '~src/scenes/send/SendWalletSelectionModal'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
   CreateAccountModal: undefined
   EditAccountModal: EditAccountModalParam
-  ReceiveWalletSelectionModal: undefined
   AccountQRCode: AccountQRCodeParams
-  ReceiveAccountSelectionModal: {wallet: Wallet}
-  ReceiveToAccountModal: {
-    walletTitle: string
-    account: Account
-  }
-  SendWalletSelectionModal: undefined
-  SendAccountSelectionModal: {wallet: Wallet}
-  SendTransactionInputModal: {
-    walletTitle: string
-    account: Account
-  }
+  ReceiveWalletSelectionModal: undefined
+  ReceiveAccountSelectionModal: ReceiveAccountSelectionParams
+  ReceiveToAccountModal: ReceiveToAccountModalParams
+  SendWalletSelectionModal: SendWalletSelectionModalParams
+  SendAccountSelectionModal: SendAccountSelectionModalParams
+  SendTransactionInputModal: SendTransactionInputModalParams
   SendTransactionReviewModal: undefined
   SendTransactionConfirmationModal: undefined
   CustomColor: {onColorPicked: (hex: string) => void}
@@ -70,12 +74,12 @@ export type ModalStackParamList = {
   QRCodeScan: undefined
 }
 
+// Add here params for modals that you need to navigate directly to, from a different stack
 export type ModalParams =
-  | ((DefaultNavigationParam &
-      Partial<CustomColorPageParam> &
-      Partial<EditAccountModalParam>) &
-      Partial<AccountQRCodeParams>)
-  | undefined
+  | DefaultNavigationParam<CustomColorPageParam>
+  | DefaultNavigationParam<EditAccountModalParam>
+  | DefaultNavigationParam<AccountQRCodeParams>
+  | DefaultNavigationParam<SendWalletSelectionModalParams>
 
 interface Props {
   route?: RouteProp<RootStackParamList, 'Modal'>
@@ -106,7 +110,6 @@ const ModalStackNavigation = (props: Props) => {
         <ModalStack.Screen
           name={Facade.route.EditAccountModal.name}
           component={EditAccountModal}
-          initialParams={props.route?.params}
         />
         <ModalStack.Screen
           name={Facade.route.ReceiveWalletSelectionModal.name}
@@ -143,7 +146,6 @@ const ModalStackNavigation = (props: Props) => {
         <ModalStack.Screen
           name={Facade.route.CustomColor.name}
           component={CustomColorPage}
-          initialParams={props.route?.params}
         />
         <ModalStack.Screen
           name={Facade.route.WalletContextModal.name}

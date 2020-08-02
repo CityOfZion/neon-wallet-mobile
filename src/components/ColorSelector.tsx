@@ -53,11 +53,13 @@ export default function ColorSelector(props: Props) {
   const customColorButton = (
     <TouchableWithoutFeedback
       onPress={() => {
-        navigation.navigate('Modal', {
+        navigation.navigate(Facade.route.Modal.name, {
           screen: Facade.route.CustomColor.name,
-          onColorPicked: (hex: string) => {
-            setColor(hex)
-            props.onSelect && props.onSelect(hex)
+          params: {
+            onColorPicked: (hex: string) => {
+              setColor(hex)
+              props.onSelect && props.onSelect(hex)
+            },
           },
         })
       }}

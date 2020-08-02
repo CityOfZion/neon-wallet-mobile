@@ -12,11 +12,18 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {NeoURI} from '~src/helpers/UriHelper'
 import {TokenBalance} from '~src/models/TokenBalance'
 import {Account} from '~src/models/redux/Account'
+import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
+
+export interface SendAccountSelectionModalParams {
+  wallet: Wallet
+  uri?: NeoURI
+}
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList & WalletStackParamList>
@@ -116,6 +123,7 @@ const SendAccountSelectionModal = (props: Props) => {
                 {
                   walletTitle: props.route.params.wallet.name ?? '',
                   account: selectedAccount ?? new Account(),
+                  uri: props.route.params?.uri,
                 }
               )
             }

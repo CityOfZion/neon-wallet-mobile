@@ -4,8 +4,10 @@ import {BarCodeEvent, BarCodeScanner} from 'expo-barcode-scanner'
 import ExpoBarCodeScannerModule from 'expo-barcode-scanner/src/ExpoBarCodeScannerModule'
 import React, {useState, useEffect, useRef} from 'react'
 import {StyleSheet, Animated} from 'react-native'
+import {URLSearchParams} from 'url'
 
 import {Facade} from '~src/app/Facade'
+import {GAS_HASH, NEO_HASH} from '~src/models/TokenValue'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {
   ButtonView,
@@ -102,10 +104,20 @@ const QRCodeScan = (props: Props) => {
             screen: Facade.route.CustomizeAccount.name,
             initial: false,
             params: {
-              source: Facade.route.ImportReadAccount.name,
-              address: key,
+              source: Facade.route.ImportKey.name,
+              address: Facade.asteroid.generateNeoAccountFromWif(key).address,
               legacy: true,
             },
+          },
+        },
+      ]
+    } else if (Facade.uri.isValid(key)) {
+      return [
+        Facade.route.Modal.name,
+        {
+          screen: Facade.route.SendWalletSelectionModal.name,
+          params: {
+            uri: Facade.uri.parse(key),
           },
         },
       ]
@@ -117,6 +129,7 @@ const QRCodeScan = (props: Props) => {
 
     if (destination) {
       setMessage(Facade.t('screens.scanQrCode.success'))
+      props.navigation.pop(1)
       props.navigation.navigate(...destination)
     } else {
       setMessage(Facade.t('screens.scanQrCode.tryAgain'))

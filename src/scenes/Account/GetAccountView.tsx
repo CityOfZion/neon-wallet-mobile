@@ -85,7 +85,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
         actionOnPress: () => {
           props.navigation.navigate(Facade.route.Modal.name, {
             screen: Facade.route.EditAccountModal.name,
-            account,
+            params: {
+              account,
+            },
           })
         },
       }),
