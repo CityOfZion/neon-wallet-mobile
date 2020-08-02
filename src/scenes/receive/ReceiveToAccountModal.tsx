@@ -8,7 +8,6 @@ import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
-import NeonQRCode from '~src/components/QRCode'
 import {QRCodeWithCopyButton} from '~src/components/QRCodeWithCopyButton'
 import SwiperPanel, {
   CloseButton,
@@ -16,7 +15,6 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import TabSelector from '~src/components/TabSelector'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {TokenValue} from '~src/models/TokenValue'
 import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -143,6 +141,11 @@ const ReferenceField = (props: {
       />
     </Fragment>
   )
+}
+
+export interface ReceiveToAccountModalParams {
+  walletTitle: string
+  account: Account
 }
 
 interface Props {

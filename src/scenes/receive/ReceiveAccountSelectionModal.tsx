@@ -15,9 +15,14 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import {Balance} from '~src/models/Balance'
 import {TokenBalance} from '~src/models/TokenBalance'
 import {Account} from '~src/models/redux/Account'
+import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
+
+export interface ReceiveAccountSelectionParams {
+  wallet: Wallet
+}
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList & WalletStackParamList>

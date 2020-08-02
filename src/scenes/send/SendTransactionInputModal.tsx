@@ -1,6 +1,6 @@
 import {RouteProp} from '@react-navigation/native'
 import React, {Fragment, useState} from 'react'
-import {ScrollView, TouchableWithoutFeedback} from 'react-native'
+import {TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
@@ -13,7 +13,9 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {NeoURI} from '~src/helpers/UriHelper'
 import {TokenValue} from '~src/models/TokenValue'
+import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {
   ButtonView,
@@ -295,6 +297,12 @@ const AmountField = (props: {
   )
 }
 
+export interface SendTransactionInputModalParams {
+  walletTitle: string
+  account: Account
+  uri?: NeoURI
+}
+
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
   route: RouteProp<ModalStackParamList, 'SendTransactionInputModal'>
@@ -305,8 +313,10 @@ const SendTransactionInputModal = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const [text, setText] = useState('')
-  const [amount, setAmount] = useState(0)
+  const [text, setText] = useState(props.route.params?.uri?.address ?? '')
+  const [amount, setAmount] = useState(props.route.params?.uri?.amount ?? 0)
+  // TODO: convert hash into TokenValue
+  // const hash = props.route.params?.uri?.asset ?? ''
   const [token, setToken] = useState<TokenValue | null>(null)
 
   return (

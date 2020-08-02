@@ -1,3 +1,4 @@
+import {RouteProp} from '@react-navigation/native'
 import React, {useRef, useState} from 'react'
 import {ScrollView} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
@@ -10,12 +11,18 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import WalletCard from '~src/components/WalletCard'
+import {NeoURI} from '~src/helpers/UriHelper'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
+export interface SendWalletSelectionModalParams {
+  uri?: NeoURI
+}
+
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
+  route: RouteProp<ModalStackParamList, 'SendWalletSelectionModal'>
 }
 
 const SendWalletSelectionModal = (props: Props) => {
@@ -71,6 +78,7 @@ const SendWalletSelectionModal = (props: Props) => {
                     Facade.route.SendAccountSelectionModal.name,
                     {
                       wallet: item,
+                      uri: props.route.params?.uri,
                     }
                   )
                 }

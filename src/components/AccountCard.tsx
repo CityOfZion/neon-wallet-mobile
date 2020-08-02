@@ -137,7 +137,7 @@ const AccountCard: React.FC<Props> = (props) => {
               {props.account.name}
             </TextView>
 
-            {props.account.accountType == 'watch' && (
+            {props.account.accountType === 'watch' && (
               <ImageView
                 width={24 * unit}
                 height={24 * unit}

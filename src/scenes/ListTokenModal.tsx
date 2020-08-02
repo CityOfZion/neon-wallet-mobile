@@ -108,6 +108,7 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
               symbol={item.symbol}
               name={item.name}
               holding={item.holding}
+              hash={item.hash}
             />
           )}
         />

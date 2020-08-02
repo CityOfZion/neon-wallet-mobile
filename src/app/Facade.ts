@@ -9,6 +9,7 @@ import {Normalize} from '~src/app/Normalize'
 import {AsteroidHelper} from '~src/helpers/AsteroidHelper'
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import {SecurityHelper} from '~src/helpers/SecurityHelper'
+import {UriHelper} from '~src/helpers/UriHelper'
 import {UtilsHelper} from '~src/helpers/UtilsHelper'
 
 export abstract class Facade {
@@ -23,6 +24,7 @@ export abstract class Facade {
   static readonly filter = FilterHelper
   static readonly security = SecurityHelper
   static readonly utils = UtilsHelper
+  static readonly uri = UriHelper
 
   // Alias
   static get t() {
