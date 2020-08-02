@@ -1,3 +1,4 @@
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -5,14 +6,21 @@ import React from 'react'
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {Wallet} from '~src/models/redux/Wallet'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {TextView, LinearLayout, ImageView} from '~src/styles/styled-components'
 
-interface Props {
-  navigation: StackNavigationProp<MoreStackParamList>
+export interface Step5CreateWalletParams {
+  wallet: Wallet
 }
 
-const Step5CreateWalletPage: React.FC<Props> = (props) => {
+interface Props {
+  navigation: StackNavigationProp<TabStackParamList>
+  route: RouteProp<MoreStackParamList, 'Step5CreateWallet'>
+}
+
+const Step5CreateWalletPage = (props: Props) => {
   return (
     <ScreenLayout alignX={'center'}>
       <LinearLayout mt={5} weight={1}>
@@ -62,9 +70,14 @@ const Step5CreateWalletPage: React.FC<Props> = (props) => {
           onPress={() => {
             props.navigation.reset({
               index: 0,
-              routes: [{name: Facade.route.More.name}],
+              routes: [{name: Facade.route.MorePage.name}],
             })
-            props.navigation.navigate(Facade.route.ListWallets.name)
+            props.navigation.navigate(Facade.route.ListWallets.name, {
+              screen: Facade.route.GetWallet.name,
+              params: {
+                wallet: props.route.params.wallet,
+              },
+            })
           }}
           label={Facade.t('step5CreateWallet.viewWallet')}
         />

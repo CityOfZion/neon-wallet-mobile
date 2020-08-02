@@ -12,16 +12,20 @@ import AccountAssetDetail from '~src/scenes/Account/AccountAssetDetail'
 import GetAccountView, {
   GetAccountParams,
 } from '~src/scenes/Account/GetAccountView'
-import GetWalletView from '~src/scenes/GetWalletView'
+import GetWalletView, {GetWalletParams} from '~src/scenes/GetWalletView'
 import ListWalletView from '~src/scenes/ListWalletView'
 
 export type WalletStackParamList = {
   ListWallets: undefined
-  GetWallet: {wallet: Wallet} & HeaderCustomProps
+  GetWallet: GetWalletParams
   GetAccount: GetAccountParams
   AccountAssetDetail: {account: Account} & HeaderCustomProps
   Modal: {screen: RouteName}
 }
+
+export type WalletStackParams =
+  | DefaultNavigationParam<GetWalletParams>
+  | DefaultNavigationParam<GetAccountParams>
 
 const WalletStack = createStackNavigator<WalletStackParamList>()
 

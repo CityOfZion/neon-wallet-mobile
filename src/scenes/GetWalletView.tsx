@@ -8,12 +8,18 @@ import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
+import HeaderBar from '~src/components/layout/HeaderBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {Account} from '~src/models/redux/Account'
+import {Wallet} from '~src/models/redux/Wallet'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+
+export interface GetWalletParams {
+  wallet: Wallet
+}
 
 interface GetWalletProps {
   route: RouteProp<WalletStackParamList, 'GetWallet'>
@@ -31,6 +37,13 @@ const GetWalletView = (props: GetWalletProps) => {
   useEffect(() => {
     Facade.await.run('populate', populate, 500)
   }, [accountsPool])
+
+  props.navigation.setOptions({
+    headerTitle: () =>
+      HeaderBar({
+        title: wallet.name ?? '-',
+      }),
+  })
 
   const populate = async () => {
     wallet.lastVisitedAt = moment().format()

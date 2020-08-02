@@ -67,7 +67,6 @@ const ListWalletView = (props: WalletProps) => {
   const selectEvent = async (wallet: Wallet) => {
     props.navigation.navigate(Facade.route.GetWallet.name, {
       wallet,
-      headerTitle: wallet.name ?? '-',
     })
   }
 
