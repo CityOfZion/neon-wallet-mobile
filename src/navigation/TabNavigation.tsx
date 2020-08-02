@@ -15,20 +15,22 @@ import MoreStackNavigation, {
 } from '~src/navigation/MoreStackNavigation'
 import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation'
 import SettingsStackNavigation from '~src/navigation/SettingsStackNavigation'
-import WalletStackNavigation from '~src/navigation/WalletsStackNavigation'
-import {CustomizeAccountParams} from '~src/scenes/CustomizeAccount'
-import {ImportReadAccountParams} from '~src/scenes/ImportReadAccount'
-import {PassphraseParams} from '~src/scenes/Passphrase'
+import WalletStackNavigation, {
+  WalletStackParams,
+} from '~src/navigation/WalletsStackNavigation'
 
 export type TabStackParamList = {
-  ListWallets: undefined
+  ListWallets: WalletStackParams
   Contacts: undefined
   Settings: undefined
   More: MoreStackParam
 }
 
 export type TabParams =
-  | (DefaultNavigationParam<MoreStackParam | undefined> &
+  | ((
+      | DefaultNavigationParam<MoreStackParam>
+      | DefaultNavigationParam<WalletStackParams>
+    ) &
       Partial<{welcomeHidden?: boolean}>)
   | undefined
 

@@ -1,21 +1,18 @@
-import {RouteProp} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {StackNavigationProp} from '~/node_modules/@react-navigation/stack'
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
-import {Account} from '~src/models/redux/Account'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {TabStackParamList} from '~src/navigation/TabNavigation'
 import Step1CreateWalletPage from '~src/scenes/CreateWalletPage/Step1CreateWalletPage'
 import Step2CreateWalletPage from '~src/scenes/CreateWalletPage/Step2CreateWalletPage'
 import Step3CreateWalletPage from '~src/scenes/CreateWalletPage/Step3CreateWalletPage'
 import Step4CreateWalletPage from '~src/scenes/CreateWalletPage/Step4CreateWalletPage'
-import Step5CreateWalletPage from '~src/scenes/CreateWalletPage/Step5CreateWalletPage'
+import Step5CreateWalletPage, {
+  Step5CreateWalletParams,
+} from '~src/scenes/CreateWalletPage/Step5CreateWalletPage'
 import CustomizeAccount, {
   CustomizeAccountParams,
 } from '~src/scenes/CustomizeAccount'
@@ -41,7 +38,7 @@ export type MoreStackParamList = {
   Step2CreateWallet: undefined
   Step3CreateWallet: HeaderActionButtonProps
   Step4CreateWallet: undefined
-  Step5CreateWallet: undefined
+  Step5CreateWallet: Step5CreateWalletParams
   ListWallets: undefined
   Modal: {screen: string}
   ImportKey: undefined
