@@ -61,6 +61,7 @@ export const AddContact = (props: AddContactProps) => {
       image={require('~/src/assets/images/icon-add-circle-outline-white.png')}
       rightButton={Facade.t('createContact.save')}
       leftButton={Facade.t('createContact.cancel')}
+      imageSize={[22, 22]}
       onClose={props.navigation.goBack}
       onLeftPress={controller.close}
       onRightPress={save}
