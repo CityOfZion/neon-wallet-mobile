@@ -247,6 +247,7 @@ const ListWalletView = (props: WalletProps) => {
             my="16px"
             mx="16px"
             tokenAssets={getActiveWallet()?.currentAssets}
+            fromAccountView={false}
           />
         )}
       </>

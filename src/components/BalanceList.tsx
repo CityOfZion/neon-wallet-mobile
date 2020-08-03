@@ -1,11 +1,14 @@
+import {useNavigation} from '@react-navigation/native'
 import React from 'react'
-import {FlatList} from 'react-native'
+import {FlatList, TouchableWithoutFeedback, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
+import {StackNavigationProp} from '~/node_modules/@react-navigation/stack'
 import {Facade} from '~src/app/Facade'
 import {Currency} from '~src/enums/Currency'
 import {TokenBalance} from '~src/models/TokenBalance'
 import {TokenValue} from '~src/models/TokenValue'
+import {Account} from '~src/models/redux/Account'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 const TableData = (props: {header: string; content: string}) => {
@@ -21,9 +24,8 @@ const TableData = (props: {header: string; content: string}) => {
   )
 }
 
-const BalanceListItem = (props: {item: TokenValue}) => {
+const ViewBalanceItem = (props: {item: TokenValue}) => {
   const {language} = useSelector((state: RootState) => state.settings)
-
   return (
     <LinearLayout orientation="horiz" alignItems="center">
       <LinearLayout
@@ -50,10 +52,41 @@ const BalanceListItem = (props: {item: TokenValue}) => {
   )
 }
 
+const BalanceListItem = (props: {
+  item: TokenValue
+  fromAccountView: boolean
+  account?: Account
+}) => {
+  const account = props.account ?? new Account()
+  const navigation = useNavigation()
+
+  return (
+    <LinearLayout>
+      {props.fromAccountView ? (
+        <TouchableWithoutFeedback
+          onPress={() =>
+            navigation?.navigate(Facade.route.AccountAssetDetail.name, {
+              account,
+            })
+          }
+        >
+          <View>
+            <ViewBalanceItem item={props.item} />
+          </View>
+        </TouchableWithoutFeedback>
+      ) : (
+        <ViewBalanceItem item={props.item} />
+      )}
+    </LinearLayout>
+  )
+}
+
 const BalanceList = (props: {
   tokenAssets?: TokenBalance
   mx?: string
   my?: string
+  fromAccountView: boolean
+  account?: Account
 }) => {
   return (
     <LinearLayout height="100%" my={props.my ?? '0px'} mx={props.mx ?? '0px'}>
@@ -65,7 +98,13 @@ const BalanceList = (props: {
           data={props.tokenAssets.assets}
           keyExtractor={(item) => item.symbol}
           ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
-          renderItem={({item}) => <BalanceListItem item={item} />}
+          renderItem={({item}) => (
+            <BalanceListItem
+              item={item}
+              fromAccountView={props.fromAccountView}
+              account={props.account}
+            />
+          )}
         />
       ) : (
         <TextView

@@ -5,10 +5,9 @@ import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
-import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
-import {Account} from '~src/models/redux/Account'
-import {Wallet} from '~src/models/redux/Wallet'
-import AccountAssetDetail from '~src/scenes/Account/AccountAssetDetail'
+import AccountAssetDetail, {
+  AccountAssetDetailParams,
+} from '~src/scenes/Account/AccountAssetDetail'
 import GetAccountView, {
   GetAccountParams,
 } from '~src/scenes/Account/GetAccountView'
@@ -19,7 +18,7 @@ export type WalletStackParamList = {
   ListWallets: undefined
   GetWallet: GetWalletParams
   GetAccount: GetAccountParams
-  AccountAssetDetail: {account: Account} & HeaderCustomProps
+  AccountAssetDetail: AccountAssetDetailParams
   Modal: {screen: RouteName}
 }
 
