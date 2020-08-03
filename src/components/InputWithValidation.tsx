@@ -135,7 +135,12 @@ const InputWithValidation = (props: Props) => {
         </TextView>
       </LinearLayout>
 
-      <LinearLayout orientation="horiz" mt={5} flex={1} justifyContent={'space-between'}>
+      <LinearLayout
+        orientation="horiz"
+        mt={5}
+        flex={1}
+        justifyContent={'space-between'}
+      >
         {props.showContacts && (
           <ButtonView onPress={async () => {}}>
             <LinearLayout orientation="horiz">
@@ -157,9 +162,7 @@ const InputWithValidation = (props: Props) => {
             </LinearLayout>
           </ButtonView>
         )}
-        {
-          !props.showContacts && <LinearLayout weight={1}/>
-        }
+        {!props.showContacts && <LinearLayout weight={1} />}
 
         {!props.hidePaste && (
           <LinearLayout>

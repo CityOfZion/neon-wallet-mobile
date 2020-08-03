@@ -24,6 +24,7 @@ import EditAccountModal, {
 } from '~src/scenes/EditAccountModal'
 import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
 import ListTokenModal from '~src/scenes/ListTokenModal'
+import {QRCodeScanParams} from '~src/scenes/QRCodeScan'
 import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import WalletContextModal from '~src/scenes/WalletContextModal'
@@ -46,7 +47,6 @@ import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewMo
 import SendWalletSelectionModal, {
   SendWalletSelectionModalParams,
 } from '~src/scenes/send/SendWalletSelectionModal'
-import {QRCodeScanParams} from "~src/scenes/QRCodeScan";
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
