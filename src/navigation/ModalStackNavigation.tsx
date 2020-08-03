@@ -46,6 +46,7 @@ import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewMo
 import SendWalletSelectionModal, {
   SendWalletSelectionModalParams,
 } from '~src/scenes/send/SendWalletSelectionModal'
+import {QRCodeScanParams} from "~src/scenes/QRCodeScan";
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
@@ -71,7 +72,7 @@ export type ModalStackParamList = {
   CurrencyPickerModal: undefined
   ThemePickerModal: undefined
   AddContact: undefined
-  QRCodeScan: undefined
+  QRCodeScan: QRCodeScanParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack

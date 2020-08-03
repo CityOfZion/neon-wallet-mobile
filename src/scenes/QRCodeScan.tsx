@@ -1,4 +1,5 @@
 import {wallet} from '@cityofzion/neon-core'
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {BarCodeEvent, BarCodeScanner} from 'expo-barcode-scanner'
 import ExpoBarCodeScannerModule from 'expo-barcode-scanner/src/ExpoBarCodeScannerModule'
@@ -9,6 +10,7 @@ import {URLSearchParams} from 'url'
 import {Facade} from '~src/app/Facade'
 import {GAS_HASH, NEO_HASH} from '~src/models/TokenValue'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {
   ButtonView,
   ImageView,
@@ -18,8 +20,13 @@ import {
 
 const {BarCodeType} = ExpoBarCodeScannerModule
 
+export interface QRCodeScanParams {
+  onQRCodeScanned?: (scannedCode: string) => void
+}
+
 export interface Props {
   navigation: StackNavigationProp<RootStackParamList>
+  route?: RouteProp<ModalStackParamList, 'QRCodeScan'>
 }
 
 const QRCodeScan = (props: Props) => {
@@ -125,14 +132,24 @@ const QRCodeScan = (props: Props) => {
   }
 
   const handleBarCodeScanned = (evt: BarCodeEvent) => {
-    const destination = goTo(evt.data)
-
-    if (destination) {
-      setMessage(Facade.t('screens.scanQrCode.success'))
+    if (props.route?.params.onQRCodeScanned) {
       props.navigation.pop(1)
-      props.navigation.navigate(...destination)
+      if (Facade.uri.isValid(evt.data)) {
+        props.route.params.onQRCodeScanned(
+          Facade.uri.parse(evt.data)?.address ?? ''
+        )
+      } else {
+        props.route.params.onQRCodeScanned(evt.data)
+      }
     } else {
-      setMessage(Facade.t('screens.scanQrCode.tryAgain'))
+      const destination = goTo(evt.data)
+      if (destination) {
+        setMessage(Facade.t('screens.scanQrCode.success'))
+        props.navigation.pop(1)
+        props.navigation.navigate(...destination)
+      } else {
+        setMessage(Facade.t('screens.scanQrCode.tryAgain'))
+      }
     }
   }
 

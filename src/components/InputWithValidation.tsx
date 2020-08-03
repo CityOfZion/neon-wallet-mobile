@@ -1,3 +1,4 @@
+import {StackNavigationProp} from '@react-navigation/stack'
 import React from 'react'
 import {
   KeyboardTypeOptions,
@@ -8,6 +9,8 @@ import {
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootState} from '~src/store/RootStore'
 import {
   ButtonView,
@@ -31,12 +34,14 @@ interface Props {
   sideMargins?: number
   hidePaste?: boolean
   hideScan?: boolean
+  showContacts?: boolean
   onClearPress?: () => void
   placeholder?: string
   secure?: boolean
   onFocus?: (e: NativeSyntheticEvent<TargetedEvent>) => void
   editable?: boolean
   keyboardType?: KeyboardTypeOptions
+  navigation?: any
 }
 
 const InputWithValidation = (props: Props) => {
@@ -130,14 +135,13 @@ const InputWithValidation = (props: Props) => {
         </TextView>
       </LinearLayout>
 
-      <LinearLayout orientation="horiz" mt={5}>
-        <LinearLayout weight={1} />
-        {!props.hidePaste && (
-          <ButtonView>
+      <LinearLayout orientation="horiz" mt={5} flex={1} justifyContent={'space-between'}>
+        {props.showContacts && (
+          <ButtonView onPress={async () => {}}>
             <LinearLayout orientation="horiz">
               <ImageView
                 resizeMode="center"
-                source={require('~/src/assets/images/icon-paste-green.png')}
+                source={require('~/src/assets/images/icon-contacts-green.png')}
               />
 
               <TextView
@@ -148,30 +152,74 @@ const InputWithValidation = (props: Props) => {
                 fontSize={16}
                 mr={6}
               >
-                {Facade.t('components.inputTextWithValidation.paste')}
+                {Facade.t('components.inputTextWithValidation.contacts')}
               </TextView>
             </LinearLayout>
           </ButtonView>
         )}
-        {!props.hideScan && (
-          <ButtonView>
-            <LinearLayout orientation="horiz">
-              <ImageView
-                resizeMode="center"
-                source={require('~/src/assets/images/icon-qrcode-green.png')}
-              />
+        {
+          !props.showContacts && <LinearLayout weight={1}/>
+        }
 
-              <TextView
-                style={{includeFontPadding: false}}
-                ml={3}
-                color={theme.colors.primary}
-                fontFamily="semibold"
-                fontSize={16}
-              >
-                {Facade.t('components.inputTextWithValidation.scan')}
-              </TextView>
-            </LinearLayout>
-          </ButtonView>
+        {!props.hidePaste && (
+          <LinearLayout>
+            <ButtonView
+              onPress={async () => {
+                const valueFromClipboard = await Facade.utils.copyFromClipboard()
+                if (props.onChangeText) {
+                  props.onChangeText(valueFromClipboard)
+                }
+              }}
+            >
+              <LinearLayout orientation="horiz">
+                <ImageView
+                  resizeMode="center"
+                  source={require('~/src/assets/images/icon-paste-green.png')}
+                />
+
+                <TextView
+                  style={{includeFontPadding: false}}
+                  ml={3}
+                  color={theme.colors.primary}
+                  fontFamily="semibold"
+                  fontSize={16}
+                  mr={6}
+                >
+                  {Facade.t('components.inputTextWithValidation.paste')}
+                </TextView>
+              </LinearLayout>
+            </ButtonView>
+          </LinearLayout>
+        )}
+        {!props.hideScan && (
+          <LinearLayout>
+            <ButtonView
+              onPress={() => {
+                props.navigation?.navigate(Facade.route.QRCodeScan.name, {
+                  params: {
+                    onQRCodeScanned: props.onChangeText,
+                  },
+                })
+              }}
+            >
+              <LinearLayout orientation="horiz">
+                <ImageView
+                  resizeMode="center"
+                  source={require('~/src/assets/images/icon-qrcode-green.png')}
+                />
+
+                <TextView
+                  style={{includeFontPadding: false}}
+                  ml={3}
+                  color={theme.colors.primary}
+                  fontFamily="semibold"
+                  fontSize={16}
+                >
+                  {Facade.t('components.inputTextWithValidation.scan')}
+                </TextView>
+              </LinearLayout>
+            </ButtonView>
+          </LinearLayout>
         )}
       </LinearLayout>
     </LinearLayout>

@@ -2,6 +2,8 @@ import {classToClass, ClassTransformOptions} from 'class-transformer'
 import {chunk} from 'lodash'
 import {Clipboard, Platform} from 'react-native'
 
+import {Facade} from '~src/app/Facade'
+
 export abstract class UtilsHelper {
   static get isIos() {
     return Platform.OS === 'ios'
@@ -37,6 +39,10 @@ export abstract class UtilsHelper {
     if (content) {
       Clipboard.setString(content)
     }
+  }
+
+  static async copyFromClipboard(): Promise<string> {
+    return await Clipboard.getString()
   }
 
   static clone<T>(fromEntity: T, options?: ClassTransformOptions): T {
