@@ -1,3 +1,4 @@
+import {RouteProp} from '@react-navigation/native'
 import React from 'react'
 import {ScrollView} from 'react-native'
 
@@ -10,10 +11,20 @@ import SwiperPanel, {
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {
+  ButtonView,
+  ImageView,
+  LinearLayout,
+  TextView,
+} from '~src/styles/styled-components'
+
+export interface SendTransactionConfirmationModalParams {
+  transactionHash: string
+}
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList & WalletStackParamList>
+  route: RouteProp<ModalStackParamList, 'SendTransactionConfirmationModal'>
 }
 
 const SendTransactionConfirmationModal = (props: Props) => {
@@ -44,6 +55,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
           resizeMode="contain"
           source={require('~src/assets/images/transaction-sent.png')}
         />
+
         <TextView color="text.0" fontSize="24px" fontFamily="medium" mb="5px">
           {Facade.t('modals.send.transactionConfirmation.header')}
         </TextView>
@@ -56,10 +68,18 @@ const SendTransactionConfirmationModal = (props: Props) => {
         >
           {Facade.t('modals.send.transactionConfirmation.subheader')}
         </TextView>
+
         <TextView color="text.2" fontSize="14px" fontFamily="medium" mb="12px">
           {Facade.t('modals.send.transactionConfirmation.transactionId')}
         </TextView>
-        <LinearLayout orientation="horiz" alignItems="center" mb="24px">
+        <ButtonView
+          orientation="horiz"
+          alignItems="center"
+          mb="24px"
+          onPress={() =>
+            Facade.utils.copyToClipboard(props.route.params.transactionHash)
+          }
+        >
           <TextView
             maxWidth="80%"
             color="primary"
@@ -67,14 +87,15 @@ const SendTransactionConfirmationModal = (props: Props) => {
             fontFamily="medium"
             mr="16px"
           >
-            AN8iLVt18CKoATdexztCQj923hw5gkc41A
+            {props.route.params.transactionHash}
           </TextView>
           <ImageView
             width="16px"
             resizeMode="contain"
             source={require('~src/assets/images/icon-copy-green.png')}
           />
-        </LinearLayout>
+        </ButtonView>
+
         <LinearLayout mt="auto" px="20px" width="100%">
           <ThemedButton
             onPress={() => {
