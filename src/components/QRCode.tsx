@@ -11,6 +11,7 @@ export interface QRCodeProps {
 }
 
 const NeonQRCode = (props: QRCodeProps) => {
+  console.log('render QR')
   const width = props.qrCodeWidth
     ? props.qrCodeWidth
     : Facade.app.windowWidth - 76

@@ -10,7 +10,7 @@ import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
 import {AccountMock} from '~src/models/AccountMock'
 import AccountAssetDetail from '~src/scenes/Account/AccountAssetDetail'
 import QRCodeScan from '~src/scenes/QRCodeScan'
-import ReceiveQRCode from '~src/scenes/receive/ReceiveQRCode'
+import ReceiveQrCodeModal from '~src/scenes/receive/ReceiveQrCodeModal'
 
 export type QuickToolsStackParamList = {
   ReceiveQrCode: undefined
@@ -29,7 +29,7 @@ const QuickToolsStackNavigation = () => {
       <QuickToolsStack.Navigator>
         <QuickToolsStack.Screen
           name={Facade.route.ReceiveQrCode.name}
-          component={ReceiveQRCode}
+          component={ReceiveQrCodeModal}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.ReceiveQrCode.translate(),

@@ -32,6 +32,9 @@ import WelcomePage from '~src/scenes/WelcomePage'
 import ReceiveAccountSelectionModal, {
   ReceiveAccountSelectionParams,
 } from '~src/scenes/receive/ReceiveAccountSelectionModal'
+import ReceiveQrCodeModal, {
+  ReceiveQrCodeModalParams,
+} from '~src/scenes/receive/ReceiveQrCodeModal'
 import ReceiveToAccountModal, {
   ReceiveToAccountModalParams,
 } from '~src/scenes/receive/ReceiveToAccountModal'
@@ -56,6 +59,7 @@ export type ModalStackParamList = {
   ReceiveWalletSelectionModal: undefined
   ReceiveAccountSelectionModal: ReceiveAccountSelectionParams
   ReceiveToAccountModal: ReceiveToAccountModalParams
+  ReceiveQrCodeModal: ReceiveQrCodeModalParams
   SendWalletSelectionModal: SendWalletSelectionModalParams
   SendAccountSelectionModal: SendAccountSelectionModalParams
   SendTransactionInputModal: SendTransactionInputModalParams
@@ -81,6 +85,7 @@ export type ModalParams =
   | DefaultNavigationParam<EditAccountModalParam>
   | DefaultNavigationParam<AccountQRCodeParams>
   | DefaultNavigationParam<SendWalletSelectionModalParams>
+  | DefaultNavigationParam<ReceiveQrCodeModalParams>
 
 interface Props {
   route?: RouteProp<RootStackParamList, 'Modal'>
@@ -123,6 +128,10 @@ const ModalStackNavigation = (props: Props) => {
         <ModalStack.Screen
           name={Facade.route.ReceiveToAccountModal.name}
           component={ReceiveToAccountModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.ReceiveQrCodeModal.name}
+          component={ReceiveQrCodeModal}
         />
         <ModalStack.Screen
           name={Facade.route.SendWalletSelectionModal.name}
