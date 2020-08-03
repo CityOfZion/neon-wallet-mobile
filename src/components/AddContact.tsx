@@ -1,6 +1,7 @@
 import {wallet} from '@cityofzion/neon-core'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
+import {Alert} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -25,6 +26,15 @@ export const AddContact = (props: AddContactProps) => {
 
   const createNewContact = async () => {
     dispatch(RootStore.contact.actions.clearState())
+    if (name.length === 0 || name.length > 20) {
+      Alert.alert(Facade.t('createContact.invalidName'))
+      return
+    }
+
+    if (!wallet.isAddress(address)) {
+      Alert.alert(Facade.t('createContact.invalidAddress'))
+      return
+    }
 
     dispatch(RootStore.contact.actions.setName(name))
     dispatch(RootStore.contact.actions.setAddress(address))
@@ -59,9 +69,12 @@ export const AddContact = (props: AddContactProps) => {
           onChangeText={(val) => setName(val)}
           color={'background.4'}
           value={name}
-          validator={(val) => val.length >= 2 && val.length <= 20}
+          validator={(val) =>
+            (val.length >= 2 && val.length <= 20) || val?.length === 0
+          }
           separatorColor={'background.3'}
           invalidColor={'background.3'}
+          invalidMessageColor={'quinary'}
           sideMargins={0}
           hideScan={true}
           hidePaste={true}
@@ -84,6 +97,7 @@ export const AddContact = (props: AddContactProps) => {
             return wallet.isAddress(address) || address?.length === 0
           }}
           separatorColor={'background.3'}
+          invalidMessageColor={'quinary'}
           sideMargins={0}
         />
       </LinearLayout>
