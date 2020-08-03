@@ -23,7 +23,7 @@ export const ContactDetails = (prop: ContactDetailsProps) => {
   const contact = prop.route.params.contact
   return (
     <ScreenLayout>
-      <LinearLayout alignItems={'center'}>
+      <LinearLayout alignItems={'center'} mr={'10px'} ml={'10px'}>
         <ImageView
           height={'199px'}
           width={'199px'}
