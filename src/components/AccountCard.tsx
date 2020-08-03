@@ -1,5 +1,4 @@
 import {useNavigation} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack/lib/typescript/src/types'
 import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
@@ -139,7 +138,7 @@ const AccountCard: React.FC<Props> = (props) => {
               allowFontScaling={true}
               adjustsFontSizeToFit={true}
             >
-              {props.account.name?.length != 0
+              {props.account.name?.length !== 0
                 ? props.account.name
                 : Facade.t('paymentCard.accountPlaceholder')}
             </TextView>

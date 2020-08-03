@@ -1,5 +1,6 @@
 import {wallet} from '@cityofzion/neon-core'
 import {StackNavigationProp} from '@react-navigation/stack'
+import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useState} from 'react'
 import {Alert} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
@@ -8,6 +9,7 @@ import {Facade} from '~src/app/Facade'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout} from '~src/styles/styled-components'
@@ -24,8 +26,7 @@ export const AddContact = (props: AddContactProps) => {
   const dispatch = useDispatch<SyncDispatch>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
-  const createNewContact = async () => {
-    dispatch(RootStore.contact.actions.clearState())
+  const submit = async () => {
     if (name.length === 0 || name.length > 20) {
       Alert.alert(Facade.t('createContact.invalidName'))
       return
@@ -36,6 +37,8 @@ export const AddContact = (props: AddContactProps) => {
       return
     }
 
+    dispatch(RootStore.contact.actions.clearState())
+
     dispatch(RootStore.contact.actions.setName(name))
     dispatch(RootStore.contact.actions.setAddress(address))
 
@@ -45,6 +48,11 @@ export const AddContact = (props: AddContactProps) => {
     await dispatchAsync(RootStore.app.actions.syncContacts())
     controller.close()
   }
+
+  const save = () => {
+    Facade.await.run('swiperRight', submit, 300)
+  }
+
   return (
     <SwiperPanel
       padding={20}
@@ -55,52 +63,57 @@ export const AddContact = (props: AddContactProps) => {
       leftButton={Facade.t('createContact.cancel')}
       onClose={props.navigation.goBack}
       onLeftPress={controller.close}
-      onRightPress={createNewContact}
+      onRightPress={save}
       controller={controller}
     >
-      <LinearLayout>
-        <InputLabel
-          title={Facade.t('createContact.name')}
-          marginBottom={'8px'}
-        />
+      <AwaitActivity
+        name={'swiperRight'}
+        loadingView={<ScreenLoader transparent={true} />}
+      >
+        <LinearLayout>
+          <InputLabel
+            title={Facade.t('createContact.name')}
+            marginBottom={'8px'}
+          />
 
-        <InputWithValidation
-          placeholder={Facade.t('createContact.namePlaceholder')}
-          onChangeText={(val) => setName(val)}
-          color={'background.4'}
-          value={name}
-          validator={(val) =>
-            (val.length >= 2 && val.length <= 20) || val?.length === 0
-          }
-          separatorColor={'background.3'}
-          invalidColor={'background.3'}
-          invalidMessageColor={'quinary'}
-          sideMargins={0}
-          hideScan={true}
-          hidePaste={true}
-        />
+          <InputWithValidation
+            placeholder={Facade.t('createContact.namePlaceholder')}
+            onChangeText={(val) => setName(val)}
+            color={'background.4'}
+            value={name}
+            validator={(val) =>
+              (val.length >= 2 && val.length <= 20) || val?.length === 0
+            }
+            separatorColor={'background.3'}
+            invalidColor={'background.3'}
+            invalidMessageColor={'quinary'}
+            sideMargins={0}
+            hideScan={true}
+            hidePaste={true}
+          />
 
-        <InputLabel
-          title={Facade.t('createContact.address')}
-          marginBottom={'8px'}
-          marginTop={'12px'}
-        />
+          <InputLabel
+            title={Facade.t('createContact.address')}
+            marginBottom={'8px'}
+            marginTop={'12px'}
+          />
 
-        <InputWithValidation
-          placeholder={Facade.t('createContact.addressPlaceholder')}
-          onChangeText={(val) => setAddress(val)}
-          color={'background.4'}
-          value={address}
-          invalidColor={'background.3'}
-          invalidSeparatorColor={'background.3'}
-          validator={() => {
-            return wallet.isAddress(address) || address?.length === 0
-          }}
-          separatorColor={'background.3'}
-          invalidMessageColor={'quinary'}
-          sideMargins={0}
-        />
-      </LinearLayout>
+          <InputWithValidation
+            placeholder={Facade.t('createContact.addressPlaceholder')}
+            onChangeText={(val) => setAddress(val)}
+            color={'background.4'}
+            value={address}
+            invalidColor={'background.3'}
+            invalidSeparatorColor={'background.3'}
+            validator={() => {
+              return wallet.isAddress(address) || address?.length === 0
+            }}
+            separatorColor={'background.3'}
+            invalidMessageColor={'quinary'}
+            sideMargins={0}
+          />
+        </LinearLayout>
+      </AwaitActivity>
     </SwiperPanel>
   )
 }

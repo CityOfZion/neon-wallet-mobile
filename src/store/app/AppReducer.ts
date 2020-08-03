@@ -10,6 +10,7 @@ import {App} from '~src/models/redux/App'
 import {Contact} from '~src/models/redux/Contact'
 import {Wallet} from '~src/models/redux/Wallet'
 import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
+import {ContactsDispatcher} from '~src/store/app/dispatchers/ContactsDispatcher'
 import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
 import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
 import {Exchange, ExchangeResponse} from '~src/types/exchange'
@@ -25,6 +26,7 @@ export class AppReducer extends ReducerWrapper<
     ExchangeDispatcher,
     WalletsDispatcher,
     AccountsDispatcher,
+    ContactsDispatcher,
   ]
 
   readonly actions = {

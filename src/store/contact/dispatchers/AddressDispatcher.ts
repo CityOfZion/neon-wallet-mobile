@@ -8,8 +8,8 @@ export class AddressDispatcher extends DispatcherWrapper<
   readonly type = 'SET_ADDRESS'
 
   readonly reducer: ContactReducer = (state, action) => {
-    const {name} = action
+    const {address} = action
 
-    return this.set(state, {name})
+    return this.set(state, {address})
   }
 }

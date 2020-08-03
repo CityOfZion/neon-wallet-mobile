@@ -36,7 +36,7 @@ const ListWalletView = (props: WalletProps) => {
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
   useEffect(() => {
-    Facade.await.run('calculateWalletAmount', calculateWalletAmount, 1000)
+    Facade.await.run('calculateWalletAmount', calculateWalletAmount)
   }, [activeIndex])
 
   const getActiveWallet = (): Wallet | null => {
