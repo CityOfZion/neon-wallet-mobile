@@ -426,7 +426,8 @@
       "inputPlaceholder": "Please enter information",
       "paste": "Paste",
       "scan": "Scan",
-      "incorrectFormat": "Incorrect format"
+      "incorrectFormat": "Incorrect format",
+      "contacts": "Contacts"
     }
   },
   "boolean": {

@@ -142,6 +142,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
           separatorColor={theme.colors.background[5]}
           invalidSeparatorColor={theme.colors.quinary}
           invalidMessageColor={theme.colors.quinary}
+          navigation={props.navigation}
         />
 
         {wallet.isAddress(inputValue) && (

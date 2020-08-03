@@ -24,6 +24,7 @@ import EditAccountModal, {
 } from '~src/scenes/EditAccountModal'
 import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
 import ListTokenModal from '~src/scenes/ListTokenModal'
+import {QRCodeScanParams} from '~src/scenes/QRCodeScan'
 import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import WalletContextModal from '~src/scenes/WalletContextModal'
@@ -71,7 +72,7 @@ export type ModalStackParamList = {
   CurrencyPickerModal: undefined
   ThemePickerModal: undefined
   AddContact: undefined
-  QRCodeScan: undefined
+  QRCodeScan: QRCodeScanParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
