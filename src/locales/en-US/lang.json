@@ -460,6 +460,8 @@
     "address": "ADDRESS",
     "addressPlaceholder": "Enter contact address",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "invalidName": "Invalid Name",
+    "invalidAddress": "Invalid Address"
   }
 }

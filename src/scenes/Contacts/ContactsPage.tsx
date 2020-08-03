@@ -1,4 +1,3 @@
-import {useFocusEffect} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
@@ -6,11 +5,11 @@ import {
   SectionList,
   SectionListData,
   SectionListRenderItemInfo,
-  TouchableHighlight,
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {Contact} from '~src/models/redux/Contact'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
@@ -20,20 +19,30 @@ import {
   ButtonView,
   ImageView,
   LinearLayout,
-  RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
 
-interface ContactsProps {
+interface Props {
   navigation: StackNavigationProp<ContactsStackParamList & RootStackParamList>
 }
 
-const ContactsPage = (prop: ContactsProps) => {
+const ContactsPage: React.FC<Props> = (prop) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const navigation = prop.navigation
   const contacts = useSelector((state: RootState) => state.app.contacts)
+
+  prop.navigation.setOptions({
+    headerRight: () =>
+      HeaderActionButton({
+        actionButtonStyle: 'add',
+        actionOnPress: () => {
+          prop.navigation.navigate(Facade.route.Modal.name, {
+            screen: Facade.route.AddContact.name,
+          })
+        },
+      }),
+  })
 
   const contactList = () => {
     const contactsMap: Map<string, Contact[]> = new Map()
@@ -62,7 +71,7 @@ const ContactsPage = (prop: ContactsProps) => {
       return (
         <ButtonView
           onPress={() => {
-            navigation.navigate(Facade.route.ContactDetails.name, {
+            prop.navigation.navigate(Facade.route.ContactDetails.name, {
               contact: info.item,
             })
           }}
@@ -104,7 +113,7 @@ const ContactsPage = (prop: ContactsProps) => {
   const noContactsView = () => {
     return (
       <ScreenLayout>
-        <LinearLayout orientation="verti" pt={200}>
+        <LinearLayout orientation="verti" width={'100%'} pt={200}>
           <TextView
             color={theme.colors.background[3]}
             fontSize={24}
@@ -173,7 +182,7 @@ const ContactsPage = (prop: ContactsProps) => {
 }
 
 ContactsPage.propTypes = {
-  navigation: PropTypes.object,
+  navigation: PropTypes.any,
 }
 
 export default ContactsPage

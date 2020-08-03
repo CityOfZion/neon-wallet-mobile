@@ -1,4 +1,3 @@
-import {StackNavigationProp} from '@react-navigation/stack'
 import React from 'react'
 import {
   KeyboardTypeOptions,
@@ -9,8 +8,6 @@ import {
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootState} from '~src/store/RootStore'
 import {
   ButtonView,
@@ -23,6 +20,7 @@ import {
 interface Props {
   onChangeText?: (text: string) => void
   color: string
+  placeholderColor?: string
   invalidColor?: string
   fontStyle?: string
   value: string
@@ -66,7 +64,7 @@ const InputWithValidation = (props: Props) => {
         <InputTextView
           onChangeText={props.onChangeText}
           color={fontColor}
-          placeholderTextColor={fontColor}
+          placeholderTextColor={props.placeholderColor ?? '#7d929a'}
           underlineColorAndroid="transparent"
           placeholder={
             props.placeholder ??
@@ -198,6 +196,7 @@ const InputWithValidation = (props: Props) => {
           <LinearLayout>
             <ButtonView
               onPress={() => {
+                // eslint-disable-next-line no-unused-expressions
                 props.navigation?.navigate(Facade.route.QRCodeScan.name, {
                   params: {
                     onQRCodeScanned: props.onChangeText,

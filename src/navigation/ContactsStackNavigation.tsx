@@ -37,14 +37,6 @@ const ContactsStackNavigation = (props: ContactsStackProps) => {
       <ContactsStack.Navigator initialRouteName={Facade.route.Contacts.name}>
         <ContactsStack.Screen
           name={Facade.route.Contacts.name}
-          initialParams={{
-            actionButtonStyle: 'add',
-            actionOnPress: () => {
-              props.navigation.navigate(Facade.route.Modal.name, {
-                screen: Facade.route.AddContact.name,
-              })
-            },
-          }}
           component={ContactsPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
