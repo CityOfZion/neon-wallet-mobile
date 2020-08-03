@@ -4,7 +4,7 @@ import {ImageLoadEventData} from 'react-native'
 import {Currency} from '~src/enums/Currency'
 
 export declare global {
-  type AccountType =
+  type AccountActionsType =
     | 'SET_ID_WALLET'
     | 'SET_NAME'
     | 'SET_SRC_ICON'
@@ -22,7 +22,7 @@ export declare global {
     backgroundColor: string | null
   }
 
-  type AccountAction = AccountState & Action<AccountType>
+  type AccountAction = AccountState & Action<AccountActionsType>
 
   type AccountReducer = ReducerApplied<AccountState, AccountAction>
 }

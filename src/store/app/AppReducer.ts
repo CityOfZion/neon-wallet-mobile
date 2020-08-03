@@ -14,7 +14,11 @@ import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
 import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
 import {Exchange, ExchangeResponse} from '~src/types/exchange'
 
-export class AppReducer extends ReducerWrapper<AppType, AppState, AppAction> {
+export class AppReducer extends ReducerWrapper<
+  AppActionsType,
+  AppState,
+  AppAction
+> {
   protected readonly initialState = Model.parse<AppState>(App)
 
   protected readonly dispatchers = [

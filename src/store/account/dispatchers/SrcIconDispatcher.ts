@@ -1,7 +1,7 @@
 import {DispatcherWrapper} from '@simpli/redux-wrapper'
 
 export class SrcIconDispatcher extends DispatcherWrapper<
-  AccountType,
+  AccountActionsType,
   AccountState,
   AccountAction
 > {

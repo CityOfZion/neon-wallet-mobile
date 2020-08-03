@@ -1,7 +1,7 @@
 import {DispatcherWrapper} from '@simpli/redux-wrapper'
 
 export class AddressDispatcher extends DispatcherWrapper<
-  ContactType,
+  ContactActionsType,
   ContactState,
   ContactAction
 > {

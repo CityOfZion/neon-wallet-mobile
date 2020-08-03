@@ -1,7 +1,7 @@
 import {DispatcherWrapper} from '@simpli/redux-wrapper'
 
 export class LoadingDispatcher extends DispatcherWrapper<
-  LoadingType,
+  LoadingActionsType,
   LoadingState,
   LoadingAction
 > {

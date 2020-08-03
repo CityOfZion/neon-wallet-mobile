@@ -4,7 +4,7 @@ import {Model} from '~src/app/Model'
 import {Account} from '~src/models/redux/Account'
 
 export class ClearStateDispatcher extends DispatcherWrapper<
-  AccountType,
+  AccountActionsType,
   AccountState,
   AccountAction
 > {

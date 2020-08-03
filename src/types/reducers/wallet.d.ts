@@ -2,23 +2,25 @@ import {Action} from 'redux'
 import {ReducerApplied} from '@simpli/redux-wrapper'
 
 export declare global {
-  type WalletType =
+  type WalletActionsType =
     | 'SET_NAME'
     | 'SET_PASSPHRASE'
     | 'SET_SECURITY_PHRASE'
     | 'SET_WALLET_TYPE'
     | 'CLEAR_STATE'
 
+  type WalletType = 'standard' | 'watch' | 'legacy'
+
   interface WalletState {
     id: string | null
     name: string | null
     passphrase: string | null
     securityPhrase: string | null
-    walletType: 'standard' | 'watch' | 'legacy' | null
+    walletType: WalletType | null
     lastVisitedAt: string | null
   }
 
-  type WalletAction = WalletState & Action<WalletType>
+  type WalletAction = WalletState & Action<WalletActionsType>
 
   type WalletReducer = ReducerApplied<WalletState, WalletAction>
 }

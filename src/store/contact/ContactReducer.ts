@@ -9,7 +9,7 @@ import {ClearStateDispatcher} from '~src/store/contact/dispatchers/ClearStateDis
 import {NameDispatcher} from '~src/store/contact/dispatchers/NameDispatcher'
 
 export class ContactReducer extends ReducerWrapper<
-  ContactType,
+  ContactActionsType,
   ContactState,
   ContactAction
 > {

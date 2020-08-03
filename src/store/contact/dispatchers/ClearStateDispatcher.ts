@@ -4,7 +4,7 @@ import {Model} from '~src/app/Model'
 import {Contact} from '~src/models/redux/Contact'
 
 export class ClearStateDispatcher extends DispatcherWrapper<
-  ContactType,
+  ContactActionsType,
   ContactState,
   ContactAction
 > {

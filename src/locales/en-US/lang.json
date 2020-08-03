@@ -233,7 +233,8 @@
   },
   "paymentCard": {
     "balance": "BALANCE",
-    "address": "ADDRESS"
+    "address": "ADDRESS",
+    "accountPlaceholder": "My Account"
   },
   "receive": {
     "paymentRequestDetails": "PAYMENT REQUEST DETAILS",
