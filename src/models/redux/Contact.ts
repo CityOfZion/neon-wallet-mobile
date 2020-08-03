@@ -3,8 +3,8 @@ import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 @HttpExclude()
 export class Contact implements ContactState {
   @HttpExpose()
-  name: string | null = null
+  name: string = ''
 
   @HttpExpose()
-  address: string | null = null
+  address: string = ''
 }

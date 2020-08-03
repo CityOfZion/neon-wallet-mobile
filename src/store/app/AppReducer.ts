@@ -117,8 +117,11 @@ export class AppReducer extends ReducerWrapper<
 
     syncContacts: (): AsyncAction<Contact[]> => {
       return async (dispatch, getState) => {
-        const contacts = await Storage.contacts.load()
+        let contacts = await Storage.contacts.load()
         if (contacts) {
+          contacts = contacts.sort((c1: Contact, c2: Contact) => {
+            return c1.name.localeCompare(c2.name)
+          })
           dispatch(this.commit('SET_CONTACTS', {contacts}))
         }
         return contacts ?? []

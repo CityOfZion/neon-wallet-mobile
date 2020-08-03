@@ -134,6 +134,8 @@ const ContactsPage: React.FC<Props> = (prop) => {
               m="auto"
               resizeMode="contain"
               source={require('~src/assets/images/add-new-contact-dashed-button.png')}
+              p={'20px'}
+              h={'54px'}
             />
             <LinearLayout alignItems={'center'} mt={-38}>
               <LinearLayout orientation={'horiz'}>
