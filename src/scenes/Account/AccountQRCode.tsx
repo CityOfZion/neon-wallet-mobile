@@ -12,7 +12,7 @@ import SwiperPanel, {
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {TextView} from '~src/styles/styled-components'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface AccountQRCodeParams {
   account: Account
@@ -38,21 +38,25 @@ export const AccountQRCode = (props: AccountQRCodeProps) => {
         require('~/src/assets/images/icon-neo-white.png')
       }
     >
-      <InputLabel
-        capitalize={true}
-        title={Facade.t('modals.accountQRCode.address')}
-      />
-      <TextView
-        color={'primary'}
-        fontFamily={'medium'}
-        fontSize={'17px'}
-        mb={'12%'}
-      >
-        {props.route.params.account.address}
-      </TextView>
-      <QRCodeWithCopyButton
-        qrCodeValue={props.route.params.account.address ?? ''}
-      />
+      <LinearLayout justifyContent={'space-between'} height={'100%'}>
+        <LinearLayout>
+          <InputLabel
+            capitalize={true}
+            title={Facade.t('modals.accountQRCode.address')}
+          />
+          <TextView
+            color={'primary'}
+            fontFamily={'medium'}
+            fontSize={'17px'}
+            mb={'12%'}
+          >
+            {props.route.params.account.address}
+          </TextView>
+        </LinearLayout>
+        <QRCodeWithCopyButton
+          qrCodeValue={props.route.params.account.address ?? ''}
+        />
+      </LinearLayout>
     </SwiperPanel>
   )
 }
