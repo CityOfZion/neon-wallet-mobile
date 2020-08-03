@@ -2,7 +2,10 @@ import {Action} from 'redux'
 import {ReducerApplied} from '@simpli/redux-wrapper'
 
 export declare global {
-  type LoadingType = 'SET_LOADING' | 'SET_LOADING_PROGRESS' | 'CLEAR_LOADING'
+  type LoadingActionsType =
+    | 'SET_LOADING'
+    | 'SET_LOADING_PROGRESS'
+    | 'CLEAR_LOADING'
 
   interface LoadingState {
     progress: number
@@ -10,7 +13,7 @@ export declare global {
     isLoading: boolean
   }
 
-  type LoadingAction = LoadingState & Action<LoadingType>
+  type LoadingAction = LoadingState & Action<LoadingActionsType>
 
   type LoadingReducer = ReducerApplied<LoadingState, LoadingAction>
 }

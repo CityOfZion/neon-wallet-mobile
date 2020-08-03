@@ -61,6 +61,7 @@ const CustomizeAccount = (props: Props) => {
   const [account, setAccount] = useState(new Account())
 
   account.address = props.route.params.address
+  account.accountType = props.route.params.legacy ? 'legacy' : 'watch'
   account.name = name
   account.backgroundColor = color
 
@@ -190,7 +191,11 @@ const CustomizeAccount = (props: Props) => {
             marginBottom="24px"
           />
 
-          <AccountCard account={account} isStackMode={false} />
+          <AccountCard
+            account={account}
+            isStackMode={false}
+            hideQRCode={true}
+          />
 
           <InputLabel
             title={Facade.t('screens.customizeAccount.accountInput.title')}

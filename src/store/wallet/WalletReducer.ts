@@ -12,7 +12,7 @@ import {SecurityPhraseDispatcher} from '~src/store/wallet/dispatchers/SecurityPh
 import {WalletTypeDispatcher} from '~src/store/wallet/dispatchers/WalletTypeDispatcher'
 
 export class WalletReducer extends ReducerWrapper<
-  WalletType,
+  WalletActionsType,
   WalletState,
   WalletAction
 > {

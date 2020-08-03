@@ -4,7 +4,7 @@ import {Model} from '~src/app/Model'
 import {Wallet} from '~src/models/redux/Wallet'
 
 export class ClearStateDispatcher extends DispatcherWrapper<
-  WalletType,
+  WalletActionsType,
   WalletState,
   WalletAction
 > {

@@ -12,7 +12,7 @@ import {LanguageDispatcher} from '~src/store/settings/dispatchers/LanguageDispat
 import {ThemeDispatcher} from '~src/store/settings/dispatchers/ThemeDispatcher'
 
 export class SettingsReducer extends ReducerWrapper<
-  SettingsType,
+  SettingsActionsType,
   SettingsState,
   SettingsAction
 > {

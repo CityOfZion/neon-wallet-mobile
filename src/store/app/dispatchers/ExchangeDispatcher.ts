@@ -1,7 +1,7 @@
 import {DispatcherWrapper} from '@simpli/redux-wrapper'
 
 export class ExchangeDispatcher extends DispatcherWrapper<
-  AppType,
+  AppActionsType,
   AppState,
   AppAction
 > {

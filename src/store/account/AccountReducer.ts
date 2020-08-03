@@ -14,7 +14,7 @@ import {NameDispatcher} from '~src/store/account/dispatchers/NameDispatcher'
 import {SrcIconDispatcher} from '~src/store/account/dispatchers/SrcIconDispatcher'
 
 export class AccountReducer extends ReducerWrapper<
-  AccountType,
+  AccountActionsType,
   AccountState,
   AccountAction
 > {

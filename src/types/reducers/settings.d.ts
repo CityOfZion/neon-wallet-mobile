@@ -5,7 +5,7 @@ import {Theme} from '~src/enums/Theme'
 import {ReducerApplied} from '@simpli/redux-wrapper'
 
 export declare global {
-  type SettingsType = 'SET_LANGUAGE' | 'SET_CURRENCY' | 'SET_THEME'
+  type SettingsActionsType = 'SET_LANGUAGE' | 'SET_CURRENCY' | 'SET_THEME'
 
   interface SettingsState {
     language: Lang
@@ -13,7 +13,7 @@ export declare global {
     theme: Theme
   }
 
-  type SettingsAction = SettingsState & Action<SettingsType>
+  type SettingsAction = SettingsState & Action<SettingsActionsType>
 
   type SettingsReducer = ReducerApplied<SettingsState, SettingsAction>
 }

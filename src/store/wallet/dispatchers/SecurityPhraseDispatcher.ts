@@ -1,7 +1,7 @@
 import {DispatcherWrapper} from '@simpli/redux-wrapper'
 
 export class SecurityPhraseDispatcher extends DispatcherWrapper<
-  WalletType,
+  WalletActionsType,
   WalletState,
   WalletAction
 > {
