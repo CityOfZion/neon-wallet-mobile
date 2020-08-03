@@ -139,8 +139,8 @@ const AccountCard: React.FC<Props> = (props) => {
 
             {props.account.accountType === 'watch' && (
               <ImageView
-                width={24 * unit}
-                height={24 * unit}
+                width={20 * unit}
+                height={20 * unit}
                 source={require('~/src/assets/images/icon-watch-white.png')}
                 ml={10 * unit}
               />
