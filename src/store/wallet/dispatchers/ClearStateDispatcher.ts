@@ -11,6 +11,9 @@ export class ClearStateDispatcher extends DispatcherWrapper<
   readonly type = 'CLEAR_STATE'
 
   readonly reducer: WalletReducer = (state, action) => {
-    return this.set(state, Model.parse<WalletState>(Wallet))
+    const emptyState = Model.parse<WalletState>(Wallet)
+    emptyState.securityPhrase = null // it must be forced because securityPhrase is excluded
+
+    return this.set(state, emptyState)
   }
 }
