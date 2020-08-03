@@ -13,7 +13,6 @@ import QRCodeScan from '~src/scenes/QRCodeScan'
 import ReceiveQrCodeModal from '~src/scenes/receive/ReceiveQrCodeModal'
 
 export type QuickToolsStackParamList = {
-  ReceiveQrCode: undefined
   AccountAssetDetail: {account: Account} & HeaderCustomProps
 }
 
@@ -27,18 +26,6 @@ const QuickToolsStackNavigation = () => {
   return (
     <ThemeProvider theme={theme}>
       <QuickToolsStack.Navigator>
-        <QuickToolsStack.Screen
-          name={Facade.route.ReceiveQrCode.name}
-          component={ReceiveQrCodeModal}
-          options={({route}) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.ReceiveQrCode.translate(),
-              image: require('~src/assets/images/icon-qrcode-white.png'),
-              theme,
-              route,
-            })
-          }
-        />
         <QuickToolsStack.Screen
           name={Facade.route.AccountAssetDetail.name}
           component={AccountAssetDetail}
