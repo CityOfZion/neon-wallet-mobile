@@ -2,7 +2,13 @@ import Constants from 'expo-constants'
 import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {LayoutChangeEvent, SafeAreaView, ScrollView} from 'react-native'
+import {
+  LayoutChangeEvent,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  SafeAreaView,
+  ScrollView,
+} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -10,6 +16,8 @@ import {LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
   onLayout?: (event: LayoutChangeEvent) => void
+  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void
+  scrollEventThrottle?: number
   children?: React.ReactNode | React.ReactNodeArray
   useHeaderPadding?: boolean
   useStatusBarPadding?: boolean
@@ -47,6 +55,8 @@ const ScreenLayout: React.FC<Props> = (props) => {
       <SafeAreaView style={{height: '100%'}}>
         <ScrollView
           scrollEnabled={props.autoScroll}
+          scrollEventThrottle={props.scrollEventThrottle}
+          onScroll={props.onScroll}
           alwaysBounceVertical={false}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{flexGrow: 1}}
@@ -81,6 +91,8 @@ ScreenLayout.propTypes = {
   alignY: PropTypes.string,
   padding: PropTypes.any,
   transparent: PropTypes.bool,
+  onScroll: PropTypes.func,
+  scrollEventThrottle: PropTypes.number,
 }
 
 ScreenLayout.defaultProps = {

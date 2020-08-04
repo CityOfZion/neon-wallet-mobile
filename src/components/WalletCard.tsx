@@ -57,93 +57,85 @@ const WalletCard = (props: WalletCardProps) => {
   }
 
   const WalletOverlay = () => {
-    return props.wallet.walletType === 'standard'
-      ? (
-        <ImageView
-          width={'100%'}
-          height={'100%'}
-          resizeMode={'stretch'}
-          source={require('~src/assets/images/wallet-card-front.png')}
-        />
-      )
-      : (
-        <ImageView
-          width={'100%'}
-          position={'absolute'}
-          bottom={0}
-          resizeMode={'stretch'}
-          source={require('~src/assets/images/wallet-semi-front.png')}
-        />
-      )
+    return props.wallet.walletType === 'standard' ? (
+      <ImageView
+        width={'100%'}
+        height={'100%'}
+        resizeMode={'stretch'}
+        source={require('~src/assets/images/wallet-card-front.png')}
+      />
+    ) : (
+      <ImageView
+        width={'100%'}
+        position={'absolute'}
+        bottom={0}
+        resizeMode={'stretch'}
+        source={require('~src/assets/images/wallet-semi-front.png')}
+      />
+    )
   }
 
   const WalletLabel = () => {
     return (
       <RelativeLayout height={58} width={'100%'} mb={15}>
-        {props.wallet.walletType === 'standard'
-          ? (
-            <Fragment>
+        {props.wallet.walletType === 'standard' ? (
+          <Fragment>
+            <ImageView
+              height={'100%'}
+              width={'100%'}
+              resizeMode={'contain'}
+              source={require('~src/assets/images/wallet-card-label.png')}
+            />
+            <LinearLayout bottom={40} orientation="horiz" alignItems={'center'}>
               <ImageView
-                height={'100%'}
-                width={'100%'}
+                ml="12px"
+                width={28}
+                height={24}
                 resizeMode={'contain'}
-                source={require('~src/assets/images/wallet-card-label.png')}
+                source={require('~src/assets/images/wallet-icon.png')}
               />
-              <LinearLayout bottom={40} orientation="horiz" alignItems={'center'}>
-                <ImageView
-                  ml="12px"
-                  width={28}
-                  height={24}
-                  resizeMode={'contain'}
-                  source={require('~src/assets/images/wallet-icon.png')}
-                />
-                <TextView
-                  ml="8px"
-                  width={'70%'}
-                  fontSize="16px"
-                  fontFamily="bold"
-                  color="text.0"
-                  allowFontScaling={true}
-                  adjustsFontSizeToFit={true}
-                  numberOfLines={1}
-                >
-                  {props.wallet.name?.toUpperCase()}
-                </TextView>
-              </LinearLayout>
-            </Fragment>
-          )
-        : (
+              <TextView
+                ml="8px"
+                width={'70%'}
+                fontSize="16px"
+                fontFamily="bold"
+                color="text.0"
+                allowFontScaling={true}
+                adjustsFontSizeToFit={true}
+                numberOfLines={1}
+              >
+                {props.wallet.name?.toUpperCase()}
+              </TextView>
+            </LinearLayout>
+          </Fragment>
+        ) : (
           <Fragment>
             <ImageView
               position={'absolute'}
               left={0}
               source={require('~src/assets/images/wallet-icon-label.png')}
             />
-            {props.wallet.walletType === 'watch'
-              ? (
-                <ImageView
-                  top={15}
-                  left={15}
-                  width={26}
-                  height={26}
-                  resizeMode={'contain'}
-                  source={require('~src/assets/images/icon-watch-grey.png')}
-                />
-              )
-              : (
-                <ImageView
-                  top={12}
-                  left={12}
-                  width={36}
-                  height={32}
-                  resizeMode={'contain'}
-                  source={require('~src/assets/images/icon-legacy-grey.png')}
-                />
-              )
-            }
+            {props.wallet.walletType === 'watch' ? (
+              <ImageView
+                top={15}
+                left={15}
+                width={26}
+                height={26}
+                resizeMode={'contain'}
+                source={require('~src/assets/images/icon-watch-grey.png')}
+              />
+            ) : (
+              <ImageView
+                top={12}
+                left={12}
+                width={36}
+                height={32}
+                resizeMode={'contain'}
+                source={require('~src/assets/images/icon-legacy-grey.png')}
+              />
+            )}
           </Fragment>
-
-          )}
+        )}
       </RelativeLayout>
     )
   }
@@ -162,11 +154,7 @@ const WalletCard = (props: WalletCardProps) => {
       )}
 
       <WalletOverlay />
-      <LinearLayout
-        position={'absolute'}
-        bottom={40}
-        width={'80%'}
-      >
+      <LinearLayout position={'absolute'} bottom={40} width={'80%'}>
         <WalletLabel />
         <RelativeLayout height={12} width={'100%'}>
           <AssetsBarBackground
