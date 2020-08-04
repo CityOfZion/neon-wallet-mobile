@@ -1,28 +1,24 @@
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import React, {useEffect, useState} from 'react'
-import {SafeAreaView, ScrollView} from 'react-native'
-import {useSelector} from 'react-redux'
+import React, {useState} from 'react'
 
-import {Facade} from '~src/app/Facade'
 import AssetQuoteComponent from '~src/components/AssetQuoteComponent'
 import TransactionsList from '~src/components/TransactionsList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {mockAccountAssetDetails} from '~src/mocks/mockAccountAssetDetails'
-import {AccountMock} from '~src/models/AccountMock'
 import {AssetQuoteModel} from '~src/models/AssetQuoteModel'
 import {TransactionModel} from '~src/models/TransactionModel'
+import {Account} from '~src/models/redux/Account'
 import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
-import {
-  ButtonView,
-  ImageView,
-  LinearGradientLayout,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 
 interface AccountAssetDetailProps {
-  account: AccountMock
+  route: RouteProp<WalletStackParamList, 'AccountAssetDetail'>
   navigation: StackNavigationProp<QuickToolsStackParamList>
+}
+
+export interface AccountAssetDetailParams {
+  account: Account
 }
 
 const AccountAssetDetail = (props: AccountAssetDetailProps) => {
@@ -33,7 +29,7 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
   assetModel.currencySymbol = 'USD'
   //assetModel.srcIcon = props.account.srcIcon
 
-  const [account, setAccount] = useState<AccountMock>(props.account)
+  const [account, setAccount] = useState<Account>(props.route.params.account)
   const [asset, setAsset] = useState<AssetQuoteModel>(assetModel)
 
   const _renderTransactionViewElement = () => {

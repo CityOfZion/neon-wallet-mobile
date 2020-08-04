@@ -114,15 +114,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
     <ScreenLayout>
       <AwaitActivity name={'populate'} loadingView={<ScreenLoader />}>
         <LinearLayout mt={4}>
-          <AccountCard
-            account={account}
-            isStackMode={false}
-            onPress={() =>
-              props.navigation.navigate(Facade.route.AccountAssetDetail.name, {
-                account,
-              })
-            }
-          />
+          <AccountCard account={account} isStackMode={false} />
         </LinearLayout>
 
         <LinearLayout mt="28px" mx="auto">
@@ -146,6 +138,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
             <BalanceList
               my="16px"
               tokenAssets={mockWalletItems[2].currentAssets}
+              fromAccountView={true}
+              account={account}
             />
           ) : (
             _renderTransactionViewElement()

@@ -136,7 +136,7 @@ const TransactionsList: React.FC<Props> = (props) => {
               mr="4px"
               source={asset.srcIcon}
             />
-            <TextView fontSize="16px" color="text.0" marginRight="30px">
+            <TextView fontSize="16px" color="text.0" marginRight="20px">
               {asset.nameSymbol}
             </TextView>
             <TextView fontSize="14px" color="text.2">

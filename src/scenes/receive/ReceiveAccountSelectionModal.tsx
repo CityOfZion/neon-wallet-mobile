@@ -108,7 +108,11 @@ const ReceiveAccountSelectionModal = (props: Props) => {
 
         <LinearLayout mt={4}>{_renderAccountCards()}</LinearLayout>
 
-        <BalanceList my="44px" tokenAssets={new TokenBalance()} />
+        <BalanceList
+          my="44px"
+          tokenAssets={new TokenBalance()}
+          fromAccountView={false}
+        />
 
         <LinearLayout
           position="absolute"
