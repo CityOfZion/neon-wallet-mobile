@@ -63,7 +63,7 @@ const BalanceList = (props: Props) => {
         <TableData header={props.item.name} content={props.item.symbol} />
         <TableData
           header={Facade.t('components.balanceList.holdings')}
-          content={String(props.item.holding)}
+          content={String(props.item.amount)}
         />
         <TableData
           header={Facade.t('components.balanceList.value')}
