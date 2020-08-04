@@ -43,7 +43,7 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
   const [showQr, setShowQr] = useState(false)
 
   const {wallet, account, amount, token, reference} = props.route.params
-  const ratio = exchange[token.symbol]?.to[currency] ?? null
+  const ratio = exchange[token.symbol]?.to[currency] ?? 0
   const value = Facade.filter.currency(amount * ratio, currency)
 
   const qrCodeContent = Facade.uri.generate(
