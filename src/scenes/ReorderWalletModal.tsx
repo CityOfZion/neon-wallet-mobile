@@ -1,11 +1,11 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
 import SortableList from 'react-native-sortable-list'
+import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
-import {mockWalletItems} from '~src/mocks/mockWalletItems'
-import {WalletMock} from '~src/models/WalletMock'
+import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -17,12 +17,13 @@ interface Props {
 export default function ReorderWalletModal(props: Props) {
   const controller = useSwiperController(true)
 
-  const [wallets, setWallets] = useState(mockWalletItems)
+  const {wallets} = useSelector((state: RootState) => state.app)
+
   const [order, setOrder] = useState<number[]>([])
   const listData: DataByNumber<string> = {}
 
   wallets.forEach((wallet, index) => {
-    listData[index] = wallet.title
+    listData[index] = wallet.name ?? ''
   })
 
   function _renderItem(props: RowProps<string>) {
@@ -48,13 +49,13 @@ export default function ReorderWalletModal(props: Props) {
   }
 
   function commitAndClose() {
-    const newWalletList: WalletMock[] = []
+    const newWalletList: Wallet[] = []
     order.forEach((i) => newWalletList.push(wallets[i]))
 
     // TODO: NW-245
     // Here is where it would save the order onto local store
     console.log(
-      `TODO: Order list = ${newWalletList.map((w) => w.title).join(', ')}`
+      `TODO: Order list = ${newWalletList.map((w) => w.name).join(', ')}`
     )
 
     controller.close()

@@ -11,11 +11,10 @@ import TabSelector from '~src/components/TabSelector'
 import TransactionsList from '~src/components/TransactionsList'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {mockAccountAssetDetails} from '~src/mocks/mockAccountAssetDetails'
-import {mockWalletItems} from '~src/mocks/mockWalletItems'
 import {NeoNode} from '~src/models/NeoNode'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {TransactionModel} from '~src/models/TransactionModel'
 import {Account} from '~src/models/redux/Account'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
@@ -40,8 +39,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const [account, setAccount] = useState<Account>(props.route.params.account)
   const [nodes, setNodes] = useState<NeoNode[]>([])
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
+  const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
 
-  const {language} = useSelector((state: RootState) => state.settings)
+  const {currency, language} = useSelector((state: RootState) => state.settings)
 
   useFocusEffect(
     useCallback(() => {
@@ -56,8 +56,17 @@ const GetAccountView = (props: GetAccountViewProps) => {
     populateAllNodes()
   }, [])
 
+  useEffect(() => {
+    Facade.await.run('populate', populateAssets)
+  }, [currency, language, isAssetsTabSelected])
+
   const populateAllNodes = async () => {
     setNodes(await NeoNode.getAllNodes())
+  }
+
+  const populateAssets = async () => {
+    const tokenAssets = await account.generateTokenAssets()
+    setTokenAssets(tokenAssets)
   }
 
   const _renderTitle: React.FC = () => {
@@ -112,34 +121,34 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   return (
     <ScreenLayout>
-      <AwaitActivity name={'populate'} loadingView={<ScreenLoader />}>
-        <LinearLayout mt={4}>
-          <AccountCard account={account} isStackMode={false} />
-        </LinearLayout>
+      <LinearLayout mt={4}>
+        <AccountCard account={account} isStackMode={false} />
+      </LinearLayout>
 
-        <LinearLayout mt="28px" mx="auto">
-          <ThemedButton
-            fontSize="16px"
-            label={Facade.t('screens.getAccount.claimAsset', {
-              assetAmount: '0.0000123 GAS',
-            })}
-          />
-        </LinearLayout>
-
-        <TabSelector
-          isFirstTabSelected={isAssetsTabSelected}
-          setFirstTabAsSelected={setIsAssetsTabSelected}
-          firstTabLabel={Facade.t('screens.getAccount.assets')}
-          secondTabLabel={Facade.t('screens.getAccount.transactions')}
+      <LinearLayout mt="28px" mx="auto">
+        <ThemedButton
+          fontSize="16px"
+          label={Facade.t('screens.getAccount.claimAsset', {
+            assetAmount: '0.0000123 GAS',
+          })}
         />
+      </LinearLayout>
 
+      <TabSelector
+        isFirstTabSelected={isAssetsTabSelected}
+        setFirstTabAsSelected={setIsAssetsTabSelected}
+        firstTabLabel={Facade.t('screens.getAccount.assets')}
+        secondTabLabel={Facade.t('screens.getAccount.transactions')}
+      />
+
+      <AwaitActivity name={'populate'} size={'large'} style={{minHeight: 100}}>
         <LinearLayout>
           {isAssetsTabSelected ? (
             <BalanceList
               my="16px"
-              tokenAssets={mockWalletItems[2].currentAssets}
-              fromAccountView={true}
+              tokenAssets={tokenAssets}
               account={account}
+              fromAccountView={true}
             />
           ) : (
             _renderTransactionViewElement()

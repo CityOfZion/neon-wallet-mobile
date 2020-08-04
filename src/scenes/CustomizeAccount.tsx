@@ -72,7 +72,7 @@ const CustomizeAccount = (props: Props) => {
   }, [loaded])
 
   const load = async () => {
-    await account.populateBalanceHistory()
+    await account.populateBalanceTokens()
     setLoaded(true)
   }
 

@@ -53,7 +53,7 @@ const GetWalletView = (props: GetWalletProps) => {
 
     const accounts = wallet.getAccounts(accountsPool)
 
-    const promises = accounts.map((it) => it.populateBalanceHistory())
+    const promises = accounts.map((it) => it.populateBalanceTokens())
     await Promise.all(promises)
 
     setAccounts(accounts)

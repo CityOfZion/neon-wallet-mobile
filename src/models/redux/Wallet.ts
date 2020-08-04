@@ -1,9 +1,14 @@
 import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 import moment from 'moment'
+import React from 'react'
 
 import {Facade} from '~src/app/Facade'
-import {TokenBalance} from '~src/models/TokenBalance'
+import {Currency} from '~src/enums/Currency'
+import {Lang} from '~src/enums/Lang'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
+import {TextView} from '~src/styles/styled-components'
+import {Exchange} from '~src/types/exchange'
 
 @HttpExclude()
 export class Wallet implements WalletState {
@@ -26,9 +31,6 @@ export class Wallet implements WalletState {
   @HttpExclude()
   securityPhrase: string | null = null
 
-  previousAssets: TokenBalance = new TokenBalance()
-  currentAssets: TokenBalance = new TokenBalance()
-
   get formattedLastVisitedAt() {
     if (!moment(this.lastVisitedAt).isValid()) return null
 
@@ -36,22 +38,6 @@ export class Wallet implements WalletState {
       // TODO: translate date format
       date: moment(this.lastVisitedAt).format('HH:mm - MMM/DD/YYYY'),
     })
-  }
-
-  get previousValue() {
-    if (!this.currentAssets.assets.length) return 0
-
-    return this.previousAssets.totalValue
-  }
-
-  get currentValue() {
-    if (!this.currentAssets.assets.length) return 0
-
-    return this.currentAssets.totalValue
-  }
-
-  get securityWords() {
-    return this.securityPhrase?.split(' ') ?? []
   }
 
   getAccounts(pool: Account[]) {
@@ -78,5 +64,31 @@ export class Wallet implements WalletState {
     const mnemonic = await this.getMnemonic()
     if (!mnemonic) return null
     return Facade.asteroid.generateNeoAccount(mnemonic, index)
+  }
+
+  async generateTokenAssets(pool: Account[]) {
+    const walletAccounts = this.getAccounts(pool)
+    return Account.generateTokenAssetsFromPool(walletAccounts)
+  }
+
+  calculateBalance(
+    tokenAssets: TokenAsset[],
+    currency: Currency,
+    exchange: Exchange
+  ) {
+    return Facade.lodash.sumBy(
+      tokenAssets,
+      (it) => it.exchange(currency, exchange) ?? 0
+    )
+  }
+
+  calculateBalanceFormatted(
+    tokenAssets: TokenAsset[],
+    currency: Currency,
+    language: Lang,
+    exchange: Exchange
+  ) {
+    const balance = this.calculateBalance(tokenAssets, currency, exchange)
+    return Facade.filter.currency(balance, currency, language)
   }
 }

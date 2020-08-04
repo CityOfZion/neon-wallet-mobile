@@ -9,6 +9,7 @@ import {Facade} from '~src/app/Facade'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {Balance} from '~src/models/Balance'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {Wallet} from '~src/models/redux/Wallet'
 import {AddressRequest} from '~src/models/request/AddressRequest'
 import {Exchange} from '~src/types/exchange'
@@ -47,22 +48,10 @@ export class Account implements AccountState {
 
   @HttpExpose()
   @ResponseSerialize(Balance)
-  balanceHistory: Balance[] = []
+  balanceTokenAssets: Balance[] = []
 
   @HttpExpose()
   accountType: WalletType | null = null
-
-  get lastBalance(): Balance | null {
-    return this.balanceHistory?.[0]
-  }
-
-  get assetSymbol() {
-    return this.lastBalance?.assetSymbol ?? null
-  }
-
-  get balanceAmount() {
-    return this.lastBalance?.amount ?? 0
-  }
 
   getWallet(pool: Wallet[]) {
     return pool.find((it) => it.id === this.idWallet)
@@ -72,16 +61,50 @@ export class Account implements AccountState {
     return pool.filter((it) => it.idWallet === this.idWallet)
   }
 
-  exchangeBalanceAmount(currency: Currency, exchange: Exchange) {
-    const {assetSymbol} = this
+  getBalanceAmountByAsset(assetSymbol: string) {
+    const balance = this.balanceTokenAssets.find(
+      (it) => it.assetSymbol === assetSymbol
+    )
+    if (!balance) return null
 
-    if (!assetSymbol) return null
+    return balance.amount ?? 0
+  }
 
+  getBalanceAmount() {
+    let amount = 0
+
+    for (const balance of this.balanceTokenAssets) {
+      const asset = balance.assetSymbol ?? ''
+      amount += this.getBalanceAmountByAsset(asset) ?? 0
+    }
+
+    return amount
+  }
+
+  exchangeBalanceAmountByAsset(
+    assetSymbol: string,
+    currency: Currency,
+    exchange: Exchange
+  ) {
     const ratio = exchange[assetSymbol]?.to[currency] ?? null
-
     if (!ratio) return null
 
-    return this.balanceAmount * ratio
+    const amount = this.getBalanceAmountByAsset(assetSymbol)
+    if (!amount) return null
+
+    return amount * ratio
+  }
+
+  exchangeBalanceAmount(currency: Currency, exchange: Exchange) {
+    let exchangedAmount = 0
+
+    for (const balance of this.balanceTokenAssets) {
+      const asset = balance.assetSymbol ?? ''
+      exchangedAmount +=
+        this.exchangeBalanceAmountByAsset(asset, currency, exchange) ?? 0
+    }
+
+    return exchangedAmount
   }
 
   formattedBalanceAmount(
@@ -90,29 +113,85 @@ export class Account implements AccountState {
     exchange: Exchange
   ) {
     // Fallback when balance amount is 0
-    if (this.balanceAmount === 0) {
-      return Facade.filter.currency(this.balanceAmount, currency, language)
+    if (this.getBalanceAmount() === 0) {
+      return Facade.filter.currency(0, currency, language)
     }
 
     const amount = this.exchangeBalanceAmount(currency, exchange)
-    if (amount) {
-      return Facade.filter.currency(amount, currency, language)
-    }
 
-    // Fallback in case it fails to calculate the exchange
-    return Facade.filter.currency(
-      this.balanceAmount,
-      this.assetSymbol,
-      language
-    )
+    return Facade.filter.currency(amount, currency, language)
   }
 
-  async populateBalanceHistory() {
+  async populateBalanceTokens() {
     if (!this.address) return
 
     const request = new AddressRequest(this.address)
     const response = await request.getBalance()
 
-    this.balanceHistory = response.balance
+    this.balanceTokenAssets = response.balance
+  }
+
+  async generateTokenAssets() {
+    await this.populateBalanceTokens()
+
+    return this.balanceTokenAssets
+      .map((it) => {
+        const {asset, assetSymbol, assetHash} = it
+
+        if (asset && assetSymbol && assetHash) {
+          const tokenAsset = new TokenAsset(asset, assetSymbol, assetHash)
+          tokenAsset.holding = it.unspent.length
+          tokenAsset.amount = it.amount ?? 0
+          return tokenAsset
+        }
+
+        return null
+      })
+      .filter((it) => it) as TokenAsset[]
+  }
+
+  static async generateTokenAssetsFromPool(pool: Account[]) {
+    const promises = pool.map((it) => it.populateBalanceTokens())
+    await Promise.all(promises)
+
+    // Flat balances of all accounts
+    const balances = Facade.lodash.flatMap(pool, (it) => it.balanceTokenAssets)
+
+    // Discover all assets in this wallet
+    const assets = Facade.lodash.uniq(
+      balances.map((it) => it.assetSymbol ?? '').filter((it) => it)
+    )
+
+    const tokenAssets: TokenAsset[] = []
+
+    for (const assetSymbol of assets) {
+      const filteredBalances = balances.filter(
+        (it) => it.assetSymbol === assetSymbol
+      )
+
+      const firstBalance = filteredBalances[0]
+
+      if (firstBalance) {
+        const {asset, assetSymbol, assetHash} = firstBalance
+
+        if (asset && assetSymbol && assetHash) {
+          const tokenAsset = new TokenAsset(asset, assetSymbol, assetHash)
+
+          tokenAsset.holding = Facade.lodash.sumBy(
+            filteredBalances,
+            (it) => it.unspent.length
+          )
+
+          tokenAsset.amount = Facade.lodash.sumBy(
+            filteredBalances,
+            (it) => it.amount ?? 0
+          )
+
+          tokenAssets.push(tokenAsset)
+        }
+      }
+    }
+
+    return tokenAssets
   }
 }
