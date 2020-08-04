@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 
 import {TokenValue} from '~src/models/TokenValue'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -22,12 +22,13 @@ const WalletCard = (props: WalletCardProps) => {
     const bottomOffset = 28 - 6 * i
 
     return (
-      <AccountCard
+      <LinearLayout
         position={'absolute'}
         bottom={`${bottomOffset}px`}
         right={'6px'}
         height={'90%'}
         width={'90%'}
+        borderRadius={18}
         bg={asset.color}
         key={i}
       />
@@ -55,6 +56,98 @@ const WalletCard = (props: WalletCardProps) => {
     })
   }
 
+  const WalletOverlay = () => {
+    return props.wallet.walletType === 'standard'
+      ? (
+        <ImageView
+          width={'100%'}
+          height={'100%'}
+          resizeMode={'stretch'}
+          source={require('~src/assets/images/wallet-card-front.png')}
+        />
+      )
+      : (
+        <ImageView
+          width={'100%'}
+          position={'absolute'}
+          bottom={0}
+          resizeMode={'stretch'}
+          source={require('~src/assets/images/wallet-semi-front.png')}
+        />
+      )
+  }
+
+  const WalletLabel = () => {
+    return (
+      <RelativeLayout height={58} width={'100%'} mb={15}>
+        {props.wallet.walletType === 'standard'
+          ? (
+            <Fragment>
+              <ImageView
+                height={'100%'}
+                width={'100%'}
+                resizeMode={'contain'}
+                source={require('~src/assets/images/wallet-card-label.png')}
+              />
+              <LinearLayout bottom={40} orientation="horiz" alignItems={'center'}>
+                <ImageView
+                  ml="12px"
+                  width={28}
+                  height={24}
+                  resizeMode={'contain'}
+                  source={require('~src/assets/images/wallet-icon.png')}
+                />
+                <TextView
+                  ml="8px"
+                  width={'70%'}
+                  fontSize="16px"
+                  fontFamily="bold"
+                  color="text.0"
+                  allowFontScaling={true}
+                  adjustsFontSizeToFit={true}
+                  numberOfLines={1}
+                >
+                  {props.wallet.name?.toUpperCase()}
+                </TextView>
+              </LinearLayout>
+            </Fragment>
+          )
+        : (
+          <Fragment>
+            <ImageView
+              position={'absolute'}
+              left={0}
+              source={require('~src/assets/images/wallet-icon-label.png')}
+            />
+            {props.wallet.walletType === 'watch'
+              ? (
+                <ImageView
+                  top={15}
+                  left={15}
+                  width={26}
+                  height={26}
+                  resizeMode={'contain'}
+                  source={require('~src/assets/images/icon-watch-grey.png')}
+                />
+              )
+              : (
+                <ImageView
+                  top={12}
+                  left={12}
+                  width={36}
+                  height={32}
+                  resizeMode={'contain'}
+                  source={require('~src/assets/images/icon-legacy-grey.png')}
+                />
+              )
+            }
+          </Fragment>
+
+          )}
+      </RelativeLayout>
+    )
+  }
+
   return (
     <WalletCardRelativeContainer
       position="relative"
@@ -67,72 +160,36 @@ const WalletCard = (props: WalletCardProps) => {
       {props.wallet.currentAssets?.assets.map((a, i) =>
         _renderAccountCard(a, i)
       )}
-      <WalletFrontImage
-        height={'100%'}
-        width={'100%'}
-        source={require('~src/assets/images/wallet-card-front.png')}
-      />
-      <RelativeLayout bottom={130} height={58} width={4 / 5}>
-        <WalletNameContainer
-          height={'100%'}
-          width={'100%'}
-          source={require('~src/assets/images/wallet-card-label.png')}
-        />
-        <LinearLayout bottom={'40px'} orientation="horiz" alignItems={'center'}>
-          <ImageView
-            ml="12px"
-            width={28}
-            height={24}
-            resizeMode={'contain'}
-            source={
-              props.wallet.walletType === 'watch'
-                ? require('~src/assets/images/icon-watch-green.png')
-                : require('~src/assets/images/wallet-icon.png')
-            }
+
+      <WalletOverlay />
+      <LinearLayout
+        position={'absolute'}
+        bottom={40}
+        width={'80%'}
+      >
+        <WalletLabel />
+        <RelativeLayout height={12} width={'100%'}>
+          <AssetsBarBackground
+            height={'10px'}
+            width={'100%'}
+            source={require('~src/assets/images/wallet-card-label.png')}
           />
-          <TextView
-            ml="8px"
-            width={'70%'}
-            fontSize="16px"
-            fontFamily="bold"
-            color="text.0"
-            allowFontScaling={true}
-            adjustsFontSizeToFit={true}
-            numberOfLines={1}
+          <AssetsBar
+            bottom={'7px'}
+            height={'5px'}
+            width={'99.5%'}
+            px={'2px'}
+            orientation={'horiz'}
           >
-            {props.wallet.name?.toUpperCase()}
-          </TextView>
-        </LinearLayout>
-      </RelativeLayout>
-      <RelativeLayout bottom={110} height={12} width={4 / 5}>
-        <AssetsBarBackground
-          height={'10px'}
-          width={'100%'}
-          source={require('~src/assets/images/wallet-card-label.png')}
-        />
-        <AssetsBar
-          bottom={'7px'}
-          height={'5px'}
-          width={'99.5%'}
-          px={'2px'}
-          orientation={'horiz'}
-        >
-          {_renderAssetsBarFills()}
-        </AssetsBar>
-      </RelativeLayout>
+            {_renderAssetsBarFills()}
+          </AssetsBar>
+        </RelativeLayout>
+      </LinearLayout>
     </WalletCardRelativeContainer>
   )
 }
 
 const colorLimedSpruce = '#364046'
-
-const WalletFrontImage = styled(ImageView)`
-  resize-mode: stretch;
-`
-
-const WalletNameContainer = styled(ImageView)`
-  resize-mode: contain;
-`
 
 const AssetsBarBackground = styled(ImageView)`
   resize-mode: cover;
@@ -147,10 +204,6 @@ const WalletCardRelativeContainer = styled(ButtonView)`
   shadow-opacity: 0.39;
   shadow-radius: 8.3px;
   elevation: 13;
-`
-
-const AccountCard = styled(LinearLayout)`
-  border-radius: 18px;
 `
 
 const AssetsBar = styled(LinearLayout)``
