@@ -17,6 +17,7 @@ import TabSelector from '~src/components/TabSelector'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {TokenValue} from '~src/models/TokenValue'
 import {Account} from '~src/models/redux/Account'
+import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {
   ButtonView,
@@ -130,7 +131,6 @@ const ReferenceField = (props: {
         onChangeText={props.setReference}
         color={props.theme.colors.text[0]}
         invalidColor={props.theme.colors.text[10]}
-        fontStyle={'regular-italic'}
         value={props.reference}
         placeholder={Facade.t('modals.receive.toAccount.addReference')}
         validator={() => true}
@@ -144,7 +144,7 @@ const ReferenceField = (props: {
 }
 
 export interface ReceiveToAccountModalParams {
-  walletTitle: string
+  wallet: Wallet
   account: Account
 }
 
@@ -165,6 +165,26 @@ const ReceiveToAccountModal = (props: Props) => {
   const [reference, setReference] = useState<string>('')
   const [token, setToken] = useState<TokenValue | null>(null)
 
+  const {wallet, account} = props.route.params
+
+  const navigate = () => {
+    if (!isValid()) return
+
+    props.navigation.navigate(Facade.route.ReceiveQrCodeModal.name, {
+      wallet,
+      account,
+      amount,
+      token: token!,
+      reference,
+    })
+  }
+
+  const isValid = () => {
+    const conditions: boolean[] = [!!account.address, !!amount, !!token]
+
+    return conditions.every((it) => it)
+  }
+
   return (
     <SwiperPanel
       controller={controller}
@@ -174,8 +194,8 @@ const ReceiveToAccountModal = (props: Props) => {
       paddingLeft={0}
       title={Facade.t('modals.receive.title')}
       rightButton={CloseButton()}
-      onRightPress={() => controller.close()}
-      onClose={() => props.navigation.goBack()}
+      onRightPress={controller.close}
+      onClose={props.navigation.goBack}
       image={require('~src/assets/images/download-white.png')}
     >
       <LinearLayout height="100%" width="100%" px="15px" orientation="verti">
@@ -186,10 +206,10 @@ const ReceiveToAccountModal = (props: Props) => {
           fontSize="md"
           fontFamily="bold"
         >
-          {props.route.params.walletTitle.toUpperCase()}
+          {props.route.params.wallet.name?.toUpperCase() ?? ''}
         </TextView>
         <AccountCard account={props.route.params.account} />
-        <TouchableWithoutFeedback onPress={() => props.navigation.goBack()}>
+        <TouchableWithoutFeedback onPress={props.navigation.goBack}>
           <LinearLayout
             orientation="horiz"
             alignSelf="center"
@@ -235,6 +255,7 @@ const ReceiveToAccountModal = (props: Props) => {
                 label={Facade.t('modals.receive.toAccount.generateQrCode')}
                 srcIcon={require('~/src/assets/images/icon-qrcode-green.png')}
                 iconSize={[19, 23]}
+                onPress={navigate}
               />
             </LinearLayout>
           </LinearLayout>

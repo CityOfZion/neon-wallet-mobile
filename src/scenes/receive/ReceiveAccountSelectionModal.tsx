@@ -127,7 +127,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
               props.navigation.navigate(
                 Facade.route.ReceiveToAccountModal.name,
                 {
-                  walletTitle: props.route.params.wallet.name ?? '',
+                  wallet: props.route.params.wallet,
                   account: selectedAccount ?? new Account(),
                 }
               )
