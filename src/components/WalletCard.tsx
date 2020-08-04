@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react'
 import {useSelector} from 'react-redux'
 
+import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import {TokenValue} from '~src/models/TokenValue'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -150,9 +151,10 @@ const WalletCard = (props: WalletCardProps) => {
         <Fragment>
           <LinearLayout
             position={'absolute'}
-            mx={'-116px'}
+            ml={Facade.utils.isAndroid ? '-46%' : '-57%'}
             p={'3px'}
-            width={height}
+            mt={Facade.utils.isAndroid ? '0px' : '-16px'}
+            width={Facade.utils.isAndroid ? height : height - 28}
             height={'100%'}
             style={{transform: [{rotate: '90deg'}]}}
           >
@@ -161,10 +163,10 @@ const WalletCard = (props: WalletCardProps) => {
           {accounts.length > 1 && (
             <LinearLayout
               position={'absolute'}
-              mx={'-116px'}
-              mt={'2px'}
+              ml={Facade.utils.isAndroid ? '-47%' : '-58%'}
               p={'3px'}
-              width={height - 9}
+              mt={Facade.utils.isAndroid ? '1px' : '-12px'}
+              width={Facade.utils.isAndroid ? height : height - 28}
               height={'102%'}
               style={{transform: [{rotate: '90deg'}]}}
             >
@@ -174,10 +176,10 @@ const WalletCard = (props: WalletCardProps) => {
           {accounts.length > 2 && (
             <LinearLayout
               position={'absolute'}
-              mx={'-116px'}
-              mt={'3px'}
+              ml={Facade.utils.isAndroid ? '-46%' : '-59%'}
               p={'3px'}
-              width={height - 18}
+              mt={Facade.utils.isAndroid ? '2px' : '-8px'}
+              width={Facade.utils.isAndroid ? height - 8 : height - 28}
               height={'104%'}
               style={{transform: [{rotate: '90deg'}]}}
             >
@@ -189,9 +191,10 @@ const WalletCard = (props: WalletCardProps) => {
     else {
       return (
         <LinearLayout
-          mx={'-116px'}
+          ml={Facade.utils.isAndroid ? '-47%' : '-57%'}
           p={'3px'}
-          width={height}
+          mt={Facade.utils.isAndroid ? '0px' : '-12px'}
+          width={Facade.utils.isAndroid ? height : height - 28}
           height={'100%'}
           style={{transform: [{rotate: '90deg'}]}}
         >
