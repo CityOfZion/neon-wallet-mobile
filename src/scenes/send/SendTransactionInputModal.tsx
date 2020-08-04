@@ -31,242 +31,6 @@ export enum Priority {
   FASTEST,
 }
 
-const priorityIconInactive = require('~src/assets/images/icon-flash-grey.png')
-const priorityIconActive = require('~src/assets/images/icon-flash-primary.png')
-
-const PriorityTab = () => {
-  const [priority, setPriority] = useState(Priority.FAST)
-
-  return (
-    <LinearLayout
-      orientation="horiz"
-      bg="background.1"
-      borderRadius={8}
-      mb="58px"
-      height="75px"
-    >
-      <ButtonView
-        bg={priority === Priority.FAST ? 'background.0' : 'background.1'}
-        weight={1}
-        p="16px"
-        borderBottomLeftRadius={8}
-        borderTopLeftRadius={8}
-        justifyContent="center"
-        onPress={() => setPriority(Priority.FAST)}
-      >
-        <LinearLayout orientation="horiz" alignItems="center">
-          <ImageView
-            source={
-              priority === Priority.FAST
-                ? priorityIconActive
-                : priorityIconInactive
-            }
-          />
-          <LinearLayout ml="8px">
-            <TextView
-              color={priority === Priority.FAST ? 'primary' : 'text.3'}
-              fontSize="16px"
-              fontFamily="semibold"
-            >
-              Fast
-            </TextView>
-            <TextView
-              color={priority === Priority.FAST ? 'primary' : 'text.3'}
-              fontSize="12px"
-            >
-              0.00001 GAS
-            </TextView>
-          </LinearLayout>
-        </LinearLayout>
-      </ButtonView>
-      <ButtonView
-        weight={1}
-        bg={priority === Priority.FASTER ? 'background.0' : 'background.1'}
-        p="16px"
-        borderStyle="solid"
-        borderLeftWidth={1}
-        borderRightWidth={1}
-        borderColor="black"
-        justifyContent="center"
-        onPress={() => setPriority(Priority.FASTER)}
-      >
-        <LinearLayout orientation="horiz" alignItems="center">
-          <ImageView
-            source={
-              priority === Priority.FASTER
-                ? priorityIconActive
-                : priorityIconInactive
-            }
-          />
-          <LinearLayout ml="8px">
-            <TextView
-              color={priority === Priority.FASTER ? 'primary' : 'text.3'}
-              fontSize="16px"
-              fontFamily="semibold"
-            >
-              Faster
-            </TextView>
-            <TextView
-              color={priority === Priority.FASTER ? 'primary' : 'text.3'}
-              fontSize="12px"
-            >
-              0.00001 GAS
-            </TextView>
-          </LinearLayout>
-        </LinearLayout>
-      </ButtonView>
-      <ButtonView
-        weight={1}
-        bg={priority === Priority.FASTEST ? 'background.0' : 'background.1'}
-        p="16px"
-        borderBottomRightRadius={8}
-        borderTopRightRadius={8}
-        justifyContent="center"
-        onPress={() => setPriority(Priority.FASTEST)}
-      >
-        <LinearLayout orientation="horiz" alignItems="center">
-          <ImageView
-            source={
-              priority === Priority.FASTEST
-                ? priorityIconActive
-                : priorityIconInactive
-            }
-          />
-          <LinearLayout ml="8px">
-            <TextView
-              color={priority === Priority.FASTEST ? 'primary' : 'text.3'}
-              fontSize="16px"
-              fontFamily="semibold"
-            >
-              Fastest
-            </TextView>
-            <TextView
-              color={priority === Priority.FASTEST ? 'primary' : 'text.3'}
-              fontSize="12px"
-            >
-              0.00001 GAS
-            </TextView>
-          </LinearLayout>
-        </LinearLayout>
-      </ButtonView>
-    </LinearLayout>
-  )
-}
-
-const DestinationAddressField = (props: {
-  theme: ApplicationTheme
-  address: string
-  setAddress: React.Dispatch<React.SetStateAction<string>>
-  navigation: any
-}) => {
-  return (
-    <Fragment>
-      <InputLabel
-        title={Facade.t('modals.send.transactionInput.destinationAddress')}
-        color={'text.0'}
-        marginTop={30}
-        marginBottom={30}
-        capitalize={true}
-      />
-      <InputWithValidation
-        onChangeText={props.setAddress}
-        color={props.theme.colors.text[0]}
-        invalidColor={props.theme.colors.text[10]}
-        value={props.address}
-        placeholder={Facade.t('modals.send.transactionInput.enterDestination')}
-        validator={() => true}
-        separatorColor={props.theme.colors.background[13]}
-        sideMargins={0}
-        showContacts={true}
-        navigation={props.navigation}
-      />
-    </Fragment>
-  )
-}
-
-const TokenField = (props: {
-  theme: ApplicationTheme
-  token: TokenValue | null
-  setToken: React.Dispatch<React.SetStateAction<TokenValue | null>>
-  nav: StackNavigationProp<ModalStackParamList>
-}) => {
-  return (
-    <Fragment>
-      <InputLabel
-        title={Facade.t('modals.send.transactionInput.token')}
-        color={'text.0'}
-        marginTop={50}
-        marginBottom={30}
-        capitalize={true}
-      />
-
-      <ButtonView
-        onPress={() => {
-          props.nav.navigate(Facade.route.ListTokenModal.name, {
-            selectedToken: props.token ?? null,
-            setToken: props.setToken,
-          })
-        }}
-      >
-        <LinearLayout position="relative">
-          <InputWithValidation
-            color={props.theme.colors.text[0]}
-            invalidColor={props.theme.colors.text[10]}
-            fontStyle={'normal'}
-            value={props.token?.name ?? ''}
-            placeholder={Facade.t('modals.send.transactionInput.selectToken')}
-            validator={() => true}
-            separatorColor={props.theme.colors.background[13]}
-            sideMargins={0}
-            hidePaste={true}
-            hideScan={true}
-            editable={false}
-          />
-          <ImageView
-            position="absolute"
-            top="10px"
-            right="15px"
-            resizeMode="contain"
-            width="12px"
-            source={require('~/src/assets/images/icon-arrow-down-green.png')}
-          />
-        </LinearLayout>
-      </ButtonView>
-    </Fragment>
-  )
-}
-
-const AmountField = (props: {
-  theme: ApplicationTheme
-  amount: number
-  setAmount: React.Dispatch<React.SetStateAction<number>>
-}) => {
-  return (
-    <Fragment>
-      <InputLabel
-        title={Facade.t('modals.send.transactionInput.amount')}
-        color={'text.0'}
-        marginTop={30}
-        marginBottom={20}
-        capitalize={true}
-      />
-      <InputWithValidation
-        onChangeText={(text) => props.setAmount(Number(text))}
-        color={props.theme.colors.text[0]}
-        invalidColor={props.theme.colors.text[10]}
-        value={String(props.amount)}
-        placeholder={Facade.t('modals.send.transactionInput.enterAmount')}
-        validator={() => true}
-        separatorColor={props.theme.colors.background[13]}
-        sideMargins={0}
-        hidePaste={true}
-        hideScan={true}
-        keyboardType="numeric"
-      />
-    </Fragment>
-  )
-}
-
 export interface SendTransactionInputModalParams {
   walletTitle: string
   account: Account
@@ -278,16 +42,253 @@ interface Props {
   route: RouteProp<ModalStackParamList, 'SendTransactionInputModal'>
 }
 
-const SendTransactionInputModal = (props: Props) => {
+const SendTransactionInputModal = (prop: Props) => {
   const controller = useSwiperController(true)
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const [text, setText] = useState(props.route.params?.uri?.address ?? '')
-  const [amount, setAmount] = useState(props.route.params?.uri?.amount ?? 0)
+  const [text, setText] = useState(prop.route.params?.uri?.address ?? '')
+  const [amount, setAmount] = useState(prop.route.params?.uri?.amount ?? 0)
   // TODO: convert hash into TokenValue
   // const hash = props.route.params?.uri?.asset ?? ''
   const [token, setToken] = useState<TokenValue | null>(null)
+
+  // Typeguard
+  function isURI(object: any): object is NeoURI {
+    return !!(object as NeoURI).address
+  }
+
+  const handleQrCode = (data: NeoURI | string) => {
+    if (isURI(data)) {
+      setText(data.address)
+    } else {
+      setText(data)
+    }
+  }
+
+  const priorityIconInactive = require('~src/assets/images/icon-flash-grey.png')
+  const priorityIconActive = require('~src/assets/images/icon-flash-primary.png')
+
+  const PriorityTab = () => {
+    const [priority, setPriority] = useState(Priority.FAST)
+
+    return (
+      <LinearLayout
+        orientation="horiz"
+        bg="background.1"
+        borderRadius={8}
+        mb="58px"
+        height="75px"
+      >
+        <ButtonView
+          bg={priority === Priority.FAST ? 'background.0' : 'background.1'}
+          weight={1}
+          p="16px"
+          borderBottomLeftRadius={8}
+          borderTopLeftRadius={8}
+          justifyContent="center"
+          onPress={() => setPriority(Priority.FAST)}
+        >
+          <LinearLayout orientation="horiz" alignItems="center">
+            <ImageView
+              source={
+                priority === Priority.FAST
+                  ? priorityIconActive
+                  : priorityIconInactive
+              }
+            />
+            <LinearLayout ml="8px">
+              <TextView
+                color={priority === Priority.FAST ? 'primary' : 'text.3'}
+                fontSize="16px"
+                fontFamily="semibold"
+              >
+                Fast
+              </TextView>
+              <TextView
+                color={priority === Priority.FAST ? 'primary' : 'text.3'}
+                fontSize="12px"
+              >
+                0.00001 GAS
+              </TextView>
+            </LinearLayout>
+          </LinearLayout>
+        </ButtonView>
+        <ButtonView
+          weight={1}
+          bg={priority === Priority.FASTER ? 'background.0' : 'background.1'}
+          p="16px"
+          borderStyle="solid"
+          borderLeftWidth={1}
+          borderRightWidth={1}
+          borderColor="black"
+          justifyContent="center"
+          onPress={() => setPriority(Priority.FASTER)}
+        >
+          <LinearLayout orientation="horiz" alignItems="center">
+            <ImageView
+              source={
+                priority === Priority.FASTER
+                  ? priorityIconActive
+                  : priorityIconInactive
+              }
+            />
+            <LinearLayout ml="8px">
+              <TextView
+                color={priority === Priority.FASTER ? 'primary' : 'text.3'}
+                fontSize="16px"
+                fontFamily="semibold"
+              >
+                Faster
+              </TextView>
+              <TextView
+                color={priority === Priority.FASTER ? 'primary' : 'text.3'}
+                fontSize="12px"
+              >
+                0.00001 GAS
+              </TextView>
+            </LinearLayout>
+          </LinearLayout>
+        </ButtonView>
+        <ButtonView
+          weight={1}
+          bg={priority === Priority.FASTEST ? 'background.0' : 'background.1'}
+          p="16px"
+          borderBottomRightRadius={8}
+          borderTopRightRadius={8}
+          justifyContent="center"
+          onPress={() => setPriority(Priority.FASTEST)}
+        >
+          <LinearLayout orientation="horiz" alignItems="center">
+            <ImageView
+              source={
+                priority === Priority.FASTEST
+                  ? priorityIconActive
+                  : priorityIconInactive
+              }
+            />
+            <LinearLayout ml="8px">
+              <TextView
+                color={priority === Priority.FASTEST ? 'primary' : 'text.3'}
+                fontSize="16px"
+                fontFamily="semibold"
+              >
+                Fastest
+              </TextView>
+              <TextView
+                color={priority === Priority.FASTEST ? 'primary' : 'text.3'}
+                fontSize="12px"
+              >
+                0.00001 GAS
+              </TextView>
+            </LinearLayout>
+          </LinearLayout>
+        </ButtonView>
+      </LinearLayout>
+    )
+  }
+
+  const DestinationAddressField = () => {
+    return (
+      <Fragment>
+        <InputLabel
+          title={Facade.t('modals.send.transactionInput.destinationAddress')}
+          color={'text.0'}
+          marginTop={30}
+          marginBottom={30}
+          capitalize={true}
+        />
+        <InputWithValidation
+          onChangeText={setText}
+          color={theme.colors.text[0]}
+          invalidColor={theme.colors.text[10]}
+          value={text}
+          placeholder={Facade.t(
+            'modals.send.transactionInput.enterDestination'
+          )}
+          validator={() => true}
+          separatorColor={theme.colors.background[13]}
+          sideMargins={0}
+          showContacts={true}
+          onScan={handleQrCode}
+        />
+      </Fragment>
+    )
+  }
+
+  const TokenField = () => {
+    return (
+      <Fragment>
+        <InputLabel
+          title={Facade.t('modals.send.transactionInput.token')}
+          color={'text.0'}
+          marginTop={50}
+          marginBottom={30}
+          capitalize={true}
+        />
+
+        <ButtonView
+          onPress={() => {
+            prop.navigation.navigate(Facade.route.ListTokenModal.name, {
+              selectedToken: token,
+              setToken,
+            })
+          }}
+        >
+          <LinearLayout position="relative">
+            <InputWithValidation
+              color={theme.colors.text[0]}
+              invalidColor={theme.colors.text[10]}
+              fontStyle={'normal'}
+              value={token?.name ?? ''}
+              placeholder={Facade.t('modals.send.transactionInput.selectToken')}
+              validator={() => true}
+              separatorColor={theme.colors.background[13]}
+              sideMargins={0}
+              hidePaste={true}
+              hideScan={true}
+              editable={false}
+            />
+            <ImageView
+              position="absolute"
+              top="10px"
+              right="15px"
+              resizeMode="contain"
+              width="12px"
+              source={require('~/src/assets/images/icon-arrow-down-green.png')}
+            />
+          </LinearLayout>
+        </ButtonView>
+      </Fragment>
+    )
+  }
+
+  const AmountField = () => {
+    return (
+      <Fragment>
+        <InputLabel
+          title={Facade.t('modals.send.transactionInput.amount')}
+          color={'text.0'}
+          marginTop={30}
+          marginBottom={20}
+          capitalize={true}
+        />
+        <InputWithValidation
+          onChangeText={(text) => setAmount(Number(text))}
+          color={theme.colors.text[0]}
+          invalidColor={theme.colors.text[10]}
+          value={String(amount)}
+          placeholder={Facade.t('modals.send.transactionInput.enterAmount')}
+          validator={() => true}
+          separatorColor={theme.colors.background[13]}
+          sideMargins={0}
+          hidePaste={true}
+          hideScan={true}
+          keyboardType="numeric"
+        />
+      </Fragment>
+    )
+  }
 
   return (
     <SwiperPanel
@@ -299,7 +300,7 @@ const SendTransactionInputModal = (props: Props) => {
       title={Facade.t('modals.send.title')}
       rightButton={CloseButton()}
       onRightPress={() => controller.close()}
-      onClose={() => props.navigation.goBack()}
+      onClose={() => prop.navigation.goBack()}
       image={require('~/src/assets/images/upload-white.png')}
     >
       <LinearLayout height="100%" width="100%" px="15px" orientation="verti">
@@ -310,10 +311,10 @@ const SendTransactionInputModal = (props: Props) => {
           fontSize="md"
           fontFamily="bold"
         >
-          {props.route.params.walletTitle}
+          {prop.route.params.walletTitle}
         </TextView>
-        <AccountCard account={props.route.params.account} />
-        <TouchableWithoutFeedback onPress={() => props.navigation.goBack()}>
+        <AccountCard account={prop.route.params.account} />
+        <TouchableWithoutFeedback onPress={() => prop.navigation.goBack()}>
           <LinearLayout
             orientation="horiz"
             alignSelf="center"
@@ -337,19 +338,9 @@ const SendTransactionInputModal = (props: Props) => {
         >
           {Facade.t('modals.send.transactionInput.transactionDetails')}
         </TextView>
-        <DestinationAddressField
-          theme={theme}
-          address={text}
-          setAddress={setText}
-          navigation={props.navigation}
-        />
-        <TokenField
-          theme={theme}
-          token={token}
-          setToken={setToken}
-          nav={props.navigation}
-        />
-        <AmountField theme={theme} amount={amount} setAmount={setAmount} />
+        <DestinationAddressField />
+        <TokenField />
+        <AmountField />
         <TextView
           mt="56px"
           mb="24px"
@@ -367,7 +358,7 @@ const SendTransactionInputModal = (props: Props) => {
           <ThemedButton
             label={Facade.t('app.next')}
             onPress={() =>
-              props.navigation.navigate(
+              prop.navigation.navigate(
                 Facade.route.SendTransactionReviewModal.name
               )
             }
