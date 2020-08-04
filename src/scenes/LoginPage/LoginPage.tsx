@@ -84,7 +84,6 @@ export default function LoginPage(props: Props) {
       <ImageView
         height={193}
         width={193}
-        mb={12}
         source={require('~/src/assets/images/logo-small.png')}
       />
       <TextView color={'text.0'} fontSize={31} letterSpacing={3.29}>
@@ -97,8 +96,9 @@ export default function LoginPage(props: Props) {
         <TextView
           mb={24}
           color={'primary'}
-          fontSize={30}
+          fontSize={26}
           letterSpacing={0.46}
+          textAlign={'center'}
           fontFamily={'semibold'}
         >
           {Facade.t('login.title')}
