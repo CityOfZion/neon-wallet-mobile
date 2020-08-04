@@ -63,7 +63,7 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
   }, [loaded])
 
   const fetchData = async () => {
-    const address = 'Ad83tfsuWxxexhefPzXVpn5vv6oCbLKFEx' //props.route.params.account.address ?? ""
+    const address = props.route.params.account.address ?? ""
     const nextPage = currentPage + 1
     const request = new AddressPaginatedRequest(address, nextPage)
     const response = await request.getAddressAbstracts()
