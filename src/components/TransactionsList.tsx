@@ -3,11 +3,13 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 import {Facade} from '~src/app/Facade'
+import {NEO} from '~src/assets/nep5/png'
 import {
   Receiver,
   Transaction,
   TransactionModel,
   Asset,
+  neo,
 } from '~src/models/TransactionModel'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -48,7 +50,7 @@ const TransactionsList: React.FC<Props> = (props) => {
                       {props.isHistory &&
                       props.transactionModel &&
                       props.transactionModel.date
-                        ? '22:09'
+                        ? moment(props.transactionModel.date).format('hh:mm')
                         : '00:00'}
                     </TextView>
                   </LinearLayout>
@@ -130,14 +132,20 @@ const TransactionsList: React.FC<Props> = (props) => {
         return (
           <LinearLayout orientation="horiz" mb="5px" key={index}>
             <ImageView
+              style={!asset.srcIcon && {opacity: 0}}
               height="15px"
               width="15px"
               alignSelf="center"
               mr="4px"
-              source={asset.srcIcon}
+              source={asset.srcIcon ?? neo.srcIcon}
             />
-            <TextView fontSize="16px" color="text.0" marginRight="20px">
-              {asset.nameSymbol}
+            <TextView
+              style={!asset.nameSymbol && {opacity: 0}}
+              fontSize="16px"
+              color="text.0"
+              marginRight="20px"
+            >
+              {asset.nameSymbol ?? neo.nameSymbol}
             </TextView>
             <TextView fontSize="14px" color="text.2">
               {asset.value}

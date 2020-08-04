@@ -13,17 +13,17 @@ export const mockAccountAssetDetails: TransactionModel[] = [
 const assetNeo = new Asset()
 assetNeo.nameSymbol = 'NEO'
 assetNeo.srcIcon = require('~src/assets/logos/logo-neo.png')
-assetNeo.value = 34534
+assetNeo.value = '34534'
 
 const assetDbc = new Asset()
 assetDbc.nameSymbol = 'DBC'
 assetDbc.srcIcon = require('~src/assets/images/icon_DBC.png')
-assetDbc.value = 532
+assetDbc.value = '532'
 
 const assetOnt = new Asset()
 assetOnt.nameSymbol = 'ONT'
 assetOnt.srcIcon = require('~src/assets/images/icon_ONT.png')
-assetOnt.value = 34534
+assetOnt.value = '34534'
 
 const receiverWithNameOne = new Receiver()
 receiverWithNameOne.isAddress = false
