@@ -30,7 +30,7 @@ export abstract class Sync {
     )
 
     // Synchronize balance from WS
-    const promises = accounts.map((it) => it.populateBalanceHistory())
+    const promises = accounts.map((it) => it.populateBalanceTokens())
     await Promise.all(promises)
 
     return {settings, exchange, wallets, accounts, contacts}

@@ -13,7 +13,7 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {NeoURI} from '~src/helpers/UriHelper'
-import {TokenBalance} from '~src/models/TokenBalance'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -36,6 +36,7 @@ const SendAccountSelectionModal = (props: Props) => {
   const [accounts, setAccounts] = useState<Account[]>([])
   const [selectedAccount, setSelectedAccount] = useState<Account>()
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
 
   useEffect(() => {
     Facade.await.run('populate', populate)
@@ -45,6 +46,11 @@ const SendAccountSelectionModal = (props: Props) => {
     const filteredAccounts = props.route.params.wallet.getAccounts(accountsPool)
     setAccounts(filteredAccounts)
     setSelectedAccount(cloneDeep(filteredAccounts[filteredAccounts.length - 1]))
+
+    const tokenAssets = await Account.generateTokenAssetsFromPool(
+      filteredAccounts
+    )
+    setTokenAssets(tokenAssets)
   }
 
   const _renderAccountCards = () => {
@@ -108,7 +114,7 @@ const SendAccountSelectionModal = (props: Props) => {
 
         <BalanceList
           my="44px"
-          tokenAssets={new TokenBalance()}
+          tokenAssets={tokenAssets}
           fromAccountView={false}
         />
 

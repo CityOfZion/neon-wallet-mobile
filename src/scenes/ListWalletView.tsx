@@ -7,10 +7,10 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import BalanceList from '~src/components/BalanceList'
-import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {Wallet} from '~src/models/redux/Wallet'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
@@ -28,7 +28,7 @@ interface WalletProps {
 const ListWalletView = (props: WalletProps) => {
   const carouselRef = useRef(null)
   const [activeIndex, setActiveIndex] = useState(0)
-  const [walletAmount, setWalletAmount] = useState<number>()
+  const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
 
   const {wallets, accounts, exchange} = useSelector(
     (state: RootState) => state.app
@@ -36,8 +36,8 @@ const ListWalletView = (props: WalletProps) => {
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
   useEffect(() => {
-    Facade.await.run('calculateWalletAmount', calculateWalletAmount)
-  }, [activeIndex])
+    Facade.await.run('populate', populate)
+  }, [activeIndex, currency, language])
 
   const getActiveWallet = (): Wallet | null => {
     return wallets[activeIndex] ?? null
@@ -47,20 +47,12 @@ const ListWalletView = (props: WalletProps) => {
     return Boolean(wallets.length)
   }
 
-  const calculateWalletAmount = async () => {
+  const populate = async () => {
     const wallet = getActiveWallet()
 
     if (wallet) {
-      const walletAccounts = wallet.getAccounts(accounts)
-      const promises = walletAccounts.map((it) => it.populateBalanceHistory())
-      await Promise.all(promises)
-
-      const walletAmount = Facade.lodash.sumBy(
-        walletAccounts,
-        (it) => it.exchangeBalanceAmount(currency, exchange) ?? 0
-      )
-
-      setWalletAmount(walletAmount)
+      const tokenAssets = await wallet.generateTokenAssets(accounts)
+      setTokenAssets(tokenAssets)
     }
   }
 
@@ -98,7 +90,7 @@ const ListWalletView = (props: WalletProps) => {
 
     return (
       <>
-        <LinearLayout orientation="verti" alignItems="center">
+        <LinearLayout mb={4} orientation="verti" alignItems="center">
           {
             <TextView fontSize="11px" color="text.2">
               {wallet.formattedLastVisitedAt}
@@ -106,32 +98,24 @@ const ListWalletView = (props: WalletProps) => {
           }
 
           <LinearLayout orientation="horiz" minHeight={56}>
-            <AwaitActivity name={'calculateWalletAmount'} size={'large'}>
-              <>
-                <TextView fontSize="36px" color="text.0" fontFamily="medium">
-                  {Facade.filter.currency(
-                    walletAmount ?? 0,
-                    currency,
-                    language
-                  )}
-                </TextView>
+            <TextView fontSize="36px" color="text.0" fontFamily="medium">
+              {wallet.calculateBalanceFormatted(
+                tokenAssets,
+                currency,
+                language,
+                exchange
+              )}
+            </TextView>
 
-                <ImageView
-                  mt="8px"
-                  mx="4px"
-                  source={require('~src/assets/images/info-primary.png')}
-                />
-                {wallet.previousValue ? (
-                  <TextView
-                    fontSize="36px"
-                    color="primary"
-                    fontFamily="semibold"
-                  >
-                    {calculateChangePercentage(wallet)}
-                  </TextView>
-                ) : null}
-              </>
-            </AwaitActivity>
+            <ImageView
+              mt="8px"
+              mx="4px"
+              source={require('~src/assets/images/info-primary.png')}
+            />
+            {/*TODO: fix percentage*/}
+            {/*<TextView fontSize="36px" color="primary" fontFamily="semibold">*/}
+            {/*  {calculateChangePercentage(wallet)}*/}
+            {/*</TextView>*/}
           </LinearLayout>
         </LinearLayout>
       </>
@@ -139,10 +123,12 @@ const ListWalletView = (props: WalletProps) => {
   }
 
   const calculateChangePercentage = (wallet: Wallet) => {
-    const changePercentage =
-      ((wallet.currentValue - wallet.previousValue) / wallet.previousValue) *
-      100
-    return `${changePercentage > 0 ? '+' : ''}${Math.round(changePercentage)}%`
+    return null
+    // TODO: fix percentage
+    // const changePercentage =
+    //   ((wallet.currentValue - wallet.previousValue) / wallet.previousValue) *
+    //   100
+    // return `${changePercentage > 0 ? '+' : ''}${Math.round(changePercentage)}%`
   }
 
   return (
@@ -232,24 +218,32 @@ const ListWalletView = (props: WalletProps) => {
           </LinearLayout>
         )}
 
-        {_renderWalletChange()}
+        <AwaitActivity
+          name={'populate'}
+          size={'large'}
+          style={{minHeight: 100}}
+        >
+          {_renderWalletChange()}
 
-        <LinearLayout mx="16px" mt="16px">
-          <Notification
-            text={
-              'Tum dicere exorsus est et dolore magnam aliquam quaerat voluptatem ut de homine.'
-            }
-          />
-        </LinearLayout>
+          <LinearLayout mx={'16px'}>
+            {/*TODO: Make this useful*/}
+            {/*<LinearLayout my={4}>*/}
+            {/*  <Notification*/}
+            {/*    text={*/}
+            {/*      'Tum dicere exorsus est et dolore magnam aliquam quaerat voluptatem ut de homine.'*/}
+            {/*    }*/}
+            {/*  />*/}
+            {/*</LinearLayout>*/}
 
-        {isListNotEmpty() && (
-          <BalanceList
-            my="16px"
-            mx="16px"
-            tokenAssets={getActiveWallet()?.currentAssets}
-            fromAccountView={false}
-          />
-        )}
+            {isListNotEmpty() && (
+              <BalanceList
+                mb={4}
+                tokenAssets={tokenAssets}
+                fromAccountView={false}
+              />
+            )}
+          </LinearLayout>
+        </AwaitActivity>
       </>
     </ScreenLayout>
   )

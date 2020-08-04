@@ -42,7 +42,9 @@ import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelect
 import SendAccountSelectionModal, {
   SendAccountSelectionModalParams,
 } from '~src/scenes/send/SendAccountSelectionModal'
-import SendTransactionConfirmationModal, {SendTransactionConfirmationModalParams} from '~src/scenes/send/SendTransactionConfirmationModal'
+import SendTransactionConfirmationModal, {
+  SendTransactionConfirmationModalParams,
+} from '~src/scenes/send/SendTransactionConfirmationModal'
 import SendTransactionInputModal, {
   SendTransactionInputModalParams,
 } from '~src/scenes/send/SendTransactionInputModal'

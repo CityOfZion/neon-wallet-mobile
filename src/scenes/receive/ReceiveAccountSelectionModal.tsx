@@ -12,8 +12,7 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {Balance} from '~src/models/Balance'
-import {TokenBalance} from '~src/models/TokenBalance'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -34,9 +33,8 @@ const ReceiveAccountSelectionModal = (props: Props) => {
 
   const [accounts, setAccounts] = useState<Account[]>([])
   const [selectedAccount, setSelectedAccount] = useState<Account>()
-  const [balanceList, setBalanceList] = useState<Balance[]>([])
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const [tokenBalance, setTokenBalance] = useState<Balance>()
+  const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
 
   useEffect(() => {
     Facade.await.run('populate', populate)
@@ -46,6 +44,11 @@ const ReceiveAccountSelectionModal = (props: Props) => {
     const filteredAccounts = props.route.params.wallet.getAccounts(accountsPool)
     setAccounts(filteredAccounts)
     setSelectedAccount(cloneDeep(filteredAccounts[filteredAccounts.length - 1]))
+
+    const tokenAssets = await Account.generateTokenAssetsFromPool(
+      filteredAccounts
+    )
+    setTokenAssets(tokenAssets)
   }
 
   const _renderAccountCards = () => {
@@ -74,8 +77,6 @@ const ReceiveAccountSelectionModal = (props: Props) => {
     accounts.unshift(lastItem)
 
     setAccounts((accounts) => [...accounts])
-    // TODO: NW-228 Integrate Account Card with its Balance, getting it from the WS
-    setTokenBalance(new Balance())
   }
 
   return (
@@ -110,7 +111,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
 
         <BalanceList
           my="44px"
-          tokenAssets={new TokenBalance()}
+          tokenAssets={tokenAssets}
           fromAccountView={false}
         />
 

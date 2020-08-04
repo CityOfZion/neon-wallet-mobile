@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {ScrollView} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
@@ -10,6 +10,7 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import WalletCard from '~src/components/WalletCard'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
@@ -23,8 +24,22 @@ const ReceiveWalletSelectionModal = (props: Props) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const carouselRef = useRef(null)
 
-  const wallets = useSelector((state: RootState) => state.app.wallets)
+  const {wallets, accounts, exchange} = useSelector(
+    (state: RootState) => state.app
+  )
   const {currency, language} = useSelector((state: RootState) => state.settings)
+  const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
+
+  useEffect(() => {
+    Facade.await.run('populate', populate)
+  }, [currency, language, activeIndex])
+
+  const populate = async () => {
+    const tokenAssets = await wallets[activeIndex]?.generateTokenAssets(
+      accounts
+    )
+    setTokenAssets(tokenAssets)
+  }
 
   return (
     <SwiperPanel
@@ -87,10 +102,11 @@ const ReceiveWalletSelectionModal = (props: Props) => {
             color="text.0"
             fontFamily="medium"
           >
-            {Facade.filter.currency(
-              wallets[activeIndex].currentValue,
+            {wallets[activeIndex]?.calculateBalanceFormatted(
+              tokenAssets,
               currency,
-              language
+              language,
+              exchange
             )}
           </TextView>
         </ScrollView>
