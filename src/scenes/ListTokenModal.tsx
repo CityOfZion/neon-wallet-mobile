@@ -19,6 +19,11 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 
+export interface ListTokenModalParams {
+  selectedToken: TokenValue | null
+  setToken: React.Dispatch<React.SetStateAction<TokenValue | null>>
+}
+
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
   route: RouteProp<ModalStackParamList, 'ListTokenModal'>

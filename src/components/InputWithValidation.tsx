@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native'
 import React from 'react'
 import {
   KeyboardTypeOptions,
@@ -8,6 +9,7 @@ import {
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {NeoURI} from '~src/helpers/UriHelper'
 import {RootState} from '~src/store/RootStore'
 import {
   ButtonView,
@@ -34,18 +36,19 @@ interface Props {
   hideScan?: boolean
   showContacts?: boolean
   onClearPress?: () => void
+  onScan?: (data: NeoURI | string) => void
   placeholder?: string
   secure?: boolean
   onFocus?: (e: NativeSyntheticEvent<TargetedEvent>) => void
   editable?: boolean
   keyboardType?: KeyboardTypeOptions
-  navigation?: any
 }
 
 const InputWithValidation = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
+  const navigation = useNavigation()
   const sideMargins = props.sideMargins ?? 20
   const fontStyle =
     props.value && props.validator(props.value)
@@ -195,14 +198,11 @@ const InputWithValidation = (props: Props) => {
         {!props.hideScan && (
           <LinearLayout>
             <ButtonView
-              onPress={() => {
-                // eslint-disable-next-line no-unused-expressions
-                props.navigation?.navigate(Facade.route.QRCodeScan.name, {
-                  params: {
-                    onQRCodeScanned: props.onChangeText,
-                  },
+              onPress={() =>
+                navigation.navigate(Facade.route.QRCodeScan.name, {
+                  onScan: props.onScan,
                 })
-              }}
+              }
             >
               <LinearLayout orientation="horiz">
                 <ImageView

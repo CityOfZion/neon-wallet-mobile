@@ -23,7 +23,7 @@ import EditAccountModal, {
   EditAccountModalParam,
 } from '~src/scenes/EditAccountModal'
 import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
-import ListTokenModal from '~src/scenes/ListTokenModal'
+import ListTokenModal, {ListTokenModalParams} from '~src/scenes/ListTokenModal'
 import {QRCodeScanParams} from '~src/scenes/QRCodeScan'
 import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
@@ -64,10 +64,7 @@ export type ModalStackParamList = {
   CustomColor: {onColorPicked: (hex: string) => void}
   WalletContextModal: undefined
   ReorderWalletModal: undefined
-  ListTokenModal: {
-    selectedToken: TokenValue | null
-    setToken: React.Dispatch<React.SetStateAction<TokenValue | null>>
-  }
+  ListTokenModal: ListTokenModalParams
   LanguagePickerModal: undefined
   CurrencyPickerModal: undefined
   ThemePickerModal: undefined

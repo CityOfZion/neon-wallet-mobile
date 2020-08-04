@@ -8,6 +8,7 @@ import {StyleSheet, Animated} from 'react-native'
 import {URLSearchParams} from 'url'
 
 import {Facade} from '~src/app/Facade'
+import {NeoURI} from '~src/helpers/UriHelper'
 import {GAS_HASH, NEO_HASH} from '~src/models/TokenValue'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -21,12 +22,12 @@ import {
 const {BarCodeType} = ExpoBarCodeScannerModule
 
 export interface QRCodeScanParams {
-  onQRCodeScanned?: (scannedCode: string) => void
+  onScan?: (data: NeoURI | string) => void
 }
 
 export interface Props {
   navigation: StackNavigationProp<RootStackParamList>
-  route?: RouteProp<ModalStackParamList, 'QRCodeScan'>
+  route: RouteProp<ModalStackParamList, 'QRCodeScan'>
 }
 
 const QRCodeScan = (props: Props) => {
@@ -72,6 +73,12 @@ const QRCodeScan = (props: Props) => {
 
     setHasPermission(granted)
   }
+
+  const isValid = (key: string) =>
+    wallet.isAddress(key) ||
+    wallet.isNEP2(key) ||
+    wallet.isWIF(key) ||
+    Facade.uri.isValid(key)
 
   const goTo = (key: string): NavParam<RootStackParamList> | undefined => {
     if (wallet.isAddress(key)) {
@@ -132,24 +139,24 @@ const QRCodeScan = (props: Props) => {
   }
 
   const handleBarCodeScanned = (evt: BarCodeEvent) => {
-    if (props.route?.params.onQRCodeScanned) {
-      props.navigation.pop(1)
-      if (Facade.uri.isValid(evt.data)) {
-        props.route.params.onQRCodeScanned(
-          Facade.uri.parse(evt.data)?.address ?? ''
-        )
+    if (isValid(evt.data)) {
+      setMessage(Facade.t('screens.scanQrCode.success'))
+
+      // If there's a callback, calls the callback and navigates back
+      if (props.route.params.onScan) {
+        let data: NeoURI | string = evt.data
+        if (Facade.uri.isValid(evt.data)) {
+          data = Facade.uri.parse(evt.data) ?? evt.data
+        }
+        props.navigation.goBack()
+        props.route.params.onScan(data)
       } else {
-        props.route.params.onQRCodeScanned(evt.data)
+        const destination = goTo(evt.data)
+        props.navigation.pop(1)
+        destination && props.navigation.navigate(...destination)
       }
     } else {
-      const destination = goTo(evt.data)
-      if (destination) {
-        setMessage(Facade.t('screens.scanQrCode.success'))
-        props.navigation.pop(1)
-        props.navigation.navigate(...destination)
-      } else {
-        setMessage(Facade.t('screens.scanQrCode.tryAgain'))
-      }
+      setMessage(Facade.t('screens.scanQrCode.tryAgain'))
     }
   }
 
