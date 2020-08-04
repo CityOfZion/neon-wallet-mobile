@@ -41,6 +41,7 @@ const ContactsStackNavigation = (props: ContactsStackProps) => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.Contacts.name,
+              image: require('~src/assets/images/icon-contacts-white.png'),
               theme,
               route,
             })

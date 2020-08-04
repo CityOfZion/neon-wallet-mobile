@@ -131,9 +131,10 @@ const ContactsPage: React.FC<Props> = (prop) => {
             }}
           >
             <ImageView
-              m="auto"
               resizeMode="contain"
               source={require('~src/assets/images/add-new-contact-dashed-button.png')}
+              width={'100%'}
+              alignSelf={'center'}
             />
             <LinearLayout alignItems={'center'} mt={-38}>
               <LinearLayout orientation={'horiz'}>
