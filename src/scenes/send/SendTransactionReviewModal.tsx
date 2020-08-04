@@ -158,9 +158,12 @@ const SendTransactionReviewModal = (props: Props) => {
           <ThemedButton
             label={Facade.t('app.send')}
             onPress={() =>
-              props.navigation.navigate(
-                Facade.route.SendTransactionConfirmationModal.name
-              )
+              props.navigation.navigate(Facade.route.Modal.name, {
+                screen: Facade.route.SendTransactionConfirmationModal.name,
+                params: {
+                  transactionHash: '<TRANSACTIONHASH>',
+                },
+              })
             }
           />
         </LinearLayout>

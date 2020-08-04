@@ -39,7 +39,7 @@ import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelect
 import SendAccountSelectionModal, {
   SendAccountSelectionModalParams,
 } from '~src/scenes/send/SendAccountSelectionModal'
-import SendTransactionConfirmationModal from '~src/scenes/send/SendTransactionConfirmationModal'
+import SendTransactionConfirmationModal, {SendTransactionConfirmationModalParams} from '~src/scenes/send/SendTransactionConfirmationModal'
 import SendTransactionInputModal, {
   SendTransactionInputModalParams,
 } from '~src/scenes/send/SendTransactionInputModal'
@@ -60,7 +60,7 @@ export type ModalStackParamList = {
   SendAccountSelectionModal: SendAccountSelectionModalParams
   SendTransactionInputModal: SendTransactionInputModalParams
   SendTransactionReviewModal: undefined
-  SendTransactionConfirmationModal: undefined
+  SendTransactionConfirmationModal: SendTransactionConfirmationModalParams
   CustomColor: {onColorPicked: (hex: string) => void}
   WalletContextModal: undefined
   ReorderWalletModal: undefined
