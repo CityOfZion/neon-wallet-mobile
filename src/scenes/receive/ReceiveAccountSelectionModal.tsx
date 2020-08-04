@@ -84,7 +84,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
       fullSize={true}
       paddingTop={24}
       paddingRight={30}
-      paddingLeft={0}
+      paddingLeft={30}
       title={Facade.t('modals.receive.title')}
       rightButton={CloseButton()}
       onRightPress={() => controller.close()}

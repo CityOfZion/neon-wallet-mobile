@@ -1,8 +1,5 @@
 import {RouteProp} from '@react-navigation/native'
-import {useHeaderHeight} from '@react-navigation/stack'
-import {LinearGradient} from 'expo-linear-gradient'
 import React, {useEffect, useState} from 'react'
-import {ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
@@ -15,7 +12,6 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {Currency} from '~src/enums/Currency'
 import {TokenValue} from '~src/models/TokenValue'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -41,12 +37,14 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
+  const {currency} = useSelector((state: RootState) => state.settings)
+  const {exchange} = useSelector((state: RootState) => state.app)
   const controller = useSwiperController(true)
   const [showQr, setShowQr] = useState(false)
 
   const {wallet, account, amount, token, reference} = props.route.params
-  // TODO: Remove mocked values
-  const value = Facade.filter.currency(amount * 10, Currency.USD)
+  const ratio = exchange[token.symbol]?.to[currency] ?? null
+  const value = Facade.filter.currency(amount * ratio, currency)
 
   const qrCodeContent = Facade.uri.generate(
     account.address ?? '',
