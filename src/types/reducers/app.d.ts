@@ -6,7 +6,7 @@ import {Exchange} from '~src/types/exchange'
 import {Contact} from '~src/models/redux/Contact'
 
 export declare global {
-  type AppType =
+  type AppActionsType =
     | 'SET_EXCHANGE'
     | 'SET_WALLETS'
     | 'SET_ACCOUNTS'
@@ -19,7 +19,7 @@ export declare global {
     contacts: Contact[]
   }
 
-  type AppAction = AppState & Action<AppType>
+  type AppAction = AppState & Action<AppActionsType>
 
   type AppReducer = ReducerApplied<AppState, AppAction>
 }

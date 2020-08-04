@@ -1,5 +1,4 @@
 import {useNavigation} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack/lib/typescript/src/types'
 import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
@@ -43,6 +42,7 @@ interface Props {
   isCompacted?: boolean
   isStackMode?: boolean
   orientBy?: 'height' | 'width'
+  hideQRCode?: boolean
 }
 
 const AccountCard: React.FC<Props> = (props) => {
@@ -115,14 +115,18 @@ const AccountCard: React.FC<Props> = (props) => {
             orientation={'horiz'}
             alignItems={'center'}
           >
-            {props.account.srcIcon && (
-              <ImageView
-                width={24 * unit}
-                height={24 * unit}
-                source={props.account.srcIcon}
-                mr={10 * unit}
-              />
-            )}
+            <ImageView
+              width={24 * unit}
+              height={24 * unit}
+              source={
+                props.account.srcIcon ??
+                require('~/src/assets/images/icon-neo-white.png')
+              }
+              resizeMode={'center'}
+              mr={10 * unit}
+              alignSelf={'center'}
+              mt={2}
+            />
 
             <TextView
               mb={-2 * unit}
@@ -134,15 +138,18 @@ const AccountCard: React.FC<Props> = (props) => {
               allowFontScaling={true}
               adjustsFontSizeToFit={true}
             >
-              {props.account.name}
+              {props.account.name?.length !== 0
+                ? props.account.name
+                : Facade.t('paymentCard.accountPlaceholder')}
             </TextView>
 
             {props.account.accountType === 'watch' && (
               <ImageView
-                width={20 * unit}
-                height={20 * unit}
+                width={21 * unit}
+                height={21 * unit}
                 source={require('~/src/assets/images/icon-watch-white.png')}
                 ml={10 * unit}
+                mt={4 * unit}
               />
             )}
           </LinearLayout>
@@ -176,23 +183,25 @@ const AccountCard: React.FC<Props> = (props) => {
               </TextView>
             </LinearLayout>
           ) : (
-            <ButtonView
-              onPress={() => {
-                navigation.navigate(Facade.route.Modal.name, {
-                  screen: Facade.route.AccountQRCode.name,
-                  params: {
-                    account: props.account,
-                  },
-                })
-              }}
-            >
-              <ImageView
-                ml={10 * unit}
-                width={32 * unit}
-                height={32 * unit}
-                source={require('~src/assets/images/card-qrcode.png')}
-              />
-            </ButtonView>
+            !props.hideQRCode && (
+              <ButtonView
+                onPress={() => {
+                  navigation.navigate(Facade.route.Modal.name, {
+                    screen: Facade.route.AccountQRCode.name,
+                    params: {
+                      account: props.account,
+                    },
+                  })
+                }}
+              >
+                <ImageView
+                  ml={10 * unit}
+                  width={32 * unit}
+                  height={32 * unit}
+                  source={require('~src/assets/images/card-qrcode.png')}
+                />
+              </ButtonView>
+            )
           )}
         </LinearLayout>
 
@@ -203,6 +212,7 @@ const AccountCard: React.FC<Props> = (props) => {
             color="white"
             textAlign="left"
             fontWeight="bold"
+            mt={20 * unit}
           >
             {Facade.t('paymentCard.balance')}
           </TextView>
@@ -291,6 +301,7 @@ AccountCard.propTypes = {
   account: PropTypes.any.isRequired,
   isCompacted: PropTypes.bool.isRequired,
   isStackMode: PropTypes.bool.isRequired,
+  hideQRCode: PropTypes.bool,
   orientBy: PropTypes.oneOf(['height', 'width']),
 }
 

@@ -157,6 +157,7 @@ const DestinationAddressField = (props: {
   theme: ApplicationTheme
   address: string
   setAddress: React.Dispatch<React.SetStateAction<string>>
+  navigation: any
 }) => {
   return (
     <Fragment>
@@ -176,40 +177,9 @@ const DestinationAddressField = (props: {
         validator={() => true}
         separatorColor={props.theme.colors.background[13]}
         sideMargins={0}
-        hidePaste={true}
-        hideScan={true}
+        showContacts={true}
+        navigation={props.navigation}
       />
-      <LinearLayout
-        orientation="horiz"
-        justifyContent="space-between"
-        mt="24px"
-        px="12px"
-      >
-        <LinearLayout orientation="horiz" alignItems="center">
-          <ImageView
-            source={require('~/src/assets/images/icon-contacts-green.png')}
-          />
-          <TextView ml="8px" fontFamily="semibold" color="primary">
-            {Facade.t('modals.send.transactionInput.contacts')}
-          </TextView>
-        </LinearLayout>
-        <LinearLayout orientation="horiz" alignItems="center">
-          <ImageView
-            source={require('~/src/assets/images/icon-paste-green.png')}
-          />
-          <TextView ml="8px" fontFamily="semibold" color="primary">
-            {Facade.t('modals.send.transactionInput.paste')}
-          </TextView>
-        </LinearLayout>
-        <LinearLayout orientation="horiz" alignItems="center">
-          <ImageView
-            source={require('~/src/assets/images/icon-qrcode-green.png')}
-          />
-          <TextView ml="8px" fontFamily="semibold" color="primary">
-            {Facade.t('modals.send.transactionInput.scan')}
-          </TextView>
-        </LinearLayout>
-      </LinearLayout>
     </Fragment>
   )
 }
@@ -371,6 +341,7 @@ const SendTransactionInputModal = (props: Props) => {
           theme={theme}
           address={text}
           setAddress={setText}
+          navigation={props.navigation}
         />
         <TokenField
           theme={theme}

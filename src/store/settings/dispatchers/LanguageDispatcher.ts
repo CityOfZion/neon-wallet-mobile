@@ -4,7 +4,7 @@ import {Facade} from '~src/app/Facade'
 import {Setup} from '~src/app/Setup'
 
 export class LanguageDispatcher extends DispatcherWrapper<
-  SettingsType,
+  SettingsActionsType,
   SettingsState,
   SettingsAction
 > {

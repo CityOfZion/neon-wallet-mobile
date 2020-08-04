@@ -29,7 +29,6 @@ const ThemedInputText: React.FC<Props> = (props) => {
         {...props}
         fontSize={'lg'}
         color={'text.0'}
-        placeholderTextColor={'#7d929a'}
         height={40}
         borderBottomColor={'text.2'}
         borderBottomWidth={1}

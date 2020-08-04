@@ -1,7 +1,7 @@
 import {DispatcherWrapper} from '@simpli/redux-wrapper'
 
 export class BackgroundDispatcher extends DispatcherWrapper<
-  AccountType,
+  AccountActionsType,
   AccountState,
   AccountAction
 > {

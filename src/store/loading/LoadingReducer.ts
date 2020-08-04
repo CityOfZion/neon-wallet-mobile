@@ -5,7 +5,7 @@ import {LoadingDispatcher} from '~src/store/loading/dispatchers/LoadingDispatche
 import {LoadingProgressDispatcher} from '~src/store/loading/dispatchers/LoadingProgressDispatcher'
 
 export class LoadingReducer extends ReducerWrapper<
-  LoadingType,
+  LoadingActionsType,
   LoadingState,
   LoadingAction
 > {

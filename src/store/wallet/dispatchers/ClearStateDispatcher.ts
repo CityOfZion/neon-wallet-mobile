@@ -4,13 +4,16 @@ import {Model} from '~src/app/Model'
 import {Wallet} from '~src/models/redux/Wallet'
 
 export class ClearStateDispatcher extends DispatcherWrapper<
-  WalletType,
+  WalletActionsType,
   WalletState,
   WalletAction
 > {
   readonly type = 'CLEAR_STATE'
 
   readonly reducer: WalletReducer = (state, action) => {
-    return this.set(state, Model.parse<WalletState>(Wallet))
+    const emptyState = Model.parse<WalletState>(Wallet)
+    emptyState.securityPhrase = null // it must be forced because securityPhrase is excluded
+
+    return this.set(state, emptyState)
   }
 }

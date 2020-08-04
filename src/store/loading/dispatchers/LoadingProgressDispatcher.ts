@@ -1,7 +1,7 @@
 import {DispatcherWrapper} from '@simpli/redux-wrapper'
 
 export class LoadingProgressDispatcher extends DispatcherWrapper<
-  LoadingType,
+  LoadingActionsType,
   LoadingState,
   LoadingAction
 > {

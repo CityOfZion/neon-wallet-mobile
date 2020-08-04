@@ -12,7 +12,7 @@ import {SecurityPhraseDispatcher} from '~src/store/wallet/dispatchers/SecurityPh
 import {WalletTypeDispatcher} from '~src/store/wallet/dispatchers/WalletTypeDispatcher'
 
 export class WalletReducer extends ReducerWrapper<
-  WalletType,
+  WalletActionsType,
   WalletState,
   WalletAction
 > {
@@ -49,19 +49,22 @@ export class WalletReducer extends ReducerWrapper<
         const wallet = plainToClass(Wallet, getState().wallet)
         const {securityPhrase} = getState().wallet
 
-        if (securityPhrase === null) {
-          return Promise.reject(
-            new Error("Can't create a wallet without a security phrase")
-          )
-        }
-
         // TODO: Review ID generator
         wallet.id = Facade.utils.uuid()
 
         wallets.push(wallet)
 
         await Storage.wallets.save(wallets)
-        await Facade.security.saveMnemonic(wallet.id, securityPhrase)
+
+        if (wallet.walletType === 'standard') {
+          if (!securityPhrase) {
+            return Promise.reject(
+              new Error("Can't create a wallet without a security phrase")
+            )
+          }
+
+          await Facade.security.saveMnemonic(wallet.id, securityPhrase)
+        }
 
         return wallet.id
       }

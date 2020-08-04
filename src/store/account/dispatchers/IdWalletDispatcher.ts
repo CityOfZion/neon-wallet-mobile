@@ -1,7 +1,7 @@
 import {DispatcherWrapper} from '@simpli/redux-wrapper'
 
 export class IdWalletDispatcher extends DispatcherWrapper<
-  AccountType,
+  AccountActionsType,
   AccountState,
   AccountAction
 > {

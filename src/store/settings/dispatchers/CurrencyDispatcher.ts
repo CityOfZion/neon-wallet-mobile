@@ -1,7 +1,7 @@
 import {DispatcherWrapper} from '@simpli/redux-wrapper'
 
 export class CurrencyDispatcher extends DispatcherWrapper<
-  SettingsType,
+  SettingsActionsType,
   SettingsState,
   SettingsAction
 > {
