@@ -30,7 +30,6 @@ export class TokenListRequest {
       response = Facade.app.tokensMainNet
     }
 
-    console.log(response)
     return this.tokenToAsset(response)
   }
 
