@@ -255,7 +255,8 @@
     },
     "listWallets": {
       "changeSinceLastVisit": "CHANGE SINCE LAST VISIT %{date}",
-      "createFirstWallet": "Create first wallet"
+      "createFirstWallet": "Create first wallet",
+      "noBackup" : "No backup found. Backup your wallet to avoid fund loss."
     },
     "getWallet": {
       "addNewAccount": "Add new account"

@@ -7,6 +7,7 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import BalanceList from '~src/components/BalanceList'
+import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
@@ -132,6 +133,8 @@ const ListWalletView = (props: WalletProps) => {
     // return `${changePercentage > 0 ? '+' : ''}${Math.round(changePercentage)}%`
   }
 
+  const wallet = getActiveWallet()
+
   return (
     <ScreenLayout
       useHeaderPadding={false}
@@ -227,14 +230,11 @@ const ListWalletView = (props: WalletProps) => {
           {_renderWalletChange()}
 
           <LinearLayout mx={'16px'}>
-            {/*TODO: Make this useful*/}
-            {/*<LinearLayout my={4}>*/}
-            {/*  <Notification*/}
-            {/*    text={*/}
-            {/*      'Tum dicere exorsus est et dolore magnam aliquam quaerat voluptatem ut de homine.'*/}
-            {/*    }*/}
-            {/*  />*/}
-            {/*</LinearLayout>*/}
+            {!wallet?.lastBackup && (
+              <LinearLayout my={4}>
+                <Notification text={Facade.t("screens.listWallets.noBackup")} />
+              </LinearLayout>
+            )}
 
             {isListNotEmpty() && (
               <BalanceList

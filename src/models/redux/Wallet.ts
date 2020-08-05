@@ -25,6 +25,9 @@ export class Wallet implements WalletState {
   lastVisitedAt: string | null = null
 
   @HttpExpose()
+  lastBackup: string | null = null
+
+  @HttpExpose()
   walletType: 'standard' | 'watch' | 'legacy' | null = null
 
   // Do not expose security phrase

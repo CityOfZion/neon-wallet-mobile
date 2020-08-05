@@ -1,9 +1,11 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
+import moment from 'moment'
 import PropTypes from 'prop-types'
 import React, {useEffect, useState} from 'react'
 import {Alert, FlatList} from 'react-native'
+import {useDispatch} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
@@ -11,6 +13,7 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
+import {RootStore} from '~src/store/RootStore'
 import {TextView, LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
@@ -20,7 +23,7 @@ interface Props {
 
 const Step2BackupWalletPage: React.FC<Props> = (props) => {
   const {wallet} = props.route.params
-
+  const dispatch = useDispatch()
   const [words, setWords] = useState<string[]>([])
   const [formedWords, setFormedWords] = useState<string[]>([])
   const [shuffledWords, setShuffledWords] = useState<string[]>([])
@@ -58,6 +61,10 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
 
   const validateAndNext = () => {
     if (formedWords.join() === words.join()) {
+      wallet.lastBackup = moment().format()
+      dispatch(RootStore.app.actions.updateWallet(wallet))
+      dispatch(RootStore.app.actions.saveWallets())
+
       props.navigation.reset({
         index: 0,
         routes: [{name: Facade.route.Step3BackupWallet.name, params: {wallet}}],
