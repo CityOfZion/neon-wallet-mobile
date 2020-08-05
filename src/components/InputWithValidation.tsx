@@ -67,7 +67,7 @@ const InputWithValidation = (props: Props) => {
         <InputTextView
           onChangeText={props.onChangeText}
           color={fontColor}
-          placeholderTextColor={props.placeholderColor ?? '#7d929a'}
+          placeholderTextColor={props.placeholderColor ?? theme.colors.text[10]}
           underlineColorAndroid="transparent"
           placeholder={
             props.placeholder ??
