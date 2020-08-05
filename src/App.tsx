@@ -1,7 +1,7 @@
 import {AppLoading} from 'expo'
 import * as Font from 'expo-font'
 import React, {useState} from 'react'
-import {StatusBar} from 'react-native'
+import {StatusBar, Text} from 'react-native'
 import {Provider as StoreProvider} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
@@ -45,7 +45,8 @@ const App = () => {
   return (
     <StoreProvider store={store}>
       <StatusBar barStyle={'light-content'} />
-      <AppNavigation />
+      <Text>Hello world!</Text>
+      {/* <AppNavigation /> */}
     </StoreProvider>
   )
 }
