@@ -1,17 +1,17 @@
 import {wallet} from '@cityofzion/neon-core'
-import {RouteProp} from '@react-navigation/native'
+import {RouteProp, CommonActions} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {BarCodeEvent, BarCodeScanner} from 'expo-barcode-scanner'
 import ExpoBarCodeScannerModule from 'expo-barcode-scanner/src/ExpoBarCodeScannerModule'
 import React, {useState, useEffect, useRef} from 'react'
 import {StyleSheet, Animated} from 'react-native'
-import {URLSearchParams} from 'url'
 
 import {Facade} from '~src/app/Facade'
+import {useSwiperController} from '~src/components/SwiperPanel'
 import {NeoURI} from '~src/helpers/UriHelper'
-import {GAS_HASH, NEO_HASH} from '~src/models/TokenValue'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import HandleQRModal from '~src/scenes/HandleQRModal'
 import {
   ButtonView,
   ImageView,
@@ -31,9 +31,11 @@ export interface Props {
 }
 
 const QRCodeScan = (props: Props) => {
+  const controller = useSwiperController(false)
   const popupVisibility = useRef(new Animated.Value(0))
   const [hasPermission, setHasPermission] = useState(false)
   const [message, setMessage] = useState<string>()
+  const [address, setAddress] = useState<string>()
   useEffect(() => {
     getScanPermission()
   }, [hasPermission])
@@ -81,21 +83,7 @@ const QRCodeScan = (props: Props) => {
     Facade.uri.isValid(key)
 
   const goTo = (key: string): NavParam<RootStackParamList> | undefined => {
-    if (wallet.isAddress(key)) {
-      return [
-        Facade.route.Tab.name,
-        {
-          screen: Facade.route.More.name,
-          params: {
-            screen: Facade.route.ImportReadAccount.name,
-            initial: false,
-            params: {
-              address: key,
-            },
-          },
-        },
-      ]
-    } else if (wallet.isNEP2(key)) {
+    if (wallet.isNEP2(key)) {
       return [
         Facade.route.Tab.name,
         {
@@ -139,25 +127,40 @@ const QRCodeScan = (props: Props) => {
   }
 
   const handleBarCodeScanned = (evt: BarCodeEvent) => {
-    if (isValid(evt.data)) {
-      setMessage(Facade.t('screens.scanQrCode.success'))
+    if (!controller.isShowing) {
+      if (isValid(evt.data)) {
+        setMessage(Facade.t('screens.scanQrCode.success'))
+        // If there's a callback, calls the callback and navigates back
+        if (props.route.params?.onScan) {
+          let data: NeoURI | string = evt.data
 
-      // If there's a callback, calls the callback and navigates back
-      if (props.route.params.onScan) {
-        let data: NeoURI | string = evt.data
-        if (Facade.uri.isValid(evt.data)) {
-          data = Facade.uri.parse(evt.data) ?? evt.data
+          if (Facade.uri.isValid(evt.data)) {
+            data = Facade.uri.parse(evt.data) ?? evt.data
+          }
+          props.navigation.goBack()
+          props.route.params.onScan(data)
+        } else {
+          // If scanned QR is an address, opens modal
+          if (wallet.isAddress(evt.data)) {
+            setAddress(evt.data)
+            controller.open()
+          } else {
+            // Otherwise, navigates to corresponding page
+            const destination = goTo(evt.data)
+            props.navigation.pop(1)
+            destination && props.navigation.navigate(...destination)
+          }
         }
-        props.navigation.goBack()
-        props.route.params.onScan(data)
       } else {
-        const destination = goTo(evt.data)
-        props.navigation.pop(1)
-        destination && props.navigation.navigate(...destination)
+        setMessage(Facade.t('screens.scanQrCode.tryAgain'))
       }
-    } else {
-      setMessage(Facade.t('screens.scanQrCode.tryAgain'))
     }
+  }
+
+  const modalNavigate = (action: CommonActions.Action) => {
+    controller.close()
+    props.navigation.pop(1)
+    props.navigation.dispatch(action)
   }
 
   return (
@@ -189,7 +192,7 @@ const QRCodeScan = (props: Props) => {
         bg="background.9"
         alignItems={'center'}
         justifyContent={'center'}
-        onPress={() => props.navigation.goBack()}
+        onPress={props.navigation.goBack}
       >
         <TextView fontSize="22px" color="primary" fontFamily="regular">
           {Facade.t('screens.scanQrCode.cancel')}
@@ -214,6 +217,12 @@ const QRCodeScan = (props: Props) => {
           {message}
         </TextView>
       </Animated.View>
+
+      <HandleQRModal
+        controller={controller}
+        address={address ?? ''}
+        onClick={modalNavigate}
+      />
     </RelativeLayout>
   )
 }

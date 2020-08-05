@@ -401,6 +401,20 @@
     },
     "theme": {
       "title": "Theme"
+    },
+    "handleQrCode": {
+      "send": {
+        "title": "Send",
+        "subtitle": "Send tokens"
+      },
+      "watch": {
+        "title": "Add a watch",
+        "subtitle": "Create a watch account from address"
+      },
+      "contact": {
+        "title": "Add a contact",
+        "subtitle": "Create a contact in your address book"
+      }
     }
   },
   "components": {
