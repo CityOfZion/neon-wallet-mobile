@@ -53,8 +53,6 @@ export default function ReorderWalletModal(props: Props) {
   }
 
   const commitAndClose = async () => {
-    console.log(order)
-
     if (order.length > 0) {
       await dispatchAsync(RootStore.wallet.actions.reorderAndSave(order))
       await dispatchAsync(RootStore.app.actions.syncWallets())
