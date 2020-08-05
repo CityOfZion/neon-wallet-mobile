@@ -1,16 +1,18 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {FlatList} from 'react-native'
+import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {
   CloseButton,
+  PANEL_OFFSET,
   useSwiperController,
 } from '~src/components/SwiperPanel'
-import {mockListTokenModal} from '~src/mocks/mockListTokenModal'
-import {TokenValue} from '~src/models/TokenValue'
+import {TokenAsset} from '~src/models/TokenAsset'
+import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {
   ButtonView,
@@ -20,8 +22,10 @@ import {
 } from '~src/styles/styled-components'
 
 export interface ListTokenModalParams {
-  selectedToken: TokenValue | null
-  setToken: React.Dispatch<React.SetStateAction<TokenValue | null>>
+  selectedToken: TokenAsset | null
+  setToken: React.Dispatch<React.SetStateAction<TokenAsset | null>>
+  account?: Account
+  filterBy?: 'send' | 'receive'
 }
 
 interface Props {
@@ -31,8 +35,42 @@ interface Props {
 
 const ListTokenModal: React.FC<Props> = (props: Props) => {
   const controller = useSwiperController(true)
+  const {tokens} = useSelector((state: RootState) => state.app)
 
-  const Item = (item: TokenValue) => {
+  const [tokenList, setTokenList] = useState<TokenAsset[]>([])
+  const filterBy = props.route.params.filterBy ?? 'receive'
+
+  useEffect(() => {
+    populate()
+  }, [filterBy])
+
+  const populate = async () => {
+    const tokensFromAccount = await props.route.params.account?.generateTokenAssets()
+
+    if (filterBy === 'send') {
+      setTokenList(tokensFromAccount ?? tokens)
+    } else {
+
+      if (tokensFromAccount) {
+        const newTokenList: TokenAsset[] = []
+        tokens.forEach((token) => {
+          const tokenFromAccount = tokensFromAccount.find(
+            (it) => it.hash === token.hash
+          )
+          if (tokenFromAccount) {
+            newTokenList.push(tokenFromAccount)
+          } else {
+            newTokenList.push(token)
+          }
+        })
+        setTokenList(newTokenList)
+      } else {
+        setTokenList(tokens)
+      }
+    }
+  }
+
+  const Item = (item: TokenAsset) => {
     return (
       <ButtonView
         py="12px"
@@ -80,42 +118,32 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
       title={Facade.t('modals.listTokenModal.tokens')}
       rightButton={CloseButton()}
       onRightPress={() => controller.close()}
-      paddingTop={24}
-      paddingRight={0}
-      paddingLeft={0}
+      paddingTop={60}
+      paddingRight={16}
+      paddingLeft={16}
       fullSize={true}
       image={require('~/src/assets/images/token_icon.png')}
       onClose={props.navigation.goBack}
+      disableDefaultScrollView={true}
     >
-      <LinearLayout height="100%" px="16px">
+      <LinearLayout weight={1} width="100%" pb={PANEL_OFFSET}>
         <TextView
           textAlign="center"
           fontFamily="medium"
           fontSize={18}
-          mt="36px"
+          mb="8px"
           color="text.0"
         >
           {Facade.t('modals.listTokenModal.selectToken')}
         </TextView>
         <FlatList
           contentContainerStyle={{
-            height: '100%',
-            paddingTop: 26,
+            paddingTop: 18,
           }}
-          data={mockListTokenModal}
+          data={tokenList}
           keyExtractor={(item) => item.symbol}
           ItemSeparatorComponent={() => <LinearLayout bg="text.3" height={1} />}
-          renderItem={({item}) => (
-            <Item
-              srcIcon={item.srcIcon}
-              value={item.value}
-              color={null}
-              symbol={item.symbol}
-              name={item.name}
-              holding={item.holding}
-              hash={item.hash}
-            />
-          )}
+          renderItem={({item}) => Item(item)}
         />
       </LinearLayout>
     </SwiperPanel>

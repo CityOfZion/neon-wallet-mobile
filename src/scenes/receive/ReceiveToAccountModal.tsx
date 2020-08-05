@@ -15,7 +15,6 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import TabSelector from '~src/components/TabSelector'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {TokenValue} from '~src/models/TokenValue'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -26,12 +25,14 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
+import {TokenAsset} from '~src/models/TokenAsset'
 
 const TokenField = (props: {
   theme: ApplicationTheme
-  token: TokenValue | null
-  setToken: React.Dispatch<React.SetStateAction<TokenValue | null>>
+  token: TokenAsset | null
+  setToken: React.Dispatch<React.SetStateAction<TokenAsset | null>>
   nav: StackNavigationProp<ModalStackParamList>
+  account: Account
 }) => {
   return (
     <Fragment>
@@ -48,6 +49,8 @@ const TokenField = (props: {
           props.nav.navigate(Facade.route.ListTokenModal.name, {
             selectedToken: props.token ?? null,
             setToken: props.setToken,
+            account: props.account,
+            filterBy: 'receive',
           })
         }}
       >
@@ -163,7 +166,7 @@ const ReceiveToAccountModal = (props: Props) => {
   )
   const [amount, setAmount] = useState<number>(0)
   const [reference, setReference] = useState<string>('')
-  const [token, setToken] = useState<TokenValue | null>(null)
+  const [token, setToken] = useState<TokenAsset | null>(null)
 
   const {wallet, account} = props.route.params
 
@@ -243,6 +246,7 @@ const ReceiveToAccountModal = (props: Props) => {
               token={token}
               setToken={setToken}
               nav={props.navigation}
+              account={account}
             />
             <AmountField theme={theme} amount={amount} setAmount={setAmount} />
             <ReferenceField

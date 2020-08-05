@@ -17,6 +17,7 @@ import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
+import {TokenListRequest} from '~src/models/request/TokenListRequest'
 
 interface WalletProps {
   navigation: StackNavigationProp<

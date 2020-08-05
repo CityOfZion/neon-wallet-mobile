@@ -5,6 +5,7 @@ import {Settings} from '~src/models/redux/Settings'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStore} from '~src/store/RootStore'
 import {Exchange} from '~src/types/exchange'
+import {TokenAsset} from '~src/models/TokenAsset'
 
 export type SyncResult = {
   settings: Settings
@@ -28,11 +29,14 @@ export abstract class Sync {
     const contacts: Contact[] = await dispatch(
       RootStore.app.actions.syncContacts()
     )
+    const tokens: TokenAsset[] = await dispatch(
+      RootStore.app.actions.syncTokens()
+    )
 
     // Synchronize balance from WS
     const promises = accounts.map((it) => it.populateBalanceTokens())
     await Promise.all(promises)
 
-    return {settings, exchange, wallets, accounts, contacts}
+    return {settings, exchange, wallets, accounts, contacts, tokens}
   }
 }

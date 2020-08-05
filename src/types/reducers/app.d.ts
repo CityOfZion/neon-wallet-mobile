@@ -4,6 +4,7 @@ import {Wallet} from '~src/models/redux/Wallet'
 import {Account} from '~src/models/redux/Account'
 import {Exchange} from '~src/types/exchange'
 import {Contact} from '~src/models/redux/Contact'
+import {TokenAsset} from '~src/models/TokenAsset'
 
 export declare global {
   type AppActionsType =
@@ -11,12 +12,14 @@ export declare global {
     | 'SET_WALLETS'
     | 'SET_ACCOUNTS'
     | 'SET_CONTACTS'
+    | 'SET_TOKENS'
 
   interface AppState {
     exchange: Exchange
     wallets: Wallet[]
     accounts: Account[]
     contacts: Contact[]
+    tokens: TokenAsset[]
   }
 
   type AppAction = AppState & Action<AppActionsType>
