@@ -69,5 +69,15 @@ export class WalletReducer extends ReducerWrapper<
         return wallet.id
       }
     },
+    reorderAndSave: (order: number[]): AsyncAction => {
+      return async () => {
+        const wallets = (await Storage.wallets.load()) ?? []
+
+        const newWalletList: Wallet[] = []
+        order.forEach((i) => newWalletList.push(wallets[i]))
+
+        await Storage.wallets.save(newWalletList)
+      }
+    },
   }
 }

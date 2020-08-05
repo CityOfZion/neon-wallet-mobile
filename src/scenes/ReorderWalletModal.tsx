@@ -1,13 +1,16 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
 import SortableList from 'react-native-sortable-list'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
+import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
+import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
@@ -18,6 +21,7 @@ export default function ReorderWalletModal(props: Props) {
   const controller = useSwiperController(true)
 
   const {wallets} = useSelector((state: RootState) => state.app)
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const [order, setOrder] = useState<number[]>([])
   const listData: DataByNumber<string> = {}
@@ -48,15 +52,11 @@ export default function ReorderWalletModal(props: Props) {
     )
   }
 
-  function commitAndClose() {
-    const newWalletList: Wallet[] = []
-    order.forEach((i) => newWalletList.push(wallets[i]))
-
-    // TODO: NW-245
-    // Here is where it would save the order onto local store
-    console.log(
-      `TODO: Order list = ${newWalletList.map((w) => w.name).join(', ')}`
-    )
+  const commitAndClose = async () => {
+    if (order.length > 0) {
+      await dispatchAsync(RootStore.wallet.actions.reorderAndSave(order))
+      await dispatchAsync(RootStore.app.actions.syncWallets())
+    }
 
     controller.close()
   }
@@ -76,27 +76,32 @@ export default function ReorderWalletModal(props: Props) {
         </TextView>
       }
       onLeftPress={controller.close}
-      onRightPress={commitAndClose}
+      onRightPress={() => Facade.await.run('commitAndClose', commitAndClose)}
     >
-      <LinearLayout height="100%">
-        <TextView
-          textAlign="center"
-          fontFamily="medium"
-          fontSize={18}
-          color="text.0"
-        >
-          {Facade.t('modals.reorderWallet.subtitle')}
-        </TextView>
-        <SortableList
-          contentContainerStyle={{
-            height: '100%',
-            paddingTop: 26,
-          }}
-          data={listData}
-          renderRow={_renderItem}
-          onChangeOrder={(order) => setOrder(order)}
-        />
-      </LinearLayout>
+      <AwaitActivity
+        name={'commitAndClose'}
+        loadingView={<ScreenLoader transparent={true} />}
+      >
+        <LinearLayout height="100%">
+          <TextView
+            textAlign="center"
+            fontFamily="medium"
+            fontSize={18}
+            color="text.0"
+          >
+            {Facade.t('modals.reorderWallet.subtitle')}
+          </TextView>
+          <SortableList
+            contentContainerStyle={{
+              height: '100%',
+              paddingTop: 26,
+            }}
+            data={listData}
+            renderRow={_renderItem}
+            onChangeOrder={(order) => setOrder(order)}
+          />
+        </LinearLayout>
+      </AwaitActivity>
     </SwiperPanel>
   )
 }
