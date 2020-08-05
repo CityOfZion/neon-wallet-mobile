@@ -1,5 +1,6 @@
 import {wallet} from '~/node_modules/@cityofzion/neon-core'
 import {GAS_HASH, NEO_HASH, TokenValue} from '~src/models/TokenValue'
+import {TokenAsset} from '~src/models/TokenAsset'
 
 export const SCHEME = 'neo:'
 
@@ -15,7 +16,7 @@ export abstract class UriHelper {
   static generate(
     address: string,
     amount?: number,
-    token?: TokenValue,
+    token?: TokenAsset,
     reference?: string
   ) {
     const params = []

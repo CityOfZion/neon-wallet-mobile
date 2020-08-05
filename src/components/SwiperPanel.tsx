@@ -391,9 +391,9 @@ export default function SwiperPanel(props: SwiperProps) {
               {props.draggable ? DragBar() : undefined}
               {props.noHeader ? undefined : Header(props)}
               {props.disableDefaultScrollView ? (
-                <TouchableHighlight>
-                  <Fragment>{props.children}</Fragment>
-                </TouchableHighlight>
+                <LinearLayout width="100%" weight={1}>
+                  {props.children}
+                </LinearLayout>
               ) : (
                 <ScrollView
                   ref={scrollView}

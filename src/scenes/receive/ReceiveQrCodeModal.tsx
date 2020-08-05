@@ -17,12 +17,13 @@ import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {TokenAsset} from '~src/models/TokenAsset'
 
 export interface ReceiveQrCodeModalParams {
   wallet: Wallet
   account: Account
   amount: number
-  token: TokenValue
+  token: TokenAsset
   reference?: string
 }
 

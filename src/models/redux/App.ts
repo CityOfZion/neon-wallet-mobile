@@ -4,6 +4,7 @@ import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
 import {Wallet} from '~src/models/redux/Wallet'
 import {Exchange} from '~src/types/exchange'
+import {TokenAsset} from '~src/models/TokenAsset'
 
 @HttpExclude()
 export class App implements AppState {
@@ -18,4 +19,7 @@ export class App implements AppState {
 
   @HttpExpose()
   contacts: Contact[] = []
+
+  @HttpExpose()
+  tokens: TokenAsset[] = []
 }

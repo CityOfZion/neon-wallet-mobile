@@ -5,6 +5,7 @@ import {map, mapValues} from 'lodash'
 import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {App} from '~src/models/redux/App'
 import {Contact} from '~src/models/redux/Contact'
@@ -12,8 +13,10 @@ import {Wallet} from '~src/models/redux/Wallet'
 import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
 import {ContactsDispatcher} from '~src/store/app/dispatchers/ContactsDispatcher'
 import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
+import {TokensDispatcher} from '~src/store/app/dispatchers/TokensDispatcher'
 import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
 import {Exchange, ExchangeResponse} from '~src/types/exchange'
+import {TokenResponse} from '~src/types/token'
 
 export class AppReducer extends ReducerWrapper<
   AppActionsType,
@@ -27,6 +30,7 @@ export class AppReducer extends ReducerWrapper<
     WalletsDispatcher,
     AccountsDispatcher,
     ContactsDispatcher,
+    TokensDispatcher,
   ]
 
   readonly actions = {
@@ -62,6 +66,36 @@ export class AppReducer extends ReducerWrapper<
         dispatch(this.commit('SET_EXCHANGE', {exchange}))
 
         return exchange
+      }
+    },
+
+    syncTokens: (): AsyncAction<TokenAsset[]> => {
+      const tokenToAsset = (response: TokenResponse): TokenAsset[] => {
+        return Facade.lodash.map(
+          response,
+          (it) => new TokenAsset(it.companyName, it.symbol, it.networks[1].hash)
+        )
+      }
+
+      return async (dispatch, getState) => {
+        let response: TokenResponse
+
+        try {
+          response = await Request.get(
+            `https://raw.githubusercontent.com/CityOfZion/neo-tokens/master/tokenList.json?timestamp=${new Date().getTime()}`
+          )
+            .name('getTokens')
+            .as<TokenResponse>()
+            .getData()
+        } catch {
+          response = Facade.app.tokensMainNet
+        }
+
+        const tokens = tokenToAsset(response)
+
+        dispatch(this.commit('SET_TOKENS', {tokens}))
+
+        return tokens
       }
     },
 

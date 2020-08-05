@@ -14,7 +14,7 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {NeoURI} from '~src/helpers/UriHelper'
-import {TokenValue} from '~src/models/TokenValue'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {
@@ -23,7 +23,6 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
 export enum Priority {
   FAST,
@@ -51,7 +50,7 @@ const SendTransactionInputModal = (prop: Props) => {
   const [amount, setAmount] = useState(prop.route.params?.uri?.amount ?? 0)
   // TODO: convert hash into TokenValue
   // const hash = props.route.params?.uri?.asset ?? ''
-  const [token, setToken] = useState<TokenValue | null>(null)
+  const [token, setToken] = useState<TokenAsset | null>(null)
 
   // Typeguard
   function isURI(object: any): object is NeoURI {
@@ -232,6 +231,8 @@ const SendTransactionInputModal = (prop: Props) => {
             prop.navigation.navigate(Facade.route.ListTokenModal.name, {
               selectedToken: token,
               setToken,
+              account: prop.route.params.account,
+              filterBy: 'send',
             })
           }}
         >
