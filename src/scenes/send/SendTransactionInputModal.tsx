@@ -42,12 +42,14 @@ interface Props {
 }
 
 const SendTransactionInputModal = (prop: Props) => {
+  const {account, walletTitle, uri} = prop.route.params
+  const {language} = useSelector((state: RootState) => state.settings)
   const controller = useSwiperController(true)
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const [text, setText] = useState(prop.route.params?.uri?.address ?? '')
-  const [amount, setAmount] = useState(prop.route.params?.uri?.amount ?? 0)
+  const [text, setText] = useState(uri?.address ?? '')
+  const [amount, setAmount] = useState(uri?.amount ?? 0)
   // TODO: convert hash into TokenValue
   // const hash = props.route.params?.uri?.asset ?? ''
   const [token, setToken] = useState<TokenAsset | null>(null)
@@ -264,29 +266,84 @@ const SendTransactionInputModal = (prop: Props) => {
     )
   }
 
+
   const AmountField = () => {
+    const getTokenBalance = () => {
+      if (!token) return 0
+
+      return  account.getBalanceAmountByAsset(token.symbol) ?? 0
+    }
+
+    const getRemainingTokenBalance = () => {
+      const total = getTokenBalance()
+
+      if (!total) return 0
+
+      return total - amount
+    }
+
     return (
       <Fragment>
-        <InputLabel
-          title={Facade.t('modals.send.transactionInput.amount')}
-          color={'text.0'}
-          marginTop={30}
-          marginBottom={20}
-          capitalize={true}
-        />
-        <InputWithValidation
-          onChangeText={(text) => setAmount(Number(text))}
-          color={theme.colors.text[0]}
-          invalidColor={theme.colors.text[10]}
-          value={String(amount)}
-          placeholder={Facade.t('modals.send.transactionInput.enterAmount')}
-          validator={() => true}
-          separatorColor={theme.colors.background[13]}
-          sideMargins={0}
-          hidePaste={true}
-          hideScan={true}
-          keyboardType="numeric"
-        />
+        <LinearLayout
+          orientation={'horiz'}
+          justifyContent={'space-between'}
+          mt={30}
+          mb={20}
+        >
+          <InputLabel
+            title={Facade.t('modals.send.transactionInput.amount')}
+            color={'text.0'}
+            capitalize={true}
+          />
+          <LinearLayout
+            orientation={'horiz'}
+            alignItems={'center'}
+          >
+            <TextView
+              mr={'6px'}
+              color={'text.10'}
+            >
+              total after transaction
+            </TextView>
+            <TextView
+              color={'text.0'}
+              fontFamily={'bold'}
+              fontSize={'16px'}
+            >
+              {Facade.filter.decimal(getRemainingTokenBalance(), language)}
+            </TextView>
+          </LinearLayout>
+        </LinearLayout>
+        <LinearLayout position={'relative'}>
+          <InputWithValidation
+            onChangeText={(text) => setAmount(Number(text))}
+            color={theme.colors.text[0]}
+            invalidColor={theme.colors.text[10]}
+            value={amount ? String(amount) : ''}
+            placeholder={Facade.t('modals.send.transactionInput.enterAmount')}
+            validator={(val) => Number(val) <= getTokenBalance()}
+            separatorColor={theme.colors.background[13]}
+            sideMargins={0}
+            hidePaste={true}
+            hideScan={true}
+            keyboardType="numeric"
+          />
+          <ButtonView
+            position={'absolute'}
+            right={'10px'}
+            top={'5px'}
+            onPress={() => setAmount(getTokenBalance())}
+          >
+            <TextView
+              color={'primary'}
+              fontSize={'15px'}
+              fontFamily={'medium'}
+            >
+              Max
+            </TextView>
+          </ButtonView>
+        </LinearLayout>
+
       </Fragment>
     )
   }
@@ -312,9 +369,9 @@ const SendTransactionInputModal = (prop: Props) => {
           fontSize="md"
           fontFamily="bold"
         >
-          {prop.route.params.walletTitle}
+          {walletTitle}
         </TextView>
-        <AccountCard account={prop.route.params.account} />
+        <AccountCard account={account} />
         <TouchableWithoutFeedback onPress={() => prop.navigation.goBack()}>
           <LinearLayout
             orientation="horiz"
