@@ -1,9 +1,11 @@
-import React, {Fragment} from 'react'
+import PropTypes from 'prop-types'
+import React, {Fragment, useState} from 'react'
+import {LayoutChangeEvent} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
-import {TokenValue} from '~src/models/TokenValue'
+import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import styled, {
   ButtonView,
@@ -13,38 +15,38 @@ import styled, {
   TextView,
 } from '~src/styles/styled-components'
 
-interface WalletCardProps {
+interface Props {
   wallet: Wallet
-  height?: number
+  width?: number
   onPress?: () => void
 }
 
-const WalletCard = (props: WalletCardProps) => {
-  const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const _renderAccountCard = (asset: TokenValue, i: number) => {
-    if (!asset || i > 2) return null
-    const bottomOffset = 28 - 6 * i
+const WalletCard: React.FC<Props> = (props) => {
+  const [viewHeight, setViewHeight] = useState<number>(0)
+  const {accounts, exchange} = useSelector((state: RootState) => state.app)
+  const {currency} = useSelector((state: RootState) => state.settings)
 
-    return (
-      <LinearLayout
-        position={'absolute'}
-        bottom={`${bottomOffset}px`}
-        right={'6px'}
-        height={'90%'}
-        width={'90%'}
-        borderRadius={18}
-        bg={asset.color}
-        key={i}
-      />
+  const walletAccounts = props.wallet.getAccounts(accounts)
+
+  const layoutEvent = (event: LayoutChangeEvent) => {
+    const {height} = event.nativeEvent.layout
+    setViewHeight(height)
+  }
+
+  const getWalletAccounts = () => {
+    return props.wallet.getAccounts(accounts)
+  }
+
+  const getTotalAmount = () => {
+    return Facade.lodash.sumBy(getWalletAccounts(), (it) =>
+      it.exchangeBalanceAmount(currency, exchange)
     )
   }
 
   const _renderAssetsBarFills = () => {
-    return props.wallet.currentAssets?.assets.map((asset, i) => {
-      const holdingValue = asset.holding * asset.value
-      const percentageOfTotal = (holdingValue / props.wallet.currentValue) * 100
-
-      if (!holdingValue) return null
+    return getWalletAccounts().map((account, i) => {
+      const amount = account.exchangeBalanceAmount(currency, exchange)
+      const percentageOfTotal = (amount / getTotalAmount()) * 100
 
       return (
         <LinearLayout
@@ -53,7 +55,7 @@ const WalletCard = (props: WalletCardProps) => {
           minWidth={'2px'}
           mx={'1px'}
           borderRadius={9999}
-          bg={asset.color}
+          bg={account.backgroundColor}
           key={i}
         />
       )
@@ -61,20 +63,22 @@ const WalletCard = (props: WalletCardProps) => {
   }
 
   const WalletOverlay = () => {
-    return props.wallet.walletType === 'standard' ? (
+    const getOverlayImage = () => {
+      if (props.wallet.walletType === 'standard') {
+        return require('~src/assets/images/wallet-card-front.png')
+      }
+
+      return require('~src/assets/images/wallet-semi-front.png')
+    }
+
+    return (
       <ImageView
         width={'100%'}
         height={'100%'}
-        resizeMode={'stretch'}
-        source={require('~src/assets/images/wallet-card-front.png')}
-      />
-    ) : (
-      <ImageView
-        width={'100%'}
         position={'absolute'}
-        bottom={0}
+        bottom={'-2px'}
         resizeMode={'stretch'}
-        source={require('~src/assets/images/wallet-semi-front.png')}
+        source={getOverlayImage()}
       />
     )
   }
@@ -144,82 +148,50 @@ const WalletCard = (props: WalletCardProps) => {
     )
   }
 
-  const AccountContainer = () => {
-    const accounts = props.wallet.getAccounts(accountsPool)
-    if (props.wallet.walletType === 'standard')
-      return (
-        <Fragment>
-          <LinearLayout
-            position={'absolute'}
-            ml={Facade.utils.isAndroid ? '-46%' : '-57%'}
-            p={'3px'}
-            mt={Facade.utils.isAndroid ? '0px' : '-16px'}
-            width={Facade.utils.isAndroid ? height : height - 28}
-            height={'100%'}
-            style={{transform: [{rotate: '90deg'}]}}
-          >
-            <AccountCard hideQRCode={true} account={accounts[0]} />
-          </LinearLayout>
-          {accounts.length > 1 && (
-            <LinearLayout
-              position={'absolute'}
-              ml={Facade.utils.isAndroid ? '-47%' : '-58%'}
-              p={'3px'}
-              mt={Facade.utils.isAndroid ? '1px' : '-12px'}
-              width={Facade.utils.isAndroid ? height : height - 28}
-              height={'102%'}
-              style={{transform: [{rotate: '90deg'}]}}
-            >
-              <AccountCard hideQRCode={true} account={accounts[1]} />
-            </LinearLayout>
-          )}
-          {accounts.length > 2 && (
-            <LinearLayout
-              position={'absolute'}
-              ml={Facade.utils.isAndroid ? '-46%' : '-59%'}
-              p={'3px'}
-              mt={Facade.utils.isAndroid ? '2px' : '-8px'}
-              width={Facade.utils.isAndroid ? height - 8 : height - 28}
-              height={'104%'}
-              style={{transform: [{rotate: '90deg'}]}}
-            >
-              <AccountCard hideQRCode={true} account={accounts[2]} />
-            </LinearLayout>
-          )}
-        </Fragment>
-      )
-    else {
-      return (
-        <LinearLayout
-          ml={Facade.utils.isAndroid ? '-47%' : '-57%'}
-          p={'3px'}
-          mt={Facade.utils.isAndroid ? '0px' : '-12px'}
-          width={Facade.utils.isAndroid ? height : height - 28}
-          height={'100%'}
-          style={{transform: [{rotate: '90deg'}]}}
+  const _accountContainer = (account: Account, index: number) => {
+    const ratio = 38 / 25
+    const cardWidth = viewHeight - 12
+    const cardHeight = cardWidth / ratio
+
+    return (
+      <LinearLayout
+        mt={`${index * 4}px`}
+        position={'absolute'}
+        style={{
+          top: 4 + cardHeight * ratio * 0.5,
+          left: 3 + cardHeight * 0.5,
+        }}
+      >
+        <RelativeLayout
+          width={cardWidth}
+          style={{
+            top: -cardHeight * 0.5,
+            left: -(cardHeight * ratio) * 0.5,
+            transform: [{rotate: '90deg'}],
+          }}
         >
-          <AccountCard hideQRCode={true} account={accounts[0]} />
-        </LinearLayout>
-      )
-    }
+          <AccountCard hideQRCode={true} account={account} />
+        </RelativeLayout>
+      </LinearLayout>
+    )
   }
 
-  const height = props.height ?? 350
   return (
     <WalletCardRelativeContainer
-      flex={1}
       position="relative"
-      m={'24px'}
-      height={props.height ?? 350}
+      width={props.width}
       bg={colorLimedSpruce}
-      onPress={() => props.onPress && props.onPress()}
       activeOpacity={1}
+      onPress={() => props.onPress && props.onPress()}
+      onLayout={layoutEvent}
+      style={{
+        aspectRatio: 25 / 38,
+      }}
     >
-      {props.wallet.currentAssets?.assets.map((a, i) =>
-        _renderAccountCard(a, i)
-      )}
-      <AccountContainer />
+      {walletAccounts.slice(0, 10).map((it, i) => _accountContainer(it, i))}
+
       <WalletOverlay />
+
       <LinearLayout position={'absolute'} bottom={40} width={'80%'}>
         <WalletLabel />
         <RelativeLayout height={12} width={'100%'}>
@@ -243,6 +215,12 @@ const WalletCard = (props: WalletCardProps) => {
   )
 }
 
+WalletCard.propTypes = {
+  wallet: PropTypes.instanceOf(Wallet).isRequired,
+  width: PropTypes.number,
+  onPress: PropTypes.func,
+}
+
 const colorLimedSpruce = '#364046'
 
 const AssetsBarBackground = styled(ImageView)`
@@ -258,6 +236,7 @@ const WalletCardRelativeContainer = styled(ButtonView)`
   shadow-opacity: 0.39;
   shadow-radius: 8.3px;
   elevation: 13;
+  overflow: hidden;
 `
 
 const AssetsBar = styled(LinearLayout)``

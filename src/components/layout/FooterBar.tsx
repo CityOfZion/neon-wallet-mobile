@@ -127,7 +127,6 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
 
   return (
     <LinearLayout
-      // zIndex="0"
       height="100%"
       width="100%"
       justifyContent="flex-end"
@@ -138,7 +137,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
       <TabBarContainer
         height={Facade.app.footerHeight}
         width={Facade.app.windowWidth}
-        bg={'background.0'}
+        bg={'#12181A'}
       >
         <RelativeLayout height="100%" width="100%">
           <View pointerEvents={'none'}>

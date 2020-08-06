@@ -12,12 +12,11 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {TokenValue} from '~src/models/TokenValue'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import {TokenAsset} from '~src/models/TokenAsset'
 
 export interface ReceiveQrCodeModalParams {
   wallet: Wallet

@@ -59,7 +59,7 @@ const CustomColorPage = (props: Props) => {
     >
       <LinearLayout height="100%">
         <LinearLayout mb={5} maxHeight="35%" alignSelf="center">
-          <AccountCard orientBy="height" account={account} hideQRCode={true}/>
+          <AccountCard orientBy="height" account={account} hideQRCode={true} />
         </LinearLayout>
 
         <TextView

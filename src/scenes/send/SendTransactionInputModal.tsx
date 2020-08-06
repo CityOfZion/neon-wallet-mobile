@@ -266,12 +266,11 @@ const SendTransactionInputModal = (prop: Props) => {
     )
   }
 
-
   const AmountField = () => {
     const getTokenBalance = () => {
       if (!token) return 0
 
-      return  account.getBalanceAmountByAsset(token.symbol) ?? 0
+      return account.getBalanceAmountByAsset(token.symbol) ?? 0
     }
 
     const getRemainingTokenBalance = () => {
@@ -295,21 +294,11 @@ const SendTransactionInputModal = (prop: Props) => {
             color={'text.0'}
             capitalize={true}
           />
-          <LinearLayout
-            orientation={'horiz'}
-            alignItems={'center'}
-          >
-            <TextView
-              mr={'6px'}
-              color={'text.10'}
-            >
+          <LinearLayout orientation={'horiz'} alignItems={'center'}>
+            <TextView mr={'6px'} color={'text.10'}>
               total after transaction
             </TextView>
-            <TextView
-              color={'text.0'}
-              fontFamily={'bold'}
-              fontSize={'16px'}
-            >
+            <TextView color={'text.0'} fontFamily={'bold'} fontSize={'16px'}>
               {Facade.filter.decimal(getRemainingTokenBalance(), language)}
             </TextView>
           </LinearLayout>
@@ -334,16 +323,11 @@ const SendTransactionInputModal = (prop: Props) => {
             top={'5px'}
             onPress={() => setAmount(getTokenBalance())}
           >
-            <TextView
-              color={'primary'}
-              fontSize={'15px'}
-              fontFamily={'medium'}
-            >
+            <TextView color={'primary'} fontSize={'15px'} fontFamily={'medium'}>
               Max
             </TextView>
           </ButtonView>
         </LinearLayout>
-
       </Fragment>
     )
   }

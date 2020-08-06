@@ -34,14 +34,15 @@ export class ApplicationConfig {
   readonly testNetworkDeprecatedLabel = 'TestNet'
 
   readonly tokensMainNet = tokenList
-  readonly tokensTestNet: Record<string, string> = {
-    DBC: 'b951ecbbc5fe37a9c280a76cb0ce0014827294cf',
-    RPX: '5b7074e873973a6ed3708862f219a6fbf4d1c411',
-    QLC: '0d821bd7b6d53f5c2b40e217c6defc8bbe896cf5',
-  }
 
   readonly nodesMainNet = nodesMainNet
   readonly nodesTestNet = nodesTestNet
+
+  readonly neoHash =
+    'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b'
+
+  readonly gasHash =
+    '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7'
 
   get networkLabels() {
     return [this.mainNetworkLabel, this.testNetworkLabel]
