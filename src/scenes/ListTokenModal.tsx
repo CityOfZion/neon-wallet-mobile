@@ -50,7 +50,6 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
     if (filterBy === 'send') {
       setTokenList(tokensFromAccount ?? tokens)
     } else {
-
       if (tokensFromAccount) {
         const newTokenList: TokenAsset[] = []
         tokens.forEach((token) => {

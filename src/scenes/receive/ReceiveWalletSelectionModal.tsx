@@ -81,18 +81,24 @@ const ReceiveWalletSelectionModal = (props: Props) => {
             swipeThreshold={5}
             enableSnap={true}
             renderItem={({item}) => (
-              <WalletCard
-                onPress={() =>
-                  props.navigation.navigate(
-                    Facade.route.ReceiveAccountSelectionModal.name,
-                    {
-                      wallet: item,
-                    }
-                  )
-                }
-                height={330}
-                wallet={item}
-              />
+              <LinearLayout
+                weight={1}
+                justifyContent={'center'}
+                alignItems={'center'}
+              >
+                <WalletCard
+                  width={240}
+                  onPress={() =>
+                    props.navigation.navigate(
+                      Facade.route.ReceiveAccountSelectionModal.name,
+                      {
+                        wallet: item,
+                      }
+                    )
+                  }
+                  wallet={item}
+                />
+              </LinearLayout>
             )}
             onSnapToItem={(index) => setActiveIndex(index)}
           />

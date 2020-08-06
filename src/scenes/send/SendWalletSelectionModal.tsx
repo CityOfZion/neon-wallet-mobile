@@ -62,64 +62,68 @@ const SendWalletSelectionModal = (props: Props) => {
       onClose={() => props.navigation.goBack()}
       image={require('~/src/assets/images/upload-white.png')}
     >
-      <LinearLayout width={'100%'}>
-        <ScrollView contentContainerStyle={{flexGrow: 1}}>
-          <TextView
-            mb={24}
-            color="text.0"
-            fontSize={18}
-            fontFamily="medium"
-            textAlign="center"
+      <TextView
+        mb={24}
+        color="text.0"
+        fontSize={18}
+        fontFamily="medium"
+        textAlign="center"
+      >
+        {Facade.t('modals.send.walletSelection.subtitle')}
+      </TextView>
+
+      <Carousel<Wallet>
+        layout={'default'}
+        ref={carouselRef}
+        data={wallets}
+        firstItem={0}
+        sliderWidth={Facade.app.windowWidth}
+        itemWidth={Math.round(Facade.app.windowWidth * 0.7)}
+        inactiveSlideScale={0.8}
+        inactiveSlideOpacity={1}
+        inactiveSlideShift={12}
+        lockScrollWhileSnapping={true}
+        lockScrollTimeoutDuration={200}
+        activeSlideOffset={5}
+        swipeThreshold={5}
+        enableSnap={true}
+        renderItem={({item}) => (
+          <LinearLayout
+            weight={1}
+            justifyContent={'center'}
+            alignItems={'center'}
           >
-            {Facade.t('modals.send.walletSelection.subtitle')}
-          </TextView>
-          <Carousel<Wallet>
-            layout={'default'}
-            ref={carouselRef}
-            data={wallets}
-            firstItem={0}
-            sliderWidth={Facade.app.windowWidth}
-            itemWidth={Math.round(Facade.app.windowWidth * 0.7)}
-            inactiveSlideScale={0.8}
-            inactiveSlideOpacity={1}
-            inactiveSlideShift={12}
-            lockScrollWhileSnapping={true}
-            lockScrollTimeoutDuration={200}
-            activeSlideOffset={5}
-            swipeThreshold={5}
-            enableSnap={true}
-            renderItem={({item}) => (
-              <WalletCard
-                onPress={() =>
-                  props.navigation.navigate(
-                    Facade.route.SendAccountSelectionModal.name,
-                    {
-                      wallet: item,
-                      uri: props.route.params?.uri,
-                    }
-                  )
-                }
-                height={330}
-                wallet={item}
-              />
-            )}
-            onSnapToItem={(index) => setActiveIndex(index)}
-          />
-          <TextView
-            alignSelf="center"
-            fontSize="36px"
-            color="text.0"
-            fontFamily="medium"
-          >
-            {wallets[activeIndex]?.calculateBalanceFormatted(
-              tokenAssets,
-              currency,
-              language,
-              exchange
-            )}
-          </TextView>
-        </ScrollView>
-      </LinearLayout>
+            <WalletCard
+              width={240}
+              onPress={() =>
+                props.navigation.navigate(
+                  Facade.route.SendAccountSelectionModal.name,
+                  {
+                    wallet: item,
+                    uri: props.route.params?.uri,
+                  }
+                )
+              }
+              wallet={item}
+            />
+          </LinearLayout>
+        )}
+        onSnapToItem={(index) => setActiveIndex(index)}
+      />
+
+      <TextView
+        alignSelf="center"
+        fontSize="36px"
+        color="text.0"
+        fontFamily="medium"
+      >
+        {wallets[activeIndex]?.calculateBalanceFormatted(
+          tokenAssets,
+          currency,
+          language,
+          exchange
+        )}
+      </TextView>
     </SwiperPanel>
   )
 }

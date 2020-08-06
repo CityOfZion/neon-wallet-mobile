@@ -25,7 +25,6 @@ export class TokenListRequest {
         .name('getTokens')
         .as<TokenResponse>()
         .getData()
-
     } catch {
       response = Facade.app.tokensMainNet
     }

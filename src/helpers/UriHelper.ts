@@ -1,5 +1,5 @@
 import {wallet} from '~/node_modules/@cityofzion/neon-core'
-import {GAS_HASH, NEO_HASH, TokenValue} from '~src/models/TokenValue'
+import {Config} from '~src/app/Config'
 import {TokenAsset} from '~src/models/TokenAsset'
 
 export const SCHEME = 'neo:'
@@ -56,8 +56,10 @@ export abstract class UriHelper {
 
       tokenHash = this._getParam(params, 'asset')
       // Changes asset to hash
-      if (tokenHash?.toUpperCase() === 'NEO') tokenHash = NEO_HASH
-      if (tokenHash?.toUpperCase() === 'GAS') tokenHash = GAS_HASH
+      if (tokenHash?.toUpperCase() === 'NEO')
+        tokenHash = Config.application.neoHash
+      if (tokenHash?.toUpperCase() === 'GAS')
+        tokenHash = Config.application.gasHash
 
       amount = this._getParam(params, 'amount')
       reference = this._getParam(params, 'remark')

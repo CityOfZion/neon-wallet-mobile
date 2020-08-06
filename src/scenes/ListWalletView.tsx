@@ -13,12 +13,12 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Wallet} from '~src/models/redux/Wallet'
+import {TokenListRequest} from '~src/models/request/TokenListRequest'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
-import {TokenListRequest} from '~src/models/request/TokenListRequest'
 
 interface WalletProps {
   navigation: StackNavigationProp<
@@ -175,7 +175,17 @@ const ListWalletView = (props: WalletProps) => {
               swipeThreshold={5}
               enableSnap={true}
               renderItem={({item}) => (
-                <WalletCard onPress={() => selectEvent(item)} wallet={item} />
+                <LinearLayout
+                  weight={1}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                >
+                  <WalletCard
+                    width={240}
+                    onPress={() => selectEvent(item)}
+                    wallet={item}
+                  />
+                </LinearLayout>
               )}
               onSnapToItem={(index) => setActiveIndex(index)}
             />
@@ -232,7 +242,7 @@ const ListWalletView = (props: WalletProps) => {
           <LinearLayout mx={'16px'}>
             {!wallet?.lastBackup && (
               <LinearLayout my={4}>
-                <Notification text={Facade.t("screens.listWallets.noBackup")} />
+                <Notification text={Facade.t('screens.listWallets.noBackup')} />
               </LinearLayout>
             )}
 

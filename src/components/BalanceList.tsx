@@ -4,9 +4,7 @@ import {FlatList, TouchableWithoutFeedback, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import {Currency} from '~src/enums/Currency'
 import {TokenAsset} from '~src/models/TokenAsset'
-import {TokenValue} from '~src/models/TokenValue'
 import {Account} from '~src/models/redux/Account'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
