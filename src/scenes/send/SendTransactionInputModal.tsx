@@ -16,6 +16,7 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import {NeoURI} from '~src/helpers/UriHelper'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
+import {Contact} from '~src/models/redux/Contact'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {
   ButtonView,
@@ -48,10 +49,23 @@ const SendTransactionInputModal = (prop: Props) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const [text, setText] = useState(uri?.address ?? '')
+  const contacts = useSelector((state: RootState) => state.app.contacts)
+  const [address, setAddress] = useState(prop.route.params?.uri?.address ?? '')
   const [amount, setAmount] = useState(uri?.amount ?? 0)
   // TODO: convert hash into TokenValue
   // const hash = props.route.params?.uri?.asset ?? ''
+
+  const [contact, setContact] = useState<Contact>()
+
+  const handleAddressChanged = (addressValue: string) => {
+    setContact(undefined)
+    const contact = contacts.find((value) => value.address === addressValue)
+    if (contact) {
+      setContact(contact)
+    } else {
+      setAddress(addressValue)
+    }
+  }
   const [token, setToken] = useState<TokenAsset | null>(null)
 
   // Typeguard
@@ -61,9 +75,9 @@ const SendTransactionInputModal = (prop: Props) => {
 
   const handleQrCode = (data: NeoURI | string) => {
     if (isURI(data)) {
-      setText(data.address)
+      handleAddressChanged(data.address)
     } else {
-      setText(data)
+      handleAddressChanged(data)
     }
   }
 
@@ -200,10 +214,10 @@ const SendTransactionInputModal = (prop: Props) => {
           capitalize={true}
         />
         <InputWithValidation
-          onChangeText={setText}
+          onChangeText={handleAddressChanged}
           color={theme.colors.text[0]}
           invalidColor={theme.colors.text[10]}
-          value={text}
+          value={address}
           placeholder={Facade.t(
             'modals.send.transactionInput.enterDestination'
           )}
@@ -211,6 +225,10 @@ const SendTransactionInputModal = (prop: Props) => {
           separatorColor={theme.colors.background[13]}
           sideMargins={0}
           showContacts={true}
+          selectedContact={contact}
+          onContactSelected={(contact: Contact) => {
+            setContact(contact)
+          }}
           onScan={handleQrCode}
         />
       </Fragment>

@@ -478,5 +478,9 @@
     "cancel": "Cancel",
     "invalidName": "Invalid Name",
     "invalidAddress": "Invalid Address"
+  },
+  "contactPicker" : {
+    "title": "Contacts",
+    "selectContact" : "Select a contact to send."
   }
 }

@@ -9,7 +9,9 @@ import {ThemeProvider} from 'styled-components'
 import {Facade} from '~src/app/Facade'
 import FooterBar from '~src/components/layout/FooterBar'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import ContactsStackNavigation from '~src/navigation/ContactsStackNavigation'
+import ContactsStackNavigation, {
+  ContactsStackParams,
+} from '~src/navigation/ContactsStackNavigation'
 import MoreStackNavigation, {
   MoreStackParam,
 } from '~src/navigation/MoreStackNavigation'
@@ -21,7 +23,7 @@ import WalletStackNavigation, {
 
 export type TabStackParamList = {
   ListWallets: WalletStackParams
-  Contacts: undefined
+  Contacts: ContactsStackParams
   Settings: undefined
   More: MoreStackParam
 }

@@ -5,12 +5,15 @@ import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
-import {AddContact} from '~src/components/AddContact'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {AddContact} from '~src/components/contacts/AddContact'
 import {
   AccountQRCode,
   AccountQRCodeParams,
 } from '~src/scenes/Account/AccountQRCode'
+import {
+  ContactPicker,
+  ContactsModalParams,
+} from '~src/scenes/Contacts/ContactPicker'
 import CreateAccountModal from '~src/scenes/CreateAccountModal'
 import CurrencyPickerModal from '~src/scenes/CurrencyPickerModal'
 import CustomColorPage, {
@@ -73,6 +76,7 @@ export type ModalStackParamList = {
   ThemePickerModal: undefined
   AddContact: undefined
   QRCodeScan: QRCodeScanParams
+  ContactsModal: ContactsModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -82,14 +86,12 @@ export type ModalParams =
   | DefaultNavigationParam<AccountQRCodeParams>
   | DefaultNavigationParam<SendWalletSelectionModalParams>
   | DefaultNavigationParam<ReceiveQrCodeModalParams>
-
-interface Props {
-  route?: RouteProp<RootStackParamList, 'Modal'>
-}
+  | DefaultNavigationParam<ContactsModalParams>
+  | DefaultNavigationParam<SendTransactionConfirmationModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
-const ModalStackNavigation = (props: Props) => {
+const ModalStackNavigation = () => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
@@ -184,6 +186,10 @@ const ModalStackNavigation = (props: Props) => {
         <ModalStack.Screen
           name={Facade.route.AccountQRCode.name}
           component={AccountQRCode}
+        />
+        <ModalStack.Screen
+          name={Facade.route.ContactsModal.name}
+          component={ContactPicker}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

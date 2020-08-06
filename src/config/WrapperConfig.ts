@@ -53,6 +53,7 @@ export class WrapperConfig {
     'SendTransactionReviewModal',
     'SendTransactionConfirmationModal',
     'Login',
+    'LoginPage',
     'WalletContextModal',
     'AccountAssetDetail',
     'ReorderWalletModal',
@@ -69,5 +70,6 @@ export class WrapperConfig {
     'AddContact',
     'ContactDetails',
     'AccountQRCode',
+    'ContactsModal',
   ] as const
 }
