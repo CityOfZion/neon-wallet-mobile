@@ -58,7 +58,7 @@ export const AddContact = (props: AddContactProps) => {
       padding={20}
       fullSize={true}
       title={Facade.t('createContact.title')}
-      image={require('~/src/assets/images/icon-add-circle-outline-white.png')}
+      image={require('~src/assets/images/icon-add-circle-outline-white.png')}
       rightButton={Facade.t('createContact.save')}
       leftButton={Facade.t('createContact.cancel')}
       imageSize={[22, 22]}

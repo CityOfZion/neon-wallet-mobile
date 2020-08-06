@@ -11,7 +11,7 @@ import PasscodePage from '~src/scenes/LoginPage/PasscodePage'
 
 export type LoginStackParamList = {
   Welcome: undefined
-  Login: undefined
+  LoginPage: undefined
   Passcode: {showError: boolean}
   ConfirmPasscode: {passcode: number[]}
 }
@@ -31,12 +31,12 @@ const LoginStackNavigation = () => {
         backgroundColor="transparent"
       />
       <LoginStack.Navigator
-        initialRouteName={Facade.route.Login.name}
+        initialRouteName={Facade.route.LoginPage.name}
         headerMode="none"
         screenOptions={Facade.config.screen}
       >
         <LoginStack.Screen
-          name={Facade.route.Login.name}
+          name={Facade.route.LoginPage.name}
           component={LoginPage}
         />
         <LoginStack.Screen

@@ -75,7 +75,6 @@ const ImportKey = (props: ImportKeyProps) => {
           validator={validator}
           separatorColor={theme.colors.background[5]}
           invalidSeparatorColor={theme.colors.background[4]}
-          navigation={props.navigation}
         />
 
         {inputIsValid && (

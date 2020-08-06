@@ -9,10 +9,15 @@ import {
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {ContactsButton} from '~src/components/input/ContactsButton'
+import {InputClearButton} from '~src/components/input/InputClearButton'
+import {PasteButton} from '~src/components/input/PasteButton'
+import {ScanButton} from '~src/components/input/ScanButton'
+import {SelectedContactView} from '~src/components/input/SelectedContactView'
 import {NeoURI} from '~src/helpers/UriHelper'
+import {Contact} from '~src/models/redux/Contact'
 import {RootState} from '~src/store/RootStore'
 import {
-  ButtonView,
   ImageView,
   LinearLayout,
   TextView,
@@ -37,11 +42,13 @@ interface Props {
   showContacts?: boolean
   onClearPress?: () => void
   onScan?: (data: NeoURI | string) => void
+  onContactSelected?: (contact: Contact) => void
   placeholder?: string
   secure?: boolean
   onFocus?: (e: NativeSyntheticEvent<TargetedEvent>) => void
   editable?: boolean
   keyboardType?: KeyboardTypeOptions
+  selectedContact?: Contact
 }
 
 const InputWithValidation = (props: Props) => {
@@ -63,53 +70,49 @@ const InputWithValidation = (props: Props) => {
 
   return (
     <LinearLayout orientation="verti" ml={sideMargins} mr={sideMargins}>
-      <LinearLayout orientation="horiz">
-        <InputTextView
-          onChangeText={props.onChangeText}
-          color={fontColor}
-          placeholderTextColor={props.placeholderColor ?? theme.colors.text[10]}
-          underlineColorAndroid="transparent"
-          placeholder={
-            props.placeholder ??
-            Facade.t('components.inputTextWithValidation.inputPlaceholder')
-          }
-          fontFamily="regular"
-          fontStyle={fontStyle}
-          fontSize={18}
-          value={props.value}
-          weight={1}
-          autoCompleteType={props.secure ? 'password' : undefined}
-          secureTextEntry={props.secure ?? false}
-          onFocus={props.onFocus}
-          editable={props.editable ?? true}
-          keyboardType={props.keyboardType}
-        />
-        {!isValid && (
-          <ImageView
-            resizeMode={'center'}
-            alignSelf="center"
-            source={require('~/src/assets/images/icon-alert-purple.png')}
+      {!props.selectedContact ? (
+        <LinearLayout orientation="horiz">
+          <InputTextView
+            onChangeText={props.onChangeText}
+            color={fontColor}
+            placeholderTextColor={props.placeholderColor ?? '#7d929a'}
+            underlineColorAndroid="transparent"
+            placeholder={
+              props.placeholder ??
+              Facade.t('components.inputTextWithValidation.inputPlaceholder')
+            }
+            fontFamily="regular"
+            fontStyle={fontStyle}
+            fontSize={18}
+            value={props.value}
+            weight={1}
+            autoCompleteType={props.secure ? 'password' : undefined}
+            secureTextEntry={props.secure ?? false}
+            onFocus={props.onFocus}
+            editable={props.editable ?? true}
+            keyboardType={props.keyboardType}
           />
-        )}
-        {props.onClearPress && props.value.length > 0 ? (
-          <TouchableWithoutFeedback
-            onPress={props.onClearPress}
-            disabled={!props.value}
-          >
+
+          {!isValid && (
             <ImageView
-              opacity={props.value ? 1 : 0}
-              width="34px"
-              height="34px"
-              mb="-6px"
               resizeMode={'center'}
               alignSelf="center"
-              source={require('~/src/assets/images/icon-cancel-grey.png')}
+              source={require('~/src/assets/images/icon-alert-purple.png')}
             />
-          </TouchableWithoutFeedback>
-        ) : (
-          <LinearLayout height="34px" mb="-6px" />
-        )}
-      </LinearLayout>
+          )}
+          {props.onClearPress && props.value.length > 0 ? (
+            <InputClearButton
+              onPress={props.onClearPress}
+              value={props.value}
+            />
+          ) : (
+            <LinearLayout height="34px" mb="-6px" />
+          )}
+        </LinearLayout>
+      ) : (
+        <SelectedContactView selectedContact={props.selectedContact} />
+      )}
+
       <LinearLayout
         mt={3}
         bg={
@@ -142,86 +145,41 @@ const InputWithValidation = (props: Props) => {
         flex={1}
         justifyContent={'space-between'}
       >
-        {props.showContacts && (
-          <ButtonView onPress={async () => {}}>
-            <LinearLayout orientation="horiz">
-              <ImageView
-                resizeMode="center"
-                source={require('~/src/assets/images/icon-contacts-green.png')}
-              />
-
-              <TextView
-                style={{includeFontPadding: false}}
-                ml={3}
-                color={theme.colors.primary}
-                fontFamily="semibold"
-                fontSize={16}
-                mr={6}
-              >
-                {Facade.t('components.inputTextWithValidation.contacts')}
-              </TextView>
-            </LinearLayout>
-          </ButtonView>
+        {props.showContacts ? (
+          <ContactsButton
+            onPress={() => {
+              navigation.navigate(Facade.route.ContactsModal.name, {
+                onContactSelected: (contact: Contact) => {
+                  if (props.onContactSelected) {
+                    props.onContactSelected(contact)
+                    navigation.goBack()
+                  }
+                },
+              })
+            }}
+          />
+        ) : (
+          <LinearLayout weight={1} />
         )}
-        {!props.showContacts && <LinearLayout weight={1} />}
 
         {!props.hidePaste && (
-          <LinearLayout>
-            <ButtonView
-              onPress={async () => {
-                const valueFromClipboard = await Facade.utils.copyFromClipboard()
-                if (props.onChangeText) {
-                  props.onChangeText(valueFromClipboard)
-                }
-              }}
-            >
-              <LinearLayout orientation="horiz">
-                <ImageView
-                  resizeMode="center"
-                  source={require('~/src/assets/images/icon-paste-green.png')}
-                />
-
-                <TextView
-                  style={{includeFontPadding: false}}
-                  ml={3}
-                  color={theme.colors.primary}
-                  fontFamily="semibold"
-                  fontSize={16}
-                  mr={6}
-                >
-                  {Facade.t('components.inputTextWithValidation.paste')}
-                </TextView>
-              </LinearLayout>
-            </ButtonView>
-          </LinearLayout>
+          <PasteButton
+            onPress={async () => {
+              const valueFromClipboard = await Facade.utils.copyFromClipboard()
+              if (props.onChangeText) {
+                props.onChangeText(valueFromClipboard)
+              }
+            }}
+          />
         )}
         {!props.hideScan && (
-          <LinearLayout>
-            <ButtonView
-              onPress={() =>
-                navigation.navigate(Facade.route.QRCodeScan.name, {
-                  onScan: props.onScan,
-                })
-              }
-            >
-              <LinearLayout orientation="horiz">
-                <ImageView
-                  resizeMode="center"
-                  source={require('~/src/assets/images/icon-qrcode-green.png')}
-                />
-
-                <TextView
-                  style={{includeFontPadding: false}}
-                  ml={3}
-                  color={theme.colors.primary}
-                  fontFamily="semibold"
-                  fontSize={16}
-                >
-                  {Facade.t('components.inputTextWithValidation.scan')}
-                </TextView>
-              </LinearLayout>
-            </ButtonView>
-          </LinearLayout>
+          <ScanButton
+            onPress={() =>
+              navigation.navigate(Facade.route.QRCodeScan.name, {
+                onScan: props.onScan,
+              })
+            }
+          />
         )}
       </LinearLayout>
     </LinearLayout>
