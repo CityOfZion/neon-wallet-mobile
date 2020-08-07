@@ -33,6 +33,9 @@ const SendWalletSelectionModal = (props: Props) => {
   const {wallets, accounts, exchange} = useSelector(
     (state: RootState) => state.app
   )
+  const usableWallets = wallets.filter(
+    (value: Wallet) => value.walletType !== 'watch'
+  )
   const {currency, language} = useSelector((state: RootState) => state.settings)
   const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
 
@@ -44,8 +47,7 @@ const SendWalletSelectionModal = (props: Props) => {
 
   const populate = async () => {
     dispatch(RootStore.senderTransaction.actions.clearState())
-
-    const tokenAssets = await wallets[activeIndex]?.generateTokenAssets(
+    const tokenAssets = await usableWallets[activeIndex]?.generateTokenAssets(
       accounts
     )
     setTokenAssets(tokenAssets)
@@ -77,7 +79,7 @@ const SendWalletSelectionModal = (props: Props) => {
       <Carousel<Wallet>
         layout={'default'}
         ref={carouselRef}
-        data={wallets}
+        data={usableWallets}
         firstItem={0}
         sliderWidth={Facade.app.windowWidth}
         itemWidth={Math.round(Facade.app.windowWidth * 0.6)}
@@ -120,7 +122,7 @@ const SendWalletSelectionModal = (props: Props) => {
         color="text.0"
         fontFamily="medium"
       >
-        {wallets[activeIndex]?.calculateBalanceFormatted(
+        {usableWallets[activeIndex]?.calculateBalanceFormatted(
           tokenAssets,
           currency,
           language,
