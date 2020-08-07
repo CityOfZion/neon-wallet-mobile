@@ -42,6 +42,7 @@ const ImportKey = (props: ImportKeyProps) => {
             source: Facade.route.ImportKey.name,
             address: neoAccount.address,
             legacy: true,
+            wif: neoAccount.WIF,
           },
         ]
       }

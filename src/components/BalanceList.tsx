@@ -20,6 +20,8 @@ const BalanceList = (props: Props) => {
 
   const innerProps = {...props}
   delete innerProps.tokenAssets
+  delete innerProps.fromAccountView
+  delete innerProps.account
 
   const TableData = (props: {header: string; content: string}) => {
     return (
@@ -105,10 +107,11 @@ const BalanceList = (props: Props) => {
   }
 
   return (
-    <LinearLayout height="100%" my={props.my ?? '0px'} mx={props.mx ?? '0px'}>
+    <LinearLayout {...innerProps} width={'100%'}>
       <TextView color="text.2" fontSize="sm">
         {Facade.t('components.balanceList.title')}
       </TextView>
+
       {props.tokenAssets.length ? (
         <FlatList<TokenAsset>
           data={props.tokenAssets}

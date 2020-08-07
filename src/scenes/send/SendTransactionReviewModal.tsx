@@ -1,5 +1,7 @@
+import {AwaitActivity} from '@simpli/react-native-await'
+import {plainToClass} from 'class-transformer'
 import React from 'react'
-import {ScrollView} from 'react-native'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
@@ -7,10 +9,17 @@ import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~src/components/SwiperPanel'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {Priority} from '~src/scenes/send/SendTransactionInputModal'
+import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+
+export interface SendModalParams {
+  transactionHash: string
+}
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -130,6 +139,32 @@ const TransactionSummaryContainer = () => {
 const SendTransactionReviewModal = (props: Props) => {
   const controller = useSwiperController(true)
 
+  const dispatch = useDispatch<SyncDispatch>()
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatchAsyncString = useDispatch<AsyncDispatch<string | null>>()
+
+  const submit = async () => {
+    const transactionHash = await dispatchAsyncString(
+      RootStore.senderTransaction.actions.sendAsset()
+    )
+
+    if (!transactionHash) {
+      throw new Error('Transaction has failed')
+    }
+
+    await dispatchAsync(
+      RootStore.senderTransaction.actions.saveToHistory(transactionHash)
+    )
+    await dispatchAsync(RootStore.app.actions.syncPendingTransactions())
+
+    dispatch(RootStore.senderTransaction.actions.clearState())
+
+    props.navigation.navigate(Facade.route.Modal.name, {
+      screen: Facade.route.SendTransactionConfirmationModal.name,
+      params: {transactionHash},
+    })
+  }
+
   return (
     <SwiperPanel
       controller={controller}
@@ -143,31 +178,36 @@ const SendTransactionReviewModal = (props: Props) => {
       onClose={() => props.navigation.goBack()}
       image={require('~/src/assets/images/upload-white.png')}
     >
-      <LinearLayout
-        height="100%"
-        width="100%"
-        px="15px"
-        orientation="verti"
-        alignItems="center"
+      <AwaitActivity
+        name={'submit'}
+        loadingView={<ScreenLoader transparent={true} />}
       >
-        <TextView color="text.0" fontFamily="medium" fontSize="18px" mb="48px">
-          {Facade.t('modals.send.transactionReview.pleaseReview')}
-        </TextView>
-        <TransactionSummaryContainer />
-        <LinearLayout width="100%" mt="32px">
-          <ThemedButton
-            label={Facade.t('app.send')}
-            onPress={() =>
-              props.navigation.navigate(Facade.route.Modal.name, {
-                screen: Facade.route.SendTransactionConfirmationModal.name,
-                params: {
-                  transactionHash: '<TRANSACTIONHASH>',
-                },
-              })
-            }
-          />
+        <LinearLayout
+          height="100%"
+          width="100%"
+          px="15px"
+          orientation="verti"
+          alignItems="center"
+        >
+          <TextView
+            color="text.0"
+            fontFamily="medium"
+            fontSize="18px"
+            mb="48px"
+          >
+            {Facade.t('modals.send.transactionReview.pleaseReview')}
+          </TextView>
+
+          <TransactionSummaryContainer />
+
+          <LinearLayout width="100%" mt="32px">
+            <ThemedButton
+              label={Facade.t('app.send')}
+              onPress={() => Facade.await.run('submit', submit)}
+            />
+          </LinearLayout>
         </LinearLayout>
-      </LinearLayout>
+      </AwaitActivity>
     </SwiperPanel>
   )
 }

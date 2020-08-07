@@ -207,7 +207,8 @@
     "security": "Security",
     "currency": "Currency",
     "language": "Language",
-    "theme": "Theme"
+    "theme": "Theme",
+    "network": "Network"
   },
   "customColorPage": {
     "title": "Custom Colour",
@@ -402,6 +403,9 @@
     },
     "theme": {
       "title": "Theme"
+    },
+    "network": {
+      "title": "Network"
     },
     "handleQrCode": {
       "send": {

@@ -12,4 +12,7 @@ export class Settings implements SettingsState {
 
   @HttpExpose()
   theme = Facade.config.application.defaultTheme
+
+  @HttpExpose()
+  network = Facade.config.application.mainNetwork
 }

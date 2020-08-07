@@ -8,37 +8,37 @@ import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~src/components/SwiperPanel'
-import {Theme} from '~src/enums/Theme'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
+import {NetworkOptions} from '~src/types/settings'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
 }
 
-const ThemePickerModal = (props: Props) => {
+const NetworkPickerModal = (props: Props) => {
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
-  const {theme} = useSelector((state: RootState) => state.settings)
+  const {network} = useSelector((state: RootState) => state.settings)
 
-  const changeTheme = async (val: Theme) => {
-    dispatch(RootStore.settings.actions.setTheme(val))
+  const changeNetwork = async (val: NetworkOptions) => {
+    dispatch(RootStore.settings.actions.setNetwork(val))
     dispatch(RootStore.settings.actions.save())
   }
 
-  const isSelected = (t: Theme) => t === theme
+  const isSelected = (n: NetworkOptions) => n.name === network.name
 
-  const themes: SelectorItem<Theme>[] = [
+  const networks: SelectorItem<NetworkOptions>[] = [
     {
-      title: Facade.t('themes.DARK'),
-      data: Theme.DARK,
-      onClick: changeTheme,
+      title: 'Main',
+      data: Facade.app.mainNetwork,
+      onClick: changeNetwork,
       isSelected,
     },
     {
-      title: Facade.t('themes.LIGHT'),
-      data: Theme.LIGHT,
-      onClick: changeTheme,
+      title: 'Test',
+      data: Facade.app.testNetwork,
+      onClick: changeNetwork,
       isSelected,
     },
   ]
@@ -46,7 +46,7 @@ const ThemePickerModal = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      title={Facade.t('modals.theme.title')}
+      title={Facade.t('modals.network.title')}
       fullSize={true}
       padding={16}
       paddingTop={24}
@@ -56,9 +56,9 @@ const ThemePickerModal = (props: Props) => {
       onRightPress={controller.close}
       disableDefaultScrollView={true}
     >
-      <SelectorList items={themes} />
+      <SelectorList items={networks} />
     </SwiperPanel>
   )
 }
 
-export default ThemePickerModal
+export default NetworkPickerModal
