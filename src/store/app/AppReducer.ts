@@ -9,10 +9,12 @@ import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {App} from '~src/models/redux/App'
 import {Contact} from '~src/models/redux/Contact'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
 import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
 import {ContactsDispatcher} from '~src/store/app/dispatchers/ContactsDispatcher'
 import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
+import {PendingTransactionDispatcher} from '~src/store/app/dispatchers/PendingTransactionDispatcher'
 import {TokensDispatcher} from '~src/store/app/dispatchers/TokensDispatcher'
 import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
 import {Exchange, ExchangeResponse} from '~src/types/exchange'
@@ -31,6 +33,7 @@ export class AppReducer extends ReducerWrapper<
     AccountsDispatcher,
     ContactsDispatcher,
     TokensDispatcher,
+    PendingTransactionDispatcher,
   ]
 
   readonly actions = {
@@ -159,6 +162,19 @@ export class AppReducer extends ReducerWrapper<
           dispatch(this.commit('SET_CONTACTS', {contacts}))
         }
         return contacts ?? []
+      }
+    },
+
+    syncPendingTransactions: (): AsyncAction<SenderTransaction[]> => {
+      return async (dispatch, getState) => {
+        const pendingTransactions = await Storage.pendingTransactions.load()
+        if (pendingTransactions) {
+          dispatch(
+            this.commit('SET_PENDING_TRANSACTIONS', {pendingTransactions})
+          )
+        }
+
+        return pendingTransactions ?? []
       }
     },
   }

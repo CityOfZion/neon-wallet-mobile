@@ -2,6 +2,7 @@ import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {plainToClass} from 'class-transformer'
 import {ImageLoadEventData} from 'react-native'
 
+import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {Currency} from '~src/enums/Currency'
@@ -61,11 +62,13 @@ export class AccountReducer extends ReducerWrapper<
 
         account.index = indexes.length ? Math.max(...indexes) + 1 : 0
 
-        if (wallet) {
+        if (wallet && wallet.walletType === 'standard') {
           const neoAccount = await wallet.generateNeoAccount(account.index)
 
           if (neoAccount) {
             account.address = neoAccount.address
+
+            await Facade.security.saveWif(account.address, neoAccount.WIF)
 
             accounts.push(account)
 
@@ -97,7 +100,7 @@ export class AccountReducer extends ReducerWrapper<
         await Storage.accounts.save(accounts)
       }
     },
-    addAndSave: (address: string): AsyncAction => {
+    importAndSave: (address: string, wif?: string): AsyncAction => {
       return async (dispatch, getState) => {
         const accounts = (await Storage.accounts.load()) ?? []
 
@@ -107,9 +110,17 @@ export class AccountReducer extends ReducerWrapper<
         const wallet = account.getWallet(getState().app.wallets)
 
         if (wallet) {
-          accounts.push(account)
+          if (wallet.walletType === 'legacy') {
+            if (wif) {
+              await Facade.security.saveWif(account.address, wif)
+            } else {
+              throw Error('Wif not defined')
+            }
+          }
 
+          accounts.push(account)
           await Storage.accounts.save(accounts)
+
           return
         }
 

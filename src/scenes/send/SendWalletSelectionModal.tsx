@@ -1,9 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
-import {cloneDeep} from 'lodash'
 import React, {useEffect, useRef, useState} from 'react'
-import {ScrollView} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
@@ -14,9 +12,9 @@ import SwiperPanel, {
 import WalletCard from '~src/components/WalletCard'
 import {NeoURI} from '~src/helpers/UriHelper'
 import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface SendWalletSelectionModalParams {
@@ -38,11 +36,15 @@ const SendWalletSelectionModal = (props: Props) => {
   const {currency, language} = useSelector((state: RootState) => state.settings)
   const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
 
+  const dispatch = useDispatch<SyncDispatch>()
+
   useEffect(() => {
     Facade.await.run('populate', populate)
   }, [currency, language, activeIndex])
 
   const populate = async () => {
+    dispatch(RootStore.senderTransaction.actions.clearState())
+
     const tokenAssets = await wallets[activeIndex]?.generateTokenAssets(
       accounts
     )
@@ -78,7 +80,7 @@ const SendWalletSelectionModal = (props: Props) => {
         data={wallets}
         firstItem={0}
         sliderWidth={Facade.app.windowWidth}
-        itemWidth={Math.round(Facade.app.windowWidth * 0.7)}
+        itemWidth={Math.round(Facade.app.windowWidth * 0.6)}
         inactiveSlideScale={0.8}
         inactiveSlideOpacity={1}
         inactiveSlideShift={12}
@@ -112,6 +114,7 @@ const SendWalletSelectionModal = (props: Props) => {
       />
 
       <TextView
+        mt={5}
         alignSelf="center"
         fontSize="36px"
         color="text.0"

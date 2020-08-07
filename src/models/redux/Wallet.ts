@@ -1,13 +1,11 @@
 import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 import moment from 'moment'
-import React from 'react'
 
 import {Facade} from '~src/app/Facade'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
-import {TextView} from '~src/styles/styled-components'
 import {Exchange} from '~src/types/exchange'
 
 @HttpExclude()
