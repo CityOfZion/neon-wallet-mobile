@@ -31,15 +31,11 @@ const ContactsPage: React.FC<Props> = (prop) => {
       }),
   })
 
-  if (!contacts || contacts.length === 0) {
-    return <NoContacts />
-  } else {
-    return (
-      <ScreenLayout padding={0} >
-        <ContactList />
-      </ScreenLayout>
-    )
-  }
+  return (
+    <ScreenLayout padding={0}>
+      {!contacts || contacts.length === 0 ? <NoContacts /> : <ContactList />}
+    </ScreenLayout>
+  )
 }
 
 ContactsPage.propTypes = {
