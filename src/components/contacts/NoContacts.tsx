@@ -20,7 +20,7 @@ export const NoContacts = () => {
         fontSize={24}
         alignSelf="center"
         font={'medium'}
-        mb={4}
+        mb={'32px'}
       >
         {Facade.t('screens.contacts.empty')}
       </TextView>
@@ -33,14 +33,15 @@ export const NoContacts = () => {
       >
         <ImageView
           alignSelf={'center'}
-          resizeMode="contain"
+          width={'95%'}
           source={require('~src/assets/images/add-new-contact-dashed-button.png')}
+          resizeMode={'contain'}
+          mt={'-4%'}
         />
         <LinearLayout
           alignItems={'center'}
           position={'absolute'}
           alignSelf={'center'}
-          mt={4}
         >
           <LinearLayout orientation={'horiz'}>
             <ImageView
