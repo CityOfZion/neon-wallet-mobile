@@ -38,6 +38,7 @@ const SendAccountSelectionModal = (props: Props) => {
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
 
+  const userHasFunds = tokenAssets.find((asset) => asset.amount > 0) != null
   useEffect(() => {
     Facade.await.run('populate', populate)
   }, [accountsPool])
@@ -137,6 +138,7 @@ const SendAccountSelectionModal = (props: Props) => {
                 }
               )
             }
+            disabled={!userHasFunds}
           />
         </LinearLayout>
       </LinearLayout>
