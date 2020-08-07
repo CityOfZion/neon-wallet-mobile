@@ -113,11 +113,13 @@ const SendAccountSelectionModal = (props: Props) => {
 
         <LinearLayout mt={4}>{_renderAccountCards()}</LinearLayout>
 
-        <BalanceList
-          my="44px"
-          tokenAssets={tokenAssets}
-          fromAccountView={false}
-        />
+        <LinearLayout width={'100%'}>
+          <BalanceList
+            my="44px"
+            tokenAssets={tokenAssets}
+            fromAccountView={false}
+          />
+        </LinearLayout>
 
         <LinearLayout
           position="absolute"
