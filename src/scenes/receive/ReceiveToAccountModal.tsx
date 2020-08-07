@@ -183,7 +183,7 @@ const ReceiveToAccountModal = (props: Props) => {
   }
 
   const isValid = () => {
-    const conditions: boolean[] = [!!account.address, !!amount, !!token]
+    const conditions: boolean[] = [Boolean(account.address), Boolean(token)]
 
     return conditions.every((it) => it)
   }
