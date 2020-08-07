@@ -1,4 +1,3 @@
-import {RouteProp} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
 import {useSelector} from 'react-redux'
@@ -24,6 +23,7 @@ import EditAccountModal, {
 } from '~src/scenes/EditAccountModal'
 import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
 import ListTokenModal, {ListTokenModalParams} from '~src/scenes/ListTokenModal'
+import NetworkPickerModal from '~src/scenes/NetworkPickerModal'
 import {QRCodeScanParams} from '~src/scenes/QRCodeScan'
 import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
@@ -48,7 +48,9 @@ import SendTransactionConfirmationModal, {
 import SendTransactionInputModal, {
   SendTransactionInputModalParams,
 } from '~src/scenes/send/SendTransactionInputModal'
-import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
+import SendTransactionReviewModal, {
+  SendModalParams,
+} from '~src/scenes/send/SendTransactionReviewModal'
 import SendWalletSelectionModal, {
   SendWalletSelectionModalParams,
 } from '~src/scenes/send/SendWalletSelectionModal'
@@ -74,9 +76,11 @@ export type ModalStackParamList = {
   LanguagePickerModal: undefined
   CurrencyPickerModal: undefined
   ThemePickerModal: undefined
+  NetworkPickerModal: undefined
   AddContact: undefined
   QRCodeScan: QRCodeScanParams
   ContactsModal: ContactsModalParams
+  Modal: ModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -85,6 +89,7 @@ export type ModalParams =
   | DefaultNavigationParam<EditAccountModalParam>
   | DefaultNavigationParam<AccountQRCodeParams>
   | DefaultNavigationParam<SendWalletSelectionModalParams>
+  | DefaultNavigationParam<SendModalParams>
   | DefaultNavigationParam<ReceiveQrCodeModalParams>
   | DefaultNavigationParam<ContactsModalParams>
   | DefaultNavigationParam<SendTransactionConfirmationModalParams>
@@ -178,6 +183,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={Facade.route.ThemePickerModal.name}
           component={ThemePickerModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.NetworkPickerModal.name}
+          component={NetworkPickerModal}
         />
         <ModalStack.Screen
           name={Facade.route.AddContact.name}

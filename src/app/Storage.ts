@@ -1,6 +1,7 @@
 import {Facade} from '~src/app/Facade'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Settings} from '~src/models/redux/Settings'
 import {Wallet} from '~src/models/redux/Wallet'
 
@@ -45,5 +46,14 @@ export abstract class Storage {
    */
   static get contacts() {
     return Facade.storage['@contacts'].bind().asArrayOf(Contact)
+  }
+
+  /**
+   * Transaction history
+   */
+  static get pendingTransactions() {
+    return Facade.storage['@pendingTransactions']
+      .bind()
+      .asArrayOf(SenderTransaction)
   }
 }

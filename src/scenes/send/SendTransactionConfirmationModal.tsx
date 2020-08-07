@@ -1,6 +1,6 @@
 import {RouteProp} from '@react-navigation/native'
+import {AwaitActivity} from '@simpli/react-native-await'
 import React from 'react'
-import {ScrollView} from 'react-native'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
@@ -59,6 +59,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
         <TextView color="text.0" fontSize="24px" fontFamily="medium" mb="5px">
           {Facade.t('modals.send.transactionConfirmation.header')}
         </TextView>
+
         <TextView
           color="text.2"
           fontSize="18px"
@@ -72,6 +73,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
         <TextView color="text.2" fontSize="14px" fontFamily="medium" mb="12px">
           {Facade.t('modals.send.transactionConfirmation.transactionId')}
         </TextView>
+
         <ButtonView
           orientation="horiz"
           alignItems="center"

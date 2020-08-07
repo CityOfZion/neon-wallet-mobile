@@ -26,6 +26,7 @@ export interface CustomizeAccountParams {
   address: string
   source: keyof MoreStackParamList
   legacy?: boolean
+  wif?: string
 }
 
 interface Props {
@@ -124,6 +125,8 @@ const CustomizeAccount = (props: Props) => {
   }
 
   const createAccount = async (walletId: string) => {
+    const wif = props.route.params.wif
+
     dispatch(RootStore.account.actions.clearState())
 
     dispatch(RootStore.account.actions.setIdWallet(walletId))
@@ -131,7 +134,9 @@ const CustomizeAccount = (props: Props) => {
     dispatch(RootStore.account.actions.setCurrency(Currency.USD))
     dispatch(RootStore.account.actions.setBackgroundColor(color))
 
-    await dispatchAsync(RootStore.account.actions.addAndSave(account.address!))
+    await dispatchAsync(
+      RootStore.account.actions.importAndSave(account.address!, wif)
+    )
     await dispatchAsync(RootStore.app.actions.syncAccounts())
 
     dispatch(RootStore.account.actions.clearState())

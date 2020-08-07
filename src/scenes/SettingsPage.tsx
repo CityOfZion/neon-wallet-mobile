@@ -17,7 +17,7 @@ interface SettingsProps {
 }
 
 const SettingsPage = (props: SettingsProps) => {
-  const {language, currency, theme} = useSelector(
+  const {language, currency, theme, network} = useSelector(
     (state: RootState) => state.settings
   )
 
@@ -73,6 +73,13 @@ const SettingsPage = (props: SettingsProps) => {
         arrowDirection={RightIconType.ARROW_DOWN}
         subtitle={Facade.t(`themes.${theme}`)}
         onPress={() => openModal(Facade.route.ThemePickerModal.name)}
+      />
+
+      <MenuItem
+        title={Facade.t('settings.network')}
+        arrowDirection={RightIconType.ARROW_DOWN}
+        subtitle={network.name}
+        onPress={() => openModal(Facade.route.NetworkPickerModal.name)}
       />
     </ScreenLayout>
   )

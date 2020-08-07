@@ -35,7 +35,7 @@ const ContactsPage: React.FC<Props> = (prop) => {
     return <NoContacts />
   } else {
     return (
-      <ScreenLayout padding={0} >
+      <ScreenLayout padding={0}>
         <ContactList />
       </ScreenLayout>
     )

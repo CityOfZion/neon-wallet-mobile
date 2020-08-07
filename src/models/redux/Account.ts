@@ -1,3 +1,4 @@
+import {wallet} from '@cityofzion/neon-js'
 import {
   HttpExclude,
   HttpExpose,
@@ -6,6 +7,7 @@ import {
 import {ImageLoadEventData} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {Balance} from '~src/models/Balance'
@@ -59,6 +61,15 @@ export class Account implements AccountState {
 
   getAccountsWithSameWallet(pool: Account[]) {
     return pool.filter((it) => it.idWallet === this.idWallet)
+  }
+
+  async getWif() {
+    return (await Facade.security.loadWif(this.address ?? '')) ?? null
+  }
+
+  async getNeoAccount() {
+    const wif = await this.getWif()
+    return wif ? new wallet.Account(wif) : null
   }
 
   getBalanceAmountByAsset(assetSymbol: string) {

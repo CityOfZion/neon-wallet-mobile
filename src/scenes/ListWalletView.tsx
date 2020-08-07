@@ -13,7 +13,6 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Wallet} from '~src/models/redux/Wallet'
-import {TokenListRequest} from '~src/models/request/TokenListRequest'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
@@ -35,11 +34,13 @@ const ListWalletView = (props: WalletProps) => {
   const {wallets, accounts, exchange} = useSelector(
     (state: RootState) => state.app
   )
-  const {currency, language} = useSelector((state: RootState) => state.settings)
+  const {currency, language, network} = useSelector(
+    (state: RootState) => state.settings
+  )
 
   useEffect(() => {
     Facade.await.run('populate', populate)
-  }, [activeIndex, currency, language])
+  }, [activeIndex, currency, language, network])
 
   const getActiveWallet = (): Wallet | null => {
     return wallets[activeIndex] ?? null
@@ -92,7 +93,7 @@ const ListWalletView = (props: WalletProps) => {
 
     return (
       <>
-        <LinearLayout mb={4} orientation="verti" alignItems="center">
+        <LinearLayout mb={6} orientation="verti" alignItems="center">
           {
             <TextView fontSize="11px" color="text.2">
               {wallet.formattedLastVisitedAt}
@@ -241,14 +242,14 @@ const ListWalletView = (props: WalletProps) => {
 
           <LinearLayout mx={'16px'}>
             {!wallet?.lastBackup && (
-              <LinearLayout my={4}>
+              <LinearLayout mb={6}>
                 <Notification text={Facade.t('screens.listWallets.noBackup')} />
               </LinearLayout>
             )}
 
             {isListNotEmpty() && (
               <BalanceList
-                mb={4}
+                mb={6}
                 tokenAssets={tokenAssets}
                 fromAccountView={false}
               />

@@ -5,6 +5,7 @@ import {Account} from '~src/models/redux/Account'
 import {Exchange} from '~src/types/exchange'
 import {Contact} from '~src/models/redux/Contact'
 import {TokenAsset} from '~src/models/TokenAsset'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 
 export declare global {
   type AppActionsType =
@@ -13,6 +14,7 @@ export declare global {
     | 'SET_ACCOUNTS'
     | 'SET_CONTACTS'
     | 'SET_TOKENS'
+    | 'SET_PENDING_TRANSACTIONS'
 
   interface AppState {
     exchange: Exchange
@@ -20,6 +22,7 @@ export declare global {
     accounts: Account[]
     contacts: Contact[]
     tokens: TokenAsset[]
+    pendingTransactions: SenderTransaction[]
   }
 
   type AppAction = AppState & Action<AppActionsType>

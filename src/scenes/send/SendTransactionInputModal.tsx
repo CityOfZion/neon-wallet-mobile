@@ -1,7 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import React, {Fragment, useState} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
@@ -18,6 +18,7 @@ import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {RootStore} from '~src/store/RootStore'
 import {
   ButtonView,
   ImageView,
@@ -25,10 +26,11 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 
+// TODO: Review fees
 export enum Priority {
-  FAST,
-  FASTER,
-  FASTEST,
+  FAST = 0.00001,
+  FASTER = 0.0001,
+  FASTEST = 0.001,
 }
 
 export interface SendTransactionInputModalParams {
@@ -44,18 +46,52 @@ interface Props {
 
 const SendTransactionInputModal = (prop: Props) => {
   const {account, walletTitle, uri} = prop.route.params
-  const {language} = useSelector((state: RootState) => state.settings)
+
+  const priorityIconInactive = require('~src/assets/images/icon-flash-grey.png')
+  const priorityIconActive = require('~src/assets/images/icon-flash-primary.png')
+
   const controller = useSwiperController(true)
+
+  const {contacts} = useSelector((state: RootState) => state.app)
+  const {language} = useSelector((state: RootState) => state.settings)
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const contacts = useSelector((state: RootState) => state.app.contacts)
+
   const [address, setAddress] = useState(prop.route.params?.uri?.address ?? '')
   const [amount, setAmount] = useState(uri?.amount ?? 0)
   // TODO: convert hash into TokenValue
   // const hash = props.route.params?.uri?.asset ?? ''
 
   const [contact, setContact] = useState<Contact>()
+
+  const [token, setToken] = useState<TokenAsset | null>(null)
+  const [priority, setPriority] = useState<Priority>()
+
+  const dispatch = useDispatch<SyncDispatch>()
+
+  const submit = () => {
+    if (!token) throw new Error('Token was not defined')
+
+    const tokenWithAmount = Facade.utils.clone(token)
+    tokenWithAmount.amount = amount
+
+    const feeAmount = priority ?? null
+
+    dispatch(RootStore.senderTransaction.actions.clearState())
+
+    dispatch(RootStore.senderTransaction.actions.setAccount(account))
+    dispatch(RootStore.senderTransaction.actions.setReceiverAddress(address))
+    dispatch(RootStore.senderTransaction.actions.setToken(tokenWithAmount))
+    dispatch(RootStore.senderTransaction.actions.setFeeAmount(feeAmount))
+
+    prop.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
+  }
+
+  // Typeguard
+  function isURI(object: any): object is NeoURI {
+    return !!(object as NeoURI).address
+  }
 
   const handleAddressChanged = (addressValue: string) => {
     setContact(undefined)
@@ -66,12 +102,6 @@ const SendTransactionInputModal = (prop: Props) => {
       setAddress(addressValue)
     }
   }
-  const [token, setToken] = useState<TokenAsset | null>(null)
-
-  // Typeguard
-  function isURI(object: any): object is NeoURI {
-    return !!(object as NeoURI).address
-  }
 
   const handleQrCode = (data: NeoURI | string) => {
     if (isURI(data)) {
@@ -81,12 +111,7 @@ const SendTransactionInputModal = (prop: Props) => {
     }
   }
 
-  const priorityIconInactive = require('~src/assets/images/icon-flash-grey.png')
-  const priorityIconActive = require('~src/assets/images/icon-flash-primary.png')
-
   const PriorityTab = () => {
-    const [priority, setPriority] = useState(Priority.FAST)
-
     return (
       <LinearLayout
         orientation="horiz"
@@ -373,7 +398,9 @@ const SendTransactionInputModal = (prop: Props) => {
         >
           {walletTitle}
         </TextView>
+
         <AccountCard account={account} />
+
         <TouchableWithoutFeedback onPress={() => prop.navigation.goBack()}>
           <LinearLayout
             orientation="horiz"
@@ -389,6 +416,7 @@ const SendTransactionInputModal = (prop: Props) => {
             </TextView>
           </LinearLayout>
         </TouchableWithoutFeedback>
+
         <TextView
           mt="40px"
           alignSelf="center"
@@ -398,9 +426,13 @@ const SendTransactionInputModal = (prop: Props) => {
         >
           {Facade.t('modals.send.transactionInput.transactionDetails')}
         </TextView>
+
         <DestinationAddressField />
+
         <TokenField />
+
         <AmountField />
+
         <TextView
           mt="56px"
           mb="24px"
@@ -413,16 +445,11 @@ const SendTransactionInputModal = (prop: Props) => {
             'modals.send.transactionInput.prioritiseTransfer'
           ).toUpperCase()}
         </TextView>
+
         <PriorityTab />
+
         <LinearLayout mb="58px" px="24px" alignSelf="center" width="100%">
-          <ThemedButton
-            label={Facade.t('app.next')}
-            onPress={() =>
-              prop.navigation.navigate(
-                Facade.route.SendTransactionReviewModal.name
-              )
-            }
-          />
+          <ThemedButton label={Facade.t('app.next')} onPress={submit} />
         </LinearLayout>
       </LinearLayout>
     </SwiperPanel>
