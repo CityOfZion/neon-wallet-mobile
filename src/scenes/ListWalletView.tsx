@@ -1,7 +1,7 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useRef, useState} from 'react'
-import {TouchableWithoutFeedback, View} from 'react-native'
+import {Alert, TouchableWithoutFeedback, View} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
 
@@ -16,7 +16,12 @@ import {Wallet} from '~src/models/redux/Wallet'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {
+  ButtonView,
+  ImageView,
+  LinearLayout,
+  TextView,
+} from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
 interface WalletProps {
@@ -30,10 +35,12 @@ const ListWalletView = (props: WalletProps) => {
   const carouselRef = useRef(null)
   const [activeIndex, setActiveIndex] = useState(0)
   const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
+  const [userHasFunds, setUserHasFunds] = useState(false)
 
   const {wallets, accounts, exchange} = useSelector(
     (state: RootState) => state.app
   )
+
   const {currency, language, network} = useSelector(
     (state: RootState) => state.settings
   )
@@ -56,7 +63,20 @@ const ListWalletView = (props: WalletProps) => {
     if (wallet) {
       const tokenAssets = await wallet.generateTokenAssets(accounts)
       setTokenAssets(tokenAssets)
+      await userHasAmountWithoutValue(tokenAssets)
     }
+  }
+
+  const userHasAmountWithoutValue = async (tokenAssets: TokenAsset[]) => {
+    const assetsWithoutValue = tokenAssets.filter((tokenAsset: TokenAsset) => {
+      const value = (tokenAsset.exchange(currency, exchange) ?? 0)
+      const exists = Boolean(value === 0 && tokenAsset.amount > 0)
+      return exists
+    })
+
+    const userHasFunds = Boolean(assetsWithoutValue.length !== 0)
+    console.log(`Show message: ${userHasFunds}`)
+    setUserHasFunds(userHasFunds)
   }
 
   const selectEvent = async (wallet: Wallet) => {
@@ -85,6 +105,13 @@ const ListWalletView = (props: WalletProps) => {
       wallet,
     })
   }
+  const openWarning = () =>
+    Alert.alert(
+      'Incomplete price data',
+      "We haven't been able to retrieve price data for all your tokens so the total may not be accurate",
+      [{text: 'OK, I understand', onPress: () => console.log('OK Pressed')}],
+      {cancelable: false}
+    )
 
   const _renderWalletChange = () => {
     const wallet = getActiveWallet()
@@ -110,11 +137,16 @@ const ListWalletView = (props: WalletProps) => {
               )}
             </TextView>
 
-            <ImageView
-              mt="8px"
-              mx="4px"
-              source={require('~src/assets/images/info-primary.png')}
-            />
+            {userHasFunds && (
+              <ButtonView onPress={openWarning}>
+                <ImageView
+                  mt="8px"
+                  mx="4px"
+                  source={require('~src/assets/images/icon-warning-green.png')}
+                />
+              </ButtonView>
+            )}
+
             {/*TODO: fix percentage*/}
             {/*<TextView fontSize="36px" color="primary" fontFamily="semibold">*/}
             {/*  {calculateChangePercentage(wallet)}*/}
