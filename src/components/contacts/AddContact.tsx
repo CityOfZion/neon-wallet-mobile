@@ -112,6 +112,10 @@ export const AddContact = (props: AddContactProps) => {
             separatorColor={'background.3'}
             invalidMessageColor={'quinary'}
             sideMargins={0}
+            onScan={(scannedContent) => {
+              const scannedAddress = scannedContent as string
+              setAddress(scannedAddress)
+            }}
           />
         </LinearLayout>
       </AwaitActivity>
