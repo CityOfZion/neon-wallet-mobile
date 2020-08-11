@@ -257,7 +257,10 @@
     "listWallets": {
       "changeSinceLastVisit": "CHANGE SINCE LAST VISIT %{date}",
       "createFirstWallet": "Create first wallet",
-      "noBackup" : "No backup found. Backup your wallet to avoid fund loss."
+      "noBackup" : "No backup found. Backup your wallet to avoid fund loss.",
+      "incompleteBalanceWarningTitle" : "Incomplete price data",
+      "incompleteBalanceWarningText" : "We haven't been able to retrieve price data for all your tokens so the total may not be accurate",
+      "incompleteBalanceWarningButton" : "OK, I understand"
     },
     "getWallet": {
       "addNewAccount": "Add new account"

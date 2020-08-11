@@ -69,13 +69,12 @@ const ListWalletView = (props: WalletProps) => {
 
   const userHasAmountWithoutValue = async (tokenAssets: TokenAsset[]) => {
     const assetsWithoutValue = tokenAssets.filter((tokenAsset: TokenAsset) => {
-      const value = (tokenAsset.exchange(currency, exchange) ?? 0)
+      const value = tokenAsset.exchange(currency, exchange) ?? 0
       const exists = Boolean(value === 0 && tokenAsset.amount > 0)
       return exists
     })
 
     const userHasFunds = Boolean(assetsWithoutValue.length !== 0)
-    console.log(`Show message: ${userHasFunds}`)
     setUserHasFunds(userHasFunds)
   }
 
@@ -107,9 +106,9 @@ const ListWalletView = (props: WalletProps) => {
   }
   const openWarning = () =>
     Alert.alert(
-      'Incomplete price data',
-      "We haven't been able to retrieve price data for all your tokens so the total may not be accurate",
-      [{text: 'OK, I understand', onPress: () => console.log('OK Pressed')}],
+      Facade.t('screens.listWallets.incompleteBalanceWarningTitle'),
+      Facade.t('screens.listWallets.incompleteBalanceWarningText'),
+      [{text: Facade.t('screens.listWallets.incompleteBalanceWarningButton')}],
       {cancelable: false}
     )
 
