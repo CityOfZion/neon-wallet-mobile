@@ -1,8 +1,10 @@
 import {api, nep5} from '@cityofzion/neon-js'
 
 import {Storage} from '~src/app/Storage'
+import {NeoNode} from '~src/models/NeoNode'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
+import {Settings} from '~src/models/redux/Settings'
 
 export abstract class NeonHelper {
   /**
@@ -15,8 +17,10 @@ export abstract class NeonHelper {
     amount: number,
     fees?: number
   ) {
-    const settings = await Storage.settings.load()
+    const settings = (await Storage.settings.load()) ?? new Settings()
     const neoAccount = await account.getNeoAccount()
+    const url =
+      (await NeoNode.getHighestNodeUrl()) ?? settings.network.defaultNodeNet
     const intents = api.makeIntent({[asset]: amount}, receiverAddress)
 
     if (!neoAccount) {
@@ -24,13 +28,13 @@ export abstract class NeonHelper {
     }
 
     const apiProvider = new api.neoscan.instance(
-      settings?.network.networkDeprecatedLabel ?? ''
+      settings.network.networkDeprecatedLabel
     )
 
     const sendResponse = await api.sendAsset({
       account: neoAccount,
       api: apiProvider,
-      url: settings?.network.nodeNet,
+      url,
       intents,
       fees,
     })
@@ -44,15 +48,17 @@ export abstract class NeonHelper {
     token: TokenAsset,
     fees?: number
   ) {
-    const settings = await Storage.settings.load()
+    const settings = (await Storage.settings.load()) ?? new Settings()
     const neoAccount = await account.getNeoAccount()
+    const url =
+      (await NeoNode.getHighestNodeUrl()) ?? settings.network.defaultNodeNet
 
     if (!neoAccount) {
       throw new Error('Neo Account not found')
     }
 
     const apiProvider = new api.neoscan.instance(
-      settings?.network.networkDeprecatedLabel ?? ''
+      settings.network.networkDeprecatedLabel
     )
 
     const scBuilder = nep5.abi.transfer(
@@ -64,7 +70,7 @@ export abstract class NeonHelper {
 
     const invokeResponse = await api.doInvoke({
       api: apiProvider,
-      url: settings?.network.nodeNet,
+      url,
       account: neoAccount,
       script: scBuilder().str,
       fees,

@@ -5,6 +5,7 @@ import {map, mapValues} from 'lodash'
 import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
+import {NeoNode} from '~src/models/NeoNode'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {App} from '~src/models/redux/App'
@@ -14,6 +15,7 @@ import {Wallet} from '~src/models/redux/Wallet'
 import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
 import {ContactsDispatcher} from '~src/store/app/dispatchers/ContactsDispatcher'
 import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
+import {NodesDispatcher} from '~src/store/app/dispatchers/NodesDispatcher'
 import {PendingTransactionDispatcher} from '~src/store/app/dispatchers/PendingTransactionDispatcher'
 import {TokensDispatcher} from '~src/store/app/dispatchers/TokensDispatcher'
 import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
@@ -29,10 +31,11 @@ export class AppReducer extends ReducerWrapper<
 
   protected readonly dispatchers = [
     ExchangeDispatcher,
+    TokensDispatcher,
+    NodesDispatcher,
     WalletsDispatcher,
     AccountsDispatcher,
     ContactsDispatcher,
-    TokensDispatcher,
     PendingTransactionDispatcher,
   ]
 
@@ -99,6 +102,22 @@ export class AppReducer extends ReducerWrapper<
         dispatch(this.commit('SET_TOKENS', {tokens}))
 
         return tokens
+      }
+    },
+
+    syncNodes: (): AsyncAction<NeoNode[]> => {
+      return async (dispatch, getState) => {
+        let nodes: NeoNode[] = []
+
+        try {
+          nodes = await NeoNode.getAllNodes()
+        } catch {
+          // ignore
+        }
+
+        dispatch(this.commit('SET_NODES', {nodes}))
+
+        return nodes
       }
     },
 

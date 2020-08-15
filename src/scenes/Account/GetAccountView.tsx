@@ -35,9 +35,9 @@ interface GetAccountViewProps {
 
 const GetAccountView = (props: GetAccountViewProps) => {
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const nodesPool = useSelector((state: RootState) => state.app.nodes)
 
   const [account, setAccount] = useState<Account>(props.route.params.account)
-  const [nodes, setNodes] = useState<NeoNode[]>([])
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
   const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
 
@@ -53,16 +53,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
   )
 
   useEffect(() => {
-    populateAllNodes()
-  }, [])
-
-  useEffect(() => {
     Facade.await.run('populate', populateAssets)
   }, [currency, language, isAssetsTabSelected])
-
-  const populateAllNodes = async () => {
-    setNodes(await NeoNode.getAllNodes())
-  }
 
   const populateAssets = async () => {
     const tokenAssets = await account.generateTokenAssets()
@@ -72,15 +64,16 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const _renderTitle: React.FC = () => {
     return (
       <LinearLayout alignItems="center" justifyContent="center">
-        <AwaitActivity name={'getAllNodes'}>
-          <TextView color={'text.3'} textAlign={'center'} fontSize={10}>
-            {Facade.t('app.neoBlockHeight')}
-          </TextView>
+        <TextView color={'text.3'} textAlign={'center'} fontSize={10}>
+          {Facade.t('app.neoBlockHeight')}
+        </TextView>
 
-          <TextView color={'text.0'} textAlign={'center'}>
-            {nodes[0] && Facade.filter.decimal(nodes[0].height, language)}
-          </TextView>
-        </AwaitActivity>
+        <TextView color={'text.0'} textAlign={'center'}>
+          {Facade.filter.decimal(
+            NeoNode.getHighestNodeHeightFromPool(nodesPool),
+            language
+          )}
+        </TextView>
       </LinearLayout>
     )
   }

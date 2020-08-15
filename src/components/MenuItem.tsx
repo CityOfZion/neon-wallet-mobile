@@ -1,5 +1,5 @@
 import React from 'react'
-import {TouchableHighlight} from 'react-native'
+import {TouchableOpacity} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -52,7 +52,7 @@ const MenuItem = (props: MenuItemProps) => {
   }
 
   return (
-    <TouchableHighlight underlayColor="transparent" onPress={props.onPress}>
+    <TouchableOpacity onPress={props.onPress}>
       <LinearLayout orientation="verti" width="100%">
         <LinearLayout
           alignItems="center"
@@ -104,7 +104,7 @@ const MenuItem = (props: MenuItemProps) => {
         </LinearLayout>
         <LinearLayout height={1} bg="background.10" alignSelf="stretch" />
       </LinearLayout>
-    </TouchableHighlight>
+    </TouchableOpacity>
   )
 }
 
