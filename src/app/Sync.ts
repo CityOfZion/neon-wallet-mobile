@@ -1,3 +1,4 @@
+import {NeoNode} from '~src/models/NeoNode'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {App} from '~src/models/redux/App'
@@ -21,6 +22,10 @@ export abstract class Sync {
     const exchange: Exchange = await dispatch(
       RootStore.app.actions.syncExchange()
     )
+    const tokens: TokenAsset[] = await dispatch(
+      RootStore.app.actions.syncTokens()
+    )
+    const nodes: NeoNode[] = await dispatch(RootStore.app.actions.syncNodes())
     const wallets: Wallet[] = await dispatch(
       RootStore.app.actions.syncWallets()
     )
@@ -29,9 +34,6 @@ export abstract class Sync {
     )
     const contacts: Contact[] = await dispatch(
       RootStore.app.actions.syncContacts()
-    )
-    const tokens: TokenAsset[] = await dispatch(
-      RootStore.app.actions.syncTokens()
     )
     const pendingTransactions: SenderTransaction[] = await dispatch(
       RootStore.app.actions.syncPendingTransactions()
@@ -44,10 +46,11 @@ export abstract class Sync {
     return {
       settings,
       exchange,
+      tokens,
+      nodes,
       wallets,
       accounts,
       contacts,
-      tokens,
       pendingTransactions,
     }
   }

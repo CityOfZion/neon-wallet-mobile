@@ -83,7 +83,6 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   const TabButton = (props: {button: TabButtonContent}) => {
     return (
       <StyledTouchable
-        underlayColor={'transparent'}
         height="100%"
         onPress={() => {
           controller.close()

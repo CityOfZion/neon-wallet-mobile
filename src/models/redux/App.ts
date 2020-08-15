@@ -1,5 +1,6 @@
 import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 
+import {NeoNode} from '~src/models/NeoNode'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
@@ -13,6 +14,12 @@ export class App implements AppState {
   exchange: Exchange = {}
 
   @HttpExpose()
+  tokens: TokenAsset[] = []
+
+  @HttpExpose()
+  nodes: NeoNode[] = []
+
+  @HttpExpose()
   wallets: Wallet[] = []
 
   @HttpExpose()
@@ -20,9 +27,6 @@ export class App implements AppState {
 
   @HttpExpose()
   contacts: Contact[] = []
-
-  @HttpExpose()
-  tokens: TokenAsset[] = []
 
   @HttpExpose()
   pendingTransactions: SenderTransaction[] = []

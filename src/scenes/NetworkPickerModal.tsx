@@ -18,12 +18,14 @@ interface Props {
 
 const NetworkPickerModal = (props: Props) => {
   const dispatch = useDispatch()
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const controller = useSwiperController(true)
   const {network} = useSelector((state: RootState) => state.settings)
 
   const changeNetwork = async (val: NetworkOptions) => {
     dispatch(RootStore.settings.actions.setNetwork(val))
     dispatch(RootStore.settings.actions.save())
+    await dispatchAsync(RootStore.app.actions.syncNodes())
   }
 
   const isSelected = (n: NetworkOptions) => n.name === network.name

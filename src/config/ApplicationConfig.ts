@@ -41,7 +41,7 @@ export class ApplicationConfig {
     return {
       name: 'Main',
       neoscanBaseUrl: 'https://api.neoscan.io/api/main_net/v1',
-      nodeNet: 'http://seed1.ngd.network:10332',
+      defaultNodeNet: 'http://seed1.ngd.network:10332', // fallback
       networkId: '1',
       networkLabel: '2.x MainNet',
       networkDeprecatedLabel: 'MainNet',
@@ -52,7 +52,7 @@ export class ApplicationConfig {
     return {
       name: 'Test',
       neoscanBaseUrl: 'https://neoscan-testnet.io/api/test_net/v1',
-      nodeNet: 'http://seed1.ngd.network:20332',
+      defaultNodeNet: 'http://seed1.ngd.network:20332', // fallback
       networkId: '2',
       networkLabel: '2.x TestNet',
       networkDeprecatedLabel: 'TestNet',

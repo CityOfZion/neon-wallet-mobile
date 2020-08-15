@@ -6,22 +6,25 @@ import {Exchange} from '~src/types/exchange'
 import {Contact} from '~src/models/redux/Contact'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
+import {NeoNode} from '~src/models/NeoNode'
 
 export declare global {
   type AppActionsType =
     | 'SET_EXCHANGE'
+    | 'SET_TOKENS'
+    | 'SET_NODES'
     | 'SET_WALLETS'
     | 'SET_ACCOUNTS'
     | 'SET_CONTACTS'
-    | 'SET_TOKENS'
     | 'SET_PENDING_TRANSACTIONS'
 
   interface AppState {
     exchange: Exchange
+    tokens: TokenAsset[]
+    nodes: NeoNode[]
     wallets: Wallet[]
     accounts: Account[]
     contacts: Contact[]
-    tokens: TokenAsset[]
     pendingTransactions: SenderTransaction[]
   }
 

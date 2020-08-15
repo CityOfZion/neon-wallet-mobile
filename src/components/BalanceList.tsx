@@ -61,18 +61,24 @@ const BalanceList = (props: Props) => {
           bg={props.item.color}
         />
         <TableData header={props.item.name} content={props.item.symbol} />
-        <TableData
-          header={Facade.t('components.balanceList.holdings')}
-          content={String(props.item.amount)}
-        />
-        <TableData
-          header={Facade.t('components.balanceList.value')}
-          content={Facade.filter.currency(
-            props.item.exchange(currency, exchange),
-            currency,
-            language
-          )}
-        />
+
+        <LinearLayout weight={1} ml={4}>
+          <TableData
+            header={Facade.t('components.balanceList.holdings')}
+            content={String(props.item.amount)}
+          />
+        </LinearLayout>
+
+        <LinearLayout weight={1} ml={4}>
+          <TableData
+            header={Facade.t('components.balanceList.value')}
+            content={Facade.filter.currency(
+              props.item.exchange(currency, exchange),
+              currency,
+              language
+            )}
+          />
+        </LinearLayout>
       </LinearLayout>
     )
   }
