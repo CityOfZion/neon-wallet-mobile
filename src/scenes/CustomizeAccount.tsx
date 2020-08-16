@@ -56,7 +56,6 @@ const CustomizeAccount = (props: Props) => {
   const [name, setName] = useState<string>('')
   const [color, setColor] = useState<string>(theme.colors.card[0])
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
-  const [loaded, setLoaded] = useState(false)
   const [saving, setSaving] = useState(false)
 
   const [account, setAccount] = useState(new Account())
@@ -65,17 +64,6 @@ const CustomizeAccount = (props: Props) => {
   account.accountType = props.route.params.legacy ? 'legacy' : 'watch'
   account.name = name
   account.backgroundColor = color
-
-  useEffect(() => {
-    if (!loaded) {
-      Facade.await.run('customizeAccount', load)
-    }
-  }, [loaded])
-
-  const load = async () => {
-    await account.populateBalanceTokens()
-    setLoaded(true)
-  }
 
   const contentMap: ContentCollection = {
     ImportKey: {

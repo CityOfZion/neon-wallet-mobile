@@ -8,6 +8,7 @@
  */
 
 import axios, {AxiosError} from 'axios'
+// @ts-ignore
 import qs from 'qs'
 
 /**

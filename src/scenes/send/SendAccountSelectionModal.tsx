@@ -1,6 +1,5 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import {cloneDeep} from 'lodash'
 import React, {useEffect, useState} from 'react'
 import {useSelector} from 'react-redux'
 
@@ -13,7 +12,6 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {NeoURI} from '~src/helpers/UriHelper'
-import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -36,22 +34,17 @@ const SendAccountSelectionModal = (props: Props) => {
   const [accounts, setAccounts] = useState<Account[]>([])
   const [selectedAccount, setSelectedAccount] = useState<Account>()
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
 
-  const userHasFunds = tokenAssets.find((asset) => asset.amount > 0) != null
+  const {wallet} = props.route.params
+
   useEffect(() => {
     Facade.await.run('populate', populate)
   }, [accountsPool])
 
   const populate = async () => {
-    const filteredAccounts = props.route.params.wallet.getAccounts(accountsPool)
-    setAccounts(filteredAccounts)
-    setSelectedAccount(cloneDeep(filteredAccounts[filteredAccounts.length - 1]))
-
-    const tokenAssets = await Account.generateTokenAssetsFromPool(
-      filteredAccounts
-    )
-    setTokenAssets(tokenAssets)
+    const accounts = wallet.getAccounts(accountsPool)
+    setAccounts(accounts)
+    setSelectedAccount(Facade.lodash.cloneDeep(accounts[accounts.length - 1]))
   }
 
   const _renderAccountCards = () => {
@@ -75,7 +68,7 @@ const SendAccountSelectionModal = (props: Props) => {
   const selectEvent = async () => {
     const size = accounts.length - 1
     const lastItem = accounts[size]
-    setSelectedAccount(cloneDeep(accounts[0]))
+    setSelectedAccount(Facade.lodash.cloneDeep(accounts[0]))
 
     accounts.pop()
     accounts.unshift(lastItem)
@@ -116,7 +109,7 @@ const SendAccountSelectionModal = (props: Props) => {
         <LinearLayout width={'100%'}>
           <BalanceList
             my="44px"
-            tokenAssets={tokenAssets}
+            tokenAssets={wallet.tokenAssets}
             fromAccountView={false}
           />
         </LinearLayout>
@@ -140,7 +133,7 @@ const SendAccountSelectionModal = (props: Props) => {
                 }
               )
             }
-            disabled={!userHasFunds}
+            disabled={!wallet.hasFunds}
           />
         </LinearLayout>
       </LinearLayout>

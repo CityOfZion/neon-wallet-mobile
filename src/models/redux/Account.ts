@@ -7,10 +7,8 @@ import {
 import {ImageLoadEventData} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
-import {Storage} from '~src/app/Storage'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
-import {Balance} from '~src/models/Balance'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Wallet} from '~src/models/redux/Wallet'
 import {AddressRequest} from '~src/models/request/AddressRequest'
@@ -48,12 +46,15 @@ export class Account implements AccountState {
   @HttpExpose()
   backgroundColor = '#00aaff'
 
-  @HttpExpose()
-  @ResponseSerialize(Balance)
-  balanceTokenAssets: Balance[] = []
+  @ResponseSerialize(TokenAsset)
+  tokenAssets: TokenAsset[] = []
 
   @HttpExpose()
   accountType: WalletType | null = null
+
+  get hasFunds() {
+    return Facade.lodash.sumBy(this.tokenAssets, (it) => it.amount ?? 0) > 0
+  }
 
   getWallet(pool: Wallet[]) {
     return pool.find((it) => it.id === this.idWallet)
@@ -73,20 +74,17 @@ export class Account implements AccountState {
   }
 
   getBalanceAmountByAsset(assetSymbol: string) {
-    const balance = this.balanceTokenAssets.find(
-      (it) => it.assetSymbol === assetSymbol
-    )
-    if (!balance) return null
+    const tokenAsset = this.tokenAssets.find((it) => it.symbol === assetSymbol)
+    if (!tokenAsset) return null
 
-    return balance.amount ?? 0
+    return tokenAsset.amount ?? 0
   }
 
   getBalanceAmount() {
     let amount = 0
 
-    for (const balance of this.balanceTokenAssets) {
-      const asset = balance.assetSymbol ?? ''
-      amount += this.getBalanceAmountByAsset(asset) ?? 0
+    for (const tokenAsset of this.tokenAssets) {
+      amount += this.getBalanceAmountByAsset(tokenAsset.symbol) ?? 0
     }
 
     return amount
@@ -109,10 +107,13 @@ export class Account implements AccountState {
   exchangeBalanceAmount(currency: Currency, exchange: Exchange) {
     let exchangedAmount = 0
 
-    for (const balance of this.balanceTokenAssets) {
-      const asset = balance.assetSymbol ?? ''
+    for (const tokenAsset of this.tokenAssets) {
       exchangedAmount +=
-        this.exchangeBalanceAmountByAsset(asset, currency, exchange) ?? 0
+        this.exchangeBalanceAmountByAsset(
+          tokenAsset.symbol,
+          currency,
+          exchange
+        ) ?? 0
     }
 
     return exchangedAmount
@@ -133,19 +134,13 @@ export class Account implements AccountState {
     return Facade.filter.currency(amount, currency, language)
   }
 
-  async populateBalanceTokens() {
+  async populateTokenAssets() {
     if (!this.address) return
 
     const request = new AddressRequest(this.address)
     const response = await request.getBalance()
 
-    this.balanceTokenAssets = response.balance
-  }
-
-  async generateTokenAssets() {
-    await this.populateBalanceTokens()
-
-    return this.balanceTokenAssets
+    this.tokenAssets = response.balance
       .map((it) => {
         const {asset, assetSymbol, assetHash} = it
 
@@ -161,48 +156,40 @@ export class Account implements AccountState {
       .filter((it) => it) as TokenAsset[]
   }
 
-  static async generateTokenAssetsFromPool(pool: Account[]) {
-    const promises = pool.map((it) => it.populateBalanceTokens())
-    await Promise.all(promises)
-
+  static generateTokenAssetsFromPool(pool: Account[]) {
     // Flat balances of all accounts
-    const balances = Facade.lodash.flatMap(pool, (it) => it.balanceTokenAssets)
+    const tokenAssets = Facade.lodash.flatMap(pool, (it) => it.tokenAssets)
 
     // Discover all assets in this wallet
-    const assets = Facade.lodash.uniq(
-      balances.map((it) => it.assetSymbol ?? '').filter((it) => it)
-    )
+    const assets = Facade.lodash.uniq(tokenAssets.map((it) => it.symbol))
 
-    const tokenAssets: TokenAsset[] = []
+    const groupedTokenAssets: TokenAsset[] = []
 
     for (const assetSymbol of assets) {
-      const filteredBalances = balances.filter(
-        (it) => it.assetSymbol === assetSymbol
+      const filteredTokenAssets = tokenAssets.filter(
+        (it) => it.symbol === assetSymbol
       )
 
-      const firstBalance = filteredBalances[0]
+      const firstOne = filteredTokenAssets[0]
+      if (!firstOne) continue
 
-      if (firstBalance) {
-        const {asset, assetSymbol, assetHash} = firstBalance
+      const {name, symbol, hash} = firstOne
 
-        if (asset && assetSymbol && assetHash) {
-          const tokenAsset = new TokenAsset(asset, assetSymbol, assetHash)
+      const tokenAsset = new TokenAsset(name, symbol, hash)
 
-          tokenAsset.holding = Facade.lodash.sumBy(
-            filteredBalances,
-            (it) => it.unspent.length
-          )
+      tokenAsset.holding = Facade.lodash.sumBy(
+        filteredTokenAssets,
+        (it) => it.holding
+      )
 
-          tokenAsset.amount = Facade.lodash.sumBy(
-            filteredBalances,
-            (it) => it.amount ?? 0
-          )
+      tokenAsset.amount = Facade.lodash.sumBy(
+        filteredTokenAssets,
+        (it) => it.amount
+      )
 
-          tokenAssets.push(tokenAsset)
-        }
-      }
+      groupedTokenAssets.push(tokenAsset)
     }
 
-    return tokenAssets
+    return groupedTokenAssets
   }
 }

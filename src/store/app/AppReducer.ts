@@ -1,6 +1,7 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {Request} from '@simpli/serialized-request'
 import {map, mapValues} from 'lodash'
+import {get} from 'styled-system'
 
 import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
@@ -157,17 +158,28 @@ export class AppReducer extends ReducerWrapper<
     syncAccounts: (): AsyncAction<Account[]> => {
       return async (dispatch, getState) => {
         const accounts = await Storage.accounts.load()
-        if (accounts) {
-          const wallets = await Storage.wallets.load()
-          if (wallets) {
-            accounts.forEach((it) => {
-              it.accountType = it.getWallet(wallets)?.walletType ?? null
-            })
-          }
+        const wallets = await Storage.wallets.load()
+
+        if (accounts && wallets) {
+          accounts.forEach((it) => {
+            it.accountType = it.getWallet(wallets)?.walletType ?? null
+          })
+
           dispatch(this.commit('SET_ACCOUNTS', {accounts}))
         }
 
         return accounts ?? []
+      }
+    },
+
+    syncTokenAssets: (): AsyncAction => {
+      return async (dispatch, getState) => {
+        const {accounts, wallets} = getState().app
+
+        const promises = accounts.map((it) => it.populateTokenAssets())
+        await Promise.all(promises)
+
+        wallets.map((it) => it.populateTokenAssets(accounts))
       }
     },
 

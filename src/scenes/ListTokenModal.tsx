@@ -38,6 +38,8 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
   const {tokens} = useSelector((state: RootState) => state.app)
 
   const [tokenList, setTokenList] = useState<TokenAsset[]>([])
+
+  const {account} = props.route.params
   const filterBy = props.route.params.filterBy ?? 'receive'
 
   useEffect(() => {
@@ -45,27 +47,25 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
   }, [filterBy])
 
   const populate = async () => {
-    const tokensFromAccount = await props.route.params.account?.generateTokenAssets()
-
     if (filterBy === 'send') {
-      setTokenList(tokensFromAccount ?? tokens)
+      setTokenList(account?.tokenAssets ?? tokens)
+    } else if (account?.tokenAssets) {
+      const newTokenList: TokenAsset[] = []
+
+      tokens.forEach((token) => {
+        const tokenFromAccount = account.tokenAssets.find(
+          (it) => it.hash === token.hash
+        )
+        if (tokenFromAccount) {
+          newTokenList.push(tokenFromAccount)
+        } else {
+          newTokenList.push(token)
+        }
+      })
+
+      setTokenList(newTokenList)
     } else {
-      if (tokensFromAccount) {
-        const newTokenList: TokenAsset[] = []
-        tokens.forEach((token) => {
-          const tokenFromAccount = tokensFromAccount.find(
-            (it) => it.hash === token.hash
-          )
-          if (tokenFromAccount) {
-            newTokenList.push(tokenFromAccount)
-          } else {
-            newTokenList.push(token)
-          }
-        })
-        setTokenList(newTokenList)
-      } else {
-        setTokenList(tokens)
-      }
+      setTokenList(tokens)
     }
   }
 

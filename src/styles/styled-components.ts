@@ -11,15 +11,9 @@ import {
   typography,
 } from 'styled-system'
 
-import {Facade} from '~src/app/Facade'
 import {orientation, weight} from '~src/styles/styled-system.config'
-import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
-const {
-  default: styled,
-} = styledComponents as styledComponents.ReactNativeThemedStyledComponentsModule<
-  ApplicationTheme
->
+const styled = styledComponents.default
 
 // TODO: iOS has a natural margin at the bottom of the text view, so we need to think of a solution to make both OS the same
 export const TextView = styled.Text<TextViewProps>`

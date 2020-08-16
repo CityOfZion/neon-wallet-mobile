@@ -14,11 +14,9 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {mockAccountAssetDetails} from '~src/mocks/mockAccountAssetDetails'
 import {NeoNode} from '~src/models/NeoNode'
-import {TokenAsset} from '~src/models/TokenAsset'
 import {TransactionModel} from '~src/models/TransactionModel'
 import {Account} from '~src/models/redux/Account'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -27,9 +25,7 @@ export interface GetAccountParams {
 }
 
 interface GetAccountViewProps {
-  navigation: StackNavigationProp<
-    WalletStackParamList & RootStackParamList & ModalStackParamList
-  >
+  navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>
   route: RouteProp<WalletStackParamList, 'GetAccount'>
 }
 
@@ -39,9 +35,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   const [account, setAccount] = useState<Account>(props.route.params.account)
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
-  const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
 
-  const {currency, language} = useSelector((state: RootState) => state.settings)
+  const {language} = useSelector((state: RootState) => state.settings)
 
   useFocusEffect(
     useCallback(() => {
@@ -51,15 +46,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
       )
     }, [accountsPool])
   )
-
-  useEffect(() => {
-    Facade.await.run('populate', populateAssets)
-  }, [currency, language, isAssetsTabSelected])
-
-  const populateAssets = async () => {
-    const tokenAssets = await account.generateTokenAssets()
-    setTokenAssets(tokenAssets)
-  }
 
   const _renderTitle: React.FC = () => {
     return (
@@ -139,7 +125,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           {isAssetsTabSelected ? (
             <BalanceList
               my="16px"
-              tokenAssets={tokenAssets}
+              tokenAssets={account.tokenAssets}
               account={account}
               fromAccountView={true}
             />
