@@ -131,7 +131,10 @@ export default function SwiperPanel(props: SwiperProps) {
           ) {
             controller.close()
           } else {
-            Animated.spring(pan.current, {toValue: {x: 0, y: 0}}).start()
+            Animated.spring(pan.current, {
+              toValue: {x: 0, y: 0},
+              useNativeDriver: true,
+            }).start()
           }
         },
       }),
@@ -160,10 +163,12 @@ export default function SwiperPanel(props: SwiperProps) {
         restSpeedThreshold: 100,
         restDisplacementThreshold: 40,
         friction: 100,
+        useNativeDriver: true,
       }),
       Animated.timing(bgOpacity.current, {
         toValue: 1,
         duration: 500,
+        useNativeDriver: true,
       }),
     ]).start(() => pan.current.flattenOffset())
 
@@ -180,10 +185,12 @@ export default function SwiperPanel(props: SwiperProps) {
         restSpeedThreshold: 150,
         restDisplacementThreshold: 100,
         friction: 100,
+        useNativeDriver: true,
       }),
       Animated.timing(bgOpacity.current, {
         toValue: 0,
         duration: 200,
+        useNativeDriver: true,
       }),
     ]).start(() => {
       props.onClose && props.onClose()

@@ -50,11 +50,13 @@ const QRCodeScan = (props: Props) => {
         Animated.timing(popupVisibility.current, {
           toValue: 1,
           duration: 200,
+          useNativeDriver: true,
         }),
         Animated.timing(popupVisibility.current, {
           toValue: 0,
           duration: 200,
           delay: 3000,
+          useNativeDriver: true,
         }),
       ]).start(() => setMessage(undefined))
     }

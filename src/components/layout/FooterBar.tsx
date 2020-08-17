@@ -111,11 +111,13 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
         toValue: controller.isShowing ? 1 : 0,
         duration: 300,
         easing: Easing.quad,
+        useNativeDriver: false,
       }),
       Animated.timing(quickToolSpin.current, {
         toValue: controller.isShowing ? 1 : 0,
         duration: 300,
         easing: Easing.quad,
+        useNativeDriver: true,
       }),
     ]).start()
   }
