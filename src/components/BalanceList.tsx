@@ -31,8 +31,9 @@ const BalanceList = (props: Props) => {
           color="text.2"
           fontSize="lg"
           allowFontScaling={true}
-          adjustsFontSizeToFit={true}
           numberOfLines={1}
+          ellipsizeMode="tail"
+          mr={4}
         >
           {props.header}
         </TextView>
