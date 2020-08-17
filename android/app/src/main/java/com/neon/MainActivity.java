@@ -1,4 +1,4 @@
-package com.neonwalletmobile;
+package com.neon;
 
 import android.os.Bundle;
 
