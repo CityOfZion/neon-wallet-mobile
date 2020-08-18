@@ -14,8 +14,7 @@
     "ios": {
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app uses face ID to authenticate the user when dealing with sensitive transactions."
-      },
-      "bundleIdentifier": "io.cityofzion.neon"
+      }
     },
     "splash": {
       "image": "src/assets/splash.png",
@@ -26,7 +25,6 @@
     "primaryColor": "#4cffb3",
     "assetBundlePatterns": [
       "**/*"
-    ],
-    "entryPoint": "node_modules/expo/AppEntry.js"
+    ]
   }
 }
