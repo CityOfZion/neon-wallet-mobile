@@ -28,6 +28,15 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   const [inputValue, setInputValue] = useState(
     props.route.params?.address ?? ''
   )
+  const [errorMessage, setErrorMessage] = useState(
+      Facade.t('components.inputTextWithValidation.incorrectFormat')
+  )
+  const [canAddAccount, setCanAddAccount] = useState(
+      false
+  )
+  const accounts = useSelector(
+      (state: RootState) => state.app.accounts
+  )
 
   useEffect(() => {
     setInputValue(props.route.params?.address ?? '')
@@ -48,6 +57,20 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
     const conditions: boolean[] = [wallet.isAddress(inputValue)]
 
     return conditions.every((it) => it)
+  }
+
+  function validateInput() {
+    let isInputValid = wallet.isAddress(inputValue)
+    if (!isInputValid) {
+      setErrorMessage(Facade.t('components.inputTextWithValidation.incorrectFormat'))
+    }
+    else if (accounts.find((account => account.address === inputValue))) {
+      // don't allow to include if the account was already added
+      isInputValid = false
+      setErrorMessage(Facade.t('importReadAccount.accountAlreadyExists'))
+    }
+    setCanAddAccount(isInputValid)
+    return isInputValid
   }
 
   return (
@@ -138,13 +161,14 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
           color={theme.colors.text[0]}
           invalidColor={theme.colors.background[3]}
           value={inputValue}
-          validator={() => wallet.isAddress(inputValue) || !inputValue}
+          validator={() => validateInput() || !inputValue}
           separatorColor={theme.colors.background[5]}
           invalidSeparatorColor={theme.colors.quinary}
           invalidMessageColor={theme.colors.quinary}
+          invalidMessage={errorMessage}
         />
 
-        {wallet.isAddress(inputValue) && (
+        {canAddAccount && (
           <LinearLayout mt={20} width="90%" alignSelf="center">
             <ThemedButton
               label={Facade.t('importReadAccount.add')}
