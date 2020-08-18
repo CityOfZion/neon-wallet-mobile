@@ -118,7 +118,6 @@ const ReceiveAccountSelectionModal = (props: Props) => {
         <LinearLayout
           position="absolute"
           bottom={0}
-          px="24px"
           alignSelf="center"
           width="100%"
         >
