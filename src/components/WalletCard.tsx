@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, {Fragment, useState} from 'react'
+import React, {Fragment, useEffect, useState} from 'react'
 import {LayoutChangeEvent} from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -22,29 +22,29 @@ interface Props {
 }
 
 const WalletCard: React.FC<Props> = (props) => {
-  const [viewHeight, setViewHeight] = useState<number>(0)
   const {accounts, exchange} = useSelector((state: RootState) => state.app)
   const {currency} = useSelector((state: RootState) => state.settings)
 
-  const walletAccounts = props.wallet.getAccounts(accounts)
+  const [viewHeight, setViewHeight] = useState<number>(0)
+  const [walletAccounts, setWalletAccounts] = useState<Account[]>([])
+
+  useEffect(() => {
+    setWalletAccounts(props.wallet.getAccounts(accounts))
+  }, [accounts])
 
   const layoutEvent = (event: LayoutChangeEvent) => {
     const {height} = event.nativeEvent.layout
     setViewHeight(height)
   }
 
-  const getWalletAccounts = () => {
-    return props.wallet.getAccounts(accounts)
-  }
-
   const getTotalAmount = () => {
-    return Facade.lodash.sumBy(getWalletAccounts(), (it) =>
+    return Facade.lodash.sumBy(walletAccounts, (it) =>
       it.exchangeBalanceAmount(currency, exchange)
     )
   }
 
   const _renderAssetsBarFills = () => {
-    return getWalletAccounts().map((account, i) => {
+    return walletAccounts.map((account, i) => {
       const amount = account.exchangeBalanceAmount(currency, exchange)
       const percentageOfTotal = (amount / getTotalAmount()) * 100
 
@@ -170,7 +170,7 @@ const WalletCard: React.FC<Props> = (props) => {
             transform: [{rotate: '90deg'}],
           }}
         >
-          <AccountCard hideQRCode={true} account={account} />
+          <AccountCard hideQRCode={true} hideBalance={true} account={account} />
         </RelativeLayout>
       </LinearLayout>
     )

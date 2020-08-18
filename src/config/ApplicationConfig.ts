@@ -11,6 +11,7 @@ import {NetworkOptions} from '~src/types/settings'
  */
 export class ApplicationConfig {
   readonly defaultTheme = Theme.DARK
+  readonly defaultDataRefreshTimeInMilliseconds = 18000
 
   readonly headerHeight = Platform.OS === 'ios' ? 40 : 72
   readonly footerHeight = 66

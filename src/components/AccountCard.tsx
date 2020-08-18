@@ -43,6 +43,7 @@ interface Props {
   isStackMode?: boolean
   orientBy?: 'height' | 'width'
   hideQRCode?: boolean
+  hideBalance?: boolean
 }
 
 const AccountCard: React.FC<Props> = (props) => {
@@ -164,7 +165,7 @@ const AccountCard: React.FC<Props> = (props) => {
                 fontWeight="bold"
                 includeFontPadding={true}
               >
-                {Facade.t('paymentCard.balance')}
+                {(!props.hideBalance && Facade.t('paymentCard.balance')) || ''}
               </TextView>
 
               <TextView
@@ -174,12 +175,17 @@ const AccountCard: React.FC<Props> = (props) => {
                 color="white"
                 textAlign="center"
                 fontWeight="bold"
+                allowFontScaling={true}
+                adjustsFontSizeToFit={true}
+                numberOfLines={1}
               >
-                {props.account.formattedBalanceAmount(
-                  currency,
-                  language,
-                  exchange
-                )}
+                {!props.hideBalance
+                  ? props.account.formattedBalanceAmount(
+                      currency,
+                      language,
+                      exchange
+                    )
+                  : ''}
               </TextView>
             </LinearLayout>
           ) : (
@@ -214,7 +220,7 @@ const AccountCard: React.FC<Props> = (props) => {
             fontWeight="bold"
             mt={20 * unit}
           >
-            {Facade.t('paymentCard.balance')}
+            {(!props.hideBalance && Facade.t('paymentCard.balance')) || ''}
           </TextView>
         )}
 
@@ -232,12 +238,17 @@ const AccountCard: React.FC<Props> = (props) => {
                 color="white"
                 textAlign="center"
                 fontWeight="bold"
+                allowFontScaling={true}
+                adjustsFontSizeToFit={true}
+                numberOfLines={1}
               >
-                {props.account.formattedBalanceAmount(
-                  currency,
-                  language,
-                  exchange
-                )}
+                {!props.hideBalance
+                  ? props.account.formattedBalanceAmount(
+                      currency,
+                      language,
+                      exchange
+                    )
+                  : ''}
               </TextView>
             )}
           </LinearLayout>
@@ -302,6 +313,7 @@ AccountCard.propTypes = {
   isCompacted: PropTypes.bool.isRequired,
   isStackMode: PropTypes.bool.isRequired,
   hideQRCode: PropTypes.bool,
+  hideBalance: PropTypes.bool,
   orientBy: PropTypes.oneOf(['height', 'width']),
 }
 

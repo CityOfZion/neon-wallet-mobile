@@ -34,21 +34,17 @@ const ReceiveAccountSelectionModal = (props: Props) => {
   const [accounts, setAccounts] = useState<Account[]>([])
   const [selectedAccount, setSelectedAccount] = useState<Account>()
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
+
+  const {wallet} = props.route.params
 
   useEffect(() => {
     Facade.await.run('populate', populate)
   }, [accountsPool])
 
   const populate = async () => {
-    const filteredAccounts = props.route.params.wallet.getAccounts(accountsPool)
-    setAccounts(filteredAccounts)
-    setSelectedAccount(cloneDeep(filteredAccounts[filteredAccounts.length - 1]))
-
-    const tokenAssets = await Account.generateTokenAssetsFromPool(
-      filteredAccounts
-    )
-    setTokenAssets(tokenAssets)
+    const accounts = wallet.getAccounts(accountsPool)
+    setAccounts(accounts)
+    setSelectedAccount(Facade.utils.clone(accounts[accounts.length - 1]))
   }
 
   const _renderAccountCards = () => {
@@ -111,7 +107,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
 
         <BalanceList
           my="44px"
-          tokenAssets={tokenAssets}
+          tokenAssets={wallet.tokenAssets}
           fromAccountView={false}
         />
 

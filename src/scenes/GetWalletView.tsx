@@ -52,10 +52,6 @@ const GetWalletView = (props: GetWalletProps) => {
     await dispatch(RootStore.app.actions.saveWallets())
 
     const accounts = wallet.getAccounts(accountsPool)
-
-    const promises = accounts.map((it) => it.populateBalanceTokens())
-    await Promise.all(promises)
-
     setAccounts(accounts)
   }
 

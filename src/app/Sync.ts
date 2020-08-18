@@ -39,9 +39,7 @@ export abstract class Sync {
       RootStore.app.actions.syncPendingTransactions()
     )
 
-    // Synchronize balance from WS
-    const promises = accounts.map((it) => it.populateBalanceTokens())
-    await Promise.all(promises)
+    await dispatch(RootStore.app.actions.syncTokenAssets())
 
     return {
       settings,
@@ -53,5 +51,16 @@ export abstract class Sync {
       contacts,
       pendingTransactions,
     }
+  }
+
+  static async refresh(dispatch: AsyncDispatch<any>) {
+    const promises = [
+      dispatch(RootStore.app.actions.syncExchange()),
+      dispatch(RootStore.app.actions.syncTokens()),
+      dispatch(RootStore.app.actions.syncNodes()),
+      dispatch(RootStore.app.actions.syncTokenAssets()),
+    ]
+
+    await Promise.all(promises)
   }
 }

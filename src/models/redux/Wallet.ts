@@ -1,4 +1,8 @@
-import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
+import {
+  HttpExclude,
+  HttpExpose,
+  ResponseSerialize,
+} from '@simpli/serialized-request'
 import moment from 'moment'
 
 import {Facade} from '~src/app/Facade'
@@ -25,12 +29,20 @@ export class Wallet implements WalletState {
   @HttpExpose()
   lastBackup: string | null = null
 
+  // Balance of tokens
+  @ResponseSerialize(TokenAsset)
+  tokenAssets: TokenAsset[] = []
+
   @HttpExpose()
-  walletType: 'standard' | 'watch' | 'legacy' | null = null
+  walletType: WalletType | null = null
 
   // Do not expose security phrase
   @HttpExclude()
   securityPhrase: string | null = null
+
+  get hasFunds() {
+    return Facade.lodash.sumBy(this.tokenAssets, (it) => it.amount ?? 0) > 0
+  }
 
   get formattedLastVisitedAt() {
     if (!moment(this.lastVisitedAt).isValid()) return null
@@ -67,29 +79,24 @@ export class Wallet implements WalletState {
     return Facade.asteroid.generateNeoAccount(mnemonic, index)
   }
 
-  async generateTokenAssets(pool: Account[]) {
+  populateTokenAssets(pool: Account[]) {
     const walletAccounts = this.getAccounts(pool)
-    return Account.generateTokenAssetsFromPool(walletAccounts)
+    this.tokenAssets = Account.generateTokenAssetsFromPool(walletAccounts)
   }
 
-  calculateBalance(
-    tokenAssets: TokenAsset[],
-    currency: Currency,
-    exchange: Exchange
-  ) {
+  calculateBalance(currency: Currency, exchange: Exchange) {
     return Facade.lodash.sumBy(
-      tokenAssets,
+      this.tokenAssets,
       (it) => it.exchange(currency, exchange) ?? 0
     )
   }
 
   calculateBalanceFormatted(
-    tokenAssets: TokenAsset[],
     currency: Currency,
     language: Lang,
     exchange: Exchange
   ) {
-    const balance = this.calculateBalance(tokenAssets, currency, exchange)
+    const balance = this.calculateBalance(currency, exchange)
     return Facade.filter.currency(balance, currency, language)
   }
 }

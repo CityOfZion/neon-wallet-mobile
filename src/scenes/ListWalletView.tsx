@@ -1,3 +1,4 @@
+import {CommonActions} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useRef, useState} from 'react'
@@ -9,8 +10,10 @@ import {Facade} from '~src/app/Facade'
 import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
+import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
+import {NeoNode} from '~src/models/NeoNode'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Wallet} from '~src/models/redux/Wallet'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
@@ -25,29 +28,27 @@ import {
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
 interface WalletProps {
-  navigation: StackNavigationProp<
-    WalletStackParamList & MoreStackParamList & TabStackParamList
-  >
+  navigation: StackNavigationProp<WalletStackParamList & MoreStackParamList>
   theme: ApplicationTheme
 }
 
 const ListWalletView = (props: WalletProps) => {
   const carouselRef = useRef(null)
   const [activeIndex, setActiveIndex] = useState(0)
-  const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
-  const [userHasFunds, setUserHasFunds] = useState(false)
 
   const {wallets, accounts, exchange} = useSelector(
     (state: RootState) => state.app
   )
 
-  const {currency, language, network} = useSelector(
-    (state: RootState) => state.settings
-  )
+  const {currency, language} = useSelector((state: RootState) => state.settings)
 
-  useEffect(() => {
-    Facade.await.run('populate', populate)
-  }, [activeIndex, currency, language, network])
+  const _renderTitle: React.FC = () => {
+    return <AwaitActivity name={'refreshData'} />
+  }
+
+  props.navigation.setOptions({
+    headerTitle: _renderTitle,
+  })
 
   const getActiveWallet = (): Wallet | null => {
     return wallets[activeIndex] ?? null
@@ -55,27 +56,6 @@ const ListWalletView = (props: WalletProps) => {
 
   const isListNotEmpty = () => {
     return Boolean(wallets.length)
-  }
-
-  const populate = async () => {
-    const wallet = getActiveWallet()
-
-    if (wallet) {
-      const tokenAssets = await wallet.generateTokenAssets(accounts)
-      setTokenAssets(tokenAssets)
-      await userHasAmountWithoutValue(tokenAssets)
-    }
-  }
-
-  const userHasAmountWithoutValue = async (tokenAssets: TokenAsset[]) => {
-    const assetsWithoutValue = tokenAssets.filter((tokenAsset: TokenAsset) => {
-      const value = tokenAsset.exchange(currency, exchange) ?? 0
-      const exists = Boolean(value === 0 && tokenAsset.amount > 0)
-      return exists
-    })
-
-    const userHasFunds = Boolean(assetsWithoutValue.length !== 0)
-    setUserHasFunds(userHasFunds)
   }
 
   const selectEvent = async (wallet: Wallet) => {
@@ -128,15 +108,10 @@ const ListWalletView = (props: WalletProps) => {
 
           <LinearLayout orientation="horiz" minHeight={56}>
             <TextView fontSize="36px" color="text.0" fontFamily="medium">
-              {wallet.calculateBalanceFormatted(
-                tokenAssets,
-                currency,
-                language,
-                exchange
-              )}
+              {wallet.calculateBalanceFormatted(currency, language, exchange)}
             </TextView>
 
-            {userHasFunds && (
+            {wallet.hasFunds && (
               <ButtonView onPress={openWarning}>
                 <ImageView
                   mt="8px"
@@ -226,8 +201,11 @@ const ListWalletView = (props: WalletProps) => {
           <LinearLayout alignItems={'center'} mx={3}>
             <TouchableWithoutFeedback
               onPress={() =>
-                props.navigation.navigate(Facade.route.More.name, {
-                  screen: Facade.route.Step1CreateWallet.name,
+                CommonActions.navigate(Facade.route.Tab.name, {
+                  screen: Facade.route.More.name,
+                  params: {
+                    screen: Facade.route.Step1CreateWallet.name,
+                  },
                 })
               }
             >
@@ -281,7 +259,7 @@ const ListWalletView = (props: WalletProps) => {
             {isListNotEmpty() && (
               <BalanceList
                 mb={6}
-                tokenAssets={tokenAssets}
+                tokenAssets={wallet?.tokenAssets ?? []}
                 fromAccountView={false}
               />
             )}

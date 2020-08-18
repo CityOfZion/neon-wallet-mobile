@@ -112,9 +112,11 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
             }
           }
 
-          receiver?.assets?.push(asset)
-          transaction?.receiver?.push(receiver)
-          transactionGroup?.transactions?.push(transaction)
+          if (receiver?.assets) receiver.assets.push(asset)
+          if (transaction?.receiver) transaction.receiver.push(receiver)
+          if (transactionGroup?.transactions) {
+            transactionGroup.transactions.push(transaction)
+          }
         })
 
         transActionModelListAux.push(transactionGroup)

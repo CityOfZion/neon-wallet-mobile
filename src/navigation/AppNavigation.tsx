@@ -96,6 +96,12 @@ const AppNavigation = (props: Props) => {
 
   useEffect(() => {
     Facade.await.run('application', startApplication, 1000)
+
+    const interval = setInterval(() => {
+      Facade.await.run('refreshData', () => Sync.refresh(dispatchAsync))
+    }, Facade.app.defaultDataRefreshTimeInMilliseconds)
+
+    return () => clearInterval(interval)
   }, [])
 
   return (

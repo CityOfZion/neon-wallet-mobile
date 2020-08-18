@@ -5,6 +5,7 @@ import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
+import {ModalParams} from '~src/navigation/ModalStackNavigation'
 import AccountAssetDetail, {
   AccountAssetDetailParams,
 } from '~src/scenes/Account/AccountAssetDetail'
@@ -19,7 +20,7 @@ export type WalletStackParamList = {
   GetWallet: GetWalletParams
   GetAccount: GetAccountParams
   AccountAssetDetail: AccountAssetDetailParams
-  Modal: {screen: RouteName}
+  Modal: ModalParams
 }
 
 export type WalletStackParams =

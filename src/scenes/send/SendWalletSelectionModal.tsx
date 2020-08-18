@@ -11,7 +11,6 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import WalletCard from '~src/components/WalletCard'
 import {NeoURI} from '~src/helpers/UriHelper'
-import {TokenAsset} from '~src/models/TokenAsset'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
@@ -30,28 +29,17 @@ const SendWalletSelectionModal = (props: Props) => {
   const controller = useSwiperController(true)
   const carouselRef = useRef(null)
   const [activeIndex, setActiveIndex] = useState(0)
-  const {wallets, accounts, exchange} = useSelector(
-    (state: RootState) => state.app
-  )
+  const {wallets, exchange} = useSelector((state: RootState) => state.app)
   const usableWallets = wallets.filter(
     (value: Wallet) => value.walletType !== 'watch'
   )
   const {currency, language} = useSelector((state: RootState) => state.settings)
-  const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
 
   const dispatch = useDispatch<SyncDispatch>()
 
   useEffect(() => {
-    Facade.await.run('populate', populate)
-  }, [currency, language, activeIndex])
-
-  const populate = async () => {
     dispatch(RootStore.senderTransaction.actions.clearState())
-    const tokenAssets = await usableWallets[activeIndex]?.generateTokenAssets(
-      accounts
-    )
-    setTokenAssets(tokenAssets)
-  }
+  }, [])
 
   return (
     <SwiperPanel
@@ -123,7 +111,6 @@ const SendWalletSelectionModal = (props: Props) => {
         fontFamily="medium"
       >
         {usableWallets[activeIndex]?.calculateBalanceFormatted(
-          tokenAssets,
           currency,
           language,
           exchange
