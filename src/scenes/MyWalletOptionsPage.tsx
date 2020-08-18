@@ -34,7 +34,7 @@ const MyWalletOptionsPage = (props: Props) => {
         arrowDirection={RightIconType.ARROW_RIGHT}
       />
 
-      {!(wallet.walletType === 'legacy' || wallet.walletType === 'watch') && (
+      {wallet.walletType === 'standard' && (
         <MenuItem
           title={Facade.t('myWalletOptions.backupWallet')}
           icon={require('~src/assets/images/icon-screen-lock-green.png')}
