@@ -29,14 +29,10 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
     props.route.params?.address ?? ''
   )
   const [errorMessage, setErrorMessage] = useState(
-      Facade.t('components.inputTextWithValidation.incorrectFormat')
+    Facade.t('components.inputTextWithValidation.incorrectFormat')
   )
-  const [canAddAccount, setCanAddAccount] = useState(
-      false
-  )
-  const accounts = useSelector(
-      (state: RootState) => state.app.accounts
-  )
+  const [canAddAccount, setCanAddAccount] = useState(false)
+  const accounts = useSelector((state: RootState) => state.app.accounts)
 
   useEffect(() => {
     setInputValue(props.route.params?.address ?? '')
@@ -62,9 +58,10 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   function validateInput() {
     let isInputValid = wallet.isAddress(inputValue)
     if (!isInputValid) {
-      setErrorMessage(Facade.t('components.inputTextWithValidation.incorrectFormat'))
-    }
-    else if (accounts.find((account => account.address === inputValue))) {
+      setErrorMessage(
+        Facade.t('components.inputTextWithValidation.incorrectFormat')
+      )
+    } else if (accounts.find((account) => account.address === inputValue)) {
       // don't allow to include if the account was already added
       isInputValid = false
       setErrorMessage(Facade.t('importReadAccount.accountAlreadyExists'))
