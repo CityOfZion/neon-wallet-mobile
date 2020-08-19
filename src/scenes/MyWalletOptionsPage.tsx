@@ -34,18 +34,20 @@ const MyWalletOptionsPage = (props: Props) => {
         arrowDirection={RightIconType.ARROW_RIGHT}
       />
 
-      <MenuItem
-        title={Facade.t('myWalletOptions.backupWallet')}
-        icon={require('~src/assets/images/icon-screen-lock-green.png')}
-        iconMarginLeft={2}
-        iconMarginRight={5}
-        arrowDirection={RightIconType.ARROW_RIGHT}
-        onPress={() =>
-          props.navigation.navigate(Facade.route.Step1BackupWallet.name, {
-            wallet,
-          })
-        }
-      />
+      {wallet.walletType === 'standard' && (
+        <MenuItem
+          title={Facade.t('myWalletOptions.backupWallet')}
+          icon={require('~src/assets/images/icon-screen-lock-green.png')}
+          iconMarginLeft={2}
+          iconMarginRight={5}
+          arrowDirection={RightIconType.ARROW_RIGHT}
+          onPress={() =>
+            props.navigation.navigate(Facade.route.Step1BackupWallet.name, {
+              wallet,
+            })
+          }
+        />
+      )}
     </ScreenLayout>
   )
 }
