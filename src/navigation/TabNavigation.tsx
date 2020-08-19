@@ -68,7 +68,7 @@ const TabNavigation = (props: Props) => {
         barStyle={theme.statusBarStyle}
         backgroundColor="transparent"
       />
-      <Tab.Navigator lazy={false} tabBar={(props) => <FooterBar {...props} />}>
+      <Tab.Navigator tabBar={(props) => <FooterBar {...props} />}>
         <Tab.Screen
           name={Facade.route.ListWallets.name}
           component={WalletStackNavigation}
