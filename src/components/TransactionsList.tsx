@@ -46,15 +46,11 @@ const TransactionsList: React.FC<Props> = (props) => {
                         ? 'Sent'
                         : Facade.t('components.transactionsList.pending')}
                     </TextView>
-                    <TextView fontSize="16px" color="text.0">
-                      {props.isHistory &&
-                      props.transactionModel &&
-                      props.transactionModel.date
-                        ? moment(props.transactionModel.date).format('hh:mm')
-                        : '00:00'}
-                    </TextView>
                   </LinearLayout>
                 )}
+                <TextView fontSize="16px" color="text.0">
+                  {transaction.hourFormated}
+                </TextView>
               </LinearLayout>
 
               <LinearLayout weight={3} orientation="vert">
@@ -158,7 +154,7 @@ const TransactionsList: React.FC<Props> = (props) => {
 
   return (
     <LinearLayout orientation="verti">
-      {props.index === 0 && (
+      {props.isHistory && (
         <TextView
           color="text.2"
           fontSize="14px"
@@ -166,13 +162,24 @@ const TransactionsList: React.FC<Props> = (props) => {
           mb="12px"
           mt="26px"
         >
-          {props.isHistory &&
-          props.transactionModel &&
-          props.transactionModel.date
+          {props.transactionModel && props.transactionModel.date
             ? moment(props.transactionModel.date).format('MMMM Do, YYYY')
-            : Facade.t('components.transactionsList.title')}
+            : ''}
         </TextView>
       )}
+
+      {!props.isHistory && props.index === 0 && (
+        <TextView
+          color="text.2"
+          fontSize="14px"
+          fontFamily="medium"
+          mb="12px"
+          mt="26px"
+        >
+          {Facade.t('components.transactionsList.title')}
+        </TextView>
+      )}
+
       {_renderTransaction()}
       {props.index !== props.lastIndex && (
         <LinearLayout

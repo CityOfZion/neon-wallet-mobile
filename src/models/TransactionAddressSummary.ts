@@ -1,5 +1,7 @@
 import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 
+import moment from '~/node_modules/moment'
+
 @HttpExclude()
 export class TransactionAddressSummary {
   @HttpExpose()
@@ -22,4 +24,8 @@ export class TransactionAddressSummary {
 
   @HttpExpose('address_from')
   addressFrom: string | null = null
+
+  dayFormatter: string | null = null
+
+  hourFormatter: string | null = null
 }

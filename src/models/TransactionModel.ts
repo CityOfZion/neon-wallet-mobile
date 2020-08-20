@@ -9,6 +9,7 @@ export class TransactionModel {
 }
 
 export class Transaction {
+  hourFormated?: string
   receiver?: Receiver[]
 }
 
