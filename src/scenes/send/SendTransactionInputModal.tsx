@@ -150,7 +150,7 @@ const SendTransactionInputModal = (prop: Props) => {
                 fontSize="16px"
                 fontFamily="semibold"
               >
-                {Facade.t('modals.send.transactionInput.priorityFast').toUpperCase()}
+                {Facade.t('modals.send.transactionInput.priorityFast')}
               </TextView>
               <TextView
                 color={priority === Priority.FAST ? 'primary' : 'text.3'}
@@ -186,7 +186,7 @@ const SendTransactionInputModal = (prop: Props) => {
                 fontSize="16px"
                 fontFamily="semibold"
               >
-                {Facade.t('modals.send.transactionInput.priorityFaster').toUpperCase()}
+                {Facade.t('modals.send.transactionInput.priorityFaster')}
               </TextView>
               <TextView
                 color={priority === Priority.FASTER ? 'primary' : 'text.3'}
@@ -220,7 +220,7 @@ const SendTransactionInputModal = (prop: Props) => {
                 fontSize="16px"
                 fontFamily="semibold"
               >
-                {Facade.t('modals.send.transactionInput.priorityFastest').toUpperCase()}
+                {Facade.t('modals.send.transactionInput.priorityFastest')}
               </TextView>
               <TextView
                 color={priority === Priority.FASTEST ? 'primary' : 'text.3'}
