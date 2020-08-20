@@ -236,7 +236,10 @@
         "amount": "AMOUNT",
         "contacts": "Contacts",
         "paste": "Paste",
-        "scan": "Scan"
+        "scan": "Scan",
+        "priorityFast": "Rápida",
+        "priorityFaster": "Muito rápida",
+        "priorityFastest": "Rapidíssima"
       },
       "transactionReview": {
         "token": "Token",

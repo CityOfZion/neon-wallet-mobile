@@ -64,11 +64,18 @@ const SendTransactionInputModal = (prop: Props) => {
   // const hash = props.route.params?.uri?.asset ?? ''
 
   const [contact, setContact] = useState<Contact>()
-
   const [token, setToken] = useState<TokenAsset | null>(null)
-  const [priority, setPriority] = useState<Priority>()
+  const [priority, setPriority] = useState<Priority | null>(Priority.FAST)
 
   const dispatch = useDispatch<SyncDispatch>()
+
+  const changePriority = (newPriority: Priority) => {
+    if (priority === newPriority) {
+      setPriority(null)
+    } else {
+      setPriority(priority)
+    }
+  }
 
   const submit = () => {
     if (!token) throw new Error('Token was not defined')
@@ -127,7 +134,7 @@ const SendTransactionInputModal = (prop: Props) => {
           borderBottomLeftRadius={8}
           borderTopLeftRadius={8}
           justifyContent="center"
-          onPress={() => setPriority(Priority.FAST)}
+          onPress={() => changePriority(Priority.FAST)}
         >
           <LinearLayout orientation="horiz" alignItems="center">
             <ImageView
@@ -143,7 +150,7 @@ const SendTransactionInputModal = (prop: Props) => {
                 fontSize="16px"
                 fontFamily="semibold"
               >
-                Fast
+                {Facade.t('modals.send.transactionInput.priorityFast')}
               </TextView>
               <TextView
                 color={priority === Priority.FAST ? 'primary' : 'text.3'}
@@ -163,7 +170,7 @@ const SendTransactionInputModal = (prop: Props) => {
           borderRightWidth={1}
           borderColor="black"
           justifyContent="center"
-          onPress={() => setPriority(Priority.FASTER)}
+          onPress={() => changePriority(Priority.FASTER)}
         >
           <LinearLayout orientation="horiz" alignItems="center">
             <ImageView
@@ -179,7 +186,7 @@ const SendTransactionInputModal = (prop: Props) => {
                 fontSize="16px"
                 fontFamily="semibold"
               >
-                Faster
+                {Facade.t('modals.send.transactionInput.priorityFaster')}
               </TextView>
               <TextView
                 color={priority === Priority.FASTER ? 'primary' : 'text.3'}
@@ -197,7 +204,7 @@ const SendTransactionInputModal = (prop: Props) => {
           borderBottomRightRadius={8}
           borderTopRightRadius={8}
           justifyContent="center"
-          onPress={() => setPriority(Priority.FASTEST)}
+          onPress={() => changePriority(Priority.FASTEST)}
         >
           <LinearLayout orientation="horiz" alignItems="center">
             <ImageView
@@ -213,7 +220,7 @@ const SendTransactionInputModal = (prop: Props) => {
                 fontSize="16px"
                 fontFamily="semibold"
               >
-                Fastest
+                {Facade.t('modals.send.transactionInput.priorityFastest')}
               </TextView>
               <TextView
                 color={priority === Priority.FASTEST ? 'primary' : 'text.3'}
