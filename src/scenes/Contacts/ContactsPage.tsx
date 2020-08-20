@@ -1,6 +1,6 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import PropTypes from 'prop-types'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -25,7 +25,7 @@ const ContactsPage: React.FC<Props> = (prop) => {
         actionButtonStyle: 'add',
         actionOnPress: () => {
           prop.navigation.navigate(Facade.route.Modal.name, {
-            screen: Facade.route.AddContact.name,
+            screen: Facade.route.PersistContact.name,
           })
         },
       }),

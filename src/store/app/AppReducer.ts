@@ -188,6 +188,9 @@ export class AppReducer extends ReducerWrapper<
         let contacts = await Storage.contacts.load()
         if (contacts) {
           contacts = contacts.sort((c1: Contact, c2: Contact) => {
+            if (!c1.name && !c2.name) return 0
+            if (!c1.name) return 1
+            if (!c2.name) return -1
             return c2.name.localeCompare(c1.name)
           })
           dispatch(this.commit('SET_CONTACTS', {contacts}))

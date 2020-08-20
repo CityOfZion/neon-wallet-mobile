@@ -69,7 +69,7 @@ export class WrapperConfig {
     'CurrencyPickerModal',
     'ThemePickerModal',
     'NetworkPickerModal',
-    'AddContact',
+    'PersistContact',
     'ContactDetails',
     'AccountQRCode',
     'ContactsModal',

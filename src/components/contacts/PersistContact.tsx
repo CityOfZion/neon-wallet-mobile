@@ -1,26 +1,35 @@
 import {wallet} from '@cityofzion/neon-core'
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useState} from 'react'
 import {Alert} from 'react-native'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
+import {Contact} from '~src/models/redux/Contact'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {RootState, RootStore} from '~src/store/RootStore'
+import {RootStore} from '~src/store/RootStore'
 import {LinearLayout} from '~src/styles/styled-components'
 
-interface AddContactProps {
-  navigation: StackNavigationProp<ModalStackParamList>
+export interface PersistContactParams {
+  contact?: Contact
 }
 
-export const AddContact = (props: AddContactProps) => {
-  const [name, setName] = useState('')
-  const [address, setAddress] = useState('')
+interface PersistContactProps {
+  navigation: StackNavigationProp<ModalStackParamList>
+  route: RouteProp<ModalStackParamList, 'PersistContact'>
+}
+
+export const PersistContact = (props: PersistContactProps) => {
+  const contact = props.route.params?.contact
+
+  const [name, setName] = useState(contact?.name ?? '')
+  const [address, setAddress] = useState(contact?.address ?? '')
   const controller = useSwiperController(true)
 
   const dispatch = useDispatch<SyncDispatch>()
@@ -42,7 +51,12 @@ export const AddContact = (props: AddContactProps) => {
     dispatch(RootStore.contact.actions.setName(name))
     dispatch(RootStore.contact.actions.setAddress(address))
 
-    await dispatchAsync(RootStore.contact.actions.createAndSave())
+    if (contact?.id) {
+      await dispatchAsync(RootStore.contact.actions.update(contact.id))
+    } else {
+      await dispatchAsync(RootStore.contact.actions.createAndSave())
+    }
+
     dispatch(RootStore.contact.actions.clearState())
 
     await dispatchAsync(RootStore.app.actions.syncContacts())
@@ -53,14 +67,30 @@ export const AddContact = (props: AddContactProps) => {
     Facade.await.run('swiperRight', submit, 300)
   }
 
+  const _headerTitle = () => {
+    if (contact) {
+      return Facade.t('persistContact.title.edit')
+    } else {
+      return Facade.t('persistContact.title.create')
+    }
+  }
+
+  const _headerIcon = () => {
+    if (contact) {
+      return undefined
+    } else {
+      return require('~src/assets/images/icon-add-circle-outline-white.png')
+    }
+  }
+
   return (
     <SwiperPanel
       padding={20}
       fullSize={true}
-      title={Facade.t('createContact.title')}
-      image={require('~src/assets/images/icon-add-circle-outline-white.png')}
-      rightButton={Facade.t('createContact.save')}
-      leftButton={Facade.t('createContact.cancel')}
+      title={_headerTitle()}
+      image={_headerIcon()}
+      rightButton={Facade.t('persistContact.save')}
+      leftButton={Facade.t('persistContact.cancel')}
       imageSize={[22, 22]}
       onClose={props.navigation.goBack}
       onLeftPress={controller.close}
@@ -73,12 +103,12 @@ export const AddContact = (props: AddContactProps) => {
       >
         <LinearLayout>
           <InputLabel
-            title={Facade.t('createContact.name')}
+            title={Facade.t('persistContact.name')}
             marginBottom={'8px'}
           />
 
           <InputWithValidation
-            placeholder={Facade.t('createContact.namePlaceholder')}
+            placeholder={Facade.t('persistContact.namePlaceholder')}
             onChangeText={(val) => setName(val)}
             color={'background.4'}
             value={name}
@@ -94,13 +124,13 @@ export const AddContact = (props: AddContactProps) => {
           />
 
           <InputLabel
-            title={Facade.t('createContact.address')}
+            title={Facade.t('persistContact.address')}
             marginBottom={'8px'}
             marginTop={'12px'}
           />
 
           <InputWithValidation
-            placeholder={Facade.t('createContact.addressPlaceholder')}
+            placeholder={Facade.t('persistContact.addressPlaceholder')}
             onChangeText={(val) => setAddress(val)}
             color={'background.4'}
             value={address}

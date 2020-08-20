@@ -1,10 +1,15 @@
-import {RouteProp} from '@react-navigation/native'
-import React from 'react'
+import {RouteProp, useFocusEffect} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
+import React, {useState, useEffect} from 'react'
+import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {Contact} from '~src/models/redux/Contact'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ContactsStackParamList} from '~src/navigation/ContactsStackNavigation'
+import {RootState} from '~src/store/RootStore'
 import {
   ButtonView,
   ImageView,
@@ -16,11 +21,38 @@ export interface ContactDetailsParams {
 }
 
 interface ContactDetailsProps {
+  navigation: StackNavigationProp<RootStackParamList>
   route: RouteProp<ContactsStackParamList, 'ContactDetails'>
 }
 
-export const ContactDetails = (prop: ContactDetailsProps) => {
-  const contact = prop.route.params.contact
+export const ContactDetails = (props: ContactDetailsProps) => {
+  const contacts = useSelector((state: RootState) => state.app.contacts)
+
+  const [contact, setContact] = useState(props.route.params.contact)
+
+  useEffect(() => {
+    const freshContact = contacts.find((it) => it.id === contact.id)
+
+    if (freshContact) {
+      setContact(freshContact)
+    }
+  }, [contacts])
+
+  props.navigation.setOptions({
+    headerRight: () =>
+      HeaderActionButton({
+        actionTitle: Facade.t('app.edit'),
+        actionButtonStyle: 'default',
+        actionOnPress: () => {
+          props.navigation.navigate(Facade.route.Modal.name, {
+            screen: Facade.route.PersistContact.name,
+            params: {
+              contact,
+            },
+          })
+        },
+      }),
+  })
   return (
     <ScreenLayout>
       <LinearLayout alignItems={'center'} mr={'10px'} ml={'10px'}>

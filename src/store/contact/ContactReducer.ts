@@ -1,6 +1,7 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {plainToClass} from 'class-transformer'
 
+import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {Contact} from '~src/models/redux/Contact'
@@ -35,11 +36,28 @@ export class ContactReducer extends ReducerWrapper<
       return async (dispatch, getState) => {
         const contacts = (await Storage.contacts.load()) ?? []
         const contact = plainToClass(Contact, getState().contact)
+
+        contact.id = Facade.utils.uuid()
+
         contacts.push(contact)
 
         await Storage.contacts.save(contacts)
 
         return contact.name ?? ''
+      }
+    },
+    update: (id: string): AsyncAction => {
+      return async (dispatch, getState) => {
+        const contacts = (await Storage.contacts.load()) ?? []
+
+        const contact = contacts.find((it) => it.id === id)
+
+        if (contact) {
+          contact.name = getState().contact.name
+          contact.address = getState().contact.address
+        }
+
+        await Storage.contacts.save(contacts)
       }
     },
   }

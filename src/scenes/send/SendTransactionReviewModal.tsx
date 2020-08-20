@@ -1,9 +1,8 @@
+import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
-import {plainToClass} from 'class-transformer'
 import React from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 
-import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {
   CloseButton,
@@ -11,8 +10,7 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {Priority} from '~src/scenes/send/SendTransactionInputModal'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -22,7 +20,7 @@ export interface SendModalParams {
 }
 
 interface Props {
-  navigation: StackNavigationProp<ModalStackParamList>
+  navigation: StackNavigationProp<RootStackParamList>
 }
 
 const TransactionSummaryContainer = () => {
