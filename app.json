@@ -19,7 +19,7 @@
     },
     "splash": {
       "image": "src/assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#364046"
     },
     "icon": "src/assets/ic_launcher.png",
