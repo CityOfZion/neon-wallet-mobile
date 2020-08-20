@@ -5,6 +5,7 @@ export declare global {
   type ContactActionsType = 'SET_NAME' | 'SET_ADDRESS' | 'CLEAR_STATE'
 
   interface ContactState {
+    id: string | null
     name: string | null
     address: string | null
   }

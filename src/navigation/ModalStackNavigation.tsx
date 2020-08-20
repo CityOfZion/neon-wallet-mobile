@@ -4,7 +4,10 @@ import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
-import {AddContact, AddContactParams} from '~src/components/contacts/AddContact'
+import {
+  PersistContact,
+  PersistContactParams,
+} from '~src/components/contacts/PersistContact'
 import {
   AccountQRCode,
   AccountQRCodeParams,
@@ -79,10 +82,9 @@ export type ModalStackParamList = {
   CurrencyPickerModal: undefined
   ThemePickerModal: undefined
   NetworkPickerModal: undefined
-  AddContact: AddContactParams
+  PersistContact: PersistContactParams
   QRCodeScan: QRCodeScanParams
   ContactsModal: ContactsModalParams
-  Modal: ModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -97,7 +99,7 @@ export type ModalParams =
   | DefaultNavigationParam<ReceiveQrCodeModalParams>
   | DefaultNavigationParam<ContactsModalParams>
   | DefaultNavigationParam<SendTransactionConfirmationModalParams>
-  | DefaultNavigationParam<AddContactParams>
+  | DefaultNavigationParam<PersistContactParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -194,8 +196,8 @@ const ModalStackNavigation = () => {
           component={NetworkPickerModal}
         />
         <ModalStack.Screen
-          name={Facade.route.AddContact.name}
-          component={AddContact}
+          name={Facade.route.PersistContact.name}
+          component={PersistContact}
         />
         <ModalStack.Screen
           name={Facade.route.AccountQRCode.name}

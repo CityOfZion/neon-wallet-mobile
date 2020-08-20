@@ -27,7 +27,7 @@ export const NoContacts = () => {
       <ButtonView
         onPress={() => {
           navigation.navigate(Facade.route.Modal.name, {
-            screen: Facade.route.AddContact.name,
+            screen: Facade.route.PersistContact.name,
           })
         }}
       >

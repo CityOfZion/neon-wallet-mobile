@@ -1,10 +1,9 @@
 import React from 'react'
 
+import {Contact} from '~src/models/redux/Contact'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
-export const SelectedContactView = (props: {
-  selectedContact: {name: string | undefined; address: string | undefined}
-}) => {
+export const SelectedContactView = (props: {selectedContact: Contact}) => {
   return (
     <LinearLayout width={'100%'}>
       <TextView

@@ -476,8 +476,11 @@
       "format": "$1"
     }
   },
-  "createContact": {
-    "title": "Create contact",
+  "persistContact": {
+    "title": {
+      "create": "Create contact",
+      "edit": "Edit contact"
+    },
     "name": "NAME",
     "namePlaceholder": "Enter contact name",
     "address": "ADDRESS",

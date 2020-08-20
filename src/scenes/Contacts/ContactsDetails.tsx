@@ -1,12 +1,15 @@
-import {RouteProp} from '@react-navigation/native'
-import React from 'react'
-import HeaderActionButton from '~src/components/layout/HeaderActionButton'
+import {RouteProp, useFocusEffect} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import React, {useState, useEffect} from 'react'
+import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {Contact} from '~src/models/redux/Contact'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ContactsStackParamList} from '~src/navigation/ContactsStackNavigation'
+import {RootState} from '~src/store/RootStore'
 import {
   ButtonView,
   ImageView,
@@ -18,12 +21,22 @@ export interface ContactDetailsParams {
 }
 
 interface ContactDetailsProps {
-  navigation: StackNavigationProp<ContactsStackParamList>
+  navigation: StackNavigationProp<RootStackParamList>
   route: RouteProp<ContactsStackParamList, 'ContactDetails'>
 }
 
 export const ContactDetails = (props: ContactDetailsProps) => {
-  const contact = props.route.params.contact
+  const contacts = useSelector((state: RootState) => state.app.contacts)
+
+  const [contact, setContact] = useState(props.route.params.contact)
+
+  useEffect(() => {
+    const freshContact = contacts.find((it) => it.id === contact.id)
+
+    if (freshContact) {
+      setContact(freshContact)
+    }
+  }, [contacts])
 
   props.navigation.setOptions({
     headerRight: () =>
@@ -31,7 +44,12 @@ export const ContactDetails = (props: ContactDetailsProps) => {
         actionTitle: Facade.t('app.edit'),
         actionButtonStyle: 'default',
         actionOnPress: () => {
-          console.log('Clicou')
+          props.navigation.navigate(Facade.route.Modal.name, {
+            screen: Facade.route.PersistContact.name,
+            params: {
+              contact,
+            },
+          })
         },
       }),
   })
