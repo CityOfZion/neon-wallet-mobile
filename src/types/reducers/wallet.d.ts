@@ -7,6 +7,7 @@ export declare global {
     | 'SET_PASSPHRASE'
     | 'SET_SECURITY_PHRASE'
     | 'SET_WALLET_TYPE'
+    | 'SET_SHOW_BACKUP_ALERT'
     | 'CLEAR_STATE'
 
   type WalletType = 'standard' | 'watch' | 'legacy'
@@ -18,6 +19,7 @@ export declare global {
     securityPhrase: string | null
     walletType: WalletType | null
     lastVisitedAt: string | null
+    showBackupAlert: boolean
   }
 
   type WalletAction = WalletState & Action<WalletActionsType>

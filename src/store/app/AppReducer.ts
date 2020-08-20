@@ -211,5 +211,17 @@ export class AppReducer extends ReducerWrapper<
         return pendingTransactions ?? []
       }
     },
+
+    syncBackupAlerts: (): AsyncAction => {
+      return async () => {
+        const wallets = await Storage.wallets.load()
+        if (wallets) {
+          wallets.forEach((wallet) => {
+            wallet.showBackupAlert = !wallet.lastBackup
+          })
+          await Storage.wallets.save(wallets)
+        }
+      }
+    },
   }
 }

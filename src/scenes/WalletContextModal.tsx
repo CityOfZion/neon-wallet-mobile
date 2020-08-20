@@ -31,8 +31,8 @@ export default function WalletContextModal(props: Props) {
       source: require('~src/assets/images/icon-circle-plus-green.png'),
       onClick: () => {
         props.navigation.navigate(Facade.route.More.name, {
-          screen: Facade.route.Step1CreateWallet.name,  
-          initial: false
+          screen: Facade.route.Step1CreateWallet.name,
+          initial: false,
         })
       },
     },
