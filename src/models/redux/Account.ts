@@ -146,7 +146,6 @@ export class Account implements AccountState {
 
         if (asset && assetSymbol && assetHash) {
           const tokenAsset = new TokenAsset(asset, assetSymbol, assetHash)
-          tokenAsset.holding = it.unspent.length
           tokenAsset.amount = it.amount ?? 0
           return tokenAsset
         }
@@ -176,11 +175,6 @@ export class Account implements AccountState {
       const {name, symbol, hash} = firstOne
 
       const tokenAsset = new TokenAsset(name, symbol, hash)
-
-      tokenAsset.holding = Facade.lodash.sumBy(
-        filteredTokenAssets,
-        (it) => it.holding
-      )
 
       tokenAsset.amount = Facade.lodash.sumBy(
         filteredTokenAssets,

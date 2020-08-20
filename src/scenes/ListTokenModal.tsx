@@ -85,6 +85,7 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
           width="29px"
           alignSelf="center"
           mr="12px"
+          resizeMode="contain"
           source={item.srcIcon}
         />
         <TextView fontFamily="bold" fontSize="18px" color="text.0" weight={1}>
@@ -102,7 +103,7 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
           </TextView>
 
           <TextView fontFamily="bold" fontSize="18px" color="text.0">
-            {item.holding}
+            {item.amount.toString(10)}
           </TextView>
         </LinearLayout>
 
