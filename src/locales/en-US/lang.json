@@ -352,7 +352,10 @@
         "amount": "Amount",
         "contacts": "Contacts",
         "paste": "Paste",
-        "scan": "Scan"
+        "scan": "Scan",
+        "priorityFast": "Fast",
+        "priorityFaster": "Faster",
+        "priorityFastest": "Fastest"
       },
       "transactionReview": {
         "token": "Token",
