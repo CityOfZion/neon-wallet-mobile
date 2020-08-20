@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
-import {AddContact} from '~src/components/contacts/AddContact'
+import {AddContact, AddContactParams} from '~src/components/contacts/AddContact'
 import {
   AccountQRCode,
   AccountQRCodeParams,
@@ -79,7 +79,7 @@ export type ModalStackParamList = {
   CurrencyPickerModal: undefined
   ThemePickerModal: undefined
   NetworkPickerModal: undefined
-  AddContact: undefined
+  AddContact: AddContactParams
   QRCodeScan: QRCodeScanParams
   ContactsModal: ContactsModalParams
   Modal: ModalParams
@@ -97,6 +97,7 @@ export type ModalParams =
   | DefaultNavigationParam<ReceiveQrCodeModalParams>
   | DefaultNavigationParam<ContactsModalParams>
   | DefaultNavigationParam<SendTransactionConfirmationModalParams>
+  | DefaultNavigationParam<AddContactParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 

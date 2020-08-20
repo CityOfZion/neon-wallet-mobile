@@ -1,5 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import React from 'react'
+import HeaderActionButton from '~src/components/layout/HeaderActionButton'
+import {StackNavigationProp} from '@react-navigation/stack'
 
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -16,11 +18,23 @@ export interface ContactDetailsParams {
 }
 
 interface ContactDetailsProps {
+  navigation: StackNavigationProp<ContactsStackParamList>
   route: RouteProp<ContactsStackParamList, 'ContactDetails'>
 }
 
-export const ContactDetails = (prop: ContactDetailsProps) => {
-  const contact = prop.route.params.contact
+export const ContactDetails = (props: ContactDetailsProps) => {
+  const contact = props.route.params.contact
+
+  props.navigation.setOptions({
+    headerRight: () =>
+      HeaderActionButton({
+        actionTitle: Facade.t('app.edit'),
+        actionButtonStyle: 'default',
+        actionOnPress: () => {
+          console.log('Clicou')
+        },
+      }),
+  })
   return (
     <ScreenLayout>
       <LinearLayout alignItems={'center'} mr={'10px'} ml={'10px'}>

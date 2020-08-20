@@ -1,3 +1,4 @@
+import {RouteProp} from '@react-navigation/native'
 import {wallet} from '@cityofzion/neon-core'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
@@ -13,14 +14,21 @@ import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout} from '~src/styles/styled-components'
+import { Contact } from '~src/models/redux/Contact'
+
+export interface AddContactParams {
+  contact?: Contact
+}
 
 interface AddContactProps {
   navigation: StackNavigationProp<ModalStackParamList>
+  route: RouteProp<ModalStackParamList, 'AddContact'>
 }
 
 export const AddContact = (props: AddContactProps) => {
-  const [name, setName] = useState('')
-  const [address, setAddress] = useState('')
+  const contact = props.route.params.contact
+  const [name, setName] = useState(contact?.name ?? '')
+  const [address, setAddress] = useState(contact?.address ?? '')
   const controller = useSwiperController(true)
 
   const dispatch = useDispatch<SyncDispatch>()
