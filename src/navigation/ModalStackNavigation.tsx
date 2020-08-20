@@ -83,7 +83,6 @@ export type ModalStackParamList = {
   ThemePickerModal: undefined
   NetworkPickerModal: undefined
   PersistContact: PersistContactParams
-  QRCodeScan: QRCodeScanParams
   ContactsModal: ContactsModalParams
 }
 
