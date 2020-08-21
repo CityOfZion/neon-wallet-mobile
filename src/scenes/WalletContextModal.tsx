@@ -8,9 +8,10 @@ import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 
 interface Props {
-  navigation: StackNavigationProp<ModalStackParamList & TabStackParamList>
+  navigation: StackNavigationProp<RootStackParamList & ModalStackParamList>
 }
 
 interface ListItem {
@@ -30,9 +31,15 @@ export default function WalletContextModal(props: Props) {
       title: Facade.t('modals.walletContext.create'),
       source: require('~src/assets/images/icon-circle-plus-green.png'),
       onClick: () => {
-        props.navigation.navigate(Facade.route.More.name, {
-          screen: Facade.route.Step1CreateWallet.name,
-          initial: false,
+        props.navigation.navigate(Facade.route.Tab.name, {
+          screen: Facade.route.More.name,
+          params: {
+            screen: Facade.route.Step1CreateWallet.name,
+            initial: false,
+            params: {
+              source: Facade.route.WalletContextModal.name,
+            },
+          },
         })
       },
     },
