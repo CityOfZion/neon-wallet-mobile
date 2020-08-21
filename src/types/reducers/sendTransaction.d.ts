@@ -2,7 +2,7 @@ import {Action} from 'redux'
 import {ReducerApplied} from '@simpli/redux-wrapper'
 import {Account} from '~src/models/redux/Account'
 import {TokenAsset} from '~src/models/TokenAsset'
-import {PriorityFee} from "~src/models/PriorityFee";
+import {PriorityFee} from '~src/models/PriorityFee'
 
 export declare global {
   type SenderTransactionActionsType =

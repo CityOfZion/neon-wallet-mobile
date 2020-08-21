@@ -1,8 +1,8 @@
 import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 
+import {PriorityFee} from '~src/models/PriorityFee'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
-import {PriorityFee} from "~src/models/PriorityFee";
 
 @HttpExclude()
 export class SenderTransaction implements SenderTransactionState {

@@ -6,6 +6,7 @@ import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {NeonHelper} from '~src/helpers/NeonHelper'
+import {PriorityFee} from '~src/models/PriorityFee'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
@@ -14,7 +15,6 @@ import {ClearStateDispatcher} from '~src/store/senderTransaction/dispatchers/Cle
 import {FeeAmountDispatcher} from '~src/store/senderTransaction/dispatchers/FeeAmountDispatcher'
 import {ReceiverAddressDispatcher} from '~src/store/senderTransaction/dispatchers/ReceiverAddressDispatcher'
 import {TokenDispatcher} from '~src/store/senderTransaction/dispatchers/TokenDispatcher'
-import {PriorityFee} from "~src/models/PriorityFee";
 
 export class SendTransactionReducer extends ReducerWrapper<
   SenderTransactionActionsType,
