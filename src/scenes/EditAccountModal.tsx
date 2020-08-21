@@ -29,14 +29,16 @@ interface Props {
 }
 
 const EditAccountModal = (props: Props) => {
+  const tokenAssets = props.route.params.account.tokenAssets
   const account = Facade.utils.clone(props.route.params.account)
+  account.tokenAssets = tokenAssets
 
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const currency = useSelector((state: RootState) => state.settings.currency)
   const controller = useSwiperController(true)
   const dispatch = useDispatch()
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const [name, setName] = useState<string>(account.name ?? '')
   const [color, setColor] = useState<string>(account.backgroundColor)
@@ -47,13 +49,15 @@ const EditAccountModal = (props: Props) => {
 
   const submit = async () => {
     if (!isValid()) return
+    const address = account.address
+
+    if (!address) throw new Error('Address not defined')
 
     dispatch(RootStore.account.actions.setName(name))
     dispatch(RootStore.account.actions.setBackgroundColor(color))
-    dispatch(RootStore.account.actions.setCurrency(currency))
 
-    await dispatch(RootStore.account.actions.updateAndSave(account.address!))
-    await dispatch(RootStore.app.actions.syncAccounts())
+    await dispatchAsync(RootStore.account.actions.updateAndSave(address))
+    await dispatchAsync(RootStore.app.actions.syncAccounts())
 
     dispatch(RootStore.account.actions.clearState())
 

@@ -37,7 +37,6 @@ export default function CreateAccountModal(props: Props) {
 
   const submit = async () => {
     dispatch(RootStore.account.actions.setName(name))
-    dispatch(RootStore.account.actions.setCurrency(currency))
     if (color) dispatch(RootStore.account.actions.setBackgroundColor(color))
 
     await dispatch(RootStore.account.actions.createAndSave())

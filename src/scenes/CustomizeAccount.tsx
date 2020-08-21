@@ -65,6 +65,16 @@ const CustomizeAccount = (props: Props) => {
   account.name = name
   account.backgroundColor = color
 
+  useEffect(() => {
+    Facade.await.run('customizeAccount', populateTokenAssets)
+  }, [])
+
+  const populateTokenAssets = async () => {
+    await account.populateTokenAssets()
+
+    setAccount(account)
+  }
+
   const contentMap: ContentCollection = {
     ImportKey: {
       title: Facade.route.ImportKey.translate(),
@@ -114,18 +124,19 @@ const CustomizeAccount = (props: Props) => {
 
   const createAccount = async (walletId: string) => {
     const wif = props.route.params.wif
+    const address = account.address
+
+    if (!address) throw new Error('Address not defined')
 
     dispatch(RootStore.account.actions.clearState())
 
     dispatch(RootStore.account.actions.setIdWallet(walletId))
     dispatch(RootStore.account.actions.setName(name))
-    dispatch(RootStore.account.actions.setCurrency(Currency.USD))
     dispatch(RootStore.account.actions.setBackgroundColor(color))
 
-    await dispatchAsync(
-      RootStore.account.actions.importAndSave(account.address!, wif)
-    )
+    await dispatchAsync(RootStore.account.actions.importAndSave(address, wif))
     await dispatchAsync(RootStore.app.actions.syncAccounts())
+    await dispatchAsync(RootStore.app.actions.syncTokenAssetsByAddress(address))
 
     dispatch(RootStore.account.actions.clearState())
   }
