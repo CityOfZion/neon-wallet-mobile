@@ -88,6 +88,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
             fontSize="14px"
             fontFamily="medium"
             mr="16px"
+            textAlign="center"
           >
             {props.route.params.transactionHash}
           </TextView>

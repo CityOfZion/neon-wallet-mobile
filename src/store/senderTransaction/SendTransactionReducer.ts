@@ -14,6 +14,7 @@ import {ClearStateDispatcher} from '~src/store/senderTransaction/dispatchers/Cle
 import {FeeAmountDispatcher} from '~src/store/senderTransaction/dispatchers/FeeAmountDispatcher'
 import {ReceiverAddressDispatcher} from '~src/store/senderTransaction/dispatchers/ReceiverAddressDispatcher'
 import {TokenDispatcher} from '~src/store/senderTransaction/dispatchers/TokenDispatcher'
+import {PriorityFee} from "~src/models/PriorityFee";
 
 export class SendTransactionReducer extends ReducerWrapper<
   SenderTransactionActionsType,
@@ -42,7 +43,7 @@ export class SendTransactionReducer extends ReducerWrapper<
     setToken: (token: TokenAsset) => {
       return this.commit('SET_TOKEN', {token})
     },
-    setFeeAmount: (feeAmount: number | null) => {
+    setFeeAmount: (feeAmount: PriorityFee) => {
       return this.commit('SET_FEE_AMOUNT', {feeAmount})
     },
     clearState: () => {
@@ -53,7 +54,7 @@ export class SendTransactionReducer extends ReducerWrapper<
         const sendTx = getState().senderTransaction
 
         const {account, token, receiverAddress, feeAmount} = sendTx
-        const fees = feeAmount ?? undefined
+        const fees = feeAmount
 
         if (!account) throw new Error('Account not defined')
         if (!token) throw new Error('Token not defined')
@@ -70,7 +71,7 @@ export class SendTransactionReducer extends ReducerWrapper<
             receiverAddress,
             assets,
             amount,
-            fees
+            fees?.fee
           )
         }
 
@@ -78,7 +79,7 @@ export class SendTransactionReducer extends ReducerWrapper<
           account,
           receiverAddress,
           token,
-          fees
+          fees?.fee
         )
       }
     },

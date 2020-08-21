@@ -1,7 +1,7 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React from 'react'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {
@@ -10,8 +10,8 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {Priority} from '~src/scenes/send/SendTransactionInputModal'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -24,6 +24,29 @@ interface Props {
 }
 
 const TransactionSummaryContainer = () => {
+  const {exchange} = useSelector((state: RootState) => state.app)
+  const {currency} = useSelector((state: RootState) => state.settings)
+  const {contacts} = useSelector((state: RootState) => state.app)
+  const transactionState = useSelector(
+    (state: RootState) => state.senderTransaction
+  )
+
+  const singleToken = new TokenAsset(
+    transactionState.token?.name ?? '',
+    transactionState.token?.symbol ?? '',
+    transactionState.token?.hash ?? ''
+  )
+  singleToken.amount = 1
+  const singleTokenPrice = singleToken.exchange(currency, exchange)
+  const contact = contacts.find(
+    (value) => value.address === transactionState.receiverAddress
+  )
+
+  const accountTokenAmount =
+    transactionState.account?.getBalanceAmountByAsset(
+      transactionState.token?.symbol ?? ''
+    ) ?? 0
+
   return (
     <LinearLayout
       orientation="verti"
@@ -35,11 +58,13 @@ const TransactionSummaryContainer = () => {
       px="14px"
       py="20px"
     >
-      <TextView color="text.0" fontSize="18px" fontFamily="medium">
-        Tyler A
-      </TextView>
+      {contact && (
+        <TextView color="text.0" fontSize="18px" fontFamily="medium">
+          {contact.name}
+        </TextView>
+      )}
       <TextView color="primary" fontSize="18px" fontFamily="medium">
-        a0x9EbitG5amU0C4wHjgWUhwWL
+        {transactionState.receiverAddress}
       </TextView>
       <LinearLayout mt="18px" mb="22px" orientation="horiz" alignItems="center">
         <TextView
@@ -53,10 +78,13 @@ const TransactionSummaryContainer = () => {
         </TextView>
         <ImageView
           mr="4px"
-          source={require('~src/assets/logos/logo-neo.png')}
+          source={transactionState.token?.srcIcon}
+          width={18}
+          height={18}
+          resizeMode="contain"
         />
         <TextView color="text.0" fontFamily="semibold" fontSize="18px">
-          NEO
+          {transactionState.token?.symbol}
         </TextView>
       </LinearLayout>
       <LinearLayout mb="22px" orientation="horiz" alignItems="center">
@@ -70,11 +98,11 @@ const TransactionSummaryContainer = () => {
           {Facade.t('modals.send.transactionReview.amount')}
         </TextView>
         <TextView color="text.0" fontFamily="semibold" fontSize="18px" mr="6px">
-          28.20028234
+          {transactionState.token?.amount}
         </TextView>
         <TextView color="text.6" fontFamily="semibold" fontSize="12px">
           {Facade.t('modals.send.transactionReview.remainingInWallet', {
-            token: '35 NEO',
+            token: `${accountTokenAmount} ${transactionState.token?.symbol}`,
           })}
         </TextView>
       </LinearLayout>
@@ -89,7 +117,10 @@ const TransactionSummaryContainer = () => {
           {Facade.t('modals.send.transactionReview.value')}
         </TextView>
         <TextView color="text.0" fontFamily="semibold" fontSize="18px">
-          $1231235,00
+          {Facade.filter.currency(
+            transactionState.token?.exchange(currency, exchange),
+            currency
+          )}
         </TextView>
       </LinearLayout>
       <LinearLayout mb="22px" orientation="horiz" alignItems="center">
@@ -103,33 +134,36 @@ const TransactionSummaryContainer = () => {
           {Facade.t('modals.send.transactionReview.price')}
         </TextView>
         <TextView color="text.0" fontFamily="semibold" fontSize="18px">
-          $12,01
+          {Facade.filter.currency(singleTokenPrice, currency)}
         </TextView>
       </LinearLayout>
-      <LinearLayout mb="22px" orientation="horiz" alignItems="center">
-        <TextView
-          color="text.6"
-          width="60px"
-          mr="12px"
-          fontFamily="medium"
-          fontSize="14px"
-        >
-          {Facade.t('modals.send.transactionReview.priority')}
-        </TextView>
-        <TextView
-          color="primary"
-          fontFamily="semibold"
-          fontSize="18px"
-          mr="8px"
-        >
-          {Priority[Priority.FAST]}
-        </TextView>
-        <TextView color="text.0" fontSize="18px">
-          {Facade.t('modals.send.transactionReview.feeAmount', {
-            amount: '0.0000001 GAS',
-          })}
-        </TextView>
-      </LinearLayout>
+
+      {transactionState.feeAmount && (
+        <LinearLayout mb="22px" orientation="horiz" alignItems="center">
+          <TextView
+            color="text.6"
+            width="60px"
+            mr="12px"
+            fontFamily="medium"
+            fontSize="14px"
+          >
+            {Facade.t('modals.send.transactionReview.priority')}
+          </TextView>
+          <TextView
+            color="primary"
+            fontFamily="semibold"
+            fontSize="18px"
+            mr="8px"
+          >
+            {transactionState.feeAmount.name.toUpperCase()}
+          </TextView>
+          <TextView color="text.0" fontSize="18px">
+            {Facade.t('modals.send.transactionReview.feeAmount', {
+              amount: `${transactionState.feeAmount.fee ?? 0} GAS`,
+            })}
+          </TextView>
+        </LinearLayout>
+      )}
     </LinearLayout>
   )
 }
