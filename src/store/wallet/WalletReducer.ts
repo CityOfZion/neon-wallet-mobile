@@ -79,5 +79,17 @@ export class WalletReducer extends ReducerWrapper<
         await Storage.wallets.save(newWalletList)
       }
     },
+    setShowBackupAlert: (id: string, showBackupAlert: boolean): AsyncAction => {
+      return async () => {
+        const wallets = (await Storage.wallets.load()) ?? []
+
+        const wallet = wallets.find((it) => it.id === id)
+
+        if (wallet) {
+          wallet.showBackupAlert = showBackupAlert
+          await Storage.wallets.save(wallets)
+        }
+      }
+    },
   }
 }
