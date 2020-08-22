@@ -24,8 +24,4 @@ export class TransactionAddressSummary {
 
   @HttpExpose('address_from')
   addressFrom: string | null = null
-
-  dayFormatter: string | null = null
-
-  hourFormatter: string | null = null
 }

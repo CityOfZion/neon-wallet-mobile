@@ -1,6 +1,6 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -11,6 +11,7 @@ import SwiperPanel, {
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {TokenAsset} from '~src/models/TokenAsset'
+import {Account} from '~src/models/redux/Account'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -24,28 +25,37 @@ interface Props {
 }
 
 const TransactionSummaryContainer = () => {
-  const {exchange} = useSelector((state: RootState) => state.app)
-  const {currency} = useSelector((state: RootState) => state.settings)
-  const {contacts} = useSelector((state: RootState) => state.app)
-  const transactionState = useSelector(
-    (state: RootState) => state.senderTransaction
+  const {exchange, contacts, accounts} = useSelector(
+    (state: RootState) => state.app
   )
+  const {currency} = useSelector((state: RootState) => state.settings)
+  const {senderTransaction} = useSelector((state: RootState) => state)
+  const [account, setAccount] = useState<Account>()
 
   const singleToken = new TokenAsset(
-    transactionState.token?.name ?? '',
-    transactionState.token?.symbol ?? '',
-    transactionState.token?.hash ?? ''
+    senderTransaction.token?.name ?? '',
+    senderTransaction.token?.symbol ?? '',
+    senderTransaction.token?.hash ?? ''
   )
   singleToken.amount = 1
   const singleTokenPrice = singleToken.exchange(currency, exchange)
   const contact = contacts.find(
-    (value) => value.address === transactionState.receiverAddress
+    (value) => value.address === senderTransaction.receiverAddress
   )
 
-  const accountTokenAmount =
-    transactionState.account?.getBalanceAmountByAsset(
-      transactionState.token?.symbol ?? ''
-    ) ?? 0
+  useEffect(() => {
+    const account = accounts.find(
+      (it) => it.address === senderTransaction.senderAddress
+    )
+    setAccount(account)
+  }, [])
+
+  const getTokenAmount = () => {
+    return (
+      account?.getBalanceAmountByAsset(senderTransaction.token?.symbol ?? '') ??
+      0
+    )
+  }
 
   return (
     <LinearLayout
@@ -64,7 +74,7 @@ const TransactionSummaryContainer = () => {
         </TextView>
       )}
       <TextView color="primary" fontSize="18px" fontFamily="medium">
-        {transactionState.receiverAddress}
+        {senderTransaction.receiverAddress}
       </TextView>
       <LinearLayout mt="18px" mb="22px" orientation="horiz" alignItems="center">
         <TextView
@@ -78,13 +88,13 @@ const TransactionSummaryContainer = () => {
         </TextView>
         <ImageView
           mr="4px"
-          source={transactionState.token?.srcIcon}
+          source={senderTransaction.token?.srcIcon}
           width={18}
           height={18}
           resizeMode="contain"
         />
         <TextView color="text.0" fontFamily="semibold" fontSize="18px">
-          {transactionState.token?.symbol}
+          {senderTransaction.token?.symbol}
         </TextView>
       </LinearLayout>
       <LinearLayout mb="22px" orientation="horiz" alignItems="center">
@@ -98,11 +108,11 @@ const TransactionSummaryContainer = () => {
           {Facade.t('modals.send.transactionReview.amount')}
         </TextView>
         <TextView color="text.0" fontFamily="semibold" fontSize="18px" mr="6px">
-          {transactionState.token?.amount}
+          {senderTransaction.token?.amount}
         </TextView>
         <TextView color="text.6" fontFamily="semibold" fontSize="12px">
           {Facade.t('modals.send.transactionReview.remainingInWallet', {
-            token: `${accountTokenAmount} ${transactionState.token?.symbol}`,
+            token: `${getTokenAmount()} ${senderTransaction.token?.symbol}`,
           })}
         </TextView>
       </LinearLayout>
@@ -118,7 +128,7 @@ const TransactionSummaryContainer = () => {
         </TextView>
         <TextView color="text.0" fontFamily="semibold" fontSize="18px">
           {Facade.filter.currency(
-            transactionState.token?.exchange(currency, exchange),
+            senderTransaction.token?.exchange(currency, exchange),
             currency
           )}
         </TextView>
@@ -138,7 +148,7 @@ const TransactionSummaryContainer = () => {
         </TextView>
       </LinearLayout>
 
-      {transactionState.feeAmount && (
+      {senderTransaction.feeAmount && (
         <LinearLayout mb="22px" orientation="horiz" alignItems="center">
           <TextView
             color="text.6"
@@ -155,11 +165,11 @@ const TransactionSummaryContainer = () => {
             fontSize="18px"
             mr="8px"
           >
-            {transactionState.feeAmount.name.toUpperCase()}
+            {senderTransaction.feeAmount.name.toUpperCase()}
           </TextView>
           <TextView color="text.0" fontSize="18px">
             {Facade.t('modals.send.transactionReview.feeAmount', {
-              amount: `${transactionState.feeAmount.fee ?? 0} GAS`,
+              amount: `${senderTransaction.feeAmount.fee ?? 0} GAS`,
             })}
           </TextView>
         </LinearLayout>

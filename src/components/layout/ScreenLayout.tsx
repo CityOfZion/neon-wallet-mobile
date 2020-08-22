@@ -17,6 +17,7 @@ import {LinearLayout} from '~src/styles/styled-components'
 interface Props {
   onLayout?: (event: LayoutChangeEvent) => void
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void
+  onReachBottom?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void
   scrollEventThrottle?: number
   children?: React.ReactNode | React.ReactNodeArray
   useHeaderPadding?: boolean
@@ -56,7 +57,19 @@ const ScreenLayout: React.FC<Props> = (props) => {
         <ScrollView
           scrollEnabled={props.autoScroll}
           scrollEventThrottle={props.scrollEventThrottle}
-          onScroll={props.onScroll}
+          onScroll={(e) => {
+            const {nativeEvent} = e
+            if (props.onScroll) props.onScroll(e)
+
+            const isScrollReachedBottom =
+              nativeEvent.layoutMeasurement.height +
+                nativeEvent.contentOffset.y >=
+              nativeEvent.contentSize.height
+
+            if (isScrollReachedBottom && props.onReachBottom) {
+              props.onReachBottom(e)
+            }
+          }}
           alwaysBounceVertical={false}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{flexGrow: 1}}
@@ -92,6 +105,7 @@ ScreenLayout.propTypes = {
   padding: PropTypes.any,
   transparent: PropTypes.bool,
   onScroll: PropTypes.func,
+  onReachBottom: PropTypes.func,
   scrollEventThrottle: PropTypes.number,
 }
 
