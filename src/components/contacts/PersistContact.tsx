@@ -69,7 +69,7 @@ export const PersistContact = (props: PersistContactProps) => {
 
   const _headerTitle = () => {
     if (contact) {
-      return Facade.t('persistContact.title.edit')
+      return Facade.t('modals.editAccount.title')
     } else {
       return Facade.t('persistContact.title.create')
     }
@@ -77,7 +77,7 @@ export const PersistContact = (props: PersistContactProps) => {
 
   const _headerIcon = () => {
     if (contact) {
-      return undefined
+      return require('~/src/assets/images/icon-pencil-white.png')
     } else {
       return require('~src/assets/images/icon-add-circle-outline-white.png')
     }

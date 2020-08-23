@@ -7,7 +7,9 @@ import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import {ModalParams} from '~src/navigation/ModalStackNavigation'
-import Step1CreateWalletPage from '~src/scenes/CreateWalletPage/Step1CreateWalletPage'
+import Step1CreateWalletPage, {
+  Step1CreateWalletParams,
+} from '~src/scenes/CreateWalletPage/Step1CreateWalletPage'
 import Step2CreateWalletPage from '~src/scenes/CreateWalletPage/Step2CreateWalletPage'
 import Step3CreateWalletPage from '~src/scenes/CreateWalletPage/Step3CreateWalletPage'
 import Step4CreateWalletPage from '~src/scenes/CreateWalletPage/Step4CreateWalletPage'
@@ -29,13 +31,14 @@ export type MoreStackParam =
       | Partial<CustomizeAccountParams>
       | ImportReadAccountParams
       | PassphraseParams
+      | Step1CreateWalletParams
       | undefined
     >
   | undefined
 
 export type MoreStackParamList = {
   MorePage: undefined
-  Step1CreateWallet: undefined
+  Step1CreateWallet: Step1CreateWalletParams
   Step2CreateWallet: undefined
   Step3CreateWallet: HeaderActionButtonProps
   Step4CreateWallet: undefined

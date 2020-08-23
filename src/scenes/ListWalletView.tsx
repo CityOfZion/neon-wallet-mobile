@@ -250,9 +250,12 @@ const ListWalletView = (props: WalletProps) => {
           {_renderWalletChange()}
 
           <LinearLayout mx={'16px'}>
-            {!wallet?.lastBackup && (
+            {wallet?.showBackupAlert && (
               <LinearLayout mb={6}>
-                <Notification text={Facade.t('screens.listWallets.noBackup')} />
+                <Notification
+                  text={Facade.t('screens.listWallets.noBackup')}
+                  wallet={wallet}
+                />
               </LinearLayout>
             )}
 
