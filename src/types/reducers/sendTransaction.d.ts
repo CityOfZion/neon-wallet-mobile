@@ -1,20 +1,19 @@
 import {Action} from 'redux'
 import {ReducerApplied} from '@simpli/redux-wrapper'
-import {Account} from '~src/models/redux/Account'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {PriorityFee} from '~src/models/PriorityFee'
 
 export declare global {
   type SenderTransactionActionsType =
-    | 'SET_ACCOUNT'
     | 'SET_TOKEN'
+    | 'SET_SENDER_ADDRESS'
     | 'SET_RECEIVER_ADDRESS'
     | 'SET_FEE_AMOUNT'
     | 'CLEAR_STATE'
 
   interface SenderTransactionState {
-    account: Account | null
     token: TokenAsset | null
+    senderAddress: string | null
     receiverAddress: string | null
     feeAmount: PriorityFee | null
   }

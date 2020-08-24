@@ -3,77 +3,72 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import {Currency} from '~src/enums/Currency'
-import {FilterHelper} from '~src/helpers/FilterHelper'
-import {AssetQuoteModel} from '~src/models/AssetQuoteModel'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
-  assetQuote: AssetQuoteModel
+  token: TokenAsset
 }
 
 const AssetQuoteComponent: React.FC<Props> = (props) => {
-  const {language} = useSelector((state: RootState) => state.settings)
+  const {exchange} = useSelector((state: RootState) => state.app)
+  const {language, currency} = useSelector((state: RootState) => state.settings)
 
-  //TODO get the real value of asset
-  const quoteOfAsset = 12345
+  const ratio = props.token.getCurrencyRatio(currency, exchange)
+  const amountExchanged = props.token.exchange(currency, exchange)
 
-  const quoteText = `${props.assetQuote.name} 1 = ${Facade.filter.currency(
-    quoteOfAsset,
-    Currency.USD,
-    language
-  )}`
+  const quoteText = ratio
+    ? `${props.token.symbol} 1 = ${Facade.filter.currency(
+        ratio,
+        currency,
+        language
+      )}`
+    : ''
 
-  const valueText = Facade.filter.currency(quoteOfAsset, Currency.USD, language)
+  const valueText = Facade.filter.currency(amountExchanged, currency, language)
 
   return (
-    <LinearLayout
-      orientation={'horiz'}
-      width={'100%'}
-      height={50}
-      marginTop={15}
-      alignItems="center"
-    >
+    <LinearLayout orientation={'horiz'} width={'100%'} alignItems="center">
       <ImageView
-        width={35}
-        height={35}
-        marginRight="10px"
-        source={require('~src/assets/images/Bitmap_Copy.png')}
+        mr={4}
+        width={Facade.scale(32)}
+        height={Facade.scale(32)}
+        resizeMode={'contain'}
+        source={props.token.srcIcon}
       />
 
-      <LinearLayout weight={1} orientation={'verti'} height={'100%'}>
+      <LinearLayout weight={1} mr={4} orientation={'verti'}>
         <TextView
+          mb={-1}
           fontFamily={'medium'}
           fontSize={12}
           color="text.2"
           textAlign="left"
+          allowFontScaling={true}
+          adjustsFontSizeToFit={true}
           numberOfLines={1}
         >
-          {props.assetQuote.name}
+          {props.token.symbol}
         </TextView>
+
         <TextView
           fontFamily={'bold'}
-          fontSize={24}
+          fontSize={'2xl'}
           color="white"
-          textAlign="left"
+          allowFontScaling={true}
+          adjustsFontSizeToFit={true}
           numberOfLines={1}
         >
-          {props.assetQuote.fullName}
+          {props.token.name}
         </TextView>
       </LinearLayout>
 
-      <LinearLayout
-        alignItems="flex-end"
-        weight={2}
-        orientation={'verti'}
-        width={'100%'}
-        height={'100%'}
-      >
+      <LinearLayout alignItems="flex-end">
         <TextView
+          mb={-1}
           fontFamily={'medium'}
-          fontSize={18}
-          color="text.2"
-          textAlign="left"
+          fontSize={'md'}
+          color={'text.2'}
           numberOfLines={1}
           allowFontScaling={true}
           adjustsFontSizeToFit={true}
@@ -82,9 +77,8 @@ const AssetQuoteComponent: React.FC<Props> = (props) => {
         </TextView>
         <TextView
           fontFamily={'medium'}
-          fontSize={18}
-          color="white"
-          textAlign="left"
+          fontSize={'lg'}
+          color={'text.0'}
           numberOfLines={1}
           allowFontScaling={true}
           adjustsFontSizeToFit={true}
@@ -97,7 +91,7 @@ const AssetQuoteComponent: React.FC<Props> = (props) => {
 }
 
 AssetQuoteComponent.propTypes = {
-  assetQuote: PropTypes.instanceOf(AssetQuoteModel).isRequired,
+  token: PropTypes.instanceOf(TokenAsset).isRequired,
 }
 
 export default AssetQuoteComponent

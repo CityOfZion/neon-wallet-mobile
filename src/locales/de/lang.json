@@ -281,8 +281,11 @@
     },
     "transactionsList": {
       "title": "#translateme",
+      "sent": "#translateme",
+      "received": "#translateme",
       "pending": "#translateme",
       "sentTo": "#translateme",
+      "receivedFrom": "#translateme",
       "value": "#translateme"
     }
   },
@@ -292,6 +295,7 @@
   },
   "dateFormat": {
     "date": "DD/MM/YYYY",
+    "datePretty": "DD/MM/YYYY",
     "datetime": "DD/MM/YYYY HH:mm",
     "time": "HH:mm"
   },

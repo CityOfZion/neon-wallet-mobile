@@ -1,11 +1,21 @@
+import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
+
 import * as Image from '~src/assets/nep5/png'
 import {Currency} from '~src/enums/Currency'
 import {Exchange} from '~src/types/exchange'
 
+@HttpExclude()
 export class TokenAsset {
+  @HttpExpose()
   name: string
+
+  @HttpExpose()
   symbol: string
+
+  @HttpExpose()
   hash: string
+
+  @HttpExpose()
   amount: number = 0
 
   constructor(name: string, symbol: string, hash: string) {
@@ -25,11 +35,15 @@ export class TokenAsset {
     return (Image as any)[this.symbol] ?? Image['NEO']
   }
 
-  exchange(currency: Currency, exchange: Exchange) {
+  getCurrencyRatio(currency: Currency, exchange: Exchange) {
     const {symbol} = this
     if (!symbol) return null
 
-    const ratio = exchange[symbol]?.to[currency] ?? null
+    return exchange[symbol]?.to[currency] ?? null
+  }
+
+  exchange(currency: Currency, exchange: Exchange) {
+    const ratio = this.getCurrencyRatio(currency, exchange)
     if (!ratio) return null
 
     const amount = this.amount ?? 0
