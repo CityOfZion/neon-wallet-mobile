@@ -1,4 +1,8 @@
-import {HttpExclude, HttpExpose, ResponseSerialize} from '@simpli/serialized-request'
+import {
+  HttpExclude,
+  HttpExpose,
+  ResponseSerialize,
+} from '@simpli/serialized-request'
 
 import {PriorityFee} from '~src/models/PriorityFee'
 import {TokenAsset} from '~src/models/TokenAsset'
