@@ -7,7 +7,6 @@ export class TokenAsset {
   symbol: string
   hash: string
   amount: number = 0
-  holding: number = 0
 
   constructor(name: string, symbol: string, hash: string) {
     this.name = name
