@@ -143,16 +143,6 @@ const AccountCard: React.FC<Props> = (props) => {
                 ? props.account.name
                 : Facade.t('paymentCard.accountPlaceholder')}
             </TextView>
-
-            {props.account.accountType === 'watch' && (
-              <ImageView
-                width={21 * unit}
-                height={21 * unit}
-                source={require('~/src/assets/images/icon-watch-white.png')}
-                ml={10 * unit}
-                mt={4 * unit}
-              />
-            )}
           </LinearLayout>
 
           {props.isCompacted ? (
@@ -261,23 +251,40 @@ const AccountCard: React.FC<Props> = (props) => {
             alignItems={'flex-end'}
           >
             <LinearLayout weight={1}>
-              <TextView
-                fontSize={14 * unit}
-                color="white"
-                textAlign="left"
-                fontWeight="bold"
-              >
-                {Facade.t('paymentCard.address')}
-              </TextView>
+              <LinearLayout orientation={'horiz'}>
+                {props.account.accountType === 'watch' && (
+                  <ImageView
+                    width={21 * unit}
+                    height={21 * unit}
+                    source={require('~/src/assets/images/icon-watch-white.png')}
+                    ml={2 * unit}
+                    mt={4 * unit}
+                    mb={4 * unit}
+                    alignSelf={'center'}
+                    mr={8 * unit}
+                  />
+                )}
 
-              <TextView
-                fontSize={14 * unit}
-                color="white"
-                opacity={0.5}
-                textAlign="left"
-              >
-                {props.account.address}
-              </TextView>
+                <LinearLayout>
+                  <TextView
+                    fontSize={14 * unit}
+                    color="white"
+                    textAlign="left"
+                    fontWeight="bold"
+                  >
+                    {Facade.t('paymentCard.address')}
+                  </TextView>
+
+                  <TextView
+                    fontSize={14 * unit}
+                    color="white"
+                    opacity={0.5}
+                    textAlign="left"
+                  >
+                    {props.account.address}
+                  </TextView>
+                </LinearLayout>
+              </LinearLayout>
             </LinearLayout>
 
             <TouchableOpacity
