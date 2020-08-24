@@ -40,6 +40,7 @@ interface Props {
 
 const ThemedButton: React.FC<Props> = (props) => {
   const [isActive, setActive] = useState<boolean>(props.active ?? false)
+  const [isSelected, setSelected] = useState(false)
   const width = Facade.scale(props.iconSize ? props.iconSize[0] : 20)
   const height = Facade.scale(props.iconSize ? props.iconSize[1] : 20)
   const fontSize = Facade.scale(props.fontSize ?? 22)
@@ -101,6 +102,12 @@ const ThemedButton: React.FC<Props> = (props) => {
 
   return (
     <ButtonView
+      onHideUnderlay={() => {
+        setSelected(false)
+      }}
+      onShowUnderlay={() => {
+        setSelected(true)
+      }}
       onPress={(e: NativeSyntheticEvent<NativeTouchEvent>) => {
         if (props.toggleable) {
           setActive(!isActive)
@@ -112,6 +119,7 @@ const ThemedButton: React.FC<Props> = (props) => {
       }}
       style={{opacity: props.disabled ? 0.4 : undefined}}
       disabled={props.disabled}
+      underlayColor="transparent"
     >
       <ThemedCard
         contentStyle={getStyle()}
@@ -123,6 +131,7 @@ const ThemedButton: React.FC<Props> = (props) => {
         alignY={'center'}
         borderThickness={props.borderThickness}
         borderColor={props.borderColor}
+        isPressed={isSelected}
       >
         {_renderLabel()}
       </ThemedCard>
@@ -160,7 +169,7 @@ ThemedButton.defaultProps = {
   basic: false,
 }
 
-const ButtonView = styled.TouchableOpacity``
+const ButtonView = styled.TouchableHighlight``
 
 const LabelView = styled(TextView)`
   text-align: center;
