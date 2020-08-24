@@ -1,7 +1,16 @@
 import {Facade} from '~src/app/Facade'
+import {
+  HttpExclude,
+  HttpExpose,
+  ResponseSerialize,
+} from '@simpli/serialized-request'
 
+@HttpExclude()
 export class PriorityFee {
+  @HttpExpose
   name: string
+
+  @HttpExpose
   fee: number
 
   constructor(name: string, fee: number) {

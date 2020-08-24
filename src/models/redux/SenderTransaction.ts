@@ -1,4 +1,4 @@
-import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
+import {HttpExclude, HttpExpose, ResponseSerialize} from '@simpli/serialized-request'
 
 import {PriorityFee} from '~src/models/PriorityFee'
 import {TokenAsset} from '~src/models/TokenAsset'
@@ -15,6 +15,7 @@ export class SenderTransaction implements SenderTransactionState {
   @HttpExpose()
   receiverAddress: string | null = null
 
+  @ResponseSerialize(PriorityFee)
   @HttpExpose()
   feeAmount: PriorityFee | null = null
 
