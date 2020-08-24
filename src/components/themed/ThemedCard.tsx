@@ -20,6 +20,7 @@ interface Props {
   hasBright?: boolean
   borderThickness?: number | string
   borderColor?: string
+  isPressed?: boolean
 }
 
 const ThemedCard: React.FC<Props> = (props) => {
@@ -29,7 +30,7 @@ const ThemedCard: React.FC<Props> = (props) => {
 
   const getBorderRadius = () => {
     if (props.rounded) {
-      return 26
+      return 8
     }
 
     return 5
@@ -61,8 +62,8 @@ const ThemedCard: React.FC<Props> = (props) => {
         height: 6,
       },
       shadowOpacity: 0.4,
-      shadowRadius: 6,
-      elevation: props.flat ? 0 : 10,
+      shadowRadius: 0,
+      elevation: props.flat ? 0 : 4,
     }
 
     return Facade.lodash.merge(
@@ -99,7 +100,11 @@ const ThemedCard: React.FC<Props> = (props) => {
 
         {props.hasBright && !props.flat && (
           <DarkCardShadow
-            colors={['rgba(52, 67, 75, 0.55)', 'rgba(0, 0, 0, 0.1)']}
+            colors={
+              props.isPressed
+                ? ['rgba(86,106,118, 0.55)', 'rgba(0, 0, 0, 0.1)']
+                : ['rgba(52,67,75, 0.55)', 'rgba(0, 0, 0, 0.1)']
+            }
             locations={[0, 1]}
             start={[1, 0]}
             end={[1, 1]}
@@ -126,6 +131,7 @@ ThemedCard.propTypes = {
   hasBright: PropTypes.bool,
   borderThickness: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   borderColor: PropTypes.string,
+  isPressed: PropTypes.bool,
 }
 
 ThemedCard.defaultProps = {
