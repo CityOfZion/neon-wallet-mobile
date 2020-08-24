@@ -14,6 +14,13 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {NeoURI} from '~src/helpers/UriHelper'
+import {
+  FasterPriority,
+  FastestPriority,
+  FastPriority,
+  NoPriority,
+  PriorityFee,
+} from '~src/models/PriorityFee'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
@@ -25,13 +32,6 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
-
-// TODO: Review fees
-export enum Priority {
-  FAST = 0.00001,
-  FASTER = 0.0001,
-  FASTEST = 0.001,
-}
 
 export interface SendTransactionInputModalParams {
   walletTitle: string
@@ -54,6 +54,7 @@ const SendTransactionInputModal = (prop: Props) => {
 
   const {contacts} = useSelector((state: RootState) => state.app)
   const {language} = useSelector((state: RootState) => state.settings)
+
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
@@ -65,15 +66,15 @@ const SendTransactionInputModal = (prop: Props) => {
 
   const [contact, setContact] = useState<Contact>()
   const [token, setToken] = useState<TokenAsset | null>(null)
-  const [priority, setPriority] = useState<Priority | null>(Priority.FAST)
+  const [priority, setPriority] = useState<PriorityFee>(FastPriority())
 
   const dispatch = useDispatch<SyncDispatch>()
 
-  const changePriority = (newPriority: Priority) => {
-    if (priority === newPriority) {
-      setPriority(null)
+  const changePriority = (newPriority: PriorityFee) => {
+    if (priority.equals(newPriority)) {
+      setPriority(NoPriority)
     } else {
-      setPriority(priority)
+      setPriority(newPriority)
     }
   }
 
@@ -82,15 +83,16 @@ const SendTransactionInputModal = (prop: Props) => {
 
     const tokenWithAmount = Facade.utils.clone(token)
     tokenWithAmount.amount = amount
-
-    const feeAmount = priority ?? null
+    const receiverAddress = contact ? contact.address ?? '' : address
 
     dispatch(RootStore.senderTransaction.actions.clearState())
 
     dispatch(RootStore.senderTransaction.actions.setAccount(account))
-    dispatch(RootStore.senderTransaction.actions.setReceiverAddress(address))
+    dispatch(
+      RootStore.senderTransaction.actions.setReceiverAddress(receiverAddress)
+    )
     dispatch(RootStore.senderTransaction.actions.setToken(tokenWithAmount))
-    dispatch(RootStore.senderTransaction.actions.setFeeAmount(feeAmount))
+    dispatch(RootStore.senderTransaction.actions.setFeeAmount(priority))
 
     prop.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
   }
@@ -128,105 +130,113 @@ const SendTransactionInputModal = (prop: Props) => {
         height="75px"
       >
         <ButtonView
-          bg={priority === Priority.FAST ? 'background.0' : 'background.1'}
+          bg={priority.equals(FastPriority()) ? 'background.0' : 'background.1'}
           weight={1}
           p="16px"
           borderBottomLeftRadius={8}
           borderTopLeftRadius={8}
           justifyContent="center"
-          onPress={() => changePriority(Priority.FAST)}
+          onPress={() => changePriority(FastPriority())}
         >
           <LinearLayout orientation="horiz" alignItems="center">
             <ImageView
               source={
-                priority === Priority.FAST
+                priority.equals(FastPriority())
                   ? priorityIconActive
                   : priorityIconInactive
               }
             />
             <LinearLayout ml="8px">
               <TextView
-                color={priority === Priority.FAST ? 'primary' : 'text.3'}
+                color={priority.equals(FastPriority()) ? 'primary' : 'text.3'}
                 fontSize="16px"
                 fontFamily="semibold"
               >
                 {Facade.t('modals.send.transactionInput.priorityFast')}
               </TextView>
               <TextView
-                color={priority === Priority.FAST ? 'primary' : 'text.3'}
+                color={priority.equals(FastPriority()) ? 'primary' : 'text.3'}
                 fontSize="12px"
               >
-                0.00001 GAS
+                {FastPriority().fee} GAS
               </TextView>
             </LinearLayout>
           </LinearLayout>
         </ButtonView>
         <ButtonView
           weight={1}
-          bg={priority === Priority.FASTER ? 'background.0' : 'background.1'}
+          bg={
+            priority.equals(FasterPriority()) ? 'background.0' : 'background.1'
+          }
           p="16px"
           borderStyle="solid"
           borderLeftWidth={1}
           borderRightWidth={1}
           borderColor="black"
           justifyContent="center"
-          onPress={() => changePriority(Priority.FASTER)}
+          onPress={() => changePriority(FasterPriority())}
         >
           <LinearLayout orientation="horiz" alignItems="center">
             <ImageView
               source={
-                priority === Priority.FASTER
+                priority.equals(FasterPriority())
                   ? priorityIconActive
                   : priorityIconInactive
               }
             />
             <LinearLayout ml="8px">
               <TextView
-                color={priority === Priority.FASTER ? 'primary' : 'text.3'}
+                color={priority.equals(FasterPriority()) ? 'primary' : 'text.3'}
                 fontSize="16px"
                 fontFamily="semibold"
               >
                 {Facade.t('modals.send.transactionInput.priorityFaster')}
               </TextView>
               <TextView
-                color={priority === Priority.FASTER ? 'primary' : 'text.3'}
+                color={priority.equals(FasterPriority()) ? 'primary' : 'text.3'}
                 fontSize="12px"
               >
-                0.00001 GAS
+                {FasterPriority().fee} GAS
               </TextView>
             </LinearLayout>
           </LinearLayout>
         </ButtonView>
         <ButtonView
           weight={1}
-          bg={priority === Priority.FASTEST ? 'background.0' : 'background.1'}
+          bg={
+            priority.equals(FastestPriority()) ? 'background.0' : 'background.1'
+          }
           p="16px"
           borderBottomRightRadius={8}
           borderTopRightRadius={8}
           justifyContent="center"
-          onPress={() => changePriority(Priority.FASTEST)}
+          onPress={() => changePriority(FastestPriority())}
         >
           <LinearLayout orientation="horiz" alignItems="center">
             <ImageView
               source={
-                priority === Priority.FASTEST
+                priority.equals(FastestPriority())
                   ? priorityIconActive
                   : priorityIconInactive
               }
             />
             <LinearLayout ml="8px">
               <TextView
-                color={priority === Priority.FASTEST ? 'primary' : 'text.3'}
+                color={
+                  priority.equals(FastestPriority()) ? 'primary' : 'text.3'
+                }
                 fontSize="16px"
                 fontFamily="semibold"
               >
                 {Facade.t('modals.send.transactionInput.priorityFastest')}
               </TextView>
               <TextView
-                color={priority === Priority.FASTEST ? 'primary' : 'text.3'}
+                color={
+                  priority.equals(FastestPriority()) ? 'primary' : 'text.3'
+                }
                 fontSize="12px"
               >
-                0.00001 GAS
+                {FastestPriority().fee} GAS
               </TextView>
             </LinearLayout>
           </LinearLayout>

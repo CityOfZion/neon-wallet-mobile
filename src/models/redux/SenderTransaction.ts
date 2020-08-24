@@ -1,5 +1,6 @@
-import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
+import {HttpExclude, HttpExpose, ResponseSerialize} from '@simpli/serialized-request'
 
+import {PriorityFee} from '~src/models/PriorityFee'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 
@@ -14,8 +15,9 @@ export class SenderTransaction implements SenderTransactionState {
   @HttpExpose()
   receiverAddress: string | null = null
 
+  @ResponseSerialize(PriorityFee)
   @HttpExpose()
-  feeAmount: number | null = null
+  feeAmount: PriorityFee | null = null
 
   @HttpExpose()
   sentAt: string | null = null
