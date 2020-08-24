@@ -30,7 +30,6 @@ const CustomColorPage = (props: Props) => {
   const account = new Account()
   account.srcIcon = require('~src/assets/images/card-neo.png')
   account.name = 'Demo Card'
-  account.currency = Currency.USD
   account.address = 'AN8iLVt18CKoATdexztCQj923hw5gkc41A'
   account.backgroundColor = color
 

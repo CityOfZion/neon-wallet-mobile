@@ -41,11 +41,9 @@ export class Account implements AccountState {
   name: string | null = null
 
   @HttpExpose()
-  currency: Currency | null = null
-
-  @HttpExpose()
   backgroundColor = '#00aaff'
 
+  // Balance of tokens
   @ResponseSerialize(TokenAsset)
   tokenAssets: TokenAsset[] = []
 

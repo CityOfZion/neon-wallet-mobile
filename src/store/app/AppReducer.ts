@@ -125,7 +125,17 @@ export class AppReducer extends ReducerWrapper<
     syncWallets: (): AsyncAction<Wallet[]> => {
       return async (dispatch, getState) => {
         const wallets = await Storage.wallets.load()
+
+        // get the balance cache in order to avoid to recalculate
+        const walletsTokenAssets = getState().app.wallets.map(
+          (it) => it.tokenAssets
+        )
+
         if (wallets) {
+          wallets.forEach((it, i) => {
+            it.tokenAssets = walletsTokenAssets[i] ?? []
+          })
+
           dispatch(this.commit('SET_WALLETS', {wallets}))
         }
 
@@ -160,15 +170,38 @@ export class AppReducer extends ReducerWrapper<
         const accounts = await Storage.accounts.load()
         const wallets = await Storage.wallets.load()
 
+        // get the balance cache in order to avoid to recalculate
+        const accountsTokenAssets = getState().app.accounts.map(
+          (it) => it.tokenAssets
+        )
+
         if (accounts && wallets) {
-          accounts.forEach((it) => {
+          accounts.forEach((it, i) => {
             it.accountType = it.getWallet(wallets)?.walletType ?? null
+            it.tokenAssets = accountsTokenAssets[i] ?? []
           })
 
           dispatch(this.commit('SET_ACCOUNTS', {accounts}))
         }
 
         return accounts ?? []
+      }
+    },
+
+    syncTokenAssetsByAddress: (address: string): AsyncAction => {
+      return async (dispatch, getState) => {
+        const {accounts, wallets} = getState().app
+
+        const account = accounts.find((it) => it.address === address)
+
+        if (account) {
+          await account.populateTokenAssets()
+
+          const wallet = account.getWallet(wallets)
+          if (wallet) {
+            wallet.populateTokenAssets(accounts)
+          }
+        }
       }
     },
 
