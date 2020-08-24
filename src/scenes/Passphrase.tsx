@@ -51,7 +51,6 @@ const Passphrase = (props: PassphraseProps) => {
   // TODO: NW-215
   const account = new Account()
   account.address = 'ThisIsAPlaceholderAddress'
-  account.currency = currency
   account.srcIcon = require('~src/assets/images/card-neo.png')
 
   const clearOnFocus = () => {

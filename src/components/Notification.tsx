@@ -1,6 +1,9 @@
 import React, {useState} from 'react'
+import {useDispatch} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {Wallet} from '~src/models/redux/Wallet'
+import {RootStore} from '~src/store/RootStore'
 import styled, {
   ButtonView,
   ImageView,
@@ -9,13 +12,26 @@ import styled, {
 } from '~src/styles/styled-components'
 
 interface NotificationProps {
+  wallet: Wallet
   text: string
 }
 
 const Notification = (props: NotificationProps) => {
-  const [seen, setSeen] = useState(false)
+  const [seen, setSeen] = useState(!props.wallet.showBackupAlert)
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   if (seen) return null
+
+  const close = async () => {
+    setSeen(true)
+
+    if (props.wallet.id) {
+      await dispatchAsync(
+        RootStore.wallet.actions.setShowBackupAlert(props.wallet.id, false)
+      )
+      await dispatchAsync(RootStore.app.actions.syncWallets())
+    }
+  }
 
   return (
     <NotificationBox
@@ -34,7 +50,7 @@ const Notification = (props: NotificationProps) => {
         <TextView color="text.0" fontSize="14px" lineHeight="14px" weight={1}>
           {props.text}
         </TextView>
-        <ButtonView alignSelf="center" onPress={() => setSeen(true)}>
+        <ButtonView alignSelf="center" onPress={() => close()}>
           <ImageView
             height={'9px'}
             width={'9px'}

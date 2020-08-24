@@ -8,7 +8,6 @@ export declare global {
     | 'SET_ID_WALLET'
     | 'SET_NAME'
     | 'SET_SRC_ICON'
-    | 'SET_CURRENCY'
     | 'SET_BACKGROUND_COLOR'
     | 'CLEAR_STATE'
 
@@ -18,7 +17,6 @@ export declare global {
     idWallet: string | null
     name: string | null
     srcIcon: ImageLoadEventData | null
-    currency: Currency | null
     backgroundColor: string | null
   }
 

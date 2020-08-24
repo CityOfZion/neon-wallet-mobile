@@ -40,6 +40,7 @@ export abstract class Sync {
     )
 
     await dispatch(RootStore.app.actions.syncTokenAssets())
+    await dispatch(RootStore.app.actions.syncBackupAlerts())
 
     return {
       settings,

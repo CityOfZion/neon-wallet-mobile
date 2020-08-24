@@ -1,7 +1,7 @@
 import {CommonActions} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useRef, useState} from 'react'
 import {Alert, TouchableWithoutFeedback, View} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
@@ -10,14 +10,10 @@ import {Facade} from '~src/app/Facade'
 import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
-import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
-import {NeoNode} from '~src/models/NeoNode'
-import {TokenAsset} from '~src/models/TokenAsset'
 import {Wallet} from '~src/models/redux/Wallet'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {
   ButtonView,
@@ -250,9 +246,12 @@ const ListWalletView = (props: WalletProps) => {
           {_renderWalletChange()}
 
           <LinearLayout mx={'16px'}>
-            {!wallet?.lastBackup && (
+            {wallet?.showBackupAlert && (
               <LinearLayout mb={6}>
-                <Notification text={Facade.t('screens.listWallets.noBackup')} />
+                <Notification
+                  text={Facade.t('screens.listWallets.noBackup')}
+                  wallet={wallet}
+                />
               </LinearLayout>
             )}
 

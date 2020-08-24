@@ -29,6 +29,9 @@ export class Wallet implements WalletState {
   @HttpExpose()
   lastBackup: string | null = null
 
+  @HttpExpose()
+  showBackupAlert: boolean = false
+
   // Balance of tokens
   @ResponseSerialize(TokenAsset)
   tokenAssets: TokenAsset[] = []

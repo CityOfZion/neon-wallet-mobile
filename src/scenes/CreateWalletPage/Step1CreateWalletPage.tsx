@@ -1,18 +1,77 @@
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import PropTypes from 'prop-types'
 import React from 'react'
+import {TouchableOpacity, View} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {TextView, LinearLayout} from '~src/styles/styled-components'
+import {TabStackParamList} from '~src/navigation/TabNavigation'
+import {TextView, LinearLayout, ImageView} from '~src/styles/styled-components'
+
+export interface Step1CreateWalletParams {
+  source?: keyof ModalStackParamList
+}
 
 interface Props {
-  navigation: StackNavigationProp<MoreStackParamList>
+  navigation: StackNavigationProp<TabStackParamList & MoreStackParamList>
+  route: RouteProp<MoreStackParamList, 'Step1CreateWallet'>
+}
+
+const CustomBackButton = (props: Props) => {
+  const showButton =
+    props.route.params?.source === Facade.route.WalletContextModal.name ||
+    props.navigation.canGoBack()
+  return (
+    <View>
+      {showButton && (
+        <TouchableOpacity
+          onPress={() => {
+            if (
+              props.route.params?.source ===
+              Facade.route.WalletContextModal.name
+            ) {
+              props.navigation.navigate(Facade.route.ListWallets.name)
+              props.navigation.pop()
+            } else {
+              if (props.navigation.canGoBack()) {
+                props.navigation.goBack()
+              }
+            }
+          }}
+        >
+          <LinearLayout orientation={'horiz'} alignItems={'center'}>
+            <ImageView
+              ml={4}
+              mr={3}
+              source={require('~src/assets/images/icon_arrow_left_white.png')}
+            />
+
+            <TextView
+              mt={Facade.utils.isAndroid ? -2 : 2}
+              fontSize={'lg'}
+              color={'text.0'}
+              style={{
+                includeFontPadding: false,
+              }}
+            >
+              {Facade.t('app.back')}
+            </TextView>
+          </LinearLayout>
+        </TouchableOpacity>
+      )}
+    </View>
+  )
 }
 
 const Step1CreateWalletPage: React.FC<Props> = (props) => {
+  props.navigation.setOptions({
+    headerLeft: () => CustomBackButton(props),
+  })
+
   const _renderItem = (index: number, title: string, body: string) => {
     return (
       <LinearLayout mb={6} orientation={'horiz'}>
@@ -93,6 +152,10 @@ const Step1CreateWalletPage: React.FC<Props> = (props) => {
 }
 
 Step1CreateWalletPage.propTypes = {
+  navigation: PropTypes.any,
+}
+
+CustomBackButton.propTypes = {
   navigation: PropTypes.any,
 }
 
