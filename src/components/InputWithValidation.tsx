@@ -3,7 +3,7 @@ import React from 'react'
 import {
   KeyboardTypeOptions,
   NativeSyntheticEvent,
-  TargetedEvent,
+  TargetedEvent, TextInputFocusEventData,
   TouchableWithoutFeedback,
 } from 'react-native'
 import {useSelector} from 'react-redux'
@@ -46,6 +46,7 @@ interface Props {
   placeholder?: string
   secure?: boolean
   onFocus?: (e: NativeSyntheticEvent<TargetedEvent>) => void
+  onBlur?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void
   editable?: boolean
   keyboardType?: KeyboardTypeOptions
   selectedContact?: Contact
@@ -89,6 +90,7 @@ const InputWithValidation = (props: Props) => {
             autoCompleteType={props.secure ? 'password' : undefined}
             secureTextEntry={props.secure ?? false}
             onFocus={props.onFocus}
+            onBlur={props.onBlur}
             editable={props.editable ?? true}
             keyboardType={props.keyboardType}
           />
