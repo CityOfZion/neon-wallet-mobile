@@ -5,10 +5,10 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList & ModalStackParamList>

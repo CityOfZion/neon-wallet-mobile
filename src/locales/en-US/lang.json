@@ -500,5 +500,9 @@
   "contactPicker" : {
     "title": "Contacts",
     "selectContact" : "Select a contact to send."
+  },
+  "toast" : {
+    "transaction": "Transaction",
+    "gasClaimSucess" : "GAS Claim Sucessfull"
   }
 }

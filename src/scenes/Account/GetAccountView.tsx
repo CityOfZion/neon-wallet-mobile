@@ -2,6 +2,7 @@ import {RouteProp, useFocusEffect} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useState, useCallback, useEffect} from 'react'
+import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -168,6 +169,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
           label={Facade.t('screens.getAccount.claimAsset', {
             assetAmount: '0.0000123 GAS',
           })}
+          //TODO NW-158 Show gas when claim is finished
+          onPress={() => showMessage({message: 'placeholder'})}
         />
       </LinearLayout>
 

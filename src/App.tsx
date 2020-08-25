@@ -2,12 +2,14 @@ import {AppLoading} from 'expo'
 import * as Font from 'expo-font'
 import React, {useState} from 'react'
 import {StatusBar} from 'react-native'
+import FlashMessage from 'react-native-flash-message'
 import {Provider as StoreProvider} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import {createLogger} from 'redux-logger'
 import thunk from 'redux-thunk'
 
+import {ThemedAlert} from '~src/components/themed/ThemedAlert'
 import AppNavigation from '~src/navigation/AppNavigation'
 import {RootStore} from '~src/store/RootStore'
 
@@ -46,6 +48,7 @@ const App = () => {
     <StoreProvider store={store}>
       <StatusBar barStyle={'light-content'} />
       <AppNavigation />
+      <FlashMessage position="top" MessageComponent={ThemedAlert} />
     </StoreProvider>
   )
 }
