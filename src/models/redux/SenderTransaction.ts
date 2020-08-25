@@ -3,9 +3,7 @@ import {
   HttpExpose,
   ResponseSerialize,
 } from '@simpli/serialized-request'
-
 import moment from 'moment'
-
 
 import {Facade} from '~src/app/Facade'
 import {PriorityFee} from '~src/models/PriorityFee'

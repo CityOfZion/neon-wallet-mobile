@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
+import {Currency} from '~src/enums/Currency'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import styled, {
@@ -14,6 +15,7 @@ import styled, {
   RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
+import {Exchange} from '~src/types/exchange'
 
 interface Props {
   wallet: Wallet
@@ -21,29 +23,78 @@ interface Props {
   onPress?: () => void
 }
 
-const WalletCard: React.FC<Props> = (props) => {
-  const {accounts, exchange} = useSelector((state: RootState) => state.app)
-  const {currency} = useSelector((state: RootState) => state.settings)
+const WalletLabel = (props: {walletType: string; walletName: string}) => {
+  return (
+    <RelativeLayout height={58} width={'100%'} mb={15}>
+      {props.walletType === 'standard' ? (
+        <Fragment>
+          <ImageView
+            height={'100%'}
+            width={'100%'}
+            resizeMode={'contain'}
+            source={require('~src/assets/images/wallet-card-label.png')}
+          />
+          <LinearLayout bottom={40} orientation="horiz" alignItems={'center'}>
+            <ImageView
+              ml="12px"
+              width={28}
+              height={24}
+              resizeMode={'contain'}
+              source={require('~src/assets/images/wallet-icon.png')}
+            />
+            <TextView
+              ml="8px"
+              width={'70%'}
+              fontSize="16px"
+              fontFamily="bold"
+              color="text.0"
+              allowFontScaling={true}
+              adjustsFontSizeToFit={true}
+              numberOfLines={1}
+            >
+              {props.walletName?.toUpperCase()}
+            </TextView>
+          </LinearLayout>
+        </Fragment>
+      ) : (
+        <Fragment>
+          <ImageView
+            position={'absolute'}
+            left={0}
+            source={require('~src/assets/images/wallet-icon-label.png')}
+          />
+          {props.walletType === 'watch' ? (
+            <ImageView
+              top={15}
+              left={15}
+              width={26}
+              height={26}
+              resizeMode={'contain'}
+              source={require('~src/assets/images/icon-watch-green.png')}
+            />
+          ) : (
+            <ImageView
+              top={12}
+              left={12}
+              width={36}
+              height={32}
+              resizeMode={'contain'}
+              source={require('~src/assets/images/icon-legacy-grey.png')}
+            />
+          )}
+        </Fragment>
+      )}
+    </RelativeLayout>
+  )
+}
 
-  const [viewHeight, setViewHeight] = useState<number>(0)
-  const [walletAccounts, setWalletAccounts] = useState<Account[]>([])
-
-  useEffect(() => {
-    setWalletAccounts(props.wallet.getAccounts(accounts))
-  }, [accounts])
-
-  const layoutEvent = (event: LayoutChangeEvent) => {
-    const {height} = event.nativeEvent.layout
-    setViewHeight(height)
-  }
-
-  const getTotalAmount = () => {
-    return Facade.lodash.sumBy(walletAccounts, (it) =>
-      it.exchangeBalanceAmount(currency, exchange)
-    )
-  }
-
-  const _renderAssetsBarFills = () => {
+function getRenderAssetsBarFills(
+  walletAccounts: Account[],
+  currency: Currency,
+  exchange: Exchange,
+  getTotalAmount: () => number
+) {
+  return () => {
     return walletAccounts.map((account, i) => {
       const amount = account.exchangeBalanceAmount(currency, exchange)
       const percentageOfTotal = (amount / getTotalAmount()) * 100
@@ -61,96 +112,29 @@ const WalletCard: React.FC<Props> = (props) => {
       )
     })
   }
+}
 
-  const WalletOverlay = () => {
-    const getOverlayImage = () => {
-      if (props.wallet.walletType === 'standard') {
-        return require('~src/assets/images/wallet-card-front.png')
-      }
+const WalletOverlay = (props: {walletType: string}) => {
+  const overlayImage =
+    props.walletType === 'standard'
+      ? require('~src/assets/images/wallet-card-front.png')
+      : require('~src/assets/images/wallet-semi-front.png')
+  const height = props.walletType === 'standard' ? '100%' : '75%'
 
-      return require('~src/assets/images/wallet-semi-front.png')
-    }
+  return (
+    <ImageView
+      width={'100%'}
+      height={height}
+      position={'absolute'}
+      bottom={'-2px'}
+      resizeMode={'stretch'}
+      source={overlayImage}
+    />
+  )
+}
 
-    const height = props.wallet.walletType === 'standard' ? '100%' : '75%'
-
-    return (
-      <ImageView
-        width={'100%'}
-        height={height}
-        position={'absolute'}
-        bottom={'-2px'}
-        resizeMode={'stretch'}
-        source={getOverlayImage()}
-      />
-    )
-  }
-
-  const WalletLabel = () => {
-    return (
-      <RelativeLayout height={58} width={'100%'} mb={15}>
-        {props.wallet.walletType === 'standard' ? (
-          <Fragment>
-            <ImageView
-              height={'100%'}
-              width={'100%'}
-              resizeMode={'contain'}
-              source={require('~src/assets/images/wallet-card-label.png')}
-            />
-            <LinearLayout bottom={40} orientation="horiz" alignItems={'center'}>
-              <ImageView
-                ml="12px"
-                width={28}
-                height={24}
-                resizeMode={'contain'}
-                source={require('~src/assets/images/wallet-icon.png')}
-              />
-              <TextView
-                ml="8px"
-                width={'70%'}
-                fontSize="16px"
-                fontFamily="bold"
-                color="text.0"
-                allowFontScaling={true}
-                adjustsFontSizeToFit={true}
-                numberOfLines={1}
-              >
-                {props.wallet.name?.toUpperCase()}
-              </TextView>
-            </LinearLayout>
-          </Fragment>
-        ) : (
-          <Fragment>
-            <ImageView
-              position={'absolute'}
-              left={0}
-              source={require('~src/assets/images/wallet-icon-label.png')}
-            />
-            {props.wallet.walletType === 'watch' ? (
-              <ImageView
-                top={15}
-                left={15}
-                width={26}
-                height={26}
-                resizeMode={'contain'}
-                source={require('~src/assets/images/icon-watch-green.png')}
-              />
-            ) : (
-              <ImageView
-                top={12}
-                left={12}
-                width={36}
-                height={32}
-                resizeMode={'contain'}
-                source={require('~src/assets/images/icon-legacy-grey.png')}
-              />
-            )}
-          </Fragment>
-        )}
-      </RelativeLayout>
-    )
-  }
-
-  const _accountContainer = (account: Account, index: number) => {
+function renderAccountContainer(viewHeight: number) {
+  const AccountContainer = (account: Account, index: number) => {
     const ratio = 38 / 25
     const cardWidth = viewHeight - 12
     const cardHeight = cardWidth / ratio
@@ -177,6 +161,39 @@ const WalletCard: React.FC<Props> = (props) => {
       </LinearLayout>
     )
   }
+  return AccountContainer
+}
+
+const WalletCard: React.FC<Props> = (props) => {
+  const {accounts, exchange} = useSelector((state: RootState) => state.app)
+  const {currency} = useSelector((state: RootState) => state.settings)
+
+  const [viewHeight, setViewHeight] = useState<number>(0)
+  const [walletAccounts, setWalletAccounts] = useState<Account[]>([])
+
+  useEffect(() => {
+    setWalletAccounts(props.wallet.getAccounts(accounts))
+  }, [accounts])
+
+  const layoutEvent = (event: LayoutChangeEvent) => {
+    const {height} = event.nativeEvent.layout
+    setViewHeight(height)
+  }
+
+  const getTotalAmount = () => {
+    return Facade.lodash.sumBy(walletAccounts, (it) =>
+      it.exchangeBalanceAmount(currency, exchange)
+    )
+  }
+
+  const _renderAssetsBarFills = getRenderAssetsBarFills(
+    walletAccounts,
+    currency,
+    exchange,
+    getTotalAmount
+  )
+
+  const _accountContainer = renderAccountContainer(viewHeight)
 
   return (
     <WalletCardRelativeContainer
@@ -192,10 +209,13 @@ const WalletCard: React.FC<Props> = (props) => {
     >
       {walletAccounts.slice(0, 10).map((it, i) => _accountContainer(it, i))}
 
-      <WalletOverlay />
+      <WalletOverlay walletType={props.wallet.walletType ?? ''} />
 
       <LinearLayout position={'absolute'} bottom={40} width={'80%'}>
-        <WalletLabel />
+        <WalletLabel
+          walletName={props.wallet.name ?? ''}
+          walletType={props.wallet.walletType ?? ''}
+        />
         <RelativeLayout height={12} width={'100%'}>
           <AssetsBarBackground
             height={'10px'}
