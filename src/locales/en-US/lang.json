@@ -441,8 +441,11 @@
     },
     "transactionsList": {
       "title": "PENDING TRANSACTIONS",
+      "sent": "Sent",
+      "received": "Received",
       "pending": "Pending",
       "sentTo": "Sent to",
+      "receivedFrom": "Received from",
       "value": "Value"
     },
     "colorSelector": {
@@ -462,6 +465,7 @@
   },
   "dateFormat": {
     "date": "MM/DD/YYYY",
+    "datePretty": "MMM DD, YYYY",
     "datetime": "MM/DD/YYYY HH:mm",
     "time": "HH:mm"
   },

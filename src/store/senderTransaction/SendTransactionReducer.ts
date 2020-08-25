@@ -10,10 +10,10 @@ import {PriorityFee} from '~src/models/PriorityFee'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
-import {AccountDispatcher} from '~src/store/senderTransaction/dispatchers/AccountDispatcher'
 import {ClearStateDispatcher} from '~src/store/senderTransaction/dispatchers/ClearStateDispatcher'
 import {FeeAmountDispatcher} from '~src/store/senderTransaction/dispatchers/FeeAmountDispatcher'
 import {ReceiverAddressDispatcher} from '~src/store/senderTransaction/dispatchers/ReceiverAddressDispatcher'
+import {SenderAddressDispatcher} from '~src/store/senderTransaction/dispatchers/SenderAddressDispatcher'
 import {TokenDispatcher} from '~src/store/senderTransaction/dispatchers/TokenDispatcher'
 
 export class SendTransactionReducer extends ReducerWrapper<
@@ -26,7 +26,7 @@ export class SendTransactionReducer extends ReducerWrapper<
   )
 
   protected readonly dispatchers = [
-    AccountDispatcher,
+    SenderAddressDispatcher,
     FeeAmountDispatcher,
     ReceiverAddressDispatcher,
     TokenDispatcher,
@@ -34,14 +34,14 @@ export class SendTransactionReducer extends ReducerWrapper<
   ]
 
   readonly actions = {
-    setAccount: (account: Account) => {
-      return this.commit('SET_ACCOUNT', {account})
+    setToken: (token: TokenAsset) => {
+      return this.commit('SET_TOKEN', {token})
+    },
+    setSenderAddress: (senderAddress: string) => {
+      return this.commit('SET_SENDER_ADDRESS', {senderAddress})
     },
     setReceiverAddress: (receiverAddress: string) => {
       return this.commit('SET_RECEIVER_ADDRESS', {receiverAddress})
-    },
-    setToken: (token: TokenAsset) => {
-      return this.commit('SET_TOKEN', {token})
     },
     setFeeAmount: (feeAmount: PriorityFee) => {
       return this.commit('SET_FEE_AMOUNT', {feeAmount})
@@ -53,12 +53,12 @@ export class SendTransactionReducer extends ReducerWrapper<
       return async (dispatch, getState) => {
         const sendTx = getState().senderTransaction
 
-        const {account, token, receiverAddress, feeAmount} = sendTx
+        const {token, senderAddress, receiverAddress, feeAmount} = sendTx
         const fees = feeAmount
 
-        if (!account) throw new Error('Account not defined')
         if (!token) throw new Error('Token not defined')
-        if (!receiverAddress) throw new Error('Receiver account not defined')
+        if (!senderAddress) throw new Error('Sender address not defined')
+        if (!receiverAddress) throw new Error('Receiver address not defined')
 
         const {symbol, amount} = token
         const nativeAssets = Config.application.assets.split(',')
@@ -67,7 +67,7 @@ export class SendTransactionReducer extends ReducerWrapper<
           const assets = symbol as 'GAS' | 'NEO'
 
           return await NeonHelper.sendNativeAsset(
-            account,
+            senderAddress,
             receiverAddress,
             assets,
             amount,
@@ -76,7 +76,7 @@ export class SendTransactionReducer extends ReducerWrapper<
         }
 
         return await NeonHelper.sendNep5Asset(
-          account,
+          senderAddress,
           receiverAddress,
           token,
           fees?.fee
@@ -96,12 +96,34 @@ export class SendTransactionReducer extends ReducerWrapper<
         )
         senderTransaction.sentAt = Facade.moment().format()
         senderTransaction.transactionHash = transactionHash
+        senderTransaction.isPending = true
 
         pendingTransactions.push(senderTransaction)
 
         await Storage.pendingTransactions.save(pendingTransactions)
 
         return senderTransaction
+      }
+    },
+    removeFromHistory: (
+      transactionHash: string
+    ): AsyncAction<SenderTransaction | null> => {
+      return async (dispatch, getState) => {
+        const pendingTransactions =
+          (await Storage.pendingTransactions.load()) ?? []
+
+        const index = pendingTransactions.findIndex(
+          (it) => it.transactionHash === transactionHash
+        )
+        if (index >= 0) {
+          pendingTransactions.splice(index, 1)
+
+          await Storage.pendingTransactions.save(pendingTransactions)
+
+          return pendingTransactions[index] ?? null
+        }
+
+        return null
       }
     },
   }

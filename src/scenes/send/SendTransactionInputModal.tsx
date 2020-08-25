@@ -59,7 +59,9 @@ const SendTransactionInputModal = (prop: Props) => {
     (state: RootState) => Facade.theme[state.settings.theme]
   )
 
-  const [address, setAddress] = useState(prop.route.params?.uri?.address ?? '')
+  const [receiverAddress, setReceiverAddress] = useState(
+    prop.route.params?.uri?.address ?? ''
+  )
   const [amount, setAmount] = useState(uri?.amount ?? 0)
   // TODO: convert hash into TokenValue
   // const hash = props.route.params?.uri?.asset ?? ''
@@ -79,19 +81,23 @@ const SendTransactionInputModal = (prop: Props) => {
   }
 
   const submit = () => {
+    const senderAddress = account.address
+
+    if (!senderAddress) throw new Error('Sender address was not defined')
     if (!token) throw new Error('Token was not defined')
 
-    const tokenWithAmount = Facade.utils.clone(token)
-    tokenWithAmount.amount = amount
-    const receiverAddress = contact ? contact.address ?? '' : address
+    const tokenWithHolding = Facade.utils.clone(token)
+    tokenWithHolding.amount = amount
 
     dispatch(RootStore.senderTransaction.actions.clearState())
 
-    dispatch(RootStore.senderTransaction.actions.setAccount(account))
+    dispatch(RootStore.senderTransaction.actions.setToken(tokenWithHolding))
+    dispatch(
+      RootStore.senderTransaction.actions.setSenderAddress(senderAddress)
+    )
     dispatch(
       RootStore.senderTransaction.actions.setReceiverAddress(receiverAddress)
     )
-    dispatch(RootStore.senderTransaction.actions.setToken(tokenWithAmount))
     dispatch(RootStore.senderTransaction.actions.setFeeAmount(priority))
 
     prop.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
@@ -107,9 +113,8 @@ const SendTransactionInputModal = (prop: Props) => {
     const contact = contacts.find((value) => value.address === addressValue)
     if (contact) {
       setContact(contact)
-    } else {
-      setAddress(addressValue)
     }
+    setReceiverAddress(addressValue)
   }
 
   const handleQrCode = (data: NeoURI | string) => {
@@ -259,7 +264,7 @@ const SendTransactionInputModal = (prop: Props) => {
           onChangeText={handleAddressChanged}
           color={theme.colors.text[0]}
           invalidColor={theme.colors.text[10]}
-          value={address}
+          value={receiverAddress}
           placeholder={Facade.t(
             'modals.send.transactionInput.enterDestination'
           )}

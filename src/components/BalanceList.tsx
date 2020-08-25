@@ -1,12 +1,12 @@
 import {useNavigation} from '@react-navigation/native'
 import React from 'react'
-import {FlatList, TouchableWithoutFeedback, View} from 'react-native'
+import {FlatList, TouchableOpacity, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props extends LinearLayoutProps {
   tokenAssets: TokenAsset[]
@@ -54,13 +54,14 @@ const BalanceList = (props: Props) => {
   const ViewBalanceItem = (props: {item: TokenAsset}) => {
     return (
       <LinearLayout orientation="horiz" alignItems="center">
-        <LinearLayout
-          height={'12px'}
-          width={'12px'}
-          borderRadius={9999}
+        <ImageView
           mr={'8px'}
-          bg={props.item.color}
+          width={Facade.scale(32)}
+          height={Facade.scale(32)}
+          resizeMode={'contain'}
+          source={props.item.srcIcon}
         />
+
         <TableData header={props.item.name} content={props.item.symbol} />
 
         <LinearLayout weight={1} ml={4}>
@@ -95,17 +96,18 @@ const BalanceList = (props: Props) => {
     return (
       <LinearLayout>
         {props.fromAccountView ? (
-          <TouchableWithoutFeedback
+          <TouchableOpacity
             onPress={() =>
               navigation?.navigate(Facade.route.AccountAssetDetail.name, {
-                account,
+                token: props.item,
+                address: account.address,
               })
             }
           >
             <View>
               <ViewBalanceItem item={props.item} />
             </View>
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
         ) : (
           <ViewBalanceItem item={props.item} />
         )}

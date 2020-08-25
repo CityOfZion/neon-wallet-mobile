@@ -11,16 +11,20 @@ export abstract class NeonHelper {
    * Only GAS or NEO
    */
   static async sendNativeAsset(
-    account: Account,
+    senderAddress: string,
     receiverAddress: string,
     asset: 'GAS' | 'NEO',
     amount: number,
     fees?: number
   ) {
     const settings = (await Storage.settings.load()) ?? new Settings()
-    const neoAccount = await account.getNeoAccount()
+    const accounts = (await Storage.accounts.load()) ?? []
+
+    const account = accounts.find((it) => it.address === senderAddress)
+    const neoAccount = await account?.getNeoAccount()
     const url =
       (await NeoNode.getHighestNodeUrl()) ?? settings.network.defaultNodeNet
+
     const intents = api.makeIntent({[asset]: amount}, receiverAddress)
 
     if (!neoAccount) {
@@ -43,13 +47,16 @@ export abstract class NeonHelper {
   }
 
   static async sendNep5Asset(
-    account: Account,
+    senderAddress: string,
     receiverAddress: string,
     token: TokenAsset,
     fees?: number
   ) {
     const settings = (await Storage.settings.load()) ?? new Settings()
-    const neoAccount = await account.getNeoAccount()
+    const accounts = (await Storage.accounts.load()) ?? []
+
+    const account = accounts.find((it) => it.address === senderAddress)
+    const neoAccount = await account?.getNeoAccount()
     const url =
       (await NeoNode.getHighestNodeUrl()) ?? settings.network.defaultNodeNet
 

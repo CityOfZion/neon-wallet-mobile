@@ -1,26 +1,20 @@
-import {wallet} from '@cityofzion/neon-core'
-import {api} from '@cityofzion/neon-js'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useState} from 'react'
-import {Dimensions, NativeScrollEvent} from 'react-native'
+import {useSelector} from 'react-redux'
 
+import {Facade} from '~src/app/Facade'
 import AssetQuoteComponent from '~src/components/AssetQuoteComponent'
 import TransactionsList from '~src/components/TransactionsList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {AssetQuoteModel} from '~src/models/AssetQuoteModel'
-import {
-  Asset,
-  gas,
-  neo,
-  Receiver,
-  Transaction,
-  TransactionModel,
-} from '~src/models/TransactionModel'
-import {Account} from '~src/models/redux/Account'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
+import {TokenAsset} from '~src/models/TokenAsset'
+import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {AddressPaginatedRequest} from '~src/models/request/AddressPaginatedRequest'
 import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
+import {LinearLayout} from '~src/styles/styled-components'
 
 interface AccountAssetDetailProps {
   route: RouteProp<WalletStackParamList, 'AccountAssetDetail'>
@@ -28,136 +22,73 @@ interface AccountAssetDetailProps {
 }
 
 export interface AccountAssetDetailParams {
-  account: Account
+  token: TokenAsset
+  address: string
 }
 
 const AccountAssetDetail = (props: AccountAssetDetailProps) => {
-  const assetModel = new AssetQuoteModel()
+  const {tokens} = useSelector((state: RootState) => state.app)
+  const {token, address} = props.route.params
 
-  assetModel.name = 'Neo'
-  assetModel.fullName = 'NEO'
-  assetModel.price = 123456
-  assetModel.currencySymbol = 'USD'
-  //assetModel.srcIcon = props.account.srcIcon
-
-  const [transactionModelList, setTransactionModelList] = useState<
-    TransactionModel[]
-  >([])
-  const [asset] = useState<AssetQuoteModel>(assetModel)
-  const [loaded, setLoaded] = useState(false)
-  const [currentPage, setCurrentPage] = useState(0)
-  const [totalPages, setTotalPages] = useState(0)
-
-  const scrollViewEnded = (e: NativeScrollEvent) => {
-    const windowHeight = Dimensions.get('window').height,
-      height = e.contentSize.height,
-      offset = e.contentOffset.y
-
-    return windowHeight + offset >= height
-  }
+  const [transactions, setTransactions] = useState<TransactionDateGroup[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
-    if (!loaded) {
-      fetchData()
-    }
-  }, [loaded])
+    Facade.await.run('populateTransaction', () => fetchTransaction(1))
+  }, [])
 
-  const fetchData = async () => {
-    const address = props.route.params.account.address ?? ''
-    const nextPage = currentPage + 1
-    const request = new AddressPaginatedRequest(address, nextPage)
+  const fetchTransaction = async (currentPage: number, collector = 0) => {
+    const request = new AddressPaginatedRequest(address, currentPage)
     const response = await request.getAddressAbstracts()
 
-    setLoaded(true)
+    if (currentPage > (response.totalPages ?? 0)) return
 
-    setTotalPages(response.totalPages ?? totalPages)
-    setCurrentPage(response.pageNumber ?? currentPage)
+    response.entries = response.entries.filter((it) => it.asset === token.hash)
 
-    if (response.entries.length > 0) {
-      const transActionModelListAux: TransactionModel[] = []
-
-      const distinctTimes = response.entries
-        .map((item) => item.time)
-        .filter((value, index, self) => self.indexOf(value) === index)
-
-      distinctTimes.map((timeLong) => {
-        const groupedByTime = response.entries.filter(
-          (item) => item.time === timeLong
-        )
-        const transactionGroup = new TransactionModel()
-        transactionGroup.date = new Date(timeLong ?? 0)
-        transactionGroup.transactions = []
-
-        groupedByTime.map((item) => {
-          const transaction = new Transaction()
-          transaction.receiver = []
-
-          const receiver = new Receiver()
-          receiver.assets = []
-          receiver.isAddress = wallet.isAddress(item.addressTo ?? '')
-          receiver.nameOrAdress = item.addressTo ?? ''
-
-          const asset = new Asset()
-          asset.value = item.amount ?? ''
-
-          if (item.asset === gas.hash) {
-            asset.nameSymbol = gas.nameSymbol
-            asset.srcIcon = gas.srcIcon
-          } else {
-            if (item.asset === neo.hash) {
-              asset.nameSymbol = neo.nameSymbol
-              asset.srcIcon = neo.srcIcon
-            } else {
-              // neoscan?
-            }
-          }
-
-          if (receiver?.assets) receiver.assets.push(asset)
-          if (transaction?.receiver) transaction.receiver.push(receiver)
-          if (transactionGroup?.transactions) {
-            transactionGroup.transactions.push(transaction)
-          }
-        })
-
-        transActionModelListAux.push(transactionGroup)
-      })
-
-      setTransactionModelList((list) => list.concat(transActionModelListAux))
-    }
-  }
-
-  const _renderTransactionViewElement = () => {
-    const lastIndex = transactionModelList.length - 1
-    return transactionModelList.map(
-      (transActionModel: TransactionModel, i: number) => {
-        return (
-          <TransactionsList
-            key={i}
-            isHistory={true}
-            transactionModel={transActionModel}
-            index={i}
-            lastIndex={lastIndex}
-          />
-        )
-      }
+    setTransactions((val) =>
+      val.concat(response.toTransactionDateGroup(tokens))
     )
+    setCurrentPage(currentPage + 1)
+
+    collector += response.entries.length
+    if (collector < (response.pageSize ?? 0)) {
+      // handling pagination with post filter
+      await fetchTransaction(currentPage + 1, collector)
+    }
   }
 
   return (
     <ScreenLayout
-      onScroll={({nativeEvent}) => {
-        if (
-          scrollViewEnded(nativeEvent) &&
-          totalPages &&
-          currentPage < totalPages
-        ) {
-          fetchData()
-        }
+      onReachBottom={() => {
+        if (Facade.await.inAction('loadMoreTransaction')) return
+        Facade.await.run(
+          'loadMoreTransaction',
+          () => fetchTransaction(currentPage),
+          500
+        )
       }}
-      scrollEventThrottle={1000}
     >
-      <AssetQuoteComponent assetQuote={assetModel} />
-      {_renderTransactionViewElement()}
+      <AwaitActivity
+        name={'populateTransaction'}
+        loadingView={<ScreenLoader />}
+      >
+        <>
+          <LinearLayout mb={5}>
+            <AssetQuoteComponent token={token} />
+          </LinearLayout>
+
+          <TransactionsList
+            address={address}
+            transactionGroups={transactions}
+          />
+
+          <AwaitActivity
+            name={'loadMoreTransaction'}
+            size={'large'}
+            style={{minHeight: 100}}
+          />
+        </>
+      </AwaitActivity>
     </ScreenLayout>
   )
 }

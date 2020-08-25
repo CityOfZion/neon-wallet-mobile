@@ -71,10 +71,12 @@ const WalletCard: React.FC<Props> = (props) => {
       return require('~src/assets/images/wallet-semi-front.png')
     }
 
+    const height = props.wallet.walletType === 'standard' ? '100%' : '75%'
+
     return (
       <ImageView
         width={'100%'}
-        height={'100%'}
+        height={height}
         position={'absolute'}
         bottom={'-2px'}
         resizeMode={'stretch'}
@@ -130,7 +132,7 @@ const WalletCard: React.FC<Props> = (props) => {
                 width={26}
                 height={26}
                 resizeMode={'contain'}
-                source={require('~src/assets/images/icon-watch-grey.png')}
+                source={require('~src/assets/images/icon-watch-green.png')}
               />
             ) : (
               <ImageView

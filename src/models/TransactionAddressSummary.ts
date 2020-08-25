@@ -1,5 +1,7 @@
 import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 
+import moment from '~/node_modules/moment'
+
 @HttpExclude()
 export class TransactionAddressSummary {
   @HttpExpose()

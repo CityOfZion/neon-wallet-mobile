@@ -1,7 +1,6 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {Request} from '@simpli/serialized-request'
 import {map, mapValues} from 'lodash'
-import {get} from 'styled-system'
 
 import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
@@ -98,7 +97,10 @@ export class AppReducer extends ReducerWrapper<
           response = Facade.app.tokensMainNet
         }
 
-        const tokens = tokenToAsset(response)
+        const neo = new TokenAsset('NEO', 'NEO', Facade.app.neoHash)
+        const gas = new TokenAsset('GAS', 'GAS', Facade.app.gasHash)
+
+        const tokens = [neo, gas, ...tokenToAsset(response)]
 
         dispatch(this.commit('SET_TOKENS', {tokens}))
 

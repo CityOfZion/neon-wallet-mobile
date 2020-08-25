@@ -1,202 +1,206 @@
-import moment from 'moment'
 import PropTypes from 'prop-types'
 import React from 'react'
+import {FlatList} from 'react-native'
+import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import {NEO} from '~src/assets/nep5/png'
-import {
-  Receiver,
-  Transaction,
-  TransactionModel,
-  Asset,
-  neo,
-} from '~src/models/TransactionModel'
+import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
-  transactionModel?: TransactionModel
-  isHistory?: boolean
-  index?: number
-  lastIndex?: number
+  address: string
+  transactionGroups: TransactionDateGroup[]
 }
+
 const TransactionsList: React.FC<Props> = (props) => {
-  const _renderTransaction = () => {
-    if (props.transactionModel && props.transactionModel.transactions) {
-      return props.transactionModel.transactions.map(
-        (transaction: Transaction, index: number) => {
-          return (
-            <LinearLayout orientation="horiz" key={index}>
-              <LinearLayout orientation="vert" mr="8px" mt="5px">
-                <ImageView
-                  style={index !== 0 && {opacity: 0}}
-                  source={
-                    props.transactionModel &&
-                    props.transactionModel.srcIcon &&
-                    props.isHistory
-                      ? props.transactionModel.srcIcon
-                      : require('~src/assets/images/clock-white.png')
-                  }
-                />
-              </LinearLayout>
-              <LinearLayout weight={1} orientation="vert">
-                {index === 0 && (
-                  <LinearLayout orientation="vert">
-                    <TextView fontSize="14px" color="text.2" mb="-2px">
-                      {props.isHistory && props.transactionModel
-                        ? 'Sent'
-                        : Facade.t('components.transactionsList.pending')}
-                    </TextView>
-                    <TextView fontSize="16px" color="text.0">
-                      {props.isHistory &&
-                      props.transactionModel &&
-                      props.transactionModel.date
-                        ? moment(props.transactionModel.date).format('hh:mm')
-                        : '00:00'}
-                    </TextView>
-                  </LinearLayout>
-                )}
-              </LinearLayout>
+  const {contacts} = useSelector((state: RootState) => state.app)
 
-              <LinearLayout weight={3} orientation="vert">
-                {index === 0 && (
-                  <LinearLayout orientation="horiz">
-                    <TextView fontSize="14px" color="text.2" width="50%">
-                      {Facade.t('components.transactionsList.sentTo')}
-                    </TextView>
-                    <TextView
-                      ml="10px"
-                      fontSize="14px"
-                      color="text.2"
-                      width="50%"
-                    >
-                      {Facade.t('components.transactionsList.value')}
-                    </TextView>
-                  </LinearLayout>
-                )}
-
-                {_renderReceivers(transaction, index)}
-              </LinearLayout>
-            </LinearLayout>
-          )
-        }
-      )
-    }
+  const isReceived = (senderTx: SenderTransaction) => {
+    return senderTx.isReceivedBy(props.address)
   }
 
-  const _renderReceivers = (transaction: Transaction, indexTrans: number) => {
-    if (transaction?.receiver) {
-      return transaction.receiver.map((receiver: Receiver, index: number) => {
-        return (
-          <LinearLayout orientation="verti" key={index}>
-            {transaction?.receiver &&
-              (index > 0 || indexTrans > 0) &&
-              transaction.receiver.length > 1 && (
-                <LinearLayout
-                  mt="10px"
-                  mb="10px"
-                  borderStyle="dotted"
-                  borderColor="text.0"
-                  borderWidth={0.4}
-                />
-              )}
-            <LinearLayout orientation="horiz">
-              {receiver.isAddress ? (
-                <TextView
-                  numberOfLines={1}
-                  ellipsizeMode="middle"
-                  width="50%"
-                  mr="10px"
-                  fontSize="16px"
-                  color="primary"
-                >
-                  {receiver.nameOrAdress}
-                </TextView>
-              ) : (
-                <TextView width="50%" mr="10px" fontSize="16px" color="text.0">
-                  {receiver.nameOrAdress}
-                </TextView>
-              )}
-              <LinearLayout orientation="verti">
-                {_renderAssets(receiver)}
-              </LinearLayout>
-            </LinearLayout>
-          </LinearLayout>
-        )
-      })
-    }
+  const hasContactName = (senderTx: SenderTransaction) => {
+    const conditions = [
+      Boolean(
+        isReceived(senderTx) && senderTx.doSenderHasContactName(contacts)
+      ),
+      Boolean(
+        !isReceived(senderTx) && senderTx.doReceiverHasContactName(contacts)
+      ),
+    ]
+
+    return conditions.some((it) => it)
   }
 
-  const _renderAssets = (rec: Receiver) => {
-    if (rec.assets) {
-      return rec.assets.map((asset: Asset, index: number) => {
-        return (
-          <LinearLayout orientation="horiz" mb="5px" key={index}>
-            <ImageView
-              style={!asset.srcIcon && {opacity: 0}}
-              height="15px"
-              width="15px"
-              alignSelf="center"
-              mr="4px"
-              source={asset.srcIcon ?? neo.srcIcon}
-            />
+  const getStatusLabel = (senderTx: SenderTransaction) => {
+    if (senderTx.isPending) {
+      return Facade.t('components.transactionsList.pending')
+    }
+
+    if (isReceived(senderTx)) {
+      return Facade.t('components.transactionsList.received')
+    }
+
+    return Facade.t('components.transactionsList.sent')
+  }
+
+  const getAddressLabel = (senderTx: SenderTransaction) => {
+    if (isReceived(senderTx)) {
+      return Facade.t('components.transactionsList.receivedFrom')
+    }
+
+    return Facade.t('components.transactionsList.sentTo')
+  }
+
+  const getAddressOrContact = (senderTx: SenderTransaction) => {
+    if (isReceived(senderTx)) {
+      return senderTx.senderAddressOrContactName(contacts)
+    }
+
+    return senderTx.receiverAddressOrContactName(contacts)
+  }
+
+  const _renderTransaction = (it: SenderTransaction) => {
+    return (
+      <LinearLayout py={4} orientation={'horiz'}>
+        <LinearLayout mr={4} alignSelf={'center'}>
+          <ImageView
+            width={Facade.scale(18)}
+            resizeMode={'contain'}
+            style={{
+              transform: [
+                {rotate: it.isReceivedBy(props.address) ? '180deg' : '0deg'},
+              ],
+            }}
+            source={
+              it.isPending
+                ? require('~src/assets/images/clock-white.png')
+                : require('~src/assets/images/icon-sent-white.png')
+            }
+          />
+        </LinearLayout>
+
+        <LinearLayout width={'60px'} mr={4}>
+          <TextView
+            fontSize={'sm'}
+            color={'text.2'}
+            allowFontScaling={true}
+            adjustsFontSizeToFit={true}
+            numberOfLines={1}
+          >
+            {getStatusLabel(it)}
+          </TextView>
+
+          {it.isDatetimeValid() && (
+            <TextView fontFamily={'semibold'} color={'text.0'}>
+              {it.formattedTime}
+            </TextView>
+          )}
+        </LinearLayout>
+
+        <LinearLayout width={'30%'} mr={4}>
+          <TextView fontSize={'sm'} color={'text.2'}>
+            {getAddressLabel(it)}
+          </TextView>
+
+          {hasContactName(it) ? (
             <TextView
-              style={!asset.nameSymbol && {opacity: 0}}
-              fontSize="16px"
-              color="text.0"
-              marginRight="20px"
+              fontSize={'md'}
+              color={'text.0'}
+              allowFontScaling={true}
+              adjustsFontSizeToFit={true}
+              numberOfLines={1}
             >
-              {asset.nameSymbol ?? neo.nameSymbol}
+              {getAddressOrContact(it)}
             </TextView>
-            <TextView fontSize="14px" color="text.2">
-              {asset.value}
+          ) : (
+            <TextView
+              numberOfLines={1}
+              ellipsizeMode={'middle'}
+              fontSize={'md'}
+              color={'primary'}
+            >
+              {getAddressOrContact(it)}
             </TextView>
-          </LinearLayout>
-        )
-      })
-    }
+          )}
+        </LinearLayout>
+
+        <LinearLayout mr={4}>
+          <TextView fontSize={'sm'} color={'text.2'}>
+            {Facade.t('components.transactionsList.value')}
+          </TextView>
+
+          {it.token && (
+            <LinearLayout orientation={'horiz'} alignItems={'center'}>
+              <ImageView
+                mr={2}
+                height={Facade.scale(18)}
+                width={Facade.scale(18)}
+                resizeMode={'contain'}
+                source={it.token.srcIcon}
+              />
+
+              <TextView fontSize={'md'} color={'text.0'}>
+                {it.token.symbol}
+              </TextView>
+            </LinearLayout>
+          )}
+        </LinearLayout>
+
+        <LinearLayout weight={1} alignSelf={'flex-end'}>
+          {it.token && (
+            <TextView
+              color={'text.2'}
+              fontSize={'md'}
+              textAlign={'right'}
+              fontFamily={'semibold'}
+              allowFontScaling={true}
+              adjustsFontSizeToFit={true}
+              numberOfLines={1}
+            >
+              {it.token.amount}
+            </TextView>
+          )}
+        </LinearLayout>
+      </LinearLayout>
+    )
   }
 
   return (
-    <LinearLayout orientation="verti">
-      {props.index === 0 && (
-        <TextView
-          color="text.2"
-          fontSize="14px"
-          fontFamily="medium"
-          mb="12px"
-          mt="26px"
-        >
-          {props.isHistory &&
-          props.transactionModel &&
-          props.transactionModel.date
-            ? moment(props.transactionModel.date).format('MMMM Do, YYYY')
-            : Facade.t('components.transactionsList.title')}
-        </TextView>
+    <FlatList<TransactionDateGroup>
+      data={props.transactionGroups}
+      keyExtractor={(item, i) => String(i)}
+      ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
+      renderItem={(group) => (
+        <LinearLayout py={4}>
+          <LinearLayout width={'100%'}>
+            {group.item.isDatetimeValid() && (
+              <TextView color={'text.0'} fontSize={'sm'} fontFamily={'bold'}>
+                {group.item.formattedDate()}
+              </TextView>
+            )}
+
+            <FlatList<SenderTransaction>
+              data={group.item.transactions}
+              keyExtractor={(item, i) => String(i)}
+              ItemSeparatorComponent={() => (
+                <LinearLayout bg="text.2" height={1} />
+              )}
+              renderItem={(sender) => _renderTransaction(sender.item)}
+            />
+          </LinearLayout>
+        </LinearLayout>
       )}
-      {_renderTransaction()}
-      {props.index !== props.lastIndex && (
-        <LinearLayout
-          mt="10px"
-          mb="10px"
-          borderStyle="solid"
-          borderColor="text.2"
-          borderWidth={0.4}
-        />
-      )}
-    </LinearLayout>
+    />
   )
 }
 
 TransactionsList.propTypes = {
-  transactionModel: PropTypes.instanceOf(TransactionModel),
-  isHistory: PropTypes.bool,
-  index: PropTypes.number,
-  lastIndex: PropTypes.number,
-}
-
-TransactionsList.defaultProps = {
-  index: 0,
-  lastIndex: 0,
+  address: PropTypes.string.isRequired,
+  transactionGroups: PropTypes.arrayOf(
+    PropTypes.instanceOf(TransactionDateGroup).isRequired
+  ).isRequired,
 }
 
 export default TransactionsList
