@@ -1,5 +1,5 @@
 import {RouteProp} from '@react-navigation/native'
-import React, {Fragment, useState} from 'react'
+import React, {Fragment, useEffect, useState} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
@@ -72,6 +72,8 @@ const SendTransactionInputModal = (prop: Props) => {
 
   const dispatch = useDispatch<SyncDispatch>()
 
+  useEffect(() => setAmount(0), [token])
+
   const changePriority = (newPriority: PriorityFee) => {
     if (priority.equals(newPriority)) {
       setPriority(NoPriority)
@@ -83,8 +85,15 @@ const SendTransactionInputModal = (prop: Props) => {
   const submit = () => {
     const senderAddress = account.address
 
-    if (!senderAddress) throw new Error('Sender address was not defined')
-    if (!token) throw new Error('Token was not defined')
+    if (!token) {
+      throw new Error('Token was not defined')
+    } else if (!senderAddress) {
+      throw new Error('Sender address was not defined')
+    } else if (!amount) {
+      throw new Error('Amount was not defined')
+    } else if (!validateAmount(String(amount))) {
+      throw new Error('Amount is not valid')
+    }
 
     const tokenWithHolding = Facade.utils.clone(token)
     tokenWithHolding.amount = amount
@@ -101,6 +110,29 @@ const SendTransactionInputModal = (prop: Props) => {
     dispatch(RootStore.senderTransaction.actions.setFeeAmount(priority))
 
     prop.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
+  }
+
+  const validateAmount = (val: string) => {
+    const hasEnoughBalance = Number(val) <= getTokenBalance()
+
+    if (token?.symbol === 'NEO') {
+      return Number.isInteger(Number(val)) && hasEnoughBalance
+    }
+
+    return hasEnoughBalance
+  }
+
+  const getTokenBalance = () => {
+    if (!token) return 0
+
+    return account.getBalanceAmountByAsset(token.symbol) ?? 0
+  }
+
+  const getRemainingTokenBalance = () => {
+    const total = getTokenBalance()
+    if (!total) return 0
+
+    return total - (amount ?? 0)
   }
 
   // Typeguard
@@ -332,18 +364,10 @@ const SendTransactionInputModal = (prop: Props) => {
   }
 
   const AmountField = () => {
-    const getTokenBalance = () => {
-      if (!token) return 0
-
-      return account.getBalanceAmountByAsset(token.symbol) ?? 0
-    }
-
-    const getRemainingTokenBalance = () => {
-      const total = getTokenBalance()
-
-      if (!total) return 0
-
-      return total - amount
+    const setValue = (val: string) => {
+      if (!validateAmount(val)) return
+      const newAmount = token?.symbol === 'NEO' ? Math.floor(Number(val)) : Number(val)
+      setAmount(newAmount)
     }
 
     return (
@@ -370,23 +394,25 @@ const SendTransactionInputModal = (prop: Props) => {
         </LinearLayout>
         <LinearLayout position={'relative'}>
           <InputWithValidation
-            onChangeText={(text) => setAmount(Number(text))}
+            onChangeText={val => setValue(val)}
             color={theme.colors.text[0]}
             invalidColor={theme.colors.text[10]}
-            value={amount ? String(amount) : ''}
+            value={amount !== null ? String(amount) : ''}
             placeholder={Facade.t('modals.send.transactionInput.enterAmount')}
-            validator={(val) => Number(val) <= getTokenBalance()}
+            validator={val => validateAmount(val)}
             separatorColor={theme.colors.background[13]}
             sideMargins={0}
             hidePaste={true}
             hideScan={true}
             keyboardType="numeric"
+            editable={Boolean(token)}
           />
           <ButtonView
             position={'absolute'}
-            right={'10px'}
-            top={'5px'}
-            onPress={() => setAmount(getTokenBalance())}
+            right={'5px'}
+            top={'0px'}
+            p={'8px'}
+            onPress={() => setValue(String(getTokenBalance()))}
           >
             <TextView color={'primary'} fontSize={'15px'} fontFamily={'medium'}>
               Max
