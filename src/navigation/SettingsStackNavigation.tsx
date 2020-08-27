@@ -16,7 +16,7 @@ import MyWalletsPage from '~src/scenes/MyWalletsPage'
 import SettingsPage from '~src/scenes/SettingsPage'
 
 export type SettingsStackParamList = {
-  Settings: undefined
+  SettingsPage: undefined
   MyWallets: undefined
   MyWalletOptions: {wallet: Wallet} & HeaderCustomProps
   Step1BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
@@ -35,7 +35,7 @@ const SettingsStackNavigation = () => {
     <ThemeProvider theme={theme}>
       <SettingsStack.Navigator>
         <SettingsStack.Screen
-          name={Facade.route.Settings.name}
+          name={Facade.route.SettingsPage.name}
           component={SettingsPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({

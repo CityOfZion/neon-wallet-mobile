@@ -43,14 +43,10 @@ export type MoreStackParamList = {
   Step3CreateWallet: HeaderActionButtonProps
   Step4CreateWallet: undefined
   Step5CreateWallet: Step5CreateWalletParams
-  ListWallets: undefined
-  Modal: ModalParams
   ImportKey: undefined
-  CustomizeReadAccount: undefined
   ImportReadAccount: ImportReadAccountParams
   Passphrase: PassphraseParams
   CustomizeAccount: CustomizeAccountParams
-  CustomColor: undefined
 }
 
 const MoreStack = createStackNavigator<MoreStackParamList>()

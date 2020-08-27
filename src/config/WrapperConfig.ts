@@ -26,6 +26,7 @@ export class WrapperConfig {
     'ListWallets',
     'Contacts',
     'Settings',
+    'SettingsPage',
     'More',
     'GetWallet',
     'GetAccount',

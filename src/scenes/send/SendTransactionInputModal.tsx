@@ -366,7 +366,8 @@ const SendTransactionInputModal = (prop: Props) => {
   const AmountField = () => {
     const setValue = (val: string) => {
       if (!validateAmount(val)) return
-      const newAmount = token?.symbol === 'NEO' ? Math.floor(Number(val)) : Number(val)
+      const newAmount =
+        token?.symbol === 'NEO' ? Math.floor(Number(val)) : Number(val)
       setAmount(newAmount)
     }
 
@@ -394,12 +395,12 @@ const SendTransactionInputModal = (prop: Props) => {
         </LinearLayout>
         <LinearLayout position={'relative'}>
           <InputWithValidation
-            onChangeText={val => setValue(val)}
+            onChangeText={(val) => setValue(val)}
             color={theme.colors.text[0]}
             invalidColor={theme.colors.text[10]}
             value={amount !== null ? String(amount) : ''}
             placeholder={Facade.t('modals.send.transactionInput.enterAmount')}
-            validator={val => validateAmount(val)}
+            validator={(val) => validateAmount(val)}
             separatorColor={theme.colors.background[13]}
             sideMargins={0}
             hidePaste={true}

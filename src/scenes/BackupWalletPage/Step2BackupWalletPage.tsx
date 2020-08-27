@@ -50,7 +50,7 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
         actionOnPress: () => {
           props.navigation.reset({
             index: 2,
-            routes: [{name: Facade.route.Settings.name}],
+            routes: [{name: Facade.route.SettingsPage.name}],
           })
           props.navigation.navigate(Facade.route.MyWalletOptions.name, {
             wallet,
