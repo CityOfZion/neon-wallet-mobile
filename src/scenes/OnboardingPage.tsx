@@ -149,7 +149,11 @@ const OnboardingPage = (props: OnboardingPageProps) => {
             showsButtons
             buttonWrapperStyle={styles.swiperButtonWrapperStyle}
             prevButton={<View />}
-            nextButton={<NextButton color={'primary'}>next</NextButton>}
+            nextButton={
+              <NextButton mb={Facade.scale(22)} color={'primary'}>
+                next
+              </NextButton>
+            }
           >
             <OnboardingSlide
               header={'Feature 1'}
@@ -211,11 +215,11 @@ const OnboardingPage = (props: OnboardingPageProps) => {
             <SkipButton
               position={'absolute'}
               left={0}
+              bottom={0}
               color={'text.0'}
               opacity={0.5}
-              bottom={0}
-              mb={'3.5%'}
-              ml={30}
+              mb={Facade.scale(30)}
+              ml={Facade.scale(30)}
               onPress={() => finish()}
               style={{textTransform: 'lowercase'}}
             >
