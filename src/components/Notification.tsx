@@ -44,7 +44,6 @@ const Notification = (props: NotificationProps) => {
     <TouchableWithoutFeedback
       onPress={() => {
         if (props.wallet) {
-          console.log(props.wallet)
           navigation.navigate(Facade.route.Settings.name, {
             screen: Facade.route.Step1BackupWallet.name,
             params: {
