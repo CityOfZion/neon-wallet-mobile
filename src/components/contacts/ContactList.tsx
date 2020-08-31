@@ -14,6 +14,7 @@ import {RootState} from '~src/store/RootStore'
 import {ButtonView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface ContactListProps {
+  mt?: number | string
   onContactSelected?: (contact: Contact) => void
 }
 
@@ -86,7 +87,7 @@ export const ContactList = (props: ContactListProps) => {
 
   return (
     <SectionList
-      style={{width: '100%', height: '100%', marginTop: 40}}
+      style={{width: '100%', height: '100%', marginTop: props.mt}}
       sections={sections}
       renderItem={renderItem}
       renderSectionHeader={renderSectionHeader}

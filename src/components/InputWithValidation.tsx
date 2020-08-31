@@ -5,7 +5,6 @@ import {
   NativeSyntheticEvent,
   TargetedEvent,
   TextInputFocusEventData,
-  TouchableWithoutFeedback,
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -16,6 +15,7 @@ import {PasteButton} from '~src/components/input/PasteButton'
 import {ScanButton} from '~src/components/input/ScanButton'
 import {SelectedContactView} from '~src/components/input/SelectedContactView'
 import {NeoURI} from '~src/helpers/UriHelper'
+import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
 import {RootState} from '~src/store/RootStore'
 import {
@@ -43,7 +43,7 @@ interface Props {
   showContacts?: boolean
   onClearPress?: () => void
   onScan?: (data: NeoURI | string) => void
-  onContactSelected?: (contact: Contact) => void
+  onSelected?: (item: Contact | Account) => void
   placeholder?: string
   secure?: boolean
   onFocus?: (e: NativeSyntheticEvent<TargetedEvent>) => void
@@ -152,9 +152,9 @@ const InputWithValidation = (props: Props) => {
           <ContactsButton
             onPress={() => {
               navigation.navigate(Facade.route.ContactsModal.name, {
-                onContactSelected: (contact: Contact) => {
-                  if (props.onContactSelected) {
-                    props.onContactSelected(contact)
+                onSelected: (item: Contact | Account) => {
+                  if (props.onSelected) {
+                    props.onSelected(item)
                     navigation.goBack()
                   }
                 },

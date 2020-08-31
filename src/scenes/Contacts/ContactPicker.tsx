@@ -1,6 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import React, {Fragment} from 'react'
+import React, {Fragment, useState} from 'react'
+import {TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -8,14 +9,16 @@ import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~src/components/SwiperPanel'
+import {AccountList} from '~src/components/accounts/AccountList'
 import {ContactList} from '~src/components/contacts/ContactList'
 import {NoContacts} from '~src/components/contacts/NoContacts'
 import {Contact} from '~src/models/redux/Contact'
+import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {TextView} from '~src/styles/styled-components'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface ContactsModalParams {
-  onContactSelected: (contact: Contact) => void
+  onSelected: (item: Contact | Account) => void
 }
 
 interface ContactsModalProps {
@@ -23,9 +26,64 @@ interface ContactsModalProps {
   route: RouteProp<ModalStackParamList, 'ContactsModal'>
 }
 
+type Tab = 'contacts' | 'accounts'
+
+const TabSelector = (props: {selected: Tab; onSelect: (t: Tab) => void}) => {
+  const contactsSelected = props.selected === 'contacts'
+
+  return (
+    <LinearLayout orientation="horiz" mx="16px">
+      <TouchableWithoutFeedback
+        onPress={() => !contactsSelected && props.onSelect('contacts')}
+      >
+        <LinearLayout orientation="verti" weight="1">
+          <TextView
+            width="100%"
+            fontFamily="bold"
+            fontSize="16px"
+            textAlign="center"
+            color={contactsSelected ? 'primary' : 'background.3'}
+            my="16px"
+          >
+            {Facade.t('contactPicker.contacts').toUpperCase()}
+          </TextView>
+          <LinearLayout
+            width="100%"
+            height={contactsSelected ? '4px' : '2px'}
+            bg={contactsSelected ? 'primary' : 'background.3'}
+          />
+        </LinearLayout>
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback
+        onPress={() => contactsSelected && props.onSelect('accounts')}
+      >
+        <LinearLayout orientation="verti" weight="1">
+          <TextView
+            width="100%"
+            fontFamily="bold"
+            fontSize="16px"
+            textAlign="center"
+            color={!contactsSelected ? 'primary' : 'background.3'}
+            my="16px"
+          >
+            {Facade.t('contactPicker.myAccounts').toUpperCase()}
+          </TextView>
+          <LinearLayout
+            width="100%"
+            height={!contactsSelected ? '4px' : '2px'}
+            bg={!contactsSelected ? 'primary' : 'background.3'}
+          />
+        </LinearLayout>
+      </TouchableWithoutFeedback>
+    </LinearLayout>
+  )
+}
+
 export const ContactPicker = (props: ContactsModalProps) => {
   const contacts = useSelector((state: RootState) => state.app.contacts)
   const controller = useSwiperController(true)
+
+  const [tab, setTab] = useState<Tab>('contacts')
 
   return (
     <SwiperPanel
@@ -39,24 +97,32 @@ export const ContactPicker = (props: ContactsModalProps) => {
       paddingTop={40}
       fullSize={true}
     >
-      {contacts.length ? (
-        <Fragment>
-          <TextView
-            color={'text.0'}
-            alignSelf={'center'}
-            fontFamily={'medium'}
-            fontSize={18}
-            mb={20}
-          >
-            {Facade.t('contactPicker.selectContact')}
-          </TextView>
-          <ContactList
-            onContactSelected={props.route.params.onContactSelected}
+      <Fragment>
+        <TextView
+          color={'text.0'}
+          alignSelf={'center'}
+          fontFamily={'medium'}
+          fontSize={18}
+        >
+          {Facade.t('contactPicker.selectContact')}
+        </TextView>
+        <TabSelector selected={tab} onSelect={(t) => setTab(t)} />
+        {tab === 'contacts' ? (
+          contacts.length ? (
+            <ContactList
+              mt={20}
+              onContactSelected={(it) => props.route.params.onSelected(it)}
+            />
+          ) : (
+            <NoContacts />
+          )
+        ) : (
+          <AccountList
+            mt={12}
+            onAccountSelected={(it) => props.route.params.onSelected(it)}
           />
-        </Fragment>
-      ) : (
-        <NoContacts />
-      )}
+        )}
+      </Fragment>
     </SwiperPanel>
   )
 }
