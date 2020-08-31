@@ -16,7 +16,7 @@ import ModalStackNavigation, {
 } from '~src/navigation/ModalStackNavigation'
 import TabNavigation, {TabParams} from '~src/navigation/TabNavigation'
 import OnboardingPage from '~src/scenes/OnboardingPage'
-import QRCodeScan from '~src/scenes/QRCodeScan'
+import QRCodeScan, {QRCodeScanParams} from '~src/scenes/QRCodeScan'
 import {RootStore} from '~src/store/RootStore'
 
 export type RootStackParamList = {
@@ -24,7 +24,7 @@ export type RootStackParamList = {
   Modal: ModalParams
   Login: undefined
   Onboarding: undefined
-  QRCodeScan: undefined
+  QRCodeScan: QRCodeScanParams
 }
 
 interface Props {

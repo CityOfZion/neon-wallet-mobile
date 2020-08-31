@@ -1,5 +1,11 @@
+import {wallet} from '@cityofzion/neon-js'
+import {useNavigation} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
+import {TouchableWithoutFeedback} from 'react-native'
 import {useDispatch} from 'react-redux'
+
+import {SettingsStackParamList} from '../navigation/SettingsStackNavigation'
 
 import {Facade} from '~src/app/Facade'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -19,6 +25,7 @@ interface NotificationProps {
 const Notification = (props: NotificationProps) => {
   const [seen, setSeen] = useState(!props.wallet.showBackupAlert)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const navigation = useNavigation()
 
   if (seen) return null
 
@@ -34,31 +41,44 @@ const Notification = (props: NotificationProps) => {
   }
 
   return (
-    <NotificationBox
-      orientation="verti"
-      height={72}
-      width="100%"
-      py="8px"
-      px="11px"
-      bg="background.1"
-      borderColor="primary"
+    <TouchableWithoutFeedback
+      onPress={() => {
+        if (props.wallet) {
+          navigation.navigate(Facade.route.Settings.name, {
+            screen: Facade.route.Step1BackupWallet.name,
+            params: {
+              wallet: props.wallet,
+            },
+          })
+        }
+      }}
     >
-      <TextView color="text.2" fontSize="10px" mb="4px">
-        {Facade.t('components.notification.title')}
-      </TextView>
-      <LinearLayout orientation="horiz">
-        <TextView color="text.0" fontSize="14px" lineHeight="14px" weight={1}>
-          {props.text}
+      <NotificationBox
+        orientation="verti"
+        height={72}
+        width="100%"
+        py="8px"
+        px="11px"
+        bg="background.1"
+        borderColor="primary"
+      >
+        <TextView color="text.2" fontSize="10px" mb="4px">
+          {Facade.t('components.notification.title')}
         </TextView>
-        <ButtonView alignSelf="center" onPress={() => close()}>
-          <ImageView
-            height={'9px'}
-            width={'9px'}
-            source={require('~src/assets/images/close.png')}
-          />
-        </ButtonView>
-      </LinearLayout>
-    </NotificationBox>
+        <LinearLayout orientation="horiz">
+          <TextView color="text.0" fontSize="14px" lineHeight="14px" weight={1}>
+            {props.text}
+          </TextView>
+          <ButtonView alignSelf="center" onPress={() => close()}>
+            <ImageView
+              height={'9px'}
+              width={'9px'}
+              source={require('~src/assets/images/close.png')}
+            />
+          </ButtonView>
+        </LinearLayout>
+      </NotificationBox>
+    </TouchableWithoutFeedback>
   )
 }
 

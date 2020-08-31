@@ -3,7 +3,8 @@ import React from 'react'
 import {
   KeyboardTypeOptions,
   NativeSyntheticEvent,
-  TargetedEvent, TextInputFocusEventData,
+  TargetedEvent,
+  TextInputFocusEventData,
   TouchableWithoutFeedback,
 } from 'react-native'
 import {useSelector} from 'react-redux'

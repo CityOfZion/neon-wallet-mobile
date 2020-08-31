@@ -27,7 +27,7 @@ export interface QRCodeScanParams {
 
 export interface Props {
   navigation: StackNavigationProp<RootStackParamList>
-  route: RouteProp<ModalStackParamList, 'QRCodeScan'>
+  route: RouteProp<RootStackParamList, 'QRCodeScan'>
 }
 
 const QRCodeScan = (props: Props) => {
