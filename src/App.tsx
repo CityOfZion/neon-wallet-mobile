@@ -18,9 +18,10 @@ const loggerMiddleware = createLogger()
 const store = createStore(
   RootStore.reducers,
   {},
-  process.env.NODE_ENV === 'production'
-    ? applyMiddleware(thunk)
-    : composeWithDevTools(applyMiddleware(thunk, loggerMiddleware))
+    applyMiddleware(thunk)
+  // process.env.NODE_ENV === 'production'
+  //   ? applyMiddleware(thunk)
+  //   : composeWithDevTools(applyMiddleware(thunk, loggerMiddleware))
 )
 
 const fetchFonts = () =>

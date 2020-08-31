@@ -21,7 +21,12 @@ import {AddressPaginatedRequest} from '~src/models/request/AddressPaginatedReque
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import {
+  ButtonView,
+  ImageView,
+  LinearLayout,
+  TextView,
+} from '~src/styles/styled-components'
 
 export interface GetAccountParams {
   account: Account
@@ -163,14 +168,43 @@ const GetAccountView = (props: GetAccountViewProps) => {
         <AccountCard account={account} isStackMode={false} />
       </LinearLayout>
 
-      <LinearLayout mt="28px" mx="auto">
-        <ThemedButton
-          fontSize="16px"
-          label={Facade.t('screens.getAccount.claimAsset', {
-            assetAmount: '0.0000123 GAS',
-          })}
-          //TODO NW-158 Show gas when claim is finished
-          onPress={() => showMessage({message: 'placeholder'})}
+      <LinearLayout orientation={'horiz'} justifyContent={'center'} flex={1}>
+        <ImageView
+          weight={1}
+          source={require('~/src/assets/images/button-send-small.png')}
+          overflow={'visible'}
+        />
+        <LinearLayout weight={0.7} />
+        <ButtonView
+          onPress={() => console.log('pressed')}
+          weight={2}
+          justifyContent={'center'}
+          overflow={'visible'}
+        >
+          <ImageView
+            source={require('~src/assets/images/button-claim-background.png')}
+            alignSelf={'center'}
+            position={'absolute'}
+            maxWidth={'100%'}
+          />
+          <TextView
+            color={'primary'}
+            alignSelf={'center'}
+            fontSize={'16px'}
+            numberOfLines={1}
+            adjustsFontSizeToFit={true}
+          >
+            {Facade.t('screens.getAccount.claimAsset', {
+              assetAmount: '0.0000123 GAS',
+            })}
+          </TextView>
+        </ButtonView>
+
+        <LinearLayout weight={0.7} />
+        <ImageView
+          weight={1}
+          source={require('~/src/assets/images/button-receive-small.png')}
+          overflow={'visible'}
         />
       </LinearLayout>
 

@@ -5,6 +5,7 @@ import {
   NativeSyntheticEvent,
   NativeTouchEvent,
   StyleProp,
+  View,
 } from 'react-native'
 
 import {Facade} from '~src/app/Facade'
@@ -23,6 +24,7 @@ interface Props {
   label?: string
   textColor?: string
   bgColor?: string
+  bgIcon?: ImageLoadEventData
   srcIcon?: ImageLoadEventData
   toggleable?: boolean
   active?: boolean
@@ -36,6 +38,8 @@ interface Props {
   contentStyle?: any
   borderThickness?: number | string
   borderColor?: string
+  marginRight?: string | number
+  marginLeft?: string | number
 }
 
 const ThemedButton: React.FC<Props> = (props) => {
@@ -55,6 +59,8 @@ const ThemedButton: React.FC<Props> = (props) => {
       paddingBottom: 0,
       paddingLeft: Facade.scale(20),
       paddingRight: Facade.scale(20),
+      marginRight: props.marginRight ?? 0,
+      marginLeft: props.marginLeft ?? 0,
       height: Facade.scale(50),
     }
 
@@ -73,6 +79,17 @@ const ThemedButton: React.FC<Props> = (props) => {
   const _renderLabel = () => {
     return (
       <LinearLayout orientation={'horiz'} alignItems={'center'}>
+        {props.bgIcon && (
+          <ImageView
+            resizeMode={'stretch'}
+            position={'absolute'}
+            weight={1}
+            source={props.bgIcon}
+            maxHeight={'100%'}
+            flexDirection={'row'}
+            flexWrap={'wrap'}
+          />
+        )}
         {props.srcIcon && (
           <ImageView
             width={width as number}
@@ -121,20 +138,22 @@ const ThemedButton: React.FC<Props> = (props) => {
       disabled={props.disabled}
       underlayColor="transparent"
     >
-      <ThemedCard
-        contentStyle={getStyle()}
-        rounded={props.rounded}
-        flat={props.flat}
-        hasBright={!props.basic && !isActive}
-        hasShadow={!props.basic && !isActive}
-        baseBgColor={isActive ? 'transparent' : props.bgColor}
-        alignY={'center'}
-        borderThickness={props.borderThickness}
-        borderColor={props.borderColor}
-        isPressed={isSelected}
-      >
-        {_renderLabel()}
-      </ThemedCard>
+      <View>
+        <ThemedCard
+          contentStyle={getStyle()}
+          rounded={props.rounded}
+          flat={props.flat}
+          hasBright={!props.basic && !isActive}
+          hasShadow={!props.basic && !isActive}
+          baseBgColor={isActive ? 'transparent' : props.bgColor}
+          alignY={'center'}
+          borderThickness={props.borderThickness}
+          borderColor={props.borderColor}
+          isPressed={isSelected}
+        >
+          {_renderLabel()}
+        </ThemedCard>
+      </View>
     </ButtonView>
   )
 }
@@ -145,6 +164,7 @@ ThemedButton.propTypes = {
   textColor: PropTypes.string,
   bgColor: PropTypes.string,
   srcIcon: PropTypes.any,
+  bgIcon: PropTypes.any,
   toggleable: PropTypes.bool,
   active: PropTypes.bool,
   disabled: PropTypes.bool,
@@ -157,6 +177,8 @@ ThemedButton.propTypes = {
   contentStyle: PropTypes.any,
   borderThickness: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   borderColor: PropTypes.string,
+  marginRight: PropTypes.any,
+  marginLeft: PropTypes.any,
 }
 
 ThemedButton.defaultProps = {
