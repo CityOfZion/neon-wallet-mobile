@@ -43,7 +43,6 @@ const Notification = (props: NotificationProps) => {
   return (
     <TouchableWithoutFeedback
       onPress={() => {
-        console.log('clicou')
         if (props.wallet) {
           console.log(props.wallet)
           navigation.navigate(Facade.route.Settings.name, {
