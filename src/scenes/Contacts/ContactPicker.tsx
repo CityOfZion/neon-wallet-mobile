@@ -6,7 +6,7 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {
-  CloseButton,
+  CloseButton, PANEL_OFFSET,
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import {AccountList} from '~src/components/accounts/AccountList'
@@ -96,6 +96,7 @@ export const ContactPicker = (props: ContactsModalProps) => {
       padding={0}
       paddingTop={40}
       fullSize={true}
+      disableDefaultScrollView={true}
     >
       <Fragment>
         <TextView
@@ -111,6 +112,7 @@ export const ContactPicker = (props: ContactsModalProps) => {
           contacts.length ? (
             <ContactList
               mt={20}
+              mb={PANEL_OFFSET}
               onContactSelected={(it) => props.route.params.onSelected(it)}
             />
           ) : (
@@ -119,6 +121,7 @@ export const ContactPicker = (props: ContactsModalProps) => {
         ) : (
           <AccountList
             mt={12}
+            mb={PANEL_OFFSET}
             onAccountSelected={(it) => props.route.params.onSelected(it)}
           />
         )}

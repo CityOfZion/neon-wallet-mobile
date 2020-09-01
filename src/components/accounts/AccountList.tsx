@@ -1,27 +1,35 @@
 import React, {Fragment} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
+import {
+  FlatList,
+  ListRenderItemInfo,
+} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootState} from '~src/store/RootStore'
-import {ButtonView, ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {
+  ButtonView,
+  ImageView,
+  LinearLayout,
+  TextView,
+} from '~src/styles/styled-components'
 
 interface AccountListProps {
   mt?: string | number
+  mb?: string | number
   onAccountSelected?: (account: Account) => void
 }
 
-interface AccountWithWallet {
+interface Item {
   account: Account
   wallet?: Wallet
+  onClick?: (account: Account) => void
 }
 
-const ListItem = (props: {
-  item: AccountWithWallet
-  onClick?: (item: Account) => void
-}) => {
+const ItemComponent = (props: ListRenderItemInfo<Item>) => {
   const walletName =
     props.item.account.accountType === 'standard'
       ? props.item.wallet?.name
@@ -37,38 +45,54 @@ const ListItem = (props: {
       : undefined
 
   return (
-    <ButtonView onPress={() => props.onClick?.(props.item.account)}>
-      <Fragment>
+    <ButtonView onPress={() => props.item.onClick?.(props.item.account)}>
+      <LinearLayout
+        orientation="horiz"
+        width="100%"
+        alignItems="center"
+        p="16px"
+      >
         <LinearLayout
-          orientation="horiz"
-          width="100%"
-          alignItems="center"
-          p="16px"
-        >
-          <LinearLayout
-            width="18px"
-            height="18px"
-            mr="16px"
-            bg={props.item.account.backgroundColor}
-            borderRadius={9999}
-          />
+          width="18px"
+          height="18px"
+          mr="16px"
+          bg={props.item.account.backgroundColor}
+          borderRadius={9999}
+        />
 
-          <LinearLayout orientation="verti" weight={1}>
-            <LinearLayout orientation="horiz" mb="8px" alignItems="flex-end">
-              <TextView weight={1} fontSize="18px" color="text.0">
-                {props.item.account.name}
-              </TextView>
-              <TextView fontSize="12px" fontFamily="bold" color="background.10">{walletName?.toUpperCase()}</TextView>
-              {walletIcon ? <ImageView ml="8px" source={walletIcon} /> : undefined}
-            </LinearLayout>
-
-            <TextView fontSize="18px" color="primary" ellipsizeMode="middle" numberOfLines={1}>{props.item.account.address}</TextView>
+        <LinearLayout orientation="verti" weight={1}>
+          <LinearLayout orientation="horiz" mb="8px" alignItems="flex-end">
+            <TextView weight={1} fontSize="18px" color="text.0">
+              {props.item.account.name}
+            </TextView>
+            <TextView fontSize="12px" fontFamily="bold" color="background.10">
+              {walletName?.toUpperCase()}
+            </TextView>
+            {walletIcon ? (
+              <ImageView ml="8px" source={walletIcon} />
+            ) : undefined}
           </LinearLayout>
+
+          <TextView
+            fontSize="18px"
+            color="primary"
+            ellipsizeMode="middle"
+            numberOfLines={1}
+          >
+            {props.item.account.address}
+          </TextView>
         </LinearLayout>
-        <LinearLayout width="100%" height="2px" bg="background.10" mx="16px" />
-      </Fragment>
+      </LinearLayout>
     </ButtonView>
   )
+}
+
+const ListSeparator = () => {
+  return <LinearLayout weight={1} height="2px" bg="background.10" mx="16px" />
+}
+
+const ListFooter = () => {
+  return <LinearLayout width="100%" height={PANEL_OFFSET} />
 }
 
 export const AccountList = (props: AccountListProps) => {
@@ -79,14 +103,17 @@ export const AccountList = (props: AccountListProps) => {
     return {
       account,
       wallet: account.getWallet(wallets),
+      onClick: props.onAccountSelected,
     }
   })
 
   return (
-    <LinearLayout mt={props.mt}>
-      {items.map((it, index) => (
-        <ListItem key={index} item={it} onClick={props.onAccountSelected} />
-      ))}
-    </LinearLayout>
+    <FlatList
+      style={{marginTop: props.mt, marginBottom: props.mb}}
+      data={items}
+      renderItem={ItemComponent}
+      ItemSeparatorComponent={ListSeparator}
+      keyExtractor={(item, index) => index.toString()}
+    />
   )
 }
