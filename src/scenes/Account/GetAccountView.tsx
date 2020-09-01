@@ -39,6 +39,7 @@ interface GetAccountViewProps {
 
 const GetAccountView = (props: GetAccountViewProps) => {
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const appWallets = useSelector((state: RootState) => state.app.wallets)
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
   const pendingTransactions = useSelector(
@@ -168,13 +169,26 @@ const GetAccountView = (props: GetAccountViewProps) => {
         <AccountCard account={account} isStackMode={false} />
       </LinearLayout>
 
-      <LinearLayout orientation={'horiz'} justifyContent={'center'} flex={1}>
-        <ImageView
-          weight={1}
-          source={require('~/src/assets/images/button-send-small.png')}
-          overflow={'visible'}
-        />
-        <LinearLayout weight={0.7} />
+      <LinearLayout orientation={'horiz'} flex={1} flexWrap={'wrap'}>
+        <ButtonView
+          onPress={() =>
+            props.navigation.navigate(Facade.route.Modal.name, {
+              screen: Facade.route.SendTransactionInputModal.name,
+              params: {
+                walletTitle:
+                  props.route.params.account.getWallet(appWallets)?.name ?? '',
+                account: props.route.params.account,
+              },
+            })
+          }
+        >
+          <ImageView
+            source={require('~/src/assets/images/button-send-small.png')}
+            overflow={'visible'}
+            ml={'-45'}
+          />
+        </ButtonView>
+
         <ButtonView
           onPress={() => console.log('pressed')}
           weight={2}
@@ -195,17 +209,28 @@ const GetAccountView = (props: GetAccountViewProps) => {
             adjustsFontSizeToFit={true}
           >
             {Facade.t('screens.getAccount.claimAsset', {
-              assetAmount: '0.0000123 GAS',
+              assetAmount: '0.1 GAS',
             })}
           </TextView>
         </ButtonView>
 
-        <LinearLayout weight={0.7} />
-        <ImageView
-          weight={1}
-          source={require('~/src/assets/images/button-receive-small.png')}
-          overflow={'visible'}
-        />
+        <ButtonView
+          onPress={() =>
+            props.navigation.navigate(Facade.route.Modal.name, {
+              screen: Facade.route.ReceiveToAccountModal.name,
+              params: {
+                wallet: props.route.params.account.getWallet(appWallets),
+                account: props.route.params.account,
+              },
+            })
+          }
+        >
+          <ImageView
+            source={require('~/src/assets/images/button-receive-small.png')}
+            overflow={'visible'}
+            mr={'-45'}
+          />
+        </ButtonView>
       </LinearLayout>
 
       <TabSelector
