@@ -1,12 +1,8 @@
-import React, {Fragment} from 'react'
-import {
-  FlatList,
-  ListRenderItemInfo,
-} from 'react-native'
+import React from 'react'
+import {FlatList, ListRenderItemInfo} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootState} from '~src/store/RootStore'
@@ -89,10 +85,6 @@ const ItemComponent = (props: ListRenderItemInfo<Item>) => {
 
 const ListSeparator = () => {
   return <LinearLayout weight={1} height="2px" bg="background.10" mx="16px" />
-}
-
-const ListFooter = () => {
-  return <LinearLayout width="100%" height={PANEL_OFFSET} />
 }
 
 export const AccountList = (props: AccountListProps) => {
