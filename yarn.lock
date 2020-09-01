@@ -7507,6 +7507,11 @@ expo-constants@~9.1.1:
     fbjs "1.0.0"
     uuid "^3.3.2"
 
+expo-crypto@~8.2.1:
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/expo-crypto/-/expo-crypto-8.2.1.tgz#307eb857912e231d26babba3aa87963e686f4cac"
+  integrity sha512-P7/gmPEb1mRhEHyhJI4qNKZuW4jq6dkbxG3q6Meo4pbJHsH2xQz/3gokOcZwB4OMd0IJ+5yfRd2gXoqU8D9Xmw==
+
 expo-error-recovery@~1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/expo-error-recovery/-/expo-error-recovery-1.2.1.tgz#a8fd68950235d4f22b30d901bfc90f7732720b93"
@@ -13993,6 +13998,12 @@ react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
   integrity sha512-/VbpIEp8tSNNHIvstuA3Swx610whci1Zpc9mqNkqn14DkMbw+ORviln2u0XyHG1kPvvwTNGZY6QpeFwxYaSdbQ==
+
+"react-native-neo-sdk-bindings@file:../neo-sdk-bindings/neo-sdk-bindings":
+  version "1.0.2"
+
+"react-native-neo-sdk-bindings@file:C:\\Users\\HP\\Workspace\\neo-sdk-bindings\\neo-sdk-bindings":
+  version "1.0.2"
 
 react-native-progress@^4.1.2:
   version "4.1.2"

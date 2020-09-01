@@ -9,6 +9,7 @@ import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {Account} from '~src/models/redux/Account'
+import {NeoNative} from '~src/native/NeoNative'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootState} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
@@ -22,21 +23,16 @@ interface PassphraseProps {
   route: RouteProp<MoreStackParamList, 'Passphrase'>
 }
 
-function verifyPassword(
+async function verifyPassword(
   nep2: string,
   password: string,
   onSuccess: (address: string) => void,
   onFailure: () => void
 ) {
-  const newAccount = new wallet.Account(nep2)
-  newAccount
-    .decrypt(password)
-    .then((account) => {
-      onSuccess(account.address)
-    })
-    .catch(() => {
-      onFailure()
-    })
+  const wif = await NeoNative.decryptNep2(password, nep2)
+  const newAccount = new wallet.Account(wif)
+  if (newAccount.address) onSuccess(newAccount.address)
+  else onFailure()
 }
 
 const Passphrase = (props: PassphraseProps) => {
