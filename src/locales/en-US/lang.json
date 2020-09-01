@@ -457,6 +457,9 @@
       "scan": "Scan",
       "incorrectFormat": "Incorrect format",
       "contacts": "Contacts"
+    },
+    "accountList": {
+      "watch": "Watch"
     }
   },
   "boolean": {
@@ -499,7 +502,9 @@
   },
   "contactPicker" : {
     "title": "Contacts",
-    "selectContact" : "Select a contact to send."
+    "selectContact" : "Select a contact to send to",
+    "contacts": "Contacts",
+    "myAccounts": "My Accounts"
   },
   "toast" : {
     "transaction": "Transaction",

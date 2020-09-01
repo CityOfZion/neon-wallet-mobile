@@ -154,6 +154,14 @@ const SendTransactionInputModal = (prop: Props) => {
     return !!(object as NeoURI).address
   }
 
+  const selectContactOrAccount = (item: Contact | Account) => {
+    if (item instanceof Contact) {
+      setContact(item)
+    } else if (item.address) {
+      setReceiverAddress(item.address)
+    }
+  }
+
   const handleAddressChanged = (addressValue: string) => {
     setContact(undefined)
     const contact = contacts.find((value) => value.address === addressValue)
@@ -319,9 +327,7 @@ const SendTransactionInputModal = (prop: Props) => {
           sideMargins={0}
           showContacts={true}
           selectedContact={contact}
-          onContactSelected={(contact: Contact) => {
-            setContact(contact)
-          }}
+          onSelected={selectContactOrAccount}
           onScan={handleQrCode}
         />
       </Fragment>
