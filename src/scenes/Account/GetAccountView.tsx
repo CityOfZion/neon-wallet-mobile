@@ -37,6 +37,63 @@ interface GetAccountViewProps {
   route: RouteProp<WalletStackParamList, 'GetAccount'>
 }
 
+const selectedReceiveImage = require('~/src/assets/images/button-receive-small-selected.png')
+const defaultReceiveImage = require('~/src/assets/images/button-receive-small.png')
+
+function ReceiveButton(props: {onPress: () => any}) {
+  const [isPressed, setPressed] = useState(false)
+  const backgroundImage = isPressed ? selectedReceiveImage : defaultReceiveImage
+  return (
+    <ButtonView
+      onPress={props.onPress}
+      activeOpacity={1}
+      onHideUnderlay={() => {
+        setPressed(false)
+      }}
+      onShowUnderlay={() => {
+        setPressed(true)
+      }}
+    >
+      <ImageView
+        source={backgroundImage}
+        overflow={'visible'}
+        //The image has margins
+        ml={'-45'}
+      />
+    </ButtonView>
+  )
+}
+
+const disabledSendImage = require('~/src/assets/images/button-send-small-disabled.png')
+const selectedSendImage = require('~/src/assets/images/button-send-small-selected.png')
+const defaultSendImage = require('~/src/assets/images/button-send-small.png')
+
+function SendButton(props: {onPress?: () => any}) {
+  const [isPressed, setPressed] = useState(false)
+  let backgroundImage = isPressed ? selectedSendImage : defaultSendImage
+  backgroundImage = props.onPress ? backgroundImage : disabledSendImage
+  return (
+    <ButtonView
+      onPress={props.onPress}
+      disabled={Boolean(props.onPress)}
+      activeOpacity={1}
+      onHideUnderlay={() => {
+        setPressed(false)
+      }}
+      onShowUnderlay={() => {
+        setPressed(true)
+      }}
+    >
+      <ImageView
+        source={backgroundImage}
+        overflow={'visible'}
+        //The image has margins
+        mr={'-45'}
+      />
+    </ButtonView>
+  )
+}
+
 const GetAccountView = (props: GetAccountViewProps) => {
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const appWallets = useSelector((state: RootState) => state.app.wallets)
@@ -47,6 +104,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
   )
 
   const [account, setAccount] = useState<Account>(props.route.params.account)
+  const isWatchAccount = Boolean(
+    props.route.params.account.accountType === 'watch'
+  )
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
 
   const [transactions, setTransactions] = useState<TransactionDateGroup[]>([])
@@ -170,24 +230,17 @@ const GetAccountView = (props: GetAccountViewProps) => {
       </LinearLayout>
 
       <LinearLayout orientation={'horiz'} flex={1} flexWrap={'wrap'}>
-        <ButtonView
+        <ReceiveButton
           onPress={() =>
             props.navigation.navigate(Facade.route.Modal.name, {
-              screen: Facade.route.SendTransactionInputModal.name,
+              screen: Facade.route.ReceiveToAccountModal.name,
               params: {
-                walletTitle:
-                  props.route.params.account.getWallet(appWallets)?.name ?? '',
+                wallet: props.route.params.account.getWallet(appWallets),
                 account: props.route.params.account,
               },
             })
           }
-        >
-          <ImageView
-            source={require('~/src/assets/images/button-send-small.png')}
-            overflow={'visible'}
-            ml={'-45'}
-          />
-        </ButtonView>
+        />
 
         <ButtonView
           onPress={() => console.log('pressed')}
@@ -214,23 +267,22 @@ const GetAccountView = (props: GetAccountViewProps) => {
           </TextView>
         </ButtonView>
 
-        <ButtonView
-          onPress={() =>
-            props.navigation.navigate(Facade.route.Modal.name, {
-              screen: Facade.route.ReceiveToAccountModal.name,
-              params: {
-                wallet: props.route.params.account.getWallet(appWallets),
-                account: props.route.params.account,
-              },
-            })
+        <SendButton
+          onPress={
+            isWatchAccount
+              ? undefined
+              : () =>
+                  props.navigation.navigate(Facade.route.Modal.name, {
+                    screen: Facade.route.SendTransactionInputModal.name,
+                    params: {
+                      walletTitle:
+                        props.route.params.account.getWallet(appWallets)
+                          ?.name ?? '',
+                      account: props.route.params.account,
+                    },
+                  })
           }
-        >
-          <ImageView
-            source={require('~/src/assets/images/button-receive-small.png')}
-            overflow={'visible'}
-            mr={'-45'}
-          />
-        </ButtonView>
+        />
       </LinearLayout>
 
       <TabSelector
