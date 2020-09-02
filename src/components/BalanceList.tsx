@@ -54,7 +54,11 @@ const BalanceList = (props: Props) => {
         </LinearLayout>
 
         <LinearLayout weight={1} ml={4}>
-          <LinearLayout weight={1} orientation="verti" justifyContent={'center'}>
+          <LinearLayout
+            weight={1}
+            orientation="verti"
+            justifyContent={'center'}
+          >
             <TextView
               mb="-6px"
               color="text.2"

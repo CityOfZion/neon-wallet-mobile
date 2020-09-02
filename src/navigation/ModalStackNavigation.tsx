@@ -99,6 +99,7 @@ export type ModalParams =
   | DefaultNavigationParam<ContactsModalParams>
   | DefaultNavigationParam<SendTransactionConfirmationModalParams>
   | DefaultNavigationParam<PersistContactParams>
+  | DefaultNavigationParam<SendTransactionInputModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 

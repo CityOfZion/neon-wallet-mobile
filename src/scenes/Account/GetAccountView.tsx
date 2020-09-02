@@ -21,7 +21,12 @@ import {AddressPaginatedRequest} from '~src/models/request/AddressPaginatedReque
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import {
+  ButtonView,
+  ImageView,
+  LinearLayout,
+  TextView,
+} from '~src/styles/styled-components'
 
 export interface GetAccountParams {
   account: Account
@@ -32,8 +37,66 @@ interface GetAccountViewProps {
   route: RouteProp<WalletStackParamList, 'GetAccount'>
 }
 
+const selectedReceiveImage = require('~/src/assets/images/button-receive-small-selected.png')
+const defaultReceiveImage = require('~/src/assets/images/button-receive-small.png')
+
+function ReceiveButton(props: {onPress: () => any}) {
+  const [isPressed, setPressed] = useState(false)
+  const backgroundImage = isPressed ? selectedReceiveImage : defaultReceiveImage
+  return (
+    <ButtonView
+      onPress={props.onPress}
+      activeOpacity={1}
+      onHideUnderlay={() => {
+        setPressed(false)
+      }}
+      onShowUnderlay={() => {
+        setPressed(true)
+      }}
+    >
+      <ImageView
+        source={backgroundImage}
+        overflow={'visible'}
+        //The image has margins
+        ml={'-45'}
+      />
+    </ButtonView>
+  )
+}
+
+const disabledSendImage = require('~/src/assets/images/button-send-small-disabled.png')
+const selectedSendImage = require('~/src/assets/images/button-send-small-selected.png')
+const defaultSendImage = require('~/src/assets/images/button-send-small.png')
+
+function SendButton(props: {onPress?: () => any}) {
+  const [isPressed, setPressed] = useState(false)
+  let backgroundImage = isPressed ? selectedSendImage : defaultSendImage
+  backgroundImage = props.onPress ? backgroundImage : disabledSendImage
+  return (
+    <ButtonView
+      onPress={props.onPress}
+      disabled={Boolean(props.onPress)}
+      activeOpacity={1}
+      onHideUnderlay={() => {
+        setPressed(false)
+      }}
+      onShowUnderlay={() => {
+        setPressed(true)
+      }}
+    >
+      <ImageView
+        source={backgroundImage}
+        overflow={'visible'}
+        //The image has margins
+        mr={'-45'}
+      />
+    </ButtonView>
+  )
+}
+
 const GetAccountView = (props: GetAccountViewProps) => {
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const appWallets = useSelector((state: RootState) => state.app.wallets)
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
   const pendingTransactions = useSelector(
@@ -41,6 +104,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
   )
 
   const [account, setAccount] = useState<Account>(props.route.params.account)
+  const isWatchAccount = Boolean(
+    props.route.params.account.accountType === 'watch'
+  )
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
 
   const [transactions, setTransactions] = useState<TransactionDateGroup[]>([])
@@ -163,14 +229,59 @@ const GetAccountView = (props: GetAccountViewProps) => {
         <AccountCard account={account} isStackMode={false} />
       </LinearLayout>
 
-      <LinearLayout mt="28px" mx="auto">
-        <ThemedButton
-          fontSize="16px"
-          label={Facade.t('screens.getAccount.claimAsset', {
-            assetAmount: '0.0000123 GAS',
-          })}
-          //TODO NW-158 Show gas when claim is finished
-          onPress={() => showMessage({message: 'placeholder'})}
+      <LinearLayout orientation={'horiz'} flex={1} flexWrap={'wrap'}>
+        <ReceiveButton
+          onPress={() =>
+            props.navigation.navigate(Facade.route.Modal.name, {
+              screen: Facade.route.ReceiveToAccountModal.name,
+              params: {
+                wallet: props.route.params.account.getWallet(appWallets),
+                account: props.route.params.account,
+              },
+            })
+          }
+        />
+
+        <ButtonView
+          onPress={() => console.log('pressed')}
+          weight={2}
+          justifyContent={'center'}
+          overflow={'visible'}
+        >
+          <ImageView
+            source={require('~src/assets/images/button-claim-background.png')}
+            alignSelf={'center'}
+            position={'absolute'}
+            maxWidth={'100%'}
+          />
+          <TextView
+            color={'primary'}
+            alignSelf={'center'}
+            fontSize={'16px'}
+            numberOfLines={1}
+            adjustsFontSizeToFit={true}
+          >
+            {Facade.t('screens.getAccount.claimAsset', {
+              assetAmount: '0.1 GAS',
+            })}
+          </TextView>
+        </ButtonView>
+
+        <SendButton
+          onPress={
+            isWatchAccount
+              ? undefined
+              : () =>
+                  props.navigation.navigate(Facade.route.Modal.name, {
+                    screen: Facade.route.SendTransactionInputModal.name,
+                    params: {
+                      walletTitle:
+                        props.route.params.account.getWallet(appWallets)
+                          ?.name ?? '',
+                      account: props.route.params.account,
+                    },
+                  })
+          }
         />
       </LinearLayout>
 
