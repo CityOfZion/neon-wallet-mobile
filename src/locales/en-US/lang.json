@@ -508,6 +508,6 @@
   },
   "toast" : {
     "transaction": "Transaction",
-    "gasClaimSucess" : "GAS Claim Sucessfull"
+    "gasClaimSucess" : "GAS claim successful!"
   }
 }
