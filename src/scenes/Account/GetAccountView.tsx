@@ -75,7 +75,7 @@ function SendButton(props: {onPress?: () => any}) {
   return (
     <ButtonView
       onPress={props.onPress}
-      disabled={Boolean(props.onPress)}
+      disabled={!props.onPress}
       activeOpacity={1}
       onHideUnderlay={() => {
         setPressed(false)
@@ -269,9 +269,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
         <SendButton
           onPress={
-            isWatchAccount
+            isWatchAccount || !props.route.params.account.getBalanceAmount()
               ? undefined
-              : () =>
+              : () => {
                   props.navigation.navigate(Facade.route.Modal.name, {
                     screen: Facade.route.SendTransactionInputModal.name,
                     params: {
@@ -281,6 +281,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
                       account: props.route.params.account,
                     },
                   })
+                }
           }
         />
       </LinearLayout>
