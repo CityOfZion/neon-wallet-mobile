@@ -73,7 +73,7 @@ const Notification = (props: NotificationProps) => {
             <ImageView
               height={'9px'}
               width={'9px'}
-              source={require('~src/assets/images/close.png')}
+              source={require('~src/assets/images/button_close_white.png')}
             />
           </ButtonView>
         </LinearLayout>
