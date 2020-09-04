@@ -37,12 +37,12 @@ export const PersistContact = (props: PersistContactProps) => {
 
   const submit = async () => {
     if (name.length === 0 || name.length > 20) {
-      Alert.alert(Facade.t('createContact.invalidName'))
+      Alert.alert(Facade.t('persistContact.invalidName'))
       return
     }
 
     if (!wallet.isAddress(address)) {
-      Alert.alert(Facade.t('createContact.invalidAddress'))
+      Alert.alert(Facade.t('persistContact.invalidAddress'))
       return
     }
 

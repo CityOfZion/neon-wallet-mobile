@@ -155,7 +155,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
               position="absolute"
               bottom={'100%'}
               width={'100%'}
-              resizeMode={'contain'}
+              resizeMode={'stretch'}
               source={require('~src/assets/images/TabBarShadow.png')}
             />
           </View>
