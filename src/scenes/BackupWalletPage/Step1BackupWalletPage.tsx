@@ -20,6 +20,20 @@ interface Props {
   navigation: StackNavigationProp<SettingsStackParamList>
 }
 
+const WordComponent = (props: {value: string}) => {
+  return (
+    <TextView
+      my={3}
+      mx={4}
+      color={'text.0'}
+      fontSize={'2xl'}
+      fontFamily={'semibold'}
+    >
+      {props.value}
+    </TextView>
+  )
+}
+
 const Step1BackupWalletPage: React.FC<Props> = (props) => {
   const [words, setWords] = useState<string[]>([])
 
@@ -68,21 +82,6 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
             }),
         },
       ]
-    )
-  }
-
-  const _renderWord = (value: string) => {
-    return (
-      <TextView
-        my={3}
-        mx={4}
-        color={'text.0'}
-        fontSize={'2xl'}
-        fontFamily={'semibold'}
-        key={value}
-      >
-        {value}
-      </TextView>
     )
   }
 
@@ -137,7 +136,9 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
                 justifyContent={'center'}
                 width={'100%'}
               >
-                {words.map((it) => _renderWord(it))}
+                {words.map((it) => (
+                  <WordComponent key={it} value={it} />
+                ))}
               </LinearLayout>
             </ThemedCard>
           </LinearLayout>

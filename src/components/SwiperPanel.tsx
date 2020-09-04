@@ -16,6 +16,7 @@ import {
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
+import {paddingTop} from '~/node_modules/@types/styled-system'
 import {Facade} from '~src/app/Facade'
 import {TextView, ImageView, LinearLayout} from '~src/styles/styled-components'
 
@@ -88,6 +89,127 @@ export const useSwiperController = (initial: boolean = false) => {
   } as SwiperController
 }
 
+const DragBar = (props: {noHeader: boolean; mb: number}) => {
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
+
+  return (
+    <View
+      style={{
+        width: 67,
+        height: 4,
+        borderRadius: 2,
+        margin: 12,
+        backgroundColor: theme.colors.background[3],
+        alignSelf: 'center',
+        marginBottom: props.noHeader ? props.mb : 0,
+      }}
+    />
+  )
+}
+
+const Header = (props: SwiperProps & {mb: number}) => {
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
+
+  return (
+    <LinearLayout
+      alignItems="center"
+      justifyContent="space-between"
+      orientation="horiz"
+      mt="24px"
+      mb={props.paddingTop}
+    >
+      <AwaitActivity name={'swiperLeft'}>
+        <LinearLayout weight={1} alignItems="flex-start">
+          <TouchableWithoutFeedback
+            onPress={() => props.onLeftPress && props.onLeftPress()}
+          >
+            <View
+              style={{
+                marginLeft: -10,
+                paddingLeft: 10,
+              }}
+            >
+              {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
+              {typeof props.leftButton === 'string' ? (
+                <TextButton text={props.leftButton} />
+              ) : (
+                props.leftButton
+              )}
+            </View>
+          </TouchableWithoutFeedback>
+        </LinearLayout>
+      </AwaitActivity>
+
+      <LinearLayout
+        weight={1}
+        width="100%"
+        orientation="horiz"
+        alignItems="center"
+        justifyContent="center"
+        position="absolute"
+      >
+        {props.image ? (
+          <ImageView
+            resizeMode="contain"
+            height={props.imageSize[0]}
+            width={props.imageSize[1]}
+            mt={Facade.utils.isIos ? -3 : 2}
+            mr="6px"
+            source={props.image}
+          />
+        ) : undefined}
+
+        <TextView
+          color={theme.colors.text[0]}
+          fontSize={24}
+          fontFamily="semibold"
+          alignSelf="center"
+        >
+          {props.title}
+        </TextView>
+      </LinearLayout>
+
+      <AwaitActivity name={'swiperRight'}>
+        <LinearLayout weight={1} alignItems="flex-end">
+          <TouchableWithoutFeedback
+            onPress={() => props.onRightPress && props.onRightPress()}
+          >
+            <View
+              style={{
+                marginRight: -10,
+                paddingRight: 10,
+              }}
+            >
+              {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
+              {typeof props.rightButton === 'string' ? (
+                <TextButton text={props.rightButton} />
+              ) : (
+                props.rightButton
+              )}
+            </View>
+          </TouchableWithoutFeedback>
+        </LinearLayout>
+      </AwaitActivity>
+    </LinearLayout>
+  )
+}
+
+const TextButton = (props: {text: string}) => {
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
+
+  return (
+    <TextView color={theme.colors.text[0]} fontSize={16} fontFamily="regular">
+      {props.text}
+    </TextView>
+  )
+}
+
 export default function SwiperPanel(props: SwiperProps) {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
@@ -149,12 +271,12 @@ export default function SwiperPanel(props: SwiperProps) {
     }
   })
 
-  function resetScroll() {
+  const resetScroll = () => {
     scrollView.current &&
       scrollView.current.scrollTo({x: 0, y: 0, animated: false})
   }
 
-  function open() {
+  const open = () => {
     if (state === State.OPEN) return
 
     Animated.parallel([
@@ -176,7 +298,7 @@ export default function SwiperPanel(props: SwiperProps) {
     setState(State.OPEN)
   }
 
-  function close() {
+  const close = () => {
     if (state === State.CLOSED) return
 
     Animated.parallel([
@@ -198,111 +320,6 @@ export default function SwiperPanel(props: SwiperProps) {
 
     resetScroll()
     setState(State.CLOSED)
-  }
-
-  function DragBar() {
-    return (
-      <View
-        style={{
-          width: 67,
-          height: 4,
-          borderRadius: 2,
-          margin: 12,
-          backgroundColor: theme.colors.background[3],
-          alignSelf: 'center',
-          marginBottom: props.noHeader ? paddingTop : 0,
-        }}
-      />
-    )
-  }
-
-  function Header(props: SwiperProps) {
-    return (
-      <LinearLayout
-        alignItems="center"
-        justifyContent="space-between"
-        orientation="horiz"
-        mt="24px"
-        mb={paddingTop}
-      >
-        <AwaitActivity name={'swiperLeft'}>
-          <LinearLayout weight={1} alignItems="flex-start">
-            <TouchableWithoutFeedback
-              onPress={() => props.onLeftPress && props.onLeftPress()}
-            >
-              <View
-                style={{
-                  marginLeft: -10,
-                  paddingLeft: 10,
-                }}
-              >
-                {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
-                {typeof props.leftButton === 'string'
-                  ? TextButton(props.leftButton)
-                  : props.leftButton}
-              </View>
-            </TouchableWithoutFeedback>
-          </LinearLayout>
-        </AwaitActivity>
-
-        <LinearLayout
-          weight={1}
-          width="100%"
-          orientation="horiz"
-          alignItems="center"
-          justifyContent="center"
-          position="absolute"
-        >
-          {props.image ? (
-            <ImageView
-              resizeMode="contain"
-              height={props.imageSize[0]}
-              width={props.imageSize[1]}
-              mt={Facade.utils.isIos ? -3 : 2}
-              mr="6px"
-              source={props.image}
-            />
-          ) : undefined}
-
-          <TextView
-            color={theme.colors.text[0]}
-            fontSize={24}
-            fontFamily="semibold"
-            alignSelf="center"
-          >
-            {props.title}
-          </TextView>
-        </LinearLayout>
-
-        <AwaitActivity name={'swiperRight'}>
-          <LinearLayout weight={1} alignItems="flex-end">
-            <TouchableWithoutFeedback
-              onPress={() => props.onRightPress && props.onRightPress()}
-            >
-              <View
-                style={{
-                  marginRight: -10,
-                  paddingRight: 10,
-                }}
-              >
-                {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
-                {typeof props.rightButton === 'string'
-                  ? TextButton(props.rightButton)
-                  : props.rightButton}
-              </View>
-            </TouchableWithoutFeedback>
-          </LinearLayout>
-        </AwaitActivity>
-      </LinearLayout>
-    )
-  }
-
-  function TextButton(text: string) {
-    return (
-      <TextView color={theme.colors.text[0]} fontSize={16} fontFamily="regular">
-        {text}
-      </TextView>
-    )
   }
 
   return (
@@ -395,8 +412,12 @@ export default function SwiperPanel(props: SwiperProps) {
                 props.fullSize ? {height: MAX_HEIGHT} : {},
               ]}
             >
-              {props.draggable ? DragBar() : undefined}
-              {props.noHeader ? undefined : Header(props)}
+              {props.draggable ? (
+                <DragBar noHeader={props.noHeader} mb={paddingTop} />
+              ) : undefined}
+              {props.noHeader ? undefined : (
+                <Header {...props} mb={paddingBottom} />
+              )}
               {props.disableDefaultScrollView ? (
                 <LinearLayout width="100%" weight={1}>
                   {props.children}

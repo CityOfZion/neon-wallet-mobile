@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
+import {Contact} from '~src/models/redux/Contact'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -13,9 +14,11 @@ interface Props {
   transactionGroups: TransactionDateGroup[]
 }
 
-const TransactionsList: React.FC<Props> = (props) => {
-  const {contacts} = useSelector((state: RootState) => state.app)
-
+const TransactionComponent = (props: {
+  item: SenderTransaction
+  contacts: Contact[]
+  address: string
+}) => {
   const isReceived = (senderTx: SenderTransaction) => {
     return senderTx.isReceivedBy(props.address)
   }
@@ -23,10 +26,11 @@ const TransactionsList: React.FC<Props> = (props) => {
   const hasContactName = (senderTx: SenderTransaction) => {
     const conditions = [
       Boolean(
-        isReceived(senderTx) && senderTx.doSenderHasContactName(contacts)
+        isReceived(senderTx) && senderTx.doSenderHasContactName(props.contacts)
       ),
       Boolean(
-        !isReceived(senderTx) && senderTx.doReceiverHasContactName(contacts)
+        !isReceived(senderTx) &&
+          senderTx.doReceiverHasContactName(props.contacts)
       ),
     ]
 
@@ -55,117 +59,123 @@ const TransactionsList: React.FC<Props> = (props) => {
 
   const getAddressOrContact = (senderTx: SenderTransaction) => {
     if (isReceived(senderTx)) {
-      return senderTx.senderAddressOrContactName(contacts)
+      return senderTx.senderAddressOrContactName(props.contacts)
     }
 
-    return senderTx.receiverAddressOrContactName(contacts)
+    return senderTx.receiverAddressOrContactName(props.contacts)
   }
 
-  const _renderTransaction = (it: SenderTransaction) => {
-    return (
-      <LinearLayout py={4} orientation={'horiz'}>
-        <LinearLayout mr={4} alignSelf={'center'}>
-          <ImageView
-            width={Facade.scale(18)}
-            resizeMode={'contain'}
-            style={{
-              transform: [
-                {rotate: it.isReceivedBy(props.address) ? '180deg' : '0deg'},
-              ],
-            }}
-            source={
-              it.isPending
-                ? require('~src/assets/images/clock-white.png')
-                : require('~src/assets/images/icon-sent-white.png')
-            }
-          />
-        </LinearLayout>
+  return (
+    <LinearLayout py={4} orientation={'horiz'}>
+      <LinearLayout mr={4} alignSelf={'center'}>
+        <ImageView
+          width={Facade.scale(18)}
+          resizeMode={'contain'}
+          style={{
+            transform: [
+              {
+                rotate: props.item.isReceivedBy(props.address)
+                  ? '180deg'
+                  : '0deg',
+              },
+            ],
+          }}
+          source={
+            props.item.isPending
+              ? require('~src/assets/images/clock-white.png')
+              : require('~src/assets/images/icon-sent-white.png')
+          }
+        />
+      </LinearLayout>
 
-        <LinearLayout width={'60px'} mr={4}>
+      <LinearLayout width={'60px'} mr={4}>
+        <TextView
+          fontSize={'sm'}
+          color={'text.2'}
+          allowFontScaling={true}
+          adjustsFontSizeToFit={true}
+          numberOfLines={1}
+        >
+          {getStatusLabel(props.item)}
+        </TextView>
+
+        {props.item.isDatetimeValid() && (
+          <TextView fontFamily={'semibold'} color={'text.0'}>
+            {props.item.formattedTime}
+          </TextView>
+        )}
+      </LinearLayout>
+
+      <LinearLayout width={'30%'} mr={4}>
+        <TextView fontSize={'sm'} color={'text.2'}>
+          {getAddressLabel(props.item)}
+        </TextView>
+
+        {hasContactName(props.item) ? (
           <TextView
-            fontSize={'sm'}
-            color={'text.2'}
+            fontSize={'md'}
+            color={'text.0'}
             allowFontScaling={true}
             adjustsFontSizeToFit={true}
             numberOfLines={1}
           >
-            {getStatusLabel(it)}
+            {getAddressOrContact(props.item)}
           </TextView>
-
-          {it.isDatetimeValid() && (
-            <TextView fontFamily={'semibold'} color={'text.0'}>
-              {it.formattedTime}
-            </TextView>
-          )}
-        </LinearLayout>
-
-        <LinearLayout width={'30%'} mr={4}>
-          <TextView fontSize={'sm'} color={'text.2'}>
-            {getAddressLabel(it)}
+        ) : (
+          <TextView
+            numberOfLines={1}
+            ellipsizeMode={'middle'}
+            fontSize={'md'}
+            color={'primary'}
+          >
+            {getAddressOrContact(props.item)}
           </TextView>
-
-          {hasContactName(it) ? (
-            <TextView
-              fontSize={'md'}
-              color={'text.0'}
-              allowFontScaling={true}
-              adjustsFontSizeToFit={true}
-              numberOfLines={1}
-            >
-              {getAddressOrContact(it)}
-            </TextView>
-          ) : (
-            <TextView
-              numberOfLines={1}
-              ellipsizeMode={'middle'}
-              fontSize={'md'}
-              color={'primary'}
-            >
-              {getAddressOrContact(it)}
-            </TextView>
-          )}
-        </LinearLayout>
-
-        <LinearLayout mr={4}>
-          <TextView fontSize={'sm'} color={'text.2'}>
-            {Facade.t('components.transactionsList.value')}
-          </TextView>
-
-          {it.token && (
-            <LinearLayout orientation={'horiz'} alignItems={'center'}>
-              <ImageView
-                mr={2}
-                height={Facade.scale(18)}
-                width={Facade.scale(18)}
-                resizeMode={'contain'}
-                source={it.token.srcIcon}
-              />
-
-              <TextView fontSize={'md'} color={'text.0'}>
-                {it.token.symbol}
-              </TextView>
-            </LinearLayout>
-          )}
-        </LinearLayout>
-
-        <LinearLayout weight={1} alignSelf={'flex-end'}>
-          {it.token && (
-            <TextView
-              color={'text.2'}
-              fontSize={'md'}
-              textAlign={'right'}
-              fontFamily={'semibold'}
-              allowFontScaling={true}
-              adjustsFontSizeToFit={true}
-              numberOfLines={1}
-            >
-              {it.token.amount}
-            </TextView>
-          )}
-        </LinearLayout>
+        )}
       </LinearLayout>
-    )
-  }
+
+      <LinearLayout mr={4}>
+        <TextView fontSize={'sm'} color={'text.2'}>
+          {Facade.t('components.transactionsList.value')}
+        </TextView>
+
+        {props.item.token && (
+          <LinearLayout orientation={'horiz'} alignItems={'center'}>
+            <ImageView
+              mr={2}
+              height={Facade.scale(18)}
+              width={Facade.scale(18)}
+              resizeMode={'contain'}
+              source={props.item.token.srcIcon}
+            />
+
+            <TextView fontSize={'md'} color={'text.0'}>
+              {props.item.token.symbol}
+            </TextView>
+          </LinearLayout>
+        )}
+      </LinearLayout>
+
+      <LinearLayout weight={1} alignSelf={'flex-end'}>
+        {props.item.token && (
+          <TextView
+            color={'text.2'}
+            fontSize={'md'}
+            textAlign={'right'}
+            fontFamily={'semibold'}
+            allowFontScaling={true}
+            adjustsFontSizeToFit={true}
+            numberOfLines={1}
+          >
+            {props.item.token.amount}
+          </TextView>
+        )}
+      </LinearLayout>
+    </LinearLayout>
+  )
+}
+
+const TransactionsList: React.FC<Props> = (props) => {
+  const {contacts} = useSelector((state: RootState) => state.app)
 
   return (
     <FlatList<TransactionDateGroup>
@@ -187,7 +197,13 @@ const TransactionsList: React.FC<Props> = (props) => {
               ItemSeparatorComponent={() => (
                 <LinearLayout bg="text.2" height={1} />
               )}
-              renderItem={(sender) => _renderTransaction(sender.item)}
+              renderItem={(sender) => (
+                <TransactionComponent
+                  item={sender.item}
+                  contacts={contacts}
+                  address={props.address}
+                />
+              )}
             />
           </LinearLayout>
         </LinearLayout>

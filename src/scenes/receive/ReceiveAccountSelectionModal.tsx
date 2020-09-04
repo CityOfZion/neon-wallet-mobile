@@ -1,7 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {cloneDeep} from 'lodash'
-import React, {useEffect, useState} from 'react'
+import React, {Fragment, useEffect, useState} from 'react'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -18,6 +18,7 @@ import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
+import AccountCardsComponent from '~src/components/AccountCardsComponent'
 
 export interface ReceiveAccountSelectionParams {
   wallet: Wallet
@@ -45,24 +46,6 @@ const ReceiveAccountSelectionModal = (props: Props) => {
     const accounts = wallet.getAccounts(accountsPool)
     setAccounts(accounts)
     setSelectedAccount(Facade.utils.clone(accounts[accounts.length - 1]))
-  }
-
-  const _renderAccountCards = () => {
-    return accounts.map((account: Account, i: number) => {
-      const marginTop = i !== 0 ? Facade.scale(-240) : undefined
-      const marginX = i !== 0 ? Facade.scale(-1) : undefined
-
-      return (
-        <LinearLayout key={i} marginTop={marginTop} mx={marginX}>
-          <AccountCard
-            account={account}
-            isCompacted={true}
-            isStackMode={i !== accounts.length - 1}
-            onPress={() => selectEvent()}
-          />
-        </LinearLayout>
-      )
-    })
   }
 
   const selectEvent = async () => {
@@ -103,7 +86,9 @@ const ReceiveAccountSelectionModal = (props: Props) => {
           {Facade.t('modals.send.accountSelection.subtitle')}
         </TextView>
 
-        <LinearLayout mt={4}>{_renderAccountCards()}</LinearLayout>
+        <LinearLayout mt={4}>
+          <AccountCardsComponent accounts={accounts} onPress={selectEvent} />
+        </LinearLayout>
 
         <BalanceList
           my="44px"

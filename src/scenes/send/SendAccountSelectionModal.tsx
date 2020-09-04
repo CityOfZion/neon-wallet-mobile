@@ -17,6 +17,7 @@ import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
+import AccountCardsComponent from '~src/components/AccountCardsComponent'
 
 export interface SendAccountSelectionModalParams {
   wallet: Wallet
@@ -45,24 +46,6 @@ const SendAccountSelectionModal = (props: Props) => {
     const accounts = wallet.getAccounts(accountsPool)
     setAccounts(accounts)
     setSelectedAccount(Facade.lodash.cloneDeep(accounts[accounts.length - 1]))
-  }
-
-  const _renderAccountCards = () => {
-    return accounts.map((account: Account, i: number) => {
-      const marginTop = i !== 0 ? Facade.scale(-240) : undefined
-      const marginX = i !== 0 ? Facade.scale(-1) : undefined
-
-      return (
-        <LinearLayout key={i} marginTop={marginTop} mx={marginX}>
-          <AccountCard
-            account={account}
-            isCompacted={true}
-            isStackMode={i !== accounts.length - 1}
-            onPress={() => selectEvent()}
-          />
-        </LinearLayout>
-      )
-    })
   }
 
   const selectEvent = async () => {
@@ -104,7 +87,9 @@ const SendAccountSelectionModal = (props: Props) => {
           {Facade.t('modals.send.accountSelection.subtitle')}
         </TextView>
 
-        <LinearLayout mt={4}>{_renderAccountCards()}</LinearLayout>
+        <LinearLayout mt={4}>
+          <AccountCardsComponent accounts={accounts} onPress={selectEvent} />
+        </LinearLayout>
 
         <LinearLayout width={'100%'}>
           <BalanceList

@@ -10,13 +10,10 @@ import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 import {TextView, LinearLayout, ImageView} from '~src/styles/styled-components'
 
 interface Props {
-  route: RouteProp<SettingsStackParamList, 'Step3BackupWallet'>
   navigation: StackNavigationProp<SettingsStackParamList>
 }
 
 const Step3BackupWalletPage: React.FC<Props> = (props) => {
-  const {wallet} = props.route.params
-
   props.navigation.setOptions({
     headerRight: () =>
       HeaderActionButton({
@@ -57,7 +54,6 @@ const Step3BackupWalletPage: React.FC<Props> = (props) => {
 
 Step3BackupWalletPage.propTypes = {
   navigation: PropTypes.any,
-  route: PropTypes.any,
 }
 
 export default Step3BackupWalletPage
