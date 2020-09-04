@@ -26,6 +26,30 @@ interface GetWalletProps {
   navigation: StackNavigationProp<WalletStackParamList>
 }
 
+const AccountCardsComponent = (props: {
+  accounts: Account[]
+  onPress: (account: Account) => void
+}) => {
+  return (
+    <Fragment>
+      {props.accounts.map((account: Account, i: number) => {
+        const marginTop = i !== 0 ? Facade.scale(-130) : undefined
+
+        return (
+          <LinearLayout key={i} marginTop={marginTop}>
+            <AccountCard
+              account={account}
+              isCompacted={true}
+              isStackMode={i !== props.accounts.length - 1}
+              onPress={() => props.onPress(account)}
+            />
+          </LinearLayout>
+        )
+      })}
+    </Fragment>
+  )
+}
+
 const GetWalletView = (props: GetWalletProps) => {
   const [accounts, setAccounts] = useState<Account[]>([])
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
@@ -70,27 +94,12 @@ const GetWalletView = (props: GetWalletProps) => {
     }
   }
 
-  const _renderAccountCards = () => {
-    return accounts.map((account: Account, i: number) => {
-      const marginTop = i !== 0 ? Facade.scale(-130) : undefined
-
-      return (
-        <LinearLayout key={i} marginTop={marginTop}>
-          <AccountCard
-            account={account}
-            isCompacted={true}
-            isStackMode={i !== accounts.length - 1}
-            onPress={() => selectEvent(account)}
-          />
-        </LinearLayout>
-      )
-    })
-  }
-
   return (
     <ScreenLayout>
       <AwaitActivity name={'populate'} loadingView={<ScreenLoader />}>
-        <LinearLayout mt={4}>{_renderAccountCards()}</LinearLayout>
+        <LinearLayout mt={4}>
+          <AccountCardsComponent accounts={accounts} onPress={selectEvent} />
+        </LinearLayout>
 
         {wallet.walletType === 'watch' || wallet.walletType === 'legacy' ? (
           <Fragment />

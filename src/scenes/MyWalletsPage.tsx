@@ -15,26 +15,31 @@ interface Props {
   theme: DefaultTheme
 }
 
+const MenuItemComponent = (props: {
+  navigation: StackNavigationProp<SettingsStackParamList>
+  wallet: Wallet
+}) => {
+  return (
+    <MenuItem
+      title={props.wallet.name ?? '?'}
+      arrowDirection={RightIconType.ARROW_RIGHT}
+      onPress={() =>
+        props.navigation.navigate(Facade.route.MyWalletOptions.name, {
+          wallet: props.wallet,
+        })
+      }
+    />
+  )
+}
+
 const MyWalletsPage = (props: Props) => {
   const wallets = useSelector((state: RootState) => state.app.wallets)
 
-  const _menuItem = (wallet: Wallet) => {
-    return (
-      <MenuItem
-        title={wallet.name ?? '?'}
-        arrowDirection={RightIconType.ARROW_RIGHT}
-        onPress={() =>
-          props.navigation.navigate(Facade.route.MyWalletOptions.name, {
-            wallet,
-          })
-        }
-      />
-    )
-  }
-
   return (
     <ScreenLayout padding={20}>
-      {wallets.map((it) => _menuItem(it))}
+      {wallets.map((it, i) => (
+        <MenuItemComponent key={i} navigation={props.navigation} wallet={it} />
+      ))}
     </ScreenLayout>
   )
 }

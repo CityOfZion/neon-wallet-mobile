@@ -17,6 +17,23 @@ interface Props {
   navigation: StackNavigationProp<ModalStackParamList & TabStackParamList>
 }
 
+const ItemComponent = (props: RowProps<string>) => {
+  return (
+    <LinearLayout>
+      <LinearLayout orientation="horiz" alignItems="center" mb="16px" mt="24px">
+        <TextView color="text.0" fontSize={18} fontFamily="bold">
+          {props.data}
+        </TextView>
+        <LinearLayout flex={1} />
+        <ImageView
+          source={require('~src/assets/images/icon-stack-green.png')}
+        />
+      </LinearLayout>
+      <LinearLayout height={0.5} bg="background.10" alignSelf="stretch" />
+    </LinearLayout>
+  )
+}
+
 export default function ReorderWalletModal(props: Props) {
   const controller = useSwiperController(true)
 
@@ -29,28 +46,6 @@ export default function ReorderWalletModal(props: Props) {
   wallets.forEach((wallet, index) => {
     listData[index] = wallet.name ?? ''
   })
-
-  function _renderItem(props: RowProps<string>) {
-    return (
-      <LinearLayout>
-        <LinearLayout
-          orientation="horiz"
-          alignItems="center"
-          mb="16px"
-          mt="24px"
-        >
-          <TextView color="text.0" fontSize={18} fontFamily="bold">
-            {props.data}
-          </TextView>
-          <LinearLayout flex={1} />
-          <ImageView
-            source={require('~src/assets/images/icon-stack-green.png')}
-          />
-        </LinearLayout>
-        <LinearLayout height={0.5} bg="background.10" alignSelf="stretch" />
-      </LinearLayout>
-    )
-  }
 
   const commitAndClose = async () => {
     if (order.length > 0) {
@@ -97,7 +92,7 @@ export default function ReorderWalletModal(props: Props) {
               paddingTop: 26,
             }}
             data={listData}
-            renderRow={_renderItem}
+            renderRow={ItemComponent}
             onChangeOrder={(order) => setOrder(order)}
           />
         </LinearLayout>

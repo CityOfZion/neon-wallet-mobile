@@ -27,7 +27,7 @@ const QrCodeGenerateTest: React.FC<object> = () => {
   const [showQrCode, setShowQrCode] = useState(false)
   const [valueForQr, setValueForQr] = useState('default')
 
-  function getTextInputValue() {
+  const getTextInputValue = () => {
     const showQr = inputValue.length > 0
 
     if (showQr) {
