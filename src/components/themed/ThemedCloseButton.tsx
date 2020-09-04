@@ -13,7 +13,7 @@ const ThemedCloseButton: React.FC<Props> = (props) => {
   return (
     <ThemedButton
       onPress={props.onPress}
-      srcIcon={require('~src/assets/images/close.png')}
+      srcIcon={require('~src/assets/images/button_close_white.png')}
       textColor={'text.0'}
       rounded={false}
       flat={true}

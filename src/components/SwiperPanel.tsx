@@ -465,7 +465,7 @@ export function CloseButton() {
       width={20}
       height={20}
       m="8px"
-      source={require('~src/assets/images/close.png')}
+      source={require('~src/assets/images/button_close_white.png')}
     />
   )
 }
