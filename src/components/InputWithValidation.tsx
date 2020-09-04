@@ -117,7 +117,7 @@ const InputWithValidation = (props: Props) => {
       )}
 
       <LinearLayout
-        mt={3}
+        mt={1}
         bg={
           props.validator(props.value)
             ? props.separatorColor
