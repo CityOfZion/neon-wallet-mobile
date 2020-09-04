@@ -84,7 +84,6 @@ const FeatureDescription = styled(TextView)`
   font-family: regular;
 `
 
-
 const OnboardingPage = (props: OnboardingPageProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]

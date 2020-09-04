@@ -13,6 +13,7 @@ import TransactionsList from '~src/components/TransactionsList'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {Lang} from '~src/enums/Lang'
 import {NeoNode} from '~src/models/NeoNode'
 import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {Account} from '~src/models/redux/Account'
@@ -27,7 +28,6 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {Lang} from '~src/enums/Lang'
 
 export interface GetAccountParams {
   account: Account
@@ -38,10 +38,10 @@ interface GetAccountViewProps {
   route: RouteProp<WalletStackParamList, 'GetAccount'>
 }
 
-const selectedReceiveImage = require('~/src/assets/images/button-receive-small-selected.png')
-const defaultReceiveImage = require('~/src/assets/images/button-receive-small.png')
-
 const ReceiveButton = (props: {onPress: () => any}) => {
+  const selectedReceiveImage = require('~/src/assets/images/button-receive-small-selected.png')
+  const defaultReceiveImage = require('~/src/assets/images/button-receive-small.png')
+  
   const [isPressed, setPressed] = useState(false)
   const backgroundImage = isPressed ? selectedReceiveImage : defaultReceiveImage
   return (

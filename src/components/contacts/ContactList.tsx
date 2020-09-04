@@ -78,7 +78,9 @@ export const ContactList = (props: ContactListProps) => {
         .get(contact.name?.[0] ?? '')
         ?.push({data: contact, onContactSelected: props.onContactSelected})
     } else {
-      contactsMap.set(contact.name?.[0] ?? '', [{data: contact, onContactSelected: props.onContactSelected}])
+      contactsMap.set(contact.name?.[0] ?? '', [
+        {data: contact, onContactSelected: props.onContactSelected},
+      ])
     }
   })
 

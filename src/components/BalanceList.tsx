@@ -4,12 +4,12 @@ import {FlatList, TouchableOpacity, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {Currency} from '~src/enums/Currency'
+import {Lang} from '~src/enums/Lang'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {Exchange} from '~src/types/exchange'
-import {Currency} from '~src/enums/Currency'
-import {Lang} from '~src/enums/Lang'
 
 interface Props extends LinearLayoutProps {
   tokenAssets: TokenAsset[]

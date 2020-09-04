@@ -218,11 +218,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
               button={settingsButton}
               controller={controller}
             />
-            <TabButton
-              {...props}
-              button={moreButton}
-              controller={controller}
-            />
+            <TabButton {...props} button={moreButton} controller={controller} />
           </LinearLayout>
         </RelativeLayout>
       </TabBarContainer>

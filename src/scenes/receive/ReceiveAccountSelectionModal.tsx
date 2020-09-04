@@ -6,6 +6,7 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
+import AccountCardsComponent from '~src/components/AccountCardsComponent'
 import BalanceList from '~src/components/BalanceList'
 import SwiperPanel, {
   CloseButton,
@@ -18,7 +19,6 @@ import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-import AccountCardsComponent from '~src/components/AccountCardsComponent'
 
 export interface ReceiveAccountSelectionParams {
   wallet: Wallet
