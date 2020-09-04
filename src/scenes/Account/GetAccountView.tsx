@@ -41,7 +41,7 @@ interface GetAccountViewProps {
 const ReceiveButton = (props: {onPress: () => any}) => {
   const selectedReceiveImage = require('~/src/assets/images/button-receive-small-selected.png')
   const defaultReceiveImage = require('~/src/assets/images/button-receive-small.png')
-  
+
   const [isPressed, setPressed] = useState(false)
   const backgroundImage = isPressed ? selectedReceiveImage : defaultReceiveImage
   return (
