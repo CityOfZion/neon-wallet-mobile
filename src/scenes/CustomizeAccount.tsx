@@ -52,6 +52,7 @@ const CustomizeAccount = (props: Props) => {
   const dispatch = useDispatch<SyncDispatch>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
+  const dispatchAsyncAccount = useDispatch<AsyncDispatch<Account>>()
 
   const [name, setName] = useState<string>('')
   const [color, setColor] = useState<string>(theme.colors.card[0])
@@ -95,9 +96,19 @@ const CustomizeAccount = (props: Props) => {
     const walletId = await createWallet()
 
     // Adds the account to the wallet
-    await createAccount(walletId)
+    const importedAccount = await createAccount(walletId)
 
-    props.navigation.replace(Facade.route.Tab.name, undefined)
+    props.navigation.replace(Facade.route.Tab.name, {
+      welcomeHidden: true,
+      screen: Facade.route.ListWallets.name,
+      params: {
+        screen: Facade.route.GetAccount.name,
+        initial: false,
+        params: {
+          account: importedAccount,
+        },
+      },
+    })
   }
 
   const createWallet = async () => {
@@ -134,11 +145,15 @@ const CustomizeAccount = (props: Props) => {
     dispatch(RootStore.account.actions.setName(name))
     dispatch(RootStore.account.actions.setBackgroundColor(color))
 
-    await dispatchAsync(RootStore.account.actions.importAndSave(address, wif))
+    const importedAccount = await dispatchAsyncAccount(
+      RootStore.account.actions.importAndSave(address, wif)
+    )
     await dispatchAsync(RootStore.app.actions.syncAccounts())
     await dispatchAsync(RootStore.app.actions.syncTokenAssetsByAddress(address))
 
     dispatch(RootStore.account.actions.clearState())
+
+    return importedAccount
   }
 
   const isValid = () => {

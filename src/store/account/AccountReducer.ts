@@ -93,7 +93,7 @@ export class AccountReducer extends ReducerWrapper<
         await Storage.accounts.save(accounts)
       }
     },
-    importAndSave: (address: string, wif?: string): AsyncAction => {
+    importAndSave: (address: string, wif?: string): AsyncAction<Account> => {
       return async (dispatch, getState) => {
         const accounts = (await Storage.accounts.load()) ?? []
 
@@ -114,7 +114,7 @@ export class AccountReducer extends ReducerWrapper<
           accounts.push(account)
           await Storage.accounts.save(accounts)
 
-          return
+          return account
         }
 
         throw Error('Something went wrong')
