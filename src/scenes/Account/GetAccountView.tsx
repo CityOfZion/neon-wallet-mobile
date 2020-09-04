@@ -13,6 +13,7 @@ import TransactionsList from '~src/components/TransactionsList'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {Lang} from '~src/enums/Lang'
 import {NeoNode} from '~src/models/NeoNode'
 import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {Account} from '~src/models/redux/Account'
@@ -37,10 +38,10 @@ interface GetAccountViewProps {
   route: RouteProp<WalletStackParamList, 'GetAccount'>
 }
 
-const selectedReceiveImage = require('~/src/assets/images/button-receive-small-selected.png')
-const defaultReceiveImage = require('~/src/assets/images/button-receive-small.png')
+const ReceiveButton = (props: {onPress: () => any}) => {
+  const selectedReceiveImage = require('~/src/assets/images/button-receive-small-selected.png')
+  const defaultReceiveImage = require('~/src/assets/images/button-receive-small.png')
 
-function ReceiveButton(props: {onPress: () => any}) {
   const [isPressed, setPressed] = useState(false)
   const backgroundImage = isPressed ? selectedReceiveImage : defaultReceiveImage
   return (
@@ -94,6 +95,23 @@ function SendButton(props: {onPress?: () => any}) {
   )
 }
 
+const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
+  return (
+    <LinearLayout alignItems="center" justifyContent="center">
+      <TextView color={'text.3'} textAlign={'center'} fontSize={10}>
+        {Facade.t('app.neoBlockHeight')}
+      </TextView>
+
+      <TextView color={'text.0'} textAlign={'center'}>
+        {Facade.filter.decimal(
+          NeoNode.getHighestNodeHeightFromPool(props.nodesPool),
+          props.language
+        )}
+      </TextView>
+    </LinearLayout>
+  )
+}
+
 const GetAccountView = (props: GetAccountViewProps) => {
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const appWallets = useSelector((state: RootState) => state.app.wallets)
@@ -133,25 +151,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }
   }, [isAssetsTabSelected])
 
-  const _renderTitle: React.FC = () => {
-    return (
-      <LinearLayout alignItems="center" justifyContent="center">
-        <TextView color={'text.3'} textAlign={'center'} fontSize={10}>
-          {Facade.t('app.neoBlockHeight')}
-        </TextView>
-
-        <TextView color={'text.0'} textAlign={'center'}>
-          {Facade.filter.decimal(
-            NeoNode.getHighestNodeHeightFromPool(nodesPool),
-            language
-          )}
-        </TextView>
-      </LinearLayout>
-    )
-  }
-
   props.navigation.setOptions({
-    headerTitle: _renderTitle,
+    headerTitle: () => TitleComponent({nodesPool, language}),
     headerRight: () =>
       HeaderActionButton({
         actionTitle: Facade.t('app.edit'),

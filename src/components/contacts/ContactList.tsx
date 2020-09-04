@@ -19,7 +19,12 @@ interface ContactListProps {
   onContactSelected?: (contact: Contact) => void
 }
 
-const renderSectionHeader = (info: {section: SectionListData<Contact>}) => {
+interface Item {
+  data: Contact
+  onContactSelected?: (contact: Contact) => void
+}
+
+const SectionHeaderComponent = (info: {section: SectionListData<Item>}) => {
   return (
     <TextView
       pt={'9px'}
@@ -35,56 +40,60 @@ const renderSectionHeader = (info: {section: SectionListData<Contact>}) => {
   )
 }
 
-export const ContactList = (props: ContactListProps) => {
+const ItemComponent = (info: SectionListRenderItemInfo<Item>) => {
   const navigation = useNavigation()
 
-  const contactsMap: Map<string, Contact[]> = new Map()
+  return (
+    <ButtonView
+      onPress={() => {
+        if (info.item.onContactSelected) {
+          info.item.onContactSelected(info.item.data)
+        } else {
+          navigation.navigate(Facade.route.ContactDetails.name, {
+            contact: info.item,
+          })
+        }
+      }}
+    >
+      <LinearLayout pl={'14px'} mt={'21px'} mb={'21px'}>
+        <TextView font={'semi-bold'} color={'text.0'} fontSize={20}>
+          {info.item.data.name}
+        </TextView>
+        <TextView font={'medium'} color={'primary'} fontSize={16}>
+          {info.item.data.address}
+        </TextView>
+      </LinearLayout>
+    </ButtonView>
+  )
+}
+
+export const ContactList = (props: ContactListProps) => {
+  const contactsMap: Map<string, Item[]> = new Map()
   const contacts = useSelector((state: RootState) => state.app.contacts)
 
   contacts.forEach((contact) => {
     if (contactsMap.has(contact.name?.[0] ?? '')) {
       // eslint-disable-next-line no-unused-expressions
-      contactsMap.get(contact.name?.[0] ?? '')?.push(contact)
+      contactsMap
+        .get(contact.name?.[0] ?? '')
+        ?.push({data: contact, onContactSelected: props.onContactSelected})
     } else {
-      contactsMap.set(contact.name?.[0] ?? '', [contact])
+      contactsMap.set(contact.name?.[0] ?? '', [
+        {data: contact, onContactSelected: props.onContactSelected},
+      ])
     }
   })
 
-  const sections: SectionListData<Contact>[] = []
+  const sections: SectionListData<Item>[] = []
 
   contactsMap.forEach((c, k) => {
-    const section: SectionListData<Contact> = {
+    const section: SectionListData<Item> = {
       key: k,
       data: c,
     }
 
     sections.push(section)
   })
-
-  const renderItem = (info: SectionListRenderItemInfo<Contact>) => {
-    return (
-      <ButtonView
-        onPress={() => {
-          if (props.onContactSelected) {
-            props.onContactSelected(info.item)
-          } else {
-            navigation.navigate(Facade.route.ContactDetails.name, {
-              contact: info.item,
-            })
-          }
-        }}
-      >
-        <LinearLayout pl={'14px'} mt={'21px'} mb={'21px'}>
-          <TextView font={'semi-bold'} color={'text.0'} fontSize={20}>
-            {info.item.name}
-          </TextView>
-          <TextView font={'medium'} color={'primary'} fontSize={16}>
-            {info.item.address}
-          </TextView>
-        </LinearLayout>
-      </ButtonView>
-    )
-  }
 
   return (
     <SectionList
@@ -95,8 +104,8 @@ export const ContactList = (props: ContactListProps) => {
         marginBottom: props.mb,
       }}
       sections={sections}
-      renderItem={renderItem}
-      renderSectionHeader={renderSectionHeader}
+      renderItem={ItemComponent}
+      renderSectionHeader={SectionHeaderComponent}
       ItemSeparatorComponent={() => {
         return (
           <LinearLayout

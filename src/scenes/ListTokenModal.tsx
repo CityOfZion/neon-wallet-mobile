@@ -9,6 +9,7 @@ import {Facade} from '~src/app/Facade'
 import SwiperPanel, {
   CloseButton,
   PANEL_OFFSET,
+  SwiperController,
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import {TokenAsset} from '~src/models/TokenAsset'
@@ -31,6 +32,53 @@ export interface ListTokenModalParams {
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
   route: RouteProp<ModalStackParamList, 'ListTokenModal'>
+}
+
+const Item = (props: {
+  controller: SwiperController
+  item: TokenAsset
+  setToken: React.Dispatch<React.SetStateAction<TokenAsset | null>>
+}) => {
+  return (
+    <ButtonView
+      py="12px"
+      orientation="horiz"
+      alignItems="center"
+      onPress={() => {
+        props.setToken(props.item)
+        props.controller.close()
+      }}
+    >
+      <ImageView
+        height="29px"
+        width="29px"
+        alignSelf="center"
+        mr="12px"
+        resizeMode="contain"
+        source={props.item.srcIcon}
+      />
+      <TextView fontFamily="bold" fontSize="18px" color="text.0" weight={1}>
+        {props.item.symbol}
+      </TextView>
+
+      <LinearLayout orientation="vert" mr="15px">
+        <TextView
+          alignItems="flex-end"
+          fontFamily="medium"
+          fontSize="14px"
+          color="text.2"
+        >
+          {Facade.t('modals.listTokenModal.holding')}
+        </TextView>
+
+        <TextView fontFamily="bold" fontSize="18px" color="text.0">
+          {props.item.amount.toString(10)}
+        </TextView>
+      </LinearLayout>
+
+      <ImageView source={require('~src/assets/images/green_plus.png')} />
+    </ButtonView>
+  )
 }
 
 const ListTokenModal: React.FC<Props> = (props: Props) => {
@@ -69,49 +117,6 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
     }
   }
 
-  const Item = (item: TokenAsset) => {
-    return (
-      <ButtonView
-        py="12px"
-        orientation="horiz"
-        alignItems="center"
-        onPress={() => {
-          props.route.params.setToken(item)
-          controller.close()
-        }}
-      >
-        <ImageView
-          height="29px"
-          width="29px"
-          alignSelf="center"
-          mr="12px"
-          resizeMode="contain"
-          source={item.srcIcon}
-        />
-        <TextView fontFamily="bold" fontSize="18px" color="text.0" weight={1}>
-          {item.symbol}
-        </TextView>
-
-        <LinearLayout orientation="vert" mr="15px">
-          <TextView
-            alignItems="flex-end"
-            fontFamily="medium"
-            fontSize="14px"
-            color="text.2"
-          >
-            {Facade.t('modals.listTokenModal.holding')}
-          </TextView>
-
-          <TextView fontFamily="bold" fontSize="18px" color="text.0">
-            {item.amount.toString(10)}
-          </TextView>
-        </LinearLayout>
-
-        <ImageView source={require('~src/assets/images/green_plus.png')} />
-      </ButtonView>
-    )
-  }
-
   return (
     <SwiperPanel
       controller={controller}
@@ -143,7 +148,13 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
           data={tokenList}
           keyExtractor={(item) => item.symbol}
           ItemSeparatorComponent={() => <LinearLayout bg="text.3" height={1} />}
-          renderItem={({item}) => Item(item)}
+          renderItem={({item}) => (
+            <Item
+              controller={controller}
+              item={item}
+              setToken={props.route.params.setToken}
+            />
+          )}
         />
       </LinearLayout>
     </SwiperPanel>

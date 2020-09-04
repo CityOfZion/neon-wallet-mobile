@@ -15,6 +15,64 @@ export interface Key {
   text?: string
 }
 
+const KeyComponent = (props: Props & {keyButton: Key}) => {
+  return (
+    <TouchableOpacity
+      disabled={props.disabled}
+      onPress={() => props.onClick?.(props.keyButton.number)}
+    >
+      <LinearLayout
+        justifyContent="center"
+        alignItems="center"
+        mx="14px"
+        my="8px"
+      >
+        <LinearLayout
+          width="75px"
+          height="75px"
+          bg="background.11"
+          opacity={0.28}
+          borderRadius="9999px"
+          position="relative"
+        />
+
+        <LinearLayout position="absolute">
+          <TextView
+            marginBottom={Platform.OS === 'ios' ? -4 : 0}
+            color="text.0"
+            textAlign="center"
+            fontSize="36px"
+          >
+            {props.keyButton.number}
+          </TextView>
+          {props.keyButton.text !== undefined ? (
+            <TextView
+              mt="-6px"
+              mb="6px"
+              color="text.0"
+              textAlign="center"
+              fontSize="10px"
+              letterSpacing={3}
+            >
+              {props.keyButton.text}
+            </TextView>
+          ) : undefined}
+        </LinearLayout>
+      </LinearLayout>
+    </TouchableOpacity>
+  )
+}
+
+const KeyRowComponent = (props: Props & {row: Key[]}) => {
+  return (
+    <LinearLayout width="100%" justifyContent="center" orientation="horiz">
+      {props.row.map((key, i) => (
+        <KeyComponent {...props} key={i} keyButton={key} />
+      ))}
+    </LinearLayout>
+  )
+}
+
 const Keypad = (props: Props) => {
   const keyArray = [
     {
@@ -60,63 +118,13 @@ const Keypad = (props: Props) => {
   ]
   const keypad = Facade.lodash.chunk(keyArray, 3)
 
-  const KeyRowComponent = (row: Key[]) => {
-    return (
-      <LinearLayout width="100%" justifyContent="center" orientation="horiz">
-        {row.map((key) => KeyComponent(key))}
-      </LinearLayout>
-    )
-  }
-
-  const KeyComponent = (key: Key) => {
-    return (
-      <TouchableOpacity
-        disabled={props.disabled}
-        onPress={() => props.onClick?.(key.number)}
-      >
-        <LinearLayout
-          justifyContent="center"
-          alignItems="center"
-          mx="14px"
-          my="8px"
-        >
-          <LinearLayout
-            width="75px"
-            height="75px"
-            bg="background.11"
-            opacity={0.28}
-            borderRadius="9999px"
-            position="relative"
-          />
-
-          <LinearLayout position="absolute">
-            <TextView
-              marginBottom={Platform.OS === 'ios' ? -4 : 0}
-              color="text.0"
-              textAlign="center"
-              fontSize="36px"
-            >
-              {key.number}
-            </TextView>
-            {key.text !== undefined ? (
-              <TextView
-                mt="-6px"
-                mb="6px"
-                color="text.0"
-                textAlign="center"
-                fontSize="10px"
-                letterSpacing={3}
-              >
-                {key.text}
-              </TextView>
-            ) : undefined}
-          </LinearLayout>
-        </LinearLayout>
-      </TouchableOpacity>
-    )
-  }
-
-  return <Fragment>{keypad.map((row) => KeyRowComponent(row))}</Fragment>
+  return (
+    <Fragment>
+      {keypad.map((row, i) => (
+        <KeyRowComponent {...props} key={i} row={row} />
+      ))}
+    </Fragment>
+  )
 }
 
 Keypad.propTypes = {

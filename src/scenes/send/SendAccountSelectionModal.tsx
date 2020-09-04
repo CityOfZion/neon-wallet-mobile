@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
+import AccountCardsComponent from '~src/components/AccountCardsComponent'
 import BalanceList from '~src/components/BalanceList'
 import SwiperPanel, {
   CloseButton,
@@ -47,24 +48,6 @@ const SendAccountSelectionModal = (props: Props) => {
     setSelectedAccount(Facade.lodash.cloneDeep(accounts[accounts.length - 1]))
   }
 
-  const _renderAccountCards = () => {
-    return accounts.map((account: Account, i: number) => {
-      const marginTop = i !== 0 ? Facade.scale(-240) : undefined
-      const marginX = i !== 0 ? Facade.scale(-1) : undefined
-
-      return (
-        <LinearLayout key={i} marginTop={marginTop} mx={marginX}>
-          <AccountCard
-            account={account}
-            isCompacted={true}
-            isStackMode={i !== accounts.length - 1}
-            onPress={() => selectEvent()}
-          />
-        </LinearLayout>
-      )
-    })
-  }
-
   const selectEvent = async () => {
     const size = accounts.length - 1
     const lastItem = accounts[size]
@@ -104,7 +87,9 @@ const SendAccountSelectionModal = (props: Props) => {
           {Facade.t('modals.send.accountSelection.subtitle')}
         </TextView>
 
-        <LinearLayout mt={4}>{_renderAccountCards()}</LinearLayout>
+        <LinearLayout mt={4}>
+          <AccountCardsComponent accounts={accounts} onPress={selectEvent} />
+        </LinearLayout>
 
         <LinearLayout width={'100%'}>
           <BalanceList

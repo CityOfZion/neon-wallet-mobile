@@ -55,13 +55,6 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
   const headerHeight = useHeaderHeight()
   const unit = headerHeight * 0.015
 
-  const FeatureDescription = styled(TextView)`
-    font-size: 15px;
-    text-align: center;
-    letter-spacing: 1.28px;
-    font-family: regular;
-  `
-
   return (
     <LinearLayout orientation={'verti'} mx={'7%'}>
       <TextView
@@ -83,6 +76,13 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
     </LinearLayout>
   )
 }
+
+const FeatureDescription = styled(TextView)`
+  font-size: 15px;
+  text-align: center;
+  letter-spacing: 1.28px;
+  font-family: regular;
+`
 
 const OnboardingPage = (props: OnboardingPageProps) => {
   const theme = useSelector(

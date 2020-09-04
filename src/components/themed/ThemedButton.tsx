@@ -38,12 +38,43 @@ interface Props {
   borderColor?: string
 }
 
-const ThemedButton: React.FC<Props> = (props) => {
-  const [isActive, setActive] = useState<boolean>(props.active ?? false)
-  const [isSelected, setSelected] = useState(false)
+const LabelComponent = (props: Props) => {
   const width = Facade.scale(props.iconSize ? props.iconSize[0] : 20)
   const height = Facade.scale(props.iconSize ? props.iconSize[1] : 20)
   const fontSize = Facade.scale(props.fontSize ?? 22)
+
+  return (
+    <LinearLayout orientation={'horiz'} alignItems={'center'}>
+      {props.srcIcon && (
+        <ImageView
+          width={width as number}
+          height={height as number}
+          mr={props.label ? 3 : undefined}
+          resizeMode="contain"
+          source={props.srcIcon}
+        />
+      )}
+
+      {Boolean(props.label) && (
+        <LabelView
+          mt={'2px'}
+          color={props.textColor}
+          fontSize={fontSize}
+          fontFamily={props.fontFamily ?? (props.flat ? 'bold' : 'regular')}
+          allowFontScaling={true}
+          adjustsFontSizeToFit={true}
+          numberOfLines={1}
+        >
+          {props.label}
+        </LabelView>
+      )}
+    </LinearLayout>
+  )
+}
+
+const ThemedButton: React.FC<Props> = (props) => {
+  const [isActive, setActive] = useState<boolean>(props.active ?? false)
+  const [isSelected, setSelected] = useState(false)
 
   useEffect(() => {
     setActive(props.active ?? false)
@@ -67,36 +98,6 @@ const ThemedButton: React.FC<Props> = (props) => {
       style,
       isActive ? styleActive : {},
       props.contentStyle ?? {}
-    )
-  }
-
-  const _renderLabel = () => {
-    return (
-      <LinearLayout orientation={'horiz'} alignItems={'center'}>
-        {props.srcIcon && (
-          <ImageView
-            width={width as number}
-            height={height as number}
-            mr={props.label ? 3 : undefined}
-            resizeMode="contain"
-            source={props.srcIcon}
-          />
-        )}
-
-        {Boolean(props.label) && (
-          <LabelView
-            mt={'2px'}
-            color={props.textColor}
-            fontSize={fontSize}
-            fontFamily={props.fontFamily ?? (props.flat ? 'bold' : 'regular')}
-            allowFontScaling={true}
-            adjustsFontSizeToFit={true}
-            numberOfLines={1}
-          >
-            {props.label}
-          </LabelView>
-        )}
-      </LinearLayout>
     )
   }
 
@@ -133,7 +134,7 @@ const ThemedButton: React.FC<Props> = (props) => {
         borderColor={props.borderColor}
         isPressed={isSelected}
       >
-        {_renderLabel()}
+        <LabelComponent {...props} />
       </ThemedCard>
     </ButtonView>
   )

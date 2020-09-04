@@ -19,7 +19,10 @@ import {
 
 import {Facade} from '~src/app/Facade'
 import {Route} from '~src/app/Route'
-import {useSwiperController} from '~src/components/SwiperPanel'
+import {
+  SwiperController,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
 import QuickToolsMenu from '~src/scenes/QuickToolsMenu'
 import styled, {
   ImageView,
@@ -34,8 +37,38 @@ interface TabButtonContent {
   route: Route<RouteName>
 }
 
+interface TabButtonProps {
+  button: TabButtonContent
+  controller: SwiperController
+}
+
+const TabButton = (props: BottomTabBarProps & TabButtonProps) => {
+  return (
+    <StyledTouchable
+      height="100%"
+      onPress={() => {
+        props.controller.close()
+        props.navigation.navigate(props.button.route.name)
+      }}
+      weight={1}
+    >
+      <ImageView
+        resizeMode="cover"
+        mx="auto"
+        mt="auto"
+        mb="10px"
+        source={
+          props.state.routes[props.state.index].name === props.button.route.name
+            ? props.button.enabledSource
+            : props.button.disabledSource
+        }
+      />
+    </StyledTouchable>
+  )
+}
+
 const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
-  const {state, descriptors, navigation} = props
+  const {state, descriptors} = props
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
@@ -78,31 +111,6 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
     enabledSource: require('~src/assets/images/button-more-primary.png'),
     disabledSource: require('~src/assets/images/button-more-disabled.png'),
     route: Facade.route.More,
-  }
-
-  const TabButton = (props: {button: TabButtonContent}) => {
-    return (
-      <StyledTouchable
-        height="100%"
-        onPress={() => {
-          controller.close()
-          navigation.navigate(props.button.route.name)
-        }}
-        weight={1}
-      >
-        <ImageView
-          resizeMode="cover"
-          mx="auto"
-          mt="auto"
-          mb="10px"
-          source={
-            state.routes[state.index].name === props.button.route.name
-              ? props.button.enabledSource
-              : props.button.disabledSource
-          }
-        />
-      </StyledTouchable>
-    )
   }
 
   function animateQuickToolsButton() {
@@ -167,8 +175,16 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
             alignItems="center"
             pointerEvents={'box-none'}
           >
-            <TabButton button={walletButton} />
-            <TabButton button={contactsButton} />
+            <TabButton
+              {...props}
+              button={walletButton}
+              controller={controller}
+            />
+            <TabButton
+              {...props}
+              button={contactsButton}
+              controller={controller}
+            />
             <StyledTouchable
               underlayColor={'transparent'}
               mx="6px"
@@ -197,8 +213,12 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
                 />
               </AnimatedLinearLayout>
             </StyledTouchable>
-            <TabButton button={settingsButton} />
-            <TabButton button={moreButton} />
+            <TabButton
+              {...props}
+              button={settingsButton}
+              controller={controller}
+            />
+            <TabButton {...props} button={moreButton} controller={controller} />
           </LinearLayout>
         </RelativeLayout>
       </TabBarContainer>

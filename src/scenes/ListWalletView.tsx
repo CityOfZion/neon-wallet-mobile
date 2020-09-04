@@ -13,6 +13,8 @@ import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
+import {Currency} from '~src/enums/Currency'
+import {Lang} from '~src/enums/Lang'
 import {Wallet} from '~src/models/redux/Wallet'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
@@ -23,10 +25,62 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
+import {Exchange} from '~src/types/exchange'
 
 interface WalletProps {
   navigation: StackNavigationProp<WalletStackParamList & MoreStackParamList>
   theme: ApplicationTheme
+}
+
+const TitleComponent = () => {
+  return <AwaitActivity name={'refreshData'} />
+}
+
+const WalletChangeComponent = (props: {
+  wallet: Wallet | null
+  currency: Currency
+  language: Lang
+  exchange: Exchange
+  onPressWarning: () => void
+}) => {
+  if (!props.wallet) return <View />
+
+  return (
+    <>
+      <LinearLayout mb={6} orientation="verti" alignItems="center">
+        {
+          <TextView fontSize="11px" color="text.2">
+            {props.wallet.formattedLastVisitedAt}
+          </TextView>
+        }
+
+        <LinearLayout orientation="horiz" minHeight={56}>
+          <TextView fontSize="36px" color="text.0" fontFamily="medium">
+            {props.wallet.calculateBalanceFormatted(
+              props.currency,
+              props.language,
+              props.exchange
+            )}
+          </TextView>
+
+          {props.wallet.hasFunds && (
+            <ButtonView onPress={props.onPressWarning}>
+              <ImageView
+                mt="8px"
+                mx="4px"
+                source={require('~src/assets/images/icon-warning-green.png')}
+              />
+            </ButtonView>
+          )}
+
+          {/*TODO: fix percentage*/}
+          {/*<TextView fontSize="36px" color="primary" fontFamily="semibold">*/}
+          {/*  {calculateChangePercentage(wallet)}*/}
+          {/*</TextView>*/}
+        </LinearLayout>
+      </LinearLayout>
+    </>
+  )
 }
 
 const ListWalletView = (props: WalletProps) => {
@@ -39,12 +93,8 @@ const ListWalletView = (props: WalletProps) => {
 
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
-  const _renderTitle: React.FC = () => {
-    return <AwaitActivity name={'refreshData'} />
-  }
-
   props.navigation.setOptions({
-    headerTitle: _renderTitle,
+    headerTitle: TitleComponent,
   })
 
   const getActiveWallet = (): Wallet | null => {
@@ -88,45 +138,6 @@ const ListWalletView = (props: WalletProps) => {
       [{text: Facade.t('screens.listWallets.incompleteBalanceWarningButton')}],
       {cancelable: false}
     )
-
-  const _renderWalletChange = () => {
-    const wallet = getActiveWallet()
-
-    if (!wallet) return <View />
-
-    return (
-      <>
-        <LinearLayout mb={6} orientation="verti" alignItems="center">
-          {
-            <TextView fontSize="11px" color="text.2">
-              {wallet.formattedLastVisitedAt}
-            </TextView>
-          }
-
-          <LinearLayout orientation="horiz" minHeight={56}>
-            <TextView fontSize="36px" color="text.0" fontFamily="medium">
-              {wallet.calculateBalanceFormatted(currency, language, exchange)}
-            </TextView>
-
-            {wallet.hasFunds && (
-              <ButtonView onPress={openWarning}>
-                <ImageView
-                  mt="8px"
-                  mx="4px"
-                  source={require('~src/assets/images/icon-warning-green.png')}
-                />
-              </ButtonView>
-            )}
-
-            {/*TODO: fix percentage*/}
-            {/*<TextView fontSize="36px" color="primary" fontFamily="semibold">*/}
-            {/*  {calculateChangePercentage(wallet)}*/}
-            {/*</TextView>*/}
-          </LinearLayout>
-        </LinearLayout>
-      </>
-    )
-  }
 
   const calculateChangePercentage = (wallet: Wallet) => {
     return null
@@ -244,7 +255,13 @@ const ListWalletView = (props: WalletProps) => {
           size={'large'}
           style={{minHeight: 100}}
         >
-          {_renderWalletChange()}
+          <WalletChangeComponent
+            currency={currency}
+            exchange={exchange}
+            language={language}
+            wallet={getActiveWallet()}
+            onPressWarning={openWarning}
+          />
 
           <LinearLayout mx={'16px'}>
             {wallet?.showBackupAlert && wallet.walletType === 'standard' && (

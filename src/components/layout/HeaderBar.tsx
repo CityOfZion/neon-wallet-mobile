@@ -18,13 +18,39 @@ export interface HeaderCustomProps {
   headerTitle?: string | React.FC<HeaderProps> | Function
 }
 
+const HeaderTitle = (props: HeaderProps) => {
+  const params: HeaderCustomProps = props.route?.params
+
+  if (params && params?.headerTitle instanceof Function) {
+    return params.headerTitle(props)
+  } else if (props.title instanceof Function) {
+    return props.title(props)
+  }
+
+  return (
+    <TextView
+      pt={2}
+      mt={Facade.utils.isAndroid ? -2 : 0}
+      textAlign="center"
+      color="text.0"
+      fontSize={Facade.scale(24)}
+      allowFontScaling={true}
+      adjustsFontSizeToFit={true}
+      numberOfLines={1}
+      style={{
+        includeFontPadding: false,
+      }}
+    >
+      {params?.headerTitle ?? props.title}
+    </TextView>
+  )
+}
+
 const HeaderBar: React.FC<HeaderProps> = (
   headerProps: HeaderProps,
   // TODO: Remove in NW-216
   props?: StackHeaderTitleProps
 ) => {
-  const params: HeaderCustomProps = headerProps.route?.params
-
   const getHeaderWidth = () => {
     const {windowWidth} = Facade.app
 
@@ -33,32 +59,6 @@ const HeaderBar: React.FC<HeaderProps> = (
     }
 
     return windowWidth - Facade.scale<number>(160)
-  }
-
-  const _renderTitle = () => {
-    if (params && params?.headerTitle instanceof Function) {
-      return params.headerTitle(headerProps)
-    } else if (headerProps.title instanceof Function) {
-      return headerProps.title(headerProps)
-    }
-
-    return (
-      <TextView
-        pt={2}
-        mt={Facade.utils.isAndroid ? -2 : 0}
-        textAlign="center"
-        color="text.0"
-        fontSize={Facade.scale(24)}
-        allowFontScaling={true}
-        adjustsFontSizeToFit={true}
-        numberOfLines={1}
-        style={{
-          includeFontPadding: false,
-        }}
-      >
-        {params?.headerTitle ?? headerProps.title}
-      </TextView>
-    )
   }
 
   return (
@@ -79,7 +79,7 @@ const HeaderBar: React.FC<HeaderProps> = (
         />
       )}
 
-      {_renderTitle()}
+      <HeaderTitle {...headerProps} />
     </LinearLayout>
   )
 }

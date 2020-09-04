@@ -1,6 +1,5 @@
+import {NativeModules} from 'react-native'
 
-import { NativeModules } from 'react-native';
+const {RNNeoSdkBindings} = NativeModules
 
-const { RNNeoSdkBindings } = NativeModules;
-
-export default RNNeoSdkBindings;
+export default RNNeoSdkBindings

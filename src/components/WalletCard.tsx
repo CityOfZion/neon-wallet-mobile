@@ -88,30 +88,35 @@ const WalletLabel = (props: {walletType: string; walletName: string}) => {
   )
 }
 
-function getRenderAssetsBarFills(
-  walletAccounts: Account[],
-  currency: Currency,
-  exchange: Exchange,
+const AssetBarFillsComponent = (props: {
+  walletAccounts: Account[]
+  currency: Currency
+  exchange: Exchange
   getTotalAmount: () => number
-) {
-  return () => {
-    return walletAccounts.map((account, i) => {
-      const amount = account.exchangeBalanceAmount(currency, exchange)
-      const percentageOfTotal = (amount / getTotalAmount()) * 100
+}) => {
+  return (
+    <Fragment>
+      {props.walletAccounts.map((account, i) => {
+        const amount = account.exchangeBalanceAmount(
+          props.currency,
+          props.exchange
+        )
+        const percentageOfTotal = (amount / props.getTotalAmount()) * 100
 
-      return (
-        <LinearLayout
-          height={'100%'}
-          weight={percentageOfTotal}
-          minWidth={'2px'}
-          mx={'1px'}
-          borderRadius={9999}
-          bg={account.backgroundColor}
-          key={i}
-        />
-      )
-    })
-  }
+        return (
+          <LinearLayout
+            height={'100%'}
+            weight={percentageOfTotal}
+            minWidth={'2px'}
+            mx={'1px'}
+            borderRadius={9999}
+            bg={account.backgroundColor}
+            key={i}
+          />
+        )
+      })}
+    </Fragment>
+  )
 }
 
 const WalletOverlay = (props: {walletType: string}) => {
@@ -133,35 +138,40 @@ const WalletOverlay = (props: {walletType: string}) => {
   )
 }
 
-function renderAccountContainer(viewHeight: number) {
-  const AccountContainer = (account: Account, index: number) => {
-    const ratio = 38 / 25
-    const cardWidth = viewHeight - 12
-    const cardHeight = cardWidth / ratio
+const AccountContainer = (props: {
+  viewHeight: number
+  account: Account
+  index: number
+}) => {
+  const ratio = 38 / 25
+  const cardWidth = props.viewHeight - 12
+  const cardHeight = cardWidth / ratio
 
-    return (
-      <LinearLayout
-        mt={`${index * 4}px`}
-        position={'absolute'}
+  return (
+    <LinearLayout
+      mt={`${props.index * 4}px`}
+      position={'absolute'}
+      style={{
+        top: 4 + cardHeight * ratio * 0.5,
+        left: 3 + cardHeight * 0.5,
+      }}
+    >
+      <RelativeLayout
+        width={cardWidth}
         style={{
-          top: 4 + cardHeight * ratio * 0.5,
-          left: 3 + cardHeight * 0.5,
+          top: -cardHeight * 0.5,
+          left: -(cardHeight * ratio) * 0.5,
+          transform: [{rotate: '90deg'}],
         }}
       >
-        <RelativeLayout
-          width={cardWidth}
-          style={{
-            top: -cardHeight * 0.5,
-            left: -(cardHeight * ratio) * 0.5,
-            transform: [{rotate: '90deg'}],
-          }}
-        >
-          <AccountCard hideQRCode={true} hideBalance={true} account={account} />
-        </RelativeLayout>
-      </LinearLayout>
-    )
-  }
-  return AccountContainer
+        <AccountCard
+          hideQRCode={true}
+          hideBalance={true}
+          account={props.account}
+        />
+      </RelativeLayout>
+    </LinearLayout>
+  )
 }
 
 const WalletCard: React.FC<Props> = (props) => {
@@ -186,15 +196,6 @@ const WalletCard: React.FC<Props> = (props) => {
     )
   }
 
-  const _renderAssetsBarFills = getRenderAssetsBarFills(
-    walletAccounts,
-    currency,
-    exchange,
-    getTotalAmount
-  )
-
-  const _accountContainer = renderAccountContainer(viewHeight)
-
   return (
     <WalletCardRelativeContainer
       position="relative"
@@ -207,7 +208,14 @@ const WalletCard: React.FC<Props> = (props) => {
         aspectRatio: 25 / 38,
       }}
     >
-      {walletAccounts.slice(0, 10).map((it, i) => _accountContainer(it, i))}
+      {walletAccounts.slice(0, 10).map((it, i) => (
+        <AccountContainer
+          key={i}
+          viewHeight={viewHeight}
+          account={it}
+          index={i}
+        />
+      ))}
 
       <WalletOverlay walletType={props.wallet.walletType ?? ''} />
 
@@ -229,7 +237,12 @@ const WalletCard: React.FC<Props> = (props) => {
             px={'2px'}
             orientation={'horiz'}
           >
-            {_renderAssetsBarFills()}
+            <AssetBarFillsComponent
+              walletAccounts={walletAccounts}
+              currency={currency}
+              exchange={exchange}
+              getTotalAmount={getTotalAmount}
+            />
           </AssetsBar>
         </RelativeLayout>
       </LinearLayout>
