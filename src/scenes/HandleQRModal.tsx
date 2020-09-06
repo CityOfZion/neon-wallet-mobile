@@ -4,10 +4,8 @@ import {ImageSourcePropType, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import SwiperPanel, {
-  CloseButton,
-  SwiperController,
-} from '~src/components/SwiperPanel'
+import SwiperPanel, {SwiperController} from '~src/components/SwiperPanel'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface ListItem {
@@ -75,8 +73,7 @@ const HandleQRModal = (props: Props) => {
       draggable={false}
       paddingTop={0}
       paddingBottom={42}
-      rightButton={CloseButton()}
-      onRightPress={props.controller.close}
+      rightButton={<ThemedCloseButton onPress={props.controller.close} />}
     >
       {items.map((item, index) => (
         <TouchableWithoutFeedback key={index} onPress={item.onClick}>

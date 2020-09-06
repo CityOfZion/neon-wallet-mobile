@@ -7,11 +7,9 @@ import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
 import {Facade} from '~src/app/Facade'
 import InputLabel from '~src/components/InputLabel'
 import NeonQRCode from '~src/components/QRCode'
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -67,8 +65,7 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
       fullSize={true}
       title={Facade.t('routes.ReceiveQrCode')}
       image={require('~src/assets/images/icon-qrcode-white.png')}
-      rightButton={CloseButton()}
-      onRightPress={controller.close}
+      rightButton={<ThemedCloseButton onPress={controller.close} />}
       onClose={props.navigation.goBack}
     >
       <LinearLayout height="100%" alignItems="center">

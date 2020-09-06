@@ -9,12 +9,10 @@ import AccountCard from '~src/components/AccountCard'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import {QRCodeWithCopyButton} from '~src/components/QRCodeWithCopyButton'
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import TabSelector from '~src/components/TabSelector'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -196,8 +194,7 @@ const ReceiveToAccountModal = (props: Props) => {
       paddingRight={30}
       paddingLeft={30}
       title={Facade.t('modals.receive.title')}
-      rightButton={CloseButton()}
-      onRightPress={controller.close}
+      rightButton={<ThemedCloseButton onPress={controller.close} />}
       onClose={props.navigation.goBack}
       image={require('~src/assets/images/download-white.png')}
     >

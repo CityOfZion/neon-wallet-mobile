@@ -6,13 +6,13 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {
-  CloseButton,
   PANEL_OFFSET,
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import {AccountList} from '~src/components/accounts/AccountList'
 import {ContactList} from '~src/components/contacts/ContactList'
 import {NoContacts} from '~src/components/contacts/NoContacts'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -91,9 +91,8 @@ export const ContactPicker = (props: ContactsModalProps) => {
       image={require('~src/assets/images/icon-contacts-white.png')}
       title={Facade.t('contactPicker.title')}
       controller={controller}
-      rightButton={CloseButton()}
+      rightButton={<ThemedCloseButton onPress={controller.close} />}
       onClose={props.navigation.goBack}
-      onRightPress={controller.close}
       padding={0}
       paddingTop={40}
       fullSize={true}

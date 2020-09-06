@@ -167,6 +167,7 @@ const AccountContainer = (props: {
         <AccountCard
           hideQRCode={true}
           hideBalance={true}
+          hasShadow={false}
           account={props.account}
         />
       </RelativeLayout>

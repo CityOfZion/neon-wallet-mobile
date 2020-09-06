@@ -7,11 +7,11 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {
-  CloseButton,
   PANEL_OFFSET,
   SwiperController,
   useSwiperController,
 } from '~src/components/SwiperPanel'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -121,8 +121,7 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={Facade.t('modals.listTokenModal.tokens')}
-      rightButton={CloseButton()}
-      onRightPress={() => controller.close()}
+      rightButton={<ThemedCloseButton onPress={controller.close} />}
       paddingTop={60}
       paddingRight={16}
       paddingLeft={16}

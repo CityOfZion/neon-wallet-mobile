@@ -8,11 +8,9 @@ import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {NeoURI} from '~src/helpers/UriHelper'
 import {
   FasterPriority,
@@ -492,8 +490,7 @@ const SendTransactionInputModal = (prop: Props) => {
       paddingRight={8}
       paddingLeft={0}
       title={Facade.t('modals.send.title')}
-      rightButton={CloseButton()}
-      onRightPress={() => controller.close()}
+      rightButton={<ThemedCloseButton onPress={controller.close} />}
       onClose={() => prop.navigation.goBack()}
       image={require('~/src/assets/images/upload-white.png')}
     >

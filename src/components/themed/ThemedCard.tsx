@@ -62,7 +62,7 @@ const ThemedCard: React.FC<Props> = (props) => {
         height: 6,
       },
       shadowOpacity: 0.4,
-      shadowRadius: 0,
+      shadowRadius: 3,
       elevation: props.flat ? 0 : 4,
     }
 

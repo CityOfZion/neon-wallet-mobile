@@ -4,12 +4,10 @@ import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
@@ -215,8 +213,7 @@ const SendTransactionReviewModal = (props: Props) => {
       paddingRight={0}
       paddingLeft={0}
       title={Facade.t('modals.send.title')}
-      rightButton={CloseButton()}
-      onRightPress={() => controller.close()}
+      rightButton={<ThemedCloseButton onPress={controller.close} />}
       onClose={() => props.navigation.goBack()}
       image={require('~/src/assets/images/upload-white.png')}
     >

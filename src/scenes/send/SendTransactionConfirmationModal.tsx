@@ -1,14 +1,11 @@
 import {RouteProp} from '@react-navigation/native'
-import {AwaitActivity} from '@simpli/react-native-await'
 import React from 'react'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {
@@ -38,8 +35,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
       paddingRight={0}
       paddingLeft={0}
       title={Facade.t('modals.send.title')}
-      rightButton={CloseButton()}
-      onRightPress={() => controller.close()}
+      rightButton={<ThemedCloseButton onPress={controller.close} />}
       onClose={() => props.navigation.goBack()}
       image={require('~/src/assets/images/upload-white.png')}
     >
