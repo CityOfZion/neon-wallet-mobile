@@ -1,6 +1,7 @@
 import {NavigationContainer, RouteProp} from '@react-navigation/native'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useState} from 'react'
+import {InteractionManager} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
@@ -97,11 +98,18 @@ const AppNavigation = (props: Props) => {
   useEffect(() => {
     Facade.await.run('application', startApplication, 1000)
 
+    let interactionPromise = InteractionManager.runAfterInteractions()
+
     const interval = setInterval(() => {
-      Facade.await.run('refreshData', () => Sync.refresh(dispatchAsync))
+      interactionPromise = InteractionManager.runAfterInteractions(() => {
+        Facade.await.run('refreshData', () => Sync.refresh(dispatchAsync))
+      })
     }, Facade.app.defaultDataRefreshTimeInMilliseconds)
 
-    return () => clearInterval(interval)
+    return () => {
+      interactionPromise.cancel()
+      clearInterval(interval)
+    }
   }, [])
 
   return (
