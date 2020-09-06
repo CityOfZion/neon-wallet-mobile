@@ -7,6 +7,7 @@ import {
   LayoutChangeEvent,
   NativeSyntheticEvent,
   NativeTouchEvent,
+  StyleProp,
   TouchableOpacity,
 } from 'react-native'
 import {useSelector} from 'react-redux'
@@ -27,7 +28,6 @@ import {
 
 import {Facade} from '~src/app/Facade'
 import {Account} from '~src/models/redux/Account'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import styled, {
   ButtonView,
   ImageView,
@@ -41,9 +41,10 @@ interface Props {
   account: Account
   isCompacted?: boolean
   isStackMode?: boolean
-  orientBy?: 'height' | 'width'
+  hasShadow?: boolean
   hideQRCode?: boolean
   hideBalance?: boolean
+  orientBy?: 'height' | 'width'
 }
 
 const AccountCard: React.FC<Props> = (props) => {
@@ -58,6 +59,26 @@ const AccountCard: React.FC<Props> = (props) => {
     setViewHeight(height)
   }
 
+  const getStyle = (): StyleProp<any> => {
+    const style = {
+      backgroundColor: props.account.backgroundColor,
+      aspectRatio: 38 / 25,
+    }
+
+    const styleShadow = {
+      shadowColor: '#000000',
+      shadowOffset: {
+        width: 0,
+        height: 6,
+      },
+      shadowOpacity: 0.4,
+      shadowRadius: 3,
+      elevation: 4,
+    }
+
+    return Facade.lodash.merge(style, props.hasShadow ? styleShadow : {})
+  }
+
   return (
     <PaymentCardView
       onLayout={layoutEvent}
@@ -66,10 +87,7 @@ const AccountCard: React.FC<Props> = (props) => {
       }
       width={props.orientBy === 'width' ? '100%' : undefined}
       height={props.orientBy === 'height' ? '100%' : undefined}
-      style={{
-        backgroundColor: props.account.backgroundColor,
-        aspectRatio: 38 / 25,
-      }}
+      style={getStyle()}
       borderRadius={17 * unit}
       activeOpacity={1}
     >
@@ -319,6 +337,7 @@ AccountCard.propTypes = {
   account: PropTypes.any.isRequired,
   isCompacted: PropTypes.bool.isRequired,
   isStackMode: PropTypes.bool.isRequired,
+  hasShadow: PropTypes.bool.isRequired,
   hideQRCode: PropTypes.bool,
   hideBalance: PropTypes.bool,
   orientBy: PropTypes.oneOf(['height', 'width']),
@@ -328,6 +347,7 @@ AccountCard.defaultProps = {
   account: new Account(),
   isCompacted: false,
   isStackMode: false,
+  hasShadow: true,
   orientBy: 'width',
 }
 
@@ -351,7 +371,6 @@ const PaymentCardView = styled.TouchableOpacity<
   ${weight}
   box-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
   elevation: 8;
-  overflow: hidden;
 `
 
 const BrightCard = styled(LinearGradient)`

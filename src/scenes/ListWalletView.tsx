@@ -2,8 +2,7 @@ import {CommonActions} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useRef, useState} from 'react'
-import {Alert, AppState, TouchableWithoutFeedback, View} from 'react-native'
-import {showMessage} from 'react-native-flash-message'
+import {Alert, TouchableWithoutFeedback, View} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
 
@@ -12,6 +11,7 @@ import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
 import WalletCard from '~src/components/WalletCard'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
+import WalletPicker from '~src/components/misc/WalletPicker'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
@@ -37,7 +37,7 @@ const TitleComponent = () => {
 }
 
 const WalletChangeComponent = (props: {
-  wallet: Wallet | null
+  wallet?: Wallet
   currency: Currency
   language: Lang
   exchange: Exchange
@@ -83,23 +83,67 @@ const WalletChangeComponent = (props: {
   )
 }
 
-const ListWalletView = (props: WalletProps) => {
-  const carouselRef = useRef(null)
-  const [activeIndex, setActiveIndex] = useState(0)
+const EmptyListComponent = () => {
+  return (
+    <LinearLayout alignItems={'center'} mx={3}>
+      <TouchableWithoutFeedback
+        onPress={() =>
+          CommonActions.navigate(Facade.route.Tab.name, {
+            screen: Facade.route.More.name,
+            params: {
+              screen: Facade.route.Step1CreateWallet.name,
+            },
+          })
+        }
+      >
+        <LinearLayout
+          my={6}
+          orientation={'horiz'}
+          width={Facade.scale(300)}
+          maxWidth={'100%'}
+          alignItems={'center'}
+          justifyContent={'center'}
+          borderStyle={'dashed'}
+          borderColor={'text.0'}
+          borderRadius={17}
+          borderWidth={1}
+          style={{
+            aspectRatio: 20 / 25,
+          }}
+        >
+          <ImageView
+            source={require('~src/assets/images/icon-plus-white.png')}
+          />
 
+          <TextView
+            color="white"
+            fontSize={18}
+            mt={2}
+            ml={3}
+            fontFamily="medium"
+          >
+            {Facade.t('screens.listWallets.createFirstWallet')}
+          </TextView>
+        </LinearLayout>
+      </TouchableWithoutFeedback>
+    </LinearLayout>
+  )
+}
+
+const ListWalletView = (props: WalletProps) => {
   const {wallets, accounts, exchange} = useSelector(
     (state: RootState) => state.app
   )
 
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
+  const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(
+    wallets[0]
+  )
+
   props.navigation.setOptions({
     headerTitle: TitleComponent,
   })
-
-  const getActiveWallet = (): Wallet | null => {
-    return wallets[activeIndex] ?? null
-  }
 
   const isListNotEmpty = () => {
     return Boolean(wallets.length)
@@ -148,8 +192,6 @@ const ListWalletView = (props: WalletProps) => {
     // return `${changePercentage > 0 ? '+' : ''}${Math.round(changePercentage)}%`
   }
 
-  const wallet = getActiveWallet()
-
   return (
     <ScreenLayout
       useHeaderPadding={false}
@@ -167,88 +209,17 @@ const ListWalletView = (props: WalletProps) => {
           />
         </LinearLayout>
 
-        {isListNotEmpty() ? (
-          <LinearLayout
-            mt="12px"
-            orientation="horiz"
-            justifyContent="center"
-            height={400}
-          >
-            <Carousel<Wallet>
-              layout={'default'}
-              ref={carouselRef}
-              data={wallets}
-              firstItem={0}
-              sliderWidth={Facade.app.windowWidth}
-              itemWidth={Math.round(Facade.app.windowWidth * 0.7)}
-              inactiveSlideScale={0.8}
-              inactiveSlideOpacity={1}
-              inactiveSlideShift={12}
-              lockScrollWhileSnapping={true}
-              lockScrollTimeoutDuration={200}
-              activeSlideOffset={5}
-              swipeThreshold={5}
-              enableSnap={true}
-              renderItem={({item}) => (
-                <LinearLayout
-                  weight={1}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                >
-                  <WalletCard
-                    width={240}
-                    onPress={() => selectEvent(item)}
-                    wallet={item}
-                  />
-                </LinearLayout>
-              )}
-              onSnapToItem={(index) => setActiveIndex(index)}
+        <LinearLayout mt={4} justifyContent={'center'} height={400}>
+          {isListNotEmpty() ? (
+            <WalletPicker
+              wallets={wallets}
+              onSelect={setSelectedWallet}
+              onPress={selectEvent}
             />
-          </LinearLayout>
-        ) : (
-          <LinearLayout alignItems={'center'} mx={3}>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                CommonActions.navigate(Facade.route.Tab.name, {
-                  screen: Facade.route.More.name,
-                  params: {
-                    screen: Facade.route.Step1CreateWallet.name,
-                  },
-                })
-              }
-            >
-              <LinearLayout
-                my={6}
-                orientation={'horiz'}
-                width={Facade.scale(300)}
-                maxWidth={'100%'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                borderStyle={'dashed'}
-                borderColor={'text.0'}
-                borderRadius={17}
-                borderWidth={1}
-                style={{
-                  aspectRatio: 20 / 25,
-                }}
-              >
-                <ImageView
-                  source={require('~src/assets/images/icon-plus-white.png')}
-                />
-
-                <TextView
-                  color="white"
-                  fontSize={18}
-                  mt={2}
-                  ml={3}
-                  fontFamily="medium"
-                >
-                  {Facade.t('screens.listWallets.createFirstWallet')}
-                </TextView>
-              </LinearLayout>
-            </TouchableWithoutFeedback>
-          </LinearLayout>
-        )}
+          ) : (
+            <EmptyListComponent />
+          )}
+        </LinearLayout>
 
         <AwaitActivity
           name={'populate'}
@@ -259,24 +230,25 @@ const ListWalletView = (props: WalletProps) => {
             currency={currency}
             exchange={exchange}
             language={language}
-            wallet={getActiveWallet()}
+            wallet={selectedWallet}
             onPressWarning={openWarning}
           />
 
           <LinearLayout mx={'16px'}>
-            {wallet?.showBackupAlert && wallet.walletType === 'standard' && (
-              <LinearLayout mb={6}>
-                <Notification
-                  text={Facade.t('screens.listWallets.noBackup')}
-                  wallet={wallet}
-                />
-              </LinearLayout>
-            )}
+            {selectedWallet?.showBackupAlert &&
+              selectedWallet.walletType === 'standard' && (
+                <LinearLayout mb={6}>
+                  <Notification
+                    text={Facade.t('screens.listWallets.noBackup')}
+                    wallet={selectedWallet}
+                  />
+                </LinearLayout>
+              )}
 
             {isListNotEmpty() && (
               <BalanceList
                 mb={6}
-                tokenAssets={wallet?.tokenAssets ?? []}
+                tokenAssets={selectedWallet?.tokenAssets ?? []}
                 fromAccountView={false}
               />
             )}

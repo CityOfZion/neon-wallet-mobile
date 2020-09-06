@@ -3,37 +3,37 @@ import React from 'react'
 import Carousel from 'react-native-snap-carousel'
 
 import {Facade} from '~src/app/Facade'
-import AccountCard from '~src/components/AccountCard'
-import {Account} from '~src/models/redux/Account'
+import WalletCard from '~src/components/WalletCard'
+import {Wallet} from '~src/models/redux/Wallet'
 import {LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
-  onPress?: (account: Account) => void
-  onSelect?: (account: Account) => void
-  accounts: Account[]
+  onPress?: (wallet: Wallet) => void
+  onSelect?: (wallet: Wallet) => void
+  wallets: Wallet[]
 }
 
-const AccountPicker: React.FC<Props> = (props: Props) => {
-  const {accounts} = props
+const WalletPicker: React.FC<Props> = (props: Props) => {
+  const {wallets} = props
 
-  const pressEvent = async (account: Account) => {
+  const pressEvent = async (wallet: Wallet) => {
     if (props.onPress) {
-      props.onPress(account)
+      props.onPress(wallet)
     }
   }
 
   const selectEvent = async (index: number) => {
     if (props.onSelect) {
-      props.onSelect(accounts[index])
+      props.onSelect(wallets[index])
     }
   }
 
   return (
-    <Carousel<Account>
+    <Carousel<Wallet>
       layout={'default'}
-      data={accounts}
+      data={wallets}
       sliderWidth={Facade.app.windowWidth}
-      itemWidth={Facade.scale(Facade.app.windowWidth * 0.7) as number}
+      itemWidth={240}
       inactiveSlideScale={0.8}
       inactiveSlideOpacity={1}
       inactiveSlideShift={12}
@@ -52,10 +52,10 @@ const AccountPicker: React.FC<Props> = (props: Props) => {
           alignItems={'center'}
           py={6}
         >
-          <AccountCard
+          <WalletCard
+            width={240}
             onPress={() => pressEvent(item)}
-            account={item}
-            isCompacted={true}
+            wallet={item}
           />
         </LinearLayout>
       )}
@@ -63,11 +63,11 @@ const AccountPicker: React.FC<Props> = (props: Props) => {
   )
 }
 
-AccountPicker.propTypes = {
+WalletPicker.propTypes = {
   onPress: PropTypes.func,
   onSelect: PropTypes.func,
-  accounts: PropTypes.arrayOf(PropTypes.instanceOf(Account).isRequired)
+  wallets: PropTypes.arrayOf(PropTypes.instanceOf(Wallet).isRequired)
     .isRequired,
 }
 
-export default AccountPicker
+export default WalletPicker

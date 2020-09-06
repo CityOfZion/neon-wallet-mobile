@@ -37,9 +37,10 @@ const ReceiveAccountSelectionModal = (props: Props) => {
 
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
 
-  const [scrollEnabled, setScrollEnabled] = useState(true)
   const [accounts, setAccounts] = useState<Account[]>([])
-  const [selectedAccount, setSelectedAccount] = useState<Account>()
+  const [selectedAccount, setSelectedAccount] = useState<Account | undefined>(
+    accounts[0]
+  )
 
   useEffect(() => {
     Facade.await.run('populate', populate)
@@ -48,7 +49,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
   const populate = async () => {
     const accounts = wallet.getAccounts(accountsPool)
     setAccounts(accounts)
-    setSelectedAccount(Facade.utils.clone(accounts[accounts.length - 1]))
+    setSelectedAccount(accounts[0])
   }
 
   return (
@@ -63,38 +64,43 @@ const ReceiveAccountSelectionModal = (props: Props) => {
       onRightPress={() => controller.close()}
       onClose={() => props.navigation.goBack()}
       image={require('~/src/assets/images/upload-white.png')}
-      scrollEnabled={scrollEnabled}
     >
-      <LinearLayout
-        height="100%"
-        width="100%"
-        px="15px"
-        orientation="verti"
-        alignItems="center"
-      >
-        <TextView color="text.3" fontSize="md" fontFamily="bold" mb={4}>
+      <LinearLayout px={5}>
+        <TextView
+          mb={4}
+          color={'text.3'}
+          fontSize={'md'}
+          fontFamily={'bold'}
+          textAlign={'center'}
+        >
           {props.route.params.wallet.name?.toUpperCase()}
         </TextView>
 
-        <TextView color="text.0" fontSize="18px" fontFamily="medium" mb={5}>
+        <TextView
+          color={'text.0'}
+          fontSize={'lg'}
+          fontFamily={'medium'}
+          textAlign={'center'}
+        >
           {Facade.t('modals.send.accountSelection.subtitle')}
         </TextView>
 
-        <RelativeLayout mb={6} zIndex={10}>
-          <AccountPicker
-            accounts={accounts}
-            onSelect={setSelectedAccount}
-            onSelectionStart={() => setScrollEnabled(false)}
-            onSelectionEnd={() => setScrollEnabled(true)}
-          />
-        </RelativeLayout>
-
-        <LinearLayout width={'100%'} mb={6}>
-          <BalanceList
-            tokenAssets={wallet.tokenAssets}
-            fromAccountView={false}
-          />
+        <LinearLayout minHeight={260} mx={-5}>
+          <AccountPicker accounts={accounts} onSelect={setSelectedAccount} />
         </LinearLayout>
+
+        <TextView mb={4} color={'text.3'} fontSize={'md'} textAlign={'center'}>
+          {Facade.t('modals.send.accountSelection.label')}
+        </TextView>
+
+        {selectedAccount && (
+          <LinearLayout width={'100%'} mb={6}>
+            <BalanceList
+              tokenAssets={selectedAccount.tokenAssets}
+              fromAccountView={false}
+            />
+          </LinearLayout>
+        )}
 
         <LinearLayout mb={6} minWidth={'80%'} maxWidth={'100%'}>
           <ThemedButton

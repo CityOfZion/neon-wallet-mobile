@@ -333,7 +333,8 @@
         "subtitle": "Please select a wallet to send from"
       },
       "accountSelection": {
-        "subtitle": "Please select an account to send from"
+        "subtitle": "Please select an account to send from",
+        "label": "TRADING ACCOUNT TOKENS VALUE"
       },
       "transactionConfirmation": {
         "header": "Transaction successfully sent!",

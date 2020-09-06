@@ -52,10 +52,6 @@ interface SwiperProps {
   // It's not there by default in case the content is a scrollable list, or it would look weird
   // (ask Joao if any questions)
   disableDefaultScrollView?: boolean
-
-  // disable scroll without changing the layout
-  // (ask Gibran if any questions)
-  scrollEnabled?: boolean
 }
 
 enum State {
@@ -442,7 +438,6 @@ export default function SwiperPanel(props: SwiperProps) {
                   showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
                   disableScrollViewPanResponder={true}
-                  scrollEnabled={props.scrollEnabled}
                 >
                   <TouchableHighlight>
                     <Fragment>{props.children}</Fragment>

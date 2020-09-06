@@ -1,3 +1,4 @@
+// @ts-ignore
 import RNNeoSdkBindings from 'react-native-neo-sdk-bindings'
 
 export class NeoNative {
