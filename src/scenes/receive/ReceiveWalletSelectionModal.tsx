@@ -4,11 +4,9 @@ import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import WalletPicker from '~src/components/misc/WalletPicker'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
@@ -35,8 +33,7 @@ const ReceiveWalletSelectionModal = (props: Props) => {
       paddingRight={30}
       paddingLeft={0}
       title={Facade.t('modals.receive.title')}
-      rightButton={CloseButton()}
-      onRightPress={() => controller.close()}
+      rightButton={<ThemedCloseButton onPress={controller.close} />}
       onClose={() => props.navigation.goBack()}
       image={require('~src/assets/images/download-white.png')}
     >

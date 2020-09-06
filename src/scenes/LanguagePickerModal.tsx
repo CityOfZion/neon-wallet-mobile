@@ -3,12 +3,9 @@ import React from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import {Storage} from '~src/app/Storage'
 import SelectorList, {SelectorItem} from '~src/components/SelectorList'
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {Lang} from '~src/enums/Lang'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
@@ -63,9 +60,8 @@ const LanguagePickerModal = (props: Props) => {
       fullSize={true}
       padding={24}
       onClose={props.navigation.goBack}
-      rightButton={CloseButton()}
+      rightButton={<ThemedCloseButton onPress={controller.close} />}
       onLeftPress={controller.close}
-      onRightPress={controller.close}
       disableDefaultScrollView={true}
     >
       <SelectorList items={languages} />

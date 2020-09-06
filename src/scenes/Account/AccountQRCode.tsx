@@ -5,11 +5,8 @@ import React from 'react'
 import {Facade} from '~src/app/Facade'
 import InputLabel from '~src/components/InputLabel'
 import {QRCodeWithCopyButton} from '~src/components/QRCodeWithCopyButton'
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
-import ScreenLayout from '~src/components/layout/ScreenLayout'
+import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
@@ -27,8 +24,7 @@ export const AccountQRCode = (props: AccountQRCodeProps) => {
   const controller = useSwiperController(true)
   return (
     <SwiperPanel
-      onRightPress={controller.close}
-      rightButton={CloseButton()}
+      rightButton={<ThemedCloseButton onPress={controller.close} />}
       fullSize={true}
       controller={controller}
       onClose={props.navigation.goBack}

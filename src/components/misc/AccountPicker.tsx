@@ -42,6 +42,7 @@ const AccountPicker: React.FC<Props> = (props: Props) => {
       activeSlideOffset={5}
       swipeThreshold={5}
       enableSnap={true}
+      useScrollView={true}
       firstItem={0}
       onLayout={() => selectEvent(0)}
       onSnapToItem={(index) => selectEvent(index)}
