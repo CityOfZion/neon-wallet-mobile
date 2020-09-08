@@ -293,6 +293,9 @@ const AmountField = (props: {
   remainingTokenBalance: number
 }) => {
   const setValue = (val: string) => {
+    const valueNumber = Number(val)
+    if (!valueNumber) return
+
     val = val.replace(',', '')
     if (props.token?.symbol === 'NEO') val = val.replace('.', '')
 
