@@ -499,7 +499,10 @@
     "save": "Save",
     "cancel": "Cancel",
     "invalidName": "Invalid Name",
-    "invalidAddress": "Invalid Address"
+    "invalidAddress": "Invalid Address",
+    "deleteContact": "DELETE CONTACT",
+    "deleteContactSubtitle": "Tum dicere exorsus est et dolore magnam aliquam quaerat voluptatem.",
+    "deleteButtom": "Delete Contact"
   },
   "contactPicker" : {
     "title": "Contacts",

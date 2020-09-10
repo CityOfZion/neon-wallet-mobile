@@ -60,5 +60,19 @@ export class ContactReducer extends ReducerWrapper<
         await Storage.contacts.save(contacts)
       }
     },
+    delete: (id: string): AsyncAction => {
+      return async (dispatch) => {
+        const contacts = (await Storage.contacts.load()) ?? []
+
+        const contact = contacts.find((it) => it.id === id)
+
+        if (contact) {
+          const index = contacts.indexOf(contact)
+          contacts.splice(index, 1)
+        }
+
+        await Storage.contacts.save(contacts)
+      }
+    },
   }
 }

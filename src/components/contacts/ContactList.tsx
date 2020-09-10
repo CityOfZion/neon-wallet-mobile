@@ -40,27 +40,27 @@ const SectionHeaderComponent = (info: {section: SectionListData<Item>}) => {
   )
 }
 
-const ItemComponent = (info: SectionListRenderItemInfo<Item>) => {
+const ItemComponent = (props: {item: Item}) => {
   const navigation = useNavigation()
 
   return (
     <ButtonView
       onPress={() => {
-        if (info.item.onContactSelected) {
-          info.item.onContactSelected(info.item.data)
+        if (props.item.onContactSelected) {
+          props.item.onContactSelected(props.item.data)
         } else {
           navigation.navigate(Facade.route.ContactDetails.name, {
-            contact: info.item,
+            contact: props.item.data,
           })
         }
       }}
     >
       <LinearLayout pl={'14px'} mt={'21px'} mb={'21px'}>
         <TextView font={'semi-bold'} color={'text.0'} fontSize={20}>
-          {info.item.data.name}
+          {props.item.data.name}
         </TextView>
         <TextView font={'medium'} color={'primary'} fontSize={16}>
-          {info.item.data.address}
+          {props.item.data.address}
         </TextView>
       </LinearLayout>
     </ButtonView>
@@ -104,7 +104,7 @@ export const ContactList = (props: ContactListProps) => {
         marginBottom: props.mb,
       }}
       sections={sections}
-      renderItem={ItemComponent}
+      renderItem={(info) => <ItemComponent item={info.item} />}
       renderSectionHeader={SectionHeaderComponent}
       ItemSeparatorComponent={() => {
         return (
