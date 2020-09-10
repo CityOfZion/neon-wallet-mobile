@@ -188,7 +188,10 @@
     "help": "Help"
   },
   "importKey": {
-    "enterAnAddress": "Enter an address, encrypted key, or private key"
+    "enterAnAddress": "Enter an address, encrypted key, or private key",
+    "alertText": "It looks like you're creating a watch account, is this correct?",
+    "alertCancelButton": "No",
+    "alertConfirmButton": "Yes"
   },
   "passphrase": {
     "enterPassphrase": "Enter a Passphrase for your encrypted key",
