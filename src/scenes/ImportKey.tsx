@@ -1,6 +1,7 @@
 import {wallet} from '@cityofzion/neon-core'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
+import {Alert} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -29,7 +30,24 @@ const ImportKey = (props: ImportKeyProps) => {
     let destination: NavParam<MoreStackParamList> | undefined = undefined
 
     if (wallet.isAddress(inputValue)) {
-      destination = [Facade.route.ImportReadAccount.name, {address: inputValue}]
+      Alert.alert(
+        '',
+        Facade.t('importKey.alertText'),
+        [
+          {
+            text: Facade.t('importKey.alertCancelButton'),
+            style: 'cancel',
+          },
+          {
+            text: Facade.t('importKey.alertConfirmButton'),
+            onPress: () =>
+              props.navigation.navigate(Facade.route.ImportReadAccount.name, {
+                address: inputValue,
+              }),
+          },
+        ],
+        {cancelable: true}
+      )
     } else if (wallet.isNEP2(inputValue)) {
       destination = [Facade.route.Passphrase.name, {encryptedKey: inputValue}]
     } else if (wallet.isWIF(inputValue)) {
