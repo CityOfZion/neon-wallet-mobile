@@ -36,7 +36,7 @@ const TransactionSummaryContainer = () => {
     senderTransaction.token?.hash ?? ''
   )
   singleToken.amount = 1
-  const singleTokenPrice = singleToken.exchange(currency, exchange)
+  const singleTokenPrice = singleToken.exchangeToken(currency, exchange)
   const contact = contacts.find(
     (value) => value.address === senderTransaction.receiverAddress
   )
@@ -126,7 +126,7 @@ const TransactionSummaryContainer = () => {
         </TextView>
         <TextView color="text.0" fontFamily="semibold" fontSize="18px">
           {Facade.filter.currency(
-            senderTransaction.token?.exchange(currency, exchange),
+            senderTransaction.token?.exchangeToken(currency, exchange),
             currency
           )}
         </TextView>

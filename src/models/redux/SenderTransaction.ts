@@ -1,6 +1,7 @@
 import {
   HttpExclude,
   HttpExpose,
+  Request,
   ResponseSerialize,
 } from '@simpli/serialized-request'
 import moment from 'moment'
@@ -8,8 +9,8 @@ import moment from 'moment'
 import {Facade} from '~src/app/Facade'
 import {PriorityFee} from '~src/models/PriorityFee'
 import {TokenAsset} from '~src/models/TokenAsset'
-import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {Contact} from '~src/models/redux/Contact'
+import {ExchangeHistoryResponse} from '~src/types/exchange'
 
 @HttpExclude()
 export class SenderTransaction implements SenderTransactionState {
@@ -86,12 +87,29 @@ export class SenderTransaction implements SenderTransactionState {
     return moment(this.sentAt).format(Facade.t('dateFormat.datePretty'))
   }
 
-  static toTransactionDateGroup(senderTransactions: SenderTransaction[]) {
-    return Facade.lodash
-      .chain(senderTransactions)
-      .groupBy((it) => it.formattedDate)
-      .map((transactions, date) => new TransactionDateGroup(date, transactions))
-      .sortBy((it) => -moment(it.date).unix())
-      .value()
+  get formattedDatetime() {
+    return moment(this.sentAt).format(Facade.t('dateFormat.datetime'))
+  }
+
+  async populateExchange() {
+    if (!this.token || !moment(this.sentAt).isValid()) return
+
+    const params = {
+      fsym: this.token.symbol,
+      tsyms: Facade.app.currencies,
+      ts: moment(this.sentAt).unix(),
+    }
+
+    const exchangeResponse = await Request.get(
+      'https://min-api.cryptocompare.com/data/pricehistorical',
+      {params}
+    )
+      .name('syncExchangeHistory')
+      .as<ExchangeHistoryResponse>()
+      .getData()
+
+    this.token.exchange = Facade.lodash.mapValues(exchangeResponse, (it) => ({
+      to: it,
+    }))
   }
 }

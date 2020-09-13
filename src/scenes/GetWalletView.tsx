@@ -72,8 +72,7 @@ const GetWalletView = (props: GetWalletProps) => {
   const populate = async () => {
     wallet.lastVisitedAt = moment().format()
 
-    await dispatch(RootStore.app.actions.updateWallet(wallet))
-    await dispatch(RootStore.app.actions.saveWallets())
+    await dispatch(RootStore.app.actions.updateAndSaveWallet(wallet))
 
     const accounts = wallet.getAccounts(accountsPool)
     setAccounts(accounts)

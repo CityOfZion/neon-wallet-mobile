@@ -1,4 +1,5 @@
 import {Facade} from '~src/app/Facade'
+import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
@@ -49,7 +50,7 @@ export abstract class Storage {
   }
 
   /**
-   * Transaction history
+   * Pending Transaction history
    */
   static get pendingTransactions() {
     return Facade.storage['@pendingTransactions']

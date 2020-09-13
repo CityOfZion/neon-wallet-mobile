@@ -28,8 +28,8 @@ export class TransactionAddressResponse {
   @ResponseSerialize(TransactionAddressSummary)
   entries: TransactionAddressSummary[] = []
 
-  toSenderTransaction(tokensPool: TokenAsset[]) {
-    return this.entries.map((it) => {
+  async toSenderTransaction(tokensPool: TokenAsset[]) {
+    const entries = this.entries.map((it) => {
       const tx = new SenderTransaction()
       tx.transactionHash = it.txid
       tx.senderAddress = it.addressFrom
@@ -44,10 +44,11 @@ export class TransactionAddressResponse {
 
       return tx
     })
-  }
 
-  toTransactionDateGroup(tokensPool: TokenAsset[]) {
-    const senderTxs = this.toSenderTransaction(tokensPool)
-    return SenderTransaction.toTransactionDateGroup(senderTxs)
+    // Populate exchange for each transaction
+    const promises = entries.map((it) => it.populateExchange())
+    await Promise.all(promises)
+
+    return entries
   }
 }

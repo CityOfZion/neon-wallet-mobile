@@ -144,91 +144,93 @@ export const PersistContact = (props: PersistContactProps) => {
         name={'swiperRight'}
         loadingView={<ScreenLoader transparent={true} />}
       >
-        <LinearLayout>
-          <InputLabel
-            title={Facade.t('persistContact.name')}
-            marginBottom={'8px'}
-          />
-
-          <InputWithValidation
-            placeholder={Facade.t('persistContact.namePlaceholder')}
-            onChangeText={(val) => setName(val)}
-            color={'background.4'}
-            value={name}
-            validator={(val) =>
-              (val.length >= 2 && val.length <= 20) || val?.length === 0
-            }
-            separatorColor={'background.3'}
-            invalidColor={'background.3'}
-            invalidMessageColor={'quinary'}
-            sideMargins={0}
-            hideScan={true}
-            hidePaste={true}
-          />
-
-          <InputLabel
-            title={Facade.t('persistContact.address')}
-            marginBottom={'8px'}
-            marginTop={'12px'}
-          />
-
-          <InputWithValidation
-            placeholder={Facade.t('persistContact.addressPlaceholder')}
-            onChangeText={(val) => setAddress(val)}
-            color={'background.4'}
-            value={address}
-            invalidColor={'background.3'}
-            invalidSeparatorColor={'background.3'}
-            validator={() => {
-              return wallet.isAddress(address) || address?.length === 0
-            }}
-            separatorColor={'background.3'}
-            invalidMessageColor={'quinary'}
-            sideMargins={0}
-            onScan={(scannedContent) => {
-              const scannedAddress = scannedContent as string
-              setAddress(scannedAddress)
-            }}
-          />
-        </LinearLayout>
-        {contact && (
-          <LinearLayout marginTop={'180px'}>
-            <LinearLayout height="1px" bg={theme.colors.background[10]} />
+        <>
+          <LinearLayout>
             <InputLabel
-              title={Facade.t('persistContact.deleteContact')}
+              title={Facade.t('persistContact.name')}
               marginBottom={'8px'}
-              marginTop={'30px'}
             />
-            <TextView color={theme.colors.text[0]} marginBottom={'30px'}>
-              {Facade.t('persistContact.deleteContactSubtitle')}
-            </TextView>
-            <TouchableWithoutFeedback onPress={deleteAction}>
-              <LinearLayout style={styles.rectangle} alignItems={'center'}>
-                <LinearLayout
-                  orientation="horiz"
-                  alignItems={'center'}
-                  marginTop={'10px'}
-                >
-                  <ImageView
-                    resizeMode="center"
-                    imageSize={[20, 20]}
-                    source={require('~/src/assets/images/icon-trash-can-primary.png')}
-                  />
 
-                  <TextView
-                    style={{includeFontPadding: false}}
-                    ml={3}
-                    color={'primary'}
-                    fontSize={20}
-                    mr={6}
-                  >
-                    {Facade.t('persistContact.deleteButtom')}
-                  </TextView>
-                </LinearLayout>
-              </LinearLayout>
-            </TouchableWithoutFeedback>
+            <InputWithValidation
+              placeholder={Facade.t('persistContact.namePlaceholder')}
+              onChangeText={(val) => setName(val)}
+              color={'background.4'}
+              value={name}
+              validator={(val) =>
+                (val.length >= 2 && val.length <= 20) || val?.length === 0
+              }
+              separatorColor={'background.3'}
+              invalidColor={'background.3'}
+              invalidMessageColor={'quinary'}
+              sideMargins={0}
+              hideScan={true}
+              hidePaste={true}
+            />
+
+            <InputLabel
+              title={Facade.t('persistContact.address')}
+              marginBottom={'8px'}
+              marginTop={'12px'}
+            />
+
+            <InputWithValidation
+              placeholder={Facade.t('persistContact.addressPlaceholder')}
+              onChangeText={(val) => setAddress(val)}
+              color={'background.4'}
+              value={address}
+              invalidColor={'background.3'}
+              invalidSeparatorColor={'background.3'}
+              validator={() => {
+                return wallet.isAddress(address) || address?.length === 0
+              }}
+              separatorColor={'background.3'}
+              invalidMessageColor={'quinary'}
+              sideMargins={0}
+              onScan={(scannedContent) => {
+                const scannedAddress = scannedContent as string
+                setAddress(scannedAddress)
+              }}
+            />
           </LinearLayout>
-        )}
+          {contact && (
+            <LinearLayout marginTop={'180px'}>
+              <LinearLayout height="1px" bg={theme.colors.background[10]} />
+              <InputLabel
+                title={Facade.t('persistContact.deleteContact')}
+                marginBottom={'8px'}
+                marginTop={'30px'}
+              />
+              <TextView color={theme.colors.text[0]} marginBottom={'30px'}>
+                {Facade.t('persistContact.deleteContactSubtitle')}
+              </TextView>
+              <TouchableWithoutFeedback onPress={deleteAction}>
+                <LinearLayout style={styles.rectangle} alignItems={'center'}>
+                  <LinearLayout
+                    orientation="horiz"
+                    alignItems={'center'}
+                    marginTop={'10px'}
+                  >
+                    <ImageView
+                      resizeMode="center"
+                      imageSize={[20, 20]}
+                      source={require('~/src/assets/images/icon-trash-can-primary.png')}
+                    />
+
+                    <TextView
+                      style={{includeFontPadding: false}}
+                      ml={3}
+                      color={'primary'}
+                      fontSize={20}
+                      mr={6}
+                    >
+                      {Facade.t('persistContact.deleteButtom')}
+                    </TextView>
+                  </LinearLayout>
+                </LinearLayout>
+              </TouchableWithoutFeedback>
+            </LinearLayout>
+          )}
+        </>
       </AwaitActivity>
     </SwiperPanel>
   )

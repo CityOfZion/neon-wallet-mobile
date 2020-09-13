@@ -10,9 +10,13 @@ import {Facade} from '~src/app/Facade'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {TokenAsset} from '~src/models/TokenAsset'
+import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
+import {AddressPaginatedRequest} from '~src/models/request/AddressPaginatedRequest'
 import {AddressRequest} from '~src/models/request/AddressRequest'
 import {Exchange} from '~src/types/exchange'
+import {Pagination} from '~src/types/pagination'
 
 @HttpExclude()
 export class Account implements AccountState {
@@ -27,6 +31,9 @@ export class Account implements AccountState {
    */
   @HttpExpose()
   index: number | null = null
+
+  @HttpExpose()
+  accountType: WalletType | null = null
 
   /**
    * Parent reference
@@ -43,12 +50,14 @@ export class Account implements AccountState {
   @HttpExpose()
   backgroundColor = '#00aaff'
 
-  // Balance of tokens
+  // Balance of each token
   @ResponseSerialize(TokenAsset)
   tokenAssets: TokenAsset[] = []
 
+  // Transactions grouped by datetime
   @HttpExpose()
-  accountType: WalletType | null = null
+  @ResponseSerialize(TransactionDateGroup)
+  transactions: TransactionDateGroup[] = []
 
   get hasFunds() {
     return Facade.lodash.sumBy(this.tokenAssets, (it) => it.amount ?? 0) > 0
@@ -151,6 +160,74 @@ export class Account implements AccountState {
         return null
       })
       .filter((it) => it) as TokenAsset[]
+  }
+
+  async populateTransactions(
+    tokensPool: TokenAsset[],
+    currentPage?: number
+  ): Promise<Pagination & {entries: SenderTransaction[]}> {
+    if (!this.address) {
+      throw Error('Address must be defined')
+    }
+
+    // Convert the grouped cache into SenderTransactions
+    let senderTxs = this.transactions.flatMap((it) => it.transactions)
+    let counter = 0 // Huge loop interactions protection
+    let totalPages: number
+    let totalEntries: number
+    let pageSize: number
+
+    const hasSomeTxs = (txids: string[]) =>
+      senderTxs.some((it) => txids.includes(it.transactionHash ?? ''))
+
+    // Make requests until it reaches the cache data
+    do {
+      const request = new AddressPaginatedRequest(this.address, currentPage)
+      const response = await request.getAddressAbstracts()
+      totalPages = response.totalPages ?? 0
+      totalEntries = response.totalEntries ?? 0
+      pageSize = response.pageSize ?? 15
+
+      // Convert to SenderTransactions
+      const transactions = await response.toSenderTransaction(tokensPool)
+
+      senderTxs = [...transactions, ...senderTxs]
+
+      const txids = response.entries
+        .map((it) => it.txid ?? '')
+        .filter((it) => it)
+
+      // Try to find similar transactions in cache
+      // If it does then break the loop
+      if (hasSomeTxs(txids)) break
+    } while (this.transactions.length && counter++ < 20)
+
+    // Remove duplications from non-fees
+    const uniqueNonFeesSenderTxs = Facade.lodash
+      .chain(senderTxs)
+      .filter((it) => it.receiverAddress !== 'fees')
+      .uniqBy((it) => it.transactionHash)
+      .value()
+
+    // Remove duplications from fees
+    const uniqueFeesSenderTxs = Facade.lodash
+      .chain(senderTxs)
+      .filter((it) => it.receiverAddress === 'fees')
+      .uniqBy((it) => it.transactionHash)
+      .value()
+
+    const entries = [...uniqueNonFeesSenderTxs, ...uniqueFeesSenderTxs]
+    const pageNumber = Math.floor(entries.length / pageSize)
+
+    this.transactions = TransactionDateGroup.toTransactionDateGroup(entries)
+
+    return {
+      totalPages,
+      totalEntries,
+      pageSize,
+      pageNumber,
+      entries,
+    }
   }
 
   static generateTokenAssetsFromPool(pool: Account[]) {

@@ -145,14 +145,7 @@ export class AppReducer extends ReducerWrapper<
       }
     },
 
-    saveWallets: (): AsyncAction => {
-      return async (dispatch, getState) => {
-        const {wallets} = getState().app
-        await Storage.wallets.save(wallets)
-      }
-    },
-
-    updateWallet: (wallet: Wallet): AsyncAction => {
+    updateAndSaveWallet: (wallet: Wallet): AsyncAction => {
       return async (dispatch, getState) => {
         const wallets = getState().app.wallets.map((it) => {
           if (it.id === wallet.id) {
@@ -164,6 +157,7 @@ export class AppReducer extends ReducerWrapper<
         })
 
         dispatch(this.commit('SET_WALLETS', {wallets}))
+        await Storage.wallets.save(wallets)
       }
     },
 
@@ -187,6 +181,18 @@ export class AppReducer extends ReducerWrapper<
         }
 
         return accounts ?? []
+      }
+    },
+
+    updateAndSaveAccount: (account: Account): AsyncAction => {
+      return async (dispatch, getState) => {
+        const accounts = getState().app.accounts.map((it) => {
+          if (it.address === account.address) return account
+          return it
+        })
+
+        dispatch(this.commit('SET_ACCOUNTS', {accounts}))
+        await Storage.accounts.save(accounts)
       }
     },
 

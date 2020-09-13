@@ -15,7 +15,7 @@ const AssetQuoteComponent: React.FC<Props> = (props) => {
   const {language, currency} = useSelector((state: RootState) => state.settings)
 
   const ratio = props.token.getCurrencyRatio(currency, exchange)
-  const amountExchanged = props.token.exchange(currency, exchange)
+  const amountExchanged = props.token.exchangeToken(currency, exchange)
 
   const quoteText = ratio
     ? `${props.token.symbol} 1 = ${Facade.filter.currency(

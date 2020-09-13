@@ -62,8 +62,7 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
   const validateAndNext = () => {
     if (formedWords.join() === words.join()) {
       wallet.lastBackup = moment().format()
-      dispatch(RootStore.app.actions.updateWallet(wallet))
-      dispatch(RootStore.app.actions.saveWallets())
+      dispatch(RootStore.app.actions.updateAndSaveWallet(wallet))
 
       props.navigation.reset({
         index: 0,
