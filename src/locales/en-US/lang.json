@@ -450,6 +450,7 @@
       "pending": "Pending",
       "sentTo": "Sent to",
       "receivedFrom": "Received from",
+      "token": "Token",
       "value": "Value"
     },
     "colorSelector": {

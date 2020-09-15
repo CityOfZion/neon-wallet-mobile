@@ -306,6 +306,7 @@
       "pending": "#translateme",
       "sentTo": "#translateme",
       "receivedFrom": "#translateme",
+      "token": "#translateme",
       "value": "#translateme"
     },
 

@@ -202,21 +202,21 @@ export class Account implements AccountState {
       if (hasSomeTxs(txids)) break
     } while (this.transactions.length && counter++ < 20)
 
-    // Remove duplications from non-fees
-    const uniqueNonFeesSenderTxs = Facade.lodash
+    // Remove duplications
+    const entries = Facade.lodash
       .chain(senderTxs)
-      .filter((it) => it.receiverAddress !== 'fees')
-      .uniqBy((it) => it.transactionHash)
+      .uniqBy((it) =>
+        [
+          it.transactionHash,
+          it.senderAddress,
+          it.receiverAddress,
+          it.sentAt,
+          it.token?.symbol ?? '',
+          it.token?.amount ?? '',
+        ].join(':')
+      )
       .value()
 
-    // Remove duplications from fees
-    const uniqueFeesSenderTxs = Facade.lodash
-      .chain(senderTxs)
-      .filter((it) => it.receiverAddress === 'fees')
-      .uniqBy((it) => it.transactionHash)
-      .value()
-
-    const entries = [...uniqueNonFeesSenderTxs, ...uniqueFeesSenderTxs]
     const pageNumber = Math.floor(entries.length / pageSize)
 
     this.transactions = TransactionDateGroup.toTransactionDateGroup(entries)

@@ -175,6 +175,7 @@ export class AppReducer extends ReducerWrapper<
           accounts.forEach((it, i) => {
             it.accountType = it.getWallet(wallets)?.walletType ?? null
             it.tokenAssets = accountsTokenAssets[i] ?? []
+            it.transactions = it.transactions ?? []
           })
 
           dispatch(this.commit('SET_ACCOUNTS', {accounts}))

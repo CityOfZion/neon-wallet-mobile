@@ -177,7 +177,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         <AccountCard account={account} isStackMode={false} />
       </LinearLayout>
 
-      <LinearLayout orientation={'horiz'} flex={1} flexWrap={'wrap'}>
+      <LinearLayout orientation={'horiz'} flexWrap={'wrap'}>
         <ReceiveButton
           onPress={() =>
             props.navigation.navigate(Facade.route.Modal.name, {
