@@ -214,7 +214,7 @@ const ReceiveToAccountModal = (props: Props) => {
         useAnimatedScrollView={true}
         keyboardOffset={300}
         showsVerticalScrollIndicator={false}
-        style={{marginBottom: PANEL_OFFSET}}
+        contentContainerStyle={{paddingBottom: PANEL_OFFSET}}
       >
         <LinearLayout height="100%" width="100%" px="15px" orientation="verti">
           <TextView
