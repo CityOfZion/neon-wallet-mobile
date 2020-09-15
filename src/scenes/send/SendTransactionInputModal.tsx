@@ -1,6 +1,11 @@
 import {RouteProp} from '@react-navigation/native'
 import React, {Fragment, useEffect, useState} from 'react'
-import {KeyboardAvoidingView, TouchableWithoutFeedback} from 'react-native'
+import {
+  KeyboardAvoidingView,
+  ScrollView,
+  TouchableWithoutFeedback,
+} from 'react-native'
+import InputScrollView from 'react-native-input-scroll-view'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
@@ -494,8 +499,13 @@ const SendTransactionInputModal = (prop: Props) => {
       rightButton={<ThemedCloseButton onPress={controller.close} />}
       onClose={() => prop.navigation.goBack()}
       image={require('~/src/assets/images/upload-white.png')}
+      disableDefaultScrollView={true}
     >
-      <KeyboardAvoidingView behavior="padding" enabled>
+      <InputScrollView
+        useAnimatedScrollView={true}
+        keyboardOffset={300}
+        showsVerticalScrollIndicator={false}
+      >
         <LinearLayout height="100%" width="100%" px="15px" orientation="verti">
           <TextView
             mb="24px"
@@ -584,7 +594,7 @@ const SendTransactionInputModal = (prop: Props) => {
             />
           </LinearLayout>
         </LinearLayout>
-      </KeyboardAvoidingView>
+      </InputScrollView>
     </SwiperPanel>
   )
 }
