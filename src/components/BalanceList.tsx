@@ -115,7 +115,7 @@ const ViewBalanceItem = (props: ItemProps) => {
             numberOfLines={1}
           >
             {Facade.filter.currency(
-              props.item.exchange(props.currency, props.exchange),
+              props.item.exchangeToken(props.currency, props.exchange),
               props.currency,
               props.language
             )}

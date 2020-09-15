@@ -38,10 +38,10 @@ export class HttpConfig {
 
         if (response.status >= 400) {
           // TODO: apply friendly error display
-          console.error(
-            response.data.message ?? response.statusText,
-            response.status.toString()
-          )
+          // console.error(
+          //   response.data.message ?? response.statusText,
+          //   response.status.toString()
+          // )
           return Promise.reject(error)
         }
 

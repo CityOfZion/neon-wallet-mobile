@@ -6,6 +6,12 @@ export interface Exchange {
   }
 }
 
+export interface ExchangeHistoryResponse {
+  [symbolRef: string]: {
+    [symbolToUse: string]: number
+  }
+}
+
 export interface ExchangeResponse {
   RAW: {
     [symbolRef: string]: {

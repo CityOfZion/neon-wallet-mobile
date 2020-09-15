@@ -1,14 +1,10 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
-import {plainToClass} from 'class-transformer'
 
 import {Config} from '~src/app/Config'
-import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
-import {Storage} from '~src/app/Storage'
 import {NeonHelper} from '~src/helpers/NeonHelper'
 import {PriorityFee} from '~src/models/PriorityFee'
 import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ClearStateDispatcher} from '~src/store/senderTransaction/dispatchers/ClearStateDispatcher'
 import {FeeAmountDispatcher} from '~src/store/senderTransaction/dispatchers/FeeAmountDispatcher'
@@ -81,49 +77,6 @@ export class SendTransactionReducer extends ReducerWrapper<
           token,
           fees?.fee
         )
-      }
-    },
-    saveToHistory: (
-      transactionHash: string
-    ): AsyncAction<SenderTransaction> => {
-      return async (dispatch, getState) => {
-        const pendingTransactions =
-          (await Storage.pendingTransactions.load()) ?? []
-
-        const senderTransaction = plainToClass(
-          SenderTransaction,
-          getState().senderTransaction
-        )
-        senderTransaction.sentAt = Facade.moment().format()
-        senderTransaction.transactionHash = transactionHash
-        senderTransaction.isPending = true
-
-        pendingTransactions.push(senderTransaction)
-
-        await Storage.pendingTransactions.save(pendingTransactions)
-
-        return senderTransaction
-      }
-    },
-    removeFromHistory: (
-      transactionHash: string
-    ): AsyncAction<SenderTransaction | null> => {
-      return async (dispatch, getState) => {
-        const pendingTransactions =
-          (await Storage.pendingTransactions.load()) ?? []
-
-        const index = pendingTransactions.findIndex(
-          (it) => it.transactionHash === transactionHash
-        )
-        if (index >= 0) {
-          pendingTransactions.splice(index, 1)
-
-          await Storage.pendingTransactions.save(pendingTransactions)
-
-          return pendingTransactions[index] ?? null
-        }
-
-        return null
       }
     },
   }

@@ -11,7 +11,7 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
-import {AddressPaginatedRequest} from '~src/models/request/AddressPaginatedRequest'
+import {Account} from '~src/models/redux/Account'
 import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {LinearLayout} from '~src/styles/styled-components'
@@ -27,33 +27,38 @@ export interface AccountAssetDetailParams {
 }
 
 const AccountAssetDetail = (props: AccountAssetDetailProps) => {
-  const {tokens} = useSelector((state: RootState) => state.app)
   const {token, address} = props.route.params
+
+  const tokensPool = useSelector((state: RootState) => state.app.tokens)
+  const accountsPool = useSelector((state: RootState) => state.app.accounts)
 
   const [transactions, setTransactions] = useState<TransactionDateGroup[]>([])
   const [currentPage, setCurrentPage] = useState(1)
+
+  const account = accountsPool.find((it) => it.address === address)
 
   useEffect(() => {
     Facade.await.run('populateTransaction', () => fetchTransaction(1))
   }, [])
 
   const fetchTransaction = async (currentPage: number, collector = 0) => {
-    const request = new AddressPaginatedRequest(address, currentPage)
-    const response = await request.getAddressAbstracts()
+    const model = Facade.utils.clone(account ?? new Account())
 
-    if (currentPage > (response.totalPages ?? 0)) return
+    const pagination = await model.populateTransactions(tokensPool, currentPage)
+    setCurrentPage(pagination.pageNumber + 1)
 
-    response.entries = response.entries.filter((it) => it.asset === token.hash)
-
-    setTransactions((val) =>
-      val.concat(response.toTransactionDateGroup(tokens))
+    // Apply filter
+    const senderTxs = pagination.entries.filter(
+      (it) => it.token?.hash === token.hash
     )
-    setCurrentPage(currentPage + 1)
 
-    collector += response.entries.length
-    if (collector < (response.pageSize ?? 0)) {
+    const transactions = TransactionDateGroup.toTransactionDateGroup(senderTxs)
+    setTransactions(transactions)
+
+    collector += senderTxs.length
+    if (collector < (pagination.pageSize ?? 0)) {
       // handling pagination with post filter
-      await fetchTransaction(currentPage + 1, collector)
+      await fetchTransaction(pagination.pageNumber + 1, collector)
     }
   }
 

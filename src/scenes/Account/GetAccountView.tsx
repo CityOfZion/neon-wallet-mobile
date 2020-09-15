@@ -2,7 +2,6 @@ import {RouteProp, useFocusEffect} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useState, useCallback, useEffect} from 'react'
-import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -12,13 +11,9 @@ import TabSelector from '~src/components/TabSelector'
 import TransactionsList from '~src/components/TransactionsList'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import ThemedButton from '~src/components/themed/ThemedButton'
 import {Lang} from '~src/enums/Lang'
 import {NeoNode} from '~src/models/NeoNode'
-import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {Account} from '~src/models/redux/Account'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
-import {AddressPaginatedRequest} from '~src/models/request/AddressPaginatedRequest'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
@@ -59,7 +54,7 @@ const ReceiveButton = (props: {onPress: () => any}) => {
         source={backgroundImage}
         overflow={'visible'}
         //The image has margins
-        ml={'-45'}
+        ml={'-45px'}
       />
     </ButtonView>
   )
@@ -89,7 +84,7 @@ function SendButton(props: {onPress?: () => any}) {
         source={backgroundImage}
         overflow={'visible'}
         //The image has margins
-        mr={'-45'}
+        mr={'-45px'}
       />
     </ButtonView>
   )
@@ -113,43 +108,20 @@ const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
 }
 
 const GetAccountView = (props: GetAccountViewProps) => {
-  const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const {account} = props.route.params
+
   const appWallets = useSelector((state: RootState) => state.app.wallets)
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
-  const pendingTransactions = useSelector(
-    (state: RootState) => state.app.pendingTransactions
-  )
-
-  const [account, setAccount] = useState<Account>(props.route.params.account)
-  const isWatchAccount = Boolean(
-    props.route.params.account.accountType === 'watch'
-  )
-  const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
-
-  const [transactions, setTransactions] = useState<TransactionDateGroup[]>([])
-  const [currentPage, setCurrentPage] = useState(1)
-
   const {language} = useSelector((state: RootState) => state.settings)
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
-  useFocusEffect(
-    useCallback(() => {
-      setAccount(
-        accountsPool.find((acc) => acc.address === account?.address) ??
-          new Account()
-      )
-    }, [accountsPool])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
+  const isWatchAccount = Boolean(
+    props.route.params.account.accountType === 'watch'
   )
-
-  useEffect(() => {
-    if (!isAssetsTabSelected) {
-      setTransactions([])
-      setCurrentPage(1)
-      Facade.await.run('populateTransaction', () => fetchTransaction(1))
-    }
-  }, [isAssetsTabSelected])
 
   props.navigation.setOptions({
     headerTitle: () => TitleComponent({nodesPool, language}),
@@ -168,51 +140,23 @@ const GetAccountView = (props: GetAccountViewProps) => {
       }),
   })
 
+  useEffect(() => {
+    if (!isAssetsTabSelected) {
+      setCurrentPage(1)
+      Facade.await.run('populateTransaction', () => fetchTransaction(1))
+    }
+  }, [isAssetsTabSelected])
+
   const fetchTransaction = async (currentPage: number) => {
-    if (!account.address) return
-
-    const request = new AddressPaginatedRequest(account.address, currentPage)
-    const response = await request.getAddressAbstracts()
-
-    if (currentPage > (response.totalPages ?? 0)) return
-
-    const pendingSenderTxs = pendingTransactions.filter(
-      (it) => it.senderAddress === account.address
+    const {pageNumber} = await account.populateTransactions(
+      tokensPool,
+      currentPage
     )
-    const senderTx = response.toSenderTransaction(tokensPool)
 
-    const pendingHashs = pendingSenderTxs.map((it) => it.transactionHash ?? '')
-    const hashs = senderTx.map((it) => it.transactionHash ?? '')
+    setCurrentPage(pageNumber + 1)
 
-    // Clear pending transactions if it is concluded
-    let needSync = false
-    for (const pendingHash of pendingHashs) {
-      if (hashs.includes(pendingHash)) {
-        await dispatchAsync(
-          RootStore.senderTransaction.actions.removeFromHistory(pendingHash)
-        )
-        needSync = true
-
-        const index = pendingSenderTxs.findIndex(
-          (it) => it.transactionHash === pendingHash
-        )
-        if (index >= 0) {
-          pendingSenderTxs.splice(index, 1)
-        }
-      }
-    }
-
-    if (needSync) {
-      await dispatchAsync(RootStore.app.actions.syncPendingTransactions())
-    }
-
-    const groupedTxs = SenderTransaction.toTransactionDateGroup([
-      ...pendingSenderTxs,
-      ...senderTx,
-    ])
-
-    setTransactions((val) => val.concat(groupedTxs))
-    setCurrentPage(currentPage + 1)
+    // Save the new cache
+    await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
   }
 
   return (
@@ -230,7 +174,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         <AccountCard account={account} isStackMode={false} />
       </LinearLayout>
 
-      <LinearLayout orientation={'horiz'} flex={1} flexWrap={'wrap'}>
+      <LinearLayout orientation={'horiz'} flexWrap={'wrap'}>
         <ReceiveButton
           onPress={() =>
             props.navigation.navigate(Facade.route.Modal.name, {
@@ -292,6 +236,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         setFirstTabAsSelected={setIsAssetsTabSelected}
         firstTabLabel={Facade.t('screens.getAccount.assets')}
         secondTabLabel={Facade.t('screens.getAccount.transactions')}
+        mb={5}
       />
 
       <LinearLayout>
@@ -310,10 +255,19 @@ const GetAccountView = (props: GetAccountViewProps) => {
           >
             <>
               {account.address && (
-                <TransactionsList
-                  address={account.address}
-                  transactionGroups={transactions}
-                />
+                <LinearLayout>
+                  <TransactionsList
+                    title={Facade.t('screens.getAccount.pendingTransactions')}
+                    address={account.address}
+                    transactionGroups={account.pendingTransactions}
+                  />
+
+                  <TransactionsList
+                    title={Facade.t('screens.getAccount.completedTransactions')}
+                    address={account.address}
+                    transactionGroups={account.transactions}
+                  />
+                </LinearLayout>
               )}
 
               <AwaitActivity

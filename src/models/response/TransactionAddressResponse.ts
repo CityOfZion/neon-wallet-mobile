@@ -28,13 +28,14 @@ export class TransactionAddressResponse {
   @ResponseSerialize(TransactionAddressSummary)
   entries: TransactionAddressSummary[] = []
 
-  toSenderTransaction(tokensPool: TokenAsset[]) {
-    return this.entries.map((it) => {
+  async toSenderTransaction(tokensPool: TokenAsset[]) {
+    const entries = this.entries.map((it) => {
       const tx = new SenderTransaction()
       tx.transactionHash = it.txid
       tx.senderAddress = it.addressFrom
       tx.receiverAddress = it.addressTo
       tx.sentAt = moment.unix(it.time ?? 0).format()
+
       const token = tokensPool.find((token) => token.hash === it.asset) ?? null
       tx.token = Facade.utils.clone(token)
 
@@ -44,10 +45,11 @@ export class TransactionAddressResponse {
 
       return tx
     })
-  }
 
-  toTransactionDateGroup(tokensPool: TokenAsset[]) {
-    const senderTxs = this.toSenderTransaction(tokensPool)
-    return SenderTransaction.toTransactionDateGroup(senderTxs)
+    // Populate exchange for each transaction
+    const promises = entries.map((it) => it.populateExchange())
+    await Promise.all(promises)
+
+    return entries
   }
 }

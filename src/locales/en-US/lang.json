@@ -272,6 +272,8 @@
     "getAccount": {
       "assets": "ASSETS",
       "transactions": "TRANSACTIONS",
+      "pendingTransactions": "PENDING TRANSACTIONS",
+      "completedTransactions": "COMPLETED TRANSACTIONS",
       "claimAsset": "Claim %{assetAmount}"
     },
     "customizeAccount": {
@@ -451,6 +453,7 @@
       "pending": "Pending",
       "sentTo": "Sent to",
       "receivedFrom": "Received from",
+      "token": "Token",
       "value": "Value"
     },
     "colorSelector": {

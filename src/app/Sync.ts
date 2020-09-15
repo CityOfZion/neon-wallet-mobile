@@ -35,11 +35,8 @@ export abstract class Sync {
     const contacts: Contact[] = await dispatch(
       RootStore.app.actions.syncContacts()
     )
-    const pendingTransactions: SenderTransaction[] = await dispatch(
-      RootStore.app.actions.syncPendingTransactions()
-    )
-
     await dispatch(RootStore.app.actions.syncTokenAssets())
+
     await dispatch(RootStore.app.actions.syncBackupAlerts())
 
     return {
@@ -50,7 +47,6 @@ export abstract class Sync {
       wallets,
       accounts,
       contacts,
-      pendingTransactions,
     }
   }
 
@@ -60,6 +56,7 @@ export abstract class Sync {
       dispatch(RootStore.app.actions.syncTokens()),
       dispatch(RootStore.app.actions.syncNodes()),
       dispatch(RootStore.app.actions.syncTokenAssets()),
+      dispatch(RootStore.app.actions.syncPendingTransactions()),
     ]
 
     await Promise.all(promises)

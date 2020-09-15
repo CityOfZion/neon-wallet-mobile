@@ -194,6 +194,8 @@
     "getAccount": {
       "assets": "#translateme",
       "transactions": "#translateme",
+      "pendingTransactions": "#translateme",
+      "completedTransactions": "#translateme",
       "claimAsset": "#translateme"
     },
     "createAccount": {
@@ -306,6 +308,7 @@
       "pending": "#translateme",
       "sentTo": "#translateme",
       "receivedFrom": "#translateme",
+      "token": "#translateme",
       "value": "#translateme"
     },
 

@@ -25,7 +25,6 @@ export declare global {
     wallets: Wallet[]
     accounts: Account[]
     contacts: Contact[]
-    pendingTransactions: SenderTransaction[]
   }
 
   type AppAction = AppState & Action<AppActionsType>

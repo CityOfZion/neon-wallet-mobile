@@ -90,7 +90,7 @@ export class Wallet implements WalletState {
   calculateBalance(currency: Currency, exchange: Exchange) {
     return Facade.lodash.sumBy(
       this.tokenAssets,
-      (it) => it.exchange(currency, exchange) ?? 0
+      (it) => it.exchangeToken(currency, exchange) ?? 0
     )
   }
 

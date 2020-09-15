@@ -7,16 +7,16 @@ import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {NeoNode} from '~src/models/NeoNode'
 import {TokenAsset} from '~src/models/TokenAsset'
+import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {Account} from '~src/models/redux/Account'
 import {App} from '~src/models/redux/App'
 import {Contact} from '~src/models/redux/Contact'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
+import {TransactionRequest} from '~src/models/request/TransactionRequest'
 import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
 import {ContactsDispatcher} from '~src/store/app/dispatchers/ContactsDispatcher'
 import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
 import {NodesDispatcher} from '~src/store/app/dispatchers/NodesDispatcher'
-import {PendingTransactionDispatcher} from '~src/store/app/dispatchers/PendingTransactionDispatcher'
 import {TokensDispatcher} from '~src/store/app/dispatchers/TokensDispatcher'
 import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
 import {Exchange, ExchangeResponse} from '~src/types/exchange'
@@ -36,7 +36,6 @@ export class AppReducer extends ReducerWrapper<
     WalletsDispatcher,
     AccountsDispatcher,
     ContactsDispatcher,
-    PendingTransactionDispatcher,
   ]
 
   readonly actions = {
@@ -145,14 +144,7 @@ export class AppReducer extends ReducerWrapper<
       }
     },
 
-    saveWallets: (): AsyncAction => {
-      return async (dispatch, getState) => {
-        const {wallets} = getState().app
-        await Storage.wallets.save(wallets)
-      }
-    },
-
-    updateWallet: (wallet: Wallet): AsyncAction => {
+    updateAndSaveWallet: (wallet: Wallet): AsyncAction => {
       return async (dispatch, getState) => {
         const wallets = getState().app.wallets.map((it) => {
           if (it.id === wallet.id) {
@@ -164,6 +156,7 @@ export class AppReducer extends ReducerWrapper<
         })
 
         dispatch(this.commit('SET_WALLETS', {wallets}))
+        await Storage.wallets.save(wallets)
       }
     },
 
@@ -181,12 +174,26 @@ export class AppReducer extends ReducerWrapper<
           accounts.forEach((it, i) => {
             it.accountType = it.getWallet(wallets)?.walletType ?? null
             it.tokenAssets = accountsTokenAssets[i] ?? []
+            it.transactions = it.transactions ?? []
+            it.pendingTransactions = it.pendingTransactions ?? []
           })
 
           dispatch(this.commit('SET_ACCOUNTS', {accounts}))
         }
 
         return accounts ?? []
+      }
+    },
+
+    updateAndSaveAccount: (account: Account): AsyncAction => {
+      return async (dispatch, getState) => {
+        const accounts = getState().app.accounts.map((it) => {
+          if (it.address === account.address) return account
+          return it
+        })
+
+        dispatch(this.commit('SET_ACCOUNTS', {accounts}))
+        await Storage.accounts.save(accounts)
       }
     },
 
@@ -234,19 +241,6 @@ export class AppReducer extends ReducerWrapper<
       }
     },
 
-    syncPendingTransactions: (): AsyncAction<SenderTransaction[]> => {
-      return async (dispatch, getState) => {
-        const pendingTransactions = await Storage.pendingTransactions.load()
-        if (pendingTransactions) {
-          dispatch(
-            this.commit('SET_PENDING_TRANSACTIONS', {pendingTransactions})
-          )
-        }
-
-        return pendingTransactions ?? []
-      }
-    },
-
     syncBackupAlerts: (): AsyncAction => {
       return async () => {
         const wallets = await Storage.wallets.load()
@@ -256,6 +250,72 @@ export class AppReducer extends ReducerWrapper<
           })
           await Storage.wallets.save(wallets)
         }
+      }
+    },
+
+    syncPendingTransactions: (): AsyncAction => {
+      return async (dispatch, getState) => {
+        const accounts = getState().app.accounts
+
+        for (const account of accounts) {
+          const senderTxs = account.pendingTransactions.flatMap(
+            (it) => it.transactions
+          )
+
+          for (const senderTx of senderTxs) {
+            if (senderTx.transactionHash) {
+              try {
+                const request = new TransactionRequest(senderTx.transactionHash)
+                const confirmedTx = await request.getTransaction()
+                const index = senderTxs.findIndex(
+                  (it) => it.transactionHash === confirmedTx.txid
+                )
+                if (index >= 0) senderTxs.splice(index, 1)
+              } catch (e) {
+                //does nothing
+              }
+            }
+          }
+
+          account.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
+            senderTxs
+          )
+        }
+
+        dispatch(this.commit('SET_ACCOUNTS', {accounts}))
+        await Storage.accounts.save(accounts)
+      }
+    },
+
+    removeCache: (): AsyncAction => {
+      return async (dispatch, getState) => {
+        const accounts = (await Storage.accounts.load()) ?? []
+
+        for (const account of accounts) {
+          account.transactions = []
+          account.pendingTransactions = []
+        }
+
+        dispatch(this.commit('SET_ACCOUNTS', {accounts}))
+        await Storage.accounts.save(accounts)
+      }
+    },
+
+    removeAppData: (): AsyncAction => {
+      return async () => {
+        const accounts = (await Storage.accounts.load()) ?? []
+
+        for (const account of accounts) {
+          await Facade.security.removeMnemonic(account.idWallet ?? '')
+          await Facade.security.removeWif(account.address ?? '')
+        }
+
+        await Storage.onboardingSeen.erase()
+        await Storage.welcomeHidden.erase()
+        await Storage.settings.erase()
+        await Storage.wallets.erase()
+        await Storage.accounts.erase()
+        await Storage.contacts.erase()
       }
     },
   }

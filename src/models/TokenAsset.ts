@@ -18,6 +18,9 @@ export class TokenAsset {
   @HttpExpose()
   amount: number = 0
 
+  @HttpExpose()
+  exchange: Exchange | null = null
+
   constructor(name: string, symbol: string, hash: string) {
     this.name = name
     this.symbol = symbol
@@ -42,8 +45,11 @@ export class TokenAsset {
     return exchange[symbol]?.to[currency] ?? null
   }
 
-  exchange(currency: Currency, exchange: Exchange) {
-    const ratio = this.getCurrencyRatio(currency, exchange)
+  exchangeToken(currency: Currency, exchange?: Exchange) {
+    const exchangeModel = exchange ?? this.exchange
+    if (!exchangeModel) return null
+
+    const ratio = this.getCurrencyRatio(currency, exchangeModel)
     if (!ratio) return null
 
     const amount = this.amount ?? 0

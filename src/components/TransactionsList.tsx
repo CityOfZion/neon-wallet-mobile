@@ -4,20 +4,26 @@ import {FlatList} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {Currency} from '~src/enums/Currency'
+import {Lang} from '~src/enums/Lang'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {Contact} from '~src/models/redux/Contact'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
+  title?: string
   address: string
   transactionGroups: TransactionDateGroup[]
 }
 
 const TransactionComponent = (props: {
   item: SenderTransaction
-  contacts: Contact[]
   address: string
+  contacts: Contact[]
+  currency: Currency
+  language: Lang
 }) => {
   const isReceived = (senderTx: SenderTransaction) => {
     return senderTx.isReceivedBy(props.address)
@@ -66,153 +72,217 @@ const TransactionComponent = (props: {
   }
 
   return (
-    <LinearLayout py={4} orientation={'horiz'}>
-      <LinearLayout mr={4} alignSelf={'center'}>
-        <ImageView
-          width={Facade.scale(18)}
-          resizeMode={'contain'}
-          style={{
-            transform: [
-              {
-                rotate: props.item.isReceivedBy(props.address)
-                  ? '180deg'
-                  : '0deg',
-              },
-            ],
-          }}
-          source={
-            props.item.isPending
-              ? require('~src/assets/images/clock-white.png')
-              : require('~src/assets/images/icon-sent-white.png')
-          }
-        />
-      </LinearLayout>
+    <LinearLayout py={4}>
+      <LinearLayout
+        mb={2}
+        orientation={'horiz'}
+        justifyContent={'space-between'}
+      >
+        <LinearLayout>
+          {props.item.isDatetimeValid() && (
+            <TextView fontFamily={'semibold'} color={'text.0'}>
+              {props.item.formattedTime}
+            </TextView>
+          )}
+        </LinearLayout>
 
-      <LinearLayout width={'60px'} mr={4}>
-        <TextView
-          fontSize={'sm'}
-          color={'text.2'}
-          allowFontScaling={true}
-          adjustsFontSizeToFit={true}
-          numberOfLines={1}
-        >
-          {getStatusLabel(props.item)}
-        </TextView>
+        <LinearLayout orientation={'horiz'}>
+          <LinearLayout mr={2} alignSelf={'center'}>
+            <ImageView
+              width={Facade.scale(18)}
+              resizeMode={'contain'}
+              style={{
+                transform: [
+                  {
+                    rotate: props.item.isReceivedBy(props.address)
+                      ? '180deg'
+                      : '0deg',
+                  },
+                ],
+              }}
+              source={
+                props.item.isPending
+                  ? require('~src/assets/images/clock-white.png')
+                  : require('~src/assets/images/icon-sent-white.png')
+              }
+            />
+          </LinearLayout>
 
-        {props.item.isDatetimeValid() && (
-          <TextView fontFamily={'semibold'} color={'text.0'}>
-            {props.item.formattedTime}
-          </TextView>
-        )}
-      </LinearLayout>
-
-      <LinearLayout width={'30%'} mr={4}>
-        <TextView fontSize={'sm'} color={'text.2'}>
-          {getAddressLabel(props.item)}
-        </TextView>
-
-        {hasContactName(props.item) ? (
           <TextView
-            fontSize={'md'}
+            fontSize={'sm'}
+            fontFamily={'semibold'}
             color={'text.0'}
             allowFontScaling={true}
             adjustsFontSizeToFit={true}
             numberOfLines={1}
           >
-            {getAddressOrContact(props.item)}
+            {getStatusLabel(props.item)}
           </TextView>
-        ) : (
-          <TextView
-            numberOfLines={1}
-            ellipsizeMode={'middle'}
-            fontSize={'md'}
-            color={'primary'}
-          >
-            {getAddressOrContact(props.item)}
-          </TextView>
-        )}
+        </LinearLayout>
       </LinearLayout>
 
-      <LinearLayout mr={4}>
-        <TextView fontSize={'sm'} color={'text.2'}>
-          {Facade.t('components.transactionsList.value')}
-        </TextView>
+      <LinearLayout orientation={'horiz'}>
+        <LinearLayout width={'40%'} mr={4}>
+          <TextView fontSize={'sm'} color={'text.2'}>
+            {getAddressLabel(props.item)}
+          </TextView>
+        </LinearLayout>
 
-        {props.item.token && (
-          <LinearLayout orientation={'horiz'} alignItems={'center'}>
-            <ImageView
-              mr={2}
-              height={Facade.scale(18)}
-              width={Facade.scale(18)}
-              resizeMode={'contain'}
-              source={props.item.token.srcIcon}
-            />
+        <LinearLayout mr={4}>
+          <TextView fontSize={'sm'} color={'text.2'}>
+            {Facade.t('components.transactionsList.token')}
+          </TextView>
+        </LinearLayout>
 
-            <TextView fontSize={'md'} color={'text.0'}>
-              {props.item.token.symbol}
-            </TextView>
+        <LinearLayout weight={1} alignSelf={'flex-end'}>
+          <TextView fontSize={'sm'} textAlign={'right'} color={'text.2'}>
+            {Facade.t('components.transactionsList.value')}
+          </TextView>
+        </LinearLayout>
+      </LinearLayout>
+
+      <FlatList<TokenAsset>
+        data={props.item.tokens}
+        keyExtractor={(item, i) => String(i)}
+        renderItem={(token) => (
+          <LinearLayout orientation={'horiz'}>
+            <LinearLayout width={'40%'} mr={4}>
+              {token.index === 0 && (
+                <>
+                  {hasContactName(props.item) ? (
+                    <TextView
+                      fontSize={'md'}
+                      color={'text.0'}
+                      allowFontScaling={true}
+                      adjustsFontSizeToFit={true}
+                      numberOfLines={1}
+                    >
+                      {getAddressOrContact(props.item)}
+                    </TextView>
+                  ) : (
+                    <TextView
+                      numberOfLines={1}
+                      ellipsizeMode={'middle'}
+                      fontSize={'md'}
+                      color={'primary'}
+                    >
+                      {getAddressOrContact(props.item)}
+                    </TextView>
+                  )}
+                </>
+              )}
+            </LinearLayout>
+
+            <LinearLayout mr={4}>
+              <LinearLayout orientation={'horiz'} alignItems={'center'}>
+                <ImageView
+                  mr={2}
+                  height={Facade.scale(18)}
+                  width={Facade.scale(18)}
+                  resizeMode={'contain'}
+                  source={token.item.srcIcon}
+                />
+
+                <TextView fontSize={'md'} color={'text.0'}>
+                  {token.item.symbol}
+                </TextView>
+              </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout weight={1} alignSelf={'flex-end'}>
+              <TextView
+                color={'primary'}
+                fontSize={'md'}
+                textAlign={'right'}
+                fontFamily={'semibold'}
+                allowFontScaling={true}
+                adjustsFontSizeToFit={true}
+                numberOfLines={1}
+              >
+                {Facade.filter.currency(
+                  token.item.exchangeToken(props.currency),
+                  props.currency,
+                  props.language
+                )}
+              </TextView>
+            </LinearLayout>
           </LinearLayout>
         )}
-      </LinearLayout>
-
-      <LinearLayout weight={1} alignSelf={'flex-end'}>
-        {props.item.token && (
-          <TextView
-            color={'text.2'}
-            fontSize={'md'}
-            textAlign={'right'}
-            fontFamily={'semibold'}
-            allowFontScaling={true}
-            adjustsFontSizeToFit={true}
-            numberOfLines={1}
-          >
-            {props.item.token.amount}
-          </TextView>
-        )}
-      </LinearLayout>
+      />
     </LinearLayout>
   )
 }
 
 const TransactionsList: React.FC<Props> = (props) => {
   const {contacts} = useSelector((state: RootState) => state.app)
+  const {currency, language} = useSelector((state: RootState) => state.settings)
 
   return (
-    <FlatList<TransactionDateGroup>
-      data={props.transactionGroups}
-      keyExtractor={(item, i) => String(i)}
-      ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
-      renderItem={(group) => (
-        <LinearLayout py={4}>
-          <LinearLayout width={'100%'}>
-            {group.item.isDatetimeValid() && (
-              <TextView color={'text.0'} fontSize={'sm'} fontFamily={'bold'}>
-                {group.item.formattedDate()}
-              </TextView>
-            )}
-
-            <FlatList<SenderTransaction>
-              data={group.item.transactions}
-              keyExtractor={(item, i) => String(i)}
-              ItemSeparatorComponent={() => (
-                <LinearLayout bg="text.2" height={1} />
-              )}
-              renderItem={(sender) => (
-                <TransactionComponent
-                  item={sender.item}
-                  contacts={contacts}
-                  address={props.address}
-                />
-              )}
-            />
-          </LinearLayout>
-        </LinearLayout>
+    <LinearLayout>
+      {props.title && Boolean(props.transactionGroups.length) && (
+        <TextView
+          color={'text.2'}
+          fontSize={'md'}
+          allowFontScaling={true}
+          adjustsFontSizeToFit={true}
+          numberOfLines={1}
+        >
+          {props.title}
+        </TextView>
       )}
-    />
+
+      <FlatList<TransactionDateGroup>
+        data={props.transactionGroups}
+        keyExtractor={(item, i) => String(i)}
+        ItemSeparatorComponent={() => (
+          <LinearLayout
+            opacity={0.5}
+            borderColor={'text.2'}
+            borderWidth={'1px'}
+            height={'1px'}
+          />
+        )}
+        renderItem={(group) => (
+          <LinearLayout py={4}>
+            <LinearLayout width={'100%'}>
+              {group.item.isDatetimeValid() && (
+                <TextView color={'text.0'} fontSize={'sm'} fontFamily={'bold'}>
+                  {group.item.formattedDate()}
+                </TextView>
+              )}
+
+              <FlatList<SenderTransaction>
+                data={group.item.groupedTransactions}
+                keyExtractor={(item, i) => String(i)}
+                ItemSeparatorComponent={() => (
+                  <LinearLayout
+                    opacity={0.5}
+                    borderColor={'text.2'}
+                    borderWidth={'1px'}
+                    borderStyle={'dashed'}
+                    height={'1px'}
+                  />
+                )}
+                renderItem={(sender) => (
+                  <TransactionComponent
+                    item={sender.item}
+                    address={props.address}
+                    contacts={contacts}
+                    currency={currency}
+                    language={language}
+                  />
+                )}
+              />
+            </LinearLayout>
+          </LinearLayout>
+        )}
+      />
+    </LinearLayout>
   )
 }
 
 TransactionsList.propTypes = {
+  title: PropTypes.string,
   address: PropTypes.string.isRequired,
   transactionGroups: PropTypes.arrayOf(
     PropTypes.instanceOf(TransactionDateGroup).isRequired
