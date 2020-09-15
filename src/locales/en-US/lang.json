@@ -354,6 +354,7 @@
         "destinationAddress": "Destination Address",
         "token": "Token",
         "amount": "Amount",
+        "insufficientFunds": "Insufficient funds",
         "contacts": "Contacts",
         "paste": "Paste",
         "scan": "Scan",

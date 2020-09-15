@@ -293,10 +293,13 @@ const AmountField = (props: {
   remainingTokenBalance: number
 }) => {
   const setValue = (val: string) => {
-    if (!props.validator(val)) return
-    const newAmount =
-      props.token?.symbol === 'NEO' ? Math.floor(Number(val)) : Number(val)
-    props.setAmount(newAmount)
+    const valueNumber = Number(val)
+    if (!valueNumber) return
+
+    val = val.replace(',', '')
+    if (props.token?.symbol === 'NEO') val = val.replace('.', '')
+
+    props.setAmount(Number(val))
   }
   const {language} = useSelector((state: RootState) => state.settings)
   const theme = useSelector(
@@ -329,9 +332,13 @@ const AmountField = (props: {
           onChangeText={(val) => setValue(val)}
           color={theme.colors.text[0]}
           invalidColor={theme.colors.text[10]}
+          invalidMessageColor={theme.colors.quinary}
           value={props.amount !== null ? String(props.amount) : ''}
           placeholder={Facade.t('modals.send.transactionInput.enterAmount')}
           validator={(val) => props.validator(val)}
+          invalidMessage={Facade.t(
+            'modals.send.transactionInput.insufficientFunds'
+          )}
           separatorColor={theme.colors.background[13]}
           sideMargins={0}
           hidePaste={true}
@@ -341,9 +348,9 @@ const AmountField = (props: {
         />
         <ButtonView
           position={'absolute'}
-          right={'5px'}
-          top={'0px'}
+          right={'25px'}
           p={'8px'}
+          top={'-5px'}
           onPress={() => setValue(String(props.tokenBalance))}
         >
           <TextView color={'primary'} fontSize={'15px'} fontFamily={'medium'}>
@@ -416,12 +423,7 @@ const SendTransactionInputModal = (prop: Props) => {
   }
 
   const validateAmount = (val: string) => {
-    const hasEnoughBalance = Number(val) <= getTokenBalance()
-
-    if (token?.symbol === 'NEO') {
-      return Number.isInteger(Number(val)) && hasEnoughBalance
-    }
-
+    const hasEnoughBalance = getTokenBalance() >= Number(val)
     return hasEnoughBalance
   }
 

@@ -84,9 +84,20 @@ const TokenField = (props: {
 
 const AmountField = (props: {
   theme: ApplicationTheme
-  amount: number
-  setAmount: React.Dispatch<React.SetStateAction<number>>
+  token?: TokenAsset
+  amount: string
+  setAmount: React.Dispatch<React.SetStateAction<string>>
 }) => {
+  const setValue = (val: string) => {
+    const valueNumber = Number(val)
+    if (!valueNumber) return
+
+    val = val.replace(',', '')
+    if (props.token?.symbol === 'NEO') val = val.replace('.', '')
+
+    props.setAmount(val)
+  }
+
   return (
     <Fragment>
       <InputLabel
@@ -97,11 +108,11 @@ const AmountField = (props: {
         capitalize={true}
       />
       <InputWithValidation
-        onChangeText={(text) => props.setAmount(Number(text))}
+        onChangeText={(text) => setValue(text)}
         color={props.theme.colors.text[0]}
         invalidColor={props.theme.colors.text[10]}
         fontStyle={'normal'}
-        value={String(props.amount)}
+        value={props.amount}
         placeholder={Facade.t('modals.receive.toAccount.enterAmount')}
         validator={() => true}
         separatorColor={props.theme.colors.background[13]}
@@ -153,7 +164,6 @@ interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
   route: RouteProp<ModalStackParamList, 'ReceiveToAccountModal'>
 }
-
 const ReceiveToAccountModal = (props: Props) => {
   const controller = useSwiperController(true)
   const theme = useSelector(
@@ -162,7 +172,7 @@ const ReceiveToAccountModal = (props: Props) => {
   const [isAddressTabSelected, setAddressTabAsSelected] = useState<boolean>(
     true
   )
-  const [amount, setAmount] = useState<number>(0)
+  const [amount, setAmount] = useState<string>()
   const [reference, setReference] = useState<string>('')
   const [token, setToken] = useState<TokenAsset | null>(null)
 
@@ -182,7 +192,6 @@ const ReceiveToAccountModal = (props: Props) => {
 
   const isValid = () => {
     const conditions: boolean[] = [Boolean(account.address), Boolean(token)]
-
     return conditions.every((it) => it)
   }
 
