@@ -170,7 +170,7 @@ const InputWithValidation = (props: Props) => {
             onPress={async () => {
               const valueFromClipboard = await Facade.utils.copyFromClipboard()
               if (props.onChangeText) {
-                props.onChangeText(valueFromClipboard)
+                props.onChangeText(valueFromClipboard.trim())
               }
             }}
           />
