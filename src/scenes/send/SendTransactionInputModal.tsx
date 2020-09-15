@@ -13,7 +13,7 @@ import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import SwiperPanel, {PANEL_OFFSET, useSwiperController} from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {NeoURI} from '~src/helpers/UriHelper'
@@ -505,6 +505,7 @@ const SendTransactionInputModal = (prop: Props) => {
         useAnimatedScrollView={true}
         keyboardOffset={300}
         showsVerticalScrollIndicator={false}
+        style={{marginBottom: PANEL_OFFSET}}
       >
         <LinearLayout height="100%" width="100%" px="15px" orientation="verti">
           <TextView

@@ -11,7 +11,7 @@ import {DismissKeyboard} from '~src/components/DismissKeyboard'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import {QRCodeWithCopyButton} from '~src/components/QRCodeWithCopyButton'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import SwiperPanel, {PANEL_OFFSET, useSwiperController} from '~src/components/SwiperPanel'
 import TabSelector from '~src/components/TabSelector'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
@@ -214,6 +214,7 @@ const ReceiveToAccountModal = (props: Props) => {
         useAnimatedScrollView={true}
         keyboardOffset={300}
         showsVerticalScrollIndicator={false}
+        style={{marginBottom: PANEL_OFFSET}}
       >
         <LinearLayout height="100%" width="100%" px="15px" orientation="verti">
           <TextView
