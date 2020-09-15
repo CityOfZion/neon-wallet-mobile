@@ -48,13 +48,4 @@ export abstract class Storage {
   static get contacts() {
     return Facade.storage['@contacts'].bind().asArrayOf(Contact)
   }
-
-  /**
-   * Pending Transaction history
-   */
-  static get pendingTransactions() {
-    return Facade.storage['@pendingTransactions']
-      .bind()
-      .asArrayOf(SenderTransaction)
-  }
 }

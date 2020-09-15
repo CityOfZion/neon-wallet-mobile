@@ -54,7 +54,7 @@ const ReceiveButton = (props: {onPress: () => any}) => {
         source={backgroundImage}
         overflow={'visible'}
         //The image has margins
-        ml={'-45'}
+        ml={'-45px'}
       />
     </ButtonView>
   )
@@ -84,7 +84,7 @@ function SendButton(props: {onPress?: () => any}) {
         source={backgroundImage}
         overflow={'visible'}
         //The image has margins
-        mr={'-45'}
+        mr={'-45px'}
       />
     </ButtonView>
   )
@@ -114,9 +114,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
   const {language} = useSelector((state: RootState) => state.settings)
-  const pendingTransactions = useSelector(
-    (state: RootState) => state.app.pendingTransactions
-  )
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
@@ -239,6 +236,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         setFirstTabAsSelected={setIsAssetsTabSelected}
         firstTabLabel={Facade.t('screens.getAccount.assets')}
         secondTabLabel={Facade.t('screens.getAccount.transactions')}
+        mb={5}
       />
 
       <LinearLayout>
@@ -257,10 +255,19 @@ const GetAccountView = (props: GetAccountViewProps) => {
           >
             <>
               {account.address && (
-                <TransactionsList
-                  address={account.address}
-                  transactionGroups={account.transactions}
-                />
+                <LinearLayout>
+                  <TransactionsList
+                    title={Facade.t('screens.getAccount.pendingTransactions')}
+                    address={account.address}
+                    transactionGroups={account.pendingTransactions}
+                  />
+
+                  <TransactionsList
+                    title={Facade.t('screens.getAccount.completedTransactions')}
+                    address={account.address}
+                    transactionGroups={account.transactions}
+                  />
+                </LinearLayout>
               )}
 
               <AwaitActivity

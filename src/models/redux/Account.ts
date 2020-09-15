@@ -59,6 +59,10 @@ export class Account implements AccountState {
   @ResponseSerialize(TransactionDateGroup)
   transactions: TransactionDateGroup[] = []
 
+  @HttpExpose()
+  @ResponseSerialize(TransactionDateGroup)
+  pendingTransactions: TransactionDateGroup[] = []
+
   get hasFunds() {
     return Facade.lodash.sumBy(this.tokenAssets, (it) => it.amount ?? 0) > 0
   }

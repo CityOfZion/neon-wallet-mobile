@@ -181,6 +181,8 @@
     "getAccount": {
       "assets": "#translateme",
       "transactions": "#translateme",
+      "pendingTransactions": "#translateme",
+      "completedTransactions": "#translateme",
       "claimAsset": "#translateme"
     },
     "createAccount": {

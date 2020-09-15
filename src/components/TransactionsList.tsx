@@ -13,6 +13,7 @@ import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
+  title?: string
   address: string
   transactionGroups: TransactionDateGroup[]
 }
@@ -217,56 +218,71 @@ const TransactionsList: React.FC<Props> = (props) => {
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
   return (
-    <FlatList<TransactionDateGroup>
-      data={props.transactionGroups}
-      keyExtractor={(item, i) => String(i)}
-      ItemSeparatorComponent={() => (
-        <LinearLayout
-          opacity={0.5}
-          borderColor={'text.2'}
-          borderWidth={'1px'}
-          height={'1px'}
-        />
+    <LinearLayout>
+      {props.title && Boolean(props.transactionGroups.length) && (
+        <TextView
+          color={'text.2'}
+          fontSize={'md'}
+          allowFontScaling={true}
+          adjustsFontSizeToFit={true}
+          numberOfLines={1}
+        >
+          {props.title}
+        </TextView>
       )}
-      renderItem={(group) => (
-        <LinearLayout py={4}>
-          <LinearLayout width={'100%'}>
-            {group.item.isDatetimeValid() && (
-              <TextView color={'text.0'} fontSize={'sm'} fontFamily={'bold'}>
-                {group.item.formattedDate()}
-              </TextView>
-            )}
 
-            <FlatList<SenderTransaction>
-              data={group.item.groupedTransactions}
-              keyExtractor={(item, i) => String(i)}
-              ItemSeparatorComponent={() => (
-                <LinearLayout
-                  opacity={0.5}
-                  borderColor={'text.2'}
-                  borderWidth={'1px'}
-                  borderStyle={'dashed'}
-                  height={'1px'}
-                />
+      <FlatList<TransactionDateGroup>
+        data={props.transactionGroups}
+        keyExtractor={(item, i) => String(i)}
+        ItemSeparatorComponent={() => (
+          <LinearLayout
+            opacity={0.5}
+            borderColor={'text.2'}
+            borderWidth={'1px'}
+            height={'1px'}
+          />
+        )}
+        renderItem={(group) => (
+          <LinearLayout py={4}>
+            <LinearLayout width={'100%'}>
+              {group.item.isDatetimeValid() && (
+                <TextView color={'text.0'} fontSize={'sm'} fontFamily={'bold'}>
+                  {group.item.formattedDate()}
+                </TextView>
               )}
-              renderItem={(sender) => (
-                <TransactionComponent
-                  item={sender.item}
-                  address={props.address}
-                  contacts={contacts}
-                  currency={currency}
-                  language={language}
-                />
-              )}
-            />
+
+              <FlatList<SenderTransaction>
+                data={group.item.groupedTransactions}
+                keyExtractor={(item, i) => String(i)}
+                ItemSeparatorComponent={() => (
+                  <LinearLayout
+                    opacity={0.5}
+                    borderColor={'text.2'}
+                    borderWidth={'1px'}
+                    borderStyle={'dashed'}
+                    height={'1px'}
+                  />
+                )}
+                renderItem={(sender) => (
+                  <TransactionComponent
+                    item={sender.item}
+                    address={props.address}
+                    contacts={contacts}
+                    currency={currency}
+                    language={language}
+                  />
+                )}
+              />
+            </LinearLayout>
           </LinearLayout>
-        </LinearLayout>
-      )}
-    />
+        )}
+      />
+    </LinearLayout>
   )
 }
 
 TransactionsList.propTypes = {
+  title: PropTypes.string,
   address: PropTypes.string.isRequired,
   transactionGroups: PropTypes.arrayOf(
     PropTypes.instanceOf(TransactionDateGroup).isRequired

@@ -35,6 +35,7 @@ export class TransactionAddressResponse {
       tx.senderAddress = it.addressFrom
       tx.receiverAddress = it.addressTo
       tx.sentAt = moment.unix(it.time ?? 0).format()
+
       const token = tokensPool.find((token) => token.hash === it.asset) ?? null
       tx.token = Facade.utils.clone(token)
 

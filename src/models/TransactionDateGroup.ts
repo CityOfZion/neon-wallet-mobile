@@ -6,8 +6,8 @@ import {
 import moment from 'moment'
 
 import {Facade} from '~src/app/Facade'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {TokenAsset} from '~src/models/TokenAsset'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 
 @HttpExclude()
 export class TransactionDateGroup {

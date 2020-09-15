@@ -1,5 +1,6 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
+import {plainToClass} from 'class-transformer'
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
@@ -9,7 +10,9 @@ import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {TokenAsset} from '~src/models/TokenAsset'
+import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {Account} from '~src/models/redux/Account'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -179,6 +182,9 @@ const TransactionSummaryContainer = () => {
 const SendTransactionReviewModal = (props: Props) => {
   const controller = useSwiperController(true)
 
+  const {senderTransaction} = useSelector((state: RootState) => state)
+  const {accounts} = useSelector((state: RootState) => state.app)
+
   const dispatch = useDispatch<SyncDispatch>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string | null>>()
@@ -192,10 +198,7 @@ const SendTransactionReviewModal = (props: Props) => {
       throw new Error('Transaction has failed')
     }
 
-    await dispatchAsync(
-      RootStore.senderTransaction.actions.saveToHistory(transactionHash)
-    )
-    await dispatchAsync(RootStore.app.actions.syncPendingTransactions())
+    await saveToHistory(transactionHash)
 
     dispatch(RootStore.senderTransaction.actions.clearState())
 
@@ -203,6 +206,29 @@ const SendTransactionReviewModal = (props: Props) => {
       screen: Facade.route.SendTransactionConfirmationModal.name,
       params: {transactionHash},
     })
+  }
+
+  const saveToHistory = async (transactionHash: string) => {
+    const senderTx = plainToClass(SenderTransaction, senderTransaction)
+    senderTx.sentAt = Facade.moment().format()
+    senderTx.transactionHash = transactionHash
+    senderTx.isPending = true
+    senderTx.token = senderTransaction.token
+    await senderTx.populateExchange()
+
+    const account = accounts.find((it) => it.address === senderTx.senderAddress)
+    if (account) {
+      const senderTxs = account.pendingTransactions.flatMap(
+        (it) => it.transactions
+      )
+      senderTxs.push(senderTx)
+
+      account.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
+        senderTxs
+      )
+
+      await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
+    }
   }
 
   return (
