@@ -400,6 +400,11 @@
       "reorder": "Reorder wallets",
       "cancel": "Cancel"
     },
+    "copyContext": {
+      "copyQR": "Copy QR code image",
+      "copyAddress": "Copy address",
+      "cancel": "Cancel"
+    },
     "reorderWallet": {
       "title": "Reorder wallets",
       "subtitle": "Drag a wallet to a new position to reorder",

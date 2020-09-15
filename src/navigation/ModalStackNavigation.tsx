@@ -17,6 +17,9 @@ import {
   ContactPicker,
   ContactsModalParams,
 } from '~src/scenes/Contacts/ContactPicker'
+import CopyContextModal, {
+  CopyContextModalParams,
+} from '~src/scenes/CopyContextModal'
 import CreateAccountModal from '~src/scenes/CreateAccountModal'
 import CurrencyPickerModal from '~src/scenes/CurrencyPickerModal'
 import CustomColorPage, {
@@ -84,6 +87,7 @@ export type ModalStackParamList = {
   NetworkPickerModal: undefined
   PersistContact: PersistContactParams
   ContactsModal: ContactsModalParams
+  CopyContextModal: CopyContextModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -206,6 +210,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={Facade.route.ContactsModal.name}
           component={ContactPicker}
+        />
+        <ModalStack.Screen
+          name={Facade.route.CopyContextModal.name}
+          component={CopyContextModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>
