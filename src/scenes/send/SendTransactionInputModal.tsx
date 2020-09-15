@@ -367,22 +367,21 @@ const SendTransactionInputModal = (prop: Props) => {
 
   const controller = useSwiperController(true)
 
-  const {contacts} = useSelector((state: RootState) => state.app)
+  const {contacts, tokens} = useSelector((state: RootState) => state.app)
 
   const [receiverAddress, setReceiverAddress] = useState(
     prop.route.params?.uri?.address ?? ''
   )
   const [amount, setAmount] = useState(uri?.amount ?? 0)
-  // TODO: convert hash into TokenValue
-  // const hash = props.route.params?.uri?.asset ?? ''
+  const hash = prop.route.params?.uri?.tokenHash ?? ''
 
   const [contact, setContact] = useState<Contact>()
-  const [token, setToken] = useState<TokenAsset | null>(null)
+  const [token, setToken] = useState<TokenAsset | null>(
+      tokens.find((t: TokenAsset) => t.hash === hash) ?? null
+  )
   const [priority, setPriority] = useState<PriorityFee>(FastPriority())
 
   const dispatch = useDispatch<SyncDispatch>()
-
-  useEffect(() => setAmount(0), [token])
 
   const changePriority = (newPriority: PriorityFee) => {
     if (priority.equals(newPriority)) {
