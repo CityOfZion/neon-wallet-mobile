@@ -18,7 +18,7 @@ const AssetQuoteComponent: React.FC<Props> = (props) => {
   const amountExchanged = props.token.exchangeToken(currency, exchange)
 
   const quoteText = ratio
-    ? `${props.token.symbol} 1 = ${Facade.filter.currency(
+    ? `${props.token.symbol} 1 = ${Facade.filter.currencyExtendedMaxLimit(
         ratio,
         currency,
         language
@@ -39,6 +39,17 @@ const AssetQuoteComponent: React.FC<Props> = (props) => {
 
       <LinearLayout weight={1} mr={4} orientation={'verti'}>
         <TextView
+          fontFamily={'bold'}
+          fontSize={'2xl'}
+          color="white"
+          allowFontScaling={true}
+          adjustsFontSizeToFit={true}
+          numberOfLines={1}
+        >
+          {props.token.name}
+        </TextView>
+
+        <TextView
           mb={-1}
           fontFamily={'medium'}
           fontSize={12}
@@ -49,17 +60,6 @@ const AssetQuoteComponent: React.FC<Props> = (props) => {
           numberOfLines={1}
         >
           {props.token.symbol}
-        </TextView>
-
-        <TextView
-          fontFamily={'bold'}
-          fontSize={'2xl'}
-          color="white"
-          allowFontScaling={true}
-          adjustsFontSizeToFit={true}
-          numberOfLines={1}
-        >
-          {props.token.name}
         </TextView>
       </LinearLayout>
 

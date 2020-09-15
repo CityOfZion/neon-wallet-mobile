@@ -122,6 +122,31 @@ export abstract class FilterHelper {
     }
   }
 
+  static currencyExtendedMaxLimit(
+    input?: InputType,
+    currency?: Currency | string | null,
+    language = Lang.EN_US,
+    minimumFractionDigits = 2,
+    maximumFractionDigits = 4
+  ) {
+    const num = Number(input)
+
+    try {
+      if (!isNaN(num)) {
+        return new Intl.NumberFormat(language, {
+          style: 'currency',
+          currency: currency ?? undefined,
+          minimumFractionDigits,
+          maximumFractionDigits,
+        }).format(num)
+      }
+
+      return String(input)
+    } catch {
+      return String(input)
+    }
+  }
+
   static hslToHex(h: number, s: number, l: number) {
     s /= 100
     l /= 100
