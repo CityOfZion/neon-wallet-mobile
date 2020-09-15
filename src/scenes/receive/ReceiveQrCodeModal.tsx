@@ -81,6 +81,12 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
             label="Copy to clipboard"
             srcIcon={require('~src/assets/images/icon-copy-green.png')}
             iconSize={[19, 23]}
+            onPress={() =>
+              props.navigation.navigate(Facade.route.CopyContextModal.name, {
+                qrCode: 'TODO', // TODO: NW-307
+                address: account.address ?? '',
+              })
+            }
           />
         </LinearLayout>
 

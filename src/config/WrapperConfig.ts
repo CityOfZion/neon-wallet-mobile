@@ -74,5 +74,6 @@ export class WrapperConfig {
     'ContactDetails',
     'AccountQRCode',
     'ContactsModal',
+    'CopyContextModal',
   ] as const
 }
