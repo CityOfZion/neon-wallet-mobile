@@ -22,6 +22,6 @@ export abstract class SecurityHelper {
   }
 
   static async removeWif(address: string) {
-    return await SecureStore.getItemAsync(address)
+    return await SecureStore.deleteItemAsync(address)
   }
 }

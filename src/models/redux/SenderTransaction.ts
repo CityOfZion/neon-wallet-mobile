@@ -16,7 +16,7 @@ import {ExchangeHistoryResponse} from '~src/types/exchange'
 export class SenderTransaction implements SenderTransactionState {
   @HttpExpose()
   @ResponseSerialize(TokenAsset)
-  token: TokenAsset | null = null
+  tokens: TokenAsset[] = []
 
   @HttpExpose()
   senderAddress: string | null = null
@@ -36,6 +36,16 @@ export class SenderTransaction implements SenderTransactionState {
 
   @HttpExpose()
   isPending: boolean = false
+
+  get token() {
+    return this.tokens[0] as TokenAsset | null
+  }
+
+  set token(val) {
+    if (val) {
+      this.tokens[0] = val
+    }
+  }
 
   isSentBy(address: string) {
     return this.senderAddress === address
@@ -104,7 +114,7 @@ export class SenderTransaction implements SenderTransactionState {
       'https://min-api.cryptocompare.com/data/pricehistorical',
       {params}
     )
-      .name('syncExchangeHistory')
+      .name('populateExchange')
       .as<ExchangeHistoryResponse>()
       .getData()
 

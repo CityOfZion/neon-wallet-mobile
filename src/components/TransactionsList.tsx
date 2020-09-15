@@ -4,6 +4,8 @@ import {FlatList} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {Currency} from '~src/enums/Currency'
+import {Lang} from '~src/enums/Lang'
 import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {Contact} from '~src/models/redux/Contact'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
@@ -16,8 +18,10 @@ interface Props {
 
 const TransactionComponent = (props: {
   item: SenderTransaction
-  contacts: Contact[]
   address: string
+  contacts: Contact[]
+  currency: Currency
+  language: Lang
 }) => {
   const isReceived = (senderTx: SenderTransaction) => {
     return senderTx.isReceivedBy(props.address)
@@ -158,7 +162,7 @@ const TransactionComponent = (props: {
       <LinearLayout weight={1} alignSelf={'flex-end'}>
         {props.item.token && (
           <TextView
-            color={'text.2'}
+            color={'primary'}
             fontSize={'md'}
             textAlign={'right'}
             fontFamily={'semibold'}
@@ -166,7 +170,11 @@ const TransactionComponent = (props: {
             adjustsFontSizeToFit={true}
             numberOfLines={1}
           >
-            {props.item.token.amount}
+            {Facade.filter.currency(
+              props.item.token.exchangeToken(props.currency),
+              props.currency,
+              props.language
+            )}
           </TextView>
         )}
       </LinearLayout>
@@ -176,6 +184,7 @@ const TransactionComponent = (props: {
 
 const TransactionsList: React.FC<Props> = (props) => {
   const {contacts} = useSelector((state: RootState) => state.app)
+  const {currency, language} = useSelector((state: RootState) => state.settings)
 
   return (
     <FlatList<TransactionDateGroup>
@@ -200,8 +209,10 @@ const TransactionsList: React.FC<Props> = (props) => {
               renderItem={(sender) => (
                 <TransactionComponent
                   item={sender.item}
-                  contacts={contacts}
                   address={props.address}
+                  contacts={contacts}
+                  currency={currency}
+                  language={language}
                 />
               )}
             />

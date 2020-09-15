@@ -264,5 +264,37 @@ export class AppReducer extends ReducerWrapper<
         }
       }
     },
+
+    removeCache: (): AsyncAction => {
+      return async (dispatch, getState) => {
+        const accounts = (await Storage.accounts.load()) ?? []
+
+        for (const account of accounts) {
+          account.transactions = []
+        }
+
+        dispatch(this.commit('SET_ACCOUNTS', {accounts}))
+        await Storage.accounts.save(accounts)
+      }
+    },
+
+    removeAppData: (): AsyncAction => {
+      return async () => {
+        const accounts = (await Storage.accounts.load()) ?? []
+
+        for (const account of accounts) {
+          await Facade.security.removeMnemonic(account.idWallet ?? '')
+          await Facade.security.removeWif(account.address ?? '')
+        }
+
+        await Storage.onboardingSeen.erase()
+        await Storage.welcomeHidden.erase()
+        await Storage.settings.erase()
+        await Storage.wallets.erase()
+        await Storage.accounts.erase()
+        await Storage.contacts.erase()
+        await Storage.pendingTransactions.erase()
+      }
+    },
   }
 }
