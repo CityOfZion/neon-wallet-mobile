@@ -202,7 +202,7 @@ const SendTransactionReviewModal = (props: Props) => {
 
     dispatch(RootStore.senderTransaction.actions.clearState())
 
-    props.navigation.navigate(Facade.route.Modal.name, {
+    props.navigation.replace(Facade.route.Modal.name, {
       screen: Facade.route.SendTransactionConfirmationModal.name,
       params: {transactionHash},
     })
