@@ -62,6 +62,7 @@
     "react-native-custom-qr-codes-expo": "^2.2.0",
     "react-native-flash-message": "^0.1.16",
     "react-native-gesture-handler": "~1.6.0",
+    "react-native-input-scroll-view": "^1.11.0",
     "react-native-neo-sdk-bindings": "file:.\\native_modules\\neo-sdk-bindings",
     "react-native-progress": "^4.1.2",
     "react-native-reanimated": "~1.9.0",

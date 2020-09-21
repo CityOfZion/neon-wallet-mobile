@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native'
 import React from 'react'
 import {
+  Keyboard,
   KeyboardTypeOptions,
   NativeSyntheticEvent,
   TargetedEvent,
@@ -94,6 +95,8 @@ const InputWithValidation = (props: Props) => {
             onBlur={props.onBlur}
             editable={props.editable ?? true}
             keyboardType={props.keyboardType}
+            returnKeyType={'done'}
+            onSubmitEditing={Keyboard.dismiss}
           />
 
           {!isValid && (
