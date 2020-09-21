@@ -377,7 +377,7 @@ const SendTransactionInputModal = (prop: Props) => {
 
   const [contact, setContact] = useState<Contact>()
   const [token, setToken] = useState<TokenAsset | null>(
-      tokens.find((t: TokenAsset) => t.hash === hash) ?? null
+    tokens.find((t: TokenAsset) => t.hash === hash) ?? null
   )
   const [priority, setPriority] = useState<PriorityFee>(FastPriority())
 

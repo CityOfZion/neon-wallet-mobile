@@ -44,9 +44,7 @@ const AppNavigation = (props: Props) => {
   const [onboardingSeen, setOnboardingSeen] = useState(true)
   const [welcomeHidden, setWelcomeHidden] = useState(true)
 
-  const dispatch = useDispatch<SyncDispatch>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
 
   const startApplication = async () => {
     const onboardingSeen = await Storage.onboardingSeen.load()
@@ -56,43 +54,7 @@ const AppNavigation = (props: Props) => {
     setWelcomeHidden(welcomeHidden ?? false)
 
     // Synchronize app reducer
-    const result = await Sync.init(dispatchAsync)
-
-    if (result.wallets.length === 0) {
-      // NW-221 The app must create a wallet for the user when it first runs
-      await createFirstWallet()
-    }
-  }
-
-  const createFirstWallet = async () => {
-    const words = Facade.asteroid.generateMnemonic() ?? []
-
-    dispatch(RootStore.wallet.actions.clearState())
-
-    dispatch(RootStore.wallet.actions.setName('My First Wallet'))
-    dispatch(RootStore.wallet.actions.setType('standard'))
-    dispatch(RootStore.wallet.actions.setSecurityPhrase(words.join(' ')))
-
-    const id = await dispatchAsyncString(
-      RootStore.wallet.actions.createAndSave()
-    )
-    await dispatchAsync(RootStore.app.actions.syncWallets())
-
-    dispatch(RootStore.wallet.actions.clearState())
-
-    await createFirstAccount(id)
-  }
-
-  const createFirstAccount = async (id: string) => {
-    dispatch(RootStore.account.actions.clearState())
-
-    dispatch(RootStore.account.actions.setIdWallet(id))
-    dispatch(RootStore.account.actions.setName('My account 1'))
-
-    await dispatchAsyncString(RootStore.account.actions.createAndSave())
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
-
-    dispatch(RootStore.account.actions.clearState())
+    await Sync.init(dispatchAsync)
   }
 
   useEffect(() => {

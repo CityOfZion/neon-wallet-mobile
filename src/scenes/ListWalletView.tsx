@@ -3,13 +3,11 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useRef, useState} from 'react'
 import {Alert, TouchableWithoutFeedback, View} from 'react-native'
-import Carousel from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
-import WalletCard from '~src/components/WalletCard'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import WalletPicker from '~src/components/misc/WalletPicker'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
@@ -209,23 +207,19 @@ const ListWalletView = (props: WalletProps) => {
           />
         </LinearLayout>
 
-        <LinearLayout mt={4} justifyContent={'center'} height={400}>
-          {isListNotEmpty() ? (
-            <WalletPicker
-              wallets={wallets}
-              onSelect={setSelectedWallet}
-              onPress={selectEvent}
-            />
-          ) : (
-            <EmptyListComponent />
-          )}
-        </LinearLayout>
+        <AwaitActivity name={'populateWallet'}>
+          <LinearLayout mt={4} justifyContent={'center'} height={400}>
+            {isListNotEmpty() ? (
+              <WalletPicker
+                wallets={wallets}
+                onSelect={setSelectedWallet}
+                onPress={selectEvent}
+              />
+            ) : (
+              <EmptyListComponent />
+            )}
+          </LinearLayout>
 
-        <AwaitActivity
-          name={'populate'}
-          size={'large'}
-          style={{minHeight: 100}}
-        >
           <WalletChangeComponent
             currency={currency}
             exchange={exchange}
