@@ -36,7 +36,11 @@ const SendTransactionConfirmationModal = (props: Props) => {
       paddingLeft={0}
       title={Facade.t('modals.send.title')}
       rightButton={<ThemedCloseButton onPress={controller.close} />}
-      onClose={() => props.navigation.goBack()}
+      onClose={() => {
+        controller.close()
+        // TODO: make the entire SendTransaction flux be inside a single modal and remove the line below
+        props.navigation.navigate(Facade.route.ListWallets.name)
+      }}
       image={require('~/src/assets/images/upload-white.png')}
     >
       <LinearLayout
