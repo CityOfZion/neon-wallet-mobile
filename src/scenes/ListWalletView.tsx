@@ -30,10 +30,6 @@ interface WalletProps {
   theme: ApplicationTheme
 }
 
-const TitleComponent = () => {
-  return <AwaitActivity name={'refreshData'} />
-}
-
 const WalletChangeComponent = (props: {
   wallet?: Wallet
   currency: Currency
@@ -138,10 +134,6 @@ const ListWalletView = (props: WalletProps) => {
   const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(
     wallets[0]
   )
-
-  props.navigation.setOptions({
-    headerTitle: TitleComponent,
-  })
 
   const isListNotEmpty = () => {
     return Boolean(wallets.length)
