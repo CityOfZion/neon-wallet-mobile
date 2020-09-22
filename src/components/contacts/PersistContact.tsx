@@ -162,7 +162,11 @@ export const PersistContact = (props: PersistContactProps) => {
         name={'swiperRight'}
         loadingView={<ScreenLoader transparent={true} />}
       >
-        <>
+        <LinearLayout
+          height="100%"
+          orientation="verti"
+          justifyContent="space-between"
+        >
           <LinearLayout>
             <InputLabel
               title={Facade.t('persistContact.name')}
@@ -211,7 +215,7 @@ export const PersistContact = (props: PersistContactProps) => {
             />
           </LinearLayout>
           {contact && (
-            <LinearLayout marginTop={'180px'}>
+            <LinearLayout>
               <LinearLayout height="1px" bg={theme.colors.background[10]} />
               <InputLabel
                 title={Facade.t('persistContact.deleteContact')}
@@ -222,33 +226,35 @@ export const PersistContact = (props: PersistContactProps) => {
                 {Facade.t('persistContact.deleteContactSubtitle')}
               </TextView>
               <TouchableWithoutFeedback onPress={alertDelete}>
-                <LinearLayout style={styles.rectangle} alignItems={'center'}>
-                  <LinearLayout
-                    orientation="horiz"
-                    alignItems={'center'}
-                    marginTop={'10px'}
-                  >
-                    <ImageView
-                      resizeMode="center"
-                      imageSize={[20, 20]}
-                      source={require('~/src/assets/images/icon-trash-can-primary.png')}
-                    />
+                <LinearLayout
+                  width="100%"
+                  borderRadius="4px"
+                  borderWidth="1px"
+                  borderColor="primary"
+                  justifyContent="center"
+                  alignItems="center"
+                  orientation="horiz"
+                  p="10px"
+                >
+                  <ImageView
+                    resizeMode="center"
+                    imageSize={[20, 20]}
+                    source={require('~/src/assets/images/icon-trash-can-primary.png')}
+                  />
 
-                    <TextView
-                      style={{includeFontPadding: false}}
-                      ml={3}
-                      color={'primary'}
-                      fontSize={20}
-                      mr={6}
-                    >
-                      {Facade.t('persistContact.deleteButtom')}
-                    </TextView>
-                  </LinearLayout>
+                  <TextView
+                    style={{includeFontPadding: false}}
+                    ml={3}
+                    color={'primary'}
+                    fontSize={20}
+                  >
+                    {Facade.t('persistContact.deleteButtom')}
+                  </TextView>
                 </LinearLayout>
               </TouchableWithoutFeedback>
             </LinearLayout>
           )}
-        </>
+        </LinearLayout>
       </AwaitActivity>
     </SwiperPanel>
   )
