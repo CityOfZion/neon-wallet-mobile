@@ -126,6 +126,24 @@ export const PersistContact = (props: PersistContactProps) => {
     }
   }
 
+  const alertDelete = () => {
+    Alert.alert(
+      '',
+      Facade.t('persistContact.deleteContactAlert'),
+      [
+        {
+          text: Facade.t('persistContact.cancel'),
+          style: 'cancel',
+        },
+        {
+          text: Facade.t('persistContact.delete'),
+          onPress: deleteAction,
+        },
+      ],
+      {cancelable: true}
+    )
+  }
+
   return (
     <SwiperPanel
       padding={20}
@@ -203,7 +221,7 @@ export const PersistContact = (props: PersistContactProps) => {
               <TextView color={theme.colors.text[0]} marginBottom={'30px'}>
                 {Facade.t('persistContact.deleteContactSubtitle')}
               </TextView>
-              <TouchableWithoutFeedback onPress={deleteAction}>
+              <TouchableWithoutFeedback onPress={alertDelete}>
                 <LinearLayout style={styles.rectangle} alignItems={'center'}>
                   <LinearLayout
                     orientation="horiz"
