@@ -1,19 +1,20 @@
-import {StackNavigationProp} from '@react-navigation/stack'
+import {useNavigationState} from '@react-navigation/native'
+import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import {plainToClass} from 'class-transformer'
 import React, {useEffect, useState} from 'react'
+import {ScrollView, TouchableHighlight} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {Account} from '~src/models/redux/Account'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -22,7 +23,7 @@ export interface SendModalParams {
 }
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList>
+  navigation: StackNavigationProp<SendModalStackParamList>
 }
 
 const TransactionSummaryContainer = () => {
@@ -180,14 +181,18 @@ const TransactionSummaryContainer = () => {
 }
 
 const SendTransactionReviewModal = (props: Props) => {
-  const controller = useSwiperController(true)
-
   const {senderTransaction} = useSelector((state: RootState) => state)
   const {accounts} = useSelector((state: RootState) => state.app)
 
   const dispatch = useDispatch<SyncDispatch>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string | null>>()
+
+  const show = useNavigationState(
+    (state) =>
+      state.routes[state.routes.length - 1].name ===
+      Facade.route.SendTransactionReviewModal.name
+  )
 
   const submit = async () => {
     const transactionHash = await dispatchAsyncString(
@@ -202,9 +207,14 @@ const SendTransactionReviewModal = (props: Props) => {
 
     dispatch(RootStore.senderTransaction.actions.clearState())
 
-    props.navigation.replace(Facade.route.Modal.name, {
-      screen: Facade.route.SendTransactionConfirmationModal.name,
-      params: {transactionHash},
+    props.navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: Facade.route.SendTransactionConfirmationModal.name,
+          params: {transactionHash},
+        },
+      ],
     })
   }
 
@@ -232,48 +242,54 @@ const SendTransactionReviewModal = (props: Props) => {
   }
 
   return (
-    <SwiperPanel
-      controller={controller}
-      fullSize={true}
-      paddingTop={24}
-      paddingRight={0}
-      paddingLeft={0}
-      title={Facade.t('modals.send.title')}
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
-      onClose={() => props.navigation.goBack()}
-      image={require('~/src/assets/images/upload-white.png')}
-    >
-      <AwaitActivity
-        name={'submit'}
-        loadingView={<ScreenLoader transparent={true} />}
+    show && (
+      <ScrollView
+        style={{
+          width: '100%',
+          marginTop: useHeaderHeight(),
+        }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          paddingBottom: PANEL_OFFSET + 20,
+          paddingLeft: 15,
+          paddingRight: 15,
+        }}
       >
-        <LinearLayout
-          height="100%"
-          width="100%"
-          px="15px"
-          orientation="verti"
-          alignItems="center"
+        <AwaitActivity
+          name={'submit'}
+          loadingView={<ScreenLoader transparent={true} />}
         >
-          <TextView
-            color="text.0"
-            fontFamily="medium"
-            fontSize="18px"
-            mb="48px"
-          >
-            {Facade.t('modals.send.transactionReview.pleaseReview')}
-          </TextView>
+          <TouchableHighlight>
+            <LinearLayout
+              height="100%"
+              width="100%"
+              orientation="verti"
+              alignItems="center"
+            >
+              <TextView
+                color="text.0"
+                fontFamily="medium"
+                fontSize="18px"
+                mb="48px"
+              >
+                {Facade.t('modals.send.transactionReview.pleaseReview')}
+              </TextView>
 
-          <TransactionSummaryContainer />
+              <TransactionSummaryContainer />
 
-          <LinearLayout width="100%" mt="32px">
-            <ThemedButton
-              label={Facade.t('app.send')}
-              onPress={() => Facade.await.run('submit', submit)}
-            />
-          </LinearLayout>
-        </LinearLayout>
-      </AwaitActivity>
-    </SwiperPanel>
+              <LinearLayout width="100%" mt="32px">
+                <ThemedButton
+                  label={Facade.t('app.send')}
+                  onPress={() => Facade.await.run('submit', submit)}
+                />
+              </LinearLayout>
+            </LinearLayout>
+          </TouchableHighlight>
+        </AwaitActivity>
+      </ScrollView>
+    )
   )
 }
 

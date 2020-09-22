@@ -62,6 +62,7 @@ import SendTransactionReviewModal, {
 import SendWalletSelectionModal, {
   SendWalletSelectionModalParams,
 } from '~src/scenes/send/SendWalletSelectionModal'
+import SendModalStackNavigation from '~src/navigation/SendModalStackNavigation'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
@@ -72,11 +73,6 @@ export type ModalStackParamList = {
   ReceiveAccountSelectionModal: ReceiveAccountSelectionParams
   ReceiveToAccountModal: ReceiveToAccountModalParams
   ReceiveQrCodeModal: ReceiveQrCodeModalParams
-  SendWalletSelectionModal: SendWalletSelectionModalParams
-  SendAccountSelectionModal: SendAccountSelectionModalParams
-  SendTransactionInputModal: SendTransactionInputModalParams
-  SendTransactionReviewModal: undefined
-  SendTransactionConfirmationModal: SendTransactionConfirmationModalParams
   CustomColor: {onColorPicked: (hex: string) => void}
   WalletContextModal: undefined
   ReorderWalletModal: undefined
@@ -88,6 +84,7 @@ export type ModalStackParamList = {
   PersistContact: PersistContactParams
   ContactsModal: ContactsModalParams
   CopyContextModal: CopyContextModalParams
+  SendModalStack: undefined
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -149,23 +146,7 @@ const ModalStackNavigation = () => {
         />
         <ModalStack.Screen
           name={Facade.route.SendWalletSelectionModal.name}
-          component={SendWalletSelectionModal}
-        />
-        <ModalStack.Screen
-          name={Facade.route.SendAccountSelectionModal.name}
-          component={SendAccountSelectionModal}
-        />
-        <ModalStack.Screen
-          name={Facade.route.SendTransactionReviewModal.name}
-          component={SendTransactionReviewModal}
-        />
-        <ModalStack.Screen
-          name={Facade.route.SendTransactionInputModal.name}
-          component={SendTransactionInputModal}
-        />
-        <ModalStack.Screen
-          name={Facade.route.SendTransactionConfirmationModal.name}
-          component={SendTransactionConfirmationModal}
+          component={SendModalStackNavigation}
         />
         <ModalStack.Screen
           name={Facade.route.CustomColor.name}
