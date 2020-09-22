@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import {layout, LayoutProps} from 'styled-system'
 
 import {Facade} from '~src/app/Facade'
+import {Account} from '~src/models/redux/Account'
 import {
   ImageView,
   LinearLayout,
@@ -16,6 +17,7 @@ import {
 
 interface Props {
   onSelect?: (hex: string) => void
+  account: Account
 }
 
 export default function ColorSelector(props: Props) {
@@ -60,6 +62,7 @@ export default function ColorSelector(props: Props) {
               setColor(hex)
               props.onSelect && props.onSelect(hex)
             },
+            account: props.account,
           },
         })
       }}

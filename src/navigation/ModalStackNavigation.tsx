@@ -73,7 +73,7 @@ export type ModalStackParamList = {
   ReceiveAccountSelectionModal: ReceiveAccountSelectionParams
   ReceiveToAccountModal: ReceiveToAccountModalParams
   ReceiveQrCodeModal: ReceiveQrCodeModalParams
-  CustomColor: {onColorPicked: (hex: string) => void}
+  CustomColor: CustomColorPageParam
   WalletContextModal: undefined
   ReorderWalletModal: undefined
   ListTokenModal: ListTokenModalParams
