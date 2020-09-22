@@ -62,7 +62,6 @@ import SendTransactionReviewModal, {
 import SendWalletSelectionModal, {
   SendWalletSelectionModalParams,
 } from '~src/scenes/send/SendWalletSelectionModal'
-import SendModalStackNavigation from '~src/navigation/SendModalStackNavigation'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
@@ -73,7 +72,7 @@ export type ModalStackParamList = {
   ReceiveAccountSelectionModal: ReceiveAccountSelectionParams
   ReceiveToAccountModal: ReceiveToAccountModalParams
   ReceiveQrCodeModal: ReceiveQrCodeModalParams
-  CustomColor: {onColorPicked: (hex: string) => void}
+  CustomColor: CustomColorPageParam
   WalletContextModal: undefined
   ReorderWalletModal: undefined
   ListTokenModal: ListTokenModalParams
@@ -146,7 +145,23 @@ const ModalStackNavigation = () => {
         />
         <ModalStack.Screen
           name={Facade.route.SendWalletSelectionModal.name}
-          component={SendModalStackNavigation}
+          component={SendWalletSelectionModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.SendAccountSelectionModal.name}
+          component={SendAccountSelectionModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.SendTransactionReviewModal.name}
+          component={SendTransactionReviewModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.SendTransactionInputModal.name}
+          component={SendTransactionInputModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.SendTransactionConfirmationModal.name}
+          component={SendTransactionConfirmationModal}
         />
         <ModalStack.Screen
           name={Facade.route.CustomColor.name}

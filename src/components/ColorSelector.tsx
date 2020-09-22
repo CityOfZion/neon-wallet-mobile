@@ -13,9 +13,11 @@ import {
   RelativeLayout,
   TextView,
 } from '~src/styles/styled-components'
+import {Account} from '~src/models/redux/Account'
 
 interface Props {
   onSelect?: (hex: string) => void
+  account: Account
 }
 
 export default function ColorSelector(props: Props) {
@@ -60,6 +62,7 @@ export default function ColorSelector(props: Props) {
               setColor(hex)
               props.onSelect && props.onSelect(hex)
             },
+            account: props.account
           },
         })
       }}

@@ -13,6 +13,7 @@ import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface CustomColorPageParam {
   onColorPicked: (hex: string) => void
+  account: Account
 }
 
 interface Props {
@@ -22,16 +23,10 @@ interface Props {
 
 const CustomColorPage = (props: Props) => {
   const controller = useSwiperController(true)
-  const defaultCardColor = '#00aaff'
 
-  const [color, setColor] = useState<string>(defaultCardColor)
-
-  // TODO: change mock values
-  const account = new Account()
-  account.srcIcon = require('~src/assets/images/card-neo.png')
-  account.name = 'Demo Card'
-  account.address = 'AN8iLVt18CKoATdexztCQj923hw5gkc41A'
-  account.backgroundColor = color
+  const [color, setColor] = useState<string>(
+    props.route.params.account.backgroundColor
+  )
 
   const colorPickerChangeEvent = (hex: string) => {
     setColor(hex)
@@ -58,7 +53,7 @@ const CustomColorPage = (props: Props) => {
     >
       <LinearLayout height="100%">
         <LinearLayout mb={5} maxHeight="35%" alignSelf="center">
-          <AccountCard orientBy="height" account={account} hideQRCode={true} />
+          <AccountCard orientBy="height" account={props.route.params.account} hideQRCode={true} />
         </LinearLayout>
 
         <TextView

@@ -295,8 +295,8 @@ const AccountCard: React.FC<Props> = (props) => {
 
                   <TextView
                     fontSize={14 * unit}
-                    color="primary"
-                    opacity={0.5}
+                    color="text.0"
+                    opacity={0.75}
                     textAlign="left"
                   >
                     {props.account.address}

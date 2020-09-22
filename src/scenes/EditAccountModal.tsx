@@ -138,7 +138,7 @@ const EditAccountModal = (props: Props) => {
             marginBottom="24px"
           />
 
-          <ColorSelector onSelect={setColor} />
+          <ColorSelector onSelect={setColor} account={account} />
         </LinearLayout>
       </AwaitActivity>
     </SwiperPanel>
