@@ -1,19 +1,18 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {RouteProp, useNavigationState} from '@react-navigation/native'
+import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import React, {useEffect, useState} from 'react'
+import {ScrollView, TouchableHighlight} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import BalanceList from '~src/components/BalanceList'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import AccountPicker from '~src/components/misc/AccountPicker'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {NeoURI} from '~src/helpers/UriHelper'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
+import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface SendAccountSelectionModalParams {
@@ -22,14 +21,17 @@ export interface SendAccountSelectionModalParams {
 }
 
 interface Props {
-  navigation: StackNavigationProp<ModalStackParamList & WalletStackParamList>
-  route: RouteProp<ModalStackParamList, 'SendAccountSelectionModal'>
+  navigation: StackNavigationProp<SendModalStackParamList>
+  route: RouteProp<SendModalStackParamList, 'SendAccountSelectionModal'>
 }
 
 const SendAccountSelectionModal = (props: Props) => {
   const {wallet} = props.route.params
-
-  const controller = useSwiperController(true)
+  const show = useNavigationState(
+    (state) =>
+      state.routes[state.routes.length - 1].name ===
+      Facade.route.SendAccountSelectionModal.name
+  )
 
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
 
@@ -49,72 +51,87 @@ const SendAccountSelectionModal = (props: Props) => {
   }
 
   return (
-    <SwiperPanel
-      controller={controller}
-      fullSize={true}
-      paddingTop={24}
-      paddingRight={0}
-      paddingLeft={0}
-      title={Facade.t('modals.send.title')}
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
-      onClose={() => props.navigation.goBack()}
-      image={require('~/src/assets/images/upload-white.png')}
-    >
-      <LinearLayout px={5}>
-        <TextView
-          mb={4}
-          color={'text.3'}
-          fontSize={'md'}
-          fontFamily={'bold'}
-          textAlign={'center'}
-        >
-          {props.route.params.wallet.name?.toUpperCase()}
-        </TextView>
+    show && (
+      <ScrollView
+        style={{
+          width: '100%',
+          marginTop: useHeaderHeight(),
+        }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          paddingBottom: PANEL_OFFSET + 20,
+          paddingLeft: 5,
+          paddingRight: 5,
+        }}
+      >
+        <TouchableHighlight>
+          <LinearLayout px={5}>
+            <TextView
+              mb={4}
+              color={'text.3'}
+              fontSize={'md'}
+              fontFamily={'bold'}
+              textAlign={'center'}
+            >
+              {props.route.params.wallet.name?.toUpperCase()}
+            </TextView>
 
-        <TextView
-          color={'text.0'}
-          fontSize={'lg'}
-          fontFamily={'medium'}
-          textAlign={'center'}
-        >
-          {Facade.t('modals.send.accountSelection.subtitle')}
-        </TextView>
+            <TextView
+              color={'text.0'}
+              fontSize={'lg'}
+              fontFamily={'medium'}
+              textAlign={'center'}
+            >
+              {Facade.t('modals.send.accountSelection.subtitle')}
+            </TextView>
 
-        <LinearLayout minHeight={260} mx={-5}>
-          <AccountPicker accounts={accounts} onSelect={setSelectedAccount} />
-        </LinearLayout>
+            <LinearLayout minHeight={260} mx={-5}>
+              <AccountPicker
+                accounts={accounts}
+                onSelect={setSelectedAccount}
+              />
+            </LinearLayout>
 
-        <TextView mb={4} color={'text.3'} fontSize={'md'} textAlign={'center'}>
-          {Facade.t('modals.send.accountSelection.label')}
-        </TextView>
+            <TextView
+              mb={4}
+              color={'text.3'}
+              fontSize={'md'}
+              textAlign={'center'}
+            >
+              {Facade.t('modals.send.accountSelection.label')}
+            </TextView>
 
-        {selectedAccount && (
-          <LinearLayout width={'100%'} mb={6}>
-            <BalanceList
-              tokenAssets={selectedAccount.tokenAssets}
-              fromAccountView={false}
-            />
-          </LinearLayout>
-        )}
+            {selectedAccount && (
+              <LinearLayout width={'100%'} mb={6}>
+                <BalanceList
+                  tokenAssets={selectedAccount.tokenAssets}
+                  fromAccountView={false}
+                />
+              </LinearLayout>
+            )}
 
-        <LinearLayout mb={6} minWidth={'80%'} maxWidth={'100%'}>
-          <ThemedButton
-            label={Facade.t('app.next')}
-            onPress={() =>
-              props.navigation.navigate(
-                Facade.route.SendTransactionInputModal.name,
-                {
-                  walletTitle: props.route.params.wallet.name ?? '',
-                  account: selectedAccount ?? new Account(),
-                  uri: props.route.params?.uri,
+            <LinearLayout mb={6} minWidth={'80%'} maxWidth={'100%'}>
+              <ThemedButton
+                label={Facade.t('app.next')}
+                onPress={() =>
+                  props.navigation.navigate(
+                    Facade.route.SendTransactionInputModal.name,
+                    {
+                      walletTitle: props.route.params.wallet.name ?? '',
+                      account: selectedAccount ?? new Account(),
+                      uri: props.route.params?.uri,
+                    }
+                  )
                 }
-              )
-            }
-            disabled={!selectedAccount?.hasFunds}
-          />
-        </LinearLayout>
-      </LinearLayout>
-    </SwiperPanel>
+                disabled={!selectedAccount?.hasFunds}
+              />
+            </LinearLayout>
+          </LinearLayout>
+        </TouchableHighlight>
+      </ScrollView>
+    )
   )
 }
 

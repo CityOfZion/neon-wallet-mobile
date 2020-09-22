@@ -1,10 +1,7 @@
-import {RouteProp} from '@react-navigation/native'
-import React, {Fragment, useEffect, useState} from 'react'
-import {
-  KeyboardAvoidingView,
-  ScrollView,
-  TouchableWithoutFeedback,
-} from 'react-native'
+import {RouteProp, useNavigationState} from '@react-navigation/native'
+import {useHeaderHeight} from '@react-navigation/stack'
+import React, {Fragment, useState} from 'react'
+import {TouchableWithoutFeedback} from 'react-native'
 import InputScrollView from 'react-native-input-scroll-view'
 import {useDispatch, useSelector} from 'react-redux'
 
@@ -13,9 +10,8 @@ import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
-import SwiperPanel, {PANEL_OFFSET, useSwiperController} from '~src/components/SwiperPanel'
+import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {NeoURI} from '~src/helpers/UriHelper'
 import {
   FasterPriority,
@@ -27,7 +23,7 @@ import {
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
 import {RootState, RootStore} from '~src/store/RootStore'
 import {
   ButtonView,
@@ -35,6 +31,7 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 
 export interface SendTransactionInputModalParams {
   walletTitle: string
@@ -43,8 +40,8 @@ export interface SendTransactionInputModalParams {
 }
 
 interface Props {
-  navigation: StackNavigationProp<ModalStackParamList>
-  route: RouteProp<ModalStackParamList, 'SendTransactionInputModal'>
+  navigation: StackNavigationProp<ModalStackParamList & SendModalStackParamList>
+  route: RouteProp<SendModalStackParamList, 'SendTransactionInputModal'>
 }
 
 const PriorityTab = (props: {
@@ -233,7 +230,7 @@ const DestinationAddressField = (props: {
 }
 
 const TokenField = (props: {
-  navigation: StackNavigationProp<ModalStackParamList>
+  navigation: StackNavigationProp<ModalStackParamList & SendModalStackParamList>
   account: Account
   token: TokenAsset | null
   setToken: React.Dispatch<React.SetStateAction<TokenAsset | null>>
@@ -369,9 +366,6 @@ const AmountField = (props: {
 
 const SendTransactionInputModal = (prop: Props) => {
   const {account, walletTitle, uri} = prop.route.params
-
-  const controller = useSwiperController(true)
-
   const {contacts, tokens} = useSelector((state: RootState) => state.app)
 
   const [receiverAddress, setReceiverAddress] = useState(
@@ -387,6 +381,12 @@ const SendTransactionInputModal = (prop: Props) => {
   const [priority, setPriority] = useState<PriorityFee>(FastPriority())
 
   const dispatch = useDispatch<SyncDispatch>()
+
+  const show = useNavigationState(
+    (state) =>
+      state.routes[state.routes.length - 1].name ===
+      Facade.route.SendTransactionInputModal.name
+  )
 
   const changePriority = (newPriority: PriorityFee) => {
     if (priority.equals(newPriority)) {
@@ -489,25 +489,25 @@ const SendTransactionInputModal = (prop: Props) => {
   }
 
   return (
-    <SwiperPanel
-      controller={controller}
-      fullSize={true}
-      paddingTop={24}
-      paddingRight={8}
-      paddingLeft={0}
-      title={Facade.t('modals.send.title')}
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
-      onClose={() => prop.navigation.goBack()}
-      image={require('~/src/assets/images/upload-white.png')}
-      disableDefaultScrollView={true}
-    >
+    show && (
       <InputScrollView
         useAnimatedScrollView={true}
         keyboardOffset={300}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: PANEL_OFFSET}}
+        style={{
+          width: '100%',
+          marginTop: useHeaderHeight(),
+        }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          paddingBottom: PANEL_OFFSET + 20,
+          paddingLeft: 15,
+          paddingRight: 15,
+        }}
       >
-        <LinearLayout height="100%" width="100%" px="15px" orientation="verti">
+        <LinearLayout orientation="verti">
           <TextView
             mb="24px"
             alignSelf="center"
@@ -596,7 +596,7 @@ const SendTransactionInputModal = (prop: Props) => {
           </LinearLayout>
         </LinearLayout>
       </InputScrollView>
-    </SwiperPanel>
+    )
   )
 }
 
