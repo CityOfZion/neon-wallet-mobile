@@ -21,6 +21,7 @@ public class BasePackageList {
         new expo.modules.permissions.PermissionsPackage(),
         new expo.modules.print.PrintPackage(),
         new expo.modules.securestore.SecureStorePackage(),
+        new expo.modules.sharing.SharingPackage(),
         new expo.modules.splashscreen.SplashScreenPackage(),
         new expo.modules.sqlite.SQLitePackage(),
         new expo.modules.updates.UpdatesPackage()
