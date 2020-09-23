@@ -1,10 +1,11 @@
 import {useNavigation} from '@react-navigation/native'
-import React, {Fragment} from 'react'
+import React, {Fragment, useRef} from 'react'
 
 import {Facade} from '~src/app/Facade'
 import NeonQRCode from '~src/components/QRCode'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {LinearLayout} from '~src/styles/styled-components'
+import ViewShot from 'react-native-view-shot'
 
 interface QRCodeWithCopyButtonProps {
   qrCodeValue: string
@@ -12,20 +13,28 @@ interface QRCodeWithCopyButtonProps {
 
 export const QRCodeWithCopyButton = (props: QRCodeWithCopyButtonProps) => {
   const navigation = useNavigation()
+  const qrCodeView = useRef<ViewShot>(null)
+
+  const captureAndNavigate = async () => {
+    const uri = await qrCodeView.current?.capture?.()
+
+    navigation.navigate(Facade.route.CopyContextModal.name, {
+      qrCode: uri,
+      address: props.qrCodeValue,
+    })
+  }
+
   return (
     <Fragment>
-      <NeonQRCode content={props.qrCodeValue} qrCodeWidth={300} />
+      <ViewShot ref={qrCodeView}>
+        <NeonQRCode content={props.qrCodeValue} qrCodeWidth={300} />
+      </ViewShot>
       <LinearLayout width={'100%'} height={54} my={'12%'}>
         <ThemedButton
           label={Facade.t('app.copyToClipboard')}
           srcIcon={require('~/src/assets/images/icon-copy-green.png')}
           iconSize={[19, 23]}
-          onPress={() => {
-            navigation.navigate(Facade.route.CopyContextModal.name, {
-              qrCode: 'TODO', // TODO: NW-307
-              address: props.qrCodeValue,
-            })
-          }}
+          onPress={captureAndNavigate}
         />
       </LinearLayout>
     </Fragment>

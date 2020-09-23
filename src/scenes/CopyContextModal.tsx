@@ -8,9 +8,11 @@ import {Facade} from '~src/app/Facade'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import * as Sharing from 'expo-sharing'
+import {SharingOptions} from 'expo-sharing/src/Sharing'
 
 export interface CopyContextModalParams {
-  qrCode: any // TODO: NW-307
+  qrCode: string // File URI
   address: string
 }
 
@@ -33,11 +35,17 @@ export const CopyContextModal = (props: CopyContextModalProps) => {
 
   const items: ListItem[] = [
     {
-      title: Facade.t('modals.copyContext.copyQR'),
+      title: Facade.t('modals.copyContext.shareQr'),
       source: require('~src/assets/images/icon-circle-qr-primary.png'),
       onClick: () => {
-        console.log('TODO')
-      }, // TODO: NW-307
+        const options: SharingOptions = {
+          mimeType: 'image/*',
+          dialogTitle: Facade.t('modals.copyContext.shareQr'),
+          UTI: 'public.png',
+        }
+
+        Sharing.shareAsync(props.route.params.qrCode, options)
+      },
     },
     {
       title: Facade.t('modals.copyContext.copyAddress'),
