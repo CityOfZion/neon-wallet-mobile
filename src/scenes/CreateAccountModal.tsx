@@ -125,7 +125,7 @@ export default function CreateAccountModal(props: Props) {
             marginBottom="24px"
           />
 
-          <ColorSelector onSelect={setColor} />
+          <ColorSelector account={account} onSelect={setColor} />
         </LinearLayout>
       </AwaitActivity>
     </SwiperPanel>
