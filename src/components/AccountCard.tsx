@@ -224,9 +224,9 @@ const AccountCard: React.FC<Props> = (props) => {
             mb={3 * unit}
             fontSize={14 * unit}
             color="white"
-            textAlign="left"
             fontWeight="bold"
             mt={20 * unit}
+            ml={30 * unit}
           >
             {(!props.hideBalance && Facade.t('paymentCard.balance')) || ''}
           </TextView>
@@ -270,7 +270,7 @@ const AccountCard: React.FC<Props> = (props) => {
           >
             <LinearLayout weight={1}>
               <LinearLayout orientation={'horiz'}>
-                {props.account.accountType === 'watch' && (
+                {props.account.accountType === 'watch' ? (
                   <ImageView
                     width={21 * unit}
                     height={21 * unit}
@@ -281,7 +281,7 @@ const AccountCard: React.FC<Props> = (props) => {
                     alignSelf={'center'}
                     mr={8 * unit}
                   />
-                )}
+                ) : <LinearLayout ml={30 * unit}/>}
 
                 <LinearLayout>
                   <TextView
