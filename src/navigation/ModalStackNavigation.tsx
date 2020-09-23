@@ -8,6 +8,7 @@ import {
   PersistContact,
   PersistContactParams,
 } from '~src/components/contacts/PersistContact'
+import SendModalStackNavigation from '~src/navigation/SendModalStackNavigation'
 import {
   AccountQRCode,
   AccountQRCodeParams,
@@ -57,12 +58,11 @@ import SendTransactionInputModal, {
   SendTransactionInputModalParams,
 } from '~src/scenes/send/SendTransactionInputModal'
 import SendTransactionReviewModal, {
-  SendModalParams,
+  SendTransactionReviewModalParams,
 } from '~src/scenes/send/SendTransactionReviewModal'
 import SendWalletSelectionModal, {
   SendWalletSelectionModalParams,
 } from '~src/scenes/send/SendWalletSelectionModal'
-import SendModalStackNavigation from '~src/navigation/SendModalStackNavigation'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
@@ -94,13 +94,9 @@ export type ModalParams =
   | DefaultNavigationParam<GetAccountParams>
   | DefaultNavigationParam<EditAccountModalParam>
   | DefaultNavigationParam<AccountQRCodeParams>
-  | DefaultNavigationParam<SendWalletSelectionModalParams>
-  | DefaultNavigationParam<SendModalParams>
   | DefaultNavigationParam<ReceiveQrCodeModalParams>
   | DefaultNavigationParam<ContactsModalParams>
-  | DefaultNavigationParam<SendTransactionConfirmationModalParams>
   | DefaultNavigationParam<PersistContactParams>
-  | DefaultNavigationParam<SendTransactionInputModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -145,7 +141,7 @@ const ModalStackNavigation = () => {
           component={ReceiveQrCodeModal}
         />
         <ModalStack.Screen
-          name={Facade.route.SendWalletSelectionModal.name}
+          name={Facade.route.SendModalStack.name}
           component={SendModalStackNavigation}
         />
         <ModalStack.Screen
