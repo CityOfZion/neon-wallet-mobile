@@ -13,10 +13,10 @@ import GetAccountView, {
   GetAccountParams,
 } from '~src/scenes/Account/GetAccountView'
 import GetWalletView, {GetWalletParams} from '~src/scenes/GetWalletView'
-import ListWalletView from '~src/scenes/ListWalletView'
+import ListWalletView, {ListWalletParams} from '~src/scenes/ListWalletView'
 
 export type WalletStackParamList = {
-  ListWallets: undefined
+  ListWalletsPage: ListWalletParams
   GetWallet: GetWalletParams
   GetAccount: GetAccountParams
   AccountAssetDetail: AccountAssetDetailParams
@@ -36,9 +36,11 @@ const WalletStackNavigation = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <WalletStack.Navigator initialRouteName={Facade.route.ListWallets.name}>
+      <WalletStack.Navigator
+        initialRouteName={Facade.route.ListWalletsPage.name}
+      >
         <WalletStack.Screen
-          name={Facade.route.ListWallets.name}
+          name={Facade.route.ListWalletsPage.name}
           component={ListWalletView}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({

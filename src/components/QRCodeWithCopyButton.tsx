@@ -1,11 +1,11 @@
 import {useNavigation} from '@react-navigation/native'
 import React, {Fragment, useRef} from 'react'
+import ViewShot from 'react-native-view-shot'
 
 import {Facade} from '~src/app/Facade'
 import NeonQRCode from '~src/components/QRCode'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {LinearLayout} from '~src/styles/styled-components'
-import ViewShot from 'react-native-view-shot'
 
 interface QRCodeWithCopyButtonProps {
   qrCodeValue: string

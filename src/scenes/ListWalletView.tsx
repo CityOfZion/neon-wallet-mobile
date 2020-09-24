@@ -1,4 +1,4 @@
-import {CommonActions} from '@react-navigation/native'
+import {CommonActions, RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useRef, useState} from 'react'
@@ -25,8 +25,13 @@ import {
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 import {Exchange} from '~src/types/exchange'
 
+export interface ListWalletParams {
+  wallet?: Wallet
+}
+
 interface WalletProps {
   navigation: StackNavigationProp<WalletStackParamList & MoreStackParamList>
+  route: RouteProp<WalletStackParamList, 'ListWalletsPage'>
   theme: ApplicationTheme
 }
 
@@ -206,6 +211,7 @@ const ListWalletView = (props: WalletProps) => {
                 wallets={wallets}
                 onSelect={setSelectedWallet}
                 onPress={selectEvent}
+                goTo={props.route.params?.wallet}
               />
             ) : (
               <EmptyListComponent />
