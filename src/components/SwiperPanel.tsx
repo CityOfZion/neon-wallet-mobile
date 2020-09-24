@@ -123,21 +123,25 @@ const Header = (props: SwiperProps & {mb: number}) => {
     >
       <LinearLayout weight={1} alignItems="flex-start" pl={4}>
         <AwaitActivity name={'swiperLeft'}>
-          {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
-          {typeof props.leftButton === 'string' ? (
-            <LinearLayout ml={-4}>
-              <ThemedButton
-                label={props.leftButton}
-                onPress={() => props.onLeftPress && props.onLeftPress()}
-                textColor={'text.0'}
-                fontSize={'md'}
-                rounded={false}
-                flat={true}
-              />
-            </LinearLayout>
-          ) : (
-            props.leftButton
-          )}
+          <TouchableWithoutFeedback
+            onPress={() => props.onLeftPress && props.onLeftPress()}>
+            {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
+            {typeof props.leftButton === 'string' ? (
+              <LinearLayout ml={-4}>
+                <LinearLayout pointerEvents={'none'}>
+                  <ThemedButton
+                    label={props.leftButton}
+                    textColor={'text.0'}
+                    fontSize={'md'}
+                    rounded={false}
+                    flat={true}
+                  />
+                </LinearLayout>
+              </LinearLayout>
+            ) : (
+              props.leftButton
+            )}
+          </TouchableWithoutFeedback>
         </AwaitActivity>
       </LinearLayout>
 
@@ -172,21 +176,26 @@ const Header = (props: SwiperProps & {mb: number}) => {
 
       <LinearLayout weight={1} alignItems="flex-end" pr={4}>
         <AwaitActivity name={'swiperRight'}>
-          {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
-          {typeof props.rightButton === 'string' ? (
+          <TouchableWithoutFeedback
+            onPress={() => props.onRightPress && props.onRightPress()}
+          >
             <LinearLayout mr={-4}>
-              <ThemedButton
-                label={props.rightButton}
-                onPress={() => props.onRightPress && props.onRightPress()}
-                textColor={'text.0'}
-                fontSize={'md'}
-                rounded={false}
-                flat={true}
-              />
+              <LinearLayout pointerEvents={'none'}>
+                {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
+                {typeof props.rightButton === 'string' ? (
+                  <ThemedButton
+                    label={props.rightButton}
+                    textColor={'text.0'}
+                    fontSize={'md'}
+                    rounded={false}
+                    flat={true}
+                  />
+                ) : (
+                  props.rightButton
+                )}
+              </LinearLayout>
             </LinearLayout>
-          ) : (
-            props.rightButton
-          )}
+          </TouchableWithoutFeedback>
         </AwaitActivity>
       </LinearLayout>
     </LinearLayout>

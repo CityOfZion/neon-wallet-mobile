@@ -12,6 +12,7 @@ import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import ThemedButton from '~src/components/themed/ThemedButton'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList & TabStackParamList>
@@ -66,9 +67,14 @@ export default function ReorderWalletModal(props: Props) {
       onClose={props.navigation.goBack}
       leftButton={Facade.t('modals.reorderWallet.cancel')}
       rightButton={
-        <TextView color="primary" fontSize={16} fontFamily="regular">
-          {Facade.t('modals.reorderWallet.save')}
-        </TextView>
+        <ThemedButton
+          label={Facade.t('modals.reorderWallet.save')}
+          textColor={'primary'}
+          fontSize={'16px'}
+          fontFamily={'regular'}
+          rounded={false}
+          flat={true}
+        />
       }
       onLeftPress={controller.close}
       onRightPress={() => Facade.await.run('commitAndClose', commitAndClose)}

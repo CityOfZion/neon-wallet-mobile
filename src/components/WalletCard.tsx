@@ -176,7 +176,7 @@ const AccountContainer = (props: {
 }
 
 const WalletCard: React.FC<Props> = (props) => {
-  const {accounts, exchange} = useSelector((state: RootState) => state.app)
+  const {wallets, accounts, exchange} = useSelector((state: RootState) => state.app)
   const {currency} = useSelector((state: RootState) => state.settings)
 
   const [viewHeight, setViewHeight] = useState<number>(0)
@@ -184,7 +184,7 @@ const WalletCard: React.FC<Props> = (props) => {
 
   useEffect(() => {
     setWalletAccounts(props.wallet.getAccounts(accounts))
-  }, [accounts])
+  }, [wallets, accounts])
 
   const layoutEvent = (event: LayoutChangeEvent) => {
     const {height} = event.nativeEvent.layout
