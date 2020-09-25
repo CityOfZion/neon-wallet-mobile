@@ -41,13 +41,38 @@ export default function ColorSelector(props: Props) {
         props.onSelect && props.onSelect(color)
       }}
     >
-      <LinearLayout width={71} height={71} borderRadius={9} overflow="hidden">
-        <LinearGradient
+      <RelativeLayout
+        width={71}
+        height={71}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <LinearLayout
           width="100%"
           height="100%"
-          colors={[color, Facade.filter.toDarkerShade(color)]}
-        />
-      </LinearLayout>
+          borderRadius={9}
+          overflow="hidden"
+          position="absolute"
+        >
+          <LinearGradient
+            width="100%"
+            height="100%"
+            colors={[Facade.filter.toDarkerShade(color), color]}
+          />
+        </LinearLayout>
+        <LinearLayout
+          width="97%"
+          height="97%"
+          borderRadius={9}
+          overflow="hidden"
+        >
+          <LinearGradient
+            width="100%"
+            height="100%"
+            colors={[color, Facade.filter.toDarkerShade(color)]}
+          />
+        </LinearLayout>
+      </RelativeLayout>
     </TouchableWithoutFeedback>
   ))
 
