@@ -18,7 +18,6 @@ import ModalStackNavigation, {
 import TabNavigation, {TabParams} from '~src/navigation/TabNavigation'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 import QRCodeScan, {QRCodeScanParams} from '~src/scenes/QRCodeScan'
-import {RootStore} from '~src/store/RootStore'
 
 export type RootStackParamList = {
   Tab: TabParams

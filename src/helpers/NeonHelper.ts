@@ -85,4 +85,27 @@ export abstract class NeonHelper {
 
     return invokeResponse.tx?.hash ?? null
   }
+
+  static async claimGas(address: string) {
+    const settings = (await Storage.settings.load()) ?? new Settings()
+    const accounts = (await Storage.accounts.load()) ?? []
+
+    const account = accounts.find((it) => it.address === address)
+    const neoAccount = await account?.getNeoAccount()
+
+    if (!neoAccount) {
+      throw new Error('Neo Account not found')
+    }
+
+    const apiProvider = new api.neoscan.instance(
+      settings.network.networkDeprecatedLabel
+    )
+
+    const response = await api.claimGas({
+      api: apiProvider,
+      account: neoAccount,
+    })
+
+    return response.claims?.claims ?? []
+  }
 }

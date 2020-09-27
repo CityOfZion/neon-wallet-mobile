@@ -197,7 +197,8 @@
       "transactions": "#translateme",
       "pendingTransactions": "#translateme",
       "completedTransactions": "#translateme",
-      "claimAsset": "#translateme"
+      "claimAsset": "#translateme",
+      "claimInProgress": "#translateme"
     },
     "createAccount": {
       "title": "#translateme",
