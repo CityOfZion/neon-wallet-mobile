@@ -8,6 +8,7 @@ import {
   PersistContact,
   PersistContactParams,
 } from '~src/components/contacts/PersistContact'
+import SendModalStackNavigation from '~src/navigation/SendModalStackNavigation'
 import {
   AccountQRCode,
   AccountQRCodeParams,
@@ -62,7 +63,6 @@ import SendTransactionReviewModal, {
 import SendWalletSelectionModal, {
   SendWalletSelectionModalParams,
 } from '~src/scenes/send/SendWalletSelectionModal'
-import SendModalStackNavigation from '~src/navigation/SendModalStackNavigation'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined

@@ -260,6 +260,7 @@
     },
     "listWallets": {
       "changeSinceLastVisit": "CHANGE SINCE LAST VISIT %{date}",
+      "changeInLast24hours": "CHANGE IN LAST 24HRS",
       "createFirstWallet": "Create first wallet",
       "noBackup" : "No backup found. Backup your wallet to avoid fund loss.",
       "incompleteBalanceWarningTitle" : "Incomplete price data",

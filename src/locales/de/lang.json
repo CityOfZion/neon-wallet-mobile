@@ -173,6 +173,7 @@
   "screens": {
     "listWallets": {
       "changeSinceLastVisit": "#translateme",
+      "changeInLast24hours": "#translateme",
       "createFirstWallet": "#translateme"
     },
     "getWallet": {

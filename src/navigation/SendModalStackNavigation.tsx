@@ -1,7 +1,12 @@
 import {RouteProp} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
-import {ImageSourcePropType, Route, TouchableWithoutFeedback, View} from 'react-native'
+import {
+  ImageSourcePropType,
+  Route,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
@@ -10,23 +15,31 @@ import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import SwiperPanel, {
-  BackButton, PANEL_OFFSET, SwiperController,
+  BackButton,
+  PANEL_OFFSET,
+  SwiperController,
   useSwiperController,
 } from '~src/components/SwiperPanel'
+import HeaderActionButton from '~src/components/layout/HeaderActionButton'
+import HeaderBackButton from '~src/components/layout/HeaderBackButton'
+import HeaderBar from '~src/components/layout/HeaderBar'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import SendAccountSelectionModal, {
+  SendAccountSelectionModalParams,
+} from '~src/scenes/send/SendAccountSelectionModal'
+import SendTransactionConfirmationModal, {
+  SendTransactionConfirmationModalParams,
+} from '~src/scenes/send/SendTransactionConfirmationModal'
+import SendTransactionInputModal, {
+  SendTransactionInputModalParams,
+} from '~src/scenes/send/SendTransactionInputModal'
+import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
 import SendWalletSelectionModal, {
   SendWalletSelectionModalParams,
 } from '~src/scenes/send/SendWalletSelectionModal'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import HeaderBar from '~src/components/layout/HeaderBar'
-import HeaderActionButton from '~src/components/layout/HeaderActionButton'
-import SendAccountSelectionModal, {SendAccountSelectionModalParams} from '~src/scenes/send/SendAccountSelectionModal'
-import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
-import SendTransactionInputModal, {SendTransactionInputModalParams} from '~src/scenes/send/SendTransactionInputModal'
-import SendTransactionConfirmationModal, {SendTransactionConfirmationModalParams} from '~src/scenes/send/SendTransactionConfirmationModal'
-import HeaderBackButton from '~src/components/layout/HeaderBackButton'
 
 export type SendModalStackParamList = {
   SendWalletSelectionModal: SendWalletSelectionModalParams

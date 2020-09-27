@@ -18,6 +18,9 @@ export class LightTheme extends ApplicationTheme {
     quaternary: '#58717b',
     quinary: '#d355e7',
 
+    success: '#4cffb3',
+    danger: '#db5860',
+
     background: {
       0: '#ddd',
       1: '#bbb',
