@@ -18,6 +18,9 @@ export class DarkTheme extends ApplicationTheme {
     quaternary: '#58717b',
     quinary: '#d355e7',
 
+    success: '#4cffb3',
+    danger: '#db5860',
+
     background: {
       0: '#1E252A',
       1: '#283239',

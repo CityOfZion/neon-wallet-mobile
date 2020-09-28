@@ -1,7 +1,8 @@
 import {CommonActions, RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useRef, useState} from 'react'
+import moment from 'moment'
+import React, {useEffect, useRef, useState} from 'react'
 import {Alert, TouchableWithoutFeedback, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -42,19 +43,46 @@ const WalletChangeComponent = (props: {
   exchange: Exchange
   onPressWarning: () => void
 }) => {
+  const {currency, language} = useSelector((state: RootState) => state.settings)
+  const {exchange} = useSelector((state: RootState) => state.app)
+  const [variationInPercent, setVariationInPercent] = useState(0)
+
   if (!props.wallet) return <View />
+
+  useEffect(() => {
+    Facade.await.run('populateVariation', () => populate())
+  }, [props.wallet])
+
+  const populate = async () => {
+    const pastOneDay = moment().add(-1, 'day')
+
+    const variation =
+      (await props.wallet?.getBalanceVariationFromPastExchange(
+        currency,
+        exchange,
+        pastOneDay
+      )) ?? 0
+
+    const balance = props.wallet?.calculateBalance(currency, exchange) ?? 0
+
+    if (balance !== 0) {
+      setVariationInPercent((variation / balance) * 100)
+    } else {
+      setVariationInPercent(0)
+    }
+  }
 
   return (
     <>
-      <LinearLayout mb={6} orientation="verti" alignItems="center">
+      <LinearLayout mb={6} alignItems={'center'}>
         {
-          <TextView fontSize="11px" color="text.2">
+          <TextView fontSize={'11px'} color={'text.2'}>
             {props.wallet.formattedLastVisitedAt}
           </TextView>
         }
 
-        <LinearLayout orientation="horiz" minHeight={56}>
-          <TextView fontSize="36px" color="text.0" fontFamily="medium">
+        <LinearLayout orientation={'horiz'} minHeight={56}>
+          <TextView fontSize={'36px'} color={'text.0'} fontFamily={'medium'}>
             {props.wallet.calculateBalanceFormatted(
               props.currency,
               props.language,
@@ -65,18 +93,35 @@ const WalletChangeComponent = (props: {
           {props.wallet.hasFunds && (
             <ButtonView onPress={props.onPressWarning}>
               <ImageView
-                mt="8px"
-                mx="4px"
+                mt={'8px'}
+                mx={'4px'}
                 source={require('~src/assets/images/icon-warning-green.png')}
               />
             </ButtonView>
           )}
-
-          {/*TODO: fix percentage*/}
-          {/*<TextView fontSize="36px" color="primary" fontFamily="semibold">*/}
-          {/*  {calculateChangePercentage(wallet)}*/}
-          {/*</TextView>*/}
         </LinearLayout>
+
+        <AwaitActivity name={'populateVariation'}>
+          <LinearLayout orientation={'horiz'}>
+            <TextView
+              mr={2}
+              fontSize={'sm'}
+              color={'text.2'}
+              fontFamily={'semibold'}
+            >
+              {Facade.t('screens.listWallets.changeInLast24hours')}
+            </TextView>
+
+            <TextView
+              fontSize={'sm'}
+              color={variationInPercent >= 0 ? 'success' : 'danger'}
+              fontFamily={'semibold'}
+            >
+              {variationInPercent > 0 ? '+' : ''}
+              {Facade.filter.decimal(variationInPercent, language, 2)}%
+            </TextView>
+          </LinearLayout>
+        </AwaitActivity>
       </LinearLayout>
     </>
   )
@@ -177,15 +222,6 @@ const ListWalletView = (props: WalletProps) => {
       [{text: Facade.t('screens.listWallets.incompleteBalanceWarningButton')}],
       {cancelable: false}
     )
-
-  const calculateChangePercentage = (wallet: Wallet) => {
-    return null
-    // TODO: fix percentage
-    // const changePercentage =
-    //   ((wallet.currentValue - wallet.previousValue) / wallet.previousValue) *
-    //   100
-    // return `${changePercentage > 0 ? '+' : ''}${Math.round(changePercentage)}%`
-  }
 
   return (
     <ScreenLayout

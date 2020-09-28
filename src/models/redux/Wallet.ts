@@ -3,13 +3,15 @@ import {
   HttpExpose,
   ResponseSerialize,
 } from '@simpli/serialized-request'
-import moment from 'moment'
+import send from 'expo-cli/build/commands/send'
+import moment, {Moment} from 'moment'
 
 import {Facade} from '~src/app/Facade'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Exchange} from '~src/types/exchange'
 
 @HttpExclude()
@@ -80,6 +82,35 @@ export class Wallet implements WalletState {
     const mnemonic = await this.getMnemonic()
     if (!mnemonic) return null
     return Facade.asteroid.generateNeoAccount(mnemonic, index)
+  }
+
+  async getBalanceFromPastExchange(currency: Currency, date: Moment) {
+    const txs: SenderTransaction[] = []
+    const promises: Promise<void>[] = []
+
+    for (const token of this.tokenAssets) {
+      const senderTx = new SenderTransaction()
+      senderTx.sentAt = date.format()
+      senderTx.token = Facade.utils.clone(token)
+      promises.push(senderTx.populateExchange())
+      txs.push(senderTx)
+    }
+
+    await Promise.all(promises)
+
+    const balances = txs.map((it) => it.token?.exchangeToken(currency) ?? 0)
+    return Facade.lodash.sum(balances)
+  }
+
+  async getBalanceVariationFromPastExchange(
+    currency: Currency,
+    exchange: Exchange,
+    date: Moment
+  ) {
+    const pastBalance = await this.getBalanceFromPastExchange(currency, date)
+    const balance = this.calculateBalance(currency, exchange)
+
+    return balance - pastBalance
   }
 
   populateTokenAssets(pool: Account[]) {
