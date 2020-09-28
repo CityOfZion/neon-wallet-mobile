@@ -124,7 +124,8 @@ const Header = (props: SwiperProps & {mb: number}) => {
       <LinearLayout weight={1} alignItems="flex-start" pl={4}>
         <AwaitActivity name={'swiperLeft'}>
           <TouchableWithoutFeedback
-            onPress={() => props.onLeftPress && props.onLeftPress()}>
+            onPress={() => props.onLeftPress && props.onLeftPress()}
+          >
             {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
             {typeof props.leftButton === 'string' ? (
               <LinearLayout ml={-4}>
