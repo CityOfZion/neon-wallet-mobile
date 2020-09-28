@@ -3,6 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import PropTypes from 'prop-types'
 import React from 'react'
 
+import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
@@ -16,7 +17,7 @@ export interface Step5CreateWalletParams {
 }
 
 interface Props {
-  navigation: StackNavigationProp<TabStackParamList>
+  navigation: StackNavigationProp<TabStackParamList & WalletStackParamList>
   route: RouteProp<MoreStackParamList, 'Step5CreateWallet'>
 }
 
@@ -72,11 +73,8 @@ const Step5CreateWalletPage = (props: Props) => {
               index: 0,
               routes: [{name: Facade.route.MorePage.name}],
             })
-            props.navigation.navigate(Facade.route.ListWallets.name, {
-              screen: Facade.route.GetWallet.name,
-              params: {
-                wallet: props.route.params.wallet,
-              },
+            props.navigation.navigate(Facade.route.ListWalletsPage.name, {
+              wallet: props.route.params.wallet,
             })
           }}
           label={Facade.t('step5CreateWallet.viewWallet')}

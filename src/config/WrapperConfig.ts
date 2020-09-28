@@ -24,6 +24,7 @@ export class WrapperConfig {
     'WelcomeModal',
     'QuickTools',
     'ListWallets',
+    'ListWalletsPage',
     'Contacts',
     'Settings',
     'SettingsPage',

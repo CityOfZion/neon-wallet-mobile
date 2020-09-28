@@ -10,11 +10,12 @@ import {LinearLayout} from '~src/styles/styled-components'
 interface Props {
   onPress?: (wallet: Wallet) => void
   onSelect?: (wallet: Wallet) => void
+  goTo?: Wallet
   wallets: Wallet[]
 }
 
 const WalletPicker: React.FC<Props> = (props: Props) => {
-  const {wallets} = props
+  const {wallets, goTo} = props
 
   const pressEvent = async (wallet: Wallet) => {
     if (props.onPress) {
@@ -27,6 +28,8 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
       props.onSelect(wallets[index])
     }
   }
+
+  const index = goTo ? wallets.findIndex((it) => it.id === goTo.id) : 0
 
   return (
     <Carousel<Wallet>
@@ -43,7 +46,7 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
       swipeThreshold={5}
       enableSnap={true}
       useScrollView={true}
-      firstItem={0}
+      firstItem={index > 0 ? index : 0}
       onLayout={() => selectEvent(0)}
       onSnapToItem={(index) => selectEvent(index)}
       renderItem={({item}) => (
