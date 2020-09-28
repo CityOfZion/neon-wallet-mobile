@@ -18,7 +18,7 @@ import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
-export interface SendModalParams {
+export interface SendTransactionReviewModalParams {
   transactionHash: string
 }
 

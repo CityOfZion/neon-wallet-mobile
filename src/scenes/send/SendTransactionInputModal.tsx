@@ -26,6 +26,7 @@ import {
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
 import {RootState, RootStore} from '~src/store/RootStore'
 import {
@@ -34,7 +35,6 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 
 export interface SendTransactionInputModalParams {
   walletTitle: string

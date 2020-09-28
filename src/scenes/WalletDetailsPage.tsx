@@ -1,0 +1,61 @@
+import {RouteProp} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
+import React from 'react'
+
+import {Facade} from '~src/app/Facade'
+import InputLabel from '~src/components/InputLabel'
+import InputWithValidation from '~src/components/InputWithValidation'
+import HeaderActionButton from '~src/components/layout/HeaderActionButton'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
+import {Wallet} from '~src/models/redux/Wallet'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
+
+export interface WalletDetailsParamList {
+  wallet: Wallet
+}
+
+interface WalletDetailsProps {
+  route: RouteProp<SettingsStackParamList, 'MyWalletOptions'>
+  navigation: StackNavigationProp<SettingsStackParamList & ModalStackParamList>
+}
+
+const WalletDetailsPage = (props: WalletDetailsProps) => {
+  const {wallet} = props.route.params
+
+  props.navigation.setOptions({
+    headerRight: () =>
+      HeaderActionButton({
+        actionTitle: Facade.t('app.edit'),
+        actionButtonStyle: 'default',
+        actionOnPress: () => {
+          // TODO: Edit modal
+          // props.navigation.navigate(Facade.route.Modal.name, {
+          //   screen: Facade.route.EditWalletModal.name,
+          //   params: {
+          //     wallet,
+          //   },
+          // })
+        },
+      }),
+  })
+
+  return (
+    <ScreenLayout padding={20}>
+      <InputLabel title={'Wallet Name'} capitalize={true} marginBottom="10px" />
+      <InputWithValidation
+        color="text.0"
+        sideMargins={0}
+        value={wallet.name ?? ''}
+        validator={() => true}
+        separatorColor="background.13"
+        hidePaste={true}
+        hideScan={true}
+        showContacts={false}
+        editable={false}
+      />
+    </ScreenLayout>
+  )
+}
+
+export default WalletDetailsPage

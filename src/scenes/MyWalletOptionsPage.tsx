@@ -32,6 +32,9 @@ const MyWalletOptionsPage = (props: Props) => {
         icon={require('~src/assets/images/icon-details-green.png')}
         iconMarginRight={4}
         arrowDirection={RightIconType.ARROW_RIGHT}
+        onPress={() =>
+          props.navigation.navigate(Facade.route.WalletDetails.name, {wallet})
+        }
       />
 
       {wallet.walletType === 'standard' && (

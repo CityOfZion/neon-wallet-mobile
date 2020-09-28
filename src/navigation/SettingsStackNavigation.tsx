@@ -3,6 +3,10 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import WalletDetailsPage, {
+  WalletDetailsParamList,
+} from '../scenes/WalletDetailsPage'
+
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
@@ -19,6 +23,7 @@ export type SettingsStackParamList = {
   SettingsPage: undefined
   MyWallets: undefined
   MyWalletOptions: {wallet: Wallet} & HeaderCustomProps
+  WalletDetails: WalletDetailsParamList
   Step1BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
   Step2BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
   Step3BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
@@ -66,6 +71,19 @@ const SettingsStackNavigation = () => {
           component={MyWalletOptionsPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
+              theme,
+              route,
+            })
+          }
+        />
+
+        <SettingsStack.Screen
+          name={Facade.route.WalletDetails.name}
+          component={WalletDetailsPage}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.WalletDetails.translate(),
+              image: require('~src/assets/images/icon-details-white.png'),
               theme,
               route,
             })

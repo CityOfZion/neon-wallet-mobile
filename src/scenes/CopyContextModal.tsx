@@ -1,5 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import * as Sharing from 'expo-sharing'
+import {SharingOptions} from 'expo-sharing/src/Sharing'
 import React, {Fragment} from 'react'
 import {ImageSourcePropType, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
@@ -8,8 +10,6 @@ import {Facade} from '~src/app/Facade'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import * as Sharing from 'expo-sharing'
-import {SharingOptions} from 'expo-sharing/src/Sharing'
 
 export interface CopyContextModalParams {
   qrCode: string // File URI
