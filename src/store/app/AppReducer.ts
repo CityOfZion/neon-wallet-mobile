@@ -21,6 +21,7 @@ import {TokensDispatcher} from '~src/store/app/dispatchers/TokensDispatcher'
 import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
 import {Exchange, ExchangeResponse} from '~src/types/exchange'
 import {TokenResponse} from '~src/types/token'
+import {showMessage} from 'react-native-flash-message'
 
 export class AppReducer extends ReducerWrapper<
   AppActionsType,
@@ -256,8 +257,11 @@ export class AppReducer extends ReducerWrapper<
     syncPendingTransactions: (): AsyncAction => {
       return async (dispatch, getState) => {
         const accounts = getState().app.accounts
+        let hasAnyAccountChanged = false
 
         for (const account of accounts) {
+          let hasAccountChanged = false
+
           const senderTxs = account.pendingTransactions.flatMap(
             (it) => it.transactions
           )
@@ -270,20 +274,40 @@ export class AppReducer extends ReducerWrapper<
                 const index = senderTxs.findIndex(
                   (it) => it.transactionHash === confirmedTx.txid
                 )
-                if (index >= 0) senderTxs.splice(index, 1)
+                if (index >= 0) {
+                  if (senderTxs[index].senderAddress === 'claim') {
+                    showMessage({
+                      message: Facade.t('toast.gasClaimSuccess'),
+                      type: 'success',
+                    })
+                  } else {
+                    showMessage({
+                      message: Facade.t('toast.transactionCompleted'),
+                      type: 'success',
+                    })
+                  }
+
+                  senderTxs.splice(index, 1)
+                  hasAccountChanged = true
+                  hasAnyAccountChanged = true
+                }
               } catch (e) {
                 //does nothing
               }
             }
           }
 
-          account.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
-            senderTxs
-          )
+          if (hasAccountChanged) {
+            account.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
+              senderTxs
+            )
+          }
         }
 
-        dispatch(this.commit('SET_ACCOUNTS', {accounts}))
-        await Storage.accounts.save(accounts)
+        if (hasAnyAccountChanged) {
+          dispatch(this.commit('SET_ACCOUNTS', {accounts}))
+          await Storage.accounts.save(accounts)
+        }
       }
     },
 

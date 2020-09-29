@@ -1,7 +1,8 @@
-import {RouteProp, useFocusEffect} from '@react-navigation/native'
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useState, useCallback, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
+import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -11,9 +12,12 @@ import TabSelector from '~src/components/TabSelector'
 import TransactionsList from '~src/components/TransactionsList'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
 import {Lang} from '~src/enums/Lang'
+import {NeonHelper} from '~src/helpers/NeonHelper'
 import {NeoNode} from '~src/models/NeoNode'
 import {Account} from '~src/models/redux/Account'
+import {AddressRequest} from '~src/models/request/AddressRequest'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
@@ -25,6 +29,7 @@ import {
 } from '~src/styles/styled-components'
 
 export interface GetAccountParams {
+  walletTitle: string
   account: Account
 }
 
@@ -32,6 +37,10 @@ interface GetAccountViewProps {
   navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>
   route: RouteProp<WalletStackParamList, 'GetAccount'>
 }
+
+const disabledSendImage = require('~/src/assets/images/button-send-small-disabled.png')
+const selectedSendImage = require('~/src/assets/images/button-send-small-selected.png')
+const defaultSendImage = require('~/src/assets/images/button-send-small.png')
 
 const ReceiveButton = (props: {onPress: () => any}) => {
   const selectedReceiveImage = require('~/src/assets/images/button-receive-small-selected.png')
@@ -60,11 +69,7 @@ const ReceiveButton = (props: {onPress: () => any}) => {
   )
 }
 
-const disabledSendImage = require('~/src/assets/images/button-send-small-disabled.png')
-const selectedSendImage = require('~/src/assets/images/button-send-small-selected.png')
-const defaultSendImage = require('~/src/assets/images/button-send-small.png')
-
-function SendButton(props: {onPress?: () => any}) {
+const SendButton = (props: {onPress?: () => any}) => {
   const [isPressed, setPressed] = useState(false)
   let backgroundImage = isPressed ? selectedSendImage : defaultSendImage
   backgroundImage = props.onPress ? backgroundImage : disabledSendImage
@@ -110,7 +115,7 @@ const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
 const GetAccountView = (props: GetAccountViewProps) => {
   const {account} = props.route.params
 
-  const appWallets = useSelector((state: RootState) => state.app.wallets)
+  const walletsPool = useSelector((state: RootState) => state.app.wallets)
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
   const {language} = useSelector((state: RootState) => state.settings)
@@ -119,9 +124,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   const [currentPage, setCurrentPage] = useState(1)
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
-  const isWatchAccount = Boolean(
-    props.route.params.account.accountType === 'watch'
-  )
+  const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>()
+
+  const isWatchAccount = props.route.params.account.accountType === 'watch'
+  const wallet = props.route.params.account.getWallet(walletsPool)
 
   props.navigation.setOptions({
     headerTitle: () => TitleComponent({nodesPool, language}),
@@ -141,11 +147,37 @@ const GetAccountView = (props: GetAccountViewProps) => {
   })
 
   useEffect(() => {
+    Facade.await.run('populateUnclaimed', () => populateUnclaimed())
+  }, [])
+
+  useEffect(() => {
     if (!isAssetsTabSelected) {
       setCurrentPage(1)
-      Facade.await.run('populateTransaction', () => fetchTransaction(1))
+      Facade.await.run('fetchTransaction', () => fetchTransaction(1))
     }
-  }, [isAssetsTabSelected])
+  }, [isAssetsTabSelected, account.pendingTransactions])
+
+  useEffect(() => {
+    const senderTxs = account.pendingTransactions.flatMap(
+      (it) => it.transactions
+    )
+
+    const exist = senderTxs.some((it) => it.receiverAddress === account.address)
+    if (exist) {
+      Facade.await.init(`ClaimGas@${account.address}`)
+    } else {
+      Facade.await.done(`ClaimGas@${account.address}`)
+    }
+  }, [account.pendingTransactions])
+
+  const populateUnclaimed = async () => {
+    if (!account.address) return
+
+    const request = new AddressRequest(account.address)
+    const response = await request.getUnclaimed()
+
+    setUnclaimedGasAmount(response.unclaimed ?? undefined)
+  }
 
   const fetchTransaction = async (currentPage: number) => {
     const {pageNumber} = await account.populateTransactions(
@@ -157,6 +189,30 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
     // Save the new cache
     await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
+  }
+
+  const claimGas = async () => {
+    if (Facade.await.inAction(`ClaimGas@${account.address}`)) return
+    if (!account.address || !unclaimedGasAmount) return
+
+    Facade.await.init(`ClaimGas@${account.address}`)
+
+    try {
+      const txid = await NeonHelper.claimGas(account.address)
+
+      if (txid) {
+        await account.addPendingUnclaimedGasTransaction(
+          unclaimedGasAmount,
+          txid
+        )
+        await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
+      }
+    } catch (e) {
+      Facade.await.done(`ClaimGas@${account.address}`)
+      showMessage({
+        message: e.message,
+      })
+    }
   }
 
   return (
@@ -174,43 +230,59 @@ const GetAccountView = (props: GetAccountViewProps) => {
         <AccountCard account={account} isStackMode={false} />
       </LinearLayout>
 
-      <LinearLayout orientation={'horiz'} flexWrap={'wrap'}>
+      <LinearLayout orientation={'horiz'} justifyContent={'space-between'}>
         <ReceiveButton
           onPress={() =>
             props.navigation.navigate(Facade.route.Modal.name, {
               screen: Facade.route.ReceiveToAccountModal.name,
               params: {
-                wallet: props.route.params.account.getWallet(appWallets),
+                wallet,
                 account: props.route.params.account,
               },
             })
           }
         />
 
-        <ButtonView
-          onPress={() => console.log('pressed')}
-          weight={2}
-          justifyContent={'center'}
-          overflow={'visible'}
-        >
-          <ImageView
-            source={require('~src/assets/images/button-claim-background.png')}
-            alignSelf={'center'}
-            position={'absolute'}
-            maxWidth={'100%'}
-          />
-          <TextView
-            color={'primary'}
-            alignSelf={'center'}
-            fontSize={'16px'}
-            numberOfLines={1}
-            adjustsFontSizeToFit={true}
+        <AwaitActivity name={'populateUnclaimed'}>
+          <AwaitActivity
+            name={`ClaimGas@${account.address}`}
+            loadingView={<ClaimGasLoader />}
           >
-            {Facade.t('screens.getAccount.claimAsset', {
-              assetAmount: '0.1 GAS',
-            })}
-          </TextView>
-        </ButtonView>
+            <>
+              {Boolean(unclaimedGasAmount && !isWatchAccount) && (
+                <ButtonView
+                  onPress={claimGas}
+                  weight={2}
+                  justifyContent={'center'}
+                  overflow={'visible'}
+                >
+                  <ImageView
+                    source={require('~src/assets/images/button-claim-background.png')}
+                    alignSelf={'center'}
+                    position={'absolute'}
+                    maxWidth={'100%'}
+                  />
+
+                  <TextView
+                    color={'primary'}
+                    alignSelf={'center'}
+                    fontSize={'16px'}
+                    numberOfLines={1}
+                    adjustsFontSizeToFit={true}
+                  >
+                    {Facade.t('screens.getAccount.claimAsset', {
+                      amount: Facade.filter.decimal(
+                        unclaimedGasAmount,
+                        language,
+                        7
+                      ),
+                    })}
+                  </TextView>
+                </ButtonView>
+              )}
+            </>
+          </AwaitActivity>
+        </AwaitActivity>
 
         <SendButton
           onPress={
@@ -220,9 +292,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
                   props.navigation.navigate(Facade.route.Modal.name, {
                     screen: Facade.route.SendTransactionInputModal.name,
                     params: {
-                      walletTitle:
-                        props.route.params.account.getWallet(appWallets)
-                          ?.name ?? '',
+                      walletTitle: wallet?.name ?? '',
                       account: props.route.params.account,
                     },
                   })
@@ -249,7 +319,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           />
         ) : (
           <AwaitActivity
-            name={'populateTransaction'}
+            name={'fetchTransaction'}
             size={'large'}
             style={{minHeight: 100}}
           >

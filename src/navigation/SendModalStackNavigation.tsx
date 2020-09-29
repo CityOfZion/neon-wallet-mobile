@@ -1,29 +1,19 @@
 import {RouteProp} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
-import {
-  ImageSourcePropType,
-  Route,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native'
+import {ImageSourcePropType, View} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack'
-import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
 import {Facade} from '~src/app/Facade'
-import {Navigator} from '~src/app/Navigator'
 import SwiperPanel, {
-  BackButton,
-  PANEL_OFFSET,
   SwiperController,
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBackButton from '~src/components/layout/HeaderBackButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
-import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import SendAccountSelectionModal, {
@@ -39,7 +29,6 @@ import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewMo
 import SendWalletSelectionModal, {
   SendWalletSelectionModalParams,
 } from '~src/scenes/send/SendWalletSelectionModal'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export type SendModalStackParamList = {
   SendWalletSelectionModal: SendWalletSelectionModalParams

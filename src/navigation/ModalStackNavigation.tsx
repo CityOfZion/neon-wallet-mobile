@@ -33,7 +33,6 @@ import {GetWalletParams} from '~src/scenes/GetWalletView'
 import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
 import ListTokenModal, {ListTokenModalParams} from '~src/scenes/ListTokenModal'
 import NetworkPickerModal from '~src/scenes/NetworkPickerModal'
-import {QRCodeScanParams} from '~src/scenes/QRCodeScan'
 import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import WalletContextModal from '~src/scenes/WalletContextModal'
@@ -48,21 +47,6 @@ import ReceiveToAccountModal, {
   ReceiveToAccountModalParams,
 } from '~src/scenes/receive/ReceiveToAccountModal'
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
-import SendAccountSelectionModal, {
-  SendAccountSelectionModalParams,
-} from '~src/scenes/send/SendAccountSelectionModal'
-import SendTransactionConfirmationModal, {
-  SendTransactionConfirmationModalParams,
-} from '~src/scenes/send/SendTransactionConfirmationModal'
-import SendTransactionInputModal, {
-  SendTransactionInputModalParams,
-} from '~src/scenes/send/SendTransactionInputModal'
-import SendTransactionReviewModal, {
-  SendTransactionReviewModalParams,
-} from '~src/scenes/send/SendTransactionReviewModal'
-import SendWalletSelectionModal, {
-  SendWalletSelectionModalParams,
-} from '~src/scenes/send/SendWalletSelectionModal'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined

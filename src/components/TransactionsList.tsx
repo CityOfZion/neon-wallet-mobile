@@ -202,7 +202,9 @@ const TransactionComponent = (props: {
                 {Facade.filter.currency(
                   token.item.exchangeToken(props.currency),
                   props.currency,
-                  props.language
+                  props.language,
+                  2,
+                  10
                 )}
               </TextView>
             </LinearLayout>

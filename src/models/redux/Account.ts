@@ -4,6 +4,7 @@ import {
   HttpExpose,
   ResponseSerialize,
 } from '@simpli/serialized-request'
+import {plainToClass} from 'class-transformer'
 import {ImageLoadEventData} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
@@ -264,5 +265,48 @@ export class Account implements AccountState {
     }
 
     return groupedTokenAssets
+  }
+
+  async addPendingTransaction(
+    senderTransaction: SenderTransactionState,
+    transactionHash: string
+  ) {
+    const senderTx = plainToClass(SenderTransaction, senderTransaction)
+    senderTx.sentAt = Facade.moment().format()
+    senderTx.transactionHash = transactionHash
+    senderTx.isPending = true
+    senderTx.token = senderTransaction.token
+
+    await senderTx.populateExchange()
+
+    const senderTxs = this.pendingTransactions.flatMap((it) => it.transactions)
+    senderTxs.push(senderTx)
+
+    this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
+      senderTxs
+    )
+  }
+
+  async addPendingUnclaimedGasTransaction(
+    amount: number,
+    transactionHash: string
+  ) {
+    const senderTx = new SenderTransaction()
+    senderTx.senderAddress = 'claim'
+    senderTx.receiverAddress = this.address
+    senderTx.sentAt = Facade.moment().format()
+    senderTx.transactionHash = transactionHash
+    senderTx.isPending = true
+    senderTx.token = new TokenAsset('GAS', 'GAS', Facade.app.gasHash)
+    senderTx.token.amount = amount
+
+    await senderTx.populateExchange()
+
+    const senderTxs = this.pendingTransactions.flatMap((it) => it.transactions)
+    senderTxs.push(senderTx)
+
+    this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
+      senderTxs
+    )
   }
 }

@@ -203,7 +203,14 @@ const SendTransactionReviewModal = (props: Props) => {
       throw new Error('Transaction has failed')
     }
 
-    await saveToHistory(transactionHash)
+    const account = accounts.find(
+      (it) => it.address === senderTransaction.senderAddress
+    )
+
+    if (account) {
+      await account.addPendingTransaction(senderTransaction, transactionHash)
+      await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
+    }
 
     dispatch(RootStore.senderTransaction.actions.clearState())
 
@@ -216,29 +223,6 @@ const SendTransactionReviewModal = (props: Props) => {
         },
       ],
     })
-  }
-
-  const saveToHistory = async (transactionHash: string) => {
-    const senderTx = plainToClass(SenderTransaction, senderTransaction)
-    senderTx.sentAt = Facade.moment().format()
-    senderTx.transactionHash = transactionHash
-    senderTx.isPending = true
-    senderTx.token = senderTransaction.token
-    await senderTx.populateExchange()
-
-    const account = accounts.find((it) => it.address === senderTx.senderAddress)
-    if (account) {
-      const senderTxs = account.pendingTransactions.flatMap(
-        (it) => it.transactions
-      )
-      senderTxs.push(senderTx)
-
-      account.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
-        senderTxs
-      )
-
-      await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
-    }
   }
 
   return (

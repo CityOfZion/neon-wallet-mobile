@@ -276,7 +276,8 @@
       "transactions": "TRANSACTIONS",
       "pendingTransactions": "PENDING TRANSACTIONS",
       "completedTransactions": "COMPLETED TRANSACTIONS",
-      "claimAsset": "Claim %{assetAmount}"
+      "claimAsset": "Claim %{amount} GAS",
+      "claimInProgress": "Claim in progress"
     },
     "customizeAccount": {
       "title": "Create account",
@@ -528,6 +529,7 @@
   },
   "toast" : {
     "transaction": "Transaction",
-    "gasClaimSucess" : "GAS claim successful!"
+    "gasClaimSuccess" : "GAS claim successful!",
+    "transactionCompleted" : "Transaction completed!"
   }
 }
