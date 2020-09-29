@@ -1,6 +1,7 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {Request} from '@simpli/serialized-request'
 import {map, mapValues} from 'lodash'
+import {showMessage} from 'react-native-flash-message'
 
 import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
@@ -21,7 +22,6 @@ import {TokensDispatcher} from '~src/store/app/dispatchers/TokensDispatcher'
 import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
 import {Exchange, ExchangeResponse} from '~src/types/exchange'
 import {TokenResponse} from '~src/types/token'
-import {showMessage} from 'react-native-flash-message'
 
 export class AppReducer extends ReducerWrapper<
   AppActionsType,

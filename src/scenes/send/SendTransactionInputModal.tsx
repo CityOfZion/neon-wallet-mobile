@@ -383,7 +383,7 @@ const SendTransactionInputModal = (prop: Props) => {
   )
   const [priority, setPriority] = useState<PriorityFee>(FastPriority())
 
-  const dispatch = useDispatch<SyncDispatch>()
+  const dispatch = useDispatch<DispatchResult>()
 
   const show = useNavigationState(
     (state) =>

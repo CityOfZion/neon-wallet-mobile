@@ -24,7 +24,7 @@ interface Props {
 }
 
 const SendWalletSelectionModal = (props: Props) => {
-  const dispatch = useDispatch<SyncDispatch>()
+  const dispatch = useDispatch<DispatchResult>()
   const show = useNavigationState(
     (state) =>
       state.routes[state.routes.length - 1].name ===

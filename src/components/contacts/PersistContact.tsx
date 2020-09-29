@@ -50,7 +50,7 @@ export const PersistContact = (props: PersistContactProps) => {
   const [address, setAddress] = useState(contact?.address ?? '')
   const controller = useSwiperController(true)
 
-  const dispatch = useDispatch<SyncDispatch>()
+  const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const submit = async () => {

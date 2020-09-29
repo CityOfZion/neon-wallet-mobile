@@ -4,7 +4,7 @@ import {AwaitActivity} from '@simpli/react-native-await'
 import moment from 'moment'
 import React, {useEffect, useRef, useState} from 'react'
 import {Alert, TouchableWithoutFeedback, View} from 'react-native'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import BalanceList from '~src/components/BalanceList'
@@ -17,6 +17,7 @@ import {Lang} from '~src/enums/Lang'
 import {Wallet} from '~src/models/redux/Wallet'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
+import {RootStore} from '~src/store/RootStore'
 import {
   ButtonView,
   ImageView,
@@ -26,9 +27,7 @@ import {
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 import {Exchange} from '~src/types/exchange'
 
-export interface ListWalletParams {
-  wallet?: Wallet
-}
+export interface ListWalletParams {}
 
 interface WalletProps {
   navigation: StackNavigationProp<WalletStackParamList & MoreStackParamList>
@@ -183,15 +182,22 @@ const ListWalletView = (props: WalletProps) => {
     wallets[0]
   )
 
+  const dispatch = useDispatch()
+
   const isListNotEmpty = () => {
     return Boolean(wallets.length)
   }
 
   const selectEvent = async (wallet: Wallet) => {
-    if (wallet.walletType !== 'standard') {
-      goToFirstAccount(wallet)
+    dispatch(RootStore.wallet.actions.selectWallet(wallet.id))
+    setSelectedWallet(wallet)
+  }
+
+  const pressEvent = async (wallet: Wallet) => {
+    if (wallet.walletType === 'standard') {
+      props.navigation.navigate(Facade.route.GetWallet.name)
     } else {
-      goToWallet(wallet)
+      goToFirstAccount(wallet)
     }
   }
 
@@ -199,20 +205,17 @@ const ListWalletView = (props: WalletProps) => {
     const accountsFromWallet = wallet.getAccounts(accounts)
 
     if (accountsFromWallet.length > 0) {
-      props.navigation.navigate(Facade.route.GetAccount.name, {
-        account: accountsFromWallet[0],
-      })
+      dispatch(
+        RootStore.account.actions.selectAccount(accountsFromWallet[0].address)
+      )
+
+      props.navigation.navigate(Facade.route.GetAccount.name)
     } else {
       // Fall back
-      goToWallet(wallet)
+      props.navigation.navigate(Facade.route.GetWallet.name)
     }
   }
 
-  const goToWallet = (wallet: Wallet) => {
-    props.navigation.navigate(Facade.route.GetWallet.name, {
-      wallet,
-    })
-  }
   const openWarning = () =>
     Alert.alert(
       Facade.t('screens.listWallets.incompleteBalanceWarningTitle'),
@@ -243,9 +246,8 @@ const ListWalletView = (props: WalletProps) => {
             {isListNotEmpty() ? (
               <WalletPicker
                 wallets={wallets}
-                onSelect={setSelectedWallet}
-                onPress={selectEvent}
-                goTo={props.route.params?.wallet}
+                onSelect={selectEvent}
+                onPress={pressEvent}
               />
             ) : (
               <EmptyListComponent />

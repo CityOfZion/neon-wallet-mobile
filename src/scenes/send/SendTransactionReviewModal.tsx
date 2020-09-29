@@ -184,7 +184,7 @@ const SendTransactionReviewModal = (props: Props) => {
   const {senderTransaction} = useSelector((state: RootState) => state)
   const {accounts} = useSelector((state: RootState) => state.app)
 
-  const dispatch = useDispatch<SyncDispatch>()
+  const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string | null>>()
 

@@ -3,6 +3,7 @@ import {ReducerApplied} from '@simpli/redux-wrapper'
 
 export declare global {
   type WalletActionsType =
+    | 'SET_ID'
     | 'SET_NAME'
     | 'SET_PASSPHRASE'
     | 'SET_SECURITY_PHRASE'

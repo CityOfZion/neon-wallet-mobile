@@ -5,6 +5,7 @@ import {Currency} from '~src/enums/Currency'
 
 export declare global {
   type AccountActionsType =
+    | 'SET_ADDRESS'
     | 'SET_ID_WALLET'
     | 'SET_NAME'
     | 'SET_SRC_ICON'

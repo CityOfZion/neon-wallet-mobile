@@ -1,21 +1,25 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import Carousel from 'react-native-snap-carousel'
+import {useDispatch} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import WalletCard from '~src/components/WalletCard'
 import {Wallet} from '~src/models/redux/Wallet'
+import {RootStore} from '~src/store/RootStore'
 import {LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
   onPress?: (wallet: Wallet) => void
   onSelect?: (wallet: Wallet) => void
-  goTo?: Wallet
   wallets: Wallet[]
 }
 
 const WalletPicker: React.FC<Props> = (props: Props) => {
-  const {wallets, goTo} = props
+  const {wallets} = props
+  const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
+
+  const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
 
   const pressEvent = async (wallet: Wallet) => {
     if (props.onPress) {
@@ -29,7 +33,7 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
     }
   }
 
-  const index = goTo ? wallets.findIndex((it) => it.id === goTo.id) : 0
+  const index = wallet ? wallets.findIndex((it) => it.id === wallet.id) : 0
 
   return (
     <Carousel<Wallet>
