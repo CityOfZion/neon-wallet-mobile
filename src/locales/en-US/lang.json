@@ -289,7 +289,7 @@
         "title": "Account Name",
         "placeholder": "Enter an account name"
       },
-      "selectColor": "Select a colour for your new account card",
+      "selectColor": "Select a color for your new account card",
       "navigation": {
         "cancel": "Cancel",
         "save": "Save"
@@ -316,7 +316,7 @@
         "title": "Account name",
         "placeholder": "Enter an account name"
       },
-      "selectColor": "Select a colour for your new account card",
+      "selectColor": "Select a color for your new account card",
       "navigation": {
         "cancel": "Cancel",
         "save": "Save"
@@ -329,7 +329,7 @@
         "title": "Account name",
         "placeholder": "Enter an account name"
       },
-      "selectColor": "Select a colour for your new account card",
+      "selectColor": "Select a color for your new account card",
       "navigation": {
         "cancel": "Cancel",
         "save": "Save"
@@ -465,7 +465,7 @@
       "value": "Value"
     },
     "colorSelector": {
-      "customColor": "Custom colour"
+      "customColor": "Custom color"
     },
     "inputTextWithValidation": {
       "inputPlaceholder": "Please enter information",
