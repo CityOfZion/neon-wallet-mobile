@@ -152,8 +152,8 @@ const AccountContainer = (props: {
       mt={`${props.index * 4}px`}
       position={'absolute'}
       style={{
-        top: 4 + cardHeight * ratio * 0.5,
-        left: 3 + cardHeight * 0.5,
+        top: 3 + cardHeight * ratio * 0.5,
+        left: 5 + cardHeight * 0.5,
       }}
     >
       <RelativeLayout
@@ -176,7 +176,9 @@ const AccountContainer = (props: {
 }
 
 const WalletCard: React.FC<Props> = (props) => {
-  const {wallets, accounts, exchange} = useSelector((state: RootState) => state.app)
+  const {wallets, accounts, exchange} = useSelector(
+    (state: RootState) => state.app
+  )
   const {currency} = useSelector((state: RootState) => state.settings)
 
   const [viewHeight, setViewHeight] = useState<number>(0)

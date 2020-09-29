@@ -96,7 +96,7 @@ const GetWalletView = (props: GetWalletProps) => {
   return (
     <ScreenLayout>
       <AwaitActivity name={'populate'} loadingView={<ScreenLoader />}>
-        <LinearLayout mt={4}>
+        <LinearLayout mt={6}>
           <AccountCardsComponent accounts={accounts} onPress={selectEvent} />
         </LinearLayout>
 

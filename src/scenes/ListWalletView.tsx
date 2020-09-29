@@ -75,11 +75,9 @@ const WalletChangeComponent = (props: {
   return (
     <>
       <LinearLayout mb={6} alignItems={'center'}>
-        {
-          <TextView fontSize={'11px'} color={'text.2'}>
-            {props.wallet.formattedLastVisitedAt}
-          </TextView>
-        }
+        <TextView fontSize={'11px'} color={'text.2'}>
+          {props.wallet.formattedLastVisitedAt}
+        </TextView>
 
         <LinearLayout orientation={'horiz'} minHeight={56}>
           <TextView fontSize={'36px'} color={'text.0'} fontFamily={'medium'}>

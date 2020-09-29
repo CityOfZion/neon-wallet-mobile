@@ -7,12 +7,12 @@ import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
+import ThemedButton from '~src/components/themed/ThemedButton'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import ThemedButton from '~src/components/themed/ThemedButton'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList & TabStackParamList>

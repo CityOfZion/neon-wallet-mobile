@@ -73,6 +73,7 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-sortable-list": "^0.0.24",
     "react-native-svg": "12.1.0",
+    "react-native-svg-transformer": "^0.14.3",
     "react-native-swiper": "^1.6.0-nightly.5",
     "react-native-unimodules": "~0.10.1",
     "react-native-view-shot": "^3.1.2",

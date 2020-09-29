@@ -1,13 +1,10 @@
 import {useNavigation} from '@react-navigation/native'
-import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
 import {
-  ImageBackground,
   LayoutChangeEvent,
   NativeSyntheticEvent,
   NativeTouchEvent,
-  StyleProp,
   TouchableOpacity,
 } from 'react-native'
 import {useSelector} from 'react-redux'
@@ -27,6 +24,8 @@ import {
 } from 'styled-system'
 
 import {Facade} from '~src/app/Facade'
+// @ts-ignore
+import CardSvg from '~src/assets/images/card.svg'
 import {Account} from '~src/models/redux/Account'
 import styled, {
   ButtonView,
@@ -54,29 +53,11 @@ const AccountCard: React.FC<Props> = (props) => {
   const [viewHeight, setViewHeight] = useState<number>(0)
   const unit = (viewHeight * 0.1) / 24
 
+  const bg = props.account.backgroundColor
+
   const layoutEvent = (event: LayoutChangeEvent) => {
     const {height} = event.nativeEvent.layout
     setViewHeight(height)
-  }
-
-  const getStyle = (): StyleProp<any> => {
-    const style = {
-      backgroundColor: props.account.backgroundColor,
-      aspectRatio: 38 / 25,
-    }
-
-    const styleShadow = {
-      shadowColor: '#000000',
-      shadowOffset: {
-        width: 0,
-        height: 6,
-      },
-      shadowOpacity: 0.4,
-      shadowRadius: 3,
-      elevation: 4,
-    }
-
-    return Facade.lodash.merge(style, props.hasShadow ? styleShadow : {})
   }
 
   return (
@@ -87,33 +68,30 @@ const AccountCard: React.FC<Props> = (props) => {
       }
       width={props.orientBy === 'width' ? '100%' : undefined}
       height={props.orientBy === 'height' ? '100%' : undefined}
-      style={getStyle()}
-      borderRadius={17 * unit}
+      style={{
+        aspectRatio: 38 / 25,
+      }}
       activeOpacity={1}
     >
-      <BrightCard
-        colors={[
-          'rgba(255, 255, 255, 0.25)',
-          'rgba(255, 255, 255, 0.25)',
-          'rgba(255, 255, 255, 0)',
-          'rgba(255, 255, 255, 0)',
-        ]}
-        locations={[0, 0.5, 0.5, 1]}
-        start={[0, -0.6]}
-        end={[1, 1.6]}
-        style={{borderRadius: 17 * unit}}
-      />
+      {props.hasShadow && (
+        <ShadowView pointerEvents={'none'}>
+          <ImageView
+            source={require('~src/assets/images/card-shadow.png')}
+            width={'112%'}
+            height={'112%'}
+            resizeMode="contain"
+          />
+        </ShadowView>
+      )}
 
-      <ShadowCard
-        colors={['rgba(0, 0, 0, 0.15)', 'rgba(32, 32, 32, 0.7)']}
-        style={{borderRadius: 17 * unit}}
-      />
-
-      <StampCard
-        source={require('~src/assets/images/card-placeholder.png')}
-        resizeMode="contain"
-        style={{borderRadius: 17 * unit}}
-      />
+      <SvgView pointerEvents={'none'}>
+        <CardSvg
+          width={'115%'}
+          height={'115%'}
+          fill={bg}
+          fillSecondary={Facade.filter.toDarkerShade(bg, 1, 0.4)}
+        />
+      </SvgView>
 
       <LinearLayout
         orientation={'verti'}
@@ -281,7 +259,9 @@ const AccountCard: React.FC<Props> = (props) => {
                     alignSelf={'center'}
                     mr={8 * unit}
                   />
-                ) : <LinearLayout ml={30 * unit}/>}
+                ) : (
+                  <LinearLayout ml={30 * unit} />
+                )}
 
                 <LinearLayout>
                   <TextView
@@ -294,7 +274,7 @@ const AccountCard: React.FC<Props> = (props) => {
                   </TextView>
 
                   <TextView
-                    fontSize={14 * unit}
+                    fontSize={12 * unit}
                     color="text.0"
                     opacity={0.75}
                     textAlign="left"
@@ -369,32 +349,22 @@ const PaymentCardView = styled.TouchableOpacity<
   ${orientation}
   ${position}
   ${weight}
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
-  elevation: 8;
 `
 
-const BrightCard = styled(LinearGradient)`
+const ShadowView = styled.View`
   position: absolute;
-  left: 0;
+  top: -16%;
+  left: -17%;
+  bottom: 0;
   right: 0;
-  top: 0;
-  bottom: 0;
 `
 
-const ShadowCard = styled(LinearGradient)`
+const SvgView = styled.View`
   position: absolute;
-  left: 0;
+  top: -17%;
+  left: -18%;
+  bottom: 0;
   right: 0;
-  top: 0;
-  bottom: 0;
-`
-
-const StampCard = styled(ImageBackground)`
-  position: absolute;
-  left: 0;
-  right: 30%;
-  top: 20%;
-  bottom: 0;
 `
 
 export default AccountCard

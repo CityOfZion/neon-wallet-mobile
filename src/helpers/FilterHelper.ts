@@ -237,12 +237,16 @@ export abstract class FilterHelper {
     return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)]
   }
 
-  static toDarkerShade(color: string) {
+  static toDarkerShade(
+    color: string,
+    saturationFactor = SATURATION_FACTOR,
+    luminanceFactor = LUMINANCE_FACTOR
+  ) {
     const hsl = this.hexToHsl(color)
     return this.hslToHex(
       hsl[0],
-      hsl[1] * SATURATION_FACTOR,
-      hsl[2] * LUMINANCE_FACTOR
+      hsl[1] * saturationFactor,
+      hsl[2] * luminanceFactor
     )
   }
 }

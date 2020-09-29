@@ -170,7 +170,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         )
       }}
     >
-      <LinearLayout mt={4}>
+      <LinearLayout mt={6}>
         <AccountCard account={account} isStackMode={false} />
       </LinearLayout>
 
