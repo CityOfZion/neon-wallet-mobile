@@ -23,10 +23,10 @@ interface Props {
   onPress?: () => void
 }
 
-const WalletLabel = (props: {walletType: string; walletName: string}) => {
+const WalletLabel = (props: {wallet: Wallet}) => {
   return (
     <RelativeLayout height={58} width={'100%'} mb={15}>
-      {props.walletType === 'standard' ? (
+      {props.wallet.walletType === 'standard' ? (
         <Fragment>
           <ImageView
             height={'100%'}
@@ -35,24 +35,35 @@ const WalletLabel = (props: {walletType: string; walletName: string}) => {
             source={require('~src/assets/images/wallet-card-label.png')}
           />
           <LinearLayout bottom={40} orientation="horiz" alignItems={'center'}>
-            <ImageView
-              ml="12px"
-              width={28}
-              height={24}
-              resizeMode={'contain'}
-              source={require('~src/assets/images/wallet-icon.png')}
-            />
+            {props.wallet.isInactive ? (
+              <ImageView
+                ml="12px"
+                width={28}
+                height={24}
+                resizeMode={'contain'}
+                source={require('~src/assets/images/wallet-icon-inactive.png')}
+              />
+            ) : (
+              <ImageView
+                ml="12px"
+                width={28}
+                height={24}
+                resizeMode={'contain'}
+                source={require('~src/assets/images/wallet-icon.png')}
+              />
+            )}
+
             <TextView
-              ml="8px"
+              ml={'8px'}
               width={'70%'}
-              fontSize="16px"
-              fontFamily="bold"
-              color="text.0"
+              fontSize={'lg'}
+              fontFamily={'bold'}
+              color={props.wallet.isInactive ? 'text.2' : 'text.0'}
               allowFontScaling={true}
               adjustsFontSizeToFit={true}
               numberOfLines={1}
             >
-              {props.walletName?.toUpperCase()}
+              {props.wallet.name?.toUpperCase()}
             </TextView>
           </LinearLayout>
         </Fragment>
@@ -63,7 +74,7 @@ const WalletLabel = (props: {walletType: string; walletName: string}) => {
             left={0}
             source={require('~src/assets/images/wallet-icon-label.png')}
           />
-          {props.walletType === 'watch' ? (
+          {props.wallet.walletType === 'watch' ? (
             <ImageView
               top={15}
               left={15}
@@ -141,6 +152,7 @@ const WalletOverlay = (props: {walletType: string}) => {
 const AccountContainer = (props: {
   viewHeight: number
   account: Account
+  wallet: Wallet
   index: number
 }) => {
   const ratio = 38 / 25
@@ -165,6 +177,8 @@ const AccountContainer = (props: {
         }}
       >
         <AccountCard
+          isInactive={props.wallet.isInactive}
+          isVertical={true}
           hideQRCode={true}
           hideBalance={true}
           hasShadow={false}
@@ -216,6 +230,7 @@ const WalletCard: React.FC<Props> = (props) => {
           key={i}
           viewHeight={viewHeight}
           account={it}
+          wallet={props.wallet}
           index={i}
         />
       ))}
@@ -223,10 +238,8 @@ const WalletCard: React.FC<Props> = (props) => {
       <WalletOverlay walletType={props.wallet.walletType ?? ''} />
 
       <LinearLayout position={'absolute'} bottom={40} width={'80%'}>
-        <WalletLabel
-          walletName={props.wallet.name ?? ''}
-          walletType={props.wallet.walletType ?? ''}
-        />
+        <WalletLabel wallet={props.wallet} />
+
         <RelativeLayout height={12} width={'100%'}>
           <AssetsBarBackground
             height={'10px'}
@@ -240,12 +253,14 @@ const WalletCard: React.FC<Props> = (props) => {
             px={'2px'}
             orientation={'horiz'}
           >
-            <AssetBarFillsComponent
-              walletAccounts={walletAccounts}
-              currency={currency}
-              exchange={exchange}
-              getTotalAmount={getTotalAmount}
-            />
+            {!props.wallet.isInactive && (
+              <AssetBarFillsComponent
+                walletAccounts={walletAccounts}
+                currency={currency}
+                exchange={exchange}
+                getTotalAmount={getTotalAmount}
+              />
+            )}
           </AssetsBar>
         </RelativeLayout>
       </LinearLayout>

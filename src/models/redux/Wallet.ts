@@ -49,6 +49,10 @@ export class Wallet implements WalletState {
     return Facade.lodash.sumBy(this.tokenAssets, (it) => it.amount ?? 0) > 0
   }
 
+  get isInactive() {
+    return !this.hasFunds && this.walletType === 'standard'
+  }
+
   get formattedLastVisitedAt() {
     if (!moment(this.lastVisitedAt).isValid()) return null
 
