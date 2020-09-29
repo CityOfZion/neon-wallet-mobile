@@ -29,6 +29,7 @@ import {
 } from '~src/styles/styled-components'
 
 export interface GetAccountParams {
+  walletTitle: string
   account: Account
 }
 
@@ -114,7 +115,7 @@ const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
 const GetAccountView = (props: GetAccountViewProps) => {
   const {account} = props.route.params
 
-  const appWallets = useSelector((state: RootState) => state.app.wallets)
+  const walletsPool = useSelector((state: RootState) => state.app.wallets)
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
   const {language} = useSelector((state: RootState) => state.settings)
@@ -126,6 +127,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>()
 
   const isWatchAccount = props.route.params.account.accountType === 'watch'
+  const wallet = props.route.params.account.getWallet(walletsPool)
 
   props.navigation.setOptions({
     headerTitle: () => TitleComponent({nodesPool, language}),
@@ -196,12 +198,12 @@ const GetAccountView = (props: GetAccountViewProps) => {
     Facade.await.init(`ClaimGas@${account.address}`)
 
     try {
-      const txs = await NeonHelper.claimGas(account.address)
+      const txid = await NeonHelper.claimGas(account.address)
 
-      if (txs[0]) {
+      if (txid) {
         await account.addPendingUnclaimedGasTransaction(
           unclaimedGasAmount,
-          txs[0].txid
+          txid
         )
         await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
       }
@@ -234,7 +236,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
             props.navigation.navigate(Facade.route.Modal.name, {
               screen: Facade.route.ReceiveToAccountModal.name,
               params: {
-                wallet: props.route.params.account.getWallet(appWallets),
+                wallet,
                 account: props.route.params.account,
               },
             })
@@ -290,9 +292,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
                   props.navigation.navigate(Facade.route.Modal.name, {
                     screen: Facade.route.SendTransactionInputModal.name,
                     params: {
-                      walletTitle:
-                        props.route.params.account.getWallet(appWallets)
-                          ?.name ?? '',
+                      walletTitle: wallet?.name ?? '',
                       account: props.route.params.account,
                     },
                   })

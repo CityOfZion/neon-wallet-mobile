@@ -16,7 +16,6 @@ import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
 import {AddressPaginatedRequest} from '~src/models/request/AddressPaginatedRequest'
 import {AddressRequest} from '~src/models/request/AddressRequest'
-import {RootStore} from '~src/store/RootStore'
 import {Exchange} from '~src/types/exchange'
 import {Pagination} from '~src/types/pagination'
 

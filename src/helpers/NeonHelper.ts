@@ -101,11 +101,11 @@ export abstract class NeonHelper {
       settings.network.networkDeprecatedLabel
     )
 
-    const response = await api.claimGas({
+    const claimGasResponse = await api.claimGas({
       api: apiProvider,
       account: neoAccount,
     })
 
-    return response.claims?.claims ?? []
+    return claimGasResponse.response?.txid ?? null
   }
 }
