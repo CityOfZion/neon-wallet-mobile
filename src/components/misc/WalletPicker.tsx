@@ -13,6 +13,7 @@ interface Props {
   onPress?: (wallet: Wallet) => void
   onSelect?: (wallet: Wallet) => void
   wallets: Wallet[]
+  canBeInactive?: boolean
 }
 
 const WalletPicker: React.FC<Props> = (props: Props) => {
@@ -64,6 +65,7 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
             width={240}
             onPress={() => pressEvent(item)}
             wallet={item}
+            canBeInactive={props.canBeInactive}
           />
         </LinearLayout>
       )}
@@ -76,6 +78,7 @@ WalletPicker.propTypes = {
   onSelect: PropTypes.func,
   wallets: PropTypes.arrayOf(PropTypes.instanceOf(Wallet).isRequired)
     .isRequired,
+  canBeInactive: PropTypes.bool,
 }
 
 export default WalletPicker
