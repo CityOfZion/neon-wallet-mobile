@@ -277,7 +277,8 @@
       "pendingTransactions": "PENDING TRANSACTIONS",
       "completedTransactions": "COMPLETED TRANSACTIONS",
       "claimAsset": "Claim %{amount} GAS",
-      "claimInProgress": "Claim in progress"
+      "claimInProgress": "Claim in progress",
+      "gasUnavailable": "GAS unavailable"
     },
     "customizeAccount": {
       "title": "Create account",

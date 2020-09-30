@@ -45,7 +45,7 @@ const ThemedCard: React.FC<Props> = (props) => {
       },
       shadowOpacity: 0.1,
       shadowRadius: 6,
-      marginBottom: 8
+      marginBottom: 8,
     }
 
     return props.hasShadow ? styleShadow : {}

@@ -5,6 +5,7 @@ import {ImageLoadEventData, Linking, Modal, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {AccountView} from '~src/components/AccountView'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
@@ -23,7 +24,6 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {AccountView} from '~src/components/AccountView'
 
 export interface TransactionDetailsParams {
   transaction: SenderTransaction
@@ -49,7 +49,9 @@ function HeaderColumn(props: {
         {props.title}
       </TextView>
       <LinearLayout orientation={'horiz'}>
-        {props.image && <ImageView alignSelf={'center'} source={props.image} mr={2} mt={1} />}
+        {props.image && (
+          <ImageView alignSelf={'center'} source={props.image} mr={2} mt={1} />
+        )}
         {props.priorityFee && (
           <TextView
             color={'primary'}
@@ -95,7 +97,6 @@ function HeaderColumn(props: {
     </LinearLayout>
   )
 }
-
 
 export const TransactionDetails = (props: Props) => {
   const controller = useSwiperController(true)
@@ -174,9 +175,7 @@ export const TransactionDetails = (props: Props) => {
                 : Facade.t('transactionDetails.confirmed')
             }
             weight={1.6}
-            image={
-              require('~/src/assets/images/icon-pending-white.png')
-            }
+            image={require('~/src/assets/images/icon-pending-white.png')}
           />
         </LinearLayout>
         <LinearLayout orientation={'horiz'}>
@@ -200,9 +199,7 @@ export const TransactionDetails = (props: Props) => {
           <HeaderColumn
             weight={1}
             title={'HASH'}
-            value={
-              transaction.transactionHash ?? ''
-            }
+            value={transaction.transactionHash ?? ''}
             showCopy={true}
           />
         </LinearLayout>

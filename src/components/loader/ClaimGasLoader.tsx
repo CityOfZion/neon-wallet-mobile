@@ -1,15 +1,26 @@
 import React from 'react'
 
 import {Facade} from '~src/app/Facade'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {
+  ImageView,
+  RelativeLayout,
+  TextView,
+} from '~src/styles/styled-components'
 
 const ClaimGasLoader = () => {
   return (
-    <LinearLayout
+    <RelativeLayout
       orientation={'horiz'}
       alignItems={'center'}
       justifyContent={'center'}
     >
+      <ImageView
+        source={require('~src/assets/images/button-claim-background-disabled.png')}
+        alignSelf={'center'}
+        position={'absolute'}
+        maxWidth={'100%'}
+      />
+
       <ImageView
         mt={-2}
         mr={4}
@@ -22,7 +33,7 @@ const ClaimGasLoader = () => {
       <TextView fontSize={'sm'} color={'primary'}>
         {Facade.t('screens.getAccount.claimInProgress')}
       </TextView>
-    </LinearLayout>
+    </RelativeLayout>
   )
 }
 
