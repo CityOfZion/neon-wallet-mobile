@@ -388,8 +388,8 @@ export default function SwiperPanel(props: SwiperProps) {
             style={{
               width: '100%',
 
-              borderTopLeftRadius: 30,
-              borderTopRightRadius: 30,
+              borderTopLeftRadius: 18,
+              borderTopRightRadius: 18,
               overflow: 'hidden',
             }}
             onLayout={(event) => {
