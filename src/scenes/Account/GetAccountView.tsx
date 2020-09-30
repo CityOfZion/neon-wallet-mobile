@@ -170,6 +170,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }
   }, [account.pendingTransactions])
 
+  const isClaimAvailable = () => {
+    return Boolean(unclaimedGasAmount && !isWatchAccount)
+  }
+
   const populateUnclaimed = async () => {
     if (!account.address) return
 
@@ -249,37 +253,48 @@ const GetAccountView = (props: GetAccountViewProps) => {
             loadingView={<ClaimGasLoader />}
           >
             <>
-              {Boolean(unclaimedGasAmount && !isWatchAccount) && (
-                <ButtonView
-                  onPress={claimGas}
-                  weight={2}
-                  justifyContent={'center'}
-                  overflow={'visible'}
-                >
+              <ButtonView
+                onPress={claimGas}
+                weight={2}
+                justifyContent={'center'}
+                overflow={'visible'}
+                activeOpacity={isClaimAvailable() ? 0.6 : 1}
+              >
+                {isClaimAvailable() ? (
                   <ImageView
                     source={require('~src/assets/images/button-claim-background.png')}
                     alignSelf={'center'}
                     position={'absolute'}
                     maxWidth={'100%'}
                   />
-
-                  <TextView
-                    color={'primary'}
+                ) : (
+                  <ImageView
+                    source={require('~src/assets/images/button-claim-background-disabled.png')}
                     alignSelf={'center'}
-                    fontSize={'16px'}
-                    numberOfLines={1}
-                    adjustsFontSizeToFit={true}
-                  >
-                    {Facade.t('screens.getAccount.claimAsset', {
-                      amount: Facade.filter.decimal(
-                        unclaimedGasAmount,
-                        language,
-                        7
-                      ),
-                    })}
-                  </TextView>
-                </ButtonView>
-              )}
+                    position={'absolute'}
+                    maxWidth={'100%'}
+                  />
+                )}
+
+                <TextView
+                  color={isClaimAvailable() ? 'primary' : 'text.2'}
+                  opacity={isClaimAvailable() ? 1 : 0.6}
+                  alignSelf={'center'}
+                  fontSize={'16px'}
+                  numberOfLines={1}
+                  adjustsFontSizeToFit={true}
+                >
+                  {isClaimAvailable()
+                    ? Facade.t('screens.getAccount.claimAsset', {
+                        amount: Facade.filter.decimal(
+                          unclaimedGasAmount,
+                          language,
+                          7
+                        ),
+                      })
+                    : Facade.t('screens.getAccount.gasUnavailable')}
+                </TextView>
+              </ButtonView>
             </>
           </AwaitActivity>
         </AwaitActivity>

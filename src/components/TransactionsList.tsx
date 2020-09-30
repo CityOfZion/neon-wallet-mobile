@@ -1,7 +1,7 @@
+import {useNavigation} from '@react-navigation/native'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {FlatList} from 'react-native'
-import {useNavigation} from '@react-navigation/native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'

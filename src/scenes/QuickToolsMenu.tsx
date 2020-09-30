@@ -97,7 +97,7 @@ export default function QuickToolsMenu(props: Props) {
                   {item.subtitle}
                 </TextView>
               </LinearLayout>
-              <LinearLayout weight={1}/>
+              <LinearLayout weight={1} />
               <ImageView
                 width={35}
                 height={35}
