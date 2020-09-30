@@ -45,7 +45,6 @@ const SettingsStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.Settings.translate(),
-              image: require('~src/assets/images/settings-white.png'),
               theme,
               route,
             })
@@ -58,7 +57,6 @@ const SettingsStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.MyWallets.translate(),
-              image: require('~src/assets/images/icon-wallet-white.png'),
               iconWidth: 28,
               theme,
               route,
@@ -83,7 +81,6 @@ const SettingsStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.WalletDetails.translate(),
-              image: require('~src/assets/images/icon-details-white.png'),
               theme,
               route,
             })
@@ -96,7 +93,6 @@ const SettingsStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.Step1BackupWallet.translate(),
-              image: require('~src/assets/images/icon-screen-lock.png'),
               theme,
               route,
             })
@@ -109,7 +105,6 @@ const SettingsStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.Step2BackupWallet.translate(),
-              image: require('~src/assets/images/icon-screen-lock.png'),
               theme,
               route,
             })
@@ -122,7 +117,6 @@ const SettingsStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.Step3BackupWallet.translate(),
-              image: require('~src/assets/images/icon-screen-lock.png'),
               theme,
               route,
             })

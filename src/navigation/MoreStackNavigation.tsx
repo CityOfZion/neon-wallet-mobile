@@ -62,7 +62,6 @@ const MoreStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.More.translate(),
-              image: require('~src/assets/images/more-horiz.png'),
               theme,
               route,
             })
@@ -75,7 +74,6 @@ const MoreStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.Step1CreateWallet.translate(),
-              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
               theme,
               route,
             })
@@ -87,7 +85,6 @@ const MoreStackNavigation = () => {
           component={Step2CreateWalletPage}
           options={Navigator.defaultStackNavigatorOptions({
             title: Facade.route.Step2CreateWallet.translate(),
-            image: require('~src/assets/images/icon-add-circle-outline-white.png'),
             theme,
           })}
         />
@@ -98,7 +95,6 @@ const MoreStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.Step3CreateWallet.translate(),
-              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
               theme,
               route,
             })
@@ -111,7 +107,6 @@ const MoreStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.Step4CreateWallet.translate(),
-              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
               theme,
               route,
             })
@@ -124,7 +119,6 @@ const MoreStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.Step5CreateWallet.translate(),
-              image: require('~src/assets/images/icon-add-circle-outline-white.png'),
               theme,
               route,
             })
@@ -137,7 +131,6 @@ const MoreStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.ImportKey.translate(),
-              image: require('~src/assets/images/icon-import-white.png'),
               theme,
               route,
             })
@@ -149,7 +142,6 @@ const MoreStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.ImportKey.translate(),
-              image: require('~src/assets/images/icon-import-white.png'),
               theme,
               route,
             })
@@ -171,7 +163,6 @@ const MoreStackNavigation = () => {
           component={CustomizeAccount}
           options={Navigator.defaultStackNavigatorOptions({
             title: Facade.route.CustomizeAccount.translate(),
-            image: require('~src/assets/images/icon-add-circle-outline-white.png'),
             theme,
           })}
         />
