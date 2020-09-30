@@ -29,6 +29,7 @@ const CustomColorPage = (props: Props) => {
   )
 
   const colorPickerChangeEvent = (hex: string) => {
+    props.route.params.account.backgroundColor = hex
     setColor(hex)
     props.route.params.account.backgroundColor = hex
   }
