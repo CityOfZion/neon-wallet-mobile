@@ -144,7 +144,6 @@ export const TransactionDetails = (props: Props) => {
   return (
     <SwiperPanel
       title={'Transaction details'}
-      image={require('~/src/assets/images/icon-transaction-details-white.png')}
       fullSize={true}
       rightButton={<ThemedCloseButton onPress={controller.close} />}
       onClose={() => props.navigation.goBack()}
