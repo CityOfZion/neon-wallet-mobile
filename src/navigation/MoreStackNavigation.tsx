@@ -164,7 +164,6 @@ const MoreStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.ImportReadAccount.translate(),
-              image: require('~src/assets/images/icon-watch-white.png'),
               theme,
               route,
             })
