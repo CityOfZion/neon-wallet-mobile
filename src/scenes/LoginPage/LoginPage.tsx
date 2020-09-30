@@ -5,6 +5,7 @@ import React, {useState} from 'react'
 import {Alert, Platform, TouchableWithoutFeedback} from 'react-native'
 
 import {LocalAuthenticationResult} from '~/node_modules/expo-local-authentication/src/LocalAuthentication.types'
+import { ThemedFlatButton } from '~/src/components/themed/ThemedFlatButton'
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
@@ -120,12 +121,8 @@ export default function LoginPage(props: Props) {
         />
 
         <LinearLayout width={'100%'}>
-          <ThemedButton
-            textColor={'text.9'}
-            bgColor={'primary'}
-            basic={true}
-            label={Facade.t('login.continue')}
-            fontFamily={'medium'}
+          <ThemedFlatButton
+            text={Facade.t('login.continue')}
             onPress={continueButton}
           />
         </LinearLayout>
