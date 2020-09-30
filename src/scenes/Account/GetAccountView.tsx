@@ -344,7 +344,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
             account={account}
             fromAccountView={true}
           />
-        ) : (
+        ) : account.tokenAssets.length ? (
           <AwaitActivity
             name={'fetchTransaction'}
             size={'large'}
@@ -374,6 +374,16 @@ const GetAccountView = (props: GetAccountViewProps) => {
               />
             </>
           </AwaitActivity>
+          ) : (
+            <TextView
+              my="32px"
+              color="text.0"
+              fontFamily="medium"
+              fontSize="18px"
+              textAlign="center"
+            >
+              {Facade.t('components.balanceList.empty')}
+            </TextView>
         )}
       </LinearLayout>
     </ScreenLayout>
