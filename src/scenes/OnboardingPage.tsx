@@ -76,8 +76,7 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
 const FeatureDescription = styled(TextView)`
   font-size: 15px;
   text-align: center;
-  letter-spacing: 1.28px;
-  font-family: regular;
+  font-family: light;
 `
 
 const OnboardingPage = (props: OnboardingPageProps) => {
@@ -154,6 +153,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
           alignItems={'center'}
           width={'100%'}
           height={'100%'}
+          bg={'background.14'}
         >
           <Swiper
             onIndexChanged={onIndexChanged}
