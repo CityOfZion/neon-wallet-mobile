@@ -8,7 +8,7 @@ export class ClearStateDispatcher extends DispatcherWrapper<
   SenderTransactionState,
   SenderTransactionAction
 > {
-  readonly type = 'CLEAR_STATE'
+  readonly type = 'CLEAR_STATE_SENDER_TRANSACTION'
 
   readonly reducer: SenderTransactionReducer = (state, action) => {
     const emptyState = Model.parse<SenderTransactionState>(SenderTransaction)

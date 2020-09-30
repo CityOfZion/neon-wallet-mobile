@@ -9,7 +9,7 @@ export declare global {
     | 'SET_SENDER_ADDRESS'
     | 'SET_RECEIVER_ADDRESS'
     | 'SET_FEE_AMOUNT'
-    | 'CLEAR_STATE'
+    | 'CLEAR_STATE_SENDER_TRANSACTION'
 
   interface SenderTransactionState {
     token: TokenAsset | null

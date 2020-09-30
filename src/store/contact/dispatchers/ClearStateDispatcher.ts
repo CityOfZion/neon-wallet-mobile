@@ -8,7 +8,7 @@ export class ClearStateDispatcher extends DispatcherWrapper<
   ContactState,
   ContactAction
 > {
-  readonly type = 'CLEAR_STATE'
+  readonly type = 'CLEAR_STATE_CONTACT'
 
   readonly reducer: ContactReducer = (state, action) => {
     return this.set(state, Model.parse<ContactState>(Contact))
