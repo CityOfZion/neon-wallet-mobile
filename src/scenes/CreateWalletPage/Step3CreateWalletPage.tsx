@@ -86,19 +86,19 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
           <LinearLayout width={'100%'} orientation={'horiz'}>
             <TextView
               weight={1}
-              color={'primary'}
+              color={'text.0'}
               fontSize={'lg'}
               fontFamily={'bold'}
             >
               {Facade.t('step3CreateWallet.label_1')}
             </TextView>
 
-            <TextView color={'primary'} fontSize={'lg'} fontFamily={'bold'}>
+            <TextView color={'text.0'} fontSize={'lg'} fontFamily={'bold'}>
               {Facade.t('step3CreateWallet.twoOfThree')}
             </TextView>
           </LinearLayout>
 
-          <TextView color={'text.0'} fontSize={'lg'}>
+          <TextView fontFamily={'light'} color={'text.0'} fontSize={'lg'}>
             {Facade.t('step3CreateWallet.body_1')}
           </TextView>
         </LinearLayout>
@@ -132,7 +132,7 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
           />
         </LinearLayout>
 
-        <TextView mb={4} color={'text.0'} fontSize={'lg'}>
+        <TextView fontFamily={'light'} mb={4} color={'text.0'} fontSize={'lg'}>
           {Facade.t('step3CreateWallet.body_2')}
         </TextView>
       </LinearLayout>

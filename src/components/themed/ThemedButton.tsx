@@ -32,7 +32,7 @@ interface Props {
   basic?: boolean
   iconSize?: [number, number]
   fontSize?: number | string
-  fontFamily?: 'bold' | 'medium' | 'regular' | 'italic' | 'semibold'
+  fontFamily?: 'bold' | 'medium' | 'regular' | 'italic' | 'semibold' | 'light'
   contentStyle?: any
   borderThickness?: number | string
   borderColor?: string
@@ -130,7 +130,7 @@ const ThemedButton: React.FC<Props> = (props) => {
         hasBright={!props.basic && !isActive}
         hasShadow={!props.basic && !isActive}
         baseBgColor={isActive ? 'transparent' : props.bgColor}
-        alignY={props.textAlign ?? 'flex-end'}
+        alignY={props.textAlign ?? 'center'}
         borderThickness={props.borderThickness}
         borderColor={props.borderColor}
         isPressed={isSelected}

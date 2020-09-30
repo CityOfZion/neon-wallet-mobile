@@ -91,11 +91,11 @@ const ItemComponent = (props: {index: number; title: string; body: string}) => {
       </LinearLayout>
 
       <LinearLayout weight={1}>
-        <TextView mr={4} color={'primary'} fontSize={'xl'} fontFamily={'bold'}>
+        <TextView mr={4} color={'text.0'} fontSize={'xl'} fontFamily={'bold'}>
           {props.title}
         </TextView>
 
-        <TextView color={'text.0'} fontSize={'lg'}>
+        <TextView fontFamily={'light'} color={'text.0'} fontSize={'lg'}>
           {props.body}
         </TextView>
       </LinearLayout>
@@ -111,7 +111,7 @@ const Step1CreateWalletPage: React.FC<Props> = (props) => {
   return (
     <ScreenLayout alignX={'center'}>
       <LinearLayout mt={5} weight={1}>
-        <TextView mb={5} color={'text.0'} fontSize={'lg'} textAlign={'center'}>
+        <TextView mb={5} color={'text.0'} fontSize={'lg'} pl={5}>
           {Facade.t('step1CreateWallet.header')}
         </TextView>
 
