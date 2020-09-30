@@ -81,22 +81,22 @@ export const CopyContextModal = (props: CopyContextModalProps) => {
                 pt="16px"
                 alignItems="center"
               >
+                <LinearLayout>
+                  <TextView
+                    color={theme.colors.text[0]}
+                    fontSize={18}
+                    fontFamily="regular"
+                  >
+                    {item.title}
+                  </TextView>
+                </LinearLayout>
+                <LinearLayout weight={1} />
                 <ImageView
                   width={35}
                   height={35}
                   mr="13px"
                   source={item.source}
                 />
-
-                <LinearLayout>
-                  <TextView
-                    color={theme.colors.text[0]}
-                    fontSize={18}
-                    fontFamily="bold"
-                  >
-                    {item.title}
-                  </TextView>
-                </LinearLayout>
               </LinearLayout>
 
               <LinearLayout height="1px" bg={theme.colors.background[5]} />

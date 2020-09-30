@@ -80,18 +80,12 @@ export default function QuickToolsMenu(props: Props) {
               pt="16px"
               alignItems="center"
             >
-              <ImageView
-                width={35}
-                height={35}
-                mr="13px"
-                source={item.source}
-              />
-
               <LinearLayout>
                 <TextView
                   color={theme.colors.text[0]}
                   fontSize={18}
-                  fontFamily="bold"
+                  fontFamily="regular"
+                  fontWeight={500}
                 >
                   {item.title}
                 </TextView>
@@ -103,6 +97,13 @@ export default function QuickToolsMenu(props: Props) {
                   {item.subtitle}
                 </TextView>
               </LinearLayout>
+              <LinearLayout weight={1}/>
+              <ImageView
+                width={35}
+                height={35}
+                mr="13px"
+                source={item.source}
+              />
             </LinearLayout>
 
             <LinearLayout height="1px" bg={theme.colors.background[5]} />
