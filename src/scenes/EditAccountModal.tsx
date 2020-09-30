@@ -61,6 +61,9 @@ const EditAccountModal = (props: Props) => {
 
     dispatch(RootStore.account.actions.clearState())
 
+    dispatch(RootStore.account.actions.selectAccount(address))
+    dispatch(RootStore.wallet.actions.selectWallet(account.idWallet))
+
     controller.close()
   }
 
