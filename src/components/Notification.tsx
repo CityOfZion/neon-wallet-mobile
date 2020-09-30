@@ -66,7 +66,7 @@ const Notification = (props: NotificationProps) => {
           {Facade.t('components.notification.title')}
         </TextView>
         <LinearLayout orientation="horiz">
-          <TextView color="text.0" fontSize="14px" lineHeight="14px" weight={1}>
+          <TextView color="text.0" fontSize="15px" lineHeight="15px" weight={1}>
             {props.text}
           </TextView>
           <ButtonView alignSelf="center" onPress={() => close()}>
