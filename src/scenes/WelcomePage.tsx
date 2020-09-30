@@ -122,7 +122,7 @@ const WelcomePage = (props: Props) => {
             }
           />
         </LinearLayout>
-        <LinearLayout mb={6} ml={4}>
+        <LinearLayout mb={6} alignSelf={'center'}>
           <ThemedCheckbox
             onChange={(checked) => persist(checked)}
             label={Facade.t('welcome.checkbox_1')}
