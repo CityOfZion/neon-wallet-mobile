@@ -30,6 +30,7 @@ const fetchFonts = () =>
     regular: require('~src/assets/fonts/sofiapro-regular.otf'),
     italic: require('~src/assets/fonts/sofiapro-regularitalic.otf'),
     semibold: require('~src/assets/fonts/sofiapro-semibold.otf'),
+    light: require('~src/assets/fonts/sofiapro-light.otf'),
   })
 
 const App = () => {
