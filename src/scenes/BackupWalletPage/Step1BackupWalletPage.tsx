@@ -27,7 +27,7 @@ const WordComponent = (props: {value: string}) => {
       mx={4}
       color={'text.0'}
       fontSize={'2xl'}
-      fontFamily={'semibold'}
+      fontFamily={'regular'}
     >
       {props.value}
     </TextView>
@@ -92,7 +92,7 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
           alignSelf={'flex-start'}
           color={'text.0'}
           fontSize={'lg'}
-          fontFamily={'bold'}
+          fontFamily={'semibold'}
         >
           {wallet.name}
         </TextView>
@@ -102,19 +102,19 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
             <LinearLayout width={'100%'} orientation={'horiz'}>
               <TextView
                 weight={1}
-                color={'primary'}
+                color={'text.0'}
                 fontSize={'lg'}
-                fontFamily={'bold'}
+                fontFamily={'semibold'}
               >
                 {Facade.t('step1BackupWallet.label_1')}
               </TextView>
 
-              <TextView color={'primary'} fontSize={'lg'} fontFamily={'bold'}>
+              <TextView color={'text.0'} fontSize={'lg'} fontFamily={'bold'}>
                 {Facade.t('step1BackupWallet.oneOfThree')}
               </TextView>
             </LinearLayout>
 
-            <TextView color={'text.0'} fontSize={'lg'}>
+            <TextView fontFamily={'light'} color={'text.0'} fontSize={'lg'}>
               {Facade.t('step1BackupWallet.body_1')}
             </TextView>
           </LinearLayout>
@@ -171,11 +171,11 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
             />
           </LinearLayout>
 
-          <TextView mb={4} color={'text.0'} fontSize={'lg'}>
+          <TextView fontFamily={'light'} mb={4} color={'text.0'} fontSize={'lg'}>
             {Facade.t('step1BackupWallet.body_2')}
           </TextView>
 
-          <TextView mb={5} color={'text.0'} fontSize={'lg'}>
+          <TextView fontFamily={'light'} mb={5} color={'text.0'} fontSize={'lg'}>
             {Facade.t('step1BackupWallet.body_3')}
           </TextView>
         </LinearLayout>

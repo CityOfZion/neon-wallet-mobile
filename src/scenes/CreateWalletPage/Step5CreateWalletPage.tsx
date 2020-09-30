@@ -41,19 +41,20 @@ const Step5CreateWalletPage = (props: Props) => {
           </TextView>
 
           <TextView
-            mb={5}
-            color={'text.2'}
+            color={'text.0'}
             fontSize={'lg'}
             textAlign={'center'}
             lineHeight={Facade.scale(20)}
+            fontFamily={'light'}
           >
             {Facade.t('step5CreateWallet.body_1')}
           </TextView>
 
           <TextView
-            color={'text.2'}
+            color={'text.0'}
             fontSize={'lg'}
             textAlign={'center'}
+            fontFamily={'light'}
             lineHeight={Facade.scale(20)}
           >
             {Facade.t('step5CreateWallet.body_2')}

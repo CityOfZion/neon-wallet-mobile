@@ -102,7 +102,7 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
           alignSelf={'flex-start'}
           color={'text.0'}
           fontSize={'lg'}
-          fontFamily={'bold'}
+          fontFamily={'semibold'}
         >
           {wallet.name}
         </TextView>
@@ -112,19 +112,19 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
             <LinearLayout width={'100%'} orientation={'horiz'}>
               <TextView
                 weight={1}
-                color={'primary'}
+                color={'text.0'}
                 fontSize={'lg'}
-                fontFamily={'bold'}
+                fontFamily={'semibold'}
               >
                 {Facade.t('step2BackupWallet.label_1')}
               </TextView>
 
-              <TextView color={'primary'} fontSize={'lg'} fontFamily={'bold'}>
+              <TextView color={'text.0'} fontSize={'lg'} fontFamily={'bold'}>
                 {Facade.t('step2BackupWallet.twoOfThree')}
               </TextView>
             </LinearLayout>
 
-            <TextView color={'text.0'} fontSize={'lg'}>
+            <TextView fontFamily={'light'} color={'text.0'} fontSize={'lg'}>
               {Facade.t('step2BackupWallet.body_1')}
             </TextView>
           </LinearLayout>
