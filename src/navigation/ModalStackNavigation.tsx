@@ -35,6 +35,10 @@ import ListTokenModal, {ListTokenModalParams} from '~src/scenes/ListTokenModal'
 import NetworkPickerModal from '~src/scenes/NetworkPickerModal'
 import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
+import {
+  TransactionDetails,
+  TransactionDetailsParams,
+} from '~src/scenes/TransactionDetails'
 import WalletContextModal from '~src/scenes/WalletContextModal'
 import WelcomePage from '~src/scenes/WelcomePage'
 import ReceiveAccountSelectionModal, {
@@ -67,6 +71,7 @@ export type ModalStackParamList = {
   NetworkPickerModal: undefined
   PersistContact: PersistContactParams
   ContactsModal: ContactsModalParams
+  TransactionDetails: TransactionDetailsParams
   CopyContextModal: CopyContextModalParams
   SendModalStack: undefined
 }
@@ -81,6 +86,7 @@ export type ModalParams =
   | DefaultNavigationParam<ReceiveQrCodeModalParams>
   | DefaultNavigationParam<ContactsModalParams>
   | DefaultNavigationParam<PersistContactParams>
+  | DefaultNavigationParam<SendTransactionInputModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -175,6 +181,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={Facade.route.CopyContextModal.name}
           component={CopyContextModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.TransactionDetails.name}
+          component={TransactionDetails}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

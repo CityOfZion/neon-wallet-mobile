@@ -39,6 +39,8 @@ interface SwiperProps {
   onLeftPress?: () => void
   onRightPress?: () => void
   onClose?: () => void
+  image?: ImageSourcePropType
+  imageSize: [number, number]
   title?: string
   children?: JSX.Element | JSX.Element[]
 
@@ -124,23 +126,24 @@ const Header = (props: SwiperProps & {mb: number}) => {
           <TouchableWithoutFeedback
             onPress={() => props.onLeftPress && props.onLeftPress()}
           >
-            {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
-            {typeof props.leftButton === 'string' ? (
-              <LinearLayout ml={-4}>
-                <LinearLayout pointerEvents={'none'}>
-                  <ThemedButton
-                    label={props.leftButton}
-                    textColor={'text.0'}
-                    fontSize={'md'}
-                    rounded={false}
-                    flat={true}
-                    fontFamily={'regular'}
-                  />
+            <View>
+              {/*If prop is plain text, turns it into a styled TextView, otherwise uses the element provided*/}
+              {typeof props.leftButton === 'string' ? (
+                <LinearLayout ml={-4}>
+                  <LinearLayout pointerEvents={'none'}>
+                    <ThemedButton
+                      label={props.leftButton}
+                      textColor={'text.0'}
+                      fontSize={'md'}
+                      rounded={false}
+                      flat={true}
+                    />
+                  </LinearLayout>
                 </LinearLayout>
-              </LinearLayout>
-            ) : (
-              props.leftButton
-            )}
+              ) : (
+                props.leftButton
+              )}
+            </View>
           </TouchableWithoutFeedback>
         </AwaitActivity>
       </LinearLayout>
@@ -153,12 +156,22 @@ const Header = (props: SwiperProps & {mb: number}) => {
         justifyContent="center"
         position="absolute"
       >
+        {props.image ? (
+          <ImageView
+            resizeMode="contain"
+            height={props.imageSize[0]}
+            width={props.imageSize[1]}
+            mt={Facade.utils.isIos ? -3 : 2}
+            mr="6px"
+            source={props.image}
+          />
+        ) : undefined}
+
         <TextView
           color={theme.colors.text[0]}
           fontSize={24}
-          fontFamily="medium"
+          fontFamily="semibold"
           alignSelf="center"
-          fontWeight={500}
         >
           {props.title}
         </TextView>
@@ -179,7 +192,6 @@ const Header = (props: SwiperProps & {mb: number}) => {
                     fontSize={'md'}
                     rounded={false}
                     flat={true}
-                    fontFamily={'regular'}
                   />
                 ) : (
                   props.rightButton
@@ -378,8 +390,8 @@ export default function SwiperPanel(props: SwiperProps) {
             style={{
               width: '100%',
 
-              borderTopLeftRadius: 18,
-              borderTopRightRadius: 18,
+              borderTopLeftRadius: 30,
+              borderTopRightRadius: 30,
               overflow: 'hidden',
             }}
             onLayout={(event) => {
@@ -455,6 +467,8 @@ SwiperPanel.propTypes = {
   paddingRight: PropTypes.number,
   paddingTop: PropTypes.number,
   paddingBottom: PropTypes.number,
+  image: PropTypes.node,
+  imageSize: PropTypes.arrayOf(PropTypes.number),
   title: PropTypes.string,
   disableScrolling: PropTypes.bool,
   scrollEnabled: PropTypes.bool,
@@ -471,6 +485,7 @@ SwiperPanel.defaultProps = {
   paddingTop: undefined,
   paddingBottom: undefined,
   disableScrolling: false,
+  imageSize: [20, 20],
 }
 
 export function CloseButton() {

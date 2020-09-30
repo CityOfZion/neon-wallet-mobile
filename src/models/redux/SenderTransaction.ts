@@ -7,7 +7,7 @@ import {
 import moment from 'moment'
 
 import {Facade} from '~src/app/Facade'
-import {PriorityFee} from '~src/models/PriorityFee'
+import {NoPriority, PriorityFee} from '~src/models/PriorityFee'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Contact} from '~src/models/redux/Contact'
 import {ExchangeHistoryResponse} from '~src/types/exchange'
@@ -26,7 +26,7 @@ export class SenderTransaction implements SenderTransactionState {
 
   @ResponseSerialize(PriorityFee)
   @HttpExpose()
-  feeAmount: PriorityFee | null = null
+  feeAmount: PriorityFee = NoPriority()
 
   @HttpExpose()
   sentAt: string | null = null // moment format

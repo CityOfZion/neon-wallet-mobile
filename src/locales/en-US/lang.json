@@ -362,10 +362,7 @@
         "insufficientFunds": "Insufficient funds",
         "contacts": "Contacts",
         "paste": "Paste",
-        "scan": "Scan",
-        "priorityFast": "Fast",
-        "priorityFaster": "Faster",
-        "priorityFastest": "Fastest"
+        "scan": "Scan"
       },
       "transactionReview": {
         "token": "Token",
@@ -531,5 +528,24 @@
     "transaction": "Transaction",
     "gasClaimSuccess" : "GAS claim successful!",
     "transactionCompleted" : "Transaction completed!"
+  },
+  "transactionDetails" : {
+    "time": "Time",
+    "date": "Date",
+    "status" : "Status",
+    "value": "Value",
+    "priorityFee" : "Priority Fee",
+    "sender": "Sender",
+    "recipient": "Recipient",
+    "qty": "Qty",
+    "viewOnDora": "View on Dora",
+    "confirmed": "Confirmed",
+    "pending": "Pending"
+  },
+  "priorityFee": {
+    "none": "None",
+    "priorityFast": "Fast",
+    "priorityFaster": "Faster",
+    "priorityFastest": "Fastest"
   }
 }

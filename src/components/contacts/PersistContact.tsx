@@ -32,6 +32,7 @@ import {
 
 export interface PersistContactParams {
   contact?: Contact
+  startingAddress: string
 }
 
 interface PersistContactProps {
@@ -44,10 +45,13 @@ export const PersistContact = (props: PersistContactProps) => {
     (state: RootState) => Facade.theme[state.settings.theme]
   )
   const contact = props.route.params?.contact
+  const startingAddress = props.route.params?.startingAddress
   var isDeleted: boolean = false
 
   const [name, setName] = useState(contact?.name ?? '')
-  const [address, setAddress] = useState(contact?.address ?? '')
+  const [address, setAddress] = useState(
+    contact?.address ?? startingAddress ?? ''
+  )
   const controller = useSwiperController(true)
 
   const dispatch = useDispatch<DispatchResult>()
