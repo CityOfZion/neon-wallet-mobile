@@ -95,7 +95,6 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
-                    image: require('~/src/assets/images/upload-white.png'),
                   }),
               })}
             />
@@ -106,7 +105,6 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
-                    image: require('~/src/assets/images/upload-white.png'),
                   }),
               })}
             />
@@ -117,7 +115,6 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
-                    image: require('~/src/assets/images/upload-white.png'),
                   }),
                 headerLeft: HeaderBackButton,
               })}
@@ -129,7 +126,6 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
-                    image: require('~/src/assets/images/upload-white.png'),
                   }),
               })}
             />
@@ -140,7 +136,6 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
-                    image: require('~/src/assets/images/upload-white.png'),
                   }),
               })}
             />
