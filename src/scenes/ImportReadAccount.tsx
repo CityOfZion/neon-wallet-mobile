@@ -76,7 +76,8 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
         <TextView
           textAlign="center"
           fontSize={18}
-          fontFamily="medium"
+          fontFamily="regular"
+          fontWeight={400}
           color={theme.colors.text[0]}
           alignSelf="center"
           flexWrap="wrap"
@@ -86,72 +87,6 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
         >
           {Facade.t('importReadAccount.headerText')}
         </TextView>
-        <LinearLayout orientation="horiz" ml={20} mr={20} alignSelf="center">
-          <ImageView
-            source={require('~/src/assets/images/icon-disabled-green.png')}
-            resizeMode="center"
-            mr={2}
-          />
-          <TextView
-            textAlign="center"
-            fontSize={16}
-            color={theme.colors.text[0]}
-            style={{includeFontPadding: false}}
-          >
-            {Facade.t('importReadAccount.disabledFeature')}
-          </TextView>
-        </LinearLayout>
-        <LinearLayout orientation="horiz" mx={20} alignSelf="center" mt={5}>
-          <ImageView
-            source={require('~/src/assets/images/icon-disabled-green.png')}
-            resizeMode="center"
-            mr={2}
-          />
-          <TextView
-            textAlign="center"
-            fontSize={16}
-            color={theme.colors.text[0]}
-            style={{includeFontPadding: false}}
-          >
-            {Facade.t('importReadAccount.disabledFeature')}
-          </TextView>
-        </LinearLayout>
-        <LinearLayout orientation="horiz" mx={20} alignSelf="center" mt={5}>
-          <ImageView
-            source={require('~/src/assets/images/icon-disabled-green.png')}
-            resizeMode="center"
-            mr={2}
-          />
-          <TextView
-            textAlign="center"
-            fontSize={16}
-            color={theme.colors.text[0]}
-            style={{includeFontPadding: false}}
-          >
-            {Facade.t('importReadAccount.disabledFeature')}
-          </TextView>
-        </LinearLayout>
-        <LinearLayout
-          orientation="horiz"
-          mx={20}
-          alignSelf="center"
-          mt={5}
-          mb={30}
-        >
-          <ImageView
-            source={require('~/src/assets/images/icon-disabled-green.png')}
-            resizeMode="center"
-            mr={2}
-          />
-          <TextView
-            textAlign="center"
-            fontSize={16}
-            color={theme.colors.text[0]}
-            style={{includeFontPadding: false}}
-          >
-            {Facade.t('importReadAccount.disabledFeature')}
-          </TextView>
-        </LinearLayout>
 
         <InputWithValidation
           onChangeText={(text) => setInputValue(text)}
