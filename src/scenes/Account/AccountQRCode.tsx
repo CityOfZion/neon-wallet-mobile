@@ -29,10 +29,6 @@ export const AccountQRCode = (props: AccountQRCodeProps) => {
       controller={controller}
       onClose={props.navigation.goBack}
       title={props.route.params.account.name ?? ''}
-      image={
-        props.route.params.account.srcIcon ??
-        require('~/src/assets/images/icon-neo-white.png')
-      }
     >
       <LinearLayout justifyContent={'space-between'} height={'100%'}>
         <LinearLayout>

@@ -48,8 +48,6 @@ const CurrencyPickerModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={Facade.t('modals.currency.title')}
-      image={require('~src/assets/images/icon-currency-white.png')}
-      imageSize={[25, 25]}
       fullSize={true}
       padding={16}
       paddingTop={24}

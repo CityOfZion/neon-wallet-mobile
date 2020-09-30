@@ -35,7 +35,6 @@ const ReceiveWalletSelectionModal = (props: Props) => {
       title={Facade.t('modals.receive.title')}
       rightButton={<ThemedCloseButton onPress={controller.close} />}
       onClose={() => props.navigation.goBack()}
-      image={require('~src/assets/images/download-white.png')}
     >
       <LinearLayout width={'100%'}>
         <ScrollView contentContainerStyle={{flexGrow: 1}}>

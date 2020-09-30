@@ -64,7 +64,6 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
       controller={controller}
       fullSize={true}
       title={Facade.t('routes.ReceiveQrCode')}
-      image={require('~src/assets/images/icon-qrcode-white.png')}
       rightButton={<ThemedCloseButton onPress={controller.close} />}
       onClose={props.navigation.goBack}
     >
