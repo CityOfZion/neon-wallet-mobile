@@ -6,6 +6,7 @@ import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ClearStateDispatcher} from '~src/store/wallet/dispatchers/ClearStateDispatcher'
+import {IdDispatcher} from '~src/store/wallet/dispatchers/IdDispatcher'
 import {NameDispatcher} from '~src/store/wallet/dispatchers/NameDispatcher'
 import {PassphraseDispatcher} from '~src/store/wallet/dispatchers/PassphraseDispatcher'
 import {SecurityPhraseDispatcher} from '~src/store/wallet/dispatchers/SecurityPhraseDispatcher'
@@ -19,6 +20,7 @@ export class WalletReducer extends ReducerWrapper<
   protected readonly initialState = Model.parse<WalletState>(Wallet)
 
   protected readonly dispatchers = [
+    IdDispatcher,
     NameDispatcher,
     PassphraseDispatcher,
     SecurityPhraseDispatcher,
@@ -27,6 +29,9 @@ export class WalletReducer extends ReducerWrapper<
   ]
 
   readonly actions = {
+    selectWallet: (id: string | null) => {
+      return this.commit('SET_ID', {id})
+    },
     setName: (name: string) => {
       return this.commit('SET_NAME', {name})
     },
@@ -41,6 +46,14 @@ export class WalletReducer extends ReducerWrapper<
     },
     clearState: () => {
       return this.commit('CLEAR_STATE', {})
+    },
+    getFromSelection: (): SyncAction<Wallet> => {
+      return (dispatch, getState) => {
+        const wallets = getState().app.wallets
+        const id = getState().wallet.id
+
+        return wallets.find((it) => it.id === id) ?? new Wallet()
+      }
     },
     createAndSave: (): AsyncAction<string> => {
       return async (dispatch, getState) => {

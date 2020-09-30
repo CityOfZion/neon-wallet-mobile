@@ -6,6 +6,7 @@ import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {Account} from '~src/models/redux/Account'
+import {AddressDispatcher} from '~src/store/account/dispatchers/AddressDispatcher'
 import {BackgroundDispatcher} from '~src/store/account/dispatchers/BackgroundDispatcher'
 import {ClearStateDispatcher} from '~src/store/account/dispatchers/ClearStateDispatcher'
 import {IdWalletDispatcher} from '~src/store/account/dispatchers/IdWalletDispatcher'
@@ -20,6 +21,7 @@ export class AccountReducer extends ReducerWrapper<
   protected readonly initialState = Model.parse<AccountState>(Account)
 
   protected readonly dispatchers = [
+    AddressDispatcher,
     IdWalletDispatcher,
     NameDispatcher,
     SrcIconDispatcher,
@@ -28,6 +30,9 @@ export class AccountReducer extends ReducerWrapper<
   ]
 
   readonly actions = {
+    selectAccount: (address: string | null) => {
+      return this.commit('SET_ADDRESS', {address})
+    },
     setIdWallet: (idWallet: string) => {
       return this.commit('SET_ID_WALLET', {idWallet})
     },
@@ -42,6 +47,14 @@ export class AccountReducer extends ReducerWrapper<
     },
     clearState: () => {
       return this.commit('CLEAR_STATE', {})
+    },
+    getFromSelection: (): SyncAction<Account> => {
+      return (dispatch, getState) => {
+        const accounts = getState().app.accounts
+        const address = getState().account.address
+
+        return accounts.find((it) => it.address === address) ?? new Account()
+      }
     },
     createAndSave: (): AsyncAction<string> => {
       return async (dispatch, getState) => {

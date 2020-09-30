@@ -24,7 +24,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
   const [confirmPassphrase, setConfirmPassphrase] = useState<string>()
   const [newWalletId, setNewWalletId] = useState<string>()
 
-  const dispatch = useDispatch<SyncDispatch>()
+  const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
 

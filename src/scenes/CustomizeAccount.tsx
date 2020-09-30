@@ -49,7 +49,7 @@ const CustomizeAccount = (props: Props) => {
     (state: RootState) => Facade.theme[state.settings.theme]
   )
 
-  const dispatch = useDispatch<SyncDispatch>()
+  const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
   const dispatchAsyncAccount = useDispatch<AsyncDispatch<Account>>()

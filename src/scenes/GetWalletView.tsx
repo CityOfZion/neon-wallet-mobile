@@ -17,9 +17,7 @@ import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
-export interface GetWalletParams {
-  wallet: Wallet
-}
+export interface GetWalletParams {}
 
 interface GetWalletProps {
   route: RouteProp<WalletStackParamList, 'GetWallet'>
@@ -54,9 +52,10 @@ const GetWalletView = (props: GetWalletProps) => {
   const [accounts, setAccounts] = useState<Account[]>([])
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
 
-  const {wallet} = props.route.params
-
   const dispatch = useDispatch()
+  const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
+
+  const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
 
   useEffect(() => {
     Facade.await.run('populate', populate, 500)
@@ -78,8 +77,9 @@ const GetWalletView = (props: GetWalletProps) => {
     setAccounts(accounts)
   }
 
-  const selectEvent = async (account: Account) => {
-    props.navigation.navigate(Facade.route.GetAccount.name, {account})
+  const pressEvent = async (account: Account) => {
+    dispatch(RootStore.account.actions.selectAccount(account.address))
+    props.navigation.navigate(Facade.route.GetAccount.name)
   }
 
   const createEvent = async () => {
@@ -97,7 +97,7 @@ const GetWalletView = (props: GetWalletProps) => {
     <ScreenLayout>
       <AwaitActivity name={'populate'} loadingView={<ScreenLoader />}>
         <LinearLayout mt={6}>
-          <AccountCardsComponent accounts={accounts} onPress={selectEvent} />
+          <AccountCardsComponent accounts={accounts} onPress={pressEvent} />
         </LinearLayout>
 
         {wallet.walletType === 'watch' || wallet.walletType === 'legacy' ? (

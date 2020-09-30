@@ -17,6 +17,7 @@ import {Lang} from '~src/enums/Lang'
 import {NeonHelper} from '~src/helpers/NeonHelper'
 import {NeoNode} from '~src/models/NeoNode'
 import {Account} from '~src/models/redux/Account'
+import {Wallet} from '~src/models/redux/Wallet'
 import {AddressRequest} from '~src/models/request/AddressRequest'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
@@ -28,10 +29,7 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 
-export interface GetAccountParams {
-  walletTitle: string
-  account: Account
-}
+export interface GetAccountParams {}
 
 interface GetAccountViewProps {
   navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>
@@ -113,9 +111,6 @@ const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
 }
 
 const GetAccountView = (props: GetAccountViewProps) => {
-  const {account} = props.route.params
-
-  const walletsPool = useSelector((state: RootState) => state.app.wallets)
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
   const {language} = useSelector((state: RootState) => state.settings)
@@ -126,8 +121,13 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
   const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>()
 
-  const isWatchAccount = props.route.params.account.accountType === 'watch'
-  const wallet = props.route.params.account.getWallet(walletsPool)
+  const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
+  const dispatchAccount = useDispatch<SyncDispatch<Account>>()
+
+  const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
+  const account = dispatchAccount(RootStore.account.actions.getFromSelection())
+
+  const isWatchAccount = account.accountType === 'watch'
 
   props.navigation.setOptions({
     headerTitle: () => TitleComponent({nodesPool, language}),
@@ -237,7 +237,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
               screen: Facade.route.ReceiveToAccountModal.name,
               params: {
                 wallet,
-                account: props.route.params.account,
+                account,
               },
             })
           }
@@ -286,14 +286,14 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
         <SendButton
           onPress={
-            isWatchAccount || !props.route.params.account.getBalanceAmount()
+            isWatchAccount || !account.getBalanceAmount()
               ? undefined
               : () => {
                   props.navigation.navigate(Facade.route.Modal.name, {
                     screen: Facade.route.SendTransactionInputModal.name,
                     params: {
                       walletTitle: wallet?.name ?? '',
-                      account: props.route.params.account,
+                      account,
                     },
                   })
                 }

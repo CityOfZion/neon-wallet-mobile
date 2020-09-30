@@ -88,7 +88,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
 
   const {wallets} = useSelector((state: RootState) => state.app)
 
-  const dispatch = useDispatch<SyncDispatch>()
+  const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
 
