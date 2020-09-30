@@ -1,11 +1,20 @@
 import {useNavigation} from '@react-navigation/native'
-import React from 'react'
-import {ImageSourcePropType, TouchableWithoutFeedback} from 'react-native'
+import React, {useState} from 'react'
+import {
+  ImageSourcePropType,
+  TouchableHighlight,
+  TouchableWithoutFeedback,
+} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {SwiperController} from '~src/components/SwiperPanel'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {
+  ButtonView,
+  ImageView,
+  LinearLayout,
+  TextView,
+} from '~src/styles/styled-components'
 
 interface ListItem {
   title: string
@@ -18,10 +27,61 @@ interface Props {
   controller: SwiperController
 }
 
+function QuickToolsItem(props: {
+  onPress: () => void
+  item: ListItem
+  index: number
+  listItems: ListItem[]
+}) {
+
+  return (
+    <TouchableHighlight
+      activeOpacity={1}
+      onPress={props.onPress}
+      style={{
+        paddingRight: 20,
+        paddingLeft: 20,
+      }}
+    >
+      <LinearLayout>
+        <LinearLayout
+          orientation="horiz"
+          pb="18px"
+          pt="16px"
+          alignItems="center"
+        >
+          <LinearLayout>
+            <TextView color={'text.0'} fontSize={18} fontFamily="regular">
+              {props.item.title}
+            </TextView>
+            <TextView color={'text.6'} fontSize={16} fontFamily="medium">
+              {props.item.subtitle}
+            </TextView>
+          </LinearLayout>
+          <LinearLayout weight={1} />
+          <ImageView
+            width={35}
+            height={35}
+            mr="13px"
+            source={props.item.source}
+          />
+        </LinearLayout>
+
+        {props.index != props.listItems.length - 1 && (
+          <LinearLayout height="1px" bg={'background.5'} />
+        )}
+      </LinearLayout>
+    </TouchableHighlight>
+  )
+}
+
 export default function QuickToolsMenu(props: Props) {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
+
+  const [isSelected, setSelected] = useState(false)
+
   const navigation = useNavigation()
 
   const items: ListItem[] = [
@@ -60,55 +120,22 @@ export default function QuickToolsMenu(props: Props) {
     <SwiperPanel
       controller={props.controller}
       noHeader={true}
-      draggable={false}
-      paddingLeft={Facade.scale<number>(36)}
-      paddingRight={Facade.scale<number>(36)}
+      draggable={true}
       paddingTop={20}
       paddingBottom={24 + Facade.app.footerHeight}
+      paddingLeft={0}
+      paddingRight={0}
     >
       {items.map((item, index) => (
-        <TouchableWithoutFeedback
+        <QuickToolsItem
           key={index}
           onPress={() => {
             runClosing(item.onClick)
           }}
-        >
-          <LinearLayout>
-            <LinearLayout
-              orientation="horiz"
-              pb="18px"
-              pt="16px"
-              alignItems="center"
-            >
-              <LinearLayout>
-                <TextView
-                  color={theme.colors.text[0]}
-                  fontSize={18}
-                  fontFamily="regular"
-                  fontWeight={500}
-                >
-                  {item.title}
-                </TextView>
-                <TextView
-                  color={theme.colors.text[6]}
-                  fontSize={16}
-                  fontFamily="medium"
-                >
-                  {item.subtitle}
-                </TextView>
-              </LinearLayout>
-              <LinearLayout weight={1} />
-              <ImageView
-                width={35}
-                height={35}
-                mr="13px"
-                source={item.source}
-              />
-            </LinearLayout>
-
-            <LinearLayout height="1px" bg={theme.colors.background[5]} />
-          </LinearLayout>
-        </TouchableWithoutFeedback>
+          item={item}
+          index={index}
+          listItems={items}
+        />
       ))}
     </SwiperPanel>
   )
