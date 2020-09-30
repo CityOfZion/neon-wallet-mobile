@@ -76,7 +76,7 @@ const MenuItem = (props: MenuItemProps) => {
             weight={1}
             color="text.0"
             fontSize={'lg'}
-            fontFamily="semibold"
+            fontFamily="regular"
             allowFontScaling={true}
             adjustsFontSizeToFit={true}
             numberOfLines={1}
