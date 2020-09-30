@@ -93,22 +93,22 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   const controller = useSwiperController()
 
   const walletButton = {
-    enabledSource: require('~src/assets/images/button-wallet-primary.png'),
+    enabledSource: require('~src/assets/images/button-wallet-white.png'),
     disabledSource: require('~src/assets/images/button-wallet-disabled.png'),
     route: Facade.route.ListWallets,
   }
   const contactsButton = {
-    enabledSource: require('~src/assets/images/button-contacts-primary.png'),
+    enabledSource: require('~src/assets/images/button-contacts-white.png'),
     disabledSource: require('~src/assets/images/button-contacts-disabled.png'),
     route: Facade.route.Contacts,
   }
   const settingsButton = {
-    enabledSource: require('~src/assets/images/button-settings-primary.png'),
+    enabledSource: require('~src/assets/images/button-settings-white.png'),
     disabledSource: require('~src/assets/images/button-settings-disabled.png'),
     route: Facade.route.Settings,
   }
   const moreButton = {
-    enabledSource: require('~src/assets/images/button-more-primary.png'),
+    enabledSource: require('~src/assets/images/button-more-white.png'),
     disabledSource: require('~src/assets/images/button-more-disabled.png'),
     route: Facade.route.More,
   }
