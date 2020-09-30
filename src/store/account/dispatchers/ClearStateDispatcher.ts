@@ -8,7 +8,7 @@ export class ClearStateDispatcher extends DispatcherWrapper<
   AccountState,
   AccountAction
 > {
-  readonly type = 'CLEAR_STATE'
+  readonly type = 'CLEAR_STATE_ACCOUNT'
 
   readonly reducer: AccountReducer = (state, action) => {
     return this.set(state, Model.parse<AccountState>(Account))

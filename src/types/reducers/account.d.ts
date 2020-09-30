@@ -10,7 +10,7 @@ export declare global {
     | 'SET_NAME'
     | 'SET_SRC_ICON'
     | 'SET_BACKGROUND_COLOR'
-    | 'CLEAR_STATE'
+    | 'CLEAR_STATE_ACCOUNT'
 
   interface AccountState {
     address: string | null

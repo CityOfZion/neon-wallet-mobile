@@ -2,7 +2,7 @@ import {Action} from 'redux'
 import {ReducerApplied} from '@simpli/redux-wrapper'
 
 export declare global {
-  type ContactActionsType = 'SET_NAME' | 'SET_ADDRESS' | 'CLEAR_STATE'
+  type ContactActionsType = 'SET_NAME' | 'SET_ADDRESS' | 'CLEAR_STATE_CONTACT'
 
   interface ContactState {
     id: string | null
