@@ -75,6 +75,7 @@ const SendWalletSelectionModal = (props: Props) => {
             </TextView>
 
             <WalletPicker
+              canBeInactive={true}
               wallets={usableWallets}
               onSelect={setSelectedWallet}
               onPress={(wallet) =>

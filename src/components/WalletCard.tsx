@@ -20,10 +20,11 @@ import {Exchange} from '~src/types/exchange'
 interface Props {
   wallet: Wallet
   width?: number
+  canBeInactive?: boolean
   onPress?: () => void
 }
 
-const WalletLabel = (props: {wallet: Wallet}) => {
+const WalletLabel = (props: {wallet: Wallet; canBeInactive?: boolean}) => {
   return (
     <RelativeLayout height={58} width={'100%'} mb={15}>
       {props.wallet.walletType === 'standard' ? (
@@ -35,7 +36,7 @@ const WalletLabel = (props: {wallet: Wallet}) => {
             source={require('~src/assets/images/wallet-card-label.png')}
           />
           <LinearLayout bottom={40} orientation="horiz" alignItems={'center'}>
-            {props.wallet.isInactive ? (
+            {props.wallet.isInactive && props.canBeInactive ? (
               <ImageView
                 ml="12px"
                 width={28}
@@ -58,7 +59,11 @@ const WalletLabel = (props: {wallet: Wallet}) => {
               width={'70%'}
               fontSize={'lg'}
               fontFamily={'bold'}
-              color={props.wallet.isInactive ? 'text.2' : 'text.0'}
+              color={
+                props.wallet.isInactive && props.canBeInactive
+                  ? 'text.2'
+                  : 'text.0'
+              }
               allowFontScaling={true}
               adjustsFontSizeToFit={true}
               numberOfLines={1}
@@ -154,6 +159,7 @@ const AccountContainer = (props: {
   account: Account
   wallet: Wallet
   index: number
+  canBeInactive?: boolean
 }) => {
   const ratio = 38 / 25
   const cardWidth = props.viewHeight - 12
@@ -177,7 +183,7 @@ const AccountContainer = (props: {
         }}
       >
         <AccountCard
-          isInactive={props.wallet.isInactive}
+          isInactive={props.wallet.isInactive && props.canBeInactive}
           isVertical={true}
           hideQRCode={true}
           hideBalance={true}
@@ -232,13 +238,17 @@ const WalletCard: React.FC<Props> = (props) => {
           account={it}
           wallet={props.wallet}
           index={i}
+          canBeInactive={props.canBeInactive}
         />
       ))}
 
       <WalletOverlay walletType={props.wallet.walletType ?? ''} />
 
       <LinearLayout position={'absolute'} bottom={40} width={'80%'}>
-        <WalletLabel wallet={props.wallet} />
+        <WalletLabel
+          wallet={props.wallet}
+          canBeInactive={props.canBeInactive}
+        />
 
         <RelativeLayout height={12} width={'100%'}>
           <AssetsBarBackground
@@ -253,7 +263,7 @@ const WalletCard: React.FC<Props> = (props) => {
             px={'2px'}
             orientation={'horiz'}
           >
-            {!props.wallet.isInactive && (
+            {(!props.wallet.isInactive || !props.canBeInactive) && (
               <AssetBarFillsComponent
                 walletAccounts={walletAccounts}
                 currency={currency}
@@ -271,6 +281,7 @@ const WalletCard: React.FC<Props> = (props) => {
 WalletCard.propTypes = {
   wallet: PropTypes.instanceOf(Wallet).isRequired,
   width: PropTypes.number,
+  canBeInactive: PropTypes.bool,
   onPress: PropTypes.func,
 }
 
