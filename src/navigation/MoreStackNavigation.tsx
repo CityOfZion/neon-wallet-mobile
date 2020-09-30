@@ -6,16 +6,13 @@ import {ThemeProvider} from 'styled-components'
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
-import {ModalParams} from '~src/navigation/ModalStackNavigation'
 import Step1CreateWalletPage, {
   Step1CreateWalletParams,
 } from '~src/scenes/CreateWalletPage/Step1CreateWalletPage'
 import Step2CreateWalletPage from '~src/scenes/CreateWalletPage/Step2CreateWalletPage'
 import Step3CreateWalletPage from '~src/scenes/CreateWalletPage/Step3CreateWalletPage'
 import Step4CreateWalletPage from '~src/scenes/CreateWalletPage/Step4CreateWalletPage'
-import Step5CreateWalletPage, {
-  Step5CreateWalletParams,
-} from '~src/scenes/CreateWalletPage/Step5CreateWalletPage'
+import Step5CreateWalletPage from '~src/scenes/CreateWalletPage/Step5CreateWalletPage'
 import CustomizeAccount, {
   CustomizeAccountParams,
 } from '~src/scenes/CustomizeAccount'
@@ -42,7 +39,7 @@ export type MoreStackParamList = {
   Step2CreateWallet: undefined
   Step3CreateWallet: HeaderActionButtonProps
   Step4CreateWallet: undefined
-  Step5CreateWallet: Step5CreateWalletParams
+  Step5CreateWallet: undefined
   ImportKey: undefined
   ImportReadAccount: ImportReadAccountParams
   Passphrase: PassphraseParams

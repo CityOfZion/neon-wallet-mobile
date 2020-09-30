@@ -114,6 +114,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
   const {language} = useSelector((state: RootState) => state.settings)
+  const {address} = useSelector((state: RootState) => state.account)
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
@@ -124,10 +125,21 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
   const dispatchAccount = useDispatch<SyncDispatch<Account>>()
 
+  const [account, setAccount] = useState(
+    dispatchAccount(RootStore.account.actions.getFromSelection())
+  )
   const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
-  const account = dispatchAccount(RootStore.account.actions.getFromSelection())
 
   const isWatchAccount = account.accountType === 'watch'
+
+  useEffect(() => {
+    if (address) {
+      const account = dispatchAccount(
+        RootStore.account.actions.getFromSelection()
+      )
+      setAccount(account)
+    }
+  }, [address])
 
   props.navigation.setOptions({
     headerTitle: () => TitleComponent({nodesPool, language}),

@@ -1,8 +1,8 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import PropTypes from 'prop-types'
-import React, {useState, useEffect} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import React, {useState} from 'react'
+import {useDispatch} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -17,35 +17,13 @@ interface Props {
 }
 
 const Step4CreateWalletPage: React.FC<Props> = (props) => {
-  const wallets = useSelector((state: RootState) => state.app).wallets
-
   const [walletName, setWalletName] = useState<string>()
   const [passphrase, setPassphrase] = useState<string>()
   const [confirmPassphrase, setConfirmPassphrase] = useState<string>()
-  const [newWalletId, setNewWalletId] = useState<string>()
 
   const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
-
-  useEffect(() => {
-    if (newWalletId) {
-      // Loads wallet to send on payload
-      const wallet = wallets.find((it) => it.id === newWalletId)
-
-      props.navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: Facade.route.Step5CreateWallet.name,
-            params: {
-              wallet,
-            },
-          },
-        ],
-      })
-    }
-  }, [newWalletId])
 
   const submit = async () => {
     if (!walletName || !passphrase || !isValid()) return
@@ -71,7 +49,16 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
     dispatch(RootStore.wallet.actions.clearState())
     dispatch(RootStore.account.actions.clearState())
 
-    setNewWalletId(id)
+    dispatch(RootStore.wallet.actions.selectWallet(id))
+
+    props.navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: Facade.route.Step5CreateWallet.name,
+        },
+      ],
+    })
   }
 
   const isValid = () => {

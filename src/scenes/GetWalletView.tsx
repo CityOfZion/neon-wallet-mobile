@@ -49,12 +49,12 @@ const AccountCardsComponent = (props: {
 }
 
 const GetWalletView = (props: GetWalletProps) => {
-  const [accounts, setAccounts] = useState<Account[]>([])
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
 
   const dispatch = useDispatch()
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
 
+  const [accounts, setAccounts] = useState<Account[]>([])
   const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
 
   useEffect(() => {
