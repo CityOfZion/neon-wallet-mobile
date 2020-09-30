@@ -10,8 +10,19 @@ export class PriorityFee {
   @HttpExpose()
   fee: number
 
-  constructor(name: string, fee: number) {
-    this.name = name
+  constructor(fee: number, name?: string) {
+    if (!name) {
+      this.name = NoPriority().name
+      if (fee < -0.05) {
+        this.name = FastPriority().name
+      } else if (fee < 0.1) {
+        this.name = FasterPriority().name
+      } else {
+        this.name = FastestPriority().name
+      }
+    } else {
+      this.name = name
+    }
     this.fee = fee
   }
 
@@ -20,10 +31,10 @@ export class PriorityFee {
   }
 }
 
-export const NoPriority = () => new PriorityFee('none', 0)
+export const NoPriority = () => new PriorityFee(0, Facade.t('priorityFee.none'))
 export const FastPriority = () =>
-  new PriorityFee(Facade.t('modals.send.transactionInput.priorityFast'), 0.001)
+  new PriorityFee(0.001, Facade.t('priorityFee.priorityFast'))
 export const FasterPriority = () =>
-  new PriorityFee(Facade.t('modals.send.transactionInput.priorityFaster'), 0.05)
+  new PriorityFee(0.05, Facade.t('priorityFee.priorityFaster'))
 export const FastestPriority = () =>
-  new PriorityFee(Facade.t('modals.send.transactionInput.priorityFastest'), 0.1)
+  new PriorityFee(0.1, Facade.t('priorityFee.priorityFastest'))
