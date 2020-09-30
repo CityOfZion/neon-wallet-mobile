@@ -36,6 +36,7 @@ interface Props {
   contentStyle?: any
   borderThickness?: number | string
   borderColor?: string
+  textAlign?: string
 }
 
 const LabelComponent = (props: Props) => {
@@ -129,7 +130,7 @@ const ThemedButton: React.FC<Props> = (props) => {
         hasBright={!props.basic && !isActive}
         hasShadow={!props.basic && !isActive}
         baseBgColor={isActive ? 'transparent' : props.bgColor}
-        alignY={'center'}
+        alignY={props.textAlign ?? 'flex-end'}
         borderThickness={props.borderThickness}
         borderColor={props.borderColor}
         isPressed={isSelected}
@@ -158,6 +159,7 @@ ThemedButton.propTypes = {
   contentStyle: PropTypes.any,
   borderThickness: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   borderColor: PropTypes.string,
+  textAlign: PropTypes.string,
 }
 
 ThemedButton.defaultProps = {

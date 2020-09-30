@@ -68,7 +68,6 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
         padding={0}
         rightButton={<ThemedCloseButton onPress={controller.close} />}
         onClose={() => props.navigation.goBack()}
-        image={require('~/src/assets/images/upload-white.png')}
         disableDefaultScrollView={true}
       >
         <View

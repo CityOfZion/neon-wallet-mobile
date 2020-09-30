@@ -149,7 +149,6 @@ export const PersistContact = (props: PersistContactProps) => {
       padding={20}
       fullSize={true}
       title={_headerTitle()}
-      image={_headerIcon()}
       rightButton={Facade.t('persistContact.save')}
       leftButton={Facade.t('persistContact.cancel')}
       imageSize={[22, 22]}

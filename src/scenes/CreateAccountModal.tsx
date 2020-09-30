@@ -74,7 +74,6 @@ export default function CreateAccountModal(props: Props) {
       onLeftPress={() => controller.close()}
       onRightPress={save}
       onClose={() => props.navigation.goBack()}
-      image={require('~/src/assets/images/icon-plus-circle-white.png')}
     >
       <AwaitActivity name={'swiperRight'}>
         <LinearLayout width="100%" height="100%">

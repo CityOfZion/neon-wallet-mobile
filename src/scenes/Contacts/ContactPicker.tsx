@@ -88,7 +88,6 @@ export const ContactPicker = (props: ContactsModalProps) => {
 
   return (
     <SwiperPanel
-      image={require('~src/assets/images/icon-contacts-white.png')}
       title={Facade.t('contactPicker.title')}
       controller={controller}
       rightButton={<ThemedCloseButton onPress={controller.close} />}

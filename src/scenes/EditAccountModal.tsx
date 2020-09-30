@@ -91,7 +91,6 @@ const EditAccountModal = (props: Props) => {
       onLeftPress={() => controller.close()}
       onRightPress={save}
       onClose={() => props.navigation.goBack()}
-      image={require('~/src/assets/images/icon-pencil-white.png')}
     >
       <AwaitActivity
         name={'swiperRight'}

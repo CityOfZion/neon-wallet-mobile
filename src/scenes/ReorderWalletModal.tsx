@@ -61,7 +61,6 @@ export default function ReorderWalletModal(props: Props) {
     <SwiperPanel
       controller={controller}
       title={Facade.t('modals.reorderWallet.title')}
-      image={require('~src/assets/images/icon-swap-white.png')}
       fullSize={true}
       padding={24}
       onClose={props.navigation.goBack}

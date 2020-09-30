@@ -55,8 +55,6 @@ const LanguagePickerModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={Facade.t('modals.language.title')}
-      image={require('~src/assets/images/icon-language-white.png')}
-      imageSize={[25, 25]}
       fullSize={true}
       padding={24}
       onClose={props.navigation.goBack}

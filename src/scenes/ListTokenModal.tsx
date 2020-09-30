@@ -126,7 +126,6 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
       paddingRight={16}
       paddingLeft={16}
       fullSize={true}
-      image={require('~/src/assets/images/token_icon.png')}
       onClose={props.navigation.goBack}
       disableDefaultScrollView={true}
     >
