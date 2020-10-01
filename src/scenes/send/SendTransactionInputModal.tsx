@@ -469,7 +469,8 @@ const SendTransactionInputModal = (prop: Props) => {
   const selectContactOrAccount = (item: Contact | Account) => {
     if (item instanceof Contact) {
       setContact(item)
-    } else if (item.address) {
+    }
+    if (item.address) {
       setReceiverAddress(item.address)
     }
   }

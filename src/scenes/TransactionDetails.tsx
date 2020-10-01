@@ -6,7 +6,9 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import {AccountView} from '~src/components/AccountView'
+import {HeaderColumn} from '~src/components/HeaderColumn'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import {TokenView} from '~src/components/TokenView'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {
@@ -34,70 +36,6 @@ interface Props {
   route: RouteProp<ModalStackParamList, 'TransactionDetails'>
 }
 
-function HeaderColumn(props: {
-  weight: number
-  title: string
-  value: string
-  image?: ImageLoadEventData
-  priorityFee?: PriorityFee
-  showCopy?: boolean
-  valueTextColor?: string
-}) {
-  return (
-    <LinearLayout orientation={'verti'} weight={props.weight} pt={2} mr={4}>
-      <TextView color={'text.10'} fontFamily={'medium'} fontSize={14}>
-        {props.title}
-      </TextView>
-      <LinearLayout orientation={'horiz'}>
-        {props.image && (
-          <ImageView alignSelf={'center'} source={props.image} mr={2} mt={1} />
-        )}
-        {props.priorityFee && (
-          <TextView
-            color={'primary'}
-            fontFamily={'semibold'}
-            fontSize={16}
-            mr={2}
-          >
-            {props.priorityFee.name.toUpperCase()}
-          </TextView>
-        )}
-        <ButtonView
-          activeOpacity={props.showCopy ? 0.4 : 1}
-          onPress={
-            props.showCopy
-              ? Facade.utils.copyToClipboard(props.value)
-              : undefined
-          }
-        >
-          <LinearLayout
-            orientation={'horiz'}
-            maxWidth={props.showCopy ? '95%' : '100%'}
-          >
-            <TextView
-              color={props.valueTextColor ?? 'text.0'}
-              fontFamily={'medium'}
-              fontSize={16}
-              numberOfLines={1}
-              ellipsizeMode={'middle'}
-            >
-              {props.value}
-            </TextView>
-            {props.showCopy && (
-              <ImageView
-                width="16px"
-                resizeMode="contain"
-                source={require('~src/assets/images/icon-copy-green.png')}
-                ml={4}
-              />
-            )}
-          </LinearLayout>
-        </ButtonView>
-      </LinearLayout>
-    </LinearLayout>
-  )
-}
-
 export const TransactionDetails = (props: Props) => {
   const controller = useSwiperController(true)
   const transaction = props.route.params.transaction
@@ -107,15 +45,13 @@ export const TransactionDetails = (props: Props) => {
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
   let senderName = undefined
-  const senderAddress =
-    props.route.params.transaction.senderAddress ?? undefined
+  const senderAddress = transaction.senderAddress ?? undefined
 
   let senderWallet = undefined
   let receiverWallet = undefined
 
   let receiverName = undefined
-  const receiverAddress =
-    props.route.params.transaction.receiverAddress ?? undefined
+  const receiverAddress = transaction.receiverAddress ?? undefined
 
   const senderAccount = accounts.find(
     (account) => account.address === senderAddress
@@ -124,7 +60,7 @@ export const TransactionDetails = (props: Props) => {
     senderWallet = senderAccount.getWallet(wallets)?.name
   } else {
     const contact = contacts.find(
-      (value) => value.address === props.route.params.transaction.senderAddress
+      (value) => value.address === transaction.senderAddress
     )
     senderName = contact?.name ?? undefined
   }
@@ -136,8 +72,7 @@ export const TransactionDetails = (props: Props) => {
     receiverWallet = receiverAccount.getWallet(wallets)?.name
   } else {
     const contact = contacts.find(
-      (value) =>
-        value.address === props.route.params.transaction.receiverAddress
+      (value) => value.address === transaction.receiverAddress
     )
     receiverName = contact?.name ?? undefined
   }
@@ -221,65 +156,7 @@ export const TransactionDetails = (props: Props) => {
           accountName={receiverAccount?.name ?? undefined}
           walletName={receiverWallet ?? undefined}
         />
-        <LinearLayout
-          orientation={'verti'}
-          borderRadius={'7px'}
-          bg={'background.15'}
-          pt={'12px'}
-          pb={'12px'}
-          pl={'16px'}
-          pr={'16px'}
-          mt={4}
-        >
-          <LinearLayout orientation={'horiz'}>
-            <ImageView
-              source={transaction.token?.srcIcon}
-              width={'14px'}
-              height={'14px'}
-              alignSelf={'center'}
-            />
-            <TextView ml={'8px'} color={'text.0'} fontFamily={'medium'}>
-              {transaction.token?.symbol}
-            </TextView>
-            <LinearLayout weight={1} />
-            <TextView fontFamily={'medium'} color={'text.0'}>
-              {Facade.filter.currency(
-                (transaction.token?.exchangeToken(currency) ?? 1) /
-                  (transaction.token?.amount ?? 1),
-                currency,
-                language
-              )}
-            </TextView>
-            <TextView
-              ml={2}
-              fontFamily={'medium'}
-              color={'text.10'}
-              fontSize={'12px'}
-              textAlignVertical={'bottom'}
-              includeFontPadding={false}
-              mt={1}
-            >
-              1 {transaction.token?.symbol}
-            </TextView>
-          </LinearLayout>
-          <LinearLayout orientation={'horiz'}>
-            <HeaderColumn
-              weight={2}
-              title={Facade.t('transactionDetails.qty')}
-              value={transaction.token?.amount.toFixed(8) ?? ''}
-            />
-            <HeaderColumn
-              weight={1.6}
-              title={Facade.t('transactionDetails.value')}
-              value={Facade.filter.currency(
-                transaction.token?.exchangeToken(currency),
-                currency,
-                language
-              )}
-              valueTextColor={'primary'}
-            />
-          </LinearLayout>
-        </LinearLayout>
+        <TokenView transaction={transaction} />
         <LinearLayout weight={1} mt={'30px'}>
           <ThemedButton
             onPress={() => {
