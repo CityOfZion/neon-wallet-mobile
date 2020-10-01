@@ -28,6 +28,7 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
+import {InteractionManager} from 'react-native'
 
 export interface GetAccountParams {}
 
@@ -132,15 +133,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   const isWatchAccount = account.accountType === 'watch'
 
-  useEffect(() => {
-    if (address) {
-      const account = dispatchAccount(
-        RootStore.account.actions.getFromSelection()
-      )
-      setAccount(account)
-    }
-  }, [address])
-
   props.navigation.setOptions({
     headerTitle: () => TitleComponent({nodesPool, language}),
     headerRight: () =>
@@ -159,13 +151,28 @@ const GetAccountView = (props: GetAccountViewProps) => {
   })
 
   useEffect(() => {
+    if (address) {
+      const account = dispatchAccount(
+        RootStore.account.actions.getFromSelection()
+      )
+      setAccount(account)
+    }
+  }, [address])
+
+  useEffect(() => {
     Facade.await.run('populateUnclaimed', () => populateUnclaimed())
   }, [])
 
   useEffect(() => {
-    if (!isAssetsTabSelected) {
-      setCurrentPage(1)
-      Facade.await.run('fetchTransaction', () => fetchTransaction(1))
+    const interactionPromise = InteractionManager.runAfterInteractions(() => {
+      if (!isAssetsTabSelected) {
+        setCurrentPage(1)
+        Facade.await.run('fetchTransaction', () => fetchTransaction(1))
+      }
+    })
+
+    return () => {
+      interactionPromise.cancel()
     }
   }, [isAssetsTabSelected, account.pendingTransactions])
 
@@ -374,16 +381,16 @@ const GetAccountView = (props: GetAccountViewProps) => {
               />
             </>
           </AwaitActivity>
-          ) : (
-            <TextView
-              my="32px"
-              color="text.0"
-              fontFamily="medium"
-              fontSize="18px"
-              textAlign="center"
-            >
-              {Facade.t('components.balanceList.empty')}
-            </TextView>
+        ) : (
+          <TextView
+            my="32px"
+            color="text.0"
+            fontFamily="medium"
+            fontSize="18px"
+            textAlign="center"
+          >
+            {Facade.t('components.balanceList.empty')}
+          </TextView>
         )}
       </LinearLayout>
     </ScreenLayout>
