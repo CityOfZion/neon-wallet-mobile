@@ -28,8 +28,8 @@ const TabSelector = (props: TabSelectorProps) => {
           fontSize="16px"
           pb="8px"
           fontFamily="semibold"
-          borderBottomWidth={'1px'}
-          borderColor="text.0"
+          borderBottomWidth={'0.8px'}
+          borderColor="text.3"
           color={props.isFirstTabSelected ? 'text.0' : 'text.3'}
         >
           {props.capitalize
@@ -51,8 +51,8 @@ const TabSelector = (props: TabSelectorProps) => {
           fontSize="16px"
           pb="8px"
           fontFamily="semibold"
-          borderBottomWidth={'1px'}
-          borderColor="text.0"
+          borderBottomWidth={'0.8px'}
+          borderColor="text.3"
           color={props.isFirstTabSelected ? 'text.3' : 'text.0'}
         >
           {props.capitalize
