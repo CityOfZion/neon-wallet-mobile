@@ -119,9 +119,12 @@ const QRCodeScan = (props: Props) => {
       return [
         Facade.route.Modal.name,
         {
-          screen: Facade.route.SendWalletSelectionModal.name,
+          screen: Facade.route.SendModalStack.name,
           params: {
-            uri: Facade.uri.parse(key),
+            screen: Facade.route.SendWalletSelectionModal.name,
+            params: {
+              uri: Facade.uri.parse(key),
+            },
           },
         },
       ]

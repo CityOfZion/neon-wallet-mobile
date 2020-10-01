@@ -31,101 +31,96 @@ const SendTransactionConfirmationModal = (props: Props) => {
       Facade.route.SendTransactionConfirmationModal.name
   )
 
-  return (
-    show && (
-      <ScrollView
-        style={{
-          width: '100%',
-          marginTop: useHeaderHeight(),
-        }}
-        contentContainerStyle={{
-          flexGrow: 1,
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          paddingBottom: PANEL_OFFSET + 20,
-          paddingLeft: 15,
-          paddingRight: 15,
-        }}
-      >
-        <TouchableHighlight>
-          <LinearLayout
-            height="100%"
-            width="100%"
-            orientation="verti"
-            alignItems="center"
+  return show ? (
+    <ScrollView
+      style={{
+        width: '100%',
+        marginTop: useHeaderHeight(),
+      }}
+      contentContainerStyle={{
+        flexGrow: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        paddingBottom: PANEL_OFFSET + 20,
+        paddingLeft: 15,
+        paddingRight: 15,
+      }}
+    >
+      <TouchableHighlight>
+        <LinearLayout
+          height="100%"
+          width="100%"
+          orientation="verti"
+          alignItems="center"
+        >
+          <ImageView
+            width="66%"
+            resizeMode="contain"
+            source={require('~src/assets/images/transaction-sent.png')}
+          />
+
+          <TextView color="text.0" fontSize="24px" fontFamily="medium" mb="5px">
+            {Facade.t('modals.send.transactionConfirmation.header')}
+          </TextView>
+
+          <TextView
+            color="text.2"
+            fontSize="18px"
+            fontFamily="medium"
+            textAlign="center"
+            mb="40px"
           >
-            <ImageView
-              width="66%"
-              resizeMode="contain"
-              source={require('~src/assets/images/transaction-sent.png')}
-            />
+            {Facade.t('modals.send.transactionConfirmation.subheader')}
+          </TextView>
 
-            <TextView
-              color="text.0"
-              fontSize="24px"
-              fontFamily="medium"
-              mb="5px"
-            >
-              {Facade.t('modals.send.transactionConfirmation.header')}
-            </TextView>
+          <TextView
+            color="text.2"
+            fontSize="14px"
+            fontFamily="medium"
+            mb="12px"
+          >
+            {Facade.t('modals.send.transactionConfirmation.transactionId')}
+          </TextView>
 
+          <ButtonView
+            orientation="horiz"
+            alignItems="center"
+            mb="24px"
+            onPress={() =>
+              Facade.utils.copyToClipboard(props.route.params.transactionHash)
+            }
+          >
             <TextView
-              color="text.2"
-              fontSize="18px"
-              fontFamily="medium"
-              textAlign="center"
-              mb="40px"
-            >
-              {Facade.t('modals.send.transactionConfirmation.subheader')}
-            </TextView>
-
-            <TextView
-              color="text.2"
+              maxWidth="80%"
+              color="primary"
               fontSize="14px"
               fontFamily="medium"
-              mb="12px"
+              mr="16px"
+              textAlign="center"
             >
-              {Facade.t('modals.send.transactionConfirmation.transactionId')}
+              {props.route.params.transactionHash}
             </TextView>
+            <ImageView
+              width="16px"
+              resizeMode="contain"
+              source={require('~src/assets/images/icon-copy-green.png')}
+            />
+          </ButtonView>
 
-            <ButtonView
-              orientation="horiz"
-              alignItems="center"
-              mb="24px"
-              onPress={() =>
-                Facade.utils.copyToClipboard(props.route.params.transactionHash)
-              }
-            >
-              <TextView
-                maxWidth="80%"
-                color="primary"
-                fontSize="14px"
-                fontFamily="medium"
-                mr="16px"
-                textAlign="center"
-              >
-                {props.route.params.transactionHash}
-              </TextView>
-              <ImageView
-                width="16px"
-                resizeMode="contain"
-                source={require('~src/assets/images/icon-copy-green.png')}
-              />
-            </ButtonView>
-
-            <LinearLayout mt="auto" px="20px" width="100%">
-              <ThemedButton
-                onPress={() => {
-                  props.navigation.pop()
-                }}
-                fontSize="22px"
-                label={Facade.t('app.close')}
-              />
-            </LinearLayout>
+          <LinearLayout mt="auto" px="20px" width="100%">
+            <ThemedButton
+              onPress={() => {
+                props.navigation.pop()
+              }}
+              fontSize="22px"
+              label={Facade.t('app.close')}
+            />
           </LinearLayout>
-        </TouchableHighlight>
-      </ScrollView>
-    )
+        </LinearLayout>
+      </TouchableHighlight>
+    </ScrollView>
+  ) : (
+    <LinearLayout />
   )
 }
 

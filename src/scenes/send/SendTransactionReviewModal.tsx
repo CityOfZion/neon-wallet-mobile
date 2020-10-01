@@ -225,55 +225,55 @@ const SendTransactionReviewModal = (props: Props) => {
     })
   }
 
-  return (
-    show && (
-      <ScrollView
-        style={{
-          width: '100%',
-          marginTop: useHeaderHeight(),
-        }}
-        contentContainerStyle={{
-          flexGrow: 1,
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          paddingBottom: PANEL_OFFSET + 20,
-          paddingLeft: 15,
-          paddingRight: 15,
-        }}
+  return show ? (
+    <ScrollView
+      style={{
+        width: '100%',
+        marginTop: useHeaderHeight(),
+      }}
+      contentContainerStyle={{
+        flexGrow: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        paddingBottom: PANEL_OFFSET + 20,
+        paddingLeft: 15,
+        paddingRight: 15,
+      }}
+    >
+      <AwaitActivity
+        name={'submit'}
+        loadingView={<ScreenLoader transparent={true} />}
       >
-        <AwaitActivity
-          name={'submit'}
-          loadingView={<ScreenLoader transparent={true} />}
-        >
-          <TouchableHighlight>
-            <LinearLayout
-              height="100%"
-              width="100%"
-              orientation="verti"
-              alignItems="center"
+        <TouchableHighlight>
+          <LinearLayout
+            height="100%"
+            width="100%"
+            orientation="verti"
+            alignItems="center"
+          >
+            <TextView
+              color="text.0"
+              fontFamily="medium"
+              fontSize="18px"
+              mb="48px"
             >
-              <TextView
-                color="text.0"
-                fontFamily="medium"
-                fontSize="18px"
-                mb="48px"
-              >
-                {Facade.t('modals.send.transactionReview.pleaseReview')}
-              </TextView>
+              {Facade.t('modals.send.transactionReview.pleaseReview')}
+            </TextView>
 
-              <TransactionSummaryContainer />
+            <TransactionSummaryContainer />
 
-              <LinearLayout width="100%" mt="32px">
-                <ThemedButton
-                  label={Facade.t('app.send')}
-                  onPress={() => Facade.await.run('submit', submit)}
-                />
-              </LinearLayout>
+            <LinearLayout width="100%" mt="32px">
+              <ThemedButton
+                label={Facade.t('app.send')}
+                onPress={() => Facade.await.run('submit', submit)}
+              />
             </LinearLayout>
-          </TouchableHighlight>
-        </AwaitActivity>
-      </ScrollView>
-    )
+          </LinearLayout>
+        </TouchableHighlight>
+      </AwaitActivity>
+    </ScrollView>
+  ) : (
+    <LinearLayout />
   )
 }
 

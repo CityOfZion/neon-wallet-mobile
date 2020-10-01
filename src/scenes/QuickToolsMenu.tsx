@@ -97,7 +97,7 @@ export default function QuickToolsMenu(props: Props) {
       source: require('~src/assets/images/icon-circle-send-primary.png'),
       onClick: () =>
         navigation.navigate(Facade.route.Modal.name, {
-          screen: Facade.route.SendWalletSelectionModal.name,
+          screen: Facade.route.SendModalStack.name,
         }),
     },
     {
