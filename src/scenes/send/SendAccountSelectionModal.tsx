@@ -50,88 +50,85 @@ const SendAccountSelectionModal = (props: Props) => {
     setSelectedAccount(accounts[0])
   }
 
-  return (
-    show && (
-      <ScrollView
-        style={{
-          width: '100%',
-          marginTop: useHeaderHeight(),
-        }}
-        contentContainerStyle={{
-          flexGrow: 1,
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          paddingBottom: PANEL_OFFSET + 20,
-          paddingLeft: 5,
-          paddingRight: 5,
-        }}
-      >
-        <TouchableHighlight>
-          <LinearLayout px={5}>
-            <TextView
-              mb={4}
-              color={'text.3'}
-              fontSize={'md'}
-              fontFamily={'bold'}
-              textAlign={'center'}
-            >
-              {props.route.params.wallet.name?.toUpperCase()}
-            </TextView>
+  return show ? (
+    <ScrollView
+      style={{
+        width: '100%',
+        marginTop: useHeaderHeight(),
+      }}
+      contentContainerStyle={{
+        flexGrow: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        paddingBottom: PANEL_OFFSET + 20,
+        paddingLeft: 5,
+        paddingRight: 5,
+      }}
+    >
+      <TouchableHighlight>
+        <LinearLayout px={5}>
+          <TextView
+            mb={4}
+            color={'text.3'}
+            fontSize={'md'}
+            fontFamily={'bold'}
+            textAlign={'center'}
+          >
+            {props.route.params.wallet.name?.toUpperCase()}
+          </TextView>
 
-            <TextView
-              color={'text.0'}
-              fontSize={'lg'}
-              fontFamily={'medium'}
-              textAlign={'center'}
-            >
-              {Facade.t('modals.send.accountSelection.subtitle')}
-            </TextView>
+          <TextView
+            color={'text.0'}
+            fontSize={'lg'}
+            fontFamily={'medium'}
+            textAlign={'center'}
+          >
+            {Facade.t('modals.send.accountSelection.subtitle')}
+          </TextView>
 
-            <LinearLayout minHeight={260} mx={-5}>
-              <AccountPicker
-                accounts={accounts}
-                onSelect={setSelectedAccount}
-              />
-            </LinearLayout>
-
-            <TextView
-              mb={4}
-              color={'text.3'}
-              fontSize={'md'}
-              textAlign={'center'}
-            >
-              {Facade.t('modals.send.accountSelection.label')}
-            </TextView>
-
-            {selectedAccount && (
-              <LinearLayout width={'100%'} mb={6}>
-                <BalanceList
-                  tokenAssets={selectedAccount.tokenAssets}
-                  fromAccountView={false}
-                />
-              </LinearLayout>
-            )}
-
-            <LinearLayout mb={6} minWidth={'80%'} maxWidth={'100%'}>
-              <ThemedButton
-                label={Facade.t('app.next')}
-                onPress={() =>
-                  props.navigation.navigate(
-                    Facade.route.SendTransactionInputModal.name,
-                    {
-                      walletTitle: props.route.params.wallet.name ?? '',
-                      account: selectedAccount ?? new Account(),
-                      uri: props.route.params?.uri,
-                    }
-                  )
-                }
-                disabled={!selectedAccount?.hasFunds}
-              />
-            </LinearLayout>
+          <LinearLayout minHeight={260} mx={-5}>
+            <AccountPicker accounts={accounts} onSelect={setSelectedAccount} />
           </LinearLayout>
-        </TouchableHighlight>
-      </ScrollView>
-    )
+
+          <TextView
+            mb={4}
+            color={'text.3'}
+            fontSize={'md'}
+            textAlign={'center'}
+          >
+            {Facade.t('modals.send.accountSelection.label')}
+          </TextView>
+
+          {selectedAccount && (
+            <LinearLayout width={'100%'} mb={6}>
+              <BalanceList
+                tokenAssets={selectedAccount.tokenAssets}
+                fromAccountView={false}
+              />
+            </LinearLayout>
+          )}
+
+          <LinearLayout mb={6} minWidth={'80%'} maxWidth={'100%'}>
+            <ThemedButton
+              label={Facade.t('app.next')}
+              onPress={() =>
+                props.navigation.navigate(
+                  Facade.route.SendTransactionInputModal.name,
+                  {
+                    walletTitle: props.route.params.wallet.name ?? '',
+                    account: selectedAccount ?? new Account(),
+                    uri: props.route.params?.uri,
+                  }
+                )
+              }
+              disabled={!selectedAccount?.hasFunds}
+            />
+          </LinearLayout>
+        </LinearLayout>
+      </TouchableHighlight>
+    </ScrollView>
+  ) : (
+    <LinearLayout />
   )
 }
 

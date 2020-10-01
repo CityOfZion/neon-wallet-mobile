@@ -324,10 +324,13 @@ const GetAccountView = (props: GetAccountViewProps) => {
               ? undefined
               : () => {
                   props.navigation.navigate(Facade.route.Modal.name, {
-                    screen: Facade.route.SendTransactionInputModal.name,
+                    screen: Facade.route.SendModalStack.name,
                     params: {
-                      walletTitle: wallet?.name ?? '',
-                      account,
+                      screen: Facade.route.SendTransactionInputModal.name,
+                      params: {
+                        walletTitle: wallet?.name ?? '',
+                        account,
+                      },
                     },
                   })
                 }

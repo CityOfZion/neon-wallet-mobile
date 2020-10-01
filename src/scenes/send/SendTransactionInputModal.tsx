@@ -491,115 +491,113 @@ const SendTransactionInputModal = (prop: Props) => {
     }
   }
 
-  return (
-    show && (
-      <InputScrollView
-        useAnimatedScrollView={true}
-        keyboardOffset={300}
-        showsVerticalScrollIndicator={false}
-        style={{
-          width: '100%',
-          marginTop: useHeaderHeight(),
-        }}
-        contentContainerStyle={{
-          flexGrow: 1,
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          paddingBottom: PANEL_OFFSET + 20,
-          paddingLeft: 15,
-          paddingRight: 15,
-        }}
-      >
-        <LinearLayout orientation="verti">
-          <TextView
-            mb="24px"
+  return show ? (
+    <InputScrollView
+      useAnimatedScrollView={true}
+      keyboardOffset={300}
+      showsVerticalScrollIndicator={false}
+      style={{
+        width: '100%',
+        marginTop: useHeaderHeight(),
+      }}
+      contentContainerStyle={{
+        flexGrow: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        paddingBottom: PANEL_OFFSET + 20,
+        paddingLeft: 15,
+        paddingRight: 15,
+      }}
+    >
+      <LinearLayout orientation="verti">
+        <TextView
+          mb="24px"
+          alignSelf="center"
+          color="text.3"
+          fontSize="md"
+          fontFamily="bold"
+        >
+          {walletTitle}
+        </TextView>
+
+        <AccountCard account={account} />
+
+        <TouchableWithoutFeedback onPress={() => prop.navigation.goBack()}>
+          <LinearLayout
+            orientation="horiz"
             alignSelf="center"
-            color="text.3"
-            fontSize="md"
-            fontFamily="bold"
-          >
-            {walletTitle}
-          </TextView>
-
-          <AccountCard account={account} />
-
-          <TouchableWithoutFeedback onPress={() => prop.navigation.goBack()}>
-            <LinearLayout
-              orientation="horiz"
-              alignSelf="center"
-              alignItems="center"
-              mt="40px"
-            >
-              <ImageView
-                source={require('~/src/assets/images/icon-reselect-green.png')}
-              />
-              <TextView ml="6px" color="primary" fontFamily="medium">
-                {Facade.t(
-                  'modals.send.transactionInput.selectDifferentAccount'
-                )}
-              </TextView>
-            </LinearLayout>
-          </TouchableWithoutFeedback>
-
-          <TextView
+            alignItems="center"
             mt="40px"
-            alignSelf="center"
-            color="text.3"
-            fontSize="md"
-            fontFamily="bold"
           >
-            {Facade.t('modals.send.transactionInput.transactionDetails')}
-          </TextView>
-
-          <DestinationAddressField
-            address={receiverAddress}
-            onAddressChanged={handleAddressChanged}
-            contact={contact}
-            onSelected={selectContactOrAccount}
-            handleQrCode={handleQrCode}
-          />
-
-          <TokenField
-            account={account}
-            navigation={prop.navigation}
-            token={token}
-            setToken={setToken}
-          />
-
-          <AmountField
-            amount={amount}
-            setAmount={(a) => setAmount(a)}
-            token={token}
-            tokenBalance={getTokenBalance()}
-            remainingTokenBalance={getRemainingTokenBalance()}
-            validator={validateAmount}
-          />
-
-          <TextView
-            mt="56px"
-            mb="24px"
-            fontFamily="semibold"
-            color="text.0"
-            alignSelf="center"
-            fontSize="14px"
-          >
-            {Facade.t(
-              'modals.send.transactionInput.prioritiseTransfer'
-            ).toUpperCase()}
-          </TextView>
-
-          <PriorityTab priority={priority} changePriority={changePriority} />
-
-          <LinearLayout mb="58px" px="24px" alignSelf="center" width="100%">
-            <ThemedButton
-              label={Facade.t('app.next')}
-              onPress={submit}
-              disabled={!validateFields()}
+            <ImageView
+              source={require('~/src/assets/images/icon-reselect-green.png')}
             />
+            <TextView ml="6px" color="primary" fontFamily="medium">
+              {Facade.t('modals.send.transactionInput.selectDifferentAccount')}
+            </TextView>
           </LinearLayout>
+        </TouchableWithoutFeedback>
+
+        <TextView
+          mt="40px"
+          alignSelf="center"
+          color="text.3"
+          fontSize="md"
+          fontFamily="bold"
+        >
+          {Facade.t('modals.send.transactionInput.transactionDetails')}
+        </TextView>
+
+        <DestinationAddressField
+          address={receiverAddress}
+          onAddressChanged={handleAddressChanged}
+          contact={contact}
+          onSelected={selectContactOrAccount}
+          handleQrCode={handleQrCode}
+        />
+
+        <TokenField
+          account={account}
+          navigation={prop.navigation}
+          token={token}
+          setToken={setToken}
+        />
+
+        <AmountField
+          amount={amount}
+          setAmount={(a) => setAmount(a)}
+          token={token}
+          tokenBalance={getTokenBalance()}
+          remainingTokenBalance={getRemainingTokenBalance()}
+          validator={validateAmount}
+        />
+
+        <TextView
+          mt="56px"
+          mb="24px"
+          fontFamily="semibold"
+          color="text.0"
+          alignSelf="center"
+          fontSize="14px"
+        >
+          {Facade.t(
+            'modals.send.transactionInput.prioritiseTransfer'
+          ).toUpperCase()}
+        </TextView>
+
+        <PriorityTab priority={priority} changePriority={changePriority} />
+
+        <LinearLayout mb="58px" px="24px" alignSelf="center" width="100%">
+          <ThemedButton
+            label={Facade.t('app.next')}
+            onPress={submit}
+            disabled={!validateFields()}
+          />
         </LinearLayout>
-      </InputScrollView>
-    )
+      </LinearLayout>
+    </InputScrollView>
+  ) : (
+    <LinearLayout />
   )
 }
 
