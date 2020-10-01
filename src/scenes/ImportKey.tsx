@@ -77,7 +77,6 @@ const ImportKey = (props: ImportKeyProps) => {
         <TextView
           textAlign="center"
           fontSize={18}
-          fontFamily="medium"
           color={theme.colors.text[0]}
           alignSelf="center"
           flexWrap="wrap"

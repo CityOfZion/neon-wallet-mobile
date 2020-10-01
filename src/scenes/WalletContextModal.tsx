@@ -81,11 +81,7 @@ export default function WalletContextModal(props: Props) {
                 justifyContent="space-between"
               >
                 <LinearLayout>
-                  <TextView
-                    color={theme.colors.text[0]}
-                    fontSize={18}
-                    fontFamily="bold"
-                  >
+                  <TextView color={theme.colors.text[0]} fontSize={18}>
                     {item.title}
                   </TextView>
                 </LinearLayout>

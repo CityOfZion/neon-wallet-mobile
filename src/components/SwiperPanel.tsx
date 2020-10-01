@@ -167,12 +167,7 @@ const Header = (props: SwiperProps & {mb: number}) => {
           />
         ) : undefined}
 
-        <TextView
-          color={theme.colors.text[0]}
-          fontSize={24}
-          fontFamily="semibold"
-          alignSelf="center"
-        >
+        <TextView color={theme.colors.text[0]} fontSize={24} alignSelf="center">
           {props.title}
         </TextView>
       </LinearLayout>

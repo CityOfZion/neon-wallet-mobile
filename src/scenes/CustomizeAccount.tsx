@@ -199,7 +199,6 @@ const CustomizeAccount = (props: Props) => {
             mb="32px"
             color={theme.colors.text[0]}
             fontSize={18}
-            fontFamily="medium"
             textAlign="center"
           >
             {contentMap[props.route.params.source]?.subtitle ?? ''}

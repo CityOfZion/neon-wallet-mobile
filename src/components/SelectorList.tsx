@@ -51,7 +51,7 @@ const SelectorItemComponent = <T extends unknown>(
         alignItems="center"
         my="24px"
       >
-        <TextView weight={1} color="text.0" fontSize="18px" fontFamily="bold">
+        <TextView weight={1} color="text.0" fontSize="18px">
           {title}
         </TextView>
         {info.item.isSelected(info.item.data) ? (

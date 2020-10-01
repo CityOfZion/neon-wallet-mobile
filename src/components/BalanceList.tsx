@@ -184,13 +184,7 @@ const BalanceList = (props: Props) => {
           )}
         />
       ) : (
-        <TextView
-          my="32px"
-          color="text.0"
-          fontFamily="medium"
-          fontSize="18px"
-          textAlign="center"
-        >
+        <TextView my="32px" color="text.0" fontSize="18px" textAlign="center">
           {Facade.t('components.balanceList.empty')}
         </TextView>
       )}
