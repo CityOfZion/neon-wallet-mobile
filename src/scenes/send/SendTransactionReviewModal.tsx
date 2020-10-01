@@ -303,7 +303,9 @@ const SendTransactionReviewModal = (props: Props) => {
               <LinearLayout orientation={'horiz'}>
                 <HeaderColumn
                   weight={1}
-                  title={'Value'.toUpperCase()}
+                  title={Facade.t(
+                    'modals.transactionReview.value'
+                  ).toUpperCase()}
                   value={Facade.filter.currency(
                     senderTransaction.token?.exchangeToken(currency),
                     currency,
