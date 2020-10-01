@@ -171,11 +171,21 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
             />
           </LinearLayout>
 
-          <TextView fontFamily={'light'} mb={4} color={'text.0'} fontSize={'lg'}>
+          <TextView
+            fontFamily={'light'}
+            mb={4}
+            color={'text.0'}
+            fontSize={'lg'}
+          >
             {Facade.t('step1BackupWallet.body_2')}
           </TextView>
 
-          <TextView fontFamily={'light'} mb={5} color={'text.0'} fontSize={'lg'}>
+          <TextView
+            fontFamily={'light'}
+            mb={5}
+            color={'text.0'}
+            fontSize={'lg'}
+          >
             {Facade.t('step1BackupWallet.body_3')}
           </TextView>
         </LinearLayout>

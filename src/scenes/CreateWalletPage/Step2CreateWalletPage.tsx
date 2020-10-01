@@ -135,11 +135,21 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
             />
           </LinearLayout>
 
-          <TextView fontFamily={'light'} mb={4} color={'text.0'} fontSize={'lg'}>
+          <TextView
+            fontFamily={'light'}
+            mb={4}
+            color={'text.0'}
+            fontSize={'lg'}
+          >
             {Facade.t('step2CreateWallet.body_2')}
           </TextView>
 
-          <TextView fontFamily={'light'} mb={5} color={'text.0'} fontSize={'lg'}>
+          <TextView
+            fontFamily={'light'}
+            mb={5}
+            color={'text.0'}
+            fontSize={'lg'}
+          >
             {Facade.t('step2CreateWallet.body_3')}
           </TextView>
         </LinearLayout>

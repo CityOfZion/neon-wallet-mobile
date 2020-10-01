@@ -7,7 +7,10 @@ import {ScrollView, TouchableHighlight} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {AccountView} from '~src/components/AccountView'
+import {HeaderColumn} from '~src/components/HeaderColumn'
 import {PANEL_OFFSET} from '~src/components/SwiperPanel'
+import {TokenView} from '~src/components/TokenView'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {TokenAsset} from '~src/models/TokenAsset'
@@ -182,11 +185,47 @@ const TransactionSummaryContainer = () => {
 
 const SendTransactionReviewModal = (props: Props) => {
   const {senderTransaction} = useSelector((state: RootState) => state)
-  const {accounts} = useSelector((state: RootState) => state.app)
+  const contacts = useSelector((state: RootState) => state.app.contacts)
+  const accounts = useSelector((state: RootState) => state.app.accounts)
+  const wallets = useSelector((state: RootState) => state.app.wallets)
 
   const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string | null>>()
+  const {currency, language} = useSelector((state: RootState) => state.settings)
+
+  let senderName = undefined
+  const senderAddress = senderTransaction.senderAddress ?? undefined
+
+  let senderWallet = undefined
+  let receiverWallet = undefined
+
+  let receiverName = undefined
+  const receiverAddress = senderTransaction.receiverAddress ?? undefined
+
+  const senderAccount = accounts.find(
+    (account) => account.address === senderAddress
+  )
+  if (senderAccount) {
+    senderWallet = senderAccount.getWallet(wallets)?.name
+  } else {
+    const contact = contacts.find(
+      (value) => value.address === senderTransaction.senderAddress
+    )
+    senderName = contact?.name ?? undefined
+  }
+  const receiverAccount = accounts.find(
+    (account) => account.address === receiverAddress
+  )
+
+  if (receiverAccount) {
+    receiverWallet = receiverAccount.getWallet(wallets)?.name
+  } else {
+    const contact = contacts.find(
+      (value) => value.address === senderTransaction.receiverAddress
+    )
+    receiverName = contact?.name ?? undefined
+  }
 
   const show = useNavigationState(
     (state) =>
@@ -260,7 +299,60 @@ const SendTransactionReviewModal = (props: Props) => {
               {Facade.t('modals.send.transactionReview.pleaseReview')}
             </TextView>
 
-            <TransactionSummaryContainer />
+            <LinearLayout width={'100%'}>
+              <LinearLayout orientation={'horiz'}>
+                <HeaderColumn
+                  weight={1}
+                  title={'Value'.toUpperCase()}
+                  value={Facade.filter.currency(
+                    senderTransaction.token?.exchangeToken(currency),
+                    currency,
+                    language
+                  )}
+                />
+                <HeaderColumn
+                  title={Facade.t(
+                    'transactionDetails.priorityFee'
+                  ).toUpperCase()}
+                  value={`${senderTransaction.feeAmount?.fee ?? 0} GAS`}
+                  weight={1}
+                  priorityFee={senderTransaction.feeAmount ?? undefined}
+                />
+              </LinearLayout>
+
+              <TextView
+                color={'text.10'}
+                fontFamily={'medium'}
+                fontSize={18}
+                mt={4}
+              >
+                {Facade.t('transactionDetails.sender')}
+              </TextView>
+              <AccountView
+                contactName={senderName}
+                address={senderAddress ?? ''}
+                accountName={senderAccount?.name ?? undefined}
+                walletName={senderWallet ?? undefined}
+              />
+              <TextView
+                color={'text.10'}
+                fontFamily={'medium'}
+                fontSize={18}
+                mt={4}
+              >
+                {Facade.t('transactionDetails.recipient')}
+              </TextView>
+              <AccountView
+                contactName={receiverName}
+                address={receiverAddress ?? ''}
+                accountName={receiverAccount?.name ?? undefined}
+                walletName={receiverWallet ?? undefined}
+              />
+              <TokenView
+                transaction={senderTransaction}
+                hideSingleTokenPrice={true}
+              />
+            </LinearLayout>
 
             <LinearLayout width="100%" mt="32px">
               <ThemedButton

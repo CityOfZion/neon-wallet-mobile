@@ -33,7 +33,6 @@ function QuickToolsItem(props: {
   index: number
   listItems: ListItem[]
 }) {
-
   return (
     <TouchableHighlight
       activeOpacity={1}
