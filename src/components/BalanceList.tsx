@@ -30,18 +30,19 @@ interface ListProps {
 }
 
 const ViewBalanceItem = (props: ItemProps) => {
+  const colorHash = props.item.hash.substring(0, 6)
   return (
     <LinearLayout
       orientation="horiz"
       alignItems="center"
       alignContent={'center'}
     >
-      <ImageView
+      <LinearLayout
         mr={'8px'}
-        width={Facade.scale(24)}
-        height={Facade.scale(24)}
-        resizeMode={'contain'}
-        source={props.item.srcIcon}
+        width={12}
+        height={12}
+        borderRadius={12 / 2}
+        backgroundColor={`#${colorHash}`}
         alginSelf={'center'}
       />
 
