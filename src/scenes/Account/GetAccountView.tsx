@@ -2,6 +2,7 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useState, useEffect} from 'react'
+import {InteractionManager} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 
@@ -28,7 +29,6 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
-import {InteractionManager} from 'react-native'
 
 export interface GetAccountParams {}
 
@@ -160,10 +160,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }, [address])
 
   useEffect(() => {
-    Facade.await.run('populateUnclaimed', () => populateUnclaimed())
-  }, [])
-
-  useEffect(() => {
     const interactionPromise = InteractionManager.runAfterInteractions(() => {
       if (!isAssetsTabSelected) {
         setCurrentPage(1)
@@ -174,7 +170,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
     return () => {
       interactionPromise.cancel()
     }
-  }, [isAssetsTabSelected, account.pendingTransactions])
+  }, [isAssetsTabSelected, account])
 
   useEffect(() => {
     const senderTxs = account.pendingTransactions.flatMap(
@@ -187,7 +183,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
     } else {
       Facade.await.done(`ClaimGas@${account.address}`)
     }
-  }, [account.pendingTransactions])
+
+    populateUnclaimed()
+  }, [account])
 
   const isClaimAvailable = () => {
     return Boolean(unclaimedGasAmount && !isWatchAccount)

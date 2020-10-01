@@ -5,6 +5,7 @@ import {NeoNode} from '~src/models/NeoNode'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Settings} from '~src/models/redux/Settings'
+import {AddressRequest} from '~src/models/request/AddressRequest'
 
 export abstract class NeonHelper {
   /**
@@ -91,15 +92,29 @@ export abstract class NeonHelper {
     const accounts = (await Storage.accounts.load()) ?? []
 
     const account = accounts.find((it) => it.address === address)
+
     const neoAccount = await account?.getNeoAccount()
 
     if (!neoAccount) {
       throw new Error('Neo Account not found')
     }
 
+    const request = new AddressRequest(address)
+    const response = await request.getBalance()
+    const balance = response.balance.find((it) => it.assetSymbol === 'NEO')
+    const amount = balance?.amount ?? null
+
+    if (!amount) {
+      throw new Error('You must have NEO in your account')
+    }
+
     const apiProvider = new api.neoscan.instance(
       settings.network.networkDeprecatedLabel
     )
+
+    await this.sendNativeAsset(address, address, 'NEO', amount)
+
+    await new Promise((resolve) => setTimeout(resolve, 45000))
 
     const claimGasResponse = await api.claimGas({
       api: apiProvider,

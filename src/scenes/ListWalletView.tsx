@@ -44,12 +44,13 @@ const WalletChangeComponent = (props: {
 }) => {
   const {currency, language} = useSelector((state: RootState) => state.settings)
   const {exchange} = useSelector((state: RootState) => state.app)
-  const [variationInPercent, setVariationInPercent] = useState(0)
+  const [variationInPercent, setVariationInPercent] = useState<number>()
 
   if (!props.wallet) return <View />
 
   useEffect(() => {
-    Facade.await.run('populateVariation', () => populate())
+    setVariationInPercent(undefined)
+    populate()
   }, [props.wallet])
 
   const populate = async () => {
@@ -109,14 +110,16 @@ const WalletChangeComponent = (props: {
               {Facade.t('screens.listWallets.changeInLast24hours')}
             </TextView>
 
-            <TextView
-              fontSize={'sm'}
-              color={variationInPercent >= 0 ? 'success' : 'danger'}
-              fontFamily={'semibold'}
-            >
-              {variationInPercent > 0 ? '+' : ''}
-              {Facade.filter.decimal(variationInPercent, language, 2)}%
-            </TextView>
+            {variationInPercent !== undefined && (
+              <TextView
+                fontSize={'sm'}
+                color={variationInPercent >= 0 ? 'success' : 'danger'}
+                fontFamily={'semibold'}
+              >
+                {variationInPercent > 0 ? '+' : ''}
+                {Facade.filter.decimal(variationInPercent, language, 2)}%
+              </TextView>
+            )}
           </LinearLayout>
         </AwaitActivity>
       </LinearLayout>

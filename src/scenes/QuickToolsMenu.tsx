@@ -67,7 +67,7 @@ function QuickToolsItem(props: {
           />
         </LinearLayout>
 
-        {props.index != props.listItems.length - 1 && (
+        {props.index !== props.listItems.length - 1 && (
           <LinearLayout height="1px" bg={'background.5'} />
         )}
       </LinearLayout>

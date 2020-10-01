@@ -214,7 +214,6 @@ export class Account implements AccountState {
         [
           it.transactionHash,
           it.senderAddress,
-          it.receiverAddress,
           it.sentAt,
           it.token?.symbol ?? '',
           it.token?.amount ?? '',

@@ -53,7 +53,12 @@ export class TransactionDateGroup {
           .chain(transactions)
           .groupBy((it) => it.transactionHash)
           .map((senderTxs) => {
-            const senderTx = senderTxs[0]
+            const senderTx =
+              senderTxs.find(
+                (it) =>
+                  it.receiverAddress !== 'fees' &&
+                  it.receiverAddress !== 'claim'
+              ) ?? senderTxs[0]
             senderTx.tokens = senderTxs
               .filter((it) => it.token)
               .map((it) => it.token as TokenAsset)
