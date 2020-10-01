@@ -35,7 +35,10 @@ export class TokenAsset {
   }
 
   get srcIcon() {
-    return (Image as any)[this.symbol] ?? Image['NEO']
+    return (
+      (Image as any)[this.symbol] ??
+      require('~/src/assets/images/icon-default-nep5.png')
+    )
   }
 
   getCurrencyRatio(currency: Currency, exchange: Exchange) {
