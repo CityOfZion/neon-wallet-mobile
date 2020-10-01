@@ -91,7 +91,7 @@ const PriorityTab = (props: {
               fontSize="16px"
               fontFamily="semibold"
             >
-              {Facade.t('modals.send.transactionInput.priorityFast')}
+              {FastPriority().name}
             </TextView>
             <TextView
               color={
@@ -135,7 +135,7 @@ const PriorityTab = (props: {
               fontSize="16px"
               fontFamily="semibold"
             >
-              {Facade.t('modals.send.transactionInput.priorityFaster')}
+              {FasterPriority().name}
             </TextView>
             <TextView
               color={
@@ -177,7 +177,7 @@ const PriorityTab = (props: {
               fontSize="16px"
               fontFamily="semibold"
             >
-              {Facade.t('modals.send.transactionInput.priorityFastest')}
+              {FastestPriority().name}
             </TextView>
             <TextView
               color={
