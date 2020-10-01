@@ -30,104 +30,7 @@ interface ListProps {
   account?: Account
 }
 
-const ViewBalanceItem = (props: ItemProps) => {
-  return (
-    <LinearLayout
-      orientation="horiz"
-      alignItems="center"
-      alignContent={'center'}
-    >
-      <ImageView
-        mr={'8px'}
-        width={Facade.scale(24)}
-        height={Facade.scale(24)}
-        resizeMode={'contain'}
-        alginSelf={'center'}
-        source={props.item.srcIcon}
-      />
-
-      <LinearLayout weight={1} orientation="verti" mt={5} mb={4}>
-        <TextView
-          color="text.0"
-          fontSize="xl"
-          fontFamily="medium"
-          allowFontScaling={true}
-          adjustsFontSizeToFit={true}
-          numberOfLines={1}
-          mb={'6px'}
-        >
-          {props.item.symbol}
-        </TextView>
-      </LinearLayout>
-
-      <LinearLayout weight={1} ml={4}>
-        <LinearLayout weight={1} orientation="verti" justifyContent={'center'}>
-          <TextView
-            mb="-6px"
-            color="text.2"
-            fontSize="sm"
-            allowFontScaling={true}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            mr={4}
-          >
-            {Facade.t('components.balanceList.holdings')}
-          </TextView>
-          <TextView
-            mt={1}
-            color="text.2"
-            fontSize="sm"
-            fontFamily="medium"
-            allowFontScaling={true}
-            adjustsFontSizeToFit={true}
-            numberOfLines={1}
-          >
-            {Facade.t('components.balanceList.value')}
-          </TextView>
-        </LinearLayout>
-      </LinearLayout>
-      <LinearLayout weight={1} />
-      <LinearLayout weight={1} ml={4}>
-        <LinearLayout
-          weight={1}
-          orientation="verti"
-          mt={5}
-          mb={4}
-          alignItems={'flex-end'}
-        >
-          <TextView
-            mb="-6px"
-            color="text.0"
-            fontSize="md"
-            allowFontScaling={true}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            textAlign={'right'}
-          >
-            {String(props.item.amount)}
-          </TextView>
-          <TextView
-            mt={1}
-            color="primary"
-            fontSize="md"
-            fontFamily="medium"
-            allowFontScaling={true}
-            adjustsFontSizeToFit={true}
-            numberOfLines={1}
-          >
-            {Facade.filter.currency(
-              props.item.exchangeToken(props.currency, props.exchange),
-              props.currency,
-              props.language
-            )}
-          </TextView>
-        </LinearLayout>
-      </LinearLayout>
-    </LinearLayout>
-  )
-}
-
-const ViewBalanceItemColour = (props: ItemProps) => {
+const ViewBalanceItem = (props: ItemProps & ListProps) => {
   const colorHash = props.item.hash.substring(0, 6)
   return (
     <LinearLayout
@@ -135,14 +38,25 @@ const ViewBalanceItemColour = (props: ItemProps) => {
       alignItems="center"
       alignContent={'center'}
     >
-      <LinearLayout
-        mr={'8px'}
-        width={12}
-        height={12}
-        borderRadius={12 / 2}
-        backgroundColor={`#${colorHash}`}
-        alginSelf={'center'}
-      />
+      {props.fromListWalletView ? (
+        <LinearLayout
+          mr={'8px'}
+          width={12}
+          height={12}
+          borderRadius={12 / 2}
+          backgroundColor={`#${colorHash}`}
+          alginSelf={'center'}
+        />
+      ) : (
+        <ImageView
+          mr={'8px'}
+          width={Facade.scale(24)}
+          height={Facade.scale(24)}
+          resizeMode={'contain'}
+          alginSelf={'center'}
+          source={props.item.srcIcon}
+        />
+      )}
 
       <LinearLayout weight={1} orientation="verti" mt={5} mb={4}>
         <TextView
@@ -244,8 +158,6 @@ const BalanceListItem = (props: ListProps & ItemProps) => {
             <ViewBalanceItem {...props} />
           </View>
         </TouchableOpacity>
-      ) : props.fromListWalletView ? (
-        <ViewBalanceItemColour {...props} />
       ) : (
         <ViewBalanceItem {...props} />
       )}
