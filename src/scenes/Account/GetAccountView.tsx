@@ -349,7 +349,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           <BalanceList
             my="16px"
             tokenAssets={account.tokenAssets}
-            account={account}
+            address={account.address ?? undefined}
             fromAccountView={true}
             fromListWalletView={false}
           />

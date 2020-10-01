@@ -24,24 +24,53 @@ interface AccountAssetDetailProps {
 export interface AccountAssetDetailParams {
   token: TokenAsset
   address: string
+  walletId?: string
 }
 
 const AccountAssetDetail = (props: AccountAssetDetailProps) => {
-  const {token, address} = props.route.params
+  const {token, address, walletId} = props.route.params
 
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const walletsPool = useSelector((state: RootState) => state.app.wallets)
 
   const [transactions, setTransactions] = useState<TransactionDateGroup[]>([])
   const [currentPage, setCurrentPage] = useState(1)
 
   const account = accountsPool.find((it) => it.address === address)
+  const wallet = walletsPool.find((it) => it.id === walletId)
 
   useEffect(() => {
     Facade.await.run('populateTransaction', () => fetchTransaction(1))
   }, [])
 
   const fetchTransaction = async (currentPage: number, collector = 0) => {
+    if (wallet) {
+      const entries = await wallet.getTransactions(
+        accountsPool,
+        tokensPool,
+        currentPage
+      )
+
+      setCurrentPage(currentPage + 1)
+
+      // Apply filter
+      const senderTxs = entries.filter((it) => it.token?.hash === token.hash)
+
+      const transactions = TransactionDateGroup.toTransactionDateGroup(
+        senderTxs
+      )
+      setTransactions(transactions)
+
+      collector += senderTxs.length
+      if (collector < 15) {
+        // handling pagination with post filter
+        await fetchTransaction(currentPage + 1, collector)
+      }
+
+      return
+    }
+
     const model = Facade.utils.clone(account ?? new Account())
 
     const pagination = await model.populateTransactions(tokensPool, currentPage)

@@ -7,14 +7,14 @@ import {Facade} from '~src/app/Facade'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {Exchange} from '~src/types/exchange'
 
 interface Props extends LinearLayoutProps {
   tokenAssets: TokenAsset[]
   fromAccountView: boolean
-  account?: Account
+  address?: string
+  walletId?: string
 }
 
 interface ItemProps {
@@ -27,7 +27,8 @@ interface ItemProps {
 interface ListProps {
   fromAccountView: boolean
   fromListWalletView: boolean
-  account?: Account
+  address?: string
+  walletId?: string
 }
 
 const ViewBalanceItem = (props: ItemProps & ListProps) => {
@@ -140,17 +141,17 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
 }
 
 const BalanceListItem = (props: ListProps & ItemProps) => {
-  const account = props.account ?? new Account()
   const navigation = useNavigation()
 
   return (
     <LinearLayout>
-      {props.fromAccountView ? (
+      {props.fromAccountView || props.fromListWalletView ? (
         <TouchableOpacity
           onPress={() =>
             navigation?.navigate(Facade.route.AccountAssetDetail.name, {
               token: props.item,
-              address: account.address,
+              address: props.address,
+              walletId: props.walletId,
             })
           }
         >
@@ -190,7 +191,8 @@ const BalanceList = (props: Props) => {
               item={item}
               fromAccountView={props.fromAccountView}
               fromListWalletView={props.fromListWalletView}
-              account={props.account}
+              address={props.address}
+              walletId={props.walletId}
               currency={currency}
               exchange={exchange}
               language={language}
