@@ -94,6 +94,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
             <BalanceList
               tokenAssets={selectedAccount.tokenAssets}
               fromAccountView={false}
+              fromListWalletView={false}
             />
           </LinearLayout>
         )}

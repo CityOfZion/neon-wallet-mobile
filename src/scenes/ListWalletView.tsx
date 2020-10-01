@@ -289,6 +289,7 @@ const ListWalletView = (props: WalletProps) => {
                 mb={6}
                 tokenAssets={selectedWallet?.tokenAssets ?? []}
                 fromAccountView={false}
+                fromListWalletView={true}
               />
             )}
           </LinearLayout>

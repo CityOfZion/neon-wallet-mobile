@@ -26,10 +26,11 @@ interface ItemProps {
 
 interface ListProps {
   fromAccountView: boolean
+  fromListWalletView: boolean
   account?: Account
 }
 
-const ViewBalanceItem = (props: ItemProps) => {
+const ViewBalanceItem = (props: ItemProps & ListProps) => {
   const colorHash = props.item.hash.substring(0, 6)
   return (
     <LinearLayout
@@ -37,14 +38,25 @@ const ViewBalanceItem = (props: ItemProps) => {
       alignItems="center"
       alignContent={'center'}
     >
-      <LinearLayout
-        mr={'8px'}
-        width={12}
-        height={12}
-        borderRadius={12 / 2}
-        backgroundColor={`#${colorHash}`}
-        alginSelf={'center'}
-      />
+      {props.fromListWalletView ? (
+        <LinearLayout
+          mr={'8px'}
+          width={12}
+          height={12}
+          borderRadius={12 / 2}
+          backgroundColor={`#${colorHash}`}
+          alginSelf={'center'}
+        />
+      ) : (
+        <ImageView
+          mr={'8px'}
+          width={Facade.scale(24)}
+          height={Facade.scale(24)}
+          resizeMode={'contain'}
+          alginSelf={'center'}
+          source={props.item.srcIcon}
+        />
+      )}
 
       <LinearLayout weight={1} orientation="verti" mt={5} mb={4}>
         <TextView
@@ -177,6 +189,7 @@ const BalanceList = (props: Props) => {
             <BalanceListItem
               item={item}
               fromAccountView={props.fromAccountView}
+              fromListWalletView={props.fromListWalletView}
               account={props.account}
               currency={currency}
               exchange={exchange}
