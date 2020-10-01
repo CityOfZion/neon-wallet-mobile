@@ -20,7 +20,7 @@ const TabSelector = (props: TabSelectorProps) => {
         weight={1}
         alignItems="center"
         borderBottomWidth={!props.isFirstTabSelected ? '0px' : '3px'}
-        borderColor="text.0"
+        borderColor="primary"
       >
         <TextView
           width={'100%'}
@@ -30,7 +30,7 @@ const TabSelector = (props: TabSelectorProps) => {
           fontFamily="semibold"
           borderBottomWidth={'1px'}
           borderColor="text.0"
-          color={props.isFirstTabSelected ? 'text.0' : 'primary'}
+          color={props.isFirstTabSelected ? 'text.0' : 'text.3'}
         >
           {props.capitalize
             ? props.firstTabLabel.toUpperCase()
@@ -43,7 +43,7 @@ const TabSelector = (props: TabSelectorProps) => {
         weight={1}
         alignItems="center"
         borderBottomWidth={props.isFirstTabSelected ? '0px' : '3px'}
-        borderColor="text.0"
+        borderColor="primary"
       >
         <TextView
           width={'100%'}
@@ -53,7 +53,7 @@ const TabSelector = (props: TabSelectorProps) => {
           fontFamily="semibold"
           borderBottomWidth={'1px'}
           borderColor="text.0"
-          color={props.isFirstTabSelected ? 'primary' : 'text.0'}
+          color={props.isFirstTabSelected ? 'text.3' : 'text.0'}
         >
           {props.capitalize
             ? props.secondTabLabel.toUpperCase()
