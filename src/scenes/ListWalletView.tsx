@@ -288,6 +288,7 @@ const ListWalletView = (props: WalletProps) => {
               <BalanceList
                 mb={6}
                 tokenAssets={selectedWallet?.tokenAssets ?? []}
+                walletId={selectedWallet?.id ?? undefined}
                 fromAccountView={false}
                 fromListWalletView={true}
               />

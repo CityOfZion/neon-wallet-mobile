@@ -3,13 +3,13 @@ import {
   HttpExpose,
   ResponseSerialize,
 } from '@simpli/serialized-request'
-import send from 'expo-cli/build/commands/send'
 import moment, {Moment} from 'moment'
 
 import {Facade} from '~src/app/Facade'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {TokenAsset} from '~src/models/TokenAsset'
+import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {Account} from '~src/models/redux/Account'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Exchange} from '~src/types/exchange'
@@ -120,6 +120,23 @@ export class Wallet implements WalletState {
   populateTokenAssets(pool: Account[]) {
     const walletAccounts = this.getAccounts(pool)
     this.tokenAssets = Account.generateTokenAssetsFromPool(walletAccounts)
+  }
+
+  async getTransactions(
+    pool: Account[],
+    tokensPool: TokenAsset[],
+    currentPage?: number
+  ) {
+    const walletAccounts = this.getAccounts(pool)
+    const promises = walletAccounts.map((it) =>
+      it.populateTransactions(tokensPool, currentPage)
+    )
+
+    await Promise.all(promises)
+
+    return walletAccounts.flatMap((group) =>
+      group.transactions.flatMap((it) => it.transactions)
+    )
   }
 
   calculateBalance(currency: Currency, exchange: Exchange) {
