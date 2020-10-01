@@ -48,7 +48,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
       colors={
         props.transparent
           ? ['#00000000', '#00000000']
-          : [theme.colors.background[1], theme.colors.background[2]]
+          : [theme.colors.background[14], theme.colors.background[2]]
       }
       start={[1, 0]}
       end={[1, 1]}
