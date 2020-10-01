@@ -54,11 +54,12 @@ const ReceiveAccountSelectionModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       fullSize={true}
-      paddingTop={24}
+      paddingTop={11}
       paddingRight={0}
       paddingLeft={0}
       title={Facade.t('modals.receive.title')}
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
+      rightButton={}
+      onRightPress={() => controller.close}
       onClose={() => props.navigation.goBack()}
     >
       <LinearLayout px={5}>
