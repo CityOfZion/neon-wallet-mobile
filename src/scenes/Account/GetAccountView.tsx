@@ -351,6 +351,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
             tokenAssets={account.tokenAssets}
             account={account}
             fromAccountView={true}
+            fromListWalletView={false}
           />
         ) : account.tokenAssets.length ? (
           <AwaitActivity
