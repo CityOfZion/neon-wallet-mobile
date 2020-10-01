@@ -363,10 +363,7 @@
         "insufficientFunds": "Insufficient funds",
         "contacts": "Contacts",
         "paste": "Paste",
-        "scan": "Scan",
-        "priorityFast": "Fast",
-        "priorityFaster": "Faster",
-        "priorityFastest": "Fastest"
+        "scan": "Scan"
       },
       "transactionReview": {
         "token": "Token",
