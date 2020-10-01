@@ -21,7 +21,7 @@ const MorePage = (props: MoreProps) => {
         title={Facade.t('more.createWallet')}
         icon={require('~/src/assets/images/wallet-icon-green.png')}
         iconMarginRight={12}
-        iconHeight={28}
+        iconHeight={26}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
           props.navigation.navigate(Facade.route.Step1CreateWallet.name)
@@ -30,7 +30,7 @@ const MorePage = (props: MoreProps) => {
       <MenuItem
         title={Facade.t('more.createWatchAccount')}
         icon={require('~/src/assets/images/icon-watch-green.png')}
-        iconWidth={20}
+        iconHeight={21}
         iconMarginLeft={2}
         iconMarginRight={18}
         arrowDirection={RightIconType.NONE}
@@ -41,7 +41,7 @@ const MorePage = (props: MoreProps) => {
       <MenuItem
         title={Facade.t('more.import')}
         icon={require('~/src/assets/images/icon-import-green.png')}
-        iconWidth={26}
+        iconWidth={22}
         iconMarginRight={15}
         iconMarginLeft={1}
         arrowDirection={RightIconType.NONE}
@@ -52,7 +52,7 @@ const MorePage = (props: MoreProps) => {
       <MenuItem
         title={Facade.t('more.help')}
         icon={require('~/src/assets/images/icon-help-green.png')}
-        iconWidth={25}
+        iconWidth={21}
         iconMarginLeft={1}
         iconMarginRight={17}
         arrowDirection={RightIconType.NONE}
