@@ -20,7 +20,8 @@ const MorePage = (props: MoreProps) => {
       <MenuItem
         title={Facade.t('more.createWallet')}
         icon={require('~/src/assets/images/wallet-icon-green.png')}
-        iconMarginRight={12}
+        iconMarginRight={3}
+        iconMarginLeft={-1}
         iconHeight={26}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
@@ -31,8 +32,7 @@ const MorePage = (props: MoreProps) => {
         title={Facade.t('more.createWatchAccount')}
         icon={require('~/src/assets/images/icon-watch-green.png')}
         iconHeight={21}
-        iconMarginLeft={2}
-        iconMarginRight={18}
+        iconMarginRight={5}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
           props.navigation.navigate(Facade.route.ImportReadAccount.name)
