@@ -45,7 +45,7 @@ export class WalletReducer extends ReducerWrapper<
       return this.commit('SET_WALLET_TYPE', {walletType})
     },
     clearState: () => {
-      return this.commit('CLEAR_STATE', {})
+      return this.commit('CLEAR_STATE_WALLET', {})
     },
     getFromSelection: (): SyncAction<Wallet> => {
       return (dispatch, getState) => {

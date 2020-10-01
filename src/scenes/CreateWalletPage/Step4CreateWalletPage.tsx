@@ -78,14 +78,15 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
           <LinearLayout width={'100%'} orientation={'horiz'}>
             <TextView
               weight={1}
-              color={'primary'}
+              color={'text.0'}
               fontSize={'lg'}
               fontFamily={'bold'}
+              mb={4}
             >
               {Facade.t('step4CreateWallet.label_1')}
             </TextView>
 
-            <TextView color={'primary'} fontSize={'lg'} fontFamily={'bold'}>
+            <TextView color={'text.0'} fontSize={'lg'} fontFamily={'bold'}>
               {Facade.t('step4CreateWallet.threeOfThree')}
             </TextView>
           </LinearLayout>

@@ -78,23 +78,20 @@ export default function WalletContextModal(props: Props) {
                 pb="18px"
                 pt="16px"
                 alignItems="center"
+                justifyContent="space-between"
               >
-                <ImageView
-                  width={35}
-                  height={35}
-                  mr="13px"
-                  source={item.source}
-                />
-
                 <LinearLayout>
-                  <TextView
-                    color={theme.colors.text[0]}
-                    fontSize={18}
-                    fontFamily="bold"
-                  >
+                  <TextView color={theme.colors.text[0]} fontSize={18}>
                     {item.title}
                   </TextView>
                 </LinearLayout>
+
+                <ImageView
+                  width={35}
+                  height={35}
+                  ml="13px"
+                  source={item.source}
+                />
               </LinearLayout>
 
               <LinearLayout height="1px" bg={theme.colors.background[5]} />

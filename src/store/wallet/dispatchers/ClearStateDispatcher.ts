@@ -8,7 +8,7 @@ export class ClearStateDispatcher extends DispatcherWrapper<
   WalletState,
   WalletAction
 > {
-  readonly type = 'CLEAR_STATE'
+  readonly type = 'CLEAR_STATE_WALLET'
 
   readonly reducer: WalletReducer = (state, action) => {
     const emptyState = Model.parse<WalletState>(Wallet)

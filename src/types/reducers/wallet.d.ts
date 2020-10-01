@@ -9,7 +9,7 @@ export declare global {
     | 'SET_SECURITY_PHRASE'
     | 'SET_WALLET_TYPE'
     | 'SET_SHOW_BACKUP_ALERT'
-    | 'CLEAR_STATE'
+    | 'CLEAR_STATE_WALLET'
 
   type WalletType = 'standard' | 'watch' | 'legacy'
 

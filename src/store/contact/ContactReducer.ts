@@ -30,7 +30,7 @@ export class ContactReducer extends ReducerWrapper<
       return this.commit('SET_ADDRESS', {address})
     },
     clearState: () => {
-      return this.commit('CLEAR_STATE', {})
+      return this.commit('CLEAR_STATE_CONTACT', {})
     },
     createAndSave: (): AsyncAction<string> => {
       return async (dispatch, getState) => {

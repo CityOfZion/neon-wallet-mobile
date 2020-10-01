@@ -71,19 +71,19 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
             <LinearLayout width={'100%'} orientation={'horiz'}>
               <TextView
                 weight={1}
-                color={'primary'}
+                color={'text.0'}
                 fontSize={'lg'}
                 fontFamily={'bold'}
               >
                 {Facade.t('step2CreateWallet.label_1')}
               </TextView>
 
-              <TextView color={'primary'} fontSize={'lg'} fontFamily={'bold'}>
+              <TextView color={'text.0'} fontSize={'lg'} fontFamily={'bold'}>
                 {Facade.t('step2CreateWallet.oneOfThree')}
               </TextView>
             </LinearLayout>
 
-            <TextView color={'text.0'} fontSize={'lg'}>
+            <TextView fontFamily={'light'} color={'text.0'} fontSize={'lg'}>
               {Facade.t('step2CreateWallet.body_1')}
             </TextView>
           </LinearLayout>
@@ -135,11 +135,11 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
             />
           </LinearLayout>
 
-          <TextView mb={4} color={'text.0'} fontSize={'lg'}>
+          <TextView fontFamily={'light'} mb={4} color={'text.0'} fontSize={'lg'}>
             {Facade.t('step2CreateWallet.body_2')}
           </TextView>
 
-          <TextView mb={5} color={'text.0'} fontSize={'lg'}>
+          <TextView fontFamily={'light'} mb={5} color={'text.0'} fontSize={'lg'}>
             {Facade.t('step2CreateWallet.body_3')}
           </TextView>
         </LinearLayout>

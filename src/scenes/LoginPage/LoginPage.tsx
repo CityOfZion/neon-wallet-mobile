@@ -5,7 +5,7 @@ import React, {useState} from 'react'
 import {Alert, Platform, TouchableWithoutFeedback} from 'react-native'
 
 import {LocalAuthenticationResult} from '~/node_modules/expo-local-authentication/src/LocalAuthentication.types'
-import { ThemedFlatButton } from '~/src/components/themed/ThemedFlatButton'
+import {ThemedFlatButton} from '~/src/components/themed/ThemedFlatButton'
 import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
@@ -82,14 +82,17 @@ export default function LoginPage(props: Props) {
       alignX="center"
       padding={32}
     >
-      <ImageView
-        height={193}
-        width={193}
-        source={require('~/src/assets/images/logo-small.png')}
-      />
-      <TextView color={'text.0'} fontSize={31} letterSpacing={3.29}>
-        {Facade.t('login.brand')}
-      </TextView>
+      <LinearLayout weight={4} width="100%" minHeight="12px" />
+      <LinearLayout>
+        <ImageView
+          height={193}
+          width={193}
+          source={require('~/src/assets/images/logo-small.png')}
+        />
+        <TextView color={'text.0'} fontSize={31} letterSpacing={3.29}>
+          {Facade.t('login.brand')}
+        </TextView>
+      </LinearLayout>
 
       <LinearLayout weight={1} width="100%" minHeight="12px" />
 

@@ -34,6 +34,7 @@ const HeaderActionButton: React.FC<HeaderActionButtonProps> = (
         onPress={props.actionOnPress}
         label={props.actionTitle}
         flat={true}
+        fontFamily={'light'}
         textColor={'primary'}
         fontSize={'lg'}
       />

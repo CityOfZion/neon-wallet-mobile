@@ -46,7 +46,7 @@ export class AccountReducer extends ReducerWrapper<
       return this.commit('SET_BACKGROUND_COLOR', {backgroundColor})
     },
     clearState: () => {
-      return this.commit('CLEAR_STATE', {})
+      return this.commit('CLEAR_STATE_ACCOUNT', {})
     },
     getFromSelection: (): SyncAction<Account> => {
       return (dispatch, getState) => {

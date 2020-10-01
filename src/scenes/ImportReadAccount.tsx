@@ -76,7 +76,6 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
         <TextView
           textAlign="center"
           fontSize={18}
-          fontFamily="regular"
           fontWeight={400}
           color={theme.colors.text[0]}
           alignSelf="center"

@@ -22,7 +22,7 @@ const ItemComponent = (props: RowProps<string>) => {
   return (
     <LinearLayout>
       <LinearLayout orientation="horiz" alignItems="center" mb="16px" mt="24px">
-        <TextView color="text.0" fontSize={18} fontFamily="bold">
+        <TextView color="text.0" fontSize={18}>
           {props.data}
         </TextView>
         <LinearLayout flex={1} />
@@ -70,7 +70,6 @@ export default function ReorderWalletModal(props: Props) {
           label={Facade.t('modals.reorderWallet.save')}
           textColor={'primary'}
           fontSize={'16px'}
-          fontFamily={'regular'}
           rounded={false}
           flat={true}
         />

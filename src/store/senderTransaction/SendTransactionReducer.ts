@@ -43,7 +43,7 @@ export class SendTransactionReducer extends ReducerWrapper<
       return this.commit('SET_FEE_AMOUNT', {feeAmount})
     },
     clearState: () => {
-      return this.commit('CLEAR_STATE', {})
+      return this.commit('CLEAR_STATE_SENDER_TRANSACTION', {})
     },
     sendAsset: (): AsyncAction<string | null> => {
       return async (dispatch, getState) => {
