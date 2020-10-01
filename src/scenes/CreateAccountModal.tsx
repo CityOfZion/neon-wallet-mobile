@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
@@ -23,17 +23,47 @@ export default function CreateAccountModal(props: Props) {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const currency = useSelector((state: RootState) => state.settings.currency)
+  const {idWallet} = useSelector((state: RootState) => state.account)
+  const accountsPool = useSelector((state: RootState) => state.app.accounts)
+
   const controller = useSwiperController(true)
+
   const dispatch = useDispatch()
 
+  const [account, setAccount] = useState(new Account())
   const [name, setName] = useState<string>('')
   const [color, setColor] = useState<string>(theme.colors.card[0])
+  const [address, setAddress] = useState<string>()
+
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
 
-  const account = new Account()
-  account.backgroundColor = color
-  account.name = name
+  useEffect(() => {
+    populateAddress()
+  }, [])
+
+  useEffect(() => {
+    const account = new Account()
+    account.name = name
+    account.backgroundColor = color
+    account.address = address ?? null
+    setAccount(account)
+  }, [name, color, address])
+
+  const populateAddress = async () => {
+    account.idWallet = idWallet
+    const indexes = account
+      .getAccountsWithSameWallet(accountsPool)
+      .map((it) => it.index ?? 0)
+
+    const wallet = new Wallet()
+    wallet.id = idWallet
+
+    const index = indexes.length ? Math.max(...indexes) + 1 : 0
+    const neoAccount = await wallet.generateNeoAccount(index)
+    const address = neoAccount?.address
+
+    setAddress(address)
+  }
 
   const submit = async () => {
     dispatch(RootStore.account.actions.setName(name))
