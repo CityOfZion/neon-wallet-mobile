@@ -92,11 +92,7 @@ const HandleQRModal = (props: Props) => {
               />
 
               <LinearLayout>
-                <TextView
-                  color={theme.colors.text[0]}
-                  fontSize={18}
-                  fontFamily="bold"
-                >
+                <TextView color={theme.colors.text[0]} fontSize={18}>
                   {item.title}
                 </TextView>
                 <TextView
