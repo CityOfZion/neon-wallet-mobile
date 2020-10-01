@@ -36,7 +36,7 @@ interface Props {
 
 interface ContentParams {
   title: string
-  icon: ImageSourcePropType
+  icon?: ImageSourcePropType
   subtitle: string
 }
 
@@ -79,12 +79,10 @@ const CustomizeAccount = (props: Props) => {
   const contentMap: ContentCollection = {
     ImportKey: {
       title: Facade.route.ImportKey.translate(),
-      icon: require('~src/assets/images/icon-import-white.png'),
       subtitle: Facade.t('screens.customizeAccount.subtitle.importKey'),
     },
     ImportReadAccount: {
       title: Facade.route.ImportReadAccount.translate(),
-      icon: require('~src/assets/images/icon-import-white.png'),
       subtitle: Facade.t('screens.customizeAccount.subtitle.importReadAccount'),
     },
   }
