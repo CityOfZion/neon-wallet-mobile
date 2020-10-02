@@ -3,9 +3,9 @@ import {api, nep5} from '@cityofzion/neon-js'
 import {Storage} from '~src/app/Storage'
 import {NeoNode} from '~src/models/NeoNode'
 import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
 import {Settings} from '~src/models/redux/Settings'
 import {AddressRequest} from '~src/models/request/AddressRequest'
+import {Facade} from '~src/app/Facade'
 
 export abstract class NeonHelper {
   /**
@@ -43,6 +43,8 @@ export abstract class NeonHelper {
       intents,
       fees,
     })
+
+    Facade.bus.emit('transactionStart', sendResponse)
 
     return sendResponse.tx?.hash ?? null
   }
@@ -84,6 +86,8 @@ export abstract class NeonHelper {
       fees,
     })
 
+    Facade.bus.emit('transactionStart', invokeResponse)
+
     return invokeResponse.tx?.hash ?? null
   }
 
@@ -104,22 +108,21 @@ export abstract class NeonHelper {
     const balance = response.balance.find((it) => it.assetSymbol === 'NEO')
     const amount = balance?.amount ?? null
 
-    if (!amount) {
-      throw new Error('You must have NEO in your account')
-    }
-
     const apiProvider = new api.neoscan.instance(
       settings.network.networkDeprecatedLabel
     )
 
-    await this.sendNativeAsset(address, address, 'NEO', amount)
-
-    await new Promise((resolve) => setTimeout(resolve, 45000))
+    if (amount) {
+      await this.sendNativeAsset(address, address, 'NEO', amount)
+      await Facade.utils.sleep(45000)
+    }
 
     const claimGasResponse = await api.claimGas({
       api: apiProvider,
       account: neoAccount,
     })
+
+    Facade.bus.emit('claimGasStart', claimGasResponse)
 
     return claimGasResponse.response?.txid ?? null
   }

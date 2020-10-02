@@ -284,6 +284,8 @@ export class Account implements AccountState {
     this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
       senderTxs
     )
+
+    Facade.bus.emit('addPendingTransaction', senderTx)
   }
 
   async addPendingUnclaimedGasTransaction(
@@ -307,5 +309,7 @@ export class Account implements AccountState {
     this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
       senderTxs
     )
+
+    Facade.bus.emit('addPendingUnclaimedGasTransaction', senderTx)
   }
 }

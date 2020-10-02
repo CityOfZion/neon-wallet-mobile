@@ -157,7 +157,27 @@ const GetAccountView = (props: GetAccountViewProps) => {
       )
       setAccount(account)
     }
+
+    Facade.bus.on('claimGasStart', refresh)
+    Facade.bus.on('claimGasEnd', refresh)
+    Facade.bus.on('transactionStart', refresh)
+    Facade.bus.on('transactionEnd', refresh)
+    Facade.bus.on('addPendingUnclaimedGasTransaction', manageClaimLoader)
+    Facade.bus.on('removePendingTransactions', manageClaimLoader)
+
+    return () => {
+      Facade.bus.off('claimGasStart', refresh)
+      Facade.bus.off('claimGasEnd', refresh)
+      Facade.bus.off('transactionStart', refresh)
+      Facade.bus.off('transactionEnd', refresh)
+      Facade.bus.off('addPendingUnclaimedGasTransaction', manageClaimLoader)
+      Facade.bus.off('removePendingTransactions', manageClaimLoader)
+    }
   }, [address])
+
+  useEffect(() => {
+    populateUnclaimed()
+  }, [account])
 
   useEffect(() => {
     const interactionPromise = InteractionManager.runAfterInteractions(() => {
@@ -172,7 +192,17 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }
   }, [isAssetsTabSelected, account])
 
-  useEffect(() => {
+  const isClaimAvailable = () => {
+    return Boolean(unclaimedGasAmount && !isWatchAccount)
+  }
+
+  const refresh = () => {
+    setCurrentPage(1)
+    fetchTransaction(1)
+    populateUnclaimed()
+  }
+
+  const manageClaimLoader = () => {
     const senderTxs = account.pendingTransactions.flatMap(
       (it) => it.transactions
     )
@@ -183,12 +213,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
     } else {
       Facade.await.done(`ClaimGas@${account.address}`)
     }
-
-    populateUnclaimed()
-  }, [account])
-
-  const isClaimAvailable = () => {
-    return Boolean(unclaimedGasAmount && !isWatchAccount)
   }
 
   const populateUnclaimed = async () => {
