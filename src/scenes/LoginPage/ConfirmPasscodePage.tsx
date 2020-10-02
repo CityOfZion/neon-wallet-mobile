@@ -1,24 +1,27 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState, useEffect} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
-import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
 import Keypad from '~src/components/Keypad'
 import PasscodeBar from '~src/components/PasscodeBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {LoginStackParamList} from '~src/navigation/LoginStackNavigation'
+import {PasscodeStackParamList} from '~src/navigation/PasscodeStackNavigation'
 import {
   PasscodeHeader,
   PASSCODE_LENGTH,
 } from '~src/scenes/LoginPage/PasscodePage'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
+
+export interface ConfirmPasscodePageParams {
+  passcode: number[]
+}
 
 interface Props {
-  navigation: StackNavigationProp<LoginStackParamList & RootStackParamList>
-  route: RouteProp<LoginStackParamList, 'ConfirmPasscode'>
+  navigation: StackNavigationProp<PasscodeStackParamList & RootStackParamList>
+  route: RouteProp<PasscodeStackParamList, 'ConfirmPasscode'>
 }
 
 const ConfirmPasscodePage = (props: Props) => {
@@ -30,14 +33,19 @@ const ConfirmPasscodePage = (props: Props) => {
       if (!Facade.lodash.isEqual(passcode, originalPasscode)) {
         props.navigation.navigate(Facade.route.Passcode.name, {showError: true})
       } else {
-        // TODO: Store password
-        props.navigation.replace('Tab', undefined)
+        persist()
       }
     }
   }, [passcode])
 
   const clickKey = (number: number) => {
     setPasscode(passcode.concat(number))
+  }
+
+  const persist = async () => {
+    await Facade.security.savePasscode(originalPasscode)
+    await Storage.hasAuthentication.save(true)
+    props.navigation.replace('Tab', undefined)
   }
 
   return (

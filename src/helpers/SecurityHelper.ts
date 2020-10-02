@@ -24,4 +24,20 @@ export abstract class SecurityHelper {
   static async removeWif(address: string) {
     return await SecureStore.deleteItemAsync(address)
   }
+
+  static async savePasscode(passcode: number[]) {
+    return await SecureStore.setItemAsync('passcode', passcode.join(','))
+  }
+
+  static async loadPasscode() {
+    return (
+      (await SecureStore.getItemAsync('passcode'))
+        ?.split(',')
+        .map((it) => Number(it)) ?? null
+    )
+  }
+
+  static async removePasscode() {
+    return await SecureStore.deleteItemAsync('passcode')
+  }
 }

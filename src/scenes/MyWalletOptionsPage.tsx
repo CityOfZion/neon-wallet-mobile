@@ -1,17 +1,21 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React from 'react'
+import {Alert} from 'react-native'
 import {DefaultTheme} from 'styled-components'
 
+import * as LocalAuthentication from '~/node_modules/expo-local-authentication'
 import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import HeaderBar from '~src/components/layout/HeaderBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 
 interface Props {
   route: RouteProp<SettingsStackParamList, 'MyWalletOptions'>
-  navigation: StackNavigationProp<SettingsStackParamList>
+  navigation: StackNavigationProp<SettingsStackParamList & RootStackParamList>
   theme: DefaultTheme
 }
 
@@ -24,6 +28,69 @@ const MyWalletOptionsPage = (props: Props) => {
         title: wallet.name ?? '',
       }),
   })
+
+  const checkForAuth = async () => {
+    // If user has set up authentication (either hardware or passcode)
+    const hasAuth = await Storage.hasAuthentication.load()
+    console.log(hasAuth)
+    if (hasAuth === true) {
+      // Checks if user set up a passcode
+      const passcode = await Facade.security.loadPasscode()
+
+      // If passcode, navigates to passcode confirmation screen
+      if (passcode) {
+        console.log(passcode)
+        props.navigation.navigate(Facade.route.PasscodeStack.name, {
+          screen: Facade.route.VerifyPasscode.name,
+          params: {
+            onValidate: (it) => {
+              if (it) {
+                props.navigation.navigate(Facade.route.Step1BackupWallet.name, {
+                  wallet,
+                })
+              }
+            },
+          },
+        })
+      } else {
+        // If no passcode, hardware authentication
+        await tryAuth()
+      }
+    }
+  }
+
+  const tryAuth = async () => {
+    const canUseHardware = await LocalAuthentication.hasHardwareAsync()
+
+    if (canUseHardware) {
+      const result = await LocalAuthentication.authenticateAsync()
+
+      if (!result.success) {
+        alertDialog()
+      } else {
+        props.navigation.navigate(Facade.route.Step1BackupWallet.name, {
+          wallet,
+        })
+      }
+    }
+  }
+
+  const alertDialog = () =>
+    Alert.alert(
+      Facade.t('myWalletOptions.dialog.title'),
+      Facade.t('myWalletOptions.dialog.subtitle'),
+      [
+        {
+          text: Facade.t('myWalletOptions.dialog.confirm'),
+          onPress: async () => await tryAuth,
+        },
+        {
+          text: Facade.t('myWalletOptions.dialog.cancel'),
+          style: 'cancel',
+        },
+      ],
+      {cancelable: true}
+    )
 
   return (
     <ScreenLayout padding={20}>
@@ -44,11 +111,7 @@ const MyWalletOptionsPage = (props: Props) => {
           iconMarginLeft={2}
           iconMarginRight={5}
           arrowDirection={RightIconType.ARROW_RIGHT}
-          onPress={() =>
-            props.navigation.navigate(Facade.route.Step1BackupWallet.name, {
-              wallet,
-            })
-          }
+          onPress={checkForAuth}
         />
       )}
     </ScreenLayout>

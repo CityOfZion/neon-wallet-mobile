@@ -1,20 +1,18 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import * as LocalAuthentication from 'expo-local-authentication'
-import ExpoLocalAuthentication from 'expo-local-authentication/src/ExpoLocalAuthentication'
 import React, {useState} from 'react'
-import {Alert, Platform, TouchableWithoutFeedback} from 'react-native'
+import {Alert, TouchableWithoutFeedback} from 'react-native'
 
 import {LocalAuthenticationResult} from '~/node_modules/expo-local-authentication/src/LocalAuthentication.types'
 import {ThemedFlatButton} from '~/src/components/themed/ThemedFlatButton'
 import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import ThemedButton from '~src/components/themed/ThemedButton'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {LoginStackParamList} from '~src/navigation/LoginStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList & LoginStackParamList>
+  navigation: StackNavigationProp<RootStackParamList>
 }
 
 const MAX_ERROR_COUNTER = 3
@@ -26,18 +24,14 @@ export default function LoginPage(props: Props) {
     const canUseHardware = await LocalAuthentication.hasHardwareAsync()
 
     if (canUseHardware) {
-      let result: LocalAuthenticationResult
-
-      if (Platform.OS === 'ios') {
-        result = await LocalAuthentication.authenticateAsync()
-      } else {
-        result = await ExpoLocalAuthentication.authenticateAsync()
-      }
+      const result = await LocalAuthentication.authenticateAsync()
 
       if (!result.success) {
         // If user doesn't have the hardware configured, redirects to passcode
         if (result.error === 'not_enrolled') {
-          props.navigation.navigate(Facade.route.Passcode.name)
+          props.navigation.navigate(Facade.route.PasscodeStack.name, {
+            screen: Facade.route.Passcode.name,
+          })
         } else {
           setErrorCounter(errorCounter + 1)
 
@@ -46,10 +40,13 @@ export default function LoginPage(props: Props) {
           }
         }
       } else {
+        await Storage.hasAuthentication.save(true)
         props.navigation.replace(Facade.route.Tab.name, undefined)
       }
     } else {
-      props.navigation.navigate(Facade.route.Passcode.name)
+      props.navigation.navigate(Facade.route.PasscodeStack.name, {
+        screen: Facade.route.Passcode.name,
+      })
     }
   }
 
@@ -60,7 +57,10 @@ export default function LoginPage(props: Props) {
       [
         {
           text: Facade.t('login.dialog.usePasscode'),
-          onPress: () => props.navigation.navigate(Facade.route.Passcode.name),
+          onPress: () =>
+            props.navigation.navigate(Facade.route.PasscodeStack.name, {
+              screen: Facade.route.Passcode.name,
+            }),
         },
         {
           text: Facade.t('login.dialog.cancel'),

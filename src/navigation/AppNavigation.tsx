@@ -5,17 +5,21 @@ import {InteractionManager} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import PasscodeStackNavigation, {
+  PasscodeStackParams,
+} from './PasscodeStackNavigation'
+
 import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import {Sync} from '~src/app/Sync'
 import LoadingOverlay from '~src/components/LoadingOverlay'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import LoginStackNavigation from '~src/navigation/LoginStackNavigation'
 import ModalStackNavigation, {
   ModalParams,
 } from '~src/navigation/ModalStackNavigation'
 import TabNavigation, {TabParams} from '~src/navigation/TabNavigation'
+import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 import QRCodeScan, {QRCodeScanParams} from '~src/scenes/QRCodeScan'
 import {RootStore} from '~src/store/RootStore'
@@ -24,6 +28,7 @@ export type RootStackParamList = {
   Tab: TabParams
   Modal: ModalParams
   Login: undefined
+  PasscodeStack: PasscodeStackParams
   Onboarding: undefined
   QRCodeScan: QRCodeScanParams
 }
@@ -43,15 +48,18 @@ const AppNavigation = (props: Props) => {
 
   const [onboardingSeen, setOnboardingSeen] = useState(true)
   const [welcomeHidden, setWelcomeHidden] = useState(true)
+  const [hasAuthentication, setHasAuthentication] = useState(false)
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const startApplication = async () => {
     const onboardingSeen = await Storage.onboardingSeen.load()
     const welcomeHidden = await Storage.welcomeHidden.load()
+    const hasAuthentication = await Storage.hasAuthentication.load()
 
     setOnboardingSeen(onboardingSeen ?? false)
     setWelcomeHidden(welcomeHidden ?? false)
+    setHasAuthentication(hasAuthentication ?? false)
 
     // Synchronize app reducer
     await Sync.init(dispatchAsync)
@@ -86,7 +94,9 @@ const AppNavigation = (props: Props) => {
               <RootStack.Navigator
                 initialRouteName={
                   onboardingSeen
-                    ? Facade.route.Login.name
+                    ? hasAuthentication
+                      ? Facade.route.Tab.name
+                      : Facade.route.Login.name
                     : Facade.route.Onboarding.name
                 }
                 headerMode="none"
@@ -107,7 +117,11 @@ const AppNavigation = (props: Props) => {
                 />
                 <RootStack.Screen
                   name={Facade.route.Login.name}
-                  component={LoginStackNavigation}
+                  component={LoginPage}
+                />
+                <RootStack.Screen
+                  name={Facade.route.PasscodeStack.name}
+                  component={PasscodeStackNavigation}
                 />
                 <RootStack.Screen
                   name={Facade.route.Modal.name}
