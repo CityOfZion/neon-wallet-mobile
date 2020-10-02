@@ -59,13 +59,27 @@ const SendTransactionConfirmationModal = (props: Props) => {
             source={require('~src/assets/images/transaction-sent.png')}
           />
 
-          <TextView color="text.0" fontSize="24px" fontFamily="medium" mb="5px">
-            {Facade.t('modals.send.transactionConfirmation.header')}
-          </TextView>
-
+          <LinearLayout orientation={'horiz'}>
+            <ImageView
+              source={require('~/src/assets/images/icon-circle-check-green.png')}
+              alignSelf={'center'}
+              maxHeight={'24px'}
+              resizeMode={'contain'}
+              mr={2}
+            />
+            <TextView
+              color="text.0"
+              fontSize="18px"
+              fontFamily="medium"
+              mb="5px"
+              numberOfLines={1}
+            >
+              {Facade.t('modals.send.transactionConfirmation.header')}
+            </TextView>
+          </LinearLayout>
           <TextView
             color="text.2"
-            fontSize="18px"
+            fontSize="14px"
             fontFamily="medium"
             textAlign="center"
             mb="40px"
@@ -81,7 +95,6 @@ const SendTransactionConfirmationModal = (props: Props) => {
           >
             {Facade.t('modals.send.transactionConfirmation.transactionId')}
           </TextView>
-
           <ButtonView
             orientation="horiz"
             alignItems="center"
