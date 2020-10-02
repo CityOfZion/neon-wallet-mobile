@@ -37,7 +37,7 @@
     "class-transformer": "^0.2.3",
     "eslint": "^7.0.0",
     "eslint-config-universe": "^3.0.0",
-    "expo": "^38.0.10",
+    "expo": "^39.0.3",
     "expo-barcode-scanner": "~8.2.1",
     "expo-blur": "~8.1.2",
     "expo-cli": "^3.22.3",
