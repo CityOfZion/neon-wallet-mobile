@@ -86,7 +86,8 @@
     "enter": "Enter Passcode",
     "confirm": "Confirm Passcode",
     "error": "Passcodes did not match. Try again",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "wrong": "Invalid passcode. Try again"
   },
   "onboarding": {
     "feature1": {
@@ -113,7 +114,16 @@
   },
   "myWalletOptions": {
     "details": "Details",
-    "backupWallet": "Backup Wallet"
+    "backupWallet": "Backup Wallet",
+    "dialog": {
+      "title": "Authentication",
+      "subtitle": "Authentication unsuccessful. Try again?",
+      "confirm": "Yes",
+      "cancel": "No"
+    },
+    "invalidAuth": "Authentication not successful. Try again?",
+    "alertCancelButton": "No",
+    "alertConfirmButton": "Yes"
   },
   "step1CreateWallet": {
     "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",

@@ -22,6 +22,13 @@ export abstract class Storage {
   }
 
   /**
+   * Controls if authentication was set up
+   */
+  static get hasAuthentication() {
+    return Facade.storage['@has_authentication'].bind().asBoolean()
+  }
+
+  /**
    * Settings' user data
    */
   static get settings() {

@@ -12,12 +12,13 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCard from '~src/components/themed/ThemedCard'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 import {TextView, LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
   route: RouteProp<SettingsStackParamList, 'Step1BackupWallet'>
-  navigation: StackNavigationProp<SettingsStackParamList>
+  navigation: StackNavigationProp<SettingsStackParamList & RootStackParamList>
 }
 
 const WordComponent = (props: {value: string}) => {

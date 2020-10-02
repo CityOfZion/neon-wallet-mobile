@@ -8,7 +8,9 @@ import {
   PersistContact,
   PersistContactParams,
 } from '~src/components/contacts/PersistContact'
-import SendModalStackNavigation from '~src/navigation/SendModalStackNavigation'
+import SendModalStackNavigation, {
+  SendStackModalParams,
+} from '~src/navigation/SendModalStackNavigation'
 import {
   AccountQRCode,
   AccountQRCodeParams,
@@ -86,7 +88,7 @@ export type ModalParams =
   | DefaultNavigationParam<ReceiveQrCodeModalParams>
   | DefaultNavigationParam<ContactsModalParams>
   | DefaultNavigationParam<PersistContactParams>
-  | DefaultNavigationParam<SendTransactionInputModalParams>
+  | DefaultNavigationParam<SendStackModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 

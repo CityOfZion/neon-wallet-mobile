@@ -15,13 +15,12 @@ import ThemedCheckbox from '~src/components/themed/ThemedCheckbox'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {ThemedFlatButton} from '~src/components/themed/ThemedFlatButton'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {LoginStackParamList} from '~src/navigation/LoginStackNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 // Why are you like this, Typescript
-type ParamList = LoginStackParamList & TabStackParamList & RootStackParamList
+type ParamList = TabStackParamList & RootStackParamList
 
 interface Props {
   navigation: StackNavigationProp<ParamList>

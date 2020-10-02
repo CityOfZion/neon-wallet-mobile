@@ -38,18 +38,17 @@ export type SendModalStackParamList = {
   SendTransactionConfirmationModal: SendTransactionConfirmationModalParams
 }
 
+export type SendStackModalParams =
+  | DefaultNavigationParam<SendWalletSelectionModalParams>
+  | DefaultNavigationParam<SendAccountSelectionModalParams>
+  | DefaultNavigationParam<SendTransactionInputModalParams>
+  | DefaultNavigationParam<SendTransactionConfirmationModalParams>
+
 const SendModalStack = createStackNavigator<SendModalStackParamList>()
 
 interface SendModalStackProps {
   navigation: StackNavigationProp<any>
   route: RouteProp<ModalStackParamList, 'SendModalStack'>
-}
-
-interface HeaderProps {
-  navigation: StackNavigationProp<SendModalStackParamList>
-  controller: SwiperController
-  title: string
-  image: ImageSourcePropType
 }
 
 const SendModalStackNavigation = (props: SendModalStackProps) => {

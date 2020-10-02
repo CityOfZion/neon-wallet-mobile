@@ -10,6 +10,7 @@ export class WrapperConfig {
   readonly dataKeys = [
     '@onboarding_seen',
     '@welcome_hidden',
+    '@has_authentication',
     '@settings',
     '@wallets',
     '@accounts',
@@ -61,8 +62,10 @@ export class WrapperConfig {
     'WalletContextModal',
     'AccountAssetDetail',
     'ReorderWalletModal',
+    'PasscodeStack',
     'Passcode',
     'ConfirmPasscode',
+    'VerifyPasscode',
     'ImportKey',
     'Passphrase',
     'ImportReadAccount',

@@ -7,31 +7,34 @@ import {Facade} from '~src/app/Facade'
 import Keypad from '~src/components/Keypad'
 import PasscodeBar from '~src/components/PasscodeBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {PasscodeStackParamList} from '~src/navigation/PasscodeStackNavigation'
+import {PASSCODE_LENGTH} from '~src/scenes/LoginPage/PasscodePage'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
-export interface PasscodePageParams {
-  showError: boolean
-  validate?: boolean
+export interface VerifyPasscodePageParams {
+  onValidate: (result: boolean) => void
 }
 
 interface Props {
-  navigation: StackNavigationProp<PasscodeStackParamList & RootStackParamList>
-  route: RouteProp<PasscodeStackParamList, 'Passcode'>
+  navigation: StackNavigationProp<PasscodeStackParamList>
+  route: RouteProp<PasscodeStackParamList, 'VerifyPasscode'>
 }
 
-export const PASSCODE_LENGTH = 5
-
 export const PasscodeHeader = (props: {
-  navigation: StackNavigationProp<any>
+  navigation: StackNavigationProp<PasscodeStackParamList>
+  route: RouteProp<PasscodeStackParamList, 'VerifyPasscode'>
 }) => {
   return (
     <LinearLayout mt={32} mb={68} orientation="horiz">
       <LinearLayout flex={1} />
       <ImageView source={require('~/src/assets/images/icon-lock.png')} />
       <LinearLayout flex={1} alignItems="flex-end" justifyContent="center">
-        <TouchableWithoutFeedback onPress={props.navigation.goBack}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            props.route.params.onValidate(false)
+            props.navigation.goBack()
+          }}
+        >
           <TextView py="4px" fontSize={16} color="text.0">
             {Facade.t('passcode.cancel')}
           </TextView>
@@ -41,24 +44,28 @@ export const PasscodeHeader = (props: {
   )
 }
 
-const PasscodePage = (props: Props) => {
+const VerifyPasscodePage = (props: Props) => {
   const [passcode, setPasscode] = useState<number[]>([])
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false)
 
   useEffect(() => {
+    if (passcode.length) setShowErrorMessage(false)
     if (passcode.length === PASSCODE_LENGTH) {
-      setPasscode([])
-      props.navigation.navigate(Facade.route.ConfirmPasscode.name, {
-        passcode,
-      })
+      validate()
     }
   }, [passcode])
 
-  useEffect(() => {
-    setShowErrorMessage(
-      (props.route.params?.showError ?? false) && passcode.length === 0
-    )
-  })
+  const validate = async () => {
+    const savedPasscode = await Facade.security.loadPasscode()
+
+    if (Facade.lodash.isEqual(passcode, savedPasscode)) {
+      props.navigation.goBack()
+      props.route.params.onValidate(true)
+    } else {
+      setPasscode([])
+      setShowErrorMessage(true)
+    }
+  }
 
   const clickKey = (number: number) => {
     setPasscode(passcode.concat(number))
@@ -72,7 +79,7 @@ const PasscodePage = (props: Props) => {
       alignX="center"
       padding={16}
     >
-      <PasscodeHeader navigation={props.navigation} />
+      <PasscodeHeader navigation={props.navigation} route={props.route} />
 
       <TextView fontSize={22} color="text.0" mb={18}>
         {Facade.t('passcode.enter')}
@@ -86,7 +93,7 @@ const PasscodePage = (props: Props) => {
         opacity={showErrorMessage ? 1 : 0}
         my={18}
       >
-        {Facade.t('passcode.error')}
+        {Facade.t('passcode.wrong')}
       </TextView>
 
       <LinearLayout weight={1} width="100%" />
@@ -101,4 +108,4 @@ const PasscodePage = (props: Props) => {
   )
 }
 
-export default PasscodePage
+export default VerifyPasscodePage
