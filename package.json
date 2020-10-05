@@ -62,6 +62,7 @@
     "react-native": "~0.62.2",
     "react-native-chart-kit": "^5.6.0",
     "react-native-custom-qr-codes-expo": "^2.2.0",
+    "react-native-fix-image": "^2.0.1",
     "react-native-flash-message": "^0.1.16",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-input-scroll-view": "^1.11.0",
