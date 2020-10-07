@@ -126,7 +126,7 @@ export const TransactionDetails = (props: Props) => {
           <HeaderColumn
             title={Facade.t('transactionDetails.priorityFee')}
             value={`${transaction.feeAmount?.fee ?? 0} GAS`}
-            weight={1.6}
+            weight={1.2}
             priorityFee={transaction.feeAmount ?? undefined}
           />
         </LinearLayout>
@@ -138,18 +138,46 @@ export const TransactionDetails = (props: Props) => {
             showCopy={true}
           />
         </LinearLayout>
-        <TextView color={'text.10'} fontFamily={'medium'} fontSize={18} mt={4}>
-          {Facade.t('transactionDetails.sender')}
-        </TextView>
+        <LinearLayout orientation={'horiz'}>
+          <LinearLayout mr={2} mt={5} alignSelf={'center'}>
+            <ImageView
+              width={Facade.scale(18)}
+              resizeMode={'contain'}
+              source={require('~src/assets/images/arrow-gray.png')}
+            />
+          </LinearLayout>
+          <TextView
+            color={'text.10'}
+            fontFamily={'medium'}
+            fontSize={18}
+            mt={4}
+          >
+            {Facade.t('transactionDetails.sender')}
+          </TextView>
+        </LinearLayout>
         <AccountView
           contactName={senderName}
           address={senderAddress ?? ''}
           accountName={senderAccount?.name ?? undefined}
           walletName={senderWallet ?? undefined}
         />
-        <TextView color={'text.10'} fontFamily={'medium'} fontSize={18} mt={4}>
-          {Facade.t('transactionDetails.recipient')}
-        </TextView>
+        <LinearLayout orientation={'horiz'}>
+          <LinearLayout mr={2} mt={5} alignSelf={'center'}>
+            <ImageView
+              width={Facade.scale(18)}
+              resizeMode={'contain'}
+              source={require('~src/assets/images/arrow-receive-gray.png')}
+            />
+          </LinearLayout>
+          <TextView
+            color={'text.10'}
+            fontFamily={'medium'}
+            fontSize={18}
+            mt={4}
+          >
+            {Facade.t('transactionDetails.recipient')}
+          </TextView>
+        </LinearLayout>
         <AccountView
           contactName={receiverName}
           address={receiverAddress ?? ''}

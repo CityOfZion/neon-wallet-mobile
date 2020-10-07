@@ -541,11 +541,11 @@
     "transactionCompleted" : "Transaction completed!"
   },
   "transactionDetails" : {
-    "time": "Time",
-    "date": "Date",
-    "status" : "Status",
-    "value": "Value",
-    "priorityFee" : "Priority Fee",
+    "time": "TIME",
+    "date": "DATE",
+    "status" : "STATUS",
+    "value": "VALUE",
+    "priorityFee" : "PRIORITY FEE",
     "sender": "Sender",
     "recipient": "Recipient",
     "qty": "Qty",
