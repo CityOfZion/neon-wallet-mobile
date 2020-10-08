@@ -58,8 +58,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
       paddingRight={0}
       paddingLeft={0}
       title={Facade.t('modals.receive.title')}
-      rightButton={}
-      onRightPress={() => controller.close}
+      rightButton={<ThemedCloseButton onPress={controller.close} />}
       onClose={() => props.navigation.goBack()}
     >
       <LinearLayout px={5}>
