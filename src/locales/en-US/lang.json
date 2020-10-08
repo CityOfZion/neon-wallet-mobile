@@ -210,7 +210,7 @@
     "next": "Next"
   },
   "importReadAccount": {
-    "headerText": "Enter an address you would like to watch.\nPlease be aware the following functionality will be disabled for this account:",
+    "headerText": "Enter an address you would like to watch.\nPlease be aware that you will not be able to perform send transactions from this account.",
     "inputPlaceholder": "Please enter information",
     "disabledFeature": "Function lorem ipsum sid dolar",
     "add": "Add",
