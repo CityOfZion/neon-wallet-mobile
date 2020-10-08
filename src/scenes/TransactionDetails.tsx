@@ -93,17 +93,17 @@ export const TransactionDetails = (props: Props) => {
       >
         <LinearLayout orientation={'horiz'}>
           <HeaderColumn
-            title={Facade.t('transactionDetails.time')}
+            title={Facade.t('transactionDetails.time').toUpperCase()}
             value={transaction.formattedTime ?? 'undefined'}
             weight={1}
           />
           <HeaderColumn
-            title={Facade.t('transactionDetails.date')}
+            title={Facade.t('transactionDetails.date').toUpperCase()}
             value={transaction.formattedDate ?? 'undefined'}
             weight={1.5}
           />
           <HeaderColumn
-            title={Facade.t('transactionDetails.status')}
+            title={Facade.t('transactionDetails.status').toUpperCase()}
             value={
               transaction.isPending
                 ? Facade.t('transactionDetails.pending')
@@ -115,7 +115,7 @@ export const TransactionDetails = (props: Props) => {
         </LinearLayout>
         <LinearLayout orientation={'horiz'}>
           <HeaderColumn
-            title={Facade.t('transactionDetails.value')}
+            title={Facade.t('transactionDetails.value').toUpperCase()}
             value={Facade.filter.currency(
               transaction.token?.exchangeToken(currency),
               currency,
@@ -124,7 +124,7 @@ export const TransactionDetails = (props: Props) => {
             weight={2}
           />
           <HeaderColumn
-            title={Facade.t('transactionDetails.priorityFee')}
+            title={Facade.t('transactionDetails.priorityFee').toUpperCase()}
             value={`${transaction.feeAmount?.fee ?? 0} GAS`}
             weight={1.2}
             priorityFee={transaction.feeAmount ?? undefined}
