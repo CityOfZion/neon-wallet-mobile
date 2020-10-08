@@ -54,7 +54,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       fullSize={true}
-      paddingTop={24}
+      paddingTop={11}
       paddingRight={0}
       paddingLeft={0}
       title={Facade.t('modals.receive.title')}
