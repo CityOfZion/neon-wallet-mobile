@@ -145,7 +145,7 @@ const ColorPicker: React.FC<Props> = (props) => {
     setLuminosityAngle(angle)
 
     const hue = 200
-    const saturation = 20
+    const saturation = 25
     const luminosity = normalizeLuminosity(angle)
 
     setHue(hue)
@@ -172,8 +172,8 @@ const ColorPicker: React.FC<Props> = (props) => {
   }
 
   const normalizeLuminosity = (luminosityAngle: number) => {
-    const luminosity = (100 * (luminosityAngle - 15)) / 330
-    return Math.abs(100 - Math.round(luminosity * 0.75))
+    const luminosity = 100 * (luminosityAngle / 330)
+    return Math.abs(100 - Math.round(luminosity * 0.5 + 25))
   }
 
   const HueView = styled(LinearLayout)`
