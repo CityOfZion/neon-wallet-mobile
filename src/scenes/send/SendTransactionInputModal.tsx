@@ -1,7 +1,7 @@
 import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
 import React, {Fragment, useState} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
+import {AsyncStorage, TouchableWithoutFeedback} from 'react-native'
 import InputScrollView from 'react-native-input-scroll-view'
 import {useDispatch, useSelector} from 'react-redux'
 
@@ -369,7 +369,9 @@ const AmountField = (props: {
 
 const SendTransactionInputModal = (prop: Props) => {
   const {account, walletTitle, uri} = prop.route.params
-  const {contacts, tokens} = useSelector((state: RootState) => state.app)
+  const {contacts, tokens, accounts, wallets} = useSelector(
+    (state: RootState) => state.app
+  )
 
   const [receiverAddress, setReceiverAddress] = useState(
     prop.route.params?.uri?.address ?? ''
@@ -467,20 +469,27 @@ const SendTransactionInputModal = (prop: Props) => {
   }
 
   const selectContactOrAccount = (item: Contact | Account) => {
-    if (item instanceof Contact) {
-      setContact(item)
-    }
     if (item.address) {
-      setReceiverAddress(item.address)
+      handleAddressChanged(item.address)
     }
   }
 
   const handleAddressChanged = (addressValue: string) => {
     setContact(undefined)
     const contact = contacts.find((value) => value.address === addressValue)
-    if (contact) {
+    const account = accounts.find((it) => it.address === addressValue)
+    if (account) {
+      const accountContact = new Contact()
+      accountContact.name = `${account.getWallet(wallets)?.name} / ${
+        account.name
+      }`
+
+      accountContact.address = addressValue
+      setContact(accountContact)
+    } else if (contact) {
       setContact(contact)
     }
+
     setReceiverAddress(addressValue)
   }
 
