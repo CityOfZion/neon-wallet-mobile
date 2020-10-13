@@ -32,14 +32,12 @@ const MyWalletOptionsPage = (props: Props) => {
   const checkForAuth = async () => {
     // If user has set up authentication (either hardware or passcode)
     const hasAuth = await Storage.hasAuthentication.load()
-    console.log(hasAuth)
     if (hasAuth === true) {
       // Checks if user set up a passcode
       const passcode = await Facade.security.loadPasscode()
 
       // If passcode, navigates to passcode confirmation screen
       if (passcode) {
-        console.log(passcode)
         props.navigation.navigate(Facade.route.PasscodeStack.name, {
           screen: Facade.route.VerifyPasscode.name,
           params: {
