@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux'
 
 import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
 import {Facade} from '~src/app/Facade'
+import {Sync} from '~src/app/Sync'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
@@ -39,6 +40,8 @@ export default function ReorderWalletModal(props: Props) {
   const controller = useSwiperController(true)
 
   const {wallets} = useSelector((state: RootState) => state.app)
+
+  const dispatch = useDispatch()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const [order, setOrder] = useState<number[]>([])
@@ -50,8 +53,13 @@ export default function ReorderWalletModal(props: Props) {
 
   const commitAndClose = async () => {
     if (order.length > 0) {
+      Facade.await.init('populateWallet')
       await dispatchAsync(RootStore.wallet.actions.reorderAndSave(order))
       await dispatchAsync(RootStore.app.actions.syncWallets())
+      await dispatchAsync(RootStore.app.actions.syncTokenAssets())
+      dispatch(RootStore.wallet.actions.selectWallet(null))
+      await Facade.utils.sleep(1000)
+      Facade.await.done('populateWallet')
     }
 
     controller.close()
