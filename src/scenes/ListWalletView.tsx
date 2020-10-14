@@ -182,9 +182,7 @@ const ListWalletView = (props: WalletProps) => {
   const {currency, language} = useSelector((state: RootState) => state.settings)
   const {id} = useSelector((state: RootState) => state.wallet)
 
-  const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(
-    wallets[0]
-  )
+  const [selectedWallet, setSelectedWallet] = useState<Wallet>()
 
   const dispatch = useDispatch()
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
@@ -193,6 +191,8 @@ const ListWalletView = (props: WalletProps) => {
     if (id) {
       const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
       setSelectedWallet(wallet)
+    } else {
+      dispatch(RootStore.wallet.actions.selectWallet(wallets[0]?.id ?? null))
     }
   }, [id])
 
@@ -253,47 +253,53 @@ const ListWalletView = (props: WalletProps) => {
         </LinearLayout>
 
         <AwaitActivity name={'populateWallet'}>
-          <LinearLayout mt={4} justifyContent={'center'} height={400}>
-            {isListNotEmpty() ? (
-              <WalletPicker
-                wallets={wallets}
-                onSelect={selectEvent}
-                onPress={pressEvent}
-              />
-            ) : (
-              <EmptyListComponent />
-            )}
-          </LinearLayout>
-
-          <WalletChangeComponent
-            currency={currency}
-            exchange={exchange}
-            language={language}
-            wallet={selectedWallet}
-            onPressWarning={openWarning}
-          />
-
-          <LinearLayout mx={'16px'}>
-            {selectedWallet?.showBackupAlert &&
-              selectedWallet.walletType === 'standard' && (
-                <LinearLayout mb={6}>
-                  <Notification
-                    text={Facade.t('screens.listWallets.noBackup')}
-                    wallet={selectedWallet}
-                  />
-                </LinearLayout>
+          <>
+            <LinearLayout mt={4} justifyContent={'center'} height={400}>
+              {isListNotEmpty() ? (
+                <WalletPicker
+                  wallets={wallets}
+                  onSelect={selectEvent}
+                  onPress={pressEvent}
+                />
+              ) : (
+                <EmptyListComponent />
               )}
+            </LinearLayout>
 
-            {isListNotEmpty() && (
-              <BalanceList
-                mb={6}
-                tokenAssets={selectedWallet?.tokenAssets ?? []}
-                walletId={selectedWallet?.id ?? undefined}
-                fromAccountView={false}
-                fromListWalletView={true}
-              />
+            {selectedWallet && (
+              <>
+                <WalletChangeComponent
+                  currency={currency}
+                  exchange={exchange}
+                  language={language}
+                  wallet={selectedWallet}
+                  onPressWarning={openWarning}
+                />
+
+                <LinearLayout mx={'16px'}>
+                  {selectedWallet.showBackupAlert &&
+                    selectedWallet.walletType === 'standard' && (
+                      <LinearLayout mb={6}>
+                        <Notification
+                          text={Facade.t('screens.listWallets.noBackup')}
+                          wallet={selectedWallet}
+                        />
+                      </LinearLayout>
+                    )}
+
+                  {isListNotEmpty() && (
+                    <BalanceList
+                      mb={6}
+                      tokenAssets={selectedWallet.tokenAssets ?? []}
+                      walletId={selectedWallet.id ?? undefined}
+                      fromAccountView={false}
+                      fromListWalletView={true}
+                    />
+                  )}
+                </LinearLayout>
+              </>
             )}
-          </LinearLayout>
+          </>
         </AwaitActivity>
       </>
     </ScreenLayout>
