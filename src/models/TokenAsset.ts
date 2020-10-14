@@ -28,10 +28,7 @@ export class TokenAsset {
   }
 
   get color() {
-    if (this.symbol === 'NEO') return 'primary'
-    if (this.symbol === 'GAS') return 'secondary'
-
-    return '#cccccc'
+    return `#${this.hash.substring(1, 7)}`
   }
 
   get srcIcon() {
