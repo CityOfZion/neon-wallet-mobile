@@ -32,7 +32,6 @@ interface ListProps {
 }
 
 const ViewBalanceItem = (props: ItemProps & ListProps) => {
-  const colorHash = props.item.hash.substring(0, 6)
   return (
     <LinearLayout
       orientation="horiz"
@@ -45,7 +44,7 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
           width={12}
           height={12}
           borderRadius={12 / 2}
-          backgroundColor={`#${colorHash}`}
+          backgroundColor={props.item.color}
           alginSelf={'center'}
         />
       ) : (

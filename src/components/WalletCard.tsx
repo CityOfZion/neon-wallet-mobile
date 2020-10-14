@@ -3,7 +3,6 @@ import React, {Fragment, useEffect, useState} from 'react'
 import {LayoutChangeEvent} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import {Currency} from '~src/enums/Currency'
 import {Account} from '~src/models/redux/Account'
@@ -105,32 +104,48 @@ const WalletLabel = (props: {wallet: Wallet; canBeInactive?: boolean}) => {
 }
 
 const AssetBarFillsComponent = (props: {
-  walletAccounts: Account[]
+  wallet: Wallet
   currency: Currency
   exchange: Exchange
-  getTotalAmount: () => number
 }) => {
+  const totalBalance = props.wallet.calculateBalance(
+    props.currency,
+    props.exchange
+  )
+
   return (
     <Fragment>
-      {props.walletAccounts.map((account, i) => {
-        const amount = account.exchangeBalanceAmount(
-          props.currency,
-          props.exchange
-        )
-        const percentageOfTotal = (amount / props.getTotalAmount()) * 100
+      {props.wallet.tokenAssets
+        .filter((token) => {
+          return (
+            (Math.round(totalBalance * 100) &&
+              token.exchangeToken(props.currency, props.exchange)) ??
+            0
+          )
+        })
+        .map((token, i) => {
+          const tokenBalance =
+            token.exchangeToken(props.currency, props.exchange) ?? 0
+          const weight = Math.round((tokenBalance / totalBalance) * 100)
 
-        return (
-          <LinearLayout
-            height={'100%'}
-            weight={percentageOfTotal}
-            minWidth={'2px'}
-            mx={'1px'}
-            borderRadius={9999}
-            bg={account.backgroundColor}
-            key={i}
-          />
-        )
-      })}
+          return (
+            <LinearLayout
+              height={'100%'}
+              weight={weight}
+              minWidth={'2px'}
+              mx={'1px'}
+              borderRadius={9999}
+              bg={token.color}
+              key={i}
+              style={{
+                shadowOpacity: 1,
+                shadowRadius: 5,
+                shadowColor: token.color,
+                shadowOffset: {height: 0, width: 0},
+              }}
+            />
+          )
+        })}
     </Fragment>
   )
 }
@@ -213,12 +228,6 @@ const WalletCard: React.FC<Props> = (props) => {
     setViewHeight(height)
   }
 
-  const getTotalAmount = () => {
-    return Facade.lodash.sumBy(walletAccounts, (it) =>
-      it.exchangeBalanceAmount(currency, exchange)
-    )
-  }
-
   return (
     <WalletCardRelativeContainer
       position="relative"
@@ -265,10 +274,9 @@ const WalletCard: React.FC<Props> = (props) => {
           >
             {(!props.wallet.isInactive || !props.canBeInactive) && (
               <AssetBarFillsComponent
-                walletAccounts={walletAccounts}
+                wallet={props.wallet}
                 currency={currency}
                 exchange={exchange}
-                getTotalAmount={getTotalAmount}
               />
             )}
           </AssetsBar>
