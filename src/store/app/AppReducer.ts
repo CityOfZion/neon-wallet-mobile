@@ -22,6 +22,7 @@ import {TokensDispatcher} from '~src/store/app/dispatchers/TokensDispatcher'
 import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
 import {Exchange, ExchangeResponse} from '~src/types/exchange'
 import {TokenResponse} from '~src/types/token'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 
 export class AppReducer extends ReducerWrapper<
   AppActionsType,
@@ -257,7 +258,7 @@ export class AppReducer extends ReducerWrapper<
     syncPendingTransactions: (): AsyncAction => {
       return async (dispatch, getState) => {
         const accounts = getState().app.accounts
-        let hasAnyAccountChanged = false
+        const removedSenderTx: SenderTransaction[] = []
 
         for (const account of accounts) {
           let hasAccountChanged = false
@@ -280,16 +281,22 @@ export class AppReducer extends ReducerWrapper<
                       message: Facade.t('toast.gasClaimSuccess'),
                       type: 'success',
                     })
+                    Facade.bus.emit('claimGasEnd', senderTxs[index])
+                    Facade.bus.emit(
+                      'removePendingUnclaimedGasTransaction',
+                      senderTxs[index]
+                    )
                   } else {
                     showMessage({
                       message: Facade.t('toast.transactionCompleted'),
                       type: 'success',
                     })
+                    Facade.bus.emit('transactionEnd', senderTxs[index])
                   }
 
-                  senderTxs.splice(index, 1)
                   hasAccountChanged = true
-                  hasAnyAccountChanged = true
+                  removedSenderTx.push(senderTxs[index])
+                  senderTxs.splice(index, 1)
                 }
               } catch (e) {
                 //does nothing
@@ -304,9 +311,11 @@ export class AppReducer extends ReducerWrapper<
           }
         }
 
-        if (hasAnyAccountChanged) {
+        if (removedSenderTx.length) {
           dispatch(this.commit('SET_ACCOUNTS', {accounts}))
           await Storage.accounts.save(accounts)
+
+          Facade.bus.emit('removePendingTransactions', removedSenderTx)
         }
       }
     },

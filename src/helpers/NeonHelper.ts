@@ -1,11 +1,12 @@
 import {api, nep5} from '@cityofzion/neon-js'
 
+import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import {NeoNode} from '~src/models/NeoNode'
 import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
 import {Settings} from '~src/models/redux/Settings'
 import {AddressRequest} from '~src/models/request/AddressRequest'
+import {TransactionRequest} from '~src/models/request/TransactionRequest'
 
 export abstract class NeonHelper {
   /**
@@ -43,6 +44,8 @@ export abstract class NeonHelper {
       intents,
       fees,
     })
+
+    Facade.bus.emit('transactionStart', sendResponse)
 
     return sendResponse.tx?.hash ?? null
   }
@@ -84,6 +87,8 @@ export abstract class NeonHelper {
       fees,
     })
 
+    Facade.bus.emit('transactionStart', invokeResponse)
+
     return invokeResponse.tx?.hash ?? null
   }
 
@@ -103,24 +108,70 @@ export abstract class NeonHelper {
     const response = await request.getBalance()
     const balance = response.balance.find((it) => it.assetSymbol === 'NEO')
     const amount = balance?.amount ?? null
-
-    if (!amount) {
-      throw new Error('You must have NEO in your account')
-    }
+    const requiresTransaction = Boolean(amount)
 
     const apiProvider = new api.neoscan.instance(
       settings.network.networkDeprecatedLabel
     )
 
-    await this.sendNativeAsset(address, address, 'NEO', amount)
+    if (requiresTransaction) {
+      const txid = await this.sendNativeAsset(
+        address,
+        address,
+        'NEO',
+        amount ?? 0
+      )
 
-    await new Promise((resolve) => setTimeout(resolve, 45000))
+      this.watchTransaction(txid ?? '', () => {
+        Facade.bus.emit('claimGasReady')
+      })
+    }
 
-    const claimGasResponse = await api.claimGas({
-      api: apiProvider,
-      account: neoAccount,
+    return new Promise<string | null>((resolve) => {
+      const fetch = async () => {
+        const claimGasResponse = await api.claimGas({
+          api: apiProvider,
+          account: neoAccount,
+        })
+
+        Facade.bus.emit('claimGasStart', claimGasResponse)
+
+        resolve(claimGasResponse.response?.txid ?? null)
+      }
+
+      // If NEO transaction was made them it must wait this transaction
+      if (requiresTransaction) {
+        // Wait until claim gas is ready to start
+        Facade.bus.off('claimGasReady', fetch)
+        Facade.bus.on('claimGasReady', fetch)
+      } else {
+        fetch()
+      }
     })
+  }
 
-    return claimGasResponse.response?.txid ?? null
+  static async watchTransaction(
+    txid: string,
+    onComplete?: () => void,
+    maxAttempts = 10,
+    intervalInMs = 3000
+  ) {
+    await Facade.utils.sleep(intervalInMs)
+
+    try {
+      const request = new TransactionRequest(txid)
+      await request.getTransaction()
+
+      if (onComplete) onComplete()
+    } catch {
+      if (maxAttempts > 0) {
+        await this.watchTransaction(
+          txid,
+          onComplete,
+          maxAttempts - 1,
+          intervalInMs
+        )
+      }
+    }
   }
 }
