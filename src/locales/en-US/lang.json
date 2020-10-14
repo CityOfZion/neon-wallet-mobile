@@ -383,7 +383,13 @@
         "price": "Price",
         "priority": "Priority",
         "feeAmount": "(Fee %{amount})",
-        "pleaseReview": "Please review transaction"
+        "pleaseReview": "Please review transaction",
+        "dialog": {
+          "title": "Authentication",
+          "subtitle": "Authentication unsuccessful. Try again?",
+          "confirm": "Yes",
+          "cancel": "No"
+        }
       }
     },
     "receive": {
