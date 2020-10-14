@@ -46,6 +46,7 @@ export default function ColorSelector(props: Props) {
         height={71}
         alignItems="center"
         justifyContent="center"
+        borderRadius={9}
       >
         <LinearLayout
           width="100%"
@@ -54,23 +55,44 @@ export default function ColorSelector(props: Props) {
           overflow="hidden"
           position="absolute"
         >
-          <LinearGradient
-            width="100%"
-            height="100%"
-            colors={[Facade.filter.toDarkerShade(color), color]}
-          />
+          {color === props.account.backgroundColor ? (
+            <>
+              <LinearLayout
+                width={'100%'}
+                height={'100%'}
+                backgroundColor={'white'}
+              />
+            </>
+          ) : (
+            <LinearGradient
+              width="100%"
+              height="100%"
+              colors={[Facade.filter.toDarkerShade(color), color]}
+            />
+          )}
         </LinearLayout>
         <LinearLayout
           width="97%"
           height="97%"
           borderRadius={9}
           overflow="hidden"
+          justifyContent={'center'}
         >
           <LinearGradient
             width="100%"
             height="100%"
             colors={[color, Facade.filter.toDarkerShade(color)]}
           />
+          {color === props.account.backgroundColor && (
+            <ImageView
+              width={'50%'}
+              height={'50%'}
+              resizeMode={'contain'}
+              position={'absolute'}
+              source={require('src/assets/images/icon-check-white.png')}
+              alignSelf={'center'}
+            />
+          )}
         </LinearLayout>
       </RelativeLayout>
     </TouchableWithoutFeedback>
