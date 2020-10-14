@@ -476,7 +476,8 @@
       "sentTo": "Sent to",
       "receivedFrom": "Received from",
       "token": "Token",
-      "value": "Value"
+      "value": "Value",
+      "quantity": "Qty"
     },
     "colorSelector": {
       "customColor": "Custom color"
