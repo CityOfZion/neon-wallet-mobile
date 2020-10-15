@@ -152,8 +152,8 @@ const AccountCard: React.FC<Props> = (props) => {
                 color="white"
                 textAlign="left"
                 numberOfLines={1}
+                width={'88%'}
                 allowFontScaling={true}
-                adjustsFontSizeToFit={true}
               >
                 {props.account.name?.length !== 0
                   ? props.account.name
