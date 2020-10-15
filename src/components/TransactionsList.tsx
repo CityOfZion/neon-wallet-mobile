@@ -17,6 +17,7 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
+import moment from 'moment'
 
 interface Props {
   title?: string
@@ -79,6 +80,14 @@ const TransactionComponent = (props: {
 
   const navigation = useNavigation()
 
+  var todayDate = moment()
+  var yesterdayDate = moment().add(-1, 'days')
+
+  var today = moment(todayDate).format(Facade.t('dateFormat.datePretty'))
+  var yesterday = moment(yesterdayDate).format(
+    Facade.t('dateFormat.datePretty')
+  )
+
   return (
     <ButtonView
       onPress={() => {
@@ -108,7 +117,11 @@ const TransactionComponent = (props: {
             <LinearLayout>
               {props.item.isDatetimeValid() && (
                 <TextView color={'text.0'} fontSize={'md'}>
-                  {props.item.formattedDate}
+                  {props.item.formattedDate === today
+                    ? Facade.t('components.transactionsList.today')
+                    : props.item.formattedDate === yesterday
+                    ? Facade.t('components.transactionsList.yesterday')
+                    : props.item.formattedDate}
                 </TextView>
               )}
             </LinearLayout>
