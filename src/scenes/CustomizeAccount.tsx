@@ -245,7 +245,7 @@ const CustomizeAccount = (props: Props) => {
             marginBottom="24px"
           />
 
-          <ColorSelector onSelect={setColor} />
+          <ColorSelector account={account} onSelect={setColor} />
         </LinearLayout>
       </AwaitActivity>
     </ScreenLayout>
