@@ -477,7 +477,9 @@
       "receivedFrom": "Received from",
       "token": "Token",
       "value": "Value",
-      "quantity": "Qty"
+      "quantity": "Qty",
+      "today": "Today",
+      "yesterday": "Yesterday"
     },
     "colorSelector": {
       "customColor": "Custom color"
