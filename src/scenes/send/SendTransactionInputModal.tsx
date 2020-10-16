@@ -1,6 +1,7 @@
 import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
 import React, {Fragment, useState} from 'react'
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler'
 import InputScrollView from 'react-native-input-scroll-view'
 import {useDispatch, useSelector} from 'react-redux'
 
