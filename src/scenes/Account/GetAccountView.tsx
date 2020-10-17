@@ -1,8 +1,13 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useState, useEffect} from 'react'
-import {InteractionManager} from 'react-native'
+import React, {useState, useEffect, useRef} from 'react'
+import {
+  Animated,
+  Easing,
+  InteractionManager,
+  LayoutChangeEvent,
+} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 
@@ -117,8 +122,11 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const {language} = useSelector((state: RootState) => state.settings)
   const {address} = useSelector((state: RootState) => state.account)
 
+  const posYFactor = useRef(new Animated.Value(0))
+
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
+  const [cardHeight, setCardHeight] = useState<number>(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
   const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>()
@@ -260,6 +268,18 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }
   }
 
+  const cardLayoutEvent = (event: LayoutChangeEvent) => {
+    const {height} = event.nativeEvent.layout
+    setCardHeight(height)
+
+    Animated.timing(posYFactor.current, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+      easing: Easing.out((val) => val ** 2),
+    }).start()
+  }
+
   return (
     <ScreenLayout
       onReachBottom={() => {
@@ -271,9 +291,24 @@ const GetAccountView = (props: GetAccountViewProps) => {
         )
       }}
     >
-      <LinearLayout mt={6}>
-        <AccountCard account={account} isStackMode={false} />
-      </LinearLayout>
+      <Animated.View
+        onLayout={cardLayoutEvent}
+        style={{
+          opacity: posYFactor.current,
+          transform: [
+            {
+              translateY: posYFactor.current.interpolate({
+                inputRange: [0, 1],
+                outputRange: [-1.2 * cardHeight, 0],
+              }),
+            },
+          ],
+        }}
+      >
+        <LinearLayout mt={6}>
+          <AccountCard account={account} isStackMode={false} />
+        </LinearLayout>
+      </Animated.View>
 
       <LinearLayout orientation={'horiz'} justifyContent={'space-between'}>
         <ReceiveButton
