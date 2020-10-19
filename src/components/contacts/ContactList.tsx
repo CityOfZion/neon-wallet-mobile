@@ -14,6 +14,7 @@ import {
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {SearchBar} from '~src/components/input/SearchBar'
 import {Contact} from '~src/models/redux/Contact'
 import {RootState} from '~src/store/RootStore'
 import {ButtonView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -126,62 +127,6 @@ interface TSearchBarContact {
   dispatchData: React.Dispatch<React.SetStateAction<Contact[]>>
 }
 
-const SearchBarContact: React.FC<TSearchBarContact> = ({dispatchData}) => {
-  const contacts = useSelector((state: RootState) => state.app.contacts)
-  const handleFilterContact = (strContact: string) => {
-    if (strContact === '') {
-      dispatchData(contacts)
-    } else {
-      const filterContacts = contacts.filter((contact) => {
-        if (contact.address && contact.name) {
-          return (
-            contact.name.startsWith(strContact) ||
-            contact.address.startsWith(strContact)
-          )
-        }
-      })
-      dispatchData(filterContacts)
-    }
-  }
-  const styles = StyleSheet.create({
-    design: {
-      borderRadius: 21,
-      height: 42,
-      borderColor: '#f00',
-      backgroundColor: '#191f23',
-      marginHorizontal: 5,
-      marginVertical: 20,
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: 20,
-    },
-    input: {
-      flex: 1,
-      color: '#899fa8',
-      fontFamily: 'light',
-      fontWeight: '300',
-      textAlignVertical: 'center',
-      fontSize: 15,
-    },
-    icon: {
-      marginRight: 5,
-    },
-  })
-  return (
-    <View style={styles.design}>
-      <Image
-        source={require('~/src/assets/images/icon-search-gray.png')}
-        style={styles.icon}
-      />
-      <TextInput
-        onChange={(e) => handleFilterContact(e.nativeEvent.text)}
-        style={styles.input}
-        placeholder={Facade.t('persistContact.search')}
-      />
-    </View>
-  )
-}
-
 export const ContactList = (props: ContactListProps) => {
   const contactsMap: Map<string, Item[]> = new Map()
   const contacts = useSelector((state: RootState) => state.app.contacts)
@@ -214,7 +159,21 @@ export const ContactList = (props: ContactListProps) => {
   return (
     <>
       {props.searchBar && (
-        <SearchBarContact data={contactsList} dispatchData={setContactsList} />
+        <SearchBar
+          dispatchData={setContactsList}
+          prevData={contacts}
+          callbackFilter={(searchText) => {
+            const filterContacts = contacts.filter((contact) => {
+              if (contact.address && contact.name) {
+                return (
+                  contact.name.includes(searchText) ||
+                  contact.address.includes(searchText)
+                )
+              }
+            })
+            setContactsList(filterContacts)
+          }}
+        />
       )}
       <SectionList
         style={{
@@ -246,8 +205,4 @@ ContactList.propTypes = {
 
 IconText.propTypes = {
   children: PropTypes.string.isRequired,
-}
-
-SearchBarContact.propTypes = {
-  dispatchData: PropTypes.any.isRequired,
 }
