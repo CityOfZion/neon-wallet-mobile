@@ -9,6 +9,7 @@ export class WrapperConfig {
 
   readonly dataKeys = [
     '@onboarding_seen',
+    '@welcome_to_nw_seen',
     '@welcome_hidden',
     '@has_authentication',
     '@settings',

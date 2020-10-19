@@ -15,6 +15,13 @@ export abstract class Storage {
   }
 
   /**
+   * Controls the span of welcome to neonwallet screen
+   */
+  static get welcomeToNWSeen() {
+    return Facade.storage['@welcome_to_nw_seen'].bind().asBoolean()
+  }
+
+  /**
    * Controls the span of welcome screen
    */
   static get welcomeHidden() {

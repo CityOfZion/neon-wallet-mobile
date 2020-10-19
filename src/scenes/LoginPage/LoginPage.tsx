@@ -138,9 +138,10 @@ export default function LoginPage(props: Props) {
         />
 
         <TouchableWithoutFeedback
-          onPress={() =>
+          onPress={() => {
+            Storage.welcomeToNWSeen.save(true)
             props.navigation.replace(Facade.route.Tab.name, undefined)
-          }
+          }}
         >
           <TextView
             p={16}

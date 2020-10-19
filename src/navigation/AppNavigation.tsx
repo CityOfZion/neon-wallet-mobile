@@ -47,6 +47,7 @@ const AppNavigation = (props: Props) => {
   const {progress, loadingText, isLoading} = loadingOverlayState
 
   const [onboardingSeen, setOnboardingSeen] = useState(true)
+  const [welcomeToNWSeen, setWelcomeToNWSeen] = useState(true)
   const [welcomeHidden, setWelcomeHidden] = useState(true)
   const [hasAuthentication, setHasAuthentication] = useState(false)
 
@@ -54,10 +55,12 @@ const AppNavigation = (props: Props) => {
 
   const startApplication = async () => {
     const onboardingSeen = await Storage.onboardingSeen.load()
+    const welcomeToNWSeen = await Storage.welcomeToNWSeen.load()
     const welcomeHidden = await Storage.welcomeHidden.load()
     const hasAuthentication = await Storage.hasAuthentication.load()
 
     setOnboardingSeen(onboardingSeen ?? false)
+    setWelcomeToNWSeen(welcomeToNWSeen ?? false)
     setWelcomeHidden(welcomeHidden ?? false)
     setHasAuthentication(hasAuthentication ?? false)
 
@@ -94,7 +97,7 @@ const AppNavigation = (props: Props) => {
               <RootStack.Navigator
                 initialRouteName={
                   onboardingSeen
-                    ? hasAuthentication
+                    ? hasAuthentication || welcomeToNWSeen
                       ? Facade.route.Tab.name
                       : Facade.route.Login.name
                     : Facade.route.Onboarding.name
