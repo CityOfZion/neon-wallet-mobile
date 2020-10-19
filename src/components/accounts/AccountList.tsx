@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {FlatList, ListRenderItemInfo} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {SearchBar} from '~src/components/input/SearchBar'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootState} from '~src/store/RootStore'
@@ -17,6 +18,7 @@ interface AccountListProps {
   mt?: string | number
   mb?: string | number
   onAccountSelected?: (account: Account) => void
+  searchBar: boolean
 }
 
 interface Item {
@@ -90,7 +92,6 @@ const ListSeparator = () => {
 export const AccountList = (props: AccountListProps) => {
   const accounts = useSelector((state: RootState) => state.app.accounts)
   const wallets = useSelector((state: RootState) => state.app.wallets)
-
   const items = accounts.map((account) => {
     return {
       account,
@@ -98,14 +99,34 @@ export const AccountList = (props: AccountListProps) => {
       onClick: props.onAccountSelected,
     }
   })
-
+  const [accountsListItem, setAccountsListItem] = useState<Item[]>(items)
   return (
-    <FlatList
-      style={{marginTop: props.mt, marginBottom: props.mb}}
-      data={items}
-      renderItem={ItemComponent}
-      ItemSeparatorComponent={ListSeparator}
-      keyExtractor={(item, index) => index.toString()}
-    />
+    <>
+      {props.searchBar && (
+        <SearchBar
+          prevData={items}
+          dispatchData={setAccountsListItem}
+          callbackFilter={(searchText) => {
+            const filterAccounts = items.filter(({account, wallet}) => {
+              if (account.name && account.address && wallet && wallet.name) {
+                return (
+                  account.name.includes(searchText) ||
+                  account.address.includes(searchText) ||
+                  wallet.name.includes(searchText)
+                )
+              }
+            })
+            setAccountsListItem(filterAccounts)
+          }}
+        />
+      )}
+
+      <FlatList
+        data={accountsListItem}
+        renderItem={ItemComponent}
+        ItemSeparatorComponent={ListSeparator}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </>
   )
 }

@@ -123,6 +123,7 @@ export const ContactPicker = (props: ContactsModalProps) => {
             mt={12}
             mb={PANEL_OFFSET}
             onAccountSelected={(it) => props.route.params.onSelected(it)}
+            searchBar={true}
           />
         )}
       </Fragment>
