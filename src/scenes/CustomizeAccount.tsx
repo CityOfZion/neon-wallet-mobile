@@ -96,6 +96,9 @@ const CustomizeAccount = (props: Props) => {
     // Adds the account to the wallet
     const importedAccount = await createAccount(walletId)
 
+    dispatch(RootStore.wallet.actions.selectWallet(walletId))
+    dispatch(RootStore.account.actions.selectAccount(importedAccount.address))
+
     props.navigation.replace(Facade.route.Tab.name, {
       welcomeHidden: true,
       screen: Facade.route.ListWallets.name,
