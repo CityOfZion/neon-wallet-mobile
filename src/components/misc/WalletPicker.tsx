@@ -39,6 +39,7 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
   return (
     <Carousel<Wallet>
       layout={'default'}
+      containerCustomStyle={{overflow: 'visible'}}
       data={wallets}
       sliderWidth={Facade.app.windowWidth}
       itemWidth={240}

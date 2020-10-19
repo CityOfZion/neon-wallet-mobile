@@ -1,4 +1,5 @@
 import {useNavigation} from '@react-navigation/native'
+import moment from 'moment'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {FlatList} from 'react-native'
@@ -17,7 +18,6 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
-import moment from 'moment'
 
 interface Props {
   title?: string

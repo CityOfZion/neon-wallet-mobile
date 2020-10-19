@@ -2,8 +2,14 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import moment from 'moment'
-import React, {useEffect, useState, Fragment} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
+import React, {useEffect, useState, Fragment, useRef} from 'react'
+import {
+  Animated,
+  Easing,
+  LayoutChangeEvent,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -28,23 +34,53 @@ const AccountCardsComponent = (props: {
   accounts: Account[]
   onPress: (account: Account) => void
 }) => {
+  const [viewHeight, setViewHeight] = useState<number>(0)
+
+  const posYFactor = useRef(new Animated.Value(0))
+
+  const layoutEvent = (event: LayoutChangeEvent) => {
+    const {height} = event.nativeEvent.layout
+    setViewHeight(height)
+
+    Animated.timing(posYFactor.current, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+      easing: Easing.out((val) => val ** 2),
+    }).start()
+  }
+
   return (
-    <Fragment>
+    <Animated.View onLayout={layoutEvent} style={{opacity: posYFactor.current}}>
       {props.accounts.map((account: Account, i: number) => {
         const marginTop = i !== 0 ? Facade.scale(-130) : undefined
 
         return (
-          <LinearLayout key={i} marginTop={marginTop}>
-            <AccountCard
-              account={account}
-              isCompacted={true}
-              isStackMode={i !== props.accounts.length - 1}
-              onPress={() => props.onPress(account)}
-            />
-          </LinearLayout>
+          <Animated.View
+            key={i}
+            style={{
+              transform: [
+                {
+                  translateY: posYFactor.current.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [-viewHeight * (1 + 0.1 * i), 0],
+                  }),
+                },
+              ],
+            }}
+          >
+            <LinearLayout marginTop={marginTop}>
+              <AccountCard
+                account={account}
+                isCompacted={true}
+                isStackMode={i !== props.accounts.length - 1}
+                onPress={() => props.onPress(account)}
+              />
+            </LinearLayout>
+          </Animated.View>
         )
       })}
-    </Fragment>
+    </Animated.View>
   )
 }
 
