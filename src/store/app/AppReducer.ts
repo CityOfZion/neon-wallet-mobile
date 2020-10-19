@@ -12,6 +12,7 @@ import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {Account} from '~src/models/redux/Account'
 import {App} from '~src/models/redux/App'
 import {Contact} from '~src/models/redux/Contact'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
 import {TransactionRequest} from '~src/models/request/TransactionRequest'
 import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
@@ -22,7 +23,6 @@ import {TokensDispatcher} from '~src/store/app/dispatchers/TokensDispatcher'
 import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
 import {Exchange, ExchangeResponse} from '~src/types/exchange'
 import {TokenResponse} from '~src/types/token'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 
 export class AppReducer extends ReducerWrapper<
   AppActionsType,
