@@ -346,6 +346,29 @@
         "save": "Save"
       }
     },
+    "editWallet": {
+      "title": "Edit",
+      "preview": "Preview",
+      "accountInput": {
+        "title": "Account name",
+        "placeholder": "Enter an account name"
+      },
+      "navigation": {
+        "ok": "Ok",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "save": "Save"
+      },
+      "walletName": "Wallet Name",
+      "namePlaceholder": "Enter wallet name",
+      "invalidName": "Invalid Name",
+      "deleteWallet": "Delete Wallet",
+      "deleteWalletSubtitle": "Tum dicere exorsus est et dolore magnam aliquam quaerat voluptatem.",
+      "deleteButtom": "Delete Wallet",
+      "deleteWalletAlert": "Are you sure you want to delete this wallet?",
+      "deleteWalletNoBackupAlert": "This wallet doesn't have a backup. You can't delete a wallet without a backup.",
+      "search": "Search"
+    },
     "send": {
       "title": "Send",
       "walletSelection": {
