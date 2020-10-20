@@ -36,7 +36,7 @@ const ContactsPage: React.FC<Props> = (prop) => {
       {!contacts || contacts.length === 0 ? (
         <NoContacts />
       ) : (
-        <ContactList mt={40} />
+        <ContactList mt={40} searchBar={true} />
       )}
     </ScreenLayout>
   )

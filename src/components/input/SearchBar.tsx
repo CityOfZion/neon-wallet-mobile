@@ -28,7 +28,7 @@ export const SearchBar: React.FC<TSearchBar> = ({
       height: 42,
       borderColor: '#f00',
       backgroundColor: '#191f23',
-      marginHorizontal: 5,
+      marginHorizontal: 10,
       marginVertical: 20,
       flexDirection: 'row',
       alignItems: 'center',
@@ -40,10 +40,10 @@ export const SearchBar: React.FC<TSearchBar> = ({
       fontFamily: 'light',
       fontWeight: '300',
       textAlignVertical: 'center',
-      fontSize: 15,
+      fontSize: 20, 
     },
     icon: {
-      marginRight: 5,
+      marginRight: 10,
     },
   })
   return (
@@ -56,6 +56,7 @@ export const SearchBar: React.FC<TSearchBar> = ({
         onChange={(e) => handleFilter(e.nativeEvent.text)}
         style={styles.input}
         placeholder={Facade.t('persistContact.search')}
+        placeholderTextColor="#899fa8"
       />
     </View>
   )
