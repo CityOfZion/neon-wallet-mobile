@@ -181,9 +181,7 @@ export const PersistContact = (props: PersistContactProps) => {
               onChangeText={(val) => setName(val)}
               color={'background.4'}
               value={name}
-              validator={(val) =>
-                (val.length >= 2 && val.length <= 20) || val?.length === 0
-              }
+              validator={(val) => true}
               separatorColor={'background.3'}
               invalidColor={'background.3'}
               invalidMessageColor={'quinary'}
