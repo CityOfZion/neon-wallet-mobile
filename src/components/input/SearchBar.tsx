@@ -28,7 +28,6 @@ export const SearchBar: React.FC<TSearchBar> = ({
     design: {
       borderRadius: 21,
       height: 42,
-      borderColor: '#f00',
       backgroundColor: '#191f23',
       marginHorizontal: marginH ?? 5,
       marginVertical: 20,
@@ -42,7 +41,7 @@ export const SearchBar: React.FC<TSearchBar> = ({
       fontFamily: 'light',
       fontWeight: '300',
       textAlignVertical: 'center',
-      fontSize: 20, 
+      fontSize: 20,
     },
     icon: {
       marginRight: 10,
@@ -68,4 +67,5 @@ SearchBar.propTypes = {
   prevData: PropTypes.any.isRequired,
   callbackFilter: PropTypes.any.isRequired,
   dispatchData: PropTypes.any.isRequired,
+  marginH: PropTypes.any.isRequired,
 }
