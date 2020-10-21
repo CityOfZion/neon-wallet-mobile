@@ -7,12 +7,14 @@ type TSearchBar<P = any> = {
   prevData: P[]
   callbackFilter: (strFilter: string) => void
   dispatchData: React.Dispatch<React.SetStateAction<P[]>>
+  marginH?: number
 }
 
 export const SearchBar: React.FC<TSearchBar> = ({
   callbackFilter,
   prevData,
   dispatchData,
+  marginH,
 }) => {
   const handleFilter = (searchText: string) => {
     if (searchText === '') {
@@ -28,7 +30,7 @@ export const SearchBar: React.FC<TSearchBar> = ({
       height: 42,
       borderColor: '#f00',
       backgroundColor: '#191f23',
-      marginHorizontal: 10,
+      marginHorizontal: marginH ?? 5,
       marginVertical: 20,
       flexDirection: 'row',
       alignItems: 'center',

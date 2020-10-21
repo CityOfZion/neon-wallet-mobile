@@ -11,6 +11,7 @@ import SwiperPanel, {
   SwiperController,
   useSwiperController,
 } from '~src/components/SwiperPanel'
+import {SearchBar} from '~src/components/input/SearchBar'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
@@ -90,9 +91,15 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
   const {account} = props.route.params
   const filterBy = props.route.params.filterBy ?? 'receive'
 
+  const [searchTokens, setSearchTokens] = useState<TokenAsset[]>([])
+
   useEffect(() => {
     populate()
   }, [filterBy])
+
+  useEffect(() => {
+    setSearchTokens(tokenList)
+  }, [tokenList])
 
   const populate = async () => {
     if (filterBy === 'send') {
@@ -110,7 +117,6 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
           newTokenList.push(token)
         }
       })
-
       setTokenList(newTokenList)
     } else {
       setTokenList(tokens)
@@ -139,11 +145,22 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
         >
           {Facade.t('modals.listTokenModal.selectToken')}
         </TextView>
-        <FlatList
-          contentContainerStyle={{
-            paddingTop: 18,
+        <SearchBar
+          marginH={-5}
+          prevData={tokenList}
+          dispatchData={setSearchTokens}
+          callbackFilter={(searchText) => {
+            const filterToken = tokenList.filter((sToken) => {
+              return (
+                sToken.name.includes(searchText) ||
+                sToken.symbol.includes(searchText)
+              )
+            })
+            setSearchTokens(filterToken)
           }}
-          data={tokenList}
+        />
+        <FlatList
+          data={searchTokens}
           keyExtractor={(item) => item.symbol}
           ItemSeparatorComponent={() => <LinearLayout bg="text.3" height={1} />}
           renderItem={({item}) => (
