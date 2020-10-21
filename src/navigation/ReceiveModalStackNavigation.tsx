@@ -20,6 +20,9 @@ import HeaderBackButton from '~src/components/layout/HeaderBackButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import ReceiveQrCodeModal, {
+  ReceiveQrCodeModalParams,
+} from '~src/scenes/receive/ReceiveQrCodeModal'
 import ReceiveToAccountModal, {
   ReceiveToAccountModalParams,
 } from '~src/scenes/receive/ReceiveToAccountModal'
@@ -29,11 +32,13 @@ export type ReceiveModalStackParamList = {
   ReceiveWalletSelectionModal: undefined
   ReceiveAccountSelectionModal: ReceiveAccountSelectionModalParams
   ReceiveToAccountModal: ReceiveToAccountModalParams
+  ReceiveQrCodeModal: ReceiveQrCodeModalParams
 }
 
 export type ReceiveStackModalParams =
   | DefaultNavigationParam<ReceiveAccountSelectionModalParams>
   | DefaultNavigationParam<ReceiveToAccountModalParams>
+  | DefaultNavigationParam<ReceiveQrCodeModalParams>
 
 const ReceiveModalStack = createStackNavigator<ReceiveModalStackParamList>()
 
@@ -101,6 +106,17 @@ const ReceiveModalStackNavigation = (props: ReceiveModalStackProps) => {
             <ReceiveModalStack.Screen
               name={Facade.route.ReceiveToAccountModal.name}
               component={ReceiveToAccountModal}
+              options={() => ({
+                headerTitle: () =>
+                  HeaderBar({
+                    title: Facade.t('modals.receive.title'),
+                  }),
+                headerLeft: HeaderBackButton,
+              })}
+            />
+            <ReceiveModalStack.Screen
+              name={Facade.route.ReceiveQrCodeModal.name}
+              component={ReceiveQrCodeModal}
               options={() => ({
                 headerTitle: () =>
                   HeaderBar({
