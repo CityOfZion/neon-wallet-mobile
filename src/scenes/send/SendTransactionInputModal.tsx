@@ -274,6 +274,7 @@ const TokenField = (props: {
             hidePaste={true}
             hideScan={true}
             editable={false}
+            srcIcon={props.token?.srcIcon}
           />
           <ImageView
             position="absolute"

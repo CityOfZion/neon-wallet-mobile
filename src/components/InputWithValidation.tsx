@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native'
 import React from 'react'
 import {
+  ImageLoadEventData,
   Keyboard,
   KeyboardTypeOptions,
   NativeSyntheticEvent,
@@ -52,12 +53,16 @@ interface Props {
   editable?: boolean
   keyboardType?: KeyboardTypeOptions
   selectedContact?: Contact
+  srcIcon?: ImageLoadEventData
+  iconSize?: [number, number]
 }
 
 const InputWithValidation = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
+  const width = Facade.scale(props.iconSize ? props.iconSize[0] : 25)
+  const height = Facade.scale(props.iconSize ? props.iconSize[1] : 25)
   const navigation = useNavigation()
   const sideMargins = props.sideMargins ?? 20
   const fontStyle =
@@ -75,6 +80,16 @@ const InputWithValidation = (props: Props) => {
     <LinearLayout orientation="verti" ml={sideMargins} mr={sideMargins}>
       {!props.selectedContact ? (
         <LinearLayout orientation="horiz">
+          {props.srcIcon && (
+            <ImageView
+              width={width as number}
+              height={height as number}
+              mr={props.value ? 3 : undefined}
+              resizeMode="contain"
+              source={props.srcIcon}
+              alignSelf={'center'}
+            />
+          )}
           <InputTextView
             onChangeText={props.onChangeText}
             color={fontColor}
