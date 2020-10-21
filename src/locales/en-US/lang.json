@@ -321,7 +321,7 @@
     },
     "createAccount": {
       "title": "Create account",
-      "subtitle": "Creating an account is easy, just give it a name below and you’re down!",
+      "subtitle": "Creating an account is easy. Just give it a name below and you're done!",
       "preview": "Preview",
       "accountInput": {
         "title": "Account name",
