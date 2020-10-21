@@ -40,7 +40,7 @@ export const SearchBar: React.FC<TSearchBar> = ({
       fontFamily: 'light',
       fontWeight: '300',
       textAlignVertical: 'center',
-      fontSize: 20, 
+      fontSize: 20,
     },
     icon: {
       marginRight: 10,

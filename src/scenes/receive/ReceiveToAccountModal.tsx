@@ -1,20 +1,19 @@
-import {RouteProp} from '@react-navigation/native'
+import {RouteProp, useNavigationState} from '@react-navigation/native'
+import {useHeaderHeight} from '@react-navigation/stack'
 import React, {Fragment, useState} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
+import {ScrollView, TouchableWithoutFeedback} from 'react-native'
 import InputScrollView from 'react-native-input-scroll-view'
 import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {ReceiveModalStackParamList} from '~/src/navigation/ReceiveModalStackNavigation'
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import {DismissKeyboard} from '~src/components/DismissKeyboard'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import {QRCodeWithCopyButton} from '~src/components/QRCodeWithCopyButton'
-import SwiperPanel, {
-  PANEL_OFFSET,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import TabSelector from '~src/components/TabSelector'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
@@ -167,10 +166,14 @@ export interface ReceiveToAccountModalParams {
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
-  route: RouteProp<ModalStackParamList, 'ReceiveToAccountModal'>
+  route: RouteProp<ReceiveModalStackParamList, 'ReceiveToAccountModal'>
 }
 const ReceiveToAccountModal = (props: Props) => {
-  const controller = useSwiperController(true)
+  const show = useNavigationState(
+    (state) =>
+      state.routes[state.routes.length - 1].name ===
+      Facade.route.ReceiveToAccountModal.name
+  )
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
@@ -200,17 +203,20 @@ const ReceiveToAccountModal = (props: Props) => {
     return conditions.every((it) => it)
   }
 
-  return (
-    <SwiperPanel
-      controller={controller}
-      fullSize={true}
-      paddingTop={24}
-      paddingRight={30}
-      paddingLeft={30}
-      title={Facade.t('modals.receive.title')}
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
-      onClose={props.navigation.goBack}
-      disableDefaultScrollView={true}
+  return show ? (
+    <ScrollView
+      style={{
+        width: '100%',
+        marginTop: useHeaderHeight(),
+      }}
+      contentContainerStyle={{
+        flexGrow: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        paddingBottom: PANEL_OFFSET + 20,
+        paddingLeft: 8,
+        paddingRight: 8,
+      }}
     >
       <InputScrollView
         useAnimatedScrollView={true}
@@ -269,7 +275,7 @@ const ReceiveToAccountModal = (props: Props) => {
               />
               <AmountField
                 theme={theme}
-                amount={amount}
+                amount={amount ?? ''}
                 setAmount={setAmount}
               />
               <ReferenceField
@@ -289,7 +295,9 @@ const ReceiveToAccountModal = (props: Props) => {
           )}
         </LinearLayout>
       </InputScrollView>
-    </SwiperPanel>
+    </ScrollView>
+  ) : (
+    <LinearLayout />
   )
 }
 

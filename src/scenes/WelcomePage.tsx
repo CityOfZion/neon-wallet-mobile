@@ -116,7 +116,7 @@ const WelcomePage = (props: Props) => {
             text={Facade.t('welcome.button_2')}
             onPress={() =>
               closeTo(Facade.route.Modal.name, {
-                screen: Facade.route.ReceiveWalletSelectionModal.name,
+                screen: Facade.route.ReceiveModalStack.name,
               })
             }
           />

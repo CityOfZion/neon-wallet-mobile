@@ -48,6 +48,7 @@ export class WrapperConfig {
     'CreateAccountModal',
     'EditAccountModal',
     'QRCodeScan',
+    'ReceiveModalStack',
     'ReceiveWalletSelectionModal',
     'ReceiveAccountSelectionModal',
     'ReceiveToAccountModal',

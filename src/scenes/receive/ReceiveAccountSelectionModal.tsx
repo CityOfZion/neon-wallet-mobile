@@ -1,37 +1,38 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {RouteProp, useNavigationState} from '@react-navigation/native'
+import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import React, {useEffect, useState} from 'react'
+import {ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
+import {ReceiveModalStackParamList} from '~/src/navigation/ReceiveModalStackNavigation'
 import {Facade} from '~src/app/Facade'
 import BalanceList from '~src/components/BalanceList'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import AccountPicker from '~src/components/misc/AccountPicker'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
-import {
-  LinearLayout,
-  RelativeLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
-export interface ReceiveAccountSelectionParams {
+export interface ReceiveAccountSelectionModalParams {
   wallet: Wallet
 }
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList & WalletStackParamList>
-  route: RouteProp<ModalStackParamList, 'ReceiveAccountSelectionModal'>
+  route: RouteProp<ReceiveModalStackParamList, 'ReceiveAccountSelectionModal'>
 }
 
 const ReceiveAccountSelectionModal = (props: Props) => {
   const {wallet} = props.route.params
 
-  const controller = useSwiperController(true)
+  const show = useNavigationState(
+    (state) =>
+      state.routes[state.routes.length - 1].name ===
+      Facade.route.ReceiveAccountSelectionModal.name
+  )
 
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
 
@@ -50,16 +51,21 @@ const ReceiveAccountSelectionModal = (props: Props) => {
     setSelectedAccount(accounts[0])
   }
 
-  return (
-    <SwiperPanel
-      controller={controller}
-      fullSize={true}
-      paddingTop={11}
-      paddingRight={0}
-      paddingLeft={0}
-      title={Facade.t('modals.receive.title')}
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
-      onClose={() => props.navigation.goBack()}
+  return show ? (
+    <ScrollView
+      style={{
+        width: '100%',
+        marginTop: useHeaderHeight(),
+        marginBottom: '10%',
+      }}
+      contentContainerStyle={{
+        flexGrow: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        paddingBottom: PANEL_OFFSET + 20,
+        paddingLeft: 5,
+        paddingRight: 5,
+      }}
     >
       <LinearLayout px={5}>
         <TextView
@@ -78,7 +84,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
           fontFamily={'medium'}
           textAlign={'center'}
         >
-          {Facade.t('modals.send.accountSelection.subtitle')}
+          {Facade.t('modals.receive.accountSelection.subtitle')}
         </TextView>
 
         <LinearLayout minHeight={260} mx={-5}>
@@ -114,7 +120,9 @@ const ReceiveAccountSelectionModal = (props: Props) => {
           />
         </LinearLayout>
       </LinearLayout>
-    </SwiperPanel>
+    </ScrollView>
+  ) : (
+    <LinearLayout />
   )
 }
 
