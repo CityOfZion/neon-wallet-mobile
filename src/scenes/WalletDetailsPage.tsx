@@ -1,6 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import InputLabel from '~src/components/InputLabel'
@@ -10,6 +11,7 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
+import {RootStore} from '~src/store/RootStore'
 
 export interface WalletDetailsParamList {
   wallet: Wallet
@@ -23,19 +25,25 @@ interface WalletDetailsProps {
 const WalletDetailsPage = (props: WalletDetailsProps) => {
   const {wallet} = props.route.params
 
+  const dispatch = useDispatch<DispatchResult>()
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+
+  dispatch(RootStore.wallet.actions.clearState())
+
+  dispatchAsync(RootStore.app.actions.syncWallets())
+
   props.navigation.setOptions({
     headerRight: () =>
       HeaderActionButton({
         actionTitle: Facade.t('app.edit'),
         actionButtonStyle: 'default',
         actionOnPress: () => {
-          // TODO: Edit modal
-          // props.navigation.navigate(Facade.route.Modal.name, {
-          //   screen: Facade.route.EditWalletModal.name,
-          //   params: {
-          //     wallet,
-          //   },
-          // })
+          props.navigation.navigate(Facade.route.Modal.name, {
+            screen: Facade.route.EditWalletModal.name,
+            params: {
+              wallet,
+            },
+          })
         },
       }),
   })

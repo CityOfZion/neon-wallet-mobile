@@ -82,5 +82,6 @@ export class WrapperConfig {
     'ContactsModal',
     'CopyContextModal',
     'TransactionDetails',
+    'EditWalletModal',
   ] as const
 }

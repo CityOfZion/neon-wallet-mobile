@@ -4,6 +4,9 @@ import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
+import EditWalletModal, {
+  EditWalletParams,
+} from '~src/components/EditWalletModal'
 import {
   PersistContact,
   PersistContactParams,
@@ -76,6 +79,7 @@ export type ModalStackParamList = {
   TransactionDetails: TransactionDetailsParams
   CopyContextModal: CopyContextModalParams
   SendModalStack: undefined
+  EditWalletModal: EditWalletParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -89,6 +93,7 @@ export type ModalParams =
   | DefaultNavigationParam<ContactsModalParams>
   | DefaultNavigationParam<PersistContactParams>
   | DefaultNavigationParam<SendStackModalParams>
+  | DefaultNavigationParam<EditWalletParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -187,6 +192,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={Facade.route.TransactionDetails.name}
           component={TransactionDetails}
+        />
+        <ModalStack.Screen
+          name={Facade.route.EditWalletModal.name}
+          component={EditWalletModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

@@ -104,5 +104,32 @@ export class WalletReducer extends ReducerWrapper<
         }
       }
     },
+    update: (id: string): AsyncAction => {
+      return async (dispatch, getState) => {
+        const wallets = (await Storage.wallets.load()) ?? []
+
+        const wallet = wallets.find((it) => it.id === id)
+
+        if (wallet) {
+          wallet.name = getState().wallet.name
+        }
+
+        await Storage.wallets.save(wallets)
+      }
+    },
+    delete: (id: string): AsyncAction => {
+      return async (dispatch) => {
+        const wallets = (await Storage.wallets.load()) ?? []
+
+        const wallet = wallets.find((it) => it.id === id)
+
+        if (wallet) {
+          const index = wallets.indexOf(wallet)
+          wallets.splice(index, 1)
+        }
+
+        await Storage.wallets.save(wallets)
+      }
+    },
   }
 }
