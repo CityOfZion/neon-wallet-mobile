@@ -134,9 +134,7 @@ export class Wallet implements WalletState {
 
     await Promise.all(promises)
 
-    return walletAccounts.flatMap((group) =>
-      group.transactions.flatMap((it) => it.transactions)
-    )
+    return walletAccounts.flatMap((it) => it.flattedTransactions)
   }
 
   calculateBalance(currency: Currency, exchange: Exchange) {
