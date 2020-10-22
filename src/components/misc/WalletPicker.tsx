@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, {useState} from 'react'
 import Carousel from 'react-native-snap-carousel'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import WalletCard from '~src/components/WalletCard'
@@ -22,6 +22,10 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
 
   const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
 
+  const [index, setIndex] = useState<number>(
+    wallet ? wallets.findIndex((it) => it.id === wallet.id) : 0
+  )
+
   const pressEvent = async (wallet: Wallet) => {
     if (props.onPress) {
       props.onPress(wallet)
@@ -29,12 +33,15 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
   }
 
   const selectEvent = async (index: number) => {
+    setIndex(index)
     if (props.onSelect) {
       props.onSelect(wallets[index])
     }
   }
 
-  const index = wallet ? wallets.findIndex((it) => it.id === wallet.id) : 0
+  const isInactive = (wallet: Wallet) => {
+    return Boolean(wallet.isInactive && props.canBeInactive)
+  }
 
   return (
     <Carousel<Wallet>
@@ -55,17 +62,22 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
       firstItem={index > 0 ? index : 0}
       onLayout={() => selectEvent(0)}
       onSnapToItem={(index) => selectEvent(index)}
-      renderItem={({item}) => (
+      renderItem={(wallet) => (
         <LinearLayout
           weight={1}
           justifyContent={'center'}
           alignItems={'center'}
           py={6}
+          pointerEvents={wallet.index !== index ? 'none' : undefined}
         >
           <WalletCard
             width={240}
-            onPress={() => pressEvent(item)}
-            wallet={item}
+            onPress={
+              !isInactive(wallet.item)
+                ? () => pressEvent(wallet.item)
+                : undefined
+            }
+            wallet={wallet.item}
             canBeInactive={props.canBeInactive}
           />
         </LinearLayout>

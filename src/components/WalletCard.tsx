@@ -234,16 +234,18 @@ const WalletCard: React.FC<Props> = (props) => {
   }
 
   const onPressEvent = () => {
-    Animated.timing(posYFactor.current, {
-      toValue: 1,
-      duration: 500,
-      easing: Easing.in((val) => val ** 2),
-      useNativeDriver: true,
-    }).start(async () => {
-      if (props.onPress) props.onPress()
-      await Facade.utils.sleep(500)
-      posYFactor.current.setValue(0)
-    })
+    if (props.onPress) {
+      Animated.timing(posYFactor.current, {
+        toValue: 1,
+        duration: 500,
+        easing: Easing.in((val) => val ** 2),
+        useNativeDriver: true,
+      }).start(async () => {
+        if (props.onPress) props.onPress()
+        await Facade.utils.sleep(500)
+        posYFactor.current.setValue(0)
+      })
+    }
   }
 
   return (
