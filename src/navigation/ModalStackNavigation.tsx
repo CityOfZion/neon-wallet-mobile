@@ -3,6 +3,8 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import ReceiveModalStackNavigation from './ReceiveModalStackNavigation'
+
 import {Facade} from '~src/app/Facade'
 import EditWalletModal, {
   EditWalletParams,
@@ -47,7 +49,7 @@ import {
 import WalletContextModal from '~src/scenes/WalletContextModal'
 import WelcomePage from '~src/scenes/WelcomePage'
 import ReceiveAccountSelectionModal, {
-  ReceiveAccountSelectionParams,
+  ReceiveAccountSelectionModalParams,
 } from '~src/scenes/receive/ReceiveAccountSelectionModal'
 import ReceiveQrCodeModal, {
   ReceiveQrCodeModalParams,
@@ -63,7 +65,7 @@ export type ModalStackParamList = {
   EditAccountModal: EditAccountModalParam
   AccountQRCode: AccountQRCodeParams
   ReceiveWalletSelectionModal: undefined
-  ReceiveAccountSelectionModal: ReceiveAccountSelectionParams
+  ReceiveAccountSelectionModal: ReceiveAccountSelectionModalParams
   ReceiveToAccountModal: ReceiveToAccountModalParams
   ReceiveQrCodeModal: ReceiveQrCodeModalParams
   CustomColor: CustomColorPageParam
@@ -80,6 +82,7 @@ export type ModalStackParamList = {
   CopyContextModal: CopyContextModalParams
   SendModalStack: undefined
   EditWalletModal: EditWalletParams
+  ReceiveModalStack: undefined
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -140,6 +143,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={Facade.route.SendModalStack.name}
           component={SendModalStackNavigation}
+        />
+        <ModalStack.Screen
+          name={Facade.route.ReceiveModalStack.name}
+          component={ReceiveModalStackNavigation}
         />
         <ModalStack.Screen
           name={Facade.route.CustomColor.name}

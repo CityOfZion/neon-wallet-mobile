@@ -1,15 +1,17 @@
-import {RouteProp} from '@react-navigation/native'
+import {RouteProp, useNavigationState} from '@react-navigation/native'
+import {useHeaderHeight} from '@react-navigation/stack'
 import React, {useState} from 'react'
+import {ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
+import {ReceiveModalStackParamList} from '~/src/navigation/ReceiveModalStackNavigation'
 import {Facade} from '~src/app/Facade'
 import InputLabel from '~src/components/InputLabel'
 import NeonQRCode from '~src/components/QRCode'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -26,7 +28,7 @@ export interface ReceiveQrCodeModalParams {
 
 export interface ReceiveQrCodeProps {
   navigation: StackNavigationProp<ModalStackParamList>
-  route: RouteProp<ModalStackParamList, 'ReceiveQrCodeModal'>
+  route: RouteProp<ReceiveModalStackParamList, 'ReceiveQrCodeModal'>
 }
 
 const buttonWidth = Facade.app.screenWidth - 76
@@ -37,7 +39,11 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
   )
   const {currency} = useSelector((state: RootState) => state.settings)
   const {exchange} = useSelector((state: RootState) => state.app)
-  const controller = useSwiperController(true)
+  const show = useNavigationState(
+    (state) =>
+      state.routes[state.routes.length - 1].name ===
+      Facade.route.ReceiveQrCodeModal.name
+  )
   const [showQr, setShowQr] = useState(false)
 
   const {wallet, account, amount, token, reference} = props.route.params
@@ -59,13 +65,21 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
 
   Facade.await.run('renderQr', renderQr)
 
-  return (
-    <SwiperPanel
-      controller={controller}
-      fullSize={true}
-      title={Facade.t('routes.ReceiveQrCode')}
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
-      onClose={props.navigation.goBack}
+  return show ? (
+    <ScrollView
+      style={{
+        width: '100%',
+        marginTop: useHeaderHeight(),
+        marginBottom: '10%',
+      }}
+      contentContainerStyle={{
+        flexGrow: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        paddingBottom: PANEL_OFFSET + 20,
+        paddingLeft: 5,
+        paddingRight: 5,
+      }}
     >
       <LinearLayout height="100%" alignItems="center">
         <AwaitActivity name={'renderQr'}>
@@ -228,7 +242,9 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
           </LinearLayout>
         </LinearLayout>
       </LinearLayout>
-    </SwiperPanel>
+    </ScrollView>
+  ) : (
+    <LinearLayout />
   )
 }
 export default ReceiveQrCodeModal
