@@ -237,7 +237,7 @@ const TabBarContainer = styled.SafeAreaView<
 const StyledTouchable = styled.TouchableHighlight<
   SpaceProps & LayoutProps & PositionProps & WeightProps
 >`
-  ${space} 
+  ${space}
   ${layout}
   ${position}
   ${weight}
@@ -263,7 +263,7 @@ const AnimatedLinearLayout = styled(Animated.View)<
     WeightProps &
     PositionProps
 >`
-  ${border}  
+  ${border}
   ${color}
   ${orientation}
   ${space}

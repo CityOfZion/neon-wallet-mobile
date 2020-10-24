@@ -1,6 +1,7 @@
 import {RouteProp, useFocusEffect} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState, useEffect} from 'react'
+import {View, StyleSheet, Text} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -53,14 +54,40 @@ export const ContactDetails = (props: ContactDetailsProps) => {
         },
       }),
   })
+  const styles = StyleSheet.create({
+    containerLetter: {
+      borderRadius: 100,
+      backgroundColor: '#252d34',
+      width: 126,
+      height: 127,
+      shadowColor: '#3e464d',
+      shadowOffset: {width: 4, height: 4},
+      shadowRadius: 36,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 30,
+      elevation: 25,
+    },
+    textLetter: {
+      color: '#899fa8',
+      fontSize: 36,
+      fontWeight: '600',
+    },
+    container: {
+      alignItems: 'center',
+      marginRight: 10,
+      marginLeft: 10,
+      flexDirection: 'row',
+    },
+  })
   return (
     <ScreenLayout>
       <LinearLayout alignItems={'center'} mr={'10px'} ml={'10px'}>
-        <ImageView
-          height={'199px'}
-          width={'199px'}
-          source={require('~src/assets/images/icon-contact-details.png')}
-        />
+        <View style={styles.containerLetter}>
+          <Text style={styles.textLetter}>
+            {contact.name?.charAt(0).toLocaleUpperCase()}
+          </Text>
+        </View>
         <TextView
           fontFamily={'semibold'}
           fontSize={'20px'}
