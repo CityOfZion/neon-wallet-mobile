@@ -8,6 +8,7 @@ import {Facade} from '~src/app/Facade'
 import SwiperPanel, {
   PANEL_OFFSET,
   useSwiperController,
+  CloseButton,
 } from '~src/components/SwiperPanel'
 import {AccountList} from '~src/components/accounts/AccountList'
 import {ContactList} from '~src/components/contacts/ContactList'
@@ -90,12 +91,13 @@ export const ContactPicker = (props: ContactsModalProps) => {
     <SwiperPanel
       title={Facade.t('contactPicker.title')}
       controller={controller}
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
       onClose={props.navigation.goBack}
       padding={0}
       paddingTop={40}
       fullSize={true}
       disableDefaultScrollView={true}
+      onRightPress={controller.close}
+      rightButton={<CloseButton mr="20px" />}
     >
       <Fragment>
         <TextView
