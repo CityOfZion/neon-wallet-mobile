@@ -1,4 +1,6 @@
 import {api, nep5} from '@cityofzion/neon-js'
+import moment from 'moment'
+import {showMessage} from 'react-native-flash-message'
 
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
@@ -114,6 +116,24 @@ export abstract class NeonHelper {
       settings.network.networkDeprecatedLabel
     )
 
+    const lastClaimedTransaction =
+      account?.flattedAllTransactions.find(
+        (it) => it.senderAddress === 'claim' || it.receiverAddress === 'claim'
+      ) ?? null
+
+    const nextClaimAllowed = lastClaimedTransaction?.sentAt
+      ? moment(lastClaimedTransaction.sentAt).add(5, 'minutes')
+      : null
+
+    // NW-473 After you claim gas, you have to wait 5 minutes to claim again
+    if (nextClaimAllowed && moment().isBefore(nextClaimAllowed)) {
+      showMessage({
+        message: Facade.t('toast.gasClaimGapError'),
+        type: 'danger',
+      })
+      throw new Error(Facade.t('toast.gasClaimGapError'))
+    }
+
     if (requiresTransaction) {
       const txid = await this.sendNativeAsset(
         address,
@@ -139,7 +159,7 @@ export abstract class NeonHelper {
         resolve(claimGasResponse.response?.txid ?? null)
       }
 
-      // If NEO transaction was made them it must wait this transaction
+      // If a NEO transaction was made them it must wait this transaction
       if (requiresTransaction) {
         // Wait until claim gas is ready to start
         Facade.bus.off('claimGasReady', fetch)

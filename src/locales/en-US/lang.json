@@ -571,6 +571,7 @@
   "toast" : {
     "transaction": "Transaction",
     "gasClaimSuccess" : "GAS claim successful!",
+    "gasClaimGapError" : "You must wait at least 5 minutes for next claim",
     "transactionCompleted" : "Transaction completed!"
   },
   "transactionDetails" : {

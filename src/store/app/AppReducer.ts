@@ -263,9 +263,7 @@ export class AppReducer extends ReducerWrapper<
         for (const account of accounts) {
           let hasAccountChanged = false
 
-          const senderTxs = account.pendingTransactions.flatMap(
-            (it) => it.transactions
-          )
+          const senderTxs = account.flattedPendingTransactions
 
           for (const senderTx of senderTxs) {
             if (senderTx.transactionHash) {

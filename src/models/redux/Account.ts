@@ -85,6 +85,22 @@ export class Account implements AccountState {
     return wif ? new wallet.Account(wif) : null
   }
 
+  get allTransactions() {
+    return [...this.pendingTransactions, ...this.transactions]
+  }
+
+  get flattedTransactions() {
+    return this.transactions.flatMap((it) => it.transactions)
+  }
+
+  get flattedPendingTransactions() {
+    return this.pendingTransactions.flatMap((it) => it.transactions)
+  }
+
+  get flattedAllTransactions() {
+    return this.allTransactions.flatMap((it) => it.transactions)
+  }
+
   getBalanceAmountByAsset(assetSymbol: string) {
     const tokenAsset = this.tokenAssets.find((it) => it.symbol === assetSymbol)
     if (!tokenAsset) return null
@@ -176,7 +192,7 @@ export class Account implements AccountState {
     }
 
     // Convert the grouped cache into SenderTransactions
-    let senderTxs = this.transactions.flatMap((it) => it.transactions)
+    let senderTxs = this.flattedTransactions
     let counter = 0 // Huge loop interactions protection
     let totalPages: number
     let totalEntries: number
@@ -278,7 +294,7 @@ export class Account implements AccountState {
 
     await senderTx.populateExchange()
 
-    const senderTxs = this.pendingTransactions.flatMap((it) => it.transactions)
+    const senderTxs = this.flattedPendingTransactions
     senderTxs.push(senderTx)
 
     this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
@@ -303,7 +319,7 @@ export class Account implements AccountState {
 
     await senderTx.populateExchange()
 
-    const senderTxs = this.pendingTransactions.flatMap((it) => it.transactions)
+    const senderTxs = this.flattedPendingTransactions
     senderTxs.push(senderTx)
 
     this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
