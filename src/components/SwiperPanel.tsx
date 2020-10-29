@@ -35,7 +35,7 @@ interface SwiperProps {
   paddingTop: number
   paddingBottom: number
   leftButton?: JSX.Element | string
-  rightButton?: JSX.Element | string
+  rightButton?: React.FC | JSX.Element | string
   onLeftPress?: () => void
   onRightPress?: () => void
   onClose?: () => void
@@ -483,15 +483,23 @@ SwiperPanel.defaultProps = {
   imageSize: [20, 20],
 }
 
-export function CloseButton() {
+interface ICloseButton {
+  mr?: string
+}
+
+export const CloseButton: React.FC<ICloseButton> = ({mr}) => {
   return (
     <ImageView
       width={20}
       height={20}
-      m="8px"
+      m={mr ?? '8px'}
       source={require('~src/assets/images/button_close_white.png')}
     />
   )
+}
+
+CloseButton.propTypes = {
+  mr: PropTypes.string,
 }
 
 export function BackButton(props: {text?: string}) {
