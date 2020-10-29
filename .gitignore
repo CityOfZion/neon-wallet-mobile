@@ -128,3 +128,4 @@ buck-out/
 # Expo
 .expo/*
 web-build/
+debug.log
