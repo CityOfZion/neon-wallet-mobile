@@ -30,9 +30,15 @@ export default function CreateAccountModal(props: Props) {
 
   const dispatch = useDispatch()
 
+  const getRandomColor = (max: number) => {
+    return Math.floor(Math.random() * Math.floor(max))
+  }
+
   const [account, setAccount] = useState(new Account())
   const [name, setName] = useState<string>('')
-  const [color, setColor] = useState<string>(theme.colors.card[0])
+  const [color, setColor] = useState<string>(
+    theme.colors.card[getRandomColor(6)]
+  )
   const [address, setAddress] = useState<string>()
 
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
