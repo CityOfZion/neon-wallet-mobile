@@ -49,7 +49,7 @@ export class Account implements AccountState {
   name: string | null = null
 
   @HttpExpose()
-  backgroundColor = '#00aaff'
+  backgroundColor = Math.floor(Math.random() * 16777215).toString(16)
 
   // Balance of each token
   @ResponseSerialize(TokenAsset)

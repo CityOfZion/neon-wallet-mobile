@@ -54,8 +54,14 @@ const CustomizeAccount = (props: Props) => {
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
   const dispatchAsyncAccount = useDispatch<AsyncDispatch<Account>>()
 
+  const getRandomColor = (max: number) => {
+    return Math.floor(Math.random() * Math.floor(max))
+  }
+
   const [name, setName] = useState<string>('')
-  const [color, setColor] = useState<string>(theme.colors.card[0])
+  const [color, setColor] = useState<string>(
+    theme.colors.card[getRandomColor(6)]
+  )
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
   const [saving, setSaving] = useState(false)
 
