@@ -1,19 +1,17 @@
-import { RouteProp, useNavigation, CommonActions } from '@react-navigation/native'
-import { StackNavigationProp } from '@react-navigation/stack'
+import {RouteProp, useNavigation, CommonActions} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
 import React from 'react'
-import {
-  Linking,
-} from 'react-native'
-import { useSelector } from 'react-redux'
+import {Linking} from 'react-native'
+import {useSelector} from 'react-redux'
 
-import { Facade } from '~src/app/Facade'
-import { AccountView } from '~src/components/AccountView'
-import { HeaderColumn } from '~src/components/HeaderColumn'
+import {Facade} from '~src/app/Facade'
+import {AccountView} from '~src/components/AccountView'
+import {HeaderColumn} from '~src/components/HeaderColumn'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~src/components/SwiperPanel'
-import { TokenView } from '~src/components/TokenView'
+import {TokenView} from '~src/components/TokenView'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {
@@ -22,9 +20,9 @@ import {
   NoPriority,
   PriorityFee,
 } from '~src/models/PriorityFee'
-import { Contact } from '~src/models/redux/Contact'
-import { SenderTransaction } from '~src/models/redux/SenderTransaction'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import {Contact} from '~src/models/redux/Contact'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {
   ButtonView,
   ImageView,
@@ -47,7 +45,7 @@ export const TransactionDetails = (props: Props) => {
   const contacts = useSelector((state: RootState) => state.app.contacts)
   const accounts = useSelector((state: RootState) => state.app.accounts)
   const wallets = useSelector((state: RootState) => state.app.wallets)
-  const { currency, language } = useSelector((state: RootState) => state.settings)
+  const {currency, language} = useSelector((state: RootState) => state.settings)
 
   let senderName = undefined
   const senderAddress = transaction.senderAddress ?? undefined
