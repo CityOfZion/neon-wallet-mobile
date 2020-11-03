@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native'
 import PropTypes from 'prop-types'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {
   View,
   StyleSheet,
@@ -136,10 +136,10 @@ export const ContactList = (props: ContactListProps) => {
     if (contactsMap.has(contact.name?.[0] ?? '')) {
       // eslint-disable-next-line no-unused-expressions
       contactsMap
-        .get(contact.name?.[0] ?? '')
+        .get(contact.name?.[0].toUpperCase() ?? '')
         ?.push({data: contact, onContactSelected: props.onContactSelected})
     } else {
-      contactsMap.set(contact.name?.[0] ?? '', [
+      contactsMap.set(contact.name?.[0].toUpperCase() ?? '', [
         {data: contact, onContactSelected: props.onContactSelected},
       ])
     }
@@ -156,6 +156,9 @@ export const ContactList = (props: ContactListProps) => {
     sections.push(section)
   })
 
+  useEffect(() => {
+    setContactsList(contacts)
+  }, [contacts])
   return (
     <>
       {props.searchBar && (
