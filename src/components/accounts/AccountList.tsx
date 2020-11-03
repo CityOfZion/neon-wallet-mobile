@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {FlatList, ListRenderItemInfo} from 'react-native'
+import {FlatList, ListRenderItemInfo, ScrollView, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -18,7 +18,7 @@ interface AccountListProps {
   mt?: string | number
   mb?: string | number
   onAccountSelected?: (account: Account) => void
-  searchBar: boolean
+  searchBar?: boolean
 }
 
 interface Item {
@@ -121,12 +121,14 @@ export const AccountList = (props: AccountListProps) => {
         />
       )}
 
-      <FlatList
-        data={accountsListItem}
-        renderItem={ItemComponent}
-        ItemSeparatorComponent={ListSeparator}
-        keyExtractor={(item, index) => index.toString()}
-      />
+      <ScrollView style={{marginBottom: props.mb}}>
+        <FlatList
+          data={accountsListItem}
+          renderItem={ItemComponent}
+          ItemSeparatorComponent={ListSeparator}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </ScrollView>
     </>
   )
 }
