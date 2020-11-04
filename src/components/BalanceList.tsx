@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native'
-import React from 'react'
+import React, {useState} from 'react'
 import {FlatList, TouchableOpacity, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -168,7 +168,7 @@ const BalanceListItem = (props: ListProps & ItemProps) => {
 const BalanceList = (props: Props) => {
   const {exchange} = useSelector((state: RootState) => state.app)
   const {currency, language} = useSelector((state: RootState) => state.settings)
-
+  const [itemSeparatorControl, setItemSeparatorControl] = useState(true)
   const innerProps = {...props}
   delete innerProps.tokenAssets
   delete innerProps.fromAccountView
@@ -182,7 +182,7 @@ const BalanceList = (props: Props) => {
 
       {props.tokenAssets.length ? (
         <FlatList<TokenAsset>
-          data={props.tokenAssets}
+          data={props.tokenAssets.filter((tokenAsset) => tokenAsset.amount > 0)}
           keyExtractor={(item) => item.symbol}
           ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
           renderItem={({item}) => (
