@@ -7,6 +7,7 @@ import {Alert, TouchableWithoutFeedback, View} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
 import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -26,7 +27,6 @@ import {
 } from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 import {Exchange} from '~src/types/exchange'
-
 export interface ListWalletParams {}
 
 interface WalletProps {

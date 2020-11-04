@@ -1,22 +1,22 @@
-import { RouteProp } from '@react-navigation/native'
-import { StackNavigationProp } from '@react-navigation/stack'
+import {RouteProp} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
 import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
-import { FlatList } from 'react-native'
-import { useSelector } from 'react-redux'
+import React, {useEffect, useState} from 'react'
+import {FlatList} from 'react-native'
+import {useSelector} from 'react-redux'
 
-import { Facade } from '~src/app/Facade'
+import {Facade} from '~src/app/Facade'
 import SwiperPanel, {
   PANEL_OFFSET,
   SwiperController,
   useSwiperController,
-  CloseButton
+  CloseButton,
 } from '~src/components/SwiperPanel'
-import { SearchBar } from '~src/components/input/SearchBar'
+import {SearchBar} from '~src/components/input/SearchBar'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import { TokenAsset } from '~src/models/TokenAsset'
-import { Account } from '~src/models/redux/Account'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import {TokenAsset} from '~src/models/TokenAsset'
+import {Account} from '~src/models/redux/Account'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {
   ButtonView,
   ImageView,
@@ -85,11 +85,11 @@ const Item = (props: {
 
 const ListTokenModal: React.FC<Props> = (props: Props) => {
   const controller = useSwiperController(true)
-  const { tokens } = useSelector((state: RootState) => state.app)
+  const {tokens} = useSelector((state: RootState) => state.app)
 
   const [tokenList, setTokenList] = useState<TokenAsset[]>([])
 
-  const { account } = props.route.params
+  const {account} = props.route.params
   const filterBy = props.route.params.filterBy ?? 'receive'
 
   const [searchTokens, setSearchTokens] = useState<TokenAsset[]>([])
@@ -165,7 +165,7 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
           data={searchTokens}
           keyExtractor={(item) => item.symbol}
           ItemSeparatorComponent={() => <LinearLayout bg="text.3" height={1} />}
-          renderItem={({ item }) => (
+          renderItem={({item}) => (
             <Item
               controller={controller}
               item={item}
