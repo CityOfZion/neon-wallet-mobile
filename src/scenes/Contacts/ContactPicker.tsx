@@ -44,7 +44,7 @@ const TabSelector = (props: {selected: Tab; onSelect: (t: Tab) => void}) => {
             fontFamily="bold"
             fontSize="16px"
             textAlign="center"
-            color={contactsSelected ? 'primary' : 'background.3'}
+            color={contactsSelected ? 'text.0' : 'background.3'}
             my="16px"
           >
             {Facade.t('contactPicker.contacts').toUpperCase()}
@@ -65,7 +65,7 @@ const TabSelector = (props: {selected: Tab; onSelect: (t: Tab) => void}) => {
             fontFamily="bold"
             fontSize="16px"
             textAlign="center"
-            color={!contactsSelected ? 'primary' : 'background.3'}
+            color={!contactsSelected ? 'text.0' : 'background.3'}
             my="16px"
           >
             {Facade.t('contactPicker.myAccounts').toUpperCase()}
