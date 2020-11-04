@@ -15,6 +15,7 @@ interface MoreProps {
 }
 
 const MorePage = (props: MoreProps) => {
+  const showHelp: boolean = false
   return (
     <ScreenLayout padding={20}>
       <MenuItem
@@ -49,14 +50,16 @@ const MorePage = (props: MoreProps) => {
           props.navigation.navigate(Facade.route.ImportKey.name)
         }}
       />
-      <MenuItem
-        title={Facade.t('more.help')}
-        icon={require('~/src/assets/images/icon-help-green.png')}
-        iconWidth={21}
-        iconMarginLeft={1}
-        iconMarginRight={17}
-        arrowDirection={RightIconType.NONE}
-      />
+      {showHelp && (
+        <MenuItem
+          title={Facade.t('more.help')}
+          icon={require('~/src/assets/images/icon-help-green.png')}
+          iconWidth={21}
+          iconMarginLeft={1}
+          iconMarginRight={17}
+          arrowDirection={RightIconType.NONE}
+        />
+      )}
     </ScreenLayout>
   )
 }
