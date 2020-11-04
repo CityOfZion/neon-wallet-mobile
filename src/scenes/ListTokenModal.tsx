@@ -73,7 +73,12 @@ const Item = (props: {
           {Facade.t('modals.listTokenModal.holding')}
         </TextView>
 
-        <TextView fontFamily="bold" fontSize="18px" color="text.0">
+        <TextView
+          textAlign="right"
+          fontFamily="bold"
+          fontSize="18px"
+          color="text.0"
+        >
           {props.item.amount.toString(10)}
         </TextView>
       </LinearLayout>
