@@ -1,11 +1,12 @@
 import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
-import React, {Fragment, useState} from 'react'
+import React, {Fragment, useEffect, useState} from 'react'
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler'
 import InputScrollView from 'react-native-input-scroll-view'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {Currency} from '~/src/enums/Currency'
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import InputLabel from '~src/components/InputLabel'
@@ -291,15 +292,24 @@ const TokenField = (props: {
 }
 
 const AmountField = (props: {
-  validator: (val: string) => boolean
+  validatorAmount: (val: string) => boolean
+  validatorFiat: (val: string) => boolean
   token: TokenAsset | null
   amount: number
+  fiat: number
   setAmount: (amount: number) => void
+  setFiat: (fiat: number) => void
   tokenBalance: number
   remainingTokenBalance: number
+  account: Account
+  currency: Currency
 }) => {
-  const setValue = (val: string) => {
-    const valueNumber = Number(val)
+  const setValue = (val: string, roundDown?: boolean) => {
+    var valueNumber
+    if (roundDown) {
+      valueNumber = Math.floor(Number(val))
+    } else valueNumber = Number(val)
+
     if (!valueNumber) return
 
     val = val.replace(',', '')
@@ -319,50 +329,104 @@ const AmountField = (props: {
         mt={30}
         mb={20}
       >
-        <InputLabel
-          title={Facade.t('modals.send.transactionInput.amount')}
-          color={'text.0'}
-          capitalize={true}
-        />
+        <LinearLayout weight={2}>
+          <InputLabel
+            title={Facade.t('modals.send.transactionInput.amount')}
+            color={'text.0'}
+            capitalize={true}
+          />
+        </LinearLayout>
         <LinearLayout orientation={'horiz'} alignItems={'center'}>
           <TextView mr={'6px'} color={'text.10'}>
-            total after transaction
+            {Facade.t('modals.send.transactionInput.totalAfterTransaction')}
           </TextView>
           <TextView color={'text.0'} fontFamily={'bold'} fontSize={'16px'}>
             {Facade.filter.decimal(props.remainingTokenBalance, language)}
           </TextView>
         </LinearLayout>
-      </LinearLayout>
-      <LinearLayout position={'relative'}>
-        <InputWithValidation
-          onChangeText={(val) => setValue(val)}
-          color={theme.colors.text[0]}
-          invalidColor={theme.colors.text[10]}
-          invalidMessageColor={theme.colors.quinary}
-          value={props.amount !== null ? String(props.amount) : ''}
-          placeholder={Facade.t('modals.send.transactionInput.enterAmount')}
-          validator={(val) => props.validator(val)}
-          invalidMessage={Facade.t(
-            'modals.send.transactionInput.insufficientFunds'
-          )}
-          separatorColor={theme.colors.background[13]}
-          sideMargins={0}
-          hidePaste={true}
-          hideScan={true}
-          keyboardType="numeric"
-          editable={Boolean(props.token)}
-        />
         <ButtonView
-          position={'absolute'}
-          right={'25px'}
           p={'8px'}
-          top={'-5px'}
           onPress={() => setValue(String(props.tokenBalance))}
         >
           <TextView color={'primary'} fontSize={'15px'} fontFamily={'medium'}>
-            Max
+            {Facade.t('modals.send.transactionInput.max')}
           </TextView>
         </ButtonView>
+      </LinearLayout>
+      <LinearLayout
+        position={'relative'}
+        orientation={'horiz'}
+        justifyContent={'space-between'}
+      >
+        <LinearLayout width={'45%'}>
+          <InputWithValidation
+            onChangeText={(val) => setValue(val)}
+            color={theme.colors.text[0]}
+            invalidColor={theme.colors.text[10]}
+            invalidMessageColor={theme.colors.quinary}
+            value={props.amount !== null ? String(props.amount) : ''}
+            placeholder={
+              Facade.t('modals.send.transactionInput.enterValue') +
+              (props.token?.symbol ?? 'NEO')
+            }
+            validator={(val) => props.validatorAmount(val)}
+            invalidMessage={Facade.t(
+              'modals.send.transactionInput.insufficientFunds'
+            )}
+            separatorColor={theme.colors.background[13]}
+            sideMargins={0}
+            hidePaste={true}
+            hideScan={true}
+            keyboardType="numeric"
+            editable={Boolean(props.token)}
+          />
+        </LinearLayout>
+        <LinearLayout width={'45%'}>
+          <LinearLayout height={'50px'}>
+            <InputWithValidation
+              onChangeText={(val) => props.setFiat(Number(val))}
+              color={theme.colors.text[0]}
+              invalidColor={theme.colors.text[10]}
+              invalidMessageColor={theme.colors.quinary}
+              value={props.fiat !== null ? String(props.fiat.toFixed(2)) : ''}
+              placeholder={
+                Facade.t('modals.send.transactionInput.enterValue') +
+                props.currency
+              }
+              validator={(val) => props.validatorFiat(val)}
+              invalidMessage={Facade.t(
+                'modals.send.transactionInput.insufficientFunds'
+              )}
+              separatorColor={theme.colors.background[13]}
+              sideMargins={0}
+              hidePaste={true}
+              hideScan={true}
+              keyboardType="numeric"
+              editable={Boolean(props.token)}
+            />
+          </LinearLayout>
+          <ButtonView
+            alignSelf={'flex-end'}
+            onPress={() => props.setFiat(Math.floor(props.fiat))}
+          >
+            <LinearLayout orientation={'horiz'}>
+              <ImageView
+                mr={'3'}
+                alignSelf={'center'}
+                source={require('~src/assets/images/round-down-arrows.png')}
+                resizeMode="contain"
+              />
+              <TextView
+                color={'primary'}
+                fontSize={'15px'}
+                fontFamily={'medium'}
+                mb={'2'}
+              >
+                {Facade.t('modals.send.transactionInput.roundDown')}
+              </TextView>
+            </LinearLayout>
+          </ButtonView>
+        </LinearLayout>
       </LinearLayout>
     </Fragment>
   )
@@ -370,14 +434,16 @@ const AmountField = (props: {
 
 const SendTransactionInputModal = (prop: Props) => {
   const {account, walletTitle, uri} = prop.route.params
-  const {contacts, tokens, accounts, wallets} = useSelector(
+  const {contacts, tokens, accounts, wallets, exchange} = useSelector(
     (state: RootState) => state.app
   )
+  const {currency, language} = useSelector((state: RootState) => state.settings)
 
   const [receiverAddress, setReceiverAddress] = useState(
     prop.route.params?.uri?.address ?? ''
   )
   const [amount, setAmount] = useState(uri?.amount ?? 0)
+  const [fiat, setFiat] = useState(0)
   const hash = prop.route.params?.uri?.tokenHash ?? ''
 
   const [contact, setContact] = useState<Contact>()
@@ -393,6 +459,24 @@ const SendTransactionInputModal = (prop: Props) => {
       state.routes[state.routes.length - 1].name ===
       Facade.route.SendTransactionInputModal.name
   )
+
+  useEffect(() => {
+    if (token?.symbol) {
+      const ratio = exchange[token?.symbol]?.to[currency] ?? null
+      if (ratio) {
+        setFiat(ratio * amount)
+      }
+    }
+  }, [amount])
+
+  useEffect(() => {
+    if (token?.symbol) {
+      const ratio = exchange[token?.symbol]?.to[currency] ?? null
+      if (ratio) {
+        setAmount(fiat / ratio)
+      }
+    }
+  }, [fiat])
 
   const changePriority = (newPriority: PriorityFee) => {
     if (priority.equals(newPriority)) {
@@ -437,6 +521,16 @@ const SendTransactionInputModal = (prop: Props) => {
     return hasEnoughBalance
   }
 
+  const validateFiat = (val: string) => {
+    if (token?.symbol) {
+      const ratio = exchange[token?.symbol]?.to[currency] ?? null
+      if (ratio) {
+        const hasEnoughBalance = getTokenBalance() * ratio >= Number(val)
+        return hasEnoughBalance
+      }
+    } else return true
+  }
+
   const validateFields = () => {
     let inputIsValid = true
     if (!token) {
@@ -445,7 +539,7 @@ const SendTransactionInputModal = (prop: Props) => {
       inputIsValid = false
     } else if (!amount) {
       inputIsValid = false
-    } else if (!validateAmount(String(amount))) {
+    } else if (!validateAmount(String(amount)) || !validateFiat(String(fiat))) {
       inputIsValid = false
     }
     return inputIsValid
@@ -577,10 +671,15 @@ const SendTransactionInputModal = (prop: Props) => {
         <AmountField
           amount={amount}
           setAmount={(a) => setAmount(a)}
+          setFiat={(a) => setFiat(a)}
+          fiat={fiat}
           token={token}
           tokenBalance={getTokenBalance()}
           remainingTokenBalance={getRemainingTokenBalance()}
-          validator={validateAmount}
+          validatorAmount={validateAmount}
+          validatorFiat={validateFiat}
+          account={account}
+          currency={currency}
         />
 
         <TextView
