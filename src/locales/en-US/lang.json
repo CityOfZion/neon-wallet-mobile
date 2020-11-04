@@ -386,8 +386,12 @@
       "transactionInput": {
         "selectDifferentAccount": "Select a different Account",
         "transactionDetails": "TRANSACTION DETAILS",
+        "totalAfterTransaction": "total after transaction",
+        "max": "Max",
+        "roundDown": "round down",
         "prioritiseTransfer": "Prioritise your transfer with a fee?",
         "enterAmount": "Enter amount",
+        "enterValue": "Enter ",
         "selectToken": "Select token to send",
         "enterDestination": "Please enter destination address",
         "destinationAddress": "Destination Address",
