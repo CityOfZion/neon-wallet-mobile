@@ -35,6 +35,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
     const id = await dispatchAsyncString(
       RootStore.wallet.actions.createAndSave()
     )
+    dispatch(RootStore.wallet.actions.setShowBackupAlert(id, true))
     await dispatchAsync(RootStore.app.actions.syncWallets())
 
     // Create first Account automatically
@@ -48,6 +49,8 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
 
     dispatch(RootStore.wallet.actions.clearState())
     dispatch(RootStore.account.actions.clearState())
+
+    await dispatchAsync(RootStore.app.actions.syncWallets())
 
     dispatch(RootStore.wallet.actions.selectWallet(id))
 
