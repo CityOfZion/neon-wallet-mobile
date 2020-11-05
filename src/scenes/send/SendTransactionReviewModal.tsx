@@ -311,6 +311,7 @@ const SendTransactionReviewModal = (props: Props) => {
     }
 
     dispatch(RootStore.senderTransaction.actions.clearState())
+    await dispatchAsync(RootStore.app.actions.syncAccounts())
 
     props.navigation.reset({
       index: 0,
