@@ -314,10 +314,13 @@ const GetAccountView = (props: GetAccountViewProps) => {
         <ReceiveButton
           onPress={() =>
             props.navigation.navigate(Facade.route.Modal.name, {
-              screen: Facade.route.ReceiveToAccountModal.name,
+              screen: Facade.route.ReceiveModalStack.name,
               params: {
-                wallet,
-                account,
+                screen: Facade.route.ReceiveToAccountModal.name,
+                params: {
+                  wallet,
+                  account,
+                },
               },
             })
           }
