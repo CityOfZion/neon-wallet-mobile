@@ -7,6 +7,7 @@ import {
   Easing,
   InteractionManager,
   LayoutChangeEvent,
+  View,
 } from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
@@ -279,7 +280,16 @@ const GetAccountView = (props: GetAccountViewProps) => {
       easing: Easing.out((val) => val ** 2),
     }).start()
   }
-
+  const [initAxisX, setInitAxisX] = useState<number>(0)
+  const [changeScreen, setChangeScreen] = useState<boolean>(true)
+  const handleChangeScreen = (value: boolean) => {
+    if (value !== changeScreen) {
+      setChangeScreen(value)
+    }
+  }
+  useEffect(() => {
+    setIsAssetsTabSelected(changeScreen)
+  }, [changeScreen])
   return (
     <ScreenLayout
       onReachBottom={() => {
@@ -398,65 +408,78 @@ const GetAccountView = (props: GetAccountViewProps) => {
         />
       </LinearLayout>
 
-      <TabSelector
-        isFirstTabSelected={isAssetsTabSelected}
-        setFirstTabAsSelected={setIsAssetsTabSelected}
-        firstTabLabel={Facade.t('screens.getAccount.assets')}
-        secondTabLabel={Facade.t('screens.getAccount.transactions')}
-        mb={5}
-      />
+      <View
+        onTouchStart={({nativeEvent}) => {
+          setInitAxisX(nativeEvent.pageX)
+        }}
+        onTouchMove={({nativeEvent}) => {
+          if (nativeEvent.pageX > initAxisX) handleChangeScreen(true)
 
-      <LinearLayout>
-        {isAssetsTabSelected ? (
-          <BalanceList
-            my="16px"
-            tokenAssets={account.tokenAssets}
-            address={account.address ?? undefined}
-            fromAccountView={true}
-            fromListWalletView={false}
-          />
-        ) : account.tokenAssets.length ? (
-          <AwaitActivity
-            name={'fetchTransaction'}
-            size={'large'}
-            style={{minHeight: 100}}
-          >
-            <>
-              {account.address && (
-                <LinearLayout>
-                  <TransactionsList
-                    title={Facade.t('screens.getAccount.pendingTransactions')}
-                    address={account.address}
-                    transactionGroups={account.pendingTransactions}
-                  />
+          if (nativeEvent.pageX < initAxisX) handleChangeScreen(false)
+        }}
+      >
+        <TabSelector
+          isFirstTabSelected={isAssetsTabSelected}
+          setFirstTabAsSelected={setIsAssetsTabSelected}
+          firstTabLabel={Facade.t('screens.getAccount.assets')}
+          secondTabLabel={Facade.t('screens.getAccount.transactions')}
+          mb={5}
+        />
 
-                  <TransactionsList
-                    title={Facade.t('screens.getAccount.completedTransactions')}
-                    address={account.address}
-                    transactionGroups={account.transactions}
-                  />
-                </LinearLayout>
-              )}
+        <LinearLayout>
+          {isAssetsTabSelected ? (
+            <BalanceList
+              my="16px"
+              tokenAssets={account.tokenAssets}
+              address={account.address ?? undefined}
+              fromAccountView={true}
+              fromListWalletView={false}
+            />
+          ) : account.tokenAssets.length ? (
+            <AwaitActivity
+              name={'fetchTransaction'}
+              size={'large'}
+              style={{minHeight: 100}}
+            >
+              <>
+                {account.address && (
+                  <LinearLayout>
+                    <TransactionsList
+                      title={Facade.t('screens.getAccount.pendingTransactions')}
+                      address={account.address}
+                      transactionGroups={account.pendingTransactions}
+                    />
 
-              <AwaitActivity
-                name={'loadMoreTransaction'}
-                size={'large'}
-                style={{minHeight: 100}}
-              />
-            </>
-          </AwaitActivity>
-        ) : (
-          <TextView
-            my="32px"
-            color="text.0"
-            fontFamily="medium"
-            fontSize="18px"
-            textAlign="center"
-          >
-            {Facade.t('components.balanceList.empty')}
-          </TextView>
-        )}
-      </LinearLayout>
+                    <TransactionsList
+                      title={Facade.t(
+                        'screens.getAccount.completedTransactions'
+                      )}
+                      address={account.address}
+                      transactionGroups={account.transactions}
+                    />
+                  </LinearLayout>
+                )}
+
+                <AwaitActivity
+                  name={'loadMoreTransaction'}
+                  size={'large'}
+                  style={{minHeight: 100}}
+                />
+              </>
+            </AwaitActivity>
+          ) : (
+            <TextView
+              my="32px"
+              color="text.0"
+              fontFamily="medium"
+              fontSize="18px"
+              textAlign="center"
+            >
+              {Facade.t('components.balanceList.empty')}
+            </TextView>
+          )}
+        </LinearLayout>
+      </View>
     </ScreenLayout>
   )
 }
