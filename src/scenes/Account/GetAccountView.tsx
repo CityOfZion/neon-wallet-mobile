@@ -7,10 +7,13 @@ import {
   Easing,
   InteractionManager,
   LayoutChangeEvent,
+  Dimensions,
+  Image,
   View,
 } from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
+import {width} from 'styled-system'
 
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
@@ -63,12 +66,13 @@ const ReceiveButton = (props: {onPress: () => any}) => {
       onShowUnderlay={() => {
         setPressed(true)
       }}
+      margin={'0 0 0 1%'}
     >
       <ImageView
         source={backgroundImage}
         overflow={'visible'}
         //The image has margins
-        ml={'-45px'}
+        width={71}
       />
     </ButtonView>
   )
@@ -89,13 +93,9 @@ const SendButton = (props: {onPress?: () => any}) => {
       onShowUnderlay={() => {
         setPressed(true)
       }}
+      margin={'0 1% 0 0'}
     >
-      <ImageView
-        source={backgroundImage}
-        overflow={'visible'}
-        //The image has margins
-        mr={'-45px'}
-      />
+      <ImageView source={backgroundImage} overflow={'visible'} width={71} />
     </ButtonView>
   )
 }
@@ -320,7 +320,14 @@ const GetAccountView = (props: GetAccountViewProps) => {
         </LinearLayout>
       </Animated.View>
 
-      <LinearLayout orientation={'horiz'} justifyContent={'space-between'}>
+      <View
+        style={{
+          flexDirection: 'row',
+          width: Dimensions.get('screen').width,
+          alignSelf: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
         <ReceiveButton
           onPress={() =>
             props.navigation.navigate(Facade.route.Modal.name, {
@@ -341,26 +348,23 @@ const GetAccountView = (props: GetAccountViewProps) => {
             name={`ClaimGas@${account.address}`}
             loadingView={<ClaimGasLoader />}
           >
-            <>
+            <View style={{width: 209}}>
               <ButtonView
                 onPress={claimGas}
                 weight={2}
                 justifyContent={'center'}
                 overflow={'visible'}
                 activeOpacity={isClaimAvailable() ? 0.6 : 1}
+                width={209}
               >
                 {isClaimAvailable() ? (
-                  <ImageView
+                  <Image
                     source={require('~src/assets/images/button-claim-background.png')}
-                    alignSelf={'center'}
-                    position={'absolute'}
-                    maxWidth={'100%'}
+                    style={{width: 209}}
                   />
                 ) : (
                   <ImageView
                     source={require('~src/assets/images/button-claim-background-disabled.png')}
-                    alignSelf={'center'}
-                    position={'absolute'}
                     maxWidth={'100%'}
                   />
                 )}
@@ -369,6 +373,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
                   color={isClaimAvailable() ? 'primary' : 'text.2'}
                   opacity={isClaimAvailable() ? 1 : 0.6}
                   alignSelf={'center'}
+                  position={'absolute'}
                   fontSize={'16px'}
                   numberOfLines={1}
                   adjustsFontSizeToFit={true}
@@ -384,7 +389,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
                     : Facade.t('screens.getAccount.gasUnavailable')}
                 </TextView>
               </ButtonView>
-            </>
+            </View>
           </AwaitActivity>
         </AwaitActivity>
 
@@ -406,7 +411,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
                 }
           }
         />
-      </LinearLayout>
+      </View>
 
       <View
         onTouchStart={({nativeEvent}) => {
