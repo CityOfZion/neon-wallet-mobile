@@ -17,6 +17,9 @@ interface SettingsProps {
 }
 
 const SettingsPage = (props: SettingsProps) => {
+  const showLanguage = false
+  const showTheme = false
+  const showNetwork = false
   const {language, currency, theme, network} = useSelector(
     (state: RootState) => state.settings
   )
@@ -57,30 +60,36 @@ const SettingsPage = (props: SettingsProps) => {
         onPress={() => openModal(Facade.route.CurrencyPickerModal.name)}
       />
 
-      <MenuItem
-        title={Facade.t('settings.language')}
-        icon={require('~src/assets/images/icon-language-green.png')}
-        iconWidth={16}
-        iconMarginLeft={2}
-        iconMarginRight={22}
-        arrowDirection={RightIconType.ARROW_DOWN}
-        subtitle={Facade.t(`languages.${language}`)}
-        onPress={() => openModal(Facade.route.LanguagePickerModal.name)}
-      />
+      {showLanguage && (
+        <MenuItem
+          title={Facade.t('settings.language')}
+          icon={require('~src/assets/images/icon-language-green.png')}
+          iconWidth={16}
+          iconMarginLeft={2}
+          iconMarginRight={22}
+          arrowDirection={RightIconType.ARROW_DOWN}
+          subtitle={Facade.t(`languages.${language}`)}
+          onPress={() => openModal(Facade.route.LanguagePickerModal.name)}
+        />
+      )}
 
-      <MenuItem
-        title={Facade.t('settings.theme')}
-        arrowDirection={RightIconType.ARROW_DOWN}
-        subtitle={Facade.t(`themes.${theme}`)}
-        onPress={() => openModal(Facade.route.ThemePickerModal.name)}
-      />
+      {showTheme && (
+        <MenuItem
+          title={Facade.t('settings.theme')}
+          arrowDirection={RightIconType.ARROW_DOWN}
+          subtitle={Facade.t(`themes.${theme}`)}
+          onPress={() => openModal(Facade.route.ThemePickerModal.name)}
+        />
+      )}
 
-      <MenuItem
-        title={Facade.t('settings.network')}
-        arrowDirection={RightIconType.ARROW_DOWN}
-        subtitle={network.name}
-        onPress={() => openModal(Facade.route.NetworkPickerModal.name)}
-      />
+      {showNetwork && (
+        <MenuItem
+          title={Facade.t('settings.network')}
+          arrowDirection={RightIconType.ARROW_DOWN}
+          subtitle={network.name}
+          onPress={() => openModal(Facade.route.NetworkPickerModal.name)}
+        />
+      )}
     </ScreenLayout>
   )
 }
