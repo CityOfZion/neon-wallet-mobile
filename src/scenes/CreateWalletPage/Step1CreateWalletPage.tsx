@@ -110,11 +110,7 @@ const Step1CreateWalletPage: React.FC<Props> = (props) => {
 
   return (
     <ScreenLayout alignX={'center'}>
-      <LinearLayout mt={5} weight={1}>
-        <TextView mb={5} color={'text.0'} fontSize={'lg'} pl={5}>
-          {Facade.t('step1CreateWallet.header')}
-        </TextView>
-
+      <LinearLayout mt={5} weight={1} width={'100%'}>
         <ItemComponent
           index={1}
           title={Facade.t('step1CreateWallet.label_1')}
