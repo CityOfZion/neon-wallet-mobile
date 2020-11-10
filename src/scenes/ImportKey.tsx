@@ -22,6 +22,7 @@ const ImportKey = (props: ImportKeyProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
+  const accounts = useSelector((state: RootState) => state.app.accounts)
 
   const [inputValue, setInputValue] = useState('')
   const inputIsValid = validator(inputValue)
@@ -53,7 +54,19 @@ const ImportKey = (props: ImportKeyProps) => {
     } else if (wallet.isWIF(inputValue)) {
       const neoAccount = Facade.asteroid.generateNeoAccountFromWif(inputValue)
 
-      if (neoAccount) {
+      if (accounts.find((account) => account.address === neoAccount.address)) {
+        Alert.alert(
+          '',
+          Facade.t('importKey.accountAlreadyExists'),
+          [
+            {
+              text: Facade.t('importKey.ok'),
+              style: 'cancel',
+            },
+          ],
+          {cancelable: true}
+        )
+      } else if (neoAccount) {
         destination = [
           Facade.route.CustomizeAccount.name,
           {
