@@ -4,7 +4,10 @@ import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import SelectorList, {SelectorItem} from '~src/components/SelectorList'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import SwiperPanel, {
+  useSwiperController,
+  CloseButton,
+} from '~src/components/SwiperPanel'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {Currency} from '~src/enums/Currency'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -53,8 +56,9 @@ const CurrencyPickerModal = (props: Props) => {
       paddingTop={24}
       onClose={props.navigation.goBack}
       onLeftPress={controller.close}
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
+      rightButton={<CloseButton mr={'20px'} />}
       disableDefaultScrollView={true}
+      onRightPress={controller.close}
     >
       <SelectorList items={currencies} />
     </SwiperPanel>
