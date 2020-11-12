@@ -1,7 +1,6 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {Request} from '@simpli/serialized-request'
 import {map, mapValues} from 'lodash'
-import {Alert} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 
 import {Facade} from '~src/app/Facade'
@@ -287,7 +286,6 @@ export class AppReducer extends ReducerWrapper<
                     )
                   } else {
                     const lastTransaction = senderTxs[index]
-                    console.log('print de lastTransaction => ', lastTransaction)
                     showMessage({
                       message: Facade.t('toast.transactionCompleted'),
                       type: 'success',
