@@ -6,6 +6,8 @@ import {StatusBar} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {SenderTransaction} from '../models/redux/SenderTransaction'
+
 import {Facade} from '~src/app/Facade'
 import FooterBar from '~src/components/layout/FooterBar'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
@@ -60,6 +62,20 @@ const TabNavigation = (props: Props) => {
       setWelcomeHidden(true)
     }
   }, [welcomeHidden])
+
+  useEffect(() => {
+    Facade.bus.on(
+      'navigateTransactionDetails',
+      (transaction: SenderTransaction) => {
+        props.navigation.navigate(Facade.route.Modal.name, {
+          screen: Facade.route.TransactionDetails.name,
+          params: {
+            transaction,
+          },
+        })
+      }
+    )
+  }, [])
 
   return (
     <ThemeProvider theme={theme}>
