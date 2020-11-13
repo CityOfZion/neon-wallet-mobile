@@ -1,13 +1,13 @@
-import {RouteProp, useNavigationState} from '@react-navigation/native'
-import {useHeaderHeight} from '@react-navigation/stack'
-import React, {Fragment, useEffect, useState} from 'react'
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler'
+import { RouteProp, useNavigationState } from '@react-navigation/native'
+import { useHeaderHeight } from '@react-navigation/stack'
+import React, { Fragment, useEffect, useState } from 'react'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import InputScrollView from 'react-native-input-scroll-view'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import {Currency} from '~/src/enums/Currency'
-import {Facade} from '~src/app/Facade'
+import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import { Currency } from '~/src/enums/Currency'
+import { Facade } from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
@@ -16,7 +16,7 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {NeoURI} from '~src/helpers/UriHelper'
+import { NeoURI } from '~src/helpers/UriHelper'
 import {
   FasterPriority,
   FastestPriority,
@@ -24,18 +24,19 @@ import {
   NoPriority,
   PriorityFee,
 } from '~src/models/PriorityFee'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
-import {Contact} from '~src/models/redux/Contact'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
-import {RootState, RootStore} from '~src/store/RootStore'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Account } from '~src/models/redux/Account'
+import { Contact } from '~src/models/redux/Contact'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { SendModalStackParamList } from '~src/navigation/SendModalStackNavigation'
+import { RootState, RootStore } from '~src/store/RootStore'
 import {
   ButtonView,
   ImageView,
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
+import { Alert } from 'react-native'
 
 export interface SendTransactionInputModalParams {
   walletTitle: string
@@ -317,7 +318,7 @@ const AmountField = (props: {
 
     props.setAmount(Number(val))
   }
-  const {language} = useSelector((state: RootState) => state.settings)
+  const { language } = useSelector((state: RootState) => state.settings)
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
@@ -433,11 +434,11 @@ const AmountField = (props: {
 }
 
 const SendTransactionInputModal = (prop: Props) => {
-  const {account, walletTitle, uri} = prop.route.params
-  const {contacts, tokens, accounts, wallets, exchange} = useSelector(
+  const { account, walletTitle, uri } = prop.route.params
+  const { contacts, tokens, accounts, wallets, exchange } = useSelector(
     (state: RootState) => state.app
   )
-  const {currency, language} = useSelector((state: RootState) => state.settings)
+  const { currency, language } = useSelector((state: RootState) => state.settings)
 
   const [receiverAddress, setReceiverAddress] = useState(
     prop.route.params?.uri?.address ?? ''
@@ -575,17 +576,16 @@ const SendTransactionInputModal = (prop: Props) => {
     const account = accounts.find((it) => it.address === addressValue)
     if (account) {
       const accountContact = new Contact()
-      accountContact.name = `${account.getWallet(wallets)?.name} / ${
-        account.name
-      }`
+      accountContact.name = `${account.getWallet(wallets)?.name} / ${account.name
+        }`
 
       accountContact.address = addressValue
       setContact(accountContact)
     } else if (contact) {
       setContact(contact)
     }
-
     setReceiverAddress(addressValue)
+    prop.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
   }
 
   const handleQrCode = (data: NeoURI | string) => {
@@ -706,8 +706,8 @@ const SendTransactionInputModal = (prop: Props) => {
       </LinearLayout>
     </InputScrollView>
   ) : (
-    <LinearLayout />
-  )
+      <LinearLayout />
+    )
 }
 
 export default SendTransactionInputModal
