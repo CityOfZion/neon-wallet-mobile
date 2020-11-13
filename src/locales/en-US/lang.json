@@ -202,7 +202,7 @@
     "enterAnAddress": "Enter an address, encrypted key, or private key",
     "alertText": "It looks like you're creating a watch account, is this correct?",
     "accountAlreadyExists": "This account already exists",
-    "ok":"Ok",
+    "ok": "Ok",
     "alertCancelButton": "No",
     "alertConfirmButton": "Yes"
   },
@@ -275,10 +275,10 @@
       "changeSinceLastVisit": "CHANGE SINCE LAST VISIT %{date}",
       "changeInLast24hours": "CHANGE IN LAST 24HRS",
       "createFirstWallet": "Create first wallet",
-      "noBackup" : "No backup found. Backup your wallet to avoid fund loss.",
-      "incompleteBalanceWarningTitle" : "Incomplete price data",
-      "incompleteBalanceWarningText" : "We haven't been able to retrieve price data for all your tokens so the total may not be accurate",
-      "incompleteBalanceWarningButton" : "OK, I understand"
+      "noBackup": "No backup found. Backup your wallet to avoid fund loss.",
+      "incompleteBalanceWarningTitle": "Incomplete price data",
+      "incompleteBalanceWarningText": "We haven't been able to retrieve price data for all your tokens so the total may not be accurate",
+      "incompleteBalanceWarningButton": "OK, I understand"
     },
     "getWallet": {
       "addNewAccount": "Add new account"
@@ -466,6 +466,9 @@
     "currency": {
       "title": "Currency"
     },
+    "security": {
+      "title": "Security"
+    },
     "theme": {
       "title": "Theme"
     },
@@ -568,24 +571,24 @@
     "deleteContactAlert": "Are you sure you want to delete this contact?",
     "search": "Search"
   },
-  "contactPicker" : {
+  "contactPicker": {
     "title": "Contacts",
-    "selectContact" : "Select a contact to send to",
+    "selectContact": "Select a contact to send to",
     "contacts": "Contacts",
     "myAccounts": "My Accounts"
   },
-  "toast" : {
+  "toast": {
     "transaction": "Transaction",
-    "gasClaimSuccess" : "GAS claim successful!",
-    "gasClaimGapError" : "You must wait at least 5 minutes for next claim",
-    "transactionCompleted" : "Transaction completed!"
+    "gasClaimSuccess": "GAS claim successful!",
+    "gasClaimGapError": "You must wait at least 5 minutes for next claim",
+    "transactionCompleted": "Transaction completed!"
   },
-  "transactionDetails" : {
+  "transactionDetails": {
     "time": "Time",
     "date": "Date",
-    "status" : "Status",
+    "status": "Status",
     "value": "Value",
-    "priorityFee" : "Priority Fee",
+    "priorityFee": "Priority Fee",
     "sender": "Sender",
     "recipient": "Recipient",
     "qty": "Qty",

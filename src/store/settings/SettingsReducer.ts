@@ -1,5 +1,6 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 
+import {Security} from '~/src/enums/Security'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {Currency} from '~src/enums/Currency'
@@ -9,6 +10,7 @@ import {Settings} from '~src/models/redux/Settings'
 import {CurrencyDispatcher} from '~src/store/settings/dispatchers/CurrencyDispatcher'
 import {LanguageDispatcher} from '~src/store/settings/dispatchers/LanguageDispatcher'
 import {NetworkDispatcher} from '~src/store/settings/dispatchers/NetworkDispatcher'
+import {SecurityDispatcher} from '~src/store/settings/dispatchers/SecurityDispatcher'
 import {ThemeDispatcher} from '~src/store/settings/dispatchers/ThemeDispatcher'
 import {NetworkOptions} from '~src/types/settings'
 
@@ -24,6 +26,7 @@ export class SettingsReducer extends ReducerWrapper<
     CurrencyDispatcher,
     ThemeDispatcher,
     NetworkDispatcher,
+    SecurityDispatcher,
   ]
 
   readonly actions = {
@@ -33,6 +36,10 @@ export class SettingsReducer extends ReducerWrapper<
 
     setCurrency: (currency: Currency) => {
       return this.commit('SET_CURRENCY', {currency})
+    },
+
+    setSecurity: (security: Security) => {
+      return this.commit('SET_SECURITY', {security})
     },
 
     setTheme: (theme: Theme) => {
@@ -48,12 +55,13 @@ export class SettingsReducer extends ReducerWrapper<
         const settings = await Storage.settings.load()
 
         if (settings) {
-          const {language, currency, theme, network} = settings
+          const {language, currency, theme, network, security} = settings
 
           dispatch(this.commit('SET_LANGUAGE', {language}))
           dispatch(this.commit('SET_CURRENCY', {currency}))
           dispatch(this.commit('SET_THEME', {theme}))
           dispatch(this.commit('SET_NETWORK', {network}))
+          dispatch(this.commit('SET_SECURITY', {security}))
         }
 
         return settings ?? new Settings()

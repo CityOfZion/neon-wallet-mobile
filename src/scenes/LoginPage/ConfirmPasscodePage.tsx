@@ -1,7 +1,9 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState, useEffect} from 'react'
+import {useDispatch} from 'react-redux'
 
+import {Security} from '~/src/enums/Security'
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import Keypad from '~src/components/Keypad'
@@ -13,6 +15,7 @@ import {
   PasscodeHeader,
   PASSCODE_LENGTH,
 } from '~src/scenes/LoginPage/PasscodePage'
+import {RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface ConfirmPasscodePageParams {
@@ -25,6 +28,7 @@ interface Props {
 }
 
 const ConfirmPasscodePage = (props: Props) => {
+  const dispatch = useDispatch()
   const [passcode, setPasscode] = useState<number[]>([])
   const originalPasscode = props.route.params.passcode
 
@@ -44,6 +48,8 @@ const ConfirmPasscodePage = (props: Props) => {
 
   const persist = async () => {
     await Facade.security.savePasscode(originalPasscode)
+    dispatch(RootStore.settings.actions.setSecurity(Security.pin))
+    dispatch(RootStore.settings.actions.save())
     await Storage.hasAuthentication.save(true)
     props.navigation.replace('Tab', undefined)
   }
