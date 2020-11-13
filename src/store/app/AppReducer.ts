@@ -285,9 +285,16 @@ export class AppReducer extends ReducerWrapper<
                       senderTxs[index]
                     )
                   } else {
+                    const lastTransaction = senderTxs[index]
                     showMessage({
                       message: Facade.t('toast.transactionCompleted'),
                       type: 'success',
+                      onPress: () => {
+                        Facade.bus.emit(
+                          'navigateTransactionDetails',
+                          lastTransaction
+                        )
+                      },
                     })
                     Facade.bus.emit('transactionEnd', senderTxs[index])
                   }
