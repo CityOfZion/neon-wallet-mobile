@@ -41,6 +41,7 @@ export interface SendTransactionInputModalParams {
   walletTitle: string
   account: Account
   uri?: NeoURI
+  selectedToken?: TokenAsset
 }
 
 interface Props {
@@ -433,7 +434,7 @@ const AmountField = (props: {
 }
 
 const SendTransactionInputModal = (prop: Props) => {
-  const {account, walletTitle, uri} = prop.route.params
+  const {account, walletTitle, uri, selectedToken} = prop.route.params
   const {contacts, tokens, accounts, wallets, exchange} = useSelector(
     (state: RootState) => state.app
   )
@@ -447,8 +448,11 @@ const SendTransactionInputModal = (prop: Props) => {
   const hash = prop.route.params?.uri?.tokenHash ?? ''
 
   const [contact, setContact] = useState<Contact>()
-  const [token, setToken] = useState<TokenAsset | null>(
-    tokens.find((t: TokenAsset) => t.hash === hash) ?? null
+  const [token, setToken] = useState<TokenAsset | null | undefined>(
+    tokens.find((t: TokenAsset) => t.hash === hash) ??
+      (selectedToken
+        ? tokens.find((t: TokenAsset) => t.hash === selectedToken.hash)
+        : null)
   )
   const [priority, setPriority] = useState<PriorityFee>(FastPriority())
 

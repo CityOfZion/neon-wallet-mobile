@@ -296,6 +296,7 @@ const ListWalletView = (props: WalletProps) => {
                       walletId={selectedWallet.id ?? undefined}
                       fromAccountView={false}
                       fromListWalletView={true}
+                      fromSendAccountSelectionModal={false}
                     />
                   )}
                 </LinearLayout>

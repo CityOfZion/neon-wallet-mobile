@@ -6,7 +6,9 @@ import {useSelector} from 'react-redux'
 import {Facade} from '~src/app/Facade'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
+import {NeoURI} from '~src/helpers/UriHelper'
 import {TokenAsset} from '~src/models/TokenAsset'
+import {Account} from '~src/models/redux/Account'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {Exchange} from '~src/types/exchange'
 
@@ -15,6 +17,9 @@ interface Props extends LinearLayoutProps {
   fromAccountView: boolean
   address?: string
   walletId?: string
+  walletTitle?: string
+  account?: Account
+  uri?: NeoURI
 }
 
 interface ItemProps {
@@ -29,6 +34,7 @@ interface ListProps {
   fromListWalletView: boolean
   address?: string
   walletId?: string
+  fromSendAccountSelectionModal: boolean
 }
 
 const ViewBalanceItem = (props: ItemProps & ListProps) => {
@@ -139,7 +145,7 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
   )
 }
 
-const BalanceListItem = (props: ListProps & ItemProps) => {
+const BalanceListItem = (props: ListProps & ItemProps & Props) => {
   const navigation = useNavigation()
 
   return (
@@ -151,6 +157,21 @@ const BalanceListItem = (props: ListProps & ItemProps) => {
               token: props.item,
               address: props.address,
               walletId: props.walletId,
+            })
+          }
+        >
+          <View>
+            <ViewBalanceItem {...props} />
+          </View>
+        </TouchableOpacity>
+      ) : props.fromSendAccountSelectionModal ? (
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(Facade.route.SendTransactionInputModal.name, {
+              walletTitle: props.walletTitle,
+              account: props.account,
+              uri: props.uri,
+              selectedToken: props.item,
             })
           }
         >
@@ -190,11 +211,18 @@ const BalanceList = (props: Props) => {
               item={item}
               fromAccountView={props.fromAccountView}
               fromListWalletView={props.fromListWalletView}
+              fromSendAccountSelectionModal={
+                props.fromSendAccountSelectionModal
+              }
               address={props.address}
               walletId={props.walletId}
               currency={currency}
               exchange={exchange}
               language={language}
+              walletTitle={props.walletTitle}
+              account={props.account}
+              uri={props.uri}
+              tokenAssets={props.tokenAssets}
             />
           )}
         />
