@@ -25,8 +25,8 @@ import {
 } from '~src/styles/styled-components'
 
 export interface ListTokenModalParams {
-  selectedToken: TokenAsset | null
-  setToken: React.Dispatch<React.SetStateAction<TokenAsset | null>>
+  selectedToken: TokenAsset | null | undefined
+  setToken: React.Dispatch<React.SetStateAction<TokenAsset | null | undefined>>
   account?: Account
   filterBy?: 'send' | 'receive'
 }
@@ -39,7 +39,7 @@ interface Props {
 const Item = (props: {
   controller: SwiperController
   item: TokenAsset
-  setToken: React.Dispatch<React.SetStateAction<TokenAsset | null>>
+  setToken: React.Dispatch<React.SetStateAction<TokenAsset | null | undefined>>
 }) => {
   return (
     <ButtonView

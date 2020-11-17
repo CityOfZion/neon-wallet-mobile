@@ -31,8 +31,8 @@ import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
 const TokenField = (props: {
   theme: ApplicationTheme
-  token: TokenAsset | null
-  setToken: React.Dispatch<React.SetStateAction<TokenAsset | null>>
+  token: TokenAsset | null | undefined
+  setToken: React.Dispatch<React.SetStateAction<TokenAsset | null | undefined>>
   nav: StackNavigationProp<ModalStackParamList>
   account: Account
 }) => {
@@ -182,7 +182,7 @@ const ReceiveToAccountModal = (props: Props) => {
   )
   const [amount, setAmount] = useState<string>('')
   const [reference, setReference] = useState<string>('')
-  const [token, setToken] = useState<TokenAsset | null>(null)
+  const [token, setToken] = useState<TokenAsset | null | undefined>(null)
 
   const {wallet, account} = props.route.params
 
