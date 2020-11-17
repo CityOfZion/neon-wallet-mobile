@@ -237,8 +237,8 @@ const DestinationAddressField = (props: {
 const TokenField = (props: {
   navigation: StackNavigationProp<ModalStackParamList & SendModalStackParamList>
   account: Account
-  token: TokenAsset | null
-  setToken: React.Dispatch<React.SetStateAction<TokenAsset | null>>
+  token: TokenAsset | null | undefined
+  setToken: React.Dispatch<React.SetStateAction<TokenAsset | null | undefined>>
 }) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
@@ -295,7 +295,7 @@ const TokenField = (props: {
 const AmountField = (props: {
   validatorAmount: (val: string) => boolean
   validatorFiat: (val: string) => boolean
-  token: TokenAsset | null
+  token: TokenAsset | null | undefined
   amount: number
   fiat: number
   setAmount: (amount: number) => void
