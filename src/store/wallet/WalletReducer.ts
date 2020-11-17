@@ -1,6 +1,7 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {plainToClass} from 'class-transformer'
 
+import {Account} from '~/src/models/redux/Account'
 import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
@@ -120,15 +121,30 @@ export class WalletReducer extends ReducerWrapper<
     delete: (id: string): AsyncAction => {
       return async (dispatch) => {
         const wallets = (await Storage.wallets.load()) ?? []
+        const accountsPool = (await Storage.accounts.load()) ?? []
 
         const wallet = wallets.find((it) => it.id === id)
 
         if (wallet) {
-          const index = wallets.indexOf(wallet)
-          wallets.splice(index, 1)
+          let account
+          let indexAccount: number
+          const accounts = wallet.getAccounts(accountsPool)
+
+          accounts?.forEach((accountItem) => {
+            account = accountsPool.find(
+              (it) => it.address === accountItem.address
+            )
+            if (account) {
+              indexAccount = accountsPool.indexOf(account)
+              accountsPool.splice(indexAccount, 1)
+            }
+          })
+          const indexWallet = wallets.indexOf(wallet)
+          wallets.splice(indexWallet, 1)
         }
 
         await Storage.wallets.save(wallets)
+        await Storage.accounts.save(accountsPool)
       }
     },
   }

@@ -74,6 +74,7 @@ export const EditWalletModal = (props: EditWalletModalProps) => {
     dispatch(RootStore.wallet.actions.clearState())
 
     await dispatchAsync(RootStore.app.actions.syncWallets())
+    await dispatchAsync(RootStore.app.actions.syncAccounts())
 
     isDeleted = true
     handleNavigation()
