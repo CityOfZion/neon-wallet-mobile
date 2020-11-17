@@ -20,7 +20,7 @@ const SettingsPage = (props: SettingsProps) => {
   const showLanguage = false
   const showTheme = false
   const showNetwork = false
-  const {language, currency, theme, network} = useSelector(
+  const {language, currency, theme, network, security} = useSelector(
     (state: RootState) => state.settings
   )
 
@@ -47,7 +47,9 @@ const SettingsPage = (props: SettingsProps) => {
         iconWidth={20}
         iconMarginLeft={2}
         iconMarginRight={18}
-        arrowDirection={RightIconType.ARROW_RIGHT}
+        arrowDirection={RightIconType.ARROW_DOWN}
+        onPress={() => openModal(Facade.route.SecurityModal.name)}
+        subtitle={security}
       />
 
       <MenuItem

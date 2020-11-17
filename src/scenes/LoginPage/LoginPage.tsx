@@ -2,13 +2,16 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import * as LocalAuthentication from 'expo-local-authentication'
 import React, {useState} from 'react'
 import {Alert, TouchableWithoutFeedback} from 'react-native'
+import {useDispatch} from 'react-redux'
 
 import {LocalAuthenticationResult} from '~/node_modules/expo-local-authentication/src/LocalAuthentication.types'
 import {ThemedFlatButton} from '~/src/components/themed/ThemedFlatButton'
+import {Security} from '~/src/enums/Security'
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
@@ -18,6 +21,8 @@ interface Props {
 const MAX_ERROR_COUNTER = 3
 
 export default function LoginPage(props: Props) {
+  const dispatch = useDispatch()
+
   const [errorCounter, setErrorCounter] = useState(0)
 
   const continueButton = async () => {
@@ -40,6 +45,8 @@ export default function LoginPage(props: Props) {
           }
         }
       } else {
+        dispatch(RootStore.settings.actions.setSecurity(Security.hardware))
+        dispatch(RootStore.settings.actions.save())
         await Storage.hasAuthentication.save(true)
         props.navigation.replace(Facade.route.Tab.name, undefined)
       }
@@ -139,6 +146,8 @@ export default function LoginPage(props: Props) {
 
         <TouchableWithoutFeedback
           onPress={() => {
+            dispatch(RootStore.settings.actions.setSecurity(Security.disabled))
+            dispatch(RootStore.settings.actions.save())
             Storage.welcomeToNWSeen.save(true)
             props.navigation.replace(Facade.route.Tab.name, undefined)
           }}

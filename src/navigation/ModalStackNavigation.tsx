@@ -3,6 +3,7 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import SecurityPickerModal from '../scenes/SecurityPickerModal'
 import ReceiveModalStackNavigation from './ReceiveModalStackNavigation'
 
 import {Facade} from '~src/app/Facade'
@@ -83,6 +84,7 @@ export type ModalStackParamList = {
   SendModalStack: undefined
   EditWalletModal: EditWalletParams
   ReceiveModalStack: undefined
+  SecurityModal: undefined
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -203,6 +205,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={Facade.route.EditWalletModal.name}
           component={EditWalletModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.SecurityModal.name}
+          component={SecurityPickerModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

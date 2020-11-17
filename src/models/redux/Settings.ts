@@ -15,4 +15,7 @@ export class Settings implements SettingsState {
 
   @HttpExpose()
   network = Facade.config.application.mainNetwork
+
+  @HttpExpose()
+  security = Facade.config.locale.defaultSecurity
 }

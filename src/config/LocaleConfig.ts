@@ -1,3 +1,5 @@
+import {Security} from '../enums/Security'
+
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 
@@ -7,7 +9,7 @@ import {Lang} from '~src/enums/Lang'
 export class LocaleConfig {
   readonly defaultCurrency = Currency.USD
   readonly defaultLanguage = Lang.EN_US
-
+  readonly defaultSecurity = Security.disabled
   readonly fallbacks = true
 
   readonly translations: Record<string, any> = {
