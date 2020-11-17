@@ -110,6 +110,10 @@ const SendAccountSelectionModal = (props: Props) => {
                   tokenAssets={selectedAccount.tokenAssets}
                   fromAccountView={false}
                   fromListWalletView={false}
+                  fromSendAccountSelectionModal={true}
+                  walletTitle={props.route.params.wallet.name ?? ''}
+                  account={selectedAccount ?? new Account()}
+                  uri={props.route.params?.uri}
                 />
               </LinearLayout>
             )}

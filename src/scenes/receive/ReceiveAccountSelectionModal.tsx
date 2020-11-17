@@ -101,6 +101,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
               tokenAssets={selectedAccount.tokenAssets}
               fromAccountView={false}
               fromListWalletView={false}
+              fromSendAccountSelectionModal={false}
             />
           </LinearLayout>
         )}
