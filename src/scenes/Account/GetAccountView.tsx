@@ -36,7 +36,9 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 
-export interface GetAccountParams {}
+export interface GetAccountParams {
+  key: string
+}
 
 interface GetAccountViewProps {
   navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>

@@ -373,6 +373,7 @@ export default function SwiperPanel(props: SwiperProps) {
         )}
         <Animated.View
           style={[
+            //@ts-ignore
             {transform: pan.current.getTranslateTransform()},
             {
               width: '100%',

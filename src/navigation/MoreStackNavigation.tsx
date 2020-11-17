@@ -3,6 +3,8 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {GetWalletParams} from '../scenes/GetWalletView'
+
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
@@ -44,6 +46,7 @@ export type MoreStackParamList = {
   ImportReadAccount: ImportReadAccountParams
   Passphrase: PassphraseParams
   CustomizeAccount: CustomizeAccountParams
+  GetWallet: GetWalletParams
 }
 
 const MoreStack = createStackNavigator<MoreStackParamList>()

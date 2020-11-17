@@ -69,7 +69,7 @@ const Step5CreateWalletPage = (props: Props) => {
               index: 0,
               routes: [{name: Facade.route.MorePage.name}],
             })
-            props.navigation.navigate(Facade.route.ListWalletsPage.name)
+            props.navigation.navigate(Facade.route.ListWalletsPage.name, {})
           }}
           label={Facade.t('step5CreateWallet.viewWallet')}
         />

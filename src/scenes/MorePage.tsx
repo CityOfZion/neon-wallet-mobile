@@ -25,7 +25,7 @@ const MorePage = (props: MoreProps) => {
         iconHeight={28}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
-          props.navigation.navigate(Facade.route.Step1CreateWallet.name)
+          props.navigation.navigate(Facade.route.Step1CreateWallet.name, {})
         }}
       />
       <MenuItem
@@ -36,7 +36,7 @@ const MorePage = (props: MoreProps) => {
         iconMarginRight={5}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
-          props.navigation.navigate(Facade.route.ImportReadAccount.name)
+          props.navigation.navigate(Facade.route.ImportReadAccount.name, {})
         }}
       />
       <MenuItem

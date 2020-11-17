@@ -527,7 +527,7 @@ const SendTransactionInputModal = (prop: Props) => {
       if (ratio) {
         const hasEnoughBalance = getTokenBalance() * ratio >= Number(val)
         return hasEnoughBalance
-      }
+      } else return true
     } else return true
   }
 

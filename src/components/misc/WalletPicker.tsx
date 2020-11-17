@@ -62,7 +62,7 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
       firstItem={index > 0 ? index : 0}
       onLayout={() => selectEvent(0)}
       onSnapToItem={(index) => selectEvent(index)}
-      renderItem={(wallet) => (
+      renderItem={(wallet: {item: Wallet; index: number}) => (
         <LinearLayout
           weight={1}
           justifyContent={'center'}

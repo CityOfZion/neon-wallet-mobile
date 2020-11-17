@@ -180,7 +180,7 @@ const ReceiveToAccountModal = (props: Props) => {
   const [isAddressTabSelected, setAddressTabAsSelected] = useState<boolean>(
     true
   )
-  const [amount, setAmount] = useState<string>()
+  const [amount, setAmount] = useState<string>('')
   const [reference, setReference] = useState<string>('')
   const [token, setToken] = useState<TokenAsset | null>(null)
 
@@ -192,7 +192,7 @@ const ReceiveToAccountModal = (props: Props) => {
     props.navigation.navigate(Facade.route.ReceiveQrCodeModal.name, {
       wallet,
       account,
-      amount,
+      amount: Number(amount),
       token: token!,
       reference,
     })

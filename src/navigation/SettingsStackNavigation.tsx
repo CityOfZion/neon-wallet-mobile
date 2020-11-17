@@ -27,6 +27,7 @@ export type SettingsStackParamList = {
   Step1BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
   Step2BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
   Step3BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
+  Modal: object
 }
 
 const SettingsStack = createStackNavigator<SettingsStackParamList>()
