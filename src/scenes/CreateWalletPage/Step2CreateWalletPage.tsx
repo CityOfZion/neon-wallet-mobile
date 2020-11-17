@@ -57,7 +57,7 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
         {
           text: Facade.t('step2CreateWallet.dialog_dismiss'),
           onPress: () =>
-            props.navigation.navigate(Facade.route.Step3CreateWallet.name),
+            props.navigation.navigate(Facade.route.Step3CreateWallet.name, {}),
         },
       ]
     )

@@ -115,7 +115,9 @@ const GetWalletView = (props: GetWalletProps) => {
 
   const pressEvent = async (account: Account) => {
     dispatch(RootStore.account.actions.selectAccount(account.address))
-    props.navigation.navigate(Facade.route.GetAccount.name)
+    props.navigation.navigate(Facade.route.GetAccount.name, {
+      key: Facade.route.GetAccount.name,
+    })
   }
 
   const createEvent = async () => {

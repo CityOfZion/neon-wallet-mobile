@@ -46,20 +46,23 @@ const AccountPicker: React.FC<Props> = (props: Props) => {
       firstItem={0}
       onLayout={() => selectEvent(0)}
       onSnapToItem={(index) => selectEvent(index)}
-      renderItem={({item}) => (
-        <LinearLayout
-          weight={1}
-          justifyContent={'center'}
-          alignItems={'center'}
-          py={6}
-        >
-          <AccountCard
-            onPress={() => pressEvent(item)}
-            account={item}
-            isCompacted={true}
-          />
-        </LinearLayout>
-      )}
+      renderItem={(accountList: {item: Account; index: number}) => {
+        const {item} = accountList
+        return (
+          <LinearLayout
+            weight={1}
+            justifyContent={'center'}
+            alignItems={'center'}
+            py={6}
+          >
+            <AccountCard
+              onPress={() => pressEvent(item)}
+              account={item}
+              isCompacted={true}
+            />
+          </LinearLayout>
+        )
+      }}
     />
   )
 }

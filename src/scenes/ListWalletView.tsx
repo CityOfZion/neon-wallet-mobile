@@ -206,7 +206,7 @@ const ListWalletView = (props: WalletProps) => {
 
   const pressEvent = async (wallet: Wallet) => {
     if (wallet.walletType === 'standard') {
-      props.navigation.navigate(Facade.route.GetWallet.name)
+      props.navigation.navigate(Facade.route.GetWallet.name, {})
     } else {
       goToFirstAccount(wallet)
     }
@@ -220,10 +220,12 @@ const ListWalletView = (props: WalletProps) => {
         RootStore.account.actions.selectAccount(accountsFromWallet[0].address)
       )
 
-      props.navigation.navigate(Facade.route.GetAccount.name)
+      props.navigation.navigate(Facade.route.GetAccount.name, {
+        key: Facade.route.GetAccount.name,
+      })
     } else {
       // Fall back
-      props.navigation.navigate(Facade.route.GetWallet.name)
+      props.navigation.navigate(Facade.route.GetWallet.name, {})
     }
   }
 

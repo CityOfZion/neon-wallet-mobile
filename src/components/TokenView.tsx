@@ -7,7 +7,7 @@ import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
-  transaction: SenderTransaction
+  transaction: SenderTransactionState
   hideSingleTokenPrice?: boolean
 }
 
