@@ -1,3 +1,4 @@
+import 'react-native'
 import 'reflect-metadata'
 import '~src/vendor/window-crypto'
 

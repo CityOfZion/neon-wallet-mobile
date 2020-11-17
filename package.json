@@ -115,7 +115,8 @@
     ],
     "setupFiles": [
       "./jest.setup.ts"
-    ]
+    ],
+    "testEnvironment": "jsdom"
   },
   "eslintConfig": {
     "extends": "universe"
