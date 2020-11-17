@@ -9,6 +9,7 @@ import {ThemeProvider} from 'styled-components'
 import {SenderTransaction} from '../models/redux/SenderTransaction'
 
 import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
 import FooterBar from '~src/components/layout/FooterBar'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import ContactsStackNavigation, {
@@ -45,6 +46,8 @@ interface Props {
 
 const Tab = createBottomTabNavigator()
 
+const welcomeHiddenStorage = Storage.welcomeHidden.load()
+
 const TabNavigation = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
@@ -55,7 +58,7 @@ const TabNavigation = (props: Props) => {
   )
 
   useEffect(() => {
-    if (!welcomeHidden) {
+    if (!welcomeHidden && welcomeHiddenStorage) {
       props.navigation.navigate(Facade.route.Modal.name, {
         screen: Facade.route.WelcomeModal.name,
       })

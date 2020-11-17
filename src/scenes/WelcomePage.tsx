@@ -125,7 +125,7 @@ const WelcomePage = (props: Props) => {
           <ThemedCheckbox
             onChange={(checked) => persist(checked)}
             label={Facade.t('welcome.checkbox_1')}
-            checked={true}
+            checked={false}
           />
         </LinearLayout>
 
