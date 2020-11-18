@@ -39,6 +39,8 @@ export const ThemedAlert: React.FC<MessageComponentProps> = (props) => {
             color={
               props.message.type === 'success'
                 ? theme.colors.primary
+                : props.message.type === 'danger'
+                ? theme.colors.danger
                 : theme.colors.text[0]
             }
           >
