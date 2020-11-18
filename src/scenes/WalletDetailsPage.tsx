@@ -23,6 +23,7 @@ interface WalletDetailsProps {
 }
 
 const WalletDetailsPage = (props: WalletDetailsProps) => {
+  const fromWalletDetailsPage = true
   const {wallet} = props.route.params
 
   const dispatch = useDispatch<DispatchResult>()
@@ -42,6 +43,7 @@ const WalletDetailsPage = (props: WalletDetailsProps) => {
             screen: Facade.route.EditWalletModal.name,
             params: {
               wallet,
+              fromWalletDetailsPage,
             },
           })
         },

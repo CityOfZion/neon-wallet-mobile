@@ -14,15 +14,18 @@ import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
+import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView, ImageView} from '~src/styles/styled-components'
 
 type ParamList = ModalStackParamList &
   TabStackParamList &
-  SettingsStackParamList
+  SettingsStackParamList &
+  WalletStackParamList
 
 export interface EditWalletParams {
   wallet: Wallet
+  fromWalletDetailsPage: boolean
 }
 
 interface EditWalletModalProps {
@@ -30,12 +33,15 @@ interface EditWalletModalProps {
   route: RouteProp<ModalStackParamList, 'EditWalletModal'>
 }
 
-export const EditWalletModal = (props: EditWalletModalProps) => {
+export const EditWalletModal = (
+  props: EditWalletModalProps & EditWalletParams
+) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
   const wallet = props.route.params?.wallet
   var isDeleted: boolean = false
+  var route: any
 
   const [name, setName] = useState(wallet?.name ?? '')
   const controller = useSwiperController(true)
@@ -62,7 +68,12 @@ export const EditWalletModal = (props: EditWalletModalProps) => {
     dispatch(RootStore.wallet.actions.clearState())
 
     await dispatchAsync(RootStore.app.actions.syncWallets())
-    props.navigation.navigate(Facade.route.MyWallets.name)
+    if (props.route.params?.fromWalletDetailsPage) {
+      route = Facade.route.MyWallets.name
+    } else {
+      route = Facade.route.ListWalletsPage.name
+    }
+    props.navigation.navigate(route)
   }
 
   const deleteAction = async () => {
@@ -85,8 +96,14 @@ export const EditWalletModal = (props: EditWalletModalProps) => {
   }
 
   const handleNavigation = () => {
+    var route: any
     if (isDeleted) {
-      props.navigation.navigate(Facade.route.MyWallets.name)
+      if (props.route.params?.fromWalletDetailsPage) {
+        route = Facade.route.MyWallets.name
+      } else {
+        route = Facade.route.ListWalletsPage.name
+      }
+      props.navigation.navigate(route)
     } else {
       props.navigation.goBack()
     }

@@ -14,6 +14,7 @@ import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
+import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
@@ -86,6 +87,24 @@ const AccountCardsComponent = (props: {
 
 const GetWalletView = (props: GetWalletProps) => {
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const fromWalletDetailsPage = false
+
+  props.navigation.setOptions({
+    headerRight: () =>
+      HeaderActionButton({
+        actionTitle: Facade.t('app.edit'),
+        actionButtonStyle: 'default',
+        actionOnPress: () => {
+          props.navigation.navigate(Facade.route.Modal.name, {
+            screen: Facade.route.EditWalletModal.name,
+            params: {
+              wallet,
+              fromWalletDetailsPage,
+            },
+          })
+        },
+      }),
+  })
 
   const dispatch = useDispatch()
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
