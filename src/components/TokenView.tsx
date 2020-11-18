@@ -9,6 +9,8 @@ import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 interface Props {
   transaction: SenderTransactionState
   hideSingleTokenPrice?: boolean
+  widthIcon?: string
+  heightIcon?: string
 }
 
 export const TokenView = (props: Props) => {
@@ -28,11 +30,16 @@ export const TokenView = (props: Props) => {
       <LinearLayout orientation={'horiz'}>
         <ImageView
           source={props.transaction.token?.srcIcon}
-          width={'14px'}
-          height={'14px'}
+          width={props.widthIcon ?? '14px'}
+          height={props.heightIcon ?? '14px'}
           alignSelf={'center'}
         />
-        <TextView ml={'8px'} color={'text.0'} fontFamily={'medium'}>
+        <TextView
+          fontSize="lg"
+          ml={'8px'}
+          color={'text.0'}
+          fontFamily={'medium'}
+        >
           {props.transaction.token?.symbol}
         </TextView>
         <LinearLayout weight={1} />

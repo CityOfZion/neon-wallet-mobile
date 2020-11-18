@@ -42,6 +42,9 @@ export class SendTransactionReducer extends ReducerWrapper<
     setFeeAmount: (feeAmount: PriorityFee) => {
       return this.commit('SET_FEE_AMOUNT', {feeAmount})
     },
+    setFiat: (fiat: number) => {
+      return this.commit('SET_FIAT', {fiat})
+    },
     clearState: () => {
       return this.commit('CLEAR_STATE_SENDER_TRANSACTION', {})
     },

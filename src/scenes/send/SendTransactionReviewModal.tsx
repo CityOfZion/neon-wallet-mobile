@@ -364,59 +364,18 @@ const SendTransactionReviewModal = (props: Props) => {
               </TextView>
 
               <LinearLayout width={'100%'}>
-                <LinearLayout orientation={'horiz'}>
-                  <HeaderColumn
-                    weight={1}
-                    title={Facade.t(
-                      'modals.transactionReview.value'
-                    ).toUpperCase()}
-                    value={Facade.filter.currency(
-                      senderTransaction.token?.exchangeToken(currency),
-                      currency,
-                      language
-                    )}
-                  />
-                  <HeaderColumn
-                    title={Facade.t(
-                      'transactionDetails.priorityFee'
-                    ).toUpperCase()}
-                    value={`${senderTransaction.feeAmount?.fee ?? 0} GAS`}
-                    weight={1}
-                    priorityFee={senderTransaction.feeAmount ?? undefined}
-                  />
-                </LinearLayout>
-
-                <TextView
-                  color={'text.10'}
-                  fontFamily={'medium'}
-                  fontSize={18}
-                  mt={4}
-                >
-                  {Facade.t('transactionDetails.sender')}
-                </TextView>
                 <AccountView
                   contactName={senderName}
                   address={senderAddress ?? ''}
                   accountName={senderAccount?.name ?? undefined}
-                  walletName={senderWallet ?? undefined}
-                />
-                <TextView
-                  color={'text.10'}
-                  fontFamily={'medium'}
-                  fontSize={18}
-                  mt={4}
-                >
-                  {Facade.t('transactionDetails.recipient')}
-                </TextView>
-                <AccountView
-                  contactName={receiverName}
-                  address={receiverAddress ?? ''}
-                  accountName={receiverAccount?.name ?? undefined}
-                  walletName={receiverWallet ?? undefined}
+                  hideTitles={true}
+                  hideButton={true}
                 />
                 <TokenView
                   transaction={senderTransaction}
                   hideSingleTokenPrice={true}
+                  widthIcon="20px"
+                  heightIcon="20px"
                 />
               </LinearLayout>
 
