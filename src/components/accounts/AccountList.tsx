@@ -123,7 +123,17 @@ export const AccountList = (props: AccountListProps) => {
 
       <ScrollView style={{marginBottom: props.mb}}>
         <FlatList
-          data={accountsListItem}
+          data={accountsListItem.sort((item, item2) => {
+            if (item.account.name !== null && item2.account.name !== null) {
+              if (item.account.name < item2.account.name) {
+                return -1
+              } else {
+                return 0
+              }
+            } else {
+              return 1
+            }
+          })}
           renderItem={ItemComponent}
           ItemSeparatorComponent={ListSeparator}
           keyExtractor={(item, index) => index.toString()}
