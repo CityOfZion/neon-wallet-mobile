@@ -21,7 +21,6 @@ const NeonQRCode = (props: QRCodeProps) => {
           <QRCode
             content={props.content}
             logoSize={74}
-            logo={require('../assets/images/icon-neon-white.png')}
             ecl="M"
             padding={2}
             size={width}
