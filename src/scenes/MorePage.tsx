@@ -1,12 +1,14 @@
 import {StackNavigationProp} from '@react-navigation/stack'
+import Constants from 'expo-constants'
 import React from 'react'
+import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {LinearLayout} from '~src/styles/styled-components'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface MoreProps {
   navigation: StackNavigationProp<MoreStackParamList>
@@ -16,6 +18,9 @@ interface MoreProps {
 
 const MorePage = (props: MoreProps) => {
   const showHelp: boolean = false
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   return (
     <ScreenLayout padding={20}>
       <MenuItem
@@ -61,6 +66,23 @@ const MorePage = (props: MoreProps) => {
           arrowDirection={RightIconType.NONE}
         />
       )}
+      <LinearLayout
+        position={'absolute'}
+        left={'5%'}
+        right={'5%'}
+        bottom={'3%'}
+      >
+        <TextView
+          fontSize={14}
+          color="white"
+          textAlign="left"
+          numberOfLines={1}
+          width={'88%'}
+          allowFontScaling={true}
+        >
+          {`v${Constants.nativeAppVersion}`}
+        </TextView>
+      </LinearLayout>
     </ScreenLayout>
   )
 }
