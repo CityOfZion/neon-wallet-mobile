@@ -1,7 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
-import {ImageSourcePropType, View} from 'react-native'
+import {View} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
@@ -56,7 +56,6 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
     return Facade.theme[state.settings.theme]
   })
   const controller = useSwiperController(true)
-
   return (
     <ThemeProvider theme={theme}>
       <SwiperPanel
@@ -94,6 +93,7 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
+                    image: require('~src/assets/images/arrow.png'),
                   }),
               })}
             />
@@ -104,6 +104,7 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
+                    image: require('~src/assets/images/arrow.png'),
                   }),
               })}
             />
@@ -114,6 +115,7 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
+                    image: require('~src/assets/images/arrow.png'),
                   }),
                 headerLeft: HeaderBackButton,
               })}
@@ -125,6 +127,7 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
+                    image: require('~src/assets/images/arrow.png'),
                   }),
               })}
             />
@@ -135,6 +138,7 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
+                    image: require('~src/assets/images/arrow.png'),
                   }),
               })}
             />

@@ -324,6 +324,7 @@ const AmountField = (props: {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
+
   return (
     <Fragment>
       <LinearLayout
@@ -506,6 +507,7 @@ const SendTransactionInputModal = (prop: Props) => {
     }
 
     const tokenWithHolding = Facade.utils.clone(token)
+    const fiatWithHolding = Facade.utils.clone(fiat)
     tokenWithHolding.amount = amount
 
     dispatch(RootStore.senderTransaction.actions.clearState())
@@ -518,6 +520,7 @@ const SendTransactionInputModal = (prop: Props) => {
       RootStore.senderTransaction.actions.setReceiverAddress(receiverAddress)
     )
     dispatch(RootStore.senderTransaction.actions.setFeeAmount(priority))
+    dispatch(RootStore.senderTransaction.actions.setFiat(fiatWithHolding))
 
     prop.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
   }
@@ -563,7 +566,6 @@ const SendTransactionInputModal = (prop: Props) => {
 
   const getTokenBalance = () => {
     if (!token) return 0
-
     return account.getBalanceAmountByAsset(token.symbol) ?? 0
   }
 

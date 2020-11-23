@@ -10,10 +10,17 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 
+interface IHeaderValue {
+  value: string
+  color: string
+  size?: number
+  align?: string
+}
+
 interface Props {
   weight: number
   title: string
-  value: string
+  value: string | IHeaderValue[]
   image?: ImageLoadEventData
   priorityFee?: PriorityFee
   showCopy?: boolean
@@ -43,7 +50,7 @@ export const HeaderColumn = (props: Props) => {
         <ButtonView
           activeOpacity={props.showCopy ? 0.4 : 1}
           onPress={
-            props.showCopy
+            props.showCopy && typeof props.value === 'string'
               ? Facade.utils.copyToClipboard(props.value)
               : undefined
           }
@@ -51,16 +58,33 @@ export const HeaderColumn = (props: Props) => {
           <LinearLayout
             orientation={'horiz'}
             maxWidth={props.showCopy ? '95%' : '100%'}
+            alignItems={'flex-end'}
           >
-            <TextView
-              color={props.valueTextColor ?? 'text.0'}
-              fontFamily={'medium'}
-              fontSize={16}
-              numberOfLines={1}
-              ellipsizeMode={'middle'}
-            >
-              {props.value}
-            </TextView>
+            {typeof props.value === 'string' ? (
+              <TextView
+                color={props.valueTextColor ?? 'text.0'}
+                fontFamily={'medium'}
+                fontSize={16}
+                numberOfLines={1}
+                ellipsizeMode={'middle'}
+              >
+                {props.value}
+              </TextView>
+            ) : (
+              props.value.map((value, index) => (
+                <TextView
+                  key={index}
+                  color={value.color ?? 'text.0'}
+                  fontFamily={'medium'}
+                  fontSize={value.size ?? 16}
+                  numberOfLines={1}
+                  ellipsizeMode={'middle'}
+                  textAlign={value.align ?? undefined}
+                >
+                  {value.value}
+                </TextView>
+              ))
+            )}
             {props.showCopy && (
               <ImageView
                 width="16px"

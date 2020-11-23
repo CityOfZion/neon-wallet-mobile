@@ -8,6 +8,7 @@ import {TokenAsset} from '~src/models/TokenAsset'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ClearStateDispatcher} from '~src/store/senderTransaction/dispatchers/ClearStateDispatcher'
 import {FeeAmountDispatcher} from '~src/store/senderTransaction/dispatchers/FeeAmountDispatcher'
+import {FiatDispatcher} from '~src/store/senderTransaction/dispatchers/FiatDispatcher'
 import {ReceiverAddressDispatcher} from '~src/store/senderTransaction/dispatchers/ReceiverAddressDispatcher'
 import {SenderAddressDispatcher} from '~src/store/senderTransaction/dispatchers/SenderAddressDispatcher'
 import {TokenDispatcher} from '~src/store/senderTransaction/dispatchers/TokenDispatcher'
@@ -27,6 +28,7 @@ export class SendTransactionReducer extends ReducerWrapper<
     ReceiverAddressDispatcher,
     TokenDispatcher,
     ClearStateDispatcher,
+    FiatDispatcher,
   ]
 
   readonly actions = {

@@ -21,6 +21,7 @@ interface Props {
   borderThickness?: number | string
   borderColor?: string
   isPressed?: boolean
+  radius?: number
 }
 
 const ThemedCard: React.FC<Props> = (props) => {
@@ -30,7 +31,7 @@ const ThemedCard: React.FC<Props> = (props) => {
 
   const getBorderRadius = () => {
     if (props.rounded) {
-      return 8
+      return props.radius ? props.radius : 8
     }
 
     return 5
@@ -133,6 +134,7 @@ ThemedCard.propTypes = {
   borderThickness: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   borderColor: PropTypes.string,
   isPressed: PropTypes.bool,
+  radius: PropTypes.number,
 }
 
 ThemedCard.defaultProps = {
@@ -142,6 +144,7 @@ ThemedCard.defaultProps = {
   padding: 30,
   hasShadow: true,
   hasBright: true,
+  radius: 0,
 }
 
 const DarkCardView = styled(LinearLayout)``

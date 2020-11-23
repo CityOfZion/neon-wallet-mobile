@@ -2,7 +2,7 @@ import {useNavigationState} from '@react-navigation/native'
 import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useState} from 'react'
-import {Alert, ScrollView, TouchableHighlight} from 'react-native'
+import {Alert, ScrollView, TouchableHighlight, View} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import * as LocalAuthentication from '~/node_modules/expo-local-authentication'
@@ -323,7 +323,6 @@ const SendTransactionReviewModal = (props: Props) => {
       ],
     })
   }
-
   return show ? (
     <ScrollView
       style={{
@@ -347,46 +346,51 @@ const SendTransactionReviewModal = (props: Props) => {
           name={'submit'}
           loadingView={<ScreenLoader transparent={true} />}
         >
-          <TouchableHighlight>
+          <View>
             <LinearLayout
               height="100%"
               width="100%"
               orientation="verti"
               alignItems="center"
+              justifyContent="space-between"
             >
-              <TextView
-                color="text.0"
-                fontFamily="medium"
-                fontSize="18px"
-                mb="48px"
-              >
-                {Facade.t('modals.send.transactionReview.pleaseReview')}
-              </TextView>
+              <LinearLayout width="100%" alignItems="center">
+                <TextView
+                  color="text.0"
+                  fontFamily="medium"
+                  fontSize="18px"
+                  mb="48px"
+                >
+                  {Facade.t('modals.send.transactionReview.pleaseReview')}
+                </TextView>
 
-              <LinearLayout width={'100%'}>
-                <AccountView
-                  contactName={senderName}
-                  address={senderAddress ?? ''}
-                  accountName={senderAccount?.name ?? undefined}
-                  hideTitles={true}
-                  hideButton={true}
-                />
-                <TokenView
-                  transaction={senderTransaction}
-                  hideSingleTokenPrice={true}
-                  widthIcon="20px"
-                  heightIcon="20px"
-                />
+                <LinearLayout width={'100%'}>
+                  <AccountView
+                    contactName={senderName}
+                    address={senderAddress ?? ''}
+                    accountName={senderAccount?.name ?? undefined}
+                    hideTitles={true}
+                    hideButton={true}
+                  />
+                  <TokenView
+                    transaction={senderTransaction}
+                    hideSingleTokenPrice={true}
+                    widthIcon="20px"
+                    heightIcon="20px"
+                  />
+                </LinearLayout>
               </LinearLayout>
 
-              <LinearLayout width="100%" mt="32px">
+              <LinearLayout width="100%" mt="32px" alignSelf="flex-end">
                 <ThemedButton
                   label={Facade.t('app.send')}
                   onPress={() => Facade.await.run('auth', checkForAuth)}
+                  rounded={true}
+                  radius={50}
                 />
               </LinearLayout>
             </LinearLayout>
-          </TouchableHighlight>
+          </View>
         </AwaitActivity>
       </AwaitActivity>
     </ScrollView>
