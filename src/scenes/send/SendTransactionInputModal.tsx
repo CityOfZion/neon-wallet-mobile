@@ -543,7 +543,11 @@ const SendTransactionInputModal = (prop: Props) => {
       inputIsValid = false
     } else if (!amount) {
       inputIsValid = false
-    } else if (!validateAmount(String(amount)) || !validateFiat(String(fiat))) {
+    } else if (
+      !validateAmount(String(amount)) ||
+      !validateFiat(String(fiat)) ||
+      !receiverAddress
+    ) {
       inputIsValid = false
     }
     return inputIsValid
