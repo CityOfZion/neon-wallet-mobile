@@ -17,7 +17,7 @@ export declare global {
     senderAddress: string | null
     receiverAddress: string | null
     feeAmount: PriorityFee | null
-    fiat: number | null
+    fiat?: number | null
   }
 
   type SenderTransactionAction = SenderTransactionState &
