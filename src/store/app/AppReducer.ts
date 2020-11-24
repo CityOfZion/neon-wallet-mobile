@@ -304,7 +304,10 @@ export class AppReducer extends ReducerWrapper<
                   senderTxs.splice(index, 1)
                 }
               } catch (e) {
-                //does nothing
+                showMessage({
+                  message: Facade.t('toast.transactionError'),
+                  type: 'danger',
+                })
               }
             }
           }

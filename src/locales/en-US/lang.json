@@ -581,7 +581,8 @@
     "transaction": "Transaction",
     "gasClaimSuccess": "GAS claim successful!",
     "gasClaimGapError": "You must wait at least 5 minutes for next claim",
-    "transactionCompleted": "Transaction completed!"
+    "transactionCompleted": "Transaction completed!",
+    "transactionError": "Transaction incompleted! Please, try again."
   },
   "transactionDetails": {
     "time": "Time",
