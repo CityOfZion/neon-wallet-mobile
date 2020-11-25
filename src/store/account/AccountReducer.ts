@@ -48,12 +48,20 @@ export class AccountReducer extends ReducerWrapper<
     clearState: () => {
       return this.commit('CLEAR_STATE_ACCOUNT', {})
     },
-    getFromSelection: (): SyncAction<Account> => {
-      return (dispatch, getState) => {
-        const accounts = getState().app.accounts
-        const address = getState().account.address
+    getFromSelection: (address?: string): SyncAction<Account> => {
+      if (address) {
+        return (dispatch, getState) => {
+          const accounts = getState().app.accounts
 
-        return accounts.find((it) => it.address === address) ?? new Account()
+          return accounts.find((it) => it.address === address) ?? new Account()
+        }
+      } else {
+        return (dispatch, getState) => {
+          const accounts = getState().app.accounts
+          const address = getState().account.address
+
+          return accounts.find((it) => it.address === address) ?? new Account()
+        }
       }
     },
     createAndSave: (): AsyncAction<string> => {

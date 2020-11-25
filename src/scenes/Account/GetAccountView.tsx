@@ -136,6 +136,13 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
   const dispatchAccount = useDispatch<SyncDispatch<Account>>()
 
+  const [senderAddress, setSenderAddress] = useState<string>('')
+
+  const changeSenderAddress = () => {
+    if (senderAddress === '' && address !== null) {
+      setSenderAddress(address)
+    }
+  }
   const [account, setAccount] = useState(
     dispatchAccount(RootStore.account.actions.getFromSelection())
   )
@@ -163,7 +170,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
   useEffect(() => {
     if (address) {
       const account = dispatchAccount(
-        RootStore.account.actions.getFromSelection()
+        RootStore.account.actions.getFromSelection(
+          senderAddress !== '' ? senderAddress : undefined
+        )
       )
       setAccount(account)
     }
@@ -187,6 +196,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   useEffect(() => {
     populateUnclaimed()
+    changeSenderAddress()
   }, [account])
 
   useEffect(() => {
