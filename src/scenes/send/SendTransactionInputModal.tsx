@@ -1,3 +1,4 @@
+import {wallet} from '@cityofzion/neon-core'
 import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
 import React, {Fragment, useEffect, useState} from 'react'
@@ -202,6 +203,7 @@ const DestinationAddressField = (props: {
   onAddressChanged: (address: string) => void
   onSelected: (item: Contact | Account) => void
   handleQrCode: (data: NeoURI | string) => void
+  validateAddress: (val: string) => boolean
 }) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
@@ -222,7 +224,7 @@ const DestinationAddressField = (props: {
         invalidColor={theme.colors.text[10]}
         value={props.address}
         placeholder={Facade.t('modals.send.transactionInput.enterDestination')}
-        validator={() => true}
+        validator={(val) => props.validateAddress(val)}
         separatorColor={theme.colors.background[13]}
         sideMargins={0}
         showContacts={true}
@@ -535,6 +537,10 @@ const SendTransactionInputModal = (prop: Props) => {
     } else return true
   }
 
+  const validateAddress = (val: string) => {
+    return wallet.isAddress(val) || val?.length === 0
+  }
+
   const validateFields = () => {
     let inputIsValid = true
     if (!token) {
@@ -543,10 +549,12 @@ const SendTransactionInputModal = (prop: Props) => {
       inputIsValid = false
     } else if (!amount) {
       inputIsValid = false
+    } else if (!receiverAddress) {
+      inputIsValid = false
     } else if (
       !validateAmount(String(amount)) ||
       !validateFiat(String(fiat)) ||
-      !receiverAddress
+      !validateAddress(receiverAddress)
     ) {
       inputIsValid = false
     }
@@ -667,6 +675,7 @@ const SendTransactionInputModal = (prop: Props) => {
           contact={contact}
           onSelected={selectContactOrAccount}
           handleQrCode={handleQrCode}
+          validateAddress={validateAddress}
         />
 
         <TokenField
