@@ -9,6 +9,8 @@ import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 interface Props {
   transaction: SenderTransactionState
   hideSingleTokenPrice?: boolean
+  widthIcon?: string
+  heightIcon?: string
 }
 
 export const TokenView = (props: Props) => {

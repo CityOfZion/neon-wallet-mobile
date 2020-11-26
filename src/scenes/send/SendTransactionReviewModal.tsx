@@ -2,7 +2,7 @@ import {useNavigationState} from '@react-navigation/native'
 import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useState} from 'react'
-import {Alert, ScrollView, TouchableHighlight} from 'react-native'
+import {Alert, ScrollView, TouchableHighlight, View} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import * as LocalAuthentication from '~/node_modules/expo-local-authentication'
@@ -323,7 +323,6 @@ const SendTransactionReviewModal = (props: Props) => {
       ],
     })
   }
-
   return show ? (
     <ScrollView
       style={{
@@ -347,87 +346,51 @@ const SendTransactionReviewModal = (props: Props) => {
           name={'submit'}
           loadingView={<ScreenLoader transparent={true} />}
         >
-          <TouchableHighlight>
+          <View>
             <LinearLayout
               height="100%"
               width="100%"
               orientation="verti"
               alignItems="center"
+              justifyContent="space-between"
             >
-              <TextView
-                color="text.0"
-                fontFamily="medium"
-                fontSize="18px"
-                mb="48px"
-              >
-                {Facade.t('modals.send.transactionReview.pleaseReview')}
-              </TextView>
+              <LinearLayout width="100%" alignItems="center">
+                <TextView
+                  color="text.0"
+                  fontFamily="medium"
+                  fontSize="18px"
+                  mb="48px"
+                >
+                  {Facade.t('modals.send.transactionReview.pleaseReview')}
+                </TextView>
 
-              <LinearLayout width={'100%'}>
-                <LinearLayout orientation={'horiz'}>
-                  <HeaderColumn
-                    weight={1}
-                    title={Facade.t(
-                      'modals.transactionReview.value'
-                    ).toUpperCase()}
-                    value={Facade.filter.currency(
-                      senderTransaction.token?.exchangeToken(currency),
-                      currency,
-                      language
-                    )}
+                <LinearLayout width={'100%'}>
+                  <AccountView
+                    contactName={senderName}
+                    address={senderAddress ?? ''}
+                    accountName={senderAccount?.name ?? undefined}
+                    hideTitles={true}
+                    hideButton={true}
                   />
-                  <HeaderColumn
-                    title={Facade.t(
-                      'transactionDetails.priorityFee'
-                    ).toUpperCase()}
-                    value={`${senderTransaction.feeAmount?.fee ?? 0} GAS`}
-                    weight={1}
-                    priorityFee={senderTransaction.feeAmount ?? undefined}
+                  <TokenView
+                    transaction={senderTransaction}
+                    hideSingleTokenPrice={true}
+                    widthIcon="20px"
+                    heightIcon="20px"
                   />
                 </LinearLayout>
-
-                <TextView
-                  color={'text.10'}
-                  fontFamily={'medium'}
-                  fontSize={18}
-                  mt={4}
-                >
-                  {Facade.t('transactionDetails.sender')}
-                </TextView>
-                <AccountView
-                  contactName={senderName}
-                  address={senderAddress ?? ''}
-                  accountName={senderAccount?.name ?? undefined}
-                  walletName={senderWallet ?? undefined}
-                />
-                <TextView
-                  color={'text.10'}
-                  fontFamily={'medium'}
-                  fontSize={18}
-                  mt={4}
-                >
-                  {Facade.t('transactionDetails.recipient')}
-                </TextView>
-                <AccountView
-                  contactName={receiverName}
-                  address={receiverAddress ?? ''}
-                  accountName={receiverAccount?.name ?? undefined}
-                  walletName={receiverWallet ?? undefined}
-                />
-                <TokenView
-                  transaction={senderTransaction}
-                  hideSingleTokenPrice={true}
-                />
               </LinearLayout>
 
-              <LinearLayout width="100%" mt="32px">
+              <LinearLayout width="100%" mt="32px" alignSelf="flex-end">
                 <ThemedButton
                   label={Facade.t('app.send')}
                   onPress={() => Facade.await.run('auth', checkForAuth)}
+                  rounded={true}
+                  radius={50}
                 />
               </LinearLayout>
             </LinearLayout>
-          </TouchableHighlight>
+          </View>
         </AwaitActivity>
       </AwaitActivity>
     </ScrollView>

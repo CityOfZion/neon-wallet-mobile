@@ -14,6 +14,8 @@ interface Props {
   address: string
   walletName?: string | undefined
   accountName?: string | undefined
+  hideTitles?: boolean
+  hideButton?: boolean
 }
 
 export const AccountView = (props: Props) => {
@@ -41,14 +43,28 @@ export const AccountView = (props: Props) => {
       {props.accountName && (
         <LinearLayout orientation={'horiz'}>
           <LinearLayout weight={1}>
-            <TextView
-              fontSize={'14px'}
-              fontWeight={500}
-              fontFamily={'medium'}
-              color={'text.10'}
-            >
-              Wallet
+            {props.hideTitles ? (
+              <></>
+            ) : (
+              <TextView color={'text.10'}>Account</TextView>
+            )}
+            <TextView fontSize="lg" color={'text.0'}>
+              {props.accountName}
             </TextView>
+          </LinearLayout>
+          <LinearLayout weight={1}>
+            {props.hideTitles ? (
+              <></>
+            ) : (
+              <TextView
+                fontSize={'14px'}
+                fontWeight={500}
+                fontFamily={'medium'}
+                color={'text.10'}
+              >
+                Wallet
+              </TextView>
+            )}
             <TextView
               fontSize={'14px'}
               fontWeight={500}
@@ -57,10 +73,6 @@ export const AccountView = (props: Props) => {
             >
               {props.walletName}
             </TextView>
-          </LinearLayout>
-          <LinearLayout weight={1}>
-            <TextView color={'text.10'}>Account</TextView>
-            <TextView color={'text.0'}>{props.accountName}</TextView>
           </LinearLayout>
         </LinearLayout>
       )}
@@ -78,7 +90,7 @@ export const AccountView = (props: Props) => {
           {props.address}
         </TextView>
 
-        {!props.contactName && !props.walletName && (
+        {!props.contactName && !props.walletName && !props.hideButton && (
           <ButtonView
             onPress={() => {
               navigation.navigate(Facade.route.Modal.name, {

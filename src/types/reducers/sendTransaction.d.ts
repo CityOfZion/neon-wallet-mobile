@@ -10,12 +10,14 @@ export declare global {
     | 'SET_RECEIVER_ADDRESS'
     | 'SET_FEE_AMOUNT'
     | 'CLEAR_STATE_SENDER_TRANSACTION'
+    | 'SET_FIAT'
 
   interface SenderTransactionState {
     token: TokenAsset | null
     senderAddress: string | null
     receiverAddress: string | null
     feeAmount: PriorityFee | null
+    fiat?: number | null
   }
 
   type SenderTransactionAction = SenderTransactionState &

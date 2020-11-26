@@ -37,6 +37,7 @@ interface Props {
   borderThickness?: number | string
   borderColor?: string
   textAlign?: string
+  radius?: number
 }
 
 const LabelComponent = (props: Props) => {
@@ -134,6 +135,7 @@ const ThemedButton: React.FC<Props> = (props) => {
         borderThickness={props.borderThickness}
         borderColor={props.borderColor}
         isPressed={isSelected}
+        radius={props.radius}
       >
         <LabelComponent {...props} />
       </ThemedCard>
@@ -160,6 +162,7 @@ ThemedButton.propTypes = {
   borderThickness: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   borderColor: PropTypes.string,
   textAlign: PropTypes.string,
+  radius: PropTypes.number,
 }
 
 ThemedButton.defaultProps = {
@@ -170,6 +173,7 @@ ThemedButton.defaultProps = {
   rounded: true,
   flat: false,
   basic: false,
+  radius: 0,
 }
 
 const ButtonView = styled.TouchableHighlight``

@@ -9,6 +9,8 @@ import {
   space,
   textStyle,
   typography,
+  borderRadius,
+  alignSelf,
 } from 'styled-system'
 
 import {orientation, weight} from '~src/styles/styled-system.config'
@@ -85,6 +87,7 @@ export const ButtonView = styled.TouchableOpacity<ButtonViewProps>`
   ${orientation}
   ${position}
   ${weight}
+  ${borderRadius}
 `
 
 export const LinearGradientLayout = styled(LinearGradient)<
