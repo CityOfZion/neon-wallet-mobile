@@ -7,6 +7,7 @@ import {
   NativeTouchEvent,
   TouchableOpacity,
 } from 'react-native'
+import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
 import {
   border,
@@ -310,6 +311,10 @@ const AccountCard: React.FC<Props> = (props) => {
                 onPress={() => {
                   if (props.account.address) {
                     Facade.utils.copyToClipboard(props.account.address)
+                    showMessage({
+                      message: Facade.t('toast.copiedToClipboard'),
+                      type: 'success',
+                    })
                   }
                 }}
                 style={{

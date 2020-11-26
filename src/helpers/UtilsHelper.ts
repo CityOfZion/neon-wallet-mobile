@@ -1,6 +1,7 @@
 import {classToClass, ClassTransformOptions} from 'class-transformer'
 import {chunk} from 'lodash'
 import {Clipboard, Platform} from 'react-native'
+import {showMessage} from 'react-native-flash-message'
 
 import {Facade} from '~src/app/Facade'
 
@@ -38,6 +39,10 @@ export abstract class UtilsHelper {
   static copyToClipboard(content?: string) {
     if (content) {
       Clipboard.setString(content)
+      showMessage({
+        message: Facade.t('toast.copiedToClipboard'),
+        type: 'success',
+      })
     }
   }
 
