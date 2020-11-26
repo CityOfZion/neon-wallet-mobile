@@ -24,6 +24,8 @@ import ImportReadAccount, {
 } from '~src/scenes/ImportReadAccount'
 import MorePage from '~src/scenes/MorePage'
 import Passphrase, {PassphraseParams} from '~src/scenes/Passphrase'
+import { SettingsStackParamList } from './SettingsStackNavigation'
+import { Wallet } from '../models/redux/Wallet'
 
 export type MoreStackParam =
   | DefaultNavigationParam<
@@ -47,6 +49,7 @@ export type MoreStackParamList = {
   Passphrase: PassphraseParams
   CustomizeAccount: CustomizeAccountParams
   GetWallet: GetWalletParams
+  Settings: SettingsStackParamList
 }
 
 const MoreStack = createStackNavigator<MoreStackParamList>()

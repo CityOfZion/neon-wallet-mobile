@@ -60,11 +60,8 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
         actionButtonStyle: 'highlight',
         actionOnPress: () => {
           props.navigation.reset({
-            index: 2,
+            index: 0,
             routes: [{name: Facade.route.SettingsPage.name}],
-          })
-          props.navigation.navigate(Facade.route.MyWalletOptions.name, {
-            wallet,
           })
         },
       }),

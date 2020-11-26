@@ -285,6 +285,7 @@ const ListWalletView = (props: WalletProps) => {
                         <Notification
                           text={Facade.t('screens.listWallets.noBackup')}
                           wallet={selectedWallet}
+                          propsNavigation={props.navigation}
                         />
                       </LinearLayout>
                     )}
