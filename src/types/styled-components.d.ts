@@ -20,6 +20,7 @@ export declare global {
     background: ColorGroup
     text: ColorGroup
     card: ColorGroup
+    danger: string
   }
 
   interface ColorGroup {

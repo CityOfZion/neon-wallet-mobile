@@ -1,6 +1,7 @@
-import React, { useRef } from 'react'
-import { StyleSheet, Animated } from 'react-native'
-import { ButtonView, LinearLayout, TextView } from '~src/styles/styled-components'
+import React, {useRef} from 'react'
+import {StyleSheet, Animated} from 'react-native'
+
+import {ButtonView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface TabSelectorProps {
   isFirstTabSelected: boolean
@@ -22,7 +23,9 @@ const TabSelector = (props: TabSelectorProps) => {
         onPress={() => props.setFirstTabAsSelected(true)}
         weight={1}
         alignItems="center"
-        borderBottomWidth={!props.isFirstTabSelected || props.hideBorderBottom ? '0px' : '3px'}
+        borderBottomWidth={
+          !props.isFirstTabSelected || props.hideBorderBottom ? '0px' : '3px'
+        }
         borderColor="primary"
       >
         <TextView
@@ -39,18 +42,18 @@ const TabSelector = (props: TabSelectorProps) => {
             ? props.firstTabLabel.toUpperCase()
             : props.firstTabLabel}
         </TextView>
-        {
-          props.selectorBar && props.isFirstTabSelected && (
-            <TabSelectorBar decrementPosX={props.moveTabBarSelector || 0.5} />
-          )
-        }
+        {props.selectorBar && props.isFirstTabSelected && (
+          <TabSelectorBar decrementPosX={props.moveTabBarSelector ?? 0.5} />
+        )}
       </ButtonView>
       <ButtonView
         activeOpacity={1}
         onPress={() => props.setFirstTabAsSelected(false)}
         weight={1}
         alignItems="center"
-        borderBottomWidth={props.isFirstTabSelected || props.hideBorderBottom ? '0px' : '3px'}
+        borderBottomWidth={
+          props.isFirstTabSelected || props.hideBorderBottom ? '0px' : '3px'
+        }
         borderColor="primary"
       >
         <TextView
@@ -67,11 +70,9 @@ const TabSelector = (props: TabSelectorProps) => {
             ? props.secondTabLabel.toUpperCase()
             : props.secondTabLabel}
         </TextView>
-        {
-          props.selectorBar && !props.isFirstTabSelected && (
-            <TabSelectorBar decrementPosX={props.moveTabBarSelector || 0.5} />
-          )
-        }
+        {props.selectorBar && !props.isFirstTabSelected && (
+          <TabSelectorBar decrementPosX={props.moveTabBarSelector ?? 0.5} />
+        )}
       </ButtonView>
     </LinearLayout>
   )
@@ -81,7 +82,9 @@ interface ITabSelectorBar {
   decrementPosX: number
 }
 
-export const TabSelectorBar: React.FC<ITabSelectorBar> = (props: ITabSelectorBar) => {
+export const TabSelectorBar: React.FC<ITabSelectorBar> = (
+  props: ITabSelectorBar
+) => {
   const posX = useRef(new Animated.Value(props.decrementPosX || 0))
   //To do a animation with a bar
   const styles = StyleSheet.create({
@@ -89,15 +92,18 @@ export const TabSelectorBar: React.FC<ITabSelectorBar> = (props: ITabSelectorBar
       height: 3,
       backgroundColor: '#4cffb3',
       flex: 1,
-      alignSelf: 'stretch'
-    }
+      alignSelf: 'stretch',
+    },
   })
   return (
-    <Animated.View style={[styles.design, {
-      transform: [{translateX: props.decrementPosX}]
-    }]}>
-
-    </Animated.View>
+    <Animated.View
+      style={[
+        styles.design,
+        {
+          transform: [{translateX: props.decrementPosX}],
+        },
+      ]}
+    ></Animated.View>
   )
 }
 
