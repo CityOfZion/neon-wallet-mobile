@@ -125,7 +125,10 @@ export const AccountList = (props: AccountListProps) => {
         <FlatList
           data={accountsListItem.sort((item, item2) => {
             if (item.account.name !== null && item2.account.name !== null) {
-              if (item.account.name.toLowerCase() < item2.account.name.toLowerCase()) {
+              if (
+                item.account.name.toLowerCase() <
+                item2.account.name.toLowerCase()
+              ) {
                 return -1
               } else {
                 return 0

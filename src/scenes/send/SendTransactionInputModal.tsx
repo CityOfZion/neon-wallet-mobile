@@ -645,13 +645,18 @@ const SendTransactionInputModal = (prop: Props) => {
 
         <AccountCard account={account} />
 
-        <TouchableWithoutFeedback onPress={() => {
-          prop.navigation.reset({
-            index: 1,
-            routes:[{name: Facade.route.ListWalletsPage.name}, {name: Facade.route.GetWallet.name}]
-          })
-          prop.navigation.goBack()
-        }}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            prop.navigation.reset({
+              index: 1,
+              routes: [
+                {name: Facade.route.ListWalletsPage.name},
+                {name: Facade.route.GetWallet.name},
+              ],
+            })
+            prop.navigation.goBack()
+          }}
+        >
           <LinearLayout
             orientation="horiz"
             alignSelf="center"
