@@ -98,6 +98,10 @@ export const EditWalletModal = (
   const handleNavigation = () => {
     var route: any
     if (isDeleted) {
+      props.navigation.reset({
+        index: 0,
+        routes: [{name: Facade.route.ListWalletsPage.name}],
+      })
       if (props.route.params?.fromWalletDetailsPage) {
         route = Facade.route.MyWallets.name
       } else {
