@@ -2,10 +2,10 @@
   "expo": {
     "name": "Neon",
     "slug": "neon",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "android": {
       "package": "io.cityofzion.neon",
-      "versionCode": 1,
+      "versionCode": 4,
       "adaptiveIcon": {
         "foregroundImage": "src/assets/ic_launcher_foreground.png",
         "backgroundColor": "#1f2b2d"
