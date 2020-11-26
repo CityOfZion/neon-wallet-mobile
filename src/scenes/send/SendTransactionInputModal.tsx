@@ -361,7 +361,7 @@ const AmountField = (props: {
         orientation={'horiz'}
         justifyContent={'space-between'}
       >
-        <LinearLayout width={'45%'}>
+        <LinearLayout width={'55%'}>
           <InputWithValidation
             onChangeText={(val) => setValue(val)}
             color={theme.colors.text[0]}
@@ -384,8 +384,16 @@ const AmountField = (props: {
             editable={Boolean(props.token)}
           />
         </LinearLayout>
-        <LinearLayout width={'45%'}>
-          <LinearLayout height={'50px'}>
+        <LinearLayout width={'40%'}>
+          <LinearLayout height={'50px'} orientation={'horiz'}>
+            <TextView
+              color={'white'}
+              fontSize={'20px'}
+              fontFamily={'medium'}
+              mr={5}
+            >
+              {`${props.currency}:`}
+            </TextView>
             <InputWithValidation
               onChangeText={(val) => props.setFiat(Number(val))}
               color={theme.colors.text[0]}
@@ -396,7 +404,7 @@ const AmountField = (props: {
                 Facade.t('modals.send.transactionInput.enterValue') +
                 props.currency
               }
-              validator={(val) => props.validatorFiat(val)}
+              validator={() => true}
               invalidMessage={Facade.t(
                 'modals.send.transactionInput.insufficientFunds'
               )}
@@ -553,7 +561,6 @@ const SendTransactionInputModal = (prop: Props) => {
       inputIsValid = false
     } else if (
       !validateAmount(String(amount)) ||
-      !validateFiat(String(fiat)) ||
       !validateAddress(receiverAddress)
     ) {
       inputIsValid = false
