@@ -80,7 +80,7 @@ const MorePage = (props: MoreProps) => {
           width={'88%'}
           allowFontScaling={true}
         >
-          {`v${Constants.nativeAppVersion}`}
+          {`v${Constants.nativeAppVersion}-${Constants.nativeBuildVersion}`}
         </TextView>
       </LinearLayout>
     </ScreenLayout>
