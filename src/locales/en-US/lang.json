@@ -596,7 +596,8 @@
     "qty": "Qty",
     "viewOnDora": "View on Dora",
     "confirmed": "Confirmed",
-    "pending": "Pending"
+    "pending": "Pending",
+    "price": "Price"
   },
   "priorityFee": {
     "none": "None",

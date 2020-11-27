@@ -11,8 +11,8 @@ import {
 } from '~src/styles/styled-components'
 
 interface IHeaderValue {
-  value: string
-  color: string
+  value?: string
+  color?: string
   size?: number
   align?: string
 }
@@ -81,7 +81,7 @@ export const HeaderColumn = (props: Props) => {
                   ellipsizeMode={'middle'}
                   textAlign={value.align ?? undefined}
                 >
-                  {value.value}
+                  {`${value.value} `}
                 </TextView>
               ))
             )}
