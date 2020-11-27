@@ -36,6 +36,7 @@ export const ThemedAlert: React.FC<MessageComponentProps> = (props) => {
 
           <TextView
             fontSize={'18px'}
+            mt={'20px'}
             color={
               props.message.type === 'success'
                 ? theme.colors.primary
