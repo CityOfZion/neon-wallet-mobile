@@ -3,6 +3,10 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {HeaderActionButtonProps} from '../components/layout/HeaderActionButton'
+import {Wallet} from '../models/redux/Wallet'
+import {SettingsStackParamList} from './SettingsStackNavigation'
+
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {ModalParams} from '~src/navigation/ModalStackNavigation'
@@ -14,9 +18,6 @@ import GetAccountView, {
 } from '~src/scenes/Account/GetAccountView'
 import GetWalletView, {GetWalletParams} from '~src/scenes/GetWalletView'
 import ListWalletView, {ListWalletParams} from '~src/scenes/ListWalletView'
-import { HeaderActionButtonProps } from '../components/layout/HeaderActionButton'
-import { Wallet } from '../models/redux/Wallet'
-import { SettingsStackParamList } from './SettingsStackNavigation'
 
 export type WalletStackParamList = {
   ListWalletsPage: ListWalletParams
@@ -24,8 +25,8 @@ export type WalletStackParamList = {
   GetAccount: GetAccountParams
   AccountAssetDetail: AccountAssetDetailParams
   Modal: ModalParams
-  Settings: SettingsStackParamList,
-  Step1BackupWallet: { wallet: Wallet } & HeaderActionButtonProps 
+  Settings: SettingsStackParamList
+  Step1BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
 }
 
 export type WalletStackParams =

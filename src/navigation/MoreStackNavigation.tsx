@@ -3,7 +3,9 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {Wallet} from '../models/redux/Wallet'
 import {GetWalletParams} from '../scenes/GetWalletView'
+import {SettingsStackParamList} from './SettingsStackNavigation'
 
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
@@ -24,8 +26,6 @@ import ImportReadAccount, {
 } from '~src/scenes/ImportReadAccount'
 import MorePage from '~src/scenes/MorePage'
 import Passphrase, {PassphraseParams} from '~src/scenes/Passphrase'
-import { SettingsStackParamList } from './SettingsStackNavigation'
-import { Wallet } from '../models/redux/Wallet'
 
 export type MoreStackParam =
   | DefaultNavigationParam<

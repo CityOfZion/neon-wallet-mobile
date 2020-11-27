@@ -1,28 +1,30 @@
-import { wallet } from '@cityofzion/neon-js'
-import { CommonActions, useNavigation } from '@react-navigation/native'
-import { StackNavigationProp } from '@react-navigation/stack'
-import React, { useState } from 'react'
-import { TouchableWithoutFeedback } from 'react-native'
-import { useDispatch } from 'react-redux'
+import {wallet} from '@cityofzion/neon-js'
+import {CommonActions, useNavigation} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
+import React, {useState} from 'react'
+import {TouchableWithoutFeedback} from 'react-native'
+import {useDispatch} from 'react-redux'
 
-import { SettingsStackParamList } from '../navigation/SettingsStackNavigation'
+import {MoreStackParamList} from '../navigation/MoreStackNavigation'
+import {SettingsStackParamList} from '../navigation/SettingsStackNavigation'
+import {WalletStackParamList} from '../navigation/WalletsStackNavigation'
 
-import { Facade } from '~src/app/Facade'
-import { Wallet } from '~src/models/redux/Wallet'
-import { RootStore } from '~src/store/RootStore'
+import {Facade} from '~src/app/Facade'
+import {Wallet} from '~src/models/redux/Wallet'
+import {RootStore} from '~src/store/RootStore'
 import styled, {
   ButtonView,
   ImageView,
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
-import { WalletStackParamList } from '../navigation/WalletsStackNavigation'
-import { MoreStackParamList } from '../navigation/MoreStackNavigation'
 
 interface NotificationProps {
   wallet: Wallet
-  text: string,
-  propsNavigation: StackNavigationProp<WalletStackParamList & MoreStackParamList>
+  text: string
+  propsNavigation: StackNavigationProp<
+    WalletStackParamList & MoreStackParamList
+  >
 }
 
 const Notification = (props: NotificationProps) => {
@@ -49,13 +51,13 @@ const Notification = (props: NotificationProps) => {
         if (props.wallet) {
           navigation.reset({
             index: 0,
-            routes: [{ name: Facade.route.Settings.name }]
+            routes: [{name: Facade.route.Settings.name}],
           })
           navigation.navigate(Facade.route.Settings.name, {
             screen: Facade.route.Step1BackupWallet.name,
             params: {
-              wallet: props.wallet
-            }
+              wallet: props.wallet,
+            },
           })
         }
       }}
