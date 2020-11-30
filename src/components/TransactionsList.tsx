@@ -72,10 +72,27 @@ const TransactionComponent = (props: {
 
   const getAddressOrContact = (senderTx: SenderTransaction) => {
     if (isReceived(senderTx)) {
+      const contactStr = senderTx.senderAddressOrContactName(props.contacts)
+      if (isClaim(contactStr)) {
+        return isClaim(contactStr)
+      }
       return senderTx.senderAddressOrContactName(props.contacts)
     }
 
     return senderTx.receiverAddressOrContactName(props.contacts)
+  }
+
+  const isClaim = (contactName: string | null) => {
+    if (contactName) {
+      return contactName.startsWith('claim')
+        ? `Gas ${contactName.charAt(0).toUpperCase()}${contactName.substring(
+            1,
+            contactName.length
+          )}`
+        : false
+    } else {
+      return false
+    }
   }
 
   const navigation = useNavigation()
@@ -168,6 +185,7 @@ const TransactionComponent = (props: {
                             ellipsizeMode={'middle'}
                             fontSize={'md'}
                             color={'primary'}
+                            width={'200px'}
                           >
                             {getAddressOrContact(props.item)}
                           </TextView>
