@@ -1,11 +1,13 @@
 import {wallet} from '@cityofzion/neon-js'
-import {useNavigation} from '@react-navigation/native'
+import {CommonActions, useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {useDispatch} from 'react-redux'
 
+import {MoreStackParamList} from '../navigation/MoreStackNavigation'
 import {SettingsStackParamList} from '../navigation/SettingsStackNavigation'
+import {WalletStackParamList} from '../navigation/WalletsStackNavigation'
 
 import {Facade} from '~src/app/Facade'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -20,6 +22,9 @@ import styled, {
 interface NotificationProps {
   wallet: Wallet
   text: string
+  propsNavigation: StackNavigationProp<
+    WalletStackParamList & MoreStackParamList
+  >
 }
 
 const Notification = (props: NotificationProps) => {
@@ -44,6 +49,10 @@ const Notification = (props: NotificationProps) => {
     <TouchableWithoutFeedback
       onPress={() => {
         if (props.wallet) {
+          navigation.reset({
+            index: 0,
+            routes: [{name: Facade.route.Settings.name}],
+          })
           navigation.navigate(Facade.route.Settings.name, {
             screen: Facade.route.Step1BackupWallet.name,
             params: {
