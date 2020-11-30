@@ -23,9 +23,9 @@ const MAX_ERROR_COUNTER = 3
 export default function LoginPage(props: Props) {
   const dispatch = useDispatch()
 
-  const [errorCounter, setErrorCounter] = useState(0)
+  const [errorCounter, setErrorCounter] = useState(0) //This function was refactored
 
-  const continueButton = async () => {
+  /*const continueButton = async () => {
     const canUseHardware = await LocalAuthentication.hasHardwareAsync()
 
     if (canUseHardware) {
@@ -55,6 +55,17 @@ export default function LoginPage(props: Props) {
         screen: Facade.route.Passcode.name,
       })
     }
+  }*/ const continueButton = async () => {
+    await Storage.welcomeHidden.save(true)
+    props.navigation.replace(Facade.route.Tab.name, {
+      screen: Facade.route.Settings.name,
+      params: {
+        screen: Facade.route.SettingsPage.name,
+        params: {
+          initialRoute: Facade.route.SecurityModal.name,
+        },
+      },
+    })
   }
 
   const alertDialog = () =>

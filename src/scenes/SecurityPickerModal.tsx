@@ -26,6 +26,7 @@ const SecurityPickerModal = (props: Props) => {
     dispatch(RootStore.settings.actions.setSecurity(val))
     dispatch(RootStore.settings.actions.save())
   }
+  const checkSecurity = () => {}
 
   const isSelected = (c: Security) => c === security
 
@@ -36,7 +37,7 @@ const SecurityPickerModal = (props: Props) => {
       isSelected,
     },
     {
-      data: Security.pin,
+      data: Security.password,
       onClick: changeSecurity,
       isSelected,
     },

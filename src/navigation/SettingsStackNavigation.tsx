@@ -6,6 +6,7 @@ import {ThemeProvider} from 'styled-components'
 import WalletDetailsPage, {
   WalletDetailsParamList,
 } from '../scenes/WalletDetailsPage'
+import {ModalStackParamList} from './ModalStackNavigation'
 
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
@@ -20,7 +21,7 @@ import MyWalletsPage from '~src/scenes/MyWalletsPage'
 import SettingsPage from '~src/scenes/SettingsPage'
 
 export type SettingsStackParamList = {
-  SettingsPage: undefined
+  SettingsPage: {initialRoute?: keyof ModalStackParamList}
   MyWallets: undefined
   MyWalletOptions: {wallet: Wallet} & HeaderCustomProps
   WalletDetails: WalletDetailsParamList

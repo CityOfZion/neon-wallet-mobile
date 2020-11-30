@@ -48,7 +48,7 @@ const ConfirmPasscodePage = (props: Props) => {
 
   const persist = async () => {
     await Facade.security.savePasscode(originalPasscode)
-    dispatch(RootStore.settings.actions.setSecurity(Security.pin))
+    dispatch(RootStore.settings.actions.setSecurity(Security.password))
     dispatch(RootStore.settings.actions.save())
     await Storage.hasAuthentication.save(true)
     props.navigation.replace('Tab', undefined)
