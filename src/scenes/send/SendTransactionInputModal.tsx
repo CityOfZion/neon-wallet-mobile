@@ -297,9 +297,10 @@ const TokenField = (props: {
 const AmountField = (props: {
   validatorAmount: (val: string) => boolean
   validatorFiat: (val: string) => boolean
+  onAmountChanged: (amount: string) => void
   token: TokenAsset | null | undefined
-  amount: number
-  fiat: number
+  amount: number | string
+  fiat: number | string
   setAmount: (amount: number) => void
   setFiat: (fiat: number) => void
   tokenBalance: number
@@ -364,7 +365,7 @@ const AmountField = (props: {
       >
         <LinearLayout width={'55%'}>
           <InputWithValidation
-            onChangeText={(val) => setValue(val)}
+            onChangeText={(val) => props.onAmountChanged(val)}
             color={theme.colors.text[0]}
             invalidColor={theme.colors.text[10]}
             invalidMessageColor={theme.colors.quinary}
@@ -400,7 +401,9 @@ const AmountField = (props: {
               color={theme.colors.text[0]}
               invalidColor={theme.colors.text[10]}
               invalidMessageColor={theme.colors.quinary}
-              value={props.fiat !== null ? String(props.fiat.toFixed(2)) : ''}
+              value={
+                props.fiat !== null ? String(Number(props.fiat).toFixed(2)) : ''
+              }
               placeholder={
                 Facade.t('modals.send.transactionInput.enterValue') +
                 props.currency
@@ -419,7 +422,7 @@ const AmountField = (props: {
           </LinearLayout>
           <ButtonView
             alignSelf={'flex-end'}
-            onPress={() => props.setFiat(Math.floor(props.fiat))}
+            onPress={() => props.setFiat(Math.floor(Number(props.fiat)))}
           >
             <LinearLayout orientation={'horiz'}>
               <ImageView
@@ -454,7 +457,7 @@ const SendTransactionInputModal = (prop: Props) => {
   const [receiverAddress, setReceiverAddress] = useState(
     prop.route.params?.uri?.address ?? ''
   )
-  const [amount, setAmount] = useState(uri?.amount ?? 0)
+  const [amount, setAmount] = useState(uri?.amount ?? '')
   const [fiat, setFiat] = useState(0)
   const hash = prop.route.params?.uri?.tokenHash ?? ''
 
@@ -476,19 +479,23 @@ const SendTransactionInputModal = (prop: Props) => {
   )
 
   useEffect(() => {
-    if (token?.symbol) {
-      const ratio = exchange[token?.symbol]?.to[currency] ?? null
-      if (ratio) {
-        setFiat(ratio * amount)
+    if (amount !== '') {
+      if (token?.symbol) {
+        const ratio = exchange[token?.symbol]?.to[currency] ?? null
+        if (ratio) {
+          setFiat(ratio * Number(amount))
+        }
       }
     }
   }, [amount])
 
   useEffect(() => {
-    if (token?.symbol) {
-      const ratio = exchange[token?.symbol]?.to[currency] ?? null
-      if (ratio) {
-        setAmount(fiat / ratio)
+    if (fiat !== 0) {
+      if (token?.symbol) {
+        const ratio = exchange[token?.symbol]?.to[currency] ?? null
+        if (ratio) {
+          setAmount(Number(fiat) / ratio)
+        }
       }
     }
   }, [fiat])
@@ -516,7 +523,7 @@ const SendTransactionInputModal = (prop: Props) => {
 
     const tokenWithHolding = Facade.utils.clone(token)
     const fiatWithHolding = Facade.utils.clone(fiat)
-    tokenWithHolding.amount = amount
+    tokenWithHolding.amount = Number(amount)
 
     dispatch(RootStore.senderTransaction.actions.clearState())
 
@@ -528,13 +535,16 @@ const SendTransactionInputModal = (prop: Props) => {
       RootStore.senderTransaction.actions.setReceiverAddress(receiverAddress)
     )
     dispatch(RootStore.senderTransaction.actions.setFeeAmount(priority))
-    dispatch(RootStore.senderTransaction.actions.setFiat(fiatWithHolding))
+    dispatch(
+      RootStore.senderTransaction.actions.setFiat(Number(fiatWithHolding))
+    )
 
     prop.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
   }
 
   const validateAmount = (val: string) => {
-    const hasEnoughBalance = getTokenBalance() >= Number(val)
+    const hasEnoughBalance =
+      getTokenBalance() >= Number(val) || val?.length === 0
     return hasEnoughBalance
   }
 
@@ -558,7 +568,7 @@ const SendTransactionInputModal = (prop: Props) => {
       inputIsValid = false
     } else if (!account.address) {
       inputIsValid = false
-    } else if (!amount) {
+    } else if (!amount || amount <= 0) {
       inputIsValid = false
     } else if (!receiverAddress) {
       inputIsValid = false
@@ -580,7 +590,7 @@ const SendTransactionInputModal = (prop: Props) => {
     const total = getTokenBalance()
     if (!total) return 0
 
-    return total - (amount ?? 0)
+    return total - (Number(amount) ?? 0)
   }
 
   // Typeguard
@@ -592,6 +602,10 @@ const SendTransactionInputModal = (prop: Props) => {
     if (item.address) {
       handleAddressChanged(item.address)
     }
+  }
+
+  const handleAmountChanged = (amount: string) => {
+    setAmount(amount)
   }
 
   const handleAddressChanged = (addressValue: string) => {
@@ -709,6 +723,7 @@ const SendTransactionInputModal = (prop: Props) => {
           amount={amount}
           setAmount={(a) => setAmount(a)}
           setFiat={(a) => setFiat(a)}
+          onAmountChanged={handleAmountChanged}
           fiat={fiat}
           token={token}
           tokenBalance={getTokenBalance()}
