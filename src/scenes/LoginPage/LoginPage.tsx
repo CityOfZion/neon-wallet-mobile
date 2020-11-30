@@ -56,9 +56,9 @@ export default function LoginPage(props: Props) {
       })
     }
   }*/ const continueButton = async () => {
-    await Storage.welcomeHidden.save(true)
     props.navigation.replace(Facade.route.Tab.name, {
       screen: Facade.route.Settings.name,
+      welcomeHidden: true,
       params: {
         screen: Facade.route.SettingsPage.name,
         params: {
