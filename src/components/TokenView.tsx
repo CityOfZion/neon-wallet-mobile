@@ -15,7 +15,21 @@ interface Props {
 
 export const TokenView = (props: Props) => {
   const {currency, language} = useSelector((state: RootState) => state.settings)
+  const {exchange} = useSelector((state: RootState) => state.app)
 
+  const getValueToken = () => {
+    if (props.transaction.token) {
+      const ratio =
+        exchange[props.transaction.token?.symbol]?.to[currency] ?? null
+      if (ratio && props.transaction.fiat) {
+        return (props.transaction.fiat / ratio).toFixed(2)
+      } else {
+        return ''
+      }
+    } else {
+      return ''
+    }
+  }
   return (
     <LinearLayout
       orientation={'verti'}
@@ -27,17 +41,21 @@ export const TokenView = (props: Props) => {
       pr={'16px'}
       mt={4}
     >
-      <LinearLayout orientation={'horiz'}>
-        <ImageView
-          source={props.transaction.token?.srcIcon}
-          width={'14px'}
-          height={'14px'}
-          alignSelf={'center'}
-        />
-        <TextView ml={'8px'} color={'text.0'} fontFamily={'medium'}>
-          {props.transaction.token?.symbol}
+      <LinearLayout orientation={'horiz'} justifyContent={'space-between'}>
+        <LinearLayout orientation={'horiz'}>
+          <ImageView
+            source={props.transaction.token?.srcIcon}
+            width={props.widthIcon ?? '14px'}
+            height={props.heightIcon ?? '14px'}
+            alignSelf={'center'}
+          />
+          <TextView ml={'8px'} color={'text.0'} fontFamily={'medium'}>
+            {props.transaction.token?.symbol}
+          </TextView>
+        </LinearLayout>
+        <TextView color="text.10">
+          {`${props.transaction.token?.amount} ${props.transaction.token?.name} in Wallet`}
         </TextView>
-        <LinearLayout weight={1} />
 
         {!props.hideSingleTokenPrice && (
           <>
@@ -73,11 +91,45 @@ export const TokenView = (props: Props) => {
           weight={1.6}
           title={Facade.t('transactionDetails.value')}
           value={Facade.filter.currency(
-            props.transaction.token?.exchangeToken(currency),
+            props.transaction.fiat,
             currency,
             language
           )}
           valueTextColor={'primary'}
+        />
+      </LinearLayout>
+      <LinearLayout orientation={'horiz'}>
+        <HeaderColumn
+          weight={2.75}
+          title={Facade.t('transactionDetails.priorityFee')}
+          value={[
+            {
+              value: props.transaction.feeAmount?.name.toUpperCase(),
+              color: 'primary',
+            },
+            {
+              value: props.transaction.feeAmount?.fee.toString(),
+              color: 'text.10',
+            },
+            {
+              value: 'GAS',
+              color: 'text.10',
+            },
+          ]}
+        />
+        <HeaderColumn
+          weight={2.2}
+          title={Facade.t('transactionDetails.price')}
+          value={[
+            {
+              value: `$${getValueToken()}`,
+            },
+            {
+              value: `1${props.transaction.token?.symbol}`,
+              color: 'text.10',
+              size: 12,
+            },
+          ]}
         />
       </LinearLayout>
     </LinearLayout>
