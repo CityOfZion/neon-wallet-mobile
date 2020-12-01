@@ -1,7 +1,7 @@
-import { RouteProp } from '@react-navigation/native'
-import { StackNavigationProp } from '@react-navigation/stack'
-import { AwaitActivity } from '@simpli/react-native-await'
-import React, { useState, useEffect, useRef } from 'react'
+import {RouteProp} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
+import {AwaitActivity} from '@simpli/react-native-await'
+import React, {useState, useEffect, useRef} from 'react'
 import {
   Animated,
   Easing,
@@ -11,10 +11,12 @@ import {
   Image,
   View,
 } from 'react-native'
-import { showMessage } from 'react-native-flash-message'
-import { useDispatch, useSelector } from 'react-redux'
+import {showMessage} from 'react-native-flash-message'
+import {useDispatch, useSelector} from 'react-redux'
 
-import { Facade } from '~src/app/Facade'
+import {ThemedClaimButton} from '~/src/components/themed/ThemedClaimButton'
+import {ThemedSendButton} from '~/src/components/themed/ThemedSendButton'
+import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import BalanceList from '~src/components/BalanceList'
 import TabSelector from '~src/components/TabSelector'
@@ -22,15 +24,16 @@ import TransactionsList from '~src/components/TransactionsList'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
-import { Lang } from '~src/enums/Lang'
-import { NeonHelper } from '~src/helpers/NeonHelper'
-import { NeoNode } from '~src/models/NeoNode'
-import { Account } from '~src/models/redux/Account'
-import { Wallet } from '~src/models/redux/Wallet'
-import { AddressRequest } from '~src/models/request/AddressRequest'
-import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
-import { RootStore } from '~src/store/RootStore'
+import {ThemedReceiveButton} from '~src/components/themed/ThemedReceiveButton'
+import {Lang} from '~src/enums/Lang'
+import {NeonHelper} from '~src/helpers/NeonHelper'
+import {NeoNode} from '~src/models/NeoNode'
+import {Account} from '~src/models/redux/Account'
+import {Wallet} from '~src/models/redux/Wallet'
+import {AddressRequest} from '~src/models/request/AddressRequest'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
+import {RootStore} from '~src/store/RootStore'
 import {
   ButtonView,
   ImageView,
@@ -51,11 +54,7 @@ const disabledSendImage = require('~/src/assets/images/button-send-small-disable
 const selectedSendImage = require('~/src/assets/images/button-send-small-selected.png')
 const defaultSendImage = require('~/src/assets/images/button-send-small.png')
 
-import { ThemedReceiveButton } from '~src/components/themed/ThemedReceiveButton'
-import { ThemedSendButton } from '~/src/components/themed/ThemedSendButton'
-import { ThemedClaimButton } from '~/src/components/themed/ThemedClaimButton'
-
-const ReceiveButton = (props: { onPress: () => any }) => {
+const ReceiveButton = (props: {onPress: () => any}) => {
   const selectedReceiveImage = require('~/src/assets/images/button-receive-small-selected.png')
   const defaultReceiveImage = require('~/src/assets/images/button-receive-small.png')
 
@@ -83,7 +82,7 @@ const ReceiveButton = (props: { onPress: () => any }) => {
   )
 }
 
-const SendButton = (props: { onPress?: () => any }) => {
+const SendButton = (props: {onPress?: () => any}) => {
   const [isPressed, setPressed] = useState(false)
   let backgroundImage = isPressed ? selectedSendImage : defaultSendImage
   backgroundImage = props.onPress ? backgroundImage : disabledSendImage
@@ -105,7 +104,7 @@ const SendButton = (props: { onPress?: () => any }) => {
   )
 }
 
-const TitleComponent = (props: { nodesPool: NeoNode[]; language: Lang }) => {
+const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
   return (
     <LinearLayout alignItems="center" justifyContent="center">
       <TextView color={'text.3'} textAlign={'center'} fontSize={10}>
@@ -125,8 +124,8 @@ const TitleComponent = (props: { nodesPool: NeoNode[]; language: Lang }) => {
 const GetAccountView = (props: GetAccountViewProps) => {
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
-  const { language } = useSelector((state: RootState) => state.settings)
-  const { address } = useSelector((state: RootState) => state.account)
+  const {language} = useSelector((state: RootState) => state.settings)
+  const {address} = useSelector((state: RootState) => state.account)
 
   const posYFactor = useRef(new Animated.Value(0))
 
@@ -155,7 +154,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const isWatchAccount = account.accountType === 'watch'
 
   props.navigation.setOptions({
-    headerTitle: () => TitleComponent({ nodesPool, language }),
+    headerTitle: () => TitleComponent({nodesPool, language}),
     headerRight: () =>
       HeaderActionButton({
         actionTitle: Facade.t('app.edit'),
@@ -249,7 +248,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }
 
   const fetchTransaction = async (currentPage: number) => {
-    const { pageNumber } = await account.populateTransactions(
+    const {pageNumber} = await account.populateTransactions(
       tokensPool,
       currentPage
     )
@@ -285,7 +284,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }
 
   const cardLayoutEvent = (event: LayoutChangeEvent) => {
-    const { height } = event.nativeEvent.layout
+    const {height} = event.nativeEvent.layout
     setCardHeight(height)
 
     Animated.timing(posYFactor.current, {
@@ -345,7 +344,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           justifyContent: 'space-around',
           alignSelf: 'center',
           marginVertical: 20,
-          elevation: 30
+          elevation: 30,
         }}
       >
         <ThemedReceiveButton
@@ -432,12 +431,12 @@ const GetAccountView = (props: GetAccountViewProps) => {
               >
                 {isClaimAvailable()
                   ? Facade.t('screens.getAccount.claimAsset', {
-                    amount: Facade.filter.decimal(
-                      unclaimedGasAmount,
-                      language,
-                      7
-                    ),
-                  })
+                      amount: Facade.filter.decimal(
+                        unclaimedGasAmount,
+                        language,
+                        7
+                      ),
+                    })
                   : Facade.t('screens.getAccount.gasUnavailable')}
               </TextView>
             </ThemedClaimButton>
@@ -449,26 +448,26 @@ const GetAccountView = (props: GetAccountViewProps) => {
             isWatchAccount || !account.getBalanceAmount()
               ? undefined
               : () => {
-                props.navigation.navigate(Facade.route.Modal.name, {
-                  screen: Facade.route.SendModalStack.name,
-                  params: {
-                    screen: Facade.route.SendTransactionInputModal.name,
+                  props.navigation.navigate(Facade.route.Modal.name, {
+                    screen: Facade.route.SendModalStack.name,
                     params: {
-                      walletTitle: wallet?.name ?? '',
-                      account,
+                      screen: Facade.route.SendTransactionInputModal.name,
+                      params: {
+                        walletTitle: wallet?.name ?? '',
+                        account,
+                      },
                     },
-                  },
-                })
-              }
+                  })
+                }
           }
         />
       </View>
 
       <View
-        onTouchStart={({ nativeEvent }) => {
+        onTouchStart={({nativeEvent}) => {
           setInitAxisX(nativeEvent.pageX)
         }}
-        onTouchMove={({ nativeEvent }) => {
+        onTouchMove={({nativeEvent}) => {
           if (nativeEvent.pageX > initAxisX + 5) handleChangeScreen(true)
 
           if (nativeEvent.pageX < initAxisX - 5) handleChangeScreen(false)
@@ -499,7 +498,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           <AwaitActivity
             name={'fetchTransaction'}
             size={'large'}
-            style={{ minHeight: 100 }}
+            style={{minHeight: 100}}
           >
             <>
               {account.address && (
@@ -521,21 +520,21 @@ const GetAccountView = (props: GetAccountViewProps) => {
               <AwaitActivity
                 name={'loadMoreTransaction'}
                 size={'large'}
-                style={{ minHeight: 100 }}
+                style={{minHeight: 100}}
               />
             </>
           </AwaitActivity>
         ) : (
-              <TextView
-                my="32px"
-                color="text.0"
-                fontFamily="medium"
-                fontSize="18px"
-                textAlign="center"
-              >
-                {Facade.t('components.balanceList.empty')}
-              </TextView>
-            )}
+          <TextView
+            my="32px"
+            color="text.0"
+            fontFamily="medium"
+            fontSize="18px"
+            textAlign="center"
+          >
+            {Facade.t('components.balanceList.empty')}
+          </TextView>
+        )}
       </LinearLayout>
     </ScreenLayout>
   )
