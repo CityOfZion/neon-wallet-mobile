@@ -1,5 +1,6 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import Constants from 'expo-constants'
+import * as WebBrowser from 'expo-web-browser'
 import React from 'react'
 import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
@@ -17,10 +18,17 @@ interface MoreProps {
 }
 
 const MorePage = (props: MoreProps) => {
-  const showHelp: boolean = false
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
+
+  const handlePressHelp = async () => {
+    const result = await WebBrowser.openBrowserAsync(
+      'https://app.pipefy.com/public/form/wUJ8xQoC?embedded=true'
+    )
+    return result
+  }
+
   return (
     <ScreenLayout padding={20}>
       <MenuItem
@@ -56,16 +64,17 @@ const MorePage = (props: MoreProps) => {
           props.navigation.navigate(Facade.route.ImportKey.name)
         }}
       />
-      {showHelp && (
-        <MenuItem
-          title={Facade.t('more.help')}
-          icon={require('~/src/assets/images/icon-help-green.png')}
-          iconWidth={21}
-          iconMarginLeft={1}
-          iconMarginRight={17}
-          arrowDirection={RightIconType.NONE}
-        />
-      )}
+      <MenuItem
+        title={Facade.t('more.help')}
+        icon={require('~/src/assets/images/icon-help-green.png')}
+        iconWidth={21}
+        iconMarginLeft={1}
+        iconMarginRight={17}
+        arrowDirection={RightIconType.NONE}
+        onPress={() => {
+          handlePressHelp()
+        }}
+      />
       <LinearLayout
         position={'absolute'}
         left={'5%'}
