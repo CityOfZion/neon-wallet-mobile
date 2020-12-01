@@ -1,12 +1,14 @@
-import { createStackNavigator } from '@react-navigation/stack'
+import {createStackNavigator} from '@react-navigation/stack'
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { ThemeProvider } from 'styled-components'
+import {useSelector} from 'react-redux'
+import {ThemeProvider} from 'styled-components'
 
+import {VerifyPasscodePageParams} from '../scenes/LoginPage/VerifyPasscodePage'
 import SecurityPickerModal from '../scenes/SecurityPickerModal'
 import ReceiveModalStackNavigation from './ReceiveModalStackNavigation'
+import {TabParams} from './TabNavigation'
 
-import { Facade } from '~src/app/Facade'
+import {Facade} from '~src/app/Facade'
 import EditWalletModal, {
   EditWalletParams,
 } from '~src/components/EditWalletModal'
@@ -14,6 +16,7 @@ import {
   PersistContact,
   PersistContactParams,
 } from '~src/components/contacts/PersistContact'
+import {PasscodeStackParams} from '~src/navigation/PasscodeStackNavigation'
 import SendModalStackNavigation, {
   SendStackModalParams,
 } from '~src/navigation/SendModalStackNavigation'
@@ -21,7 +24,7 @@ import {
   AccountQRCode,
   AccountQRCodeParams,
 } from '~src/scenes/Account/AccountQRCode'
-import { GetAccountParams } from '~src/scenes/Account/GetAccountView'
+import {GetAccountParams} from '~src/scenes/Account/GetAccountView'
 import {
   ContactPicker,
   ContactsModalParams,
@@ -37,9 +40,9 @@ import CustomColorPage, {
 import EditAccountModal, {
   EditAccountModalParam,
 } from '~src/scenes/EditAccountModal'
-import { GetWalletParams } from '~src/scenes/GetWalletView'
+import {GetWalletParams} from '~src/scenes/GetWalletView'
 import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
-import ListTokenModal, { ListTokenModalParams } from '~src/scenes/ListTokenModal'
+import ListTokenModal, {ListTokenModalParams} from '~src/scenes/ListTokenModal'
 import NetworkPickerModal from '~src/scenes/NetworkPickerModal'
 import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
@@ -59,9 +62,6 @@ import ReceiveToAccountModal, {
   ReceiveToAccountModalParams,
 } from '~src/scenes/receive/ReceiveToAccountModal'
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
-import { TabParams } from './TabNavigation'
-import { PasscodeStackParams } from '~src/navigation/PasscodeStackNavigation'
-import { VerifyPasscodePageParams } from '../scenes/LoginPage/VerifyPasscodePage'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
@@ -87,8 +87,8 @@ export type ModalStackParamList = {
   SendModalStack: undefined
   EditWalletModal: EditWalletParams
   ReceiveModalStack: undefined
-  SecurityModal: { isFirstTime?: boolean } | undefined
-  Tab: TabParams,
+  SecurityModal: {isFirstTime?: boolean} | undefined
+  Tab: TabParams
   PasscodeStack: PasscodeStackParams
   Modal: object
   VerifyPasscode: VerifyPasscodePageParams

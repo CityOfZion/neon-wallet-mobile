@@ -17,7 +17,7 @@ export interface Step1CreateWalletParams {
 }
 
 interface Props {
-  navigation: StackNavigationProp<TabStackParamList & MoreStackParamList>
+  navigation: StackNavigationProp<MoreStackParamList>
   route: RouteProp<MoreStackParamList, 'Step1CreateWallet'>
 }
 
@@ -133,7 +133,10 @@ const Step1CreateWalletPage: React.FC<Props> = (props) => {
       <LinearLayout mt={5} mb={6} px={5} width={'100%'}>
         <ThemedButton
           onPress={() =>
-            props.navigation.navigate(Facade.route.Step2CreateWallet.name)
+            props.navigation.navigate(
+              Facade.route.Step2CreateWallet.name,
+              undefined
+            )
           }
           label={Facade.t('step1CreateWallet.createWallet')}
         />

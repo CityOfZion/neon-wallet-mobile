@@ -1,16 +1,16 @@
-import { RouteProp } from '@react-navigation/native'
-import { StackNavigationProp } from '@react-navigation/stack'
-import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { DefaultTheme } from 'styled-components'
+import {RouteProp} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
+import React, {useEffect} from 'react'
+import {Alert} from 'react-native'
+import {useSelector} from 'react-redux'
+import {DefaultTheme} from 'styled-components'
 
-import { Facade } from '~src/app/Facade'
-import MenuItem, { RightIconType } from '~src/components/MenuItem'
+import {Facade} from '~src/app/Facade'
+import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { SettingsStackParamList } from '~src/navigation/SettingsStackNavigation'
-import { Alert } from 'react-native'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 
 interface SettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList & RootStackParamList>
@@ -23,18 +23,26 @@ const SettingsPage = (props: SettingsProps) => {
   const showLanguage = false
   const showTheme = false
   const showNetwork = false
-  const { language, currency, theme, network, security } = useSelector(
+  const {language, currency, theme, network, security} = useSelector(
     (state: RootState) => state.settings
   )
-  const openModal = (modal: keyof ModalStackParamList, params?: ModalStackParamList['SecurityModal']) => {
+  const openModal = (
+    modal: keyof ModalStackParamList,
+    params?: ModalStackParamList['SecurityModal']
+  ) => {
     props.navigation.navigate(Facade.route.Modal.name, {
       screen: modal,
-      params
+      params,
     })
   }
   useEffect(() => {
     if (props.route.params?.initialRoute) {
-      openModal(props.route.params.initialRoute, props.route.params?.initialRoute ? { isFirstTime: true } : { isFirstTime: false })
+      openModal(
+        props.route.params.initialRoute,
+        props.route.params?.initialRoute
+          ? {isFirstTime: true}
+          : {isFirstTime: false}
+      )
     }
   }, [])
   return (
