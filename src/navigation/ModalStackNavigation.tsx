@@ -60,6 +60,8 @@ import ReceiveToAccountModal, {
 } from '~src/scenes/receive/ReceiveToAccountModal'
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
 import { TabParams } from './TabNavigation'
+import { PasscodeStackParams } from '~src/navigation/PasscodeStackNavigation'
+import { VerifyPasscodePageParams } from '../scenes/LoginPage/VerifyPasscodePage'
 
 export type ModalStackParamList = {
   WelcomeModal: undefined
@@ -86,7 +88,10 @@ export type ModalStackParamList = {
   EditWalletModal: EditWalletParams
   ReceiveModalStack: undefined
   SecurityModal: { isFirstTime?: boolean } | undefined
-  Tab: TabParams
+  Tab: TabParams,
+  PasscodeStack: PasscodeStackParams
+  Modal: object
+  VerifyPasscode: VerifyPasscodePageParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack

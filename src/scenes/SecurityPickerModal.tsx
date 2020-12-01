@@ -1,5 +1,5 @@
 import { StackNavigationProp } from '@react-navigation/stack'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Facade } from '~src/app/Facade'
@@ -14,7 +14,6 @@ import { RootStore } from '~src/store/RootStore'
 
 import * as LocalAuthentication from 'expo-local-authentication'
 import { Storage } from '~src/app/Storage'
-import { SettingsStackParamList } from '../navigation/SettingsStackNavigation'
 import { RouteProp } from '@react-navigation/native'
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -22,14 +21,21 @@ interface Props {
 }
 
 const SecurityPickerModal = (props: Props) => {
+  const { security } = useSelector((state: RootState) => state.settings)
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
+  const [controlSecurity, setControlSecurity] = useState<Security>(security)
 
-  const { security } = useSelector((state: RootState) => state.settings)
+  useEffect(() => {
+    saveSecurity()
+  }, [controlSecurity])
 
-  const changeSecurity = async (val: Security) => {
-    if (await checkSecurity()) {
-      dispatch(RootStore.settings.actions.setSecurity(val))
+  const changeSecurity = (val: Security) => {
+    checkSecurity(val)
+  }
+  const saveSecurity = async () => {
+    if (security !== controlSecurity) {
+      dispatch(RootStore.settings.actions.setSecurity(controlSecurity)) //hardware is fixed
       dispatch(RootStore.settings.actions.save())
       if (props.route.params?.isFirstTime) {
         await Storage.welcomeToNWSeen.save(true)
@@ -41,23 +47,72 @@ const SecurityPickerModal = (props: Props) => {
       controller.close()
     }
   }
-  const checkSecurity = async () => {
+  const checkSecurity = async (newSecurity: Security) => {
+    if (security === Security.disabled) {
+      return setNewSecurity(newSecurity)
+    } else {
+      return await validateSecurity(newSecurity) ? setNewSecurity(newSecurity) : false
+    }
+  }
+
+  const validateSecurity = async (sec: Security) => {
     switch (security) {
       case Security.hardware:
-        const canUseHardware = await LocalAuthentication.hasHardwareAsync()
-        if (canUseHardware) {
-          const result = await LocalAuthentication.authenticateAsync()
-          if (result.success) {
-            return true
-          } else {
-            return false
-          }
+        const result = await hardwareAuth()
+        if (result?.success) {
+          setNewSecurity(sec)
+          break;
         } else {
-          return false
+          setNewSecurity(security)
+          break;
         }
-      case Security.disabled:
-        return true
+      case Security.password:
+        props.navigation.navigate(Facade.route.PasscodeStack.name, {
+          screen: Facade.route.VerifyPasscode.name,
+          params: {
+            onValidate: (validate) => {
+              if (validate) {
+                setNewSecurity(sec)
+              } else {
+                setNewSecurity(security)
+              }
+            }
+          }
+        })
       default:
+        return false
+    }
+  }
+
+  const hardwareAuth = async () => {
+    const canUseHardware = await LocalAuthentication.hasHardwareAsync()
+    if (canUseHardware) {
+      const result = await LocalAuthentication.authenticateAsync()
+      return result
+    }
+  }
+
+  const setNewSecurity = async (sec: Security) => {
+    switch (sec) {
+      case Security.hardware:
+        const result = await hardwareAuth()
+        if (result?.success) {
+          setControlSecurity(sec)
+          break;
+        } else {
+          setControlSecurity(security)
+          break;
+        }
+      case Security.password:
+        props.navigation.replace(Facade.route.PasscodeStack.name, {
+          screen: Facade.route.Passcode.name
+        })
+        break;
+      case Security.disabled:
+        setControlSecurity(sec)
+        break;
+      default:
+
         break;
     }
   }
