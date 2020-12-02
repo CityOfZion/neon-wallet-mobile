@@ -1,10 +1,8 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import * as LocalAuthentication from 'expo-local-authentication'
-import React, {useState} from 'react'
-import {Alert, TouchableWithoutFeedback} from 'react-native'
+import React from 'react'
+import {TouchableWithoutFeedback} from 'react-native'
 import {useDispatch} from 'react-redux'
 
-import {LocalAuthenticationResult} from '~/node_modules/expo-local-authentication/src/LocalAuthentication.types'
 import {ThemedFlatButton} from '~/src/components/themed/ThemedFlatButton'
 import {Security} from '~/src/enums/Security'
 import {Facade} from '~src/app/Facade'
@@ -18,44 +16,10 @@ interface Props {
   navigation: StackNavigationProp<RootStackParamList>
 }
 
-const MAX_ERROR_COUNTER = 3
-
 export default function LoginPage(props: Props) {
   const dispatch = useDispatch()
 
-  const [errorCounter, setErrorCounter] = useState(0) //This function was refactored
-
-  /*const continueButton = async () => {
-    const canUseHardware = await LocalAuthentication.hasHardwareAsync()
-
-    if (canUseHardware) {
-      const result = await LocalAuthentication.authenticateAsync()
-
-      if (!result.success) {
-        // If user doesn't have the hardware configured, redirects to passcode
-        if (result.error === 'not_enrolled') {
-          props.navigation.navigate(Facade.route.PasscodeStack.name, {
-            screen: Facade.route.Passcode.name,
-          })
-        } else {
-          setErrorCounter(errorCounter + 1)
-
-          if (errorCounter >= MAX_ERROR_COUNTER) {
-            alertDialog()
-          }
-        }
-      } else {
-        dispatch(RootStore.settings.actions.setSecurity(Security.hardware))
-        dispatch(RootStore.settings.actions.save())
-        await Storage.hasAuthentication.save(true)
-        props.navigation.replace(Facade.route.Tab.name, undefined)
-      }
-    } else {
-      props.navigation.navigate(Facade.route.PasscodeStack.name, {
-        screen: Facade.route.Passcode.name,
-      })
-    }
-  }*/ const continueButton = async () => {
+  const continueButton = async () => {
     props.navigation.replace(Facade.route.Tab.name, {
       screen: Facade.route.Settings.name,
       welcomeHidden: true,
@@ -67,30 +31,6 @@ export default function LoginPage(props: Props) {
       },
     })
   }
-
-  const alertDialog = () =>
-    Alert.alert(
-      Facade.t('login.dialog.title'),
-      Facade.t('login.dialog.subtitle'),
-      [
-        {
-          text: Facade.t('login.dialog.usePasscode'),
-          onPress: () =>
-            props.navigation.navigate(Facade.route.PasscodeStack.name, {
-              screen: Facade.route.Passcode.name,
-            }),
-        },
-        {
-          text: Facade.t('login.dialog.cancel'),
-          style: 'cancel',
-        },
-        {
-          text: Facade.t('login.dialog.tryAgain'),
-          onPress: continueButton,
-        },
-      ],
-      {cancelable: false}
-    )
 
   return (
     <ScreenLayout
