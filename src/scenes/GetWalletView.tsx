@@ -50,27 +50,32 @@ const AccountCardsComponent = (props: {
       easing: Easing.out((val) => val ** 2),
     }).start()
   }
-
+  const arrColors = ['#f00', '#0f0', '#00f']
   return (
     <Animated.View onLayout={layoutEvent} style={{opacity: posYFactor.current}}>
       {props.accounts.map((account: Account, i: number) => {
         const marginTop = i !== 0 ? Facade.scale(-130) : undefined
-
         return (
           <Animated.View
             key={i}
-            style={{
-              transform: [
-                {
-                  translateY: posYFactor.current.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [-viewHeight * (1 + 0.1 * i), 0],
-                  }),
-                },
-              ],
-            }}
+            style={[
+              {
+                transform: [
+                  {
+                    translateY: posYFactor.current.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [-viewHeight * (1 + 0.1 * i), 0],
+                    }),
+                  },
+                ],
+              },
+              {
+                zIndex: i,
+                marginTop,
+              },
+            ]}
           >
-            <LinearLayout marginTop={marginTop}>
+            <LinearLayout>
               <AccountCard
                 account={account}
                 isCompacted={true}
