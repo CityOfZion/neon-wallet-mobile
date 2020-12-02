@@ -80,6 +80,7 @@ export const PersistContact = (props: PersistContactProps) => {
     }
 
     dispatch(RootStore.contact.actions.clearState())
+    dispatch(RootStore.app.actions.syncContacts())
     controller.close()
   }
 
