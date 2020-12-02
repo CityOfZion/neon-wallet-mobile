@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {FlatList} from 'react-native'
+import {FlatList, Image} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -104,7 +104,6 @@ const TransactionComponent = (props: {
   var yesterday = moment(yesterdayDate).format(
     Facade.t('dateFormat.datePretty')
   )
-
   return (
     <ButtonView
       onPress={() => {
@@ -261,14 +260,19 @@ const TransactionComponent = (props: {
               <LinearLayout orientation={'horiz'}>
                 <LinearLayout mr={4} width={'27%'}>
                   <LinearLayout orientation={'horiz'} alignItems={'center'}>
-                    <ImageView
-                      mr={2}
-                      height={Facade.scale(18)}
-                      width={Facade.scale(18)}
+                    <Image
+                      width={18}
+                      height={18}
                       resizeMode={'contain'}
+                      resizeMethod={'resize'}
+                      style={{
+                        resizeMode: 'contain',
+                        marginRight: 6,
+                        width: 18,
+                        height: 18,
+                      }}
                       source={token.item.srcIcon}
                     />
-
                     <TextView fontSize={'md'} color={'text.0'}>
                       {token.item.symbol}
                     </TextView>
