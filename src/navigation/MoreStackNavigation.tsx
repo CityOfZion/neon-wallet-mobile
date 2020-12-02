@@ -6,6 +6,7 @@ import {ThemeProvider} from 'styled-components'
 import {Wallet} from '../models/redux/Wallet'
 import {GetWalletParams} from '../scenes/GetWalletView'
 import {SettingsStackParamList} from './SettingsStackNavigation'
+import {WalletStackParams} from './WalletsStackNavigation'
 
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
@@ -50,6 +51,7 @@ export type MoreStackParamList = {
   CustomizeAccount: CustomizeAccountParams
   GetWallet: GetWalletParams
   Settings: SettingsStackParamList
+  ListWallets: WalletStackParams
 }
 
 const MoreStack = createStackNavigator<MoreStackParamList>()

@@ -6,6 +6,10 @@ import {ThemeProvider} from 'styled-components'
 import WalletDetailsPage, {
   WalletDetailsParamList,
 } from '../scenes/WalletDetailsPage'
+import {ModalStackParamList} from './ModalStackNavigation'
+import PasscodeStackNavigation, {
+  PasscodeStackParams,
+} from './PasscodeStackNavigation'
 
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
@@ -18,9 +22,8 @@ import Step3BackupWalletPage from '~src/scenes/BackupWalletPage/Step3BackupWalle
 import MyWalletOptionsPage from '~src/scenes/MyWalletOptionsPage'
 import MyWalletsPage from '~src/scenes/MyWalletsPage'
 import SettingsPage from '~src/scenes/SettingsPage'
-
 export type SettingsStackParamList = {
-  SettingsPage: undefined
+  SettingsPage: {initialRoute?: keyof ModalStackParamList} | undefined
   MyWallets: undefined
   MyWalletOptions: {wallet: Wallet} & HeaderCustomProps
   WalletDetails: WalletDetailsParamList
@@ -28,6 +31,7 @@ export type SettingsStackParamList = {
   Step2BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
   Step3BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
   Modal: object
+  PasscodeStack: PasscodeStackParams
 }
 
 const SettingsStack = createStackNavigator<SettingsStackParamList>()
@@ -118,6 +122,17 @@ const SettingsStackNavigation = () => {
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               title: Facade.route.Step3BackupWallet.translate(),
+              theme,
+              route,
+            })
+          }
+        />
+        <SettingsStack.Screen
+          name={Facade.route.PasscodeStack.name}
+          component={PasscodeStackNavigation}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: Facade.route.PasscodeStack.name,
               theme,
               route,
             })

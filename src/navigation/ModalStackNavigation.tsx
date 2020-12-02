@@ -3,8 +3,10 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {VerifyPasscodePageParams} from '../scenes/LoginPage/VerifyPasscodePage'
 import SecurityPickerModal from '../scenes/SecurityPickerModal'
 import ReceiveModalStackNavigation from './ReceiveModalStackNavigation'
+import {TabParams} from './TabNavigation'
 
 import {Facade} from '~src/app/Facade'
 import EditWalletModal, {
@@ -14,6 +16,7 @@ import {
   PersistContact,
   PersistContactParams,
 } from '~src/components/contacts/PersistContact'
+import {PasscodeStackParams} from '~src/navigation/PasscodeStackNavigation'
 import SendModalStackNavigation, {
   SendStackModalParams,
 } from '~src/navigation/SendModalStackNavigation'
@@ -84,7 +87,11 @@ export type ModalStackParamList = {
   SendModalStack: undefined
   EditWalletModal: EditWalletParams
   ReceiveModalStack: undefined
-  SecurityModal: undefined
+  SecurityModal: {isFirstTime?: boolean} | undefined
+  Tab: TabParams
+  PasscodeStack: PasscodeStackParams
+  Modal: object
+  VerifyPasscode: VerifyPasscodePageParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack

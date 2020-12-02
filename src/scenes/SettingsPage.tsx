@@ -1,5 +1,7 @@
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import React from 'react'
+import React, {useEffect} from 'react'
+import {Alert} from 'react-native'
 import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
@@ -14,6 +16,7 @@ interface SettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList & RootStackParamList>
   theme: DefaultTheme
   navigationOptions: object
+  route: RouteProp<SettingsStackParamList, 'SettingsPage'>
 }
 
 const SettingsPage = (props: SettingsProps) => {
@@ -23,13 +26,25 @@ const SettingsPage = (props: SettingsProps) => {
   const {language, currency, theme, network, security} = useSelector(
     (state: RootState) => state.settings
   )
-
-  const openModal = (modal: keyof ModalStackParamList) => {
+  const openModal = (
+    modal: keyof ModalStackParamList,
+    params?: ModalStackParamList['SecurityModal']
+  ) => {
     props.navigation.navigate(Facade.route.Modal.name, {
       screen: modal,
+      params,
     })
   }
-
+  useEffect(() => {
+    if (props.route.params?.initialRoute) {
+      openModal(
+        props.route.params.initialRoute,
+        props.route.params?.initialRoute
+          ? {isFirstTime: true}
+          : {isFirstTime: false}
+      )
+    }
+  }, [])
   return (
     <ScreenLayout padding={20}>
       <MenuItem

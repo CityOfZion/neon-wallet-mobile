@@ -1,8 +1,11 @@
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import React from 'react'
+import * as LocalAuthentication from 'expo-local-authentication'
+import React, {useState, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
 import SelectorList, {SelectorItem} from '~src/components/SelectorList'
 import SwiperPanel, {
   useSwiperController,
@@ -14,17 +17,111 @@ import {RootStore} from '~src/store/RootStore'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
+  route: RouteProp<ModalStackParamList, 'SecurityModal'>
 }
 
 const SecurityPickerModal = (props: Props) => {
+  const {security} = useSelector((state: RootState) => state.settings)
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
+  const [controlSecurity, setControlSecurity] = useState<Security>(security)
 
-  const {security} = useSelector((state: RootState) => state.settings)
+  useEffect(() => {
+    saveSecurity()
+  }, [controlSecurity])
 
-  const changeSecurity = async (val: Security) => {
-    dispatch(RootStore.settings.actions.setSecurity(val))
-    dispatch(RootStore.settings.actions.save())
+  const changeSecurity = (val: Security) => {
+    checkSecurity(val)
+  }
+  const saveSecurity = async () => {
+    if (security !== controlSecurity) {
+      dispatch(RootStore.settings.actions.setSecurity(controlSecurity)) //hardware is fixed
+      dispatch(RootStore.settings.actions.save())
+      if (props.route.params?.isFirstTime) {
+        await Storage.welcomeToNWSeen.save(true)
+        props.navigation.replace(Facade.route.Tab.name, {
+          screen: Facade.route.ListWallets.name,
+          welcomeHidden: false,
+        })
+      }
+      controller.close()
+    }
+  }
+  const checkSecurity = async (newSecurity: Security) => {
+    if (security === Security.disabled) {
+      return setNewSecurity(newSecurity)
+    } else {
+      return (await validateSecurity(newSecurity))
+        ? setNewSecurity(newSecurity)
+        : false
+    }
+  }
+
+  const validateSecurity = async (sec: Security) => {
+    switch (security) {
+      case Security.hardware: {
+        const result = await hardwareAuth()
+        if (result?.success) {
+          setNewSecurity(sec)
+          break
+        } else {
+          setNewSecurity(security)
+          break
+        }
+      }
+      case Security.password: {
+        props.navigation.navigate(Facade.route.PasscodeStack.name, {
+          screen: Facade.route.VerifyPasscode.name,
+          params: {
+            onValidate: (validate) => {
+              if (validate) {
+                setNewSecurity(sec)
+              } else {
+                setNewSecurity(security)
+              }
+            },
+          },
+        })
+        break
+      }
+      default: {
+        return false
+      }
+    }
+  }
+
+  const hardwareAuth = async () => {
+    const canUseHardware = await LocalAuthentication.hasHardwareAsync()
+    if (canUseHardware) {
+      const result = await LocalAuthentication.authenticateAsync()
+      return result
+    }
+  }
+
+  const setNewSecurity = async (sec: Security) => {
+    switch (sec) {
+      case Security.hardware: {
+        const result = await hardwareAuth()
+        if (result?.success) {
+          setControlSecurity(sec)
+          break
+        } else {
+          setControlSecurity(security)
+          break
+        }
+      }
+
+      case Security.password:
+        props.navigation.replace(Facade.route.PasscodeStack.name, {
+          screen: Facade.route.Passcode.name,
+        })
+        break
+      case Security.disabled:
+        setControlSecurity(sec)
+        break
+      default:
+        break
+    }
   }
 
   const isSelected = (c: Security) => c === security
@@ -36,7 +133,7 @@ const SecurityPickerModal = (props: Props) => {
       isSelected,
     },
     {
-      data: Security.pin,
+      data: Security.password,
       onClick: changeSecurity,
       isSelected,
     },

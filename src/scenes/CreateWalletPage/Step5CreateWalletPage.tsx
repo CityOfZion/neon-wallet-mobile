@@ -12,7 +12,7 @@ import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {TextView, LinearLayout, ImageView} from '~src/styles/styled-components'
 
 interface Props {
-  navigation: StackNavigationProp<TabStackParamList & WalletStackParamList>
+  navigation: StackNavigationProp<WalletStackParamList>
   route: RouteProp<MoreStackParamList, 'Step5CreateWallet'>
 }
 
