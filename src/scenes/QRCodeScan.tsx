@@ -72,10 +72,12 @@ const QRCodeScan = (props: Props) => {
 
       if (!granted) {
         setMessage(Facade.t('screens.scanQrCode.noAccess'))
+      } else {
+        setHasPermission(granted)
       }
+    } else {
+      setHasPermission(granted)
     }
-
-    setHasPermission(granted)
   }
 
   const isValid = (key: string) =>
@@ -175,11 +177,13 @@ const QRCodeScan = (props: Props) => {
       justifyContent={'center'}
       height="100%"
     >
-      <BarCodeScanner
-        barCodeTypes={[BarCodeType.qr]}
-        onBarCodeScanned={handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
-      />
+      {hasPermission && (
+        <BarCodeScanner
+          barCodeTypes={[BarCodeType.qr]}
+          onBarCodeScanned={handleBarCodeScanned}
+          style={StyleSheet.absoluteFillObject}
+        />
+      )}
 
       <ImageView
         width="100%"
