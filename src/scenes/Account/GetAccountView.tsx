@@ -361,59 +361,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
             })
           }
         />
-
-        {/*<AwaitActivity name={'populateUnclaimed'}>
-          <AwaitActivity
-            name={`ClaimGas@${account.address}`}
-            loadingView={<ClaimGasLoader />}
-          >
-            <View style={{ width: 209 }}>
-              <ButtonView
-                onPress={claimGas}
-                weight={2}
-                justifyContent={'center'}
-                overflow={'visible'}
-                activeOpacity={isClaimAvailable() ? 0.6 : 1}
-                width={209}
-              >
-                {isClaimAvailable() ? (
-                  <Image
-                    source={require('~src/assets/images/button-claim-background.png')}
-                    style={{ width: 209 }}
-                  />
-                ) : (
-                    <ImageView
-                      source={require('~src/assets/images/button-claim-background-disabled.png')}
-                      alignSelf={'center'}
-                      position={'absolute'}
-                      maxWidth={'100%'}
-                    />
-                  )}
-
-                <TextView
-                  color={isClaimAvailable() ? 'primary' : 'text.2'}
-                  opacity={isClaimAvailable() ? 1 : 0.6}
-                  alignSelf={'center'}
-                  position={'absolute'}
-                  fontSize={'16px'}
-                  numberOfLines={1}
-                  adjustsFontSizeToFit={true}
-                >
-                  {isClaimAvailable()
-                    ? Facade.t('screens.getAccount.claimAsset', {
-                      amount: Facade.filter.decimal(
-                        unclaimedGasAmount,
-                        language,
-                        7
-                      ),
-                    })
-                    : Facade.t('screens.getAccount.gasUnavailable')}
-                </TextView>
-              </ButtonView>
-            </View>
-          </AwaitActivity>
-                  </AwaitActivity>*/}
-
         <AwaitActivity name={'populateUnclaimed'}>
           <AwaitActivity
             name={`ClaimGas@${account.address}`}
