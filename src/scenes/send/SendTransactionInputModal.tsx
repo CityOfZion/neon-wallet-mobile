@@ -2,6 +2,7 @@ import {wallet} from '@cityofzion/neon-core'
 import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
 import React, {Fragment, useEffect, useState} from 'react'
+import {Alert} from 'react-native'
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler'
 import InputScrollView from 'react-native-input-scroll-view'
 import {useDispatch, useSelector} from 'react-redux'
@@ -623,8 +624,8 @@ const SendTransactionInputModal = (prop: Props) => {
     } else if (contact) {
       setContact(contact)
     }
-
     setReceiverAddress(addressValue)
+    prop.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
   }
 
   const handleQrCode = (data: NeoURI | string) => {

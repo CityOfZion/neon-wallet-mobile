@@ -10,6 +10,7 @@ import {
   SectionList,
   SectionListData,
   SectionListRenderItemInfo,
+  Alert,
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
