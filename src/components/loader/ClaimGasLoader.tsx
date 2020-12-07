@@ -15,13 +15,6 @@ const ClaimGasLoader = () => {
       justifyContent={'center'}
     >
       <ImageView
-        source={require('~src/assets/images/button-claim-background-disabled.png')}
-        alignSelf={'center'}
-        position={'absolute'}
-        maxWidth={'100%'}
-      />
-
-      <ImageView
         mt={-2}
         mr={4}
         source={require('~/src/assets/images/icon-rotate-right-green.png')}

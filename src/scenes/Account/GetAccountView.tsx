@@ -14,6 +14,8 @@ import {
 import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 
+import {ThemedClaimButton} from '~/src/components/themed/ThemedClaimButton'
+import {ThemedSendButton} from '~/src/components/themed/ThemedSendButton'
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import BalanceList from '~src/components/BalanceList'
@@ -22,6 +24,7 @@ import TransactionsList from '~src/components/TransactionsList'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
+import {ThemedReceiveButton} from '~src/components/themed/ThemedReceiveButton'
 import {Lang} from '~src/enums/Lang'
 import {NeonHelper} from '~src/helpers/NeonHelper'
 import {NeoNode} from '~src/models/NeoNode'
@@ -338,11 +341,13 @@ const GetAccountView = (props: GetAccountViewProps) => {
         style={{
           flexDirection: 'row',
           width: Dimensions.get('screen').width,
+          justifyContent: 'space-around',
           alignSelf: 'center',
-          justifyContent: 'space-between',
+          marginVertical: 20,
+          elevation: 30,
         }}
       >
-        <ReceiveButton
+        <ThemedReceiveButton
           onPress={() =>
             props.navigation.navigate(Facade.route.Modal.name, {
               screen: Facade.route.ReceiveModalStack.name,
@@ -356,60 +361,36 @@ const GetAccountView = (props: GetAccountViewProps) => {
             })
           }
         />
-
         <AwaitActivity name={'populateUnclaimed'}>
           <AwaitActivity
             name={`ClaimGas@${account.address}`}
             loadingView={<ClaimGasLoader />}
           >
-            <View style={{width: 209}}>
-              <ButtonView
-                onPress={claimGas}
-                weight={2}
-                justifyContent={'center'}
-                overflow={'visible'}
-                activeOpacity={isClaimAvailable() ? 0.6 : 1}
-                width={209}
+            <ThemedClaimButton onPress={claimGas}>
+              <TextView
+                color={isClaimAvailable() ? 'primary' : 'text.2'}
+                opacity={isClaimAvailable() ? 1 : 0.6}
+                alignSelf={'center'}
+                position={'absolute'}
+                fontSize={'16px'}
+                numberOfLines={1}
+                adjustsFontSizeToFit={true}
               >
-                {isClaimAvailable() ? (
-                  <Image
-                    source={require('~src/assets/images/button-claim-background.png')}
-                    style={{width: 209}}
-                  />
-                ) : (
-                  <ImageView
-                    source={require('~src/assets/images/button-claim-background-disabled.png')}
-                    alignSelf={'center'}
-                    position={'absolute'}
-                    maxWidth={'100%'}
-                  />
-                )}
-
-                <TextView
-                  color={isClaimAvailable() ? 'primary' : 'text.2'}
-                  opacity={isClaimAvailable() ? 1 : 0.6}
-                  alignSelf={'center'}
-                  position={'absolute'}
-                  fontSize={'16px'}
-                  numberOfLines={1}
-                  adjustsFontSizeToFit={true}
-                >
-                  {isClaimAvailable()
-                    ? Facade.t('screens.getAccount.claimAsset', {
-                        amount: Facade.filter.decimal(
-                          unclaimedGasAmount,
-                          language,
-                          7
-                        ),
-                      })
-                    : Facade.t('screens.getAccount.gasUnavailable')}
-                </TextView>
-              </ButtonView>
-            </View>
+                {isClaimAvailable()
+                  ? Facade.t('screens.getAccount.claimAsset', {
+                      amount: Facade.filter.decimal(
+                        unclaimedGasAmount,
+                        language,
+                        7
+                      ),
+                    })
+                  : Facade.t('screens.getAccount.gasUnavailable')}
+              </TextView>
+            </ThemedClaimButton>
           </AwaitActivity>
         </AwaitActivity>
 
-        <SendButton
+        <ThemedSendButton
           onPress={
             isWatchAccount || !account.getBalanceAmount()
               ? undefined
