@@ -25,15 +25,25 @@ export const PASSCODE_LENGTH = 5
 
 export const PasscodeHeader = (props: {
   navigation: StackNavigationProp<any>
+  passcode: number[]
+  deletePasscode: () => void
 }) => {
   return (
     <LinearLayout mt={32} mb={68} orientation="horiz">
       <LinearLayout flex={1} />
       <ImageView source={require('~/src/assets/images/icon-lock.png')} />
       <LinearLayout flex={1} alignItems="flex-end" justifyContent="center">
-        <TouchableWithoutFeedback onPress={props.navigation.goBack}>
+        <TouchableWithoutFeedback
+          onPress={
+            props.passcode.length <= 0
+              ? props.navigation.goBack
+              : props.deletePasscode
+          }
+        >
           <TextView py="4px" fontSize={16} color="text.0">
-            {Facade.t('passcode.cancel')}
+            {props.passcode.length <= 0
+              ? Facade.t('passcode.cancel')
+              : 'Delete'}
           </TextView>
         </TouchableWithoutFeedback>
       </LinearLayout>
@@ -54,6 +64,10 @@ const PasscodePage = (props: Props) => {
     }
   }, [passcode])
 
+  const deletePasscode = () => {
+    setPasscode([])
+  }
+
   useEffect(() => {
     setShowErrorMessage(
       (props.route.params?.showError ?? false) && passcode.length === 0
@@ -63,7 +77,6 @@ const PasscodePage = (props: Props) => {
   const clickKey = (number: number) => {
     setPasscode(passcode.concat(number))
   }
-
   return (
     <ScreenLayout
       useHeaderPadding={false}
@@ -72,7 +85,11 @@ const PasscodePage = (props: Props) => {
       alignX="center"
       padding={16}
     >
-      <PasscodeHeader navigation={props.navigation} />
+      <PasscodeHeader
+        deletePasscode={deletePasscode}
+        passcode={passcode}
+        navigation={props.navigation}
+      />
 
       <TextView fontSize={22} color="text.0" mb={18}>
         {Facade.t('passcode.enter')}
