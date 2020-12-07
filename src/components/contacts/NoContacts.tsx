@@ -54,6 +54,8 @@ export const NoContacts = () => {
               bottom={0}
               color={'text.0'}
               textAlign="center"
+              justifyContent="center"
+              alignItens="center"
             >
               {Facade.t('screens.contacts.addContact')}
             </TextView>
