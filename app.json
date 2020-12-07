@@ -42,6 +42,20 @@
         "wasm",
         "svg"
       ]
+    },
+    "web": {
+      "config": {
+        "firebase": {
+          "apiKey": "AIzaSyC6x5g6ng7oGxPmCpKxZJ9xFeurMp-Th3I",
+          "measurementId": "G-HC3YF0FT0J",
+          "authDomain": "neon-wallet-2ec5d.firebaseapp.com",
+          "appId": "1:209775750653:web:7f2744867295dfd8c17d94",
+          "messagingSenderId": "209775750653",
+          "databaseURL": "https://neon-wallet-2ec5d.firebaseio.com",
+          "projectId": "neon-wallet-2ec5d",
+          "storageBucket": "neon-wallet-2ec5d.appspot.com"
+        }
+      }
     }
   }
 }
