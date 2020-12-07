@@ -10,7 +10,6 @@ import {Facade} from '~src/app/Facade'
 import {useSwiperController} from '~src/components/SwiperPanel'
 import {NeoURI} from '~src/helpers/UriHelper'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import HandleQRModal from '~src/scenes/HandleQRModal'
 import {
   ButtonView,
