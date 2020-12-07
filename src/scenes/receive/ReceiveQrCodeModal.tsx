@@ -1,7 +1,8 @@
 import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
-import React, {useState} from 'react'
+import React, {useState, useRef} from 'react'
 import {ScrollView} from 'react-native'
+import ViewShot from 'react-native-view-shot'
 import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
@@ -64,7 +65,14 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
   }
 
   Facade.await.run('renderQr', renderQr)
-
+  const qrCodeView = useRef<ViewShot>(null)
+  const captureAndNavigate = async () => {
+    const uri = await qrCodeView.current?.capture?.()
+    props.navigation.navigate(Facade.route.CopyContextModal.name, {
+      qrCode: uri ?? '',
+      address: account.address ?? '',
+    })
+  }
   return show ? (
     <ScrollView
       style={{
@@ -85,7 +93,9 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
         <AwaitActivity name={'renderQr'}>
           <LinearLayout width={buttonWidth} height={buttonWidth}>
             {showQr ? (
-              <NeonQRCode content={qrCodeContent} qrCodeWidth={buttonWidth} />
+              <ViewShot ref={qrCodeView}>
+                <NeonQRCode content={qrCodeContent} qrCodeWidth={buttonWidth} />
+              </ViewShot>
             ) : undefined}
           </LinearLayout>
         </AwaitActivity>
@@ -94,12 +104,7 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
             label="Copy to clipboard"
             srcIcon={require('~src/assets/images/icon-copy-green.png')}
             iconSize={[19, 23]}
-            onPress={() =>
-              props.navigation.navigate(Facade.route.CopyContextModal.name, {
-                qrCode: 'TODO', // TODO: NW-307
-                address: account.address ?? '',
-              })
-            }
+            onPress={captureAndNavigate}
           />
         </LinearLayout>
 
