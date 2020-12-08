@@ -1,0 +1,608 @@
+{
+  "languages": {
+    "de": "German",
+    "en-US": "English",
+    "pt-BR": "Portuguese"
+  },
+  "themes": {
+    "DARK": "Dark",
+    "LIGHT": "Light"
+  },
+  "app": {
+    "neoBlockHeight": "NEO BLOCK HEIGHT",
+    "back": "Back",
+    "next": "Next",
+    "continue": "Continue",
+    "edit": "Edit",
+    "copy": "Copy",
+    "print": "Print",
+    "skip": "Skip",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close",
+    "send": "Send",
+    "done": "Done",
+    "copyToClipboard": "Copy to clipboard"
+  },
+  "routes": {
+    "GetWallet": "Wallet",
+    "Contacts": "Contacts",
+    "More": "More",
+    "Account": "Account",
+    "Settings": "Settings",
+    "ReceiveQrCode": "Receive QR Code",
+    "CustomColor": "Custom Colour",
+    "CreateWallet": "Create Wallet",
+    "MyWallets": "My Wallets",
+    "WalletDetails": "Details",
+    "Step1CreateWallet": "Create wallet",
+    "Step2CreateWallet": "Create wallet",
+    "Step3CreateWallet": "Create wallet",
+    "Step4CreateWallet": "Create wallet",
+    "Step5CreateWallet": "Create wallet",
+    "Step1BackupWallet": "Backup wallet",
+    "Step2BackupWallet": "Backup wallet",
+    "Step3BackupWallet": "Backup wallet",
+    "Step4BackupWallet": "Backup wallet",
+    "ImportKey": "Import",
+    "Passphrase": "Create Wallet",
+    "ImportReadAccount": "Add a watch",
+    "CustomizeAccount": "Customize account"
+  },
+  "home": {
+    "welcome": "Welcome to Neon Wallet!"
+  },
+  "welcome": {
+    "brand": "neonwallet",
+    "title": "To get you started",
+    "body_1_1": "To get you started we have created your first wallet for you. All the details and back up options for your wallet can be found in ",
+    "body_1_2": "Settings",
+    "body_1_3": " then ",
+    "body_1_4": "My wallets",
+    "body_2_1": "We strongly recommend that you",
+    "body_2_2": " BACK UP ",
+    "body_2_3": "your wallet to make sure its safe should you lose your phone",
+    "label_1": "Quick start options",
+    "button_1": "Import a wallet",
+    "button_2": "Add funds to your wallet",
+    "checkbox_1": "Don’t show this screen again"
+  },
+  "login": {
+    "brand": "neonwallet",
+    "title": "Welcome to neonwallet",
+    "body": "We are creating your first wallet, would you like to set up security to keep your assets protected?",
+    "continue": "Continue",
+    "skip": "skip",
+    "dialog": {
+      "title": "Too many wrong attempts",
+      "subtitle": "Use a different authentication method?",
+      "cancel": "Cancel",
+      "tryAgain": "Try again",
+      "usePasscode": "Use passcode"
+    }
+  },
+  "passcode": {
+    "enter": "Enter Passcode",
+    "confirm": "Confirm Passcode",
+    "error": "Passcodes did not match. Try again",
+    "cancel": "Cancel",
+    "wrong": "Invalid passcode. Try again"
+  },
+  "onboarding": {
+    "feature1": {
+      "title": "The original wallet on the move",
+      "subtitle": "All the best features of our desktop wallet  plus more in the palm of you hand"
+    },
+    "feature2": {
+      "title": "First class user experience",
+      "subtitle": "Neon Wallet has been designed to make managing your crypto assets as intuitive as possible"
+    },
+    "feature3": {
+      "title": "BIP39 wallet",
+      "subtitle": "BIP39 wallet standard, create infinite child accounts using a single mnemonic"
+    },
+    "feature4": {
+      "title": "Packed pipeline of updates",
+      "subtitle": "The team is working around the clock to bring you the latest new features"
+    },
+    "getStarted": {
+      "title": "Packed pipeline of updates",
+      "subtitle": "The team is working around the clock to bring you the latest new features",
+      "buttonTitle": "Get Started!"
+    }
+  },
+  "myWalletOptions": {
+    "details": "Details",
+    "backupWallet": "Backup Wallet",
+    "dialog": {
+      "title": "Authentication",
+      "subtitle": "Authentication unsuccessful. Try again?",
+      "confirm": "Yes",
+      "cancel": "No"
+    },
+    "invalidAuth": "Authentication not successful. Try again?",
+    "alertCancelButton": "No",
+    "alertConfirmButton": "Yes"
+  },
+  "step1CreateWallet": {
+    "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",
+    "label_1": "Generate security phrase",
+    "body_1": "This set of secret words make it easy to back up and restore your account. This makes your wallet really secure ",
+    "label_2": "Confirm security phrase",
+    "body_2": "It’s really important you remember your phrase correctly so we will help you with that. If you’re in a rush you can do it another time.",
+    "label_3": "Give your wallet a name and create a Passphrase",
+    "body_3": "Give your wallet a memorable name and passphrase and your ready to go!",
+    "createWallet": "Create Wallet"
+  },
+  "step2CreateWallet": {
+    "oneOfThree": "1 of 3",
+    "label_1": "Generate security phrase",
+    "body_1": "Below you will find your secret phrase",
+    "body_2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it below but be sure to keep it safe.",
+    "body_3": "Anyone with this phrase will be able to steal your hard earned assets and you won’t be able to get them back! ",
+    "dialog_title": "Make sure you keep your security phrase safe",
+    "dialog_body": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
+    "dialog_dismiss": "OK, I understand"
+  },
+  "step3CreateWallet": {
+    "twoOfThree": "2 of 3",
+    "label_1": "Confirm security phrase",
+    "body_1": "Please select each phrase in the correct order to make sure you’ve got it right. ",
+    "body_2": "Don’t worry you can find your secret phrase in the settings for the wallet. Go ahead and skip this step if you really need to.",
+    "dialog_1_title": "Are you sure you want to skip back up confirmation?",
+    "dialog_1_body": "Confirming that you have correctly backed up your security phrase is highly recommended",
+    "dialog_2_title": "Incorrect word order",
+    "dialog_2_body": "Please try again to confirm your back up"
+  },
+  "step4CreateWallet": {
+    "threeOfThree": "3 of 3",
+    "label_1": "Give your wallet a name and create a Passphrase",
+    "body_1": "Give your wallet a memorable name, maybe it could be related to what you want to use the wallet for like “trading” or “investments”.",
+    "label_walletName": "Wallet Name",
+    "label_createPassphrase": "Create Passphrase",
+    "label_confirmPassphrase": "Confirm Passphrase",
+    "placeholder_walletName": "Please enter a name",
+    "placeholder_createPassphrase": "Please enter a passphrase",
+    "placeholder_confirmPassphrase": "Please repeat the passphrase"
+  },
+  "step5CreateWallet": {
+    "label_1": "Congratulations, You’re the proud owner of a shiny new wallet!",
+    "body_1": "Remember to keep your secret phrase safe, having several backups is always a good idea.",
+    "body_2": "If you need to find out a wallets secret phrase you can find it in the settings page for that wallet. ",
+    "viewWallet": "View wallet"
+  },
+  "step1BackupWallet": {
+    "oneOfThree": "1 of 3",
+    "label_1": "Security phrase",
+    "body_1": "Below you will find your secret phrase",
+    "body_2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it below but be sure to keep it safe.",
+    "body_3": "Anyone with this phrase will be able to steal your hard earned assets and you won’t be able to get them back!",
+    "dialog_title": "Make sure you keep your security phrase safe",
+    "dialog_body": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
+    "dialog_dismiss": "OK, I understand"
+  },
+  "step2BackupWallet": {
+    "twoOfThree": "2 of 3",
+    "label_1": "Confirm back up",
+    "body_1": "To confirm you have backed up you key words please select your words in the correct order from the list below.",
+    "dialog_1_title": "Incorrect word order",
+    "dialog_1_body": "Please try again to confirm your back up"
+  },
+  "step3BackupWallet": {
+    "label_1": "Congratulations, You have confirmed your back up"
+  },
+  "more": {
+    "createWallet": "Create wallet",
+    "createWatchAccount": "Create watch account",
+    "import": "Import",
+    "help": "Help"
+  },
+  "importKey": {
+    "enterAnAddress": "Enter an address, encrypted key, or private key",
+    "alertText": "It looks like you're creating a watch account, is this correct?",
+    "accountAlreadyExists": "This account already exists",
+    "ok": "Ok",
+    "alertCancelButton": "No",
+    "alertConfirmButton": "Yes"
+  },
+  "passphrase": {
+    "enterPassphrase": "Enter a Passphrase for your encrypted key",
+    "inputPlaceholder": "Please enter Passphrase",
+    "next": "Next"
+  },
+  "importReadAccount": {
+    "headerText": "Enter an address you would like to watch.\nPlease be aware that you will not be able to perform send transactions from this account.",
+    "inputPlaceholder": "Please enter information",
+    "disabledFeature": "Function lorem ipsum sid dolar",
+    "add": "Add",
+    "accountAlreadyExists": "Account already exists"
+  },
+  "settings": {
+    "title": "Settings",
+    "myWallets": "My Wallets",
+    "security": "Security",
+    "currency": "Currency",
+    "language": "Language",
+    "theme": "Theme",
+    "network": "Network"
+  },
+  "customColorPage": {
+    "title": "Custom Color",
+    "subtitle": "Select a custom color for your account",
+    "navigation": {
+      "cancel": "Cancel",
+      "done": "Done"
+    }
+  },
+  "quickTools": {
+    "qrCode": {
+      "title": "Scan QR code",
+      "subtitle": "Launch QR code scanner"
+    },
+    "send": {
+      "title": "Send",
+      "subtitle": "Send tokens"
+    },
+    "receive": {
+      "title": "Receive",
+      "subtitle": "Receive tokens"
+    }
+  },
+  "paymentCard": {
+    "balance": "BALANCE",
+    "address": "ADDRESS",
+    "accountPlaceholder": "My Account"
+  },
+  "receive": {
+    "paymentRequestDetails": "PAYMENT REQUEST DETAILS",
+    "token": "Token",
+    "amount": "Amount",
+    "value": "Value",
+    "location": "Location",
+    "address": "Address",
+    "reference": "Reference"
+  },
+  "screens": {
+    "contactDetails": {
+      "walletAddress": "WALLET ADDRESS"
+    },
+    "contacts": {
+      "empty": "No contacts",
+      "addContact": "Add new contact"
+    },
+    "listWallets": {
+      "changeSinceLastVisit": "CHANGE SINCE LAST VISIT %{date}",
+      "changeInLast24hours": "CHANGE IN LAST 24HRS",
+      "createFirstWallet": "Create first wallet",
+      "noBackup": "No backup found. Backup your wallet to avoid fund loss.",
+      "incompleteBalanceWarningTitle": "Incomplete price data",
+      "incompleteBalanceWarningText": "We haven't been able to retrieve price data for all your tokens so the total may not be accurate",
+      "incompleteBalanceWarningButton": "OK, I understand"
+    },
+    "getWallet": {
+      "addNewAccount": "Add new account"
+    },
+    "getAccount": {
+      "assets": "ASSETS",
+      "transactions": "TRANSACTIONS",
+      "pendingTransactions": "PENDING TRANSACTIONS",
+      "completedTransactions": "COMPLETED TRANSACTIONS",
+      "claimAsset": "Claim %{amount} GAS",
+      "claimInProgress": "Claim in progress",
+      "gasUnavailable": "GAS unavailable"
+    },
+    "customizeAccount": {
+      "title": "Create account",
+      "subtitle": {
+        "importKey": "Your new account has been added. Why not customise your account card to make it memorable",
+        "importReadAccount": "Your new watch account has been added. Why not customise your account card to make it memorable"
+      },
+      "accountInput": {
+        "title": "Account Name",
+        "placeholder": "Enter an account name"
+      },
+      "selectColor": "Select a color for your new account card",
+      "navigation": {
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "preview": "Preview"
+    },
+    "scanQrCode": {
+      "success": "Success!",
+      "requesting": "Requesting for camera permission",
+      "noAccess": "No access to camera",
+      "cancel": "Cancel",
+      "tryAgain": "Try again"
+    }
+  },
+  "modals": {
+    "accountQRCode": {
+      "address": "Address"
+    },
+    "createAccount": {
+      "title": "Create account",
+      "subtitle": "Creating an account is easy. Just give it a name below and you're done!",
+      "preview": "Preview",
+      "accountInput": {
+        "title": "Account name",
+        "placeholder": "Enter an account name"
+      },
+      "selectColor": "Select a color for your new account card",
+      "navigation": {
+        "cancel": "Cancel",
+        "save": "Save"
+      }
+    },
+    "editAccount": {
+      "title": "Edit",
+      "preview": "Preview",
+      "accountInput": {
+        "title": "Account name",
+        "placeholder": "Enter an account name"
+      },
+      "selectColor": "Select a color for your new account card",
+      "navigation": {
+        "cancel": "Cancel",
+        "save": "Save"
+      }
+    },
+    "editWallet": {
+      "title": "Edit",
+      "preview": "Preview",
+      "accountInput": {
+        "title": "Account name",
+        "placeholder": "Enter an account name"
+      },
+      "navigation": {
+        "ok": "Ok",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "save": "Save"
+      },
+      "walletName": "Wallet Name",
+      "namePlaceholder": "Enter wallet name",
+      "invalidName": "Invalid Name",
+      "deleteWallet": "Delete Wallet",
+      "deleteWalletSubtitle": "Tum dicere exorsus est et dolore magnam aliquam quaerat voluptatem.",
+      "deleteButtom": "Delete Wallet",
+      "deleteWalletAlert": "Are you sure you want to delete this wallet?",
+      "deleteWalletNoBackupAlert": "This wallet doesn't have a backup. You can't delete a wallet without a backup.",
+      "search": "Search"
+    },
+    "send": {
+      "title": "Send",
+      "walletSelection": {
+        "subtitle": "Please select a wallet to send from"
+      },
+      "accountSelection": {
+        "subtitle": "Please select an account to send from",
+        "label": "TRADING ACCOUNT TOKENS VALUE"
+      },
+      "transactionConfirmation": {
+        "header": "Transaction successfully sent!",
+        "subheader": "Once your transaction has been confirmed it will appear in your transaction history",
+        "transactionId": "TRANSACTION ID"
+      },
+      "transactionInput": {
+        "selectDifferentAccount": "Select a different Account",
+        "transactionDetails": "TRANSACTION DETAILS",
+        "totalAfterTransaction": "total after transaction",
+        "max": "Max",
+        "roundDown": "round down",
+        "prioritiseTransfer": "Prioritise your transfer with a fee?",
+        "enterAmount": "Enter amount",
+        "enterValue": "Enter ",
+        "selectToken": "Select token to send",
+        "enterDestination": "Please enter destination address",
+        "destinationAddress": "Destination Address",
+        "token": "Token",
+        "amount": "Amount",
+        "insufficientFunds": "Insufficient funds",
+        "contacts": "Contacts",
+        "paste": "Paste",
+        "scan": "Scan"
+      },
+      "transactionReview": {
+        "token": "Token",
+        "amount": "Amount",
+        "remainingInWallet": "(%{token} in wallet)",
+        "value": "Value",
+        "price": "Price",
+        "priority": "Priority",
+        "feeAmount": "(Fee %{amount})",
+        "pleaseReview": "Please review transaction",
+        "dialog": {
+          "title": "Authentication",
+          "subtitle": "Authentication unsuccessful. Try again?",
+          "confirm": "Yes",
+          "cancel": "No"
+        }
+      }
+    },
+    "receive": {
+      "title": "Receive",
+      "walletSelection": {
+        "subtitle": "Please select a wallet to receive to"
+      },
+      "accountSelection": {
+        "subtitle": "Please select an account to receive to"
+      },
+      "toAccount": {
+        "yourAddress": "Your Address",
+        "requestTokens": "Request Tokens",
+        "selectTokenToReceive": "Select token to receive",
+        "enterAmount": "Enter amount",
+        "addReference": "Add a reference",
+        "reference": "Reference",
+        "generateQrCode": "Generate QR Code"
+      }
+    },
+    "listTokenModal": {
+      "holding": "Holdings",
+      "tokens": "Tokens",
+      "selectToken": "Select a token to send to"
+    },
+    "walletContext": {
+      "create": "Create new wallet",
+      "reorder": "Reorder wallets",
+      "cancel": "Cancel"
+    },
+    "copyContext": {
+      "shareQr": "Share QR code image",
+      "copyAddress": "Copy address",
+      "cancel": "Cancel"
+    },
+    "reorderWallet": {
+      "title": "Reorder wallets",
+      "subtitle": "Drag a wallet to a new position to reorder",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "language": {
+      "title": "Language"
+    },
+    "currency": {
+      "title": "Currency"
+    },
+    "security": {
+      "title": "Security"
+    },
+    "theme": {
+      "title": "Theme"
+    },
+    "network": {
+      "title": "Network"
+    },
+    "handleQrCode": {
+      "send": {
+        "title": "Send",
+        "subtitle": "Send tokens"
+      },
+      "watch": {
+        "title": "Add a watch",
+        "subtitle": "Create a watch account from address"
+      },
+      "contact": {
+        "title": "Add a contact",
+        "subtitle": "Create a contact in your address book"
+      }
+    }
+  },
+  "components": {
+    "notification": {
+      "title": "NOTIFICATION"
+    },
+    "balanceList": {
+      "title": "TOKEN VALUE",
+      "holdings": "Holdings",
+      "value": "Value",
+      "empty": "Your wallet is currently empty, why not add some funds today?"
+    },
+    "transactionsList": {
+      "title": "PENDING TRANSACTIONS",
+      "sent": "Sent",
+      "received": "Received",
+      "pending": "Pending",
+      "sentTo": "Sent to",
+      "receivedFrom": "Received from",
+      "token": "Token",
+      "value": "Value",
+      "quantity": "Qty",
+      "today": "Today",
+      "yesterday": "Yesterday"
+    },
+    "colorSelector": {
+      "customColor": "Custom color"
+    },
+    "inputTextWithValidation": {
+      "inputPlaceholder": "Please enter information",
+      "paste": "Paste",
+      "scan": "Scan",
+      "incorrectFormat": "Incorrect format",
+      "contacts": "Contacts"
+    },
+    "accountList": {
+      "watch": "Watch"
+    }
+  },
+  "boolean": {
+    "true": "Yes",
+    "false": "No"
+  },
+  "dateFormat": {
+    "date": "MM/DD/YYYY",
+    "datePretty": "MMM DD, YYYY",
+    "datetime": "MM/DD/YYYY HH:mm",
+    "time": "HH:mm"
+  },
+  "filter": {
+    "number": {
+      "decimal": ".",
+      "thousands": ","
+    },
+    "phone": {
+      "regex": "(\\d{3})(\\d{3})(\\d{4})$",
+      "format": "($1) $2-$3"
+    },
+    "zipcode": {
+      "regex": "(\\d{5})$",
+      "format": "$1"
+    }
+  },
+  "persistContact": {
+    "title": {
+      "create": "Create contact",
+      "edit": "Edit contact"
+    },
+    "name": "NAME",
+    "namePlaceholder": "Enter contact name",
+    "address": "ADDRESS",
+    "addressPlaceholder": "Enter contact address",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "invalidName": "Invalid Name",
+    "invalidAddress": "Invalid Address",
+    "deleteContact": "DELETE CONTACT",
+    "deleteContactSubtitle": "Tum dicere exorsus est et dolore magnam aliquam quaerat voluptatem.",
+    "deleteButtom": "Delete Contact",
+    "deleteContactAlert": "Are you sure you want to delete this contact?",
+    "search": "Search"
+  },
+  "contactPicker": {
+    "title": "Contacts",
+    "selectContact": "Select a contact to send to",
+    "contacts": "Contacts",
+    "myAccounts": "My Accounts"
+  },
+  "toast": {
+    "transaction": "Transaction",
+    "gasClaimSuccess": "GAS claim successful!",
+    "gasClaimGapError": "You must wait at least 5 minutes for next claim",
+    "transactionCompleted": "Transaction completed!",
+    "transactionError": "Transaction incompleted! Please, try again.",
+    "copiedToClipboard": "Copied to clipboard"
+  },
+  "transactionDetails": {
+    "time": "Time",
+    "date": "Date",
+    "status": "Status",
+    "value": "Value",
+    "priorityFee": "Priority Fee",
+    "sender": "Sender",
+    "recipient": "Recipient",
+    "qty": "Qty",
+    "viewOnDora": "View on Dora",
+    "confirmed": "Confirmed",
+    "pending": "Pending",
+    "price": "Price"
+  },
+  "priorityFee": {
+    "none": "None",
+    "priorityFast": "Fast",
+    "priorityFaster": "Faster",
+    "priorityFastest": "Fastest"
+  }
+}
