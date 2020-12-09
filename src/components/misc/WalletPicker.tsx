@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
+import {NativeScrollEvent, NativeSyntheticEvent} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 import {useDispatch, useSelector} from 'react-redux'
 
@@ -14,6 +15,8 @@ interface Props {
   onSelect?: (wallet: Wallet) => void
   wallets: Wallet[]
   canBeInactive?: boolean
+  onScrollBegin?: (evt?: NativeSyntheticEvent<NativeScrollEvent>) => void
+  onScrollEnd?: (evt?: NativeSyntheticEvent<NativeScrollEvent>) => void
 }
 
 const WalletPicker: React.FC<Props> = (props: Props) => {
@@ -45,6 +48,8 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
 
   return (
     <Carousel<Wallet>
+      onScrollBeginDrag={props.onScrollBegin}
+      onScrollEndDrag={props.onScrollEnd}
       layout={'default'}
       containerCustomStyle={{overflow: 'visible'}}
       data={wallets}

@@ -3,7 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import moment from 'moment'
 import React, {useEffect, useRef, useState} from 'react'
-import {Alert, TouchableWithoutFeedback, View} from 'react-native'
+import {Alert, TouchableWithoutFeedback, View, Animated} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -194,6 +194,7 @@ const ListWalletView = (props: WalletProps) => {
     } else {
       dispatch(RootStore.wallet.actions.selectWallet(wallets[0]?.id ?? null))
     }
+    fadeIn()
   }, [id])
 
   const isListNotEmpty = () => {
@@ -229,6 +230,22 @@ const ListWalletView = (props: WalletProps) => {
     }
   }
 
+  const fadeValue = useRef(new Animated.Value(1)).current
+  const fadeIn = () => {
+    Animated.timing(fadeValue, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start()
+  }
+  const fadeOut = () => {
+    Animated.timing(fadeValue, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start()
+  }
+
   const openWarning = () =>
     Alert.alert(
       Facade.t('screens.listWallets.incompleteBalanceWarningTitle'),
@@ -262,6 +279,7 @@ const ListWalletView = (props: WalletProps) => {
                   wallets={wallets}
                   onSelect={selectEvent}
                   onPress={pressEvent}
+                  onScrollBegin={fadeOut}
                 />
               ) : (
                 <EmptyListComponent />
@@ -269,7 +287,7 @@ const ListWalletView = (props: WalletProps) => {
             </LinearLayout>
 
             {selectedWallet && (
-              <>
+              <Animated.View style={{opacity: fadeValue}}>
                 <WalletChangeComponent
                   currency={currency}
                   exchange={exchange}
@@ -277,7 +295,6 @@ const ListWalletView = (props: WalletProps) => {
                   wallet={selectedWallet}
                   onPressWarning={openWarning}
                 />
-
                 <LinearLayout mx={'16px'}>
                   {selectedWallet.showBackupAlert &&
                     selectedWallet.walletType === 'standard' && (
@@ -301,7 +318,7 @@ const ListWalletView = (props: WalletProps) => {
                     />
                   )}
                 </LinearLayout>
-              </>
+              </Animated.View>
             )}
           </>
         </AwaitActivity>
