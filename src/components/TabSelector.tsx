@@ -1,5 +1,6 @@
-import React, {useRef} from 'react'
-import {StyleSheet, Animated} from 'react-native'
+import React, {useRef, useState, useEffect} from 'react'
+import {Dimensions, View} from 'react-native'
+import {TabView, SceneMap, TabBar, ScrollPager} from 'react-native-tab-view'
 
 import {ButtonView, LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -42,9 +43,6 @@ const TabSelector = (props: TabSelectorProps) => {
             ? props.firstTabLabel.toUpperCase()
             : props.firstTabLabel}
         </TextView>
-        {props.selectorBar && props.isFirstTabSelected && (
-          <TabSelectorBar decrementPosX={props.moveTabBarSelector ?? 0.5} />
-        )}
       </ButtonView>
       <ButtonView
         activeOpacity={1}
@@ -70,40 +68,49 @@ const TabSelector = (props: TabSelectorProps) => {
             ? props.secondTabLabel.toUpperCase()
             : props.secondTabLabel}
         </TextView>
-        {props.selectorBar && !props.isFirstTabSelected && (
-          <TabSelectorBar decrementPosX={props.moveTabBarSelector ?? 0.5} />
-        )}
       </ButtonView>
     </LinearLayout>
   )
 }
 
 interface ITabSelectorBar {
-  decrementPosX: number
+  firstScene: IScene
+  secondScene: IScene
+}
+interface IScene {
+  title: string
+  Element: (props?: any) => JSX.Element
 }
 
 export const TabSelectorBar: React.FC<ITabSelectorBar> = (
   props: ITabSelectorBar
 ) => {
-  const posX = useRef(new Animated.Value(props.decrementPosX || 0))
-  //To do a animation with a bar
-  const styles = StyleSheet.create({
-    design: {
-      height: 3,
-      backgroundColor: '#4cffb3',
-      flex: 1,
-      alignSelf: 'stretch',
-    },
+  const [index, SetIndex] = useState<number>(0)
+  const renderScenes = SceneMap({
+    [props.firstScene.title]: props.firstScene.Element,
+    [props.secondScene.title]: props.secondScene.Element,
   })
+  const initialLayout = {width: Dimensions.get('window').width, height: 10}
+  const [routes] = useState([
+    {key: props.firstScene.title, title: props.firstScene.title},
+    {key: props.secondScene.title, title: props.secondScene.title},
+  ])
+
   return (
-    <Animated.View
-      style={[
-        styles.design,
-        {
-          transform: [{translateX: props.decrementPosX}],
-        },
-      ]}
-    ></Animated.View>
+    <TabView
+      renderScene={renderScenes}
+      onIndexChange={SetIndex}
+      initialLayout={initialLayout}
+      navigationState={{index, routes}}
+      renderTabBar={(props) => (
+        <TabBar
+          {...props}
+          indicatorStyle={{backgroundColor: '#4cffb3'}}
+          style={{backgroundColor: '#ffffff00', elevation: 0}}
+          pressColor={'#000BB'}
+        />
+      )}
+    />
   )
 }
 
