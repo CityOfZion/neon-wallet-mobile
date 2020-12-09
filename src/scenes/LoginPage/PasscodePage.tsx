@@ -26,7 +26,7 @@ export const PASSCODE_LENGTH = 5
 export const PasscodeHeader = (props: {
   navigation: StackNavigationProp<any>
   passcode: number[]
-  deletePasscode: () => void
+  deletePasscode?: () => void
 }) => {
   return (
     <LinearLayout mt={32} mb={68} orientation="horiz">

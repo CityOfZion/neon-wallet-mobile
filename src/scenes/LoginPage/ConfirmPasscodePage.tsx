@@ -62,7 +62,10 @@ const ConfirmPasscodePage = (props: Props) => {
       alignX="center"
       padding={16}
     >
-      <PasscodeHeader navigation={props.navigation} />
+      <PasscodeHeader
+        passcode={props.route.params.passcode}
+        navigation={props.navigation}
+      />
 
       <TextView fontSize={22} color="text.0" mb={18}>
         {Facade.t('passcode.confirm')}
