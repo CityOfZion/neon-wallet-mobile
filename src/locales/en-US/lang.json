@@ -125,6 +125,10 @@
     "alertCancelButton": "No",
     "alertConfirmButton": "Yes"
   },
+  "myWalletsPage": {
+    "noWallet": "You don't have a wallet.",
+    "noWallet_2": "Please, create a wallet."
+  },
   "step1CreateWallet": {
     "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",
     "label_1": "Generate security phrase",
