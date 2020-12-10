@@ -9,6 +9,7 @@ import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {Wallet} from '~src/models/redux/Wallet'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<SettingsStackParamList>
@@ -35,11 +36,41 @@ const MenuItemComponent = (props: {
 const MyWalletsPage = (props: Props) => {
   const wallets = useSelector((state: RootState) => state.app.wallets)
 
+  const isListNotEmpty = () => {
+    return Boolean(wallets.length)
+  }
+
   return (
     <ScreenLayout padding={20}>
-      {wallets.map((it, i) => (
-        <MenuItemComponent key={i} navigation={props.navigation} wallet={it} />
-      ))}
+      {isListNotEmpty() ? (
+        wallets.map((it, i) => (
+          <MenuItemComponent
+            key={i}
+            navigation={props.navigation}
+            wallet={it}
+          />
+        ))
+      ) : (
+        <LinearLayout alignItems={'center'} width={'100%'} height={'100%'}>
+          <TextView
+            color="white"
+            fontSize={18}
+            mt={9}
+            fontFamily="medium"
+            textAlign={'center'}
+          >
+            {Facade.t('myWalletsPage.noWallet')}
+          </TextView>
+          <TextView
+            color="white"
+            fontSize={18}
+            fontFamily="medium"
+            textAlign={'center'}
+          >
+            {Facade.t('myWalletsPage.noWallet_2')}
+          </TextView>
+        </LinearLayout>
+      )}
     </ScreenLayout>
   )
 }
