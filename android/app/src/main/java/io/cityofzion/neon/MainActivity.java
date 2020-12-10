@@ -1,4 +1,4 @@
-package io.cityofzion.neon;
+package io.coz.neonwallet;
 
 import android.os.Bundle;
 
