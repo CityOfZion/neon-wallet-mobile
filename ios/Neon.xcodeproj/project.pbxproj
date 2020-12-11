@@ -313,7 +313,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.coz.neonwallet;
+				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -339,7 +339,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.coz.neonwallet;
+				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -403,7 +403,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.coz.neonwallet;
+				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
 				SDKROOT = iphoneos;
 			};
@@ -458,7 +458,7 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = io.coz.neonwallet;
+				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

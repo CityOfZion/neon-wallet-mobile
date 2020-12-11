@@ -4,7 +4,7 @@
     "slug": "neon",
     "version": "0.0.2",
     "android": {
-      "package": "io.coz.neonwallet",
+      "package": "io.cityofzion.neon",
       "versionCode": 4,
       "adaptiveIcon": {
         "foregroundImage": "src/assets/ic_launcher_foreground.png",
@@ -16,7 +16,7 @@
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app uses face ID to authenticate the user when dealing with sensitive transactions."
       },
-      "bundleIdentifier": "io.coz.neonwallet",
+      "bundleIdentifier": "io.cityofzion.neon",
       "googleServicesFile": "./GoogleService-Info.plist"
     },
     "splash": {

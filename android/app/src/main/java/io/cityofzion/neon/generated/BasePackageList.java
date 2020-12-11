@@ -1,4 +1,4 @@
-package io.coz.neonwallet.generated;
+package io.cityofzion.neon.generated;
 
 import java.util.Arrays;
 import java.util.List;

@@ -132,7 +132,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'io.coz.neonwallet'
+        applicationId 'io.cityofzion.neon'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 4
