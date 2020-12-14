@@ -195,13 +195,23 @@ const BalanceList = (props: Props) => {
   delete innerProps.fromAccountView
   delete innerProps.account
 
+  const showListTokenAssets = (tokenAssets: TokenAsset[]) => {
+    let show = false
+    tokenAssets.forEach((token) => {
+      if (token.amount > 0) {
+        show = true
+      }
+    })
+    return show
+  }
+
   return (
     <LinearLayout {...innerProps} width={'100%'}>
       <TextView color="text.2" fontSize="sm">
         {Facade.t('components.balanceList.title')}
       </TextView>
 
-      {props.tokenAssets.length ? (
+      {showListTokenAssets(props.tokenAssets) ? (
         <FlatList<TokenAsset>
           data={props.tokenAssets.filter((tokenAsset) => tokenAsset.amount > 0)}
           keyExtractor={(item) => item.symbol}
