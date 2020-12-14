@@ -209,10 +209,13 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
     dependencies {
         classpath 'com.google.gms:google-services:4.2.0'
     }
 }
-
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply plugin: 'com.google.gms.google-services'
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
