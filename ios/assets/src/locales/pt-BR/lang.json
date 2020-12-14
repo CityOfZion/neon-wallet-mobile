@@ -1,0 +1,359 @@
+{
+  "languages": {
+    "de": "Alemão",
+    "en-US": "Inglês",
+    "pt-BR": "Português"
+  },
+  "themes": {
+    "DARK": "Escuro",
+    "LIGHT": "Claro"
+  },
+  "app": {
+    "neoBlockHeight": "NEO BLOCK HEIGHT",
+    "back": "Voltar",
+    "next": "Próximo",
+    "continue": "Continuar",
+    "edit": "Editar",
+    "skip": "Pular",
+    "copy": "Copiar",
+    "print": "Imprimir",
+    "retry": "Tentar novamente",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "done": "Feito",
+    "close": "Fechar",
+    "copyToClipboard": "Copy to clipboard"
+  },
+  "routes": {
+    "GetWallet": "Carteira",
+    "Contacts": "Contatos",
+    "More": "Mais",
+    "Account": "Conta",
+    "Settings": "Configurações",
+    "ReceiveQrCode": "Receive QR Code",
+    "CustomColor": "Personalizar Cor",
+    "CreateWallet": "Create Wallet",
+    "MyWallets": "Minhas Carteiras",
+    "Step1CreateWallet": "Criar carteira",
+    "Step2CreateWallet": "Criar carteira",
+    "Step3CreateWallet": "Criar carteira",
+    "Step4CreateWallet": "Criar carteira",
+    "Step5CreateWallet": "Criar carteira",
+    "Step1BackupWallet": "Backup da carteira",
+    "Step2BackupWallet": "Backup da carteira",
+    "Step3BackupWallet": "Backup da carteira",
+    "Step4BackupWallet": "Backup da carteira"
+  },
+  "home": {
+    "welcome": "Bem-vindo ao Neon Wallet!"
+  },
+  "welcome": {
+    "brand": "neonwallet",
+    "title": "Bem-vindo",
+    "body_1_1": "Para começar nós criamos sua primeira carteira para você. Todos os detalhes e opções de restauração para sua carteira pode ser encontrado em ",
+    "body_1_2": "Configurações",
+    "body_1_3": " e ",
+    "body_1_4": "Minha carteira",
+    "body_2_1": "Nós recomendamos fortemente que você faça o",
+    "body_2_2": " BACKUP ",
+    "body_2_3": "da sua carteira para ter certeza que estará seguro contra a perda deste celular. ",
+    "label_1": "Primeiros passos",
+    "button_1": "Importar uma carteira",
+    "button_2": "Adicionar fundos à sua carteira",
+    "checkbox_1": "Não mostrar essa tela novamente"
+  },
+  "login": {
+    "brand": "neonwallet",
+    "title": "#translateme",
+    "body": "#translateme",
+    "continue": "#translateme",
+    "skip": "#translateme"
+  },
+  "onboarding": {
+    "feature1": {
+      "title": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "feature2": {
+      "title": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "feature3": {
+      "title": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "feature4": {
+      "title": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "getStarted": {
+      "title": "#translateme",
+      "subtitle": "#translateme",
+      "buttonTitle": "#translateme"
+    }
+  },
+  "myWalletOptions": {
+    "details": "Detalhes",
+    "backupWallet": "Backup da carteira"
+  },
+  "step1CreateWallet": {
+    "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",
+    "label_1": "#translateme",
+    "body_1": "#translateme",
+    "label_2": "#translateme",
+    "body_2": "#translateme",
+    "label_3": "#translateme",
+    "body_3": "#translateme",
+    "createWallet": "#translateme"
+  },
+  "step2CreateWallet": {
+    "oneOfThree": "1 de 3",
+    "label_1": "#translateme",
+    "body_1": "#translateme",
+    "body_2": "#translateme",
+    "body_3": "#translateme"
+  },
+  "step3CreateWallet": {
+    "twoOfThree": "2 de 3",
+    "label_1": "#translateme",
+    "body_1": "#translateme",
+    "body_2": "#translateme",
+    "dialog_1_title": "#translateme",
+    "dialog_1_body": "#translateme",
+    "dialog_2_title": "#translateme",
+    "dialog_2_body": "#translateme"
+  },
+  "step4CreateWallet": {
+    "threeOfThree": "3 de 3",
+    "label_1": "#translateme",
+    "body_1": "#translateme",
+    "label_walletName": "#translateme",
+    "label_createPassphrase": "#translateme",
+    "label_confirmPassphrase": "#translateme",
+    "placeholder_walletName": "#translateme",
+    "placeholder_createPassphrase": "#translateme",
+    "placeholder_confirmPassphrase": "#translateme"
+  },
+  "step5CreateWallet": {
+    "label_1": "#translateme",
+    "body_1": "#translateme",
+    "body_2": "#translateme",
+    "viewWallet": "#translateme"
+  },
+  "settings": {
+    "title": "Configurações",
+    "myWallets": "Minhas Wallets",
+    "security": "Segurança",
+    "currency": "Moeda",
+    "language": "Idioma",
+    "theme": "Tema"
+  },
+  "customColorPage": {
+    "title": "Personalizar Cor",
+    "subtitle": "Selecione um cor personalizada para sua conta",
+    "navigation": {
+      "cancel": "Cancelar",
+      "done": "Concluído"
+    }
+  },
+  "quickTools": {
+    "qrCode": {
+      "title": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "send": {
+      "title": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "receive": {
+      "title": "#translateme",
+      "subtitle": "#translateme"
+    }
+  },
+  "paymentCard": {
+    "balance": "SALDO",
+    "address": "ENDEREÇO"
+  },
+  "receive": {
+    "paymentRequestDetails": "#translateme",
+    "token": "#translateme",
+    "amount": "#translateme",
+    "value": "#translateme",
+    "location": "#translateme",
+    "address": "#translateme",
+    "reference": "#translateme"
+  },
+  "screens": {
+    "listWallets": {
+      "changeSinceLastVisit": "#translateme",
+      "changeInLast24hours": "#translateme",
+      "createFirstWallet": "Criar primeira carteira"
+    },
+    "getWallet": {
+      "addNewAccount": "#translateme"
+    },
+    "getAccount": {
+      "assets": "#translateme",
+      "transactions": "#translateme",
+      "pendingTransactions": "#translateme",
+      "completedTransactions": "#translateme",
+      "claimAsset": "#translateme",
+      "claimInProgress": "#translateme"
+    },
+    "createAccount": {
+      "title": "#translateme",
+      "subtitle": "#translateme",
+      "accountInput": {
+        "title": "#translateme",
+        "placeholder": "#translateme"
+      },
+      "selectColor": "#translateme",
+      "navigation": {
+        "cancel": "#translateme",
+        "save": "#translateme"
+      }
+    }
+  },
+  "modals": {
+    "send": {
+      "title": "Send",
+      "walletSelection": {
+        "subtitle": "Please select a wallet to send from"
+      },
+      "accountSelection": {
+        "subtitle": "Please select an account to send from",
+        "label": "TRADING ACCOUNT TOKENS VALUE"
+      },
+      "transactionConfirmation": {
+        "header": "Transaction successfully sent!",
+        "subheader": "Once your transaction has been confirmed it will appear in your transaction history",
+        "transactionId": "TRANSACTION ID"
+      },
+      "transactionInput": {
+        "selectDifferentAccount": "Select a different Account",
+        "transactionDetails": "TRANSACTION DETAILS",
+        "prioritiseTransfer": "PRIORITISE YOUR TRANSFER WITH A FEE?",
+        "enterAmount": "Enter amount",
+        "selectToken": "Select token to send",
+        "enterDestination": "Enter destination address",
+        "destinationAddress": "DESTINATION ADDRESS",
+        "token": "TOKEN",
+        "amount": "AMOUNT",
+        "contacts": "Contacts",
+        "paste": "Paste",
+        "scan": "Scan",
+        "priorityFast": "Rápida",
+        "priorityFaster": "Muito rápida",
+        "priorityFastest": "Rapidíssima"
+      },
+      "transactionReview": {
+        "token": "Token",
+        "amount": "Amount",
+        "remainingInWallet": "(%{token} in wallet)",
+        "value": "Value",
+        "price": "Price",
+        "priority": "Priority",
+        "feeAmount": "(Fee %{amount})",
+        "pleaseReview": "Please review transaction"
+      }
+    },
+    "receive": {
+      "title": "Receive",
+      "walletSelection": {
+        "subtitle": "Please select a wallet to receive to"
+      },
+      "accountSelection": {
+        "subtitle": "Please select an account to receive to"
+      },
+      "toAccount": {
+        "yourAddress": "Your Address",
+        "requestTokens": "Request Tokens",
+        "selectTokenToReceive": "Select token to receive",
+        "enterAmount": "Enter amount",
+        "addReference": "Add a reference",
+        "reference": "Reference",
+        "generateQrCode": "Generate QR Code"
+      }
+    },
+    "walletContext": {
+      "create": "Create new wallet",
+      "reorder": "Reorder wallets",
+      "cancel": "Cancel"
+    },
+    "listTokenModal": {
+      "holding": "Holdings",
+      "tokens": "Tokens",
+      "selectToken": "Select a token to send to",
+      "value": "#translateme"
+    },
+    "reorderWallet": {
+      "title": "Reorder wallets",
+      "subtitle": "Drag a wallet to a new position to reorder",
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  },
+  "components": {
+    "notification": {
+      "title": "#translateme"
+    },
+    "balanceList": {
+      "title": "#translateme",
+      "holdings": "#translateme",
+      "value": "#translateme",
+      "empty": "#translateme"
+    },
+    "transactionsList": {
+      "title": "#translateme",
+      "sent": "#translateme",
+      "received": "#translateme",
+      "pending": "#translateme",
+      "sentTo": "#translateme",
+      "receivedFrom": "#translateme",
+      "token": "#translateme",
+      "value": "#translateme"
+    },
+
+    "transactionInput": {
+      "selectDifferentAccount": "Select a different Account",
+      "transactionDetails": "TRANSACTION DETAILS",
+      "prioritiseTransfer": "PRIORITISE YOUR TRANSFER WITH A FEE?",
+      "enterAmount": "Enter amount",
+      "selectToken": "Select token to send",
+      "enterDestination": "Enter destination address",
+      "destinationAddress": "DESTINATION ADDRESS",
+      "token": "TOKEN",
+      "amount": "AMOUNT",
+      "contacts": "Contacts",
+      "paste": "Paste",
+      "scan": "Scan"
+    },
+    "colorSelector": {
+      "customColor": "Cor personalizada"
+    }
+  },
+  "boolean": {
+    "true": "Sim",
+    "false": "Não"
+  },
+  "dateFormat": {
+    "date": "DD/MM/YYYY",
+    "datePretty": "DD [de] MMM [de] YYYY",
+    "datetime": "DD/MM/YYYY HH:mm",
+    "time": "hh:mm"
+  },
+  "filter": {
+    "number": {
+      "decimal": ",",
+      "thousands": "."
+    },
+    "phone": {
+      "regex": "(\\d{2})(\\d{4,5})(\\d{4})$",
+      "format": "($1) $2-$3"
+    },
+    "zipcode": {
+      "regex": "(\\d{5})(\\d{3})$",
+      "format": "$1-$2"
+    }
+  }
+}
