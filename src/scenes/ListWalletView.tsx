@@ -246,6 +246,12 @@ const ListWalletView = (props: WalletProps) => {
     }).start()
   }
 
+  const fadeOutWallet = () => {
+    if (wallets.length > 1) {
+      fadeOut()
+    }
+  }
+
   const openWarning = () =>
     Alert.alert(
       Facade.t('screens.listWallets.incompleteBalanceWarningTitle'),
@@ -279,7 +285,7 @@ const ListWalletView = (props: WalletProps) => {
                   wallets={wallets}
                   onSelect={selectEvent}
                   onPress={pressEvent}
-                  onScrollBegin={fadeOut}
+                  onScrollBegin={fadeOutWallet}
                 />
               ) : (
                 <EmptyListComponent />
