@@ -466,6 +466,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
             title: 'Transactions',
             Element: TransactionsTab,
           }}
+          setFirstTabAsSelected={setIsAssetsTabSelected}
         />
       )}
     </ScreenLayout>
