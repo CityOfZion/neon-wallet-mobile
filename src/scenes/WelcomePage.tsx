@@ -1,7 +1,7 @@
 import {RouteProp, CommonActions} from '@react-navigation/native'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
+import {Image, ScrollView} from 'react-native'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
@@ -54,6 +54,19 @@ const WelcomePage = (props: Props) => {
     >
       <LinearLayout mb={PANEL_OFFSET} pt={30} flex={1}>
         <LinearLayout weight={1} />
+        <Image
+          source={require('~src/assets/images/wellcomeGetstarted.png')}
+          style={{
+            marginLeft: -40,
+            width: 513,
+            height: 475,
+            resizeMode: 'contain',
+            alignSelf: 'center',
+          }}
+          width={513}
+          height={475}
+          resizeMode={'contain'}
+        />
         <TextView
           mb={5}
           color={'primary'}
@@ -65,67 +78,15 @@ const WelcomePage = (props: Props) => {
         </TextView>
 
         <TextView mb={6} color={'text.0'} fontSize={'lg'} textAlign={'center'}>
-          {Facade.t('welcome.body_1_1')}
-
-          <TextView fontFamily={'bold'} color={'text.0'}>
-            {Facade.t('welcome.body_1_2')}
-          </TextView>
-
-          {Facade.t('welcome.body_1_3')}
-
-          <TextView fontFamily={'bold'} color={'text.0'}>
-            {Facade.t('welcome.body_1_4')}
-          </TextView>
-        </TextView>
-
-        <TextView mb={6} color={'text.0'} fontSize={'lg'} textAlign={'center'}>
-          {Facade.t('welcome.body_2_1')}
-
-          <TextView>{Facade.t('welcome.body_2_2')}</TextView>
-
-          {Facade.t('welcome.body_2_3')}
+          {Facade.t('welcome.body_1_1_2')}
         </TextView>
 
         <LinearLayout weight={1} />
-        <TextView
-          color={'text.11'}
-          fontSize={'xl'}
-          fontFamily={'bold'}
-          allowFontScaling={true}
-          adjustsFontSizeToFit={true}
-          mb={5}
-          textAlign="center"
-        >
-          {Facade.t('welcome.label_1')}
-        </TextView>
 
         <LinearLayout mt={3} mb={6} width={'100%'}>
           <ThemedFlatButton
-            text={Facade.t('welcome.button_1')}
-            onPress={() =>
-              closeTo(Facade.route.Tab.name, {
-                screen: Facade.route.More.name,
-                params: {
-                  screen: Facade.route.ImportKey.name,
-                  initial: false,
-                },
-              })
-            }
-          />
-          <ThemedFlatButton
-            text={Facade.t('welcome.button_2')}
-            onPress={() =>
-              closeTo(Facade.route.Modal.name, {
-                screen: Facade.route.ReceiveModalStack.name,
-              })
-            }
-          />
-        </LinearLayout>
-        <LinearLayout mb={6} alignSelf={'center'}>
-          <ThemedCheckbox
-            onChange={(checked) => persist(checked)}
-            label={Facade.t('welcome.checkbox_1')}
-            checked={false}
+            text={Facade.t('welcome.button_3')}
+            onPress={controller.close}
           />
         </LinearLayout>
 
