@@ -294,18 +294,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
       useNativeDriver: true,
       easing: Easing.out((val) => val ** 2),
     }).start()
+    setShowTabBarSelector(true)
   }
-
-  const [changeScreen, setChangeScreen] = useState<boolean>(true)
-  const handleChangeScreen = (value: boolean) => {
-    if (value !== changeScreen) {
-      setChangeScreen(value)
-    }
-  }
-  useEffect(() => {
-    setIsAssetsTabSelected(changeScreen)
-  }, [changeScreen])
-
+  const [showTabBarSelector, setShowTabBarSelector] = useState(false)
   const BalanceListParam = () => {
     return (
       <BalanceList
@@ -465,16 +456,19 @@ const GetAccountView = (props: GetAccountViewProps) => {
           }
         />
       </View>
-      <TabSelectorBar
-        firstScene={{
-          title: 'Assets',
-          Element: BalanceListParam,
-        }}
-        secondScene={{
-          title: 'Transactions',
-          Element: TransactionsTab,
-        }}
-      />
+      {showTabBarSelector && (
+        <TabSelectorBar
+          firstScene={{
+            title: 'Assets',
+            Element: BalanceListParam,
+          }}
+          secondScene={{
+            title: 'Transactions',
+            Element: TransactionsTab,
+          }}
+          setFirstTabAsSelected={setIsAssetsTabSelected}
+        />
+      )}
     </ScreenLayout>
   )
 }
