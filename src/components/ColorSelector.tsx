@@ -125,6 +125,7 @@ export default function ColorSelector(props: Props) {
         <TextView
           fontSize="12px"
           width="100%"
+          px="5px"
           mb="11px"
           position="absolute"
           bottom={0}
