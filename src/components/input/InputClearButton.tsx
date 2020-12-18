@@ -11,11 +11,10 @@ export const InputClearButton = (props: {
     <TouchableWithoutFeedback onPress={props.onPress} disabled={!props.value}>
       <ImageView
         opacity={props.value ? 1 : 0}
-        width="34px"
-        height="34px"
+        width={20}
+        height={20}
         mb="-6px"
-        resizeMode={'center'}
-        alignSelf="center"
+        resizeMode="contain"
         source={require('~/src/assets/images/icon-cancel-grey.png')}
       />
     </TouchableWithoutFeedback>
