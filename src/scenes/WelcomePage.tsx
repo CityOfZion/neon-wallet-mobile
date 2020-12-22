@@ -1,11 +1,11 @@
-import { RouteProp, CommonActions } from '@react-navigation/native'
+import {RouteProp, CommonActions} from '@react-navigation/native'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
-import { Image, ScrollView, Dimensions } from 'react-native'
+import React, {useState} from 'react'
+import {Image, ScrollView, Dimensions} from 'react-native'
 
-import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import { Facade } from '~src/app/Facade'
-import { Storage } from '~src/app/Storage'
+import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
 import SwiperPanel, {
   PANEL_OFFSET,
   useSwiperController,
@@ -13,11 +13,11 @@ import SwiperPanel, {
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCheckbox from '~src/components/themed/ThemedCheckbox'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import { ThemedFlatButton } from '~src/components/themed/ThemedFlatButton'
-import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { TabStackParamList } from '~src/navigation/TabNavigation'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import {ThemedFlatButton} from '~src/components/themed/ThemedFlatButton'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {TabStackParamList} from '~src/navigation/TabNavigation'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 // Why are you like this, Typescript
 type ParamList = TabStackParamList & RootStackParamList
@@ -34,7 +34,7 @@ const WelcomePage = (props: Props) => {
   const persist = async (value: boolean) => {
     await Storage.welcomeHidden.save(value)
   }
-  
+
   const closeTo = (...arg: NavParam<ParamList>) => {
     setAction(CommonActions.navigate(...arg))
     controller.close()
@@ -79,7 +79,12 @@ const WelcomePage = (props: Props) => {
             {Facade.t('welcome.title')}
           </TextView>
 
-          <TextView mb={6} color={'text.0'} fontSize={'lg'} textAlign={'center'}>
+          <TextView
+            mb={6}
+            color={'text.0'}
+            fontSize={'lg'}
+            textAlign={'center'}
+          >
             {Facade.t('welcome.body_1_1_2')}
           </TextView>
 
@@ -109,7 +114,6 @@ const WelcomePage = (props: Props) => {
           </LinearLayout>
         </LinearLayout>
       </ScrollView>
-
     </SwiperPanel>
   )
 }
