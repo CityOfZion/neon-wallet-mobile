@@ -1,7 +1,7 @@
 import {RouteProp, CommonActions} from '@react-navigation/native'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
-import {Image, ScrollView} from 'react-native'
+import {Image, ScrollView, Dimensions} from 'react-native'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
@@ -39,7 +39,8 @@ const WelcomePage = (props: Props) => {
     setAction(CommonActions.navigate(...arg))
     controller.close()
   }
-
+  const imgWidth = Dimensions.get('window').width
+  const imgHeight = Dimensions.get('window').height * 0.4
   return (
     <SwiperPanel
       controller={controller}
@@ -52,60 +53,67 @@ const WelcomePage = (props: Props) => {
       image={require('~/src/assets/images/icon-plus-circle-white.png')}
       disableDefaultScrollView={true}
     >
-      <LinearLayout mb={PANEL_OFFSET} pt={30} flex={1}>
-        <LinearLayout weight={1} />
-        <Image
-          source={require('~src/assets/images/wellcomeGetstarted.png')}
-          style={{
-            marginLeft: -40,
-            width: 513,
-            height: 475,
-            resizeMode: 'contain',
-            alignSelf: 'center',
-          }}
-          width={513}
-          height={475}
-          resizeMode={'contain'}
-        />
-        <TextView
-          mb={5}
-          color={'primary'}
-          fontSize={Facade.scale(30)}
-          fontFamily={'regular'}
-          textAlign="center"
-        >
-          {Facade.t('welcome.title')}
-        </TextView>
-
-        <TextView mb={6} color={'text.0'} fontSize={'lg'} textAlign={'center'}>
-          {Facade.t('welcome.body_1_1_2')}
-        </TextView>
-
-        <LinearLayout weight={1} />
-
-        <LinearLayout mt={3} mb={6} width={'100%'}>
-          <ThemedFlatButton
-            text={Facade.t('welcome.button_3')}
-            onPress={controller.close}
+      <ScrollView>
+        <LinearLayout mb={PANEL_OFFSET} pt={30} flex={1}>
+          <LinearLayout weight={1} />
+          <Image
+            source={require('~src/assets/images/wellcomeGetstarted.png')}
+            style={{
+              marginLeft: -40,
+              width: imgWidth,
+              height: imgHeight,
+              resizeMode: 'contain',
+              alignSelf: 'center',
+            }}
+            width={imgWidth}
+            height={imgHeight}
+            resizeMode={'contain'}
           />
-        </LinearLayout>
+          <TextView
+            mb={5}
+            color={'primary'}
+            fontSize={Facade.scale(30)}
+            fontFamily={'regular'}
+            textAlign="center"
+          >
+            {Facade.t('welcome.title')}
+          </TextView>
 
-        <LinearLayout
-          position={'absolute'}
-          right={Facade.scale(5)}
-          top={Facade.scale(5)}
-        >
-          <ThemedCloseButton
-            onPress={() =>
-              closeTo(
-                // TODO: figure out a way to remove the explicity of 'undefined'
-                Facade.route.Tab.name,
-                undefined
-              )
-            }
-          />
+          <TextView
+            mb={6}
+            color={'text.0'}
+            fontSize={'lg'}
+            textAlign={'center'}
+          >
+            {Facade.t('welcome.body_1_1_2')}
+          </TextView>
+
+          <LinearLayout weight={1} />
+
+          <LinearLayout mt={3} mb={6} width={'100%'}>
+            <ThemedFlatButton
+              text={Facade.t('welcome.button_3')}
+              onPress={controller.close}
+            />
+          </LinearLayout>
+
+          <LinearLayout
+            position={'absolute'}
+            right={Facade.scale(5)}
+            top={Facade.scale(5)}
+          >
+            <ThemedCloseButton
+              onPress={() =>
+                closeTo(
+                  // TODO: figure out a way to remove the explicity of 'undefined'
+                  Facade.route.Tab.name,
+                  undefined
+                )
+              }
+            />
+          </LinearLayout>
         </LinearLayout>
-      </LinearLayout>
+      </ScrollView>
     </SwiperPanel>
   )
 }
