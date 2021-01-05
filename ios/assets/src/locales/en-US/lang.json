@@ -57,6 +57,7 @@
     "brand": "neonwallet",
     "title": "To get you started",
     "body_1_1": "To get you started we have created your first wallet for you. All the details and back up options for your wallet can be found in ",
+    "body_1_1_2": "To get you started we have created your first wallet, and inside, your first account for you. ",
     "body_1_2": "Settings",
     "body_1_3": " then ",
     "body_1_4": "My wallets",
@@ -66,6 +67,7 @@
     "label_1": "Quick start options",
     "button_1": "Import a wallet",
     "button_2": "Add funds to your wallet",
+    "button_3": "Take a look now",
     "checkbox_1": "Don’t show this screen again"
   },
   "login": {
@@ -124,6 +126,10 @@
     "invalidAuth": "Authentication not successful. Try again?",
     "alertCancelButton": "No",
     "alertConfirmButton": "Yes"
+  },
+  "myWalletsPage": {
+    "noWallet": "You don't have a wallet.",
+    "noWallet_2": "Please, create a wallet."
   },
   "step1CreateWallet": {
     "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",
