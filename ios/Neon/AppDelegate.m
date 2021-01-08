@@ -54,9 +54,7 @@ static void InitializeFlipper(UIApplication *application) {
   #ifdef DEBUG
     [self initializeReactNativeApp];
   #else
-    EXUpdatesAppController *controller = [EXUpdatesAppController sharedInstance];
-    controller.delegate = self;
-    [controller startAndShowLaunchScreen:self.window];
+    [self initializeReactNativeApp];
   #endif
 
   [super application:application didFinishLaunchingWithOptions:launchOptions];
@@ -90,7 +88,7 @@ static void InitializeFlipper(UIApplication *application) {
  #ifdef DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
  #else
-  return [[EXUpdatesAppController sharedInstance] launchAssetUrl];
+  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
  #endif
 }
 
