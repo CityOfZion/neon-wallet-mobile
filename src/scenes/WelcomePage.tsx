@@ -39,8 +39,8 @@ const WelcomePage = (props: Props) => {
     setAction(CommonActions.navigate(...arg))
     controller.close()
   }
-  const imgWidth = Dimensions.get('window').width
-  const imgHeight = Dimensions.get('window').height * 0.4
+  const imgWidth = Dimensions.get('window').width * 1.1
+  const imgHeight = Dimensions.get('window').height * 0.55
   return (
     <SwiperPanel
       controller={controller}
@@ -53,21 +53,21 @@ const WelcomePage = (props: Props) => {
       image={require('~/src/assets/images/icon-plus-circle-white.png')}
       disableDefaultScrollView={true}
     >
-      <ScrollView>
+      <ScrollView style={{marginHorizontal: -20}}>
         <LinearLayout mb={PANEL_OFFSET} pt={30} flex={1}>
           <LinearLayout weight={1} />
           <Image
             source={require('~src/assets/images/wellcomeGetstarted.png')}
             style={{
-              marginLeft: -40,
+              marginLeft: -50,
               width: imgWidth,
               height: imgHeight,
-              resizeMode: 'contain',
+              resizeMode: 'stretch',
               alignSelf: 'center',
             }}
             width={imgWidth}
             height={imgHeight}
-            resizeMode={'contain'}
+            resizeMode={'stretch'}
           />
           <TextView
             mb={5}
