@@ -603,7 +603,8 @@
     "viewOnDora": "View on Dora",
     "confirmed": "Confirmed",
     "pending": "Pending",
-    "price": "Price"
+    "price": "Price",
+    "amount": "Amount"
   },
   "priorityFee": {
     "none": "None",
