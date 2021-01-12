@@ -1,0 +1,11 @@
+{
+    "changelog": [
+        {
+            "version": "V0.0.3",
+            "date": "Today",
+            "changes": [
+                "- Added Changelog"
+            ]
+        }
+    ]
+}

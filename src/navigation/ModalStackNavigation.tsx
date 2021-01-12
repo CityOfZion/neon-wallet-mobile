@@ -25,6 +25,7 @@ import {
   AccountQRCodeParams,
 } from '~src/scenes/Account/AccountQRCode'
 import {GetAccountParams} from '~src/scenes/Account/GetAccountView'
+import ChangelogModal, {ChangelogModalParams} from '~src/scenes/ChangelogModal'
 import {
   ContactPicker,
   ContactsModalParams,
@@ -92,6 +93,7 @@ export type ModalStackParamList = {
   PasscodeStack: PasscodeStackParams
   Modal: object
   VerifyPasscode: VerifyPasscodePageParams
+  ChangelogModal: ChangelogModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -106,6 +108,7 @@ export type ModalParams =
   | DefaultNavigationParam<PersistContactParams>
   | DefaultNavigationParam<SendStackModalParams>
   | DefaultNavigationParam<EditWalletParams>
+  | DefaultNavigationParam<ChangelogModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -121,6 +124,10 @@ const ModalStackNavigation = () => {
         headerMode="none"
         screenOptions={Facade.config.screen}
       >
+        <ModalStack.Screen
+          name={Facade.route.ChangelogModal.name}
+          component={ChangelogModal}
+        />
         <ModalStack.Screen
           name={Facade.route.WelcomeModal.name}
           component={WelcomePage}

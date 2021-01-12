@@ -29,6 +29,20 @@ export abstract class Storage {
   }
 
   /**
+   * Controls the span of changelog screen
+   */
+  static get changelogHidden() {
+    return Facade.storage['@changelog_hidden'].bind().asBoolean()
+  }
+
+  /**
+   * Controls the number of versions
+   */
+  static get numberOfVersions() {
+    return Facade.storage['@number_of_versions'].bind().asNumber()
+  }
+
+  /**
    * Controls if authentication was set up
    */
   static get hasAuthentication() {

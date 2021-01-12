@@ -48,7 +48,8 @@
     "ImportKey": "Import",
     "Passphrase": "Create Wallet",
     "ImportReadAccount": "Add a watch",
-    "CustomizeAccount": "Customize account"
+    "CustomizeAccount": "Customize account",
+    "ChangelogPage": "Changelog"
   },
   "home": {
     "welcome": "Welcome to Neon Wallet!"

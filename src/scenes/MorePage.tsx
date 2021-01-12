@@ -2,17 +2,19 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import Constants from 'expo-constants'
 import * as WebBrowser from 'expo-web-browser'
 import React from 'react'
+import {TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
 import {Facade} from '~src/app/Facade'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface MoreProps {
-  navigation: StackNavigationProp<MoreStackParamList>
+  navigation: StackNavigationProp<MoreStackParamList & ModalStackParamList>
   theme: DefaultTheme
   navigationOptions: object
 }
@@ -75,23 +77,31 @@ const MorePage = (props: MoreProps) => {
           handlePressHelp()
         }}
       />
-      <LinearLayout
-        position={'absolute'}
-        left={'5%'}
-        right={'5%'}
-        bottom={'3%'}
+      <TouchableWithoutFeedback
+        onPress={() => {
+          props.navigation.navigate(Facade.route.Modal.name, {
+            screen: Facade.route.ChangelogModal.name,
+          })
+        }}
       >
-        <TextView
-          fontSize={14}
-          color="white"
-          textAlign="left"
-          numberOfLines={1}
-          width={'88%'}
-          allowFontScaling={true}
+        <LinearLayout
+          position={'absolute'}
+          left={'5%'}
+          right={'5%'}
+          bottom={'3%'}
         >
-          {`v${Constants.nativeAppVersion}-${Constants.nativeBuildVersion}`}
-        </TextView>
-      </LinearLayout>
+          <TextView
+            fontSize={14}
+            color="white"
+            textAlign="left"
+            numberOfLines={1}
+            width={'88%'}
+            allowFontScaling={true}
+          >
+            {`v${Constants.nativeAppVersion}-${Constants.nativeBuildVersion}`}
+          </TextView>
+        </LinearLayout>
+      </TouchableWithoutFeedback>
     </ScreenLayout>
   )
 }

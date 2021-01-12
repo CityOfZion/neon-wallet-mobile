@@ -50,6 +50,8 @@ const AppNavigation = (props: Props) => {
   const [welcomeToNWSeen, setWelcomeToNWSeen] = useState(true)
   const [welcomeHidden, setWelcomeHidden] = useState(true)
   const [hasAuthentication, setHasAuthentication] = useState(false)
+  const [changelogHidden, setChangelogHidden] = useState(true)
+  const [numberOfVersions, setNumberOfVersions] = useState(0)
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
@@ -58,11 +60,15 @@ const AppNavigation = (props: Props) => {
     const welcomeToNWSeen = await Storage.welcomeToNWSeen.load()
     const welcomeHidden = await Storage.welcomeHidden.load()
     const hasAuthentication = await Storage.hasAuthentication.load()
+    const changelogHidden = await Storage.changelogHidden.load()
+    const numberOfVersions = await Storage.numberOfVersions.load()
 
     setOnboardingSeen(onboardingSeen ?? false)
     setWelcomeToNWSeen(welcomeToNWSeen ?? false)
     setWelcomeHidden(welcomeHidden ?? false)
     setHasAuthentication(hasAuthentication ?? false)
+    setChangelogHidden(changelogHidden ?? false)
+    setNumberOfVersions(numberOfVersions ?? 0)
 
     // Synchronize app reducer
     await Sync.init(dispatchAsync)
@@ -108,7 +114,11 @@ const AppNavigation = (props: Props) => {
                 <RootStack.Screen
                   name="Tab"
                   component={TabNavigation}
-                  initialParams={{welcomeHidden}}
+                  initialParams={{
+                    welcomeHidden,
+                    changelogHidden,
+                    numberOfVersions,
+                  }}
                 />
                 <RootStack.Screen
                   name={Facade.route.Onboarding.name}

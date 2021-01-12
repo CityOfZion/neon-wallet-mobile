@@ -353,6 +353,8 @@ export class AppReducer extends ReducerWrapper<
 
         await Storage.onboardingSeen.erase()
         await Storage.welcomeHidden.erase()
+        await Storage.changelogHidden.erase()
+        await Storage.numberOfVersions.erase()
         await Storage.hasAuthentication.erase()
         await Storage.settings.erase()
         await Storage.wallets.erase()
