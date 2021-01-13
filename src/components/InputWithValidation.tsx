@@ -173,7 +173,9 @@ const InputWithValidation = (props: Props) => {
                 onSelected: (item: Contact | Account) => {
                   if (props.onSelected) {
                     props.onSelected(item)
-                    navigation.goBack()
+                    navigation.navigate(
+                      Facade.route.SendTransactionInputModal.name
+                    )
                   }
                 },
               })
