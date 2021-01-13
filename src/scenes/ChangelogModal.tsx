@@ -5,7 +5,7 @@ import React from 'react'
 
 import * as data from '~src/Changelog.json'
 import {Facade} from '~src/app/Facade'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import SwiperPanel, {CloseButton, useSwiperController} from '~src/components/SwiperPanel'
 import Changelog from '~src/components/changelog/Changelog'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
@@ -44,10 +44,10 @@ const ChangelogModal = (props: Props) => {
       padding={20}
       fullSize={true}
       title={Facade.t('modals.changelog.title')}
-      leftButton={Facade.t('modals.changelog.goBack')}
+      rightButton={<CloseButton mr="25px" />}
       imageSize={[22, 22]}
       onClose={handleNavigation}
-      onLeftPress={controller.close}
+      onRightPress={controller.close}
       controller={controller}
     >
       <AwaitActivity

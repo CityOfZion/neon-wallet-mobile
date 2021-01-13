@@ -37,13 +37,7 @@ const Changelog: React.FC<IChangelog> = ({changelog}) => {
       borderColor={'rgba(0, 0, 0, 0.1)'}
       height={'100%'}
     >
-      <LinearLayout
-        flex={1}
-        padding={20}
-        bg={theme.colors.background[12]}
-        width={'100%'}
-        borderRadius={13}
-      >
+      <LinearLayout flex={1} padding={20} width={'100%'} borderRadius={13}>
         <Timeline
           data={changelog ? formatChangelog() : []}
           circleSize={20}
