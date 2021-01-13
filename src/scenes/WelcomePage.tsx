@@ -64,6 +64,7 @@ const WelcomePage = (props: Props) => {
               height: imgHeight,
               resizeMode: 'stretch',
               alignSelf: 'center',
+              marginTop: 30
             }}
             width={imgWidth}
             height={imgHeight}
@@ -90,10 +91,12 @@ const WelcomePage = (props: Props) => {
 
           <LinearLayout weight={1} />
 
-          <LinearLayout mt={3} mb={6} width={'100%'}>
+          <LinearLayout mt={3} mb={6} style={{alignSelf: 'center', width: '85%'}}>
             <ThemedFlatButton
               text={Facade.t('welcome.button_3')}
               onPress={controller.close}
+              alignItems={'flex-start'}
+              textAlign={'center'}
             />
           </LinearLayout>
 
