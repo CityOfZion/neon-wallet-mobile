@@ -188,7 +188,11 @@ export const TransactionDetails = (props: Props) => {
           accountName={receiverAccount?.name ?? undefined}
           walletName={receiverWallet ?? undefined}
         />
-        <TokenView transaction={transaction} />
+        <TokenView
+          hideTokenInWallet={true}
+          hideSingleTokenPrice={true}
+          transaction={transaction}
+        />
         <LinearLayout weight={1} mt={'30px'}>
           <ThemedButton
             onPress={() => {
