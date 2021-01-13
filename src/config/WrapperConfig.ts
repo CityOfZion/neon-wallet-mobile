@@ -11,6 +11,8 @@ export class WrapperConfig {
     '@onboarding_seen',
     '@welcome_to_nw_seen',
     '@welcome_hidden',
+    '@changelog_hidden',
+    '@number_of_versions',
     '@has_authentication',
     '@settings',
     '@wallets',
@@ -85,5 +87,6 @@ export class WrapperConfig {
     'TransactionDetails',
     'EditWalletModal',
     'SecurityModal',
+    'ChangelogModal',
   ] as const
 }

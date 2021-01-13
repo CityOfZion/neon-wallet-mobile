@@ -494,6 +494,10 @@
         "title": "Add a contact",
         "subtitle": "Create a contact in your address book"
       }
+    },
+    "changelog": {
+      "title": "Changelog",
+      "goBack": "Go Back"
     }
   },
   "components": {

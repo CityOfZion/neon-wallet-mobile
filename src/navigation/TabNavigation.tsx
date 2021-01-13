@@ -8,6 +8,7 @@ import {ThemeProvider} from 'styled-components'
 
 import {SenderTransaction} from '../models/redux/SenderTransaction'
 
+import * as data from '~src/Changelog.json'
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import FooterBar from '~src/components/layout/FooterBar'
@@ -36,7 +37,11 @@ export type TabParams =
       | DefaultNavigationParam<MoreStackParam>
       | DefaultNavigationParam<WalletStackParams>
     ) &
-      Partial<{welcomeHidden?: boolean}>)
+      Partial<{
+        welcomeHidden?: boolean
+        changelogHidden?: boolean
+        numberOfVersions?: number
+      }>)
   | undefined
 
 interface Props {
@@ -47,8 +52,11 @@ interface Props {
 const Tab = createBottomTabNavigator()
 
 const welcomeHiddenStorage = Storage.welcomeHidden.load()
+const changelogHiddenStorage = Storage.changelogHidden.load()
+const numberOfVersions = Storage.numberOfVersions.load()
 
 const TabNavigation = (props: Props) => {
+  const currentNumberOfVersions = Object.keys(data.changelog).length
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
@@ -57,14 +65,35 @@ const TabNavigation = (props: Props) => {
     props.route.params?.welcomeHidden ?? true
   )
 
-  useEffect(() => {
-    if (!welcomeHidden && welcomeHiddenStorage) {
+  const [changelogHidden, setChangelogHidden] = useState(
+    props.route.params?.changelogHidden ?? true
+  )
+
+  const [numberOfVersions, setNumberOfVersions] = useState(
+    props.route.params?.numberOfVersions ?? 0
+  )
+
+  if (numberOfVersions !== currentNumberOfVersions) {
+    if (!changelogHidden && changelogHiddenStorage) {
+      Storage.numberOfVersions.save(currentNumberOfVersions)
       props.navigation.navigate(Facade.route.Modal.name, {
-        screen: Facade.route.WelcomeModal.name,
+        screen: Facade.route.ChangelogModal.name,
+        params: {
+          fromTabNavigation: true,
+        },
       })
-      setWelcomeHidden(true)
+      setChangelogHidden(true)
     }
-  }, [welcomeHidden])
+  } else {
+    useEffect(() => {
+      if (!welcomeHidden && welcomeHiddenStorage) {
+        props.navigation.navigate(Facade.route.Modal.name, {
+          screen: Facade.route.WelcomeModal.name,
+        })
+        setWelcomeHidden(true)
+      }
+    }, [welcomeHidden])
+  }
 
   useEffect(() => {
     Facade.bus.on(
