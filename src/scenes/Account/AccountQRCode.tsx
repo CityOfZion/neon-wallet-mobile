@@ -5,7 +5,10 @@ import React from 'react'
 import {Facade} from '~src/app/Facade'
 import InputLabel from '~src/components/InputLabel'
 import {QRCodeWithCopyButton} from '~src/components/QRCodeWithCopyButton'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import SwiperPanel, {
+  useSwiperController,
+  CloseButton,
+} from '~src/components/SwiperPanel'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -24,11 +27,12 @@ export const AccountQRCode = (props: AccountQRCodeProps) => {
   const controller = useSwiperController(true)
   return (
     <SwiperPanel
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
+      rightButton={<CloseButton mr={'25px'} />}
       fullSize={true}
       controller={controller}
       onClose={props.navigation.goBack}
       title={props.route.params.account.name ?? ''}
+      onRightPress={controller.close}
     >
       <LinearLayout justifyContent={'space-between'} height={'100%'}>
         <LinearLayout>
