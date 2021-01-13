@@ -408,7 +408,8 @@
         "insufficientFunds": "Insufficient funds",
         "contacts": "Contacts",
         "paste": "Paste",
-        "scan": "Scan"
+        "scan": "Scan",
+        "tipCheckboxLabel": "(I am happy to support my network and chip in %{tipValue} GAS (Optional))"
       },
       "transactionReview": {
         "token": "Token",

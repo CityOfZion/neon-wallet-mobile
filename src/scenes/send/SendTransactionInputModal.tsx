@@ -1,8 +1,9 @@
 import {wallet} from '@cityofzion/neon-core'
 import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
+import PropTypes from 'prop-types'
 import React, {Fragment, useEffect, useState} from 'react'
-import {Alert} from 'react-native'
+import {View, StyleSheet, Text} from 'react-native'
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler'
 import InputScrollView from 'react-native-input-scroll-view'
 import {useDispatch, useSelector} from 'react-redux'
@@ -17,7 +18,9 @@ import SwiperPanel, {
   PANEL_OFFSET,
   useSwiperController,
 } from '~src/components/SwiperPanel'
+import {TipCheckbox} from '~src/components/TipCheckbox'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import ThemedCheckBox from '~src/components/themed/ThemedCheckbox'
 import {NeoURI} from '~src/helpers/UriHelper'
 import {
   FasterPriority,
@@ -38,7 +41,6 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
-
 export interface SendTransactionInputModalParams {
   walletTitle: string
   account: Account
@@ -63,7 +65,7 @@ const PriorityTab = (props: {
       orientation="horiz"
       bg="background.1"
       borderRadius={8}
-      mb="58px"
+      mb="40px"
       height="75px"
     >
       <ButtonView
@@ -460,8 +462,8 @@ const SendTransactionInputModal = (prop: Props) => {
   )
   const [amount, setAmount] = useState(uri?.amount ?? '')
   const [fiat, setFiat] = useState(0)
+  const [tip, setTip] = useState<{amount: number; address: string}>()
   const hash = prop.route.params?.uri?.tokenHash ?? ''
-
   const [contact, setContact] = useState<Contact>()
   const [token, setToken] = useState<TokenAsset | null | undefined>(
     tokens.find((t: TokenAsset) => t.hash === hash) ??
@@ -524,6 +526,7 @@ const SendTransactionInputModal = (prop: Props) => {
 
     const tokenWithHolding = Facade.utils.clone(token)
     const fiatWithHolding = Facade.utils.clone(fiat)
+    const tipWithHolding = Facade.utils.clone(tip)
     tokenWithHolding.amount = Number(amount)
 
     dispatch(RootStore.senderTransaction.actions.clearState())
@@ -539,6 +542,7 @@ const SendTransactionInputModal = (prop: Props) => {
     dispatch(
       RootStore.senderTransaction.actions.setFiat(Number(fiatWithHolding))
     )
+    dispatch(RootStore.senderTransaction.actions.setTip(tipWithHolding))
 
     prop.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
   }
@@ -635,6 +639,9 @@ const SendTransactionInputModal = (prop: Props) => {
       handleAddressChanged(data)
     }
   }
+  const gasAmount = account.tokenAssets.find(
+    (asset) => asset.name === 'GAS' && asset.symbol === 'GAS'
+  )?.amount
 
   return show ? (
     <InputScrollView
@@ -749,6 +756,17 @@ const SendTransactionInputModal = (prop: Props) => {
         </TextView>
 
         <PriorityTab priority={priority} changePriority={changePriority} />
+        <TipCheckbox
+          gasAmount={gasAmount}
+          address={'AHznnriCRsUCWfN53gfNL2UYWVsbNzyXkA'}
+          fiat={fiat}
+          label={Facade.t('modals.send.transactionInput.tipCheckboxLabel', {
+            tipValue: tip ? tip.amount.toFixed(8) : '0',
+          })}
+          dispatchTip={setTip}
+          mainAsset={token?.name}
+          feeAmount={priority.fee}
+        />
       </LinearLayout>
       <LinearLayout mb="58px" px="24px" alignSelf="center" width="100%">
         <ThemedButton

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import {useSelector} from 'react-redux'
 
@@ -5,7 +6,6 @@ import {Facade} from '~src/app/Facade'
 import {HeaderColumn} from '~src/components/HeaderColumn'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-
 interface Props {
   transaction: SenderTransactionState
   hideSingleTokenPrice?: boolean
@@ -227,4 +227,77 @@ export const TokenView = (props: Props) => {
       </LinearLayout>
     </LinearLayout>
   )
+}
+
+interface ITipView {
+  amount: number
+  widthIcon?: string
+  heightIcon?: string
+}
+
+export const TipView: React.FC<ITipView> = (props) => {
+  const tokens = useSelector((state: RootState) => state.app.tokens)
+  const {exchange} = useSelector((state: RootState) => state.app)
+  const {currency} = useSelector((state: RootState) => state.settings)
+  const ratioTip = exchange['GAS'].to[currency] * props.amount
+  return (
+    <LinearLayout
+      orientation={'verti'}
+      borderRadius={'7px'}
+      bg={'background.14'}
+      pt={'12px'}
+      pb={'12px'}
+      pl={'16px'}
+      pr={'16px'}
+      mt={4}
+    >
+      <TextView mb={'5px'} color={'text.10'}>
+        Tip
+      </TextView>
+      <LinearLayout orientation={'horiz'}>
+        <ImageView
+          source={
+            tokens.find(
+              (token) => token.symbol === 'GAS' && token.name === 'GAS'
+            )?.srcIcon
+          }
+          width={props.widthIcon ?? '14px'}
+          height={props.heightIcon ?? '14px'}
+          alignSelf={'center'}
+        />
+        <TextView
+          ml={3}
+          fontFamily={'medium'}
+          color={'text.0'}
+          fontSize={'12px'}
+          textAlignVertical={'bottom'}
+          includeFontPadding={false}
+        >
+          {
+            tokens.find(
+              (token) => token.symbol === 'GAS' && token.name === 'GAS'
+            )?.symbol
+          }
+        </TextView>
+      </LinearLayout>
+      <LinearLayout style={{width: 275}} alignSelf={'flex-start'}>
+        <LinearLayout orientation={'horiz'} justifyContent={'space-between'}>
+          <LinearLayout orientation={'verti'}>
+            <TextView color={'text.10'}>qty</TextView>
+            <TextView color={'text.0'}>{props.amount.toFixed(8)}</TextView>
+          </LinearLayout>
+          <LinearLayout orientation={'verti'}>
+            <TextView color={'text.10'}>value</TextView>
+            <TextView color={'text.0'}>{`$${ratioTip.toFixed(8)}`}</TextView>
+          </LinearLayout>
+        </LinearLayout>
+      </LinearLayout>
+    </LinearLayout>
+  )
+}
+
+TipView.propTypes = {
+  amount: PropTypes.number.isRequired,
+  heightIcon: PropTypes.string,
+  widthIcon: PropTypes.string,
 }

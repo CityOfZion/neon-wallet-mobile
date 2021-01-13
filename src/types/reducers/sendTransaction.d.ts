@@ -11,6 +11,7 @@ export declare global {
     | 'SET_FEE_AMOUNT'
     | 'CLEAR_STATE_SENDER_TRANSACTION'
     | 'SET_FIAT'
+    | 'SET_TIP'
 
   interface SenderTransactionState {
     token: TokenAsset | null
@@ -19,6 +20,7 @@ export declare global {
     feeAmount: PriorityFee | null
     fiat?: number | null
     tokens: TokenAsset[]
+    tip?: {amount: number; address: string}
   }
 
   type SenderTransactionAction = SenderTransactionState &
