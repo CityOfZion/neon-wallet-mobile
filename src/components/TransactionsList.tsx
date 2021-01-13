@@ -289,7 +289,7 @@ const TransactionComponent = (props: {
                     adjustsFontSizeToFit={true}
                     numberOfLines={1}
                   >
-                    {props.item.token?.amount.toFixed(8) ?? ''}
+                    {token.item.amount.toFixed(8) ?? ''}
                   </TextView>
                 </LinearLayout>
 
@@ -308,7 +308,7 @@ const TransactionComponent = (props: {
                       props.currency,
                       props.language,
                       2,
-                      10
+                      8
                     )}
                   </TextView>
                 </LinearLayout>
