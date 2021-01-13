@@ -480,7 +480,7 @@ const SendTransactionInputModal = (prop: Props) => {
       state.routes[state.routes.length - 1].name ===
       Facade.route.SendTransactionInputModal.name
   )
-  const routes = useNavigationState((state) => state.routeNames)
+
   useEffect(() => {
     if (amount !== '') {
       if (token?.symbol) {
