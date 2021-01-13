@@ -11,6 +11,7 @@ import {FeeAmountDispatcher} from '~src/store/senderTransaction/dispatchers/FeeA
 import {FiatDispatcher} from '~src/store/senderTransaction/dispatchers/FiatDispatcher'
 import {ReceiverAddressDispatcher} from '~src/store/senderTransaction/dispatchers/ReceiverAddressDispatcher'
 import {SenderAddressDispatcher} from '~src/store/senderTransaction/dispatchers/SenderAddressDispatcher'
+import {TipDispatcher} from '~src/store/senderTransaction/dispatchers/TipDispatcher'
 import {TokenDispatcher} from '~src/store/senderTransaction/dispatchers/TokenDispatcher'
 
 export class SendTransactionReducer extends ReducerWrapper<
@@ -29,6 +30,7 @@ export class SendTransactionReducer extends ReducerWrapper<
     TokenDispatcher,
     ClearStateDispatcher,
     FiatDispatcher,
+    TipDispatcher,
   ]
 
   readonly actions = {
@@ -50,11 +52,14 @@ export class SendTransactionReducer extends ReducerWrapper<
     clearState: () => {
       return this.commit('CLEAR_STATE_SENDER_TRANSACTION', {})
     },
+    setTip: (tip: {amount: number; address: string} | undefined) => {
+      return this.commit('SET_TIP', {tip})
+    },
     sendAsset: (): AsyncAction<string | null> => {
       return async (dispatch, getState) => {
         const sendTx = getState().senderTransaction
 
-        const {token, senderAddress, receiverAddress, feeAmount} = sendTx
+        const {token, senderAddress, receiverAddress, feeAmount, tip} = sendTx
         const fees = feeAmount
 
         if (!token) throw new Error('Token not defined')
@@ -72,7 +77,9 @@ export class SendTransactionReducer extends ReducerWrapper<
             receiverAddress,
             assets,
             amount,
-            fees?.fee
+            fees?.fee,
+            tip ? tip.amount : undefined,
+            tip ? tip.address : undefined
           )
         }
 
@@ -80,7 +87,9 @@ export class SendTransactionReducer extends ReducerWrapper<
           senderAddress,
           receiverAddress,
           token,
-          fees?.fee
+          fees?.fee,
+          tip ? tip.amount : undefined,
+          tip ? tip.address : undefined
         )
       }
     },

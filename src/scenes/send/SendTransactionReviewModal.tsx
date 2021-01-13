@@ -11,7 +11,7 @@ import {Storage} from '~src/app/Storage'
 import {AccountView} from '~src/components/AccountView'
 import {HeaderColumn} from '~src/components/HeaderColumn'
 import {PANEL_OFFSET} from '~src/components/SwiperPanel'
-import {TokenView} from '~src/components/TokenView'
+import {TokenView, TipView} from '~src/components/TokenView'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {TokenAsset} from '~src/models/TokenAsset'
@@ -188,7 +188,7 @@ const SendTransactionReviewModal = (props: Props) => {
   const contacts = useSelector((state: RootState) => state.app.contacts)
   const accounts = useSelector((state: RootState) => state.app.accounts)
   const wallets = useSelector((state: RootState) => state.app.wallets)
-
+  const tip = useSelector((state: RootState) => state.senderTransaction.tip)
   const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string | null>>()
@@ -378,6 +378,7 @@ const SendTransactionReviewModal = (props: Props) => {
                     widthIcon="20px"
                     heightIcon="20px"
                   />
+                  {tip && <TipView amount={tip.amount} />}
                 </LinearLayout>
               </LinearLayout>
 

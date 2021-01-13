@@ -213,7 +213,7 @@ const BalanceList = (props: Props) => {
 
       {showListTokenAssets(props.tokenAssets) ? (
         <FlatList<TokenAsset>
-          data={props.tokenAssets.filter((tokenAsset) => tokenAsset.amount > 0)}
+          data={props.tokenAssets}
           keyExtractor={(item) => item.symbol}
           ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
           renderItem={({item}) => (

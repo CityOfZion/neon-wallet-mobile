@@ -16,6 +16,13 @@ interface Props {
   checked?: boolean
   label: string
   singleRow?: boolean
+  labelStyle?: {
+    color: string
+    size: string | number
+    numberOfLines: number
+    marginHorizontal: number
+    marginVertical: number
+  }
 }
 
 const ThemedCheckbox: React.FC<Props> = (props) => {
@@ -25,7 +32,6 @@ const ThemedCheckbox: React.FC<Props> = (props) => {
     setValue(!value)
     if (props.onChange) props.onChange(!value, e)
   }
-
   return (
     <CheckboxView onPress={onChangeEvent}>
       <CheckboxContentView
@@ -54,13 +60,17 @@ const ThemedCheckbox: React.FC<Props> = (props) => {
 
         <LabelView
           weight={props.singleRow ? 1 : undefined}
-          color={'text.0'}
-          fontSize={'lg'}
+          color={props.labelStyle?.color ?? 'text.0'}
+          fontSize={props.labelStyle?.size ?? 'lg'}
           fontFamily={'bold'}
           allowFontScaling={true}
           adjustsFontSizeToFit={true}
-          numberOfLines={1}
-          style={{textAlign: 'left'}}
+          numberOfLines={props.labelStyle?.numberOfLines ?? 3}
+          style={{
+            textAlign: 'left',
+            marginVertical: props.labelStyle?.marginVertical ?? 0,
+            marginHorizontal: props.labelStyle?.marginHorizontal ?? 0,
+          }}
         >
           {props.label}
         </LabelView>
@@ -74,6 +84,7 @@ ThemedCheckbox.propTypes = {
   checked: PropTypes.bool,
   label: PropTypes.string.isRequired,
   singleRow: PropTypes.bool,
+  labelStyle: PropTypes.any,
 }
 
 ThemedCheckbox.defaultProps = {
