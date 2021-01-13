@@ -7,11 +7,17 @@ import {
   GestureResponderEvent,
   View,
 } from 'react-native'
+
+import {Account} from '~src/models/redux/Account'
 interface Props {
+  account?: Account
   onPress?: (evt: GestureResponderEvent) => void
 }
 
 const ThemedSendButton: React.FC<Props> = (props) => {
+  const isWatchAccount = props.account?.accountType === 'watch'
+  const isNotEmpty = props.account?.hasFunds
+
   const styles = StyleSheet.create({
     dropShadow: {
       alignItems: 'center',
@@ -34,11 +40,19 @@ const ThemedSendButton: React.FC<Props> = (props) => {
   return (
     <TouchableWithoutFeedback onPress={props.onPress}>
       <View style={styles.dropShadow}>
-        <Image
-          width={13}
-          height={16}
-          source={require('~src/assets/images/arrow-up-green.png')}
-        />
+        {isNotEmpty && !isWatchAccount ? (
+          <Image
+            width={13}
+            height={16}
+            source={require('~src/assets/images/arrow-up-green.png')}
+          />
+        ) : (
+          <Image
+            width={13}
+            height={16}
+            source={require('~src/assets/images/arrow-gray.png')}
+          />
+        )}
       </View>
     </TouchableWithoutFeedback>
   )
@@ -46,6 +60,7 @@ const ThemedSendButton: React.FC<Props> = (props) => {
 
 ThemedSendButton.propTypes = {
   onPress: PropTypes.func.isRequired,
+  account: PropTypes.any,
 }
 
 export {ThemedSendButton}

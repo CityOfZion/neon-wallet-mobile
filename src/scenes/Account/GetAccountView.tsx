@@ -438,6 +438,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         </AwaitActivity>
 
         <ThemedSendButton
+          account={account}
           onPress={
             isWatchAccount || !account.getBalanceAmount()
               ? undefined
