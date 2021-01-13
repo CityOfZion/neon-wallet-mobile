@@ -207,35 +207,38 @@ const BalanceList = (props: Props) => {
 
   return (
     <LinearLayout {...innerProps} width={'100%'}>
-      <TextView color="text.2" fontSize="sm">
-        {Facade.t('components.balanceList.title')}
-      </TextView>
-
       {showListTokenAssets(props.tokenAssets) ? (
-        <FlatList<TokenAsset>
-          data={props.tokenAssets}
-          keyExtractor={(item) => item.symbol}
-          ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
-          renderItem={({item}) => (
-            <BalanceListItem
-              item={item}
-              fromAccountView={props.fromAccountView}
-              fromListWalletView={props.fromListWalletView}
-              fromSendAccountSelectionModal={
-                props.fromSendAccountSelectionModal
-              }
-              address={props.address}
-              walletId={props.walletId}
-              currency={currency}
-              exchange={exchange}
-              language={language}
-              walletTitle={props.walletTitle}
-              account={props.account}
-              uri={props.uri}
-              tokenAssets={props.tokenAssets}
-            />
-          )}
-        />
+        <>
+          <TextView color="text.2" fontSize="sm">
+            {Facade.t('components.balanceList.title')}
+          </TextView>
+          <FlatList<TokenAsset>
+            data={props.tokenAssets}
+            keyExtractor={(item) => item.symbol}
+            ItemSeparatorComponent={() => (
+              <LinearLayout bg="text.2" height={1} />
+            )}
+            renderItem={({item}) => (
+              <BalanceListItem
+                item={item}
+                fromAccountView={props.fromAccountView}
+                fromListWalletView={props.fromListWalletView}
+                fromSendAccountSelectionModal={
+                  props.fromSendAccountSelectionModal
+                }
+                address={props.address}
+                walletId={props.walletId}
+                currency={currency}
+                exchange={exchange}
+                language={language}
+                walletTitle={props.walletTitle}
+                account={props.account}
+                uri={props.uri}
+                tokenAssets={props.tokenAssets}
+              />
+            )}
+          />
+        </>
       ) : (
         <TextView my="32px" color="text.0" fontSize="18px" textAlign="center">
           {Facade.t('components.balanceList.empty')}
