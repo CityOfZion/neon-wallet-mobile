@@ -1,10 +1,13 @@
 {
     "changelog": [
         {
-            "version": "V0.0.3",
-            "date": "Today",
+            "version": "V1.0.1-8",
+            "date": "January 14 2021",
             "changes": [
-                "- Added Changelog"
+                "- Added Changelog",
+                "- Bug fixes",
+                "- Optional tipping",
+                "- New Getting Started layout"
             ]
         }
     ]
