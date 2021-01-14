@@ -2,11 +2,8 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import {useSelector} from 'react-redux'
 
-import {TokenAsset} from '../models/TokenAsset'
-
 import {Facade} from '~src/app/Facade'
 import {HeaderColumn} from '~src/components/HeaderColumn'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 interface Props {
   transaction: SenderTransactionState
