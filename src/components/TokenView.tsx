@@ -4,7 +4,6 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import {HeaderColumn} from '~src/components/HeaderColumn'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 interface Props {
   transaction: SenderTransactionState
@@ -88,12 +87,11 @@ export const TokenView = (props: Props) => {
               weight={1.6}
               title={Facade.t('transactionDetails.value')}
               value={Facade.filter.currency(
-                props.transaction.fiat ??
-                  (exchange[token.symbol].to[currency] * token.amount).toFixed(
-                    8
-                  ),
+                token.exchangeToken(currency),
                 currency,
-                language
+                language,
+                2,
+                4
               )}
               valueTextColor={'primary'}
             />

@@ -79,7 +79,6 @@ export const TransactionDetails = (props: Props) => {
     )
     receiverName = contact?.name ?? undefined
   }
-
   return (
     <SwiperPanel
       controller={controller}
