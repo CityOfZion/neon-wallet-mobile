@@ -409,7 +409,7 @@
         "contacts": "Contacts",
         "paste": "Paste",
         "scan": "Scan",
-        "tipCheckboxLabel": "(I am happy to support my network and chip in %{tipValue} GAS (Optional))"
+        "tipCheckboxLabel": "(I am happy to support my network and chip in %{tipValue} GAS (Optional)"
       },
       "transactionReview": {
         "token": "Token",

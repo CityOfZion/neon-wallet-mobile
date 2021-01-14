@@ -40,7 +40,8 @@ const WelcomePage = (props: Props) => {
     await Storage.welcomeHidden.save(value)
   }
 
-  const closeTo = (...arg: NavParam<ParamList>) => {
+  const closeTo = async (...arg: NavParam<ParamList>) => {
+    await persist(true)
     setAction(CommonActions.navigate(...arg))
     controller.close()
   }
@@ -109,7 +110,13 @@ const WelcomePage = (props: Props) => {
           >
             <ThemedFlatButton
               text={Facade.t('welcome.button_3')}
-              onPress={controller.close}
+              onPress={() => {
+                closeTo(
+                  // TODO: figure out a way to remove the explicity of 'undefined'
+                  Facade.route.Tab.name,
+                  undefined
+                )
+              }}
               alignItems={'flex-start'}
               textAlign={'center'}
             />
