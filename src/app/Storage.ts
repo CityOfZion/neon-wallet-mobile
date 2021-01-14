@@ -50,6 +50,13 @@ export abstract class Storage {
   }
 
   /**
+   * Controls if authentication for hardware was set up
+   */
+  static get hasAuthenticationForHardware() {
+    return Facade.storage['@has_authentication_hard'].bind().asBoolean()
+  }
+
+  /**
    * Settings' user data
    */
   static get settings() {

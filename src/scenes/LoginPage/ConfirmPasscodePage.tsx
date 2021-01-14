@@ -51,6 +51,7 @@ const ConfirmPasscodePage = (props: Props) => {
     dispatch(RootStore.settings.actions.setSecurity(Security.password))
     dispatch(RootStore.settings.actions.save())
     await Storage.hasAuthentication.save(true)
+    await Storage.hasAuthenticationForHardware.save(false)
     props.navigation.replace('Tab', undefined)
   }
 
