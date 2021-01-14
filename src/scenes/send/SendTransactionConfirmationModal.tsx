@@ -16,7 +16,7 @@ import {
 } from '~src/styles/styled-components'
 
 export interface SendTransactionConfirmationModalParams {
-  transactionHash: string
+  transactionHash?: string
 }
 
 interface Props {
@@ -77,48 +77,54 @@ const SendTransactionConfirmationModal = (props: Props) => {
               {Facade.t('modals.send.transactionConfirmation.header')}
             </TextView>
           </LinearLayout>
-          <TextView
-            color="text.2"
-            fontSize="14px"
-            fontFamily="medium"
-            textAlign="center"
-            mb="40px"
-          >
-            {Facade.t('modals.send.transactionConfirmation.subheader')}
-          </TextView>
+          {props.route.params.transactionHash && (
+            <>
+              <TextView
+                color="text.2"
+                fontSize="14px"
+                fontFamily="medium"
+                textAlign="center"
+                mb="40px"
+              >
+                {Facade.t('modals.send.transactionConfirmation.subheader')}
+              </TextView>
 
-          <TextView
-            color="text.2"
-            fontSize="14px"
-            fontFamily="medium"
-            mb="12px"
-          >
-            {Facade.t('modals.send.transactionConfirmation.transactionId')}
-          </TextView>
-          <ButtonView
-            orientation="horiz"
-            alignItems="center"
-            mb="24px"
-            onPress={() =>
-              Facade.utils.copyToClipboard(props.route.params.transactionHash)
-            }
-          >
-            <TextView
-              maxWidth="80%"
-              color="primary"
-              fontSize="14px"
-              fontFamily="medium"
-              mr="16px"
-              textAlign="center"
-            >
-              {props.route.params.transactionHash}
-            </TextView>
-            <ImageView
-              width="16px"
-              resizeMode="contain"
-              source={require('~src/assets/images/icon-copy-green.png')}
-            />
-          </ButtonView>
+              <TextView
+                color="text.2"
+                fontSize="14px"
+                fontFamily="medium"
+                mb="12px"
+              >
+                {Facade.t('modals.send.transactionConfirmation.transactionId')}
+              </TextView>
+              <ButtonView
+                orientation="horiz"
+                alignItems="center"
+                mb="24px"
+                onPress={() =>
+                  Facade.utils.copyToClipboard(
+                    props.route.params.transactionHash
+                  )
+                }
+              >
+                <TextView
+                  maxWidth="80%"
+                  color="primary"
+                  fontSize="14px"
+                  fontFamily="medium"
+                  mr="16px"
+                  textAlign="center"
+                >
+                  {props.route.params.transactionHash}
+                </TextView>
+                <ImageView
+                  width="16px"
+                  resizeMode="contain"
+                  source={require('~src/assets/images/icon-copy-green.png')}
+                />
+              </ButtonView>
+            </>
+          )}
 
           <LinearLayout mt="auto" px="20px" width="100%">
             <ThemedButton

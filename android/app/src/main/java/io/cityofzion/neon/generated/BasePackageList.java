@@ -12,8 +12,6 @@ public class BasePackageList {
         new expo.modules.crypto.CryptoPackage(),
         new expo.modules.errorrecovery.ErrorRecoveryPackage(),
         new expo.modules.filesystem.FileSystemPackage(),
-        new expo.modules.firebase.analytics.FirebaseAnalyticsPackage(),
-        new expo.modules.firebase.core.FirebaseCorePackage(),
         new expo.modules.font.FontLoaderPackage(),
         new expo.modules.imageloader.ImageLoaderPackage(),
         new expo.modules.keepawake.KeepAwakePackage(),
