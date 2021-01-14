@@ -22,14 +22,19 @@ import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 // Why are you like this, Typescript
 type ParamList = TabStackParamList & RootStackParamList
 
+export interface WelcomeModalParam {
+  showChangelog?: boolean
+}
+
 interface Props {
   navigation: StackNavigationProp<ParamList>
-  route: RouteProp<ModalStackParamList, keyof ModalStackParamList>
+  route: RouteProp<ModalStackParamList, 'WelcomeModal'>
 }
 
 const WelcomePage = (props: Props) => {
   const controller = useSwiperController(true)
   const [action, setAction] = useState<CommonActions.Action>()
+  const showChangelog = props.route.params?.showChangelog
 
   const persist = async (value: boolean) => {
     await Storage.welcomeHidden.save(value)
@@ -48,7 +53,13 @@ const WelcomePage = (props: Props) => {
       paddingTop={20}
       noHeader={true}
       onClose={() =>
-        action ? props.navigation.dispatch(action) : props.navigation.goBack()
+        showChangelog
+          ? props.navigation.navigate(Facade.route.Modal.name, {
+              screen: Facade.route.ChangelogModal.name,
+            })
+          : action
+          ? props.navigation.dispatch(action)
+          : props.navigation.goBack()
       }
       image={require('~/src/assets/images/icon-plus-circle-white.png')}
       disableDefaultScrollView={true}

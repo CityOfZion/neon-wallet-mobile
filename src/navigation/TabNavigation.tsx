@@ -69,19 +69,20 @@ const TabNavigation = (props: Props) => {
     props.route.params?.changelogHidden ?? true
   )
 
-  const [numberOfVersions, setNumberOfVersions] = useState(
-    props.route.params?.numberOfVersions ?? 0
-  )
-
-  if (numberOfVersions !== currentNumberOfVersions) {
+  if (props.route.params?.numberOfVersions !== currentNumberOfVersions) {
     if (!changelogHidden && changelogHiddenStorage) {
       Storage.numberOfVersions.save(currentNumberOfVersions)
+      //TODO: If WelcomeModal should appear, navigate to here
       props.navigation.navigate(Facade.route.Modal.name, {
-        screen: Facade.route.ChangelogModal.name,
+        screen: Facade.route.WelcomeModal.name,
         params: {
-          fromTabNavigation: true,
+          showChangelog: true,
         },
       })
+      //If not, navigate to here
+      // props.navigation.navigate(Facade.route.Modal.name, {
+      //   screen: Facade.route.ChangelogModal.name,
+      // })
       setChangelogHidden(true)
     }
   } else {

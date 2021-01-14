@@ -1,7 +1,7 @@
-import {RouteProp} from '@react-navigation/native'
+import {RouteProp, CommonActions} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
-import React from 'react'
+import React, {useState} from 'react'
 
 import * as data from '~src/Changelog.json'
 import {Facade} from '~src/app/Facade'
@@ -30,16 +30,11 @@ interface Props {
 
 const ChangelogModal = (props: Props) => {
   const controller = useSwiperController(true)
-  const fromTabNavigation = props.route.params?.fromTabNavigation
+  const [action, setAction] = useState<CommonActions.Action>()
 
-  const handleNavigation = () => {
-    if (fromTabNavigation) {
-      props.navigation.navigate(Facade.route.Modal.name, {
-        screen: Facade.route.WelcomeModal.name,
-      })
-    } else {
-      props.navigation.goBack()
-    }
+  const closeTo = (...arg: NavParam<ParamList>) => {
+    setAction(CommonActions.navigate(...arg))
+    controller.close()
   }
 
   return (
@@ -49,8 +44,16 @@ const ChangelogModal = (props: Props) => {
       title={Facade.t('modals.changelog.title')}
       rightButton={<CloseButton mr="25px" />}
       imageSize={[22, 22]}
-      onClose={handleNavigation}
-      onRightPress={controller.close}
+      onClose={() =>
+        action ? props.navigation.dispatch(action) : props.navigation.goBack()
+      }
+      onRightPress={() =>
+        closeTo(
+          // TODO: figure out a way to remove the explicity of 'undefined'
+          Facade.route.Tab.name,
+          undefined
+        )
+      }
       controller={controller}
     >
       <AwaitActivity
