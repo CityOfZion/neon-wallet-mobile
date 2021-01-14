@@ -33,7 +33,7 @@ const ThemedCheckbox: React.FC<Props> = (props) => {
     if (props.onChange) props.onChange(!value, e)
   }
   return (
-    <CheckboxView onPress={onChangeEvent}>
+    <CheckboxView style={{width: '90%'}} onPress={onChangeEvent}>
       <CheckboxContentView
         orientation={'horiz'}
         alignItems={'center'}
