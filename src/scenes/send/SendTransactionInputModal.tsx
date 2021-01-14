@@ -629,7 +629,6 @@ const SendTransactionInputModal = (prop: Props) => {
       setContact(contact)
     }
     setReceiverAddress(addressValue)
-    prop.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
   }
 
   const handleQrCode = (data: NeoURI | string) => {
