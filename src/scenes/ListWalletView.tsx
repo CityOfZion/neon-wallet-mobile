@@ -15,6 +15,7 @@ import WalletPicker from '~src/components/misc/WalletPicker'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {Wallet} from '~src/models/redux/Wallet'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
@@ -40,6 +41,7 @@ const WalletChangeComponent = (props: {
   currency: Currency
   language: Lang
   exchange: Exchange
+  tokenAssets: TokenAsset[]
   onPressWarning: () => void
 }) => {
   const {currency, language} = useSelector((state: RootState) => state.settings)
@@ -72,57 +74,71 @@ const WalletChangeComponent = (props: {
     }
   }
 
+  const showListTokenAssets = (tokenAssets: TokenAsset[]) => {
+    let show = false
+    tokenAssets.forEach((token) => {
+      if (token.amount > 0) {
+        show = true
+      }
+    })
+    return show
+  }
+
   return (
     <>
-      <LinearLayout mb={6} alignItems={'center'}>
-        <TextView fontSize={'11px'} color={'text.2'}>
-          {props.wallet.formattedLastVisitedAt}
-        </TextView>
-
-        <LinearLayout orientation={'horiz'} minHeight={56}>
-          <TextView fontSize={'36px'} color={'text.0'} fontFamily={'medium'}>
-            {props.wallet.calculateBalanceFormatted(
-              props.currency,
-              props.language,
-              props.exchange
-            )}
+      {showListTokenAssets(props.tokenAssets) ? (
+        <LinearLayout mb={6} alignItems={'center'}>
+          <TextView fontSize={'11px'} color={'text.2'}>
+            {props.wallet.formattedLastVisitedAt}
           </TextView>
 
-          {props.wallet.hasFunds && (
-            <ButtonView onPress={props.onPressWarning}>
-              <ImageView
-                mt={'8px'}
-                mx={'4px'}
-                source={require('~src/assets/images/icon-warning-green.png')}
-              />
-            </ButtonView>
-          )}
-        </LinearLayout>
-
-        <AwaitActivity name={'populateVariation'}>
-          <LinearLayout orientation={'horiz'}>
-            <TextView
-              mr={2}
-              fontSize={'sm'}
-              color={'text.2'}
-              fontFamily={'semibold'}
-            >
-              {Facade.t('screens.listWallets.changeInLast24hours')}
+          <LinearLayout orientation={'horiz'} minHeight={56}>
+            <TextView fontSize={'36px'} color={'text.0'} fontFamily={'medium'}>
+              {props.wallet.calculateBalanceFormatted(
+                props.currency,
+                props.language,
+                props.exchange
+              )}
             </TextView>
 
-            {variationInPercent !== undefined && (
-              <TextView
-                fontSize={'sm'}
-                color={variationInPercent >= 0 ? 'success' : 'danger'}
-                fontFamily={'semibold'}
-              >
-                {variationInPercent > 0 ? '+' : ''}
-                {Facade.filter.decimal(variationInPercent, language, 2)}%
-              </TextView>
+            {props.wallet.hasFunds && (
+              <ButtonView onPress={props.onPressWarning}>
+                <ImageView
+                  mt={'8px'}
+                  mx={'4px'}
+                  source={require('~src/assets/images/icon-warning-green.png')}
+                />
+              </ButtonView>
             )}
           </LinearLayout>
-        </AwaitActivity>
-      </LinearLayout>
+
+          <AwaitActivity name={'populateVariation'}>
+            <LinearLayout orientation={'horiz'}>
+              <TextView
+                mr={2}
+                fontSize={'sm'}
+                color={'text.2'}
+                fontFamily={'semibold'}
+              >
+                {Facade.t('screens.listWallets.changeInLast24hours')}
+              </TextView>
+
+              {variationInPercent !== undefined && (
+                <TextView
+                  fontSize={'sm'}
+                  color={variationInPercent >= 0 ? 'success' : 'danger'}
+                  fontFamily={'semibold'}
+                >
+                  {variationInPercent > 0 ? '+' : ''}
+                  {Facade.filter.decimal(variationInPercent, language, 2)}%
+                </TextView>
+              )}
+            </LinearLayout>
+          </AwaitActivity>
+        </LinearLayout>
+      ) : (
+        <View />
+      )}
     </>
   )
 }
@@ -299,6 +315,7 @@ const ListWalletView = (props: WalletProps) => {
                   exchange={exchange}
                   language={language}
                   wallet={selectedWallet}
+                  tokenAssets={selectedWallet.tokenAssets ?? []}
                   onPressWarning={openWarning}
                 />
                 <LinearLayout mx={'16px'}>
