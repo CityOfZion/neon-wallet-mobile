@@ -31,7 +31,7 @@ export const TipCheckbox: React.FC<ITipCheckbox> = ({
   const [tip, setTip] = useState<{amount: number; address: string} | undefined>(
     undefined
   )
-  const [checkedState, setCheckedState] = useState(false)
+
   const {exchange} = useSelector((state: RootState) => state.app)
   const {currency} = useSelector((state: RootState) => state.settings)
   const isVisible = () => {
@@ -75,7 +75,7 @@ export const TipCheckbox: React.FC<ITipCheckbox> = ({
       labelStyle={{
         color: 'primary',
         size: 14,
-        numberOfLines: 2,
+        numberOfLines: 3,
         marginVertical: 8,
         marginHorizontal: 4,
       }}
