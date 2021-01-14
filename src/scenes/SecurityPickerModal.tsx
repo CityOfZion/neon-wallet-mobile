@@ -38,12 +38,14 @@ const SecurityPickerModal = (props: Props) => {
       dispatch(RootStore.settings.actions.setSecurity(controlSecurity)) //hardware is fixed
       dispatch(RootStore.settings.actions.save())
       if (props.route.params?.isFirstTime) {
-        await Storage.welcomeToNWSeen.save(true)
+        await Storage.welcomeToNWSeen.save(false)
         props.navigation.replace(Facade.route.Tab.name, {
           screen: Facade.route.ListWallets.name,
-          welcomeHidden: false,
+          welcomeHidden: true,
+          changelogHidden: true,
         })
       }
+      await Storage.welcomeHidden.save(true)
       controller.close()
     }
   }
