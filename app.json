@@ -20,9 +20,9 @@
       "googleServicesFile": "./GoogleService-Info.plist"
     },
     "splash": {
-      "image": "src/assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#364046"
+      "image": "src/assets/splash-darker.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1f2830"
     },
     "icon": "src/assets/ic_launcher.png",
     "primaryColor": "#4cffb3",
