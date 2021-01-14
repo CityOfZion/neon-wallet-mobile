@@ -14,6 +14,7 @@ export class WrapperConfig {
     '@changelog_hidden',
     '@number_of_versions',
     '@has_authentication',
+    '@has_authentication_hard',
     '@settings',
     '@wallets',
     '@accounts',

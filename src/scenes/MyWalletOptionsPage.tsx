@@ -2,7 +2,11 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React from 'react'
 import {Alert} from 'react-native'
+import {useDispatch, useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
+
+import {Security} from '../enums/Security'
+import {RootStore} from '../store/RootStore'
 
 import * as LocalAuthentication from '~/node_modules/expo-local-authentication'
 import {Facade} from '~src/app/Facade'
@@ -32,6 +36,7 @@ const MyWalletOptionsPage = (props: Props) => {
   const checkForAuth = async () => {
     // If user has set up authentication (either hardware or passcode)
     const hasAuth = await Storage.hasAuthentication.load()
+    const hasAuthHard = await Storage.hasAuthenticationForHardware.load()
     if (hasAuth === true) {
       // Checks if user set up a passcode
       const passcode = await Facade.security.loadPasscode()
@@ -50,9 +55,15 @@ const MyWalletOptionsPage = (props: Props) => {
             },
           },
         })
+      }
+    } else {
+      // If no passcode, hardware authentication
+      if (hasAuthHard === true) {
+        tryAuth()
       } else {
-        // If no passcode, hardware authentication
-        await tryAuth()
+        props.navigation.navigate(Facade.route.Step1BackupWallet.name, {
+          wallet,
+        })
       }
     }
   }

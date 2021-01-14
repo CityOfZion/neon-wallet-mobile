@@ -356,6 +356,7 @@ export class AppReducer extends ReducerWrapper<
         await Storage.changelogHidden.erase()
         await Storage.numberOfVersions.erase()
         await Storage.hasAuthentication.erase()
+        await Storage.hasAuthenticationForHardware.erase()
         await Storage.settings.erase()
         await Storage.wallets.erase()
         await Storage.accounts.erase()

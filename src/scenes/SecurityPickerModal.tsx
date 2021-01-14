@@ -104,6 +104,8 @@ const SecurityPickerModal = (props: Props) => {
         const result = await hardwareAuth()
         if (result?.success) {
           setControlSecurity(sec)
+          Storage.hasAuthenticationForHardware.save(true)
+          Storage.hasAuthentication.save(false)
           break
         } else {
           setControlSecurity(security)
@@ -118,6 +120,8 @@ const SecurityPickerModal = (props: Props) => {
         break
       case Security.disabled:
         setControlSecurity(sec)
+        Storage.hasAuthenticationForHardware.save(false)
+        Storage.hasAuthentication.save(false)
         break
       default:
         break
