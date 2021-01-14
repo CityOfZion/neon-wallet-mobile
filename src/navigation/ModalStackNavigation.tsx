@@ -52,7 +52,7 @@ import {
   TransactionDetailsParams,
 } from '~src/scenes/TransactionDetails'
 import WalletContextModal from '~src/scenes/WalletContextModal'
-import WelcomePage from '~src/scenes/WelcomePage'
+import WelcomePage, {WelcomeModalParam} from '~src/scenes/WelcomePage'
 import ReceiveAccountSelectionModal, {
   ReceiveAccountSelectionModalParams,
 } from '~src/scenes/receive/ReceiveAccountSelectionModal'
@@ -65,7 +65,7 @@ import ReceiveToAccountModal, {
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
 
 export type ModalStackParamList = {
-  WelcomeModal: undefined
+  WelcomeModal: WelcomeModalParam
   CreateAccountModal: undefined
   EditAccountModal: EditAccountModalParam
   AccountQRCode: AccountQRCodeParams
@@ -109,6 +109,7 @@ export type ModalParams =
   | DefaultNavigationParam<SendStackModalParams>
   | DefaultNavigationParam<EditWalletParams>
   | DefaultNavigationParam<ChangelogModalParams>
+  | DefaultNavigationParam<WelcomeModalParam>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
