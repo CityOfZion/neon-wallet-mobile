@@ -298,6 +298,14 @@ const SendTransactionReviewModal = (props: Props) => {
     )
 
     if (!transactionHash) {
+      props.navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: Facade.route.SendTransactionConfirmationModal.name,
+          },
+        ],
+      })
       throw new Error('Transaction has failed')
     }
 
