@@ -1,5 +1,6 @@
 import React from 'react'
 import {ImageLoadEventData} from 'react-native'
+import {showMessage} from 'react-native-flash-message'
 
 import {Facade} from '~src/app/Facade'
 import {PriorityFee} from '~src/models/PriorityFee'
@@ -49,11 +50,15 @@ export const HeaderColumn = (props: Props) => {
         )}
         <ButtonView
           activeOpacity={props.showCopy ? 0.4 : 1}
-          onPress={
-            props.showCopy && typeof props.value === 'string'
-              ? Facade.utils.copyToClipboard(props.value)
-              : undefined
-          }
+          onPress={() => {
+            if (props.showCopy && typeof props.value === 'string') {
+              Facade.utils.copyToClipboard(props.value)
+              showMessage({
+                message: Facade.t('toast.copiedToClipboard'),
+                type: 'success',
+              })
+            }
+          }}
         >
           <LinearLayout
             orientation={'horiz'}
