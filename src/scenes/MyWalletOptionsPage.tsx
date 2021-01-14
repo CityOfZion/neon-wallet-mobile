@@ -109,7 +109,11 @@ const MyWalletOptionsPage = (props: Props) => {
           iconMarginLeft={2}
           iconMarginRight={5}
           arrowDirection={RightIconType.ARROW_RIGHT}
-          onPress={checkForAuth}
+          onPress={() =>
+            props.navigation.navigate(Facade.route.Step1BackupWallet.name, {
+              wallet,
+            })
+          }
         />
       )}
     </ScreenLayout>
