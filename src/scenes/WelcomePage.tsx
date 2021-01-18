@@ -53,15 +53,18 @@ const WelcomePage = (props: Props) => {
       fullSize={true}
       paddingTop={20}
       noHeader={true}
-      onClose={() =>
-        showChangelog
-          ? props.navigation.navigate(Facade.route.Modal.name, {
-              screen: Facade.route.ChangelogModal.name,
-            })
-          : action
-          ? props.navigation.dispatch(action)
-          : props.navigation.goBack()
-      }
+      onClose={() => {
+        if (showChangelog) {
+          persist(true)
+          props.navigation.navigate(Facade.route.Modal.name, {
+            screen: Facade.route.ChangelogModal.name,
+          })
+        } else if (action) {
+          props.navigation.dispatch(action)
+        } else {
+          props.navigation.goBack()
+        }
+      }}
       image={require('~/src/assets/images/icon-plus-circle-white.png')}
       disableDefaultScrollView={true}
     >
