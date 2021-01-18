@@ -48,8 +48,7 @@
     "ImportKey": "Import",
     "Passphrase": "Create Wallet",
     "ImportReadAccount": "Add a watch",
-    "CustomizeAccount": "Customize account",
-    "ChangelogPage": "Changelog"
+    "CustomizeAccount": "Customize account"
   },
   "home": {
     "welcome": "Welcome to Neon Wallet!"
@@ -409,7 +408,8 @@
         "insufficientFunds": "Insufficient funds",
         "contacts": "Contacts",
         "paste": "Paste",
-        "scan": "Scan"
+        "scan": "Scan",
+        "tipCheckboxLabel": "(I am happy to support my network and chip in %{tipValue} GAS (Optional)"
       },
       "transactionReview": {
         "token": "Token",
@@ -495,6 +495,10 @@
         "title": "Add a contact",
         "subtitle": "Create a contact in your address book"
       }
+    },
+    "changelog": {
+      "title": "Changelog",
+      "goBack": "Go Back"
     }
   },
   "components": {
@@ -604,7 +608,8 @@
     "viewOnDora": "View on Dora",
     "confirmed": "Confirmed",
     "pending": "Pending",
-    "price": "Price"
+    "price": "Price",
+    "amount": "Amount"
   },
   "priorityFee": {
     "none": "None",

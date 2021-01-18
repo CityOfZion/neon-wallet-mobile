@@ -94,7 +94,6 @@ const Notification = (props: NotificationProps) => {
 const NotificationBox = styled(LinearLayout)`
   border-radius: 7px;
   border-left-width: 7px;
-  shadow-color: #fff;
   shadow-offset: { width: 2, height: 6 };
   shadow-opacity: 0.39;
   shadow-radius: 8.3px;
