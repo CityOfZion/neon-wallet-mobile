@@ -11,6 +11,7 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import Changelog from '~src/components/changelog/Changelog'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
@@ -39,22 +40,13 @@ const ChangelogModal = (props: Props) => {
 
   return (
     <SwiperPanel
+      controller={controller}
       padding={20}
       fullSize={true}
       title={Facade.t('modals.changelog.title')}
-      rightButton={<CloseButton mr="25px" />}
-      imageSize={[22, 22]}
       onClose={() =>
-        action ? props.navigation.dispatch(action) : props.navigation.goBack()
+        props.navigation.navigate(Facade.route.Tab.name, undefined)
       }
-      onRightPress={() =>
-        closeTo(
-          // TODO: figure out a way to remove the explicity of 'undefined'
-          Facade.route.Tab.name,
-          undefined
-        )
-      }
-      controller={controller}
     >
       <AwaitActivity
         name={'swiperRight'}
@@ -64,6 +56,21 @@ const ChangelogModal = (props: Props) => {
           <Changelog changelog={data.changelog} />
         </LinearLayout>
       </AwaitActivity>
+      <LinearLayout
+        position={'absolute'}
+        right={Facade.scale(-7)}
+        top={Facade.scale(-10)}
+      >
+        <ThemedCloseButton
+          onPress={() =>
+            closeTo(
+              // TODO: figure out a way to remove the explicity of 'undefined'
+              Facade.route.Tab.name,
+              undefined
+            )
+          }
+        />
+      </LinearLayout>
     </SwiperPanel>
   )
 }
