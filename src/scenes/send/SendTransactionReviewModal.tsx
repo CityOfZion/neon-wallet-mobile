@@ -395,7 +395,7 @@ const SendTransactionReviewModal = (props: Props) => {
                   label={Facade.t('app.send')}
                   onPress={() => Facade.await.run('auth', checkForAuth)}
                   rounded={true}
-                  radius={50}
+                  radius={25}
                 />
               </LinearLayout>
             </LinearLayout>
