@@ -231,7 +231,8 @@
         "scan": "Scan",
         "priorityFast": "Fast",
         "priorityFaster": "Faster",
-        "priorityFastest": "Fastest"
+        "priorityFastest": "Fastest",
+        "tipCheckboxLabel": "(I am happy to support my network and chip in %{tipValue} GAS (Optional)"
       },
       "transactionReview": {
         "token": "Token",
