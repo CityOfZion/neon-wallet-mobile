@@ -5,6 +5,7 @@ import React, {useState} from 'react'
 
 import * as data from '~src/Changelog.json'
 import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
@@ -30,10 +31,12 @@ interface Props {
 }
 
 const ChangelogModal = (props: Props) => {
+  const currentNumberOfVersions = Object.keys(data.changelog).length
   const controller = useSwiperController(true)
   const [action, setAction] = useState<CommonActions.Action>()
 
   const closeTo = (...arg: NavParam<ParamList>) => {
+    Storage.numberOfVersions.save(currentNumberOfVersions)
     setAction(CommonActions.navigate(...arg))
     controller.close()
   }
@@ -44,9 +47,10 @@ const ChangelogModal = (props: Props) => {
       padding={20}
       fullSize={true}
       title={Facade.t('modals.changelog.title')}
-      onClose={() =>
+      onClose={() => {
+        Storage.numberOfVersions.save(currentNumberOfVersions)
         props.navigation.navigate(Facade.route.Tab.name, undefined)
-      }
+      }}
     >
       <AwaitActivity
         name={'swiperRight'}
