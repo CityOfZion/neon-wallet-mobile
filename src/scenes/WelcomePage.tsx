@@ -67,23 +67,23 @@ const WelcomePage = (props: Props) => {
       }}
       image={require('~/src/assets/images/icon-plus-circle-white.png')}
       disableDefaultScrollView={true}
+      darkerSolidColorBG={true}
     >
       <ScrollView style={{marginHorizontal: -20}}>
         <LinearLayout mb={PANEL_OFFSET} pt={30} flex={1}>
           <LinearLayout weight={1} />
           <Image
-            source={require('~src/assets/images/wellcomeGetstarted.png')}
+            source={require('~src/assets/images/get_started.png')}
             style={{
-              marginLeft: -50,
               width: imgWidth,
               height: imgHeight,
-              resizeMode: 'stretch',
+              resizeMode: 'contain',
               alignSelf: 'center',
               marginTop: 30,
             }}
             width={imgWidth}
             height={imgHeight}
-            resizeMode={'stretch'}
+            resizeMode={'contain'}
           />
           <TextView
             mb={5}
@@ -97,6 +97,8 @@ const WelcomePage = (props: Props) => {
 
           <TextView
             mb={6}
+            mr={5}
+            ml={5}
             color={'text.0'}
             fontSize={'lg'}
             textAlign={'center'}
