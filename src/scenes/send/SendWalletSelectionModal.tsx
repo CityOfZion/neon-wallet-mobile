@@ -46,8 +46,6 @@ const SendWalletSelectionModal = (props: Props) => {
     (value: Wallet) => value.hasFunds
   )
 
-  console.log(walletWithFunds.length)
-
   const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(
     usableWallets[0]
   )
