@@ -140,11 +140,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				A642DACC91B36965C3CC46FE /* [CP] Copy Pods Resources */,
-<<<<<<< Updated upstream
 				CD97971FB7EB760A8E9E0A35 /* [CP-User] [RNFB] Core Configuration */,
-=======
-				FD9EE2501D8C6EB22F526153 /* [CP-User] [RNFB] Core Configuration */,
->>>>>>> Stashed changes
 			);
 			buildRules = (
 			);
