@@ -87,6 +87,7 @@ export const TransactionDetails = (props: Props) => {
       onClose={() => props.navigation.goBack()}
       onRightPress={controller.close}
       rightButton={<CloseButton mr="20px" />}
+      solidColorBG={true}
     >
       <LinearLayout
         orientation={'verti'}
