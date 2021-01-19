@@ -85,61 +85,79 @@ const WalletChangeComponent = (props: {
   }
 
   return (
-    <>
+    <LinearLayout mb={6} alignItems={'center'}>
       {showListTokenAssets(props.tokenAssets) ? (
-        <LinearLayout mb={6} alignItems={'center'}>
-          <TextView fontSize={'11px'} color={'text.2'}>
-            {props.wallet.formattedLastVisitedAt}
-          </TextView>
-
-          <LinearLayout orientation={'horiz'} minHeight={56}>
-            <TextView fontSize={'36px'} color={'text.0'} fontFamily={'medium'}>
-              {props.wallet.calculateBalanceFormatted(
-                props.currency,
-                props.language,
-                props.exchange
-              )}
-            </TextView>
-
-            {props.wallet.hasFunds && (
-              <ButtonView onPress={props.onPressWarning}>
-                <ImageView
-                  mt={'8px'}
-                  mx={'4px'}
-                  source={require('~src/assets/images/icon-warning-green.png')}
-                />
-              </ButtonView>
-            )}
-          </LinearLayout>
-
-          <AwaitActivity name={'populateVariation'}>
-            <LinearLayout orientation={'horiz'}>
-              <TextView
-                mr={2}
-                fontSize={'sm'}
-                color={'text.2'}
-                fontFamily={'semibold'}
-              >
-                {Facade.t('screens.listWallets.changeInLast24hours')}
-              </TextView>
-
-              {variationInPercent !== undefined && (
-                <TextView
-                  fontSize={'sm'}
-                  color={variationInPercent >= 0 ? 'success' : 'danger'}
-                  fontFamily={'semibold'}
-                >
-                  {variationInPercent > 0 ? '+' : ''}
-                  {Facade.filter.decimal(variationInPercent, language, 2)}%
-                </TextView>
-              )}
-            </LinearLayout>
-          </AwaitActivity>
-        </LinearLayout>
+        <TextView fontSize={'11px'} color={'text.2'}>
+          {props.wallet.formattedLastVisitedAt}
+        </TextView>
       ) : (
         <View />
       )}
-    </>
+
+      <LinearLayout orientation={'horiz'} minHeight={56}>
+        <TextView fontSize={'36px'} color={'text.0'} fontFamily={'medium'}>
+          {props.wallet.calculateBalance(props.currency, props.exchange) !== 0
+            ? props.wallet.calculateBalanceFormatted(
+                props.currency,
+                props.language,
+                props.exchange
+              )
+            : Facade.filter.currency(
+                props.wallet.calculateBalance(props.currency, props.exchange),
+                props.currency,
+                props.language,
+                0,
+                0
+              )}
+        </TextView>
+
+        {props.wallet.hasFunds && (
+          <ButtonView onPress={props.onPressWarning}>
+            <ImageView
+              mt={'8px'}
+              mx={'4px'}
+              source={require('~src/assets/images/icon-warning-green.png')}
+            />
+          </ButtonView>
+        )}
+      </LinearLayout>
+
+      <AwaitActivity name={'populateVariation'}>
+        <LinearLayout orientation={'horiz'}>
+          <TextView
+            mr={2}
+            fontSize={'sm'}
+            color={'text.2'}
+            fontFamily={'semibold'}
+          >
+            {Facade.t('screens.listWallets.changeInLast24hours')}
+          </TextView>
+
+          {variationInPercent !== undefined && (
+            <TextView
+              fontSize={'sm'}
+              color={
+                variationInPercent > 0
+                  ? 'success'
+                  : variationInPercent === 0
+                  ? 'text.2'
+                  : 'danger'
+              }
+              fontFamily={'semibold'}
+            >
+              {variationInPercent > 0
+                ? '+'
+                : variationInPercent === 0
+                ? '-'
+                : ''}
+              {variationInPercent === 0
+                ? ''
+                : `${Facade.filter.decimal(variationInPercent, language, 2)}%`}
+            </TextView>
+          )}
+        </LinearLayout>
+      </AwaitActivity>
+    </LinearLayout>
   )
 }
 
@@ -281,6 +299,7 @@ const ListWalletView = (props: WalletProps) => {
       useHeaderPadding={false}
       useStatusBarPadding={true}
       padding={0}
+      invertedGradient={true}
     >
       <>
         <LinearLayout alignSelf={'flex-end'}>
