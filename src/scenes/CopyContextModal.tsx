@@ -65,6 +65,7 @@ export const CopyContextModal = (props: CopyContextModalProps) => {
       noHeader={true}
       padding={36}
       onClose={props.navigation.goBack}
+      solidColorBG={true}
     >
       <Fragment>
         {items.map((item, index) => (
