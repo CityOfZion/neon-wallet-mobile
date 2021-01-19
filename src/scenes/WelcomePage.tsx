@@ -75,11 +75,12 @@ const WelcomePage = (props: Props) => {
           <Image
             source={require('~src/assets/images/get_started.png')}
             style={{
-              width: imgWidth,
-              height: imgHeight,
+              width: imgWidth * 1.17,
+              height: imgHeight * 1.17,
+              marginLeft: 10,
               resizeMode: 'contain',
               alignSelf: 'center',
-              marginTop: 30,
+              marginTop: 10,
             }}
             width={imgWidth}
             height={imgHeight}
@@ -129,10 +130,11 @@ const WelcomePage = (props: Props) => {
 
           <LinearLayout
             position={'absolute'}
-            right={Facade.scale(5)}
-            top={Facade.scale(5)}
+            right={Facade.scale(2)}
+            top={Facade.scale(-10)}
           >
             <ThemedCloseButton
+              iconSize={[18, 18]}
               onPress={() =>
                 closeTo(
                   // TODO: figure out a way to remove the explicity of 'undefined'
