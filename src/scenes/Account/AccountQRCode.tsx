@@ -33,6 +33,7 @@ export const AccountQRCode = (props: AccountQRCodeProps) => {
       onClose={props.navigation.goBack}
       title={props.route.params.account.name ?? ''}
       onRightPress={controller.close}
+      solidColorBG={true}
     >
       <LinearLayout justifyContent={'space-between'} height={'100%'}>
         <LinearLayout>
