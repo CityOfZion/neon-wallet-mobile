@@ -42,6 +42,8 @@ interface SwiperProps {
   image?: ImageSourcePropType
   imageSize: [number, number]
   title?: string
+  solidColorBG?: boolean
+  darkerSolidColorBG?: boolean
   children?: JSX.Element | JSX.Element[]
 
   // Important! If you wish to disable the default scroll view,
@@ -386,8 +388,8 @@ export default function SwiperPanel(props: SwiperProps) {
             style={{
               width: '100%',
 
-              borderTopLeftRadius: 30,
-              borderTopRightRadius: 30,
+              borderTopLeftRadius: 18,
+              borderTopRightRadius: 18,
               overflow: 'hidden',
             }}
             onLayout={(event) => {
@@ -395,7 +397,13 @@ export default function SwiperPanel(props: SwiperProps) {
             }}
           >
             <LinearGradient
-              colors={[theme.colors.background[6], theme.colors.background[7]]}
+              colors={
+                props.darkerSolidColorBG
+                  ? [theme.colors.background[14], theme.colors.background[14]]
+                  : props.solidColorBG
+                  ? [theme.colors.background[2], theme.colors.background[2]]
+                  : [theme.colors.background[6], theme.colors.background[7]]
+              }
               end={[1, 0.75]}
               style={[
                 {
@@ -468,6 +476,8 @@ SwiperPanel.propTypes = {
   title: PropTypes.string,
   disableScrolling: PropTypes.bool,
   scrollEnabled: PropTypes.bool,
+  solidColorBG: PropTypes.bool,
+  darkerSolidColorBG: PropTypes.bool,
 }
 
 SwiperPanel.defaultProps = {
@@ -482,6 +492,8 @@ SwiperPanel.defaultProps = {
   paddingBottom: undefined,
   disableScrolling: false,
   imageSize: [20, 20],
+  solidColorBG: false,
+  darkerSolidColorBG: false,
 }
 
 interface ICloseButton {
