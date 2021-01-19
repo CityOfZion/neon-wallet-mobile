@@ -173,7 +173,6 @@
     "placeholder_confirmPassphrase": "Please repeat the passphrase",
     "setName":"Wallet Name cannot be empty.",
     "setPassphrase": "Passphrase cannot be empty.",
-    "shortPassphrase": "Passphrase must have at least 6 characters.",
     "passphraseDontMatch": "Passphrases do not match"
   },
   "step5CreateWallet": {

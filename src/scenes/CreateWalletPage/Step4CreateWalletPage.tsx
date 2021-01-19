@@ -33,9 +33,6 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
     } else if (!passphrase) {
       Alert.alert(Facade.t('step4CreateWallet.setPassphrase'))
       return
-    } else if (!((passphrase?.length ?? 0) >= 6)) {
-      Alert.alert(Facade.t('step4CreateWallet.shortPassphrase'))
-      return
     } else if (passphrase !== confirmPassphrase) {
       Alert.alert(Facade.t('step4CreateWallet.passphraseDontMatch'))
       return
