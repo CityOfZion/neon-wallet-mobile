@@ -170,7 +170,10 @@
     "label_confirmPassphrase": "Confirm Passphrase",
     "placeholder_walletName": "Please enter a name",
     "placeholder_createPassphrase": "Please enter a passphrase",
-    "placeholder_confirmPassphrase": "Please repeat the passphrase"
+    "placeholder_confirmPassphrase": "Please repeat the passphrase",
+    "setName":"Wallet Name cannot be empty.",
+    "setPassphrase": "Passphrase cannot be empty.",
+    "passphraseDontMatch": "Passphrases do not match"
   },
   "step5CreateWallet": {
     "label_1": "Congratulations, You’re the proud owner of a shiny new wallet!",

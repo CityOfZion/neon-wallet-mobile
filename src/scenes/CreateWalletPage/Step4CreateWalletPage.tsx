@@ -2,6 +2,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
+import {Alert} from 'react-native'
 import {useDispatch} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -26,7 +27,16 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
 
   const submit = async () => {
-    if (!walletName || !passphrase || !isValid()) return
+    if (!walletName) {
+      Alert.alert(Facade.t('step4CreateWallet.setName'))
+      return
+    } else if (!passphrase) {
+      Alert.alert(Facade.t('step4CreateWallet.setPassphrase'))
+      return
+    } else if (passphrase !== confirmPassphrase) {
+      Alert.alert(Facade.t('step4CreateWallet.passphraseDontMatch'))
+      return
+    }
 
     dispatch(RootStore.wallet.actions.setName(walletName))
     dispatch(RootStore.wallet.actions.setType('standard'))
@@ -139,7 +149,6 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
           <ThemedButton
             onPress={() => Facade.await.run('submit', submit, 1000)}
             label={Facade.t('app.continue')}
-            disabled={!isValid()}
           />
         </AwaitActivity>
       </LinearLayout>
