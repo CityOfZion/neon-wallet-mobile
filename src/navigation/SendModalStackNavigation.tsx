@@ -67,6 +67,7 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
         rightButton={<ThemedCloseButton onPress={controller.close} />}
         onClose={() => props.navigation.goBack()}
         disableDefaultScrollView={true}
+        solidColorBG={true}
       >
         <View
           style={{
@@ -93,7 +94,6 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
-                    image: require('~src/assets/images/arrow.png'),
                   }),
               })}
             />
@@ -104,7 +104,6 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
-                    image: require('~src/assets/images/arrow.png'),
                   }),
               })}
             />
@@ -115,7 +114,6 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
-                    image: require('~src/assets/images/arrow.png'),
                   }),
                 headerLeft: HeaderBackButton,
               })}
@@ -127,7 +125,6 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
-                    image: require('~src/assets/images/arrow.png'),
                   }),
               })}
             />
@@ -138,7 +135,6 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
                 headerTitle: () =>
                   HeaderBar({
                     title: Facade.t('modals.send.title'),
-                    image: require('~src/assets/images/arrow.png'),
                   }),
               })}
             />
