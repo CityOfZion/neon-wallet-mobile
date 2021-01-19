@@ -75,8 +75,8 @@ const WelcomePage = (props: Props) => {
           <Image
             source={require('~src/assets/images/get_started.png')}
             style={{
-              width: imgWidth * 1.17,
-              height: imgHeight * 1.17,
+              width: imgWidth * 1.2,
+              height: imgHeight * 1.2,
               marginLeft: 10,
               resizeMode: 'contain',
               alignSelf: 'center',
