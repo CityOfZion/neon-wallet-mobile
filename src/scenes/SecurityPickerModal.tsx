@@ -162,6 +162,7 @@ const SecurityPickerModal = (props: Props) => {
       rightButton={<CloseButton mr={'20px'} />}
       disableDefaultScrollView={true}
       onRightPress={controller.close}
+      solidColorBG={true}
     >
       <SelectorList items={securities} />
     </SwiperPanel>
