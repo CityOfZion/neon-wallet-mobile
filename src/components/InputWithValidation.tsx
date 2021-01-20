@@ -152,34 +152,19 @@ const InputWithValidation = (props: Props) => {
       />
 
       <LinearLayout height="12px" justifyContent="flex-start">
-        {Platform.OS === 'ios' ? (
-          <TextView
-            fontStyle="italic"
-            color={props.invalidMessageColor ?? theme.colors.background[5]}
-            fontSize={12}
-            fontFamily="regular"
-            textAlign="right"
-            mt={2}
-            opacity={isValid ? 0 : 1}
-            height={'15px'}
-          >
-            {props.invalidMessage ??
-              Facade.t('components.inputTextWithValidation.incorrectFormat')}
-          </TextView>
-        ) : (
-          <TextView
-            fontStyle="italic"
-            color={props.invalidMessageColor ?? theme.colors.background[5]}
-            fontSize={12}
-            fontFamily="regular"
-            textAlign="right"
-            mt={2}
-            opacity={isValid ? 0 : 1}
-          >
-            {props.invalidMessage ??
-              Facade.t('components.inputTextWithValidation.incorrectFormat')}
-          </TextView>
-        )}
+        <TextView
+          fontStyle="italic"
+          color={props.invalidMessageColor ?? theme.colors.background[5]}
+          fontSize={12}
+          fontFamily="regular"
+          textAlign="right"
+          mt={2}
+          opacity={isValid ? 0 : 1}
+          height={Platform.OS === 'ios' ? '15px' : undefined}
+        >
+          {props.invalidMessage ??
+            Facade.t('components.inputTextWithValidation.incorrectFormat')}
+        </TextView>
       </LinearLayout>
 
       <LinearLayout
