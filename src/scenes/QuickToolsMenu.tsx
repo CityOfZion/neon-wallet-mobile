@@ -5,6 +5,7 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback,
 } from 'react-native'
+import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -50,10 +51,20 @@ function QuickToolsItem(props: {
           alignItems="center"
         >
           <LinearLayout>
-            <TextView color={'text.0'} fontSize={18} fontFamily="regular">
+            <TextView
+              style={{includeFontPadding: false}}
+              color={'text.0'}
+              fontSize={18}
+              fontFamily="regular"
+            >
               {props.item.title}
             </TextView>
-            <TextView color={'text.6'} fontSize={16} fontFamily="medium">
+            <TextView
+              style={{includeFontPadding: false}}
+              color={'text.6'}
+              fontSize={16}
+              fontFamily="medium"
+            >
               {props.item.subtitle}
             </TextView>
           </LinearLayout>
@@ -67,7 +78,7 @@ function QuickToolsItem(props: {
         </LinearLayout>
 
         {props.index !== props.listItems.length - 1 && (
-          <LinearLayout height="1px" bg={'background.5'} />
+          <LinearLayout height="2px" bg={'background.5'} width={'96%'} />
         )}
       </LinearLayout>
     </TouchableHighlight>
@@ -121,9 +132,10 @@ export default function QuickToolsMenu(props: Props) {
       noHeader={true}
       draggable={true}
       paddingTop={20}
-      paddingBottom={24 + Facade.app.footerHeight}
+      paddingBottom={24 + Facade.app.footerHeight + useSafeAreaInsets().bottom}
       paddingLeft={0}
       paddingRight={0}
+      solidColorBG={true}
     >
       {items.map((item, index) => (
         <QuickToolsItem
