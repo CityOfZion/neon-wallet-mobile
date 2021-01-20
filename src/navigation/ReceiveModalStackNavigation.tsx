@@ -64,6 +64,7 @@ const ReceiveModalStackNavigation = (props: ReceiveModalStackProps) => {
         rightButton={<ThemedCloseButton onPress={controller.close} />}
         onClose={() => props.navigation.goBack()}
         disableDefaultScrollView={true}
+        solidColorBG={true}
       >
         <View
           style={{
