@@ -117,13 +117,13 @@ const Header = (props: SwiperProps & {mb: number}) => {
 
   return (
     <LinearLayout
-      alignItems="center"
-      justifyContent="space-between"
+      justifyContent={'space-between'}
+      alignItems="baseline"
       orientation="horiz"
       mt="24px"
       mb={props.paddingTop}
     >
-      <LinearLayout weight={1} alignItems="flex-start" pl={4}>
+      <LinearLayout pl={4}>
         <AwaitActivity name={'swiperLeft'}>
           <TouchableWithoutFeedback
             onPress={() => props.onLeftPress && props.onLeftPress()}
@@ -150,15 +150,7 @@ const Header = (props: SwiperProps & {mb: number}) => {
         </AwaitActivity>
       </LinearLayout>
 
-      <LinearLayout
-        weight={1}
-        width="100%"
-        orientation="horiz"
-        alignItems="center"
-        justifyContent="center"
-        position="absolute"
-        pointerEvents={'none'}
-      >
+      <LinearLayout pointerEvents={'none'}>
         {props.image ? (
           <ImageView
             resizeMode="contain"
@@ -170,12 +162,12 @@ const Header = (props: SwiperProps & {mb: number}) => {
           />
         ) : undefined}
 
-        <TextView color={theme.colors.text[0]} fontSize={24} alignSelf="center">
+        <TextView color={theme.colors.text[0]} fontSize={24}>
           {props.title}
         </TextView>
       </LinearLayout>
 
-      <LinearLayout weight={1} alignItems="flex-end" pr={4}>
+      <LinearLayout pr={4}>
         <AwaitActivity name={'swiperRight'}>
           <TouchableWithoutFeedback
             onPress={() => props.onRightPress && props.onRightPress()}
