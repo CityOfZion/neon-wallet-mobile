@@ -1,7 +1,7 @@
 import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
 import React, {useState} from 'react'
-import {ScrollView} from 'react-native'
+import {ScrollView, Dimensions} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
@@ -36,7 +36,7 @@ const ReceiveWalletSelectionModal = (props: Props) => {
     <ScrollView
       style={{
         width: '100%',
-        marginTop: useHeaderHeight(),
+        marginTop: useHeaderHeight() + Dimensions.get('screen').height * 0.04,
       }}
       contentContainerStyle={{
         flexGrow: 1,
@@ -55,6 +55,7 @@ const ReceiveWalletSelectionModal = (props: Props) => {
             fontSize={18}
             fontFamily="medium"
             textAlign="center"
+            style={{marginBottom: Dimensions.get('screen').height * 0.05}}
           >
             {Facade.t('modals.receive.walletSelection.subtitle')}
           </TextView>
