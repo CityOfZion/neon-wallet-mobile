@@ -1,11 +1,12 @@
 import {useNavigation} from '@react-navigation/native'
 import PropTypes from 'prop-types'
-import React, {useState} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import {
   LayoutChangeEvent,
   NativeSyntheticEvent,
   NativeTouchEvent,
   TouchableOpacity,
+  Animated,
 } from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
@@ -68,7 +69,19 @@ const AccountCard: React.FC<Props> = (props) => {
     const {height} = event.nativeEvent.layout
     setViewHeight(height)
   }
-
+  const fadeAnim = useRef(new Animated.Value(0)).current
+  const fadeIn = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start()
+  }
+  useEffect(() => {
+    if (viewHeight !== 0) {
+      fadeIn()
+    }
+  }, [viewHeight])
   return (
     <PaymentCardView
       onLayout={layoutEvent}
@@ -113,236 +126,237 @@ const AccountCard: React.FC<Props> = (props) => {
           borderBottomColor: props.isVertical ? bright : dark,
         }}
       />
-
-      {!props.isInactive && (
-        <LinearLayout
-          orientation={'verti'}
-          width={'100%'}
-          height={'100%'}
-          px={15 * unit}
-          py={10 * unit}
-        >
+      <Animated.View style={{opacity: fadeAnim}}>
+        {!props.isInactive && (
           <LinearLayout
-            mb={3 * unit}
-            orientation={'horiz'}
-            alignItems={'flex-end'}
+            orientation={'verti'}
             width={'100%'}
+            height={'100%'}
+            px={15 * unit}
+            py={10 * unit}
           >
             <LinearLayout
-              weight={1}
               mb={3 * unit}
-              orientation={'horiz'}
-              alignItems={'center'}
-            >
-              <ImageView
-                width={24 * unit}
-                height={24 * unit}
-                source={
-                  props.account.srcIcon ??
-                  require('~/src/assets/images/icon-neo-white.png')
-                }
-                resizeMode={'center'}
-                mr={10 * unit}
-                alignSelf={'center'}
-                mt={2}
-              />
-
-              <TextView
-                mb={-2 * unit}
-                fontFamily={'semibold'}
-                fontSize={22 * unit}
-                color="white"
-                textAlign="left"
-                numberOfLines={1}
-                width={'88%'}
-                allowFontScaling={true}
-              >
-                {props.account.name?.length !== 0
-                  ? props.account.name
-                  : Facade.t('paymentCard.accountPlaceholder')}
-              </TextView>
-            </LinearLayout>
-
-            {props.isCompacted ? (
-              <LinearLayout ml={10 * unit} alignItems={'flex-start'}>
-                <TextView
-                  fontFamily={'bold'}
-                  fontSize={12 * unit}
-                  color="white"
-                  textAlign="left"
-                  fontWeight="bold"
-                  includeFontPadding={true}
-                >
-                  {(!props.hideBalance && Facade.t('paymentCard.balance')) ||
-                    ''}
-                </TextView>
-
-                <TextView
-                  mt={-6 * unit}
-                  fontFamily={'semibold'}
-                  fontSize={21 * unit}
-                  color="white"
-                  textAlign="center"
-                  fontWeight="bold"
-                  allowFontScaling={true}
-                  adjustsFontSizeToFit={true}
-                  numberOfLines={1}
-                >
-                  {!props.hideBalance
-                    ? props.account.formattedBalanceAmount(
-                        currency,
-                        language,
-                        exchange
-                      )
-                    : ''}
-                </TextView>
-              </LinearLayout>
-            ) : (
-              !props.hideQRCode && (
-                <ButtonView
-                  onPress={() => {
-                    navigation.navigate(Facade.route.Modal.name, {
-                      screen: Facade.route.AccountQRCode.name,
-                      params: {
-                        account: props.account,
-                      },
-                    })
-                  }}
-                >
-                  <ImageView
-                    ml={10 * unit}
-                    width={32 * unit}
-                    height={32 * unit}
-                    source={require('~src/assets/images/card-qrcode.png')}
-                  />
-                </ButtonView>
-              )
-            )}
-          </LinearLayout>
-
-          {!props.isStackMode && !props.isCompacted && (
-            <TextView
-              mb={3 * unit}
-              fontSize={14 * unit}
-              color="white"
-              fontFamily="bold"
-              mt={20 * unit}
-              ml={30 * unit}
-            >
-              {(!props.hideBalance && Facade.t('paymentCard.balance')) || ''}
-            </TextView>
-          )}
-
-          {!props.isStackMode && (
-            <LinearLayout
-              orientation={'verti'}
-              justifyContent={'center'}
-              alignItems={'center'}
-              weight={1}
-            >
-              {!props.isCompacted && (
-                <TextView
-                  mb={3 * unit}
-                  fontSize={48 * unit}
-                  color="white"
-                  textAlign="center"
-                  fontFamily="semibold"
-                  allowFontScaling={true}
-                  adjustsFontSizeToFit={true}
-                  numberOfLines={1}
-                >
-                  {!props.hideBalance
-                    ? props.account.formattedBalanceAmount(
-                        currency,
-                        language,
-                        exchange
-                      )
-                    : ''}
-                </TextView>
-              )}
-            </LinearLayout>
-          )}
-
-          {props.account.address && (
-            <LinearLayout
-              mt={10 * unit}
               orientation={'horiz'}
               alignItems={'flex-end'}
-              mb={5}
+              width={'100%'}
             >
-              <LinearLayout weight={1}>
-                <LinearLayout orientation={'horiz'}>
-                  {props.account.accountType === 'watch' ? (
-                    <ImageView
-                      width={21 * unit}
-                      height={21 * unit}
-                      source={require('~/src/assets/images/icon-watch-white.png')}
-                      ml={2 * unit}
-                      mt={4 * unit}
-                      mb={4 * unit}
-                      alignSelf={'center'}
-                      mr={8 * unit}
-                    />
-                  ) : (
-                    <LinearLayout ml={30 * unit} />
-                  )}
+              <LinearLayout
+                weight={1}
+                mb={3 * unit}
+                orientation={'horiz'}
+                alignItems={'center'}
+              >
+                <ImageView
+                  width={24 * unit}
+                  height={24 * unit}
+                  source={
+                    props.account.srcIcon ??
+                    require('~/src/assets/images/icon-neo-white.png')
+                  }
+                  resizeMode={'center'}
+                  mr={10 * unit}
+                  alignSelf={'center'}
+                  mt={2}
+                />
 
-                  <LinearLayout>
-                    <TextView
-                      fontSize={14 * unit}
-                      color="white"
-                      textAlign="left"
-                      fontFamily="bold"
-                    >
-                      {Facade.t('paymentCard.address')}
-                    </TextView>
-
-                    <TextView
-                      color="primary"
-                      opacity={0.75}
-                      textAlign="left"
-                      fontFamily={'medium'}
-                      ellipsizeMode={'middle'}
-                      pr={'22px'}
-                      numberOfLines={1}
-                      fontSize={'14'}
-                    >
-                      {props.account.address}
-                    </TextView>
-                  </LinearLayout>
-                </LinearLayout>
+                <TextView
+                  mb={-2 * unit}
+                  fontFamily={'semibold'}
+                  fontSize={22 * unit}
+                  color="white"
+                  textAlign="left"
+                  numberOfLines={1}
+                  width={'88%'}
+                  allowFontScaling={true}
+                >
+                  {props.account.name?.length !== 0
+                    ? props.account.name
+                    : Facade.t('paymentCard.accountPlaceholder')}
+                </TextView>
               </LinearLayout>
 
-              {!props.hideCopy && (
-                <TouchableOpacity
-                  onPress={() => {
-                    if (props.account.address) {
-                      Facade.utils.copyToClipboard(props.account.address)
-                      showMessage({
-                        message: Facade.t('toast.copiedToClipboard'),
-                        type: 'success',
+              {props.isCompacted ? (
+                <LinearLayout ml={10 * unit} alignItems={'flex-start'}>
+                  <TextView
+                    fontFamily={'bold'}
+                    fontSize={12 * unit}
+                    color="white"
+                    textAlign="left"
+                    fontWeight="bold"
+                    includeFontPadding={true}
+                  >
+                    {(!props.hideBalance && Facade.t('paymentCard.balance')) ||
+                      ''}
+                  </TextView>
+
+                  <TextView
+                    mt={-6 * unit}
+                    fontFamily={'semibold'}
+                    fontSize={21 * unit}
+                    color="white"
+                    textAlign="center"
+                    fontWeight="bold"
+                    allowFontScaling={true}
+                    adjustsFontSizeToFit={true}
+                    numberOfLines={1}
+                  >
+                    {!props.hideBalance
+                      ? props.account.formattedBalanceAmount(
+                          currency,
+                          language,
+                          exchange
+                        )
+                      : ''}
+                  </TextView>
+                </LinearLayout>
+              ) : (
+                !props.hideQRCode && (
+                  <ButtonView
+                    onPress={() => {
+                      navigation.navigate(Facade.route.Modal.name, {
+                        screen: Facade.route.AccountQRCode.name,
+                        params: {
+                          account: props.account,
+                        },
                       })
-                    }
-                  }}
-                  style={{
-                    paddingTop: 12 * unit,
-                    paddingLeft: 12 * unit,
-                    paddingBottom: 6 * unit,
-                    paddingRight: 6 * unit,
-                  }}
-                >
-                  <ImageView
-                    width={20 * unit}
-                    height={24 * unit}
-                    source={require('~src/assets/images/card-copy.png')}
-                    style={{opacity: 0.5}}
-                  />
-                </TouchableOpacity>
+                    }}
+                  >
+                    <ImageView
+                      ml={10 * unit}
+                      width={32 * unit}
+                      height={32 * unit}
+                      source={require('~src/assets/images/card-qrcode.png')}
+                    />
+                  </ButtonView>
+                )
               )}
             </LinearLayout>
-          )}
-        </LinearLayout>
-      )}
+
+            {!props.isStackMode && !props.isCompacted && (
+              <TextView
+                mb={3 * unit}
+                fontSize={14 * unit}
+                color="white"
+                fontFamily="bold"
+                mt={20 * unit}
+                ml={30 * unit}
+              >
+                {(!props.hideBalance && Facade.t('paymentCard.balance')) || ''}
+              </TextView>
+            )}
+
+            {!props.isStackMode && (
+              <LinearLayout
+                orientation={'verti'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                weight={1}
+              >
+                {!props.isCompacted && (
+                  <TextView
+                    mb={3 * unit}
+                    fontSize={48 * unit}
+                    color="white"
+                    textAlign="center"
+                    fontFamily="semibold"
+                    allowFontScaling={true}
+                    adjustsFontSizeToFit={true}
+                    numberOfLines={1}
+                  >
+                    {!props.hideBalance
+                      ? props.account.formattedBalanceAmount(
+                          currency,
+                          language,
+                          exchange
+                        )
+                      : ''}
+                  </TextView>
+                )}
+              </LinearLayout>
+            )}
+
+            {props.account.address && (
+              <LinearLayout
+                mt={10 * unit}
+                orientation={'horiz'}
+                alignItems={'flex-end'}
+                mb={5}
+              >
+                <LinearLayout weight={1}>
+                  <LinearLayout orientation={'horiz'}>
+                    {props.account.accountType === 'watch' ? (
+                      <ImageView
+                        width={21 * unit}
+                        height={21 * unit}
+                        source={require('~/src/assets/images/icon-watch-white.png')}
+                        ml={2 * unit}
+                        mt={4 * unit}
+                        mb={4 * unit}
+                        alignSelf={'center'}
+                        mr={8 * unit}
+                      />
+                    ) : (
+                      <LinearLayout ml={30 * unit} />
+                    )}
+
+                    <LinearLayout>
+                      <TextView
+                        fontSize={14 * unit}
+                        color="white"
+                        textAlign="left"
+                        fontFamily="bold"
+                      >
+                        {Facade.t('paymentCard.address')}
+                      </TextView>
+
+                      <TextView
+                        color="primary"
+                        opacity={0.75}
+                        textAlign="left"
+                        fontFamily={'medium'}
+                        ellipsizeMode={'middle'}
+                        pr={'22px'}
+                        numberOfLines={1}
+                        fontSize={'14'}
+                      >
+                        {props.account.address}
+                      </TextView>
+                    </LinearLayout>
+                  </LinearLayout>
+                </LinearLayout>
+
+                {!props.hideCopy && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (props.account.address) {
+                        Facade.utils.copyToClipboard(props.account.address)
+                        showMessage({
+                          message: Facade.t('toast.copiedToClipboard'),
+                          type: 'success',
+                        })
+                      }
+                    }}
+                    style={{
+                      paddingTop: 12 * unit,
+                      paddingLeft: 12 * unit,
+                      paddingBottom: 6 * unit,
+                      paddingRight: 6 * unit,
+                    }}
+                  >
+                    <ImageView
+                      width={20 * unit}
+                      height={24 * unit}
+                      source={require('~src/assets/images/card-copy.png')}
+                      style={{opacity: 0.5}}
+                    />
+                  </TouchableOpacity>
+                )}
+              </LinearLayout>
+            )}
+          </LinearLayout>
+        )}
+      </Animated.View>
     </PaymentCardView>
   )
 }
