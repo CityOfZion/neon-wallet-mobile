@@ -86,13 +86,13 @@ export const TransactionDetails = (props: Props) => {
       fullSize={true}
       onClose={() => props.navigation.goBack()}
       onRightPress={controller.close}
-      rightButton={<CloseButton mr="20px" />}
+      rightButton={<CloseButton mr="30px" />}
       solidColorBG={true}
     >
       <LinearLayout
         orientation={'verti'}
         alignContent={'flex-start'}
-        mt={'30px'}
+        mt={'5px'}
         flex={1}
       >
         <LinearLayout orientation={'horiz'}>
@@ -190,7 +190,8 @@ export const TransactionDetails = (props: Props) => {
         />
         <TokenView
           hideTokenInWallet={true}
-          hideSingleTokenPrice={true}
+          hideSingleTokenPrice={false}
+          hideAmountAbove={true}
           transaction={transaction}
         />
         <LinearLayout weight={1} mt={'30px'}>
