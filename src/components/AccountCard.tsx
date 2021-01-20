@@ -46,6 +46,7 @@ interface Props {
   hasShadow?: boolean
   hideQRCode?: boolean
   hideBalance?: boolean
+  hideCopy?: boolean
   orientBy?: 'height' | 'width'
 }
 
@@ -224,7 +225,7 @@ const AccountCard: React.FC<Props> = (props) => {
               mb={3 * unit}
               fontSize={14 * unit}
               color="white"
-              fontWeight="bold"
+              fontFamily="bold"
               mt={20 * unit}
               ml={30 * unit}
             >
@@ -245,7 +246,7 @@ const AccountCard: React.FC<Props> = (props) => {
                   fontSize={48 * unit}
                   color="white"
                   textAlign="center"
-                  fontWeight="bold"
+                  fontFamily="semibold"
                   allowFontScaling={true}
                   adjustsFontSizeToFit={true}
                   numberOfLines={1}
@@ -267,6 +268,7 @@ const AccountCard: React.FC<Props> = (props) => {
               mt={10 * unit}
               orientation={'horiz'}
               alignItems={'flex-end'}
+              mb={5}
             >
               <LinearLayout weight={1}>
                 <LinearLayout orientation={'horiz'}>
@@ -290,16 +292,20 @@ const AccountCard: React.FC<Props> = (props) => {
                       fontSize={14 * unit}
                       color="white"
                       textAlign="left"
-                      fontWeight="bold"
+                      fontFamily="bold"
                     >
                       {Facade.t('paymentCard.address')}
                     </TextView>
 
                     <TextView
-                      fontSize={12 * unit}
-                      color="text.0"
+                      color="primary"
                       opacity={0.75}
                       textAlign="left"
+                      fontFamily={'medium'}
+                      ellipsizeMode={'middle'}
+                      pr={'22px'}
+                      numberOfLines={1}
+                      fontSize={'14'}
                     >
                       {props.account.address}
                     </TextView>
@@ -307,30 +313,32 @@ const AccountCard: React.FC<Props> = (props) => {
                 </LinearLayout>
               </LinearLayout>
 
-              <TouchableOpacity
-                onPress={() => {
-                  if (props.account.address) {
-                    Facade.utils.copyToClipboard(props.account.address)
-                    showMessage({
-                      message: Facade.t('toast.copiedToClipboard'),
-                      type: 'success',
-                    })
-                  }
-                }}
-                style={{
-                  paddingTop: 12 * unit,
-                  paddingLeft: 12 * unit,
-                  paddingBottom: 6 * unit,
-                  paddingRight: 6 * unit,
-                }}
-              >
-                <ImageView
-                  width={20 * unit}
-                  height={24 * unit}
-                  source={require('~src/assets/images/card-copy.png')}
-                  style={{opacity: 0.5}}
-                />
-              </TouchableOpacity>
+              {!props.hideCopy && (
+                <TouchableOpacity
+                  onPress={() => {
+                    if (props.account.address) {
+                      Facade.utils.copyToClipboard(props.account.address)
+                      showMessage({
+                        message: Facade.t('toast.copiedToClipboard'),
+                        type: 'success',
+                      })
+                    }
+                  }}
+                  style={{
+                    paddingTop: 12 * unit,
+                    paddingLeft: 12 * unit,
+                    paddingBottom: 6 * unit,
+                    paddingRight: 6 * unit,
+                  }}
+                >
+                  <ImageView
+                    width={20 * unit}
+                    height={24 * unit}
+                    source={require('~src/assets/images/card-copy.png')}
+                    style={{opacity: 0.5}}
+                  />
+                </TouchableOpacity>
+              )}
             </LinearLayout>
           )}
         </LinearLayout>
@@ -349,6 +357,7 @@ AccountCard.propTypes = {
   hasShadow: PropTypes.bool.isRequired,
   hideQRCode: PropTypes.bool,
   hideBalance: PropTypes.bool,
+  hideCopy: PropTypes.bool,
   orientBy: PropTypes.oneOf(['height', 'width']),
 }
 

@@ -234,7 +234,7 @@ const ReceiveToAccountModal = (props: Props) => {
           >
             {props.route.params.wallet.name?.toUpperCase() ?? ''}
           </TextView>
-          <AccountCard account={props.route.params.account} />
+          <AccountCard account={props.route.params.account} hideCopy={true} hideQRCode={true}/>
           <TouchableWithoutFeedback onPress={props.navigation.goBack}>
             <LinearLayout
               orientation="horiz"

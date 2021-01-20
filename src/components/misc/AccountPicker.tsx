@@ -33,7 +33,7 @@ const AccountPicker: React.FC<Props> = (props: Props) => {
       layout={'default'}
       data={accounts}
       sliderWidth={Facade.app.windowWidth}
-      itemWidth={Facade.scale(Facade.app.windowWidth * 0.7) as number}
+      itemWidth={Facade.scale(Facade.app.windowWidth) as number}
       inactiveSlideScale={0.8}
       inactiveSlideOpacity={1}
       inactiveSlideShift={12}
@@ -59,6 +59,7 @@ const AccountPicker: React.FC<Props> = (props: Props) => {
               onPress={() => pressEvent(item)}
               account={item}
               isCompacted={true}
+              hideCopy={true}
             />
           </LinearLayout>
         )
