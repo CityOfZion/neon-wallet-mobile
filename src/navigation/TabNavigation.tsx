@@ -51,12 +51,11 @@ interface Props {
 
 const Tab = createBottomTabNavigator()
 
-const welcomeHiddenStorage = Storage.welcomeHidden.load()
-const changelogHiddenStorage = Storage.changelogHidden.load()
-const numberOfVersions = Storage.numberOfVersions.load()
-
 const TabNavigation = (props: Props) => {
   const currentNumberOfVersions = Object.keys(data.changelog).length
+  const welcomeHiddenStorage = props.route.params?.welcomeHidden ?? false
+  const changelogHiddenStorage = props.route.params?.changelogHidden ?? false
+  const numberOfVersionsStorage = props.route.params?.numberOfVersions ?? 0
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
@@ -69,9 +68,8 @@ const TabNavigation = (props: Props) => {
     props.route.params?.changelogHidden ?? true
   )
 
-  if (props.route.params?.numberOfVersions !== currentNumberOfVersions) {
-    if (!changelogHidden && changelogHiddenStorage) {
-      Storage.numberOfVersions.save(currentNumberOfVersions)
+  if (numberOfVersionsStorage !== currentNumberOfVersions) {
+    if (!changelogHidden && !changelogHiddenStorage) {
       if (!welcomeHiddenStorage) {
         props.navigation.navigate(Facade.route.Modal.name, {
           screen: Facade.route.WelcomeModal.name,
