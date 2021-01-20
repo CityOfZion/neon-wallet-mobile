@@ -383,7 +383,8 @@
     "send": {
       "title": "Send",
       "walletSelection": {
-        "subtitle": "Please select a wallet to send from"
+        "subtitle": "Please select a wallet to send from",
+        "noFunds": "Your wallets currently have no funds, please add funds in order to send"
       },
       "accountSelection": {
         "subtitle": "Please select an account to send from",

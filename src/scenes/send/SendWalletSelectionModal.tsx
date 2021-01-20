@@ -31,11 +31,19 @@ const SendWalletSelectionModal = (props: Props) => {
       Facade.route.SendWalletSelectionModal.name
   )
 
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
+
   const {wallets, exchange} = useSelector((state: RootState) => state.app)
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
   const usableWallets = wallets.filter(
     (value: Wallet) => value.walletType !== 'watch'
+  )
+
+  const walletWithFunds = usableWallets.filter(
+    (value: Wallet) => value.hasFunds
   )
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(
@@ -64,7 +72,7 @@ const SendWalletSelectionModal = (props: Props) => {
       <TouchableHighlight>
         <Fragment>
           <TextView
-            mb={24}
+            mb={20}
             color="text.0"
             fontSize={18}
             fontFamily="medium"
@@ -89,18 +97,51 @@ const SendWalletSelectionModal = (props: Props) => {
           />
 
           <TextView
-            mt={5}
             alignSelf="center"
             fontSize="36px"
             color="text.0"
             fontFamily="medium"
           >
-            {selectedWallet?.calculateBalanceFormatted(
-              currency,
-              language,
-              exchange
-            )}
+            {selectedWallet?.calculateBalance(currency, exchange) !== 0
+              ? selectedWallet?.calculateBalanceFormatted(
+                  currency,
+                  language,
+                  exchange
+                )
+              : Facade.filter.currency(
+                  selectedWallet?.calculateBalance(currency, exchange),
+                  currency,
+                  language,
+                  0,
+                  0
+                )}
           </TextView>
+          {walletWithFunds.length === 0 && (
+            <LinearLayout
+              mt={21}
+              mr={15}
+              ml={15}
+              alignSelf="center"
+              flex={1}
+              width={'92%'}
+              borderRadius={7}
+              bg={theme.colors.background[14]}
+            >
+              <TextView
+                mt={25}
+                mr={15}
+                ml={17}
+                mb={25}
+                alignSelf="center"
+                fontSize="18px"
+                color="text.0"
+                fontFamily="light"
+                textAlign="center"
+              >
+                {Facade.t('modals.send.walletSelection.noFunds')}
+              </TextView>
+            </LinearLayout>
+          )}
         </Fragment>
       </TouchableHighlight>
     </ScrollView>
