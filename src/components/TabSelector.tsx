@@ -18,57 +18,67 @@ interface TabSelectorProps {
 
 const TabSelector = (props: TabSelectorProps) => {
   return (
-    <LinearLayout orientation="horiz" mt="36px" mb={props.mb ?? '0px'}>
-      <ButtonView
-        activeOpacity={1}
-        onPress={() => props.setFirstTabAsSelected(true)}
-        weight={1}
-        alignItems="center"
-        borderBottomWidth={
-          !props.isFirstTabSelected || props.hideBorderBottom ? '0px' : '3px'
-        }
-        borderColor="primary"
-      >
-        <TextView
-          width={'100%'}
-          textAlign={'center'}
-          fontSize="16px"
-          pb="8px"
-          fontFamily="semibold"
-          borderBottomWidth={'0.8px'}
-          borderColor="text.3"
-          color={props.isFirstTabSelected ? 'text.0' : 'text.3'}
+    <LinearLayout
+      orientation="horiz"
+      mt="36px"
+      mb={props.mb ?? '0px'}
+      width={'100%'}
+    >
+      <LinearLayout orientation={'verti'} weight={1}>
+        <ButtonView
+          activeOpacity={1}
+          onPress={() => props.setFirstTabAsSelected(true)}
+          alignItems="center"
         >
-          {props.capitalize
-            ? props.firstTabLabel.toUpperCase()
-            : props.firstTabLabel}
-        </TextView>
-      </ButtonView>
-      <ButtonView
-        activeOpacity={1}
-        onPress={() => props.setFirstTabAsSelected(false)}
-        weight={1}
-        alignItems="center"
-        borderBottomWidth={
-          props.isFirstTabSelected || props.hideBorderBottom ? '0px' : '3px'
-        }
-        borderColor="primary"
-      >
-        <TextView
-          width={'100%'}
-          textAlign={'center'}
-          fontSize="16px"
-          pb="8px"
-          fontFamily="semibold"
-          borderBottomWidth={'0.8px'}
-          borderColor="text.3"
-          color={props.isFirstTabSelected ? 'text.3' : 'text.0'}
+          <TextView
+            width={'100%'}
+            textAlign={'center'}
+            fontSize="16px"
+            pb="8px"
+            fontFamily="semibold"
+            borderBottomWidth={'0.8px'}
+            borderColor="text.3"
+            color={props.isFirstTabSelected ? 'text.0' : 'text.3'}
+          >
+            {props.capitalize
+              ? props.firstTabLabel.toUpperCase()
+              : props.firstTabLabel}
+          </TextView>
+        </ButtonView>
+        {props.isFirstTabSelected && <LinearLayout height={3} bg={'primary'} />}
+        {!props.isFirstTabSelected && (
+          <LinearLayout height={1} bg={'text.3'} mb={1} />
+        )}
+      </LinearLayout>
+      <LinearLayout orientation={'verti'} weight={1}>
+        <ButtonView
+          activeOpacity={1}
+          onPress={() => props.setFirstTabAsSelected(false)}
+          weight={1}
+          alignItems="center"
         >
-          {props.capitalize
-            ? props.secondTabLabel.toUpperCase()
-            : props.secondTabLabel}
-        </TextView>
-      </ButtonView>
+          <TextView
+            width={'100%'}
+            textAlign={'center'}
+            fontSize="16px"
+            pb="8px"
+            fontFamily="semibold"
+            borderBottomWidth={'0.8px'}
+            borderColor="text.3"
+            color={props.isFirstTabSelected ? 'text.3' : 'text.0'}
+          >
+            {props.capitalize
+              ? props.secondTabLabel.toUpperCase()
+              : props.secondTabLabel}
+          </TextView>
+        </ButtonView>
+        {!props.isFirstTabSelected && (
+          <LinearLayout height={3} bg={'primary'} />
+        )}
+        {props.isFirstTabSelected && (
+          <LinearLayout height={1} bg={'text.3'} mb={2} />
+        )}
+      </LinearLayout>
     </LinearLayout>
   )
 }
