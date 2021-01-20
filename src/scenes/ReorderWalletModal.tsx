@@ -1,5 +1,6 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
+import {Dimensions} from 'react-native'
 import SortableList from 'react-native-sortable-list'
 import {useDispatch, useSelector} from 'react-redux'
 
@@ -14,7 +15,6 @@ import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList & TabStackParamList>
 }
@@ -89,7 +89,7 @@ export default function ReorderWalletModal(props: Props) {
         name={'commitAndClose'}
         loadingView={<ScreenLoader transparent={true} />}
       >
-        <LinearLayout height="100%">
+        <LinearLayout height="100%" mt={Dimensions.get('screen').height * 0.02}>
           <TextView
             textAlign="center"
             fontFamily="medium"
@@ -101,7 +101,7 @@ export default function ReorderWalletModal(props: Props) {
           <SortableList
             contentContainerStyle={{
               height: '100%',
-              paddingTop: 26,
+              paddingTop: Dimensions.get('screen').height * 0.07,
             }}
             data={listData}
             renderRow={ItemComponent}
