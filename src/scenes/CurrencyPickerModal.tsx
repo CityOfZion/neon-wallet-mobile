@@ -59,6 +59,7 @@ const CurrencyPickerModal = (props: Props) => {
       rightButton={<CloseButton mr={'20px'} />}
       disableDefaultScrollView={true}
       onRightPress={controller.close}
+      solidColorBG={true}
     >
       <SelectorList items={currencies} />
     </SwiperPanel>
