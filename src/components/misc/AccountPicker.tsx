@@ -34,7 +34,7 @@ const AccountPicker: React.FC<Props> = (props: Props) => {
       data={accounts}
       sliderWidth={Facade.app.windowWidth}
       itemWidth={Facade.scale(Facade.app.windowWidth) as number}
-      inactiveSlideScale={0.8}
+      inactiveSlideScale={0.9}
       inactiveSlideOpacity={1}
       inactiveSlideShift={12}
       lockScrollWhileSnapping={true}
