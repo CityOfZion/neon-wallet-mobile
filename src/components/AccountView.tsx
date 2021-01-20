@@ -1,6 +1,5 @@
 import {useNavigation} from '@react-navigation/native'
 import React from 'react'
-import {Image} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import {
