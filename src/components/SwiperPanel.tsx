@@ -157,6 +157,7 @@ const Header = (props: SwiperProps & {mb: number}) => {
         alignItems="center"
         justifyContent="center"
         position="absolute"
+        pointerEvents={'none'}
       >
         {props.image ? (
           <ImageView
