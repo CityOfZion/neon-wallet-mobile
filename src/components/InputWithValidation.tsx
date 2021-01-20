@@ -77,7 +77,12 @@ const InputWithValidation = (props: Props) => {
   const isValid = props.validator(props.value)
 
   return (
-    <LinearLayout orientation="verti" ml={sideMargins} mr={sideMargins}>
+    <LinearLayout
+      orientation="verti"
+      ml={sideMargins}
+      mr={sideMargins}
+      flex={1}
+    >
       {!props.selectedContact ? (
         <LinearLayout orientation="horiz">
           {props.srcIcon && (
@@ -184,7 +189,6 @@ const InputWithValidation = (props: Props) => {
         ) : (
           <LinearLayout weight={1} />
         )}
-
         {!props.hidePaste && (
           <PasteButton
             onPress={async () => {

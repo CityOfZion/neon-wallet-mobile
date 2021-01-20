@@ -86,7 +86,7 @@ const ImportKey = (props: ImportKeyProps) => {
 
   return (
     <ScreenLayout>
-      <LinearLayout orientation="verti" width="100%">
+      <LinearLayout orientation="verti" width="100%" height="100%">
         <TextView
           textAlign="center"
           fontSize={18}
@@ -109,7 +109,13 @@ const ImportKey = (props: ImportKeyProps) => {
         />
 
         {inputIsValid && (
-          <LinearLayout mt={80} width="90%" alignSelf="center">
+          <LinearLayout
+            mt={20}
+            width="90%"
+            flex={1}
+            alignSelf="center"
+            justifyContent={'flex-end'}
+          >
             <ThemedButton label="Next" onPress={onNext} />
           </LinearLayout>
         )}

@@ -72,7 +72,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
 
   return (
     <ScreenLayout useHeaderPadding={true}>
-      <LinearLayout orientation="verti" width="100%">
+      <LinearLayout orientation="verti" width="100%" height="100%">
         <TextView
           textAlign="center"
           fontSize={18}
@@ -100,7 +100,13 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
         />
 
         {canAddAccount && (
-          <LinearLayout mt={20} width="90%" alignSelf="center">
+          <LinearLayout
+            mt={20}
+            width="90%"
+            flex={1}
+            alignSelf="center"
+            justifyContent={'flex-end'}
+          >
             <ThemedButton
               label={Facade.t('importReadAccount.add')}
               onPress={persist}
