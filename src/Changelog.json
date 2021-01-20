@@ -10,6 +10,15 @@
                 "- New Getting Started layout",
                 "- Remove glare around the backup modal"
             ]
+        },
+        {
+            "version": "V1.0.2-9",
+            "date": "January 20 2021",
+            "changes": [
+                "- Bug fixes",
+                "- New passphrase validation when creating a new Wallet",
+                "- New layouts"
+            ]
         }
     ]
 }
