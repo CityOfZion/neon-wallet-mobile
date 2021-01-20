@@ -11,6 +11,7 @@ interface Props {
   widthIcon?: string
   heightIcon?: string
   hideTokenInWallet?: boolean
+  hideAmountAbove?: boolean
 }
 
 export const TokenView = (props: Props) => {
@@ -36,26 +37,36 @@ export const TokenView = (props: Props) => {
       props.transaction.tokens.map((token, index) => (
         <>
           <LinearLayout orientation={'horiz'} justifyContent={'space-between'}>
-            <LinearLayout orientation={'horiz'}>
+            <LinearLayout orientation={'horiz'} weight={1}>
               <ImageView
                 source={token?.srcIcon}
-                width={props.widthIcon ?? '14px'}
-                height={props.heightIcon ?? '14px'}
+                width={props.widthIcon ?? '17px'}
+                height={props.heightIcon ?? '17px'}
                 alignSelf={'center'}
               />
-              <TextView ml={'8px'} color={'text.0'} fontFamily={'medium'}>
+              <TextView
+                ml={'8px'}
+                color={'text.0'}
+                fontFamily={'medium'}
+                fontSize={'16px'}
+              >
                 {token?.symbol}
               </TextView>
             </LinearLayout>
             {!props.hideTokenInWallet && (
-              <TextView color="text.10">
+              <TextView color="text.10" mr={3}>
                 {`${token?.amount} ${token?.name} in Wallet`}
               </TextView>
             )}
 
             {!props.hideSingleTokenPrice && (
               <>
-                <TextView fontFamily={'medium'} color={'text.0'}>
+                <TextView
+                  fontFamily={'medium'}
+                  fontSize={'16px'}
+                  color={'text.0'}
+                  mr={2}
+                >
                   {Facade.filter.currency(
                     (token?.exchangeToken(currency) ?? 1) /
                       (token?.amount ?? 1),
@@ -65,6 +76,7 @@ export const TokenView = (props: Props) => {
                 </TextView>
                 <TextView
                   ml={2}
+                  mr={4}
                   fontFamily={'medium'}
                   color={'text.10'}
                   fontSize={'12px'}
@@ -111,26 +123,36 @@ export const TokenView = (props: Props) => {
     ) : (
       <>
         <LinearLayout orientation={'horiz'} justifyContent={'space-between'}>
-          <LinearLayout orientation={'horiz'}>
+          <LinearLayout orientation={'horiz'} weight={1}>
             <ImageView
               source={props.transaction.token?.srcIcon}
-              width={props.widthIcon ?? '14px'}
-              height={props.heightIcon ?? '14px'}
+              width={props.widthIcon ?? '17px'}
+              height={props.heightIcon ?? '17px'}
               alignSelf={'center'}
             />
-            <TextView ml={'8px'} color={'text.0'} fontFamily={'medium'}>
+            <TextView
+              ml={'8px'}
+              color={'text.0'}
+              fontFamily={'medium'}
+              fontSize={'16px'}
+            >
               {props.transaction.token?.symbol}
             </TextView>
           </LinearLayout>
           {!props.hideTokenInWallet && (
-            <TextView color="text.10">
+            <TextView color="text.10" mr={3}>
               {`${props.transaction.token?.amount} ${props.transaction.token?.name} in Wallet`}
             </TextView>
           )}
 
           {!props.hideSingleTokenPrice && (
             <>
-              <TextView fontFamily={'medium'} color={'text.0'}>
+              <TextView
+                fontFamily={'medium'}
+                fontSize={'16px'}
+                color={'text.0'}
+                mr={2}
+              >
                 {Facade.filter.currency(
                   (props.transaction.token?.exchangeToken(currency) ?? 1) /
                     (props.transaction.token?.amount ?? 1),
@@ -140,6 +162,7 @@ export const TokenView = (props: Props) => {
               </TextView>
               <TextView
                 ml={2}
+                mr={4}
                 fontFamily={'medium'}
                 color={'text.10'}
                 fontSize={'12px'}
@@ -208,20 +231,22 @@ export const TokenView = (props: Props) => {
             },
           ]}
         />
-        <HeaderColumn
-          weight={2.2}
-          title={Facade.t('transactionDetails.amount')}
-          value={[
-            {
-              value: `${getValueToken()}`,
-            },
-            {
-              value: `1${props.transaction.token?.symbol}`,
-              color: 'text.0',
-              size: 12,
-            },
-          ]}
-        />
+        {!props.hideAmountAbove && (
+          <HeaderColumn
+            weight={2.2}
+            title={Facade.t('transactionDetails.amount')}
+            value={[
+              {
+                value: `${getValueToken()}`,
+              },
+              {
+                value: `1${props.transaction.token?.symbol}`,
+                color: 'text.0',
+                size: 12,
+              },
+            ]}
+          />
+        )}
       </LinearLayout>
     </LinearLayout>
   )

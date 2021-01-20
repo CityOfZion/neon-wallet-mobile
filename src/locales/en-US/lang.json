@@ -606,7 +606,7 @@
     "status": "Status",
     "value": "Value",
     "priorityFee": "Priority Fee",
-    "sender": "Sender",
+    "sender": "Sent from",
     "recipient": "Recipient",
     "qty": "Qty",
     "viewOnDora": "View on Dora",

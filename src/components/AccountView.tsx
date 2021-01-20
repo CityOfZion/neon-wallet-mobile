@@ -1,5 +1,6 @@
 import {useNavigation} from '@react-navigation/native'
 import React from 'react'
+import {Image} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import {
@@ -46,10 +47,12 @@ export const AccountView = (props: Props) => {
             {props.hideTitles ? (
               <></>
             ) : (
-              <TextView color={'text.10'}>Account</TextView>
+              <TextView color={'text.10'} fontSize={'14px'}>
+                Wallet
+              </TextView>
             )}
-            <TextView fontSize="lg" color={'text.0'}>
-              {props.accountName}
+            <TextView fontSize={'16px'} color={'text.0'}>
+              {props.walletName}
             </TextView>
           </LinearLayout>
           <LinearLayout weight={1}>
@@ -62,16 +65,17 @@ export const AccountView = (props: Props) => {
                 fontFamily={'medium'}
                 color={'text.10'}
               >
-                Wallet
+                Account
               </TextView>
             )}
             <TextView
-              fontSize={'14px'}
+              fontSize={'16px'}
               fontWeight={500}
               fontFamily={'medium'}
               color={'text.0'}
+              mb={2}
             >
-              {props.walletName}
+              {props.accountName}
             </TextView>
           </LinearLayout>
         </LinearLayout>
@@ -102,8 +106,10 @@ export const AccountView = (props: Props) => {
             }}
           >
             <ImageView
-              resizeMode={'cover'}
-              source={require('~/src/assets/images/icon-circle-plus-green.png')}
+              width={Facade.scale(25)}
+              height={Facade.scale(25)}
+              resizeMode={'contain'}
+              source={require('~/src/assets/images/icon-circle-plus-green-small.png')}
             />
           </ButtonView>
         )}
