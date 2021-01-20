@@ -83,6 +83,7 @@ const IconItemComponent: React.FC<IconItem> = ({
 const IconText: React.FC = ({children}) => {
   const styles = StyleSheet.create({
     design: {
+      marginBottom: 3,
       color: '#899fa8',
       fontFamily: 'semibold',
       fontSize: 18,
@@ -106,12 +107,14 @@ const ItemComponent = (props: {item: Item}) => {
         }
       }}
     >
-      <LinearLayout mt={'21px'} mb={'21px'} orientation="horiz">
-        <IconItemComponent color="#394651" width={42} heigth={42}>
-          <IconText>{props.item.data.name?.charAt(0).toUpperCase()}</IconText>
-        </IconItemComponent>
-        <LinearLayout>
-          <TextView font={'semi-bold'} color={'text.0'} fontSize={20}>
+      <LinearLayout mt={'20px'} mb={'20px'} ml={'7px'} orientation="horiz">
+        <LinearLayout mt={3} mr={1}>
+          <IconItemComponent color="#394651" width={36} heigth={36}>
+            <IconText>{props.item.data.name?.charAt(0).toUpperCase()}</IconText>
+          </IconItemComponent>
+        </LinearLayout>
+        <LinearLayout mr={3}>
+          <TextView font={'semi-bold'} color={'text.0'} fontSize={18}>
             {props.item.data.name}
           </TextView>
           <TextView font={'medium'} color={'primary'} fontSize={16}>
@@ -132,6 +135,18 @@ export const ContactList = (props: ContactListProps) => {
   const contactsMap: Map<string, Item[]> = new Map()
   const contacts = useSelector((state: RootState) => state.app.contacts)
   const [contactsList, setContactsList] = useState<Contact[]>(contacts)
+
+  contactsList.sort((item: Contact, item2: Contact) => {
+    if (item.name !== null && item2.name !== null) {
+      if (item.name.toLowerCase() < item2.name.toLowerCase()) {
+        return -1
+      } else {
+        return 0
+      }
+    } else {
+      return 1
+    }
+  })
 
   contactsList.forEach((contact) => {
     if (contactsMap.has(contact.name?.[0] ?? '')) {

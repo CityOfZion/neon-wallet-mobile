@@ -29,6 +29,7 @@ interface Props {
   padding?: number | string
   transparent?: boolean
   invertedGradient?: boolean
+  solidColorBG?: boolean
 }
 
 const ScreenLayout: React.FC<Props> = (props) => {
@@ -51,6 +52,8 @@ const ScreenLayout: React.FC<Props> = (props) => {
           ? ['#00000000', '#00000000']
           : props.invertedGradient
           ? [theme.colors.background[9], theme.colors.background[14]]
+          : props.solidColorBG
+          ? [theme.colors.background[2], theme.colors.background[2]]
           : [theme.colors.background[14], theme.colors.background[2]]
       }
       start={[1, 0]}
@@ -108,6 +111,7 @@ ScreenLayout.propTypes = {
   padding: PropTypes.any,
   transparent: PropTypes.bool,
   invertedGradient: PropTypes.bool,
+  solidColorBG: PropTypes.bool,
   onScroll: PropTypes.func,
   onReachBottom: PropTypes.func,
   scrollEventThrottle: PropTypes.number,
@@ -120,6 +124,7 @@ ScreenLayout.defaultProps = {
   autoScroll: true,
   transparent: false,
   invertedGradient: false,
+  solidColorBG: false,
 }
 
 export default ScreenLayout
