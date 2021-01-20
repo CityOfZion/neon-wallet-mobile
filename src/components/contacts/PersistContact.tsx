@@ -159,13 +159,14 @@ export const PersistContact = (props: PersistContactProps) => {
       onLeftPress={controller.close}
       onRightPress={save}
       controller={controller}
+      solidColorBG={true}
     >
       <AwaitActivity
         name={'swiperRight'}
         loadingView={<ScreenLoader transparent={true} />}
       >
         <LinearLayout
-          height="100%"
+          height="97.5%"
           orientation="verti"
           justifyContent="space-between"
         >
@@ -178,7 +179,7 @@ export const PersistContact = (props: PersistContactProps) => {
             <InputWithValidation
               placeholder={Facade.t('persistContact.namePlaceholder')}
               onChangeText={(val) => setName(val)}
-              color={'background.4'}
+              color={'white'}
               value={name}
               validator={(val) => true}
               separatorColor={'background.3'}
@@ -198,7 +199,7 @@ export const PersistContact = (props: PersistContactProps) => {
             <InputWithValidation
               placeholder={Facade.t('persistContact.addressPlaceholder')}
               onChangeText={(val) => setAddress(val)}
-              color={'background.4'}
+              color={'primary'}
               value={address}
               invalidColor={'background.3'}
               invalidSeparatorColor={'background.3'}
@@ -216,11 +217,11 @@ export const PersistContact = (props: PersistContactProps) => {
           </LinearLayout>
           {contact && (
             <LinearLayout>
-              <LinearLayout height="1px" bg={theme.colors.background[10]} />
+              <LinearLayout height="1px" bg={theme.colors.background[6]} />
               <InputLabel
                 title={Facade.t('persistContact.deleteContact')}
                 marginBottom={'8px'}
-                marginTop={'30px'}
+                marginTop={'25px'}
               />
               <TextView color={theme.colors.text[0]} marginBottom={'30px'}>
                 {Facade.t('persistContact.deleteContactSubtitle')}
