@@ -7,6 +7,7 @@ import {
   NativeSyntheticEvent,
   TargetedEvent,
   TextInputFocusEventData,
+  Platform,
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -159,6 +160,7 @@ const InputWithValidation = (props: Props) => {
           textAlign="right"
           mt={2}
           opacity={isValid ? 0 : 1}
+          height={Platform.OS === 'ios' ? '15px' : undefined}
         >
           {props.invalidMessage ??
             Facade.t('components.inputTextWithValidation.incorrectFormat')}
