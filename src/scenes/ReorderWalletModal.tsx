@@ -84,6 +84,7 @@ export default function ReorderWalletModal(props: Props) {
       }
       onLeftPress={controller.close}
       onRightPress={() => Facade.await.run('commitAndClose', commitAndClose)}
+      solidColorBG={true}
     >
       <AwaitActivity
         name={'commitAndClose'}
