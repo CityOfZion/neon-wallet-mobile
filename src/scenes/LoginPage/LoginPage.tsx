@@ -23,6 +23,7 @@ export default function LoginPage(props: Props) {
     props.navigation.replace(Facade.route.Tab.name, {
       screen: Facade.route.Settings.name,
       welcomeHidden: true,
+      changelogHidden: true,
       params: {
         screen: Facade.route.SettingsPage.name,
         params: {

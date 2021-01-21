@@ -107,6 +107,7 @@ const CustomizeAccount = (props: Props) => {
 
     props.navigation.replace(Facade.route.Tab.name, {
       welcomeHidden: true,
+      changelogHidden: true,
       screen: Facade.route.ListWallets.name,
       params: {
         screen: Facade.route.GetAccount.name,
