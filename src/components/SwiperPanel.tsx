@@ -114,7 +114,7 @@ const Header = (props: SwiperProps & {mb: number}) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
- 
+
   return (
     <LinearLayout
       justifyContent={'space-between'}
@@ -123,7 +123,7 @@ const Header = (props: SwiperProps & {mb: number}) => {
       mt="24px"
       mb={props.paddingTop}
     >
-      <LinearLayout pl={props.leftButton ? 4: 7}>
+      <LinearLayout pl={props.leftButton ? 4 : 7}>
         <AwaitActivity name={'swiperLeft'}>
           <TouchableWithoutFeedback
             onPress={() => props.onLeftPress && props.onLeftPress()}
