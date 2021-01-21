@@ -114,7 +114,7 @@ const Header = (props: SwiperProps & {mb: number}) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-    console.log('print de leftButton => ', props.leftButton)
+ 
   return (
     <LinearLayout
       justifyContent={'space-between'}
