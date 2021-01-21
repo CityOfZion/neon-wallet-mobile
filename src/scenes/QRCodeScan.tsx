@@ -17,6 +17,7 @@ import {
   ImageView,
   RelativeLayout,
   TextView,
+  LinearLayout,
 } from '~src/styles/styled-components'
 
 const {BarCodeType} = ExpoBarCodeScannerModule
@@ -195,17 +196,19 @@ const QRCodeScan = (props: Props) => {
         position="absolute"
         bottom={0}
         width={'100%'}
-        height="70px"
-        borderTopLeftRadius="30px"
-        borderTopRightRadius="30px"
-        bg="background.9"
+        height="100px"
+        borderTopLeftRadius="18px"
+        borderTopRightRadius="18px"
+        bg={'#333d46'}
         alignItems={'center'}
         justifyContent={'center'}
         onPress={props.navigation.goBack}
       >
-        <TextView fontSize="22px" color="primary" fontFamily="regular">
-          {Facade.t('screens.scanQrCode.cancel')}
-        </TextView>
+        <LinearLayout mb={6}>
+          <TextView fontSize="22px" color="primary" fontFamily="regular">
+            {Facade.t('screens.scanQrCode.cancel')}
+          </TextView>
+        </LinearLayout>
       </ButtonView>
 
       <Animated.View
