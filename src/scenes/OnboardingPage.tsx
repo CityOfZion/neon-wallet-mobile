@@ -141,12 +141,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   }
 
   return (
-    <LinearGradient
-      style={{flex: 1}}
-      colors={[theme.colors.background[1], theme.colors.background[2]]}
-      start={[0.1, 0.1]}
-      end={[1, 1]}
-    >
+    <LinearLayout flex={1} bg={'background.14'}>
       <SafeAreaView>
         <LinearLayout
           orientation={'verti'}
@@ -242,7 +237,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
           )}
         </LinearLayout>
       </SafeAreaView>
-    </LinearGradient>
+    </LinearLayout>
   )
 }
 
