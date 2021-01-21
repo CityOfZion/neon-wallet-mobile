@@ -409,7 +409,7 @@
         "destinationAddress": "Destination Address",
         "token": "Token",
         "amount": "Amount",
-        "insufficientFunds": "Insufficient funds",
+        "insufficientFunds": "Insufficient funds!",
         "contacts": "Contacts",
         "paste": "Paste",
         "scan": "Scan",
@@ -535,7 +535,7 @@
       "inputPlaceholder": "Please enter information",
       "paste": "Paste",
       "scan": "Scan",
-      "incorrectFormat": "Incorrect format",
+      "incorrectFormat": "Incorrect format!",
       "contacts": "Contacts"
     },
     "accountList": {
