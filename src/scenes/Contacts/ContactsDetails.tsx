@@ -82,7 +82,10 @@ export const ContactDetails = (props: ContactDetailsProps) => {
   })
   return (
     <ScreenLayout>
-      <LinearLayout alignItems={'center'} mt={Dimensions.get('screen').height * 0.07}>
+      <LinearLayout
+        alignItems={'center'}
+        mt={Dimensions.get('screen').height * 0.07}
+      >
         <View style={styles.containerLetter}>
           <Text style={styles.textLetter}>
             {contact.name?.charAt(0).toLocaleUpperCase()}

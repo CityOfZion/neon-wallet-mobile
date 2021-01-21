@@ -1,17 +1,20 @@
-import { api, nep5 } from '@cityofzion/neon-js'
+import {api, nep5} from '@cityofzion/neon-js'
 import moment from 'moment'
-import { showMessage } from 'react-native-flash-message'
+import {showMessage} from 'react-native-flash-message'
 
-import { DoInvokeConfig, SendAssetConfig } from '../../node_modules/@cityofzion/neon-api/lib/funcs/types'
-import { tx } from '../../node_modules/@cityofzion/neon-core'
+import {
+  DoInvokeConfig,
+  SendAssetConfig,
+} from '../../node_modules/@cityofzion/neon-api/lib/funcs/types'
+import {tx} from '../../node_modules/@cityofzion/neon-core'
 
-import { Facade } from '~src/app/Facade'
-import { Storage } from '~src/app/Storage'
-import { NeoNode } from '~src/models/NeoNode'
-import { TokenAsset } from '~src/models/TokenAsset'
-import { Settings } from '~src/models/redux/Settings'
-import { AddressRequest } from '~src/models/request/AddressRequest'
-import { TransactionRequest } from '~src/models/request/TransactionRequest'
+import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
+import {NeoNode} from '~src/models/NeoNode'
+import {TokenAsset} from '~src/models/TokenAsset'
+import {Settings} from '~src/models/redux/Settings'
+import {AddressRequest} from '~src/models/request/AddressRequest'
+import {TransactionRequest} from '~src/models/request/TransactionRequest'
 export abstract class NeonHelper {
   /**
    * Only GAS or NEO
@@ -36,11 +39,11 @@ export abstract class NeonHelper {
     let intents: tx.TransactionOutput[]
 
     if (tipAmount && tipReceiverAddress) {
-      const tipIntent = api.makeIntent({ GAS: tipAmount }, tipReceiverAddress)
-      const assetIntent = api.makeIntent({ [asset]: amount }, receiverAddress)
+      const tipIntent = api.makeIntent({GAS: tipAmount}, tipReceiverAddress)
+      const assetIntent = api.makeIntent({[asset]: amount}, receiverAddress)
       intents = assetIntent.concat(tipIntent)
     } else {
-      intents = api.makeIntent({ [asset]: amount }, receiverAddress)
+      intents = api.makeIntent({[asset]: amount}, receiverAddress)
     }
 
     if (!neoAccount) {
@@ -64,7 +67,13 @@ export abstract class NeonHelper {
     return sendResponse.tx?.hash ?? null
   }
 
-  static async getHash(senderAddress: string, asset: string, amount: number, receiverAddress: string, fees?: number) {
+  static async getHash(
+    senderAddress: string,
+    asset: string,
+    amount: number,
+    receiverAddress: string,
+    fees?: number
+  ) {
     const settings = (await Storage.settings.load()) ?? new Settings()
     const accounts = (await Storage.accounts.load()) ?? []
 
@@ -77,9 +86,7 @@ export abstract class NeonHelper {
       settings.network.networkDeprecatedLabel
     )
 
-    let intents: tx.TransactionOutput[]
-
-    intents = api.makeIntent({ [asset]: amount }, receiverAddress)
+    const intents = api.makeIntent({[asset]: amount}, receiverAddress)
     if (!neoAccount) {
       throw new Error('Neo Account not found')
     }
@@ -88,7 +95,7 @@ export abstract class NeonHelper {
       api: apiProvider,
       url,
       intents,
-      fees
+      fees,
     }
     return assetsConfig.tx?.hash ?? 'sem hash'
   }
@@ -127,7 +134,7 @@ export abstract class NeonHelper {
     let invokeResponse: DoInvokeConfig
 
     if (tipAmount && tipReceiverAddress) {
-      const tipIntent = api.makeIntent({ GAS: tipAmount }, tipReceiverAddress)
+      const tipIntent = api.makeIntent({GAS: tipAmount}, tipReceiverAddress)
       invokeResponse = await api.doInvoke({
         api: apiProvider,
         url,

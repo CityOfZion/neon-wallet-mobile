@@ -1,25 +1,25 @@
-import { useNavigationState } from '@react-navigation/native'
-import { StackNavigationProp, useHeaderHeight } from '@react-navigation/stack'
-import { AwaitActivity } from '@simpli/react-native-await'
-import React, { useEffect, useState } from 'react'
-import { Alert, ScrollView, TouchableHighlight, View } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import {useNavigationState} from '@react-navigation/native'
+import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
+import {AwaitActivity} from '@simpli/react-native-await'
+import React, {useEffect, useState} from 'react'
+import {Alert, ScrollView, TouchableHighlight, View} from 'react-native'
+import {useDispatch, useSelector} from 'react-redux'
 
 import * as LocalAuthentication from '~/node_modules/expo-local-authentication'
-import { Facade } from '~src/app/Facade'
-import { Storage } from '~src/app/Storage'
-import { AccountView } from '~src/components/AccountView'
-import { HeaderColumn } from '~src/components/HeaderColumn'
-import { PANEL_OFFSET } from '~src/components/SwiperPanel'
-import { TokenView, TipView } from '~src/components/TokenView'
+import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
+import {AccountView} from '~src/components/AccountView'
+import {HeaderColumn} from '~src/components/HeaderColumn'
+import {PANEL_OFFSET} from '~src/components/SwiperPanel'
+import {TokenView, TipView} from '~src/components/TokenView'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { TokenAsset } from '~src/models/TokenAsset'
-import { Account } from '~src/models/redux/Account'
-import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { SendModalStackParamList } from '~src/navigation/SendModalStackNavigation'
-import { RootStore } from '~src/store/RootStore'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import {TokenAsset} from '~src/models/TokenAsset'
+import {Account} from '~src/models/redux/Account'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
+import {RootStore} from '~src/store/RootStore'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface SendTransactionReviewModalParams {
   transactionHash: string
@@ -30,11 +30,11 @@ interface Props {
 }
 
 const TransactionSummaryContainer = () => {
-  const { exchange, contacts, accounts } = useSelector(
+  const {exchange, contacts, accounts} = useSelector(
     (state: RootState) => state.app
   )
-  const { currency } = useSelector((state: RootState) => state.settings)
-  const { senderTransaction } = useSelector((state: RootState) => state)
+  const {currency} = useSelector((state: RootState) => state.settings)
+  const {senderTransaction} = useSelector((state: RootState) => state)
   const [account, setAccount] = useState<Account>()
 
   const singleToken = new TokenAsset(
@@ -184,15 +184,17 @@ const TransactionSummaryContainer = () => {
 }
 
 const SendTransactionReviewModal = (props: Props) => {
-  const { senderTransaction } = useSelector((state: RootState) => state)
+  const {senderTransaction} = useSelector((state: RootState) => state)
   const contacts = useSelector((state: RootState) => state.app.contacts)
   const accounts = useSelector((state: RootState) => state.app.accounts)
   const wallets = useSelector((state: RootState) => state.app.wallets)
   const tip = useSelector((state: RootState) => state.senderTransaction.tip)
   const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const dispatchAsyncString = useDispatch<AsyncDispatch<string | null | undefined>>()
-  const { currency, language } = useSelector((state: RootState) => state.settings)
+  const dispatchAsyncString = useDispatch<
+    AsyncDispatch<string | null | undefined>
+  >()
+  const {currency, language} = useSelector((state: RootState) => state.settings)
 
   let senderName = undefined
   const senderAddress = senderTransaction.senderAddress ?? undefined
@@ -289,7 +291,7 @@ const SendTransactionReviewModal = (props: Props) => {
           style: 'cancel',
         },
       ],
-      { cancelable: true }
+      {cancelable: true}
     )
 
   const submit = async () => {
@@ -299,7 +301,6 @@ const SendTransactionReviewModal = (props: Props) => {
       )
 
       if (!transactionHash) {
-        
         throw new Error('Transaction has failed')
       }
       const account = accounts.find(
@@ -319,18 +320,20 @@ const SendTransactionReviewModal = (props: Props) => {
         routes: [
           {
             name: Facade.route.SendTransactionConfirmationModal.name,
-            params: { transactionHash },
+            params: {transactionHash},
           },
         ],
       })
     } catch (error) {
-      const hash = await dispatchAsyncString(RootStore.senderTransaction.actions.getHash())
+      const hash = await dispatchAsyncString(
+        RootStore.senderTransaction.actions.getHash()
+      )
       props.navigation.reset({
         index: 0,
         routes: [
           {
             name: Facade.route.SendTransactionConfirmationModal.name,
-            params: {hash}
+            params: {hash},
           },
         ],
       })
@@ -409,8 +412,8 @@ const SendTransactionReviewModal = (props: Props) => {
       </AwaitActivity>
     </ScrollView>
   ) : (
-      <LinearLayout />
-    )
+    <LinearLayout />
+  )
 }
 
 export default SendTransactionReviewModal

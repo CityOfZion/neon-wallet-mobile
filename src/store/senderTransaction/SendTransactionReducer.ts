@@ -96,7 +96,7 @@ export class SendTransactionReducer extends ReducerWrapper<
     getHash: (): AsyncAction<string | undefined> => {
       return async (dispatch, getState) => {
         const sendTx = getState().senderTransaction
-          
+
         const {token, senderAddress, receiverAddress, feeAmount} = sendTx
         const fees = feeAmount
 
@@ -106,7 +106,13 @@ export class SendTransactionReducer extends ReducerWrapper<
 
         const {symbol, amount} = token
 
-        return await NeonHelper.getHash(senderAddress, symbol,amount,receiverAddress, fees?.fee)
+        return await NeonHelper.getHash(
+          senderAddress,
+          symbol,
+          amount,
+          receiverAddress,
+          fees?.fee
+        )
       }
     },
   }
