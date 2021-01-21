@@ -78,7 +78,7 @@ const HandleQRModal = (props: Props) => {
       noHeader={true}
       solidColorBG={true}
     >
-      <LinearLayout height={'60px'} />
+      <LinearLayout height={'35px'} />
       <LinearLayout>
         {items.map((item, index) => (
           <>
