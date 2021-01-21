@@ -422,6 +422,9 @@
         "value": "Value",
         "price": "Price",
         "priority": "Priority",
+        "sender": "Sent from",
+        "recipient": "Recipient",
+        "priorityFee":"Priority Fee",
         "feeAmount": "(Fee %{amount})",
         "pleaseReview": "Please review transaction",
         "dialog": {

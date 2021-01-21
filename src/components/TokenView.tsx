@@ -12,6 +12,7 @@ interface Props {
   heightIcon?: string
   hideTokenInWallet?: boolean
   hideAmountAbove?: boolean
+  hidePriorityFee?: boolean
 }
 
 export const TokenView = (props: Props) => {
@@ -212,42 +213,46 @@ export const TokenView = (props: Props) => {
       mt={4}
     >
       {renderTokenValues()}
-      <LinearLayout orientation={'horiz'}>
-        <HeaderColumn
-          weight={2.75}
-          title={Facade.t('transactionDetails.priorityFee')}
-          value={[
-            {
-              value: props.transaction.feeAmount?.name.toUpperCase(),
-              color: 'primary',
-            },
-            {
-              value: props.transaction.feeAmount?.fee.toString(),
-              color: 'text.10',
-            },
-            {
-              value: 'GAS',
-              color: 'text.10',
-            },
-          ]}
-        />
-        {!props.hideAmountAbove && (
-          <HeaderColumn
-            weight={2.2}
-            title={Facade.t('transactionDetails.amount')}
-            value={[
-              {
-                value: `${getValueToken()}`,
-              },
-              {
-                value: `1${props.transaction.token?.symbol}`,
-                color: 'text.0',
-                size: 12,
-              },
-            ]}
-          />
-        )}
-      </LinearLayout>
+      {(!props.hidePriorityFee || !props.hideAmountAbove) && (
+        <LinearLayout orientation={'horiz'}>
+          {!props.hidePriorityFee && (
+            <HeaderColumn
+              weight={2.75}
+              title={Facade.t('transactionDetails.priorityFee')}
+              value={[
+                {
+                  value: props.transaction.feeAmount?.name.toUpperCase(),
+                  color: 'primary',
+                },
+                {
+                  value: props.transaction.feeAmount?.fee.toString(),
+                  color: 'text.10',
+                },
+                {
+                  value: 'GAS',
+                  color: 'text.10',
+                },
+              ]}
+            />
+          )}
+          {!props.hideAmountAbove && (
+            <HeaderColumn
+              weight={2.2}
+              title={Facade.t('transactionDetails.amount')}
+              value={[
+                {
+                  value: `${getValueToken()}`,
+                },
+                {
+                  value: `1${props.transaction.token?.symbol}`,
+                  color: 'text.0',
+                  size: 12,
+                },
+              ]}
+            />
+          )}
+        </LinearLayout>
+      )}
     </LinearLayout>
   )
 }

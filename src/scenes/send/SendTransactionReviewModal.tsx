@@ -370,29 +370,99 @@ const SendTransactionReviewModal = (props: Props) => {
               alignItems="center"
               justifyContent="space-between"
             >
-              <LinearLayout width="100%" alignItems="center">
-                <TextView
-                  color="text.0"
-                  fontFamily="medium"
-                  fontSize="18px"
-                  mb="48px"
-                >
-                  {Facade.t('modals.send.transactionReview.pleaseReview')}
-                </TextView>
+              <LinearLayout
+                width="100%"
+                orientation="verti"
+                alignContent={'flex-start'}
+              >
+                <LinearLayout width="100%" alignItems="center">
+                  <TextView
+                    color="text.0"
+                    fontFamily="medium"
+                    fontSize="18px"
+                    mb="18px"
+                  >
+                    {Facade.t('modals.send.transactionReview.pleaseReview')}
+                  </TextView>
+                  <LinearLayout orientation={'horiz'}>
+                    <HeaderColumn
+                      title={Facade.t(
+                        'modals.send.transactionReview.value'
+                      ).toUpperCase()}
+                      value={Facade.filter.currency(
+                        senderTransaction.token?.exchangeToken(currency),
+                        currency,
+                        language
+                      )}
+                      weight={2}
+                    />
+                    <HeaderColumn
+                      title={Facade.t(
+                        'modals.send.transactionReview.priorityFee'
+                      ).toUpperCase()}
+                      value={`${senderTransaction.feeAmount?.fee ?? 0} GAS`}
+                      weight={1.2}
+                      priorityFee={senderTransaction.feeAmount ?? undefined}
+                    />
+                  </LinearLayout>
+                </LinearLayout>
 
+                <LinearLayout orientation={'horiz'} alignContent={'flex-start'}>
+                  <LinearLayout mr={2} mt={5} alignSelf={'center'}>
+                    <ImageView
+                      width={Facade.scale(18)}
+                      resizeMode={'contain'}
+                      source={require('~src/assets/images/arrow-gray.png')}
+                    />
+                  </LinearLayout>
+                  <TextView
+                    color={'text.10'}
+                    fontFamily={'medium'}
+                    fontSize={18}
+                    mt={4}
+                  >
+                    {Facade.t('modals.send.transactionReview.sender')}
+                  </TextView>
+                </LinearLayout>
                 <LinearLayout width={'100%'}>
                   <AccountView
                     contactName={senderName}
                     address={senderAddress ?? ''}
                     accountName={senderAccount?.name ?? undefined}
-                    hideTitles={true}
+                    walletName={senderWallet ?? undefined}
                     hideButton={true}
+                  />
+                  <LinearLayout orientation={'horiz'}>
+                    <LinearLayout mr={2} mt={5} alignSelf={'center'}>
+                      <ImageView
+                        width={Facade.scale(18)}
+                        resizeMode={'contain'}
+                        source={require('~src/assets/images/arrow-receive-gray.png')}
+                      />
+                    </LinearLayout>
+                    <TextView
+                      color={'text.10'}
+                      fontFamily={'medium'}
+                      fontSize={18}
+                      mt={4}
+                    >
+                      {Facade.t('modals.send.transactionReview.recipient')}
+                    </TextView>
+                  </LinearLayout>
+                  <AccountView
+                    contactName={receiverName}
+                    address={receiverAddress ?? ''}
+                    accountName={receiverAccount?.name ?? undefined}
+                    walletName={receiverWallet ?? undefined}
                   />
                   <TokenView
                     transaction={senderTransaction}
                     hideSingleTokenPrice={true}
                     widthIcon="20px"
                     heightIcon="20px"
+                    hideAmountAbove={true}
+                    hideTokenInWallet={true}
+                    hidePriorityFee={true}
                   />
                   {tip && <TipView amount={tip.amount} />}
                 </LinearLayout>
