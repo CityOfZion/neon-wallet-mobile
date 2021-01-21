@@ -191,7 +191,9 @@ const SendTransactionReviewModal = (props: Props) => {
   const tip = useSelector((state: RootState) => state.senderTransaction.tip)
   const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const dispatchAsyncString = useDispatch<AsyncDispatch<string | null>>()
+  const dispatchAsyncString = useDispatch<
+    AsyncDispatch<string | null | undefined>
+  >()
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
   let senderName = undefined
@@ -293,43 +295,49 @@ const SendTransactionReviewModal = (props: Props) => {
     )
 
   const submit = async () => {
-    const transactionHash = await dispatchAsyncString(
-      RootStore.senderTransaction.actions.sendAsset()
-    )
+    try {
+      const transactionHash = await dispatchAsyncString(
+        RootStore.senderTransaction.actions.sendAsset()
+      )
 
-    if (!transactionHash) {
+      if (!transactionHash) {
+        throw new Error('Transaction has failed')
+      }
+      const account = accounts.find(
+        (it) => it.address === senderTransaction.senderAddress
+      )
+
+      if (account) {
+        await account.addPendingTransaction(senderTransaction, transactionHash)
+        await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
+      }
+
+      dispatch(RootStore.senderTransaction.actions.clearState())
+      await dispatchAsync(RootStore.app.actions.syncAccounts())
+
       props.navigation.reset({
         index: 0,
         routes: [
           {
             name: Facade.route.SendTransactionConfirmationModal.name,
+            params: {transactionHash},
           },
         ],
       })
-      throw new Error('Transaction has failed')
+    } catch (error) {
+      const hash = await dispatchAsyncString(
+        RootStore.senderTransaction.actions.getHash()
+      )
+      props.navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: Facade.route.SendTransactionConfirmationModal.name,
+            params: {hash},
+          },
+        ],
+      })
     }
-
-    const account = accounts.find(
-      (it) => it.address === senderTransaction.senderAddress
-    )
-
-    if (account) {
-      await account.addPendingTransaction(senderTransaction, transactionHash)
-      await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
-    }
-
-    dispatch(RootStore.senderTransaction.actions.clearState())
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
-
-    props.navigation.reset({
-      index: 0,
-      routes: [
-        {
-          name: Facade.route.SendTransactionConfirmationModal.name,
-          params: {transactionHash},
-        },
-      ],
-    })
   }
   return show ? (
     <ScrollView

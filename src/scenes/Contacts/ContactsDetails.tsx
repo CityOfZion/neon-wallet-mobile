@@ -1,7 +1,7 @@
-import {RouteProp, useFocusEffect} from '@react-navigation/native'
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState, useEffect} from 'react'
-import {View, StyleSheet, Text} from 'react-native'
+import {View, StyleSheet, Text, Dimensions} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -82,7 +82,10 @@ export const ContactDetails = (props: ContactDetailsProps) => {
   })
   return (
     <ScreenLayout>
-      <LinearLayout alignItems={'center'} mr={'10px'} ml={'10px'}>
+      <LinearLayout
+        alignItems={'center'}
+        mt={Dimensions.get('screen').height * 0.07}
+      >
         <View style={styles.containerLetter}>
           <Text style={styles.textLetter}>
             {contact.name?.charAt(0).toLocaleUpperCase()}
@@ -92,7 +95,8 @@ export const ContactDetails = (props: ContactDetailsProps) => {
           fontFamily={'semibold'}
           fontSize={'20px'}
           color={'text.0'}
-          mb={'10px'}
+          mb={Dimensions.get('screen').height * 0.05}
+          mt={Dimensions.get('screen').height * 0.02}
         >
           {contact.name}
         </TextView>

@@ -2,7 +2,10 @@ import {api, nep5} from '@cityofzion/neon-js'
 import moment from 'moment'
 import {showMessage} from 'react-native-flash-message'
 
-import {DoInvokeConfig} from '../../node_modules/@cityofzion/neon-api/lib/funcs/types'
+import {
+  DoInvokeConfig,
+  SendAssetConfig,
+} from '../../node_modules/@cityofzion/neon-api/lib/funcs/types'
 import {tx} from '../../node_modules/@cityofzion/neon-core'
 
 import {Facade} from '~src/app/Facade'
@@ -62,6 +65,39 @@ export abstract class NeonHelper {
     Facade.bus.emit('transactionStart', sendResponse)
 
     return sendResponse.tx?.hash ?? null
+  }
+
+  static async getHash(
+    senderAddress: string,
+    asset: string,
+    amount: number,
+    receiverAddress: string,
+    fees?: number
+  ) {
+    const settings = (await Storage.settings.load()) ?? new Settings()
+    const accounts = (await Storage.accounts.load()) ?? []
+
+    const account = accounts.find((it) => it.address === senderAddress)
+    const neoAccount = await account?.getNeoAccount()
+    const url =
+      (await NeoNode.getHighestNodeUrl()) ?? settings.network.defaultNodeNet
+
+    const apiProvider = new api.neoscan.instance(
+      settings.network.networkDeprecatedLabel
+    )
+
+    const intents = api.makeIntent({[asset]: amount}, receiverAddress)
+    if (!neoAccount) {
+      throw new Error('Neo Account not found')
+    }
+    const assetsConfig: SendAssetConfig = {
+      account: neoAccount,
+      api: apiProvider,
+      url,
+      intents,
+      fees,
+    }
+    return assetsConfig.tx?.hash ?? 'sem hash'
   }
 
   static async sendNep5Asset(

@@ -93,5 +93,27 @@ export class SendTransactionReducer extends ReducerWrapper<
         )
       }
     },
+    getHash: (): AsyncAction<string | undefined> => {
+      return async (dispatch, getState) => {
+        const sendTx = getState().senderTransaction
+
+        const {token, senderAddress, receiverAddress, feeAmount} = sendTx
+        const fees = feeAmount
+
+        if (!token) throw new Error('Token not defined')
+        if (!senderAddress) throw new Error('Sender address not defined')
+        if (!receiverAddress) throw new Error('Receiver address not defined')
+
+        const {symbol, amount} = token
+
+        return await NeonHelper.getHash(
+          senderAddress,
+          symbol,
+          amount,
+          receiverAddress,
+          fees?.fee
+        )
+      }
+    },
   }
 }
