@@ -1,7 +1,8 @@
-import {CommonActions, RouteProp} from '@react-navigation/native'
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import moment from 'moment'
+import PropTypes from 'prop-types'
 import React, {useEffect, useRef, useState} from 'react'
 import {Alert, TouchableWithoutFeedback, View, Animated} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
@@ -17,6 +18,8 @@ import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Wallet} from '~src/models/redux/Wallet'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
@@ -30,10 +33,19 @@ import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 import {Exchange} from '~src/types/exchange'
 export interface ListWalletParams {}
 
+type Props = WalletStackParamList &
+  MoreStackParamList &
+  RootStackParamList &
+  ModalStackParamList
+
 interface WalletProps {
-  navigation: StackNavigationProp<WalletStackParamList & MoreStackParamList>
+  navigation: StackNavigationProp<Props>
   route: RouteProp<WalletStackParamList, 'ListWalletsPage'>
   theme: ApplicationTheme
+}
+
+interface EmptyListProps {
+  navigation: StackNavigationProp<Props>
 }
 
 const WalletChangeComponent = (props: {
@@ -161,18 +173,31 @@ const WalletChangeComponent = (props: {
   )
 }
 
-const EmptyListComponent = () => {
+const EmptyListComponent: React.FC<EmptyListProps> = (props) => {
+  const {navigation} = props
   return (
     <LinearLayout alignItems={'center'} mx={3}>
       <TouchableWithoutFeedback
-        onPress={() =>
-          CommonActions.navigate(Facade.route.Tab.name, {
+        onPress={() => {
+          props.navigation.reset({
+            index: 0,
+            routes: [
+              {name: Facade.route.Tab.name},
+              {name: Facade.route.Step1CreateWallet.name},
+              {name: Facade.route.More.name},
+            ],
+          })
+          navigation.navigate(Facade.route.Tab.name, {
             screen: Facade.route.More.name,
             params: {
               screen: Facade.route.Step1CreateWallet.name,
+              initial: false,
+              params: {
+                source: Facade.route.WalletContextModal.name,
+              },
             },
           })
-        }
+        }}
       >
         <LinearLayout
           my={6}
@@ -323,7 +348,7 @@ const ListWalletView = (props: WalletProps) => {
                   onScrollBegin={fadeOutWallet}
                 />
               ) : (
-                <EmptyListComponent />
+                <EmptyListComponent navigation={props.navigation} />
               )}
             </LinearLayout>
 
@@ -367,6 +392,10 @@ const ListWalletView = (props: WalletProps) => {
       </>
     </ScreenLayout>
   )
+}
+
+EmptyListComponent.propTypes = {
+  navigation: PropTypes.any.isRequired,
 }
 
 export default ListWalletView
