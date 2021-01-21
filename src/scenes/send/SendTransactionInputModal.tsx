@@ -234,6 +234,7 @@ const DestinationAddressField = (props: {
         selectedContact={props.contact}
         onSelected={props.onSelected}
         onScan={props.handleQrCode}
+        invalidMessageColor={theme.colors.quinary}
       />
     </Fragment>
   )
