@@ -52,61 +52,80 @@ const ReceiveAccountSelectionModal = (props: Props) => {
   }
 
   return show ? (
-    <ScrollView
-      style={{
-        width: '100%',
-        marginTop: useHeaderHeight(),
-        marginBottom: '10%',
-      }}
-      contentContainerStyle={{
-        flexGrow: 1,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        paddingBottom: PANEL_OFFSET + 20,
-        paddingLeft: 5,
-        paddingRight: 5,
-      }}
-    >
-      <LinearLayout px={5}>
-        <TextView
-          mb={4}
-          color={'text.3'}
-          fontSize={'md'}
-          fontFamily={'bold'}
-          textAlign={'center'}
-        >
-          {props.route.params.wallet.name?.toUpperCase()}
-        </TextView>
+    <LinearLayout>
+      <ScrollView
+        style={{
+          width: '100%',
+          marginTop: useHeaderHeight(),
+          marginBottom: '10%',
+        }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          paddingBottom: PANEL_OFFSET + 20,
+          paddingLeft: 5,
+          paddingRight: 5,
+        }}
+      >
+        <LinearLayout px={5}>
+          <TextView
+            mb={4}
+            color={'text.2'}
+            fontSize={'14px'}
+            fontFamily={'bold'}
+            textAlign={'center'}
+          >
+            {props.route.params.wallet.name?.toUpperCase()}
+          </TextView>
 
-        <TextView
-          color={'text.0'}
-          fontSize={'lg'}
-          fontFamily={'medium'}
-          textAlign={'center'}
-        >
-          {Facade.t('modals.receive.accountSelection.subtitle')}
-        </TextView>
+          <TextView
+            color={'text.0'}
+            fontSize={'18px'}
+            fontFamily={'medium'}
+            textAlign={'center'}
+          >
+            {Facade.t('modals.receive.accountSelection.subtitle')}
+          </TextView>
 
-        <LinearLayout minHeight={260} mx={-5}>
-          <AccountPicker accounts={accounts} onSelect={setSelectedAccount} />
-        </LinearLayout>
-
-        <TextView mb={4} color={'text.3'} fontSize={'md'} textAlign={'center'}>
-          {Facade.t('modals.send.accountSelection.label')}
-        </TextView>
-
-        {selectedAccount && (
-          <LinearLayout width={'100%'} mb={6}>
-            <BalanceList
-              tokenAssets={selectedAccount.tokenAssets}
-              fromAccountView={false}
-              fromListWalletView={false}
-              fromSendAccountSelectionModal={false}
-            />
+          <LinearLayout minHeight={260} mx={-5}>
+            <AccountPicker accounts={accounts} onSelect={setSelectedAccount} />
           </LinearLayout>
-        )}
 
-        <LinearLayout mb={6} minWidth={'80%'} maxWidth={'100%'}>
+          <TextView
+            mb={4}
+            color={'text.2'}
+            fontSize={'14px'}
+            fontFamily={'medium'}
+            textAlign={'center'}
+          >
+            {Facade.t('modals.send.accountSelection.label')}
+          </TextView>
+
+          {selectedAccount && (
+            <LinearLayout width={'100%'} mb={6}>
+              <BalanceList
+                tokenAssets={selectedAccount.tokenAssets}
+                fromAccountView={false}
+                fromListWalletView={false}
+                fromSendAccountSelectionModal={false}
+              />
+            </LinearLayout>
+          )}
+        </LinearLayout>
+      </ScrollView>
+      <LinearLayout
+        position={'absolute'}
+        left={'10%'}
+        right={'10%'}
+        bottom={'9%'}
+      >
+        <LinearLayout
+          minWidth={'80%'}
+          maxWidth={'100%'}
+          marginBottom={'8px'}
+          marginTop={'30px'}
+        >
           <ThemedButton
             label={Facade.t('app.next')}
             onPress={() =>
@@ -121,7 +140,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
           />
         </LinearLayout>
       </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
   ) : (
     <LinearLayout />
   )
