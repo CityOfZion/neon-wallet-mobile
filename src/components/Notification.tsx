@@ -11,6 +11,8 @@ import {WalletStackParamList} from '../navigation/WalletsStackNavigation'
 
 import {Facade} from '~src/app/Facade'
 import {Wallet} from '~src/models/redux/Wallet'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import styled, {
   ButtonView,
@@ -19,12 +21,15 @@ import styled, {
   TextView,
 } from '~src/styles/styled-components'
 
+type Props = WalletStackParamList &
+  MoreStackParamList &
+  RootStackParamList &
+  ModalStackParamList
+
 interface NotificationProps {
   wallet: Wallet
   text: string
-  propsNavigation: StackNavigationProp<
-    WalletStackParamList & MoreStackParamList
-  >
+  propsNavigation: StackNavigationProp<Props>
 }
 
 const Notification = (props: NotificationProps) => {
