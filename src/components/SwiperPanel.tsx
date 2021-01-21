@@ -123,7 +123,7 @@ const Header = (props: SwiperProps & {mb: number}) => {
       mt="24px"
       mb={props.paddingTop}
     >
-      <LinearLayout pl={4}>
+      <LinearLayout pl={props.leftButton ? 4 : 7}>
         <AwaitActivity name={'swiperLeft'}>
           <TouchableWithoutFeedback
             onPress={() => props.onLeftPress && props.onLeftPress()}
