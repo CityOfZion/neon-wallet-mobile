@@ -468,12 +468,12 @@ const SendTransactionReviewModal = (props: Props) => {
                 </LinearLayout>
               </LinearLayout>
 
-              <LinearLayout width="100%" mt="32px" alignSelf="flex-end">
+              <LinearLayout width="90%" mt="32px" alignSelf="center">
                 <ThemedButton
                   label={Facade.t('app.send')}
                   onPress={() => Facade.await.run('auth', checkForAuth)}
                   rounded={true}
-                  radius={25}
+                  radius={8}
                 />
               </LinearLayout>
             </LinearLayout>
