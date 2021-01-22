@@ -1,7 +1,7 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import PropTypes from 'prop-types'
 import React, {useState, useEffect} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
+import {Platform, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {AccountList} from '~/src/components/accounts/AccountList'
@@ -37,7 +37,7 @@ const TabSelector = (props: {selected: Tab; onSelect: (t: Tab) => void}) => {
             fontSize="16px"
             textAlign="center"
             color={contactsSelected ? 'text.0' : 'background.3'}
-            my="12px"
+            my={Platform.OS === 'ios' ? '20px' : '4px'}
           >
             {Facade.t('contactPicker.contacts').toUpperCase()}
           </TextView>
@@ -58,7 +58,7 @@ const TabSelector = (props: {selected: Tab; onSelect: (t: Tab) => void}) => {
             fontSize="16px"
             textAlign="center"
             color={!contactsSelected ? 'text.0' : 'background.3'}
-            my="12px"
+            my={Platform.OS === 'ios' ? '20px' : '4px'}
           >
             {Facade.t('contactPicker.myAccounts').toUpperCase()}
           </TextView>
