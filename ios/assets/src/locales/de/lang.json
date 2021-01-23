@@ -214,8 +214,7 @@
       "transactionConfirmation": {
         "header": "Transaction successfully sent!",
         "subheader": "Once your transaction has been confirmed it will appear in your transaction history",
-        "transactionId": "TRANSACTION ID",
-        "transactionPending": "Your transaction may take a few seconds to be confirmed."
+        "transactionId": "TRANSACTION ID"
       },
       "transactionInput": {
         "selectDifferentAccount": "Select a different Account",
