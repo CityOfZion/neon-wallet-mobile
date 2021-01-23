@@ -116,7 +116,7 @@ const ImportKey = (props: ImportKeyProps) => {
             flex={1}
             alignSelf="center"
             justifyContent={'flex-end'}
-            mb={10}
+            mb={'10px'}
           >
             <ThemedButton label="Next" onPress={onNext} />
           </LinearLayout>

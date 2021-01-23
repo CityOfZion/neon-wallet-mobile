@@ -44,7 +44,6 @@ const AccountPicker: React.FC<Props> = (props: Props) => {
       enableSnap={true}
       useScrollView={true}
       firstItem={0}
-      onLayout={() => selectEvent(0)}
       onSnapToItem={(index) => selectEvent(index)}
       renderItem={(accountList: {item: Account; index: number}) => {
         const {item} = accountList

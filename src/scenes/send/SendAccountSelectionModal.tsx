@@ -49,7 +49,11 @@ const SendAccountSelectionModal = (props: Props) => {
     setAccounts(accounts)
     setSelectedAccount(accounts[0])
   }
-
+  const handleChangeAccount = (account: Account) => {
+    if (account.address !== selectedAccount?.address) {
+      setSelectedAccount(account)
+    }
+  }
   return show ? (
     <LinearLayout>
       <ScrollView
@@ -91,7 +95,7 @@ const SendAccountSelectionModal = (props: Props) => {
             <LinearLayout minHeight={260} mx={-5}>
               <AccountPicker
                 accounts={accounts}
-                onSelect={setSelectedAccount}
+                onSelect={handleChangeAccount}
               />
             </LinearLayout>
 

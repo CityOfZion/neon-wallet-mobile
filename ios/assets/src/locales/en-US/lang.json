@@ -170,7 +170,10 @@
     "label_confirmPassphrase": "Confirm Passphrase",
     "placeholder_walletName": "Please enter a name",
     "placeholder_createPassphrase": "Please enter a passphrase",
-    "placeholder_confirmPassphrase": "Please repeat the passphrase"
+    "placeholder_confirmPassphrase": "Please repeat the passphrase",
+    "setName":"Wallet Name cannot be empty.",
+    "setPassphrase": "Passphrase cannot be empty.",
+    "passphraseDontMatch": "Passphrases do not match"
   },
   "step5CreateWallet": {
     "label_1": "Congratulations, You’re the proud owner of a shiny new wallet!",
@@ -380,7 +383,8 @@
     "send": {
       "title": "Send",
       "walletSelection": {
-        "subtitle": "Please select a wallet to send from"
+        "subtitle": "Please select a wallet to send from",
+        "noFunds": "Your wallets currently have no funds, please add funds in order to send"
       },
       "accountSelection": {
         "subtitle": "Please select an account to send from",
@@ -389,8 +393,7 @@
       "transactionConfirmation": {
         "header": "Transaction successfully sent!",
         "subheader": "Once your transaction has been confirmed it will appear in your transaction history",
-        "transactionId": "TRANSACTION ID",
-        "transactionPending": "Your transaction may take a few seconds to be confirmed."
+        "transactionId": "TRANSACTION ID"
       },
       "transactionInput": {
         "selectDifferentAccount": "Select a different Account",
@@ -419,6 +422,9 @@
         "value": "Value",
         "price": "Price",
         "priority": "Priority",
+        "sender": "Sent from",
+        "recipient": "Recipient",
+        "priorityFee":"Priority Fee",
         "feeAmount": "(Fee %{amount})",
         "pleaseReview": "Please review transaction",
         "dialog": {
@@ -603,7 +609,7 @@
     "status": "Status",
     "value": "Value",
     "priorityFee": "Priority Fee",
-    "sender": "Sender",
+    "sender": "Sent from",
     "recipient": "Recipient",
     "qty": "Qty",
     "viewOnDora": "View on Dora",
