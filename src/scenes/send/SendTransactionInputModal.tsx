@@ -320,7 +320,7 @@ const AmountField = (props: {
 
     if (!valueNumber) return
 
-    val = val.replace(',', '')
+    val = val.replace(',', '.')
     if (props.token?.symbol === 'NEO') val = val.replace('.', '')
 
     props.setAmount(Number(val))
@@ -610,8 +610,10 @@ const SendTransactionInputModal = (prop: Props) => {
     }
   }
 
-  const handleAmountChanged = (amount: string) => {
-    setAmount(amount)
+  const handleAmountChanged = (val: string) => {
+    val = val.replace(',', '.')
+    if (token?.symbol === 'NEO') val = val.replace('.', '')
+    setAmount(val)
   }
 
   const handleAddressChanged = (addressValue: string) => {
