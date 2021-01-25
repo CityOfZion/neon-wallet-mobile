@@ -302,7 +302,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
     return (
       <BalanceList
         my="16px"
-        tokenAssets={tokensPool}
+        tokenAssets={account.tokenAssets}
         address={account.address ?? undefined}
         fromAccountView={true}
         fromListWalletView={false}
