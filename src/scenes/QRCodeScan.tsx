@@ -114,6 +114,7 @@ const QRCodeScan = (props: Props) => {
               source: Facade.route.ImportKey.name,
               address: Facade.asteroid.generateNeoAccountFromWif(key).address,
               legacy: true,
+              wif: key,
             },
           },
         },
