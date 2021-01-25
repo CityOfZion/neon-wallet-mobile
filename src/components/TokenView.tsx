@@ -311,11 +311,11 @@ export const TipView: React.FC<ITipView> = (props) => {
       <LinearLayout style={{width: 275}} alignSelf={'flex-start'}>
         <LinearLayout orientation={'horiz'} justifyContent={'space-between'}>
           <LinearLayout orientation={'verti'}>
-            <TextView color={'text.10'}>qty</TextView>
+            <TextView color={'text.10'}>Qty</TextView>
             <TextView color={'text.0'}>{props.amount.toFixed(8)}</TextView>
           </LinearLayout>
           <LinearLayout orientation={'verti'}>
-            <TextView color={'text.10'}>value</TextView>
+            <TextView color={'text.10'}>Value</TextView>
             <TextView color={'text.0'}>{`$${ratioTip.toFixed(8)}`}</TextView>
           </LinearLayout>
         </LinearLayout>
