@@ -195,6 +195,7 @@ const SendTransactionReviewModal = (props: Props) => {
     AsyncDispatch<string | null | undefined>
   >()
   const {currency, language} = useSelector((state: RootState) => state.settings)
+  const {exchange} = useSelector((state: RootState) => state.app)
 
   let senderName = undefined
   const senderAddress = senderTransaction.senderAddress ?? undefined
@@ -339,6 +340,18 @@ const SendTransactionReviewModal = (props: Props) => {
       })
     }
   }
+
+  const calcValue = () => {
+    const fiat = senderTransaction.fiat ?? 0
+    const tip =
+      exchange['GAS'].to[currency] * (senderTransaction.tip?.amount ?? 0)
+    const fee =
+      exchange['GAS'].to[currency] * (senderTransaction.feeAmount?.fee ?? 0)
+
+    const value = fiat + tip + fee
+
+    return Facade.filter.currency(value, currency, language)
+  }
   return show ? (
     <ScrollView
       style={{
@@ -389,18 +402,18 @@ const SendTransactionReviewModal = (props: Props) => {
                       title={Facade.t(
                         'modals.send.transactionReview.value'
                       ).toUpperCase()}
-                      value={Facade.filter.currency(
-                        senderTransaction.token?.exchangeToken(currency),
-                        currency,
-                        language
-                      )}
+                      value={calcValue()}
                       weight={2}
                     />
                     <HeaderColumn
                       title={Facade.t(
                         'modals.send.transactionReview.priorityFee'
                       ).toUpperCase()}
-                      value={`${senderTransaction.feeAmount?.fee ?? 0} GAS`}
+                      value={
+                        senderTransaction.feeAmount?.fee
+                          ? `${senderTransaction.feeAmount?.fee} GAS`
+                          : ''
+                      }
                       weight={1.2}
                       priorityFee={senderTransaction.feeAmount ?? undefined}
                     />
