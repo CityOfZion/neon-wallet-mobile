@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import {StyleSheet, View, Image, TextInput} from 'react-native'
+import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 type TSearchBar<P = any> = {
@@ -16,6 +17,10 @@ export const SearchBar: React.FC<TSearchBar> = ({
   dispatchData,
   marginH,
 }) => {
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
+
   const handleFilter = (searchText: string) => {
     if (searchText === '') {
       dispatchData(prevData)
@@ -28,7 +33,7 @@ export const SearchBar: React.FC<TSearchBar> = ({
     design: {
       borderRadius: 21,
       height: 42,
-      backgroundColor: '#191f23',
+      backgroundColor: theme.colors.background[12],
       marginHorizontal: marginH ?? 5,
       marginVertical: 20,
       flexDirection: 'row',

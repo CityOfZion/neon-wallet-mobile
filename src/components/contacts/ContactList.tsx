@@ -42,8 +42,8 @@ interface IconItem {
 const SectionHeaderComponent = (info: {section: SectionListData<Item>}) => {
   return (
     <TextView
-      pt={'9px'}
-      pb={'9px'}
+      pt={'6px'}
+      pb={'6px'}
       pl={'14px'}
       font={'medium'}
       color={'primary'}
@@ -107,17 +107,25 @@ const ItemComponent = (props: {item: Item}) => {
         }
       }}
     >
-      <LinearLayout mt={'20px'} mb={'20px'} ml={'7px'} orientation="horiz">
+      <LinearLayout mt={'18px'} mb={'18px'} ml={'6px'} orientation="horiz">
         <LinearLayout mt={3} mr={1}>
           <IconItemComponent color="#394651" width={36} heigth={36}>
             <IconText>{props.item.data.name?.charAt(0).toUpperCase()}</IconText>
           </IconItemComponent>
         </LinearLayout>
-        <LinearLayout mr={3}>
+        <LinearLayout mr={3} width={'85%'}>
           <TextView font={'semi-bold'} color={'text.0'} fontSize={18}>
             {props.item.data.name}
           </TextView>
-          <TextView font={'medium'} color={'primary'} fontSize={16}>
+          <TextView
+            font={'medium'}
+            color={'primary'}
+            fontSize={16}
+            textAlign="left"
+            mr={'16px'}
+            numberOfLines={1}
+            ellipsizeMode={'middle'}
+          >
             {props.item.data.address}
           </TextView>
         </LinearLayout>
