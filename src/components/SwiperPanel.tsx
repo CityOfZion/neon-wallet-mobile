@@ -1,9 +1,9 @@
-import { useFocusEffect } from '@react-navigation/native'
-import { AwaitActivity } from '@simpli/react-native-await'
-import { BlurView } from 'expo-blur'
-import { LinearGradient } from 'expo-linear-gradient'
+import {useFocusEffect} from '@react-navigation/native'
+import {AwaitActivity} from '@simpli/react-native-await'
+import {BlurView} from 'expo-blur'
+import {LinearGradient} from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
-import React, { useState, useRef, Fragment, useMemo } from 'react'
+import React, {useState, useRef, Fragment, useMemo} from 'react'
 import {
   Animated,
   ImageSourcePropType,
@@ -13,13 +13,13 @@ import {
   TouchableWithoutFeedback,
   useWindowDimensions,
   View,
-  Dimensions
+  Dimensions,
 } from 'react-native'
-import { useSelector } from 'react-redux'
+import {useSelector} from 'react-redux'
 
-import { Facade } from '~src/app/Facade'
+import {Facade} from '~src/app/Facade'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { TextView, ImageView, LinearLayout } from '~src/styles/styled-components'
+import {TextView, ImageView, LinearLayout} from '~src/styles/styled-components'
 
 export const PANEL_OFFSET = 50
 const ANIMATION_DELTA_THRESHOLD = 0.5
@@ -91,7 +91,7 @@ export const useSwiperController = (initial: boolean = false) => {
   } as SwiperController
 }
 
-const DragBar = (props: { noHeader: boolean; mb: number }) => {
+const DragBar = (props: {noHeader: boolean; mb: number}) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
@@ -111,7 +111,7 @@ const DragBar = (props: { noHeader: boolean; mb: number }) => {
   )
 }
 
-const Header = (props: SwiperProps & { mb: number }) => {
+const Header = (props: SwiperProps & {mb: number}) => {
   const LETTER_OFFSET = 10
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
@@ -145,8 +145,8 @@ const Header = (props: SwiperProps & { mb: number }) => {
                   </LinearLayout>
                 </LinearLayout>
               ) : (
-                  props.leftButton
-                )}
+                props.leftButton
+              )}
             </View>
           </TouchableWithoutFeedback>
         </AwaitActivity>
@@ -154,11 +154,14 @@ const Header = (props: SwiperProps & { mb: number }) => {
 
       <LinearLayout
         pointerEvents={'none'}
-        style={{ 
+        style={{
           position: 'absolute',
           alignSelf: 'center',
-          marginLeft: (Dimensions.get('window').width / 2) - (props.title ? props.title.length : 0) - LETTER_OFFSET, //calc to center title always
-         }}
+          marginLeft:
+            Dimensions.get('window').width / 2 -
+            (props.title ? props.title.length : 0) -
+            LETTER_OFFSET, //calc to center title always
+        }}
       >
         {props.image ? (
           <ImageView
@@ -193,8 +196,8 @@ const Header = (props: SwiperProps & { mb: number }) => {
                     flat={true}
                   />
                 ) : (
-                    props.rightButton
-                  )}
+                  props.rightButton
+                )}
               </LinearLayout>
             </LinearLayout>
           </TouchableWithoutFeedback>
@@ -212,7 +215,7 @@ export default function SwiperPanel(props: SwiperProps) {
 
   const [height, setHeight] = useState<number>()
   const bgOpacity = useRef(new Animated.Value(0))
-  const pan = useRef(new Animated.ValueXY({ x: 0, y: height ?? MAX_HEIGHT }))
+  const pan = useRef(new Animated.ValueXY({x: 0, y: height ?? MAX_HEIGHT}))
   const [state, setState] = useState(State.CLOSED)
 
   const scrollView = useRef<ScrollView>(null)
@@ -246,13 +249,13 @@ export default function SwiperPanel(props: SwiperProps) {
           // or movement is faster than ANIMATION_VELOCITY_THRESHOLD, closes panel
           if (
             gestureState.dy >
-            (height ?? MAX_HEIGHT) * ANIMATION_DELTA_THRESHOLD ||
+              (height ?? MAX_HEIGHT) * ANIMATION_DELTA_THRESHOLD ||
             gestureState.vy > ANIMATION_VELOCITY_THRESHOLD
           ) {
             controller.close()
           } else {
             Animated.spring(pan.current, {
-              toValue: { x: 0, y: 0 },
+              toValue: {x: 0, y: 0},
               useNativeDriver: true,
             }).start()
           }
@@ -271,7 +274,7 @@ export default function SwiperPanel(props: SwiperProps) {
 
   const resetScroll = () => {
     scrollView.current &&
-      scrollView.current.scrollTo({ x: 0, y: 0, animated: false })
+      scrollView.current.scrollTo({x: 0, y: 0, animated: false})
   }
 
   const open = () => {
@@ -279,7 +282,7 @@ export default function SwiperPanel(props: SwiperProps) {
 
     Animated.parallel([
       Animated.spring(pan.current, {
-        toValue: { x: 0, y: 0 },
+        toValue: {x: 0, y: 0},
         restSpeedThreshold: 100,
         restDisplacementThreshold: 40,
         friction: 100,
@@ -301,7 +304,7 @@ export default function SwiperPanel(props: SwiperProps) {
 
     Animated.parallel([
       Animated.spring(pan.current, {
-        toValue: { x: 0, y: height ?? MAX_HEIGHT },
+        toValue: {x: 0, y: height ?? MAX_HEIGHT},
         restSpeedThreshold: 150,
         restDisplacementThreshold: 100,
         friction: 100,
@@ -365,20 +368,20 @@ export default function SwiperPanel(props: SwiperProps) {
             />
           </TouchableWithoutFeedback>
         ) : (
-            <View
-              style={{
-                width: '100%',
-                height: '100%',
-                minHeight: PANEL_OFFSET,
-                flex: 1,
-              }}
-              pointerEvents={'none'}
-            />
-          )}
+          <View
+            style={{
+              width: '100%',
+              height: '100%',
+              minHeight: PANEL_OFFSET,
+              flex: 1,
+            }}
+            pointerEvents={'none'}
+          />
+        )}
         <Animated.View
           style={[
             //@ts-ignore
-            { transform: pan.current.getTranslateTransform() },
+            {transform: pan.current.getTranslateTransform()},
             {
               width: '100%',
               marginBottom: -PANEL_OFFSET,
@@ -403,8 +406,8 @@ export default function SwiperPanel(props: SwiperProps) {
                 props.darkerSolidColorBG
                   ? [theme.colors.background[14], theme.colors.background[14]]
                   : props.solidColorBG
-                    ? [theme.colors.background[2], theme.colors.background[2]]
-                    : [theme.colors.background[6], theme.colors.background[7]]
+                  ? [theme.colors.background[2], theme.colors.background[2]]
+                  : [theme.colors.background[6], theme.colors.background[7]]
               }
               end={[1, 0.75]}
               style={[
@@ -412,7 +415,7 @@ export default function SwiperPanel(props: SwiperProps) {
                   paddingTop:
                     props.noHeader && !props.draggable ? paddingTop : 0,
                 },
-                props.fullSize ? { height: MAX_HEIGHT } : {},
+                props.fullSize ? {height: MAX_HEIGHT} : {},
               ]}
             >
               {props.draggable ? (
@@ -433,29 +436,29 @@ export default function SwiperPanel(props: SwiperProps) {
                   {props.children}
                 </LinearLayout>
               ) : (
-                  <ScrollView
-                    ref={scrollView}
-                    style={{
-                      width: '100%',
-                      paddingLeft,
-                      paddingRight,
-                    }}
-                    contentContainerStyle={{
-                      flexGrow: 1,
-                      flexDirection: 'column',
-                      justifyContent: 'flex-start',
-                      paddingBottom: PANEL_OFFSET + paddingBottom,
-                    }}
-                    alwaysBounceVertical={false}
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                    disableScrollViewPanResponder={true}
-                  >
-                    <TouchableHighlight>
-                      <Fragment>{props.children}</Fragment>
-                    </TouchableHighlight>
-                  </ScrollView>
-                )}
+                <ScrollView
+                  ref={scrollView}
+                  style={{
+                    width: '100%',
+                    paddingLeft,
+                    paddingRight,
+                  }}
+                  contentContainerStyle={{
+                    flexGrow: 1,
+                    flexDirection: 'column',
+                    justifyContent: 'flex-start',
+                    paddingBottom: PANEL_OFFSET + paddingBottom,
+                  }}
+                  alwaysBounceVertical={false}
+                  showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
+                  disableScrollViewPanResponder={true}
+                >
+                  <TouchableHighlight>
+                    <Fragment>{props.children}</Fragment>
+                  </TouchableHighlight>
+                </ScrollView>
+              )}
             </LinearGradient>
           </View>
         </Animated.View>
@@ -502,7 +505,7 @@ interface ICloseButton {
   mr?: string
 }
 
-export const CloseButton: React.FC<ICloseButton> = ({ mr }) => {
+export const CloseButton: React.FC<ICloseButton> = ({mr}) => {
   return (
     <ImageView
       width={20}
@@ -517,7 +520,7 @@ CloseButton.propTypes = {
   mr: PropTypes.string,
 }
 
-export function BackButton(props: { text?: string }) {
+export function BackButton(props: {text?: string}) {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
