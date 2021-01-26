@@ -13,6 +13,7 @@ import {
   TouchableWithoutFeedback,
   useWindowDimensions,
   View,
+  Dimensions,
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -111,6 +112,7 @@ const DragBar = (props: {noHeader: boolean; mb: number}) => {
 }
 
 const Header = (props: SwiperProps & {mb: number}) => {
+  const LETTER_OFFSET = 10
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
@@ -150,7 +152,17 @@ const Header = (props: SwiperProps & {mb: number}) => {
         </AwaitActivity>
       </LinearLayout>
 
-      <LinearLayout pointerEvents={'none'}>
+      <LinearLayout
+        pointerEvents={'none'}
+        style={{
+          position: 'absolute',
+          alignSelf: 'center',
+          marginLeft:
+            Dimensions.get('window').width / 2 -
+            (props.title ? props.title.length : 0) -
+            LETTER_OFFSET, //calc to center title always
+        }}
+      >
         {props.image ? (
           <ImageView
             resizeMode="contain"
