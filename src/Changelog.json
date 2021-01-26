@@ -1,7 +1,23 @@
 {
     "changelog": [
         {
-            "version": "V1.0.1-8",
+            "version": "V1.0.11-30",
+            "date": "January 25 2021",
+            "changes": [
+                "- Bug fixes"
+            ]
+        },
+        {
+            "version": "  V1.0.2-09",
+            "date": "January 20 2021",
+            "changes": [
+                "- Bug fixes",
+                "- New passphrase validation when creating a new Wallet",
+                "- New layouts"
+            ]
+        },
+        {
+            "version": "  V1.0.1-08",
             "date": "January 14 2021",
             "changes": [
                 "- Added Changelog",
@@ -9,15 +25,6 @@
                 "- Optional tipping",
                 "- New Getting Started layout",
                 "- Remove glare around the backup modal"
-            ]
-        },
-        {
-            "version": "V1.0.2-9",
-            "date": "January 20 2021",
-            "changes": [
-                "- Bug fixes",
-                "- New passphrase validation when creating a new Wallet",
-                "- New layouts"
             ]
         }
     ]
