@@ -496,11 +496,11 @@
       },
       "watch": {
         "title": "Add a watch",
-        "subtitle": "Create a watch account from address"
+        "subtitle": "Create a watch account"
       },
       "contact": {
         "title": "Add a contact",
-        "subtitle": "Create a contact in your address book"
+        "subtitle": "Create a contact"
       }
     },
     "changelog": {
