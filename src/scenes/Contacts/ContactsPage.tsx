@@ -91,7 +91,7 @@ const ContactsPage: React.FC<Props> = (prop) => {
   })
 
   return (
-    <ScreenLayout padding={0} solidColorBG={true}>
+    <ScreenLayout padding={0} darkerSolidColorBG={true}>
       <TabSelector selected={tab} onSelect={(t) => setTab(t)} />
       {tab === 'contacts' ? (
         !contacts || contacts.length === 0 ? (

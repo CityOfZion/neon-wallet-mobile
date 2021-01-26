@@ -30,6 +30,7 @@ interface Props {
   transparent?: boolean
   invertedGradient?: boolean
   solidColorBG?: boolean
+  darkerSolidColorBG?: boolean
 }
 
 const ScreenLayout: React.FC<Props> = (props) => {
@@ -44,18 +45,25 @@ const ScreenLayout: React.FC<Props> = (props) => {
       ? Constants.statusBarHeight
       : 0
 
+  const chooseColorBG = () => {
+    let color
+    if (props.transparent) {
+      color = ['#00000000', '#00000000']
+    } else if (props.invertedGradient) {
+      color = [theme.colors.background[9], theme.colors.background[14]]
+    } else if (props.solidColorBG) {
+      color = [theme.colors.background[2], theme.colors.background[2]]
+    } else if (props.darkerSolidColorBG) {
+      color = [theme.colors.background[14], theme.colors.background[14]]
+    } else {
+      color = [theme.colors.background[14], theme.colors.background[2]]
+    }
+    return color
+  }
   return (
     <LinearGradient
       onLayout={props.onLayout}
-      colors={
-        props.transparent
-          ? ['#00000000', '#00000000']
-          : props.invertedGradient
-          ? [theme.colors.background[9], theme.colors.background[14]]
-          : props.solidColorBG
-          ? [theme.colors.background[2], theme.colors.background[2]]
-          : [theme.colors.background[14], theme.colors.background[2]]
-      }
+      colors={chooseColorBG()}
       start={[1, 0]}
       end={[1, 1]}
     >
@@ -112,6 +120,7 @@ ScreenLayout.propTypes = {
   transparent: PropTypes.bool,
   invertedGradient: PropTypes.bool,
   solidColorBG: PropTypes.bool,
+  darkerSolidColorBG: PropTypes.bool,
   onScroll: PropTypes.func,
   onReachBottom: PropTypes.func,
   scrollEventThrottle: PropTypes.number,
@@ -125,6 +134,7 @@ ScreenLayout.defaultProps = {
   transparent: false,
   invertedGradient: false,
   solidColorBG: false,
+  darkerSolidColorBG: false,
 }
 
 export default ScreenLayout
