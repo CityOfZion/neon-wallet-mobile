@@ -160,7 +160,7 @@ const Header = (props: SwiperProps & {mb: number}) => {
           marginLeft:
             Dimensions.get('window').width / 2 -
             (Dimensions.get('window').width / 100) *
-              (props.title ? props.title.length * 1.3 : 0),
+              ((props.title ? props.title.length : 0) * 1.3),
         }}
       >
         {props.image ? (
