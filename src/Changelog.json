@@ -1,6 +1,13 @@
 {
     "changelog": [
         {
+            "version": "V1.0.12-31",
+            "date": "January 27 2021",
+            "changes": [
+                "- Bug fixes"
+            ]
+        },
+        {
             "version": "V1.0.11-30",
             "date": "January 25 2021",
             "changes": [
