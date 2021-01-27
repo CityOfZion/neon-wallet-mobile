@@ -112,7 +112,7 @@ const DragBar = (props: {noHeader: boolean; mb: number}) => {
 }
 
 const Header = (props: SwiperProps & {mb: number}) => {
-  const LETTER_OFFSET = 10
+  const LETTER_OFFSET = 12
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
@@ -159,8 +159,8 @@ const Header = (props: SwiperProps & {mb: number}) => {
           alignSelf: 'center',
           marginLeft:
             Dimensions.get('window').width / 2 -
-            (props.title ? props.title.length : 0) -
-            LETTER_OFFSET, //calc to center title always
+            (Dimensions.get('window').width / 100) *
+              (props.title ? props.title.length * 1.3 : 0),
         }}
       >
         {props.image ? (
