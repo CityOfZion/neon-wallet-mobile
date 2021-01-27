@@ -50,7 +50,6 @@ const ReceiveAccountSelectionModal = (props: Props) => {
     setAccounts(accounts)
     setSelectedAccount(accounts[0])
   }
-
   return show ? (
     <LinearLayout>
       <ScrollView
@@ -89,7 +88,13 @@ const ReceiveAccountSelectionModal = (props: Props) => {
           </TextView>
 
           <LinearLayout minHeight={260} mx={-5}>
-            <AccountPicker accounts={accounts} onSelect={setSelectedAccount} />
+            <AccountPicker
+              accounts={accounts}
+              onSelect={setSelectedAccount}
+              initialAccount={
+                selectedAccount ? accounts.indexOf(selectedAccount) : undefined
+              }
+            />
           </LinearLayout>
 
           <TextView
