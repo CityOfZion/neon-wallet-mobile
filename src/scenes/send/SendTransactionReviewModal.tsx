@@ -20,7 +20,7 @@ import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-
+import {showMessage} from 'react-native-flash-message'
 export interface SendTransactionReviewModalParams {
   transactionHash: string
 }
@@ -314,7 +314,6 @@ const SendTransactionReviewModal = (props: Props) => {
       }
 
       dispatch(RootStore.senderTransaction.actions.clearState())
-      await dispatchAsync(RootStore.app.actions.syncAccounts())
 
       props.navigation.reset({
         index: 0,
@@ -326,18 +325,26 @@ const SendTransactionReviewModal = (props: Props) => {
         ],
       })
     } catch (error) {
-      const hash = await dispatchAsyncString(
-        RootStore.senderTransaction.actions.getHash()
-      )
-      props.navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: Facade.route.SendTransactionConfirmationModal.name,
-            params: {hash},
-          },
-        ],
-      })
+      //alert(JSON.stringify(error))
+      switch (error.code) {
+        case 'ECONNABORTED':
+          showMessage({
+            type: 'info',
+            message: Facade.t('toast.transactionWarning'),
+            duration: 5000
+          })
+          props.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
+          break;
+      
+        default:
+          showMessage({
+            type: 'danger',
+            message: Facade.t('toast.transactionError'),
+            duration: 5000
+          })
+          props.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
+          break;
+      }
     }
   }
 

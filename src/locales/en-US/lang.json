@@ -601,7 +601,8 @@
     "gasClaimGapError": "You must wait at least 5 minutes for next claim",
     "transactionCompleted": "Transaction completed!",
     "transactionError": "Transaction incompleted! Please, try again.",
-    "copiedToClipboard": "Copied to clipboard"
+    "copiedToClipboard": "Copied to clipboard",
+    "transactionWarning": "Transaction is pending"
   },
   "transactionDetails": {
     "time": "Time",
