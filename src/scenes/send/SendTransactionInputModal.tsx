@@ -611,7 +611,8 @@ const SendTransactionInputModal = (prop: Props) => {
   }
 
   const handleAmountChanged = (val: string) => {
-    val = val.replace(',', '.')
+    val = val.replace(/,|\.\.|\.,/g, '.')
+    val = val.replace(/\s|-/g, '')
     if (token?.symbol === 'NEO') val = val.replace('.', '')
     setAmount(val)
   }
