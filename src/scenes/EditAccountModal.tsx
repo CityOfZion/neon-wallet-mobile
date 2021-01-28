@@ -1,5 +1,6 @@
 import {RouteProp} from '@react-navigation/native'
 import React, {useState} from 'react'
+import {Alert, TouchableWithoutFeedback} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
@@ -14,10 +15,11 @@ import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {Account} from '~src/models/redux/Account'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore, RootState} from '~src/store/RootStore'
-import {LinearLayout} from '~src/styles/styled-components'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
-type ParamList = ModalStackParamList & RootStackParamList
+type ParamList = ModalStackParamList & RootStackParamList & WalletStackParamList
 
 export interface EditAccountModalParam {
   account: Account
@@ -32,6 +34,7 @@ const EditAccountModal = (props: Props) => {
   const tokenAssets = props.route.params.account.tokenAssets
   const account = Facade.utils.clone(props.route.params.account)
   account.tokenAssets = tokenAssets
+  var isDeleted: boolean = false
 
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
@@ -82,28 +85,77 @@ const EditAccountModal = (props: Props) => {
     Facade.await.run('swiperRight', submit, 300)
   }
 
+  const handleNavigation = () => {
+    if (isDeleted) {
+      props.navigation.reset({
+        index: 0,
+        routes: [{name: Facade.route.ListWalletsPage.name}],
+      })
+      props.navigation.navigate(Facade.route.ListWalletsPage.name, {})
+    } else {
+      props.navigation.goBack()
+    }
+  }
+
+  const deleteAction = async () => {
+    dispatch(RootStore.account.actions.clearState())
+
+    if (account?.address) {
+      await dispatchAsync(RootStore.account.actions.delete(account.address))
+    }
+    dispatch(RootStore.account.actions.clearState())
+
+    await dispatchAsync(RootStore.app.actions.syncWallets())
+    await dispatchAsync(RootStore.app.actions.syncAccounts())
+
+    isDeleted = true
+    handleNavigation()
+  }
+
+  const alertDelete = () => {
+    Alert.alert(
+      '',
+      Facade.t('modals.editAccount.deleteAccountAlert'),
+      [
+        {
+          text: Facade.t('modals.editAccount.navigation.cancel'),
+          style: 'cancel',
+        },
+        {
+          text: Facade.t('modals.editAccount.navigation.delete'),
+          onPress: deleteAction,
+        },
+      ],
+      {cancelable: true}
+    )
+  }
+
   return (
     <SwiperPanel
       controller={controller}
       fullSize={true}
-      paddingTop={36}
-      paddingBottom={36}
+      paddingTop={0}
       title={Facade.t('modals.editAccount.title')}
       leftButton={Facade.t('modals.editAccount.navigation.cancel')}
       rightButton={Facade.t('modals.editAccount.navigation.save')}
       onLeftPress={() => controller.close()}
       onRightPress={save}
-      onClose={() => props.navigation.goBack()}
+      onClose={() => handleNavigation()}
+      solidColorBG={true}
     >
       <AwaitActivity
         name={'swiperRight'}
         loadingView={<ScreenLoader transparent={true} />}
       >
-        <LinearLayout width="100%" height="100%">
+        <LinearLayout
+          height="100%"
+          orientation="verti"
+          justifyContent="space-between"
+        >
           <InputLabel
             title={Facade.t('modals.editAccount.preview')}
             capitalize={true}
-            marginBottom="24px"
+            marginBottom="14px"
           />
 
           <AccountCard account={account} isStackMode={false} />
@@ -111,8 +163,8 @@ const EditAccountModal = (props: Props) => {
           <InputLabel
             title={Facade.t('modals.editAccount.accountInput.title')}
             capitalize={true}
-            marginTop="48px"
-            marginBottom="10px"
+            marginTop="10px"
+            marginBottom="3px"
           />
           <InputWithValidation
             value={name}
@@ -136,11 +188,48 @@ const EditAccountModal = (props: Props) => {
           <InputLabel
             title={Facade.t('modals.editAccount.selectColor')}
             capitalize={true}
-            marginTop="12px"
-            marginBottom="24px"
+            marginBottom="5px"
           />
 
           <ColorSelector onSelect={setColor} account={account} />
+          <LinearLayout>
+            <InputLabel
+              title={Facade.t('modals.editAccount.deleteAccount')}
+              capitalize={true}
+              marginBottom={'5px'}
+              marginTop={'10px'}
+            />
+            <TextView color={theme.colors.text[0]} marginBottom={'20px'}>
+              {Facade.t('modals.editAccount.deleteAccountSubtitle')}
+            </TextView>
+            <TouchableWithoutFeedback onPress={alertDelete}>
+              <LinearLayout
+                width="100%"
+                borderRadius="4px"
+                borderWidth="1px"
+                borderColor="primary"
+                justifyContent="center"
+                alignItems="center"
+                orientation="horiz"
+                p="10px"
+              >
+                <ImageView
+                  resizeMode="center"
+                  imageSize={[20, 20]}
+                  source={require('~/src/assets/images/icon-trash-can-primary.png')}
+                />
+
+                <TextView
+                  style={{includeFontPadding: false}}
+                  ml={3}
+                  color={'primary'}
+                  fontSize={20}
+                >
+                  {Facade.t('modals.editAccount.deleteButtom')}
+                </TextView>
+              </LinearLayout>
+            </TouchableWithoutFeedback>
+          </LinearLayout>
         </LinearLayout>
       </AwaitActivity>
     </SwiperPanel>

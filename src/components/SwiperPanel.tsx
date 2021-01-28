@@ -156,7 +156,7 @@ const Header = (props: SwiperProps & {mb: number}) => {
         pointerEvents={'none'}
         style={{
           position: 'absolute',
-          alignSelf: 'center',
+          alignSelf: 'flex-start',
           marginLeft:
             Dimensions.get('window').width / 2 -
             (Dimensions.get('window').width / 100) *

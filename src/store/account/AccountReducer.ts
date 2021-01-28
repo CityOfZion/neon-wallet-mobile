@@ -141,5 +141,18 @@ export class AccountReducer extends ReducerWrapper<
         throw Error('Something went wrong')
       }
     },
+    delete: (address: string): AsyncAction => {
+      return async (dispatch) => {
+        const accounts = (await Storage.accounts.load()) ?? []
+
+        const account = accounts.find((it) => it.address === address)
+
+        if (account) {
+          const indexAccount = accounts.indexOf(account)
+          accounts.splice(indexAccount, 1)
+        }
+        await Storage.accounts.save(accounts)
+      }
+    },
   }
 }
