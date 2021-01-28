@@ -3,6 +3,7 @@ import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useState} from 'react'
 import {Alert, ScrollView, TouchableHighlight, View} from 'react-native'
+import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 
 import * as LocalAuthentication from '~/node_modules/expo-local-authentication'
@@ -20,7 +21,6 @@ import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import {showMessage} from 'react-native-flash-message'
 export interface SendTransactionReviewModalParams {
   transactionHash: string
 }
@@ -331,19 +331,23 @@ const SendTransactionReviewModal = (props: Props) => {
           showMessage({
             type: 'info',
             message: Facade.t('toast.transactionWarning'),
-            duration: 5000
+            duration: 5000,
           })
-          props.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
-          break;
-      
+          props.navigation.navigate(
+            Facade.route.SendTransactionReviewModal.name
+          )
+          break
+
         default:
           showMessage({
             type: 'danger',
             message: Facade.t('toast.transactionError'),
-            duration: 5000
+            duration: 5000,
           })
-          props.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
-          break;
+          props.navigation.navigate(
+            Facade.route.SendTransactionReviewModal.name
+          )
+          break
       }
     }
   }
