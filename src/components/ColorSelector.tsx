@@ -67,7 +67,7 @@ export default function ColorSelector(props: Props) {
             <LinearGradient
               width="100%"
               height="100%"
-              colors={[Facade.filter.toDarkerShade(color), color]}
+              colors={[color, Facade.filter.toDarkerShade(color)]}
             />
           )}
         </LinearLayout>
@@ -152,11 +152,11 @@ export default function ColorSelector(props: Props) {
           orientation="horiz"
           justifyContent="space-between"
           key={key}
-          mt={key === 0 ? 0 : 16 /* If first group of buttons, no top margin*/}
+          mt={key === 0 ? 0 : 11 /* If first group of buttons, no top margin*/}
           mb={
             key === buttonGroup.length - 1
               ? 0
-              : 16 /* If last group of buttons, no bottom margin*/
+              : 11 /* If last group of buttons, no bottom margin*/
           }
         >
           {button}
