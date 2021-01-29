@@ -91,7 +91,7 @@ const EditAccountModal = (props: Props) => {
         index: 0,
         routes: [{name: Facade.route.ListWalletsPage.name}],
       })
-      props.navigation.navigate(Facade.route.ListWalletsPage.name, {})
+      props.navigation.navigate(Facade.route.GetWallet.name, {})
     } else {
       props.navigation.goBack()
     }
