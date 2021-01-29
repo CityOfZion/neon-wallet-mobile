@@ -36,7 +36,7 @@ export const NoContacts = () => {
           width={'95%'}
           source={require('~src/assets/images/add-new-contact-dashed-button.png')}
           resizeMode={'contain'}
-          mt={'-4%'}
+          mt={'-14px'}
         />
         <LinearLayout
           alignItems={'center'}
