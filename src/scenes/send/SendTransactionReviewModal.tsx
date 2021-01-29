@@ -325,7 +325,6 @@ const SendTransactionReviewModal = (props: Props) => {
         ],
       })
     } catch (error) {
-      //alert(JSON.stringify(error))
       switch (error.code) {
         case 'ECONNABORTED':
           showMessage({
