@@ -1,7 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState, useEffect} from 'react'
-import {View, StyleSheet, Text, Dimensions} from 'react-native'
+import {View, StyleSheet, Text, Dimensions, StyleSheetProperties} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -67,6 +67,10 @@ export const ContactDetails = (props: ContactDetailsProps) => {
       justifyContent: 'center',
       marginBottom: 30,
       elevation: 25,
+      shadowOpacity: 1,
+      shadowColor: '#00000044',
+      shadowOffset: {width: 5, height: 5},
+      shadowRadius: 25
     },
     textLetter: {
       color: '#899fa8',
