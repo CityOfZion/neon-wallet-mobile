@@ -309,6 +309,9 @@ const ListWalletView = (props: WalletProps) => {
     if (wallets.length > 1) {
       fadeOut()
     }
+    setTimeout(() => {
+      fadeIn()
+    }, 3000)
   }
 
   const openWarning = () =>
