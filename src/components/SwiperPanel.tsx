@@ -28,6 +28,7 @@ const ANIMATION_VELOCITY_THRESHOLD = 0.5
 interface SwiperProps {
   controller?: SwiperController
   fullSize: boolean
+  smallerSize?: boolean
   noHeader: boolean
   draggable: boolean
   padding: number
@@ -415,7 +416,11 @@ export default function SwiperPanel(props: SwiperProps) {
                   paddingTop:
                     props.noHeader && !props.draggable ? paddingTop : 0,
                 },
-                props.fullSize ? {height: MAX_HEIGHT} : {},
+                props.fullSize
+                  ? {height: MAX_HEIGHT}
+                  : props.smallerSize
+                  ? {height: MAX_HEIGHT - 46}
+                  : {},
               ]}
             >
               {props.draggable ? (

@@ -267,8 +267,11 @@
     "paymentRequestDetails": "PAYMENT REQUEST DETAILS",
     "token": "Token",
     "amount": "Amount",
+    "qty": "Qty",
     "value": "Value",
     "location": "Location",
+    "wallet": "Wallet",
+    "account": "Account",
     "address": "Address",
     "reference": "Reference"
   },
