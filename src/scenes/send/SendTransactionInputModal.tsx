@@ -677,7 +677,8 @@ const SendTransactionInputModal = (prop: Props) => {
 
         <AccountCard account={account} />
 
-        <TouchableWithoutFeedback
+        <ButtonView
+          activeOpacity={0.4}
           onPress={() => {
             prop.navigation.reset({
               index: 1,
@@ -702,7 +703,7 @@ const SendTransactionInputModal = (prop: Props) => {
               {Facade.t('modals.send.transactionInput.selectDifferentAccount')}
             </TextView>
           </LinearLayout>
-        </TouchableWithoutFeedback>
+        </ButtonView>
 
         <TextView
           mt="40px"
