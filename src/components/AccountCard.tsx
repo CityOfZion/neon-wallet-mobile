@@ -311,8 +311,8 @@ const AccountCard: React.FC<Props> = (props) => {
                       </TextView>
 
                       <TextView
-                        color="primary"
-                        opacity={0.75}
+                        color={'#ffffff'}
+                        opacity={0.6}
                         textAlign="left"
                         fontFamily={'medium'}
                         ellipsizeMode={'middle'}
