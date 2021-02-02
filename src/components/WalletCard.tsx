@@ -249,7 +249,7 @@ const WalletCard: React.FC<Props> = (props) => {
   }
 
   return (
-    <ThemedShadowContainer radius={25} android={{width: props.width}}>
+    <ThemedShadowContainer android={{width: props.width, border: 7, radius: 30, opacity: 0.18}}>
       <WalletCardRelativeContainer
         position="relative"
         width={props.width}
