@@ -30,7 +30,9 @@ const Changelog: React.FC<IChangelog> = ({changelog}) => {
 
   return (
     <LinearLayout
-      padding={22}
+      pl={22}
+      pr={22}
+      pb={22}
       justifyContent={'center'}
       alignItems={'center'}
       borderRadius={4}
