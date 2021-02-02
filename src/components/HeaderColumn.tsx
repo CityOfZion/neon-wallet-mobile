@@ -49,6 +49,7 @@ export const HeaderColumn = (props: Props) => {
           </TextView>
         )}
         <ButtonView
+          width={'100%'}
           activeOpacity={props.showCopy ? 0.4 : 1}
           onPress={() => {
             if (props.showCopy && typeof props.value === 'string') {
@@ -62,7 +63,7 @@ export const HeaderColumn = (props: Props) => {
         >
           <LinearLayout
             orientation={'horiz'}
-            maxWidth={props.showCopy ? '95%' : '100%'}
+            maxWidth={props.showCopy ? '93%' : '100%'}
             alignItems={'flex-end'}
           >
             {typeof props.value === 'string' ? (
@@ -91,12 +92,14 @@ export const HeaderColumn = (props: Props) => {
               ))
             )}
             {props.showCopy && (
-              <ImageView
-                width="16px"
-                resizeMode="contain"
-                source={require('~src/assets/images/icon-copy-green.png')}
-                ml={4}
-              />
+              <LinearLayout>
+                <ImageView
+                  width="16px"
+                  resizeMode="contain"
+                  source={require('~src/assets/images/icon-copy-green.png')}
+                  ml={2}
+                />
+              </LinearLayout>
             )}
           </LinearLayout>
         </ButtonView>
