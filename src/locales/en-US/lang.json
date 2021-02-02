@@ -617,6 +617,7 @@
     "priorityFee": "Priority Fee",
     "sender": "Sent from",
     "recipient": "Recipient",
+    "hash": "Hash",
     "qty": "Qty",
     "viewOnDora": "View on Dora",
     "confirmed": "Confirmed",

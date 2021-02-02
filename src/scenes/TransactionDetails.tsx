@@ -137,7 +137,7 @@ export const TransactionDetails = (props: Props) => {
         <LinearLayout orientation={'horiz'}>
           <HeaderColumn
             weight={1}
-            title={'HASH'}
+            title={Facade.t('transactionDetails.hash').toUpperCase()}
             value={transaction.transactionHash ?? ''}
             showCopy={true}
           />
