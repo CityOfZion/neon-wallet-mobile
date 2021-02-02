@@ -7,11 +7,14 @@ import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
-import {ReceiveModalStackParamList} from '~/src/navigation/ReceiveModalStackNavigation'
 import {Facade} from '~src/app/Facade'
 import InputLabel from '~src/components/InputLabel'
 import NeonQRCode from '~src/components/QRCode'
-import {PANEL_OFFSET} from '~src/components/SwiperPanel'
+import SwiperPanel, {
+  CloseButton,
+  PANEL_OFFSET,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
@@ -29,7 +32,7 @@ export interface ReceiveQrCodeModalParams {
 
 export interface ReceiveQrCodeProps {
   navigation: StackNavigationProp<ModalStackParamList>
-  route: RouteProp<ReceiveModalStackParamList, 'ReceiveQrCodeModal'>
+  route: RouteProp<ModalStackParamList, 'ReceiveQrCodeModal'>
 }
 
 const buttonWidth = Facade.app.screenWidth - 76
@@ -45,6 +48,7 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
       state.routes[state.routes.length - 1].name ===
       Facade.route.ReceiveQrCodeModal.name
   )
+  const controller = useSwiperController(true)
   const [showQr, setShowQr] = useState(false)
 
   const {wallet, account, amount, token, reference} = props.route.params
@@ -73,23 +77,17 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
       address: account.address ?? '',
     })
   }
-  return show ? (
-    <ScrollView
-      style={{
-        width: '100%',
-        marginTop: useHeaderHeight(),
-        marginBottom: '10%',
-      }}
-      contentContainerStyle={{
-        flexGrow: 1,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        paddingBottom: PANEL_OFFSET + 20,
-        paddingLeft: 5,
-        paddingRight: 5,
-      }}
+  return (
+    <SwiperPanel
+      controller={controller}
+      title={Facade.t('routes.ReceiveQrCode')}
+      rightButton={<CloseButton mr="12px" />}
+      onRightPress={controller.close}
+      onClose={() => props.navigation.goBack()}
+      solidColorBG={true}
+      smallerSize={true}
     >
-      <LinearLayout height="100%" alignItems="center">
+      <LinearLayout mt="43px" height="100%" alignItems="center">
         <AwaitActivity name={'renderQr'}>
           <LinearLayout width={buttonWidth} height={buttonWidth}>
             {showQr ? (
@@ -109,7 +107,7 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
         </LinearLayout>
 
         <LinearLayout
-          width="90%"
+          width="95%"
           mt={22}
           flex={1}
           flexWrap="wrap"
@@ -129,29 +127,33 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
             </TextView>
           </LinearLayout>
           <LinearLayout
-            borderWidth={1}
-            borderRadius={7}
-            pl={14}
-            pt={27}
-            borderColor={theme.colors.background[4]}
+            bg={'background.14'}
+            pb={'12px'}
+            pr={'13px'}
+            mt={'4px'}
+            borderRadius={'7px'}
+            pl={'13px'}
+            pt={'13px'}
           >
-            <LinearLayout orientation="horiz" width="100%" mb={14}>
+            <LinearLayout width="100%" mb={14}>
               <InputLabel
                 title={Facade.t('receive.token')}
                 weight={labelWeight}
+                lightText={true}
               />
 
               <LinearLayout orientation="horiz" weight={5}>
                 <ImageView
                   alignSelf="center"
-                  width={18}
-                  height={18}
+                  width={17}
+                  height={17}
                   resizeMode="center"
                   source={token.srcIcon}
                 />
                 <TextView
                   color="white"
                   ml={2}
+                  mt={2}
                   fontFamily="semibold"
                   fontSize={18}
                   style={{includeFontPadding: false}}
@@ -160,12 +162,20 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
                 </TextView>
               </LinearLayout>
             </LinearLayout>
-            <LinearLayout orientation="horiz" width="100%" mb={14}>
+            <LinearLayout orientation="horiz" width="100%">
               <InputLabel
-                title={Facade.t('receive.amount')}
+                title={Facade.t('receive.qty')}
                 weight={labelWeight}
+                lightText={true}
               />
 
+              <InputLabel
+                title={Facade.t('receive.value')}
+                weight={labelWeight}
+                lightText={true}
+              />
+            </LinearLayout>
+            <LinearLayout orientation="horiz" width="100%" mb={16}>
               <TextView
                 color="white"
                 fontFamily="semibold"
@@ -174,15 +184,9 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
               >
                 {amount}
               </TextView>
-            </LinearLayout>
-            <LinearLayout orientation="horiz" width="100%" mb={14}>
-              <InputLabel
-                title={Facade.t('receive.value')}
-                weight={labelWeight}
-              />
 
               <TextView
-                color="white"
+                color="primary"
                 fontFamily="semibold"
                 fontSize={18}
                 weight={5}
@@ -191,28 +195,47 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
               </TextView>
             </LinearLayout>
 
-            <LinearLayout orientation="horiz" width="100%" mb={14}>
+            <LinearLayout orientation="horiz" width="100%">
               <InputLabel
-                title={Facade.t('receive.location')}
+                title={Facade.t('receive.wallet')}
                 weight={labelWeight}
+                lightText={true}
               />
+
+              <InputLabel
+                title={Facade.t('receive.account')}
+                weight={labelWeight}
+                lightText={true}
+              />
+            </LinearLayout>
+            <LinearLayout orientation="horiz" width="100%" mb={16}>
+              <TextView
+                color="white"
+                fontFamily="semibold"
+                fontSize={16}
+                weight={5}
+                mr={5}
+                style={{includeFontPadding: false}}
+              >
+                {wallet.name}
+              </TextView>
 
               <TextView
                 color="white"
                 fontFamily="semibold"
                 fontSize={16}
                 weight={5}
-                ml={2}
                 mr={5}
                 style={{includeFontPadding: false}}
               >
-                {`${wallet.name} / ${account.name}`}
+                {account.name}
               </TextView>
             </LinearLayout>
-            <LinearLayout orientation="horiz" width="100%" mb={14}>
+            <LinearLayout width="100%" mb={16}>
               <InputLabel
                 title={Facade.t('receive.address')}
                 weight={labelWeight}
+                lightText={true}
               />
 
               <TextView
@@ -220,25 +243,24 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
                 fontFamily="medium"
                 fontSize={16}
                 weight={5}
-                ml={2}
                 style={{includeFontPadding: false}}
-                mr={5}
+                mr={1}
               >
                 {account.address}
               </TextView>
             </LinearLayout>
-            <LinearLayout orientation="horiz" width="100%" mb={20}>
+            <LinearLayout width="100%" mb={16}>
               <InputLabel
                 title={Facade.t('receive.reference')}
                 weight={labelWeight}
+                lightText={true}
               />
               <TextView
                 color="white"
                 fontFamily="semibold"
                 fontSize={16}
                 weight={5}
-                ml={2}
-                mr={5}
+                mr={1}
                 style={{includeFontPadding: false}}
               >
                 {reference}
@@ -247,9 +269,7 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
           </LinearLayout>
         </LinearLayout>
       </LinearLayout>
-    </ScrollView>
-  ) : (
-    <LinearLayout />
+    </SwiperPanel>
   )
 }
 export default ReceiveQrCodeModal
