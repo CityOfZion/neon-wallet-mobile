@@ -1,12 +1,19 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState, useEffect} from 'react'
-import {View, StyleSheet, Text, Dimensions, StyleSheetProperties} from 'react-native'
+import {
+  View,
+  StyleSheet,
+  Text,
+  Dimensions,
+  StyleSheetProperties,
+} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ThemedShadowContainer from '~src/components/themed/ThemedShadowContainer'
 import {Contact} from '~src/models/redux/Contact'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ContactsStackParamList} from '~src/navigation/ContactsStackNavigation'
@@ -17,6 +24,7 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
+
 export interface ContactDetailsParams {
   contact: Contact
 }
@@ -66,11 +74,6 @@ export const ContactDetails = (props: ContactDetailsProps) => {
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: 30,
-      elevation: 25,
-      shadowOpacity: 1,
-      shadowColor: '#00000044',
-      shadowOffset: {width: 5, height: 5},
-      shadowRadius: 25
     },
     textLetter: {
       color: '#899fa8',
@@ -90,11 +93,22 @@ export const ContactDetails = (props: ContactDetailsProps) => {
         alignItems={'center'}
         mt={Dimensions.get('screen').height * 0.07}
       >
-        <View style={styles.containerLetter}>
-          <Text style={styles.textLetter}>
-            {contact.name?.charAt(0).toLocaleUpperCase()}
-          </Text>
-        </View>
+        <ThemedShadowContainer
+          android={{
+            width: 126,
+            height: 127,
+            opacity: 0.5,
+            x: 5,
+            y: 5,
+            radius: 60,
+          }}
+        >
+          <View style={styles.containerLetter}>
+            <Text style={styles.textLetter}>
+              {contact.name?.charAt(0).toLocaleUpperCase()}
+            </Text>
+          </View>
+        </ThemedShadowContainer>
         <TextView
           fontFamily={'semibold'}
           fontSize={'20px'}

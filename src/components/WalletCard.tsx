@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
+import ThemedShadowContainer from '~src/components/themed/ThemedShadowContainer'
 import {Currency} from '~src/enums/Currency'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -16,7 +17,6 @@ import styled, {
   TextView,
 } from '~src/styles/styled-components'
 import {Exchange} from '~src/types/exchange'
-
 interface Props {
   wallet: Wallet
   width?: number
@@ -249,88 +249,90 @@ const WalletCard: React.FC<Props> = (props) => {
   }
 
   return (
-    <WalletCardRelativeContainer
-      position="relative"
-      width={props.width}
-      bg={colorLimedSpruce}
-      activeOpacity={1}
-      onPress={onPressEvent}
-      onLayout={layoutEvent}
-      style={{
-        aspectRatio: 25 / 38,
-      }}
-    >
-      <LinearLayout
-        position={'absolute'}
-        bottom={0}
-        width={'100%'}
-        height={3 * viewHeight}
-        overflow={'hidden'}
-        borderRadius={'18px'}
+    <ThemedShadowContainer radius={25} android={{width: props.width}}>
+      <WalletCardRelativeContainer
+        position="relative"
+        width={props.width}
+        bg={colorLimedSpruce}
+        activeOpacity={1}
+        onPress={onPressEvent}
+        onLayout={layoutEvent}
+        style={{
+          aspectRatio: 25 / 38,
+        }}
       >
-        <RelativeLayout top={2 * viewHeight}>
-          {limitedWalletAccounts.map((it, i) => (
-            <Animated.View
-              key={i}
-              style={{
-                transform: [
-                  {
-                    translateY: posYFactor.current.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [
-                        0,
-                        -viewHeight *
-                          (1.2 + 0.1 * (limitedWalletAccounts.length - i)),
-                      ],
-                    }),
-                  },
-                ],
-              }}
-            >
-              <AccountContainer
-                viewHeight={viewHeight}
-                account={it}
-                wallet={props.wallet}
-                index={i}
-                canBeInactive={props.canBeInactive}
-              />
-            </Animated.View>
-          ))}
-        </RelativeLayout>
-      </LinearLayout>
+        <LinearLayout
+          position={'absolute'}
+          bottom={0}
+          width={'100%'}
+          height={3 * viewHeight}
+          overflow={'hidden'}
+          borderRadius={'18px'}
+        >
+          <RelativeLayout top={2 * viewHeight}>
+            {limitedWalletAccounts.map((it, i) => (
+              <Animated.View
+                key={i}
+                style={{
+                  transform: [
+                    {
+                      translateY: posYFactor.current.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [
+                          0,
+                          -viewHeight *
+                            (1.2 + 0.1 * (limitedWalletAccounts.length - i)),
+                        ],
+                      }),
+                    },
+                  ],
+                }}
+              >
+                <AccountContainer
+                  viewHeight={viewHeight}
+                  account={it}
+                  wallet={props.wallet}
+                  index={i}
+                  canBeInactive={props.canBeInactive}
+                />
+              </Animated.View>
+            ))}
+          </RelativeLayout>
+        </LinearLayout>
 
-      <WalletOverlay walletType={props.wallet.walletType ?? ''} />
+        <WalletOverlay walletType={props.wallet.walletType ?? ''} />
 
-      <LinearLayout position={'absolute'} bottom={40} width={'80%'}>
-        <WalletLabel
-          wallet={props.wallet}
-          canBeInactive={props.canBeInactive}
-        />
-
-        <RelativeLayout height={12} width={'100%'}>
-          <AssetsBarBackground
-            height={'10px'}
-            width={'100%'}
-            source={require('~src/assets/images/wallet-card-label.png')}
+        <LinearLayout position={'absolute'} bottom={40} width={'80%'}>
+          <WalletLabel
+            wallet={props.wallet}
+            canBeInactive={props.canBeInactive}
           />
-          <AssetsBar
-            bottom={'7px'}
-            height={'5px'}
-            width={'99.5%'}
-            px={'2px'}
-            orientation={'horiz'}
-          >
-            {(!props.wallet.isInactive || !props.canBeInactive) && (
-              <AssetBarFillsComponent
-                wallet={props.wallet}
-                currency={currency}
-                exchange={exchange}
-              />
-            )}
-          </AssetsBar>
-        </RelativeLayout>
-      </LinearLayout>
-    </WalletCardRelativeContainer>
+
+          <RelativeLayout height={12} width={'100%'}>
+            <AssetsBarBackground
+              height={'10px'}
+              width={'100%'}
+              source={require('~src/assets/images/wallet-card-label.png')}
+            />
+            <AssetsBar
+              bottom={'7px'}
+              height={'5px'}
+              width={'99.5%'}
+              px={'2px'}
+              orientation={'horiz'}
+            >
+              {(!props.wallet.isInactive || !props.canBeInactive) && (
+                <AssetBarFillsComponent
+                  wallet={props.wallet}
+                  currency={currency}
+                  exchange={exchange}
+                />
+              )}
+            </AssetsBar>
+          </RelativeLayout>
+        </LinearLayout>
+      </WalletCardRelativeContainer>
+    </ThemedShadowContainer>
   )
 }
 
