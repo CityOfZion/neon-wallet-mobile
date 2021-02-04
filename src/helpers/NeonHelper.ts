@@ -7,6 +7,7 @@ import {
   SendAssetConfig,
 } from '../../node_modules/@cityofzion/neon-api/lib/funcs/types'
 import {tx} from '../../node_modules/@cityofzion/neon-core'
+import {UtilsHelper} from './UtilsHelper'
 
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
@@ -33,8 +34,9 @@ export abstract class NeonHelper {
 
     const account = accounts.find((it) => it.address === senderAddress)
     const neoAccount = await account?.getNeoAccount()
-    const url =
-      (await NeoNode.getHighestNodeUrl()) ?? settings.network.defaultNodeNet
+    const url = (await (await NeoNode.getAllNodes()).map(
+      (pool) => pool.url
+    )) ?? [settings.network.defaultNodeNet]
 
     let intents: tx.TransactionOutput[]
 
@@ -54,17 +56,52 @@ export abstract class NeonHelper {
       settings.network.networkDeprecatedLabel
     )
 
-    const sendResponse = await api.sendAsset({
-      account: neoAccount,
-      api: apiProvider,
-      url,
-      intents,
-      fees,
-    })
-
-    Facade.bus.emit('transactionStart', sendResponse)
+    const urlNotNull: string[] = url.filter(
+      (address) => address !== null
+    ) as string[]
+    const sendResponse = await NeonHelper.sendAssetsMultipleAddress(
+      urlNotNull,
+      {
+        account: neoAccount,
+        api: apiProvider,
+        intents,
+        fees,
+      }
+    )
 
     return sendResponse.tx?.hash ?? null
+  }
+
+  static sendAssetsMultipleAddress(
+    url: string[],
+    config: SendAssetConfig
+  ): Promise<SendAssetConfig> {
+    return new Promise((resolve, reject) => {
+      let alreadySuccess = false
+      const onSucess = (resp: SendAssetConfig) => {
+        if (alreadySuccess) {
+          return
+        }
+        alreadySuccess = true
+        Facade.bus.emit('transactionStart', resp)
+        resolve(resp)
+      }
+      try {
+        Promise.all(
+          url.map(async (address) => {
+            const sends = await api.sendAsset({
+              ...config,
+              url: address,
+            })
+            onSucess(sends)
+          })
+        )
+      } catch (e) {
+        if (!alreadySuccess) {
+          reject(e)
+        }
+      }
+    })
   }
 
   static async getHash(

@@ -3,7 +3,6 @@ import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useState} from 'react'
 import {Alert, ScrollView, TouchableHighlight, View} from 'react-native'
-import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 
 import * as LocalAuthentication from '~/node_modules/expo-local-authentication'
@@ -296,59 +295,33 @@ const SendTransactionReviewModal = (props: Props) => {
     )
 
   const submit = async () => {
-    try {
-      const transactionHash = await dispatchAsyncString(
-        RootStore.senderTransaction.actions.sendAsset()
-      )
+    const transactionHash = await dispatchAsyncString(
+      RootStore.senderTransaction.actions.sendAsset()
+    )
 
-      if (!transactionHash) {
-        throw new Error('Transaction has failed')
-      }
-      const account = accounts.find(
-        (it) => it.address === senderTransaction.senderAddress
-      )
-
-      if (account) {
-        await account.addPendingTransaction(senderTransaction, transactionHash)
-        await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
-      }
-
-      dispatch(RootStore.senderTransaction.actions.clearState())
-
-      props.navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: Facade.route.SendTransactionConfirmationModal.name,
-            params: {transactionHash},
-          },
-        ],
-      })
-    } catch (error) {
-      switch (error.code) {
-        case 'ECONNABORTED':
-          showMessage({
-            type: 'info',
-            message: Facade.t('toast.transactionWarning'),
-            duration: 5000,
-          })
-          props.navigation.navigate(
-            Facade.route.SendTransactionReviewModal.name
-          )
-          break
-
-        default:
-          showMessage({
-            type: 'danger',
-            message: Facade.t('toast.transactionError'),
-            duration: 5000,
-          })
-          props.navigation.navigate(
-            Facade.route.SendTransactionReviewModal.name
-          )
-          break
-      }
+    if (!transactionHash) {
+      throw new Error('Transaction has failed')
     }
+    const account = accounts.find(
+      (it) => it.address === senderTransaction.senderAddress
+    )
+
+    if (account) {
+      await account.addPendingTransaction(senderTransaction, transactionHash)
+      await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
+    }
+
+    dispatch(RootStore.senderTransaction.actions.clearState())
+
+    props.navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: Facade.route.SendTransactionConfirmationModal.name,
+          params: {transactionHash},
+        },
+      ],
+    })
   }
 
   const calcValue = () => {

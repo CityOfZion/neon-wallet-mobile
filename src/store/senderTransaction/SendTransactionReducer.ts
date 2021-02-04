@@ -55,7 +55,7 @@ export class SendTransactionReducer extends ReducerWrapper<
     setTip: (tip: {amount: number; address: string} | undefined) => {
       return this.commit('SET_TIP', {tip})
     },
-    sendAsset: (): AsyncAction<string | null> => {
+    sendAsset: (): AsyncAction<string | null | undefined> => {
       return async (dispatch, getState) => {
         const sendTx = getState().senderTransaction
 
