@@ -2,7 +2,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import Constants from 'expo-constants'
 import * as WebBrowser from 'expo-web-browser'
 import React from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
+import {TouchableWithoutFeedback, Platform} from 'react-native'
 import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
@@ -98,7 +98,9 @@ const MorePage = (props: MoreProps) => {
             width={'88%'}
             allowFontScaling={true}
           >
-            {`v${Constants.nativeAppVersion}-${Constants.nativeBuildVersion}`}
+            {`v${Constants.nativeAppVersion}-${Constants.nativeBuildVersion}${
+              Platform.OS === 'ios' ? 'i' : 'a'
+            }`}
           </TextView>
         </LinearLayout>
       </TouchableWithoutFeedback>
