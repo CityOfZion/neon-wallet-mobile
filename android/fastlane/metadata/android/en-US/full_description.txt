@@ -1,0 +1,1 @@
+The Neon Wallet is original light wallet for the Neo blockchain.
