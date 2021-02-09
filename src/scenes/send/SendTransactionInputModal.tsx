@@ -490,7 +490,7 @@ const SendTransactionInputModal = (prop: Props) => {
           setFiat(ratio * Number(amount))
         }
       }
-    }
+    } else setFiat(0)
   }, [amount])
 
   useEffect(() => {
@@ -503,6 +503,10 @@ const SendTransactionInputModal = (prop: Props) => {
       }
     }
   }, [fiat])
+
+  useEffect(() => {
+    setAmount('')
+  }, [token])
 
   const changePriority = (newPriority: PriorityFee) => {
     if (priority.equals(newPriority)) {
