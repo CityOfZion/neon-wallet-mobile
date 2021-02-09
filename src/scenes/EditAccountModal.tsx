@@ -87,10 +87,6 @@ const EditAccountModal = (props: Props) => {
 
   const handleNavigation = () => {
     if (isDeleted) {
-      props.navigation.reset({
-        index: 0,
-        routes: [{name: Facade.route.ListWalletsPage.name}],
-      })
       props.navigation.navigate(Facade.route.GetWallet.name, {})
     } else {
       props.navigation.goBack()
@@ -105,7 +101,6 @@ const EditAccountModal = (props: Props) => {
     }
     dispatch(RootStore.account.actions.clearState())
 
-    await dispatchAsync(RootStore.app.actions.syncWallets())
     await dispatchAsync(RootStore.app.actions.syncAccounts())
 
     isDeleted = true
