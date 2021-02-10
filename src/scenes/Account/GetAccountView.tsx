@@ -14,7 +14,6 @@ import {
 } from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
-
 import {ThemedClaimButton} from '~/src/components/themed/ThemedClaimButton'
 import {ThemedSendButton} from '~/src/components/themed/ThemedSendButton'
 import {Facade} from '~src/app/Facade'
@@ -26,7 +25,6 @@ import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
 import {ThemedReceiveButton} from '~src/components/themed/ThemedReceiveButton'
-import ErrorBound from '~src/config/ErrorBound'
 import {Lang} from '~src/enums/Lang'
 import {NeonHelper} from '~src/helpers/NeonHelper'
 import {NeoNode} from '~src/models/NeoNode'
@@ -127,7 +125,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
   const {language} = useSelector((state: RootState) => state.settings)
   const {address} = useSelector((state: RootState) => state.account)
-
   const posYFactor = useRef(new Animated.Value(0))
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
@@ -302,7 +299,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
     return (
       <BalanceList
         my="16px"
-        tokenAssets={account.tokenAssets}
+        tokenAssets={account.getTokenAssets()}
         address={account.address ?? undefined}
         fromAccountView={true}
         fromListWalletView={false}
@@ -324,13 +321,13 @@ const GetAccountView = (props: GetAccountViewProps) => {
               <TransactionsList
                 title={Facade.t('screens.getAccount.pendingTransactions')}
                 address={account.address}
-                transactionGroups={account.pendingTransactions}
+                transactionGroups={account.getPendingTransactions()}
               />
 
               <TransactionsList
                 title={Facade.t('screens.getAccount.completedTransactions')}
                 address={account.address}
-                transactionGroups={account.transactions}
+                transactionGroups={account.getTransactions()}
               />
             </LinearLayout>
           )}

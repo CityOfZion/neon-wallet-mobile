@@ -7,7 +7,7 @@ export declare global {
   type AccountActionsType =
     | 'SET_ADDRESS'
     | 'SET_ID_WALLET'
-    | 'SET_NAME'
+    | 'SET_NAME_ACCOUNT'
     | 'SET_SRC_ICON'
     | 'SET_BACKGROUND_COLOR'
     | 'CLEAR_STATE_ACCOUNT'
