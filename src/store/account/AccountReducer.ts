@@ -37,7 +37,7 @@ export class AccountReducer extends ReducerWrapper<
       return this.commit('SET_ID_WALLET', {idWallet})
     },
     setName: (name: string) => {
-      return this.commit('SET_NAME', {name})
+      return this.commit('SET_NAME_ACCOUNT', {name})
     },
     setSrcIcon: (srcIcon: ImageLoadEventData | null) => {
       return this.commit('SET_SRC_ICON', {srcIcon})

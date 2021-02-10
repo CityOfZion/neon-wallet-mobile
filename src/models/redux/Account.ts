@@ -328,4 +328,15 @@ export class Account implements AccountState {
 
     Facade.bus.emit('addPendingUnclaimedGasTransaction', senderTx)
   }
+
+  getTokenAssets() {
+    return this.tokenAssets
+  }
+
+  getPendingTransactions() {
+    return this.pendingTransactions
+  }
+  getTransactions() {
+    return this.transactions
+  }
 }

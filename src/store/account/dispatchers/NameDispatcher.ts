@@ -5,7 +5,7 @@ export class NameDispatcher extends DispatcherWrapper<
   AccountState,
   AccountAction
 > {
-  readonly type = 'SET_NAME'
+  readonly type = 'SET_NAME_ACCOUNT'
 
   readonly reducer: AccountReducer = (state, action) => {
     const {name} = action
