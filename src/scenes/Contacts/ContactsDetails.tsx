@@ -136,7 +136,7 @@ export const ContactDetails = (props: ContactDetailsProps) => {
         >
           <TextView
             fontFamily={'regular'}
-            fontSize={'18px'}
+            fontSize={'16px'}
             color={'primary'}
             textAlign={'center'}
             mr={'6px'}
