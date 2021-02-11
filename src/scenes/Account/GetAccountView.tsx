@@ -41,6 +41,8 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
+import { TokenAsset } from '~/src/models/TokenAsset'
+import { TransactionDateGroup } from '~/src/models/TransactionDateGroup'
 export interface GetAccountParams {
   key: string
 }
@@ -124,8 +126,10 @@ const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
 const GetAccountView = (props: GetAccountViewProps) => {
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
-  const {language} = useSelector((state: RootState) => state.settings)
+  const {language, currency} = useSelector((state: RootState) => state.settings)
   const {address} = useSelector((state: RootState) => state.account)
+  const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const {exchange} = useSelector((state: RootState) => state.app)
   const posYFactor = useRef(new Animated.Value(0))
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
@@ -195,6 +199,13 @@ const GetAccountView = (props: GetAccountViewProps) => {
       Facade.bus.off('removePendingTransactions', manageClaimLoader)
     }
   }, [address])
+  const [tokenAssetsState, setTokenAssetsState] = useState<TokenAsset[]>([])
+  const [transactionsState, setTransactionState] = useState<TransactionDateGroup[]>([])
+  const [pendingTransactionsState, setPendingTransactionState] = useState<TransactionDateGroup[]>([])
+  const [balanceFormatted, setBalanceFormatted] = useState<string>(account.formattedBalanceAmount(currency, language, exchange))
+  useEffect(() => {
+    //alert('mudou o balance')
+  }, [balanceFormatted,currency, language, exchange])
 
   useEffect(() => {
     populateUnclaimed()
