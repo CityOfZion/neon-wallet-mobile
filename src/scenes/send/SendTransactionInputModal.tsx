@@ -302,11 +302,13 @@ const AmountField = (props: {
   validatorAmount: (val: string) => boolean
   validatorFiat: (val: string) => boolean
   onAmountChanged: (amount: string) => void
+  onFiatChanged: (fiat: string) => void
   token: TokenAsset | null | undefined
   amount: number | string
   fiat: number | string
   setAmount: (amount: number) => void
   setFiat: (fiat: number) => void
+  setFieldTyping: (typingField: string) => void
   tokenBalance: number
   remainingTokenBalance: number
   account: Account
@@ -367,8 +369,9 @@ const AmountField = (props: {
         orientation={'horiz'}
         justifyContent={'space-between'}
       >
-        <LinearLayout width={'55%'}>
+        <LinearLayout width={'50%'}>
           <InputWithValidation
+            onFocus={() => props.setFieldTyping('amountField')}
             onChangeText={(val) => props.onAmountChanged(val)}
             color={theme.colors.text[0]}
             invalidColor={theme.colors.text[10]}
@@ -390,7 +393,7 @@ const AmountField = (props: {
             editable={Boolean(props.token)}
           />
         </LinearLayout>
-        <LinearLayout width={'40%'}>
+        <LinearLayout width={'45%'}>
           <LinearLayout height={'50px'} orientation={'horiz'}>
             <TextView
               color={'white'}
@@ -401,13 +404,12 @@ const AmountField = (props: {
               {`${props.currency}:`}
             </TextView>
             <InputWithValidation
-              onChangeText={(val) => props.setFiat(Number(val))}
+              onFocus={() => props.setFieldTyping('fiatField')}
+              onChangeText={(val) => props.onFiatChanged(val)}
               color={theme.colors.text[0]}
               invalidColor={theme.colors.text[10]}
               invalidMessageColor={theme.colors.quinary}
-              value={
-                props.fiat !== null ? String(Number(props.fiat).toFixed(2)) : ''
-              }
+              value={props.fiat !== '' ? String(props.fiat) : ''}
               placeholder={
                 Facade.t('modals.send.transactionInput.enterValue') +
                 props.currency
@@ -425,6 +427,7 @@ const AmountField = (props: {
             />
           </LinearLayout>
           <ButtonView
+            mt={2}
             alignSelf={'flex-end'}
             onPress={() => props.setFiat(Math.floor(Number(props.fiat)))}
           >
@@ -452,6 +455,7 @@ const AmountField = (props: {
 }
 
 const SendTransactionInputModal = (prop: Props) => {
+  const [fieldTyping, setFieldTyping] = useState<string>('')
   const {account, walletTitle, uri, selectedToken} = prop.route.params
   const {contacts, tokens, accounts, wallets, exchange} = useSelector(
     (state: RootState) => state.app
@@ -462,7 +466,7 @@ const SendTransactionInputModal = (prop: Props) => {
     prop.route.params?.uri?.address ?? ''
   )
   const [amount, setAmount] = useState(uri?.amount ?? '')
-  const [fiat, setFiat] = useState(0)
+  const [fiat, setFiat] = useState<number | string>('')
   const [tip, setTip] = useState<{amount: number; address: string}>()
   const hash = prop.route.params?.uri?.tokenHash ?? ''
   const [contact, setContact] = useState<Contact>()
@@ -483,24 +487,38 @@ const SendTransactionInputModal = (prop: Props) => {
   )
 
   useEffect(() => {
-    if (amount !== '') {
-      if (token?.symbol) {
-        const ratio = exchange[token?.symbol]?.to[currency] ?? null
-        if (ratio) {
-          setFiat(ratio * Number(amount))
+    if (fieldTyping === 'amountField') {
+      if (amount !== '') {
+        if (token?.symbol) {
+          const ratio = exchange[token?.symbol]?.to[currency] ?? null
+          if (ratio) {
+            var valAmount = String(ratio * Number(amount))
+            valAmount = valAmount.replace(
+              /[0-9]+\.[0-9]{3,}$/g,
+              String(Number(valAmount).toFixed(2))
+            )
+            setFiat(Number(valAmount))
+          }
         }
-      }
-    } else setFiat(0)
+      } else setFiat('')
+    }
   }, [amount])
 
   useEffect(() => {
-    if (fiat !== 0) {
-      if (token?.symbol) {
-        const ratio = exchange[token?.symbol]?.to[currency] ?? null
-        if (ratio) {
-          setAmount(Number(fiat) / ratio)
+    if (fieldTyping === 'fiatField') {
+      if (fiat !== '') {
+        if (token?.symbol) {
+          const ratio = exchange[token?.symbol]?.to[currency] ?? null
+          if (ratio) {
+            var val = String(Number(fiat) / ratio)
+            val = val.replace(
+              /[0-9]+\.[0-9]{9,}$/g,
+              String(Number(val).toFixed(8))
+            )
+            setAmount(Number(val))
+          }
         }
-      }
+      } else setAmount('')
     }
   }, [fiat])
 
@@ -617,8 +635,16 @@ const SendTransactionInputModal = (prop: Props) => {
   const handleAmountChanged = (val: string) => {
     val = val.replace(/,|\.\.|\.,/g, '.')
     val = val.replace(/\s|-/g, '')
+    val = val.replace(/[0-9]+\.[0-9]{9,}$/g, String(Number(val).toFixed(8)))
     if (token?.symbol === 'NEO') val = val.replace('.', '')
     setAmount(val)
+  }
+
+  const handleFiatChanged = (val: string) => {
+    val = val.replace(/,|\.\.|\.,/g, '.')
+    val = val.replace(/\s|-/g, '')
+    val = val.replace(/[0-9]+\.[0-9]{3,}$/g, String(Number(val).toFixed(2)))
+    setFiat(val)
   }
 
   const handleAddressChanged = (addressValue: string) => {
@@ -739,7 +765,9 @@ const SendTransactionInputModal = (prop: Props) => {
           amount={amount}
           setAmount={(a) => setAmount(a)}
           setFiat={(a) => setFiat(a)}
+          setFieldTyping={(a) => setFieldTyping(a)}
           onAmountChanged={handleAmountChanged}
+          onFiatChanged={handleFiatChanged}
           fiat={fiat}
           token={token}
           tokenBalance={getTokenBalance()}
@@ -767,7 +795,7 @@ const SendTransactionInputModal = (prop: Props) => {
         <TipCheckbox
           gasAmount={gasAmount}
           address={'AHznnriCRsUCWfN53gfNL2UYWVsbNzyXkA'}
-          fiat={fiat}
+          fiat={Number(fiat)}
           label={Facade.t('modals.send.transactionInput.tipCheckboxLabel', {
             tipValue: tip ? tip.amount.toFixed(8) : '0',
           })}
