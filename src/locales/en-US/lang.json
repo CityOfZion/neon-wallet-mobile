@@ -354,7 +354,7 @@
         "title": "Account name",
         "placeholder": "Enter an account name"
       },
-      "selectColor": "Select a color for your new account card",
+      "selectColor": "Customize your card",
       "navigation": {
         "cancel": "Cancel",
         "delete": "Delete",

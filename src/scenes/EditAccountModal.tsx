@@ -147,19 +147,13 @@ const EditAccountModal = (props: Props) => {
           orientation="verti"
           justifyContent="space-between"
         >
-          <InputLabel
-            title={Facade.t('modals.editAccount.preview')}
-            capitalize={true}
-            marginBottom="14px"
-          />
-
           <AccountCard account={account} isStackMode={false} />
 
           <InputLabel
             title={Facade.t('modals.editAccount.accountInput.title')}
             capitalize={true}
-            marginTop="10px"
-            marginBottom="3px"
+            marginTop="25px"
+            marginBottom="7px"
           />
           <InputWithValidation
             value={name}
@@ -183,7 +177,7 @@ const EditAccountModal = (props: Props) => {
           <InputLabel
             title={Facade.t('modals.editAccount.selectColor')}
             capitalize={true}
-            marginBottom="5px"
+            marginBottom="15px"
           />
 
           <ColorSelector onSelect={setColor} account={account} />
@@ -192,7 +186,7 @@ const EditAccountModal = (props: Props) => {
               title={Facade.t('modals.editAccount.deleteAccount')}
               capitalize={true}
               marginBottom={'5px'}
-              marginTop={'10px'}
+              marginTop={'30px'}
             />
             <TextView color={theme.colors.text[0]} marginBottom={'20px'}>
               {Facade.t('modals.editAccount.deleteAccountSubtitle')}
