@@ -42,8 +42,8 @@ export default function ColorSelector(props: Props) {
       }}
     >
       <RelativeLayout
-        width={71}
-        height={71}
+        width={63}
+        height={63}
         alignItems="center"
         justifyContent="center"
         borderRadius={9}
@@ -114,19 +114,19 @@ export default function ColorSelector(props: Props) {
         })
       }}
     >
-      <RelativeLayout width={71} height={71}>
+      <RelativeLayout width={63} height={63}>
         <ImageView
-          width={71}
-          height={71}
+          width={63}
+          height={63}
           source={require('~src/assets/images/button-custom-color.png')}
           resizeMode="contain"
         />
 
         <TextView
-          fontSize="12px"
+          fontSize="10px"
           width="85%"
           ml="5px"
-          mb="11px"
+          mb="5px"
           position="absolute"
           bottom={0}
           color={theme.colors.text[7]}
