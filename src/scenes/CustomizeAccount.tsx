@@ -67,10 +67,12 @@ const CustomizeAccount = (props: Props) => {
 
   const [account, setAccount] = useState(new Account())
 
-  account.address = props.route.params.address
-  account.accountType = props.route.params.legacy ? 'legacy' : 'watch'
-  account.name = name
-  account.backgroundColor = color
+  useEffect(() => {
+    account.address = props.route.params.address
+    account.accountType = props.route.params.legacy ? 'legacy' : 'watch'
+    account.name = name
+    account.backgroundColor = color
+  }, [account])
 
   useEffect(() => {
     Facade.await.run('customizeAccount', populateTokenAssets)
@@ -152,7 +154,6 @@ const CustomizeAccount = (props: Props) => {
     dispatch(RootStore.account.actions.setIdWallet(walletId))
     dispatch(RootStore.account.actions.setName(name))
     dispatch(RootStore.account.actions.setBackgroundColor(color))
-
     const importedAccount = await dispatchAsyncAccount(
       RootStore.account.actions.importAndSave(address, wif)
     )

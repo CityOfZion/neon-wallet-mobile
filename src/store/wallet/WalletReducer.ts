@@ -34,7 +34,7 @@ export class WalletReducer extends ReducerWrapper<
       return this.commit('SET_ID', {id})
     },
     setName: (name: string) => {
-      return this.commit('SET_NAME', {name})
+      return this.commit('SET_NAME_WALLET', {name})
     },
     setPassphrase: (passphrase: string) => {
       return this.commit('SET_PASSPHRASE', {passphrase})
