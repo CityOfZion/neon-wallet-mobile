@@ -5,7 +5,7 @@
 #import <React/RCTBridgeModule.h>
 #endif
 
-@interface RNNeoSdkBindings : NSObject <RCTBridgeModule>
+@interface RCTRNNeoSdkBindings : NSObject <RCTBridgeModule>
 
 @end
   

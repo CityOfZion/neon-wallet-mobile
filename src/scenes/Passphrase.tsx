@@ -26,12 +26,12 @@ interface PassphraseProps {
 async function verifyPassword(
   nep2: string,
   password: string,
-  onSuccess: (address: string) => void,
+  onSuccess: (address: string, wif: string) => void,
   onFailure: () => void
 ) {
   const wif = await NeoNative.decryptNep2(password, nep2)
   const newAccount = new wallet.Account(wif)
-  if (newAccount.address) onSuccess(newAccount.address)
+  if (newAccount.address) onSuccess(newAccount.address, wif)
   else onFailure()
 }
 
@@ -92,7 +92,7 @@ const Passphrase = (props: PassphraseProps) => {
                 verifyPassword(
                   encryptedKey,
                   inputValue,
-                  (address) => {
+                  (address, wif) => {
                     setInputIsValid(true)
                     props.navigation.navigate(
                       Facade.route.CustomizeAccount.name,
@@ -100,6 +100,7 @@ const Passphrase = (props: PassphraseProps) => {
                         source: Facade.route.ImportKey.name,
                         address,
                         legacy: true,
+                        wif
                       }
                     )
                   },
