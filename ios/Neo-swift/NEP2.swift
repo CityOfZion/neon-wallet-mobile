@@ -5,11 +5,10 @@
 //  Created by Luís Silva on 11/10/17.
 //  Copyright © 2017 drei. All rights reserved.
 //
-import Neoutils
 import Foundation
 
 @objc public class NEP2: NSObject {
-    public static func decryptKey(key: String, passphrase: String, scryptParameter: Scrypt?) -> (key: [UInt8], hash: [UInt8])? {
+    @objc public func decryptKey(key: String, passphrase: String, scryptParameter: Scrypt?) -> NEPReturn? {
         guard let encryptedKeyBytes = key.base58CheckDecodedBytes else { return nil }
         if encryptedKeyBytes.count != 39 {
             return nil
@@ -33,10 +32,13 @@ import Foundation
         
         let decryptedKey = decryptedHalf1 + decryptedHalf2
         
-        return (key: decryptedKey, hash: addressHash)
+        let nepReturn = NEPReturn()
+        nepReturn.addressHash = addressHash
+        nepReturn.decryptedKey = decryptedKey
+        return nepReturn
     }
     
-    @objc public static func verify(addressHash: [UInt8], address: String) -> Bool {
+    @objc public func verify(addressHash: [UInt8], address: String) -> Bool {
         let addressHashSource = [UInt8](address.utf8)
         let calculatedHash = [UInt8](addressHashSource.sha256.sha256[0..<4])
         

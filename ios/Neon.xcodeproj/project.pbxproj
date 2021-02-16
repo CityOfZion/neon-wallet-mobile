@@ -12,11 +12,18 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		71A4DD3025DB1FCC0003DCD9 /* RCTCalendarModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 71A4DD2F25DB1FCC0003DCD9 /* RCTCalendarModule.m */; };
-		71A4DDF625DB275C0003DCD9 /* RNNeoSdkBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 71A4DDF525DB275B0003DCD9 /* RNNeoSdkBindings.m */; };
-		71A4DE0725DB316B0003DCD9 /* NEP2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A4DE0625DB316B0003DCD9 /* NEP2.swift */; };
 		96905EF65AED1B983A6B3ABC /* libPods-Neon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-Neon.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		FA142A3025DC4F3500FEFBC8 /* Base58.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A2A25DC4F3400FEFBC8 /* Base58.swift */; };
+		FA142A3125DC4F3500FEFBC8 /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A2B25DC4F3400FEFBC8 /* AES.swift */; };
+		FA142A3225DC4F3500FEFBC8 /* Scrypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A2C25DC4F3400FEFBC8 /* Scrypt.swift */; };
+		FA142A3425DC4F3500FEFBC8 /* NEP2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A2E25DC4F3500FEFBC8 /* NEP2.swift */; };
+		FA142A3525DC4F3500FEFBC8 /* PBKDF2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A2F25DC4F3500FEFBC8 /* PBKDF2.swift */; };
+		FA142A3E25DC4F5200FEFBC8 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A3B25DC4F5200FEFBC8 /* ArrayExtension.swift */; };
+		FA142A3F25DC4F5200FEFBC8 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A3C25DC4F5200FEFBC8 /* StringExtension.swift */; };
+		FA142A4025DC4F5200FEFBC8 /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A3D25DC4F5200FEFBC8 /* DataExtension.swift */; };
+		FA142A8D25DC57B800FEFBC8 /* NEPReturn.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A8C25DC57B800FEFBC8 /* NEPReturn.swift */; };
+		FA142A9125DC580D00FEFBC8 /* NeoSwift.m in Sources */ = {isa = PBXBuildFile; fileRef = FA142A9025DC580D00FEFBC8 /* NeoSwift.m */; };
 		FAC4877125800A790076ACC1 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = FAC4877025800A790076ACC1 /* assets */; };
 		FAD7DCB7257FC2C00092EF9B /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		FAE7F48325A4ECB40014C2EC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAE7F48225A4ECB40014C2EC /* GoogleService-Info.plist */; };
@@ -33,17 +40,23 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Neon/main.m; sourceTree = "<group>"; };
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-Neon.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Neon.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2E3173556A471DD304B334 /* Pods-Neon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Neon.debug.xcconfig"; path = "Target Support Files/Pods-Neon/Pods-Neon.debug.xcconfig"; sourceTree = "<group>"; };
-		71A4DD2E25DB1F580003DCD9 /* RCTCalendarModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTCalendarModule.h; sourceTree = "<group>"; };
-		71A4DD2F25DB1FCC0003DCD9 /* RCTCalendarModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTCalendarModule.m; sourceTree = "<group>"; };
-		71A4DDF425DB275B0003DCD9 /* RNNeoSdkBindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNNeoSdkBindings.h; path = "../native_modules/neo-sdk-bindings/ios/RNNeoSdkBindings.h"; sourceTree = "<group>"; };
-		71A4DDF525DB275B0003DCD9 /* RNNeoSdkBindings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RNNeoSdkBindings.m; path = "../native_modules/neo-sdk-bindings/ios/RNNeoSdkBindings.m"; sourceTree = "<group>"; };
-		71A4DE0625DB316B0003DCD9 /* NEP2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NEP2.swift; sourceTree = "<group>"; };
 		71A4DE0A25DB334E0003DCD9 /* Neon-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Neon-Bridging-Header.h"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-Neon.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Neon.release.xcconfig"; path = "Target Support Files/Pods-Neon/Pods-Neon.release.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = Neon/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		FA142A2A25DC4F3400FEFBC8 /* Base58.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base58.swift; sourceTree = "<group>"; };
+		FA142A2B25DC4F3400FEFBC8 /* AES.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AES.swift; sourceTree = "<group>"; };
+		FA142A2C25DC4F3400FEFBC8 /* Scrypt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scrypt.swift; sourceTree = "<group>"; };
+		FA142A2E25DC4F3500FEFBC8 /* NEP2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NEP2.swift; sourceTree = "<group>"; };
+		FA142A2F25DC4F3500FEFBC8 /* PBKDF2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBKDF2.swift; sourceTree = "<group>"; };
+		FA142A3B25DC4F5200FEFBC8 /* ArrayExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
+		FA142A3C25DC4F5200FEFBC8 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		FA142A3D25DC4F5200FEFBC8 /* DataExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataExtension.swift; sourceTree = "<group>"; };
+		FA142A8C25DC57B800FEFBC8 /* NEPReturn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NEPReturn.swift; sourceTree = "<group>"; };
+		FA142A8F25DC580D00FEFBC8 /* NeoSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NeoSwift.h; sourceTree = "<group>"; };
+		FA142A9025DC580D00FEFBC8 /* NeoSwift.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NeoSwift.m; sourceTree = "<group>"; };
 		FAC4877025800A790076ACC1 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		FAE7F48225A4ECB40014C2EC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -98,17 +111,13 @@
 			isa = PBXGroup;
 			children = (
 				71A4DE0A25DB334E0003DCD9 /* Neon-Bridging-Header.h */,
-				71A4DE0625DB316B0003DCD9 /* NEP2.swift */,
-				71A4DDF425DB275B0003DCD9 /* RNNeoSdkBindings.h */,
-				71A4DDF525DB275B0003DCD9 /* RNNeoSdkBindings.m */,
-				71A4DD2F25DB1FCC0003DCD9 /* RCTCalendarModule.m */,
-				71A4DD2E25DB1F580003DCD9 /* RCTCalendarModule.h */,
 				FAC4877025800A790076ACC1 /* assets */,
-				13B07FAE1A68108700A75B9A /* Neon */,
-				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				832341AE1AAA6A7D00B99B32 /* Libraries */,
+				FA1429CD25DC490100FEFBC8 /* Neo-swift */,
+				13B07FAE1A68108700A75B9A /* Neon */,
 				D65327D7A22EEC0BE12398D9 /* Pods */,
+				83CBBA001A601CBA00E9B192 /* Products */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -139,6 +148,32 @@
 				7A4D352CD337FB3A3BF06240 /* Pods-Neon.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		FA1429CD25DC490100FEFBC8 /* Neo-swift */ = {
+			isa = PBXGroup;
+			children = (
+				FA142A3825DC4F4900FEFBC8 /* Extension */,
+				FA142A2B25DC4F3400FEFBC8 /* AES.swift */,
+				FA142A2A25DC4F3400FEFBC8 /* Base58.swift */,
+				FA142A2E25DC4F3500FEFBC8 /* NEP2.swift */,
+				FA142A8C25DC57B800FEFBC8 /* NEPReturn.swift */,
+				FA142A2F25DC4F3500FEFBC8 /* PBKDF2.swift */,
+				FA142A2C25DC4F3400FEFBC8 /* Scrypt.swift */,
+				FA142A8F25DC580D00FEFBC8 /* NeoSwift.h */,
+				FA142A9025DC580D00FEFBC8 /* NeoSwift.m */,
+			);
+			path = "Neo-swift";
+			sourceTree = "<group>";
+		};
+		FA142A3825DC4F4900FEFBC8 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				FA142A3B25DC4F5200FEFBC8 /* ArrayExtension.swift */,
+				FA142A3D25DC4F5200FEFBC8 /* DataExtension.swift */,
+				FA142A3C25DC4F5200FEFBC8 /* StringExtension.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -306,11 +341,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				71A4DD3025DB1FCC0003DCD9 /* RCTCalendarModule.m in Sources */,
-				71A4DE0725DB316B0003DCD9 /* NEP2.swift in Sources */,
+				FA142A4025DC4F5200FEFBC8 /* DataExtension.swift in Sources */,
+				FA142A3125DC4F3500FEFBC8 /* AES.swift in Sources */,
+				FA142A3425DC4F3500FEFBC8 /* NEP2.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				71A4DDF625DB275C0003DCD9 /* RNNeoSdkBindings.m in Sources */,
+				FA142A3E25DC4F5200FEFBC8 /* ArrayExtension.swift in Sources */,
+				FA142A3025DC4F3500FEFBC8 /* Base58.swift in Sources */,
+				FA142A9125DC580D00FEFBC8 /* NeoSwift.m in Sources */,
+				FA142A8D25DC57B800FEFBC8 /* NEPReturn.swift in Sources */,
+				FA142A3525DC4F3500FEFBC8 /* PBKDF2.swift in Sources */,
+				FA142A3F25DC4F5200FEFBC8 /* StringExtension.swift in Sources */,
+				FA142A3225DC4F3500FEFBC8 /* Scrypt.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
