@@ -12,11 +12,12 @@
 
 @implementation NeoSwift
 
-typedef void (^NeoBlock)(NEP2 *);
+typedef void (^NeoBlock)(NSString *);
 
-RCT_EXPORT_METHOD(nepInstance:(NeoBlock)callback)
+RCT_EXPORT_METHOD(getWifWithKeyAndPasspharase:(NSString*)key passpharase:(NSString*)passharase callback:(NeoBlock)callback)
 {
-  callback([NEP2 new]);
+  NSString * wif = [NEP2 getWifWithEncryptedPrivateKey:key passphrase:passharase];
+  callback(wif);
 }
 
 RCT_EXPORT_MODULE();

@@ -6,9 +6,18 @@
 //  Copyright © 2017 drei. All rights reserved.
 //
 import Foundation
+import Neoutils
 
 @objc public class NEP2: NSObject {
-    @objc public func decryptKey(key: String, passphrase: String, scryptParameter: Scrypt?) -> NEPReturn? {
+    @objc public static func getWif(encryptedPrivateKey: String, passphrase: String) -> String? {
+        var error: NSError?
+        guard let nepResult = decryptKey(encryptedPrivateKey, passphrase: passphrase, scryptParameter: nil) else { return nil }
+        guard let wallet = NeoutilsGenerateFromPrivateKey(nepResult.decryptedKey?.hexString ?? "", &error) else { return nil }
+        
+        return wallet.wif()
+    }
+    
+    @objc public static func decryptKey(_ key: String, passphrase: String, scryptParameter: Scrypt?) -> NEPReturn? {
         guard let encryptedKeyBytes = key.base58CheckDecodedBytes else { return nil }
         if encryptedKeyBytes.count != 39 {
             return nil
@@ -38,7 +47,7 @@ import Foundation
         return nepReturn
     }
     
-    @objc public func verify(addressHash: [UInt8], address: String) -> Bool {
+    @objc public static func verify(addressHash: [UInt8], address: String) -> Bool {
         let addressHashSource = [UInt8](address.utf8)
         let calculatedHash = [UInt8](addressHashSource.sha256.sha256[0..<4])
         
