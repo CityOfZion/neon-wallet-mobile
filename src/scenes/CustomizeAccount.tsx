@@ -1,11 +1,11 @@
-import { RouteProp } from '@react-navigation/native'
-import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import {RouteProp} from '@react-navigation/native'
+import React, {useState, useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 
-import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import { AwaitActivity } from '~/node_modules/@simpli/react-native-await'
-import { ImageSourcePropType } from '~/node_modules/@types/react-native'
-import { Facade } from '~src/app/Facade'
+import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
+import {ImageSourcePropType} from '~/node_modules/@types/react-native'
+import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import ColorSelector from '~src/components/ColorSelector'
 import InputLabel from '~src/components/InputLabel'
@@ -14,13 +14,13 @@ import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import { Currency } from '~src/enums/Currency'
-import { Account } from '~src/models/redux/Account'
-import { Wallet } from '~src/models/redux/Wallet'
-import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
-import { RootState, RootStore } from '~src/store/RootStore'
-import { LinearLayout, TextView } from '~src/styles/styled-components'
+import {Currency} from '~src/enums/Currency'
+import {Account} from '~src/models/redux/Account'
+import {Wallet} from '~src/models/redux/Wallet'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import {RootState, RootStore} from '~src/store/RootStore'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface CustomizeAccountParams {
   address: string
@@ -106,7 +106,6 @@ const CustomizeAccount = (props: Props) => {
 
     dispatch(RootStore.wallet.actions.selectWallet(walletId))
     dispatch(RootStore.account.actions.selectAccount(importedAccount.address))
-
   }
 
   const createWallet = async () => {

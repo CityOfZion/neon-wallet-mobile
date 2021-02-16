@@ -100,7 +100,7 @@ const Passphrase = (props: PassphraseProps) => {
                         source: Facade.route.ImportKey.name,
                         address,
                         legacy: true,
-                        wif
+                        wif,
                       }
                     )
                   },
