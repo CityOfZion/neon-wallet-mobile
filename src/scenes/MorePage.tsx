@@ -33,11 +33,12 @@ const MorePage = (props: MoreProps) => {
 
   return (
     <ScreenLayout padding={20}>
+      <LinearLayout mb={'20px'} />
       <MenuItem
         title={Facade.t('more.createWallet')}
         icon={require('~/src/assets/images/wallet-icon-green.png')}
-        iconMarginRight={12}
-        iconHeight={28}
+        iconMarginRight={3}
+        iconHeight={26}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
           props.navigation.navigate(Facade.route.Step1CreateWallet.name, {})
@@ -46,9 +47,10 @@ const MorePage = (props: MoreProps) => {
       <MenuItem
         title={Facade.t('more.createWatchAccount')}
         icon={require('~/src/assets/images/icon-watch-green.png')}
-        iconHeight={25}
-        iconWidth={25}
+        iconHeight={20}
+        iconWidth={20}
         iconMarginRight={5}
+        iconMarginLeft={2}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
           props.navigation.navigate(Facade.route.ImportReadAccount.name, {})
@@ -57,8 +59,8 @@ const MorePage = (props: MoreProps) => {
       <MenuItem
         title={Facade.t('more.import')}
         icon={require('~/src/assets/images/icon-import-green.png')}
-        iconHeight={26}
-        iconWidth={26}
+        iconHeight={22}
+        iconWidth={22}
         iconMarginRight={15}
         iconMarginLeft={1}
         arrowDirection={RightIconType.NONE}
