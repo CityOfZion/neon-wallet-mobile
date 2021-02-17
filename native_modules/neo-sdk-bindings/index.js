@@ -1,5 +1,13 @@
-import {NativeModules} from 'react-native'
+import { NativeModules } from 'react-native'
+import { Platform } from 'react-native'
+const { RNNeoSdkBindings, getWifWithKeyAndPasspharase, } = NativeModules
 
-const {RNNeoSdkBindings, CalendarModule} = NativeModules
+let NativeFunc;
 
-export default RNNeoSdkBindings
+if (Platform.OS === 'ios') {
+    NativeFunc = getWifWithKeyAndPasspharase
+} else {
+    NativeFunc = RNNeoSdkBindings
+}
+
+export default NativeFunc

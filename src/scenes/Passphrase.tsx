@@ -1,18 +1,19 @@
-import {wallet} from '@cityofzion/neon-core'
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import React, {useState} from 'react'
-import {useSelector} from 'react-redux'
+import { wallet } from '@cityofzion/neon-core'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import { Facade } from '~src/app/Facade'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {Account} from '~src/models/redux/Account'
-import {NeoNative} from '~src/native/NeoNative'
-import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {RootState} from '~src/store/RootStore'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { Account } from '~src/models/redux/Account'
+import { NeoNative } from '~src/native/NeoNative'
+import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
+import { RootState } from '~src/store/RootStore'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
+import { Platform } from 'react-native'
 
 export interface PassphraseParams {
   encryptedKey: string
@@ -29,17 +30,26 @@ async function verifyPassword(
   onSuccess: (address: string, wif: string) => void,
   onFailure: () => void
 ) {
-  const wif = await NeoNative.decryptNep2(password, nep2)
-  const newAccount = new wallet.Account(wif)
-  if (newAccount.address) onSuccess(newAccount.address, wif)
-  else onFailure()
+  let wif: string;
+  if (Platform.OS === 'ios') {
+    NeoNative.decryptNep2IOS(nep2, password, (wif) => {
+      const newAccount = new wallet.Account(wif)
+      onSuccess(newAccount.address, wif)
+    })
+  } else {
+    wif = await NeoNative.decryptNep2(password, nep2)
+    const newAccount = new wallet.Account(wif)
+    if (newAccount.address) onSuccess(newAccount.address, wif)
+    else onFailure()
+  }
+
 }
 
 const Passphrase = (props: PassphraseProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const {currency} = useSelector((state: RootState) => state.settings)
+  const { currency } = useSelector((state: RootState) => state.settings)
   const [inputValue, setInputValue] = useState('')
   const [inputIsValid, setInputIsValid] = useState(true)
   const encryptedKey = props.route.params.encryptedKey
