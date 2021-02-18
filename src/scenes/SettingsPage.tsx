@@ -11,6 +11,7 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
+import {LinearLayout} from '~src/styles/styled-components'
 
 interface SettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList & RootStackParamList>
@@ -47,11 +48,12 @@ const SettingsPage = (props: SettingsProps) => {
   }, [])
   return (
     <ScreenLayout padding={20}>
+      <LinearLayout mb={20} />
       <MenuItem
         title={Facade.t('settings.myWallets')}
         icon={require('~/src/assets/images/wallet-icon-green.png')}
         iconMarginRight={12}
-        iconHeight={28}
+        iconHeight={24}
         arrowDirection={RightIconType.ARROW_RIGHT}
         onPress={() => props.navigation.navigate(Facade.route.MyWallets.name)}
       />
@@ -59,18 +61,18 @@ const SettingsPage = (props: SettingsProps) => {
       <MenuItem
         title={Facade.t('settings.security')}
         icon={require('~/src/assets/images/security-icon-green.png')}
-        iconWidth={20}
+        iconWidth={18}
         iconMarginLeft={2}
         iconMarginRight={18}
-        arrowDirection={RightIconType.ARROW_DOWN}
+        arrowDirection={RightIconType.ARROW_RIGHT}
         onPress={() => openModal(Facade.route.SecurityModal.name)}
-        subtitle={security}
       />
 
       <MenuItem
         title={Facade.t('settings.currency')}
         icon={require('~src/assets/images/icon-currency-green.png')}
-        iconWidth={26}
+        iconWidth={22}
+        iconMarginLeft={2}
         iconMarginRight={16}
         arrowDirection={RightIconType.ARROW_DOWN}
         subtitle={currency}
