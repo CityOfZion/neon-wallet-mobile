@@ -51,7 +51,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
     setSelectedAccount(accounts[0])
   }
   return show ? (
-    <LinearLayout>
+    <LinearLayout height={'100%'}>
       <ScrollView
         style={{
           width: '100%',
@@ -121,9 +121,9 @@ const ReceiveAccountSelectionModal = (props: Props) => {
       </ScrollView>
       <LinearLayout
         position={'absolute'}
-        left={'10%'}
-        right={'10%'}
-        bottom={'9%'}
+        left={'9%'}
+        right={'9%'}
+        bottom={'8%'}
       >
         <LinearLayout
           minWidth={'80%'}
