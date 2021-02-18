@@ -24,24 +24,31 @@ interface PassphraseProps {
   route: RouteProp<MoreStackParamList, 'Passphrase'>
 }
 
+interface IVerifyPasswordResult {
+  address: string,
+  wif: string
+}
+
 async function verifyPassword(
   nep2: string,
   password: string,
-  onSuccess: (address: string, wif: string) => void,
-  onFailure: () => void
-) {
+) : Promise<IVerifyPasswordResult> {
   let wif: string;
-  if (Platform.OS === 'ios') {
-    NeoNative.decryptNep2IOS(nep2, password, (wif) => {
+  return new Promise(async (resolve, reject) => {
+    if (Platform.OS === 'ios') {
+      await NeoNative.decryptNep2IOS(nep2, password, (wif) => {
+        const newAccount = new wallet.Account(wif)
+        if (newAccount.address) resolve({address: newAccount.address, wif})
+        else reject()
+      })
+    } else {
+      wif = await NeoNative.decryptNep2(password, nep2)
       const newAccount = new wallet.Account(wif)
-      onSuccess(newAccount.address, wif)
-    })
-  } else {
-    wif = await NeoNative.decryptNep2(password, nep2)
-    const newAccount = new wallet.Account(wif)
-    if (newAccount.address) onSuccess(newAccount.address, wif)
-    else onFailure()
-  }
+      if (newAccount.address) resolve({address: newAccount.address, wif})
+      else reject()
+    }
+  })
+  
 
 }
 
@@ -98,26 +105,22 @@ const Passphrase = (props: PassphraseProps) => {
           {inputValue.length > 0 && (
             <ThemedButton
               label={Facade.t('passphrase.next')}
-              onPress={() => {
-                verifyPassword(
-                  encryptedKey,
-                  inputValue,
-                  (address, wif) => {
-                    setInputIsValid(true)
-                    props.navigation.navigate(
-                      Facade.route.CustomizeAccount.name,
-                      {
-                        source: Facade.route.ImportKey.name,
-                        address,
-                        legacy: true,
-                        wif,
-                      }
-                    )
-                  },
-                  () => {
-                    setInputIsValid(false)
-                  }
-                )
+              onPress={async () => {
+                try {
+                  const {address, wif} = await verifyPassword(encryptedKey, inputValue)
+                  setInputIsValid(true)
+                  props.navigation.navigate(
+                    Facade.route.CustomizeAccount.name,
+                    {
+                      source: Facade.route.ImportKey.name,
+                      address,
+                      legacy: true,
+                      wif,
+                    }
+                  )
+                } catch (error) {
+                  setInputIsValid(false)
+                }
               }}
             />
           )}
