@@ -6,6 +6,6 @@ export class NeoNative {
     return wif
   }
   static async decryptNep2IOS(password: string, key: string, callback: (wif: string) => void) {
-    return RNNeoSdkBindings(key, password, callback)
+    return RNNeoSdkBindings.decryptNep2(key, password, callback)
   }
 }

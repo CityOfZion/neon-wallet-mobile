@@ -10,14 +10,17 @@
 
 @class NEP2;
 
-@implementation NeoSwift
+@implementation RNNeoSdkBindings
 
 typedef void (^NeoBlock)(NSString *);
 
-RCT_EXPORT_METHOD(getWifWithKeyAndPasspharase:(NSString*)key passpharase:(NSString*)passharase callback:(NeoBlock)callback)
+RCT_EXPORT_METHOD(decryptNep2:(NSString*)key
+                  passpharase:(NSString*)passharase
+                  callback: (RCTResponseSenderBlock)callback)
 {
   NSString * wif = [NEP2 getWifWithEncryptedPrivateKey:key passphrase:passharase];
-  callback(wif);
+  
+  callback(@[wif]);
 }
 
 RCT_EXPORT_MODULE();

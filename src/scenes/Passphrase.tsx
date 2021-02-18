@@ -39,13 +39,13 @@ async function verifyPassword(
       await NeoNative.decryptNep2IOS(nep2, password, (wif) => {
         const newAccount = new wallet.Account(wif)
         if (newAccount.address) resolve({address: newAccount.address, wif})
-        else reject()
+        else reject('Key decryption failed')
       })
     } else {
       wif = await NeoNative.decryptNep2(password, nep2)
       const newAccount = new wallet.Account(wif)
       if (newAccount.address) resolve({address: newAccount.address, wif})
-      else reject()
+      else reject('Key decryption failed')
     }
   })
   

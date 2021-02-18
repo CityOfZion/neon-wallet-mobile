@@ -8,6 +8,6 @@
 #import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
 
-@interface NeoSwift : NSObject <RCTBridgeModule>
+@interface RNNeoSdkBindings : NSObject <RCTBridgeModule>
 
 @end

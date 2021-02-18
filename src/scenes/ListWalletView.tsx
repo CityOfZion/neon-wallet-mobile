@@ -4,7 +4,7 @@ import {AwaitActivity} from '@simpli/react-native-await'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import React, {useEffect, useRef, useState} from 'react'
-import {Alert, TouchableWithoutFeedback, View, Animated} from 'react-native'
+import {Alert, TouchableWithoutFeedback, View, Animated, NativeModules} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
