@@ -16,6 +16,7 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -81,7 +82,7 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
     <SwiperPanel
       controller={controller}
       title={Facade.t('routes.ReceiveQrCode')}
-      rightButton={<CloseButton mr="12px" />}
+      rightButton={<ThemedCloseButton />}
       onRightPress={controller.close}
       onClose={() => props.navigation.goBack()}
       solidColorBG={true}
@@ -107,20 +108,20 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
         </LinearLayout>
 
         <LinearLayout
-          width="95%"
+          width="99%"
           mt={22}
           flex={1}
           flexWrap="wrap"
           minHeight={400}
         >
           <LinearLayout orientation="horiz">
-            <LinearLayout weight={labelWeight} pl={14} />
+            <LinearLayout weight={labelWeight} />
             <TextView
               weight={5}
               fontFamily="bold"
               color="white"
               fontSize={14}
-              mb={16}
+              mb={18}
               style={{includeFontPadding: false}}
             >
               {Facade.t('receive.paymentRequestDetails')}
@@ -129,10 +130,10 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
           <LinearLayout
             bg={'background.14'}
             pb={'12px'}
-            pr={'13px'}
+            pr={'10px'}
             mt={'4px'}
             borderRadius={'7px'}
-            pl={'13px'}
+            pl={'10px'}
             pt={'13px'}
           >
             <LinearLayout width="100%" mb={14}>
