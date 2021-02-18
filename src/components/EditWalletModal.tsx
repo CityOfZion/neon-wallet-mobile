@@ -157,6 +157,7 @@ export const EditWalletModal = (
       onLeftPress={controller.close}
       onRightPress={save}
       controller={controller}
+      solidColorBG={true}
     >
       <AwaitActivity
         name={'swiperRight'}
