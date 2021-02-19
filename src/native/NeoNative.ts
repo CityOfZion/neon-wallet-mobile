@@ -5,7 +5,7 @@ export class NeoNative {
     const { wif } = await RNNeoSdkBindings.decryptNep2(key, password)
     return wif
   }
-  static async decryptNep2IOS(password: string, key: string, callback: (wif: string) => void) {
+  static decryptNep2IOS(password: string, key: string, callback: (wif: string) => void) {
     return RNNeoSdkBindings.decryptNep2(key, password, callback)
   }
 }

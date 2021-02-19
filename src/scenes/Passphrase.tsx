@@ -13,7 +13,7 @@ import { NeoNative } from '~src/native/NeoNative'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { RootState } from '~src/store/RootStore'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
-import { Platform } from 'react-native'
+import { Platform, NativeModules } from 'react-native'
 
 export interface PassphraseParams {
   encryptedKey: string
@@ -36,11 +36,12 @@ async function verifyPassword(
   let wif: string;
   return new Promise(async (resolve, reject) => {
     if (Platform.OS === 'ios') {
-      await NeoNative.decryptNep2IOS(nep2, password, (wif) => {
-        const newAccount = new wallet.Account(wif)
-        if (newAccount.address) resolve({address: newAccount.address, wif})
-        else reject('Key decryption failed')
-      })
+     NativeModules.RNNeoSdkBindings.decryptNep2(nep2, password, (wif: string) => {
+       alert(`print de WIF => ${wif}`)
+      const newAccount = new wallet.Account(wif)
+      if (newAccount.address) resolve({address: newAccount.address, wif})
+      else reject('Key decryption failed')
+     })
     } else {
       wif = await NeoNative.decryptNep2(password, nep2)
       const newAccount = new wallet.Account(wif)
