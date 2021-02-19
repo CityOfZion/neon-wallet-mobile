@@ -6,6 +6,9 @@ labels: question
 assignees: ''
 ---
 
+**Feedback source**
+The original source of the feedback (reddit, pipefy, twitter, etc...)
+
 **Platform:**
  - Version [e.g. [release]vX.X-X]
  - OS: [e.g. iOS or Android]

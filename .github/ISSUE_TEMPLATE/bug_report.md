@@ -11,6 +11,9 @@ assignees: ''
  - OS: [e.g. iOS or Android]
  - OS version [e.g. 11i or 8.0a]
 
+**Feedback source**
+The original source of the feedback (reddit, pipefy, twitter, etc...).
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
