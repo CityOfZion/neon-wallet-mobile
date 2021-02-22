@@ -407,7 +407,7 @@ export default function SwiperPanel(props: SwiperProps) {
                 props.darkerSolidColorBG
                   ? [theme.colors.background[14], theme.colors.background[14]]
                   : props.solidColorBG
-                  ? [theme.colors.background[2], theme.colors.background[2]]
+                  ? [theme.colors.background[17], theme.colors.background[17]]
                   : [theme.colors.background[6], theme.colors.background[7]]
               }
               end={[1, 0.75]}
