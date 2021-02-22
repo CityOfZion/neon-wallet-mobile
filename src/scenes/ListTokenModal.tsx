@@ -141,6 +141,7 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
       fullSize={true}
       onClose={props.navigation.goBack}
       disableDefaultScrollView={true}
+      solidColorBG={true}
     >
       <LinearLayout weight={1} width="100%" pb={PANEL_OFFSET}>
         <TextView
