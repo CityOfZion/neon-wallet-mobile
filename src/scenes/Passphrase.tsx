@@ -2,6 +2,7 @@ import {wallet} from '@cityofzion/neon-core'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
+import {Platform, NativeModules} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -23,16 +24,34 @@ interface PassphraseProps {
   route: RouteProp<MoreStackParamList, 'Passphrase'>
 }
 
+interface IVerifyPasswordResult {
+  address: string
+  wif: string
+}
+
 async function verifyPassword(
   nep2: string,
-  password: string,
-  onSuccess: (address: string, wif: string) => void,
-  onFailure: () => void
-) {
-  const wif = await NeoNative.decryptNep2(password, nep2)
-  const newAccount = new wallet.Account(wif)
-  if (newAccount.address) onSuccess(newAccount.address, wif)
-  else onFailure()
+  password: string
+): Promise<IVerifyPasswordResult> {
+  let wif: string
+  return new Promise(async (resolve, reject) => {
+    if (Platform.OS === 'ios') {
+      NativeModules.RNNeoSdkBindings.decryptNep2(
+        nep2,
+        password,
+        (wif: string) => {
+          const newAccount = new wallet.Account(wif)
+          if (newAccount.address) resolve({address: newAccount.address, wif})
+          else reject(new Error('Key decryption failed'))
+        }
+      )
+    } else {
+      wif = await NeoNative.decryptNep2(password, nep2)
+      const newAccount = new wallet.Account(wif)
+      if (newAccount.address) resolve({address: newAccount.address, wif})
+      else reject(new Error('Key decryption failed'))
+    }
+  })
 }
 
 const Passphrase = (props: PassphraseProps) => {
@@ -88,26 +107,25 @@ const Passphrase = (props: PassphraseProps) => {
           {inputValue.length > 0 && (
             <ThemedButton
               label={Facade.t('passphrase.next')}
-              onPress={() => {
-                verifyPassword(
-                  encryptedKey,
-                  inputValue,
-                  (address, wif) => {
-                    setInputIsValid(true)
-                    props.navigation.navigate(
-                      Facade.route.CustomizeAccount.name,
-                      {
-                        source: Facade.route.ImportKey.name,
-                        address,
-                        legacy: true,
-                        wif,
-                      }
-                    )
-                  },
-                  () => {
-                    setInputIsValid(false)
-                  }
-                )
+              onPress={async () => {
+                try {
+                  const {address, wif} = await verifyPassword(
+                    encryptedKey,
+                    inputValue
+                  )
+                  setInputIsValid(true)
+                  props.navigation.navigate(
+                    Facade.route.CustomizeAccount.name,
+                    {
+                      source: Facade.route.ImportKey.name,
+                      address,
+                      legacy: true,
+                      wif,
+                    }
+                  )
+                } catch (error) {
+                  setInputIsValid(false)
+                }
               }}
             />
           )}

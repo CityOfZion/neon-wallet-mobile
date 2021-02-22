@@ -1,5 +1,4 @@
 import {NativeModules} from 'react-native'
-
-const {RNNeoSdkBindings, CalendarModule} = NativeModules
+const {RNNeoSdkBindings} = NativeModules
 
 export default RNNeoSdkBindings
