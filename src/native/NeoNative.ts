@@ -2,10 +2,14 @@
 import RNNeoSdkBindings from 'react-native-neo-sdk-bindings'
 export class NeoNative {
   static async decryptNep2(password: string, key: string): Promise<string> {
-    const { wif } = await RNNeoSdkBindings.decryptNep2(key, password)
+    const {wif} = await RNNeoSdkBindings.decryptNep2(key, password)
     return wif
   }
-  static decryptNep2IOS(password: string, key: string, callback: (wif: string) => void) {
+  static decryptNep2IOS(
+    password: string,
+    key: string,
+    callback: (wif: string) => void
+  ) {
     return RNNeoSdkBindings.decryptNep2(key, password, callback)
   }
 }

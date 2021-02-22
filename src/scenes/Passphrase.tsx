@@ -1,19 +1,19 @@
-import { wallet } from '@cityofzion/neon-core'
-import { RouteProp } from '@react-navigation/native'
-import { StackNavigationProp } from '@react-navigation/stack'
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import {wallet} from '@cityofzion/neon-core'
+import {RouteProp} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
+import React, {useState} from 'react'
+import {Platform, NativeModules} from 'react-native'
+import {useSelector} from 'react-redux'
 
-import { Facade } from '~src/app/Facade'
+import {Facade} from '~src/app/Facade'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { Account } from '~src/models/redux/Account'
-import { NeoNative } from '~src/native/NeoNative'
-import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
-import { RootState } from '~src/store/RootStore'
-import { LinearLayout, TextView } from '~src/styles/styled-components'
-import { Platform, NativeModules } from 'react-native'
+import {Account} from '~src/models/redux/Account'
+import {NeoNative} from '~src/native/NeoNative'
+import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import {RootState} from '~src/store/RootStore'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface PassphraseParams {
   encryptedKey: string
@@ -25,39 +25,40 @@ interface PassphraseProps {
 }
 
 interface IVerifyPasswordResult {
-  address: string,
+  address: string
   wif: string
 }
 
 async function verifyPassword(
   nep2: string,
-  password: string,
-) : Promise<IVerifyPasswordResult> {
-  let wif: string;
+  password: string
+): Promise<IVerifyPasswordResult> {
+  let wif: string
   return new Promise(async (resolve, reject) => {
     if (Platform.OS === 'ios') {
-     NativeModules.RNNeoSdkBindings.decryptNep2(nep2, password, (wif: string) => {
-       alert(`print de WIF => ${wif}`)
-      const newAccount = new wallet.Account(wif)
-      if (newAccount.address) resolve({address: newAccount.address, wif})
-      else reject('Key decryption failed')
-     })
+      NativeModules.RNNeoSdkBindings.decryptNep2(
+        nep2,
+        password,
+        (wif: string) => {
+          const newAccount = new wallet.Account(wif)
+          if (newAccount.address) resolve({address: newAccount.address, wif})
+          else reject(new Error('Key decryption failed'))
+        }
+      )
     } else {
       wif = await NeoNative.decryptNep2(password, nep2)
       const newAccount = new wallet.Account(wif)
       if (newAccount.address) resolve({address: newAccount.address, wif})
-      else reject('Key decryption failed')
+      else reject(new Error('Key decryption failed'))
     }
   })
-  
-
 }
 
 const Passphrase = (props: PassphraseProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const { currency } = useSelector((state: RootState) => state.settings)
+  const {currency} = useSelector((state: RootState) => state.settings)
   const [inputValue, setInputValue] = useState('')
   const [inputIsValid, setInputIsValid] = useState(true)
   const encryptedKey = props.route.params.encryptedKey
@@ -108,7 +109,10 @@ const Passphrase = (props: PassphraseProps) => {
               label={Facade.t('passphrase.next')}
               onPress={async () => {
                 try {
-                  const {address, wif} = await verifyPassword(encryptedKey, inputValue)
+                  const {address, wif} = await verifyPassword(
+                    encryptedKey,
+                    inputValue
+                  )
                   setInputIsValid(true)
                   props.navigation.navigate(
                     Facade.route.CustomizeAccount.name,
