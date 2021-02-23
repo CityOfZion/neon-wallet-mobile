@@ -1,21 +1,12 @@
 import {useNavigation} from '@react-navigation/native'
 import React, {useState} from 'react'
-import {
-  ImageSourcePropType,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-} from 'react-native'
+import {ImageSourcePropType, Pressable} from 'react-native'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {SwiperController} from '~src/components/SwiperPanel'
-import {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface ListItem {
   title: string
@@ -34,54 +25,64 @@ function QuickToolsItem(props: {
   index: number
   listItems: ListItem[]
 }) {
-  return (
-    <TouchableHighlight
-      activeOpacity={1}
-      onPress={props.onPress}
-      style={{
-        paddingRight: 20,
-        paddingLeft: 20,
-      }}
-    >
-      <LinearLayout>
-        <LinearLayout
-          orientation="horiz"
-          pb="18px"
-          pt="16px"
-          alignItems="center"
-        >
-          <LinearLayout>
-            <TextView
-              style={{includeFontPadding: false}}
-              color={'text.0'}
-              fontSize={18}
-              fontFamily="regular"
-            >
-              {props.item.title}
-            </TextView>
-            <TextView
-              style={{includeFontPadding: false}}
-              color={'text.6'}
-              fontSize={16}
-              fontFamily="medium"
-            >
-              {props.item.subtitle}
-            </TextView>
-          </LinearLayout>
-          <LinearLayout weight={1} />
-          <ImageView
-            width={35}
-            height={35}
-            mr="13px"
-            source={props.item.source}
-          />
-        </LinearLayout>
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
 
-        {props.index !== props.listItems.length - 1 && (
-          <LinearLayout height="2px" bg={'background.5'} width={'96%'} />
-        )}
-      </LinearLayout>
-    </TouchableHighlight>
+  return (
+    <Pressable
+      onPress={props.onPress}
+      style={({pressed}) => [
+        {
+          backgroundColor: pressed ? theme.colors.background[16] : undefined,
+        },
+      ]}
+    >
+      {() => (
+        <LinearLayout paddingRight={25} paddingLeft={25}>
+          <LinearLayout
+            orientation="horiz"
+            pb="18px"
+            pt="16px"
+            alignItems="center"
+          >
+            <LinearLayout>
+              <TextView
+                style={{includeFontPadding: false}}
+                color={theme.colors.text[0]}
+                fontSize={18}
+                fontFamily="regular"
+              >
+                {props.item.title}
+              </TextView>
+              <TextView
+                style={{includeFontPadding: false}}
+                color={theme.colors.text[6]}
+                fontSize={16}
+                fontFamily="medium"
+              >
+                {props.item.subtitle}
+              </TextView>
+            </LinearLayout>
+            <LinearLayout weight={1} />
+            <ImageView
+              width={35}
+              height={35}
+              mr="13px"
+              source={props.item.source}
+            />
+          </LinearLayout>
+
+          {props.index !== props.listItems.length - 1 && (
+            <LinearLayout
+              height="1px"
+              bg={theme.colors.background[10]}
+              width={'96%'}
+            />
+          )}
+        </LinearLayout>
+      )}
+    </Pressable>
   )
 }
 
