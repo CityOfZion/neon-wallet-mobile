@@ -209,9 +209,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const [balanceFormatted, setBalanceFormatted] = useState<string>(
     account.formattedBalanceAmount(currency, language, exchange)
   )
-  useEffect(() => {
-    //alert('mudou o balance')
-  }, [balanceFormatted, currency, language, exchange])
 
   useEffect(() => {
     populateUnclaimed()
@@ -230,6 +227,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
       interactionPromise.cancel()
     }
   }, [isAssetsTabSelected, account])
+
+  useEffect(() => {
+ setAccount(accountsPool.find(acc => acc.address === address) || account)
+  }, [accountsPool])
 
   const isClaimAvailable = () => {
     return Boolean(unclaimedGasAmount && !isWatchAccount)
@@ -370,6 +371,14 @@ const GetAccountView = (props: GetAccountViewProps) => {
     )
   }
 
+  const handleChangeScene = (index: number) => {
+    if(index === 0){
+      setIsAssetsTabSelected(true)
+    }else{
+      setIsAssetsTabSelected(false)
+    }
+  }
+
   return (
     <ScreenLayout
       onReachBottom={() => {
@@ -480,7 +489,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
             title: 'Transactions',
             Element: TransactionsTab,
           }}
-          setFirstTabAsSelected={setIsAssetsTabSelected}
+          handleIndex={handleChangeScene}
         />
       )}
     </ScreenLayout>

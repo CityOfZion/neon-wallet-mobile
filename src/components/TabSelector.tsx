@@ -86,7 +86,7 @@ const TabSelector = (props: TabSelectorProps) => {
 interface ITabSelectorBar {
   firstScene: IScene
   secondScene: IScene
-  setFirstTabAsSelected?: React.Dispatch<React.SetStateAction<boolean>>
+  handleIndex?: (nowIndex: number) => void
 }
 interface IScene {
   title: string
@@ -107,16 +107,20 @@ export const TabSelectorBar: React.FC<ITabSelectorBar> = (
     {key: props.secondScene.title, title: props.secondScene.title},
   ])
 
+  const handleIndex = (page: number) => {
+      SetIndex(page)
+  }
+
   useEffect(() => {
-    if (props.setFirstTabAsSelected) {
-      props.setFirstTabAsSelected(false) //if not assets selected, make a fetch transactions
+    if (props.handleIndex) {
+      props.handleIndex(index) //if not assets selected, make a fetch transactions
     }
   }, [index])
 
   return (
     <TabView
       renderScene={renderScenes}
-      onIndexChange={SetIndex}
+      onIndexChange={handleIndex}
       initialLayout={initialLayout}
       navigationState={{index, routes}}
       renderTabBar={(props) => (
