@@ -6,12 +6,7 @@ import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import SwiperPanel, {SwiperController} from '~src/components/SwiperPanel'
-import {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface ListItem {
   title: string
@@ -43,7 +38,7 @@ function QuickToolsItem(props: {
         },
       ]}
     >
-      {({pressed}) => (
+      {() => (
         <LinearLayout paddingRight={25} paddingLeft={25}>
           <LinearLayout
             orientation="horiz"
