@@ -318,7 +318,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
       >
         <>
           {account.address && (
-            <LinearLayout>
+            <LinearLayout pt={20}>
               <TransactionsList
                 title={Facade.t('screens.getAccount.pendingTransactions')}
                 address={account.address}

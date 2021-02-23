@@ -120,12 +120,23 @@ export const TabSelectorBar: React.FC<ITabSelectorBar> = (
       initialLayout={initialLayout}
       navigationState={{index, routes}}
       renderTabBar={(props) => (
-        <TabBar
-          {...props}
-          indicatorStyle={{backgroundColor: '#4cffb3'}}
-          style={{backgroundColor: '#ffffff00', elevation: 0}}
-          pressColor={'#000BB'}
-        />
+        <>
+          <TabBar
+            {...props}
+            indicatorStyle={{backgroundColor: '#4cffb3'}}
+            style={{backgroundColor: '#ffffff00', elevation: 0}}
+            pressColor={'#000BB'}
+          />
+          <View
+            style={{
+              height: 0.7,
+              width: Dimensions.get('window').width,
+              marginTop: 45,
+              backgroundColor: '#5d6d74',
+              position: 'absolute',
+            }}
+          />
+        </>
       )}
     />
   )
