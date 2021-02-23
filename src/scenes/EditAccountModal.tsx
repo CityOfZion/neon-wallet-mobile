@@ -143,12 +143,15 @@ const EditAccountModal = (props: Props) => {
         loadingView={<ScreenLoader transparent={true} />}
       >
         <LinearLayout
-          height="100%"
           orientation="verti"
           justifyContent="space-between"
-          mt="20px"
+          mt="10px"
         >
-          <AccountCard account={account} isStackMode={false} />
+          <AccountCard
+            account={account}
+            isStackMode={false}
+            hasShadow={false}
+          />
 
           <InputLabel
             title={Facade.t('modals.editAccount.accountInput.title')}
