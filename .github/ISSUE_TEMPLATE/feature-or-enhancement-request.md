@@ -6,6 +6,9 @@ labels: discussion
 assignees: ''
 ---
 
+**Feedback source**
+The original source of the feedback (reddit, pipefy, twitter, etc...).
+
 **Summary or problem description**
 A summary of the problem you want to solve or something you want to improve.
 
