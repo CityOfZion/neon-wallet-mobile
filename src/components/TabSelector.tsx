@@ -108,7 +108,7 @@ export const TabSelectorBar: React.FC<ITabSelectorBar> = (
   ])
 
   useEffect(() => {
-    if (index === 0 && props.setFirstTabAsSelected) {
+    if (props.setFirstTabAsSelected) {
       props.setFirstTabAsSelected(false) //if not assets selected, make a fetch transactions
     }
   }, [index])

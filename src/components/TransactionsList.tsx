@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/native'
 import moment from 'moment'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {FlatList, Image} from 'react-native'
 import {useSelector} from 'react-redux'
 

@@ -17,6 +17,8 @@ import {useDispatch, useSelector} from 'react-redux'
 
 import {ThemedClaimButton} from '~/src/components/themed/ThemedClaimButton'
 import {ThemedSendButton} from '~/src/components/themed/ThemedSendButton'
+import {TokenAsset} from '~/src/models/TokenAsset'
+import {TransactionDateGroup} from '~/src/models/TransactionDateGroup'
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import BalanceList from '~src/components/BalanceList'
@@ -41,8 +43,6 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
-import { TokenAsset } from '~/src/models/TokenAsset'
-import { TransactionDateGroup } from '~/src/models/TransactionDateGroup'
 export interface GetAccountParams {
   key: string
 }
@@ -200,12 +200,18 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }
   }, [address])
   const [tokenAssetsState, setTokenAssetsState] = useState<TokenAsset[]>([])
-  const [transactionsState, setTransactionState] = useState<TransactionDateGroup[]>([])
-  const [pendingTransactionsState, setPendingTransactionState] = useState<TransactionDateGroup[]>([])
-  const [balanceFormatted, setBalanceFormatted] = useState<string>(account.formattedBalanceAmount(currency, language, exchange))
+  const [transactionsState, setTransactionState] = useState<
+    TransactionDateGroup[]
+  >([])
+  const [pendingTransactionsState, setPendingTransactionState] = useState<
+    TransactionDateGroup[]
+  >([])
+  const [balanceFormatted, setBalanceFormatted] = useState<string>(
+    account.formattedBalanceAmount(currency, language, exchange)
+  )
   useEffect(() => {
     //alert('mudou o balance')
-  }, [balanceFormatted,currency, language, exchange])
+  }, [balanceFormatted, currency, language, exchange])
 
   useEffect(() => {
     populateUnclaimed()

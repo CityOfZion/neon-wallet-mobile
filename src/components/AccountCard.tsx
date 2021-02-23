@@ -82,7 +82,7 @@ const AccountCard: React.FC<Props> = (props) => {
       fadeIn()
     }
   }, [viewHeight])
-  
+
   return (
     <PaymentCardView
       onLayout={layoutEvent}
