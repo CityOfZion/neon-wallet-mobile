@@ -17,6 +17,8 @@ import {useDispatch, useSelector} from 'react-redux'
 
 import {ThemedClaimButton} from '~/src/components/themed/ThemedClaimButton'
 import {ThemedSendButton} from '~/src/components/themed/ThemedSendButton'
+import {TokenAsset} from '~/src/models/TokenAsset'
+import {TransactionDateGroup} from '~/src/models/TransactionDateGroup'
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import BalanceList from '~src/components/BalanceList'
@@ -25,6 +27,7 @@ import TransactionsList from '~src/components/TransactionsList'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {ThemedReceiveButton} from '~src/components/themed/ThemedReceiveButton'
 import {Lang} from '~src/enums/Lang'
 import {NeonHelper} from '~src/helpers/NeonHelper'
@@ -124,8 +127,10 @@ const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
 const GetAccountView = (props: GetAccountViewProps) => {
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
-  const {language} = useSelector((state: RootState) => state.settings)
+  const {language, currency} = useSelector((state: RootState) => state.settings)
   const {address} = useSelector((state: RootState) => state.account)
+  const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const {exchange} = useSelector((state: RootState) => state.app)
   const posYFactor = useRef(new Animated.Value(0))
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
@@ -185,6 +190,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
     Facade.bus.on('transactionEnd', refresh)
     Facade.bus.on('addPendingUnclaimedGasTransaction', manageClaimLoader)
     Facade.bus.on('removePendingTransactions', manageClaimLoader)
+    Facade.bus.on('updateTransactions', handleUpdateTransactions)
 
     return () => {
       Facade.bus.off('claimGasStart', refresh)
@@ -195,6 +201,16 @@ const GetAccountView = (props: GetAccountViewProps) => {
       Facade.bus.off('removePendingTransactions', manageClaimLoader)
     }
   }, [address])
+  const [tokenAssetsState, setTokenAssetsState] = useState<TokenAsset[]>([])
+  const [transactionsState, setTransactionState] = useState<
+    TransactionDateGroup[]
+  >([])
+  const [pendingTransactionsState, setPendingTransactionState] = useState<
+    TransactionDateGroup[]
+  >([])
+  const [balanceFormatted, setBalanceFormatted] = useState<string>(
+    account.formattedBalanceAmount(currency, language, exchange)
+  )
 
   useEffect(() => {
     populateUnclaimed()
@@ -258,6 +274,19 @@ const GetAccountView = (props: GetAccountViewProps) => {
     await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
   }
 
+  const handleUpdateTransactions = () => {
+    const interactionPromise = InteractionManager.runAfterInteractions(() => {
+      if (!isAssetsTabSelected) {
+        setCurrentPage(1)
+        Facade.await.run('fetchTransaction', () => fetchTransaction(1))
+      }
+    })
+
+    return () => {
+      interactionPromise.cancel()
+    }
+  }
+
   const claimGas = async () => {
     if (Facade.await.inAction(`ClaimGas@${account.address}`)) return
     if (!account.address || !unclaimedGasAmount) return
@@ -315,6 +344,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         name={'fetchTransaction'}
         size={'large'}
         style={{minHeight: 100}}
+        loadingView={<ScreenLoader transparent={true} />}
       >
         <>
           {account.address && (
@@ -351,6 +381,14 @@ const GetAccountView = (props: GetAccountViewProps) => {
         {Facade.t('components.balanceList.empty')}
       </TextView>
     )
+  }
+
+  const handleChangeScene = (index: number) => {
+    if (index === 0) {
+      setIsAssetsTabSelected(true)
+    } else {
+      setIsAssetsTabSelected(false)
+    }
   }
 
   return (
@@ -463,7 +501,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
             title: 'Transactions',
             Element: TransactionsTab,
           }}
-          setFirstTabAsSelected={setIsAssetsTabSelected}
+          handleIndex={handleChangeScene}
         />
       )}
     </ScreenLayout>
