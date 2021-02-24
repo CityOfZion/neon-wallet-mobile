@@ -315,11 +315,9 @@ export class AppReducer extends ReducerWrapper<
             )
           }
         }
-
+        dispatch(this.commit('SET_ACCOUNTS', {accounts}))
+        await Storage.accounts.save(accounts)
         if (removedSenderTx.length) {
-          dispatch(this.commit('SET_ACCOUNTS', {accounts}))
-          await Storage.accounts.save(accounts)
-
           Facade.bus.emit('removePendingTransactions', removedSenderTx)
         }
       }

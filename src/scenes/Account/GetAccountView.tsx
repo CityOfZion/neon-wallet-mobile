@@ -27,6 +27,7 @@ import TransactionsList from '~src/components/TransactionsList'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {ThemedReceiveButton} from '~src/components/themed/ThemedReceiveButton'
 import {Lang} from '~src/enums/Lang'
 import {NeonHelper} from '~src/helpers/NeonHelper'
@@ -189,6 +190,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
     Facade.bus.on('transactionEnd', refresh)
     Facade.bus.on('addPendingUnclaimedGasTransaction', manageClaimLoader)
     Facade.bus.on('removePendingTransactions', manageClaimLoader)
+    Facade.bus.on('updateTransactions', handleUpdateTransactions)
 
     return () => {
       Facade.bus.off('claimGasStart', refresh)
@@ -227,10 +229,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
       interactionPromise.cancel()
     }
   }, [isAssetsTabSelected, account])
-
-  useEffect(() => {
- setAccount(accountsPool.find(acc => acc.address === address) || account)
-  }, [accountsPool])
 
   const isClaimAvailable = () => {
     return Boolean(unclaimedGasAmount && !isWatchAccount)
@@ -274,6 +272,19 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
     // Save the new cache
     await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
+  }
+
+  const handleUpdateTransactions = () => {
+    const interactionPromise = InteractionManager.runAfterInteractions(() => {
+      if (!isAssetsTabSelected) {
+        setCurrentPage(1)
+        Facade.await.run('fetchTransaction', () => fetchTransaction(1))
+      }
+    })
+
+    return () => {
+      interactionPromise.cancel()
+    }
   }
 
   const claimGas = async () => {
@@ -333,6 +344,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         name={'fetchTransaction'}
         size={'large'}
         style={{minHeight: 100}}
+        loadingView={<ScreenLoader transparent={true} />}
       >
         <>
           {account.address && (
@@ -372,9 +384,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }
 
   const handleChangeScene = (index: number) => {
-    if(index === 0){
+    if (index === 0) {
       setIsAssetsTabSelected(true)
-    }else{
+    } else {
       setIsAssetsTabSelected(false)
     }
   }

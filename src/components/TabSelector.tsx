@@ -108,7 +108,7 @@ export const TabSelectorBar: React.FC<ITabSelectorBar> = (
   ])
 
   const handleIndex = (page: number) => {
-      SetIndex(page)
+    SetIndex(page)
   }
 
   useEffect(() => {
