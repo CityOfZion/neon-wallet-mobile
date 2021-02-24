@@ -87,7 +87,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
             {Facade.t('modals.receive.accountSelection.subtitle')}
           </TextView>
 
-          <LinearLayout minHeight={260} mx={-5}>
+          <LinearLayout minHeight={200} mx={-5}>
             <AccountPicker
               accounts={accounts}
               onSelect={setSelectedAccount}
