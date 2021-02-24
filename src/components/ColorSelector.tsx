@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native'
 import {LinearGradient as ExpoLinearGradient} from 'expo-linear-gradient'
-import React, {Fragment, useState} from 'react'
+import React, {Fragment, useState, useEffect} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 import styled from 'styled-components'

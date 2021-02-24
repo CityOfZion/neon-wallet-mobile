@@ -84,6 +84,12 @@ const CustomizeAccount = (props: Props) => {
     setAccount(account)
   }
 
+  const handleColor = (hex: string) => {
+    account.backgroundColor = hex
+    setAccount(account)
+    setColor(hex)
+  }
+
   const contentMap: ContentCollection = {
     ImportKey: {
       title: Facade.route.ImportKey.translate(),
@@ -256,7 +262,7 @@ const CustomizeAccount = (props: Props) => {
             marginBottom="24px"
           />
 
-          <ColorSelector account={account} onSelect={setColor} />
+          <ColorSelector account={account} onSelect={handleColor} />
         </LinearLayout>
       </AwaitActivity>
     </ScreenLayout>
