@@ -1,7 +1,17 @@
 {
     "changelog": [
+    	{
+            "version": "V1.0.15-39",
+            "date": "February 24 2021",
+            "changes": [
+                "- Bug fixes",
+                "- Change layouts",
+                "- New feature delete account",
+                "- Implement only one method, that is the decryptNep2 iOS"
+            ]
+        },
         {
-            "version": "V1.0.16-37",
+            "version": "V1.0.15-37",
             "date": "February 10 2021",
             "changes": [
                 "- Bug fixes",
