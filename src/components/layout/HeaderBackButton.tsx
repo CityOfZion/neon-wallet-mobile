@@ -19,7 +19,7 @@ const HeaderBackButton = (props: StackHeaderLeftButtonProps) => {
 
             <TextView
               mt={Facade.utils.isAndroid ? -2 : 2}
-              fontSize={'lg'}
+              fontSize={18}
               color={'text.0'}
               style={{
                 includeFontPadding: false,
