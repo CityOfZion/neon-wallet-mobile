@@ -10,7 +10,6 @@ import SwiperPanel, {
   PANEL_OFFSET,
   SwiperController,
   useSwiperController,
-  CloseButton,
 } from '~src/components/SwiperPanel'
 import {SearchBar} from '~src/components/input/SearchBar'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
@@ -83,7 +82,13 @@ const Item = (props: {
         </TextView>
       </LinearLayout>
 
-      <ImageView source={require('~src/assets/images/green_plus.png')} />
+      <ImageView
+        mt={4}
+        width={Facade.scale(26)}
+        height={Facade.scale(26)}
+        resizeMode={'contain'}
+        source={require('~src/assets/images/green_plus.png')}
+      />
     </ButtonView>
   )
 }
@@ -133,12 +138,12 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={Facade.t('modals.listTokenModal.tokens')}
-      rightButton={<CloseButton mr="20px" />}
+      rightButton={<ThemedCloseButton onPress={controller.close} />}
       onRightPress={controller.close}
-      paddingTop={60}
+      paddingTop={4}
       paddingRight={16}
       paddingLeft={16}
-      fullSize={true}
+      smallerSize={true}
       onClose={props.navigation.goBack}
       disableDefaultScrollView={true}
       solidColorBG={true}
@@ -148,12 +153,12 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
           textAlign="center"
           fontFamily="medium"
           fontSize={18}
-          mb="8px"
           color="text.0"
         >
           {Facade.t('modals.listTokenModal.selectToken')}
         </TextView>
         <SearchBar
+          lighterColor={true}
           marginH={-5}
           prevData={tokenList}
           dispatchData={setSearchTokens}
@@ -170,7 +175,9 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
         <FlatList
           data={searchTokens}
           keyExtractor={(item) => item.symbol}
-          ItemSeparatorComponent={() => <LinearLayout bg="text.3" height={1} />}
+          ItemSeparatorComponent={() => (
+            <LinearLayout bg="background.10" height={1} />
+          )}
           renderItem={({item}) => (
             <Item
               controller={controller}

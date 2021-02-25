@@ -9,6 +9,7 @@ type TSearchBar<P = any> = {
   callbackFilter: (strFilter: string) => void
   dispatchData: React.Dispatch<React.SetStateAction<P[]>>
   marginH?: number
+  lighterColor?: boolean
 }
 
 export const SearchBar: React.FC<TSearchBar> = ({
@@ -16,6 +17,7 @@ export const SearchBar: React.FC<TSearchBar> = ({
   prevData,
   dispatchData,
   marginH,
+  lighterColor,
 }) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
@@ -33,7 +35,7 @@ export const SearchBar: React.FC<TSearchBar> = ({
     design: {
       borderRadius: 21,
       height: 42,
-      backgroundColor: theme.colors.background[12],
+      backgroundColor: lighterColor ? '#273037' : theme.colors.background[12],
       marginHorizontal: marginH ?? 5,
       marginVertical: 20,
       flexDirection: 'row',
@@ -73,4 +75,5 @@ SearchBar.propTypes = {
   callbackFilter: PropTypes.any.isRequired,
   dispatchData: PropTypes.any.isRequired,
   marginH: PropTypes.any.isRequired,
+  lighterColor: PropTypes.bool,
 }
