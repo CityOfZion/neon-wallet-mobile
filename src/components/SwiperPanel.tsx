@@ -175,7 +175,7 @@ const Header = (props: SwiperProps & {mb: number}) => {
           />
         ) : undefined}
 
-        <TextView color={theme.colors.text[0]} fontSize={24}>
+        <TextView color={theme.colors.text[0]} fontSize={23}>
           {props.title}
         </TextView>
       </LinearLayout>
