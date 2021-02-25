@@ -51,7 +51,9 @@ import {
   TransactionDetails,
   TransactionDetailsParams,
 } from '~src/scenes/TransactionDetails'
-import WalletContextModal from '~src/scenes/WalletContextModal'
+import WalletContextModal, {
+  WalletContextModalParams,
+} from '~src/scenes/WalletContextModal'
 import WelcomePage, {WelcomeModalParam} from '~src/scenes/WelcomePage'
 import ReceiveAccountSelectionModal, {
   ReceiveAccountSelectionModalParams,
@@ -74,7 +76,7 @@ export type ModalStackParamList = {
   ReceiveToAccountModal: ReceiveToAccountModalParams
   ReceiveQrCodeModal: ReceiveQrCodeModalParams
   CustomColor: CustomColorPageParam
-  WalletContextModal: undefined
+  WalletContextModal: WalletContextModalParams
   ReorderWalletModal: undefined
   ListTokenModal: ListTokenModalParams
   LanguagePickerModal: undefined
@@ -110,6 +112,7 @@ export type ModalParams =
   | DefaultNavigationParam<EditWalletParams>
   | DefaultNavigationParam<ChangelogModalParams>
   | DefaultNavigationParam<WelcomeModalParam>
+  | DefaultNavigationParam<WalletContextModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 

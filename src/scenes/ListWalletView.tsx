@@ -341,6 +341,7 @@ const ListWalletView = (props: WalletProps) => {
             onPress={() =>
               props.navigation.navigate(Facade.route.Modal.name, {
                 screen: Facade.route.WalletContextModal.name,
+                params: {wallets},
               })
             }
           />
