@@ -50,7 +50,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
     if (props.transparent) {
       color = ['#00000000', '#00000000']
     } else if (props.invertedGradient) {
-      color = [theme.colors.background[9], theme.colors.background[14]]
+      color = [theme.colors.background[9], theme.colors.background[18]]
     } else if (props.solidColorBG) {
       color = [theme.colors.background[2], theme.colors.background[2]]
     } else if (props.darkerSolidColorBG) {

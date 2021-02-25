@@ -393,6 +393,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   return (
     <ScreenLayout
+      invertedGradient={true}
       onReachBottom={() => {
         if (Facade.await.inAction('loadMoreTransaction')) return
         Facade.await.run(
