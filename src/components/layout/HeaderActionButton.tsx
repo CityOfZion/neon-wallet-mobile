@@ -46,7 +46,7 @@ const HeaderActionButton: React.FC<HeaderActionButtonProps> = (
 
   if (actionButtonStyle === 'close') {
     return (
-      <LinearLayout mt={4}>
+      <LinearLayout mt={2}>
         <ThemedCloseButton onPress={props?.actionOnPress} />
       </LinearLayout>
     )
