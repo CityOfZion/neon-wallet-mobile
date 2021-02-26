@@ -40,6 +40,7 @@ export class DarkTheme extends ApplicationTheme {
       15: '#282f35',
       16: '#27313a',
       17: '#333d46',
+      18: '#161c22',
     },
 
     text: {
