@@ -1,6 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
+import {Dimensions} from 'react-native'
 
 import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
@@ -42,7 +43,6 @@ const CustomColorPage = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      fullSize={true}
       title={Facade.t('customColorPage.title')}
       leftButton={Facade.t('customColorPage.navigation.cancel')}
       rightButton={Facade.t('customColorPage.navigation.done')}
@@ -51,13 +51,19 @@ const CustomColorPage = (props: Props) => {
       padding={16}
       paddingTop={20}
       onClose={() => props.navigation.goBack()}
+      solidColorBG={true}
+      smallerSize={true}
     >
       <LinearLayout height="100%">
-        <LinearLayout mb={5} maxHeight="35%" alignSelf="center">
+        <LinearLayout
+          mb={5}
+          maxHeight={`${Dimensions.get('window').width * 0.6}px`}
+          alignSelf="center"
+        >
           <AccountCard
             orientBy="height"
             account={props.route.params.account}
-            hideQRCode={true}
+            isCustomAccount={true}
           />
         </LinearLayout>
 

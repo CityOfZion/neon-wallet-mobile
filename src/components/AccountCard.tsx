@@ -7,6 +7,7 @@ import {
   NativeTouchEvent,
   TouchableOpacity,
   Animated,
+  Platform,
 } from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
@@ -49,6 +50,7 @@ interface Props {
   hideBalance?: boolean
   hideCopy?: boolean
   orientBy?: 'height' | 'width'
+  isCustomAccount?: boolean
 }
 
 const AccountCard: React.FC<Props> = (props) => {
@@ -338,18 +340,34 @@ const AccountCard: React.FC<Props> = (props) => {
                         })
                       }
                     }}
-                    style={{
-                      paddingTop: 12 * unit,
-                      paddingLeft: 12 * unit,
-                      paddingBottom: 6 * unit,
-                      paddingRight: 6 * unit,
-                    }}
+                    style={
+                      !props.isCustomAccount
+                        ? {
+                            paddingTop: 12 * unit,
+                            paddingLeft: 12 * unit,
+                            paddingBottom: 6 * unit,
+                            paddingRight: 6 * unit,
+                          }
+                        : {
+                            marginBottom: 15 * unit,
+                            marginRight:
+                              Platform.OS !== 'ios' ? 24 * unit : 38 * unit,
+                          }
+                    }
                   >
                     <ImageView
-                      width={20 * unit}
-                      height={24 * unit}
+                      width={!props.isCustomAccount ? 20 * unit : 10}
+                      height={!props.isCustomAccount ? 24 * unit : 14}
                       source={require('~src/assets/images/card-copy.png')}
-                      style={{opacity: 0.5}}
+                      style={
+                        !props.isCustomAccount
+                          ? {opacity: 0.5}
+                          : {
+                              opacity: 0.5,
+                              width: 10,
+                              height: 12,
+                            }
+                      }
                     />
                   </TouchableOpacity>
                 )}
@@ -374,6 +392,7 @@ AccountCard.propTypes = {
   hideBalance: PropTypes.bool,
   hideCopy: PropTypes.bool,
   orientBy: PropTypes.oneOf(['height', 'width']),
+  isCustomAccount: PropTypes.any.isRequired,
 }
 
 AccountCard.defaultProps = {
