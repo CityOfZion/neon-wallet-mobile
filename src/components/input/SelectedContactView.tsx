@@ -1,9 +1,15 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 
 import {Contact} from '~src/models/redux/Contact'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
-export const SelectedContactView = (props: {selectedContact: Contact}) => {
+interface ISelectedContactView {
+  selectedContact: Contact
+  onClick?: () => void
+}
+
+export const SelectedContactView: React.FC<ISelectedContactView> = (props) => {
   return (
     <LinearLayout width={'100%'}>
       <TextView
@@ -11,6 +17,7 @@ export const SelectedContactView = (props: {selectedContact: Contact}) => {
         fontFamily={'regular'}
         color={'text.0'}
         fontSize={'18px'}
+        onPress={props.onClick}
       >
         {props.selectedContact?.name}
       </TextView>
@@ -19,9 +26,15 @@ export const SelectedContactView = (props: {selectedContact: Contact}) => {
         fontFamily={'medium'}
         color={'text.10'}
         fontSize={'16px'}
+        onPress={props.onClick}
       >
         {props.selectedContact?.address}
       </TextView>
     </LinearLayout>
   )
+}
+
+SelectedContactView.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  selectedContact: PropTypes.any,
 }

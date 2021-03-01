@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native'
-import React from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import {
   ImageLoadEventData,
   Keyboard,
@@ -8,6 +8,7 @@ import {
   TargetedEvent,
   TextInputFocusEventData,
   Platform,
+  TextInput,
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -77,6 +78,25 @@ const InputWithValidation = (props: Props) => {
 
   const isValid = props.validator(props.value)
 
+  const [contact, setContact] = useState<Contact | undefined>(
+    props.selectedContact
+  )
+  const inputRef = useRef<TextInput>(null)
+  const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    setContact(props.selectedContact)
+    if (props.onBlur) {
+      props.onBlur(e)
+    }
+  }
+
+  useEffect(() => {
+    setContact(props.selectedContact)
+  }, [props.selectedContact])
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [contact])
+
   return (
     <LinearLayout
       orientation="verti"
@@ -84,7 +104,7 @@ const InputWithValidation = (props: Props) => {
       mr={sideMargins}
       flex={1}
     >
-      {!props.selectedContact ? (
+      {!contact ? (
         <LinearLayout orientation="horiz">
           {props.srcIcon && (
             <ImageView
@@ -97,6 +117,7 @@ const InputWithValidation = (props: Props) => {
             />
           )}
           <InputTextView
+            ref={inputRef}
             onChangeText={props.onChangeText}
             color={fontColor}
             placeholderTextColor={props.placeholderColor ?? '#7d929a'}
@@ -113,7 +134,7 @@ const InputWithValidation = (props: Props) => {
             autoCompleteType={props.secure ? 'password' : undefined}
             secureTextEntry={props.secure ?? false}
             onFocus={props.onFocus}
-            onBlur={props.onBlur}
+            onBlur={handleBlur}
             editable={props.editable ?? true}
             keyboardType={props.keyboardType}
             returnKeyType={'done'}
@@ -137,7 +158,10 @@ const InputWithValidation = (props: Props) => {
           )}
         </LinearLayout>
       ) : (
-        <SelectedContactView selectedContact={props.selectedContact} />
+        <SelectedContactView
+          selectedContact={contact}
+          onClick={() => setContact(undefined)}
+        />
       )}
 
       <LinearLayout
