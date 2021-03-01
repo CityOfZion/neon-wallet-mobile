@@ -158,7 +158,7 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
             <ThemedButton
               onPress={() =>
                 Print.printAsync({
-                  html: `<html><body>${seeds}</body></html>`,
+                  html: `<html><body><br><br>&emsp;&emsp;${seeds}</body></html>`,
                 })
               }
               label={Facade.t('app.print')}

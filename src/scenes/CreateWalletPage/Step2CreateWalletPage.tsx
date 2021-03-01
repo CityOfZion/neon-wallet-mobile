@@ -1,5 +1,6 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
+import * as Print from 'expo-print'
 import PropTypes from 'prop-types'
 import React, {useEffect, useState} from 'react'
 import {Alert} from 'react-native'
@@ -35,6 +36,8 @@ const WordComponent = (props: {value: string}) => {
 const Step2CreateWalletPage: React.FC<Props> = (props) => {
   const dispatch = useDispatch()
   const [words, setWords] = useState<string[]>([])
+
+  const seeds = words.join(' ')
 
   useEffect(() => {
     Facade.await.run('populate', populate, 500)
@@ -118,7 +121,7 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
             justifyContent={'flex-end'}
           >
             <ThemedButton
-              onPress={() => Facade.utils.copyToClipboard(words.join(' '))}
+              onPress={() => Facade.utils.copyToClipboard(seeds)}
               label={Facade.t('app.copy')}
               srcIcon={require('~/src/assets/images/icon-copy-green.png')}
               iconSize={[Facade.scale(25), Facade.scale(25)]}
@@ -127,6 +130,11 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
             />
 
             <ThemedButton
+              onPress={() =>
+                Print.printAsync({
+                  html: `<html><body><br><br>&emsp;&emsp;${seeds}</body></html>`,
+                })
+              }
               label={Facade.t('app.print')}
               srcIcon={require('~/src/assets/images/icon-print-green.png')}
               iconSize={[25, 25]}
