@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, {useState, useEffect} from 'react'
 import {NativeScrollEvent, NativeSyntheticEvent} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import WalletCard from '~src/components/WalletCard'
@@ -47,7 +47,8 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
   }
 
   useEffect(() => {
-    setIndex(wallets.indexOf(wallet))
+    const index = wallets.indexOf(wallet) < 0 ? 0 : wallets.indexOf(wallet)
+    setIndex(index)
   }, [wallet])
 
   return (
