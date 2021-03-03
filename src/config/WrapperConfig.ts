@@ -19,6 +19,7 @@ export class WrapperConfig {
     '@wallets',
     '@accounts',
     '@contacts',
+    '@preAccount',
   ] as const
 
   readonly routes = [

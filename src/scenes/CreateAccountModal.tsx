@@ -45,7 +45,7 @@ export default function CreateAccountModal(props: Props) {
     await dispatch(RootStore.app.actions.syncAccounts())
 
     dispatch(RootStore.account.actions.clearState())
-
+    await dispatch(RootStore.app.actions.createPreAccount())
     controller.close()
   }
 
@@ -111,6 +111,7 @@ const AccountModalChildren: React.FC<IAccountModalChildren> = ({
   )
   const {idWallet} = useSelector((state: RootState) => state.account)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const preAccount = useSelector((state: RootState) => state.app.preAccount)
 
   const [account, setAccount] = useState(new Account())
 
@@ -129,19 +130,22 @@ const AccountModalChildren: React.FC<IAccountModalChildren> = ({
   }, [name, color, address])
 
   const populateAddress = useCallback(async () => {
-    account.idWallet = idWallet
-    const indexes = account
-      .getAccountsWithSameWallet(accountsPool)
-      .map((it) => it.index ?? 0)
+    if (!preAccount) {
+      account.idWallet = idWallet
+      const indexes = account
+        .getAccountsWithSameWallet(accountsPool)
+        .map((it) => it.index ?? 0)
 
-    const wallet = new Wallet()
-    wallet.id = idWallet
+      const wallet = new Wallet()
+      wallet.id = idWallet
+      const index = indexes.length ? Math.max(...indexes) + 1 : 0
+      const neoAccount = await wallet.generateNeoAccount(index)
+      const address = neoAccount?.address
 
-    const index = indexes.length ? Math.max(...indexes) + 1 : 0
-    const neoAccount = await wallet.generateNeoAccount(index)
-    const address = neoAccount?.address
-
-    setAddress(address)
+      setAddress(address)
+    } else {
+      setAddress(preAccount.address ? preAccount.address : '')
+    }
   }, [address])
 
   return (

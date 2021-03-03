@@ -92,6 +92,7 @@ const AccountCardsComponent = (props: {
 
 const GetWalletView = (props: GetWalletProps) => {
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const preAccount = useSelector((state: RootState) => state.app.preAccount)
   const fromWalletDetailsPage = false
 
   props.navigation.setOptions({
@@ -132,7 +133,7 @@ const GetWalletView = (props: GetWalletProps) => {
     wallet.lastVisitedAt = moment().format()
 
     await dispatch(RootStore.app.actions.updateAndSaveWallet(wallet))
-
+    if (!preAccount) await dispatch(RootStore.app.actions.createPreAccount())
     const accounts = wallet.getAccounts(accountsPool)
     setAccounts(accounts)
   }

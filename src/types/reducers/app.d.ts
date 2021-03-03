@@ -17,6 +17,7 @@ export declare global {
     | 'SET_ACCOUNTS'
     | 'SET_CONTACTS'
     | 'SET_PENDING_TRANSACTIONS'
+    | 'SET_PRE_ACCOUNT_CREATE'
 
   interface AppState {
     exchange: Exchange
@@ -25,6 +26,7 @@ export declare global {
     wallets: Wallet[]
     accounts: Account[]
     contacts: Contact[]
+    preAccount: Account | null
   }
 
   type AppAction = AppState & Action<AppActionsType>

@@ -1,6 +1,6 @@
 import {createStackNavigator} from '@react-navigation/stack'
-import React from 'react'
-import {useSelector} from 'react-redux'
+import React, {useEffect} from 'react'
+import {useSelector, useDispatch} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {VerifyPasscodePageParams} from '../scenes/LoginPage/VerifyPasscodePage'
@@ -65,6 +65,7 @@ import ReceiveToAccountModal, {
   ReceiveToAccountModalParams,
 } from '~src/scenes/receive/ReceiveToAccountModal'
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
+import {RootStore} from '~src/store/RootStore'
 
 export type ModalStackParamList = {
   WelcomeModal: WelcomeModalParam

@@ -83,4 +83,8 @@ export abstract class Storage {
   static get contacts() {
     return Facade.storage['@contacts'].bind().asArrayOf(Contact)
   }
+
+  static get preAccount() {
+    return Facade.storage['@preAccount'].bind().as(Account)
+  }
 }

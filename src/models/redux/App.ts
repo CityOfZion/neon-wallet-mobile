@@ -26,4 +26,7 @@ export class App implements AppState {
 
   @HttpExpose()
   contacts: Contact[] = []
+
+  @HttpExpose()
+  preAccount: Account | null = null
 }
