@@ -46,6 +46,7 @@ export default function CreateAccountModal(props: Props) {
 
     dispatch(RootStore.account.actions.clearState())
     await dispatch(RootStore.app.actions.createPreAccount())
+    await dispatch(RootStore.app.actions.syncPreAccount())
     controller.close()
   }
 

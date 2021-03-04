@@ -36,8 +36,9 @@ export abstract class Sync {
       RootStore.app.actions.syncContacts()
     )
     const preAccount: Account | null = await dispatch(
-      RootStore.app.actions.createPreAccount()
+      RootStore.app.actions.syncPreAccount()
     )
+
     await dispatch(RootStore.app.actions.syncTokenAssets())
 
     await dispatch(RootStore.app.actions.syncBackupAlerts())

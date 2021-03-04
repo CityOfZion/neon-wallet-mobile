@@ -8,11 +8,11 @@ import {
   Easing,
   LayoutChangeEvent,
   TouchableWithoutFeedback,
-  View,
 } from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
 import AccountCard from '~src/components/AccountCard'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
@@ -133,7 +133,8 @@ const GetWalletView = (props: GetWalletProps) => {
     wallet.lastVisitedAt = moment().format()
 
     await dispatch(RootStore.app.actions.updateAndSaveWallet(wallet))
-    if (!preAccount) await dispatch(RootStore.app.actions.createPreAccount())
+    if (!preAccount?.address)
+      await dispatch(RootStore.app.actions.createPreAccount())
     const accounts = wallet.getAccounts(accountsPool)
     setAccounts(accounts)
   }

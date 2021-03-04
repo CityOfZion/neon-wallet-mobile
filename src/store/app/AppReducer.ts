@@ -46,8 +46,6 @@ export class AppReducer extends ReducerWrapper<
   readonly actions = {
     createPreAccount: (): AsyncAction => {
       return async (dispatch, getState) => {
-        const acc = await Storage.preAccount.load()
-
         const account = new Account()
         const accountsPool = getState().app.accounts
         account.idWallet = getState().wallet.id
@@ -58,18 +56,25 @@ export class AppReducer extends ReducerWrapper<
         const wallet = new Wallet()
         wallet.id = getState().wallet.id
         const index = indexes.length ? Math.max(...indexes) + 1 : 0
-        if (index > 0) {
-          const neoAccount = (await wallet.generateNeoAccount(index)) as
-            | Account
-            | null
-            | undefined
-          if (neoAccount) {
-            await Storage.preAccount.save(neoAccount)
-          }
-          dispatch(
-            this.commit('SET_PRE_ACCOUNT_CREATE', {preAccount: neoAccount})
-          )
+
+        const neoAccount = (await wallet.generateNeoAccount(index)) as
+          | Account
+          | null
+          | undefined
+
+        dispatch(
+          this.commit('SET_PRE_ACCOUNT_CREATE', {preAccount: neoAccount})
+        )
+        if (neoAccount) {
+          await Storage.preAccount.save(plainToClass(Account, neoAccount))
         }
+      }
+    },
+    syncPreAccount: (): AsyncAction<Account | null> => {
+      return async (dispatch, getState) => {
+        const preAccount = await Storage.preAccount.load()
+        dispatch(this.commit('SET_PRE_ACCOUNT_CREATE', {preAccount}))
+        return preAccount
       }
     },
     syncExchange: (): AsyncAction<Exchange> => {
@@ -211,12 +216,6 @@ export class AppReducer extends ReducerWrapper<
           })
 
           dispatch(this.commit('SET_ACCOUNTS', {accounts}))
-        }
-
-        if (
-          accounts?.find((account) => account.address === preAccount?.address)
-        ) {
-          this.actions.createPreAccount()
         }
 
         return accounts ?? []
