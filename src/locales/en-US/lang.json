@@ -166,14 +166,8 @@
     "label_1": "Give your wallet a name and create a Passphrase",
     "body_1": "Give your wallet a memorable name, maybe it could be related to what you want to use the wallet for like “trading” or “investments”.",
     "label_walletName": "Wallet Name",
-    "label_createPassphrase": "Create Passphrase",
-    "label_confirmPassphrase": "Confirm Passphrase",
     "placeholder_walletName": "Please enter a name",
-    "placeholder_createPassphrase": "Please enter a passphrase",
-    "placeholder_confirmPassphrase": "Please repeat the passphrase",
-    "setName":"Wallet Name cannot be empty.",
-    "setPassphrase": "Passphrase cannot be empty.",
-    "passphraseDontMatch": "Passphrases do not match"
+    "setName":"Wallet Name cannot be empty."
   },
   "step5CreateWallet": {
     "label_1": "Congratulations, You’re the proud owner of a shiny new wallet!",

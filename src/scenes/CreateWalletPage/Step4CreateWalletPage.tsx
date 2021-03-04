@@ -19,8 +19,6 @@ interface Props {
 
 const Step4CreateWalletPage: React.FC<Props> = (props) => {
   const [walletName, setWalletName] = useState<string>()
-  const [passphrase, setPassphrase] = useState<string>()
-  const [confirmPassphrase, setConfirmPassphrase] = useState<string>()
 
   const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
@@ -30,17 +28,10 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
     if (!walletName) {
       Alert.alert(Facade.t('step4CreateWallet.setName'))
       return
-    } else if (!passphrase) {
-      Alert.alert(Facade.t('step4CreateWallet.setPassphrase'))
-      return
-    } else if (passphrase !== confirmPassphrase) {
-      Alert.alert(Facade.t('step4CreateWallet.passphraseDontMatch'))
-      return
     }
 
     dispatch(RootStore.wallet.actions.setName(walletName))
     dispatch(RootStore.wallet.actions.setType('standard'))
-    dispatch(RootStore.wallet.actions.setPassphrase(passphrase))
 
     const id = await dispatchAsyncString(
       RootStore.wallet.actions.createAndSave()
@@ -75,11 +66,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
   }
 
   const isValid = () => {
-    const conditions = [
-      Boolean(walletName),
-      (passphrase?.length ?? 0) >= 6,
-      passphrase === confirmPassphrase,
-    ]
+    const conditions = [Boolean(walletName)]
 
     return conditions.every((it) => it)
   }
@@ -115,31 +102,6 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
             onChangeText={(value: string) => setWalletName(value)}
             value={walletName}
             maxLength={32}
-          />
-
-          <ThemedInputText
-            mb={6}
-            autoCompleteType={'password'}
-            secureTextEntry={true}
-            label={Facade.t('step4CreateWallet.label_createPassphrase')}
-            placeholder={Facade.t(
-              'step4CreateWallet.placeholder_createPassphrase'
-            )}
-            onChangeText={(value: string) => setPassphrase(value)}
-            value={passphrase}
-            maxLength={16}
-          />
-
-          <ThemedInputText
-            autoCompleteType={'password'}
-            secureTextEntry={true}
-            label={Facade.t('step4CreateWallet.label_confirmPassphrase')}
-            placeholder={Facade.t(
-              'step4CreateWallet.placeholder_confirmPassphrase'
-            )}
-            onChangeText={(value: string) => setConfirmPassphrase(value)}
-            value={confirmPassphrase}
-            maxLength={16}
           />
         </LinearLayout>
       </LinearLayout>
