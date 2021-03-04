@@ -8,11 +8,11 @@ import {
   Easing,
   LayoutChangeEvent,
   TouchableWithoutFeedback,
-  View,
 } from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import {Storage} from '~src/app/Storage'
 import AccountCard from '~src/components/AccountCard'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
@@ -92,6 +92,7 @@ const AccountCardsComponent = (props: {
 
 const GetWalletView = (props: GetWalletProps) => {
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const preAccount = useSelector((state: RootState) => state.app.preAccount)
   const fromWalletDetailsPage = false
 
   props.navigation.setOptions({
@@ -132,7 +133,8 @@ const GetWalletView = (props: GetWalletProps) => {
     wallet.lastVisitedAt = moment().format()
 
     await dispatch(RootStore.app.actions.updateAndSaveWallet(wallet))
-
+    if (!preAccount?.address)
+      await dispatch(RootStore.app.actions.createPreAccount())
     const accounts = wallet.getAccounts(accountsPool)
     setAccounts(accounts)
   }

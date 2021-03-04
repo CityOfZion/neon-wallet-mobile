@@ -1,5 +1,6 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {Request} from '@simpli/serialized-request'
+import {plainToClass} from 'class-transformer'
 import {map, mapValues} from 'lodash'
 import {showMessage} from 'react-native-flash-message'
 
@@ -15,6 +16,7 @@ import {Contact} from '~src/models/redux/Contact'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
 import {TransactionRequest} from '~src/models/request/TransactionRequest'
+import {AccountPreCreatedDispatcher} from '~src/store/app/dispatchers/AccountPreCreatedDispatcher'
 import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
 import {ContactsDispatcher} from '~src/store/app/dispatchers/ContactsDispatcher'
 import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
@@ -38,9 +40,43 @@ export class AppReducer extends ReducerWrapper<
     WalletsDispatcher,
     AccountsDispatcher,
     ContactsDispatcher,
+    AccountPreCreatedDispatcher,
   ]
 
   readonly actions = {
+    createPreAccount: (): AsyncAction => {
+      return async (dispatch, getState) => {
+        const account = new Account()
+        const accountsPool = getState().app.accounts
+        account.idWallet = getState().wallet.id
+        const indexes = account
+          .getAccountsWithSameWallet(accountsPool)
+          .map((it) => it.index ?? 0)
+
+        const wallet = new Wallet()
+        wallet.id = getState().wallet.id
+        const index = indexes.length ? Math.max(...indexes) + 1 : 0
+
+        const neoAccount = (await wallet.generateNeoAccount(index)) as
+          | Account
+          | null
+          | undefined
+
+        dispatch(
+          this.commit('SET_PRE_ACCOUNT_CREATE', {preAccount: neoAccount})
+        )
+        if (neoAccount) {
+          await Storage.preAccount.save(plainToClass(Account, neoAccount))
+        }
+      }
+    },
+    syncPreAccount: (): AsyncAction<Account | null> => {
+      return async (dispatch, getState) => {
+        const preAccount = await Storage.preAccount.load()
+        dispatch(this.commit('SET_PRE_ACCOUNT_CREATE', {preAccount}))
+        return preAccount
+      }
+    },
     syncExchange: (): AsyncAction<Exchange> => {
       return async (dispatch, getState) => {
         const assets = Facade.app.assets.split(',')
@@ -156,7 +192,6 @@ export class AppReducer extends ReducerWrapper<
 
           return it
         })
-
         dispatch(this.commit('SET_WALLETS', {wallets}))
         await Storage.wallets.save(wallets)
       }
@@ -166,7 +201,7 @@ export class AppReducer extends ReducerWrapper<
       return async (dispatch, getState) => {
         const accounts = await Storage.accounts.load()
         const wallets = await Storage.wallets.load()
-
+        const preAccount = getState().app.preAccount
         // get the balance cache in order to avoid to recalculate
         const accountsTokenAssets = getState().app.accounts.map(
           (it) => it.tokenAssets

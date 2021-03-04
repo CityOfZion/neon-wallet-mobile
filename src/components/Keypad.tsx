@@ -37,12 +37,7 @@ const KeyComponent = (props: Props & {keyButton: Key}) => {
         />
 
         <LinearLayout position="absolute">
-          <TextView
-            marginBottom={Platform.OS === 'ios' ? -4 : 0}
-            color="text.0"
-            textAlign="center"
-            fontSize="36px"
-          >
+          <TextView color="text.0" textAlign="center" fontSize="36px">
             {props.keyButton.number}
           </TextView>
           {props.keyButton.text !== undefined ? (
