@@ -137,8 +137,8 @@
     "body_1": "This set of secret words make it easy to back up and restore your account. This makes your wallet really secure ",
     "label_2": "Confirm security phrase",
     "body_2": "It’s really important you remember your phrase correctly so we will help you with that. If you’re in a rush you can do it another time.",
-    "label_3": "Give your wallet a name and create a Passphrase",
-    "body_3": "Give your wallet a memorable name and passphrase and your ready to go!",
+    "label_3": "Give your wallet a name",
+    "body_3": "Give your wallet a memorable name and your ready to go!",
     "createWallet": "Create Wallet"
   },
   "step2CreateWallet": {
@@ -163,7 +163,7 @@
   },
   "step4CreateWallet": {
     "threeOfThree": "3 of 3",
-    "label_1": "Give your wallet a name and create a Passphrase",
+    "label_1": "Give your wallet a name",
     "body_1": "Give your wallet a memorable name, maybe it could be related to what you want to use the wallet for like “trading” or “investments”.",
     "label_walletName": "Wallet Name",
     "placeholder_walletName": "Please enter a name",

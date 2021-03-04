@@ -73,8 +73,8 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
 
   return (
     <ScreenLayout alignX={'center'}>
-      <LinearLayout mt={5} weight={1}>
-        <LinearLayout mb={6} width={'100%'}>
+      <LinearLayout mt={'15px'} weight={1} mr={'5px'} ml={'5px'}>
+        <LinearLayout mb={'15px'} width={'100%'}>
           <LinearLayout width={'100%'} orientation={'horiz'}>
             <TextView
               weight={1}
@@ -91,12 +91,11 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
             </TextView>
           </LinearLayout>
 
-          <TextView mb={6} color={'text.0'} fontSize={'lg'}>
+          <TextView mb={'25px'} color={'text.0'} fontSize={'lg'}>
             {Facade.t('step4CreateWallet.body_1')}
           </TextView>
 
           <ThemedInputText
-            mb={6}
             label={Facade.t('step4CreateWallet.label_walletName')}
             placeholder={Facade.t('step4CreateWallet.placeholder_walletName')}
             onChangeText={(value: string) => setWalletName(value)}
