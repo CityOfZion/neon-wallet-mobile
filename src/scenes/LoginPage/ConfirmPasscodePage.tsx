@@ -46,6 +46,10 @@ const ConfirmPasscodePage = (props: Props) => {
     setPasscode(passcode.concat(number))
   }
 
+  const deletePasscode = () => {
+    setPasscode([])
+  }
+
   const persist = async () => {
     await Facade.security.savePasscode(originalPasscode)
     dispatch(RootStore.settings.actions.setSecurity(Security.password))
@@ -68,6 +72,7 @@ const ConfirmPasscodePage = (props: Props) => {
       padding={16}
     >
       <PasscodeHeader
+        deletePasscode={deletePasscode}
         passcode={props.route.params.passcode}
         navigation={props.navigation}
       />
