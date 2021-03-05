@@ -20,7 +20,6 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import {TipCheckbox} from '~src/components/TipCheckbox'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import ThemedCheckBox from '~src/components/themed/ThemedCheckbox'
 import {NeoURI} from '~src/helpers/UriHelper'
 import {
   FasterPriority,
@@ -794,7 +793,7 @@ const SendTransactionInputModal = (prop: Props) => {
         <PriorityTab priority={priority} changePriority={changePriority} />
         <TipCheckbox
           gasAmount={gasAmount}
-          address={'AHznnriCRsUCWfN53gfNL2UYWVsbNzyXkA'}
+          address={'AVav2pJu9S5rpsLyne2iC4vG63ngqT7uv9'}
           fiat={Number(fiat)}
           label={Facade.t('modals.send.transactionInput.tipCheckboxLabel', {
             tipValue: tip ? tip.amount.toFixed(8) : '0',
@@ -802,6 +801,7 @@ const SendTransactionInputModal = (prop: Props) => {
           dispatchTip={setTip}
           mainAsset={token?.name}
           feeAmount={priority.fee}
+          navigation={prop.navigation}
         />
       </LinearLayout>
       <LinearLayout mb="58px" px="24px" alignSelf="center" width="100%">

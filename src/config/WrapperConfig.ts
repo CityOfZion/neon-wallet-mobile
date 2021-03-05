@@ -62,6 +62,7 @@ export class WrapperConfig {
     'SendTransactionInputModal',
     'SendTransactionReviewModal',
     'SendTransactionConfirmationModal',
+    'TipConfirmationModal',
     'Login',
     'LoginPage',
     'WalletContextModal',

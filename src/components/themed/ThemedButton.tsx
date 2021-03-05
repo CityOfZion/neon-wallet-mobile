@@ -21,6 +21,7 @@ interface Props {
     active?: boolean
   ) => void
   label?: string
+  subLabel?: string
   textColor?: string
   bgColor?: string
   srcIcon?: ImageLoadEventData
@@ -32,6 +33,7 @@ interface Props {
   basic?: boolean
   iconSize?: [number, number]
   fontSize?: number | string
+  subFontSize?: number | string
   fontFamily?: 'bold' | 'medium' | 'regular' | 'italic' | 'semibold' | 'light'
   contentStyle?: any
   borderThickness?: number | string
@@ -44,6 +46,7 @@ const LabelComponent = (props: Props) => {
   const width = Facade.scale(props.iconSize ? props.iconSize[0] : 20)
   const height = Facade.scale(props.iconSize ? props.iconSize[1] : 20)
   const fontSize = Facade.scale(props.fontSize ?? 22)
+  const subFontSize = Facade.scale(props.subFontSize ?? 18)
 
   return (
     <LinearLayout orientation={'horiz'} alignItems={'center'}>
@@ -58,17 +61,31 @@ const LabelComponent = (props: Props) => {
       )}
 
       {Boolean(props.label) && (
-        <LabelView
-          mt={'2px'}
-          color={props.textColor}
-          fontSize={fontSize}
-          fontFamily={props.fontFamily ?? (props.flat ? 'bold' : 'regular')}
-          allowFontScaling={true}
-          adjustsFontSizeToFit={true}
-          numberOfLines={1}
-        >
-          {props.label}
-        </LabelView>
+        <LinearLayout mt={'2px'} orientation="horiz" alignItems={'baseline'}>
+          <LabelView
+            color={props.textColor}
+            fontSize={fontSize}
+            fontFamily={props.fontFamily ?? (props.flat ? 'bold' : 'regular')}
+            allowFontScaling={true}
+            adjustsFontSizeToFit={true}
+            numberOfLines={1}
+          >
+            {props.label}
+          </LabelView>
+          {Boolean(props.subLabel) && (
+            <LabelView
+              ml={3}
+              color={props.textColor}
+              fontSize={subFontSize}
+              fontFamily={props.fontFamily ?? (props.flat ? 'bold' : 'regular')}
+              allowFontScaling={true}
+              adjustsFontSizeToFit={true}
+              numberOfLines={1}
+            >
+              {props.subLabel}
+            </LabelView>
+          )}
+        </LinearLayout>
       )}
     </LinearLayout>
   )
