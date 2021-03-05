@@ -9,9 +9,9 @@ import {Lang} from '~src/enums/Lang'
 import {NeoURI} from '~src/helpers/UriHelper'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
+import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {Exchange} from '~src/types/exchange'
-import {RootStore} from '~src/store/RootStore'
 interface Props extends LinearLayoutProps {
   tokenAssets: TokenAsset[]
   fromAccountView: boolean
@@ -196,9 +196,12 @@ const BalanceList = (props: Props) => {
   delete innerProps.fromAccountView
   delete innerProps.account
 
-  
   const zeroBalanceFilter = (token: TokenAsset) => {
-    if(token.symbol === 'NEO' || token.symbol === 'GAS' || token.amount !== 0){
+    if (
+      token.symbol === 'NEO' ||
+      token.symbol === 'GAS' ||
+      token.amount !== 0
+    ) {
       return token
     }
   }
@@ -221,7 +224,11 @@ const BalanceList = (props: Props) => {
             {Facade.t('components.balanceList.title')}
           </TextView>
           <FlatList<TokenAsset>
-            data={props.zeroBalance ? props.tokenAssets.filter(zeroBalanceFilter) : props.tokenAssets}
+            data={
+              props.zeroBalance
+                ? props.tokenAssets.filter(zeroBalanceFilter)
+                : props.tokenAssets
+            }
             keyExtractor={(item) => item.symbol}
             ItemSeparatorComponent={() => (
               <LinearLayout bg="text.2" height={1} />
