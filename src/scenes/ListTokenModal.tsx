@@ -119,13 +119,15 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
       const newTokenList: TokenAsset[] = []
 
       tokens.forEach((token) => {
-        const tokenFromAccount = account.tokenAssets.find(
-          (it) => it.hash === token.hash
-        )
-        if (tokenFromAccount) {
-          newTokenList.push(tokenFromAccount)
-        } else {
-          newTokenList.push(token)
+        if (token.name !== '\u0000') {
+          const tokenFromAccount = account.tokenAssets.find(
+            (it) => it.hash === token.hash
+          )
+          if (tokenFromAccount) {
+            newTokenList.push(tokenFromAccount)
+          } else {
+            newTokenList.push(token)
+          }
         }
       })
       setTokenList(newTokenList)
