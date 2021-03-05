@@ -1,6 +1,6 @@
 import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import {ScrollView} from 'react-native'
 import ViewShot from 'react-native-view-shot'
 import {useSelector} from 'react-redux'
@@ -15,6 +15,7 @@ import SwiperPanel, {
   PANEL_OFFSET,
   useSwiperController,
 } from '~src/components/SwiperPanel'
+import {Loader} from '~src/components/loader/loader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {TokenAsset} from '~src/models/TokenAsset'
@@ -22,7 +23,6 @@ import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-
 export interface ReceiveQrCodeModalParams {
   wallet: Wallet
   account: Account
@@ -64,12 +64,6 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
     reference
   )
 
-  const renderQr = async () => {
-    await Facade.utils.sleep(1000)
-    setShowQr(true)
-  }
-
-  Facade.await.run('renderQr', renderQr)
   const qrCodeView = useRef<ViewShot>(null)
   const captureAndNavigate = async () => {
     const uri = await qrCodeView.current?.capture?.()
@@ -78,6 +72,15 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
       address: account.address ?? '',
     })
   }
+
+  const renderQr = async () => {
+    await Facade.utils.sleep(1000)
+    setShowQr(true)
+  }
+
+  useEffect(() => {
+    Facade.await.run('renderQr', renderQr)
+  }, [])
   return (
     <SwiperPanel
       controller={controller}
@@ -89,14 +92,14 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
       smallerSize={true}
     >
       <LinearLayout mt="43px" height="100%" alignItems="center">
-        <AwaitActivity name={'renderQr'}>
-          <LinearLayout width={buttonWidth} height={buttonWidth}>
-            {showQr ? (
+        <AwaitActivity name={'renderQr'} loadingView={<Loader />}>
+          {showQr ? (
+            <LinearLayout width={buttonWidth} height={buttonWidth}>
               <ViewShot ref={qrCodeView}>
                 <NeonQRCode content={qrCodeContent} qrCodeWidth={buttonWidth} />
               </ViewShot>
-            ) : undefined}
-          </LinearLayout>
+            </LinearLayout>
+          ) : undefined}
         </AwaitActivity>
         <LinearLayout width={buttonWidth} height={54} mt={34}>
           <ThemedButton
