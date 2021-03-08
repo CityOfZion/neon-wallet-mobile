@@ -7,7 +7,10 @@ import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import SelectorList, {SelectorItem} from '~src/components/SelectorList'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import SwiperPanel, {
+  CloseButton,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {Lang} from '~src/enums/Lang'
@@ -47,14 +50,15 @@ const TipConfirmationModal = (props: Props) => {
       controller={controller}
       title={Facade.t('modals.tipping.title')}
       fullSize={true}
-      padding={24}
+      padding={16}
       onClose={setAndClose}
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
+      rightButton={<CloseButton mr={'20px'} />}
       onRightPress={controller.close}
+      solidColorBG={true}
     >
       <LinearLayout height="100%" orientation="verti">
         <ImageView
-          mt="48px"
+          mt="24px"
           resizeMode="center"
           source={require('~/src/assets/images/neo-tipping-logo.png')}
           alignSelf={'center'}
