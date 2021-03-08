@@ -29,8 +29,28 @@ export const PasscodeHeader = (props: {
   deletePasscode?: () => void
 }) => {
   return (
-    <LinearLayout mt={32} mb={68} orientation="horiz">
-      <LinearLayout flex={1} />
+    <LinearLayout mt={32} mb={68} orientation="horiz" justifyContent="center">
+      <LinearLayout flex={1} alignItems="flex-start" justifyContent="center">
+        <TouchableWithoutFeedback onPress={props.navigation.goBack}>
+          <LinearLayout orientation={'horiz'} alignItems={'center'}>
+            <ImageView
+              ml={1}
+              mr={3}
+              source={require('~src/assets/images/icon_arrow_left_white.png')}
+            />
+
+            <TextView
+              fontSize={16}
+              color={'text.0'}
+              style={{
+                includeFontPadding: false,
+              }}
+            >
+              {Facade.t('app.back')}
+            </TextView>
+          </LinearLayout>
+        </TouchableWithoutFeedback>
+      </LinearLayout>
       <ImageView source={require('~/src/assets/images/icon-lock.png')} />
       <LinearLayout flex={1} alignItems="flex-end" justifyContent="center">
         <TouchableWithoutFeedback
