@@ -7,7 +7,10 @@ import {useDispatch, useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import SelectorList, {SelectorItem} from '~src/components/SelectorList'
-import SwiperPanel, {CloseButton, useSwiperController} from '~src/components/SwiperPanel'
+import SwiperPanel, {
+  CloseButton,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {Lang} from '~src/enums/Lang'
