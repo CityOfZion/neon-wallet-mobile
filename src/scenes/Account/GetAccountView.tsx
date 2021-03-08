@@ -449,7 +449,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
             name={`ClaimGas@${account.address}`}
             loadingView={<ClaimGasLoader />}
           >
-            <ThemedClaimButton onPress={claimGas}>
+            <ThemedClaimButton
+              onPress={claimGas}
+              isClaimAvailable={isClaimAvailable()}
+            >
               <TextView
                 color={isClaimAvailable() ? 'primary' : 'text.2'}
                 opacity={isClaimAvailable() ? 1 : 0.6}
