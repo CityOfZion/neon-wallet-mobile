@@ -10,8 +10,6 @@ import SwiperPanel, {
   PANEL_OFFSET,
   useSwiperController,
 } from '~src/components/SwiperPanel'
-import ThemedButton from '~src/components/themed/ThemedButton'
-import ThemedCheckbox from '~src/components/themed/ThemedCheckbox'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {ThemedFlatButton} from '~src/components/themed/ThemedFlatButton'
 import {RootStackParamList} from '~src/navigation/AppNavigation'

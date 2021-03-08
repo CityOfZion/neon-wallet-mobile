@@ -1,8 +1,15 @@
+import {useNavigation} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack/lib/typescript/src/types'
 import PropTypes from 'prop-types'
 import React, {useState, useEffect} from 'react'
+import {TouchableWithoutFeedback, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
+import {Facade} from '~src/app/Facade'
 import ThemedCheckBox from '~src/components/themed/ThemedCheckbox'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
+import styled from '~src/styles/styled-components'
 
 interface ITipCheckbox {
   label: string
@@ -15,6 +22,7 @@ interface ITipCheckbox {
   address: string
   mainAsset?: string
   feeAmount?: number
+  navigation: StackNavigationProp<ModalStackParamList & SendModalStackParamList>
 }
 
 export const TipCheckbox: React.FC<ITipCheckbox> = ({
@@ -26,11 +34,13 @@ export const TipCheckbox: React.FC<ITipCheckbox> = ({
   mainAsset,
   feeAmount,
   dispatchTip,
+  navigation,
 }) => {
   const [visible, setVisible] = useState(false)
   const [tip, setTip] = useState<{amount: number; address: string} | undefined>(
     undefined
   )
+  const [checked, setChecked] = useState<boolean>(true)
 
   const {exchange} = useSelector((state: RootState) => state.app)
   const {currency} = useSelector((state: RootState) => state.settings)
@@ -50,14 +60,37 @@ export const TipCheckbox: React.FC<ITipCheckbox> = ({
   }
   const calcTip = (checked: boolean) => {
     if (!checked) {
-      setTip(undefined)
+      uncheckTip()
     } else {
-      const tipValue = (fiat / 100) * (percentage ?? 0.1)
-      if (tip === undefined) {
-        setTip({address, amount: tipValue})
-      } else if (tip) {
-        tip.amount !== tipValue && setTip({address, amount: tipValue})
-      }
+      checkTip()
+    }
+  }
+
+  const uncheckTip = () => {
+    setTip(undefined)
+  }
+
+  const checkTip = () => {
+    const tipValue = (fiat / 100) * (percentage ?? 0.1)
+    if (tip === undefined) {
+      setTip({address, amount: tipValue})
+    } else if (tip) {
+      tip.amount !== tipValue && setTip({address, amount: tipValue})
+    }
+  }
+
+  const openTipModal = () => {
+    if (checked) {
+      navigation.navigate(Facade.route.Modal.name, {
+        screen: Facade.route.TipConfirmationModal.name,
+        params: {
+          callback: (value: boolean) => {
+            setChecked(value)
+          },
+        },
+      })
+    } else {
+      setChecked(true)
     }
   }
   useEffect(() => {
@@ -66,11 +99,17 @@ export const TipCheckbox: React.FC<ITipCheckbox> = ({
   useEffect(() => {
     dispatchTip(tip)
   }, [tip])
+  useEffect(() => {
+    if (visible) {
+      calcTip(checked)
+    }
+  }, [checked, visible])
   return visible ? (
     <ThemedCheckBox
       label={label}
-      onChange={(check) => {
-        calcTip(check)
+      checked={checked}
+      onClick={() => {
+        openTipModal()
       }}
       labelStyle={{
         color: 'primary',
@@ -93,4 +132,5 @@ TipCheckbox.propTypes = {
   mainAsset: PropTypes.string,
   feeAmount: PropTypes.number,
   dispatchTip: PropTypes.func.isRequired,
+  navigation: PropTypes.any.isRequired,
 }

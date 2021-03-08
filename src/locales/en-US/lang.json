@@ -508,6 +508,14 @@
     "changelog": {
       "title": "Changelog",
       "goBack": "Go Back"
+    },
+    "tipping":  {
+      "title": "Tipping",
+      "subtitle": "Benefits of tipping",
+      "description": "At magnum periculum adiit in quo minus id, quod omnium philosophorum sententia tale. Si sine causa? quae fuerit causa, mox videro; interea hoc tenebo, si mihi.",
+      "keepTip": "Keep Tip",
+      "recommended": "(Recommended)",
+      "removeTip": "Remove Tip"
     }
   },
   "components": {

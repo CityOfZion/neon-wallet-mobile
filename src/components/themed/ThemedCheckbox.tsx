@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {NativeSyntheticEvent, NativeTouchEvent} from 'react-native'
 
 import styled, {
@@ -9,10 +9,8 @@ import styled, {
 } from '~src/styles/styled-components'
 
 interface Props {
-  onChange?: (
-    checked: boolean,
-    e: NativeSyntheticEvent<NativeTouchEvent>
-  ) => void
+  onChange?: (checked: boolean) => void
+  onClick?: () => void
   checked?: boolean
   label: string
   singleRow?: boolean
@@ -28,12 +26,14 @@ interface Props {
 const ThemedCheckbox: React.FC<Props> = (props) => {
   const [value, setValue] = useState<boolean>(props.checked ?? false)
 
-  const onChangeEvent = (e: NativeSyntheticEvent<NativeTouchEvent>) => {
-    setValue(!value)
-    if (props.onChange) props.onChange(!value, e)
-  }
+  useEffect(() => {
+    if (value !== props.checked) {
+      setValue(props.checked ?? false)
+      props.onChange?.(value)
+    }
+  }, [props.checked])
   return (
-    <CheckboxView style={{width: '90%'}} onPress={onChangeEvent}>
+    <CheckboxView style={{width: '90%'}} onPress={props?.onClick}>
       <CheckboxContentView
         orientation={'horiz'}
         alignItems={'center'}
@@ -81,6 +81,7 @@ const ThemedCheckbox: React.FC<Props> = (props) => {
 
 ThemedCheckbox.propTypes = {
   onChange: PropTypes.func,
+  onClick: PropTypes.func,
   checked: PropTypes.bool,
   label: PropTypes.string.isRequired,
   singleRow: PropTypes.bool,

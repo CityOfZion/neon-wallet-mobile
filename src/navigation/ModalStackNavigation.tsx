@@ -47,6 +47,9 @@ import ListTokenModal, {ListTokenModalParams} from '~src/scenes/ListTokenModal'
 import NetworkPickerModal from '~src/scenes/NetworkPickerModal'
 import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
+import TipConfirmationModal, {
+  TipConfirmationModalParams,
+} from '~src/scenes/TipConfirmationModal'
 import {
   TransactionDetails,
   TransactionDetailsParams,
@@ -97,6 +100,7 @@ export type ModalStackParamList = {
   Modal: object
   VerifyPasscode: VerifyPasscodePageParams
   ChangelogModal: ChangelogModalParams
+  TipConfirmationModal: TipConfirmationModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -228,6 +232,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={Facade.route.SecurityModal.name}
           component={SecurityPickerModal}
+        />
+        <ModalStack.Screen
+          name={Facade.route.TipConfirmationModal.name}
+          component={TipConfirmationModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>
