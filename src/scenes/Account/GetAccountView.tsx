@@ -334,6 +334,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         fromAccountView={true}
         fromListWalletView={false}
         fromSendAccountSelectionModal={false}
+        zeroBalance={true}
       />
     )
   }
