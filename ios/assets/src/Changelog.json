@@ -1,6 +1,17 @@
 {
     "changelog": [
     	{
+            "version": "V1.0.15-40",
+            "date": "March 09 2021",
+            "changes": [
+                "- Bug fixes",
+                "- Change layouts",
+                "- New feature tip screen",
+                "- New feature fixes token NEO/GAS",
+                "- Change Removal of wallet-level password protection (via entropy)"	 
+            ]
+        },
+    	{
             "version": "V1.0.15-39",
             "date": "February 24 2021",
             "changes": [
