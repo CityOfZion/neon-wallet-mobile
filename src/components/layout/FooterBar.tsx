@@ -56,7 +56,7 @@ const TabButton = (props: BottomTabBarProps & TabButtonProps) => {
         resizeMode="cover"
         mx="auto"
         mt="auto"
-        mb="10px"
+        mb="13px"
         source={
           props.state.routes[props.state.index].name === props.button.route.name
             ? props.button.enabledSource
