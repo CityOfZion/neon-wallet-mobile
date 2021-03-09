@@ -75,6 +75,7 @@ const ThemedSendButton: React.FC<Props> = (props) => {
                 ? ['#41515b', '#28333b']
                 : ['#313e46', '#20292f']
             }
+            style={{borderRadius: 7}}
           >
             <LinearLayout
               width="100%"

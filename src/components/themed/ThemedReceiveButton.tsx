@@ -25,12 +25,7 @@ const ThemedReceiveButton: React.FC<Props> = (props) => {
       width: 71,
       height: 45,
       borderRadius: 7,
-      shadowColor: '#464d53',
-      shadowOffset: {
-        width: 12,
-        height: 12,
-      },
-      shadowRadius: 7,
+
       elevation: 30,
     },
   })
@@ -65,6 +60,7 @@ const ThemedReceiveButton: React.FC<Props> = (props) => {
             overflow="hidden"
             justifyContent={'center'}
             colors={['#41515b', '#28333b']}
+            style={{borderRadius: 7}}
           >
             <LinearLayout
               width="100%"
