@@ -59,6 +59,7 @@ const TipConfirmationModal = (props: Props) => {
       <LinearLayout height="100%" orientation="verti">
         <ImageView
           mt="24px"
+          mr="-76px" // Negative margin because the original image has a shadow offset to the right
           resizeMode="center"
           source={require('~/src/assets/images/neo-tipping-logo.png')}
           alignSelf={'center'}
