@@ -355,7 +355,7 @@
         "save": "Save"
       },
       "deleteAccount": "Delete Account",
-      "deleteAccountSubtitle": "Tum dicere exorsus est et dolore magnam aliquam quaerat voluptatem.",
+      "deleteAccountSubtitle": "This will remove your account and its transaction history.",
       "deleteButtom": "Delete account",
       "deleteAccountAlert": "Are you sure you want to delete this account?"
     },
