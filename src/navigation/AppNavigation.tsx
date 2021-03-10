@@ -59,6 +59,8 @@ const AppNavigation = (props: Props) => {
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
+  const [hasInit, setInit] = useState(false)
+
   const startApplication = async () => {
     const onboardingSeen = await Storage.onboardingSeen.load()
     const welcomeToNWSeen = await Storage.welcomeToNWSeen.load()
@@ -78,24 +80,28 @@ const AppNavigation = (props: Props) => {
 
     // Synchronize app reducer
     await Sync.init(dispatchAsync)
+
+    setInit(true)
   }
 
   useEffect(() => {
-    Facade.await.run('application', startApplication, 1000)
+    if (hasInit) {
+      let interactionPromise = InteractionManager.runAfterInteractions()
 
-    let interactionPromise = InteractionManager.runAfterInteractions()
+      const interval = setInterval(() => {
+        interactionPromise = InteractionManager.runAfterInteractions(() => {
+          Facade.await.run('refreshData', () => Sync.refresh(dispatchAsync))
+        })
+      }, Facade.app.defaultDataRefreshTimeInMilliseconds)
 
-    const interval = setInterval(() => {
-      interactionPromise = InteractionManager.runAfterInteractions(() => {
-        Facade.await.run('refreshData', () => Sync.refresh(dispatchAsync))
-      })
-    }, Facade.app.defaultDataRefreshTimeInMilliseconds)
-
-    return () => {
-      interactionPromise.cancel()
-      clearInterval(interval)
+      return () => {
+        interactionPromise.cancel()
+        clearInterval(interval)
+      }
+    } else {
+      Facade.await.run('application', startApplication, 1000)
     }
-  }, [])
+  }, [hasInit])
 
   return (
     <>
