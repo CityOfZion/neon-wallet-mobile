@@ -21,6 +21,7 @@ interface Props extends LinearLayoutProps {
   account?: Account
   uri?: NeoURI
   zeroBalance?: boolean
+  hideEmptyMessage?: boolean
 }
 
 interface ItemProps {
@@ -254,6 +255,8 @@ const BalanceList = (props: Props) => {
             )}
           />
         </>
+      ) : props.hideEmptyMessage ? (
+        <View />
       ) : (
         <TextView my="32px" color="text.0" fontSize="18px" textAlign="center">
           {Facade.t('components.balanceList.empty')}

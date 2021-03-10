@@ -1,9 +1,10 @@
 import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import React, {useEffect, useState} from 'react'
-import {ScrollView} from 'react-native'
+import {ScrollView, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
+import {TokenAsset} from '~/src/models/TokenAsset'
 import {ReceiveModalStackParamList} from '~/src/navigation/ReceiveModalStackNavigation'
 import {Facade} from '~src/app/Facade'
 import BalanceList from '~src/components/BalanceList'
@@ -49,6 +50,18 @@ const ReceiveAccountSelectionModal = (props: Props) => {
     const accounts = wallet.getAccounts(accountsPool)
     setAccounts(accounts)
     setSelectedAccount(accounts[0])
+  }
+
+  const showListTokenAssets = (tokenAssets: TokenAsset[] | undefined) => {
+    let show = false
+    if (tokenAssets) {
+      tokenAssets.forEach((token) => {
+        if (token.amount > 0) {
+          show = true
+        }
+      })
+    }
+    return show
   }
   return show ? (
     <LinearLayout height={'100%'}>
@@ -97,19 +110,27 @@ const ReceiveAccountSelectionModal = (props: Props) => {
             />
           </LinearLayout>
 
-          <TextView
-            mb={4}
-            color={'text.2'}
-            fontSize={'14px'}
-            fontFamily={'medium'}
-            textAlign={'center'}
-          >
-            {Facade.t('modals.send.accountSelection.label')}
-          </TextView>
+          {showListTokenAssets(selectedAccount?.tokenAssets) ? (
+            <TextView
+              mb={4}
+              color={'text.2'}
+              fontSize={'14px'}
+              fontFamily={'medium'}
+              textAlign={'center'}
+            >
+              {Facade.t(
+                'modals.receive.accountSelection.tokensValue'
+              ).toUpperCase()}
+            </TextView>
+          ) : (
+            <View />
+          )}
 
           {selectedAccount && (
             <LinearLayout width={'100%'} mb={6}>
               <BalanceList
+                hideEmptyMessage={true}
+                zeroBalance={false}
                 tokenAssets={selectedAccount.tokenAssets}
                 fromAccountView={false}
                 fromListWalletView={false}

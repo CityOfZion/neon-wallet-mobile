@@ -443,7 +443,8 @@
         "subtitle": "Please select a wallet to receive to"
       },
       "accountSelection": {
-        "subtitle": "Please select an account to receive to"
+        "subtitle": "Please select an account to receive to",
+        "tokensValue": "Account Name Tokens Value"
       },
       "toAccount": {
         "yourAddress": "Your Address",
