@@ -126,19 +126,17 @@ const ReceiveAccountSelectionModal = (props: Props) => {
             <View />
           )}
 
-          {showListTokenAssets(selectedAccount?.tokenAssets) ? (
-            selectedAccount && (
-              <LinearLayout width={'100%'} mb={6}>
-                <BalanceList
-                  tokenAssets={selectedAccount.tokenAssets}
-                  fromAccountView={false}
-                  fromListWalletView={false}
-                  fromSendAccountSelectionModal={false}
-                />
-              </LinearLayout>
-            )
-          ) : (
-            <View />
+          {selectedAccount && (
+            <LinearLayout width={'100%'} mb={6}>
+              <BalanceList
+                hideEmptyMessage={true}
+                zeroBalance={false}
+                tokenAssets={selectedAccount.tokenAssets}
+                fromAccountView={false}
+                fromListWalletView={false}
+                fromSendAccountSelectionModal={false}
+              />
+            </LinearLayout>
           )}
         </LinearLayout>
       </ScrollView>
