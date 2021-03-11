@@ -19,6 +19,7 @@ import {Storage} from '~src/app/Storage'
 import {Sync} from '~src/app/Sync'
 import LoadingOverlay from '~src/components/LoadingOverlay'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
+import {DeepLinkingConfig} from '~src/config/DeepLinkingConfig'
 import ModalStackNavigation, {
   ModalParams,
 } from '~src/navigation/ModalStackNavigation'
@@ -29,7 +30,6 @@ import TabNavigation, {
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 import QRCodeScan, {QRCodeScanParams} from '~src/scenes/QRCodeScan'
-import {RootStore} from '~src/store/RootStore'
 
 export type RootStackParamList = {
   Tab: TabParams
@@ -45,6 +45,8 @@ interface Props {
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()
+
+const deepLinking = new DeepLinkingConfig()
 
 const AppNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => {
@@ -109,24 +111,18 @@ const AppNavigation = (props: Props) => {
       Facade.await.run('application', startApplication, 1000)
     }
   }, [hasInit])
-  const linking: LinkingOptions = {
-    prefixes: ['neonwallet://app'],
-    config: {
-      screens: {
-        Tab: linkingTab,
-        [Facade.route.Onboarding.name]: Facade.route.Onboarding.name,
-        [Facade.route.QRCodeScan.name]: Facade.route.QRCodeScan.name,
-        [Facade.route.Login.name]: Facade.route.Login.name,
-        [Facade.route.PasscodeStack.name]: Facade.route.PasscodeStack.name,
-        [Facade.route.Modal.name]: Facade.route.Modal.name,
-      },
-      initialRouteName: onboardingSeen
-        ? hasAuthentication || welcomeToNWSeen
-          ? Facade.route.Tab.name
-          : Facade.route.Login.name
-        : Facade.route.Onboarding.name,
-    },
+
+  const getInitialRouteName = () => {
+    return onboardingSeen
+      ? hasAuthentication || welcomeToNWSeen
+        ? Facade.route.Tab.name
+        : Facade.route.Login.name
+      : Facade.route.Onboarding.name
   }
+
+  deepLinking.setInitialRoute(getInitialRouteName())
+
+  const linking = deepLinking.getLinkingConfig()
   return (
     <>
       <>
@@ -137,13 +133,7 @@ const AppNavigation = (props: Props) => {
             )}
             <ThemeProvider theme={theme}>
               <RootStack.Navigator
-                initialRouteName={
-                  onboardingSeen
-                    ? hasAuthentication || welcomeToNWSeen
-                      ? Facade.route.Tab.name
-                      : Facade.route.Login.name
-                    : Facade.route.Onboarding.name
-                }
+                initialRouteName={getInitialRouteName()}
                 headerMode="none"
                 screenOptions={Facade.config.screen}
               >
