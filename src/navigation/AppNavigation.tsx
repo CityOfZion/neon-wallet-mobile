@@ -1,4 +1,8 @@
-import {NavigationContainer, RouteProp} from '@react-navigation/native'
+import {
+  NavigationContainer,
+  RouteProp,
+  LinkingOptions,
+} from '@react-navigation/native'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useState} from 'react'
 import {InteractionManager} from 'react-native'
@@ -18,7 +22,10 @@ import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ModalStackNavigation, {
   ModalParams,
 } from '~src/navigation/ModalStackNavigation'
-import TabNavigation, {TabParams} from '~src/navigation/TabNavigation'
+import TabNavigation, {
+  TabParams,
+  linkingTab,
+} from '~src/navigation/TabNavigation'
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 import QRCodeScan, {QRCodeScanParams} from '~src/scenes/QRCodeScan'
@@ -102,12 +109,29 @@ const AppNavigation = (props: Props) => {
       Facade.await.run('application', startApplication, 1000)
     }
   }, [hasInit])
-
+  const linking: LinkingOptions = {
+    prefixes: ['neonwallet://app'],
+    config: {
+      screens: {
+        Tab: linkingTab,
+        [Facade.route.Onboarding.name]: Facade.route.Onboarding.name,
+        [Facade.route.QRCodeScan.name]: Facade.route.QRCodeScan.name,
+        [Facade.route.Login.name]: Facade.route.Login.name,
+        [Facade.route.PasscodeStack.name]: Facade.route.PasscodeStack.name,
+        [Facade.route.Modal.name]: Facade.route.Modal.name,
+      },
+      initialRouteName: onboardingSeen
+        ? hasAuthentication || welcomeToNWSeen
+          ? Facade.route.Tab.name
+          : Facade.route.Login.name
+        : Facade.route.Onboarding.name,
+    },
+  }
   return (
     <>
       <>
         <AwaitActivity name={'application'} loadingView={<ScreenLoader />}>
-          <NavigationContainer>
+          <NavigationContainer linking={linking}>
             {isLoading && (
               <LoadingOverlay progress={progress} loadingText={loadingText} />
             )}
