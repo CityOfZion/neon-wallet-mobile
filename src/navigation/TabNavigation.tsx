@@ -1,5 +1,5 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
-import {RouteProp, PathConfig} from '@react-navigation/native'
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useEffect, useState} from 'react'
 import {StatusBar} from 'react-native'
@@ -50,17 +50,6 @@ interface Props {
 }
 
 const Tab = createBottomTabNavigator()
-
-export const linkingTab: PathConfig = {
-  path: 'Tab',
-  screens: {
-    [Facade.route.ListWallets.name]: Facade.route.ListWallets.name,
-    [Facade.route.Contacts.name]: Facade.route.Contacts.name,
-    [Facade.route.QuickTools.name]: Facade.route.QuickTools.name,
-    [Facade.route.Settings.name]: Facade.route.Settings.name,
-    [Facade.route.More.name]: Facade.route.More.name,
-  },
-}
 
 const TabNavigation = (props: Props) => {
   const currentNumberOfVersions = Object.keys(data.changelog).length
