@@ -5,6 +5,7 @@ import {
   StyleSheet,
   GestureResponderEvent,
   View,
+  Platform,
 } from 'react-native'
 
 import {
@@ -19,6 +20,11 @@ interface Props {
 }
 
 const ThemedClaimButton: React.FC<Props> = (props) => {
+  const gradientButton =
+    Platform.OS === 'android'
+      ? ['#464c52', '#1c2329']
+      : ['#1c232999', '#464c52BB']
+  const gradientEnd = [0.1, 0.8]
   const styles = StyleSheet.create({
     dropShadow: {
       alignItems: 'center',
@@ -36,7 +42,10 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
     },
   })
   return (
-    <TouchableWithoutFeedback onPress={props.onPress}>
+    <TouchableWithoutFeedback
+      onPress={props.onPress}
+      style={{borderWidth: 2, borderColor: '#f00'}}
+    >
       <View style={styles.dropShadow}>
         <RelativeLayout
           width={'100%'}
@@ -55,8 +64,8 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
             <LinearGradientLayout
               width="100%"
               height="100%"
-              colors={['#464c52', '#1c2329']}
-              end={[0.1, 0.8]}
+              colors={gradientButton}
+              end={gradientEnd}
             />
           </LinearLayout>
           <LinearGradientLayout
@@ -70,6 +79,7 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
                 ? ['#41515b', '#28333b']
                 : ['#313e46', '#20292f']
             }
+            style={{borderRadius: 7}}
           >
             <LinearLayout
               width="100%"
