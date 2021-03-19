@@ -65,7 +65,7 @@ const MorePage = (props: MoreProps) => {
         iconMarginLeft={1}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
-          props.navigation.navigate(Facade.route.ImportKey.name)
+          props.navigation.navigate(Facade.route.ImportKey.name, {})
         }}
       />
       <MenuItem

@@ -23,10 +23,7 @@ import {DeepLinkingConfig} from '~src/config/DeepLinkingConfig'
 import ModalStackNavigation, {
   ModalParams,
 } from '~src/navigation/ModalStackNavigation'
-import TabNavigation, {
-  TabParams,
-  linkingTab,
-} from '~src/navigation/TabNavigation'
+import TabNavigation, {TabParams} from '~src/navigation/TabNavigation'
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 import QRCodeScan, {QRCodeScanParams} from '~src/scenes/QRCodeScan'
