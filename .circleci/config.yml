@@ -105,8 +105,8 @@ workflows:
     jobs:
       - node
       - test:
-          - requires:
-              - node
+          requires:
+            - node
       - deploy:
           requires:
             - test
