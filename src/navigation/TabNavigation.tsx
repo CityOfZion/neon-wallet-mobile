@@ -51,17 +51,6 @@ interface Props {
 
 const Tab = createBottomTabNavigator()
 
-export const linkingTab: PathConfig = {
-  path: 'Tab',
-  screens: {
-    [Facade.route.ListWallets.name]: Facade.route.ListWallets.name,
-    [Facade.route.Contacts.name]: Facade.route.Contacts.name,
-    [Facade.route.QuickTools.name]: Facade.route.QuickTools.name,
-    [Facade.route.Settings.name]: Facade.route.Settings.name,
-    [Facade.route.More.name]: Facade.route.More.name,
-  },
-}
-
 const TabNavigation = (props: Props) => {
   const currentNumberOfVersions = Object.keys(data.changelog).length
   const welcomeHiddenStorage = props.route.params?.welcomeHidden ?? false
