@@ -21,12 +21,15 @@ platform :android do
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
     releaseFilePath = File.join(Dir.pwd, "..", "./neon.jks")
-    store_password = prompt(text: "Signing Store Password: ")
-    key_password = prompt(text: "Signing Key Password: ")
-    key_alias = prompt(text: "Signing Key Alias: ")
+    store_password = ENV['ANDROID_STORE_PASS']
+    key_password = ENV['ANDROID_KEY_PASS']
+    key_alias = ENV['ANDROID_KEY_ALIAS']
     gradle(task: 'clean')
     android_set_version_code(
       gradle_file: "app/build.gradle" # optional
+    )
+    gradle(
+      task: 'bundleReleaseJsAndAssets',
     )
     gradle(
       task: 'assemble',
