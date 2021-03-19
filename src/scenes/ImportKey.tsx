@@ -1,6 +1,7 @@
 import {wallet} from '@cityofzion/neon-core'
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Alert} from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -13,6 +14,7 @@ import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface ImportKeyProps {
   navigation: StackNavigationProp<MoreStackParamList>
+  route: RouteProp<MoreStackParamList, 'ImportKey'>
 }
 
 const validator = (text: string) =>
@@ -24,7 +26,11 @@ const ImportKey = (props: ImportKeyProps) => {
   )
   const accounts = useSelector((state: RootState) => state.app.accounts)
 
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState(
+    props.route.params && props.route.params.address
+      ? props.route.params.address
+      : ''
+  )
   const inputIsValid = validator(inputValue)
 
   const onNext = async () => {

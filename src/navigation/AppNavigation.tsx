@@ -127,7 +127,7 @@ const AppNavigation = (props: Props) => {
     <>
       <>
         <AwaitActivity name={'application'} loadingView={<ScreenLoader />}>
-          <NavigationContainer linking={linking}>
+          <NavigationContainer linking={linking} fallback={<ScreenLoader />}>
             {isLoading && (
               <LoadingOverlay progress={progress} loadingText={loadingText} />
             )}

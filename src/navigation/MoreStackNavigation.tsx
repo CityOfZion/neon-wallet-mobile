@@ -45,7 +45,7 @@ export type MoreStackParamList = {
   Step3CreateWallet: HeaderActionButtonProps
   Step4CreateWallet: undefined
   Step5CreateWallet: undefined
-  ImportKey: undefined
+  ImportKey: {address?: string}
   ImportReadAccount: ImportReadAccountParams
   Passphrase: PassphraseParams
   CustomizeAccount: CustomizeAccountParams
