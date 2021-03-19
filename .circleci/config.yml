@@ -5,6 +5,7 @@ jobs:
     docker:
       - image: circleci/node:10.16.3
     steps:
+      - checkout
       - attach_workspace:
           at: ~/neon-wallet-mobile
       - run:
@@ -57,6 +58,7 @@ jobs:
       JAVA_OPTS: '-Xms512m -Xmx2g'
       GRADLE_OPTS: '-Xmx3g -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx2g -XX:+HeapDumpOnOutOfMemoryError"'
     steps:
+      - checkout
       - attach_workspace:
           at: ~/neon-wallet-mobile
 
