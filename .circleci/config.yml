@@ -48,7 +48,7 @@ jobs:
           paths:
             - node_modules
 
-  build:
+  deploy:
     docker:
       - image: circleci/android:api-29-node
     working_directory: ~/neon-wallet-mobile/android
