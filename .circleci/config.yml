@@ -69,7 +69,6 @@ jobs:
           key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
           paths:
             - vendor/bundle
-            -
 
       - run:
           name: Setting ANDROID_KEY_JSON
