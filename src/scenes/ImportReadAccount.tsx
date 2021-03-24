@@ -26,17 +26,13 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
     (state: RootState) => Facade.theme[state.settings.theme]
   )
   const [inputValue, setInputValue] = useState(
-    props.route.params?.address ?? ''
+    props.route.params ? props.route.params.address ?? '' : ''
   )
   const [errorMessage, setErrorMessage] = useState(
     Facade.t('components.inputTextWithValidation.incorrectFormat')
   )
   const [canAddAccount, setCanAddAccount] = useState(false)
   const accounts = useSelector((state: RootState) => state.app.accounts)
-
-  useEffect(() => {
-    setInputValue(props.route.params?.address ?? '')
-  }, [props.route.params?.address])
 
   const persist = () => {
     if (!isValid()) {

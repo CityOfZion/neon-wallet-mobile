@@ -11,6 +11,7 @@ import {WalletStackParams} from './WalletsStackNavigation'
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
+import {IPlayload} from '~src/config/DeepLinkingConfig'
 import Step1CreateWalletPage, {
   Step1CreateWalletParams,
 } from '~src/scenes/CreateWalletPage/Step1CreateWalletPage'
@@ -27,7 +28,6 @@ import ImportReadAccount, {
 } from '~src/scenes/ImportReadAccount'
 import MorePage from '~src/scenes/MorePage'
 import Passphrase, {PassphraseParams} from '~src/scenes/Passphrase'
-
 export type MoreStackParam =
   | DefaultNavigationParam<
       | Partial<CustomizeAccountParams>
@@ -39,13 +39,13 @@ export type MoreStackParam =
   | undefined
 
 export type MoreStackParamList = {
-  MorePage: undefined
+  MorePage?: {playload?: IPlayload}
   Step1CreateWallet: Step1CreateWalletParams
   Step2CreateWallet: undefined
   Step3CreateWallet: HeaderActionButtonProps
   Step4CreateWallet: undefined
   Step5CreateWallet: undefined
-  ImportKey: {address?: string}
+  ImportKey: {key?: string}
   ImportReadAccount: ImportReadAccountParams
   Passphrase: PassphraseParams
   CustomizeAccount: CustomizeAccountParams
