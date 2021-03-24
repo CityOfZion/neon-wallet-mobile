@@ -45,7 +45,7 @@ export class DeepLinkingConfig {
             screens: {
               Tab: 'Tab',
               [Facade.route.QRCodeScan.name]: {
-                path: 'read_address/:address?',
+                path: 'address/:address?',
               },
             },
           },
@@ -60,23 +60,5 @@ export class DeepLinkingConfig {
   }
   getLinkingConfig() {
     return this.linkingConfig
-  }
-  static playloadIsAccount(
-    playload: PlayContact | PlayAccount | PlayTransaction
-  ) {
-    let isAccount = false
-    function setIsAcount(value: boolean) {
-      if (!isAccount) {
-        isAccount = value
-      }
-    }
-    const accountFields = ['address', 'private_key', 'encrypted_key']
-    const p = playload as PlayAccount
-    if (p !== undefined) {
-      accountFields.forEach((field) =>
-        field in p ? setIsAcount(true) : setIsAcount(false)
-      )
-    }
-    return isAccount
   }
 }

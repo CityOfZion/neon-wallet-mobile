@@ -11,7 +11,6 @@ import {WalletStackParams} from './WalletsStackNavigation'
 import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
-import {IPlayload} from '~src/config/DeepLinkingConfig'
 import Step1CreateWalletPage, {
   Step1CreateWalletParams,
 } from '~src/scenes/CreateWalletPage/Step1CreateWalletPage'
@@ -39,7 +38,7 @@ export type MoreStackParam =
   | undefined
 
 export type MoreStackParamList = {
-  MorePage?: {playload?: IPlayload}
+  MorePage?: undefined
   Step1CreateWallet: Step1CreateWalletParams
   Step2CreateWallet: undefined
   Step3CreateWallet: HeaderActionButtonProps
