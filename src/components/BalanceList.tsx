@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native'
-import React, {useState} from 'react'
+import React from 'react'
 import {FlatList, TouchableOpacity, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -22,6 +22,7 @@ interface Props extends LinearLayoutProps {
   uri?: NeoURI
   zeroBalance?: boolean
   hideEmptyMessage?: boolean
+  notOrderByValue?: boolean
 }
 
 interface ItemProps {
@@ -191,7 +192,14 @@ const BalanceListItem = (props: ListProps & ItemProps & Props) => {
 const BalanceList = (props: Props) => {
   const {exchange} = useSelector((state: RootState) => state.app)
   const {currency, language} = useSelector((state: RootState) => state.settings)
-  const [itemSeparatorControl, setItemSeparatorControl] = useState(true)
+
+  const orderByValue = (token1: TokenAsset, token2: TokenAsset) => {
+    const value1 = token1.exchangeToken(currency, exchange) ?? 0
+    const value2 = token2.exchangeToken(currency, exchange) ?? 0
+    if (value1 < value2) return 1
+    if (value1 > value2) return -1
+    return 0
+  }
   const innerProps = {...props}
   delete innerProps.tokenAssets
   delete innerProps.fromAccountView
@@ -216,7 +224,16 @@ const BalanceList = (props: Props) => {
     })
     return show
   }
-
+  const getTokenAssets = () => {
+    let tokens = props.tokenAssets
+    if (!props.notOrderByValue) {
+      tokens = tokens.sort(orderByValue)
+    }
+    if (props.zeroBalance) {
+      tokens = tokens.filter(zeroBalanceFilter)
+    }
+    return tokens
+  }
   return (
     <LinearLayout {...innerProps} width={'100%'}>
       {showListTokenAssets(props.tokenAssets) ? (
@@ -225,11 +242,7 @@ const BalanceList = (props: Props) => {
             {Facade.t('components.balanceList.title')}
           </TextView>
           <FlatList<TokenAsset>
-            data={
-              props.zeroBalance
-                ? props.tokenAssets.filter(zeroBalanceFilter)
-                : props.tokenAssets
-            }
+            data={getTokenAssets()}
             keyExtractor={(item) => item.symbol}
             ItemSeparatorComponent={() => (
               <LinearLayout bg="text.2" height={1} />
