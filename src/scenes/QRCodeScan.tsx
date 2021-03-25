@@ -24,6 +24,7 @@ const {BarCodeType} = ExpoBarCodeScannerModule
 
 export interface QRCodeScanParams {
   onScan?: (data: NeoURI | string) => void
+  address?: string
 }
 
 export interface Props {
@@ -44,6 +45,14 @@ const QRCodeScan = (props: Props) => {
   useEffect(() => {
     showMessage()
   }, [message])
+
+  useEffect(() => {
+    if (props.route.params?.address) {
+      if (wallet.isAddress(props.route.params.address)) {
+        whatDoWithData(props.route.params.address)
+      }
+    }
+  }, [])
 
   const showMessage = () => {
     if (message) {
@@ -135,27 +144,27 @@ const QRCodeScan = (props: Props) => {
     }
   }
 
-  const handleBarCodeScanned = (evt: BarCodeEvent) => {
+  const whatDoWithData = (info: string | NeoURI) => {
     if (!controller.isShowing) {
-      if (isValid(evt.data)) {
+      if (isValid(info as string)) {
         setMessage(Facade.t('screens.scanQrCode.success'))
         // If there's a callback, calls the callback and navigates back
         if (props.route.params?.onScan) {
-          let data: NeoURI | string = evt.data
+          let data: NeoURI | string = info
 
-          if (Facade.uri.isValid(evt.data)) {
-            data = Facade.uri.parse(evt.data) ?? evt.data
+          if (Facade.uri.isValid(info as string)) {
+            data = Facade.uri.parse(info as string) ?? info
           }
           props.navigation.goBack()
           props.route.params.onScan(data)
         } else {
           // If scanned QR is an address, opens modal
-          if (wallet.isAddress(evt.data)) {
-            setAddress(evt.data)
+          if (wallet.isAddress(info as string)) {
+            setAddress(info as string)
             controller.open()
           } else {
             // Otherwise, navigates to corresponding page
-            const destination = goTo(evt.data)
+            const destination = goTo(info as string)
             props.navigation.pop(1)
             destination && props.navigation.navigate(...destination)
           }
@@ -164,6 +173,10 @@ const QRCodeScan = (props: Props) => {
         setMessage(Facade.t('screens.scanQrCode.tryAgain'))
       }
     }
+  }
+
+  const handleBarCodeScanned = (evt: BarCodeEvent) => {
+    whatDoWithData(evt.data)
   }
 
   const modalNavigate = (action: CommonActions.Action) => {

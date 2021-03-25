@@ -1,4 +1,8 @@
-import {NavigationContainer, RouteProp} from '@react-navigation/native'
+import {
+  NavigationContainer,
+  RouteProp,
+  LinkingOptions,
+} from '@react-navigation/native'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useState} from 'react'
 import {InteractionManager} from 'react-native'
@@ -15,6 +19,7 @@ import {Storage} from '~src/app/Storage'
 import {Sync} from '~src/app/Sync'
 import LoadingOverlay from '~src/components/LoadingOverlay'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
+import {DeepLinkingConfig} from '~src/config/DeepLinkingConfig'
 import ModalStackNavigation, {
   ModalParams,
 } from '~src/navigation/ModalStackNavigation'
@@ -22,7 +27,6 @@ import TabNavigation, {TabParams} from '~src/navigation/TabNavigation'
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 import QRCodeScan, {QRCodeScanParams} from '~src/scenes/QRCodeScan'
-import {RootStore} from '~src/store/RootStore'
 
 export type RootStackParamList = {
   Tab: TabParams
@@ -38,6 +42,8 @@ interface Props {
 }
 
 const RootStack = createStackNavigator<RootStackParamList>()
+
+const deepLinking = new DeepLinkingConfig()
 
 const AppNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => {
@@ -103,23 +109,28 @@ const AppNavigation = (props: Props) => {
     }
   }, [hasInit])
 
+  const getInitialRouteName = () => {
+    return onboardingSeen
+      ? hasAuthentication || welcomeToNWSeen
+        ? Facade.route.Tab.name
+        : Facade.route.Login.name
+      : Facade.route.Onboarding.name
+  }
+
+  deepLinking.setInitialRoute(getInitialRouteName())
+
+  const linking = deepLinking.getLinkingConfig()
   return (
     <>
       <>
         <AwaitActivity name={'application'} loadingView={<ScreenLoader />}>
-          <NavigationContainer>
+          <NavigationContainer linking={linking} fallback={<ScreenLoader />}>
             {isLoading && (
               <LoadingOverlay progress={progress} loadingText={loadingText} />
             )}
             <ThemeProvider theme={theme}>
               <RootStack.Navigator
-                initialRouteName={
-                  onboardingSeen
-                    ? hasAuthentication || welcomeToNWSeen
-                      ? Facade.route.Tab.name
-                      : Facade.route.Login.name
-                    : Facade.route.Onboarding.name
-                }
+                initialRouteName={getInitialRouteName()}
                 headerMode="none"
                 screenOptions={Facade.config.screen}
               >
