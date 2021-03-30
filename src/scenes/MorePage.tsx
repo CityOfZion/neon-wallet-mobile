@@ -1,7 +1,8 @@
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import Constants from 'expo-constants'
 import * as WebBrowser from 'expo-web-browser'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {TouchableWithoutFeedback, Platform} from 'react-native'
 import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
@@ -12,11 +13,11 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-
 interface MoreProps {
   navigation: StackNavigationProp<MoreStackParamList & ModalStackParamList>
   theme: DefaultTheme
   navigationOptions: object
+  route: RouteProp<MoreStackParamList, 'MorePage'>
 }
 
 const MorePage = (props: MoreProps) => {

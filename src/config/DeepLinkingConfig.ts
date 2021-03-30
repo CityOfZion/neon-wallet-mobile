@@ -21,7 +21,20 @@ export class DeepLinkingConfig {
                 screens: {
                   [Facade.route.MorePage.name]: Facade.route.MorePage.name,
                   [Facade.route.ImportKey.name]: {
-                    path: 'import_wallet/:address?',
+                    path: 'import_key/:key',
+                  },
+                  [Facade.route.ImportReadAccount.name]: {
+                    path: 'import_address/:address',
+                  },
+                },
+              },
+              [Facade.route.ListWallets.name]: {
+                initialRouteName: Facade.route.ListWalletsPage.name,
+                screens: {
+                  [Facade.route.ListWalletsPage.name]:
+                    Facade.route.ListWalletsPage.name,
+                  [Facade.route.GetAccount.name]: {
+                    path: 'send',
                   },
                 },
               },
@@ -32,7 +45,7 @@ export class DeepLinkingConfig {
             screens: {
               Tab: 'Tab',
               [Facade.route.QRCodeScan.name]: {
-                path: 'read_address/:address?',
+                path: 'address/:address?',
               },
             },
           },

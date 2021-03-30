@@ -27,9 +27,7 @@ const ImportKey = (props: ImportKeyProps) => {
   const accounts = useSelector((state: RootState) => state.app.accounts)
 
   const [inputValue, setInputValue] = useState(
-    props.route.params && props.route.params.address
-      ? props.route.params.address
-      : ''
+    props.route.params ? props.route.params.key ?? '' : ''
   )
   const inputIsValid = validator(inputValue)
 
