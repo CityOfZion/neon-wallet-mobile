@@ -1,6 +1,6 @@
 #import <Firebase.h>
 #import "AppDelegate.h"
-
+#import <React/RCTLinkingManager.h>
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
@@ -10,7 +10,6 @@
 #import <UMReactNativeAdapter/UMModuleRegistryAdapter.h>
 #import <EXSplashScreen/EXSplashScreenService.h>
 #import <UMCore/UMModuleRegistryProvider.h>
-#import <ReactRCTLinkingManager.h>
 #if DEBUG
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>

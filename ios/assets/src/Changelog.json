@@ -1,6 +1,15 @@
 {
     "changelog": [
     	{
+            "version": "V1.0.15-43",
+            "date": "March 30 2021",
+            "changes": [
+                "- Bug fixes",
+                "- Change layouts",
+                "- Deep link "	 
+            ]
+        },
+    	{
             "version": "V1.0.15-40",
             "date": "March 09 2021",
             "changes": [
