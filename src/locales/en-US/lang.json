@@ -267,7 +267,8 @@
     "wallet": "Wallet",
     "account": "Account",
     "address": "Address",
-    "reference": "Reference"
+    "reference": "Reference",
+    "shareOrCopy":"Share or Copy to clipboard"
   },
   "screens": {
     "contactDetails": {
