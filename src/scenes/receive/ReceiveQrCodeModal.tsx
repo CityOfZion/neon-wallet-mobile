@@ -103,7 +103,7 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
         </AwaitActivity>
         <LinearLayout width={buttonWidth} height={54} mt={34}>
           <ThemedButton
-            label="Copy to clipboard"
+            label={Facade.t('receive.shareOrCopy')}
             srcIcon={require('~src/assets/images/icon-copy-green.png')}
             iconSize={[19, 23]}
             onPress={captureAndNavigate}
