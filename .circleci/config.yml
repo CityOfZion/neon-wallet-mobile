@@ -169,8 +169,12 @@ jobs:
       - run:
           name: Certificate
           working_directory: ~/neon-wallet-mobile/ios/builds
-          command: echo $IOS_CERTIFICATE | base64 --decode > ./development.cer    
-              
+          command: echo $IOS_CERTIFICATE | base64 --decode > ./development.cer
+          
+      - run:
+          name: Open Session Apple Connect
+          command: eval $(FASTLANE_DISABLE_COLORS=1 bundle exec fastlane spaceauth -u $APPLE_ID 2>/dev/null | grep "export FASTLANE_SESSION")
+
       - run:
           name: Fastlane
           command: bundle exec fastlane $FASTLANE_LANE
