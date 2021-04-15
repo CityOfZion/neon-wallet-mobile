@@ -164,12 +164,12 @@ jobs:
       - run:
           name: Mobile Provision
           working_directory: ~/neon-wallet-mobile/ios/builds
-          command: echo $IOS_MOBILE_PROVISION | base64 -di > ./match_AppStore_iocityofzionneon_1617203405.mobileprovision
+          command: echo $IOS_MOBILE_PROVISION | base64 --decode > ./match_AppStore_iocityofzionneon_1617203405.mobileprovision
 
       - run:
           name: Certificate
           working_directory: ~/neon-wallet-mobile/ios/builds
-          command: echo $IOS_CERTIFICATE | base64 -di > ./development.cer    
+          command: echo $IOS_CERTIFICATE | base64 --decode > ./development.cer    
               
       - run:
           name: Fastlane
