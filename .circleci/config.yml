@@ -3,7 +3,7 @@ jobs:
   test:
     working_directory: ~/neon-wallet-mobile
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/node:10.19.0
     steps:
       - checkout
       - attach_workspace:
@@ -21,7 +21,7 @@ jobs:
   node:
     working_directory: ~/neon-wallet-mobile
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/node:10.19.0
 
     steps:
       - checkout
