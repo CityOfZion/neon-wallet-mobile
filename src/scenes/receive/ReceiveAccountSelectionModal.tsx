@@ -1,7 +1,8 @@
 import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
+import {LinearGradient} from 'expo-linear-gradient'
 import React, {useEffect, useState} from 'react'
-import {ScrollView, View} from 'react-native'
+import {ScrollView, StyleSheet, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {TokenAsset} from '~/src/models/TokenAsset'
@@ -27,6 +28,9 @@ interface Props {
 }
 
 const ReceiveAccountSelectionModal = (props: Props) => {
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const {wallet} = props.route.params
 
   const show = useNavigationState(
@@ -79,6 +83,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
           paddingLeft: 5,
           paddingRight: 5,
         }}
+        nestedScrollEnabled={true}
       >
         <LinearLayout px={5}>
           <TextView
@@ -107,6 +112,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
               initialAccount={
                 selectedAccount ? accounts.indexOf(selectedAccount) : undefined
               }
+              isCompacted={false}
             />
           </LinearLayout>
 
@@ -142,34 +148,57 @@ const ReceiveAccountSelectionModal = (props: Props) => {
       </ScrollView>
       <LinearLayout
         position={'absolute'}
-        left={'9%'}
-        right={'9%'}
-        bottom={'8%'}
+        bottom={'1%'}
+        height={'26%'}
+        width={'100%'}
+        alignItens={'center'}
       >
-        <LinearLayout
-          minWidth={'80%'}
-          maxWidth={'100%'}
-          marginBottom={'8px'}
-          marginTop={'30px'}
+        <LinearGradient
+          style={styles.shadowNext}
+          colors={[
+            'transparent',
+            Facade.filter.toDarkerShade(theme.colors.background[17], 1, 0.85),
+          ]}
+          start={[1, 0]}
+          end={[1, 0.45]}
         >
-          <ThemedButton
-            label={Facade.t('app.next')}
-            onPress={() =>
-              props.navigation.navigate(
-                Facade.route.ReceiveToAccountModal.name,
-                {
-                  wallet: props.route.params.wallet,
-                  account: selectedAccount ?? new Account(),
+          <LinearLayout
+            alignSelf={'center'}
+            position={'absolute'}
+            bottom={'30%'}
+          >
+            <LinearLayout
+              minWidth={'80%'}
+              maxWidth={'100%'}
+              marginBottom={'8px'}
+              marginTop={'30px'}
+            >
+              <ThemedButton
+                label={Facade.t('app.next')}
+                onPress={() =>
+                  props.navigation.navigate(
+                    Facade.route.ReceiveToAccountModal.name,
+                    {
+                      wallet: props.route.params.wallet,
+                      account: selectedAccount ?? new Account(),
+                    }
+                  )
                 }
-              )
-            }
-          />
-        </LinearLayout>
+              />
+            </LinearLayout>
+          </LinearLayout>
+        </LinearGradient>
       </LinearLayout>
     </LinearLayout>
   ) : (
     <LinearLayout />
   )
 }
+
+const styles = StyleSheet.create({
+  shadowNext: {
+    height: '100%',
+  },
+})
 
 export default ReceiveAccountSelectionModal

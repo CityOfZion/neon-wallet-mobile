@@ -12,6 +12,7 @@ interface Props {
   onSelect?: (account: Account) => void
   accounts: Account[]
   initialAccount?: number
+  isCompacted?: boolean
 }
 
 const AccountPicker: React.FC<Props> = (props: Props) => {
@@ -58,8 +59,9 @@ const AccountPicker: React.FC<Props> = (props: Props) => {
             <AccountCard
               onPress={() => pressEvent(item)}
               account={item}
-              isCompacted={true}
+              isCompacted={props.isCompacted}
               hideCopy={true}
+              hideQRCode={true}
             />
           </LinearLayout>
         )
@@ -73,6 +75,11 @@ AccountPicker.propTypes = {
   onSelect: PropTypes.func,
   accounts: PropTypes.arrayOf(PropTypes.instanceOf(Account).isRequired)
     .isRequired,
+  isCompacted: PropTypes.bool,
+}
+
+AccountPicker.defaultProps = {
+  isCompacted: true,
 }
 
 export default AccountPicker
