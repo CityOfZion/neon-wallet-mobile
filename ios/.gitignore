@@ -1,4 +1,5 @@
 neon.ipa
-builds
 *.dSYM
 *.dSYM.zip
+*.mobileprovision
+*.cer
