@@ -144,7 +144,7 @@ jobs:
           working_directory: ios
 
       - run:
-          command: gem install bundler && bundle update
+          command: gem install bundler
           working_directory: ios    
 
       - run: 
