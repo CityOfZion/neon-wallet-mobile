@@ -2,7 +2,7 @@ import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import {LinearGradient} from 'expo-linear-gradient'
 import React, {useEffect, useState} from 'react'
-import {ScrollView, StyleSheet, View} from 'react-native'
+import {ScrollView, StyleSheet, View, TouchableHighlight} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {TokenAsset} from '~/src/models/TokenAsset'
@@ -68,7 +68,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
     return show
   }
   return show ? (
-    <LinearLayout height={'100%'}>
+    <LinearLayout>
       <ScrollView
         style={{
           width: '100%',
@@ -85,66 +85,70 @@ const ReceiveAccountSelectionModal = (props: Props) => {
         }}
         nestedScrollEnabled={true}
       >
-        <LinearLayout px={5}>
-          <TextView
-            mb={4}
-            color={'text.2'}
-            fontSize={'14px'}
-            fontFamily={'bold'}
-            textAlign={'center'}
-          >
-            {props.route.params.wallet.name?.toUpperCase()}
-          </TextView>
-
-          <TextView
-            color={'text.0'}
-            fontSize={'18px'}
-            fontFamily={'medium'}
-            textAlign={'center'}
-          >
-            {Facade.t('modals.receive.accountSelection.subtitle')}
-          </TextView>
-
-          <LinearLayout minHeight={200} mx={-5}>
-            <AccountPicker
-              accounts={accounts}
-              onSelect={setSelectedAccount}
-              initialAccount={
-                selectedAccount ? accounts.indexOf(selectedAccount) : undefined
-              }
-              isCompacted={false}
-            />
-          </LinearLayout>
-
-          {showListTokenAssets(selectedAccount?.tokenAssets) ? (
+        <TouchableHighlight>
+          <LinearLayout px={5}>
             <TextView
               mb={4}
               color={'text.2'}
               fontSize={'14px'}
+              fontFamily={'bold'}
+              textAlign={'center'}
+            >
+              {props.route.params.wallet.name?.toUpperCase()}
+            </TextView>
+
+            <TextView
+              color={'text.0'}
+              fontSize={'18px'}
               fontFamily={'medium'}
               textAlign={'center'}
             >
-              {Facade.t(
-                'modals.receive.accountSelection.tokensValue'
-              ).toUpperCase()}
+              {Facade.t('modals.receive.accountSelection.subtitle')}
             </TextView>
-          ) : (
-            <View />
-          )}
 
-          {selectedAccount && (
-            <LinearLayout width={'100%'} mb={6}>
-              <BalanceList
-                hideEmptyMessage={true}
-                zeroBalance={false}
-                tokenAssets={selectedAccount.tokenAssets}
-                fromAccountView={false}
-                fromListWalletView={false}
-                fromSendAccountSelectionModal={false}
+            <LinearLayout minHeight={200} mx={-5}>
+              <AccountPicker
+                accounts={accounts}
+                onSelect={setSelectedAccount}
+                initialAccount={
+                  selectedAccount
+                    ? accounts.indexOf(selectedAccount)
+                    : undefined
+                }
+                isCompacted={false}
               />
             </LinearLayout>
-          )}
-        </LinearLayout>
+
+            {showListTokenAssets(selectedAccount?.tokenAssets) ? (
+              <TextView
+                mb={4}
+                color={'text.2'}
+                fontSize={'14px'}
+                fontFamily={'medium'}
+                textAlign={'center'}
+              >
+                {Facade.t(
+                  'modals.receive.accountSelection.tokensValue'
+                ).toUpperCase()}
+              </TextView>
+            ) : (
+              <View />
+            )}
+
+            {selectedAccount && (
+              <LinearLayout width={'100%'} mb={6}>
+                <BalanceList
+                  hideEmptyMessage={true}
+                  zeroBalance={false}
+                  tokenAssets={selectedAccount.tokenAssets}
+                  fromAccountView={false}
+                  fromListWalletView={false}
+                  fromSendAccountSelectionModal={false}
+                />
+              </LinearLayout>
+            )}
+          </LinearLayout>
+        </TouchableHighlight>
       </ScrollView>
       <LinearLayout
         position={'absolute'}
