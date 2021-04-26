@@ -7,6 +7,7 @@ import {LoadingReducer} from '~src/store/loading/LoadingReducer'
 import {SendTransactionReducer} from '~src/store/senderTransaction/SendTransactionReducer'
 import {SettingsReducer} from '~src/store/settings/SettingsReducer'
 import {WalletReducer} from '~src/store/wallet/WalletReducer'
+import { reducer as network } from 'react-native-offline';
 
 export type RootState = ReturnType<typeof RootStore.reducers>
 
@@ -27,5 +28,6 @@ export abstract class RootStore {
     loading: RootStore.loading.reducer,
     contact: RootStore.contact.reducer,
     senderTransaction: RootStore.senderTransaction.reducer,
+    network
   })
 }

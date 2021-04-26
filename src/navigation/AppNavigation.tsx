@@ -85,9 +85,13 @@ const AppNavigation = (props: Props) => {
     setNumberOfVersions(numberOfVersions ?? 0)
 
     // Synchronize app reducer
-    await Sync.init(dispatchAsync)
-
-    setInit(true)
+    try {
+      await Sync.init(dispatchAsync)
+      setInit(true)
+    } catch (error) {
+        alert('houve um problema!')
+        console.log('print de error', error)
+    }
   }
 
   useEffect(() => {

@@ -88,7 +88,7 @@ export class AppReducer extends ReducerWrapper<
         }
 
         const response = await Request.get(
-          'https://min-api.cryptocompare.com/data/pricemultifull',
+          'https://min-api.cryptocompare.com/data/pricemultifull', //criar uma função reqExchange para fazer a request
           {params}
         )
           .name('syncExchange')
@@ -125,7 +125,7 @@ export class AppReducer extends ReducerWrapper<
 
         try {
           response = await Request.get(
-            `https://raw.githubusercontent.com/CityOfZion/neo-tokens/master/tokenList.json?timestamp=${new Date().getTime()}`
+            `https://raw.githubusercontent.com/CityOfZion/neo-tokens/master/tokenList.json?timestamp=${new Date().getTime()}` //criar uma função reqTokens para fazer a request
           )
             .name('getTokens')
             .as<TokenResponse>()

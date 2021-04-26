@@ -20,12 +20,12 @@ export abstract class Sync {
     )
 
     const exchange: Exchange = await dispatch(
-      RootStore.app.actions.syncExchange()
+      RootStore.app.actions.syncExchange() //makes a request to sync state
     )
     const tokens: TokenAsset[] = await dispatch(
-      RootStore.app.actions.syncTokens()
+      RootStore.app.actions.syncTokens() //makes a request to sync state but have a treatment in failed case
     )
-    const nodes: NeoNode[] = await dispatch(RootStore.app.actions.syncNodes())
+    const nodes: NeoNode[] = await dispatch(RootStore.app.actions.syncNodes()) //makes a request to sync state
     const wallets: Wallet[] = await dispatch(
       RootStore.app.actions.syncWallets()
     )
@@ -39,7 +39,7 @@ export abstract class Sync {
       RootStore.app.actions.syncPreAccount()
     )
 
-    await dispatch(RootStore.app.actions.syncTokenAssets())
+    await dispatch(RootStore.app.actions.syncTokenAssets()) //everything need request balance and don´t presist data in storage
 
     await dispatch(RootStore.app.actions.syncBackupAlerts())
 
