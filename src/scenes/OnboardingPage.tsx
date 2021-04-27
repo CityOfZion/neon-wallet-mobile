@@ -1,8 +1,7 @@
 import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
-import {LinearGradient} from 'expo-linear-gradient'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
-import Swiper from 'react-native-swiper'
+import Carousel, {Pagination} from 'react-native-snap-carousel'
 import {useDispatch, useSelector} from 'react-redux'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
@@ -48,15 +47,18 @@ const OnboardingSlide = (props: OnboardingSlideProps) => {
 }
 
 const FeatureText = (props: {title: string; subtitle: string}) => {
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
   const headerHeight = useHeaderHeight()
   const unit = headerHeight * 0.015
 
   return (
     <LinearLayout orientation={'verti'} mx={'7%'}>
       <TextView
-        color={'text.0'}
+        color={theme.colors.text[0]}
         fontFamily={'semibold'}
-        fontSize={'20px'}
+        fontSize={'22px'}
         textAlign={'center'}
       >
         {props.title}
@@ -64,8 +66,8 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
 
       <FeatureDescription
         mt={'2%'}
-        color={'text.4'}
-        style={{lineHeight: 18 * unit}}
+        color={theme.colors.text[4]}
+        style={{lineHeight: 24}}
       >
         {props.subtitle}
       </FeatureDescription>
@@ -74,7 +76,7 @@ const FeatureText = (props: {title: string; subtitle: string}) => {
 }
 
 const FeatureDescription = styled(TextView)`
-  font-size: 15px;
+  font-size: 20px;
   text-align: center;
   font-family: light;
 `
@@ -83,7 +85,9 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
+  const carousel = useRef<Carousel<any>>(null)
   const [isLastPage, setIsLastPage] = useState(false)
+  const [carouselIndex, setCarouselIndex] = useState(0)
 
   const {wallets} = useSelector((state: RootState) => state.app)
 
@@ -97,17 +101,17 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     props.navigation.replace(Facade.route.Login.name)
   }
 
-  const onIndexChanged = function (index: number) {
-    if (index === 3) setIsLastPage(true)
-    else setIsLastPage(false)
-  }
-
   useEffect(() => {
     if (wallets.length === 0) {
       // NW-221 The app must create a wallet for the user when it first runs
       Facade.await.run('populateWallet', () => createFirstWallet())
     }
   }, [])
+
+  useEffect(() => {
+    if (carouselIndex === 3) setIsLastPage(true)
+    else setIsLastPage(false)
+  }, [carouselIndex])
 
   const createFirstWallet = async () => {
     const words = Facade.asteroid.generateMnemonic() ?? []
@@ -140,6 +144,33 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     dispatch(RootStore.account.actions.clearState())
   }
 
+  const data = [
+    {
+      header: 'Feature 1',
+      image: require('~src/assets/images/onboarding-1.png'),
+      title: 'onboarding.feature1.title',
+      subtitle: 'onboarding.feature1.subtitle',
+    },
+    {
+      header: 'Feature 2',
+      image: require('~src/assets/images/onboarding-2.png'),
+      title: 'onboarding.feature2.title',
+      subtitle: 'onboarding.feature2.subtitle',
+    },
+    {
+      header: 'Feature 3',
+      image: require('~src/assets/images/onboarding-3.png'),
+      title: 'onboarding.feature3.title',
+      subtitle: 'onboarding.feature3.subtitle',
+    },
+    {
+      header: 'Time to get started!',
+      image: require('~src/assets/images/onboarding-4.png'),
+      title: 'onboarding.feature4.title',
+      subtitle: 'onboarding.feature4.subtitle',
+    },
+  ]
+
   return (
     <LinearLayout flex={1} bg={'background.14'}>
       <SafeAreaView>
@@ -150,90 +181,129 @@ const OnboardingPage = (props: OnboardingPageProps) => {
           height={'100%'}
           bg={'background.14'}
         >
-          <Swiper
-            onIndexChanged={onIndexChanged}
-            dotColor={theme.colors.text[3]}
-            activeDotColor={theme.colors.primary}
-            loop={false}
-            showsButtons
-            buttonWrapperStyle={styles.swiperButtonWrapperStyle}
-            prevButton={<View />}
-            nextButton={
-              <NextButton mb={Facade.scale(22)} color={'primary'}>
+          <Carousel
+            layout={'default'}
+            ref={carousel}
+            data={data}
+            sliderWidth={Facade.app.windowWidth}
+            itemWidth={Facade.app.windowWidth}
+            inactiveSlideScale={1}
+            inactiveSlideOpacity={0}
+            inactiveSlideShift={25}
+            lockScrollWhileSnapping={true}
+            lockScrollTimeoutDuration={1000}
+            activeSlideOffset={5}
+            swipeThreshold={5}
+            enableSnap={true}
+            useScrollView={true}
+            firstItem={0}
+            onSnapToItem={(index) => setCarouselIndex(index)}
+            renderItem={(imageList: {
+              item: {
+                header: string
+                image: ImageLoadEventData
+                title: string
+                subtitle: string
+              }
+              index: number
+            }) => {
+              const {item, index} = imageList
+              return (
+                <LinearLayout
+                  weight={1}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  py={6}
+                >
+                  {index < data.length - 1 ? (
+                    <OnboardingSlide
+                      header={item.header}
+                      image={item.image}
+                      bottomContent={
+                        <FeatureText
+                          title={Facade.t(item.title)}
+                          subtitle={Facade.t(item.subtitle)}
+                        />
+                      }
+                    />
+                  ) : (
+                    <OnboardingSlide
+                      header={item.header}
+                      image={item.image}
+                      bottomContent={
+                        <LinearLayout
+                          width={'100%'}
+                          mt={'15%'}
+                          alignItems={'center'}
+                        >
+                          <LinearLayout mb={'8%'}>
+                            <FeatureText
+                              title={Facade.t(item.title)}
+                              subtitle={Facade.t(item.subtitle)}
+                            />
+                          </LinearLayout>
+
+                          <LinearLayout width={'100%'} px={'7%'}>
+                            <ThemedButton
+                              onPress={() => finish()}
+                              label={Facade.t(
+                                'onboarding.getStarted.buttonTitle'
+                              )}
+                              basic={true}
+                              bgColor={'primary'}
+                              textColor={'black'}
+                            />
+                          </LinearLayout>
+                        </LinearLayout>
+                      }
+                    />
+                  )}
+                </LinearLayout>
+              )
+            }}
+          />
+          <Pagination
+            dotsLength={data.length}
+            activeDotIndex={carouselIndex}
+            dotStyle={{
+              width: 8,
+              height: 8,
+              borderRadius: 5,
+              backgroundColor: theme.colors.primary,
+            }}
+            inactiveDotStyle={{
+              backgroundColor: theme.colors.text[3],
+            }}
+            inactiveDotOpacity={0.4}
+            inactiveDotScale={1}
+          />
+          {!isLastPage && (
+            <>
+              <NextButton
+                mb={Facade.scale(30)}
+                color={'primary'}
+                onPress={() => carousel.current?.snapToNext()}
+                position={'absolute'}
+                right={0}
+                bottom={0}
+                mr={Facade.scale(30)}
+              >
                 next
               </NextButton>
-            }
-          >
-            <OnboardingSlide
-              header={'Feature 1'}
-              image={require('~src/assets/images/onboarding-1.png')}
-              bottomContent={
-                <FeatureText
-                  title={Facade.t('onboarding.feature1.title')}
-                  subtitle={Facade.t('onboarding.feature1.subtitle')}
-                />
-              }
-            />
-            <OnboardingSlide
-              header={'Feature 2'}
-              image={require('~src/assets/images/onboarding-2.png')}
-              bottomContent={
-                <FeatureText
-                  title={Facade.t('onboarding.feature2.title')}
-                  subtitle={Facade.t('onboarding.feature2.subtitle')}
-                />
-              }
-            />
-            <OnboardingSlide
-              header={'Feature 3'}
-              image={require('~src/assets/images/onboarding-3.png')}
-              bottomContent={
-                <FeatureText
-                  title={Facade.t('onboarding.feature3.title')}
-                  subtitle={Facade.t('onboarding.feature3.subtitle')}
-                />
-              }
-            />
-            <OnboardingSlide
-              header={'Time to get started!'}
-              image={require('~src/assets/images/onboarding-4.png')}
-              bottomContent={
-                <LinearLayout width={'100%'} alignItems={'center'}>
-                  <LinearLayout mb={'8%'}>
-                    <FeatureText
-                      title={Facade.t('onboarding.feature4.title')}
-                      subtitle={Facade.t('onboarding.feature4.subtitle')}
-                    />
-                  </LinearLayout>
-
-                  <LinearLayout width={'100%'} px={'7%'}>
-                    <ThemedButton
-                      onPress={() => finish()}
-                      label={Facade.t('onboarding.getStarted.buttonTitle')}
-                      basic={true}
-                      bgColor={'primary'}
-                      textColor={'black'}
-                    />
-                  </LinearLayout>
-                </LinearLayout>
-              }
-            />
-          </Swiper>
-
-          {!isLastPage && (
-            <SkipButton
-              position={'absolute'}
-              left={0}
-              bottom={0}
-              color={'text.0'}
-              opacity={0.5}
-              mb={Facade.scale(30)}
-              ml={Facade.scale(30)}
-              onPress={() => finish()}
-              style={{textTransform: 'lowercase'}}
-            >
-              {Facade.t('app.skip')}
-            </SkipButton>
+              <SkipButton
+                position={'absolute'}
+                left={0}
+                bottom={0}
+                color={'text.0'}
+                opacity={0.5}
+                mb={Facade.scale(30)}
+                ml={Facade.scale(30)}
+                onPress={() => finish()}
+                style={{textTransform: 'lowercase'}}
+              >
+                {Facade.t('app.skip')}
+              </SkipButton>
+            </>
           )}
         </LinearLayout>
       </SafeAreaView>
