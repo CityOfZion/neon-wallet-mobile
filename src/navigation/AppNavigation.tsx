@@ -1,7 +1,6 @@
 import {
   NavigationContainer,
   RouteProp,
-  LinkingOptions,
 } from '@react-navigation/native'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useState} from 'react'
@@ -49,6 +48,7 @@ const AppNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => {
     return Facade.theme[state.settings.theme]
   })
+  const {isConnected} = useSelector((state: RootState) => state.network)
   const loadingOverlayState = useSelector((state: RootState) => state.loading)
   const {progress, loadingText, isLoading} = loadingOverlayState
 
@@ -84,13 +84,12 @@ const AppNavigation = (props: Props) => {
     setChangelogHidden(changelogHidden ?? false)
     setNumberOfVersions(numberOfVersions ?? 0)
 
-    // Synchronize app reducer
     try {
+      // Synchronize app reducer
       await Sync.init(dispatchAsync)
       setInit(true)
     } catch (error) {
-        alert('houve um problema!')
-        console.log('print de error', error)
+      console.log(error)
     }
   }
 
@@ -112,6 +111,23 @@ const AppNavigation = (props: Props) => {
       Facade.await.run('application', startApplication, 1000)
     }
   }, [hasInit])
+
+  useEffect(() => {
+    if (isConnected) {
+      let interactionPromise = InteractionManager.runAfterInteractions()
+
+      const interval = setInterval(() => {
+        interactionPromise = InteractionManager.runAfterInteractions(() => {
+          Facade.await.run('fetchData', () => Sync.fetchs(dispatchAsync))
+        })
+      }, Facade.app.defaultDataRefreshTimeInMilliseconds)
+
+      return () => {
+        interactionPromise.cancel()
+        clearInterval(interval)
+      }
+    }
+  }, [isConnected])
 
   const getInitialRouteName = () => {
     return onboardingSeen
