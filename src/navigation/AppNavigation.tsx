@@ -1,7 +1,4 @@
-import {
-  NavigationContainer,
-  RouteProp,
-} from '@react-navigation/native'
+import {NavigationContainer, RouteProp} from '@react-navigation/native'
 import {AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useState} from 'react'
 import {InteractionManager} from 'react-native'
