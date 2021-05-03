@@ -53,6 +53,7 @@ export class Account implements AccountState {
 
   // Balance of each token
   @ResponseSerialize(TokenAsset)
+  @HttpExpose()
   tokenAssets: TokenAsset[] = []
 
   // Transactions grouped by datetime
@@ -63,6 +64,32 @@ export class Account implements AccountState {
   @HttpExpose()
   @ResponseSerialize(TransactionDateGroup)
   pendingTransactions: TransactionDateGroup[] = []
+
+  static async fetchTokenAssets(address: string) {
+    try {
+      const request = new AddressRequest(address)
+      const response = await request.getBalance()
+
+      const tokenAssets = response.balance
+        .map((it) => {
+          const {asset, assetSymbol, assetHash} = it
+
+          if (asset && assetSymbol && assetHash) {
+            const tokenAsset = new TokenAsset(asset, assetSymbol, assetHash)
+            tokenAsset.amount = it.amount ?? 0
+            return tokenAsset
+          }
+
+          return null
+        })
+        .filter((it) => it) as TokenAsset[]
+
+      return tokenAssets
+    } catch (error) {
+      console.log(error)
+      throw new Error(`Problem to request tokens account ${address}`)
+    }
+  }
 
   get hasFunds() {
     return Facade.lodash.sumBy(this.tokenAssets, (it) => it.amount ?? 0) > 0
@@ -338,5 +365,8 @@ export class Account implements AccountState {
   }
   getTransactions() {
     return this.transactions
+  }
+  setTokenAssets(tokens: TokenAsset[]) {
+    this.tokenAssets = tokens
   }
 }

@@ -1,8 +1,12 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {Request} from '@simpli/serialized-request'
 import {plainToClass} from 'class-transformer'
-import {map, mapValues} from 'lodash'
+import {map, mapValues, update} from 'lodash'
 import {showMessage} from 'react-native-flash-message'
+import {
+  checkInternetConnection,
+  offlineActionCreators,
+} from 'react-native-offline'
 
 import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
@@ -15,6 +19,7 @@ import {App} from '~src/models/redux/App'
 import {Contact} from '~src/models/redux/Contact'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
+import {AddressRequest} from '~src/models/request/AddressRequest'
 import {TransactionRequest} from '~src/models/request/TransactionRequest'
 import {AccountPreCreatedDispatcher} from '~src/store/app/dispatchers/AccountPreCreatedDispatcher'
 import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
@@ -79,36 +84,50 @@ export class AppReducer extends ReducerWrapper<
     },
     syncExchange: (): AsyncAction<Exchange> => {
       return async (dispatch, getState) => {
-        const assets = Facade.app.assets.split(',')
-        const otherAssets = map(Facade.app.tokensMainNet, (it) => it.symbol)
-
-        const params = {
-          fsyms: assets.concat(otherAssets).join(','),
-          tsyms: Facade.app.currencies,
+        const exchange = await Storage.exchange.load()
+        if (exchange) {
+          dispatch(this.commit('SET_EXCHANGE', {exchange}))
+          return exchange
         }
+        return {} as Exchange
+      }
+    },
 
-        const response = await Request.get(
-          'https://min-api.cryptocompare.com/data/pricemultifull',
-          {params}
-        )
-          .name('syncExchange')
-          .as<ExchangeResponse>()
-          .getData()
+    fetchExchange: (): AsyncAction => {
+      return async (dispatch) => {
+        try {
+          const assets = Facade.app.assets.split(',')
+          const otherAssets = map(Facade.app.tokensMainNet, (it) => it.symbol)
 
-        const exchange: Exchange = mapValues(response.RAW, (symbolRef) => {
-          const symbolRefMap = mapValues(
-            symbolRef,
-            (symbolToUse) => symbolToUse.PRICE
-          )
-
-          return {
-            to: symbolRefMap,
+          const params = {
+            fsyms: assets.concat(otherAssets).join(','),
+            tsyms: Facade.app.currencies,
           }
-        })
 
-        dispatch(this.commit('SET_EXCHANGE', {exchange}))
+          const response = await Request.get(
+            'https://min-api.cryptocompare.com/data/pricemultifull',
+            {params}
+          )
+            .name('syncExchange')
+            .as<ExchangeResponse>()
+            .getData()
 
-        return exchange
+          const exchange: Exchange = mapValues(response.RAW, (symbolRef) => {
+            const symbolRefMap = mapValues(
+              symbolRef,
+              (symbolToUse) => symbolToUse.PRICE
+            )
+
+            return {
+              to: symbolRefMap,
+            }
+          })
+
+          await Storage.exchange.save(exchange)
+        } catch (error) {
+          console.log(error)
+          throw new Error('Problema para sincronizar exchange')
+        }
       }
     },
 
@@ -121,6 +140,31 @@ export class AppReducer extends ReducerWrapper<
       }
 
       return async (dispatch, getState) => {
+        const tokenAssets = await Storage.tokenAssets.load()
+
+        if (tokenAssets) {
+          dispatch(this.commit('SET_TOKENS', {tokens: tokenAssets}))
+          return tokenAssets
+        } else {
+          const tokensMainNet = Facade.app.tokensMainNet
+          const neo = new TokenAsset('NEO', 'NEO', Facade.app.neoHash)
+          const gas = new TokenAsset('GAS', 'GAS', Facade.app.gasHash)
+          const tokens = [neo, gas, ...tokenToAsset(tokensMainNet)]
+          dispatch(this.commit('SET_TOKENS', {tokens}))
+
+          return tokens
+        }
+      }
+    },
+
+    fetchTokens: (): AsyncAction => {
+      const tokenToAsset = (response: TokenResponse): TokenAsset[] => {
+        return Facade.lodash.map(
+          response,
+          (it) => new TokenAsset(it.companyName, it.symbol, it.networks[1].hash)
+        )
+      }
+      return async (dispatch) => {
         let response: TokenResponse
 
         try {
@@ -130,34 +174,40 @@ export class AppReducer extends ReducerWrapper<
             .name('getTokens')
             .as<TokenResponse>()
             .getData()
-        } catch {
-          response = Facade.app.tokensMainNet
+
+          const neo = new TokenAsset('NEO', 'NEO', Facade.app.neoHash)
+          const gas = new TokenAsset('GAS', 'GAS', Facade.app.gasHash)
+
+          const tokens = [neo, gas, ...tokenToAsset(response)]
+          await Storage.tokenAssets.save(tokens)
+          this.actions.syncTokens()
+        } catch (error) {
+          console.log(error)
+          throw new Error('Problema para consultar token list')
         }
-
-        const neo = new TokenAsset('NEO', 'NEO', Facade.app.neoHash)
-        const gas = new TokenAsset('GAS', 'GAS', Facade.app.gasHash)
-
-        const tokens = [neo, gas, ...tokenToAsset(response)]
-
-        dispatch(this.commit('SET_TOKENS', {tokens}))
-
-        return tokens
       }
     },
 
     syncNodes: (): AsyncAction<NeoNode[]> => {
       return async (dispatch, getState) => {
         let nodes: NeoNode[] = []
-
-        try {
-          nodes = await NeoNode.getAllNodes()
-        } catch {
-          // ignore
-        }
-
+        nodes = (await Storage.neoNodes.load()) ?? []
         dispatch(this.commit('SET_NODES', {nodes}))
-
         return nodes
+      }
+    },
+
+    fetchNodes: (): AsyncAction => {
+      return async (dispatch) => {
+        try {
+          let nodes: NeoNode[] = []
+          nodes = await NeoNode.getAllNodes()
+          await Storage.neoNodes.save(nodes)
+          this.actions.syncNodes()
+        } catch (error) {
+          console.log(error)
+          throw new Error('não carregou os nodes')
+        }
       }
     },
 
@@ -200,17 +250,12 @@ export class AppReducer extends ReducerWrapper<
     syncAccounts: (): AsyncAction<Account[]> => {
       return async (dispatch, getState) => {
         const accounts = await Storage.accounts.load()
+
         const wallets = await Storage.wallets.load()
-        const preAccount = getState().app.preAccount
-        // get the balance cache in order to avoid to recalculate
-        const accountsTokenAssets = getState().app.accounts.map(
-          (it) => it.tokenAssets
-        )
 
         if (accounts && wallets) {
           accounts.forEach((it, i) => {
             it.accountType = it.getWallet(wallets)?.walletType ?? null
-            it.tokenAssets = accountsTokenAssets[i] ?? []
             it.transactions = it.transactions ?? []
             it.pendingTransactions = it.pendingTransactions ?? []
           })
@@ -253,12 +298,54 @@ export class AppReducer extends ReducerWrapper<
 
     syncTokenAssets: (): AsyncAction => {
       return async (dispatch, getState) => {
-        const {accounts, wallets} = getState().app
+        const {wallets} = getState().app
+        const accounts = await Storage.accounts.load()
 
-        const promises = accounts.map((it) => it.populateTokenAssets())
-        await Promise.all(promises)
+        if (accounts) {
+          wallets.map((it) => it.populateTokenAssets(accounts))
+        }
+      }
+    },
 
-        wallets.map((it) => it.populateTokenAssets(accounts))
+    fetchBalanceAccounts: (): AsyncAction => {
+      interface IBalanceAccounts {
+        address: string
+        tokens: TokenAsset[]
+      }
+      return async (dispatch, getState) => {
+        try {
+          const {accounts} = getState().app
+          const balanceAccounts = await Promise.all(
+            accounts
+              .map(async (acc) => {
+                const {address} = acc
+                if (address) {
+                  const response = await Account.fetchTokenAssets(
+                    address as string
+                  )
+                  return {address, tokens: response}
+                }
+              })
+              .filter((res) => res !== undefined)
+          )
+
+          const updatedAccounts = balanceAccounts
+            .map((balanceAccount) => {
+              const {address, tokens} = balanceAccount as IBalanceAccounts
+              const updatedAccount = accounts.find(
+                (acc) => acc.address === address
+              ) as Account
+              updatedAccount.tokenAssets = tokens
+              return updatedAccount
+            })
+            .filter((acc) => acc !== undefined)
+
+          await Storage.accounts.save(updatedAccounts)
+          this.actions.syncTokenAssets()
+        } catch (error) {
+          console.log(error)
+          throw new Error('Problema para consultar os balances')
+        }
       }
     },
 
@@ -355,6 +442,16 @@ export class AppReducer extends ReducerWrapper<
         if (removedSenderTx.length) {
           Facade.bus.emit('removePendingTransactions', removedSenderTx)
         }
+      }
+    },
+
+    syncNetworkStatus: (): AsyncAction => {
+      return async (dispatch, getState) => {
+        setInterval(async () => {
+          const isConnected = await checkInternetConnection()
+          const {connectionChange} = offlineActionCreators
+          dispatch(connectionChange(isConnected))
+        }, 2000)
       }
     },
 

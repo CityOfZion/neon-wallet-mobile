@@ -20,6 +20,9 @@ export class WrapperConfig {
     '@accounts',
     '@contacts',
     '@preAccount',
+    '@exchange',
+    '@token_assets',
+    '@neo_nodes',
   ] as const
 
   readonly routes = [

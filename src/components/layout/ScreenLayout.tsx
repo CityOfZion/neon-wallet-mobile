@@ -12,6 +12,7 @@ import {
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
+import OfflineBar from '~src/components/OfflineBar'
 import {LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
@@ -92,6 +93,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
             marginBottom: tabBarHeight,
           }}
         >
+          <OfflineBar />
           <LinearLayout
             alignItems={props.alignX}
             justifyContent={props.alignY}

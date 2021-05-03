@@ -1,10 +1,13 @@
 import {Facade} from '~src/app/Facade'
+import {NeoNode} from '~src/models/NeoNode'
+import {TokenAsset} from '~src/models/TokenAsset'
 import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Settings} from '~src/models/redux/Settings'
 import {Wallet} from '~src/models/redux/Wallet'
+import {Exchange} from '~src/types/exchange'
 
 export abstract class Storage {
   /**
@@ -86,5 +89,15 @@ export abstract class Storage {
 
   static get preAccount() {
     return Facade.storage['@preAccount'].bind().as(Account)
+  }
+  static get exchange() {
+    return Facade.storage['@exchange'].bind().as<Exchange>()
+  }
+
+  static get tokenAssets() {
+    return Facade.storage['@token_assets'].bind().asArrayOf(TokenAsset)
+  }
+  static get neoNodes() {
+    return Facade.storage['@neo_nodes'].bind().asArrayOf(NeoNode)
   }
 }
