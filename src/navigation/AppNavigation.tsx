@@ -63,7 +63,12 @@ const AppNavigation = (props: Props) => {
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const [hasInit, setInit] = useState(false)
-
+  const [syncInterval, setSyncInterval] = useState(
+    Facade.app.defaultDataRefreshTimeInMilliseconds
+  )
+  const [fetchInterval, setFetchInterval] = useState(
+    Facade.app.defaultDataRefreshTimeInMilliseconds
+  )
   const startApplication = async () => {
     const onboardingSeen = await Storage.onboardingSeen.load()
     const welcomeToNWSeen = await Storage.welcomeToNWSeen.load()
@@ -93,12 +98,15 @@ const AppNavigation = (props: Props) => {
   useEffect(() => {
     if (hasInit) {
       let interactionPromise = InteractionManager.runAfterInteractions()
-
       const interval = setInterval(() => {
         interactionPromise = InteractionManager.runAfterInteractions(() => {
           Facade.await.run('refreshData', () => Sync.refresh(dispatchAsync))
         })
-      }, Facade.app.defaultDataRefreshTimeInMilliseconds)
+      }, syncInterval)
+
+      setTimeout(() => {
+        setSyncInterval(Facade.app.defaultDataRefreshTimeInMilliseconds)
+      }, syncInterval)
 
       return () => {
         interactionPromise.cancel()
@@ -107,24 +115,36 @@ const AppNavigation = (props: Props) => {
     } else {
       Facade.await.run('application', startApplication, 1000)
     }
-  }, [hasInit])
+  }, [hasInit, syncInterval])
 
   useEffect(() => {
     if (isConnected) {
-      let interactionPromise = InteractionManager.runAfterInteractions()
-
-      const interval = setInterval(() => {
-        interactionPromise = InteractionManager.runAfterInteractions(() => {
-          Facade.await.run('fetchData', () => Sync.fetchs(dispatchAsync))
-        })
-      }, Facade.app.defaultDataRefreshTimeInMilliseconds)
-
-      return () => {
-        interactionPromise.cancel()
-        clearInterval(interval)
-      }
+      setSyncInterval(10000)
+      setFetchInterval(5000)
+    } else {
+      setSyncInterval(Facade.app.defaultDataRefreshTimeInMilliseconds)
+      setFetchInterval(Facade.app.defaultDataRefreshTimeInMilliseconds)
     }
   }, [isConnected])
+
+  useEffect(() => {
+    let interactionPromise = InteractionManager.runAfterInteractions()
+
+    const interval = setInterval(() => {
+      interactionPromise = InteractionManager.runAfterInteractions(() => {
+        Facade.await.run('fetchData', () => Sync.fetchs(dispatchAsync))
+      })
+    }, fetchInterval)
+
+    setTimeout(() => {
+      setFetchInterval(Facade.app.defaultDataRefreshTimeInMilliseconds)
+    }, fetchInterval)
+
+    return () => {
+      interactionPromise.cancel()
+      clearInterval(interval)
+    }
+  }, [fetchInterval])
 
   const getInitialRouteName = () => {
     return onboardingSeen

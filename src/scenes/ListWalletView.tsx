@@ -299,7 +299,7 @@ const ListWalletView = (props: WalletProps) => {
   const fadeIn = () => {
     Animated.timing(fadeValue, {
       toValue: 1,
-      duration: 1000,
+      duration: 500,
       useNativeDriver: true,
     }).start()
   }

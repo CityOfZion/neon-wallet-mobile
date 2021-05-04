@@ -25,7 +25,7 @@ const ImportKey = (props: ImportKeyProps) => {
     (state: RootState) => Facade.theme[state.settings.theme]
   )
   const accounts = useSelector((state: RootState) => state.app.accounts)
-
+  const {isConnected} = useSelector((state: RootState) => state.network)
   const [inputValue, setInputValue] = useState(
     props.route.params ? props.route.params.key ?? '' : ''
   )
@@ -120,7 +120,7 @@ const ImportKey = (props: ImportKeyProps) => {
             flex={1}
             alignSelf="center"
             justifyContent={'flex-end'}
-            mb={'10px'}
+            mb={!isConnected ? '12%' : '10px'}
           >
             <ThemedButton label="Next" onPress={onNext} />
           </LinearLayout>

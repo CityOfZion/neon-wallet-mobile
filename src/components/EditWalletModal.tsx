@@ -83,6 +83,7 @@ export const EditWalletModal = (
       await dispatchAsync(RootStore.wallet.actions.delete(wallet.id))
     }
     dispatch(RootStore.wallet.actions.clearState())
+    dispatch(RootStore.account.actions.clearState())
 
     await dispatchAsync(RootStore.app.actions.syncWallets())
     await dispatchAsync(RootStore.app.actions.syncAccounts())

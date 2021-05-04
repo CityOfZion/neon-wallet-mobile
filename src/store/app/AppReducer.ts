@@ -180,7 +180,6 @@ export class AppReducer extends ReducerWrapper<
 
           const tokens = [neo, gas, ...tokenToAsset(response)]
           await Storage.tokenAssets.save(tokens)
-          this.actions.syncTokens()
         } catch (error) {
           console.log(error)
           throw new Error('Problema para consultar token list')
@@ -203,7 +202,6 @@ export class AppReducer extends ReducerWrapper<
           let nodes: NeoNode[] = []
           nodes = await NeoNode.getAllNodes()
           await Storage.neoNodes.save(nodes)
-          this.actions.syncNodes()
         } catch (error) {
           console.log(error)
           throw new Error('não carregou os nodes')
@@ -341,7 +339,6 @@ export class AppReducer extends ReducerWrapper<
             .filter((acc) => acc !== undefined)
 
           await Storage.accounts.save(updatedAccounts)
-          this.actions.syncTokenAssets()
         } catch (error) {
           console.log(error)
           throw new Error('Problema para consultar os balances')

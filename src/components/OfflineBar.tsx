@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, StyleSheet, View, Image} from 'react-native'
+import {Text, StyleSheet, ScrollView, Image, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -19,6 +19,8 @@ const OfflineBar = () => {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
+      position: 'absolute',
+      zIndex: 99,
     },
     text: {
       color: '#fff',

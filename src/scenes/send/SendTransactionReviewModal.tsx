@@ -183,6 +183,7 @@ const TransactionSummaryContainer = () => {
 }
 
 const SendTransactionReviewModal = (props: Props) => {
+  const {isConnected} = useSelector((state: RootState) => state.network)
   const {senderTransaction} = useSelector((state: RootState) => state)
   const contacts = useSelector((state: RootState) => state.app.contacts)
   const accounts = useSelector((state: RootState) => state.app.accounts)
@@ -470,6 +471,7 @@ const SendTransactionReviewModal = (props: Props) => {
                   onPress={() => Facade.await.run('auth', checkForAuth)}
                   rounded={true}
                   radius={8}
+                  disabled={!isConnected}
                 />
               </LinearLayout>
             </LinearLayout>

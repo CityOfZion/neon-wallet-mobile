@@ -33,7 +33,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   )
   const [canAddAccount, setCanAddAccount] = useState(false)
   const accounts = useSelector((state: RootState) => state.app.accounts)
-
+  const {isConnected} = useSelector((state: RootState) => state.network)
   const persist = () => {
     if (!isValid()) {
       return
@@ -97,12 +97,11 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
 
         {canAddAccount && (
           <LinearLayout
-            mt={20}
             width="90%"
             flex={1}
             alignSelf="center"
             justifyContent={'flex-end'}
-            mb={'10px'}
+            mb={!isConnected ? '12%' : '10px'}
           >
             <ThemedButton
               label={Facade.t('importReadAccount.add')}

@@ -32,7 +32,7 @@ const SendAccountSelectionModal = (props: Props) => {
       state.routes[state.routes.length - 1].name ===
       Facade.route.SendAccountSelectionModal.name
   )
-
+  const {isConnected} = useSelector((state: RootState) => state.network)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
 
   const [accounts, setAccounts] = useState<Account[]>([])
@@ -148,7 +148,7 @@ const SendAccountSelectionModal = (props: Props) => {
                 }
               )
             }
-            disabled={!selectedAccount?.hasFunds}
+            disabled={!selectedAccount?.hasFunds || !isConnected}
           />
         </LinearLayout>
       </LinearLayout>
