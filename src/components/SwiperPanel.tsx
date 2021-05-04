@@ -459,6 +459,7 @@ export default function SwiperPanel(props: SwiperProps) {
                   showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
                   disableScrollViewPanResponder={true}
+                  nestedScrollEnabled={true}
                 >
                   <TouchableHighlight>
                     <Fragment>{props.children}</Fragment>
