@@ -2,7 +2,7 @@ import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
 import React, {useState} from 'react'
 import {ScrollView, Dimensions} from 'react-native'
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Facade} from '~src/app/Facade'
@@ -11,6 +11,7 @@ import WalletPicker from '~src/components/misc/WalletPicker'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ReceiveModalStackParamList} from '~src/navigation/ReceiveModalStackNavigation'
+import {RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
@@ -24,12 +25,15 @@ const ReceiveWalletSelectionModal = (props: Props) => {
       state.routes[state.routes.length - 1].name ===
       Facade.route.ReceiveWalletSelectionModal.name
   )
+  const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
+
+  const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
 
   const {wallets, exchange} = useSelector((state: RootState) => state.app)
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(
-    wallets[0]
+    wallet
   )
 
   return show ? (
