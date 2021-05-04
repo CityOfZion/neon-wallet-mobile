@@ -144,9 +144,16 @@ const BalanceListParam = () => {
 
 const TransactionsTab = () => {
   const dispatchAccount = useDispatch<SyncDispatch<Account>>()
-  const [account] = useState(
+  const [account, setAccount] = useState(
     dispatchAccount(RootStore.account.actions.getFromSelection())
   )
+
+  const accountsPool = useSelector((state: RootState) => state.app.accounts)
+
+  useEffect(() => {
+    const upAccount = accountsPool.find(acc => acc.address === account.address) || new Account()
+    setAccount(upAccount)
+  }, [accountsPool])
 
   return account.tokenAssets.length ? (
     <AwaitActivity

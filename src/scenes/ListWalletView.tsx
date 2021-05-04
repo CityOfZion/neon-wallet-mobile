@@ -243,7 +243,7 @@ const ListWalletView = (props: WalletProps) => {
   const {wallets, accounts, exchange} = useSelector(
     (state: RootState) => state.app
   )
-
+  const {isConnected} = useSelector((state: RootState) => state.network)
   const {currency, language} = useSelector((state: RootState) => state.settings)
   const {id} = useSelector((state: RootState) => state.wallet)
 
@@ -336,7 +336,7 @@ const ListWalletView = (props: WalletProps) => {
       invertedGradient={true}
     >
       <>
-        <LinearLayout alignSelf={'flex-end'}>
+        <LinearLayout alignSelf={'flex-end'} style={{marginTop: !isConnected ? 12 : undefined}}> 
           <ThemedMoreButton
             onPress={() =>
               props.navigation.navigate(Facade.route.Modal.name, {
