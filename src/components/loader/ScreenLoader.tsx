@@ -11,7 +11,11 @@ const ScreenLoader = (props?: {transparent?: boolean}) => {
   )
 
   return (
-    <ScreenLayout alignY={'center'} transparent={props?.transparent ?? false}>
+    <ScreenLayout
+      hideOfflineBar={true}
+      alignY={'center'}
+      transparent={props?.transparent ?? false}
+    >
       <ActivityIndicator size={'large'} color={theme.colors.text[0]} />
     </ScreenLayout>
   )

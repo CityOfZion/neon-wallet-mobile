@@ -1,5 +1,6 @@
 import {RouteProp} from '@react-navigation/native'
 import React, {useState, useEffect} from 'react'
+import {View} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
@@ -62,6 +63,7 @@ const CustomizeAccount = (props: Props) => {
   const [color, setColor] = useState<string>(
     theme.colors.card[getRandomColor(6)]
   )
+  const {isConnected} = useSelector((state: RootState) => state.network)
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
   const [saving, setSaving] = useState(false)
 
@@ -76,12 +78,16 @@ const CustomizeAccount = (props: Props) => {
 
   useEffect(() => {
     Facade.await.run('customizeAccount', populateTokenAssets)
-  }, [])
+  }, [isConnected])
 
   const populateTokenAssets = async () => {
-    await account.populateTokenAssets()
-
-    setAccount(account)
+    if (!isConnected) {
+      setSaving(false)
+      setAccount(account)
+    } else {
+      await account.populateTokenAssets()
+      setAccount(account)
+    }
   }
 
   const handleColor = (hex: string) => {
@@ -112,7 +118,6 @@ const CustomizeAccount = (props: Props) => {
 
     dispatch(RootStore.wallet.actions.selectWallet(walletId))
     dispatch(RootStore.account.actions.selectAccount(importedAccount.address))
-
     props.navigation.replace(Facade.route.Tab.name, {
       welcomeHidden: true,
       changelogHidden: true,
@@ -164,7 +169,10 @@ const CustomizeAccount = (props: Props) => {
       RootStore.account.actions.importAndSave(address, wif)
     )
     await dispatchAsync(RootStore.app.actions.syncAccounts())
-    await dispatchAsync(RootStore.app.actions.syncTokenAssetsByAddress(address))
+    isConnected &&
+      (await dispatchAsync(
+        RootStore.app.actions.syncTokenAssetsByAddress(address)
+      ))
 
     dispatch(RootStore.account.actions.clearState())
 
@@ -236,24 +244,26 @@ const CustomizeAccount = (props: Props) => {
             marginTop="48px"
             marginBottom="10px"
           />
-          <InputWithValidation
-            value={name}
-            validator={(text) => !(showInvalid && !text)}
-            placeholder={Facade.t(
-              'screens.customizeAccount.accountInput.placeholder'
-            )}
-            onChangeText={setName}
-            onClearPress={() => setName('')}
-            onFocus={() => setShowInvalid(false)}
-            color={theme.colors.text[0]}
-            invalidColor={theme.colors.background[3]}
-            separatorColor={theme.colors.background[5]}
-            invalidSeparatorColor={theme.colors.quinary}
-            invalidMessageColor={theme.colors.quinary}
-            hidePaste={true}
-            hideScan={true}
-            sideMargins={0}
-          />
+          <View>
+            <InputWithValidation
+              value={name}
+              validator={(text) => !(showInvalid && !text)}
+              placeholder={Facade.t(
+                'screens.customizeAccount.accountInput.placeholder'
+              )}
+              onChangeText={setName}
+              onClearPress={() => setName('')}
+              onFocus={() => setShowInvalid(false)}
+              color={theme.colors.text[0]}
+              invalidColor={theme.colors.background[3]}
+              separatorColor={theme.colors.background[5]}
+              invalidSeparatorColor={theme.colors.quinary}
+              invalidMessageColor={theme.colors.quinary}
+              hidePaste={true}
+              hideScan={true}
+              sideMargins={0}
+            />
+          </View>
 
           <InputLabel
             title={Facade.t('screens.customizeAccount.selectColor')}

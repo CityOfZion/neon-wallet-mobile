@@ -124,6 +124,83 @@ const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
   )
 }
 
+const BalanceListParam = () => {
+  const dispatchAccount = useDispatch<SyncDispatch<Account>>()
+  const [account] = useState(
+    dispatchAccount(RootStore.account.actions.getFromSelection())
+  )
+  return (
+    <BalanceList
+      my="16px"
+      tokenAssets={account.getTokenAssets()}
+      address={account.address ?? undefined}
+      fromAccountView={true}
+      fromListWalletView={false}
+      fromSendAccountSelectionModal={false}
+      zeroBalance={true}
+    />
+  )
+}
+
+const TransactionsTab = () => {
+  const dispatchAccount = useDispatch<SyncDispatch<Account>>()
+  const [account, setAccount] = useState(
+    dispatchAccount(RootStore.account.actions.getFromSelection())
+  )
+
+  const accountsPool = useSelector((state: RootState) => state.app.accounts)
+
+  useEffect(() => {
+    const upAccount =
+      accountsPool.find((acc) => acc.address === account.address) ??
+      new Account()
+    setAccount(upAccount)
+  }, [accountsPool])
+
+  return account.tokenAssets.length ? (
+    <AwaitActivity
+      name={'fetchTransaction'}
+      size={'large'}
+      style={{minHeight: 100}}
+      loadingView={<ScreenLoader transparent={true} />}
+    >
+      <>
+        {account.address && (
+          <LinearLayout pt={20}>
+            <TransactionsList
+              title={Facade.t('screens.getAccount.pendingTransactions')}
+              address={account.address}
+              transactionGroups={account.getPendingTransactions()}
+            />
+
+            <TransactionsList
+              title={Facade.t('screens.getAccount.completedTransactions')}
+              address={account.address}
+              transactionGroups={account.getTransactions()}
+            />
+          </LinearLayout>
+        )}
+
+        <AwaitActivity
+          name={'loadMoreTransaction'}
+          size={'large'}
+          style={{minHeight: 100}}
+        />
+      </>
+    </AwaitActivity>
+  ) : (
+    <TextView
+      my="32px"
+      color="text.0"
+      fontFamily="medium"
+      fontSize="18px"
+      textAlign="center"
+    >
+      {Facade.t('components.balanceList.empty')}
+    </TextView>
+  )
+}
+
 const GetAccountView = (props: GetAccountViewProps) => {
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
@@ -132,6 +209,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const {exchange} = useSelector((state: RootState) => state.app)
   const posYFactor = useRef(new Animated.Value(0))
+  const {isConnected} = useSelector((state: RootState) => state.network)
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
@@ -201,16 +279,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
       Facade.bus.off('removePendingTransactions', manageClaimLoader)
     }
   }, [address])
-  const [tokenAssetsState, setTokenAssetsState] = useState<TokenAsset[]>([])
-  const [transactionsState, setTransactionState] = useState<
-    TransactionDateGroup[]
-  >([])
-  const [pendingTransactionsState, setPendingTransactionState] = useState<
-    TransactionDateGroup[]
-  >([])
-  const [balanceFormatted, setBalanceFormatted] = useState<string>(
-    account.formattedBalanceAmount(currency, language, exchange)
-  )
 
   useEffect(() => {
     populateUnclaimed()
@@ -231,7 +299,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }, [isAssetsTabSelected, account])
 
   const isClaimAvailable = () => {
-    return Boolean(unclaimedGasAmount && !isWatchAccount)
+    return Boolean(unclaimedGasAmount && !isWatchAccount && isConnected)
   }
 
   const refresh = () => {
@@ -272,6 +340,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
     // Save the new cache
     await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
+    await dispatchAsync(RootStore.app.actions.syncAccounts())
   }
 
   const handleUpdateTransactions = () => {
@@ -289,7 +358,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   const claimGas = async () => {
     if (Facade.await.inAction(`ClaimGas@${account.address}`)) return
-    if (!account.address || !unclaimedGasAmount) return
+    if (!account.address || !unclaimedGasAmount || !isConnected) return
 
     Facade.await.init(`ClaimGas@${account.address}`)
 
@@ -316,75 +385,15 @@ const GetAccountView = (props: GetAccountViewProps) => {
     setCardHeight(height)
     posYFactor.current.setValue(1)
 
-    // Animated.timing(posYFactor.current, {
-    //   toValue: 1,
-    //   duration: 500,
-    //   useNativeDriver: true,
-    //   easing: Easing.out((val) => val ** 2),
-    // }).start()
+    Animated.timing(posYFactor.current, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+      easing: Easing.out((val) => val ** 2),
+    }).start()
     setShowTabBarSelector(true)
   }
   const [showTabBarSelector, setShowTabBarSelector] = useState(false)
-  const BalanceListParam = () => {
-    return (
-      <LinearLayout mr={'7px'} ml={'7px'}>
-        <BalanceList
-          my="16px"
-          tokenAssets={account.getTokenAssets()}
-          address={account.address ?? undefined}
-          fromAccountView={true}
-          fromListWalletView={false}
-          fromSendAccountSelectionModal={false}
-          zeroBalance={true}
-        />
-      </LinearLayout>
-    )
-  }
-
-  const TransactionsTab = () => {
-    return account.tokenAssets.length ? (
-      <AwaitActivity
-        name={'fetchTransaction'}
-        size={'large'}
-        style={{minHeight: 100}}
-        loadingView={<ScreenLoader transparent={true} />}
-      >
-        <>
-          {account.address && (
-            <LinearLayout pt={20} mr={'7px'} ml={'7px'}>
-              <TransactionsList
-                title={Facade.t('screens.getAccount.pendingTransactions')}
-                address={account.address}
-                transactionGroups={account.getPendingTransactions()}
-              />
-
-              <TransactionsList
-                title={Facade.t('screens.getAccount.completedTransactions')}
-                address={account.address}
-                transactionGroups={account.getTransactions()}
-              />
-            </LinearLayout>
-          )}
-
-          <AwaitActivity
-            name={'loadMoreTransaction'}
-            size={'large'}
-            style={{minHeight: 100}}
-          />
-        </>
-      </AwaitActivity>
-    ) : (
-      <TextView
-        my="32px"
-        color="text.0"
-        fontFamily="medium"
-        fontSize="18px"
-        textAlign="center"
-      >
-        {Facade.t('components.balanceList.empty')}
-      </TextView>
-    )
-  }
 
   const handleChangeScene = (index: number) => {
     if (index === 0) {
@@ -481,7 +490,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         <ThemedSendButton
           account={account}
           onPress={
-            isWatchAccount || !account.getBalanceAmount()
+            isWatchAccount || !account.getBalanceAmount() || !isConnected
               ? undefined
               : () => {
                   props.navigation.navigate(Facade.route.Modal.name, {

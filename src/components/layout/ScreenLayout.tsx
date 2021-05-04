@@ -32,6 +32,7 @@ interface Props {
   invertedGradient?: boolean
   solidColorBG?: boolean
   darkerSolidColorBG?: boolean
+  hideOfflineBar?: boolean
 }
 
 const ScreenLayout: React.FC<Props> = (props) => {
@@ -45,7 +46,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
     props.useStatusBarPadding && Facade.utils.isAndroid
       ? Constants.statusBarHeight
       : 0
-
+  const {isConnected} = useSelector((state: RootState) => state.network)
   const chooseColorBG = () => {
     let color
     if (props.transparent) {
@@ -93,11 +94,14 @@ const ScreenLayout: React.FC<Props> = (props) => {
             marginBottom: tabBarHeight,
           }}
         >
-          <OfflineBar />
+          {!props.hideOfflineBar && <OfflineBar />}
           <LinearLayout
             alignItems={props.alignX}
             justifyContent={props.alignY}
-            style={{padding: Facade.scale(props.padding ?? 10)}}
+            style={{
+              padding: Facade.scale(props.padding ?? 10),
+              marginTop: !isConnected ? 45 : undefined,
+            }}
             position={'relative'}
             height={'100%'}
           >
@@ -126,6 +130,7 @@ ScreenLayout.propTypes = {
   onScroll: PropTypes.func,
   onReachBottom: PropTypes.func,
   scrollEventThrottle: PropTypes.number,
+  hideOfflineBar: PropTypes.bool,
 }
 
 ScreenLayout.defaultProps = {
@@ -137,6 +142,7 @@ ScreenLayout.defaultProps = {
   invertedGradient: false,
   solidColorBG: false,
   darkerSolidColorBG: false,
+  hideOfflineBar: false,
 }
 
 export default ScreenLayout

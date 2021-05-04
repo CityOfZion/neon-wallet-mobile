@@ -11,7 +11,7 @@ import {NetworkOptions} from '~src/types/settings'
  */
 export class ApplicationConfig {
   readonly defaultTheme = Theme.DARK
-  readonly defaultDataRefreshTimeInMilliseconds = 10000
+  readonly defaultDataRefreshTimeInMilliseconds = 60000
 
   readonly headerHeight =
     Platform.OS === 'ios' ? 40 : 72 + (StatusBar.currentHeight ?? 0)

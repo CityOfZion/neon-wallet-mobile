@@ -479,6 +479,8 @@ const SendTransactionInputModal = (prop: Props) => {
 
   const dispatch = useDispatch<DispatchResult>()
 
+  const {isConnected} = useSelector((state: RootState) => state.network)
+
   const show = useNavigationState(
     (state) =>
       state.routes[state.routes.length - 1].name ===
@@ -604,6 +606,8 @@ const SendTransactionInputModal = (prop: Props) => {
       !validateAddress(receiverAddress)
     ) {
       inputIsValid = false
+    } else if (!isConnected) {
+      return false
     }
     return inputIsValid
   }

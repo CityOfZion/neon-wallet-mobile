@@ -7,6 +7,7 @@ import {
   GestureResponderEvent,
   View,
 } from 'react-native'
+import {useSelector} from 'react-redux'
 
 import {Facade} from '~/src/app/Facade'
 import {
@@ -23,7 +24,7 @@ interface Props {
 const ThemedSendButton: React.FC<Props> = (props) => {
   const isWatchAccount = props.account?.accountType === 'watch'
   const isNotEmpty = props.account?.hasFunds
-
+  const {isConnected} = useSelector((state: RootState) => state.network)
   const styles = StyleSheet.create({
     dropShadow: {
       alignItems: 'center',
@@ -40,6 +41,7 @@ const ThemedSendButton: React.FC<Props> = (props) => {
       elevation: 30,
     },
   })
+
   return (
     <TouchableWithoutFeedback onPress={props.onPress}>
       <View style={styles.dropShadow}>
@@ -82,7 +84,7 @@ const ThemedSendButton: React.FC<Props> = (props) => {
               orientation="horiz"
               justifyContent={'center'}
             >
-              {isNotEmpty && !isWatchAccount ? (
+              {isNotEmpty && !isWatchAccount && isConnected ? (
                 <Image
                   width={13}
                   height={16}
