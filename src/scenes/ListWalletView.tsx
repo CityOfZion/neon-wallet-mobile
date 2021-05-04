@@ -336,7 +336,10 @@ const ListWalletView = (props: WalletProps) => {
       invertedGradient={true}
     >
       <>
-        <LinearLayout alignSelf={'flex-end'} style={{marginTop: !isConnected ? 12 : undefined}}> 
+        <LinearLayout
+          alignSelf={'flex-end'}
+          style={{marginTop: !isConnected ? 12 : undefined}}
+        >
           <ThemedMoreButton
             onPress={() =>
               props.navigation.navigate(Facade.route.Modal.name, {
