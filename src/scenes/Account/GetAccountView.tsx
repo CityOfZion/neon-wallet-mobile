@@ -327,15 +327,17 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const [showTabBarSelector, setShowTabBarSelector] = useState(false)
   const BalanceListParam = () => {
     return (
-      <BalanceList
-        my="16px"
-        tokenAssets={account.getTokenAssets()}
-        address={account.address ?? undefined}
-        fromAccountView={true}
-        fromListWalletView={false}
-        fromSendAccountSelectionModal={false}
-        zeroBalance={true}
-      />
+      <LinearLayout mr={'7px'} ml={'7px'}>
+        <BalanceList
+          my="16px"
+          tokenAssets={account.getTokenAssets()}
+          address={account.address ?? undefined}
+          fromAccountView={true}
+          fromListWalletView={false}
+          fromSendAccountSelectionModal={false}
+          zeroBalance={true}
+        />
+      </LinearLayout>
     )
   }
 
@@ -349,7 +351,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
       >
         <>
           {account.address && (
-            <LinearLayout pt={20}>
+            <LinearLayout pt={20} mr={'7px'} ml={'7px'}>
               <TransactionsList
                 title={Facade.t('screens.getAccount.pendingTransactions')}
                 address={account.address}
@@ -423,7 +425,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
       <View
         style={{
           flexDirection: 'row',
-          width: Dimensions.get('screen').width,
+          width: Dimensions.get('screen').width - 15,
           justifyContent: 'space-around',
           alignSelf: 'center',
           marginVertical: 20,
