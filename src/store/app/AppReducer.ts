@@ -377,6 +377,7 @@ export class AppReducer extends ReducerWrapper<
     syncPendingTransactions: (): AsyncAction => {
       return async (dispatch, getState) => {
         const accounts = getState().app.accounts
+        const wallets = getState().app.wallets
         const removedSenderTx: SenderTransaction[] = []
 
         for (const account of accounts) {
@@ -434,8 +435,10 @@ export class AppReducer extends ReducerWrapper<
             )
           }
         }
-        dispatch(this.commit('SET_ACCOUNTS', {accounts}))
         await Storage.accounts.save(accounts)
+        dispatch(this.commit('SET_ACCOUNTS', {accounts}))
+        this.actions.syncWallets()
+
         if (removedSenderTx.length) {
           Facade.bus.emit('removePendingTransactions', removedSenderTx)
         }
