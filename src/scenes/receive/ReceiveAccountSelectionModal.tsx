@@ -127,9 +127,9 @@ const ReceiveAccountSelectionModal = (props: Props) => {
                 fontFamily={'medium'}
                 textAlign={'center'}
               >
-                {Facade.t(
+                {`${props.route.params.wallet.name?.toUpperCase()} ${Facade.t(
                   'modals.receive.accountSelection.tokensValue'
-                ).toUpperCase()}
+                ).toUpperCase()}`}
               </TextView>
             ) : (
               <View />
