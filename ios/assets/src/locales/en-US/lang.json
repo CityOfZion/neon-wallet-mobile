@@ -267,7 +267,8 @@
     "wallet": "Wallet",
     "account": "Account",
     "address": "Address",
-    "reference": "Reference"
+    "reference": "Reference",
+    "shareOrCopy":"Share or Copy to clipboard"
   },
   "screens": {
     "contactDetails": {
@@ -444,7 +445,7 @@
       },
       "accountSelection": {
         "subtitle": "Please select an account to receive to",
-        "tokensValue": "Account Name Tokens Value"
+        "tokensValue": "Tokens Value"
       },
       "toAccount": {
         "yourAddress": "Your Address",
