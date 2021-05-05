@@ -1,6 +1,15 @@
 {
     "changelog": [
     	{
+            "version": "V1.0.15-45",
+            "date": "May 05 2021",
+            "changes": [
+                "- Bug fixes",
+                "- Change layouts",
+                "- New Feature - Offline mode "	 
+            ]
+        },
+    	{
             "version": "V1.0.15-43",
             "date": "March 30 2021",
             "changes": [
