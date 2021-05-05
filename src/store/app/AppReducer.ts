@@ -438,7 +438,7 @@ export class AppReducer extends ReducerWrapper<
         await Storage.accounts.save(accounts)
         dispatch(this.commit('SET_ACCOUNTS', {accounts}))
         this.actions.syncWallets()
-        
+
         if (removedSenderTx.length) {
           Facade.bus.emit('removePendingTransactions', removedSenderTx)
         }

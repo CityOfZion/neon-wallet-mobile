@@ -131,7 +131,9 @@ const BalanceListParam = () => {
   )
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   useEffect(() => {
-    const upAccount = accountsPool.find(acc => acc.address === account.address) || new Account()
+    const upAccount =
+      accountsPool.find((acc) => acc.address === account.address) ??
+      new Account()
     setAccount(upAccount)
   }, [accountsPool])
   return (
