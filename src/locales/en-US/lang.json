@@ -445,7 +445,7 @@
       },
       "accountSelection": {
         "subtitle": "Please select an account to receive to",
-        "tokensValue": "Account Name Tokens Value"
+        "tokensValue": "Tokens Value"
       },
       "toAccount": {
         "yourAddress": "Your Address",
