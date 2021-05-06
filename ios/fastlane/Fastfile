@@ -32,6 +32,8 @@ platform :ios do
       workspace: "Neon.xcworkspace",
       scheme: "Neon-release",
     )
+
+    upload_to_testflight
     
   end
 end
