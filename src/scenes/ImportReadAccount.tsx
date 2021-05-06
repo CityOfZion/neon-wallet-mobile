@@ -101,7 +101,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
             flex={1}
             alignSelf="center"
             justifyContent={'flex-end'}
-            mb={!isConnected ? '12%' : '10px'}
+            mb={!isConnected ? '14%' : '10px'}
           >
             <ThemedButton
               label={Facade.t('importReadAccount.add')}

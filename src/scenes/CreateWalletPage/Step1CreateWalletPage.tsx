@@ -130,7 +130,7 @@ const Step1CreateWalletPage: React.FC<Props> = (props) => {
         />
       </LinearLayout>
 
-      <LinearLayout mt={5} mb={6} px={5} width={'100%'}>
+      <LinearLayout mt={5} mb={7} px={5} width={'100%'}>
         <ThemedButton
           onPress={() =>
             props.navigation.navigate(
