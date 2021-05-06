@@ -24,7 +24,7 @@ platform :ios do
     increment_build_number(xcodeproj: "Neon.xcodeproj")
     
     match(
-      type: "adhoc",
+      type: "appstore",
       verbose: true
     )
 
