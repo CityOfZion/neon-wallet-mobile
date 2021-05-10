@@ -338,7 +338,7 @@ const ListWalletView = (props: WalletProps) => {
       <>
         <LinearLayout
           alignSelf={'flex-end'}
-          style={{marginTop: !isConnected ? 12 : undefined}}
+          style={{marginTop: !isConnected ? 14 : undefined}}
         >
           <ThemedMoreButton
             onPress={() =>

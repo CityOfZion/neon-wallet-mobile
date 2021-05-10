@@ -105,7 +105,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
         </LinearLayout>
       </LinearLayout>
 
-      <LinearLayout mt={5} mb={6} px={5} width={'100%'}>
+      <LinearLayout mt={5} mb={7} px={5} width={'100%'}>
         <AwaitActivity name={'submit'} size={'large'}>
           <ThemedButton
             onPress={() => Facade.await.run('submit', submit, 1000)}
