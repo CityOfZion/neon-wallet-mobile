@@ -216,6 +216,7 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 5DRRKCU6DK;
 						LastSwiftMigration = 1240;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -382,6 +383,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Neon/neon.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_TEAM = 5DRRKCU6DK;
 				ENABLE_BITCODE = NO;
@@ -404,6 +407,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
+				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc io.cityofzion.neon";
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -418,8 +422,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Neon/neon.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_TEAM = 5DRRKCU6DK;
 				ENABLE_BITCODE = NO;
@@ -438,7 +442,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc io.cityofzion.neon";
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

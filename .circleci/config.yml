@@ -3,7 +3,7 @@ jobs:
   test:
     working_directory: ~/neon-wallet-mobile
     docker:
-      - image: circleci/node:10.19.0
+      - image: circleci/node:10.16.3
     steps:
       - checkout
       - attach_workspace:
@@ -21,7 +21,7 @@ jobs:
   node:
     working_directory: ~/neon-wallet-mobile
     docker:
-      - image: circleci/node:10.19.0
+      - image: cimg/node:12.16
 
     steps:
       - checkout
@@ -48,9 +48,8 @@ jobs:
           root: ~/neon-wallet-mobile
           paths:
             - node_modules
-            - ios
 
-  deploy:
+  deployAndroid:
     docker:
       - image: circleci/android:api-29-node
     working_directory: ~/neon-wallet-mobile/android
@@ -102,7 +101,6 @@ jobs:
           command: bundle exec fastlane android beta
       - store_artifacts:
           path: output
-
   deployIOS:
     working_directory: ~/neon-wallet-mobile
     macos:
@@ -130,6 +128,8 @@ jobs:
           key: node-v1-{{ checksum "package.json" }}-{{ arch }}
           paths:
             - node_modules
+      
+      - run: npm run build:ios
 
       - restore_cache:
           key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
@@ -162,20 +162,6 @@ jobs:
             - ios/Pods
 
       - run:
-          name: Mobile Provision
-          working_directory: ~/neon-wallet-mobile/ios/builds
-          command: echo $IOS_MOBILE_PROVISION | base64 --decode > ./match_AppStore_iocityofzionneon_1617203405.mobileprovision
-
-      - run:
-          name: Certificate
-          working_directory: ~/neon-wallet-mobile/ios/builds
-          command: echo $IOS_CERTIFICATE | base64 --decode > ./development.cer
-
-      - run:
-          name: Open Session Apple Connect
-          command: eval $(FASTLANE_DISABLE_COLORS=1 bundle exec fastlane spaceauth -u $APPLE_ID 2>/dev/null | grep "export FASTLANE_SESSION")   
-              
-      - run:
           name: Fastlane
           command: bundle exec fastlane $FASTLANE_LANE
           working_directory: ios
@@ -194,19 +180,17 @@ workflows:
       - test:
           requires:
             - node
-      - deploy:
+      - deployAndroid:
           requires:
-            - test
+            - test            
           filters:
             branches:
               only:
-                - master
-                - /ci-.*/
+                - development     
       - deployIOS:
           requires:
             - test            
           filters:
             branches:
               only:
-                - master
-                - /ci-.*/  
+                - development  

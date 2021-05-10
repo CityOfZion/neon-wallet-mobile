@@ -24,12 +24,17 @@ platform :ios do
     increment_build_number(xcodeproj: "Neon.xcodeproj")
     
     match(
-      type: "appstore"
+      type: "adhoc",
+      verbose: true
     )
 
     build_app(
       workspace: "Neon.xcworkspace",
       scheme: "Neon-release",
+    )
+
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
     )
     
   end
