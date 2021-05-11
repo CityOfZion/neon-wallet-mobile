@@ -45,6 +45,10 @@ type ContentCollection = {
   [key in keyof Partial<MoreStackParamList>]: ContentParams
 }
 
+export const getRandomColor = (max: number) => {
+  return Math.floor(Math.random() * Math.floor(max))
+}
+
 const CustomizeAccount = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
@@ -54,10 +58,6 @@ const CustomizeAccount = (props: Props) => {
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
   const dispatchAsyncAccount = useDispatch<AsyncDispatch<Account>>()
-
-  const getRandomColor = (max: number) => {
-    return Math.floor(Math.random() * Math.floor(max))
-  }
 
   const [name, setName] = useState<string>('')
   const [color, setColor] = useState<string>(

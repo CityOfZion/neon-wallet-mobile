@@ -3,13 +3,17 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useEffect, useState} from 'react'
 import {Alert} from 'react-native'
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {AsteroidHelper} from '~src/helpers/AsteroidHelper'
+import {AddressPaginatedRequest} from '~src/models/request/AddressPaginatedRequest'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import {getRandomColor} from '~src/scenes/CustomizeAccount'
+import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface ImportKeyProps {
@@ -17,8 +21,17 @@ interface ImportKeyProps {
   route: RouteProp<MoreStackParamList, 'ImportKey'>
 }
 
+const isMnemonic = (word: string) => {
+  const list = String(word).split(' ')
+  return list.length === 12
+}
+
 const validator = (text: string) =>
-  wallet.isAddress(text) || wallet.isNEP2(text) || wallet.isWIF(text) || !text
+  wallet.isAddress(text) ||
+  wallet.isNEP2(text) ||
+  wallet.isWIF(text) ||
+  !text ||
+  isMnemonic(text)
 
 const ImportKey = (props: ImportKeyProps) => {
   const theme = useSelector(
@@ -29,7 +42,91 @@ const ImportKey = (props: ImportKeyProps) => {
   const [inputValue, setInputValue] = useState(
     props.route.params ? props.route.params.key ?? '' : ''
   )
+  const dispatch = useDispatch()
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
+
   const inputIsValid = validator(inputValue)
+
+  const importMnemonic = async (mnemonic: string) => {
+    let index: number = 0
+    let stop: boolean = false
+    const WALLET_NAME_DEFAULT = 'Mnemonic Wallet'
+    const ACCOUNT_NAME_DEFAULT = `Mnemonic Account ${index + 1}`
+    const walletID = await createWallet(WALLET_NAME_DEFAULT)
+    while (!stop && isConnected) {
+      const {WIF, address} = await new Promise((resolve) => {
+        resolve(AsteroidHelper.generateNeoAccount(mnemonic, index))
+      })
+      const req = new AddressPaginatedRequest(address, 1)
+      const {totalEntries} = await req.getAddressAbstracts()
+      if (totalEntries && totalEntries > 0) {
+        await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
+      } else {
+        if (index < 1) {
+          await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
+        }
+        stop = true
+      }
+      index++
+    }
+    if (!isConnected) {
+      const {WIF, address} = await new Promise((resolve) => {
+        resolve(AsteroidHelper.generateNeoAccount(mnemonic, index))
+      })
+      await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
+    }
+  }
+
+  const createWallet = async (name: string) => {
+    dispatch(RootStore.wallet.actions.clearState())
+    dispatch(RootStore.wallet.actions.setName(name))
+
+    dispatch(RootStore.wallet.actions.setType('standard'))
+
+    const walletId = await dispatchAsyncString(
+      RootStore.wallet.actions.createAndSave()
+    )
+
+    dispatch(RootStore.wallet.actions.clearState())
+
+    await dispatchAsync(RootStore.app.actions.syncWallets())
+
+    dispatch(RootStore.wallet.actions.selectWallet(walletId))
+
+    return walletId
+  }
+
+  const createAccount = async (
+    walletId: string,
+    name: string,
+    wif: string,
+    address: string
+  ) => {
+    if (!address) throw new Error('Address not defined')
+
+    dispatch(RootStore.account.actions.clearState())
+
+    dispatch(RootStore.account.actions.setIdWallet(walletId))
+    dispatch(RootStore.account.actions.setName(name))
+    dispatch(
+      RootStore.account.actions.setBackgroundColor(
+        theme.colors.card[getRandomColor(6)]
+      )
+    )
+    const importedAccount = (await dispatchAsync(
+      RootStore.account.actions.importAndSave(address, wif)
+    )) as Account
+    await dispatchAsync(RootStore.app.actions.syncAccounts())
+    isConnected &&
+      (await dispatchAsync(
+        RootStore.app.actions.syncTokenAssetsByAddress(address)
+      ))
+
+    dispatch(RootStore.account.actions.clearState())
+
+    return importedAccount
+  }
 
   const onNext = async () => {
     let destination: NavParam<MoreStackParamList> | undefined = undefined
@@ -81,6 +178,8 @@ const ImportKey = (props: ImportKeyProps) => {
           },
         ]
       }
+    } else if (isMnemonic(inputValue)) {
+      importMnemonic(inputValue)
     }
 
     if (destination) {
