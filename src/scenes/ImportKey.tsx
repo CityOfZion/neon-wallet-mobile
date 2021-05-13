@@ -58,7 +58,7 @@ const ImportKey = (props: ImportKeyProps) => {
     let stop: boolean = false
     const WALLET_NAME_DEFAULT = 'Mnemonic Wallet'
     const ACCOUNT_NAME_DEFAULT = `Mnemonic Account ${index + 1}`
-    const walletID = await createWallet(WALLET_NAME_DEFAULT)
+    const walletID = await createWallet(WALLET_NAME_DEFAULT, mnemonic)
     while (!stop && isConnected) {
       const {WIF, address} = await new Promise((resolve) => {
         resolve(AsteroidHelper.generateNeoAccount(mnemonic, index))
@@ -83,10 +83,10 @@ const ImportKey = (props: ImportKeyProps) => {
     }
   }
 
-  const createWallet = async (name: string) => {
+  const createWallet = async (name: string, securityPhrase: string) => {
     dispatch(RootStore.wallet.actions.clearState())
     dispatch(RootStore.wallet.actions.setName(name))
-
+    dispatch(RootStore.wallet.actions.setSecurityPhrase(securityPhrase))
     dispatch(RootStore.wallet.actions.setType('standard'))
 
     const walletId = await dispatchAsyncString(
@@ -184,7 +184,7 @@ const ImportKey = (props: ImportKeyProps) => {
         ]
       }
     } else if (validateMnemonic(inputValue)) {
-      importMnemonic(inputValue)
+      await importMnemonic(inputValue)
       await dispatchAsync(RootStore.app.actions.syncWallets())
       props.navigation.reset({
         index: 0,
