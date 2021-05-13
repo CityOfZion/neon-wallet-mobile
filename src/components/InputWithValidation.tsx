@@ -57,6 +57,8 @@ interface Props {
   selectedContact?: Contact
   srcIcon?: ImageLoadEventData
   iconSize?: [number, number]
+  isMultiline?: boolean
+  fromImportKey?: boolean
 }
 
 const InputWithValidation = (props: Props) => {
@@ -89,6 +91,10 @@ const InputWithValidation = (props: Props) => {
     }
   }
 
+  const isMnemonic = (word: string) => {
+    return word.split(' ').length > 1
+  }
+
   useEffect(() => {
     setContact(props.selectedContact)
   }, [props.selectedContact])
@@ -116,32 +122,46 @@ const InputWithValidation = (props: Props) => {
               alignSelf={'center'}
             />
           )}
-          <InputTextView
-            ref={inputRef}
-            onChangeText={props.onChangeText}
-            color={fontColor}
-            placeholderTextColor={props.placeholderColor ?? '#7d929a'}
-            underlineColorAndroid="transparent"
-            placeholder={
-              props.placeholder ??
-              Facade.t('components.inputTextWithValidation.inputPlaceholder')
+          <LinearLayout
+            bg={props.fromImportKey ? theme.colors.background[12] : undefined}
+            borderColor={
+              !props.validator(props.value)
+                ? theme.colors.quinary
+                : theme.colors.background[12]
             }
-            fontFamily="regular"
-            fontStyle={fontStyle}
-            fontSize={18}
-            value={props.value}
-            weight={1}
-            autoCompleteType={props.secure ? 'password' : undefined}
-            secureTextEntry={props.secure ?? false}
-            onFocus={props.onFocus}
-            onBlur={handleBlur}
-            editable={props.editable ?? true}
-            keyboardType={props.keyboardType}
-            returnKeyType={'done'}
-            onSubmitEditing={Keyboard.dismiss}
-          />
+            borderRadius={10}
+            borderWidth={props.isMultiline ? 1 : 0}
+            width={'100%'}
+          >
+            <InputTextView
+              ref={inputRef}
+              onChangeText={props.onChangeText}
+              color={fontColor}
+              placeholderTextColor={props.placeholderColor ?? '#7d929a'}
+              underlineColorAndroid="transparent"
+              placeholder={
+                props.placeholder ??
+                Facade.t('components.inputTextWithValidation.inputPlaceholder')
+              }
+              fontFamily="regular"
+              fontStyle={fontStyle}
+              fontSize={18}
+              value={props.value}
+              weight={props.isMultiline ? 4 : 1}
+              autoCompleteType={props.secure ? 'password' : undefined}
+              secureTextEntry={props.secure ?? false}
+              onFocus={props.onFocus}
+              onBlur={handleBlur}
+              editable={props.editable ?? true}
+              keyboardType={props.keyboardType}
+              returnKeyType={'done'}
+              onSubmitEditing={Keyboard.dismiss}
+              multiline={!!props.isMultiline}
+              numberOfLines={props.isMultiline ? 10 : 1}
+            />
+          </LinearLayout>
 
-          {!isValid && (
+          {!props.fromImportKey && !isValid && (
             <ImageView
               resizeMode={'center'}
               alignSelf="center"
@@ -164,32 +184,36 @@ const InputWithValidation = (props: Props) => {
         />
       )}
 
-      <LinearLayout
-        mt={1}
-        bg={
-          props.validator(props.value)
-            ? props.separatorColor
-            : props.invalidSeparatorColor ?? props.separatorColor
-        }
-        height={1}
-        width="100%"
-      />
+      {!props.fromImportKey && (
+        <>
+          <LinearLayout
+            mt={1}
+            bg={
+              props.validator(props.value)
+                ? props.separatorColor
+                : props.invalidSeparatorColor ?? props.separatorColor
+            }
+            height={1}
+            width="100%"
+          />
 
-      <LinearLayout height="12px" justifyContent="flex-start">
-        <TextView
-          fontStyle="italic"
-          color={props.invalidMessageColor ?? theme.colors.background[5]}
-          fontSize={12}
-          fontFamily="regular"
-          textAlign="right"
-          mt={2}
-          opacity={isValid ? 0 : 1}
-          height={Platform.OS === 'ios' ? '15px' : undefined}
-        >
-          {props.invalidMessage ??
-            Facade.t('components.inputTextWithValidation.incorrectFormat')}
-        </TextView>
-      </LinearLayout>
+          <LinearLayout height="12px" justifyContent="flex-start">
+            <TextView
+              fontStyle="italic"
+              color={props.invalidMessageColor ?? theme.colors.background[5]}
+              fontSize={12}
+              fontFamily="regular"
+              textAlign="right"
+              mt={2}
+              opacity={isValid ? 0 : 1}
+              height={Platform.OS === 'ios' ? '15px' : undefined}
+            >
+              {props.invalidMessage ??
+                Facade.t('components.inputTextWithValidation.incorrectFormat')}
+            </TextView>
+          </LinearLayout>
+        </>
+      )}
 
       <LinearLayout
         orientation="horiz"
@@ -228,9 +252,11 @@ const InputWithValidation = (props: Props) => {
         {!props.hideScan && (
           <ScanButton
             onPress={() =>
-              navigation.navigate(Facade.route.QRCodeScan.name, {
-                onScan: props.onScan,
-              })
+              isMnemonic(props.value)
+                ? undefined
+                : navigation.navigate(Facade.route.QRCodeScan.name, {
+                    onScan: props.onScan,
+                  })
             }
           />
         )}

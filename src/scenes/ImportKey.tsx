@@ -2,9 +2,10 @@ import {wallet} from '@cityofzion/neon-core'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useEffect, useState} from 'react'
-import {Alert} from 'react-native'
+import {Alert, Platform, TextInput} from 'react-native'
 import {useSelector, useDispatch} from 'react-redux'
 
+import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
 import {Facade} from '~src/app/Facade'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -17,13 +18,17 @@ import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface ImportKeyProps {
-  navigation: StackNavigationProp<MoreStackParamList>
+  navigation: StackNavigationProp<MoreStackParamList & WalletStackParamList>
   route: RouteProp<MoreStackParamList, 'ImportKey'>
 }
 
-const isMnemonic = (word: string) => {
+const validateMnemonic = (word: string) => {
   const list = String(word).split(' ')
   return list.length === 12
+}
+
+const isMnemonic = (word: string) => {
+  return word.split(' ').length > 1
 }
 
 const validator = (text: string) =>
@@ -31,7 +36,7 @@ const validator = (text: string) =>
   wallet.isNEP2(text) ||
   wallet.isWIF(text) ||
   !text ||
-  isMnemonic(text)
+  validateMnemonic(text)
 
 const ImportKey = (props: ImportKeyProps) => {
   const theme = useSelector(
@@ -178,12 +183,28 @@ const ImportKey = (props: ImportKeyProps) => {
           },
         ]
       }
-    } else if (isMnemonic(inputValue)) {
+    } else if (validateMnemonic(inputValue)) {
       importMnemonic(inputValue)
+      await dispatchAsync(RootStore.app.actions.syncWallets())
+      props.navigation.reset({
+        index: 0,
+        routes: [{name: Facade.route.MorePage.name}],
+      })
+      props.navigation.replace(Facade.route.ListWalletsPage.name, {})
     }
 
     if (destination) {
       props.navigation.navigate(...destination)
+    }
+  }
+
+  type TTextComponent = 'input' | 'textArea'
+
+  const [textComponent, setTextComponent] = useState<TTextComponent>('input')
+
+  const handleComponent = () => {
+    if (validateMnemonic(inputValue)) {
+      setTextComponent('textArea')
     }
   }
 
@@ -210,6 +231,8 @@ const ImportKey = (props: ImportKeyProps) => {
           separatorColor={theme.colors.background[5]}
           invalidSeparatorColor={theme.colors.background[4]}
           invalidMessageColor={theme.colors.quinary}
+          isMultiline={isMnemonic(inputValue)}
+          fromImportKey={true}
         />
 
         {inputIsValid && (

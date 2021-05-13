@@ -124,10 +124,10 @@ export class AccountReducer extends ReducerWrapper<
         const wallet = account.getWallet(getState().app.wallets)
 
         if (wallet) {
-          if (wallet.walletType === 'legacy') {
-            if (wif) {
-              await Facade.security.saveWif(account.address, wif)
-            } else {
+          if (wif) {
+            await Facade.security.saveWif(account.address, wif)
+          } else {
+            if (wallet.walletType === 'legacy') {
               throw Error('Wif not defined')
             }
           }
