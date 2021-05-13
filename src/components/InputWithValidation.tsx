@@ -91,10 +91,6 @@ const InputWithValidation = (props: Props) => {
     }
   }
 
-  const isMnemonic = (word: string) => {
-    return word.split(' ').length > 1
-  }
-
   useEffect(() => {
     setContact(props.selectedContact)
   }, [props.selectedContact])
@@ -130,8 +126,10 @@ const InputWithValidation = (props: Props) => {
                 : theme.colors.background[12]
             }
             borderRadius={10}
-            borderWidth={props.isMultiline ? 1 : 0}
+            borderWidth={props.fromImportKey ? 1 : 0}
             width={'100%'}
+            orientation={'horiz'}
+            p={3}
           >
             <InputTextView
               ref={inputRef}
@@ -158,24 +156,25 @@ const InputWithValidation = (props: Props) => {
               onSubmitEditing={Keyboard.dismiss}
               multiline={!!props.isMultiline}
               numberOfLines={props.isMultiline ? 10 : 1}
+              style={{textAlignVertical: 'top'}}
             />
-          </LinearLayout>
 
-          {!props.fromImportKey && !isValid && (
-            <ImageView
-              resizeMode={'center'}
-              alignSelf="center"
-              source={require('~/src/assets/images/icon-alert-purple.png')}
-            />
-          )}
-          {props.onClearPress && props.value.length > 0 ? (
-            <InputClearButton
-              onPress={props.onClearPress}
-              value={props.value}
-            />
-          ) : (
-            <LinearLayout height="34px" mb="-6px" />
-          )}
+            {!props.isMultiline && !isValid && (
+              <ImageView
+                resizeMode={'center'}
+                alignSelf="center"
+                source={require('~/src/assets/images/icon-alert-purple.png')}
+              />
+            )}
+            {props.onClearPress && props.value.length > 0 ? (
+              <InputClearButton
+                onPress={props.onClearPress}
+                value={props.value}
+              />
+            ) : (
+              <LinearLayout height="34px" mb="-6px" />
+            )}
+          </LinearLayout>
         </LinearLayout>
       ) : (
         <SelectedContactView
@@ -185,34 +184,33 @@ const InputWithValidation = (props: Props) => {
       )}
 
       {!props.fromImportKey && (
-        <>
-          <LinearLayout
-            mt={1}
-            bg={
-              props.validator(props.value)
-                ? props.separatorColor
-                : props.invalidSeparatorColor ?? props.separatorColor
-            }
-            height={1}
-            width="100%"
-          />
-
-          <LinearLayout height="12px" justifyContent="flex-start">
-            <TextView
-              fontStyle="italic"
-              color={props.invalidMessageColor ?? theme.colors.background[5]}
-              fontSize={12}
-              fontFamily="regular"
-              textAlign="right"
-              mt={2}
-              opacity={isValid ? 0 : 1}
-              height={Platform.OS === 'ios' ? '15px' : undefined}
-            >
-              {props.invalidMessage ??
-                Facade.t('components.inputTextWithValidation.incorrectFormat')}
-            </TextView>
-          </LinearLayout>
-        </>
+        <LinearLayout
+          mt={1}
+          bg={
+            props.validator(props.value)
+              ? props.separatorColor
+              : props.invalidSeparatorColor ?? props.separatorColor
+          }
+          height={1}
+          width="100%"
+        />
+      )}
+      {!props.isMultiline && (
+        <LinearLayout height="12px" justifyContent="flex-start">
+          <TextView
+            fontStyle="italic"
+            color={props.invalidMessageColor ?? theme.colors.background[5]}
+            fontSize={12}
+            fontFamily="regular"
+            textAlign="right"
+            mt={2}
+            opacity={isValid ? 0 : 1}
+            height={Platform.OS === 'ios' ? '15px' : undefined}
+          >
+            {props.invalidMessage ??
+              Facade.t('components.inputTextWithValidation.incorrectFormat')}
+          </TextView>
+        </LinearLayout>
       )}
 
       <LinearLayout
@@ -251,8 +249,9 @@ const InputWithValidation = (props: Props) => {
         )}
         {!props.hideScan && (
           <ScanButton
+            disabled={props.isMultiline}
             onPress={() =>
-              isMnemonic(props.value)
+              props.isMultiline
                 ? undefined
                 : navigation.navigate(Facade.route.QRCodeScan.name, {
                     onScan: props.onScan,

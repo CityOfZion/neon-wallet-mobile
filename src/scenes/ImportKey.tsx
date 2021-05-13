@@ -1,21 +1,23 @@
 import {wallet} from '@cityofzion/neon-core'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import React, {useEffect, useState} from 'react'
-import {Alert, Platform, TextInput} from 'react-native'
+import {AwaitActivity} from '@simpli/react-native-await'
+import React, {useState} from 'react'
+import {Alert} from 'react-native'
 import {useSelector, useDispatch} from 'react-redux'
 
 import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
 import {Facade} from '~src/app/Facade'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {AsteroidHelper} from '~src/helpers/AsteroidHelper'
 import {AddressPaginatedRequest} from '~src/models/request/AddressPaginatedRequest'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {getRandomColor} from '~src/scenes/CustomizeAccount'
 import {RootState, RootStore} from '~src/store/RootStore'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import {LinearLayout, ImageView, TextView} from '~src/styles/styled-components'
 
 interface ImportKeyProps {
   navigation: StackNavigationProp<MoreStackParamList & WalletStackParamList>
@@ -184,13 +186,8 @@ const ImportKey = (props: ImportKeyProps) => {
         ]
       }
     } else if (validateMnemonic(inputValue)) {
-      await importMnemonic(inputValue)
+      await Facade.await.run('importKey', () => importMnemonic(inputValue))
       await dispatchAsync(RootStore.app.actions.syncWallets())
-      props.navigation.reset({
-        index: 0,
-        routes: [{name: Facade.route.MorePage.name}],
-      })
-      props.navigation.replace(Facade.route.ListWalletsPage.name, {})
     }
 
     if (destination) {
@@ -210,44 +207,98 @@ const ImportKey = (props: ImportKeyProps) => {
 
   return (
     <ScreenLayout>
-      <LinearLayout orientation="verti" width="100%" height="100%">
-        <TextView
-          textAlign="center"
-          fontSize={18}
-          color={theme.colors.text[0]}
-          alignSelf="center"
-          flexWrap="wrap"
-          m={40}
-        >
-          {Facade.t('importKey.enterAnAddress')}
-        </TextView>
-
-        <InputWithValidation
-          onChangeText={(text) => setInputValue(text)}
-          color={theme.colors.text[0]}
-          invalidColor={theme.colors.background[3]}
-          value={inputValue}
-          validator={validator}
-          separatorColor={theme.colors.background[5]}
-          invalidSeparatorColor={theme.colors.background[4]}
-          invalidMessageColor={theme.colors.quinary}
-          isMultiline={isMnemonic(inputValue)}
-          fromImportKey={true}
-        />
-
-        {inputIsValid && (
-          <LinearLayout
-            mt={20}
-            width="90%"
-            flex={1}
+      <AwaitActivity
+        name={'importKey'}
+        loadingView={<ScreenLoader />}
+        onLoadingEnd={() => {
+          props.navigation.reset({
+            index: 0,
+            routes: [{name: Facade.route.Tab.name}],
+          })
+          props.navigation.replace(Facade.route.ListWalletsPage.name, {})
+        }}
+      >
+        <LinearLayout orientation="verti" width="100%" height="100%">
+          <TextView
+            textAlign="center"
+            fontSize={18}
+            color={theme.colors.text[0]}
             alignSelf="center"
             justifyContent={'flex-end'}
             mb={!isConnected ? '14%' : '10px'}
+            flexWrap="wrap"
+            m={40}
           >
-            <ThemedButton label="Next" onPress={onNext} />
+            {Facade.t('importKey.enterAnAddress')}
+          </TextView>
+          <LinearLayout orientation={'horiz'} justifyContent={'center'} mb={21}>
+            {isMnemonic(inputValue) && validateMnemonic(inputValue) ? (
+              <>
+                <ImageView
+                  resizeMode="center"
+                  source={require('~/src/assets/images/check-material.png')}
+                />
+                <TextView
+                  ml={'10px'}
+                  textAlign="center"
+                  fontSize={'16px'}
+                  color={theme.colors.primary}
+                  alignSelf="center"
+                  flexWrap="wrap"
+                >
+                  {Facade.t('importKey.mnemonicComplete')}
+                </TextView>
+              </>
+            ) : isMnemonic(inputValue) && !validateMnemonic(inputValue) ? (
+              <>
+                <LinearLayout mt={1}>
+                  <ImageView
+                    resizeMode="center"
+                    source={require('~/src/assets/images/clear-material.png')}
+                  />
+                </LinearLayout>
+                <TextView
+                  ml={'10px'}
+                  textAlign="center"
+                  fontSize={'16px'}
+                  color={theme.colors.quinary}
+                  alignSelf="center"
+                  flexWrap="wrap"
+                >
+                  {Facade.t('importKey.mnemonicIncorrect')}
+                </TextView>
+              </>
+            ) : (
+              <></>
+            )}
           </LinearLayout>
-        )}
-      </LinearLayout>
+          <InputWithValidation
+            onChangeText={(text) => setInputValue(text)}
+            color={theme.colors.text[0]}
+            invalidColor={theme.colors.background[3]}
+            value={inputValue}
+            validator={validator}
+            separatorColor={theme.colors.background[5]}
+            invalidSeparatorColor={theme.colors.background[4]}
+            invalidMessageColor={theme.colors.quinary}
+            isMultiline={isMnemonic(inputValue)}
+            fromImportKey={true}
+          />
+
+          {inputIsValid && (
+            <LinearLayout
+              mt={20}
+              width="90%"
+              flex={1}
+              alignSelf="center"
+              justifyContent={'flex-end'}
+              mb={!isConnected ? '12%' : '10px'}
+            >
+              <ThemedButton label="Next" onPress={onNext} />
+            </LinearLayout>
+          )}
+        </LinearLayout>
+      </AwaitActivity>
     </ScreenLayout>
   )
 }
