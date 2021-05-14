@@ -97,6 +97,10 @@ const ImportKey = (props: ImportKeyProps) => {
 
     dispatch(RootStore.wallet.actions.clearState())
 
+    await dispatchAsync(
+      RootStore.wallet.actions.setShowBackupAlert(walletId, false)
+    )
+
     await dispatchAsync(RootStore.app.actions.syncWallets())
 
     dispatch(RootStore.wallet.actions.selectWallet(walletId))
