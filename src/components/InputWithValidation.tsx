@@ -129,7 +129,7 @@ const InputWithValidation = (props: Props) => {
             borderWidth={props.fromImportKey ? 1 : 0}
             width={'100%'}
             orientation={'horiz'}
-            p={3}
+            p={props.fromImportKey ? '2%' : undefined}
           >
             <InputTextView
               ref={inputRef}
@@ -156,7 +156,7 @@ const InputWithValidation = (props: Props) => {
               onSubmitEditing={Keyboard.dismiss}
               multiline={!!props.isMultiline}
               numberOfLines={props.isMultiline ? 10 : 1}
-              style={{textAlignVertical: 'top'}}
+              style={props.isMultiline ? {textAlignVertical: 'top'} : undefined}
             />
 
             {!props.isMultiline && !isValid && (
