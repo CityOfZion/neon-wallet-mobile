@@ -31,6 +31,10 @@ const SendWalletSelectionModal = (props: Props) => {
       Facade.route.SendWalletSelectionModal.name
   )
 
+  const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
+
+  const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
+
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
@@ -47,7 +51,7 @@ const SendWalletSelectionModal = (props: Props) => {
   )
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(
-    usableWallets[0]
+    wallet
   )
 
   useEffect(() => {
