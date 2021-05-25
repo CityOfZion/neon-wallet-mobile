@@ -454,17 +454,21 @@ const AmountField = (props: {
 }
 
 const SendTransactionInputModal = (prop: Props) => {
-  const [fieldTyping, setFieldTyping] = useState<string>('')
   const {account, walletTitle, uri, selectedToken} = prop.route.params
   const {contacts, tokens, accounts, wallets, exchange} = useSelector(
     (state: RootState) => state.app
+  )
+  const [fieldTyping, setFieldTyping] = useState<string>(
+    uri ? 'amountField' : ''
   )
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
   const [receiverAddress, setReceiverAddress] = useState(
     prop.route.params?.uri?.address ?? ''
   )
-  const [amount, setAmount] = useState(uri?.amount ?? '')
+  const [amount, setAmount] = useState<number | string>(
+    Number(uri?.amount) ?? ''
+  )
   const [fiat, setFiat] = useState<number | string>('')
   const [tip, setTip] = useState<{amount: number; address: string}>()
   const hash = prop.route.params?.uri?.tokenHash ?? ''
@@ -524,7 +528,9 @@ const SendTransactionInputModal = (prop: Props) => {
   }, [fiat])
 
   useEffect(() => {
-    setAmount('')
+    if (!uri?.amount) {
+      setAmount('')
+    }
   }, [token])
 
   const changePriority = (newPriority: PriorityFee) => {
