@@ -356,7 +356,10 @@ const AmountField = (props: {
         </LinearLayout>
         <ButtonView
           p={'8px'}
-          onPress={() => setValue(String(props.tokenBalance))}
+          onPress={() => {
+            props.setFieldTyping('amountField')
+            setValue(String(props.tokenBalance))
+          }}
         >
           <TextView color={'primary'} fontSize={'15px'} fontFamily={'medium'}>
             {Facade.t('modals.send.transactionInput.max')}
@@ -428,7 +431,10 @@ const AmountField = (props: {
           <ButtonView
             mt={2}
             alignSelf={'flex-end'}
-            onPress={() => props.setFiat(Math.floor(Number(props.fiat)))}
+            onPress={() => {
+              props.setFieldTyping('fiatField')
+              props.setFiat(Math.floor(Number(props.fiat)))
+            }}
           >
             <LinearLayout orientation={'horiz'}>
               <ImageView
