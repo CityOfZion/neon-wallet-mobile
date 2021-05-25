@@ -89,14 +89,13 @@ const TokenField = (props: {
 const AmountField = (props: {
   theme: ApplicationTheme
   token?: TokenAsset
-  amount: string
-  setAmount: React.Dispatch<React.SetStateAction<string>>
+  amount: number | string
+  setAmount: React.Dispatch<React.SetStateAction<number | string>>
 }) => {
   const setValue = (val: string) => {
-    const valueNumber = Number(val)
-    if (!valueNumber) return
-
-    val = val.replace(',', '')
+    val = val.replace(/,|\.\.|\.,/g, '.')
+    val = val.replace(/\s|-/g, '')
+    val = val.replace(/[0-9]+\.[0-9]{9,}$/g, String(Number(val).toFixed(8)))
     if (props.token?.symbol === 'NEO') val = val.replace('.', '')
 
     props.setAmount(val)
@@ -116,7 +115,7 @@ const AmountField = (props: {
         color={props.theme.colors.text[0]}
         invalidColor={props.theme.colors.text[10]}
         fontStyle={'normal'}
-        value={props.amount}
+        value={props.amount !== null ? String(props.amount) : ''}
         placeholder={Facade.t('modals.receive.toAccount.enterAmount')}
         validator={() => true}
         separatorColor={props.theme.colors.background[13]}
@@ -180,7 +179,7 @@ const ReceiveToAccountModal = (props: Props) => {
   const [isAddressTabSelected, setAddressTabAsSelected] = useState<boolean>(
     true
   )
-  const [amount, setAmount] = useState<string>('')
+  const [amount, setAmount] = useState<number | string>('')
   const [reference, setReference] = useState<string>('')
   const [token, setToken] = useState<TokenAsset | null | undefined>(null)
 
@@ -279,7 +278,7 @@ const ReceiveToAccountModal = (props: Props) => {
               />
               <AmountField
                 theme={theme}
-                amount={amount ?? ''}
+                amount={amount}
                 setAmount={setAmount}
               />
               <ReferenceField
