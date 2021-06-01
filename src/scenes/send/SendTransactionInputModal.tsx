@@ -203,7 +203,7 @@ const DestinationAddressField = (props: {
   address: string
   contact?: Contact
   onAddressChanged: (address: string) => void
-  onSelected: (item: Contact | Account) => void
+  onSelected: (item: Contact | Account, addressSelected?: string) => void
   handleQrCode: (data: NeoURI | string) => void
   validateAddress: (val: string) => boolean
 }) => {
@@ -234,6 +234,7 @@ const DestinationAddressField = (props: {
         onSelected={props.onSelected}
         onScan={props.handleQrCode}
         invalidMessageColor={theme.colors.quinary}
+        addressSelected={props.address}
       />
     </Fragment>
   )
@@ -641,9 +642,12 @@ const SendTransactionInputModal = (prop: Props) => {
     return !!(object as NeoURI).address
   }
 
-  const selectContactOrAccount = (item: Contact | Account) => {
-    if (item.address) {
-      handleAddressChanged(item.address)
+  const selectContactOrAccount = (
+    item: Contact | Account,
+    addressSelected?: string
+  ) => {
+    if (addressSelected) {
+      handleAddressChanged(addressSelected)
     }
   }
 
@@ -664,7 +668,9 @@ const SendTransactionInputModal = (prop: Props) => {
 
   const handleAddressChanged = (addressValue: string) => {
     setContact(undefined)
-    const contact = contacts.find((value) => value.address === addressValue)
+    const contact = contacts.find((value) =>
+      value.addresses.find((address) => address === addressValue)
+    )
     const account = accounts.find((it) => it.address === addressValue)
     if (account) {
       const accountContact = new Contact()
@@ -672,7 +678,7 @@ const SendTransactionInputModal = (prop: Props) => {
         account.name
       }`
 
-      accountContact.address = addressValue
+      accountContact.addresses.push(addressValue)
       setContact(accountContact)
     } else if (contact) {
       setContact(contact)

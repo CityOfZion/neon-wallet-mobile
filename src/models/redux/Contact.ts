@@ -9,5 +9,5 @@ export class Contact implements ContactState {
   name: string | null = null
 
   @HttpExpose()
-  address: string | null = null
+  addresses: string[] = []
 }

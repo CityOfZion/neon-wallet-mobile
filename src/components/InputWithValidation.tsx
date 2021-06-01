@@ -47,7 +47,7 @@ interface Props {
   showContacts?: boolean
   onClearPress?: () => void
   onScan?: (data: NeoURI | string) => void
-  onSelected?: (item: Contact | Account) => void
+  onSelected?: (item: Contact | Account, addressSelected?: string) => void
   placeholder?: string
   secure?: boolean
   onFocus?: (e: NativeSyntheticEvent<TargetedEvent>) => void
@@ -59,6 +59,7 @@ interface Props {
   iconSize?: [number, number]
   isMultiline?: boolean
   fromImportKey?: boolean
+  addressSelected?: string
 }
 
 const InputWithValidation = (props: Props) => {
@@ -180,6 +181,7 @@ const InputWithValidation = (props: Props) => {
         <SelectedContactView
           selectedContact={contact}
           onClick={() => setContact(undefined)}
+          addressSelected={props.addressSelected}
         />
       )}
 
@@ -223,9 +225,12 @@ const InputWithValidation = (props: Props) => {
           <ContactsButton
             onPress={() => {
               navigation.navigate(Facade.route.ContactsModal.name, {
-                onSelected: (item: Contact | Account) => {
+                onSelected: (
+                  item: Contact | Account,
+                  addressSelected?: string
+                ) => {
                   if (props.onSelected) {
-                    props.onSelected(item)
+                    props.onSelected(item, addressSelected)
                     navigation.navigate(
                       Facade.route.SendTransactionInputModal.name
                     )

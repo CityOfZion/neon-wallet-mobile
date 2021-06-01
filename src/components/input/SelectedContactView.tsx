@@ -7,6 +7,7 @@ import {LinearLayout, TextView} from '~src/styles/styled-components'
 interface ISelectedContactView {
   selectedContact: Contact
   onClick?: () => void
+  addressSelected?: string
 }
 
 export const SelectedContactView: React.FC<ISelectedContactView> = (props) => {
@@ -28,7 +29,7 @@ export const SelectedContactView: React.FC<ISelectedContactView> = (props) => {
         fontSize={'16px'}
         onPress={props.onClick}
       >
-        {props.selectedContact?.address}
+        {props.addressSelected}
       </TextView>
     </LinearLayout>
   )
@@ -37,4 +38,5 @@ export const SelectedContactView: React.FC<ISelectedContactView> = (props) => {
 SelectedContactView.propTypes = {
   onClick: PropTypes.func.isRequired,
   selectedContact: PropTypes.any,
+  addressSelected: PropTypes.any,
 }

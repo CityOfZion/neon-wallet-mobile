@@ -1,5 +1,6 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import PropTypes from 'prop-types'
 import React, {useState, useEffect} from 'react'
 import {
   View,
@@ -7,6 +8,7 @@ import {
   Text,
   Dimensions,
   StyleSheetProperties,
+  TouchableOpacity,
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -32,6 +34,42 @@ export interface ContactDetailsParams {
 interface ContactDetailsProps {
   navigation: StackNavigationProp<RootStackParamList>
   route: RouteProp<ContactsStackParamList, 'ContactDetails'>
+}
+
+interface IItemAddress {
+  address: string
+}
+const ItemAddress: React.FC<IItemAddress> = ({address}) => {
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
+  const styles = StyleSheet.create({
+    text: {
+      color: theme.colors.primary,
+      fontFamily: 'medium',
+      fontSize: 16,
+    },
+    container: {
+      paddingVertical: 17,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      borderBottomWidth: 1,
+      borderBottomColor: '#ffffff55',
+    },
+  })
+  return (
+    <TouchableOpacity
+      onPress={() => Facade.utils.copyToClipboard(address)}
+      style={styles.container}
+    >
+      <Text style={styles.text}>{address}</Text>
+      <ImageView
+        resizeMode="center"
+        source={require('~/src/assets/images/icon-copy-green.png')}
+        alignSelf={'center'}
+      />
+    </TouchableOpacity>
+  )
 }
 
 export const ContactDetails = (props: ContactDetailsProps) => {
@@ -86,6 +124,10 @@ export const ContactDetails = (props: ContactDetailsProps) => {
       marginLeft: 10,
       flexDirection: 'row',
     },
+    containerAddresses: {
+      width: '100%',
+      paddingHorizontal: 10,
+    },
   })
   return (
     <ScreenLayout>
@@ -122,34 +164,16 @@ export const ContactDetails = (props: ContactDetailsProps) => {
           {Facade.t('screens.contactDetails.walletAddress')}
         </TextView>
 
-        <ButtonView
-          alignSelf={'center'}
-          width={'100%'}
-          onPress={() => {
-            if (contact.address) Facade.utils.copyToClipboard(contact.address)
-          }}
-          orientation={'horiz'}
-          alignItems={'center'}
-          alignContent={'center'}
-          justifyContent={'center'}
-          mt={'6px'}
-        >
-          <TextView
-            fontFamily={'regular'}
-            fontSize={'16px'}
-            color={'primary'}
-            textAlign={'center'}
-            mr={'6px'}
-          >
-            {contact.address}
-          </TextView>
-          <ImageView
-            resizeMode="center"
-            source={require('~/src/assets/images/icon-copy-green.png')}
-            alignSelf={'center'}
-          />
-        </ButtonView>
+        <View style={styles.containerAddresses}>
+          {contact.addresses.map((address, index) => (
+            <ItemAddress key={index} address={address} />
+          ))}
+        </View>
       </LinearLayout>
     </ScreenLayout>
   )
+}
+
+ItemAddress.propTypes = {
+  address: PropTypes.any,
 }

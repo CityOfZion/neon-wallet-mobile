@@ -11,6 +11,7 @@ import {
   SectionListData,
   SectionListRenderItemInfo,
   Alert,
+  TouchableOpacity,
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -24,12 +25,12 @@ interface ContactListProps {
   mt?: number | string
   mb?: number | string
   searchBar?: boolean
-  onContactSelected?: (contact: Contact) => void
+  onContactSelected?: (contact: Contact, addressSelected?: string) => void
 }
 
 interface Item {
   data: Contact
-  onContactSelected?: (contact: Contact) => void
+  onContactSelected?: (contact: Contact, addressSelected?: string) => void
 }
 
 interface IconItem {
@@ -93,20 +94,53 @@ const IconText: React.FC = ({children}) => {
   return <Text style={styles.design}>{children}</Text>
 }
 
-const ItemComponent = (props: {item: Item}) => {
+interface IAddressItem {
+  address: string
+  onContactSelected?: (contact: Contact, addressSelected?: string) => void
+  contact: Contact
+}
+const AddressItem: React.FC<IAddressItem> = ({
+  address,
+  onContactSelected,
+  contact,
+}) => {
   const navigation = useNavigation()
+  const theme = useSelector(
+    (state: RootState) => Facade.theme[state.settings.theme]
+  )
+  const styles = StyleSheet.create({
+    text: {
+      color: theme.colors.primary,
+      fontFamily: 'medium',
+      fontSize: 16,
+    },
+    container: {
+      borderBottomWidth: 1,
+      borderColor: '#ffffff55',
+      paddingVertical: 17,
+    },
+  })
   return (
-    <ButtonView
+    <TouchableOpacity
       onPress={() => {
-        if (props.item.onContactSelected) {
-          props.item.onContactSelected(props.item.data)
+        if (onContactSelected) {
+          onContactSelected(contact, address)
         } else {
           navigation.navigate(Facade.route.ContactDetails.name, {
-            contact: props.item.data,
+            contact,
           })
         }
       }}
+      style={styles.container}
     >
+      <Text style={styles.text}>{address}</Text>
+    </TouchableOpacity>
+  )
+}
+
+const ItemComponent = (props: {item: Item}) => {
+  return (
+    <LinearLayout>
       <LinearLayout mt={'18px'} mb={'18px'} ml={'6px'} orientation="horiz">
         <LinearLayout mt={3} mr={1}>
           <IconItemComponent color="#394651" width={36} heigth={36}>
@@ -117,20 +151,19 @@ const ItemComponent = (props: {item: Item}) => {
           <TextView font={'semi-bold'} color={'text.0'} fontSize={18}>
             {props.item.data.name}
           </TextView>
-          <TextView
-            font={'medium'}
-            color={'primary'}
-            fontSize={16}
-            textAlign="left"
-            mr={'16px'}
-            numberOfLines={1}
-            ellipsizeMode={'middle'}
-          >
-            {props.item.data.address}
-          </TextView>
+          <View>
+            {props.item.data.addresses.map((address, index) => (
+              <AddressItem
+                key={index}
+                address={address}
+                onContactSelected={props.item.onContactSelected}
+                contact={props.item.data}
+              />
+            ))}
+          </View>
         </LinearLayout>
       </LinearLayout>
-    </ButtonView>
+    </LinearLayout>
   )
 }
 
@@ -191,10 +224,10 @@ export const ContactList = (props: ContactListProps) => {
           prevData={contacts}
           callbackFilter={(searchText) => {
             const filterContacts = contacts.filter((contact) => {
-              if (contact.address && contact.name) {
+              if (contact.addresses.length > 0 && contact.name) {
                 return (
                   contact.name.includes(searchText) ||
-                  contact.address.includes(searchText)
+                  contact.addresses.includes(searchText)
                 )
               }
             })
@@ -232,4 +265,10 @@ ContactList.propTypes = {
 
 IconText.propTypes = {
   children: PropTypes.string.isRequired,
+}
+
+AddressItem.propTypes = {
+  onContactSelected: PropTypes.func,
+  address: PropTypes.any,
+  contact: PropTypes.any,
 }

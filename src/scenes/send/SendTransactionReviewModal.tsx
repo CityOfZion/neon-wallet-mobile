@@ -43,8 +43,10 @@ const TransactionSummaryContainer = () => {
   )
   singleToken.amount = 1
   const singleTokenPrice = singleToken.exchangeToken(currency, exchange)
-  const contact = contacts.find(
-    (value) => value.address === senderTransaction.receiverAddress
+  const contact = contacts.find((value) =>
+    value.addresses.find(
+      (address) => address === senderTransaction.receiverAddress
+    )
   )
 
   useEffect(() => {
@@ -212,8 +214,10 @@ const SendTransactionReviewModal = (props: Props) => {
   if (senderAccount) {
     senderWallet = senderAccount.getWallet(wallets)?.name
   } else {
-    const contact = contacts.find(
-      (value) => value.address === senderTransaction.senderAddress
+    const contact = contacts.find((value) =>
+      value.addresses.find(
+        (address) => address === senderTransaction.senderAddress
+      )
     )
     senderName = contact?.name ?? undefined
   }
@@ -224,8 +228,10 @@ const SendTransactionReviewModal = (props: Props) => {
   if (receiverAccount) {
     receiverWallet = receiverAccount.getWallet(wallets)?.name
   } else {
-    const contact = contacts.find(
-      (value) => value.address === senderTransaction.receiverAddress
+    const contact = contacts.find((value) =>
+      value.addresses.find(
+        (address) => address === senderTransaction.receiverAddress
+      )
     )
     receiverName = contact?.name ?? undefined
   }

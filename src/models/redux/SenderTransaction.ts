@@ -56,15 +56,21 @@ export class SenderTransaction implements SenderTransactionState {
   }
 
   doSenderHasContactName(contactsPool: Contact[]) {
-    return contactsPool.find((it) => it.address === this.senderAddress)
+    return contactsPool.find((it) =>
+      it.addresses.find((address) => address === this.senderAddress)
+    )
   }
 
   doReceiverHasContactName(contactsPool: Contact[]) {
-    return contactsPool.find((it) => it.address === this.receiverAddress)
+    return contactsPool.find((it) =>
+      it.addresses.find((address) => address === this.senderAddress)
+    )
   }
 
   senderAddressOrContactName(contactsPool: Contact[]) {
-    const contact = contactsPool.find((it) => it.address === this.senderAddress)
+    const contact = contactsPool.find((it) =>
+      it.addresses.find((address) => address === this.senderAddress)
+    )
 
     if (contact) {
       return contact.name
@@ -74,8 +80,8 @@ export class SenderTransaction implements SenderTransactionState {
   }
 
   receiverAddressOrContactName(contactsPool: Contact[]) {
-    const contact = contactsPool.find(
-      (it) => it.address === this.receiverAddress
+    const contact = contactsPool.find((it) =>
+      it.addresses.find((address) => address === this.senderAddress)
     )
 
     if (contact) {
