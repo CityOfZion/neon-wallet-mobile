@@ -37,6 +37,7 @@ import {
 export interface PersistContactParams {
   contact?: Contact
   startingAddress: string
+  addingContact?: boolean
 }
 
 interface PersistContactProps {
@@ -93,6 +94,16 @@ export const PersistContact = (props: PersistContactProps) => {
     id: number
     text: string
   }
+
+  useEffect(() => {
+    if (
+      props.route.params &&
+      props.route.params.addingContact &&
+      props.route.params.startingAddress
+    ) {
+      handleChangeAddress(0, props.route.params.startingAddress)
+    }
+  }, [])
 
   const handleChangeAddress = (id: number, text: string) => {
     const foundInput = addresses.find((input) => input.id === id)
