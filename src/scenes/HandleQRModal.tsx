@@ -65,7 +65,16 @@ const HandleQRModal = (props: Props) => {
       title: Facade.t('modals.handleQrCode.contact.title'),
       subtitle: Facade.t('modals.handleQrCode.contact.subtitle'),
       source: require('~src/assets/images/icon-cicle-contacts-primary.png'),
-      onClick: () => console.log('TODO'),
+      onClick: () =>
+        props?.onClick?.(
+          CommonActions.navigate(Facade.route.Modal.name, {
+            screen: Facade.route.PersistContact.name,
+            params: {
+              addingContact: true,
+              startingAddress: props.address,
+            },
+          })
+        ),
     },
   ]
 

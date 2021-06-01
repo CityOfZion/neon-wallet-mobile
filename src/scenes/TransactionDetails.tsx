@@ -62,8 +62,8 @@ export const TransactionDetails = (props: Props) => {
   if (senderAccount) {
     senderWallet = senderAccount.getWallet(wallets)?.name
   } else {
-    const contact = contacts.find(
-      (value) => value.address === transaction.senderAddress
+    const contact = contacts.find((value) =>
+      value.addresses.find((address) => address === transaction.senderAddress)
     )
     senderName = contact?.name ?? undefined
   }
@@ -74,8 +74,8 @@ export const TransactionDetails = (props: Props) => {
   if (receiverAccount) {
     receiverWallet = receiverAccount.getWallet(wallets)?.name
   } else {
-    const contact = contacts.find(
-      (value) => value.address === transaction.receiverAddress
+    const contact = contacts.find((value) =>
+      value.addresses.find((address) => address === transaction.receiverAddress)
     )
     receiverName = contact?.name ?? undefined
   }

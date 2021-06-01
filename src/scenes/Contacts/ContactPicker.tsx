@@ -20,7 +20,7 @@ import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface ContactsModalParams {
-  onSelected: (item: Contact | Account) => void
+  onSelected: (item: Contact | Account, addressSelected?: string) => void
 }
 
 interface ContactsModalProps {
@@ -114,7 +114,9 @@ export const ContactPicker = (props: ContactsModalProps) => {
             <ContactList
               mt={20}
               mb={PANEL_OFFSET}
-              onContactSelected={(it) => props.route.params.onSelected(it)}
+              onContactSelected={(it, address) =>
+                props.route.params.onSelected(it, address)
+              }
               searchBar={true}
             />
           ) : (

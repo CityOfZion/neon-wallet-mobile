@@ -26,8 +26,8 @@ export class ContactReducer extends ReducerWrapper<
     setName: (name: string) => {
       return this.commit('SET_NAME', {name})
     },
-    setAddress: (address: string) => {
-      return this.commit('SET_ADDRESS', {address})
+    setAddress: (addresses: string[]) => {
+      return this.commit('SET_ADDRESSES', {addresses})
     },
     clearState: () => {
       return this.commit('CLEAR_STATE_CONTACT', {})
@@ -54,7 +54,7 @@ export class ContactReducer extends ReducerWrapper<
 
         if (contact) {
           contact.name = getState().contact.name
-          contact.address = getState().contact.address
+          contact.addresses = getState().contact.addresses
         }
 
         await Storage.contacts.save(contacts)
