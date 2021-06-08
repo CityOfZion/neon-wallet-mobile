@@ -66,9 +66,10 @@ const ImportKey = (props: ImportKeyProps) => {
       const ACCOUNT_NAME_DEFAULT = `Mnemonic Account ${index + 1}`
       const walletID = await createWallet(WALLET_NAME_DEFAULT, mnemonic)
       while (!stop && isConnected) {
-        const {WIF, address} = await new Promise((resolve) => {
-          resolve(AsteroidHelper.generateNeoAccount(mnemonic, index))
-        })
+        const {WIF, address} = AsteroidHelper.generateNeoAccount(
+          mnemonic,
+          index
+        )
         if (!accounts.find((account) => account.address === address)) {
           const req = new AddressPaginatedRequest(address, 1)
           const {totalEntries} = await req.getAddressAbstracts()
