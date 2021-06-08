@@ -56,6 +56,22 @@ export class WalletReducer extends ReducerWrapper<
         return wallets.find((it) => it.id === id) ?? new Wallet()
       }
     },
+    mnemonicIsImported: (mnemonic: string): AsyncAction<boolean> => {
+      return async (dispatch, getState) => {
+        const walletIds = getState()
+          .app.wallets.map((wallet) => wallet.id)
+          .filter((id) => id !== null) as string[]
+        const mnemonics = await Promise.all(
+          walletIds.map(async (id) => await Facade.security.loadMnemonic(id))
+        )
+        const foundMnemonic = mnemonics.find((it) => it === mnemonic)
+        if (foundMnemonic) {
+          return true
+        } else {
+          return false
+        }
+      }
+    },
     createAndSave: (): AsyncAction<string> => {
       return async (dispatch, getState) => {
         const wallets = (await Storage.wallets.load()) ?? []

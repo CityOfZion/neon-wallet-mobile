@@ -9,6 +9,7 @@ import {
   TextInputFocusEventData,
   Platform,
   TextInput,
+  Dimensions,
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -92,6 +93,11 @@ const InputWithValidation = (props: Props) => {
     }
   }
 
+  const handleChangeText = (text: string) => {
+    props.onChangeText && props.onChangeText(text)
+    inputRef.current?.focus()
+  }
+
   useEffect(() => {
     setContact(props.selectedContact)
   }, [props.selectedContact])
@@ -99,6 +105,10 @@ const InputWithValidation = (props: Props) => {
   useEffect(() => {
     inputRef.current?.focus()
   }, [contact])
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [props.isMultiline])
 
   return (
     <LinearLayout
@@ -134,7 +144,7 @@ const InputWithValidation = (props: Props) => {
           >
             <InputTextView
               ref={inputRef}
-              onChangeText={props.onChangeText}
+              onChangeText={handleChangeText}
               color={fontColor}
               placeholderTextColor={props.placeholderColor ?? '#7d929a'}
               underlineColorAndroid="transparent"
@@ -155,9 +165,15 @@ const InputWithValidation = (props: Props) => {
               keyboardType={props.keyboardType}
               returnKeyType={'done'}
               onSubmitEditing={Keyboard.dismiss}
-              multiline={!!props.isMultiline}
+              multiline={Platform.OS === 'ios' ? true : props.isMultiline}
               numberOfLines={props.isMultiline ? 10 : 1}
               style={props.isMultiline ? {textAlignVertical: 'top'} : undefined}
+              clearTextOnFocus={false}
+              height={
+                props.isMultiline && Platform.OS === 'ios'
+                  ? Dimensions.get('screen').height * 0.25
+                  : undefined
+              }
             />
 
             {!props.isMultiline && !isValid && (

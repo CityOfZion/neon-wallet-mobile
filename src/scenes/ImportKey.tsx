@@ -2,8 +2,8 @@ import {wallet} from '@cityofzion/neon-core'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useState} from 'react'
-import {Alert} from 'react-native'
+import React, {useState, useEffect} from 'react'
+import {Alert, Platform, TextInput, Text} from 'react-native'
 import {useSelector, useDispatch} from 'react-redux'
 
 import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
@@ -56,32 +56,45 @@ const ImportKey = (props: ImportKeyProps) => {
   const inputIsValid = validator(inputValue)
 
   const importMnemonic = async (mnemonic: string) => {
-    let index: number = 0
-    let stop: boolean = false
-    const WALLET_NAME_DEFAULT = 'Mnemonic Wallet'
-    const ACCOUNT_NAME_DEFAULT = `Mnemonic Account ${index + 1}`
-    const walletID = await createWallet(WALLET_NAME_DEFAULT, mnemonic)
-    while (!stop && isConnected) {
-      const {WIF, address} = await new Promise((resolve) => {
-        resolve(AsteroidHelper.generateNeoAccount(mnemonic, index))
-      })
-      const req = new AddressPaginatedRequest(address, 1)
-      const {totalEntries} = await req.getAddressAbstracts()
-      if (totalEntries && totalEntries > 0) {
-        await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
-      } else {
-        if (index < 1) {
-          await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
+    const mnemonicIsImported = (await dispatchAsync(
+      RootStore.wallet.actions.mnemonicIsImported(mnemonic)
+    )) as boolean
+    if (!mnemonicIsImported) {
+      let index: number = 0
+      let stop: boolean = false
+      const WALLET_NAME_DEFAULT = 'Mnemonic Wallet'
+      const ACCOUNT_NAME_DEFAULT = `Mnemonic Account ${index + 1}`
+      const walletID = await createWallet(WALLET_NAME_DEFAULT, mnemonic)
+      while (!stop && isConnected) {
+        const {WIF, address} = AsteroidHelper.generateNeoAccount(
+          mnemonic,
+          index
+        )
+        if (!accounts.find((account) => account.address === address)) {
+          const req = new AddressPaginatedRequest(address, 1)
+          const {totalEntries} = await req.getAddressAbstracts()
+          if (totalEntries && totalEntries > 0) {
+            await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
+          } else {
+            if (index < 1) {
+              await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
+            }
+            stop = true
+          }
+          index++
+        } else {
+          stop = true
+          Alert.alert(`address: ${address} already exists`)
         }
-        stop = true
       }
-      index++
-    }
-    if (!isConnected) {
-      const {WIF, address} = await new Promise((resolve) => {
-        resolve(AsteroidHelper.generateNeoAccount(mnemonic, index))
-      })
-      await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
+      if (!isConnected) {
+        const {WIF, address} = await new Promise((resolve) => {
+          resolve(AsteroidHelper.generateNeoAccount(mnemonic, index))
+        })
+        await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
+      }
+    } else {
+      Alert.alert('Mnemonic already exists')
     }
   }
 
