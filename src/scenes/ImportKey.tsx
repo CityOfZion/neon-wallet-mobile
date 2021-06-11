@@ -6,8 +6,6 @@ import React, {useState, useEffect} from 'react'
 import {Alert, Platform, TextInput, Text} from 'react-native'
 import {useSelector, useDispatch} from 'react-redux'
 
-import {Account} from '../models/redux/Account'
-
 import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
 import {Facade} from '~src/app/Facade'
 import InputWithValidation from '~src/components/InputWithValidation'
@@ -22,7 +20,7 @@ import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout, ImageView, TextView} from '~src/styles/styled-components'
 
 interface ImportKeyProps {
-  navigation: StackNavigationProp<MoreStackParamList>
+  navigation: StackNavigationProp<MoreStackParamList & WalletStackParamList>
   route: RouteProp<MoreStackParamList, 'ImportKey'>
 }
 
@@ -207,7 +205,6 @@ const ImportKey = (props: ImportKeyProps) => {
     } else if (validateMnemonic(inputValue)) {
       await Facade.await.run('importKey', () => importMnemonic(inputValue))
       await dispatchAsync(RootStore.app.actions.syncWallets())
-      await dispatchAsync(RootStore.app.actions.syncAccounts())
     }
 
     if (destination) {

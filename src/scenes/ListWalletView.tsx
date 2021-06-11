@@ -260,18 +260,7 @@ const ListWalletView = (props: WalletProps) => {
       dispatch(RootStore.wallet.actions.selectWallet(wallets[0]?.id ?? null))
     }
     fadeIn()
-  }, [id, wallets, accounts])
-
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-
-  const keepUpdatedInfo = async () => {
-    await dispatchAsync(RootStore.app.actions.syncWallets())
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
-  }
-
-  useEffect(() => {
-    keepUpdatedInfo()
-  }, [])
+  }, [id])
 
   const isListNotEmpty = () => {
     return Boolean(wallets.length)
