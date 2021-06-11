@@ -6,6 +6,8 @@ import React, {useState, useEffect} from 'react'
 import {Alert, Platform, TextInput, Text} from 'react-native'
 import {useSelector, useDispatch} from 'react-redux'
 
+import {Account} from '../models/redux/Account'
+
 import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
 import {Facade} from '~src/app/Facade'
 import InputWithValidation from '~src/components/InputWithValidation'

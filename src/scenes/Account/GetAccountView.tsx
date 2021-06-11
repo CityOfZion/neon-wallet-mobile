@@ -305,6 +305,14 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }
   }, [isAssetsTabSelected, account])
 
+  const keepUpdatedInfo = async () => {
+    await dispatchAsync(RootStore.app.actions.syncAccounts())
+  }
+
+  useEffect(() => {
+    keepUpdatedInfo()
+  }, [])
+
   const isClaimAvailable = () => {
     return Boolean(unclaimedGasAmount && !isWatchAccount && isConnected)
   }
