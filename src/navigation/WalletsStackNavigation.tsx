@@ -27,6 +27,7 @@ export type WalletStackParamList = {
   Modal: ModalParams
   Settings: SettingsStackParamList
   Step1BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
+  MorePage: object
 }
 
 export type WalletStackParams =

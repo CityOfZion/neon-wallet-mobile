@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {FlatList, TouchableOpacity, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -234,6 +234,7 @@ const BalanceList = (props: Props) => {
     }
     return tokens
   }
+
   return (
     <LinearLayout {...innerProps} width={'100%'}>
       {showListTokenAssets(props.tokenAssets) ? (
