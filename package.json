@@ -44,7 +44,7 @@
     "expo": "^39.0.0",
     "expo-barcode-scanner": "~9.0.0",
     "expo-blur": "~8.2.0",
-    "expo-cli": "^3.22.3",
+    "expo-cli": "^4.5.2",
     "expo-crypto": "~8.3.0",
     "expo-file-system": "~9.2.0",
     "expo-font": "~8.3.0",
