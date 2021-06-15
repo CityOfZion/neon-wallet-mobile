@@ -272,7 +272,7 @@ export const PersistContact = (props: PersistContactProps) => {
     >
       <AwaitActivity
         name={'swiperRight'}
-        loadingView={<ScreenLoader transparent={true} />}
+        loadingView={<ScreenLoader solidColorBG={true} />}
       >
         <ScrollView>
           <LinearLayout

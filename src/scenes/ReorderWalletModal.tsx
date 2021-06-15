@@ -88,7 +88,7 @@ export default function ReorderWalletModal(props: Props) {
     >
       <AwaitActivity
         name={'commitAndClose'}
-        loadingView={<ScreenLoader transparent={true} />}
+        loadingView={<ScreenLoader solidColorBG={true} />}
       >
         <LinearLayout height="100%" mt={Dimensions.get('screen').height * 0.02}>
           <TextView

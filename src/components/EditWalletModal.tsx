@@ -164,7 +164,7 @@ export const EditWalletModal = (
     >
       <AwaitActivity
         name={'swiperRight'}
-        loadingView={<ScreenLoader transparent={true} />}
+        loadingView={<ScreenLoader solidColorBG={true} />}
       >
         <LinearLayout
           height="100%"
