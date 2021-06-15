@@ -1,12 +1,17 @@
-import React, { useState } from 'react'
-import { ActivityIndicator } from 'react-native'
-import { WebView } from 'react-native-webview'
-import { useSelector } from 'react-redux'
+import {LinearGradient} from 'expo-linear-gradient'
+import React, {useState} from 'react'
+import {StyleSheet, ActivityIndicator, View, SafeAreaView} from 'react-native'
+import {WebView} from 'react-native-webview'
+import {useSelector} from 'react-redux'
 
-import { Facade } from '~src/app/Facade'
-import ScreenLayout from '~src/components/layout/ScreenLayout'
+import {Facade} from '~src/app/Facade'
 
-const ScreenLoader = (props?: { transparent?: boolean }) => {
+const ScreenLoader = (props?: {
+  transparent?: boolean
+  invertedGradient?: boolean
+  solidColorBG?: boolean
+  darkerSolidColorBG?: boolean
+}) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
@@ -16,7 +21,7 @@ const ScreenLoader = (props?: { transparent?: boolean }) => {
   const updateSource = () => {
     setRenderedOnce(true)
   }
-
+  /* eslint-disable */
   const loader = `<!DOCTYPE html>
   <html>
   <body>
@@ -27,47 +32,78 @@ const ScreenLoader = (props?: { transparent?: boolean }) => {
   </body>
   <style>
       body{
-          background-color: #1a2026;
-          padding-top: 15rem;
-          padding-left: 10rem;
+          background-color: transparent;
+          padding-top: 10rem;
+          padding-left: 25vw;
       }
       svg{
-          width: 70vw;
-          height: 70vh;
+          width: 45vw;
+          height: 45vh;
       }
   </style>
   </html>
   `
-
-  //const svgPath = require('~src/assets/logos/Logo-3.svg')
+  /* eslint-enable */
+  const [loadingWebView, setLoadingWebView] = useState<boolean>(true)
+  const chooseColorBG = () => {
+    let color
+    if (props?.transparent) {
+      color = ['#00000000', '#00000000']
+    } else if (props?.invertedGradient) {
+      color = ['#22292f', theme.colors.background[18]]
+    } else if (props?.solidColorBG) {
+      color = [theme.colors.background[2], theme.colors.background[2]]
+    } else if (props?.darkerSolidColorBG) {
+      color = [theme.colors.background[14], theme.colors.background[14]]
+    } else {
+      color = [theme.colors.background[14], theme.colors.background[2]]
+    }
+    return color
+  }
   const svgPath =
     'file://C:/Workspace/neon-wallet-mobile/src/assets/logos/Logo-3.svg'
 
   return (
-    <WebView
-      originWhitelist={['*']}
-      //source={renderedOnce ? {url: 'http://www.google.com.br'} : undefined}
-      // source={{'http://www.google.com.br'}}
-      // style={{
-      //   width: 300,
-      //   height: 300,
-      // }}
-      source={{
-        html: loader,
-      }}
-      bounces={true}
-      startInLoadingState
-      scalesPageToFit
-      javaScriptEnabled={true}
-    />
-    // <ScreenLayout
-    //   hideOfflineBar={true}
-    //   alignY={'center'}
-    //   transparent={props?.transparent ?? false}
-    // >
-    //   <ActivityIndicator size={'large'} color={theme.colors.text[0]} />
-    // </ScreenLayout>
+    <LinearGradient colors={chooseColorBG()}>
+      <SafeAreaView style={{height: '100%'}}>
+        <WebView
+          style={{
+            backgroundColor: 'transparent',
+          }}
+          originWhitelist={['*']}
+          source={{
+            html: loader,
+          }}
+          bounces={true}
+          startInLoadingState
+          scalesPageToFit
+          javaScriptEnabled={true}
+          onLoadEnd={() => {
+            setLoadingWebView(false)
+          }}
+        />
+        {loadingWebView && (
+          <LinearGradient
+            colors={chooseColorBG()}
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              alignItems: 'center',
+              backgroundColor: theme.colors.background[14],
+              justifyContent: 'center',
+            }}
+          >
+            <ActivityIndicator />
+          </LinearGradient>
+        )}
+      </SafeAreaView>
+    </LinearGradient>
   )
 }
+
+const styles = StyleSheet.create({
+  screen: {
+    backgroundColor: 'transparent',
+  },
+})
 
 export default ScreenLoader

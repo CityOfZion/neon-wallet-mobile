@@ -169,7 +169,7 @@ const TransactionsTab = () => {
       name={'fetchTransaction'}
       size={'large'}
       style={{minHeight: 100}}
-      loadingView={<ScreenLoader transparent={true} />}
+      loadingView={<ScreenLoader invertedGradient={true} />}
     >
       <>
         {account.address && (

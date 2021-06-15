@@ -140,7 +140,7 @@ const EditAccountModal = (props: Props) => {
     >
       <AwaitActivity
         name={'swiperRight'}
-        loadingView={<ScreenLoader transparent={true} />}
+        loadingView={<ScreenLoader solidColorBG={true} />}
       >
         <LinearLayout
           orientation="verti"
