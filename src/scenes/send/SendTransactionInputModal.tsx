@@ -667,23 +667,24 @@ const SendTransactionInputModal = (prop: Props) => {
   }
 
   const handleAddressChanged = (addressValue: string) => {
+    const cleanAddressValue = addressValue.replace(/\r?\n|\r/, '').trim()
     setContact(undefined)
     const contact = contacts.find((value) =>
-      value.addresses.find((address) => address === addressValue)
+      value.addresses.find((address) => address === cleanAddressValue)
     )
-    const account = accounts.find((it) => it.address === addressValue)
+    const account = accounts.find((it) => it.address === cleanAddressValue)
     if (account) {
       const accountContact = new Contact()
       accountContact.name = `${account.getWallet(wallets)?.name} / ${
         account.name
       }`
 
-      accountContact.addresses.push(addressValue)
+      accountContact.addresses.push(cleanAddressValue)
       setContact(accountContact)
     } else if (contact) {
       setContact(contact)
     }
-    setReceiverAddress(addressValue)
+    setReceiverAddress(cleanAddressValue)
   }
 
   const handleQrCode = (data: NeoURI | string) => {

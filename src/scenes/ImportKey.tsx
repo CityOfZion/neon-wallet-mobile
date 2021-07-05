@@ -216,12 +216,9 @@ const ImportKey = (props: ImportKeyProps) => {
 
   type TTextComponent = 'input' | 'textArea'
 
-  const [textComponent, setTextComponent] = useState<TTextComponent>('input')
-
-  const handleComponent = () => {
-    if (validateMnemonic(inputValue)) {
-      setTextComponent('textArea')
-    }
+  const handleInputValue = (text: string) => {
+    const cleanText = text.replace(/\r?\n|\r/, '').trim()
+    setInputValue(cleanText)
   }
 
   return (
@@ -292,7 +289,7 @@ const ImportKey = (props: ImportKeyProps) => {
             )}
           </LinearLayout>
           <InputWithValidation
-            onChangeText={(text) => setInputValue(text)}
+            onChangeText={handleInputValue}
             color={theme.colors.text[0]}
             invalidColor={theme.colors.background[3]}
             value={inputValue}

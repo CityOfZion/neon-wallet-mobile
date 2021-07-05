@@ -66,6 +66,11 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
     return isInputValid
   }
 
+  const handleInputValue = (text: string) => {
+    const cleanText = text.replace(/\r?\n|\r/, '').trim()
+    setInputValue(cleanText)
+  }
+
   return (
     <ScreenLayout useHeaderPadding={true}>
       <LinearLayout orientation="verti" width="100%" height="100%">
@@ -84,7 +89,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
         </TextView>
 
         <InputWithValidation
-          onChangeText={(text) => setInputValue(text)}
+          onChangeText={handleInputValue}
           color={theme.colors.text[0]}
           invalidColor={theme.colors.background[3]}
           value={inputValue}
