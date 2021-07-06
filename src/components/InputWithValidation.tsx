@@ -95,7 +95,6 @@ const InputWithValidation = (props: Props) => {
 
   const handleChangeText = (text: string) => {
     props.onChangeText && props.onChangeText(text)
-    inputRef.current?.focus()
   }
 
   useEffect(() => {
