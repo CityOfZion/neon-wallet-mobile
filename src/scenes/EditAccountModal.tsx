@@ -87,6 +87,9 @@ const EditAccountModal = (props: Props) => {
 
   const handleNavigation = () => {
     if (isDeleted) {
+      props.navigation.replace(Facade.route.Tab.name, {
+        screen: Facade.route.ListWallets.name,
+      })
       props.navigation.navigate(Facade.route.GetWallet.name, {})
     } else {
       props.navigation.goBack()
