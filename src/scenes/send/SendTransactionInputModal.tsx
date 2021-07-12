@@ -648,6 +648,10 @@ const SendTransactionInputModal = (prop: Props) => {
   ) => {
     if (addressSelected) {
       handleAddressChanged(addressSelected)
+    } else {
+      'address' in item &&
+        item.address !== null &&
+        handleAddressChanged(item.address)
     }
   }
 
