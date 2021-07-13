@@ -671,7 +671,7 @@ const SendTransactionInputModal = (prop: Props) => {
   }
 
   const handleAddressChanged = (addressValue: string) => {
-    const cleanAddressValue = addressValue.replace(/\r?\n|\r/, '').trim()
+    const cleanAddressValue = Facade.utils.clearText(addressValue)
     setContact(undefined)
     const contact = contacts.find((value) =>
       value.addresses.find((address) => address === cleanAddressValue)

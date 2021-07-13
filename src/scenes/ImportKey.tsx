@@ -214,13 +214,6 @@ const ImportKey = (props: ImportKeyProps) => {
     }
   }
 
-  type TTextComponent = 'input' | 'textArea'
-
-  const handleInputValue = (text: string) => {
-    const cleanText = text.replace(/\r?\n|\r/, '').trim()
-    setInputValue(cleanText)
-  }
-
   return (
     <ScreenLayout>
       <AwaitActivity
@@ -289,7 +282,7 @@ const ImportKey = (props: ImportKeyProps) => {
             )}
           </LinearLayout>
           <InputWithValidation
-            onChangeText={handleInputValue}
+            onChangeText={(text) => setInputValue(text)}
             color={theme.colors.text[0]}
             invalidColor={theme.colors.background[3]}
             value={inputValue}

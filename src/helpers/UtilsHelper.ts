@@ -58,4 +58,8 @@ export abstract class UtilsHelper {
     // eslint-disable-next-line no-undef
     return new Promise((resolve) => setTimeout(resolve, ms))
   }
+  static clearText(text: string) {
+    const cleanText = text.replace(/\r?\n|\r/, '').trim() //remove enter
+    return cleanText
+  }
 }

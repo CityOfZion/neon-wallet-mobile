@@ -94,7 +94,7 @@ const InputWithValidation = (props: Props) => {
   }
 
   const handleChangeText = (text: string) => {
-    props.onChangeText && props.onChangeText(text)
+    props.onChangeText && props.onChangeText(Facade.utils.clearText(text))
   }
 
   useEffect(() => {
