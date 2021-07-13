@@ -64,14 +64,10 @@ const InputAddress: React.FC<IInputGroup> = ({
     handleChangeAddress(id, address)
   }, [address])
 
-  const handleInputValue = (text: string) => {
-    const cleanText = text.replace(/\r?\n|\r/, '').trim()
-    setAddress(cleanText)
-  }
   return (
     <InputWithValidation
       placeholder={Facade.t('persistContact.addressPlaceholder')}
-      onChangeText={handleInputValue}
+      onChangeText={(text) => setAddress(text)}
       color={'primary'}
       value={address}
       invalidColor={'background.3'}
