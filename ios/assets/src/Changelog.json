@@ -1,6 +1,22 @@
 {
     "changelog": [
     	{
+            "version": "V1.0.15-48",
+            "date": "July 14 2021",
+            "changes": [
+                "- Bug fixes" 
+            ]
+        },
+    	{
+            "version": "V1.0.15-47",
+            "date": "July 02 2021",
+            "changes": [
+                "- Bug fixes",
+                "- Change layouts",
+                "- New Feature - mnemonic importing  "	 
+            ]
+        },
+    	{
             "version": "V1.0.15-45",
             "date": "May 05 2021",
             "changes": [
