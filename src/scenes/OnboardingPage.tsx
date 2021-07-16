@@ -126,7 +126,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
       RootStore.wallet.actions.createAndSave()
     )
     await dispatchAsync(RootStore.app.actions.syncWallets())
-
+    dispatch(RootStore.wallet.actions.setShowBackupAlert(id, true))
     dispatch(RootStore.wallet.actions.clearState())
 
     await createFirstAccount(id)
