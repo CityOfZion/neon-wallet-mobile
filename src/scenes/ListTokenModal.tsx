@@ -2,7 +2,7 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import PropTypes from 'prop-types'
 import React, {useEffect, useState} from 'react'
-import {FlatList} from 'react-native'
+import {FlatList, Keyboard} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -103,6 +103,14 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
   const filterBy = props.route.params.filterBy ?? 'receive'
 
   const [searchTokens, setSearchTokens] = useState<TokenAsset[]>([])
+
+  const forceCloseKeyboard = () => {
+    Keyboard.dismiss()
+  }
+
+  useEffect(() => {
+    forceCloseKeyboard()
+  }, [])
 
   useEffect(() => {
     populate()
