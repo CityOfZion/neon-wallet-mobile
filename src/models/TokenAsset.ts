@@ -28,7 +28,8 @@ export class TokenAsset {
   }
 
   get color() {
-    return `#${this.hash.substring(1, 7)}`
+    const hashWithoutHex = this.hash.replace('0x', '')
+    return `#${hashWithoutHex.substring(1, 7)}`
   }
 
   get srcIcon() {

@@ -162,6 +162,8 @@ const TransactionsTab = () => {
       accountsPool.find((acc) => acc.address === account.address) ??
       new Account()
     setAccount(upAccount)
+    console.log('print account transactions')
+    console.log(account.getTransactions())
   }, [accountsPool])
 
   return account.tokenAssets.length ? (
@@ -339,8 +341,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const populateUnclaimed = async () => {
     if (!account.address) return
 
-    const request = new AddressRequest(account.address)
-    const response = await request.getUnclaimed()
+    const request = Facade.app.blockchainDataProvider
+    const response = await request.getUnclaimed(account.address)
 
     setUnclaimedGasAmount(response.unclaimed ?? undefined)
   }

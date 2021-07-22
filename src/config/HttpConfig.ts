@@ -19,7 +19,6 @@ export class HttpConfig {
    * Web Server request & response config
    */
   readonly axiosInstance = axios.create({
-    baseURL: 'https://api.neoscan.io/api/main_net/v1',
     paramsSerializer: (params) => qs.stringify(params, {arrayFormat: 'repeat'}), // myendpoint?myarray=1&myarray=2
   })
 

@@ -5,7 +5,7 @@ import {
 } from '@simpli/serialized-request'
 import moment from 'moment'
 
-import {Facade} from '~/src/app/Facade'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {TransactionAddressSummary} from '~src/models/TransactionAddressSummary'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
@@ -37,7 +37,7 @@ export class TransactionAddressResponse {
       tx.sentAt = moment.unix(it.time ?? 0).format()
 
       const token = tokensPool.find((token) => token.hash === it.asset) ?? null
-      tx.token = Facade.utils.clone(token)
+      tx.token = UtilsHelper.clone(token)
 
       if (tx.token) {
         tx.token.amount = Number(it.amount ?? 0) ?? 0

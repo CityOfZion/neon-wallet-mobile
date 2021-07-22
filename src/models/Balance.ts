@@ -9,10 +9,6 @@ import {TransactionSummary} from '~src/models/TransactionSummary'
 @HttpExclude()
 export class Balance {
   @HttpExpose()
-  @ResponseSerialize(TransactionSummary)
-  unspent: TransactionSummary[] = []
-
-  @HttpExpose()
   amount: number | null = null
 
   @HttpExpose('asset_symbol')

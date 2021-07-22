@@ -73,8 +73,8 @@ const ImportKey = (props: ImportKeyProps) => {
           index
         )
         if (!accounts.find((account) => account.address === address)) {
-          const req = new AddressPaginatedRequest(address, 1)
-          const {totalEntries} = await req.getAddressAbstracts()
+          const req = Facade.app.blockchainDataProvider
+          const {totalEntries} = await req.getAddressAbstracts(address, 1)
           if (totalEntries && totalEntries > 0) {
             await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
           } else {
