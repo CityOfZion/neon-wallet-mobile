@@ -51,7 +51,7 @@ export class NeoscanProvider implements NeoLegacyProvider {
       .getData()
   }
   async getAllNodes() {
-    return Request.get(`${this.baseUrl}/get_all_nodes`)
+    return Request.get(`${this.baseUrl}/${this.network}/v1/get_all_nodes`)
       .name('getAllNodes')
       .asArrayOf(NeoNode)
       .getData()

@@ -83,8 +83,11 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     return result
   }
   async getUnclaimed(address: string) {
-    const neoscan = new NeoscanProvider()
-    return neoscan.getUnclaimed(address) //using neoscan like a redundant, but dora sdk need give support to get_unclaimed function
+    const result = new UnclaimedResponse()
+    const {unclaimed} = await api.NeoLegacyREST.getUnclaimed(address)
+    result.address = address
+    result.unclaimed = unclaimed
+    return result
   }
   private convertScientifcNotationToDecimal(scientificNotation: number) {
     return scientificNotation * Math.pow(10, this.baseNumeric)
