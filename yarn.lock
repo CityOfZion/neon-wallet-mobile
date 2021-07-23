@@ -1763,6 +1763,13 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@cityofzion/dora-ts@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@cityofzion/dora-ts/-/dora-ts-0.0.3.tgz#887c27e312b3e770572023a718ccbcc053d53682"
+  integrity sha512-QimzUG32hpZd2MFZ57xAGea96ggazCPwAH65L+AU9SzLnoSr1PjREGVRtdn389zC4V+DPWhRoupKIcN7ytHsjQ==
+  dependencies:
+    axios "^0.21.1"
+
 "@cityofzion/neon-api@^4.8.1":
   version "4.8.1"
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-api/-/neon-api-4.8.1.tgz#c173eae102e5edc15e824016d0173131dce10fea"
@@ -4189,6 +4196,11 @@
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.4.tgz#15925414e0ad2cd765bfef58842f7e26a7accb24"
   integrity sha512-1HcDas8SEj4z1Wc696tH56G8OlRaH/sqZOynNNB+HF0WOeXPaxTtbYzJY2oEfiUxjSKjhCKr+MvR7dCHcEelug==
+
+"@types/qs@^6.9.7":
+  version "6.9.7"
+  resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.7.tgz#63bb7d067db107cc1e457c303bc25d511febf6cb"
+  integrity sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==
 
 "@types/react-native-snap-carousel@^3.8.1":
   version "3.8.2"

@@ -19,8 +19,6 @@ import {App} from '~src/models/redux/App'
 import {Contact} from '~src/models/redux/Contact'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
-import {AddressRequest} from '~src/models/request/AddressRequest'
-import {TransactionRequest} from '~src/models/request/TransactionRequest'
 import {AccountPreCreatedDispatcher} from '~src/store/app/dispatchers/AccountPreCreatedDispatcher'
 import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
 import {ContactsDispatcher} from '~src/store/app/dispatchers/ContactsDispatcher'
@@ -200,7 +198,7 @@ export class AppReducer extends ReducerWrapper<
       return async (dispatch) => {
         try {
           let nodes: NeoNode[] = []
-          nodes = await NeoNode.getAllNodes()
+          nodes = await Facade.app.blockchainDataProvider.getAllNodes()
           await Storage.neoNodes.save(nodes)
         } catch (error) {
           console.log(error)
@@ -388,8 +386,10 @@ export class AppReducer extends ReducerWrapper<
           for (const senderTx of senderTxs) {
             if (senderTx.transactionHash) {
               try {
-                const request = new TransactionRequest(senderTx.transactionHash)
-                const confirmedTx = await request.getTransaction()
+                const request = Facade.app.blockchainDataProvider
+                const confirmedTx = await request.getTransaction(
+                  senderTx.transactionHash
+                )
                 const index = senderTxs.findIndex(
                   (it) => it.transactionHash === confirmedTx.txid
                 )

@@ -7,15 +7,12 @@ import {
   SendAssetConfig,
 } from '../../node_modules/@cityofzion/neon-api/lib/funcs/types'
 import {tx} from '../../node_modules/@cityofzion/neon-core'
-import {UtilsHelper} from './UtilsHelper'
 
 import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import {NeoNode} from '~src/models/NeoNode'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Settings} from '~src/models/redux/Settings'
-import {AddressRequest} from '~src/models/request/AddressRequest'
-import {TransactionRequest} from '~src/models/request/TransactionRequest'
 export abstract class NeonHelper {
   /**
    * Only GAS or NEO
@@ -207,8 +204,8 @@ export abstract class NeonHelper {
       throw new Error('Neo Account not found')
     }
 
-    const request = new AddressRequest(address)
-    const response = await request.getBalance()
+    const request = Facade.app.blockchainDataProvider
+    const response = await request.getBalance(address)
     const balance = response.balance.find((it) => it.assetSymbol === 'NEO')
     const amount = balance?.amount ?? null
     const requiresTransaction = Boolean(amount)
@@ -280,8 +277,8 @@ export abstract class NeonHelper {
     await Facade.utils.sleep(intervalInMs)
 
     try {
-      const request = new TransactionRequest(txid)
-      await request.getTransaction()
+      const request = Facade.app.blockchainDataProvider
+      await request.getTransaction(txid)
 
       if (onComplete) onComplete()
     } catch {

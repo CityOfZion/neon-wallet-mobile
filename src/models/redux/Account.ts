@@ -14,8 +14,6 @@ import {TokenAsset} from '~src/models/TokenAsset'
 import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
-import {AddressPaginatedRequest} from '~src/models/request/AddressPaginatedRequest'
-import {AddressRequest} from '~src/models/request/AddressRequest'
 import {Exchange} from '~src/types/exchange'
 import {Pagination} from '~src/types/pagination'
 
@@ -67,8 +65,8 @@ export class Account implements AccountState {
 
   static async fetchTokenAssets(address: string) {
     try {
-      const request = new AddressRequest(address)
-      const response = await request.getBalance()
+      const request = Facade.app.blockchainDataProvider
+      const response = await request.getBalance(address)
 
       const tokenAssets = response.balance
         .map((it) => {
@@ -192,8 +190,8 @@ export class Account implements AccountState {
   async populateTokenAssets() {
     if (!this.address) return
 
-    const request = new AddressRequest(this.address)
-    const response = await request.getBalance()
+    const request = Facade.app.blockchainDataProvider
+    const response = await request.getBalance(this.address)
 
     this.tokenAssets = response.balance
       .map((it) => {
@@ -230,8 +228,11 @@ export class Account implements AccountState {
 
     // Make requests until it reaches the cache data
     do {
-      const request = new AddressPaginatedRequest(this.address, currentPage)
-      const response = await request.getAddressAbstracts()
+      const request = Facade.app.blockchainDataProvider
+      const response = await request.getAddressAbstracts(
+        this.address,
+        currentPage
+      )
       totalPages = response.totalPages ?? 0
       totalEntries = response.totalEntries ?? 0
       pageSize = response.pageSize ?? 15

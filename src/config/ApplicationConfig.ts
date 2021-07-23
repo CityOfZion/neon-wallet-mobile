@@ -1,17 +1,18 @@
 import {Dimensions, Platform, StatusBar} from 'react-native'
 
+import {NeoLegacyProviderOption} from '~src/blockchain/NeoLegacy'
 import nodesMainNet from '~src/core/nodes-main-net.json'
 import nodesTestNet from '~src/core/nodes-test-net.json'
 import tokenList from '~src/core/tokenList.json'
 import {Theme} from '~src/enums/Theme'
 import {NetworkOptions} from '~src/types/settings'
-
 /**
  * Application Configuration
  */
 export class ApplicationConfig {
   readonly defaultTheme = Theme.DARK
   readonly defaultDataRefreshTimeInMilliseconds = 60000
+  readonly blockchainDataProvider = NeoLegacyProviderOption('doraSdk') //select a provider to neo legacy informations
 
   readonly headerHeight =
     Platform.OS === 'ios' ? 40 : 72 + (StatusBar.currentHeight ?? 0)
