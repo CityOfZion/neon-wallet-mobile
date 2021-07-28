@@ -1,7 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useState, useEffect, useRef, useCallback} from 'react'
 import {
   Animated,
   Easing,
@@ -315,9 +315,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
     keepUpdatedInfo()
   }, [])
 
-  const isClaimAvailable = () => {
+  const isClaimAvailable = useCallback(() => {
     return Boolean(unclaimedGasAmount && !isWatchAccount && isConnected)
-  }
+  }, [account, unclaimedGasAmount, isWatchAccount, isConnected])
 
   const refresh = () => {
     setCurrentPage(1)
@@ -390,10 +390,11 @@ const GetAccountView = (props: GetAccountViewProps) => {
         await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
       }
     } catch (e) {
-      Facade.await.done(`ClaimGas@${account.address}`)
       showMessage({
         message: e.message,
       })
+    } finally {
+      Facade.await.done(`ClaimGas@${account.address}`)
     }
   }
 
