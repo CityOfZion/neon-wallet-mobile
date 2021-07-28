@@ -59,7 +59,7 @@ export abstract class UtilsHelper {
     return new Promise((resolve) => setTimeout(resolve, ms))
   }
   static clearText(text: string) {
-    const cleanText = text.replace(/\r?\n|\r/, '').trim() //remove enter
+    const cleanText = text.replace(/\r?\n|\r/, '') //remove enter
     return cleanText
   }
 }
