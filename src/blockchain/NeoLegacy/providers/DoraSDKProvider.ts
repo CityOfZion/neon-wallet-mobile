@@ -90,6 +90,8 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     return result
   }
   private convertScientifcNotationToDecimal(scientificNotation: number) {
-    return scientificNotation * Math.pow(10, this.baseNumeric)
+    return String(scientificNotation).includes('e')
+      ? scientificNotation * Math.pow(10, this.baseNumeric)
+      : scientificNotation
   }
 }

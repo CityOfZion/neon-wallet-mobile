@@ -266,7 +266,7 @@ export class Account implements AccountState {
       .value()
 
     const pageNumber = Math.floor(entries.length / pageSize)
-
+    this.clearTransactions()
     this.transactions = TransactionDateGroup.toTransactionDateGroup(entries)
 
     return {
@@ -369,5 +369,8 @@ export class Account implements AccountState {
   }
   setTokenAssets(tokens: TokenAsset[]) {
     this.tokenAssets = tokens
+  }
+  clearTransactions() {
+    this.transactions = []
   }
 }
