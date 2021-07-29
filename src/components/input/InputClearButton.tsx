@@ -8,9 +8,8 @@ export const InputClearButton = (props: {
   value: string
 }) => {
   return (
-    <TouchableWithoutFeedback onPress={props.onPress} disabled={!props.value}>
+    <TouchableWithoutFeedback onPress={props.onPress}>
       <ImageView
-        opacity={props.value ? 1 : 0}
         width={14}
         height={14}
         mt="5px"

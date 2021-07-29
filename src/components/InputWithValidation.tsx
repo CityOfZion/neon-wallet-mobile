@@ -10,6 +10,7 @@ import {
   Platform,
   TextInput,
   Dimensions,
+  View,
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -61,6 +62,7 @@ interface Props {
   isMultiline?: boolean
   fromImportKey?: boolean
   addressSelected?: string
+  forceClearButton?: boolean
 }
 
 const InputWithValidation = (props: Props) => {
@@ -175,21 +177,34 @@ const InputWithValidation = (props: Props) => {
               }
             />
 
-            {!props.isMultiline && !isValid && (
-              <ImageView
-                resizeMode={'center'}
-                alignSelf="center"
-                source={require('~/src/assets/images/icon-alert-purple.png')}
-              />
-            )}
-            {props.onClearPress && props.value.length > 0 ? (
-              <InputClearButton
-                onPress={props.onClearPress}
-                value={props.value}
-              />
-            ) : (
-              <LinearLayout height="34px" mb="-6px" />
-            )}
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                width:
+                  props.value.length > 0
+                    ? Dimensions.get('screen').width * 0.12
+                    : undefined,
+                justifyContent: 'space-between',
+              }}
+            >
+              {!props.isMultiline && !isValid && (
+                <ImageView
+                  resizeMode={'center'}
+                  alignSelf="center"
+                  source={require('~/src/assets/images/icon-alert-purple.png')}
+                />
+              )}
+              {(props.onClearPress && props.value.length > 0) ||
+              (props.onClearPress && props.forceClearButton) ? (
+                <InputClearButton
+                  onPress={props.onClearPress}
+                  value={props.value}
+                />
+              ) : (
+                <LinearLayout height="34px" mb="-6px" />
+              )}
+            </View>
           </LinearLayout>
         </LinearLayout>
       ) : (

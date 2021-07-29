@@ -86,6 +86,7 @@ const InputAddress: React.FC<IInputGroup> = ({
         setAddress('')
         handleDeleteInput(id)
       }}
+      forceClearButton={true}
     />
   )
 }
