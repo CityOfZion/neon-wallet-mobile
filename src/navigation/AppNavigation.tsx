@@ -113,7 +113,7 @@ const AppNavigation = (props: Props) => {
         clearInterval(interval)
       }
     } else {
-      Facade.await.run('application', startApplication, 1000)
+      Facade.await.run('application', startApplication, 2000)
     }
   }, [hasInit, syncInterval])
 
