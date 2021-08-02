@@ -76,6 +76,7 @@ export default function CreateAccountModal(props: Props) {
       title={Facade.t('modals.createAccount.title')}
       leftButton={Facade.t('modals.createAccount.navigation.cancel')}
       rightButton={Facade.t('modals.createAccount.navigation.save')}
+      disableRightButton={!name}
       onLeftPress={controller.close}
       onRightPress={save}
       onClose={props.navigation.goBack}
