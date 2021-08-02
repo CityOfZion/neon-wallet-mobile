@@ -324,7 +324,9 @@ export const PersistContact = (props: PersistContactProps) => {
                 <Image
                   source={require('~src/assets/images/add-contact-white.png')}
                 />
-                <Text style={styles.textAnother}>Add another text</Text>
+                <Text style={styles.textAnother}>
+                  {Facade.t('persistContact.addAnotherAddress')}
+                </Text>
               </TouchableOpacity>
             </LinearLayout>
             {contact && (
