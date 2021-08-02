@@ -38,6 +38,7 @@ interface SwiperProps {
   paddingBottom: number
   leftButton?: JSX.Element | string
   rightButton?: React.FC | JSX.Element | string
+  disableRightButton?: boolean
   onLeftPress?: () => void
   onRightPress?: () => void
   onClose?: () => void
@@ -196,6 +197,7 @@ const Header = (props: SwiperProps & {mb: number}) => {
                     fontSize={'md'}
                     rounded={false}
                     flat={true}
+                    disabled={props.disableRightButton}
                   />
                 ) : (
                   props.rightButton
@@ -490,6 +492,7 @@ SwiperPanel.propTypes = {
   scrollEnabled: PropTypes.bool,
   solidColorBG: PropTypes.bool,
   darkerSolidColorBG: PropTypes.bool,
+  disableRightButton: PropTypes.bool,
 }
 
 SwiperPanel.defaultProps = {
@@ -506,6 +509,7 @@ SwiperPanel.defaultProps = {
   imageSize: [20, 20],
   solidColorBG: false,
   darkerSolidColorBG: false,
+  disableRightButton: false,
 }
 
 interface ICloseButton {
