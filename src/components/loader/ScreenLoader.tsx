@@ -60,8 +60,6 @@ const ScreenLoader = (props?: {
     }
     return color
   }
-  const svgPath =
-    'file://C:/Workspace/neon-wallet-mobile/src/assets/logos/Logo-3.svg'
 
   return (
     <LinearGradient colors={chooseColorBG()}>
