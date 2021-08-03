@@ -45,6 +45,8 @@ PODS:
   - EXPrint (9.1.0):
     - UMCore
     - UMFileSystemInterface
+  - EXRandom (9.0.1):
+    - React
   - EXSecureStore (9.2.0):
     - UMCore
   - EXSharing (8.4.1):
@@ -490,6 +492,7 @@ DEPENDENCIES:
   - EXLocation (from `../node_modules/expo-location/ios`)
   - EXPermissions (from `../node_modules/expo-permissions/ios`)
   - EXPrint (from `../node_modules/expo-print/ios`)
+  - EXRandom (from `../node_modules/expo-random/ios`)
   - EXSecureStore (from `../node_modules/expo-secure-store/ios`)
   - EXSharing (from `../node_modules/expo-sharing/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
@@ -627,6 +630,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-permissions/ios"
   EXPrint:
     :path: "../node_modules/expo-print/ios"
+  EXRandom:
+    :path: "../node_modules/expo-random/ios"
   EXSecureStore:
     :path: "../node_modules/expo-secure-store/ios"
   EXSharing:
@@ -763,6 +768,7 @@ SPEC CHECKSUMS:
   EXLocation: 90232c6f2773b04a3c146bfda9f181035722c10a
   EXPermissions: 30cbe5b72bd209b65c00884180ad058a60bb413d
   EXPrint: 969e4d8514319a74405b015cd0bf6023dcdf4b00
+  EXRandom: 10419e13e311477711fa4bfc5e560e690ff6667b
   EXSecureStore: 579cbccd9cd093e6f4336aba073b059008bd78e0
   EXSharing: 02ac909b58904235ab9405b9e69deb24613f8b40
   EXSplashScreen: 7ea40b8524f27e7444e3892411c8a4782ab6b4ce
