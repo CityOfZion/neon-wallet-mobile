@@ -11,6 +11,7 @@ const ScreenLoader = (props?: {
   invertedGradient?: boolean
   solidColorBG?: boolean
   darkerSolidColorBG?: boolean
+  gradient?: boolean
 }) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
@@ -55,6 +56,8 @@ const ScreenLoader = (props?: {
       color = [theme.colors.background[2], theme.colors.background[2]]
     } else if (props?.darkerSolidColorBG) {
       color = [theme.colors.background[14], theme.colors.background[14]]
+    } else if (props?.gradient) {
+      color = ['#1d2228', '#30363f']
     } else {
       color = [theme.colors.background[14], theme.colors.background[2]]
     }
@@ -86,7 +89,9 @@ const ScreenLoader = (props?: {
             style={{
               ...StyleSheet.absoluteFillObject,
               alignItems: 'center',
-              backgroundColor: theme.colors.background[14],
+              backgroundColor: props?.darkerSolidColorBG
+                ? theme.colors.background[14]
+                : '#23282e',
               justifyContent: 'center',
             }}
           >
