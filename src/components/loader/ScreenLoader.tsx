@@ -53,7 +53,7 @@ const ScreenLoader = (props?: {
     } else if (props?.invertedGradient) {
       color = ['#22292f', theme.colors.background[18]]
     } else if (props?.solidColorBG) {
-      color = [theme.colors.background[2], theme.colors.background[2]]
+      color = [theme.colors.background[17], theme.colors.background[17]]
     } else if (props?.darkerSolidColorBG) {
       color = [theme.colors.background[14], theme.colors.background[14]]
     } else if (props?.gradient) {
@@ -91,6 +91,8 @@ const ScreenLoader = (props?: {
               alignItems: 'center',
               backgroundColor: props?.darkerSolidColorBG
                 ? theme.colors.background[14]
+                : props?.solidColorBG
+                ? theme.colors.background[17]
                 : '#23282e',
               justifyContent: 'center',
             }}
