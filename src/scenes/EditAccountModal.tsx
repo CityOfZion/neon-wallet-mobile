@@ -138,6 +138,7 @@ const EditAccountModal = (props: Props) => {
       title={Facade.t('modals.editAccount.title')}
       leftButton={Facade.t('modals.editAccount.navigation.cancel')}
       rightButton={Facade.t('modals.editAccount.navigation.save')}
+      disableRightButton={!name}
       onLeftPress={() => controller.close()}
       onRightPress={save}
       onClose={() => handleNavigation()}
