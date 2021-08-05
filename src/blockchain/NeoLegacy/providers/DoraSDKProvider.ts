@@ -66,7 +66,7 @@ export class DoraSDKProvider implements NeoLegacyProvider {
       transactionID,
       this.network
     )
-    result.txid = txid
+    result.txid = txid.replace('0x', '')
     result.type = type
     result.size = size
     result.blockHeight = block

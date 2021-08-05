@@ -1,21 +1,21 @@
-import {wallet} from '@cityofzion/neon-js'
+import { wallet } from '@cityofzion/neon-js'
 import {
   HttpExclude,
   HttpExpose,
   ResponseSerialize,
 } from '@simpli/serialized-request'
-import {plainToClass} from 'class-transformer'
-import {ImageLoadEventData} from 'react-native'
+import { plainToClass } from 'class-transformer'
+import { ImageLoadEventData } from 'react-native'
 
-import {Facade} from '~src/app/Facade'
-import {Currency} from '~src/enums/Currency'
-import {Lang} from '~src/enums/Lang'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
-import {Wallet} from '~src/models/redux/Wallet'
-import {Exchange} from '~src/types/exchange'
-import {Pagination} from '~src/types/pagination'
+import { Facade } from '~src/app/Facade'
+import { Currency } from '~src/enums/Currency'
+import { Lang } from '~src/enums/Lang'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { TransactionDateGroup } from '~src/models/TransactionDateGroup'
+import { SenderTransaction } from '~src/models/redux/SenderTransaction'
+import { Wallet } from '~src/models/redux/Wallet'
+import { Exchange } from '~src/types/exchange'
+import { Pagination } from '~src/types/pagination'
 
 @HttpExclude()
 export class Account implements AccountState {
@@ -70,7 +70,7 @@ export class Account implements AccountState {
 
       const tokenAssets = response.balance
         .map((it) => {
-          const {asset, assetSymbol, assetHash} = it
+          const { asset, assetSymbol, assetHash } = it
 
           if (asset && assetSymbol && assetHash) {
             const tokenAsset = new TokenAsset(asset, assetSymbol, assetHash)
@@ -195,7 +195,7 @@ export class Account implements AccountState {
 
     this.tokenAssets = response.balance
       .map((it) => {
-        const {asset, assetSymbol, assetHash} = it
+        const { asset, assetSymbol, assetHash } = it
 
         if (asset && assetSymbol && assetHash) {
           const tokenAsset = new TokenAsset(asset, assetSymbol, assetHash)
@@ -211,7 +211,7 @@ export class Account implements AccountState {
   async populateTransactions(
     tokensPool: TokenAsset[],
     currentPage?: number
-  ): Promise<Pagination & {entries: SenderTransaction[]}> {
+  ): Promise<Pagination & { entries: SenderTransaction[] }> {
     if (!this.address) {
       throw Error('Address must be defined')
     }
@@ -266,7 +266,15 @@ export class Account implements AccountState {
       .value()
 
     const pageNumber = Math.floor(entries.length / pageSize)
+    const flattedPendingTransactions = this.flattedPendingTransactions
+    entries.forEach(entry => {
+      if (flattedPendingTransactions.find(flattedPendingTransaction => flattedPendingTransaction.transactionHash === entry.transactionHash)) {
+        flattedPendingTransactions.splice(flattedPendingTransactions.indexOf(entry),1)
+      }
+    })
+
     this.clearTransactions()
+    this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(flattedPendingTransactions)
     this.transactions = TransactionDateGroup.toTransactionDateGroup(entries)
 
     return {
@@ -295,7 +303,7 @@ export class Account implements AccountState {
       const firstOne = filteredTokenAssets[0]
       if (!firstOne) continue
 
-      const {name, symbol, hash} = firstOne
+      const { name, symbol, hash } = firstOne
 
       const tokenAsset = new TokenAsset(name, symbol, hash)
 
@@ -353,8 +361,6 @@ export class Account implements AccountState {
     this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
       senderTxs
     )
-
-    Facade.bus.emit('addPendingUnclaimedGasTransaction', senderTx)
   }
 
   getTokenAssets() {
