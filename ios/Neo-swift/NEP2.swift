@@ -13,6 +13,13 @@ import Neoutils
         var error: NSError?
         guard let nepResult = decryptKey(encryptedPrivateKey, passphrase: passphrase, scryptParameter: nil) else { return nil }
         guard let wallet = NeoutilsGenerateFromPrivateKey(nepResult.decryptedKey?.hexString ?? "", &error) else { return nil }
+      
+        guard let nepResultAddreshash = nepResult.addressHash else { return nil }
+        guard let walletAddress = wallet.address() else { return nil }
+        
+        if (!verify(addressHash: nepResultAddreshash, address: walletAddress)) {
+            return nil
+        }
         
         return wallet.wif()
     }
