@@ -379,7 +379,6 @@ export class AppReducer extends ReducerWrapper<
         const removedSenderTx: SenderTransaction[] = []
 
         for (const account of accounts) {
-    
           const senderTxs = account.flattedPendingTransactions
 
           for (const senderTx of senderTxs) {
@@ -429,8 +428,6 @@ export class AppReducer extends ReducerWrapper<
         await Storage.accounts.save(accounts)
         dispatch(this.commit('SET_ACCOUNTS', {accounts}))
         this.actions.syncWallets()
-
-        
       }
     },
 

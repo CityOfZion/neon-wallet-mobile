@@ -319,17 +319,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
     populateUnclaimed()
   }
 
-  const manageClaimLoader = () => {
-    const senderTxs = account.getPendingTransactions().flatMap((it) => it.transactions)
-    console.log('debug manageClaimLoader', senderTxs.find(tx => tx.receiverAddress === account.address))
-    const exist = senderTxs.some((it) => it.receiverAddress === account.address)
-    if (exist) {
-      Facade.await.init(`ClaimGas@${account.address}`)
-    } else {
-      Facade.await.done(`ClaimGas@${account.address}`)
-    }
-  }
-
   const populateUnclaimed = async () => {
     if (!account.address) return
 
