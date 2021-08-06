@@ -16,10 +16,7 @@ export class ContactReducer extends ReducerWrapper<
 > {
   protected readonly initialState = Model.parse<ContactState>(Contact)
 
-  protected readonly dispatchers = [
-    NameDispatcher,
-    AddressDispatcher,
-  ]
+  protected readonly dispatchers = [NameDispatcher, AddressDispatcher]
 
   readonly actions = {
     setName: (name: string) => {

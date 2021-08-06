@@ -1,25 +1,25 @@
-import { wallet } from '@cityofzion/neon-core'
-import { RouteProp } from '@react-navigation/native'
-import { StackNavigationProp } from '@react-navigation/stack'
-import { AwaitActivity } from '@simpli/react-native-await'
-import React, { useState, useEffect } from 'react'
-import { Alert, Platform, TextInput, Text } from 'react-native'
-import { useSelector, useDispatch } from 'react-redux'
+import {wallet} from '@cityofzion/neon-core'
+import {RouteProp} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
+import {AwaitActivity} from '@simpli/react-native-await'
+import React, {useState, useEffect} from 'react'
+import {Alert, Platform, TextInput, Text} from 'react-native'
+import {useSelector, useDispatch} from 'react-redux'
 
-import { Account } from '../models/redux/Account'
+import {Account} from '../models/redux/Account'
 
-import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
-import { Facade } from '~src/app/Facade'
+import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
+import {Facade} from '~src/app/Facade'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { AsteroidHelper } from '~src/helpers/AsteroidHelper'
-import { AddressPaginatedRequest } from '~src/models/request/AddressPaginatedRequest'
-import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
-import { getRandomColor } from '~src/scenes/CustomizeAccount'
-import { RootState, RootStore } from '~src/store/RootStore'
-import { LinearLayout, ImageView, TextView } from '~src/styles/styled-components'
+import {AsteroidHelper} from '~src/helpers/AsteroidHelper'
+import {AddressPaginatedRequest} from '~src/models/request/AddressPaginatedRequest'
+import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import {getRandomColor} from '~src/scenes/CustomizeAccount'
+import {RootState, RootStore} from '~src/store/RootStore'
+import {LinearLayout, ImageView, TextView} from '~src/styles/styled-components'
 
 interface ImportKeyProps {
   navigation: StackNavigationProp<MoreStackParamList & WalletStackParamList>
@@ -47,7 +47,7 @@ const ImportKey = (props: ImportKeyProps) => {
     (state: RootState) => Facade.theme[state.settings.theme]
   )
   const {accounts, tokens} = useSelector((state: RootState) => state.app)
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const {isConnected} = useSelector((state: RootState) => state.network)
   const [inputValue, setInputValue] = useState(
     props.route.params ? props.route.params.key ?? '' : ''
   )
@@ -68,13 +68,13 @@ const ImportKey = (props: ImportKeyProps) => {
       const ACCOUNT_NAME_DEFAULT = `Mnemonic Account ${index + 1}`
       const walletID = await createWallet(WALLET_NAME_DEFAULT, mnemonic)
       while (!stop && isConnected) {
-        const { WIF, address } = AsteroidHelper.generateNeoAccount(
+        const {WIF, address} = AsteroidHelper.generateNeoAccount(
           mnemonic,
           index
         )
         if (!accounts.find((account) => account.address === address)) {
           const req = Facade.app.blockchainDataProvider
-          const { totalEntries } = await req.getAddressAbstracts(address, 1)
+          const {totalEntries} = await req.getAddressAbstracts(address, 1)
           if (totalEntries && totalEntries > 0) {
             await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
           } else {
@@ -90,7 +90,7 @@ const ImportKey = (props: ImportKeyProps) => {
         }
       }
       if (!isConnected) {
-        const { WIF, address } = await new Promise((resolve) => {
+        const {WIF, address} = await new Promise((resolve) => {
           resolve(AsteroidHelper.generateNeoAccount(mnemonic, index))
         })
         await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
@@ -101,7 +101,6 @@ const ImportKey = (props: ImportKeyProps) => {
   }
 
   const createWallet = async (name: string, securityPhrase: string) => {
-
     dispatch(RootStore.wallet.actions.setName(name))
     dispatch(RootStore.wallet.actions.setSecurityPhrase(securityPhrase))
     dispatch(RootStore.wallet.actions.setType('standard'))
@@ -109,8 +108,6 @@ const ImportKey = (props: ImportKeyProps) => {
     const walletId = await dispatchAsyncString(
       RootStore.wallet.actions.createAndSave()
     )
-
-
 
     await dispatchAsync(
       RootStore.wallet.actions.setShowBackupAlert(walletId, false)
@@ -171,10 +168,10 @@ const ImportKey = (props: ImportKeyProps) => {
               }),
           },
         ],
-        { cancelable: true }
+        {cancelable: true}
       )
     } else if (wallet.isNEP2(inputValue)) {
-      destination = [Facade.route.Passphrase.name, { encryptedKey: inputValue }]
+      destination = [Facade.route.Passphrase.name, {encryptedKey: inputValue}]
     } else if (wallet.isWIF(inputValue)) {
       const neoAccount = Facade.asteroid.generateNeoAccountFromWif(inputValue)
 
@@ -188,7 +185,7 @@ const ImportKey = (props: ImportKeyProps) => {
               style: 'cancel',
             },
           ],
-          { cancelable: true }
+          {cancelable: true}
         )
       } else if (neoAccount) {
         destination = [
@@ -219,7 +216,7 @@ const ImportKey = (props: ImportKeyProps) => {
         onLoadingEnd={() => {
           props.navigation.reset({
             index: 0,
-            routes: [{ name: Facade.route.Tab.name }],
+            routes: [{name: Facade.route.Tab.name}],
           })
           props.navigation.replace(Facade.route.ListWalletsPage.name, {})
         }}

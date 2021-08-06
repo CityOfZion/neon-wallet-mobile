@@ -29,8 +29,6 @@ const WalletDetailsPage = (props: WalletDetailsProps) => {
   const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
-   
-
   dispatchAsync(RootStore.app.actions.syncWallets())
 
   props.navigation.setOptions({

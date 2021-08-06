@@ -133,7 +133,6 @@ const CustomizeAccount = (props: Props) => {
   }
 
   const createWallet = async () => {
-     
     dispatch(RootStore.wallet.actions.setName(name))
 
     // Creates a legacy or watch wallet, depending if address
@@ -148,8 +147,6 @@ const CustomizeAccount = (props: Props) => {
       RootStore.wallet.actions.createAndSave()
     )
     await dispatchAsync(RootStore.app.actions.syncWallets())
-
-     
 
     return walletId
   }

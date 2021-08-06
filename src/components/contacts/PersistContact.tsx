@@ -193,7 +193,6 @@ export const PersistContact = (props: PersistContactProps) => {
   }
 
   const deleteAction = async () => {
-
     if (contact?.id) {
       await dispatchAsync(RootStore.contact.actions.delete(contact.id))
     }

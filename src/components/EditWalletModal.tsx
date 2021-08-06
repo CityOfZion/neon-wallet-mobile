@@ -73,8 +73,6 @@ export const EditWalletModal = (
   }
 
   const deleteAction = async () => {
-     
-
     if (wallet?.id) {
       await dispatchAsync(RootStore.wallet.actions.delete(wallet.id))
     }

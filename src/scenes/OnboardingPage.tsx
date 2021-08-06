@@ -116,8 +116,6 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const createFirstWallet = async () => {
     const words = Facade.asteroid.generateMnemonic() ?? []
 
-     
-
     dispatch(RootStore.wallet.actions.setName('My First Wallet'))
     dispatch(RootStore.wallet.actions.setType('standard'))
     dispatch(RootStore.wallet.actions.setSecurityPhrase(words.join(' ')))
@@ -127,19 +125,16 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     )
     await dispatchAsync(RootStore.app.actions.syncWallets())
     dispatch(RootStore.wallet.actions.setShowBackupAlert(id, true))
-     
 
     await createFirstAccount(id)
   }
 
   const createFirstAccount = async (id: string) => {
-
     dispatch(RootStore.account.actions.setIdWallet(id))
     dispatch(RootStore.account.actions.setName('My account 1'))
 
     await dispatchAsyncString(RootStore.account.actions.createAndSave())
     await dispatchAsync(RootStore.app.actions.syncAccounts())
-
   }
 
   const data = [
