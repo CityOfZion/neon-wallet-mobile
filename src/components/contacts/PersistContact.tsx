@@ -171,8 +171,6 @@ export const PersistContact = (props: PersistContactProps) => {
       return
     }
 
-    dispatch(RootStore.contact.actions.clearState())
-
     dispatch(RootStore.contact.actions.setName(name))
     dispatch(
       RootStore.contact.actions.setAddress(
@@ -190,18 +188,15 @@ export const PersistContact = (props: PersistContactProps) => {
       await dispatchAsync(RootStore.contact.actions.createAndSave())
     }
 
-    dispatch(RootStore.contact.actions.clearState())
     dispatch(RootStore.app.actions.syncContacts())
     controller.close()
   }
 
   const deleteAction = async () => {
-    dispatch(RootStore.contact.actions.clearState())
 
     if (contact?.id) {
       await dispatchAsync(RootStore.contact.actions.delete(contact.id))
     }
-    dispatch(RootStore.contact.actions.clearState())
 
     await dispatchAsync(RootStore.app.actions.syncContacts())
 

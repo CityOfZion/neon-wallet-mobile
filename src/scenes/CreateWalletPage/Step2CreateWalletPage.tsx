@@ -48,7 +48,7 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
 
     await setWords(words)
 
-    dispatch(RootStore.wallet.actions.clearState())
+     
     dispatch(RootStore.wallet.actions.setSecurityPhrase(words.join(' ')))
   }
 

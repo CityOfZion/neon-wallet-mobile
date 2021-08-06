@@ -566,8 +566,6 @@ const SendTransactionInputModal = (prop: Props) => {
     const tipWithHolding = Facade.utils.clone(tip)
     tokenWithHolding.amount = Number(amount)
 
-    dispatch(RootStore.senderTransaction.actions.clearState())
-
     dispatch(RootStore.senderTransaction.actions.setToken(tokenWithHolding))
     dispatch(
       RootStore.senderTransaction.actions.setSenderAddress(senderAddress)

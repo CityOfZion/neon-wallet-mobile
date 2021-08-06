@@ -19,7 +19,6 @@ export class ContactReducer extends ReducerWrapper<
   protected readonly dispatchers = [
     NameDispatcher,
     AddressDispatcher,
-    ClearStateDispatcher,
   ]
 
   readonly actions = {
@@ -28,9 +27,6 @@ export class ContactReducer extends ReducerWrapper<
     },
     setAddress: (addresses: string[]) => {
       return this.commit('SET_ADDRESSES', {addresses})
-    },
-    clearState: () => {
-      return this.commit('CLEAR_STATE_CONTACT', {})
     },
     createAndSave: (): AsyncAction<string> => {
       return async (dispatch, getState) => {

@@ -62,7 +62,6 @@ const EditAccountModal = (props: Props) => {
     await dispatchAsync(RootStore.account.actions.updateAndSave(address))
     await dispatchAsync(RootStore.app.actions.syncAccounts())
 
-    dispatch(RootStore.account.actions.clearState())
 
     dispatch(RootStore.account.actions.selectAccount(address))
     dispatch(RootStore.wallet.actions.selectWallet(account.idWallet))
@@ -99,12 +98,10 @@ const EditAccountModal = (props: Props) => {
   }
 
   const deleteAction = async () => {
-    dispatch(RootStore.account.actions.clearState())
 
     if (account?.address) {
       await dispatchAsync(RootStore.account.actions.delete(account.address))
     }
-    dispatch(RootStore.account.actions.clearState())
 
     await dispatchAsync(RootStore.app.actions.syncAccounts())
 

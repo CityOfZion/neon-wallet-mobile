@@ -133,7 +133,7 @@ const CustomizeAccount = (props: Props) => {
   }
 
   const createWallet = async () => {
-    dispatch(RootStore.wallet.actions.clearState())
+     
     dispatch(RootStore.wallet.actions.setName(name))
 
     // Creates a legacy or watch wallet, depending if address
@@ -149,7 +149,7 @@ const CustomizeAccount = (props: Props) => {
     )
     await dispatchAsync(RootStore.app.actions.syncWallets())
 
-    dispatch(RootStore.wallet.actions.clearState())
+     
 
     return walletId
   }
@@ -159,8 +159,6 @@ const CustomizeAccount = (props: Props) => {
     const address = account.address
 
     if (!address) throw new Error('Address not defined')
-
-    dispatch(RootStore.account.actions.clearState())
 
     dispatch(RootStore.account.actions.setIdWallet(walletId))
     dispatch(RootStore.account.actions.setName(name))
@@ -173,8 +171,6 @@ const CustomizeAccount = (props: Props) => {
       (await dispatchAsync(
         RootStore.app.actions.syncTokenAssetsByAddress(address)
       ))
-
-    dispatch(RootStore.account.actions.clearState())
 
     return importedAccount
   }

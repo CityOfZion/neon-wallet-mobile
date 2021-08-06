@@ -29,7 +29,7 @@ const WalletDetailsPage = (props: WalletDetailsProps) => {
   const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
-  dispatch(RootStore.wallet.actions.clearState())
+   
 
   dispatchAsync(RootStore.app.actions.syncWallets())
 

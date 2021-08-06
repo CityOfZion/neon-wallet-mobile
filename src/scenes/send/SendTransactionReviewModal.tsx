@@ -318,8 +318,6 @@ const SendTransactionReviewModal = (props: Props) => {
       await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
     }
 
-    dispatch(RootStore.senderTransaction.actions.clearState())
-
     props.navigation.reset({
       index: 0,
       routes: [
