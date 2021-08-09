@@ -380,8 +380,6 @@ export class AppReducer extends ReducerWrapper<
         const removedSenderTx: SenderTransaction[] = []
 
         for (const account of accounts) {
-          let hasAccountChanged = false
-
           const senderTxs = account.flattedPendingTransactions
 
           for (const senderTx of senderTxs) {
@@ -419,8 +417,6 @@ export class AppReducer extends ReducerWrapper<
                     })
                     Facade.bus.emit('transactionEnd', senderTxs[index])
                   }
-
-                  hasAccountChanged = true
                   removedSenderTx.push(senderTxs[index])
                   senderTxs.splice(index, 1)
                 }
@@ -429,20 +425,10 @@ export class AppReducer extends ReducerWrapper<
               }
             }
           }
-
-          if (hasAccountChanged) {
-            account.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
-              senderTxs
-            )
-          }
         }
         await Storage.accounts.save(accounts)
         dispatch(this.commit('SET_ACCOUNTS', {accounts}))
         this.actions.syncWallets()
-
-        if (removedSenderTx.length) {
-          Facade.bus.emit('removePendingTransactions', removedSenderTx)
-        }
       }
     },
 

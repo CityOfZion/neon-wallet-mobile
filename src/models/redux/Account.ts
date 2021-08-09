@@ -266,7 +266,25 @@ export class Account implements AccountState {
       .value()
 
     const pageNumber = Math.floor(entries.length / pageSize)
+    const flattedPendingTransactions = this.flattedPendingTransactions
+    entries.forEach((entry) => {
+      if (
+        flattedPendingTransactions.find(
+          (flattedPendingTransaction) =>
+            flattedPendingTransaction.transactionHash === entry.transactionHash
+        )
+      ) {
+        flattedPendingTransactions.splice(
+          flattedPendingTransactions.indexOf(entry),
+          1
+        )
+      }
+    })
+
     this.clearTransactions()
+    this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
+      flattedPendingTransactions
+    )
     this.transactions = TransactionDateGroup.toTransactionDateGroup(entries)
 
     return {
@@ -353,8 +371,6 @@ export class Account implements AccountState {
     this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
       senderTxs
     )
-
-    Facade.bus.emit('addPendingUnclaimedGasTransaction', senderTx)
   }
 
   getTokenAssets() {

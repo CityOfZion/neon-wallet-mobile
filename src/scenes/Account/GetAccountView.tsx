@@ -162,8 +162,6 @@ const TransactionsTab = () => {
       accountsPool.find((acc) => acc.address === account.address) ??
       new Account()
     setAccount(upAccount)
-    console.log('print account transactions')
-    console.log(account.getTransactions())
   }, [accountsPool])
 
   return account.tokenAssets.length ? (
@@ -275,8 +273,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
     Facade.bus.on('claimGasEnd', refresh)
     Facade.bus.on('transactionStart', refresh)
     Facade.bus.on('transactionEnd', refresh)
-    Facade.bus.on('addPendingUnclaimedGasTransaction', manageClaimLoader)
-    Facade.bus.on('removePendingTransactions', manageClaimLoader)
     Facade.bus.on('updateTransactions', handleUpdateTransactions)
 
     return () => {
@@ -284,8 +280,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
       Facade.bus.off('claimGasEnd', refresh)
       Facade.bus.off('transactionStart', refresh)
       Facade.bus.off('transactionEnd', refresh)
-      Facade.bus.off('addPendingUnclaimedGasTransaction', manageClaimLoader)
-      Facade.bus.off('removePendingTransactions', manageClaimLoader)
     }
   }, [address])
 
@@ -323,19 +317,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
     setCurrentPage(1)
     fetchTransaction(1)
     populateUnclaimed()
-  }
-
-  const manageClaimLoader = () => {
-    const senderTxs = account.pendingTransactions.flatMap(
-      (it) => it.transactions
-    )
-
-    const exist = senderTxs.some((it) => it.receiverAddress === account.address)
-    if (exist) {
-      Facade.await.init(`ClaimGas@${account.address}`)
-    } else {
-      Facade.await.done(`ClaimGas@${account.address}`)
-    }
   }
 
   const populateUnclaimed = async () => {
