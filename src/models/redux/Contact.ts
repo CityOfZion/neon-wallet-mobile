@@ -10,4 +10,14 @@ export class Contact implements ContactState {
 
   @HttpExpose()
   addresses: string[] = []
+
+  @HttpExpose()
+  address: string | null = null
+
+  adaptNewFormat() {
+    if (this.address && !this.addresses) {
+      this.addresses = []
+      this.addresses.push(this.address)
+    }
+  }
 }

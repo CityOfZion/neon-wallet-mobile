@@ -348,6 +348,7 @@ export class AppReducer extends ReducerWrapper<
       return async (dispatch, getState) => {
         let contacts = await Storage.contacts.load()
         if (contacts) {
+          contacts.forEach((contact) => contact.adaptNewFormat())
           contacts = contacts.sort((c1: Contact, c2: Contact) => {
             if (!c1.name && !c2.name) return 0
             if (!c1.name) return 1
