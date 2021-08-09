@@ -54,10 +54,6 @@ const SendWalletSelectionModal = (props: Props) => {
     wallet
   )
 
-  useEffect(() => {
-    dispatch(RootStore.senderTransaction.actions.clearState())
-  }, [])
-
   return show ? (
     <ScrollView
       style={{

@@ -148,7 +148,6 @@ const GetWalletView = (props: GetWalletProps) => {
 
   const createEvent = async () => {
     if (wallet.id) {
-      dispatch(RootStore.account.actions.clearState())
       dispatch(RootStore.account.actions.setIdWallet(wallet.id))
 
       props.navigation.navigate(Facade.route.Modal.name, {

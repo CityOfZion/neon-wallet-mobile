@@ -26,7 +26,6 @@ export class WalletReducer extends ReducerWrapper<
     PassphraseDispatcher,
     SecurityPhraseDispatcher,
     WalletTypeDispatcher,
-    ClearStateDispatcher,
   ]
 
   readonly actions = {
@@ -44,9 +43,6 @@ export class WalletReducer extends ReducerWrapper<
     },
     setType: (walletType: 'standard' | 'watch' | 'legacy') => {
       return this.commit('SET_WALLET_TYPE', {walletType})
-    },
-    clearState: () => {
-      return this.commit('CLEAR_STATE_WALLET', {})
     },
     getFromSelection: (): SyncAction<Wallet> => {
       return (dispatch, getState) => {

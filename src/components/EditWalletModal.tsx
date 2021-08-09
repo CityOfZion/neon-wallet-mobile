@@ -55,8 +55,6 @@ export const EditWalletModal = (
       return
     }
 
-    dispatch(RootStore.wallet.actions.clearState())
-
     dispatch(RootStore.wallet.actions.setName(name))
 
     if (wallet?.id) {
@@ -64,8 +62,6 @@ export const EditWalletModal = (
     } else {
       await dispatchAsync(RootStore.wallet.actions.createAndSave())
     }
-
-    dispatch(RootStore.wallet.actions.clearState())
 
     await dispatchAsync(RootStore.app.actions.syncWallets())
     if (props.route.params?.fromWalletDetailsPage) {
@@ -77,13 +73,9 @@ export const EditWalletModal = (
   }
 
   const deleteAction = async () => {
-    dispatch(RootStore.wallet.actions.clearState())
-
     if (wallet?.id) {
       await dispatchAsync(RootStore.wallet.actions.delete(wallet.id))
     }
-    dispatch(RootStore.wallet.actions.clearState())
-    dispatch(RootStore.account.actions.clearState())
 
     await dispatchAsync(RootStore.app.actions.syncWallets())
     await dispatchAsync(RootStore.app.actions.syncAccounts())

@@ -28,7 +28,6 @@ export class SendTransactionReducer extends ReducerWrapper<
     FeeAmountDispatcher,
     ReceiverAddressDispatcher,
     TokenDispatcher,
-    ClearStateDispatcher,
     FiatDispatcher,
     TipDispatcher,
   ]
@@ -48,9 +47,6 @@ export class SendTransactionReducer extends ReducerWrapper<
     },
     setFiat: (fiat: number) => {
       return this.commit('SET_FIAT', {fiat})
-    },
-    clearState: () => {
-      return this.commit('CLEAR_STATE_SENDER_TRANSACTION', {})
     },
     setTip: (tip: {amount: number; address: string} | undefined) => {
       return this.commit('SET_TIP', {tip})

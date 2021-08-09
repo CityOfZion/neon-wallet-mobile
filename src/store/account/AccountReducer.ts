@@ -26,7 +26,6 @@ export class AccountReducer extends ReducerWrapper<
     NameDispatcher,
     SrcIconDispatcher,
     BackgroundDispatcher,
-    ClearStateDispatcher,
   ]
 
   readonly actions = {
@@ -44,9 +43,6 @@ export class AccountReducer extends ReducerWrapper<
     },
     setBackgroundColor: (backgroundColor: string) => {
       return this.commit('SET_BACKGROUND_COLOR', {backgroundColor})
-    },
-    clearState: () => {
-      return this.commit('CLEAR_STATE_ACCOUNT', {})
     },
     getFromSelection: (address?: string): SyncAction<Account> => {
       if (address) {

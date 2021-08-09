@@ -46,7 +46,7 @@ const ImportKey = (props: ImportKeyProps) => {
   const theme = useSelector(
     (state: RootState) => Facade.theme[state.settings.theme]
   )
-  const accounts = useSelector((state: RootState) => state.app.accounts)
+  const {accounts, tokens} = useSelector((state: RootState) => state.app)
   const {isConnected} = useSelector((state: RootState) => state.network)
   const [inputValue, setInputValue] = useState(
     props.route.params ? props.route.params.key ?? '' : ''
@@ -101,7 +101,6 @@ const ImportKey = (props: ImportKeyProps) => {
   }
 
   const createWallet = async (name: string, securityPhrase: string) => {
-    dispatch(RootStore.wallet.actions.clearState())
     dispatch(RootStore.wallet.actions.setName(name))
     dispatch(RootStore.wallet.actions.setSecurityPhrase(securityPhrase))
     dispatch(RootStore.wallet.actions.setType('standard'))
@@ -109,8 +108,6 @@ const ImportKey = (props: ImportKeyProps) => {
     const walletId = await dispatchAsyncString(
       RootStore.wallet.actions.createAndSave()
     )
-
-    dispatch(RootStore.wallet.actions.clearState())
 
     await dispatchAsync(
       RootStore.wallet.actions.setShowBackupAlert(walletId, false)
@@ -131,8 +128,6 @@ const ImportKey = (props: ImportKeyProps) => {
   ) => {
     if (!address) throw new Error('Address not defined')
 
-    dispatch(RootStore.account.actions.clearState())
-
     dispatch(RootStore.account.actions.setIdWallet(walletId))
     dispatch(RootStore.account.actions.setName(name))
     dispatch(
@@ -148,9 +143,8 @@ const ImportKey = (props: ImportKeyProps) => {
       (await dispatchAsync(
         RootStore.app.actions.syncTokenAssetsByAddress(address)
       ))
-
-    dispatch(RootStore.account.actions.clearState())
-
+    await importedAccount.populateTokenAssets()
+    await importedAccount.populateTransactions(tokens)
     return importedAccount
   }
 
