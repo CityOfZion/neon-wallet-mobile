@@ -216,7 +216,9 @@ export abstract class NeonHelper {
 
     const lastClaimedTransaction =
       account?.flattedAllTransactions.find(
-        (it) => it.senderAddress === 'claim' || it.receiverAddress === 'claim'
+        (it) =>
+          it.senderAddress === ('claim' || 'mint') ||
+          it.receiverAddress === ('claim' || 'mint')
       ) ?? null
 
     const nextClaimAllowed = lastClaimedTransaction?.sentAt
@@ -233,28 +235,42 @@ export abstract class NeonHelper {
     }
 
     if (requiresTransaction) {
-      const txid = await this.sendNativeAsset(
-        address,
-        address,
-        'NEO',
-        amount ?? 0
-      )
+      try {
+        const txid = await this.sendNativeAsset(
+          address,
+          address,
+          'NEO',
+          amount ?? 0
+        )
 
-      this.watchTransaction(txid ?? '', () => {
-        Facade.bus.emit('claimGasReady')
-      })
+        this.watchTransaction(txid ?? '', () => {
+          Facade.bus.emit('claimGasReady')
+        })
+      } catch (error) {
+        showMessage({message: 'Problem to send native asset', type: 'danger'})
+        Facade.bus.emit('ClaimGasFinished')
+        throw new Error('Problem to send native asset')
+      }
     }
 
     return new Promise<string | null>((resolve) => {
       const fetch = async () => {
-        const claimGasResponse = await api.claimGas({
-          api: apiProvider,
-          account: neoAccount,
-        })
+        try {
+          const claimGasResponse = await api.claimGas({
+            api: apiProvider,
+            account: neoAccount,
+          })
 
-        Facade.bus.emit('claimGasStart', claimGasResponse)
-
-        resolve(claimGasResponse.response?.txid ?? null)
+          Facade.bus.emit('claimGasStart', claimGasResponse)
+          resolve(claimGasResponse.response?.txid ?? null)
+        } catch (error) {
+          showMessage({
+            message: 'Problem to get claim gas information',
+            type: 'danger',
+          })
+          Facade.bus.emit('ClaimGasFinished')
+          throw new Error('Problem to get claim gas information')
+        }
       }
 
       // If a NEO transaction was made them it must wait this transaction

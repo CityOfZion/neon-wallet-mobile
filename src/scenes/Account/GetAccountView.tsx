@@ -274,12 +274,14 @@ const GetAccountView = (props: GetAccountViewProps) => {
     Facade.bus.on('transactionStart', refresh)
     Facade.bus.on('transactionEnd', refresh)
     Facade.bus.on('updateTransactions', handleUpdateTransactions)
+    Facade.bus.on('ClaimGasFinished', availableClaimGasButton)
 
     return () => {
       Facade.bus.off('claimGasStart', refresh)
       Facade.bus.off('claimGasEnd', refresh)
       Facade.bus.off('transactionStart', refresh)
       Facade.bus.off('transactionEnd', refresh)
+      Facade.bus.on('ClaimGasFinished', availableClaimGasButton)
     }
   }, [address])
 
@@ -317,6 +319,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
     setCurrentPage(1)
     fetchTransaction(1)
     populateUnclaimed()
+  }
+
+  const availableClaimGasButton = () => {
+    Facade.await.done(`ClaimGas@${account.address}`)
   }
 
   const populateUnclaimed = async () => {
