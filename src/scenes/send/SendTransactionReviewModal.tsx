@@ -1,7 +1,7 @@
 import {useNavigationState} from '@react-navigation/native'
 import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {Alert, ScrollView, TouchableHighlight, View} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
@@ -242,9 +242,11 @@ const SendTransactionReviewModal = (props: Props) => {
       Facade.route.SendTransactionReviewModal.name
   )
 
-  const checkForAuth = async () => {
+  const checkForAuth = useCallback(async () => {
     // If user has set up authentication (either hardware or passcode)
     const hasAuth = await Storage.hasAuthentication.load()
+    const useHardware = await Storage.hasAuthenticationForHardware.load()
+
     if (hasAuth === true) {
       // Checks if user set up a passcode
       const passcode = await Facade.security.loadPasscode()
@@ -265,10 +267,12 @@ const SendTransactionReviewModal = (props: Props) => {
         // If no passcode, hardware authentication
         await tryAuth()
       }
+    } else if (useHardware) {
+      await tryAuth()
     } else {
       Facade.await.run('submit', submit)
     }
-  }
+  }, [])
 
   const tryAuth = async () => {
     const canUseHardware = await LocalAuthentication.hasHardwareAsync()
