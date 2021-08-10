@@ -198,7 +198,7 @@ export const TransactionDetails = (props: Props) => {
           <ThemedButton
             onPress={() => {
               Linking.openURL(
-                `https://dora.coz.io/transaction/0x${transaction.transactionHash}`
+                `https://dora.coz.io/transaction/neo2/mainnet/0x${transaction.transactionHash}`
               )
             }}
             label={Facade.t('transactionDetails.viewOnDora')}
