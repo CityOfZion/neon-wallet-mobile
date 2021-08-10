@@ -16,13 +16,16 @@ import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {AsteroidHelper} from '~src/helpers/AsteroidHelper'
 import {AddressPaginatedRequest} from '~src/models/request/AddressPaginatedRequest'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {getRandomColor} from '~src/scenes/CustomizeAccount'
 import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout, ImageView, TextView} from '~src/styles/styled-components'
 
+type ParamList = MoreStackParamList & WalletStackParamList & RootStackParamList
+
 interface ImportKeyProps {
-  navigation: StackNavigationProp<MoreStackParamList & WalletStackParamList>
+  navigation: StackNavigationProp<ParamList>
   route: RouteProp<MoreStackParamList, 'ImportKey'>
 }
 
@@ -65,13 +68,13 @@ const ImportKey = (props: ImportKeyProps) => {
       let index: number = 0
       let stop: boolean = false
       const WALLET_NAME_DEFAULT = 'Mnemonic Wallet'
-      const ACCOUNT_NAME_DEFAULT = `Mnemonic Account ${index + 1}`
       const walletID = await createWallet(WALLET_NAME_DEFAULT, mnemonic)
       while (!stop && isConnected) {
         const {WIF, address} = AsteroidHelper.generateNeoAccount(
           mnemonic,
           index
         )
+        const ACCOUNT_NAME_DEFAULT = `Mnemonic Account ${index + 1}`
         if (!accounts.find((account) => account.address === address)) {
           const req = Facade.app.blockchainDataProvider
           const {totalEntries} = await req.getAddressAbstracts(address, 1)
@@ -93,6 +96,7 @@ const ImportKey = (props: ImportKeyProps) => {
         const {WIF, address} = await new Promise((resolve) => {
           resolve(AsteroidHelper.generateNeoAccount(mnemonic, index))
         })
+        const ACCOUNT_NAME_DEFAULT = `Mnemonic Account ${index + 1}`
         await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
       }
     } else {
@@ -220,7 +224,11 @@ const ImportKey = (props: ImportKeyProps) => {
             index: 0,
             routes: [{name: Facade.route.Tab.name}],
           })
-          props.navigation.replace(Facade.route.ListWalletsPage.name, {})
+          props.navigation.replace(Facade.route.Tab.name, {
+            welcomeHidden: true,
+            changelogHidden: true,
+            screen: Facade.route.ListWallets.name,
+          })
         }}
       >
         <LinearLayout orientation="verti" width="100%" height="100%">
