@@ -197,7 +197,7 @@ const CustomizeAccount = (props: Props) => {
     headerRight: () =>
       HeaderActionButton({
         actionTitle: Facade.t('screens.customizeAccount.navigation.save'),
-        actionButtonStyle: 'highlight',
+        actionButtonStyle: !name ? 'hightlightdisabled' : 'highlight',
         actionOnPress: () => !saving && save(),
       }),
   })

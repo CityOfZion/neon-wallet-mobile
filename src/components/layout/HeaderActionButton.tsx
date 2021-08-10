@@ -8,7 +8,12 @@ import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 
 export interface HeaderActionButtonProps {
   actionTitle?: string
-  actionButtonStyle?: 'default' | 'highlight' | 'close' | 'add'
+  actionButtonStyle?:
+    | 'default'
+    | 'highlight'
+    | 'close'
+    | 'add'
+    | 'hightlightdisabled'
   actionOnPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
 }
 
@@ -40,6 +45,20 @@ const HeaderActionButton: React.FC<HeaderActionButtonProps> = (
         fontFamily={'light'}
         textColor={'primary'}
         fontSize={'lg'}
+      />
+    )
+  }
+
+  if (actionButtonStyle === 'hightlightdisabled' && props?.actionTitle) {
+    return (
+      <ThemedButton
+        onPress={props.actionOnPress}
+        label={props.actionTitle}
+        flat={true}
+        fontFamily={'light'}
+        textColor={'primary'}
+        fontSize={'lg'}
+        disabled={true}
       />
     )
   }
