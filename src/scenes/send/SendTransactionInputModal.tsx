@@ -3,7 +3,7 @@ import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
 import PropTypes from 'prop-types'
 import React, {Fragment, useEffect, useState} from 'react'
-import {View, StyleSheet, Text} from 'react-native'
+import {View, StyleSheet, Text, Keyboard} from 'react-native'
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler'
 import InputScrollView from 'react-native-input-scroll-view'
 import {useDispatch, useSelector} from 'react-redux'
@@ -539,6 +539,10 @@ const SendTransactionInputModal = (prop: Props) => {
       setAmount('')
     }
   }, [token])
+
+  useEffect(() => {
+    Keyboard.dismiss()
+  }, [])
 
   const changePriority = (newPriority: PriorityFee) => {
     if (priority.equals(newPriority)) {
