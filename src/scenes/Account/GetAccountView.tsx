@@ -164,7 +164,7 @@ const TransactionsTab = () => {
     setAccount(upAccount)
   }, [accountsPool])
 
-  return account.tokenAssets.length ? (
+  return account.getTransactions().length ? (
     <AwaitActivity
       name={'fetchTransaction'}
       size={'large'}

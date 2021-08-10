@@ -324,7 +324,6 @@ const TransactionComponent = (props: {
 const TransactionsList: React.FC<Props> = (props) => {
   const {contacts} = useSelector((state: RootState) => state.app)
   const {currency, language} = useSelector((state: RootState) => state.settings)
-
   return (
     <LinearLayout>
       {props.title && Boolean(props.transactionGroups.length) && (
