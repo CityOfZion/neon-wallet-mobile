@@ -27,7 +27,7 @@ interface ImportKeyProps {
 }
 
 const validateMnemonic = (word: string) => {
-  const list = String(word).split(' ')
+  const list = String(word.trim()).split(' ')
   return list.length === 12
 }
 
@@ -199,7 +199,9 @@ const ImportKey = (props: ImportKeyProps) => {
         ]
       }
     } else if (validateMnemonic(inputValue)) {
-      await Facade.await.run('importKey', () => importMnemonic(inputValue))
+      await Facade.await.run('importKey', () =>
+        importMnemonic(inputValue.trim())
+      )
       await dispatchAsync(RootStore.app.actions.syncWallets())
     }
 
