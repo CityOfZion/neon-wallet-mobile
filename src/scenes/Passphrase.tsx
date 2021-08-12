@@ -3,6 +3,7 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useState} from 'react'
 import {Platform, NativeModules} from 'react-native'
+import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
 
 import {Facade} from '~src/app/Facade'
@@ -36,20 +37,36 @@ async function verifyPassword(
   let wif: string
   return new Promise(async (resolve, reject) => {
     if (Platform.OS === 'ios') {
-      NativeModules.RNNeoSdkBindings.decryptNep2(
-        nep2,
-        password,
-        (wif: string) => {
-          const newAccount = new wallet.Account(wif)
-          if (newAccount.address) resolve({address: newAccount.address, wif})
-          else reject(new Error('Key decryption failed'))
-        }
-      )
+      try {
+        NativeModules.RNNeoSdkBindings.decryptNep2(
+          nep2,
+          password,
+          (wif: string | null) => {
+            if (wif) {
+              const newAccount = new wallet.Account(wif)
+              if (newAccount.address)
+                resolve({address: newAccount.address, wif})
+              else reject(new Error('Key decryption failed'))
+            } else {
+              showMessage({message: 'Incorrect password', type: 'danger'})
+              reject(new Error('Key decryption failed'))
+            }
+          }
+        )
+      } catch (error) {
+        showMessage({message: 'Incorrect password', type: 'danger'})
+        reject(new Error('Key decryption failed'))
+      }
     } else {
-      wif = await NeoNative.decryptNep2(password, nep2)
-      const newAccount = new wallet.Account(wif)
-      if (newAccount.address) resolve({address: newAccount.address, wif})
-      else reject(new Error('Key decryption failed'))
+      try {
+        wif = await NeoNative.decryptNep2(password, nep2)
+        const newAccount = new wallet.Account(wif)
+        if (newAccount.address) resolve({address: newAccount.address, wif})
+        else reject(new Error('Key decryption failed'))
+      } catch (error) {
+        showMessage({message: 'Incorrect password', type: 'danger'})
+        reject(new Error('Key decryption failed'))
+      }
     }
   })
 }
