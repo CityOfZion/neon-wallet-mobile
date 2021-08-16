@@ -28,6 +28,7 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
   const [words, setWords] = useState<string[]>([])
   const [formedWords, setFormedWords] = useState<string[]>([])
   const [shuffledWords, setShuffledWords] = useState<string[]>([])
+  const [indexesPressedWords, setIndexesPressedWords] = useState<number[]>([])
 
   useEffect(() => {
     Facade.await.run('populateStep2', populate)
@@ -89,12 +90,18 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
     return formedWords.length !== words.length
   }
 
-  const toggleWordEvent = (word: string, active: boolean) => {
+  const toggleWordEvent = (
+    word: string,
+    active: boolean,
+    indexWord: number
+  ) => {
     if (active) {
       const words = [...formedWords, word]
       setFormedWords(words)
+      setIndexesPressedWords([...indexesPressedWords, indexWord])
     } else {
       setFormedWords([])
+      setIndexesPressedWords([])
     }
   }
 
@@ -145,16 +152,16 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
               horizontal={false}
               scrollEnabled={false}
               numColumns={3}
-              renderItem={({item}) => (
+              renderItem={({item, index}) => (
                 <LinearLayout weight={1} mx={2} my={5}>
                   <ThemedButton
                     onPress={(event, active) =>
-                      toggleWordEvent(String(item), Boolean(active))
+                      toggleWordEvent(String(item), Boolean(active), index)
                     }
                     label={item}
                     toggleable={true}
                     rounded={false}
-                    active={formedWords.includes(item)}
+                    active={indexesPressedWords.includes(index)}
                   />
                 </LinearLayout>
               )}
