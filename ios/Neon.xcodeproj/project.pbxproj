@@ -385,7 +385,7 @@
 				CODE_SIGN_ENTITLEMENTS = Neon/neon.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = 5DRRKCU6DK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -407,7 +407,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
-				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc io.cityofzion.neon";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development io.cityofzion.neon";
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -424,7 +424,7 @@
 				CODE_SIGN_ENTITLEMENTS = Neon/neon.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = 5DRRKCU6DK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -442,7 +442,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
-				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc io.cityofzion.neon";
+				PROVISIONING_PROFILE_SPECIFIER = "App Store Kenedy Neon Wallet 05072021";
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
