@@ -24,6 +24,7 @@ interface Props {
 const Step2BackupWalletPage: React.FC<Props> = (props) => {
   const {wallet} = props.route.params
   const dispatch = useDispatch()
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const [words, setWords] = useState<string[]>([])
   const [formedWords, setFormedWords] = useState<string[]>([])
   const [shuffledWords, setShuffledWords] = useState<string[]>([])
@@ -59,10 +60,12 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
       }),
   })
 
-  const validateAndNext = () => {
+  const validateAndNext = async () => {
     if (formedWords.join() === words.join()) {
       wallet.lastBackup = moment().format()
+      wallet.showBackupAlert = false
       dispatch(RootStore.app.actions.updateAndSaveWallet(wallet))
+      await dispatchAsync(RootStore.app.actions.syncWallets())
 
       props.navigation.reset({
         index: 0,

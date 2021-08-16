@@ -39,7 +39,9 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
         {
           text: Facade.t('boolean.true'),
           onPress: () =>
-            props.navigation.navigate(Facade.route.Step4CreateWallet.name),
+            props.navigation.navigate(Facade.route.Step4CreateWallet.name, {
+              hasBackup: false,
+            }),
         },
         {
           text: Facade.t('boolean.false'),
@@ -51,7 +53,9 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
 
   const validateAndNext = () => {
     if (formedWords.join() === words.join()) {
-      props.navigation.navigate(Facade.route.Step4CreateWallet.name)
+      props.navigation.navigate(Facade.route.Step4CreateWallet.name, {
+        hasBackup: true,
+      })
     } else {
       Alert.alert(
         Facade.t('step3CreateWallet.dialog_2_title'),

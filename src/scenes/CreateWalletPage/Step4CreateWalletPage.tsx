@@ -1,3 +1,4 @@
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
 import PropTypes from 'prop-types'
@@ -13,8 +14,13 @@ import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {TextView, LinearLayout} from '~src/styles/styled-components'
 
+export interface Step4CreateWalletParams {
+  hasBackup?: boolean
+}
+
 interface Props {
   navigation: StackNavigationProp<MoreStackParamList>
+  route: RouteProp<MoreStackParamList, 'Step4CreateWallet'>
 }
 
 const Step4CreateWalletPage: React.FC<Props> = (props) => {
@@ -23,6 +29,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
   const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
+  const hasBackup = props.route.params.hasBackup ?? false
 
   const submit = async () => {
     if (!walletName) {
@@ -36,7 +43,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
     const id = await dispatchAsyncString(
       RootStore.wallet.actions.createAndSave()
     )
-    dispatch(RootStore.wallet.actions.setShowBackupAlert(id, true))
+    dispatch(RootStore.wallet.actions.setShowBackupAlert(id, !hasBackup))
     await dispatchAsync(RootStore.app.actions.syncWallets())
 
     // Create first Account automatically
@@ -115,6 +122,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
 
 Step4CreateWalletPage.propTypes = {
   navigation: PropTypes.any,
+  route: PropTypes.any,
 }
 
 export default Step4CreateWalletPage
