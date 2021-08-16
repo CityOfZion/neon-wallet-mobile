@@ -505,6 +505,7 @@ const SendTransactionInputModal = (prop: Props) => {
           const ratio = exchange[token?.symbol]?.to[currency] ?? null
           if (ratio) {
             var valAmount = String(ratio * Number(amount))
+            valAmount = valAmount.replace(/[\d.]+e-[0-9]+/g, String(0))
             valAmount = valAmount.replace(
               /[0-9]+\.[0-9]{3,}$/g,
               String(Number(valAmount).toFixed(2))
