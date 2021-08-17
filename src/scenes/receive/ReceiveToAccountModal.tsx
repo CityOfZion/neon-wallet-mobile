@@ -286,7 +286,7 @@ const ReceiveToAccountModal = (props: Props) => {
                 reference={reference}
                 setReference={setReference}
               />
-              <LinearLayout width={'100%'} height={54} my={34}>
+              <LinearLayout width={'100%'} my={30}>
                 <ThemedButton
                   label={Facade.t('modals.receive.toAccount.generateQrCode')}
                   srcIcon={require('~/src/assets/images/icon-qrcode-green.png')}
