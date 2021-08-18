@@ -31,9 +31,7 @@ export abstract class NeonHelper {
 
     const account = accounts.find((it) => it.address === senderAddress)
     const neoAccount = await account?.getNeoAccount()
-    const url = (await (await NeoNode.getAllNodes()).map(
-      (pool) => pool.url
-    )) ?? [settings.network.defaultNodeNet]
+    const listUrls = (await NeoNode.getAllNodes()).map((node) => node.url)
 
     let intents: tx.TransactionOutput[]
 
@@ -53,52 +51,37 @@ export abstract class NeonHelper {
       settings.network.networkDeprecatedLabel
     )
 
-    const urlNotNull: string[] = url.filter(
-      (address) => address !== null
-    ) as string[]
-    const sendResponse = await NeonHelper.sendAssetsMultipleAddress(
-      urlNotNull,
-      {
-        account: neoAccount,
-        api: apiProvider,
-        intents,
-        fees,
+    const sendResponse = new Promise<SendAssetConfig>(
+      async (resolve, reject) => {
+        let stopSend = true
+        for (let i = 0; i < listUrls.length; i++) {
+          if (!stopSend) {
+            break
+          }
+          const url = listUrls[i]
+          if (url) {
+            setTimeout(async () => {
+              try {
+                const sendResponse = await api.sendAsset({
+                  url,
+                  account: neoAccount,
+                  api: apiProvider,
+                  intents,
+                  fees,
+                })
+                stopSend = true
+                resolve(sendResponse)
+              } catch (error) {
+                reject(error)
+                throw new Error(error.message)
+              }
+            }, 8000)
+          }
+        }
       }
     )
 
-    return sendResponse.tx?.hash ?? null
-  }
-
-  static sendAssetsMultipleAddress(
-    url: string[],
-    config: SendAssetConfig
-  ): Promise<SendAssetConfig> {
-    return new Promise((resolve, reject) => {
-      let alreadySuccess = false
-      const onSucess = (resp: SendAssetConfig) => {
-        if (alreadySuccess) {
-          return
-        }
-        alreadySuccess = true
-        Facade.bus.emit('transactionStart', resp)
-        resolve(resp)
-      }
-      try {
-        Promise.all(
-          url.map(async (address) => {
-            const sends = await api.sendAsset({
-              ...config,
-              url: address,
-            })
-            onSucess(sends)
-          })
-        )
-      } catch (e) {
-        if (!alreadySuccess) {
-          reject(e)
-        }
-      }
-    })
+    return (await sendResponse).tx?.hash ?? null
   }
 
   static async getHash(
