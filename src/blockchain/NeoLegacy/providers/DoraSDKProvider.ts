@@ -80,7 +80,17 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     nodes.forEach(({height, url}) => {
       result.push({height, url})
     })
-    return result
+    return result.sort((node1, node2) => {
+      if (node1.height && node2.height) {
+        if (node1.height < node2.height) {
+          return 1
+        } else {
+          return -1
+        }
+      } else {
+        return 0
+      }
+    })
   }
   async getUnclaimed(address: string) {
     const result = new UnclaimedResponse()
