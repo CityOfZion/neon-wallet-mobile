@@ -80,7 +80,7 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     nodes.forEach(({height, url}) => {
       result.push({height, url})
     })
-    return result.sort((node1, node2) => {
+    const allNodes = result.sort((node1, node2) => {
       if (node1.height && node2.height) {
         if (node1.height < node2.height) {
           return 1
@@ -91,7 +91,13 @@ export class DoraSDKProvider implements NeoLegacyProvider {
         return 0
       }
     })
+
+    const nodesHttps = allNodes.filter((node) => node.url?.includes('https'))
+    const nodesHttp = allNodes.filter((node) => !node.url?.includes('https'))
+
+    return [...nodesHttps, ...nodesHttp]
   }
+
   async getUnclaimed(address: string) {
     const result = new UnclaimedResponse()
     const {unclaimed} = await api.NeoLegacyREST.getUnclaimed(address)
