@@ -16,7 +16,7 @@ import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
-import {LinearLayout} from '~src/styles/styled-components'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
@@ -63,6 +63,14 @@ const ChangelogModal = (props: Props) => {
         name={'swiperRight'}
         loadingView={<ScreenLoader transparent={true} />}
       >
+        <LinearLayout orientation="verti" mr={5} pl={42} mt={5} mb={5}>
+          <TextView color="white">
+            {Facade.t('modals.changelog.thankYouText')}
+          </TextView>
+          <TextView color="white" textAlign="right" fontFamily={'bold'}>
+            {Facade.t('modals.changelog.cozTeam')}
+          </TextView>
+        </LinearLayout>
         <LinearLayout orientation="verti" width="100%">
           <Changelog changelog={data.changelog} />
         </LinearLayout>
