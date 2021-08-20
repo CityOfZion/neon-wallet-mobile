@@ -513,6 +513,8 @@
     },
     "changelog": {
       "title": "Changelog",
+      "thankYouText": "Thank you for choosing Neon Wallet Mobile. Feel free to reach us through any of our public channels, so we can continue to improve it together!",
+      "cozTeam": "- COZ team",
       "goBack": "Go Back"
     },
     "tipping":  {
