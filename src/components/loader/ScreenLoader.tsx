@@ -1,9 +1,10 @@
 import {LinearGradient} from 'expo-linear-gradient'
 import React, {useState} from 'react'
-import {StyleSheet, ActivityIndicator, View, SafeAreaView} from 'react-native'
+import {StyleSheet, SafeAreaView, ActivityIndicator} from 'react-native'
 import {WebView} from 'react-native-webview'
 import {useSelector} from 'react-redux'
 
+import {ImageView, LinearLayout} from '~/src/styles/styled-components'
 import {Facade} from '~src/app/Facade'
 
 const ScreenLoader = (props?: {
@@ -83,23 +84,40 @@ const ScreenLoader = (props?: {
             setLoadingWebView(false)
           }}
         />
-        {loadingWebView && (
-          <LinearGradient
-            colors={chooseColorBG()}
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              alignItems: 'center',
-              backgroundColor: props?.darkerSolidColorBG
-                ? theme.colors.background[14]
-                : props?.solidColorBG
-                ? theme.colors.background[17]
-                : '#23282e',
-              justifyContent: 'center',
-            }}
-          >
-            <ActivityIndicator />
-          </LinearGradient>
-        )}
+        {loadingWebView &&
+          (props?.invertedGradient ? (
+            <LinearGradient
+              colors={chooseColorBG()}
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                alignItems: 'center',
+                backgroundColor: props?.darkerSolidColorBG
+                  ? theme.colors.background[14]
+                  : props?.solidColorBG
+                  ? theme.colors.background[17]
+                  : '#23282e',
+                justifyContent: 'center',
+              }}
+            >
+              <ActivityIndicator />
+            </LinearGradient>
+          ) : (
+            <LinearLayout
+              style={styles.screen}
+              bg={
+                props?.darkerSolidColorBG
+                  ? theme.colors.background[14]
+                  : props?.solidColorBG
+                  ? theme.colors.background[17]
+                  : '#23282e'
+              }
+            >
+              <ImageView
+                style={styles.image}
+                source={require('~src/assets/images/Non-animated-logo.png')}
+              />
+            </LinearLayout>
+          ))}
       </SafeAreaView>
     </LinearGradient>
   )
@@ -107,7 +125,15 @@ const ScreenLoader = (props?: {
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: 'transparent',
+    ...StyleSheet.absoluteFillObject,
+    paddingTop: '35%',
+    paddingLeft: '26%',
+    position: 'absolute',
+  },
+  image: {
+    width: 174,
+    height: 153,
+    resizeMode: 'contain',
   },
 })
 
