@@ -8,6 +8,8 @@ import {
   offlineActionCreators,
 } from 'react-native-offline'
 
+import {RootStore} from '../RootStore'
+
 import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
@@ -419,6 +421,9 @@ export class AppReducer extends ReducerWrapper<
                   }
                   removedSenderTx.push(senderTxs[index])
                   senderTxs.splice(index, 1)
+                  await dispatch(RootStore.app.actions.fetchBalanceAccounts())
+                  await dispatch(RootStore.app.actions.syncAccounts())
+                  await dispatch(RootStore.app.actions.syncWallets())
                 }
               } catch (e) {
                 /** TODO #665 GITHUB*/
