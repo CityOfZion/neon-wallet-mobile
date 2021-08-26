@@ -58,13 +58,13 @@ const TipConfirmationModal = (props: Props) => {
     >
       <LinearLayout height="100%" orientation="verti">
         <ImageView
-          mt="24px"
-          mr="-76px" // Negative margin because the original image has a shadow offset to the right
+          mr="-50px" // Negative margin because the original image has a shadow offset to the right
           resizeMode="center"
+          height="210px"
           source={require('~/src/assets/images/neo-tipping-logo.png')}
           alignSelf={'center'}
         />
-        <LinearLayout orientation="horiz" justifyContent="center" mb="36px">
+        <LinearLayout orientation="horiz" justifyContent="center" mb="20px">
           <ImageView
             mr="4px"
             resizeMode="center"
@@ -80,11 +80,11 @@ const TipConfirmationModal = (props: Props) => {
           fontSize="18px"
           color="text.0"
           textAlign="center"
-          mb="32px"
+          mb="20px"
         >
           {Facade.t('modals.tipping.description')}
         </TextView>
-        <LinearLayout width="100%" alignSelf="center" mb="28px">
+        <LinearLayout width="100%" alignSelf="center" mb="25px">
           <ThemedButton
             label={Facade.t('modals.tipping.keepTip')}
             subLabel={Facade.t('modals.tipping.recommended')}
