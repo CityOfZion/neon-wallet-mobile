@@ -2,6 +2,7 @@ import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {plainToClass} from 'class-transformer'
 import {ImageLoadEventData} from 'react-native'
 
+import {TokenAsset} from '~/src/models/TokenAsset'
 import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
@@ -12,7 +13,7 @@ import {ClearStateDispatcher} from '~src/store/account/dispatchers/ClearStateDis
 import {IdWalletDispatcher} from '~src/store/account/dispatchers/IdWalletDispatcher'
 import {NameDispatcher} from '~src/store/account/dispatchers/NameDispatcher'
 import {SrcIconDispatcher} from '~src/store/account/dispatchers/SrcIconDispatcher'
-
+import {TokenAssetsDispatcher} from '~src/store/account/dispatchers/TokenAssetsDispatcher'
 export class AccountReducer extends ReducerWrapper<
   AccountActionsType,
   AccountState,
@@ -26,6 +27,7 @@ export class AccountReducer extends ReducerWrapper<
     NameDispatcher,
     SrcIconDispatcher,
     BackgroundDispatcher,
+    TokenAssetsDispatcher,
   ]
 
   readonly actions = {
@@ -43,6 +45,9 @@ export class AccountReducer extends ReducerWrapper<
     },
     setBackgroundColor: (backgroundColor: string) => {
       return this.commit('SET_BACKGROUND_COLOR', {backgroundColor})
+    },
+    setTokenAssets: (tokenAssets: TokenAsset[]) => {
+      return this.commit('SET_TOKENASSETS_ACCOUNT', {tokenAssets})
     },
     getFromSelection: (address?: string): SyncAction<Account> => {
       if (address) {

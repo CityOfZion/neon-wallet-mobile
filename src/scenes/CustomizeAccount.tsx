@@ -1,7 +1,10 @@
 import {RouteProp} from '@react-navigation/native'
 import React, {useState, useEffect} from 'react'
 import {View} from 'react-native'
+import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
+
+import {TokenAsset} from '../models/TokenAsset'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
@@ -63,6 +66,7 @@ const CustomizeAccount = (props: Props) => {
   const [color, setColor] = useState<string>(
     theme.colors.card[getRandomColor(6)]
   )
+  const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
   const {isConnected} = useSelector((state: RootState) => state.network)
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
   const [saving, setSaving] = useState(false)
@@ -74,7 +78,8 @@ const CustomizeAccount = (props: Props) => {
     account.accountType = props.route.params.legacy ? 'legacy' : 'watch'
     account.name = name
     account.backgroundColor = color
-  }, [account])
+    account.tokenAssets = tokenAssets
+  }, [account, tokenAssets])
 
   useEffect(() => {
     Facade.await.run('customizeAccount', populateTokenAssets)
@@ -85,8 +90,14 @@ const CustomizeAccount = (props: Props) => {
       setSaving(false)
       setAccount(account)
     } else {
-      await account.populateTokenAssets()
-      setAccount(account)
+      try {
+        await account.populateTokenAssets()
+      } catch (error) {
+        console.log(error)
+        showMessage({message: 'Problem to get balance', type: 'danger'})
+      } finally {
+        setTokenAssets(account.tokenAssets)
+      }
     }
   }
 
@@ -116,7 +127,6 @@ const CustomizeAccount = (props: Props) => {
     // Adds the account to the wallet
     const importedAccount = await createAccount(walletId)
 
-    dispatch(RootStore.wallet.actions.selectWallet(walletId))
     dispatch(RootStore.account.actions.selectAccount(importedAccount.address))
     props.navigation.replace(Facade.route.Tab.name, {
       welcomeHidden: true,
@@ -125,9 +135,6 @@ const CustomizeAccount = (props: Props) => {
       params: {
         screen: Facade.route.GetAccount.name,
         initial: false,
-        params: {
-          account: importedAccount,
-        },
       },
     })
   }
@@ -146,6 +153,7 @@ const CustomizeAccount = (props: Props) => {
     const walletId = await dispatchAsyncString(
       RootStore.wallet.actions.createAndSave()
     )
+    dispatch(RootStore.wallet.actions.selectWallet(walletId))
     await dispatchAsync(RootStore.app.actions.syncWallets())
 
     return walletId
@@ -160,14 +168,12 @@ const CustomizeAccount = (props: Props) => {
     dispatch(RootStore.account.actions.setIdWallet(walletId))
     dispatch(RootStore.account.actions.setName(name))
     dispatch(RootStore.account.actions.setBackgroundColor(color))
+    dispatch(RootStore.account.actions.setTokenAssets(tokenAssets))
     const importedAccount = await dispatchAsyncAccount(
       RootStore.account.actions.importAndSave(address, wif)
     )
+    dispatch(RootStore.account.actions.selectAccount(address))
     await dispatchAsync(RootStore.app.actions.syncAccounts())
-    isConnected &&
-      (await dispatchAsync(
-        RootStore.app.actions.syncTokenAssetsByAddress(address)
-      ))
 
     return importedAccount
   }

@@ -2,6 +2,7 @@ import {Action} from 'redux'
 import {ReducerApplied} from '@simpli/redux-wrapper'
 import {ImageLoadEventData} from 'react-native'
 import {Currency} from '~src/enums/Currency'
+import {TokenAsset} from '~/src/models/TokenAsset'
 
 export declare global {
   type AccountActionsType =
@@ -11,6 +12,7 @@ export declare global {
     | 'SET_SRC_ICON'
     | 'SET_BACKGROUND_COLOR'
     | 'CLEAR_STATE_ACCOUNT'
+    | 'SET_TOKENASSETS_ACCOUNT'
 
   interface AccountState {
     address: string | null
@@ -19,6 +21,7 @@ export declare global {
     name: string | null
     srcIcon: ImageLoadEventData | null
     backgroundColor: string | null
+    tokenAssets: TokenAsset[] | null
   }
 
   type AccountAction = AccountState & Action<AccountActionsType>

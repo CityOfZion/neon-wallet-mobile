@@ -212,7 +212,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
   const {language, currency} = useSelector((state: RootState) => state.settings)
-  const {address} = useSelector((state: RootState) => state.account)
+  const {address, tokenAssets} = useSelector(
+    (state: RootState) => state.account
+  )
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const {exchange} = useSelector((state: RootState) => state.app)
   const posYFactor = useRef(new Animated.Value(0))

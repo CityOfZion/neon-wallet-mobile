@@ -1,6 +1,7 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {plainToClass} from 'class-transformer'
 
+import {TokenAsset} from '~/src/models/TokenAsset'
 import {Account} from '~/src/models/redux/Account'
 import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
@@ -11,8 +12,8 @@ import {IdDispatcher} from '~src/store/wallet/dispatchers/IdDispatcher'
 import {NameDispatcher} from '~src/store/wallet/dispatchers/NameDispatcher'
 import {PassphraseDispatcher} from '~src/store/wallet/dispatchers/PassphraseDispatcher'
 import {SecurityPhraseDispatcher} from '~src/store/wallet/dispatchers/SecurityPhraseDispatcher'
+import {TokenAssetsDispatcher} from '~src/store/wallet/dispatchers/TokenAssetsDispatcher'
 import {WalletTypeDispatcher} from '~src/store/wallet/dispatchers/WalletTypeDispatcher'
-
 export class WalletReducer extends ReducerWrapper<
   WalletActionsType,
   WalletState,
@@ -26,6 +27,7 @@ export class WalletReducer extends ReducerWrapper<
     PassphraseDispatcher,
     SecurityPhraseDispatcher,
     WalletTypeDispatcher,
+    TokenAssetsDispatcher,
   ]
 
   readonly actions = {
@@ -43,6 +45,9 @@ export class WalletReducer extends ReducerWrapper<
     },
     setType: (walletType: 'standard' | 'watch' | 'legacy') => {
       return this.commit('SET_WALLET_TYPE', {walletType})
+    },
+    setTokenAssets: (tokenAssets: TokenAsset[]) => {
+      return this.commit('SET_TOKENASSETS_WALLET', {tokenAssets})
     },
     getFromSelection: (): SyncAction<Wallet> => {
       return (dispatch, getState) => {
