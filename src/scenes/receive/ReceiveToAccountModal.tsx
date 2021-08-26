@@ -2,7 +2,6 @@ import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
 import React, {Fragment, useState} from 'react'
 import {ScrollView, TouchableWithoutFeedback} from 'react-native'
-import InputScrollView from 'react-native-input-scroll-view'
 import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
@@ -217,87 +216,74 @@ const ReceiveToAccountModal = (props: Props) => {
         paddingRight: 8,
       }}
     >
-      <InputScrollView
-        useAnimatedScrollView={true}
-        keyboardOffset={300}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: PANEL_OFFSET}}
-      >
-        <LinearLayout height="100%" width="100%" px="15px" orientation="verti">
-          <TextView
-            mb="24px"
+      <LinearLayout height="100%" width="100%" px="15px" orientation="verti">
+        <TextView
+          mb="24px"
+          alignSelf="center"
+          color="text.3"
+          fontSize="md"
+          fontFamily="bold"
+        >
+          {props.route.params.wallet.name?.toUpperCase() ?? ''}
+        </TextView>
+        <AccountCard
+          account={props.route.params.account}
+          hideCopy={true}
+          hideQRCode={true}
+        />
+        <TouchableWithoutFeedback onPress={props.navigation.goBack}>
+          <LinearLayout
+            orientation="horiz"
             alignSelf="center"
-            color="text.3"
-            fontSize="md"
-            fontFamily="bold"
+            alignItems="center"
+            mt="40px"
           >
-            {props.route.params.wallet.name?.toUpperCase() ?? ''}
-          </TextView>
-          <AccountCard
-            account={props.route.params.account}
-            hideCopy={true}
-            hideQRCode={true}
-          />
-          <TouchableWithoutFeedback onPress={props.navigation.goBack}>
-            <LinearLayout
-              orientation="horiz"
-              alignSelf="center"
-              alignItems="center"
-              mt="40px"
-            >
-              <ImageView
-                source={require('~/src/assets/images/icon-reselect-green.png')}
-              />
-              <TextView ml="6px" color="primary" fontFamily="medium">
-                {Facade.t(
-                  'modals.send.transactionInput.selectDifferentAccount'
-                )}
-              </TextView>
-            </LinearLayout>
-          </TouchableWithoutFeedback>
-          <TabSelector
-            isFirstTabSelected={isAddressTabSelected}
-            setFirstTabAsSelected={setAddressTabAsSelected}
-            firstTabLabel={Facade.t('modals.receive.toAccount.yourAddress')}
-            secondTabLabel={Facade.t('modals.receive.toAccount.requestTokens')}
-            mb={isAddressTabSelected ? 38 : 46}
-            capitalize={true}
-          />
-          {isAddressTabSelected ? (
-            <QRCodeWithCopyButton
-              qrCodeValue={props.route.params.account.address ?? ''}
+            <ImageView
+              source={require('~/src/assets/images/icon-reselect-green.png')}
             />
-          ) : (
-            <LinearLayout orientation="verti" justifyContent="space-between">
-              <TokenField
-                theme={theme}
-                token={token}
-                setToken={setToken}
-                nav={props.navigation}
-                account={account}
+            <TextView ml="6px" color="primary" fontFamily="medium">
+              {Facade.t('modals.send.transactionInput.selectDifferentAccount')}
+            </TextView>
+          </LinearLayout>
+        </TouchableWithoutFeedback>
+        <TabSelector
+          isFirstTabSelected={isAddressTabSelected}
+          setFirstTabAsSelected={setAddressTabAsSelected}
+          firstTabLabel={Facade.t('modals.receive.toAccount.yourAddress')}
+          secondTabLabel={Facade.t('modals.receive.toAccount.requestTokens')}
+          mb={isAddressTabSelected ? 38 : 46}
+          capitalize={true}
+        />
+        {isAddressTabSelected ? (
+          <QRCodeWithCopyButton
+            qrCodeValue={props.route.params.account.address ?? ''}
+          />
+        ) : (
+          <LinearLayout orientation="verti" justifyContent="space-between">
+            <TokenField
+              theme={theme}
+              token={token}
+              setToken={setToken}
+              nav={props.navigation}
+              account={account}
+            />
+            <AmountField theme={theme} amount={amount} setAmount={setAmount} />
+            <ReferenceField
+              theme={theme}
+              reference={reference}
+              setReference={setReference}
+            />
+            <LinearLayout width={'100%'} my={30}>
+              <ThemedButton
+                label={Facade.t('modals.receive.toAccount.generateQrCode')}
+                srcIcon={require('~/src/assets/images/icon-qrcode-green.png')}
+                iconSize={[19, 23]}
+                onPress={navigate}
               />
-              <AmountField
-                theme={theme}
-                amount={amount}
-                setAmount={setAmount}
-              />
-              <ReferenceField
-                theme={theme}
-                reference={reference}
-                setReference={setReference}
-              />
-              <LinearLayout width={'100%'} my={30}>
-                <ThemedButton
-                  label={Facade.t('modals.receive.toAccount.generateQrCode')}
-                  srcIcon={require('~/src/assets/images/icon-qrcode-green.png')}
-                  iconSize={[19, 23]}
-                  onPress={navigate}
-                />
-              </LinearLayout>
             </LinearLayout>
-          )}
-        </LinearLayout>
-      </InputScrollView>
+          </LinearLayout>
+        )}
+      </LinearLayout>
     </ScrollView>
   ) : (
     <LinearLayout />
