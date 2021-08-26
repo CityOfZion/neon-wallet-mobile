@@ -56,9 +56,8 @@ const WalletChangeComponent = (props: {
   onPressWarning: () => void
 }) => {
   const {currency, language} = useSelector((state: RootState) => state.settings)
-  const {exchange} = useSelector((state: RootState) => state.app)
+  const {exchange, accounts} = useSelector((state: RootState) => state.app)
   const [variationInPercent, setVariationInPercent] = useState<number>()
-
   if (!props.wallet) return <View />
 
   useEffect(() => {
@@ -75,6 +74,8 @@ const WalletChangeComponent = (props: {
         exchange,
         pastOneDay
       )) ?? 0
+
+    props.wallet?.populateTokenAssets(accounts)
 
     const balance = props.wallet?.calculateBalance(currency, exchange) ?? 0
 

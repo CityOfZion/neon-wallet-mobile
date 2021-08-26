@@ -1,5 +1,6 @@
 import {Action} from 'redux'
 import {ReducerApplied} from '@simpli/redux-wrapper'
+import {TokenAsset} from '~/src/models/TokenAsset'
 
 export declare global {
   type WalletActionsType =
@@ -10,6 +11,7 @@ export declare global {
     | 'SET_WALLET_TYPE'
     | 'SET_SHOW_BACKUP_ALERT'
     | 'CLEAR_STATE_WALLET'
+    | 'SET_TOKENASSETS_WALLET'
 
   type WalletType = 'standard' | 'watch' | 'legacy'
 
@@ -21,6 +23,7 @@ export declare global {
     walletType: WalletType | null
     lastVisitedAt: string | null
     showBackupAlert: boolean
+    tokenAssets: TokenAsset[] | null
   }
 
   type WalletAction = WalletState & Action<WalletActionsType>
