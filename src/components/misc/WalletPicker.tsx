@@ -4,7 +4,7 @@ import {NativeScrollEvent, NativeSyntheticEvent} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 import {useDispatch} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {applicationConfig} from '~/src/config/ApplicationConfig'
 import WalletCard from '~src/components/WalletCard'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStore} from '~src/store/RootStore'
@@ -58,7 +58,7 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
       layout={'default'}
       containerCustomStyle={{overflow: 'visible'}}
       data={wallets}
-      sliderWidth={Facade.app.windowWidth}
+      sliderWidth={applicationConfig.windowWidth}
       itemWidth={240}
       inactiveSlideScale={0.8}
       inactiveSlideOpacity={1}

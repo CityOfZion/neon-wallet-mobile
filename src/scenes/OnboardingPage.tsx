@@ -1,12 +1,21 @@
-import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
+import {StackNavigationProp} from '@react-navigation/stack'
+import {Await} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
 import React, {useEffect, useState, useRef} from 'react'
 import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
 import Carousel, {Pagination} from 'react-native-snap-carousel'
 import {useDispatch, useSelector} from 'react-redux'
 
+import {applicationConfig} from '../config/ApplicationConfig'
+import {AsteroidHelper} from '../helpers/AsteroidHelper'
+import {getRandomColor} from './CustomizeAccount'
+
+import {useHeaderHeight} from '~/node_modules/@react-navigation/stack'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {Normalize} from '~src/app/Normalize'
 import {Storage} from '~src/app/Storage'
+import {blockchainList, BlockchainServiceKey} from '~src/blockchain'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {RootStore} from '~src/store/RootStore'
 import styled, {
@@ -48,7 +57,7 @@ const OnboardingSlide = (props: OnboardingSlideProps) => {
 
 const FeatureText = (props: {title: string; subtitle: string}) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const headerHeight = useHeaderHeight()
   const unit = headerHeight * 0.015
@@ -83,7 +92,7 @@ const FeatureDescription = styled(TextView)`
 
 const OnboardingPage = (props: OnboardingPageProps) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const carousel = useRef<Carousel<any>>(null)
   const [isLastPage, setIsLastPage] = useState(false)
@@ -98,13 +107,13 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const finish = async () => {
     await Storage.onboardingSeen.save(true)
 
-    props.navigation.replace(Facade.route.Login.name)
+    props.navigation.replace(wrapper.route.Login.name)
   }
 
   useEffect(() => {
     if (wallets.length === 0) {
       // NW-221 The app must create a wallet for the user when it first runs
-      Facade.await.run('populateWallet', () => createFirstWallet())
+      Await.run('populateWallet', () => createFirstWallet())
     }
   }, [])
 
@@ -114,7 +123,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   }, [carouselIndex])
 
   const createFirstWallet = async () => {
-    const words = Facade.asteroid.generateMnemonic() ?? []
+    const words = AsteroidHelper.generateMnemonic() ?? []
 
     dispatch(RootStore.wallet.actions.setName('My First Wallet'))
     dispatch(RootStore.wallet.actions.setType('standard'))
@@ -126,13 +135,34 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     await dispatchAsync(RootStore.app.actions.syncWallets())
     dispatch(RootStore.wallet.actions.setShowBackupAlert(id, true))
 
-    await createFirstAccount(id)
+    for (const blockchainName of blockchainList) {
+      await createFirstAccount(
+        id,
+        blockchainName,
+        blockchainList.indexOf(blockchainName)
+      )
+    }
   }
 
-  const createFirstAccount = async (id: string) => {
+  const createFirstAccount = async (
+    id: string,
+    blockchain: BlockchainServiceKey,
+    count: number
+  ) => {
     dispatch(RootStore.account.actions.setIdWallet(id))
-    dispatch(RootStore.account.actions.setName('My account 1'))
-
+    dispatch(RootStore.account.actions.setName(`My account ${count + 1}`))
+    dispatch(RootStore.account.actions.setIndex(count))
+    dispatch(RootStore.account.actions.setBlockchain(blockchain))
+    dispatch(
+      RootStore.account.actions.setBackgroundColor(
+        theme.colors.card[getRandomColor(6)]
+      )
+    )
+    dispatch(
+      RootStore.account.actions.setSrcIcon(
+        applicationConfig.blockchain[blockchain].icon
+      )
+    )
     await dispatchAsyncString(RootStore.account.actions.createAndSave())
     await dispatchAsync(RootStore.app.actions.syncAccounts())
   }
@@ -178,8 +208,8 @@ const OnboardingPage = (props: OnboardingPageProps) => {
             layout={'default'}
             ref={carousel}
             data={data}
-            sliderWidth={Facade.app.windowWidth}
-            itemWidth={Facade.app.windowWidth}
+            sliderWidth={applicationConfig.windowWidth}
+            itemWidth={applicationConfig.windowWidth}
             inactiveSlideScale={1}
             inactiveSlideOpacity={0}
             inactiveSlideShift={25}
@@ -214,8 +244,8 @@ const OnboardingPage = (props: OnboardingPageProps) => {
                       image={item.image}
                       bottomContent={
                         <FeatureText
-                          title={Facade.t(item.title)}
-                          subtitle={Facade.t(item.subtitle)}
+                          title={i18n.t(item.title)}
+                          subtitle={i18n.t(item.subtitle)}
                         />
                       }
                     />
@@ -231,15 +261,15 @@ const OnboardingPage = (props: OnboardingPageProps) => {
                         >
                           <LinearLayout mb={'8%'}>
                             <FeatureText
-                              title={Facade.t(item.title)}
-                              subtitle={Facade.t(item.subtitle)}
+                              title={i18n.t(item.title)}
+                              subtitle={i18n.t(item.subtitle)}
                             />
                           </LinearLayout>
 
                           <LinearLayout width={'100%'} px={'7%'}>
                             <ThemedButton
                               onPress={() => finish()}
-                              label={Facade.t(
+                              label={i18n.t(
                                 'onboarding.getStarted.buttonTitle'
                               )}
                               basic={true}
@@ -273,13 +303,13 @@ const OnboardingPage = (props: OnboardingPageProps) => {
           {!isLastPage && (
             <>
               <NextButton
-                mb={Facade.scale(30)}
+                mb={Normalize.scale(30)}
                 color={'primary'}
                 onPress={() => carousel.current?.snapToNext()}
                 position={'absolute'}
                 right={0}
                 bottom={0}
-                mr={Facade.scale(30)}
+                mr={Normalize.scale(30)}
               >
                 next
               </NextButton>
@@ -289,12 +319,12 @@ const OnboardingPage = (props: OnboardingPageProps) => {
                 bottom={0}
                 color={'text.0'}
                 opacity={0.5}
-                mb={Facade.scale(30)}
-                ml={Facade.scale(30)}
+                mb={Normalize.scale(30)}
+                ml={Normalize.scale(30)}
                 onPress={() => finish()}
                 style={{textTransform: 'lowercase'}}
               >
-                {Facade.t('app.skip')}
+                {i18n.t('app.skip')}
               </SkipButton>
             </>
           )}

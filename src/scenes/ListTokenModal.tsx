@@ -1,11 +1,13 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, {useEffect, useState} from 'react'
 import {FlatList, Keyboard} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {Normalize} from '../app/Normalize'
+
 import SwiperPanel, {
   PANEL_OFFSET,
   SwiperController,
@@ -69,7 +71,7 @@ const Item = (props: {
           fontSize="14px"
           color="text.2"
         >
-          {Facade.t('modals.listTokenModal.holding')}
+          {i18n.t('modals.listTokenModal.holding')}
         </TextView>
 
         <TextView
@@ -84,8 +86,8 @@ const Item = (props: {
 
       <ImageView
         mt={4}
-        width={Facade.scale(26)}
-        height={Facade.scale(26)}
+        width={Normalize.scale(26)}
+        height={Normalize.scale(26)}
         resizeMode={'contain'}
         source={require('~src/assets/images/green_plus.png')}
       />
@@ -147,7 +149,7 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      title={Facade.t('modals.listTokenModal.tokens')}
+      title={i18n.t('modals.listTokenModal.tokens')}
       rightButton={<ThemedCloseButton onPress={controller.close} />}
       onRightPress={controller.close}
       paddingTop={4}
@@ -165,7 +167,7 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
           fontSize={18}
           color="text.0"
         >
-          {Facade.t('modals.listTokenModal.selectToken')}
+          {i18n.t('modals.listTokenModal.selectToken')}
         </TextView>
         <SearchBar
           lighterColor={true}

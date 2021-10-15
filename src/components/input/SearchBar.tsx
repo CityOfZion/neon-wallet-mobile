@@ -1,9 +1,11 @@
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {StyleSheet, View, Image, TextInput} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+
 type TSearchBar<P = any> = {
   prevData: P[]
   callbackFilter: (strFilter: string) => void
@@ -20,7 +22,7 @@ export const SearchBar: React.FC<TSearchBar> = ({
   lighterColor,
 }) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   const handleFilter = (searchText: string) => {
@@ -63,7 +65,7 @@ export const SearchBar: React.FC<TSearchBar> = ({
       <TextInput
         onChange={(e) => handleFilter(e.nativeEvent.text)}
         style={styles.input}
-        placeholder={Facade.t('persistContact.search')}
+        placeholder={i18n.t('persistContact.search')}
         placeholderTextColor="#899fa8"
       />
     </View>

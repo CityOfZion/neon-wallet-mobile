@@ -1,9 +1,11 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
+import _ from 'lodash'
 import React, {useState, useEffect} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 
-import {Facade} from '~src/app/Facade'
+import {SecurityHelper} from '~/src/helpers/SecurityHelper'
 import Keypad from '~src/components/Keypad'
 import PasscodeBar from '~src/components/PasscodeBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -36,7 +38,7 @@ export const PasscodeHeader = (props: {
           }}
         >
           <TextView py="4px" fontSize={16} color="text.0">
-            {Facade.t('passcode.cancel')}
+            {i18n.t('passcode.cancel')}
           </TextView>
         </TouchableWithoutFeedback>
       </LinearLayout>
@@ -56,9 +58,9 @@ const VerifyPasscodePage = (props: Props) => {
   }, [passcode])
 
   const validate = async () => {
-    const savedPasscode = await Facade.security.loadPasscode()
+    const savedPasscode = await SecurityHelper.loadPasscode()
 
-    if (Facade.lodash.isEqual(passcode, savedPasscode)) {
+    if (_.isEqual(passcode, savedPasscode)) {
       props.navigation.goBack()
       props.route.params.onValidate(true)
     } else {
@@ -82,7 +84,7 @@ const VerifyPasscodePage = (props: Props) => {
       <PasscodeHeader navigation={props.navigation} route={props.route} />
 
       <TextView fontSize={22} color="text.0" mb={18}>
-        {Facade.t('passcode.enter')}
+        {i18n.t('passcode.enter')}
       </TextView>
 
       <PasscodeBar data={passcode} length={PASSCODE_LENGTH} />
@@ -93,7 +95,7 @@ const VerifyPasscodePage = (props: Props) => {
         opacity={showErrorMessage ? 1 : 0}
         my={18}
       >
-        {Facade.t('passcode.wrong')}
+        {i18n.t('passcode.wrong')}
       </TextView>
 
       <LinearLayout weight={1} width="100%" />

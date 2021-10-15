@@ -6,7 +6,8 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
@@ -33,29 +34,29 @@ const ContactsStack = createStackNavigator<ContactsStackParamList>()
 
 const ContactsStackNavigation = (props: ContactsStackProps) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   return (
     <ThemeProvider theme={theme}>
-      <ContactsStack.Navigator initialRouteName={Facade.route.Contacts.name}>
+      <ContactsStack.Navigator initialRouteName={wrapper.route.Contacts.name}>
         <ContactsStack.Screen
-          name={Facade.route.Contacts.name}
+          name={wrapper.route.Contacts.name}
           component={ContactsPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.Contacts.name,
+              title: wrapper.route.Contacts.name,
               theme,
               route,
             })
           }
         />
         <ContactsStack.Screen
-          name={Facade.route.ContactDetails.name}
+          name={wrapper.route.ContactDetails.name}
           component={ContactDetails}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.Contacts.translate(),
+              title: wrapper.route.Contacts.translate(),
               theme,
               route,
             })

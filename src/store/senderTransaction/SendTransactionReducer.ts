@@ -1,12 +1,11 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 
-import {Config} from '~src/app/Config'
+import {applicationConfig} from '~/src/config/ApplicationConfig'
+import {Account} from '~/src/models/redux/Account'
 import {Model} from '~src/app/Model'
-import {NeonHelper} from '~src/helpers/NeonHelper'
 import {PriorityFee} from '~src/models/PriorityFee'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
-import {ClearStateDispatcher} from '~src/store/senderTransaction/dispatchers/ClearStateDispatcher'
 import {FeeAmountDispatcher} from '~src/store/senderTransaction/dispatchers/FeeAmountDispatcher'
 import {FiatDispatcher} from '~src/store/senderTransaction/dispatchers/FiatDispatcher'
 import {ReceiverAddressDispatcher} from '~src/store/senderTransaction/dispatchers/ReceiverAddressDispatcher'
@@ -51,64 +50,17 @@ export class SendTransactionReducer extends ReducerWrapper<
     setTip: (tip: {amount: number; address: string} | undefined) => {
       return this.commit('SET_TIP', {tip})
     },
-    sendAsset: (): AsyncAction<string | null | undefined> => {
+    sendAsset: (account: Account): AsyncAction<string | null | undefined> => {
       return async (dispatch, getState) => {
         const sendTx = getState().senderTransaction
 
-        const {token, senderAddress, receiverAddress, feeAmount, tip} = sendTx
-        const fees = feeAmount
-
-        if (!token) throw new Error('Token not defined')
-        if (!senderAddress) throw new Error('Sender address not defined')
-        if (!receiverAddress) throw new Error('Receiver address not defined')
-
-        const {symbol, amount} = token
-        const nativeAssets = Config.application.assets.split(',')
-
-        if (nativeAssets.includes(symbol)) {
-          const assets = symbol as 'GAS' | 'NEO'
-
-          return await NeonHelper.sendNativeAsset(
-            senderAddress,
-            receiverAddress,
-            assets,
-            amount,
-            fees?.fee,
-            tip ? tip.amount : undefined,
-            tip ? tip.address : undefined
-          )
+        try {
+          return await applicationConfig.blockchain[
+            account.blockchain
+          ].sendTransaction(sendTx)
+        } catch (error) {
+          throw new Error('Transaction has failed')
         }
-
-        return await NeonHelper.sendNep5Asset(
-          senderAddress,
-          receiverAddress,
-          token,
-          fees?.fee,
-          tip ? tip.amount : undefined,
-          tip ? tip.address : undefined
-        )
-      }
-    },
-    getHash: (): AsyncAction<string | undefined> => {
-      return async (dispatch, getState) => {
-        const sendTx = getState().senderTransaction
-
-        const {token, senderAddress, receiverAddress, feeAmount} = sendTx
-        const fees = feeAmount
-
-        if (!token) throw new Error('Token not defined')
-        if (!senderAddress) throw new Error('Sender address not defined')
-        if (!receiverAddress) throw new Error('Receiver address not defined')
-
-        const {symbol, amount} = token
-
-        return await NeonHelper.getHash(
-          senderAddress,
-          symbol,
-          amount,
-          receiverAddress,
-          fees?.fee
-        )
       }
     },
   }

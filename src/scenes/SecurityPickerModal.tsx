@@ -1,10 +1,12 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import * as LocalAuthentication from 'expo-local-authentication'
+import i18n from 'i18n-js'
 import React, {useState, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+
 import {Storage} from '~src/app/Storage'
 import SelectorList, {SelectorItem} from '~src/components/SelectorList'
 import SwiperPanel, {
@@ -39,8 +41,8 @@ const SecurityPickerModal = (props: Props) => {
       dispatch(RootStore.settings.actions.save())
       if (props.route.params?.isFirstTime) {
         await Storage.welcomeToNWSeen.save(false)
-        props.navigation.replace(Facade.route.Tab.name, {
-          screen: Facade.route.ListWallets.name,
+        props.navigation.replace(wrapper.route.Tab.name, {
+          screen: wrapper.route.ListWallets.name,
           welcomeHidden: true,
           changelogHidden: true,
         })
@@ -72,8 +74,8 @@ const SecurityPickerModal = (props: Props) => {
         }
       }
       case Security.password: {
-        props.navigation.navigate(Facade.route.PasscodeStack.name, {
-          screen: Facade.route.VerifyPasscode.name,
+        props.navigation.navigate(wrapper.route.PasscodeStack.name, {
+          screen: wrapper.route.VerifyPasscode.name,
           params: {
             onValidate: (validate) => {
               if (validate) {
@@ -116,8 +118,8 @@ const SecurityPickerModal = (props: Props) => {
       }
 
       case Security.password:
-        props.navigation.replace(Facade.route.PasscodeStack.name, {
-          screen: Facade.route.Passcode.name,
+        props.navigation.replace(wrapper.route.PasscodeStack.name, {
+          screen: wrapper.route.Passcode.name,
         })
         break
       case Security.disabled:
@@ -153,7 +155,7 @@ const SecurityPickerModal = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      title={Facade.t('modals.security.title')}
+      title={i18n.t('modals.security.title')}
       fullSize={true}
       padding={16}
       paddingTop={24}

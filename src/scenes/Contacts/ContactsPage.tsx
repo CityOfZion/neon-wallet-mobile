@@ -1,12 +1,13 @@
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, {useState, useEffect} from 'react'
 import {Platform, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
+import {wrapper} from '~/src/app/ApplicationWrapper'
 import {AccountList} from '~/src/components/accounts/AccountList'
 import {LinearLayout, TextView} from '~/src/styles/styled-components'
-import {Facade} from '~src/app/Facade'
 import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import {ContactList} from '~src/components/contacts/ContactList'
 import {NoContacts} from '~src/components/contacts/NoContacts'
@@ -15,7 +16,6 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ContactsStackParamList} from '~src/navigation/ContactsStackNavigation'
 import {RootState} from '~src/store/RootStore'
-
 interface Props {
   navigation: StackNavigationProp<ContactsStackParamList & RootStackParamList>
 }
@@ -43,7 +43,7 @@ const TabSelector = (props: {selected: Tab; onSelect: (t: Tab) => void}) => {
             color={contactsSelected ? 'text.0' : 'background.3'}
             my={Platform.OS === 'ios' ? '20px' : '4px'}
           >
-            {Facade.t('contactPicker.contacts').toUpperCase()}
+            {i18n.t('contactPicker.contacts').toUpperCase()}
           </TextView>
           <LinearLayout
             width="100%"
@@ -64,7 +64,7 @@ const TabSelector = (props: {selected: Tab; onSelect: (t: Tab) => void}) => {
             color={!contactsSelected ? 'text.0' : 'background.3'}
             my={Platform.OS === 'ios' ? '20px' : '4px'}
           >
-            {Facade.t('contactPicker.myAccounts').toUpperCase()}
+            {i18n.t('contactPicker.myAccounts').toUpperCase()}
           </TextView>
           <LinearLayout
             width="100%"
@@ -87,8 +87,8 @@ const ContactsPage: React.FC<Props> = (prop) => {
       HeaderActionButton({
         actionButtonStyle: 'add',
         actionOnPress: () => {
-          prop.navigation.navigate(Facade.route.Modal.name, {
-            screen: Facade.route.PersistContact.name,
+          prop.navigation.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.PersistContact.name,
           })
         },
       }),

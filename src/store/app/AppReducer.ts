@@ -1,34 +1,38 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
-import {Request} from '@simpli/serialized-request'
 import {plainToClass} from 'class-transformer'
-import {map, mapValues, update} from 'lodash'
+import i18n from 'i18n-js'
+import _ from 'lodash'
 import {showMessage} from 'react-native-flash-message'
 import {
   checkInternetConnection,
   offlineActionCreators,
 } from 'react-native-offline'
 
-import {RootStore} from '../RootStore'
-
-import {Facade} from '~src/app/Facade'
+import {appBus} from '~/src/app/AppBus'
+import {applicationConfig} from '~/src/config/ApplicationConfig'
+import {SecurityHelper} from '~/src/helpers/SecurityHelper'
+import {Node} from '~/src/models/Node'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
+import {BlockchainServiceKey, blockchainList} from '~src/blockchain'
 import {NeoNode} from '~src/models/NeoNode'
 import {TokenAsset} from '~src/models/TokenAsset'
-import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
 import {Account} from '~src/models/redux/Account'
 import {App} from '~src/models/redux/App'
 import {Contact} from '~src/models/redux/Contact'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
-import {AccountPreCreatedDispatcher} from '~src/store/app/dispatchers/AccountPreCreatedDispatcher'
 import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
 import {ContactsDispatcher} from '~src/store/app/dispatchers/ContactsDispatcher'
 import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
 import {NodesDispatcher} from '~src/store/app/dispatchers/NodesDispatcher'
 import {TokensDispatcher} from '~src/store/app/dispatchers/TokensDispatcher'
 import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
-import {Exchange, ExchangeResponse} from '~src/types/exchange'
+import {
+  Exchange,
+  ExchangeResponse,
+  MultichainExchange,
+} from '~src/types/exchange'
 import {TokenResponse} from '~src/types/token'
 
 export class AppReducer extends ReducerWrapper<
@@ -45,85 +49,81 @@ export class AppReducer extends ReducerWrapper<
     WalletsDispatcher,
     AccountsDispatcher,
     ContactsDispatcher,
-    AccountPreCreatedDispatcher,
   ]
 
   readonly actions = {
-    createPreAccount: (): AsyncAction => {
-      return async (dispatch, getState) => {
-        const account = new Account()
-        const accountsPool = getState().app.accounts
-        account.idWallet = getState().wallet.id
-        const indexes = account
-          .getAccountsWithSameWallet(accountsPool)
-          .map((it) => it.index ?? 0)
-
-        const wallet = new Wallet()
-        wallet.id = getState().wallet.id
-        const index = indexes.length ? Math.max(...indexes) + 1 : 0
-
-        const neoAccount = (await wallet.generateNeoAccount(index)) as
-          | Account
-          | null
-          | undefined
-
-        dispatch(
-          this.commit('SET_PRE_ACCOUNT_CREATE', {preAccount: neoAccount})
-        )
-        if (neoAccount) {
-          await Storage.preAccount.save(plainToClass(Account, neoAccount))
-        }
-      }
-    },
-    syncPreAccount: (): AsyncAction<Account | null> => {
-      return async (dispatch, getState) => {
-        const preAccount = await Storage.preAccount.load()
-        dispatch(this.commit('SET_PRE_ACCOUNT_CREATE', {preAccount}))
-        return preAccount
-      }
-    },
-    syncExchange: (): AsyncAction<Exchange> => {
+    syncExchange: (): AsyncAction<MultichainExchange> => {
       return async (dispatch, getState) => {
         const exchange = await Storage.exchange.load()
-        if (exchange) {
-          dispatch(this.commit('SET_EXCHANGE', {exchange}))
-          return exchange
+        const multichainExchange =
+          (await Storage.multichainExchange.load()) ??
+          ({} as MultichainExchange)
+        if (!Object.keys(multichainExchange).length && exchange) {
+          multichainExchange['neoLegacy'] = exchange
         }
-        return {} as Exchange
+        dispatch(this.commit('SET_EXCHANGE', {exchange: multichainExchange}))
+        return multichainExchange
       }
     },
 
     fetchExchange: (): AsyncAction => {
+      const tokenToAsset = (
+        response: TokenResponse,
+        blockchainName: BlockchainServiceKey
+      ): TokenAsset[] => {
+        return _.map(
+          response,
+          (it) =>
+            new TokenAsset(
+              it.companyName,
+              it.symbol,
+              it.networks[1].hash,
+              blockchainName
+            )
+        )
+      }
+
       return async (dispatch) => {
         try {
-          const assets = Facade.app.assets.split(',')
-          const otherAssets = map(Facade.app.tokensMainNet, (it) => it.symbol)
-
-          const params = {
-            fsyms: assets.concat(otherAssets).join(','),
-            tsyms: Facade.app.currencies,
+          let tokenList = (await Storage.tokenAssets.load()) ?? []
+          if (tokenList.length < 1) {
+            const assetsBlockchain: TokenAsset[] = []
+            let tokensBlockchain: TokenAsset[] = []
+            await Promise.all(
+              blockchainList.map(async (blockchainName) => {
+                const {assets, provider} = applicationConfig.blockchain[
+                  blockchainName
+                ]
+                const tokenListResponse = await provider.getTokenList()
+                assets.forEach(({hash, name, symbol}) => {
+                  assetsBlockchain.push(
+                    new TokenAsset(name, symbol, hash, blockchainName)
+                  )
+                  tokensBlockchain = tokenToAsset(
+                    tokenListResponse,
+                    blockchainName
+                  )
+                })
+              })
+            )
+            tokenList = [...tokensBlockchain, ...assetsBlockchain]
           }
 
-          const response = await Request.get(
-            'https://min-api.cryptocompare.com/data/pricemultifull',
-            {params}
+          const result: MultichainExchange = {} as MultichainExchange
+          await Promise.all(
+            blockchainList.map(async (blockchainName) => {
+              const {provider} = applicationConfig.blockchain[blockchainName]
+              const tokenAssetSymbols = tokenList
+                .filter((token) => token.blockchain === blockchainName)
+                .map((token) => token.symbol)
+
+              result[blockchainName] = await provider.getExchangeData({
+                tokenAssetSymbols,
+                currencies: applicationConfig.currencies,
+              })
+            })
           )
-            .name('syncExchange')
-            .as<ExchangeResponse>()
-            .getData()
-
-          const exchange: Exchange = mapValues(response.RAW, (symbolRef) => {
-            const symbolRefMap = mapValues(
-              symbolRef,
-              (symbolToUse) => symbolToUse.PRICE
-            )
-
-            return {
-              to: symbolRefMap,
-            }
-          })
-
-          await Storage.exchange.save(exchange)
+          await Storage.multichainExchange.save(result)
         } catch (error) {
           console.log(error)
           throw new Error('Problema para sincronizar exchange')
@@ -132,54 +132,97 @@ export class AppReducer extends ReducerWrapper<
     },
 
     syncTokens: (): AsyncAction<TokenAsset[]> => {
-      const tokenToAsset = (response: TokenResponse): TokenAsset[] => {
-        return Facade.lodash.map(
+      const tokenToAsset = (
+        response: TokenResponse,
+        blockchainName: BlockchainServiceKey
+      ): TokenAsset[] => {
+        return _.map(
           response,
-          (it) => new TokenAsset(it.companyName, it.symbol, it.networks[1].hash)
+          (it) =>
+            new TokenAsset(
+              it.companyName,
+              it.symbol,
+              it.networks[1].hash,
+              blockchainName
+            )
         )
       }
 
       return async (dispatch, getState) => {
         const tokenAssets = await Storage.tokenAssets.load()
-
         if (tokenAssets) {
-          dispatch(this.commit('SET_TOKENS', {tokens: tokenAssets}))
+          const tokens = tokenAssets.map((token) => {
+            token.adaptToMultichain()
+            return token
+          })
+          dispatch(this.commit('SET_TOKENS', {tokens}))
           return tokenAssets
         } else {
-          const tokensMainNet = Facade.app.tokensMainNet
-          const neo = new TokenAsset('NEO', 'NEO', Facade.app.neoHash)
-          const gas = new TokenAsset('GAS', 'GAS', Facade.app.gasHash)
-          const tokens = [neo, gas, ...tokenToAsset(tokensMainNet)]
-          dispatch(this.commit('SET_TOKENS', {tokens}))
-
-          return tokens
+          const assetsBlockchain: TokenAsset[] = []
+          let tokensBlockchain: TokenAsset[] = []
+          try {
+            await Promise.all(
+              blockchainList.map(async (blockchainName) => {
+                const {assets, provider} = applicationConfig.blockchain[
+                  blockchainName
+                ]
+                const tokenList = await provider.getTokenList()
+                assets.forEach(({hash, name, symbol}) => {
+                  assetsBlockchain.push(
+                    new TokenAsset(name, symbol, hash, blockchainName)
+                  )
+                  tokensBlockchain = tokenToAsset(tokenList, blockchainName)
+                })
+              })
+            )
+            const tokens = [...assetsBlockchain, ...tokensBlockchain]
+            dispatch(this.commit('SET_TOKENS', {tokens}))
+            return tokens
+          } catch (error) {
+            console.log(error)
+            throw new Error('Problema para consultar token list')
+          }
         }
       }
     },
 
-    fetchTokens: (): AsyncAction => {
-      const tokenToAsset = (response: TokenResponse): TokenAsset[] => {
-        return Facade.lodash.map(
+    fetchTokens: (): AsyncAction<TokenAsset[]> => {
+      const tokenToAsset = (
+        response: TokenResponse,
+        blockchain: BlockchainServiceKey
+      ): TokenAsset[] => {
+        return _.map(
           response,
-          (it) => new TokenAsset(it.companyName, it.symbol, it.networks[1].hash)
+          (it) =>
+            new TokenAsset(
+              it.companyName,
+              it.symbol,
+              it.networks[1].hash,
+              blockchain
+            )
         )
       }
-      return async (dispatch) => {
-        let response: TokenResponse
-
+      return async () => {
+        const assetsBlockchain: TokenAsset[] = []
+        let tokensBlockchain: TokenAsset[] = []
         try {
-          response = await Request.get(
-            `https://raw.githubusercontent.com/CityOfZion/neo-tokens/master/tokenList.json?timestamp=${new Date().getTime()}`
+          await Promise.all(
+            blockchainList.map(async (blockchainName) => {
+              const {assets, provider} = applicationConfig.blockchain[
+                blockchainName
+              ]
+              const tokenList = await provider.getTokenList()
+              assets.forEach(({hash, name, symbol}) => {
+                assetsBlockchain.push(
+                  new TokenAsset(name, symbol, hash, blockchainName)
+                )
+                tokensBlockchain = tokenToAsset(tokenList, blockchainName)
+              })
+            })
           )
-            .name('getTokens')
-            .as<TokenResponse>()
-            .getData()
-
-          const neo = new TokenAsset('NEO', 'NEO', Facade.app.neoHash)
-          const gas = new TokenAsset('GAS', 'GAS', Facade.app.gasHash)
-
-          const tokens = [neo, gas, ...tokenToAsset(response)]
+          const tokens = [...assetsBlockchain, ...tokensBlockchain]
           await Storage.tokenAssets.save(tokens)
+          return tokens
         } catch (error) {
           console.log(error)
           throw new Error('Problema para consultar token list')
@@ -187,21 +230,30 @@ export class AppReducer extends ReducerWrapper<
       }
     },
 
-    syncNodes: (): AsyncAction<NeoNode[]> => {
+    syncNodes: (): AsyncAction<Node[]> => {
       return async (dispatch, getState) => {
-        let nodes: NeoNode[] = []
-        nodes = (await Storage.neoNodes.load()) ?? []
+        let neoNodes: NeoNode[] = []
+        neoNodes = (await Storage.neoNodes.load()) ?? []
+        const nodes = (await Storage.nodes.load()) ?? []
+        if (!nodes.length) {
+          neoNodes.forEach(({height, url}) =>
+            nodes.push({url, height, blockchain: 'neoLegacy'})
+          )
+        }
         dispatch(this.commit('SET_NODES', {nodes}))
         return nodes
       }
     },
 
     fetchNodes: (): AsyncAction => {
-      return async (dispatch) => {
+      return async () => {
         try {
-          let nodes: NeoNode[] = []
-          nodes = await Facade.app.blockchainDataProvider.getAllNodes()
-          await Storage.neoNodes.save(nodes)
+          let nodes: Node[] = []
+          blockchainList.forEach(async (blockchainName) => {
+            const {provider} = applicationConfig.blockchain[blockchainName]
+            nodes = await provider.getAllNodes()
+            await Storage.nodes.save(nodes)
+          })
         } catch (error) {
           console.log(error)
           throw new Error('não carregou os nodes')
@@ -256,8 +308,8 @@ export class AppReducer extends ReducerWrapper<
             it.accountType = it.getWallet(wallets)?.walletType ?? null
             it.transactions = it.transactions ?? []
             it.pendingTransactions = it.pendingTransactions ?? []
+            it.adaptToMultichain()
           })
-
           dispatch(this.commit('SET_ACCOUNTS', {accounts}))
         }
 
@@ -281,7 +333,7 @@ export class AppReducer extends ReducerWrapper<
       return async (dispatch, getState) => {
         const {accounts, wallets} = getState().app
 
-        const account = accounts.find((it) => it.address === address)
+        const account = accounts.find((it) => it.address === address) //TODO: alem de checar o address precisa tbm ter certeza do blockchain
 
         if (account) {
           await account.populateTokenAssets()
@@ -318,10 +370,30 @@ export class AppReducer extends ReducerWrapper<
               .map(async (acc) => {
                 const {address} = acc
                 if (address) {
-                  const response = await Account.fetchTokenAssets(
-                    address as string
-                  )
-                  return {address, tokens: response}
+                  const response = await applicationConfig.blockchain[
+                    acc.blockchain
+                  ].provider.getBalance(address)
+
+                  const tokens = response.balance
+                    .map((it) => {
+                      const {asset, assetSymbol, assetHash} = it
+
+                      if (asset && assetSymbol && assetHash) {
+                        const tokenAsset = new TokenAsset(
+                          asset,
+                          assetSymbol,
+                          assetHash,
+                          acc.blockchain
+                        )
+                        tokenAsset.amount = it.amount ?? 0
+                        return tokenAsset
+                      }
+
+                      return null
+                    })
+                    .filter((it) => it) as TokenAsset[]
+
+                  return {address, tokens}
                 }
               })
               .filter((res) => res !== undefined)
@@ -387,7 +459,8 @@ export class AppReducer extends ReducerWrapper<
           for (const senderTx of senderTxs) {
             if (senderTx.transactionHash) {
               try {
-                const request = Facade.app.blockchainDataProvider
+                const request =
+                  applicationConfig.blockchain[account.blockchain].provider
                 const confirmedTx = await request.getTransaction(
                   senderTx.transactionHash
                 )
@@ -397,33 +470,30 @@ export class AppReducer extends ReducerWrapper<
                 if (index >= 0) {
                   if (senderTxs[index].senderAddress === 'claim') {
                     showMessage({
-                      message: Facade.t('toast.gasClaimSuccess'),
+                      message: i18n.t('toast.gasClaimSuccess'),
                       type: 'success',
                     })
-                    Facade.bus.emit('claimGasEnd', senderTxs[index])
-                    Facade.bus.emit(
-                      'removePendingUnclaimedGasTransaction',
-                      senderTxs[index]
-                    )
+                    appBus.emit('claimGasEnd', senderTxs[index])
                   } else {
                     const lastTransaction = senderTxs[index]
                     showMessage({
-                      message: Facade.t('toast.transactionCompleted'),
+                      message: i18n.t('toast.transactionCompleted'),
                       type: 'success',
                       onPress: () => {
-                        Facade.bus.emit(
+                        appBus.emit(
                           'navigateTransactionDetails',
                           lastTransaction
                         )
                       },
                     })
-                    Facade.bus.emit('transactionEnd', senderTxs[index])
+                    appBus.emit('transactionEnd', senderTxs[index])
                   }
+                  account.removePendingTransactions(
+                    senderTxs[index],
+                    senderTx.transactionHash
+                  )
                   removedSenderTx.push(senderTxs[index])
                   senderTxs.splice(index, 1)
-                  await dispatch(RootStore.app.actions.fetchBalanceAccounts())
-                  await dispatch(RootStore.app.actions.syncAccounts())
-                  await dispatch(RootStore.app.actions.syncWallets())
                 }
               } catch (e) {
                 /** TODO #665 GITHUB*/
@@ -447,6 +517,7 @@ export class AppReducer extends ReducerWrapper<
       }
     },
 
+    //used just in development
     removeCache: (): AsyncAction => {
       return async (dispatch, getState) => {
         const accounts = (await Storage.accounts.load()) ?? []
@@ -461,13 +532,14 @@ export class AppReducer extends ReducerWrapper<
       }
     },
 
+    //used just in development
     removeAppData: (): AsyncAction => {
       return async () => {
         const accounts = (await Storage.accounts.load()) ?? []
 
         for (const account of accounts) {
-          await Facade.security.removeMnemonic(account.idWallet ?? '')
-          await Facade.security.removeWif(account.address ?? '')
+          await SecurityHelper.removeMnemonic(account.idWallet ?? '')
+          await SecurityHelper.removeWif(account.address ?? '')
         }
 
         await Storage.onboardingSeen.erase()
@@ -481,7 +553,7 @@ export class AppReducer extends ReducerWrapper<
         await Storage.accounts.erase()
         await Storage.contacts.erase()
 
-        await Facade.security.removePasscode()
+        await SecurityHelper.removePasscode()
       }
     },
   }

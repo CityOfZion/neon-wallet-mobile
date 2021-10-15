@@ -1,8 +1,9 @@
 import {StackNavigationProp} from '@react-navigation/stack'
+import {Await} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
 import React from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
 import SelectorList, {SelectorItem} from '~src/components/SelectorList'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
@@ -21,7 +22,7 @@ const LanguagePickerModal = (props: Props) => {
 
   const changeLanguage = async (val: Lang) => {
     dispatch(RootStore.settings.actions.setLanguage(val))
-    await Facade.await.run(
+    await Await.run(
       'application',
       async () => await dispatch(RootStore.settings.actions.save()),
       1000
@@ -32,19 +33,19 @@ const LanguagePickerModal = (props: Props) => {
 
   const languages: SelectorItem<Lang>[] = [
     {
-      title: Facade.t('languages.en-US'),
+      title: i18n.t('languages.en-US'),
       data: Lang.EN_US,
       onClick: changeLanguage,
       isSelected,
     },
     {
-      title: Facade.t('languages.pt-BR'),
+      title: i18n.t('languages.pt-BR'),
       data: Lang.PT_BR,
       onClick: changeLanguage,
       isSelected,
     },
     {
-      title: Facade.t('languages.de'),
+      title: i18n.t('languages.de'),
       data: Lang.DE,
       onClick: changeLanguage,
       isSelected,
@@ -54,7 +55,7 @@ const LanguagePickerModal = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      title={Facade.t('modals.language.title')}
+      title={i18n.t('modals.language.title')}
       fullSize={true}
       padding={24}
       onClose={props.navigation.goBack}

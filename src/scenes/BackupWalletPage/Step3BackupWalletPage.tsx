@@ -1,9 +1,11 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {Normalize} from '~/src/app/Normalize'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
@@ -17,12 +19,12 @@ const Step3BackupWalletPage: React.FC<Props> = (props) => {
   props.navigation.setOptions({
     headerRight: () =>
       HeaderActionButton({
-        actionTitle: Facade.t('app.done'),
+        actionTitle: i18n.t('app.done'),
         actionButtonStyle: 'highlight',
         actionOnPress: () => {
           props.navigation.reset({
             index: 0,
-            routes: [{name: Facade.route.SettingsPage.name}],
+            routes: [{name: wrapper.route.SettingsPage.name}],
           })
         },
       }),
@@ -35,7 +37,7 @@ const Step3BackupWalletPage: React.FC<Props> = (props) => {
           mt={6}
           mb={4}
           source={require('~/src/assets/images/logo-3d.png')}
-          style={{marginLeft: Facade.scale(60)}}
+          style={{marginLeft: Normalize.scale(60)}}
         />
       </LinearLayout>
 
@@ -44,9 +46,9 @@ const Step3BackupWalletPage: React.FC<Props> = (props) => {
         color={'text.0'}
         fontSize={'2xl'}
         textAlign={'center'}
-        lineHeight={Facade.scale(24)}
+        lineHeight={Normalize.scale(24)}
       >
-        {Facade.t('step3BackupWallet.label_1')}
+        {i18n.t('step3BackupWallet.label_1')}
       </TextView>
     </ScreenLayout>
   )

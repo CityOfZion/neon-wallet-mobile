@@ -3,16 +3,19 @@ import {
   HttpExpose,
   ResponseSerialize,
 } from '@simpli/serialized-request'
+import {t} from 'i18n-js'
+import _ from 'lodash'
 import moment, {Moment} from 'moment'
 
-import {Facade} from '~src/app/Facade'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
+import {FilterHelper} from '~src/helpers/FilterHelper'
+import {SecurityHelper} from '~src/helpers/SecurityHelper'
+import {UtilsHelper} from '~src/helpers/UtilsHelper'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
-import {Exchange} from '~src/types/exchange'
-
+import {MultichainExchange} from '~src/types/exchange'
 @HttpExclude()
 export class Wallet implements WalletState {
   @HttpExpose()
@@ -45,7 +48,7 @@ export class Wallet implements WalletState {
   securityPhrase: string | null = null
 
   get hasFunds() {
-    return Facade.lodash.sumBy(this.tokenAssets, (it) => it.amount ?? 0) > 0
+    return _.sumBy(this.tokenAssets, (it) => Number(it.amount) ?? 0) > 0
   }
 
   get isInactive() {
@@ -55,7 +58,7 @@ export class Wallet implements WalletState {
   get formattedLastVisitedAt() {
     if (!moment(this.lastVisitedAt).isValid()) return null
 
-    return Facade.t('screens.listWallets.changeSinceLastVisit', {
+    return t('screens.listWallets.changeSinceLastVisit', {
       // TODO: translate date format
       date: moment(this.lastVisitedAt).format('HH:mm - MMM/DD/YYYY'),
     })
@@ -66,25 +69,7 @@ export class Wallet implements WalletState {
   }
 
   async getMnemonic() {
-    return (await Facade.security.loadMnemonic(this.id ?? '')) ?? null
-  }
-
-  async getKeychain() {
-    const mnemonic = await this.getMnemonic()
-    if (!mnemonic) return null
-    return Facade.asteroid.getKeychainFromMnemonic(mnemonic)
-  }
-
-  async generateWif(index: number) {
-    const mnemonic = await this.getMnemonic()
-    if (!mnemonic) return null
-    return Facade.asteroid.generateWif(mnemonic, index)
-  }
-
-  async generateNeoAccount(index: number) {
-    const mnemonic = await this.getMnemonic()
-    if (!mnemonic) return null
-    return Facade.asteroid.generateNeoAccount(mnemonic, index)
+    return (await SecurityHelper.loadMnemonic(this.id ?? '')) ?? null
   }
 
   async getBalanceFromPastExchange(currency: Currency, date: Moment) {
@@ -94,7 +79,7 @@ export class Wallet implements WalletState {
     for (const token of this.tokenAssets) {
       const senderTx = new SenderTransaction()
       senderTx.sentAt = date.format()
-      senderTx.token = Facade.utils.clone(token)
+      senderTx.token = UtilsHelper.clone(token)
       promises.push(senderTx.populateExchange())
       txs.push(senderTx)
     }
@@ -102,16 +87,16 @@ export class Wallet implements WalletState {
     await Promise.all(promises)
 
     const balances = txs.map((it) => it.token?.exchangeToken(currency) ?? 0)
-    return Facade.lodash.sum(balances)
+    return _.sum(balances)
   }
 
   async getBalanceVariationFromPastExchange(
     currency: Currency,
-    exchange: Exchange,
-    date: Moment
+    date: Moment,
+    multichainExchange: MultichainExchange
   ) {
     const pastBalance = await this.getBalanceFromPastExchange(currency, date)
-    const balance = this.calculateBalance(currency, exchange)
+    const balance = this.calculateBalance(currency, multichainExchange)
 
     return balance - pastBalance
   }
@@ -136,19 +121,19 @@ export class Wallet implements WalletState {
     return walletAccounts.flatMap((it) => it.flattedTransactions)
   }
 
-  calculateBalance(currency: Currency, exchange: Exchange) {
-    return Facade.lodash.sumBy(
+  calculateBalance(currency: Currency, multichainExchange: MultichainExchange) {
+    return _.sumBy(
       this.tokenAssets,
-      (it) => it.exchangeToken(currency, exchange) ?? 0
+      (it) => it.exchangeToken(currency, multichainExchange[it.blockchain]) ?? 0
     )
   }
 
   calculateBalanceFormatted(
     currency: Currency,
     language: Lang,
-    exchange: Exchange
+    multichainExchange: MultichainExchange
   ) {
-    const balance = this.calculateBalance(currency, exchange)
-    return Facade.filter.currency(balance, currency, language)
+    const balance = this.calculateBalance(currency, multichainExchange)
+    return FilterHelper.currency(balance, currency, language)
   }
 }

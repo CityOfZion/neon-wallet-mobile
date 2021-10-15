@@ -1,13 +1,15 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import {AwaitActivity} from '@simpli/react-native-await'
+import {Await, AwaitActivity} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
+import _ from 'lodash'
 import moment from 'moment'
 import PropTypes from 'prop-types'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useCallback} from 'react'
 import {Alert, FlatList} from 'react-native'
 import {useDispatch} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
@@ -31,30 +33,30 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
   const [indexesPressedWords, setIndexesPressedWords] = useState<number[]>([])
 
   useEffect(() => {
-    Facade.await.run('populateStep2', populate)
+    Await.run('populateStep2', populate)
   }, [wallet.id])
 
-  const populate = async () => {
+  const populate = useCallback(async () => {
     const mnemonic = await wallet.getMnemonic()
 
     if (mnemonic) {
       const words = mnemonic.split(' ')
       setWords(words)
-      setShuffledWords(Facade.lodash.shuffle(words))
+      setShuffledWords(_.shuffle(words))
     }
-  }
+  }, [wallet.id])
 
   props.navigation.setOptions({
     headerRight: () =>
       HeaderActionButton({
-        actionTitle: Facade.t('app.cancel'),
+        actionTitle: i18n.t('app.cancel'),
         actionButtonStyle: 'highlight',
         actionOnPress: () => {
           props.navigation.reset({
             index: 2,
-            routes: [{name: Facade.route.SettingsPage.name}],
+            routes: [{name: wrapper.route.SettingsPage.name}],
           })
-          props.navigation.navigate(Facade.route.MyWalletOptions.name, {
+          props.navigation.navigate(wrapper.route.MyWalletOptions.name, {
             wallet,
           })
         },
@@ -70,15 +72,17 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
 
       props.navigation.reset({
         index: 0,
-        routes: [{name: Facade.route.Step3BackupWallet.name, params: {wallet}}],
+        routes: [
+          {name: wrapper.route.Step3BackupWallet.name, params: {wallet}},
+        ],
       })
     } else {
       Alert.alert(
-        Facade.t('step2BackupWallet.dialog_1_title'),
-        Facade.t('step2BackupWallet.dialog_1_body'),
+        i18n.t('step2BackupWallet.dialog_1_title'),
+        i18n.t('step2BackupWallet.dialog_1_body'),
         [
           {
-            text: Facade.t('app.retry'),
+            text: i18n.t('app.retry'),
             onPress: () => setFormedWords([]),
           },
         ]
@@ -126,16 +130,16 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
                 fontSize={'lg'}
                 fontFamily={'semibold'}
               >
-                {Facade.t('step2BackupWallet.label_1')}
+                {i18n.t('step2BackupWallet.label_1')}
               </TextView>
 
               <TextView color={'text.0'} fontSize={'lg'} fontFamily={'bold'}>
-                {Facade.t('step2BackupWallet.twoOfThree')}
+                {i18n.t('step2BackupWallet.twoOfThree')}
               </TextView>
             </LinearLayout>
 
             <TextView fontFamily={'light'} color={'text.0'} fontSize={'lg'}>
-              {Facade.t('step2BackupWallet.body_1')}
+              {i18n.t('step2BackupWallet.body_1')}
             </TextView>
           </LinearLayout>
 
@@ -172,7 +176,7 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
         <LinearLayout mt={5} mb={6} px={5} width={'100%'}>
           <ThemedButton
             onPress={() => validateAndNext()}
-            label={Facade.t('app.continue')}
+            label={i18n.t('app.continue')}
             disabled={isDisabled()}
           />
         </LinearLayout>

@@ -1,15 +1,17 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {TouchableOpacity, View} from 'react-native'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {Normalize} from '~/src/app/Normalize'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {TextView, LinearLayout, ImageView} from '~src/styles/styled-components'
 
 export interface Step1CreateWalletParams {
@@ -23,7 +25,7 @@ interface Props {
 
 const CustomBackButton = (props: Props) => {
   const showButton =
-    props.route.params?.source === Facade.route.WalletContextModal.name ||
+    props.route.params?.source === wrapper.route.WalletContextModal.name ||
     props.navigation.canGoBack()
   return (
     <View>
@@ -32,10 +34,10 @@ const CustomBackButton = (props: Props) => {
           onPress={() => {
             if (
               props.route.params?.source ===
-              Facade.route.WalletContextModal.name
+              wrapper.route.WalletContextModal.name
             ) {
-              props.navigation.navigate(Facade.route.ListWallets.name, {
-                screen: Facade.route.ListWallets.name,
+              props.navigation.navigate(wrapper.route.ListWallets.name, {
+                screen: wrapper.route.ListWallets.name,
               })
               props.navigation.pop()
             } else {
@@ -53,14 +55,14 @@ const CustomBackButton = (props: Props) => {
             />
 
             <TextView
-              mt={Facade.utils.isAndroid ? -2 : 2}
+              mt={UtilsHelper.isAndroid ? -2 : 2}
               fontSize={'lg'}
               color={'text.0'}
               style={{
                 includeFontPadding: false,
               }}
             >
-              {Facade.t('app.back')}
+              {i18n.t('app.back')}
             </TextView>
           </LinearLayout>
         </TouchableOpacity>
@@ -75,9 +77,9 @@ const ItemComponent = (props: {index: number; title: string; body: string}) => {
       <LinearLayout
         mt={1}
         mr={3}
-        height={Facade.scale(26)}
-        width={Facade.scale(26)}
-        borderRadius={Facade.scale(13)}
+        height={Normalize.scale(26)}
+        width={Normalize.scale(26)}
+        borderRadius={Normalize.scale(13)}
         bg={'primary'}
         alignItems={'center'}
       >
@@ -115,18 +117,18 @@ const Step1CreateWalletPage: React.FC<Props> = (props) => {
       <LinearLayout mt={5} weight={1} width={'100%'}>
         <ItemComponent
           index={1}
-          title={Facade.t('step1CreateWallet.label_1')}
-          body={Facade.t('step1CreateWallet.body_1')}
+          title={i18n.t('step1CreateWallet.label_1')}
+          body={i18n.t('step1CreateWallet.body_1')}
         />
         <ItemComponent
           index={2}
-          title={Facade.t('step1CreateWallet.label_2')}
-          body={Facade.t('step1CreateWallet.body_2')}
+          title={i18n.t('step1CreateWallet.label_2')}
+          body={i18n.t('step1CreateWallet.body_2')}
         />
         <ItemComponent
           index={3}
-          title={Facade.t('step1CreateWallet.label_3')}
-          body={Facade.t('step1CreateWallet.body_3')}
+          title={i18n.t('step1CreateWallet.label_3')}
+          body={i18n.t('step1CreateWallet.body_3')}
         />
       </LinearLayout>
 
@@ -134,11 +136,11 @@ const Step1CreateWalletPage: React.FC<Props> = (props) => {
         <ThemedButton
           onPress={() =>
             props.navigation.navigate(
-              Facade.route.Step2CreateWallet.name,
+              wrapper.route.Step2CreateWallet.name,
               undefined
             )
           }
-          label={Facade.t('step1CreateWallet.createWallet')}
+          label={i18n.t('step1CreateWallet.createWallet')}
         />
       </LinearLayout>
     </ScreenLayout>

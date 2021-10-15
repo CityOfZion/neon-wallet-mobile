@@ -1,21 +1,32 @@
-import {wallet} from '@cityofzion/neon-core'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useState, useEffect} from 'react'
-import {Alert, Platform, TextInput, Text} from 'react-native'
+import {Await, AwaitActivity} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
+import React, {useState, useEffect, useCallback} from 'react'
+import {Alert, View, ScrollView} from 'react-native'
+import {showMessage} from 'react-native-flash-message'
 import {useSelector, useDispatch} from 'react-redux'
 
+import {wrapper} from '../app/ApplicationWrapper'
+import {applicationConfig} from '../config/ApplicationConfig'
 import {Account} from '../models/redux/Account'
+import {MnemonicSelectionInfo} from './MnemonicSelectionList'
 
 import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
-import {Facade} from '~src/app/Facade'
+import {
+  BlockchainServiceKey,
+  blockchainList,
+  validateTextAllBlockchains,
+  validateAddressAllBlockchains,
+  validatePrivateKeyWithPasswordAllBlockchains,
+  validateWifAllBlockchains,
+  getBlockchainByAddress,
+} from '~src/blockchain'
+import AddressesImportList from '~src/components/AddressesImportList'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {AsteroidHelper} from '~src/helpers/AsteroidHelper'
-import {AddressPaginatedRequest} from '~src/models/request/AddressPaginatedRequest'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {getRandomColor} from '~src/scenes/CustomizeAccount'
@@ -23,7 +34,6 @@ import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout, ImageView, TextView} from '~src/styles/styled-components'
 
 type ParamList = MoreStackParamList & WalletStackParamList & RootStackParamList
-
 interface ImportKeyProps {
   navigation: StackNavigationProp<ParamList>
   route: RouteProp<MoreStackParamList, 'ImportKey'>
@@ -38,27 +48,27 @@ const isMnemonic = (word: string) => {
   return word.split(' ').length > 1
 }
 
-const validator = (text: string) =>
-  wallet.isAddress(text) ||
-  wallet.isNEP2(text) ||
-  wallet.isWIF(text) ||
-  !text ||
-  validateMnemonic(text)
-
 const ImportKey = (props: ImportKeyProps) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const {accounts, tokens} = useSelector((state: RootState) => state.app)
   const {isConnected} = useSelector((state: RootState) => state.network)
   const [inputValue, setInputValue] = useState(
     props.route.params ? props.route.params.key ?? '' : ''
   )
+  const [addressesFound, setAddressesFound] = useState<
+    {address: string; blockchain: BlockchainServiceKey}[]
+  >([])
+  const [inputIsValid, setInputIsValid] = useState<boolean>(false)
+  const [addressesSelected, setAddressesSelected] = useState<
+    {address: string; blockchain: BlockchainServiceKey}[]
+  >([])
+  const [showImportList, setShowImportList] = useState<boolean>(false)
+  const [disableButton, setDisableButton] = useState<boolean>(false)
   const dispatch = useDispatch()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
-
-  const inputIsValid = validator(inputValue)
 
   const importMnemonic = async (mnemonic: string) => {
     const mnemonicIsImported = (await dispatchAsync(
@@ -67,40 +77,57 @@ const ImportKey = (props: ImportKeyProps) => {
     if (!mnemonicIsImported) {
       let index: number = 0
       let stop: boolean = false
-      const WALLET_NAME_DEFAULT = 'Mnemonic Wallet'
-      const walletID = await createWallet(WALLET_NAME_DEFAULT, mnemonic)
-      while (!stop && isConnected) {
-        const {WIF, address} = AsteroidHelper.generateNeoAccount(
-          mnemonic,
-          index
-        )
-        const ACCOUNT_NAME_DEFAULT = `Mnemonic Account ${index + 1}`
-        if (!accounts.find((account) => account.address === address)) {
-          const req = Facade.app.blockchainDataProvider
-          const {totalEntries} = await req.getAddressAbstracts(address, 1)
-          if (totalEntries && totalEntries > 0) {
-            await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
-          } else {
-            if (index < 1) {
-              await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
+      const allAccountsInfo: MnemonicSelectionInfo = new Map()
+      let accountsInfo: {
+        address: string
+        wif: string
+        derivationIndex: number
+      }[] = []
+      for (const blockchainName of blockchainList) {
+        stop = false
+        index = 0
+        while (!stop && isConnected) {
+          const {wif, address} = applicationConfig.blockchain[
+            blockchainName
+          ].generateAccount(mnemonic, index)
+          if (!accounts.find((account) => account.address === address)) {
+            const req = applicationConfig.blockchain[blockchainName].provider
+            const {totalEntries} = await req.getAddressAbstracts(address, 1)
+            if (totalEntries && totalEntries > 0) {
+              accountsInfo.push({address, wif, derivationIndex: index})
+            } else {
+              accountsInfo.push({address, wif, derivationIndex: index})
+              stop = true
             }
+            index++
+          } else {
             stop = true
+            Alert.alert(
+              i18n.t('importReadAccount.accountAlreadyExists', {
+                account: address,
+              })
+            )
           }
-          index++
-        } else {
-          stop = true
-          Alert.alert(`address: ${address} already exists`)
         }
+        allAccountsInfo.set(blockchainName, accountsInfo)
+        accountsInfo = []
       }
+
       if (!isConnected) {
-        const {WIF, address} = await new Promise((resolve) => {
-          resolve(AsteroidHelper.generateNeoAccount(mnemonic, index))
+        showMessage({
+          message: 'You need to be online to import informations',
+          type: 'danger',
         })
-        const ACCOUNT_NAME_DEFAULT = `Mnemonic Account ${index + 1}`
-        await createAccount(walletID, ACCOUNT_NAME_DEFAULT, WIF, address)
+        return null
       }
+      return allAccountsInfo
     } else {
-      Alert.alert('Mnemonic already exists')
+      Alert.alert(
+        i18n.t('importKey.mnemonicAlreadyExists', {
+          mnemonic,
+        })
+      )
+      return null
     }
   }
 
@@ -128,7 +155,8 @@ const ImportKey = (props: ImportKeyProps) => {
     walletId: string,
     name: string,
     wif: string,
-    address: string
+    address: string,
+    blockchain: BlockchainServiceKey
   ) => {
     if (!address) throw new Error('Address not defined')
 
@@ -139,6 +167,7 @@ const ImportKey = (props: ImportKeyProps) => {
         theme.colors.card[getRandomColor(6)]
       )
     )
+    dispatch(RootStore.account.actions.setBlockchain(blockchain))
     const importedAccount = (await dispatchAsync(
       RootStore.account.actions.importAndSave(address, wif)
     )) as Account
@@ -152,165 +181,331 @@ const ImportKey = (props: ImportKeyProps) => {
     return importedAccount
   }
 
-  const onNext = async () => {
-    let destination: NavParam<MoreStackParamList> | undefined = undefined
+  const handleChangeWhenAddress = useCallback(() => {
+    if (validateAddressAllBlockchains(inputValue)) {
+      const blockchainName = getBlockchainByAddress(inputValue)
+      if (!blockchainName) {
+        showMessage({
+          message: i18n.t(
+            'blockchainServices.errorMessages.blockchainNotFound'
+          ),
+          type: 'danger',
+        })
+        throw new Error(
+          i18n.t('blockchainServices.errorMessages.blockchainNotFound')
+        )
+      }
+      setAddressesFound([{address: inputValue, blockchain: blockchainName}])
+      if (!addressAlreadyExist(inputValue)) {
+        setAddressesSelected([
+          {address: inputValue, blockchain: blockchainName},
+        ])
+        return true
+      } else {
+        showMessage({
+          message: i18n.t('importKey.accountAlreadyExists', {
+            account: inputValue,
+          }),
+          animationDuration: 1000,
+          duration: 3000,
+        })
+        return false
+      }
+    }
+  }, [inputValue])
 
-    if (wallet.isAddress(inputValue)) {
+  const addressAlreadyExist = useCallback(
+    (address: string) => {
+      if (accounts.find((account) => account.address === address)) {
+        return true
+      } else {
+        return false
+      }
+    },
+    [accounts]
+  )
+
+  const handleChangeWhenEncryptedKey = useCallback(() => {
+    let destination: NavParam<MoreStackParamList> | undefined = undefined
+    if (validatePrivateKeyWithPasswordAllBlockchains(inputValue)) {
+      destination = [wrapper.route.Passphrase.name, {encryptedKey: inputValue}]
+    }
+  }, [inputValue])
+
+  const handleChangeWhenWIF = useCallback(() => {
+    if (validateWifAllBlockchains(inputValue)) {
+      for (const blockchainName of blockchainList) {
+        if (
+          applicationConfig.blockchain[blockchainName].validateWif(inputValue)
+        ) {
+          const addressFromWif = applicationConfig.blockchain[
+            blockchainName
+          ].generateAccountFromWif(inputValue)
+
+          if (addressAlreadyExist(addressFromWif)) {
+            showMessage({
+              message: `${i18n.t('importKey.accountAlreadyExists', {
+                account: addressFromWif,
+              })}`,
+              duration: 5000,
+              type: 'danger',
+            })
+            setAddressesFound((prevState) => {
+              const data = prevState
+              const addressExist = data.find(
+                (addressFound) =>
+                  addressFound.address === addressFromWif &&
+                  addressFound.blockchain === blockchainName
+              )
+              if (addressExist) {
+                const indexOf = data.indexOf(addressExist)
+                data.splice(indexOf, 1)
+              }
+              return [...data]
+            })
+          } else {
+            setAddressesFound((prevState) => {
+              const data = prevState
+              data.push({address: addressFromWif, blockchain: blockchainName})
+              return [...data]
+            })
+            setShowImportList(true)
+          }
+        }
+      }
+    }
+  }, [inputValue])
+
+  const handleChangeWhenMnemonic = useCallback(async () => {
+    if (validateMnemonic(inputValue)) {
+      setDisableButton(false)
+    }
+  }, [inputValue])
+
+  const handleChangeInput = useCallback(async () => {
+    handleChangeWhenAddress()
+    handleChangeWhenEncryptedKey()
+    handleChangeWhenWIF()
+    handleChangeWhenMnemonic()
+  }, [inputValue])
+
+  const persistImport = useCallback(async () => {
+    if (validateAddressAllBlockchains(inputValue)) {
       Alert.alert(
         '',
-        Facade.t('importKey.alertText'),
+        i18n.t('importKey.alertText'),
         [
           {
-            text: Facade.t('importKey.alertCancelButton'),
+            text: i18n.t('importKey.alertCancelButton'),
             style: 'cancel',
           },
           {
-            text: Facade.t('importKey.alertConfirmButton'),
+            text: i18n.t('importKey.alertConfirmButton'),
             onPress: () =>
-              props.navigation.navigate(Facade.route.ImportReadAccount.name, {
+              props.navigation.navigate(wrapper.route.ImportReadAccount.name, {
                 address: inputValue,
               }),
           },
         ],
         {cancelable: true}
       )
-    } else if (wallet.isNEP2(inputValue)) {
-      destination = [Facade.route.Passphrase.name, {encryptedKey: inputValue}]
-    } else if (wallet.isWIF(inputValue)) {
-      const neoAccount = Facade.asteroid.generateNeoAccountFromWif(inputValue)
-
-      if (accounts.find((account) => account.address === neoAccount.address)) {
-        Alert.alert(
-          '',
-          Facade.t('importKey.accountAlreadyExists'),
-          [
-            {
-              text: Facade.t('importKey.ok'),
-              style: 'cancel',
-            },
-          ],
-          {cancelable: true}
+    } else if (validatePrivateKeyWithPasswordAllBlockchains(inputValue)) {
+      props.navigation.navigate(wrapper.route.Passphrase.name, {
+        encryptedKey: inputValue,
+      })
+    } else if (validateWifAllBlockchains(inputValue)) {
+      const mnemonic = applicationConfig.blockchain[
+        addressesSelected[0].blockchain
+      ].generateMnemonic()
+      if (!Array.isArray(mnemonic)) {
+        throw new Error(
+          i18n.t('importKey.mnemonicAlreadyExists', {
+            mnemonic,
+          })
         )
-      } else if (neoAccount) {
-        destination = [
-          Facade.route.CustomizeAccount.name,
-          {
-            source: Facade.route.ImportKey.name,
-            address: neoAccount.address,
-            legacy: true,
-            wif: neoAccount.WIF,
-          },
-        ]
       }
-    } else if (validateMnemonic(inputValue)) {
-      await Facade.await.run('importKey', () =>
-        importMnemonic(inputValue.trim())
-      )
+      const idWallet = await createWallet('Imported Wallet', mnemonic.join(','))
+      dispatch(RootStore.wallet.actions.selectWallet(idWallet))
+      for (const addressSelected of addressesSelected) {
+        await createAccount(
+          idWallet,
+          `${i18n.t(
+            `blockchainServices.${addressSelected.blockchain}.label`
+          )} Account 1`,
+          inputValue,
+          addressSelected.address,
+          addressSelected.blockchain
+        )
+      }
       await dispatchAsync(RootStore.app.actions.syncWallets())
-    }
+      await dispatchAsync(RootStore.app.actions.syncAccounts())
 
-    if (destination) {
-      props.navigation.navigate(...destination)
+      props.navigation.replace(wrapper.route.Tab.name, {
+        welcomeHidden: true,
+        changelogHidden: true,
+        screen: wrapper.route.ListWallets.name,
+      })
+      props.navigation.navigate(wrapper.route.GetWallet.name, {})
+    } else if (validateMnemonic(inputValue)) {
+      const dataAccountsToImport = await importMnemonic(inputValue)
+      if (dataAccountsToImport) {
+        props.navigation.navigate(wrapper.route.MnemonicSelectionList.name, {
+          data: dataAccountsToImport,
+          mnemonic: inputValue,
+        })
+      }
     }
-  }
+  }, [addressesSelected, inputValue])
 
+  const validator = useCallback(
+    (text: string) => {
+      if (text.includes(' ')) {
+        if (validateMnemonic(text)) {
+          setInputIsValid(true)
+          return true
+        } else {
+          setInputIsValid(false)
+          return false
+        }
+      } else {
+        if (validateTextAllBlockchains(text)) {
+          setInputIsValid(true)
+          return true
+        } else {
+          setInputIsValid(false)
+          return false
+        }
+      }
+    },
+    [inputValue]
+  )
+
+  useEffect(() => {
+    if (inputIsValid) {
+      handleChangeInput()
+    } else {
+      setShowImportList(false)
+      setAddressesFound([])
+    }
+  }, [inputIsValid])
   return (
     <ScreenLayout>
-      <AwaitActivity
-        name={'importKey'}
-        loadingView={<ScreenLoader />}
-        onLoadingEnd={() => {
-          props.navigation.reset({
-            index: 0,
-            routes: [{name: Facade.route.Tab.name}],
-          })
-          props.navigation.replace(Facade.route.Tab.name, {
-            welcomeHidden: true,
-            changelogHidden: true,
-            screen: Facade.route.ListWallets.name,
-          })
-        }}
-      >
-        <LinearLayout orientation="verti" width="100%" height="100%">
-          <TextView
-            textAlign="center"
-            fontSize={18}
-            color={theme.colors.text[0]}
-            alignSelf="center"
-            justifyContent={'flex-end'}
-            mb={!isConnected ? '14%' : '10px'}
-            flexWrap="wrap"
-            m={40}
-          >
-            {Facade.t('importKey.enterAnAddress')}
-          </TextView>
-          <LinearLayout orientation={'horiz'} justifyContent={'center'} mb={21}>
-            {isMnemonic(inputValue) && validateMnemonic(inputValue) ? (
-              <>
-                <ImageView
-                  resizeMode="center"
-                  source={require('~/src/assets/images/check-material.png')}
-                />
-                <TextView
-                  ml={'10px'}
-                  textAlign="center"
-                  fontSize={'16px'}
-                  color={theme.colors.primary}
-                  alignSelf="center"
-                  flexWrap="wrap"
-                >
-                  {Facade.t('importKey.mnemonicComplete')}
-                </TextView>
-              </>
-            ) : isMnemonic(inputValue) && !validateMnemonic(inputValue) ? (
-              <>
-                <LinearLayout mt={1}>
-                  <ImageView
-                    resizeMode="center"
-                    source={require('~/src/assets/images/clear-material.png')}
-                  />
-                </LinearLayout>
-                <TextView
-                  ml={'10px'}
-                  textAlign="center"
-                  fontSize={'16px'}
-                  color={theme.colors.quinary}
-                  alignSelf="center"
-                  flexWrap="wrap"
-                >
-                  {Facade.t('importKey.mnemonicIncorrect')}
-                </TextView>
-              </>
-            ) : (
-              <></>
-            )}
-          </LinearLayout>
-          <InputWithValidation
-            onChangeText={(text) => setInputValue(text)}
-            color={theme.colors.text[0]}
-            invalidColor={theme.colors.background[3]}
-            value={inputValue}
-            validator={validator}
-            separatorColor={theme.colors.background[5]}
-            invalidSeparatorColor={theme.colors.background[4]}
-            invalidMessageColor={theme.colors.quinary}
-            isMultiline={isMnemonic(inputValue)}
-            fromImportKey={true}
-          />
-
-          {inputIsValid && (
-            <LinearLayout
-              mt={20}
-              width="90%"
-              flex={1}
+      <AwaitActivity name={'importKey'} loadingView={<ScreenLoader />}>
+        <ScrollView>
+          <LinearLayout orientation="verti" width="100%" height="100%">
+            <TextView
+              textAlign="center"
+              fontSize={18}
+              color={theme.colors.text[0]}
               alignSelf="center"
               justifyContent={'flex-end'}
-              mb={!isConnected ? '12%' : '10px'}
+              mb={!isConnected ? '14%' : '10px'}
+              flexWrap="wrap"
+              m={40}
             >
-              <ThemedButton label="Next" onPress={onNext} />
+              {i18n.t('importKey.enterAnAddress')}
+            </TextView>
+            <LinearLayout
+              orientation={'horiz'}
+              justifyContent={'center'}
+              mb={21}
+            >
+              {isMnemonic(inputValue) && validateMnemonic(inputValue) ? (
+                <>
+                  <ImageView
+                    resizeMode="center"
+                    source={require('~/src/assets/images/check-material.png')}
+                  />
+                  <TextView
+                    ml={'10px'}
+                    textAlign="center"
+                    fontSize={'16px'}
+                    color={theme.colors.primary}
+                    alignSelf="center"
+                    flexWrap="wrap"
+                  >
+                    {i18n.t('importKey.mnemonicComplete')}
+                  </TextView>
+                </>
+              ) : isMnemonic(inputValue) && !validateMnemonic(inputValue) ? (
+                <>
+                  <LinearLayout mt={1}>
+                    <ImageView
+                      resizeMode="center"
+                      source={require('~/src/assets/images/clear-material.png')}
+                    />
+                  </LinearLayout>
+                  <TextView
+                    ml={'10px'}
+                    textAlign="center"
+                    fontSize={'16px'}
+                    color={theme.colors.quinary}
+                    alignSelf="center"
+                    flexWrap="wrap"
+                  >
+                    {i18n.t('importKey.mnemonicIncorrect')}
+                  </TextView>
+                </>
+              ) : (
+                <></>
+              )}
             </LinearLayout>
-          )}
-        </LinearLayout>
+            <InputWithValidation
+              onChangeText={(text) => {
+                setInputValue(text)
+              }}
+              color={theme.colors.text[0]}
+              invalidColor={theme.colors.background[3]}
+              value={inputValue}
+              validator={validator}
+              separatorColor={theme.colors.background[5]}
+              invalidSeparatorColor={theme.colors.background[4]}
+              invalidMessageColor={theme.colors.quinary}
+              isMultiline={isMnemonic(inputValue)}
+              fromImportKey={true}
+              sideMargins={0}
+            />
+
+            {showImportList && (
+              <View style={{marginTop: 20}}>
+                <TextView
+                  textAlign="center"
+                  fontSize={'16px'}
+                  alignSelf="center"
+                  color={'text.3'}
+                  mb={'10px'}
+                >
+                  Select the correct account from the list below
+                </TextView>
+                <AddressesImportList
+                  onSelectAddress={(addressesSelected) => {
+                    setAddressesSelected(addressesSelected)
+                  }}
+                  addressesInfo={addressesFound}
+                />
+              </View>
+            )}
+
+            {inputIsValid && (
+              <LinearLayout
+                mt={20}
+                width="90%"
+                flex={1}
+                alignSelf="center"
+                justifyContent={'flex-end'}
+                mb={!isConnected ? '12%' : '10px'}
+              >
+                <ThemedButton
+                  label="Next"
+                  onPress={() => {
+                    Await.run('importKey', persistImport)
+                  }}
+                  disabled={disableButton}
+                />
+              </LinearLayout>
+            )}
+          </LinearLayout>
+        </ScrollView>
       </AwaitActivity>
     </ScreenLayout>
   )

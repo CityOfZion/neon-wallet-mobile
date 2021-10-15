@@ -1,16 +1,16 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React, {useState, useEffect} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
 import Keypad from '~src/components/Keypad'
 import PasscodeBar from '~src/components/PasscodeBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {PasscodeStackParamList} from '~src/navigation/PasscodeStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-
 export interface PasscodePageParams {
   showError: boolean
   validate?: boolean
@@ -46,7 +46,7 @@ export const PasscodeHeader = (props: {
                 includeFontPadding: false,
               }}
             >
-              {Facade.t('app.back')}
+              {i18n.t('app.back')}
             </TextView>
           </LinearLayout>
         </TouchableWithoutFeedback>
@@ -61,9 +61,7 @@ export const PasscodeHeader = (props: {
           }
         >
           <TextView py="4px" fontSize={16} color="text.0">
-            {props.passcode.length <= 0
-              ? Facade.t('passcode.cancel')
-              : 'Delete'}
+            {props.passcode.length <= 0 ? i18n.t('passcode.cancel') : 'Delete'}
           </TextView>
         </TouchableWithoutFeedback>
       </LinearLayout>
@@ -78,7 +76,7 @@ const PasscodePage = (props: Props) => {
   useEffect(() => {
     if (passcode.length === PASSCODE_LENGTH) {
       setPasscode([])
-      props.navigation.navigate(Facade.route.ConfirmPasscode.name, {
+      props.navigation.navigate(wrapper.route.ConfirmPasscode.name, {
         passcode,
       })
     }
@@ -112,7 +110,7 @@ const PasscodePage = (props: Props) => {
       />
 
       <TextView fontSize={22} color="text.0" mb={18}>
-        {Facade.t('passcode.enter')}
+        {i18n.t('passcode.enter')}
       </TextView>
 
       <PasscodeBar data={passcode} length={PASSCODE_LENGTH} />
@@ -123,7 +121,7 @@ const PasscodePage = (props: Props) => {
         opacity={showErrorMessage ? 1 : 0}
         my={18}
       >
-        {Facade.t('passcode.error')}
+        {i18n.t('passcode.error')}
       </TextView>
 
       <LinearLayout weight={1} width="100%" />

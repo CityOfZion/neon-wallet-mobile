@@ -1,6 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import {AwaitActivity} from '@simpli/react-native-await'
+import {Await, AwaitActivity} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
 import moment from 'moment'
 import React, {useEffect, useState, Fragment, useRef} from 'react'
 import {
@@ -11,8 +12,9 @@ import {
 } from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
-import {Storage} from '~src/app/Storage'
+import {wrapper} from '../app/ApplicationWrapper'
+import {Normalize} from '../app/Normalize'
+
 import AccountCard from '~src/components/AccountCard'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
@@ -50,11 +52,11 @@ const AccountCardsComponent = (props: {
       easing: Easing.out((val) => val ** 2),
     }).start()
   }
-  const arrColors = ['#f00', '#0f0', '#00f']
+
   return (
     <Animated.View onLayout={layoutEvent} style={{opacity: posYFactor.current}}>
       {props.accounts.map((account: Account, i: number) => {
-        const marginTop = i !== 0 ? Facade.scale(-130) : undefined
+        const marginTop = i !== 0 ? Normalize.scale(-130) : undefined
         return (
           <Animated.View
             key={i}
@@ -92,17 +94,16 @@ const AccountCardsComponent = (props: {
 
 const GetWalletView = (props: GetWalletProps) => {
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const preAccount = useSelector((state: RootState) => state.app.preAccount)
   const fromWalletDetailsPage = false
 
   props.navigation.setOptions({
     headerRight: () =>
       HeaderActionButton({
-        actionTitle: Facade.t('app.edit'),
+        actionTitle: i18n.t('app.edit'),
         actionButtonStyle: 'default',
         actionOnPress: () => {
-          props.navigation.navigate(Facade.route.Modal.name, {
-            screen: Facade.route.EditWalletModal.name,
+          props.navigation.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.EditWalletModal.name,
             params: {
               wallet,
               fromWalletDetailsPage,
@@ -119,7 +120,7 @@ const GetWalletView = (props: GetWalletProps) => {
   const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
 
   useEffect(() => {
-    Facade.await.run('populate', populate, 500)
+    Await.run('populate', populate, 500)
   }, [accountsPool])
 
   props.navigation.setOptions({
@@ -133,16 +134,15 @@ const GetWalletView = (props: GetWalletProps) => {
     wallet.lastVisitedAt = moment().format()
 
     await dispatch(RootStore.app.actions.updateAndSaveWallet(wallet))
-    if (!preAccount?.address)
-      await dispatch(RootStore.app.actions.createPreAccount())
     const accounts = wallet.getAccounts(accountsPool)
     setAccounts(accounts)
   }
 
   const pressEvent = async (account: Account) => {
     dispatch(RootStore.account.actions.selectAccount(account.address))
-    props.navigation.navigate(Facade.route.GetAccount.name, {
-      key: Facade.route.GetAccount.name,
+    dispatch(RootStore.account.actions.setBlockchain(account.blockchain))
+    props.navigation.navigate(wrapper.route.GetAccount.name, {
+      key: wrapper.route.GetAccount.name,
     })
   }
 
@@ -150,8 +150,11 @@ const GetWalletView = (props: GetWalletProps) => {
     if (wallet.id) {
       dispatch(RootStore.account.actions.setIdWallet(wallet.id))
 
-      props.navigation.navigate(Facade.route.Modal.name, {
-        screen: Facade.route.CreateAccountModal.name,
+      props.navigation.navigate(wrapper.route.Modal.name, {
+        screen: wrapper.route.BlockchainListModal.name,
+        params: {
+          walletOrAccount: 'account',
+        },
       })
     }
   }
@@ -192,7 +195,7 @@ const GetWalletView = (props: GetWalletProps) => {
                 ml={3}
                 fontFamily="medium"
               >
-                {Facade.t('screens.getWallet.addNewAccount')}
+                {i18n.t('screens.getWallet.addNewAccount')}
               </TextView>
             </LinearLayout>
           </TouchableWithoutFeedback>

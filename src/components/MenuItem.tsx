@@ -1,7 +1,8 @@
 import React from 'react'
 import {TouchableOpacity} from 'react-native'
 
-import {Facade} from '~src/app/Facade'
+import {Normalize} from '../app/Normalize'
+
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export enum RightIconType {
@@ -57,9 +58,9 @@ const MenuItem = (props: MenuItemProps) => {
         <LinearLayout
           alignItems="center"
           orientation="horiz"
-          height={Facade.scale(65)}
+          height={Normalize.scale(65)}
           width="100%"
-          pl={Facade.scale(1)}
+          pl={Normalize.scale(1)}
         >
           {props.icon && (
             <ImageView
@@ -87,7 +88,7 @@ const MenuItem = (props: MenuItemProps) => {
           <TextView
             fontSize={'md'}
             fontFamily="semibold"
-            mr={Facade.scale(3)}
+            mr={Normalize.scale(3)}
             color="#869ca5"
           >
             {props.subtitle}

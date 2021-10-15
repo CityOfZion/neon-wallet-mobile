@@ -1,15 +1,15 @@
-import {wallet} from '@cityofzion/neon-js'
-import {CommonActions, useNavigation} from '@react-navigation/native'
+import {useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React, {useState} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {useDispatch} from 'react-redux'
 
+import {wrapper} from '../app/ApplicationWrapper'
 import {MoreStackParamList} from '../navigation/MoreStackNavigation'
 import {SettingsStackParamList} from '../navigation/SettingsStackNavigation'
 import {WalletStackParamList} from '../navigation/WalletsStackNavigation'
 
-import {Facade} from '~src/app/Facade'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -35,7 +35,9 @@ interface NotificationProps {
 const Notification = (props: NotificationProps) => {
   const [seen, setSeen] = useState(!props.wallet.showBackupAlert)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const navigation = useNavigation()
+  const navigation = useNavigation<
+    StackNavigationProp<SettingsStackParamList>
+  >()
 
   if (seen) return null
 
@@ -56,10 +58,10 @@ const Notification = (props: NotificationProps) => {
         if (props.wallet) {
           navigation.reset({
             index: 0,
-            routes: [{name: Facade.route.Settings.name}],
+            routes: [{name: wrapper.route.Settings.name}],
           })
-          navigation.navigate(Facade.route.Settings.name, {
-            screen: Facade.route.Step1BackupWallet.name,
+          navigation.navigate(wrapper.route.Settings.name, {
+            screen: wrapper.route.Step1BackupWallet.name,
             params: {
               wallet: props.wallet,
             },
@@ -78,7 +80,7 @@ const Notification = (props: NotificationProps) => {
       >
         <LinearLayout orientation="horiz">
           <TextView color="text.2" fontSize="10px" mb="4px" width="98%">
-            {Facade.t('components.notification.title')}
+            {i18n.t('components.notification.title')}
           </TextView>
           <ButtonView alignSelf="flex-start" width="2%" onPress={() => close()}>
             <ImageView

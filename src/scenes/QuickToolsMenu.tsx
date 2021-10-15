@@ -1,17 +1,22 @@
 import {useNavigation} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React, {useState} from 'react'
-import {ImageSourcePropType, Pressable} from 'react-native'
+import {ImageLoadEventData, Pressable} from 'react-native'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+import {applicationConfig} from '../config/ApplicationConfig'
+import {RootStackParamList} from '../navigation/AppNavigation'
+
 import SwiperPanel, {SwiperController} from '~src/components/SwiperPanel'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface ListItem {
   title: string
   subtitle: string
-  source: ImageSourcePropType
+  source: ImageLoadEventData
   onClick: () => void
 }
 
@@ -26,7 +31,7 @@ function QuickToolsItem(props: {
   listItems: ListItem[]
 }) {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   return (
@@ -88,36 +93,34 @@ function QuickToolsItem(props: {
 
 export default function QuickToolsMenu(props: Props) {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
-  const [isSelected, setSelected] = useState(false)
-
-  const navigation = useNavigation()
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
 
   const items: ListItem[] = [
     {
-      title: Facade.t('quickTools.qrCode.title'),
-      subtitle: Facade.t('quickTools.qrCode.subtitle'),
+      title: i18n.t('quickTools.qrCode.title'),
+      subtitle: i18n.t('quickTools.qrCode.subtitle'),
       source: require('~src/assets/images/icon-circle-qr-primary.png'),
-      onClick: () => navigation.navigate(Facade.route.QRCodeScan.name),
+      onClick: () => navigation.navigate(wrapper.route.QRCodeScan.name, {}),
     },
     {
-      title: Facade.t('quickTools.send.title'),
-      subtitle: Facade.t('quickTools.send.subtitle'),
+      title: i18n.t('quickTools.send.title'),
+      subtitle: i18n.t('quickTools.send.subtitle'),
       source: require('~src/assets/images/icon-circle-send-primary.png'),
       onClick: () =>
-        navigation.navigate(Facade.route.Modal.name, {
-          screen: Facade.route.SendModalStack.name,
+        navigation.navigate(wrapper.route.Modal.name, {
+          screen: wrapper.route.SendModalStack.name,
         }),
     },
     {
-      title: Facade.t('quickTools.receive.title'),
-      subtitle: Facade.t('quickTools.receive.subtitle'),
+      title: i18n.t('quickTools.receive.title'),
+      subtitle: i18n.t('quickTools.receive.subtitle'),
       source: require('~src/assets/images/icon-circle-receive-primary.png'),
       onClick: () =>
-        navigation.navigate(Facade.route.Modal.name, {
-          screen: Facade.route.ReceiveModalStack.name,
+        navigation.navigate(wrapper.route.Modal.name, {
+          screen: wrapper.route.ReceiveModalStack.name,
         }),
     },
   ]
@@ -133,7 +136,9 @@ export default function QuickToolsMenu(props: Props) {
       noHeader={true}
       draggable={true}
       paddingTop={20}
-      paddingBottom={24 + Facade.app.footerHeight + useSafeAreaInsets().bottom}
+      paddingBottom={
+        24 + applicationConfig.footerHeight + useSafeAreaInsets().bottom
+      }
       paddingLeft={0}
       paddingRight={0}
       solidColorBG={true}

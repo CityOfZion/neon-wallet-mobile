@@ -1,15 +1,14 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React from 'react'
 import {Alert} from 'react-native'
-import {useDispatch, useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
-import {Security} from '../enums/Security'
-import {RootStore} from '../store/RootStore'
+import {wrapper} from '../app/ApplicationWrapper'
+import {SecurityHelper} from '../helpers/SecurityHelper'
 
 import * as LocalAuthentication from '~/node_modules/expo-local-authentication'
-import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import HeaderBar from '~src/components/layout/HeaderBar'
@@ -39,18 +38,21 @@ const MyWalletOptionsPage = (props: Props) => {
     const hasAuthHard = await Storage.hasAuthenticationForHardware.load()
     if (hasAuth === true) {
       // Checks if user set up a passcode
-      const passcode = await Facade.security.loadPasscode()
+      const passcode = await SecurityHelper.loadPasscode()
 
       // If passcode, navigates to passcode confirmation screen
       if (passcode) {
-        props.navigation.navigate(Facade.route.PasscodeStack.name, {
-          screen: Facade.route.VerifyPasscode.name,
+        props.navigation.navigate(wrapper.route.PasscodeStack.name, {
+          screen: wrapper.route.VerifyPasscode.name,
           params: {
             onValidate: (it) => {
               if (it) {
-                props.navigation.navigate(Facade.route.Step1BackupWallet.name, {
-                  wallet,
-                })
+                props.navigation.navigate(
+                  wrapper.route.Step1BackupWallet.name,
+                  {
+                    wallet,
+                  }
+                )
               }
             },
           },
@@ -61,7 +63,7 @@ const MyWalletOptionsPage = (props: Props) => {
       if (hasAuthHard === true) {
         tryAuth()
       } else {
-        props.navigation.navigate(Facade.route.Step1BackupWallet.name, {
+        props.navigation.navigate(wrapper.route.Step1BackupWallet.name, {
           wallet,
         })
       }
@@ -77,7 +79,7 @@ const MyWalletOptionsPage = (props: Props) => {
       if (!result.success) {
         alertDialog()
       } else {
-        props.navigation.navigate(Facade.route.Step1BackupWallet.name, {
+        props.navigation.navigate(wrapper.route.Step1BackupWallet.name, {
           wallet,
         })
       }
@@ -86,15 +88,15 @@ const MyWalletOptionsPage = (props: Props) => {
 
   const alertDialog = () =>
     Alert.alert(
-      Facade.t('myWalletOptions.dialog.title'),
-      Facade.t('myWalletOptions.dialog.subtitle'),
+      i18n.t('myWalletOptions.dialog.title'),
+      i18n.t('myWalletOptions.dialog.subtitle'),
       [
         {
-          text: Facade.t('myWalletOptions.dialog.confirm'),
+          text: i18n.t('myWalletOptions.dialog.confirm'),
           onPress: async () => await tryAuth,
         },
         {
-          text: Facade.t('myWalletOptions.dialog.cancel'),
+          text: i18n.t('myWalletOptions.dialog.cancel'),
           style: 'cancel',
         },
       ],
@@ -104,18 +106,18 @@ const MyWalletOptionsPage = (props: Props) => {
   return (
     <ScreenLayout padding={20}>
       <MenuItem
-        title={Facade.t('myWalletOptions.details')}
+        title={i18n.t('myWalletOptions.details')}
         icon={require('~src/assets/images/icon-details-green.png')}
         iconMarginRight={4}
         arrowDirection={RightIconType.ARROW_RIGHT}
         onPress={() =>
-          props.navigation.navigate(Facade.route.WalletDetails.name, {wallet})
+          props.navigation.navigate(wrapper.route.WalletDetails.name, {wallet})
         }
       />
 
       {wallet.walletType === 'standard' && (
         <MenuItem
-          title={Facade.t('myWalletOptions.backupWallet')}
+          title={i18n.t('myWalletOptions.backupWallet')}
           icon={require('~src/assets/images/icon-screen-lock-green.png')}
           iconMarginLeft={2}
           iconMarginRight={5}

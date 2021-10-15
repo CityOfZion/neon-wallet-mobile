@@ -1,9 +1,12 @@
+import {Await} from '@simpli/react-native-await'
 import {StorageListener} from '@simpli/react-native-storage'
 import {RequestConfig, RequestListener} from '@simpli/serialized-request'
 import i18n from 'i18n-js'
 import {Platform} from 'react-native'
 
-import {Facade} from '~src/app/Facade'
+import {httpConfig} from '../config/HttpConfig'
+import {localeConfig} from '../config/LocaleConfig'
+
 import {Lang} from '~src/enums/Lang'
 
 export abstract class Setup {
@@ -17,19 +20,19 @@ export abstract class Setup {
       require('intl/locale-data/jsonp/de')
     }
 
-    RequestConfig.axios = Facade.config.http.axiosInstance
+    RequestConfig.axios = httpConfig.axiosInstance
 
-    RequestListener.onRequestStart((name) => Facade.await.init(name))
-    RequestListener.onRequestEnd((name) => Facade.await.done(name))
-    RequestListener.onRequestError((name) => Facade.await.error(name))
+    RequestListener.onRequestStart((name) => Await.init(name))
+    RequestListener.onRequestEnd((name) => Await.done(name))
+    RequestListener.onRequestError((name) => Await.error(name))
 
-    StorageListener.onStorageStart((name) => Facade.await.init(name))
-    StorageListener.onStorageEnd((name) => Facade.await.done(name))
+    StorageListener.onStorageStart((name) => Await.init(name))
+    StorageListener.onStorageEnd((name) => Await.done(name))
 
-    i18n.defaultLocale = Facade.config.locale.defaultLanguage
-    i18n.locale = Facade.config.locale.defaultLanguage
-    i18n.fallbacks = Facade.config.locale.fallbacks
-    i18n.translations = Facade.config.locale.translations
+    i18n.defaultLocale = localeConfig.defaultLanguage
+    i18n.locale = localeConfig.defaultLanguage
+    i18n.fallbacks = localeConfig.fallbacks
+    i18n.translations = localeConfig.translations
   }
 
   static changeLocale(lang: Lang) {

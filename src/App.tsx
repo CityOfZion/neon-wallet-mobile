@@ -17,8 +17,8 @@ const loggerMiddleware = createLogger()
 
 const store = createStore(RootStore.reducers, {}, applyMiddleware(thunk))
 
-const fetchFonts = () =>
-  Font.loadAsync({
+const fetchFonts = async () =>
+  await Font.loadAsync({
     bold: require('~src/assets/fonts/sofiapro-bold.otf'),
     medium: require('~src/assets/fonts/sofiapro-medium.otf'),
     regular: require('~src/assets/fonts/sofiapro-regular.otf'),
@@ -33,6 +33,9 @@ const App = () => {
   if (!dataLoaded) {
     return (
       <AppLoading
+        onError={() => {
+          console.warn()
+        }}
         startAsync={fetchFonts}
         onFinish={() => setDataLoaded(true)}
       />

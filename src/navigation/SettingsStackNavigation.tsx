@@ -3,6 +3,7 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {wrapper} from '../app/ApplicationWrapper'
 import WalletDetailsPage, {
   WalletDetailsParamList,
 } from '../scenes/WalletDetailsPage'
@@ -11,7 +12,6 @@ import PasscodeStackNavigation, {
   PasscodeStackParams,
 } from './PasscodeStackNavigation'
 
-import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
@@ -32,24 +32,25 @@ export type SettingsStackParamList = {
   Step3BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
   Modal: object
   PasscodeStack: PasscodeStackParams
+  Settings: object
 }
 
 const SettingsStack = createStackNavigator<SettingsStackParamList>()
 
 const SettingsStackNavigation = () => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   return (
     <ThemeProvider theme={theme}>
       <SettingsStack.Navigator>
         <SettingsStack.Screen
-          name={Facade.route.SettingsPage.name}
+          name={wrapper.route.SettingsPage.name}
           component={SettingsPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.Settings.translate(),
+              title: wrapper.route.Settings.translate(),
               theme,
               route,
             })
@@ -57,11 +58,11 @@ const SettingsStackNavigation = () => {
         />
 
         <SettingsStack.Screen
-          name={Facade.route.MyWallets.name}
+          name={wrapper.route.MyWallets.name}
           component={MyWalletsPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.MyWallets.translate(),
+              title: wrapper.route.MyWallets.translate(),
               iconWidth: 28,
               theme,
               route,
@@ -70,7 +71,7 @@ const SettingsStackNavigation = () => {
         />
 
         <SettingsStack.Screen
-          name={Facade.route.MyWalletOptions.name}
+          name={wrapper.route.MyWalletOptions.name}
           component={MyWalletOptionsPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
@@ -81,11 +82,11 @@ const SettingsStackNavigation = () => {
         />
 
         <SettingsStack.Screen
-          name={Facade.route.WalletDetails.name}
+          name={wrapper.route.WalletDetails.name}
           component={WalletDetailsPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.WalletDetails.translate(),
+              title: wrapper.route.WalletDetails.translate(),
               theme,
               route,
             })
@@ -93,11 +94,11 @@ const SettingsStackNavigation = () => {
         />
 
         <SettingsStack.Screen
-          name={Facade.route.Step1BackupWallet.name}
+          name={wrapper.route.Step1BackupWallet.name}
           component={Step1BackupWalletPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.Step1BackupWallet.translate(),
+              title: wrapper.route.Step1BackupWallet.translate(),
               theme,
               route,
             })
@@ -105,11 +106,11 @@ const SettingsStackNavigation = () => {
         />
 
         <SettingsStack.Screen
-          name={Facade.route.Step2BackupWallet.name}
+          name={wrapper.route.Step2BackupWallet.name}
           component={Step2BackupWalletPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.Step2BackupWallet.translate(),
+              title: wrapper.route.Step2BackupWallet.translate(),
               theme,
               route,
             })
@@ -117,22 +118,22 @@ const SettingsStackNavigation = () => {
         />
 
         <SettingsStack.Screen
-          name={Facade.route.Step3BackupWallet.name}
+          name={wrapper.route.Step3BackupWallet.name}
           component={Step3BackupWalletPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.Step3BackupWallet.translate(),
+              title: wrapper.route.Step3BackupWallet.translate(),
               theme,
               route,
             })
           }
         />
         <SettingsStack.Screen
-          name={Facade.route.PasscodeStack.name}
+          name={wrapper.route.PasscodeStack.name}
           component={PasscodeStackNavigation}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
-              title: Facade.route.PasscodeStack.name,
+              title: wrapper.route.PasscodeStack.name,
               theme,
               route,
             })

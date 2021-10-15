@@ -1,10 +1,12 @@
 import {LinearGradient} from 'expo-linear-gradient'
+import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {StyleProp} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {Normalize} from '~/src/app/Normalize'
 import styled, {LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
@@ -26,7 +28,7 @@ interface Props {
 
 const ThemedCard: React.FC<Props> = (props) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   const getBorderRadius = () => {
@@ -54,7 +56,7 @@ const ThemedCard: React.FC<Props> = (props) => {
 
   const getContentStyle = (): StyleProp<any> => {
     const style = {
-      padding: Facade.scale(props.padding!),
+      padding: Normalize.scale(props.padding!),
     }
 
     const styleShadow = {
@@ -68,7 +70,7 @@ const ThemedCard: React.FC<Props> = (props) => {
       elevation: props.flat ? 0 : 4,
     }
 
-    return Facade.lodash.merge(
+    return _.merge(
       style,
       props.hasShadow ? styleShadow : {},
       props.contentStyle ?? {}

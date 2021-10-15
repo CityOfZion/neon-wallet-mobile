@@ -1,9 +1,10 @@
 import {wallet} from '@cityofzion/neon-core'
 import {RouteProp, useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import {AwaitActivity} from '@simpli/react-native-await'
+import {Await, AwaitActivity} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {
   Alert,
   View,
@@ -18,8 +19,13 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context'
 import {useDispatch, useSelector} from 'react-redux'
 
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {
+  BlockchainServiceKey,
+  getBlockchainByAddress,
+  validateAddressAllBlockchains,
+} from '~/src/blockchain'
 import {TabStackParamList} from '~/src/navigation/TabNavigation'
-import {Facade} from '~src/app/Facade'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
@@ -27,13 +33,7 @@ import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {Contact} from '~src/models/redux/Contact'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
-import {
-  LinearLayout,
-  TextView,
-  ButtonView,
-  ImageView,
-} from '~src/styles/styled-components'
-
+import {LinearLayout, TextView, ImageView} from '~src/styles/styled-components'
 export interface PersistContactParams {
   contact?: Contact
   startingAddress: string
@@ -66,14 +66,14 @@ const InputAddress: React.FC<IInputGroup> = ({
 
   return (
     <InputWithValidation
-      placeholder={Facade.t('persistContact.addressPlaceholder')}
+      placeholder={i18n.t('persistContact.addressPlaceholder')}
       onChangeText={(text) => setAddress(text)}
       color={'primary'}
       value={address}
       invalidColor={'background.3'}
       invalidSeparatorColor={'background.3'}
       validator={() => {
-        return wallet.isAddress(address) || address?.length === 0
+        return validateAddressAllBlockchains(address)
       }}
       separatorColor={'background.3'}
       invalidMessageColor={'quinary'}
@@ -93,8 +93,8 @@ const InputAddress: React.FC<IInputGroup> = ({
 
 export const PersistContact = (props: PersistContactProps) => {
   interface IAddresses {
+    address: string
     id: number
-    text: string
   }
 
   useEffect(() => {
@@ -107,19 +107,19 @@ export const PersistContact = (props: PersistContactProps) => {
     }
   }, [])
 
-  const handleChangeAddress = (id: number, text: string) => {
+  const handleChangeAddress = (id: number, address: string) => {
     const foundInput = addresses.find((input) => input.id === id)
     if (foundInput) {
       const indexFoundInput = addresses.indexOf(foundInput)
       setAddresses((prevState) => {
         const data = prevState
-        data[indexFoundInput] = {id, text}
+        data[indexFoundInput] = {id, address}
         return data
       })
     } else {
       setAddresses((prevState) => {
         const data = prevState
-        data.push({id, text})
+        data.push({id, address})
         return [...data]
       })
     }
@@ -136,7 +136,7 @@ export const PersistContact = (props: PersistContactProps) => {
   }
 
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const contact = props.route.params?.contact
   const startingAddress = props.route.params?.startingAddress
@@ -144,9 +144,9 @@ export const PersistContact = (props: PersistContactProps) => {
 
   const [name, setName] = useState(contact?.name ?? '')
   const [addresses, setAddresses] = useState<IAddresses[]>(
-    contact?.addresses.map<IAddresses>((address, index) => {
-      return {id: index, text: address}
-    }) ?? [{id: 0, text: startingAddress}]
+    contact?.addresses.map<IAddresses>(({address}, index) => {
+      return {id: index, address}
+    }) ?? [{id: 0, address: startingAddress}]
   )
   const controller = useSwiperController(true)
 
@@ -155,32 +155,36 @@ export const PersistContact = (props: PersistContactProps) => {
 
   const submit = async () => {
     if (name.length === 0 || name.length > 20) {
-      Alert.alert(Facade.t('persistContact.invalidName'))
+      Alert.alert(i18n.t('persistContact.invalidName'))
       return
     }
 
-    const validAddress = addresses.reduce((acc, {text}) => {
-      if (!wallet.isAddress(text)) {
+    const validAddress = addresses.reduce((acc, {address}) => {
+      if (!validateAddressAllBlockchains(address)) {
         return false
       }
       return acc
     }, true)
 
     if (!validAddress) {
-      Alert.alert(Facade.t('persistContact.invalidAddress'))
+      Alert.alert(i18n.t('persistContact.invalidAddress'))
       return
     }
 
     dispatch(RootStore.contact.actions.setName(name))
-    dispatch(
-      RootStore.contact.actions.setAddress(
-        addresses
-          .map((address) => address.text)
-          .filter(
-            (address, index, addresses) => addresses.indexOf(address) === index
-          )
-      )
-    ) //remove duplicated data
+
+    const addressesToSave = addresses
+      .map((info): ContactAddresses | null => {
+        const blockchainName = getBlockchainByAddress(info.address)
+        if (blockchainName) {
+          return {address: info.address, blockchain: blockchainName}
+        } else {
+          return null
+        }
+      })
+      .filter((info) => info !== null) as ContactAddressesList
+
+    dispatch(RootStore.contact.actions.setAddress(addressesToSave))
 
     if (contact?.id) {
       await dispatchAsync(RootStore.contact.actions.update(contact.id))
@@ -204,14 +208,14 @@ export const PersistContact = (props: PersistContactProps) => {
   }
 
   const save = () => {
-    Facade.await.run('swiperRight', submit, 300)
+    Await.run('swiperRight', submit, 300)
   }
 
   const _headerTitle = () => {
     if (contact) {
-      return Facade.t('modals.editAccount.title')
+      return i18n.t('modals.editAccount.title')
     } else {
-      return Facade.t('persistContact.title.create')
+      return i18n.t('persistContact.title.create')
     }
   }
 
@@ -225,8 +229,8 @@ export const PersistContact = (props: PersistContactProps) => {
 
   const handleNavigation = () => {
     if (isDeleted) {
-      props.navigation.navigate(Facade.route.Contacts.name, {
-        screen: Facade.route.Contacts.name,
+      props.navigation.navigate(wrapper.route.Contacts.name, {
+        screen: wrapper.route.Contacts.name,
         initial: true,
       })
     } else {
@@ -237,14 +241,14 @@ export const PersistContact = (props: PersistContactProps) => {
   const alertDelete = () => {
     Alert.alert(
       '',
-      Facade.t('persistContact.deleteContactAlert'),
+      i18n.t('persistContact.deleteContactAlert'),
       [
         {
-          text: Facade.t('persistContact.cancel'),
+          text: i18n.t('persistContact.cancel'),
           style: 'cancel',
         },
         {
-          text: Facade.t('persistContact.delete'),
+          text: i18n.t('persistContact.delete'),
           onPress: deleteAction,
         },
       ],
@@ -257,8 +261,8 @@ export const PersistContact = (props: PersistContactProps) => {
       padding={20}
       fullSize={true}
       title={_headerTitle()}
-      rightButton={Facade.t('persistContact.save')}
-      leftButton={Facade.t('persistContact.cancel')}
+      rightButton={i18n.t('persistContact.save')}
+      leftButton={i18n.t('persistContact.cancel')}
       imageSize={[22, 22]}
       onClose={handleNavigation}
       onLeftPress={controller.close}
@@ -278,12 +282,12 @@ export const PersistContact = (props: PersistContactProps) => {
           >
             <LinearLayout>
               <InputLabel
-                title={Facade.t('persistContact.name')}
+                title={i18n.t('persistContact.name')}
                 marginBottom={'8px'}
               />
 
               <InputWithValidation
-                placeholder={Facade.t('persistContact.namePlaceholder')}
+                placeholder={i18n.t('persistContact.namePlaceholder')}
                 onChangeText={(val) => setName(val)}
                 color={'white'}
                 value={name}
@@ -297,18 +301,18 @@ export const PersistContact = (props: PersistContactProps) => {
               />
 
               <InputLabel
-                title={Facade.t('persistContact.address')}
+                title={i18n.t('persistContact.address')}
                 marginBottom={'8px'}
                 marginTop={'12px'}
               />
 
-              {addresses.map((data, index) => (
+              {addresses.map(({address}, index) => (
                 <InputAddress
                   key={index}
                   id={index}
                   handleChangeAddress={handleChangeAddress}
                   handleDeleteInput={handleDeleteInput}
-                  initialAddress={data.text}
+                  initialAddress={address}
                 />
               ))}
               <TouchableOpacity
@@ -319,7 +323,7 @@ export const PersistContact = (props: PersistContactProps) => {
                   source={require('~src/assets/images/add-contact-white.png')}
                 />
                 <Text style={styles.textAnother}>
-                  {Facade.t('persistContact.addAnotherAddress')}
+                  {i18n.t('persistContact.addAnotherAddress')}
                 </Text>
               </TouchableOpacity>
             </LinearLayout>
@@ -327,12 +331,12 @@ export const PersistContact = (props: PersistContactProps) => {
               <LinearLayout>
                 <LinearLayout height="1px" bg={theme.colors.background[6]} />
                 <InputLabel
-                  title={Facade.t('persistContact.deleteContact')}
+                  title={i18n.t('persistContact.deleteContact')}
                   marginBottom={'8px'}
                   marginTop={'25px'}
                 />
                 <TextView color={theme.colors.text[0]} marginBottom={'30px'}>
-                  {Facade.t('persistContact.deleteContactSubtitle')}
+                  {i18n.t('persistContact.deleteContactSubtitle')}
                 </TextView>
                 <TouchableWithoutFeedback onPress={alertDelete}>
                   <LinearLayout
@@ -357,7 +361,7 @@ export const PersistContact = (props: PersistContactProps) => {
                       color={'primary'}
                       fontSize={20}
                     >
-                      {Facade.t('persistContact.deleteButtom')}
+                      {i18n.t('persistContact.deleteButtom')}
                     </TextView>
                   </LinearLayout>
                 </TouchableWithoutFeedback>

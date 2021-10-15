@@ -1,8 +1,8 @@
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
 import SelectorList, {SelectorItem} from '~src/components/SelectorList'
 import SwiperPanel, {
   useSwiperController,
@@ -50,7 +50,7 @@ const CurrencyPickerModal = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      title={Facade.t('modals.currency.title')}
+      title={i18n.t('modals.currency.title')}
       fullSize={true}
       padding={16}
       paddingTop={24}

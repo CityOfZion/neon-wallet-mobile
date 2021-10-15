@@ -1,6 +1,6 @@
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs'
 import React, {useEffect, useRef} from 'react'
-import {Animated, View, Easing, ImageSourcePropType} from 'react-native'
+import {Animated, View, Easing, ImageLoadEventData} from 'react-native'
 import {useSelector} from 'react-redux'
 import {
   border,
@@ -17,7 +17,8 @@ import {
   SpaceProps,
 } from 'styled-system'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {applicationConfig} from '~/src/config/ApplicationConfig'
 import {Route} from '~src/app/Route'
 import {
   SwiperController,
@@ -32,8 +33,8 @@ import styled, {
 import {orientation, weight} from '~src/styles/styled-system.config'
 
 interface TabButtonContent {
-  enabledSource: ImageSourcePropType
-  disabledSource: ImageSourcePropType
+  enabledSource: ImageLoadEventData
+  disabledSource: ImageLoadEventData
   route: Route<RouteName>
 }
 
@@ -70,7 +71,7 @@ const TabButton = (props: BottomTabBarProps & TabButtonProps) => {
 const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   const {state, descriptors} = props
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const focusedOptions = descriptors[state.routes[state.index].key].options
 
@@ -95,22 +96,22 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   const walletButton = {
     enabledSource: require('~src/assets/images/button-wallet-white.png'),
     disabledSource: require('~src/assets/images/button-wallet-disabled.png'),
-    route: Facade.route.ListWallets,
+    route: wrapper.route.ListWallets,
   }
   const contactsButton = {
     enabledSource: require('~src/assets/images/button-contacts-white.png'),
     disabledSource: require('~src/assets/images/button-contacts-disabled.png'),
-    route: Facade.route.Contacts,
+    route: wrapper.route.Contacts,
   }
   const settingsButton = {
     enabledSource: require('~src/assets/images/button-settings-white.png'),
     disabledSource: require('~src/assets/images/button-settings-disabled.png'),
-    route: Facade.route.Settings,
+    route: wrapper.route.Settings,
   }
   const moreButton = {
     enabledSource: require('~src/assets/images/button-more-white.png'),
     disabledSource: require('~src/assets/images/button-more-disabled.png'),
-    route: Facade.route.More,
+    route: wrapper.route.More,
   }
 
   function animateQuickToolsButton() {
@@ -144,8 +145,8 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
     >
       <QuickToolsMenu controller={controller} />
       <TabBarContainer
-        height={Facade.app.footerHeight}
-        width={Facade.app.windowWidth}
+        height={applicationConfig.footerHeight}
+        width={applicationConfig.windowWidth}
         bg={'#12181A'}
       >
         <RelativeLayout height="100%" width="100%">

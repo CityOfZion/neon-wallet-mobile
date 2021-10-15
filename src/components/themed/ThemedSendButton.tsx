@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {
   TouchableWithoutFeedback,
   StyleSheet,
@@ -9,7 +9,6 @@ import {
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~/src/app/Facade'
 import {
   LinearGradientLayout,
   LinearLayout,

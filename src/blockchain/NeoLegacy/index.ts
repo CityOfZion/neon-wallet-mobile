@@ -1,7 +1,8 @@
-import {DoraSDKProvider} from './providers/DoraSDKProvider'
-import {NeoscanProvider} from './providers/NeoscanProvider'
-type TNeoLegacyProviderOptions = 'neoscan' | 'doraSdk'
-export function NeoLegacyProviderOption(option: TNeoLegacyProviderOptions) {
+import {DoraSDKProvider, NeoscanProvider, TNeoLegacyProvider} from './providers'
+export type TNeoLegacyProviderOptions = 'neoscan' | 'doraSdk'
+export function NeoLegacyProviderOption(
+  option: TNeoLegacyProviderOptions
+): TNeoLegacyProvider {
   switch (option) {
     case 'neoscan':
       return new NeoscanProvider()

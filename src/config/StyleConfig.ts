@@ -31,3 +31,5 @@ export class StyleConfig {
     },
   }
 }
+
+export const styleConfig = new StyleConfig()

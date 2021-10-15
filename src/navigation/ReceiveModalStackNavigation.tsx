@@ -1,20 +1,19 @@
 import {RouteProp} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React from 'react'
-import {ImageSourcePropType, View} from 'react-native'
+import {View} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {wrapper} from '../app/ApplicationWrapper'
+import {screenConfig} from '../config/ScreenConfig'
 import ReceiveAccountSelectionModal, {
   ReceiveAccountSelectionModalParams,
 } from '../scenes/receive/ReceiveAccountSelectionModal'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack'
-import {Facade} from '~src/app/Facade'
-import SwiperPanel, {
-  SwiperController,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBackButton from '~src/components/layout/HeaderBackButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
@@ -44,7 +43,7 @@ interface ReceiveModalStackProps {
 
 const ReceiveModalStackNavigation = (props: ReceiveModalStackProps) => {
   const theme = useSelector((state: RootState) => {
-    return Facade.theme[state.settings.theme]
+    return wrapper.theme[state.settings.theme]
   })
   const controller = useSwiperController(true)
 
@@ -69,7 +68,7 @@ const ReceiveModalStackNavigation = (props: ReceiveModalStackProps) => {
           <ReceiveModalStack.Navigator
             initialRouteName={'ReceiveWalletSelectionModal'}
             screenOptions={{
-              ...Facade.config.screen,
+              ...screenConfig,
               headerLeft: HeaderBackButton,
               headerRight: () =>
                 HeaderActionButton({
@@ -80,32 +79,32 @@ const ReceiveModalStackNavigation = (props: ReceiveModalStackProps) => {
             }}
           >
             <ReceiveModalStack.Screen
-              name={Facade.route.ReceiveWalletSelectionModal.name}
+              name={wrapper.route.ReceiveWalletSelectionModal.name}
               component={ReceiveWalletSelectionModal}
               options={() => ({
                 headerTitle: () =>
                   HeaderBar({
-                    title: Facade.t('modals.receive.title'),
+                    title: i18n.t('modals.receive.title'),
                   }),
               })}
             />
             <ReceiveModalStack.Screen
-              name={Facade.route.ReceiveAccountSelectionModal.name}
+              name={wrapper.route.ReceiveAccountSelectionModal.name}
               component={ReceiveAccountSelectionModal}
               options={() => ({
                 headerTitle: () =>
                   HeaderBar({
-                    title: Facade.t('modals.receive.title'),
+                    title: i18n.t('modals.receive.title'),
                   }),
               })}
             />
             <ReceiveModalStack.Screen
-              name={Facade.route.ReceiveToAccountModal.name}
+              name={wrapper.route.ReceiveToAccountModal.name}
               component={ReceiveToAccountModal}
               options={() => ({
                 headerTitle: () =>
                   HeaderBar({
-                    title: Facade.t('modals.receive.title'),
+                    title: i18n.t('modals.receive.title'),
                   }),
                 headerLeft: HeaderBackButton,
               })}

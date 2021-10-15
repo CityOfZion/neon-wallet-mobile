@@ -3,8 +3,10 @@ import {StatusBar} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {wrapper} from '../app/ApplicationWrapper'
+import {screenConfig} from '../config/ScreenConfig'
+
 import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
-import {Facade} from '~src/app/Facade'
 import ConfirmPasscodePage, {
   ConfirmPasscodePageParams,
 } from '~src/scenes/LoginPage/ConfirmPasscodePage'
@@ -30,7 +32,7 @@ const PasscodeStack = createStackNavigator<PasscodeStackParamList>()
 
 const PasscodeStackNavigation = () => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   return (
@@ -41,20 +43,19 @@ const PasscodeStackNavigation = () => {
         backgroundColor="transparent"
       />
       <PasscodeStack.Navigator
-        initialRouteName={Facade.route.Passcode.name}
-        headerMode="none"
-        screenOptions={Facade.config.screen}
+        initialRouteName={wrapper.route.Passcode.name}
+        screenOptions={{...screenConfig, headerShown: false}}
       >
         <PasscodeStack.Screen
-          name={Facade.route.Passcode.name}
+          name={wrapper.route.Passcode.name}
           component={PasscodePage}
         />
         <PasscodeStack.Screen
-          name={Facade.route.ConfirmPasscode.name}
+          name={wrapper.route.ConfirmPasscode.name}
           component={ConfirmPasscodePage}
         />
         <PasscodeStack.Screen
-          name={Facade.route.VerifyPasscode.name}
+          name={wrapper.route.VerifyPasscode.name}
           component={VerifyPasscodePage}
         />
       </PasscodeStack.Navigator>

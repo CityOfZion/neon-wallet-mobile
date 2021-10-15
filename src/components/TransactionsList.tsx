@@ -1,11 +1,17 @@
 import {useNavigation} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import React, {useEffect} from 'react'
 import {FlatList, Image} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+import {Normalize} from '../app/Normalize'
+import {FilterHelper} from '../helpers/FilterHelper'
+import {ModalStackParamList} from '../navigation/ModalStackNavigation'
+
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {TokenAsset} from '~src/models/TokenAsset'
@@ -52,22 +58,22 @@ const TransactionComponent = (props: {
 
   const getStatusLabel = (senderTx: SenderTransaction) => {
     if (senderTx.isPending) {
-      return Facade.t('components.transactionsList.pending')
+      return i18n.t('components.transactionsList.pending')
     }
 
     if (isReceived(senderTx)) {
-      return Facade.t('components.transactionsList.received')
+      return i18n.t('components.transactionsList.received')
     }
 
-    return Facade.t('components.transactionsList.sent')
+    return i18n.t('components.transactionsList.sent')
   }
 
   const getAddressLabel = (senderTx: SenderTransaction) => {
     if (isReceived(senderTx)) {
-      return Facade.t('components.transactionsList.receivedFrom')
+      return i18n.t('components.transactionsList.receivedFrom')
     }
 
-    return Facade.t('components.transactionsList.sentTo')
+    return i18n.t('components.transactionsList.sentTo')
   }
 
   const getAddressOrContact = (senderTx: SenderTransaction) => {
@@ -95,20 +101,18 @@ const TransactionComponent = (props: {
     }
   }
 
-  const navigation = useNavigation()
+  const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
 
   var todayDate = moment()
   var yesterdayDate = moment().add(-1, 'days')
 
-  var today = moment(todayDate).format(Facade.t('dateFormat.datePretty'))
-  var yesterday = moment(yesterdayDate).format(
-    Facade.t('dateFormat.datePretty')
-  )
+  var today = moment(todayDate).format(i18n.t('dateFormat.datePretty'))
+  var yesterday = moment(yesterdayDate).format(i18n.t('dateFormat.datePretty'))
   return (
     <ButtonView
       onPress={() => {
-        navigation.navigate(Facade.route.Modal.name, {
-          screen: Facade.route.TransactionDetails.name,
+        navigation.navigate(wrapper.route.Modal.name, {
+          screen: wrapper.route.TransactionDetails.name,
           params: {
             transaction: props.item,
           },
@@ -134,9 +138,9 @@ const TransactionComponent = (props: {
               {props.item.isDatetimeValid() && (
                 <TextView color={'text.0'} fontSize={'md'}>
                   {props.item.formattedDate === today
-                    ? Facade.t('components.transactionsList.today')
+                    ? i18n.t('components.transactionsList.today')
                     : props.item.formattedDate === yesterday
-                    ? Facade.t('components.transactionsList.yesterday')
+                    ? i18n.t('components.transactionsList.yesterday')
                     : props.item.formattedDate}
                 </TextView>
               )}
@@ -199,7 +203,7 @@ const TransactionComponent = (props: {
             <LinearLayout orientation={'horiz'}>
               <LinearLayout mr={2} alignSelf={'center'}>
                 <ImageView
-                  width={Facade.scale(20)}
+                  width={Normalize.scale(20)}
                   resizeMode={'contain'}
                   style={{
                     transform: [
@@ -234,19 +238,19 @@ const TransactionComponent = (props: {
         <LinearLayout orientation={'horiz'} justifyContent={'space-between'}>
           <LinearLayout width={'27%'} mr={4}>
             <TextView fontSize={'sm'} color={'text.2'}>
-              {Facade.t('components.transactionsList.token')}
+              {i18n.t('components.transactionsList.token')}
             </TextView>
           </LinearLayout>
 
           <LinearLayout mr={4}>
             <TextView fontSize={'sm'} color={'text.2'}>
-              {Facade.t('components.transactionsList.quantity')}
+              {i18n.t('components.transactionsList.quantity')}
             </TextView>
           </LinearLayout>
 
           <LinearLayout weight={1} alignSelf={'flex-end'}>
             <TextView fontSize={'sm'} textAlign={'right'} color={'text.2'}>
-              {Facade.t('components.transactionsList.value')}
+              {i18n.t('components.transactionsList.value')}
             </TextView>
           </LinearLayout>
         </LinearLayout>
@@ -303,7 +307,7 @@ const TransactionComponent = (props: {
                     adjustsFontSizeToFit={true}
                     numberOfLines={1}
                   >
-                    {Facade.filter.currency(
+                    {FilterHelper.currency(
                       token.item.exchangeToken(props.currency),
                       props.currency,
                       props.language,

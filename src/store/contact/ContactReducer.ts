@@ -1,7 +1,8 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {plainToClass} from 'class-transformer'
 
-import {Facade} from '~src/app/Facade'
+import {BlockchainServiceKey} from '~/src/blockchain'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {Contact} from '~src/models/redux/Contact'
@@ -22,7 +23,7 @@ export class ContactReducer extends ReducerWrapper<
     setName: (name: string) => {
       return this.commit('SET_NAME', {name})
     },
-    setAddress: (addresses: string[]) => {
+    setAddress: (addresses: ContactAddressesList) => {
       return this.commit('SET_ADDRESSES', {addresses})
     },
     createAndSave: (): AsyncAction<string> => {
@@ -30,7 +31,7 @@ export class ContactReducer extends ReducerWrapper<
         const contacts = (await Storage.contacts.load()) ?? []
         const contact = plainToClass(Contact, getState().contact)
 
-        contact.id = Facade.utils.uuid()
+        contact.id = UtilsHelper.uuid()
 
         contacts.push(contact)
 

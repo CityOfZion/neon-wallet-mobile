@@ -1,15 +1,14 @@
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
 import SelectorList, {SelectorItem} from '~src/components/SelectorList'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {Theme} from '~src/enums/Theme'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
-
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
 }
@@ -28,13 +27,13 @@ const ThemePickerModal = (props: Props) => {
 
   const themes: SelectorItem<Theme>[] = [
     {
-      title: Facade.t('themes.DARK'),
+      title: i18n.t('themes.DARK'),
       data: Theme.DARK,
       onClick: changeTheme,
       isSelected,
     },
     {
-      title: Facade.t('themes.LIGHT'),
+      title: i18n.t('themes.LIGHT'),
       data: Theme.LIGHT,
       onClick: changeTheme,
       isSelected,
@@ -44,7 +43,7 @@ const ThemePickerModal = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      title={Facade.t('modals.theme.title')}
+      title={i18n.t('modals.theme.title')}
       fullSize={true}
       padding={16}
       paddingTop={24}

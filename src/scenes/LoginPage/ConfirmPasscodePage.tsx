@@ -1,10 +1,13 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
+import _ from 'lodash'
 import React, {useState, useEffect} from 'react'
 import {useDispatch} from 'react-redux'
 
+import {wrapper} from '~/src/app/ApplicationWrapper'
 import {Security} from '~/src/enums/Security'
-import {Facade} from '~src/app/Facade'
+import {SecurityHelper} from '~/src/helpers/SecurityHelper'
 import {Storage} from '~src/app/Storage'
 import Keypad from '~src/components/Keypad'
 import PasscodeBar from '~src/components/PasscodeBar'
@@ -34,8 +37,10 @@ const ConfirmPasscodePage = (props: Props) => {
 
   useEffect(() => {
     if (passcode.length === PASSCODE_LENGTH) {
-      if (!Facade.lodash.isEqual(passcode, originalPasscode)) {
-        props.navigation.navigate(Facade.route.Passcode.name, {showError: true})
+      if (!_.isEqual(passcode, originalPasscode)) {
+        props.navigation.navigate(wrapper.route.Passcode.name, {
+          showError: true,
+        })
       } else {
         persist()
       }
@@ -51,13 +56,13 @@ const ConfirmPasscodePage = (props: Props) => {
   }
 
   const persist = async () => {
-    await Facade.security.savePasscode(originalPasscode)
+    await SecurityHelper.savePasscode(originalPasscode)
     dispatch(RootStore.settings.actions.setSecurity(Security.password))
     dispatch(RootStore.settings.actions.save())
     await Storage.hasAuthentication.save(true)
     await Storage.hasAuthenticationForHardware.save(false)
-    props.navigation.replace(Facade.route.Tab.name, {
-      screen: Facade.route.ListWallets.name,
+    props.navigation.replace(wrapper.route.Tab.name, {
+      screen: wrapper.route.ListWallets.name,
       welcomeHidden: true,
       changelogHidden: true,
     })
@@ -78,14 +83,14 @@ const ConfirmPasscodePage = (props: Props) => {
       />
 
       <TextView fontSize={22} color="text.0" mb={18}>
-        {Facade.t('passcode.confirm')}
+        {i18n.t('passcode.confirm')}
       </TextView>
 
       <PasscodeBar data={passcode} length={PASSCODE_LENGTH} />
 
       {/*Opacity is always zero, just to reserve the space so the keypad doesn't bounce*/}
       <TextView color="primary" fontSize={22} opacity={0} my={18}>
-        {Facade.t('passcode.error')}
+        {i18n.t('passcode.error')}
       </TextView>
 
       <LinearLayout weight={1} width="100%" />

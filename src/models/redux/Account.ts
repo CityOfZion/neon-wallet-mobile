@@ -1,13 +1,17 @@
-import {wallet} from '@cityofzion/neon-js'
 import {
   HttpExclude,
   HttpExpose,
   ResponseSerialize,
 } from '@simpli/serialized-request'
 import {plainToClass} from 'class-transformer'
+import _ from 'lodash'
+import moment from 'moment'
 import {ImageLoadEventData} from 'react-native'
 
-import {Facade} from '~src/app/Facade'
+import {appBus} from '~/src/app/AppBus'
+import {FilterHelper} from '~/src/helpers/FilterHelper'
+import {SecurityHelper} from '~/src/helpers/SecurityHelper'
+import {BlockchainServiceKey, blockchainServices} from '~src/blockchain'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {TokenAsset} from '~src/models/TokenAsset'
@@ -16,6 +20,8 @@ import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
 import {Exchange} from '~src/types/exchange'
 import {Pagination} from '~src/types/pagination'
+
+const logoDefault = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 
 @HttpExclude()
 export class Account implements AccountState {
@@ -41,7 +47,7 @@ export class Account implements AccountState {
   idWallet: string | null = null
 
   @HttpExpose()
-  srcIcon: ImageLoadEventData | null = null
+  srcIcon: ImageLoadEventData = logoDefault
 
   @HttpExpose()
   name: string | null = null
@@ -63,34 +69,11 @@ export class Account implements AccountState {
   @ResponseSerialize(TransactionDateGroup)
   pendingTransactions: TransactionDateGroup[] = []
 
-  static async fetchTokenAssets(address: string) {
-    try {
-      const request = Facade.app.blockchainDataProvider
-      const response = await request.getBalance(address)
-
-      const tokenAssets = response.balance
-        .map((it) => {
-          const {asset, assetSymbol, assetHash} = it
-
-          if (asset && assetSymbol && assetHash) {
-            const tokenAsset = new TokenAsset(asset, assetSymbol, assetHash)
-            tokenAsset.amount = it.amount ?? 0
-            return tokenAsset
-          }
-
-          return null
-        })
-        .filter((it) => it) as TokenAsset[]
-
-      return tokenAssets
-    } catch (error) {
-      console.log(error)
-      throw new Error(`Problem to request tokens account ${address}`)
-    }
-  }
+  @HttpExpose()
+  blockchain: BlockchainServiceKey = 'neoLegacy'
 
   get hasFunds() {
-    return Facade.lodash.sumBy(this.tokenAssets, (it) => it.amount ?? 0) > 0
+    return _.sumBy(this.tokenAssets, (it) => Number(it.amount) ?? 0) > 0
   }
 
   getWallet(pool: Wallet[]) {
@@ -102,12 +85,7 @@ export class Account implements AccountState {
   }
 
   async getWif() {
-    return (await Facade.security.loadWif(this.address ?? '')) ?? null
-  }
-
-  async getNeoAccount() {
-    const wif = await this.getWif()
-    return wif ? new wallet.Account(wif) : null
+    return (await SecurityHelper.loadWif(this.address ?? '')) ?? null
   }
 
   get allTransactions() {
@@ -130,7 +108,7 @@ export class Account implements AccountState {
     const tokenAsset = this.tokenAssets.find((it) => it.symbol === assetSymbol)
     if (!tokenAsset) return null
 
-    return tokenAsset.amount ?? 0
+    return tokenAsset.amount
   }
 
   getBalanceAmount() {
@@ -179,18 +157,18 @@ export class Account implements AccountState {
   ) {
     // Fallback when balance amount is 0
     if (this.getBalanceAmount() === 0) {
-      return Facade.filter.currency(0, currency, language)
+      return FilterHelper.currency(0, currency, language)
     }
 
     const amount = this.exchangeBalanceAmount(currency, exchange)
 
-    return Facade.filter.currency(amount, currency, language)
+    return FilterHelper.currency(amount, currency, language)
   }
 
   async populateTokenAssets() {
     if (!this.address) return
 
-    const request = Facade.app.blockchainDataProvider
+    const request = blockchainServices[this.blockchain].provider
     const response = await request.getBalance(this.address)
 
     this.tokenAssets = response.balance
@@ -198,7 +176,12 @@ export class Account implements AccountState {
         const {asset, assetSymbol, assetHash} = it
 
         if (asset && assetSymbol && assetHash) {
-          const tokenAsset = new TokenAsset(asset, assetSymbol, assetHash)
+          const tokenAsset = new TokenAsset(
+            asset,
+            assetSymbol,
+            assetHash,
+            this.blockchain
+          )
           tokenAsset.amount = it.amount ?? 0
           return tokenAsset
         }
@@ -228,7 +211,7 @@ export class Account implements AccountState {
 
     // Make requests until it reaches the cache data
     do {
-      const request = Facade.app.blockchainDataProvider
+      const request = blockchainServices[this.blockchain].provider
       const response = await request.getAddressAbstracts(
         this.address,
         currentPage
@@ -252,8 +235,7 @@ export class Account implements AccountState {
     } while (this.transactions.length && counter++ < 20)
 
     // Remove duplications
-    const entries = Facade.lodash
-      .chain(senderTxs)
+    const entries = _.chain(senderTxs)
       .uniqBy((it) =>
         [
           it.transactionHash,
@@ -298,10 +280,10 @@ export class Account implements AccountState {
 
   static generateTokenAssetsFromPool(pool: Account[]) {
     // Flat balances of all accounts
-    const tokenAssets = Facade.lodash.flatMap(pool, (it) => it.tokenAssets)
+    const tokenAssets = _.flatMap(pool, (it) => it.tokenAssets)
 
     // Discover all assets in this wallet
-    const assets = Facade.lodash.uniq(tokenAssets.map((it) => it.symbol))
+    const assets = _.uniq(tokenAssets.map((it) => it.symbol))
 
     const groupedTokenAssets: TokenAsset[] = []
 
@@ -313,14 +295,11 @@ export class Account implements AccountState {
       const firstOne = filteredTokenAssets[0]
       if (!firstOne) continue
 
-      const {name, symbol, hash} = firstOne
+      const {name, symbol, hash, blockchain} = firstOne
 
-      const tokenAsset = new TokenAsset(name, symbol, hash)
+      const tokenAsset = new TokenAsset(name, symbol, hash, blockchain)
 
-      tokenAsset.amount = Facade.lodash.sumBy(
-        filteredTokenAssets,
-        (it) => it.amount
-      )
+      tokenAsset.amount = _.sumBy(filteredTokenAssets, (it) => it.amount)
 
       groupedTokenAssets.push(tokenAsset)
     }
@@ -333,7 +312,7 @@ export class Account implements AccountState {
     transactionHash: string
   ) {
     const senderTx = plainToClass(SenderTransaction, senderTransaction)
-    senderTx.sentAt = Facade.moment().format()
+    senderTx.sentAt = moment().format()
     senderTx.transactionHash = transactionHash
     senderTx.isPending = true
     senderTx.token = senderTransaction.token
@@ -347,20 +326,48 @@ export class Account implements AccountState {
       senderTxs
     )
 
-    Facade.bus.emit('addPendingTransaction', senderTx)
+    appBus.emit('addPendingTransaction', senderTx)
+  }
+
+  async removePendingTransactions(
+    senderTransaction: SenderTransaction,
+    transactionHash: string | null
+  ) {
+    if (transactionHash !== null) {
+      senderTransaction.sentAt = moment().format()
+      senderTransaction.transactionHash = transactionHash
+      senderTransaction.isPending = true
+
+      await senderTransaction.populateExchange()
+
+      const senderTxs = this.flattedPendingTransactions.filter(
+        (it) => it.transactionHash !== transactionHash
+      )
+
+      this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
+        senderTxs
+      )
+    }
   }
 
   async addPendingUnclaimedGasTransaction(
     amount: number,
-    transactionHash: string
+    transactionHash: string,
+    claimedToken: string,
+    claimedTokenHash: string
   ) {
     const senderTx = new SenderTransaction()
     senderTx.senderAddress = 'claim'
     senderTx.receiverAddress = this.address
-    senderTx.sentAt = Facade.moment().format()
+    senderTx.sentAt = moment().format()
     senderTx.transactionHash = transactionHash
     senderTx.isPending = true
-    senderTx.token = new TokenAsset('GAS', 'GAS', Facade.app.gasHash)
+    senderTx.token = new TokenAsset(
+      claimedToken,
+      claimedToken,
+      claimedTokenHash,
+      this.blockchain
+    )
     senderTx.token.amount = amount
 
     await senderTx.populateExchange()
@@ -388,5 +395,14 @@ export class Account implements AccountState {
   }
   clearTransactions() {
     this.transactions = []
+  }
+
+  adaptToMultichain() {
+    if (!this.blockchain) {
+      this.blockchain = 'neoLegacy'
+    }
+    if (!this.srcIcon) {
+      this.srcIcon = logoDefault
+    }
   }
 }

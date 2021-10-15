@@ -1,17 +1,17 @@
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {useDispatch} from 'react-redux'
 
+import {wrapper} from '~/src/app/ApplicationWrapper'
 import {ThemedFlatButton} from '~/src/components/themed/ThemedFlatButton'
 import {Security} from '~/src/enums/Security'
-import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-
 interface Props {
   navigation: StackNavigationProp<RootStackParamList>
 }
@@ -20,14 +20,14 @@ export default function LoginPage(props: Props) {
   const dispatch = useDispatch()
 
   const continueButton = async () => {
-    props.navigation.replace(Facade.route.Tab.name, {
-      screen: Facade.route.Settings.name,
+    props.navigation.replace(wrapper.route.Tab.name, {
+      screen: wrapper.route.Settings.name,
       welcomeHidden: true,
       changelogHidden: true,
       params: {
-        screen: Facade.route.SettingsPage.name,
+        screen: wrapper.route.SettingsPage.name,
         params: {
-          initialRoute: Facade.route.SecurityModal.name,
+          initialRoute: wrapper.route.SecurityModal.name,
         },
       },
     })
@@ -49,7 +49,7 @@ export default function LoginPage(props: Props) {
           source={require('~/src/assets/images/logo-small.png')}
         />
         <TextView color={'text.0'} fontSize={31} letterSpacing={3.29}>
-          {Facade.t('login.brand')}
+          {i18n.t('login.brand')}
         </TextView>
       </LinearLayout>
 
@@ -64,7 +64,7 @@ export default function LoginPage(props: Props) {
           textAlign={'center'}
           fontFamily={'semibold'}
         >
-          {Facade.t('login.title')}
+          {i18n.t('login.title')}
         </TextView>
 
         <TextView
@@ -73,7 +73,7 @@ export default function LoginPage(props: Props) {
           letterSpacing={0.2}
           textAlign={'center'}
         >
-          {Facade.t('login.body')}
+          {i18n.t('login.body')}
         </TextView>
         <LinearLayout
           weight={1}
@@ -84,7 +84,7 @@ export default function LoginPage(props: Props) {
 
         <LinearLayout width={'100%'}>
           <ThemedFlatButton
-            text={Facade.t('login.continue')}
+            text={i18n.t('login.continue')}
             onPress={continueButton}
           />
         </LinearLayout>
@@ -101,7 +101,7 @@ export default function LoginPage(props: Props) {
             dispatch(RootStore.settings.actions.setSecurity(Security.disabled))
             dispatch(RootStore.settings.actions.save())
             Storage.welcomeToNWSeen.save(true)
-            props.navigation.replace(Facade.route.Tab.name, undefined)
+            props.navigation.replace(wrapper.route.Tab.name, undefined)
           }}
         >
           <TextView
@@ -111,7 +111,7 @@ export default function LoginPage(props: Props) {
             letterSpacing={1.93}
             textAlign={'center'}
           >
-            {Facade.t('login.skip')}
+            {i18n.t('login.skip')}
           </TextView>
         </TouchableWithoutFeedback>
 

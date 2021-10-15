@@ -23,7 +23,9 @@
     "close": "Close",
     "send": "Send",
     "done": "Done",
-    "copyToClipboard": "Copy to clipboard"
+    "copyToClipboard": "Copy to clipboard",
+    "add": "Add",
+    "createNow": "Create Now"
   },
   "routes": {
     "GetWallet": "Wallet",
@@ -203,15 +205,16 @@
   },
   "importKey": {
     "enterAnAddress": "Enter an address, encrypted key, private key or mnemonic words",
-    "alertText": "It looks like you're creating a watch account, is this correct?",
-    "accountAlreadyExists": "This account already exists",
+    "alertText": "Sorry, you cannot import a public address, but you can create a watch account, would you like to do this now?",
+    "accountAlreadyExists": "The account: %{account} already exists",
     "ok": "Ok",
     "alertCancelButton": "No",
     "alertConfirmButton": "Yes",
     "mnemonicComplete": "Mnemonic complete",
     "mnemonicIncorrect": "Mnemonic incorrect",
     "areImportingMnemonic": "Looks like you are importing a mnemonic",
-    "areWatchAccount": "Looks like you are importing a watch account"
+    "areWatchAccount": "Looks like you are importing a watch account",
+    "mnemonicAlreadyExists": "The mnemonic: %{mnemonic} already exists"
   },
   "passphrase": {
     "enterPassphrase": "Enter a Passphrase for your encrypted key",
@@ -220,6 +223,7 @@
   },
   "importReadAccount": {
     "headerText": "Enter an address you would like to watch.\nPlease be aware that you will not be able to perform send transactions from this account.",
+    "headerText2": "Select the correct account from the list below",
     "inputPlaceholder": "Please enter information",
     "disabledFeature": "Function lorem ipsum sid dolar",
     "add": "Add",
@@ -431,7 +435,7 @@
         "priority": "Priority",
         "sender": "Sent from",
         "recipient": "Recipient",
-        "priorityFee":"Priority Fee",
+        "priorityFee":"%{tokenSymbol} Fee",
         "feeAmount": "(Fee %{amount})",
         "pleaseReview": "Please review transaction",
         "dialog": {
@@ -524,6 +528,20 @@
       "keepTip": "Keep Tip",
       "recommended": "(Recommended)",
       "removeTip": "Remove Tip"
+    },
+    "blockchainList":{
+      "accountPage": {
+        "title": "Add new account",
+        "subtitle": "Select the desired blockchain for your new account"
+      },
+      "walletPage": {
+        "title": "Create Wallet",
+        "subtitle": "Please select which account types you require in your wallet"
+      },
+      "xExisting": "%{amount} existing",
+      "countAccount": "Account %{count}",
+      "typeAccount": "%{type} Account",
+      "encryptedWallet": "Encrypted Wallet"
     }
   },
   "components": {
@@ -644,5 +662,19 @@
     "priorityFast": "Fast",
     "priorityFaster": "Faster",
     "priorityFastest": "Fastest"
+  },
+  "blockchainServices":{
+    "neo3":{
+      "label": "NEO",
+      "id": "Neo N3"
+    },
+    "neoLegacy": {
+      "label": "Neo Legacy",
+      "id":"Neo Legacy"
+    },
+    "errorMessages": {
+      "keyWrongOrAddressesImported": "Encrypted key is not valid or all address has been imported",
+      "blockchainNotFound": "Blockchain not found"
+    }
   }
 }

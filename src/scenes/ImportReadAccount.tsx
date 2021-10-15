@@ -1,115 +1,202 @@
-import {wallet} from '@cityofzion/neon-core'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import React, {useState, useEffect} from 'react'
+import {Await, AwaitActivity} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
+import React, {useState, useCallback, useEffect} from 'react'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+import ScreenLoader from '../components/loader/ScreenLoader'
+import {applicationConfig} from '../config/ApplicationConfig'
+import {RootStackParamList} from '../navigation/AppNavigation'
+import {WalletStackParamList} from '../navigation/WalletsStackNavigation'
+
+import {
+  BlockchainServiceKey,
+  getBlockchainByAddress,
+  validateAddressAllBlockchains,
+  blockchainList,
+} from '~src/blockchain'
+import AddressesImportList from '~src/components/AddressesImportList'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {useWalletHook, useAccountHook} from '~src/hooks'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootState} from '~src/store/RootStore'
-import {LinearLayout, TextView, ImageView} from '~src/styles/styled-components'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface ImportReadAccountParams {
   address?: string
 }
 
 interface ImportReadAccountProps {
-  navigation: StackNavigationProp<MoreStackParamList>
+  navigation: StackNavigationProp<
+    MoreStackParamList & WalletStackParamList & RootStackParamList
+  >
   route: RouteProp<MoreStackParamList, 'ImportReadAccount'>
 }
 
 const ImportReadAccount = (props: ImportReadAccountProps) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const [inputValue, setInputValue] = useState(
     props.route.params ? props.route.params.address ?? '' : ''
   )
   const [errorMessage, setErrorMessage] = useState(
-    Facade.t('components.inputTextWithValidation.incorrectFormat')
+    i18n.t('components.inputTextWithValidation.incorrectFormat')
   )
   const [canAddAccount, setCanAddAccount] = useState(false)
+  const [addressesList, setAddressesList] = useState<
+    {address: string; blockchain: BlockchainServiceKey}[]
+  >([])
+  const [addressesListSelected, setAddressesListSelected] = useState<
+    {address: string; blockchain: BlockchainServiceKey}[]
+  >([])
   const accounts = useSelector((state: RootState) => state.app.accounts)
   const {isConnected} = useSelector((state: RootState) => state.network)
-  const persist = () => {
+  const {createWallet} = useWalletHook()
+  const {createWatchAccount} = useAccountHook()
+  const persist = async () => {
     if (!isValid()) {
       return
     }
-
-    props.navigation.navigate(Facade.route.CustomizeAccount.name, {
-      source: Facade.route.ImportReadAccount.name,
-      address: inputValue,
+    const blockchainName = getBlockchainByAddress(inputValue)
+    if (!blockchainName) return
+    const mnemonic = applicationConfig.blockchain[
+      blockchainName
+    ].generateMnemonic()
+    if (!Array.isArray(mnemonic)) {
+      throw new Error(
+        i18n.t('importKey.mnemonicAlreadyExists', {
+          mnemonic,
+        })
+      )
+    }
+    const idWallet = await createWallet(
+      'Watch Account',
+      mnemonic.join(','),
+      'watch'
+    )
+    for (const addressInfo of addressesListSelected) {
+      await createWatchAccount(
+        idWallet,
+        `${i18n.t(
+          `blockchainServices.${addressInfo.blockchain}.label`
+        )} ${i18n.t('modals.blockchainList.typeAccount', {type: 'Watch'})}`,
+        addressInfo.address,
+        addressInfo.blockchain
+      )
+    }
+    props.navigation.replace(wrapper.route.Tab.name, {
+      welcomeHidden: true,
+      changelogHidden: true,
+      screen: wrapper.route.ListWallets.name,
     })
   }
 
   const isValid = () => {
-    const conditions: boolean[] = [wallet.isAddress(inputValue)]
+    const conditions: boolean[] = [validateAddressAllBlockchains(inputValue)]
 
     return conditions.every((it) => it)
   }
 
+  const handleChangeAddressesListSelected = useCallback(
+    (
+      addressInfoSelected: {
+        address: string
+        blockchain: BlockchainServiceKey
+      }[]
+    ) => {
+      setAddressesListSelected(addressInfoSelected)
+    },
+    [addressesListSelected]
+  )
+
   function validateInput() {
-    let isInputValid = wallet.isAddress(inputValue)
+    let isInputValid = validateAddressAllBlockchains(inputValue)
     if (!isInputValid) {
       setErrorMessage(
-        Facade.t('components.inputTextWithValidation.incorrectFormat')
+        i18n.t('components.inputTextWithValidation.incorrectFormat')
       )
     } else if (accounts.find((account) => account.address === inputValue)) {
       // don't allow to include if the account was already added
       isInputValid = false
-      setErrorMessage(Facade.t('importReadAccount.accountAlreadyExists'))
+      setErrorMessage(i18n.t('importReadAccount.accountAlreadyExists'))
     }
     setCanAddAccount(isInputValid)
     return isInputValid
   }
 
+  useEffect(() => {
+    for (const blockchain of blockchainList) {
+      const addressIsValid = applicationConfig.blockchain[
+        blockchain
+      ].validateAddress(inputValue)
+      if (addressIsValid) {
+        setAddressesList([...addressesList, {address: inputValue, blockchain}])
+      }
+    }
+  }, [inputValue])
+
   return (
     <ScreenLayout useHeaderPadding={true}>
-      <LinearLayout orientation="verti" width="100%" height="100%">
-        <TextView
-          textAlign="center"
-          fontSize={18}
-          fontWeight={400}
-          color={theme.colors.text[0]}
-          alignSelf="center"
-          flexWrap="wrap"
-          mx={40}
-          mt={4}
-          mb={6}
-        >
-          {Facade.t('importReadAccount.headerText')}
-        </TextView>
-
-        <InputWithValidation
-          onChangeText={(text) => setInputValue(text)}
-          color={theme.colors.text[0]}
-          invalidColor={theme.colors.background[3]}
-          value={inputValue}
-          validator={() => validateInput() || !inputValue}
-          separatorColor={theme.colors.background[5]}
-          invalidSeparatorColor={theme.colors.quinary}
-          invalidMessageColor={theme.colors.quinary}
-          invalidMessage={errorMessage}
-        />
-
-        {canAddAccount && (
-          <LinearLayout
-            width="90%"
-            flex={1}
+      <AwaitActivity name="importWatchAccount" loadingView={<ScreenLoader />}>
+        <LinearLayout orientation="verti" width="100%" height="100%">
+          <TextView
+            textAlign="center"
+            fontSize={18}
+            fontWeight={400}
+            color={theme.colors.text[0]}
             alignSelf="center"
-            justifyContent={'flex-end'}
-            mb={!isConnected ? '14%' : '10px'}
+            flexWrap="wrap"
+            mx={40}
+            mt={4}
+            mb={6}
           >
-            <ThemedButton
-              label={Facade.t('importReadAccount.add')}
-              onPress={persist}
+            {i18n.t('importReadAccount.headerText')}
+          </TextView>
+
+          <InputWithValidation
+            onChangeText={(text) => setInputValue(text)}
+            color={theme.colors.text[0]}
+            invalidColor={theme.colors.background[3]}
+            value={inputValue}
+            validator={() => validateInput() || !inputValue}
+            separatorColor={theme.colors.background[5]}
+            invalidSeparatorColor={theme.colors.quinary}
+            invalidMessageColor={theme.colors.quinary}
+            invalidMessage={errorMessage}
+          />
+
+          <LinearLayout>
+            <TextView color="#7d929a" fontSize="16px" mb={5}>
+              {i18n.t('importReadAccount.headerText2')}
+            </TextView>
+            <AddressesImportList
+              addressesInfo={addressesList}
+              onSelectAddress={handleChangeAddressesListSelected}
             />
           </LinearLayout>
-        )}
-      </LinearLayout>
+
+          {canAddAccount && (
+            <LinearLayout
+              width="90%"
+              flex={1}
+              alignSelf="center"
+              justifyContent={'flex-end'}
+              mb={!isConnected ? '14%' : '10px'}
+            >
+              <ThemedButton
+                label={i18n.t('importReadAccount.add')}
+                onPress={() => Await.run('importWatchAccount', persist)}
+                disabled={addressesListSelected.length < 1}
+              />
+            </LinearLayout>
+          )}
+        </LinearLayout>
+      </AwaitActivity>
     </ScreenLayout>
   )
 }

@@ -1,10 +1,13 @@
 import {RouteProp, useNavigation, CommonActions} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React from 'react'
 import {Linking} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {Normalize} from '../app/Normalize'
+import {FilterHelper} from '../helpers/FilterHelper'
+
 import {AccountView} from '~src/components/AccountView'
 import {HeaderColumn} from '~src/components/HeaderColumn'
 import SwiperPanel, {
@@ -13,14 +16,6 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import {TokenView} from '~src/components/TokenView'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import {
-  FasterPriority,
-  FastPriority,
-  NoPriority,
-  PriorityFee,
-} from '~src/models/PriorityFee'
-import {Contact} from '~src/models/redux/Contact'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {
@@ -47,13 +42,13 @@ export const TransactionDetails = (props: Props) => {
   const wallets = useSelector((state: RootState) => state.app.wallets)
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
-  let senderName = undefined
+  let senderName: null | undefined | string = undefined
   const senderAddress = transaction.senderAddress ?? undefined
 
-  let senderWallet = undefined
-  let receiverWallet = undefined
+  let senderWallet: null | undefined | string = undefined
+  let receiverWallet: null | undefined | string = undefined
 
-  let receiverName = undefined
+  let receiverName: null | undefined | string = undefined
   const receiverAddress = transaction.receiverAddress ?? undefined
 
   const senderAccount = accounts.find(
@@ -63,7 +58,7 @@ export const TransactionDetails = (props: Props) => {
     senderWallet = senderAccount.getWallet(wallets)?.name
   } else {
     const contact = contacts.find((value) =>
-      value.addresses.find((address) => address === transaction.senderAddress)
+      value.addresses.find(({address}) => address === transaction.senderAddress)
     )
     senderName = contact?.name ?? undefined
   }
@@ -75,7 +70,9 @@ export const TransactionDetails = (props: Props) => {
     receiverWallet = receiverAccount.getWallet(wallets)?.name
   } else {
     const contact = contacts.find((value) =>
-      value.addresses.find((address) => address === transaction.receiverAddress)
+      value.addresses.find(
+        ({address}) => address === transaction.receiverAddress
+      )
     )
     receiverName = contact?.name ?? undefined
   }
@@ -97,21 +94,21 @@ export const TransactionDetails = (props: Props) => {
       >
         <LinearLayout orientation={'horiz'}>
           <HeaderColumn
-            title={Facade.t('transactionDetails.time').toUpperCase()}
+            title={i18n.t('transactionDetails.time').toUpperCase()}
             value={transaction.formattedTime ?? 'undefined'}
             weight={1}
           />
           <HeaderColumn
-            title={Facade.t('transactionDetails.date').toUpperCase()}
+            title={i18n.t('transactionDetails.date').toUpperCase()}
             value={transaction.formattedDate ?? 'undefined'}
             weight={1.5}
           />
           <HeaderColumn
-            title={Facade.t('transactionDetails.status').toUpperCase()}
+            title={i18n.t('transactionDetails.status').toUpperCase()}
             value={
               transaction.isPending
-                ? Facade.t('transactionDetails.pending')
-                : Facade.t('transactionDetails.confirmed')
+                ? i18n.t('transactionDetails.pending')
+                : i18n.t('transactionDetails.confirmed')
             }
             weight={1.6}
             image={require('~/src/assets/images/icon-pending-white.png')}
@@ -119,8 +116,8 @@ export const TransactionDetails = (props: Props) => {
         </LinearLayout>
         <LinearLayout orientation={'horiz'}>
           <HeaderColumn
-            title={Facade.t('transactionDetails.value').toUpperCase()}
-            value={Facade.filter.currency(
+            title={i18n.t('transactionDetails.value').toUpperCase()}
+            value={FilterHelper.currency(
               transaction.token?.exchangeToken(currency),
               currency,
               language
@@ -128,7 +125,7 @@ export const TransactionDetails = (props: Props) => {
             weight={2}
           />
           <HeaderColumn
-            title={Facade.t('transactionDetails.priorityFee').toUpperCase()}
+            title={i18n.t('transactionDetails.priorityFee').toUpperCase()}
             value={`${transaction.feeAmount?.fee ?? 0} GAS`}
             weight={1.2}
             priorityFee={transaction.feeAmount ?? undefined}
@@ -137,7 +134,7 @@ export const TransactionDetails = (props: Props) => {
         <LinearLayout orientation={'horiz'}>
           <HeaderColumn
             weight={1}
-            title={Facade.t('transactionDetails.hash').toUpperCase()}
+            title={i18n.t('transactionDetails.hash').toUpperCase()}
             value={transaction.transactionHash ?? ''}
             showCopy={true}
           />
@@ -145,7 +142,7 @@ export const TransactionDetails = (props: Props) => {
         <LinearLayout orientation={'horiz'}>
           <LinearLayout mr={2} mt={5} alignSelf={'center'}>
             <ImageView
-              width={Facade.scale(18)}
+              width={Normalize.scale(18)}
               resizeMode={'contain'}
               source={require('~src/assets/images/arrow-gray.png')}
             />
@@ -156,7 +153,7 @@ export const TransactionDetails = (props: Props) => {
             fontSize={18}
             mt={4}
           >
-            {Facade.t('transactionDetails.sender')}
+            {i18n.t('transactionDetails.sender')}
           </TextView>
         </LinearLayout>
         <AccountView
@@ -168,7 +165,7 @@ export const TransactionDetails = (props: Props) => {
         <LinearLayout orientation={'horiz'}>
           <LinearLayout mr={2} mt={5} alignSelf={'center'}>
             <ImageView
-              width={Facade.scale(18)}
+              width={Normalize.scale(18)}
               resizeMode={'contain'}
               source={require('~src/assets/images/arrow-receive-gray.png')}
             />
@@ -179,7 +176,7 @@ export const TransactionDetails = (props: Props) => {
             fontSize={18}
             mt={4}
           >
-            {Facade.t('transactionDetails.recipient')}
+            {i18n.t('transactionDetails.recipient')}
           </TextView>
         </LinearLayout>
         <AccountView
@@ -201,7 +198,7 @@ export const TransactionDetails = (props: Props) => {
                 `https://dora.coz.io/transaction/neo2/mainnet/0x${transaction.transactionHash}`
               )
             }}
-            label={Facade.t('transactionDetails.viewOnDora')}
+            label={i18n.t('transactionDetails.viewOnDora')}
             srcIcon={require('~/src/assets/images/icon-dora-green.png')}
           />
         </LinearLayout>

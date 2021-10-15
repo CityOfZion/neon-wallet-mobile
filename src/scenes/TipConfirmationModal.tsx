@@ -1,11 +1,11 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
 import React, {useState} from 'react'
 import {Button, TextComponent, View} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
 import SelectorList, {SelectorItem} from '~src/components/SelectorList'
 import SwiperPanel, {
   CloseButton,
@@ -16,16 +16,8 @@ import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {Lang} from '~src/enums/Lang'
 import {NeoURI} from '~src/helpers/UriHelper'
 import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
-import {RootStore} from '~src/store/RootStore'
-import {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface TipConfirmationModalParams {
   callback?: (arg: boolean) => void
@@ -48,7 +40,7 @@ const TipConfirmationModal = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      title={Facade.t('modals.tipping.title')}
+      title={i18n.t('modals.tipping.title')}
       fullSize={true}
       padding={16}
       onClose={setAndClose}
@@ -72,7 +64,7 @@ const TipConfirmationModal = (props: Props) => {
             alignSelf={'center'}
           />
           <TextView fontFamily="medium" fontSize="22px" color="text.0">
-            {Facade.t('modals.tipping.subtitle')}
+            {i18n.t('modals.tipping.subtitle')}
           </TextView>
         </LinearLayout>
         <TextView
@@ -82,12 +74,12 @@ const TipConfirmationModal = (props: Props) => {
           textAlign="center"
           mb="20px"
         >
-          {Facade.t('modals.tipping.description')}
+          {i18n.t('modals.tipping.description')}
         </TextView>
         <LinearLayout width="100%" alignSelf="center" mb="25px">
           <ThemedButton
-            label={Facade.t('modals.tipping.keepTip')}
-            subLabel={Facade.t('modals.tipping.recommended')}
+            label={i18n.t('modals.tipping.keepTip')}
+            subLabel={i18n.t('modals.tipping.recommended')}
             onPress={() => {
               setValue(true)
               controller.close()
@@ -98,7 +90,7 @@ const TipConfirmationModal = (props: Props) => {
         </LinearLayout>
         <LinearLayout width="100%" alignSelf="center">
           <ThemedButton
-            label={Facade.t('modals.tipping.removeTip')}
+            label={i18n.t('modals.tipping.removeTip')}
             onPress={() => {
               setValue(false)
               controller.close()

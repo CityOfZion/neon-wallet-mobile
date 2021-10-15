@@ -9,10 +9,8 @@ import {Theme} from '~src/enums/Theme'
 import {Settings} from '~src/models/redux/Settings'
 import {CurrencyDispatcher} from '~src/store/settings/dispatchers/CurrencyDispatcher'
 import {LanguageDispatcher} from '~src/store/settings/dispatchers/LanguageDispatcher'
-import {NetworkDispatcher} from '~src/store/settings/dispatchers/NetworkDispatcher'
 import {SecurityDispatcher} from '~src/store/settings/dispatchers/SecurityDispatcher'
 import {ThemeDispatcher} from '~src/store/settings/dispatchers/ThemeDispatcher'
-import {NetworkOptions} from '~src/types/settings'
 
 export class SettingsReducer extends ReducerWrapper<
   SettingsActionsType,
@@ -25,7 +23,6 @@ export class SettingsReducer extends ReducerWrapper<
     LanguageDispatcher,
     CurrencyDispatcher,
     ThemeDispatcher,
-    NetworkDispatcher,
     SecurityDispatcher,
   ]
 
@@ -46,21 +43,16 @@ export class SettingsReducer extends ReducerWrapper<
       return this.commit('SET_THEME', {theme})
     },
 
-    setNetwork: (network: NetworkOptions) => {
-      return this.commit('SET_NETWORK', {network})
-    },
-
     syncSettings: (): AsyncAction<Settings> => {
       return async (dispatch, getState) => {
         const settings = await Storage.settings.load()
 
         if (settings) {
-          const {language, currency, theme, network, security} = settings
+          const {language, currency, theme, security} = settings
 
           dispatch(this.commit('SET_LANGUAGE', {language}))
           dispatch(this.commit('SET_CURRENCY', {currency}))
           dispatch(this.commit('SET_THEME', {theme}))
-          dispatch(this.commit('SET_NETWORK', {network}))
           dispatch(this.commit('SET_SECURITY', {security}))
         }
 

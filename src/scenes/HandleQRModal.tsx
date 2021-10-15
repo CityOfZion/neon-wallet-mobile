@@ -1,16 +1,20 @@
 import {CommonActions} from '@react-navigation/native'
+import i18n from 'i18n-js'
 import React from 'react'
-import {ImageSourcePropType, TouchableWithoutFeedback} from 'react-native'
+import {ImageLoadEventData, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+import {Normalize} from '../app/Normalize'
+
 import SwiperPanel, {SwiperController} from '~src/components/SwiperPanel'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+
 interface ListItem {
   title: string
   subtitle: string
-  source: ImageSourcePropType
+  source: ImageLoadEventData
   onClick: () => void
 }
 
@@ -22,20 +26,20 @@ export interface Props {
 
 const HandleQRModal = (props: Props) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   const items: ListItem[] = [
     {
-      title: Facade.t('modals.handleQrCode.send.title'),
-      subtitle: Facade.t('modals.handleQrCode.send.subtitle'),
+      title: i18n.t('modals.handleQrCode.send.title'),
+      subtitle: i18n.t('modals.handleQrCode.send.subtitle'),
       source: require('~src/assets/images/icon-circle-send-primary.png'),
       onClick: () =>
         props?.onClick?.(
-          CommonActions.navigate(Facade.route.Modal.name, {
-            screen: Facade.route.SendModalStack.name,
+          CommonActions.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.SendModalStack.name,
             params: {
-              screen: Facade.route.SendWalletSelectionModal.name,
+              screen: wrapper.route.SendWalletSelectionModal.name,
               params: {
                 uri: {address: props.address},
               },
@@ -44,15 +48,15 @@ const HandleQRModal = (props: Props) => {
         ),
     },
     {
-      title: Facade.t('modals.handleQrCode.watch.title'),
-      subtitle: Facade.t('modals.handleQrCode.watch.subtitle'),
+      title: i18n.t('modals.handleQrCode.watch.title'),
+      subtitle: i18n.t('modals.handleQrCode.watch.subtitle'),
       source: require('~src/assets/images/icon-cicle-watch-primary.png'),
       onClick: () =>
         props?.onClick?.(
-          CommonActions.navigate(Facade.route.Tab.name, {
-            screen: Facade.route.More.name,
+          CommonActions.navigate(wrapper.route.Tab.name, {
+            screen: wrapper.route.More.name,
             params: {
-              screen: Facade.route.ImportReadAccount.name,
+              screen: wrapper.route.ImportReadAccount.name,
               initial: false,
               params: {
                 address: props.address,
@@ -62,13 +66,13 @@ const HandleQRModal = (props: Props) => {
         ),
     },
     {
-      title: Facade.t('modals.handleQrCode.contact.title'),
-      subtitle: Facade.t('modals.handleQrCode.contact.subtitle'),
+      title: i18n.t('modals.handleQrCode.contact.title'),
+      subtitle: i18n.t('modals.handleQrCode.contact.subtitle'),
       source: require('~src/assets/images/icon-cicle-contacts-primary.png'),
       onClick: () =>
         props?.onClick?.(
-          CommonActions.navigate(Facade.route.Modal.name, {
-            screen: Facade.route.PersistContact.name,
+          CommonActions.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.PersistContact.name,
             params: {
               addingContact: true,
               startingAddress: props.address,
@@ -124,8 +128,8 @@ const HandleQRModal = (props: Props) => {
       </LinearLayout>
       <LinearLayout
         position={'absolute'}
-        right={Facade.scale(-18)}
-        top={Facade.scale(3)}
+        right={Normalize.scale(-18)}
+        top={Normalize.scale(3)}
       >
         <ThemedCloseButton
           iconSize={[18, 27]}

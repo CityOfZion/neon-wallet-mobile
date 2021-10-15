@@ -1,8 +1,8 @@
+import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React, {Fragment} from 'react'
-import {Platform, TouchableOpacity} from 'react-native'
+import {TouchableOpacity} from 'react-native'
 
-import {Facade} from '~src/app/Facade'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
@@ -111,7 +111,7 @@ const Keypad = (props: Props) => {
       text: undefined,
     },
   ]
-  const keypad = Facade.lodash.chunk(keyArray, 3)
+  const keypad = _.chunk(keyArray, 3)
 
   return (
     <Fragment>

@@ -1,15 +1,17 @@
 import {RouteProp} from '@react-navigation/native'
+import i18n from 'i18n-js'
 import React, {useState, useEffect} from 'react'
 import {View} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 
+import {wrapper} from '../app/ApplicationWrapper'
+import {BlockchainServiceKey} from '../blockchain'
 import {TokenAsset} from '../models/TokenAsset'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
-import {ImageSourcePropType} from '~/node_modules/@types/react-native'
-import {Facade} from '~src/app/Facade'
+import {Await, AwaitActivity} from '~/node_modules/@simpli/react-native-await'
+import {ImageLoadEventData} from '~/node_modules/@types/react-native'
 import AccountCard from '~src/components/AccountCard'
 import ColorSelector from '~src/components/ColorSelector'
 import InputLabel from '~src/components/InputLabel'
@@ -18,19 +20,17 @@ import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import {Currency} from '~src/enums/Currency'
 import {Account} from '~src/models/redux/Account'
-import {Wallet} from '~src/models/redux/Wallet'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-
 export interface CustomizeAccountParams {
   address: string
   source: keyof MoreStackParamList
   legacy?: boolean
   wif?: string
+  blockchain: BlockchainServiceKey
 }
 
 interface Props {
@@ -40,7 +40,7 @@ interface Props {
 
 interface ContentParams {
   title: string
-  icon?: ImageSourcePropType
+  icon?: ImageLoadEventData
   subtitle: string
 }
 
@@ -54,7 +54,7 @@ export const getRandomColor = (max: number) => {
 
 const CustomizeAccount = (props: Props) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   const dispatch = useDispatch<DispatchResult>()
@@ -79,10 +79,11 @@ const CustomizeAccount = (props: Props) => {
     account.name = name
     account.backgroundColor = color
     account.tokenAssets = tokenAssets
+    account.blockchain = props.route.params.blockchain
   }, [account, tokenAssets])
 
   useEffect(() => {
-    Facade.await.run('customizeAccount', populateTokenAssets)
+    Await.run('customizeAccount', populateTokenAssets)
   }, [isConnected])
 
   const populateTokenAssets = async () => {
@@ -109,12 +110,12 @@ const CustomizeAccount = (props: Props) => {
 
   const contentMap: ContentCollection = {
     ImportKey: {
-      title: Facade.route.ImportKey.translate(),
-      subtitle: Facade.t('screens.customizeAccount.subtitle.importKey'),
+      title: wrapper.route.ImportKey.translate(),
+      subtitle: i18n.t('screens.customizeAccount.subtitle.importKey'),
     },
     ImportReadAccount: {
-      title: Facade.route.ImportReadAccount.translate(),
-      subtitle: Facade.t('screens.customizeAccount.subtitle.importReadAccount'),
+      title: wrapper.route.ImportReadAccount.translate(),
+      subtitle: i18n.t('screens.customizeAccount.subtitle.importReadAccount'),
     },
   }
 
@@ -128,12 +129,12 @@ const CustomizeAccount = (props: Props) => {
     const importedAccount = await createAccount(walletId)
 
     dispatch(RootStore.account.actions.selectAccount(importedAccount.address))
-    props.navigation.replace(Facade.route.Tab.name, {
+    props.navigation.replace(wrapper.route.Tab.name, {
       welcomeHidden: true,
       changelogHidden: true,
-      screen: Facade.route.ListWallets.name,
+      screen: wrapper.route.ListWallets.name,
       params: {
-        screen: Facade.route.GetAccount.name,
+        screen: wrapper.route.GetAccount.name,
         initial: false,
       },
     })
@@ -162,13 +163,15 @@ const CustomizeAccount = (props: Props) => {
   const createAccount = async (walletId: string) => {
     const wif = props.route.params.wif
     const address = account.address
-
+    const {blockchain: blockchainName} = props.route.params
     if (!address) throw new Error('Address not defined')
 
     dispatch(RootStore.account.actions.setIdWallet(walletId))
     dispatch(RootStore.account.actions.setName(name))
     dispatch(RootStore.account.actions.setBackgroundColor(color))
     dispatch(RootStore.account.actions.setTokenAssets(tokenAssets))
+    dispatch(RootStore.account.actions.setBlockchain(blockchainName))
+
     const importedAccount = await dispatchAsyncAccount(
       RootStore.account.actions.importAndSave(address, wif)
     )
@@ -190,7 +193,7 @@ const CustomizeAccount = (props: Props) => {
       return
     }
 
-    Facade.await.run('customizeAccount', submit, 300)
+    Await.run('customizeAccount', submit, 300)
   }
 
   // TODO: NW-216
@@ -202,7 +205,7 @@ const CustomizeAccount = (props: Props) => {
       }),
     headerRight: () =>
       HeaderActionButton({
-        actionTitle: Facade.t('screens.customizeAccount.navigation.save'),
+        actionTitle: i18n.t('screens.customizeAccount.navigation.save'),
         actionButtonStyle: !name ? 'hightlightdisabled' : 'highlight',
         actionOnPress: () => !saving && save(),
       }),
@@ -226,7 +229,7 @@ const CustomizeAccount = (props: Props) => {
             {contentMap[props.route.params.source]?.subtitle ?? ''}
           </TextView>
           <InputLabel
-            title={Facade.t('screens.customizeAccount.preview')}
+            title={i18n.t('screens.customizeAccount.preview')}
             capitalize={true}
             marginBottom="24px"
           />
@@ -238,7 +241,7 @@ const CustomizeAccount = (props: Props) => {
           />
 
           <InputLabel
-            title={Facade.t('screens.customizeAccount.accountInput.title')}
+            title={i18n.t('screens.customizeAccount.accountInput.title')}
             capitalize={true}
             marginTop="48px"
             marginBottom="10px"
@@ -247,7 +250,7 @@ const CustomizeAccount = (props: Props) => {
             <InputWithValidation
               value={name}
               validator={(text) => !(showInvalid && !text)}
-              placeholder={Facade.t(
+              placeholder={i18n.t(
                 'screens.customizeAccount.accountInput.placeholder'
               )}
               onChangeText={setName}
@@ -265,7 +268,7 @@ const CustomizeAccount = (props: Props) => {
           </View>
 
           <InputLabel
-            title={Facade.t('screens.customizeAccount.selectColor')}
+            title={i18n.t('screens.customizeAccount.selectColor')}
             capitalize={true}
             marginTop="12px"
             marginBottom="24px"

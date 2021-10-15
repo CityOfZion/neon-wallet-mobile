@@ -1,7 +1,6 @@
 import React from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 
-import {Facade} from '~src/app/Facade'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export const ThemedFlatButton = (props: {

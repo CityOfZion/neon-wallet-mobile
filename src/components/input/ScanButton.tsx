@@ -1,7 +1,8 @@
+import i18n from 'i18n-js'
 import React from 'react'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
 import {
   ButtonView,
   ImageView,
@@ -11,7 +12,7 @@ import {
 
 export const ScanButton = (props: {onPress: () => any; disabled?: boolean}) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   return (
     <LinearLayout>
@@ -38,7 +39,7 @@ export const ScanButton = (props: {onPress: () => any; disabled?: boolean}) => {
             fontFamily="semibold"
             fontSize={16}
           >
-            {Facade.t('components.inputTextWithValidation.scan')}
+            {i18n.t('components.inputTextWithValidation.scan')}
           </TextView>
         </LinearLayout>
       </ButtonView>

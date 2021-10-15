@@ -3,7 +3,8 @@ import React, {Fragment, useEffect, useRef, useState} from 'react'
 import {Animated, Easing, LayoutChangeEvent} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {UtilsHelper} from '../helpers/UtilsHelper'
+
 import AccountCard from '~src/components/AccountCard'
 import ThemedShadowContainer from '~src/components/themed/ThemedShadowContainer'
 import {Currency} from '~src/enums/Currency'
@@ -17,6 +18,7 @@ import styled, {
   TextView,
 } from '~src/styles/styled-components'
 import {Exchange} from '~src/types/exchange'
+
 interface Props {
   wallet: Wallet
   width?: number
@@ -104,15 +106,10 @@ const WalletLabel = (props: {wallet: Wallet; canBeInactive?: boolean}) => {
   )
 }
 
-const AssetBarFillsComponent = (props: {
-  wallet: Wallet
-  currency: Currency
-  exchange: Exchange
-}) => {
-  const totalBalance = props.wallet.calculateBalance(
-    props.currency,
-    props.exchange
-  )
+const AssetBarFillsComponent = (props: {wallet: Wallet}) => {
+  const {currency} = useSelector((state: RootState) => state.settings)
+  const {exchange} = useSelector((state: RootState) => state.app)
+  const totalBalance = props.wallet.calculateBalance(currency, exchange)
 
   return (
     <Fragment>
@@ -120,13 +117,13 @@ const AssetBarFillsComponent = (props: {
         .filter((token) => {
           return (
             (Math.round(totalBalance * 100) &&
-              token.exchangeToken(props.currency, props.exchange)) ??
+              token.exchangeToken(currency, exchange[token.blockchain])) ??
             0
           )
         })
         .map((token, i) => {
           const tokenBalance =
-            token.exchangeToken(props.currency, props.exchange) ?? 0
+            token.exchangeToken(currency, exchange[token.blockchain]) ?? 0
           const weight = Math.round((tokenBalance / totalBalance) * 100)
 
           return (
@@ -242,7 +239,7 @@ const WalletCard: React.FC<Props> = (props) => {
         useNativeDriver: true,
       }).start(async () => {
         if (props.onPress) props.onPress()
-        await Facade.utils.sleep(500)
+        await UtilsHelper.sleep(500)
         posYFactor.current.setValue(0)
       })
     }
@@ -324,11 +321,7 @@ const WalletCard: React.FC<Props> = (props) => {
               orientation={'horiz'}
             >
               {(!props.wallet.isInactive || !props.canBeInactive) && (
-                <AssetBarFillsComponent
-                  wallet={props.wallet}
-                  currency={currency}
-                  exchange={exchange}
-                />
+                <AssetBarFillsComponent wallet={props.wallet} />
               )}
             </AssetsBar>
           </RelativeLayout>

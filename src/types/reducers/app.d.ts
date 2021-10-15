@@ -2,12 +2,11 @@ import {Action} from 'redux'
 import {ReducerApplied} from '@simpli/redux-wrapper'
 import {Wallet} from '~src/models/redux/Wallet'
 import {Account} from '~src/models/redux/Account'
-import {Exchange} from '~src/types/exchange'
+import {Exchange, MultichainExchange} from '~src/types/exchange'
 import {Contact} from '~src/models/redux/Contact'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
-import {NeoNode} from '~src/models/NeoNode'
-
+import {Node} from '~src/models/Node'
 export declare global {
   type AppActionsType =
     | 'SET_EXCHANGE'
@@ -20,13 +19,12 @@ export declare global {
     | 'SET_PRE_ACCOUNT_CREATE'
 
   interface AppState {
-    exchange: Exchange
+    exchange: MultichainExchange
     tokens: TokenAsset[]
-    nodes: NeoNode[]
+    nodes: Node[]
     wallets: Wallet[]
     accounts: Account[]
     contacts: Contact[]
-    preAccount: Account | null
   }
 
   type AppAction = AppState & Action<AppActionsType>

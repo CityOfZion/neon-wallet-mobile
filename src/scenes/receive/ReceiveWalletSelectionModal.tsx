@@ -1,11 +1,12 @@
 import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React, {useState} from 'react'
 import {ScrollView, Dimensions} from 'react-native'
 import {useSelector, useDispatch} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
 import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import WalletPicker from '~src/components/misc/WalletPicker'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -23,7 +24,7 @@ const ReceiveWalletSelectionModal = (props: Props) => {
   const show = useNavigationState(
     (state) =>
       state.routes[state.routes.length - 1].name ===
-      Facade.route.ReceiveWalletSelectionModal.name
+      wrapper.route.ReceiveWalletSelectionModal.name
   )
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
 
@@ -61,7 +62,7 @@ const ReceiveWalletSelectionModal = (props: Props) => {
             textAlign="center"
             style={{marginBottom: Dimensions.get('screen').height * 0.05}}
           >
-            {Facade.t('modals.receive.walletSelection.subtitle')}
+            {i18n.t('modals.receive.walletSelection.subtitle')}
           </TextView>
 
           <WalletPicker
@@ -69,7 +70,7 @@ const ReceiveWalletSelectionModal = (props: Props) => {
             onSelect={setSelectedWallet}
             onPress={(wallet) =>
               props.navigation.navigate(
-                Facade.route.ReceiveAccountSelectionModal.name,
+                wrapper.route.ReceiveAccountSelectionModal.name,
                 {
                   wallet,
                 }

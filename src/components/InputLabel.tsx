@@ -1,7 +1,8 @@
 import React from 'react'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+
 import {TextView} from '~src/styles/styled-components'
 
 const InputLabel = (props: {
@@ -15,7 +16,7 @@ const InputLabel = (props: {
   lightText?: boolean
 }) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const marginBottom = props.marginBottom ?? 0
   const marginTop = props.marginTop ?? 1

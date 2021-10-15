@@ -18,3 +18,5 @@ export class LocaleConfig {
     [Lang.PT_BR]: require('~src/locales/pt-BR/lang.json'),
   }
 }
+
+export const localeConfig = new LocaleConfig()

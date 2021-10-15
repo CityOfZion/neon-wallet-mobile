@@ -1,7 +1,5 @@
-import {wallet} from '~/node_modules/@cityofzion/neon-core'
-import {Config} from '~src/app/Config'
+import {validateAddressAllBlockchains} from '~src/blockchain'
 import {TokenAsset} from '~src/models/TokenAsset'
-
 export const SCHEME = 'neo:'
 
 // URI interface
@@ -36,7 +34,7 @@ export abstract class UriHelper {
   static isValid(str: string) {
     return (
       str.startsWith(SCHEME) &&
-      wallet.isAddress(str.substr(SCHEME.length).split('?')[0])
+      validateAddressAllBlockchains(str.substr(SCHEME.length).split('?')[0])
     )
   }
 
@@ -55,11 +53,6 @@ export abstract class UriHelper {
       const params = substrings[1].split('&')
 
       tokenHash = this._getParam(params, 'asset')
-      // Changes asset to hash
-      if (tokenHash?.toUpperCase() === 'NEO')
-        tokenHash = Config.application.neoHash
-      if (tokenHash?.toUpperCase() === 'GAS')
-        tokenHash = Config.application.gasHash
 
       amount = this._getParam(params, 'amount')
       reference = this._getParam(params, 'remark')

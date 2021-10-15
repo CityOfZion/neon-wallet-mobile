@@ -2,7 +2,8 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import Carousel from 'react-native-snap-carousel'
 
-import {Facade} from '~src/app/Facade'
+import {Normalize} from '~/src/app/Normalize'
+import {applicationConfig} from '~/src/config/ApplicationConfig'
 import AccountCard from '~src/components/AccountCard'
 import {Account} from '~src/models/redux/Account'
 import {LinearLayout} from '~src/styles/styled-components'
@@ -34,8 +35,8 @@ const AccountPicker: React.FC<Props> = (props: Props) => {
     <Carousel<Account>
       layout={'default'}
       data={accounts}
-      sliderWidth={Facade.app.windowWidth}
-      itemWidth={Facade.scale(Facade.app.windowWidth - 40) as number}
+      sliderWidth={applicationConfig.windowWidth}
+      itemWidth={Normalize.scale(applicationConfig.windowWidth - 40) as number}
       inactiveSlideScale={0.9}
       inactiveSlideOpacity={1}
       inactiveSlideShift={12}

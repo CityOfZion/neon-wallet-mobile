@@ -1,12 +1,15 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import {AwaitActivity} from '@simpli/react-native-await'
+import {Await, AwaitActivity} from '@simpli/react-native-await'
 import * as Print from 'expo-print'
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, {useEffect, useState} from 'react'
 import {Alert} from 'react-native'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {Normalize} from '~/src/app/Normalize'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
@@ -42,7 +45,7 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
   const seeds = words.join(' ')
 
   useEffect(() => {
-    Facade.await.run('populateStep1', populate)
+    Await.run('populateStep1', populate)
   }, [wallet.id])
 
   const populate = async () => {
@@ -56,12 +59,12 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
   props.navigation.setOptions({
     headerRight: () =>
       HeaderActionButton({
-        actionTitle: Facade.t('app.cancel'),
+        actionTitle: i18n.t('app.cancel'),
         actionButtonStyle: 'highlight',
         actionOnPress: () => {
           props.navigation.reset({
             index: 0,
-            routes: [{name: Facade.route.SettingsPage.name}],
+            routes: [{name: wrapper.route.SettingsPage.name}],
           })
         },
       }),
@@ -69,13 +72,13 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
 
   const infoDialog = () => {
     Alert.alert(
-      Facade.t('step1BackupWallet.dialog_title'),
-      Facade.t('step1BackupWallet.dialog_body'),
+      i18n.t('step1BackupWallet.dialog_title'),
+      i18n.t('step1BackupWallet.dialog_body'),
       [
         {
-          text: Facade.t('step1BackupWallet.dialog_dismiss'),
+          text: i18n.t('step1BackupWallet.dialog_dismiss'),
           onPress: () =>
-            props.navigation.navigate(Facade.route.Step2BackupWallet.name, {
+            props.navigation.navigate(wrapper.route.Step2BackupWallet.name, {
               wallet,
             }),
         },
@@ -104,16 +107,16 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
                 fontSize={'lg'}
                 fontFamily={'semibold'}
               >
-                {Facade.t('step1BackupWallet.label_1')}
+                {i18n.t('step1BackupWallet.label_1')}
               </TextView>
 
               <TextView color={'text.0'} fontSize={'lg'} fontFamily={'bold'}>
-                {Facade.t('step1BackupWallet.oneOfThree')}
+                {i18n.t('step1BackupWallet.oneOfThree')}
               </TextView>
             </LinearLayout>
 
             <TextView fontFamily={'light'} color={'text.0'} fontSize={'lg'}>
-              {Facade.t('step1BackupWallet.body_1')}
+              {i18n.t('step1BackupWallet.body_1')}
             </TextView>
           </LinearLayout>
 
@@ -121,10 +124,10 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
             <ThemedCard
               rounded={false}
               contentStyle={{
-                paddingTop: Facade.scale(26),
-                paddingBottom: Facade.scale(26),
-                paddingLeft: Facade.scale(10),
-                paddingRight: Facade.scale(10),
+                paddingTop: Normalize.scale(26),
+                paddingBottom: Normalize.scale(26),
+                paddingLeft: Normalize.scale(10),
+                paddingRight: Normalize.scale(10),
               }}
             >
               <LinearLayout
@@ -147,10 +150,10 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
             justifyContent={'flex-end'}
           >
             <ThemedButton
-              onPress={() => Facade.utils.copyToClipboard(seeds ?? '')}
-              label={Facade.t('app.copy')}
+              onPress={() => UtilsHelper.copyToClipboard(seeds ?? '')}
+              label={i18n.t('app.copy')}
               srcIcon={require('~/src/assets/images/icon-copy-green.png')}
-              iconSize={[Facade.scale(25), Facade.scale(25)]}
+              iconSize={[Normalize.scale(25), Normalize.scale(25)]}
               fontSize={18}
               flat={true}
             />
@@ -161,7 +164,7 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
                   html: `<html><body><br><br>&emsp;&emsp;${seeds}</body></html>`,
                 })
               }
-              label={Facade.t('app.print')}
+              label={i18n.t('app.print')}
               srcIcon={require('~/src/assets/images/icon-print-green.png')}
               iconSize={[25, 25]}
               fontSize={18}
@@ -175,7 +178,7 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
             color={'text.0'}
             fontSize={'lg'}
           >
-            {Facade.t('step1BackupWallet.body_2')}
+            {i18n.t('step1BackupWallet.body_2')}
           </TextView>
 
           <TextView
@@ -184,14 +187,14 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
             color={'text.0'}
             fontSize={'lg'}
           >
-            {Facade.t('step1BackupWallet.body_3')}
+            {i18n.t('step1BackupWallet.body_3')}
           </TextView>
         </LinearLayout>
 
         <LinearLayout mt={5} mb={6} px={5} width={'100%'}>
           <ThemedButton
             onPress={() => infoDialog()}
-            label={Facade.t('app.continue')}
+            label={i18n.t('app.continue')}
           />
         </LinearLayout>
       </AwaitActivity>

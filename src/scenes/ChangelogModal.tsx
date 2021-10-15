@@ -1,10 +1,12 @@
 import {RouteProp, CommonActions} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
 import React, {useState} from 'react'
 
+import {wrapper} from '../app/ApplicationWrapper'
+
 import * as data from '~src/Changelog.json'
-import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import SwiperPanel, {
   CloseButton,
@@ -14,10 +16,8 @@ import Changelog from '~src/components/changelog/Changelog'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-
 type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
 export interface ChangelogModalParams {
@@ -45,18 +45,18 @@ const ChangelogModal = (props: Props) => {
       controller={controller}
       padding={20}
       fullSize={true}
-      title={Facade.t('modals.changelog.title')}
+      title={i18n.t('modals.changelog.title')}
       rightButton={<CloseButton mr={'20px'} />}
       onRightPress={() =>
         closeTo(
           // TODO: figure out a way to remove the explicity of 'undefined'
-          Facade.route.Tab.name,
+          wrapper.route.Tab.name,
           undefined
         )
       }
       onClose={() => {
         Storage.numberOfVersions.save(currentNumberOfVersions)
-        props.navigation.navigate(Facade.route.Tab.name, undefined)
+        props.navigation.navigate(wrapper.route.Tab.name, undefined)
       }}
     >
       <AwaitActivity
@@ -65,10 +65,10 @@ const ChangelogModal = (props: Props) => {
       >
         <LinearLayout orientation="verti" mr={5} pl={42} mt={5} mb={5}>
           <TextView color="white">
-            {Facade.t('modals.changelog.thankYouText')}
+            {i18n.t('modals.changelog.thankYouText')}
           </TextView>
           <TextView color="white" textAlign="right" fontFamily={'bold'}>
-            {Facade.t('modals.changelog.cozTeam')}
+            {i18n.t('modals.changelog.cozTeam')}
           </TextView>
         </LinearLayout>
         <LinearLayout orientation="verti" width="100%">

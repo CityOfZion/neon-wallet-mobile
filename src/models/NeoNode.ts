@@ -1,6 +1,4 @@
-import {Request, HttpExclude, HttpExpose} from '@simpli/serialized-request'
-
-import {Facade} from '../app/Facade'
+import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 
 @HttpExclude()
 export class NeoNode {
@@ -9,15 +7,6 @@ export class NeoNode {
 
   @HttpExpose()
   height: number | null = null
-
-  static async getAllNodes() {
-    return Facade.app.blockchainDataProvider.getAllNodes()
-  }
-
-  static async getHighestNodeUrl() {
-    const pool = await this.getAllNodes()
-    return this.getHighestNodeUrlFromPool(pool)
-  }
 
   static getHighestNodeUrlFromPool(pool: NeoNode[]) {
     const height = this.getHighestNodeHeightFromPool(pool)

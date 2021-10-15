@@ -1,9 +1,13 @@
 import {useNavigation} from '@react-navigation/native'
+import i18n from 'i18n-js'
 import React from 'react'
 import {FlatList, TouchableOpacity, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+import {Normalize} from '../app/Normalize'
+import {FilterHelper} from '../helpers/FilterHelper'
+
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {NeoURI} from '~src/helpers/UriHelper'
@@ -12,6 +16,7 @@ import {Account} from '~src/models/redux/Account'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {Exchange} from '~src/types/exchange'
+
 interface Props extends LinearLayoutProps {
   tokenAssets: TokenAsset[]
   fromAccountView: boolean
@@ -59,8 +64,8 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
       ) : (
         <ImageView
           mr={'8px'}
-          width={Facade.scale(24)}
-          height={Facade.scale(24)}
+          width={Normalize.scale(24)}
+          height={Normalize.scale(24)}
           resizeMode={'contain'}
           alginSelf={'center'}
           source={props.item.srcIcon}
@@ -92,7 +97,7 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
             ellipsizeMode="tail"
             mr={4}
           >
-            {Facade.t('components.balanceList.holdings')}
+            {i18n.t('components.balanceList.holdings')}
           </TextView>
           <TextView
             mt={1}
@@ -103,7 +108,7 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
             adjustsFontSizeToFit={true}
             numberOfLines={1}
           >
-            {Facade.t('components.balanceList.value')}
+            {i18n.t('components.balanceList.value')}
           </TextView>
         </LinearLayout>
       </LinearLayout>
@@ -136,7 +141,7 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
             adjustsFontSizeToFit={true}
             numberOfLines={1}
           >
-            {Facade.filter.currency(
+            {FilterHelper.currency(
               props.item.exchangeToken(props.currency, props.exchange),
               props.currency,
               props.language
@@ -156,7 +161,7 @@ const BalanceListItem = (props: ListProps & ItemProps & Props) => {
       {props.fromAccountView || props.fromListWalletView ? (
         <TouchableOpacity
           onPress={() =>
-            navigation?.navigate(Facade.route.AccountAssetDetail.name, {
+            navigation?.navigate(wrapper.route.AccountAssetDetail.name, {
               token: props.item,
               address: props.address,
               walletId: props.walletId,
@@ -170,7 +175,7 @@ const BalanceListItem = (props: ListProps & ItemProps & Props) => {
       ) : props.fromSendAccountSelectionModal ? (
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate(Facade.route.SendTransactionInputModal.name, {
+            navigation.navigate(wrapper.route.SendTransactionInputModal.name, {
               walletTitle: props.walletTitle,
               account: props.account,
               uri: props.uri,
@@ -194,14 +199,16 @@ const BalanceList = (props: Props) => {
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
   const orderByValue = (token1: TokenAsset, token2: TokenAsset) => {
-    const value1 = token1.exchangeToken(currency, exchange) ?? 0
-    const value2 = token2.exchangeToken(currency, exchange) ?? 0
+    const value1 =
+      token1.exchangeToken(currency, exchange[token1.blockchain]) ?? 0
+    const value2 =
+      token2.exchangeToken(currency, exchange[token2.blockchain]) ?? 0
     if (value1 < value2) return 1
     if (value1 > value2) return -1
     return 0
   }
-  const innerProps = {...props}
-  delete innerProps.tokenAssets
+  const innerProps = {...props} //@ts-ignore
+  delete innerProps.tokenAssets //@ts-ignore
   delete innerProps.fromAccountView
   delete innerProps.account
 
@@ -239,7 +246,7 @@ const BalanceList = (props: Props) => {
       {showListTokenAssets(props.tokenAssets) ? (
         <>
           <TextView color="text.2" fontSize="sm">
-            {Facade.t('components.balanceList.title')}
+            {i18n.t('components.balanceList.title')}
           </TextView>
           <FlatList<TokenAsset>
             data={getTokenAssets()}
@@ -258,7 +265,7 @@ const BalanceList = (props: Props) => {
                 address={props.address}
                 walletId={props.walletId}
                 currency={currency}
-                exchange={exchange}
+                exchange={exchange[item.blockchain]}
                 language={language}
                 walletTitle={props.walletTitle}
                 account={props.account}
@@ -272,7 +279,7 @@ const BalanceList = (props: Props) => {
         <View />
       ) : (
         <TextView my="32px" color="text.0" fontSize="18px" textAlign="center">
-          {Facade.t('components.balanceList.empty')}
+          {i18n.t('components.balanceList.empty')}
         </TextView>
       )}
     </LinearLayout>

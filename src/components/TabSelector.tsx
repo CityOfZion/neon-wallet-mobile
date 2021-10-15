@@ -1,6 +1,6 @@
 import React, {useRef, useState, useEffect} from 'react'
 import {Dimensions, View} from 'react-native'
-import {TabView, SceneMap, TabBar, ScrollPager} from 'react-native-tab-view'
+import {TabView, SceneMap, TabBar} from 'react-native-tab-view'
 
 import {ButtonView, LinearLayout, TextView} from '~src/styles/styled-components'
 

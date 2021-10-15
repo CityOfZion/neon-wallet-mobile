@@ -1,19 +1,22 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import React, {useEffect, useRef, useState} from 'react'
 import {Alert, TouchableWithoutFeedback, View, Animated} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+import {Normalize} from '../app/Normalize'
+import {FilterHelper} from '../helpers/FilterHelper'
+
 import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import WalletPicker from '~src/components/misc/WalletPicker'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
-import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -29,7 +32,7 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
-import {Exchange} from '~src/types/exchange'
+
 export interface ListWalletParams {}
 
 type Props = WalletStackParamList &
@@ -49,9 +52,7 @@ interface EmptyListProps {
 
 const WalletChangeComponent = (props: {
   wallet?: Wallet
-  currency: Currency
   language: Lang
-  exchange: Exchange
   tokenAssets: TokenAsset[]
   onPressWarning: () => void
 }) => {
@@ -71,8 +72,8 @@ const WalletChangeComponent = (props: {
     const variation =
       (await props.wallet?.getBalanceVariationFromPastExchange(
         currency,
-        exchange,
-        pastOneDay
+        pastOneDay,
+        exchange
       )) ?? 0
 
     props.wallet?.populateTokenAssets(accounts)
@@ -108,16 +109,16 @@ const WalletChangeComponent = (props: {
 
       <LinearLayout orientation={'horiz'} minHeight={56}>
         <TextView fontSize={'36px'} color={'text.0'} fontFamily={'medium'}>
-          {props.wallet.calculateBalance(props.currency, props.exchange) !== 0
+          {props.wallet.calculateBalance(currency, exchange) !== 0
             ? props.wallet.calculateBalanceFormatted(
-                props.currency,
-                props.language,
-                props.exchange
+                currency,
+                language,
+                exchange
               )
-            : Facade.filter.currency(
-                props.wallet.calculateBalance(props.currency, props.exchange),
-                props.currency,
-                props.language,
+            : FilterHelper.currency(
+                props.wallet.calculateBalance(currency, exchange),
+                currency,
+                language,
                 0,
                 0
               )}
@@ -142,7 +143,7 @@ const WalletChangeComponent = (props: {
             color={'text.2'}
             fontFamily={'semibold'}
           >
-            {Facade.t('screens.listWallets.changeInLast24hours')}
+            {i18n.t('screens.listWallets.changeInLast24hours')}
           </TextView>
 
           {variationInPercent !== undefined && (
@@ -164,7 +165,7 @@ const WalletChangeComponent = (props: {
                 : ''}
               {variationInPercent === 0
                 ? ''
-                : `${Facade.filter.decimal(variationInPercent, language, 2)}%`}
+                : `${FilterHelper.decimal(variationInPercent, language, 2)}%`}
             </TextView>
           )}
         </LinearLayout>
@@ -182,18 +183,18 @@ const EmptyListComponent: React.FC<EmptyListProps> = (props) => {
           props.navigation.reset({
             index: 0,
             routes: [
-              {name: Facade.route.Tab.name},
-              {name: Facade.route.Step1CreateWallet.name},
-              {name: Facade.route.More.name},
+              {name: wrapper.route.Tab.name},
+              {name: wrapper.route.Step1CreateWallet.name},
+              {name: wrapper.route.MorePage.name},
             ],
           })
-          navigation.navigate(Facade.route.Tab.name, {
-            screen: Facade.route.More.name,
+          navigation.navigate(wrapper.route.Tab.name, {
+            screen: wrapper.route.More.name,
             params: {
-              screen: Facade.route.Step1CreateWallet.name,
+              screen: wrapper.route.Step1CreateWallet.name,
               initial: false,
               params: {
-                source: Facade.route.WalletContextModal.name,
+                source: wrapper.route.WalletContextModal.name,
               },
             },
           })
@@ -202,7 +203,7 @@ const EmptyListComponent: React.FC<EmptyListProps> = (props) => {
         <LinearLayout
           my={6}
           orientation={'horiz'}
-          width={Facade.scale(300)}
+          width={Normalize.scale(300)}
           maxWidth={'100%'}
           alignItems={'center'}
           justifyContent={'center'}
@@ -225,7 +226,7 @@ const EmptyListComponent: React.FC<EmptyListProps> = (props) => {
             ml={3}
             fontFamily="medium"
           >
-            {Facade.t('screens.listWallets.createFirstWallet')}
+            {i18n.t('screens.listWallets.createFirstWallet')}
           </TextView>
         </LinearLayout>
       </TouchableWithoutFeedback>
@@ -277,7 +278,7 @@ const ListWalletView = (props: WalletProps) => {
 
   const pressEvent = async (wallet: Wallet) => {
     if (wallet.walletType === 'standard') {
-      props.navigation.navigate(Facade.route.GetWallet.name, {})
+      props.navigation.navigate(wrapper.route.GetWallet.name, {})
     } else {
       goToFirstAccount(wallet)
     }
@@ -291,12 +292,12 @@ const ListWalletView = (props: WalletProps) => {
         RootStore.account.actions.selectAccount(accountsFromWallet[0].address)
       )
 
-      props.navigation.navigate(Facade.route.GetAccount.name, {
-        key: Facade.route.GetAccount.name,
+      props.navigation.navigate(wrapper.route.GetAccount.name, {
+        key: wrapper.route.GetAccount.name,
       })
     } else {
       // Fall back
-      props.navigation.navigate(Facade.route.GetWallet.name, {})
+      props.navigation.navigate(wrapper.route.GetWallet.name, {})
     }
   }
 
@@ -327,9 +328,9 @@ const ListWalletView = (props: WalletProps) => {
 
   const openWarning = () =>
     Alert.alert(
-      Facade.t('screens.listWallets.incompleteBalanceWarningTitle'),
-      Facade.t('screens.listWallets.incompleteBalanceWarningText'),
-      [{text: Facade.t('screens.listWallets.incompleteBalanceWarningButton')}],
+      i18n.t('screens.listWallets.incompleteBalanceWarningTitle'),
+      i18n.t('screens.listWallets.incompleteBalanceWarningText'),
+      [{text: i18n.t('screens.listWallets.incompleteBalanceWarningButton')}],
       {cancelable: false}
     )
 
@@ -347,8 +348,8 @@ const ListWalletView = (props: WalletProps) => {
         >
           <ThemedMoreButton
             onPress={() =>
-              props.navigation.navigate(Facade.route.Modal.name, {
-                screen: Facade.route.WalletContextModal.name,
+              props.navigation.navigate(wrapper.route.Modal.name, {
+                screen: wrapper.route.WalletContextModal.name,
                 params: {wallets},
               })
             }
@@ -373,8 +374,6 @@ const ListWalletView = (props: WalletProps) => {
             {selectedWallet && (
               <Animated.View style={{opacity: fadeValue}}>
                 <WalletChangeComponent
-                  currency={currency}
-                  exchange={exchange}
                   language={language}
                   wallet={selectedWallet}
                   tokenAssets={selectedWallet.tokenAssets ?? []}
@@ -385,7 +384,7 @@ const ListWalletView = (props: WalletProps) => {
                     selectedWallet.walletType === 'standard' && (
                       <LinearLayout mb={6}>
                         <Notification
-                          text={Facade.t('screens.listWallets.noBackup')}
+                          text={i18n.t('screens.listWallets.noBackup')}
                           wallet={selectedWallet}
                           propsNavigation={props.navigation}
                         />

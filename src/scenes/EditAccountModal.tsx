@@ -1,11 +1,14 @@
 import {RouteProp} from '@react-navigation/native'
+import i18n from 'i18n-js'
 import React, {useState} from 'react'
 import {Alert, TouchableWithoutFeedback} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
+import {wrapper} from '../app/ApplicationWrapper'
+import {UtilsHelper} from '../helpers/UtilsHelper'
+
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
-import {Facade} from '~src/app/Facade'
+import {Await, AwaitActivity} from '~/node_modules/@simpli/react-native-await'
 import AccountCard from '~src/components/AccountCard'
 import ColorSelector from '~src/components/ColorSelector'
 import InputLabel from '~src/components/InputLabel'
@@ -18,7 +21,6 @@ import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore, RootState} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-
 type ParamList = ModalStackParamList & RootStackParamList & WalletStackParamList
 
 export interface EditAccountModalParam {
@@ -32,12 +34,12 @@ interface Props {
 
 const EditAccountModal = (props: Props) => {
   const tokenAssets = props.route.params.account.tokenAssets
-  const account = Facade.utils.clone(props.route.params.account)
+  const account = UtilsHelper.clone(props.route.params.account)
   account.tokenAssets = tokenAssets
   var isDeleted: boolean = false
 
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const controller = useSwiperController(true)
   const dispatch = useDispatch()
@@ -80,17 +82,17 @@ const EditAccountModal = (props: Props) => {
       return
     }
 
-    Facade.await.run('swiperRight', submit, 300)
+    Await.run('swiperRight', submit, 300)
   }
 
   const handleNavigation = () => {
     if (isDeleted) {
       props.navigation.reset({
         index: 0,
-        routes: [{name: Facade.route.Tab.name}],
+        routes: [{name: wrapper.route.Tab.name}],
       })
-      props.navigation.replace(Facade.route.ListWalletsPage.name, {})
-      props.navigation.navigate(Facade.route.GetWallet.name, {})
+      props.navigation.replace(wrapper.route.ListWalletsPage.name, {})
+      props.navigation.navigate(wrapper.route.GetWallet.name, {})
     } else {
       props.navigation.goBack()
     }
@@ -110,14 +112,14 @@ const EditAccountModal = (props: Props) => {
   const alertDelete = () => {
     Alert.alert(
       '',
-      Facade.t('modals.editAccount.deleteAccountAlert'),
+      i18n.t('modals.editAccount.deleteAccountAlert'),
       [
         {
-          text: Facade.t('modals.editAccount.navigation.cancel'),
+          text: i18n.t('modals.editAccount.navigation.cancel'),
           style: 'cancel',
         },
         {
-          text: Facade.t('modals.editAccount.navigation.delete'),
+          text: i18n.t('modals.editAccount.navigation.delete'),
           onPress: deleteAction,
         },
       ],
@@ -130,9 +132,9 @@ const EditAccountModal = (props: Props) => {
       controller={controller}
       fullSize={true}
       paddingTop={0}
-      title={Facade.t('modals.editAccount.title')}
-      leftButton={Facade.t('modals.editAccount.navigation.cancel')}
-      rightButton={Facade.t('modals.editAccount.navigation.save')}
+      title={i18n.t('modals.editAccount.title')}
+      leftButton={i18n.t('modals.editAccount.navigation.cancel')}
+      rightButton={i18n.t('modals.editAccount.navigation.save')}
       disableRightButton={!name}
       onLeftPress={() => controller.close()}
       onRightPress={save}
@@ -155,7 +157,7 @@ const EditAccountModal = (props: Props) => {
           />
 
           <InputLabel
-            title={Facade.t('modals.editAccount.accountInput.title')}
+            title={i18n.t('modals.editAccount.accountInput.title')}
             capitalize={true}
             marginTop="20px"
             marginBottom="5px"
@@ -163,9 +165,7 @@ const EditAccountModal = (props: Props) => {
           <InputWithValidation
             value={name}
             validator={(text) => !(showInvalid && !text)}
-            placeholder={Facade.t(
-              'modals.editAccount.accountInput.placeholder'
-            )}
+            placeholder={i18n.t('modals.editAccount.accountInput.placeholder')}
             onChangeText={setName}
             onClearPress={() => setName('')}
             onFocus={() => setShowInvalid(false)}
@@ -180,7 +180,7 @@ const EditAccountModal = (props: Props) => {
           />
 
           <InputLabel
-            title={Facade.t('modals.editAccount.selectColor')}
+            title={i18n.t('modals.editAccount.selectColor')}
             capitalize={true}
             marginBottom="13px"
           />
@@ -188,13 +188,13 @@ const EditAccountModal = (props: Props) => {
           <ColorSelector onSelect={setColor} account={account} />
           <LinearLayout>
             <InputLabel
-              title={Facade.t('modals.editAccount.deleteAccount')}
+              title={i18n.t('modals.editAccount.deleteAccount')}
               capitalize={true}
               marginBottom={'5px'}
               marginTop={'27px'}
             />
             <TextView color={theme.colors.text[0]} marginBottom={'20px'}>
-              {Facade.t('modals.editAccount.deleteAccountSubtitle')}
+              {i18n.t('modals.editAccount.deleteAccountSubtitle')}
             </TextView>
             <TouchableWithoutFeedback onPress={alertDelete}>
               <LinearLayout
@@ -219,7 +219,7 @@ const EditAccountModal = (props: Props) => {
                   color={'primary'}
                   fontSize={20}
                 >
-                  {Facade.t('modals.editAccount.deleteButtom')}
+                  {i18n.t('modals.editAccount.deleteButtom')}
                 </TextView>
               </LinearLayout>
             </TouchableWithoutFeedback>

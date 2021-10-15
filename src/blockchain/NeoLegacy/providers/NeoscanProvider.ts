@@ -1,12 +1,16 @@
 import {Request} from '@simpli/serialized-request'
+import {mapValues} from 'lodash'
 
 import {NeoLegacyProvider} from './common'
 
 import {NeoNode} from '~/src/models/NeoNode'
+import {Node} from '~/src/models/Node'
 import {Transaction} from '~/src/models/Transaction'
 import {BalanceResponse} from '~/src/models/response/BalanceResponse'
 import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
 import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
+import {ExchangeResponse} from '~/src/types/exchange'
+import {TokenResponse} from '~/src/types/token'
 
 export type NeoscanNetworkOptions = 'main_net' | 'test_net'
 
@@ -51,9 +55,57 @@ export class NeoscanProvider implements NeoLegacyProvider {
       .getData()
   }
   async getAllNodes() {
-    return Request.get(`${this.baseUrl}/${this.network}/v1/get_all_nodes`)
+    const result: Node[] = []
+    const response = await Request.get(
+      `${this.baseUrl}/${this.network}/v1/get_all_nodes`
+    )
       .name('getAllNodes')
       .asArrayOf(NeoNode)
       .getData()
+
+    response.forEach(({height, url}) => {
+      result.push({url, height, blockchain: 'neoLegacy'})
+    })
+
+    return result
+  }
+
+  async getTokenList() {
+    return Request.get(
+      `https://raw.githubusercontent.com/CityOfZion/neo-tokens/master/tokenList.json?timestamp=${new Date().getTime()}`
+    )
+      .name('getTokens')
+      .as<TokenResponse>()
+      .getData()
+  }
+
+  async getExchangeData(params: {
+    tokenAssetSymbols: string[]
+    currencies: string
+  }) {
+    const {tokenAssetSymbols, currencies} = params
+    const paramRequest = {
+      fsyms: tokenAssetSymbols.join(','),
+      tsyms: currencies,
+    }
+
+    const response = await Request.get(
+      'https://min-api.cryptocompare.com/data/pricemultifull',
+      {params: paramRequest}
+    )
+      .name('syncExchange')
+      .as<ExchangeResponse>()
+      .getData()
+
+    return mapValues(response.RAW, (symbolRef) => {
+      const symbolRefMap = mapValues(
+        symbolRef,
+        (symbolToUse) => symbolToUse.PRICE
+      )
+
+      return {
+        to: symbolRefMap,
+      }
+    })
   }
 }

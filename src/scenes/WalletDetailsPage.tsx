@@ -1,9 +1,11 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
@@ -34,11 +36,11 @@ const WalletDetailsPage = (props: WalletDetailsProps) => {
   props.navigation.setOptions({
     headerRight: () =>
       HeaderActionButton({
-        actionTitle: Facade.t('app.edit'),
+        actionTitle: i18n.t('app.edit'),
         actionButtonStyle: 'default',
         actionOnPress: () => {
-          props.navigation.navigate(Facade.route.Modal.name, {
-            screen: Facade.route.EditWalletModal.name,
+          props.navigation.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.EditWalletModal.name,
             params: {
               wallet,
               fromWalletDetailsPage,

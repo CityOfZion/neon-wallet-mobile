@@ -1,31 +1,36 @@
 import {useNavigation} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, {useState, useEffect} from 'react'
 import {
   View,
   StyleSheet,
   Text,
-  TextInput,
-  Image,
   SectionList,
   SectionListData,
-  SectionListRenderItemInfo,
-  Alert,
   TouchableOpacity,
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {
+  BlockchainServiceKey,
+  getBlockchainByAddress,
+  getBlockchainLogo,
+} from '~/src/blockchain'
+import {ContactsStackParamList} from '~/src/navigation/ContactsStackNavigation'
 import {SearchBar} from '~src/components/input/SearchBar'
 import {Contact} from '~src/models/redux/Contact'
 import {RootState} from '~src/store/RootStore'
-import {ButtonView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface ContactListProps {
   mt?: number | string
   mb?: number | string
   searchBar?: boolean
   onContactSelected?: (contact: Contact, addressSelected?: string) => void
+  filterByBlockchain?: BlockchainServiceKey
 }
 
 interface Item {
@@ -104,15 +109,23 @@ const AddressItem: React.FC<IAddressItem> = ({
   onContactSelected,
   contact,
 }) => {
-  const navigation = useNavigation()
+  const blockchainName = getBlockchainByAddress(address)
+  const navigation = useNavigation<
+    StackNavigationProp<ContactsStackParamList>
+  >()
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const styles = StyleSheet.create({
     text: {
       color: theme.colors.primary,
       fontFamily: 'medium',
-      fontSize: 16,
+      fontSize: 15,
+    },
+    nameBlockchain: {
+      color: theme.colors.text[2],
+      fontFamily: 'regular',
+      fontSize: 14,
     },
     container: {
       borderBottomWidth: 1,
@@ -126,14 +139,33 @@ const AddressItem: React.FC<IAddressItem> = ({
         if (onContactSelected) {
           onContactSelected(contact, address)
         } else {
-          navigation.navigate(Facade.route.ContactDetails.name, {
+          navigation.navigate(wrapper.route.ContactDetails.name, {
             contact,
           })
         }
       }}
       style={styles.container}
     >
-      <Text style={styles.text}>{address}</Text>
+      <LinearLayout orientation={'horiz'}>
+        {blockchainName && (
+          <ImageView
+            width={17}
+            height={18}
+            source={getBlockchainLogo(blockchainName)}
+            resizeMode={'center'}
+            mr={3}
+            alignSelf={'center'}
+          />
+        )}
+        <LinearLayout orientation={'verti'} width={'92%'}>
+          <Text style={styles.nameBlockchain}>
+            {i18n.t(`blockchainServices.${blockchainName}.id`)}
+          </Text>
+          <Text style={styles.text} numberOfLines={1} ellipsizeMode={'middle'}>
+            {address}
+          </Text>
+        </LinearLayout>
+      </LinearLayout>
     </TouchableOpacity>
   )
 }
@@ -142,7 +174,7 @@ const ItemComponent = (props: {item: Item}) => {
   return (
     <LinearLayout>
       <LinearLayout mt={'18px'} mb={'18px'} ml={'6px'} orientation="horiz">
-        <LinearLayout mt={3} mr={1}>
+        <LinearLayout mt={-2} mr={1}>
           <IconItemComponent color="#394651" width={36} heigth={36}>
             <IconText>{props.item.data.name?.charAt(0).toUpperCase()}</IconText>
           </IconItemComponent>
@@ -152,7 +184,7 @@ const ItemComponent = (props: {item: Item}) => {
             {props.item.data.name}
           </TextView>
           <View>
-            {props.item.data.addresses.map((address, index) => (
+            {props.item.data.addresses.map(({address}, index) => (
               <AddressItem
                 key={index}
                 address={address}
@@ -175,7 +207,21 @@ interface TSearchBarContact {
 export const ContactList = (props: ContactListProps) => {
   const contactsMap: Map<string, Item[]> = new Map()
   const contacts = useSelector((state: RootState) => state.app.contacts)
-  const [contactsList, setContactsList] = useState<Contact[]>(contacts)
+  const {filterByBlockchain} = props
+  const [contactsList, setContactsList] = useState<Contact[]>(
+    contacts.map<Contact>((contact) => {
+      const {addresses} = contact
+      const newContact = new Contact()
+      newContact.address = contact.address
+      newContact.id = contact.id
+      newContact.name = contact.name
+      const filteredAddresses = addresses.filter(
+        (it) => it.blockchain === filterByBlockchain
+      )
+      newContact.addresses = filteredAddresses
+      return newContact
+    })
+  )
 
   contactsList.sort((item: Contact, item2: Contact) => {
     if (item.name !== null && item2.name !== null) {
@@ -214,7 +260,12 @@ export const ContactList = (props: ContactListProps) => {
   })
 
   useEffect(() => {
-    setContactsList(contacts)
+    if (!filterByBlockchain) {
+      setContactsList(contacts)
+    }
+    return () => {
+      setContactsList(contacts)
+    }
   }, [contacts])
   return (
     <>
@@ -227,7 +278,9 @@ export const ContactList = (props: ContactListProps) => {
               if (contact.addresses.length > 0 && contact.name) {
                 return (
                   contact.name.includes(searchText) ||
-                  contact.addresses.includes(searchText)
+                  contact.addresses.find(
+                    (infoContact) => infoContact.address === searchText
+                  )
                 )
               }
             })

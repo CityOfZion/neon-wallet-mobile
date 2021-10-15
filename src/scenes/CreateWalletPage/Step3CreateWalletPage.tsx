@@ -1,87 +1,108 @@
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
+import _ from 'lodash'
 import PropTypes from 'prop-types'
-import React, {useState} from 'react'
+import React, {useState, useCallback, useEffect, useMemo} from 'react'
 import {Alert, FlatList} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {TextView, LinearLayout} from '~src/styles/styled-components'
 
+export interface ParamsCreateWalletPage {
+  mnemonic: string[]
+}
+
 interface Props {
   navigation: StackNavigationProp<MoreStackParamList>
+  route: RouteProp<MoreStackParamList, 'Step3CreateWallet'>
 }
 
 const Step3CreateWalletPage: React.FC<Props> = (props) => {
-  const words = useSelector(
-    (state: RootState) => state.wallet.securityPhrase?.split(' ') ?? []
-  )
+  const words = props.route.params.mnemonic
   const [formedWords, setFormedWords] = useState<string[]>([])
-  const [shuffledWords] = useState<string[]>(Facade.lodash.shuffle(words))
+  const [shuffledWords] = useState<string[]>(_.shuffle(words))
 
   props.navigation.setOptions({
     headerRight: () =>
       HeaderActionButton({
-        actionTitle: Facade.t('app.skip'),
+        actionTitle: i18n.t('app.skip'),
         actionButtonStyle: 'highlight',
         actionOnPress: () => skipDialog(),
       }),
   })
 
-  const skipDialog = () => {
+  const skipDialog = useCallback(() => {
     Alert.alert(
-      Facade.t('step3CreateWallet.dialog_1_title'),
-      Facade.t('step3CreateWallet.dialog_1_body'),
+      i18n.t('step3CreateWallet.dialog_1_title'),
+      i18n.t('step3CreateWallet.dialog_1_body'),
       [
         {
-          text: Facade.t('boolean.true'),
+          text: i18n.t('boolean.true'),
           onPress: () =>
-            props.navigation.navigate(Facade.route.Step4CreateWallet.name, {
+            props.navigation.navigate(wrapper.route.Step4CreateWallet.name, {
               hasBackup: false,
             }),
         },
         {
-          text: Facade.t('boolean.false'),
+          text: i18n.t('boolean.false'),
           style: 'cancel',
         },
       ]
     )
-  }
+  }, [])
 
-  const validateAndNext = () => {
-    if (formedWords.join() === words.join()) {
-      props.navigation.navigate(Facade.route.Step4CreateWallet.name, {
+  const validateAndNext = useCallback(() => {
+    if (formedWords.join() === words.join(' ')) {
+      props.navigation.navigate(wrapper.route.Step4CreateWallet.name, {
         hasBackup: true,
       })
     } else {
       Alert.alert(
-        Facade.t('step3CreateWallet.dialog_2_title'),
-        Facade.t('step3CreateWallet.dialog_2_body'),
+        i18n.t('step3CreateWallet.dialog_2_title'),
+        i18n.t('step3CreateWallet.dialog_2_body'),
         [
           {
-            text: Facade.t('app.retry'),
+            text: i18n.t('app.retry'),
             onPress: () => setFormedWords([]),
           },
         ]
       )
     }
-  }
+  }, [formedWords, words])
 
-  const isDisabled = () => {
+  const isDisabled = useCallback(() => {
     return formedWords.length !== words.length
-  }
+  }, [formedWords, words])
 
-  const toggleWordEvent = (word: string, active: boolean) => {
-    if (active) {
-      const words = [...formedWords, word]
-      setFormedWords(words)
-    } else {
-      setFormedWords([])
-    }
-  }
+  const toggleWordEvent = useCallback(
+    (word: string, active: boolean) => {
+      if (active) {
+        setFormedWords([...formedWords, word])
+      } else {
+        setFormedWords([])
+      }
+    },
+    [formedWords]
+  )
+
+  const MemoThemedButton = useCallback(
+    (item: string) => (
+      <ThemedButton
+        onPress={(_, active) => toggleWordEvent(String(item), Boolean(active))}
+        label={item}
+        toggleable={true}
+        rounded={false}
+        active={formedWords.includes(item)}
+      />
+    ),
+    [formedWords]
+  )
 
   return (
     <ScreenLayout alignX={'center'}>
@@ -94,16 +115,16 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
               fontSize={'lg'}
               fontFamily={'bold'}
             >
-              {Facade.t('step3CreateWallet.label_1')}
+              {i18n.t('step3CreateWallet.label_1')}
             </TextView>
 
             <TextView color={'text.0'} fontSize={'lg'} fontFamily={'bold'}>
-              {Facade.t('step3CreateWallet.twoOfThree')}
+              {i18n.t('step3CreateWallet.twoOfThree')}
             </TextView>
           </LinearLayout>
 
           <TextView fontFamily={'light'} color={'text.0'} fontSize={'lg'}>
-            {Facade.t('step3CreateWallet.body_1')}
+            {i18n.t('step3CreateWallet.body_1')}
           </TextView>
         </LinearLayout>
 
@@ -122,29 +143,21 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
             numColumns={3}
             renderItem={({item}) => (
               <LinearLayout weight={1} mx={2} my={5}>
-                <ThemedButton
-                  onPress={(event, active) =>
-                    toggleWordEvent(String(item), Boolean(active))
-                  }
-                  label={item}
-                  toggleable={true}
-                  rounded={false}
-                  active={formedWords.includes(item)}
-                />
+                {MemoThemedButton(item)}
               </LinearLayout>
             )}
           />
         </LinearLayout>
 
         <TextView fontFamily={'light'} mb={4} color={'text.0'} fontSize={'lg'}>
-          {Facade.t('step3CreateWallet.body_2')}
+          {i18n.t('step3CreateWallet.body_2')}
         </TextView>
       </LinearLayout>
 
       <LinearLayout mt={5} mb={7} px={5} width={'100%'}>
         <ThemedButton
           onPress={() => validateAndNext()}
-          label={Facade.t('app.continue')}
+          label={i18n.t('app.continue')}
           disabled={isDisabled()}
         />
       </LinearLayout>
@@ -154,6 +167,7 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
 
 Step3CreateWalletPage.propTypes = {
   navigation: PropTypes.any,
+  route: PropTypes.any,
 }
 
 export default Step3CreateWalletPage

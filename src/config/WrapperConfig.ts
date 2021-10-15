@@ -19,10 +19,11 @@ export class WrapperConfig {
     '@wallets',
     '@accounts',
     '@contacts',
-    '@preAccount',
     '@exchange',
     '@token_assets',
     '@neo_nodes',
+    '@nodes',
+    '@MultichainExchange',
   ] as const
 
   readonly routes = [
@@ -94,5 +95,10 @@ export class WrapperConfig {
     'EditWalletModal',
     'SecurityModal',
     'ChangelogModal',
+    'BlockchainListModal',
+    'BlockchainListPage',
+    'MnemonicSelectionList',
   ] as const
 }
+
+export const wrapperConfig = new WrapperConfig()

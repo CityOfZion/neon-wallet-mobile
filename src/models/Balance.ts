@@ -1,10 +1,4 @@
-import {
-  HttpExclude,
-  HttpExpose,
-  ResponseSerialize,
-} from '@simpli/serialized-request'
-
-import {TransactionSummary} from '~src/models/TransactionSummary'
+import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 
 @HttpExclude()
 export class Balance {

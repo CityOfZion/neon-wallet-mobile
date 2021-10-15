@@ -1,10 +1,13 @@
 import {RouteProp, CommonActions} from '@react-navigation/native'
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
 import {Image, ScrollView, Dimensions} from 'react-native'
 
+import {wrapper} from '../app/ApplicationWrapper'
+import {Normalize} from '../app/Normalize'
+
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import SwiperPanel, {
   PANEL_OFFSET,
@@ -16,7 +19,6 @@ import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-
 // Why are you like this, Typescript
 type ParamList = TabStackParamList & RootStackParamList
 
@@ -54,8 +56,8 @@ const WelcomePage = (props: Props) => {
       onClose={() => {
         if (showChangelog) {
           persist(true)
-          props.navigation.navigate(Facade.route.Modal.name, {
-            screen: Facade.route.ChangelogModal.name,
+          props.navigation.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.ChangelogModal.name,
           })
         } else if (action) {
           props.navigation.dispatch(action)
@@ -87,11 +89,11 @@ const WelcomePage = (props: Props) => {
           <TextView
             mb={5}
             color={'primary'}
-            fontSize={Facade.scale(30)}
+            fontSize={Normalize.scale(30)}
             fontFamily={'regular'}
             textAlign="center"
           >
-            {Facade.t('welcome.title')}
+            {i18n.t('welcome.title')}
           </TextView>
 
           <TextView
@@ -102,7 +104,7 @@ const WelcomePage = (props: Props) => {
             fontSize={'lg'}
             textAlign={'center'}
           >
-            {Facade.t('welcome.body_1_1_2')}
+            {i18n.t('welcome.body_1_1_2')}
           </TextView>
 
           <LinearLayout weight={1} />
@@ -113,11 +115,11 @@ const WelcomePage = (props: Props) => {
             style={{alignSelf: 'center', width: '85%'}}
           >
             <ThemedFlatButton
-              text={Facade.t('welcome.button_3')}
+              text={i18n.t('welcome.button_3')}
               onPress={() => {
                 closeTo(
                   // TODO: figure out a way to remove the explicity of 'undefined'
-                  Facade.route.Tab.name,
+                  wrapper.route.Tab.name,
                   undefined
                 )
               }}
@@ -128,15 +130,15 @@ const WelcomePage = (props: Props) => {
 
           <LinearLayout
             position={'absolute'}
-            right={Facade.scale(2)}
-            top={Facade.scale(-10)}
+            right={Normalize.scale(2)}
+            top={Normalize.scale(-10)}
           >
             <ThemedCloseButton
               iconSize={[18, 18]}
               onPress={() =>
                 closeTo(
                   // TODO: figure out a way to remove the explicity of 'undefined'
-                  Facade.route.Tab.name,
+                  wrapper.route.Tab.name,
                   undefined
                 )
               }

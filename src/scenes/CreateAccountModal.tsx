@@ -1,12 +1,15 @@
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, {useEffect, useState, useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
+import {wrapper} from '../app/ApplicationWrapper'
+import {BlockchainServiceKey} from '../blockchain'
 import ScreenLoader from '../components/loader/ScreenLoader'
+import {applicationConfig} from '../config/ApplicationConfig'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
-import {Facade} from '~src/app/Facade'
+import {Await, AwaitActivity} from '~/node_modules/@simpli/react-native-await'
 import AccountCard from '~src/components/AccountCard'
 import ColorSelector from '~src/components/ColorSelector'
 import InputLabel from '~src/components/InputLabel'
@@ -17,20 +20,21 @@ import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
 }
 
 export default function CreateAccountModal(props: Props) {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const controller = useSwiperController(true)
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
   const dispatch = useDispatch()
   const [name, setName] = useState<string>('')
-
+  const [blockchain, setBlockchain] = useState<BlockchainServiceKey>(
+    'neoLegacy'
+  )
   const getRandomColor = (max: number) => {
     return Math.floor(Math.random() * Math.floor(max))
   }
@@ -41,13 +45,17 @@ export default function CreateAccountModal(props: Props) {
 
   const submit = async () => {
     dispatch(RootStore.account.actions.setName(name))
+    dispatch(RootStore.account.actions.setBlockchain(blockchain))
+    dispatch(
+      RootStore.account.actions.setSrcIcon(
+        applicationConfig.blockchain[blockchain].icon
+      )
+    )
     if (color) dispatch(RootStore.account.actions.setBackgroundColor(color))
 
     await dispatch(RootStore.account.actions.createAndSave())
     await dispatch(RootStore.app.actions.syncAccounts())
-
-    await dispatch(RootStore.app.actions.createPreAccount())
-    await dispatch(RootStore.app.actions.syncPreAccount())
+    await dispatch(RootStore.app.actions.syncWallets())
     controller.close()
   }
 
@@ -63,7 +71,7 @@ export default function CreateAccountModal(props: Props) {
       return
     }
 
-    Facade.await.run('swiperRight', submit, 300)
+    Await.run('swiperRight', submit, 300)
   }
 
   return (
@@ -72,9 +80,9 @@ export default function CreateAccountModal(props: Props) {
       fullSize={true}
       paddingTop={36}
       paddingBottom={36}
-      title={Facade.t('modals.createAccount.title')}
-      leftButton={Facade.t('modals.createAccount.navigation.cancel')}
-      rightButton={Facade.t('modals.createAccount.navigation.save')}
+      title={i18n.t('modals.createAccount.title')}
+      leftButton={i18n.t('modals.createAccount.navigation.cancel')}
+      rightButton={i18n.t('modals.createAccount.navigation.save')}
       disableRightButton={!name}
       onLeftPress={controller.close}
       onRightPress={save}
@@ -115,15 +123,27 @@ const AccountModalChildren: React.FC<IAccountModalChildren> = ({
   setName,
 }) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const {idWallet} = useSelector((state: RootState) => state.account)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const preAccount = useSelector((state: RootState) => state.app.preAccount)
 
   const [account, setAccount] = useState(new Account())
 
   const [address, setAddress] = useState<string>()
+
+  const generateAccount = async (
+    wallet: Wallet,
+    index: number,
+    blockchain: BlockchainServiceKey
+  ) => {
+    const mnemonic = await wallet.getMnemonic()
+    if (!mnemonic) return null
+    return applicationConfig.blockchain[blockchain].generateAccount(
+      mnemonic,
+      index
+    )
+  }
 
   useEffect(() => {
     populateAddress()
@@ -138,22 +158,18 @@ const AccountModalChildren: React.FC<IAccountModalChildren> = ({
   }, [name, color, address])
 
   const populateAddress = useCallback(async () => {
-    if (!preAccount) {
-      account.idWallet = idWallet
-      const indexes = account
-        .getAccountsWithSameWallet(accountsPool)
-        .map((it) => it.index ?? 0)
+    account.idWallet = idWallet
+    const indexes = account
+      .getAccountsWithSameWallet(accountsPool)
+      .map((it) => it.index ?? 0)
 
-      const wallet = new Wallet()
-      wallet.id = idWallet
-      const index = indexes.length ? Math.max(...indexes) + 1 : 0
-      const neoAccount = await wallet.generateNeoAccount(index)
-      const address = neoAccount?.address
+    const wallet = new Wallet()
+    wallet.id = idWallet
+    const index = indexes.length ? Math.max(...indexes) + 1 : 0
+    const newAccount = await generateAccount(wallet, index, account.blockchain)
+    const address = newAccount?.address
 
-      setAddress(address)
-    } else {
-      setAddress(preAccount.address ? preAccount.address : '')
-    }
+    setAddress(address)
   }, [address])
 
   return (
@@ -165,10 +181,10 @@ const AccountModalChildren: React.FC<IAccountModalChildren> = ({
         fontFamily="medium"
         textAlign="center"
       >
-        {Facade.t('modals.createAccount.subtitle')}
+        {i18n.t('modals.createAccount.subtitle')}
       </TextView>
       <InputLabel
-        title={Facade.t('modals.createAccount.preview')}
+        title={i18n.t('modals.createAccount.preview')}
         capitalize={true}
         marginBottom="24px"
       />
@@ -176,7 +192,7 @@ const AccountModalChildren: React.FC<IAccountModalChildren> = ({
       <AccountCard account={account} isStackMode={false} />
 
       <InputLabel
-        title={Facade.t('modals.createAccount.accountInput.title')}
+        title={i18n.t('modals.createAccount.accountInput.title')}
         capitalize={true}
         marginTop="48px"
         marginBottom="10px"
@@ -184,7 +200,7 @@ const AccountModalChildren: React.FC<IAccountModalChildren> = ({
       <InputWithValidation
         value={name}
         validator={(text) => !(showInvalid && !text)}
-        placeholder={Facade.t('modals.createAccount.accountInput.title')}
+        placeholder={i18n.t('modals.createAccount.accountInput.title')}
         onChangeText={setName}
         onClearPress={() => setName('')}
         onFocus={() => setShowInvalid(false)}
@@ -199,7 +215,7 @@ const AccountModalChildren: React.FC<IAccountModalChildren> = ({
       />
 
       <InputLabel
-        title={Facade.t('modals.createAccount.selectColor')}
+        title={i18n.t('modals.createAccount.selectColor')}
         capitalize={true}
         marginTop="12px"
         marginBottom="24px"

@@ -3,12 +3,13 @@ import React, {useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {wrapper} from '../app/ApplicationWrapper'
+import {screenConfig} from '../config/ScreenConfig'
 import {VerifyPasscodePageParams} from '../scenes/LoginPage/VerifyPasscodePage'
 import SecurityPickerModal from '../scenes/SecurityPickerModal'
 import ReceiveModalStackNavigation from './ReceiveModalStackNavigation'
 import {TabParams} from './TabNavigation'
 
-import {Facade} from '~src/app/Facade'
 import EditWalletModal, {
   EditWalletParams,
 } from '~src/components/EditWalletModal'
@@ -25,6 +26,9 @@ import {
   AccountQRCodeParams,
 } from '~src/scenes/Account/AccountQRCode'
 import {GetAccountParams} from '~src/scenes/Account/GetAccountView'
+import BlockchainListModal, {
+  BlockchainListModalParams,
+} from '~src/scenes/BlockchainListModal'
 import ChangelogModal, {ChangelogModalParams} from '~src/scenes/ChangelogModal'
 import {
   ContactPicker,
@@ -44,7 +48,6 @@ import EditAccountModal, {
 import {GetWalletParams} from '~src/scenes/GetWalletView'
 import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
 import ListTokenModal, {ListTokenModalParams} from '~src/scenes/ListTokenModal'
-import NetworkPickerModal from '~src/scenes/NetworkPickerModal'
 import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import TipConfirmationModal, {
@@ -68,7 +71,6 @@ import ReceiveToAccountModal, {
   ReceiveToAccountModalParams,
 } from '~src/scenes/receive/ReceiveToAccountModal'
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
-import {RootStore} from '~src/store/RootStore'
 
 export type ModalStackParamList = {
   WelcomeModal: WelcomeModalParam
@@ -101,6 +103,7 @@ export type ModalStackParamList = {
   VerifyPasscode: VerifyPasscodePageParams
   ChangelogModal: ChangelogModalParams
   TipConfirmationModal: TipConfirmationModalParams
+  BlockchainListModal: BlockchainListModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -118,124 +121,125 @@ export type ModalParams =
   | DefaultNavigationParam<ChangelogModalParams>
   | DefaultNavigationParam<WelcomeModalParam>
   | DefaultNavigationParam<WalletContextModalParams>
+  | DefaultNavigationParam<BlockchainListModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
 const ModalStackNavigation = () => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   return (
     <ThemeProvider theme={theme}>
       <ModalStack.Navigator
-        initialRouteName={Facade.route.CreateAccountModal.name}
+        initialRouteName={wrapper.route.CreateAccountModal.name}
         headerMode="none"
-        screenOptions={Facade.config.screen}
+        screenOptions={screenConfig}
       >
         <ModalStack.Screen
-          name={Facade.route.ChangelogModal.name}
+          name={wrapper.route.ChangelogModal.name}
           component={ChangelogModal}
         />
         <ModalStack.Screen
-          name={Facade.route.WelcomeModal.name}
+          name={wrapper.route.WelcomeModal.name}
           component={WelcomePage}
         />
         <ModalStack.Screen
-          name={Facade.route.CreateAccountModal.name}
+          name={wrapper.route.CreateAccountModal.name}
           component={CreateAccountModal}
         />
         <ModalStack.Screen
-          name={Facade.route.EditAccountModal.name}
+          name={wrapper.route.EditAccountModal.name}
           component={EditAccountModal}
         />
         <ModalStack.Screen
-          name={Facade.route.ReceiveWalletSelectionModal.name}
+          name={wrapper.route.ReceiveWalletSelectionModal.name}
           component={ReceiveWalletSelectionModal}
         />
         <ModalStack.Screen
-          name={Facade.route.ReceiveAccountSelectionModal.name}
+          name={wrapper.route.ReceiveAccountSelectionModal.name}
           component={ReceiveAccountSelectionModal}
         />
         <ModalStack.Screen
-          name={Facade.route.ReceiveToAccountModal.name}
+          name={wrapper.route.ReceiveToAccountModal.name}
           component={ReceiveToAccountModal}
         />
         <ModalStack.Screen
-          name={Facade.route.ReceiveQrCodeModal.name}
+          name={wrapper.route.ReceiveQrCodeModal.name}
           component={ReceiveQrCodeModal}
         />
         <ModalStack.Screen
-          name={Facade.route.SendModalStack.name}
+          name={wrapper.route.SendModalStack.name}
           component={SendModalStackNavigation}
         />
         <ModalStack.Screen
-          name={Facade.route.ReceiveModalStack.name}
+          name={wrapper.route.ReceiveModalStack.name}
           component={ReceiveModalStackNavigation}
         />
         <ModalStack.Screen
-          name={Facade.route.CustomColor.name}
+          name={wrapper.route.CustomColor.name}
           component={CustomColorPage}
         />
         <ModalStack.Screen
-          name={Facade.route.WalletContextModal.name}
+          name={wrapper.route.WalletContextModal.name}
           component={WalletContextModal}
         />
         <ModalStack.Screen
-          name={Facade.route.ReorderWalletModal.name}
+          name={wrapper.route.ReorderWalletModal.name}
           component={ReorderWalletModal}
         />
         <ModalStack.Screen
-          name={Facade.route.ListTokenModal.name}
+          name={wrapper.route.ListTokenModal.name}
           component={ListTokenModal}
         />
         <ModalStack.Screen
-          name={Facade.route.LanguagePickerModal.name}
+          name={wrapper.route.LanguagePickerModal.name}
           component={LanguagePickerModal}
         />
         <ModalStack.Screen
-          name={Facade.route.CurrencyPickerModal.name}
+          name={wrapper.route.CurrencyPickerModal.name}
           component={CurrencyPickerModal}
         />
         <ModalStack.Screen
-          name={Facade.route.ThemePickerModal.name}
+          name={wrapper.route.ThemePickerModal.name}
           component={ThemePickerModal}
         />
         <ModalStack.Screen
-          name={Facade.route.NetworkPickerModal.name}
-          component={NetworkPickerModal}
-        />
-        <ModalStack.Screen
-          name={Facade.route.PersistContact.name}
+          name={wrapper.route.PersistContact.name}
           component={PersistContact}
         />
         <ModalStack.Screen
-          name={Facade.route.AccountQRCode.name}
+          name={wrapper.route.AccountQRCode.name}
           component={AccountQRCode}
         />
         <ModalStack.Screen
-          name={Facade.route.ContactsModal.name}
+          name={wrapper.route.ContactsModal.name}
           component={ContactPicker}
         />
         <ModalStack.Screen
-          name={Facade.route.CopyContextModal.name}
+          name={wrapper.route.CopyContextModal.name}
           component={CopyContextModal}
         />
         <ModalStack.Screen
-          name={Facade.route.TransactionDetails.name}
+          name={wrapper.route.TransactionDetails.name}
           component={TransactionDetails}
         />
         <ModalStack.Screen
-          name={Facade.route.EditWalletModal.name}
+          name={wrapper.route.EditWalletModal.name}
           component={EditWalletModal}
         />
         <ModalStack.Screen
-          name={Facade.route.SecurityModal.name}
+          name={wrapper.route.SecurityModal.name}
           component={SecurityPickerModal}
         />
         <ModalStack.Screen
-          name={Facade.route.TipConfirmationModal.name}
+          name={wrapper.route.TipConfirmationModal.name}
           component={TipConfirmationModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.BlockchainListModal.name}
+          component={BlockchainListModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

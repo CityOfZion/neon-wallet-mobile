@@ -1,19 +1,20 @@
-import {useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack/lib/typescript/src/types'
 import PropTypes from 'prop-types'
 import React, {useState, useEffect} from 'react'
-import {TouchableWithoutFeedback, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+import {BlockchainServiceKey} from '../blockchain'
+import {WalletStackParamList} from '../navigation/WalletsStackNavigation'
+
 import ThemedCheckBox from '~src/components/themed/ThemedCheckbox'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
-import styled from '~src/styles/styled-components'
 
 interface ITipCheckbox {
+  tokenTipAmount: number
   label: string
-  gasAmount?: number
+  tokenTip: string
   fiat: number
   dispatchTip: React.Dispatch<
     React.SetStateAction<{amount: number; address: string} | undefined>
@@ -22,11 +23,16 @@ interface ITipCheckbox {
   address: string
   mainAsset?: string
   feeAmount?: number
-  navigation: StackNavigationProp<ModalStackParamList & SendModalStackParamList>
+  navigation: StackNavigationProp<
+    ModalStackParamList & SendModalStackParamList & WalletStackParamList
+  >
+  blockchain: BlockchainServiceKey
 }
 
 export const TipCheckbox: React.FC<ITipCheckbox> = ({
-  gasAmount,
+  tokenTipAmount,
+  blockchain,
+  tokenTip,
   fiat,
   label,
   percentage,
@@ -46,11 +52,14 @@ export const TipCheckbox: React.FC<ITipCheckbox> = ({
   const {currency} = useSelector((state: RootState) => state.settings)
   const isVisible = () => {
     const tipValue = (fiat / 100) * (percentage ?? 0.3) //by pattern, the value is 0.3%
-    const gasValue = exchange['GAS'].to[currency] * (gasAmount ? gasAmount : 0)
-    const feeValue = exchange['GAS'].to[currency] * (feeAmount ? feeAmount : 0)
+    const gasValue =
+      exchange[blockchain][tokenTip].to[currency] *
+      (tokenTipAmount ? tokenTipAmount : 0)
+    const feeValue =
+      exchange[blockchain][tokenTip].to[currency] * (feeAmount ? feeAmount : 0)
     if (
-      (gasValue >= tipValue && fiat > 0 && mainAsset !== 'GAS') ||
-      (mainAsset === 'GAS' && gasValue >= fiat + tipValue + feeValue)
+      (gasValue >= tipValue && fiat > 0 && mainAsset !== tokenTip) ||
+      (mainAsset === tokenTip && gasValue >= fiat + tipValue + feeValue)
     ) {
       setVisible(true)
     } else {
@@ -81,8 +90,8 @@ export const TipCheckbox: React.FC<ITipCheckbox> = ({
 
   const openTipModal = () => {
     if (checked) {
-      navigation.navigate(Facade.route.Modal.name, {
-        screen: Facade.route.TipConfirmationModal.name,
+      navigation.navigate(wrapper.route.Modal.name, {
+        screen: wrapper.route.TipConfirmationModal.name,
         params: {
           callback: (value: boolean) => {
             setChecked(value)
@@ -124,7 +133,6 @@ export const TipCheckbox: React.FC<ITipCheckbox> = ({
   )
 }
 TipCheckbox.propTypes = {
-  gasAmount: PropTypes.number,
   fiat: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
   percentage: PropTypes.number,
@@ -133,4 +141,7 @@ TipCheckbox.propTypes = {
   feeAmount: PropTypes.number,
   dispatchTip: PropTypes.func.isRequired,
   navigation: PropTypes.any.isRequired,
+  tokenTipAmount: PropTypes.any.isRequired,
+  blockchain: PropTypes.any.isRequired,
+  tokenTip: PropTypes.any.isRequired,
 }

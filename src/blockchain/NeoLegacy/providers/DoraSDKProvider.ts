@@ -1,13 +1,18 @@
 import {api} from '@cityofzion/dora-ts'
+import {rpc, u} from '@cityofzion/neon-js'
+import {Request} from '@simpli/serialized-request'
+import {mapValues} from 'lodash'
 
-import {NeoscanProvider} from '../providers/NeoscanProvider'
 import {NeoLegacyProvider} from './common'
 
 import {NeoNode} from '~/src/models/NeoNode'
+import {Node} from '~/src/models/Node'
 import {Transaction} from '~/src/models/Transaction'
 import {BalanceResponse} from '~/src/models/response/BalanceResponse'
 import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
 import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
+import {Exchange, ExchangeResponse} from '~/src/types/exchange'
+import {TokenResponse} from '~/src/types/token'
 type DoraNetworkOptions = 'mainnet' | 'testnet'
 export class DoraSDKProvider implements NeoLegacyProvider {
   readonly network: DoraNetworkOptions
@@ -40,7 +45,7 @@ export class DoraSDKProvider implements NeoLegacyProvider {
           asset,
           blockHeight: block_height,
           time,
-          txid: txid.replace('0x', ''),
+          txid,
         })
       }
     )
@@ -52,12 +57,13 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     const balances = Array.from(response.values())
     balances.forEach(({asset, asset_name, balance, symbol}) => {
       result.balance.push({
-        amount: balance,
+        amount: Number(balance),
         asset: asset_name,
-        assetHash: asset.replace('0x', ''),
+        assetHash: asset,
         assetSymbol: symbol,
       })
     })
+
     return result
   }
   async getTransaction(transactionID: string) {
@@ -66,7 +72,7 @@ export class DoraSDKProvider implements NeoLegacyProvider {
       transactionID,
       this.network
     )
-    result.txid = txid.replace('0x', '')
+    result.txid = txid
     result.type = type
     result.size = size
     result.blockHeight = block
@@ -74,11 +80,11 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     return result
   }
   async getAllNodes() {
-    const result = [] as NeoNode[]
+    const result = [] as Node[]
     const response = await api.NeoLegacyREST.getAllNodes(this.network)
     const nodes = Array.from(response.values())
     nodes.forEach(({height, url}) => {
-      result.push({height, url})
+      result.push({height, url, blockchain: 'neoLegacy'})
     })
     const allNodes = result.sort((node1, node2) => {
       if (node1.height && node2.height) {
@@ -107,7 +113,46 @@ export class DoraSDKProvider implements NeoLegacyProvider {
   }
   private convertScientifcNotationToDecimal(scientificNotation: number) {
     return String(scientificNotation).includes('e')
-      ? scientificNotation * Math.pow(10, this.baseNumeric)
+      ? new Number(scientificNotation).toFixed(this.baseNumeric)
       : scientificNotation
+  }
+
+  async getTokenList() {
+    return Request.get(
+      `https://raw.githubusercontent.com/CityOfZion/neo-tokens/master/tokenList.json?timestamp=${new Date().getTime()}`
+    )
+      .name('getTokens')
+      .as<TokenResponse>()
+      .getData()
+  }
+
+  async getExchangeData(params: {
+    tokenAssetSymbols: string[]
+    currencies: string
+  }) {
+    const {tokenAssetSymbols, currencies} = params
+    const paramRequest = {
+      fsyms: tokenAssetSymbols.join(','),
+      tsyms: currencies,
+    }
+
+    const response = await Request.get(
+      'https://min-api.cryptocompare.com/data/pricemultifull',
+      {params: paramRequest}
+    )
+      .name('syncExchange')
+      .as<ExchangeResponse>()
+      .getData()
+
+    return mapValues(response.RAW, (symbolRef) => {
+      const symbolRefMap = mapValues(
+        symbolRef,
+        (symbolToUse) => symbolToUse.PRICE
+      )
+
+      return {
+        to: symbolRefMap,
+      }
+    })
   }
 }

@@ -3,6 +3,7 @@
     "name": "Neon",
     "slug": "neon",
     "version": "0.0.2",
+    "orientation": "portrait",
     "android": {
       "package": "io.cityofzion.neon",
       "versionCode": 4,
@@ -14,7 +15,8 @@
     },
     "ios": {
       "infoPlist": {
-        "NSFaceIDUsageDescription": "This app uses face ID to authenticate the user when dealing with sensitive transactions."
+        "NSFaceIDUsageDescription": "This app uses face ID to authenticate the user when dealing with sensitive transactions.",
+        "requireFullScreen": true
       },
       "bundleIdentifier": "io.cityofzion.neon",
       "googleServicesFile": "./GoogleService-Info.plist"

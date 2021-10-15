@@ -2,11 +2,14 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import * as Sharing from 'expo-sharing'
 import {SharingOptions} from 'expo-sharing/src/Sharing'
+import i18n from 'i18n-js'
 import React, {Fragment} from 'react'
-import {ImageSourcePropType, TouchableWithoutFeedback} from 'react-native'
+import {ImageLoadEventData, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+import {UtilsHelper} from '../helpers/UtilsHelper'
+
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -23,24 +26,24 @@ interface CopyContextModalProps {
 
 interface ListItem {
   title: string
-  source: ImageSourcePropType
+  source: ImageLoadEventData
   onClick: () => void
 }
 
 export const CopyContextModal = (props: CopyContextModalProps) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const controller = useSwiperController(true)
 
   const items: ListItem[] = [
     {
-      title: Facade.t('modals.copyContext.shareQr'),
+      title: i18n.t('modals.copyContext.shareQr'),
       source: require('~src/assets/images/icon-circle-qr-primary.png'),
       onClick: () => {
         const options: SharingOptions = {
           mimeType: 'image/*',
-          dialogTitle: Facade.t('modals.copyContext.shareQr'),
+          dialogTitle: i18n.t('modals.copyContext.shareQr'),
           UTI: 'public.png',
         }
 
@@ -48,9 +51,9 @@ export const CopyContextModal = (props: CopyContextModalProps) => {
       },
     },
     {
-      title: Facade.t('modals.copyContext.copyAddress'),
+      title: i18n.t('modals.copyContext.copyAddress'),
       source: require('~src/assets/images/icon-circle-location-primary.png'),
-      onClick: () => Facade.utils.copyToClipboard(props.route.params.address),
+      onClick: () => UtilsHelper.copyToClipboard(props.route.params.address),
     },
   ]
 
@@ -112,7 +115,7 @@ export const CopyContextModal = (props: CopyContextModalProps) => {
             fontSize={22}
             textAlign="center"
           >
-            {Facade.t('modals.copyContext.cancel')}
+            {i18n.t('modals.copyContext.cancel')}
           </TextView>
         </TouchableWithoutFeedback>
       </Fragment>

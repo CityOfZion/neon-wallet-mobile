@@ -3,7 +3,7 @@ import React from 'react'
 import Timeline from 'react-native-timeline-flatlist'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {LinearLayout} from '~src/styles/styled-components'
 
@@ -19,7 +19,7 @@ interface IChangelog {
 
 const Changelog: React.FC<IChangelog> = ({changelog}) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const convert = (x: {version: string; date: string; changes: string[]}) => {
     const description = x.changes.join('\n')

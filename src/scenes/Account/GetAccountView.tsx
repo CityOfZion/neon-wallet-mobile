@@ -1,6 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import {AwaitActivity} from '@simpli/react-native-await'
+import {Await, AwaitActivity} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
 import React, {useState, useEffect, useRef, useCallback} from 'react'
 import {
   Animated,
@@ -8,42 +9,38 @@ import {
   InteractionManager,
   LayoutChangeEvent,
   Dimensions,
-  Image,
   View,
-  ScrollView,
 } from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 
+import {appBus} from '~/src/app/AppBus'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import ModalWarningFee from '~/src/components/ModalWarningFee'
+import TransactionsList from '~/src/components/TransactionsList'
+import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import {ThemedClaimButton} from '~/src/components/themed/ThemedClaimButton'
 import {ThemedSendButton} from '~/src/components/themed/ThemedSendButton'
+import {applicationConfig} from '~/src/config/ApplicationConfig'
+import {FilterHelper} from '~/src/helpers/FilterHelper'
+import {useAmountFee} from '~/src/hooks/AmountFeeHook'
 import {TokenAsset} from '~/src/models/TokenAsset'
-import {TransactionDateGroup} from '~/src/models/TransactionDateGroup'
-import {Facade} from '~src/app/Facade'
+import {isClaimable} from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
 import BalanceList from '~src/components/BalanceList'
-import TabSelector, {TabSelectorBar} from '~src/components/TabSelector'
-import TransactionsList from '~src/components/TransactionsList'
+import {TabSelectorBar} from '~src/components/TabSelector'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
-import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {ThemedReceiveButton} from '~src/components/themed/ThemedReceiveButton'
 import {Lang} from '~src/enums/Lang'
-import {NeonHelper} from '~src/helpers/NeonHelper'
 import {NeoNode} from '~src/models/NeoNode'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
-import {AddressRequest} from '~src/models/request/AddressRequest'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
-import {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 export interface GetAccountParams {
   key: string
 }
@@ -57,65 +54,15 @@ const disabledSendImage = require('~/src/assets/images/button-send-small-disable
 const selectedSendImage = require('~/src/assets/images/button-send-small-selected.png')
 const defaultSendImage = require('~/src/assets/images/button-send-small.png')
 
-const ReceiveButton = (props: {onPress: () => any}) => {
-  const selectedReceiveImage = require('~/src/assets/images/button-receive-small-selected.png')
-  const defaultReceiveImage = require('~/src/assets/images/button-receive-small.png')
-
-  const [isPressed, setPressed] = useState(false)
-  const backgroundImage = isPressed ? selectedReceiveImage : defaultReceiveImage
-  return (
-    <ButtonView
-      onPress={props.onPress}
-      activeOpacity={1}
-      onHideUnderlay={() => {
-        setPressed(false)
-      }}
-      onShowUnderlay={() => {
-        setPressed(true)
-      }}
-      margin={'0 0 0 1%'}
-    >
-      <ImageView
-        source={backgroundImage}
-        overflow={'visible'}
-        //The image has margins
-        width={71}
-      />
-    </ButtonView>
-  )
-}
-
-const SendButton = (props: {onPress?: () => any}) => {
-  const [isPressed, setPressed] = useState(false)
-  let backgroundImage = isPressed ? selectedSendImage : defaultSendImage
-  backgroundImage = props.onPress ? backgroundImage : disabledSendImage
-  return (
-    <ButtonView
-      onPress={props.onPress}
-      disabled={!props.onPress}
-      activeOpacity={1}
-      onHideUnderlay={() => {
-        setPressed(false)
-      }}
-      onShowUnderlay={() => {
-        setPressed(true)
-      }}
-      margin={'0 1% 0 0'}
-    >
-      <ImageView source={backgroundImage} overflow={'visible'} width={71} />
-    </ButtonView>
-  )
-}
-
 const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
   return (
     <LinearLayout alignItems="center" justifyContent="center">
       <TextView color={'text.3'} textAlign={'center'} fontSize={10}>
-        {Facade.t('app.neoBlockHeight')}
+        {i18n.t('app.neoBlockHeight')}
       </TextView>
 
       <TextView color={'text.0'} textAlign={'center'}>
-        {Facade.filter.decimal(
+        {FilterHelper.decimal(
           NeoNode.getHighestNodeHeightFromPool(props.nodesPool),
           props.language
         )}
@@ -175,13 +122,13 @@ const TransactionsTab = () => {
         {account.address && (
           <LinearLayout pt={20}>
             <TransactionsList
-              title={Facade.t('screens.getAccount.pendingTransactions')}
+              title={i18n.t('screens.getAccount.pendingTransactions')}
               address={account.address}
               transactionGroups={account.getPendingTransactions()}
             />
 
             <TransactionsList
-              title={Facade.t('screens.getAccount.completedTransactions')}
+              title={i18n.t('screens.getAccount.completedTransactions')}
               address={account.address}
               transactionGroups={account.getTransactions()}
             />
@@ -203,7 +150,7 @@ const TransactionsTab = () => {
       fontSize="18px"
       textAlign="center"
     >
-      {Facade.t('components.balanceList.empty')}
+      {i18n.t('components.balanceList.empty')}
     </TextView>
   )
 }
@@ -211,21 +158,22 @@ const TransactionsTab = () => {
 const GetAccountView = (props: GetAccountViewProps) => {
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
-  const {language, currency} = useSelector((state: RootState) => state.settings)
-  const {address, tokenAssets} = useSelector(
-    (state: RootState) => state.account
-  )
-  const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const {exchange} = useSelector((state: RootState) => state.app)
+  const {language} = useSelector((state: RootState) => state.settings)
+  const {address} = useSelector((state: RootState) => state.account)
+
   const posYFactor = useRef(new Animated.Value(0))
   const {isConnected} = useSelector((state: RootState) => state.network)
-
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
-  const [cardHeight, setCardHeight] = useState<number>(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
-  const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>()
+  const [showTabBarLabels, setShowTabBarLabels] = useState(false)
+  const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>(0)
+  const [isClaimAvailable, setIsClaimAvaliable] = useState<boolean>(false)
+
+  const [showWarning, setShowWarning] = useState<boolean>(false)
+
+  const [showWarning, setShowWarning] = useState<boolean>(false)
 
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
   const dispatchAccount = useDispatch<SyncDispatch<Account>>()
@@ -240,6 +188,35 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const [account, setAccount] = useState(
     dispatchAccount(RootStore.account.actions.getFromSelection())
   )
+
+  const [totTokenFeeAccount, setTotTokenFeeAccount] = useState<number>(
+    account.tokenAssets.find(
+      (token) =>
+        token.symbol ===
+        applicationConfig.blockchain[account.blockchain].feeToken.token
+    )?.amount ?? 0
+  )
+
+  const {amount: amountFee, calc: calcFee} = useAmountFee(account.blockchain)
+
+  const handleCalcFee = useCallback(() => {
+    const tokenFee = account.tokenAssets.find(
+      (it) =>
+        applicationConfig.blockchain[account.blockchain].feeToken.token ===
+        it.symbol
+    )
+    if (tokenFee && account.address && unclaimedGasAmount > 0) {
+      const token = new TokenAsset(
+        tokenFee.name,
+        tokenFee.symbol,
+        tokenFee.hash,
+        tokenFee.blockchain
+      )
+      token.amount = unclaimedGasAmount
+      calcFee(token, account, account.address)
+    }
+  }, [account, unclaimedGasAmount, amountFee])
+
   const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
 
   const isWatchAccount = account.accountType === 'watch'
@@ -248,11 +225,11 @@ const GetAccountView = (props: GetAccountViewProps) => {
     headerTitle: () => TitleComponent({nodesPool, language}),
     headerRight: () =>
       HeaderActionButton({
-        actionTitle: Facade.t('app.edit'),
+        actionTitle: i18n.t('app.edit'),
         actionButtonStyle: 'default',
         actionOnPress: () => {
-          props.navigation.navigate(Facade.route.Modal.name, {
-            screen: Facade.route.EditAccountModal.name,
+          props.navigation.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.EditAccountModal.name,
             params: {
               account,
             },
@@ -264,26 +241,24 @@ const GetAccountView = (props: GetAccountViewProps) => {
   useEffect(() => {
     if (address) {
       const account = dispatchAccount(
-        RootStore.account.actions.getFromSelection(
-          senderAddress !== '' ? senderAddress : undefined
-        )
+        RootStore.account.actions.getFromSelection()
       )
       setAccount(account)
     }
 
-    Facade.bus.on('claimGasStart', refresh)
-    Facade.bus.on('claimGasEnd', refresh)
-    Facade.bus.on('transactionStart', refresh)
-    Facade.bus.on('transactionEnd', refresh)
-    Facade.bus.on('updateTransactions', handleUpdateTransactions)
-    Facade.bus.on('ClaimGasFinished', availableClaimGasButton)
+    appBus.on('claimGasStart', refresh)
+    appBus.on('claimGasEnd', refresh)
+    appBus.on('transactionStart', refresh)
+    appBus.on('transactionEnd', refresh)
+    appBus.on('updateTransactions', handleUpdateTransactions)
+    appBus.on('ClaimGasFinished', availableClaimGasButton)
 
     return () => {
-      Facade.bus.off('claimGasStart', refresh)
-      Facade.bus.off('claimGasEnd', refresh)
-      Facade.bus.off('transactionStart', refresh)
-      Facade.bus.off('transactionEnd', refresh)
-      Facade.bus.on('ClaimGasFinished', availableClaimGasButton)
+      appBus.off('claimGasStart', refresh)
+      appBus.off('claimGasEnd', refresh)
+      appBus.off('transactionStart', refresh)
+      appBus.off('transactionEnd', refresh)
+      appBus.on('ClaimGasFinished', availableClaimGasButton)
     }
   }, [address])
 
@@ -293,10 +268,21 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }, [account])
 
   useEffect(() => {
+    handleCalcFee()
+    Await.done(`ClaimGas@${account.address}`)
+  }, [unclaimedGasAmount])
+
+  useEffect(() => {
+    if (amountFee >= 0) {
+      handleIsClaimAvailable()
+    }
+  }, [amountFee])
+
+  useEffect(() => {
     const interactionPromise = InteractionManager.runAfterInteractions(() => {
       if (!isAssetsTabSelected) {
         setCurrentPage(1)
-        Facade.await.run('fetchTransaction', () => fetchTransaction(1))
+        Await.run('fetchTransaction', () => fetchTransaction(1))
       }
     })
 
@@ -313,8 +299,12 @@ const GetAccountView = (props: GetAccountViewProps) => {
     keepUpdatedInfo()
   }, [])
 
-  const isClaimAvailable = useCallback(() => {
-    return Boolean(unclaimedGasAmount && !isWatchAccount && isConnected)
+  const handleIsClaimAvailable = useCallback(() => {
+    if (unclaimedGasAmount > 0 && !isWatchAccount && isConnected) {
+      setIsClaimAvaliable(true)
+    } else {
+      setIsClaimAvaliable(false)
+    }
   }, [account, unclaimedGasAmount, isWatchAccount, isConnected])
 
   const refresh = () => {
@@ -324,16 +314,16 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }
 
   const availableClaimGasButton = () => {
-    Facade.await.done(`ClaimGas@${account.address}`)
+    Await.done(`ClaimGas@${account.address}`)
   }
 
   const populateUnclaimed = async () => {
     if (!account.address) return
 
-    const request = Facade.app.blockchainDataProvider
+    const request = applicationConfig.blockchain[account.blockchain].provider
     const response = await request.getUnclaimed(account.address)
 
-    setUnclaimedGasAmount(response.unclaimed ?? undefined)
+    setUnclaimedGasAmount(response.unclaimed ?? 0)
   }
 
   const fetchTransaction = async (currentPage: number) => {
@@ -353,7 +343,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
     const interactionPromise = InteractionManager.runAfterInteractions(() => {
       if (!isAssetsTabSelected) {
         setCurrentPage(1)
-        Facade.await.run('fetchTransaction', () => fetchTransaction(1))
+        Await.run('fetchTransaction', () => fetchTransaction(1))
       }
     })
 
@@ -362,34 +352,46 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }
   }
 
+  const handleClaimGas = useCallback(async () => {
+    if (unclaimedGasAmount && unclaimedGasAmount > amountFee) {
+      await claimGas()
+    } else {
+      setShowWarning(true)
+    }
+  }, [amountFee, totTokenFeeAccount, showWarning, unclaimedGasAmount])
+
   const claimGas = async () => {
-    if (Facade.await.inAction(`ClaimGas@${account.address}`)) return
     if (!account.address || !unclaimedGasAmount || !isConnected) return
 
-    Facade.await.init(`ClaimGas@${account.address}`)
-
     try {
-      const txid = await NeonHelper.claimGas(account.address)
-
-      if (txid) {
-        await account.addPendingUnclaimedGasTransaction(
-          unclaimedGasAmount,
-          txid
-        )
-        await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
+      const bs = applicationConfig.blockchain[account.blockchain]
+      if (isClaimable(bs)) {
+        Await.init(`ClaimGas@${account.address}`)
+        const responseClaim = await bs.claimGas(account.address)
+        if (responseClaim?.txid) {
+          await account.addPendingUnclaimedGasTransaction(
+            unclaimedGasAmount,
+            responseClaim.txid,
+            responseClaim.token,
+            responseClaim.hash
+          )
+          await dispatchAsync(
+            RootStore.app.actions.updateAndSaveAccount(account)
+          )
+        }
       }
     } catch (e) {
+      console.log('error claim gas => ', e)
+      Await.done(`ClaimGas@${account.address}`)
       showMessage({
-        message: e.message,
+        message: 'Gas has been failed', //TODO: config a message error
+        type: 'danger',
+        duration: 3000,
       })
-    } finally {
-      Facade.await.done(`ClaimGas@${account.address}`)
     }
   }
 
   const cardLayoutEvent = (event: LayoutChangeEvent) => {
-    const {height} = event.nativeEvent.layout
-    setCardHeight(height)
     posYFactor.current.setValue(1)
 
     Animated.timing(posYFactor.current, {
@@ -398,7 +400,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
       useNativeDriver: true,
       easing: Easing.out((val) => val ** 2),
     }).start()
-    setShowTabBarSelector(true)
+    setTimeout(() => setShowTabBarSelector(true), 500)
+    setTimeout(() => setShowTabBarLabels(true), 1000)
   }
   const [showTabBarSelector, setShowTabBarSelector] = useState(false)
 
@@ -414,8 +417,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
     <ScreenLayout
       invertedGradient={true}
       onReachBottom={() => {
-        if (Facade.await.inAction('loadMoreTransaction')) return
-        Facade.await.run(
+        if (Await.inAction('loadMoreTransaction')) return
+        Await.run(
           'loadMoreTransaction',
           () => fetchTransaction(currentPage),
           500
@@ -450,10 +453,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
       >
         <ThemedReceiveButton
           onPress={() =>
-            props.navigation.navigate(Facade.route.Modal.name, {
-              screen: Facade.route.ReceiveModalStack.name,
+            props.navigation.navigate(wrapper.route.Modal.name, {
+              screen: wrapper.route.ReceiveModalStack.name,
               params: {
-                screen: Facade.route.ReceiveToAccountModal.name,
+                screen: wrapper.route.ReceiveToAccountModal.name,
                 params: {
                   wallet,
                   account,
@@ -468,29 +471,11 @@ const GetAccountView = (props: GetAccountViewProps) => {
             loadingView={<ClaimGasLoader />}
           >
             <ThemedClaimButton
-              onPress={claimGas}
-              isClaimAvailable={isClaimAvailable()}
-            >
-              <TextView
-                color={isClaimAvailable() ? 'primary' : 'text.2'}
-                opacity={isClaimAvailable() ? 1 : 0.6}
-                alignSelf={'center'}
-                position={'absolute'}
-                fontSize={'16px'}
-                numberOfLines={1}
-                adjustsFontSizeToFit={true}
-              >
-                {isClaimAvailable()
-                  ? Facade.t('screens.getAccount.claimAsset', {
-                      amount: Facade.filter.decimal(
-                        unclaimedGasAmount,
-                        language,
-                        7
-                      ),
-                    })
-                  : Facade.t('screens.getAccount.gasUnavailable')}
-              </TextView>
-            </ThemedClaimButton>
+              onPress={handleClaimGas}
+              isClaimAvailable={isClaimAvailable}
+              unclaimedGasAmount={unclaimedGasAmount ?? 0}
+              fee={amountFee}
+            />
           </AwaitActivity>
         </AwaitActivity>
 
@@ -500,10 +485,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
             isWatchAccount || !account.getBalanceAmount() || !isConnected
               ? undefined
               : () => {
-                  props.navigation.navigate(Facade.route.Modal.name, {
-                    screen: Facade.route.SendModalStack.name,
+                  props.navigation.navigate(wrapper.route.Modal.name, {
+                    screen: wrapper.route.SendModalStack.name,
                     params: {
-                      screen: Facade.route.SendTransactionInputModal.name,
+                      screen: wrapper.route.SendTransactionInputModal.name,
                       params: {
                         walletTitle: wallet?.name ?? '',
                         account,
@@ -527,6 +512,14 @@ const GetAccountView = (props: GetAccountViewProps) => {
           handleIndex={handleChangeScene}
         />
       )}
+      <ModalWarningFee
+        onPress={claimGas}
+        totTokenFeeAccount={totTokenFeeAccount}
+        unclaimedGasAmount={unclaimedGasAmount ?? 0}
+        amountFee={amountFee ?? 0}
+        showWarning={showWarning}
+        setShowWarning={(show) => setShowWarning(show)}
+      />
     </ScreenLayout>
   )
 }

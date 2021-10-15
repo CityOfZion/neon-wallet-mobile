@@ -2,7 +2,9 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {Normalize} from '../app/Normalize'
+import {FilterHelper} from '../helpers/FilterHelper'
+
 import {TokenAsset} from '~src/models/TokenAsset'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -14,25 +16,31 @@ const AssetQuoteComponent: React.FC<Props> = (props) => {
   const {exchange} = useSelector((state: RootState) => state.app)
   const {language, currency} = useSelector((state: RootState) => state.settings)
 
-  const ratio = props.token.getCurrencyRatio(currency, exchange)
-  const amountExchanged = props.token.exchangeToken(currency, exchange)
+  const ratio = props.token.getCurrencyRatio(
+    currency,
+    exchange[props.token.blockchain]
+  )
+  const amountExchanged = props.token.exchangeToken(
+    currency,
+    exchange[props.token.blockchain]
+  )
 
   const quoteText = ratio
-    ? `${props.token.symbol} 1 = ${Facade.filter.currencyExtendedMaxLimit(
+    ? `${props.token.symbol} 1 = ${FilterHelper.currencyExtendedMaxLimit(
         ratio,
         currency,
         language
       )}`
     : ''
 
-  const valueText = Facade.filter.currency(amountExchanged, currency, language)
+  const valueText = FilterHelper.currency(amountExchanged, currency, language)
 
   return (
     <LinearLayout orientation={'horiz'} width={'100%'} alignItems="center">
       <ImageView
         mr={4}
-        width={Facade.scale(32)}
-        height={Facade.scale(32)}
+        width={Normalize.scale(32)}
+        height={Normalize.scale(32)}
         resizeMode={'contain'}
         source={props.token.srcIcon}
       />

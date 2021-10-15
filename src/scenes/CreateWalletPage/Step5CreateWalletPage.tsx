@@ -1,18 +1,22 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React from 'react'
 
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {Normalize} from '~/src/app/Normalize'
 import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
-import {Facade} from '~src/app/Facade'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {TextView, LinearLayout, ImageView} from '~src/styles/styled-components'
 
 interface Props {
-  navigation: StackNavigationProp<WalletStackParamList>
+  navigation: StackNavigationProp<
+    MoreStackParamList & WalletStackParamList & RootStackParamList
+  >
   route: RouteProp<MoreStackParamList, 'Step5CreateWallet'>
 }
 
@@ -26,7 +30,7 @@ const Step5CreateWalletPage = (props: Props) => {
               mt={6}
               mb={4}
               source={require('~/src/assets/images/logo-3d.png')}
-              style={{marginLeft: Facade.scale(60)}}
+              style={{marginLeft: Normalize.scale(60)}}
             />
           </LinearLayout>
 
@@ -35,19 +39,19 @@ const Step5CreateWalletPage = (props: Props) => {
             color={'text.0'}
             fontSize={'2xl'}
             textAlign={'center'}
-            lineHeight={Facade.scale(24)}
+            lineHeight={Normalize.scale(24)}
           >
-            {Facade.t('step5CreateWallet.label_1')}
+            {i18n.t('step5CreateWallet.label_1')}
           </TextView>
 
           <TextView
             color={'text.0'}
             fontSize={'lg'}
             textAlign={'center'}
-            lineHeight={Facade.scale(20)}
+            lineHeight={Normalize.scale(20)}
             fontFamily={'light'}
           >
-            {Facade.t('step5CreateWallet.body_1')}
+            {i18n.t('step5CreateWallet.body_1')}
           </TextView>
 
           <TextView
@@ -55,9 +59,9 @@ const Step5CreateWalletPage = (props: Props) => {
             fontSize={'lg'}
             textAlign={'center'}
             fontFamily={'light'}
-            lineHeight={Facade.scale(20)}
+            lineHeight={Normalize.scale(20)}
           >
-            {Facade.t('step5CreateWallet.body_2')}
+            {i18n.t('step5CreateWallet.body_2')}
           </TextView>
         </LinearLayout>
       </LinearLayout>
@@ -65,13 +69,14 @@ const Step5CreateWalletPage = (props: Props) => {
       <LinearLayout mt={5} mb={7} px={5} width={'100%'}>
         <ThemedButton
           onPress={() => {
-            props.navigation.reset({
-              index: 0,
-              routes: [{name: Facade.route.MorePage.name}],
+            props.navigation.replace(wrapper.route.Tab.name, {
+              welcomeHidden: true,
+              changelogHidden: true,
+              screen: wrapper.route.ListWallets.name,
             })
-            props.navigation.navigate(Facade.route.ListWalletsPage.name, {})
+            props.navigation.navigate(wrapper.route.ListWalletsPage.name, {})
           }}
-          label={Facade.t('step5CreateWallet.viewWallet')}
+          label={i18n.t('step5CreateWallet.viewWallet')}
         />
       </LinearLayout>
     </ScreenLayout>

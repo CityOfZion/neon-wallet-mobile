@@ -1,16 +1,16 @@
 import {RouteProp} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React from 'react'
 import {View} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {wrapper} from '../app/ApplicationWrapper'
+import {screenConfig} from '../config/ScreenConfig'
+
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack'
-import {Facade} from '~src/app/Facade'
-import SwiperPanel, {
-  SwiperController,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBackButton from '~src/components/layout/HeaderBackButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
@@ -29,7 +29,6 @@ import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewMo
 import SendWalletSelectionModal, {
   SendWalletSelectionModalParams,
 } from '~src/scenes/send/SendWalletSelectionModal'
-
 export type SendModalStackParamList = {
   SendWalletSelectionModal: SendWalletSelectionModalParams
   SendAccountSelectionModal: SendAccountSelectionModalParams
@@ -53,7 +52,7 @@ interface SendModalStackProps {
 
 const SendModalStackNavigation = (props: SendModalStackProps) => {
   const theme = useSelector((state: RootState) => {
-    return Facade.theme[state.settings.theme]
+    return wrapper.theme[state.settings.theme]
   })
   const controller = useSwiperController(true)
   return (
@@ -77,7 +76,7 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
           <SendModalStack.Navigator
             initialRouteName={'SendWalletSelectionModal'}
             screenOptions={{
-              ...Facade.config.screen,
+              ...screenConfig,
               headerLeft: HeaderBackButton,
               headerRight: () =>
                 HeaderActionButton({
@@ -88,53 +87,53 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
             }}
           >
             <SendModalStack.Screen
-              name={Facade.route.SendWalletSelectionModal.name}
+              name={wrapper.route.SendWalletSelectionModal.name}
               component={SendWalletSelectionModal}
               options={() => ({
                 headerTitle: () =>
                   HeaderBar({
-                    title: Facade.t('modals.send.title'),
+                    title: i18n.t('modals.send.title'),
                   }),
               })}
             />
             <SendModalStack.Screen
-              name={Facade.route.SendAccountSelectionModal.name}
+              name={wrapper.route.SendAccountSelectionModal.name}
               component={SendAccountSelectionModal}
               options={() => ({
                 headerTitle: () =>
                   HeaderBar({
-                    title: Facade.t('modals.send.title'),
+                    title: i18n.t('modals.send.title'),
                   }),
               })}
             />
             <SendModalStack.Screen
-              name={Facade.route.SendTransactionReviewModal.name}
+              name={wrapper.route.SendTransactionReviewModal.name}
               component={SendTransactionReviewModal}
               options={() => ({
                 headerTitle: () =>
                   HeaderBar({
-                    title: Facade.t('modals.send.title'),
+                    title: i18n.t('modals.send.title'),
                   }),
                 headerLeft: HeaderBackButton,
               })}
             />
             <SendModalStack.Screen
-              name={Facade.route.SendTransactionInputModal.name}
+              name={wrapper.route.SendTransactionInputModal.name}
               component={SendTransactionInputModal}
               options={() => ({
                 headerTitle: () =>
                   HeaderBar({
-                    title: Facade.t('modals.send.title'),
+                    title: i18n.t('modals.send.title'),
                   }),
               })}
             />
             <SendModalStack.Screen
-              name={Facade.route.SendTransactionConfirmationModal.name}
+              name={wrapper.route.SendTransactionConfirmationModal.name}
               component={SendTransactionConfirmationModal}
               options={() => ({
                 headerTitle: () =>
                   HeaderBar({
-                    title: Facade.t('modals.send.title'),
+                    title: i18n.t('modals.send.title'),
                   }),
               })}
             />

@@ -6,11 +6,11 @@ import {StatusBar} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {appBus} from '../app/AppBus'
+import {wrapper} from '../app/ApplicationWrapper'
 import {SenderTransaction} from '../models/redux/SenderTransaction'
 
 import * as data from '~src/Changelog.json'
-import {Facade} from '~src/app/Facade'
-import {Storage} from '~src/app/Storage'
 import FooterBar from '~src/components/layout/FooterBar'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import ContactsStackNavigation, {
@@ -57,7 +57,7 @@ const TabNavigation = (props: Props) => {
   const changelogHiddenStorage = props.route.params?.changelogHidden ?? false
   const numberOfVersionsStorage = props.route.params?.numberOfVersions ?? 0
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   const [welcomeHidden, setWelcomeHidden] = useState(
@@ -71,15 +71,15 @@ const TabNavigation = (props: Props) => {
   if (numberOfVersionsStorage !== currentNumberOfVersions) {
     if (!changelogHidden && !changelogHiddenStorage) {
       if (!welcomeHiddenStorage) {
-        props.navigation.navigate(Facade.route.Modal.name, {
-          screen: Facade.route.WelcomeModal.name,
+        props.navigation.navigate(wrapper.route.Modal.name, {
+          screen: wrapper.route.WelcomeModal.name,
           params: {
             showChangelog: true,
           },
         })
       } else {
-        props.navigation.navigate(Facade.route.Modal.name, {
-          screen: Facade.route.ChangelogModal.name,
+        props.navigation.navigate(wrapper.route.Modal.name, {
+          screen: wrapper.route.ChangelogModal.name,
         })
       }
       setChangelogHidden(true)
@@ -87,8 +87,8 @@ const TabNavigation = (props: Props) => {
   } else {
     useEffect(() => {
       if (!welcomeHidden && welcomeHiddenStorage) {
-        props.navigation.navigate(Facade.route.Modal.name, {
-          screen: Facade.route.WelcomeModal.name,
+        props.navigation.navigate(wrapper.route.Modal.name, {
+          screen: wrapper.route.WelcomeModal.name,
         })
         setWelcomeHidden(true)
       }
@@ -96,11 +96,11 @@ const TabNavigation = (props: Props) => {
   }
 
   useEffect(() => {
-    Facade.bus.on(
+    appBus.on(
       'navigateTransactionDetails',
       (transaction: SenderTransaction) => {
-        props.navigation.navigate(Facade.route.Modal.name, {
-          screen: Facade.route.TransactionDetails.name,
+        props.navigation.navigate(wrapper.route.Modal.name, {
+          screen: wrapper.route.TransactionDetails.name,
           params: {
             transaction,
           },
@@ -118,23 +118,23 @@ const TabNavigation = (props: Props) => {
       />
       <Tab.Navigator tabBar={(props) => <FooterBar {...props} />}>
         <Tab.Screen
-          name={Facade.route.ListWallets.name}
+          name={wrapper.route.ListWallets.name}
           component={WalletStackNavigation}
         />
         <Tab.Screen
-          name={Facade.route.Contacts.name}
+          name={wrapper.route.Contacts.name}
           component={ContactsStackNavigation}
         />
         <Tab.Screen
-          name={Facade.route.QuickTools.name}
+          name={wrapper.route.QuickTools.name}
           component={QuickToolsStackNavigation}
         />
         <Tab.Screen
-          name={Facade.route.Settings.name}
+          name={wrapper.route.Settings.name}
           component={SettingsStackNavigation}
         />
         <Tab.Screen
-          name={Facade.route.More.name}
+          name={wrapper.route.More.name}
           component={MoreStackNavigation}
         />
       </Tab.Navigator>

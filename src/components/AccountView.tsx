@@ -1,7 +1,14 @@
 import {useNavigation} from '@react-navigation/native'
-import React from 'react'
+import {StackNavigationProp} from '@react-navigation/stack'
+import I18n from 'i18n-js'
+import React, {useEffect} from 'react'
+import {View} from 'react-native'
+import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+import {Normalize} from '../app/Normalize'
+import {ModalStackParamList} from '../navigation/ModalStackNavigation'
+
 import {
   ButtonView,
   ImageView,
@@ -19,7 +26,8 @@ interface Props {
 }
 
 export const AccountView = (props: Props) => {
-  const navigation = useNavigation()
+  const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
+  const {blockchain} = useSelector((state: RootState) => state.account)
   return (
     <LinearLayout
       borderRadius={'7px'}
@@ -80,24 +88,29 @@ export const AccountView = (props: Props) => {
         </LinearLayout>
       )}
       <LinearLayout orientation={'horiz'}>
-        <TextView
-          mr={4}
-          alignSelf={'center'}
-          weight={1}
-          numberOfLines={1}
-          color={'primary'}
-          fontSize={'16px'}
-          ellipsizeMode={'middle'}
-          fontFamily={'medium'}
-        >
-          {props.address}
-        </TextView>
+        <View>
+          <TextView color="text.10" fontSize={'14px'}>
+            {I18n.t(`blockchainServices.${blockchain}.id`)}
+          </TextView>
+          <TextView
+            mr={4}
+            alignSelf={'center'}
+            weight={1}
+            numberOfLines={1}
+            color={'primary'}
+            fontSize={'16px'}
+            ellipsizeMode={'middle'}
+            fontFamily={'medium'}
+          >
+            {props.address}
+          </TextView>
+        </View>
 
         {!props.contactName && !props.walletName && !props.hideButton && (
           <ButtonView
             onPress={() => {
-              navigation.navigate(Facade.route.Modal.name, {
-                screen: Facade.route.PersistContact.name,
+              navigation.navigate(wrapper.route.Modal.name, {
+                screen: wrapper.route.PersistContact.name,
                 params: {
                   startingAddress: props.address,
                 },
@@ -105,8 +118,8 @@ export const AccountView = (props: Props) => {
             }}
           >
             <ImageView
-              width={Facade.scale(25)}
-              height={Facade.scale(25)}
+              width={Normalize.scale(25)}
+              height={Normalize.scale(25)}
               resizeMode={'contain'}
               source={require('~/src/assets/images/icon-circle-plus-green-small.png')}
             />

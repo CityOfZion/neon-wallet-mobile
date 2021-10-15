@@ -2,15 +2,19 @@ import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {plainToClass} from 'class-transformer'
 import {ImageLoadEventData} from 'react-native'
 
+import {BlockchainServiceKey} from '~/src/blockchain'
+import {applicationConfig} from '~/src/config/ApplicationConfig'
+import {SecurityHelper} from '~/src/helpers/SecurityHelper'
 import {TokenAsset} from '~/src/models/TokenAsset'
-import {Facade} from '~src/app/Facade'
+import {Wallet} from '~/src/models/redux/Wallet'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {Account} from '~src/models/redux/Account'
 import {AddressDispatcher} from '~src/store/account/dispatchers/AddressDispatcher'
 import {BackgroundDispatcher} from '~src/store/account/dispatchers/BackgroundDispatcher'
-import {ClearStateDispatcher} from '~src/store/account/dispatchers/ClearStateDispatcher'
+import {BlockchainDispatcher} from '~src/store/account/dispatchers/BlockchainDispatcher'
 import {IdWalletDispatcher} from '~src/store/account/dispatchers/IdWalletDispatcher'
+import {IndexDispatcher} from '~src/store/account/dispatchers/IndexDispatcher'
 import {NameDispatcher} from '~src/store/account/dispatchers/NameDispatcher'
 import {SrcIconDispatcher} from '~src/store/account/dispatchers/SrcIconDispatcher'
 import {TokenAssetsDispatcher} from '~src/store/account/dispatchers/TokenAssetsDispatcher'
@@ -28,6 +32,8 @@ export class AccountReducer extends ReducerWrapper<
     SrcIconDispatcher,
     BackgroundDispatcher,
     TokenAssetsDispatcher,
+    BlockchainDispatcher,
+    IndexDispatcher,
   ]
 
   readonly actions = {
@@ -40,7 +46,7 @@ export class AccountReducer extends ReducerWrapper<
     setName: (name: string) => {
       return this.commit('SET_NAME_ACCOUNT', {name})
     },
-    setSrcIcon: (srcIcon: ImageLoadEventData | null) => {
+    setSrcIcon: (srcIcon: ImageLoadEventData) => {
       return this.commit('SET_SRC_ICON', {srcIcon})
     },
     setBackgroundColor: (backgroundColor: string) => {
@@ -49,42 +55,59 @@ export class AccountReducer extends ReducerWrapper<
     setTokenAssets: (tokenAssets: TokenAsset[]) => {
       return this.commit('SET_TOKENASSETS_ACCOUNT', {tokenAssets})
     },
-    getFromSelection: (address?: string): SyncAction<Account> => {
-      if (address) {
-        return (dispatch, getState) => {
-          const accounts = getState().app.accounts
-
-          return accounts.find((it) => it.address === address) ?? new Account()
-        }
-      } else {
-        return (dispatch, getState) => {
-          const accounts = getState().app.accounts
-          const address = getState().account.address
-
-          return accounts.find((it) => it.address === address) ?? new Account()
-        }
+    setBlockchain: (blockchain: BlockchainServiceKey) => {
+      return this.commit('SET_BLOCKCHAIN_ACCOUNT', {blockchain})
+    },
+    setIndex: (index: number) => {
+      return this.commit('SET_INDEX_ACCOUNT', {index})
+    },
+    getFromSelection: (): SyncAction<Account> => {
+      return (dispatch, getState) => {
+        const accounts = getState().app.accounts
+        const {address} = getState().account
+        return accounts.find((it) => it.address === address) ?? new Account()
       }
     },
     createAndSave: (): AsyncAction<string> => {
+      const generateAccount = async (
+        wallet: Wallet,
+        index: number,
+        blockchain: BlockchainServiceKey
+      ) => {
+        const mnemonic = await wallet.getMnemonic()
+        if (!mnemonic) return null
+        return applicationConfig.blockchain[blockchain].generateAccount(
+          mnemonic,
+          index
+        )
+      }
+
       return async (dispatch, getState) => {
-        const accounts = (await Storage.accounts.load()) ?? []
+        const accounts = getState().app.accounts
 
         const account = plainToClass(Account, getState().account)
+        const blockchain = getState().account.blockchain
+        const index = getState().account.index
         const wallet = account.getWallet(getState().app.wallets)
 
         const indexes = account
           .getAccountsWithSameWallet(getState().app.accounts)
           .map((it) => it.index ?? 0)
 
-        account.index = indexes.length ? Math.max(...indexes) + 1 : 0
+        account.index = indexes.length ? Math.max(...indexes) + 1 : index ?? 0
+        account.blockchain = blockchain
 
         if (wallet && wallet.walletType === 'standard') {
-          const neoAccount = await wallet.generateNeoAccount(account.index)
+          const newAccount = await generateAccount(
+            wallet,
+            account.index,
+            blockchain
+          )
 
-          if (neoAccount) {
-            account.address = neoAccount.address
+          if (newAccount) {
+            account.address = newAccount.address
 
-            await Facade.security.saveWif(account.address, neoAccount.WIF)
+            await SecurityHelper.saveWif(account.address, newAccount.wif)
 
             accounts.push(account)
 
@@ -93,7 +116,6 @@ export class AccountReducer extends ReducerWrapper<
             return account.address
           }
         }
-
         throw Error('Something went wrong')
       }
     },
@@ -117,18 +139,19 @@ export class AccountReducer extends ReducerWrapper<
     },
     importAndSave: (address: string, wif?: string): AsyncAction<Account> => {
       return async (dispatch, getState) => {
-        const accounts = (await Storage.accounts.load()) ?? []
-
+        const accounts = getState().app.accounts
         const account = plainToClass(Account, getState().account)
         account.address = address
-
         const wallet = account.getWallet(getState().app.wallets)
 
         if (wallet) {
           if (wif) {
-            await Facade.security.saveWif(account.address, wif)
+            await SecurityHelper.saveWif(account.address, wif)
           } else {
-            if (wallet.walletType === 'legacy') {
+            if (
+              wallet.walletType === 'legacy' ||
+              wallet.walletType === 'standard'
+            ) {
               throw Error('Wif not defined')
             }
           }

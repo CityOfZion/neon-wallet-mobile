@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import React, {useState, useRef, Fragment, useMemo} from 'react'
 import {
   Animated,
-  ImageSourcePropType,
+  ImageLoadEventData,
   PanResponder,
   ScrollView,
   TouchableHighlight,
@@ -17,7 +17,9 @@ import {
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+import {UtilsHelper} from '../helpers/UtilsHelper'
+
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {TextView, ImageView, LinearLayout} from '~src/styles/styled-components'
 
@@ -42,7 +44,7 @@ interface SwiperProps {
   onLeftPress?: () => void
   onRightPress?: () => void
   onClose?: () => void
-  image?: ImageSourcePropType
+  image?: ImageLoadEventData
   imageSize: [number, number]
   title?: string
   solidColorBG?: boolean
@@ -95,7 +97,7 @@ export const useSwiperController = (initial: boolean = false) => {
 
 const DragBar = (props: {noHeader: boolean; mb: number}) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   return (
@@ -116,7 +118,7 @@ const DragBar = (props: {noHeader: boolean; mb: number}) => {
 const Header = (props: SwiperProps & {mb: number}) => {
   const LETTER_OFFSET = 12
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   return (
@@ -171,7 +173,7 @@ const Header = (props: SwiperProps & {mb: number}) => {
             resizeMode="contain"
             height={props.imageSize[0]}
             width={props.imageSize[1]}
-            mt={Facade.utils.isIos ? -3 : 2}
+            mt={UtilsHelper.isIos ? -3 : 2}
             mr="6px"
             source={props.image}
           />
@@ -213,7 +215,7 @@ const Header = (props: SwiperProps & {mb: number}) => {
 
 export default function SwiperPanel(props: SwiperProps) {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const MAX_HEIGHT = useWindowDimensions?.().height
 
@@ -533,7 +535,7 @@ CloseButton.propTypes = {
 
 export function BackButton(props: {text?: string}) {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   return (
     <View

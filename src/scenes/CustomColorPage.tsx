@@ -1,9 +1,9 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React, {useState} from 'react'
 import {Dimensions} from 'react-native'
 
-import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ColorPicker from '~src/components/misc/ColorPicker'
@@ -11,7 +11,6 @@ import {Currency} from '~src/enums/Currency'
 import {Account} from '~src/models/redux/Account'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-
 export interface CustomColorPageParam {
   onColorPicked: (hex: string) => void
   account: Account
@@ -43,9 +42,9 @@ const CustomColorPage = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      title={Facade.t('customColorPage.title')}
-      leftButton={Facade.t('customColorPage.navigation.cancel')}
-      rightButton={Facade.t('customColorPage.navigation.done')}
+      title={i18n.t('customColorPage.title')}
+      leftButton={i18n.t('customColorPage.navigation.cancel')}
+      rightButton={i18n.t('customColorPage.navigation.done')}
       onLeftPress={controller.close}
       onRightPress={pickAndClose}
       padding={16}
@@ -76,7 +75,7 @@ const CustomColorPage = (props: Props) => {
           adjustsFontSizeToFit={true}
           numberOfLines={1}
         >
-          {Facade.t('customColorPage.subtitle')}
+          {i18n.t('customColorPage.subtitle')}
         </TextView>
 
         <LinearLayout width="100%" weight={1} alignItems="center">

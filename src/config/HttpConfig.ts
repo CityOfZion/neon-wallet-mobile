@@ -49,3 +49,5 @@ export class HttpConfig {
     )
   }
 }
+
+export const httpConfig = new HttpConfig()

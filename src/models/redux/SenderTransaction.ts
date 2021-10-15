@@ -4,9 +4,11 @@ import {
   Request,
   ResponseSerialize,
 } from '@simpli/serialized-request'
+import i18n from 'i18n-js'
+import _ from 'lodash'
 import moment from 'moment'
 
-import {Facade} from '~src/app/Facade'
+import {applicationConfig} from '~/src/config/ApplicationConfig'
 import {NoPriority, PriorityFee} from '~src/models/PriorityFee'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Contact} from '~src/models/redux/Contact'
@@ -57,19 +59,19 @@ export class SenderTransaction implements SenderTransactionState {
 
   doSenderHasContactName(contactsPool: Contact[]) {
     return contactsPool.find((it) =>
-      it.addresses.find((address) => address === this.senderAddress)
+      it.addresses.find(({address}) => address === this.senderAddress)
     )
   }
 
   doReceiverHasContactName(contactsPool: Contact[]) {
     return contactsPool.find((it) =>
-      it.addresses.find((address) => address === this.senderAddress)
+      it.addresses.find(({address}) => address === this.senderAddress)
     )
   }
 
   senderAddressOrContactName(contactsPool: Contact[]) {
     const contact = contactsPool.find((it) =>
-      it.addresses.find((address) => address === this.senderAddress)
+      it.addresses.find(({address}) => address === this.senderAddress)
     )
 
     if (contact) {
@@ -81,7 +83,7 @@ export class SenderTransaction implements SenderTransactionState {
 
   receiverAddressOrContactName(contactsPool: Contact[]) {
     const contact = contactsPool.find((it) =>
-      it.addresses.find((address) => address === this.senderAddress)
+      it.addresses.find(({address}) => address === this.senderAddress)
     )
 
     if (contact) {
@@ -96,15 +98,15 @@ export class SenderTransaction implements SenderTransactionState {
   }
 
   get formattedTime() {
-    return moment(this.sentAt).format(Facade.t('dateFormat.time'))
+    return moment(this.sentAt).format(i18n.t('dateFormat.time'))
   }
 
   get formattedDate() {
-    return moment(this.sentAt).format(Facade.t('dateFormat.datePretty'))
+    return moment(this.sentAt).format(i18n.t('dateFormat.datePretty'))
   }
 
   get formattedDatetime() {
-    return moment(this.sentAt).format(Facade.t('dateFormat.datetime'))
+    return moment(this.sentAt).format(i18n.t('dateFormat.datetime'))
   }
 
   async populateExchange() {
@@ -112,7 +114,7 @@ export class SenderTransaction implements SenderTransactionState {
 
     const params = {
       fsym: this.token.symbol,
-      tsyms: Facade.app.currencies,
+      tsyms: applicationConfig.currencies,
       ts: moment(this.sentAt).unix(),
     }
 
@@ -124,7 +126,7 @@ export class SenderTransaction implements SenderTransactionState {
       .as<ExchangeHistoryResponse>()
       .getData()
 
-    this.token.exchange = Facade.lodash.mapValues(exchangeResponse, (it) => ({
+    this.token.exchange = _.mapValues(exchangeResponse, (it) => ({
       to: it,
     }))
   }

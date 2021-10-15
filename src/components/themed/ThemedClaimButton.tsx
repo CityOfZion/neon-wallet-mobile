@@ -1,22 +1,30 @@
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import {
   TouchableWithoutFeedback,
   StyleSheet,
   GestureResponderEvent,
   View,
   Platform,
+  ImageLoadEventData,
 } from 'react-native'
+import {useSelector} from 'react-redux'
 
+import {FilterHelper} from '~/src/helpers/FilterHelper'
 import {
   RelativeLayout,
   LinearLayout,
   LinearGradientLayout,
+  TextView,
+  ImageView,
 } from '~/src/styles/styled-components'
+
 interface Props {
   onPress: (evt: GestureResponderEvent) => void
   isClaimAvailable: boolean
-  children?: any
+  unclaimedGasAmount: number
+  fee: number | null
 }
 
 const ThemedClaimButton: React.FC<Props> = (props) => {
@@ -41,10 +49,47 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
       elevation: 30,
     },
   })
+  const {language} = useSelector((state: RootState) => state.settings)
+  const [infoClaim, setInfoClaim] = useState<{
+    textColor: string
+    text: string
+    opacity: number
+    icon?: ImageLoadEventData
+  }>()
+
+  const handleInfoClaim = useCallback(() => {
+    if (props.unclaimedGasAmount <= 0 || props.fee === null) {
+      setInfoClaim({
+        text: i18n.t('screens.getAccount.gasUnavailable'),
+        textColor: 'text.2',
+        opacity: 0.6,
+      })
+    } else if (props.fee < props.unclaimedGasAmount) {
+      setInfoClaim({
+        text: i18n.t('screens.getAccount.claimAsset', {
+          amount: FilterHelper.decimal(props.unclaimedGasAmount, language, 8),
+        }),
+        textColor: 'primary',
+        opacity: 1,
+      })
+    } else {
+      setInfoClaim({
+        text: i18n.t('screens.getAccount.claimAsset', {
+          amount: FilterHelper.decimal(props.unclaimedGasAmount, language, 8),
+        }),
+        textColor: '#d355e7',
+        opacity: 1,
+        icon: require('~src/assets/images/icon-warning-purple.png'),
+      })
+    }
+  }, [props.unclaimedGasAmount, props.fee, props.isClaimAvailable])
+
+  useEffect(() => {
+    handleInfoClaim()
+  }, [props.isClaimAvailable])
   return (
     <TouchableWithoutFeedback
-      onPress={props.onPress}
-      style={{borderWidth: 2, borderColor: '#f00'}}
+      onPress={props.isClaimAvailable ? props.onPress : undefined}
     >
       <View style={styles.dropShadow}>
         <RelativeLayout
@@ -84,9 +129,21 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
             <LinearLayout
               width="100%"
               orientation="horiz"
-              justifyContent={'center'}
+              justifyContent={'space-evenly'}
             >
-              {props.children}
+              {infoClaim?.icon && (
+                <ImageView source={infoClaim?.icon} width={19} height={16} />
+              )}
+              <TextView
+                color={infoClaim?.textColor}
+                opacity={infoClaim?.opacity}
+                alignSelf={'center'}
+                fontSize={'16px'}
+                numberOfLines={1}
+                adjustsFontSizeToFit={true}
+              >
+                {infoClaim?.text}
+              </TextView>
             </LinearLayout>
           </LinearGradientLayout>
         </RelativeLayout>
@@ -97,8 +154,9 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
 
 ThemedClaimButton.propTypes = {
   onPress: PropTypes.func.isRequired,
-  children: PropTypes.any.isRequired,
   isClaimAvailable: PropTypes.bool.isRequired,
+  unclaimedGasAmount: PropTypes.number.isRequired,
+  fee: PropTypes.number.isRequired,
 }
 
 export {ThemedClaimButton}

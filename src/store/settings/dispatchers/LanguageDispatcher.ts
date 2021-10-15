@@ -1,6 +1,6 @@
 import {DispatcherWrapper} from '@simpli/redux-wrapper'
 
-import {Facade} from '~src/app/Facade'
+import {localeConfig} from '~/src/config/LocaleConfig'
 import {Setup} from '~src/app/Setup'
 
 export class LanguageDispatcher extends DispatcherWrapper<
@@ -13,7 +13,7 @@ export class LanguageDispatcher extends DispatcherWrapper<
   readonly reducer: SettingsReducer = (state, action) => {
     const {language} = action
 
-    const keys = Object.keys(Facade.config.locale.translations)
+    const keys = Object.keys(localeConfig.translations)
 
     if (keys.includes(language)) {
       Setup.changeLocale(language)

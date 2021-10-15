@@ -1,11 +1,13 @@
 import {RouteProp, useNavigationState} from '@react-navigation/native'
-import React, {useEffect, useState, Fragment} from 'react'
+import i18n from 'i18n-js'
+import React, {useState, Fragment} from 'react'
 import {ScrollView, TouchableHighlight} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {useHeaderHeight} from '~/node_modules/@react-navigation/stack'
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {FilterHelper} from '~/src/helpers/FilterHelper'
 import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import WalletPicker from '~src/components/misc/WalletPicker'
 import {NeoURI} from '~src/helpers/UriHelper'
@@ -28,7 +30,7 @@ const SendWalletSelectionModal = (props: Props) => {
   const show = useNavigationState(
     (state) =>
       state.routes[state.routes.length - 1].name ===
-      Facade.route.SendWalletSelectionModal.name
+      wrapper.route.SendWalletSelectionModal.name
   )
 
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
@@ -36,7 +38,7 @@ const SendWalletSelectionModal = (props: Props) => {
   const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
 
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   const {wallets, exchange} = useSelector((state: RootState) => state.app)
@@ -78,7 +80,7 @@ const SendWalletSelectionModal = (props: Props) => {
             fontFamily="medium"
             textAlign="center"
           >
-            {Facade.t('modals.send.walletSelection.subtitle')}
+            {i18n.t('modals.send.walletSelection.subtitle')}
           </TextView>
 
           <WalletPicker
@@ -87,7 +89,7 @@ const SendWalletSelectionModal = (props: Props) => {
             onSelect={setSelectedWallet}
             onPress={(wallet) =>
               props.navigation.navigate(
-                Facade.route.SendAccountSelectionModal.name,
+                wrapper.route.SendAccountSelectionModal.name,
                 {
                   wallet,
                   uri: props.route.params?.uri,
@@ -108,7 +110,7 @@ const SendWalletSelectionModal = (props: Props) => {
                   language,
                   exchange
                 )
-              : Facade.filter.currency(
+              : FilterHelper.currency(
                   selectedWallet?.calculateBalance(currency, exchange),
                   currency,
                   language,
@@ -138,7 +140,7 @@ const SendWalletSelectionModal = (props: Props) => {
                 fontFamily="light"
                 textAlign="center"
               >
-                {Facade.t('modals.send.walletSelection.noFunds')}
+                {i18n.t('modals.send.walletSelection.noFunds')}
               </TextView>
             </LinearLayout>
           )}

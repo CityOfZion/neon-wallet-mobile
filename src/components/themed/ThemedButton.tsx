@@ -1,5 +1,6 @@
+import _ from 'lodash'
 import PropTypes from 'prop-types'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useCallback, useMemo} from 'react'
 import {
   ImageLoadEventData,
   NativeSyntheticEvent,
@@ -7,7 +8,8 @@ import {
   StyleProp,
 } from 'react-native'
 
-import {Facade} from '~src/app/Facade'
+import {Normalize} from '~/src/app/Normalize'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import ThemedCard from '~src/components/themed/ThemedCard'
 import styled, {
   ImageView,
@@ -43,10 +45,10 @@ interface Props {
 }
 
 const LabelComponent = (props: Props) => {
-  const width = Facade.scale(props.iconSize ? props.iconSize[0] : 20)
-  const height = Facade.scale(props.iconSize ? props.iconSize[1] : 20)
-  const fontSize = Facade.scale(props.fontSize ?? 22)
-  const subFontSize = Facade.scale(props.subFontSize ?? 18)
+  const width = Normalize.scale(props.iconSize ? props.iconSize[0] : 20)
+  const height = Normalize.scale(props.iconSize ? props.iconSize[1] : 20)
+  const fontSize = Normalize.scale(props.fontSize ?? 22)
+  const subFontSize = Normalize.scale(props.subFontSize ?? 18)
 
   return (
     <LinearLayout orientation={'horiz'} alignItems={'center'}>
@@ -99,13 +101,13 @@ const ThemedButton: React.FC<Props> = (props) => {
     setActive(props.active ?? false)
   }, [props.active])
 
-  const getStyle = (): StyleProp<any> => {
+  const getStyle = useCallback((): StyleProp<any> => {
     const style = {
       paddingTop: 0,
       paddingBottom: 0,
-      paddingLeft: Facade.scale(20),
-      paddingRight: Facade.scale(20),
-      height: Facade.scale(50),
+      paddingLeft: Normalize.scale(20),
+      paddingRight: Normalize.scale(20),
+      height: Normalize.scale(50),
     }
 
     const styleActive = {
@@ -113,12 +115,12 @@ const ThemedButton: React.FC<Props> = (props) => {
       borderWidth: 1,
     }
 
-    return Facade.lodash.merge(
-      style,
-      isActive ? styleActive : {},
-      props.contentStyle ?? {}
-    )
-  }
+    return _.merge(style, isActive ? styleActive : {}, props.contentStyle ?? {})
+  }, [isActive, props.contentStyle])
+
+  const MemoLabelComponent = useMemo(() => <LabelComponent {...props} />, [
+    props,
+  ])
 
   return (
     <ButtonView
@@ -154,7 +156,7 @@ const ThemedButton: React.FC<Props> = (props) => {
         isPressed={isSelected}
         radius={props.radius}
       >
-        <LabelComponent {...props} />
+        {MemoLabelComponent}
       </ThemedCard>
     </ButtonView>
   )
@@ -198,7 +200,7 @@ const ButtonView = styled.TouchableHighlight``
 const LabelView = styled(TextView)`
   text-align: center;
   include-font-padding: false;
-  margin-top: ${Facade.utils.isAndroid ? '-2px' : '0'};
+  margin-top: ${UtilsHelper.isAndroid ? '-2px' : '0'};
 `
 
 export default ThemedButton

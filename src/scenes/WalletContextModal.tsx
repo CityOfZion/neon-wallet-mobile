@@ -1,10 +1,12 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React, {Fragment} from 'react'
-import {ImageSourcePropType, TouchableWithoutFeedback} from 'react-native'
+import {ImageLoadEventData, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
@@ -23,54 +25,54 @@ interface Props {
 
 interface ListItem {
   title: string
-  source: ImageSourcePropType
+  source: ImageLoadEventData
   onClick: () => void
 }
 
 export default function WalletContextModal(props: Props) {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const controller = useSwiperController(true)
   const items: ListItem[] =
     props.route.params.wallets.length > 1
       ? [
           {
-            title: Facade.t('modals.walletContext.create'),
+            title: i18n.t('modals.walletContext.create'),
             source: require('~src/assets/images/icon-circle-plus-green.png'),
             onClick: () => {
-              props.navigation.navigate(Facade.route.Tab.name, {
-                screen: Facade.route.More.name,
+              props.navigation.navigate(wrapper.route.Tab.name, {
+                screen: wrapper.route.More.name,
                 params: {
-                  screen: Facade.route.Step1CreateWallet.name,
+                  screen: wrapper.route.Step1CreateWallet.name,
                   initial: false,
                   params: {
-                    source: Facade.route.WalletContextModal.name,
+                    source: wrapper.route.WalletContextModal.name,
                   },
                 },
               })
             },
           },
           {
-            title: Facade.t('modals.walletContext.reorder'),
+            title: i18n.t('modals.walletContext.reorder'),
             source: require('~src/assets/images/icon-circle-swap-green.png'),
             onClick: () => {
-              props.navigation.navigate(Facade.route.ReorderWalletModal.name)
+              props.navigation.navigate(wrapper.route.ReorderWalletModal.name)
             },
           },
         ]
       : [
           {
-            title: Facade.t('modals.walletContext.create'),
+            title: i18n.t('modals.walletContext.create'),
             source: require('~src/assets/images/icon-circle-plus-green.png'),
             onClick: () => {
-              props.navigation.navigate(Facade.route.Tab.name, {
-                screen: Facade.route.More.name,
+              props.navigation.navigate(wrapper.route.Tab.name, {
+                screen: wrapper.route.More.name,
                 params: {
-                  screen: Facade.route.Step1CreateWallet.name,
+                  screen: wrapper.route.Step1CreateWallet.name,
                   initial: false,
                   params: {
-                    source: Facade.route.WalletContextModal.name,
+                    source: wrapper.route.WalletContextModal.name,
                   },
                 },
               })
@@ -132,7 +134,7 @@ export default function WalletContextModal(props: Props) {
             fontSize={22}
             textAlign="center"
           >
-            {Facade.t('modals.walletContext.cancel')}
+            {i18n.t('modals.walletContext.cancel')}
           </TextView>
         </TouchableWithoutFeedback>
       </Fragment>

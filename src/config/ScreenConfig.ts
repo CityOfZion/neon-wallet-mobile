@@ -20,3 +20,5 @@ export class ScreenConfig implements StackNavigationOptions {
     },
   })
 }
+
+export const screenConfig = new ScreenConfig()

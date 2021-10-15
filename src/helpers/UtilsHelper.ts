@@ -1,10 +1,8 @@
 import {classToClass, ClassTransformOptions} from 'class-transformer'
+import {t} from 'i18n-js'
 import {chunk} from 'lodash'
 import {Clipboard, Platform} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
-
-import {Facade} from '~src/app/Facade'
-
 export abstract class UtilsHelper {
   static get isIos() {
     return Platform.OS === 'ios'
@@ -40,7 +38,7 @@ export abstract class UtilsHelper {
     if (content) {
       Clipboard.setString(content)
       showMessage({
-        message: Facade.t('toast.copiedToClipboard'),
+        message: t('toast.copiedToClipboard'), // TODO: fix ciclic import of facade on the need to translate text of Utils method #1081
         type: 'success',
       })
     }

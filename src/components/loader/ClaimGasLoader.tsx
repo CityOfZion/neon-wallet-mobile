@@ -1,6 +1,6 @@
+import i18n from 'i18n-js'
 import React from 'react'
 
-import {Facade} from '~src/app/Facade'
 import {
   ImageView,
   RelativeLayout,
@@ -24,7 +24,7 @@ const ClaimGasLoader = () => {
       />
 
       <TextView fontSize={'sm'} color={'primary'}>
-        {Facade.t('screens.getAccount.claimInProgress')}
+        {i18n.t('screens.getAccount.claimInProgress')}
       </TextView>
     </RelativeLayout>
   )

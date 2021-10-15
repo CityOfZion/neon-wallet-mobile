@@ -1,3 +1,7 @@
+import {BlockchainServiceKey} from '~src/blockchain'
+
+export type MultichainExchange = Record<BlockchainServiceKey, Exchange>
+
 export interface Exchange {
   [symbolRef: string]: {
     to: {

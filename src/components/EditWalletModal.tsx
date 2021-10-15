@@ -1,12 +1,14 @@
-import {RouteProp, useNavigation} from '@react-navigation/native'
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import {AwaitActivity} from '@simpli/react-native-await'
+import {Await, AwaitActivity} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
 import React, {useState} from 'react'
 import {Alert, StyleSheet, TouchableWithoutFeedback} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
+import {wrapper} from '../app/ApplicationWrapper'
+
 import {TabStackParamList} from '~/src/navigation/TabNavigation'
-import {Facade} from '~src/app/Facade'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
@@ -37,7 +39,7 @@ export const EditWalletModal = (
   props: EditWalletModalProps & EditWalletParams
 ) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const wallet = props.route.params?.wallet
   var isDeleted: boolean = false
@@ -51,7 +53,7 @@ export const EditWalletModal = (
 
   const submit = async () => {
     if (name.length === 0 || name.length > 20) {
-      Alert.alert(Facade.t('modals.editWallet.invalidName'))
+      Alert.alert(i18n.t('modals.editWallet.invalidName'))
       return
     }
 
@@ -65,9 +67,9 @@ export const EditWalletModal = (
 
     await dispatchAsync(RootStore.app.actions.syncWallets())
     if (props.route.params?.fromWalletDetailsPage) {
-      route = Facade.route.MyWallets.name
+      route = wrapper.route.MyWallets.name
     } else {
-      route = Facade.route.ListWalletsPage.name
+      route = wrapper.route.ListWalletsPage.name
     }
     props.navigation.navigate(route)
   }
@@ -87,7 +89,7 @@ export const EditWalletModal = (
   }
 
   const save = () => {
-    Facade.await.run('swiperRight', submit, 300)
+    Await.run('swiperRight', submit, 300)
   }
 
   const handleNavigation = () => {
@@ -95,12 +97,12 @@ export const EditWalletModal = (
     if (isDeleted) {
       props.navigation.reset({
         index: 0,
-        routes: [{name: Facade.route.ListWalletsPage.name}],
+        routes: [{name: wrapper.route.ListWalletsPage.name}],
       })
       if (props.route.params?.fromWalletDetailsPage) {
-        route = Facade.route.MyWallets.name
+        route = wrapper.route.MyWallets.name
       } else {
-        route = Facade.route.ListWalletsPage.name
+        route = wrapper.route.ListWalletsPage.name
       }
       props.navigation.navigate(route)
     } else {
@@ -111,14 +113,14 @@ export const EditWalletModal = (
   const alertDelete = () => {
     Alert.alert(
       '',
-      Facade.t('modals.editWallet.deleteWalletAlert'),
+      i18n.t('modals.editWallet.deleteWalletAlert'),
       [
         {
-          text: Facade.t('modals.editWallet.navigation.cancel'),
+          text: i18n.t('modals.editWallet.navigation.cancel'),
           style: 'cancel',
         },
         {
-          text: Facade.t('modals.editWallet.navigation.delete'),
+          text: i18n.t('modals.editWallet.navigation.delete'),
           onPress: deleteAction,
         },
       ],
@@ -129,10 +131,10 @@ export const EditWalletModal = (
   const alertNoBackupDelete = () => {
     Alert.alert(
       '',
-      Facade.t('modals.editWallet.deleteWalletNoBackupAlert'),
+      i18n.t('modals.editWallet.deleteWalletNoBackupAlert'),
       [
         {
-          text: Facade.t('modals.editWallet.navigation.ok'),
+          text: i18n.t('modals.editWallet.navigation.ok'),
           style: 'cancel',
         },
       ],
@@ -144,9 +146,9 @@ export const EditWalletModal = (
     <SwiperPanel
       padding={20}
       fullSize={true}
-      title={Facade.t('modals.editAccount.title')}
-      rightButton={Facade.t('modals.editWallet.navigation.save')}
-      leftButton={Facade.t('modals.editWallet.navigation.cancel')}
+      title={i18n.t('modals.editAccount.title')}
+      rightButton={i18n.t('modals.editWallet.navigation.save')}
+      leftButton={i18n.t('modals.editWallet.navigation.cancel')}
       imageSize={[22, 22]}
       onClose={handleNavigation}
       onLeftPress={controller.close}
@@ -165,12 +167,12 @@ export const EditWalletModal = (
         >
           <LinearLayout>
             <InputLabel
-              title={Facade.t('modals.editWallet.walletName')}
+              title={i18n.t('modals.editWallet.walletName')}
               marginBottom={'8px'}
             />
 
             <InputWithValidation
-              placeholder={Facade.t('modals.editWallet.namePlaceholder')}
+              placeholder={i18n.t('modals.editWallet.namePlaceholder')}
               onChangeText={(val) => setName(val)}
               color={'background.4'}
               value={name}
@@ -188,12 +190,12 @@ export const EditWalletModal = (
           <LinearLayout>
             <LinearLayout height="1px" bg={theme.colors.background[10]} />
             <InputLabel
-              title={Facade.t('modals.editWallet.deleteWallet')}
+              title={i18n.t('modals.editWallet.deleteWallet')}
               marginBottom={'8px'}
               marginTop={'30px'}
             />
             <TextView color={theme.colors.text[0]} marginBottom={'30px'}>
-              {Facade.t('modals.editWallet.deleteWalletSubtitle')}
+              {i18n.t('modals.editWallet.deleteWalletSubtitle')}
             </TextView>
             <TouchableWithoutFeedback onPress={alertDelete}>
               <LinearLayout
@@ -218,7 +220,7 @@ export const EditWalletModal = (
                   color={'primary'}
                   fontSize={20}
                 >
-                  {Facade.t('modals.editWallet.deleteButtom')}
+                  {i18n.t('modals.editWallet.deleteButtom')}
                 </TextView>
               </LinearLayout>
             </TouchableWithoutFeedback>

@@ -1,10 +1,56 @@
 {
     "changelog": [
     	{
+            "version": "V1.0.20-57",
+            "date": "october 26 2021",
+            "changes": [
+                "-iOS app crash during encrypted key import",
+                "-Changes to Random Token Color Algorithm",
+                "-Fix Claim Gas in both blockchains",
+                "-Error Page on Import of seed words",
+                "-When I perform a transaction, the confirmation toast keeps appearing in a loop",
+                "-Bug fix",
+            ]
+        },
+    	{
+            "version": "V1.0.19-56",
+            "date": "october 20 2021",
+            "changes": [
+                "-Changes to Import Flow 4 Encrypted Key",
+                "-Scan QR Code -> Filter Address by Chain -> Select Account",
+                "-Confirm Transaction Screen: Add Chain Identifier to Address",
+                "-Bug fix",
+            ]
+        },
+    	{
+            "version": "V1.0.18-55",
+            "date": "october 14 2021",
+            "changes": [
+                "-Changes to Import Flow 3 Watch Account",
+                "-Account Creation: Blockchain Order and Default Selection",
+                "-Changes to Import Flow Encrypted Key",
+            ]
+        },
+    	{
+            "version": "V1.0.17-54",
+            "date": "october 07 2021",
+            "changes": [
+                "-Contacts Flow Multichain Improvement -> My Accounts Tab", 
+                "-Changes to Account Card",
+                "-Changes to Contacts Flow",
+                "-Changes to First Wallet Creation when App first opens",
+                "-Changes to Create a Wallet Flow",
+                "-Changes to Import Flow 2 - Importing WIF",
+                "-Changes to Claim Gas Flow",
+                "-Changes to Import Flow 1 - Importing Mnemonic",
+                "-Changes to Transaction flow",
+            ]
+        },
+    	{
             "version": "V1.0.16-54",
             "date": "August 20 2021",
             "changes": [
-                "- Presenting the Neon Wallet Mobile" 
+                "-Presenting the Neon Wallet Mobile" 
             ]
         },
     	

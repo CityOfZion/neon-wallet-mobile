@@ -1,22 +1,22 @@
 import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 
-import {NeoNode} from '~src/models/NeoNode'
+import {Node} from '~src/models/Node'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
 import {Wallet} from '~src/models/redux/Wallet'
-import {Exchange} from '~src/types/exchange'
+import {Exchange, MultichainExchange} from '~src/types/exchange'
 
 @HttpExclude()
 export class App implements AppState {
   @HttpExpose()
-  exchange: Exchange = {}
+  exchange: MultichainExchange = {neoLegacy: {}, neo3: {}}
 
   @HttpExpose()
   tokens: TokenAsset[] = []
 
   @HttpExpose()
-  nodes: NeoNode[] = []
+  nodes: Node[] = []
 
   @HttpExpose()
   wallets: Wallet[] = []
@@ -26,7 +26,4 @@ export class App implements AppState {
 
   @HttpExpose()
   contacts: Contact[] = []
-
-  @HttpExpose()
-  preAccount: Account | null = null
 }

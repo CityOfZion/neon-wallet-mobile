@@ -1,13 +1,12 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {plainToClass} from 'class-transformer'
 
+import {SecurityHelper} from '~/src/helpers/SecurityHelper'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import {TokenAsset} from '~/src/models/TokenAsset'
-import {Account} from '~/src/models/redux/Account'
-import {Facade} from '~src/app/Facade'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {Wallet} from '~src/models/redux/Wallet'
-import {ClearStateDispatcher} from '~src/store/wallet/dispatchers/ClearStateDispatcher'
 import {IdDispatcher} from '~src/store/wallet/dispatchers/IdDispatcher'
 import {NameDispatcher} from '~src/store/wallet/dispatchers/NameDispatcher'
 import {PassphraseDispatcher} from '~src/store/wallet/dispatchers/PassphraseDispatcher'
@@ -63,7 +62,7 @@ export class WalletReducer extends ReducerWrapper<
           .app.wallets.map((wallet) => wallet.id)
           .filter((id) => id !== null) as string[]
         const mnemonics = await Promise.all(
-          walletIds.map(async (id) => await Facade.security.loadMnemonic(id))
+          walletIds.map(async (id) => await SecurityHelper.loadMnemonic(id))
         )
         const foundMnemonic = mnemonics.find((it) => it === mnemonic)
         if (foundMnemonic) {
@@ -75,13 +74,13 @@ export class WalletReducer extends ReducerWrapper<
     },
     createAndSave: (): AsyncAction<string> => {
       return async (dispatch, getState) => {
-        const wallets = (await Storage.wallets.load()) ?? []
+        const wallets = getState().app.wallets
 
         const wallet = plainToClass(Wallet, getState().wallet)
         const {securityPhrase} = getState().wallet
 
         // TODO: Review ID generator
-        wallet.id = Facade.utils.uuid()
+        wallet.id = UtilsHelper.uuid()
 
         wallets.push(wallet)
 
@@ -94,7 +93,7 @@ export class WalletReducer extends ReducerWrapper<
             )
           }
 
-          await Facade.security.saveMnemonic(wallet.id, securityPhrase)
+          await SecurityHelper.saveMnemonic(wallet.id, securityPhrase)
         }
 
         return wallet.id

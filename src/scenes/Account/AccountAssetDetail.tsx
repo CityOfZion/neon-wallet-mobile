@@ -1,10 +1,10 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import {AwaitActivity} from '@simpli/react-native-await'
+import {Await, AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useState} from 'react'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import AssetQuoteComponent from '~src/components/AssetQuoteComponent'
 import TransactionsList from '~src/components/TransactionsList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -41,7 +41,7 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
   const wallet = walletsPool.find((it) => it.id === walletId)
 
   useEffect(() => {
-    Facade.await.run('populateTransaction', () => fetchTransaction(1))
+    Await.run('populateTransaction', () => fetchTransaction(1))
   }, [])
 
   const fetchTransaction = async (currentPage: number, collector = 0) => {
@@ -71,7 +71,7 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
       return
     }
 
-    const model = Facade.utils.clone(account ?? new Account())
+    const model = UtilsHelper.clone(account ?? new Account())
 
     const pagination = await model.populateTransactions(tokensPool, currentPage)
     setCurrentPage(pagination.pageNumber + 1)
@@ -94,8 +94,8 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
   return (
     <ScreenLayout
       onReachBottom={() => {
-        if (Facade.await.inAction('loadMoreTransaction')) return
-        Facade.await.run(
+        if (Await.inAction('loadMoreTransaction')) return
+        Await.run(
           'loadMoreTransaction',
           () => fetchTransaction(currentPage),
           500

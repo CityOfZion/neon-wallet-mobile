@@ -1,6 +1,7 @@
 import {registerRootComponent} from 'expo'
 
-import '~src/vendor/window-crypto'
+import 'react-native-get-random-values'
+import 'text-encoding-polyfill'
 import 'reflect-metadata'
 
 import App from './src/App'

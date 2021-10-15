@@ -1,12 +1,19 @@
 import {useNavigation} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
 import {LinearGradient as ExpoLinearGradient} from 'expo-linear-gradient'
+import i18n from 'i18n-js'
+import _ from 'lodash'
 import React, {Fragment, useState, useEffect} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 import styled from 'styled-components'
 import {layout, LayoutProps} from 'styled-system'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+import {FilterHelper} from '../helpers/FilterHelper'
+import {UtilsHelper} from '../helpers/UtilsHelper'
+import {ModalStackParamList} from '../navigation/ModalStackNavigation'
+
 import {Account} from '~src/models/redux/Account'
 import {
   ImageView,
@@ -22,13 +29,11 @@ interface Props {
 
 export default function ColorSelector(props: Props) {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
-  const navigation = useNavigation()
+  const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
   const [color, setColor] = useState<string>()
-  const colorsList = Facade.lodash.clone(
-    Object.values(theme.colors.card) as string[]
-  )
+  const colorsList = _.clone(Object.values(theme.colors.card) as string[])
 
   // If color selected from color picker, adds to the list
   color && colorsList.push(color)
@@ -67,7 +72,7 @@ export default function ColorSelector(props: Props) {
             <LinearGradient
               width="100%"
               height="100%"
-              colors={[color, Facade.filter.toDarkerShade(color)]}
+              colors={[color, FilterHelper.toDarkerShade(color)]}
             />
           )}
         </LinearLayout>
@@ -81,7 +86,7 @@ export default function ColorSelector(props: Props) {
           <LinearGradient
             width="100%"
             height="100%"
-            colors={[color, Facade.filter.toDarkerShade(color)]}
+            colors={[color, FilterHelper.toDarkerShade(color)]}
           />
           {color === props.account.backgroundColor && (
             <ImageView
@@ -102,8 +107,8 @@ export default function ColorSelector(props: Props) {
   const customColorButton = (
     <TouchableWithoutFeedback
       onPress={() => {
-        navigation.navigate(Facade.route.Modal.name, {
-          screen: Facade.route.CustomColor.name,
+        navigation.navigate(wrapper.route.Modal.name, {
+          screen: wrapper.route.CustomColor.name,
           params: {
             onColorPicked: (hex: string) => {
               setColor(hex)
@@ -132,7 +137,7 @@ export default function ColorSelector(props: Props) {
           color={theme.colors.text[7]}
           textAlign="center"
         >
-          {Facade.t('components.colorSelector.customColor')}
+          {i18n.t('components.colorSelector.customColor')}
         </TextView>
       </RelativeLayout>
     </TouchableWithoutFeedback>
@@ -143,7 +148,7 @@ export default function ColorSelector(props: Props) {
   const paddingButton = <LinearLayout width={71} height={71} />
 
   // Buttons grouped by 4
-  const buttonGroup = Facade.utils.chunkPadded(buttonList, 4, paddingButton)
+  const buttonGroup = UtilsHelper.chunkPadded(buttonList, 4, paddingButton)
   return (
     <Fragment>
       {buttonGroup.map((button, key) => (

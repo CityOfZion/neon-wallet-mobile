@@ -1,10 +1,12 @@
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {Wallet} from '~src/models/redux/Wallet'
@@ -25,7 +27,7 @@ const MenuItemComponent = (props: {
       title={props.wallet.name ?? '?'}
       arrowDirection={RightIconType.ARROW_RIGHT}
       onPress={() =>
-        props.navigation.navigate(Facade.route.MyWalletOptions.name, {
+        props.navigation.navigate(wrapper.route.MyWalletOptions.name, {
           wallet: props.wallet,
         })
       }
@@ -59,7 +61,7 @@ const MyWalletsPage = (props: Props) => {
             fontFamily="medium"
             textAlign={'center'}
           >
-            {Facade.t('myWalletsPage.noWallet')}
+            {i18n.t('myWalletsPage.noWallet')}
           </TextView>
           <TextView
             color="white"
@@ -67,7 +69,7 @@ const MyWalletsPage = (props: Props) => {
             fontFamily="medium"
             textAlign={'center'}
           >
-            {Facade.t('myWalletsPage.noWallet_2')}
+            {i18n.t('myWalletsPage.noWallet_2')}
           </TextView>
         </LinearLayout>
       )}

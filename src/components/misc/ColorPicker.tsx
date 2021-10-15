@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, {useState, useEffect} from 'react'
 import {GestureResponderEvent, LayoutChangeEvent} from 'react-native'
 
-import {Facade} from '~src/app/Facade'
+import {FilterHelper} from '~/src/helpers/FilterHelper'
 import styled, {
   LinearLayout,
   RelativeLayout,
@@ -27,7 +27,7 @@ const ColorPicker: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if (props.color) {
-      const [h, s, l] = Facade.filter.hexToHsl(props.color)
+      const [h, s, l] = FilterHelper.hexToHsl(props.color)
       let hue, saturation, luminosity
 
       if (s > 40 && Math.abs(l - 50) <= 30) {
@@ -51,7 +51,7 @@ const ColorPicker: React.FC<Props> = (props) => {
       setHueAngle(normalizeAngle(-h))
       setLuminosityAngle(Math.abs(359 - (15 + (330 * l) / 100)))
 
-      const hex = Facade.filter.hslToHex(hue, saturation, luminosity)
+      const hex = FilterHelper.hslToHex(hue, saturation, luminosity)
       if (props.onChange) props.onChange(hex)
     }
   }, [])
@@ -61,7 +61,7 @@ const ColorPicker: React.FC<Props> = (props) => {
   }
 
   const getHex = () => {
-    return Facade.filter.hslToHex(hue, saturation, luminosity)
+    return FilterHelper.hslToHex(hue, saturation, luminosity)
   }
 
   const getHueRadius = (includeDistanceVariation = true) => {
@@ -111,7 +111,7 @@ const ColorPicker: React.FC<Props> = (props) => {
     setSaturation(saturation)
     setLuminosity(luminosity)
 
-    const hex = Facade.filter.hslToHex(hue, saturation, luminosity)
+    const hex = FilterHelper.hslToHex(hue, saturation, luminosity)
     if (props.onChange) props.onChange(hex)
 
     return false
@@ -152,7 +152,7 @@ const ColorPicker: React.FC<Props> = (props) => {
     setSaturation(saturation)
     setLuminosity(luminosity)
 
-    const hex = Facade.filter.hslToHex(hue, saturation, luminosity)
+    const hex = FilterHelper.hslToHex(hue, saturation, luminosity)
     if (props.onChange) props.onChange(hex)
 
     return false

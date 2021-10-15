@@ -1,16 +1,17 @@
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React, {useState} from 'react'
 import {Dimensions} from 'react-native'
 import SortableList from 'react-native-sortable-list'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {AwaitActivity} from '~/node_modules/@simpli/react-native-await'
-import {Facade} from '~src/app/Facade'
+import {UtilsHelper} from '../helpers/UtilsHelper'
+
+import {Await, AwaitActivity} from '~/node_modules/@simpli/react-native-await'
 import {Sync} from '~src/app/Sync'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {RootStore} from '~src/store/RootStore'
@@ -53,13 +54,13 @@ export default function ReorderWalletModal(props: Props) {
 
   const commitAndClose = async () => {
     if (order.length > 0) {
-      Facade.await.init('populateWallet')
+      Await.init('populateWallet')
       await dispatchAsync(RootStore.wallet.actions.reorderAndSave(order))
       await dispatchAsync(RootStore.app.actions.syncWallets())
       await dispatchAsync(RootStore.app.actions.syncTokenAssets())
       dispatch(RootStore.wallet.actions.selectWallet(null))
-      await Facade.utils.sleep(1000)
-      Facade.await.done('populateWallet')
+      await UtilsHelper.sleep(1000)
+      Await.done('populateWallet')
     }
 
     controller.close()
@@ -68,14 +69,14 @@ export default function ReorderWalletModal(props: Props) {
   return (
     <SwiperPanel
       controller={controller}
-      title={Facade.t('modals.reorderWallet.title')}
+      title={i18n.t('modals.reorderWallet.title')}
       fullSize={true}
       padding={24}
       onClose={props.navigation.goBack}
-      leftButton={Facade.t('modals.reorderWallet.cancel')}
+      leftButton={i18n.t('modals.reorderWallet.cancel')}
       rightButton={
         <ThemedButton
-          label={Facade.t('modals.reorderWallet.save')}
+          label={i18n.t('modals.reorderWallet.save')}
           textColor={'primary'}
           fontSize={'16px'}
           rounded={false}
@@ -83,7 +84,7 @@ export default function ReorderWalletModal(props: Props) {
         />
       }
       onLeftPress={controller.close}
-      onRightPress={() => Facade.await.run('commitAndClose', commitAndClose)}
+      onRightPress={() => Await.run('commitAndClose', commitAndClose)}
       solidColorBG={true}
     >
       <AwaitActivity
@@ -97,7 +98,7 @@ export default function ReorderWalletModal(props: Props) {
             fontSize={18}
             color="text.0"
           >
-            {Facade.t('modals.reorderWallet.subtitle')}
+            {i18n.t('modals.reorderWallet.subtitle')}
           </TextView>
           <SortableList
             contentContainerStyle={{

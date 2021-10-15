@@ -1,16 +1,24 @@
-import {wallet} from '@cityofzion/neon-core'
 import {RouteProp, CommonActions} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {BarCodeEvent, BarCodeScanner} from 'expo-barcode-scanner'
 import ExpoBarCodeScannerModule from 'expo-barcode-scanner/src/ExpoBarCodeScannerModule'
+import i18n from 'i18n-js'
 import React, {useState, useEffect, useRef} from 'react'
 import {StyleSheet, Animated} from 'react-native'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+import {
+  getBlockchainByWif,
+  validateAddressAllBlockchains,
+  validatePrivateKeyWithPasswordAllBlockchains,
+  validateTextAllBlockchains,
+  validateWifAllBlockchains,
+} from '../blockchain'
+import {applicationConfig} from '../config/ApplicationConfig'
+
 import {useSwiperController} from '~src/components/SwiperPanel'
-import {NeoURI} from '~src/helpers/UriHelper'
+import {NeoURI, UriHelper} from '~src/helpers/UriHelper'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import HandleQRModal from '~src/scenes/HandleQRModal'
 import {
   ButtonView,
@@ -48,7 +56,7 @@ const QRCodeScan = (props: Props) => {
 
   useEffect(() => {
     if (props.route.params?.address) {
-      if (wallet.isAddress(props.route.params.address)) {
+      if (validateAddressAllBlockchains(props.route.params.address)) {
         whatDoWithData(props.route.params.address)
       }
     }
@@ -76,12 +84,12 @@ const QRCodeScan = (props: Props) => {
     let granted = (await BarCodeScanner.getPermissionsAsync()).granted
 
     if (!granted) {
-      setMessage(Facade.t('screens.scanQrCode.requesting'))
+      setMessage(i18n.t('screens.scanQrCode.requesting'))
 
       granted = (await BarCodeScanner.requestPermissionsAsync()).granted
 
       if (!granted) {
-        setMessage(Facade.t('screens.scanQrCode.noAccess'))
+        setMessage(i18n.t('screens.scanQrCode.noAccess'))
       } else {
         setHasPermission(granted)
       }
@@ -91,19 +99,16 @@ const QRCodeScan = (props: Props) => {
   }
 
   const isValid = (key: string) =>
-    wallet.isAddress(key) ||
-    wallet.isNEP2(key) ||
-    wallet.isWIF(key) ||
-    Facade.uri.isValid(key)
+    validateTextAllBlockchains(key) || UriHelper.isValid(key)
 
   const goTo = (key: string): NavParam<RootStackParamList> | undefined => {
-    if (wallet.isNEP2(key)) {
+    if (validatePrivateKeyWithPasswordAllBlockchains(key)) {
       return [
-        Facade.route.Tab.name,
+        wrapper.route.Tab.name,
         {
-          screen: Facade.route.More.name,
+          screen: wrapper.route.More.name,
           params: {
-            screen: Facade.route.Passphrase.name,
+            screen: wrapper.route.Passphrase.name,
             initial: false,
             params: {
               encryptedKey: key,
@@ -111,32 +116,39 @@ const QRCodeScan = (props: Props) => {
           },
         },
       ]
-    } else if (wallet.isWIF(key)) {
-      return [
-        Facade.route.Tab.name,
-        {
-          screen: Facade.route.More.name,
-          params: {
-            screen: Facade.route.CustomizeAccount.name,
-            initial: false,
+    } else if (validateWifAllBlockchains(key)) {
+      const blockchainName = getBlockchainByWif(key)
+      if (blockchainName) {
+        return [
+          wrapper.route.Tab.name,
+          {
+            screen: wrapper.route.More.name,
             params: {
-              source: Facade.route.ImportKey.name,
-              address: Facade.asteroid.generateNeoAccountFromWif(key).address,
-              legacy: true,
-              wif: key,
+              screen: wrapper.route.CustomizeAccount.name,
+              initial: false,
+              params: {
+                source: wrapper.route.ImportKey.name,
+                address:
+                  applicationConfig.blockchain[
+                    blockchainName
+                  ].generateAccountFromWif(key),
+                legacy: true,
+                wif: key,
+                blockchain: blockchainName,
+              },
             },
           },
-        },
-      ]
-    } else if (Facade.uri.isValid(key)) {
+        ]
+      }
+    } else if (UriHelper.isValid(key)) {
       return [
-        Facade.route.Modal.name,
+        wrapper.route.Modal.name,
         {
-          screen: Facade.route.SendModalStack.name,
+          screen: wrapper.route.SendModalStack.name,
           params: {
-            screen: Facade.route.SendWalletSelectionModal.name,
+            screen: wrapper.route.SendWalletSelectionModal.name,
             params: {
-              uri: Facade.uri.parse(key),
+              uri: UriHelper.parse(key),
             },
           },
         },
@@ -147,19 +159,27 @@ const QRCodeScan = (props: Props) => {
   const whatDoWithData = (info: string | NeoURI) => {
     if (!controller.isShowing) {
       if (isValid(info as string)) {
-        setMessage(Facade.t('screens.scanQrCode.success'))
+        setMessage(i18n.t('screens.scanQrCode.success'))
         // If there's a callback, calls the callback and navigates back
         if (props.route.params?.onScan) {
           let data: NeoURI | string = info
 
-          if (Facade.uri.isValid(info as string)) {
-            data = Facade.uri.parse(info as string) ?? info
+          if (UriHelper.isValid(info as string)) {
+            data = UriHelper.parse(info as string) ?? info
           }
           props.navigation.goBack()
           props.route.params.onScan(data)
         } else {
           // If scanned QR is an address, opens modal
-          if (wallet.isAddress(info as string)) {
+          if (validateAddressAllBlockchains(info as string)) {
+            let data: NeoURI | string = info
+
+            if (UriHelper.isValid(info as string)) {
+              data = UriHelper.parse(info as string) ?? info
+              const destination = goTo(info as string)
+              props.navigation.pop(1)
+              destination && props.navigation.navigate(...destination)
+            }
             setAddress(info as string)
             controller.open()
           } else {
@@ -170,7 +190,7 @@ const QRCodeScan = (props: Props) => {
           }
         }
       } else {
-        setMessage(Facade.t('screens.scanQrCode.tryAgain'))
+        setMessage(i18n.t('screens.scanQrCode.tryAgain'))
       }
     }
   }
@@ -220,7 +240,7 @@ const QRCodeScan = (props: Props) => {
       >
         <LinearLayout mb={6}>
           <TextView fontSize="22px" color="primary" fontFamily="regular">
-            {Facade.t('screens.scanQrCode.cancel')}
+            {i18n.t('screens.scanQrCode.cancel')}
           </TextView>
         </LinearLayout>
       </ButtonView>

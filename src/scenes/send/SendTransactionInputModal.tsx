@@ -1,16 +1,26 @@
-import {wallet} from '@cityofzion/neon-core'
 import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
+import I18n from 'i18n-js'
 import PropTypes from 'prop-types'
-import React, {Fragment, useEffect, useState} from 'react'
+import React, {Fragment, useCallback, useEffect, useState} from 'react'
 import {View, StyleSheet, Text, Keyboard} from 'react-native'
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler'
 import InputScrollView from 'react-native-input-scroll-view'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {
+  BlockchainServiceKey,
+  validateAddressAllBlockchains,
+  SenderTransactionInfo,
+} from '~/src/blockchain'
+import {TransactionFeeNeo3} from '~/src/components/TransactionFeeNeo3'
+import {applicationConfig} from '~/src/config/ApplicationConfig'
 import {Currency} from '~/src/enums/Currency'
-import {Facade} from '~src/app/Facade'
+import {FilterHelper} from '~/src/helpers/FilterHelper'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
+import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
 import AccountCard from '~src/components/AccountCard'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
@@ -22,6 +32,7 @@ import {TipCheckbox} from '~src/components/TipCheckbox'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {NeoURI} from '~src/helpers/UriHelper'
 import {
+  CustomPriotity,
   FasterPriority,
   FastestPriority,
   FastPriority,
@@ -40,6 +51,7 @@ import {
   LinearLayout,
   TextView,
 } from '~src/styles/styled-components'
+
 export interface SendTransactionInputModalParams {
   walletTitle: string
   account: Account
@@ -48,7 +60,9 @@ export interface SendTransactionInputModalParams {
 }
 
 interface Props {
-  navigation: StackNavigationProp<ModalStackParamList & SendModalStackParamList>
+  navigation: StackNavigationProp<
+    ModalStackParamList & SendModalStackParamList & WalletStackParamList
+  >
   route: RouteProp<SendModalStackParamList, 'SendTransactionInputModal'>
 }
 
@@ -200,21 +214,33 @@ const PriorityTab = (props: {
 }
 
 const DestinationAddressField = (props: {
+  blockchain: BlockchainServiceKey
   address: string
   contact?: Contact
   onAddressChanged: (address: string) => void
   onSelected: (item: Contact | Account, addressSelected?: string) => void
   handleQrCode: (data: NeoURI | string) => void
   validateAddress: (val: string) => boolean
+  onValidateAddress: (addressIsValid: boolean) => void
 }) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
+
+  const validateAddress = useCallback(() => {
+    return applicationConfig.blockchain[props.blockchain].validateAddress(
+      props.address
+    )
+  }, [props.address])
+
+  useEffect(() => {
+    props.onValidateAddress(validateAddress())
+  }, [props.address])
 
   return (
     <Fragment>
       <InputLabel
-        title={Facade.t('modals.send.transactionInput.destinationAddress')}
+        title={I18n.t('modals.send.transactionInput.destinationAddress')}
         color={'text.0'}
         marginTop={30}
         marginBottom={30}
@@ -225,8 +251,8 @@ const DestinationAddressField = (props: {
         color={theme.colors.text[0]}
         invalidColor={theme.colors.text[10]}
         value={props.address}
-        placeholder={Facade.t('modals.send.transactionInput.enterDestination')}
-        validator={(val) => props.validateAddress(val)}
+        placeholder={I18n.t('modals.send.transactionInput.enterDestination')}
+        validator={() => validateAddress()}
         separatorColor={theme.colors.background[13]}
         sideMargins={0}
         showContacts={true}
@@ -241,18 +267,21 @@ const DestinationAddressField = (props: {
 }
 
 const TokenField = (props: {
-  navigation: StackNavigationProp<ModalStackParamList & SendModalStackParamList>
+  navigation: StackNavigationProp<
+    ModalStackParamList & SendModalStackParamList & WalletStackParamList
+  >
   account: Account
   token: TokenAsset | null | undefined
   setToken: React.Dispatch<React.SetStateAction<TokenAsset | null | undefined>>
+  tokenFromUri: boolean
 }) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   return (
     <Fragment>
       <InputLabel
-        title={Facade.t('modals.send.transactionInput.token')}
+        title={I18n.t('modals.send.transactionInput.token')}
         color={'text.0'}
         marginTop={50}
         marginBottom={30}
@@ -260,14 +289,18 @@ const TokenField = (props: {
       />
 
       <ButtonView
-        onPress={() => {
-          props.navigation.navigate(Facade.route.ListTokenModal.name, {
-            selectedToken: props.token,
-            setToken: props.setToken,
-            account: props.account,
-            filterBy: 'send',
-          })
-        }}
+        onPress={
+          !props.tokenFromUri
+            ? () => {
+                props.navigation.navigate(wrapper.route.ListTokenModal.name, {
+                  selectedToken: props.token,
+                  setToken: props.setToken,
+                  account: props.account,
+                  filterBy: 'send',
+                })
+              }
+            : undefined
+        }
       >
         <LinearLayout position="relative">
           <InputWithValidation
@@ -275,7 +308,7 @@ const TokenField = (props: {
             invalidColor={theme.colors.text[10]}
             fontStyle={'normal'}
             value={props.token?.name ?? ''}
-            placeholder={Facade.t('modals.send.transactionInput.selectToken')}
+            placeholder={I18n.t('modals.send.transactionInput.selectToken')}
             validator={() => true}
             separatorColor={theme.colors.background[13]}
             sideMargins={0}
@@ -329,7 +362,7 @@ const AmountField = (props: {
   }
   const {language} = useSelector((state: RootState) => state.settings)
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   return (
@@ -342,17 +375,17 @@ const AmountField = (props: {
       >
         <LinearLayout weight={2}>
           <InputLabel
-            title={Facade.t('modals.send.transactionInput.amount')}
+            title={I18n.t('modals.send.transactionInput.amount')}
             color={'text.0'}
             capitalize={true}
           />
         </LinearLayout>
         <LinearLayout orientation={'horiz'} alignItems={'center'}>
           <TextView mr={'6px'} color={'text.10'}>
-            {Facade.t('modals.send.transactionInput.totalAfterTransaction')}
+            {I18n.t('modals.send.transactionInput.totalAfterTransaction')}
           </TextView>
           <TextView color={'text.0'} fontFamily={'bold'} fontSize={'16px'}>
-            {Facade.filter.decimal(props.remainingTokenBalance, language)}
+            {FilterHelper.decimal(props.remainingTokenBalance, language)}
           </TextView>
         </LinearLayout>
         <ButtonView
@@ -363,7 +396,7 @@ const AmountField = (props: {
           }}
         >
           <TextView color={'primary'} fontSize={'15px'} fontFamily={'medium'}>
-            {Facade.t('modals.send.transactionInput.max')}
+            {I18n.t('modals.send.transactionInput.max')}
           </TextView>
         </ButtonView>
       </LinearLayout>
@@ -381,11 +414,11 @@ const AmountField = (props: {
             invalidMessageColor={theme.colors.quinary}
             value={props.amount !== null ? String(props.amount) : ''}
             placeholder={
-              Facade.t('modals.send.transactionInput.enterValue') +
+              I18n.t('modals.send.transactionInput.enterValue') +
               (props.token?.symbol ?? 'NEO')
             }
             validator={(val) => props.validatorAmount(val)}
-            invalidMessage={Facade.t(
+            invalidMessage={I18n.t(
               'modals.send.transactionInput.insufficientFunds'
             )}
             separatorColor={theme.colors.background[13]}
@@ -414,11 +447,11 @@ const AmountField = (props: {
               invalidMessageColor={theme.colors.quinary}
               value={props.fiat !== '' ? String(props.fiat) : ''}
               placeholder={
-                Facade.t('modals.send.transactionInput.enterValue') +
+                I18n.t('modals.send.transactionInput.enterValue') +
                 props.currency
               }
               validator={() => true}
-              invalidMessage={Facade.t(
+              invalidMessage={I18n.t(
                 'modals.send.transactionInput.insufficientFunds'
               )}
               separatorColor={theme.colors.background[13]}
@@ -450,7 +483,7 @@ const AmountField = (props: {
                 fontFamily={'medium'}
                 mb={'2'}
               >
-                {Facade.t('modals.send.transactionInput.roundDown')}
+                {I18n.t('modals.send.transactionInput.roundDown')}
               </TextView>
             </LinearLayout>
           </ButtonView>
@@ -465,11 +498,12 @@ const SendTransactionInputModal = (prop: Props) => {
   const {contacts, tokens, accounts, wallets, exchange} = useSelector(
     (state: RootState) => state.app
   )
+  const {account: accountRedux} = useSelector((state: RootState) => state)
   const [fieldTyping, setFieldTyping] = useState<string>(
     uri ? 'amountField' : ''
   )
-  const {currency, language} = useSelector((state: RootState) => state.settings)
-
+  const {currency} = useSelector((state: RootState) => state.settings)
+  const [isValidTransaction, setIsValidTransaction] = useState<boolean>(false)
   const [receiverAddress, setReceiverAddress] = useState(
     prop.route.params?.uri?.address ?? ''
   )
@@ -478,7 +512,9 @@ const SendTransactionInputModal = (prop: Props) => {
   )
   const [fiat, setFiat] = useState<number | string>('')
   const [tip, setTip] = useState<{amount: number; address: string}>()
+  const [tokenTipAmount, setTokenTipAmount] = useState<number>(0)
   const hash = prop.route.params?.uri?.tokenHash ?? ''
+  const tokenFromUri = Boolean(prop.route.params?.uri?.tokenHash)
   const [contact, setContact] = useState<Contact>()
   const [token, setToken] = useState<TokenAsset | null | undefined>(
     tokens.find((t: TokenAsset) => t.hash === hash) ??
@@ -487,22 +523,25 @@ const SendTransactionInputModal = (prop: Props) => {
         : null)
   )
   const [priority, setPriority] = useState<PriorityFee>(FastPriority())
+  const [cozTip, setCozTip] = useState<
+    {address: string; token: string} | undefined
+  >(applicationConfig.blockchain[account.blockchain].cozTip)
 
   const dispatch = useDispatch<DispatchResult>()
 
   const {isConnected} = useSelector((state: RootState) => state.network)
-
   const show = useNavigationState(
     (state) =>
       state.routes[state.routes.length - 1].name ===
-      Facade.route.SendTransactionInputModal.name
+      wrapper.route.SendTransactionInputModal.name
   )
 
   useEffect(() => {
     if (fieldTyping === 'amountField') {
       if (amount !== '') {
         if (token?.symbol) {
-          const ratio = exchange[token?.symbol]?.to[currency] ?? null
+          const ratio =
+            exchange[account.blockchain][token?.symbol]?.to[currency] ?? null
           if (ratio) {
             var valAmount = String(ratio * Number(amount))
             valAmount = valAmount.replace(/[\d.]+e-[0-9]+/g, String(0))
@@ -521,7 +560,8 @@ const SendTransactionInputModal = (prop: Props) => {
     if (fieldTyping === 'fiatField') {
       if (fiat !== '') {
         if (token?.symbol) {
-          const ratio = exchange[token?.symbol]?.to[currency] ?? null
+          const ratio =
+            exchange[account.blockchain][token?.symbol]?.to[currency] ?? null
           if (ratio) {
             var val = String(Number(fiat) / ratio)
             val = val.replace(
@@ -545,6 +585,14 @@ const SendTransactionInputModal = (prop: Props) => {
     Keyboard.dismiss()
   }, [])
 
+  useEffect(() => {
+    const amount =
+      account.tokenAssets.find(
+        (asset) => asset.name === cozTip?.token && asset.symbol === cozTip.token
+      )?.amount ?? 0
+    setTokenTipAmount(amount)
+  }, [cozTip])
+
   const changePriority = (newPriority: PriorityFee) => {
     if (priority.equals(newPriority)) {
       setPriority(NoPriority)
@@ -566,9 +614,9 @@ const SendTransactionInputModal = (prop: Props) => {
       throw new Error('Amount is not valid')
     }
 
-    const tokenWithHolding = Facade.utils.clone(token)
-    const fiatWithHolding = Facade.utils.clone(fiat)
-    const tipWithHolding = Facade.utils.clone(tip)
+    const tokenWithHolding = UtilsHelper.clone(token)
+    const fiatWithHolding = UtilsHelper.clone(fiat)
+    const tipWithHolding = UtilsHelper.clone(tip)
     tokenWithHolding.amount = Number(amount)
 
     dispatch(RootStore.senderTransaction.actions.setToken(tokenWithHolding))
@@ -584,7 +632,7 @@ const SendTransactionInputModal = (prop: Props) => {
     )
     dispatch(RootStore.senderTransaction.actions.setTip(tipWithHolding))
 
-    prop.navigation.navigate(Facade.route.SendTransactionReviewModal.name)
+    prop.navigation.navigate(wrapper.route.SendTransactionReviewModal.name)
   }
 
   const validateAmount = (val: string) => {
@@ -595,7 +643,8 @@ const SendTransactionInputModal = (prop: Props) => {
 
   const validateFiat = (val: string) => {
     if (token?.symbol) {
-      const ratio = exchange[token?.symbol]?.to[currency] ?? null
+      const ratio =
+        exchange[account.blockchain][token?.symbol]?.to[currency] ?? null
       if (ratio) {
         const hasEnoughBalance = getTokenBalance() * ratio >= Number(val)
         return hasEnoughBalance
@@ -604,7 +653,7 @@ const SendTransactionInputModal = (prop: Props) => {
   }
 
   const validateAddress = (val: string) => {
-    return wallet.isAddress(val) || val?.length === 0
+    return validateAddressAllBlockchains(val) || val?.length === 0
   }
 
   const validateFields = () => {
@@ -673,26 +722,34 @@ const SendTransactionInputModal = (prop: Props) => {
     setFiat(val)
   }
 
-  const handleAddressChanged = (addressValue: string) => {
-    const cleanAddressValue = Facade.utils.clearText(addressValue)
-    setContact(undefined)
-    const contact = contacts.find((value) =>
-      value.addresses.find((address) => address === cleanAddressValue)
-    )
-    const account = accounts.find((it) => it.address === cleanAddressValue)
-    if (account) {
-      const accountContact = new Contact()
-      accountContact.name = `${account.getWallet(wallets)?.name} / ${
-        account.name
-      }`
+  const handleAddressChanged = useCallback(
+    (addressValue: string) => {
+      const cleanAddressValue = UtilsHelper.clearText(addressValue)
+      setContact(undefined)
+      const contactFound = contacts.find((value) =>
+        value.addresses.find(({address}) => address === cleanAddressValue)
+      )
+      const accountFound = accounts.find(
+        (it) => it.address === cleanAddressValue
+      )
+      if (accountFound) {
+        const accountContact = new Contact()
+        accountContact.name = `${accountFound.getWallet(wallets)?.name} / ${
+          accountFound.name
+        }`
 
-      accountContact.addresses.push(cleanAddressValue)
-      setContact(accountContact)
-    } else if (contact) {
-      setContact(contact)
-    }
-    setReceiverAddress(cleanAddressValue)
-  }
+        accountContact.addresses.push({
+          address: cleanAddressValue,
+          blockchain: accountFound.blockchain,
+        })
+        setContact(accountContact)
+      } else if (contactFound) {
+        setContact(contactFound)
+      }
+      setReceiverAddress(cleanAddressValue)
+    },
+    [contact, contacts, account, accounts]
+  )
 
   const handleQrCode = (data: NeoURI | string) => {
     if (isURI(data)) {
@@ -701,9 +758,6 @@ const SendTransactionInputModal = (prop: Props) => {
       handleAddressChanged(data)
     }
   }
-  const gasAmount = account.tokenAssets.find(
-    (asset) => asset.name === 'GAS' && asset.symbol === 'GAS'
-  )?.amount
 
   return show ? (
     <InputScrollView
@@ -742,8 +796,8 @@ const SendTransactionInputModal = (prop: Props) => {
             prop.navigation.reset({
               index: 1,
               routes: [
-                {name: Facade.route.ListWalletsPage.name},
-                {name: Facade.route.GetWallet.name},
+                {name: wrapper.route.ListWalletsPage.name},
+                {name: wrapper.route.GetWallet.name},
               ],
             })
             prop.navigation.goBack()
@@ -759,7 +813,7 @@ const SendTransactionInputModal = (prop: Props) => {
               source={require('~/src/assets/images/icon-reselect-green.png')}
             />
             <TextView ml="6px" color="primary" fontFamily="medium">
-              {Facade.t('modals.send.transactionInput.selectDifferentAccount')}
+              {I18n.t('modals.send.transactionInput.selectDifferentAccount')}
             </TextView>
           </LinearLayout>
         </ButtonView>
@@ -771,16 +825,20 @@ const SendTransactionInputModal = (prop: Props) => {
           fontSize="md"
           fontFamily="bold"
         >
-          {Facade.t('modals.send.transactionInput.transactionDetails')}
+          {I18n.t('modals.send.transactionInput.transactionDetails')}
         </TextView>
 
         <DestinationAddressField
+          blockchain={account.blockchain}
           address={receiverAddress}
           onAddressChanged={handleAddressChanged}
           contact={contact}
           onSelected={selectContactOrAccount}
           handleQrCode={handleQrCode}
           validateAddress={validateAddress}
+          onValidateAddress={(addressIsValid) => {
+            setIsValidTransaction(!addressIsValid)
+          }}
         />
 
         <TokenField
@@ -788,6 +846,7 @@ const SendTransactionInputModal = (prop: Props) => {
           navigation={prop.navigation}
           token={token}
           setToken={setToken}
+          tokenFromUri={tokenFromUri}
         />
 
         <AmountField
@@ -807,38 +866,60 @@ const SendTransactionInputModal = (prop: Props) => {
           currency={currency}
         />
 
-        <TextView
-          mt="56px"
-          mb="24px"
-          fontFamily="semibold"
-          color="text.0"
-          alignSelf="center"
-          fontSize="14px"
-        >
-          {Facade.t(
-            'modals.send.transactionInput.prioritiseTransfer'
-          ).toUpperCase()}
-        </TextView>
-
-        <PriorityTab priority={priority} changePriority={changePriority} />
-        <TipCheckbox
-          gasAmount={gasAmount}
-          address={'AVav2pJu9S5rpsLyne2iC4vG63ngqT7uv9'}
-          fiat={Number(fiat)}
-          label={Facade.t('modals.send.transactionInput.tipCheckboxLabel', {
-            tipValue: tip ? tip.amount.toFixed(8) : '0',
-          })}
-          dispatchTip={setTip}
-          mainAsset={token?.name}
-          feeAmount={priority.fee}
-          navigation={prop.navigation}
-        />
+        {account.blockchain === 'neoLegacy' && (
+          <>
+            <TextView
+              mt="56px"
+              mb="24px"
+              fontFamily="semibold"
+              color="text.0"
+              alignSelf="center"
+              fontSize="14px"
+            >
+              {I18n.t(
+                'modals.send.transactionInput.prioritiseTransfer'
+              ).toUpperCase()}
+            </TextView>
+            <PriorityTab priority={priority} changePriority={changePriority} />
+          </>
+        )}
+        {account.blockchain === 'neo3' && (
+          <TransactionFeeNeo3
+            blockchain={account.blockchain}
+            account={account}
+            amount={Number(amount)}
+            receiverAddress={receiverAddress}
+            token={token}
+            onInsuficientFunds={(notHasFunds) => {
+              setIsValidTransaction(notHasFunds)
+            }}
+            onChangeAmountFee={(gasFee) => {
+              setPriority(CustomPriotity(gasFee, token?.symbol))
+            }}
+          />
+        )}
+        {cozTip && (
+          <TipCheckbox
+            tokenTipAmount={tokenTipAmount}
+            blockchain={account.blockchain}
+            tokenTip={cozTip.token}
+            address={cozTip.address}
+            fiat={Number(fiat)}
+            label={I18n.t('modals.send.transactionInput.tipCheckboxLabel', {
+              tipValue: tip ? tip.amount.toFixed(8) : '0',
+            })}
+            dispatchTip={setTip}
+            mainAsset={token?.name}
+            feeAmount={priority.fee}
+            navigation={prop.navigation}
+          />
+        )}
       </LinearLayout>
       <LinearLayout mb="58px" px="24px" alignSelf="center" width="100%">
         <ThemedButton
-          label={Facade.t('app.next')}
+          label={I18n.t('app.next')}
           onPress={submit}
-          disabled={!validateFields()}
+          disabled={!validateFields() || isValidTransaction}
         />
       </LinearLayout>
     </InputScrollView>

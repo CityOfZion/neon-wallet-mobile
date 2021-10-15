@@ -3,11 +3,12 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {wrapper} from '../app/ApplicationWrapper'
 import {HeaderActionButtonProps} from '../components/layout/HeaderActionButton'
 import {Wallet} from '../models/redux/Wallet'
+import {MoreStackParamList} from './MoreStackNavigation'
 import {SettingsStackParamList} from './SettingsStackNavigation'
 
-import {Facade} from '~src/app/Facade'
 import {Navigator} from '~src/app/Navigator'
 import {ModalParams} from '~src/navigation/ModalStackNavigation'
 import AccountAssetDetail, {
@@ -27,6 +28,7 @@ export type WalletStackParamList = {
   Modal: ModalParams
   Settings: SettingsStackParamList
   Step1BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
+  More: MoreStackParamList
 }
 
 export type WalletStackParams =
@@ -37,16 +39,16 @@ const WalletStack = createStackNavigator<WalletStackParamList>()
 
 const WalletStackNavigation = () => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   return (
     <ThemeProvider theme={theme}>
       <WalletStack.Navigator
-        initialRouteName={Facade.route.ListWalletsPage.name}
+        initialRouteName={wrapper.route.ListWalletsPage.name}
       >
         <WalletStack.Screen
-          name={Facade.route.ListWalletsPage.name}
+          name={wrapper.route.ListWalletsPage.name}
           component={ListWalletView}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
@@ -56,7 +58,7 @@ const WalletStackNavigation = () => {
           }
         />
         <WalletStack.Screen
-          name={Facade.route.GetWallet.name}
+          name={wrapper.route.GetWallet.name}
           component={GetWalletView}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
@@ -66,7 +68,7 @@ const WalletStackNavigation = () => {
           }
         />
         <WalletStack.Screen
-          name={Facade.route.GetAccount.name}
+          name={wrapper.route.GetAccount.name}
           component={GetAccountView}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
@@ -76,7 +78,7 @@ const WalletStackNavigation = () => {
           }
         />
         <WalletStack.Screen
-          name={Facade.route.AccountAssetDetail.name}
+          name={wrapper.route.AccountAssetDetail.name}
           component={AccountAssetDetail}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({

@@ -1,21 +1,19 @@
 import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 
-import {Facade} from '~src/app/Facade'
+import {localeConfig} from '~/src/config/LocaleConfig'
+import {Theme} from '~src/enums/Theme'
 
 @HttpExclude()
 export class Settings implements SettingsState {
   @HttpExpose()
-  language = Facade.config.locale.defaultLanguage
+  language = localeConfig.defaultLanguage
 
   @HttpExpose()
-  currency = Facade.config.locale.defaultCurrency
+  currency = localeConfig.defaultCurrency
 
   @HttpExpose()
-  theme = Facade.config.application.defaultTheme
+  theme = Theme.DARK
 
   @HttpExpose()
-  network = Facade.config.application.mainNetwork
-
-  @HttpExpose()
-  security = Facade.config.locale.defaultSecurity
+  security = localeConfig.defaultSecurity
 }

@@ -2,6 +2,7 @@ import {Action} from 'redux'
 import {ReducerApplied} from '@simpli/redux-wrapper'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {PriorityFee} from '~src/models/PriorityFee'
+import {SenderTransactionInfo} from '~/src/blockchain'
 
 export declare global {
   type SenderTransactionActionsType =
@@ -13,14 +14,9 @@ export declare global {
     | 'SET_FIAT'
     | 'SET_TIP'
 
-  interface SenderTransactionState {
-    token: TokenAsset | null
-    senderAddress: string | null
-    receiverAddress: string | null
-    feeAmount: PriorityFee | null
+  interface SenderTransactionState extends SenderTransactionInfo {
     fiat?: number | null
     tokens: TokenAsset[]
-    tip?: {amount: number; address: string}
   }
 
   type SenderTransactionAction = SenderTransactionState &

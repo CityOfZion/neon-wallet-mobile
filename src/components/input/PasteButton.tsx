@@ -1,6 +1,6 @@
+import i18n from 'i18n-js'
 import React from 'react'
 
-import {Facade} from '~src/app/Facade'
 import {
   ButtonView,
   ImageView,
@@ -26,7 +26,7 @@ export const PasteButton = (props: {onPress: () => Promise<void>}) => {
             fontSize={16}
             mr={6}
           >
-            {Facade.t('components.inputTextWithValidation.paste')}
+            {i18n.t('components.inputTextWithValidation.paste')}
           </TextView>
         </LinearLayout>
       </ButtonView>

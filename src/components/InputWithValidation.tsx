@@ -1,5 +1,7 @@
 import {useNavigation} from '@react-navigation/native'
-import React, {useState, useEffect, useRef} from 'react'
+import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
+import React, {useState, useEffect} from 'react'
 import {
   ImageLoadEventData,
   Keyboard,
@@ -8,13 +10,18 @@ import {
   TargetedEvent,
   TextInputFocusEventData,
   Platform,
-  TextInput,
   Dimensions,
   View,
 } from 'react-native'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+import {Normalize} from '../app/Normalize'
+import {UtilsHelper} from '../helpers/UtilsHelper'
+import {RootStackParamList} from '../navigation/AppNavigation'
+import {ModalStackParamList} from '../navigation/ModalStackNavigation'
+import {SendModalStackParamList} from '../navigation/SendModalStackNavigation'
+
 import {ContactsButton} from '~src/components/input/ContactsButton'
 import {InputClearButton} from '~src/components/input/InputClearButton'
 import {PasteButton} from '~src/components/input/PasteButton'
@@ -23,7 +30,7 @@ import {SelectedContactView} from '~src/components/input/SelectedContactView'
 import {NeoURI} from '~src/helpers/UriHelper'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
-import {RootState} from '~src/store/RootStore'
+import {RootState, RootStore} from '~src/store/RootStore'
 import {
   ImageView,
   LinearLayout,
@@ -66,12 +73,19 @@ interface Props {
 }
 
 const InputWithValidation = (props: Props) => {
+  const dispatchAccount = useDispatch<SyncDispatch<Account>>()
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
-  const width = Facade.scale(props.iconSize ? props.iconSize[0] : 25)
-  const height = Facade.scale(props.iconSize ? props.iconSize[1] : 25)
-  const navigation = useNavigation()
+  const width = Normalize.scale(props.iconSize ? props.iconSize[0] : 25)
+  const height = Normalize.scale(props.iconSize ? props.iconSize[1] : 25)
+  const account = dispatchAccount(RootStore.account.actions.getFromSelection())
+  const navigation =
+    useNavigation<
+      StackNavigationProp<ModalStackParamList & SendModalStackParamList>
+    >()
+  const navigationScan =
+    useNavigation<StackNavigationProp<RootStackParamList>>()
   const sideMargins = props.sideMargins ?? 20
   const fontStyle =
     props.value && props.validator(props.value)
@@ -87,7 +101,7 @@ const InputWithValidation = (props: Props) => {
   const [contact, setContact] = useState<Contact | undefined>(
     props.selectedContact
   )
-  const inputRef = useRef<TextInput>(null)
+
   const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     setContact(props.selectedContact)
     if (props.onBlur) {
@@ -96,20 +110,12 @@ const InputWithValidation = (props: Props) => {
   }
 
   const handleChangeText = (text: string) => {
-    props.onChangeText && props.onChangeText(Facade.utils.clearText(text))
+    props.onChangeText && props.onChangeText(UtilsHelper.clearText(text))
   }
 
   useEffect(() => {
     setContact(props.selectedContact)
   }, [props.selectedContact])
-
-  useEffect(() => {
-    inputRef.current?.focus()
-  }, [contact])
-
-  useEffect(() => {
-    inputRef.current?.focus()
-  }, [props.isMultiline])
 
   return (
     <LinearLayout
@@ -144,14 +150,14 @@ const InputWithValidation = (props: Props) => {
             p={props.fromImportKey ? '2%' : undefined}
           >
             <InputTextView
-              ref={inputRef}
+              autoCapitalize="none"
               onChangeText={handleChangeText}
               color={fontColor}
               placeholderTextColor={props.placeholderColor ?? '#7d929a'}
               underlineColorAndroid="transparent"
               placeholder={
                 props.placeholder ??
-                Facade.t('components.inputTextWithValidation.inputPlaceholder')
+                i18n.t('components.inputTextWithValidation.inputPlaceholder')
               }
               fontFamily="regular"
               fontStyle={fontStyle}
@@ -240,7 +246,7 @@ const InputWithValidation = (props: Props) => {
             height={Platform.OS === 'ios' ? '15px' : undefined}
           >
             {props.invalidMessage ??
-              Facade.t('components.inputTextWithValidation.incorrectFormat')}
+              i18n.t('components.inputTextWithValidation.incorrectFormat')}
           </TextView>
         </LinearLayout>
       )}
@@ -254,7 +260,7 @@ const InputWithValidation = (props: Props) => {
         {props.showContacts ? (
           <ContactsButton
             onPress={() => {
-              navigation.navigate(Facade.route.ContactsModal.name, {
+              navigation.navigate(wrapper.route.ContactsModal.name, {
                 onSelected: (
                   item: Contact | Account,
                   addressSelected?: string
@@ -262,10 +268,15 @@ const InputWithValidation = (props: Props) => {
                   if (props.onSelected) {
                     props.onSelected(item, addressSelected)
                     navigation.navigate(
-                      Facade.route.SendTransactionInputModal.name
+                      wrapper.route.SendTransactionInputModal.name,
+                      {
+                        account,
+                        walletTitle: '',
+                      }
                     )
                   }
                 },
+                filterByBlockchain: account.blockchain,
               })
             }}
           />
@@ -275,7 +286,7 @@ const InputWithValidation = (props: Props) => {
         {!props.hidePaste && (
           <PasteButton
             onPress={async () => {
-              const valueFromClipboard = await Facade.utils.copyFromClipboard()
+              const valueFromClipboard = await UtilsHelper.copyFromClipboard()
               if (props.onChangeText) {
                 props.onChangeText(valueFromClipboard.trim())
               }
@@ -288,7 +299,7 @@ const InputWithValidation = (props: Props) => {
             onPress={() =>
               props.isMultiline
                 ? undefined
-                : navigation.navigate(Facade.route.QRCodeScan.name, {
+                : navigationScan.navigate(wrapper.route.QRCodeScan.name, {
                     onScan: props.onScan,
                   })
             }

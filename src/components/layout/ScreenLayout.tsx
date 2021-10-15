@@ -11,7 +11,10 @@ import {
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {Normalize} from '~/src/app/Normalize'
+import {applicationConfig} from '~/src/config/ApplicationConfig'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import OfflineBar from '~src/components/OfflineBar'
 import {LinearLayout} from '~src/styles/styled-components'
 
@@ -37,13 +40,17 @@ interface Props {
 
 const ScreenLayout: React.FC<Props> = (props) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
-  const headerHeight = props.useHeaderPadding ? Facade.app.headerHeight : 0
-  const tabBarHeight = props.useFooterPadding ? Facade.app.footerHeight : 0
+  const headerHeight = props.useHeaderPadding
+    ? applicationConfig.headerHeight
+    : 0
+  const tabBarHeight = props.useFooterPadding
+    ? applicationConfig.footerHeight
+    : 0
   const headerExtraHeight =
-    props.useStatusBarPadding && Facade.utils.isAndroid
+    props.useStatusBarPadding && UtilsHelper.isAndroid
       ? Constants.statusBarHeight
       : 0
   const {isConnected} = useSelector((state: RootState) => state.network)
@@ -99,7 +106,7 @@ const ScreenLayout: React.FC<Props> = (props) => {
             alignItems={props.alignX}
             justifyContent={props.alignY}
             style={{
-              padding: Facade.scale(props.padding ?? 10),
+              padding: Normalize.scale(props.padding ?? 10),
               marginTop: !isConnected ? 45 : undefined,
             }}
             position={'relative'}

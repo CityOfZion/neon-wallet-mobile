@@ -1,8 +1,9 @@
-import {StackHeaderTitleProps} from '@react-navigation/stack/lib/typescript/src/types'
 import React from 'react'
 import {Route} from 'react-native'
 
-import {Facade} from '~src/app/Facade'
+import {Normalize} from '~/src/app/Normalize'
+import {applicationConfig} from '~/src/config/ApplicationConfig'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
@@ -30,10 +31,10 @@ const HeaderTitle = (props: HeaderProps) => {
   return (
     <TextView
       pt={2}
-      mt={Facade.utils.isAndroid ? -2 : 0}
+      mt={UtilsHelper.isAndroid ? -2 : 0}
       textAlign="center"
       color="text.0"
-      fontSize={Facade.scale(24)}
+      fontSize={Normalize.scale(24)}
       allowFontScaling={true}
       adjustsFontSizeToFit={true}
       numberOfLines={1}
@@ -46,24 +47,20 @@ const HeaderTitle = (props: HeaderProps) => {
   )
 }
 
-const HeaderBar: React.FC<HeaderProps> = (
-  headerProps: HeaderProps,
-  // TODO: Remove in NW-216
-  props?: StackHeaderTitleProps
-) => {
+const HeaderBar: React.FC<HeaderProps> = (headerProps: HeaderProps) => {
   const getHeaderWidth = () => {
-    const {windowWidth} = Facade.app
+    const {windowWidth} = applicationConfig
 
-    if (Facade.utils.isIos) {
-      return windowWidth - Facade.scale<number>(220)
+    if (UtilsHelper.isIos) {
+      return windowWidth - Normalize.scale<number>(220)
     }
 
-    return windowWidth - Facade.scale<number>(160)
+    return windowWidth - Normalize.scale<number>(160)
   }
 
   return (
     <LinearLayout
-      height={Facade.app.headerHeight}
+      height={applicationConfig.headerHeight}
       width={getHeaderWidth()}
       orientation="horiz"
       alignItems={'center'}
@@ -72,7 +69,7 @@ const HeaderBar: React.FC<HeaderProps> = (
     >
       {headerProps.image && (
         <ImageView
-          width={Facade.scale<number>(headerProps.iconWidth ?? 20)}
+          width={Normalize.scale<number>(headerProps.iconWidth ?? 20)}
           mr={3}
           source={headerProps.image}
           resizeMode="contain"

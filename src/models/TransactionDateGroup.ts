@@ -3,9 +3,10 @@ import {
   HttpExpose,
   ResponseSerialize,
 } from '@simpli/serialized-request'
+import i18n from 'i18n-js'
+import _ from 'lodash'
 import moment from 'moment'
 
-import {Facade} from '~src/app/Facade'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 
@@ -39,18 +40,16 @@ export class TransactionDateGroup {
   }
 
   formattedDate() {
-    return moment(this.date).format(Facade.t('dateFormat.datePretty'))
+    return moment(this.date).format(i18n.t('dateFormat.datePretty'))
   }
 
   static toTransactionDateGroup(senderTransactions: SenderTransaction[]) {
-    return Facade.lodash
-      .chain(senderTransactions)
+    return _.chain(senderTransactions)
       .groupBy((it) => it.formattedDate)
       .map((transactions, date) => {
         // Find similar transactions of each group
         // And group it in another layer
-        const groups = Facade.lodash
-          .chain(transactions)
+        const groups = _.chain(transactions)
           .groupBy((it) => it.transactionHash)
           .map((senderTxs) => {
             const senderTx =

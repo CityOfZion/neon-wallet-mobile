@@ -4,8 +4,8 @@ import {StyleSheet, SafeAreaView, ActivityIndicator} from 'react-native'
 import {WebView} from 'react-native-webview'
 import {useSelector} from 'react-redux'
 
+import {wrapper} from '~/src/app/ApplicationWrapper'
 import {ImageView, LinearLayout} from '~/src/styles/styled-components'
-import {Facade} from '~src/app/Facade'
 
 const ScreenLoader = (props?: {
   transparent?: boolean
@@ -15,7 +15,7 @@ const ScreenLoader = (props?: {
   gradient?: boolean
 }) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   const [renderedOnce, setRenderedOnce] = useState(false)

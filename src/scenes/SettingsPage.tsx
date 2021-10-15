@@ -1,11 +1,12 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React, {useEffect} from 'react'
-import {Alert} from 'react-native'
 import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
@@ -23,15 +24,15 @@ interface SettingsProps {
 const SettingsPage = (props: SettingsProps) => {
   const showLanguage = false
   const showTheme = false
-  const showNetwork = false
-  const {language, currency, theme, network, security} = useSelector(
+
+  const {language, currency, theme, security} = useSelector(
     (state: RootState) => state.settings
   )
   const openModal = (
     modal: keyof ModalStackParamList,
     params?: ModalStackParamList['SecurityModal']
   ) => {
-    props.navigation.navigate(Facade.route.Modal.name, {
+    props.navigation.navigate(wrapper.route.Modal.name, {
       screen: modal,
       params,
     })
@@ -48,65 +49,55 @@ const SettingsPage = (props: SettingsProps) => {
   }, [])
   return (
     <ScreenLayout padding={20}>
-      <LinearLayout mb={20} />
       <MenuItem
-        title={Facade.t('settings.myWallets')}
+        title={i18n.t('settings.myWallets')}
         icon={require('~/src/assets/images/wallet-icon-green.png')}
         iconMarginRight={12}
         iconHeight={24}
         arrowDirection={RightIconType.ARROW_RIGHT}
-        onPress={() => props.navigation.navigate(Facade.route.MyWallets.name)}
+        onPress={() => props.navigation.navigate(wrapper.route.MyWallets.name)}
       />
 
       <MenuItem
-        title={Facade.t('settings.security')}
+        title={i18n.t('settings.security')}
         icon={require('~/src/assets/images/security-icon-green.png')}
         iconWidth={18}
         iconMarginLeft={2}
         iconMarginRight={18}
         arrowDirection={RightIconType.ARROW_RIGHT}
-        onPress={() => openModal(Facade.route.SecurityModal.name)}
+        onPress={() => openModal(wrapper.route.SecurityModal.name)}
       />
 
       <MenuItem
-        title={Facade.t('settings.currency')}
+        title={i18n.t('settings.currency')}
         icon={require('~src/assets/images/icon-currency-green.png')}
         iconWidth={22}
         iconMarginLeft={2}
         iconMarginRight={16}
         arrowDirection={RightIconType.ARROW_DOWN}
         subtitle={currency}
-        onPress={() => openModal(Facade.route.CurrencyPickerModal.name)}
+        onPress={() => openModal(wrapper.route.CurrencyPickerModal.name)}
       />
 
       {showLanguage && (
         <MenuItem
-          title={Facade.t('settings.language')}
+          title={i18n.t('settings.language')}
           icon={require('~src/assets/images/icon-language-green.png')}
           iconWidth={16}
           iconMarginLeft={2}
           iconMarginRight={22}
           arrowDirection={RightIconType.ARROW_DOWN}
-          subtitle={Facade.t(`languages.${language}`)}
-          onPress={() => openModal(Facade.route.LanguagePickerModal.name)}
+          subtitle={i18n.t(`languages.${language}`)}
+          onPress={() => openModal(wrapper.route.LanguagePickerModal.name)}
         />
       )}
 
       {showTheme && (
         <MenuItem
-          title={Facade.t('settings.theme')}
+          title={i18n.t('settings.theme')}
           arrowDirection={RightIconType.ARROW_DOWN}
-          subtitle={Facade.t(`themes.${theme}`)}
-          onPress={() => openModal(Facade.route.ThemePickerModal.name)}
-        />
-      )}
-
-      {showNetwork && (
-        <MenuItem
-          title={Facade.t('settings.network')}
-          arrowDirection={RightIconType.ARROW_DOWN}
-          subtitle={network.name}
-          onPress={() => openModal(Facade.route.NetworkPickerModal.name)}
+          subtitle={i18n.t(`themes.${theme}`)}
+          onPress={() => openModal(wrapper.route.ThemePickerModal.name)}
         />
       )}
     </ScreenLayout>

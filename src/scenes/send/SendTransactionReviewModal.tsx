@@ -1,12 +1,18 @@
 import {useNavigationState} from '@react-navigation/native'
-import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
-import {AwaitActivity} from '@simpli/react-native-await'
-import React, {useCallback, useEffect, useState} from 'react'
-import {Alert, ScrollView, TouchableHighlight, View} from 'react-native'
+import {StackNavigationProp} from '@react-navigation/stack'
+import {Await, AwaitActivity} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
+import React, {useCallback} from 'react'
+import {Alert, ScrollView, View} from 'react-native'
+import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 
+import {useHeaderHeight} from '~/node_modules/@react-navigation/stack'
 import * as LocalAuthentication from '~/node_modules/expo-local-authentication'
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {Normalize} from '~/src/app/Normalize'
+import {FilterHelper} from '~/src/helpers/FilterHelper'
+import {SecurityHelper} from '~/src/helpers/SecurityHelper'
 import {Storage} from '~src/app/Storage'
 import {AccountView} from '~src/components/AccountView'
 import {HeaderColumn} from '~src/components/HeaderColumn'
@@ -14,8 +20,6 @@ import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import {TokenView, TipView} from '~src/components/TokenView'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
@@ -26,162 +30,6 @@ export interface SendTransactionReviewModalParams {
 
 interface Props {
   navigation: StackNavigationProp<SendModalStackParamList & RootStackParamList>
-}
-
-const TransactionSummaryContainer = () => {
-  const {exchange, contacts, accounts} = useSelector(
-    (state: RootState) => state.app
-  )
-  const {currency} = useSelector((state: RootState) => state.settings)
-  const {senderTransaction} = useSelector((state: RootState) => state)
-  const [account, setAccount] = useState<Account>()
-
-  const singleToken = new TokenAsset(
-    senderTransaction.token?.name ?? '',
-    senderTransaction.token?.symbol ?? '',
-    senderTransaction.token?.hash ?? ''
-  )
-  singleToken.amount = 1
-  const singleTokenPrice = singleToken.exchangeToken(currency, exchange)
-  const contact = contacts.find((value) =>
-    value.addresses.find(
-      (address) => address === senderTransaction.receiverAddress
-    )
-  )
-
-  useEffect(() => {
-    const account = accounts.find(
-      (it) => it.address === senderTransaction.senderAddress
-    )
-    setAccount(account)
-  }, [])
-
-  const getTokenAmount = () => {
-    return (
-      account?.getBalanceAmountByAsset(senderTransaction.token?.symbol ?? '') ??
-      0
-    )
-  }
-
-  return (
-    <LinearLayout
-      orientation="verti"
-      borderRadius="8px"
-      borderWidth="1px"
-      borderStyle="solid"
-      borderColor="background.4"
-      width="100%"
-      px="14px"
-      py="20px"
-    >
-      {contact && (
-        <TextView color="text.0" fontSize="18px" fontFamily="medium">
-          {contact.name}
-        </TextView>
-      )}
-      <TextView color="primary" fontSize="18px" fontFamily="medium">
-        {senderTransaction.receiverAddress}
-      </TextView>
-      <LinearLayout mt="18px" mb="22px" orientation="horiz" alignItems="center">
-        <TextView
-          color="text.6"
-          width="60px"
-          mr="12px"
-          fontFamily="medium"
-          fontSize="14px"
-        >
-          {Facade.t('modals.send.transactionReview.token')}
-        </TextView>
-        <ImageView
-          mr="4px"
-          source={senderTransaction.token?.srcIcon}
-          width={18}
-          height={18}
-          resizeMode="contain"
-        />
-        <TextView color="text.0" fontFamily="semibold" fontSize="18px">
-          {senderTransaction.token?.symbol}
-        </TextView>
-      </LinearLayout>
-      <LinearLayout mb="22px" orientation="horiz" alignItems="center">
-        <TextView
-          color="text.6"
-          width="60px"
-          mr="12px"
-          fontFamily="medium"
-          fontSize="14px"
-        >
-          {Facade.t('modals.send.transactionReview.amount')}
-        </TextView>
-        <TextView color="text.0" fontFamily="semibold" fontSize="18px" mr="6px">
-          {senderTransaction.token?.amount}
-        </TextView>
-        <TextView color="text.6" fontFamily="semibold" fontSize="12px">
-          {Facade.t('modals.send.transactionReview.remainingInWallet', {
-            token: `${getTokenAmount()} ${senderTransaction.token?.symbol}`,
-          })}
-        </TextView>
-      </LinearLayout>
-      <LinearLayout mb="22px" orientation="horiz" alignItems="center">
-        <TextView
-          color="text.6"
-          width="60px"
-          mr="12px"
-          fontFamily="medium"
-          fontSize="14px"
-        >
-          {Facade.t('modals.send.transactionReview.value')}
-        </TextView>
-        <TextView color="text.0" fontFamily="semibold" fontSize="18px">
-          {Facade.filter.currency(
-            senderTransaction.token?.exchangeToken(currency, exchange),
-            currency
-          )}
-        </TextView>
-      </LinearLayout>
-      <LinearLayout mb="22px" orientation="horiz" alignItems="center">
-        <TextView
-          color="text.6"
-          width="60px"
-          mr="12px"
-          fontFamily="medium"
-          fontSize="14px"
-        >
-          {Facade.t('modals.send.transactionReview.price')}
-        </TextView>
-        <TextView color="text.0" fontFamily="semibold" fontSize="18px">
-          {Facade.filter.currency(singleTokenPrice, currency)}
-        </TextView>
-      </LinearLayout>
-
-      {senderTransaction.feeAmount && (
-        <LinearLayout mb="22px" orientation="horiz" alignItems="center">
-          <TextView
-            color="text.6"
-            width="60px"
-            mr="12px"
-            fontFamily="medium"
-            fontSize="14px"
-          >
-            {Facade.t('modals.send.transactionReview.priority')}
-          </TextView>
-          <TextView
-            color="primary"
-            fontFamily="semibold"
-            fontSize="18px"
-            mr="8px"
-          >
-            {senderTransaction.feeAmount.name.toUpperCase()}
-          </TextView>
-          <TextView color="text.0" fontSize="18px">
-            {Facade.t('modals.send.transactionReview.feeAmount', {
-              amount: `${senderTransaction.feeAmount.fee ?? 0} GAS`,
-            })}
-          </TextView>
-        </LinearLayout>
-      )}
-    </LinearLayout>
-  )
 }
 
 const SendTransactionReviewModal = (props: Props) => {
@@ -197,8 +45,6 @@ const SendTransactionReviewModal = (props: Props) => {
     AsyncDispatch<string | null | undefined>
   >()
   const {currency, language} = useSelector((state: RootState) => state.settings)
-  const {exchange} = useSelector((state: RootState) => state.app)
-
   let senderName = undefined
   const senderAddress = senderTransaction.senderAddress ?? undefined
 
@@ -216,7 +62,7 @@ const SendTransactionReviewModal = (props: Props) => {
   } else {
     const contact = contacts.find((value) =>
       value.addresses.find(
-        (address) => address === senderTransaction.senderAddress
+        ({address}) => address === senderTransaction.senderAddress
       )
     )
     senderName = contact?.name ?? undefined
@@ -230,7 +76,7 @@ const SendTransactionReviewModal = (props: Props) => {
   } else {
     const contact = contacts.find((value) =>
       value.addresses.find(
-        (address) => address === senderTransaction.receiverAddress
+        ({address}) => address === senderTransaction.receiverAddress
       )
     )
     receiverName = contact?.name ?? undefined
@@ -239,7 +85,7 @@ const SendTransactionReviewModal = (props: Props) => {
   const show = useNavigationState(
     (state) =>
       state.routes[state.routes.length - 1].name ===
-      Facade.route.SendTransactionReviewModal.name
+      wrapper.route.SendTransactionReviewModal.name
   )
 
   const checkForAuth = useCallback(async () => {
@@ -249,16 +95,16 @@ const SendTransactionReviewModal = (props: Props) => {
 
     if (hasAuth === true) {
       // Checks if user set up a passcode
-      const passcode = await Facade.security.loadPasscode()
+      const passcode = await SecurityHelper.loadPasscode()
 
       // If passcode, navigates to passcode confirmation screen
       if (passcode) {
-        props.navigation.navigate(Facade.route.PasscodeStack.name, {
-          screen: Facade.route.VerifyPasscode.name,
+        props.navigation.navigate(wrapper.route.PasscodeStack.name, {
+          screen: wrapper.route.VerifyPasscode.name,
           params: {
             onValidate: (it) => {
               if (it) {
-                Facade.await.run('submit', submit)
+                Await.run('submit', submit)
               }
             },
           },
@@ -270,7 +116,7 @@ const SendTransactionReviewModal = (props: Props) => {
     } else if (useHardware) {
       await tryAuth()
     } else {
-      Facade.await.run('submit', submit)
+      Await.run('submit', submit)
     }
   }, [])
 
@@ -283,22 +129,22 @@ const SendTransactionReviewModal = (props: Props) => {
       if (!result.success) {
         alertDialog()
       } else {
-        Facade.await.run('submit', submit)
+        Await.run('submit', submit)
       }
     }
   }
 
   const alertDialog = () =>
     Alert.alert(
-      Facade.t('modals.send.transactionReview.dialog.title'),
-      Facade.t('modals.send.transactionReview.dialog.subtitle'),
+      i18n.t('modals.send.transactionReview.dialog.title'),
+      i18n.t('modals.send.transactionReview.dialog.subtitle'),
       [
         {
-          text: Facade.t('modals.send.transactionReview.dialog.confirm'),
+          text: i18n.t('modals.send.transactionReview.dialog.confirm'),
           onPress: async () => await tryAuth,
         },
         {
-          text: Facade.t('modals.send.transactionReview.dialog.cancel'),
+          text: i18n.t('modals.send.transactionReview.dialog.cancel'),
           style: 'cancel',
         },
       ],
@@ -306,18 +152,20 @@ const SendTransactionReviewModal = (props: Props) => {
     )
 
   const submit = async () => {
-    const transactionHash = await dispatchAsyncString(
-      RootStore.senderTransaction.actions.sendAsset()
-    )
-
-    if (!transactionHash) {
-      throw new Error('Transaction has failed')
-    }
+    let transactionHash: string | null | undefined
     const account = accounts.find(
       (it) => it.address === senderTransaction.senderAddress
     )
 
     if (account) {
+      transactionHash = await dispatchAsyncString(
+        RootStore.senderTransaction.actions.sendAsset(account)
+      )
+
+      if (!transactionHash) {
+        showMessage({message: 'Transaction has failed', type: 'danger'})
+        throw new Error('Transaction has failed')
+      }
       await account.addPendingTransaction(senderTransaction, transactionHash)
       await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
     }
@@ -326,7 +174,7 @@ const SendTransactionReviewModal = (props: Props) => {
       index: 0,
       routes: [
         {
-          name: Facade.route.SendTransactionConfirmationModal.name,
+          name: wrapper.route.SendTransactionConfirmationModal.name,
           params: {transactionHash},
         },
       ],
@@ -335,14 +183,14 @@ const SendTransactionReviewModal = (props: Props) => {
 
   const calcValue = () => {
     const fiat = senderTransaction.fiat ?? 0
-    const tip =
-      exchange['GAS'].to[currency] * (senderTransaction.tip?.amount ?? 0)
-    const fee =
-      exchange['GAS'].to[currency] * (senderTransaction.feeAmount?.fee ?? 0)
+    const tip = senderTransaction.tip ? senderTransaction.tip.amount : 0
+    const fee = senderTransaction.feeAmount
+      ? senderTransaction.feeAmount.fee
+      : 0
 
     const value = fiat + tip + fee
 
-    return Facade.filter.currency(value, currency, language)
+    return FilterHelper.currency(value, currency, language)
   }
   return show ? (
     <ScrollView
@@ -387,23 +235,25 @@ const SendTransactionReviewModal = (props: Props) => {
                     fontSize="18px"
                     mb="18px"
                   >
-                    {Facade.t('modals.send.transactionReview.pleaseReview')}
+                    {i18n.t('modals.send.transactionReview.pleaseReview')}
                   </TextView>
                   <LinearLayout orientation={'horiz'}>
                     <HeaderColumn
-                      title={Facade.t(
-                        'modals.send.transactionReview.value'
-                      ).toUpperCase()}
+                      title={i18n
+                        .t('modals.send.transactionReview.value')
+                        .toUpperCase()}
                       value={calcValue()}
                       weight={2}
                     />
                     <HeaderColumn
-                      title={Facade.t(
-                        'modals.send.transactionReview.priorityFee'
-                      ).toUpperCase()}
+                      title={i18n
+                        .t('modals.send.transactionReview.priorityFee', {
+                          tokenSymbol: senderTransaction.token?.symbol,
+                        })
+                        .toUpperCase()}
                       value={
                         senderTransaction.feeAmount?.fee
-                          ? `${senderTransaction.feeAmount?.fee} GAS`
+                          ? `${senderTransaction.feeAmount?.fee}`
                           : ''
                       }
                       weight={1.2}
@@ -415,7 +265,7 @@ const SendTransactionReviewModal = (props: Props) => {
                 <LinearLayout orientation={'horiz'} alignContent={'flex-start'}>
                   <LinearLayout mr={2} mt={5} alignSelf={'center'}>
                     <ImageView
-                      width={Facade.scale(18)}
+                      width={Normalize.scale(18)}
                       resizeMode={'contain'}
                       source={require('~src/assets/images/arrow-gray.png')}
                     />
@@ -426,7 +276,7 @@ const SendTransactionReviewModal = (props: Props) => {
                     fontSize={18}
                     mt={4}
                   >
-                    {Facade.t('modals.send.transactionReview.sender')}
+                    {i18n.t('modals.send.transactionReview.sender')}
                   </TextView>
                 </LinearLayout>
                 <LinearLayout width={'100%'}>
@@ -440,7 +290,7 @@ const SendTransactionReviewModal = (props: Props) => {
                   <LinearLayout orientation={'horiz'}>
                     <LinearLayout mr={2} mt={5} alignSelf={'center'}>
                       <ImageView
-                        width={Facade.scale(18)}
+                        width={Normalize.scale(18)}
                         resizeMode={'contain'}
                         source={require('~src/assets/images/arrow-receive-gray.png')}
                       />
@@ -451,7 +301,7 @@ const SendTransactionReviewModal = (props: Props) => {
                       fontSize={18}
                       mt={4}
                     >
-                      {Facade.t('modals.send.transactionReview.recipient')}
+                      {i18n.t('modals.send.transactionReview.recipient')}
                     </TextView>
                   </LinearLayout>
                   <AccountView
@@ -475,8 +325,8 @@ const SendTransactionReviewModal = (props: Props) => {
 
               <LinearLayout width="90%" mt="32px" alignSelf="center">
                 <ThemedButton
-                  label={Facade.t('app.send')}
-                  onPress={() => Facade.await.run('auth', checkForAuth)}
+                  label={i18n.t('app.send')}
+                  onPress={() => Await.run('auth', checkForAuth)}
                   rounded={true}
                   radius={8}
                   disabled={!isConnected}

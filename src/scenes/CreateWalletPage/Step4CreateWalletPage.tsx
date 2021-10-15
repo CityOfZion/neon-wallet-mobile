@@ -1,12 +1,14 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, {useState} from 'react'
 import {Alert} from 'react-native'
 import {useDispatch} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {BlockchainServiceKey} from '~/src/blockchain'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedInputText from '~src/components/themed/ThemedInputText'
@@ -16,6 +18,7 @@ import {TextView, LinearLayout} from '~src/styles/styled-components'
 
 export interface Step4CreateWalletParams {
   hasBackup?: boolean
+  blockchain?: BlockchainServiceKey
 }
 
 interface Props {
@@ -31,47 +34,16 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
   const hasBackup = props.route.params.hasBackup ?? false
 
-  const submit = async () => {
+  const next = async () => {
     if (!walletName) {
-      Alert.alert(Facade.t('step4CreateWallet.setName'))
+      Alert.alert(i18n.t('step4CreateWallet.setName'))
       return
     }
 
     dispatch(RootStore.wallet.actions.setName(walletName))
     dispatch(RootStore.wallet.actions.setType('standard'))
 
-    const id = await dispatchAsyncString(
-      RootStore.wallet.actions.createAndSave()
-    )
-    dispatch(RootStore.wallet.actions.setShowBackupAlert(id, !hasBackup))
-    await dispatchAsync(RootStore.app.actions.syncWallets())
-
-    // Create first Account automatically
-
-    dispatch(RootStore.account.actions.setIdWallet(id))
-    dispatch(RootStore.account.actions.setName('My account 1'))
-
-    await dispatchAsyncString(RootStore.account.actions.createAndSave())
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
-
-    await dispatchAsync(RootStore.app.actions.syncWallets())
-
-    dispatch(RootStore.wallet.actions.selectWallet(id))
-
-    props.navigation.reset({
-      index: 0,
-      routes: [
-        {
-          name: Facade.route.Step5CreateWallet.name,
-        },
-      ],
-    })
-  }
-
-  const isValid = () => {
-    const conditions = [Boolean(walletName)]
-
-    return conditions.every((it) => it)
+    props.navigation.navigate(wrapper.route.BlockchainListPage.name)
   }
 
   return (
@@ -86,21 +58,21 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
               fontFamily={'bold'}
               mb={4}
             >
-              {Facade.t('step4CreateWallet.label_1')}
+              {i18n.t('step4CreateWallet.label_1')}
             </TextView>
 
             <TextView color={'text.0'} fontSize={'lg'} fontFamily={'bold'}>
-              {Facade.t('step4CreateWallet.threeOfThree')}
+              {i18n.t('step4CreateWallet.threeOfThree')}
             </TextView>
           </LinearLayout>
 
           <TextView mb={'25px'} color={'text.0'} fontSize={'lg'}>
-            {Facade.t('step4CreateWallet.body_1')}
+            {i18n.t('step4CreateWallet.body_1')}
           </TextView>
 
           <ThemedInputText
-            label={Facade.t('step4CreateWallet.label_walletName')}
-            placeholder={Facade.t('step4CreateWallet.placeholder_walletName')}
+            label={i18n.t('step4CreateWallet.label_walletName')}
+            placeholder={i18n.t('step4CreateWallet.placeholder_walletName')}
             onChangeText={(value: string) => setWalletName(value)}
             value={walletName}
             maxLength={32}
@@ -110,10 +82,7 @@ const Step4CreateWalletPage: React.FC<Props> = (props) => {
 
       <LinearLayout mt={5} mb={7} px={5} width={'100%'}>
         <AwaitActivity name={'submit'} size={'large'}>
-          <ThemedButton
-            onPress={() => Facade.await.run('submit', submit, 1000)}
-            label={Facade.t('app.continue')}
-          />
+          <ThemedButton onPress={next} label={i18n.t('app.continue')} />
         </AwaitActivity>
       </LinearLayout>
     </ScreenLayout>

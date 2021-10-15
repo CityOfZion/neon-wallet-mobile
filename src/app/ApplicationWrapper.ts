@@ -1,4 +1,5 @@
-import {Config} from '~src/app/Config'
+import {wrapperConfig} from '../config/WrapperConfig'
+
 import {DataKey} from '~src/app/DataKey'
 import {Route} from '~src/app/Route'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
@@ -13,16 +14,16 @@ export class ApplicationWrapper {
     const storage: Record<string, DataKey<string>> = {}
     const route: Record<string, Route<string>> = {}
 
-    Config.wrapper.themes.forEach((ApplicationTheme) => {
+    wrapperConfig.themes.forEach((ApplicationTheme) => {
       const applicationTheme: ApplicationTheme = new ApplicationTheme()
       theme[applicationTheme.id] = applicationTheme
     })
 
-    Config.wrapper.dataKeys.forEach((it) => {
+    wrapperConfig.dataKeys.forEach((it) => {
       storage[it] = new DataKey(it)
     })
 
-    Config.wrapper.routes.forEach((it) => {
+    wrapperConfig.routes.forEach((it) => {
       route[it] = new Route(it)
     })
 
@@ -31,3 +32,5 @@ export class ApplicationWrapper {
     this.route = route as RouteWrapper
   }
 }
+
+export const wrapper = new ApplicationWrapper()

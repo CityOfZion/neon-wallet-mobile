@@ -1,10 +1,16 @@
 import {RouteProp, useNavigationState} from '@react-navigation/native'
-import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
+import {StackNavigationProp} from '@react-navigation/stack'
+import {Await} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
 import React, {useEffect, useState} from 'react'
 import {ScrollView, TouchableHighlight} from 'react-native'
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {useHeaderHeight} from '~/node_modules/@react-navigation/stack'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {getBlockchainByAddress} from '~/src/blockchain'
+import {applicationConfig} from '~/src/config/ApplicationConfig'
+import {RootStore} from '~/src/store/RootStore'
 import BalanceList from '~src/components/BalanceList'
 import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import AccountPicker from '~src/components/misc/AccountPicker'
@@ -30,7 +36,7 @@ const SendAccountSelectionModal = (props: Props) => {
   const show = useNavigationState(
     (state) =>
       state.routes[state.routes.length - 1].name ===
-      Facade.route.SendAccountSelectionModal.name
+      wrapper.route.SendAccountSelectionModal.name
   )
   const {isConnected} = useSelector((state: RootState) => state.network)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
@@ -40,12 +46,22 @@ const SendAccountSelectionModal = (props: Props) => {
     accounts[0]
   )
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    Facade.await.run('populate', populate)
+    Await.run('populate', populate)
   }, [accountsPool])
 
   const populate = async () => {
-    const accounts = wallet.getAccounts(accountsPool)
+    const addressUri = props.route.params.uri?.address ?? ''
+    const blockchainAddressUri = getBlockchainByAddress(addressUri) //if the addressUri is empty, blockchainAddressUri will go null
+    const accounts = wallet.getAccounts(accountsPool).filter((acc) => {
+      if (blockchainAddressUri) {
+        return acc.blockchain === blockchainAddressUri
+      } else {
+        return acc
+      }
+    })
     setAccounts(accounts)
     setSelectedAccount(accounts[0])
   }
@@ -54,6 +70,13 @@ const SendAccountSelectionModal = (props: Props) => {
       setSelectedAccount(account)
     }
   }
+
+  useEffect(() => {
+    if (selectedAccount) {
+      dispatch(RootStore.account.actions.selectAccount(selectedAccount.address))
+    }
+  }, [selectedAccount])
+
   return show ? (
     <LinearLayout>
       <ScrollView
@@ -89,7 +112,7 @@ const SendAccountSelectionModal = (props: Props) => {
               fontFamily={'medium'}
               textAlign={'center'}
             >
-              {Facade.t('modals.send.accountSelection.subtitle')}
+              {i18n.t('modals.send.accountSelection.subtitle')}
             </TextView>
 
             <LinearLayout minHeight={260} mx={-5}>
@@ -105,7 +128,7 @@ const SendAccountSelectionModal = (props: Props) => {
               fontSize={'md'}
               textAlign={'center'}
             >
-              {Facade.t('modals.send.accountSelection.label')}
+              {i18n.t('modals.send.accountSelection.label')}
             </TextView>
 
             {selectedAccount && (
@@ -114,7 +137,9 @@ const SendAccountSelectionModal = (props: Props) => {
                   tokenAssets={selectedAccount.tokenAssets}
                   fromAccountView={false}
                   fromListWalletView={false}
-                  fromSendAccountSelectionModal={true}
+                  fromSendAccountSelectionModal={
+                    !props.route.params?.uri?.tokenHash
+                  }
                   walletTitle={props.route.params.wallet.name ?? ''}
                   account={selectedAccount ?? new Account()}
                   uri={props.route.params?.uri}
@@ -137,10 +162,10 @@ const SendAccountSelectionModal = (props: Props) => {
           marginTop={'30px'}
         >
           <ThemedButton
-            label={Facade.t('app.next')}
+            label={i18n.t('app.next')}
             onPress={() =>
               props.navigation.navigate(
-                Facade.route.SendTransactionInputModal.name,
+                wrapper.route.SendTransactionInputModal.name,
                 {
                   walletTitle: props.route.params.wallet.name ?? '',
                   account: selectedAccount ?? new Account(),

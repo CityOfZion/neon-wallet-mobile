@@ -2,17 +2,20 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import Constants from 'expo-constants'
 import * as WebBrowser from 'expo-web-browser'
+import i18n from 'i18n-js'
 import React, {useEffect} from 'react'
 import {TouchableWithoutFeedback, Platform} from 'react-native'
 import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '../app/ApplicationWrapper'
+
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
+
 interface MoreProps {
   navigation: StackNavigationProp<MoreStackParamList & ModalStackParamList>
   theme: DefaultTheme
@@ -22,7 +25,7 @@ interface MoreProps {
 
 const MorePage = (props: MoreProps) => {
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
   const handlePressHelp = async () => {
@@ -36,17 +39,17 @@ const MorePage = (props: MoreProps) => {
     <ScreenLayout padding={20}>
       <LinearLayout mb={'20px'} />
       <MenuItem
-        title={Facade.t('more.createWallet')}
+        title={i18n.t('more.createWallet')}
         icon={require('~/src/assets/images/wallet-icon-green.png')}
         iconMarginRight={3}
         iconHeight={26}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
-          props.navigation.navigate(Facade.route.Step1CreateWallet.name, {})
+          props.navigation.navigate(wrapper.route.Step1CreateWallet.name, {})
         }}
       />
       <MenuItem
-        title={Facade.t('more.createWatchAccount')}
+        title={i18n.t('more.createWatchAccount')}
         icon={require('~/src/assets/images/icon-watch-green.png')}
         iconHeight={20}
         iconWidth={20}
@@ -54,11 +57,11 @@ const MorePage = (props: MoreProps) => {
         iconMarginLeft={2}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
-          props.navigation.navigate(Facade.route.ImportReadAccount.name, {})
+          props.navigation.navigate(wrapper.route.ImportReadAccount.name, {})
         }}
       />
       <MenuItem
-        title={Facade.t('more.import')}
+        title={i18n.t('more.import')}
         icon={require('~/src/assets/images/icon-import-green.png')}
         iconHeight={22}
         iconWidth={22}
@@ -66,11 +69,11 @@ const MorePage = (props: MoreProps) => {
         iconMarginLeft={1}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
-          props.navigation.navigate(Facade.route.ImportKey.name, {})
+          props.navigation.navigate(wrapper.route.ImportKey.name, {})
         }}
       />
       <MenuItem
-        title={Facade.t('more.help')}
+        title={i18n.t('more.help')}
         icon={require('~/src/assets/images/icon-help-green.png')}
         iconWidth={21}
         iconMarginLeft={1}
@@ -82,8 +85,8 @@ const MorePage = (props: MoreProps) => {
       />
       <TouchableWithoutFeedback
         onPress={() => {
-          props.navigation.navigate(Facade.route.Modal.name, {
-            screen: Facade.route.ChangelogModal.name,
+          props.navigation.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.ChangelogModal.name,
           })
         }}
       >

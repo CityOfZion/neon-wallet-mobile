@@ -1,10 +1,14 @@
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {applicationConfig} from '../config/ApplicationConfig'
+import {FilterHelper} from '../helpers/FilterHelper'
+
 import {HeaderColumn} from '~src/components/HeaderColumn'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+
 interface Props {
   transaction: SenderTransactionState
   hideSingleTokenPrice?: boolean
@@ -22,7 +26,9 @@ export const TokenView = (props: Props) => {
   const getValueToken = () => {
     if (props.transaction.token) {
       const ratio =
-        exchange[props.transaction.token?.symbol]?.to[currency] ?? null
+        exchange[props.transaction.token?.blockchain][
+          props.transaction.token?.symbol
+        ]?.to[currency] ?? null
       if (ratio && props.transaction.fiat) {
         return (props.transaction.fiat / ratio).toFixed(2)
       } else {
@@ -68,7 +74,7 @@ export const TokenView = (props: Props) => {
                   color={'text.0'}
                   mr={2}
                 >
-                  {Facade.filter.currency(
+                  {FilterHelper.currency(
                     (token?.exchangeToken(currency) ?? 1) /
                       (token?.amount ?? 1),
                     currency,
@@ -93,13 +99,13 @@ export const TokenView = (props: Props) => {
           <LinearLayout orientation={'horiz'}>
             <HeaderColumn
               weight={2}
-              title={Facade.t('transactionDetails.qty')}
+              title={i18n.t('transactionDetails.qty')}
               value={token?.amount.toFixed(8) ?? ''}
             />
             <HeaderColumn
               weight={1.6}
-              title={Facade.t('transactionDetails.value')}
-              value={Facade.filter.currency(
+              title={i18n.t('transactionDetails.value')}
+              value={FilterHelper.currency(
                 token.exchangeToken(currency),
                 currency,
                 language,
@@ -154,7 +160,7 @@ export const TokenView = (props: Props) => {
                 color={'text.0'}
                 mr={2}
               >
-                {Facade.filter.currency(
+                {FilterHelper.currency(
                   (props.transaction.token?.exchangeToken(currency) ?? 1) /
                     (props.transaction.token?.amount ?? 1),
                   currency,
@@ -179,17 +185,18 @@ export const TokenView = (props: Props) => {
         <LinearLayout orientation={'horiz'}>
           <HeaderColumn
             weight={2}
-            title={Facade.t('transactionDetails.qty')}
+            title={i18n.t('transactionDetails.qty')}
             value={props.transaction.token?.amount.toFixed(8) ?? ''}
           />
           <HeaderColumn
             weight={1.6}
-            title={Facade.t('transactionDetails.value')}
-            value={Facade.filter.currency(
+            title={i18n.t('transactionDetails.value')}
+            value={FilterHelper.currency(
               props.transaction.fiat ??
                 (
-                  exchange[props.transaction.tokens[0].symbol].to[currency] *
-                  props.transaction.tokens[0].amount
+                  exchange[props.transaction.tokens[0].blockchain][
+                    props.transaction.tokens[0].symbol
+                  ].to[currency] * props.transaction.tokens[0].amount
                 ).toFixed(8),
               currency,
               language
@@ -218,7 +225,7 @@ export const TokenView = (props: Props) => {
           {!props.hidePriorityFee && (
             <HeaderColumn
               weight={2.75}
-              title={Facade.t('transactionDetails.priorityFee')}
+              title={i18n.t('transactionDetails.priorityFee')}
               value={[
                 {
                   value: props.transaction.feeAmount?.name.toUpperCase(),
@@ -238,7 +245,7 @@ export const TokenView = (props: Props) => {
           {!props.hideAmountAbove && (
             <HeaderColumn
               weight={2.2}
-              title={Facade.t('transactionDetails.amount')}
+              title={i18n.t('transactionDetails.amount')}
               value={[
                 {
                   value: `${getValueToken()}`,
@@ -265,10 +272,27 @@ interface ITipView {
 
 export const TipView: React.FC<ITipView> = (props) => {
   const tokens = useSelector((state: RootState) => state.app.tokens)
+  const {token} = useSelector((state: RootState) => state.senderTransaction)
   const {exchange} = useSelector((state: RootState) => state.app)
   const {currency} = useSelector((state: RootState) => state.settings)
-  const ratioTip = exchange['GAS'].to[currency] * props.amount
-  return (
+  const [ratio, setRatio] = useState<number>(0)
+  const [cozTip, setCozTip] = useState<
+    {address: string; token: string} | undefined
+  >()
+  useEffect(() => {
+    if (token) {
+      setCozTip(applicationConfig.blockchain[token.blockchain].cozTip)
+    }
+  }, [token, props.amount, currency])
+
+  useEffect(() => {
+    if (cozTip && token) {
+      const value =
+        exchange[token.blockchain][cozTip.token].to[currency] * props.amount
+      setRatio(value)
+    }
+  }, [cozTip])
+  return token && cozTip ? (
     <LinearLayout
       orientation={'verti'}
       borderRadius={'7px'}
@@ -286,7 +310,8 @@ export const TipView: React.FC<ITipView> = (props) => {
         <ImageView
           source={
             tokens.find(
-              (token) => token.symbol === 'GAS' && token.name === 'GAS'
+              (token) =>
+                token.symbol === cozTip.token && token.name === cozTip.token
             )?.srcIcon
           }
           width={props.widthIcon ?? '14px'}
@@ -303,7 +328,8 @@ export const TipView: React.FC<ITipView> = (props) => {
         >
           {
             tokens.find(
-              (token) => token.symbol === 'GAS' && token.name === 'GAS'
+              (token) =>
+                token.symbol === cozTip.token && token.name === cozTip.token
             )?.symbol
           }
         </TextView>
@@ -312,19 +338,21 @@ export const TipView: React.FC<ITipView> = (props) => {
         <LinearLayout orientation={'horiz'} justifyContent={'space-between'}>
           <LinearLayout orientation={'verti'}>
             <TextView color={'text.10'}>
-              {Facade.t('transactionDetails.qty')}
+              {i18n.t('transactionDetails.qty')}
             </TextView>
             <TextView color={'text.0'}>{props.amount.toFixed(8)}</TextView>
           </LinearLayout>
           <LinearLayout orientation={'verti'}>
             <TextView color={'text.10'}>
-              {Facade.t('transactionDetails.value')}
+              {i18n.t('transactionDetails.value')}
             </TextView>
-            <TextView color={'text.0'}>{`$${ratioTip.toFixed(8)}`}</TextView>
+            <TextView color={'text.0'}>{`$${ratio.toFixed(8)}`}</TextView>
           </LinearLayout>
         </LinearLayout>
       </LinearLayout>
     </LinearLayout>
+  ) : (
+    <></>
   )
 }
 

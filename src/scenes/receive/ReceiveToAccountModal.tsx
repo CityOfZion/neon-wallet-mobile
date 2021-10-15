@@ -1,12 +1,13 @@
 import {RouteProp, useNavigationState} from '@react-navigation/native'
 import {useHeaderHeight} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React, {Fragment, useState} from 'react'
 import {ScrollView, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {wrapper} from '~/src/app/ApplicationWrapper'
 import {ReceiveModalStackParamList} from '~/src/navigation/ReceiveModalStackNavigation'
-import {Facade} from '~src/app/Facade'
 import AccountCard from '~src/components/AccountCard'
 import {DismissKeyboard} from '~src/components/DismissKeyboard'
 import InputLabel from '~src/components/InputLabel'
@@ -38,7 +39,7 @@ const TokenField = (props: {
   return (
     <Fragment>
       <InputLabel
-        title={Facade.t('modals.send.transactionInput.token')}
+        title={i18n.t('modals.send.transactionInput.token')}
         color={'text.0'}
         marginTop={0}
         marginBottom={20}
@@ -47,7 +48,7 @@ const TokenField = (props: {
 
       <ButtonView
         onPress={() => {
-          props.nav.navigate(Facade.route.ListTokenModal.name, {
+          props.nav.navigate(wrapper.route.ListTokenModal.name, {
             selectedToken: props.token ?? null,
             setToken: props.setToken,
             account: props.account,
@@ -61,7 +62,7 @@ const TokenField = (props: {
             invalidColor={props.theme.colors.text[10]}
             fontStyle={'normal'}
             value={props.token?.name ?? ''}
-            placeholder={Facade.t(
+            placeholder={i18n.t(
               'modals.receive.toAccount.selectTokenToReceive'
             )}
             validator={() => true}
@@ -103,7 +104,7 @@ const AmountField = (props: {
   return (
     <Fragment>
       <InputLabel
-        title={Facade.t('modals.send.transactionInput.amount')}
+        title={i18n.t('modals.send.transactionInput.amount')}
         color={'text.0'}
         marginTop={42}
         marginBottom={20}
@@ -115,7 +116,7 @@ const AmountField = (props: {
         invalidColor={props.theme.colors.text[10]}
         fontStyle={'normal'}
         value={props.amount !== null ? String(props.amount) : ''}
-        placeholder={Facade.t('modals.receive.toAccount.enterAmount')}
+        placeholder={i18n.t('modals.receive.toAccount.enterAmount')}
         validator={() => true}
         separatorColor={props.theme.colors.background[13]}
         sideMargins={0}
@@ -135,7 +136,7 @@ const ReferenceField = (props: {
   return (
     <Fragment>
       <InputLabel
-        title={Facade.t('modals.receive.toAccount.reference')}
+        title={i18n.t('modals.receive.toAccount.reference')}
         color={'text.0'}
         marginTop={42}
         marginBottom={20}
@@ -146,7 +147,7 @@ const ReferenceField = (props: {
         color={props.theme.colors.text[0]}
         invalidColor={props.theme.colors.text[10]}
         value={props.reference}
-        placeholder={Facade.t('modals.receive.toAccount.addReference')}
+        placeholder={i18n.t('modals.receive.toAccount.addReference')}
         validator={() => true}
         separatorColor={props.theme.colors.background[13]}
         sideMargins={0}
@@ -170,10 +171,10 @@ const ReceiveToAccountModal = (props: Props) => {
   const show = useNavigationState(
     (state) =>
       state.routes[state.routes.length - 1].name ===
-      Facade.route.ReceiveToAccountModal.name
+      wrapper.route.ReceiveToAccountModal.name
   )
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const [isAddressTabSelected, setAddressTabAsSelected] = useState<boolean>(
     true
@@ -187,7 +188,7 @@ const ReceiveToAccountModal = (props: Props) => {
   const navigate = () => {
     if (!isValid()) return
 
-    props.navigation.navigate(Facade.route.ReceiveQrCodeModal.name, {
+    props.navigation.navigate(wrapper.route.ReceiveQrCodeModal.name, {
       wallet,
       account,
       amount: Number(amount),
@@ -242,15 +243,15 @@ const ReceiveToAccountModal = (props: Props) => {
               source={require('~/src/assets/images/icon-reselect-green.png')}
             />
             <TextView ml="6px" color="primary" fontFamily="medium">
-              {Facade.t('modals.send.transactionInput.selectDifferentAccount')}
+              {i18n.t('modals.send.transactionInput.selectDifferentAccount')}
             </TextView>
           </LinearLayout>
         </TouchableWithoutFeedback>
         <TabSelector
           isFirstTabSelected={isAddressTabSelected}
           setFirstTabAsSelected={setAddressTabAsSelected}
-          firstTabLabel={Facade.t('modals.receive.toAccount.yourAddress')}
-          secondTabLabel={Facade.t('modals.receive.toAccount.requestTokens')}
+          firstTabLabel={i18n.t('modals.receive.toAccount.yourAddress')}
+          secondTabLabel={i18n.t('modals.receive.toAccount.requestTokens')}
           mb={isAddressTabSelected ? 38 : 46}
           capitalize={true}
         />
@@ -275,7 +276,7 @@ const ReceiveToAccountModal = (props: Props) => {
             />
             <LinearLayout width={'100%'} my={30}>
               <ThemedButton
-                label={Facade.t('modals.receive.toAccount.generateQrCode')}
+                label={i18n.t('modals.receive.toAccount.generateQrCode')}
                 srcIcon={require('~/src/assets/images/icon-qrcode-green.png')}
                 iconSize={[19, 23]}
                 onPress={navigate}

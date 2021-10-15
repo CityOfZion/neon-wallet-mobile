@@ -1,16 +1,18 @@
 import {NavigationContainer, RouteProp} from '@react-navigation/native'
-import {AwaitActivity} from '@simpli/react-native-await'
+import {Await, AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useState} from 'react'
 import {InteractionManager} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {wrapper} from '../app/ApplicationWrapper'
+import {applicationConfig} from '../config/ApplicationConfig'
+import {screenConfig} from '../config/ScreenConfig'
 import PasscodeStackNavigation, {
   PasscodeStackParams,
 } from './PasscodeStackNavigation'
 
 import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
-import {Facade} from '~src/app/Facade'
 import {Storage} from '~src/app/Storage'
 import {Sync} from '~src/app/Sync'
 import LoadingOverlay from '~src/components/LoadingOverlay'
@@ -23,7 +25,6 @@ import TabNavigation, {TabParams} from '~src/navigation/TabNavigation'
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 import QRCodeScan, {QRCodeScanParams} from '~src/scenes/QRCodeScan'
-
 export type RootStackParamList = {
   Tab: TabParams
   Modal: ModalParams
@@ -43,7 +44,7 @@ const deepLinking = new DeepLinkingConfig()
 
 const AppNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => {
-    return Facade.theme[state.settings.theme]
+    return wrapper.theme[state.settings.theme]
   })
   const {isConnected} = useSelector((state: RootState) => state.network)
   const loadingOverlayState = useSelector((state: RootState) => state.loading)
@@ -96,13 +97,15 @@ const AppNavigation = (props: Props) => {
       let interactionPromise = InteractionManager.runAfterInteractions()
       const interval = setInterval(() => {
         interactionPromise = InteractionManager.runAfterInteractions(() => {
-          Facade.await.run('refreshData', () => Sync.refresh(dispatchAsync))
-          Facade.await.run('fetchData', () => Sync.fetchs(dispatchAsync))
+          Await.run('refreshData', () => Sync.refresh(dispatchAsync))
+          Await.run('fetchData', () => Sync.fetchs(dispatchAsync))
         })
       }, syncFetchInterval)
 
       if (isConnected) {
-        setFetchSyncInterval(Facade.app.defaultDataRefreshTimeInMilliseconds)
+        setFetchSyncInterval(
+          applicationConfig.defaultDataRefreshTimeInMilliseconds
+        )
       } else {
         clearInterval(interval)
       }
@@ -112,16 +115,16 @@ const AppNavigation = (props: Props) => {
         clearInterval(interval)
       }
     } else {
-      !hasInit && Facade.await.run('application', startApplication)
+      !hasInit && Await.run('application', startApplication)
     }
   }, [hasInit, syncFetchInterval, isConnected])
 
   const getInitialRouteName = () => {
     return onboardingSeen
       ? hasAuthentication || welcomeToNWSeen
-        ? Facade.route.Tab.name
-        : Facade.route.Login.name
-      : Facade.route.Onboarding.name
+        ? wrapper.route.Tab.name
+        : wrapper.route.Login.name
+      : wrapper.route.Onboarding.name
   }
 
   deepLinking.setInitialRoute(getInitialRouteName())
@@ -139,7 +142,7 @@ const AppNavigation = (props: Props) => {
               <RootStack.Navigator
                 initialRouteName={getInitialRouteName()}
                 headerMode="none"
-                screenOptions={Facade.config.screen}
+                screenOptions={screenConfig}
               >
                 <RootStack.Screen
                   name="Tab"
@@ -151,23 +154,23 @@ const AppNavigation = (props: Props) => {
                   }}
                 />
                 <RootStack.Screen
-                  name={Facade.route.Onboarding.name}
+                  name={wrapper.route.Onboarding.name}
                   component={OnboardingPage}
                 />
                 <RootStack.Screen
-                  name={Facade.route.QRCodeScan.name}
+                  name={wrapper.route.QRCodeScan.name}
                   component={QRCodeScan}
                 />
                 <RootStack.Screen
-                  name={Facade.route.Login.name}
+                  name={wrapper.route.Login.name}
                   component={LoginPage}
                 />
                 <RootStack.Screen
-                  name={Facade.route.PasscodeStack.name}
+                  name={wrapper.route.PasscodeStack.name}
                   component={PasscodeStackNavigation}
                 />
                 <RootStack.Screen
-                  name={Facade.route.Modal.name}
+                  name={wrapper.route.Modal.name}
                   component={ModalStackNavigation}
                   initialParams={props.route?.params}
                 />

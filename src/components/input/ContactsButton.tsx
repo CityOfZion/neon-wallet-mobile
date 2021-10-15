@@ -1,6 +1,6 @@
+import i18n from 'i18n-js'
 import React from 'react'
 
-import {Facade} from '~src/app/Facade'
 import {
   ButtonView,
   ImageView,
@@ -25,7 +25,7 @@ export const ContactsButton = (props: {onPress: () => void}) => {
           fontSize={16}
           mr={6}
         >
-          {Facade.t('components.inputTextWithValidation.contacts')}
+          {i18n.t('components.inputTextWithValidation.contacts')}
         </TextView>
       </LinearLayout>
     </ButtonView>

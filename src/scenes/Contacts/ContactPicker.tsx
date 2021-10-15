@@ -1,10 +1,11 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import React, {Fragment, useState} from 'react'
+import i18n from 'i18n-js'
+import React, {Fragment, useState, useEffect} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {BlockchainServiceKey, getBlockchainByAddress} from '~/src/blockchain'
 import SwiperPanel, {
   PANEL_OFFSET,
   useSwiperController,
@@ -13,14 +14,13 @@ import SwiperPanel, {
 import {AccountList} from '~src/components/accounts/AccountList'
 import {ContactList} from '~src/components/contacts/ContactList'
 import {NoContacts} from '~src/components/contacts/NoContacts'
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
-
 export interface ContactsModalParams {
   onSelected: (item: Contact | Account, addressSelected?: string) => void
+  filterByBlockchain?: BlockchainServiceKey
 }
 
 interface ContactsModalProps {
@@ -47,7 +47,7 @@ const TabSelector = (props: {selected: Tab; onSelect: (t: Tab) => void}) => {
             color={contactsSelected ? 'text.0' : 'background.3'}
             my="16px"
           >
-            {Facade.t('contactPicker.contacts').toUpperCase()}
+            {i18n.t('contactPicker.contacts').toUpperCase()}
           </TextView>
           <LinearLayout
             width="100%"
@@ -68,7 +68,7 @@ const TabSelector = (props: {selected: Tab; onSelect: (t: Tab) => void}) => {
             color={!contactsSelected ? 'text.0' : 'background.3'}
             my="16px"
           >
-            {Facade.t('contactPicker.myAccounts').toUpperCase()}
+            {i18n.t('contactPicker.myAccounts').toUpperCase()}
           </TextView>
           <LinearLayout
             width="100%"
@@ -89,7 +89,7 @@ export const ContactPicker = (props: ContactsModalProps) => {
 
   return (
     <SwiperPanel
-      title={Facade.t('contactPicker.title')}
+      title={i18n.t('contactPicker.title')}
       controller={controller}
       onClose={props.navigation.goBack}
       padding={0}
@@ -106,7 +106,7 @@ export const ContactPicker = (props: ContactsModalProps) => {
           fontFamily={'medium'}
           fontSize={18}
         >
-          {Facade.t('contactPicker.selectContact')}
+          {i18n.t('contactPicker.selectContact')}
         </TextView>
         <TabSelector selected={tab} onSelect={(t) => setTab(t)} />
         {tab === 'contacts' ? (
@@ -118,6 +118,7 @@ export const ContactPicker = (props: ContactsModalProps) => {
                 props.route.params.onSelected(it, address)
               }
               searchBar={true}
+              filterByBlockchain={props.route.params.filterByBlockchain}
             />
           ) : (
             <NoContacts />
@@ -127,6 +128,7 @@ export const ContactPicker = (props: ContactsModalProps) => {
             mb={PANEL_OFFSET}
             onAccountSelected={(it) => props.route.params.onSelected(it)}
             searchBar={true}
+            filterByBlockchain={props.route.params.filterByBlockchain}
           />
         )}
       </Fragment>

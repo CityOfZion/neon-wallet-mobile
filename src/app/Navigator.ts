@@ -1,12 +1,13 @@
 import {StackNavigationOptions} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 
-import {Facade} from '~src/app/Facade'
+import {UtilsHelper} from '../helpers/UtilsHelper'
+
 import HeaderActionButton, {
   HeaderActionButtonProps,
 } from '~src/components/layout/HeaderActionButton'
 import HeaderBackButton from '~src/components/layout/HeaderBackButton'
 import HeaderBar, {HeaderProps} from '~src/components/layout/HeaderBar'
-
 export abstract class Navigator {
   static defaultStackNavigatorOptions(
     headerProps: HeaderProps
@@ -14,8 +15,8 @@ export abstract class Navigator {
     const params: HeaderActionButtonProps = headerProps.route?.params
 
     return {
-      headerBackTitle: Facade.t('app.back'),
-      headerLeft: Facade.utils.isAndroid ? HeaderBackButton : undefined,
+      headerBackTitle: i18n.t('app.back'),
+      headerLeft: UtilsHelper.isAndroid ? HeaderBackButton : undefined,
       headerTitle: (props) => HeaderBar(headerProps, props),
       headerRight: () => HeaderActionButton(params),
       headerTransparent: true,

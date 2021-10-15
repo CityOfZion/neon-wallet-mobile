@@ -1,8 +1,10 @@
 import {useNavigation} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React from 'react'
 
-import {Facade} from '~src/app/Facade'
-import ScreenLayout from '~src/components/layout/ScreenLayout'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
 import {
   ButtonView,
   ImageView,
@@ -11,7 +13,7 @@ import {
 } from '~src/styles/styled-components'
 
 export const NoContacts = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
 
   return (
     <LinearLayout orientation="verti" flex={1} justifyContent={'center'} p={20}>
@@ -22,12 +24,12 @@ export const NoContacts = () => {
         font={'medium'}
         mb={'32px'}
       >
-        {Facade.t('screens.contacts.empty')}
+        {i18n.t('screens.contacts.empty')}
       </TextView>
       <ButtonView
         onPress={() => {
-          navigation.navigate(Facade.route.Modal.name, {
-            screen: Facade.route.PersistContact.name,
+          navigation.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.PersistContact.name,
           })
         }}
       >
@@ -57,7 +59,7 @@ export const NoContacts = () => {
               justifyContent="center"
               alignItens="center"
             >
-              {Facade.t('screens.contacts.addContact')}
+              {i18n.t('screens.contacts.addContact')}
             </TextView>
           </LinearLayout>
         </LinearLayout>

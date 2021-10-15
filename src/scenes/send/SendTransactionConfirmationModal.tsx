@@ -1,10 +1,12 @@
 import {RouteProp, useNavigationState} from '@react-navigation/native'
-import {useHeaderHeight} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React from 'react'
 import {ScrollView, TouchableHighlight} from 'react-native'
 
+import {useHeaderHeight} from '~/node_modules/@react-navigation/stack'
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
@@ -28,7 +30,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
   const show = useNavigationState(
     (state) =>
       state.routes[state.routes.length - 1].name ===
-      Facade.route.SendTransactionConfirmationModal.name
+      wrapper.route.SendTransactionConfirmationModal.name
   )
 
   return show ? (
@@ -74,7 +76,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
               mb="5px"
               numberOfLines={1}
             >
-              {Facade.t('modals.send.transactionConfirmation.header')}
+              {i18n.t('modals.send.transactionConfirmation.header')}
             </TextView>
           </LinearLayout>
           {props.route.params.transactionHash && (
@@ -86,7 +88,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
                 textAlign="center"
                 mb="40px"
               >
-                {Facade.t('modals.send.transactionConfirmation.subheader')}
+                {i18n.t('modals.send.transactionConfirmation.subheader')}
               </TextView>
 
               <TextView
@@ -95,14 +97,14 @@ const SendTransactionConfirmationModal = (props: Props) => {
                 fontFamily="medium"
                 mb="12px"
               >
-                {Facade.t('modals.send.transactionConfirmation.transactionId')}
+                {i18n.t('modals.send.transactionConfirmation.transactionId')}
               </TextView>
               <ButtonView
                 orientation="horiz"
                 alignItems="center"
                 mb="24px"
                 onPress={() =>
-                  Facade.utils.copyToClipboard(
+                  UtilsHelper.copyToClipboard(
                     props.route.params.transactionHash
                   )
                 }
@@ -132,7 +134,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
                 props.navigation.pop()
               }}
               fontSize="22px"
-              label={Facade.t('app.close')}
+              label={i18n.t('app.close')}
             />
           </LinearLayout>
         </LinearLayout>

@@ -1,5 +1,6 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, {useState, useEffect} from 'react'
 import {
@@ -7,12 +8,13 @@ import {
   StyleSheet,
   Text,
   Dimensions,
-  StyleSheetProperties,
   TouchableOpacity,
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Facade} from '~src/app/Facade'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {getBlockchainByAddress, getBlockchainLogo} from '~/src/blockchain'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedShadowContainer from '~src/components/themed/ThemedShadowContainer'
@@ -20,12 +22,7 @@ import {Contact} from '~src/models/redux/Contact'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ContactsStackParamList} from '~src/navigation/ContactsStackNavigation'
 import {RootState} from '~src/store/RootStore'
-import {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface ContactDetailsParams {
   contact: Contact
@@ -40,14 +37,20 @@ interface IItemAddress {
   address: string
 }
 const ItemAddress: React.FC<IItemAddress> = ({address}) => {
+  const blockchainName = getBlockchainByAddress(address)
   const theme = useSelector(
-    (state: RootState) => Facade.theme[state.settings.theme]
+    (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const styles = StyleSheet.create({
     text: {
       color: theme.colors.primary,
       fontFamily: 'medium',
-      fontSize: 16,
+      fontSize: 15,
+    },
+    nameBlockchain: {
+      color: theme.colors.text[2],
+      fontFamily: 'regular',
+      fontSize: 14,
     },
     container: {
       paddingVertical: 17,
@@ -59,15 +62,38 @@ const ItemAddress: React.FC<IItemAddress> = ({address}) => {
   })
   return (
     <TouchableOpacity
-      onPress={() => Facade.utils.copyToClipboard(address)}
+      onPress={() => UtilsHelper.copyToClipboard(address)}
       style={styles.container}
     >
-      <Text style={styles.text}>{address}</Text>
-      <ImageView
-        resizeMode="center"
-        source={require('~/src/assets/images/icon-copy-green.png')}
-        alignSelf={'center'}
-      />
+      <LinearLayout orientation={'horiz'}>
+        {blockchainName && (
+          <ImageView
+            width={17}
+            height={18}
+            source={getBlockchainLogo(blockchainName)}
+            resizeMode={'center'}
+            mr={3}
+            alignSelf={'center'}
+          />
+        )}
+        <LinearLayout orientation={'verti'} width={'90%'}>
+          <Text style={styles.nameBlockchain}>
+            {blockchainName === 'neo3'
+              ? 'Neo N3'
+              : i18n.t(`blockchainServices.${blockchainName}.label`)}
+          </Text>
+          <Text style={styles.text} numberOfLines={1} ellipsizeMode={'middle'}>
+            {address}
+          </Text>
+        </LinearLayout>
+        <ImageView
+          resizeMode="center"
+          width={20}
+          height={20}
+          source={require('~/src/assets/images/icon-copy-green.png')}
+          alignSelf={'center'}
+        />
+      </LinearLayout>
     </TouchableOpacity>
   )
 }
@@ -88,11 +114,11 @@ export const ContactDetails = (props: ContactDetailsProps) => {
   props.navigation.setOptions({
     headerRight: () =>
       HeaderActionButton({
-        actionTitle: Facade.t('app.edit'),
+        actionTitle: i18n.t('app.edit'),
         actionButtonStyle: 'default',
         actionOnPress: () => {
-          props.navigation.navigate(Facade.route.Modal.name, {
-            screen: Facade.route.PersistContact.name,
+          props.navigation.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.PersistContact.name,
             params: {
               contact,
             },
@@ -126,7 +152,7 @@ export const ContactDetails = (props: ContactDetailsProps) => {
     },
     containerAddresses: {
       width: '100%',
-      paddingHorizontal: 10,
+      paddingRight: 12,
     },
   })
   return (
@@ -161,11 +187,11 @@ export const ContactDetails = (props: ContactDetailsProps) => {
           {contact.name}
         </TextView>
         <TextView textAlign={'center'} color={'text.6'} fontSize={'14px'}>
-          {Facade.t('screens.contactDetails.walletAddress')}
+          {i18n.t('screens.contactDetails.walletAddress')}
         </TextView>
 
         <View style={styles.containerAddresses}>
-          {contact.addresses.map((address, index) => (
+          {contact.addresses.map(({address}, index) => (
             <ItemAddress key={index} address={address} />
           ))}
         </View>

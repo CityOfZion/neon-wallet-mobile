@@ -7,7 +7,7 @@ const provider = NeoLegacyProviderOption('doraSdk')
 const address = 'AeGgZTTWPzyVtNiQRcpngkV75Xip1hznmi'
 const txid = '02e8f3f51b59c4bf7ec7b8b9474494c437e2f45acc510b9a108d4367935329b2'
 
-describe('Dora SDK Provider validate format requests', () => {
+describe('Neo Legacy Dora SDK Provider validate format requests', () => {
 
     test('get all nodes', async () => {
         const result = await provider.getAllNodes()
