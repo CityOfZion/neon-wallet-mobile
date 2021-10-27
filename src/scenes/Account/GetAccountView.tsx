@@ -24,6 +24,7 @@ import {ThemedSendButton} from '~/src/components/themed/ThemedSendButton'
 import {applicationConfig} from '~/src/config/ApplicationConfig'
 import {FilterHelper} from '~/src/helpers/FilterHelper'
 import {useAmountFee} from '~/src/hooks/AmountFeeHook'
+import {Node} from '~/src/models/Node'
 import {TokenAsset} from '~/src/models/TokenAsset'
 import {isClaimable} from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
@@ -159,7 +160,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const nodesPool = useSelector((state: RootState) => state.app.nodes)
   const {language} = useSelector((state: RootState) => state.settings)
-  const {address} = useSelector((state: RootState) => state.account)
+  const {address, blockchain} = useSelector((state: RootState) => state.account)
 
   const posYFactor = useRef(new Animated.Value(0))
   const {isConnected} = useSelector((state: RootState) => state.network)
@@ -172,6 +173,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const [isClaimAvailable, setIsClaimAvaliable] = useState<boolean>(false)
 
   const [showWarning, setShowWarning] = useState<boolean>(false)
+  const [nodesPoolBlockchain, setNodesPoolBlockchain] = useState<Node[]>([])
 
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
   const dispatchAccount = useDispatch<SyncDispatch<Account>>()
@@ -220,7 +222,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const isWatchAccount = account.accountType === 'watch'
 
   props.navigation.setOptions({
-    headerTitle: () => TitleComponent({nodesPool, language}),
+    headerTitle: () =>
+      TitleComponent({nodesPool: nodesPoolBlockchain, language}),
     headerRight: () =>
       HeaderActionButton({
         actionTitle: i18n.t('app.edit'),
@@ -263,6 +266,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   useEffect(() => {
     populateUnclaimed()
     changeSenderAddress()
+    getNodesfromBlockchain()
   }, [account])
 
   useEffect(() => {
@@ -309,6 +313,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
     setCurrentPage(1)
     fetchTransaction(1)
     populateUnclaimed()
+    getNodesfromBlockchain()
   }
 
   const availableClaimGasButton = () => {
@@ -322,6 +327,13 @@ const GetAccountView = (props: GetAccountViewProps) => {
     const response = await request.getUnclaimed(account.address)
 
     setUnclaimedGasAmount(response.unclaimed ?? 0)
+  }
+
+  const getNodesfromBlockchain = async () => {
+    const request = applicationConfig.blockchain[account.blockchain].provider
+    const response = await request.getAllNodes()
+
+    setNodesPoolBlockchain(response ?? [])
   }
 
   const fetchTransaction = async (currentPage: number) => {
