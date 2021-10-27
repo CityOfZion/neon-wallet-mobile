@@ -173,8 +173,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   const [showWarning, setShowWarning] = useState<boolean>(false)
 
-  const [showWarning, setShowWarning] = useState<boolean>(false)
-
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
   const dispatchAccount = useDispatch<SyncDispatch<Account>>()
 
