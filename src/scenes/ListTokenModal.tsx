@@ -133,10 +133,18 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
           const tokenFromAccount = account.tokenAssets.find(
             (it) => it.hash === token.hash
           )
-          if (tokenFromAccount) {
-            newTokenList.push(tokenFromAccount)
-          } else {
-            newTokenList.push(token)
+          if (token.name !== 'NEO' && token.name !== 'GAS') {
+            if (tokenFromAccount) {
+              newTokenList.push(tokenFromAccount)
+            } else {
+              newTokenList.push(token)
+            }
+          } else if (token.blockchain === account.blockchain) {
+            if (tokenFromAccount) {
+              newTokenList.push(tokenFromAccount)
+            } else {
+              newTokenList.push(token)
+            }
           }
         }
       })
