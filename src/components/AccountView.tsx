@@ -5,10 +5,10 @@ import React, {useEffect} from 'react'
 import {View} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {Normalize} from '../app/Normalize'
-import {ModalStackParamList} from '../navigation/ModalStackNavigation'
-
+import {getBlockchainByAddress} from '~/src/blockchain'
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {Normalize} from '~src/app/Normalize'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {
   ButtonView,
   ImageView,
@@ -27,7 +27,7 @@ interface Props {
 
 export const AccountView = (props: Props) => {
   const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
-  const {blockchain} = useSelector((state: RootState) => state.account)
+  const blockchain = getBlockchainByAddress(props.address)
   return (
     <LinearLayout
       borderRadius={'7px'}
