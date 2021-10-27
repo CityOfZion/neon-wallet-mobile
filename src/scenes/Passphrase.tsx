@@ -99,7 +99,7 @@ const Passphrase = (props: PassphraseProps) => {
       if (addressesInfo.length < 1) {
         showMessage({
           message: i18n.t(
-            'blockchainServices.errorMessage.keyWrongOrAddressesImported'
+            'blockchainServices.errorMessages.keyWrongOrAddressesImported'
           ),
           type: 'danger',
           duration: 4000,
@@ -215,23 +215,6 @@ const Passphrase = (props: PassphraseProps) => {
                 secure={true}
                 onFocus={clearOnFocus}
                 hideScan={true}
-              />
-            </View>
-          )}
-
-          {showInputField && (
-            <View style={{minHeight: 100}}>
-              <InputWithValidation
-                value={inputValue}
-                onChangeText={setInputValue}
-                validator={(text) => inputIsValid || !text}
-                color={theme.colors.primary}
-                invalidColor={theme.colors.primary}
-                separatorColor={theme.colors.background[4]}
-                invalidSeparatorColor={theme.colors.background[5]}
-                placeholder={i18n.t('passphrase.inputPlaceholder')}
-                secure={true}
-                onFocus={clearOnFocus}
               />
             </View>
           )}
