@@ -67,7 +67,13 @@ const EditAccountModal = (props: Props) => {
     dispatch(RootStore.account.actions.selectAccount(address))
     dispatch(RootStore.wallet.actions.selectWallet(account.idWallet))
 
-    controller.close()
+    props.navigation.reset({
+      index: 0,
+      routes: [{name: wrapper.route.Tab.name}],
+    })
+    props.navigation.navigate(wrapper.route.GetAccount.name, {
+      key: wrapper.route.GetAccount.name,
+    })
   }
 
   const isValid = () => {
