@@ -5,9 +5,10 @@ import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React, {useState, useCallback, useEffect, useMemo} from 'react'
 import {Alert, FlatList} from 'react-native'
-import {useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
+import {RootStore} from '~/src/store/RootStore'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
@@ -27,7 +28,7 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
   const words = props.route.params.mnemonic
   const [formedWords, setFormedWords] = useState<string[]>([])
   const [shuffledWords] = useState<string[]>(_.shuffle(words))
-
+  const dispatch = useDispatch()
   props.navigation.setOptions({
     headerRight: () =>
       HeaderActionButton({
@@ -103,6 +104,10 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
     ),
     [formedWords]
   )
+
+  useEffect(() => {
+    dispatch(RootStore.wallet.actions.setSecurityPhrase(words.join(' ')))
+  }, [words])
 
   return (
     <ScreenLayout alignX={'center'}>
