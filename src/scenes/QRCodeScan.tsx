@@ -128,10 +128,9 @@ const QRCodeScan = (props: Props) => {
               initial: false,
               params: {
                 source: wrapper.route.ImportKey.name,
-                address:
-                  applicationConfig.blockchain[
-                    blockchainName
-                  ].generateAccountFromWif(key),
+                address: applicationConfig.blockchain[
+                  blockchainName
+                ].generateAccountFromWif(key),
                 legacy: true,
                 wif: key,
                 blockchain: blockchainName,

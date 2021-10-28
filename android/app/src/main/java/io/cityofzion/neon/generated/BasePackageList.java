@@ -20,6 +20,7 @@ public class BasePackageList {
         new expo.modules.location.LocationPackage(),
         new expo.modules.permissions.PermissionsPackage(),
         new expo.modules.print.PrintPackage(),
+        new expo.modules.screenorientation.ScreenOrientationPackage(),
         new expo.modules.securestore.SecureStorePackage(),
         new expo.modules.sharing.SharingPackage(),
         new expo.modules.splashscreen.SplashScreenPackage(),

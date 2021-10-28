@@ -80,12 +80,12 @@ const InputWithValidation = (props: Props) => {
   const width = Normalize.scale(props.iconSize ? props.iconSize[0] : 25)
   const height = Normalize.scale(props.iconSize ? props.iconSize[1] : 25)
   const account = dispatchAccount(RootStore.account.actions.getFromSelection())
-  const navigation =
-    useNavigation<
-      StackNavigationProp<ModalStackParamList & SendModalStackParamList>
-    >()
-  const navigationScan =
-    useNavigation<StackNavigationProp<RootStackParamList>>()
+  const navigation = useNavigation<
+    StackNavigationProp<ModalStackParamList & SendModalStackParamList>
+  >()
+  const navigationScan = useNavigation<
+    StackNavigationProp<RootStackParamList>
+  >()
   const sideMargins = props.sideMargins ?? 20
   const fontStyle =
     props.value && props.validator(props.value)
