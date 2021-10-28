@@ -155,7 +155,12 @@ export const PersistContact = (props: PersistContactProps) => {
 
   const submit = async () => {
     if (name.length === 0 || name.length > 20) {
-      Alert.alert(i18n.t('persistContact.invalidName'))
+      Alert.alert(
+        i18n.t('persistContact.invalidName'),
+        i18n.t('persistContact.invalidNameSubtitle', {
+          nameLenght: name ? name.length : 0,
+        })
+      )
       return
     }
 
