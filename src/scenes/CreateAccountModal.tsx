@@ -32,9 +32,8 @@ export default function CreateAccountModal(props: Props) {
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
   const dispatch = useDispatch()
   const [name, setName] = useState<string>('')
-  const [blockchain, setBlockchain] = useState<BlockchainServiceKey>(
-    'neoLegacy'
-  )
+  const [blockchain, setBlockchain] =
+    useState<BlockchainServiceKey>('neoLegacy')
   const getRandomColor = (max: number) => {
     return Math.floor(Math.random() * Math.floor(max))
   }

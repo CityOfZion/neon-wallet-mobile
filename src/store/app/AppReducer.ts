@@ -91,9 +91,8 @@ export class AppReducer extends ReducerWrapper<
             let tokensBlockchain: TokenAsset[] = []
             await Promise.all(
               blockchainList.map(async (blockchainName) => {
-                const {assets, provider} = applicationConfig.blockchain[
-                  blockchainName
-                ]
+                const {assets, provider} =
+                  applicationConfig.blockchain[blockchainName]
                 const tokenListResponse = await provider.getTokenList()
                 assets.forEach(({hash, name, symbol}) => {
                   assetsBlockchain.push(
@@ -163,9 +162,8 @@ export class AppReducer extends ReducerWrapper<
           try {
             await Promise.all(
               blockchainList.map(async (blockchainName) => {
-                const {assets, provider} = applicationConfig.blockchain[
-                  blockchainName
-                ]
+                const {assets, provider} =
+                  applicationConfig.blockchain[blockchainName]
                 const tokenList = await provider.getTokenList()
                 assets.forEach(({hash, name, symbol}) => {
                   assetsBlockchain.push(
@@ -208,9 +206,8 @@ export class AppReducer extends ReducerWrapper<
         try {
           await Promise.all(
             blockchainList.map(async (blockchainName) => {
-              const {assets, provider} = applicationConfig.blockchain[
-                blockchainName
-              ]
+              const {assets, provider} =
+                applicationConfig.blockchain[blockchainName]
               const tokenList = await provider.getTokenList()
               assets.forEach(({hash, name, symbol}) => {
                 assetsBlockchain.push(
