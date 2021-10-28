@@ -203,6 +203,7 @@ export class AppReducer extends ReducerWrapper<
       return async () => {
         const assetsBlockchain: TokenAsset[] = []
         let tokensBlockchain: TokenAsset[] = []
+        const tokensAllBlockchains: TokenAsset[] = []
         try {
           await Promise.all(
             blockchainList.map(async (blockchainName) => {
@@ -215,9 +216,14 @@ export class AppReducer extends ReducerWrapper<
                 )
                 tokensBlockchain = tokenToAsset(tokenList, blockchainName)
               })
+              tokensBlockchain.forEach(({hash, name, symbol, blockchain}) => {
+                tokensAllBlockchains.push(
+                  new TokenAsset(name, symbol, hash, blockchain)
+                )
+              })
             })
           )
-          const tokens = [...assetsBlockchain, ...tokensBlockchain]
+          const tokens = [...assetsBlockchain, ...tokensAllBlockchains]
           await Storage.tokenAssets.save(tokens)
           return tokens
         } catch (error) {
