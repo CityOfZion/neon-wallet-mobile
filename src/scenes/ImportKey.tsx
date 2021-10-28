@@ -359,22 +359,37 @@ const ImportKey = (props: ImportKeyProps) => {
 
   const validator = useCallback(
     (text: string) => {
-      if (text.includes(' ')) {
-        if (validateMnemonic(text)) {
-          setInputIsValid(true)
-          return true
+      try {
+        if (text.includes(' ')) {
+          if (validateMnemonic(text)) {
+            setInputIsValid(true)
+            return true
+          } else {
+            setInputIsValid(false)
+            return false
+          }
         } else {
-          setInputIsValid(false)
-          return false
+          if (validateTextAllBlockchains(text)) {
+            setInputIsValid(true)
+            return true
+          } else {
+            setInputIsValid(false)
+            return false
+          }
         }
-      } else {
-        if (validateTextAllBlockchains(text)) {
-          setInputIsValid(true)
-          return true
-        } else {
-          setInputIsValid(false)
-          return false
-        }
+      } catch (error) {
+        setTimeout(() => {
+          setInputValue('')
+        }, 500)
+        showMessage({
+          message: i18n.t(
+            'blockchainServices.errorMessages.invalidInformation'
+          ),
+          type: 'danger',
+          duration: 5000,
+        })
+        setInputIsValid(false)
+        return false
       }
     },
     [inputValue]
