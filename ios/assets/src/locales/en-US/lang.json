@@ -618,6 +618,7 @@
     "save": "Save",
     "cancel": "Cancel",
     "invalidName": "Invalid Name",
+    "invalidNameSubtitle": "This name has %{nameLenght} characters, it must be above 0 and below 20.",
     "invalidAddress": "Invalid Address",
     "deleteContact": "DELETE CONTACT",
     "deleteContactSubtitle": "Deleting a contact will remove all their addresses from your contacts list and is permanent.",
@@ -674,7 +675,8 @@
     },
     "errorMessages": {
       "keyWrongOrAddressesImported": "Encrypted key is not valid or all address has been imported",
-      "blockchainNotFound": "Blockchain not found"
+      "blockchainNotFound": "Blockchain not found",
+      "invalidInformation": "Not is valid information"
     }
   }
 }
