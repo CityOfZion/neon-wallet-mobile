@@ -49,7 +49,7 @@ const SelectorItemComponent = <T extends unknown>(
         width="100%"
         orientation="horiz"
         alignItems="center"
-        my="24px"
+        style={{height: 60}}
       >
         <TextView weight={1} color="text.0" fontSize="18px">
           {title}
