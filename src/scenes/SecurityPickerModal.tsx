@@ -101,7 +101,8 @@ const SecurityPickerModal = (props: Props) => {
       const result = await LocalAuthentication.authenticateAsync(
         Platform.OS === 'android'
           ? {
-              disableDeviceFallback: true,
+              disableDeviceFallback: true, // Responsable for terminate the process after several failed attempts
+              // Those properties need to be set, otherwise it shows an error
               cancelLabel: 'cancel',
               promptMessage: 'Authentication',
             }
