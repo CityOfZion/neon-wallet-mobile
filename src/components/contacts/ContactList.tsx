@@ -14,6 +14,7 @@ import {
 import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
+import {Normalize} from '~/src/app/Normalize'
 import {
   BlockchainServiceKey,
   getBlockchainByAddress,
@@ -149,12 +150,13 @@ const AddressItem: React.FC<IAddressItem> = ({
       <LinearLayout orientation={'horiz'}>
         {blockchainName && (
           <ImageView
-            width={17}
-            height={18}
+            width={Normalize.scale(17)}
+            height={Normalize.scale(18)}
             source={getBlockchainLogo(blockchainName)}
-            resizeMode={'center'}
+            resizeMode={'contain'}
+            alginSelf={'center'}
+            mt={3}
             mr={3}
-            alignSelf={'center'}
           />
         )}
         <LinearLayout orientation={'verti'} width={'92%'}>

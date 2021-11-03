@@ -88,11 +88,13 @@ const ModalWarningFee = ({
     },
   }
 
-  const [statusWarning, setStatusWarning] =
-    useState<TStatusWarning>('insuficient')
+  const [statusWarning, setStatusWarning] = useState<TStatusWarning>(
+    'insuficient'
+  )
 
-  const {buttons, icon, observations, subtitle, title, question} =
-    warningInfo[statusWarning]
+  const {buttons, icon, observations, subtitle, title, question} = warningInfo[
+    statusWarning
+  ]
 
   const handleStatusWarning = useCallback(() => {
     if (amountFee > totTokenFeeAccount) {
