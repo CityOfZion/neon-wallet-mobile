@@ -3,6 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import * as LocalAuthentication from 'expo-local-authentication'
 import i18n from 'i18n-js'
 import React, {useState, useEffect} from 'react'
+import {Platform} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {wrapper} from '../app/ApplicationWrapper'
@@ -97,7 +98,16 @@ const SecurityPickerModal = (props: Props) => {
   const hardwareAuth = async () => {
     const canUseHardware = await LocalAuthentication.hasHardwareAsync()
     if (canUseHardware) {
-      const result = await LocalAuthentication.authenticateAsync()
+      const result = await LocalAuthentication.authenticateAsync(
+        Platform.OS === 'android'
+          ? {
+              disableDeviceFallback: true, // Responsable for terminate the process after several failed attempts
+              // Those properties need to be set, otherwise it shows an error
+              cancelLabel: 'cancel',
+              promptMessage: 'Authentication',
+            }
+          : undefined
+      )
       return result
     }
   }
