@@ -22,6 +22,7 @@ import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import { Normalize } from '~/src/app/Normalize'
 
 export interface ReceiveQrCodeModalParams {
   wallet: Wallet
@@ -148,11 +149,12 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
 
               <LinearLayout orientation="horiz" weight={5}>
                 <ImageView
-                  alignSelf="center"
-                  width={17}
-                  height={17}
-                  resizeMode="center"
-                  source={token.srcIcon}
+                 mt={3}
+                 width={Normalize.scale(18)}
+                 height={Normalize.scale(18)}
+                 resizeMode={'contain'}
+                 alginSelf={'center'}
+                 source={token.srcIcon}
                 />
                 <TextView
                   color="white"
