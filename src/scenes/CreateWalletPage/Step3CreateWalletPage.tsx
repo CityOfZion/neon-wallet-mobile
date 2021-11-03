@@ -59,7 +59,7 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
   }, [])
 
   const validateAndNext = useCallback(() => {
-    if (formedWords.join() === words.join(' ')) {
+    if (formedWords.join(' ') === words.join(' ')) {
       props.navigation.navigate(wrapper.route.Step4CreateWallet.name, {
         hasBackup: true,
       })
