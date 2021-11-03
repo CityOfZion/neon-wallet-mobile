@@ -468,7 +468,8 @@
     "listTokenModal": {
       "holding": "Holdings",
       "tokens": "Tokens",
-      "selectToken": "Select a token to send to"
+      "selectTokenSend": "Select a token to send to",
+      "selectTokenReceive": "Select a token to receive"
     },
     "walletContext": {
       "create": "Create new wallet",
