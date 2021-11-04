@@ -13,7 +13,6 @@ import {Lang} from '~src/enums/Lang'
 import {NeoURI} from '~src/helpers/UriHelper'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
-import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 import {Exchange} from '~src/types/exchange'
 
@@ -46,6 +45,7 @@ interface ListProps {
 }
 
 const ViewBalanceItem = (props: ItemProps & ListProps) => {
+  const showBlockchain = props.fromListWalletView
   return (
     <LinearLayout
       orientation="horiz"
@@ -80,10 +80,23 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
           allowFontScaling={true}
           adjustsFontSizeToFit={true}
           numberOfLines={1}
-          mb={'6px'}
+          mb={showBlockchain ? '-5px' : '6px'}
         >
           {props.item.symbol}
         </TextView>
+        {showBlockchain && (
+          <TextView
+            color="text.2"
+            fontSize="sm"
+            fontFamily="medium"
+            allowFontScaling={true}
+            adjustsFontSizeToFit={true}
+            numberOfLines={1}
+            mb={'6px'}
+          >
+            {i18n.t(`blockchainServices.${props.item.blockchain}.id`)}
+          </TextView>
+        )}
       </LinearLayout>
 
       <LinearLayout weight={1} ml={4}>
