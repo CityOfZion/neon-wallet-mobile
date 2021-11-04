@@ -169,7 +169,9 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
           fontSize={18}
           color="text.0"
         >
-          {i18n.t('modals.listTokenModal.selectToken')}
+          {filterBy === 'send'
+            ? i18n.t('modals.listTokenModal.selectTokenSend')
+            : i18n.t('modals.listTokenModal.selectTokenReceive')}
         </TextView>
         <SearchBar
           lighterColor={true}
