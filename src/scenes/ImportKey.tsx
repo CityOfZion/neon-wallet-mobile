@@ -9,6 +9,7 @@ import {useSelector, useDispatch} from 'react-redux'
 
 import {wrapper} from '../app/ApplicationWrapper'
 import {applicationConfig} from '../config/ApplicationConfig'
+import {UtilsHelper} from '../helpers/UtilsHelper'
 import {Account} from '../models/redux/Account'
 import {MnemonicSelectionInfo} from './MnemonicSelectionList'
 
@@ -467,7 +468,7 @@ const ImportKey = (props: ImportKeyProps) => {
             </LinearLayout>
             <InputWithValidation
               onChangeText={(text) => {
-                setInputValue(text)
+                setInputValue(UtilsHelper.removeAccents(text))
               }}
               color={theme.colors.text[0]}
               invalidColor={theme.colors.background[3]}
