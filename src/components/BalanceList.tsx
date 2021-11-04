@@ -34,7 +34,6 @@ interface ItemProps {
   exchange: Exchange
   currency: Currency
   language: Lang
-  showBlockchain: boolean
 }
 
 interface ListProps {
@@ -46,7 +45,7 @@ interface ListProps {
 }
 
 const ViewBalanceItem = (props: ItemProps & ListProps) => {
-  const showBlockchain = props.fromListWalletView && props.showBlockchain
+  const showBlockchain = props.fromListWalletView
   return (
     <LinearLayout
       orientation="horiz"
@@ -285,7 +284,6 @@ const BalanceList = (props: Props) => {
                 account={props.account}
                 uri={props.uri}
                 tokenAssets={props.tokenAssets}
-                showBlockchain={item.symbol === 'GAS' || item.symbol === 'NEO'}
               />
             )}
           />
