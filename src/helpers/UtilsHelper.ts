@@ -60,4 +60,7 @@ export abstract class UtilsHelper {
     const cleanText = text.replace(/\r?\n|\r/, '') //remove enter
     return cleanText
   }
+  static removeAccents(text: string) {
+    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  }
 }
