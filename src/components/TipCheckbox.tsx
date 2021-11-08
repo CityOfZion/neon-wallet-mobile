@@ -51,7 +51,7 @@ export const TipCheckbox: React.FC<ITipCheckbox> = ({
   const {exchange} = useSelector((state: RootState) => state.app)
   const {currency} = useSelector((state: RootState) => state.settings)
   const isVisible = () => {
-    const tipValue = (fiat / 100) * (percentage ?? 0.3) //by pattern, the value is 0.3%
+    const tipValue = (fiat / 100) * (percentage ?? 1) //by pattern, the value is 1%
     const gasValue =
       exchange[blockchain][tokenTip].to[currency] *
       (tokenTipAmount ? tokenTipAmount : 0)
