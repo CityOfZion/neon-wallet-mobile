@@ -21,8 +21,7 @@ import {Wallet} from '~src/models/redux/Wallet'
 import {Exchange} from '~src/types/exchange'
 import {Pagination} from '~src/types/pagination'
 
-const logoDefault =
-  require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
+const logoDefault = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 
 @HttpExclude()
 export class Account implements AccountState {
@@ -323,8 +322,9 @@ export class Account implements AccountState {
     const senderTxs = this.flattedPendingTransactions
     senderTxs.push(senderTx)
 
-    this.pendingTransactions =
-      TransactionDateGroup.toTransactionDateGroup(senderTxs)
+    this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
+      senderTxs
+    )
 
     appBus.emit('addPendingTransaction', senderTx)
   }
@@ -344,8 +344,9 @@ export class Account implements AccountState {
         (it) => it.transactionHash !== transactionHash
       )
 
-      this.pendingTransactions =
-        TransactionDateGroup.toTransactionDateGroup(senderTxs)
+      this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
+        senderTxs
+      )
     }
   }
 
@@ -374,8 +375,9 @@ export class Account implements AccountState {
     const senderTxs = this.flattedPendingTransactions
     senderTxs.push(senderTx)
 
-    this.pendingTransactions =
-      TransactionDateGroup.toTransactionDateGroup(senderTxs)
+    this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
+      senderTxs
+    )
   }
 
   getTokenAssets() {
