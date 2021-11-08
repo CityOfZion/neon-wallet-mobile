@@ -97,7 +97,6 @@ const ImportKey = (props: ImportKeyProps) => {
             if (totalEntries && totalEntries > 0) {
               accountsInfo.push({address, wif, derivationIndex: index})
             } else {
-              accountsInfo.push({address, wif, derivationIndex: index})
               stop = true
             }
             index++
