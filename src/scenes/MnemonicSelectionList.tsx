@@ -309,6 +309,7 @@ const MnemonicSelectionList = (props: Props) => {
             />
           </ScrollView>
           <ThemedButton
+            disabled={addressesSelected.length < 1}
             label={i18n.t('routes.ImportKey')}
             onPress={() => {
               Await.run('importMnemonic', handleImportAccounts)
