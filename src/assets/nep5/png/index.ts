@@ -1,49 +1,103 @@
-export const ACAT = require('./ACAT.png')
-export const APH = require('./APH.png')
-export const APT = require('./APT.png')
-export const ASA = require('./ASA.png')
-export const AVA = require('./AVA.png')
-export const BDN = require('./BDN.png')
-export const CGAS = require('./CGAS.png')
-export const COUP = require('./COUP.png')
-export const CPX = require('./CPX.png')
-export const DAD = require('./DAD.png')
-export const DBC = require('./DBC.png')
-export const EDS = require('./EDS.png')
-export const EFX = require('./EFX.png')
-export const FTW = require('./FTW.png')
-export const GALA = require('./GALA.png')
-export const GAS = require('./GAS.png')
-export const GTA = require('./GTA.png')
-export const GUARD = require('./GUARD.png')
-export const LFX = require('./LFX.png')
-export const LRN = require('./LRN.png')
-export const LX = require('./LX.png')
-export const MCT = require('./MCT.png')
-export const NEO = require('./NEO.png')
-export const NEX = require('./NEX.png')
-export const NKN = require('./NKN.png')
-export const NNC = require('./NNC.png')
-export const NNN = require('./NNN.png')
-export const NOS = require('./NOS.png')
-export const NRVE = require('./NRVE.png')
-export const NVL = require('./NVL.png')
-export const OBT = require('./OBT.png')
-export const ONT = require('./ONT.png')
-export const PHX = require('./PHX.png')
-export const PKC = require('./PKC.png')
-export const QLC = require('./QLC.png')
-export const RHT = require('./RHT.png')
-export const SCC = require('./SCC.png')
-export const SDS = require('./SDS.png')
-export const SENNO = require('./SENNO.png')
-export const SOUL = require('./SOUL.png')
-export const SWTH = require('./SWTH.png')
-export const THOR = require('./THOR.png')
-export const TKY = require('./TKY.png')
-export const TNC = require('./TNC.png')
-export const TOLL = require('./TOLL.png')
-export const UTD = require('./UTD.png')
-export const WWB = require('./WWB.png')
-export const XQTA = require('./XQTA.png')
-export const ZPT = require('./ZPT.png')
+export const neo3 = {
+  GUARD: require('./GUARD.png'),
+  SENNO: require('./SENNO.png'),
+  COUP: require('./COUP.png'),
+  CGAS: require('./CGAS.png'),
+  GALA: require('./GALA.png'),
+  ACAT: require('./ACAT.png'),
+  NRVE: require('./NRVE.png'),
+  SOUL: require('./SOUL.png'),
+  SWTH: require('./SWTH.png'),
+  THOR: require('./THOR.png'),
+  TOLL: require('./TOLL.png'),
+  XQTA: require('./XQTA.png'),
+  APH: require('./APH.png'),
+  APT: require('./APT.png'),
+  ASA: require('./ASA.png'),
+  AVA: require('./AVA.png'),
+  BDN: require('./BDN.png'),
+  CPX: require('./CPX.png'),
+  DAD: require('./DAD.png'),
+  DBC: require('./DBC.png'),
+  EDS: require('./EDS.png'),
+  EFX: require('./EFX.png'),
+  FTW: require('./FTW.png'),
+  GAS: require('./GASN3.png'),
+  GTA: require('./GTA.png'),
+  MCT: require('./MCT.png'),
+  NEO: require('./NEON3.png'),
+  NEX: require('./NEX.png'),
+  NKN: require('./NKN.png'),
+  NNC: require('./NNC.png'),
+  NNN: require('./NNN.png'),
+  NOS: require('./NOS.png'),
+  NVL: require('./NVL.png'),
+  OBT: require('./OBT.png'),
+  ONT: require('./ONT.png'),
+  PHX: require('./PHX.png'),
+  PKC: require('./PKC.png'),
+  QLC: require('./QLC.png'),
+  RHT: require('./RHT.png'),
+  SCC: require('./SCC.png'),
+  SDS: require('./SDS.png'),
+  LFX: require('./LFX.png'),
+  LRN: require('./LRN.png'),
+  TKY: require('./TKY.png'),
+  TNC: require('./TNC.png'),
+  UTD: require('./UTD.png'),
+  WWB: require('./WWB.png'),
+  ZPT: require('./ZPT.png'),
+  LX: require('./LX.png'),
+}
+
+export const neoLegacy = {
+  GUARD: require('./GUARD.png'),
+  SENNO: require('./SENNO.png'),
+  COUP: require('./COUP.png'),
+  CGAS: require('./CGAS.png'),
+  GALA: require('./GALA.png'),
+  ACAT: require('./ACAT.png'),
+  NRVE: require('./NRVE.png'),
+  SOUL: require('./SOUL.png'),
+  SWTH: require('./SWTH.png'),
+  THOR: require('./THOR.png'),
+  TOLL: require('./TOLL.png'),
+  XQTA: require('./XQTA.png'),
+  APH: require('./APH.png'),
+  APT: require('./APT.png'),
+  ASA: require('./ASA.png'),
+  AVA: require('./AVA.png'),
+  BDN: require('./BDN.png'),
+  CPX: require('./CPX.png'),
+  DAD: require('./DAD.png'),
+  DBC: require('./DBC.png'),
+  EDS: require('./EDS.png'),
+  EFX: require('./EFX.png'),
+  FTW: require('./FTW.png'),
+  GAS: require('./GAS.png'),
+  GTA: require('./GTA.png'),
+  MCT: require('./MCT.png'),
+  NEO: require('./NEO.png'),
+  NEX: require('./NEX.png'),
+  NKN: require('./NKN.png'),
+  NNC: require('./NNC.png'),
+  NNN: require('./NNN.png'),
+  NOS: require('./NOS.png'),
+  NVL: require('./NVL.png'),
+  OBT: require('./OBT.png'),
+  ONT: require('./ONT.png'),
+  PHX: require('./PHX.png'),
+  PKC: require('./PKC.png'),
+  QLC: require('./QLC.png'),
+  RHT: require('./RHT.png'),
+  SCC: require('./SCC.png'),
+  SDS: require('./SDS.png'),
+  LFX: require('./LFX.png'),
+  LRN: require('./LRN.png'),
+  TKY: require('./TKY.png'),
+  TNC: require('./TNC.png'),
+  UTD: require('./UTD.png'),
+  WWB: require('./WWB.png'),
+  ZPT: require('./ZPT.png'),
+  LX: require('./LX.png'),
+}

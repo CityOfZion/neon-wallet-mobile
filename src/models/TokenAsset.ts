@@ -45,7 +45,7 @@ export class TokenAsset {
 
   get srcIcon() {
     return (
-      (Image as any)[this.symbol] ??
+      (Image as any)[this.blockchain][this.symbol] ??
       require('~/src/assets/images/icon-default-nep5.png')
     )
   }
