@@ -28,6 +28,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable {
   provider: Neo3Provider
   key: BlockchainServiceKey
   icon = icon
+  cozTip: {address: string; token: string; hash: string}
   readonly magicNumber = 844378958
   readonly derivationPath = "m/44'/888'/0'/0/?"
   readonly platform = 'neo'
@@ -51,6 +52,11 @@ export class BSNeo3 implements IBlockchainService, IClaimable {
       hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
       token: 'GAS',
       img: feeTokenImg,
+    }
+    this.cozTip = {
+      address: 'NXWJfovnpRaj2r3yrYQXDMvBLixv9zJZsk',
+      token: 'GAS',
+      hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
     }
   }
   validateAddress(address: string) {
