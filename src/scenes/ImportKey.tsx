@@ -3,7 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, {useState, useEffect, useCallback} from 'react'
-import {Alert, View, ScrollView} from 'react-native'
+import {Alert, View, ScrollView, TextInput} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector, useDispatch} from 'react-redux'
 
@@ -467,7 +467,10 @@ const ImportKey = (props: ImportKeyProps) => {
             </LinearLayout>
             <InputWithValidation
               onChangeText={(text) => {
-                setInputValue(UtilsHelper.removeAccents(text))
+                const textValue = isMnemonic(text)
+                  ? UtilsHelper.removeAccents(text).toLowerCase()
+                  : UtilsHelper.removeAccents(text)
+                setInputValue(textValue)
               }}
               color={theme.colors.text[0]}
               invalidColor={theme.colors.background[3]}
