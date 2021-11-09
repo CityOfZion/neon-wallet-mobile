@@ -197,8 +197,14 @@ export function getBlockchainBySomeText(text: string) {
   }, null as BlockchainServiceKey | null)
 }
 
-export function getBlockchainLogo(blockchain: BlockchainServiceKey) {
-  return ((BlockchainIcons as any)[blockchain] ??
+type TColorLogo = 'white' | 'default'
+
+export function getBlockchainLogo(
+  blockchain: BlockchainServiceKey,
+  color: TColorLogo = 'default'
+) {
+  const blockchainWithColor = `${blockchain}${color === 'default' ? '' : color}`
+  return ((BlockchainIcons as any)[blockchainWithColor] ??
     require('~/src/assets/images/icon-default-nep5.png')) as ImageLoadEventData //need a default logo
 }
 

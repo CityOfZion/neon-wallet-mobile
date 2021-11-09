@@ -29,6 +29,7 @@ import {
 } from 'styled-system'
 
 import {wrapper} from '../app/ApplicationWrapper'
+import {getBlockchainLogo} from '../blockchain'
 import {applicationConfig} from '../config/ApplicationConfig'
 import {FilterHelper} from '../helpers/FilterHelper'
 import {UtilsHelper} from '../helpers/UtilsHelper'
@@ -155,7 +156,7 @@ const AccountCard: React.FC<Props> = (props) => {
               <ImageView
                 width={35 * unit}
                 height={35 * unit}
-                source={props.account.srcIcon}
+                source={getBlockchainLogo(props.account.blockchain, 'white')}
                 resizeMode={'contain'}
                 ml={unit * 10}
                 mr={unit * 10}

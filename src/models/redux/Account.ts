@@ -11,7 +11,11 @@ import {ImageLoadEventData} from 'react-native'
 import {appBus} from '~/src/app/AppBus'
 import {FilterHelper} from '~/src/helpers/FilterHelper'
 import {SecurityHelper} from '~/src/helpers/SecurityHelper'
-import {BlockchainServiceKey, blockchainServices} from '~src/blockchain'
+import {
+  BlockchainServiceKey,
+  blockchainServices,
+  getBlockchainLogo,
+} from '~src/blockchain'
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
 import {TokenAsset} from '~src/models/TokenAsset'
@@ -20,8 +24,6 @@ import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
 import {Exchange} from '~src/types/exchange'
 import {Pagination} from '~src/types/pagination'
-
-const logoDefault = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 
 @HttpExclude()
 export class Account implements AccountState {
@@ -47,9 +49,6 @@ export class Account implements AccountState {
   idWallet: string | null = null
 
   @HttpExpose()
-  srcIcon: ImageLoadEventData = logoDefault
-
-  @HttpExpose()
   name: string | null = null
 
   @HttpExpose()
@@ -71,6 +70,9 @@ export class Account implements AccountState {
 
   @HttpExpose()
   blockchain: BlockchainServiceKey = 'neoLegacy'
+
+  @HttpExpose()
+  srcIcon: ImageLoadEventData = getBlockchainLogo(this.blockchain, 'white')
 
   get hasFunds() {
     return _.sumBy(this.tokenAssets, (it) => Number(it.amount) ?? 0) > 0
@@ -402,7 +404,7 @@ export class Account implements AccountState {
       this.blockchain = 'neoLegacy'
     }
     if (!this.srcIcon) {
-      this.srcIcon = logoDefault
+      this.srcIcon = getBlockchainLogo(this.blockchain, 'white')
     }
   }
 }
