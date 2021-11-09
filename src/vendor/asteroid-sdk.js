@@ -46324,7 +46324,7 @@ module.exports=[
     "repeat",
     "replace",
     "report",
-    "melanke_requires",
+    "requires",
     "rescue",
     "resemble",
     "resist",
