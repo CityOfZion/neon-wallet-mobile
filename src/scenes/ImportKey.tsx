@@ -99,15 +99,8 @@ const ImportKey = (props: ImportKeyProps) => {
             } else {
               stop = true
             }
-            index++
-          } else {
-            stop = true
-            Alert.alert(
-              i18n.t('importReadAccount.accountAlreadyExists', {
-                account: address,
-              })
-            )
           }
+          index++
         }
         allAccountsInfo.set(blockchainName, accountsInfo)
         accountsInfo = []
