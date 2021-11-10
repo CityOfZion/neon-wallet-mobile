@@ -100,6 +100,7 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
   const {tokens} = useSelector((state: RootState) => state.app)
 
   const [tokenList, setTokenList] = useState<TokenAsset[]>([])
+  const [emptySearchList, setEmptySearchList] = useState<boolean>(false)
 
   const {account} = props.route.params
   const filterBy = props.route.params.filterBy ?? 'receive'
@@ -175,6 +176,7 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
         </TextView>
         <SearchBar
           lighterColor={true}
+          emptySearchList={setEmptySearchList}
           marginH={-5}
           prevData={tokenList}
           dispatchData={setSearchTokens}
@@ -185,23 +187,40 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
                 sToken.symbol.includes(searchText)
               )
             })
-            setSearchTokens(filterToken)
+            if (filterToken.length > 0) {
+              setEmptySearchList(false)
+              setSearchTokens(filterToken)
+            } else {
+              setEmptySearchList(true)
+            }
           }}
         />
-        <FlatList
-          data={searchTokens}
-          keyExtractor={(item) => item.symbol}
-          ItemSeparatorComponent={() => (
-            <LinearLayout bg="background.10" height={1} />
-          )}
-          renderItem={({item}) => (
-            <Item
-              controller={controller}
-              item={item}
-              setToken={props.route.params.setToken}
-            />
-          )}
-        />
+        {emptySearchList ? (
+          <TextView
+            font={'semi-bold'}
+            color={'text.0'}
+            fontSize={18}
+            pt={5}
+            textAlign={'center'}
+          >
+            {i18n.t('persistContact.noResultsFound')}
+          </TextView>
+        ) : (
+          <FlatList
+            data={searchTokens}
+            keyExtractor={(item) => item.symbol}
+            ItemSeparatorComponent={() => (
+              <LinearLayout bg="background.10" height={1} />
+            )}
+            renderItem={({item}) => (
+              <Item
+                controller={controller}
+                item={item}
+                setToken={props.route.params.setToken}
+              />
+            )}
+          />
+        )}
       </LinearLayout>
     </SwiperPanel>
   )

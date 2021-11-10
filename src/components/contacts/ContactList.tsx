@@ -224,6 +224,7 @@ export const ContactList = (props: ContactListProps) => {
       return newContact
     })
   )
+  const [emptySearchList, setEmptySearchList] = useState<boolean>(false)
 
   contactsList.sort((item: Contact, item2: Contact) => {
     if (item.name !== null && item2.name !== null) {
@@ -274,6 +275,7 @@ export const ContactList = (props: ContactListProps) => {
       {props.searchBar && (
         <SearchBar
           dispatchData={setContactsList}
+          emptySearchList={setEmptySearchList}
           prevData={contacts}
           callbackFilter={(searchText) => {
             const filterContacts = contacts.filter((contact) => {
@@ -286,30 +288,47 @@ export const ContactList = (props: ContactListProps) => {
                 )
               }
             })
-            setContactsList(filterContacts)
+            if (filterContacts.length > 0) {
+              setEmptySearchList(false)
+              setContactsList(filterContacts)
+            } else {
+              setEmptySearchList(true)
+            }
           }}
         />
       )}
-      <SectionList
-        style={{
-          width: '100%',
-          height: '100%',
-          marginBottom: props.mb,
-        }}
-        sections={sections}
-        renderItem={(info) => <ItemComponent item={info.item} />}
-        renderSectionHeader={SectionHeaderComponent}
-        ItemSeparatorComponent={() => {
-          return (
-            <LinearLayout
-              height={'1px'}
-              ml={'16px'}
-              mr={'16px'}
-              bg={'background.10'}
-            />
-          )
-        }}
-      />
+      {emptySearchList ? (
+        <TextView
+          font={'semi-bold'}
+          color={'text.0'}
+          fontSize={18}
+          pt={5}
+          textAlign={'center'}
+        >
+          {i18n.t('persistContact.noResultsFound')}
+        </TextView>
+      ) : (
+        <SectionList
+          style={{
+            width: '100%',
+            height: '100%',
+            marginBottom: props.mb,
+          }}
+          sections={sections}
+          renderItem={(info) => <ItemComponent item={info.item} />}
+          renderSectionHeader={SectionHeaderComponent}
+          ItemSeparatorComponent={() => {
+            return (
+              <LinearLayout
+                height={'1px'}
+                ml={'16px'}
+                mr={'16px'}
+                bg={'background.10'}
+              />
+            )
+          }}
+        />
+      )}
     </>
   )
 }

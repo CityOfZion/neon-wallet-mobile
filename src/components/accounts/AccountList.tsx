@@ -128,11 +128,13 @@ export const AccountList = (props: AccountListProps) => {
       }
     })
   const [accountsListItem, setAccountsListItem] = useState<Item[]>(items)
+  const [emptySearchList, setEmptySearchList] = useState<boolean>(false)
   return (
     <>
       {props.searchBar && (
         <SearchBar
           prevData={items}
+          emptySearchList={setEmptySearchList}
           dispatchData={setAccountsListItem}
           callbackFilter={(searchText) => {
             const filterAccounts = items.filter(({account, wallet}) => {
@@ -144,31 +146,48 @@ export const AccountList = (props: AccountListProps) => {
                 )
               }
             })
-            setAccountsListItem(filterAccounts)
+            if (filterAccounts.length > 0) {
+              setEmptySearchList(false)
+              setAccountsListItem(filterAccounts)
+            } else {
+              setEmptySearchList(true)
+            }
           }}
         />
       )}
 
       <ScrollView style={{marginBottom: props.mb}}>
-        <FlatList
-          data={accountsListItem.sort((item, item2) => {
-            if (item.account.name !== null && item2.account.name !== null) {
-              if (
-                item.account.name.toLowerCase() <
-                item2.account.name.toLowerCase()
-              ) {
-                return -1
+        {emptySearchList ? (
+          <TextView
+            font={'semi-bold'}
+            color={'text.0'}
+            fontSize={18}
+            pt={5}
+            textAlign={'center'}
+          >
+            {i18n.t('persistContact.noResultsFound')}
+          </TextView>
+        ) : (
+          <FlatList
+            data={accountsListItem.sort((item, item2) => {
+              if (item.account.name !== null && item2.account.name !== null) {
+                if (
+                  item.account.name.toLowerCase() <
+                  item2.account.name.toLowerCase()
+                ) {
+                  return -1
+                } else {
+                  return 0
+                }
               } else {
-                return 0
+                return 1
               }
-            } else {
-              return 1
-            }
-          })}
-          renderItem={ItemComponent}
-          ItemSeparatorComponent={ListSeparator}
-          keyExtractor={(item, index) => index.toString()}
-        />
+            })}
+            renderItem={ItemComponent}
+            ItemSeparatorComponent={ListSeparator}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        )}
       </ScrollView>
     </>
   )

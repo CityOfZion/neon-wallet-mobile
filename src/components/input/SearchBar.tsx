@@ -12,6 +12,7 @@ type TSearchBar<P = any> = {
   dispatchData: React.Dispatch<React.SetStateAction<P[]>>
   marginH?: number
   lighterColor?: boolean
+  emptySearchList: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const SearchBar: React.FC<TSearchBar> = ({
@@ -20,6 +21,7 @@ export const SearchBar: React.FC<TSearchBar> = ({
   dispatchData,
   marginH,
   lighterColor,
+  emptySearchList,
 }) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
@@ -28,6 +30,7 @@ export const SearchBar: React.FC<TSearchBar> = ({
   const handleFilter = (searchText: string) => {
     if (searchText === '') {
       dispatchData(prevData)
+      emptySearchList(false)
     } else {
       callbackFilter(searchText)
     }
@@ -78,4 +81,5 @@ SearchBar.propTypes = {
   dispatchData: PropTypes.any.isRequired,
   marginH: PropTypes.any.isRequired,
   lighterColor: PropTypes.bool,
+  emptySearchList: PropTypes.any.isRequired,
 }
