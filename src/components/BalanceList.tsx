@@ -263,7 +263,7 @@ const BalanceList = (props: Props) => {
           </TextView>
           <FlatList<TokenAsset>
             data={getTokenAssets()}
-            keyExtractor={(item) => item.symbol}
+            keyExtractor={(item) => item.hash}
             ItemSeparatorComponent={() => (
               <LinearLayout bg="text.2" height={1} />
             )}
