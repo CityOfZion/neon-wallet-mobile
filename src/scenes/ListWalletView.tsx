@@ -255,6 +255,9 @@ const ListWalletView = (props: WalletProps) => {
       dispatch(RootStore.wallet.actions.selectWallet(wallets[0]?.id ?? null))
     }
     fadeIn()
+    return () => {
+      setSelectedWallet(undefined)
+    }
   }, [id, wallets, accounts])
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
