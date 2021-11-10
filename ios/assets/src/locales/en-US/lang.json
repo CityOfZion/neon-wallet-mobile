@@ -626,7 +626,8 @@
     "deleteButtom": "Delete Contact",
     "deleteContactAlert": "Are you sure you want to delete this contact?",
     "search": "Search",
-    "addAnotherAddress": "Add another address"
+    "addAnotherAddress": "Add another address",
+    "noResultsFound": "No results found"
   },
   "contactPicker": {
     "title": "Contacts",
@@ -677,7 +678,7 @@
     "errorMessages": {
       "keyWrongOrAddressesImported": "Encrypted key is not valid or all address has been imported",
       "blockchainNotFound": "Blockchain not found",
-      "invalidInformation": "Not is valid information"
+      "invalidInformation": "Invalid information"
     }
   }
 }

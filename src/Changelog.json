@@ -1,6 +1,17 @@
 {
     "changelog": [
     	{
+            "version": "V1.0.24-64",
+            "date": "November 10 2021",
+            "changes": [
+                "- Wallet Summary Screen -> NEO and GAS counting both N3 and Legacy tokens together",
+                "- When searching contacts, No results found or something similar if none present",
+                "- Import text field -> Crashing the app with specific inputs",
+                	"-Not is valid should be Invalid or something similar.",
+                "- Android app is very slow, we need to see a way to improve / optimize the app",
+            ]
+        },
+    	{
             "version": "V1.0.21-58",
             "date": "october 28 2021",
             "changes": [
