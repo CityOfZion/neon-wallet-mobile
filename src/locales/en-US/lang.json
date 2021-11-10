@@ -626,7 +626,8 @@
     "deleteButtom": "Delete Contact",
     "deleteContactAlert": "Are you sure you want to delete this contact?",
     "search": "Search",
-    "addAnotherAddress": "Add another address"
+    "addAnotherAddress": "Add another address",
+    "noResultsFound": "No results found"
   },
   "contactPicker": {
     "title": "Contacts",
