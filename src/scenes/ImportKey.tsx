@@ -379,7 +379,7 @@ const ImportKey = (props: ImportKeyProps) => {
             'blockchainServices.errorMessages.invalidInformation'
           ),
           type: 'danger',
-          duration: 5000,
+          duration: 8000,
         })
         setInputIsValid(false)
         return false

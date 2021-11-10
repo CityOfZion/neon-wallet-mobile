@@ -677,7 +677,7 @@
     "errorMessages": {
       "keyWrongOrAddressesImported": "Encrypted key is not valid or all address has been imported",
       "blockchainNotFound": "Blockchain not found",
-      "invalidInformation": "Not is valid information"
+      "invalidInformation": "Invalid information"
     }
   }
 }
