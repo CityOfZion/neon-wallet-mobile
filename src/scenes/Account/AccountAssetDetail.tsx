@@ -1,7 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useCallback} from 'react'
 import {useSelector} from 'react-redux'
 
 import {UtilsHelper} from '~/src/helpers/UtilsHelper'
@@ -44,6 +44,16 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
     Await.run('populateTransaction', () => fetchTransaction(1))
   }, [])
 
+  const fixStringHashToken = useCallback(
+    (hash?: string) => {
+      if (!hash?.includes('0x')) {
+        return '0x' + hash
+      }
+      return hash
+    },
+    [token, wallet]
+  )
+
   const fetchTransaction = async (currentPage: number, collector = 0) => {
     if (wallet) {
       const entries = await wallet.getTransactions(
@@ -52,14 +62,14 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
         currentPage
       )
 
-      setCurrentPage(currentPage + 1)
-
-      // Apply filter
-      const senderTxs = entries.filter((it) => it.token?.hash === token.hash)
+      const senderTxs = entries.filter((it) => {
+        return fixStringHashToken(it.token?.hash) === token.hash
+      })
 
       const transactions = TransactionDateGroup.toTransactionDateGroup(
         senderTxs
       )
+
       setTransactions(transactions)
 
       collector += senderTxs.length

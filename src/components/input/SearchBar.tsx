@@ -12,7 +12,7 @@ type TSearchBar<P = any> = {
   dispatchData: React.Dispatch<React.SetStateAction<P[]>>
   marginH?: number
   lighterColor?: boolean
-  emptySearchList: React.Dispatch<React.SetStateAction<boolean>>
+  emptySearchList?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const SearchBar: React.FC<TSearchBar> = ({
@@ -30,7 +30,7 @@ export const SearchBar: React.FC<TSearchBar> = ({
   const handleFilter = (searchText: string) => {
     if (searchText === '') {
       dispatchData(prevData)
-      emptySearchList(false)
+      emptySearchList?.(false)
     } else {
       callbackFilter(searchText)
     }
