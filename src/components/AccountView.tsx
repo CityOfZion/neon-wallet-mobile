@@ -90,7 +90,9 @@ export const AccountView = (props: Props) => {
       <LinearLayout orientation={'horiz'}>
         <View>
           <TextView color="text.10" fontSize={'14px'}>
-            {I18n.t(`blockchainServices.${blockchain}.id`)}
+            {blockchain !== null
+              ? I18n.t(`blockchainServices.${blockchain}.id`)
+              : ''}
           </TextView>
           <TextView
             mr={4}
@@ -106,25 +108,28 @@ export const AccountView = (props: Props) => {
           </TextView>
         </View>
 
-        {!props.contactName && !props.walletName && !props.hideButton && (
-          <ButtonView
-            onPress={() => {
-              navigation.navigate(wrapper.route.Modal.name, {
-                screen: wrapper.route.PersistContact.name,
-                params: {
-                  startingAddress: props.address,
-                },
-              })
-            }}
-          >
-            <ImageView
-              width={Normalize.scale(25)}
-              height={Normalize.scale(25)}
-              resizeMode={'contain'}
-              source={require('~/src/assets/images/icon-circle-plus-green-small.png')}
-            />
-          </ButtonView>
-        )}
+        {!props.contactName &&
+          !props.walletName &&
+          !props.hideButton &&
+          blockchain && (
+            <ButtonView
+              onPress={() => {
+                navigation.navigate(wrapper.route.Modal.name, {
+                  screen: wrapper.route.PersistContact.name,
+                  params: {
+                    startingAddress: props.address,
+                  },
+                })
+              }}
+            >
+              <ImageView
+                width={Normalize.scale(25)}
+                height={Normalize.scale(25)}
+                resizeMode={'contain'}
+                source={require('~/src/assets/images/icon-circle-plus-green-small.png')}
+              />
+            </ButtonView>
+          )}
       </LinearLayout>
     </LinearLayout>
   )

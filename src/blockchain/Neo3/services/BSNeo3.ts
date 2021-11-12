@@ -25,6 +25,7 @@ const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEvent
 const feeTokenImg = require('~src/assets/nep5/png/GAS.png')
 const SDK: typeof AsteroidSDK = require('~src/vendor/asteroid-sdk')
 export class BSNeo3 implements IBlockchainService, IClaimable {
+  readonly siteUrlQuery = `https://dora.coz.io/transaction/neo3/mainnet/`
   provider: Neo3Provider
   key: BlockchainServiceKey
   icon = icon

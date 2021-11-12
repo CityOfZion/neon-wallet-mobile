@@ -6,6 +6,7 @@ import {Linking} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {Normalize} from '../app/Normalize'
+import {applicationConfig} from '../config/ApplicationConfig'
 import {FilterHelper} from '../helpers/FilterHelper'
 
 import {AccountView} from '~src/components/AccountView'
@@ -192,15 +193,18 @@ export const TransactionDetails = (props: Props) => {
           transaction={transaction}
         />
         <LinearLayout weight={1} mt={'30px'}>
-          <ThemedButton
-            onPress={() => {
-              Linking.openURL(
-                `https://dora.coz.io/transaction/neo2/mainnet/0x${transaction.transactionHash}`
-              )
-            }}
-            label={i18n.t('transactionDetails.viewOnDora')}
-            srcIcon={require('~/src/assets/images/icon-dora-green.png')}
-          />
+          {senderAccount && (
+            <ThemedButton
+              onPress={() => {
+                Linking.openURL(
+                  applicationConfig.blockchain[senderAccount.blockchain]
+                    .siteUrlQuery + transaction.transactionHash
+                )
+              }}
+              label={i18n.t('transactionDetails.viewOnDora')}
+              srcIcon={require('~/src/assets/images/icon-dora-green.png')}
+            />
+          )}
         </LinearLayout>
       </LinearLayout>
     </SwiperPanel>
