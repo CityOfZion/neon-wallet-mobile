@@ -5,6 +5,7 @@ import React, {useEffect, useState, useCallback} from 'react'
 import {useSelector} from 'react-redux'
 
 import {UtilsHelper} from '~/src/helpers/UtilsHelper'
+import {Wallet} from '~/src/models/redux/Wallet'
 import AssetQuoteComponent from '~src/components/AssetQuoteComponent'
 import TransactionsList from '~src/components/TransactionsList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -54,8 +55,26 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
     [token, wallet]
   )
 
-  const fetchTransaction = async (currentPage: number, collector = 0) => {
-    if (wallet) {
+  const fetchTransactionAccount = useCallback(
+    async (account: Account, currentPage: number) => {
+      const {entries} = await account.populateTransactions(
+        tokensPool,
+        currentPage
+      )
+      const senderTxs = entries.filter((it) => {
+        return fixStringHashToken(it.token?.hash) === token.hash
+      })
+      const transactions = TransactionDateGroup.toTransactionDateGroup(
+        senderTxs
+      )
+      setTransactions(transactions)
+      return senderTxs.length
+    },
+    [account, token]
+  )
+
+  const fetchTransactionWallet = useCallback(
+    async (wallet: Wallet) => {
       const entries = await wallet.getTransactions(
         accountsPool,
         tokensPool,
@@ -71,14 +90,22 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
       )
 
       setTransactions(transactions)
+      return senderTxs.length
+    },
+    [wallet, token]
+  )
 
-      collector += senderTxs.length
-      if (collector < 15) {
-        // handling pagination with post filter
-        await fetchTransaction(currentPage + 1, collector)
-      }
+  const fetchTransaction = async (currentPage: number, collector = 0) => {
+    let countCollector: number = 0
+    if (wallet) {
+      countCollector = await fetchTransactionWallet(wallet)
+
+      collector += countCollector
 
       return
+    } else if (account) {
+      countCollector = await fetchTransactionAccount(account, currentPage)
+      collector += countCollector
     }
 
     const model = UtilsHelper.clone(account ?? new Account())
@@ -86,18 +113,9 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
     const pagination = await model.populateTransactions(tokensPool, currentPage)
     setCurrentPage(pagination.pageNumber + 1)
 
-    // Apply filter
-    const senderTxs = pagination.entries.filter(
-      (it) => it.token?.hash === token.hash
-    )
-
-    const transactions = TransactionDateGroup.toTransactionDateGroup(senderTxs)
-    setTransactions(transactions)
-
-    collector += senderTxs.length
-    if (collector < (pagination.pageSize ?? 0)) {
+    if (collector < 15) {
       // handling pagination with post filter
-      await fetchTransaction(pagination.pageNumber + 1, collector)
+      await fetchTransaction(currentPage + 1, collector)
     }
   }
 
