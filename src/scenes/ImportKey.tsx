@@ -467,7 +467,9 @@ const ImportKey = (props: ImportKeyProps) => {
               }}
               autoCapitalize={Platform.OS === 'android' ? 'none' : undefined} //fix duplicate words in android OS, in IOS the issue doesn't happen
               secure={Platform.OS === 'android' ? true : undefined}
-              keyboardType={Platform.OS === 'android' ? "visible-password" : undefined}
+              keyboardType={
+                Platform.OS === 'android' ? 'visible-password' : undefined
+              }
               color={theme.colors.text[0]}
               invalidColor={theme.colors.background[3]}
               value={inputValue}
