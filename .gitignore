@@ -129,3 +129,4 @@ buck-out/
 .expo/*
 web-build/
 debug.log
+android/app/release/app-release.apk
