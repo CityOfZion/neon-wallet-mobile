@@ -32,7 +32,7 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
-
+import crypto from 'crypto'
 export interface ListWalletParams {}
 
 type Props = WalletStackParamList &

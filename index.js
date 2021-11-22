@@ -1,11 +1,13 @@
+import './shim'
 import {registerRootComponent} from 'expo'
 
-import 'react-native-get-random-values'
 import 'text-encoding-polyfill'
 import 'reflect-metadata'
 
 import App from './src/App'
 import {Setup} from './src/app/Setup'
+
+import 'react-native-get-random-values'
 
 Setup.init()
 
