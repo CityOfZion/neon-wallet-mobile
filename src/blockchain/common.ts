@@ -51,6 +51,10 @@ export interface IClaimable {
   ) => Promise<{txid: string | null; token: string; hash: string} | null>
 }
 
+export interface IWalletConnect {
+  connect: () => boolean
+}
+
 export interface IBlockchainService {
   key: BlockchainServiceKey
   provider: BlockchainDataProvider
