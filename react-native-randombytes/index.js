@@ -56,7 +56,7 @@ export function randomBytes(length, cb) {
     })
   } else {
     const value = Random.getRandomBytes(Math.ceil(length * 0.25))
-    cb(null, toBuffer(value.toString()))
+    cb(null, value)
   }
 }
 
