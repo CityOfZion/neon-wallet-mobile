@@ -1,0 +1,181 @@
+import I18n from 'i18n-js'
+import React, {Fragment} from 'react'
+import {useSelector} from 'react-redux'
+
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import InputLabel from '~/src/components/InputLabel'
+import InputWithValidation from '~/src/components/InputWithValidation'
+import {Currency} from '~/src/enums/Currency'
+import {FilterHelper} from '~/src/helpers/FilterHelper'
+import {TokenAsset} from '~/src/models/TokenAsset'
+import {Account} from '~/src/models/redux/Account'
+import {
+  LinearLayout,
+  TextView,
+  ButtonView,
+  ImageView,
+} from '~/src/styles/styled-components'
+
+const AmountField = (props: {
+  validatorAmount: (val: string) => boolean
+  validatorFiat: (val: string) => boolean
+  onAmountChanged: (amount: string) => void
+  onFiatChanged: (fiat: string) => void
+  token: TokenAsset | null | undefined
+  amount: number | string
+  fiat: number | string
+  setAmount: (amount: number) => void
+  setFiat: (fiat: number) => void
+  setFieldTyping: (typingField: string) => void
+  tokenBalance: number
+  remainingTokenBalance: number
+  account: Account
+  currency: Currency
+}) => {
+  const setValue = (val: string, roundDown?: boolean) => {
+    var valueNumber
+    if (roundDown) {
+      valueNumber = Math.floor(Number(val))
+    } else valueNumber = Number(val)
+
+    if (!valueNumber) return
+
+    val = val.replace(',', '.')
+    if (props.token?.symbol === 'NEO') val = val.replace('.', '')
+
+    props.setAmount(Number(val))
+  }
+  const {language} = useSelector((state: RootState) => state.settings)
+  const theme = useSelector(
+    (state: RootState) => wrapper.theme[state.settings.theme]
+  )
+
+  return (
+    <Fragment>
+      <LinearLayout
+        orientation={'horiz'}
+        justifyContent={'space-between'}
+        mt={30}
+        mb={20}
+      >
+        <LinearLayout weight={2}>
+          <InputLabel
+            title={I18n.t('modals.send.transactionInput.amount')}
+            color={'text.0'}
+            capitalize={true}
+          />
+        </LinearLayout>
+        <LinearLayout orientation={'horiz'} alignItems={'center'}>
+          <TextView mr={'6px'} color={'text.10'}>
+            {I18n.t('modals.send.transactionInput.totalAfterTransaction')}
+          </TextView>
+          <TextView color={'text.0'} fontFamily={'bold'} fontSize={'16px'}>
+            {FilterHelper.decimal(props.remainingTokenBalance, language)}
+          </TextView>
+        </LinearLayout>
+        <ButtonView
+          p={'8px'}
+          onPress={() => {
+            props.setFieldTyping('amountField')
+            setValue(String(props.tokenBalance))
+          }}
+        >
+          <TextView color={'primary'} fontSize={'15px'} fontFamily={'medium'}>
+            {I18n.t('modals.send.transactionInput.max')}
+          </TextView>
+        </ButtonView>
+      </LinearLayout>
+      <LinearLayout
+        position={'relative'}
+        orientation={'horiz'}
+        justifyContent={'space-between'}
+      >
+        <LinearLayout width={'50%'}>
+          <InputWithValidation
+            onFocus={() => props.setFieldTyping('amountField')}
+            onChangeText={(val) => props.onAmountChanged(val)}
+            color={theme.colors.text[0]}
+            invalidColor={theme.colors.text[10]}
+            invalidMessageColor={theme.colors.quinary}
+            value={props.amount !== null ? String(props.amount) : ''}
+            placeholder={
+              I18n.t('modals.send.transactionInput.enterValue') +
+              (props.token?.symbol ?? 'NEO')
+            }
+            validator={(val) => props.validatorAmount(val)}
+            invalidMessage={I18n.t(
+              'modals.send.transactionInput.insufficientFunds'
+            )}
+            separatorColor={theme.colors.background[13]}
+            sideMargins={0}
+            hidePaste={true}
+            hideScan={true}
+            keyboardType="numeric"
+            editable={Boolean(props.token)}
+          />
+        </LinearLayout>
+        <LinearLayout width={'45%'}>
+          <LinearLayout height={'50px'} orientation={'horiz'}>
+            <TextView
+              color={'white'}
+              fontSize={'20px'}
+              fontFamily={'medium'}
+              mr={5}
+            >
+              {`${props.currency}:`}
+            </TextView>
+            <InputWithValidation
+              onFocus={() => props.setFieldTyping('fiatField')}
+              onChangeText={(val) => props.onFiatChanged(val)}
+              color={theme.colors.text[0]}
+              invalidColor={theme.colors.text[10]}
+              invalidMessageColor={theme.colors.quinary}
+              value={props.fiat !== '' ? String(props.fiat) : ''}
+              placeholder={
+                I18n.t('modals.send.transactionInput.enterValue') +
+                props.currency
+              }
+              validator={() => true}
+              invalidMessage={I18n.t(
+                'modals.send.transactionInput.insufficientFunds'
+              )}
+              separatorColor={theme.colors.background[13]}
+              sideMargins={0}
+              hidePaste={true}
+              hideScan={true}
+              keyboardType="numeric"
+              editable={Boolean(props.token)}
+            />
+          </LinearLayout>
+          <ButtonView
+            mt={2}
+            alignSelf={'flex-end'}
+            onPress={() => {
+              props.setFieldTyping('fiatField')
+              props.setFiat(Math.floor(Number(props.fiat)))
+            }}
+          >
+            <LinearLayout orientation={'horiz'}>
+              <ImageView
+                mr={'3'}
+                alignSelf={'center'}
+                source={require('~src/assets/images/round-down-arrows.png')}
+                resizeMode="contain"
+              />
+              <TextView
+                color={'primary'}
+                fontSize={'15px'}
+                fontFamily={'medium'}
+                mb={'2'}
+              >
+                {I18n.t('modals.send.transactionInput.roundDown')}
+              </TextView>
+            </LinearLayout>
+          </ButtonView>
+        </LinearLayout>
+      </LinearLayout>
+    </Fragment>
+  )
+}
+
+export default AmountField

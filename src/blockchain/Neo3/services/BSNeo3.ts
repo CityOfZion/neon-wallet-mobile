@@ -307,7 +307,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable {
       intents.push({
         to: tip.address,
         from: neoAccount,
-        contractHash: token.hash,
+        contractHash: this.cozTip.hash,
         decimalAmt: tip.amount,
       })
     }
