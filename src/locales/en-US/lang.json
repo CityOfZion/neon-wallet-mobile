@@ -542,7 +542,8 @@
       "xExisting": "%{amount} existing",
       "countAccount": "Account %{count}",
       "typeAccount": "%{type} Account",
-      "encryptedWallet": "Encrypted Wallet"
+      "encryptedWallet": "Encrypted Wallet",
+      "errorCreateWallet": "Problem to create wallet, try again"
     }
   },
   "components": {

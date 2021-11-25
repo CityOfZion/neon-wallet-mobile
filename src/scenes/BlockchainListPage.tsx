@@ -36,46 +36,56 @@ const BlockchainListPage = (props: Props) => {
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const createWallet = useCallback(async () => {
-    if (blockchainsSelected.length < 1) {
-      showMessage({
-        message: i18n.t('blockchainServices.errorMessages.blockchainNotFound'),
-        type: 'danger',
-        duration: 3000,
-      })
-      throw new Error(
-        i18n.t('blockchainServices.errorMessages.blockchainNotFound')
+    let id: string = ''
+    try {
+      id = await dispatchAsyncString(RootStore.wallet.actions.createAndSave())
+      await dispatchAsync(RootStore.app.actions.syncWallets())
+      await Promise.all(
+        blockchainsSelected.map(async (blockchain) => {
+          dispatch(RootStore.account.actions.setIdWallet(id))
+          dispatch(
+            RootStore.account.actions.setName(
+              `${i18n.t(
+                `blockchainServices.${blockchain}.label`
+              )} ${i18n.t('modals.blockchainList.countAccount', {count: 1})}`
+            )
+          )
+          dispatch(RootStore.account.actions.setBlockchain(blockchain))
+          dispatch(
+            RootStore.account.actions.setSrcIcon(
+              applicationConfig.blockchain[blockchain].icon
+            )
+          )
+          dispatch(
+            RootStore.account.actions.setBackgroundColor(
+              theme.colors.card[getRandomColor(6)]
+            )
+          )
+          await dispatchAsyncString(RootStore.account.actions.createAndSave())
+
+          dispatch(RootStore.wallet.actions.selectWallet(id))
+        })
       )
-    }
-    const id = await dispatchAsyncString(
-      RootStore.wallet.actions.createAndSave()
-    )
-    await dispatchAsync(RootStore.app.actions.syncWallets())
-    for (const blockchain of blockchainsSelected) {
-      dispatch(RootStore.account.actions.setIdWallet(id))
-      dispatch(
-        RootStore.account.actions.setName(
-          `${i18n.t(
-            `blockchainServices.${blockchain}.label`
-          )} ${i18n.t('modals.blockchainList.countAccount', {count: 1})}`
-        )
-      )
-      dispatch(RootStore.account.actions.setBlockchain(blockchain))
-      dispatch(
-        RootStore.account.actions.setSrcIcon(
-          applicationConfig.blockchain[blockchain].icon
-        )
-      )
-      dispatch(
-        RootStore.account.actions.setBackgroundColor(
-          theme.colors.card[getRandomColor(6)]
-        )
-      )
-      await dispatchAsyncString(RootStore.account.actions.createAndSave())
+
       await dispatchAsync(RootStore.app.actions.syncAccounts())
 
       await dispatchAsync(RootStore.app.actions.syncWallets())
 
-      dispatch(RootStore.wallet.actions.selectWallet(id))
+      props.navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: wrapper.route.Step5CreateWallet.name,
+          },
+        ],
+      })
+    } catch (error) {
+      dispatchAsync(RootStore.wallet.actions.delete(id))
+      showMessage({
+        message: i18n.t('modals.blockchainList.errorCreateWallet'),
+        type: 'danger',
+        duration: 5000,
+      })
     }
   }, [blockchainsSelected])
 
@@ -85,16 +95,6 @@ const BlockchainListPage = (props: Props) => {
         name={'createWallet'}
         size={'large'}
         loadingView={<ScreenLoader />}
-        onLoadingEnd={() => {
-          props.navigation.reset({
-            index: 0,
-            routes: [
-              {
-                name: wrapper.route.Step5CreateWallet.name,
-              },
-            ],
-          })
-        }}
       >
         <LinearLayout mt={'15px'} weight={1}>
           <View style={{alignContent: 'center'}}>
