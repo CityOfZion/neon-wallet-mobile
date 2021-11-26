@@ -1,3 +1,4 @@
+import {JsonRpcRequest, JsonRpcResponse} from '@json-rpc-tools/utils'
 import {ImageLoadEventData} from 'react-native'
 
 import {PriorityFee} from '../models/PriorityFee'
@@ -52,7 +53,11 @@ export interface IClaimable {
 }
 
 export interface IWalletConnect {
-  connect: () => boolean
+  //connect: () => boolean
+  rpcCall: (
+    account: string,
+    request: JsonRpcRequest
+  ) => Promise<JsonRpcResponse>
 }
 
 export interface IBlockchainService {
@@ -216,6 +221,10 @@ export function getBlockchainLogo(
 
 export function isClaimable(object: any): object is IClaimable {
   return 'claimGas' in object
+}
+
+export function canConnect(object: any): object is IWalletConnect {
+  return 'rpcCall' in object
 }
 
 export type BlockchainServiceKey = 'neoLegacy' | 'neo3'

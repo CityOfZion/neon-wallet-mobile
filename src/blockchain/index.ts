@@ -16,6 +16,8 @@ import {
   BlockchainDataProvider,
   getBlockchainLogo,
   SenderTransactionInfo,
+  IWalletConnect,
+  canConnect,
 } from '../blockchain/common'
 
 export {
@@ -36,4 +38,6 @@ export {
   BlockchainDataProvider,
   getBlockchainLogo,
   SenderTransactionInfo,
+  IWalletConnect,
+  canConnect,
 }

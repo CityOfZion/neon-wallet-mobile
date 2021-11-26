@@ -302,7 +302,7 @@ export const WalletConnectContextProvider: React.FC<{
           } else {
             await askApproval()
           }
-        } catch (e) {
+        } catch (e: any) {
           await reject(e.message)
         }
       }
