@@ -21,12 +21,11 @@ import TransactionsList from '~/src/components/TransactionsList'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import {ThemedClaimButton} from '~/src/components/themed/ThemedClaimButton'
 import {ThemedSendButton} from '~/src/components/themed/ThemedSendButton'
-import {applicationConfig} from '~/src/config/ApplicationConfig'
 import {FilterHelper} from '~/src/helpers/FilterHelper'
 import {useAmountFee} from '~/src/hooks/AmountFeeHook'
 import {Node} from '~/src/models/Node'
 import {TokenAsset} from '~/src/models/TokenAsset'
-import {isClaimable} from '~src/blockchain'
+import {blockchainServices, isClaimable} from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
 import BalanceList from '~src/components/BalanceList'
 import {TabSelectorBar} from '~src/components/TabSelector'
@@ -193,8 +192,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const [totTokenFeeAccount, setTotTokenFeeAccount] = useState<number>(
     account.tokenAssets.find(
       (token) =>
-        token.symbol ===
-        applicationConfig.blockchain[account.blockchain].feeToken.token
+        token.symbol === blockchainServices[account.blockchain].feeToken.token
     )?.amount ?? 0
   )
 
@@ -203,8 +201,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const handleCalcFee = useCallback(() => {
     const tokenFee = account.tokenAssets.find(
       (it) =>
-        applicationConfig.blockchain[account.blockchain].feeToken.token ===
-        it.symbol
+        blockchainServices[account.blockchain].feeToken.token === it.symbol
     )
     if (tokenFee && account.address && unclaimedGasAmount > 0) {
       const token = new TokenAsset(
@@ -324,14 +321,14 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const populateUnclaimed = async () => {
     if (!account.address) return
 
-    const request = applicationConfig.blockchain[account.blockchain].provider
+    const request = blockchainServices[account.blockchain].provider
     const response = await request.getUnclaimed(account.address)
 
     setUnclaimedGasAmount(response.unclaimed ?? 0)
   }
 
   const getNodesfromBlockchain = async () => {
-    const request = applicationConfig.blockchain[account.blockchain].provider
+    const request = blockchainServices[account.blockchain].provider
     const response = await request.getAllNodes()
 
     setNodesPoolBlockchain(response ?? [])
@@ -375,7 +372,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
     if (!account.address || !unclaimedGasAmount || !isConnected) return
 
     try {
-      const bs = applicationConfig.blockchain[account.blockchain]
+      const bs = blockchainServices[account.blockchain]
       if (isClaimable(bs)) {
         Await.init(`ClaimGas@${account.address}`)
         const responseClaim = await bs.claimGas(account.address)
