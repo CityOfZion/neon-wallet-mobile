@@ -42,6 +42,7 @@ interface Props {
   borderColor?: string
   textAlign?: string
   radius?: number
+  width?: string | number
 }
 
 const LabelComponent = (props: Props) => {
@@ -63,7 +64,13 @@ const LabelComponent = (props: Props) => {
       )}
 
       {Boolean(props.label) && (
-        <LinearLayout mt={'2px'} orientation="horiz" alignItems={'baseline'}>
+        <LinearLayout
+          width={props.width}
+          mt={'2px'}
+          orientation="horiz"
+          alignItems={'baseline'}
+          justifyContent={'center'}
+        >
           <LabelView
             color={props.textColor}
             fontSize={fontSize}
