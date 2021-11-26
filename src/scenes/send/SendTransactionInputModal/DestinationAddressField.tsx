@@ -7,7 +7,7 @@ import {BlockchainServiceKey} from '~/src/blockchain'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import {applicationConfig} from '~/src/config/ApplicationConfig'
-import {NeoURI} from '~/src/helpers/UriHelper'
+import {IURI} from '~/src/helpers/UriHelper'
 import {Account} from '~/src/models/redux/Account'
 import {Contact} from '~/src/models/redux/Contact'
 
@@ -17,7 +17,7 @@ const DestinationAddressField = (props: {
   contact?: Contact
   onAddressChanged: (address: string) => void
   onSelected: (item: Contact | Account, addressSelected?: string) => void
-  handleQrCode: (data: NeoURI | string) => void
+  handleQrCode: (data: IURI | string) => void
   validateAddress: (val: string) => boolean
   onValidateAddress: (addressIsValid: boolean) => void
 }) => {

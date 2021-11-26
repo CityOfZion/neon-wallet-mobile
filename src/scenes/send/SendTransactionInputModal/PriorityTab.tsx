@@ -16,6 +16,7 @@ import {
 const PriorityTab = (props: {
   priority: PriorityFee
   changePriority: (p: PriorityFee) => void
+  feeTokenSymbol?: string
 }) => {
   const priorityIconInactive = require('~src/assets/images/icon-flash-grey.png')
   const priorityIconActive = require('~src/assets/images/icon-flash-primary.png')
@@ -65,7 +66,7 @@ const PriorityTab = (props: {
               }
               fontSize="12px"
             >
-              {FastPriority().fee} GAS
+              {FastPriority().fee} {props.feeTokenSymbol}
             </TextView>
           </LinearLayout>
         </LinearLayout>
@@ -109,7 +110,7 @@ const PriorityTab = (props: {
               }
               fontSize="12px"
             >
-              {FasterPriority().fee} GAS
+              {FasterPriority().fee} {props.feeTokenSymbol}
             </TextView>
           </LinearLayout>
         </LinearLayout>
@@ -151,7 +152,7 @@ const PriorityTab = (props: {
               }
               fontSize="12px"
             >
-              {FastestPriority().fee} GAS
+              {FastestPriority().fee} {props.feeTokenSymbol}
             </TextView>
           </LinearLayout>
         </LinearLayout>

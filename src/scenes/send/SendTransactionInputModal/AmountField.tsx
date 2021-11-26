@@ -1,5 +1,5 @@
 import I18n from 'i18n-js'
-import React, {Fragment} from 'react'
+import React, {Fragment, useEffect, useState, useCallback} from 'react'
 import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
@@ -32,23 +32,40 @@ const AmountField = (props: {
   account: Account
   currency: Currency
 }) => {
-  const setValue = (val: string, roundDown?: boolean) => {
-    var valueNumber
-    if (roundDown) {
-      valueNumber = Math.floor(Number(val))
-    } else valueNumber = Number(val)
+  const [tokenDecimalPlaces, setTokenDecimalPlaces] = useState<number>()
 
-    if (!valueNumber) return
+  const setValue = useCallback(
+    (val: string, roundDown?: boolean) => {
+      var valueNumber
+      if (roundDown) {
+        valueNumber = Math.floor(Number(val))
+      } else valueNumber = Number(val)
 
-    val = val.replace(',', '.')
-    if (props.token?.symbol === 'NEO') val = val.replace('.', '')
+      if (!valueNumber) return
 
-    props.setAmount(Number(val))
-  }
+      val = val.replace(',', '.')
+      if (tokenDecimalPlaces && tokenDecimalPlaces < 1)
+        val = val.replace('.', '')
+
+      props.setAmount(Number(val))
+    },
+    [tokenDecimalPlaces]
+  )
+
   const {language} = useSelector((state: RootState) => state.settings)
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
+
+  useEffect(() => {
+    if (props.token) {
+      TokenAsset.getDecimals(props.token.symbol, props.token.blockchain).then(
+        (result) => {
+          setTokenDecimalPlaces(result)
+        }
+      )
+    }
+  }, [props.token])
 
   return (
     <Fragment>
@@ -98,10 +115,9 @@ const AmountField = (props: {
             invalidColor={theme.colors.text[10]}
             invalidMessageColor={theme.colors.quinary}
             value={props.amount !== null ? String(props.amount) : ''}
-            placeholder={
-              I18n.t('modals.send.transactionInput.enterValue') +
-              (props.token?.symbol ?? 'NEO')
-            }
+            placeholder={I18n.t('modals.send.transactionInput.enterValue', {
+              value: props.token ? props.token.symbol : 'Token',
+            })}
             validator={(val) => props.validatorAmount(val)}
             invalidMessage={I18n.t(
               'modals.send.transactionInput.insufficientFunds'
@@ -131,10 +147,9 @@ const AmountField = (props: {
               invalidColor={theme.colors.text[10]}
               invalidMessageColor={theme.colors.quinary}
               value={props.fiat !== '' ? String(props.fiat) : ''}
-              placeholder={
-                I18n.t('modals.send.transactionInput.enterValue') +
-                props.currency
-              }
+              placeholder={I18n.t('modals.send.transactionInput.enterValue', {
+                value: props.currency,
+              })}
               validator={() => true}
               invalidMessage={I18n.t(
                 'modals.send.transactionInput.insufficientFunds'

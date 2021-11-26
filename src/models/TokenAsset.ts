@@ -1,5 +1,7 @@
 import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
 
+import {applicationConfig} from '../config/ApplicationConfig'
+
 import * as Color from '~src/assets/nep5/color'
 import * as Image from '~src/assets/nep5/png'
 import {BlockchainServiceKey} from '~src/blockchain'
@@ -36,6 +38,26 @@ export class TokenAsset {
     this.symbol = symbol
     this.hash = hash
     this.blockchain = blockchain
+  }
+
+  static async getDecimals(
+    tokenSymbol: string,
+    blockchain: BlockchainServiceKey
+  ) {
+    let decimals: number | undefined = undefined
+    const tokenList = await applicationConfig.blockchain[
+      blockchain
+    ].provider.getTokenList()
+    const assets = applicationConfig.blockchain[blockchain].assets
+    decimals = assets.find((it) => it.symbol === tokenSymbol)?.decimals
+    if (decimals) {
+      return decimals
+    } else if (tokenList[tokenSymbol]) {
+      decimals = tokenList[tokenSymbol].networks[1].decimals
+      return decimals
+    } else {
+      return decimals
+    }
   }
 
   get color() {

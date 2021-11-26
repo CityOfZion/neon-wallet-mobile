@@ -44,11 +44,13 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
       name: 'NEO',
       hash: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
       symbol: 'NEO',
+      decimals: 0,
     },
     {
       name: 'GAS',
       hash: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
       symbol: 'GAS',
+      decimals: 8,
     },
   ]
   readonly feeToken: {hash: string; token: string; img: ImageLoadEventData}

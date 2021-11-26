@@ -27,7 +27,7 @@ import {InputClearButton} from '~src/components/input/InputClearButton'
 import {PasteButton} from '~src/components/input/PasteButton'
 import {ScanButton} from '~src/components/input/ScanButton'
 import {SelectedContactView} from '~src/components/input/SelectedContactView'
-import {NeoURI} from '~src/helpers/UriHelper'
+import {IURI} from '~src/helpers/UriHelper'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
 import {RootState, RootStore} from '~src/store/RootStore'
@@ -55,7 +55,7 @@ interface Props {
   hideScan?: boolean
   showContacts?: boolean
   onClearPress?: () => void
-  onScan?: (data: NeoURI | string) => void
+  onScan?: (data: IURI | string) => void
   onSelected?: (item: Contact | Account, addressSelected?: string) => void
   placeholder?: string
   secure?: boolean

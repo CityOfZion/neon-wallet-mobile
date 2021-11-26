@@ -15,7 +15,7 @@ import BalanceList from '~src/components/BalanceList'
 import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import AccountPicker from '~src/components/misc/AccountPicker'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {NeoURI} from '~src/helpers/UriHelper'
+import {IURI} from '~src/helpers/UriHelper'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
@@ -23,7 +23,7 @@ import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface SendAccountSelectionModalParams {
   wallet: Wallet
-  uri?: NeoURI
+  uri?: IURI
 }
 
 interface Props {

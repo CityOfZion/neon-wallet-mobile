@@ -22,7 +22,7 @@ import AccountCard from '~src/components/AccountCard'
 import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import {TipCheckbox} from '~src/components/TipCheckbox'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {NeoURI} from '~src/helpers/UriHelper'
+import {IURI} from '~src/helpers/UriHelper'
 import {
   CustomPriotity,
   FastPriority,
@@ -45,7 +45,7 @@ import {
 export interface SendTransactionInputModalParams {
   walletTitle: string
   account: Account
-  uri?: NeoURI
+  uri?: IURI
   selectedToken?: TokenAsset
 }
 
@@ -254,8 +254,8 @@ const SendTransactionInputModal = (prop: Props) => {
   }, [amount])
 
   // Typeguard
-  function isURI(object: any): object is NeoURI {
-    return !!(object as NeoURI).address
+  function isURI(object: any): object is IURI {
+    return !!(object as IURI).address
   }
 
   const selectContactOrAccount = useCallback(
@@ -318,7 +318,7 @@ const SendTransactionInputModal = (prop: Props) => {
     [contacts, account, accounts]
   )
 
-  const handleQrCode = (data: NeoURI | string) => {
+  const handleQrCode = (data: IURI | string) => {
     if (isURI(data)) {
       handleAddressChanged(data.address)
     } else {
@@ -447,7 +447,11 @@ const SendTransactionInputModal = (prop: Props) => {
                 'modals.send.transactionInput.prioritiseTransfer'
               ).toUpperCase()}
             </TextView>
-            <PriorityTab priority={priority} changePriority={changePriority} />
+            <PriorityTab
+              priority={priority}
+              changePriority={changePriority}
+              feeTokenSymbol={cozTip?.token}
+            />
           </>
         )}
         {account.blockchain === 'neo3' && (
