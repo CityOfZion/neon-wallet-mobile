@@ -80,7 +80,9 @@ export const TipCheckbox: React.FC<ITipCheckbox> = ({
   }
 
   const checkTip = () => {
-    const tipValue = (fiat / 100) * (percentage ?? 0.1)
+    const tipValue =
+      ((fiat / 100) * (percentage ?? 1)) /
+      exchange[blockchain][tokenTip].to[currency]
     if (tip === undefined) {
       setTip({address, amount: tipValue})
     } else if (tip) {

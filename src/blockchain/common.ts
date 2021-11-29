@@ -42,6 +42,7 @@ export interface AssetInfo {
   name: string
   hash: string
   symbol: string
+  decimals: number
 }
 
 export interface IClaimable {

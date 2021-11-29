@@ -414,7 +414,7 @@
         "roundDown": "round down",
         "prioritiseTransfer": "Prioritise your transfer with a fee?",
         "enterAmount": "Enter amount",
-        "enterValue": "Enter ",
+        "enterValue": "Enter %{value} ",
         "selectToken": "Select token to send",
         "enterDestination": "Please enter destination address",
         "destinationAddress": "Destination Address",

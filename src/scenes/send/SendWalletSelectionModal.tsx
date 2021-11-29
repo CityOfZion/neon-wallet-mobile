@@ -10,14 +10,14 @@ import {wrapper} from '~/src/app/ApplicationWrapper'
 import {FilterHelper} from '~/src/helpers/FilterHelper'
 import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import WalletPicker from '~src/components/misc/WalletPicker'
-import {NeoURI} from '~src/helpers/UriHelper'
+import {IURI} from '~src/helpers/UriHelper'
 import {Wallet} from '~src/models/redux/Wallet'
 import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface SendWalletSelectionModalParams {
-  uri?: NeoURI
+  uri?: IURI
 }
 
 interface Props {

@@ -17,7 +17,7 @@ import {
 import {applicationConfig} from '../config/ApplicationConfig'
 
 import {useSwiperController} from '~src/components/SwiperPanel'
-import {NeoURI, UriHelper} from '~src/helpers/UriHelper'
+import {IURI, UriHelper} from '~src/helpers/UriHelper'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import HandleQRModal from '~src/scenes/HandleQRModal'
 import {
@@ -31,7 +31,7 @@ import {
 const {BarCodeType} = ExpoBarCodeScannerModule
 
 export interface QRCodeScanParams {
-  onScan?: (data: NeoURI | string) => void
+  onScan?: (data: IURI | string) => void
   address?: string
 }
 
@@ -155,13 +155,13 @@ const QRCodeScan = (props: Props) => {
     }
   }
 
-  const whatDoWithData = (info: string | NeoURI) => {
+  const whatDoWithData = (info: string | IURI) => {
     if (!controller.isShowing) {
       if (isValid(info as string)) {
         setMessage(i18n.t('screens.scanQrCode.success'))
         // If there's a callback, calls the callback and navigates back
         if (props.route.params?.onScan) {
-          let data: NeoURI | string = info
+          let data: IURI | string = info
 
           if (UriHelper.isValid(info as string)) {
             data = UriHelper.parse(info as string) ?? info
@@ -171,7 +171,7 @@ const QRCodeScan = (props: Props) => {
         } else {
           // If scanned QR is an address, opens modal
           if (validateAddressAllBlockchains(info as string)) {
-            let data: NeoURI | string = info
+            let data: IURI | string = info
 
             if (UriHelper.isValid(info as string)) {
               data = UriHelper.parse(info as string) ?? info

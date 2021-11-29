@@ -1,21 +1,13 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import {AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, {useState} from 'react'
-import {Button, TextComponent, View} from 'react-native'
-import {useDispatch, useSelector} from 'react-redux'
 
-import SelectorList, {SelectorItem} from '~src/components/SelectorList'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import {Lang} from '~src/enums/Lang'
-import {NeoURI} from '~src/helpers/UriHelper'
-import {TokenAsset} from '~src/models/TokenAsset'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 

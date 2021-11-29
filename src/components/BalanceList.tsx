@@ -10,7 +10,7 @@ import {FilterHelper} from '../helpers/FilterHelper'
 
 import {Currency} from '~src/enums/Currency'
 import {Lang} from '~src/enums/Lang'
-import {NeoURI} from '~src/helpers/UriHelper'
+import {IURI} from '~src/helpers/UriHelper'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -23,7 +23,7 @@ interface Props extends LinearLayoutProps {
   walletId?: string
   walletTitle?: string
   account?: Account
-  uri?: NeoURI
+  uri?: IURI
   zeroBalance?: boolean
   hideEmptyMessage?: boolean
   notOrderByValue?: boolean

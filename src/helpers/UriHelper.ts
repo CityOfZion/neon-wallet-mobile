@@ -3,7 +3,7 @@ import {TokenAsset} from '~src/models/TokenAsset'
 export const SCHEME = 'neo:'
 
 // URI interface
-export interface NeoURI {
+export interface IURI {
   address: string
   tokenHash?: string
   amount?: number
@@ -38,7 +38,7 @@ export abstract class UriHelper {
     )
   }
 
-  static parse(str: string): NeoURI | undefined {
+  static parse(str: string): IURI | undefined {
     if (!this.isValid(str)) return undefined
 
     const substrings = str.substr(SCHEME.length).split('?')
