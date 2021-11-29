@@ -10,6 +10,7 @@ import {Alert} from 'react-native'
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {Normalize} from '~/src/app/Normalize'
 import {UtilsHelper} from '~/src/helpers/UtilsHelper'
+import {MoreStackParamList} from '~/src/navigation/MoreStackNavigation'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
@@ -19,9 +20,11 @@ import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 import {TextView, LinearLayout} from '~src/styles/styled-components'
 
+type ParamList = SettingsStackParamList & RootStackParamList
+
 interface Props {
   route: RouteProp<SettingsStackParamList, 'Step1BackupWallet'>
-  navigation: StackNavigationProp<SettingsStackParamList & RootStackParamList>
+  navigation: StackNavigationProp<ParamList>
 }
 
 const WordComponent = (props: {value: string}) => {
@@ -64,7 +67,10 @@ const Step1BackupWalletPage: React.FC<Props> = (props) => {
         actionOnPress: () => {
           props.navigation.reset({
             index: 0,
-            routes: [{name: wrapper.route.SettingsPage.name}],
+            routes: [
+              {name: wrapper.route.SettingsPage.name},
+              {name: wrapper.route.More.name},
+            ],
           })
         },
       }),

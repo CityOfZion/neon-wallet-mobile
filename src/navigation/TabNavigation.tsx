@@ -20,7 +20,7 @@ import MoreStackNavigation, {
   MoreStackParam,
 } from '~src/navigation/MoreStackNavigation'
 import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation'
-import SettingsStackNavigation from '~src/navigation/SettingsStackNavigation'
+import WalletConnectStackNavigation from '~src/navigation/WalletConnectStackNavigation'
 import WalletStackNavigation, {
   WalletStackParams,
 } from '~src/navigation/WalletsStackNavigation'
@@ -28,7 +28,7 @@ import WalletStackNavigation, {
 export type TabStackParamList = {
   ListWallets: WalletStackParams
   Contacts: ContactsStackParams
-  Settings: undefined
+  WalletConnectPage: undefined
   More: MoreStackParam
 }
 
@@ -130,8 +130,8 @@ const TabNavigation = (props: Props) => {
           component={QuickToolsStackNavigation}
         />
         <Tab.Screen
-          name={wrapper.route.Settings.name}
-          component={SettingsStackNavigation}
+          name={wrapper.route.WalletConnectPage.name}
+          component={WalletConnectStackNavigation}
         />
         <Tab.Screen
           name={wrapper.route.More.name}

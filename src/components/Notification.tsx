@@ -35,9 +35,7 @@ interface NotificationProps {
 const Notification = (props: NotificationProps) => {
   const [seen, setSeen] = useState(!props.wallet.showBackupAlert)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const navigation = useNavigation<
-    StackNavigationProp<SettingsStackParamList>
-  >()
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
 
   if (seen) return null
 
@@ -58,12 +56,22 @@ const Notification = (props: NotificationProps) => {
         if (props.wallet) {
           navigation.reset({
             index: 0,
-            routes: [{name: wrapper.route.Settings.name}],
+            routes: [
+              {name: wrapper.route.MorePage.name},
+              {name: wrapper.route.Settings.name},
+            ],
           })
-          navigation.navigate(wrapper.route.Settings.name, {
-            screen: wrapper.route.Step1BackupWallet.name,
+          navigation.navigate(wrapper.route.Tab.name, {
+            screen: wrapper.route.More.name,
             params: {
-              wallet: props.wallet,
+              screen: wrapper.route.Settings.name,
+              initial: false,
+              params: {
+                screen: wrapper.route.Step1BackupWallet.name,
+                params: {
+                  wallet: props.wallet,
+                },
+              },
             },
           })
         }

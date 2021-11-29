@@ -98,15 +98,15 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
     disabledSource: require('~src/assets/images/button-wallet-disabled.png'),
     route: wrapper.route.ListWallets,
   }
+  const dappsButton = {
+    enabledSource: require('~src/assets/images/button-dapps-white.png'),
+    disabledSource: require('~src/assets/images/button-dapps-disabled.png'),
+    route: wrapper.route.WalletConnectPage,
+  }
   const contactsButton = {
     enabledSource: require('~src/assets/images/button-contacts-white.png'),
     disabledSource: require('~src/assets/images/button-contacts-disabled.png'),
     route: wrapper.route.Contacts,
-  }
-  const settingsButton = {
-    enabledSource: require('~src/assets/images/button-settings-white.png'),
-    disabledSource: require('~src/assets/images/button-settings-disabled.png'),
-    route: wrapper.route.Settings,
   }
   const moreButton = {
     enabledSource: require('~src/assets/images/button-more-white.png'),
@@ -183,7 +183,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
             />
             <TabButton
               {...props}
-              button={contactsButton}
+              button={dappsButton}
               controller={controller}
             />
             <StyledTouchable
@@ -216,7 +216,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
             </StyledTouchable>
             <TabButton
               {...props}
-              button={settingsButton}
+              button={contactsButton}
               controller={controller}
             />
             <TabButton {...props} button={moreButton} controller={controller} />

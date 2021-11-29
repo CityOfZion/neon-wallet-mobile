@@ -21,13 +21,17 @@ export default function LoginPage(props: Props) {
 
   const continueButton = async () => {
     props.navigation.replace(wrapper.route.Tab.name, {
-      screen: wrapper.route.Settings.name,
+      screen: wrapper.route.More.name,
       welcomeHidden: true,
       changelogHidden: true,
       params: {
-        screen: wrapper.route.SettingsPage.name,
+        screen: wrapper.route.Settings.name,
+        initial: false,
         params: {
-          initialRoute: wrapper.route.SecurityModal.name,
+          screen: wrapper.route.SettingsPage.name,
+          params: {
+            initialRoute: wrapper.route.SecurityModal.name,
+          },
         },
       },
     })
