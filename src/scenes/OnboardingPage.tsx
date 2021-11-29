@@ -111,9 +111,13 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   }
 
   useEffect(() => {
+    dispatch(RootStore.timer.actions.setTimerOff())
     if (wallets.length === 0) {
       // NW-221 The app must create a wallet for the user when it first runs
       Await.run('populateWallet', () => createFirstWallet())
+    }
+    return () => {
+      dispatch(RootStore.timer.actions.setTimerOn())
     }
   }, [])
 

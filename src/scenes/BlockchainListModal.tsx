@@ -14,11 +14,7 @@ import {ModalStackParamList} from '../navigation/ModalStackNavigation'
 import {RootStore} from '../store/RootStore'
 import {getRandomColor} from './CustomizeAccount'
 
-import {
-  blockchainList,
-  BlockchainServiceKey,
-  getBlockchainLogo,
-} from '~src/blockchain'
+import {BlockchainServiceKey} from '~src/blockchain'
 import BlockchainList from '~src/components/BlockchainList'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {SearchBar} from '~src/components/input/SearchBar'
@@ -102,6 +98,13 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
       dispatchWallet(RootStore.wallet.actions.getFromSelection())
     )
   }, [wallet])
+
+  useEffect(() => {
+    dispatch(RootStore.timer.actions.setTimerOff())
+    return () => {
+      dispatch(RootStore.timer.actions.setTimerOn())
+    }
+  }, [])
 
   return (
     <SwiperPanel
