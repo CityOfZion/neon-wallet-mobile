@@ -544,6 +544,17 @@
       "typeAccount": "%{type} Account",
       "encryptedWallet": "Encrypted Wallet",
       "errorCreateWallet": "Problem to create wallet, try again"
+    },
+    "transactionSent": {
+      "title": "WalletConnect",
+      "transactionSent": "Transaction successfully sent!",
+      "transactionSuccessText": "Once your transaction has been confirmed it will appear in your activity feed.",
+      "transactionId": "Transaction ID",
+      "transactionFailed": "Transaction failed",
+      "transactionFailText": "I'm sorry but your transaction could not be sent.",
+      "transactionError": "Error message",
+      "viewOnDora": "View on dora",
+      "viewTransaction": "View transaction"
     }
   },
   "components": {
