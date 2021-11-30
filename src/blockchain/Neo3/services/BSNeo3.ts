@@ -11,7 +11,7 @@ import {ImageLoadEventData, NativeModules, Platform} from 'react-native'
 import {Storage} from '~/src/app/Storage'
 import {DEFAULT_NETWORKS} from '~/src/config/walletConnect/constants'
 import {AsteroidHelper} from '~/src/helpers/AsteroidHelper'
-import {N3Helper} from '~/src/helpers/N3Helper'
+import {WCN3Helper} from '~/src/helpers/WCN3Helper'
 import {NeoNode} from '~/src/models/NeoNode'
 import {TokenAsset} from '~/src/models/TokenAsset'
 import {NeoNative} from '~/src/native/NeoNative'
@@ -67,59 +67,20 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
       hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
     }
   }
-  //connect: () => boolean
   rpcCall = async (
     address: string,
     request: JsonRpcRequest
   ): Promise<JsonRpcResponse> => {
     const neoAccount = await this.getNeoAccount(address)
-    let result: any
+    const nodes = await this.provider.getAllNodes()
+    const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
 
-    if (request.method === 'invokefunction') {
-      if (!neoAccount) {
-        throw new Error('No account')
-      }
+    if (!neoAccount) throw new Error('No account')
+    if (!bestUrl) throw new Error('Blockchain unavailable, try again')
 
-      result = await (
-        await N3Helper.init(DEFAULT_NETWORKS['neo3:mainnet'])
-      ).contractInvoke(neoAccount, request.params[0])
-    } else if (request.method === 'testInvoke') {
-      if (!neoAccount) {
-        throw new Error('No account')
-      }
-
-      result = await (
-        await N3Helper.init(DEFAULT_NETWORKS['neo3:mainnet'])
-      ).testInvoke(neoAccount, request.params[0])
-    } else if (request.method === 'multiInvoke') {
-      if (!neoAccount) {
-        throw new Error('No account')
-      }
-
-      result = await (
-        await N3Helper.init(DEFAULT_NETWORKS['neo3:mainnet'])
-      ).multiInvoke(neoAccount, request.params)
-    } else if (request.method === 'multiTestInvoke') {
-      if (!neoAccount) {
-        throw new Error('No account')
-      }
-
-      result = await (
-        await N3Helper.init(DEFAULT_NETWORKS['neo3:mainnet'])
-      ).multiTestInvoke(neoAccount, request.params)
-    } else {
-      const {jsonrpc, ...queryLike} = request
-      result = await new rpc.RPCClient(
-        DEFAULT_NETWORKS['neo3:mainnet']
-      ).execute(Neon.create.query({...queryLike, jsonrpc: '2.0'}))
-    }
-
-    return {
-      id: request.id,
-      jsonrpc: '2.0',
-      result,
-    }
+    return await (await WCN3Helper.init(bestUrl)).rpcCall(neoAccount, request)
   }
+
   validateAddress(address: string) {
     return address.startsWith('n') || address.startsWith('N') //the method wallet.isAddress doesn't work correctly
   }

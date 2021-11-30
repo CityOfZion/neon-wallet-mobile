@@ -17,7 +17,7 @@ import {
   getBlockchainLogo,
   SenderTransactionInfo,
   IWalletConnect,
-  canConnect,
+  hasWCIntegration,
 } from '../blockchain/common'
 
 export {
@@ -39,5 +39,5 @@ export {
   getBlockchainLogo,
   SenderTransactionInfo,
   IWalletConnect,
-  canConnect,
+  hasWCIntegration,
 }

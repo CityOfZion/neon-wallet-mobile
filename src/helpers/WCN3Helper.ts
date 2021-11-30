@@ -19,7 +19,7 @@ export type ContractInvocation = {
   signer?: Signer
 }
 
-export class N3Helper {
+export class WCN3Helper {
   private readonly rpcAddress: string
   private readonly networkMagic: number
 
@@ -31,10 +31,10 @@ export class N3Helper {
   static init = async (
     rpcAddress: string,
     networkMagic?: number
-  ): Promise<N3Helper> => {
-    return new N3Helper(
+  ): Promise<WCN3Helper> => {
+    return new WCN3Helper(
       rpcAddress,
-      networkMagic ?? (await N3Helper.getMagicOfRpcAddress(rpcAddress))
+      networkMagic ?? (await WCN3Helper.getMagicOfRpcAddress(rpcAddress))
     )
   }
 
@@ -108,14 +108,14 @@ export class N3Helper {
       }
     )
 
-    const convertedArgs = N3Helper.convertParams(call.args)
+    const convertedArgs = WCN3Helper.convertParams(call.args)
 
     try {
       return await contract.invoke(call.operation, convertedArgs, [
-        N3Helper.buildSigner(account, call),
+        WCN3Helper.buildSigner(account, call),
       ])
     } catch (e) {
-      return N3Helper.convertError(e)
+      return WCN3Helper.convertError(e)
     }
   }
 
@@ -123,16 +123,16 @@ export class N3Helper {
     account: Account,
     call: ContractInvocation
   ): Promise<any> => {
-    const convertedArgs = N3Helper.convertParams(call.args)
+    const convertedArgs = WCN3Helper.convertParams(call.args)
 
     try {
       return await new rpc.RPCClient(
         this.rpcAddress
       ).invokeFunction(call.scriptHash, call.operation, convertedArgs, [
-        N3Helper.buildSigner(account, call),
+        WCN3Helper.buildSigner(account, call),
       ])
     } catch (e) {
-      return N3Helper.convertError(e)
+      return WCN3Helper.convertError(e)
     }
   }
 
@@ -146,7 +146,7 @@ export class N3Helper {
       sb.emitContractCall({
         scriptHash: c.scriptHash,
         operation: c.operation,
-        args: N3Helper.convertParams(c.args),
+        args: WCN3Helper.convertParams(c.args),
       })
 
       if (c.abortOnFail) {
@@ -158,7 +158,7 @@ export class N3Helper {
     return await new rpc.RPCClient(
       this.rpcAddress
     ).invokeScript(Neon.u.HexString.fromHex(script), [
-      N3Helper.buildSigner(account, calls),
+      WCN3Helper.buildSigner(account, calls),
     ])
   }
 
@@ -172,7 +172,7 @@ export class N3Helper {
       sb.emitContractCall({
         scriptHash: c.scriptHash,
         operation: c.operation,
-        args: N3Helper.convertParams(c.args),
+        args: WCN3Helper.convertParams(c.args),
       })
 
       if (c.abortOnFail) {
@@ -189,7 +189,7 @@ export class N3Helper {
     const trx = new tx.Transaction({
       script: Neon.u.HexString.fromHex(script),
       validUntilBlock: currentHeight + 100,
-      signers: [N3Helper.buildSigner(account, calls)],
+      signers: [WCN3Helper.buildSigner(account, calls)],
     })
 
     console.log(trx)
@@ -214,7 +214,7 @@ export class N3Helper {
         : a.type === 'ScriptHash'
         ? sc.ContractParam.hash160(Neon.u.HexString.fromHex(a.value))
         : a.type === 'Array'
-        ? sc.ContractParam.array(...N3Helper.convertParams(a.value))
+        ? sc.ContractParam.array(...WCN3Helper.convertParams(a.value))
         : a
     )
   }

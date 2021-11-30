@@ -1,7 +1,6 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity} from '@simpli/react-native-await'
-import crypto from 'crypto'
 import i18n from 'i18n-js'
 import moment from 'moment'
 import PropTypes from 'prop-types'

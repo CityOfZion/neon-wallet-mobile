@@ -53,7 +53,6 @@ export interface IClaimable {
 }
 
 export interface IWalletConnect {
-  //connect: () => boolean
   rpcCall: (
     account: string,
     request: JsonRpcRequest
@@ -223,7 +222,7 @@ export function isClaimable(object: any): object is IClaimable {
   return 'claimGas' in object
 }
 
-export function canConnect(object: any): object is IWalletConnect {
+export function hasWCIntegration(object: any): object is IWalletConnect {
   return 'rpcCall' in object
 }
 

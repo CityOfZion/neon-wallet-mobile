@@ -1,13 +1,7 @@
-import {AccountJSON} from '@cityofzion/neon-core-next/lib/wallet/Account'
-import {Account as NeoAccount} from '@cityofzion/neon-core/lib/wallet'
-import {wallet as walletWC} from '@cityofzion/neon-js-next'
-import {JsonRpcRequest} from '@json-rpc-tools/utils'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
-import {SessionTypes} from '@walletconnect/types'
 import i18n from 'i18n-js'
-import {KeyValueStorage} from 'keyvaluestorage'
 import React, {useState, useEffect, useRef, useCallback} from 'react'
 import {
   Animated,
@@ -22,11 +16,9 @@ import {useDispatch, useSelector} from 'react-redux'
 
 import {appBus} from '~/src/app/AppBus'
 import {wrapper} from '~/src/app/ApplicationWrapper'
-import InputWithValidation from '~/src/components/InputWithValidation'
 import ModalWarningFee from '~/src/components/ModalWarningFee'
 import TransactionsList from '~/src/components/TransactionsList'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
-import ThemedButton from '~/src/components/themed/ThemedButton'
 import {ThemedClaimButton} from '~/src/components/themed/ThemedClaimButton'
 import {ThemedSendButton} from '~/src/components/themed/ThemedSendButton'
 import {applicationConfig} from '~/src/config/ApplicationConfig'
@@ -34,7 +26,7 @@ import {FilterHelper} from '~/src/helpers/FilterHelper'
 import {useAmountFee} from '~/src/hooks/AmountFeeHook'
 import {Node} from '~/src/models/Node'
 import {TokenAsset} from '~/src/models/TokenAsset'
-import {isClaimable, canConnect} from '~src/blockchain'
+import {isClaimable} from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
 import BalanceList from '~src/components/BalanceList'
 import {TabSelectorBar} from '~src/components/TabSelector'
@@ -42,26 +34,14 @@ import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
 import {ThemedReceiveButton} from '~src/components/themed/ThemedReceiveButton'
-import {
-  DEFAULT_APP_METADATA,
-  DEFAULT_LOGGER,
-  DEFAULT_METHODS,
-  DEFAULT_NETWORKS,
-  DEFAULT_RELAY_PROVIDER,
-} from '~src/config/walletConnect/constants'
-import {
-  WalletConnectContextProvider,
-  useWalletConnect,
-} from '~src/contexts/WalletConnectContext'
 import {Lang} from '~src/enums/Lang'
-import {N3Helper} from '~src/helpers/N3Helper'
 import {NeoNode} from '~src/models/NeoNode'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
-import {ButtonView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface GetAccountParams {
   key: string
@@ -70,14 +50,6 @@ export interface GetAccountParams {
 interface GetAccountViewProps {
   navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>
   route: RouteProp<WalletStackParamList, 'GetAccount'>
-}
-
-const wcOptions = {
-  appMetadata: DEFAULT_APP_METADATA,
-  chainIds: Object.keys(DEFAULT_NETWORKS),
-  logger: DEFAULT_LOGGER,
-  methods: DEFAULT_METHODS,
-  relayServer: DEFAULT_RELAY_PROVIDER,
 }
 
 const disabledSendImage = require('~/src/assets/images/button-send-small-disabled.png')
@@ -203,7 +175,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   const [showWarning, setShowWarning] = useState<boolean>(false)
   const [nodesPoolBlockchain, setNodesPoolBlockchain] = useState<Node[]>([])
-  const [loading, setLoading] = useState(false)
 
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
   const dispatchAccount = useDispatch<SyncDispatch<Account>>()
@@ -218,38 +189,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const [account, setAccount] = useState(
     dispatchAccount(RootStore.account.actions.getFromSelection())
   )
-  const walletConnectCtx = useWalletConnect()
-  const bs = applicationConfig.blockchain[account.blockchain]
-  const [connectingWallet, setConnectingWallet] = useState(false)
-  const [connectingApp, setConnectingApp] = useState(false)
-  const [requestString, setRequestString] = useState<string>('')
-  const [requestOpen, setRequestOpen] = useState<
-    SessionTypes.RequestEvent | undefined
-  >(undefined)
-
-  // useEffect(() => {
-  //   if (canConnect(bs)) {
-  //     setConnectingApp(!walletConnectCtx.sessions.length)
-  //   }
-  // }, [walletConnectCtx.sessions])
-
-  useEffect(() => {
-    // if the request method is 'testInvoke' or 'multiTestInvoke' we auto-accept it
-    if (canConnect(bs)) {
-      walletConnectCtx.autoAcceptIntercept(
-        (acc, chain, req: JsonRpcRequest) =>
-          req.method === 'testInvoke' || req.method === 'multiTestInvoke'
-      )
-
-      walletConnectCtx.onRequestListener(
-        async (acc, chain, req: JsonRpcRequest) =>
-          await await bs.rpcCall(address ?? '', req)
-      )
-      if (address !== null) {
-        setWCAccount(address)
-      }
-    }
-  }, [account])
 
   const [totTokenFeeAccount, setTotTokenFeeAccount] = useState<number>(
     account.tokenAssets.find(
@@ -361,44 +300,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   useEffect(() => {
     keepUpdatedInfo()
-    if (walletConnectCtx.storage) {
-      loadAccountToStorage(walletConnectCtx.storage)
-    }
-  }, [walletConnectCtx.initialized])
-
-  const setWCAccount = (acc: string) => {
-    walletConnectCtx.clearAccountAndChain()
-    walletConnectCtx.addAccountAndChain(acc, DEFAULT_NETWORKS['neo3:mainnet'])
-    setConnectingWallet(true)
-    alert('Connected')
-  }
-
-  const disconnectWCAccount = (acc: string) => {
-    walletConnectCtx.removeAccountAndChain(
-      acc,
-      DEFAULT_NETWORKS['neo3:mainnet']
-    )
-    setConnectingWallet(false)
-    alert('Disconnected')
-  }
-
-  const loadAccountToStorage = useCallback(
-    async (storage: KeyValueStorage) => {
-      alert('passa aqui!')
-      // const json = await storage.getItem<Partial<AccountJSON>>('account')
-      if (account.address !== null) {
-        //const account = new walletWC.Account(json)
-        setWCAccount(account.address)
-      }
-    },
-    [account]
-  )
-
-  useEffect(() => {
-    if (walletConnectCtx.storage) {
-      loadAccountToStorage(walletConnectCtx.storage)
-    }
-  }, [loadAccountToStorage, walletConnectCtx.storage, account])
+  }, [])
 
   const handleIsClaimAvailable = useCallback(() => {
     if (unclaimedGasAmount > 0 && !isWatchAccount && isConnected) {
@@ -469,36 +371,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }
   }, [amountFee, totTokenFeeAccount, showWarning, unclaimedGasAmount])
 
-  const ShowConnetion = () => {
-    const firstProposal = walletConnectCtx.sessionProposals[0]
-    return (
-      <>
-        <TextView> {'Connected'}</TextView>
-        {/* {!!walletConnectCtx.sessionProposals.length &&
-          (firstProposal.permissions.jsonrpc.methods.length ? (
-            <>
-              <ButtonView
-                onPress={() => walletConnectCtx.approveSession(firstProposal)}
-              >
-                <TextView color="#fff" fontFamily={'medium'} fontSize={'14px'}>
-                  {'Approve'}
-                </TextView>
-              </ButtonView>
-              <ButtonView
-                onPress={() => walletConnectCtx.rejectSession(firstProposal)}
-              >
-                <TextView color="#fff" fontFamily={'medium'} fontSize={'14px'}>
-                  {'Reject'}
-                </TextView>
-              </ButtonView>
-            </>
-          ) : (
-            <View />
-          ))} */}
-      </>
-    )
-  }
-
   const claimGas = async () => {
     if (!account.address || !unclaimedGasAmount || !isConnected) return
 
@@ -552,17 +424,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }
   }
 
-  const handleInput = async (value: string) => {
-    setLoading(true)
-    console.log('wcClient' + walletConnectCtx.wcClient)
-    // try {
-    //   await walletConnectCtx.onURI(value)
-    // } catch (e) {
-    //   alert(e)
-    //   setLoading(false)
-    // }
-  }
-
   return (
     <ScreenLayout
       invertedGradient={true}
@@ -590,159 +451,65 @@ const GetAccountView = (props: GetAccountViewProps) => {
           <AccountCard account={account} isStackMode={false} />
         </LinearLayout>
       </Animated.View>
-
       <View
         style={{
-          flexDirection: 'column',
-          //width: Dimensions.get('screen').width - 15,
+          flexDirection: 'row',
+          width: Dimensions.get('screen').width - 15,
           justifyContent: 'space-around',
           alignSelf: 'center',
           marginVertical: 20,
           elevation: 30,
         }}
       >
-        {loading ? <TextView> {'Loading'}</TextView> : <View />}
-        <ButtonView
-          alignSelf="center"
-          //width="2%"
-          onPress={() => {
-            if (account.address !== null) {
-              setWCAccount(account.address)
-            }
-          }}
-          mb={'20px'}
-        >
-          <TextView
-            style={{
-              flexDirection: 'row',
-            }}
-            color="#fff"
-            fontFamily={'medium'}
-            fontSize={'20px'}
-          >
-            {'Connect'}
-          </TextView>
-        </ButtonView>
-        <ButtonView
-          alignSelf="center"
-          //width="2%"
-          onPress={() => {
-            if (account.address !== null) {
-              disconnectWCAccount(account.address)
-            }
-          }}
-          mb={'20px'}
-        >
-          <TextView
-            style={{
-              flexDirection: 'row',
-            }}
-            color="#fff"
-            fontFamily={'medium'}
-            fontSize={'20px'}
-          >
-            {'Disconnect'}
-          </TextView>
-        </ButtonView>
-        {connectingWallet && (
-          <>
-            <ButtonView
-              alignSelf="center"
-              //width="2%"
-              onPress={() => {
-                handleInput(requestString)
-              }}
-              //mt={'-20px'}
-              mb={'20px'}
-            >
-              <TextView
-                style={{
-                  flexDirection: 'row',
-                }}
-                color="#fff"
-                fontFamily={'medium'}
-                fontSize={'20px'}
-              >
-                {'Submit'}
-              </TextView>
-            </ButtonView>
-            <InputWithValidation
-              placeholder={i18n.t('modals.editWallet.namePlaceholder')}
-              onChangeText={(val) => setRequestString(val)}
-              color={'background.4'}
-              value={requestString}
-              validator={(val) => true}
-              separatorColor={'background.3'}
-              invalidColor={'background.3'}
-              invalidMessageColor={'quinary'}
-              sideMargins={0}
-              hideScan={true}
-              hidePaste={false}
-            />
-          </>
-        )}
-        {connectingApp && <ShowConnetion />}
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            width: Dimensions.get('screen').width - 15,
-            justifyContent: 'space-around',
-            alignSelf: 'center',
-            marginVertical: 20,
-            elevation: 30,
-          }}
-        >
-          <ThemedReceiveButton
-            onPress={() =>
-              props.navigation.navigate(wrapper.route.Modal.name, {
-                screen: wrapper.route.ReceiveModalStack.name,
+        <ThemedReceiveButton
+          onPress={() =>
+            props.navigation.navigate(wrapper.route.Modal.name, {
+              screen: wrapper.route.ReceiveModalStack.name,
+              params: {
+                screen: wrapper.route.ReceiveToAccountModal.name,
                 params: {
-                  screen: wrapper.route.ReceiveToAccountModal.name,
-                  params: {
-                    wallet,
-                    account,
-                  },
+                  wallet,
+                  account,
                 },
-              })
-            }
-          />
-          <AwaitActivity name={'populateUnclaimed'}>
-            <AwaitActivity
-              name={`ClaimGas@${account.address}`}
-              loadingView={<ClaimGasLoader />}
-            >
-              <ThemedClaimButton
-                onPress={handleClaimGas}
-                isClaimAvailable={isClaimAvailable}
-                unclaimedGasAmount={unclaimedGasAmount ?? 0}
-                fee={amountFee}
-              />
-            </AwaitActivity>
+              },
+            })
+          }
+        />
+        <AwaitActivity name={'populateUnclaimed'}>
+          <AwaitActivity
+            name={`ClaimGas@${account.address}`}
+            loadingView={<ClaimGasLoader />}
+          >
+            <ThemedClaimButton
+              onPress={handleClaimGas}
+              isClaimAvailable={isClaimAvailable}
+              unclaimedGasAmount={unclaimedGasAmount ?? 0}
+              fee={amountFee}
+            />
           </AwaitActivity>
+        </AwaitActivity>
 
-          <ThemedSendButton
-            account={account}
-            onPress={
-              isWatchAccount || !account.getBalanceAmount() || !isConnected
-                ? undefined
-                : () => {
-                    props.navigation.navigate(wrapper.route.Modal.name, {
-                      screen: wrapper.route.SendModalStack.name,
+        <ThemedSendButton
+          account={account}
+          onPress={
+            isWatchAccount || !account.getBalanceAmount() || !isConnected
+              ? undefined
+              : () => {
+                  props.navigation.navigate(wrapper.route.Modal.name, {
+                    screen: wrapper.route.SendModalStack.name,
+                    params: {
+                      screen: wrapper.route.SendTransactionInputModal.name,
                       params: {
-                        screen: wrapper.route.SendTransactionInputModal.name,
-                        params: {
-                          walletTitle: wallet?.name ?? '',
-                          account,
-                        },
+                        walletTitle: wallet?.name ?? '',
+                        account,
                       },
-                    })
-                  }
-            }
-          />
-        </View>
-        */}
+                    },
+                  })
+                }
+          }
+        />
       </View>
-      {/* {showTabBarSelector && (
+      {showTabBarSelector && (
         <TabSelectorBar
           firstScene={{
             title: 'Assets',
@@ -762,7 +529,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         amountFee={amountFee ?? 0}
         showWarning={showWarning}
         setShowWarning={(show) => setShowWarning(show)}
-      /> */}
+      />
     </ScreenLayout>
   )
 }

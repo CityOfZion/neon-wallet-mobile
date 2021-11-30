@@ -10,12 +10,10 @@ export const DEFAULT_METHODS = [
 export const DEFAULT_LOGGER = 'debug'
 
 export const DEFAULT_APP_METADATA = {
-  name: 'CoZ Wallet Prototype',
-  description: 'WalletConnect integration Prototype',
+  name: 'Neon Wallet Mobile',
+  description: 'Mobile version of the highly acclaimed Neon Wallet for the Neo Blockchain. Create and organize wallets, or easily import your existing ones, to safely manage and transfer your assets across multiple accounts with Neon’s slick interface.',
   url: 'https://coz.io/',
-  icons: [
-    'https://raw.githubusercontent.com/CityOfZion/visual-identity/develop/_CoZ%20Branding/_Logo/_Logo%20icon/_PNG%20200x178px/CoZ_Icon_DARKBLUE_200x178px.png',
-  ],
+  icons: ['file:../../../assets/ic_launcher.png'],
 }
 
 export const DEFAULT_CHAIN = 'neo3:mainnet'
