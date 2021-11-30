@@ -9,6 +9,7 @@ import {ERROR} from '@walletconnect/utils'
 import KeyValueStorage from 'keyvaluestorage'
 import PropTypes from 'prop-types'
 import React, {useCallback, useContext, useEffect, useState} from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 type OnRequestCallback = (
   accountAddress: string,
@@ -109,7 +110,9 @@ export const WalletConnectContextProvider: React.FC<{
   }, [])
 
   const init = async () => {
-    const st = new KeyValueStorage()
+    const st = new KeyValueStorage({
+      asyncStorage: AsyncStorage as any
+    })
     setStorage(st)
     setWcClient(
       await Client.init({
@@ -302,7 +305,7 @@ export const WalletConnectContextProvider: React.FC<{
           } else {
             await askApproval()
           }
-        } catch (e: any) {
+        } catch (e) {
           await reject(e.message)
         }
       }
