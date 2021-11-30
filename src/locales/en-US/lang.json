@@ -33,6 +33,7 @@
     "More": "More",
     "Account": "Account",
     "Settings": "Settings",
+    "WalletConnectPage": "dApps",
     "ReceiveQrCode": "Receive QR Code",
     "CustomColor": "Custom Colour",
     "CreateWallet": "Create Wallet",
@@ -201,6 +202,7 @@
     "createWallet": "Create wallet",
     "createWatchAccount": "Create watch account",
     "import": "Import",
+    "settings": "Settings",
     "help": "Help"
   },
   "importKey": {

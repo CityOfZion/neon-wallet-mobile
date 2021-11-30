@@ -6,7 +6,9 @@ import {ThemeProvider} from 'styled-components'
 
 import {wrapper} from '../app/ApplicationWrapper'
 import {GetWalletParams} from '../scenes/GetWalletView'
-import {SettingsStackParamList} from './SettingsStackNavigation'
+import SettingsStackNavigation, {
+  SettingsStackParamList,
+} from './SettingsStackNavigation'
 import {WalletStackParams} from './WalletsStackNavigation'
 
 import {Navigator} from '~src/app/Navigator'
@@ -59,10 +61,10 @@ export type MoreStackParamList = {
   Passphrase: PassphraseParams
   CustomizeAccount: CustomizeAccountParams
   GetWallet: GetWalletParams
-  Settings: SettingsStackParamList
   ListWallets: WalletStackParams
   BlockchainListPage: undefined
   MnemonicSelectionList: MnemonicSelectionListParams
+  Settings: undefined
 }
 
 const MoreStack = createStackNavigator<MoreStackParamList>()
@@ -200,6 +202,16 @@ const MoreStackNavigation = () => {
             title: wrapper.route.ImportKey.translate(),
             theme,
           })}
+        />
+        <MoreStack.Screen
+          name={wrapper.route.Settings.name}
+          component={SettingsStackNavigation}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: wrapper.route.Settings.translate(),
+              theme,
+            })
+          }
         />
       </MoreStack.Navigator>
     </ThemeProvider>

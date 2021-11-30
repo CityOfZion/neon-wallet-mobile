@@ -1,4 +1,4 @@
-import {RouteProp} from '@react-navigation/native'
+import {RouteProp, useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import Constants from 'expo-constants'
 import * as WebBrowser from 'expo-web-browser'
@@ -14,6 +14,9 @@ import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import SettingsStackNavigation, {
+  SettingsStackParamList,
+} from '~src/navigation/SettingsStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface MoreProps {
@@ -34,6 +37,10 @@ const MorePage = (props: MoreProps) => {
     )
     return result
   }
+
+  const settingsNavigation = useNavigation<
+    StackNavigationProp<SettingsStackParamList>
+  >()
 
   return (
     <ScreenLayout padding={20}>
@@ -70,6 +77,18 @@ const MorePage = (props: MoreProps) => {
         arrowDirection={RightIconType.NONE}
         onPress={() => {
           props.navigation.navigate(wrapper.route.ImportKey.name, {})
+        }}
+      />
+      <MenuItem
+        title={i18n.t('more.settings')}
+        icon={require('~/src/assets/images/icon-settings-green.png')}
+        iconHeight={22}
+        iconWidth={22}
+        iconMarginRight={15}
+        iconMarginLeft={1}
+        arrowDirection={RightIconType.NONE}
+        onPress={() => {
+          settingsNavigation.navigate(wrapper.route.Settings.name, {})
         }}
       />
       <MenuItem
