@@ -89,7 +89,7 @@ export class AccountReducer extends ReducerWrapper<
         const blockchain = getState().account.blockchain
         const index = getState().account.index
         const wallet = account.getWallet(getState().app.wallets)
-
+        const tokenPool = getState().app.tokens
         const indexes = account
           .getAccountsWithSameWallet(getState().app.accounts)
           .map((it) => it.index ?? 0)
@@ -109,6 +109,9 @@ export class AccountReducer extends ReducerWrapper<
 
             await SecurityHelper.saveWif(account.address, newAccount.wif)
 
+            await account.populateTokenAssets()
+            await account.populateTransactions(tokenPool)
+
             accounts.push(account)
 
             await Storage.accounts.save(accounts)
@@ -121,7 +124,7 @@ export class AccountReducer extends ReducerWrapper<
     },
     updateAndSave: (address: string): AsyncAction => {
       return async (dispatch, getState) => {
-        const accounts = (await Storage.accounts.load()) ?? []
+        const accounts = plainToClass(Account, getState().app.accounts)
 
         const edited = plainToClass(Account, getState().account)
 
@@ -132,6 +135,7 @@ export class AccountReducer extends ReducerWrapper<
         if (account) {
           account.name = edited.name
           account.backgroundColor = edited.backgroundColor
+          account.tokenAssets = edited.tokenAssets
         }
 
         await Storage.accounts.save(accounts)

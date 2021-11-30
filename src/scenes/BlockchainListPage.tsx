@@ -89,6 +89,13 @@ const BlockchainListPage = (props: Props) => {
     }
   }, [blockchainsSelected])
 
+  useEffect(() => {
+    dispatch(RootStore.timer.actions.setTimerOff())
+    return () => {
+      dispatch(RootStore.timer.actions.setTimerOn())
+    }
+  }, [])
+
   return (
     <ScreenLayout>
       <AwaitActivity

@@ -48,6 +48,7 @@ const AppNavigation = (props: Props) => {
   })
   const {isConnected} = useSelector((state: RootState) => state.network)
   const loadingOverlayState = useSelector((state: RootState) => state.loading)
+  const {status: timerStatus} = useSelector((state: RootState) => state.timer)
   const {progress, loadingText, isLoading} = loadingOverlayState
 
   const [onboardingSeen, setOnboardingSeen] = useState(true)
@@ -110,6 +111,10 @@ const AppNavigation = (props: Props) => {
         clearInterval(interval)
       }
 
+      if (!timerStatus) {
+        clearInterval(interval)
+      }
+
       return () => {
         interactionPromise.cancel()
         clearInterval(interval)
@@ -117,7 +122,7 @@ const AppNavigation = (props: Props) => {
     } else {
       !hasInit && Await.run('application', startApplication)
     }
-  }, [hasInit, syncFetchInterval, isConnected])
+  }, [hasInit, syncFetchInterval, isConnected, timerStatus])
 
   const getInitialRouteName = () => {
     return onboardingSeen

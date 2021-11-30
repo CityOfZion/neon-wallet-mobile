@@ -197,6 +197,7 @@ export interface MnemonicSelectionListParams {
 const MnemonicSelectionList = (props: Props) => {
   const {mnemonic} = props.route.params
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatch = useDispatch()
   const [itensActives, setItemActives] = useState<number[]>([0])
   const handleActiveItens = (itens: number[]) => {
     setItemActives(itens)
@@ -253,6 +254,14 @@ const MnemonicSelectionList = (props: Props) => {
       screen: 'ListWalletsPage',
     })
   }, [addressesSelected])
+
+  useEffect(() => {
+    dispatch(RootStore.timer.actions.setTimerOff())
+    return () => {
+      //execute on component destruction
+      dispatch(RootStore.timer.actions.setTimerOn())
+    }
+  }, [])
 
   return (
     <ScreenLayout>

@@ -164,13 +164,25 @@ const ImportKey = (props: ImportKeyProps) => {
     const importedAccount = (await dispatchAsync(
       RootStore.account.actions.importAndSave(address, wif)
     )) as Account
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
-    isConnected &&
-      (await dispatchAsync(
+
+    if (isConnected) {
+      await importedAccount.populateTokenAssets()
+      await importedAccount.populateTransactions(tokens)
+      await dispatchAsync(
         RootStore.app.actions.syncTokenAssetsByAddress(address)
-      ))
-    await importedAccount.populateTokenAssets()
-    await importedAccount.populateTransactions(tokens)
+      )
+    }
+    dispatch(
+      RootStore.account.actions.setTokenAssets(importedAccount.tokenAssets)
+    )
+
+    if (importedAccount.address) {
+      await dispatchAsync(
+        RootStore.account.actions.updateAndSave(importedAccount.address)
+      )
+    }
+    await dispatchAsync(RootStore.app.actions.syncAccounts())
+
     return importedAccount
   }
 
@@ -396,6 +408,13 @@ const ImportKey = (props: ImportKeyProps) => {
       setAddressesFound([])
     }
   }, [inputIsValid])
+
+  useEffect(() => {
+    dispatch(RootStore.timer.actions.setTimerOff())
+    return () => {
+      dispatch(RootStore.timer.actions.setTimerOn())
+    }
+  }, [])
   return (
     <ScreenLayout>
       <AwaitActivity name={'importKey'} loadingView={<ScreenLoader />}>
