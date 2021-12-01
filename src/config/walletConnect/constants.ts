@@ -5,6 +5,8 @@ export const DEFAULT_METHODS = [
   'testInvoke',
   'multiInvoke',
   'multiTestInvoke',
+  'signMessage',
+  'verifyMessage',
 ]
 
 export const DEFAULT_LOGGER = 'debug'

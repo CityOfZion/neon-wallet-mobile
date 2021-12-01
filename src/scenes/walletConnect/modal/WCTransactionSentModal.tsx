@@ -1,5 +1,4 @@
 import {RouteProp, useNavigation} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
 import {Linking, ScrollView} from 'react-native'
@@ -14,24 +13,20 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import {applicationConfig} from '~src/config/ApplicationConfig'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
-import TransactionFailed from '~src/scenes/walletConnect/fragment/TransactionFailed'
-import TransactionSuccess from '~src/scenes/walletConnect/fragment/TransactionSuccess'
+import TransactionFailed from '~src/scenes/walletConnect/modal/fragment/TransactionFailed'
+import TransactionSuccess from '~src/scenes/walletConnect/modal/fragment/TransactionSuccess'
 import {LinearLayout} from '~src/styles/styled-components'
 
-export interface TransactionSentModalParams {
+export interface WCTransactionSentModalParams {
   transaction?: SenderTransaction
   errorMessage?: string
 }
 
 interface Props {
-  route: RouteProp<ModalStackParamList, 'TransactionSentModal'>
+  route: RouteProp<ModalStackParamList, 'WCTransactionSentModal'>
 }
 
-const TransactionSentModal = (props: Props) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+const WCTransactionSentModal = (props: Props) => {
   const controller = useSwiperController(true)
   const accounts = useSelector((state: RootState) => state.app.accounts)
   const navigation = useNavigation()
@@ -118,4 +113,4 @@ const TransactionSentModal = (props: Props) => {
   )
 }
 
-export default TransactionSentModal
+export default WCTransactionSentModal

@@ -17,7 +17,7 @@ import {
 import {applicationConfig} from '../config/ApplicationConfig'
 
 import {useSwiperController} from '~src/components/SwiperPanel'
-import {IURI, UriHelper} from '~src/helpers/UriHelper'
+import {IURI, TScheme, UriHelper} from '~src/helpers/UriHelper'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import HandleQRModal from '~src/scenes/HandleQRModal'
 import {
@@ -38,6 +38,39 @@ export interface QRCodeScanParams {
 export interface Props {
   navigation: StackNavigationProp<RootStackParamList>
   route: RouteProp<RootStackParamList, 'QRCodeScan'>
+}
+
+type INavigationScheme = Record<
+  TScheme,
+  (key: string) => NavParam<RootStackParamList> | undefined
+>
+
+const navigationScheme: INavigationScheme = {
+  'neo:': (key) => {
+    return [
+      wrapper.route.Modal.name,
+      {
+        screen: wrapper.route.SendModalStack.name,
+        params: {
+          screen: wrapper.route.SendWalletSelectionModal.name,
+          params: {
+            uri: UriHelper.parse(key),
+          },
+        },
+      },
+    ]
+  },
+  'wc:': (key) => {
+    return [
+      wrapper.route.Modal.name,
+      {
+        screen: wrapper.route.WCConnectionRequestModalModal.name,
+        params: {
+          uri: key,
+        },
+      },
+    ]
+  },
 }
 
 const QRCodeScan = (props: Props) => {
@@ -139,19 +172,12 @@ const QRCodeScan = (props: Props) => {
           },
         ]
       }
-    } else if (UriHelper.isValid(key)) {
-      return [
-        wrapper.route.Modal.name,
-        {
-          screen: wrapper.route.SendModalStack.name,
-          params: {
-            screen: wrapper.route.SendWalletSelectionModal.name,
-            params: {
-              uri: UriHelper.parse(key),
-            },
-          },
-        },
-      ]
+    }
+
+    const scheme = UriHelper.isValidAsString(key)
+
+    if (scheme) {
+      return navigationScheme[scheme](key)
     }
   }
 

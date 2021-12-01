@@ -1,6 +1,9 @@
 import {validateAddressAllBlockchains} from '~src/blockchain'
 import {TokenAsset} from '~src/models/TokenAsset'
-export const SCHEME = 'neo:'
+
+export type TScheme = 'wc:' | 'neo:'
+
+export const SCHEME: TScheme[] = ['neo:', 'wc:']
 
 // URI interface
 export interface IURI {
@@ -31,17 +34,35 @@ export abstract class UriHelper {
     }
   }
 
+  static isValidAsString(str: string) {
+    const key = SCHEME.find((it) => str.startsWith(it))
+
+    if (UriHelper.isValid(str)) {
+      return key
+    }
+  }
+
   static isValid(str: string) {
-    return (
-      str.startsWith(SCHEME) &&
-      validateAddressAllBlockchains(str.substr(SCHEME.length).split('?')[0])
-    )
+    const key = SCHEME.find((it) => str.startsWith(it))
+    const isNeo = key === 'neo:'
+
+    if (isNeo) {
+      return (
+        key &&
+        validateAddressAllBlockchains(str.substr(key.length).split('?')[0])
+      )
+    }
+
+    return !!key
   }
 
   static parse(str: string): IURI | undefined {
-    if (!this.isValid(str)) return undefined
+    const key = SCHEME.find((it) => str.startsWith(it)) ?? ''
+    const isNeo = key === 'neo:'
 
-    const substrings = str.substr(SCHEME.length).split('?')
+    if (!this.isValid(str) || !isNeo) return undefined
+
+    const substrings = str.substr(key.length).split('?')
     const address = substrings[0]
 
     let tokenHash: string | undefined
