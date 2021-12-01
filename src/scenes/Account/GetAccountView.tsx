@@ -42,6 +42,7 @@ import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
+
 export interface GetAccountParams {
   key: string
 }
@@ -450,7 +451,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
           <AccountCard account={account} isStackMode={false} />
         </LinearLayout>
       </Animated.View>
-
       <View
         style={{
           flexDirection: 'row',

@@ -11,8 +11,25 @@ import thunk from 'redux-thunk'
 
 import {ThemedAlert} from '~src/components/themed/ThemedAlert'
 import ErrorBound from '~src/config/ErrorBound'
+import {
+  DEFAULT_APP_METADATA,
+  DEFAULT_LOGGER,
+  DEFAULT_METHODS,
+  DEFAULT_NETWORKS,
+  DEFAULT_RELAY_PROVIDER,
+} from '~src/config/walletConnect/constants'
+import {WalletConnectContextProvider} from '~src/contexts/WalletConnectContext'
 import AppNavigation from '~src/navigation/AppNavigation'
 import {RootStore} from '~src/store/RootStore'
+
+const wcOptions = {
+  appMetadata: DEFAULT_APP_METADATA,
+  chainIds: Object.keys(DEFAULT_NETWORKS),
+  logger: DEFAULT_LOGGER,
+  methods: DEFAULT_METHODS,
+  relayServer: DEFAULT_RELAY_PROVIDER,
+}
+
 const loggerMiddleware = createLogger()
 
 const store = createStore(RootStore.reducers, {}, applyMiddleware(thunk))
@@ -46,7 +63,9 @@ const App = () => {
     <StoreProvider store={store}>
       <StatusBar barStyle={'light-content'} />
       <ErrorBound>
-        <AppNavigation />
+        <WalletConnectContextProvider options={wcOptions}>
+          <AppNavigation />
+        </WalletConnectContextProvider>
       </ErrorBound>
       <FlashMessage position="top" MessageComponent={ThemedAlert} />
     </StoreProvider>

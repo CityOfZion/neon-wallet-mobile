@@ -10,17 +10,21 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "ts-build": "tsc -b",
-    "build:ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios"
+    "build:ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
+    "postinstall": "node_modules/.bin/rn-nodeify --install crypto,assert,url,stream,events --hack"
   },
   "dependencies": {
     "@cityofzion/dora-ts": "^0.0.7",
+    "@cityofzion/neon-core-next": "npm:@cityofzion/neon-core@5.0.0-next.16",
     "@cityofzion/neon-js": "^4.8.0",
     "@cityofzion/neon-js-next": "npm:@cityofzion/neon-js@5.0.0-next.16",
+    "@json-rpc-tools/utils": "^1.7.6",
     "@moonlight-io/asteroid-sdk-js": "git+https://github.com/Moonlight-io/asteroid-sdk-js",
+    "@react-native-async-storage/async-storage": "^1.15.13",
     "@react-native-community/async-storage": "~1.12.0",
     "@react-native-community/clipboard": "^1.2.2",
     "@react-native-community/masked-view": "0.1.10",
-    "@react-native-community/netinfo": "^6.0.2",
+    "@react-native-community/netinfo": "^7.1.2",
     "@react-native-firebase/analytics": "^10.4.0",
     "@react-native-firebase/app": "10.4",
     "@react-navigation/bottom-tabs": "^5.4.5",
@@ -39,10 +43,14 @@
     "@types/styled-system": "^5.1.9",
     "@typescript-eslint/eslint-plugin": "^2.32.0",
     "@typescript-eslint/parser": "^2.32.0",
+    "@walletconnect/client": "2.0.0-beta.17",
+    "@walletconnect/types": "2.0.0-beta.17",
+    "@walletconnect/utils": "2.0.0-beta.17",
     "axios": "^0.19.2",
     "class-transformer": "^0.2.3",
     "eslint": "^7.0.0",
     "eslint-config-universe": "^3.0.0",
+    "events": "^1.0.0",
     "expo": "^39.0.0",
     "expo-barcode-scanner": "~9.0.0",
     "expo-blur": "^9.0.3",
@@ -64,6 +72,7 @@
     "flux-standard-action": "^2.1.1",
     "i18n-js": "^3.5.1",
     "intl": "^1.2.5",
+    "keyvaluestorage": "^0.7.1",
     "lodash": "^4.17.15",
     "moment": "^2.27.0",
     "prettier": "^2.0.5",
@@ -72,6 +81,7 @@
     "react-native": "0.63.4",
     "react-native-chart-kit": "^5.6.0",
     "react-native-collapsible": "^1.6.0",
+    "react-native-crypto": "^2.1.0",
     "react-native-custom-qr-codes-expo": "^2.2.0",
     "react-native-fix-image": "^2.0.1",
     "react-native-flash-message": "^0.1.16",
@@ -81,6 +91,7 @@
     "react-native-neo-sdk-bindings": "file:./native_modules/neo-sdk-bindings",
     "react-native-offline": "^5.8.0",
     "react-native-progress": "^4.1.2",
+    "react-native-randombytes": "file:./react-native-randombytes",
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
@@ -98,14 +109,17 @@
     "react-native-webview": "10.7.0",
     "react-navigation": "latest",
     "react-redux": "^7.2.0",
+    "readable-stream": "1.0.33",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "reflect-metadata": "^0.1.13",
+    "stream-browserify": "^1.0.0",
     "styled-components": "^5.1.1",
     "styled-system": "^5.1.5",
-    "text-encoding-polyfill": "^0.6.7"
+    "text-encoding-polyfill": "^0.6.7",
+    "url": "~0.10.1"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
@@ -124,6 +138,7 @@
     "react-devtools": "^4.10.0",
     "react-native-testing-library": "^1.14.0",
     "react-test-renderer": "^16.13.1",
+    "rn-nodeify": "^10.3.0",
     "typescript": "~3.9.2"
   },
   "jest": {
@@ -152,5 +167,23 @@
     ]
   },
   "name": "neon-wallet-mobile",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "react-native": {
+    "crypto": "react-native-crypto",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "stream": "stream-browserify"
+  },
+  "browser": {
+    "crypto": "react-native-crypto",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "stream": "stream-browserify"
+  }
 }

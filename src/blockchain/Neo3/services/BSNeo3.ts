@@ -1,13 +1,17 @@
-import {api, wallet, u, rpc, tx} from '@cityofzion/neon-js-next'
+import {Account} from '@cityofzion/neon-core-next/lib/wallet'
+import Neon, {api, wallet, u, rpc, tx} from '@cityofzion/neon-js-next'
 import {
   Nep17TransferIntent,
   signingConfig,
 } from '@cityofzion/neon-js-next/node_modules/@cityofzion/neon-api/lib/NetworkFacade'
+import {JsonRpcRequest, JsonRpcResponse} from '@json-rpc-tools/utils'
 import type * as AsteroidSDK from '@moonlight-io/asteroid-sdk-js'
 import {ImageLoadEventData, NativeModules, Platform} from 'react-native'
 
 import {Storage} from '~/src/app/Storage'
+import {DEFAULT_NETWORKS} from '~/src/config/walletConnect/constants'
 import {AsteroidHelper} from '~/src/helpers/AsteroidHelper'
+import {WCN3Helper} from '~/src/helpers/WCN3Helper'
 import {NeoNode} from '~/src/models/NeoNode'
 import {TokenAsset} from '~/src/models/TokenAsset'
 import {NeoNative} from '~/src/native/NeoNative'
@@ -17,6 +21,7 @@ import {
   SenderTransactionInfo,
   AssetInfo,
   IClaimable,
+  IWalletConnect,
 } from '~src/blockchain'
 import {Neo3ProviderOptions} from '~src/blockchain/Neo3'
 import {Neo3Provider} from '~src/blockchain/Neo3/providers/common'
@@ -24,7 +29,7 @@ import {Neo3Provider} from '~src/blockchain/Neo3/providers/common'
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 const feeTokenImg = require('~src/assets/nep5/png/GAS.png')
 const SDK: typeof AsteroidSDK = require('~src/vendor/asteroid-sdk')
-export class BSNeo3 implements IBlockchainService, IClaimable {
+export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
   readonly siteUrlQuery = `https://dora.coz.io/transaction/neo3/mainnet/`
   provider: Neo3Provider
   key: BlockchainServiceKey
@@ -62,6 +67,20 @@ export class BSNeo3 implements IBlockchainService, IClaimable {
       hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
     }
   }
+  rpcCall = async (
+    address: string,
+    request: JsonRpcRequest
+  ): Promise<JsonRpcResponse> => {
+    const neoAccount = await this.getNeoAccount(address)
+    const nodes = await this.provider.getAllNodes()
+    const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
+
+    if (!neoAccount) throw new Error('No account')
+    if (!bestUrl) throw new Error('Blockchain unavailable, try again')
+
+    return await (await WCN3Helper.init(bestUrl)).rpcCall(neoAccount, request)
+  }
+
   validateAddress(address: string) {
     return address.startsWith('n') || address.startsWith('N') //the method wallet.isAddress doesn't work correctly
   }
@@ -122,7 +141,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable {
       const result = await facade.transferToken(intents, signing)
 
       return result
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error.message)
     }
   }
@@ -272,7 +291,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable {
       return (
         Number(requiredSystemFee.toDecimal(8)) + Number(networkFee.toDecimal(8))
       )
-    } catch (error) {
+    } catch (error: any) {
       console.log('Error calculate fee')
       console.log(error)
       throw new Error(error)

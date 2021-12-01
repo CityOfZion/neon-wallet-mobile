@@ -32,7 +32,6 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
-
 export interface ListWalletParams {}
 
 type Props = WalletStackParamList &

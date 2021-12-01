@@ -250,7 +250,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
                 })
                 stopSend = true
                 resolve(sendResponse)
-              } catch (error) {
+              } catch (error: any) {
                 reject(error)
                 throw new Error(error.message)
               }
@@ -369,7 +369,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
         token: this.cozTip.token,
         hash: this.cozTip.hash,
       }
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error.message)
     }
   }

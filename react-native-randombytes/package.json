@@ -1,0 +1,45 @@
+{
+  "name": "react-native-randombytes",
+  "version": "3.6.1",
+  "description": "randomBytes for react-native",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mvayngrib/react-native-randombytes.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react-component",
+    "react-native",
+    "randomBytes",
+    "rng",
+    "ios",
+    "android"
+  ],
+  "dependencies": {
+    "buffer": "^4.9.1",
+    "sjcl": "^1.0.3"
+  },
+  "author": "Mark Vayngrib <mark.vayngrib@lablz.com> (http://github.com/mvayngrib)",
+  "license": "ISC",
+  "react-native": {
+    "crypto": "react-native-crypto",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "stream": "stream-browserify"
+  },
+  "browser": {
+    "crypto": "react-native-crypto",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "stream": "stream-browserify"
+  }
+}
