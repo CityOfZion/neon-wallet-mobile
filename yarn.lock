@@ -4611,16 +4611,6 @@
     pino "^6.7.0"
     pino-pretty "^4.3.0"
 
-"@walletconnect/types@^2.0.0-beta.17", "@walletconnect/types@^2.0.0-beta.20":
-  version "2.0.0-beta.20"
-  resolved "https://registry.yarnpkg.com/@walletconnect/types/-/types-2.0.0-beta.20.tgz#115b1c939264e5dcb14474e68cee3a79fdbe7c80"
-  integrity sha512-WtTqkbZyEA8l68asaVCDm+PbCKqXN6YI+sM3oM69VCaPOK2Fhq4D3jFqHgZtCvKdrR4NMqb/dsd93dIZrBA+sw==
-  dependencies:
-    "@walletconnect/jsonrpc-types" "^1.0.0"
-    keyvaluestorage "^0.7.1"
-    pino "^6.7.0"
-    pino-pretty "^4.3.0"
-
 "@walletconnect/utils@2.0.0-beta.17":
   version "2.0.0-beta.17"
   resolved "https://registry.yarnpkg.com/@walletconnect/utils/-/utils-2.0.0-beta.17.tgz#ac7fb9738c503b651ca84b10b27294a4f7c33322"
@@ -4633,22 +4623,6 @@
     "@walletconnect/types" "^2.0.0-beta.17"
     "@walletconnect/window-getters" "^1.0.0"
     "@walletconnect/window-metadata" "^1.0.0"
-    query-string "^6.13.5"
-
-"@walletconnect/utils@^2.0.0-beta.17":
-  version "2.0.0-beta.20"
-  resolved "https://registry.yarnpkg.com/@walletconnect/utils/-/utils-2.0.0-beta.20.tgz#25cca3252e826d3fcf1bfdcdeb24d4e01693eb4e"
-  integrity sha512-C1M/2FArfrOn8NVoF8M0oOQGIK91mPmoXLZudQePP9ZzLaylLEi/XGJ89f8lbnu+HGu4OzZREZvqEN+mh2hWOQ==
-  dependencies:
-    "@walletconnect/ecies-25519" "^1.0.1"
-    "@walletconnect/encoding" "^1.0.0"
-    "@walletconnect/jsonrpc-utils" "^1.0.0"
-    "@walletconnect/logger" "^1.0.0"
-    "@walletconnect/safe-json" "^1.0.0"
-    "@walletconnect/types" "^2.0.0-beta.20"
-    "@walletconnect/window-getters" "^1.0.0"
-    "@walletconnect/window-metadata" "^1.0.0"
-    lodash.union "^4.6.0"
     query-string "^6.13.5"
 
 "@walletconnect/window-getters@^1.0.0":
@@ -12372,11 +12346,6 @@ lodash.throttle@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
-
-lodash.union@^4.6.0:
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/lodash.union/-/lodash.union-4.6.0.tgz#48bb5088409f16f1821666641c44dd1aaae3cd88"
-  integrity sha1-SLtQiECfFvGCFmZkHETdGqrjzYg=
 
 lodash.uniq@^4.5.0:
   version "4.5.0"

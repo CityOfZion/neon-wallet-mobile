@@ -134,13 +134,17 @@ export const WalletConnectContextProvider: React.FC<{
 
     for (let i = 0; i < storageItems.length; i++) {
       const wcVal = storageItems[i]
-      if (wcVal?.substring(0, 2) === 'wc') {
-        itemsToRemove.push(wcVal)
-      }
+      // TODO: fix storage problem when the connection breaks
+      // if (wcVal?.substring(0, 2) === 'wc') {
+      itemsToRemove.push(wcVal)
+      // }
     }
+
     for (let i = 0; i < itemsToRemove.length; i++) {
       storage?.removeItem(itemsToRemove[i])
     }
+
+    console.log('ACTION', 'CLEAR STORAGE', storage?.getKeys())
   }
 
   const resetApp = async () => {
@@ -156,6 +160,7 @@ export const WalletConnectContextProvider: React.FC<{
     } catch (e) {
       // ignored
     }
+    await clearStorage()
 
     setWcClient(undefined)
     setSessionProposals([])
@@ -229,9 +234,10 @@ export const WalletConnectContextProvider: React.FC<{
       throw new Error('Client is not initialized')
     }
 
-    if (!accounts.length) {
-      return
-    }
+    // TODO: decide if accounts is mandatory, if so, put this if back and add accounts to the ctx
+    // if (!accounts.length) {
+    //   return
+    // }
 
     wcClient.on(
       CLIENT_EVENTS.session.proposal,
