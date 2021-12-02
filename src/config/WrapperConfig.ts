@@ -99,6 +99,7 @@ export class WrapperConfig {
     'BlockchainListPage',
     'MnemonicSelectionList',
     'WalletConnectPage',
+    'WCConnectionRequestModal',
   ] as const
 }
 

@@ -1,6 +1,6 @@
 import {createStackNavigator} from '@react-navigation/stack'
-import React, {useEffect} from 'react'
-import {useSelector, useDispatch} from 'react-redux'
+import React from 'react'
+import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {wrapper} from '../app/ApplicationWrapper'
@@ -71,6 +71,10 @@ import ReceiveToAccountModal, {
   ReceiveToAccountModalParams,
 } from '~src/scenes/receive/ReceiveToAccountModal'
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
+import WCConnectionRequestModal, {
+  WCConnectionRequestModalParams,
+} from '~src/scenes/walletConnect/modal/WCConnectionRequestModal'
+import {WCTransactionSentModalParams} from '~src/scenes/walletConnect/modal/WCTransactionSentModal'
 
 export type ModalStackParamList = {
   WelcomeModal: WelcomeModalParam
@@ -104,6 +108,8 @@ export type ModalStackParamList = {
   ChangelogModal: ChangelogModalParams
   TipConfirmationModal: TipConfirmationModalParams
   BlockchainListModal: BlockchainListModalParams
+  WCTransactionSentModal: WCTransactionSentModalParams
+  WCConnectionRequestModal: WCConnectionRequestModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -122,6 +128,8 @@ export type ModalParams =
   | DefaultNavigationParam<WelcomeModalParam>
   | DefaultNavigationParam<WalletContextModalParams>
   | DefaultNavigationParam<BlockchainListModalParams>
+  | DefaultNavigationParam<WCTransactionSentModalParams>
+  | DefaultNavigationParam<WCConnectionRequestModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -240,6 +248,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={wrapper.route.BlockchainListModal.name}
           component={BlockchainListModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.WCConnectionRequestModal.name}
+          component={WCConnectionRequestModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

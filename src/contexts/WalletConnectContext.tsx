@@ -3,13 +3,13 @@ import {
   JsonRpcRequest,
   JsonRpcResponse,
 } from '@json-rpc-tools/utils'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Client, {CLIENT_EVENTS} from '@walletconnect/client'
 import {AppMetadata, SessionTypes} from '@walletconnect/types'
 import {ERROR} from '@walletconnect/utils'
 import KeyValueStorage from 'keyvaluestorage'
 import PropTypes from 'prop-types'
 import React, {useCallback, useContext, useEffect, useState} from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 type OnRequestCallback = (
   accountAddress: string,
@@ -111,7 +111,7 @@ export const WalletConnectContextProvider: React.FC<{
 
   const init = async () => {
     const st = new KeyValueStorage({
-      asyncStorage: AsyncStorage as any
+      asyncStorage: AsyncStorage as any,
     })
     setStorage(st)
     setWcClient(
@@ -122,6 +122,25 @@ export const WalletConnectContextProvider: React.FC<{
         storage: st,
       })
     )
+  }
+
+  const clearStorage = async () => {
+    const itemsToRemove: string[] = []
+    const storageItems = await storage?.getKeys()
+
+    if (!storageItems?.length) {
+      return
+    }
+
+    for (let i = 0; i < storageItems.length; i++) {
+      const wcVal = storageItems[i]
+      if (wcVal?.substring(0, 2) === 'wc') {
+        itemsToRemove.push(wcVal)
+      }
+    }
+    for (let i = 0; i < itemsToRemove.length; i++) {
+      storage?.removeItem(itemsToRemove[i])
+    }
   }
 
   const resetApp = async () => {
@@ -146,6 +165,7 @@ export const WalletConnectContextProvider: React.FC<{
     setSessions([])
     setRequests([])
     setResults([])
+    clearStorage()
   }
 
   const checkPersistedState = useCallback(async () => {
