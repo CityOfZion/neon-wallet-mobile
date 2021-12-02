@@ -71,8 +71,8 @@ import ReceiveToAccountModal, {
   ReceiveToAccountModalParams,
 } from '~src/scenes/receive/ReceiveToAccountModal'
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
-import WCConnectionRequestModalModal, {
-  WCConnectionRequestModalModalParams,
+import WCConnectionRequestModal, {
+  WCConnectionRequestModalParams,
 } from '~src/scenes/walletConnect/modal/WCConnectionRequestModal'
 import {WCTransactionSentModalParams} from '~src/scenes/walletConnect/modal/WCTransactionSentModal'
 
@@ -109,7 +109,7 @@ export type ModalStackParamList = {
   TipConfirmationModal: TipConfirmationModalParams
   BlockchainListModal: BlockchainListModalParams
   WCTransactionSentModal: WCTransactionSentModalParams
-  WCConnectionRequestModalModal: WCConnectionRequestModalModalParams
+  WCConnectionRequestModal: WCConnectionRequestModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -129,7 +129,7 @@ export type ModalParams =
   | DefaultNavigationParam<WalletContextModalParams>
   | DefaultNavigationParam<BlockchainListModalParams>
   | DefaultNavigationParam<WCTransactionSentModalParams>
-  | DefaultNavigationParam<WCConnectionRequestModalModalParams>
+  | DefaultNavigationParam<WCConnectionRequestModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -250,8 +250,8 @@ const ModalStackNavigation = () => {
           component={BlockchainListModal}
         />
         <ModalStack.Screen
-          name={wrapper.route.WCConnectionRequestModalModal.name}
-          component={WCConnectionRequestModalModal}
+          name={wrapper.route.WCConnectionRequestModal.name}
+          component={WCConnectionRequestModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

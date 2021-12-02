@@ -64,7 +64,7 @@ const navigationScheme: INavigationScheme = {
     return [
       wrapper.route.Modal.name,
       {
-        screen: wrapper.route.WCConnectionRequestModalModal.name,
+        screen: wrapper.route.WCConnectionRequestModal.name,
         params: {
           uri: key,
         },

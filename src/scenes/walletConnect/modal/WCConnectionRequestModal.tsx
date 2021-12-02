@@ -11,15 +11,15 @@ import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
-export interface WCConnectionRequestModalModalParams {
+export interface WCConnectionRequestModalParams {
   uri: string
 }
 
 interface Props {
-  route: RouteProp<ModalStackParamList, 'WCConnectionRequestModalModal'>
+  route: RouteProp<ModalStackParamList, 'WCConnectionRequestModal'>
 }
 
-const WCConnectionRequestModalModal = (props: Props) => {
+const WCConnectionRequestModal = (props: Props) => {
   const controller = useSwiperController(true)
   const walletConnectCtx = useWalletConnect()
   const [hasError, setError] = useState(false)
@@ -53,7 +53,7 @@ const WCConnectionRequestModalModal = (props: Props) => {
       padding={0}
       solidColorBG
     >
-      <TextView>{'WCConnectionRequestModalModal'}</TextView>
+      <TextView>{'WCConnectionRequestModal'}</TextView>
       <TextView>
         {'walletConnectCtx.sessionProposals = ' +
           walletConnectCtx.sessionProposals}
@@ -84,4 +84,4 @@ const WCConnectionRequestModalModal = (props: Props) => {
   )
 }
 
-export default WCConnectionRequestModalModal
+export default WCConnectionRequestModal
