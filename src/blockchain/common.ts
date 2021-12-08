@@ -227,3 +227,35 @@ export function hasWCIntegration(object: any): object is IWalletConnect {
 }
 
 export type BlockchainServiceKey = 'neoLegacy' | 'neo3'
+
+export type TWCBlockchain = {
+  blockchain: BlockchainServiceKey
+  wcchain: string
+}
+
+export const WCBlockchains: TWCBlockchain[] = [
+  {blockchain: 'neo3', wcchain: 'neo3:mainnet'},
+]
+
+export function getBlockchainByWCChain(chains: string[]) {
+  let result: BlockchainServiceKey | null = null
+
+  for (const chain of chains) {
+    const chainFound = WCBlockchains.find(({wcchain}) => chain === wcchain)
+    if (chainFound) {
+      result = chainFound.blockchain
+      break
+    }
+  }
+
+  return result
+}
+
+export function getWCChainByBlockchain(blockchain: BlockchainServiceKey) {
+  let result: string | null = null
+
+  result =
+    WCBlockchains.find((it) => it.blockchain === blockchain)?.wcchain ?? null
+
+  return result
+}

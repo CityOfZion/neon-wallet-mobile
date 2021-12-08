@@ -1,7 +1,9 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import React from 'react'
+import React, {useEffect} from 'react'
 
+import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
+import {WCNoConnectDapps} from '~/src/scenes/walletConnect/components/WCNoConnectDapps'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {WalletConnectStackParamList} from '~src/navigation/WalletConnectStackNavigation'
 
@@ -11,7 +13,12 @@ interface WalletConnectPageProps {
 }
 
 const WalletConnectPage = (props: WalletConnectPageProps) => {
-  return <ScreenLayout padding={20}></ScreenLayout>
+  const {sessions} = useWalletConnect()
+  return sessions.length < 1 ? (
+    <WCNoConnectDapps />
+  ) : (
+    <ScreenLayout padding={20}></ScreenLayout>
+  )
 }
 
 export default WalletConnectPage

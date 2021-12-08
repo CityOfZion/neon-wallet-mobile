@@ -100,6 +100,9 @@ export class WrapperConfig {
     'MnemonicSelectionList',
     'WalletConnectPage',
     'WCConnectionRequestModal',
+    'WCConnectDappModal',
+    'WCWalletSelectionModal',
+    'WCAccountSelectionModal',
   ] as const
 }
 

@@ -7,9 +7,17 @@ import {wrapper} from '../app/ApplicationWrapper'
 import {screenConfig} from '../config/ScreenConfig'
 import {VerifyPasscodePageParams} from '../scenes/LoginPage/VerifyPasscodePage'
 import SecurityPickerModal from '../scenes/SecurityPickerModal'
+import {
+  WCAccountSelectionModal,
+  WCAccountSelectionModalParams,
+} from '../scenes/walletConnect/modal/WCAccountSelectionModal'
+import WCWalletSelectionModal, {
+  WCWalletSelectionModalModalParams,
+} from '../scenes/walletConnect/modal/WCWalletSelectionModal'
 import ReceiveModalStackNavigation from './ReceiveModalStackNavigation'
 import {TabParams} from './TabNavigation'
 
+import {WCConnectDappModal} from '~/src/scenes/walletConnect/modal/WCConnectDappModal'
 import EditWalletModal, {
   EditWalletParams,
 } from '~src/components/EditWalletModal'
@@ -110,6 +118,9 @@ export type ModalStackParamList = {
   BlockchainListModal: BlockchainListModalParams
   WCTransactionSentModal: WCTransactionSentModalParams
   WCConnectionRequestModal: WCConnectionRequestModalParams
+  WCConnectDappModal: undefined
+  WCWalletSelectionModal: WCWalletSelectionModalModalParams | undefined
+  WCAccountSelectionModal: WCAccountSelectionModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -130,6 +141,7 @@ export type ModalParams =
   | DefaultNavigationParam<BlockchainListModalParams>
   | DefaultNavigationParam<WCTransactionSentModalParams>
   | DefaultNavigationParam<WCConnectionRequestModalParams>
+  | DefaultNavigationParam<WCWalletSelectionModalModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -252,6 +264,18 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={wrapper.route.WCConnectionRequestModal.name}
           component={WCConnectionRequestModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.WCConnectDappModal.name}
+          component={WCConnectDappModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.WCWalletSelectionModal.name}
+          component={WCWalletSelectionModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.WCAccountSelectionModal.name}
+          component={WCAccountSelectionModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

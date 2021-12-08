@@ -122,16 +122,16 @@ const TabNavigation = (props: Props) => {
           component={WalletStackNavigation}
         />
         <Tab.Screen
+          name={wrapper.route.WalletConnectPage.name}
+          component={WalletConnectStackNavigation}
+        />
+        <Tab.Screen
           name={wrapper.route.Contacts.name}
           component={ContactsStackNavigation}
         />
         <Tab.Screen
           name={wrapper.route.QuickTools.name}
           component={QuickToolsStackNavigation}
-        />
-        <Tab.Screen
-          name={wrapper.route.WalletConnectPage.name}
-          component={WalletConnectStackNavigation}
         />
         <Tab.Screen
           name={wrapper.route.More.name}
