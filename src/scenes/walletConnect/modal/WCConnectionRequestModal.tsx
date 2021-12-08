@@ -127,10 +127,10 @@ const WCConnectionRequestModal = (props: Props) => {
                 color={'#fff'}
                 textAlign={'center'}
               >
-                {`${i18n.t('modals.WCConnectionRequest.subtitle_1', {
+                {i18n.t('modals.WCConnectionRequest.subtitle_1', {
                   dAppName:
                     walletConnectCtx.sessionProposals[0].proposer.metadata.name,
-                })} wants to connect to your wallet`}
+                })}
               </TextView>
 
               <LinearLayout
