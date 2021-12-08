@@ -154,7 +154,7 @@ const AddressItem: React.FC<IAddressItem> = ({
             height={Normalize.scale(18)}
             source={getBlockchainLogo(blockchainName)}
             resizeMode={'contain'}
-            alginSelf={'center'}
+            alignSelf={'center'}
             mt={3}
             mr={3}
           />

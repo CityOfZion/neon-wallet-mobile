@@ -103,6 +103,7 @@ export class WrapperConfig {
     'WCConnectDappModal',
     'WCWalletSelectionModal',
     'WCAccountSelectionModal',
+    'TransactionRequestModal',
   ] as const
 }
 

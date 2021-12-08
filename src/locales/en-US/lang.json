@@ -338,6 +338,21 @@
     "accountQRCode": {
       "address": "Address"
     },
+    "transactionRequest": {
+      "title": "WalletConnect",
+      "xWantsToCall": "%{dappName} wants to call",
+      "hash": "Hash",
+      "method": "Method",
+      "signatureScope": "Signature Scope",
+      "transactionFee": "Transaction Fee",
+      "xGas": "%{amount} GAS",
+      "json": "JSON",
+      "confirmToProceed": "Please confirm if you would like to proceed with this transaction.",
+      "buttom": {
+        "accept": "Accept",
+        "decline": "Decline"
+      }
+    },
     "createAccount": {
       "title": "Create account",
       "subtitle": "Creating an account is easy. Just give it a name below and you're done!",
