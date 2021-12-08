@@ -572,7 +572,9 @@
     "WCConnectionRequest": {
       "chain": "Chain",
       "features": "Features",
-      "subtitle": "If you would like to connect please accept and continue by selecting an account to connect with."
+      "subtitle": "If you would like to connect please accept and continue by selecting an account to connect with.",
+      "subtitle_1": "%{dAppName} wants to connect to your wallet",
+      "acceptLabel": "Accept"
     },
     "WCWalletSelection": {
       "title": "Please select the wallet where your account resides"

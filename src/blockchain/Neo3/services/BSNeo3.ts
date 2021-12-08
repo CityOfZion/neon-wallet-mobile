@@ -53,6 +53,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
     },
   ]
   readonly feeToken: {hash: string; token: string; img: ImageLoadEventData}
+  readonly wcChains: string[]
   constructor() {
     this.provider = Neo3ProviderOptions('doraSDK')
     this.key = 'neo3'
@@ -66,6 +67,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
       token: 'GAS',
       hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
     }
+    this.wcChains = ['neo3:mainnet']
   }
   rpcCall = async (
     address: string,

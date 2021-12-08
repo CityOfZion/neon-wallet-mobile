@@ -68,7 +68,7 @@ const WCConnectionRequestModal = (props: Props) => {
       Await.run(activityName, loadWCConnection, 8000)
     }
     return () => {
-      walletConnectCtx.setSessionProposals([])
+      walletConnectCtx.setSessionProposals([]) //will guarantee that there will be only one sessionProposal at a time
     }
   }, [])
 
@@ -127,7 +127,10 @@ const WCConnectionRequestModal = (props: Props) => {
                 color={'#fff'}
                 textAlign={'center'}
               >
-                {`${walletConnectCtx.sessionProposals[0].proposer.metadata.name} wants to connect to your wallet`}
+                {`${i18n.t('modals.WCConnectionRequest.subtitle_1', {
+                  dAppName:
+                    walletConnectCtx.sessionProposals[0].proposer.metadata.name,
+                })} wants to connect to your wallet`}
               </TextView>
 
               <LinearLayout
@@ -191,7 +194,10 @@ const WCConnectionRequestModal = (props: Props) => {
               <TextView color={'#fff'} fontSize={'18px'} textAlign={'center'}>
                 {i18n.t('modals.WCConnectionRequest.subtitle')}
               </TextView>
-              <ThemedButton label={'Accept'} onPress={handleAccept} />
+              <ThemedButton
+                label={i18n.t('modals.WCConnectionRequest.acceptLabel')}
+                onPress={handleAccept}
+              />
             </LinearLayout>
           </LinearLayout>
         ) : (

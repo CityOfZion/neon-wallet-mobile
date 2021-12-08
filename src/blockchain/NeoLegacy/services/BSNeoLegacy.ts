@@ -54,6 +54,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     },
   ]
   readonly feeToken: {hash: string; token: string; img: ImageLoadEventData}
+  readonly wcChains: string[]
   constructor() {
     this.provider = NeoLegacyProviderOption('doraSdk')
     this.key = 'neoLegacy'
@@ -67,6 +68,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
       token: 'GAS',
       img: feeTokenImg,
     }
+    this.wcChains = [] //neoLegacy doesn't support wallet connect
   }
 
   generateMnemonic() {
