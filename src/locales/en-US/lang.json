@@ -557,6 +557,27 @@
       "transactionError": "Error message",
       "viewOnDora": "View on dora",
       "viewTransaction": "View transaction"
+    },
+    "connectDApp": {
+      "title": "Connect a dApp",
+      "subtitle": "All transactions requested by a connected Dapp will be presented for signing before being broadcast to the blockchain. No action from the Dapp will happen without your direct approval.",
+      "url": "dApp URL",
+      "placeholder": "Please enter dApp URL or scan QR code",
+      "connectLabel": "Connect"
+    },
+    "WCAccountSelection": {
+      "title": "Account Selection",
+      "subtitle": "Please select the account you wish to connect to"
+    },
+    "WCConnectionRequest": {
+      "chain": "Chain",
+      "features": "Features",
+      "subtitle": "If you would like to connect please accept and continue by selecting an account to connect with.",
+      "subtitle_1": "%{dAppName} wants to connect to your wallet",
+      "acceptLabel": "Accept"
+    },
+    "WCWalletSelection": {
+      "title": "Please select the wallet where your account resides"
     }
   },
   "components": {
@@ -694,5 +715,13 @@
       "blockchainNotFound": "Blockchain not found",
       "invalidInformation": "Invalid information"
     }
+  },
+  "walletconnect": {
+    "alert": {
+      "text": "%{text} Connected"
+    },
+    "noDAppsConnected": "No dApps connected",
+    "waitingDAppConnect": "Please be a patient, we are now connecting with %{dAppName}",
+    "connectDAppLabel": "Connect a dApp"
   }
 }

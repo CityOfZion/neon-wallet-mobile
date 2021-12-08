@@ -33,7 +33,7 @@ interface GetWalletProps {
   navigation: StackNavigationProp<WalletStackParamList>
 }
 
-const AccountCardsComponent = (props: {
+export const AccountCardsComponent = (props: {
   accounts: Account[]
   onPress: (account: Account) => void
 }) => {

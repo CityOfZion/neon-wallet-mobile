@@ -90,7 +90,7 @@
     "react-native-input-scroll-view": "^1.11.0",
     "react-native-neo-sdk-bindings": "file:./native_modules/neo-sdk-bindings",
     "react-native-offline": "^5.8.0",
-    "react-native-progress": "^4.1.2",
+    "react-native-progress": "^5.0.0",
     "react-native-randombytes": "file:./react-native-randombytes",
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.4",

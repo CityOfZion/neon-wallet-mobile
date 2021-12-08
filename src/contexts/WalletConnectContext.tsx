@@ -41,7 +41,7 @@ interface IWalletConnectContext {
   setRequests: React.Dispatch<React.SetStateAction<SessionTypes.RequestEvent[]>>
   results: any[]
   setResults: React.Dispatch<React.SetStateAction<any[]>>
-
+  accounts: string[]
   init: () => Promise<void>
   resetApp: () => Promise<void>
   subscribeToEvents: () => void
@@ -495,6 +495,7 @@ export const WalletConnectContextProvider: React.FC<{
     setRequests,
     results,
     setResults,
+    accounts,
 
     init,
     resetApp,

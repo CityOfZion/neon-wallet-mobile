@@ -69,6 +69,7 @@ export interface IBlockchainService {
   readonly cozTip?: {address: string; token: string; hash: string} //config token with the symbol name
   readonly feeToken: {hash: string; token: string; img: ImageLoadEventData}
   readonly siteUrlQuery: string
+  readonly wcChains: string[]
   sendTransaction: (sendTx: SenderTransactionInfo) => Promise<string | null>
   generateMnemonic: () => string[] | null
   generateWif(mnemonic: string, index: number): string
@@ -227,3 +228,28 @@ export function hasWCIntegration(object: any): object is IWalletConnect {
 }
 
 export type BlockchainServiceKey = 'neoLegacy' | 'neo3'
+
+export function getBlockchainByWCChain(chains: string[]) {
+  let result: BlockchainServiceKey | null = null
+
+  blockchainList.forEach((blockchain) => {
+    for (const chain of chains) {
+      const chainFound = blockchainServices[blockchain].wcChains.find(
+        (it) => it === chain
+      )
+      if (chainFound) {
+        result = blockchain
+        break
+      }
+    }
+  })
+  return result
+}
+
+export function getWCChainByBlockchain(blockchain: BlockchainServiceKey) {
+  let result: string | null = null
+
+  result = blockchainServices[blockchain].wcChains[0] ?? null
+
+  return result
+}
