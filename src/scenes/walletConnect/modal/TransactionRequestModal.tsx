@@ -3,7 +3,7 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {SessionTypes, AppMetadata} from '@walletconnect/types'
 import i18n from 'i18n-js'
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {TouchableWithoutFeedback, Linking} from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -146,31 +146,38 @@ const SessionItem = () => {
 
 const TransactionRequestModal = (props: Props) => {
   const controller = useSwiperController(true)
-  const walletConnectCtx = useWalletConnect()
-  const requestJsonRpc = JSON.parse(
-    walletConnectCtx.requests[0].request.jsonrpc
-  )
+  const {sessions, requests, approveRequest, rejectRequest} = useWalletConnect()
+  
   const [feeAmount, setFeeAmount] = useState<number>(0)
   //requestJson
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const params = props.route.params
+  
+  interface WCRequestParams {
+    scriptHash: string,
+    operation: string,
+    args: {type: string, value: number}[],
+    signer: {scope: number}
+  }
 
-  // useEffect(() => {
-  //   handleCalcFee()
-  // }, [])
+  useEffect(() => {
+    //console.log('debug requests and sessions', {requests, sessions})
+    //alert(JSON.stringify(requests[0]))
+  }, [])
 
-  // const handleCalcFee = async () => {
-  //   if (transaction) {
-  //     const result = await applicationConfig.blockchain['neo3'].calculateFee(
-  //       transaction
-  //     )
-  //     setFeeAmount(result)
-  //   } else {
-  //     setFeeAmount(0)
-  //   }
-  // }
+  const handleAcceptRequest = useCallback(async () => {
+    await approveRequest(requests[0])
+    controller.close()
+    props.navigation.goBack()
+  }, [requests, controller])
+
+  const handleDeclineRequest = useCallback(async () => {
+    await rejectRequest(requests[0])
+    controller.close()
+    props.navigation.goBack()
+  }, [requests, controller])
 
   return (
     <SwiperPanel
@@ -199,9 +206,7 @@ const TransactionRequestModal = (props: Props) => {
           alignSelf={'center'}
           pb={'19px'}
         >
-          {i18n.t('modals.transactionRequest.xWantsToCall', {
-            dappName: params.metadata.name,
-          })}
+          params.metadata.name
         </TextView>
         {
           // walletConnectCtx.requests.map(
@@ -341,17 +346,11 @@ const TransactionRequestModal = (props: Props) => {
         </TextView>
         <ThemedButton
           label={i18n.t('modals.transactionRequest.buttom.accept')}
-          onPress={async () => {
-            //await walletConnectCtx.approveRequest(props.requestEvent)
-            controller.close()
-          }}
+          onPress={handleAcceptRequest}
         />
         <LinearLayout mt={'24px'}>
           <TouchableWithoutFeedback
-            onPress={async () => {
-              //await walletConnectCtx.rejectRequest(props.requestEvent)
-              controller.close()
-            }}
+            onPress={handleDeclineRequest}
           >
             <LinearLayout
               width="100%"

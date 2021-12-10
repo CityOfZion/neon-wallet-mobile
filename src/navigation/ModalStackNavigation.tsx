@@ -81,7 +81,7 @@ import ReceiveToAccountModal, {
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
 import TransactionRequestModal, {
   TransactionRequestModalParams,
-} from '~src/scenes/walletConnect/TransactionRequestModal'
+} from '~/src/scenes/walletConnect/modal/TransactionRequestModal'
 import WCConnectionRequestModal, {
   WCConnectionRequestModalParams,
 } from '~src/scenes/walletConnect/modal/WCConnectionRequestModal'
@@ -281,6 +281,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={wrapper.route.WCAccountSelectionModal.name}
           component={WCAccountSelectionModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.TransactionRequestModal.name}
+          component={TransactionRequestModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

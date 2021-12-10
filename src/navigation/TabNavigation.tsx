@@ -24,6 +24,7 @@ import WalletConnectStackNavigation from '~src/navigation/WalletConnectStackNavi
 import WalletStackNavigation, {
   WalletStackParams,
 } from '~src/navigation/WalletsStackNavigation'
+import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 
 export type TabStackParamList = {
   ListWallets: WalletStackParams
@@ -59,7 +60,7 @@ const TabNavigation = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
-
+  const {requests} = useWalletConnect()
   const [welcomeHidden, setWelcomeHidden] = useState(
     props.route.params?.welcomeHidden ?? true
   )
@@ -108,6 +109,14 @@ const TabNavigation = (props: Props) => {
       }
     )
   }, [])
+
+  useEffect(() => {
+    if(requests.length > 0){
+      props.navigation.navigate(wrapper.route.Modal.name, {
+        screen: wrapper.route.TransactionRequestModal.name
+      })
+    }
+  }, [requests])
 
   return (
     <ThemeProvider theme={theme}>

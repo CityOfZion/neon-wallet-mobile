@@ -1,30 +1,33 @@
-import {NavigationContainer, RouteProp} from '@react-navigation/native'
-import {Await, AwaitActivity} from '@simpli/react-native-await'
-import React, {useEffect, useState} from 'react'
-import {InteractionManager} from 'react-native'
-import {useDispatch, useSelector} from 'react-redux'
-import {ThemeProvider} from 'styled-components'
+import { NavigationContainer, RouteProp } from '@react-navigation/native'
+import { Await, AwaitActivity } from '@simpli/react-native-await'
+import React, { useEffect, useState } from 'react'
+import { InteractionManager } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+import { ThemeProvider } from 'styled-components'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {applicationConfig} from '../config/ApplicationConfig'
-import {screenConfig} from '../config/ScreenConfig'
+import { wrapper } from '../app/ApplicationWrapper'
+import { applicationConfig } from '../config/ApplicationConfig'
+import { screenConfig } from '../config/ScreenConfig'
 import PasscodeStackNavigation, {
   PasscodeStackParams,
 } from './PasscodeStackNavigation'
 
-import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
-import {Storage} from '~src/app/Storage'
-import {Sync} from '~src/app/Sync'
+import { createStackNavigator } from '~/node_modules/@react-navigation/stack'
+import { Storage } from '~src/app/Storage'
+import { Sync } from '~src/app/Sync'
 import LoadingOverlay from '~src/components/LoadingOverlay'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import {DeepLinkingConfig} from '~src/config/DeepLinkingConfig'
+import { DeepLinkingConfig } from '~src/config/DeepLinkingConfig'
 import ModalStackNavigation, {
   ModalParams,
 } from '~src/navigation/ModalStackNavigation'
-import TabNavigation, {TabParams} from '~src/navigation/TabNavigation'
+import TabNavigation, { TabParams } from '~src/navigation/TabNavigation'
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import OnboardingPage from '~src/scenes/OnboardingPage'
-import QRCodeScan, {QRCodeScanParams} from '~src/scenes/QRCodeScan'
+import QRCodeScan, { QRCodeScanParams } from '~src/scenes/QRCodeScan'
+import { useWalletConnect } from '~src/contexts/WalletConnectContext'
+import { JsonRpcRequest } from '@json-rpc-tools/utils'
+import { getBlockchainByAddress, hasWCIntegration } from '../blockchain'
 export type RootStackParamList = {
   Tab: TabParams
   Modal: ModalParams
@@ -46,10 +49,10 @@ const AppNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => {
     return wrapper.theme[state.settings.theme]
   })
-  const {isConnected} = useSelector((state: RootState) => state.network)
+  const { isConnected } = useSelector((state: RootState) => state.network)
   const loadingOverlayState = useSelector((state: RootState) => state.loading)
-  const {status: timerStatus} = useSelector((state: RootState) => state.timer)
-  const {progress, loadingText, isLoading} = loadingOverlayState
+  const { status: timerStatus } = useSelector((state: RootState) => state.timer)
+  const { progress, loadingText, isLoading } = loadingOverlayState
 
   const [onboardingSeen, setOnboardingSeen] = useState(true)
   const [welcomeToNWSeen, setWelcomeToNWSeen] = useState(true)
@@ -61,6 +64,8 @@ const AppNavigation = (props: Props) => {
   ] = useState(false)
   const [changelogHidden, setChangelogHidden] = useState(true)
   const [numberOfVersions, setNumberOfVersions] = useState(0)
+
+  const walletConnectCtx = useWalletConnect()
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
@@ -123,6 +128,31 @@ const AppNavigation = (props: Props) => {
       !hasInit && Await.run('application', startApplication)
     }
   }, [hasInit, syncFetchInterval, isConnected, timerStatus])
+
+  useEffect(() => {
+    // if the request method is 'testInvoke' or 'multiTestInvoke' we auto-accept it
+    walletConnectCtx.autoAcceptIntercept((acc, chain, req: JsonRpcRequest) =>
+      req.method === 'testInvoke' || req.method === 'multiTestInvoke')
+
+    walletConnectCtx.onRequestListener(async (acc, chain, req: JsonRpcRequest) => {
+      console.log('debug request lintener => ', acc, chain, req)
+      const blockchain = getBlockchainByAddress(acc)
+      if (blockchain) {
+        const bs = applicationConfig.blockchain[blockchain]
+        if(hasWCIntegration(bs)){
+          const result = await bs.rpcCall(acc, req)
+          if(!result.hasOwnProperty('error')){
+            console.log('deu certo', [result])
+          }else{
+            console.log('deu errado', [result])
+          }
+          return result
+        }
+      }
+      throw new Error("Failed request listener");
+    })
+
+  }, [])
 
   const getInitialRouteName = () => {
     return onboardingSeen
