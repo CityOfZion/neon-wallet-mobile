@@ -94,7 +94,7 @@ const ImportKey = (props: ImportKeyProps) => {
           if (!accounts.find((account) => account.address === address)) {
             const req = applicationConfig.blockchain[blockchainName].provider
             const {totalEntries} = await req.getAddressAbstracts(address, 1)
-            if (totalEntries && totalEntries > 0) {
+            if ((totalEntries && totalEntries > 0) || index === 0) {
               accountsInfo.push({address, wif, derivationIndex: index})
             } else {
               stop = true

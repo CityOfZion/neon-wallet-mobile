@@ -68,7 +68,7 @@ export class AccountReducer extends ReducerWrapper<
         return accounts.find((it) => it.address === address) ?? new Account()
       }
     },
-    createAndSave: (): AsyncAction<string> => {
+    createAndSave: (indexAccount?: number): AsyncAction<string> => {
       const generateAccount = async (
         wallet: Wallet,
         index: number,
@@ -94,7 +94,7 @@ export class AccountReducer extends ReducerWrapper<
           .getAccountsWithSameWallet(getState().app.accounts)
           .map((it) => it.index ?? 0)
 
-        account.index = indexes.length ? Math.max(...indexes) + 1 : index ?? 0
+        account.index = indexAccount ?? (indexes.length ? Math.max(...indexes) + 1 : index ?? 0)
         account.blockchain = blockchain
 
         if (wallet && wallet.walletType === 'standard') {

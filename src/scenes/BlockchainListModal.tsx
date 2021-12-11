@@ -64,6 +64,8 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
     const indexAccount = selectedWallet
       .getAccounts(accountsPool)
       .filter((account) => account.blockchain === blockchainSelected).length
+    
+    alert(indexAccount)
     dispatch(RootStore.account.actions.setIdWallet(wallet.id))
     dispatch(
       RootStore.account.actions.setName(
@@ -86,7 +88,7 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
         applicationConfig.blockchain[blockchainSelected].icon
       )
     )
-    await dispatchAsync(RootStore.account.actions.createAndSave())
+    await dispatchAsync(RootStore.account.actions.createAndSave(indexAccount))
     await dispatchAsync(RootStore.app.actions.syncAccounts())
     await dispatchAsync(RootStore.app.actions.syncWallets())
 
