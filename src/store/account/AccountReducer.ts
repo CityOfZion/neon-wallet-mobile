@@ -94,7 +94,9 @@ export class AccountReducer extends ReducerWrapper<
           .getAccountsWithSameWallet(getState().app.accounts)
           .map((it) => it.index ?? 0)
 
-        account.index = indexAccount ?? (indexes.length ? Math.max(...indexes) + 1 : index ?? 0)
+        account.index =
+          indexAccount ??
+          (indexes.length ? Math.max(...indexes) + 1 : index ?? 0)
         account.blockchain = blockchain
 
         if (wallet && wallet.walletType === 'standard') {

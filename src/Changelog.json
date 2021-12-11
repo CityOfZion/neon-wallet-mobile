@@ -1,6 +1,13 @@
 {
     "changelog": [
     	{
+            "version": "V1.0.27-1",
+            "date": "December 13 2021",
+            "changes": [
+                " -N3 support and minor bugfixes",
+            ]
+        },
+    	{
             "version": "V1.0.25-1",
             "date": "November 16 2021",
             "changes": [

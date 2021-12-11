@@ -64,8 +64,7 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
     const indexAccount = selectedWallet
       .getAccounts(accountsPool)
       .filter((account) => account.blockchain === blockchainSelected).length
-    
-    alert(indexAccount)
+
     dispatch(RootStore.account.actions.setIdWallet(wallet.id))
     dispatch(
       RootStore.account.actions.setName(
