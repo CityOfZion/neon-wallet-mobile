@@ -118,7 +118,7 @@ const TransactionsTab = () => {
       name={'fetchTransaction'}
       size={'large'}
       style={{minHeight: 100}}
-      loadingView={<ScreenLoader invertedGradient={true} />}
+      loadingView={<ScreenLoader solidColorBG={true} />}
     >
       <>
         {account.address && (
@@ -426,7 +426,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   return (
     <ScreenLayout
-      invertedGradient={true}
+      solidColorBG={true}
       onReachBottom={() => {
         if (Await.inAction('loadMoreTransaction')) return
         Await.run(
