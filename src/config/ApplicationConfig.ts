@@ -7,7 +7,7 @@ import {Theme} from '~src/enums/Theme'
  */
 export class ApplicationConfig {
   readonly defaultTheme = Theme.DARK
-  readonly defaultDataRefreshTimeInMilliseconds = 10000
+  readonly defaultDataRefreshTimeInMilliseconds = 7000
   readonly blockchain = blockchainServices
   readonly defaultBlockchainKey: BlockchainServiceKey = 'neo3'
   readonly headerHeight =
