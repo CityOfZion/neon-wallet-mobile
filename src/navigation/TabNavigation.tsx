@@ -12,6 +12,7 @@ import {SenderTransaction} from '../models/redux/SenderTransaction'
 
 import * as data from '~src/Changelog.json'
 import FooterBar from '~src/components/layout/FooterBar'
+import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import ContactsStackNavigation, {
   ContactsStackParams,
@@ -24,7 +25,6 @@ import WalletConnectStackNavigation from '~src/navigation/WalletConnectStackNavi
 import WalletStackNavigation, {
   WalletStackParams,
 } from '~src/navigation/WalletsStackNavigation'
-import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 
 export type TabStackParamList = {
   ListWallets: WalletStackParams
@@ -111,9 +111,9 @@ const TabNavigation = (props: Props) => {
   }, [])
 
   useEffect(() => {
-    if(requests.length > 0){
+    if (requests.length > 0) {
       props.navigation.navigate(wrapper.route.Modal.name, {
-        screen: wrapper.route.TransactionRequestModal.name
+        screen: wrapper.route.TransactionRequestModal.name,
       })
     }
   }, [requests])

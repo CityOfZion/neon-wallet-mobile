@@ -17,6 +17,9 @@ import WCWalletSelectionModal, {
 import ReceiveModalStackNavigation from './ReceiveModalStackNavigation'
 import {TabParams} from './TabNavigation'
 
+import TransactionRequestModal, {
+  TransactionRequestModalParams,
+} from '~/src/scenes/walletConnect/modal/TransactionRequestModal'
 import {WCConnectDappModal} from '~/src/scenes/walletConnect/modal/WCConnectDappModal'
 import EditWalletModal, {
   EditWalletParams,
@@ -79,9 +82,6 @@ import ReceiveToAccountModal, {
   ReceiveToAccountModalParams,
 } from '~src/scenes/receive/ReceiveToAccountModal'
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
-import TransactionRequestModal, {
-  TransactionRequestModalParams,
-} from '~/src/scenes/walletConnect/modal/TransactionRequestModal'
 import WCConnectionRequestModal, {
   WCConnectionRequestModalParams,
 } from '~src/scenes/walletConnect/modal/WCConnectionRequestModal'

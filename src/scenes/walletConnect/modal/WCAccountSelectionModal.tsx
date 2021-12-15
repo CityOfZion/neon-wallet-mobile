@@ -47,7 +47,6 @@ export const WCAccountSelectionModal = (props: Props) => {
   )
   const pressEvent = useCallback(
     (account: Account) => {
-
       if (walletConnectCtx.sessionProposals.length > 0 && account.address) {
         setAccountSelected(account)
       }
@@ -55,33 +54,36 @@ export const WCAccountSelectionModal = (props: Props) => {
     [walletConnectCtx.sessionProposals]
   )
 
-  const handleConnectDApp = useCallback(async (account: Account) => {
-    try {
-      if (walletConnectCtx.sessionProposals.length > 0 && account?.address) {
-        const wcChain = getWCChainByBlockchain(account.blockchain)
-        console.log({wcChain, accountSelected})
-        if (wcChain) {
-          await walletConnectCtx.approveSession(
-            walletConnectCtx.sessionProposals[0],
-            [{address: account.address, chain: wcChain}]
-          )
-          showMessage({
-            message: i18n.t('walletconnect.alert.text', {text: nameDApp}),
-            duration: 7000,
-            type: 'warning',
-          })
+  const handleConnectDApp = useCallback(
+    async (account: Account) => {
+      try {
+        if (walletConnectCtx.sessionProposals.length > 0 && account?.address) {
+          const wcChain = getWCChainByBlockchain(account.blockchain)
+          console.log({wcChain, accountSelected})
+          if (wcChain) {
+            await walletConnectCtx.approveSession(
+              walletConnectCtx.sessionProposals[0],
+              [{address: account.address, chain: wcChain}]
+            )
+            showMessage({
+              message: i18n.t('walletconnect.alert.text', {text: nameDApp}),
+              duration: 7000,
+              type: 'warning',
+            })
+          }
         }
-      }
 
-      props.navigation.reset({
-        index: 0,
-        routes: [{name: wrapper.route.Tab.name}],
-      })
-      props.navigation.navigate(wrapper.route.WalletConnectPage.name)
-    } catch (error) {
-      console.log(error)
-    }
-  }, [walletConnectCtx.sessionProposals])
+        props.navigation.reset({
+          index: 0,
+          routes: [{name: wrapper.route.Tab.name}],
+        })
+        props.navigation.navigate(wrapper.route.WalletConnectPage.name)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    [walletConnectCtx.sessionProposals]
+  )
 
   return (
     <>
@@ -101,7 +103,10 @@ export const WCAccountSelectionModal = (props: Props) => {
           <TextView color="text.0" fontSize={18} textAlign="center" mb={'30px'}>
             {i18n.t('modals.WCAccountSelection.subtitle')}
           </TextView>
-          <AccountCardsComponent accounts={accounts} onPress={handleConnectDApp} />
+          <AccountCardsComponent
+            accounts={accounts}
+            onPress={handleConnectDApp}
+          />
         </LinearLayout>
       </SwiperPanel>
     </>

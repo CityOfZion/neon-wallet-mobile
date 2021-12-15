@@ -147,18 +147,18 @@ const SessionItem = () => {
 const TransactionRequestModal = (props: Props) => {
   const controller = useSwiperController(true)
   const {sessions, requests, approveRequest, rejectRequest} = useWalletConnect()
-  
+
   const [feeAmount, setFeeAmount] = useState<number>(0)
   //requestJson
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const params = props.route.params
-  
+
   interface WCRequestParams {
-    scriptHash: string,
-    operation: string,
-    args: {type: string, value: number}[],
+    scriptHash: string
+    operation: string
+    args: {type: string; value: number}[]
     signer: {scope: number}
   }
 
@@ -349,9 +349,7 @@ const TransactionRequestModal = (props: Props) => {
           onPress={handleAcceptRequest}
         />
         <LinearLayout mt={'24px'}>
-          <TouchableWithoutFeedback
-            onPress={handleDeclineRequest}
-          >
+          <TouchableWithoutFeedback onPress={handleDeclineRequest}>
             <LinearLayout
               width="100%"
               borderRadius="4px"

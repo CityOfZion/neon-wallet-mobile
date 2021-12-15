@@ -142,6 +142,11 @@
     "rn-nodeify": "^10.3.0",
     "typescript": "~3.9.2"
   },
+  "resolutions": {
+    "@walletconnect/client": "2.0.0-beta.17",
+    "@walletconnect/types": "2.0.0-beta.17",
+    "@walletconnect/utils": "2.0.0-beta.17"
+  },
   "jest": {
     "preset": "jest-expo",
     "verbose": true,
