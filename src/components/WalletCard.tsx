@@ -3,11 +3,10 @@ import React, {Fragment, useEffect, useRef, useState} from 'react'
 import {Animated, Easing, LayoutChangeEvent} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {UtilsHelper} from '../helpers/UtilsHelper'
-
 import AccountCard from '~src/components/AccountCard'
 import ThemedShadowContainer from '~src/components/themed/ThemedShadowContainer'
 import {Currency} from '~src/enums/Currency'
+import {UtilsHelper} from '~src/helpers/UtilsHelper'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import styled, {

@@ -3,10 +3,9 @@ import React, {Fragment, useCallback, useEffect} from 'react'
 import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
-import {BlockchainServiceKey} from '~/src/blockchain'
+import {BlockchainServiceKey, blockchainServices} from '~/src/blockchain'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
-import {applicationConfig} from '~/src/config/ApplicationConfig'
 import {IURI} from '~/src/helpers/UriHelper'
 import {Account} from '~/src/models/redux/Account'
 import {Contact} from '~/src/models/redux/Contact'
@@ -26,9 +25,7 @@ const DestinationAddressField = (props: {
   )
 
   const validateAddress = useCallback(() => {
-    return applicationConfig.blockchain[props.blockchain].validateAddress(
-      props.address
-    )
+    return blockchainServices[props.blockchain].validateAddress(props.address)
   }, [props.address])
 
   useEffect(() => {

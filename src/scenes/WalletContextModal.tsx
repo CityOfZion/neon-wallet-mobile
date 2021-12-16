@@ -5,8 +5,7 @@ import React, {Fragment} from 'react'
 import {ImageLoadEventData, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStackParamList} from '~src/navigation/AppNavigation'

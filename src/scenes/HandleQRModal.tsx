@@ -4,9 +4,8 @@ import React from 'react'
 import {ImageLoadEventData, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {Normalize} from '../app/Normalize'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {Normalize} from '~src/app/Normalize'
 import SwiperPanel, {SwiperController} from '~src/components/SwiperPanel'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'

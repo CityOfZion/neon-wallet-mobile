@@ -3,8 +3,7 @@ import React from 'react'
 import {ImageLoadEventData} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 
-import {UtilsHelper} from '../helpers/UtilsHelper'
-
+import {UtilsHelper} from '~src/helpers/UtilsHelper'
 import {PriorityFee} from '~src/models/PriorityFee'
 import {
   ButtonView,

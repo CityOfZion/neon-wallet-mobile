@@ -3,10 +3,9 @@ import {StatusBar} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {screenConfig} from '../config/ScreenConfig'
-
 import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {screenConfig} from '~src/config/ScreenConfig'
 import ConfirmPasscodePage, {
   ConfirmPasscodePageParams,
 } from '~src/scenes/LoginPage/ConfirmPasscodePage'

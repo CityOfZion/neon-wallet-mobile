@@ -1,6 +1,6 @@
 import {system} from 'styled-system'
 
-import {styleConfig} from '../config/StyleConfig'
+import {styleConfig} from '~src/config/StyleConfig'
 
 export const orientation = system({
   orientation: styleConfig.orientation,

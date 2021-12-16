@@ -1,8 +1,7 @@
 import React from 'react'
 import {TouchableOpacity} from 'react-native'
 
-import {Normalize} from '../app/Normalize'
-
+import {Normalize} from '~src/app/Normalize'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export enum RightIconType {

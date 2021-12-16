@@ -4,9 +4,8 @@ import {AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, {useState} from 'react'
 
-import {wrapper} from '../app/ApplicationWrapper'
-
 import * as data from '~src/Changelog.json'
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {Storage} from '~src/app/Storage'
 import SwiperPanel, {
   CloseButton,

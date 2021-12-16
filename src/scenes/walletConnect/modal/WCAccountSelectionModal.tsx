@@ -5,8 +5,6 @@ import React, {useEffect, useState, useCallback, useMemo} from 'react'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
 
-import {AccountCardsComponent} from '../../GetWalletView'
-
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {getWCChainByBlockchain} from '~/src/blockchain/common'
 import {ProgressBar} from '~/src/components/ProgressBar'
@@ -21,6 +19,7 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import {useWalletConnect} from '~src/contexts/WalletConnectContext'
+import {AccountCardsComponent} from '~src/scenes/GetWalletView'
 
 export interface WCAccountSelectionModalParams {
   wallet: Wallet

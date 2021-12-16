@@ -1,6 +1,5 @@
 import {Dimensions, Platform, StatusBar} from 'react-native'
 
-import {BlockchainServiceKey, blockchainServices} from '~src/blockchain'
 import {Theme} from '~src/enums/Theme'
 /**
  * Application Configuration
@@ -8,8 +7,6 @@ import {Theme} from '~src/enums/Theme'
 export class ApplicationConfig {
   readonly defaultTheme = Theme.DARK
   readonly defaultDataRefreshTimeInMilliseconds = 7000
-  readonly blockchain = blockchainServices
-  readonly defaultBlockchainKey: BlockchainServiceKey = 'neo3'
   readonly headerHeight =
     Platform.OS === 'ios' ? 40 : 72 + (StatusBar.currentHeight ?? 0)
   readonly footerHeight = 66

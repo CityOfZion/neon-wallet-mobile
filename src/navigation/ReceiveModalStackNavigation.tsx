@@ -6,19 +6,18 @@ import {View} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {screenConfig} from '../config/ScreenConfig'
-import ReceiveAccountSelectionModal, {
-  ReceiveAccountSelectionModalParams,
-} from '../scenes/receive/ReceiveAccountSelectionModal'
-
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack'
+import {wrapper} from '~src/app/ApplicationWrapper'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBackButton from '~src/components/layout/HeaderBackButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
+import {screenConfig} from '~src/config/ScreenConfig'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import ReceiveAccountSelectionModal, {
+  ReceiveAccountSelectionModalParams,
+} from '~src/scenes/receive/ReceiveAccountSelectionModal'
 import ReceiveToAccountModal, {
   ReceiveToAccountModalParams,
 } from '~src/scenes/receive/ReceiveToAccountModal'

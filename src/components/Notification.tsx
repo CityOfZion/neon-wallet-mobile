@@ -5,14 +5,12 @@ import React, {useState} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {useDispatch} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {MoreStackParamList} from '../navigation/MoreStackNavigation'
-import {SettingsStackParamList} from '../navigation/SettingsStackNavigation'
-import {WalletStackParamList} from '../navigation/WalletsStackNavigation'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import styled, {
   ButtonView,

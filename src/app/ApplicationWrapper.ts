@@ -1,7 +1,6 @@
-import {wrapperConfig} from '../config/WrapperConfig'
-
 import {DataKey} from '~src/app/DataKey'
 import {Route} from '~src/app/Route'
+import {wrapperConfig} from '~src/config/WrapperConfig'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 
 export class ApplicationWrapper {

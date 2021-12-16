@@ -6,8 +6,6 @@ import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
 import Carousel, {Pagination} from 'react-native-snap-carousel'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {applicationConfig} from '../config/ApplicationConfig'
-import {AsteroidHelper} from '../helpers/AsteroidHelper'
 import {getRandomColor} from './CustomizeAccount'
 
 import {useHeaderHeight} from '~/node_modules/@react-navigation/stack'
@@ -15,7 +13,13 @@ import ThemedButton from '~/src/components/themed/ThemedButton'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Normalize} from '~src/app/Normalize'
 import {Storage} from '~src/app/Storage'
-import {blockchainList, BlockchainServiceKey} from '~src/blockchain'
+import {
+  blockchainList,
+  BlockchainServiceKey,
+  blockchainServices,
+} from '~src/blockchain'
+import {applicationConfig} from '~src/config/ApplicationConfig'
+import {AsteroidHelper} from '~src/helpers/AsteroidHelper'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {RootStore} from '~src/store/RootStore'
 import styled, {
@@ -163,9 +167,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
       )
     )
     dispatch(
-      RootStore.account.actions.setSrcIcon(
-        applicationConfig.blockchain[blockchain].icon
-      )
+      RootStore.account.actions.setSrcIcon(blockchainServices[blockchain].icon)
     )
     await dispatchAsyncString(RootStore.account.actions.createAndSave())
     await dispatchAsync(RootStore.app.actions.syncAccounts())

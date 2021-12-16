@@ -1,8 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import {AppLoading} from 'expo'
 import * as Font from 'expo-font'
 import React, {useState} from 'react'
 import {StatusBar} from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import FlashMessage from 'react-native-flash-message'
 import {Provider as StoreProvider} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
@@ -31,7 +31,7 @@ const wcOptions = {
   relayServer: DEFAULT_RELAY_PROVIDER,
   storageOptions: {
     asyncStorage: AsyncStorage as any,
-  }
+  },
 }
 
 const loggerMiddleware = createLogger()

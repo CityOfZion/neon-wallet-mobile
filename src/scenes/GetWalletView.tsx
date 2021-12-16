@@ -12,9 +12,8 @@ import {
 } from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {Normalize} from '../app/Normalize'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {Normalize} from '~src/app/Normalize'
 import AccountCard from '~src/components/AccountCard'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'

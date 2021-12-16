@@ -1,6 +1,6 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 
-import {applicationConfig} from '~/src/config/ApplicationConfig'
+import {blockchainServices} from '~/src/blockchain'
 import {Account} from '~/src/models/redux/Account'
 import {Model} from '~src/app/Model'
 import {PriorityFee} from '~src/models/PriorityFee'
@@ -55,9 +55,9 @@ export class SendTransactionReducer extends ReducerWrapper<
         const sendTx = getState().senderTransaction
 
         try {
-          return await applicationConfig.blockchain[
-            account.blockchain
-          ].sendTransaction(sendTx)
+          return await blockchainServices[account.blockchain].sendTransaction(
+            sendTx
+          )
         } catch (error) {
           throw new Error('Transaction has failed')
         }

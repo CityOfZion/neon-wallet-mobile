@@ -9,16 +9,14 @@ import {
 } from 'react-native'
 import {useSelector, useDispatch} from 'react-redux'
 
-import {applicationConfig} from '../config/ApplicationConfig'
-import {Wallet} from '../models/redux/Wallet'
-import {RootStore} from '../store/RootStore'
-
 import {
   blockchainList,
   BlockchainServiceKey,
   getBlockchainLogo,
 } from '~src/blockchain'
 import {SearchBar} from '~src/components/input/SearchBar'
+import {Wallet} from '~src/models/redux/Wallet'
+import {RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface IBlockchainItem {
@@ -171,7 +169,7 @@ const BlockchainList = (props: IBlockchainList) => {
     if (props.isMulti) {
       selectAllBlockchains()
     } else {
-      selectBlockchain(applicationConfig.defaultBlockchainKey)
+      selectBlockchain('neo3')
     }
     const mapLabelsBlockchain: IBlockchainListMap[] = blockchainList.map<
       IBlockchainListMap

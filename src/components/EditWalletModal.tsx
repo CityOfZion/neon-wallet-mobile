@@ -6,9 +6,8 @@ import React, {useState} from 'react'
 import {Alert, StyleSheet, TouchableWithoutFeedback} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-
 import {TabStackParamList} from '~/src/navigation/TabNavigation'
+import {wrapper} from '~src/app/ApplicationWrapper'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'

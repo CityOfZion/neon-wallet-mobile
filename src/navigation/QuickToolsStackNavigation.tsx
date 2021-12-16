@@ -3,12 +3,11 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {Account} from '../models/redux/Account'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
+import {Account} from '~src/models/redux/Account'
 import AccountAssetDetail from '~src/scenes/Account/AccountAssetDetail'
 
 export type QuickToolsStackParamList = {

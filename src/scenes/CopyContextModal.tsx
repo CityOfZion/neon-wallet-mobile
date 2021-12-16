@@ -7,10 +7,9 @@ import React, {Fragment} from 'react'
 import {ImageLoadEventData, TouchableWithoutFeedback} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {UtilsHelper} from '../helpers/UtilsHelper'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import {UtilsHelper} from '~src/helpers/UtilsHelper'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 

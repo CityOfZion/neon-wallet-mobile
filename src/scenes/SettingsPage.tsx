@@ -5,8 +5,7 @@ import React, {useEffect} from 'react'
 import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
-import {wrapper} from '../app/ApplicationWrapper'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {RootStackParamList} from '~src/navigation/AppNavigation'

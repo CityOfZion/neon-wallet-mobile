@@ -3,6 +3,7 @@ import React, {Fragment, useEffect, useState, useCallback} from 'react'
 import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
+import {BlockchainServiceKey, blockchainServices} from '~/src/blockchain'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import {Currency} from '~/src/enums/Currency'
@@ -57,13 +58,31 @@ const AmountField = (props: {
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
+  const getDecimals = useCallback(
+    async (tokenSymbol: string, blockchain: BlockchainServiceKey) => {
+      let decimals: number | undefined = undefined
+      const tokenList = await blockchainServices[
+        blockchain
+      ].provider.getTokenList()
+      const assets = blockchainServices[blockchain].assets
+      decimals = assets.find((it) => it.symbol === tokenSymbol)?.decimals
+      if (decimals) {
+        return decimals
+      } else if (tokenList[tokenSymbol]) {
+        decimals = tokenList[tokenSymbol].networks[1].decimals
+        return decimals
+      } else {
+        return decimals
+      }
+    },
+    [props.token]
+  )
+
   useEffect(() => {
     if (props.token) {
-      TokenAsset.getDecimals(props.token.symbol, props.token.blockchain).then(
-        (result) => {
-          setTokenDecimalPlaces(result)
-        }
-      )
+      getDecimals(props.token.symbol, props.token.blockchain).then((result) => {
+        setTokenDecimalPlaces(result)
+      })
     }
   }, [props.token])
 

@@ -5,18 +5,17 @@ import {Linking, ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {wrapper} from '~src/app/ApplicationWrapper'
+import {blockchainServices} from '~src/blockchain'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {applicationConfig} from '~src/config/ApplicationConfig'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import TransactionFailed from '~src/scenes/walletConnect/modal/fragment/TransactionFailed'
 import TransactionSuccess from '~src/scenes/walletConnect/modal/fragment/TransactionSuccess'
 import {LinearLayout} from '~src/styles/styled-components'
-
 export interface WCTransactionSentModalParams {
   transaction?: SenderTransaction
   errorMessage?: string
@@ -102,8 +101,8 @@ const WCTransactionSentModal = (props: Props) => {
           onPress={() => {
             if (senderAccount?.blockchain) {
               Linking.openURL(
-                applicationConfig.blockchain[senderAccount.blockchain]
-                  ?.siteUrlQuery + transaction?.transactionHash
+                blockchainServices[senderAccount.blockchain]?.siteUrlQuery +
+                  transaction?.transactionHash
               )
             }
           }}

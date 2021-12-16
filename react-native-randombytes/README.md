@@ -4,11 +4,9 @@
 
 ```js
 import { randomBytes } from 'react-native-randombytes'
-
 // synchronous API
 // uses SJCL
 const rand = randomBytes(4)
-
 // asynchronous API
 // uses iOS-side SecRandomCopyBytes
 randomBytes(4, (err, bytes) => {
@@ -58,7 +56,6 @@ Confused? See an example with screenshots [here](http://facebook.github.io/react
 ```gradle
 // file: android/settings.gradle
 ...
-
 include ':randombytes', ':app'
 project(':randombytes').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-randombytes/android')
 ```
@@ -68,7 +65,6 @@ project(':randombytes').projectDir = new File(rootProject.projectDir, '../node_m
 ```gradle
 // file: android/app/build.gradle
 ...
-
 dependencies {
     ...
     compile project(':randombytes')
@@ -80,12 +76,9 @@ dependencies {
 ```java
 ...
 import com.bitgo.randombytes.RandomBytesPackage // import
-
 public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
-
     private ReactInstanceManager mReactInstanceManager;
     private ReactRootView mReactRootView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,17 +96,11 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
         setContentView(mReactRootView);
     }
 ...
-
 ```
-
 ### `Windows`
  
-
 ```bash
 react-native link react-native-randombytes
 ```
-
 Depending on your project versions and the state of RN-Windows this may not always work. If it does not, a manual installation guide can be found here:
-
 https://github.com/Microsoft/react-native-windows/blob/master/docs/LinkingLibrariesWindows.md
-

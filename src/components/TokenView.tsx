@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import React, {useEffect, useState} from 'react'
 import {useSelector} from 'react-redux'
 
-import {applicationConfig} from '../config/ApplicationConfig'
-import {FilterHelper} from '../helpers/FilterHelper'
+import {blockchainServices} from '../blockchain'
 
 import {HeaderColumn} from '~src/components/HeaderColumn'
+import {FilterHelper} from '~src/helpers/FilterHelper'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
@@ -281,7 +281,7 @@ export const TipView: React.FC<ITipView> = (props) => {
   >()
   useEffect(() => {
     if (token) {
-      setCozTip(applicationConfig.blockchain[token.blockchain].cozTip)
+      setCozTip(blockchainServices[token.blockchain].cozTip)
     }
   }, [token, props.amount, currency])
 

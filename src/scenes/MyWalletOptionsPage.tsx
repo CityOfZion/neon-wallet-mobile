@@ -5,14 +5,13 @@ import React from 'react'
 import {Alert} from 'react-native'
 import {DefaultTheme} from 'styled-components'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {SecurityHelper} from '../helpers/SecurityHelper'
-
 import * as LocalAuthentication from '~/node_modules/expo-local-authentication'
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {Storage} from '~src/app/Storage'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import HeaderBar from '~src/components/layout/HeaderBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
+import {SecurityHelper} from '~src/helpers/SecurityHelper'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 

@@ -7,18 +7,17 @@ import {View} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {BlockchainServiceKey} from '../blockchain'
-import BlockchainList from '../components/BlockchainList'
-import ScreenLoader from '../components/loader/ScreenLoader'
-import ThemedButton from '../components/themed/ThemedButton'
-import {applicationConfig} from '../config/ApplicationConfig'
-import {MoreStackParamList} from '../navigation/MoreStackNavigation'
-import {RootStore} from '../store/RootStore'
-import {LinearLayout, TextView} from '../styles/styled-components'
 import {getRandomColor} from './CustomizeAccount'
 
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {BlockchainServiceKey, blockchainServices} from '~src/blockchain'
+import BlockchainList from '~src/components/BlockchainList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
+import ThemedButton from '~src/components/themed/ThemedButton'
+import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import {RootStore} from '~src/store/RootStore'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<MoreStackParamList>
@@ -53,7 +52,7 @@ const BlockchainListPage = (props: Props) => {
           dispatch(RootStore.account.actions.setBlockchain(blockchain))
           dispatch(
             RootStore.account.actions.setSrcIcon(
-              applicationConfig.blockchain[blockchain].icon
+              blockchainServices[blockchain].icon
             )
           )
           dispatch(

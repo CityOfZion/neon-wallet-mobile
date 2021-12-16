@@ -2,7 +2,7 @@ import React from 'react'
 import {Text, StyleSheet, ScrollView, Image, View} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
+import {wrapper} from '~src/app/ApplicationWrapper'
 
 const OfflineBar = () => {
   const {isConnected} = useSelector((state: RootState) => state.network)

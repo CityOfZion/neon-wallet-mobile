@@ -2,8 +2,7 @@ import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {plainToClass} from 'class-transformer'
 import {ImageLoadEventData} from 'react-native'
 
-import {BlockchainServiceKey} from '~/src/blockchain'
-import {applicationConfig} from '~/src/config/ApplicationConfig'
+import {BlockchainServiceKey, blockchainServices} from '~/src/blockchain'
 import {SecurityHelper} from '~/src/helpers/SecurityHelper'
 import {TokenAsset} from '~/src/models/TokenAsset'
 import {Wallet} from '~/src/models/redux/Wallet'
@@ -76,10 +75,7 @@ export class AccountReducer extends ReducerWrapper<
       ) => {
         const mnemonic = await wallet.getMnemonic()
         if (!mnemonic) return null
-        return applicationConfig.blockchain[blockchain].generateAccount(
-          mnemonic,
-          index
-        )
+        return blockchainServices[blockchain].generateAccount(mnemonic, index)
       }
 
       return async (dispatch, getState) => {

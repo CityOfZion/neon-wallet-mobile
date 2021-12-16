@@ -7,20 +7,19 @@ import {View} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector, useDispatch} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {applicationConfig} from '../config/ApplicationConfig'
-import {Wallet} from '../models/redux/Wallet'
-import {ModalStackParamList} from '../navigation/ModalStackNavigation'
-import {RootStore} from '../store/RootStore'
 import {getRandomColor} from './CustomizeAccount'
 
-import {BlockchainServiceKey} from '~src/blockchain'
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {BlockchainServiceKey, blockchainServices} from '~src/blockchain'
 import BlockchainList from '~src/components/BlockchainList'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
 import {SearchBar} from '~src/components/input/SearchBar'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
+import {Wallet} from '~src/models/redux/Wallet'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {RootStore} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 export interface BlockchainListModalParams {
   walletOrAccount: 'wallet' | 'account'
@@ -84,7 +83,7 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
     )
     dispatch(
       RootStore.account.actions.setSrcIcon(
-        applicationConfig.blockchain[blockchainSelected].icon
+        blockchainServices[blockchainSelected].icon
       )
     )
     await dispatchAsync(RootStore.account.actions.createAndSave(indexAccount))

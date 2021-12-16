@@ -6,20 +6,24 @@ import {InteractionManager} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {getBlockchainByAddress, hasWCIntegration} from '../blockchain'
-import {applicationConfig} from '../config/ApplicationConfig'
-import {screenConfig} from '../config/ScreenConfig'
 import PasscodeStackNavigation, {
   PasscodeStackParams,
 } from './PasscodeStackNavigation'
 
 import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {Storage} from '~src/app/Storage'
 import {Sync} from '~src/app/Sync'
+import {
+  blockchainServices,
+  getBlockchainByAddress,
+  hasWCIntegration,
+} from '~src/blockchain'
 import LoadingOverlay from '~src/components/LoadingOverlay'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
+import {applicationConfig} from '~src/config/ApplicationConfig'
 import {DeepLinkingConfig} from '~src/config/DeepLinkingConfig'
+import {screenConfig} from '~src/config/ScreenConfig'
 import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 import ModalStackNavigation, {
   ModalParams,
@@ -141,7 +145,7 @@ const AppNavigation = (props: Props) => {
         console.log('debug request lintener => ', acc, chain, req)
         const blockchain = getBlockchainByAddress(acc)
         if (blockchain) {
-          const bs = applicationConfig.blockchain[blockchain]
+          const bs = blockchainServices[blockchain]
           if (hasWCIntegration(bs)) {
             const result = await bs.rpcCall(acc, req)
             if (!result.hasOwnProperty('error')) {

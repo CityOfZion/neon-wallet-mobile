@@ -4,10 +4,9 @@ import PropTypes from 'prop-types'
 import React, {useState} from 'react'
 import {Image, ScrollView, Dimensions} from 'react-native'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {Normalize} from '../app/Normalize'
-
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {Normalize} from '~src/app/Normalize'
 import {Storage} from '~src/app/Storage'
 import SwiperPanel, {
   PANEL_OFFSET,

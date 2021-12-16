@@ -28,16 +28,13 @@ import {
   SpaceProps,
 } from 'styled-system'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {getBlockchainLogo} from '../blockchain'
-import {applicationConfig} from '../config/ApplicationConfig'
-import {FilterHelper} from '../helpers/FilterHelper'
-import {UtilsHelper} from '../helpers/UtilsHelper'
-import {ModalStackParamList} from '../navigation/ModalStackNavigation'
-
-// @ts-ignore
+import {wrapper} from '~src/app/ApplicationWrapper' //@ts-ignore
 import CardSvg from '~src/assets/images/card.svg'
+import {blockchainServices, getBlockchainLogo} from '~src/blockchain'
+import {FilterHelper} from '~src/helpers/FilterHelper'
+import {UtilsHelper} from '~src/helpers/UtilsHelper'
 import {Account} from '~src/models/redux/Account'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import styled, {
   ButtonView,
   ImageView,
@@ -195,11 +192,11 @@ const AccountCard: React.FC<Props> = (props) => {
                     numberOfLines={1}
                     width={'88%'}
                   >
-                    {applicationConfig.blockchain[props.account.blockchain]
-                      .key === 'neoLegacy'
+                    {blockchainServices[props.account.blockchain].key ===
+                    'neoLegacy'
                       ? 'NEO LEGACY'
-                      : applicationConfig.blockchain[props.account.blockchain]
-                          .key === 'neo3'
+                      : blockchainServices[props.account.blockchain].key ===
+                        'neo3'
                       ? 'NEO N3'
                       : ''}
                   </TextView>

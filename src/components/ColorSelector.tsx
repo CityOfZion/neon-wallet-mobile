@@ -9,12 +9,11 @@ import {useSelector} from 'react-redux'
 import styled from 'styled-components'
 import {layout, LayoutProps} from 'styled-system'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {FilterHelper} from '../helpers/FilterHelper'
-import {UtilsHelper} from '../helpers/UtilsHelper'
-import {ModalStackParamList} from '../navigation/ModalStackNavigation'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {FilterHelper} from '~src/helpers/FilterHelper'
+import {UtilsHelper} from '~src/helpers/UtilsHelper'
 import {Account} from '~src/models/redux/Account'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {
   ImageView,
   LinearLayout,

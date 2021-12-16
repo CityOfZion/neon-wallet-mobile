@@ -4,13 +4,12 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {GetWalletParams} from '../scenes/GetWalletView'
 import SettingsStackNavigation, {
   SettingsStackParamList,
 } from './SettingsStackNavigation'
 import {WalletStackParams} from './WalletsStackNavigation'
 
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import BlockchainListPage from '~src/scenes/BlockchainListPage'
@@ -28,6 +27,7 @@ import Step5CreateWalletPage from '~src/scenes/CreateWalletPage/Step5CreateWalle
 import CustomizeAccount, {
   CustomizeAccountParams,
 } from '~src/scenes/CustomizeAccount'
+import {GetWalletParams} from '~src/scenes/GetWalletView'
 import ImportKey from '~src/scenes/ImportKey'
 import ImportReadAccount, {
   ImportReadAccountParams,

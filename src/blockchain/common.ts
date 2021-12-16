@@ -1,8 +1,6 @@
 import {JsonRpcRequest, JsonRpcResponse} from '@json-rpc-tools/utils'
 import {ImageLoadEventData} from 'react-native'
 
-import {PriorityFee} from '../models/PriorityFee'
-import {TokenAsset} from '../models/TokenAsset'
 import {BSNeo3} from './Neo3/services/BSNeo3'
 import {BSNeoLegacy} from './NeoLegacy/services/BSNeoLegacy'
 
@@ -14,6 +12,9 @@ import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
 import {Exchange} from '~/src/types/exchange'
 import {TokenResponse} from '~/src/types/token'
 import * as BlockchainIcons from '~src/assets/blockchainIcons'
+import {PriorityFee} from '~src/models/PriorityFee'
+import {TokenAsset} from '~src/models/TokenAsset'
+import {Account} from '~src/models/redux/Account'
 
 export interface SenderTransactionInfo {
   token: TokenAsset | null
@@ -88,6 +89,7 @@ export interface IBlockchainService {
   calculateFee: (
     sendtx: Omit<SenderTransactionInfo, 'feeAmount'>
   ) => Promise<number>
+  setAccountsPool: (accounts: Account[]) => void
 }
 
 export type IBlockchainServices = Record<

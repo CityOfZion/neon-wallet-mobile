@@ -10,9 +10,9 @@ import moment from 'moment'
 import {Platform, NativeModules, ImageLoadEventData} from 'react-native'
 
 import {appBus} from '~/src/app/AppBus'
-import {Storage} from '~/src/app/Storage'
 import {AsteroidHelper} from '~/src/helpers/AsteroidHelper'
 import {UtilsHelper} from '~/src/helpers/UtilsHelper'
+import {Account} from '~/src/models/redux/Account'
 import {Settings} from '~/src/models/redux/Settings'
 import {
   BlockchainServiceKey,
@@ -55,6 +55,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   ]
   readonly feeToken: {hash: string; token: string; img: ImageLoadEventData}
   readonly wcChains: string[]
+  accountsPool: Account[] = []
   constructor() {
     this.provider = NeoLegacyProviderOption('doraSdk')
     this.key = 'neoLegacy'
@@ -194,11 +195,13 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   }
 
   private async getNeoAccount(address: string) {
-    const accounts = (await Storage.accounts.load()) ?? []
-
-    const account = accounts.find((it) => it.address === address)
+    const account = this.accountsPool.find((it) => it.address === address)
     const wifAccount = await account?.getWif()
     return wifAccount ? new wallet.Account(wifAccount) : null
+  }
+
+  setAccountsPool(accounts: Account[]) {
+    this.accountsPool = accounts
   }
 
   /**
@@ -273,8 +276,6 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     tipAmount?: number,
     tipReceiverAddress?: string
   ) {
-    const settings = (await Storage.settings.load()) ?? new Settings()
-
     const neoAccount = await this.getNeoAccount(senderAddress)
     const pool = await this.provider.getAllNodes()
     const height = pool.reduce(
@@ -326,9 +327,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
 
   async claimGas(address: string) {
     try {
-      const accounts = (await Storage.accounts.load()) ?? []
-
-      const account = accounts.find((it) => it.address === address)
+      const account = this.accountsPool.find((it) => it.address === address)
 
       const neoAccount = await this.getNeoAccount(address)
 

@@ -11,7 +11,7 @@ asn1.decoders = melanke_requires('./asn1/decoders');
 asn1.encoders = melanke_requires('./asn1/encoders');
 
 },{"./asn1/api":2,"./asn1/base":4,"./asn1/constants":8,"./asn1/decoders":10,"./asn1/encoders":13,"bn.js":15}],2:[function(melanke_requires,module,exports){
-var asn1 = melanke_requires('../asn1');
+var asn1 = melanke_requires('~src/asn1');
 var inherits = melanke_requires('inherits');
 
 var api = exports;
@@ -73,9 +73,9 @@ Entity.prototype.encode = function encode(data, enc, /* internal */ reporter) {
   return this._getEncoder(enc).encode(data, reporter);
 };
 
-},{"../asn1":1,"inherits":134,"vm":193}],3:[function(melanke_requires,module,exports){
+},{"~src/asn1":1,"inherits":134,"vm":193}],3:[function(melanke_requires,module,exports){
 var inherits = melanke_requires('inherits');
-var Reporter = melanke_requires('../base').Reporter;
+var Reporter = melanke_requires('~src/base').Reporter;
 var Buffer = melanke_requires('buffer').Buffer;
 
 function DecoderBuffer(base, options) {
@@ -191,7 +191,7 @@ EncoderBuffer.prototype.join = function join(out, offset) {
   return out;
 };
 
-},{"../base":4,"buffer":64,"inherits":134}],4:[function(melanke_requires,module,exports){
+},{"~src/base":4,"buffer":64,"inherits":134}],4:[function(melanke_requires,module,exports){
 var base = exports;
 
 base.Reporter = melanke_requires('./reporter').Reporter;
@@ -200,9 +200,9 @@ base.EncoderBuffer = melanke_requires('./buffer').EncoderBuffer;
 base.Node = melanke_requires('./node');
 
 },{"./buffer":3,"./node":5,"./reporter":6}],5:[function(melanke_requires,module,exports){
-var Reporter = melanke_requires('../base').Reporter;
-var EncoderBuffer = melanke_requires('../base').EncoderBuffer;
-var DecoderBuffer = melanke_requires('../base').DecoderBuffer;
+var Reporter = melanke_requires('~src/base').Reporter;
+var EncoderBuffer = melanke_requires('~src/base').EncoderBuffer;
+var DecoderBuffer = melanke_requires('~src/base').DecoderBuffer;
 var assert = melanke_requires('minimalistic-assert');
 
 // Supported tags
@@ -835,7 +835,7 @@ Node.prototype._isPrintstr = function isPrintstr(str) {
   return /^[A-Za-z0-9 '\(\)\+,\-\.\/:=\?]*$/.test(str);
 };
 
-},{"../base":4,"minimalistic-assert":140}],6:[function(melanke_requires,module,exports){
+},{"~src/base":4,"minimalistic-assert":140}],6:[function(melanke_requires,module,exports){
 var inherits = melanke_requires('inherits');
 
 function Reporter(options) {
@@ -959,7 +959,7 @@ ReporterError.prototype.rethrow = function rethrow(msg) {
 };
 
 },{"inherits":134}],7:[function(melanke_requires,module,exports){
-var constants = melanke_requires('../constants');
+var constants = melanke_requires('~src/constants');
 
 exports.tagClass = {
   0: 'universal',
@@ -1002,7 +1002,7 @@ exports.tag = {
 };
 exports.tagByName = constants._reverse(exports.tag);
 
-},{"../constants":8}],8:[function(melanke_requires,module,exports){
+},{"~src/constants":8}],8:[function(melanke_requires,module,exports){
 var constants = exports;
 
 // Helper
@@ -1026,7 +1026,7 @@ constants.der = melanke_requires('./der');
 },{"./der":7}],9:[function(melanke_requires,module,exports){
 var inherits = melanke_requires('inherits');
 
-var asn1 = melanke_requires('../../asn1');
+var asn1 = melanke_requires('~src/~src/asn1');
 var base = asn1.base;
 var bignum = asn1.bignum;
 
@@ -1349,7 +1349,7 @@ function derDecodeLen(buf, primitive, fail) {
   return len;
 }
 
-},{"../../asn1":1,"inherits":134}],10:[function(melanke_requires,module,exports){
+},{"~src/~src/asn1":1,"inherits":134}],10:[function(melanke_requires,module,exports){
 var decoders = exports;
 
 decoders.der = melanke_requires('./der');
@@ -1410,7 +1410,7 @@ PEMDecoder.prototype.decode = function decode(data, options) {
 var inherits = melanke_requires('inherits');
 var Buffer = melanke_requires('buffer').Buffer;
 
-var asn1 = melanke_requires('../../asn1');
+var asn1 = melanke_requires('~src/~src/asn1');
 var base = asn1.base;
 
 // Import DER constants
@@ -1703,7 +1703,7 @@ function encodeTag(tag, primitive, cls, reporter) {
   return res;
 }
 
-},{"../../asn1":1,"buffer":64,"inherits":134}],13:[function(melanke_requires,module,exports){
+},{"~src/~src/asn1":1,"buffer":64,"inherits":134}],13:[function(melanke_requires,module,exports){
 var encoders = exports;
 
 encoders.der = melanke_requires('./der');
@@ -9770,7 +9770,7 @@ exports.encrypt = function (self, chunk, decrypt) {
 },{"safe-buffer":180}],31:[function(melanke_requires,module,exports){
 var xor = melanke_requires('buffer-xor')
 var Buffer = melanke_requires('safe-buffer').Buffer
-var incr32 = melanke_requires('../incr32')
+var incr32 = melanke_requires('~src/incr32')
 
 function getBlock (self) {
   var out = self._cipher.encryptBlockRaw(self._prev)
@@ -9799,7 +9799,7 @@ exports.encrypt = function (self, chunk) {
   return xor(chunk, pad)
 }
 
-},{"../incr32":26,"buffer-xor":63,"safe-buffer":180}],32:[function(melanke_requires,module,exports){
+},{"~src/incr32":26,"buffer-xor":63,"safe-buffer":180}],32:[function(melanke_requires,module,exports){
 exports.encrypt = function (self, block) {
   return self._cipher.encryptBlock(block)
 }
@@ -11146,7 +11146,7 @@ var destroyImpl = melanke_requires('./internal/streams/destroy');
 var _melanke_requires = melanke_requires('./internal/streams/state'),
     getHighWaterMark = _melanke_requires.getHighWaterMark;
 
-var _melanke_requires$codes = melanke_requires('../errors').codes,
+var _melanke_requires$codes = melanke_requires('~src/errors').codes,
     ERR_INVALID_ARG_TYPE = _melanke_requires$codes.ERR_INVALID_ARG_TYPE,
     ERR_STREAM_PUSH_AFTER_EOF = _melanke_requires$codes.ERR_STREAM_PUSH_AFTER_EOF,
     ERR_METHOD_NOT_IMPLEMENTED = _melanke_requires$codes.ERR_METHOD_NOT_IMPLEMENTED,
@@ -12193,7 +12193,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this,melanke_requires('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../errors":48,"./_stream_duplex":49,"./internal/streams/async_iterator":54,"./internal/streams/buffer_list":55,"./internal/streams/destroy":56,"./internal/streams/from":58,"./internal/streams/state":60,"./internal/streams/stream":61,"_process":154,"buffer":64,"events":102,"inherits":134,"string_decoder/":190,"util":19}],52:[function(melanke_requires,module,exports){
+},{"~src/errors":48,"./_stream_duplex":49,"./internal/streams/async_iterator":54,"./internal/streams/buffer_list":55,"./internal/streams/destroy":56,"./internal/streams/from":58,"./internal/streams/state":60,"./internal/streams/stream":61,"_process":154,"buffer":64,"events":102,"inherits":134,"string_decoder/":190,"util":19}],52:[function(melanke_requires,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -12259,7 +12259,7 @@ function indexOf(xs, x) {
 
 module.exports = Transform;
 
-var _melanke_requires$codes = melanke_requires('../errors').codes,
+var _melanke_requires$codes = melanke_requires('~src/errors').codes,
     ERR_METHOD_NOT_IMPLEMENTED = _melanke_requires$codes.ERR_METHOD_NOT_IMPLEMENTED,
     ERR_MULTIPLE_CALLBACK = _melanke_requires$codes.ERR_MULTIPLE_CALLBACK,
     ERR_TRANSFORM_ALREADY_TRANSFORMING = _melanke_requires$codes.ERR_TRANSFORM_ALREADY_TRANSFORMING,
@@ -12395,7 +12395,7 @@ function done(stream, er, data) {
   if (stream._transformState.transforming) throw new ERR_TRANSFORM_ALREADY_TRANSFORMING();
   return stream.push(null);
 }
-},{"../errors":48,"./_stream_duplex":49,"inherits":134}],53:[function(melanke_requires,module,exports){
+},{"~src/errors":48,"./_stream_duplex":49,"inherits":134}],53:[function(melanke_requires,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -12483,7 +12483,7 @@ var destroyImpl = melanke_requires('./internal/streams/destroy');
 var _melanke_requires = melanke_requires('./internal/streams/state'),
     getHighWaterMark = _melanke_requires.getHighWaterMark;
 
-var _melanke_requires$codes = melanke_requires('../errors').codes,
+var _melanke_requires$codes = melanke_requires('~src/errors').codes,
     ERR_INVALID_ARG_TYPE = _melanke_requires$codes.ERR_INVALID_ARG_TYPE,
     ERR_METHOD_NOT_IMPLEMENTED = _melanke_requires$codes.ERR_METHOD_NOT_IMPLEMENTED,
     ERR_MULTIPLE_CALLBACK = _melanke_requires$codes.ERR_MULTIPLE_CALLBACK,
@@ -13095,7 +13095,7 @@ Writable.prototype._destroy = function (err, cb) {
   cb(err);
 };
 }).call(this,melanke_requires('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../errors":48,"./_stream_duplex":49,"./internal/streams/destroy":56,"./internal/streams/state":60,"./internal/streams/stream":61,"_process":154,"buffer":64,"inherits":134,"util-deprecate":192}],54:[function(melanke_requires,module,exports){
+},{"~src/errors":48,"./_stream_duplex":49,"./internal/streams/destroy":56,"./internal/streams/state":60,"./internal/streams/stream":61,"_process":154,"buffer":64,"inherits":134,"util-deprecate":192}],54:[function(melanke_requires,module,exports){
 (function (process){
 'use strict';
 
@@ -13629,7 +13629,7 @@ module.exports = {
 // permission from the author, Mathias Buus (@mafintosh).
 'use strict';
 
-var ERR_STREAM_PREMATURE_CLOSE = melanke_requires('../../../errors').codes.ERR_STREAM_PREMATURE_CLOSE;
+var ERR_STREAM_PREMATURE_CLOSE = melanke_requires('~src/~src/~src/errors').codes.ERR_STREAM_PREMATURE_CLOSE;
 
 function once(callback) {
   var called = false;
@@ -13729,7 +13729,7 @@ function eos(stream, opts, callback) {
 }
 
 module.exports = eos;
-},{"../../../errors":48}],58:[function(melanke_requires,module,exports){
+},{"~src/~src/~src/errors":48}],58:[function(melanke_requires,module,exports){
 module.exports = function () {
   throw new Error('Readable.from is not available in the browser')
 };
@@ -13750,7 +13750,7 @@ function once(callback) {
   };
 }
 
-var _melanke_requires$codes = melanke_requires('../../../errors').codes,
+var _melanke_requires$codes = melanke_requires('~src/~src/~src/errors').codes,
     ERR_MISSING_ARGS = _melanke_requires$codes.ERR_MISSING_ARGS,
     ERR_STREAM_DESTROYED = _melanke_requires$codes.ERR_STREAM_DESTROYED;
 
@@ -13832,10 +13832,10 @@ function pipeline() {
 }
 
 module.exports = pipeline;
-},{"../../../errors":48,"./end-of-stream":57}],60:[function(melanke_requires,module,exports){
+},{"~src/~src/~src/errors":48,"./end-of-stream":57}],60:[function(melanke_requires,module,exports){
 'use strict';
 
-var ERR_INVALID_OPT_VALUE = melanke_requires('../../../errors').codes.ERR_INVALID_OPT_VALUE;
+var ERR_INVALID_OPT_VALUE = melanke_requires('~src/~src/~src/errors').codes.ERR_INVALID_OPT_VALUE;
 
 function highWaterMarkFrom(options, isDuplex, duplexKey) {
   return options.highWaterMark != null ? options.highWaterMark : isDuplex ? options[duplexKey] : null;
@@ -13860,7 +13860,7 @@ function getHighWaterMark(state, options, duplexKey, isDuplex) {
 module.exports = {
   getHighWaterMark: getHighWaterMark
 };
-},{"../../../errors":48}],61:[function(melanke_requires,module,exports){
+},{"~src/~src/~src/errors":48}],61:[function(melanke_requires,module,exports){
 module.exports = melanke_requires('events').EventEmitter;
 
 },{"events":102}],62:[function(melanke_requires,module,exports){
@@ -15880,8 +15880,8 @@ function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 
-}).call(this,{"isBuffer":melanke_requires("../../is-buffer/index.js")})
-},{"../../is-buffer/index.js":135}],67:[function(melanke_requires,module,exports){
+}).call(this,{"isBuffer":melanke_requires("~src/~src/is-buffer/index.js")})
+},{"~src/~src/is-buffer/index.js":135}],67:[function(melanke_requires,module,exports){
 (function (Buffer){
 var elliptic = melanke_requires('elliptic')
 var BN = melanke_requires('bn.js')
@@ -17301,7 +17301,7 @@ arguments[4][15][0].apply(exports,arguments)
 
 var elliptic = exports;
 
-elliptic.version = melanke_requires('../package.json').version;
+elliptic.version = melanke_requires('~src/package.json').version;
 elliptic.utils = melanke_requires('./elliptic/utils');
 elliptic.rand = melanke_requires('brorand');
 elliptic.curve = melanke_requires('./elliptic/curve');
@@ -17311,11 +17311,11 @@ elliptic.curves = melanke_requires('./elliptic/curves');
 elliptic.ec = melanke_requires('./elliptic/ec');
 elliptic.eddsa = melanke_requires('./elliptic/eddsa');
 
-},{"../package.json":101,"./elliptic/curve":88,"./elliptic/curves":91,"./elliptic/ec":92,"./elliptic/eddsa":95,"./elliptic/utils":99,"brorand":18}],86:[function(melanke_requires,module,exports){
+},{"~src/package.json":101,"./elliptic/curve":88,"./elliptic/curves":91,"./elliptic/ec":92,"./elliptic/eddsa":95,"./elliptic/utils":99,"brorand":18}],86:[function(melanke_requires,module,exports){
 'use strict';
 
 var BN = melanke_requires('bn.js');
-var utils = melanke_requires('../utils');
+var utils = melanke_requires('~src/utils');
 var getNAF = utils.getNAF;
 var getJSF = utils.getJSF;
 var assert = utils.assert;
@@ -17689,10 +17689,10 @@ BasePoint.prototype.dblp = function dblp(k) {
   return r;
 };
 
-},{"../utils":99,"bn.js":100}],87:[function(melanke_requires,module,exports){
+},{"~src/utils":99,"bn.js":100}],87:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('../utils');
+var utils = melanke_requires('~src/utils');
 var BN = melanke_requires('bn.js');
 var inherits = melanke_requires('inherits');
 var Base = melanke_requires('./base');
@@ -18123,7 +18123,7 @@ Point.prototype.eqXToP = function eqXToP(x) {
 Point.prototype.toP = Point.prototype.normalize;
 Point.prototype.mixedAdd = Point.prototype.add;
 
-},{"../utils":99,"./base":86,"bn.js":100,"inherits":134}],88:[function(melanke_requires,module,exports){
+},{"~src/utils":99,"./base":86,"bn.js":100,"inherits":134}],88:[function(melanke_requires,module,exports){
 'use strict';
 
 var curve = exports;
@@ -18140,7 +18140,7 @@ var BN = melanke_requires('bn.js');
 var inherits = melanke_requires('inherits');
 var Base = melanke_requires('./base');
 
-var utils = melanke_requires('../utils');
+var utils = melanke_requires('~src/utils');
 
 function MontCurve(conf) {
   Base.call(this, 'mont', conf);
@@ -18313,10 +18313,10 @@ Point.prototype.getX = function getX() {
   return this.x.fromRed();
 };
 
-},{"../utils":99,"./base":86,"bn.js":100,"inherits":134}],90:[function(melanke_requires,module,exports){
+},{"~src/utils":99,"./base":86,"bn.js":100,"inherits":134}],90:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('../utils');
+var utils = melanke_requires('~src/utils');
 var BN = melanke_requires('bn.js');
 var inherits = melanke_requires('inherits');
 var Base = melanke_requires('./base');
@@ -19252,7 +19252,7 @@ JPoint.prototype.isInfinity = function isInfinity() {
   return this.z.cmpn(0) === 0;
 };
 
-},{"../utils":99,"./base":86,"bn.js":100,"inherits":134}],91:[function(melanke_requires,module,exports){
+},{"~src/utils":99,"./base":86,"bn.js":100,"inherits":134}],91:[function(melanke_requires,module,exports){
 'use strict';
 
 var curves = exports;
@@ -19465,8 +19465,8 @@ defineCurve('secp256k1', {
 
 var BN = melanke_requires('bn.js');
 var HmacDRBG = melanke_requires('hmac-drbg');
-var utils = melanke_requires('../utils');
-var curves = melanke_requires('../curves');
+var utils = melanke_requires('~src/utils');
+var curves = melanke_requires('~src/curves');
 var rand = melanke_requires('brorand');
 var assert = utils.assert;
 
@@ -19703,11 +19703,11 @@ EC.prototype.getKeyRecoveryParam = function(e, signature, Q, enc) {
   throw new Error('Unable to find valid recovery factor');
 };
 
-},{"../curves":91,"../utils":99,"./key":93,"./signature":94,"bn.js":100,"brorand":18,"hmac-drbg":132}],93:[function(melanke_requires,module,exports){
+},{"~src/curves":91,"~src/utils":99,"./key":93,"./signature":94,"bn.js":100,"brorand":18,"hmac-drbg":132}],93:[function(melanke_requires,module,exports){
 'use strict';
 
 var BN = melanke_requires('bn.js');
-var utils = melanke_requires('../utils');
+var utils = melanke_requires('~src/utils');
 var assert = utils.assert;
 
 function KeyPair(ec, options) {
@@ -19823,12 +19823,12 @@ KeyPair.prototype.inspect = function inspect() {
          ' pub: ' + (this.pub && this.pub.inspect()) + ' >';
 };
 
-},{"../utils":99,"bn.js":100}],94:[function(melanke_requires,module,exports){
+},{"~src/utils":99,"bn.js":100}],94:[function(melanke_requires,module,exports){
 'use strict';
 
 var BN = melanke_requires('bn.js');
 
-var utils = melanke_requires('../utils');
+var utils = melanke_requires('~src/utils');
 var assert = utils.assert;
 
 function Signature(options, enc) {
@@ -19991,12 +19991,12 @@ Signature.prototype.toDER = function toDER(enc) {
   return utils.encode(res, enc);
 };
 
-},{"../utils":99,"bn.js":100}],95:[function(melanke_requires,module,exports){
+},{"~src/utils":99,"bn.js":100}],95:[function(melanke_requires,module,exports){
 'use strict';
 
 var hash = melanke_requires('hash.js');
-var curves = melanke_requires('../curves');
-var utils = melanke_requires('../utils');
+var curves = melanke_requires('~src/curves');
+var utils = melanke_requires('~src/utils');
 var assert = utils.assert;
 var parseBytes = utils.parseBytes;
 var KeyPair = melanke_requires('./key');
@@ -20111,10 +20111,10 @@ EDDSA.prototype.isPoint = function isPoint(val) {
   return val instanceof this.pointClass;
 };
 
-},{"../curves":91,"../utils":99,"./key":96,"./signature":97,"hash.js":120}],96:[function(melanke_requires,module,exports){
+},{"~src/curves":91,"~src/utils":99,"./key":96,"./signature":97,"hash.js":120}],96:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('../utils');
+var utils = melanke_requires('~src/utils');
 var assert = utils.assert;
 var parseBytes = utils.parseBytes;
 var cachedProperty = utils.cachedProperty;
@@ -20208,11 +20208,11 @@ KeyPair.prototype.getPublic = function getPublic(enc) {
 
 module.exports = KeyPair;
 
-},{"../utils":99}],97:[function(melanke_requires,module,exports){
+},{"~src/utils":99}],97:[function(melanke_requires,module,exports){
 'use strict';
 
 var BN = melanke_requires('bn.js');
-var utils = melanke_requires('../utils');
+var utils = melanke_requires('~src/utils');
 var assert = utils.assert;
 var cachedProperty = utils.cachedProperty;
 var parseBytes = utils.parseBytes;
@@ -20275,7 +20275,7 @@ Signature.prototype.toHex = function toHex() {
 
 module.exports = Signature;
 
-},{"../utils":99,"bn.js":100}],98:[function(melanke_requires,module,exports){
+},{"~src/utils":99,"bn.js":100}],98:[function(melanke_requires,module,exports){
 module.exports = {
   doubles: {
     step: 4,
@@ -21946,11 +21946,11 @@ arguments[4][49][0].apply(exports,arguments)
 arguments[4][50][0].apply(exports,arguments)
 },{"./_stream_transform":109,"dup":50,"inherits":134}],108:[function(melanke_requires,module,exports){
 arguments[4][51][0].apply(exports,arguments)
-},{"../errors":105,"./_stream_duplex":106,"./internal/streams/async_iterator":111,"./internal/streams/buffer_list":112,"./internal/streams/destroy":113,"./internal/streams/from":115,"./internal/streams/state":117,"./internal/streams/stream":118,"_process":154,"buffer":64,"dup":51,"events":102,"inherits":134,"string_decoder/":190,"util":19}],109:[function(melanke_requires,module,exports){
+},{"~src/errors":105,"./_stream_duplex":106,"./internal/streams/async_iterator":111,"./internal/streams/buffer_list":112,"./internal/streams/destroy":113,"./internal/streams/from":115,"./internal/streams/state":117,"./internal/streams/stream":118,"_process":154,"buffer":64,"dup":51,"events":102,"inherits":134,"string_decoder/":190,"util":19}],109:[function(melanke_requires,module,exports){
 arguments[4][52][0].apply(exports,arguments)
-},{"../errors":105,"./_stream_duplex":106,"dup":52,"inherits":134}],110:[function(melanke_requires,module,exports){
+},{"~src/errors":105,"./_stream_duplex":106,"dup":52,"inherits":134}],110:[function(melanke_requires,module,exports){
 arguments[4][53][0].apply(exports,arguments)
-},{"../errors":105,"./_stream_duplex":106,"./internal/streams/destroy":113,"./internal/streams/state":117,"./internal/streams/stream":118,"_process":154,"buffer":64,"dup":53,"inherits":134,"util-deprecate":192}],111:[function(melanke_requires,module,exports){
+},{"~src/errors":105,"./_stream_duplex":106,"./internal/streams/destroy":113,"./internal/streams/state":117,"./internal/streams/stream":118,"_process":154,"buffer":64,"dup":53,"inherits":134,"util-deprecate":192}],111:[function(melanke_requires,module,exports){
 arguments[4][54][0].apply(exports,arguments)
 },{"./end-of-stream":114,"_process":154,"dup":54}],112:[function(melanke_requires,module,exports){
 arguments[4][55][0].apply(exports,arguments)
@@ -21958,13 +21958,13 @@ arguments[4][55][0].apply(exports,arguments)
 arguments[4][56][0].apply(exports,arguments)
 },{"_process":154,"dup":56}],114:[function(melanke_requires,module,exports){
 arguments[4][57][0].apply(exports,arguments)
-},{"../../../errors":105,"dup":57}],115:[function(melanke_requires,module,exports){
+},{"~src/~src/~src/errors":105,"dup":57}],115:[function(melanke_requires,module,exports){
 arguments[4][58][0].apply(exports,arguments)
 },{"dup":58}],116:[function(melanke_requires,module,exports){
 arguments[4][59][0].apply(exports,arguments)
-},{"../../../errors":105,"./end-of-stream":114,"dup":59}],117:[function(melanke_requires,module,exports){
+},{"~src/~src/~src/errors":105,"./end-of-stream":114,"dup":59}],117:[function(melanke_requires,module,exports){
 arguments[4][60][0].apply(exports,arguments)
-},{"../../../errors":105,"dup":60}],118:[function(melanke_requires,module,exports){
+},{"~src/~src/~src/errors":105,"dup":60}],118:[function(melanke_requires,module,exports){
 arguments[4][61][0].apply(exports,arguments)
 },{"dup":61,"events":102}],119:[function(melanke_requires,module,exports){
 arguments[4][62][0].apply(exports,arguments)
@@ -22288,8 +22288,8 @@ exports.sha512 = melanke_requires('./sha/512');
 },{"./sha/1":125,"./sha/224":126,"./sha/256":127,"./sha/384":128,"./sha/512":129}],125:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('../utils');
-var common = melanke_requires('../common');
+var utils = melanke_requires('~src/utils');
+var common = melanke_requires('~src/common');
 var shaCommon = melanke_requires('./common');
 
 var rotl32 = utils.rotl32;
@@ -22361,10 +22361,10 @@ SHA1.prototype._digest = function digest(enc) {
     return utils.split32(this.h, 'big');
 };
 
-},{"../common":121,"../utils":131,"./common":130}],126:[function(melanke_requires,module,exports){
+},{"~src/common":121,"~src/utils":131,"./common":130}],126:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('../utils');
+var utils = melanke_requires('~src/utils');
 var SHA256 = melanke_requires('./256');
 
 function SHA224() {
@@ -22393,11 +22393,11 @@ SHA224.prototype._digest = function digest(enc) {
 };
 
 
-},{"../utils":131,"./256":127}],127:[function(melanke_requires,module,exports){
+},{"~src/utils":131,"./256":127}],127:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('../utils');
-var common = melanke_requires('../common');
+var utils = melanke_requires('~src/utils');
+var common = melanke_requires('~src/common');
 var shaCommon = melanke_requires('./common');
 var assert = melanke_requires('minimalistic-assert');
 
@@ -22500,10 +22500,10 @@ SHA256.prototype._digest = function digest(enc) {
     return utils.split32(this.h, 'big');
 };
 
-},{"../common":121,"../utils":131,"./common":130,"minimalistic-assert":140}],128:[function(melanke_requires,module,exports){
+},{"~src/common":121,"~src/utils":131,"./common":130,"minimalistic-assert":140}],128:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('../utils');
+var utils = melanke_requires('~src/utils');
 
 var SHA512 = melanke_requires('./512');
 
@@ -22537,11 +22537,11 @@ SHA384.prototype._digest = function digest(enc) {
     return utils.split32(this.h.slice(0, 12), 'big');
 };
 
-},{"../utils":131,"./512":129}],129:[function(melanke_requires,module,exports){
+},{"~src/utils":131,"./512":129}],129:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('../utils');
-var common = melanke_requires('../common');
+var utils = melanke_requires('~src/utils');
+var common = melanke_requires('~src/common');
 var assert = melanke_requires('minimalistic-assert');
 
 var rotr64_hi = utils.rotr64_hi;
@@ -22869,10 +22869,10 @@ function g1_512_lo(xh, xl) {
   return r;
 }
 
-},{"../common":121,"../utils":131,"minimalistic-assert":140}],130:[function(melanke_requires,module,exports){
+},{"~src/common":121,"~src/utils":131,"minimalistic-assert":140}],130:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('../utils');
+var utils = melanke_requires('~src/utils');
 var rotr32 = utils.rotr32;
 
 function ft_1(s, x, y, z) {
@@ -22920,7 +22920,7 @@ function g1_256(x) {
 }
 exports.g1_256 = g1_256;
 
-},{"../utils":131}],131:[function(melanke_requires,module,exports){
+},{"~src/utils":131}],131:[function(melanke_requires,module,exports){
 'use strict';
 
 var assert = melanke_requires('minimalistic-assert');
@@ -31486,7 +31486,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Keychain = void 0;
 var crypto_1 = __importDefault(melanke_requires("crypto"));
 var bignumber_js_1 = __importDefault(melanke_requires("bignumber.js"));
-var constants_1 = melanke_requires("../constants");
+var constants_1 = melanke_requires("~src/constants");
 var bip39 = __importStar(melanke_requires("bip39"));
 var _1 = melanke_requires(".");
 /**
@@ -31618,7 +31618,7 @@ var Keychain = /** @class */ (function () {
 exports.Keychain = Keychain;
 
 }).call(this,melanke_requires("buffer").Buffer)
-},{".":200,"../constants":212,"bignumber.js":280,"bip39":282,"buffer":64,"crypto":73}],203:[function(melanke_requires,module,exports){
+},{".":200,"~src/constants":212,"bignumber.js":280,"bip39":282,"buffer":64,"crypto":73}],203:[function(melanke_requires,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -31678,7 +31678,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NeoCommon = void 0;
 var neon_js_1 = __importStar(melanke_requires("@cityofzion/neon-js"));
-var helpers_1 = melanke_requires("../helpers");
+var helpers_1 = melanke_requires("~src/helpers");
 var NeoCommon = /** @class */ (function () {
     function NeoCommon() {
     }
@@ -32027,7 +32027,7 @@ var NeoCommon = /** @class */ (function () {
 }());
 exports.NeoCommon = NeoCommon;
 
-},{"../helpers":220,"@cityofzion/neon-js":194}],204:[function(melanke_requires,module,exports){
+},{"~src/helpers":220,"@cityofzion/neon-js":194}],204:[function(melanke_requires,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -32069,8 +32069,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NeoContractClaims = void 0;
 var neon_js_1 = melanke_requires("@cityofzion/neon-js");
 var _1 = melanke_requires(".");
-var claims_helper_1 = melanke_requires("../helpers/claims-helper");
-var claim_encryption_1 = melanke_requires("../constants/claim_encryption");
+var claims_helper_1 = melanke_requires("~src/helpers/claims-helper");
+var claim_encryption_1 = melanke_requires("~src/constants/claim_encryption");
 var NeoContractClaims = /** @class */ (function () {
     function NeoContractClaims() {
     }
@@ -32654,7 +32654,7 @@ var NeoContractClaims = /** @class */ (function () {
 }());
 exports.NeoContractClaims = NeoContractClaims;
 
-},{".":200,"../constants/claim_encryption":211,"../helpers/claims-helper":217,"@cityofzion/neon-js":194}],205:[function(melanke_requires,module,exports){
+},{".":200,"~src/constants/claim_encryption":211,"~src/helpers/claims-helper":217,"@cityofzion/neon-js":194}],205:[function(melanke_requires,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -32696,7 +32696,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NeoContractIdentity = void 0;
 var neon_js_1 = melanke_requires("@cityofzion/neon-js");
 var _1 = melanke_requires(".");
-var helpers_1 = melanke_requires("../helpers");
+var helpers_1 = melanke_requires("~src/helpers");
 var NeoContractIdentity = /** @class */ (function () {
     function NeoContractIdentity() {
     }
@@ -33070,7 +33070,7 @@ var NeoContractIdentity = /** @class */ (function () {
 }());
 exports.NeoContractIdentity = NeoContractIdentity;
 
-},{".":200,"../helpers":220,"@cityofzion/neon-js":194}],206:[function(melanke_requires,module,exports){
+},{".":200,"~src/helpers":220,"@cityofzion/neon-js":194}],206:[function(melanke_requires,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -33774,7 +33774,7 @@ var neo_contract_identity_1 = melanke_requires("./neo-contract-identity");
 var neo_contract_claims_1 = melanke_requires("./neo-contract-claims");
 var _1 = melanke_requires(".");
 var neon_js_1 = melanke_requires("@cityofzion/neon-js");
-var helpers_1 = melanke_requires("../helpers");
+var helpers_1 = melanke_requires("~src/helpers");
 var NeoVivid = /** @class */ (function () {
     function NeoVivid() {
     }
@@ -33893,7 +33893,7 @@ var NeoVivid = /** @class */ (function () {
 }());
 exports.NeoVivid = NeoVivid;
 
-},{".":200,"../helpers":220,"./neo-contract-claims":204,"./neo-contract-identity":205,"@cityofzion/neon-js":194}],209:[function(melanke_requires,module,exports){
+},{".":200,"~src/helpers":220,"./neo-contract-claims":204,"./neo-contract-identity":205,"@cityofzion/neon-js":194}],209:[function(melanke_requires,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.attributeTypes = void 0;
@@ -34042,7 +34042,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttributeContextHelper = void 0;
-var attribute_contexts_json_1 = __importDefault(melanke_requires("../../data/attribute-contexts.json"));
+var attribute_contexts_json_1 = __importDefault(melanke_requires("~src/~src/data/attribute-contexts.json"));
 var AttributeContextHelper = /** @class */ (function () {
     function AttributeContextHelper() {
     }
@@ -34091,12 +34091,12 @@ var AttributeContextHelper = /** @class */ (function () {
 }());
 exports.AttributeContextHelper = AttributeContextHelper;
 
-},{"../../data/attribute-contexts.json":195}],217:[function(melanke_requires,module,exports){
+},{"~src/~src/data/attribute-contexts.json":195}],217:[function(melanke_requires,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClaimsHelper = void 0;
 var neon_js_1 = melanke_requires("@cityofzion/neon-js");
-var claim_encryption_1 = melanke_requires("../constants/claim_encryption");
+var claim_encryption_1 = melanke_requires("~src/constants/claim_encryption");
 var _1 = melanke_requires(".");
 var ClaimsHelper = /** @class */ (function () {
     function ClaimsHelper() {
@@ -34186,7 +34186,7 @@ var ClaimsHelper = /** @class */ (function () {
 }());
 exports.ClaimsHelper = ClaimsHelper;
 
-},{".":220,"../constants/claim_encryption":211,"@cityofzion/neon-js":194}],218:[function(melanke_requires,module,exports){
+},{".":220,"~src/constants/claim_encryption":211,"@cityofzion/neon-js":194}],218:[function(melanke_requires,module,exports){
 (function (Buffer){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -34406,7 +34406,7 @@ __exportStar(melanke_requires("./identity-helper"), exports);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NetworkHelper = void 0;
-var urls_1 = melanke_requires("../constants/urls");
+var urls_1 = melanke_requires("~src/constants/urls");
 var NetworkHelper = /** @class */ (function () {
     function NetworkHelper() {
     }
@@ -34444,7 +34444,7 @@ var NetworkHelper = /** @class */ (function () {
 }());
 exports.NetworkHelper = NetworkHelper;
 
-},{"../constants/urls":215}],222:[function(melanke_requires,module,exports){
+},{"~src/constants/urls":215}],222:[function(melanke_requires,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TimingHelper = void 0;
@@ -34694,7 +34694,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AsteroidUserRest = void 0;
 var axios_1 = __importDefault(melanke_requires("axios"));
-var helpers_1 = melanke_requires("../helpers");
+var helpers_1 = melanke_requires("~src/helpers");
 var AsteroidUserRest = /** @class */ (function () {
     function AsteroidUserRest() {
     }
@@ -34717,7 +34717,7 @@ var AsteroidUserRest = /** @class */ (function () {
 }());
 exports.AsteroidUserRest = AsteroidUserRest;
 
-},{"../helpers":220,"axios":253}],245:[function(melanke_requires,module,exports){
+},{"~src/helpers":220,"axios":253}],245:[function(melanke_requires,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -34761,7 +34761,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AsteroidWorkerRest = void 0;
 var axios_1 = __importDefault(melanke_requires("axios"));
-var helpers_1 = melanke_requires("../helpers");
+var helpers_1 = melanke_requires("~src/helpers");
 var AsteroidWorkerRest = /** @class */ (function () {
     function AsteroidWorkerRest() {
     }
@@ -34784,7 +34784,7 @@ var AsteroidWorkerRest = /** @class */ (function () {
 }());
 exports.AsteroidWorkerRest = AsteroidWorkerRest;
 
-},{"../helpers":220,"axios":253}],246:[function(melanke_requires,module,exports){
+},{"~src/helpers":220,"axios":253}],246:[function(melanke_requires,module,exports){
 "use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
@@ -34922,8 +34922,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AsteroidUserRpc = void 0;
 var base_1 = melanke_requires("./base");
-var rpc_defaults_1 = melanke_requires("../constants/rpc-defaults");
-var helpers_1 = melanke_requires("../helpers");
+var rpc_defaults_1 = melanke_requires("~src/constants/rpc-defaults");
+var helpers_1 = melanke_requires("~src/helpers");
 var AsteroidUserRpc = /** @class */ (function () {
     function AsteroidUserRpc() {
     }
@@ -35638,7 +35638,7 @@ var AsteroidUserRpc = /** @class */ (function () {
 }());
 exports.AsteroidUserRpc = AsteroidUserRpc;
 
-},{"../constants/rpc-defaults":213,"../helpers":220,"./base":246}],249:[function(melanke_requires,module,exports){
+},{"~src/constants/rpc-defaults":213,"~src/helpers":220,"./base":246}],249:[function(melanke_requires,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -35679,8 +35679,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AsteroidWorkerRpc = void 0;
 var base_1 = melanke_requires("./base");
-var rpc_defaults_1 = melanke_requires("../constants/rpc-defaults");
-var helpers_1 = melanke_requires("../helpers");
+var rpc_defaults_1 = melanke_requires("~src/constants/rpc-defaults");
+var helpers_1 = melanke_requires("~src/helpers");
 var AsteroidWorkerRpc = /** @class */ (function () {
     function AsteroidWorkerRpc() {
     }
@@ -35856,7 +35856,7 @@ var AsteroidWorkerRpc = /** @class */ (function () {
 }());
 exports.AsteroidWorkerRpc = AsteroidWorkerRpc;
 
-},{"../constants/rpc-defaults":213,"../helpers":220,"./base":246}],250:[function(melanke_requires,module,exports){
+},{"~src/constants/rpc-defaults":213,"~src/helpers":220,"./base":246}],250:[function(melanke_requires,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -35864,9 +35864,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttributeValidator = void 0;
 var lodash_1 = melanke_requires("lodash");
-var attribute_validation_rules_json_1 = __importDefault(melanke_requires("../../data/attribute-validation-rules.json"));
+var attribute_validation_rules_json_1 = __importDefault(melanke_requires("~src/~src/data/attribute-validation-rules.json"));
 var validation_error_1 = melanke_requires("./validation-error");
-var helpers_1 = melanke_requires("../helpers");
+var helpers_1 = melanke_requires("~src/helpers");
 var AttributeValidator = /** @class */ (function () {
     function AttributeValidator() {
     }
@@ -35995,7 +35995,7 @@ var AttributeValidator = /** @class */ (function () {
 }());
 exports.AttributeValidator = AttributeValidator;
 
-},{"../../data/attribute-validation-rules.json":196,"../helpers":220,"./validation-error":252,"lodash":347}],251:[function(melanke_requires,module,exports){
+},{"~src/~src/data/attribute-validation-rules.json":196,"~src/helpers":220,"./validation-error":252,"lodash":347}],251:[function(melanke_requires,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -36047,13 +36047,13 @@ module.exports = melanke_requires('./lib/axios');
 },{"./lib/axios":255}],254:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('./../utils');
-var settle = melanke_requires('./../core/settle');
-var buildURL = melanke_requires('./../helpers/buildURL');
-var buildFullPath = melanke_requires('../core/buildFullPath');
-var parseHeaders = melanke_requires('./../helpers/parseHeaders');
-var isURLSameOrigin = melanke_requires('./../helpers/isURLSameOrigin');
-var createError = melanke_requires('../core/createError');
+var utils = melanke_requires('./~src/utils');
+var settle = melanke_requires('./~src/core/settle');
+var buildURL = melanke_requires('./~src/helpers/buildURL');
+var buildFullPath = melanke_requires('~src/core/buildFullPath');
+var parseHeaders = melanke_requires('./~src/helpers/parseHeaders');
+var isURLSameOrigin = melanke_requires('./~src/helpers/isURLSameOrigin');
+var createError = melanke_requires('~src/core/createError');
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -36150,7 +36150,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = melanke_requires('./../helpers/cookies');
+      var cookies = melanke_requires('./~src/helpers/cookies');
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(fullPath)) && config.xsrfCookieName ?
@@ -36226,7 +36226,7 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-},{"../core/buildFullPath":261,"../core/createError":262,"./../core/settle":266,"./../helpers/buildURL":270,"./../helpers/cookies":272,"./../helpers/isURLSameOrigin":274,"./../helpers/parseHeaders":276,"./../utils":278}],255:[function(melanke_requires,module,exports){
+},{"~src/core/buildFullPath":261,"~src/core/createError":262,"./~src/core/settle":266,"./~src/helpers/buildURL":270,"./~src/helpers/cookies":272,"./~src/helpers/isURLSameOrigin":274,"./~src/helpers/parseHeaders":276,"./~src/utils":278}],255:[function(melanke_requires,module,exports){
 'use strict';
 
 var utils = melanke_requires('./utils');
@@ -36371,8 +36371,8 @@ module.exports = function isCancel(value) {
 },{}],259:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('./../utils');
-var buildURL = melanke_requires('../helpers/buildURL');
+var utils = melanke_requires('./~src/utils');
+var buildURL = melanke_requires('~src/helpers/buildURL');
 var InterceptorManager = melanke_requires('./InterceptorManager');
 var dispatchRequest = melanke_requires('./dispatchRequest');
 var mergeConfig = melanke_requires('./mergeConfig');
@@ -36464,10 +36464,10 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = Axios;
 
-},{"../helpers/buildURL":270,"./../utils":278,"./InterceptorManager":260,"./dispatchRequest":263,"./mergeConfig":265}],260:[function(melanke_requires,module,exports){
+},{"~src/helpers/buildURL":270,"./~src/utils":278,"./InterceptorManager":260,"./dispatchRequest":263,"./mergeConfig":265}],260:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('./../utils');
+var utils = melanke_requires('./~src/utils');
 
 function InterceptorManager() {
   this.handlers = [];
@@ -36518,11 +36518,11 @@ InterceptorManager.prototype.forEach = function forEach(fn) {
 
 module.exports = InterceptorManager;
 
-},{"./../utils":278}],261:[function(melanke_requires,module,exports){
+},{"./~src/utils":278}],261:[function(melanke_requires,module,exports){
 'use strict';
 
-var isAbsoluteURL = melanke_requires('../helpers/isAbsoluteURL');
-var combineURLs = melanke_requires('../helpers/combineURLs');
+var isAbsoluteURL = melanke_requires('~src/helpers/isAbsoluteURL');
+var combineURLs = melanke_requires('~src/helpers/combineURLs');
 
 /**
  * Creates a new URL by combining the baseURL with the requestedURL,
@@ -36540,7 +36540,7 @@ module.exports = function buildFullPath(baseURL, requestedURL) {
   return requestedURL;
 };
 
-},{"../helpers/combineURLs":271,"../helpers/isAbsoluteURL":273}],262:[function(melanke_requires,module,exports){
+},{"~src/helpers/combineURLs":271,"~src/helpers/isAbsoluteURL":273}],262:[function(melanke_requires,module,exports){
 'use strict';
 
 var enhanceError = melanke_requires('./enhanceError');
@@ -36563,10 +36563,10 @@ module.exports = function createError(message, config, code, request, response) 
 },{"./enhanceError":264}],263:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('./../utils');
+var utils = melanke_requires('./~src/utils');
 var transformData = melanke_requires('./transformData');
-var isCancel = melanke_requires('../cancel/isCancel');
-var defaults = melanke_requires('../defaults');
+var isCancel = melanke_requires('~src/cancel/isCancel');
+var defaults = melanke_requires('~src/defaults');
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -36641,7 +36641,7 @@ module.exports = function dispatchRequest(config) {
   });
 };
 
-},{"../cancel/isCancel":258,"../defaults":268,"./../utils":278,"./transformData":267}],264:[function(melanke_requires,module,exports){
+},{"~src/cancel/isCancel":258,"~src/defaults":268,"./~src/utils":278,"./transformData":267}],264:[function(melanke_requires,module,exports){
 'use strict';
 
 /**
@@ -36688,7 +36688,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 },{}],265:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('../utils');
+var utils = melanke_requires('~src/utils');
 
 /**
  * Config-specific merge-function which creates a new config-object
@@ -36760,7 +36760,7 @@ module.exports = function mergeConfig(config1, config2) {
   return config;
 };
 
-},{"../utils":278}],266:[function(melanke_requires,module,exports){
+},{"~src/utils":278}],266:[function(melanke_requires,module,exports){
 'use strict';
 
 var createError = melanke_requires('./createError');
@@ -36790,7 +36790,7 @@ module.exports = function settle(resolve, reject, response) {
 },{"./createError":262}],267:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('./../utils');
+var utils = melanke_requires('./~src/utils');
 
 /**
  * Transform the data for a request or a response
@@ -36809,7 +36809,7 @@ module.exports = function transformData(data, headers, fns) {
   return data;
 };
 
-},{"./../utils":278}],268:[function(melanke_requires,module,exports){
+},{"./~src/utils":278}],268:[function(melanke_requires,module,exports){
 (function (process){
 'use strict';
 
@@ -36926,7 +36926,7 @@ module.exports = function bind(fn, thisArg) {
 },{}],270:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('./../utils');
+var utils = melanke_requires('./~src/utils');
 
 function encode(val) {
   return encodeURIComponent(val).
@@ -36996,7 +36996,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
   return url;
 };
 
-},{"./../utils":278}],271:[function(melanke_requires,module,exports){
+},{"./~src/utils":278}],271:[function(melanke_requires,module,exports){
 'use strict';
 
 /**
@@ -37015,7 +37015,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 },{}],272:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('./../utils');
+var utils = melanke_requires('./~src/utils');
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -37067,7 +37067,7 @@ module.exports = (
     })()
 );
 
-},{"./../utils":278}],273:[function(melanke_requires,module,exports){
+},{"./~src/utils":278}],273:[function(melanke_requires,module,exports){
 'use strict';
 
 /**
@@ -37086,7 +37086,7 @@ module.exports = function isAbsoluteURL(url) {
 },{}],274:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('./../utils');
+var utils = melanke_requires('./~src/utils');
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -37153,10 +37153,10 @@ module.exports = (
     })()
 );
 
-},{"./../utils":278}],275:[function(melanke_requires,module,exports){
+},{"./~src/utils":278}],275:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('../utils');
+var utils = melanke_requires('~src/utils');
 
 module.exports = function normalizeHeaderName(headers, normalizedName) {
   utils.forEach(headers, function processHeader(value, name) {
@@ -37167,10 +37167,10 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
   });
 };
 
-},{"../utils":278}],276:[function(melanke_requires,module,exports){
+},{"~src/utils":278}],276:[function(melanke_requires,module,exports){
 'use strict';
 
-var utils = melanke_requires('./../utils');
+var utils = melanke_requires('./~src/utils');
 
 // Headers whose duplicates are ignored by node
 // c.f. https://nodejs.org/api/http.html#http_message_headers
@@ -37222,7 +37222,7 @@ module.exports = function parseHeaders(headers) {
   return parsed;
 };
 
-},{"./../utils":278}],277:[function(melanke_requires,module,exports){
+},{"./~src/utils":278}],277:[function(melanke_requires,module,exports){
 'use strict';
 
 /**
@@ -57287,31 +57287,31 @@ arguments[4][69][0].apply(exports,arguments)
 arguments[4][70][0].apply(exports,arguments)
 },{"dup":70,"md5.js":348}],298:[function(melanke_requires,module,exports){
 arguments[4][85][0].apply(exports,arguments)
-},{"../package.json":313,"./elliptic/curve":301,"./elliptic/curves":304,"./elliptic/ec":305,"./elliptic/eddsa":308,"./elliptic/utils":312,"brorand":292,"dup":85}],299:[function(melanke_requires,module,exports){
+},{"~src/package.json":313,"./elliptic/curve":301,"./elliptic/curves":304,"./elliptic/ec":305,"./elliptic/eddsa":308,"./elliptic/utils":312,"brorand":292,"dup":85}],299:[function(melanke_requires,module,exports){
 arguments[4][86][0].apply(exports,arguments)
-},{"../utils":312,"bn.js":291,"dup":86}],300:[function(melanke_requires,module,exports){
+},{"~src/utils":312,"bn.js":291,"dup":86}],300:[function(melanke_requires,module,exports){
 arguments[4][87][0].apply(exports,arguments)
-},{"../utils":312,"./base":299,"bn.js":291,"dup":87,"inherits":344}],301:[function(melanke_requires,module,exports){
+},{"~src/utils":312,"./base":299,"bn.js":291,"dup":87,"inherits":344}],301:[function(melanke_requires,module,exports){
 arguments[4][88][0].apply(exports,arguments)
 },{"./base":299,"./edwards":300,"./mont":302,"./short":303,"dup":88}],302:[function(melanke_requires,module,exports){
 arguments[4][89][0].apply(exports,arguments)
-},{"../utils":312,"./base":299,"bn.js":291,"dup":89,"inherits":344}],303:[function(melanke_requires,module,exports){
+},{"~src/utils":312,"./base":299,"bn.js":291,"dup":89,"inherits":344}],303:[function(melanke_requires,module,exports){
 arguments[4][90][0].apply(exports,arguments)
-},{"../utils":312,"./base":299,"bn.js":291,"dup":90,"inherits":344}],304:[function(melanke_requires,module,exports){
+},{"~src/utils":312,"./base":299,"bn.js":291,"dup":90,"inherits":344}],304:[function(melanke_requires,module,exports){
 arguments[4][91][0].apply(exports,arguments)
 },{"./curve":301,"./precomputed/secp256k1":311,"./utils":312,"dup":91,"hash.js":331}],305:[function(melanke_requires,module,exports){
 arguments[4][92][0].apply(exports,arguments)
-},{"../curves":304,"../utils":312,"./key":306,"./signature":307,"bn.js":291,"brorand":292,"dup":92,"hmac-drbg":343}],306:[function(melanke_requires,module,exports){
+},{"~src/curves":304,"~src/utils":312,"./key":306,"./signature":307,"bn.js":291,"brorand":292,"dup":92,"hmac-drbg":343}],306:[function(melanke_requires,module,exports){
 arguments[4][93][0].apply(exports,arguments)
-},{"../utils":312,"bn.js":291,"dup":93}],307:[function(melanke_requires,module,exports){
+},{"~src/utils":312,"bn.js":291,"dup":93}],307:[function(melanke_requires,module,exports){
 arguments[4][94][0].apply(exports,arguments)
-},{"../utils":312,"bn.js":291,"dup":94}],308:[function(melanke_requires,module,exports){
+},{"~src/utils":312,"bn.js":291,"dup":94}],308:[function(melanke_requires,module,exports){
 arguments[4][95][0].apply(exports,arguments)
-},{"../curves":304,"../utils":312,"./key":309,"./signature":310,"dup":95,"hash.js":331}],309:[function(melanke_requires,module,exports){
+},{"~src/curves":304,"~src/utils":312,"./key":309,"./signature":310,"dup":95,"hash.js":331}],309:[function(melanke_requires,module,exports){
 arguments[4][96][0].apply(exports,arguments)
-},{"../utils":312,"dup":96}],310:[function(melanke_requires,module,exports){
+},{"~src/utils":312,"dup":96}],310:[function(melanke_requires,module,exports){
 arguments[4][97][0].apply(exports,arguments)
-},{"../utils":312,"bn.js":291,"dup":97}],311:[function(melanke_requires,module,exports){
+},{"~src/utils":312,"bn.js":291,"dup":97}],311:[function(melanke_requires,module,exports){
 arguments[4][98][0].apply(exports,arguments)
 },{"dup":98}],312:[function(melanke_requires,module,exports){
 arguments[4][99][0].apply(exports,arguments)
@@ -57385,11 +57385,11 @@ arguments[4][49][0].apply(exports,arguments)
 arguments[4][50][0].apply(exports,arguments)
 },{"./_stream_transform":319,"dup":50,"inherits":344}],318:[function(melanke_requires,module,exports){
 arguments[4][51][0].apply(exports,arguments)
-},{"../errors":315,"./_stream_duplex":316,"./internal/streams/async_iterator":321,"./internal/streams/buffer_list":322,"./internal/streams/destroy":323,"./internal/streams/from":325,"./internal/streams/state":327,"./internal/streams/stream":328,"_process":154,"buffer":64,"dup":51,"events":102,"inherits":344,"string_decoder/":330,"util":19}],319:[function(melanke_requires,module,exports){
+},{"~src/errors":315,"./_stream_duplex":316,"./internal/streams/async_iterator":321,"./internal/streams/buffer_list":322,"./internal/streams/destroy":323,"./internal/streams/from":325,"./internal/streams/state":327,"./internal/streams/stream":328,"_process":154,"buffer":64,"dup":51,"events":102,"inherits":344,"string_decoder/":330,"util":19}],319:[function(melanke_requires,module,exports){
 arguments[4][52][0].apply(exports,arguments)
-},{"../errors":315,"./_stream_duplex":316,"dup":52,"inherits":344}],320:[function(melanke_requires,module,exports){
+},{"~src/errors":315,"./_stream_duplex":316,"dup":52,"inherits":344}],320:[function(melanke_requires,module,exports){
 arguments[4][53][0].apply(exports,arguments)
-},{"../errors":315,"./_stream_duplex":316,"./internal/streams/destroy":323,"./internal/streams/state":327,"./internal/streams/stream":328,"_process":154,"buffer":64,"dup":53,"inherits":344,"util-deprecate":369}],321:[function(melanke_requires,module,exports){
+},{"~src/errors":315,"./_stream_duplex":316,"./internal/streams/destroy":323,"./internal/streams/state":327,"./internal/streams/stream":328,"_process":154,"buffer":64,"dup":53,"inherits":344,"util-deprecate":369}],321:[function(melanke_requires,module,exports){
 arguments[4][54][0].apply(exports,arguments)
 },{"./end-of-stream":324,"_process":154,"dup":54}],322:[function(melanke_requires,module,exports){
 arguments[4][55][0].apply(exports,arguments)
@@ -57397,13 +57397,13 @@ arguments[4][55][0].apply(exports,arguments)
 arguments[4][56][0].apply(exports,arguments)
 },{"_process":154,"dup":56}],324:[function(melanke_requires,module,exports){
 arguments[4][57][0].apply(exports,arguments)
-},{"../../../errors":315,"dup":57}],325:[function(melanke_requires,module,exports){
+},{"~src/~src/~src/errors":315,"dup":57}],325:[function(melanke_requires,module,exports){
 arguments[4][58][0].apply(exports,arguments)
 },{"dup":58}],326:[function(melanke_requires,module,exports){
 arguments[4][59][0].apply(exports,arguments)
-},{"../../../errors":315,"./end-of-stream":324,"dup":59}],327:[function(melanke_requires,module,exports){
+},{"~src/~src/~src/errors":315,"./end-of-stream":324,"dup":59}],327:[function(melanke_requires,module,exports){
 arguments[4][60][0].apply(exports,arguments)
-},{"../../../errors":315,"dup":60}],328:[function(melanke_requires,module,exports){
+},{"~src/~src/~src/errors":315,"dup":60}],328:[function(melanke_requires,module,exports){
 arguments[4][61][0].apply(exports,arguments)
 },{"dup":61,"events":102}],329:[function(melanke_requires,module,exports){
 arguments[4][62][0].apply(exports,arguments)
@@ -57421,17 +57421,17 @@ arguments[4][123][0].apply(exports,arguments)
 arguments[4][124][0].apply(exports,arguments)
 },{"./sha/1":336,"./sha/224":337,"./sha/256":338,"./sha/384":339,"./sha/512":340,"dup":124}],336:[function(melanke_requires,module,exports){
 arguments[4][125][0].apply(exports,arguments)
-},{"../common":332,"../utils":342,"./common":341,"dup":125}],337:[function(melanke_requires,module,exports){
+},{"~src/common":332,"~src/utils":342,"./common":341,"dup":125}],337:[function(melanke_requires,module,exports){
 arguments[4][126][0].apply(exports,arguments)
-},{"../utils":342,"./256":338,"dup":126}],338:[function(melanke_requires,module,exports){
+},{"~src/utils":342,"./256":338,"dup":126}],338:[function(melanke_requires,module,exports){
 arguments[4][127][0].apply(exports,arguments)
-},{"../common":332,"../utils":342,"./common":341,"dup":127,"minimalistic-assert":349}],339:[function(melanke_requires,module,exports){
+},{"~src/common":332,"~src/utils":342,"./common":341,"dup":127,"minimalistic-assert":349}],339:[function(melanke_requires,module,exports){
 arguments[4][128][0].apply(exports,arguments)
-},{"../utils":342,"./512":340,"dup":128}],340:[function(melanke_requires,module,exports){
+},{"~src/utils":342,"./512":340,"dup":128}],340:[function(melanke_requires,module,exports){
 arguments[4][129][0].apply(exports,arguments)
-},{"../common":332,"../utils":342,"dup":129,"minimalistic-assert":349}],341:[function(melanke_requires,module,exports){
+},{"~src/common":332,"~src/utils":342,"dup":129,"minimalistic-assert":349}],341:[function(melanke_requires,module,exports){
 arguments[4][130][0].apply(exports,arguments)
-},{"../utils":342,"dup":130}],342:[function(melanke_requires,module,exports){
+},{"~src/utils":342,"dup":130}],342:[function(melanke_requires,module,exports){
 arguments[4][131][0].apply(exports,arguments)
 },{"dup":131,"inherits":344,"minimalistic-assert":349}],343:[function(melanke_requires,module,exports){
 arguments[4][132][0].apply(exports,arguments)

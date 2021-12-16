@@ -7,13 +7,10 @@ import {Alert, View, ScrollView, TextInput, Platform} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector, useDispatch} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {applicationConfig} from '../config/ApplicationConfig'
-import {UtilsHelper} from '../helpers/UtilsHelper'
-import {Account} from '../models/redux/Account'
 import {MnemonicSelectionInfo} from './MnemonicSelectionList'
 
 import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {
   BlockchainServiceKey,
   blockchainList,
@@ -22,12 +19,15 @@ import {
   validatePrivateKeyWithPasswordAllBlockchains,
   validateWifAllBlockchains,
   getBlockchainByAddress,
+  blockchainServices,
 } from '~src/blockchain'
 import AddressesImportList from '~src/components/AddressesImportList'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {UtilsHelper} from '~src/helpers/UtilsHelper'
+import {Account} from '~src/models/redux/Account'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {getRandomColor} from '~src/scenes/CustomizeAccount'
@@ -88,11 +88,11 @@ const ImportKey = (props: ImportKeyProps) => {
         stop = false
         index = 0
         while (!stop && isConnected) {
-          const {wif, address} = applicationConfig.blockchain[
+          const {wif, address} = blockchainServices[
             blockchainName
           ].generateAccount(mnemonic, index)
           if (!accounts.find((account) => account.address === address)) {
-            const req = applicationConfig.blockchain[blockchainName].provider
+            const req = blockchainServices[blockchainName].provider
             const {totalEntries} = await req.getAddressAbstracts(address, 1)
             if ((totalEntries && totalEntries > 0) || index === 0) {
               accountsInfo.push({address, wif, derivationIndex: index})
@@ -240,10 +240,8 @@ const ImportKey = (props: ImportKeyProps) => {
   const handleChangeWhenWIF = useCallback(() => {
     if (validateWifAllBlockchains(inputValue)) {
       for (const blockchainName of blockchainList) {
-        if (
-          applicationConfig.blockchain[blockchainName].validateWif(inputValue)
-        ) {
-          const addressFromWif = applicationConfig.blockchain[
+        if (blockchainServices[blockchainName].validateWif(inputValue)) {
+          const addressFromWif = blockchainServices[
             blockchainName
           ].generateAccountFromWif(inputValue)
 
@@ -319,7 +317,7 @@ const ImportKey = (props: ImportKeyProps) => {
         encryptedKey: inputValue,
       })
     } else if (validateWifAllBlockchains(inputValue)) {
-      const mnemonic = applicationConfig.blockchain[
+      const mnemonic = blockchainServices[
         addressesSelected[0].blockchain
       ].generateMnemonic()
       if (!Array.isArray(mnemonic)) {

@@ -6,8 +6,7 @@ import React, {useState, useEffect} from 'react'
 import {Platform} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {Storage} from '~src/app/Storage'
 import SelectorList, {SelectorItem} from '~src/components/SelectorList'
 import SwiperPanel, {

@@ -14,7 +14,11 @@ import {SecurityHelper} from '~/src/helpers/SecurityHelper'
 import {Node} from '~/src/models/Node'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
-import {BlockchainServiceKey, blockchainList} from '~src/blockchain'
+import {
+  BlockchainServiceKey,
+  blockchainList,
+  blockchainServices,
+} from '~src/blockchain'
 import {NeoNode} from '~src/models/NeoNode'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
@@ -91,9 +95,7 @@ export class AppReducer extends ReducerWrapper<
             let tokensBlockchain: TokenAsset[] = []
             await Promise.all(
               blockchainList.map(async (blockchainName) => {
-                const {assets, provider} = applicationConfig.blockchain[
-                  blockchainName
-                ]
+                const {assets, provider} = blockchainServices[blockchainName]
                 const tokenListResponse = await provider.getTokenList()
                 assets.forEach(({hash, name, symbol}) => {
                   assetsBlockchain.push(
@@ -112,7 +114,7 @@ export class AppReducer extends ReducerWrapper<
           const result: MultichainExchange = {} as MultichainExchange
           await Promise.all(
             blockchainList.map(async (blockchainName) => {
-              const {provider} = applicationConfig.blockchain[blockchainName]
+              const {provider} = blockchainServices[blockchainName]
               const tokenAssetSymbols = tokenList
                 .filter((token) => token.blockchain === blockchainName)
                 .map((token) => token.symbol)
@@ -163,9 +165,7 @@ export class AppReducer extends ReducerWrapper<
           try {
             await Promise.all(
               blockchainList.map(async (blockchainName) => {
-                const {assets, provider} = applicationConfig.blockchain[
-                  blockchainName
-                ]
+                const {assets, provider} = blockchainServices[blockchainName]
                 const tokenList = await provider.getTokenList()
                 assets.forEach(({hash, name, symbol}) => {
                   assetsBlockchain.push(
@@ -209,9 +209,7 @@ export class AppReducer extends ReducerWrapper<
         try {
           await Promise.all(
             blockchainList.map(async (blockchainName) => {
-              const {assets, provider} = applicationConfig.blockchain[
-                blockchainName
-              ]
+              const {assets, provider} = blockchainServices[blockchainName]
               const tokenList = await provider.getTokenList()
               assets.forEach(({hash, name, symbol}) => {
                 assetsBlockchain.push(
@@ -256,7 +254,7 @@ export class AppReducer extends ReducerWrapper<
         try {
           let nodes: Node[] = []
           blockchainList.forEach(async (blockchainName) => {
-            const {provider} = applicationConfig.blockchain[blockchainName]
+            const {provider} = blockchainServices[blockchainName]
             nodes = await provider.getAllNodes()
             await Storage.nodes.save(nodes)
           })
@@ -315,6 +313,11 @@ export class AppReducer extends ReducerWrapper<
             it.transactions = it.transactions ?? []
             it.pendingTransactions = it.pendingTransactions ?? []
             it.adaptToMultichain()
+          })
+          blockchainList.forEach((blockchain) => {
+            blockchainServices[blockchain].setAccountsPool(
+              accounts.filter((acc) => acc.blockchain === blockchain)
+            )
           })
           dispatch(this.commit('SET_ACCOUNTS', {accounts}))
         }
@@ -376,7 +379,7 @@ export class AppReducer extends ReducerWrapper<
               .map(async (acc) => {
                 const {address} = acc
                 if (address) {
-                  const response = await applicationConfig.blockchain[
+                  const response = await blockchainServices[
                     acc.blockchain
                   ].provider.getBalance(address)
 
@@ -465,8 +468,7 @@ export class AppReducer extends ReducerWrapper<
           for (const senderTx of senderTxs) {
             if (senderTx.transactionHash) {
               try {
-                const request =
-                  applicationConfig.blockchain[account.blockchain].provider
+                const request = blockchainServices[account.blockchain].provider
                 const confirmedTx = await request.getTransaction(
                   senderTx.transactionHash
                 )

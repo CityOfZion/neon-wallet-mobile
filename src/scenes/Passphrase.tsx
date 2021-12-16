@@ -7,20 +7,19 @@ import {View} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import ScreenLoader from '../components/loader/ScreenLoader'
-
 import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {
   BlockchainServiceKey,
   getBlockchainByPrivateKeyWithPassword,
   blockchainList,
+  blockchainServices,
 } from '~src/blockchain'
 import AddressesImportList from '~src/components/AddressesImportList'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {applicationConfig} from '~src/config/ApplicationConfig'
 import {useAccountHook, useWalletHook} from '~src/hooks'
 import {Account} from '~src/models/redux/Account'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
@@ -75,13 +74,14 @@ const Passphrase = (props: PassphraseProps) => {
     setShowInputField(false)
     try {
       for (const blockchain of blockchainList) {
-        const isEncryptedKey = applicationConfig.blockchain[
+        const isEncryptedKey = blockchainServices[
           blockchain
         ].validatePrivateKeyWithPassword(encryptedKey)
         if (isEncryptedKey) {
-          const {address} = await applicationConfig.blockchain[
-            blockchain
-          ].decryptKey(encryptedKey, inputValue)
+          const {address} = await blockchainServices[blockchain].decryptKey(
+            encryptedKey,
+            inputValue
+          )
           const addressExist = accounts.some((acc) => acc.address === address)
           if (!addressExist) {
             setAdrresesInfo((prevState) => {
@@ -131,14 +131,15 @@ const Passphrase = (props: PassphraseProps) => {
   const persist = useCallback(async () => {
     try {
       for (const {address, blockchain} of addressesInfoSelected) {
-        const isEncryptedKey = applicationConfig.blockchain[
+        const isEncryptedKey = blockchainServices[
           blockchain
         ].validatePrivateKeyWithPassword(encryptedKey)
         if (isEncryptedKey) {
-          const {wif} = await applicationConfig.blockchain[
-            blockchain
-          ].decryptKey(encryptedKey, correctPassword)
-          const mnemonic = applicationConfig.blockchain[blockchain]
+          const {wif} = await blockchainServices[blockchain].decryptKey(
+            encryptedKey,
+            correctPassword
+          )
+          const mnemonic = blockchainServices[blockchain]
             .generateMnemonic()
             ?.join(',')
           if (mnemonic) {
