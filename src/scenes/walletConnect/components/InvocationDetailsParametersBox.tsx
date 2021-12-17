@@ -17,11 +17,13 @@ export type Props = {
   count: number
 }
 
-const typesToConvert: Record<string, string> = {
-  Address: 'Hash160',
-}
-
-const CopyButton = ({onPress}: {onPress: () => void}) => {
+const CopyButton = ({
+  onPress,
+  disabled,
+}: {
+  onPress?: () => void
+  disabled: boolean
+}) => {
   return (
     <LinearLayout pr={18}>
       <TouchableWithoutFeedback onPress={onPress}>
@@ -30,6 +32,7 @@ const CopyButton = ({onPress}: {onPress: () => void}) => {
           source={require('~/src/assets/images/icon-copy-green.png')}
           height={20}
           width={20}
+          opacity={disabled ? 0.4 : 1}
         />
       </TouchableWithoutFeedback>
     </LinearLayout>
@@ -37,16 +40,22 @@ const CopyButton = ({onPress}: {onPress: () => void}) => {
 }
 
 const InvocationDetailsParametersBox = ({data, count}: Props) => {
-  const type = typesToConvert[data.type] || data.type
-
-  const typeColor = doraTypeColors[type as DoraTypeColors]
+  const typeColor = data.type
+    ? doraTypeColors[data.type as DoraTypeColors]
+    : null
 
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
-  const handleRightButtonPress = () => {
-    UtilsHelper.copyToClipboard(String(data.value))
+  const value = !data.value
+    ? null
+    : typeof data.value == 'string'
+    ? data.value
+    : JSON.stringify(data.value)
+
+  const handleRightButtonPress = (text: string) => {
+    UtilsHelper.copyToClipboard(text)
     showMessage({
       message: i18n.t('toast.copiedToClipboard'),
       type: 'success',
@@ -55,10 +64,15 @@ const InvocationDetailsParametersBox = ({data, count}: Props) => {
 
   return (
     <WalletConnectBox
-      title={data.name}
+      title={data.name ?? ''}
       count={count}
       rightButton={
-        data.value && <CopyButton onPress={handleRightButtonPress} />
+        <CopyButton
+          onPress={
+            value !== null ? () => handleRightButtonPress(value) : undefined
+          }
+          disabled={value === null}
+        />
       }
     >
       <LinearLayout
@@ -66,24 +80,26 @@ const InvocationDetailsParametersBox = ({data, count}: Props) => {
         padding={18}
         backgroundColor={theme.colors.background[20]}
       >
-        <LinearLayout
-          padding={12}
-          borderRadius={4}
-          backgroundColor={typeColor.color}
-        >
-          <TextView
-            fontFamily={'medium'}
-            fontSize={'16px'}
-            fontWeight={'500'}
-            color={
-              typeColor.textColor === 'light'
-                ? theme.colors.text[0]
-                : theme.colors.text[13]
-            }
+        {typeColor && (
+          <LinearLayout
+            padding={12}
+            borderRadius={4}
+            backgroundColor={typeColor.color}
           >
-            {type}
-          </TextView>
-        </LinearLayout>
+            <TextView
+              fontFamily={'medium'}
+              fontSize={'16px'}
+              fontWeight={'500'}
+              color={
+                typeColor.textColor === 'light'
+                  ? theme.colors.text[0]
+                  : theme.colors.text[13]
+              }
+            >
+              {data.type}
+            </TextView>
+          </LinearLayout>
+        )}
       </LinearLayout>
       <LinearLayout
         padding={18}
@@ -98,7 +114,7 @@ const InvocationDetailsParametersBox = ({data, count}: Props) => {
           lineHeight={'20px'}
           color={theme.colors.text[0]}
         >
-          {data.value ?? 'null'}
+          {value ?? 'null'}
         </TextView>
       </LinearLayout>
     </WalletConnectBox>

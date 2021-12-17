@@ -30,7 +30,7 @@ const ContractDetailsBox = ({
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
-  const handlePressHash = async () => {
+  const handlePressDoraIcon = async () => {
     const [blockchain, network] = session.state.accounts[0].split(':')
 
     const result = await WebBrowser.openBrowserAsync(
@@ -57,17 +57,17 @@ const ContractDetailsBox = ({
           >
             {i18n.t('components.contractDetailsBox.hash')}
           </TextView>
-          <TouchableWithoutFeedback onPress={() => handlePressHash()}>
-            <LinearLayout width={'65%'} orientation={'horiz'} pr={'30px'}>
-              <TextView
-                color={'primary'}
-                ellipsizeMode={'middle'}
-                numberOfLines={1}
-                fontSize={16}
-                pr={'13px'}
-              >
-                {hash}
-              </TextView>
+          <LinearLayout width={'65%'} orientation={'horiz'} pr={'30px'}>
+            <TextView
+              color={'primary'}
+              ellipsizeMode={'middle'}
+              numberOfLines={1}
+              fontSize={16}
+              pr={'13px'}
+            >
+              {hash}
+            </TextView>
+            <TouchableWithoutFeedback onPress={() => handlePressDoraIcon()}>
               <ImageView
                 alignSelf={'center'}
                 resizeMode={'contain'}
@@ -75,8 +75,8 @@ const ContractDetailsBox = ({
                 height={13}
                 source={require('~src/assets/images/dora-link.png')}
               />
-            </LinearLayout>
-          </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
+          </LinearLayout>
         </LinearLayout>
         <LinearLayout
           height={'1px'}

@@ -8,6 +8,7 @@ import React, {useCallback, useEffect, useState} from 'react'
 import {TouchableWithoutFeedback, Linking} from 'react-native'
 import {useSelector} from 'react-redux'
 
+import ConnectionHeader from '../components/ConnectionHeader'
 import ContractDetailsBox from '../components/ContractDetailsBox'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
@@ -40,13 +41,6 @@ interface Props {
 
 interface SessionItemProps {
   request: SessionTypes.RequestEvent
-}
-
-export interface WCRequestParams {
-  scriptHash: string
-  operation: string
-  args: {type: string; value: number | string}[]
-  signer: {scope: number}
 }
 
 const TransactionRequestModal = (props: Props) => {
@@ -96,22 +90,7 @@ const TransactionRequestModal = (props: Props) => {
       solidColorBG
     >
       <LinearLayout orientation="verti" mr={2} ml={2} mt={5} mb={5}>
-        <ImageView
-          source={require('~src/assets/ic_launcher.png')}
-          resizeMode={'contain'}
-          alignSelf={'center'}
-          width={77}
-          height={75}
-        />
-        <TextView
-          pt={'13px'}
-          color="white"
-          fontSize={18}
-          alignSelf={'center'}
-          pb={'19px'}
-        >
-          {session.peer.metadata.name}
-        </TextView>
+        <ConnectionHeader title={session.peer.metadata.name} imageUri={''} />
         <ContractDetailsBox
           session={session}
           rightButton={
@@ -120,8 +99,9 @@ const TransactionRequestModal = (props: Props) => {
                 props.navigation.navigate(wrapper.route.Modal.name, {
                   screen: wrapper.route.WCInvocationDetailsModal.name,
                   params: {
-                    request: props.route.params.request,
+                    request,
                     session,
+                    contract,
                   },
                 })
               }
