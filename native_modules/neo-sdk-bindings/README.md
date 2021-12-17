@@ -27,7 +27,7 @@
 2. Append the following lines to `android/settings.gradle`:
   	```
   	include ':react-native-neo-sdk-bindings'
-  	project(':react-native-neo-sdk-bindings').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-neo-sdk-bindings/android')
+  	project(':react-native-neo-sdk-bindings').projectDir = new File(rootProject.projectDir, 	'~src/node_modules/react-native-neo-sdk-bindings/android')
   	```
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
   	```

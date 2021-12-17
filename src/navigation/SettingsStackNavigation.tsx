@@ -3,15 +3,12 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import WalletDetailsPage, {
-  WalletDetailsParamList,
-} from '../scenes/WalletDetailsPage'
 import {ModalStackParamList} from './ModalStackNavigation'
 import PasscodeStackNavigation, {
   PasscodeStackParams,
 } from './PasscodeStackNavigation'
 
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
@@ -22,6 +19,9 @@ import Step3BackupWalletPage from '~src/scenes/BackupWalletPage/Step3BackupWalle
 import MyWalletOptionsPage from '~src/scenes/MyWalletOptionsPage'
 import MyWalletsPage from '~src/scenes/MyWalletsPage'
 import SettingsPage from '~src/scenes/SettingsPage'
+import WalletDetailsPage, {
+  WalletDetailsParamList,
+} from '~src/scenes/WalletDetailsPage'
 export type SettingsStackParamList = {
   SettingsPage: {initialRoute?: keyof ModalStackParamList} | undefined
   MyWallets: undefined

@@ -414,7 +414,7 @@
         "roundDown": "round down",
         "prioritiseTransfer": "Prioritise your transfer with a fee?",
         "enterAmount": "Enter amount",
-        "enterValue": "Enter ",
+        "enterValue": "Enter %{value} ",
         "selectToken": "Select token to send",
         "enterDestination": "Please enter destination address",
         "destinationAddress": "Destination Address",
@@ -542,7 +542,19 @@
       "xExisting": "%{amount} existing",
       "countAccount": "Account %{count}",
       "typeAccount": "%{type} Account",
-      "encryptedWallet": "Encrypted Wallet"
+      "encryptedWallet": "Encrypted Wallet",
+      "errorCreateWallet": "Problem to create wallet, try again"
+    },
+    "transactionSent": {
+      "title": "WalletConnect",
+      "transactionSent": "Transaction successfully sent!",
+      "transactionSuccessText": "Once your transaction has been confirmed it will appear in your activity feed.",
+      "transactionId": "Transaction ID",
+      "transactionFailed": "Transaction failed",
+      "transactionFailText": "I'm sorry but your transaction could not be sent.",
+      "transactionError": "Error message",
+      "viewOnDora": "View on dora",
+      "viewTransaction": "View transaction"
     }
   },
   "components": {

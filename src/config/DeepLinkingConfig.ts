@@ -4,7 +4,7 @@ import {
   PathConfigMap,
 } from '@react-navigation/native'
 
-import {wrapper} from '../app/ApplicationWrapper'
+import {wrapper} from '~src/app/ApplicationWrapper'
 
 export class DeepLinkingConfig {
   linkingConfig: LinkingOptions

@@ -3,21 +3,14 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {screenConfig} from '../config/ScreenConfig'
-import {VerifyPasscodePageParams} from '../scenes/LoginPage/VerifyPasscodePage'
-import SecurityPickerModal from '../scenes/SecurityPickerModal'
-import {
-  WCAccountSelectionModal,
-  WCAccountSelectionModalParams,
-} from '../scenes/walletConnect/modal/WCAccountSelectionModal'
-import WCWalletSelectionModal, {
-  WCWalletSelectionModalModalParams,
-} from '../scenes/walletConnect/modal/WCWalletSelectionModal'
 import ReceiveModalStackNavigation from './ReceiveModalStackNavigation'
 import {TabParams} from './TabNavigation'
 
+import TransactionRequestModal, {
+  TransactionRequestModalParams,
+} from '~/src/scenes/walletConnect/modal/TransactionRequestModal'
 import {WCConnectDappModal} from '~/src/scenes/walletConnect/modal/WCConnectDappModal'
+import {wrapper} from '~src/app/ApplicationWrapper'
 import EditWalletModal, {
   EditWalletParams,
 } from '~src/components/EditWalletModal'
@@ -25,6 +18,7 @@ import {
   PersistContact,
   PersistContactParams,
 } from '~src/components/contacts/PersistContact'
+import {screenConfig} from '~src/config/ScreenConfig'
 import {PasscodeStackParams} from '~src/navigation/PasscodeStackNavigation'
 import SendModalStackNavigation, {
   SendStackModalParams,
@@ -56,7 +50,9 @@ import EditAccountModal, {
 import {GetWalletParams} from '~src/scenes/GetWalletView'
 import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
 import ListTokenModal, {ListTokenModalParams} from '~src/scenes/ListTokenModal'
+import {VerifyPasscodePageParams} from '~src/scenes/LoginPage/VerifyPasscodePage'
 import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
+import SecurityPickerModal from '~src/scenes/SecurityPickerModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import TipConfirmationModal, {
   TipConfirmationModalParams,
@@ -79,10 +75,17 @@ import ReceiveToAccountModal, {
   ReceiveToAccountModalParams,
 } from '~src/scenes/receive/ReceiveToAccountModal'
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
+import {
+  WCAccountSelectionModal,
+  WCAccountSelectionModalParams,
+} from '~src/scenes/walletConnect/modal/WCAccountSelectionModal'
 import WCConnectionRequestModal, {
   WCConnectionRequestModalParams,
 } from '~src/scenes/walletConnect/modal/WCConnectionRequestModal'
 import {WCTransactionSentModalParams} from '~src/scenes/walletConnect/modal/WCTransactionSentModal'
+import WCWalletSelectionModal, {
+  WCWalletSelectionModalModalParams,
+} from '~src/scenes/walletConnect/modal/WCWalletSelectionModal'
 
 export type ModalStackParamList = {
   WelcomeModal: WelcomeModalParam
@@ -121,6 +124,7 @@ export type ModalStackParamList = {
   WCConnectDappModal: undefined
   WCWalletSelectionModal: WCWalletSelectionModalModalParams | undefined
   WCAccountSelectionModal: WCAccountSelectionModalParams
+  TransactionRequestModal: TransactionRequestModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -142,6 +146,7 @@ export type ModalParams =
   | DefaultNavigationParam<WCTransactionSentModalParams>
   | DefaultNavigationParam<WCConnectionRequestModalParams>
   | DefaultNavigationParam<WCWalletSelectionModalModalParams>
+  | DefaultNavigationParam<TransactionRequestModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -276,6 +281,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={wrapper.route.WCAccountSelectionModal.name}
           component={WCAccountSelectionModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.TransactionRequestModal.name}
+          component={TransactionRequestModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

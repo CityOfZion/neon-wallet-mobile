@@ -6,8 +6,7 @@ import React, {useEffect, useState} from 'react'
 import {FlatList, Keyboard} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Normalize} from '../app/Normalize'
-
+import {Normalize} from '~src/app/Normalize'
 import SwiperPanel, {
   PANEL_OFFSET,
   SwiperController,

@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import {AppLoading} from 'expo'
 import * as Font from 'expo-font'
 import React, {useState} from 'react'
@@ -28,6 +29,9 @@ const wcOptions = {
   logger: DEFAULT_LOGGER,
   methods: DEFAULT_METHODS,
   relayServer: DEFAULT_RELAY_PROVIDER,
+  storageOptions: {
+    asyncStorage: AsyncStorage as any,
+  },
 }
 
 const loggerMiddleware = createLogger()

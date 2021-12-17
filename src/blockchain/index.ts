@@ -18,7 +18,7 @@ import {
   SenderTransactionInfo,
   IWalletConnect,
   hasWCIntegration,
-} from '../blockchain/common'
+} from '~src/blockchain/common'
 
 export {
   BlockchainServiceKey,

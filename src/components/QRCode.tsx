@@ -2,8 +2,7 @@ import React from 'react'
 // @ts-ignore
 import {QRCode} from 'react-native-custom-qr-codes-expo'
 
-import {applicationConfig} from '../config/ApplicationConfig'
-
+import {applicationConfig} from '~src/config/ApplicationConfig'
 import {LinearLayout} from '~src/styles/styled-components'
 
 export interface QRCodeProps {

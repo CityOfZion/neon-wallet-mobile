@@ -17,10 +17,9 @@ import {
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {UtilsHelper} from '../helpers/UtilsHelper'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {UtilsHelper} from '~src/helpers/UtilsHelper'
 import {TextView, ImageView, LinearLayout} from '~src/styles/styled-components'
 
 export const PANEL_OFFSET = 50

@@ -15,21 +15,20 @@ import {
 } from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {Normalize} from '../app/Normalize'
-import {UtilsHelper} from '../helpers/UtilsHelper'
-import {RootStackParamList} from '../navigation/AppNavigation'
-import {ModalStackParamList} from '../navigation/ModalStackNavigation'
-import {SendModalStackParamList} from '../navigation/SendModalStackNavigation'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {Normalize} from '~src/app/Normalize'
 import {ContactsButton} from '~src/components/input/ContactsButton'
 import {InputClearButton} from '~src/components/input/InputClearButton'
 import {PasteButton} from '~src/components/input/PasteButton'
 import {ScanButton} from '~src/components/input/ScanButton'
 import {SelectedContactView} from '~src/components/input/SelectedContactView'
 import {IURI} from '~src/helpers/UriHelper'
+import {UtilsHelper} from '~src/helpers/UtilsHelper'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
 import {RootState, RootStore} from '~src/store/RootStore'
 import {
   ImageView,

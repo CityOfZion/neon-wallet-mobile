@@ -4,8 +4,7 @@ import i18n from 'i18n-js'
 import React from 'react'
 import {useDispatch} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'

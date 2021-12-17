@@ -6,12 +6,12 @@ import {StatusBar} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {appBus} from '../app/AppBus'
-import {wrapper} from '../app/ApplicationWrapper'
-import {SenderTransaction} from '../models/redux/SenderTransaction'
-
 import * as data from '~src/Changelog.json'
+import {appBus} from '~src/app/AppBus'
+import {wrapper} from '~src/app/ApplicationWrapper'
 import FooterBar from '~src/components/layout/FooterBar'
+import {useWalletConnect} from '~src/contexts/WalletConnectContext'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import ContactsStackNavigation, {
   ContactsStackParams,
@@ -59,7 +59,7 @@ const TabNavigation = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
-
+  const {requests} = useWalletConnect()
   const [welcomeHidden, setWelcomeHidden] = useState(
     props.route.params?.welcomeHidden ?? true
   )
@@ -108,6 +108,14 @@ const TabNavigation = (props: Props) => {
       }
     )
   }, [])
+
+  useEffect(() => {
+    if (requests.length > 0) {
+      props.navigation.navigate(wrapper.route.Modal.name, {
+        screen: wrapper.route.TransactionRequestModal.name,
+      })
+    }
+  }, [requests])
 
   return (
     <ThemeProvider theme={theme}>

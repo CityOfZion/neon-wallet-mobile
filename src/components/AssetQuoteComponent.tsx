@@ -2,9 +2,8 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import {useSelector} from 'react-redux'
 
-import {Normalize} from '../app/Normalize'
-import {FilterHelper} from '../helpers/FilterHelper'
-
+import {Normalize} from '~src/app/Normalize'
+import {FilterHelper} from '~src/helpers/FilterHelper'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 

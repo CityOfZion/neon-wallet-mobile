@@ -8,11 +8,7 @@ import {
   View,
 } from 'react-native'
 
-import {
-  LinearGradientLayout,
-  LinearLayout,
-  RelativeLayout,
-} from '~/src/styles/styled-components'
+import {LinearLayout, RelativeLayout} from '~/src/styles/styled-components'
 interface Props {
   onPress: (evt: GestureResponderEvent) => void
 }
@@ -46,20 +42,15 @@ const ThemedReceiveButton: React.FC<Props> = (props) => {
             overflow="hidden"
             position="absolute"
           >
-            <LinearGradientLayout
-              width="100%"
-              height="100%"
-              colors={['#464c52', '#1c2329']}
-              end={[0.3, 1]}
-            />
+            <LinearLayout width="100%" height="100%" bg={'#1c2329'} />
           </LinearLayout>
-          <LinearGradientLayout
+          <LinearLayout
             width="96%"
             height="96%"
             borderRadius={7}
             overflow="hidden"
             justifyContent={'center'}
-            colors={['#41515b', '#28333b']}
+            bg={'#41515b'}
             style={{borderRadius: 7}}
           >
             <LinearLayout
@@ -73,7 +64,7 @@ const ThemedReceiveButton: React.FC<Props> = (props) => {
                 source={require('~src/assets/images/arrow-down-green.png')}
               />
             </LinearLayout>
-          </LinearGradientLayout>
+          </LinearLayout>
         </RelativeLayout>
       </View>
     </TouchableWithoutFeedback>

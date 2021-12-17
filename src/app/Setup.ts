@@ -4,9 +4,8 @@ import {RequestConfig, RequestListener} from '@simpli/serialized-request'
 import i18n from 'i18n-js'
 import {Platform} from 'react-native'
 
-import {httpConfig} from '../config/HttpConfig'
-import {localeConfig} from '../config/LocaleConfig'
-
+import {httpConfig} from '~src/config/HttpConfig'
+import {localeConfig} from '~src/config/LocaleConfig'
 import {Lang} from '~src/enums/Lang'
 
 export abstract class Setup {

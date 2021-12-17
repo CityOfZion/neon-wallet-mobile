@@ -9,7 +9,7 @@ PODS:
     - ZXingObjC/PDF417
   - EXBlur (9.0.3):
     - UMCore
-  - EXConstants (9.3.5):
+  - EXConstants (9.2.0):
     - UMConstantsInterface
     - UMCore
   - EXCrypto (8.3.0):
@@ -383,7 +383,7 @@ PODS:
     - React-Core (= 0.63.4)
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
-  - RNCAsyncStorage (1.12.1):
+  - RNCAsyncStorage (1.15.13):
     - React-Core
   - RNCClipboard (1.4.0):
     - React-Core
@@ -434,7 +434,7 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EXBarCodeScanner (from `../node_modules/expo-barcode-scanner/ios`)
   - EXBlur (from `../node_modules/expo-blur/ios`)
-  - EXConstants (from `../node_modules/expo-linking/node_modules/expo-constants/ios`)
+  - EXConstants (from `../node_modules/expo-constants/ios`)
   - EXCrypto (from `../node_modules/expo-crypto/ios`)
   - EXErrorRecovery (from `../node_modules/expo-error-recovery/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
@@ -486,7 +486,7 @@ DEPENDENCIES:
   - React-RCTText (from `../node_modules/react-native/Libraries/Text`)
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
@@ -534,7 +534,7 @@ EXTERNAL SOURCES:
   EXBlur:
     :path: "../node_modules/expo-blur/ios"
   EXConstants:
-    :path: "../node_modules/expo-linking/node_modules/expo-constants/ios"
+    :path: "../node_modules/expo-constants/ios"
   EXCrypto:
     :path: "../node_modules/expo-crypto/ios"
   EXErrorRecovery:
@@ -634,7 +634,7 @@ EXTERNAL SOURCES:
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
-    :path: "../node_modules/@react-native-community/async-storage"
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCClipboard:
     :path: "../node_modules/@react-native-community/clipboard"
   RNCMaskedView:
@@ -687,7 +687,7 @@ SPEC CHECKSUMS:
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   EXBarCodeScanner: 1a76d3dc0dae2799af6012e3e4966100e4221a94
   EXBlur: 50d490040f3b14898ed8198d5125dc699189f4d9
-  EXConstants: 54d0bf04319d1692c6c7bc03ca151ef7a71705a4
+  EXConstants: f486f6b4a36b86e47ab258d4d2b7b2699786fdce
   EXCrypto: 80ee65669a5466a7ce9426a8ae985a50be7f3a5d
   EXErrorRecovery: 16696fe023fb46a32c3b09033abc361cfcf150a7
   EXFileSystem: afe9b1fd937d30270bf5108ba44e2f4a1d1ad694
@@ -747,7 +747,7 @@ SPEC CHECKSUMS:
   React-RCTText: 5c51df3f08cb9dedc6e790161195d12bac06101c
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
-  RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
+  RNCAsyncStorage: ac55c090d35b880ac47a7807ab797854afc640ae
   RNCClipboard: a1dd5a278566666ac8f9c9b517b7922c801bcd98
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNFBAnalytics: dbe60bec27fa2d4876983581f98a1ebdd46a3c95

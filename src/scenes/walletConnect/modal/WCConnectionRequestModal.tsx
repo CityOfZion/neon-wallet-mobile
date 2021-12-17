@@ -58,6 +58,7 @@ const WCConnectionRequestModal = (props: Props) => {
     try {
       await runOnURI()
     } catch (error) {
+      console.log('error onUri => ', error)
       setError(true)
       Await.done(activityName)
     }
@@ -65,21 +66,12 @@ const WCConnectionRequestModal = (props: Props) => {
 
   useEffect(() => {
     if (walletConnectCtx.sessionProposals.length < 1) {
-      Await.run(activityName, loadWCConnection, 8000)
+      Await.run(activityName, loadWCConnection, 5000)
     }
     return () => {
       walletConnectCtx.setSessionProposals([]) //will guarantee that there will be only one sessionProposal at a time
     }
   }, [])
-
-  useEffect(() => {
-    if (walletConnectCtx.sessionProposals.length > 0) {
-      const blockchainByWCChain = getBlockchainByWCChain(
-        walletConnectCtx.sessionProposals[0].permissions.blockchain.chains
-      )
-      blockchainByWCChain && setBlockchain(blockchainByWCChain)
-    }
-  }, [walletConnectCtx.sessionProposals])
 
   return (
     <SwiperPanel

@@ -1,3 +1,4 @@
+import {JsonRpcRequest} from '@json-rpc-tools/utils'
 import {NavigationContainer, RouteProp} from '@react-navigation/native'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
 import React, {useEffect, useState} from 'react'
@@ -5,19 +6,25 @@ import {InteractionManager} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {applicationConfig} from '../config/ApplicationConfig'
-import {screenConfig} from '../config/ScreenConfig'
 import PasscodeStackNavigation, {
   PasscodeStackParams,
 } from './PasscodeStackNavigation'
 
 import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {Storage} from '~src/app/Storage'
 import {Sync} from '~src/app/Sync'
+import {
+  blockchainServices,
+  getBlockchainByAddress,
+  hasWCIntegration,
+} from '~src/blockchain'
 import LoadingOverlay from '~src/components/LoadingOverlay'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
+import {applicationConfig} from '~src/config/ApplicationConfig'
 import {DeepLinkingConfig} from '~src/config/DeepLinkingConfig'
+import {screenConfig} from '~src/config/ScreenConfig'
+import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 import ModalStackNavigation, {
   ModalParams,
 } from '~src/navigation/ModalStackNavigation'
@@ -61,6 +68,8 @@ const AppNavigation = (props: Props) => {
   ] = useState(false)
   const [changelogHidden, setChangelogHidden] = useState(true)
   const [numberOfVersions, setNumberOfVersions] = useState(0)
+
+  const walletConnectCtx = useWalletConnect()
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
@@ -123,6 +132,34 @@ const AppNavigation = (props: Props) => {
       !hasInit && Await.run('application', startApplication)
     }
   }, [hasInit, syncFetchInterval, isConnected, timerStatus])
+
+  useEffect(() => {
+    // if the request method is 'testInvoke' or 'multiTestInvoke' we auto-accept it
+    walletConnectCtx.autoAcceptIntercept(
+      (acc, chain, req: JsonRpcRequest) =>
+        req.method === 'testInvoke' || req.method === 'multiTestInvoke'
+    )
+
+    walletConnectCtx.onRequestListener(
+      async (acc, chain, req: JsonRpcRequest) => {
+        console.log('debug request lintener => ', acc, chain, req)
+        const blockchain = getBlockchainByAddress(acc)
+        if (blockchain) {
+          const bs = blockchainServices[blockchain]
+          if (hasWCIntegration(bs)) {
+            const result = await bs.rpcCall(acc, req)
+            if (!result.hasOwnProperty('error')) {
+              console.log('deu certo', [result])
+            } else {
+              console.log('deu errado', [result])
+            }
+            return result
+          }
+        }
+        throw new Error('Failed request listener')
+      }
+    )
+  }, [])
 
   const getInitialRouteName = () => {
     return onboardingSeen

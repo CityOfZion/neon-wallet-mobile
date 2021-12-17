@@ -5,24 +5,23 @@ import i18n from 'i18n-js'
 import React, {useState, useCallback, useEffect} from 'react'
 import {useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import ScreenLoader from '../components/loader/ScreenLoader'
-import {applicationConfig} from '../config/ApplicationConfig'
-import {RootStackParamList} from '../navigation/AppNavigation'
-import {WalletStackParamList} from '../navigation/WalletsStackNavigation'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {
   BlockchainServiceKey,
   getBlockchainByAddress,
   validateAddressAllBlockchains,
   blockchainList,
+  blockchainServices,
 } from '~src/blockchain'
 import AddressesImportList from '~src/components/AddressesImportList'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {useWalletHook, useAccountHook} from '~src/hooks'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootState} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
@@ -64,9 +63,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
     }
     const blockchainName = getBlockchainByAddress(inputValue)
     if (!blockchainName) return
-    const mnemonic = applicationConfig.blockchain[
-      blockchainName
-    ].generateMnemonic()
+    const mnemonic = blockchainServices[blockchainName].generateMnemonic()
     if (!Array.isArray(mnemonic)) {
       throw new Error(
         i18n.t('importKey.mnemonicAlreadyExists', {
@@ -131,9 +128,9 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
 
   useEffect(() => {
     for (const blockchain of blockchainList) {
-      const addressIsValid = applicationConfig.blockchain[
-        blockchain
-      ].validateAddress(inputValue)
+      const addressIsValid = blockchainServices[blockchain].validateAddress(
+        inputValue
+      )
       if (addressIsValid) {
         setAddressesList([...addressesList, {address: inputValue, blockchain}])
       }

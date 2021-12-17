@@ -14,9 +14,9 @@ import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
 import {ExchangeResponse} from '~/src/types/exchange'
 import {TokenResponse} from '~/src/types/token'
 
-type DoraNetworkOptions = 'mainnet' | 'testnet'
+type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
 export class DoraSDKProvider implements Neo3Provider {
-  readonly network: DoraNetworkOptions = 'mainnet'
+  readonly network: DoraNetworkOptions = __DEV__ ? 'testnet_rc4' : 'mainnet'
   readonly baseNumeric: number = 8
   constructor(network?: DoraNetworkOptions) {
     if (network) {

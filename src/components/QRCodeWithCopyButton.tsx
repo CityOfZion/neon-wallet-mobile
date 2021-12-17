@@ -4,11 +4,10 @@ import i18n from 'i18n-js'
 import React, {Fragment, useRef} from 'react'
 import ViewShot from 'react-native-view-shot'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {ModalStackParamList} from '../navigation/ModalStackNavigation'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
 import NeonQRCode from '~src/components/QRCode'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {LinearLayout} from '~src/styles/styled-components'
 
 interface QRCodeWithCopyButtonProps {

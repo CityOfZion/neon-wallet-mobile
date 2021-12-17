@@ -14,15 +14,17 @@ import {
 import Accordion from 'react-native-collapsible/Accordion'
 import {useDispatch} from 'react-redux'
 
-import {MoreStackParamList} from '../navigation/MoreStackNavigation'
-
 import {wrapper} from '~src/app/ApplicationWrapper'
-import {BlockchainServiceKey, getBlockchainLogo} from '~src/blockchain'
+import {
+  BlockchainServiceKey,
+  blockchainServices,
+  getBlockchainLogo,
+} from '~src/blockchain'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {applicationConfig} from '~src/config/ApplicationConfig'
 import {useWalletHook, useAccountHook} from '~src/hooks'
+import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 export type MnemonicSelectionInfo = Map<
   BlockchainServiceKey,
@@ -131,9 +133,10 @@ const ContentMnemonicItem = (props: ContentMnemonicItemProps) => {
       >
         <View style={{backgroundColor: '#191f23'}}>
           <Text style={{fontFamily: 'medium', color: '#899fa8', fontSize: 16}}>
-            {applicationConfig.blockchain[
-              props.blockchain
-            ].derivationPath.replace('?', String(props.data.derivationIndex))}
+            {blockchainServices[props.blockchain].derivationPath.replace(
+              '?',
+              String(props.data.derivationIndex)
+            )}
           </Text>
           <Text style={{fontFamily: 'medium', color: '#fff', fontSize: 16}}>
             {props.data.address}

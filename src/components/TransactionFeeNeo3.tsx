@@ -2,12 +2,14 @@ import React, {useEffect, useCallback, useState} from 'react'
 import {View} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Normalize} from '../app/Normalize'
-import {applicationConfig} from '../config/ApplicationConfig'
-import {TokenAsset} from '../models/TokenAsset'
-import {Account} from '../models/redux/Account'
-
-import {BlockchainServiceKey, SenderTransactionInfo} from '~src/blockchain'
+import {Normalize} from '~src/app/Normalize'
+import {
+  BlockchainServiceKey,
+  blockchainServices,
+  SenderTransactionInfo,
+} from '~src/blockchain'
+import {TokenAsset} from '~src/models/TokenAsset'
+import {Account} from '~src/models/redux/Account'
 import {ImageView, TextView, ButtonView} from '~src/styles/styled-components'
 interface Props {
   receiverAddress: string
@@ -39,9 +41,9 @@ export const TransactionFeeNeo3 = (props: Props) => {
 
   const handleCalcFee = async () => {
     if (transaction) {
-      const result = await applicationConfig.blockchain[
-        props.blockchain
-      ].calculateFee(transaction)
+      const result = await blockchainServices[props.blockchain].calculateFee(
+        transaction
+      )
       setFeeAmount(result)
     } else {
       setFeeAmount(0)
@@ -53,8 +55,7 @@ export const TransactionFeeNeo3 = (props: Props) => {
     if (props.token && props.amount > 0) {
       const feeToken = props.account.tokenAssets.find(
         (token) =>
-          token.symbol ===
-          applicationConfig.blockchain[props.blockchain].feeToken.token
+          token.symbol === blockchainServices[props.blockchain].feeToken.token
       )
       if (!feeToken) return
 
@@ -166,9 +167,7 @@ export const TransactionFeeNeo3 = (props: Props) => {
               width={Normalize.scale(19)}
               height={Normalize.scale(21)}
               resizeMode={'contain'}
-              source={
-                applicationConfig.blockchain[props.blockchain].feeToken.img
-              }
+              source={blockchainServices[props.blockchain].feeToken.img}
             />
             <TextView color={'#fff'} fontFamily={'semibold'} fontSize={'18px'}>
               {feeAmount.toFixed(8)}

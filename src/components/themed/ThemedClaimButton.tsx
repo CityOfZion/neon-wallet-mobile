@@ -15,7 +15,6 @@ import {FilterHelper} from '~/src/helpers/FilterHelper'
 import {
   RelativeLayout,
   LinearLayout,
-  LinearGradientLayout,
   TextView,
   ImageView,
 } from '~/src/styles/styled-components'
@@ -106,24 +105,15 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
             overflow="hidden"
             position="absolute"
           >
-            <LinearGradientLayout
-              width="100%"
-              height="100%"
-              colors={gradientButton}
-              end={gradientEnd}
-            />
+            <LinearLayout width="100%" height="100%" bg={'#1c2329'} />
           </LinearLayout>
-          <LinearGradientLayout
+          <LinearLayout
             width="98%"
             height="98%"
             borderRadius={7}
             overflow="hidden"
             justifyContent={'center'}
-            colors={
-              props.isClaimAvailable
-                ? ['#41515b', '#28333b']
-                : ['#313e46', '#20292f']
-            }
+            bg={props.isClaimAvailable ? '#41515b' : '#313e46'}
             style={{borderRadius: 7}}
           >
             <LinearLayout
@@ -145,7 +135,7 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
                 {infoClaim?.text}
               </TextView>
             </LinearLayout>
-          </LinearGradientLayout>
+          </LinearLayout>
         </RelativeLayout>
       </View>
     </TouchableWithoutFeedback>

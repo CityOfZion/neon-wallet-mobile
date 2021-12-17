@@ -5,10 +5,9 @@ import React from 'react'
 import {Linking} from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {Normalize} from '../app/Normalize'
-import {applicationConfig} from '../config/ApplicationConfig'
-import {FilterHelper} from '../helpers/FilterHelper'
+import {blockchainServices} from '../blockchain'
 
+import {Normalize} from '~src/app/Normalize'
 import {AccountView} from '~src/components/AccountView'
 import {HeaderColumn} from '~src/components/HeaderColumn'
 import SwiperPanel, {
@@ -17,6 +16,7 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import {TokenView} from '~src/components/TokenView'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import {FilterHelper} from '~src/helpers/FilterHelper'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {
@@ -197,8 +197,8 @@ export const TransactionDetails = (props: Props) => {
             <ThemedButton
               onPress={() => {
                 Linking.openURL(
-                  applicationConfig.blockchain[senderAccount.blockchain]
-                    .siteUrlQuery + transaction.transactionHash
+                  blockchainServices[senderAccount.blockchain].siteUrlQuery +
+                    transaction.transactionHash
                 )
               }}
               label={i18n.t('transactionDetails.viewOnDora')}

@@ -6,16 +6,15 @@ import i18n from 'i18n-js'
 import React, {useState, useEffect, useRef} from 'react'
 import {StyleSheet, Animated} from 'react-native'
 
-import {wrapper} from '../app/ApplicationWrapper'
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {
+  blockchainServices,
   getBlockchainByWif,
   validateAddressAllBlockchains,
   validatePrivateKeyWithPasswordAllBlockchains,
   validateTextAllBlockchains,
   validateWifAllBlockchains,
-} from '../blockchain'
-import {applicationConfig} from '../config/ApplicationConfig'
-
+} from '~src/blockchain'
 import {useSwiperController} from '~src/components/SwiperPanel'
 import {IURI, TScheme, UriHelper} from '~src/helpers/UriHelper'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
@@ -161,7 +160,7 @@ const QRCodeScan = (props: Props) => {
               initial: false,
               params: {
                 source: wrapper.route.ImportKey.name,
-                address: applicationConfig.blockchain[
+                address: blockchainServices[
                   blockchainName
                 ].generateAccountFromWif(key),
                 legacy: true,

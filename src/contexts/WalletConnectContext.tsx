@@ -3,11 +3,11 @@ import {
   JsonRpcRequest,
   JsonRpcResponse,
 } from '@json-rpc-tools/utils'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import Client, {CLIENT_EVENTS} from '@walletconnect/client'
 import {AppMetadata, SessionTypes} from '@walletconnect/types'
 import {ERROR} from '@walletconnect/utils'
 import KeyValueStorage from 'keyvaluestorage'
+import {KeyValueStorageOptions} from 'keyvaluestorage/dist/cjs/shared'
 import PropTypes from 'prop-types'
 import React, {useCallback, useContext, useEffect, useState} from 'react'
 
@@ -41,15 +41,16 @@ interface IWalletConnectContext {
   setRequests: React.Dispatch<React.SetStateAction<SessionTypes.RequestEvent[]>>
   results: any[]
   setResults: React.Dispatch<React.SetStateAction<any[]>>
-  accounts: string[]
   init: () => Promise<void>
   resetApp: () => Promise<void>
   subscribeToEvents: () => void
   checkPersistedState: () => Promise<void>
   approveAndMakeRequest: (
-    request: JsonRpcRequest
+    requestEvent: SessionTypes.RequestEvent
   ) => Promise<JsonRpcResponse<any>>
-  makeRequest: (request: JsonRpcRequest) => Promise<JsonRpcResponse<any>>
+  makeRequest: (
+    requestEvent: SessionTypes.RequestEvent
+  ) => Promise<JsonRpcResponse<any>>
   checkApprovedRequest: (
     request: JsonRpcRequest
   ) => Promise<boolean | undefined>
@@ -57,7 +58,10 @@ interface IWalletConnectContext {
   getPeerOfRequest: (
     requestEvent: SessionTypes.RequestEvent
   ) => Promise<SessionTypes.Participant>
-  approveSession: (proposal: SessionTypes.Proposal) => Promise<void>
+  approveSession: (
+    proposal: SessionTypes.Proposal,
+    accounts: AddressAndChain[]
+  ) => Promise<void>
   rejectSession: (proposal: SessionTypes.Proposal) => Promise<void>
   disconnect: (topic: string) => Promise<void>
   removeFromPending: (requestEvent: SessionTypes.RequestEvent) => Promise<void>
@@ -66,9 +70,6 @@ interface IWalletConnectContext {
   rejectRequest: (requestEvent: SessionTypes.RequestEvent) => Promise<void>
   onRequestListener: (listener: OnRequestCallback) => void
   autoAcceptIntercept: (listener: AutoAcceptCallback) => void
-  addAccountAndChain: (address: string, chain: string) => void
-  removeAccountAndChain: (address: string, chain: string) => void
-  clearAccountAndChain: () => void
 }
 
 export interface CtxOptions {
@@ -77,11 +78,17 @@ export interface CtxOptions {
   logger: string
   methods: string[]
   relayServer: string
+  storageOptions?: KeyValueStorageOptions
 }
 
 export const WalletConnectContext = React.createContext(
   {} as IWalletConnectContext
 )
+
+export type AddressAndChain = {
+  address: string
+  chain: string
+}
 
 export const WalletConnectContextProvider: React.FC<{
   options: CtxOptions
@@ -94,7 +101,6 @@ export const WalletConnectContextProvider: React.FC<{
   >([])
   const [initialized, setInitialized] = useState<boolean>(false)
   const [chains, setChains] = useState<string[]>(options.chainIds)
-  const [accounts, setAccounts] = useState<string[]>([])
   const [sessions, setSessions] = useState<SessionTypes.Created[]>([])
   const [requests, setRequests] = useState<SessionTypes.RequestEvent[]>([])
   const [results, setResults] = useState<any[]>([])
@@ -110,9 +116,7 @@ export const WalletConnectContextProvider: React.FC<{
   }, [])
 
   const init = async () => {
-    const st = new KeyValueStorage({
-      asyncStorage: AsyncStorage as any,
-    })
+    const st = new KeyValueStorage(options.storageOptions)
     setStorage(st)
     setWcClient(
       await Client.init({
@@ -122,6 +126,31 @@ export const WalletConnectContextProvider: React.FC<{
         storage: st,
       })
     )
+  }
+
+  const resetApp = async () => {
+    try {
+      await Promise.all(
+        sessions.map((session) =>
+          wcClient?.disconnect({
+            topic: session.topic,
+            reason: ERROR.USER_DISCONNECTED.format(),
+          })
+        )
+      )
+    } catch (e) {
+      // ignored
+    }
+    await clearStorage()
+
+    setWcClient(undefined)
+    setSessionProposals([])
+    setInitialized(false)
+    setChains([])
+    setSessions([])
+    setRequests([])
+    setResults([])
+    clearStorage()
   }
 
   const clearStorage = async () => {
@@ -147,32 +176,6 @@ export const WalletConnectContextProvider: React.FC<{
     console.log('ACTION', 'CLEAR STORAGE', storage?.getKeys())
   }
 
-  const resetApp = async () => {
-    try {
-      await Promise.all(
-        sessions.map((session) =>
-          wcClient?.disconnect({
-            topic: session.topic,
-            reason: ERROR.USER_DISCONNECTED.format(),
-          })
-        )
-      )
-    } catch (e) {
-      // ignored
-    }
-    await clearStorage()
-
-    setWcClient(undefined)
-    setSessionProposals([])
-    setInitialized(false)
-    setChains([])
-    setAccounts([])
-    setSessions([])
-    setRequests([])
-    setResults([])
-    clearStorage()
-  }
-
   const checkPersistedState = useCallback(async () => {
     if (typeof wcClient === 'undefined') {
       throw new Error('Client is not initialized')
@@ -192,22 +195,28 @@ export const WalletConnectContextProvider: React.FC<{
     setAutoAcceptCallback(() => listener)
   }
 
-  const approveAndMakeRequest = async (request: JsonRpcRequest) => {
-    storage?.setItem(`request-${JSON.stringify(request)}`, true)
-    return await makeRequest(request)
+  const approveAndMakeRequest = async (
+    requestEvent: SessionTypes.RequestEvent
+  ) => {
+    storage?.setItem(`request-${JSON.stringify(requestEvent.request)}`, true)
+    return await makeRequest(requestEvent)
   }
 
   const makeRequest = useCallback(
-    async (request: JsonRpcRequest) => {
-      // TODO: allow multiple accounts
-      const [namespace, reference, address] = accounts[0]?.split(':')
+    async (requestEvent: SessionTypes.RequestEvent) => {
+      const foundSession = findSessionByTopic(requestEvent.topic)
+      const acc = foundSession?.state.accounts[0]
+      if (!acc) {
+        throw new Error('There is no Account')
+      }
+      const [namespace, reference, address] = acc?.split(':')
       const chainId = `${namespace}:${reference}`
       if (!onRequestCallback) {
         throw new Error('There is no onRequestCallback')
       }
-      return await onRequestCallback(address, chainId, request)
+      return await onRequestCallback(address, chainId, requestEvent.request)
     },
-    [accounts]
+    [JSON.stringify(sessions)]
   )
 
   const checkApprovedRequest = useCallback(
@@ -234,10 +243,7 @@ export const WalletConnectContextProvider: React.FC<{
       throw new Error('Client is not initialized')
     }
 
-    // TODO: decide if accounts is mandatory, if so, put this if back and add accounts to the ctx
-    // if (!accounts.length) {
-    //   return
-    // }
+    wcClient.events.removeAllListeners()
 
     wcClient.on(
       CLIENT_EVENTS.session.proposal,
@@ -295,7 +301,7 @@ export const WalletConnectContextProvider: React.FC<{
         }
 
         const approve = async () => {
-          const response = await makeRequest(requestEvent.request)
+          const response = await makeRequest(requestEvent)
           await respondRequest(requestEvent.topic, response)
         }
 
@@ -313,8 +319,10 @@ export const WalletConnectContextProvider: React.FC<{
           } else if (autoAcceptCallback) {
             let address: string | undefined = undefined
             let chainId: string | undefined = undefined
-            if (accounts.length) {
-              const [namespace, reference, addr] = accounts[0].split(':')
+            const foundSession = findSessionByTopic(requestEvent.topic)
+            const acc = foundSession?.state.accounts[0]
+            if (acc) {
+              const [namespace, reference, addr] = acc.split(':')
               address = addr
               chainId = `${namespace}:${reference}`
             }
@@ -332,7 +340,7 @@ export const WalletConnectContextProvider: React.FC<{
             await askApproval()
           }
         } catch (e) {
-          await reject(e.message)
+          await reject((e as any).message)
         }
       }
     )
@@ -352,7 +360,21 @@ export const WalletConnectContextProvider: React.FC<{
       console.log('EVENT', 'session_deleted')
       setSessions(wcClient.session.values)
     })
-  }, [chains, checkApprovedRequest, makeRequest, respondRequest, wcClient])
+  }, [
+    chains,
+    checkApprovedRequest,
+    makeRequest,
+    respondRequest,
+    wcClient,
+    JSON.stringify(sessions),
+  ])
+
+  const findSessionByTopic = useCallback(
+    (topic: string) => {
+      return sessions.find((session) => session.topic === topic)
+    },
+    [JSON.stringify(sessions)]
+  )
 
   useEffect(() => {
     if (wcClient) {
@@ -378,7 +400,10 @@ export const WalletConnectContextProvider: React.FC<{
     return peer
   }
 
-  const approveSession = async (proposal: SessionTypes.Proposal) => {
+  const approveSession = async (
+    proposal: SessionTypes.Proposal,
+    accounts: AddressAndChain[]
+  ) => {
     console.log('ACTION', 'approveSession')
     if (typeof wcClient === 'undefined') {
       throw new Error('Client is not initialized')
@@ -386,11 +411,13 @@ export const WalletConnectContextProvider: React.FC<{
     if (typeof accounts === 'undefined') {
       throw new Error('Accounts is undefined')
     }
-    const accs = accounts.filter((account) => {
-      const [namespace, reference] = account.split(':')
-      const chainId = `${namespace}:${reference}`
-      return proposal.permissions.blockchain.chains.includes(chainId)
-    })
+    const accs = accounts
+      .filter((account) => {
+        const [namespace, reference] = account.chain.split(':')
+        const chainId = `${namespace}:${reference}`
+        return proposal.permissions.blockchain.chains.includes(chainId)
+      })
+      .map((acc) => `${acc.chain}:${acc.address}`)
     const response = {
       state: {accounts: accs},
       metadata: options.appMetadata,
@@ -431,7 +458,7 @@ export const WalletConnectContextProvider: React.FC<{
       throw new Error('Client is not initialized')
     }
     try {
-      const response = await approveAndMakeRequest(requestEvent.request)
+      const response = await approveAndMakeRequest(requestEvent)
       await wcClient.respond({
         topic: requestEvent.topic,
         response,
@@ -464,20 +491,6 @@ export const WalletConnectContextProvider: React.FC<{
     await removeFromPending(requestEvent)
   }
 
-  const addAccountAndChain = (address: string, chain: string) => {
-    setAccounts((oldAccs) => [...oldAccs, `${chain}:${address}`])
-  }
-
-  const removeAccountAndChain = (address: string, chain: string) => {
-    setAccounts((oldAccs) => [
-      ...oldAccs.filter((acc) => acc !== `${chain}:${address}`),
-    ])
-  }
-
-  const clearAccountAndChain = () => {
-    setAccounts([])
-  }
-
   const contextValue: IWalletConnectContext = {
     wcClient,
     setWcClient,
@@ -495,7 +508,6 @@ export const WalletConnectContextProvider: React.FC<{
     setRequests,
     results,
     setResults,
-    accounts,
 
     init,
     resetApp,
@@ -515,9 +527,6 @@ export const WalletConnectContextProvider: React.FC<{
     rejectRequest,
     onRequestListener,
     autoAcceptIntercept,
-    addAccountAndChain,
-    removeAccountAndChain,
-    clearAccountAndChain,
   }
 
   return (

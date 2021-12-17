@@ -5,8 +5,6 @@ import React, {useEffect, useState, useCallback, useMemo} from 'react'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
 
-import {AccountCardsComponent} from '../../GetWalletView'
-
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {getWCChainByBlockchain} from '~/src/blockchain/common'
 import {ProgressBar} from '~/src/components/ProgressBar'
@@ -21,6 +19,7 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import {useWalletConnect} from '~src/contexts/WalletConnectContext'
+import {AccountCardsComponent} from '~src/scenes/GetWalletView'
 
 export interface WCAccountSelectionModalParams {
   wallet: Wallet
@@ -37,9 +36,8 @@ interface Props {
 export const WCAccountSelectionModal = (props: Props) => {
   const controller = useSwiperController(true)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const [addressConnect, setAddressConnect] = useState<string>('')
-  const [showProgressBar, setShowProgressBar] = useState<boolean>(false)
   const walletConnectCtx = useWalletConnect()
+  const [accountSelected, setAccountSelected] = useState<Account>()
 
   const accounts = props.route.params.wallet.getAccounts(accountsPool)
   const nameDApp = useMemo(
@@ -49,56 +47,45 @@ export const WCAccountSelectionModal = (props: Props) => {
   const pressEvent = useCallback(
     (account: Account) => {
       if (walletConnectCtx.sessionProposals.length > 0 && account.address) {
-        const wcChain = getWCChainByBlockchain(account.blockchain)
-        if (wcChain) {
-          walletConnectCtx.addAccountAndChain(account.address, wcChain)
-          setAddressConnect(account.address)
-        }
+        setAccountSelected(account)
       }
     },
-    [walletConnectCtx.sessionProposals, walletConnectCtx.accounts]
+    [walletConnectCtx.sessionProposals]
   )
 
-  const handleConnectDApp = useCallback(async () => {
-    try {
-      if (walletConnectCtx.sessionProposals.length > 0) {
-        await walletConnectCtx.approveSession(
-          walletConnectCtx.sessionProposals[0]
-        )
-        showMessage({
-          message: i18n.t('walletconnect.alert.text', {text: nameDApp}),
-          duration: 7000,
-          type: 'warning',
+  const handleConnectDApp = useCallback(
+    async (account: Account) => {
+      try {
+        if (walletConnectCtx.sessionProposals.length > 0 && account?.address) {
+          const wcChain = getWCChainByBlockchain(account.blockchain)
+          console.log({wcChain, accountSelected})
+          if (wcChain) {
+            await walletConnectCtx.approveSession(
+              walletConnectCtx.sessionProposals[0],
+              [{address: account.address, chain: wcChain}]
+            )
+            showMessage({
+              message: i18n.t('walletconnect.alert.text', {text: nameDApp}),
+              duration: 7000,
+              type: 'warning',
+            })
+          }
+        }
+
+        props.navigation.reset({
+          index: 0,
+          routes: [{name: wrapper.route.Tab.name}],
         })
+        props.navigation.navigate(wrapper.route.WalletConnectPage.name)
+      } catch (error) {
+        console.log(error)
       }
-
-      props.navigation.reset({
-        index: 0,
-        routes: [{name: wrapper.route.Tab.name}],
-      })
-      props.navigation.navigate(wrapper.route.WalletConnectPage.name)
-    } catch (error) {
-      console.log(error)
-    }
-  }, [walletConnectCtx.accounts, walletConnectCtx.sessionProposals])
-
-  useEffect(() => {
-    if (
-      !!walletConnectCtx.accounts.find((it) => it.includes(addressConnect)) &&
-      addressConnect !== ''
-    ) {
-      setShowProgressBar(true)
-    }
-  }, [walletConnectCtx.accounts, addressConnect])
+    },
+    [walletConnectCtx.sessionProposals]
+  )
 
   return (
     <>
-      <ProgressBar
-        onFinish={handleConnectDApp}
-        show={showProgressBar}
-        timeToComplete={10}
-        text={i18n.t('walletconnect.waitingDAppConnect', {dAppName: nameDApp})}
-      />
       <SwiperPanel
         padding={20}
         fullSize={true}
@@ -115,7 +102,10 @@ export const WCAccountSelectionModal = (props: Props) => {
           <TextView color="text.0" fontSize={18} textAlign="center" mb={'30px'}>
             {i18n.t('modals.WCAccountSelection.subtitle')}
           </TextView>
-          <AccountCardsComponent accounts={accounts} onPress={pressEvent} />
+          <AccountCardsComponent
+            accounts={accounts}
+            onPress={handleConnectDApp}
+          />
         </LinearLayout>
       </SwiperPanel>
     </>

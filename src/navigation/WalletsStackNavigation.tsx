@@ -3,13 +3,13 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {HeaderActionButtonProps} from '../components/layout/HeaderActionButton'
-import {Wallet} from '../models/redux/Wallet'
 import {MoreStackParamList} from './MoreStackNavigation'
 import {SettingsStackParamList} from './SettingsStackNavigation'
 
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {Navigator} from '~src/app/Navigator'
+import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
+import {Wallet} from '~src/models/redux/Wallet'
 import {ModalParams} from '~src/navigation/ModalStackNavigation'
 import AccountAssetDetail, {
   AccountAssetDetailParams,

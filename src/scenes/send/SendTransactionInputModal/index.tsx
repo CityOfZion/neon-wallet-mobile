@@ -15,9 +15,9 @@ import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/ty
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {validateAddressAllBlockchains} from '~/src/blockchain'
 import {TransactionFeeNeo3} from '~/src/components/TransactionFeeNeo3'
-import {applicationConfig} from '~/src/config/ApplicationConfig'
 import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
+import {blockchainServices} from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
 import {PANEL_OFFSET} from '~src/components/SwiperPanel'
 import {TipCheckbox} from '~src/components/TipCheckbox'
@@ -58,7 +58,7 @@ interface Props {
 
 const SendTransactionInputModal = (prop: Props) => {
   const {account, walletTitle, uri, selectedToken} = prop.route.params
-  const cozTip = applicationConfig.blockchain[account.blockchain].cozTip
+  const cozTip = blockchainServices[account.blockchain].cozTip
   const {contacts, tokens, accounts, wallets, exchange} = useSelector(
     (state: RootState) => state.app
   )

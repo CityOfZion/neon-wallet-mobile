@@ -1,13 +1,12 @@
 import {StackNavigationOptions} from '@react-navigation/stack'
 import i18n from 'i18n-js'
 
-import {UtilsHelper} from '../helpers/UtilsHelper'
-
 import HeaderActionButton, {
   HeaderActionButtonProps,
 } from '~src/components/layout/HeaderActionButton'
 import HeaderBackButton from '~src/components/layout/HeaderBackButton'
 import HeaderBar, {HeaderProps} from '~src/components/layout/HeaderBar'
+import {UtilsHelper} from '~src/helpers/UtilsHelper'
 export abstract class Navigator {
   static defaultStackNavigatorOptions(
     headerProps: HeaderProps

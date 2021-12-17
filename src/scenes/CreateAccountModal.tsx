@@ -3,18 +3,16 @@ import PropTypes from 'prop-types'
 import React, {useEffect, useState, useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
-import {BlockchainServiceKey} from '../blockchain'
-import ScreenLoader from '../components/loader/ScreenLoader'
-import {applicationConfig} from '../config/ApplicationConfig'
-
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Await, AwaitActivity} from '~/node_modules/@simpli/react-native-await'
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {BlockchainServiceKey, blockchainServices} from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
 import ColorSelector from '~src/components/ColorSelector'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -47,9 +45,7 @@ export default function CreateAccountModal(props: Props) {
     dispatch(RootStore.account.actions.setName(name))
     dispatch(RootStore.account.actions.setBlockchain(blockchain))
     dispatch(
-      RootStore.account.actions.setSrcIcon(
-        applicationConfig.blockchain[blockchain].icon
-      )
+      RootStore.account.actions.setSrcIcon(blockchainServices[blockchain].icon)
     )
     if (color) dispatch(RootStore.account.actions.setBackgroundColor(color))
 
@@ -139,10 +135,7 @@ const AccountModalChildren: React.FC<IAccountModalChildren> = ({
   ) => {
     const mnemonic = await wallet.getMnemonic()
     if (!mnemonic) return null
-    return applicationConfig.blockchain[blockchain].generateAccount(
-      mnemonic,
-      index
-    )
+    return blockchainServices[blockchain].generateAccount(mnemonic, index)
   }
 
   useEffect(() => {

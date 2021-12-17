@@ -1,4 +1,3 @@
-import {Account} from '@cityofzion/neon-core-next/lib/wallet'
 import Neon, {api, wallet, u, rpc, tx} from '@cityofzion/neon-js-next'
 import {
   Nep17TransferIntent,
@@ -8,12 +7,11 @@ import {JsonRpcRequest, JsonRpcResponse} from '@json-rpc-tools/utils'
 import type * as AsteroidSDK from '@moonlight-io/asteroid-sdk-js'
 import {ImageLoadEventData, NativeModules, Platform} from 'react-native'
 
-import {Storage} from '~/src/app/Storage'
-import {DEFAULT_NETWORKS} from '~/src/config/walletConnect/constants'
 import {AsteroidHelper} from '~/src/helpers/AsteroidHelper'
 import {WCN3Helper} from '~/src/helpers/WCN3Helper'
 import {NeoNode} from '~/src/models/NeoNode'
 import {TokenAsset} from '~/src/models/TokenAsset'
+import {Account} from '~/src/models/redux/Account'
 import {NeoNative} from '~/src/native/NeoNative'
 import {
   IBlockchainService,
@@ -35,6 +33,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
   key: BlockchainServiceKey
   icon = icon
   cozTip: {address: string; token: string; hash: string}
+  accountsPool: Account[] = []
   readonly magicNumber = 844378958
   readonly derivationPath = "m/44'/888'/0'/0/?"
   readonly platform = 'neo'
@@ -67,7 +66,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
       token: 'GAS',
       hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
     }
-    this.wcChains = ['neo3:mainnet']
+    this.wcChains = __DEV__ ? ['neo3:testnet'] : ['neo3:mainnet']
   }
   rpcCall = async (
     address: string,
@@ -300,6 +299,10 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
     }
   }
 
+  setAccountsPool(accounts: Account[]) {
+    this.accountsPool = accounts
+  }
+
   private async signing(address: string) {
     const neoAccount = await this.getNeoAccount(address)
     if (!neoAccount) throw new Error('Sender Address in invalid')
@@ -338,8 +341,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
   }
 
   private async getNeoAccount(address: string) {
-    const accounts = (await Storage.accounts.load()) ?? []
-    const account = accounts.find((it) => it.address === address)
+    const account = this.accountsPool.find((it) => it.address === address)
     const wifAccount = await account?.getWif()
     return wifAccount ? new wallet.Account(wifAccount) : null
   }

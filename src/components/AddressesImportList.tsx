@@ -9,10 +9,10 @@ import {
 } from 'react-native'
 import {useSelector} from 'react-redux'
 
-import {BlockchainServiceKey, getBlockchainLogo} from '../blockchain'
-import {LinearLayout, TextView} from '../styles/styled-components'
-
 import {wrapper} from '~/src/app/ApplicationWrapper'
+import {BlockchainServiceKey, getBlockchainLogo} from '~src/blockchain'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
+
 export interface AddressImportItem {
   address: string
   blockchain: BlockchainServiceKey

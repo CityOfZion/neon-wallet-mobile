@@ -3,7 +3,7 @@ import {View, Dimensions} from 'react-native'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import {useSelector} from 'react-redux'
 
-import {wrapper} from '../app/ApplicationWrapper'
+import {wrapper} from '~src/app/ApplicationWrapper'
 
 export const HeaderNavigationDefault = () => {
   const insets = useSafeAreaInsets()

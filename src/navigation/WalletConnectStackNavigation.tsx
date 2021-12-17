@@ -3,8 +3,7 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {wrapper} from '../app/ApplicationWrapper'
-
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {Navigator} from '~src/app/Navigator'
 import WalletConnectPage from '~src/scenes/walletConnect/WalletConnectPage'
 export type WalletConnectStackParamList = {
