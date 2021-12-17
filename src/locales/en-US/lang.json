@@ -332,6 +332,11 @@
       "noAccess": "No access to camera",
       "cancel": "Cancel",
       "tryAgain": "Try again"
+    },
+    "screenLayout": {
+      "assets": "Assets",
+      "transactions": "Transactions",
+      "connections": "Connections"
     }
   },
   "modals": {
