@@ -220,6 +220,12 @@
     }
   },
   "modals": {
+    "invocationDetails": {
+      "title": "Detalhes da Invocação",
+      "detailsTitle": "Detalhes",
+      "parametersTitle": "Parâmetros da solicitação",
+      "noParameters": "Sem parâmetros"
+    },
     "send": {
       "title": "Send",
       "walletSelection": {
@@ -299,6 +305,10 @@
     }
   },
   "components": {
+    "contractDetailsBox": {
+      "hash": "Hash",
+      "method": "Método"
+    },
     "notification": {
       "title": "#translateme"
     },

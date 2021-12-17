@@ -1,7 +1,8 @@
 import {JsonRpcRequest, JsonRpcResponse} from '@json-rpc-tools/utils'
 import {ImageLoadEventData} from 'react-native'
 
-import {BSNeo3} from './Neo3/services/BSNeo3'
+import {ContractResponse} from '../models/response/ContractResponse'
+import {BSNeo3, ContractParam} from './Neo3/services/BSNeo3'
 import {BSNeoLegacy} from './NeoLegacy/services/BSNeoLegacy'
 
 import {Node} from '~/src/models/Node'
@@ -30,6 +31,7 @@ export interface BlockchainDataProvider {
     address: string,
     page?: number
   ) => Promise<TransactionAddressResponse>
+  getContract: (hash: string) => Promise<ContractResponse>
   getBalance: (address: string) => Promise<BalanceResponse>
   getUnclaimed: (address: string) => Promise<UnclaimedResponse>
   getAllNodes: () => Promise<Node[]>

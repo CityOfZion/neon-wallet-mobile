@@ -170,7 +170,7 @@
     "body_1": "Give your wallet a memorable name, maybe it could be related to what you want to use the wallet for like “trading” or “investments”.",
     "label_walletName": "Wallet Name",
     "placeholder_walletName": "Please enter a name",
-    "setName":"Wallet Name cannot be empty."
+    "setName": "Wallet Name cannot be empty."
   },
   "step5CreateWallet": {
     "label_1": "Congratulations, You’re the proud owner of a shiny new wallet!",
@@ -278,7 +278,7 @@
     "account": "Account",
     "address": "Address",
     "reference": "Reference",
-    "shareOrCopy":"Share or Copy to clipboard"
+    "shareOrCopy": "Share or Copy to clipboard"
   },
   "screens": {
     "contactDetails": {
@@ -340,14 +340,19 @@
     }
   },
   "modals": {
+    "invocationDetails": {
+      "title": "Invocation Details",
+      "detailsTitle": "Details",
+      "parametersTitle": "Request Parameters",
+      "noParameters": "No Parameters"
+    },
     "accountQRCode": {
       "address": "Address"
     },
     "transactionRequest": {
       "title": "WalletConnect",
       "xWantsToCall": "%{dappName} wants to call",
-      "hash": "Hash",
-      "method": "Method",
+
       "signatureScope": "Signature Scope",
       "transactionFee": "Transaction Fee",
       "xGas": "%{amount} GAS",
@@ -457,7 +462,7 @@
         "priority": "Priority",
         "sender": "Sent from",
         "recipient": "Recipient",
-        "priorityFee":"%{tokenSymbol} Fee",
+        "priorityFee": "%{tokenSymbol} Fee",
         "feeAmount": "(Fee %{amount})",
         "pleaseReview": "Please review transaction",
         "dialog": {
@@ -544,7 +549,7 @@
       "cozTeam": "- COZ team",
       "goBack": "Go Back"
     },
-    "tipping":  {
+    "tipping": {
       "title": "Tipping",
       "subtitle": "Benefits of tipping",
       "description": "COZ loves building products for our community of users. Tips are a great way to show the team that you appreciate their work and allow us to keep the wallet free of external influences. Why not toss a coin to your devs?",
@@ -552,7 +557,7 @@
       "recommended": "(Recommended)",
       "removeTip": "Remove Tip"
     },
-    "blockchainList":{
+    "blockchainList": {
       "accountPage": {
         "title": "Add new account",
         "subtitle": "Select the desired blockchain for your new account"
@@ -611,6 +616,10 @@
     }
   },
   "components": {
+    "contractDetailsBox": {
+      "hash": "Hash",
+      "method": "Method"
+    },
     "notification": {
       "title": "NOTIFICATION"
     },
@@ -731,14 +740,14 @@
     "priorityFaster": "Faster",
     "priorityFastest": "Fastest"
   },
-  "blockchainServices":{
-    "neo3":{
+  "blockchainServices": {
+    "neo3": {
       "label": "NEO",
       "id": "Neo N3"
     },
     "neoLegacy": {
       "label": "Neo Legacy",
-      "id":"Neo Legacy"
+      "id": "Neo Legacy"
     },
     "errorMessages": {
       "keyWrongOrAddressesImported": "Encrypted key is not valid or all address has been imported",

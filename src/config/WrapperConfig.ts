@@ -109,6 +109,7 @@ export class WrapperConfig {
     'AccountTransactionsScreen',
     'RawJsonModal',
     'WCConnectionDetailsModal',
+    'WCInvocationDetailsModal',
   ] as const
 }
 

@@ -7,6 +7,7 @@ import {NeoNode} from '~/src/models/NeoNode'
 import {Node} from '~/src/models/Node'
 import {Transaction} from '~/src/models/Transaction'
 import {BalanceResponse} from '~/src/models/response/BalanceResponse'
+import {ContractResponse} from '~/src/models/response/ContractResponse'
 import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
 import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
 import {ExchangeResponse} from '~/src/types/exchange'
@@ -53,6 +54,9 @@ export class NeoscanProvider implements NeoLegacyProvider {
       .name('getUnclaimed')
       .as(UnclaimedResponse)
       .getData()
+  }
+  async getContract(hash: string): Promise<ContractResponse> {
+    throw new Error('Method not implemented')
   }
   async getAllNodes() {
     const result: Node[] = []

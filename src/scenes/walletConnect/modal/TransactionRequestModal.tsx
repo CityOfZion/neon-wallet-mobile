@@ -7,6 +7,8 @@ import React, {useCallback, useEffect, useState} from 'react'
 import {TouchableWithoutFeedback, Linking} from 'react-native'
 import {useSelector} from 'react-redux'
 
+import ContractDetailsBox from '../components/ContractDetailsBox'
+
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
 import {wrapper} from '~src/app/ApplicationWrapper'
@@ -22,7 +24,7 @@ type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
 export interface TransactionRequestModalParams {
   metadata: AppMetadata
-  //session: SessionTypes.Settled
+  // session: SessionTypes.Settled
 }
 
 interface Props {
@@ -30,117 +32,15 @@ interface Props {
   route: RouteProp<ModalStackParamList, 'TransactionRequestModal'>
 }
 
-//const SessionItem = (props: {request: JsonRpcRequest<any>}) => {
-const SessionItem = () => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+interface SessionItemProps {
+  request: SessionTypes.RequestEvent
+}
 
-  return (
-    <LinearLayout mb={'13px'}>
-      <LinearLayout
-        bg={theme.colors.background[14]}
-        borderTopLeftRadius={6}
-        borderTopRightRadius={6}
-        orientation={'horiz'}
-        justifyContent={'space-between'}
-      >
-        <TextView
-          color={'white'}
-          fontFamily={'bold'}
-          fontSize={'16px'}
-          pl={'18px'}
-          pt={'14px'}
-          pb={'20px'}
-        >
-          {'Contract 1'}
-        </TextView>
-        <ImageView
-          alignSelf={'center'}
-          resizeMode={'contain'}
-          width={7}
-          height={12}
-          pr={'40px'}
-          source={require('~src/assets/images/icon-arrow-right-green.png')}
-        />
-      </LinearLayout>
-      <LinearLayout
-        bg={theme.colors.background[1]}
-        orientation={'verti'}
-        borderBottomLeftRadius={6}
-        borderBottomRightRadius={6}
-        pt={'13px'}
-        pb={'13px'}
-      >
-        <LinearLayout
-          pb={'13px'}
-          orientation={'horiz'}
-          justifyContent={'space-between'}
-        >
-          <TextView
-            color={theme.colors.text[10]}
-            weight={2}
-            fontFamily={'bold'}
-            fontSize={14}
-            pl={'18px'}
-          >
-            {i18n.t('modals.transactionRequest.hash')}
-          </TextView>
-          <LinearLayout width={'65%'} orientation={'horiz'} pr={'30px'}>
-            <TextView
-              color={'primary'}
-              ellipsizeMode={'middle'}
-              numberOfLines={1}
-              fontSize={16}
-              pr={'13px'}
-            >
-              {}
-              {'042454707407254752547274476674235723752'}
-            </TextView>
-            <TouchableWithoutFeedback onPress={() => {}}>
-              <ImageView
-                alignSelf={'center'}
-                resizeMode={'contain'}
-                width={14}
-                height={13}
-                source={require('~src/assets/images/dora-link.png')}
-              />
-            </TouchableWithoutFeedback>
-          </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-          height={'1px'}
-          ml={'16px'}
-          mr={'16px'}
-          bg={theme.colors.background[10]}
-        />
-        <LinearLayout
-          orientation={'horiz'}
-          justifyContent={'space-between'}
-          mt={'13px'}
-        >
-          <TextView
-            color={theme.colors.text[10]}
-            weight={2}
-            fontFamily={'bold'}
-            fontSize={14}
-            pl={'18px'}
-          >
-            {i18n.t('modals.transactionRequest.method')}
-          </TextView>
-          <TextView
-            pr={'20px'}
-            color={'white'}
-            alignSelf={'flex-end'}
-            fontSize={16}
-          >
-            {/*{props.request.method}*/}
-            {'Invokefunction'}
-          </TextView>
-        </LinearLayout>
-      </LinearLayout>
-    </LinearLayout>
-  )
+export interface WCRequestParams {
+  scriptHash: string
+  operation: string
+  args: {type: string; value: number | string}[]
+  signer: {scope: number}
 }
 
 const TransactionRequestModal = (props: Props) => {
@@ -152,19 +52,10 @@ const TransactionRequestModal = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
-  const params = props.route.params
 
-  interface WCRequestParams {
-    scriptHash: string
-    operation: string
-    args: {type: string; value: number}[]
-    signer: {scope: number}
-  }
-
-  useEffect(() => {
-    //console.log('debug requests and sessions', {requests, sessions})
-    //alert(JSON.stringify(requests[0]))
-  }, [])
+  const session = sessions.find(
+    (item) => item.topic === requests[0].topic
+  ) as SessionTypes.Settled
 
   const handleAcceptRequest = useCallback(async () => {
     await approveRequest(requests[0])
@@ -207,17 +98,34 @@ const TransactionRequestModal = (props: Props) => {
         >
           params.metadata.name
         </TextView>
-        {
-          // walletConnectCtx.requests.map(
-          //   (requestEvent) =>
-          // isJsonRpcRequest(requestEvent.request) &&
-          // requestEvent.topic === params.session.topic &&
-          <SessionItem
-          // key={requestEvent.request.id}
-          // request={requestEvent.request}
-          />
-          //)
-        }
+        <ContractDetailsBox
+          session={session}
+          rightButton={
+            <TouchableWithoutFeedback
+              onPress={() =>
+                props.navigation.navigate(wrapper.route.Modal.name, {
+                  screen: wrapper.route.WCInvocationDetailsModal.name,
+                  params: {
+                    request: requests[0],
+                    session,
+                  },
+                })
+              }
+            >
+              <ImageView
+                alignSelf={'center'}
+                resizeMode={'contain'}
+                width={7}
+                height={12}
+                pr={'40px'}
+                source={require('~src/assets/images/icon-arrow-right-green.png')}
+              />
+            </TouchableWithoutFeedback>
+          }
+          hash="042454707407254752547274476674235723752"
+          method="Invokefunction"
+          title="Contract 1"
+        />
         <TouchableWithoutFeedback onPress={() => {}}>
           <LinearLayout
             bg={theme.colors.background[1]}
