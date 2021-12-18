@@ -1,4 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
@@ -100,6 +101,7 @@ const WalletStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               theme,
               route,
+              title: i18n.t('screens.screenLayout.assets'),
             })
           }
         />
@@ -110,6 +112,7 @@ const WalletStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               theme,
               route,
+              title: i18n.t('screens.screenLayout.connections'),
             })
           }
         />
@@ -120,6 +123,7 @@ const WalletStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               theme,
               route,
+              title: i18n.t('screens.screenLayout.transactions'),
             })
           }
         />

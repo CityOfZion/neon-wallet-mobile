@@ -26,6 +26,7 @@ interface Props extends LinearLayoutProps {
   zeroBalance?: boolean
   hideEmptyMessage?: boolean
   notOrderByValue?: boolean
+  parentScreen?: 'assets'
 }
 
 interface ItemProps {
@@ -41,10 +42,14 @@ interface ListProps {
   address?: string
   walletId?: string
   fromSendAccountSelectionModal: boolean
+  parentScreen?: 'assets'
 }
 
 const ViewBalanceItem = (props: ItemProps & ListProps) => {
   const showBlockchain = props.fromListWalletView
+
+  const isAssets = props.parentScreen === 'assets'
+
   return (
     <LinearLayout
       orientation="horiz"
@@ -79,11 +84,11 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
           allowFontScaling={true}
           adjustsFontSizeToFit={true}
           numberOfLines={1}
-          mb={showBlockchain ? '-5px' : '6px'}
+          mb={showBlockchain || isAssets ? '-5px' : '6px'}
         >
           {props.item.symbol}
         </TextView>
-        {showBlockchain && (
+        {(showBlockchain || isAssets) && (
           <TextView
             color="text.2"
             fontSize="sm"
@@ -98,32 +103,38 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
         )}
       </LinearLayout>
 
-      <LinearLayout weight={1} ml={4}>
-        <LinearLayout weight={1} orientation="verti" justifyContent={'center'}>
-          <TextView
-            mb="-6px"
-            color="text.2"
-            fontSize="sm"
-            allowFontScaling={true}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            mr={4}
+      {!isAssets && (
+        <LinearLayout weight={1} ml={4}>
+          <LinearLayout
+            weight={1}
+            orientation="verti"
+            justifyContent={'center'}
           >
-            {i18n.t('components.balanceList.holdings')}
-          </TextView>
-          <TextView
-            mt={1}
-            color="text.2"
-            fontSize="sm"
-            fontFamily="medium"
-            allowFontScaling={true}
-            adjustsFontSizeToFit={true}
-            numberOfLines={1}
-          >
-            {i18n.t('components.balanceList.value')}
-          </TextView>
+            <TextView
+              mb="-6px"
+              color="text.2"
+              fontSize="sm"
+              allowFontScaling={true}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              mr={4}
+            >
+              {i18n.t('components.balanceList.holdings')}
+            </TextView>
+            <TextView
+              mt={1}
+              color="text.2"
+              fontSize="sm"
+              fontFamily="medium"
+              allowFontScaling={true}
+              adjustsFontSizeToFit={true}
+              numberOfLines={1}
+            >
+              {i18n.t('components.balanceList.value')}
+            </TextView>
+          </LinearLayout>
         </LinearLayout>
-      </LinearLayout>
+      )}
       <LinearLayout weight={1} />
       <LinearLayout weight={1} ml={4}>
         <LinearLayout
@@ -210,6 +221,8 @@ const BalanceList = (props: Props) => {
   const {exchange} = useSelector((state: RootState) => state.app)
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
+  const isAssets = props.parentScreen === 'assets'
+
   const orderByValue = (token1: TokenAsset, token2: TokenAsset) => {
     const value1 =
       token1.exchangeToken(currency, exchange[token1.blockchain]) ?? 0
@@ -258,7 +271,9 @@ const BalanceList = (props: Props) => {
       {showListTokenAssets(props.tokenAssets) ? (
         <>
           <TextView color="text.2" fontSize="sm">
-            {i18n.t('components.balanceList.title')}
+            {isAssets
+              ? i18n.t('components.balanceList.titleAssets')
+              : i18n.t('components.balanceList.title')}
           </TextView>
           <FlatList<TokenAsset>
             data={getTokenAssets()}
@@ -283,6 +298,7 @@ const BalanceList = (props: Props) => {
                 account={props.account}
                 uri={props.uri}
                 tokenAssets={props.tokenAssets}
+                parentScreen={props.parentScreen}
               />
             )}
           />
