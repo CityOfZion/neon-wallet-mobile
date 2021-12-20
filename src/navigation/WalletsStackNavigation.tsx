@@ -14,6 +14,9 @@ import {ModalParams} from '~src/navigation/ModalStackNavigation'
 import AccountAssetDetail, {
   AccountAssetDetailParams,
 } from '~src/scenes/Account/AccountAssetDetail'
+import AccountAssetScreen from '~src/scenes/Account/AccountAssetsScreen'
+import AccountConnectionsScreen from '~src/scenes/Account/AccountConnectionsScreen'
+import AccountTransactionsScreen from '~src/scenes/Account/AccountTransactionsScreen'
 import GetAccountView, {
   GetAccountParams,
 } from '~src/scenes/Account/GetAccountView'
@@ -29,6 +32,9 @@ export type WalletStackParamList = {
   Settings: SettingsStackParamList
   Step1BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
   More: MoreStackParamList
+  AccountAssetScreen: undefined
+  AccountTransactionsScreen: undefined
+  AccountConnectionsScreen: undefined
 }
 
 export type WalletStackParams =
@@ -80,6 +86,36 @@ const WalletStackNavigation = () => {
         <WalletStack.Screen
           name={wrapper.route.AccountAssetDetail.name}
           component={AccountAssetDetail}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              theme,
+              route,
+            })
+          }
+        />
+        <WalletStack.Screen
+          name={wrapper.route.AccountAssetScreen.name}
+          component={AccountAssetScreen}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              theme,
+              route,
+            })
+          }
+        />
+        <WalletStack.Screen
+          name={wrapper.route.AccountConnectionsScreen.name}
+          component={AccountConnectionsScreen}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              theme,
+              route,
+            })
+          }
+        />
+        <WalletStack.Screen
+          name={wrapper.route.AccountTransactionsScreen.name}
+          component={AccountTransactionsScreen}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               theme,

@@ -104,6 +104,9 @@ export class WrapperConfig {
     'WCWalletSelectionModal',
     'WCAccountSelectionModal',
     'TransactionRequestModal',
+    'AccountAssetScreen',
+    'AccountConnectionsScreen',
+    'AccountTransactionsScreen',
   ] as const
 }
 

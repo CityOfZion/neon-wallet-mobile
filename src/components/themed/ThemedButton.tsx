@@ -18,6 +18,7 @@ import styled, {
 } from '~src/styles/styled-components'
 
 interface Props {
+  alignX?: string
   onPress?: (
     e: NativeSyntheticEvent<NativeTouchEvent>,
     active?: boolean
@@ -42,6 +43,7 @@ interface Props {
   borderColor?: string
   textAlign?: string
   radius?: number
+  suffix?: JSX.Element
   width?: string | number
 }
 
@@ -96,6 +98,15 @@ const LabelComponent = (props: Props) => {
           )}
         </LinearLayout>
       )}
+
+      <LinearLayout
+        flex={1}
+        orientation="horiz"
+        alignItems={'center'}
+        justifyContent={'flex-end'}
+      >
+        {props.suffix}
+      </LinearLayout>
     </LinearLayout>
   )
 }
@@ -162,6 +173,7 @@ const ThemedButton: React.FC<Props> = (props) => {
         borderColor={props.borderColor}
         isPressed={isSelected}
         radius={props.radius}
+        alignX={props.alignX}
       >
         {MemoLabelComponent}
       </ThemedCard>
@@ -174,6 +186,7 @@ ThemedButton.propTypes = {
   label: PropTypes.string,
   textColor: PropTypes.string,
   bgColor: PropTypes.string,
+  alignX: PropTypes.string,
   srcIcon: PropTypes.any,
   toggleable: PropTypes.bool,
   active: PropTypes.bool,
@@ -182,6 +195,7 @@ ThemedButton.propTypes = {
   flat: PropTypes.bool,
   basic: PropTypes.bool,
   iconSize: PropTypes.any,
+  suffix: PropTypes.element,
   fontSize: PropTypes.any,
   fontFamily: PropTypes.any,
   contentStyle: PropTypes.any,
@@ -193,6 +207,7 @@ ThemedButton.propTypes = {
 
 ThemedButton.defaultProps = {
   textColor: 'primary',
+  alignX: 'center',
   toggleable: false,
   active: false,
   disabled: false,

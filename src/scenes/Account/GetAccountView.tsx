@@ -25,13 +25,17 @@ import {FilterHelper} from '~/src/helpers/FilterHelper'
 import {useAmountFee} from '~/src/hooks/AmountFeeHook'
 import {Node} from '~/src/models/Node'
 import {TokenAsset} from '~/src/models/TokenAsset'
-import {blockchainServices, isClaimable} from '~src/blockchain'
+import {
+  blockchainServices,
+  hasWCIntegration,
+  isClaimable,
+} from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
 import BalanceList from '~src/components/BalanceList'
-import {TabSelectorBar} from '~src/components/TabSelector'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
+import ThemedButton from '~src/components/themed/ThemedButton'
 import {ThemedReceiveButton} from '~src/components/themed/ThemedReceiveButton'
 import {Lang} from '~src/enums/Lang'
 import {NeoNode} from '~src/models/NeoNode'
@@ -40,7 +44,7 @@ import {Wallet} from '~src/models/redux/Wallet'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface GetAccountParams {
   key: string
@@ -158,9 +162,8 @@ const TransactionsTab = () => {
 
 const GetAccountView = (props: GetAccountViewProps) => {
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
-  const nodesPool = useSelector((state: RootState) => state.app.nodes)
   const {language} = useSelector((state: RootState) => state.settings)
-  const {address, blockchain} = useSelector((state: RootState) => state.account)
+  const {address} = useSelector((state: RootState) => state.account)
 
   const posYFactor = useRef(new Animated.Value(0))
   const {isConnected} = useSelector((state: RootState) => state.network)
@@ -421,6 +424,12 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }
   }
 
+  const hasWalletconnect = () => {
+    const bs = blockchainServices[account.blockchain]
+
+    return hasWCIntegration(bs)
+  }
+
   return (
     <ScreenLayout
       solidColorBG={true}
@@ -506,19 +515,67 @@ const GetAccountView = (props: GetAccountViewProps) => {
           }
         />
       </View>
-      {showTabBarSelector && (
-        <TabSelectorBar
-          firstScene={{
-            title: 'Assets',
-            Element: BalanceListParam,
+      <LinearLayout>
+        <ThemedButton
+          alignX={'flex-start'}
+          textColor={'text.0'}
+          label={i18n.t('screens.screenLayout.assets')}
+          srcIcon={require('~/src/assets/images/Equalizer_-_simple-line-icons.png')}
+          iconSize={[19, 23]}
+          onPress={() => {
+            props.navigation.navigate(wrapper.route.AccountAssetScreen.name)
           }}
-          secondScene={{
-            title: 'Transactions',
-            Element: TransactionsTab,
-          }}
-          handleIndex={handleChangeScene}
+          suffix={
+            <ImageView
+              width={15}
+              height={15}
+              resizeMode={'contain'}
+              source={require('~src/assets/images/icon-arrow-right-green.png')}
+            />
+          }
         />
-      )}
+        <ThemedButton
+          alignX={'flex-start'}
+          textColor={'text.0'}
+          label={i18n.t('screens.screenLayout.transactions')}
+          srcIcon={require('~/src/assets/images/icon-reselect-green.png')}
+          iconSize={[19, 23]}
+          onPress={() => {
+            props.navigation.navigate(
+              wrapper.route.AccountTransactionsScreen.name
+            )
+          }}
+          suffix={
+            <ImageView
+              width={15}
+              height={15}
+              resizeMode={'contain'}
+              source={require('~src/assets/images/icon-arrow-right-green.png')}
+            />
+          }
+        />
+        <ThemedButton
+          disabled={!hasWalletconnect()}
+          alignX={'flex-start'}
+          textColor={'text.0'}
+          label={i18n.t('screens.screenLayout.connections')}
+          srcIcon={require('~/src/assets/images/connections.png')}
+          suffix={
+            <ImageView
+              width={15}
+              height={15}
+              resizeMode={'contain'}
+              source={require('~src/assets/images/icon-arrow-right-green.png')}
+            />
+          }
+          iconSize={[19, 23]}
+          onPress={() => {
+            props.navigation.navigate(
+              wrapper.route.AccountConnectionsScreen.name
+            )
+          }}
+        />
+      </LinearLayout>
       <ModalWarningFee
         onPress={claimGas}
         totTokenFeeAccount={totTokenFeeAccount}
