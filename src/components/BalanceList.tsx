@@ -173,6 +173,11 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
   )
 }
 
+ViewBalanceItem.defaultProps = {
+  showHoldingValueColumn: true,
+  showBlockchain: false,
+}
+
 const BalanceListItem = (props: ListProps & ItemProps & Props) => {
   const navigation = useNavigation()
 
