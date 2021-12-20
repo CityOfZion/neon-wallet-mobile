@@ -25,7 +25,11 @@ import {FilterHelper} from '~/src/helpers/FilterHelper'
 import {useAmountFee} from '~/src/hooks/AmountFeeHook'
 import {Node} from '~/src/models/Node'
 import {TokenAsset} from '~/src/models/TokenAsset'
-import {blockchainServices, isClaimable} from '~src/blockchain'
+import {
+  blockchainServices,
+  hasWCIntegration,
+  isClaimable,
+} from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
 import BalanceList from '~src/components/BalanceList'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
@@ -383,8 +387,11 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }).start()
   }
 
-  const isNeoLegacy = () =>
-    blockchainServices[account.blockchain].key === 'neoLegacy'
+  const hasWalletconnect = () => {
+    const bs = blockchainServices[account.blockchain]
+
+    return hasWCIntegration(bs)
+  }
 
   return (
     <ScreenLayout
@@ -511,7 +518,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           }
         />
         <ThemedButton
-          disabled={isNeoLegacy()}
+          disabled={!hasWalletconnect()}
           alignX={'flex-start'}
           textColor={'text.0'}
           label={i18n.t('screens.screenLayout.connections')}
