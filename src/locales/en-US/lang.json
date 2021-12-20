@@ -605,8 +605,7 @@
       "title": "NOTIFICATION"
     },
     "balanceList": {
-      "title": "TOKEN VALUE",
-      "titleAssets": "TOKEN BALANCES",
+      "title": "TOKEN BALANCES",
       "holdings": "Holdings",
       "value": "Value",
       "empty": "Your wallet is currently empty, why not add some funds today?"

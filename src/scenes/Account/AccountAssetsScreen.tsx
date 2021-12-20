@@ -22,8 +22,6 @@ const AccountAssetScreen = () => {
     setAccount(upAccount)
   }, [accountsPool])
 
-  console.log(account)
-
   return (
     <ScreenLayout>
       <LinearLayout
@@ -47,9 +45,9 @@ const AccountAssetScreen = () => {
         my="16px"
         tokenAssets={account.getTokenAssets()}
         address={account.address ?? undefined}
-        fromAccountView={true}
-        parentScreen={'assets'}
-        fromListWalletView={false}
+        showHoldingValueColumn={false}
+        showBlockchain={true}
+        fromAccountView={false}
         fromSendAccountSelectionModal={false}
         zeroBalance={true}
       />

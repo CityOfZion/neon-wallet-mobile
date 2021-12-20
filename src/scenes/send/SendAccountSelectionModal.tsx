@@ -136,7 +136,6 @@ const SendAccountSelectionModal = (props: Props) => {
                 <BalanceList
                   tokenAssets={selectedAccount.tokenAssets}
                   fromAccountView={false}
-                  fromListWalletView={false}
                   fromSendAccountSelectionModal={
                     !props.route.params?.uri?.tokenHash
                   }

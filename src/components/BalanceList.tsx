@@ -26,7 +26,6 @@ interface Props extends LinearLayoutProps {
   zeroBalance?: boolean
   hideEmptyMessage?: boolean
   notOrderByValue?: boolean
-  parentScreen?: 'assets'
 }
 
 interface ItemProps {
@@ -38,17 +37,15 @@ interface ItemProps {
 
 interface ListProps {
   fromAccountView: boolean
-  fromListWalletView: boolean
+  showBlockchain?: boolean
+  showHoldingValueColumn?: boolean
   address?: string
   walletId?: string
   fromSendAccountSelectionModal: boolean
-  parentScreen?: 'assets'
 }
 
 const ViewBalanceItem = (props: ItemProps & ListProps) => {
-  const showBlockchain = props.fromListWalletView
-
-  const isAssets = props.parentScreen === 'assets'
+  const showBlockchain = props.showBlockchain
 
   return (
     <LinearLayout
@@ -56,7 +53,7 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
       alignItems="center"
       alignContent={'center'}
     >
-      {props.fromListWalletView ? (
+      {props.showBlockchain ? (
         <LinearLayout
           mr={'8px'}
           width={12}
@@ -84,11 +81,11 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
           allowFontScaling={true}
           adjustsFontSizeToFit={true}
           numberOfLines={1}
-          mb={showBlockchain || isAssets ? '-5px' : '6px'}
+          mb={showBlockchain ? '-5px' : '6px'}
         >
           {props.item.symbol}
         </TextView>
-        {(showBlockchain || isAssets) && (
+        {showBlockchain && (
           <TextView
             color="text.2"
             fontSize="sm"
@@ -103,7 +100,7 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
         )}
       </LinearLayout>
 
-      {!isAssets && (
+      {props.showHoldingValueColumn && (
         <LinearLayout weight={1} ml={4}>
           <LinearLayout
             weight={1}
@@ -181,7 +178,7 @@ const BalanceListItem = (props: ListProps & ItemProps & Props) => {
 
   return (
     <LinearLayout>
-      {props.fromAccountView || props.fromListWalletView ? (
+      {props.fromAccountView || props.showBlockchain ? (
         <TouchableOpacity
           onPress={() =>
             navigation?.navigate(wrapper.route.AccountAssetDetail.name, {
@@ -217,11 +214,14 @@ const BalanceListItem = (props: ListProps & ItemProps & Props) => {
   )
 }
 
+BalanceListItem.defaultProps = {
+  showHoldingValueColumn: true,
+  showBlockchain: false,
+}
+
 const BalanceList = (props: Props) => {
   const {exchange} = useSelector((state: RootState) => state.app)
   const {currency, language} = useSelector((state: RootState) => state.settings)
-
-  const isAssets = props.parentScreen === 'assets'
 
   const orderByValue = (token1: TokenAsset, token2: TokenAsset) => {
     const value1 =
@@ -271,9 +271,7 @@ const BalanceList = (props: Props) => {
       {showListTokenAssets(props.tokenAssets) ? (
         <>
           <TextView color="text.2" fontSize="sm">
-            {isAssets
-              ? i18n.t('components.balanceList.titleAssets')
-              : i18n.t('components.balanceList.title')}
+            {i18n.t('components.balanceList.title')}
           </TextView>
           <FlatList<TokenAsset>
             data={getTokenAssets()}
@@ -285,7 +283,7 @@ const BalanceList = (props: Props) => {
               <BalanceListItem
                 item={item}
                 fromAccountView={props.fromAccountView}
-                fromListWalletView={props.fromListWalletView}
+                showBlockchain={props.showBlockchain}
                 fromSendAccountSelectionModal={
                   props.fromSendAccountSelectionModal
                 }
@@ -298,7 +296,7 @@ const BalanceList = (props: Props) => {
                 account={props.account}
                 uri={props.uri}
                 tokenAssets={props.tokenAssets}
-                parentScreen={props.parentScreen}
+                showHoldingValueColumn={props.showHoldingValueColumn}
               />
             )}
           />

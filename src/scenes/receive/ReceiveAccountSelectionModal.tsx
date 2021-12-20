@@ -144,7 +144,6 @@ const ReceiveAccountSelectionModal = (props: Props) => {
                   zeroBalance={false}
                   tokenAssets={selectedAccount.tokenAssets}
                   fromAccountView={false}
-                  fromListWalletView={false}
                   fromSendAccountSelectionModal={false}
                 />
               </LinearLayout>
