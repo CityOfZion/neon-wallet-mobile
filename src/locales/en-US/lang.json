@@ -598,6 +598,10 @@
     },
     "WCWalletSelection": {
       "title": "Please select the wallet where your account resides"
+    },
+    "rawJson": {
+      "title": "JSON",
+      "data": "Data"
     }
   },
   "components": {
