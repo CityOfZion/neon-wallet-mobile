@@ -23,8 +23,13 @@ import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
 export interface TransactionRequestModalParams {
+<<<<<<< Updated upstream
   metadata: AppMetadata
   // session: SessionTypes.Settled
+=======
+  request: SessionTypes.RequestEvent
+  session?: SessionTypes.Settled
+>>>>>>> Stashed changes
 }
 
 interface Props {
@@ -53,9 +58,22 @@ const TransactionRequestModal = (props: Props) => {
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
+<<<<<<< Updated upstream
   const session = sessions.find(
     (item) => item.topic === requests[0].topic
   ) as SessionTypes.Settled
+=======
+  interface WCRequestParams {
+    scriptHash: string
+    operation: string
+    args: {type: string; value: number}[]
+    signer: {scope: number}
+  }
+
+  useEffect(() => {
+    alert(JSON.stringify(props.route.params.request))
+  }, [])
+>>>>>>> Stashed changes
 
   const handleAcceptRequest = useCallback(async () => {
     await approveRequest(requests[0])
@@ -64,7 +82,7 @@ const TransactionRequestModal = (props: Props) => {
   }, [requests, controller])
 
   const handleDeclineRequest = useCallback(async () => {
-    await rejectRequest(requests[0])
+    await rejectRequest(props.route.params.request)
     controller.close()
     props.navigation.goBack()
   }, [requests, controller])

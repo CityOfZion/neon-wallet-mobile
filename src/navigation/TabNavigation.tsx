@@ -59,7 +59,7 @@ const TabNavigation = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
-  const {requests} = useWalletConnect()
+  const {requests, sessions} = useWalletConnect()
   const [welcomeHidden, setWelcomeHidden] = useState(
     props.route.params?.welcomeHidden ?? true
   )
@@ -111,8 +111,13 @@ const TabNavigation = (props: Props) => {
 
   useEffect(() => {
     if (requests.length > 0) {
+      const foundSession = sessions.find(it => it.topic === requests[0].topic)
       props.navigation.navigate(wrapper.route.Modal.name, {
         screen: wrapper.route.TransactionRequestModal.name,
+        params: {
+          request: requests[0],
+          session: foundSession
+        }
       })
     }
   }, [requests])
