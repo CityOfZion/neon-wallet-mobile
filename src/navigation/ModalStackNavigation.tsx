@@ -137,6 +137,7 @@ export type ModalStackParamList = {
   RawJsonModal: RawJsonModalParams
   WCConnectionDetailsModal: WCConnectionDetailsModalParams
   WCInvocationDetailsModal: WCInvocationDetailsModalParams
+  RawJsonModal: RawJsonModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -162,6 +163,7 @@ export type ModalParams =
   | DefaultNavigationParam<RawJsonModalParams>
   | DefaultNavigationParam<WCConnectionDetailsModalParams>
   | DefaultNavigationParam<WCInvocationDetailsModalParams>
+  | DefaultNavigationParam<RawJsonModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -308,6 +310,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={wrapper.route.WCConnectionDetailsModal.name}
           component={WCConnectionDetailsModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.RawJsonModal.name}
+          component={RawJsonModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>
