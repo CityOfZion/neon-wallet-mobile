@@ -33,7 +33,7 @@
     "More": "More",
     "Account": "Account",
     "Settings": "Settings",
-    "WalletConnectPage": "dApps",
+    "WalletConnectPage": "Connection",
     "ReceiveQrCode": "Receive QR Code",
     "CustomColor": "Custom Colour",
     "CreateWallet": "Create Wallet",
@@ -602,6 +602,12 @@
     "rawJson": {
       "title": "JSON",
       "data": "Data"
+    },
+    "WCConnectionDetails": {
+      "chain": "Chain",
+      "features": "Features",
+      "title": "Connection details",
+      "disconnect": "Disconnect"
     }
   },
   "components": {
@@ -746,6 +752,8 @@
     },
     "noDAppsConnected": "No dApps connected",
     "waitingDAppConnect": "Please be a patient, we are now connecting with %{dAppName}",
-    "connectDAppLabel": "Connect a dApp"
+    "connectDAppLabel": "Connect a dApp",
+    "connectNewDAppLabel": "Connect a new dApp",
+    "connectedDApps": "Connected dApps"
   }
 }

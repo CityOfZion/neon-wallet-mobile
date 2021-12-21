@@ -25,6 +25,7 @@ const WalletConnectStackNavigation = () => {
           component={WalletConnectPage}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
+              title: wrapper.route.WalletConnectPage.translate(),
               theme,
               route,
             })

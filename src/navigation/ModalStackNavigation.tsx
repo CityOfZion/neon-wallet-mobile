@@ -82,6 +82,9 @@ import {
   WCAccountSelectionModal,
   WCAccountSelectionModalParams,
 } from '~src/scenes/walletConnect/modal/WCAccountSelectionModal'
+import WCConnectionDetailsModal, {
+  WCConnectionDetailsModalParams,
+} from '~src/scenes/walletConnect/modal/WCConnectionDetailsModal'
 import WCConnectionRequestModal, {
   WCConnectionRequestModalParams,
 } from '~src/scenes/walletConnect/modal/WCConnectionRequestModal'
@@ -129,6 +132,7 @@ export type ModalStackParamList = {
   WCAccountSelectionModal: WCAccountSelectionModalParams
   TransactionRequestModal: TransactionRequestModalParams
   RawJsonModal: RawJsonModalParams
+  WCConnectionDetailsModal: WCConnectionDetailsModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -152,6 +156,7 @@ export type ModalParams =
   | DefaultNavigationParam<WCWalletSelectionModalModalParams>
   | DefaultNavigationParam<TransactionRequestModalParams>
   | DefaultNavigationParam<RawJsonModalParams>
+  | DefaultNavigationParam<WCConnectionDetailsModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -294,6 +299,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={wrapper.route.RawJsonModal.name}
           component={RawJsonModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.WCConnectionDetailsModal.name}
+          component={WCConnectionDetailsModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>
