@@ -1,18 +1,18 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import React, {useEffect, useState} from 'react'
-import {StatusBar} from 'react-native'
-import {useSelector} from 'react-redux'
-import {ThemeProvider} from 'styled-components'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import React, { useCallback, useEffect, useState } from 'react'
+import { StatusBar } from 'react-native'
+import { useSelector } from 'react-redux'
+import { ThemeProvider } from 'styled-components'
 
 import * as data from '~src/Changelog.json'
-import {appBus} from '~src/app/AppBus'
-import {wrapper} from '~src/app/ApplicationWrapper'
+import { appBus } from '~src/app/AppBus'
+import { wrapper } from '~src/app/ApplicationWrapper'
 import FooterBar from '~src/components/layout/FooterBar'
-import {useWalletConnect} from '~src/contexts/WalletConnectContext'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
+import { useWalletConnect } from '~src/contexts/WalletConnectContext'
+import { SenderTransaction } from '~src/models/redux/SenderTransaction'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
 import ContactsStackNavigation, {
   ContactsStackParams,
 } from '~src/navigation/ContactsStackNavigation'
@@ -24,6 +24,8 @@ import WalletConnectStackNavigation from '~src/navigation/WalletConnectStackNavi
 import WalletStackNavigation, {
   WalletStackParams,
 } from '~src/navigation/WalletsStackNavigation'
+import { blockchainServices, getBlockchainByWCChain } from '../blockchain'
+import { ContractInvocation } from '../helpers/WCN3Helper'
 
 export type TabStackParamList = {
   ListWallets: WalletStackParams
@@ -34,14 +36,14 @@ export type TabStackParamList = {
 
 export type TabParams =
   | ((
-      | DefaultNavigationParam<MoreStackParam>
-      | DefaultNavigationParam<WalletStackParams>
-    ) &
-      Partial<{
-        welcomeHidden?: boolean
-        changelogHidden?: boolean
-        numberOfVersions?: number
-      }>)
+    | DefaultNavigationParam<MoreStackParam>
+    | DefaultNavigationParam<WalletStackParams>
+  ) &
+    Partial<{
+      welcomeHidden?: boolean
+      changelogHidden?: boolean
+      numberOfVersions?: number
+    }>)
   | undefined
 
 interface Props {
@@ -59,7 +61,7 @@ const TabNavigation = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
-  const {requests, sessions} = useWalletConnect()
+  const { requests, sessions } = useWalletConnect()
   const [welcomeHidden, setWelcomeHidden] = useState(
     props.route.params?.welcomeHidden ?? true
   )
@@ -109,17 +111,26 @@ const TabNavigation = (props: Props) => {
     )
   }, [])
 
-  useEffect(() => {
-    if (requests.length > 0) {
-      const foundSession = sessions.find(it => it.topic === requests[0].topic)
+  const navigateToTransactionRequetModal = useCallback(async () => {
+    const foundSession = sessions.find(it => it.topic === requests[0].topic)
+    const blockchain = getBlockchainByWCChain(foundSession?.permissions.blockchain.chains || [])
+    const contractParams: ContractInvocation  = requests[0].request.params
+    if(blockchain && foundSession && requests.length > 0){
+      const contract = blockchainServices[blockchain].provider.getContract(contractParams.scriptHash)
       props.navigation.navigate(wrapper.route.Modal.name, {
         screen: wrapper.route.TransactionRequestModal.name,
         params: {
           request: requests[0],
-          session: foundSession
+          session: foundSession,
+          contract,
+          contractParams
         }
       })
     }
+  }, [requests])
+
+  useEffect(() => {
+    navigateToTransactionRequetModal()
   }, [requests])
 
   return (

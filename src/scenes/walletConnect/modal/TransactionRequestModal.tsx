@@ -1,35 +1,35 @@
-import {isJsonRpcRequest, JsonRpcRequest} from '@json-rpc-tools/utils'
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {SessionTypes, AppMetadata} from '@walletconnect/types'
+import { isJsonRpcRequest, JsonRpcRequest } from '@json-rpc-tools/utils'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { SessionTypes, AppMetadata } from '@walletconnect/types'
 import i18n from 'i18n-js'
-import React, {useCallback, useEffect, useState} from 'react'
-import {TouchableWithoutFeedback, Linking} from 'react-native'
-import {useSelector} from 'react-redux'
+import React, { useCallback, useEffect, useState } from 'react'
+import { TouchableWithoutFeedback, Linking } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import ContractDetailsBox from '../components/ContractDetailsBox'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
-import {wrapper} from '~src/app/ApplicationWrapper'
+import { useWalletConnect } from '~/src/contexts/WalletConnectContext'
+import { wrapper } from '~src/app/ApplicationWrapper'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~src/components/SwiperPanel'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {TabStackParamList} from '~src/navigation/TabNavigation'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { TabStackParamList } from '~src/navigation/TabNavigation'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ContractResponse } from '~/src/models/response/ContractResponse'
+import { ContractInvocation } from '~/src/helpers/WCN3Helper'
+
 type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
 export interface TransactionRequestModalParams {
-<<<<<<< Updated upstream
-  metadata: AppMetadata
-  // session: SessionTypes.Settled
-=======
   request: SessionTypes.RequestEvent
-  session?: SessionTypes.Settled
->>>>>>> Stashed changes
+  contract: ContractResponse
+  session: SessionTypes.Settled
+  contractParams: ContractInvocation
 }
 
 interface Props {
@@ -44,39 +44,22 @@ interface SessionItemProps {
 export interface WCRequestParams {
   scriptHash: string
   operation: string
-  args: {type: string; value: number | string}[]
-  signer: {scope: number}
+  args: { type: string; value: number | string }[]
+  signer: { scope: number }
 }
 
 const TransactionRequestModal = (props: Props) => {
+  const { contract, request, session, contractParams } = props.route.params
   const controller = useSwiperController(true)
-  const {sessions, requests, approveRequest, rejectRequest} = useWalletConnect()
-
+  const { sessions, requests, approveRequest, rejectRequest } = useWalletConnect()
   const [feeAmount, setFeeAmount] = useState<number>(0)
   //requestJson
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
-<<<<<<< Updated upstream
-  const session = sessions.find(
-    (item) => item.topic === requests[0].topic
-  ) as SessionTypes.Settled
-=======
-  interface WCRequestParams {
-    scriptHash: string
-    operation: string
-    args: {type: string; value: number}[]
-    signer: {scope: number}
-  }
-
-  useEffect(() => {
-    alert(JSON.stringify(props.route.params.request))
-  }, [])
->>>>>>> Stashed changes
-
   const handleAcceptRequest = useCallback(async () => {
-    await approveRequest(requests[0])
+    await approveRequest(request)
     controller.close()
     props.navigation.goBack()
   }, [requests, controller])
@@ -100,7 +83,6 @@ const TransactionRequestModal = (props: Props) => {
     >
       <LinearLayout orientation="verti" mr={2} ml={2} mt={5} mb={5}>
         <ImageView
-          //source={params.metadata.icons[0]}
           source={require('~src/assets/ic_launcher.png')}
           resizeMode={'contain'}
           alignSelf={'center'}
@@ -114,7 +96,7 @@ const TransactionRequestModal = (props: Props) => {
           alignSelf={'center'}
           pb={'19px'}
         >
-          params.metadata.name
+          {contract.name}
         </TextView>
         <ContractDetailsBox
           session={session}
@@ -124,7 +106,7 @@ const TransactionRequestModal = (props: Props) => {
                 props.navigation.navigate(wrapper.route.Modal.name, {
                   screen: wrapper.route.WCInvocationDetailsModal.name,
                   params: {
-                    request: requests[0],
+                    request: props.route.params.request,
                     session,
                   },
                 })
@@ -140,11 +122,11 @@ const TransactionRequestModal = (props: Props) => {
               />
             </TouchableWithoutFeedback>
           }
-          hash="042454707407254752547274476674235723752"
-          method="Invokefunction"
-          title="Contract 1"
+          hash={contract.hash || ''}
+          method={contractParams.operation}
+          title={contract.name || ''}
         />
-        <TouchableWithoutFeedback onPress={() => {}}>
+        <TouchableWithoutFeedback onPress={() => { }}>
           <LinearLayout
             bg={theme.colors.background[1]}
             orientation={'horiz'}
@@ -228,10 +210,9 @@ const TransactionRequestModal = (props: Props) => {
         </LinearLayout>
         <TouchableWithoutFeedback
           onPress={() => {
-            // TODO: When you receive the proper information, remove the mock => [0]
             props.navigation.navigate(wrapper.route.RawJsonModal.name, {
               dataJson: JSON.stringify(requests[0], null, 2),
-              metadata: props.route.params.metadata,
+              metadata: session.peer.metadata,
             })
           }}
         >
@@ -294,7 +275,7 @@ const TransactionRequestModal = (props: Props) => {
               p="10px"
             >
               <TextView
-                style={{includeFontPadding: false}}
+                style={{ includeFontPadding: false }}
                 ml={3}
                 color={'primary'}
                 fontSize={20}

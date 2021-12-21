@@ -236,7 +236,7 @@ export type BlockchainServiceKey = 'neoLegacy' | 'neo3'
 export function getBlockchainByWCChain(chains: string[]) {
   let result: BlockchainServiceKey | null = null
 
-  blockchainList.forEach((blockchain) => {
+  for(const blockchain of blockchainList){
     for (const chain of chains) {
       const chainFound = blockchainServices[blockchain].wcChains.find(
         (it) => it === chain
@@ -246,7 +246,7 @@ export function getBlockchainByWCChain(chains: string[]) {
         break
       }
     }
-  })
+  }
   return result
 }
 
