@@ -300,7 +300,15 @@ const TransactionRequestModal = (props: Props) => {
             </TextView>
           </LinearLayout>
         </LinearLayout>
-        <TouchableWithoutFeedback onPress={() => {}}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            // TODO: When you receive the proper information, remove the mock => [0]
+            props.navigation.navigate(wrapper.route.RawJsonModal.name, {
+              dataJson: JSON.stringify(requests[0], null, 2),
+              metadata: props.route.params.metadata,
+            })
+          }}
+        >
           <LinearLayout
             bg={theme.colors.background[1]}
             orientation={'horiz'}
