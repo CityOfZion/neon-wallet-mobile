@@ -459,7 +459,6 @@ export const WalletConnectContextProvider: React.FC<{
       topic,
       reason: ERROR.USER_DISCONNECTED.format(),
     })
-    await storage?.removeItem(`approvalDate-${topic}`)
   }
 
   const removeFromPending = async (requestEvent: SessionTypes.RequestEvent) => {
