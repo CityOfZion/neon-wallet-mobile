@@ -137,7 +137,6 @@ export type ModalStackParamList = {
   RawJsonModal: RawJsonModalParams
   WCConnectionDetailsModal: WCConnectionDetailsModalParams
   WCInvocationDetailsModal: WCInvocationDetailsModalParams
-  RawJsonModal: RawJsonModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
