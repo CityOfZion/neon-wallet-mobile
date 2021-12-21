@@ -192,13 +192,9 @@ const AccountCard: React.FC<Props> = (props) => {
                     numberOfLines={1}
                     width={'88%'}
                   >
-                    {blockchainServices[props.account.blockchain].key ===
-                    'neoLegacy'
-                      ? 'NEO LEGACY'
-                      : blockchainServices[props.account.blockchain].key ===
-                        'neo3'
-                      ? 'NEO N3'
-                      : ''}
+                    {i18n.t(
+                      `blockchainServices.${props.account.blockchain}.id`
+                    )}
                   </TextView>
                 </LinearLayout>
               </LinearLayout>

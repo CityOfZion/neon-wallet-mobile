@@ -7,8 +7,12 @@ import React, {useCallback, useEffect, useState} from 'react'
 import {TouchableWithoutFeedback, Linking} from 'react-native'
 import {useSelector} from 'react-redux'
 
+import ContractDetailsBox from '../components/ContractDetailsBox'
+
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
+import {ContractInvocation} from '~/src/helpers/WCN3Helper'
+import {ContractResponse} from '~/src/models/response/ContractResponse'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import SwiperPanel, {
   CloseButton,
@@ -18,11 +22,14 @@ import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+
 type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
 export interface TransactionRequestModalParams {
-  metadata: AppMetadata
-  //session: SessionTypes.Settled
+  request: SessionTypes.RequestEvent
+  contract: ContractResponse
+  session: SessionTypes.Settled
+  contractParams: ContractInvocation
 }
 
 interface Props {
@@ -30,152 +37,35 @@ interface Props {
   route: RouteProp<ModalStackParamList, 'TransactionRequestModal'>
 }
 
-//const SessionItem = (props: {request: JsonRpcRequest<any>}) => {
-const SessionItem = () => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+interface SessionItemProps {
+  request: SessionTypes.RequestEvent
+}
 
-  return (
-    <LinearLayout mb={'13px'}>
-      <LinearLayout
-        bg={theme.colors.background[14]}
-        borderTopLeftRadius={6}
-        borderTopRightRadius={6}
-        orientation={'horiz'}
-        justifyContent={'space-between'}
-      >
-        <TextView
-          color={'white'}
-          fontFamily={'bold'}
-          fontSize={'16px'}
-          pl={'18px'}
-          pt={'14px'}
-          pb={'20px'}
-        >
-          {'Contract 1'}
-        </TextView>
-        <ImageView
-          alignSelf={'center'}
-          resizeMode={'contain'}
-          width={7}
-          height={12}
-          pr={'40px'}
-          source={require('~src/assets/images/icon-arrow-right-green.png')}
-        />
-      </LinearLayout>
-      <LinearLayout
-        bg={theme.colors.background[1]}
-        orientation={'verti'}
-        borderBottomLeftRadius={6}
-        borderBottomRightRadius={6}
-        pt={'13px'}
-        pb={'13px'}
-      >
-        <LinearLayout
-          pb={'13px'}
-          orientation={'horiz'}
-          justifyContent={'space-between'}
-        >
-          <TextView
-            color={theme.colors.text[10]}
-            weight={2}
-            fontFamily={'bold'}
-            fontSize={14}
-            pl={'18px'}
-          >
-            {i18n.t('modals.transactionRequest.hash')}
-          </TextView>
-          <LinearLayout width={'65%'} orientation={'horiz'} pr={'30px'}>
-            <TextView
-              color={'primary'}
-              ellipsizeMode={'middle'}
-              numberOfLines={1}
-              fontSize={16}
-              pr={'13px'}
-            >
-              {}
-              {'042454707407254752547274476674235723752'}
-            </TextView>
-            <TouchableWithoutFeedback onPress={() => {}}>
-              <ImageView
-                alignSelf={'center'}
-                resizeMode={'contain'}
-                width={14}
-                height={13}
-                source={require('~src/assets/images/dora-link.png')}
-              />
-            </TouchableWithoutFeedback>
-          </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-          height={'1px'}
-          ml={'16px'}
-          mr={'16px'}
-          bg={theme.colors.background[10]}
-        />
-        <LinearLayout
-          orientation={'horiz'}
-          justifyContent={'space-between'}
-          mt={'13px'}
-        >
-          <TextView
-            color={theme.colors.text[10]}
-            weight={2}
-            fontFamily={'bold'}
-            fontSize={14}
-            pl={'18px'}
-          >
-            {i18n.t('modals.transactionRequest.method')}
-          </TextView>
-          <TextView
-            pr={'20px'}
-            color={'white'}
-            alignSelf={'flex-end'}
-            fontSize={16}
-          >
-            {/*{props.request.method}*/}
-            {'Invokefunction'}
-          </TextView>
-        </LinearLayout>
-      </LinearLayout>
-    </LinearLayout>
-  )
+export interface WCRequestParams {
+  scriptHash: string
+  operation: string
+  args: {type: string; value: number | string}[]
+  signer: {scope: number}
 }
 
 const TransactionRequestModal = (props: Props) => {
+  const {contract, request, session, contractParams} = props.route.params
   const controller = useSwiperController(true)
   const {sessions, requests, approveRequest, rejectRequest} = useWalletConnect()
-
   const [feeAmount, setFeeAmount] = useState<number>(0)
   //requestJson
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
-  const params = props.route.params
-
-  interface WCRequestParams {
-    scriptHash: string
-    operation: string
-    args: {type: string; value: number}[]
-    signer: {scope: number}
-  }
-
-  useEffect(() => {
-    //console.log('debug requests and sessions', {requests, sessions})
-    //alert(JSON.stringify(requests[0]))
-  }, [])
 
   const handleAcceptRequest = useCallback(async () => {
-    await approveRequest(requests[0])
+    await approveRequest(request)
     controller.close()
-    props.navigation.goBack()
   }, [requests, controller])
 
   const handleDeclineRequest = useCallback(async () => {
-    await rejectRequest(requests[0])
+    await rejectRequest(props.route.params.request)
     controller.close()
-    props.navigation.goBack()
   }, [requests, controller])
 
   return (
@@ -185,13 +75,24 @@ const TransactionRequestModal = (props: Props) => {
       fullSize={true}
       title={i18n.t('modals.transactionRequest.title')}
       rightButton={<CloseButton mr={'20px'} />}
-      onRightPress={controller.close}
-      onClose={props.navigation.goBack}
+      onRightPress={() => {
+        handleDeclineRequest()
+      }}
+      onClose={() => {
+        props.navigation.reset({
+          index: 0,
+          routes: [{name: wrapper.route.Tab.name}],
+        })
+        if (requests.length < 1) {
+          props.navigation.replace(wrapper.route.Tab.name, {
+            screen: wrapper.route.WalletConnectPage.name,
+          })
+        }
+      }}
       solidColorBG
     >
       <LinearLayout orientation="verti" mr={2} ml={2} mt={5} mb={5}>
         <ImageView
-          //source={params.metadata.icons[0]}
           source={require('~src/assets/ic_launcher.png')}
           resizeMode={'contain'}
           alignSelf={'center'}
@@ -205,19 +106,36 @@ const TransactionRequestModal = (props: Props) => {
           alignSelf={'center'}
           pb={'19px'}
         >
-          params.metadata.name
+          {session.peer.metadata.name}
         </TextView>
-        {
-          // walletConnectCtx.requests.map(
-          //   (requestEvent) =>
-          // isJsonRpcRequest(requestEvent.request) &&
-          // requestEvent.topic === params.session.topic &&
-          <SessionItem
-          // key={requestEvent.request.id}
-          // request={requestEvent.request}
-          />
-          //)
-        }
+        <ContractDetailsBox
+          session={session}
+          rightButton={
+            <TouchableWithoutFeedback
+              onPress={() =>
+                props.navigation.navigate(wrapper.route.Modal.name, {
+                  screen: wrapper.route.WCInvocationDetailsModal.name,
+                  params: {
+                    request: props.route.params.request,
+                    session,
+                  },
+                })
+              }
+            >
+              <ImageView
+                alignSelf={'center'}
+                resizeMode={'contain'}
+                width={7}
+                height={12}
+                pr={'40px'}
+                source={require('~src/assets/images/icon-arrow-right-green.png')}
+              />
+            </TouchableWithoutFeedback>
+          }
+          hash={contract.hash ?? ''}
+          method={contractParams.operation}
+          title={contract.name ?? ''}
+        />
         <TouchableWithoutFeedback onPress={() => {}}>
           <LinearLayout
             bg={theme.colors.background[1]}
@@ -302,10 +220,9 @@ const TransactionRequestModal = (props: Props) => {
         </LinearLayout>
         <TouchableWithoutFeedback
           onPress={() => {
-            // TODO: When you receive the proper information, remove the mock => [0]
             props.navigation.navigate(wrapper.route.RawJsonModal.name, {
               dataJson: JSON.stringify(requests[0], null, 2),
-              metadata: props.route.params.metadata,
+              metadata: session.peer.metadata,
             })
           }}
         >

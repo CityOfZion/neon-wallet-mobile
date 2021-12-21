@@ -27,6 +27,11 @@ import {Neo3Provider} from '~src/blockchain/Neo3/providers/common'
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 const feeTokenImg = require('~src/assets/nep5/png/GAS.png')
 const SDK: typeof AsteroidSDK = require('~src/vendor/asteroid-sdk')
+
+export interface ContractParam {
+  type: string
+  name: string
+}
 export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
   readonly siteUrlQuery = `https://dora.coz.io/transaction/neo3/mainnet/`
   provider: Neo3Provider
@@ -65,9 +70,10 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
       address: 'NXWJfovnpRaj2r3yrYQXDMvBLixv9zJZsk',
       token: 'GAS',
       hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
-    }
+    } //eslint-disable-next-line
     this.wcChains = __DEV__ ? ['neo3:testnet'] : ['neo3:mainnet']
   }
+
   rpcCall = async (
     address: string,
     request: JsonRpcRequest

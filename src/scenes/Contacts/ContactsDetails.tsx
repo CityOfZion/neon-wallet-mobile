@@ -77,11 +77,11 @@ const ItemAddress: React.FC<IItemAddress> = ({address}) => {
           />
         )}
         <LinearLayout orientation={'verti'} width={'90%'}>
-          <Text style={styles.nameBlockchain}>
-            {blockchainName === 'neo3'
-              ? 'Neo N3'
-              : i18n.t(`blockchainServices.${blockchainName}.label`)}
-          </Text>
+          {blockchainName && (
+            <Text style={styles.nameBlockchain}>
+              {i18n.t(`blockchainServices.${blockchainName}.id`)}
+            </Text>
+          )}
           <Text style={styles.text} numberOfLines={1} ellipsizeMode={'middle'}>
             {address}
           </Text>

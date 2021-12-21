@@ -202,6 +202,12 @@
     }
   },
   "modals": {
+    "invocationDetails": {
+      "title": "Invocation Details",
+      "detailsTitle": "Details",
+      "parametersTitle": "Request Parameters",
+      "noParameters": "No Parameters"
+    },
     "send": {
       "title": "Send",
       "walletSelection": {
@@ -276,6 +282,10 @@
     }
   },
   "components": {
+    "contractDetailsBox": {
+      "hash": "Hash",
+      "method": "Method"
+    },
     "notification": {
       "title": "#translateme"
     },

@@ -9,6 +9,7 @@ import {NeoNode} from '~/src/models/NeoNode'
 import {Node} from '~/src/models/Node'
 import {Transaction} from '~/src/models/Transaction'
 import {BalanceResponse} from '~/src/models/response/BalanceResponse'
+import {ContractResponse} from '~/src/models/response/ContractResponse'
 import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
 import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
 import {Exchange, ExchangeResponse} from '~/src/types/exchange'
@@ -21,6 +22,7 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     this.network = 'mainnet'
     this.baseNumeric = 8
   }
+
   async getAddressAbstracts(address: string, page: number = 1) {
     const result = new TransactionAddressResponse()
     const {
@@ -51,6 +53,7 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     )
     return result
   }
+
   async getBalance(address: string) {
     const result = new BalanceResponse()
     const response = await api.NeoLegacyREST.balance(address, this.network)
@@ -66,6 +69,7 @@ export class DoraSDKProvider implements NeoLegacyProvider {
 
     return result
   }
+
   async getTransaction(transactionID: string) {
     const result = new Transaction()
     const {block, size, time, txid, type} = await api.NeoLegacyREST.transaction(
@@ -79,6 +83,11 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     result.time = Number(time)
     return result
   }
+
+  async getContract(hash: string): Promise<ContractResponse> {
+    throw new Error('Method not implemented')
+  }
+
   async getAllNodes() {
     const result = [] as Node[]
     const response = await api.NeoLegacyREST.getAllNodes(this.network)

@@ -418,6 +418,7 @@ export const WalletConnectContextProvider: React.FC<{
         return proposal.permissions.blockchain.chains.includes(chainId)
       })
       .map((acc) => `${acc.chain}:${acc.address}`)
+
     const response = {
       state: {accounts: accs},
       metadata: options.appMetadata,

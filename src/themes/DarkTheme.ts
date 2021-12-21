@@ -41,6 +41,8 @@ export class DarkTheme extends ApplicationTheme {
       16: '#27313a',
       17: '#333d46',
       18: '#161c22',
+      19: '#2d353e',
+      20: '#232a30',
     },
 
     text: {
@@ -56,6 +58,8 @@ export class DarkTheme extends ApplicationTheme {
       9: '#23272a',
       10: '#7d929a',
       11: '#899fa8',
+      12: '#7b9098',
+      13: '#1a2f34',
     },
 
     card: {

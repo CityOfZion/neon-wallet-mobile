@@ -1,10 +1,13 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {StatusBar} from 'react-native'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
+
+import {blockchainServices, getBlockchainByWCChain} from '../blockchain'
+import {ContractInvocation} from '../helpers/WCN3Helper'
 
 import * as data from '~src/Changelog.json'
 import {appBus} from '~src/app/AppBus'
@@ -59,7 +62,7 @@ const TabNavigation = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
-  const {requests} = useWalletConnect()
+  const {requests, sessions} = useWalletConnect()
   const [welcomeHidden, setWelcomeHidden] = useState(
     props.route.params?.welcomeHidden ?? true
   )
@@ -109,12 +112,31 @@ const TabNavigation = (props: Props) => {
     )
   }, [])
 
-  useEffect(() => {
-    if (requests.length > 0) {
+  const navigateToTransactionRequetModal = useCallback(async () => {
+    const foundSession = sessions.find((it) => it.topic === requests[0].topic)
+    const blockchain = getBlockchainByWCChain(
+      foundSession?.permissions.blockchain.chains ?? []
+    )
+    const contractParams: ContractInvocation = requests[0].request.params[0]
+
+    if (blockchain && foundSession && requests.length > 0) {
+      const contract = await blockchainServices[
+        blockchain
+      ].provider.getContract(contractParams.scriptHash)
       props.navigation.navigate(wrapper.route.Modal.name, {
         screen: wrapper.route.TransactionRequestModal.name,
+        params: {
+          request: requests[0],
+          session: foundSession,
+          contract,
+          contractParams,
+        },
       })
     }
+  }, [requests])
+
+  useEffect(() => {
+    navigateToTransactionRequetModal()
   }, [requests])
 
   return (

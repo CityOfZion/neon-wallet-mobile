@@ -3,6 +3,9 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import WCInvocationDetailsModal, {
+  WCInvocationDetailsModalParams,
+} from '../scenes/walletConnect/modal/WCInvocationDetailsModal'
 import ReceiveModalStackNavigation from './ReceiveModalStackNavigation'
 import {TabParams} from './TabNavigation'
 
@@ -133,6 +136,7 @@ export type ModalStackParamList = {
   TransactionRequestModal: TransactionRequestModalParams
   RawJsonModal: RawJsonModalParams
   WCConnectionDetailsModal: WCConnectionDetailsModalParams
+  WCInvocationDetailsModal: WCInvocationDetailsModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -157,6 +161,8 @@ export type ModalParams =
   | DefaultNavigationParam<TransactionRequestModalParams>
   | DefaultNavigationParam<RawJsonModalParams>
   | DefaultNavigationParam<WCConnectionDetailsModalParams>
+  | DefaultNavigationParam<WCInvocationDetailsModalParams>
+  | DefaultNavigationParam<RawJsonModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -303,6 +309,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={wrapper.route.WCConnectionDetailsModal.name}
           component={WCConnectionDetailsModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.RawJsonModal.name}
+          component={RawJsonModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>
