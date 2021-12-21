@@ -19,7 +19,7 @@ import {
   IWalletConnect,
   hasWCIntegration,
   getBlockchainByWCChain,
-  getWCChainByBlockchain
+  getWCChainByBlockchain,
 } from '~src/blockchain/common'
 
 export {
@@ -43,5 +43,5 @@ export {
   IWalletConnect,
   hasWCIntegration,
   getBlockchainByWCChain,
-  getWCChainByBlockchain
+  getWCChainByBlockchain,
 }

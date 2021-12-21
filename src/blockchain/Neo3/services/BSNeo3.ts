@@ -70,8 +70,8 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
       address: 'NXWJfovnpRaj2r3yrYQXDMvBLixv9zJZsk',
       token: 'GAS',
       hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
-    }
-    this.wcChains = __DEV__ ? ['neo3:mainnet'] : ['neo3:mainnet']
+    } //eslint-disable-next-line
+    this.wcChains = __DEV__ ? ['neo3:testnet'] : ['neo3:mainnet']
   }
 
   rpcCall = async (

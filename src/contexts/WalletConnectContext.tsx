@@ -415,7 +415,10 @@ export const WalletConnectContextProvider: React.FC<{
       .filter((account) => {
         const [namespace, reference] = account.chain.split(':')
         const chainId = `${namespace}:${reference}`
-        console.log('debug proposal.permissions.blockchain.chains', proposal.permissions.blockchain.chains)
+        console.log(
+          'debug proposal.permissions.blockchain.chains',
+          proposal.permissions.blockchain.chains
+        )
         console.log('debug account', account)
         return proposal.permissions.blockchain.chains.includes(chainId)
       })
