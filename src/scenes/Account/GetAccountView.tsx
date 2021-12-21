@@ -393,9 +393,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
     return hasWCIntegration(bs)
   }
 
-  const isNeoLegacy = () =>
-    blockchainServices[account.blockchain].key === 'neoLegacy'
-
   return (
     <ScreenLayout
       solidColorBG={true}
