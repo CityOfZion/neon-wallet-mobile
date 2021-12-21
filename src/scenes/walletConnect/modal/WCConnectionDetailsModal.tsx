@@ -35,7 +35,6 @@ const WCConnectionDetailsModal = (props: Props) => {
   const navigation = useNavigation()
   const [blockchain, setBlockchain] = useState<BlockchainServiceKey>('neo3')
   const {dapp} = props.route.params
-  //const approvalDate = walletConnectCtx.getApprovalDate(dapp.session.topic)
   useEffect(() => {
     if (walletConnectCtx.sessions.length > 0) {
       const blockchainByWCChain = getBlockchainByWCChain(
@@ -99,9 +98,8 @@ const WCConnectionDetailsModal = (props: Props) => {
                 )
               })}
               <TextView color={'text.10'} fontSize={'12px'}>
-                {dapp.approvalDate
-                  ? moment.unix(dapp.approvalDate).format('HH:mm Do MMM YYYY')
-                  : ''}
+                {/* TODO: Change the date to store the ApprovalDate */}
+                {moment.unix(dapp.session.expiry).format('HH:mm Do MMM YYYY')}
               </TextView>
             </LinearLayout>
             <LinearLayout

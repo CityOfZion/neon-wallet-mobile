@@ -8,7 +8,6 @@ import {AppMetadata, SessionTypes} from '@walletconnect/types'
 import {ERROR} from '@walletconnect/utils'
 import KeyValueStorage from 'keyvaluestorage'
 import {KeyValueStorageOptions} from 'keyvaluestorage/dist/cjs/shared'
-import moment from 'moment'
 import PropTypes from 'prop-types'
 import React, {useCallback, useContext, useEffect, useState} from 'react'
 
@@ -38,8 +37,6 @@ interface IWalletConnectContext {
   setChains: React.Dispatch<React.SetStateAction<string[]>>
   sessions: SessionTypes.Created[]
   setSessions: React.Dispatch<React.SetStateAction<SessionTypes.Created[]>>
-  approvalDate: IApprovalDate[]
-  setApprovalDate: React.Dispatch<React.SetStateAction<IApprovalDate[]>>
   requests: SessionTypes.RequestEvent[]
   setRequests: React.Dispatch<React.SetStateAction<SessionTypes.RequestEvent[]>>
   results: any[]
@@ -73,11 +70,6 @@ interface IWalletConnectContext {
   rejectRequest: (requestEvent: SessionTypes.RequestEvent) => Promise<void>
   onRequestListener: (listener: OnRequestCallback) => void
   autoAcceptIntercept: (listener: AutoAcceptCallback) => void
-}
-
-export interface IApprovalDate {
-  topic: string
-  approvalDate: number | undefined
 }
 
 export interface CtxOptions {
@@ -118,7 +110,6 @@ export const WalletConnectContextProvider: React.FC<{
   const [autoAcceptCallback, setAutoAcceptCallback] = useState<
     AutoAcceptCallback | undefined
   >(undefined)
-  const [approvalDate, setApprovalDate] = useState<IApprovalDate[]>([])
 
   useEffect(() => {
     init()
@@ -191,27 +182,9 @@ export const WalletConnectContextProvider: React.FC<{
     }
     setSessions(wcClient.session.values)
     setRequests(wcClient.session.history.pending)
-    syncApprovalDate()
     setInitialized(true)
   }, [wcClient])
 
-  const syncApprovalDate = useCallback(async () => {
-    const storageItems = await storage?.getKeys()
-    storageItems?.map((item) => {
-      if (item.startsWith('approvalDate-')) {
-        const topic = item.slice(13)
-        storage?.getItem<number>(item).then((value) => {
-          setApprovalDate((old) => {
-            if (old.find((oldSession) => oldSession.topic === topic)) {
-              return old
-            } else {
-              return [...old, {topic, approvalDate: value}]
-            }
-          })
-        })
-      }
-    })
-  }, [storage])
   // ---- MAKE REQUESTS AND SAVE/CHECK IF APPROVED ------------------------------//
 
   const onRequestListener = (listener: OnRequestCallback) => {
@@ -451,9 +424,6 @@ export const WalletConnectContextProvider: React.FC<{
     }
     const session = await wcClient.approve({proposal, response})
     setSessionProposals((old) => old.filter((i) => i !== proposal))
-    if (!(await storage?.getItem(`approvalDate-${session.topic}`))) {
-      await storage?.setItem(`approvalDate-${session.topic}`, moment().unix())
-    }
     setSessions((old) => {
       if (
         old.find(
@@ -466,10 +436,6 @@ export const WalletConnectContextProvider: React.FC<{
       ) {
         return old
       } else {
-        setApprovalDate((old) => [
-          ...old,
-          {topic: session.topic, approvalDate: moment().unix()},
-        ])
         return [...old, session]
       }
     })
@@ -494,7 +460,6 @@ export const WalletConnectContextProvider: React.FC<{
       reason: ERROR.USER_DISCONNECTED.format(),
     })
     await storage?.removeItem(`approvalDate-${topic}`)
-    setApprovalDate((old) => old.filter((i) => i.topic !== topic))
   }
 
   const removeFromPending = async (requestEvent: SessionTypes.RequestEvent) => {
@@ -554,8 +519,6 @@ export const WalletConnectContextProvider: React.FC<{
     setChains,
     sessions,
     setSessions,
-    approvalDate,
-    setApprovalDate,
     requests,
     setRequests,
     results,

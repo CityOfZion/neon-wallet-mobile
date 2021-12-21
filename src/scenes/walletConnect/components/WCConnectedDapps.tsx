@@ -29,7 +29,6 @@ interface IWalletInfo {
 export interface IDappInfo {
   session: SessionTypes.Settled
   connectedAcc: IWalletInfo[]
-  approvalDate: number | undefined
 }
 
 export const WCConnectedDapps = () => {
@@ -60,13 +59,9 @@ export const WCConnectedDapps = () => {
         wallet: account?.getWallet(walletsPool),
       }
     })
-    const approvalDateArray = walletConnectCtx.approvalDate.filter(
-      (item) => item.topic === session.topic
-    )
     return {
       session,
       connectedAcc: accountsConnected,
-      approvalDate: approvalDateArray[0]?.approvalDate,
     }
   })
 
@@ -95,11 +90,10 @@ export const WCConnectedDapps = () => {
             </LinearLayout>
             <LinearLayout>
               <TextView color={'text.10'} fontSize={'12px'}>
-                {props.item.approvalDate
-                  ? moment
-                      .unix(props.item.approvalDate)
-                      .format('HH:mm Do MMM YYYY')
-                  : ''}
+                {/* TODO: Change the date to store the ApprovalDate */}
+                {moment
+                  .unix(props.item.session.expiry)
+                  .format('HH:mm Do MMM YYYY')}
               </TextView>
               <TextView color={'white'} fontFamily={'medium'} fontSize={'18px'}>
                 {props.item.session.peer.metadata.name}
