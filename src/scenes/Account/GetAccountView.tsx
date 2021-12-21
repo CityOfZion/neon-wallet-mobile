@@ -76,31 +76,6 @@ const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
   )
 }
 
-const BalanceListParam = () => {
-  const dispatchAccount = useDispatch<SyncDispatch<Account>>()
-  const [account, setAccount] = useState(
-    dispatchAccount(RootStore.account.actions.getFromSelection())
-  )
-  const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  useEffect(() => {
-    const upAccount =
-      accountsPool.find((acc) => acc.address === account.address) ??
-      new Account()
-    setAccount(upAccount)
-  }, [accountsPool])
-  return (
-    <BalanceList
-      my="16px"
-      tokenAssets={account.getTokenAssets()}
-      address={account.address ?? undefined}
-      fromAccountView={true}
-      fromListWalletView={false}
-      fromSendAccountSelectionModal={false}
-      zeroBalance={true}
-    />
-  )
-}
-
 const TransactionsTab = () => {
   const dispatchAccount = useDispatch<SyncDispatch<Account>>()
   const [account, setAccount] = useState(
@@ -171,7 +146,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   const [currentPage, setCurrentPage] = useState(1)
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
-  const [showTabBarLabels, setShowTabBarLabels] = useState(false)
   const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>(0)
   const [isClaimAvailable, setIsClaimAvaliable] = useState<boolean>(false)
 
@@ -411,17 +385,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
       useNativeDriver: true,
       easing: Easing.out((val) => val ** 2),
     }).start()
-    setTimeout(() => setShowTabBarSelector(true), 500)
-    setTimeout(() => setShowTabBarLabels(true), 1000)
-  }
-  const [showTabBarSelector, setShowTabBarSelector] = useState(false)
-
-  const handleChangeScene = (index: number) => {
-    if (index === 0) {
-      setIsAssetsTabSelected(true)
-    } else {
-      setIsAssetsTabSelected(false)
-    }
   }
 
   const hasWalletconnect = () => {

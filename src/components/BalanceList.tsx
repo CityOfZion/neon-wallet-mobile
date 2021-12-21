@@ -37,21 +37,23 @@ interface ItemProps {
 
 interface ListProps {
   fromAccountView: boolean
-  fromListWalletView: boolean
+  showBlockchain?: boolean
+  showHoldingValueColumn?: boolean
   address?: string
   walletId?: string
   fromSendAccountSelectionModal: boolean
 }
 
 const ViewBalanceItem = (props: ItemProps & ListProps) => {
-  const showBlockchain = props.fromListWalletView
+  const showBlockchain = props.showBlockchain
+
   return (
     <LinearLayout
       orientation="horiz"
       alignItems="center"
       alignContent={'center'}
     >
-      {props.fromListWalletView ? (
+      {props.showBlockchain ? (
         <LinearLayout
           mr={'8px'}
           width={12}
@@ -98,32 +100,38 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
         )}
       </LinearLayout>
 
-      <LinearLayout weight={1} ml={4}>
-        <LinearLayout weight={1} orientation="verti" justifyContent={'center'}>
-          <TextView
-            mb="-6px"
-            color="text.2"
-            fontSize="sm"
-            allowFontScaling={true}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            mr={4}
+      {props.showHoldingValueColumn && (
+        <LinearLayout weight={1} ml={4}>
+          <LinearLayout
+            weight={1}
+            orientation="verti"
+            justifyContent={'center'}
           >
-            {i18n.t('components.balanceList.holdings')}
-          </TextView>
-          <TextView
-            mt={1}
-            color="text.2"
-            fontSize="sm"
-            fontFamily="medium"
-            allowFontScaling={true}
-            adjustsFontSizeToFit={true}
-            numberOfLines={1}
-          >
-            {i18n.t('components.balanceList.value')}
-          </TextView>
+            <TextView
+              mb="-6px"
+              color="text.2"
+              fontSize="sm"
+              allowFontScaling={true}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              mr={4}
+            >
+              {i18n.t('components.balanceList.holdings')}
+            </TextView>
+            <TextView
+              mt={1}
+              color="text.2"
+              fontSize="sm"
+              fontFamily="medium"
+              allowFontScaling={true}
+              adjustsFontSizeToFit={true}
+              numberOfLines={1}
+            >
+              {i18n.t('components.balanceList.value')}
+            </TextView>
+          </LinearLayout>
         </LinearLayout>
-      </LinearLayout>
+      )}
       <LinearLayout weight={1} />
       <LinearLayout weight={1} ml={4}>
         <LinearLayout
@@ -165,12 +173,17 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
   )
 }
 
+ViewBalanceItem.defaultProps = {
+  showHoldingValueColumn: true,
+  showBlockchain: false,
+}
+
 const BalanceListItem = (props: ListProps & ItemProps & Props) => {
   const navigation = useNavigation()
 
   return (
     <LinearLayout>
-      {props.fromAccountView || props.fromListWalletView ? (
+      {props.fromAccountView || props.showBlockchain ? (
         <TouchableOpacity
           onPress={() =>
             navigation?.navigate(wrapper.route.AccountAssetDetail.name, {
@@ -204,6 +217,11 @@ const BalanceListItem = (props: ListProps & ItemProps & Props) => {
       )}
     </LinearLayout>
   )
+}
+
+BalanceListItem.defaultProps = {
+  showHoldingValueColumn: true,
+  showBlockchain: false,
 }
 
 const BalanceList = (props: Props) => {
@@ -270,7 +288,7 @@ const BalanceList = (props: Props) => {
               <BalanceListItem
                 item={item}
                 fromAccountView={props.fromAccountView}
-                fromListWalletView={props.fromListWalletView}
+                showBlockchain={props.showBlockchain}
                 fromSendAccountSelectionModal={
                   props.fromSendAccountSelectionModal
                 }
@@ -283,6 +301,7 @@ const BalanceList = (props: Props) => {
                 account={props.account}
                 uri={props.uri}
                 tokenAssets={props.tokenAssets}
+                showHoldingValueColumn={props.showHoldingValueColumn}
               />
             )}
           />

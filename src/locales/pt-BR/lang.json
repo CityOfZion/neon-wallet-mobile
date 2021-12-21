@@ -304,6 +304,7 @@
     },
     "balanceList": {
       "title": "#translateme",
+      "titleAssets": "#translateme",
       "holdings": "#translateme",
       "value": "#translateme",
       "empty": "#translateme"
