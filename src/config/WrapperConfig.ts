@@ -114,6 +114,7 @@ export class WrapperConfig {
     'AccountConnectionsScreen',
     'AccountTransactionsScreen',
     'RawJsonModal',
+    'SignatureScopeModal',
   ] as const
 }
 
