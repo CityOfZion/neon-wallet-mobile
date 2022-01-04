@@ -1,6 +1,7 @@
+import base64 from 'react-native-base64'
+
 import {validateAddressAllBlockchains} from '~src/blockchain'
 import {TokenAsset} from '~src/models/TokenAsset'
-
 export type TScheme = 'wc:' | 'neo:'
 
 export const SCHEME: TScheme[] = ['neo:', 'wc:']
@@ -80,6 +81,18 @@ export abstract class UriHelper {
     }
 
     return {address, tokenHash, amount, reference}
+  }
+
+  static checkIsBase64(uri: string) {
+    const regexBase64 = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
+    return regexBase64.test(uri)
+  }
+
+  static convertBase64ToUri(uri: string) {
+    if (UriHelper.checkIsBase64(uri)) {
+      return base64.decode(uri)
+    }
+    return uri
   }
 
   private static _getParam<T extends string | number>(

@@ -137,6 +137,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1027
         versionName "1.0.27"
+        multiDexEnabled true
     }
     splits {
         abi {

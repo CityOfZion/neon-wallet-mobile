@@ -21,7 +21,6 @@
     "@json-rpc-tools/utils": "^1.7.6",
     "@moonlight-io/asteroid-sdk-js": "git+https://github.com/Moonlight-io/asteroid-sdk-js",
     "@react-native-async-storage/async-storage": "^1.15.13",
-    "@react-native-community/async-storage": "~1.12.0",
     "@react-native-community/clipboard": "^1.2.2",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/netinfo": "^7.1.2",
@@ -79,6 +78,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "0.63.4",
+    "react-native-base64": "^0.2.1",
     "react-native-chart-kit": "^5.6.0",
     "react-native-collapsible": "^1.6.0",
     "react-native-crypto": "^2.1.0",
@@ -127,6 +127,7 @@
     "@types/qs": "^6.9.7",
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
+    "@types/react-native-base64": "^0.2.0",
     "@types/react-test-renderer": "^16.9.2",
     "babel-jest": "~25.2.6",
     "babel-preset-expo": "^8.3.0",
@@ -139,12 +140,14 @@
     "react-native-testing-library": "^1.14.0",
     "react-test-renderer": "^16.13.1",
     "rn-nodeify": "^10.3.0",
-    "typescript": "~3.9.2"
+    "typescript": "~3.9.2",
+    "uri-scheme": "^1.0.111"
   },
   "resolutions": {
     "@walletconnect/client": "2.0.0-beta.17",
     "@walletconnect/types": "2.0.0-beta.17",
-    "@walletconnect/utils": "2.0.0-beta.17"
+    "@walletconnect/utils": "2.0.0-beta.17",
+    "@walletconnect/ramdombytes": "file:./react-native-randombytes"
   },
   "jest": {
     "preset": "jest-expo",

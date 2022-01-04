@@ -38,6 +38,9 @@ const WCConnectionRequestModal = (props: Props) => {
   const activityName = 'loadWCConnection'
 
   const handleAccept = useCallback(async () => {
+    console.log('debug handleAccept =>', {
+      sizeSessionProposals: walletConnectCtx.sessionProposals.length,
+    })
     if (walletConnectCtx.sessionProposals.length > 0) {
       navigation.navigate(wrapper.route.Modal.name, {
         screen: wrapper.route.WCWalletSelectionModal.name,
@@ -47,6 +50,7 @@ const WCConnectionRequestModal = (props: Props) => {
 
   const runOnURI = useCallback(async () => {
     try {
+      console.log('debug runOnURI => ', uri)
       await walletConnectCtx.onURI(uri)
     } catch (error) {
       console.log('error onUri => ', error)
@@ -56,6 +60,7 @@ const WCConnectionRequestModal = (props: Props) => {
 
   const loadWCConnection = useCallback(async () => {
     try {
+      console.log('debug loadWCConnection => ', uri)
       await runOnURI()
     } catch (error) {
       console.log('error onUri => ', error)

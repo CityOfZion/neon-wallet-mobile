@@ -11,7 +11,7 @@ export class DeepLinkingConfig {
 
   constructor() {
     this.linkingConfig = {
-      prefixes: ['neon://', 'nep9://'],
+      prefixes: ['neon://', 'nep9://', 'wc://'],
       config: {
         screens: {
           Tab: {
@@ -25,6 +25,14 @@ export class DeepLinkingConfig {
                   },
                   [wrapper.route.ImportReadAccount.name]: {
                     path: 'import_address/:address',
+                  },
+                },
+              },
+              [wrapper.route.WalletConnectPage.name]: {
+                initialRouteName: wrapper.route.WalletConnectPage.name,
+                screens: {
+                  [wrapper.route.WalletConnectPage.name]: {
+                    path: 'uri/:uri',
                   },
                 },
               },
