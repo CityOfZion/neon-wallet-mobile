@@ -613,6 +613,36 @@
       "features": "Features",
       "title": "Connection details",
       "disconnect": "Disconnect"
+    },
+    "signatureScope": {
+      "title": "Signature Scope",
+      "scopeTitle": "Scope",
+      "explanationTitle": "Explanation",
+      "0": {
+        "scope": "None",
+        "explanation": "Your signature is only valid for fee payments."
+      },
+      "1": {
+        "scope": "Call by Entry",
+        "explanation": "Your signature can only be used by the calling contract and just for this transaction."
+      },
+      "128": {
+        "warning": "Dapp requesting a very broad permission. Proceed with care.",
+        "scope": "Global",
+        "explanation": "Your signature can be used without restriction with any contract."
+      },
+      "16": {
+        "warning": "Dapp requesting a very broad permission. Proceed with care.",
+        "scope": "Custom Contracts",
+        "allowedList": "Allowed Contracts",
+        "explanation": "Your signature can be used by the set of contracts listed above."
+      },
+      "32": {
+        "warning":"Dapp requesting a very broad permission. Proceed with care.",
+        "scope": "Custom Groups",
+        "allowedList": "Allowed Groups",
+        "explanation": "Your signature can be used by the set of groups listed above."
+      }
     }
   },
   "components": {

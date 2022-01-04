@@ -1,3 +1,4 @@
+import {WitnessScope} from '@cityofzion/neon-core-next/lib/tx/components/WitnessScope'
 import {isJsonRpcRequest, JsonRpcRequest} from '@json-rpc-tools/utils'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
@@ -52,6 +53,9 @@ const TransactionRequestModal = (props: Props) => {
   const {contract, request, session, contractParams} = props.route.params
   const controller = useSwiperController(true)
   const {sessions, requests, approveRequest, rejectRequest} = useWalletConnect()
+  const scope = contractParams.signer?.scope ?? WitnessScope.CalledByEntry
+  const showWarning =
+    scope !== WitnessScope.None && scope !== WitnessScope.CalledByEntry
   const [feeAmount, setFeeAmount] = useState<number>(0)
   //requestJson
   const theme = useSelector(
@@ -136,7 +140,14 @@ const TransactionRequestModal = (props: Props) => {
           method={contractParams.operation}
           title={contract.name ?? ''}
         />
-        <TouchableWithoutFeedback onPress={() => {}}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            props.navigation.navigate(wrapper.route.SignatureScopeModal.name, {
+              data: contractParams.signer,
+              session,
+            })
+          }}
+        >
           <LinearLayout
             bg={theme.colors.background[1]}
             orientation={'horiz'}
@@ -156,22 +167,24 @@ const TransactionRequestModal = (props: Props) => {
               {i18n.t('modals.transactionRequest.signatureScope')}
             </TextView>
             <LinearLayout orientation={'horiz'}>
-              <ImageView
-                alignSelf={'center'}
-                resizeMode={'contain'}
-                width={7}
-                height={12}
-                pr={'20px'}
-                source={require('~src/assets/images/red-alert.png')}
-              />
+              {showWarning && (
+                <ImageView
+                  alignSelf={'center'}
+                  resizeMode={'contain'}
+                  width={7}
+                  height={12}
+                  pr={'20px'}
+                  source={require('~src/assets/images/red-alert.png')}
+                />
+              )}
               <TextView
-                color={'#ea5d8e'}
+                color={showWarning ? '#ea5d8e' : 'white'}
                 alignSelf={'flex-end'}
                 pb={'3px'}
                 fontSize={12}
                 fontFamily={'bold'}
               >
-                {'GLOBAL'}
+                {i18n.t(`modals.signatureScope.${scope}.scope`)}
               </TextView>
               <ImageView
                 alignSelf={'center'}
