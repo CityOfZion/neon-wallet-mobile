@@ -60,6 +60,7 @@ export class DarkTheme extends ApplicationTheme {
       11: '#899fa8',
       12: '#7b9098',
       13: '#1a2f34',
+      14: '#869ca5',
     },
 
     card: {

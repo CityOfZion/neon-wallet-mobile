@@ -337,6 +337,10 @@
       "assets": "Assets",
       "transactions": "Transactions",
       "connections": "Connections"
+    },
+    "WCAccountConnections": {
+      "noDAppsConnected": "No dApps connected",
+      "title": "Connections"
     }
   },
   "modals": {
@@ -639,7 +643,7 @@
         "explanation": "Your signature can be used by the set of contracts listed above."
       },
       "32": {
-        "warning":"Dapp requesting a very broad permission. Proceed with care.",
+        "warning": "Dapp requesting a very broad permission. Proceed with care.",
         "scope": "Custom Groups",
         "allowedList": "Allowed Groups",
         "explanation": "Your signature can be used by the set of groups listed above."
