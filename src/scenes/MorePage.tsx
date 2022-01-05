@@ -13,9 +13,6 @@ import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import SettingsStackNavigation, {
-  SettingsStackParamList,
-} from '~src/navigation/SettingsStackNavigation'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface MoreProps {
@@ -36,10 +33,6 @@ const MorePage = (props: MoreProps) => {
     )
     return result
   }
-
-  const settingsNavigation = useNavigation<
-    StackNavigationProp<SettingsStackParamList>
-  >()
 
   return (
     <ScreenLayout padding={20}>
@@ -87,7 +80,7 @@ const MorePage = (props: MoreProps) => {
         iconMarginLeft={1}
         arrowDirection={RightIconType.NONE}
         onPress={() => {
-          settingsNavigation.navigate(wrapper.route.Settings.name, {})
+          props.navigation.navigate(wrapper.route.Settings.name)
         }}
       />
       <MenuItem
