@@ -113,25 +113,29 @@ const TabNavigation = (props: Props) => {
   }, [])
 
   const navigateToTransactionRequetModal = useCallback(async () => {
-    const foundSession = sessions.find((it) => it.topic === requests[0].topic)
-    const blockchain = getBlockchainByWCChain(
-      foundSession?.permissions.blockchain.chains ?? []
-    )
-    const contractParams: ContractInvocation = requests[0].request.params[0]
+    if (requests.length > 0) {
+      const foundSession = sessions.find((it) => it.topic === requests[0].topic)
 
-    if (blockchain && foundSession && requests.length > 0) {
-      const contract = await blockchainServices[
-        blockchain
-      ].provider.getContract(contractParams.scriptHash)
-      props.navigation.navigate(wrapper.route.Modal.name, {
-        screen: wrapper.route.TransactionRequestModal.name,
-        params: {
-          request: requests[0],
-          session: foundSession,
-          contract,
-          contractParams,
-        },
-      })
+      const blockchain = getBlockchainByWCChain(
+        foundSession?.permissions.blockchain.chains ?? []
+      )
+      const contractParams: ContractInvocation = requests[0].request.params[0]
+
+      if (blockchain && foundSession) {
+        const contract = await blockchainServices[
+          blockchain
+        ].provider.getContract(contractParams.scriptHash)
+
+        props.navigation.navigate(wrapper.route.Modal.name, {
+          screen: wrapper.route.TransactionRequestModal.name,
+          params: {
+            request: requests[0],
+            session: foundSession,
+            contract,
+            contractParams,
+          },
+        })
+      }
     }
   }, [requests])
 
