@@ -533,9 +533,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
           }
           iconSize={[19, 23]}
           onPress={() => {
-            props.navigation.navigate(
-              wrapper.route.AccountConnectionsScreen.name
-            )
+            props.navigation.navigate(wrapper.route.WCAccountConnections.name, {
+              account,
+            })
           }}
         />
       </LinearLayout>
