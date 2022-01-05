@@ -206,12 +206,7 @@ const MoreStackNavigation = () => {
         <MoreStack.Screen
           name={wrapper.route.Settings.name}
           component={SettingsStackNavigation}
-          options={({route}) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: wrapper.route.Settings.translate(),
-              theme,
-            })
-          }
+          options={{headerShown: false}}
         />
       </MoreStack.Navigator>
     </ThemeProvider>
