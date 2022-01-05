@@ -168,6 +168,7 @@ export type ModalParams =
   | DefaultNavigationParam<WCInvocationDetailsModalParams>
   | DefaultNavigationParam<RawJsonModalParams>
   | DefaultNavigationParam<SignatureScopeModalParams>
+  | DefaultNavigationParam<WCInvocationDetailsModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -322,6 +323,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={wrapper.route.SignatureScopeModal.name}
           component={SignatureScopeModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.WCInvocationDetailsModal.name}
+          component={WCInvocationDetailsModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

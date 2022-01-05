@@ -13,6 +13,7 @@ export type DoraTypeColors =
   | 'Buffer'
   | 'InteropInterface'
   | 'Void'
+  | 'Any'
 
 type DoraTypeColorValue = {color: string; textColor: 'dark' | 'light'}
 
@@ -71,6 +72,10 @@ export const doraTypeColors: Record<DoraTypeColors, DoraTypeColorValue> = {
   },
   Void: {
     color: '#528D93',
+    textColor: 'dark',
+  },
+  Any: {
+    color: '#00D69D',
     textColor: 'dark',
   },
 }
