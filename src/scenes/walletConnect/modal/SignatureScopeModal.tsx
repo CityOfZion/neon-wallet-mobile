@@ -6,12 +6,12 @@ import i18n from 'i18n-js'
 import React from 'react'
 import {useSelector} from 'react-redux'
 
-import {Signer} from '~/src/helpers/WCN3Helper'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~src/components/SwiperPanel'
+import {Signer} from '~src/helpers/NeonWcAdapter'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
@@ -30,7 +30,7 @@ interface Props {
 
 const SignatureScopeModal = (props: Props) => {
   const {data, session} = props.route.params
-  const scope = data?.scope ?? WitnessScope.CalledByEntry
+  const scope = data?.scopes ?? WitnessScope.CalledByEntry
   const showWarning =
     scope !== WitnessScope.None && scope !== WitnessScope.CalledByEntry
   const showAllowedList =

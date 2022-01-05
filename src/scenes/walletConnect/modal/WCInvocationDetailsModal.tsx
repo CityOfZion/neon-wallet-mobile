@@ -15,10 +15,10 @@ import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~/src/components/SwiperPanel'
-import {ContractInvocation} from '~/src/helpers/WCN3Helper'
 import {ContractResponse} from '~/src/models/response/ContractResponse'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
 import {TextView, LinearLayout, ImageView} from '~/src/styles/styled-components'
+import {ContractInvocation} from '~src/helpers/NeonWcAdapter'
 
 export interface WCInvocationDetailsModalParams {
   request: SessionTypes.RequestEvent

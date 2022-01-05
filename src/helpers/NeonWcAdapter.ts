@@ -6,7 +6,7 @@ import {JsonRpcRequest, JsonRpcResponse} from '@json-rpc-tools/utils'
 import {randomBytes} from 'crypto'
 
 export type Signer = {
-  scope: WitnessScope
+  scopes: WitnessScope
   allowedContracts?: string[]
   allowedGroups?: string[]
 }
@@ -16,11 +16,10 @@ export type ContractInvocation = {
   operation: string
   args: any[]
   abortOnFail?: boolean
-  signer?: Signer
 }
 
 export type ContractInvocationMulti = {
-  signer: Signer[]
+  signers: Signer[]
   invocations: ContractInvocation[]
 }
 
@@ -31,7 +30,7 @@ export type SignedMessage = {
   messageHex: string
 }
 
-export class WCN3Helper {
+export class NeonWcAdapter {
   private readonly rpcAddress: string
   private readonly networkMagic: number
 
@@ -43,10 +42,10 @@ export class WCN3Helper {
   static init = async (
     rpcAddress: string,
     networkMagic?: number
-  ): Promise<WCN3Helper> => {
-    return new WCN3Helper(
+  ): Promise<NeonWcAdapter> => {
+    return new NeonWcAdapter(
       rpcAddress,
-      networkMagic ?? (await WCN3Helper.getMagicOfRpcAddress(rpcAddress))
+      networkMagic ?? (await NeonWcAdapter.getMagicOfRpcAddress(rpcAddress))
     )
   }
 
@@ -69,30 +68,18 @@ export class WCN3Helper {
   ): Promise<JsonRpcResponse> => {
     let result: any
 
-    if (request.method === 'invokefunction') {
+    if (request.method === 'invokeFunction') {
       if (!account) {
         throw new Error('No account')
       }
 
-      result = await this.contractInvoke(account, request.params[0])
+      result = await this.invokeFunction(account, request.params)
     } else if (request.method === 'testInvoke') {
       if (!account) {
         throw new Error('No account')
       }
 
-      result = await this.testInvoke(account, request.params[0])
-    } else if (request.method === 'multiInvoke') {
-      if (!account) {
-        throw new Error('No account')
-      }
-
-      result = await this.multiInvoke(account, request.params)
-    } else if (request.method === 'multiTestInvoke') {
-      if (!account) {
-        throw new Error('No account')
-      }
-
-      result = await this.multiTestInvoke(account, request.params)
+      result = await this.testInvoke(account, request.params)
     } else if (request.method === 'signMessage') {
       if (!account) {
         throw new Error('No account')
@@ -115,48 +102,7 @@ export class WCN3Helper {
     }
   }
 
-  contractInvoke = async (
-    account: Account,
-    call: ContractInvocation
-  ): Promise<any> => {
-    const contract = new Neon.experimental.SmartContract(
-      Neon.u.HexString.fromHex(call.scriptHash),
-      {
-        networkMagic: this.networkMagic,
-        rpcAddress: this.rpcAddress,
-        account,
-      }
-    )
-
-    const convertedArgs = WCN3Helper.convertParams(call.args)
-
-    try {
-      return await contract.invoke(call.operation, convertedArgs, [
-        WCN3Helper.buildSigner(account, call.signer),
-      ])
-    } catch (e) {
-      return WCN3Helper.convertError(e)
-    }
-  }
-
   testInvoke = async (
-    account: Account,
-    call: ContractInvocation
-  ): Promise<any> => {
-    const convertedArgs = WCN3Helper.convertParams(call.args)
-
-    try {
-      return await new rpc.RPCClient(
-        this.rpcAddress
-      ).invokeFunction(call.scriptHash, call.operation, convertedArgs, [
-        WCN3Helper.buildSigner(account, call.signer),
-      ])
-    } catch (e) {
-      return WCN3Helper.convertError(e)
-    }
-  }
-
-  multiTestInvoke = async (
     account: Account,
     cim: ContractInvocationMulti
   ): Promise<any> => {
@@ -166,7 +112,7 @@ export class WCN3Helper {
       sb.emitContractCall({
         scriptHash: c.scriptHash,
         operation: c.operation,
-        args: WCN3Helper.convertParams(c.args),
+        args: NeonWcAdapter.convertParams(c.args),
       })
 
       if (c.abortOnFail) {
@@ -177,11 +123,11 @@ export class WCN3Helper {
     const script = sb.build()
     return await new rpc.RPCClient(this.rpcAddress).invokeScript(
       Neon.u.HexString.fromHex(script),
-      WCN3Helper.buildMultipleSigner(account, cim.signer)
+      NeonWcAdapter.buildMultipleSigner(account, cim.signers)
     )
   }
 
-  multiInvoke = async (
+  invokeFunction = async (
     account: Account,
     cim: ContractInvocationMulti
   ): Promise<any> => {
@@ -191,7 +137,7 @@ export class WCN3Helper {
       sb.emitContractCall({
         scriptHash: c.scriptHash,
         operation: c.operation,
-        args: WCN3Helper.convertParams(c.args),
+        args: NeonWcAdapter.convertParams(c.args),
       })
 
       if (c.abortOnFail) {
@@ -208,10 +154,8 @@ export class WCN3Helper {
     const trx = new tx.Transaction({
       script: Neon.u.HexString.fromHex(script),
       validUntilBlock: currentHeight + 100,
-      signers: WCN3Helper.buildMultipleSigner(account, cim.signer),
+      signers: NeonWcAdapter.buildMultipleSigner(account, cim.signers),
     })
-
-    console.log(trx)
 
     await Neon.experimental.txHelpers.addFees(trx, {
       rpcAddress: this.rpcAddress,
@@ -255,7 +199,7 @@ export class WCN3Helper {
         : a.type === 'ScriptHash'
         ? sc.ContractParam.hash160(Neon.u.HexString.fromHex(a.value))
         : a.type === 'Array'
-        ? sc.ContractParam.array(...WCN3Helper.convertParams(a.value))
+        ? sc.ContractParam.array(...NeonWcAdapter.convertParams(a.value))
         : a
     )
   }
@@ -265,7 +209,7 @@ export class WCN3Helper {
       account: account.scriptHash,
     })
 
-    signer.scopes = signerEntry?.scope ?? WitnessScope.CalledByEntry
+    signer.scopes = signerEntry?.scopes ?? WitnessScope.CalledByEntry
     if (signerEntry?.allowedContracts) {
       signer.allowedContracts = signerEntry.allowedContracts.map((ac) =>
         Neon.u.HexString.fromHex(ac)
@@ -281,12 +225,8 @@ export class WCN3Helper {
   }
 
   private static buildMultipleSigner(account: Account, signers: Signer[]) {
-    return !signers.length
-      ? [WCN3Helper.buildSigner(account)]
-      : signers.map((s) => WCN3Helper.buildSigner(account, s))
-  }
-
-  private static convertError(e: Error) {
-    return {error: {...e, message: e.message}}
+    return !signers?.length
+      ? [NeonWcAdapter.buildSigner(account)]
+      : signers.map((s) => NeonWcAdapter.buildSigner(account, s))
   }
 }

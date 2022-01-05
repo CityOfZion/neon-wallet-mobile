@@ -13,13 +13,13 @@ import ContractDetailsBox from '../components/ContractDetailsBox'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
-import {ContractInvocation} from '~/src/helpers/WCN3Helper'
 import {ContractResponse} from '~/src/models/response/ContractResponse'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~src/components/SwiperPanel'
+import {ContractInvocation, Signer} from '~src/helpers/NeonWcAdapter'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
@@ -32,6 +32,7 @@ export interface TransactionRequestModalParams {
   contract: ContractResponse
   session: SessionTypes.Settled
   contractParams: ContractInvocation
+  signer: Signer
 }
 
 interface Props {
@@ -44,10 +45,16 @@ interface SessionItemProps {
 }
 
 const TransactionRequestModal = (props: Props) => {
-  const {contract, request, session, contractParams} = props.route.params
+  const {
+    contract,
+    request,
+    session,
+    contractParams,
+    signer,
+  } = props.route.params
   const controller = useSwiperController(true)
   const {sessions, requests, approveRequest, rejectRequest} = useWalletConnect()
-  const scope = contractParams.signer?.scope ?? WitnessScope.CalledByEntry
+  const scope = signer?.scopes ?? WitnessScope.CalledByEntry
   const showWarning =
     scope !== WitnessScope.None && scope !== WitnessScope.CalledByEntry
   const [feeAmount, setFeeAmount] = useState<number>(0)
@@ -123,7 +130,7 @@ const TransactionRequestModal = (props: Props) => {
         <TouchableWithoutFeedback
           onPress={() => {
             props.navigation.navigate(wrapper.route.SignatureScopeModal.name, {
-              data: contractParams.signer,
+              data: signer,
               session,
             })
           }}

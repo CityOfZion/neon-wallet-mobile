@@ -7,7 +7,7 @@ import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {blockchainServices, getBlockchainByWCChain} from '../blockchain'
-import {ContractInvocation} from '../helpers/WCN3Helper'
+import {ContractInvocation} from '../helpers/NeonWcAdapter'
 
 import * as data from '~src/Changelog.json'
 import {appBus} from '~src/app/AppBus'

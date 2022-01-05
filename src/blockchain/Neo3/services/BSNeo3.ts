@@ -8,7 +8,6 @@ import type * as AsteroidSDK from '@moonlight-io/asteroid-sdk-js'
 import {ImageLoadEventData, NativeModules, Platform} from 'react-native'
 
 import {AsteroidHelper} from '~/src/helpers/AsteroidHelper'
-import {WCN3Helper} from '~/src/helpers/WCN3Helper'
 import {NeoNode} from '~/src/models/NeoNode'
 import {TokenAsset} from '~/src/models/TokenAsset'
 import {Account} from '~/src/models/redux/Account'
@@ -23,6 +22,7 @@ import {
 } from '~src/blockchain'
 import {Neo3ProviderOptions} from '~src/blockchain/Neo3'
 import {Neo3Provider} from '~src/blockchain/Neo3/providers/common'
+import {NeonWcAdapter} from '~src/helpers/NeonWcAdapter'
 
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 const feeTokenImg = require('~src/assets/nep5/png/GAS.png')
@@ -85,7 +85,10 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
     if (!neoAccount) throw new Error('No account')
     if (!bestUrl) throw new Error('Blockchain unavailable, try again')
 
-    return await (await WCN3Helper.init(bestUrl)).rpcCall(neoAccount, request)
+    return await (await NeonWcAdapter.init(bestUrl)).rpcCall(
+      neoAccount,
+      request
+    )
   }
 
   validateAddress(address: string) {
