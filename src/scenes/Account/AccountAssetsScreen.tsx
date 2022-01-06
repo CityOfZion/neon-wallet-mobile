@@ -6,7 +6,6 @@ import BalanceList from '~src/components/BalanceList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {Account} from '~src/models/redux/Account'
 import {RootStore} from '~src/store/RootStore'
-import {TextView, LinearLayout, ButtonView} from '~src/styles/styled-components'
 
 const AccountAssetScreen = () => {
   const dispatchAccount = useDispatch<SyncDispatch<Account>>()
