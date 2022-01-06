@@ -223,6 +223,7 @@ const LabelView = styled(TextView)`
   text-align: center;
   include-font-padding: false;
   margin-top: ${UtilsHelper.isAndroid ? '-2px' : '0'};
+  width: 100%;
 `
 
 export default ThemedButton

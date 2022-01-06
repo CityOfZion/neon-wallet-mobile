@@ -4569,12 +4569,6 @@
   dependencies:
     pino "^6.7.0"
 
-"@walletconnect/ramdombytes@file:./react-native-randombytes":
-  version "3.6.1"
-  dependencies:
-    buffer "^4.9.1"
-    sjcl "^1.0.3"
-
 "@walletconnect/randombytes@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@walletconnect/randombytes/-/randombytes-1.0.1.tgz#87f0f02d9206704ce1c9e23f07d3b28898c48385"
