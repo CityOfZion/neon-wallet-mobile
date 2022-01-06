@@ -5,9 +5,11 @@ import {ThemeProvider} from 'styled-components'
 
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Navigator} from '~src/app/Navigator'
-import WalletConnectPage from '~src/scenes/walletConnect/WalletConnectPage'
+import WalletConnectPage, {
+  WalletConnectPageParams,
+} from '~src/scenes/walletConnect/WalletConnectPage'
 export type WalletConnectStackParamList = {
-  WalletConnectPage: undefined
+  WalletConnectPage: WalletConnectPageParams
 }
 
 const WalletConnectStack = createStackNavigator<WalletConnectStackParamList>()

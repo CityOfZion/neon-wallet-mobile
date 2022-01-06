@@ -12,7 +12,10 @@ import {TabParams} from './TabNavigation'
 import TransactionRequestModal, {
   TransactionRequestModalParams,
 } from '~/src/scenes/walletConnect/modal/TransactionRequestModal'
-import {WCConnectDappModal} from '~/src/scenes/walletConnect/modal/WCConnectDappModal'
+import {
+  WCConnectDappModal,
+  WCConnectDappModalParams,
+} from '~/src/scenes/walletConnect/modal/WCConnectDappModal'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import EditWalletModal, {
   EditWalletParams,
@@ -133,7 +136,7 @@ export type ModalStackParamList = {
   BlockchainListModal: BlockchainListModalParams
   WCTransactionSentModal: WCTransactionSentModalParams
   WCConnectionRequestModal: WCConnectionRequestModalParams
-  WCConnectDappModal: undefined
+  WCConnectDappModal: WCConnectDappModalParams
   WCWalletSelectionModal: WCWalletSelectionModalModalParams | undefined
   WCAccountSelectionModal: WCAccountSelectionModalParams
   TransactionRequestModal: TransactionRequestModalParams
@@ -169,6 +172,7 @@ export type ModalParams =
   | DefaultNavigationParam<RawJsonModalParams>
   | DefaultNavigationParam<SignatureScopeModalParams>
   | DefaultNavigationParam<WCInvocationDetailsModalParams>
+  | DefaultNavigationParam<WCConnectDappModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -301,10 +305,6 @@ const ModalStackNavigation = () => {
           component={WCWalletSelectionModal}
         />
         <ModalStack.Screen
-          name={wrapper.route.WCAccountSelectionModal.name}
-          component={WCAccountSelectionModal}
-        />
-        <ModalStack.Screen
           name={wrapper.route.TransactionRequestModal.name}
           component={TransactionRequestModal}
         />
@@ -317,8 +317,8 @@ const ModalStackNavigation = () => {
           component={WCConnectionDetailsModal}
         />
         <ModalStack.Screen
-          name={wrapper.route.RawJsonModal.name}
-          component={RawJsonModal}
+          name={wrapper.route.WCAccountSelectionModal.name}
+          component={WCAccountSelectionModal}
         />
         <ModalStack.Screen
           name={wrapper.route.SignatureScopeModal.name}

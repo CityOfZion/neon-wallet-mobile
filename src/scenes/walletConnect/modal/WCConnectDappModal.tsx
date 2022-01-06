@@ -1,8 +1,7 @@
-import {useNavigation} from '@react-navigation/native'
+import {RouteProp, useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, {useState, useCallback} from 'react'
-import {Dimensions, ScrollView} from 'react-native'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import InputWithValidation from '~/src/components/InputWithValidation'
@@ -15,8 +14,16 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 
-export const WCConnectDappModal = () => {
-  const [url, setUrl] = useState<string>('')
+export interface WCConnectDappModalParams {
+  uri?: string
+}
+
+interface WCConnectDappModalProps {
+  route: RouteProp<ModalStackParamList, 'WCConnectDappModal'>
+}
+
+export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
+  const [url, setUrl] = useState<string>(props.route.params?.uri ?? '')
   const controller = useSwiperController(true)
   const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
 
