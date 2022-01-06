@@ -19,7 +19,11 @@ import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~src/components/SwiperPanel'
-import {ContractInvocation, Signer} from '~src/helpers/NeonWcAdapter'
+import {
+  ContractInvocation,
+  ContractInvocationMulti,
+  Signer,
+} from '~src/helpers/NeonWcAdapter'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
@@ -29,10 +33,7 @@ type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
 export interface TransactionRequestModalParams {
   request: SessionTypes.RequestEvent
-  contract: ContractResponse
   session: SessionTypes.Settled
-  contractParams: ContractInvocation
-  signer: Signer
 }
 
 interface Props {
@@ -45,18 +46,22 @@ interface SessionItemProps {
 }
 
 const TransactionRequestModal = (props: Props) => {
-  const {
-    contract,
-    request,
-    session,
-    contractParams,
-    signer,
-  } = props.route.params
+  const {request, session} = props.route.params
   const controller = useSwiperController(true)
   const {sessions, requests, approveRequest, rejectRequest} = useWalletConnect()
-  const scope = signer?.scopes ?? WitnessScope.CalledByEntry
-  const showWarning =
-    scope !== WitnessScope.None && scope !== WitnessScope.CalledByEntry
+
+  if (!['invokeFunction', 'testInvoke'].includes(request.request.method)) {
+    return <></>
+  }
+  const requestParams: ContractInvocationMulti = request.request.params
+
+  const scopes = requestParams.signers.map((signer) => signer.scopes) ?? [
+    WitnessScope.CalledByEntry,
+  ]
+  const showWarning = scopes.some(
+    (scope) =>
+      scope !== WitnessScope.None && scope !== WitnessScope.CalledByEntry
+  )
   const [feeAmount, setFeeAmount] = useState<number>(0)
   //requestJson
   const theme = useSelector(
@@ -98,92 +103,99 @@ const TransactionRequestModal = (props: Props) => {
     >
       <LinearLayout orientation="verti" mr={2} ml={2} mt={5} mb={5}>
         <ConnectionHeader title={session.peer.metadata.name} imageUri={''} />
-        <ContractDetailsBox
-          session={session}
-          rightButton={
-            <TouchableWithoutFeedback
-              onPress={() =>
-                props.navigation.navigate(wrapper.route.Modal.name, {
-                  screen: wrapper.route.WCInvocationDetailsModal.name,
-                  params: {
-                    request,
-                    session,
-                    contract,
-                  },
-                })
-              }
-            >
-              <ImageView
-                alignSelf={'center'}
-                resizeMode={'contain'}
-                width={7}
-                height={12}
-                pr={'40px'}
-                source={require('~src/assets/images/icon-arrow-right-green.png')}
-              />
-            </TouchableWithoutFeedback>
-          }
-          hash={contract.hash ?? ''}
-          method={contractParams.operation}
-          title={contract.name ?? ''}
-        />
-        <TouchableWithoutFeedback
-          onPress={() => {
-            props.navigation.navigate(wrapper.route.SignatureScopeModal.name, {
-              data: signer,
-              session,
-            })
-          }}
-        >
-          <LinearLayout
-            bg={theme.colors.background[1]}
-            orientation={'horiz'}
-            borderRadius={6}
-            mb={'13px'}
-            pt={'13px'}
-            pb={'13px'}
-            justifyContent={'space-between'}
-          >
-            <TextView
-              color={theme.colors.text[10]}
-              weight={2}
-              fontFamily={'bold'}
-              fontSize={14}
-              pl={'18px'}
-            >
-              {i18n.t('modals.transactionRequest.signatureScope')}
-            </TextView>
-            <LinearLayout orientation={'horiz'}>
-              {showWarning && (
+        {requestParams.invocations.map((contract, index) => (
+          <ContractDetailsBox
+            key={`${contract.operation}-${index}`}
+            session={session}
+            contract={contract}
+            rightButton={
+              <TouchableWithoutFeedback
+                onPress={() =>
+                  props.navigation.navigate(wrapper.route.Modal.name, {
+                    screen: wrapper.route.WCInvocationDetailsModal.name,
+                    params: {
+                      session,
+                      contract,
+                    },
+                  })
+                }
+              >
                 <ImageView
                   alignSelf={'center'}
                   resizeMode={'contain'}
                   width={7}
                   height={12}
-                  pr={'20px'}
-                  source={require('~src/assets/images/red-alert.png')}
+                  pr={'40px'}
+                  source={require('~src/assets/images/icon-arrow-right-green.png')}
                 />
-              )}
+              </TouchableWithoutFeedback>
+            }
+          />
+        ))}
+        {requestParams.signers.map((signer, index) => (
+          <TouchableWithoutFeedback
+            key={`${signer.scopes}-${index}`}
+            onPress={() => {
+              props.navigation.navigate(
+                wrapper.route.SignatureScopeModal.name,
+                {
+                  data: signer,
+                  session,
+                }
+              )
+            }}
+          >
+            <LinearLayout
+              bg={theme.colors.background[1]}
+              orientation={'horiz'}
+              borderRadius={6}
+              mb={'13px'}
+              pt={'13px'}
+              pb={'13px'}
+              justifyContent={'space-between'}
+            >
               <TextView
-                color={showWarning ? '#ea5d8e' : 'white'}
-                alignSelf={'flex-end'}
-                pb={'3px'}
-                fontSize={12}
+                color={theme.colors.text[10]}
+                weight={2}
                 fontFamily={'bold'}
+                fontSize={14}
+                pl={'18px'}
               >
-                {i18n.t(`modals.signatureScope.${scope}.scope`)}
+                {i18n.t('modals.transactionRequest.signatureScope')}
               </TextView>
-              <ImageView
-                alignSelf={'center'}
-                resizeMode={'contain'}
-                width={7}
-                height={12}
-                pr={'35px'}
-                source={require('~src/assets/images/icon-arrow-right-green.png')}
-              />
+              <LinearLayout orientation={'horiz'}>
+                {showWarning && (
+                  <ImageView
+                    alignSelf={'center'}
+                    resizeMode={'contain'}
+                    width={7}
+                    height={12}
+                    pr={'20px'}
+                    source={require('~src/assets/images/red-alert.png')}
+                  />
+                )}
+                <TextView
+                  color={showWarning ? '#ea5d8e' : 'white'}
+                  alignSelf={'flex-end'}
+                  pb={'3px'}
+                  fontSize={12}
+                  fontFamily={'bold'}
+                >
+                  {i18n.t(`modals.signatureScope.${signer.scopes}.scope`)}
+                </TextView>
+                <ImageView
+                  alignSelf={'center'}
+                  resizeMode={'contain'}
+                  width={7}
+                  height={12}
+                  pr={'35px'}
+                  source={require('~src/assets/images/icon-arrow-right-green.png')}
+                />
+              </LinearLayout>
             </LinearLayout>
-          </LinearLayout>
-        </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback>
+        ))}
+
         <LinearLayout
           bg={theme.colors.background[1]}
           orientation={'horiz'}

@@ -1,3 +1,4 @@
+import {JsonRpcRequest} from '@json-rpc-tools/utils'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
@@ -7,7 +8,10 @@ import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {blockchainServices, getBlockchainByWCChain} from '../blockchain'
-import {ContractInvocation} from '../helpers/NeonWcAdapter'
+import {
+  ContractInvocation,
+  ContractInvocationMulti,
+} from '../helpers/NeonWcAdapter'
 
 import * as data from '~src/Changelog.json'
 import {appBus} from '~src/app/AppBus'
@@ -116,23 +120,12 @@ const TabNavigation = (props: Props) => {
     if (requests.length > 0) {
       const foundSession = sessions.find((it) => it.topic === requests[0].topic)
 
-      const blockchain = getBlockchainByWCChain(
-        foundSession?.permissions.blockchain.chains ?? []
-      )
-      const contractParams: ContractInvocation = requests[0].request.params[0]
-
-      if (blockchain && foundSession) {
-        const contract = await blockchainServices[
-          blockchain
-        ].provider.getContract(contractParams.scriptHash)
-
+      if (foundSession) {
         props.navigation.navigate(wrapper.route.Modal.name, {
           screen: wrapper.route.TransactionRequestModal.name,
           params: {
             request: requests[0],
             session: foundSession,
-            contract,
-            contractParams,
           },
         })
       }
