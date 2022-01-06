@@ -384,12 +384,16 @@ export const WalletConnectContextProvider: React.FC<{
   }, [wcClient, subscribeToEvents, checkPersistedState])
 
   const onURI = async (data: any) => {
-    const uri = typeof data === 'string' ? data : ''
-    if (!uri) return
-    if (typeof wcClient === 'undefined') {
-      throw new Error('Client is not initialized')
+    try {
+      const uri = typeof data === 'string' ? data : ''
+      if (!uri) return
+      if (typeof wcClient === 'undefined') {
+        throw new Error('Client is not initialized')
+      }
+      await wcClient.pair({uri})
+    } catch (error) {
+      throw new Error('Problem with client pair')
     }
-    await wcClient.pair({uri})
   }
 
   const getPeerOfRequest = async (requestEvent: SessionTypes.RequestEvent) => {

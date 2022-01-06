@@ -2,7 +2,7 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {SessionTypes} from '@walletconnect/types'
 import i18n from 'i18n-js'
-import React, {useCallback, useState} from 'react'
+import React, {useCallback, useState, useEffect} from 'react'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
 
@@ -11,19 +11,19 @@ import ContractDetailsBox from '../components/ContractDetailsBox'
 import InvocationDetailsParametersBox from '../components/InvocationDetailsParametersBox'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
+import {blockchainServices, getBlockchainByWCChain} from '~/src/blockchain'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~/src/components/SwiperPanel'
-import {ContractInvocation} from '~/src/helpers/WCN3Helper'
 import {ContractResponse} from '~/src/models/response/ContractResponse'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
 import {TextView, LinearLayout, ImageView} from '~/src/styles/styled-components'
+import {ContractInvocation} from '~src/helpers/NeonWcAdapter'
 
 export interface WCInvocationDetailsModalParams {
-  request: SessionTypes.RequestEvent
   session: SessionTypes.Settled
-  contract: ContractResponse
+  contract: ContractInvocation
 }
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -39,21 +39,34 @@ export type Param = {
 }
 
 const WCInvocationDetailsModal = ({navigation, route}: Props) => {
+  const {session, contract} = route.params
   const swipperController = useSwiperController(true)
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
-  const {contract, request, session} = route.params
+  const [contractInfo, setContractInfo] = useState<ContractResponse>()
+  const [paramsWithValue, setParamsWithValue] = useState<Param[]>()
+  const handleGetContractInfo = useCallback(async () => {
+    const blockchain = getBlockchainByWCChain(
+      session.permissions.blockchain.chains ?? []
+    )
 
-  const requestParams = request.request.params[0] as ContractInvocation
+    if (blockchain && session) {
+      const contractInfo = await blockchainServices[
+        blockchain
+      ].provider.getContract(contract.scriptHash)
+      setContractInfo(contractInfo)
+    }
+  }, [session])
+
+  useEffect(() => {
+    handleGetContractInfo()
+  }, [handleGetContractInfo])
 
   const infos = {
     dAppName: session.peer.metadata.name,
     dAppIcon: session.peer.metadata.icons[0],
-    contractName: contract.name ?? '',
-    contractHash: contract.hash ?? '',
-    contractMethod: requestParams.operation,
   }
 
   const sanitizeValue = (value: ParamValue) => {
@@ -68,9 +81,9 @@ const WCInvocationDetailsModal = ({navigation, route}: Props) => {
     return value
   }
 
-  const getParamsWithValue = () => {
-    const method = contract.methods.find(
-      (item) => item.name === requestParams.operation
+  const populateParamsWithValues = () => {
+    const method = contractInfo?.methods.find(
+      (item) => item.name === contract.operation
     )
 
     if (!method) {
@@ -82,15 +95,19 @@ const WCInvocationDetailsModal = ({navigation, route}: Props) => {
     }
 
     const paramsWithValue = method.parameters.map((parameter, index) => ({
-      value: sanitizeValue(requestParams.args[index].value),
+      value: sanitizeValue(contract.args[index].value),
       type: parameter.type,
       name: parameter.name,
     }))
 
-    return paramsWithValue
+    setParamsWithValue(paramsWithValue)
   }
 
-  const paramsWithValue = getParamsWithValue()
+  useEffect(() => {
+    if (contractInfo) {
+      populateParamsWithValues()
+    }
+  }, [contractInfo])
 
   return (
     <SwiperPanel
@@ -117,9 +134,7 @@ const WCInvocationDetailsModal = ({navigation, route}: Props) => {
         </TextView>
         <ContractDetailsBox
           session={route.params.session}
-          title={infos.contractName}
-          hash={infos.contractHash}
-          method={infos.contractMethod}
+          contract={contract}
         />
         <TextView
           fontFamily={'regular'}
