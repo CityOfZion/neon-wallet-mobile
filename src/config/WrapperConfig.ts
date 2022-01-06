@@ -107,7 +107,7 @@ export class WrapperConfig {
     'AccountAssetScreen',
     'WCConnectionDetailsModal',
     'AccountConnectionsScreen',
-    'WCAccountConnections',
+    'WCAccountConnectionsScreen',
     'AccountTransactionsScreen',
     'RawJsonModal',
     'SignatureScopeModal',

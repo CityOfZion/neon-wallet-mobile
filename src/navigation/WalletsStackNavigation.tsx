@@ -4,9 +4,9 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import WCWalletConnections, {
-  WCAccountConnectionsParams,
-} from '../scenes/walletConnect/WCAccountConnections'
+import WCAccountConnectionsScreen, {
+  WCAccountConnectionsScreenParams,
+} from '../scenes/walletConnect/WCAccountConnectionsScreen'
 import {MoreStackParamList} from './MoreStackNavigation'
 import {SettingsStackParamList} from './SettingsStackNavigation'
 
@@ -37,7 +37,7 @@ export type WalletStackParamList = {
   More: MoreStackParamList
   AccountAssetScreen: undefined
   AccountTransactionsScreen: undefined
-  WCAccountConnections: WCAccountConnectionsParams
+  WCAccountConnectionsScreen: WCAccountConnectionsScreenParams
 }
 
 export type WalletStackParams =
@@ -108,8 +108,8 @@ const WalletStackNavigation = () => {
           }
         />
         <WalletStack.Screen
-          name={wrapper.route.WCAccountConnections.name}
-          component={WCWalletConnections}
+          name={wrapper.route.WCAccountConnectionsScreen.name}
+          component={WCAccountConnectionsScreen}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               theme,
