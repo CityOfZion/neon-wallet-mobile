@@ -5,6 +5,7 @@ import i18n from 'i18n-js'
 import moment from 'moment'
 import React, {useEffect, useState, useCallback} from 'react'
 import {Linking, TouchableWithoutFeedback} from 'react-native'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {getBlockchainLogo} from '~/src/blockchain'
@@ -12,6 +13,7 @@ import {
   BlockchainServiceKey,
   getBlockchainByWCChain,
 } from '~/src/blockchain/common'
+import {RootStore} from '~/src/store/RootStore'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
@@ -35,6 +37,7 @@ const WCConnectionDetailsModal = (props: Props) => {
   const navigation = useNavigation()
   const [blockchain, setBlockchain] = useState<BlockchainServiceKey>('neo3')
   const {dapp} = props.route.params
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   useEffect(() => {
     if (walletConnectCtx.sessions.length > 0) {
       const blockchainByWCChain = getBlockchainByWCChain(
@@ -98,8 +101,7 @@ const WCConnectionDetailsModal = (props: Props) => {
                 )
               })}
               <TextView color={'text.10'} fontSize={'12px'}>
-                {/* TODO: Change the date to store the ApprovalDate */}
-                {moment.unix(dapp.session.expiry).format('HH:mm Do MMM YYYY')}
+                {moment.unix(dapp.approvedDate).format('HH:mm Do MMM YYYY')}
               </TextView>
             </LinearLayout>
             <LinearLayout

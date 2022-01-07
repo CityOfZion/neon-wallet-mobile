@@ -24,6 +24,7 @@ export class WrapperConfig {
     '@neo_nodes',
     '@nodes',
     '@MultichainExchange',
+    '@wcApprovalDate',
   ] as const
 
   readonly routes = [

@@ -10,6 +10,9 @@ import KeyValueStorage from 'keyvaluestorage'
 import {KeyValueStorageOptions} from 'keyvaluestorage/dist/cjs/shared'
 import PropTypes from 'prop-types'
 import React, {useCallback, useContext, useEffect, useState} from 'react'
+import {useDispatch} from 'react-redux'
+
+import {RootStore} from '~src/store/RootStore'
 
 type OnRequestCallback = (
   accountAddress: string,
@@ -110,6 +113,7 @@ export const WalletConnectContextProvider: React.FC<{
   const [autoAcceptCallback, setAutoAcceptCallback] = useState<
     AutoAcceptCallback | undefined
   >(undefined)
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   useEffect(() => {
     init()
@@ -444,6 +448,7 @@ export const WalletConnectContextProvider: React.FC<{
         return [...old, session]
       }
     })
+    dispatchAsync(RootStore.wcReducer.actions.updateApprovalDate(session.topic))
   }
 
   const rejectSession = async (proposal: SessionTypes.Proposal) => {
@@ -464,6 +469,7 @@ export const WalletConnectContextProvider: React.FC<{
       topic,
       reason: ERROR.USER_DISCONNECTED.format(),
     })
+    await dispatchAsync(RootStore.wcReducer.actions.delete(topic))
   }
 
   const removeFromPending = async (requestEvent: SessionTypes.RequestEvent) => {

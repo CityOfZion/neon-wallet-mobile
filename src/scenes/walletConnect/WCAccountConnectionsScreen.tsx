@@ -2,7 +2,7 @@
 import {RouteProp, useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React from 'react'
+import React, {useEffect, useCallback, useState} from 'react'
 import {FlatList, ScrollView} from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -13,9 +13,11 @@ import ListSeparator from './components/ListSeparator'
 import {IDappInfo} from './components/WCConnectedDapps'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
+import {Storage} from '~/src/app/Storage'
 import AccountSubTitle from '~/src/components/AccountSubTitle'
 import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
 import {Account} from '~/src/models/redux/Account'
+import {WCApprovalDate} from '~/src/models/redux/WCApprovalDate'
 import {RootStackParamList} from '~/src/navigation/AppNavigation'
 import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
 import {LinearLayout, TextView} from '~/src/styles/styled-components'
@@ -34,6 +36,14 @@ const WCAccountConnectionsScreen = ({route, navigation}: Props) => {
   const walletConnectCtx = useWalletConnect()
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const walletsPool = useSelector((state: RootState) => state.app.wallets)
+  const [approvalDatesPool, setApprovalDatesPool] = useState<
+    WCApprovalDate[] | null
+  >(null)
+
+  const syncApprovalDates = useCallback(async () => {
+    const result = await Storage.wcApprovalDates.load()
+    setApprovalDatesPool(result)
+  }, [])
 
   const account = route.params.account
 
@@ -57,6 +67,7 @@ const WCAccountConnectionsScreen = ({route, navigation}: Props) => {
       })
     )
     .map((session) => {
+      let approvedDate: WCApprovalDate | undefined
       const connectedAcc = session.state.accounts.map((it) => {
         const info = it.split(':')
         const account = accountsPool.find(
@@ -68,20 +79,31 @@ const WCAccountConnectionsScreen = ({route, navigation}: Props) => {
         }
       })
 
+      if (approvalDatesPool !== null) {
+        approvedDate = approvalDatesPool.find(
+          (it) => it.sessionTopic === session.topic
+        )
+      }
+
       const dAppInfo: IDappInfo = {
         session,
         connectedAcc,
+        approvedDate: approvedDate?.approvalDate ?? 0,
       }
 
       return {
         dAppName: session.peer.metadata.name,
-        sessionExpiry: session.expiry,
+        approvedDate: dAppInfo.approvedDate,
         iconUri: session.peer.metadata.icons[0],
         onPress: () => {
           handleNavigation(dAppInfo)
         },
       }
     })
+
+  useEffect(() => {
+    syncApprovalDates()
+  }, [items])
 
   return (
     <ScreenLayout solidColorBG>

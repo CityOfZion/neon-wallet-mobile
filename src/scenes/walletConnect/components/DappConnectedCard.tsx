@@ -7,7 +7,7 @@ import {ImageView, LinearLayout, TextView} from '~/src/styles/styled-components'
 export interface DappConnectedCardProps {
   onPress?: () => void
   iconUri: string
-  sessionExpiry: number
+  approvedDate: number
   dAppName: string
   footer?: React.ReactNode
 }
@@ -16,7 +16,7 @@ const DappConnectedCard = ({
   dAppName,
   footer,
   iconUri,
-  sessionExpiry,
+  approvedDate,
   onPress,
 }: DappConnectedCardProps) => {
   return (
@@ -43,8 +43,7 @@ const DappConnectedCard = ({
           </LinearLayout>
           <LinearLayout>
             <TextView color={'text.10'} fontSize={'12px'}>
-              {/* TODO: Change the date to store the ApprovalDate */}
-              {moment.unix(sessionExpiry).format('HH:mm Do MMM YYYY')}
+              {moment.unix(approvedDate).format('HH:mm Do MMM YYYY')}
             </TextView>
             <TextView color={'white'} fontFamily={'medium'} fontSize={'18px'}>
               {dAppName}
