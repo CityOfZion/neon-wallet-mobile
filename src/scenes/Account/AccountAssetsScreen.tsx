@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
+import AccountSubTitle from '~/src/components/AccountSubTitle'
 import BalanceList from '~src/components/BalanceList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {Account} from '~src/models/redux/Account'
 import {RootStore} from '~src/store/RootStore'
-import {TextView, LinearLayout, ButtonView} from '~src/styles/styled-components'
 
 const AccountAssetScreen = () => {
   const dispatchAccount = useDispatch<SyncDispatch<Account>>()
@@ -24,23 +24,7 @@ const AccountAssetScreen = () => {
 
   return (
     <ScreenLayout>
-      <LinearLayout
-        orientation={'horiz'}
-        justifyContent={'center'}
-        mb={3}
-        alignItems={'center'}
-      >
-        <ButtonView
-          borderRadius={100}
-          disabled={true}
-          width={12}
-          height={12}
-          backgroundColor={account.backgroundColor}
-          mr={3}
-        />
-
-        <TextView color={'text.2'}>{account.name?.toUpperCase()}</TextView>
-      </LinearLayout>
+      <AccountSubTitle account={account} />
       <BalanceList
         my="16px"
         tokenAssets={account.getTokenAssets()}

@@ -13,7 +13,7 @@ import ListSeparator from './components/ListSeparator'
 import {IDappInfo} from './components/WCConnectedDapps'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
-import HeaderActionButton from '~/src/components/layout/HeaderActionButton'
+import AccountSubTitle from '~/src/components/AccountSubTitle'
 import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
 import {Account} from '~/src/models/redux/Account'
 import {RootStackParamList} from '~/src/navigation/AppNavigation'
@@ -21,48 +21,21 @@ import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
 import {LinearLayout, TextView} from '~/src/styles/styled-components'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 
-export type WCAccountConnectionsParams = {
+export type WCAccountConnectionsScreenParams = {
   account: Account
 }
 
 interface Props {
   navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>
-  route: RouteProp<WalletStackParamList, 'WCAccountConnections'>
+  route: RouteProp<WalletStackParamList, 'WCAccountConnectionsScreen'>
 }
 
-const WCAccountConnections = ({route, navigation}: Props) => {
+const WCAccountConnectionsScreen = ({route, navigation}: Props) => {
   const walletConnectCtx = useWalletConnect()
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const walletsPool = useSelector((state: RootState) => state.app.wallets)
 
   const account = route.params.account
-
-  navigation.setOptions({
-    headerTitle: () => (
-      <LinearLayout alignItems="center" justifyContent="center" pt={'28px'}>
-        <TextView fontSize={'24px'} fontWeight={500} color={'text.0'}>
-          {i18n.t('screens.WCAccountConnections.title')}
-        </TextView>
-        <LinearLayout
-          orientation={'horiz'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          mt={'16px'}
-        >
-          <LinearLayout
-            width="12px"
-            height="12px"
-            bg={account.backgroundColor}
-            borderRadius={7}
-            mr={'8px'}
-          />
-          <TextView color={'text.14'} fontSize={'14px'}>
-            {account.name ?? ''}
-          </TextView>
-        </LinearLayout>
-      </LinearLayout>
-    ),
-  })
 
   const handleNavigation = (dappInfo: IDappInfo) => {
     if (walletConnectCtx.sessions.length > 0) {
@@ -110,38 +83,40 @@ const WCAccountConnections = ({route, navigation}: Props) => {
       }
     })
 
-  return walletConnectCtx.sessions.length > 0 ? (
+  return (
     <ScreenLayout solidColorBG>
-      <LinearLayout paddingHorizontal={20} paddingVertical={50}>
-        <ScrollView>
-          <FlatList
-            data={items}
-            renderItem={({item}) => <DappConnectedCard {...item} />}
-            ItemSeparatorComponent={ListSeparator}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </ScrollView>
-        <ListSeparator />
-      </LinearLayout>
-    </ScreenLayout>
-  ) : (
-    <ScreenLayout solidColorBG>
-      <LinearLayout
-        height={'100%'}
-        justifyContent={'center'}
-        alignItems={'center'}
-      >
-        <TextView
-          fontFamily={'medium'}
-          fontSize={'24px'}
-          color={'text.11'}
-          textAlign={'center'}
+      <AccountSubTitle account={account} />
+
+      {walletConnectCtx.sessions.length > 0 ? (
+        <LinearLayout paddingHorizontal={20} my="50px">
+          <ScrollView>
+            <FlatList
+              data={items}
+              renderItem={({item}) => <DappConnectedCard {...item} />}
+              ItemSeparatorComponent={ListSeparator}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </ScrollView>
+          <ListSeparator />
+        </LinearLayout>
+      ) : (
+        <LinearLayout
+          height={'100%'}
+          justifyContent={'center'}
+          alignItems={'center'}
         >
-          {i18n.t('screens.WCAccountConnections.noDAppsConnected')}
-        </TextView>
-      </LinearLayout>
+          <TextView
+            fontFamily={'medium'}
+            fontSize={'24px'}
+            color={'text.11'}
+            textAlign={'center'}
+          >
+            {i18n.t('screens.WCAccountConnectionsScreen.noDAppsConnected')}
+          </TextView>
+        </LinearLayout>
+      )}
     </ScreenLayout>
   )
 }
 
-export default WCAccountConnections
+export default WCAccountConnectionsScreen
