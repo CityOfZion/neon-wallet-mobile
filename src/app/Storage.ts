@@ -6,6 +6,7 @@ import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 import {Contact} from '~src/models/redux/Contact'
 import {Settings} from '~src/models/redux/Settings'
+import {WCApprovalDate} from '~src/models/redux/WCApprovalDate'
 import {Wallet} from '~src/models/redux/Wallet'
 import {Exchange, MultichainExchange} from '~src/types/exchange'
 
@@ -102,5 +103,8 @@ export abstract class Storage {
     return wrapper.storage['@MultichainExchange']
       .bind()
       .as<MultichainExchange>()
+  }
+  static get wcApprovalDates() {
+    return wrapper.storage['@wcApprovalDate'].bind().asArrayOf(WCApprovalDate)
   }
 }

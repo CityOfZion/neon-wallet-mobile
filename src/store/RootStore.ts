@@ -12,6 +12,7 @@ import {SendTransactionReducer} from '~src/store/senderTransaction/SendTransacti
 import {SettingsReducer} from '~src/store/settings/SettingsReducer'
 import {TimerReducer} from '~src/store/timer/TimerReducer'
 import {WalletReducer} from '~src/store/wallet/WalletReducer'
+import {WalletConnectReducer} from '~src/store/walletConnect/WalletConnectReducer'
 export type RootState = ReturnType<typeof RootStore.reducers>
 
 export abstract class RootStore {
@@ -23,6 +24,7 @@ export abstract class RootStore {
   static readonly contact = new ContactReducer()
   static readonly senderTransaction = new SendTransactionReducer()
   static readonly timer = new TimerReducer()
+  static readonly wcReducer = new WalletConnectReducer()
 
   static readonly reducers = combineReducers({
     app: RootStore.app.reducer,
@@ -34,5 +36,6 @@ export abstract class RootStore {
     senderTransaction: RootStore.senderTransaction.reducer,
     network: createNetworkReducer(),
     timer: RootStore.timer.reducer,
+    wcReducer: RootStore.wcReducer.reducer,
   })
 }

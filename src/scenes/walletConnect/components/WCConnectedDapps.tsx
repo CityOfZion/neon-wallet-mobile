@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {SessionTypes} from '@walletconnect/types/dist/cjs/session'
 import i18n from 'i18n-js'
-import React from 'react'
+import React, {useEffect, useCallback, useState} from 'react'
 import {
   FlatList,
   ListRenderItemInfo,
@@ -15,7 +15,9 @@ import DappConnectedCard from './DappConnectedCard'
 import ListSeparator from './ListSeparator'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
+import {Storage} from '~/src/app/Storage'
 import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
+import {WCApprovalDate} from '~/src/models/redux/WCApprovalDate'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
 import {ImageView, LinearLayout, TextView} from '~/src/styles/styled-components'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -30,6 +32,7 @@ interface IWalletInfo {
 export interface IDappInfo {
   session: SessionTypes.Settled
   connectedAcc: IWalletInfo[]
+  approvedDate: number
 }
 
 export const WCConnectedDapps = () => {
@@ -37,6 +40,14 @@ export const WCConnectedDapps = () => {
   const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const walletsPool = useSelector((state: RootState) => state.app.wallets)
+  const [approvalDatesPool, setApprovalDatesPool] = useState<
+    WCApprovalDate[] | null
+  >(null)
+
+  const syncApprovalDates = useCallback(async () => {
+    const result = await Storage.wcApprovalDates.load()
+    setApprovalDatesPool(result)
+  }, [])
 
   const handleNavigation = (dappInfo: IDappInfo) => {
     if (walletConnectCtx.sessions.length > 0) {
@@ -50,6 +61,7 @@ export const WCConnectedDapps = () => {
   }
 
   const items: IDappInfo[] = walletConnectCtx.sessions.map((session) => {
+    let approvedDate: WCApprovalDate | undefined
     const accountsConnected = session.state.accounts.map((it) => {
       const info = it.split(':')
       const account = accountsPool.find(
@@ -60,17 +72,27 @@ export const WCConnectedDapps = () => {
         wallet: account?.getWallet(walletsPool),
       }
     })
+    if (approvalDatesPool !== null) {
+      approvedDate = approvalDatesPool.find(
+        (it) => it.sessionTopic === session.topic
+      )
+    }
     return {
       session,
       connectedAcc: accountsConnected,
+      approvedDate: approvedDate?.approvalDate ?? 0,
     }
   })
+
+  useEffect(() => {
+    syncApprovalDates()
+  }, [items])
 
   const DappConnectedItem = (props: ListRenderItemInfo<IDappInfo>) => {
     return (
       <DappConnectedCard
         dAppName={props.item.session.peer.metadata.name}
-        sessionExpiry={props.item.session.expiry}
+        approvedDate={props.item.approvedDate}
         iconUri={props.item.session.peer.metadata.icons[0]}
         onPress={() => handleNavigation(props.item)}
         footer={

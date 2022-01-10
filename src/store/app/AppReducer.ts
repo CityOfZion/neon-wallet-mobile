@@ -560,6 +560,7 @@ export class AppReducer extends ReducerWrapper<
         await Storage.wallets.erase()
         await Storage.accounts.erase()
         await Storage.contacts.erase()
+        await Storage.wcApprovalDates.erase()
 
         await SecurityHelper.removePasscode()
       }
