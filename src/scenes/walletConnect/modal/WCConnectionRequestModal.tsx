@@ -1,6 +1,5 @@
 import {RouteProp, useNavigation} from '@react-navigation/native'
 import {AwaitActivity, Await} from '@simpli/react-native-await'
-import {SessionTypes} from '@walletconnect/types'
 import i18n from 'i18n-js'
 import React, {useEffect, useState, useCallback} from 'react'
 
@@ -18,6 +17,7 @@ import SwiperPanel, {
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
 import {LinearLayout, TextView, ImageView} from '~src/styles/styled-components'
 
 export interface WCConnectionRequestModalParams {
@@ -95,40 +95,16 @@ const WCConnectionRequestModal = (props: Props) => {
         {walletConnectCtx.sessionProposals.length > 0 ? (
           <LinearLayout height={'100%'} justifyContent={'space-between'}>
             <LinearLayout height={'50%'} mt={3}>
-              <LinearLayout
-                borderRadius={'4px'}
-                padding={5}
-                width={'77px'}
-                height={'75px'}
-                backgroundColor={'#1c2228'}
-                alignSelf={'center'}
-                mb={'20px'}
-              >
-                <ImageView
-                  resizeMode="contain"
-                  source={{
-                    uri:
-                      walletConnectCtx.sessionProposals[0].proposer.metadata
-                        .icons[0],
-                  }}
-                  width={'100%'}
-                  height={'100%'}
-                />
-              </LinearLayout>
-
-              <TextView
-                mb={'40px'}
-                fontFamily={'regular'}
-                fontSize={'18px'}
-                fontWeight={'400'}
-                color={'#fff'}
-                textAlign={'center'}
-              >
-                {i18n.t('modals.WCConnectionRequest.subtitle_1', {
+              <ConnectionHeader
+                title={i18n.t('modals.WCConnectionRequest.subtitle_1', {
                   dAppName:
                     walletConnectCtx.sessionProposals[0].proposer.metadata.name,
                 })}
-              </TextView>
+                imageUri={
+                  walletConnectCtx.sessionProposals[0].proposer.metadata
+                    .icons[0]
+                }
+              />
 
               <LinearLayout
                 width={'100%'}

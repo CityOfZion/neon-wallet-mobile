@@ -1,25 +1,21 @@
 import {RouteProp, useNavigation} from '@react-navigation/native'
-import {AwaitActivity, Await} from '@simpli/react-native-await'
-import {SessionTypes} from '@walletconnect/types'
 import i18n from 'i18n-js'
 import moment from 'moment'
 import React, {useEffect, useState, useCallback} from 'react'
-import {Linking, TouchableWithoutFeedback} from 'react-native'
-import {useDispatch, useSelector} from 'react-redux'
+import {TouchableWithoutFeedback} from 'react-native'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
 import {getBlockchainLogo} from '~/src/blockchain'
 import {
   BlockchainServiceKey,
   getBlockchainByWCChain,
 } from '~/src/blockchain/common'
-import {RootStore} from '~/src/store/RootStore'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
 import {IDappInfo} from '~src/scenes/walletConnect/components/WCConnectedDapps'
 import {LinearLayout, TextView, ImageView} from '~src/styles/styled-components'
 
@@ -37,7 +33,6 @@ const WCConnectionDetailsModal = (props: Props) => {
   const navigation = useNavigation()
   const [blockchain, setBlockchain] = useState<BlockchainServiceKey>('neo3')
   const {dapp} = props.route.params
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   useEffect(() => {
     if (walletConnectCtx.sessions.length > 0) {
       const blockchainByWCChain = getBlockchainByWCChain(
@@ -104,35 +99,10 @@ const WCConnectionDetailsModal = (props: Props) => {
                 {moment.unix(dapp.approvedDate).format('HH:mm Do MMM YYYY')}
               </TextView>
             </LinearLayout>
-            <LinearLayout
-              borderRadius={'4px'}
-              padding={5}
-              width={'77px'}
-              height={'75px'}
-              backgroundColor={'#1c2228'}
-              alignSelf={'center'}
-              mb={'20px'}
-            >
-              <ImageView
-                resizeMode="contain"
-                source={{
-                  uri: dapp.session.peer.metadata.icons[0],
-                }}
-                width={'100%'}
-                height={'100%'}
-              />
-            </LinearLayout>
-
-            <TextView
-              mb={'26px'}
-              fontFamily={'medium'}
-              fontSize={'24px'}
-              fontWeight={'400'}
-              color={'white'}
-              textAlign={'center'}
-            >
-              {dapp.session.peer.metadata.name}
-            </TextView>
+            <ConnectionHeader
+              title={dapp.session.peer.metadata.name}
+              imageUri={dapp.session.peer.metadata.icons[0]}
+            />
 
             <LinearLayout
               width={'100%'}

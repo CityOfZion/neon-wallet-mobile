@@ -15,6 +15,7 @@ import {Signer} from '~src/helpers/NeonWcAdapter'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
+import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
@@ -57,34 +58,10 @@ const SignatureScopeModal = (props: Props) => {
       solidColorBG
     >
       <LinearLayout>
-        <LinearLayout orientation={'verti'} mb={'26px'}>
-          <LinearLayout
-            borderRadius={'4px'}
-            padding={5}
-            width={'77px'}
-            height={'75px'}
-            backgroundColor={'#1c2228'}
-            alignSelf={'center'}
-          >
-            <ImageView
-              resizeMode="contain"
-              source={{
-                uri: session.peer.metadata.icons[0],
-              }}
-              width={'100%'}
-              height={'100%'}
-            />
-          </LinearLayout>
-          <TextView
-            mt={'13px'}
-            color={'white'}
-            textAlign={'center'}
-            fontFamily={'medium'}
-            fontSize={'18px'}
-          >
-            {session.peer.metadata.name}
-          </TextView>
-        </LinearLayout>
+        <ConnectionHeader
+          title={session.peer.metadata.name}
+          imageUri={session.peer.metadata.icons[0]}
+        />
         <LinearLayout orientation={'verti'} width="100%">
           <TextView
             color={theme.colors.text[10]}
