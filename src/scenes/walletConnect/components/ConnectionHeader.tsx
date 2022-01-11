@@ -14,10 +14,10 @@ const WalletConnectBox = ({imageUri, title}: Props) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
-  const [imgUri, setImageUri] = useState<string | undefined>(undefined)
+  const [imgUriState, setImgUriState] = useState<string | undefined>(undefined)
   const imgDefault = require('~src/assets/logos/icon-dapp-default.png')
   useEffect(() => {
-    setImageUri(imageUri)
+    setImgUriState(imageUri)
   }, [imageUri])
 
   return (
@@ -29,13 +29,13 @@ const WalletConnectBox = ({imageUri, title}: Props) => {
         width={'77px'}
         height={'75px'}
       >
-        {imgUri ? (
+        {imgUriState ? (
           <Image
             source={{
-              uri: imgUri,
+              uri: imgUriState,
             }}
             onError={() => {
-              setImageUri(undefined)
+              setImgUriState(undefined)
             }}
             style={{
               width: '100%',
