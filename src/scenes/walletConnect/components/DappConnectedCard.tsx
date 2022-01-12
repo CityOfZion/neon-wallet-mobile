@@ -1,6 +1,6 @@
 import moment from 'moment'
-import React from 'react'
-import {TouchableHighlight} from 'react-native'
+import React, {useEffect, useState} from 'react'
+import {TouchableHighlight, Image} from 'react-native'
 
 import {ImageView, LinearLayout, TextView} from '~/src/styles/styled-components'
 
@@ -19,27 +19,47 @@ const DappConnectedCard = ({
   approvedDate,
   onPress,
 }: DappConnectedCardProps) => {
+  const [imgUri, setImageUri] = useState<string | undefined>(undefined)
+  const imgDefault = require('~src/assets/logos/icon-dapp-default.png')
+  useEffect(() => {
+    setImageUri(iconUri)
+  }, [iconUri])
+
   return (
     <TouchableHighlight onPress={onPress}>
       <LinearLayout orientation={'horiz'} justifyContent={'space-between'}>
         <LinearLayout orientation={'horiz'}>
           <LinearLayout
             borderRadius={'4px'}
-            p={'5px'}
             width={'42px'}
             height={'41px'}
-            backgroundColor={'background.14'}
             alignSelf={'center'}
             mr={'10px'}
           >
-            <ImageView
-              resizeMode="contain"
-              source={{
-                uri: iconUri,
-              }}
-              width={'100%'}
-              height={'100%'}
-            />
+            {imgUri ? (
+              <Image
+                source={{
+                  uri: imgUri,
+                }}
+                onError={() => {
+                  setImageUri(undefined)
+                }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  resizeMode: 'contain',
+                }}
+              />
+            ) : (
+              <Image
+                source={imgDefault}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  resizeMode: 'contain',
+                }}
+              />
+            )}
           </LinearLayout>
           <LinearLayout>
             <TextView color={'text.10'} fontSize={'12px'}>

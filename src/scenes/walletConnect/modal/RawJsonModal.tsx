@@ -16,6 +16,7 @@ import SwiperPanel, {
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
+import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
 import {LinearLayout, TextView, ImageView} from '~src/styles/styled-components'
 type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
@@ -49,33 +50,10 @@ const RawJsonModal = (props: Props) => {
     >
       <LinearLayout mb={'20%'}>
         <LinearLayout alignSelf={'center'}>
-          <LinearLayout
-            borderRadius={'4px'}
-            padding={5}
-            width={'77px'}
-            height={'75px'}
-            backgroundColor={'#1c2228'}
-            alignSelf={'center'}
-          >
-            <ImageView
-              height={'100%'}
-              width={'100%'}
-              resizeMode={'contain'}
-              // TODO: Just change the source for the source bellow
-              //source={{uri: props.route.params.metadata.icons[0]}}
-              source={require('~src/assets/ic_launcher.png')}
-              alignSelf={'center'}
-            />
-          </LinearLayout>
-          <TextView
-            fontSize={'18px'}
-            fontFamily={'medium'}
-            color={'white'}
-            mt={'13px'}
-            textAlign={'center'}
-          >
-            props.route.params.metadata.name
-          </TextView>
+          <ConnectionHeader
+            title={props.route.params.metadata.name}
+            imageUri={props.route.params.metadata.icons[0]}
+          />
         </LinearLayout>
         <LinearLayout>
           <LinearLayout
