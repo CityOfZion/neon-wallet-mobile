@@ -1763,10 +1763,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cityofzion/dora-ts@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@cityofzion/dora-ts/-/dora-ts-0.0.7.tgz#675df7d0ec757d04c233ef7580b90a9d0501c491"
-  integrity sha512-KfAmSSEtM7ngZJ8/EccjTcwhwjVKcCa3aoSemlHlGwQaIj6k9jkuk1HZgS9Za6K5vJ050IMTsCUsIqcVJpT5gw==
+"@cityofzion/dora-ts@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@cityofzion/dora-ts/-/dora-ts-0.0.10.tgz#d73d51b6566153d0c04c05459ee207c7d3265875"
+  integrity sha512-K0VoIvYvbLT92SRffPMBSgUZudrF78UJ0v0KIDw4PUbN5U/4uVOHlEfPlGjISvHanVFgEB4lLVpzbkTkcydaCw==
   dependencies:
     axios "^0.21.1"
 
@@ -1780,7 +1780,7 @@
     isomorphic-ws "4.0.1"
     ws "7.3.0"
 
-"@cityofzion/neon-api@^5.0.0-next.15":
+"@cityofzion/neon-api@^5.0.0-next.16":
   version "5.0.0-next.16"
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-api/-/neon-api-5.0.0-next.16.tgz#83d2f70c43b124424817ce1acf1925c5cb8131b4"
   integrity sha512-wn7skR+gPvMGUS2GTP9xAW6TP0kwigtLC9+tV7xbl2idaRk3SVGzpI6TrPzCAtZ+mTCqznUjzT/R2jQTSxsCPg==
@@ -1788,8 +1788,7 @@
     isomorphic-ws "4.0.1"
     ws "7.4.4"
 
-"@cityofzion/neon-core-next@npm:@cityofzion/neon-core@5.0.0-next.16", "@cityofzion/neon-core@^5.0.0-next.15":
-  name "@cityofzion/neon-core-next"
+"@cityofzion/neon-core-next@npm:@cityofzion/neon-core@5.0.0-next.16", "@cityofzion/neon-core@^5.0.0-next.16":
   version "5.0.0-next.16"
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-core/-/neon-core-5.0.0-next.16.tgz#f76224a564592c00b0d50fe5f620fe0dbba2a3d2"
   integrity sha512-C9YoomPA5JuOh2HpYY99OYicJBRg+LncPbtTQ4WZ8ujQ4w9DA8DIdLJ0cfWCWFPvGxAt3dW2sxYMzWn+5oNWxg==
@@ -1828,13 +1827,13 @@
     secure-random "1.1.2"
     wif "2.0.6"
 
-"@cityofzion/neon-js-next@npm:@cityofzion/neon-js@5.0.0-next.15":
-  version "5.0.0-next.15"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neon-js/-/neon-js-5.0.0-next.15.tgz#bd90ca7714a76f0abf53fdccae4100e779cf1248"
-  integrity sha512-ueuk+8QmVW+L96IsO074XefnYCFiCZ6HE9k2fUbsAQi/57KmxC4S/N5ErmXwyDSQks8NkHLdp0ihnGC0dwaD4A==
+"@cityofzion/neon-js-next@npm:@cityofzion/neon-js@5.0.0-next.16":
+  version "5.0.0-next.16"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-js/-/neon-js-5.0.0-next.16.tgz#fa9b1f8331eb406a278e8883193d749750237e80"
+  integrity sha512-mN/0OHzsCPFJqN1WC/cjHBEoSEvURWRkiQdCQBLAbD71Mo12SXEWOd10858c9MQbfTPovT/pSy+eZdGSCANZwg==
   dependencies:
-    "@cityofzion/neon-api" "^5.0.0-next.15"
-    "@cityofzion/neon-core" "^5.0.0-next.15"
+    "@cityofzion/neon-api" "^5.0.0-next.16"
+    "@cityofzion/neon-core" "^5.0.0-next.16"
 
 "@cityofzion/neon-js@^4.7.1", "@cityofzion/neon-js@^4.8.0":
   version "4.8.1"

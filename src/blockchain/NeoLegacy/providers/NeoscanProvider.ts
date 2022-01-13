@@ -112,4 +112,9 @@ export class NeoscanProvider implements NeoLegacyProvider {
       }
     })
   }
+
+  async getAssetByHash(hash: string) {
+    throw new Error("not implement endpoint");
+    return null
+  }
 }

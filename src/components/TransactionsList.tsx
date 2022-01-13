@@ -259,64 +259,67 @@ const TransactionComponent = (props: {
             data={props.item.tokens}
             keyExtractor={(item, i) => String(i)}
             listKey={props.item.transactionHash ?? ''}
-            renderItem={(token) => (
-              <LinearLayout orientation={'horiz'}>
-                <LinearLayout mr={4} width={'27%'}>
-                  <LinearLayout orientation={'horiz'} alignItems={'center'}>
-                    <Image
-                      width={18}
-                      height={18}
-                      resizeMode={'contain'}
-                      resizeMethod={'resize'}
-                      style={{
-                        resizeMode: 'contain',
-                        marginRight: 6,
-                        width: 18,
-                        height: 18,
-                      }}
-                      source={token.item.srcIcon}
-                    />
-                    <TextView fontSize={'md'} color={'text.0'}>
-                      {token.item.symbol}
+            renderItem={(token) => {
+              console.log('token.item.amount', token.item.amount)
+              return (
+                <LinearLayout orientation={'horiz'}>
+                  <LinearLayout mr={4} width={'27%'}>
+                    <LinearLayout orientation={'horiz'} alignItems={'center'}>
+                      <Image
+                        width={18}
+                        height={18}
+                        resizeMode={'contain'}
+                        resizeMethod={'resize'}
+                        style={{
+                          resizeMode: 'contain',
+                          marginRight: 6,
+                          width: 18,
+                          height: 18,
+                        }}
+                        source={token.item.srcIcon}
+                      />
+                      <TextView fontSize={'md'} color={'text.0'}>
+                        {token.item.symbol}
+                      </TextView>
+                    </LinearLayout>
+                  </LinearLayout>
+
+                  <LinearLayout alignContent={'flex-start'}>
+                    <TextView
+                      color={'text.0'}
+                      fontSize={'md'}
+                      textAlign={'right'}
+                      fontFamily={'semibold'}
+                      allowFontScaling={true}
+                      adjustsFontSizeToFit={true}
+                      numberOfLines={1}
+                    >
+                      {token.item.amount.toFixed(8) ?? ''}
+                    </TextView>
+                  </LinearLayout>
+
+                  <LinearLayout weight={2} alignSelf={'flex-end'}>
+                    <TextView
+                      color={'primary'}
+                      fontSize={'md'}
+                      textAlign={'right'}
+                      fontFamily={'semibold'}
+                      allowFontScaling={true}
+                      adjustsFontSizeToFit={true}
+                      numberOfLines={1}
+                    >
+                      {FilterHelper.currency(
+                        token.item.exchangeToken(props.currency),
+                        props.currency,
+                        props.language,
+                        2,
+                        8
+                      )}
                     </TextView>
                   </LinearLayout>
                 </LinearLayout>
-
-                <LinearLayout alignContent={'flex-start'}>
-                  <TextView
-                    color={'text.0'}
-                    fontSize={'md'}
-                    textAlign={'right'}
-                    fontFamily={'semibold'}
-                    allowFontScaling={true}
-                    adjustsFontSizeToFit={true}
-                    numberOfLines={1}
-                  >
-                    {token.item.amount.toFixed(8) ?? ''}
-                  </TextView>
-                </LinearLayout>
-
-                <LinearLayout weight={2} alignSelf={'flex-end'}>
-                  <TextView
-                    color={'primary'}
-                    fontSize={'md'}
-                    textAlign={'right'}
-                    fontFamily={'semibold'}
-                    allowFontScaling={true}
-                    adjustsFontSizeToFit={true}
-                    numberOfLines={1}
-                  >
-                    {FilterHelper.currency(
-                      token.item.exchangeToken(props.currency),
-                      props.currency,
-                      props.language,
-                      2,
-                      8
-                    )}
-                  </TextView>
-                </LinearLayout>
-              </LinearLayout>
-            )}
+              )
+            }}
           />
         </LinearLayout>
       </LinearLayout>

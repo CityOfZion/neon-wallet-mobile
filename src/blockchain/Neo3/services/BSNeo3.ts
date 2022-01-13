@@ -151,7 +151,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
       const result = await facade.transferToken(intents, signing)
 
       return result
-    } catch (error: any) {
+    } catch (error) {
       throw new Error(error.message)
     }
   }
@@ -301,7 +301,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
       return (
         Number(requiredSystemFee.toDecimal(8)) + Number(networkFee.toDecimal(8))
       )
-    } catch (error: any) {
+    } catch (error) {
       console.log('Error calculate fee')
       console.log(error)
       throw new Error(error)

@@ -40,6 +40,9 @@ export interface BlockchainDataProvider {
     tokenAssetSymbols: string[]
     currencies: string
   }) => Promise<Exchange>
+  getAssetByHash: (
+    hash: string
+  ) => Promise<{symbol: string; decimals: number} | null>
 }
 
 export interface AssetInfo {
