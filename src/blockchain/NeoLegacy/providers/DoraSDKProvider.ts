@@ -49,7 +49,7 @@ export class DoraSDKProvider implements NeoLegacyProvider {
           time,
           txid,
           qtyInvocations: 0,
-          qtyNotifications: 0
+          qtyNotifications: 0,
         })
       }
     )
