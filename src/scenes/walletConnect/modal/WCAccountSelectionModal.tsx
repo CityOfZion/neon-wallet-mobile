@@ -6,8 +6,7 @@ import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
-import {getWCChainByBlockchain} from '~/src/blockchain/common'
-import {ProgressBar} from '~/src/components/ProgressBar'
+import {getWCChainByBlockchain, hasWalletconnect} from '~/src/blockchain/common'
 import {IURI} from '~/src/helpers/UriHelper'
 import {Account} from '~/src/models/redux/Account'
 import {Wallet} from '~/src/models/redux/Wallet'
@@ -39,18 +38,13 @@ export const WCAccountSelectionModal = (props: Props) => {
   const walletConnectCtx = useWalletConnect()
   const [accountSelected, setAccountSelected] = useState<Account>()
 
-  const accounts = props.route.params.wallet.getAccounts(accountsPool)
+  const accounts = props.route.params.wallet
+    .getAccounts(accountsPool)
+    .filter((it) => hasWalletconnect(it))
+
   const nameDApp = useMemo(
     () => walletConnectCtx.sessionProposals[0].proposer.metadata.name,
     []
-  )
-  const pressEvent = useCallback(
-    (account: Account) => {
-      if (walletConnectCtx.sessionProposals.length > 0 && account.address) {
-        setAccountSelected(account)
-      }
-    },
-    [walletConnectCtx.sessionProposals]
   )
 
   const handleConnectDApp = useCallback(
