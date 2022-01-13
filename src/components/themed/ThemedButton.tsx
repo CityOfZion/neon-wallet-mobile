@@ -42,6 +42,7 @@ interface Props {
   borderThickness?: number | string
   borderColor?: string
   textAlign?: string
+  textAlignX?: string
   radius?: number
   suffix?: JSX.Element
   width?: string | number
@@ -71,8 +72,9 @@ const LabelComponent = (props: Props) => {
           width={props.width}
           mt={'2px'}
           orientation="horiz"
-          alignItems={'baseline'}
-          justifyContent={'center'}
+          alignItems={'center'}
+          justifyContent={props.textAlignX}
+          flex={!props.width && !props.flat ? 1 : undefined}
         >
           <LabelView
             color={props.textColor}
@@ -100,14 +102,7 @@ const LabelComponent = (props: Props) => {
         </LinearLayout>
       )}
 
-      <LinearLayout
-        flex={1}
-        orientation="horiz"
-        alignItems={'center'}
-        justifyContent={'flex-end'}
-      >
-        {props.suffix}
-      </LinearLayout>
+      {!!props.suffix && <LinearLayout>{props.suffix}</LinearLayout>}
     </LinearLayout>
   )
 }
@@ -167,7 +162,7 @@ const ThemedButton: React.FC<Props> = (props) => {
         rounded={props.rounded}
         flat={props.flat}
         hasBright={!props.basic && !isActive}
-        hasShadow={!props.basic && !isActive}
+        hasShadow={props.disabled ? false : !props.basic && !isActive}
         baseBgColor={isActive ? 'transparent' : props.bgColor}
         alignY={props.textAlign ?? 'center'}
         borderThickness={props.borderThickness}
@@ -204,12 +199,14 @@ ThemedButton.propTypes = {
   px: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   borderColor: PropTypes.string,
   textAlign: PropTypes.string,
+  textAlignX: PropTypes.string,
   radius: PropTypes.number,
 }
 
 ThemedButton.defaultProps = {
   textColor: 'primary',
   alignX: 'center',
+  textAlignX: 'center',
   toggleable: false,
   active: false,
   disabled: false,
@@ -226,7 +223,6 @@ const LabelView = styled(TextView)`
   text-align: center;
   include-font-padding: false;
   margin-top: ${UtilsHelper.isAndroid ? '-2px' : '0'};
-  width: 100%;
 `
 
 export default ThemedButton
