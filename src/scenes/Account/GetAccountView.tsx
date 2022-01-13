@@ -31,12 +31,12 @@ import {
   isClaimable,
 } from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
-import BalanceList from '~src/components/BalanceList'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {ThemedReceiveButton} from '~src/components/themed/ThemedReceiveButton'
+import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 import {Lang} from '~src/enums/Lang'
 import {NeoNode} from '~src/models/NeoNode'
 import {Account} from '~src/models/redux/Account'
@@ -143,6 +143,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const posYFactor = useRef(new Animated.Value(0))
   const {isConnected} = useSelector((state: RootState) => state.network)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const walletConnectCtx = useWalletConnect()
 
   const [currentPage, setCurrentPage] = useState(1)
   const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
@@ -480,7 +481,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
       </View>
       <LinearLayout>
         <ThemedButton
-          alignX={'flex-start'}
+          px={30}
           textColor={'text.0'}
           label={i18n.t('screens.screenLayout.assets')}
           srcIcon={require('~/src/assets/images/Equalizer_-_simple-line-icons.png')}
@@ -498,7 +499,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           }
         />
         <ThemedButton
-          alignX={'flex-start'}
+          px={30}
           textColor={'text.0'}
           label={i18n.t('screens.screenLayout.transactions')}
           srcIcon={require('~/src/assets/images/icon-reselect-green.png')}
@@ -518,8 +519,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
           }
         />
         <ThemedButton
-          disabled={!hasWalletconnect()}
-          alignX={'flex-start'}
+          px={30}
+          disabled={!hasWalletconnect() || !walletConnectCtx.sessions.length}
           textColor={'text.0'}
           label={i18n.t('screens.screenLayout.connections')}
           srcIcon={require('~/src/assets/images/connections.png')}

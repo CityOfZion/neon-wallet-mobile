@@ -45,6 +45,7 @@ interface Props {
   radius?: number
   suffix?: JSX.Element
   width?: string | number
+  px?: string | number
 }
 
 const LabelComponent = (props: Props) => {
@@ -123,8 +124,8 @@ const ThemedButton: React.FC<Props> = (props) => {
     const style = {
       paddingTop: 0,
       paddingBottom: 0,
-      paddingLeft: Normalize.scale(20),
-      paddingRight: Normalize.scale(20),
+      paddingLeft: Normalize.scale(props.px!),
+      paddingRight: Normalize.scale(props.px!),
       height: Normalize.scale(50),
     }
 
@@ -200,6 +201,7 @@ ThemedButton.propTypes = {
   fontFamily: PropTypes.any,
   contentStyle: PropTypes.any,
   borderThickness: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  px: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   borderColor: PropTypes.string,
   textAlign: PropTypes.string,
   radius: PropTypes.number,
@@ -215,6 +217,7 @@ ThemedButton.defaultProps = {
   flat: false,
   basic: false,
   radius: 0,
+  px: 20,
 }
 
 const ButtonView = styled.TouchableHighlight``
