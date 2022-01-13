@@ -51,7 +51,11 @@ const WalletDetailsPage = (props: WalletDetailsProps) => {
 
   return (
     <ScreenLayout padding={20}>
-      <InputLabel title={'Wallet Name'} capitalize={true} marginBottom="10px" />
+      <InputLabel
+        title={i18n.t('walletDetailsPage.inputWalletName')}
+        capitalize={true}
+        marginBottom="10px"
+      />
       <InputWithValidation
         color="text.0"
         sideMargins={0}

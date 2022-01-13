@@ -72,7 +72,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
       )
     }
     const idWallet = await createWallet(
-      'Watch Account',
+      i18n.t('defaultNameWallet.watchAccount'),
       mnemonic.join(','),
       'watch'
     )

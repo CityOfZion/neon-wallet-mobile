@@ -96,18 +96,22 @@
   },
   "onboarding": {
     "feature1": {
+      "header": "Feature 1",
       "title": "The original wallet on the move",
       "subtitle": "All the best features of our desktop wallet plus more in the palm of your hand"
     },
     "feature2": {
+      "header": "Feature 2",
       "title": "First class user experience",
       "subtitle": "Neon Wallet has been designed to make managing your crypto assets as intuitive as possible"
     },
     "feature3": {
+      "header": "Feature 3",
       "title": "BIP39 wallet",
       "subtitle": "BIP39 wallet standard, create infinite child accounts using a single mnemonic"
     },
     "feature4": {
+      "header": "Time to get started!",
       "title": "Packed pipeline of updates",
       "subtitle": "The team is working around the clock to bring you the latest new features"
     },
@@ -216,11 +220,13 @@
     "mnemonicIncorrect": "Mnemonic incorrect",
     "areImportingMnemonic": "Looks like you are importing a mnemonic",
     "areWatchAccount": "Looks like you are importing a watch account",
-    "mnemonicAlreadyExists": "The mnemonic: %{mnemonic} already exists"
+    "mnemonicAlreadyExists": "The mnemonic: %{mnemonic} already exists",
+    "offline": "You need to be online to import informations"
   },
   "passphrase": {
     "enterPassphrase": "Enter a Passphrase for your encrypted key",
     "inputPlaceholder": "Please enter Passphrase",
+    "selectAccount": "Please select the correct account from you Encrypted Key",
     "next": "Next"
   },
   "importReadAccount": {
@@ -324,7 +330,8 @@
         "cancel": "Cancel",
         "save": "Save"
       },
-      "preview": "Preview"
+      "preview": "Preview",
+      "problemToGetBalance": "Problem to get balance"
     },
     "scanQrCode": {
       "success": "Success!",
@@ -648,6 +655,24 @@
         "allowedList": "Allowed Groups",
         "explanation": "Your signature can be used by the set of groups listed above."
       }
+    },
+    "warningFee": {
+      "highClaimFee": {
+        "title": "High Claim Fee",
+        "subtitle": "This will be deducted from your balance.",
+        "question": "Do you wish to proceed?"
+      },
+      "insufficientFunds": {
+        "title": "Insufficient GAS funds",
+        "subtitle": "You have insufficient GAS to claim."
+      },
+      "claimAmount": "Claim amount",
+      "claimFee": "Claim Fee",
+      "buttons": {
+        "yes": "Yes",
+        "no": "No",
+        "ok": "OK, I understand"
+      }
     }
   },
   "components": {
@@ -744,6 +769,12 @@
     "contacts": "Contacts",
     "myAccounts": "My Accounts"
   },
+  "walletDetailsPage": {
+    "inputWalletName": "Wallet Name"
+  },
+  "mnemonicSelectionList": {
+    "qtySelectedOfTotal": "%{qtySelected} selected of %{total} addresses"
+  },
   "toast": {
     "transaction": "Transaction",
     "gasClaimSuccess": "GAS claim successful!",
@@ -767,7 +798,8 @@
     "confirmed": "Confirmed",
     "pending": "Pending",
     "price": "Price",
-    "amount": "Amount"
+    "amount": "Amount",
+    "amountTokenNameInWallet": "%{amount} %{tokenName} in Wallet" 
   },
   "priorityFee": {
     "none": "None",
@@ -775,14 +807,26 @@
     "priorityFaster": "Faster",
     "priorityFastest": "Fastest"
   },
+  "messages": {
+    "encryptedKeyNotValid": "Encrypted key is not valid",
+    "problemToGenerateWallet": "Problem to generate Wallet",
+    "transactionFailed": "Transaction has failed"
+  },
+  "defaultNameWallet": {
+    "importedWallet": "Imported Wallet",
+    "watchAccount": "Watch Account",
+    "mnemonicWallet": "Mnemonic Wallet"
+  },
   "blockchainServices": {
     "neo3": {
       "label": "NEO",
-      "id": "Neo N3"
+      "id": "Neo N3",
+      "accountName": "NEO Account"
     },
     "neoLegacy": {
       "label": "Neo Legacy",
-      "id": "Neo Legacy"
+      "id": "Neo Legacy",
+      "accountName": "Neo Legacy Account"
     },
     "errorMessages": {
       "keyWrongOrAddressesImported": "Encrypted key is not valid or all address has been imported",

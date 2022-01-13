@@ -175,25 +175,25 @@ const OnboardingPage = (props: OnboardingPageProps) => {
 
   const data = [
     {
-      header: 'Feature 1',
+      header: 'onboarding.feature1.header',
       image: require('~src/assets/images/onboarding-1.png'),
       title: 'onboarding.feature1.title',
       subtitle: 'onboarding.feature1.subtitle',
     },
     {
-      header: 'Feature 2',
+      header: 'onboarding.feature2.header',
       image: require('~src/assets/images/onboarding-2.png'),
       title: 'onboarding.feature2.title',
       subtitle: 'onboarding.feature2.subtitle',
     },
     {
-      header: 'Feature 3',
+      header: 'onboarding.feature3.header',
       image: require('~src/assets/images/onboarding-3.png'),
       title: 'onboarding.feature3.title',
       subtitle: 'onboarding.feature3.subtitle',
     },
     {
-      header: 'Time to get started!',
+      header: 'onboarding.feature4.header',
       image: require('~src/assets/images/onboarding-4.png'),
       title: 'onboarding.feature4.title',
       subtitle: 'onboarding.feature4.subtitle',

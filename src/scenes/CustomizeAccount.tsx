@@ -94,7 +94,10 @@ const CustomizeAccount = (props: Props) => {
         await account.populateTokenAssets()
       } catch (error) {
         console.log(error)
-        showMessage({message: 'Problem to get balance', type: 'danger'})
+        showMessage({
+          message: i18n.t('screens.customizeAccount.problemToGetBalance'),
+          type: 'danger',
+        })
       } finally {
         setTokenAssets(account.tokenAssets)
       }

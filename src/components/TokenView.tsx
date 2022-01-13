@@ -62,7 +62,10 @@ export const TokenView = (props: Props) => {
             </LinearLayout>
             {!props.hideTokenInWallet && (
               <TextView color="text.10" mr={3}>
-                {`${token?.amount} ${token?.name} in Wallet`}
+                {i18n.t('transactionDetails.amountTokenNameInWallet', {
+                  amount: token?.amount,
+                  tokenName: token?.name,
+                })}
               </TextView>
             )}
 

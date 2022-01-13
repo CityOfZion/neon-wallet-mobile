@@ -78,9 +78,12 @@ const HeaderMnemonicSelection = (props: HeaderMnemonicSelectionProps) => {
         </View>
       </View>
       <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-        <Text
-          style={{color: '#899fa8', marginRight: 15, fontFamily: 'medium'}}
-        >{`${props.qtyAddressesSelected} selected of ${props.totAddresses} addresses`}</Text>
+        <Text style={{color: '#899fa8', marginRight: 15, fontFamily: 'medium'}}>
+          {i18n.t('mnemonicSelectionList.qtySelectedOfTotal', {
+            qtySelected: props.qtyAddressesSelected,
+            total: props.totAddresses,
+          })}
+        </Text>
         {props.isActive ? (
           <Text style={{fontSize: 30, color: '#4cffb3'}}>-</Text>
         ) : (
@@ -234,13 +237,16 @@ const MnemonicSelectionList = (props: Props) => {
   )
 
   const handleImportAccounts = useCallback(async () => {
-    const idWallet = await walletHook.createWallet('Mnemonic Wallet', mnemonic)
+    const idWallet = await walletHook.createWallet(
+      i18n.t('defaultNameWallet.mnemonicWallet'),
+      mnemonic
+    )
     for (let i = 0; i < addressesSelected.length; i++) {
       await accountHook.createAccount(
         idWallet,
         `${i18n.t(
-          `blockchainServices.${addressesSelected[i].blockchain}.label`
-        )} Account ${i}`,
+          `blockchainServices.${addressesSelected[i].blockchain}.accountName`
+        )} ${i}`,
         addressesSelected[i].wif,
         addressesSelected[i].address,
         addressesSelected[i].blockchain

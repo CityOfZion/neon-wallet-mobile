@@ -152,13 +152,16 @@ const Passphrase = (props: PassphraseProps) => {
             )
             await createAccount(
               idWallet,
-              `${i18n.t(`blockchainServices.${blockchain}.label`)} Account`,
+              i18n.t(`blockchainServices.${blockchain}.accountName`),
               wif,
               address,
               blockchain
             )
           } else {
-            showMessage({message: 'Problem to generate Wallet', type: 'danger'})
+            showMessage({
+              message: i18n.t('messages.problemToGenerateWallet'),
+              type: 'danger',
+            })
           }
         }
       }
@@ -168,7 +171,10 @@ const Passphrase = (props: PassphraseProps) => {
         screen: wrapper.route.ListWallets.name,
       })
     } catch (error) {
-      showMessage({message: 'Problem to generate Wallet', type: 'danger'})
+      showMessage({
+        message: i18n.t('messages.problemToGenerateWallet'),
+        type: 'danger',
+      })
     }
   }, [inputValue, addressesInfoSelected, showInputField])
 
@@ -182,7 +188,7 @@ const Passphrase = (props: PassphraseProps) => {
 
   useEffect(() => {
     if (addressesInfoSelected.length > 0) {
-      setTitlePage('Please select the correct account from you Encrypted Key')
+      setTitlePage(i18n.t('passphrase.selectAccount'))
     }
   }, [addressesInfoSelected])
 
