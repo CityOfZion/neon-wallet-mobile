@@ -2,6 +2,7 @@ import {RouteProp, useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, {useState, useCallback} from 'react'
+import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import InputWithValidation from '~/src/components/InputWithValidation'
@@ -26,6 +27,9 @@ export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
   const [url, setUrl] = useState<string>(props.route.params?.uri ?? '')
   const controller = useSwiperController(true)
   const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
+  const theme = useSelector(
+    (state: RootState) => wrapper.theme[state.settings.theme]
+  )
 
   const validateURL = useCallback(() => {
     return UriHelper.isValid(url)
@@ -90,6 +94,7 @@ export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
                 validator={validateURL}
                 value={url}
                 placeholder={i18n.t('modals.connectDApp.placeholder')}
+                invalidMessageColor={theme.colors.quinary}
               />
             </LinearLayout>
           </LinearLayout>
