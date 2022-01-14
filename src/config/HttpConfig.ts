@@ -32,7 +32,8 @@ export class HttpConfig {
         const response = error.response
 
         if (!response) {
-          return console.log('Could not connect to server')
+          console.log('Could not connect to server')
+          return Promise.reject(error)
         }
 
         if (response.status >= 400) {
