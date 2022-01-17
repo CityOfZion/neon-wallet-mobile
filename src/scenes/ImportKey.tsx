@@ -108,7 +108,7 @@ const ImportKey = (props: ImportKeyProps) => {
 
       if (!isConnected) {
         showMessage({
-          message: 'You need to be online to import informations',
+          message: i18n.t('importKey.offline'),
           type: 'danger',
         })
         return null
@@ -327,14 +327,17 @@ const ImportKey = (props: ImportKeyProps) => {
           })
         )
       }
-      const idWallet = await createWallet('Imported Wallet', mnemonic.join(','))
+      const idWallet = await createWallet(
+        i18n.t('defaultNameWallet.importedWallet'),
+        mnemonic.join(',')
+      )
       dispatch(RootStore.wallet.actions.selectWallet(idWallet))
       for (const addressSelected of addressesSelected) {
         await createAccount(
           idWallet,
           `${i18n.t(
-            `blockchainServices.${addressSelected.blockchain}.label`
-          )} Account 1`,
+            `blockchainServices.${addressSelected.blockchain}.accountName`
+          )} 1`,
           inputValue,
           addressSelected.address,
           addressSelected.blockchain

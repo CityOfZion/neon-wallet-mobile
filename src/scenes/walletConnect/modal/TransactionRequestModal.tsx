@@ -216,7 +216,6 @@ const TransactionRequestModal = (props: Props) => {
           </TextView>
           <LinearLayout orientation={'horiz'}>
             <TextView
-              //pr={'20px'}
               color={'primary'}
               alignSelf={'flex-end'}
               pb={'3px'}

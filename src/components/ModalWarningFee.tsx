@@ -1,4 +1,5 @@
 import {BlurView} from 'expo-blur'
+import i18n from 'i18n-js'
 import React, {useState, useEffect, useCallback} from 'react'
 import {Modal, View, TouchableOpacity, ImageLoadEventData} from 'react-native'
 import {useSelector} from 'react-redux'
@@ -39,27 +40,30 @@ const ModalWarningFee = ({
   > = {
     high: {
       title: {
-        label: 'High Claim Fee',
+        label: i18n.t('modals.warningFee.highClaimFee.title'),
         color: '#4cffb3',
       },
-      subtitle: 'This will be deducted from your balance.',
-      question: 'Do you wish to proceed?',
+      subtitle: i18n.t('modals.warningFee.highClaimFee.subtitle'),
+      question: i18n.t('modals.warningFee.highClaimFee.question'),
       observations: [
         {
-          title: 'Claim amount',
+          title: i18n.t('modals.warningFee.claimAmount'),
           content: FilterHelper.decimal(unclaimedGasAmount, language, 8),
         },
-        {title: 'Claim Fee', content: String(amountFee)},
+        {
+          title: i18n.t('modals.warningFee.claimFee'),
+          content: String(amountFee),
+        },
       ],
       buttons: [
         {
-          label: 'No',
+          label: i18n.t('modals.warningFee.buttons.no'),
           onPress: () => {
             setShowWarning(false)
           },
         },
         {
-          label: 'Yes',
+          label: i18n.t('modals.warningFee.buttons.yes'),
           onPress: () => {
             onPress()
             setShowWarning(false)
@@ -70,14 +74,19 @@ const ModalWarningFee = ({
     },
     insuficient: {
       title: {
-        label: 'Insufficient GAS funds',
+        label: i18n.t('modals.warningFee.insufficientFunds.title'),
         color: '#d355e7',
       },
-      subtitle: 'You have insufficient GAS to claim.',
-      observations: [{title: 'Claim Fee', content: String(amountFee)}],
+      subtitle: i18n.t('modals.warningFee.insufficientFunds.subtitle'),
+      observations: [
+        {
+          title: i18n.t('modals.warningFee.claimAmount'),
+          content: String(amountFee),
+        },
+      ],
       buttons: [
         {
-          label: 'OK, I understand',
+          label: i18n.t('modals.warningFee.buttons.ok'),
           onPress: () => {
             setShowWarning(false)
           },

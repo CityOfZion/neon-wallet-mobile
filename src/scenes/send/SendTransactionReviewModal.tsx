@@ -163,8 +163,11 @@ const SendTransactionReviewModal = (props: Props) => {
       )
 
       if (!transactionHash) {
-        showMessage({message: 'Transaction has failed', type: 'danger'})
-        throw new Error('Transaction has failed')
+        showMessage({
+          message: i18n.t('messages.transactionFailed'),
+          type: 'danger',
+        })
+        throw new Error(i18n.t('messages.transactionFailed'))
       }
       await account.addPendingTransaction(senderTransaction, transactionHash)
       await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
