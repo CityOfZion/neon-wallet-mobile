@@ -8,6 +8,7 @@ import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/ty
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {FilterHelper} from '~/src/helpers/FilterHelper'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
+import {hasWalletconnect} from '~src/blockchain/common'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
@@ -31,6 +32,7 @@ const WCWalletSelectionModal = (props: Props) => {
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
 
   const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
+  const accountsPool = useSelector((state: RootState) => state.app.accounts)
 
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
@@ -40,7 +42,9 @@ const WCWalletSelectionModal = (props: Props) => {
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
   const usableWallets = wallets.filter(
-    (value: Wallet) => value.walletType !== 'watch'
+    (value: Wallet) =>
+      value.walletType !== 'watch' &&
+      value.getAccounts(accountsPool).some((it) => hasWalletconnect(it))
   )
 
   const walletWithFunds = usableWallets.filter(

@@ -5,10 +5,7 @@ import React, {useEffect, useState, useCallback} from 'react'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {getBlockchainLogo} from '~/src/blockchain'
-import {
-  BlockchainServiceKey,
-  getBlockchainByWCChain,
-} from '~/src/blockchain/common'
+import {BlockchainServiceKey} from '~/src/blockchain/common'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import SwiperPanel, {
   CloseButton,

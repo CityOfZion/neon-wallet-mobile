@@ -231,6 +231,12 @@ export function hasWCIntegration(object: any): object is IWalletConnect {
   return 'rpcCall' in object
 }
 
+export const hasWalletconnect = (account: Account) => {
+  const bs = blockchainServices[account.blockchain]
+
+  return hasWCIntegration(bs)
+}
+
 export type BlockchainServiceKey = 'neoLegacy' | 'neo3'
 
 export function getBlockchainByWCChain(chains: string[]) {
