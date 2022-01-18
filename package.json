@@ -146,7 +146,8 @@
   "resolutions": {
     "@walletconnect/client": "2.0.0-beta.17",
     "@walletconnect/types": "2.0.0-beta.17",
-    "@walletconnect/utils": "2.0.0-beta.17"
+    "@walletconnect/utils": "2.0.0-beta.17",
+    "electron": "^11.0.1"
   },
   "jest": {
     "preset": "jest-expo",
