@@ -48,6 +48,8 @@ export class DoraSDKProvider implements NeoLegacyProvider {
           blockHeight: block_height,
           time,
           txid,
+          qtyInvocations: 0,
+          qtyNotifications: 0,
         })
       }
     )
@@ -163,5 +165,17 @@ export class DoraSDKProvider implements NeoLegacyProvider {
         to: symbolRefMap,
       }
     })
+  }
+  async getAssetByHash(hash: string) {
+    const response = await api.NeoLegacyREST.asset(hash, this.network)
+
+    if (response) {
+      return {
+        symbol: response.symbol,
+        decimals: Number(response.decimals),
+      }
+    } else {
+      return null
+    }
   }
 }

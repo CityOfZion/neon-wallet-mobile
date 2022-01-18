@@ -17,6 +17,9 @@ export class TransactionAddressSummary {
   asset: string | null = null
 
   @HttpExpose()
+  symbol?: string = undefined
+
+  @HttpExpose()
   amount: string | null = null
 
   @HttpExpose('address_to')
@@ -24,4 +27,10 @@ export class TransactionAddressSummary {
 
   @HttpExpose('address_from')
   addressFrom: string | null = null
+
+  @HttpExpose('qtyNotifications')
+  qtyNotifications: number = 0
+
+  @HttpExpose('qtyInvocations')
+  qtyInvocations: number = 0
 }

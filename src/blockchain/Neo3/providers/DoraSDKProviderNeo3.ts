@@ -1,4 +1,6 @@
 import {api} from '@cityofzion/dora-ts'
+import {AddressTransactionsResponse} from '@cityofzion/dora-ts/dist/interfaces/api/neo'
+import {TransactionEnhanced} from '@cityofzion/dora-ts/dist/interfaces/api/neo/interface'
 import {rpc, u} from '@cityofzion/neon-js-next'
 import {Request} from '@simpli/serialized-request'
 import {mapValues} from 'lodash'
@@ -30,32 +32,53 @@ export class DoraSDKProvider implements Neo3Provider {
 
   async getAddressAbstracts(address: string, page: number = 1) {
     const result = new TransactionAddressResponse()
-    const {
-      page_number,
-      page_size,
-      total_entries,
-      total_pages,
-      entries,
-    } = await api.NeoRest.getAddressAbstracts(address, page, this.network)
 
-    result.pageNumber = page_number
-    result.pageSize = page_size
-    result.totalEntries = total_entries
-    result.totalPages = total_pages
-    entries.forEach(
-      ({address_from, address_to, amount, asset, block_height, time, txid}) => {
-        const amountConverted = this.convertScientifcNotationToDecimal(amount)
-        result.entries.push({
-          addressFrom: address_from,
-          addressTo: address_to,
-          amount: String(amountConverted),
-          asset,
-          blockHeight: block_height,
-          time,
-          txid,
-        })
+    let txFullResponse: AddressTransactionsResponse | any[] = []
+
+    txFullResponse = await api.NeoRest.addressTXFull(address)
+
+    if (!Array.isArray(txFullResponse)) {
+      const {totalCount, items} = txFullResponse
+      result.pageNumber = page
+      result.pageSize = items.length
+      result.totalEntries = totalCount
+
+      for (const {
+        block,
+        invocations,
+        notifications,
+        time,
+        transfers,
+      } of items) {
+        for (const {amount, scripthash, to, from, txid} of transfers) {
+          const asset = await this.getAssetByHash(scripthash)
+          result.entries.push({
+            addressFrom: from,
+            addressTo: to,
+            amount: String(
+              Number(amount) /
+                (asset?.decimals && asset.decimals > 0
+                  ? 10 ** asset.decimals
+                  : 1)
+            ),
+            asset: scripthash,
+            blockHeight: block,
+            time: Number(time.replace('.', '')) / 1000, //dora endpoint is returning prop "time" as string with dot and with 3 zeros, so needs to remove dot and divide by 1000 to can convert to date using new Date()
+            txid,
+            qtyInvocations: invocations.length,
+            qtyNotifications: notifications.length,
+            symbol: asset ? asset.symbol : undefined,
+          })
+        }
       }
-    )
+    } else {
+      result.totalPages = 1
+      result.totalEntries = 0
+      result.pageSize = 15
+      result.pageNumber = 1
+      result.entries = []
+    }
+
     return result
   }
 
@@ -197,6 +220,19 @@ export class DoraSDKProvider implements Neo3Provider {
     result.address = address
     result.unclaimed = Number(unclaimedResult)
     return result
+  }
+
+  async getAssetByHash(hash: string) {
+    const response = await api.NeoRest.asset(hash, this.network)
+
+    if (response) {
+      return {
+        symbol: response.symbol,
+        decimals: Number(response.decimals),
+      }
+    } else {
+      return null
+    }
   }
 
   private convertScientifcNotationToDecimal(scientificNotation: number) {

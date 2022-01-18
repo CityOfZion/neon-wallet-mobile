@@ -10,6 +10,9 @@ import WCAccountConnectionsScreen, {
 import {MoreStackParamList} from './MoreStackNavigation'
 import {SettingsStackParamList} from './SettingsStackNavigation'
 
+import AccountTransactionsScreen, {
+  AccountTransactionsScreenParams,
+} from '~/src/scenes/Account/AccountTransactionsScreen'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
@@ -19,7 +22,6 @@ import AccountAssetDetail, {
   AccountAssetDetailParams,
 } from '~src/scenes/Account/AccountAssetDetail'
 import AccountAssetScreen from '~src/scenes/Account/AccountAssetsScreen'
-import AccountTransactionsScreen from '~src/scenes/Account/AccountTransactionsScreen'
 import GetAccountView, {
   GetAccountParams,
 } from '~src/scenes/Account/GetAccountView'
@@ -36,7 +38,7 @@ export type WalletStackParamList = {
   Step1BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
   More: MoreStackParamList
   AccountAssetScreen: undefined
-  AccountTransactionsScreen: undefined
+  AccountTransactionsScreen: AccountTransactionsScreenParams
   WCAccountConnectionsScreen: WCAccountConnectionsScreenParams
 }
 
@@ -125,6 +127,7 @@ const WalletStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               theme,
               route,
+              title: 'Transactions',
             })
           }
         />

@@ -508,7 +508,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
           iconSize={[19, 23]}
           onPress={() => {
             props.navigation.navigate(
-              wrapper.route.AccountTransactionsScreen.name
+              wrapper.route.AccountTransactionsScreen.name,
+              {
+                account,
+              }
             )
           }}
           suffix={

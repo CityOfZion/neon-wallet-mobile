@@ -1,0 +1,80 @@
+import i18n from 'i18n-js'
+import React from 'react'
+import {Linking, View, TouchableWithoutFeedback} from 'react-native'
+import {useDispatch} from 'react-redux'
+
+import {TransactionDataScreen} from '.'
+import {TransferItem} from './TransferItem'
+
+import {blockchainServices} from '~/src/blockchain'
+import {BoxLabelNumber} from '~/src/components/BoxLabelNumber'
+import {Account} from '~/src/models/redux/Account'
+import {RootStore} from '~/src/store/RootStore'
+import {ImageView, TextView} from '~/src/styles/styled-components'
+export const TransactionItemDate = (props: TransactionDataScreen) => {
+  const dispatch = useDispatch<SyncDispatch<Account>>()
+  const account = dispatch(RootStore.account.actions.getFromSelection())
+  return (
+    <View
+      style={{
+        backgroundColor: '#0f0f10',
+        borderRadius: 8,
+        paddingHorizontal: 6,
+        paddingVertical: 20,
+        marginTop: 15,
+      }}
+    >
+      <View
+        style={{flexDirection: 'row', flexWrap: 'wrap', marginVertical: 10}}
+      >
+        <TextView color="#fff" fontFamily="medium" fontSize="18px">
+          {i18n.t('screens.getAccount.txidLabel')}
+        </TextView>
+        <TextView
+          ellipsizeMode={'middle'}
+          numberOfLines={1}
+          color="primary"
+          fontFamily="medium"
+          fontSize="16px"
+        >
+          {props.txid}
+        </TextView>
+      </View>
+      <View>
+        <TextView color="#899fa8" fontSize="14px" fontFamily="medium">
+          {i18n.t('screens.getAccount.sentToLabel')}
+        </TextView>
+        {props.transfers.map((transfer, index) => (
+          <TransferItem key={index} {...transfer} />
+        ))}
+      </View>
+      <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+        <View style={{flexDirection: 'row'}}>
+          <BoxLabelNumber
+            color={'#1f2b33'}
+            label={i18n.t('screens.getAccount.invocationsLabel')}
+            number={props.qtyInvocations}
+          />
+          <BoxLabelNumber
+            color={'#1f2b33'}
+            label={i18n.t('screens.getAccount.notificationsLabel')}
+            number={props.qtyNotifications}
+          />
+        </View>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            Linking.openURL(
+              blockchainServices[account.blockchain].siteUrlQuery + props.txid
+            )
+          }}
+        >
+          <ImageView
+            width="28px"
+            height="28px"
+            source={require('~src/assets/images/dora-link.png')}
+          />
+        </TouchableWithoutFeedback>
+      </View>
+    </View>
+  )
+}
