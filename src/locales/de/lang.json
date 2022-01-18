@@ -8,6 +8,12 @@
     "DARK": "#translateme",
     "LIGHT": "#translateme"
   },
+  "contexts": {
+    "walletConnect": {
+      "timeoutError": "Timeout Error",
+      "clientPairError": "Problem with client pair"
+    }
+  },
   "app": {
     "neoBlockHeight": "NEO BLOCK HEIGHT",
     "back": "#translateme",

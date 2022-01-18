@@ -2,6 +2,7 @@ import {RouteProp, useNavigation} from '@react-navigation/native'
 import {AwaitActivity, Await} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, {useEffect, useState, useCallback} from 'react'
+import {showMessage} from 'react-native-flash-message'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {getBlockchainLogo} from '~/src/blockchain'
@@ -29,7 +30,6 @@ const WCConnectionRequestModal = (props: Props) => {
   const controller = useSwiperController(true)
   const walletConnectCtx = useWalletConnect()
   const navigation = useNavigation()
-  const [hasError, setError] = useState(false)
   const [blockchain, setBlockchain] = useState<BlockchainServiceKey>('neo3')
   const {uri} = props.route.params
   const activityName = 'loadWCConnection'
@@ -49,26 +49,21 @@ const WCConnectionRequestModal = (props: Props) => {
     try {
       console.log('debug runOnURI => ', uri)
       await walletConnectCtx.onURI(uri)
-    } catch (error) {
+    } catch (error: any) {
       console.log('error onUri => ', error)
-      setError(true)
+
+      showMessage({
+        message: error.message,
+        type: 'danger',
+      })
+
+      navigation.goBack()
     }
   }, [uri])
 
-  const loadWCConnection = useCallback(async () => {
-    try {
-      console.log('debug loadWCConnection => ', uri)
-      await runOnURI()
-    } catch (error) {
-      console.log('error onUri => ', error)
-      setError(true)
-      Await.done(activityName)
-    }
-  }, [runOnURI])
-
   useEffect(() => {
     if (walletConnectCtx.sessionProposals.length < 1) {
-      Await.run(activityName, loadWCConnection, 5000)
+      Await.run(activityName, runOnURI, 5000)
     }
     return () => {
       walletConnectCtx.setSessionProposals([]) //will guarantee that there will be only one sessionProposal at a time

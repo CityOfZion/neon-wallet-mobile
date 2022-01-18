@@ -8,6 +8,12 @@
     "DARK": "Escuro",
     "LIGHT": "Claro"
   },
+  "contexts": {
+    "walletConnect": {
+      "timeoutError": "Erro de tempo excedido",
+      "clientPairError": "Problemas com o par de cliente"
+    }
+  },
   "app": {
     "neoBlockHeight": "NEO BLOCK HEIGHT",
     "back": "Voltar",

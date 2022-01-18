@@ -6,10 +6,17 @@ import {
 import Client, {CLIENT_EVENTS} from '@walletconnect/client'
 import {AppMetadata, SessionTypes} from '@walletconnect/types'
 import {ERROR} from '@walletconnect/utils'
+import i18n from 'i18n-js'
 import KeyValueStorage from 'keyvaluestorage'
 import {KeyValueStorageOptions} from 'keyvaluestorage/dist/cjs/shared'
 import PropTypes from 'prop-types'
-import React, {useCallback, useContext, useEffect, useState} from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import {useDispatch} from 'react-redux'
 
 import {RootStore} from '~src/store/RootStore'
@@ -57,7 +64,7 @@ interface IWalletConnectContext {
   checkApprovedRequest: (
     request: JsonRpcRequest
   ) => Promise<boolean | undefined>
-  onURI: (data: any) => Promise<void>
+  onURI: (data: any, timeoutMs?: number) => Promise<void>
   getPeerOfRequest: (
     requestEvent: SessionTypes.RequestEvent
   ) => Promise<SessionTypes.Participant>
@@ -114,6 +121,7 @@ export const WalletConnectContextProvider: React.FC<{
     AutoAcceptCallback | undefined
   >(undefined)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const lastSessionProposal = useRef<SessionTypes.Proposal | undefined>()
 
   useEffect(() => {
     init()
@@ -279,7 +287,9 @@ export const WalletConnectContextProvider: React.FC<{
         if (unsupportedMethods.length) {
           return wcClient.reject({proposal})
         }
+
         setSessionProposals((old) => [...old, proposal])
+        lastSessionProposal.current = proposal
 
         return null
       }
@@ -387,17 +397,44 @@ export const WalletConnectContextProvider: React.FC<{
     }
   }, [wcClient, subscribeToEvents, checkPersistedState])
 
-  const onURI = async (data: any) => {
-    try {
-      const uri = typeof data === 'string' ? data : ''
-      if (!uri) return
-      if (typeof wcClient === 'undefined') {
-        throw new Error('Client is not initialized')
+  const onURI = (data: any, timeoutMs: number = 5000) => {
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+        const uri = typeof data === 'string' ? data : ''
+        if (!uri) return
+        if (typeof wcClient === 'undefined') {
+          throw new Error('Client is not initialized')
+        }
+
+        const pairId = await wcClient.pair({uri})
+
+        let attempts = 0
+        const msPerAttempts = 500
+        const maxAttempts = Math.ceil(timeoutMs / msPerAttempts)
+
+        const interval = setInterval(() => {
+          console.log('debug trying =>', {
+            lastId: lastSessionProposal.current?.signal.params.topic,
+            pairId,
+          })
+          if (lastSessionProposal.current?.signal.params.topic === pairId) {
+            console.log('debug succes')
+            clearInterval(interval)
+            resolve()
+          }
+
+          if (attempts >= maxAttempts) {
+            console.log('debug attempt error')
+            clearInterval(interval)
+            reject(new Error(i18n.t('contexts.walletConnect.timeoutError')))
+          }
+
+          attempts += 1
+        }, msPerAttempts)
+      } catch (error) {
+        reject(new Error(i18n.t('contexts.walletConnect.clientPairError')))
       }
-      await wcClient.pair({uri})
-    } catch (error) {
-      throw new Error('Problem with client pair')
-    }
+    })
   }
 
   const getPeerOfRequest = async (requestEvent: SessionTypes.RequestEvent) => {
