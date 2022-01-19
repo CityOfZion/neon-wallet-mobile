@@ -526,7 +526,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
         <ThemedButton
           px={30}
           disabled={!hasWalletconnect() || !walletConnectCtx.sessions.length}
-          disabled={!hasWalletconnect()}
           textAlignX={'flex-start'}
           textColor={'text.0'}
           label={i18n.t('screens.screenLayout.connections')}

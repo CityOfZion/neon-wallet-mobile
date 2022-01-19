@@ -59,6 +59,7 @@ export class SendTransactionReducer extends ReducerWrapper<
             sendTx
           )
         } catch (error) {
+          console.log(error)
           throw new Error('Transaction has failed')
         }
       }
