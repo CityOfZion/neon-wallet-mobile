@@ -2,7 +2,6 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, {useEffect, useState, useCallback, useMemo} from 'react'
-import {TouchableWithoutFeedback, View} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
 
