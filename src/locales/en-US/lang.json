@@ -27,6 +27,12 @@
     "add": "Add",
     "createNow": "Create Now"
   },
+  "contexts": {
+    "walletConnect": {
+      "timeoutError": "Timeout Error",
+      "clientPairError": "Problem with client pair"
+    }
+  },
   "routes": {
     "GetWallet": "Wallet",
     "Contacts": "Contacts",
@@ -803,7 +809,7 @@
     "pending": "Pending",
     "price": "Price",
     "amount": "Amount",
-    "amountTokenNameInWallet": "%{amount} %{tokenName} in Wallet" 
+    "amountTokenNameInWallet": "%{amount} %{tokenName} in Wallet"
   },
   "priorityFee": {
     "none": "None",
