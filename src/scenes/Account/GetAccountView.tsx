@@ -482,7 +482,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
       <LinearLayout>
         <ThemedButton
           px={30}
-          textAlignX={'flex-start'}
+          textAlignX={'center'}
           textColor={'text.0'}
           label={i18n.t('screens.screenLayout.assets')}
           srcIcon={require('~/src/assets/images/Equalizer_-_simple-line-icons.png')}
@@ -501,7 +501,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         />
         <ThemedButton
           px={30}
-          textAlignX={'flex-start'}
+          textAlignX={'center'}
           textColor={'text.0'}
           label={i18n.t('screens.screenLayout.transactions')}
           srcIcon={require('~/src/assets/images/icon-reselect-green.png')}
@@ -526,7 +526,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         <ThemedButton
           px={30}
           disabled={!hasWalletconnect() || !walletConnectCtx.sessions.length}
-          textAlignX={'flex-start'}
+          textAlignX={'center'}
           textColor={'text.0'}
           label={i18n.t('screens.screenLayout.connections')}
           srcIcon={require('~/src/assets/images/connections.png')}
