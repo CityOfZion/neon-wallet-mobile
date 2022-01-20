@@ -57,7 +57,10 @@ export const TransactionFeeNeo3 = (props: Props) => {
         (token) =>
           token.symbol === blockchainServices[props.blockchain].feeToken.token
       )
-      if (!feeToken) return
+      if (!feeToken) {
+        setIsInsuficientFounds(true)
+        return
+      }
 
       const amountFeeToken =
         feeToken.symbol === props.token.symbol
