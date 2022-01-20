@@ -35,6 +35,7 @@ interface GetWalletProps {
 export const AccountCardsComponent = (props: {
   accounts: Account[]
   onPress: (account: Account) => void
+  disableSecondTouch?: boolean
 }) => {
   const [viewHeight, setViewHeight] = useState<number>(0)
 
@@ -82,6 +83,7 @@ export const AccountCardsComponent = (props: {
                 isCompacted={true}
                 isStackMode={i !== props.accounts.length - 1}
                 onPress={() => props.onPress(account)}
+                disableSecondTouch={props.disableSecondTouch}
               />
             </LinearLayout>
           </Animated.View>

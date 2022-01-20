@@ -99,6 +99,7 @@ export const WCAccountSelectionModal = (props: Props) => {
           <AccountCardsComponent
             accounts={accounts}
             onPress={handleConnectDApp}
+            disableSecondTouch={true}
           />
         </LinearLayout>
       </SwiperPanel>

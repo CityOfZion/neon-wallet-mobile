@@ -56,6 +56,7 @@ interface Props {
   hideCopy?: boolean
   orientBy?: 'height' | 'width'
   isCustomAccount?: boolean
+  disableSecondTouch?: boolean
 }
 
 const AccountCard: React.FC<Props> = (props) => {
@@ -63,6 +64,7 @@ const AccountCard: React.FC<Props> = (props) => {
   const {language, currency} = useSelector((state: RootState) => state.settings)
   const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
   const [viewHeight, setViewHeight] = useState<number>(0)
+  const [disableTouch, setDisableTouch] = useState<boolean>(false)
 
   const unit = (viewHeight * 0.1) / 24
   const bright = 'rgba(255, 255, 255, 0.2)'
@@ -94,7 +96,10 @@ const AccountCard: React.FC<Props> = (props) => {
     <PaymentCardView
       onLayout={layoutEvent}
       onPress={(e: NativeSyntheticEvent<NativeTouchEvent>) =>
-        props.onPress?.(e)
+        {
+          props.onPress?.(e)
+          setDisableTouch(true)
+        }
       }
       width={props.orientBy === 'width' ? '100%' : undefined}
       height={props.orientBy === 'height' ? '100%' : undefined}
@@ -102,6 +107,7 @@ const AccountCard: React.FC<Props> = (props) => {
         aspectRatio: 38 / 25,
       }}
       activeOpacity={1}
+      disabled={props.disableSecondTouch ? disableTouch : false}
     >
       {props.hasShadow && (
         <ShadowView pointerEvents={'none'}>
