@@ -17,6 +17,29 @@ import {PriorityFee} from '~src/models/PriorityFee'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
 
+export interface IRPCContract {
+  hash: string
+  manifest: {
+    name: string
+    abi: {
+      events: {
+        name: string
+        parameters: {
+          name: string
+          type: string
+        }[]
+      }[]
+      methods: {
+        name: string
+        offset: number
+        parameters: {name: string; type: string}[]
+        returntype: string
+        safe: boolean
+      }[]
+    }
+  }
+}
+
 export interface SenderTransactionInfo {
   token: TokenAsset | null
   senderAddress: string | null
