@@ -89,8 +89,9 @@ export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
             <LinearLayout ml={-5} mr={-5}>
               <InputWithValidation
                 onChangeText={handleChangeURL}
-                color={'#7d929a'}
-                separatorColor={'background.3'}
+                color={'text.10'}
+                separatorColor={'text.3'}
+                invalidColor={'text.10'}
                 validator={validateURL}
                 value={url}
                 placeholder={i18n.t('modals.connectDApp.placeholder')}
