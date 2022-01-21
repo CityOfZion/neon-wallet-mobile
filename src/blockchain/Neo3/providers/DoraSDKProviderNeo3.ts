@@ -1,7 +1,7 @@
 import {api} from '@cityofzion/dora-ts'
 import {AddressTransactionsResponse} from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 import {TransactionEnhanced} from '@cityofzion/dora-ts/dist/interfaces/api/neo/interface'
-import {rpc, u} from '@cityofzion/neon-js-next'
+import {rpc, u} from '@cityofzion/neon-core-next'
 import {Request} from '@simpli/serialized-request'
 import {mapValues} from 'lodash'
 
@@ -18,6 +18,7 @@ import {TransactionAddressResponse} from '~/src/models/response/TransactionAddre
 import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
 import {ExchangeResponse} from '~/src/types/exchange'
 import {TokenResponse} from '~/src/types/token'
+import {IRPCContract} from '~src/blockchain'
 
 type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
 export class DoraSDKProvider implements Neo3Provider {
@@ -100,7 +101,18 @@ export class DoraSDKProvider implements Neo3Provider {
   async getContract(hash: string): Promise<ContractResponse> {
     const contract = new ContractResponse()
 
-    const response = await api.NeoRest.contract(hash, this.network)
+    const nodes = await this.getAllNodes()
+    const url = NeoNode.getHighestNodeUrlFromPool(nodes)
+    if (!url) throw new Error('Problem get contract')
+
+    const rpcClient = new rpc.RPCClient(url)
+
+    const response = await rpcClient.execute(
+      new rpc.Query<string[], IRPCContract>({
+        method: 'getcontractstate',
+        params: [hash],
+      })
+    )
 
     contract.hash = response.hash
     contract.name = response.manifest.name

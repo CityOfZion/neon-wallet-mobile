@@ -95,12 +95,10 @@ const AccountCard: React.FC<Props> = (props) => {
   return (
     <PaymentCardView
       onLayout={layoutEvent}
-      onPress={(e: NativeSyntheticEvent<NativeTouchEvent>) =>
-        {
-          props.onPress?.(e)
-          setDisableTouch(true)
-        }
-      }
+      onPress={(e: NativeSyntheticEvent<NativeTouchEvent>) => {
+        props.onPress?.(e)
+        setDisableTouch(true)
+      }}
       width={props.orientBy === 'width' ? '100%' : undefined}
       height={props.orientBy === 'height' ? '100%' : undefined}
       style={{
@@ -421,6 +419,7 @@ AccountCard.propTypes = {
   hideCopy: PropTypes.bool,
   orientBy: PropTypes.oneOf(['height', 'width']),
   isCustomAccount: PropTypes.any.isRequired,
+  disableSecondTouch: PropTypes.any.isRequired,
 }
 
 AccountCard.defaultProps = {

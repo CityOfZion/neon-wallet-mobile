@@ -20,6 +20,7 @@ import {
   hasWCIntegration,
   getBlockchainByWCChain,
   getWCChainByBlockchain,
+  IRPCContract,
 } from '~src/blockchain/common'
 
 export {
@@ -44,4 +45,5 @@ export {
   hasWCIntegration,
   getBlockchainByWCChain,
   getWCChainByBlockchain,
+  IRPCContract,
 }
