@@ -413,18 +413,12 @@ export const WalletConnectContextProvider: React.FC<{
         const maxAttempts = Math.ceil(timeoutMs / msPerAttempts)
 
         const interval = setInterval(() => {
-          console.log('debug trying =>', {
-            lastId: lastSessionProposal.current?.signal.params.topic,
-            pairId,
-          })
           if (lastSessionProposal.current?.signal.params.topic === pairId) {
-            console.log('debug succes')
             clearInterval(interval)
             resolve()
           }
 
           if (attempts >= maxAttempts) {
-            console.log('debug attempt error')
             clearInterval(interval)
             reject(new Error(i18n.t('contexts.walletConnect.timeoutError')))
           }

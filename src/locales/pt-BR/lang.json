@@ -10,7 +10,7 @@
   },
   "contexts": {
     "walletConnect": {
-      "timeoutError": "Erro de tempo excedido",
+      "timeoutError": "URL de conexão expirada",
       "clientPairError": "Problemas com o par de cliente"
     }
   },
