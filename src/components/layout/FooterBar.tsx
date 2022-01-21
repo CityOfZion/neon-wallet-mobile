@@ -99,8 +99,8 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
     route: wrapper.route.ListWallets,
   }
   const dappsButton = {
-    enabledSource: require('~src/assets/images/button-dapps-white.png'),
-    disabledSource: require('~src/assets/images/button-dapps-disabled.png'),
+    enabledSource: require('~src/assets/images/button-connections-white.png'),
+    disabledSource: require('~src/assets/images/button-connections-disabled.png'),
     route: wrapper.route.WalletConnectPage,
   }
   const contactsButton = {
