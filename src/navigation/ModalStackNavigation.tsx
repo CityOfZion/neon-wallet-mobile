@@ -71,16 +71,6 @@ import WalletContextModal, {
   WalletContextModalParams,
 } from '~src/scenes/WalletContextModal'
 import WelcomePage, {WelcomeModalParam} from '~src/scenes/WelcomePage'
-import ReceiveAccountSelectionModal, {
-  ReceiveAccountSelectionModalParams,
-} from '~src/scenes/receive/ReceiveAccountSelectionModal'
-import ReceiveQrCodeModal, {
-  ReceiveQrCodeModalParams,
-} from '~src/scenes/receive/ReceiveQrCodeModal'
-import ReceiveToAccountModal, {
-  ReceiveToAccountModalParams,
-} from '~src/scenes/receive/ReceiveToAccountModal'
-import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
 import RawJsonModal, {
   RawJsonModalParams,
 } from '~src/scenes/walletConnect/modal/RawJsonModal'
@@ -107,10 +97,6 @@ export type ModalStackParamList = {
   CreateAccountModal: undefined
   EditAccountModal: EditAccountModalParam
   AccountQRCode: AccountQRCodeParams
-  ReceiveWalletSelectionModal: undefined
-  ReceiveAccountSelectionModal: ReceiveAccountSelectionModalParams
-  ReceiveToAccountModal: ReceiveToAccountModalParams
-  ReceiveQrCodeModal: ReceiveQrCodeModalParams
   CustomColor: CustomColorPageParam
   WalletContextModal: WalletContextModalParams
   ReorderWalletModal: undefined
@@ -153,7 +139,6 @@ export type ModalParams =
   | DefaultNavigationParam<GetAccountParams>
   | DefaultNavigationParam<EditAccountModalParam>
   | DefaultNavigationParam<AccountQRCodeParams>
-  | DefaultNavigationParam<ReceiveQrCodeModalParams>
   | DefaultNavigationParam<ContactsModalParams>
   | DefaultNavigationParam<PersistContactParams>
   | DefaultNavigationParam<SendStackModalParams>
@@ -203,22 +188,6 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={wrapper.route.EditAccountModal.name}
           component={EditAccountModal}
-        />
-        <ModalStack.Screen
-          name={wrapper.route.ReceiveWalletSelectionModal.name}
-          component={ReceiveWalletSelectionModal}
-        />
-        <ModalStack.Screen
-          name={wrapper.route.ReceiveAccountSelectionModal.name}
-          component={ReceiveAccountSelectionModal}
-        />
-        <ModalStack.Screen
-          name={wrapper.route.ReceiveToAccountModal.name}
-          component={ReceiveToAccountModal}
-        />
-        <ModalStack.Screen
-          name={wrapper.route.ReceiveQrCodeModal.name}
-          component={ReceiveQrCodeModal}
         />
         <ModalStack.Screen
           name={wrapper.route.SendModalStack.name}

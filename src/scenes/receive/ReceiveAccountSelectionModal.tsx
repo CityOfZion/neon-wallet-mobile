@@ -8,11 +8,15 @@ import {ScrollView, StyleSheet, View, TouchableHighlight} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
+import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
 import {FilterHelper} from '~/src/helpers/FilterHelper'
 import {TokenAsset} from '~/src/models/TokenAsset'
 import {ReceiveModalStackParamList} from '~/src/navigation/ReceiveModalStackNavigation'
 import BalanceList from '~src/components/BalanceList'
-import {PANEL_OFFSET} from '~src/components/SwiperPanel'
+import SwiperPanel, {
+  BackButton,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
 import AccountPicker from '~src/components/misc/AccountPicker'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {Account} from '~src/models/redux/Account'
@@ -29,17 +33,27 @@ interface Props {
   route: RouteProp<ReceiveModalStackParamList, 'ReceiveAccountSelectionModal'>
 }
 
+interface NextButtonProps {
+  onPress: () => void
+  mt?: string
+}
+
+const NextButton = ({onPress, ...props}: NextButtonProps) => {
+  return (
+    <LinearLayout minWidth={'80%'} alignSelf={'center'} {...props}>
+      <ThemedButton label={i18n.t('app.next')} onPress={onPress} />
+    </LinearLayout>
+  )
+}
+
 const ReceiveAccountSelectionModal = (props: Props) => {
+  const controller = useSwiperController(true)
+
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
-  const {wallet} = props.route.params
 
-  const show = useNavigationState(
-    (state) =>
-      state.routes[state.routes.length - 1].name ===
-      wrapper.route.ReceiveAccountSelectionModal.name
-  )
+  const {wallet} = props.route.params
 
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
 
@@ -58,151 +72,154 @@ const ReceiveAccountSelectionModal = (props: Props) => {
     setSelectedAccount(accounts[0])
   }
 
-  const showListTokenAssets = (tokenAssets: TokenAsset[] | undefined) => {
-    let show = false
-    if (tokenAssets) {
-      tokenAssets.forEach((token) => {
-        if (token.amount > 0) {
-          show = true
-        }
-      })
-    }
-    return show
+  const shouldShowListTokenAssets = (tokenAssets: TokenAsset[]) => {
+    return tokenAssets
+      ? tokenAssets.some((token) => {
+          return token.amount > 0
+        })
+      : false
   }
-  return show ? (
-    <LinearLayout>
-      <ScrollView
-        style={{
-          width: '100%',
-          marginTop: useHeaderHeight(),
-          marginBottom: '10%',
-        }}
-        contentContainerStyle={{
-          flexGrow: 1,
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          paddingBottom: PANEL_OFFSET + 20,
-          paddingLeft: 5,
-          paddingRight: 5,
-        }}
-        nestedScrollEnabled={true}
+  return (
+    <>
+      <SwiperPanel
+        controller={controller}
+        fullSize={true}
+        title={i18n.t('modals.receive.title')}
+        padding={0}
+        rightButton={<ThemedCloseButton onPress={controller.close} />}
+        leftButton={<BackButton text={i18n.t('app.back')} />}
+        onLeftPress={controller.close}
+        onRightPress={controller.close}
+        onClose={() => props.navigation.goBack()}
+        solidColorBG={true}
       >
-        <TouchableHighlight>
-          <LinearLayout px={5}>
-            <TextView
-              mb={4}
-              color={'text.2'}
-              fontSize={'14px'}
-              fontFamily={'bold'}
-              textAlign={'center'}
-            >
-              {props.route.params.wallet.name?.toUpperCase()}
-            </TextView>
-
-            <TextView
-              color={'text.0'}
-              fontSize={'18px'}
-              fontFamily={'medium'}
-              textAlign={'center'}
-            >
-              {i18n.t('modals.receive.accountSelection.subtitle')}
-            </TextView>
-
-            <LinearLayout minHeight={200} mx={-5}>
-              <AccountPicker
-                accounts={accounts}
-                onSelect={setSelectedAccount}
-                initialAccount={
-                  selectedAccount
-                    ? accounts.indexOf(selectedAccount)
-                    : undefined
-                }
-                isCompacted={false}
-              />
-            </LinearLayout>
-
-            {showListTokenAssets(selectedAccount?.tokenAssets) ? (
+        <LinearLayout>
+          <TouchableHighlight>
+            <LinearLayout>
               <TextView
                 mb={4}
                 color={'text.2'}
                 fontSize={'14px'}
-                fontFamily={'medium'}
+                fontFamily={'bold'}
                 textAlign={'center'}
               >
-                {`${props.route.params.wallet.name?.toUpperCase()} ${i18n
-                  .t('modals.receive.accountSelection.tokensValue')
-                  .toUpperCase()}`}
+                {props.route.params.wallet.name?.toUpperCase()}
               </TextView>
-            ) : (
-              <View />
-            )}
 
-            {selectedAccount && (
-              <LinearLayout width={'100%'} mb={6}>
-                <BalanceList
-                  hideEmptyMessage={true}
-                  zeroBalance={false}
-                  tokenAssets={selectedAccount.tokenAssets}
-                  fromAccountView={false}
-                  fromSendAccountSelectionModal={false}
+              <TextView
+                color={'text.0'}
+                fontSize={'18px'}
+                fontFamily={'medium'}
+                textAlign={'center'}
+                mb={'28px'}
+              >
+                {i18n.t('modals.receive.accountSelection.subtitle')}
+              </TextView>
+
+              <LinearLayout minHeight={200}>
+                <AccountPicker
+                  accounts={accounts}
+                  onSelect={setSelectedAccount}
+                  initialAccount={
+                    selectedAccount
+                      ? accounts.indexOf(selectedAccount)
+                      : undefined
+                  }
+                  isCompacted={false}
                 />
               </LinearLayout>
-            )}
-          </LinearLayout>
-        </TouchableHighlight>
-      </ScrollView>
-      <LinearLayout
-        position={'absolute'}
-        bottom={'1%'}
-        height={'26%'}
-        width={'100%'}
-        alignItens={'center'}
-      >
-        <LinearGradient
-          style={styles.shadowNext}
-          colors={[
-            'transparent',
-            FilterHelper.toDarkerShade(theme.colors.background[17], 1, 0.85),
-          ]}
-          start={[1, 0]}
-          end={[1, 0.45]}
-        >
+
+              {!!selectedAccount &&
+              shouldShowListTokenAssets(selectedAccount.tokenAssets) ? (
+                <>
+                  <TextView
+                    mb={4}
+                    color={'text.2'}
+                    fontSize={'14px'}
+                    fontFamily={'medium'}
+                    textAlign={'center'}
+                  >
+                    {`${props.route.params.wallet.name?.toUpperCase()} ${i18n
+                      .t('modals.receive.accountSelection.tokensValue')
+                      .toUpperCase()}`}
+                  </TextView>
+                  <LinearLayout width={'100%'} px={5}>
+                    <BalanceList
+                      hideEmptyMessage={true}
+                      zeroBalance={false}
+                      tokenAssets={selectedAccount.tokenAssets}
+                      fromAccountView={false}
+                      fromSendAccountSelectionModal={false}
+                    />
+                  </LinearLayout>
+                </>
+              ) : (
+                <NextButton
+                  mt={'28px'}
+                  onPress={() =>
+                    props.navigation.navigate(wrapper.route.Modal.name, {
+                      screen: wrapper.route.ReceiveModalStack.name,
+                      params: {
+                        screen: wrapper.route.ReceiveToAccountModal.name,
+                        params: {
+                          wallet: props.route.params.wallet,
+                          account: selectedAccount ?? new Account(),
+                        },
+                      },
+                    })
+                  }
+                />
+              )}
+            </LinearLayout>
+          </TouchableHighlight>
+        </LinearLayout>
+      </SwiperPanel>
+      {!!selectedAccount &&
+        shouldShowListTokenAssets(selectedAccount.tokenAssets) && (
           <LinearLayout
-            alignSelf={'center'}
             position={'absolute'}
-            bottom={'30%'}
+            bottom={'0px'}
+            height={'125px'}
+            width={'100%'}
           >
-            <LinearLayout
-              minWidth={'80%'}
-              maxWidth={'100%'}
-              marginBottom={'8px'}
-              marginTop={'30px'}
+            <LinearGradient
+              style={styles.shadowNext}
+              colors={[
+                'transparent',
+                FilterHelper.toDarkerShade(
+                  theme.colors.background[17],
+                  1,
+                  0.85
+                ),
+              ]}
+              start={[1, 0]}
+              end={[1, 0.5]}
             >
-              <ThemedButton
-                label={i18n.t('app.next')}
+              <NextButton
                 onPress={() =>
-                  props.navigation.navigate(
-                    wrapper.route.ReceiveToAccountModal.name,
-                    {
-                      wallet: props.route.params.wallet,
-                      account: selectedAccount ?? new Account(),
-                    }
-                  )
+                  props.navigation.navigate(wrapper.route.Modal.name, {
+                    screen: wrapper.route.ReceiveModalStack.name,
+                    params: {
+                      screen: wrapper.route.ReceiveToAccountModal.name,
+                      params: {
+                        wallet: props.route.params.wallet,
+                        account: selectedAccount ?? new Account(),
+                      },
+                    },
+                  })
                 }
               />
-            </LinearLayout>
+            </LinearGradient>
           </LinearLayout>
-        </LinearGradient>
-      </LinearLayout>
-    </LinearLayout>
-  ) : (
-    <LinearLayout />
+        )}
+    </>
   )
 }
 
 const styles = StyleSheet.create({
   shadowNext: {
     height: '100%',
+    justifyContent: 'center',
   },
 })
 
