@@ -355,7 +355,7 @@ const ListWalletView = (props: WalletProps) => {
 
         <AwaitActivity name={'populateWallet'}>
           <>
-            <LinearLayout mt={4} justifyContent={'center'} height={400}>
+            <LinearLayout mt={-5} justifyContent={'center'} height={385}>
               {isListNotEmpty() ? (
                 <WalletPicker
                   wallets={wallets}
