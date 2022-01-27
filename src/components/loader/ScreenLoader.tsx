@@ -35,12 +35,15 @@ const ScreenLoader = (props?: {
   <style>
       body{
           background-color: transparent;
-          padding-top: 10rem;
-          padding-left: 25vw;
       }
       svg{
-          width: 45vw;
-          height: 45vh;
+          align-self: center;
+          background-color: transparent;
+          display: flex;
+          jusstify-self: center;
+          height: 90vh;
+          margin: auto;
+          width: 30%;
       }
   </style>
   </html>
@@ -126,14 +129,12 @@ const ScreenLoader = (props?: {
 const styles = StyleSheet.create({
   screen: {
     ...StyleSheet.absoluteFillObject,
-    paddingTop: '35%',
-    paddingLeft: '26%',
-    position: 'absolute',
   },
   image: {
-    width: 174,
-    height: 153,
+    height: '100%',
+    width: '30%',
     resizeMode: 'contain',
+    alignSelf: 'center',
   },
 })
 
