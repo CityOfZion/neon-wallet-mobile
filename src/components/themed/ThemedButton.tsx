@@ -47,6 +47,8 @@ interface Props {
   suffix?: JSX.Element
   width?: string | number
   px?: string | number
+  iconAlignX?: string
+  labelWidth?: string
 }
 
 const LabelComponent = (props: Props) => {
@@ -56,20 +58,24 @@ const LabelComponent = (props: Props) => {
   const subFontSize = Normalize.scale(props.subFontSize ?? 18)
 
   return (
-    <LinearLayout orientation={'horiz'} alignItems={'center'}>
+    <LinearLayout
+      width={props.labelWidth}
+      orientation={'horiz'}
+      alignItems={'center'}
+    >
       {props.srcIcon && (
         <ImageView
           width={width as number}
           height={height as number}
-          mr={props.label ? 3 : undefined}
           resizeMode="contain"
           source={props.srcIcon}
+          ml={props.labelWidth ? -3 : undefined}
         />
       )}
 
       {Boolean(props.label) && (
         <LinearLayout
-          width={props.width}
+          width={props.labelWidth ?? props.width}
           mt={'2px'}
           orientation="horiz"
           alignItems={'center'}
@@ -153,7 +159,7 @@ const ThemedButton: React.FC<Props> = (props) => {
           props.onPress(e, props.toggleable ? !isActive : undefined)
         }
       }}
-      style={{opacity: props.disabled ? 0.3 : undefined}}
+      style={{opacity: props.disabled ? 0.3 : undefined, width: props.width}}
       disabled={props.disabled}
       underlayColor="transparent"
     >
@@ -201,6 +207,11 @@ ThemedButton.propTypes = {
   textAlign: PropTypes.string,
   textAlignX: PropTypes.string,
   radius: PropTypes.number,
+  iconAlignX: PropTypes.any,
+  labelWidth: PropTypes.string,
+  subFontSize: PropTypes.string,
+  subLabel: PropTypes.string,
+  width: PropTypes.any,
 }
 
 ThemedButton.defaultProps = {

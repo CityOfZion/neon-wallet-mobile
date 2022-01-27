@@ -149,14 +149,15 @@ const AccountCard: React.FC<Props> = (props) => {
             py={10 * unit}
           >
             <LinearLayout
-              mb={3 * unit}
+              mt={'5px'}
               orientation={'horiz'}
               alignItems={'flex-end'}
               width={'100%'}
+              pr={10 * unit}
             >
               <ImageView
-                width={35 * unit}
-                height={35 * unit}
+                width={30 * unit}
+                height={30 * unit}
                 source={getBlockchainLogo(props.account.blockchain, 'white')}
                 resizeMode={'contain'}
                 ml={unit * 10}
@@ -240,6 +241,7 @@ const AccountCard: React.FC<Props> = (props) => {
               ) : (
                 !props.hideQRCode && (
                   <ButtonView
+                    style={{alignSelf: 'baseline'}}
                     onPress={() => {
                       navigation.navigate(wrapper.route.Modal.name, {
                         screen: wrapper.route.AccountQRCode.name,
@@ -252,8 +254,8 @@ const AccountCard: React.FC<Props> = (props) => {
                     <ImageView
                       ml={10 * unit}
                       mb={5 * unit}
-                      width={30 * unit}
-                      height={30 * unit}
+                      width={25 * unit}
+                      height={25 * unit}
                       source={require('~src/assets/images/card-qrcode.png')}
                     />
                   </ButtonView>
@@ -268,7 +270,7 @@ const AccountCard: React.FC<Props> = (props) => {
                 color="white"
                 fontFamily="bold"
                 mt={20 * unit}
-                ml={45 * unit}
+                ml={52 * unit}
               >
                 {(!props.hideBalance && i18n.t('paymentCard.balance')) || ''}
               </TextView>
@@ -311,6 +313,7 @@ const AccountCard: React.FC<Props> = (props) => {
                 alignItems={'flex-end'}
                 justifyContent={'space-between'}
                 mb={5}
+                pr={30 * unit}
               >
                 <LinearLayout>
                   <LinearLayout orientation={'horiz'}>
