@@ -1,13 +1,9 @@
 import PropTypes from 'prop-types'
 import React, {useEffect} from 'react'
-import {
-  TouchableWithoutFeedback,
-  StyleSheet,
-  Image,
-  GestureResponderEvent,
-  View,
-} from 'react-native'
+import {StyleSheet, GestureResponderEvent, Dimensions} from 'react-native'
 import {useSelector} from 'react-redux'
+
+import ThemedButton from './ThemedButton'
 
 import {LinearLayout, RelativeLayout} from '~/src/styles/styled-components'
 import {Account} from '~src/models/redux/Account'
@@ -24,7 +20,7 @@ const ThemedSendButton: React.FC<Props> = (props) => {
     dropShadow: {
       alignItems: 'center',
       justifyContent: 'center',
-      width: 71,
+      width: Dimensions.get('window').width * 0.19,
       height: 45,
       borderRadius: 7,
       shadowColor: '#464d53',
@@ -38,56 +34,15 @@ const ThemedSendButton: React.FC<Props> = (props) => {
   })
 
   return (
-    <TouchableWithoutFeedback onPress={props.onPress}>
-      <View style={styles.dropShadow}>
-        <RelativeLayout
-          width={'100%'}
-          height={'100%'}
-          alignItems="center"
-          justifyContent="center"
-          borderRadius={7}
-        >
-          <LinearLayout
-            width="100%"
-            height="100%"
-            borderRadius={7}
-            overflow="hidden"
-            position="absolute"
-          >
-            <LinearLayout width="100%" height="100%" bg={'#1c2329'} />
-          </LinearLayout>
-          <LinearLayout
-            width="96%"
-            height="96%"
-            borderRadius={7}
-            overflow="hidden"
-            justifyContent={'center'}
-            bg={isNotEmpty && !isWatchAccount ? '#41515b' : '#313e46'}
-            style={{borderRadius: 7}}
-          >
-            <LinearLayout
-              width="100%"
-              orientation="horiz"
-              justifyContent={'center'}
-            >
-              {isNotEmpty && !isWatchAccount && isConnected ? (
-                <Image
-                  width={13}
-                  height={16}
-                  source={require('~src/assets/images/arrow-up-green.png')}
-                />
-              ) : (
-                <Image
-                  width={13}
-                  height={16}
-                  source={require('~src/assets/images/arrow-gray.png')}
-                />
-              )}
-            </LinearLayout>
-          </LinearLayout>
-        </RelativeLayout>
-      </View>
-    </TouchableWithoutFeedback>
+    <ThemedButton
+      srcIcon={
+        isNotEmpty && !isWatchAccount && isConnected
+          ? require('~src/assets/images/arrow-up-green.png')
+          : require('~src/assets/images/arrow-gray.png')
+      }
+      width={Dimensions.get('window').width * 0.19}
+      onPress={props.onPress}
+    />
   )
 }
 

@@ -407,7 +407,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
-				PROVISIONING_PROFILE_SPECIFIER = "match Development io.cityofzion.neon";
+				PROVISIONING_PROFILE_SPECIFIER = "kenedy dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -442,7 +442,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
-				PROVISIONING_PROFILE_SPECIFIER = "App Store Kenedy Neon Wallet 05072021";
+				PROVISIONING_PROFILE_SPECIFIER = "kenedy dev distribution";
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

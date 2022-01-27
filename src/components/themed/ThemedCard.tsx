@@ -2,7 +2,7 @@ import {LinearGradient} from 'expo-linear-gradient'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {StyleProp} from 'react-native'
+import {Platform, StyleProp} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
@@ -59,11 +59,19 @@ const ThemedCard: React.FC<Props> = (props) => {
       padding: Normalize.scale(props.padding!),
     }
 
+    const borderIos = {
+      borderWidth: 0.15,
+      borderTopColor: '#fff',
+      borderLeftColor: '#fff',
+      borderBottomColor: '#000',
+      borderRightColor: '#000',
+    }
+
     const styleShadow = {
-      shadowColor: '#000000',
+      shadowColor: 'rgba(18, 21, 23, 0.99)',
       shadowOffset: {
-        width: 0,
-        height: 6,
+        width: 12,
+        height: 15,
       },
       shadowOpacity: 0.4,
       shadowRadius: 3,
@@ -73,7 +81,8 @@ const ThemedCard: React.FC<Props> = (props) => {
     return _.merge(
       style,
       props.hasShadow ? styleShadow : {},
-      props.contentStyle ?? {}
+      props.contentStyle ?? {},
+      Platform.OS === 'ios' ? borderIos : {}
     )
   }
 

@@ -2,14 +2,15 @@ import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, {useState, useEffect, useCallback} from 'react'
 import {
-  TouchableWithoutFeedback,
   StyleSheet,
   GestureResponderEvent,
-  View,
   Platform,
   ImageLoadEventData,
+  Dimensions,
 } from 'react-native'
 import {useSelector} from 'react-redux'
+
+import ThemedButton from './ThemedButton'
 
 import {FilterHelper} from '~/src/helpers/FilterHelper'
 import {
@@ -36,7 +37,7 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
     dropShadow: {
       alignItems: 'center',
       justifyContent: 'center',
-      width: 209,
+      width: Dimensions.get('window').width * 0.49,
       height: 45,
       borderRadius: 7,
       shadowColor: '#464d53',
@@ -87,58 +88,24 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
     handleInfoClaim()
   }, [props.isClaimAvailable])
   return (
-    <TouchableWithoutFeedback
-      onPress={props.isClaimAvailable ? props.onPress : undefined}
-    >
-      <View style={styles.dropShadow}>
-        <RelativeLayout
-          width={'100%'}
-          height={'100%'}
-          alignItems="center"
-          justifyContent="center"
-          borderRadius={7}
-        >
-          <LinearLayout
-            width="100%"
-            height="100%"
-            borderRadius={7}
-            overflow="hidden"
-            position="absolute"
-          >
-            <LinearLayout width="100%" height="100%" bg={'#1c2329'} />
-          </LinearLayout>
-          <LinearLayout
-            width="98%"
-            height="98%"
-            borderRadius={7}
-            overflow="hidden"
-            justifyContent={'center'}
-            bg={props.isClaimAvailable ? '#41515b' : '#313e46'}
-            style={{borderRadius: 7}}
-          >
-            <LinearLayout
-              width="100%"
-              orientation="horiz"
-              justifyContent={'space-evenly'}
-            >
-              {infoClaim?.icon && (
-                <ImageView source={infoClaim?.icon} width={19} height={16} />
-              )}
-              <TextView
-                color={infoClaim?.textColor}
-                opacity={infoClaim?.opacity}
-                alignSelf={'center'}
-                fontSize={'16px'}
-                numberOfLines={1}
-                adjustsFontSizeToFit={true}
-              >
-                {infoClaim?.text}
-              </TextView>
-            </LinearLayout>
-          </LinearLayout>
-        </RelativeLayout>
-      </View>
-    </TouchableWithoutFeedback>
+    <ThemedButton
+      onPress={props.onPress}
+      srcIcon={infoClaim?.icon}
+      label={infoClaim?.text}
+      width={Dimensions.get('window').width * 0.5}
+      fontSize={'16px'}
+      iconSize={!props.isClaimAvailable ? [10, 10] : [20, 20]}
+      textColor={
+        infoClaim?.icon
+          ? props.isClaimAvailable
+            ? infoClaim.textColor
+            : undefined
+          : '#ffffff99'
+      }
+      iconAlignX="flex-end"
+      labelWidth="100%"
+      disabled={!props.isClaimAvailable}
+    ></ThemedButton>
   )
 }
 

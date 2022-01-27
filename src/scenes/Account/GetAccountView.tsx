@@ -396,7 +396,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   return (
     <ScreenLayout
-      solidColorBG={true}
+      darkerSolidColorBG={true}
       onReachBottom={() => {
         if (Await.inAction('loadMoreTransaction')) return
         Await.run(
@@ -417,8 +417,12 @@ const GetAccountView = (props: GetAccountViewProps) => {
           ],
         }}
       >
-        <LinearLayout mt={6}>
-          <AccountCard account={account} isStackMode={false} />
+        <LinearLayout mt={4}>
+          <AccountCard
+            account={account}
+            hasShadow={false}
+            isStackMode={false}
+          />
         </LinearLayout>
       </Animated.View>
       <View
