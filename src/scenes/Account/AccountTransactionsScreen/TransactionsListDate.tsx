@@ -11,6 +11,7 @@ import {LinearLayout, TextView} from '~/src/styles/styled-components'
 interface TransactionsListDateProps {
   date: string
   transactions: TransactionDataScreen[]
+  pendingTransactions: TransactionDataScreen[]
 }
 
 export const TransactionsListDate = (props: TransactionsListDateProps) => {
@@ -19,17 +20,23 @@ export const TransactionsListDate = (props: TransactionsListDateProps) => {
       <TextView mb={'20px'} color="#fff" fontFamily="semibold" fontSize="30px">
         {moment(props.date).format('DD MMMM')}
       </TextView>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Image
-          style={{marginRight: 5, width: 18, height: 18}}
-          source={require('src/assets/images/icon-check-white.png')}
+      {props.pendingTransactions.map((pendingTransaction) => (
+        <TransactionItemDate
+          iconStatusTransactions={require('src/assets/images/icon-pending-white.png')}
+          key={pendingTransaction.txid}
+          statusTransactions={'PENDING TRANSACTIONS'}
+          {...pendingTransaction}
         />
-        <TextView color="#899fa8">
-          {i18n.t('screens.getAccount.completedTransactions')}
-        </TextView>
-      </View>
+      ))}
       {props.transactions.map((transaction) => (
-        <TransactionItemDate key={transaction.txid} {...transaction} />
+        <TransactionItemDate
+          iconStatusTransactions={require('src/assets/images/icon-check-white.png')}
+          key={transaction.txid}
+          statusTransactions={i18n.t(
+            'screens.getAccount.completedTransactions'
+          )}
+          {...transaction}
+        />
       ))}
     </LinearLayout>
   )

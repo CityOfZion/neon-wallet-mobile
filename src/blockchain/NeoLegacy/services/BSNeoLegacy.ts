@@ -31,7 +31,6 @@ const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEvent
 const feeTokenImg = require('~src/assets/nep5/png/GAS.png')
 const SDK: typeof AsteroidSDK = require('~src/vendor/asteroid-sdk')
 export class BSNeoLegacy implements IClaimable, IBlockchainService {
-  readonly siteUrlQuery = `https://dora.coz.io/transaction/neo2/mainnet/`
   readonly networkDeprecatedLabel = 'MainNet'
   readonly defaultNodeNet = 'http://seed1.ngd.network:10332'
   cozTip: {address: string; token: string; hash: string}
@@ -320,8 +319,6 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
         fees,
       })
     }
-
-    appBus.emit('transactionStart', invokeResponse)
 
     return invokeResponse.tx?.hash ?? null
   }

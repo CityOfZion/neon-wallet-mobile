@@ -55,10 +55,6 @@ interface GetAccountViewProps {
   route: RouteProp<WalletStackParamList, 'GetAccount'>
 }
 
-const disabledSendImage = require('~/src/assets/images/button-send-small-disabled.png')
-const selectedSendImage = require('~/src/assets/images/button-send-small-selected.png')
-const defaultSendImage = require('~/src/assets/images/button-send-small.png')
-
 const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
   return (
     <LinearLayout alignItems="center" justifyContent="center">
@@ -76,65 +72,6 @@ const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
   )
 }
 
-const TransactionsTab = () => {
-  const dispatchAccount = useDispatch<SyncDispatch<Account>>()
-  const [account, setAccount] = useState(
-    dispatchAccount(RootStore.account.actions.getFromSelection())
-  )
-
-  const accountsPool = useSelector((state: RootState) => state.app.accounts)
-
-  useEffect(() => {
-    const upAccount =
-      accountsPool.find((acc) => acc.address === account.address) ??
-      new Account()
-    setAccount(upAccount)
-  }, [accountsPool])
-
-  return account.getTransactions().length ? (
-    <AwaitActivity
-      name={'fetchTransaction'}
-      size={'large'}
-      style={{minHeight: 100}}
-      loadingView={<ScreenLoader solidColorBG={true} />}
-    >
-      <>
-        {account.address && (
-          <LinearLayout pt={20}>
-            <TransactionsList
-              title={i18n.t('screens.getAccount.pendingTransactions')}
-              address={account.address}
-              transactionGroups={account.getPendingTransactions()}
-            />
-
-            <TransactionsList
-              title={i18n.t('screens.getAccount.completedTransactions')}
-              address={account.address}
-              transactionGroups={account.getTransactions()}
-            />
-          </LinearLayout>
-        )}
-
-        <AwaitActivity
-          name={'loadMoreTransaction'}
-          size={'large'}
-          style={{minHeight: 100}}
-        />
-      </>
-    </AwaitActivity>
-  ) : (
-    <TextView
-      my="32px"
-      color="text.0"
-      fontFamily="medium"
-      fontSize="18px"
-      textAlign="center"
-    >
-      {i18n.t('components.balanceList.empty')}
-    </TextView>
-  )
-}
-
 const GetAccountView = (props: GetAccountViewProps) => {
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const {language} = useSelector((state: RootState) => state.settings)
@@ -146,7 +83,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const walletConnectCtx = useWalletConnect()
 
   const [currentPage, setCurrentPage] = useState(1)
-  const [isAssetsTabSelected, setIsAssetsTabSelected] = useState<boolean>(true)
   const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>(0)
   const [isClaimAvailable, setIsClaimAvaliable] = useState<boolean>(false)
 
@@ -222,20 +158,12 @@ const GetAccountView = (props: GetAccountViewProps) => {
       )
       setAccount(account)
     }
-
-    appBus.on('claimGasStart', refresh)
     appBus.on('claimGasEnd', refresh)
-    appBus.on('transactionStart', refresh)
     appBus.on('transactionEnd', refresh)
-    appBus.on('updateTransactions', handleUpdateTransactions)
-    appBus.on('ClaimGasFinished', availableClaimGasButton)
 
     return () => {
-      appBus.off('claimGasStart', refresh)
       appBus.off('claimGasEnd', refresh)
-      appBus.off('transactionStart', refresh)
       appBus.off('transactionEnd', refresh)
-      appBus.on('ClaimGasFinished', availableClaimGasButton)
     }
   }, [address])
 
@@ -247,7 +175,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   useEffect(() => {
     handleCalcFee()
-    Await.done(`ClaimGas@${account.address}`)
   }, [unclaimedGasAmount])
 
   useEffect(() => {
@@ -255,19 +182,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
       handleIsClaimAvailable()
     }
   }, [amountFee])
-
-  useEffect(() => {
-    const interactionPromise = InteractionManager.runAfterInteractions(() => {
-      if (!isAssetsTabSelected) {
-        setCurrentPage(1)
-        Await.run('fetchTransaction', () => fetchTransaction(1))
-      }
-    })
-
-    return () => {
-      interactionPromise.cancel()
-    }
-  }, [isAssetsTabSelected, account])
 
   const keepUpdatedInfo = async () => {
     await dispatchAsync(RootStore.app.actions.syncAccounts())
@@ -286,14 +200,11 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }, [account, unclaimedGasAmount, isWatchAccount, isConnected])
 
   const refresh = () => {
+    Await.done(`ClaimGas@${account.address}`)
     setCurrentPage(1)
     fetchTransaction(1)
     populateUnclaimed()
     getNodesfromBlockchain()
-  }
-
-  const availableClaimGasButton = () => {
-    Await.done(`ClaimGas@${account.address}`)
   }
 
   const populateUnclaimed = async () => {
@@ -323,19 +234,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
     // Save the new cache
     await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
     await dispatchAsync(RootStore.app.actions.syncAccounts())
-  }
-
-  const handleUpdateTransactions = () => {
-    const interactionPromise = InteractionManager.runAfterInteractions(() => {
-      if (!isAssetsTabSelected) {
-        setCurrentPage(1)
-        Await.run('fetchTransaction', () => fetchTransaction(1))
-      }
-    })
-
-    return () => {
-      interactionPromise.cancel()
-    }
   }
 
   const handleClaimGas = useCallback(async () => {

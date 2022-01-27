@@ -197,8 +197,8 @@ export const TransactionDetails = (props: Props) => {
             <ThemedButton
               onPress={() => {
                 Linking.openURL(
-                  blockchainServices[senderAccount.blockchain].siteUrlQuery +
-                    transaction.transactionHash
+                  blockchainServices[senderAccount.blockchain].provider
+                    .siteUrlQuery + transaction.transactionHash
                 )
               }}
               label={i18n.t('transactionDetails.viewOnDora')}
