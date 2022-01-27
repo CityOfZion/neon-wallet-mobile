@@ -45,11 +45,6 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
   )
   const {currency} = useSelector((state: RootState) => state.settings)
   const {exchange} = useSelector((state: RootState) => state.app)
-  const show = useNavigationState(
-    (state) =>
-      state.routes[state.routes.length - 1].name ===
-      wrapper.route.ReceiveQrCodeModal.name
-  )
   const controller = useSwiperController(true)
   const [showQr, setShowQr] = useState(false)
 

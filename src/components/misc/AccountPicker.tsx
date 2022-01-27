@@ -36,7 +36,7 @@ const AccountPicker: React.FC<Props> = (props: Props) => {
       layout={'default'}
       data={accounts}
       sliderWidth={applicationConfig.windowWidth}
-      itemWidth={Normalize.scale(applicationConfig.windowWidth - 40) as number}
+      itemWidth={Normalize.scale(applicationConfig.windowWidth - 150) as number}
       inactiveSlideScale={0.9}
       inactiveSlideOpacity={1}
       inactiveSlideShift={12}
@@ -51,12 +51,7 @@ const AccountPicker: React.FC<Props> = (props: Props) => {
       renderItem={(accountList: {item: Account; index: number}) => {
         const {item} = accountList
         return (
-          <LinearLayout
-            weight={1}
-            justifyContent={'center'}
-            alignItems={'center'}
-            py={6}
-          >
+          <LinearLayout justifyContent={'center'} alignItems={'center'}>
             <AccountCard
               onPress={() => pressEvent(item)}
               account={item}

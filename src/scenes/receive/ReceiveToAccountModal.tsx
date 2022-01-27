@@ -13,7 +13,10 @@ import {DismissKeyboard} from '~src/components/DismissKeyboard'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import {QRCodeWithCopyButton} from '~src/components/QRCodeWithCopyButton'
-import {PANEL_OFFSET} from '~src/components/SwiperPanel'
+import SwiperPanel, {
+  PANEL_OFFSET,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
 import TabSelector from '~src/components/TabSelector'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
@@ -168,11 +171,7 @@ interface Props {
   route: RouteProp<ReceiveModalStackParamList, 'ReceiveToAccountModal'>
 }
 const ReceiveToAccountModal = (props: Props) => {
-  const show = useNavigationState(
-    (state) =>
-      state.routes[state.routes.length - 1].name ===
-      wrapper.route.ReceiveToAccountModal.name
-  )
+  const controller = useSwiperController(true)
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
@@ -188,12 +187,18 @@ const ReceiveToAccountModal = (props: Props) => {
   const navigate = () => {
     if (!isValid()) return
 
-    props.navigation.navigate(wrapper.route.ReceiveQrCodeModal.name, {
-      wallet,
-      account,
-      amount: Number(amount),
-      token: token!,
-      reference,
+    props.navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.ReceiveModalStack.name,
+      params: {
+        screen: wrapper.route.ReceiveQrCodeModal.name,
+        params: {
+          wallet,
+          account,
+          amount: Number(amount),
+          token: token!,
+          reference,
+        },
+      },
     })
   }
 
@@ -202,22 +207,18 @@ const ReceiveToAccountModal = (props: Props) => {
     return conditions.every((it) => it)
   }
 
-  return show ? (
-    <ScrollView
-      style={{
-        width: '100%',
-        marginTop: useHeaderHeight(),
-      }}
-      contentContainerStyle={{
-        flexGrow: 1,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        paddingBottom: PANEL_OFFSET + 20,
-        paddingLeft: 8,
-        paddingRight: 8,
-      }}
+  return (
+    <SwiperPanel
+      controller={controller}
+      fullSize={true}
+      title={i18n.t('modals.receive.title')}
+      padding={0}
+      rightButton={<ThemedCloseButton onPress={controller.close} />}
+      onRightPress={controller.close}
+      onClose={() => props.navigation.goBack()}
+      solidColorBG={true}
     >
-      <LinearLayout height="100%" width="100%" px="15px" orientation="verti">
+      <LinearLayout height="100%" width="100%" px="24px" orientation="verti">
         <TextView
           mb="24px"
           alignSelf="center"
@@ -285,9 +286,7 @@ const ReceiveToAccountModal = (props: Props) => {
           </LinearLayout>
         )}
       </LinearLayout>
-    </ScrollView>
-  ) : (
-    <LinearLayout />
+    </SwiperPanel>
   )
 }
 
