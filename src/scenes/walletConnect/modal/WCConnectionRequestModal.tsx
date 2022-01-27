@@ -17,6 +17,7 @@ import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
 import {LinearLayout, TextView, ImageView} from '~src/styles/styled-components'
+import {TouchableWithoutFeedback} from 'react-native'
 
 export interface WCConnectionRequestModalParams {
   uri: string
@@ -155,14 +156,39 @@ const WCConnectionRequestModal = (props: Props) => {
                 </LinearLayout>
               </LinearLayout>
             </LinearLayout>
-            <LinearLayout height={'30%'} justifyContent={'space-between'}>
+            <LinearLayout height={'35%'} justifyContent={'space-between'}>
               <TextView color={'#fff'} fontSize={'18px'} textAlign={'center'}>
                 {i18n.t('modals.WCConnectionRequest.subtitle')}
               </TextView>
-              <ThemedButton
-                label={i18n.t('modals.WCConnectionRequest.acceptLabel')}
-                onPress={handleAccept}
-              />
+              <LinearLayout>
+                <ThemedButton
+                  label={i18n.t('modals.WCConnectionRequest.acceptLabel')}
+                  onPress={handleAccept}
+                />
+                <LinearLayout mt={5}>
+                  <TouchableWithoutFeedback onPress={controller.close}>
+                    <LinearLayout
+                      width="100%"
+                      borderRadius="4px"
+                      borderWidth="1px"
+                      borderColor="primary"
+                      justifyContent="center"
+                      alignItems="center"
+                      orientation="horiz"
+                      p="10px"
+                    >
+                      <TextView
+                        style={{includeFontPadding: false}}
+                        ml={3}
+                        color={'primary'}
+                        fontSize={20}
+                      >
+                        {i18n.t('modals.WCConnectionRequest.declineLabel')}
+                      </TextView>
+                    </LinearLayout>
+                  </TouchableWithoutFeedback>
+                </LinearLayout>
+              </LinearLayout>
             </LinearLayout>
           </LinearLayout>
         ) : (
