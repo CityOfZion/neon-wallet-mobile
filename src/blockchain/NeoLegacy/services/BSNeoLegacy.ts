@@ -191,11 +191,6 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     return wallet.isWIF(privateKey)
   }
 
-  async calculateFee(senderAddress: string, cim: ContractInvocationMulti) {
-    throw new Error('function not available to neo legacy')
-    return {systemFee: 0, networkFee: 0}
-  }
-
   async calculateTransferFee(sendtx: Omit<SenderTransactionInfo, 'feeAmount'>) {
     return 0
   }

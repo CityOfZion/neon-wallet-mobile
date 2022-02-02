@@ -11,7 +11,7 @@ import {useSelector} from 'react-redux'
 import ConnectionHeader from '../components/ConnectionHeader'
 import ContractDetailsBox from '../components/ContractDetailsBox'
 
-import {blockchainServices} from '~/src/blockchain'
+import {blockchainServices, hasWCIntegration} from '~/src/blockchain'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
 import {Account} from '~/src/models/redux/Account'
@@ -83,12 +83,16 @@ const TransactionRequestModal = (props: Props) => {
   const handleCalculateFee = useCallback(async () => {
     let sumFee: number = 0
     if (accountRequest?.address) {
-      const {networkFee, systemFee} = await blockchainServices[
-        accountRequest.blockchain
-      ].calculateFee(accountRequest.address, requestParams)
-      sumFee += networkFee + systemFee
+      const bs = blockchainServices[accountRequest.blockchain]
+      if (hasWCIntegration(bs)) {
+        const {networkFee, systemFee} = await bs.calculateFee(
+          accountRequest.address,
+          requestParams
+        )
+        sumFee += networkFee + systemFee
+        setFeeRequest(sumFee)
+      }
     }
-    setFeeRequest(sumFee)
   }, [request, accountRequest])
 
   useEffect(() => {

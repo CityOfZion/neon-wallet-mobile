@@ -87,6 +87,13 @@ export interface IWalletConnect {
     account: string,
     request: JsonRpcRequest
   ) => Promise<JsonRpcResponse>
+  calculateFee(
+    senderAddress: string,
+    cim: ContractInvocationMulti
+  ): Promise<{
+    networkFee: number
+    systemFee: number
+  }>
 }
 
 export interface IBlockchainService {
@@ -118,13 +125,6 @@ export interface IBlockchainService {
   calculateTransferFee: (
     sendtx: Omit<SenderTransactionInfo, 'feeAmount'>
   ) => Promise<number>
-  calculateFee(
-    senderAddress: string,
-    cim: ContractInvocationMulti
-  ): Promise<{
-    networkFee: number
-    systemFee: number
-  }>
   setAccountsPool: (accounts: Account[]) => void
 }
 
@@ -262,7 +262,14 @@ export function isClaimable(object: any): object is IClaimable {
 }
 
 export function hasWCIntegration(object: any): object is IWalletConnect {
-  return 'rpcCall' in object
+  const methodsName = ['rpcCall', 'calculateFee']
+  let result = false
+  for (const methodName of methodsName) {
+    if (methodName in object) {
+      result = methodName in object
+    }
+  }
+  return result
 }
 
 export const hasWalletconnect = (account: Account) => {
