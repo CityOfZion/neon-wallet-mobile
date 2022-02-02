@@ -1,6 +1,7 @@
 import {JsonRpcRequest, JsonRpcResponse} from '@json-rpc-tools/utils'
 import {ImageLoadEventData} from 'react-native'
 
+import {ContractInvocationMulti} from '../helpers/NeonWcAdapter'
 import {ContractResponse} from '../models/response/ContractResponse'
 import {BSNeo3, ContractParam} from './Neo3/services/BSNeo3'
 import {BSNeoLegacy} from './NeoLegacy/services/BSNeoLegacy'
@@ -86,6 +87,13 @@ export interface IWalletConnect {
     account: string,
     request: JsonRpcRequest
   ) => Promise<JsonRpcResponse>
+  calculateFee(
+    senderAddress: string,
+    cim: ContractInvocationMulti
+  ): Promise<{
+    networkFee: number
+    systemFee: number
+  }>
 }
 
 export interface IBlockchainService {
@@ -114,7 +122,7 @@ export interface IBlockchainService {
   validateAddress(address: string): boolean
   validatePrivateKeyWithPassword(privateKey: string): boolean
   validateWif(privateKey: string): boolean
-  calculateFee: (
+  calculateTransferFee: (
     sendtx: Omit<SenderTransactionInfo, 'feeAmount'>
   ) => Promise<number>
   setAccountsPool: (accounts: Account[]) => void
@@ -254,7 +262,14 @@ export function isClaimable(object: any): object is IClaimable {
 }
 
 export function hasWCIntegration(object: any): object is IWalletConnect {
-  return 'rpcCall' in object
+  const methodsName = ['rpcCall', 'calculateFee']
+  let result = false
+  for (const methodName of methodsName) {
+    if (methodName in object) {
+      result = methodName in object
+    }
+  }
+  return result
 }
 
 export const hasWalletconnect = (account: Account) => {

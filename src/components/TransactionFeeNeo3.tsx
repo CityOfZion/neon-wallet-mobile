@@ -41,9 +41,9 @@ export const TransactionFeeNeo3 = (props: Props) => {
 
   const handleCalcFee = async () => {
     if (transaction) {
-      const result = await blockchainServices[props.blockchain].calculateFee(
-        transaction
-      )
+      const result = await blockchainServices[
+        props.blockchain
+      ].calculateTransferFee(transaction)
       setFeeAmount(result)
     } else {
       setFeeAmount(0)

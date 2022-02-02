@@ -9,7 +9,7 @@ export function useAmountFee(blockchain: BlockchainServiceKey) {
 
   const calc = useCallback(
     async (token: TokenAsset, account: Account, receiverAddress: string) => {
-      const result = await blockchainServices[blockchain].calculateFee({
+      const result = await blockchainServices[blockchain].calculateTransferFee({
         receiverAddress,
         senderAddress: account.address,
         token,
