@@ -56,6 +56,7 @@ const AccountTransactionsScreen = (props: Props) => {
       const transactionsHistory = await blockchainServices[
         account.blockchain
       ].provider.getAddressAbstracts(account.address)
+
       handleFormatTransactions(transactionsHistory)
     }
   }, [account])

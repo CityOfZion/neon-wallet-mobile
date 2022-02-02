@@ -1,5 +1,5 @@
 import i18n from 'i18n-js'
-import React from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import {
   Linking,
   View,
@@ -29,6 +29,23 @@ export const TransactionItemDate = (
 ) => {
   const dispatch = useDispatch<SyncDispatch<Account>>()
   const account = dispatch(RootStore.account.actions.getFromSelection())
+  const [sentOrReceiveStatus, setSentOrReceiveStatus] = useState<string>(
+    i18n.t('screens.getAccount.sentToLabel')
+  )
+
+  const handleChangeSentOrReceiveStatus = useCallback(() => {
+    const transfer = props.transfers.find(
+      (transfer) => transfer.addressTo === account.address
+    )
+    if (transfer) {
+      setSentOrReceiveStatus(i18n.t('screens.getAccount.receivedFromLabel'))
+    }
+  }, [account, props.transfers])
+
+  useEffect(() => {
+    handleChangeSentOrReceiveStatus()
+  }, [account, props.transfers])
+
   return (
     <View style={{marginBottom: 20}}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -65,7 +82,7 @@ export const TransactionItemDate = (
         </View>
         <View>
           <TextView color="#899fa8" fontSize="14px" fontFamily="medium">
-            {i18n.t('screens.getAccount.sentToLabel')}
+            {sentOrReceiveStatus}
           </TextView>
           {props.transfers.map((transfer, index) => (
             <TransferItem key={index} {...transfer} />

@@ -323,7 +323,8 @@
       "txidLabel": "TX ID:",
       "sentToLabel": "Sent to",
       "invocationsLabel": "Invocations",
-      "notificationsLabel": "Notifications"
+      "notificationsLabel": "Notifications",
+      "receivedFromLabel": "Received from"
     },
     "customizeAccount": {
       "title": "Create account",

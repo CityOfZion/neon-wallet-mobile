@@ -24,7 +24,7 @@ export const TransactionsListDate = (props: TransactionsListDateProps) => {
         <TransactionItemDate
           iconStatusTransactions={require('src/assets/images/icon-pending-white.png')}
           key={pendingTransaction.txid}
-          statusTransactions={'PENDING TRANSACTIONS'}
+          statusTransactions={i18n.t('components.transactionList.title')}
           {...pendingTransaction}
         />
       ))}
