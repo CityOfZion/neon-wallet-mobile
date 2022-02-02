@@ -23,7 +23,7 @@ import {IRPCContract} from '~src/blockchain'
 type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
 export class DoraSDKProvider implements Neo3Provider {
   //eslint-disable-next-line
-  readonly network: DoraNetworkOptions = __DEV__ ? 'testnet_rc4' : 'mainnet'
+  readonly network: DoraNetworkOptions = 'mainnet'
   readonly baseNumeric: number = 8
   constructor(network?: DoraNetworkOptions) {
     if (network) {

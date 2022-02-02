@@ -22,7 +22,10 @@ import {
 } from '~src/blockchain'
 import {Neo3ProviderOptions} from '~src/blockchain/Neo3'
 import {Neo3Provider} from '~src/blockchain/Neo3/providers/common'
-import {NeonWcAdapter} from '~src/helpers/NeonWcAdapter'
+import {
+  ContractInvocationMulti,
+  NeonWcAdapter,
+} from '~src/helpers/NeonWcAdapter'
 
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 const feeTokenImg = require('~src/assets/nep5/png/GAS.png')
@@ -208,7 +211,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
 
     const tokenFee = new TokenAsset('NEO', 'NEO', neoHash, this.key)
     tokenFee.amount = neoBalance[0].amount ?? 0
-    const gasFee = await this.calculateFee({
+    const gasFee = await this.calculateTransferFee({
       receiverAddress: address,
       senderAddress: address,
       token: tokenFee,
@@ -237,7 +240,61 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
     }
   }
 
-  async calculateFee(sendtx: Omit<SenderTransactionInfo, 'feeAmount'>) {
+  async calculateFee(senderAddress: string, cim: ContractInvocationMulti) {
+    const fromAccount = await this.getNeoAccount(senderAddress)
+
+    if (!fromAccount) throw new Error('Account not found')
+    const sb = Neon.create.scriptBuilder()
+
+    cim.invocations.forEach((invocation) => {
+      sb.emitContractCall({
+        scriptHash: invocation.scriptHash,
+        operation: invocation.operation,
+        args: NeonWcAdapter.convertParams(invocation.args),
+      })
+    })
+    const script = sb.build()
+
+    const defaultEndpoint = 'http://seed1.neo.org:10332'
+    const node = (await this.provider.getAllNodes())[0]
+    const endpoint = node.url
+
+    const rpcClient = new rpc.NeoServerRpcClient(endpoint ?? defaultEndpoint)
+
+    const currentHeight = await rpcClient.getBlockCount()
+
+    const trx = new tx.Transaction({
+      script: Neon.u.HexString.fromHex(script),
+      validUntilBlock: currentHeight + 100,
+      signers: NeonWcAdapter.buildMultipleSigner(fromAccount, cim.signers),
+    })
+
+    const magicNumber = await NeonWcAdapter.getMagicOfRpcAddress(
+      endpoint ?? defaultEndpoint
+    )
+
+    const config = {
+      networkMagic: magicNumber,
+      rpcAddress: endpoint ?? defaultEndpoint,
+    }
+
+    const networkFee = await Neon.experimental.txHelpers.calculateNetworkFee(
+      trx,
+      fromAccount,
+      config
+    )
+    const systemFee = await Neon.experimental.txHelpers.getSystemFee(
+      Neon.u.HexString.fromHex(script),
+      config
+    )
+
+    return {
+      networkFee: Number(networkFee / 10 ** 8),
+      systemFee: Number(systemFee / 10 ** 8),
+    }
+  }
+
+  async calculateTransferFee(sendtx: Omit<SenderTransactionInfo, 'feeAmount'>) {
     try {
       const {receiverAddress, senderAddress, token} = sendtx
       if (!receiverAddress) throw new Error('Receiver address is invalid')

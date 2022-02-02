@@ -11,8 +11,10 @@ import {useSelector} from 'react-redux'
 import ConnectionHeader from '../components/ConnectionHeader'
 import ContractDetailsBox from '../components/ContractDetailsBox'
 
+import {blockchainServices} from '~/src/blockchain'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
+import {Account} from '~/src/models/redux/Account'
 import {ContractResponse} from '~/src/models/response/ContractResponse'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import SwiperPanel, {
@@ -28,7 +30,6 @@ import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-
 type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
 export interface TransactionRequestModalParams {
@@ -53,7 +54,48 @@ const TransactionRequestModal = (props: Props) => {
   if (!['invokeFunction', 'testInvoke'].includes(request.request.method)) {
     return <></>
   }
+
   const requestParams: ContractInvocationMulti = request.request.params
+
+  const [accountRequest, setAccountRequest] = useState<Account>()
+
+  const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const [feeRequest, setFeeRequest] = useState<number>()
+  useEffect(() => {
+    requestParams.invocations.forEach((invocation) => {
+      const args = invocation.args as ArgsRequest[]
+      if (args.length > 0) {
+        const acc = accountsPool.find(
+          (account) => account.address === args[0].value
+        )
+        if (acc) {
+          setAccountRequest(acc)
+        }
+      }
+    })
+  }, [request, accountsPool])
+
+  type TypeArgsRequest = 'Address' | 'Integer' | 'Array'
+  interface ArgsRequest {
+    type?: TypeArgsRequest
+    value?: string
+  }
+  const handleCalculateFee = useCallback(async () => {
+    let sumFee: number = 0
+    if (accountRequest?.address) {
+      const {networkFee, systemFee} = await blockchainServices[
+        accountRequest.blockchain
+      ].calculateFee(accountRequest.address, requestParams)
+      sumFee += networkFee + systemFee
+    }
+    setFeeRequest(sumFee)
+  }, [request, accountRequest])
+
+  useEffect(() => {
+    if (accountRequest) {
+      handleCalculateFee()
+    }
+  }, [accountRequest])
 
   const scopes = requestParams.signers.map((signer) => signer.scopes) ?? [
     WitnessScope.CalledByEntry,
@@ -62,7 +104,7 @@ const TransactionRequestModal = (props: Props) => {
     (scope) =>
       scope !== WitnessScope.None && scope !== WitnessScope.CalledByEntry
   )
-  const [feeAmount, setFeeAmount] = useState<number>(0)
+
   //requestJson
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
@@ -224,7 +266,7 @@ const TransactionRequestModal = (props: Props) => {
               pr={'20px'}
             >
               {i18n.t('modals.transactionRequest.xGas', {
-                amount: '20',
+                amount: feeRequest ? (feeRequest / 8).toFixed(8) : '',
               })}
             </TextView>
           </LinearLayout>

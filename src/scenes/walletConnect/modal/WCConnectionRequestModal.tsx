@@ -2,6 +2,7 @@ import {RouteProp, useNavigation} from '@react-navigation/native'
 import {AwaitActivity, Await} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, {useEffect, useState, useCallback} from 'react'
+import {TouchableWithoutFeedback} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
@@ -17,7 +18,6 @@ import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
 import {LinearLayout, TextView, ImageView} from '~src/styles/styled-components'
-import {TouchableWithoutFeedback} from 'react-native'
 
 export interface WCConnectionRequestModalParams {
   uri: string

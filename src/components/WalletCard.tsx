@@ -246,7 +246,15 @@ const WalletCard: React.FC<Props> = (props) => {
 
   return (
     <ThemedShadowContainer
-      android={{width: props.width, height: 365, border: 7, radius: 30, opacity: 0.18, y: 7, x: 7}}
+      android={{
+        width: props.width,
+        height: 365,
+        border: 7,
+        radius: 30,
+        opacity: 0.18,
+        y: 7,
+        x: 7,
+      }}
     >
       <WalletCardRelativeContainer
         position="relative"
@@ -257,7 +265,7 @@ const WalletCard: React.FC<Props> = (props) => {
         onLayout={layoutEvent}
         style={{
           aspectRatio: 25 / 38,
-          height: 350
+          height: 350,
         }}
       >
         <LinearLayout

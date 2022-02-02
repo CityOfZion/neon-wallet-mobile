@@ -1,6 +1,7 @@
 import {JsonRpcRequest, JsonRpcResponse} from '@json-rpc-tools/utils'
 import {ImageLoadEventData} from 'react-native'
 
+import {ContractInvocationMulti} from '../helpers/NeonWcAdapter'
 import {ContractResponse} from '../models/response/ContractResponse'
 import {BSNeo3, ContractParam} from './Neo3/services/BSNeo3'
 import {BSNeoLegacy} from './NeoLegacy/services/BSNeoLegacy'
@@ -114,9 +115,16 @@ export interface IBlockchainService {
   validateAddress(address: string): boolean
   validatePrivateKeyWithPassword(privateKey: string): boolean
   validateWif(privateKey: string): boolean
-  calculateFee: (
+  calculateTransferFee: (
     sendtx: Omit<SenderTransactionInfo, 'feeAmount'>
   ) => Promise<number>
+  calculateFee(
+    senderAddress: string,
+    cim: ContractInvocationMulti
+  ): Promise<{
+    networkFee: number
+    systemFee: number
+  }>
   setAccountsPool: (accounts: Account[]) => void
 }
 

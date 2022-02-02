@@ -190,7 +190,7 @@ export class NeonWcAdapter {
     )
   }
 
-  private static convertParams(args: any[]): ContractParam[] {
+  static convertParams(args: any[]): ContractParam[] {
     return args.map((a) =>
       a.value === undefined
         ? a
@@ -224,7 +224,7 @@ export class NeonWcAdapter {
     return signer
   }
 
-  private static buildMultipleSigner(account: Account, signers: Signer[]) {
+  static buildMultipleSigner(account: Account, signers: Signer[]) {
     return !signers?.length
       ? [NeonWcAdapter.buildSigner(account)]
       : signers.map((s) => NeonWcAdapter.buildSigner(account, s))

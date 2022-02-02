@@ -11,6 +11,7 @@ import {Platform, NativeModules, ImageLoadEventData} from 'react-native'
 
 import {appBus} from '~/src/app/AppBus'
 import {AsteroidHelper} from '~/src/helpers/AsteroidHelper'
+import {ContractInvocationMulti} from '~/src/helpers/NeonWcAdapter'
 import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import {Account} from '~/src/models/redux/Account'
 import {Settings} from '~/src/models/redux/Settings'
@@ -190,7 +191,12 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     return wallet.isWIF(privateKey)
   }
 
-  async calculateFee(sendtx: Omit<SenderTransactionInfo, 'feeAmount'>) {
+  async calculateFee(senderAddress: string, cim: ContractInvocationMulti) {
+    throw new Error('function not available to neo legacy')
+    return {systemFee: 0, networkFee: 0}
+  }
+
+  async calculateTransferFee(sendtx: Omit<SenderTransactionInfo, 'feeAmount'>) {
     return 0
   }
 
