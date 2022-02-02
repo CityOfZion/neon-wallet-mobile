@@ -13,7 +13,9 @@ import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import {HeaderCustomProps} from '~src/components/layout/HeaderBar'
 import {Wallet} from '~src/models/redux/Wallet'
-import Step1BackupWalletPage from '~src/scenes/BackupWalletPage/Step1BackupWalletPage'
+import Step1BackupWalletPage, {
+  StepsBackupWalletPageParams,
+} from '~src/scenes/BackupWalletPage/Step1BackupWalletPage'
 import Step2BackupWalletPage from '~src/scenes/BackupWalletPage/Step2BackupWalletPage'
 import Step3BackupWalletPage from '~src/scenes/BackupWalletPage/Step3BackupWalletPage'
 import MyWalletOptionsPage from '~src/scenes/MyWalletOptionsPage'
@@ -27,12 +29,10 @@ export type SettingsStackParamList = {
   MyWallets: undefined
   MyWalletOptions: {wallet: Wallet} & HeaderCustomProps
   WalletDetails: WalletDetailsParamList
-  Step1BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
-  Step2BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
-  Step3BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
-  Modal: object
+  Step1BackupWallet: StepsBackupWalletPageParams & HeaderActionButtonProps
+  Step2BackupWallet: StepsBackupWalletPageParams & HeaderActionButtonProps
+  Step3BackupWallet: StepsBackupWalletPageParams & HeaderActionButtonProps
   PasscodeStack: PasscodeStackParams
-  Settings: object
 }
 
 const SettingsStack = createStackNavigator<SettingsStackParamList>()
