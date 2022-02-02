@@ -16,6 +16,7 @@ import {
 import * as data from '~src/Changelog.json'
 import {appBus} from '~src/app/AppBus'
 import {wrapper} from '~src/app/ApplicationWrapper'
+import {Storage} from '~src/app/Storage'
 import FooterBar from '~src/components/layout/FooterBar'
 import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
@@ -45,9 +46,7 @@ export type TabParams =
       | DefaultNavigationParam<WalletStackParams>
     ) &
       Partial<{
-        welcomeHidden?: boolean
-        changelogHidden?: boolean
-        numberOfVersions?: number
+        isFirstTime?: boolean
       }>)
   | undefined
 
@@ -59,48 +58,37 @@ interface Props {
 const Tab = createBottomTabNavigator()
 
 const TabNavigation = (props: Props) => {
-  const currentNumberOfVersions = Object.keys(data.changelog).length
-  const welcomeHiddenStorage = props.route.params?.welcomeHidden ?? false
-  const changelogHiddenStorage = props.route.params?.changelogHidden ?? false
-  const numberOfVersionsStorage = props.route.params?.numberOfVersions ?? 0
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const {requests, sessions} = useWalletConnect()
-  const [welcomeHidden, setWelcomeHidden] = useState(
-    props.route.params?.welcomeHidden ?? true
-  )
 
-  const [changelogHidden, setChangelogHidden] = useState(
-    props.route.params?.changelogHidden ?? true
-  )
+  useEffect(() => {
+    async function handleData() {
+      const currentNumberOfVersions = Object.keys(data.changelog).length
+      const storageNumberOfVersion = await Storage.numberOfVersions.load()
 
-  if (numberOfVersionsStorage !== currentNumberOfVersions) {
-    if (!changelogHidden && !changelogHiddenStorage) {
-      if (!welcomeHiddenStorage) {
+      if (props.route.params?.isFirstTime) {
+        Storage.changelogHidden.save(true)
+        Storage.welcomeHidden.save(true)
+        Storage.welcomeToNWSeen.save(true)
+      }
+
+      if (
+        storageNumberOfVersion !== currentNumberOfVersions ||
+        props.route.params?.isFirstTime
+      ) {
         props.navigation.navigate(wrapper.route.Modal.name, {
           screen: wrapper.route.WelcomeModal.name,
           params: {
             showChangelog: true,
           },
         })
-      } else {
-        props.navigation.navigate(wrapper.route.Modal.name, {
-          screen: wrapper.route.ChangelogModal.name,
-        })
       }
-      setChangelogHidden(true)
     }
-  } else {
-    useEffect(() => {
-      if (!welcomeHidden && welcomeHiddenStorage) {
-        props.navigation.navigate(wrapper.route.Modal.name, {
-          screen: wrapper.route.WelcomeModal.name,
-        })
-        setWelcomeHidden(true)
-      }
-    }, [welcomeHidden])
-  }
+
+    handleData()
+  }, [])
 
   useEffect(() => {
     appBus.on(

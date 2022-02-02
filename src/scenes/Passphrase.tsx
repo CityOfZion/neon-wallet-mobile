@@ -166,8 +166,6 @@ const Passphrase = (props: PassphraseProps) => {
         }
       }
       props.navigation.replace(wrapper.route.Tab.name, {
-        welcomeHidden: true,
-        changelogHidden: true,
         screen: wrapper.route.ListWallets.name,
       })
     } catch (error) {

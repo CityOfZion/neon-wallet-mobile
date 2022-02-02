@@ -60,14 +60,7 @@ const AppNavigation = (props: Props) => {
 
   const [onboardingSeen, setOnboardingSeen] = useState(true)
   const [welcomeToNWSeen, setWelcomeToNWSeen] = useState(true)
-  const [welcomeHidden, setWelcomeHidden] = useState(true)
   const [hasAuthentication, setHasAuthentication] = useState(false)
-  const [
-    hasAuthenticationForHardware,
-    setHasAuthenticationForHardware,
-  ] = useState(false)
-  const [changelogHidden, setChangelogHidden] = useState(true)
-  const [numberOfVersions, setNumberOfVersions] = useState(0)
 
   const walletConnectCtx = useWalletConnect()
 
@@ -79,19 +72,11 @@ const AppNavigation = (props: Props) => {
   const startApplication = async () => {
     const onboardingSeen = await Storage.onboardingSeen.load()
     const welcomeToNWSeen = await Storage.welcomeToNWSeen.load()
-    const welcomeHidden = await Storage.welcomeHidden.load()
     const hasAuthentication = await Storage.hasAuthentication.load()
-    const hasAuthenticationForHardware = await Storage.hasAuthenticationForHardware.load()
-    const changelogHidden = await Storage.changelogHidden.load()
-    const numberOfVersions = await Storage.numberOfVersions.load()
 
     setOnboardingSeen(onboardingSeen ?? false)
     setWelcomeToNWSeen(welcomeToNWSeen ?? false)
-    setWelcomeHidden(welcomeHidden ?? false)
     setHasAuthentication(hasAuthentication ?? false)
-    setHasAuthenticationForHardware(hasAuthenticationForHardware ?? false)
-    setChangelogHidden(changelogHidden ?? false)
-    setNumberOfVersions(numberOfVersions ?? 0)
 
     try {
       // Synchronize app reducer
@@ -186,15 +171,7 @@ const AppNavigation = (props: Props) => {
                 headerMode="none"
                 screenOptions={screenConfig}
               >
-                <RootStack.Screen
-                  name="Tab"
-                  component={TabNavigation}
-                  initialParams={{
-                    welcomeHidden,
-                    changelogHidden,
-                    numberOfVersions,
-                  }}
-                />
+                <RootStack.Screen name="Tab" component={TabNavigation} />
                 <RootStack.Screen
                   name={wrapper.route.Onboarding.name}
                   component={OnboardingPage}

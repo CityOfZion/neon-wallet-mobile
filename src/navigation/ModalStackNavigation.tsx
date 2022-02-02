@@ -58,7 +58,9 @@ import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
 import ListTokenModal, {ListTokenModalParams} from '~src/scenes/ListTokenModal'
 import {VerifyPasscodePageParams} from '~src/scenes/LoginPage/VerifyPasscodePage'
 import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
-import SecurityPickerModal from '~src/scenes/SecurityPickerModal'
+import SecurityPickerModal, {
+  SecurityPickerModalParams,
+} from '~src/scenes/SecurityPickerModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import TipConfirmationModal, {
   TipConfirmationModalParams,
@@ -112,7 +114,7 @@ export type ModalStackParamList = {
   SendModalStack: undefined
   EditWalletModal: EditWalletParams
   ReceiveModalStack: undefined
-  SecurityModal: {isFirstTime?: boolean} | undefined
+  SecurityModal: SecurityPickerModalParams
   Tab: TabParams
   PasscodeStack: PasscodeStackParams
   Modal: object

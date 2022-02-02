@@ -17,6 +17,10 @@ import {Security} from '~src/enums/Security'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 
+export interface SecurityPickerModalParams {
+  isFirstTime?: boolean
+}
+
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
   route: RouteProp<ModalStackParamList, 'SecurityModal'>
@@ -35,19 +39,25 @@ const SecurityPickerModal = (props: Props) => {
   const changeSecurity = (val: Security) => {
     checkSecurity(val)
   }
+
+  const handleOnClose = () => {
+    if (props.route.params.isFirstTime) {
+      props.navigation.replace(wrapper.route.Tab.name, {
+        screen: wrapper.route.ListWallets.name,
+        isFirstTime: true,
+      })
+
+      return
+    }
+
+    props.navigation.goBack()
+  }
+
   const saveSecurity = async () => {
     if (security !== controlSecurity) {
       dispatch(RootStore.settings.actions.setSecurity(controlSecurity)) //hardware is fixed
       dispatch(RootStore.settings.actions.save())
-      if (props.route.params?.isFirstTime) {
-        await Storage.welcomeToNWSeen.save(false)
-        props.navigation.replace(wrapper.route.Tab.name, {
-          screen: wrapper.route.ListWallets.name,
-          welcomeHidden: true,
-          changelogHidden: true,
-        })
-      }
-      await Storage.welcomeHidden.save(true)
+
       controller.close()
     }
   }
@@ -168,7 +178,7 @@ const SecurityPickerModal = (props: Props) => {
       fullSize={true}
       padding={16}
       paddingTop={24}
-      onClose={props.navigation.goBack}
+      onClose={handleOnClose}
       onLeftPress={controller.close}
       rightButton={<CloseButton mr={'20px'} />}
       disableDefaultScrollView={true}

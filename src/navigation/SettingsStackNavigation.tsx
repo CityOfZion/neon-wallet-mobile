@@ -22,8 +22,9 @@ import SettingsPage from '~src/scenes/SettingsPage'
 import WalletDetailsPage, {
   WalletDetailsParamList,
 } from '~src/scenes/WalletDetailsPage'
+
 export type SettingsStackParamList = {
-  SettingsPage: {initialRoute?: keyof ModalStackParamList} | undefined
+  SettingsPage: undefined
   MyWallets: undefined
   MyWalletOptions: {wallet: Wallet} & HeaderCustomProps
   WalletDetails: WalletDetailsParamList

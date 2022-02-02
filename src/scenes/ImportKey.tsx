@@ -347,8 +347,6 @@ const ImportKey = (props: ImportKeyProps) => {
       await dispatchAsync(RootStore.app.actions.syncAccounts())
 
       props.navigation.replace(wrapper.route.Tab.name, {
-        welcomeHidden: true,
-        changelogHidden: true,
         screen: wrapper.route.ListWallets.name,
       })
       props.navigation.navigate(wrapper.route.GetWallet.name, {})

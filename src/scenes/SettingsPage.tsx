@@ -27,25 +27,7 @@ const SettingsPage = (props: SettingsProps) => {
   const {language, currency, theme, security} = useSelector(
     (state: RootState) => state.settings
   )
-  const openModal = (
-    modal: keyof ModalStackParamList,
-    params?: ModalStackParamList['SecurityModal']
-  ) => {
-    props.navigation.navigate(wrapper.route.Modal.name, {
-      screen: modal,
-      params,
-    })
-  }
-  useEffect(() => {
-    if (props.route.params?.initialRoute) {
-      openModal(
-        props.route.params.initialRoute,
-        props.route.params?.initialRoute
-          ? {isFirstTime: true}
-          : {isFirstTime: false}
-      )
-    }
-  }, [])
+
   return (
     <ScreenLayout padding={20}>
       <MenuItem
@@ -64,7 +46,11 @@ const SettingsPage = (props: SettingsProps) => {
         iconMarginLeft={2}
         iconMarginRight={18}
         arrowDirection={RightIconType.ARROW_RIGHT}
-        onPress={() => openModal(wrapper.route.SecurityModal.name)}
+        onPress={() =>
+          props.navigation.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.SecurityModal.name,
+          })
+        }
       />
 
       <MenuItem
@@ -75,7 +61,11 @@ const SettingsPage = (props: SettingsProps) => {
         iconMarginRight={16}
         arrowDirection={RightIconType.ARROW_DOWN}
         subtitle={currency}
-        onPress={() => openModal(wrapper.route.CurrencyPickerModal.name)}
+        onPress={() =>
+          props.navigation.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.CurrencyPickerModal.name,
+          })
+        }
       />
 
       {showLanguage && (
@@ -87,7 +77,11 @@ const SettingsPage = (props: SettingsProps) => {
           iconMarginRight={22}
           arrowDirection={RightIconType.ARROW_DOWN}
           subtitle={i18n.t(`languages.${language}`)}
-          onPress={() => openModal(wrapper.route.LanguagePickerModal.name)}
+          onPress={() =>
+            props.navigation.navigate(wrapper.route.Modal.name, {
+              screen: wrapper.route.LanguagePickerModal.name,
+            })
+          }
         />
       )}
 
@@ -96,7 +90,11 @@ const SettingsPage = (props: SettingsProps) => {
           title={i18n.t('settings.theme')}
           arrowDirection={RightIconType.ARROW_DOWN}
           subtitle={i18n.t(`themes.${theme}`)}
-          onPress={() => openModal(wrapper.route.ThemePickerModal.name)}
+          onPress={() =>
+            props.navigation.navigate(wrapper.route.Modal.name, {
+              screen: wrapper.route.ThemePickerModal.name,
+            })
+          }
         />
       )}
     </ScreenLayout>

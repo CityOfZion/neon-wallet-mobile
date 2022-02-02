@@ -132,8 +132,6 @@ const CustomizeAccount = (props: Props) => {
 
     dispatch(RootStore.account.actions.selectAccount(importedAccount.address))
     props.navigation.replace(wrapper.route.Tab.name, {
-      welcomeHidden: true,
-      changelogHidden: true,
       screen: wrapper.route.ListWallets.name,
       params: {
         screen: wrapper.route.GetAccount.name,
