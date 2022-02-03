@@ -12,10 +12,13 @@ import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 import {TextView, LinearLayout, ImageView} from '~src/styles/styled-components'
 
 interface Props {
-  navigation: StackNavigationProp<SettingsStackParamList>
+  navigation: StackNavigationProp<ParamList>
+  route: RouteProp<SettingsStackParamList, 'Step3BackupWallet'>
 }
 
 const Step3BackupWalletPage: React.FC<Props> = (props) => {
+  const {accessByNotification} = props.route.params
+
   props.navigation.setOptions({
     headerRight: () =>
       HeaderActionButton({
@@ -24,10 +27,13 @@ const Step3BackupWalletPage: React.FC<Props> = (props) => {
         actionOnPress: () => {
           props.navigation.reset({
             index: 0,
-            routes: [{name: wrapper.route.SettingsPage.name}],
+            routes: accessByNotification
+              ? [{name: wrapper.route.Tab.name}]
+              : [{name: wrapper.route.More.name}],
           })
         },
       }),
+    headerLeft: () => null,
   })
 
   return (
@@ -56,6 +62,7 @@ const Step3BackupWalletPage: React.FC<Props> = (props) => {
 
 Step3BackupWalletPage.propTypes = {
   navigation: PropTypes.any,
+  route: PropTypes.any,
 }
 
 export default Step3BackupWalletPage

@@ -52,13 +52,6 @@ const Notification = (props: NotificationProps) => {
     <TouchableWithoutFeedback
       onPress={() => {
         if (props.wallet) {
-          navigation.reset({
-            index: 0,
-            routes: [
-              {name: wrapper.route.MorePage.name},
-              {name: wrapper.route.Settings.name},
-            ],
-          })
           navigation.navigate(wrapper.route.Tab.name, {
             screen: wrapper.route.More.name,
             params: {
@@ -68,6 +61,7 @@ const Notification = (props: NotificationProps) => {
                 screen: wrapper.route.Step1BackupWallet.name,
                 params: {
                   wallet: props.wallet,
+                  accessByNotification: true,
                 },
               },
             },

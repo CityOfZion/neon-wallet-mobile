@@ -24,7 +24,7 @@ interface Props {
 }
 
 const Step2BackupWalletPage: React.FC<Props> = (props) => {
-  const {wallet} = props.route.params
+  const {wallet, accessByNotification} = props.route.params
   const dispatch = useDispatch()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const [words, setWords] = useState<string[]>([])
@@ -53,11 +53,10 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
         actionButtonStyle: 'highlight',
         actionOnPress: () => {
           props.navigation.reset({
-            index: 2,
-            routes: [{name: wrapper.route.SettingsPage.name}],
-          })
-          props.navigation.navigate(wrapper.route.MyWalletOptions.name, {
-            wallet,
+            index: 0,
+            routes: accessByNotification
+              ? [{name: wrapper.route.Tab.name}]
+              : [{name: wrapper.route.More.name}],
           })
         },
       }),
@@ -70,11 +69,9 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
       dispatch(RootStore.app.actions.updateAndSaveWallet(wallet))
       await dispatchAsync(RootStore.app.actions.syncWallets())
 
-      props.navigation.reset({
-        index: 0,
-        routes: [
-          {name: wrapper.route.Step3BackupWallet.name, params: {wallet}},
-        ],
+      props.navigation.navigate(wrapper.route.Step3BackupWallet.name, {
+        wallet,
+        accessByNotification,
       })
     } else {
       Alert.alert(
