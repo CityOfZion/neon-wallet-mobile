@@ -3,6 +3,9 @@ import React from 'react'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
 
+import {ThemedButtonViewOnDora} from './ThemedButtonViewOnDora'
+import {ThemedButtonViewTransaction} from './ThemedButtonViewTransaction'
+
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Normalize} from '~src/app/Normalize'
 import {UtilsHelper} from '~src/helpers/UtilsHelper'
@@ -27,7 +30,7 @@ const TransactionSuccess = (props: Props) => {
       orientation={'verti'}
       alignItems={'center'}
       width={'100%'}
-      height={'80%'}
+      height={'100%'}
     >
       <ImageView
         alignSelf={'center'}
@@ -106,6 +109,8 @@ const TransactionSuccess = (props: Props) => {
           />
         </ButtonView>
       )}
+      <ThemedButtonViewTransaction />
+      <ThemedButtonViewOnDora txid={props.transactionHash} mt="10px" />
     </LinearLayout>
   )
 }

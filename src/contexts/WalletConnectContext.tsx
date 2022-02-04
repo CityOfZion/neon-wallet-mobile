@@ -76,7 +76,9 @@ interface IWalletConnectContext {
   disconnect: (topic: string) => Promise<void>
   removeFromPending: (requestEvent: SessionTypes.RequestEvent) => Promise<void>
   respondRequest: (topic: string, response: JsonRpcResponse) => Promise<void>
-  approveRequest: (requestEvent: SessionTypes.RequestEvent) => Promise<void>
+  approveRequest: (
+    requestEvent: SessionTypes.RequestEvent
+  ) => Promise<JsonRpcResponse<any> | null>
   rejectRequest: (requestEvent: SessionTypes.RequestEvent) => Promise<void>
   onRequestListener: (listener: OnRequestCallback) => void
   autoAcceptIntercept: (listener: AutoAcceptCallback) => void
@@ -519,8 +521,9 @@ export const WalletConnectContextProvider: React.FC<{
         topic: requestEvent.topic,
         response,
       })
+      await removeFromPending(requestEvent)
+      return response
     } catch (error) {
-      console.error(error)
       await wcClient.respond({
         topic: requestEvent.topic,
         response: formatJsonRpcError(
@@ -528,9 +531,8 @@ export const WalletConnectContextProvider: React.FC<{
           'Failed or Rejected Request'
         ),
       })
+      throw error
     }
-
-    await removeFromPending(requestEvent)
   }
 
   const rejectRequest = async (requestEvent: SessionTypes.RequestEvent) => {
