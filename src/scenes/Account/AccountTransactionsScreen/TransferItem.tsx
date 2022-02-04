@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react'
-import {View} from 'react-native'
+import React, {useState, useEffect, useCallback} from 'react'
+import {View, TouchableWithoutFeedback} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {TransfersDataScreen} from '.'
@@ -18,6 +18,7 @@ export const TransferItem = (props: TransfersDataScreen) => {
 
   const [fiatAmount, setFiatAmount] = useState<string>('')
   const [contactName, setContactname] = useState<string>('')
+  const [addressEllipsizeWidth, setAddressEllipsizeWidth] = useState('40%')
   useEffect(() => {
     const {symbol, amount} = props
     if (symbol) {
@@ -40,11 +41,24 @@ export const TransferItem = (props: TransfersDataScreen) => {
     }
   }, [contacts])
 
+  const handleChangeAddressSize = useCallback(() => {
+    setAddressEllipsizeWidth(addressEllipsizeWidth === '40%' ? '100%' : '40%')
+  }, [addressEllipsizeWidth])
+
   return (
     <View style={{marginVertical: 5, padding: 5}}>
-      <TextView color="primary" fontSize="18px" fontFamily="medium">
-        {contactName}
-      </TextView>
+      <TouchableWithoutFeedback onPress={handleChangeAddressSize}>
+        <TextView
+          ellipsizeMode={'middle'}
+          numberOfLines={1}
+          color="primary"
+          fontSize="17px"
+          fontFamily="medium"
+          width={addressEllipsizeWidth}
+        >
+          {contactName}
+        </TextView>
+      </TouchableWithoutFeedback>
       <View
         style={{
           flexDirection: 'row',

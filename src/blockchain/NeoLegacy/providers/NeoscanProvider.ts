@@ -17,10 +17,11 @@ export type NeoscanNetworkOptions = 'main_net' | 'test_net'
 
 export class NeoscanProvider implements NeoLegacyProvider {
   readonly baseUrl: string
-  private network: NeoscanNetworkOptions
+  //eslint-disable-next-line
+  private network: NeoscanNetworkOptions = __DEV__ ? `main_net` : `main_net`
+  readonly siteUrlQuery = `https://api.neoscan.io/api/${this.network}/v1/`
   constructor() {
     this.baseUrl = 'https://api.neoscan.io/api'
-    this.network = 'main_net' //by default is mainnet selected
   }
 
   async getAddressAbstracts(address: string, page: number = 1) {

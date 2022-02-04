@@ -50,6 +50,7 @@ export interface SenderTransactionInfo {
 }
 
 export interface BlockchainDataProvider {
+  readonly siteUrlQuery: string
   getTransaction: (txid: string) => Promise<Transaction>
   getAddressAbstracts: (
     address: string,
@@ -105,7 +106,6 @@ export interface IBlockchainService {
   readonly assets: AssetInfo[]
   readonly cozTip?: {address: string; token: string; hash: string} //config token with the symbol name
   readonly feeToken: {hash: string; token: string; img: ImageLoadEventData}
-  readonly siteUrlQuery: string
   readonly wcChains: string[]
   sendTransaction: (sendTx: SenderTransactionInfo) => Promise<string | null>
   generateMnemonic: () => string[] | null

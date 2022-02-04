@@ -20,10 +20,11 @@ import {ExchangeResponse} from '~/src/types/exchange'
 import {TokenResponse} from '~/src/types/token'
 import {IRPCContract} from '~src/blockchain'
 
-type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
+export type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
 export class DoraSDKProvider implements Neo3Provider {
   //eslint-disable-next-line
-  readonly network: DoraNetworkOptions = 'mainnet'
+  readonly network: DoraNetworkOptions = __DEV__ ? 'testnet_rc4' : 'mainnet'
+  readonly siteUrlQuery = `https://dora.coz.io/transaction/neo3/${this.network}/`
   readonly baseNumeric: number = 8
   constructor(network?: DoraNetworkOptions) {
     if (network) {
@@ -36,7 +37,11 @@ export class DoraSDKProvider implements Neo3Provider {
 
     let txFullResponse: AddressTransactionsResponse | any[] = []
 
-    txFullResponse = await api.NeoRest.addressTXFull(address)
+    txFullResponse = await api.NeoRest.addressTXFull(
+      address,
+      page,
+      this.network
+    )
 
     if (!Array.isArray(txFullResponse)) {
       const {totalCount, items} = txFullResponse

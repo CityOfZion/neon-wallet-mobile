@@ -14,12 +14,13 @@ import {TransactionAddressResponse} from '~/src/models/response/TransactionAddre
 import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
 import {Exchange, ExchangeResponse} from '~/src/types/exchange'
 import {TokenResponse} from '~/src/types/token'
-type DoraNetworkOptions = 'mainnet' | 'testnet'
+type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
 export class DoraSDKProvider implements NeoLegacyProvider {
-  readonly network: DoraNetworkOptions
+  //eslint-disable-next-line
+  readonly network: DoraNetworkOptions = __DEV__ ? 'testnet' : 'testnet_rc4'
+  readonly siteUrlQuery: string = `https://dora.coz.io/api/v1/neo2/${this.network}/`
   baseNumeric: number
   constructor() {
-    this.network = 'mainnet'
     this.baseNumeric = 8
   }
 

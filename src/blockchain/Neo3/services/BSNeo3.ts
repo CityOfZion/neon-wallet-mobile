@@ -36,7 +36,6 @@ export interface ContractParam {
   name: string
 }
 export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
-  readonly siteUrlQuery = `https://dora.coz.io/transaction/neo3/mainnet/`
   provider: Neo3Provider
   key: BlockchainServiceKey
   icon = icon

@@ -101,8 +101,8 @@ const WCTransactionSentModal = (props: Props) => {
           onPress={() => {
             if (senderAccount?.blockchain) {
               Linking.openURL(
-                blockchainServices[senderAccount.blockchain]?.siteUrlQuery +
-                  transaction?.transactionHash
+                blockchainServices[senderAccount.blockchain]?.provider
+                  .siteUrlQuery + transaction?.transactionHash
               )
             }
           }}
