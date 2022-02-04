@@ -20,7 +20,7 @@ export const ThemedButtonViewOnDora = (props: Props) => {
   const navigateToDora = useCallback(() => {
     const acc = dispatch(RootStore.account.actions.getFromSelection())
     Linking.openURL(
-      blockchainServices[acc.blockchain]?.siteUrlQuery + props.txid
+      blockchainServices[acc.blockchain]?.provider.siteUrlQuery + props.txid
     )
   }, [account])
   return (
