@@ -63,8 +63,6 @@ const ConfirmPasscodePage = (props: Props) => {
     await Storage.hasAuthenticationForHardware.save(false)
     props.navigation.replace(wrapper.route.Tab.name, {
       screen: wrapper.route.ListWallets.name,
-      welcomeHidden: true,
-      changelogHidden: true,
     })
   }
 

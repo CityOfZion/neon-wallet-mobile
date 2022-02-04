@@ -20,20 +20,9 @@ export default function LoginPage(props: Props) {
   const dispatch = useDispatch()
 
   const continueButton = async () => {
-    props.navigation.replace(wrapper.route.Tab.name, {
-      screen: wrapper.route.More.name,
-      welcomeHidden: true,
-      changelogHidden: true,
-      params: {
-        screen: wrapper.route.Settings.name,
-        initial: false,
-        params: {
-          screen: wrapper.route.SettingsPage.name,
-          params: {
-            initialRoute: wrapper.route.SecurityModal.name,
-          },
-        },
-      },
+    props.navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.SecurityModal.name,
+      params: {isFirstTime: true},
     })
   }
 
@@ -104,8 +93,10 @@ export default function LoginPage(props: Props) {
           onPress={() => {
             dispatch(RootStore.settings.actions.setSecurity(Security.disabled))
             dispatch(RootStore.settings.actions.save())
-            Storage.welcomeToNWSeen.save(true)
-            props.navigation.replace(wrapper.route.Tab.name, undefined)
+            props.navigation.replace(wrapper.route.Tab.name, {
+              screen: wrapper.route.ListWallets.name,
+              isFirstTime: true,
+            })
           }}
         >
           <TextView
