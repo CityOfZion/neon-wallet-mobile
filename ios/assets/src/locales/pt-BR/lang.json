@@ -8,6 +8,12 @@
     "DARK": "Escuro",
     "LIGHT": "Claro"
   },
+  "contexts": {
+    "walletConnect": {
+      "timeoutError": "URL de conexão expirada",
+      "clientPairError": "Problemas com o par de cliente"
+    }
+  },
   "app": {
     "neoBlockHeight": "NEO BLOCK HEIGHT",
     "back": "Voltar",
@@ -212,9 +218,20 @@
         "cancel": "#translateme",
         "save": "#translateme"
       }
+    },
+    "screenLayout": {
+      "assets": "Assets",
+      "transactions": "Transactions",
+      "connections": "Connections"
     }
   },
   "modals": {
+    "invocationDetails": {
+      "title": "Detalhes da Invocação",
+      "detailsTitle": "Detalhes",
+      "parametersTitle": "Parâmetros da solicitação",
+      "noParameters": "Sem parâmetros"
+    },
     "send": {
       "title": "Send",
       "walletSelection": {
@@ -294,11 +311,16 @@
     }
   },
   "components": {
+    "contractDetailsBox": {
+      "hash": "Hash",
+      "method": "Método"
+    },
     "notification": {
       "title": "#translateme"
     },
     "balanceList": {
       "title": "#translateme",
+      "titleAssets": "#translateme",
       "holdings": "#translateme",
       "value": "#translateme",
       "empty": "#translateme"

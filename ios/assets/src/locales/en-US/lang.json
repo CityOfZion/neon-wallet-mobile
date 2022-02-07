@@ -27,12 +27,19 @@
     "add": "Add",
     "createNow": "Create Now"
   },
+  "contexts": {
+    "walletConnect": {
+      "timeoutError": "Connection URL Expired",
+      "clientPairError": "Problem with client pair"
+    }
+  },
   "routes": {
     "GetWallet": "Wallet",
     "Contacts": "Contacts",
     "More": "More",
     "Account": "Account",
     "Settings": "Settings",
+    "WalletConnectPage": "Connection",
     "ReceiveQrCode": "Receive QR Code",
     "CustomColor": "Custom Colour",
     "CreateWallet": "Create Wallet",
@@ -95,18 +102,22 @@
   },
   "onboarding": {
     "feature1": {
+      "header": "Feature 1",
       "title": "The original wallet on the move",
       "subtitle": "All the best features of our desktop wallet plus more in the palm of your hand"
     },
     "feature2": {
+      "header": "Feature 2",
       "title": "First class user experience",
       "subtitle": "Neon Wallet has been designed to make managing your crypto assets as intuitive as possible"
     },
     "feature3": {
+      "header": "Feature 3",
       "title": "BIP39 wallet",
       "subtitle": "BIP39 wallet standard, create infinite child accounts using a single mnemonic"
     },
     "feature4": {
+      "header": "Time to get started!",
       "title": "Packed pipeline of updates",
       "subtitle": "The team is working around the clock to bring you the latest new features"
     },
@@ -169,7 +180,7 @@
     "body_1": "Give your wallet a memorable name, maybe it could be related to what you want to use the wallet for like “trading” or “investments”.",
     "label_walletName": "Wallet Name",
     "placeholder_walletName": "Please enter a name",
-    "setName":"Wallet Name cannot be empty."
+    "setName": "Wallet Name cannot be empty."
   },
   "step5CreateWallet": {
     "label_1": "Congratulations, You’re the proud owner of a shiny new wallet!",
@@ -201,6 +212,7 @@
     "createWallet": "Create wallet",
     "createWatchAccount": "Create watch account",
     "import": "Import",
+    "settings": "Settings",
     "help": "Help"
   },
   "importKey": {
@@ -214,11 +226,13 @@
     "mnemonicIncorrect": "Mnemonic incorrect",
     "areImportingMnemonic": "Looks like you are importing a mnemonic",
     "areWatchAccount": "Looks like you are importing a watch account",
-    "mnemonicAlreadyExists": "The mnemonic: %{mnemonic} already exists"
+    "mnemonicAlreadyExists": "The mnemonic: %{mnemonic} already exists",
+    "offline": "You need to be online to import informations"
   },
   "passphrase": {
     "enterPassphrase": "Enter a Passphrase for your encrypted key",
     "inputPlaceholder": "Please enter Passphrase",
+    "selectAccount": "Please select the correct account from you Encrypted Key",
     "next": "Next"
   },
   "importReadAccount": {
@@ -276,7 +290,7 @@
     "account": "Account",
     "address": "Address",
     "reference": "Reference",
-    "shareOrCopy":"Share or Copy to clipboard"
+    "shareOrCopy": "Share or Copy to clipboard"
   },
   "screens": {
     "contactDetails": {
@@ -305,7 +319,12 @@
       "completedTransactions": "COMPLETED TRANSACTIONS",
       "claimAsset": "Claim %{amount} GAS",
       "claimInProgress": "Claim in progress",
-      "gasUnavailable": "GAS unavailable"
+      "gasUnavailable": "GAS unavailable",
+      "txidLabel": "TX ID:",
+      "sentToLabel": "Sent to",
+      "invocationsLabel": "Invocations",
+      "notificationsLabel": "Notifications",
+      "receivedFromLabel": "Received from"
     },
     "customizeAccount": {
       "title": "Create account",
@@ -322,7 +341,8 @@
         "cancel": "Cancel",
         "save": "Save"
       },
-      "preview": "Preview"
+      "preview": "Preview",
+      "problemToGetBalance": "Problem to get balance"
     },
     "scanQrCode": {
       "success": "Success!",
@@ -330,11 +350,41 @@
       "noAccess": "No access to camera",
       "cancel": "Cancel",
       "tryAgain": "Try again"
+    },
+    "screenLayout": {
+      "assets": "Assets",
+      "transactions": "Transactions",
+      "connections": "Connections"
+    },
+    "WCAccountConnectionsScreen": {
+      "noDAppsConnected": "No dApps connected",
+      "title": "Connections"
     }
   },
   "modals": {
+    "invocationDetails": {
+      "title": "Invocation Details",
+      "detailsTitle": "Details",
+      "parametersTitle": "Request Parameters",
+      "noParameters": "No Parameters",
+      "methodDoesNotExist": "Method does not exist on contract"
+    },
     "accountQRCode": {
       "address": "Address"
+    },
+    "transactionRequest": {
+      "title": "WalletConnect",
+      "xWantsToCall": "%{dappName} wants to call",
+
+      "signatureScope": "Signature Scope",
+      "transactionFee": "Transaction Fee",
+      "xGas": "%{amount} GAS",
+      "json": "JSON",
+      "confirmToProceed": "Please confirm if you would like to proceed with this transaction.",
+      "buttom": {
+        "accept": "Accept",
+        "decline": "Decline"
+      }
     },
     "createAccount": {
       "title": "Create account",
@@ -435,7 +485,7 @@
         "priority": "Priority",
         "sender": "Sent from",
         "recipient": "Recipient",
-        "priorityFee":"%{tokenSymbol} Fee",
+        "priorityFee": "%{tokenSymbol} Fee",
         "feeAmount": "(Fee %{amount})",
         "pleaseReview": "Please review transaction",
         "dialog": {
@@ -522,7 +572,7 @@
       "cozTeam": "- COZ team",
       "goBack": "Go Back"
     },
-    "tipping":  {
+    "tipping": {
       "title": "Tipping",
       "subtitle": "Benefits of tipping",
       "description": "COZ loves building products for our community of users. Tips are a great way to show the team that you appreciate their work and allow us to keep the wallet free of external influences. Why not toss a coin to your devs?",
@@ -530,7 +580,7 @@
       "recommended": "(Recommended)",
       "removeTip": "Remove Tip"
     },
-    "blockchainList":{
+    "blockchainList": {
       "accountPage": {
         "title": "Add new account",
         "subtitle": "Select the desired blockchain for your new account"
@@ -555,14 +605,98 @@
       "transactionError": "Error message",
       "viewOnDora": "View on dora",
       "viewTransaction": "View transaction"
+    },
+    "connectDApp": {
+      "title": "Connect a dApp",
+      "subtitle": "All transactions requested by a connected Dapp will be presented for signing before being broadcast to the blockchain. No action from the Dapp will happen without your direct approval.",
+      "url": "dApp URL",
+      "placeholder": "Please enter dApp URL or scan QR code",
+      "connectLabel": "Connect"
+    },
+    "WCAccountSelection": {
+      "title": "Account Selection",
+      "subtitle": "Please select the account you wish to connect to"
+    },
+    "WCConnectionRequest": {
+      "chain": "Chain",
+      "features": "Features",
+      "subtitle": "If you would like to connect please accept and continue by selecting an account to connect with.",
+      "subtitle_1": "%{dAppName} wants to connect to your wallet",
+      "acceptLabel": "Accept",
+      "declineLabel": "Decline"
+    },
+    "WCWalletSelection": {
+      "title": "Please select the wallet where your account resides"
+    },
+    "rawJson": {
+      "title": "JSON",
+      "data": "Data"
+    },
+    "WCConnectionDetails": {
+      "chain": "Chain",
+      "features": "Features",
+      "title": "Connection details",
+      "disconnect": "Disconnect"
+    },
+    "signatureScope": {
+      "title": "Signature Scope",
+      "scopeTitle": "Scope",
+      "explanationTitle": "Explanation",
+      "0": {
+        "scope": "None",
+        "explanation": "Your signature is only valid for fee payments."
+      },
+      "1": {
+        "scope": "Call by Entry",
+        "explanation": "Your signature can only be used by the calling contract and just for this transaction."
+      },
+      "128": {
+        "warning": "Dapp requesting a very broad permission. Proceed with care.",
+        "scope": "Global",
+        "explanation": "Your signature can be used without restriction with any contract."
+      },
+      "16": {
+        "warning": "Dapp requesting a very broad permission. Proceed with care.",
+        "scope": "Custom Contracts",
+        "allowedList": "Allowed Contracts",
+        "explanation": "Your signature can be used by the set of contracts listed above."
+      },
+      "32": {
+        "warning": "Dapp requesting a very broad permission. Proceed with care.",
+        "scope": "Custom Groups",
+        "allowedList": "Allowed Groups",
+        "explanation": "Your signature can be used by the set of groups listed above."
+      }
+    },
+    "warningFee": {
+      "highClaimFee": {
+        "title": "High Claim Fee",
+        "subtitle": "This will be deducted from your balance.",
+        "question": "Do you wish to proceed?"
+      },
+      "insufficientFunds": {
+        "title": "Insufficient GAS funds",
+        "subtitle": "You have insufficient GAS to claim."
+      },
+      "claimAmount": "Claim amount",
+      "claimFee": "Claim Fee",
+      "buttons": {
+        "yes": "Yes",
+        "no": "No",
+        "ok": "OK, I understand"
+      }
     }
   },
   "components": {
+    "contractDetailsBox": {
+      "hash": "Hash",
+      "method": "Method"
+    },
     "notification": {
       "title": "NOTIFICATION"
     },
     "balanceList": {
-      "title": "TOKEN VALUE",
+      "title": "TOKEN BALANCES",
       "holdings": "Holdings",
       "value": "Value",
       "empty": "Your wallet is currently empty, why not add some funds today?"
@@ -647,6 +781,12 @@
     "contacts": "Contacts",
     "myAccounts": "My Accounts"
   },
+  "walletDetailsPage": {
+    "inputWalletName": "Wallet Name"
+  },
+  "mnemonicSelectionList": {
+    "qtySelectedOfTotal": "%{qtySelected} selected of %{total} addresses"
+  },
   "toast": {
     "transaction": "Transaction",
     "gasClaimSuccess": "GAS claim successful!",
@@ -670,7 +810,8 @@
     "confirmed": "Confirmed",
     "pending": "Pending",
     "price": "Price",
-    "amount": "Amount"
+    "amount": "Amount",
+    "amountTokenNameInWallet": "%{amount} %{tokenName} in Wallet"
   },
   "priorityFee": {
     "none": "None",
@@ -678,19 +819,41 @@
     "priorityFaster": "Faster",
     "priorityFastest": "Fastest"
   },
-  "blockchainServices":{
-    "neo3":{
+  "messages": {
+    "encryptedKeyNotValid": "Encrypted key is not valid",
+    "problemToGenerateWallet": "Problem to generate Wallet",
+    "transactionFailed": "Transaction has failed"
+  },
+  "defaultNameWallet": {
+    "importedWallet": "Imported Wallet",
+    "watchAccount": "Watch Account",
+    "mnemonicWallet": "Mnemonic Wallet"
+  },
+  "blockchainServices": {
+    "neo3": {
       "label": "NEO",
-      "id": "Neo N3"
+      "id": "Neo N3",
+      "accountName": "NEO Account"
     },
     "neoLegacy": {
       "label": "Neo Legacy",
-      "id":"Neo Legacy"
+      "id": "Neo Legacy",
+      "accountName": "Neo Legacy Account"
     },
     "errorMessages": {
       "keyWrongOrAddressesImported": "Encrypted key is not valid or all address has been imported",
       "blockchainNotFound": "Blockchain not found",
       "invalidInformation": "Invalid information"
     }
+  },
+  "walletconnect": {
+    "alert": {
+      "text": "%{text} Connected"
+    },
+    "noDAppsConnected": "No dApps connected",
+    "waitingDAppConnect": "Please be a patient, we are now connecting with %{dAppName}",
+    "connectDAppLabel": "Connect a dApp",
+    "connectNewDAppLabel": "Connect a new dApp",
+    "connectedDApps": "Connected dApps"
   }
 }

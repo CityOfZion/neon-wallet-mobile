@@ -8,6 +8,12 @@
     "DARK": "#translateme",
     "LIGHT": "#translateme"
   },
+  "contexts": {
+    "walletConnect": {
+      "timeoutError": "Connection URL Expired",
+      "clientPairError": "Problem with client pair"
+    }
+  },
   "app": {
     "neoBlockHeight": "NEO BLOCK HEIGHT",
     "back": "#translateme",
@@ -202,6 +208,12 @@
     }
   },
   "modals": {
+    "invocationDetails": {
+      "title": "Invocation Details",
+      "detailsTitle": "Details",
+      "parametersTitle": "Request Parameters",
+      "noParameters": "No Parameters"
+    },
     "send": {
       "title": "Send",
       "walletSelection": {
@@ -276,6 +288,10 @@
     }
   },
   "components": {
+    "contractDetailsBox": {
+      "hash": "Hash",
+      "method": "Method"
+    },
     "notification": {
       "title": "#translateme"
     },
