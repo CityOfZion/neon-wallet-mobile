@@ -1,21 +1,22 @@
 import {WitnessScope} from '@cityofzion/neon-core-next/lib/tx/components/WitnessScope'
-import {isJsonRpcRequest, JsonRpcRequest} from '@json-rpc-tools/utils'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {SessionTypes, AppMetadata} from '@walletconnect/types'
 import i18n from 'i18n-js'
 import React, {useCallback, useEffect, useState} from 'react'
 import {TouchableWithoutFeedback, Linking} from 'react-native'
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 
 import ConnectionHeader from '../components/ConnectionHeader'
 import ContractDetailsBox from '../components/ContractDetailsBox'
+import TransactionFailed from './fragment/TransactionFailed'
+import TransactionSuccess from './fragment/TransactionSuccess'
 
 import {blockchainServices, hasWCIntegration} from '~/src/blockchain'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
 import {Account} from '~/src/models/redux/Account'
-import {ContractResponse} from '~/src/models/response/ContractResponse'
+import {RootStore} from '~/src/store/RootStore'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import SwiperPanel, {
   CloseButton,
@@ -30,6 +31,7 @@ import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+
 type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
 export interface TransactionRequestModalParams {
@@ -47,9 +49,16 @@ interface SessionItemProps {
 }
 
 const TransactionRequestModal = (props: Props) => {
+  const dispatch = useDispatch()
   const {request, session} = props.route.params
   const controller = useSwiperController(true)
-  const {sessions, requests, approveRequest, rejectRequest} = useWalletConnect()
+  const {
+    sessions,
+    requests,
+    approveRequest,
+    rejectRequest,
+    onRequestListener,
+  } = useWalletConnect()
 
   if (!['invokeFunction', 'testInvoke'].includes(request.request.method)) {
     return <></>
@@ -61,6 +70,9 @@ const TransactionRequestModal = (props: Props) => {
 
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const [feeRequest, setFeeRequest] = useState<number>()
+  const [showModalSuccess, setshowModalSuccess] = useState<boolean>(false)
+  const [showModalFailed, setShowModalFailed] = useState<boolean>(false)
+  const [messageAfterAccept, setMessageAfterAccept] = useState<string>()
   useEffect(() => {
     requestParams.invocations.forEach((invocation) => {
       const args = invocation.args as ArgsRequest[]
@@ -98,6 +110,7 @@ const TransactionRequestModal = (props: Props) => {
   useEffect(() => {
     if (accountRequest) {
       handleCalculateFee()
+      dispatch(RootStore.account.actions.selectAccount(accountRequest.address))
     }
   }, [accountRequest])
 
@@ -115,8 +128,18 @@ const TransactionRequestModal = (props: Props) => {
   )
 
   const handleAcceptRequest = useCallback(async () => {
-    await approveRequest(request)
-    controller.close()
+    try {
+      const response = await approveRequest(request)
+      if (response && 'result' in response) {
+        const {result} = response
+        setMessageAfterAccept(result as string)
+        setshowModalSuccess(true)
+      }
+    } catch (error) {
+      setShowModalFailed(true)
+      setMessageAfterAccept(error.message as string)
+      console.log('debug error handle accept ', error)
+    }
   }, [requests, controller])
 
   const handleDeclineRequest = useCallback(async () => {
@@ -148,49 +171,109 @@ const TransactionRequestModal = (props: Props) => {
       solidColorBG
     >
       <LinearLayout orientation="verti" mr={2} ml={2} mt={5} mb={5}>
-        <ConnectionHeader title={session.peer.metadata.name} imageUri={''} />
-        {requestParams.invocations.map((contract, index) => (
-          <ContractDetailsBox
-            key={`${contract.operation}-${index}`}
-            session={session}
-            contract={contract}
-            rightButton={
+        {showModalSuccess && messageAfterAccept ? (
+          <TransactionSuccess transactionHash={messageAfterAccept} />
+        ) : showModalFailed && messageAfterAccept ? (
+          <TransactionFailed errorMessage={messageAfterAccept} />
+        ) : (
+          <>
+            <ConnectionHeader
+              title={session.peer.metadata.name}
+              imageUri={''}
+            />
+            {requestParams.invocations.map((contract, index) => (
+              <ContractDetailsBox
+                key={`${contract.operation}-${index}`}
+                session={session}
+                contract={contract}
+                rightButton={
+                  <TouchableWithoutFeedback
+                    onPress={() =>
+                      props.navigation.navigate(wrapper.route.Modal.name, {
+                        screen: wrapper.route.WCInvocationDetailsModal.name,
+                        params: {
+                          session,
+                          contract,
+                        },
+                      })
+                    }
+                  >
+                    <ImageView
+                      alignSelf={'center'}
+                      resizeMode={'contain'}
+                      width={7}
+                      height={12}
+                      pr={'40px'}
+                      source={require('~src/assets/images/icon-arrow-right-green.png')}
+                    />
+                  </TouchableWithoutFeedback>
+                }
+              />
+            ))}
+            {requestParams.signers.map((signer, index) => (
               <TouchableWithoutFeedback
-                onPress={() =>
-                  props.navigation.navigate(wrapper.route.Modal.name, {
-                    screen: wrapper.route.WCInvocationDetailsModal.name,
-                    params: {
+                key={`${signer.scopes}-${index}`}
+                onPress={() => {
+                  props.navigation.navigate(
+                    wrapper.route.SignatureScopeModal.name,
+                    {
+                      data: signer,
                       session,
-                      contract,
-                    },
-                  })
-                }
+                    }
+                  )
+                }}
               >
-                <ImageView
-                  alignSelf={'center'}
-                  resizeMode={'contain'}
-                  width={7}
-                  height={12}
-                  pr={'40px'}
-                  source={require('~src/assets/images/icon-arrow-right-green.png')}
-                />
+                <LinearLayout
+                  bg={theme.colors.background[1]}
+                  orientation={'horiz'}
+                  borderRadius={6}
+                  mb={'13px'}
+                  pt={'13px'}
+                  pb={'13px'}
+                  justifyContent={'space-between'}
+                >
+                  <TextView
+                    color={theme.colors.text[10]}
+                    weight={2}
+                    fontFamily={'bold'}
+                    fontSize={14}
+                    pl={'18px'}
+                  >
+                    {i18n.t('modals.transactionRequest.signatureScope')}
+                  </TextView>
+                  <LinearLayout orientation={'horiz'}>
+                    {showWarning && (
+                      <ImageView
+                        alignSelf={'center'}
+                        resizeMode={'contain'}
+                        width={7}
+                        height={12}
+                        pr={'20px'}
+                        source={require('~src/assets/images/red-alert.png')}
+                      />
+                    )}
+                    <TextView
+                      color={showWarning ? '#ea5d8e' : 'white'}
+                      alignSelf={'flex-end'}
+                      pb={'3px'}
+                      fontSize={12}
+                      fontFamily={'bold'}
+                    >
+                      {i18n.t(`modals.signatureScope.${signer.scopes}.scope`)}
+                    </TextView>
+                    <ImageView
+                      alignSelf={'center'}
+                      resizeMode={'contain'}
+                      width={7}
+                      height={12}
+                      pr={'35px'}
+                      source={require('~src/assets/images/icon-arrow-right-green.png')}
+                    />
+                  </LinearLayout>
+                </LinearLayout>
               </TouchableWithoutFeedback>
-            }
-          />
-        ))}
-        {requestParams.signers.map((signer, index) => (
-          <TouchableWithoutFeedback
-            key={`${signer.scopes}-${index}`}
-            onPress={() => {
-              props.navigation.navigate(
-                wrapper.route.SignatureScopeModal.name,
-                {
-                  data: signer,
-                  session,
-                }
-              )
-            }}
-          >
+            ))}
+
             <LinearLayout
               bg={theme.colors.background[1]}
               orientation={'horiz'}
@@ -207,151 +290,102 @@ const TransactionRequestModal = (props: Props) => {
                 fontSize={14}
                 pl={'18px'}
               >
-                {i18n.t('modals.transactionRequest.signatureScope')}
+                {i18n.t('modals.transactionRequest.transactionFee')}
               </TextView>
               <LinearLayout orientation={'horiz'}>
-                {showWarning && (
+                <TextView
+                  color={'primary'}
+                  alignSelf={'flex-end'}
+                  pb={'3px'}
+                  fontSize={'16px'}
+                  fontFamily={'bold'}
+                  pr={'20px'}
+                >
+                  {i18n.t('modals.transactionRequest.xGas', {
+                    amount: feeRequest ? (feeRequest / 8).toFixed(8) : '',
+                  })}
+                </TextView>
+              </LinearLayout>
+            </LinearLayout>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                props.navigation.navigate(wrapper.route.RawJsonModal.name, {
+                  dataJson: JSON.stringify(requests[0], null, 2),
+                  metadata: session.peer.metadata,
+                })
+              }}
+            >
+              <LinearLayout
+                bg={theme.colors.background[1]}
+                orientation={'horiz'}
+                borderRadius={6}
+                mb={'13px'}
+                pt={'13px'}
+                pb={'13px'}
+                justifyContent={'space-between'}
+              >
+                <TextView
+                  color={theme.colors.text[10]}
+                  weight={2}
+                  fontFamily={'bold'}
+                  fontSize={14}
+                  pl={'18px'}
+                >
+                  {i18n.t('modals.transactionRequest.json')}
+                </TextView>
+                <LinearLayout orientation={'horiz'}>
                   <ImageView
                     alignSelf={'center'}
                     resizeMode={'contain'}
                     width={7}
                     height={12}
-                    pr={'20px'}
-                    source={require('~src/assets/images/red-alert.png')}
+                    pr={'35px'}
+                    source={require('~src/assets/images/icon-arrow-right-green.png')}
                   />
-                )}
-                <TextView
-                  color={showWarning ? '#ea5d8e' : 'white'}
-                  alignSelf={'flex-end'}
-                  pb={'3px'}
-                  fontSize={12}
-                  fontFamily={'bold'}
-                >
-                  {i18n.t(`modals.signatureScope.${signer.scopes}.scope`)}
-                </TextView>
-                <ImageView
-                  alignSelf={'center'}
-                  resizeMode={'contain'}
-                  width={7}
-                  height={12}
-                  pr={'35px'}
-                  source={require('~src/assets/images/icon-arrow-right-green.png')}
-                />
+                </LinearLayout>
               </LinearLayout>
-            </LinearLayout>
-          </TouchableWithoutFeedback>
-        ))}
-
-        <LinearLayout
-          bg={theme.colors.background[1]}
-          orientation={'horiz'}
-          borderRadius={6}
-          mb={'13px'}
-          pt={'13px'}
-          pb={'13px'}
-          justifyContent={'space-between'}
-        >
-          <TextView
-            color={theme.colors.text[10]}
-            weight={2}
-            fontFamily={'bold'}
-            fontSize={14}
-            pl={'18px'}
-          >
-            {i18n.t('modals.transactionRequest.transactionFee')}
-          </TextView>
-          <LinearLayout orientation={'horiz'}>
+            </TouchableWithoutFeedback>
             <TextView
-              color={'primary'}
-              alignSelf={'flex-end'}
-              pb={'3px'}
-              fontSize={'16px'}
-              fontFamily={'bold'}
-              pr={'20px'}
+              mt={'31px'}
+              mr={'20px'}
+              ml={'20px'}
+              mb={'31px'}
+              color={'white'}
+              fontSize={'18px'}
+              alignself={'center'}
+              textAlign={'center'}
             >
-              {i18n.t('modals.transactionRequest.xGas', {
-                amount: feeRequest ? (feeRequest / 8).toFixed(8) : '',
-              })}
+              {i18n.t('modals.transactionRequest.confirmToProceed')}
             </TextView>
-          </LinearLayout>
-        </LinearLayout>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            props.navigation.navigate(wrapper.route.RawJsonModal.name, {
-              dataJson: JSON.stringify(requests[0], null, 2),
-              metadata: session.peer.metadata,
-            })
-          }}
-        >
-          <LinearLayout
-            bg={theme.colors.background[1]}
-            orientation={'horiz'}
-            borderRadius={6}
-            mb={'13px'}
-            pt={'13px'}
-            pb={'13px'}
-            justifyContent={'space-between'}
-          >
-            <TextView
-              color={theme.colors.text[10]}
-              weight={2}
-              fontFamily={'bold'}
-              fontSize={14}
-              pl={'18px'}
-            >
-              {i18n.t('modals.transactionRequest.json')}
-            </TextView>
-            <LinearLayout orientation={'horiz'}>
-              <ImageView
-                alignSelf={'center'}
-                resizeMode={'contain'}
-                width={7}
-                height={12}
-                pr={'35px'}
-                source={require('~src/assets/images/icon-arrow-right-green.png')}
-              />
+            <ThemedButton
+              label={i18n.t('modals.transactionRequest.buttom.accept')}
+              onPress={handleAcceptRequest}
+            />
+            <LinearLayout mt={'24px'}>
+              <TouchableWithoutFeedback onPress={handleDeclineRequest}>
+                <LinearLayout
+                  width="100%"
+                  borderRadius="4px"
+                  borderWidth="1px"
+                  borderColor="primary"
+                  justifyContent="center"
+                  alignItems="center"
+                  orientation="horiz"
+                  p="10px"
+                >
+                  <TextView
+                    style={{includeFontPadding: false}}
+                    ml={3}
+                    color={'primary'}
+                    fontSize={20}
+                  >
+                    {i18n.t('modals.transactionRequest.buttom.decline')}
+                  </TextView>
+                </LinearLayout>
+              </TouchableWithoutFeedback>
             </LinearLayout>
-          </LinearLayout>
-        </TouchableWithoutFeedback>
-        <TextView
-          mt={'31px'}
-          mr={'20px'}
-          ml={'20px'}
-          mb={'31px'}
-          color={'white'}
-          fontSize={'18px'}
-          alignself={'center'}
-          textAlign={'center'}
-        >
-          {i18n.t('modals.transactionRequest.confirmToProceed')}
-        </TextView>
-        <ThemedButton
-          label={i18n.t('modals.transactionRequest.buttom.accept')}
-          onPress={handleAcceptRequest}
-        />
-        <LinearLayout mt={'24px'}>
-          <TouchableWithoutFeedback onPress={handleDeclineRequest}>
-            <LinearLayout
-              width="100%"
-              borderRadius="4px"
-              borderWidth="1px"
-              borderColor="primary"
-              justifyContent="center"
-              alignItems="center"
-              orientation="horiz"
-              p="10px"
-            >
-              <TextView
-                style={{includeFontPadding: false}}
-                ml={3}
-                color={'primary'}
-                fontSize={20}
-              >
-                {i18n.t('modals.transactionRequest.buttom.decline')}
-              </TextView>
-            </LinearLayout>
-          </TouchableWithoutFeedback>
-        </LinearLayout>
+          </>
+        )}
       </LinearLayout>
     </SwiperPanel>
   )

@@ -2,6 +2,9 @@ import i18n from 'i18n-js'
 import React from 'react'
 import {useSelector} from 'react-redux'
 
+import {ThemedButtonViewOnDora} from './ThemedButtonViewOnDora'
+import {ThemedButtonViewTransaction} from './ThemedButtonViewTransaction'
+
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Normalize} from '~src/app/Normalize'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
@@ -21,6 +24,7 @@ const TransactionFailed = (props: Props) => {
       alignItems={'center'}
       width={'100%'}
       paddingBottom={50}
+      height="100%"
     >
       <ImageView
         alignSelf={'center'}
@@ -74,7 +78,7 @@ const TransactionFailed = (props: Props) => {
         fontWeight={300}
         lineHeight="20px"
         fontFamily="light"
-        maxWidth={'90%'}
+        width={'90%'}
         minHeight={'73px'}
         bg={theme.colors.background[7]}
         px={5}
@@ -83,6 +87,8 @@ const TransactionFailed = (props: Props) => {
       >
         {props.errorMessage}
       </TextView>
+      <ThemedButtonViewTransaction disable />
+      <ThemedButtonViewOnDora txid={props.errorMessage} disable mt="10px" />
     </LinearLayout>
   )
 }
