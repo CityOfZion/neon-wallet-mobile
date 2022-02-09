@@ -43,7 +43,7 @@ import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
-import {RootStore} from '~src/store/RootStore'
+import { RootState, RootStore } from '~src/store/RootStore';
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface GetAccountParams {
@@ -74,6 +74,7 @@ const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
 }
 
 const GetAccountView = (props: GetAccountViewProps) => {
+  const {sessions} = useWalletConnect()
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const {language} = useSelector((state: RootState) => state.settings)
   const {address} = useSelector((state: RootState) => state.account)
@@ -81,9 +82,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const posYFactor = useRef(new Animated.Value(0))
   const {isConnected} = useSelector((state: RootState) => state.network)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const walletConnectCtx = useWalletConnect()
 
   const [currentPage, setCurrentPage] = useState(1)
+  const [hasSession, setHasSession] = useState(false)
   const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>(0)
   const [isClaimAvailable, setIsClaimAvaliable] = useState<boolean>(false)
 
@@ -301,6 +302,21 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }
   }, [props.route.params.navigateToTransactions])
 
+  useEffect(() => {
+    if (sessions.length > 0) {
+      setHasSession(false);
+
+      sessions.forEach(it => {
+        const found = it.state.accounts.some(([, , address]) => account.address === address);
+
+        if (found) {
+          setHasSession(found);
+          return
+        }
+      })
+    }
+  }, [sessions])
+
   return (
     <ScreenLayout
       darkerSolidColorBG={true}
@@ -436,7 +452,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         />
         <ThemedButton
           px={30}
-          disabled={!hasWalletconnect() || !walletConnectCtx.sessions.length}
+          disabled={!hasWalletconnect() || !hasSession}
           textAlignX={'center'}
           textColor={'text.0'}
           label={i18n.t('screens.screenLayout.connections')}
