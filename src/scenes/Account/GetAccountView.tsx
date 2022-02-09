@@ -43,7 +43,7 @@ import {Account} from '~src/models/redux/Account'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
-import { RootState, RootStore } from '~src/store/RootStore';
+import {RootState, RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface GetAccountParams {
@@ -304,14 +304,15 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   useEffect(() => {
     if (sessions.length > 0) {
-      setHasSession(false);
+      setHasSession(false)
 
-      sessions.forEach(it => {
-        const found = it.state.accounts.some(([, , address]) => account.address === address);
+      sessions.forEach((it) => {
+        const found = it.state.accounts.some(
+          ([, , address]) => account.address === address
+        )
 
         if (found) {
-          setHasSession(found);
-          return
+          setHasSession(found)
         }
       })
     }

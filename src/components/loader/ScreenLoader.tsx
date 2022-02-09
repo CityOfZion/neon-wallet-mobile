@@ -1,8 +1,15 @@
 import {LinearGradient} from 'expo-linear-gradient'
 import React, {useState} from 'react'
-import {StyleSheet, SafeAreaView, ActivityIndicator} from 'react-native'
+import {
+  Platform,
+  Dimensions,
+  StyleSheet,
+  SafeAreaView,
+  ActivityIndicator,
+} from 'react-native'
 import {WebView} from 'react-native-webview'
 import {useSelector} from 'react-redux'
+import {paddingLeft} from 'styled-system'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {ImageView, LinearLayout} from '~/src/styles/styled-components'
@@ -37,12 +44,10 @@ const ScreenLoader = (props?: {
           background-color: transparent;
       }
       svg{
-          align-self: center;
           background-color: transparent;
           display: flex;
-          jusstify-self: center;
-          height: 90vh;
-          margin: auto;
+          height: 30%;
+          margin: 65% 0 0 35%;
           width: 30%;
       }
   </style>
@@ -74,6 +79,7 @@ const ScreenLoader = (props?: {
         <WebView
           style={{
             backgroundColor: 'transparent',
+            display: 'flex',
           }}
           originWhitelist={['*']}
           source={{
