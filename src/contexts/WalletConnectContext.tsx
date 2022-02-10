@@ -64,7 +64,7 @@ interface IWalletConnectContext {
   checkApprovedRequest: (
     request: JsonRpcRequest
   ) => Promise<boolean | undefined>
-  onURI: (data: any, timeoutMs?: number) => Promise<void>
+  onURI: (data: any) => Promise<void>
   getPeerOfRequest: (
     requestEvent: SessionTypes.RequestEvent
   ) => Promise<SessionTypes.Participant>
@@ -123,7 +123,6 @@ export const WalletConnectContextProvider: React.FC<{
     AutoAcceptCallback | undefined
   >(undefined)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const lastSessionProposal = useRef<SessionTypes.Proposal | undefined>()
 
   useEffect(() => {
     init()
@@ -291,7 +290,6 @@ export const WalletConnectContextProvider: React.FC<{
         }
 
         setSessionProposals((old) => [...old, proposal])
-        lastSessionProposal.current = proposal
 
         return null
       }
@@ -399,38 +397,18 @@ export const WalletConnectContextProvider: React.FC<{
     }
   }, [wcClient, subscribeToEvents, checkPersistedState])
 
-  const onURI = (data: any, timeoutMs: number = 5000) => {
-    return new Promise<void>(async (resolve, reject) => {
-      try {
-        const uri = typeof data === 'string' ? data : ''
-        if (!uri) return
-        if (typeof wcClient === 'undefined') {
-          throw new Error('Client is not initialized')
-        }
-
-        const pairId = await wcClient.pair({uri})
-
-        let attempts = 0
-        const msPerAttempts = 500
-        const maxAttempts = Math.ceil(timeoutMs / msPerAttempts)
-
-        const interval = setInterval(() => {
-          if (lastSessionProposal.current?.signal.params.topic === pairId) {
-            clearInterval(interval)
-            resolve()
-          }
-
-          if (attempts >= maxAttempts) {
-            clearInterval(interval)
-            reject(new Error(i18n.t('contexts.walletConnect.timeoutError')))
-          }
-
-          attempts += 1
-        }, msPerAttempts)
-      } catch (error) {
-        reject(new Error(i18n.t('contexts.walletConnect.clientPairError')))
+  const onURI = async (data: any) => {
+    try {
+      const uri = typeof data === 'string' ? data : ''
+      if (!uri) return
+      if (typeof wcClient === 'undefined') {
+        throw new Error('Client is not initialized')
       }
-    })
+
+      await wcClient.pair({uri})
+    } catch (error) {
+      throw new Error(i18n.t('contexts.walletConnect.clientPairError'))
+    }
   }
 
   const getPeerOfRequest = async (requestEvent: SessionTypes.RequestEvent) => {
