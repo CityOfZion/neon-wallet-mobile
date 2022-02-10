@@ -144,17 +144,17 @@ export const WalletConnectContextProvider: React.FC<{
 
   const cleanConnections = () =>
     useCallback(async () => {
-      try {
-        await Promise.all(
-          sessions.map(
-            async (session) =>
-              await wcClient?.disconnect({
-                topic: session.topic,
-                reason: ERROR.USER_DISCONNECTED.format(),
-              })
-          )
-        )
-      } catch (error) {}
+      await Promise.all(
+        sessions.map(async (session) => {
+          try {
+            await wcClient?.disconnect({
+              topic: session.topic,
+              reason: ERROR.USER_DISCONNECTED.format(),
+            })
+          } catch (error) {}
+        })
+      )
+
       await clearStorage()
 
       setSessionProposals([])
