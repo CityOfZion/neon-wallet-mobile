@@ -46,7 +46,7 @@ PODS:
     - UMFileSystemInterface
   - EXRandom (9.0.1):
     - React
-  - EXScreenOrientation (3.2.1):
+  - EXScreenOrientation (3.3.0):
     - React-Core
     - UMCore
   - EXSecureStore (9.2.0):
@@ -798,7 +798,7 @@ SPEC CHECKSUMS:
   EXPermissions: 30cbe5b72bd209b65c00884180ad058a60bb413d
   EXPrint: 969e4d8514319a74405b015cd0bf6023dcdf4b00
   EXRandom: 10419e13e311477711fa4bfc5e560e690ff6667b
-  EXScreenOrientation: d94f791c7ade3639352f34fcf5353f7c554b7d69
+  EXScreenOrientation: 09fe6b6b87899ae0c9320255bda7b7513cdfc8ec
   EXSecureStore: 579cbccd9cd093e6f4336aba073b059008bd78e0
   EXSharing: 02ac909b58904235ab9405b9e69deb24613f8b40
   EXSplashScreen: 7ea40b8524f27e7444e3892411c8a4782ab6b4ce
