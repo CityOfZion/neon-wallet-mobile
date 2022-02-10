@@ -82,6 +82,7 @@ interface IWalletConnectContext {
   rejectRequest: (requestEvent: SessionTypes.RequestEvent) => Promise<void>
   onRequestListener: (listener: OnRequestCallback) => void
   autoAcceptIntercept: (listener: AutoAcceptCallback) => void
+  cleanConnections: () => Promise<void>
 }
 
 export interface CtxOptions {
@@ -140,6 +141,28 @@ export const WalletConnectContextProvider: React.FC<{
       })
     )
   }
+
+  const cleanConnections = () =>
+    useCallback(async () => {
+      try {
+        await Promise.all(
+          sessions.map(
+            async (session) =>
+              await wcClient?.disconnect({
+                topic: session.topic,
+                reason: ERROR.USER_DISCONNECTED.format(),
+              })
+          )
+        )
+      } catch (error) {}
+      await clearStorage()
+
+      setSessionProposals([])
+      setChains([])
+      setSessions([])
+      setRequests([])
+      setResults([])
+    }, [sessions])
 
   const resetApp = async () => {
     try {
@@ -563,6 +586,7 @@ export const WalletConnectContextProvider: React.FC<{
     rejectRequest,
     onRequestListener,
     autoAcceptIntercept,
+    cleanConnections,
   }
 
   return (
