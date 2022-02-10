@@ -1,4 +1,5 @@
 import {
+  getStateFromPath,
   LinkingOptions,
   PathConfig,
   PathConfigMap,
@@ -58,6 +59,35 @@ export class DeepLinkingConfig {
             },
           },
         },
+      },
+      getStateFromPath: (path, options) => {
+        if (path.includes('uri')) {
+          const [_, paramUri] = path.split('=')
+          return {
+            routes: [
+              {
+                name: wrapper.route.Tab.name,
+                state: {
+                  routes: [
+                    {
+                      name: wrapper.route.WalletConnectPage.name,
+                      params: {uri: paramUri},
+                      state: {
+                        routes: [
+                          {
+                            name: wrapper.route.WalletConnectPage.name,
+                            params: {uri: paramUri},
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        }
+        return getStateFromPath(path, options)
       },
     }
   }
