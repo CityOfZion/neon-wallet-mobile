@@ -1,7 +1,7 @@
 import {JsonRpcRequest} from '@json-rpc-tools/utils'
 import {NavigationContainer, RouteProp} from '@react-navigation/native'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {InteractionManager} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
@@ -118,6 +118,10 @@ const AppNavigation = (props: Props) => {
     }
   }, [hasInit, syncFetchInterval, isConnected, timerStatus])
 
+  const handleCleanConnectionsDApps = useCallback(async () => {
+    await walletConnectCtx.cleanConnections()
+  }, [walletConnectCtx.sessions])
+
   useEffect(() => {
     // if the request method is 'testInvoke' or 'multiTestInvoke' we auto-accept it
     walletConnectCtx.autoAcceptIntercept(
@@ -145,6 +149,10 @@ const AppNavigation = (props: Props) => {
       }
     )
   }, [])
+
+  useEffect(() => {
+    handleCleanConnectionsDApps()
+  }, [walletConnectCtx.sessions])
 
   const getInitialRouteName = () => {
     return onboardingSeen
