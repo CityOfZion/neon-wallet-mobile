@@ -312,7 +312,7 @@ const AccountCard: React.FC<Props> = (props) => {
                 orientation={'horiz'}
                 alignItems={'flex-end'}
                 justifyContent={'space-between'}
-                mb={5}
+                mb={5 * unit}
                 pr={30 * unit}
               >
                 <LinearLayout>

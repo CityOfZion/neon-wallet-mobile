@@ -1,10 +1,10 @@
-import {RouteProp, useNavigationState} from '@react-navigation/native'
-import {StackNavigationProp, useHeaderHeight} from '@react-navigation/stack'
+import {RouteProp} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
 import {Await} from '@simpli/react-native-await'
 import {LinearGradient} from 'expo-linear-gradient'
 import i18n from 'i18n-js'
 import React, {useEffect, useState} from 'react'
-import {ScrollView, StyleSheet, View, TouchableHighlight} from 'react-native'
+import {StyleSheet, View, TouchableHighlight} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
@@ -93,7 +93,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
         onClose={() => props.navigation.goBack()}
         solidColorBG={true}
       >
-        <LinearLayout>
+        <LinearLayout mt={6}>
           <TouchableHighlight>
             <LinearLayout>
               <TextView
