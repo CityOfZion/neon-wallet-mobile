@@ -140,8 +140,8 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     const id = await dispatchAsyncString(
       RootStore.wallet.actions.createAndSave()
     )
+    await dispatchAsync(RootStore.wallet.actions.setShowBackupAlert(id, true))
     await dispatchAsync(RootStore.app.actions.syncWallets())
-    dispatch(RootStore.wallet.actions.setShowBackupAlert(id, true))
 
     for (const blockchainName of blockchainList) {
       await createFirstAccount(

@@ -73,16 +73,19 @@ const Notification = (props: NotificationProps) => {
         orientation="verti"
         height={72}
         width="100%"
-        py="8px"
-        px="11px"
         bg="background.1"
         borderColor="primary"
       >
-        <LinearLayout orientation="horiz">
-          <TextView color="text.2" fontSize="10px" mb="4px" width="98%">
+        <LinearLayout orientation="horiz" justifyContent="space-between">
+          <TextView color="text.2" fontSize="10px" mb="4px" px="11px" pt="8px">
             {i18n.t('components.notification.title')}
           </TextView>
-          <ButtonView alignSelf="flex-start" width="2%" onPress={() => close()}>
+          <ButtonView
+            alignSelf="flex-start"
+            onPress={() => close()}
+            px="11px"
+            py="8px"
+          >
             <ImageView
               height={'9px'}
               width={'9px'}
@@ -90,7 +93,14 @@ const Notification = (props: NotificationProps) => {
             />
           </ButtonView>
         </LinearLayout>
-        <TextView color="text.0" fontSize="15px" lineHeight="15px" weight={1}>
+        <TextView
+          color="text.0"
+          fontSize="15px"
+          lineHeight="15px"
+          weight={1}
+          px="11px"
+          pb="8px"
+        >
           {props.text}
         </TextView>
       </NotificationBox>
