@@ -304,17 +304,16 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   useEffect(() => {
     if (sessions.length > 0) {
-      setHasSession(false)
-
-      sessions.forEach((it) => {
-        const found = it.state.accounts.some(
-          ([, , address]) => account.address === address
-        )
+      for (const it of sessions) {
+        const [firstAccount] = it.state.accounts
+        const [, , address] = firstAccount.split(':');
+        const found = account.address === address;
 
         if (found) {
-          setHasSession(found)
+          setHasSession(found);
+          break;
         }
-      })
+      }
     }
   }, [sessions])
 
