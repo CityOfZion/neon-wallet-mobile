@@ -117,6 +117,7 @@ export const WalletConnectContextProvider: React.FC<{
   const [sessions, setSessions] = useState<SessionTypes.Created[]>([])
   const [requests, setRequests] = useState<SessionTypes.RequestEvent[]>([])
   const [results, setResults] = useState<any[]>([])
+  const [sessionsWasClean, setsessionsWasClean] = useState<boolean>(false)
   const [onRequestCallback, setOnRequestCallback] = useState<
     OnRequestCallback | undefined
   >(undefined)
@@ -142,27 +143,23 @@ export const WalletConnectContextProvider: React.FC<{
     )
   }
 
-  const cleanConnections = () =>
-    useCallback(async () => {
+  const cleanConnections = useCallback(async () => {
+    if (!sessionsWasClean && sessions.length > 0) {
+      setSessions([])
+      setRequests([])
+      setsessionsWasClean(true)
+
       await Promise.all(
         sessions.map(async (session) => {
           try {
-            await wcClient?.disconnect({
-              topic: session.topic,
-              reason: ERROR.USER_DISCONNECTED.format(),
-            })
-          } catch (error) {}
+            await disconnect(session.topic)
+          } catch (error) {
+            throw error
+          }
         })
       )
-
-      await clearStorage()
-
-      setSessionProposals([])
-      setChains([])
-      setSessions([])
-      setRequests([])
-      setResults([])
-    }, [sessions])
+    }
+  }, [sessions, sessionsWasClean])
 
   const resetApp = async () => {
     try {
