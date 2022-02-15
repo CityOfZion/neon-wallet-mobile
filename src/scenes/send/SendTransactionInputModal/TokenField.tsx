@@ -1,6 +1,6 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import I18n from 'i18n-js'
-import React, {Fragment} from 'react'
+import React, {Fragment, useEffect} from 'react'
 import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
@@ -29,6 +29,7 @@ const TokenField = (props: {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
+
   return (
     <Fragment>
       <InputLabel

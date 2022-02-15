@@ -107,7 +107,9 @@ export class Account implements AccountState {
   }
 
   getBalanceAmountByAsset(assetSymbol: string) {
-    const tokenAsset = this.tokenAssets.find((it) => it.symbol === assetSymbol)
+    const tokenAsset = this.tokenAssets.find(
+      (it) => it.symbol === assetSymbol && it.blockchain === this.blockchain
+    )
     if (!tokenAsset) return null
 
     return tokenAsset.amount

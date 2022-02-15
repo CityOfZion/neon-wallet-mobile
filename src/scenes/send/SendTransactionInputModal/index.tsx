@@ -3,6 +3,7 @@ import {useHeaderHeight} from '@react-navigation/stack'
 import I18n from 'i18n-js'
 import React, {useCallback, useEffect, useState} from 'react'
 import {Keyboard} from 'react-native'
+import {showMessage} from 'react-native-flash-message'
 import InputScrollView from 'react-native-input-scroll-view'
 import {useDispatch, useSelector} from 'react-redux'
 
@@ -80,7 +81,7 @@ const SendTransactionInputModal = (prop: Props) => {
   const tokenFromUri = Boolean(prop.route.params?.uri?.tokenHash)
   const [contact, setContact] = useState<Contact>()
   const [token, setToken] = useState<TokenAsset | null | undefined>(
-    tokens.find((t: TokenAsset) => t.hash === hash) ??
+    tokens.find((t) => t.hash === hash) ??
       (selectedToken
         ? tokens.find((t: TokenAsset) => t.hash === selectedToken.hash)
         : null)
@@ -126,7 +127,7 @@ const SendTransactionInputModal = (prop: Props) => {
             var val = String(Number(fiat) / ratio)
             val = val.replace(
               /[0-9]+\.[0-9]{9,}$/g,
-              String(Number(val).toFixed(8))
+              String(Number(val).toFixed(token.decimals ?? 8))
             )
             setAmount(Number(val))
           }
@@ -166,7 +167,6 @@ const SendTransactionInputModal = (prop: Props) => {
 
   const submit = useCallback(() => {
     const senderAddress = account.address
-
     if (!token) {
       throw new Error('Token was not defined')
     } else if (!senderAddress) {
@@ -197,7 +197,7 @@ const SendTransactionInputModal = (prop: Props) => {
     dispatch(RootStore.senderTransaction.actions.setTip(tipWithHolding))
 
     prop.navigation.navigate(wrapper.route.SendTransactionReviewModal.name)
-  }, [token, amount, fiat, tip, priority, account])
+  }, [token, amount, fiat, tip, priority, account, tokens])
 
   const validateAmount = (val: string) => {
     const hasEnoughBalance =
@@ -251,7 +251,7 @@ const SendTransactionInputModal = (prop: Props) => {
     if (!total) return 0
 
     return total - (Number(amount) ?? 0)
-  }, [amount])
+  }, [amount, getTokenBalance])
 
   // Typeguard
   function isURI(object: any): object is IURI {
@@ -271,13 +271,32 @@ const SendTransactionInputModal = (prop: Props) => {
     []
   )
 
+  const getDecimalsOfToken = useCallback(
+    (token: TokenAsset) => {
+      const decimalsToken = tokens.find(
+        (it) => it.symbol === token.symbol && it.blockchain === token.blockchain
+      )?.decimals
+      if (decimalsToken !== null) {
+        return decimalsToken
+      }
+      return undefined
+    },
+    [tokens]
+  )
+
   const handleAmountChanged = useCallback(
     (val: string) => {
-      val = val.replace(/,|\.\.|\.,/g, '.')
-      val = val.replace(/\s|-/g, '')
-      val = val.replace(/[0-9]+\.[0-9]{9,}$/g, String(Number(val).toFixed(8)))
-      if (token?.symbol === 'NEO') val = val.replace('.', '')
-      setAmount(val)
+      if (token) {
+        const decimals = getDecimalsOfToken(token)
+        val = val.replace(/,|\.\.|\.,/g, '.')
+        val = val.replace(/\s|-/g, '')
+        val = val.replace(
+          /[0-9]+\.[0-9]{9,}$/g,
+          String(Number(val).toFixed(decimals ?? 2))
+        )
+        if (decimals !== undefined && decimals < 1) val = val.replace('.', '')
+        setAmount(val)
+      }
     },
     [token]
   )
