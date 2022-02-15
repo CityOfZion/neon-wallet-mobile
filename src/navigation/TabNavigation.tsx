@@ -105,7 +105,7 @@ const TabNavigation = (props: Props) => {
   }, [])
 
   const navigateToTransactionRequetModal = useCallback(async () => {
-    if (requests.length > 0) {
+    if (requests.length > 0 && sessions.length > 0) {
       const foundSession = sessions.find((it) => it.topic === requests[0].topic)
 
       if (foundSession) {

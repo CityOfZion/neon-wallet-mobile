@@ -306,12 +306,12 @@ const GetAccountView = (props: GetAccountViewProps) => {
     if (sessions.length > 0) {
       for (const it of sessions) {
         const [firstAccount] = it.state.accounts
-        const [, , address] = firstAccount.split(':');
-        const found = account.address === address;
+        const [, , address] = firstAccount.split(':')
+        const found = account.address === address
 
         if (found) {
-          setHasSession(found);
-          break;
+          setHasSession(found)
+          break
         }
       }
     }
