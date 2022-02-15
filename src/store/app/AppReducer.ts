@@ -82,7 +82,8 @@ export class AppReducer extends ReducerWrapper<
               it.companyName,
               it.symbol,
               it.networks[1].hash,
-              blockchainName
+              blockchainName,
+              it.networks[1].decimals
             )
         )
       }
@@ -97,9 +98,9 @@ export class AppReducer extends ReducerWrapper<
               blockchainList.map(async (blockchainName) => {
                 const {assets, provider} = blockchainServices[blockchainName]
                 const tokenListResponse = await provider.getTokenList()
-                assets.forEach(({hash, name, symbol}) => {
+                assets.forEach(({hash, name, symbol, decimals}) => {
                   assetsBlockchain.push(
-                    new TokenAsset(name, symbol, hash, blockchainName)
+                    new TokenAsset(name, symbol, hash, blockchainName, decimals)
                   )
                   tokensBlockchain = tokenToAsset(
                     tokenListResponse,
@@ -145,7 +146,8 @@ export class AppReducer extends ReducerWrapper<
               it.companyName,
               it.symbol,
               it.networks[1].hash,
-              blockchainName
+              blockchainName,
+              it.networks[1].decimals
             )
         )
       }
@@ -167,9 +169,9 @@ export class AppReducer extends ReducerWrapper<
               blockchainList.map(async (blockchainName) => {
                 const {assets, provider} = blockchainServices[blockchainName]
                 const tokenList = await provider.getTokenList()
-                assets.forEach(({hash, name, symbol}) => {
+                assets.forEach(({hash, name, symbol, decimals}) => {
                   assetsBlockchain.push(
-                    new TokenAsset(name, symbol, hash, blockchainName)
+                    new TokenAsset(name, symbol, hash, blockchainName, decimals)
                   )
                   tokensBlockchain = tokenToAsset(tokenList, blockchainName)
                 })
@@ -198,7 +200,8 @@ export class AppReducer extends ReducerWrapper<
               it.companyName,
               it.symbol,
               it.networks[1].hash,
-              blockchain
+              blockchain,
+              it.networks[1].decimals
             )
         )
       }
@@ -211,17 +214,25 @@ export class AppReducer extends ReducerWrapper<
             blockchainList.map(async (blockchainName) => {
               const {assets, provider} = blockchainServices[blockchainName]
               const tokenList = await provider.getTokenList()
-              assets.forEach(({hash, name, symbol}) => {
+              assets.forEach(({hash, name, symbol, decimals}) => {
                 assetsBlockchain.push(
-                  new TokenAsset(name, symbol, hash, blockchainName)
+                  new TokenAsset(name, symbol, hash, blockchainName, decimals)
                 )
                 tokensBlockchain = tokenToAsset(tokenList, blockchainName)
               })
-              tokensBlockchain.forEach(({hash, name, symbol, blockchain}) => {
-                tokensAllBlockchains.push(
-                  new TokenAsset(name, symbol, hash, blockchain)
-                )
-              })
+              tokensBlockchain.forEach(
+                ({hash, name, symbol, blockchain, decimals}) => {
+                  tokensAllBlockchains.push(
+                    new TokenAsset(
+                      name,
+                      symbol,
+                      hash,
+                      blockchain,
+                      decimals ?? undefined
+                    )
+                  )
+                }
+              )
             })
           )
           const tokens = [...assetsBlockchain, ...tokensAllBlockchains]
@@ -306,7 +317,7 @@ export class AppReducer extends ReducerWrapper<
         const accounts = await Storage.accounts.load()
 
         const wallets = await Storage.wallets.load()
-
+        console.log('debug sync accounts', accounts)
         if (accounts && wallets) {
           accounts.forEach((it, i) => {
             it.accountType = it.getWallet(wallets)?.walletType ?? null
@@ -373,7 +384,7 @@ export class AppReducer extends ReducerWrapper<
       }
       return async (dispatch, getState) => {
         try {
-          const {accounts} = getState().app
+          const {accounts, tokens} = getState().app
           const balanceAccounts = await Promise.all(
             accounts
               .map(async (acc) => {

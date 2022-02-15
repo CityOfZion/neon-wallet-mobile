@@ -33,7 +33,7 @@ const AmountField = (props: {
   account: Account
   currency: Currency
 }) => {
-  const [tokenDecimalPlaces, setTokenDecimalPlaces] = useState<number>()
+  const [tokenDecimalPlaces, setTokenDecimalPlaces] = useState<number | null>()
 
   const setValue = useCallback(
     (val: string, roundDown?: boolean) => {
@@ -45,7 +45,11 @@ const AmountField = (props: {
       if (!valueNumber) return
 
       val = val.replace(',', '.')
-      if (tokenDecimalPlaces && tokenDecimalPlaces < 1)
+      if (
+        tokenDecimalPlaces !== undefined &&
+        tokenDecimalPlaces !== null &&
+        tokenDecimalPlaces < 1
+      )
         val = val.replace('.', '')
 
       props.setAmount(Number(val))
@@ -57,23 +61,13 @@ const AmountField = (props: {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
+  const {tokens} = useSelector((state: RootState) => state.app)
 
   const getDecimals = useCallback(
     async (tokenSymbol: string, blockchain: BlockchainServiceKey) => {
-      let decimals: number | undefined = undefined
-      const tokenList = await blockchainServices[
-        blockchain
-      ].provider.getTokenList()
-      const assets = blockchainServices[blockchain].assets
-      decimals = assets.find((it) => it.symbol === tokenSymbol)?.decimals
-      if (decimals) {
-        return decimals
-      } else if (tokenList[tokenSymbol]) {
-        decimals = tokenList[tokenSymbol].networks[1].decimals
-        return decimals
-      } else {
-        return decimals
-      }
+      return tokens.find(
+        (it) => it.symbol === tokenSymbol && it.blockchain === blockchain
+      )?.decimals
     },
     [props.token]
   )
@@ -178,7 +172,7 @@ const AmountField = (props: {
               hidePaste={true}
               hideScan={true}
               keyboardType="numeric"
-              editable={Boolean(props.token)}
+              editable={!!tokenDecimalPlaces}
             />
           </LinearLayout>
           <ButtonView

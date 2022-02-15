@@ -25,17 +25,21 @@ export class TokenAsset {
 
   @HttpExpose()
   blockchain: BlockchainServiceKey = 'neoLegacy'
+  @HttpExpose()
+  decimals: number | null = null
 
   constructor(
     name: string,
     symbol: string,
     hash: string,
-    blockchain: BlockchainServiceKey
+    blockchain: BlockchainServiceKey,
+    decimals?: number
   ) {
     this.name = name
     this.symbol = symbol
     this.hash = hash
     this.blockchain = blockchain
+    this.decimals = decimals !== undefined ? decimals : null
   }
 
   get color() {
