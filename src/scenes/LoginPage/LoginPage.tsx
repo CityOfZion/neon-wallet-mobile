@@ -1,13 +1,12 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {useDispatch} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {ThemedFlatButton} from '~/src/components/themed/ThemedFlatButton'
 import {Security} from '~/src/enums/Security'
-import {Storage} from '~src/app/Storage'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {RootStore} from '~src/store/RootStore'
@@ -18,13 +17,18 @@ interface Props {
 
 export default function LoginPage(props: Props) {
   const dispatch = useDispatch()
-
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const continueButton = async () => {
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.SecurityModal.name,
       params: {isFirstTime: true},
     })
   }
+
+  useEffect(() => {
+    dispatchAsync(RootStore.app.actions.syncWallets())
+    dispatchAsync(RootStore.app.actions.syncAccounts())
+  }, [])
 
   return (
     <ScreenLayout

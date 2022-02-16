@@ -11,7 +11,8 @@ export function useWalletHook() {
     async (
       name: string,
       mnemonic: string,
-      type?: 'standard' | 'watch' | 'legacy'
+      type?: 'standard' | 'watch' | 'legacy',
+      showBackupAlert?: boolean
     ) => {
       dispatch(RootStore.wallet.actions.setName(name))
       dispatch(RootStore.wallet.actions.setSecurityPhrase(mnemonic))
@@ -22,7 +23,10 @@ export function useWalletHook() {
       )
 
       await dispatchAsync(
-        RootStore.wallet.actions.setShowBackupAlert(walletId, false)
+        RootStore.wallet.actions.setShowBackupAlert(
+          walletId,
+          showBackupAlert ?? false
+        )
       )
 
       await dispatchAsync(RootStore.app.actions.syncWallets())

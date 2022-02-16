@@ -1,6 +1,6 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {plainToClass} from 'class-transformer'
-import i18n from 'i18n-js'
+import i18n, {t} from 'i18n-js'
 import _ from 'lodash'
 import {showMessage} from 'react-native-flash-message'
 import {
@@ -10,8 +10,11 @@ import {
 
 import {appBus} from '~/src/app/AppBus'
 import {applicationConfig} from '~/src/config/ApplicationConfig'
+import {AsteroidHelper} from '~/src/helpers/AsteroidHelper'
 import {SecurityHelper} from '~/src/helpers/SecurityHelper'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import {Node} from '~/src/models/Node'
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {
@@ -26,6 +29,7 @@ import {App} from '~src/models/redux/App'
 import {Contact} from '~src/models/redux/Contact'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
+import {getRandomColor} from '~src/scenes/CustomizeAccount'
 import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
 import {ContactsDispatcher} from '~src/store/app/dispatchers/ContactsDispatcher'
 import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
@@ -533,6 +537,71 @@ export class AppReducer extends ReducerWrapper<
           const {connectionChange} = offlineActionCreators
           dispatch(connectionChange(isConnected))
         }, 2000)
+      }
+    },
+
+    createInitialWallet: (): AsyncAction => {
+      const generateAccount = async (
+        wallet: Wallet,
+        index: number,
+        blockchain: BlockchainServiceKey
+      ) => {
+        const mnemonic = await wallet.getMnemonic()
+        if (!mnemonic) return null
+        return blockchainServices[blockchain].generateAccount(mnemonic, index)
+      }
+      return async (dispatch, getState) => {
+        const words = AsteroidHelper.generateMnemonic() ?? []
+        const wallets = getState().app.wallets
+        const accounts = getState().app.accounts
+        const theme = wrapper.theme[getState().settings.theme]
+        if (wallets.length < 1) {
+          const wallet = plainToClass(Wallet, getState().wallet)
+
+          // TODO: Review ID generator
+          wallet.id = UtilsHelper.uuid()
+          wallet.name = i18n.t('onboarding.firstWalletName')
+          wallet.showBackupAlert = true
+          wallet.securityPhrase = words.join(' ')
+          wallet.walletType = 'standard'
+          wallets.push(wallet)
+
+          await Storage.wallets.save(wallets)
+          if (wallet.walletType === 'standard') {
+            if (!wallet.securityPhrase) {
+              return Promise.reject(
+                new Error("Can't create a wallet without a security phrase")
+              )
+            }
+
+            await SecurityHelper.saveMnemonic(wallet.id, wallet.securityPhrase)
+          }
+          for (const blockchainName of blockchainList) {
+            const newAccount = await generateAccount(
+              wallet,
+              blockchainList.indexOf(blockchainName),
+              blockchainName
+            )
+            if (newAccount) {
+              const account = new Account()
+              const {address, wif} = newAccount
+              account.address = address
+              account.blockchain = blockchainName
+              account.idWallet = wallet.id
+              account.accountType = wallet.walletType
+              account.index = blockchainList.indexOf(blockchainName)
+              account.name = i18n.t('modals.blockchainList.countAccount', {
+                count: 1,
+              })
+              account.backgroundColor = theme.colors.card[getRandomColor(6)]
+              await SecurityHelper.saveWif(account.address, wif)
+
+              accounts.push(account)
+
+              await Storage.accounts.save(accounts)
+            }
+          }
+        }
       }
     },
 

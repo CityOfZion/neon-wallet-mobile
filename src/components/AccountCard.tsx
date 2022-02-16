@@ -30,7 +30,7 @@ import {
 
 import {wrapper} from '~src/app/ApplicationWrapper' //@ts-ignore
 import CardSvg from '~src/assets/images/card.svg'
-import {blockchainServices, getBlockchainLogo} from '~src/blockchain'
+import {getBlockchainLogo} from '~src/blockchain'
 import {FilterHelper} from '~src/helpers/FilterHelper'
 import {UtilsHelper} from '~src/helpers/UtilsHelper'
 import {Account} from '~src/models/redux/Account'
