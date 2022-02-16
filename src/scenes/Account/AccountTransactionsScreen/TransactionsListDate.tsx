@@ -20,14 +20,15 @@ export const TransactionsListDate = (props: TransactionsListDateProps) => {
       <TextView mb={'20px'} color="#fff" fontFamily="semibold" fontSize="30px">
         {moment(props.date).format('DD MMMM')}
       </TextView>
-      {props.pendingTransactions.map((pendingTransaction) => (
-        <TransactionItemDate
-          iconStatusTransactions={require('src/assets/images/icon-pending-white.png')}
-          key={pendingTransaction.txid}
-          statusTransactions={i18n.t('components.transactionList.title')}
-          {...pendingTransaction}
-        />
-      ))}
+      {props.pendingTransactions &&
+        props.pendingTransactions.map((pendingTransaction) => (
+          <TransactionItemDate
+            iconStatusTransactions={require('src/assets/images/icon-pending-white.png')}
+            key={pendingTransaction.txid}
+            statusTransactions={i18n.t('components.transactionsList.title')}
+            {...pendingTransaction}
+          />
+        ))}
       {props.transactions.map((transaction) => (
         <TransactionItemDate
           iconStatusTransactions={require('src/assets/images/icon-check-white.png')}
