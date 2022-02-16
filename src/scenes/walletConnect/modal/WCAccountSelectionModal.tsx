@@ -70,9 +70,15 @@ export const WCAccountSelectionModal = (props: Props) => {
           index: 0,
           routes: [{name: wrapper.route.Tab.name}],
         })
-        props.navigation.navigate(wrapper.route.WalletConnectPage.name)
+        props.navigation.navigate(wrapper.route.WalletConnectPage.name, {})
       } catch (error) {
-        console.log(error)
+        const message = (error as {message: string}).message
+        showMessage({message, duration: 5000, type: 'danger'})
+        props.navigation.reset({
+          index: 0,
+          routes: [{name: wrapper.route.Tab.name}],
+        })
+        props.navigation.navigate(wrapper.route.WalletConnectPage.name, {}) 
       }
     },
     [walletConnectCtx.sessionProposals]
