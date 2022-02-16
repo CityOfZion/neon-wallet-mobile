@@ -1,6 +1,6 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import {plainToClass} from 'class-transformer'
-import i18n, {t} from 'i18n-js'
+import i18n from 'i18n-js'
 import _ from 'lodash'
 import {showMessage} from 'react-native-flash-message'
 import {
