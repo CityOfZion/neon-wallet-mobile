@@ -498,6 +498,13 @@ const ImportKey = (props: ImportKeyProps) => {
               isMultiline={isMnemonic(inputValue)}
               fromImportKey={true}
               sideMargins={0}
+              onScan={(data) => {
+                if (typeof data === 'string') {
+                  const textValue = UtilsHelper.removeAccents(data)
+
+                  setInputValue(textValue)
+                }
+              }}
             />
 
             {showImportList && (
