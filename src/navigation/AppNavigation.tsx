@@ -57,7 +57,6 @@ const AppNavigation = (props: Props) => {
   const {isConnected} = useSelector((state: RootState) => state.network)
   const loadingOverlayState = useSelector((state: RootState) => state.loading)
   const {status: timerStatus} = useSelector((state: RootState) => state.timer)
-  const walletsPool = useSelector((state: RootState) => state.app.wallets)
   const {progress, loadingText, isLoading} = loadingOverlayState
 
   const [onboardingSeen, setOnboardingSeen] = useState(true)
@@ -156,12 +155,6 @@ const AppNavigation = (props: Props) => {
   useEffect(() => {
     handleCleanConnectionsDApps()
   }, [walletConnectCtx.sessions])
-
-  useEffect(() => {
-    if (walletsPool.length > 0 && !timerStatus) {
-      dispatch(RootStore.timer.actions.setTimerOn())
-    }
-  }, [walletsPool, timerStatus])
 
   const getInitialRouteName = () => {
     return onboardingSeen

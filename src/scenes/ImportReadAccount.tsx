@@ -18,7 +18,7 @@ import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {useWalletHook, useAccountHook} from '~src/hooks'
+import {useBlockchainActionsHook} from '~src/hooks'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
@@ -55,8 +55,8 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   >([])
   const accounts = useSelector((state: RootState) => state.app.accounts)
   const {isConnected} = useSelector((state: RootState) => state.network)
-  const {createWallet} = useWalletHook()
-  const {createWatchAccount} = useAccountHook()
+  const blockchainActionsHook = useBlockchainActionsHook()
+  const {walletIdState} = blockchainActionsHook
   const persist = async () => {
     if (!isValid()) {
       return
@@ -71,25 +71,41 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
         })
       )
     }
-    const idWallet = await createWallet(
+    Await.init('importWatchAccount')
+    blockchainActionsHook.init()
+    await blockchainActionsHook.createWallet(
       i18n.t('defaultNameWallet.watchAccount'),
       mnemonic.join(','),
       'watch'
     )
-    for (const addressInfo of addressesListSelected) {
-      await createWatchAccount(
-        idWallet,
-        `${i18n.t(
-          `blockchainServices.${addressInfo.blockchain}.label`
-        )} ${i18n.t('modals.blockchainList.typeAccount', {type: 'Watch'})}`,
-        addressInfo.address,
-        addressInfo.blockchain
-      )
-    }
-    props.navigation.replace(wrapper.route.Tab.name, {
-      screen: wrapper.route.ListWallets.name,
-    })
   }
+
+  const importAccounts = useCallback(
+    async (walletId: string) => {
+      for (const addressInfo of addressesListSelected) {
+        await blockchainActionsHook.importWatchAccount(
+          walletId,
+          `${i18n.t(
+            `blockchainServices.${addressInfo.blockchain}.label`
+          )} ${i18n.t('modals.blockchainList.typeAccount', {type: 'Watch'})}`,
+          addressInfo.address,
+          addressInfo.blockchain
+        )
+      }
+      blockchainActionsHook.finish()
+      Await.done('importWatchAccount')
+      props.navigation.replace(wrapper.route.Tab.name, {
+        screen: wrapper.route.ListWallets.name,
+      })
+    },
+    [addressesListSelected]
+  )
+
+  useEffect(() => {
+    if (walletIdState) {
+      importAccounts(walletIdState)
+    }
+  }, [walletIdState])
 
   const isValid = () => {
     const conditions: boolean[] = [validateAddressAllBlockchains(inputValue)]
@@ -185,7 +201,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
             >
               <ThemedButton
                 label={i18n.t('importReadAccount.add')}
-                onPress={() => Await.run('importWatchAccount', persist)}
+                onPress={persist}
                 disabled={addressesListSelected.length < 1}
               />
             </LinearLayout>

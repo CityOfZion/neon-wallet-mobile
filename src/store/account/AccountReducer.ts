@@ -143,6 +143,8 @@ export class AccountReducer extends ReducerWrapper<
       return async (dispatch, getState) => {
         const accounts = getState().app.accounts
         const account = plainToClass(Account, getState().account)
+        const isConnected = getState().network.isConnected
+        const tokensPool = getState().app.tokens
         account.address = address
         const wallet = account.getWallet(getState().app.wallets)
 
@@ -156,6 +158,11 @@ export class AccountReducer extends ReducerWrapper<
             ) {
               throw Error('Wif not defined')
             }
+          }
+
+          if (isConnected) {
+            await account.populateTokenAssets()
+            await account.populateTransactions(tokensPool)
           }
 
           accounts.push(account)

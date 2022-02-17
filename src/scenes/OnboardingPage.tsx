@@ -5,6 +5,8 @@ import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
 import Carousel, {Pagination} from 'react-native-snap-carousel'
 import {useDispatch, useSelector} from 'react-redux'
 
+import {useBlockchainActionsHook} from '../hooks'
+
 import {useHeaderHeight} from '~/node_modules/@react-navigation/stack'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {wrapper} from '~src/app/ApplicationWrapper'
@@ -92,7 +94,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const carousel = useRef<Carousel<any>>(null)
   const [isLastPage, setIsLastPage] = useState(false)
   const [carouselIndex, setCarouselIndex] = useState(0)
-
+  const blockchainActionsHook = useBlockchainActionsHook()
   const {wallets} = useSelector((state: RootState) => state.app)
 
   const dispatch = useDispatch<DispatchResult>()
@@ -105,9 +107,9 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   }
 
   useEffect(() => {
-    dispatch(RootStore.timer.actions.setTimerOff())
+    blockchainActionsHook.init()
     if (wallets.length === 0) {
-      dispatchAsync(RootStore.app.actions.createInitialWallet())
+      blockchainActionsHook.createInitialWallet()
     }
   }, [])
 

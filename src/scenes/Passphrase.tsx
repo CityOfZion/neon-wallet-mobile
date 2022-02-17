@@ -11,7 +11,6 @@ import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {
   BlockchainServiceKey,
-  getBlockchainByPrivateKeyWithPassword,
   blockchainList,
   blockchainServices,
 } from '~src/blockchain'
@@ -20,7 +19,7 @@ import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {useAccountHook, useWalletHook} from '~src/hooks'
+import {useBlockchainActionsHook} from '~src/hooks'
 import {Account} from '~src/models/redux/Account'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
@@ -43,8 +42,8 @@ const Passphrase = (props: PassphraseProps) => {
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const {accounts} = useSelector((state: RootState) => state.app)
-  const {createWallet} = useWalletHook()
-  const {createAccount} = useAccountHook()
+  const blockchainActionsHook = useBlockchainActionsHook()
+  const {walletIdState} = blockchainActionsHook
   const [inputValue, setInputValue] = useState('')
   const [addressesInfo, setAdrresesInfo] = useState<
     {address: string; blockchain: BlockchainServiceKey}[]
@@ -105,6 +104,7 @@ const Passphrase = (props: PassphraseProps) => {
           duration: 4000,
         })
         setShowInputField(true)
+        Await.done('importEncryptedKey')
       }
     } catch (error) {
       if (addressesInfo.length < 1) {
@@ -130,38 +130,29 @@ const Passphrase = (props: PassphraseProps) => {
 
   const persist = useCallback(async () => {
     try {
-      for (const {address, blockchain} of addressesInfoSelected) {
+      for (const {blockchain} of addressesInfoSelected) {
         const isEncryptedKey = blockchainServices[
           blockchain
         ].validatePrivateKeyWithPassword(encryptedKey)
         if (isEncryptedKey) {
-          const {wif} = await blockchainServices[blockchain].decryptKey(
-            encryptedKey,
-            correctPassword
-          )
           const mnemonic = blockchainServices[blockchain]
             .generateMnemonic()
             ?.join(',')
           if (mnemonic) {
-            const idWallet = await createWallet(
+            blockchainActionsHook.init()
+            await blockchainActionsHook.createWallet(
               `${i18n.t(`blockchainServices.${blockchain}.id`)} ${i18n.t(
                 'modals.blockchainList.encryptedWallet'
               )}`,
               mnemonic,
               'legacy'
             )
-            await createAccount(
-              idWallet,
-              i18n.t(`blockchainServices.${blockchain}.accountName`),
-              wif,
-              address,
-              blockchain
-            )
           } else {
             showMessage({
               message: i18n.t('messages.problemToGenerateWallet'),
               type: 'danger',
             })
+            Await.done('importEncryptedKey')
           }
         }
       }
@@ -173,10 +164,39 @@ const Passphrase = (props: PassphraseProps) => {
         message: i18n.t('messages.problemToGenerateWallet'),
         type: 'danger',
       })
+      Await.done('importEncryptedKey')
     }
   }, [inputValue, addressesInfoSelected, showInputField])
 
+  const importAccounts = useCallback(
+    async (walletId: string) => {
+      for (const {address, blockchain} of addressesInfoSelected) {
+        const {wif} = await blockchainServices[blockchain].decryptKey(
+          encryptedKey,
+          correctPassword
+        )
+        await blockchainActionsHook.importAccount(
+          walletId,
+          i18n.t(`blockchainServices.${blockchain}.accountName`),
+          wif,
+          address,
+          blockchain
+        )
+      }
+      blockchainActionsHook.finish()
+      Await.done('importEncryptedKey')
+    },
+    [addressesInfoSelected]
+  )
+
+  useEffect(() => {
+    if (walletIdState) {
+      importAccounts(walletIdState)
+    }
+  }, [walletIdState])
+
   const handleClickNext = useCallback(async () => {
+    Await.init('importEncryptedKey')
     if (showInputField) {
       await validatePassword()
     } else {
@@ -237,13 +257,7 @@ const Passphrase = (props: PassphraseProps) => {
             <ThemedButton
               disabled={handleDisableNextButton()}
               label={i18n.t('passphrase.next')}
-              onPress={async () => {
-                Await.run(
-                  'importEncryptedKey',
-                  handleClickNext,
-                  showInputField ? 1000 : 5000
-                )
-              }}
+              onPress={handleClickNext}
             />
           </LinearLayout>
         </LinearLayout>

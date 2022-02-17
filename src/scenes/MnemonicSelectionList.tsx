@@ -23,9 +23,8 @@ import {
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {useWalletHook, useAccountHook} from '~src/hooks'
+import {useBlockchainActionsHook} from '~src/hooks'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {RootStore} from '~src/store/RootStore'
 export type MnemonicSelectionInfo = Map<
   BlockchainServiceKey,
   {address: string; wif: string; derivationIndex: number}[]
@@ -211,10 +210,8 @@ const MnemonicSelectionList = (props: Props) => {
   const [addressesSelected, setAddressesSelected] = useState<
     {address: string; blockchain: BlockchainServiceKey; wif: string}[]
   >([])
-
-  const walletHook = useWalletHook()
-  const accountHook = useAccountHook()
-
+  const blockchainActionsHook = useBlockchainActionsHook()
+  const {walletIdState} = blockchainActionsHook
   const handleSelectAddress = useCallback(
     (address: string, wif: string, blockchain: BlockchainServiceKey) => {
       setAddressesSelected((prevState) => {
@@ -237,40 +234,46 @@ const MnemonicSelectionList = (props: Props) => {
   )
 
   const handleImportAccounts = useCallback(async () => {
-    const idWallet = await walletHook.createWallet(
+    Await.init('importMnemonic')
+    blockchainActionsHook.init()
+    await blockchainActionsHook.createWallet(
       i18n.t('defaultNameWallet.mnemonicWallet'),
-      mnemonic
+      mnemonic,
+      'standard'
     )
-    for (let i = 0; i < addressesSelected.length; i++) {
-      await accountHook.createAccount(
-        idWallet,
-        `${i18n.t(
-          `blockchainServices.${addressesSelected[i].blockchain}.accountName`
-        )} ${i}`,
-        addressesSelected[i].wif,
-        addressesSelected[i].address,
-        addressesSelected[i].blockchain
-      )
-    }
-    await dispatchAsync(RootStore.app.actions.syncWallets())
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
-
-    props.navigation.reset({
-      index: 0,
-      routes: [{name: wrapper.route.Tab.name}],
-    })
-    props.navigation.navigate(wrapper.route.ListWallets.name, {
-      screen: 'ListWalletsPage',
-    })
   }, [addressesSelected])
 
+  const importAccounts = useCallback(
+    async (walletId: string) => {
+      for (let i = 0; i < addressesSelected.length; i++) {
+        await blockchainActionsHook.importAccount(
+          walletId,
+          `${i18n.t(
+            `blockchainServices.${addressesSelected[i].blockchain}.accountName`
+          )} ${i}`,
+          addressesSelected[i].wif,
+          addressesSelected[i].address,
+          addressesSelected[i].blockchain
+        )
+      }
+      blockchainActionsHook.finish()
+      Await.done('importMnemonic')
+      props.navigation.reset({
+        index: 0,
+        routes: [{name: wrapper.route.Tab.name}],
+      })
+      props.navigation.navigate(wrapper.route.ListWallets.name, {
+        screen: 'ListWalletsPage',
+      })
+    },
+    [addressesSelected]
+  )
+
   useEffect(() => {
-    dispatch(RootStore.timer.actions.setTimerOff())
-    return () => {
-      //execute on component destruction
-      dispatch(RootStore.timer.actions.setTimerOn())
+    if (walletIdState) {
+      importAccounts(walletIdState)
     }
-  }, [])
+  }, [walletIdState])
 
   return (
     <ScreenLayout>
@@ -329,9 +332,7 @@ const MnemonicSelectionList = (props: Props) => {
           <ThemedButton
             disabled={addressesSelected.length < 1}
             label={i18n.t('routes.ImportKey')}
-            onPress={() => {
-              Await.run('importMnemonic', handleImportAccounts)
-            }}
+            onPress={handleImportAccounts}
           />
         </View>
       </AwaitActivity>
