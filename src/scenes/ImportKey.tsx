@@ -2,7 +2,7 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useRef} from 'react'
 import {Alert, View, ScrollView, TextInput, Platform} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector, useDispatch} from 'react-redux'
@@ -67,6 +67,7 @@ const ImportKey = (props: ImportKeyProps) => {
   >([])
   const [showImportList, setShowImportList] = useState<boolean>(false)
   const [disableButton, setDisableButton] = useState<boolean>(false)
+  const disableButtonTouch = useRef<boolean>(false)
   const dispatch = useDispatch()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
@@ -293,71 +294,80 @@ const ImportKey = (props: ImportKeyProps) => {
   }, [inputValue])
 
   const persistImport = useCallback(async () => {
-    if (validateAddressAllBlockchains(inputValue)) {
-      Alert.alert(
-        '',
-        i18n.t('importKey.alertText'),
-        [
-          {
-            text: i18n.t('importKey.alertCancelButton'),
-            style: 'cancel',
-          },
-          {
-            text: i18n.t('importKey.alertConfirmButton'),
-            onPress: () =>
-              props.navigation.navigate(wrapper.route.ImportReadAccount.name, {
-                address: inputValue,
-              }),
-          },
-        ],
-        {cancelable: true}
-      )
-    } else if (validatePrivateKeyWithPasswordAllBlockchains(inputValue)) {
-      props.navigation.navigate(wrapper.route.Passphrase.name, {
-        encryptedKey: inputValue,
-      })
-    } else if (validateWifAllBlockchains(inputValue)) {
-      const mnemonic = blockchainServices[
-        addressesSelected[0].blockchain
-      ].generateMnemonic()
-      if (!Array.isArray(mnemonic)) {
-        throw new Error(
-          i18n.t('importKey.mnemonicAlreadyExists', {
-            mnemonic,
-          })
-        )
-      }
-      const idWallet = await createWallet(
-        i18n.t('defaultNameWallet.importedWallet'),
-        mnemonic.join(',')
-      )
-      dispatch(RootStore.wallet.actions.selectWallet(idWallet))
-      for (const addressSelected of addressesSelected) {
-        await createAccount(
-          idWallet,
-          `${i18n.t(
-            `blockchainServices.${addressSelected.blockchain}.accountName`
-          )} 1`,
-          inputValue,
-          addressSelected.address,
-          addressSelected.blockchain
-        )
-      }
-      await dispatchAsync(RootStore.app.actions.syncWallets())
-      await dispatchAsync(RootStore.app.actions.syncAccounts())
+    if (!disableButtonTouch.current) {
+      disableButtonTouch.current = true
 
-      props.navigation.replace(wrapper.route.Tab.name, {
-        screen: wrapper.route.ListWallets.name,
-      })
-      props.navigation.navigate(wrapper.route.GetWallet.name, {})
-    } else if (validateMnemonic(inputValue)) {
-      const dataAccountsToImport = await importMnemonic(inputValue)
-      if (dataAccountsToImport) {
-        props.navigation.navigate(wrapper.route.MnemonicSelectionList.name, {
-          data: dataAccountsToImport,
-          mnemonic: inputValue,
+      if (validateAddressAllBlockchains(inputValue)) {
+        Alert.alert(
+          '',
+          i18n.t('importKey.alertText'),
+          [
+            {
+              text: i18n.t('importKey.alertCancelButton'),
+              style: 'cancel',
+            },
+            {
+              text: i18n.t('importKey.alertConfirmButton'),
+              onPress: () =>
+                props.navigation.navigate(
+                  wrapper.route.ImportReadAccount.name,
+                  {
+                    address: inputValue,
+                  }
+                ),
+            },
+          ],
+          {cancelable: true}
+        )
+      } else if (validatePrivateKeyWithPasswordAllBlockchains(inputValue)) {
+        props.navigation.navigate(wrapper.route.Passphrase.name, {
+          encryptedKey: inputValue,
         })
+      } else if (validateWifAllBlockchains(inputValue)) {
+        const mnemonic = blockchainServices[
+          addressesSelected[0].blockchain
+        ].generateMnemonic()
+        if (!Array.isArray(mnemonic)) {
+          throw new Error(
+            i18n.t('importKey.mnemonicAlreadyExists', {
+              mnemonic,
+            })
+          )
+        }
+        const idWallet = await createWallet(
+          i18n.t('defaultNameWallet.importedWallet'),
+          mnemonic.join(',')
+        )
+        dispatch(RootStore.wallet.actions.selectWallet(idWallet))
+        for (const addressSelected of addressesSelected) {
+          await createAccount(
+            idWallet,
+            `${i18n.t(
+              `blockchainServices.${addressSelected.blockchain}.accountName`
+            )} 1`,
+            inputValue,
+            addressSelected.address,
+            addressSelected.blockchain
+          )
+        }
+        await dispatchAsync(RootStore.app.actions.syncWallets())
+        await dispatchAsync(RootStore.app.actions.syncAccounts())
+
+        props.navigation.replace(wrapper.route.Tab.name, {
+          screen: wrapper.route.ListWallets.name,
+        })
+        props.navigation.navigate(wrapper.route.GetWallet.name, {})
+      } else if (validateMnemonic(inputValue)) {
+        const dataAccountsToImport = await importMnemonic(inputValue)
+        if (dataAccountsToImport) {
+          props.navigation.navigate(wrapper.route.MnemonicSelectionList.name, {
+            data: dataAccountsToImport,
+            mnemonic: inputValue,
+          })
+        }
       }
+
+      disableButtonTouch.current = false
     }
   }, [addressesSelected, inputValue])
 
