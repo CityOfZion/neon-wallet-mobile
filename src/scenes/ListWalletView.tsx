@@ -256,7 +256,6 @@ const ListWalletView = (props: WalletProps) => {
   const keepUpdatedInfo = async () => {
     await dispatchAsync(RootStore.app.actions.syncWallets())
     await dispatchAsync(RootStore.app.actions.syncAccounts())
-    dispatch(RootStore.timer.actions.setTimerOn())
     setSelectedWallet(wallets[0])
   }
 

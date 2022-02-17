@@ -32,6 +32,7 @@ import TabNavigation, {TabParams} from '~src/navigation/TabNavigation'
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 import QRCodeScan, {QRCodeScanParams} from '~src/scenes/QRCodeScan'
+import {RootStore} from '~src/store/RootStore'
 export type RootStackParamList = {
   Tab: TabParams
   Modal: ModalParams
@@ -56,6 +57,7 @@ const AppNavigation = (props: Props) => {
   const {isConnected} = useSelector((state: RootState) => state.network)
   const loadingOverlayState = useSelector((state: RootState) => state.loading)
   const {status: timerStatus} = useSelector((state: RootState) => state.timer)
+  const walletsPool = useSelector((state: RootState) => state.app.wallets)
   const {progress, loadingText, isLoading} = loadingOverlayState
 
   const [onboardingSeen, setOnboardingSeen] = useState(true)
@@ -65,6 +67,7 @@ const AppNavigation = (props: Props) => {
   const walletConnectCtx = useWalletConnect()
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatch = useDispatch()
 
   const [hasInit, setInit] = useState(false)
   const [syncFetchInterval, setFetchSyncInterval] = useState(10000)
@@ -153,6 +156,12 @@ const AppNavigation = (props: Props) => {
   useEffect(() => {
     handleCleanConnectionsDApps()
   }, [walletConnectCtx.sessions])
+
+  useEffect(() => {
+    if (walletsPool.length > 0 && !timerStatus) {
+      dispatch(RootStore.timer.actions.setTimerOn())
+    }
+  }, [walletsPool, timerStatus])
 
   const getInitialRouteName = () => {
     return onboardingSeen

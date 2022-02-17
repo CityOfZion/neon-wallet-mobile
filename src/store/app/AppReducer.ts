@@ -321,7 +321,7 @@ export class AppReducer extends ReducerWrapper<
         const accounts = await Storage.accounts.load()
 
         const wallets = await Storage.wallets.load()
-        console.log('debug sync accounts', accounts)
+
         if (accounts && wallets) {
           accounts.forEach((it, i) => {
             it.accountType = it.getWallet(wallets)?.walletType ?? null
