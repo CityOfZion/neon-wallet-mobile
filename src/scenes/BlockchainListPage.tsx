@@ -35,12 +35,19 @@ const BlockchainListPage = (props: Props) => {
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const createWallet = useCallback(async () => {
-    let id: string = ''
+    let id: string | undefined
+
     try {
       id = await dispatchAsyncString(RootStore.wallet.actions.createAndSave())
+
       await dispatchAsync(RootStore.app.actions.syncWallets())
+
       await Promise.all(
         blockchainsSelected.map(async (blockchain) => {
+          if (!id) {
+            throw new Error()
+          }
+
           dispatch(RootStore.account.actions.setIdWallet(id))
           dispatch(
             RootStore.account.actions.setName(
@@ -60,6 +67,7 @@ const BlockchainListPage = (props: Props) => {
               theme.colors.card[getRandomColor(6)]
             )
           )
+
           await dispatchAsyncString(RootStore.account.actions.createAndSave())
 
           dispatch(RootStore.wallet.actions.selectWallet(id))
@@ -79,7 +87,11 @@ const BlockchainListPage = (props: Props) => {
         ],
       })
     } catch (error) {
-      dispatchAsync(RootStore.wallet.actions.delete(id))
+      if (id) {
+        await dispatchAsync(RootStore.wallet.actions.delete(id))
+        await dispatchAsync(RootStore.app.actions.syncWallets())
+      }
+
       showMessage({
         message: i18n.t('modals.blockchainList.errorCreateWallet'),
         type: 'danger',
