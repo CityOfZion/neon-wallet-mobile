@@ -28,10 +28,8 @@ import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {UtilsHelper} from '~src/helpers/UtilsHelper'
 import {useBlockchainActionsHook} from '~src/hooks'
-import {Account} from '~src/models/redux/Account'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {getRandomColor} from '~src/scenes/CustomizeAccount'
 import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout, ImageView, TextView} from '~src/styles/styled-components'
 type ParamList = MoreStackParamList & WalletStackParamList & RootStackParamList
@@ -67,10 +65,7 @@ const ImportKey = (props: ImportKeyProps) => {
   >([])
   const [showImportList, setShowImportList] = useState<boolean>(false)
   const [disableButton, setDisableButton] = useState<boolean>(false)
-  const disableButtonTouch = useRef<boolean>(false)
-  const dispatch = useDispatch()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
   const blockchainActionsHook = useBlockchainActionsHook()
   const {walletIdState} = blockchainActionsHook
 

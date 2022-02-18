@@ -1,6 +1,6 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, {useEffect} from 'react'
+import React from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {useDispatch} from 'react-redux'
 
@@ -17,18 +17,12 @@ interface Props {
 
 export default function LoginPage(props: Props) {
   const dispatch = useDispatch()
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const continueButton = async () => {
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.SecurityModal.name,
       params: {isFirstTime: true},
     })
   }
-
-  useEffect(() => {
-    dispatchAsync(RootStore.app.actions.syncWallets())
-    dispatchAsync(RootStore.app.actions.syncAccounts())
-  }, [])
 
   return (
     <ScreenLayout

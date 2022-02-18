@@ -8,13 +8,11 @@ import {showMessage} from 'react-native-flash-message'
 import {useSelector, useDispatch} from 'react-redux'
 
 import {useBlockchainActionsHook} from '../hooks'
-import {getRandomColor} from './CustomizeAccount'
 
 import {wrapper} from '~src/app/ApplicationWrapper'
-import {BlockchainServiceKey, blockchainServices} from '~src/blockchain'
+import {BlockchainServiceKey} from '~src/blockchain'
 import BlockchainList from '~src/components/BlockchainList'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
-import {SearchBar} from '~src/components/input/SearchBar'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
@@ -38,8 +36,6 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
   >()
 
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const dispatch = useDispatch()
   const wallet = useSelector((state: RootState) => state.wallet)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const [selectedWallet, setSelectedWallet] = useState<Wallet>(
@@ -79,8 +75,6 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
       blockchainSelected,
       indexAccount
     )
-
-    await dispatchAsync(RootStore.app.actions.syncWallets())
     blockchainActionsHook.finish()
     props.navigation.goBack()
   }, [accountsPool, wallet, blockchainSelected])

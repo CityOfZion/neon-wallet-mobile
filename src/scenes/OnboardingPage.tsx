@@ -3,7 +3,7 @@ import i18n from 'i18n-js'
 import React, {useEffect, useState, useRef} from 'react'
 import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
 import Carousel, {Pagination} from 'react-native-snap-carousel'
-import {useDispatch, useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 
 import {useBlockchainActionsHook} from '../hooks'
 
@@ -14,7 +14,6 @@ import {Normalize} from '~src/app/Normalize'
 import {Storage} from '~src/app/Storage'
 import {applicationConfig} from '~src/config/ApplicationConfig'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {RootStore} from '~src/store/RootStore'
 import styled, {
   ImageView,
   LinearLayout,
@@ -96,9 +95,6 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const [carouselIndex, setCarouselIndex] = useState(0)
   const blockchainActionsHook = useBlockchainActionsHook()
   const {wallets} = useSelector((state: RootState) => state.app)
-
-  const dispatch = useDispatch<DispatchResult>()
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const finish = async () => {
     await Storage.onboardingSeen.save(true)

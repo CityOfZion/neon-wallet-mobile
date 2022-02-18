@@ -12,7 +12,6 @@ import {
   ScrollView,
 } from 'react-native'
 import Accordion from 'react-native-collapsible/Accordion'
-import {useDispatch} from 'react-redux'
 
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {
@@ -201,8 +200,6 @@ export interface MnemonicSelectionListParams {
 
 const MnemonicSelectionList = (props: Props) => {
   const {mnemonic} = props.route.params
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const dispatch = useDispatch()
   const [itensActives, setItemActives] = useState<number[]>([0])
   const handleActiveItens = (itens: number[]) => {
     setItemActives(itens)
