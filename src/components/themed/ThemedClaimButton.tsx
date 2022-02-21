@@ -77,7 +77,7 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
         text: i18n.t('screens.getAccount.claimAsset', {
           amount: FilterHelper.decimal(props.unclaimedGasAmount, language, 8),
         }),
-        textColor: '#d355e7',
+        textColor: '#4cffb3',
         opacity: 1,
         icon: require('~src/assets/images/icon-warning-purple.png'),
       })

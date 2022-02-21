@@ -46,6 +46,7 @@ interface Props {
   radius?: number
   suffix?: JSX.Element
   width?: string | number
+  height?: number
   px?: string | number
   iconAlignX?: string
   labelWidth?: string
@@ -84,6 +85,7 @@ const LabelComponent = (props: Props) => {
         >
           <LabelView
             color={props.textColor}
+            px={props.srcIcon ? '15px' : ''}
             fontSize={fontSize}
             fontFamily={props.fontFamily ?? (props.flat ? 'bold' : 'regular')}
             allowFontScaling={true}
@@ -127,7 +129,7 @@ const ThemedButton: React.FC<Props> = (props) => {
       paddingBottom: 0,
       paddingLeft: Normalize.scale(props.px!),
       paddingRight: Normalize.scale(props.px!),
-      height: Normalize.scale(50),
+      height: Normalize.scale(props.height!),
     }
 
     const styleActive = {
@@ -159,7 +161,7 @@ const ThemedButton: React.FC<Props> = (props) => {
           props.onPress(e, props.toggleable ? !isActive : undefined)
         }
       }}
-      style={{opacity: props.disabled ? 0.3 : undefined, width: props.width}}
+      style={{opacity: props.disabled ? 0.3 : undefined, width: props.width, height: props.height}}
       disabled={props.disabled}
       underlayColor="transparent"
     >
@@ -212,6 +214,7 @@ ThemedButton.propTypes = {
   subFontSize: PropTypes.string,
   subLabel: PropTypes.string,
   width: PropTypes.any,
+  height: PropTypes.number,
 }
 
 ThemedButton.defaultProps = {
@@ -226,6 +229,7 @@ ThemedButton.defaultProps = {
   basic: false,
   radius: 0,
   px: 20,
+  height: 50,
 }
 
 const ButtonView = styled.TouchableHighlight``

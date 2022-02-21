@@ -354,8 +354,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
           width: Dimensions.get('screen').width - 15,
           justifyContent: 'space-around',
           alignSelf: 'center',
-          marginVertical: 20,
-          elevation: 30,
+          marginVertical: 5,
+          elevation: 15,
         }}
       >
         <ThemedReceiveButton
@@ -409,18 +409,21 @@ const GetAccountView = (props: GetAccountViewProps) => {
       <LinearLayout>
         <ThemedButton
           px={30}
-          textAlignX={'center'}
+          height={88}
+          textAlignX={'flex-start'}
           textColor={'text.0'}
+          fontSize={17}
+          fontFamily={'medium'}
           label={i18n.t('screens.screenLayout.assets')}
           srcIcon={require('~/src/assets/images/Equalizer_-_simple-line-icons.png')}
-          iconSize={[19, 23]}
+          iconSize={[28, 24]}
           onPress={() => {
             props.navigation.navigate(wrapper.route.AccountAssetScreen.name)
           }}
           suffix={
             <ImageView
-              width={15}
-              height={15}
+              width={20}
+              height={20}
               resizeMode={'contain'}
               source={require('~src/assets/images/icon-arrow-right-green.png')}
             />
@@ -428,11 +431,14 @@ const GetAccountView = (props: GetAccountViewProps) => {
         />
         <ThemedButton
           px={30}
-          textAlignX={'center'}
+          height={88}
+          textAlignX={'flex-start'}
           textColor={'text.0'}
+          fontSize={17}
+          fontFamily={'medium'}
           label={i18n.t('screens.screenLayout.transactions')}
           srcIcon={require('~/src/assets/images/icon-reselect-green.png')}
-          iconSize={[19, 23]}
+          iconSize={[28, 30]}
           onPress={() => {
             props.navigation.navigate(
               wrapper.route.AccountTransactionsScreen.name,
@@ -443,8 +449,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
           }}
           suffix={
             <ImageView
-              width={15}
-              height={15}
+              width={20}
+              height={20}
               resizeMode={'contain'}
               source={require('~src/assets/images/icon-arrow-right-green.png')}
             />
@@ -452,20 +458,23 @@ const GetAccountView = (props: GetAccountViewProps) => {
         />
         <ThemedButton
           px={30}
+          height={88}
           disabled={!hasWalletconnect() || !hasSession}
-          textAlignX={'center'}
+          textAlignX={'flex-start'}
           textColor={'text.0'}
+          fontSize={17}
+          fontFamily={'medium'}
           label={i18n.t('screens.screenLayout.connections')}
           srcIcon={require('~/src/assets/images/connections.png')}
           suffix={
             <ImageView
-              width={15}
-              height={15}
+              width={20}
+              height={20}
               resizeMode={'contain'}
               source={require('~src/assets/images/icon-arrow-right-green.png')}
             />
           }
-          iconSize={[19, 23]}
+          iconSize={[28, 30]}
           onPress={() => {
             props.navigation.navigate(
               wrapper.route.WCAccountConnectionsScreen.name,
