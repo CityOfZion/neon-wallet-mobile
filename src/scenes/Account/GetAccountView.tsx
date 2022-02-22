@@ -354,8 +354,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
           width: Dimensions.get('screen').width - 15,
           justifyContent: 'space-around',
           alignSelf: 'center',
-          marginVertical: 5,
-          elevation: 15,
+          marginVertical: 20,
+          elevation: 30,
         }}
       >
         <ThemedReceiveButton
@@ -409,12 +409,13 @@ const GetAccountView = (props: GetAccountViewProps) => {
       <LinearLayout>
         <ThemedButton
           px={30}
+          my={5}
           height={88}
           textAlignX={'flex-start'}
           textColor={'text.0'}
-          fontSize={17}
+          fontSize={'17px'}
           fontFamily={'medium'}
-          label={i18n.t('screens.screenLayout.assets')}
+          label={i18n.t('screens.screenLayout.assets').toUpperCase()}
           srcIcon={require('~/src/assets/images/Equalizer_-_simple-line-icons.png')}
           iconSize={[28, 24]}
           onPress={() => {
@@ -431,12 +432,13 @@ const GetAccountView = (props: GetAccountViewProps) => {
         />
         <ThemedButton
           px={30}
+          my={5}
           height={88}
           textAlignX={'flex-start'}
           textColor={'text.0'}
-          fontSize={17}
+          fontSize={'17px'}
           fontFamily={'medium'}
-          label={i18n.t('screens.screenLayout.transactions')}
+          label={i18n.t('screens.screenLayout.transactions').toUpperCase()}
           srcIcon={require('~/src/assets/images/icon-reselect-green.png')}
           iconSize={[28, 30]}
           onPress={() => {
@@ -458,13 +460,14 @@ const GetAccountView = (props: GetAccountViewProps) => {
         />
         <ThemedButton
           px={30}
+          my={5}
           height={88}
           disabled={!hasWalletconnect() || !hasSession}
           textAlignX={'flex-start'}
           textColor={'text.0'}
-          fontSize={17}
+          fontSize={'17px'}
           fontFamily={'medium'}
-          label={i18n.t('screens.screenLayout.connections')}
+          label={i18n.t('screens.screenLayout.connections').toUpperCase()}
           srcIcon={require('~/src/assets/images/connections.png')}
           suffix={
             <ImageView

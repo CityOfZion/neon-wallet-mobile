@@ -48,8 +48,11 @@ interface Props {
   width?: string | number
   height?: number
   px?: string | number
+  my?: string | number
   iconAlignX?: string
   labelWidth?: string
+  labelPx?: string | number
+  adjustsFontSizeToFit?: boolean
 }
 
 const LabelComponent = (props: Props) => {
@@ -85,11 +88,11 @@ const LabelComponent = (props: Props) => {
         >
           <LabelView
             color={props.textColor}
-            px={props.srcIcon ? '15px' : ''}
+            px={props.labelPx ?? (props.srcIcon ? '15px' : '')}
             fontSize={fontSize}
             fontFamily={props.fontFamily ?? (props.flat ? 'bold' : 'regular')}
             allowFontScaling={true}
-            adjustsFontSizeToFit={true}
+            adjustsFontSizeToFit={props.adjustsFontSizeToFit}
             numberOfLines={1}
           >
             {props.label}
@@ -101,7 +104,7 @@ const LabelComponent = (props: Props) => {
               fontSize={subFontSize}
               fontFamily={props.fontFamily ?? (props.flat ? 'bold' : 'regular')}
               allowFontScaling={true}
-              adjustsFontSizeToFit={true}
+              adjustsFontSizeToFit={props.adjustsFontSizeToFit}
               numberOfLines={1}
             >
               {props.subLabel}
@@ -161,7 +164,7 @@ const ThemedButton: React.FC<Props> = (props) => {
           props.onPress(e, props.toggleable ? !isActive : undefined)
         }
       }}
-      style={{opacity: props.disabled ? 0.3 : undefined, width: props.width, height: props.height}}
+      style={{opacity: props.disabled ? 0.3 : undefined, width: props.width, height: props.height, marginVertical: props.my}}
       disabled={props.disabled}
       underlayColor="transparent"
     >
@@ -194,6 +197,7 @@ ThemedButton.propTypes = {
   srcIcon: PropTypes.any,
   toggleable: PropTypes.bool,
   active: PropTypes.bool,
+  adjustsFontSizeToFit: PropTypes.bool,
   disabled: PropTypes.bool,
   rounded: PropTypes.bool,
   flat: PropTypes.bool,
@@ -205,6 +209,7 @@ ThemedButton.propTypes = {
   contentStyle: PropTypes.any,
   borderThickness: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   px: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  my: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   borderColor: PropTypes.string,
   textAlign: PropTypes.string,
   textAlignX: PropTypes.string,
@@ -213,6 +218,7 @@ ThemedButton.propTypes = {
   labelWidth: PropTypes.string,
   subFontSize: PropTypes.string,
   subLabel: PropTypes.string,
+  labelPx: PropTypes.string,
   width: PropTypes.any,
   height: PropTypes.number,
 }
@@ -223,12 +229,14 @@ ThemedButton.defaultProps = {
   textAlignX: 'center',
   toggleable: false,
   active: false,
+  adjustsFontSizeToFit: true,
   disabled: false,
   rounded: true,
   flat: false,
   basic: false,
   radius: 0,
   px: 20,
+  my: 0,
   height: 50,
 }
 

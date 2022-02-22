@@ -77,7 +77,7 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
         text: i18n.t('screens.getAccount.claimAsset', {
           amount: FilterHelper.decimal(props.unclaimedGasAmount, language, 8),
         }),
-        textColor: '#4cffb3',
+        textColor: '#d355e7',
         opacity: 1,
         icon: require('~src/assets/images/icon-warning-purple.png'),
       })
@@ -89,11 +89,14 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
   }, [props.isClaimAvailable])
   return (
     <ThemedButton
+      height={45}
       onPress={props.onPress}
       srcIcon={infoClaim?.icon}
       label={infoClaim?.text}
       width={Dimensions.get('window').width * 0.5}
-      fontSize={'16px'}
+      fontSize={'15px'}
+      labelPx={2}
+      adjustsFontSizeToFit={false}
       iconSize={!props.isClaimAvailable ? [10, 10] : [20, 20]}
       textColor={
         infoClaim?.icon
