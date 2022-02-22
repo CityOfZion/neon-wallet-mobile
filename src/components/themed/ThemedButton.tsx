@@ -48,6 +48,7 @@ interface Props {
   width?: string | number
   height?: number
   px?: string | number
+  my?: string | number
   iconAlignX?: string
   labelWidth?: string
 }
@@ -161,7 +162,7 @@ const ThemedButton: React.FC<Props> = (props) => {
           props.onPress(e, props.toggleable ? !isActive : undefined)
         }
       }}
-      style={{opacity: props.disabled ? 0.3 : undefined, width: props.width, height: props.height}}
+      style={{opacity: props.disabled ? 0.3 : undefined, width: props.width, height: props.height, marginVertical: props.my}}
       disabled={props.disabled}
       underlayColor="transparent"
     >
@@ -205,6 +206,7 @@ ThemedButton.propTypes = {
   contentStyle: PropTypes.any,
   borderThickness: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   px: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  my: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   borderColor: PropTypes.string,
   textAlign: PropTypes.string,
   textAlignX: PropTypes.string,
@@ -229,6 +231,7 @@ ThemedButton.defaultProps = {
   basic: false,
   radius: 0,
   px: 20,
+  my: 0,
   height: 50,
 }
 

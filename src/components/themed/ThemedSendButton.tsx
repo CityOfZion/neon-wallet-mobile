@@ -35,6 +35,7 @@ const ThemedSendButton: React.FC<Props> = (props) => {
 
   return (
     <ThemedButton
+      height={45}
       srcIcon={
         isNotEmpty && !isWatchAccount && isConnected
           ? require('~src/assets/images/arrow-up-green.png')

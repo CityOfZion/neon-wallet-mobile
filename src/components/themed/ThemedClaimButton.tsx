@@ -89,6 +89,7 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
   }, [props.isClaimAvailable])
   return (
     <ThemedButton
+      height={45}
       onPress={props.onPress}
       srcIcon={infoClaim?.icon}
       label={infoClaim?.text}
