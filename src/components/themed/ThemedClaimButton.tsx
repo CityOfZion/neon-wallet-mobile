@@ -94,7 +94,9 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
       srcIcon={infoClaim?.icon}
       label={infoClaim?.text}
       width={Dimensions.get('window').width * 0.5}
-      fontSize={'16px'}
+      fontSize={'15px'}
+      labelPx={2}
+      adjustsFontSizeToFit={false}
       iconSize={!props.isClaimAvailable ? [10, 10] : [20, 20]}
       textColor={
         infoClaim?.icon

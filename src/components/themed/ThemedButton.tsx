@@ -51,6 +51,8 @@ interface Props {
   my?: string | number
   iconAlignX?: string
   labelWidth?: string
+  labelPx?: string | number
+  adjustsFontSizeToFit?: boolean
 }
 
 const LabelComponent = (props: Props) => {
@@ -86,11 +88,11 @@ const LabelComponent = (props: Props) => {
         >
           <LabelView
             color={props.textColor}
-            px={props.srcIcon ? '15px' : ''}
+            px={props.labelPx ?? (props.srcIcon ? '15px' : '')}
             fontSize={fontSize}
             fontFamily={props.fontFamily ?? (props.flat ? 'bold' : 'regular')}
             allowFontScaling={true}
-            adjustsFontSizeToFit={true}
+            adjustsFontSizeToFit={props.adjustsFontSizeToFit}
             numberOfLines={1}
           >
             {props.label}
@@ -102,7 +104,7 @@ const LabelComponent = (props: Props) => {
               fontSize={subFontSize}
               fontFamily={props.fontFamily ?? (props.flat ? 'bold' : 'regular')}
               allowFontScaling={true}
-              adjustsFontSizeToFit={true}
+              adjustsFontSizeToFit={props.adjustsFontSizeToFit}
               numberOfLines={1}
             >
               {props.subLabel}
@@ -195,6 +197,7 @@ ThemedButton.propTypes = {
   srcIcon: PropTypes.any,
   toggleable: PropTypes.bool,
   active: PropTypes.bool,
+  adjustsFontSizeToFit: PropTypes.bool,
   disabled: PropTypes.bool,
   rounded: PropTypes.bool,
   flat: PropTypes.bool,
@@ -215,6 +218,7 @@ ThemedButton.propTypes = {
   labelWidth: PropTypes.string,
   subFontSize: PropTypes.string,
   subLabel: PropTypes.string,
+  labelPx: PropTypes.string,
   width: PropTypes.any,
   height: PropTypes.number,
 }
@@ -225,6 +229,7 @@ ThemedButton.defaultProps = {
   textAlignX: 'center',
   toggleable: false,
   active: false,
+  adjustsFontSizeToFit: true,
   disabled: false,
   rounded: true,
   flat: false,
