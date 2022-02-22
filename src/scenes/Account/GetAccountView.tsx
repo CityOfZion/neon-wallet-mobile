@@ -412,7 +412,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           my={5}
           height={88}
           textAlignX={'flex-start'}
-          textColor={'primary'}
+          textColor={'text.0'}
           fontSize={'17px'}
           fontFamily={'medium'}
           label={i18n.t('screens.screenLayout.assets').toUpperCase()}
@@ -435,7 +435,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           my={5}
           height={88}
           textAlignX={'flex-start'}
-          textColor={'primary'}
+          textColor={'text.0'}
           fontSize={'17px'}
           fontFamily={'medium'}
           label={i18n.t('screens.screenLayout.transactions').toUpperCase()}
@@ -464,7 +464,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           height={88}
           disabled={!hasWalletconnect() || !hasSession}
           textAlignX={'flex-start'}
-          textColor={'primary'}
+          textColor={'text.0'}
           fontSize={'17px'}
           fontFamily={'medium'}
           label={i18n.t('screens.screenLayout.connections').toUpperCase()}
