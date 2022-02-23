@@ -61,7 +61,7 @@ const AppNavigation = (props: Props) => {
   const {status: timerStatus} = useSelector((state: RootState) => state.timer)
 
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const {checkPendingTransactions} = usePendngTransactions()
+  const {checkPendingTransactionsAndUpdateBalance} = usePendngTransactions()
   const {progress, loadingText, isLoading} = loadingOverlayState
 
   const [onboardingSeen, setOnboardingSeen] = useState(true)
@@ -164,11 +164,9 @@ const AppNavigation = (props: Props) => {
   }, [walletConnectCtx.sessions])
 
   useEffect(() => {
-    checkPendingTransactions(accountsPool)
+    checkPendingTransactionsAndUpdateBalance(accountsPool)
     accountsPool.some((it) => it.flattedPendingTransactions.length < 1)
   }, [accountsPool, selectedWallet.tokenAssets])
-
-  useEffect(() => {}, [selectedWallet.tokenAssets])
 
   const getInitialRouteName = () => {
     return onboardingSeen

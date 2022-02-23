@@ -15,7 +15,7 @@ export function usePendngTransactions() {
   const [isClaim, setIsClaim] = useState<boolean>()
   const [lastTransaction, setLastTransaction] = useState<SenderTransaction>()
 
-  const checkPendingTransactions = useCallback(
+  const checkPendingTransactionsAndUpdateBalance = useCallback(
     async (accountsPool: Account[]) => {
       for (const account of accountsPool) {
         if (account.flattedPendingTransactions.length > 0) {
@@ -81,5 +81,5 @@ export function usePendngTransactions() {
     }
   }, [isClaim, lastTransaction])
 
-  return {checkPendingTransactions, claimHasUpdated: isClaim}
+  return {checkPendingTransactionsAndUpdateBalance}
 }
