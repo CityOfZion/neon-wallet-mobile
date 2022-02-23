@@ -1,5 +1,6 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import {Await, AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, {useEffect, useState, useCallback, useMemo} from 'react'
 import {showMessage} from 'react-native-flash-message'
@@ -7,6 +8,7 @@ import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {getWCChainByBlockchain, hasWalletconnect} from '~/src/blockchain/common'
+import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import {IURI} from '~/src/helpers/UriHelper'
 import {Account} from '~/src/models/redux/Account'
 import {Wallet} from '~/src/models/redux/Wallet'
@@ -19,7 +21,6 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 import {AccountCardsComponent} from '~src/scenes/GetWalletView'
-
 export interface WCAccountSelectionModalParams {
   wallet: Wallet
   uri?: IURI
@@ -85,7 +86,7 @@ export const WCAccountSelectionModal = (props: Props) => {
   )
 
   return (
-    <>
+    <AwaitActivity name="connectingDapp" loadingView={<ScreenLoader />}>
       <SwiperPanel
         padding={20}
         fullSize={true}
@@ -104,11 +105,13 @@ export const WCAccountSelectionModal = (props: Props) => {
           </TextView>
           <AccountCardsComponent
             accounts={accounts}
-            onPress={handleConnectDApp}
+            onPress={(account) =>
+              Await.run('connectingDapp', () => handleConnectDApp(account))
+            }
             disableSecondTouch={true}
           />
         </LinearLayout>
       </SwiperPanel>
-    </>
+    </AwaitActivity>
   )
 }

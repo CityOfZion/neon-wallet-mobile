@@ -145,10 +145,9 @@ export const WalletConnectContextProvider: React.FC<{
 
   const cleanConnections = useCallback(async () => {
     if (!sessionsWasClean && sessions.length > 0) {
-      setSessions([])
-      setRequests([])
       setsessionsWasClean(true)
-
+      setRequests([])
+      setSessionProposals([])
       await Promise.all(
         sessions.map(async (session) => {
           try {
@@ -158,6 +157,8 @@ export const WalletConnectContextProvider: React.FC<{
           }
         })
       )
+
+      setSessions([])
     }
   }, [sessions, sessionsWasClean])
 
