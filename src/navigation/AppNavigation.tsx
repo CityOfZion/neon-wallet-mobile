@@ -6,6 +6,8 @@ import {InteractionManager} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {usePendngTransactions} from '../hooks/PendingTransactionsHook'
+import {Wallet} from '../models/redux/Wallet'
 import PasscodeStackNavigation, {
   PasscodeStackParams,
 } from './PasscodeStackNavigation'
@@ -57,6 +59,9 @@ const AppNavigation = (props: Props) => {
   const {isConnected} = useSelector((state: RootState) => state.network)
   const loadingOverlayState = useSelector((state: RootState) => state.loading)
   const {status: timerStatus} = useSelector((state: RootState) => state.timer)
+
+  const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const {checkPendingTransactions} = usePendngTransactions()
   const {progress, loadingText, isLoading} = loadingOverlayState
 
   const [onboardingSeen, setOnboardingSeen] = useState(true)
@@ -66,8 +71,10 @@ const AppNavigation = (props: Props) => {
   const walletConnectCtx = useWalletConnect()
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const dispatch = useDispatch()
-
+  const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
+  const selectedWallet = dispatchWallet(
+    RootStore.wallet.actions.getFromSelection()
+  )
   const [hasInit, setInit] = useState(false)
   const [syncFetchInterval, setFetchSyncInterval] = useState(10000)
 
@@ -155,6 +162,13 @@ const AppNavigation = (props: Props) => {
   useEffect(() => {
     handleCleanConnectionsDApps()
   }, [walletConnectCtx.sessions])
+
+  useEffect(() => {
+    checkPendingTransactions(accountsPool)
+    accountsPool.some((it) => it.flattedPendingTransactions.length < 1)
+  }, [accountsPool, selectedWallet.tokenAssets])
+
+  useEffect(() => {}, [selectedWallet.tokenAssets])
 
   const getInitialRouteName = () => {
     return onboardingSeen
