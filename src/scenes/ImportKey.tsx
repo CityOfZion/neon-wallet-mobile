@@ -27,13 +27,11 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import {UtilsHelper} from '~src/helpers/UtilsHelper'
-import {Account} from '~src/models/redux/Account'
+import {useBlockchainActionsHook} from '~src/hooks'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {getRandomColor} from '~src/scenes/CustomizeAccount'
 import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout, ImageView, TextView} from '~src/styles/styled-components'
-
 type ParamList = MoreStackParamList & WalletStackParamList & RootStackParamList
 interface ImportKeyProps {
   navigation: StackNavigationProp<ParamList>
@@ -67,10 +65,9 @@ const ImportKey = (props: ImportKeyProps) => {
   >([])
   const [showImportList, setShowImportList] = useState<boolean>(false)
   const [disableButton, setDisableButton] = useState<boolean>(false)
-  const disableButtonTouch = useRef<boolean>(false)
-  const dispatch = useDispatch()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
+  const blockchainActionsHook = useBlockchainActionsHook()
+  const {walletIdState} = blockchainActionsHook
 
   const importMnemonic = async (mnemonic: string) => {
     const mnemonicIsImported = (await dispatchAsync(
@@ -123,68 +120,6 @@ const ImportKey = (props: ImportKeyProps) => {
       )
       return null
     }
-  }
-
-  const createWallet = async (name: string, securityPhrase: string) => {
-    dispatch(RootStore.wallet.actions.setName(name))
-    dispatch(RootStore.wallet.actions.setSecurityPhrase(securityPhrase))
-    dispatch(RootStore.wallet.actions.setType('standard'))
-
-    const walletId = await dispatchAsyncString(
-      RootStore.wallet.actions.createAndSave()
-    )
-
-    await dispatchAsync(
-      RootStore.wallet.actions.setShowBackupAlert(walletId, false)
-    )
-
-    await dispatchAsync(RootStore.app.actions.syncWallets())
-
-    dispatch(RootStore.wallet.actions.selectWallet(walletId))
-
-    return walletId
-  }
-
-  const createAccount = async (
-    walletId: string,
-    name: string,
-    wif: string,
-    address: string,
-    blockchain: BlockchainServiceKey
-  ) => {
-    if (!address) throw new Error('Address not defined')
-
-    dispatch(RootStore.account.actions.setIdWallet(walletId))
-    dispatch(RootStore.account.actions.setName(name))
-    dispatch(
-      RootStore.account.actions.setBackgroundColor(
-        theme.colors.card[getRandomColor(6)]
-      )
-    )
-    dispatch(RootStore.account.actions.setBlockchain(blockchain))
-    const importedAccount = (await dispatchAsync(
-      RootStore.account.actions.importAndSave(address, wif)
-    )) as Account
-
-    if (isConnected) {
-      await importedAccount.populateTokenAssets()
-      await importedAccount.populateTransactions(tokens)
-      await dispatchAsync(
-        RootStore.app.actions.syncTokenAssetsByAddress(address)
-      )
-    }
-    dispatch(
-      RootStore.account.actions.setTokenAssets(importedAccount.tokenAssets)
-    )
-
-    if (importedAccount.address) {
-      await dispatchAsync(
-        RootStore.account.actions.updateAndSave(importedAccount.address)
-      )
-    }
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
-
-    return importedAccount
   }
 
   const handleChangeWhenAddress = useCallback(() => {
@@ -294,82 +229,89 @@ const ImportKey = (props: ImportKeyProps) => {
   }, [inputValue])
 
   const persistImport = useCallback(async () => {
-    if (!disableButtonTouch.current) {
-      disableButtonTouch.current = true
-
-      if (validateAddressAllBlockchains(inputValue)) {
-        Alert.alert(
-          '',
-          i18n.t('importKey.alertText'),
-          [
-            {
-              text: i18n.t('importKey.alertCancelButton'),
-              style: 'cancel',
-            },
-            {
-              text: i18n.t('importKey.alertConfirmButton'),
-              onPress: () =>
-                props.navigation.navigate(
-                  wrapper.route.ImportReadAccount.name,
-                  {
-                    address: inputValue,
-                  }
-                ),
-            },
-          ],
-          {cancelable: true}
-        )
-      } else if (validatePrivateKeyWithPasswordAllBlockchains(inputValue)) {
-        props.navigation.navigate(wrapper.route.Passphrase.name, {
-          encryptedKey: inputValue,
-        })
-      } else if (validateWifAllBlockchains(inputValue)) {
-        const mnemonic = blockchainServices[
-          addressesSelected[0].blockchain
-        ].generateMnemonic()
-        if (!Array.isArray(mnemonic)) {
-          throw new Error(
-            i18n.t('importKey.mnemonicAlreadyExists', {
-              mnemonic,
-            })
-          )
-        }
-        const idWallet = await createWallet(
-          i18n.t('defaultNameWallet.importedWallet'),
-          mnemonic.join(',')
-        )
-        dispatch(RootStore.wallet.actions.selectWallet(idWallet))
-        for (const addressSelected of addressesSelected) {
-          await createAccount(
-            idWallet,
-            `${i18n.t(
-              `blockchainServices.${addressSelected.blockchain}.accountName`
-            )} 1`,
-            inputValue,
-            addressSelected.address,
-            addressSelected.blockchain
-          )
-        }
-        await dispatchAsync(RootStore.app.actions.syncWallets())
-        await dispatchAsync(RootStore.app.actions.syncAccounts())
-
-        props.navigation.replace(wrapper.route.Tab.name, {
-          screen: wrapper.route.ListWallets.name,
-        })
-        props.navigation.navigate(wrapper.route.GetWallet.name, {})
-      } else if (validateMnemonic(inputValue)) {
-        const dataAccountsToImport = await importMnemonic(inputValue)
-        if (dataAccountsToImport) {
-          props.navigation.navigate(wrapper.route.MnemonicSelectionList.name, {
-            data: dataAccountsToImport,
-            mnemonic: inputValue,
+    Await.init('importKey')
+    if (validateAddressAllBlockchains(inputValue)) {
+      Alert.alert(
+        '',
+        i18n.t('importKey.alertText'),
+        [
+          {
+            text: i18n.t('importKey.alertCancelButton'),
+            style: 'cancel',
+          },
+          {
+            text: i18n.t('importKey.alertConfirmButton'),
+            onPress: () =>
+              props.navigation.navigate(wrapper.route.ImportReadAccount.name, {
+                address: inputValue,
+              }),
+          },
+        ],
+        {cancelable: true}
+      )
+      Await.done('importKey')
+    } else if (validatePrivateKeyWithPasswordAllBlockchains(inputValue)) {
+      Await.done('importKey')
+      props.navigation.navigate(wrapper.route.Passphrase.name, {
+        encryptedKey: inputValue,
+      })
+    } else if (validateWifAllBlockchains(inputValue)) {
+      const mnemonic = blockchainServices[
+        addressesSelected[0].blockchain
+      ].generateMnemonic()
+      if (!Array.isArray(mnemonic)) {
+        throw new Error(
+          i18n.t('importKey.mnemonicAlreadyExists', {
+            mnemonic,
           })
-        }
+        )
       }
-
-      disableButtonTouch.current = false
+      blockchainActionsHook.init()
+      await blockchainActionsHook.createWallet(
+        i18n.t('defaultNameWallet.importedWallet'),
+        mnemonic.join(','),
+        'standard'
+      )
+    } else if (validateMnemonic(inputValue)) {
+      const dataAccountsToImport = await importMnemonic(inputValue)
+      if (dataAccountsToImport) {
+        Await.done('importKey')
+        props.navigation.navigate(wrapper.route.MnemonicSelectionList.name, {
+          data: dataAccountsToImport,
+          mnemonic: inputValue,
+        })
+      }
     }
   }, [addressesSelected, inputValue])
+
+  const importAccounts = useCallback(
+    async (walletId: string) => {
+      for (const addressSelected of addressesSelected) {
+        await blockchainActionsHook.importAccount(
+          walletId,
+          `${i18n.t(
+            `blockchainServices.${addressSelected.blockchain}.accountName`
+          )} 1`,
+          inputValue,
+          addressSelected.address,
+          addressSelected.blockchain
+        )
+      }
+      blockchainActionsHook.finish()
+      Await.done('importKey')
+      props.navigation.replace(wrapper.route.Tab.name, {
+        screen: wrapper.route.ListWallets.name,
+      })
+      props.navigation.navigate(wrapper.route.GetWallet.name, {})
+    },
+    [addressesSelected]
+  )
+
+  useEffect(() => {
+    if (walletIdState) {
+      importAccounts(walletIdState)
+    }
+  }, [walletIdState])
 
   const validator = useCallback(
     (text: string) => {
@@ -418,12 +360,6 @@ const ImportKey = (props: ImportKeyProps) => {
     }
   }, [inputIsValid])
 
-  useEffect(() => {
-    dispatch(RootStore.timer.actions.setTimerOff())
-    return () => {
-      dispatch(RootStore.timer.actions.setTimerOn())
-    }
-  }, [])
   return (
     <ScreenLayout>
       <AwaitActivity name={'importKey'} loadingView={<ScreenLoader />}>
@@ -548,9 +484,7 @@ const ImportKey = (props: ImportKeyProps) => {
               >
                 <ThemedButton
                   label="Next"
-                  onPress={() => {
-                    Await.run('importKey', persistImport)
-                  }}
+                  onPress={persistImport}
                   disabled={disableButton}
                 />
               </LinearLayout>

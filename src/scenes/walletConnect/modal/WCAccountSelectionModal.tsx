@@ -78,7 +78,7 @@ export const WCAccountSelectionModal = (props: Props) => {
           index: 0,
           routes: [{name: wrapper.route.Tab.name}],
         })
-        props.navigation.navigate(wrapper.route.WalletConnectPage.name, {}) 
+        props.navigation.navigate(wrapper.route.WalletConnectPage.name, {})
       }
     },
     [walletConnectCtx.sessionProposals]

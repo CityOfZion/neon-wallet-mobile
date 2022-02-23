@@ -45,7 +45,6 @@ import {
 import CopyContextModal, {
   CopyContextModalParams,
 } from '~src/scenes/CopyContextModal'
-import CreateAccountModal from '~src/scenes/CreateAccountModal'
 import CurrencyPickerModal from '~src/scenes/CurrencyPickerModal'
 import CustomColorPage, {
   CustomColorPageParam,
@@ -182,10 +181,6 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={wrapper.route.WelcomeModal.name}
           component={WelcomePage}
-        />
-        <ModalStack.Screen
-          name={wrapper.route.CreateAccountModal.name}
-          component={CreateAccountModal}
         />
         <ModalStack.Screen
           name={wrapper.route.EditAccountModal.name}

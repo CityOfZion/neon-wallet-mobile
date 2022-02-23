@@ -124,7 +124,8 @@
       "title": "Packed pipeline of updates",
       "subtitle": "The team is working around the clock to bring you the latest new features",
       "buttonTitle": "Get Started!"
-    }
+    },
+    "firstWalletName": "My First Wallet"
   },
   "myWalletOptions": {
     "details": "Details",

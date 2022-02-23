@@ -1,4 +1,3 @@
-import {useAccountHook} from '~src/hooks/AccountHook'
-import {useWalletHook} from '~src/hooks/WalletHook'
-
-export {useWalletHook, useAccountHook}
+import {useAmountFee} from '~src/hooks/AmountFeeHook'
+import {useBlockchainActionsHook} from '~src/hooks/BlockchainActionsHook'
+export {useAmountFee, useBlockchainActionsHook}

@@ -7,13 +7,12 @@ import {View} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector, useDispatch} from 'react-redux'
 
-import {getRandomColor} from './CustomizeAccount'
+import {useBlockchainActionsHook} from '../hooks'
 
 import {wrapper} from '~src/app/ApplicationWrapper'
-import {BlockchainServiceKey, blockchainServices} from '~src/blockchain'
+import {BlockchainServiceKey} from '~src/blockchain'
 import BlockchainList from '~src/components/BlockchainList'
 import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
-import {SearchBar} from '~src/components/input/SearchBar'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
@@ -37,8 +36,6 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
   >()
 
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const dispatch = useDispatch()
   const wallet = useSelector((state: RootState) => state.wallet)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const [selectedWallet, setSelectedWallet] = useState<Wallet>(
@@ -48,6 +45,8 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
+
+  const blockchainActionsHook = useBlockchainActionsHook()
 
   const createAccount = useCallback(async () => {
     if (!wallet.id) throw new Error('No wallet selected')
@@ -64,32 +63,19 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
       .getAccounts(accountsPool)
       .filter((account) => account.blockchain === blockchainSelected).length
 
-    dispatch(RootStore.account.actions.setIdWallet(wallet.id))
-    dispatch(
-      RootStore.account.actions.setName(
-        `${i18n.t(`blockchainServices.${blockchainSelected}.label`)} ${i18n.t(
-          'modals.blockchainList.countAccount',
-          {
-            count: indexAccount + 1,
-          }
-        )}`
-      )
+    blockchainActionsHook.init()
+    blockchainActionsHook.createAccount(
+      wallet.id,
+      `${i18n.t(`blockchainServices.${blockchainSelected}.label`)} ${i18n.t(
+        'modals.blockchainList.countAccount',
+        {
+          count: indexAccount + 1,
+        }
+      )}`,
+      blockchainSelected,
+      indexAccount
     )
-    dispatch(RootStore.account.actions.setBlockchain(blockchainSelected))
-    dispatch(
-      RootStore.account.actions.setBackgroundColor(
-        theme.colors.card[getRandomColor(6)]
-      )
-    )
-    dispatch(
-      RootStore.account.actions.setSrcIcon(
-        blockchainServices[blockchainSelected].icon
-      )
-    )
-    await dispatchAsync(RootStore.account.actions.createAndSave(indexAccount))
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
-    await dispatchAsync(RootStore.app.actions.syncWallets())
-
+    blockchainActionsHook.finish()
     props.navigation.goBack()
   }, [accountsPool, wallet, blockchainSelected])
 
@@ -98,13 +84,6 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
       dispatchWallet(RootStore.wallet.actions.getFromSelection())
     )
   }, [wallet])
-
-  useEffect(() => {
-    dispatch(RootStore.timer.actions.setTimerOff())
-    return () => {
-      dispatch(RootStore.timer.actions.setTimerOn())
-    }
-  }, [])
 
   return (
     <SwiperPanel

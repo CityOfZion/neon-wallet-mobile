@@ -32,6 +32,7 @@ import TabNavigation, {TabParams} from '~src/navigation/TabNavigation'
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 import QRCodeScan, {QRCodeScanParams} from '~src/scenes/QRCodeScan'
+import {RootStore} from '~src/store/RootStore'
 export type RootStackParamList = {
   Tab: TabParams
   Modal: ModalParams
@@ -65,6 +66,7 @@ const AppNavigation = (props: Props) => {
   const walletConnectCtx = useWalletConnect()
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatch = useDispatch()
 
   const [hasInit, setInit] = useState(false)
   const [syncFetchInterval, setFetchSyncInterval] = useState(10000)

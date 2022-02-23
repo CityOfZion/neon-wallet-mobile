@@ -1,27 +1,19 @@
 import {StackNavigationProp} from '@react-navigation/stack'
-import {Await} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, {useEffect, useState, useRef} from 'react'
 import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
 import Carousel, {Pagination} from 'react-native-snap-carousel'
-import {useDispatch, useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 
-import {getRandomColor} from './CustomizeAccount'
+import {useBlockchainActionsHook} from '../hooks'
 
 import {useHeaderHeight} from '~/node_modules/@react-navigation/stack'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Normalize} from '~src/app/Normalize'
 import {Storage} from '~src/app/Storage'
-import {
-  blockchainList,
-  BlockchainServiceKey,
-  blockchainServices,
-} from '~src/blockchain'
 import {applicationConfig} from '~src/config/ApplicationConfig'
-import {AsteroidHelper} from '~src/helpers/AsteroidHelper'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {RootStore} from '~src/store/RootStore'
 import styled, {
   ImageView,
   LinearLayout,
@@ -101,12 +93,8 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const carousel = useRef<Carousel<any>>(null)
   const [isLastPage, setIsLastPage] = useState(false)
   const [carouselIndex, setCarouselIndex] = useState(0)
-
+  const blockchainActionsHook = useBlockchainActionsHook()
   const {wallets} = useSelector((state: RootState) => state.app)
-
-  const dispatch = useDispatch<DispatchResult>()
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
 
   const finish = async () => {
     await Storage.onboardingSeen.save(true)
@@ -115,13 +103,9 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   }
 
   useEffect(() => {
-    dispatch(RootStore.timer.actions.setTimerOff())
+    blockchainActionsHook.init()
     if (wallets.length === 0) {
-      // NW-221 The app must create a wallet for the user when it first runs
-      Await.run('populateWallet', () => createFirstWallet())
-    }
-    return () => {
-      dispatch(RootStore.timer.actions.setTimerOn())
+      blockchainActionsHook.createInitialWallet()
     }
   }, [])
 
@@ -129,49 +113,6 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     if (carouselIndex === 3) setIsLastPage(true)
     else setIsLastPage(false)
   }, [carouselIndex])
-
-  const createFirstWallet = async () => {
-    const words = AsteroidHelper.generateMnemonic() ?? []
-
-    dispatch(RootStore.wallet.actions.setName('My First Wallet'))
-    dispatch(RootStore.wallet.actions.setType('standard'))
-    dispatch(RootStore.wallet.actions.setSecurityPhrase(words.join(' ')))
-
-    const id = await dispatchAsyncString(
-      RootStore.wallet.actions.createAndSave()
-    )
-    await dispatchAsync(RootStore.wallet.actions.setShowBackupAlert(id, true))
-    await dispatchAsync(RootStore.app.actions.syncWallets())
-
-    for (const blockchainName of blockchainList) {
-      await createFirstAccount(
-        id,
-        blockchainName,
-        blockchainList.indexOf(blockchainName)
-      )
-    }
-  }
-
-  const createFirstAccount = async (
-    id: string,
-    blockchain: BlockchainServiceKey,
-    count: number
-  ) => {
-    dispatch(RootStore.account.actions.setIdWallet(id))
-    dispatch(RootStore.account.actions.setName(`My account ${count + 1}`))
-    dispatch(RootStore.account.actions.setIndex(count))
-    dispatch(RootStore.account.actions.setBlockchain(blockchain))
-    dispatch(
-      RootStore.account.actions.setBackgroundColor(
-        theme.colors.card[getRandomColor(6)]
-      )
-    )
-    dispatch(
-      RootStore.account.actions.setSrcIcon(blockchainServices[blockchain].icon)
-    )
-    await dispatchAsyncString(RootStore.account.actions.createAndSave())
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
-  }
 
   const data = [
     {

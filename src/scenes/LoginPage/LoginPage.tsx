@@ -7,7 +7,6 @@ import {useDispatch} from 'react-redux'
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {ThemedFlatButton} from '~/src/components/themed/ThemedFlatButton'
 import {Security} from '~/src/enums/Security'
-import {Storage} from '~src/app/Storage'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {RootStore} from '~src/store/RootStore'
@@ -18,7 +17,6 @@ interface Props {
 
 export default function LoginPage(props: Props) {
   const dispatch = useDispatch()
-
   const continueButton = async () => {
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.SecurityModal.name,

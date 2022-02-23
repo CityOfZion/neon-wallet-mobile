@@ -10,8 +10,11 @@ import {
 
 import {appBus} from '~/src/app/AppBus'
 import {applicationConfig} from '~/src/config/ApplicationConfig'
+import {AsteroidHelper} from '~/src/helpers/AsteroidHelper'
 import {SecurityHelper} from '~/src/helpers/SecurityHelper'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import {Node} from '~/src/models/Node'
+import {wrapper} from '~src/app/ApplicationWrapper'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {
@@ -26,6 +29,7 @@ import {App} from '~src/models/redux/App'
 import {Contact} from '~src/models/redux/Contact'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
+import {getRandomColor} from '~src/scenes/CustomizeAccount'
 import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
 import {ContactsDispatcher} from '~src/store/app/dispatchers/ContactsDispatcher'
 import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
@@ -317,7 +321,7 @@ export class AppReducer extends ReducerWrapper<
         const accounts = await Storage.accounts.load()
 
         const wallets = await Storage.wallets.load()
-        console.log('debug sync accounts', accounts)
+
         if (accounts && wallets) {
           accounts.forEach((it, i) => {
             it.accountType = it.getWallet(wallets)?.walletType ?? null
