@@ -8,6 +8,8 @@ import React, {useEffect, useRef, useState} from 'react'
 import {Alert, TouchableWithoutFeedback, View, Animated} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
+import {useBalanceHook} from '../hooks/BalanceHook'
+
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Normalize} from '~src/app/Normalize'
 import BalanceList from '~src/components/BalanceList'
@@ -57,6 +59,8 @@ const WalletChangeComponent = (props: {
   const {currency, language} = useSelector((state: RootState) => state.settings)
   const {exchange, accounts} = useSelector((state: RootState) => state.app)
   const [variationInPercent, setVariationInPercent] = useState<number>()
+
+  const {walletBalance} = useBalanceHook()
   if (!props.wallet) return <View />
 
   useEffect(() => {
@@ -107,19 +111,7 @@ const WalletChangeComponent = (props: {
 
       <LinearLayout orientation={'horiz'} minHeight={56}>
         <TextView fontSize={'36px'} color={'text.0'} fontFamily={'medium'}>
-          {props.wallet.calculateBalance(currency, exchange) !== 0
-            ? props.wallet.calculateBalanceFormatted(
-                currency,
-                language,
-                exchange
-              )
-            : FilterHelper.currency(
-                props.wallet.calculateBalance(currency, exchange),
-                currency,
-                language,
-                0,
-                0
-              )}
+          {walletBalance}
         </TextView>
 
         {props.wallet.hasFunds && (

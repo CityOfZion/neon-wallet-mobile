@@ -59,7 +59,6 @@ export abstract class Sync {
       dispatch(RootStore.app.actions.syncTokens()),
       dispatch(RootStore.app.actions.syncNodes()),
       dispatch(RootStore.app.actions.syncTokenAssets()),
-      dispatch(RootStore.app.actions.syncPendingTransactions()),
     ]
 
     await Promise.all(promises)

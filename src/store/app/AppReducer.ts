@@ -319,7 +319,6 @@ export class AppReducer extends ReducerWrapper<
     syncAccounts: (): AsyncAction<Account[]> => {
       return async (dispatch, getState) => {
         const accounts = await Storage.accounts.load()
-
         const wallets = await Storage.wallets.load()
 
         if (accounts && wallets) {
@@ -388,7 +387,7 @@ export class AppReducer extends ReducerWrapper<
       }
       return async (dispatch, getState) => {
         try {
-          const {accounts, tokens} = getState().app
+          const {accounts} = getState().app
           const balanceAccounts = await Promise.all(
             accounts
               .map(async (acc) => {
@@ -468,65 +467,6 @@ export class AppReducer extends ReducerWrapper<
           })
           await Storage.wallets.save(wallets)
         }
-      }
-    },
-
-    syncPendingTransactions: (): AsyncAction => {
-      return async (dispatch, getState) => {
-        const accounts = getState().app.accounts
-        const wallets = getState().app.wallets
-        const removedSenderTx: SenderTransaction[] = []
-
-        for (const account of accounts) {
-          const senderTxs = account.flattedPendingTransactions
-
-          for (const senderTx of senderTxs) {
-            if (senderTx.transactionHash) {
-              try {
-                const request = blockchainServices[account.blockchain].provider
-                const confirmedTx = await request.getTransaction(
-                  senderTx.transactionHash
-                )
-                const index = senderTxs.findIndex(
-                  (it) => it.transactionHash === confirmedTx.txid
-                )
-                if (index >= 0) {
-                  if (senderTxs[index].senderAddress === 'claim') {
-                    showMessage({
-                      message: i18n.t('toast.gasClaimSuccess'),
-                      type: 'success',
-                    })
-                    appBus.emit('claimGasEnd', senderTxs[index])
-                  } else {
-                    const lastTransaction = senderTxs[index]
-                    showMessage({
-                      message: i18n.t('toast.transactionCompleted'),
-                      type: 'success',
-                      onPress: () => {
-                        appBus.emit(
-                          'navigateTransactionDetails',
-                          lastTransaction
-                        )
-                      },
-                    })
-                    appBus.emit('transactionEnd', senderTxs[index])
-                  }
-                  account.removePendingTransactions(
-                    senderTxs[index],
-                    senderTx.transactionHash
-                  )
-                  removedSenderTx.push(senderTxs[index])
-                  senderTxs.splice(index, 1)
-                }
-              } catch (e) {
-                /** TODO #665 GITHUB*/
-              }
-            }
-          }
-        }
-        await Storage.accounts.save(accounts)
-        dispatch(this.commit('SET_ACCOUNTS', {accounts}))
-        this.actions.syncWallets()
       }
     },
 

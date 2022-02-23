@@ -17,8 +17,6 @@ import {useDispatch, useSelector} from 'react-redux'
 import {appBus} from '~/src/app/AppBus'
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import ModalWarningFee from '~/src/components/ModalWarningFee'
-import TransactionsList from '~/src/components/TransactionsList'
-import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import {ThemedClaimButton} from '~/src/components/themed/ThemedClaimButton'
 import {ThemedSendButton} from '~/src/components/themed/ThemedSendButton'
 import {FilterHelper} from '~/src/helpers/FilterHelper'
@@ -78,7 +76,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const {language} = useSelector((state: RootState) => state.settings)
   const {address} = useSelector((state: RootState) => state.account)
-
+  const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const posYFactor = useRef(new Animated.Value(0))
   const {isConnected} = useSelector((state: RootState) => state.network)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
@@ -160,20 +158,26 @@ const GetAccountView = (props: GetAccountViewProps) => {
       )
       setAccount(account)
     }
-    appBus.on('claimGasEnd', refresh)
-    appBus.on('transactionEnd', refresh)
-
-    return () => {
-      appBus.off('claimGasEnd', refresh)
-      appBus.off('transactionEnd', refresh)
-    }
   }, [address])
 
   useEffect(() => {
-    populateUnclaimed()
     changeSenderAddress()
     getNodesfromBlockchain()
   }, [account])
+
+  useEffect(() => {
+    appBus.on('claimGasEnd', async () => {
+      await populateUnclaimed()
+      Await.done(`ClaimGas@${account.address}`)
+    })
+    populateUnclaimed()
+
+    return () => {
+      appBus.off('claimGasEnd', () => {
+        Await.done(`ClaimGas@${account.address}`)
+      })
+    }
+  }, [account.tokenAssets])
 
   useEffect(() => {
     handleCalcFee()
@@ -201,20 +205,11 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }
   }, [account, unclaimedGasAmount, isWatchAccount, isConnected])
 
-  const refresh = () => {
-    Await.done(`ClaimGas@${account.address}`)
-    setCurrentPage(1)
-    fetchTransaction(1)
-    populateUnclaimed()
-    getNodesfromBlockchain()
-  }
-
   const populateUnclaimed = async () => {
     if (!account.address) return
 
     const request = blockchainServices[account.blockchain].provider
     const response = await request.getUnclaimed(account.address)
-
     setUnclaimedGasAmount(response.unclaimed ?? 0)
   }
 
