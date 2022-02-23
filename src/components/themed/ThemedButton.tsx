@@ -73,7 +73,7 @@ const LabelComponent = (props: Props) => {
           height={height as number}
           resizeMode="contain"
           source={props.srcIcon}
-          ml={props.labelWidth ? -3 : undefined}
+          ml={props.labelWidth ? -4 : undefined}
         />
       )}
 

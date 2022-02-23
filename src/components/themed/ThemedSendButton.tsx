@@ -41,7 +41,7 @@ const ThemedSendButton: React.FC<Props> = (props) => {
           ? require('~src/assets/images/arrow-up-green.png')
           : require('~src/assets/images/arrow-gray.png')
       }
-      width={Dimensions.get('window').width * 0.19}
+      width={Dimensions.get('window').width * 0.15}
       onPress={props.onPress}
     />
   )

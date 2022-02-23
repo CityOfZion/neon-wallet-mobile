@@ -25,7 +25,7 @@ const ThemedReceiveButton: React.FC<Props> = (props) => {
       height={45}
       srcIcon={require('~src/assets/images/arrow-down-green.png')}
       onPress={props.onPress}
-      width={Dimensions.get('window').width * 0.19}
+      width={Dimensions.get('window').width * 0.15}
     />
   )
 }
