@@ -164,7 +164,12 @@ const ThemedButton: React.FC<Props> = (props) => {
           props.onPress(e, props.toggleable ? !isActive : undefined)
         }
       }}
-      style={{opacity: props.disabled ? 0.3 : undefined, width: props.width, height: props.height, marginVertical: props.my}}
+      style={{
+        opacity: props.disabled ? 0.3 : undefined,
+        width: props.width,
+        height: props.height,
+        marginVertical: props.my,
+      }}
       disabled={props.disabled}
       underlayColor="transparent"
     >
