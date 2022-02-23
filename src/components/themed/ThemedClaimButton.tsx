@@ -32,23 +32,6 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
     Platform.OS === 'android'
       ? ['#464c52', '#1c2329']
       : ['#1c232999', '#464c52BB']
-  const gradientEnd = [0.1, 0.8]
-  const styles = StyleSheet.create({
-    dropShadow: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: Dimensions.get('window').width * 0.49,
-      height: 45,
-      borderRadius: 7,
-      shadowColor: '#464d53',
-      shadowOffset: {
-        width: 12,
-        height: 12,
-      },
-      shadowRadius: 7,
-      elevation: 30,
-    },
-  })
   const {language} = useSelector((state: RootState) => state.settings)
   const [infoClaim, setInfoClaim] = useState<{
     textColor: string
@@ -93,11 +76,11 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
       onPress={props.onPress}
       srcIcon={infoClaim?.icon}
       label={infoClaim?.text}
-      width={Dimensions.get('window').width * 0.5}
+      width={Dimensions.get('window').width * 0.6}
       fontSize={'15px'}
-      labelPx={2}
+      labelPx={0}
       adjustsFontSizeToFit={false}
-      iconSize={!props.isClaimAvailable ? [10, 10] : [20, 20]}
+      iconSize={[15, 15]}
       textColor={
         infoClaim?.icon
           ? props.isClaimAvailable
