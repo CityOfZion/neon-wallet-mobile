@@ -5,6 +5,7 @@ import {NeoLegacyProvider} from './common'
 
 import {NeoNode} from '~/src/models/NeoNode'
 import {Node} from '~/src/models/Node'
+import {TokenAsset} from '~/src/models/TokenAsset'
 import {Transaction} from '~/src/models/Transaction'
 import {BalanceResponse} from '~/src/models/response/BalanceResponse'
 import {ContractResponse} from '~/src/models/response/ContractResponse'
@@ -24,7 +25,11 @@ export class NeoscanProvider implements NeoLegacyProvider {
     this.baseUrl = 'https://api.neoscan.io/api'
   }
 
-  async getAddressAbstracts(address: string, page: number = 1) {
+  async getAddressAbstracts(
+    address: string,
+    tokens: TokenAsset[],
+    page: number = 1
+  ) {
     return Request.get(
       `${this.baseUrl}/${this.network}/v1/get_address_abstracts/${address}/${page}`
     )

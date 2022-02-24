@@ -64,7 +64,7 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
       .filter((account) => account.blockchain === blockchainSelected).length
 
     blockchainActionsHook.init()
-    blockchainActionsHook.createAccount(
+    await blockchainActionsHook.createAccount(
       wallet.id,
       `${i18n.t(`blockchainServices.${blockchainSelected}.label`)} ${i18n.t(
         'modals.blockchainList.countAccount',

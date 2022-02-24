@@ -91,7 +91,11 @@ const ImportKey = (props: ImportKeyProps) => {
           ].generateAccount(mnemonic, index)
           if (!accounts.find((account) => account.address === address)) {
             const req = blockchainServices[blockchainName].provider
-            const {totalEntries} = await req.getAddressAbstracts(address, 1)
+            const {totalEntries} = await req.getAddressAbstracts(
+              address,
+              tokens,
+              1
+            )
             if ((totalEntries && totalEntries > 0) || index === 0) {
               accountsInfo.push({address, wif, derivationIndex: index})
             } else {
