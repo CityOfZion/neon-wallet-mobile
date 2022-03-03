@@ -248,7 +248,10 @@ const ListWalletView = (props: WalletProps) => {
   const keepUpdatedInfo = async () => {
     await dispatchAsync(RootStore.app.actions.syncWallets())
     await dispatchAsync(RootStore.app.actions.syncAccounts())
-    setSelectedWallet(wallets[0])
+    if (!selectedWallet) {
+      RootStore.wallet.actions.selectWallet(wallets[0].id)
+      setSelectedWallet(wallets[0])
+    }
   }
 
   useEffect(() => {

@@ -42,7 +42,9 @@ export interface TransactionDataScreen {
 
 const AccountTransactionsScreen = (props: Props) => {
   const {account} = props.route.params
-  const {accounts: accountsPool} = useSelector((state: RootState) => state.app)
+  const {accounts: accountsPool, tokens} = useSelector(
+    (state: RootState) => state.app
+  )
   const [transactionsDataScreen, setTransactionsDataScreen] = useState<{
     [date: string]: TransactionDataScreen[]
   }>({})
@@ -55,7 +57,7 @@ const AccountTransactionsScreen = (props: Props) => {
     if (account.address) {
       const transactionsHistory = await blockchainServices[
         account.blockchain
-      ].provider.getAddressAbstracts(account.address)
+      ].provider.getAddressAbstracts(account.address, tokens)
 
       handleFormatTransactions(transactionsHistory)
     }

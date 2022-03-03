@@ -40,41 +40,36 @@ const BlockchainListPage = (props: Props) => {
     try {
       id = await dispatchAsyncString(RootStore.wallet.actions.createAndSave())
 
+      if (!id) {
+        throw new Error('modals.blockchainList.errorCreateWallet')
+      }
       await dispatchAsync(RootStore.app.actions.syncWallets())
-
-      await Promise.all(
-        blockchainsSelected.map(async (blockchain) => {
-          if (!id) {
-            throw new Error()
-          }
-
-          dispatch(RootStore.account.actions.setIdWallet(id))
-          dispatch(
-            RootStore.account.actions.setName(
-              `${i18n.t(
-                `blockchainServices.${blockchain}.label`
-              )} ${i18n.t('modals.blockchainList.countAccount', {count: 1})}`
-            )
+      for (const blockchain of blockchainsSelected) {
+        dispatch(RootStore.account.actions.setIdWallet(id))
+        dispatch(
+          RootStore.account.actions.setName(
+            `${i18n.t(
+              `blockchainServices.${blockchain}.label`
+            )} ${i18n.t('modals.blockchainList.countAccount', {count: 1})}`
           )
-          dispatch(RootStore.account.actions.setBlockchain(blockchain))
-          dispatch(
-            RootStore.account.actions.setSrcIcon(
-              blockchainServices[blockchain].icon
-            )
+        )
+        dispatch(RootStore.account.actions.setBlockchain(blockchain))
+        dispatch(
+          RootStore.account.actions.setSrcIcon(
+            blockchainServices[blockchain].icon
           )
-          dispatch(
-            RootStore.account.actions.setBackgroundColor(
-              theme.colors.card[getRandomColor(6)]
-            )
+        )
+        dispatch(
+          RootStore.account.actions.setBackgroundColor(
+            theme.colors.card[getRandomColor(6)]
           )
+        )
 
-          await dispatchAsyncString(RootStore.account.actions.createAndSave())
+        await dispatchAsyncString(RootStore.account.actions.createAndSave())
+        await dispatchAsync(RootStore.app.actions.syncAccounts())
+      }
 
-          dispatch(RootStore.wallet.actions.selectWallet(id))
-        })
-      )
-
-      await dispatchAsync(RootStore.app.actions.syncAccounts())
+      dispatch(RootStore.wallet.actions.selectWallet(id))
 
       await dispatchAsync(RootStore.app.actions.syncWallets())
 

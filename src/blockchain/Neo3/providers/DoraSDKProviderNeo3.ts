@@ -11,6 +11,7 @@ import {ContractMethod} from '~/src/models/ContractMethod'
 import {ContractParameter} from '~/src/models/ContractParameter'
 import {NeoNode} from '~/src/models/NeoNode'
 import {Node} from '~/src/models/Node'
+import {TokenAsset} from '~/src/models/TokenAsset'
 import {Transaction} from '~/src/models/Transaction'
 import {BalanceResponse} from '~/src/models/response/BalanceResponse'
 import {ContractResponse} from '~/src/models/response/ContractResponse'
@@ -32,7 +33,11 @@ export class DoraSDKProvider implements Neo3Provider {
     }
   }
 
-  async getAddressAbstracts(address: string, page: number = 1) {
+  async getAddressAbstracts(
+    address: string,
+    tokens: TokenAsset[],
+    page: number = 1
+  ) {
     const result = new TransactionAddressResponse()
 
     let txFullResponse: AddressTransactionsResponse | any[] = []
@@ -57,7 +62,10 @@ export class DoraSDKProvider implements Neo3Provider {
         transfers,
       } of items) {
         for (const {amount, scripthash, to, from, txid} of transfers) {
-          const asset = await this.getAssetByHash(scripthash)
+          const asset = tokens.find(
+            (token) =>
+              token.hash === scripthash || '0x' + token.hash === scripthash
+          )
           result.entries.push({
             addressFrom: from,
             addressTo: to,

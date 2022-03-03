@@ -85,7 +85,6 @@ export class AccountReducer extends ReducerWrapper<
         const blockchain = getState().account.blockchain
         const index = getState().account.index
         const wallet = account.getWallet(getState().app.wallets)
-        const tokenPool = getState().app.tokens
         const indexes = account
           .getAccountsWithSameWallet(getState().app.accounts)
           .map((it) => it.index ?? 0)
@@ -101,14 +100,10 @@ export class AccountReducer extends ReducerWrapper<
             account.index,
             blockchain
           )
-
           if (newAccount) {
             account.address = newAccount.address
 
             await SecurityHelper.saveWif(account.address, newAccount.wif)
-
-            await account.populateTokenAssets()
-            await account.populateTransactions(tokenPool)
 
             accounts.push(account)
 

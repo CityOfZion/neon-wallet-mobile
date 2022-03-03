@@ -218,6 +218,7 @@ export class Account implements AccountState {
       const request = blockchainServices[this.blockchain].provider
       const response = await request.getAddressAbstracts(
         this.address,
+        this.tokenAssets,
         currentPage
       )
       totalPages = response.totalPages ?? 0
