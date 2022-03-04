@@ -36,10 +36,14 @@ export function usePendngTransactions() {
                 if (receiverAcc) {
                   await updateBalanceAfterPending(receiverAcc)
                 }
-                pendingTransaction.receiverAddress === 'claim' ||
-                pendingTransaction.receiverAddress === account.address
-                  ? setIsClaim(true)
-                  : setLastTransaction(pendingTransaction)
+                if (
+                  pendingTransaction.receiverAddress === 'claim' ||
+                  pendingTransaction.receiverAddress === account.address
+                ) {
+                  setIsClaim(true)
+                } else {
+                  setLastTransaction(pendingTransaction)
+                }
               }
             }
           }

@@ -130,6 +130,8 @@ export function useBlockchainActionsHook() {
       )
       await dispatchAsync(RootStore.account.actions.importAndSave(address, wif))
       await dispatchAsync(RootStore.app.actions.syncAccounts())
+      await dispatchAsync(RootStore.app.actions.fetchBalanceAccounts())
+      await dispatchAsync(RootStore.app.actions.syncAccounts())
       await dispatchAsync(RootStore.app.actions.syncWallets())
       setAccountAddress(address)
     },
