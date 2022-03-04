@@ -231,10 +231,10 @@ const ListWalletView = (props: WalletProps) => {
   const {isConnected} = useSelector((state: RootState) => state.network)
   const {currency, language} = useSelector((state: RootState) => state.settings)
   const {id} = useSelector((state: RootState) => state.wallet)
-
-  const [selectedWallet, setSelectedWallet] = useState<Wallet>()
-
   const dispatch = useDispatch()
+  const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
+  
+  const selectedWallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
 
   useEffect(() => {
     if (!id) {
@@ -243,27 +243,11 @@ const ListWalletView = (props: WalletProps) => {
     fadeIn()
   }, [id, wallets, accounts])
 
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-
-  const keepUpdatedInfo = async () => {
-    await dispatchAsync(RootStore.app.actions.syncWallets())
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
-    if (!selectedWallet) {
-      RootStore.wallet.actions.selectWallet(wallets[0].id)
-      setSelectedWallet(wallets[0])
-    }
-  }
-
-  useEffect(() => {
-    keepUpdatedInfo()
-  }, [])
-
   const isListNotEmpty = () => {
     return Boolean(wallets.length)
   }
 
   const selectEvent = async (wallet: Wallet) => {
-    setSelectedWallet(wallet)
     fadeIn()
     dispatch(RootStore.wallet.actions.selectWallet(wallet.id))
   }
