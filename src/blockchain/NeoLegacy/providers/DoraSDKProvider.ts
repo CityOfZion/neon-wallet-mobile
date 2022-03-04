@@ -76,7 +76,6 @@ export class DoraSDKProvider implements NeoLegacyProvider {
         assetSymbol: symbol,
       })
     })
-
     return result
   }
 
