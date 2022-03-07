@@ -105,7 +105,6 @@ const Passphrase = (props: PassphraseProps) => {
         })
         setShowInputField(true)
       }
-      Await.done('importEncryptedKey')
     } catch (error) {
       if (addressesInfo.length < 1) {
         showMessage({
@@ -117,6 +116,8 @@ const Passphrase = (props: PassphraseProps) => {
         })
         setShowInputField(true)
       }
+    } finally {
+      Await.done('importEncryptedKey')
     }
   }, [inputValue])
 
