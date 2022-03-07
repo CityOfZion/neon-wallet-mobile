@@ -104,8 +104,8 @@ const Passphrase = (props: PassphraseProps) => {
           duration: 4000,
         })
         setShowInputField(true)
-        Await.done('importEncryptedKey')
       }
+      Await.done('importEncryptedKey')
     } catch (error) {
       if (addressesInfo.length < 1) {
         showMessage({
@@ -170,21 +170,30 @@ const Passphrase = (props: PassphraseProps) => {
 
   const importAccounts = useCallback(
     async (walletId: string) => {
-      for (const {address, blockchain} of addressesInfoSelected) {
-        const {wif} = await blockchainServices[blockchain].decryptKey(
-          encryptedKey,
-          correctPassword
-        )
-        await blockchainActionsHook.importAccount(
-          walletId,
-          i18n.t(`blockchainServices.${blockchain}.accountName`),
-          wif,
-          address,
-          blockchain
-        )
+      try {
+        for (const {address, blockchain} of addressesInfoSelected) {
+          const {wif} = await blockchainServices[blockchain].decryptKey(
+            encryptedKey,
+            correctPassword
+          )
+          await blockchainActionsHook.importAccount(
+            walletId,
+            i18n.t(`blockchainServices.${blockchain}.accountName`),
+            wif,
+            address,
+            blockchain
+          )
+        }
+        blockchainActionsHook.finish()
+        Await.done('importEncryptedKey')
+      } catch (error) {
+        showMessage({
+          message: i18n.t('messages.problemToGenerateWallet'),
+          type: 'danger',
+        })
+      } finally {
+        Await.done('importEncryptedKey')
       }
-      blockchainActionsHook.finish()
-      Await.done('importEncryptedKey')
     },
     [addressesInfoSelected]
   )
