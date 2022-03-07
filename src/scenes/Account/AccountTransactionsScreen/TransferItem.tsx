@@ -13,7 +13,7 @@ export const TransferItem = (props: TransfersDataScreen) => {
   const dispatch = useDispatch<SyncDispatch<Account>>()
   const account = dispatch(RootStore.account.actions.getFromSelection())
   const contacts = useSelector((state: RootState) => state.app.contacts)
-  const {exchange} = useSelector((state: RootState) => state.app)
+  const {exchange, tokens} = useSelector((state: RootState) => state.app)
   const {currency} = useSelector((state: RootState) => state.settings)
 
   const [fiatAmount, setFiatAmount] = useState<string>('')
@@ -21,7 +21,7 @@ export const TransferItem = (props: TransfersDataScreen) => {
   const [addressEllipsizeWidth, setAddressEllipsizeWidth] = useState('40%')
   useEffect(() => {
     const {symbol, amount} = props
-    if (symbol) {
+    if (symbol && exchange[account.blockchain][symbol]) {
       const ratio = exchange[account.blockchain][symbol].to[currency]
       const fiatCalculated = ratio * Number(amount)
       setFiatAmount(`$${FilterHelper.decimal(fiatCalculated, undefined, 8)}`)
@@ -71,8 +71,7 @@ export const TransferItem = (props: TransfersDataScreen) => {
             width="21px"
             height="21px"
             source={
-              account.tokenAssets.find((token) => token.symbol === props.symbol)
-                ?.srcIcon
+              tokens.find((token) => token.symbol === props.symbol)?.srcIcon
             }
             mr="5px"
           />
