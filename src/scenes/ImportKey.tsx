@@ -82,6 +82,7 @@ const ImportKey = (props: ImportKeyProps) => {
         wif: string
         derivationIndex: number
       }[] = []
+
       for (const blockchainName of blockchainList) {
         stop = false
         index = 0
@@ -90,6 +91,7 @@ const ImportKey = (props: ImportKeyProps) => {
             blockchainName
           ].generateAccount(mnemonic, index)
           if (!accounts.find((account) => account.address === address)) {
+            await UtilsHelper.sleep(200)
             const req = blockchainServices[blockchainName].provider
             const {totalEntries} = await req.getAddressAbstracts(
               address,

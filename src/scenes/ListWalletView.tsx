@@ -233,8 +233,10 @@ const ListWalletView = (props: WalletProps) => {
   const {id} = useSelector((state: RootState) => state.wallet)
   const dispatch = useDispatch()
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
-  
-  const selectedWallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
+
+  const selectedWallet = dispatchWallet(
+    RootStore.wallet.actions.getFromSelection()
+  )
 
   useEffect(() => {
     if (!id) {
