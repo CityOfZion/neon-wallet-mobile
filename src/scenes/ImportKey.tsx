@@ -82,35 +82,32 @@ const ImportKey = (props: ImportKeyProps) => {
         wif: string
         derivationIndex: number
       }[] = []
-      try {
-        for (const blockchainName of blockchainList) {
-          stop = false
-          index = 0
-          while (!stop && isConnected) {
-            const {wif, address} = blockchainServices[
-              blockchainName
-            ].generateAccount(mnemonic, index)
-            if (!accounts.find((account) => account.address === address)) {
-              await UtilsHelper.sleep(200)
-              const req = blockchainServices[blockchainName].provider
-              const {totalEntries} = await req.getAddressAbstracts(
-                address,
-                tokens,
-                1
-              )
-              if ((totalEntries && totalEntries > 0) || index === 0) {
-                accountsInfo.push({address, wif, derivationIndex: index})
-              } else {
-                stop = true
-              }
+
+      for (const blockchainName of blockchainList) {
+        stop = false
+        index = 0
+        while (!stop && isConnected) {
+          const {wif, address} = blockchainServices[
+            blockchainName
+          ].generateAccount(mnemonic, index)
+          if (!accounts.find((account) => account.address === address)) {
+            await UtilsHelper.sleep(200)
+            const req = blockchainServices[blockchainName].provider
+            const {totalEntries} = await req.getAddressAbstracts(
+              address,
+              tokens,
+              1
+            )
+            if ((totalEntries && totalEntries > 0) || index === 0) {
+              accountsInfo.push({address, wif, derivationIndex: index})
+            } else {
+              stop = true
             }
-            index++
           }
-          allAccountsInfo.set(blockchainName, accountsInfo)
-          accountsInfo = []
+          index++
         }
-      } catch (error) {
-        throw error
+        allAccountsInfo.set(blockchainName, accountsInfo)
+        accountsInfo = []
       }
 
       if (!isConnected) {
