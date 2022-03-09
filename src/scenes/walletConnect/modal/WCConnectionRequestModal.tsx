@@ -36,9 +36,6 @@ const WCConnectionRequestModal = (props: Props) => {
   const activityName = 'loadWCConnection'
 
   const handleAccept = useCallback(async () => {
-    console.log('debug handleAccept =>', {
-      sizeSessionProposals: walletConnectCtx.sessionProposals.length,
-    })
     if (walletConnectCtx.sessionProposals.length > 0) {
       navigation.navigate(wrapper.route.Modal.name, {
         screen: wrapper.route.WCWalletSelectionModal.name,

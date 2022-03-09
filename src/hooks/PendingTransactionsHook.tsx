@@ -1,19 +1,15 @@
 import i18n from 'i18n-js'
-import {useState, useCallback, useEffect} from 'react'
+import {useCallback} from 'react'
 import {showMessage} from 'react-native-flash-message'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 
 import {appBus} from '../app/AppBus'
 import {blockchainServices} from '../blockchain'
 import {Account} from '../models/redux/Account'
-import {SenderTransaction} from '../models/redux/SenderTransaction'
 import {RootStore} from '../store/RootStore'
 
 export function usePendngTransactions() {
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const tokensPool = useSelector((state: RootState) => state.app.tokens)
-  const [isClaim, setIsClaim] = useState<boolean>()
-  const [lastTransaction, setLastTransaction] = useState<SenderTransaction>()
 
   const checkPendingTransactionsAndUpdateBalance = useCallback(
     async (accountsPool: Account[]) => {
@@ -40,9 +36,24 @@ export function usePendngTransactions() {
                   pendingTransaction.receiverAddress === 'claim' ||
                   pendingTransaction.receiverAddress === account.address
                 ) {
-                  setIsClaim(true)
+                  showMessage({
+                    message: i18n.t('toast.gasClaimSuccess'),
+                    type: 'success',
+                    duration: 2000,
+                  })
+                  appBus.emit('claimGasEnd')
                 } else {
-                  setLastTransaction(pendingTransaction)
+                  showMessage({
+                    duration: 2000,
+                    message: i18n.t('toast.transactionCompleted'),
+                    type: 'success',
+                    onPress: () => {
+                      appBus.emit(
+                        'navigateTransactionDetails',
+                        pendingTransaction
+                      )
+                    },
+                  })
                 }
               }
             }
@@ -50,40 +61,15 @@ export function usePendngTransactions() {
         }
       }
     },
-    [isClaim, lastTransaction]
+    []
   )
 
-  const updateBalanceAfterPending = useCallback(
-    async (account: Account) => {
-      await account.populateTokenAssets()
-      await account.populateTransactions(tokensPool)
-      await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
-      await dispatchAsync(RootStore.app.actions.syncAccounts())
-      await dispatchAsync(RootStore.app.actions.syncWallets())
-    },
-    [tokensPool, isClaim, lastTransaction]
-  )
-
-  useEffect(() => {
-    if (isClaim) {
-      showMessage({
-        message: i18n.t('toast.gasClaimSuccess'),
-        type: 'success',
-      })
-      setIsClaim(undefined)
-      appBus.emit('claimGasEnd')
-    } else if (lastTransaction) {
-      showMessage({
-        duration: 7000,
-        message: i18n.t('toast.transactionCompleted'),
-        type: 'success',
-        onPress: () => {
-          appBus.emit('navigateTransactionDetails', lastTransaction)
-        },
-      })
-      setLastTransaction(undefined)
-    }
-  }, [isClaim, lastTransaction])
+  const updateBalanceAfterPending = useCallback(async (account: Account) => {
+    await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
+    await dispatchAsync(RootStore.app.actions.fetchBalanceAccounts())
+    await dispatchAsync(RootStore.app.actions.syncAccounts())
+    await dispatchAsync(RootStore.app.actions.syncWallets())
+  }, [])
 
   return {checkPendingTransactionsAndUpdateBalance}
 }

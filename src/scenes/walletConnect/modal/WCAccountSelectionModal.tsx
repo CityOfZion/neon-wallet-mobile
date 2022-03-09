@@ -1,8 +1,8 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import {Await, AwaitActivity} from '@simpli/react-native-await'
+import {AwaitActivity, Await} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, {useEffect, useState, useCallback, useMemo} from 'react'
+import React, {useState, useCallback, useMemo} from 'react'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
 
@@ -37,7 +37,6 @@ export const WCAccountSelectionModal = (props: Props) => {
   const controller = useSwiperController(true)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const walletConnectCtx = useWalletConnect()
-  const [accountSelected, setAccountSelected] = useState<Account>()
 
   const accounts = props.route.params.wallet
     .getAccounts(accountsPool)
@@ -50,11 +49,12 @@ export const WCAccountSelectionModal = (props: Props) => {
 
   const handleConnectDApp = useCallback(
     async (account: Account) => {
+      Await.init('connectDapp')
       try {
         if (walletConnectCtx.sessionProposals.length > 0 && account?.address) {
           const wcChain = getWCChainByBlockchain(account.blockchain)
-          console.log({wcChain, accountSelected})
           if (wcChain) {
+            walletConnectCtx.setsessionsWasClean(true)
             await walletConnectCtx.approveSession(
               walletConnectCtx.sessionProposals[0],
               [{address: account.address, chain: wcChain}]
@@ -74,19 +74,21 @@ export const WCAccountSelectionModal = (props: Props) => {
         props.navigation.navigate(wrapper.route.WalletConnectPage.name, {})
       } catch (error) {
         const message = (error as {message: string}).message
-        showMessage({message, duration: 5000, type: 'danger'})
+        showMessage({message, duration: 7000, type: 'danger'})
         props.navigation.reset({
           index: 0,
           routes: [{name: wrapper.route.Tab.name}],
         })
         props.navigation.navigate(wrapper.route.WalletConnectPage.name, {})
+      } finally {
+        Await.done('connectDapp')
       }
     },
     [walletConnectCtx.sessionProposals]
   )
 
   return (
-    <AwaitActivity name="connectingDapp" loadingView={<ScreenLoader />}>
+    <AwaitActivity name="connectDapp" loadingView={<ScreenLoader />}>
       <SwiperPanel
         padding={20}
         fullSize={true}

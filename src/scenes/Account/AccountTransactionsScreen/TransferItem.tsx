@@ -24,7 +24,7 @@ export const TransferItem = (props: TransfersDataScreen) => {
     if (symbol && exchange[account.blockchain][symbol]) {
       const ratio = exchange[account.blockchain][symbol].to[currency]
       const fiatCalculated = ratio * Number(amount)
-      setFiatAmount(`$${FilterHelper.decimal(fiatCalculated, undefined, 8)}`)
+      setFiatAmount(`$${FilterHelper.decimal(fiatCalculated, undefined, 2)}`)
     }
   }, [exchange, currency])
 
@@ -46,7 +46,7 @@ export const TransferItem = (props: TransfersDataScreen) => {
   }, [addressEllipsizeWidth])
 
   return (
-    <View style={{marginVertical: 5, padding: 5}}>
+    <View style={{marginBottom: 15}}>
       <TouchableWithoutFeedback onPress={handleChangeAddressSize}>
         <TextView
           ellipsizeMode={'middle'}
@@ -55,6 +55,7 @@ export const TransferItem = (props: TransfersDataScreen) => {
           fontSize="17px"
           fontFamily="medium"
           width={addressEllipsizeWidth}
+          pb={3}
         >
           {contactName}
         </TextView>
@@ -66,12 +67,16 @@ export const TransferItem = (props: TransfersDataScreen) => {
           justifyContent: 'space-between',
         }}
       >
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', borderWidth: 2}}>
           <ImageView
             width="21px"
             height="21px"
             source={
-              tokens.find((token) => token.symbol === props.symbol)?.srcIcon
+              tokens.find(
+                (token) =>
+                  token.symbol === props.symbol &&
+                  token.blockchain === account.blockchain
+              )?.srcIcon
             }
             mr="5px"
           />
@@ -80,7 +85,7 @@ export const TransferItem = (props: TransfersDataScreen) => {
           </TextView>
         </View>
         <TextView color="#fff" fontSize="16px" fontFamily="medium">
-          {props.amount}
+          {FilterHelper.decimal(props.amount, undefined, props.decimals)}
         </TextView>
         <TextView color="#fff" fontSize="16px" fontFamily="medium">
           {fiatAmount}

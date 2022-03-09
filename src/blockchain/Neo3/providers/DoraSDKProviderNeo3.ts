@@ -24,7 +24,7 @@ import {IRPCContract} from '~src/blockchain'
 export type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
 export class DoraSDKProvider implements Neo3Provider {
   //eslint-disable-next-line
-  readonly network: DoraNetworkOptions = __DEV__ ? 'testnet_rc4' : 'mainnet'
+  readonly network: DoraNetworkOptions = 'mainnet'
   readonly siteUrlQuery = `https://dora.coz.io/transaction/neo3/${this.network}/`
   readonly baseNumeric: number = 8
   constructor(network?: DoraNetworkOptions) {
