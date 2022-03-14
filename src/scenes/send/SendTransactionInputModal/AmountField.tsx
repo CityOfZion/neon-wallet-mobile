@@ -100,7 +100,9 @@ const AmountField = (props: {
             {I18n.t('modals.send.transactionInput.totalAfterTransaction')}
           </TextView>
           <TextView color={'text.0'} fontFamily={'bold'} fontSize={'16px'}>
-            {FilterHelper.decimal(props.remainingTokenBalance, language)}
+            {props.remainingTokenBalance >= 0
+              ? FilterHelper.decimal(props.remainingTokenBalance, language)
+              : '-'}
           </TextView>
         </LinearLayout>
         <ButtonView
