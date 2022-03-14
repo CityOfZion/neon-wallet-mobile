@@ -276,7 +276,8 @@ const ImportKey = (props: ImportKeyProps) => {
       await blockchainActionsHook.createWallet(
         i18n.t('defaultNameWallet.importedWallet'),
         mnemonic.join(','),
-        'standard'
+        'standard',
+        true
       )
     } else if (validateMnemonic(inputValue)) {
       const dataAccountsToImport = await importMnemonic(inputValue)
