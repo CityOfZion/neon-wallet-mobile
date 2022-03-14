@@ -76,6 +76,7 @@ const TransactionRequestModal = (props: Props) => {
   const [showModalSuccess, setshowModalSuccess] = useState<boolean>(false)
   const [showModalFailed, setShowModalFailed] = useState<boolean>(false)
   const [messageAfterAccept, setMessageAfterAccept] = useState<string>()
+  const [isAcceptetdRequest, setIsAcceptedRequest] = useState<boolean>(false)
   useEffect(() => {
     requestParams.invocations.forEach((invocation) => {
       const args = invocation.args as ArgsRequest[]
@@ -158,6 +159,7 @@ const TransactionRequestModal = (props: Props) => {
         await handleAddPendingTransaction(result)
         setMessageAfterAccept(result as string)
         setshowModalSuccess(true)
+        setIsAcceptedRequest(true)
       }
     } catch (error) {
       setShowModalFailed(true)
@@ -167,9 +169,11 @@ const TransactionRequestModal = (props: Props) => {
   }, [requests, controller])
 
   const handleDeclineRequest = useCallback(async () => {
-    await rejectRequest(props.route.params.request)
+    if (!isAcceptetdRequest) {
+      await rejectRequest(props.route.params.request)
+    }
     controller.close()
-  }, [requests, controller])
+  }, [requests, controller, isAcceptetdRequest])
 
   return (
     <AwaitActivity name="wcTransactionAccepted">
@@ -181,6 +185,9 @@ const TransactionRequestModal = (props: Props) => {
         rightButton={<CloseButton mr={'20px'} />}
         onRightPress={() => {
           handleDeclineRequest()
+        }}
+        onClose={() => {
+          props.navigation.goBack()
         }}
         solidColorBG
       >

@@ -64,12 +64,15 @@ export function usePendngTransactions() {
     []
   )
 
-  const updateBalanceAfterPending = useCallback(async (account: Account) => {
-    await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
-    await dispatchAsync(RootStore.app.actions.fetchBalanceAccounts())
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
-    await dispatchAsync(RootStore.app.actions.syncWallets())
-  }, [])
+  const updateBalanceAfterPending = useCallback(
+    async (account: Account) => {
+      await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
+      await dispatchAsync(RootStore.app.actions.fetchBalanceAccounts())
+      await dispatchAsync(RootStore.app.actions.syncAccounts())
+      await dispatchAsync(RootStore.app.actions.syncWallets())
+    },
+    [checkPendingTransactionsAndUpdateBalance]
+  )
 
   return {checkPendingTransactionsAndUpdateBalance}
 }

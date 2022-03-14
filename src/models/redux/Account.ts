@@ -394,8 +394,8 @@ export class Account implements AccountState {
     senderTx.qtyInvocations = qtyInvocations
     senderTx.transactionHash = transactionHash
     senderTx.sentAt = moment().format()
-    senderTx.senderAddress = this.address
-    senderTx.receiverAddress = this.address
+    senderTx.senderAddress = ''
+    senderTx.receiverAddress = ''
 
     const senderTxs = this.flattedAllTransactions
     senderTxs.push(senderTx)
