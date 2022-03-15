@@ -57,6 +57,9 @@ const Passphrase = (props: PassphraseProps) => {
   const [correctPassword, setCorrectPassword] = useState<string>('')
   const [inputIsValid, setInputIsValid] = useState(true)
   const [showInputField, setShowInputField] = useState(true)
+  const [mnemonicEncryptedWallet, setMnemonicEncryptedWallet] = useState<
+    string
+  >()
   const encryptedKey = props.route.params.encryptedKey
 
   const account = new Account()
@@ -83,6 +86,12 @@ const Passphrase = (props: PassphraseProps) => {
           )
           const addressExist = accounts.some((acc) => acc.address === address)
           if (!addressExist) {
+            const mnemonic = blockchainServices[blockchain]
+              .generateMnemonic()
+              ?.join(',')
+            if (mnemonic) {
+              setMnemonicEncryptedWallet(mnemonic)
+            }
             setAdrresesInfo((prevState) => {
               const data = prevState
               data.push({address, blockchain})
@@ -131,35 +140,20 @@ const Passphrase = (props: PassphraseProps) => {
 
   const persist = useCallback(async () => {
     try {
-      for (const {blockchain} of addressesInfoSelected) {
-        const isEncryptedKey = blockchainServices[
-          blockchain
-        ].validatePrivateKeyWithPassword(encryptedKey)
-        if (isEncryptedKey) {
-          const mnemonic = blockchainServices[blockchain]
-            .generateMnemonic()
-            ?.join(',')
-          if (mnemonic) {
-            blockchainActionsHook.init()
-            await blockchainActionsHook.createWallet(
-              `${i18n.t(`blockchainServices.${blockchain}.id`)} ${i18n.t(
-                'modals.blockchainList.encryptedWallet'
-              )}`,
-              mnemonic,
-              'legacy'
-            )
-          } else {
-            showMessage({
-              message: i18n.t('messages.problemToGenerateWallet'),
-              type: 'danger',
-            })
-            Await.done('importEncryptedKey')
-          }
-        }
+      if (mnemonicEncryptedWallet) {
+        blockchainActionsHook.init()
+        await blockchainActionsHook.createWallet(
+          `${i18n.t('modals.blockchainList.encryptedWallet')}`,
+          mnemonicEncryptedWallet,
+          'standard',
+          true
+        )
+      } else {
+        showMessage({
+          message: i18n.t('messages.problemToGenerateWallet'),
+          type: 'danger',
+        })
       }
-      props.navigation.replace(wrapper.route.Tab.name, {
-        screen: wrapper.route.ListWallets.name,
-      })
     } catch (error) {
       showMessage({
         message: i18n.t('messages.problemToGenerateWallet'),
@@ -167,7 +161,12 @@ const Passphrase = (props: PassphraseProps) => {
       })
       Await.done('importEncryptedKey')
     }
-  }, [inputValue, addressesInfoSelected, showInputField])
+  }, [
+    inputValue,
+    addressesInfoSelected,
+    showInputField,
+    mnemonicEncryptedWallet,
+  ])
 
   const importAccounts = useCallback(
     async (walletId: string) => {
@@ -186,7 +185,9 @@ const Passphrase = (props: PassphraseProps) => {
           )
         }
         blockchainActionsHook.finish()
-        Await.done('importEncryptedKey')
+        props.navigation.replace(wrapper.route.Tab.name, {
+          screen: wrapper.route.ListWallets.name,
+        })
       } catch (error) {
         showMessage({
           message: i18n.t('messages.problemToGenerateWallet'),

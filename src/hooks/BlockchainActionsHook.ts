@@ -49,7 +49,12 @@ export function useBlockchainActionsHook() {
   }, [timerStatus])
 
   const createWallet = useCallback(
-    async (name: string, securityPhrase: string, type: WalletType) => {
+    async (
+      name: string,
+      securityPhrase: string,
+      type: WalletType,
+      isImport?: boolean
+    ) => {
       if (!timerStatus) {
         throw new Error('The hook need be initialized')
       }
@@ -62,7 +67,7 @@ export function useBlockchainActionsHook() {
       )
 
       await dispatchAsync(
-        RootStore.wallet.actions.setShowBackupAlert(walletId, true)
+        RootStore.wallet.actions.setShowBackupAlert(walletId, !isImport)
       )
 
       await dispatchAsync(RootStore.app.actions.syncWallets())
