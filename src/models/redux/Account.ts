@@ -385,6 +385,26 @@ export class Account implements AccountState {
     )
   }
 
+  async addPendingWCTransaction(
+    transactionHash: string,
+    qtyInvocations: number
+  ) {
+    const senderTx = new SenderTransaction()
+    senderTx.isPending = true
+    senderTx.qtyInvocations = qtyInvocations
+    senderTx.transactionHash = transactionHash
+    senderTx.sentAt = moment().format()
+    senderTx.senderAddress = ''
+    senderTx.receiverAddress = ''
+
+    const senderTxs = this.flattedAllTransactions
+    senderTxs.push(senderTx)
+
+    this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(
+      senderTxs
+    )
+  }
+
   getTokenAssets() {
     return this.tokenAssets
   }

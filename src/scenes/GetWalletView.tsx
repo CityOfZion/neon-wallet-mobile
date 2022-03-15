@@ -144,6 +144,7 @@ const GetWalletView = (props: GetWalletProps) => {
     dispatch(RootStore.account.actions.setBlockchain(account.blockchain))
     props.navigation.navigate(wrapper.route.GetAccount.name, {
       key: wrapper.route.GetAccount.name,
+      navigateToTransactions: false,
     })
   }
 

@@ -83,6 +83,7 @@ interface IWalletConnectContext {
   onRequestListener: (listener: OnRequestCallback) => void
   autoAcceptIntercept: (listener: AutoAcceptCallback) => void
   cleanConnections: () => Promise<void>
+  setsessionsWasClean: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export interface CtxOptions {
@@ -147,7 +148,7 @@ export const WalletConnectContextProvider: React.FC<{
     if (!sessionsWasClean && sessions.length > 0) {
       setsessionsWasClean(true)
       setRequests([])
-      setSessionProposals([])
+
       await Promise.all(
         sessions.map(async (session) => {
           try {
@@ -585,6 +586,7 @@ export const WalletConnectContextProvider: React.FC<{
     onRequestListener,
     autoAcceptIntercept,
     cleanConnections,
+    setsessionsWasClean,
   }
 
   return (

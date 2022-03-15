@@ -39,6 +39,9 @@ export class SenderTransaction implements SenderTransactionState {
   @HttpExpose()
   isPending: boolean = false
 
+  @HttpExpose()
+  qtyInvocations: number | null = null
+
   get token() {
     return this.tokens[0] as TokenAsset | null
   }

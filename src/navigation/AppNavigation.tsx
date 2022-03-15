@@ -165,8 +165,7 @@ const AppNavigation = (props: Props) => {
 
   useEffect(() => {
     checkPendingTransactionsAndUpdateBalance(accountsPool)
-    accountsPool.some((it) => it.flattedPendingTransactions.length < 1)
-  }, [accountsPool, selectedWallet.tokenAssets])
+  }, [accountsPool])
 
   const getInitialRouteName = () => {
     return onboardingSeen

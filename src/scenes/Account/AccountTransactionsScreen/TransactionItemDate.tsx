@@ -1,12 +1,6 @@
 import i18n from 'i18n-js'
 import React, {useState, useCallback, useEffect} from 'react'
-import {
-  Linking,
-  View,
-  TouchableWithoutFeedback,
-  ImageSourcePropType,
-  Image,
-} from 'react-native'
+import {Linking, View, TouchableWithoutFeedback} from 'react-native'
 import {useDispatch} from 'react-redux'
 
 import {TransactionDataScreen} from '.'
@@ -20,8 +14,8 @@ import {ImageView, TextView} from '~/src/styles/styled-components'
 
 interface TransactionDataScreenWithStatusTransactions
   extends TransactionDataScreen {
-  statusTransactions: string
-  iconStatusTransactions: ImageSourcePropType
+  hour: string
+  hideLinkDora?: boolean
 }
 
 export const TransactionItemDate = (
@@ -42,53 +36,74 @@ export const TransactionItemDate = (
     }
   }, [account, props.transfers])
 
+  const checkRenderTransactionInfo = useCallback(() => {
+    return props.transactionType === 'sendTransaction'
+  }, [props])
+
   useEffect(() => {
     handleChangeSentOrReceiveStatus()
   }, [account, props.transfers])
 
   return (
-    <View style={{marginBottom: 20}}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Image
-          style={{marginRight: 5, width: 18, height: 18}}
-          source={props.iconStatusTransactions}
-        />
-        <TextView color="#899fa8">{props.statusTransactions}</TextView>
-      </View>
+    <View style={{marginBottom: 5}}>
       <View
         style={{
           backgroundColor: '#0f0f10',
           borderRadius: 8,
           paddingHorizontal: 6,
-          paddingVertical: 20,
           marginTop: 15,
+          paddingBottom: 10,
         }}
       >
         <View
-          style={{flexDirection: 'row', flexWrap: 'wrap', marginVertical: 10}}
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            marginVertical: 10,
+            justifyContent: 'space-between',
+          }}
         >
-          <TextView color="#fff" fontFamily="medium" fontSize="18px">
-            {i18n.t('screens.getAccount.txidLabel')}
-          </TextView>
-          <TextView
-            ellipsizeMode={'middle'}
-            numberOfLines={1}
-            color="primary"
-            fontFamily="medium"
-            fontSize="16px"
+          <View
+            style={{
+              flexDirection: 'row',
+            }}
           >
-            {props.txid}
+            <TextView color="#fff" fontFamily="medium" fontSize="18px">
+              {i18n.t('screens.getAccount.txidLabel')}
+            </TextView>
+            <TextView
+              ellipsizeMode={'middle'}
+              numberOfLines={1}
+              color="primary"
+              fontFamily="medium"
+              fontSize="16px"
+              width="60%"
+              ml="10px"
+            >
+              {props.txid}
+            </TextView>
+          </View>
+          <TextView color="#fff" fontFamily="medium" fontSize="16px">
+            {props.hour}
           </TextView>
         </View>
-        <View>
-          <TextView color="#899fa8" fontSize="14px" fontFamily="medium">
-            {sentOrReceiveStatus}
-          </TextView>
-          {props.transfers.map((transfer, index) => (
-            <TransferItem key={index} {...transfer} />
-          ))}
-        </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+        {checkRenderTransactionInfo() && (
+          <View>
+            <TextView color="#899fa8" fontSize="14px" fontFamily="medium">
+              {sentOrReceiveStatus}
+            </TextView>
+            {props.transfers.map((transfer, index) => (
+              <TransferItem key={index} {...transfer} />
+            ))}
+          </View>
+        )}
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 10,
+          }}
+        >
           <View style={{flexDirection: 'row'}}>
             <BoxLabelNumber
               color={'#1f2b33'}
@@ -101,20 +116,22 @@ export const TransactionItemDate = (
               number={props.qtyNotifications}
             />
           </View>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              Linking.openURL(
-                blockchainServices[account.blockchain].provider.siteUrlQuery +
-                  props.txid
-              )
-            }}
-          >
-            <ImageView
-              width="28px"
-              height="28px"
-              source={require('~src/assets/images/dora-link.png')}
-            />
-          </TouchableWithoutFeedback>
+          {!props.hideLinkDora && (
+            <TouchableWithoutFeedback
+              onPress={() => {
+                Linking.openURL(
+                  blockchainServices[account.blockchain].provider.siteUrlQuery +
+                    props.txid
+                )
+              }}
+            >
+              <ImageView
+                width="28px"
+                height="28px"
+                source={require('~src/assets/images/dora-link.png')}
+              />
+            </TouchableWithoutFeedback>
+          )}
         </View>
       </View>
     </View>

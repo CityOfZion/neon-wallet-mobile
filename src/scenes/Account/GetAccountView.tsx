@@ -295,7 +295,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         account,
       })
     }
-  }, [props.route.params.navigateToTransactions])
+  }, [props.route.params.navigateToTransactions, account])
 
   useEffect(() => {
     if (sessions.length > 0) {
