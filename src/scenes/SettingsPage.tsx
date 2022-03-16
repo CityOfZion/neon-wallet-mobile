@@ -1,7 +1,7 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, {useEffect} from 'react'
+import React from 'react'
 import {useSelector} from 'react-redux'
 import {DefaultTheme} from 'styled-components'
 
@@ -9,9 +9,7 @@ import {wrapper} from '~src/app/ApplicationWrapper'
 import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
-import {LinearLayout} from '~src/styles/styled-components'
 
 interface SettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList & RootStackParamList>

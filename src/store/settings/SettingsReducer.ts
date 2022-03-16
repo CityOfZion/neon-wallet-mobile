@@ -8,10 +8,10 @@ import {Lang} from '~src/enums/Lang'
 import {Theme} from '~src/enums/Theme'
 import {Settings} from '~src/models/redux/Settings'
 import {CurrencyDispatcher} from '~src/store/settings/dispatchers/CurrencyDispatcher'
+import {IsFirstTimeDispatcher} from '~src/store/settings/dispatchers/IsFirstTimeDispatcher'
 import {LanguageDispatcher} from '~src/store/settings/dispatchers/LanguageDispatcher'
 import {SecurityDispatcher} from '~src/store/settings/dispatchers/SecurityDispatcher'
 import {ThemeDispatcher} from '~src/store/settings/dispatchers/ThemeDispatcher'
-
 export class SettingsReducer extends ReducerWrapper<
   SettingsActionsType,
   SettingsState,
@@ -24,6 +24,7 @@ export class SettingsReducer extends ReducerWrapper<
     CurrencyDispatcher,
     ThemeDispatcher,
     SecurityDispatcher,
+    IsFirstTimeDispatcher,
   ]
 
   readonly actions = {
@@ -43,17 +44,22 @@ export class SettingsReducer extends ReducerWrapper<
       return this.commit('SET_THEME', {theme})
     },
 
+    setIsFirstTime: (isFirstTime: boolean) => {
+      return this.commit('SET_IS_FIRST_TIME', {isFirstTime})
+    },
+
     syncSettings: (): AsyncAction<Settings> => {
       return async (dispatch, getState) => {
         const settings = await Storage.settings.load()
 
         if (settings) {
-          const {language, currency, theme, security} = settings
+          const {language, currency, theme, security, isFirstTime} = settings
 
           dispatch(this.commit('SET_LANGUAGE', {language}))
           dispatch(this.commit('SET_CURRENCY', {currency}))
           dispatch(this.commit('SET_THEME', {theme}))
           dispatch(this.commit('SET_SECURITY', {security}))
+          dispatch(this.commit('SET_IS_FIRST_TIME', {isFirstTime}))
         }
 
         return settings ?? new Settings()

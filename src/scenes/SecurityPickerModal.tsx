@@ -17,9 +17,7 @@ import {Security} from '~src/enums/Security'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 
-export interface SecurityPickerModalParams {
-  isFirstTime?: boolean
-}
+export interface SecurityPickerModalParams {}
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -27,7 +25,9 @@ interface Props {
 }
 
 const SecurityPickerModal = (props: Props) => {
-  const {security} = useSelector((state: RootState) => state.settings)
+  const {security, isFirstTime} = useSelector(
+    (state: RootState) => state.settings
+  )
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
   const [controlSecurity, setControlSecurity] = useState<Security>(security)
@@ -41,10 +41,9 @@ const SecurityPickerModal = (props: Props) => {
   }
 
   const handleOnClose = () => {
-    if (props.route.params.isFirstTime) {
+    if (isFirstTime) {
       props.navigation.replace(wrapper.route.Tab.name, {
         screen: wrapper.route.ListWallets.name,
-        isFirstTime: true,
       })
 
       return
@@ -72,6 +71,9 @@ const SecurityPickerModal = (props: Props) => {
   }
 
   const validateSecurity = async (sec: Security) => {
+    if (security === sec) {
+      return false
+    }
     switch (security) {
       case Security.hardware: {
         const result = await hardwareAuth()
