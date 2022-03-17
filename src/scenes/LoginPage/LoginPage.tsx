@@ -18,9 +18,9 @@ interface Props {
 export default function LoginPage(props: Props) {
   const dispatch = useDispatch()
   const continueButton = async () => {
+    dispatch(RootStore.settings.actions.setIsFirstTime(true))
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.SecurityModal.name,
-      params: {isFirstTime: true},
     })
   }
 
@@ -93,7 +93,6 @@ export default function LoginPage(props: Props) {
             dispatch(RootStore.settings.actions.save())
             props.navigation.replace(wrapper.route.Tab.name, {
               screen: wrapper.route.ListWallets.name,
-              isFirstTime: true,
             })
           }}
         >

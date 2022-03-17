@@ -1,17 +1,12 @@
-import {JsonRpcRequest} from '@json-rpc-tools/utils'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import React, {useCallback, useEffect, useState} from 'react'
 import {StatusBar} from 'react-native'
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {blockchainServices, getBlockchainByWCChain} from '../blockchain'
-import {
-  ContractInvocation,
-  ContractInvocationMulti,
-} from '../helpers/NeonWcAdapter'
+import {RootStore} from '../store/RootStore'
 
 import * as data from '~src/Changelog.json'
 import {appBus} from '~src/app/AppBus'
@@ -41,13 +36,10 @@ export type TabStackParamList = {
 }
 
 export type TabParams =
-  | ((
+  | (
       | DefaultNavigationParam<MoreStackParam>
       | DefaultNavigationParam<WalletStackParams>
-    ) &
-      Partial<{
-        isFirstTime?: boolean
-      }>)
+    )
   | undefined
 
 interface Props {
@@ -61,29 +53,30 @@ const TabNavigation = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
+  const {isFirstTime} = useSelector((state: RootState) => state.settings)
   const {requests, sessions} = useWalletConnect()
-
+  const dispatch = useDispatch()
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   useEffect(() => {
     async function handleData() {
       const currentNumberOfVersions = Object.keys(data.changelog).length
       const storageNumberOfVersion = await Storage.numberOfVersions.load()
 
-      if (props.route.params?.isFirstTime) {
+      if (isFirstTime) {
         Storage.changelogHidden.save(true)
         Storage.welcomeHidden.save(true)
         Storage.welcomeToNWSeen.save(true)
       }
 
-      if (
-        storageNumberOfVersion !== currentNumberOfVersions ||
-        props.route.params?.isFirstTime
-      ) {
+      if (storageNumberOfVersion !== currentNumberOfVersions || isFirstTime) {
         props.navigation.navigate(wrapper.route.Modal.name, {
           screen: wrapper.route.WelcomeModal.name,
           params: {
             showChangelog: true,
           },
         })
+        dispatch(RootStore.settings.actions.setIsFirstTime(false))
+        await dispatchAsync(RootStore.settings.actions.save())
       }
     }
 

@@ -11,12 +11,14 @@ export declare global {
     | 'SET_CURRENCY'
     | 'SET_THEME'
     | 'SET_SECURITY'
+    | 'SET_IS_FIRST_TIME'
 
   interface SettingsState {
     language: Lang
     currency: Currency
     theme: Theme
     security: Security
+    isFirstTime: boolean
   }
 
   type SettingsAction = SettingsState & Action<SettingsActionsType>

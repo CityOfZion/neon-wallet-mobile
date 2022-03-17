@@ -3,11 +3,12 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import _ from 'lodash'
 import React, {useState, useEffect} from 'react'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {Security} from '~/src/enums/Security'
 import {SecurityHelper} from '~/src/helpers/SecurityHelper'
+import {MoreStackParamList} from '~/src/navigation/MoreStackNavigation'
 import {Storage} from '~src/app/Storage'
 import Keypad from '~src/components/Keypad'
 import PasscodeBar from '~src/components/PasscodeBar'
@@ -26,11 +27,14 @@ export interface ConfirmPasscodePageParams {
 }
 
 interface Props {
-  navigation: StackNavigationProp<PasscodeStackParamList & RootStackParamList>
+  navigation: StackNavigationProp<
+    PasscodeStackParamList & RootStackParamList & MoreStackParamList
+  >
   route: RouteProp<PasscodeStackParamList, 'ConfirmPasscode'>
 }
 
 const ConfirmPasscodePage = (props: Props) => {
+  const {isFirstTime} = useSelector((state: RootState) => state.settings)
   const dispatch = useDispatch()
   const [passcode, setPasscode] = useState<number[]>([])
   const originalPasscode = props.route.params.passcode
@@ -61,9 +65,16 @@ const ConfirmPasscodePage = (props: Props) => {
     dispatch(RootStore.settings.actions.save())
     await Storage.hasAuthentication.save(true)
     await Storage.hasAuthenticationForHardware.save(false)
-    props.navigation.replace(wrapper.route.Tab.name, {
-      screen: wrapper.route.ListWallets.name,
-    })
+    if (isFirstTime) {
+      props.navigation.replace(wrapper.route.Tab.name, {
+        screen: wrapper.route.ListWallets.name,
+      })
+    } else {
+      props.navigation.replace(wrapper.route.Tab.name, {
+        screen: wrapper.route.More.name,
+      })
+      props.navigation.navigate(wrapper.route.Settings.name)
+    }
   }
 
   return (

@@ -16,4 +16,7 @@ export class Settings implements SettingsState {
 
   @HttpExpose()
   security = localeConfig.defaultSecurity
+
+  @HttpExpose()
+  isFirstTime = false
 }

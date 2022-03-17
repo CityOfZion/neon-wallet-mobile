@@ -3,7 +3,6 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {ModalStackParamList} from './ModalStackNavigation'
 import PasscodeStackNavigation, {
   PasscodeStackParams,
 } from './PasscodeStackNavigation'
