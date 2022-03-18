@@ -4,7 +4,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity, Await} from '@simpli/react-native-await'
 import {SessionTypes, AppMetadata} from '@walletconnect/types'
 import i18n from 'i18n-js'
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useRef, useState} from 'react'
 import {TouchableWithoutFeedback, Linking} from 'react-native'
 import {useSelector, useDispatch} from 'react-redux'
 
@@ -77,6 +77,9 @@ const TransactionRequestModal = (props: Props) => {
   const [showModalFailed, setShowModalFailed] = useState<boolean>(false)
   const [messageAfterAccept, setMessageAfterAccept] = useState<string>()
   const [isAcceptetdRequest, setIsAcceptedRequest] = useState<boolean>(false)
+  const [buttonsIsDisabled, setButtonsIsDisabled] = useState<boolean>(false)
+  const shouldProcessButtons = useRef<boolean>(true)
+
   useEffect(() => {
     requestParams.invocations.forEach((invocation) => {
       const args = invocation.args as ArgsRequest[]
@@ -152,19 +155,27 @@ const TransactionRequestModal = (props: Props) => {
   )
 
   const handleAcceptRequest = useCallback(async () => {
-    try {
-      const response = await approveRequest(request)
-      if (response && 'result' in response) {
-        const {result} = response
-        await handleAddPendingTransaction(result)
-        setMessageAfterAccept(result as string)
-        setshowModalSuccess(true)
-        setIsAcceptedRequest(true)
+    if (shouldProcessButtons.current) {
+      shouldProcessButtons.current = false
+      setButtonsIsDisabled(true)
+
+      try {
+        const response = await approveRequest(request)
+        if (response && 'result' in response) {
+          const {result} = response
+          await handleAddPendingTransaction(result)
+          setMessageAfterAccept(result as string)
+          setshowModalSuccess(true)
+          setIsAcceptedRequest(true)
+        }
+      } catch (error: any) {
+        setShowModalFailed(true)
+        setMessageAfterAccept(error.message as string)
+        console.log('debug error handle accept ', error)
       }
-    } catch (error) {
-      setShowModalFailed(true)
-      setMessageAfterAccept(error.message as string)
-      console.log('debug error handle accept ', error)
+
+      shouldProcessButtons.current = true
+      setButtonsIsDisabled(false)
     }
   }, [requests, controller])
 
@@ -380,12 +391,16 @@ const TransactionRequestModal = (props: Props) => {
               </TextView>
               <ThemedButton
                 label={i18n.t('modals.transactionRequest.buttom.accept')}
+                disabled={buttonsIsDisabled}
                 onPress={() =>
                   Await.run('handleAcceptRequest', handleAcceptRequest, 500)
                 }
               />
               <LinearLayout mt={'24px'}>
-                <TouchableWithoutFeedback onPress={handleDeclineRequest}>
+                <TouchableWithoutFeedback
+                  onPress={handleDeclineRequest}
+                  disabled={buttonsIsDisabled}
+                >
                   <LinearLayout
                     width="100%"
                     borderRadius="4px"
@@ -395,6 +410,7 @@ const TransactionRequestModal = (props: Props) => {
                     alignItems="center"
                     orientation="horiz"
                     p="10px"
+                    opacity={buttonsIsDisabled ? '0.3' : '1'}
                   >
                     <TextView
                       style={{includeFontPadding: false}}
