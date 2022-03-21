@@ -187,10 +187,6 @@ const InputWithValidation = (props: Props) => {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                width:
-                  props.value.length > 0
-                    ? Dimensions.get('screen').width * 0.12
-                    : undefined,
                 justifyContent: 'space-between',
               }}
             >
@@ -202,14 +198,9 @@ const InputWithValidation = (props: Props) => {
                 />
               )}
               {(props.onClearPress && props.value.length > 0) ||
-              (props.onClearPress && props.forceClearButton) ? (
-                <InputClearButton
-                  onPress={props.onClearPress}
-                  value={props.value}
-                />
-              ) : (
-                <LinearLayout height="34px" mb="-6px" />
-              )}
+                (props.onClearPress && props.forceClearButton && (
+                  <InputClearButton onPress={props.onClearPress} />
+                ))}
             </View>
           </LinearLayout>
         </LinearLayout>

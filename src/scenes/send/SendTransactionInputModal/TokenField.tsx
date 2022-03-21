@@ -4,6 +4,7 @@ import React, {Fragment, useEffect} from 'react'
 import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
+import {Normalize} from '~/src/app/Normalize'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import {TokenAsset} from '~/src/models/TokenAsset'
@@ -15,6 +16,7 @@ import {
   ButtonView,
   LinearLayout,
   ImageView,
+  TextView,
 } from '~/src/styles/styled-components'
 
 const TokenField = (props: {
@@ -54,21 +56,31 @@ const TokenField = (props: {
             : undefined
         }
       >
-        <LinearLayout position="relative">
-          <InputWithValidation
-            color={theme.colors.text[0]}
-            invalidColor={theme.colors.text[10]}
-            fontStyle={'normal'}
-            value={props.token?.name ?? ''}
-            placeholder={I18n.t('modals.send.transactionInput.selectToken')}
-            validator={() => true}
-            separatorColor={theme.colors.background[13]}
-            sideMargins={0}
-            hidePaste={true}
-            hideScan={true}
-            editable={false}
-            srcIcon={props.token?.srcIcon}
-          />
+        <LinearLayout
+          borderBottomWidth={1}
+          borderBottomColor={theme.colors.background[13]}
+          orientation="horiz"
+        >
+          {!!props.token?.srcIcon && (
+            <ImageView
+              resizeMode="contain"
+              width={Normalize.scale(25)}
+              height={Normalize.scale(25)}
+              source={props.token?.srcIcon}
+              mr={'8px'}
+            />
+          )}
+          <TextView
+            fontSize={18}
+            fontFamily="regular"
+            color={props.token?.name ? theme.colors.text[0] : '#7d929a'}
+            fontStyle={props.token?.name ? 'normal' : 'italic'}
+            pt={2}
+            pb={2}
+          >
+            {props.token?.name ??
+              I18n.t('modals.send.transactionInput.selectToken')}
+          </TextView>
           <ImageView
             position="absolute"
             top="10px"
