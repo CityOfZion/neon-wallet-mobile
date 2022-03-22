@@ -152,14 +152,17 @@ export class DoraSDKProvider implements Neo3Provider {
 
   async getTransaction(transactionID: string) {
     const result = new Transaction()
-    const {block, size, time, hash} = await api.NeoRest.transaction(
+    const neoRestTransaction = await api.NeoRest.transaction(
       transactionID,
       this.network
     )
-    result.txid = hash
-    result.size = size
-    result.blockHeight = block
-    result.time = Number(time)
+    if (neoRestTransaction) {
+      const {hash, size, block, time} = neoRestTransaction
+      result.txid = hash
+      result.size = size
+      result.blockHeight = block
+      result.time = Number(time)
+    }
     return result
   }
 

@@ -441,6 +441,80 @@ export class AppReducer extends ReducerWrapper<
       }
     },
 
+    syncCheckPendingTransactions: (): AsyncAction => {
+      return async (dispatch, getState) => {
+        const accountsPool = getState().app.accounts
+        const tokensPool = getState().app.tokens
+
+        const refreshAccounts = async (
+          updatedAccounts: Account[],
+          isRefresh: boolean
+        ) => {
+          if (isRefresh) {
+            dispatch(this.commit('SET_ACCOUNTS', {accounts: updatedAccounts}))
+            await Storage.accounts.save(updatedAccounts)
+          }
+        }
+
+        if (
+          accountsPool.some((acc) => acc.flattedPendingTransactions.length > 0)
+        ) {
+          let refreshAccountsControl: boolean = false
+          const updatedAccounts = await Promise.all(
+            accountsPool.map(async (account) => {
+              if (account.flattedPendingTransactions.length > 0) {
+                for (const pendingTransaction of account.flattedPendingTransactions) {
+                  if (pendingTransaction.transactionHash) {
+                    const transaction = await blockchainServices[
+                      account.blockchain
+                    ].provider.getTransaction(
+                      pendingTransaction.transactionHash
+                    )
+                    if (
+                      transaction.txid === pendingTransaction.transactionHash
+                    ) {
+                      await account.removePendingTransactions(
+                        pendingTransaction,
+                        pendingTransaction.transactionHash
+                      )
+                      await account.populateTokenAssets()
+                      await account.populateTransactions(tokensPool)
+                      refreshAccountsControl = true
+                      if (
+                        pendingTransaction.receiverAddress === 'claim' ||
+                        pendingTransaction.receiverAddress === account.address
+                      ) {
+                        showMessage({
+                          message: i18n.t('toast.gasClaimSuccess'),
+                          type: 'success',
+                          duration: 2000,
+                        })
+                        appBus.emit('claimGasEnd')
+                      } else {
+                        showMessage({
+                          duration: 2000,
+                          message: i18n.t('toast.transactionCompleted'),
+                          type: 'success',
+                          onPress: () => {
+                            appBus.emit(
+                              'navigateTransactionDetails',
+                              pendingTransaction
+                            )
+                          },
+                        })
+                      }
+                    }
+                  }
+                }
+              }
+              return account
+            })
+          )
+          await refreshAccounts(updatedAccounts, refreshAccountsControl)
+        }
+      }
+    },
+
     syncContacts: (): AsyncAction<Contact[]> => {
       return async (dispatch, getState) => {
         let contacts = await Storage.contacts.load()
