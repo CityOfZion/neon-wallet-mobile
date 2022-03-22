@@ -6,7 +6,6 @@ import {InteractionManager} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {usePendngTransactions} from '../hooks/PendingTransactionsHook'
 import {Wallet} from '../models/redux/Wallet'
 import PasscodeStackNavigation, {
   PasscodeStackParams,
@@ -60,8 +59,6 @@ const AppNavigation = (props: Props) => {
   const loadingOverlayState = useSelector((state: RootState) => state.loading)
   const {status: timerStatus} = useSelector((state: RootState) => state.timer)
 
-  const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const {checkPendingTransactionsAndUpdateBalance} = usePendngTransactions()
   const {progress, loadingText, isLoading} = loadingOverlayState
 
   const [onboardingSeen, setOnboardingSeen] = useState(true)
@@ -162,10 +159,6 @@ const AppNavigation = (props: Props) => {
   useEffect(() => {
     handleCleanConnectionsDApps()
   }, [walletConnectCtx.sessions])
-
-  useEffect(() => {
-    checkPendingTransactionsAndUpdateBalance(accountsPool)
-  }, [accountsPool])
 
   const getInitialRouteName = () => {
     return onboardingSeen
