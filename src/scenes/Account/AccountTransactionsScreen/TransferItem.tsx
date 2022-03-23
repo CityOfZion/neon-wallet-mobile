@@ -67,7 +67,7 @@ export const TransferItem = (props: TransfersDataScreen) => {
           justifyContent: 'space-between',
         }}
       >
-        <View style={{flexDirection: 'row', borderWidth: 2}}>
+        <View style={{flexDirection: 'row'}}>
           <ImageView
             width="21px"
             height="21px"
