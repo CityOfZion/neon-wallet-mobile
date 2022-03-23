@@ -4,7 +4,7 @@ import {Await, AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import moment from 'moment'
 import React, {useCallback, useState, useEffect} from 'react'
-import {ImageSourcePropType, View} from 'react-native'
+import {ImageSourcePropType} from 'react-native'
 import {useSelector} from 'react-redux'
 
 import {TransactionsListDate} from './TransactionsListDate'
