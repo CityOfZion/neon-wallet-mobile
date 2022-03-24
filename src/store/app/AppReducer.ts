@@ -446,6 +446,8 @@ export class AppReducer extends ReducerWrapper<
         const accountsPool = getState().app.accounts
         const tokensPool = getState().app.tokens
 
+        type TransactionType = 'isClaim' | 'isTransaction'
+
         const refreshAccounts = async (
           updatedAccounts: Account[],
           isRefresh: boolean
@@ -456,12 +458,45 @@ export class AppReducer extends ReducerWrapper<
           }
         }
 
+        const showToastFeedback = (
+          showToast: boolean,
+          typeTransaction: TransactionType,
+          transaction?: SenderTransaction
+        ) => {
+          if (showToast) {
+            switch (typeTransaction) {
+              case 'isClaim':
+                showMessage({
+                  message: i18n.t('toast.gasClaimSuccess'),
+                  type: 'success',
+                  duration: 2000,
+                })
+                appBus.emit('claimGasEnd')
+                break
+              case 'isTransaction':
+                showMessage({
+                  duration: 2000,
+                  message: i18n.t('toast.transactionCompleted'),
+                  type: 'success',
+                  onPress: () => {
+                    appBus.emit('navigateTransactionDetails', transaction)
+                  },
+                })
+                break
+              default:
+                break
+            }
+          }
+        }
+
         if (
           accountsPool.some((acc) => acc.flattedPendingTransactions.length > 0)
         ) {
           let refreshAccountsControl: boolean = false
+          let typeTransaction: TransactionType = 'isTransaction'
+          let transactionFound: SenderTransaction = new SenderTransaction()
           const updatedAccounts = await Promise.all(
-            accountsPool.map(async (account) => {
+            accountsPool.map(async (account, index) => {
               if (account.flattedPendingTransactions.length > 0) {
                 for (const pendingTransaction of account.flattedPendingTransactions) {
                   if (pendingTransaction.transactionHash) {
@@ -484,25 +519,11 @@ export class AppReducer extends ReducerWrapper<
                         pendingTransaction.receiverAddress === 'claim' ||
                         pendingTransaction.receiverAddress === account.address
                       ) {
-                        showMessage({
-                          message: i18n.t('toast.gasClaimSuccess'),
-                          type: 'success',
-                          duration: 2000,
-                        })
-                        appBus.emit('claimGasEnd')
+                        typeTransaction = 'isClaim'
                       } else {
-                        showMessage({
-                          duration: 2000,
-                          message: i18n.t('toast.transactionCompleted'),
-                          type: 'success',
-                          onPress: () => {
-                            appBus.emit(
-                              'navigateTransactionDetails',
-                              pendingTransaction
-                            )
-                          },
-                        })
+                        typeTransaction = 'isTransaction'
                       }
+                      transactionFound = pendingTransaction
                     }
                   }
                 }
@@ -511,6 +532,11 @@ export class AppReducer extends ReducerWrapper<
             })
           )
           await refreshAccounts(updatedAccounts, refreshAccountsControl)
+          showToastFeedback(
+            refreshAccountsControl,
+            typeTransaction,
+            transactionFound
+          )
         }
       }
     },
