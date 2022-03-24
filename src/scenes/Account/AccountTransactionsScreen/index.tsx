@@ -12,6 +12,7 @@ import {TransactionsListDate} from './TransactionsListDate'
 import {blockchainServices} from '~/src/blockchain'
 import AccountSubTitle from '~/src/components/AccountSubTitle'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
+import {Loader} from '~/src/components/loader/loader'
 import {TransactionDateGroup} from '~/src/models/TransactionDateGroup'
 import {Account} from '~/src/models/redux/Account'
 import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
@@ -62,15 +63,22 @@ const AccountTransactionsScreen = (props: Props) => {
     setPendingTransactionsDataScreen,
   ] = useState<{[date: string]: TransactionDataScreen[]}>()
 
-  const handleLoadTransactions = useCallback(async () => {
-    if (account.address) {
-      const transactionsHistory = await blockchainServices[
-        account.blockchain
-      ].provider.getAddressAbstracts(account.address, tokens)
+  const [pageRequest, setPageRequest] = useState<number>(1)
+  const [showLoading, setShowLoading] = useState<boolean>(true)
 
-      handleFormatTransactions(transactionsHistory)
-    }
-  }, [account, accountsPool])
+  const handleLoadTransactions = useCallback(
+    async (page?: number) => {
+      if (account.address) {
+        const transactionsHistory = await blockchainServices[
+          account.blockchain
+        ].provider.getAddressAbstracts(account.address, tokens, page)
+
+        handleFormatTransactions(transactionsHistory)
+        setShowLoading(false)
+      }
+    },
+    [account, accountsPool, pageRequest, showLoading]
+  )
 
   const getKeyDateByTimeStamp = useCallback((timestamp: number) => {
     return moment(timestamp).format('YYYY-MM-DD')
@@ -161,7 +169,10 @@ const AccountTransactionsScreen = (props: Props) => {
         }
       })
 
-      setTransactionsDataScreen(formatedTransactionsData)
+      setTransactionsDataScreen((prevState) => {
+        const data = prevState
+        return {...data, ...formatedTransactionsData}
+      })
     },
     [transactionsDataScreen, getKeyDateByTimeStamp]
   )
@@ -180,6 +191,14 @@ const AccountTransactionsScreen = (props: Props) => {
     }
     Await.run('populateTransactionsList', handleLoadTransactions)
   }, [account, accountsPool])
+
+  useEffect(() => {
+    if (showLoading) {
+      Await.init('moreLoadTransaction')
+    } else {
+      Await.done('moreLoadTransaction')
+    }
+  }, [showLoading])
 
   const populatePendingTransactionList = useCallback(
     (
@@ -275,7 +294,21 @@ const AccountTransactionsScreen = (props: Props) => {
       name="populateTransactionsList"
       loadingView={<ScreenLoader />}
     >
-      <ScreenLayout>
+      <ScreenLayout
+        onScroll={(e) => {
+          const paddingToBottom = e.nativeEvent.layoutMeasurement.height
+          if (
+            e.nativeEvent.contentOffset.y >=
+            e.nativeEvent.contentSize.height - paddingToBottom
+          ) {
+            handleLoadTransactions(pageRequest + 1)
+            setShowLoading(true)
+            setPageRequest((prevState) => {
+              return prevState + 1
+            })
+          }
+        }}
+      >
         <AccountSubTitle account={account} />
         {Object.keys(transactionsDataScreen).map((date) => (
           <TransactionsListDate
@@ -289,6 +322,9 @@ const AccountTransactionsScreen = (props: Props) => {
             }
           />
         ))}
+        {showLoading && (
+          <AwaitActivity name="moreLoadTransaction" loadingView={<Loader />} />
+        )}
       </ScreenLayout>
     </AwaitActivity>
   )
