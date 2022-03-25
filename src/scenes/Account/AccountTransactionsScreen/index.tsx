@@ -177,6 +177,21 @@ const AccountTransactionsScreen = (props: Props) => {
     [transactionsDataScreen, getKeyDateByTimeStamp]
   )
 
+  const handleRenderingPendingTransactions = useCallback(
+    (
+      pendingTransactions: TransactionDataScreen[],
+      completedTransactions: TransactionDataScreen[]
+    ) => {
+      return pendingTransactions.filter(
+        (pending) =>
+          !completedTransactions.some(
+            (completed) => completed.txid === pending.txid
+          )
+      )
+    },
+    [pendingTransactionsDataScreen, transactionsDataScreen]
+  )
+
   useEffect(() => {
     const wcPendingTransactions = account
       .getPendingTransactions()
@@ -317,7 +332,10 @@ const AccountTransactionsScreen = (props: Props) => {
             transactions={transactionsDataScreen[date]}
             pendingTransactions={
               pendingTransactionsDataScreen
-                ? pendingTransactionsDataScreen[date]
+                ? handleRenderingPendingTransactions(
+                    pendingTransactionsDataScreen[date],
+                    transactionsDataScreen[date]
+                  )
                 : []
             }
           />
