@@ -114,41 +114,46 @@ const AccountTransactionsScreen = (props: Props) => {
           symbol,
         }) => {
           if (txid && time && addressFrom && addressTo && amount && asset) {
-            let historyTransfer = formatedTransfers.get(txid)
-            if (historyTransfer) {
-              historyTransfer.push({
-                addressFrom,
-                addressTo,
-                amount,
-                asset,
-                symbol,
-                decimals: getDecimalsToken(symbol),
+            if (
+              addressFrom === account.address ||
+              addressTo === account.address
+            ) {
+              let historyTransfer = formatedTransfers.get(txid)
+              if (historyTransfer) {
+                historyTransfer.push({
+                  addressFrom,
+                  addressTo,
+                  amount,
+                  asset,
+                  symbol,
+                  decimals: getDecimalsToken(symbol),
+                })
+                formatedTransfers.set(txid, historyTransfer)
+              } else {
+                historyTransfer = []
+                historyTransfer.push({
+                  addressFrom,
+                  addressTo,
+                  amount,
+                  asset,
+                  symbol,
+                  decimals: getDecimalsToken(symbol),
+                })
+                formatedTransfers.set(txid, historyTransfer)
+              }
+              formatedTransactions.set(txid, {
+                transactionType: 'sendTransaction',
+                txid,
+                qtyInvocations,
+                qtyNotifications,
+                time,
+                transfers: historyTransfer,
+                iconStatusTransaction: require('src/assets/images/icon-check-white.png'),
+                statusTransaction: i18n.t(
+                  'screens.getAccount.completedTransactions'
+                ),
               })
-              formatedTransfers.set(txid, historyTransfer)
-            } else {
-              historyTransfer = []
-              historyTransfer.push({
-                addressFrom,
-                addressTo,
-                amount,
-                asset,
-                symbol,
-                decimals: getDecimalsToken(symbol),
-              })
-              formatedTransfers.set(txid, historyTransfer)
             }
-            formatedTransactions.set(txid, {
-              transactionType: 'sendTransaction',
-              txid,
-              qtyInvocations,
-              qtyNotifications,
-              time,
-              transfers: historyTransfer,
-              iconStatusTransaction: require('src/assets/images/icon-check-white.png'),
-              statusTransaction: i18n.t(
-                'screens.getAccount.completedTransactions'
-              ),
-            })
           }
         }
       )

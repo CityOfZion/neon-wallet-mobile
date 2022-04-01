@@ -18,31 +18,31 @@ interface TransactionDataScreenWithStatusTransactions
   hideLinkDora?: boolean
 }
 
+export type TSentOrReceived = 'sent' | 'received'
+
 export const TransactionItemDate = (
   props: TransactionDataScreenWithStatusTransactions
 ) => {
   const dispatch = useDispatch<SyncDispatch<Account>>()
   const account = dispatch(RootStore.account.actions.getFromSelection())
-  const [sentOrReceiveStatus, setSentOrReceiveStatus] = useState<string>(
-    i18n.t('screens.getAccount.sentToLabel')
-  )
 
-  const handleChangeSentOrReceiveStatus = useCallback(() => {
+  const handleSentOrReceived = (): TSentOrReceived => {
     const transfer = props.transfers.find(
       (transfer) => transfer.addressTo === account.address
     )
+
     if (transfer) {
-      setSentOrReceiveStatus(i18n.t('screens.getAccount.receivedFromLabel'))
+      return 'received'
     }
-  }, [account, props.transfers])
+
+    return 'sent'
+  }
 
   const checkRenderTransactionInfo = useCallback(() => {
     return props.transactionType === 'sendTransaction'
   }, [props])
 
-  useEffect(() => {
-    handleChangeSentOrReceiveStatus()
-  }, [account, props.transfers])
+  const sentOrReceived = handleSentOrReceived()
 
   return (
     <View style={{marginBottom: 5}}>
@@ -90,10 +90,16 @@ export const TransactionItemDate = (
         {checkRenderTransactionInfo() && (
           <View>
             <TextView color="#899fa8" fontSize="14px" fontFamily="medium">
-              {sentOrReceiveStatus}
+              {sentOrReceived === 'sent'
+                ? i18n.t('screens.getAccount.sentToLabel')
+                : i18n.t('screens.getAccount.receivedFromLabel')}
             </TextView>
             {props.transfers.map((transfer, index) => (
-              <TransferItem key={index} {...transfer} />
+              <TransferItem
+                key={index}
+                sentOrReceived={sentOrReceived}
+                {...transfer}
+              />
             ))}
           </View>
         )}
