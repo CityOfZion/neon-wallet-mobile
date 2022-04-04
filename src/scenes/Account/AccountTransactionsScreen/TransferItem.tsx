@@ -3,13 +3,16 @@ import {View, TouchableWithoutFeedback} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {TransfersDataScreen} from '.'
+import {TSentOrReceived} from './TransactionItemDate'
 
 import {FilterHelper} from '~/src/helpers/FilterHelper'
 import {Account} from '~/src/models/redux/Account'
 import {RootStore} from '~/src/store/RootStore'
 import {ImageView, TextView} from '~/src/styles/styled-components'
 
-export const TransferItem = (props: TransfersDataScreen) => {
+type Props = TransfersDataScreen & {sentOrReceived: TSentOrReceived}
+
+export const TransferItem = (props: Props) => {
   const dispatch = useDispatch<SyncDispatch<Account>>()
   const account = dispatch(RootStore.account.actions.getFromSelection())
   const contacts = useSelector((state: RootState) => state.app.contacts)
@@ -17,8 +20,9 @@ export const TransferItem = (props: TransfersDataScreen) => {
   const {currency} = useSelector((state: RootState) => state.settings)
 
   const [fiatAmount, setFiatAmount] = useState<string>('')
-  const [contactName, setContactname] = useState<string>('')
+  const [contactNameOrAddress, setContactnameOrAddress] = useState<string>('')
   const [addressEllipsizeWidth, setAddressEllipsizeWidth] = useState('40%')
+
   useEffect(() => {
     const {symbol, amount} = props
     if (symbol && exchange[account.blockchain][symbol]) {
@@ -29,21 +33,26 @@ export const TransferItem = (props: TransfersDataScreen) => {
   }, [exchange, currency])
 
   useEffect(() => {
+    const address =
+      props.sentOrReceived === 'received' ? props.addressFrom : props.addressTo
+
     const contact = contacts.find(
       (contact) =>
-        contact.address === props.addressTo ||
-        contact.addresses.find((it) => it.address === props.addressTo)
+        contact.address === address ||
+        contact.addresses.find((it) => it.address === address)
     )
     if (contact?.name) {
-      setContactname(contact.name)
+      setContactnameOrAddress(contact.name)
     } else {
-      setContactname(props.addressTo)
+      setContactnameOrAddress(address)
     }
   }, [contacts])
 
   const handleChangeAddressSize = useCallback(() => {
-    setAddressEllipsizeWidth(addressEllipsizeWidth === '40%' ? '100%' : '40%')
-  }, [addressEllipsizeWidth])
+    setAddressEllipsizeWidth((prevState) =>
+      prevState === '40%' ? '100%' : '40%'
+    )
+  }, [])
 
   return (
     <View style={{marginBottom: 15}}>
@@ -57,7 +66,7 @@ export const TransferItem = (props: TransfersDataScreen) => {
           width={addressEllipsizeWidth}
           pb={3}
         >
-          {contactName}
+          {contactNameOrAddress}
         </TextView>
       </TouchableWithoutFeedback>
       <View
