@@ -1780,16 +1780,12 @@
     isomorphic-ws "4.0.1"
     ws "7.3.0"
 
-"@cityofzion/neon-api@^5.0.0-next.16":
-  version "5.0.0-next.16"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neon-api/-/neon-api-5.0.0-next.16.tgz#83d2f70c43b124424817ce1acf1925c5cb8131b4"
-  integrity sha512-wn7skR+gPvMGUS2GTP9xAW6TP0kwigtLC9+tV7xbl2idaRk3SVGzpI6TrPzCAtZ+mTCqznUjzT/R2jQTSxsCPg==
-  dependencies:
-    isomorphic-ws "4.0.1"
-    ws "7.4.4"
+"@cityofzion/neon-api@^5.0.0-next.17":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-api/-/neon-api-5.0.0.tgz#7f8e68b14923dfb8c1292836c276b178f5184372"
+  integrity sha512-nvslHi77gv1Vc44rZb2QamQyWhWGhooXDnVCIA6BZUpiArMWZ3TNYaDCXLWQTSvz14UdcYN8WIIt9v/vcD/wqg==
 
-"@cityofzion/neon-core-next@npm:@cityofzion/neon-core@5.0.0-next.16", "@cityofzion/neon-core@^5.0.0-next.16":
-  name "@cityofzion/neon-core-next"
+"@cityofzion/neon-core-next@npm:@cityofzion/neon-core@5.0.0-next.16":
   version "5.0.0-next.16"
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-core/-/neon-core-5.0.0-next.16.tgz#f76224a564592c00b0d50fe5f620fe0dbba2a3d2"
   integrity sha512-C9YoomPA5JuOh2HpYY99OYicJBRg+LncPbtTQ4WZ8ujQ4w9DA8DIdLJ0cfWCWFPvGxAt3dW2sxYMzWn+5oNWxg==
@@ -1828,13 +1824,31 @@
     secure-random "1.1.2"
     wif "2.0.6"
 
-"@cityofzion/neon-js-next@npm:@cityofzion/neon-js@5.0.0-next.16":
-  version "5.0.0-next.16"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neon-js/-/neon-js-5.0.0-next.16.tgz#fa9b1f8331eb406a278e8883193d749750237e80"
-  integrity sha512-mN/0OHzsCPFJqN1WC/cjHBEoSEvURWRkiQdCQBLAbD71Mo12SXEWOd10858c9MQbfTPovT/pSy+eZdGSCANZwg==
+"@cityofzion/neon-core@^5.0.0-next.17":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-core/-/neon-core-5.0.0.tgz#6b242782404df474285ad7760224871444cc1d35"
+  integrity sha512-OJPZsgWxXFCSSFo6WiGmxn+/2XP0w0JXT8oYOqYxKfFYJXNh6/ENuglMs7w5jMpFsYb/Hp6Hy8qdXf/Q3Es9jg==
   dependencies:
-    "@cityofzion/neon-api" "^5.0.0-next.16"
-    "@cityofzion/neon-core" "^5.0.0-next.16"
+    abort-controller "3.0.0"
+    bignumber.js "7.2.1"
+    bn.js "5.2.0"
+    bs58 "4.0.1"
+    buffer "6.0.3"
+    cross-fetch "^3.1.4"
+    crypto-js "4.1.1"
+    elliptic "6.5.4"
+    lodash "4.17.21"
+    loglevel "1.8.0"
+    loglevel-plugin-prefix "0.8.4"
+    scrypt-js "3.0.1"
+
+"@cityofzion/neon-js-next@npm:@cityofzion/neon-js@5.0.0-next.17":
+  version "5.0.0-next.17"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-js/-/neon-js-5.0.0-next.17.tgz#ba09d3404f799bbc381e85f18664c5e6c996923e"
+  integrity sha512-36Gzh1wrDYvHKoCn7tBenbAOP2ke/rvpkzMwRILxGc3PmY4xJATzGKlpbw9koNFR4fs8uLKZCnyC4aT4XWWDKQ==
+  dependencies:
+    "@cityofzion/neon-api" "^5.0.0-next.17"
+    "@cityofzion/neon-core" "^5.0.0-next.17"
 
 "@cityofzion/neon-js@^4.7.1", "@cityofzion/neon-js@^4.8.0":
   version "4.8.1"
@@ -12336,7 +12350,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-"lodash@>=3.5 <5", lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.5:
+lodash@4.17.21, "lodash@>=3.5 <5", lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.5:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -12398,6 +12412,11 @@ loglevel@1.7.1, loglevel@^1.6.8:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.7.1.tgz#005fde2f5e6e47068f935ff28573e125ef72f197"
   integrity sha512-Hesni4s5UkWkwCGJMQGAh71PaLUmKFM60dHvq0zi/vDhhrzuk+4GgNbTXJ12YYQJn6ZKBDNIjYcuQGKudvqrIw==
+
+loglevel@1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.8.0.tgz#e7ec73a57e1e7b419cb6c6ac06bf050b67356114"
+  integrity sha512-G6A/nJLRgWOuuwdNuA6koovfEV1YpqqAG4pRUlFaz3jj2QNZ8M4vBqnVA+HBTmU/AMNUtlOsMmSpF6NyOjztbA==
 
 lolex@^5.0.0:
   version "5.1.2"
@@ -19392,11 +19411,6 @@ ws@7.3.0:
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.3.0.tgz#4b2f7f219b3d3737bc1a2fbf145d825b94d38ffd"
   integrity sha512-iFtXzngZVXPGgpTlP1rBqsUK82p9tKqsWRPg5L56egiljujJT3vGAYnHANvFxBieXrTFavhzhxW52jnaWV+w2w==
-
-ws@7.4.4:
-  version "7.4.4"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.4.tgz#383bc9742cb202292c9077ceab6f6047b17f2d59"
-  integrity sha512-Qm8k8ojNQIMx7S+Zp8u/uHOx7Qazv3Yv4q68MiWWWOJhiwG5W3x7iqmRtJo8xxrciZUY4vRxUTJCKuRnF28ZZw==
 
 ws@^1.1.0, ws@^1.1.5:
   version "1.1.5"

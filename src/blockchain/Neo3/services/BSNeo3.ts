@@ -8,6 +8,7 @@ import type * as AsteroidSDK from '@moonlight-io/asteroid-sdk-js'
 import {ImageLoadEventData, NativeModules, Platform} from 'react-native'
 
 import {AsteroidHelper} from '~/src/helpers/AsteroidHelper'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import {NeoNode} from '~/src/models/NeoNode'
 import {TokenAsset} from '~/src/models/TokenAsset'
 import {Account} from '~/src/models/redux/Account'
@@ -239,58 +240,28 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
     }
   }
 
-  async calculateFee(senderAddress: string, cim: ContractInvocationMulti) {
+  async calculateFee(senderAddress: string, request: JsonRpcRequest) {
     const fromAccount = await this.getNeoAccount(senderAddress)
 
     if (!fromAccount) throw new Error('Account not found')
     const sb = Neon.create.scriptBuilder()
 
-    cim.invocations.forEach((invocation) => {
-      sb.emitContractCall({
-        scriptHash: invocation.scriptHash,
-        operation: invocation.operation,
-        args: NeonWcAdapter.convertParams(invocation.args),
-      })
-    })
     const script = sb.build()
 
     const defaultEndpoint = 'http://seed1.neo.org:10332'
     const node = (await this.provider.getAllNodes())[0]
     const endpoint = node.url
 
-    const rpcClient = new rpc.NeoServerRpcClient(endpoint ?? defaultEndpoint)
-
-    const currentHeight = await rpcClient.getBlockCount()
-
-    const trx = new tx.Transaction({
-      script: Neon.u.HexString.fromHex(script),
-      validUntilBlock: currentHeight + 100,
-      signers: NeonWcAdapter.buildMultipleSigner(fromAccount, cim.signers),
-    })
-
-    const magicNumber = await NeonWcAdapter.getMagicOfRpcAddress(
-      endpoint ?? defaultEndpoint
-    )
-
-    const config = {
-      networkMagic: magicNumber,
-      rpcAddress: endpoint ?? defaultEndpoint,
-    }
-
-    const networkFee = await Neon.experimental.txHelpers.calculateNetworkFee(
-      trx,
+    const nwcAdapter = await NeonWcAdapter.init(endpoint ?? defaultEndpoint)
+    const requestParams: ContractInvocationMulti = request.params
+    const testInvokeResult = await nwcAdapter.testInvoke(
       fromAccount,
-      config
-    )
-    const systemFee = await Neon.experimental.txHelpers.getSystemFee(
-      Neon.u.HexString.fromHex(script),
-      config
+      requestParams
     )
 
-    return {
-      networkFee: Number(networkFee / 10 ** 8),
-      systemFee: Number(systemFee / 10 ** 8),
-    }
+    return UtilsHelper.convertToArbitraryDecimals(
+      Number(testInvokeResult.gasconsumed)
+    )
   }
 
   async calculateTransferFee(sendtx: Omit<SenderTransactionInfo, 'feeAmount'>) {

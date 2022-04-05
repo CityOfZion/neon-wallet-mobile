@@ -63,4 +63,9 @@ export abstract class UtilsHelper {
   static removeAccents(text: string) {
     return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   }
+  static convertToArbitraryDecimals(num: number, decimals: number = 8) {
+    // eslint-disable-next-line
+    const multiplier = 1 / Math.pow(10, decimals)
+    return (num * multiplier).toFixed(decimals)
+  }
 }

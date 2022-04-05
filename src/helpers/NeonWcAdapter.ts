@@ -1,3 +1,4 @@
+import {InvokeResult} from '@cityofzion/neon-core-next/lib/rpc'
 import {ContractParam} from '@cityofzion/neon-core-next/lib/sc'
 import {WitnessScope} from '@cityofzion/neon-core-next/lib/tx/components/WitnessScope'
 import {Account} from '@cityofzion/neon-core-next/lib/wallet'
@@ -105,7 +106,7 @@ export class NeonWcAdapter {
   testInvoke = async (
     account: Account,
     cim: ContractInvocationMulti
-  ): Promise<any> => {
+  ): Promise<InvokeResult> => {
     const sb = Neon.create.scriptBuilder()
 
     cim.invocations.forEach((c) => {

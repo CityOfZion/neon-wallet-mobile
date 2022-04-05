@@ -17,7 +17,7 @@
     "@cityofzion/dora-ts": "^0.0.10",
     "@cityofzion/neon-core-next": "npm:@cityofzion/neon-core@5.0.0-next.16",
     "@cityofzion/neon-js": "^4.8.0",
-    "@cityofzion/neon-js-next": "npm:@cityofzion/neon-js@5.0.0-next.16",
+    "@cityofzion/neon-js-next": "npm:@cityofzion/neon-js@5.0.0-next.17",
     "@json-rpc-tools/utils": "^1.7.6",
     "@moonlight-io/asteroid-sdk-js": "git+https://github.com/Moonlight-io/asteroid-sdk-js",
     "@react-native-async-storage/async-storage": "^1.15.13",
