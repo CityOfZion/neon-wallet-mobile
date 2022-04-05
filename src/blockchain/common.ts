@@ -54,7 +54,6 @@ export interface BlockchainDataProvider {
   getTransaction: (txid: string) => Promise<Transaction>
   getAddressAbstracts: (
     address: string,
-    tokens: TokenAsset[],
     page?: number
   ) => Promise<TransactionAddressResponse>
   getContract: (hash: string) => Promise<ContractResponse>

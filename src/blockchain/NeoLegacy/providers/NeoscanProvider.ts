@@ -25,11 +25,7 @@ export class NeoscanProvider implements NeoLegacyProvider {
     this.baseUrl = 'https://api.neoscan.io/api'
   }
 
-  async getAddressAbstracts(
-    address: string,
-    tokens: TokenAsset[],
-    page: number = 1
-  ) {
+  async getAddressAbstracts(address: string, page: number = 1) {
     return Request.get(
       `${this.baseUrl}/${this.network}/v1/get_address_abstracts/${address}/${page}`
     )

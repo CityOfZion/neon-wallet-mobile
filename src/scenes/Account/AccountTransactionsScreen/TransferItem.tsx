@@ -94,7 +94,7 @@ export const TransferItem = (props: Props) => {
           </TextView>
         </View>
         <TextView color="#fff" fontSize="16px" fontFamily="medium">
-          {FilterHelper.decimal(props.amount, undefined, props.decimals)}
+          {props.amount}
         </TextView>
         <TextView color="#fff" fontSize="16px" fontFamily="medium">
           {fiatAmount}
