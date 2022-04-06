@@ -51,7 +51,7 @@ const ImportKey = (props: ImportKeyProps) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
-  const {accounts, tokens} = useSelector((state: RootState) => state.app)
+  const {accounts} = useSelector((state: RootState) => state.app)
   const {isConnected} = useSelector((state: RootState) => state.network)
   const [inputValue, setInputValue] = useState(
     props.route.params ? props.route.params.key ?? '' : ''
@@ -93,11 +93,7 @@ const ImportKey = (props: ImportKeyProps) => {
           if (!accounts.find((account) => account.address === address)) {
             await UtilsHelper.sleep(200)
             const req = blockchainServices[blockchainName].provider
-            const {totalEntries} = await req.getAddressAbstracts(
-              address,
-              tokens,
-              1
-            )
+            const {totalEntries} = await req.getAddressAbstracts(address, 1)
             if ((totalEntries && totalEntries > 0) || index === 0) {
               accountsInfo.push({address, wif, derivationIndex: index})
             } else {

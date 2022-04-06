@@ -3,7 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import moment from 'moment'
-import React, {useCallback, useState, useEffect} from 'react'
+import React, {useCallback, useState, useEffect, useRef} from 'react'
 import {ImageSourcePropType} from 'react-native'
 import {useSelector} from 'react-redux'
 
@@ -13,6 +13,7 @@ import {blockchainServices} from '~/src/blockchain'
 import AccountSubTitle from '~/src/components/AccountSubTitle'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import {Loader} from '~/src/components/loader/loader'
+import {TransactionAddressSummary} from '~/src/models/TransactionAddressSummary'
 import {TransactionDateGroup} from '~/src/models/TransactionDateGroup'
 import {Account} from '~/src/models/redux/Account'
 import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
@@ -34,7 +35,7 @@ export interface TransfersDataScreen {
   amount: string
   asset: string
   decimals: number
-  symbol?: string
+  symbol: string
 }
 
 export type ITransactionType = 'wcTransaction' | 'sendTransaction'
@@ -66,14 +67,22 @@ const AccountTransactionsScreen = (props: Props) => {
   const [pageRequest, setPageRequest] = useState<number>(1)
   const [showLoading, setShowLoading] = useState<boolean>(true)
 
+  const decimalsCache = useRef<Map<string, {symbol: string; decimals: number}>>(
+    new Map(
+      blockchainServices[
+        account.blockchain
+      ].assets.map(({symbol, decimals, hash}) => [hash, {symbol, decimals}])
+    )
+  )
+
   const handleLoadTransactions = useCallback(
     async (page?: number) => {
       if (account.address) {
-        const transactionsHistory = await blockchainServices[
+        const {entries} = await blockchainServices[
           account.blockchain
-        ].provider.getAddressAbstracts(account.address, tokens, page)
+        ].provider.getAddressAbstracts(account.address, page)
 
-        handleFormatTransactions(transactionsHistory)
+        await handleFormatTransactions(entries)
         setShowLoading(false)
       }
     },
@@ -84,25 +93,39 @@ const AccountTransactionsScreen = (props: Props) => {
     return moment(timestamp).format('YYYY-MM-DD')
   }, [])
 
-  const getDecimalsToken = useCallback(
-    (symbol?: string) => {
-      const tokenFound = tokens.find((token) => token.symbol === symbol)
-      if (tokenFound?.decimals) {
-        return tokenFound.decimals
-      } else {
-        return 8
+  const getDecimalsAndSymbolToken = useCallback(
+    async (hash: string) => {
+      const cachedAsset = decimalsCache.current.get(hash)
+
+      if (cachedAsset) {
+        return cachedAsset
+      }
+
+      const tokenAsset = await blockchainServices[
+        account.blockchain
+      ].provider.getAssetByHash(hash)
+
+      if (tokenAsset) {
+        decimalsCache.current.set(hash, tokenAsset)
+
+        return tokenAsset
+      }
+
+      return {
+        symbol: '',
+        decimals: 0,
       }
     },
     [tokens]
   )
 
   const handleFormatTransactions = useCallback(
-    (transactions: TransactionAddressResponse) => {
+    async (entries: TransactionAddressSummary[]) => {
       const formatedTransactions = new Map<string, TransactionDataScreen>()
       const formatedTransfers = new Map<string, TransfersDataScreen[]>()
 
-      transactions.entries.forEach(
-        ({
+      for (const entry of entries) {
+        const {
           txid,
           addressFrom,
           addressTo,
@@ -111,52 +134,46 @@ const AccountTransactionsScreen = (props: Props) => {
           time,
           qtyInvocations,
           qtyNotifications,
-          symbol,
-        }) => {
-          if (txid && time && addressFrom && addressTo && amount && asset) {
-            if (
-              addressFrom === account.address ||
-              addressTo === account.address
-            ) {
-              let historyTransfer = formatedTransfers.get(txid)
-              if (historyTransfer) {
-                historyTransfer.push({
-                  addressFrom,
-                  addressTo,
-                  amount,
-                  asset,
-                  symbol,
-                  decimals: getDecimalsToken(symbol),
-                })
-                formatedTransfers.set(txid, historyTransfer)
-              } else {
-                historyTransfer = []
-                historyTransfer.push({
-                  addressFrom,
-                  addressTo,
-                  amount,
-                  asset,
-                  symbol,
-                  decimals: getDecimalsToken(symbol),
-                })
-                formatedTransfers.set(txid, historyTransfer)
-              }
-              formatedTransactions.set(txid, {
-                transactionType: 'sendTransaction',
-                txid,
-                qtyInvocations,
-                qtyNotifications,
-                time,
-                transfers: historyTransfer,
-                iconStatusTransaction: require('src/assets/images/icon-check-white.png'),
-                statusTransaction: i18n.t(
-                  'screens.getAccount.completedTransactions'
-                ),
-              })
-            }
-          }
+        } = entry
+
+        if (!txid || !time || !addressFrom || !addressTo || !amount || !asset) {
+          continue
         }
-      )
+
+        if (addressFrom !== account.address && addressTo !== account.address) {
+          continue
+        }
+
+        const {decimals, symbol} = await getDecimalsAndSymbolToken(asset)
+
+        const transfer = {
+          addressFrom,
+          addressTo,
+          amount: String(Number(amount) / 10 ** decimals),
+          asset,
+          symbol,
+          decimals,
+        }
+
+        let historyTransfer = formatedTransfers.get(txid)
+        if (historyTransfer) {
+          historyTransfer.push(transfer)
+          formatedTransfers.set(txid, historyTransfer)
+        } else {
+          historyTransfer = [transfer]
+          formatedTransfers.set(txid, historyTransfer)
+        }
+        formatedTransactions.set(txid, {
+          transactionType: 'sendTransaction',
+          txid,
+          qtyInvocations,
+          qtyNotifications,
+          time,
+          transfers: historyTransfer,
+          iconStatusTransaction: require('src/assets/images/icon-check-white.png'),
+          statusTransaction: i18n.t('screens.getAccount.completedTransactions'),
+        })
+      }
 
       const formatedTransactionsData: {
         [date: string]: TransactionDataScreen[]
@@ -197,6 +214,96 @@ const AccountTransactionsScreen = (props: Props) => {
     [pendingTransactionsDataScreen, transactionsDataScreen]
   )
 
+  const populatePendingTransactionList = useCallback(
+    async (
+      pendingTransactions: TransactionDateGroup[],
+      transactionType: ITransactionType
+    ) => {
+      if (pendingTransactions.length <= 0) {
+        return
+      }
+
+      const formatedTransactions = new Map<string, TransactionDataScreen>()
+      const formatedTransfers = new Map<string, TransfersDataScreen[]>()
+
+      for (const pendingTransaction of pendingTransactions) {
+        if (!pendingTransaction.date) {
+          continue
+        }
+
+        for (const transaction of pendingTransaction.transactions) {
+          if (
+            !transaction.sentAt ||
+            !transaction.transactionHash ||
+            !transaction.senderAddress ||
+            !transaction.receiverAddress ||
+            !transaction.token
+          ) {
+            continue
+          }
+
+          const tokenAsset = await getDecimalsAndSymbolToken(
+            transaction.token.hash
+          )
+
+          let historyTransfer = formatedTransfers.get(
+            transaction.transactionHash
+          )
+
+          const transfer = {
+            addressFrom: transaction.senderAddress,
+            addressTo: transaction.receiverAddress,
+            amount: String(transaction.token.amount),
+            asset: transaction.token.hash,
+            symbol: transaction.token.symbol,
+            decimals: tokenAsset.decimals,
+          }
+
+          if (historyTransfer) {
+            historyTransfer.push(transfer)
+            formatedTransfers.set(transaction.sentAt, historyTransfer)
+          } else {
+            historyTransfer = [transfer]
+            formatedTransfers.set(transaction.transactionHash, historyTransfer)
+          }
+
+          formatedTransactions.set(transaction.transactionHash, {
+            transactionType,
+            txid: transaction.transactionHash,
+            qtyInvocations: 0,
+            qtyNotifications: transaction.qtyInvocations ?? 0,
+            time: moment(transaction.sentAt).toDate().getTime(),
+            transfers: historyTransfer,
+            iconStatusTransaction: require('src/assets/images/icon-pending-white.png'),
+            statusTransaction: i18n.t('components.transactionsList.title'),
+          })
+        }
+      }
+
+      const formatedTransactionsData: {
+        [date: string]: TransactionDataScreen[]
+      } = {}
+
+      Array.from(formatedTransactions.values()).forEach((transaction) => {
+        const {time} = transaction
+        if (time) {
+          const keyDate = getKeyDateByTimeStamp(time)
+          if (formatedTransactionsData[keyDate]) {
+            formatedTransactionsData[keyDate].push(transaction)
+          } else {
+            formatedTransactionsData[keyDate] = [transaction]
+          }
+        }
+      })
+
+      setPendingTransactionsDataScreen((prevState) => {
+        const data = prevState
+        return {...data, ...formatedTransactionsData}
+      })
+    },
+    [account, pendingTransactionsDataScreen]
+  )
+
   useEffect(() => {
     const wcPendingTransactions = account
       .getPendingTransactions()
@@ -209,6 +316,7 @@ const AccountTransactionsScreen = (props: Props) => {
     } else if (sendPendingTransactions.length > 0) {
       populatePendingTransactionList(sendPendingTransactions, 'sendTransaction')
     }
+
     Await.run('populateTransactionsList', handleLoadTransactions)
   }, [account, accountsPool])
 
@@ -219,95 +327,6 @@ const AccountTransactionsScreen = (props: Props) => {
       Await.done('moreLoadTransaction')
     }
   }, [showLoading])
-
-  const populatePendingTransactionList = useCallback(
-    (
-      pendingTransactions: TransactionDateGroup[],
-      transactionType: ITransactionType
-    ) => {
-      if (pendingTransactions.length > 0) {
-        const formatedTransactions = new Map<string, TransactionDataScreen>()
-        const formatedTransfers = new Map<string, TransfersDataScreen[]>()
-        pendingTransactions.forEach((it) => {
-          let txid: string = ''
-          if (it.date) {
-            it.transactions.forEach((transaction) => {
-              if (
-                transaction.sentAt &&
-                transaction.transactionHash &&
-                transaction.senderAddress !== null &&
-                transaction.receiverAddress !== null
-              ) {
-                let historyTransfer = formatedTransfers.get(
-                  transaction.transactionHash
-                )
-                txid = transaction.transactionHash
-                if (historyTransfer) {
-                  historyTransfer.push({
-                    addressFrom: transaction.senderAddress,
-                    addressTo: transaction.receiverAddress,
-                    amount: String(transaction.token?.amount),
-                    asset: transaction.token?.hash ?? '',
-                    symbol: transaction.token?.symbol ?? '',
-                    decimals: getDecimalsToken(transaction.token?.symbol),
-                  })
-                  formatedTransfers.set(transaction.sentAt, historyTransfer)
-                } else {
-                  historyTransfer = []
-                  historyTransfer.push({
-                    addressFrom: transaction.senderAddress,
-                    addressTo: transaction.receiverAddress,
-                    amount: String(transaction.token?.amount ?? ''),
-                    asset: transaction.token?.hash ?? '',
-                    symbol: transaction.token?.symbol,
-                    decimals: getDecimalsToken(transaction.token?.symbol),
-                  })
-                  formatedTransfers.set(
-                    transaction.transactionHash,
-                    historyTransfer
-                  )
-                }
-                formatedTransactions.set(txid, {
-                  transactionType,
-                  txid,
-                  qtyInvocations: 0,
-                  qtyNotifications: transaction.qtyInvocations ?? 0,
-                  time: moment(transaction.sentAt).toDate().getTime(),
-                  transfers: historyTransfer,
-                  iconStatusTransaction: require('src/assets/images/icon-pending-white.png'),
-                  statusTransaction: i18n.t(
-                    'components.transactionsList.title'
-                  ),
-                })
-              }
-            })
-          }
-        })
-
-        const formatedTransactionsData: {
-          [date: string]: TransactionDataScreen[]
-        } = {}
-
-        Array.from(formatedTransactions.values()).forEach((transaction) => {
-          const {time} = transaction
-          if (time) {
-            const keyDate = getKeyDateByTimeStamp(time)
-            if (formatedTransactionsData[keyDate]) {
-              formatedTransactionsData[keyDate].push(transaction)
-            } else {
-              formatedTransactionsData[keyDate] = [transaction]
-            }
-          }
-        })
-
-        setPendingTransactionsDataScreen((prevState) => {
-          const data = prevState
-          return {...data, ...formatedTransactionsData}
-        })
-      }
-    },
-    [account, pendingTransactionsDataScreen]
-  )
 
   return (
     <AwaitActivity

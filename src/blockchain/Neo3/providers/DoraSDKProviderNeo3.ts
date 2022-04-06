@@ -33,11 +33,7 @@ export class DoraSDKProvider implements Neo3Provider {
     }
   }
 
-  async getAddressAbstracts(
-    address: string,
-    tokens: TokenAsset[],
-    page: number = 1
-  ) {
+  async getAddressAbstracts(address: string, page: number = 1) {
     const result = new TransactionAddressResponse()
 
     let txFullResponse: AddressTransactionsResponse | any[] = []
@@ -62,26 +58,16 @@ export class DoraSDKProvider implements Neo3Provider {
         transfers,
       } of items) {
         for (const {amount, scripthash, to, from, txid} of transfers) {
-          const asset = tokens.find(
-            (token) =>
-              token.hash === scripthash || '0x' + token.hash === scripthash
-          )
           result.entries.push({
             addressFrom: from,
             addressTo: to,
-            amount: String(
-              Number(amount) /
-                (asset?.decimals && asset.decimals > 0
-                  ? 10 ** asset.decimals
-                  : 1)
-            ),
+            amount,
             asset: scripthash,
             blockHeight: block,
             time: Number(time.replace('.', '')) / 1000, //dora endpoint is returning prop "time" as string with dot and with 3 zeros, so needs to remove dot and divide by 1000 to can convert to date using new Date()
             txid,
             qtyInvocations: invocations.length,
             qtyNotifications: notifications.length,
-            symbol: asset ? asset.symbol : undefined,
           })
         }
       }

@@ -25,11 +25,7 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     this.baseNumeric = 8
   }
 
-  async getAddressAbstracts(
-    address: string,
-    tokens: TokenAsset[],
-    page: number = 1
-  ) {
+  async getAddressAbstracts(address: string, page: number = 1) {
     const result = new TransactionAddressResponse()
     const {
       page_number,
@@ -45,10 +41,8 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     result.totalPages = total_pages
     entries.forEach(
       ({address_from, address_to, amount, asset, block_height, time, txid}) => {
-        const tokenFound = tokens.find((token) => token.hash === asset)
         const amountConverted = this.convertScientifcNotationToDecimal(amount)
         result.entries.push({
-          symbol: tokenFound?.symbol,
           addressFrom: address_from,
           addressTo: address_to,
           amount: String(amountConverted),
