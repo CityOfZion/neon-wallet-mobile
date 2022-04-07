@@ -1,5 +1,6 @@
 import i18n from 'i18n-js'
-import React, {useState, useCallback, useEffect} from 'react'
+import moment from 'moment'
+import React from 'react'
 import {Linking, View, TouchableWithoutFeedback} from 'react-native'
 import {useDispatch} from 'react-redux'
 
@@ -14,11 +15,8 @@ import {ImageView, TextView} from '~/src/styles/styled-components'
 
 interface TransactionDataScreenWithStatusTransactions
   extends TransactionDataScreen {
-  hour: string
   hideLinkDora?: boolean
 }
-
-export type TSentOrReceived = 'sent' | 'received'
 
 export const TransactionItemDate = (
   props: TransactionDataScreenWithStatusTransactions
@@ -26,23 +24,7 @@ export const TransactionItemDate = (
   const dispatch = useDispatch<SyncDispatch<Account>>()
   const account = dispatch(RootStore.account.actions.getFromSelection())
 
-  const handleSentOrReceived = (): TSentOrReceived => {
-    const transfer = props.transfers.find(
-      (transfer) => transfer.addressTo === account.address
-    )
-
-    if (transfer) {
-      return 'received'
-    }
-
-    return 'sent'
-  }
-
-  const checkRenderTransactionInfo = useCallback(() => {
-    return props.transactionType === 'sendTransaction'
-  }, [props])
-
-  const sentOrReceived = handleSentOrReceived()
+  const checkRenderTransactionInfo = props.transactionType === 'sendTransaction'
 
   return (
     <View style={{marginBottom: 5}}>
@@ -50,9 +32,9 @@ export const TransactionItemDate = (
         style={{
           backgroundColor: '#0f0f10',
           borderRadius: 8,
-          paddingHorizontal: 6,
+          paddingHorizontal: 14,
           marginTop: 15,
-          paddingBottom: 10,
+          paddingBottom: 20,
         }}
       >
         <View
@@ -69,7 +51,7 @@ export const TransactionItemDate = (
             }}
           >
             <TextView color="#fff" fontFamily="medium" fontSize="18px">
-              {i18n.t('screens.getAccount.txidLabel')}
+              {i18n.t('screens.accountTransaction.txidLabel')}
             </TextView>
             <TextView
               ellipsizeMode={'middle'}
@@ -84,25 +66,18 @@ export const TransactionItemDate = (
             </TextView>
           </View>
           <TextView color="#fff" fontFamily="medium" fontSize="16px">
-            {props.hour}
+            {moment(props.time).format(i18n.t('formatters.transactionTime'))}
           </TextView>
         </View>
-        {checkRenderTransactionInfo() && (
+
+        {checkRenderTransactionInfo && (
           <View>
-            <TextView color="#899fa8" fontSize="14px" fontFamily="medium">
-              {sentOrReceived === 'sent'
-                ? i18n.t('screens.getAccount.sentToLabel')
-                : i18n.t('screens.getAccount.receivedFromLabel')}
-            </TextView>
-            {props.transfers.map((transfer, index) => (
-              <TransferItem
-                key={index}
-                sentOrReceived={sentOrReceived}
-                {...transfer}
-              />
+            {props.transfers.map((transfer) => (
+              <TransferItem key={transfer.hash} {...transfer} />
             ))}
           </View>
         )}
+
         <View
           style={{
             flexDirection: 'row',
@@ -113,15 +88,16 @@ export const TransactionItemDate = (
           <View style={{flexDirection: 'row'}}>
             <BoxLabelNumber
               color={'#1f2b33'}
-              label={i18n.t('screens.getAccount.invocationsLabel')}
+              label={i18n.t('screens.accountTransaction.invocationsLabel')}
               number={props.qtyInvocations}
             />
             <BoxLabelNumber
               color={'#1f2b33'}
-              label={i18n.t('screens.getAccount.notificationsLabel')}
+              label={i18n.t('screens.accountTransaction.notificationsLabel')}
               number={props.qtyNotifications}
             />
           </View>
+
           {!props.hideLinkDora && (
             <TouchableWithoutFeedback
               onPress={() => {
@@ -134,6 +110,8 @@ export const TransactionItemDate = (
               <ImageView
                 width="28px"
                 height="28px"
+                resizeMode="contain"
+                alignSelf="center"
                 source={require('~src/assets/images/dora-link.png')}
               />
             </TouchableWithoutFeedback>

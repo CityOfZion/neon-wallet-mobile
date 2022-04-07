@@ -1,33 +1,40 @@
-import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
+import {
+  HttpExclude,
+  HttpExpose,
+  ResponseSerialize,
+} from '@simpli/serialized-request'
 
-import moment from '~/node_modules/moment'
+import {TransactionAddressTransfer} from './TransactionAddressTransfer'
 
 @HttpExclude()
 export class TransactionAddressSummary {
   @HttpExpose()
-  txid: string | null = null
+  hash: string
 
   @HttpExpose()
-  time: number | null = null
+  time: number
 
   @HttpExpose('block_height')
-  blockHeight: number | null = null
+  blockHeight: number
 
   @HttpExpose()
-  asset: string | null = null
+  @ResponseSerialize(TransactionAddressTransfer)
+  transfers: TransactionAddressTransfer[] = []
 
   @HttpExpose()
-  amount: string | null = null
+  qtyInvocations: number = 0
 
-  @HttpExpose('address_to')
-  addressTo: string | null = null
-
-  @HttpExpose('address_from')
-  addressFrom: string | null = null
-
-  @HttpExpose('qtyNotifications')
+  @HttpExpose()
   qtyNotifications: number = 0
 
-  @HttpExpose('qtyInvocations')
-  qtyInvocations: number = 0
+  constructor(
+    data: Omit<
+      TransactionAddressSummary,
+      'qtyInvocations' | 'qtyNotifications' | 'transfers'
+    >
+  ) {
+    this.hash = data.hash
+    this.time = data.time
+    this.blockHeight = data.blockHeight
+  }
 }

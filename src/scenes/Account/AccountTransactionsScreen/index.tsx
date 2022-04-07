@@ -1,11 +1,9 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
-import i18n from 'i18n-js'
 import moment from 'moment'
 import React, {useCallback, useState, useEffect, useRef} from 'react'
-import {ImageSourcePropType} from 'react-native'
-import {useSelector} from 'react-redux'
+import {NativeScrollEvent, NativeSyntheticEvent} from 'react-native'
 
 import {TransactionsListDate} from './TransactionsListDate'
 
@@ -16,7 +14,6 @@ import {Loader} from '~/src/components/loader/loader'
 import {TransactionAddressSummary} from '~/src/models/TransactionAddressSummary'
 import {TransactionDateGroup} from '~/src/models/TransactionDateGroup'
 import {Account} from '~/src/models/redux/Account'
-import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
 import {RootStackParamList} from '~/src/navigation/AppNavigation'
 import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -33,7 +30,7 @@ export interface TransfersDataScreen {
   addressFrom: string
   addressTo: string
   amount: string
-  asset: string
+  hash: string
   decimals: number
   symbol: string
 }
@@ -42,31 +39,29 @@ export type ITransactionType = 'wcTransaction' | 'sendTransaction'
 
 export interface TransactionDataScreen {
   txid: string
-  time: number | null
+  time: number
   qtyInvocations: number
   qtyNotifications: number
   transfers: TransfersDataScreen[]
-  statusTransaction: string
-  iconStatusTransaction: ImageSourcePropType
   transactionType: ITransactionType
 }
 
 const AccountTransactionsScreen = (props: Props) => {
   const {account} = props.route.params
-  const {tokens, accounts: accountsPool} = useSelector(
-    (state: RootState) => state.app
-  )
-  const [transactionsDataScreen, setTransactionsDataScreen] = useState<{
-    [date: string]: TransactionDataScreen[]
-  }>({})
-  const [
-    pendingTransactionsDataScreen,
-    setPendingTransactionsDataScreen,
-  ] = useState<{[date: string]: TransactionDataScreen[]}>()
 
-  const [pageRequest, setPageRequest] = useState<number>(1)
-  const [showLoading, setShowLoading] = useState<boolean>(true)
+  const [completedTransactions, setCompletedTransactions] = useState<
+    TransactionDataScreen[]
+  >([])
+  const [pendingTransactions, setPendingTransactions] = useState<
+    TransactionDataScreen[]
+  >([])
+  const [hasMoreTransactionsToLoad, setHasMoreTransactionsToLoad] = useState<
+    boolean
+  >(true)
 
+  const pageControl = useRef<number>(1)
+  const requestControl = useRef<boolean>(false)
+  const completedTransactionsHash = useRef<string[]>([])
   const decimalsCache = useRef<Map<string, {symbol: string; decimals: number}>>(
     new Map(
       blockchainServices[
@@ -75,147 +70,117 @@ const AccountTransactionsScreen = (props: Props) => {
     )
   )
 
-  const handleLoadTransactions = useCallback(
-    async (page?: number) => {
-      if (account.address) {
-        const {entries} = await blockchainServices[
-          account.blockchain
-        ].provider.getAddressAbstracts(account.address, page)
+  const handleOnScroll = async (
+    event: NativeSyntheticEvent<NativeScrollEvent>
+  ) => {
+    if (
+      event.nativeEvent.contentOffset.y >=
+      event.nativeEvent.contentSize.height * 0.7
+    ) {
+      handleLoadTransactions()
+    }
+  }
 
-        await handleFormatTransactions(entries)
-        setShowLoading(false)
+  const handleLoadTransactions = useCallback(async () => {
+    if (
+      account.address &&
+      !requestControl.current &&
+      hasMoreTransactionsToLoad
+    ) {
+      requestControl.current = true
+
+      const {transactions, totalPages} = await blockchainServices[
+        account.blockchain
+      ].provider.getAddressAbstracts(account.address, pageControl.current)
+
+      await handleFormatTransactions(transactions)
+
+      pageControl.current += 1
+      requestControl.current = false
+
+      if (totalPages && pageControl.current > totalPages) {
+        setHasMoreTransactionsToLoad(false)
       }
-    },
-    [account, accountsPool, pageRequest, showLoading]
-  )
+    }
+  }, [account])
 
-  const getKeyDateByTimeStamp = useCallback((timestamp: number) => {
-    return moment(timestamp).format('YYYY-MM-DD')
+  const getDecimalsAndSymbolToken = useCallback(async (hash: string) => {
+    const cachedAsset = decimalsCache.current.get(hash)
+
+    if (cachedAsset) {
+      return cachedAsset
+    }
+
+    const tokenAsset = await blockchainServices[
+      account.blockchain
+    ].provider.getAssetByHash(hash)
+
+    if (tokenAsset) {
+      decimalsCache.current.set(hash, tokenAsset)
+
+      return tokenAsset
+    }
+
+    return {
+      symbol: '',
+      decimals: 0,
+    }
   }, [])
 
-  const getDecimalsAndSymbolToken = useCallback(
-    async (hash: string) => {
-      const cachedAsset = decimalsCache.current.get(hash)
-
-      if (cachedAsset) {
-        return cachedAsset
-      }
-
-      const tokenAsset = await blockchainServices[
-        account.blockchain
-      ].provider.getAssetByHash(hash)
-
-      if (tokenAsset) {
-        decimalsCache.current.set(hash, tokenAsset)
-
-        return tokenAsset
-      }
-
-      return {
-        symbol: '',
-        decimals: 0,
-      }
-    },
-    [tokens]
-  )
-
   const handleFormatTransactions = useCallback(
-    async (entries: TransactionAddressSummary[]) => {
-      const formatedTransactions = new Map<string, TransactionDataScreen>()
-      const formatedTransfers = new Map<string, TransfersDataScreen[]>()
+    async (transactions: TransactionAddressSummary[]) => {
+      const formatedTransactions: TransactionDataScreen[] = []
 
-      for (const entry of entries) {
+      for (const transaction of transactions) {
         const {
-          txid,
-          addressFrom,
-          addressTo,
-          amount,
-          asset,
+          hash,
           time,
           qtyInvocations,
           qtyNotifications,
-        } = entry
+          transfers,
+        } = transaction
 
-        if (!txid || !time || !addressFrom || !addressTo || !amount || !asset) {
-          continue
+        const formatedTransfers: TransfersDataScreen[] = []
+
+        for (const transfer of transfers) {
+          const {amount, hash, from, to} = transfer
+
+          if (from !== account.address && to !== account.address) {
+            continue
+          }
+
+          const {decimals, symbol} = await getDecimalsAndSymbolToken(hash)
+
+          formatedTransfers.push({
+            addressFrom: from,
+            addressTo: to,
+            amount: String(amount / 10 ** decimals),
+            hash,
+            symbol,
+            decimals,
+          })
         }
 
-        if (addressFrom !== account.address && addressTo !== account.address) {
-          continue
-        }
-
-        const {decimals, symbol} = await getDecimalsAndSymbolToken(asset)
-
-        const transfer = {
-          addressFrom,
-          addressTo,
-          amount: String(Number(amount) / 10 ** decimals),
-          asset,
-          symbol,
-          decimals,
-        }
-
-        let historyTransfer = formatedTransfers.get(txid)
-        if (historyTransfer) {
-          historyTransfer.push(transfer)
-          formatedTransfers.set(txid, historyTransfer)
-        } else {
-          historyTransfer = [transfer]
-          formatedTransfers.set(txid, historyTransfer)
-        }
-        formatedTransactions.set(txid, {
+        formatedTransactions.push({
           transactionType: 'sendTransaction',
-          txid,
+          txid: hash,
           qtyInvocations,
           qtyNotifications,
           time,
-          transfers: historyTransfer,
-          iconStatusTransaction: require('src/assets/images/icon-check-white.png'),
-          statusTransaction: i18n.t('screens.getAccount.completedTransactions'),
+          transfers: formatedTransfers,
         })
       }
 
-      const formatedTransactionsData: {
-        [date: string]: TransactionDataScreen[]
-      } = {}
+      completedTransactionsHash.current = formatedTransactions.map(
+        ({txid}) => txid
+      )
 
-      Array.from(formatedTransactions.values()).forEach((transaction) => {
-        const {time} = transaction
-        if (time) {
-          const keyDate = getKeyDateByTimeStamp(time)
-          if (formatedTransactionsData[keyDate]) {
-            formatedTransactionsData[keyDate].push(transaction)
-          } else {
-            formatedTransactionsData[keyDate] = [transaction]
-          }
-        }
-      })
-
-      setTransactionsDataScreen((prevState) => {
-        const data = prevState
-        return {...data, ...formatedTransactionsData}
-      })
+      setCompletedTransactions((prevState) => [
+        ...prevState,
+        ...formatedTransactions,
+      ])
     },
-    [transactionsDataScreen, getKeyDateByTimeStamp]
-  )
-
-  const handleRenderingPendingTransactions = useCallback(
-    (
-      pendingTransactions: TransactionDataScreen[],
-      completedTransactions: TransactionDataScreen[]
-    ) => {
-      if (pendingTransactions) {
-        return pendingTransactions.filter(
-          (pending) =>
-            !completedTransactions.some(
-              (completed) => completed.txid === pending.txid
-            )
-        )
-      } else {
-        return pendingTransactions
-      }
-    },
-    [pendingTransactionsDataScreen, transactionsDataScreen]
+    [getDecimalsAndSymbolToken]
   )
 
   const populatePendingTransactionList = useCallback(
@@ -227,8 +192,10 @@ const AccountTransactionsScreen = (props: Props) => {
         return
       }
 
-      const formatedTransactions = new Map<string, TransactionDataScreen>()
-      const formatedTransfers = new Map<string, TransfersDataScreen[]>()
+      const formatedPendingTransactionsMap = new Map<
+        string,
+        TransactionDataScreen
+      >()
 
       for (const pendingTransaction of pendingTransactions) {
         if (!pendingTransaction.date) {
@@ -236,77 +203,86 @@ const AccountTransactionsScreen = (props: Props) => {
         }
 
         for (const transaction of pendingTransaction.transactions) {
+          const {
+            sentAt,
+            transactionHash,
+            senderAddress,
+            receiverAddress,
+            token,
+          } = transaction
+
           if (
-            !transaction.sentAt ||
-            !transaction.transactionHash ||
-            !transaction.senderAddress ||
-            !transaction.receiverAddress ||
-            !transaction.token
+            !sentAt ||
+            !transactionHash ||
+            !senderAddress ||
+            !receiverAddress ||
+            !token
           ) {
             continue
           }
 
-          const tokenAsset = await getDecimalsAndSymbolToken(
-            transaction.token.hash
-          )
+          const {decimals, symbol} = await getDecimalsAndSymbolToken(token.hash)
 
-          let historyTransfer = formatedTransfers.get(
-            transaction.transactionHash
-          )
-
-          const transfer = {
-            addressFrom: transaction.senderAddress,
-            addressTo: transaction.receiverAddress,
-            amount: String(transaction.token.amount),
-            asset: transaction.token.hash,
-            symbol: transaction.token.symbol,
-            decimals: tokenAsset.decimals,
+          const transfer: TransfersDataScreen = {
+            addressFrom: senderAddress,
+            addressTo: receiverAddress,
+            amount: String(token.amount / 10 ** decimals),
+            hash: token.hash,
+            symbol,
+            decimals,
           }
 
-          if (historyTransfer) {
-            historyTransfer.push(transfer)
-            formatedTransfers.set(transaction.sentAt, historyTransfer)
-          } else {
-            historyTransfer = [transfer]
-            formatedTransfers.set(transaction.transactionHash, historyTransfer)
+          const exitingTransaction = formatedPendingTransactionsMap.get(
+            transactionHash
+          )
+
+          if (exitingTransaction) {
+            formatedPendingTransactionsMap.set(transactionHash, {
+              ...exitingTransaction,
+              transfers: [...exitingTransaction.transfers, transfer],
+            })
+            continue
           }
 
-          formatedTransactions.set(transaction.transactionHash, {
+          const transactionDataScreen: TransactionDataScreen = {
+            txid: transactionHash,
             transactionType,
-            txid: transaction.transactionHash,
             qtyInvocations: 0,
-            qtyNotifications: transaction.qtyInvocations ?? 0,
-            time: moment(transaction.sentAt).toDate().getTime(),
-            transfers: historyTransfer,
-            iconStatusTransaction: require('src/assets/images/icon-pending-white.png'),
-            statusTransaction: i18n.t('components.transactionsList.title'),
-          })
+            qtyNotifications: 0,
+            time: moment(sentAt).unix(),
+            transfers: [transfer],
+          }
+
+          formatedPendingTransactionsMap.set(
+            transactionHash,
+            transactionDataScreen
+          )
         }
       }
 
-      const formatedTransactionsData: {
-        [date: string]: TransactionDataScreen[]
-      } = {}
+      const formatedPendingTransactions = Array.from(
+        formatedPendingTransactionsMap.values()
+      )
 
-      Array.from(formatedTransactions.values()).forEach((transaction) => {
-        const {time} = transaction
-        if (time) {
-          const keyDate = getKeyDateByTimeStamp(time)
-          if (formatedTransactionsData[keyDate]) {
-            formatedTransactionsData[keyDate].push(transaction)
-          } else {
-            formatedTransactionsData[keyDate] = [transaction]
-          }
-        }
-      })
+      const filteredTransactions = formatedPendingTransactions.filter(
+        (pendingTransaction) =>
+          !completedTransactionsHash.current.some(
+            (completedTransactionHash) =>
+              completedTransactionHash === pendingTransaction.txid
+          )
+      )
 
-      setPendingTransactionsDataScreen((prevState) => {
-        const data = prevState
-        return {...data, ...formatedTransactionsData}
-      })
+      setPendingTransactions((prevState) => [
+        ...prevState,
+        ...filteredTransactions,
+      ])
     },
-    [account, pendingTransactionsDataScreen]
+    [getDecimalsAndSymbolToken]
   )
+
+  useEffect(() => {
+    Await.run('populateTransactionsList', handleLoadTransactions)
+  }, [handleLoadTransactions])
 
   useEffect(() => {
     const wcPendingTransactions = account
@@ -315,62 +291,30 @@ const AccountTransactionsScreen = (props: Props) => {
         it.transactions.filter((it) => it.qtyInvocations !== null)
       )
     const sendPendingTransactions = account.getPendingTransactions()
+
     if (wcPendingTransactions.length > 0) {
       populatePendingTransactionList(wcPendingTransactions, 'wcTransaction')
-    } else if (sendPendingTransactions.length > 0) {
+      return
+    }
+
+    if (sendPendingTransactions.length > 0) {
       populatePendingTransactionList(sendPendingTransactions, 'sendTransaction')
     }
-
-    Await.run('populateTransactionsList', handleLoadTransactions)
-  }, [account, accountsPool])
-
-  useEffect(() => {
-    if (showLoading) {
-      Await.init('moreLoadTransaction')
-    } else {
-      Await.done('moreLoadTransaction')
-    }
-  }, [showLoading])
+  }, [populatePendingTransactionList])
 
   return (
     <AwaitActivity
       name="populateTransactionsList"
       loadingView={<ScreenLoader />}
     >
-      <ScreenLayout
-        onScroll={(e) => {
-          const paddingToBottom = e.nativeEvent.layoutMeasurement.height
-          if (
-            e.nativeEvent.contentOffset.y >=
-            e.nativeEvent.contentSize.height - paddingToBottom
-          ) {
-            handleLoadTransactions(pageRequest + 1)
-            setShowLoading(true)
-            setPageRequest((prevState) => {
-              return prevState + 1
-            })
-          }
-        }}
-      >
+      <ScreenLayout onScroll={handleOnScroll}>
         <AccountSubTitle account={account} />
-        {Object.keys(transactionsDataScreen).map((date) => (
-          <TransactionsListDate
-            key={date}
-            date={date}
-            transactions={transactionsDataScreen[date]}
-            pendingTransactions={
-              pendingTransactionsDataScreen
-                ? handleRenderingPendingTransactions(
-                    pendingTransactionsDataScreen[date],
-                    transactionsDataScreen[date]
-                  )
-                : []
-            }
-          />
-        ))}
-        {showLoading && (
-          <AwaitActivity name="moreLoadTransaction" loadingView={<Loader />} />
-        )}
+        <TransactionsListDate
+          completedTransactions={completedTransactions}
+          pendingTransactions={pendingTransactions}
+        />
+
+        {hasMoreTransactionsToLoad && <Loader />}
       </ScreenLayout>
     </AwaitActivity>
   )

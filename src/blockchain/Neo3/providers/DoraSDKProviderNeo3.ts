@@ -1,7 +1,6 @@
 import {api} from '@cityofzion/dora-ts'
 import {AddressTransactionsResponse} from '@cityofzion/dora-ts/dist/interfaces/api/neo'
-import {TransactionEnhanced} from '@cityofzion/dora-ts/dist/interfaces/api/neo/interface'
-import {rpc, u} from '@cityofzion/neon-core-next'
+import {rpc, u, wallet} from '@cityofzion/neon-core-next'
 import {Request} from '@simpli/serialized-request'
 import {mapValues} from 'lodash'
 
@@ -11,8 +10,9 @@ import {ContractMethod} from '~/src/models/ContractMethod'
 import {ContractParameter} from '~/src/models/ContractParameter'
 import {NeoNode} from '~/src/models/NeoNode'
 import {Node} from '~/src/models/Node'
-import {TokenAsset} from '~/src/models/TokenAsset'
 import {Transaction} from '~/src/models/Transaction'
+import {TransactionAddressSummary} from '~/src/models/TransactionAddressSummary'
+import {TransactionAddressTransfer} from '~/src/models/TransactionAddressTransfer'
 import {BalanceResponse} from '~/src/models/response/BalanceResponse'
 import {ContractResponse} from '~/src/models/response/ContractResponse'
 import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
@@ -44,40 +44,46 @@ export class DoraSDKProvider implements Neo3Provider {
       this.network
     )
 
-    if (!Array.isArray(txFullResponse)) {
-      const {totalCount, items} = txFullResponse
-      result.pageNumber = page
-      result.pageSize = items.length
-      result.totalEntries = totalCount
+    const {totalCount, items} = txFullResponse
+    result.pageNumber = page
+    result.pageSize = items.length
+    result.totalEntries = totalCount
+    result.totalPages = Math.ceil(totalCount / 15)
 
-      for (const {
-        block,
-        invocations,
-        notifications,
-        time,
-        transfers,
-      } of items) {
-        for (const {amount, scripthash, to, from, txid} of transfers) {
-          result.entries.push({
-            addressFrom: from,
-            addressTo: to,
+    items.forEach(({block, hash, invocations, notifications, time}) => {
+      const transaction = new TransactionAddressSummary({
+        blockHeight: block,
+        hash,
+        time: Number(time.replace('.', '')) / 1000,
+      })
+      transaction.qtyInvocations = invocations.length
+      transaction.qtyNotifications = notifications.length
+
+      notifications
+        .filter(
+          ({event_name: eventName, state}) =>
+            (state as any).length === 3 && eventName === 'Transfer'
+        )
+        .forEach(({contract, state}) => {
+          const [{value: from}, {value: to}, {value: amount}] = state as any
+
+          const convertedFrom = from
+            ? this.convertByteStringToAddress(from)
+            : 'Mint'
+          const convertedTo = to ? this.convertByteStringToAddress(to) : 'Burn'
+
+          const transfer = new TransactionAddressTransfer({
             amount,
-            asset: scripthash,
-            blockHeight: block,
-            time: Number(time.replace('.', '')) / 1000, //dora endpoint is returning prop "time" as string with dot and with 3 zeros, so needs to remove dot and divide by 1000 to can convert to date using new Date()
-            txid,
-            qtyInvocations: invocations.length,
-            qtyNotifications: notifications.length,
+            to: convertedTo,
+            from: convertedFrom,
+            hash: contract,
           })
-        }
-      }
-    } else {
-      result.totalPages = 1
-      result.totalEntries = 0
-      result.pageSize = 15
-      result.pageNumber = 1
-      result.entries = []
-    }
+
+          transaction.transfers.push(transfer)
+        })
+
+      result.transactions.push(transaction)
+    })
 
     return result
   }
@@ -253,5 +259,13 @@ export class DoraSDKProvider implements Neo3Provider {
     return String(scientificNotation).includes('e')
       ? new Number(scientificNotation).toFixed(this.baseNumeric)
       : scientificNotation
+  }
+
+  private convertByteStringToAddress(byteString: string): string {
+    const account = new wallet.Account(
+      u.reverseHex(u.HexString.fromBase64(byteString).toString())
+    )
+
+    return account.address
   }
 }
