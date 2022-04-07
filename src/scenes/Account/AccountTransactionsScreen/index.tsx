@@ -204,12 +204,16 @@ const AccountTransactionsScreen = (props: Props) => {
       pendingTransactions: TransactionDataScreen[],
       completedTransactions: TransactionDataScreen[]
     ) => {
-      return pendingTransactions.filter(
-        (pending) =>
-          !completedTransactions.some(
-            (completed) => completed.txid === pending.txid
-          )
-      )
+      if (pendingTransactions) {
+        return pendingTransactions.filter(
+          (pending) =>
+            !completedTransactions.some(
+              (completed) => completed.txid === pending.txid
+            )
+        )
+      } else {
+        return pendingTransactions
+      }
     },
     [pendingTransactionsDataScreen, transactionsDataScreen]
   )
