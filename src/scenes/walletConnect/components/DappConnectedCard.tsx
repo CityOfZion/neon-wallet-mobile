@@ -1,3 +1,4 @@
+import I18n from 'i18n-js'
 import moment from 'moment'
 import React, {useEffect, useState} from 'react'
 import {TouchableHighlight, Image} from 'react-native'
@@ -7,7 +8,7 @@ import {ImageView, LinearLayout, TextView} from '~/src/styles/styled-components'
 export interface DappConnectedCardProps {
   onPress?: () => void
   iconUri: string
-  approvedDate: number
+  approvedDate?: number
   dAppName: string
   footer?: React.ReactNode
 }
@@ -62,9 +63,13 @@ const DappConnectedCard = ({
             )}
           </LinearLayout>
           <LinearLayout>
-            <TextView color={'text.10'} fontSize={'12px'}>
-              {moment.unix(approvedDate).format('HH:mm Do MMM YYYY')}
-            </TextView>
+            {!!approvedDate && (
+              <TextView color={'text.10'} fontSize={'12px'}>
+                {moment
+                  .unix(approvedDate)
+                  .format(I18n.t('formatters.dappApprovedDate'))}
+              </TextView>
+            )}
             <TextView color={'white'} fontFamily={'medium'} fontSize={'18px'}>
               {dAppName}
             </TextView>

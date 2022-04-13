@@ -481,7 +481,9 @@ export const WalletConnectContextProvider: React.FC<{
         return [...old, session]
       }
     })
-    dispatchAsync(RootStore.wcReducer.actions.updateApprovalDate(session.topic))
+    await dispatchAsync(
+      RootStore.wcReducer.actions.updateApprovalDate(session.topic)
+    )
   }
 
   const rejectSession = async (proposal: SessionTypes.Proposal) => {

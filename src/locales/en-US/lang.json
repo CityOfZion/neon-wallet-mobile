@@ -8,6 +8,9 @@
     "DARK": "Dark",
     "LIGHT": "Light"
   },
+  "formatters": {
+    "dappApprovedDate": "HH:mm Do MMM YYYY"
+  },
   "app": {
     "neoBlockHeight": "NEO BLOCK HEIGHT",
     "back": "Back",
