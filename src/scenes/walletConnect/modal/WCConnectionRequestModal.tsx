@@ -81,7 +81,10 @@ const WCConnectionRequestModal = (props: Props) => {
       onRightPress={controller.close}
       solidColorBG={true}
     >
-      <AwaitActivity name={activityName} loadingView={<ScreenLoader />}>
+      <AwaitActivity
+        name={activityName}
+        loadingView={<ScreenLoader transparent={true} />}
+      >
         {walletConnectCtx.sessionProposals.length > 0 ? (
           <LinearLayout height={'100%'} justifyContent={'space-between'}>
             <LinearLayout height={'50%'} mt={3}>
