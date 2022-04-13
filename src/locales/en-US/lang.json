@@ -29,7 +29,8 @@
   },
   "contexts": {
     "walletConnect": {
-      "clientPairError": "Problem with client pair"
+      "clientPairError": "Problem with client pair",
+      "unsupportedMethod": "The method %{method} is not supported"
     }
   },
   "routes": {
