@@ -100,16 +100,15 @@ const TransactionRequestModal = (props: Props) => {
     value?: string
   }
   const handleCalculateFee = useCallback(async () => {
-    let sumFee: number = 0
     if (accountRequest?.address) {
       const bs = blockchainServices[accountRequest.blockchain]
       if (hasWCIntegration(bs)) {
-        const {networkFee, systemFee} = await bs.calculateFee(
+        const resultFee = await bs.calculateFee(
           accountRequest.address,
-          requestParams
+          request.request
         )
-        sumFee += networkFee + systemFee
-        setFeeRequest(sumFee)
+
+        setFeeRequest(Number(resultFee))
       }
     }
   }, [request, accountRequest])

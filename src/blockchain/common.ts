@@ -88,13 +88,7 @@ export interface IWalletConnect {
     account: string,
     request: JsonRpcRequest
   ) => Promise<JsonRpcResponse>
-  calculateFee(
-    senderAddress: string,
-    cim: ContractInvocationMulti
-  ): Promise<{
-    networkFee: number
-    systemFee: number
-  }>
+  calculateFee(senderAddress: string, cim: JsonRpcRequest): Promise<string>
 }
 
 export interface IBlockchainService {
