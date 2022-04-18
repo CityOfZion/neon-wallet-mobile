@@ -8,6 +8,9 @@
     "DARK": "Escuro",
     "LIGHT": "Claro"
   },
+  "formatters": {
+    "dappApprovedDate": "HH:mm Do MMM YYYY"
+  },
   "contexts": {
     "walletConnect": {
       "timeoutError": "URL de conexão expirada",

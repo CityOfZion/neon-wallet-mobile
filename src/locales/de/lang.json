@@ -8,6 +8,9 @@
     "DARK": "#translateme",
     "LIGHT": "#translateme"
   },
+  "formatters": {
+    "dappApprovedDate": "HH:mm Do MMM YYYY"
+  },
   "contexts": {
     "walletConnect": {
       "timeoutError": "Connection URL Expired",
