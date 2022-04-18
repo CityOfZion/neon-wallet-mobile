@@ -27,7 +27,7 @@ const SettingsPage = (props: SettingsProps) => {
   )
 
   return (
-    <ScreenLayout padding={20}>
+    <ScreenLayout padding={20} darkerSolidColorBG={true}>
       <MenuItem
         title={i18n.t('settings.myWallets')}
         icon={require('~/src/assets/images/wallet-icon-green.png')}

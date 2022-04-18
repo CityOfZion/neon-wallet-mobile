@@ -68,12 +68,12 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
   }
 
   return (
-    <ScreenLayout alignX={'center'}>
+    <ScreenLayout alignX={'center'} darkerSolidColorBG={true}>
       <AwaitActivity
         name={'populate'}
         loadingView={
           <LinearLayout width={'100%'} height={'100%'}>
-            <ScreenLoader />
+            <ScreenLoader transparent={true} />
           </LinearLayout>
         }
       >

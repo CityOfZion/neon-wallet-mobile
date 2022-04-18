@@ -42,7 +42,7 @@ const MyWalletsPage = (props: Props) => {
   }
 
   return (
-    <ScreenLayout padding={20}>
+    <ScreenLayout padding={20} darkerSolidColorBG={true}>
       {isListNotEmpty() ? (
         wallets.map((it, i) => (
           <MenuItemComponent

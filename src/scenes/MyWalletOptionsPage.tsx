@@ -103,7 +103,7 @@ const MyWalletOptionsPage = (props: Props) => {
     )
 
   return (
-    <ScreenLayout padding={20}>
+    <ScreenLayout padding={20} darkerSolidColorBG={true}>
       <MenuItem
         title={i18n.t('myWalletOptions.details')}
         icon={require('~src/assets/images/icon-details-green.png')}

@@ -17,7 +17,7 @@ export const WCNoConnectDapps = () => {
     })
   }, [])
   return (
-    <ScreenLayout>
+    <ScreenLayout darkerSolidColorBG={true}>
       <LinearLayout height={'100%'} pt={Dimensions.get('window').height * 0.2}>
         <LinearLayout height={200} justifyContent={'space-around'}>
           <TextView

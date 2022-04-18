@@ -84,6 +84,7 @@ export const AccountCardsComponent = (props: {
                 isStackMode={i !== props.accounts.length - 1}
                 onPress={() => props.onPress(account)}
                 disableSecondTouch={props.disableSecondTouch}
+                hasShadow={false}
               />
             </LinearLayout>
           </Animated.View>
@@ -162,7 +163,7 @@ const GetWalletView = (props: GetWalletProps) => {
   }
 
   return (
-    <ScreenLayout>
+    <ScreenLayout darkerSolidColorBG={true}>
       <AwaitActivity name={'populate'} loadingView={<ScreenLoader />}>
         <LinearLayout mt={6}>
           <AccountCardsComponent accounts={accounts} onPress={pressEvent} />

@@ -23,7 +23,7 @@ const AccountAssetScreen = () => {
   }, [accountsPool])
 
   return (
-    <ScreenLayout>
+    <ScreenLayout darkerSolidColorBG={true}>
       <AccountSubTitle account={account} />
       <BalanceList
         my="16px"

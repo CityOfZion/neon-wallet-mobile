@@ -50,7 +50,7 @@ const WalletDetailsPage = (props: WalletDetailsProps) => {
   })
 
   return (
-    <ScreenLayout padding={20}>
+    <ScreenLayout padding={20} darkerSolidColorBG={true}>
       <InputLabel
         title={i18n.t('walletDetailsPage.inputWalletName')}
         capitalize={true}

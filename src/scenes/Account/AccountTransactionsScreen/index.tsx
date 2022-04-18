@@ -307,7 +307,7 @@ const AccountTransactionsScreen = (props: Props) => {
       name="populateTransactionsList"
       loadingView={<ScreenLoader />}
     >
-      <ScreenLayout onScroll={handleOnScroll}>
+      <ScreenLayout onScroll={handleOnScroll} darkerSolidColorBG={true}>
         <AccountSubTitle account={account} />
         <TransactionsListDate
           completedTransactions={completedTransactions}

@@ -57,6 +57,7 @@ const ChangelogModal = (props: Props) => {
         Storage.numberOfVersions.save(currentNumberOfVersions)
         props.navigation.navigate(wrapper.route.Tab.name, undefined)
       }}
+      solidColorBG={true}
     >
       <AwaitActivity
         name={'swiperRight'}
