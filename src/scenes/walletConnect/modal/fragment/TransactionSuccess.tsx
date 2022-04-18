@@ -3,6 +3,7 @@ import React from 'react'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
 
+import {ResponseModalProps} from '../TransactionRequestModal'
 import {ThemedButtonViewOnDora} from './ThemedButtonViewOnDora'
 import {ThemedButtonViewTransaction} from './ThemedButtonViewTransaction'
 
@@ -16,11 +17,7 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 
-interface Props {
-  transactionHash: string
-}
-
-const TransactionSuccess = (props: Props) => {
+const TransactionSuccess = (props: ResponseModalProps) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
@@ -110,7 +107,9 @@ const TransactionSuccess = (props: Props) => {
         </ButtonView>
       )}
       <ThemedButtonViewTransaction />
-      <ThemedButtonViewOnDora txid={props.transactionHash} mt="10px" />
+      {props.transactionHash && (
+        <ThemedButtonViewOnDora txid={props.transactionHash} mt="10px" />
+      )}
     </LinearLayout>
   )
 }

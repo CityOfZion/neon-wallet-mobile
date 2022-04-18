@@ -612,6 +612,14 @@
       "viewOnDora": "View on dora",
       "viewTransaction": "View transaction"
     },
+    "verifyMessage": {
+        "button": {
+          "accept": "Authenticate"
+        },
+        "title": "%{dAppName} asks for authentication",
+        "authenticateSuccess": "Wallet Authenticated!",
+        "authenticateFailed": " Wallet Authentication Failed!"
+    },
     "connectDApp": {
       "title": "Connect a dApp",
       "subtitle": "All transactions requested by a connected Dapp will be presented for signing before being broadcast to the blockchain. No action from the Dapp will happen without your direct approval.",

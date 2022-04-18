@@ -2,6 +2,7 @@ import i18n from 'i18n-js'
 import React from 'react'
 import {useSelector} from 'react-redux'
 
+import {ResponseModalProps} from '../TransactionRequestModal'
 import {ThemedButtonViewOnDora} from './ThemedButtonViewOnDora'
 import {ThemedButtonViewTransaction} from './ThemedButtonViewTransaction'
 
@@ -9,11 +10,7 @@ import {wrapper} from '~src/app/ApplicationWrapper'
 import {Normalize} from '~src/app/Normalize'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
-interface Props {
-  errorMessage: string
-}
-
-const TransactionFailed = (props: Props) => {
+const TransactionFailed = (props: ResponseModalProps) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
@@ -88,7 +85,9 @@ const TransactionFailed = (props: Props) => {
         {props.errorMessage}
       </TextView>
       <ThemedButtonViewTransaction disable />
-      <ThemedButtonViewOnDora txid={props.errorMessage} disable mt="10px" />
+      {props.errorMessage && (
+        <ThemedButtonViewOnDora txid={props.errorMessage} disable mt="10px" />
+      )}
     </LinearLayout>
   )
 }
