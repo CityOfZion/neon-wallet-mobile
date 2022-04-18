@@ -26,30 +26,34 @@ export class TransactionAddressResponse {
 
   @ResponseExpose()
   @ResponseSerialize(TransactionAddressSummary)
-  entries: TransactionAddressSummary[] = []
+  transactions: TransactionAddressSummary[] = []
 
   async toSenderTransaction(tokensPool: TokenAsset[]) {
-    const entries = this.entries.map((it) => {
-      const tx = new SenderTransaction()
-      tx.transactionHash = it.txid
-      tx.senderAddress = it.addressFrom
-      tx.receiverAddress = it.addressTo
-      tx.sentAt = moment.unix(it.time ?? 0).format()
+    const transactions = this.transactions.flatMap((transaction) =>
+      transaction.transfers.map((transfer) => {
+        const tx = new SenderTransaction()
+        tx.transactionHash = transaction.hash
+        tx.senderAddress = transfer.from
+        tx.receiverAddress = transfer.to
+        tx.sentAt = moment.unix(transaction.time ?? 0).format()
 
-      const token = tokensPool.find((token) => token.hash === it.asset) ?? null
-      tx.token = UtilsHelper.clone(token)
+        const token =
+          tokensPool.find((token) => token.hash === transfer.hash) ?? null
+        tx.token = UtilsHelper.clone(token)
 
-      if (tx.token) {
-        tx.token.amount = Number(it.amount ?? 0) ?? 0
-      }
+        if (tx.token) {
+          tx.token.amount = transfer.amount
+        }
 
-      return tx
-    })
+        return tx
+      })
+    )
 
     // Populate exchange for each transaction
-    const promises = entries.map((it) => it.populateExchange())
-    await Promise.all(promises)
+    await Promise.all(
+      transactions.map((transaction) => transaction.populateExchange())
+    )
 
-    return entries
+    return transactions
   }
 }

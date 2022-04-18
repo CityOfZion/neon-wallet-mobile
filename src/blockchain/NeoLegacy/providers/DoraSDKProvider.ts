@@ -9,6 +9,8 @@ import {NeoNode} from '~/src/models/NeoNode'
 import {Node} from '~/src/models/Node'
 import {TokenAsset} from '~/src/models/TokenAsset'
 import {Transaction} from '~/src/models/Transaction'
+import {TransactionAddressSummary} from '~/src/models/TransactionAddressSummary'
+import {TransactionAddressTransfer} from '~/src/models/TransactionAddressTransfer'
 import {BalanceResponse} from '~/src/models/response/BalanceResponse'
 import {ContractResponse} from '~/src/models/response/ContractResponse'
 import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
@@ -39,22 +41,39 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     result.pageSize = page_size
     result.totalEntries = total_entries
     result.totalPages = total_pages
+
+    const transactions = new Map<string, TransactionAddressSummary>()
+
     entries.forEach(
       ({address_from, address_to, amount, asset, block_height, time, txid}) => {
         const amountConverted = this.convertScientifcNotationToDecimal(amount)
-        result.entries.push({
-          addressFrom: address_from,
-          addressTo: address_to,
-          amount: String(amountConverted),
-          asset,
+
+        const transfer = new TransactionAddressTransfer({
+          amount: Number(amountConverted),
+          hash: asset,
+          from: address_from ?? 'Mint',
+          to: address_to ?? 'Burn',
+        })
+
+        const existingTransaction = transactions.get(txid)
+
+        if (existingTransaction) {
+          existingTransaction.transfers.push(transfer)
+          return
+        }
+
+        const transaction = new TransactionAddressSummary({
           blockHeight: block_height,
           time,
-          txid,
-          qtyInvocations: 0,
-          qtyNotifications: 0,
+          hash: txid,
         })
+        transaction.transfers.push(transfer)
+        transactions.set(txid, transaction)
       }
     )
+
+    result.transactions = Array.from(transactions.values())
+
     return result
   }
 

@@ -9,7 +9,9 @@
     "LIGHT": "Light"
   },
   "formatters": {
-    "dappApprovedDate": "HH:mm Do MMM YYYY"
+    "dappApprovedDate": "HH:mm Do MMM YYYY",
+    "transactionTime": "hh:mm:a",
+    "transactionsPerDate": "DD MMMM"
   },
   "app": {
     "neoBlockHeight": "NEO BLOCK HEIGHT",
@@ -317,18 +319,18 @@
       "addNewAccount": "Add new account"
     },
     "getAccount": {
-      "assets": "ASSETS",
-      "transactions": "TRANSACTIONS",
-      "pendingTransactions": "PENDING TRANSACTIONS",
-      "completedTransactions": "COMPLETED TRANSACTIONS",
       "claimAsset": "Claim %{amount} GAS",
       "claimInProgress": "Claim in progress",
-      "gasUnavailable": "GAS unavailable",
+      "gasUnavailable": "GAS unavailable"
+    },
+    "accountTransaction": {
       "txidLabel": "TX ID:",
       "sentToLabel": "Sent to",
+      "receivedFromLabel": "Received from",
+      "pendingTransactions": "PENDING TRANSACTIONS",
+      "completedTransactions": "COMPLETED TRANSACTIONS",
       "invocationsLabel": "Invocations",
-      "notificationsLabel": "Notifications",
-      "receivedFromLabel": "Received from"
+      "notificationsLabel": "Notifications"
     },
     "customizeAccount": {
       "title": "Create account",
