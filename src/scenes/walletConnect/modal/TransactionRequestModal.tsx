@@ -12,6 +12,8 @@ import {useSelector, useDispatch} from 'react-redux'
 import ConnectionHeader from '../components/ConnectionHeader'
 import ContractDetailsBox from '../components/ContractDetailsBox'
 import {checkSupportedMethods} from '../utils'
+import {SignMessageFailed} from './fragment/SignMessageFailed'
+import {SignMessageSuccess} from './fragment/SignMessageSuccess'
 import TransactionFailed from './fragment/TransactionFailed'
 import TransactionSuccess from './fragment/TransactionSuccess'
 import {VerifyMessageFailed} from './fragment/VerifyMessageFailed'
@@ -54,11 +56,48 @@ export interface ResponseModalProps {
   onClose?: () => void
 }
 
+const RequestWhenSignMessage = ({request}: TransactionRequestModalParams) => {
+  const requestParams = request.request.params as string
+  const theme = useSelector(
+    (state: RootState) => wrapper.theme[state.settings.theme]
+  )
+  return (
+    <LinearLayout orientation={'verti'} alignItems={'center'}>
+      <TextView
+        color={theme.colors.text[6]}
+        fontSize={14}
+        fontWeight={500}
+        fontFamily="medium"
+        textAlign={'center'}
+        mb={4}
+        borderRadius={5}
+      >
+        {i18n.t('modals.signMessage.labelMessage').toUpperCase()}
+      </TextView>
+      <TextView
+        color={theme.colors.text[0]}
+        fontSize={16}
+        fontWeight={300}
+        lineHeight="20px"
+        fontFamily="light"
+        width={'90%'}
+        minHeight={'73px'}
+        bg={theme.colors.background[7]}
+        px={5}
+        py={2}
+        mb={'auto'}
+        borderRadius={5}
+      >
+        {requestParams}
+      </TextView>
+    </LinearLayout>
+  )
+}
+
 const RequestWhenVerifyMessage = ({
   request,
   session,
 }: TransactionRequestModalParams) => {
-  const requestParams = request.request.params as SignedMessage
   return <LinearLayout />
 }
 
@@ -290,7 +329,6 @@ const RequestWhenInvokeFunction = ({
 }
 
 const TransactionRequestModal = (props: Props) => {
-  const dispatch = useDispatch()
   const {request, session} = props.route.params
   const controller = useSwiperController(true)
   const {accounts} = useSelector((state: RootState) => state.app)
@@ -479,6 +517,51 @@ const TransactionRequestModal = (props: Props) => {
         failed: VerifyMessageFailed,
       },
     },
+    signMessage: {
+      component: RequestWhenSignMessage,
+      accept: async () => {
+        setButtonsIsDisabled(true)
+        try {
+          const response = await approveRequest(request)
+          if (response && 'result' in response) {
+            setshowModalSuccess(true)
+          }
+        } catch (error: any) {
+          setShowModalFailed(true)
+          setMessageAfterAccept(error.message as string)
+        } finally {
+          setButtonsIsDisabled(false)
+        }
+      },
+      reject: async () => {
+        setButtonsIsDisabled(true)
+        try {
+          if (!isAcceptetdRequest) {
+            await rejectRequest(props.route.params.request)
+          }
+          controller.close()
+        } catch (error: any) {
+          setShowModalFailed(true)
+          setMessageAfterAccept(error.message as string)
+        } finally {
+          setButtonsIsDisabled(false)
+        }
+      },
+      text: {
+        button: {
+          accept: i18n.t('modals.signMessage.button.accept'),
+          reject: i18n.t('modals.transactionRequest.buttom.decline'),
+        },
+        title: i18n.t('modals.signMessage.title', {
+          dAppName: session.peer.metadata.name,
+        }),
+      },
+      responseModal: {
+        success: SignMessageSuccess,
+        failed: SignMessageFailed,
+      },
+      hideDappName: true,
+    },
   }
 
   const handleRenderingComponentByMethod = () => {
@@ -502,7 +585,7 @@ const TransactionRequestModal = (props: Props) => {
         />
       )
     } else {
-      ;<></>
+      return <></>
     }
   }
 
@@ -537,8 +620,6 @@ const TransactionRequestModal = (props: Props) => {
                     ].hideDappName
                   }
                 />
-                {handleRenderingComponentByMethod()}
-
                 <TextView
                   mt={'2%'}
                   mr={'20px'}
@@ -555,6 +636,7 @@ const TransactionRequestModal = (props: Props) => {
                     ].text.title
                   }
                 </TextView>
+                {handleRenderingComponentByMethod()}
               </LinearLayout>
               <LinearLayout>
                 <ThemedButton
