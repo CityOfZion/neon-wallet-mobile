@@ -406,7 +406,7 @@ const TransactionRequestModal = (props: Props) => {
       reject: () => Promise<void>
       text: {
         button: {
-          accepet: string
+          accept: string
           reject: string
         }
         title: string
@@ -424,7 +424,7 @@ const TransactionRequestModal = (props: Props) => {
       reject: handleDeclineRequestWhenInvokeFunction,
       text: {
         button: {
-          accepet: i18n.t('modals.transactionRequest.buttom.accept'),
+          accept: i18n.t('modals.transactionRequest.buttom.accept'),
           reject: i18n.t('modals.transactionRequest.buttom.decline'),
         },
         title: i18n.t('modals.transactionRequest.confirmToProceed'),
@@ -466,7 +466,7 @@ const TransactionRequestModal = (props: Props) => {
       },
       text: {
         button: {
-          accepet: i18n.t('modals.verifyMessage.button.accept'),
+          accept: i18n.t('modals.verifyMessage.button.accept'),
           reject: i18n.t('modals.transactionRequest.buttom.decline'),
         },
         title: i18n.t('modals.verifyMessage.title', {
@@ -561,7 +561,7 @@ const TransactionRequestModal = (props: Props) => {
                   label={
                     listComponentByMethod[
                       props.route.params.request.request.method
-                    ].text.button.accepet
+                    ].text.button.accept
                   }
                   disabled={buttonsIsDisabled}
                   onPress={() =>
