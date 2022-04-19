@@ -1,5 +1,4 @@
 import {WitnessScope} from '@cityofzion/neon-core-next/lib/tx/components/WitnessScope'
-import {JsonRpcRequest} from '@json-rpc-tools/utils'
 import {RouteProp, useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity, Await} from '@simpli/react-native-await'
@@ -13,8 +12,12 @@ import {useSelector, useDispatch} from 'react-redux'
 import ConnectionHeader from '../components/ConnectionHeader'
 import ContractDetailsBox from '../components/ContractDetailsBox'
 import {checkSupportedMethods} from '../utils'
+import {SignMessageFailed} from './fragment/SignMessageFailed'
+import {SignMessageSuccess} from './fragment/SignMessageSuccess'
 import TransactionFailed from './fragment/TransactionFailed'
 import TransactionSuccess from './fragment/TransactionSuccess'
+import {VerifyMessageFailed} from './fragment/VerifyMessageFailed'
+import {VerifyMessageSuccess} from './fragment/VerifyMessageSuccess'
 
 import {blockchainServices, hasWCIntegration} from '~/src/blockchain'
 import ThemedButton from '~/src/components/themed/ThemedButton'
@@ -27,10 +30,8 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import {
-  ContractInvocation,
   ContractInvocationMulti,
   SignedMessage,
-  Signer,
 } from '~src/helpers/NeonWcAdapter'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
@@ -49,8 +50,55 @@ interface Props {
   route: RouteProp<ModalStackParamList, 'TransactionRequestModal'>
 }
 
-interface SessionItemProps {
-  request: SessionTypes.RequestEvent
+export interface ResponseModalProps {
+  errorMessage?: string
+  transactionHash?: string
+  onClose?: () => void
+}
+
+const RequestWhenSignMessage = ({request}: TransactionRequestModalParams) => {
+  const requestParams = request.request.params as string
+  const theme = useSelector(
+    (state: RootState) => wrapper.theme[state.settings.theme]
+  )
+  return (
+    <LinearLayout orientation={'verti'} alignItems={'center'}>
+      <TextView
+        color={theme.colors.text[6]}
+        fontSize={14}
+        fontWeight={500}
+        fontFamily="medium"
+        textAlign={'center'}
+        mb={4}
+        borderRadius={5}
+      >
+        {i18n.t('modals.signMessage.labelMessage').toUpperCase()}
+      </TextView>
+      <TextView
+        color={theme.colors.text[0]}
+        fontSize={16}
+        fontWeight={300}
+        lineHeight="20px"
+        fontFamily="light"
+        width={'90%'}
+        minHeight={'73px'}
+        bg={theme.colors.background[7]}
+        px={5}
+        py={2}
+        mb={'auto'}
+        borderRadius={5}
+      >
+        {requestParams}
+      </TextView>
+    </LinearLayout>
+  )
+}
+
+const RequestWhenVerifyMessage = ({
+  request,
+  session,
+}: TransactionRequestModalParams) => {
+  return <LinearLayout />
 }
 
 const RequestWhenInvokeFunction = ({
@@ -90,7 +138,7 @@ const RequestWhenInvokeFunction = ({
   }, [request, accountsPool])
 
   useEffect(() => {
-    if(accountRequest){
+    if (accountRequest) {
       handleCalculateFee()
     }
   }, [accountRequest])
@@ -281,7 +329,6 @@ const RequestWhenInvokeFunction = ({
 }
 
 const TransactionRequestModal = (props: Props) => {
-  const dispatch = useDispatch()
   const {request, session} = props.route.params
   const controller = useSwiperController(true)
   const {accounts} = useSelector((state: RootState) => state.app)
@@ -391,24 +438,152 @@ const TransactionRequestModal = (props: Props) => {
    * The key need be the method name that wallet coonect is using
    */
   const listComponentByMethod: {
-    [key: string]: (props: TransactionRequestModalParams) => JSX.Element
-  } = {
-    invokeFunction: RequestWhenInvokeFunction,
-  }
-
-  const listHandleFunctionsByMethod: {
-    [key: string]: {accept: () => Promise<void>; reject: () => Promise<void>}
+    [key: string]: {
+      component: (props: TransactionRequestModalParams) => JSX.Element
+      accept: () => Promise<void>
+      reject: () => Promise<void>
+      text: {
+        button: {
+          accept: string
+          reject: string
+        }
+        title: string
+      }
+      hideDappName?: boolean
+      responseModal: {
+        success: (props: ResponseModalProps) => JSX.Element
+        failed: (props: ResponseModalProps) => JSX.Element
+      }
+    }
   } = {
     invokeFunction: {
+      component: RequestWhenInvokeFunction,
       accept: handleAcceptRequestWhenInvokeFunction,
       reject: handleDeclineRequestWhenInvokeFunction,
+      text: {
+        button: {
+          accept: i18n.t('modals.transactionRequest.buttom.accept'),
+          reject: i18n.t('modals.transactionRequest.buttom.decline'),
+        },
+        title: i18n.t('modals.transactionRequest.confirmToProceed'),
+      },
+      responseModal: {
+        success: TransactionSuccess,
+        failed: TransactionFailed,
+      },
+    },
+    verifyMessage: {
+      component: RequestWhenVerifyMessage,
+      accept: async () => {
+        setButtonsIsDisabled(true)
+        try {
+          const response = await approveRequest(request)
+          if (response && 'result' in response) {
+            setshowModalSuccess(true)
+          }
+        } catch (error: any) {
+          setShowModalFailed(true)
+          setMessageAfterAccept(error.message as string)
+        } finally {
+          setButtonsIsDisabled(false)
+        }
+      },
+      reject: async () => {
+        setButtonsIsDisabled(true)
+        try {
+          if (!isAcceptetdRequest) {
+            await rejectRequest(props.route.params.request)
+          }
+          controller.close()
+        } catch (error: any) {
+          setShowModalFailed(true)
+          setMessageAfterAccept(error.message as string)
+        } finally {
+          setButtonsIsDisabled(false)
+        }
+      },
+      text: {
+        button: {
+          accept: i18n.t('modals.verifyMessage.button.accept'),
+          reject: i18n.t('modals.transactionRequest.buttom.decline'),
+        },
+        title: i18n.t('modals.verifyMessage.title', {
+          dAppName: session.peer.metadata.name,
+        }),
+      },
+      hideDappName: true,
+      responseModal: {
+        success: VerifyMessageSuccess,
+        failed: VerifyMessageFailed,
+      },
+    },
+    signMessage: {
+      component: RequestWhenSignMessage,
+      accept: async () => {
+        setButtonsIsDisabled(true)
+        try {
+          const response = await approveRequest(request)
+          if (response && 'result' in response) {
+            setshowModalSuccess(true)
+          }
+        } catch (error: any) {
+          setShowModalFailed(true)
+          setMessageAfterAccept(error.message as string)
+        } finally {
+          setButtonsIsDisabled(false)
+        }
+      },
+      reject: async () => {
+        setButtonsIsDisabled(true)
+        try {
+          if (!isAcceptetdRequest) {
+            await rejectRequest(props.route.params.request)
+          }
+          controller.close()
+        } catch (error: any) {
+          setShowModalFailed(true)
+          setMessageAfterAccept(error.message as string)
+        } finally {
+          setButtonsIsDisabled(false)
+        }
+      },
+      text: {
+        button: {
+          accept: i18n.t('modals.signMessage.button.accept'),
+          reject: i18n.t('modals.transactionRequest.buttom.decline'),
+        },
+        title: i18n.t('modals.signMessage.title', {
+          dAppName: session.peer.metadata.name,
+        }),
+      },
+      responseModal: {
+        success: SignMessageSuccess,
+        failed: SignMessageFailed,
+      },
+      hideDappName: true,
     },
   }
 
   const handleRenderingComponentByMethod = () => {
-    const Component = listComponentByMethod[request.request.method]
+    const Component = listComponentByMethod[request.request.method].component
     if (Component) {
       return <Component request={request} session={session} />
+    } else {
+      return <></>
+    }
+  }
+
+  const handleRenderingModal = (typeModal: 'success' | 'failed') => {
+    const Component =
+      listComponentByMethod[request.request.method].responseModal[typeModal]
+    if (Component) {
+      return (
+        <Component
+          errorMessage={messageAfterAccept}
+          transactionHash={messageAfterAccept}
+          onClose={controller.close}
+        />
+      )
     } else {
       return <></>
     }
@@ -422,80 +597,98 @@ const TransactionRequestModal = (props: Props) => {
         fullSize={true}
         title={i18n.t('modals.transactionRequest.title')}
         rightButton={<CloseButton mr={'20px'} />}
-        onRightPress={
-          listHandleFunctionsByMethod[request.request.method].reject
-        }
+        onRightPress={listComponentByMethod[request.request.method].reject}
         onClose={() => {
           props.navigation.goBack()
         }}
         solidColorBG
       >
         <LinearLayout orientation="verti" mr={2} ml={2} mt={5} mb={5}>
-          {showModalSuccess && messageAfterAccept ? (
-            <TransactionSuccess transactionHash={messageAfterAccept} />
-          ) : showModalFailed && messageAfterAccept ? (
-            <TransactionFailed errorMessage={messageAfterAccept} />
+          {showModalSuccess ? (
+            handleRenderingModal('success')
+          ) : showModalFailed ? (
+            handleRenderingModal('failed')
           ) : (
-            <>
-              <ConnectionHeader
-                title={session.peer.metadata.name}
-                imageUri={''}
-              />
-              {handleRenderingComponentByMethod()}
-
-              <TextView
-                mt={'31px'}
-                mr={'20px'}
-                ml={'20px'}
-                mb={'31px'}
-                color={'white'}
-                fontSize={'18px'}
-                alignself={'center'}
-                textAlign={'center'}
-              >
-                {i18n.t('modals.transactionRequest.confirmToProceed')}
-              </TextView>
-              <ThemedButton
-                label={i18n.t('modals.transactionRequest.buttom.accept')}
-                disabled={buttonsIsDisabled}
-                onPress={() =>
-                  Await.run(
-                    'handleAcceptRequest',
-                    listHandleFunctionsByMethod[request.request.method].accept,
-                    500
-                  )
-                }
-              />
-              <LinearLayout mt={'24px'}>
-                <TouchableWithoutFeedback
-                  onPress={
-                    listHandleFunctionsByMethod[request.request.method].reject
+            <LinearLayout height="100%" justifyContent="space-between">
+              <LinearLayout>
+                <ConnectionHeader
+                  title={session.peer.metadata.name}
+                  imageUri={''}
+                  hideTitle={
+                    listComponentByMethod[
+                      props.route.params.request.request.method
+                    ].hideDappName
+                  }
+                />
+                <TextView
+                  mt={'2%'}
+                  mr={'20px'}
+                  ml={'20px'}
+                  mb={'31px'}
+                  color={'white'}
+                  fontSize={'18px'}
+                  alignself={'center'}
+                  textAlign={'center'}
+                >
+                  {
+                    listComponentByMethod[
+                      props.route.params.request.request.method
+                    ].text.title
+                  }
+                </TextView>
+                {handleRenderingComponentByMethod()}
+              </LinearLayout>
+              <LinearLayout>
+                <ThemedButton
+                  label={
+                    listComponentByMethod[
+                      props.route.params.request.request.method
+                    ].text.button.accept
                   }
                   disabled={buttonsIsDisabled}
-                >
-                  <LinearLayout
-                    width="100%"
-                    borderRadius="4px"
-                    borderWidth="1px"
-                    borderColor="primary"
-                    justifyContent="center"
-                    alignItems="center"
-                    orientation="horiz"
-                    p="10px"
-                    opacity={buttonsIsDisabled ? '0.3' : '1'}
+                  onPress={() =>
+                    Await.run(
+                      'handleAcceptRequest',
+                      listComponentByMethod[request.request.method].accept,
+                      500
+                    )
+                  }
+                />
+                <LinearLayout mt={'24px'}>
+                  <TouchableWithoutFeedback
+                    onPress={
+                      listComponentByMethod[request.request.method].reject
+                    }
+                    disabled={buttonsIsDisabled}
                   >
-                    <TextView
-                      style={{includeFontPadding: false}}
-                      ml={3}
-                      color={'primary'}
-                      fontSize={20}
+                    <LinearLayout
+                      width="100%"
+                      borderRadius="4px"
+                      borderWidth="1px"
+                      borderColor="primary"
+                      justifyContent="center"
+                      alignItems="center"
+                      orientation="horiz"
+                      p="10px"
+                      opacity={buttonsIsDisabled ? '0.3' : '1'}
                     >
-                      {i18n.t('modals.transactionRequest.buttom.decline')}
-                    </TextView>
-                  </LinearLayout>
-                </TouchableWithoutFeedback>
+                      <TextView
+                        style={{includeFontPadding: false}}
+                        ml={3}
+                        color={'primary'}
+                        fontSize={20}
+                      >
+                        {
+                          listComponentByMethod[
+                            props.route.params.request.request.method
+                          ].text.button.reject
+                        }
+                      </TextView>
+                    </LinearLayout>
+                  </TouchableWithoutFeedback>
+                </LinearLayout>
               </LinearLayout>
-            </>
+            </LinearLayout>
           )}
         </LinearLayout>
       </SwiperPanel>

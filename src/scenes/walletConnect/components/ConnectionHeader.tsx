@@ -8,9 +8,10 @@ import {LinearLayout, TextView, ImageView} from '~/src/styles/styled-components'
 type Props = {
   imageUri: string
   title: string
+  hideTitle?: boolean
 }
 
-const WalletConnectBox = ({imageUri, title}: Props) => {
+const WalletConnectBox = ({imageUri, title, hideTitle}: Props) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
@@ -54,16 +55,18 @@ const WalletConnectBox = ({imageUri, title}: Props) => {
           />
         )}
       </LinearLayout>
-      <TextView
-        mt={'14px'}
-        fontFamily={'regular'}
-        fontSize={'18px'}
-        fontWeight={'500'}
-        color={theme.colors.text[0]}
-        textAlign={'center'}
-      >
-        {title}
-      </TextView>
+      {!hideTitle && (
+        <TextView
+          mt={'14px'}
+          fontFamily={'regular'}
+          fontSize={'18px'}
+          fontWeight={'500'}
+          color={theme.colors.text[0]}
+          textAlign={'center'}
+        >
+          {title}
+        </TextView>
+      )}
     </LinearLayout>
   )
 }
