@@ -8,6 +8,11 @@
     "DARK": "Escuro",
     "LIGHT": "Claro"
   },
+  "formatters": {
+    "dappApprovedDate": "HH:mm Do MMM YYYY",
+    "transactionTime": "hh:mm:a",
+    "transactionsPerDate": "DD MMMM"
+  },
   "contexts": {
     "walletConnect": {
       "timeoutError": "URL de conexão expirada",
@@ -199,12 +204,18 @@
       "addNewAccount": "#translateme"
     },
     "getAccount": {
-      "assets": "#translateme",
-      "transactions": "#translateme",
+      "claimAsset": "#translateme",
+      "claimInProgress": "#translateme",
+      "gasUnavailable": "#translateme"
+    },
+    "accountTransaction": {
+      "txidLabel": "#translateme",
+      "sentToLabel": "#translateme",
+      "receivedFromLabel": "#translateme",
       "pendingTransactions": "#translateme",
       "completedTransactions": "#translateme",
-      "claimAsset": "#translateme",
-      "claimInProgress": "#translateme"
+      "invocationsLabel": "#translateme",
+      "notificationsLabel": "#translateme"
     },
     "createAccount": {
       "title": "#translateme",
