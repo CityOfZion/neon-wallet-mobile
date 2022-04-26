@@ -9,6 +9,7 @@ import {wrapper} from '~/src/app/ApplicationWrapper'
 import {getBlockchainLogo} from '~/src/blockchain'
 import {BlockchainServiceKey} from '~/src/blockchain/common'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
+import {useHandleOfflineFunctions} from '~/src/hooks'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
@@ -32,6 +33,7 @@ const WCConnectionRequestModal = (props: Props) => {
   const walletConnectCtx = useWalletConnect()
   const navigation = useNavigation()
   const [blockchain, setBlockchain] = useState<BlockchainServiceKey>('neo3')
+  const {handleAsyncOnlyOnline, handleOnlyOnline} = useHandleOfflineFunctions()
   const {uri} = props.route.params
   const activityName = 'loadWCConnection'
 
@@ -49,10 +51,12 @@ const WCConnectionRequestModal = (props: Props) => {
       await walletConnectCtx.onURI(uri)
     } catch (error: any) {
       console.log('error onUri => ', error)
+      controller.close()
 
       showMessage({
         message: error.message,
         type: 'danger',
+        duration: 3000,
       })
 
       navigation.goBack()
@@ -61,10 +65,13 @@ const WCConnectionRequestModal = (props: Props) => {
 
   useEffect(() => {
     if (walletConnectCtx.sessionProposals.length < 1) {
-      Await.run(activityName, runOnURI, 5000)
-    }
-    return () => {
-      walletConnectCtx.setSessionProposals([]) //will guarantee that there will be only one sessionProposal at a time
+      Await.run<void>(
+        activityName,
+        async () => {
+          return handleOnlyOnline(runOnURI)
+        },
+        5000
+      )
     }
   }, [])
 

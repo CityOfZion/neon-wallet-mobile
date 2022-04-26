@@ -22,6 +22,7 @@ import {VerifyMessageSuccess} from './fragment/VerifyMessageSuccess'
 import {blockchainServices, hasWCIntegration} from '~/src/blockchain'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
+import {useHandleOfflineFunctions} from '~/src/hooks'
 import {Account} from '~/src/models/redux/Account'
 import {RootStore} from '~/src/store/RootStore'
 import {wrapper} from '~src/app/ApplicationWrapper'
@@ -355,6 +356,8 @@ const TransactionRequestModal = (props: Props) => {
   const [buttonsIsDisabled, setButtonsIsDisabled] = useState<boolean>(false)
   const shouldProcessButtons = useRef<boolean>(true)
 
+  const {handleOnlyOnline} = useHandleOfflineFunctions()
+
   const handleAddPendingTransaction = useCallback(
     async (txid: string, accountRequest?: Account) => {
       if (accountRequest?.address) {
@@ -597,9 +600,10 @@ const TransactionRequestModal = (props: Props) => {
         fullSize={true}
         title={i18n.t('modals.transactionRequest.title')}
         rightButton={<CloseButton mr={'20px'} />}
-        onRightPress={listComponentByMethod[request.request.method].reject}
-        onClose={async () => {
-          await listComponentByMethod[request.request.method].reject()
+        onRightPress={() =>
+          handleOnlyOnline(listComponentByMethod[request.request.method].reject)
+        }
+        onClose={() => {
           props.navigation.goBack()
         }}
         solidColorBG
@@ -650,15 +654,20 @@ const TransactionRequestModal = (props: Props) => {
                   onPress={() =>
                     Await.run(
                       'handleAcceptRequest',
-                      listComponentByMethod[request.request.method].accept,
+                      async () =>
+                        handleOnlyOnline(
+                          listComponentByMethod[request.request.method].accept
+                        ),
                       500
                     )
                   }
                 />
                 <LinearLayout mt={'24px'}>
                   <TouchableWithoutFeedback
-                    onPress={
-                      listComponentByMethod[request.request.method].reject
+                    onPress={() =>
+                      handleOnlyOnline(
+                        listComponentByMethod[request.request.method].reject
+                      )
                     }
                     disabled={buttonsIsDisabled}
                   >

@@ -100,6 +100,7 @@ export class DoraSDKProvider implements Neo3Provider {
         assetSymbol: symbol,
       })
     })
+    result.address = address
     return result
   }
 

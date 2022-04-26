@@ -10,6 +10,7 @@ import {wrapper} from '~/src/app/ApplicationWrapper'
 import {getWCChainByBlockchain, hasWalletconnect} from '~/src/blockchain/common'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import {IURI} from '~/src/helpers/UriHelper'
+import {useHandleOfflineFunctions} from '~/src/hooks'
 import {Account} from '~/src/models/redux/Account'
 import {Wallet} from '~/src/models/redux/Wallet'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
@@ -37,7 +38,7 @@ export const WCAccountSelectionModal = (props: Props) => {
   const controller = useSwiperController(true)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const walletConnectCtx = useWalletConnect()
-
+  const {handleAsyncOnlyOnline, handleOnlyOnline} = useHandleOfflineFunctions()
   const accounts = props.route.params.wallet
     .getAccounts(accountsPool)
     .filter((it) => hasWalletconnect(it))
@@ -108,7 +109,13 @@ export const WCAccountSelectionModal = (props: Props) => {
           <AccountCardsComponent
             accounts={accounts}
             onPress={(account) =>
-              Await.run('connectingDapp', () => handleConnectDApp(account))
+              Await.run<void>(
+                'connectingDapp',
+                async () => {
+                  return handleOnlyOnline(() => handleConnectDApp(account))
+                },
+                3000
+              )
             }
             disableSecondTouch={true}
           />

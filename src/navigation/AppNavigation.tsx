@@ -90,10 +90,18 @@ const AppNavigation = (props: Props) => {
       setInit(true)
     } catch (error) {
       console.log(error)
+      throw error
+    }
+  }
+
+  const startWalletConnect = async () => {
+    if (isConnected && walletConnectCtx.initialized === false) {
+      await walletConnectCtx.init()
     }
   }
 
   useEffect(() => {
+    startWalletConnect()
     if (hasInit) {
       let interactionPromise = InteractionManager.runAfterInteractions()
       const interval = setInterval(() => {

@@ -89,6 +89,7 @@ export class DoraSDKProvider implements NeoLegacyProvider {
         assetSymbol: symbol,
       })
     })
+    result.address = address
     return result
   }
 

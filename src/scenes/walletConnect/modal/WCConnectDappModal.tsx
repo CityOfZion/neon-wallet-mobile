@@ -8,6 +8,7 @@ import {wrapper} from '~/src/app/ApplicationWrapper'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {UriHelper} from '~/src/helpers/UriHelper'
+import {useHandleOfflineFunctions} from '~/src/hooks/HandleOfflineFunctions'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
 import {LinearLayout, TextView} from '~/src/styles/styled-components'
 import SwiperPanel, {
@@ -25,6 +26,7 @@ interface WCConnectDappModalProps {
 
 export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
   const [url, setUrl] = useState<string>(props.route.params?.uri ?? '')
+  const {handleOnlyOnline} = useHandleOfflineFunctions()
   const controller = useSwiperController(true)
   const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
   const theme = useSelector(
@@ -105,7 +107,7 @@ export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
           <ThemedButton
             label={i18n.t('modals.connectDApp.connectLabel')}
             disabled={!validateURL()}
-            onPress={handleNavigation}
+            onPress={() => handleOnlyOnline(handleNavigation)}
           />
         </LinearLayout>
       </LinearLayout>

@@ -19,11 +19,14 @@ import {
   DEFAULT_NETWORKS,
   DEFAULT_RELAY_PROVIDER,
 } from '~src/config/walletConnect/constants'
-import {WalletConnectContextProvider} from '~src/contexts/WalletConnectContext'
+import {
+  CtxOptions,
+  WalletConnectContextProvider,
+} from '~src/contexts/WalletConnectContext'
 import AppNavigation from '~src/navigation/AppNavigation'
 import {RootStore} from '~src/store/RootStore'
 
-const wcOptions = {
+const wcOptions: CtxOptions = {
   appMetadata: DEFAULT_APP_METADATA,
   chainIds: Object.keys(DEFAULT_NETWORKS),
   logger: DEFAULT_LOGGER,
@@ -32,6 +35,7 @@ const wcOptions = {
   storageOptions: {
     asyncStorage: AsyncStorage as any,
   },
+  initialize: false,
 }
 
 const loggerMiddleware = createLogger()

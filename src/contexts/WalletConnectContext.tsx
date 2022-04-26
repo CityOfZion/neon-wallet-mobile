@@ -17,7 +17,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 import {RootStore} from '~src/store/RootStore'
 
@@ -93,6 +93,7 @@ export interface CtxOptions {
   methods: string[]
   relayServer: string
   storageOptions?: KeyValueStorageOptions
+  initialize?: boolean
 }
 
 export const WalletConnectContext = React.createContext(
@@ -128,7 +129,9 @@ export const WalletConnectContextProvider: React.FC<{
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   useEffect(() => {
-    init()
+    if (options.initialize !== false) {
+      init()
+    }
   }, [])
 
   const init = async () => {

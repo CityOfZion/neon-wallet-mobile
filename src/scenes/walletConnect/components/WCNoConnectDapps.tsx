@@ -5,12 +5,14 @@ import React, {useCallback} from 'react'
 import {Dimensions, TouchableWithoutFeedback} from 'react-native'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
+import {useHandleOfflineFunctions} from '~/src/hooks/HandleOfflineFunctions'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
 import {TextView, LinearLayout, ImageView} from '~/src/styles/styled-components'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 
 export const WCNoConnectDapps = () => {
   const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
+  const {handleOnlyOnline} = useHandleOfflineFunctions()
   const handleNavigation = useCallback(() => {
     navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.WCConnectDappModal.name,
@@ -28,7 +30,9 @@ export const WCNoConnectDapps = () => {
           >
             {i18n.t('walletconnect.noDAppsConnected')}
           </TextView>
-          <TouchableWithoutFeedback onPress={handleNavigation}>
+          <TouchableWithoutFeedback
+            onPress={() => handleOnlyOnline(handleNavigation)}
+          >
             <LinearLayout
               orientation="horiz"
               width="385px"
