@@ -1,6 +1,15 @@
 {
     "changelog": [
     	{
+            "version": "V1.0.28-1",
+            "date": "April 08 2022",
+            "changes": [
+                " -Wallet Connect Integration",
+                " -Design Enhancements",
+                " -Minor bugfixes",
+            ]
+        },
+    	{
             "version": "V1.0.27-1",
             "date": "December 13 2021",
             "changes": [

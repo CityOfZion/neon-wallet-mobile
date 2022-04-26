@@ -598,7 +598,8 @@ const TransactionRequestModal = (props: Props) => {
         title={i18n.t('modals.transactionRequest.title')}
         rightButton={<CloseButton mr={'20px'} />}
         onRightPress={listComponentByMethod[request.request.method].reject}
-        onClose={() => {
+        onClose={async () => {
+          await listComponentByMethod[request.request.method].reject()
           props.navigation.goBack()
         }}
         solidColorBG

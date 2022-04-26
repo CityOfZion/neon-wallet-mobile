@@ -8,6 +8,11 @@
     "DARK": "Dark",
     "LIGHT": "Light"
   },
+  "formatters": {
+    "dappApprovedDate": "HH:mm Do MMM YYYY",
+    "transactionTime": "hh:mm:a",
+    "transactionsPerDate": "DD MMMM"
+  },
   "app": {
     "neoBlockHeight": "NEO BLOCK HEIGHT",
     "back": "Back",
@@ -29,7 +34,8 @@
   },
   "contexts": {
     "walletConnect": {
-      "clientPairError": "Problem with client pair"
+      "clientPairError": "Problem with client pair",
+      "unsupportedMethod": "The method %{method} is not supported"
     }
   },
   "routes": {
@@ -313,18 +319,18 @@
       "addNewAccount": "Add new account"
     },
     "getAccount": {
-      "assets": "ASSETS",
-      "transactions": "TRANSACTIONS",
-      "pendingTransactions": "PENDING TRANSACTIONS",
-      "completedTransactions": "COMPLETED TRANSACTIONS",
       "claimAsset": "Claim %{amount} GAS",
       "claimInProgress": "Claim in progress",
-      "gasUnavailable": "GAS unavailable",
+      "gasUnavailable": "GAS unavailable"
+    },
+    "accountTransaction": {
       "txidLabel": "TX ID:",
       "sentToLabel": "Sent to",
+      "receivedFromLabel": "Received from",
+      "pendingTransactions": "PENDING TRANSACTIONS",
+      "completedTransactions": "COMPLETED TRANSACTIONS",
       "invocationsLabel": "Invocations",
-      "notificationsLabel": "Notifications",
-      "receivedFromLabel": "Received from"
+      "notificationsLabel": "Notifications"
     },
     "customizeAccount": {
       "title": "Create account",
@@ -605,6 +611,23 @@
       "transactionError": "Error message",
       "viewOnDora": "View on dora",
       "viewTransaction": "View transaction"
+    },
+    "verifyMessage": {
+        "button": {
+          "accept": "Authenticate"
+        },
+        "title": "%{dAppName} asks for authentication",
+        "authenticateSuccess": "Wallet Authenticated!",
+        "authenticateFailed": " Wallet Authentication Failed!"
+    },
+    "signMessage": {
+      "button": {
+        "accept":"Sign Message"
+      },
+      "title": "%{dAppName} asks for authentication",
+      "labelMessage": "message",
+      "signMessageSucess": "Message Successfully Signed",
+      "signMessageFailed": "Message Signing Failed"
     },
     "connectDApp": {
       "title": "Connect a dApp",
