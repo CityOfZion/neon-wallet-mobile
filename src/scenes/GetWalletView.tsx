@@ -84,7 +84,6 @@ export const AccountCardsComponent = (props: {
                 isStackMode={i !== props.accounts.length - 1}
                 onPress={() => props.onPress(account)}
                 disableSecondTouch={props.disableSecondTouch}
-                hasShadow={false}
               />
             </LinearLayout>
           </Animated.View>

@@ -232,7 +232,6 @@ const ReceiveToAccountModal = (props: Props) => {
           account={props.route.params.account}
           hideCopy={true}
           hideQRCode={true}
-          hasShadow={false}
         />
         <TouchableWithoutFeedback onPress={props.navigation.goBack}>
           <LinearLayout
