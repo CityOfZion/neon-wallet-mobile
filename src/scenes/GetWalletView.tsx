@@ -162,7 +162,7 @@ const GetWalletView = (props: GetWalletProps) => {
   }
 
   return (
-    <ScreenLayout>
+    <ScreenLayout darkerSolidColorBG={true}>
       <AwaitActivity name={'populate'} loadingView={<ScreenLoader />}>
         <LinearLayout mt={6}>
           <AccountCardsComponent accounts={accounts} onPress={pressEvent} />

@@ -122,7 +122,7 @@ const ModalWarningFee = ({
         <View
           style={{
             alignItems: 'center',
-            backgroundColor: '#191f23',
+            backgroundColor: '#13191D',
             width: '90%',
             opacity: 0.9,
             alignSelf: 'center',

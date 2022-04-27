@@ -364,7 +364,7 @@ const ImportKey = (props: ImportKeyProps) => {
   }, [inputIsValid])
 
   return (
-    <ScreenLayout>
+    <ScreenLayout darkerSolidColorBG={true}>
       <AwaitActivity name={'importKey'} loadingView={<ScreenLoader />}>
         <ScrollView>
           <LinearLayout orientation="verti" width="100%" height="100%">

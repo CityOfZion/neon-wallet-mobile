@@ -106,7 +106,7 @@ const WCAccountConnectionsScreen = ({route, navigation}: Props) => {
   }, [items])
 
   return (
-    <ScreenLayout solidColorBG>
+    <ScreenLayout darkerSolidColorBG={true}>
       <AccountSubTitle account={account} />
 
       {walletConnectCtx.sessions.length > 0 ? (

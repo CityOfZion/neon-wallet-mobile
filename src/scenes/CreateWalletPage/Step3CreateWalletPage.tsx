@@ -110,7 +110,7 @@ const Step3CreateWalletPage: React.FC<Props> = (props) => {
   }, [words])
 
   return (
-    <ScreenLayout alignX={'center'}>
+    <ScreenLayout alignX={'center'} darkerSolidColorBG={true}>
       <LinearLayout mt={5} weight={1}>
         <LinearLayout mb={6} width={'100%'}>
           <LinearLayout width={'100%'} orientation={'horiz'}>

@@ -35,7 +35,7 @@ const MorePage = (props: MoreProps) => {
   }
 
   return (
-    <ScreenLayout padding={20}>
+    <ScreenLayout padding={20} darkerSolidColorBG={true}>
       <LinearLayout mb={'20px'} />
       <MenuItem
         title={i18n.t('more.createWallet')}

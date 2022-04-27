@@ -37,7 +37,7 @@ const Step3BackupWalletPage: React.FC<Props> = (props) => {
   })
 
   return (
-    <ScreenLayout alignX={'center'} alignY={'center'}>
+    <ScreenLayout alignX={'center'} alignY={'center'} darkerSolidColorBG={true}>
       <LinearLayout alignItems={'center'}>
         <ImageView
           mt={6}

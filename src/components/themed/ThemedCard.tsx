@@ -103,7 +103,7 @@ const ThemedCard: React.FC<Props> = (props) => {
       >
         {props.hasBright && !props.flat && (
           <DarkCardBright
-            colors={['rgba(255, 255, 255, 0.25)', 'rgba(255, 255, 255, 0)']}
+            colors={['rgba(33, 43, 50, 1)', 'rgba(22, 28, 33, 1)']}
             locations={[0, 1]}
             start={[1, 0]}
             end={[1, 1]}

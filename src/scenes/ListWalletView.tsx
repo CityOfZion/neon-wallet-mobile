@@ -317,7 +317,7 @@ const ListWalletView = (props: WalletProps) => {
       useHeaderPadding={false}
       useStatusBarPadding={true}
       padding={0}
-      invertedGradient={true}
+      darkerSolidColorBG={true}
     >
       <>
         <LinearLayout

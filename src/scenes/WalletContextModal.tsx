@@ -90,6 +90,7 @@ export default function WalletContextModal(props: Props) {
       noHeader={true}
       padding={36}
       onClose={props.navigation.goBack}
+      solidColorBG={true}
     >
       <Fragment>
         {items.map((item, index) => (

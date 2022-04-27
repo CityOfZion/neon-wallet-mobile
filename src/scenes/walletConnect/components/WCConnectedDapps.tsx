@@ -148,7 +148,7 @@ export const WCConnectedDapps = () => {
       name="getConnectedDapps"
       loadingView={<ScreenLoader solidColorBG />}
     >
-      <ScreenLayout padding={20} solidColorBG>
+      <ScreenLayout padding={20} darkerSolidColorBG={true}>
         <LinearLayout justifyContent={'space-between'} height={'100%'}>
           <LinearLayout>
             <LinearLayout>

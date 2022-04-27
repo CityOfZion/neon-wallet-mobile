@@ -113,7 +113,7 @@ const Step1CreateWalletPage: React.FC<Props> = (props) => {
   })
 
   return (
-    <ScreenLayout alignX={'center'}>
+    <ScreenLayout alignX={'center'} darkerSolidColorBG={true}>
       <LinearLayout mt={5} weight={1} width={'100%'}>
         <ItemComponent
           index={1}

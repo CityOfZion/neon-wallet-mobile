@@ -126,13 +126,13 @@ const ContentMnemonicItem = (props: ContentMnemonicItemProps) => {
     <TouchableWithoutFeedback onPress={handleIsSelected}>
       <View
         style={{
-          backgroundColor: '#191f23',
+          backgroundColor: '#13191D',
           flexDirection: 'row',
           justifyContent: 'space-between',
           padding: 10,
         }}
       >
-        <View style={{backgroundColor: '#191f23'}}>
+        <View style={{backgroundColor: '#13191D'}}>
           <Text style={{fontFamily: 'medium', color: '#899fa8', fontSize: 16}}>
             {blockchainServices[props.blockchain].derivationPath.replace(
               '?',

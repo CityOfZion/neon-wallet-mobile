@@ -107,7 +107,7 @@ const Step2BackupWalletPage: React.FC<Props> = (props) => {
   }
 
   return (
-    <ScreenLayout alignX={'center'}>
+    <ScreenLayout alignX={'center'} darkerSolidColorBG={true}>
       <AwaitActivity name={'populateStep2'} loadingView={<ScreenLoader />}>
         <TextView
           alignSelf={'flex-start'}
