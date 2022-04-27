@@ -1,3 +1,4 @@
 import {useAmountFee} from '~src/hooks/AmountFeeHook'
 import {useBlockchainActionsHook} from '~src/hooks/BlockchainActionsHook'
-export {useAmountFee, useBlockchainActionsHook}
+import {useHandleOfflineFunctions} from '~src/hooks/HandleOfflineFunctions'
+export {useAmountFee, useBlockchainActionsHook, useHandleOfflineFunctions}

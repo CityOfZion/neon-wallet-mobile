@@ -877,6 +877,7 @@
     "waitingDAppConnect": "Please be a patient, we are now connecting with %{dAppName}",
     "connectDAppLabel": "Connect a dApp",
     "connectNewDAppLabel": "Connect a new dApp",
-    "connectedDApps": "Connected dApps"
+    "connectedDApps": "Connected dApps",
+    "offline": "You need to be online to connect with some dApp"
   }
 }

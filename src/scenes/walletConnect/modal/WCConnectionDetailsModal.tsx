@@ -9,6 +9,7 @@ import {
   BlockchainServiceKey,
   getBlockchainByWCChain,
 } from '~/src/blockchain/common'
+import {useHandleOfflineFunctions} from '~/src/hooks'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
@@ -32,6 +33,7 @@ const WCConnectionDetailsModal = (props: Props) => {
   const walletConnectCtx = useWalletConnect()
   const navigation = useNavigation()
   const [blockchain, setBlockchain] = useState<BlockchainServiceKey>('neo3')
+  const {handleOnlyOnline} = useHandleOfflineFunctions()
   const {dapp} = props.route.params
   useEffect(() => {
     if (walletConnectCtx.sessions.length > 0) {
@@ -43,7 +45,7 @@ const WCConnectionDetailsModal = (props: Props) => {
   }, [walletConnectCtx.sessions])
 
   const handleDisconnect = useCallback(async () => {
-    walletConnectCtx.disconnect(dapp.session.topic)
+    await walletConnectCtx.disconnect(dapp.session.topic)
     controller.close()
   }, [walletConnectCtx.sessions])
 
@@ -160,7 +162,9 @@ const WCConnectionDetailsModal = (props: Props) => {
             </LinearLayout>
           </LinearLayout>
           <LinearLayout height={'30%'} justifyContent={'flex-end'} mb={'12px'}>
-            <TouchableWithoutFeedback onPress={handleDisconnect}>
+            <TouchableWithoutFeedback
+              onPress={() => handleOnlyOnline(handleDisconnect)}
+            >
               <LinearLayout
                 width="100%"
                 borderRadius="4px"
