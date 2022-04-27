@@ -21,6 +21,7 @@ import {
   getBlockchainByWCChain,
   getWCChainByBlockchain,
   IRPCContract,
+  isValidWcChain,
 } from '~src/blockchain/common'
 
 export {
@@ -46,4 +47,5 @@ export {
   getBlockchainByWCChain,
   getWCChainByBlockchain,
   IRPCContract,
+  isValidWcChain,
 }

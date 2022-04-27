@@ -7,7 +7,7 @@ import {showMessage} from 'react-native-flash-message'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {getBlockchainLogo} from '~/src/blockchain'
-import {BlockchainServiceKey} from '~/src/blockchain/common'
+import {BlockchainServiceKey, isValidWcChain} from '~/src/blockchain/common'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import {useHandleOfflineFunctions} from '~/src/hooks'
 import SwiperPanel, {
@@ -33,6 +33,7 @@ const WCConnectionRequestModal = (props: Props) => {
   const walletConnectCtx = useWalletConnect()
   const navigation = useNavigation()
   const [blockchain, setBlockchain] = useState<BlockchainServiceKey>('neo3')
+  const [sessionIsValid, setSessionIsValid] = useState<boolean>()
   const {handleAsyncOnlyOnline, handleOnlyOnline} = useHandleOfflineFunctions()
   const {uri} = props.route.params
   const activityName = 'loadWCConnection'
@@ -63,7 +64,18 @@ const WCConnectionRequestModal = (props: Props) => {
     }
   }, [uri])
 
-  useEffect(() => {
+  const validateSessionProposal = useCallback(() => {
+    if (walletConnectCtx.sessionProposals.length > 0) {
+      const session = walletConnectCtx.sessionProposals[0]
+      const isValid = isValidWcChain(
+        session.permissions.blockchain.chains,
+        blockchain
+      )
+      setSessionIsValid(isValid)
+    }
+  }, [walletConnectCtx.sessionProposals, blockchain])
+
+  const handleAcceptSessionProposal = useCallback(() => {
     if (walletConnectCtx.sessionProposals.length < 1) {
       Await.run<void>(
         activityName,
@@ -73,7 +85,31 @@ const WCConnectionRequestModal = (props: Props) => {
         5000
       )
     }
+  }, [walletConnectCtx.sessionProposals])
+
+  useEffect(() => {
+    handleAcceptSessionProposal()
+    return () => {
+      walletConnectCtx.setSessionProposals([]) //will guarantee that there will be only one sessionProposal at a time
+    }
   }, [])
+
+  useEffect(() => {
+    validateSessionProposal()
+  }, [walletConnectCtx.sessionProposals])
+
+  useEffect(() => {
+    if (
+      walletConnectCtx.sessionProposals.length > 0 &&
+      sessionIsValid === false
+    ) {
+      showMessage({
+        message: i18n.t('walletconnect.invalidSession'),
+        type: 'danger',
+        duration: 3000,
+      })
+    }
+  }, [sessionIsValid, walletConnectCtx.sessionProposals])
 
   return (
     <SwiperPanel
@@ -169,6 +205,7 @@ const WCConnectionRequestModal = (props: Props) => {
               </TextView>
               <LinearLayout>
                 <ThemedButton
+                  disabled={!sessionIsValid}
                   label={i18n.t('modals.WCConnectionRequest.acceptLabel')}
                   onPress={handleAccept}
                 />

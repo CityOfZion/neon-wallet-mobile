@@ -878,6 +878,7 @@
     "connectDAppLabel": "Connect a dApp",
     "connectNewDAppLabel": "Connect a new dApp",
     "connectedDApps": "Connected dApps",
-    "offline": "You need to be online to connect with some dApp"
+    "offline": "You need to be online to connect with some dApp",
+    "invalidSession": "Trying to connect to unsupported network"
   }
 }
