@@ -298,3 +298,12 @@ export function getWCChainByBlockchain(blockchain: BlockchainServiceKey) {
 
   return result
 }
+
+export function isValidWcChain(
+  wcChains: string[],
+  blockchain: BlockchainServiceKey
+) {
+  return blockchainServices[blockchain].wcChains.some((chain) =>
+    wcChains.includes(chain)
+  )
+}
