@@ -44,46 +44,50 @@ export class DoraSDKProvider implements Neo3Provider {
       this.network
     )
 
-    const {totalCount, items} = txFullResponse
-    result.pageNumber = page
-    result.pageSize = items.length
-    result.totalEntries = totalCount
-    result.totalPages = Math.ceil(totalCount / 15)
+    if (!Array.isArray(txFullResponse)) {
+      const {totalCount, items} = txFullResponse
+      result.pageNumber = page
+      result.pageSize = items.length
+      result.totalEntries = totalCount
+      result.totalPages = Math.ceil(totalCount / 15)
 
-    items.forEach(({block, hash, invocations, notifications, time}) => {
-      const transaction = new TransactionAddressSummary({
-        blockHeight: block,
-        hash,
-        time: Number(time.replace('.', '')) / 1000,
-      })
-      transaction.qtyInvocations = invocations.length
-      transaction.qtyNotifications = notifications.length
+      items.forEach(({block, hash, invocations, notifications, time}) => {
+        const transaction = new TransactionAddressSummary({
+          blockHeight: block,
+          hash,
+          time: Number(time.replace('.', '')) / 1000,
+        })
+        transaction.qtyInvocations = invocations.length
+        transaction.qtyNotifications = notifications.length
 
-      notifications
-        .filter(
-          ({event_name: eventName, state}) =>
-            (state as any).length === 3 && eventName === 'Transfer'
-        )
-        .forEach(({contract, state}) => {
-          const [{value: from}, {value: to}, {value: amount}] = state as any
+        notifications
+          .filter(
+            ({event_name: eventName, state}) =>
+              (state as any).length === 3 && eventName === 'Transfer'
+          )
+          .forEach(({contract, state}) => {
+            const [{value: from}, {value: to}, {value: amount}] = state as any
 
-          const convertedFrom = from
-            ? this.convertByteStringToAddress(from)
-            : 'Mint'
-          const convertedTo = to ? this.convertByteStringToAddress(to) : 'Burn'
+            const convertedFrom = from
+              ? this.convertByteStringToAddress(from)
+              : 'Mint'
+            const convertedTo = to
+              ? this.convertByteStringToAddress(to)
+              : 'Burn'
 
-          const transfer = new TransactionAddressTransfer({
-            amount,
-            to: convertedTo,
-            from: convertedFrom,
-            hash: contract,
+            const transfer = new TransactionAddressTransfer({
+              amount,
+              to: convertedTo,
+              from: convertedFrom,
+              hash: contract,
+            })
+
+            transaction.transfers.push(transfer)
           })
 
-          transaction.transfers.push(transfer)
-        })
-
-      result.transactions.push(transaction)
-    })
+        result.transactions.push(transaction)
+      })
+    }
 
     return result
   }
