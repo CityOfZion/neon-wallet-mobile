@@ -366,6 +366,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
               },
             })
           }
+          isDark={true}
         />
         <AwaitActivity name={'populateUnclaimed'}>
           <AwaitActivity
@@ -377,6 +378,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
               isClaimAvailable={isClaimAvailable}
               unclaimedGasAmount={unclaimedGasAmount ?? 0}
               fee={amountFee}
+              isDark={true}
             />
           </AwaitActivity>
         </AwaitActivity>
@@ -399,6 +401,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
                   })
                 }
           }
+          isDark={true}
         />
       </View>
       <LinearLayout>
@@ -424,6 +427,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
               source={require('~src/assets/images/icon-arrow-right-green.png')}
             />
           }
+          isDark={true}
         />
         <ThemedButton
           px={30}
@@ -452,6 +456,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
               source={require('~src/assets/images/icon-arrow-right-green.png')}
             />
           }
+          isDark={true}
         />
         <ThemedButton
           px={30}
@@ -481,6 +486,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
               }
             )
           }}
+          isDark={true}
         />
       </LinearLayout>
       <ModalWarningFee

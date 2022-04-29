@@ -10,6 +10,7 @@ import {Account} from '~src/models/redux/Account'
 interface Props {
   account?: Account
   onPress?: (evt: GestureResponderEvent) => void
+  isDark?: boolean
 }
 
 const ThemedSendButton: React.FC<Props> = (props) => {
@@ -43,6 +44,7 @@ const ThemedSendButton: React.FC<Props> = (props) => {
       }
       width={Dimensions.get('window').width * 0.15}
       onPress={props.onPress}
+      isDark={props.isDark}
     />
   )
 }

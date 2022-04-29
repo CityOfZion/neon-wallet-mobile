@@ -25,6 +25,7 @@ interface Props {
   isClaimAvailable: boolean
   unclaimedGasAmount: number
   fee: number | null
+  isDark?: boolean
 }
 
 const ThemedClaimButton: React.FC<Props> = (props) => {

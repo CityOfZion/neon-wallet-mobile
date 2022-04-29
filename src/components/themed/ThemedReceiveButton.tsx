@@ -7,6 +7,7 @@ import ThemedButton from './ThemedButton'
 import {LinearLayout, RelativeLayout} from '~/src/styles/styled-components'
 interface Props {
   onPress: (evt: GestureResponderEvent) => void
+  isDark?: boolean
 }
 
 const ThemedReceiveButton: React.FC<Props> = (props) => {
@@ -26,6 +27,7 @@ const ThemedReceiveButton: React.FC<Props> = (props) => {
       srcIcon={require('~src/assets/images/arrow-down-green.png')}
       onPress={props.onPress}
       width={Dimensions.get('window').width * 0.15}
+      isDark={props.isDark}
     />
   )
 }
