@@ -51,7 +51,7 @@ const ImportKey = (props: ImportKeyProps) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
-  const {accounts} = useSelector((state: RootState) => state.app)
+  const {accounts, exchange} = useSelector((state: RootState) => state.app)
   const {isConnected} = useSelector((state: RootState) => state.network)
   const [inputValue, setInputValue] = useState(
     props.route.params ? props.route.params.key ?? '' : ''
@@ -310,12 +310,6 @@ const ImportKey = (props: ImportKeyProps) => {
     [addressesSelected]
   )
 
-  useEffect(() => {
-    if (walletIdState) {
-      importAccounts(walletIdState)
-    }
-  }, [walletIdState])
-
   const validator = useCallback(
     (text: string) => {
       try {
@@ -354,6 +348,13 @@ const ImportKey = (props: ImportKeyProps) => {
     [inputValue]
   )
 
+  const grantPopulateExchange = useCallback(async () => {
+    if(Object.keys(exchange).length < 1){
+      await dispatchAsync(RootStore.app.actions.fetchExchange())
+      await dispatchAsync(RootStore.app.actions.syncExchange())
+    }
+  }, [exchange])
+
   useEffect(() => {
     if (inputIsValid) {
       handleChangeInput()
@@ -362,6 +363,16 @@ const ImportKey = (props: ImportKeyProps) => {
       setAddressesFound([])
     }
   }, [inputIsValid])
+
+  useEffect(() => {
+    if (walletIdState) {
+      importAccounts(walletIdState)
+    }
+  }, [walletIdState])
+
+  useEffect(() => {
+    grantPopulateExchange()
+  }, [exchange])
 
   return (
     <ScreenLayout darkerSolidColorBG={true}>
