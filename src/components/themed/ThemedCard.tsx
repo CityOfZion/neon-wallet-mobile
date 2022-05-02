@@ -24,6 +24,7 @@ interface Props {
   borderColor?: string
   isPressed?: boolean
   radius?: number
+  isDark?: boolean
 }
 
 const ThemedCard: React.FC<Props> = (props) => {
@@ -61,8 +62,8 @@ const ThemedCard: React.FC<Props> = (props) => {
 
     const borderIos = {
       borderWidth: 0.15,
-      borderTopColor: '#fff',
-      borderLeftColor: '#fff',
+      borderTopColor: '#000',
+      borderLeftColor: '#000',
       borderBottomColor: '#000',
       borderRightColor: '#000',
     }
@@ -103,7 +104,11 @@ const ThemedCard: React.FC<Props> = (props) => {
       >
         {props.hasBright && !props.flat && (
           <DarkCardBright
-            colors={['rgba(33, 43, 50, 1)', 'rgba(22, 28, 33, 1)']}
+            colors={
+              props.isDark
+                ? ['rgba(33, 43, 50, 1)', 'rgba(22, 28, 33, 1)']
+                : ['rgba(255, 255, 255, 0.25)', 'rgba(255, 255, 255, 0)']
+            }
             locations={[0, 1]}
             start={[1, 0]}
             end={[1, 1]}

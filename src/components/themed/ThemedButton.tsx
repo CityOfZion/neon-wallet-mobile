@@ -53,6 +53,7 @@ interface Props {
   labelWidth?: string
   labelPx?: string | number
   adjustsFontSizeToFit?: boolean
+  isDark?: boolean
 }
 
 const LabelComponent = (props: Props) => {
@@ -186,6 +187,7 @@ const ThemedButton: React.FC<Props> = (props) => {
         isPressed={isSelected}
         radius={props.radius}
         alignX={props.alignX}
+        isDark={props.isDark}
       >
         {MemoLabelComponent}
       </ThemedCard>
@@ -226,6 +228,7 @@ ThemedButton.propTypes = {
   labelPx: PropTypes.string,
   width: PropTypes.any,
   height: PropTypes.number,
+  isDark: PropTypes.bool,
 }
 
 ThemedButton.defaultProps = {
