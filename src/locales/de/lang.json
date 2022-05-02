@@ -216,6 +216,12 @@
         "cancel": "#translateme",
         "save": "#translateme"
       }
+    },
+    "screenLayout": {
+      "assets": "Assets",
+      "transactions": "Transactions",
+      "connections": "Connections",
+      "nfts": "NFTS"
     }
   },
   "modals": {
