@@ -4,6 +4,7 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {AccountNFTSScreenParams} from '../scenes/Account/AccountNFTSScreen'
 import WCAccountConnectionsScreen, {
   WCAccountConnectionsScreenParams,
 } from '../scenes/walletConnect/WCAccountConnectionsScreen'
@@ -40,6 +41,7 @@ export type WalletStackParamList = {
   AccountAssetScreen: undefined
   AccountTransactionsScreen: AccountTransactionsScreenParams
   WCAccountConnectionsScreen: WCAccountConnectionsScreenParams
+  AccountNFTSScreen: AccountNFTSScreenParams
 }
 
 export type WalletStackParams =
@@ -127,7 +129,18 @@ const WalletStackNavigation = () => {
             Navigator.defaultStackNavigatorOptions({
               theme,
               route,
-              title: 'Transactions',
+              title: i18n.t('screens.screenLayout.transactions'),
+            })
+          }
+        />
+        <WalletStack.Screen
+          name={wrapper.route.AccountNFTSScreen.name}
+          component={AccountTransactionsScreen}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              theme,
+              route,
+              title: i18n.t('screens.screenLayout.nfts'),
             })
           }
         />

@@ -57,7 +57,7 @@ const AccountTransactionsScreen = (props: Props) => {
   >([])
   const [hasMoreTransactionsToLoad, setHasMoreTransactionsToLoad] = useState<
     boolean
-  >(true)
+  >(false)
 
   const pageControl = useRef<number>(1)
   const requestControl = useRef<boolean>(false)
@@ -100,6 +100,8 @@ const AccountTransactionsScreen = (props: Props) => {
 
       if (totalPages && pageControl.current > totalPages) {
         setHasMoreTransactionsToLoad(false)
+      } else {
+        setHasMoreTransactionsToLoad(true)
       }
     }
   }, [account])

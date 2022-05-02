@@ -233,7 +233,8 @@
     "screenLayout": {
       "assets": "Assets",
       "transactions": "Transactions",
-      "connections": "Connections"
+      "connections": "Connections",
+      "nfts": "NFTS"
     }
   },
   "modals": {
