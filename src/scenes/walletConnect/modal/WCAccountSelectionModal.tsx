@@ -2,7 +2,7 @@ import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity, Await} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, {useState, useCallback, useMemo} from 'react'
+import React, {useCallback, useMemo} from 'react'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
 
@@ -38,7 +38,7 @@ export const WCAccountSelectionModal = (props: Props) => {
   const controller = useSwiperController(true)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const walletConnectCtx = useWalletConnect()
-  const {handleAsyncOnlyOnline, handleOnlyOnline} = useHandleOfflineFunctions()
+  const {handleOnlyOnline} = useHandleOfflineFunctions()
   const accounts = props.route.params.wallet
     .getAccounts(accountsPool)
     .filter((it) => hasWalletconnect(it))
@@ -47,19 +47,37 @@ export const WCAccountSelectionModal = (props: Props) => {
     () => walletConnectCtx.sessionProposals[0].proposer.metadata.name,
     []
   )
+  const timeoutToRequest = 10000
+  const connectionFailed = useCallback(() => {
+    return setTimeout(() => {
+      showMessage({
+        message: i18n.t('walletconnect.internetConnectionLost1'),
+        type: 'danger',
+        duration: 5000,
+      })
+      props.navigation.reset({
+        index: 0,
+        routes: [{name: wrapper.route.Tab.name}],
+      })
+      props.navigation.navigate(wrapper.route.WalletConnectPage.name, {})
+    }, timeoutToRequest)
+  }, [])
 
   const handleConnectDApp = useCallback(
     async (account: Account) => {
+      const resultConnectionFailed = connectionFailed()
       Await.init('connectDapp')
       try {
         if (walletConnectCtx.sessionProposals.length > 0 && account?.address) {
           const wcChain = getWCChainByBlockchain(account.blockchain)
           if (wcChain) {
             walletConnectCtx.setsessionsWasClean(true)
+
             await walletConnectCtx.approveSession(
               walletConnectCtx.sessionProposals[0],
               [{address: account.address, chain: wcChain}]
             )
+            clearTimeout(resultConnectionFailed)
             showMessage({
               message: i18n.t('walletconnect.alert.text', {text: nameDApp}),
               duration: 7000,
@@ -74,6 +92,7 @@ export const WCAccountSelectionModal = (props: Props) => {
         })
         props.navigation.navigate(wrapper.route.WalletConnectPage.name, {})
       } catch (error) {
+        clearTimeout(resultConnectionFailed)
         const message = (error as {message: string}).message
         showMessage({message, duration: 7000, type: 'danger'})
         props.navigation.reset({
@@ -89,19 +108,19 @@ export const WCAccountSelectionModal = (props: Props) => {
   )
 
   return (
-    <AwaitActivity name="connectDapp" loadingView={<ScreenLoader />}>
-      <SwiperPanel
-        padding={20}
-        fullSize={true}
-        controller={controller}
-        rightButton={<CloseButton mr={'20px'} />}
-        title={i18n.t('modals.WCAccountSelection.title')}
-        onClose={() => {
-          props.navigation.goBack()
-        }}
-        onRightPress={controller.close}
-        solidColorBG={true}
-      >
+    <SwiperPanel
+      padding={20}
+      fullSize={true}
+      controller={controller}
+      rightButton={<CloseButton mr={'20px'} />}
+      title={i18n.t('modals.WCAccountSelection.title')}
+      onClose={() => {
+        props.navigation.goBack()
+      }}
+      onRightPress={controller.close}
+      solidColorBG={true}
+    >
+      <AwaitActivity name="connectDapp" loadingView={<ScreenLoader />}>
         <LinearLayout mt={6} height={'100%'} textAlign="center">
           <TextView color="text.0" fontSize={18} textAlign="center" mb={'30px'}>
             {i18n.t('modals.WCAccountSelection.subtitle')}
@@ -109,18 +128,12 @@ export const WCAccountSelectionModal = (props: Props) => {
           <AccountCardsComponent
             accounts={accounts}
             onPress={(account) =>
-              Await.run<void>(
-                'connectingDapp',
-                async () => {
-                  return handleOnlyOnline(() => handleConnectDApp(account))
-                },
-                3000
-              )
+              handleOnlyOnline(() => handleConnectDApp(account))
             }
             disableSecondTouch={true}
           />
         </LinearLayout>
-      </SwiperPanel>
-    </AwaitActivity>
+      </AwaitActivity>
+    </SwiperPanel>
   )
 }

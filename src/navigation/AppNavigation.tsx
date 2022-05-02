@@ -1,8 +1,10 @@
 import {JsonRpcRequest} from '@json-rpc-tools/utils'
 import {NavigationContainer, RouteProp} from '@react-navigation/native'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
+import i18n from 'i18n-js'
 import React, {useCallback, useEffect, useState} from 'react'
 import {InteractionManager} from 'react-native'
+import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
@@ -94,14 +96,19 @@ const AppNavigation = (props: Props) => {
     }
   }
 
-  const startWalletConnect = async () => {
-    if (isConnected && walletConnectCtx.initialized === false) {
-      await walletConnectCtx.init()
+  const handleDisconnectWalletConnect = useCallback(async () => {
+    if (!isConnected) {
+      walletConnectCtx.setWcClient(undefined)
+      showMessage({
+        message: i18n.t('walletconnect.internetConnectionLost1'),
+        type: 'danger',
+        duration: 7000,
+      })
     }
-  }
+  }, [isConnected, walletConnectCtx])
 
   useEffect(() => {
-    startWalletConnect()
+    handleDisconnectWalletConnect()
     if (hasInit) {
       let interactionPromise = InteractionManager.runAfterInteractions()
       const interval = setInterval(() => {
