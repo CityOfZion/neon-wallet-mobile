@@ -1,7 +1,7 @@
 import i18n from 'i18n-js'
 import moment from 'moment'
 import React, {useCallback, useMemo} from 'react'
-import {View, Image, Alert} from 'react-native'
+import {View, Image, FlatList} from 'react-native'
 
 import {TransactionDataScreen} from '.'
 import {TransactionItemDate} from './TransactionItemDate'
@@ -17,15 +17,9 @@ export const TransactionsListDate = ({
   pendingTransactions,
   completedTransactions,
 }: TransactionsListDateProps) => {
-  const formatTransactionsPerDate = useCallback(
-    (
-      transactions: TransactionDataScreen[],
-      initialData: Record<string, TransactionDataScreen[]> = {}
-    ) => {
-      const transactionsPerDate: Record<
-        string,
-        TransactionDataScreen[]
-      > = initialData
+  const separateTransactionsPerDate = useCallback(
+    (transactions: TransactionDataScreen[]) => {
+      const transactionsPerDate: Record<string, TransactionDataScreen[]> = {}
 
       transactions.forEach((transaction) => {
         const {time} = transaction
@@ -46,25 +40,32 @@ export const TransactionsListDate = ({
   )
 
   const completedTransactionsPerDate = useMemo(
-    () => formatTransactionsPerDate(completedTransactions),
-    [formatTransactionsPerDate, completedTransactions]
-  )
-  const pendingTransactionsPerDate = useMemo(
-    () => formatTransactionsPerDate(pendingTransactions),
-    [formatTransactionsPerDate, pendingTransactions]
+    () => separateTransactionsPerDate(completedTransactions),
+    [separateTransactionsPerDate, completedTransactions]
   )
 
-  const dates = [
-    ...Object.keys(completedTransactionsPerDate),
-    ...Object.keys(pendingTransactionsPerDate),
-  ]
-    .filter((date, index, array) => array.indexOf(date) === index)
-    .sort((a, b) => moment(a).diff(moment(b)))
+  const pendingTransactionsPerDate = useMemo(
+    () => separateTransactionsPerDate(pendingTransactions),
+    [separateTransactionsPerDate, pendingTransactions]
+  )
+
+  const dates = useMemo(
+    () =>
+      [
+        ...Object.keys(completedTransactionsPerDate),
+        ...Object.keys(pendingTransactionsPerDate),
+      ]
+        .filter((date, index, array) => array.indexOf(date) === index) //Remove duplicates
+        .sort((a, b) => moment(b).diff(a)),
+    [completedTransactionsPerDate, pendingTransactionsPerDate]
+  )
 
   return (
-    <>
-      {dates.map((date) => (
-        <LinearLayout mb={'10px'} key={date}>
+    <FlatList
+      data={dates}
+      keyExtractor={(item) => item}
+      renderItem={({item: date}) => (
+        <LinearLayout mb={'10px'}>
           <TextView
             mb={'20px'}
             color="#fff"
@@ -88,13 +89,13 @@ export const TransactionsListDate = ({
                     )}
                   </TextView>
                 </View>
-                {pendingTransactionsPerDate[date].map((transaction) => (
-                  <TransactionItemDate
-                    hideLinkDora={true}
-                    key={transaction.txid}
-                    {...transaction}
-                  />
-                ))}
+                <FlatList
+                  data={pendingTransactionsPerDate[date]}
+                  keyExtractor={(item) => item.txid}
+                  renderItem={({item}) => (
+                    <TransactionItemDate hideLinkDora={true} {...item} />
+                  )}
+                />
               </>
             )}
 
@@ -110,16 +111,15 @@ export const TransactionsListDate = ({
                     {i18n.t('screens.accountTransaction.completedTransactions')}
                   </TextView>
                 </View>
-                {completedTransactionsPerDate[date].map((transaction) => (
-                  <TransactionItemDate
-                    key={transaction.txid}
-                    {...transaction}
-                  />
-                ))}
+                <FlatList
+                  data={completedTransactionsPerDate[date]}
+                  keyExtractor={(item) => item.txid}
+                  renderItem={({item}) => <TransactionItemDate {...item} />}
+                />
               </>
             )}
         </LinearLayout>
-      ))}
-    </>
+      )}
+    />
   )
 }
