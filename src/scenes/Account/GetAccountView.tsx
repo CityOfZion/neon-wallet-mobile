@@ -482,6 +482,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
               account,
             })
           }}
+          isDark={true}
         />
         <ThemedButton
           px={30}
