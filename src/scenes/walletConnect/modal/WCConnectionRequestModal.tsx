@@ -1,4 +1,5 @@
 import {RouteProp, useNavigation} from '@react-navigation/native'
+import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity, Await} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, {useEffect, useState, useCallback} from 'react'
@@ -10,6 +11,7 @@ import {getBlockchainLogo} from '~/src/blockchain'
 import {BlockchainServiceKey, isValidWcChain} from '~/src/blockchain/common'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import {useHandleOfflineFunctions} from '~/src/hooks'
+import {WalletConnectStackParamList} from '~/src/navigation/WalletConnectStackNavigation'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
@@ -26,6 +28,9 @@ export interface WCConnectionRequestModalParams {
 
 interface Props {
   route: RouteProp<ModalStackParamList, 'WCConnectionRequestModal'>
+  navigation: StackNavigationProp<
+    ModalStackParamList & WalletConnectStackParamList
+  >
 }
 
 const WCConnectionRequestModal = (props: Props) => {
@@ -37,6 +42,7 @@ const WCConnectionRequestModal = (props: Props) => {
   const {handleAsyncOnlyOnline, handleOnlyOnline} = useHandleOfflineFunctions()
   const {uri} = props.route.params
   const activityName = 'loadWCConnection'
+  const timeoutToRequest = 8000
 
   const handleAccept = useCallback(async () => {
     if (walletConnectCtx.sessionProposals.length > 0) {
@@ -46,11 +52,30 @@ const WCConnectionRequestModal = (props: Props) => {
     }
   }, [walletConnectCtx.sessionProposals])
 
+  const connectionFailed = useCallback(() => {
+    return setTimeout(() => {
+      showMessage({
+        message: i18n.t('walletconnect.internetConnectionLost1'),
+        type: 'danger',
+        duration: 5000,
+      })
+      props.navigation.reset({
+        index: 0,
+        routes: [{name: wrapper.route.Tab.name}],
+      })
+      props.navigation.navigate(wrapper.route.WalletConnectPage.name, {})
+    }, timeoutToRequest)
+  }, [])
+
   const runOnURI = useCallback(async () => {
+    const resultConnectionFailed = connectionFailed()
+    Await.init(activityName)
     try {
       console.log('debug runOnURI => ', uri)
       await walletConnectCtx.onURI(uri)
+      clearTimeout(resultConnectionFailed)
     } catch (error: any) {
+      clearTimeout(resultConnectionFailed)
       console.log('error onUri => ', error)
       controller.close()
 
@@ -61,6 +86,8 @@ const WCConnectionRequestModal = (props: Props) => {
       })
 
       navigation.goBack()
+    } finally {
+      Await.done(activityName)
     }
   }, [uri])
 
@@ -75,23 +102,14 @@ const WCConnectionRequestModal = (props: Props) => {
     }
   }, [walletConnectCtx.sessionProposals, blockchain])
 
-  const handleAcceptSessionProposal = useCallback(() => {
+  const handleAcceptSessionProposal = useCallback(async () => {
     if (walletConnectCtx.sessionProposals.length < 1) {
-      Await.run<void>(
-        activityName,
-        async () => {
-          return handleOnlyOnline(runOnURI)
-        },
-        5000
-      )
+      await runOnURI()
     }
   }, [walletConnectCtx.sessionProposals])
 
   useEffect(() => {
     handleAcceptSessionProposal()
-    return () => {
-      walletConnectCtx.setSessionProposals([]) //will guarantee that there will be only one sessionProposal at a time
-    }
   }, [])
 
   useEffect(() => {

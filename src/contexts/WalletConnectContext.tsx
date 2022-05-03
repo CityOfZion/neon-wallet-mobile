@@ -150,7 +150,6 @@ export const WalletConnectContextProvider: React.FC<{
   const cleanConnections = useCallback(async () => {
     if (!sessionsWasClean && sessions.length > 0) {
       setsessionsWasClean(true)
-      setRequests([])
 
       await Promise.all(
         sessions.map(async (session) => {
@@ -162,7 +161,13 @@ export const WalletConnectContextProvider: React.FC<{
         })
       )
 
+      setWcClient(undefined)
+      setSessionProposals([])
+      setInitialized(false)
+      setChains([])
       setSessions([])
+      setRequests([])
+      setResults([])
     }
   }, [sessions, sessionsWasClean])
 
@@ -432,7 +437,7 @@ export const WalletConnectContextProvider: React.FC<{
 
       await wcClient.pair({uri})
     } catch (error) {
-      throw new Error(i18n.t('contexts.walletConnect.clientPairError'))
+      throw error
     }
   }
 
@@ -448,45 +453,49 @@ export const WalletConnectContextProvider: React.FC<{
     proposal: SessionTypes.Proposal,
     accounts: AddressAndChain[]
   ) => {
-    console.log('ACTION', 'approveSession')
-    if (typeof wcClient === 'undefined') {
-      throw new Error('Client is not initialized')
-    }
-    if (typeof accounts === 'undefined') {
-      throw new Error('Accounts is undefined')
-    }
-    const accs = accounts
-      .filter((account) => {
-        const [namespace, reference] = account.chain.split(':')
-        const chainId = `${namespace}:${reference}`
-        return proposal.permissions.blockchain.chains.includes(chainId)
-      })
-      .map((acc) => `${acc.chain}:${acc.address}`)
-
-    const response = {
-      state: {accounts: accs},
-      metadata: options.appMetadata,
-    }
-    const session = await wcClient.approve({proposal, response})
-    setSessionProposals((old) => old.filter((i) => i !== proposal))
-    setSessions((old) => {
-      if (
-        old.find(
-          (oldSession) =>
-            oldSession.topic === session.topic &&
-            oldSession.state.accounts.some((account) =>
-              session.state.accounts.includes(account)
-            )
-        )
-      ) {
-        return old
-      } else {
-        return [...old, session]
+    try {
+      console.log('ACTION', 'approveSession')
+      if (typeof wcClient === 'undefined') {
+        throw new Error('Client is not initialized')
       }
-    })
-    await dispatchAsync(
-      RootStore.wcReducer.actions.updateApprovalDate(session.topic)
-    )
+      if (typeof accounts === 'undefined') {
+        throw new Error('Accounts is undefined')
+      }
+      const accs = accounts
+        .filter((account) => {
+          const [namespace, reference] = account.chain.split(':')
+          const chainId = `${namespace}:${reference}`
+          return proposal.permissions.blockchain.chains.includes(chainId)
+        })
+        .map((acc) => `${acc.chain}:${acc.address}`)
+
+      const response = {
+        state: {accounts: accs},
+        metadata: options.appMetadata,
+      }
+      const session = await wcClient.approve({proposal, response})
+      setSessionProposals((old) => old.filter((i) => i !== proposal))
+      setSessions((old) => {
+        if (
+          old.find(
+            (oldSession) =>
+              oldSession.topic === session.topic &&
+              oldSession.state.accounts.some((account) =>
+                session.state.accounts.includes(account)
+              )
+          )
+        ) {
+          return old
+        } else {
+          return [...old, session]
+        }
+      })
+      await dispatchAsync(
+        RootStore.wcReducer.actions.updateApprovalDate(session.topic)
+      )
+    } catch (error) {
+      throw error
+    }
   }
 
   const rejectSession = async (proposal: SessionTypes.Proposal) => {

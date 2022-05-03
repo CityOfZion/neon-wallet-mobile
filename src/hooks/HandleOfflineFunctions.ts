@@ -12,7 +12,7 @@ export function useHandleOfflineFunctions() {
         showMessage({
           message: i18n.t('walletconnect.offline'),
           type: 'danger',
-          duration: 3000,
+          duration: 6000,
         })
       }
     },
@@ -27,7 +27,7 @@ export function useHandleOfflineFunctions() {
         showMessage({
           message: i18n.t('walletconnect.offline'),
           type: 'danger',
-          duration: 3000,
+          duration: 6000,
         })
       }
     },

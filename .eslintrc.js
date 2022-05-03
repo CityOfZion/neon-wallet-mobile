@@ -6,6 +6,7 @@ module.exports = {
     clearInterval: true,
     window: true,
     Intl: true,
+    clearTimeout: true
   },
   extends: [
     'universe',
