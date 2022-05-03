@@ -326,7 +326,14 @@
       "pendingTransactions": "PENDING TRANSACTIONS",
       "completedTransactions": "COMPLETED TRANSACTIONS",
       "invocationsLabel": "Invocations",
-      "notificationsLabel": "Notifications"
+      "notificationsLabel": "Notifications",
+      "asset": "Asset",
+      "nft": "NFT",
+      "errorToGetTransactions": "Unexpected error to get transactions",
+      "emptyList": "No transaction to list"
+    },
+    "accountNFT": {
+      "emptyList": "No NFT to list"
     },
     "customizeAccount": {
       "title": "Create account",

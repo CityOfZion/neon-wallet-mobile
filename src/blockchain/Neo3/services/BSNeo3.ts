@@ -5,13 +5,18 @@ import {
 } from '@cityofzion/neon-js-next/node_modules/@cityofzion/neon-api/lib/NetworkFacade'
 import {JsonRpcRequest, JsonRpcResponse} from '@json-rpc-tools/utils'
 import type * as AsteroidSDK from '@moonlight-io/asteroid-sdk-js'
+import axios from 'axios'
 import {ImageLoadEventData, NativeModules, Platform} from 'react-native'
+
+import {INFT} from '../../common'
 
 import {AsteroidHelper} from '~/src/helpers/AsteroidHelper'
 import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import {NeoNode} from '~/src/models/NeoNode'
 import {TokenAsset} from '~/src/models/TokenAsset'
 import {Account} from '~/src/models/redux/Account'
+import {NFTResponse} from '~/src/models/response/NFTResponse'
+import {NFTSResponse} from '~/src/models/response/NFTSResponse'
 import {NeoNative} from '~/src/native/NeoNative'
 import {
   IBlockchainService,
@@ -32,11 +37,33 @@ const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEvent
 const feeTokenImg = require('~src/assets/nep5/png/GAS.png')
 const SDK: typeof AsteroidSDK = require('~src/vendor/asteroid-sdk')
 
+interface GhostMarketNFT {
+  nft: {
+    token_id: string
+    symbol: string
+    contract: string
+    collection: {
+      name: string
+      logo_url: string
+    }
+    nft_metadata: {
+      name: string
+      image: string
+    }
+  }
+}
+
+interface GhostMarketAssets {
+  assets: GhostMarketNFT[]
+  total_results: number
+}
+
 export interface ContractParam {
   type: string
   name: string
 }
-export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
+export class BSNeo3
+  implements IBlockchainService, IClaimable, IWalletConnect, INFT {
   provider: Neo3Provider
   key: BlockchainServiceKey
   icon = icon
@@ -154,7 +181,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
       const result = await facade.transferToken(intents, signing)
 
       return result
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error.message)
     }
   }
@@ -328,7 +355,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
       return (
         Number(requiredSystemFee.toDecimal(8)) + Number(networkFee.toDecimal(8))
       )
-    } catch (error) {
+    } catch (error: any) {
       console.log('Error calculate fee')
       console.log(error)
       throw new Error(error)
@@ -337,6 +364,64 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
 
   setAccountsPool(accounts: Account[]) {
     this.accountsPool = accounts
+  }
+
+  async getNFTS(address: string, page: number = 1): Promise<NFTSResponse> {
+    const nftPageLimit = 18
+
+    const url = this.buildGhostMarketURL('assets', {
+      owner: address,
+      limit: nftPageLimit,
+      offset: nftPageLimit * (page - 1),
+      with_total: 1,
+    })
+
+    const {data} = await axios.get(url)
+
+    const {assets, total_results: totalResults} = data as GhostMarketAssets
+
+    const totalPages = Math.ceil(totalResults / nftPageLimit)
+
+    const nftsResponse = new NFTSResponse({totalPages})
+
+    assets.forEach(({nft}) => {
+      const nftResponse = new NFTResponse({
+        collectionImage: this.treatGhostMarketImage(nft.collection.logo_url),
+        collectionName: nft.collection.name,
+        image: this.treatGhostMarketImage(nft.nft_metadata.image),
+        name: nft.nft_metadata.name,
+        symbol: nft.symbol,
+        id: nft.token_id,
+        contractHash: nft.contract,
+      })
+
+      nftsResponse.items.push(nftResponse)
+    })
+
+    return nftsResponse
+  }
+
+  async getNFT(tokenId: string, hash: string): Promise<NFTResponse> {
+    const url = this.buildGhostMarketURL('assets', {
+      token_id: tokenId,
+      contract: hash,
+    })
+
+    const {data} = await axios.get(url)
+
+    const [{nft}] = data.assets
+
+    const nftResponse = new NFTResponse({
+      collectionImage: this.treatGhostMarketImage(nft.collection.logo_url),
+      collectionName: nft.collection.name,
+      image: this.treatGhostMarketImage(nft.nft_metadata.image),
+      name: nft.nft_metadata.name,
+      symbol: nft.symbol,
+      id: nft.token_id,
+      contractHash: nft.contract,
+    })
+
+    return nftResponse
   }
 
   private async signing(address: string) {
@@ -380,5 +465,40 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect {
     const account = this.accountsPool.find((it) => it.address === address)
     const wifAccount = await account?.getWif()
     return wifAccount ? new wallet.Account(wifAccount) : null
+  }
+
+  private treatGhostMarketImage(srcImage?: string) {
+    if (!srcImage) {
+      return
+    }
+
+    if (srcImage.startsWith('ipfs://')) {
+      const [, imageId] = srcImage.split('://')
+
+      return `https://ipfs.ghostmarket.io/ipfs/${imageId}`
+    }
+
+    return srcImage
+  }
+
+  private buildGhostMarketURL(
+    path: string,
+    params?: Record<string, string | number>
+  ) {
+    const chain = 'n3'
+
+    const baseUrl = 'https://api.ghostmarket.io/api/v1'
+
+    const parameters =
+      params && Object.keys(params).length > 0
+        ? Object.keys(params).reduce(
+            (acc, item) => acc + `&${item}=${params[item]}`,
+            ''
+          )
+        : ''
+
+    const url = `${baseUrl}/${path}?chain=${chain}${parameters}`
+
+    return url
   }
 }

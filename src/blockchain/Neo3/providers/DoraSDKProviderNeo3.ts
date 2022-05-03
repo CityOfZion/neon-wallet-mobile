@@ -1,8 +1,8 @@
 import {api} from '@cityofzion/dora-ts'
+import {TypedResponse} from '@cityofzion/dora-ts/dist/interfaces/api/common'
 import {AddressTransactionsResponse} from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 import {rpc, u, wallet} from '@cityofzion/neon-core-next'
 import {Request} from '@simpli/serialized-request'
-import axios from 'axios'
 import {mapValues} from 'lodash'
 
 import {Neo3Provider} from './common'
@@ -12,38 +12,16 @@ import {ContractParameter} from '~/src/models/ContractParameter'
 import {NeoNode} from '~/src/models/NeoNode'
 import {Node} from '~/src/models/Node'
 import {Transaction} from '~/src/models/Transaction'
+import {TransactionAddressAsset} from '~/src/models/TransactionAddressAsset'
+import {TransactionAddressNFT} from '~/src/models/TransactionAddressNFT'
 import {TransactionAddressSummary} from '~/src/models/TransactionAddressSummary'
-import {TransactionAddressTransfer} from '~/src/models/TransactionAddressTransfer'
 import {BalanceResponse} from '~/src/models/response/BalanceResponse'
 import {ContractResponse} from '~/src/models/response/ContractResponse'
-import {NFTResponse} from '~/src/models/response/NFTResponse'
-import {NFTSResponse} from '~/src/models/response/NFTSResponse'
 import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
 import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
 import {ExchangeResponse} from '~/src/types/exchange'
 import {TokenResponse} from '~/src/types/token'
 import {IRPCContract} from '~src/blockchain'
-
-interface GhostMarketNFT {
-  nft: {
-    token_id: string
-    symbol: string
-    contract: string
-    collection: {
-      name: string
-      logo_url: string
-    }
-    nft_metadata: {
-      name: string
-      image: string
-    }
-  }
-}
-
-interface GhostMarketAssets {
-  assets: GhostMarketNFT[]
-  total_results: number
-}
 
 export type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
 export class DoraSDKProvider implements Neo3Provider {
@@ -51,7 +29,6 @@ export class DoraSDKProvider implements Neo3Provider {
   readonly network: DoraNetworkOptions = 'mainnet'
   readonly siteUrlQuery = `https://dora.coz.io/transaction/neo3/${this.network}/`
   readonly baseNumeric: number = 8
-  private readonly nftPageLimit = 18
 
   constructor(network?: DoraNetworkOptions) {
     if (network) {
@@ -70,49 +47,80 @@ export class DoraSDKProvider implements Neo3Provider {
       this.network
     )
 
-    if (!Array.isArray(txFullResponse)) {
-      const {totalCount, items} = txFullResponse
-      result.pageNumber = page
-      result.pageSize = items.length
-      result.totalEntries = totalCount
-      result.totalPages = Math.ceil(totalCount / 15)
+    if (Array.isArray(txFullResponse)) {
+      return result
+    }
 
-      items.forEach(({block, hash, invocations, notifications, time}) => {
-        const transaction = new TransactionAddressSummary({
-          blockHeight: block,
-          hash,
-          time: Number(time),
-        })
-        transaction.qtyInvocations = invocations.length
-        transaction.qtyNotifications = notifications.length
+    const {totalCount, items} = txFullResponse
+    result.pageNumber = page
+    result.pageSize = items.length
+    result.totalEntries = totalCount
+    result.totalPages = Math.ceil(totalCount / 15)
 
-        notifications
-          .filter(
-            ({event_name: eventName, state}) =>
-              (state as any).length === 3 && eventName === 'Transfer'
-          )
-          .forEach(({contract, state}) => {
-            const [{value: from}, {value: to}, {value: amount}] = state as any
+    for (const item of items) {
+      const {block, hash, invocations, notifications, time} = item
 
-            const convertedFrom = from
-              ? this.convertByteStringToAddress(from)
-              : 'Mint'
-            const convertedTo = to
-              ? this.convertByteStringToAddress(to)
-              : 'Burn'
+      const transaction = new TransactionAddressSummary({
+        blockHeight: block,
+        hash,
+        time: Number(time),
+      })
+      transaction.qtyInvocations = invocations.length
+      transaction.qtyNotifications = notifications.length
 
-            const transfer = new TransactionAddressTransfer({
-              amount,
-              to: convertedTo,
-              from: convertedFrom,
-              hash: contract,
-            })
+      for (const notification of notifications) {
+        const {contract, event_name: eventName} = notification
+        const state = (notification.state as any) as TypedResponse[]
 
-            transaction.transfers.push(transfer)
+        if (eventName !== 'Transfer') {
+          continue
+        }
+
+        if (state.length !== 3 && state.length !== 4) {
+          continue
+        }
+
+        const [{value: from}, {value: to}] = state
+
+        const convertedFrom = from
+          ? this.convertByteStringToAddress(from)
+          : 'Mint'
+
+        const convertedTo = to ? this.convertByteStringToAddress(to) : 'Burn'
+
+        if (convertedFrom !== address && convertedTo !== address) {
+          continue
+        }
+
+        if (state.length === 3) {
+          const [, , {value: amount}] = state
+
+          const asset = new TransactionAddressAsset({
+            amount,
+            to: convertedTo,
+            from: convertedFrom,
+            hash: contract,
           })
 
-        result.transactions.push(transaction)
-      })
+          transaction.transfers.push(asset)
+          continue
+        }
+
+        const [, , , {value: tokenId}] = state
+
+        const convertedTokenId = this.convertByteStringToInteger(tokenId)
+
+        const nft = new TransactionAddressNFT({
+          tokenId: convertedTokenId,
+          to: convertedTo,
+          from: convertedFrom,
+          hash: contract,
+        })
+
+        transaction.transfers.push(nft)
+      }
+
+      result.transactions.push(transaction)
     }
 
     return result
@@ -286,45 +294,6 @@ export class DoraSDKProvider implements Neo3Provider {
     }
   }
 
-  async getNFTS(address: string, page: number = 1): Promise<NFTSResponse> {
-    const url = this.buildGhostMarketURL('assets', {
-      owner: address,
-      limit: this.nftPageLimit,
-      offset: this.nftPageLimit * (page - 1),
-      with_total: 1,
-    })
-
-    const {data} = await axios.get(url)
-
-    const {assets, total_results: totalResults} = data as GhostMarketAssets
-
-    const totalPages = Math.ceil(totalResults / this.nftPageLimit)
-
-    const nftsResponse = new NFTSResponse({totalPages})
-
-    assets.forEach(({nft}) => {
-      const nftResponse = new NFTResponse({
-        collectionImage: this.treatGhostMarketImage(nft.collection.logo_url),
-        collectionName: nft.collection.name,
-        image: this.treatGhostMarketImage(nft.nft_metadata.image),
-        name: nft.nft_metadata.name,
-        symbol: nft.symbol,
-        id: nft.token_id,
-        contractHash: nft.contract,
-      })
-
-      nftsResponse.items.push(nftResponse)
-    })
-
-    return nftsResponse
-  }
-
-  private convertScientifcNotationToDecimal(scientificNotation: number) {
-    return String(scientificNotation).includes('e')
-      ? new Number(scientificNotation).toFixed(this.baseNumeric)
-      : scientificNotation
-  }
-
   private convertByteStringToAddress(byteString: string): string {
     const account = new wallet.Account(
       u.reverseHex(u.HexString.fromBase64(byteString).toString())
@@ -333,41 +302,11 @@ export class DoraSDKProvider implements Neo3Provider {
     return account.address
   }
 
-  private treatGhostMarketImage(srcImage?: string) {
-    if (!srcImage) {
-      return
-    }
+  private convertByteStringToInteger(byteString: string): string {
+    const integer = u.BigInteger.fromHex(
+      u.reverseHex(u.HexString.fromBase64(byteString).toString())
+    ).toString()
 
-    if (srcImage.startsWith('ipfs://')) {
-      const [, imageId] = srcImage.split('://')
-
-      return `https://ipfs.ghostmarket.io/ipfs/${imageId}`
-    }
-
-    return srcImage
-  }
-
-  private buildGhostMarketURL(
-    path: string,
-    params?: Record<string, string | number>
-  ) {
-    const chain = this.network === 'mainnet' ? 'n3' : 'n3t'
-
-    const baseUrl =
-      this.network === 'mainnet'
-        ? 'https://api.ghostmarket.io/api/v1'
-        : 'https://api3.ghostmarket.io:7061/api/v1'
-
-    const parameters =
-      params && Object.keys(params).length > 0
-        ? Object.keys(params).reduce(
-            (acc, item) => acc + `&${item}=${params[item]}`,
-            ''
-          )
-        : ''
-
-    const url = `${baseUrl}/${path}?chain=${chain}${parameters}`
-
-    return url
+    return integer
   }
 }

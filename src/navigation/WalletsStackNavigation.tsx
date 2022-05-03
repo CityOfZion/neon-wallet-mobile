@@ -15,7 +15,7 @@ import {SettingsStackParamList} from './SettingsStackNavigation'
 
 import AccountTransactionsScreen, {
   AccountTransactionsScreenParams,
-} from '~/src/scenes/Account/AccountTransactionsScreen'
+} from '~/src/scenes/Account/AccountTransactionsScreen/AccountTransactionsScreen'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'

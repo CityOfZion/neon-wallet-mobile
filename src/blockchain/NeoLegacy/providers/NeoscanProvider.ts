@@ -9,6 +9,7 @@ import {TokenAsset} from '~/src/models/TokenAsset'
 import {Transaction} from '~/src/models/Transaction'
 import {BalanceResponse} from '~/src/models/response/BalanceResponse'
 import {ContractResponse} from '~/src/models/response/ContractResponse'
+import {NFTResponse} from '~/src/models/response/NFTResponse'
 import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
 import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
 import {ExchangeResponse} from '~/src/types/exchange'
@@ -115,8 +116,9 @@ export class NeoscanProvider implements NeoLegacyProvider {
     })
   }
 
-  async getAssetByHash(hash: string) {
+  async getAssetByHash(
+    hash: string
+  ): Promise<{symbol: string; decimals: number} | null> {
     throw new Error('not implement endpoint')
-    return null
   }
 }
