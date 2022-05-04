@@ -68,6 +68,9 @@ const AppNavigation = (props: Props) => {
   const [hasAuthentication, setHasAuthentication] = useState(false)
 
   const walletConnectCtx = useWalletConnect()
+  const {dappConnectionStart} = useSelector(
+    (state: RootState) => state.wcReducer
+  )
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
@@ -99,13 +102,18 @@ const AppNavigation = (props: Props) => {
   const handleDisconnectWalletConnect = useCallback(async () => {
     if (!isConnected) {
       walletConnectCtx.setWcClient(undefined)
-      showMessage({
-        message: i18n.t('walletconnect.internetConnectionLost1'),
-        type: 'danger',
-        duration: 7000,
-      })
+      walletConnectCtx.setSessions([])
+      walletConnectCtx.setSessionProposals([])
+      walletConnectCtx.setRequests([])
+      if (!dappConnectionStart) {
+        showMessage({
+          message: i18n.t('walletconnect.internetConnectionLost2'),
+          type: 'danger',
+          duration: 7000,
+        })
+      }
     }
-  }, [isConnected, walletConnectCtx])
+  }, [isConnected, walletConnectCtx, dappConnectionStart])
 
   useEffect(() => {
     handleDisconnectWalletConnect()

@@ -349,7 +349,7 @@ const ImportKey = (props: ImportKeyProps) => {
   )
 
   const grantPopulateExchange = useCallback(async () => {
-    if(Object.keys(exchange).length < 1){
+    if (Object.keys(exchange).length < 1) {
       await dispatchAsync(RootStore.app.actions.fetchExchange())
       await dispatchAsync(RootStore.app.actions.syncExchange())
     }
