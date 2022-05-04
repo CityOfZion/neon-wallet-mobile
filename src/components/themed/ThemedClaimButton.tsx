@@ -101,6 +101,7 @@ ThemedClaimButton.propTypes = {
   isClaimAvailable: PropTypes.bool.isRequired,
   unclaimedGasAmount: PropTypes.number.isRequired,
   fee: PropTypes.number.isRequired,
+  isDark: PropTypes.bool,
 }
 
 export {ThemedClaimButton}
