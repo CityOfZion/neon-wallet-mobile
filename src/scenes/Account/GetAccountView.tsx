@@ -458,32 +458,36 @@ const GetAccountView = (props: GetAccountViewProps) => {
           }
           isDark={true}
         />
-        <ThemedButton
-          px={30}
-          my={5}
-          height={88}
-          textAlignX={'flex-start'}
-          textColor={'text.0'}
-          fontSize={'17px'}
-          fontFamily={'medium'}
-          label={i18n.t('screens.screenLayout.nfts').toUpperCase()}
-          srcIcon={require('~/src/assets/images/diamond-green.png')}
-          suffix={
-            <ImageView
-              width={20}
-              height={20}
-              resizeMode={'contain'}
-              source={require('~src/assets/images/icon-arrow-right-green.png')}
-            />
-          }
-          iconSize={[28, 30]}
-          onPress={() => {
-            props.navigation.navigate(wrapper.route.AccountNFTSScreen.name, {
-              account,
-            })
-          }}
-          isDark={true}
-        />
+
+        {false && (
+          <ThemedButton
+            px={30}
+            my={5}
+            height={88}
+            textAlignX={'flex-start'}
+            textColor={'text.0'}
+            fontSize={'17px'}
+            fontFamily={'medium'}
+            label={i18n.t('screens.screenLayout.nfts').toUpperCase()}
+            srcIcon={require('~/src/assets/images/diamond-green.png')}
+            suffix={
+              <ImageView
+                width={20}
+                height={20}
+                resizeMode={'contain'}
+                source={require('~src/assets/images/icon-arrow-right-green.png')}
+              />
+            }
+            iconSize={[28, 30]}
+            onPress={() => {
+              props.navigation.navigate(wrapper.route.AccountNFTSScreen.name, {
+                account,
+              })
+            }}
+            isDark={true}
+          />
+        )}
+
         <ThemedButton
           px={30}
           my={5}
