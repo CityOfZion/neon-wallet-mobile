@@ -1,6 +1,7 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
 import moment from 'moment'
 
+import {DappConnectionStartDispatcher} from './dispatchers/DappConnectionStartDispatcher'
 import {SetApprovalDateDispatcher} from './dispatchers/SetApprovalDateDispatcher'
 
 import {Model} from '~/src/app/Model'
@@ -14,7 +15,10 @@ export class WalletConnectReducer extends ReducerWrapper<
 > {
   protected readonly initialState = Model.parse<WCState>(WCApprovalDate)
 
-  protected readonly dispatchers = [SetApprovalDateDispatcher]
+  protected readonly dispatchers = [
+    SetApprovalDateDispatcher,
+    DappConnectionStartDispatcher,
+  ]
 
   readonly actions = {
     setApprovalDate: (approvalDates: WCApprovalDate[]) => {
@@ -41,6 +45,9 @@ export class WalletConnectReducer extends ReducerWrapper<
         }
         await Storage.wcApprovalDates.save(wcApprovalDates)
       }
+    },
+    setDappConnectionStart: (dappConnectionStart: boolean) => {
+      return this.commit('SET_DAPP_CONNECTION_START', {dappConnectionStart})
     },
   }
 }
