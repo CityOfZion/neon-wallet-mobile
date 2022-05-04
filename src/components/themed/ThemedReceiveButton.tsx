@@ -34,6 +34,7 @@ const ThemedReceiveButton: React.FC<Props> = (props) => {
 
 ThemedReceiveButton.propTypes = {
   onPress: PropTypes.func.isRequired,
+  isDark: PropTypes.bool,
 }
 
 export {ThemedReceiveButton}

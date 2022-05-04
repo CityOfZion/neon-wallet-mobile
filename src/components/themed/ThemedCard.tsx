@@ -151,6 +151,7 @@ ThemedCard.propTypes = {
   borderColor: PropTypes.string,
   isPressed: PropTypes.bool,
   radius: PropTypes.number,
+  isDark: PropTypes.bool,
 }
 
 ThemedCard.defaultProps = {

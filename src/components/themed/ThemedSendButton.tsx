@@ -52,6 +52,7 @@ const ThemedSendButton: React.FC<Props> = (props) => {
 ThemedSendButton.propTypes = {
   onPress: PropTypes.func.isRequired,
   account: PropTypes.any,
+  isDark: PropTypes.bool,
 }
 
 export {ThemedSendButton}
