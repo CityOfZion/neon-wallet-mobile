@@ -103,8 +103,7 @@ const AppNavigation = (props: Props) => {
     if (!isConnected) {
       walletConnectCtx.setWcClient(undefined)
       walletConnectCtx.setSessions([])
-      walletConnectCtx.setSessionProposals([])
-      walletConnectCtx.setRequests([])
+
       if (!dappConnectionStart) {
         showMessage({
           message: i18n.t('walletconnect.internetConnectionLost2'),

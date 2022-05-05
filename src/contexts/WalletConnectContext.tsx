@@ -93,7 +93,6 @@ export interface CtxOptions {
   methods: string[]
   relayServer: string
   storageOptions?: KeyValueStorageOptions
-  initialize?: boolean
 }
 
 export const WalletConnectContext = React.createContext(
@@ -129,12 +128,11 @@ export const WalletConnectContextProvider: React.FC<{
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   useEffect(() => {
-    if (options.initialize !== false) {
-      init()
-    }
+    init()
   }, [])
 
   const init = async () => {
+    await clearStorage()
     const st = new KeyValueStorage(options.storageOptions)
     setStorage(st)
     setWcClient(
@@ -161,13 +159,13 @@ export const WalletConnectContextProvider: React.FC<{
         })
       )
 
-      setWcClient(undefined)
       setSessionProposals([])
       setInitialized(false)
-      setChains([])
       setSessions([])
       setRequests([])
       setResults([])
+      wcClient?.events.removeAllListeners()
+      setWcClient(undefined)
     }
   }, [sessions, sessionsWasClean])
 
@@ -189,7 +187,6 @@ export const WalletConnectContextProvider: React.FC<{
     setWcClient(undefined)
     setSessionProposals([])
     setInitialized(false)
-    setChains([])
     setSessions([])
     setRequests([])
     setResults([])
@@ -207,9 +204,10 @@ export const WalletConnectContextProvider: React.FC<{
     for (let i = 0; i < storageItems.length; i++) {
       const wcVal = storageItems[i]
       // TODO: fix storage problem when the connection breaks
-      // if (wcVal?.substring(0, 2) === 'wc') {
-      itemsToRemove.push(wcVal)
-      // }
+      console.log('print wallet connect', wcVal)
+      if (wcVal?.substring(0, 2) === 'wc') {
+        itemsToRemove.push(wcVal)
+      }
     }
 
     for (let i = 0; i < itemsToRemove.length; i++) {
@@ -296,6 +294,7 @@ export const WalletConnectContextProvider: React.FC<{
         }
         console.log('EVENT', 'session_proposal')
         const supportedNamespaces: string[] = []
+        console.log('print de chains', chains)
         chains.forEach((chainId) => {
           const [namespace] = chainId.split(':')
           if (!supportedNamespaces.includes(namespace)) {
