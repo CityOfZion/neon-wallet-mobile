@@ -62,8 +62,8 @@ const ThemedCard: React.FC<Props> = (props) => {
 
     const borderIos = {
       borderWidth: 0.15,
-      borderTopColor: '#000',
-      borderLeftColor: '#000',
+      borderTopColor: '#fff',
+      borderLeftColor: '#fff',
       borderBottomColor: '#000',
       borderRightColor: '#000',
     }
@@ -88,7 +88,7 @@ const ThemedCard: React.FC<Props> = (props) => {
   }
 
   return (
-    <DarkCardView style={getStyle()}>
+    <DarkCardView>
       <DarkCardContentView
         style={getContentStyle()}
         backgroundColor={
