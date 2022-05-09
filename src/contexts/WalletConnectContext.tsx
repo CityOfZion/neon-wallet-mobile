@@ -204,7 +204,6 @@ export const WalletConnectContextProvider: React.FC<{
     for (let i = 0; i < storageItems.length; i++) {
       const wcVal = storageItems[i]
       // TODO: fix storage problem when the connection breaks
-      console.log('print wallet connect', wcVal)
       if (wcVal?.substring(0, 2) === 'wc') {
         itemsToRemove.push(wcVal)
       }
@@ -294,7 +293,6 @@ export const WalletConnectContextProvider: React.FC<{
         }
         console.log('EVENT', 'session_proposal')
         const supportedNamespaces: string[] = []
-        console.log('print de chains', chains)
         chains.forEach((chainId) => {
           const [namespace] = chainId.split(':')
           if (!supportedNamespaces.includes(namespace)) {
