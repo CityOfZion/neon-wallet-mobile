@@ -111,7 +111,7 @@ const TabNavigation = (props: Props) => {
         })
       }
     }
-  }, [requests])
+  }, [requests, sessions])
 
   useEffect(() => {
     navigateToTransactionRequetModal()

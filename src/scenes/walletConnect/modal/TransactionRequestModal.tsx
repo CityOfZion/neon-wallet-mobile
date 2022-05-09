@@ -438,7 +438,7 @@ const TransactionRequestModal = (props: Props) => {
   }, [requests, controller, isAcceptetdRequest])
 
   /**
-   * The key need be the method name that wallet coonect is using
+   * The key need be the method name that wallet connect is using
    */
   const listComponentByMethod: {
     [key: string]: {
@@ -592,6 +592,12 @@ const TransactionRequestModal = (props: Props) => {
     }
   }
 
+  useEffect(() => {
+    if (requests.length < 1) {
+      controller.close()
+    }
+  }, [requests])
+
   return (
     <AwaitActivity name="wcTransactionAccepted">
       <SwiperPanel
@@ -604,6 +610,7 @@ const TransactionRequestModal = (props: Props) => {
           handleOnlyOnline(listComponentByMethod[request.request.method].reject)
         }
         onClose={() => {
+          handleOnlyOnline(listComponentByMethod[request.request.method].reject)
           props.navigation.goBack()
         }}
         solidColorBG

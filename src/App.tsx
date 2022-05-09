@@ -35,7 +35,6 @@ const wcOptions: CtxOptions = {
   storageOptions: {
     asyncStorage: AsyncStorage as any,
   },
-  initialize: false,
 }
 
 const loggerMiddleware = createLogger()
