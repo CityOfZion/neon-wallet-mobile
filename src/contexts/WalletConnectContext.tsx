@@ -6,7 +6,6 @@ import {
 import Client, {CLIENT_EVENTS} from '@walletconnect/client'
 import {AppMetadata, SessionTypes} from '@walletconnect/types'
 import {ERROR} from '@walletconnect/utils'
-import i18n from 'i18n-js'
 import KeyValueStorage from 'keyvaluestorage'
 import {KeyValueStorageOptions} from 'keyvaluestorage/dist/cjs/shared'
 import PropTypes from 'prop-types'
@@ -17,7 +16,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 
 import {RootStore} from '~src/store/RootStore'
 
@@ -54,7 +53,6 @@ interface IWalletConnectContext {
   init: () => Promise<void>
   resetApp: () => Promise<void>
   subscribeToEvents: () => void
-  checkPersistedState: () => Promise<void>
   approveAndMakeRequest: (
     requestEvent: SessionTypes.RequestEvent
   ) => Promise<JsonRpcResponse<any>>
@@ -219,15 +217,6 @@ export const WalletConnectContextProvider: React.FC<{
     console.log('ACTION', 'CLEAR STORAGE', storage?.getKeys())
   }
 
-  const checkPersistedState = useCallback(async () => {
-    if (typeof wcClient === 'undefined') {
-      throw new Error('Client is not initialized')
-    }
-    setSessions(wcClient.session.values)
-    setRequests(wcClient.session.history.pending)
-    setInitialized(true)
-  }, [wcClient])
-
   // ---- MAKE REQUESTS AND SAVE/CHECK IF APPROVED ------------------------------//
 
   const onRequestListener = (listener: OnRequestCallback) => {
@@ -282,8 +271,8 @@ export const WalletConnectContextProvider: React.FC<{
   const subscribeToEvents = useCallback(() => {
     console.log('ACTION', 'subscribeToEvents')
 
-    if (typeof wcClient === 'undefined') {
-      throw new Error('Client is not initialized')
+    if (!wcClient) {
+      return
     }
 
     wcClient.events.removeAllListeners()
@@ -421,11 +410,8 @@ export const WalletConnectContextProvider: React.FC<{
   )
 
   useEffect(() => {
-    if (wcClient) {
-      subscribeToEvents()
-      checkPersistedState()
-    }
-  }, [wcClient, subscribeToEvents, checkPersistedState])
+    subscribeToEvents()
+  }, [subscribeToEvents])
 
   const onURI = async (data: any) => {
     try {
@@ -584,7 +570,6 @@ export const WalletConnectContextProvider: React.FC<{
     init,
     resetApp,
     subscribeToEvents,
-    checkPersistedState,
     approveAndMakeRequest,
     makeRequest,
     checkApprovedRequest,
