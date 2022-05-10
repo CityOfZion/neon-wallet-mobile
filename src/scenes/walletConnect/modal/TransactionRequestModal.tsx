@@ -2,10 +2,10 @@ import {WitnessScope} from '@cityofzion/neon-core-next/lib/tx/components/Witness
 import {RouteProp, useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity, Await} from '@simpli/react-native-await'
-import {SessionTypes, AppMetadata} from '@walletconnect/types'
+import {SessionTypes} from '@walletconnect/types'
 import i18n from 'i18n-js'
 import React, {useCallback, useEffect, useRef, useState} from 'react'
-import {TouchableWithoutFeedback, Linking} from 'react-native'
+import {TouchableWithoutFeedback} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector, useDispatch} from 'react-redux'
 
@@ -30,10 +30,7 @@ import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~src/components/SwiperPanel'
-import {
-  ContractInvocationMulti,
-  SignedMessage,
-} from '~src/helpers/NeonWcAdapter'
+import {ContractInvocationMulti} from '~src/helpers/NeonWcAdapter'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~src/navigation/TabNavigation'
@@ -591,12 +588,6 @@ const TransactionRequestModal = (props: Props) => {
       return <></>
     }
   }
-
-  useEffect(() => {
-    if (requests.length < 1) {
-      controller.close()
-    }
-  }, [requests])
 
   return (
     <AwaitActivity name="wcTransactionAccepted">
