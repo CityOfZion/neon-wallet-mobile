@@ -46,7 +46,6 @@ import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface GetAccountParams {
   key: string
-  navigateToTransactions?: boolean
 }
 
 interface GetAccountViewProps {
@@ -288,14 +287,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
     return hasWCIntegration(bs)
   }
-
-  useEffect(() => {
-    if (props.route.params.navigateToTransactions) {
-      props.navigation.navigate(wrapper.route.AccountTransactionsScreen.name, {
-        account,
-      })
-    }
-  }, [props.route.params.navigateToTransactions, account])
 
   useEffect(() => {
     if (sessions.length > 0) {

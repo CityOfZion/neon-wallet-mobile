@@ -48,10 +48,17 @@ interface Props {
   route: RouteProp<ModalStackParamList, 'TransactionRequestModal'>
 }
 
+export type TypeArgsRequest = 'Address' | 'Integer' | 'Array'
+
+export interface ArgsRequest {
+  type?: TypeArgsRequest
+  value?: string
+}
 export interface ResponseModalProps {
   errorMessage?: string
   transactionHash?: string
   onClose?: () => void
+  request: SessionTypes.RequestEvent
 }
 
 const RequestWhenSignMessage = ({request}: TransactionRequestModalParams) => {
@@ -141,11 +148,6 @@ const RequestWhenInvokeFunction = ({
     }
   }, [accountRequest])
 
-  type TypeArgsRequest = 'Address' | 'Integer' | 'Array'
-  interface ArgsRequest {
-    type?: TypeArgsRequest
-    value?: string
-  }
   const handleCalculateFee = useCallback(async () => {
     if (accountRequest?.address) {
       const bs = blockchainServices[accountRequest.blockchain]
@@ -380,12 +382,6 @@ const TransactionRequestModal = (props: Props) => {
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
-  type TypeArgsRequest = 'Address' | 'Integer' | 'Array'
-  interface ArgsRequest {
-    type?: TypeArgsRequest
-    value?: string
-  }
-
   const handleAcceptRequestWhenInvokeFunction = useCallback(async () => {
     if (shouldProcessButtons.current) {
       shouldProcessButtons.current = false
@@ -582,6 +578,7 @@ const TransactionRequestModal = (props: Props) => {
           errorMessage={messageAfterAccept}
           transactionHash={messageAfterAccept}
           onClose={controller.close}
+          request={request}
         />
       )
     } else {
