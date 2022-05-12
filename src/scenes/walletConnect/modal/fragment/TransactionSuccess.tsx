@@ -106,7 +106,7 @@ const TransactionSuccess = (props: ResponseModalProps) => {
           />
         </ButtonView>
       )}
-      <ThemedButtonViewTransaction />
+      <ThemedButtonViewTransaction request={props.request} />
       {props.transactionHash && (
         <ThemedButtonViewOnDora txid={props.transactionHash} mt="10px" />
       )}
