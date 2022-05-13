@@ -58,7 +58,7 @@ export interface ResponseModalProps {
   errorMessage?: string
   transactionHash?: string
   onClose?: () => void
-  request: SessionTypes.RequestEvent
+  session: SessionTypes.Settled
 }
 
 const RequestWhenSignMessage = ({request}: TransactionRequestModalParams) => {
@@ -578,7 +578,7 @@ const TransactionRequestModal = (props: Props) => {
           errorMessage={messageAfterAccept}
           transactionHash={messageAfterAccept}
           onClose={controller.close}
-          request={request}
+          session={session}
         />
       )
     } else {
