@@ -1,7 +1,7 @@
 import i18n from 'i18n-js'
 import moment from 'moment'
 import React, {useCallback, useMemo} from 'react'
-import {View, Image, FlatList} from 'react-native'
+import {View, Image, FlatList, Alert} from 'react-native'
 
 import {TransactionDataScreen} from '.'
 import {TransactionItemDate} from './TransactionItemDate'
@@ -24,7 +24,7 @@ export const TransactionsListDate = ({
       transactions.forEach((transaction) => {
         const {time} = transaction
 
-        const date = moment(time).format('YYYY-MM-DD')
+        const date = moment.unix(time).format('YYYY-MM-DD')
 
         if (date in transactionsPerDate) {
           transactionsPerDate[date].push(transaction)
@@ -84,9 +84,7 @@ export const TransactionsListDate = ({
                     source={require('src/assets/images/icon-pending-white.png')}
                   />
                   <TextView color="#899fa8">
-                    {i18n.t(
-                      'components.accountTransaction.pendingTransactions'
-                    )}
+                    {i18n.t('screens.accountTransaction.pendingTransactions')}
                   </TextView>
                 </View>
                 <FlatList

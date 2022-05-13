@@ -1,4 +1,4 @@
-import {RouteProp} from '@react-navigation/native'
+import {RouteProp, useFocusEffect} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
@@ -98,6 +98,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
       setSenderAddress(address)
     }
   }
+
   const [account, setAccount] = useState(
     dispatchAccount(RootStore.account.actions.getFromSelection())
   )
@@ -148,6 +149,13 @@ const GetAccountView = (props: GetAccountViewProps) => {
           })
         },
       }),
+  })
+
+  useFocusEffect(() => {
+    const account = dispatchAccount(
+      RootStore.account.actions.getFromSelection()
+    )
+    setAccount(account)
   })
 
   useEffect(() => {
