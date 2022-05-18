@@ -9,13 +9,7 @@ import {ERROR} from '@walletconnect/utils'
 import KeyValueStorage from 'keyvaluestorage'
 import {KeyValueStorageOptions} from 'keyvaluestorage/dist/cjs/shared'
 import PropTypes from 'prop-types'
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import React, {useCallback, useContext, useEffect, useState} from 'react'
 import {useDispatch} from 'react-redux'
 
 import {RootStore} from '~src/store/RootStore'
@@ -80,8 +74,6 @@ interface IWalletConnectContext {
   rejectRequest: (requestEvent: SessionTypes.RequestEvent) => Promise<void>
   onRequestListener: (listener: OnRequestCallback) => void
   autoAcceptIntercept: (listener: AutoAcceptCallback) => void
-  cleanConnections: () => Promise<void>
-  setsessionsWasClean: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export interface CtxOptions {
@@ -116,103 +108,71 @@ export const WalletConnectContextProvider: React.FC<{
   const [sessions, setSessions] = useState<SessionTypes.Created[]>([])
   const [requests, setRequests] = useState<SessionTypes.RequestEvent[]>([])
   const [results, setResults] = useState<any[]>([])
-  const [sessionsWasClean, setsessionsWasClean] = useState<boolean>(false)
   const [onRequestCallback, setOnRequestCallback] = useState<
     OnRequestCallback | undefined
   >(undefined)
   const [autoAcceptCallback, setAutoAcceptCallback] = useState<
     AutoAcceptCallback | undefined
   >(undefined)
+
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
-  useEffect(() => {
-    init()
-  }, [])
-
   const init = async () => {
-    await clearStorage()
     const st = new KeyValueStorage(options.storageOptions)
-    setStorage(st)
-    setWcClient(
-      await Client.init({
-        controller: true,
-        relayProvider: options.relayServer,
-        logger: options.logger,
-        storage: st,
-      })
-    )
-  }
+    const client = await Client.init({
+      controller: true,
+      relayProvider: options.relayServer,
+      logger: options.logger,
+      storage: st,
+    })
 
-  const cleanConnections = useCallback(async () => {
-    if (!sessionsWasClean && sessions.length > 0) {
-      setsessionsWasClean(true)
-
-      await Promise.all(
-        sessions.map(async (session) => {
-          try {
-            await disconnect(session.topic)
-          } catch (error) {
-            throw error
-          }
-        })
-      )
-
-      setSessionProposals([])
-      setInitialized(false)
-      setSessions([])
-      setRequests([])
-      setResults([])
-      wcClient?.events.removeAllListeners()
-      setWcClient(undefined)
-    }
-  }, [sessions, sessionsWasClean])
-
-  const resetApp = async () => {
     try {
       await Promise.all(
-        sessions.map((session) =>
-          wcClient?.disconnect({
+        client.session.values.map(async (session) =>
+          client.disconnect({
             topic: session.topic,
-            reason: ERROR.USER_DISCONNECTED.format(),
+            reason: ERROR.GENERIC.format(),
           })
         )
       )
-    } catch (e) {
-      // ignored
-    }
-    await clearStorage()
+    } catch {}
+
+    setStorage(st)
+    setWcClient(client)
+    setInitialized(true)
+  }
+
+  const resetApp = async () => {
+    wcClient?.events.removeAllListeners()
 
     setWcClient(undefined)
     setSessionProposals([])
     setInitialized(false)
     setSessions([])
+    setStorage(undefined)
     setRequests([])
     setResults([])
-    clearStorage()
   }
 
-  const clearStorage = async () => {
-    const itemsToRemove: string[] = []
-    const storageItems = await storage?.getKeys()
-
-    if (!storageItems?.length) {
+  const clearStorage = useCallback(async () => {
+    if (!storage) {
       return
     }
 
-    for (let i = 0; i < storageItems.length; i++) {
-      const wcVal = storageItems[i]
-      // TODO: fix storage problem when the connection breaks
-      if (wcVal?.substring(0, 2) === 'wc') {
-        itemsToRemove.push(wcVal)
-      }
+    const storageItems = await storage.getKeys()
+
+    if (!storageItems.length) {
+      return
     }
 
-    for (let i = 0; i < itemsToRemove.length; i++) {
-      storage?.removeItem(itemsToRemove[i])
-    }
+    const itemsToRemove = storageItems.filter(
+      (item) => item.substring(0, 2) === 'wc'
+    )
 
-    console.log('ACTION', 'CLEAR STORAGE', storage?.getKeys())
-  }
+    await Promise.all(itemsToRemove.map((item) => storage.removeItem(item)))
+
+    console.log('ACTION', 'CLEAR STORAGE', storageItems)
+  }, [storage])
 
   // ---- MAKE REQUESTS AND SAVE/CHECK IF APPROVED ------------------------------//
 
@@ -390,14 +350,7 @@ export const WalletConnectContextProvider: React.FC<{
       console.log('EVENT', 'session_deleted')
       setSessions(wcClient.session.values)
     })
-  }, [
-    chains,
-    checkApprovedRequest,
-    makeRequest,
-    respondRequest,
-    wcClient,
-    JSON.stringify(sessions),
-  ])
+  }, [chains, checkApprovedRequest, makeRequest, respondRequest, wcClient])
 
   const findSessionByTopic = useCallback(
     (topic: string) => {
@@ -406,14 +359,12 @@ export const WalletConnectContextProvider: React.FC<{
     [JSON.stringify(sessions)]
   )
 
-  useEffect(() => {
-    subscribeToEvents()
-  }, [subscribeToEvents])
-
-  const onURI = async (data: any) => {
+  const onURI = async (data: string) => {
     try {
       const uri = typeof data === 'string' ? data : ''
+
       if (!uri) return
+
       if (typeof wcClient === 'undefined') {
         throw new Error('Client is not initialized')
       }
@@ -546,6 +497,13 @@ export const WalletConnectContextProvider: React.FC<{
     await removeFromPending(requestEvent)
   }
 
+  useEffect(() => {
+    if (wcClient) {
+      subscribeToEvents()
+      clearStorage()
+    }
+  }, [wcClient])
+
   const contextValue: IWalletConnectContext = {
     wcClient,
     setWcClient,
@@ -581,8 +539,6 @@ export const WalletConnectContextProvider: React.FC<{
     rejectRequest,
     onRequestListener,
     autoAcceptIntercept,
-    cleanConnections,
-    setsessionsWasClean,
   }
 
   return (

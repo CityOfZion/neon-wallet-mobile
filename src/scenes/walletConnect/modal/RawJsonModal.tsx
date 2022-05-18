@@ -9,6 +9,7 @@ import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {UtilsHelper} from '~/src/helpers/UtilsHelper'
+import {useTreatNetworkOnWalletConnectFlow} from '~/src/hooks'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
@@ -35,6 +36,7 @@ const RawJsonModal = (props: Props) => {
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const controller = useSwiperController(true)
+  useTreatNetworkOnWalletConnectFlow()
 
   return (
     <SwiperPanel

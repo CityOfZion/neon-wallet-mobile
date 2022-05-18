@@ -2,13 +2,18 @@ import {JsonRpcRequest} from '@json-rpc-tools/utils'
 import {NavigationContainer, RouteProp} from '@react-navigation/native'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {InteractionManager} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {Wallet} from '../models/redux/Wallet'
+import {
+  blockchainServices,
+  getBlockchainByAddress,
+  hasWCIntegration,
+} from '../blockchain'
+import {useWalletConnect} from '../contexts/WalletConnectContext'
 import PasscodeStackNavigation, {
   PasscodeStackParams,
 } from './PasscodeStackNavigation'
@@ -17,17 +22,11 @@ import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Storage} from '~src/app/Storage'
 import {Sync} from '~src/app/Sync'
-import {
-  blockchainServices,
-  getBlockchainByAddress,
-  hasWCIntegration,
-} from '~src/blockchain'
 import LoadingOverlay from '~src/components/LoadingOverlay'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import {applicationConfig} from '~src/config/ApplicationConfig'
 import {DeepLinkingConfig} from '~src/config/DeepLinkingConfig'
 import {screenConfig} from '~src/config/ScreenConfig'
-import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 import ModalStackNavigation, {
   ModalParams,
 } from '~src/navigation/ModalStackNavigation'
@@ -35,7 +34,7 @@ import TabNavigation, {TabParams} from '~src/navigation/TabNavigation'
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 import QRCodeScan, {QRCodeScanParams} from '~src/scenes/QRCodeScan'
-import {RootStore} from '~src/store/RootStore'
+
 export type RootStackParamList = {
   Tab: TabParams
   Modal: ModalParams
@@ -58,25 +57,16 @@ const AppNavigation = (props: Props) => {
     return wrapper.theme[state.settings.theme]
   })
   const {isConnected} = useSelector((state: RootState) => state.network)
-  const loadingOverlayState = useSelector((state: RootState) => state.loading)
+  const {isLoading, loadingText, progress} = useSelector(
+    (state: RootState) => state.loading
+  )
   const {status: timerStatus} = useSelector((state: RootState) => state.timer)
-
-  const {progress, loadingText, isLoading} = loadingOverlayState
+  const walletConnectCtx = useWalletConnect()
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const [onboardingSeen, setOnboardingSeen] = useState(true)
   const [welcomeToNWSeen, setWelcomeToNWSeen] = useState(true)
   const [hasAuthentication, setHasAuthentication] = useState(false)
-
-  const walletConnectCtx = useWalletConnect()
-  const {dappConnectionStart} = useSelector(
-    (state: RootState) => state.wcReducer
-  )
-
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
-  const selectedWallet = dispatchWallet(
-    RootStore.wallet.actions.getFromSelection()
-  )
   const [hasInit, setInit] = useState(false)
   const [syncFetchInterval, setFetchSyncInterval] = useState(10000)
 
@@ -89,33 +79,12 @@ const AppNavigation = (props: Props) => {
     setWelcomeToNWSeen(welcomeToNWSeen ?? false)
     setHasAuthentication(hasAuthentication ?? false)
 
-    try {
-      // Synchronize app reducer
-      await Sync.init(dispatchAsync)
-      setInit(true)
-    } catch (error) {
-      console.log(error)
-      throw error
-    }
+    await Sync.init(dispatchAsync)
+    await walletConnectCtx.init()
+    setInit(true)
   }
 
-  const handleDisconnectWalletConnect = useCallback(async () => {
-    if (!isConnected) {
-      walletConnectCtx.setWcClient(undefined)
-      walletConnectCtx.setSessions([])
-
-      if (!dappConnectionStart) {
-        showMessage({
-          message: i18n.t('walletconnect.internetConnectionLost2'),
-          type: 'danger',
-          duration: 7000,
-        })
-      }
-    }
-  }, [isConnected, walletConnectCtx, dappConnectionStart])
-
   useEffect(() => {
-    handleDisconnectWalletConnect()
     if (hasInit) {
       let interactionPromise = InteractionManager.runAfterInteractions()
       const interval = setInterval(() => {
@@ -146,30 +115,46 @@ const AppNavigation = (props: Props) => {
     }
   }, [hasInit, syncFetchInterval, isConnected, timerStatus])
 
-  const handleCleanConnectionsDApps = useCallback(async () => {
-    await walletConnectCtx.cleanConnections()
-  }, [walletConnectCtx.sessions])
+  useEffect(() => {
+    async function handle() {
+      if (!hasInit) {
+        return
+      }
+
+      if (!isConnected && walletConnectCtx.initialized) {
+        showMessage({
+          message: i18n.t('walletconnect.internetConnectionLost'),
+          type: 'danger',
+          duration: 5000,
+        })
+        await walletConnectCtx.resetApp()
+        return
+      }
+
+      if (isConnected && !walletConnectCtx.initialized) {
+        await walletConnectCtx.init()
+      }
+    }
+
+    handle()
+  }, [isConnected])
 
   useEffect(() => {
-    // if the request method is 'testInvoke' or 'multiTestInvoke' we auto-accept it
     walletConnectCtx.autoAcceptIntercept(
-      (acc, chain, req: JsonRpcRequest) =>
-        req.method === 'testInvoke' || req.method === 'multiTestInvoke'
+      (_accountAddress, _chain, request: JsonRpcRequest) =>
+        request.method === 'testInvoke' || request.method === 'multiTestInvoke'
     )
 
     walletConnectCtx.onRequestListener(
-      async (acc, chain, req: JsonRpcRequest) => {
-        console.log('debug request lintener => ', acc, chain, req)
-        const blockchain = getBlockchainByAddress(acc)
+      async (accountAddress, _chain, request: JsonRpcRequest) => {
+        const blockchain = getBlockchainByAddress(accountAddress)
+
         if (blockchain) {
           const bs = blockchainServices[blockchain]
+
           if (hasWCIntegration(bs)) {
-            const result = await bs.rpcCall(acc, req)
-            if (!result.hasOwnProperty('error')) {
-              console.log('deu certo', [result])
-            } else {
-              console.log('deu errado', [result])
-            }
+            const result = await bs.rpcCall(accountAddress, request)
+
             return result
           }
         }
@@ -177,10 +162,6 @@ const AppNavigation = (props: Props) => {
       }
     )
   }, [])
-
-  useEffect(() => {
-    handleCleanConnectionsDApps()
-  }, [walletConnectCtx.sessions])
 
   const getInitialRouteName = () => {
     return onboardingSeen

@@ -1,17 +1,19 @@
 import {RouteProp, useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AwaitActivity, Await} from '@simpli/react-native-await'
+import {SessionTypes} from '@walletconnect/types'
 import i18n from 'i18n-js'
-import React, {useEffect, useState, useCallback} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
+import React, {useEffect, useState, useCallback, useRef, useMemo} from 'react'
+import {Alert, TouchableWithoutFeedback} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
+import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {getBlockchainLogo} from '~/src/blockchain'
 import {BlockchainServiceKey, isValidWcChain} from '~/src/blockchain/common'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
-import {useHandleOfflineFunctions} from '~/src/hooks'
-import {WalletConnectStackParamList} from '~/src/navigation/WalletConnectStackNavigation'
+import {useTreatNetworkOnWalletConnectFlow} from '~/src/hooks'
+import {TabStackParamList} from '~/src/navigation/TabNavigation'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
@@ -28,21 +30,35 @@ export interface WCConnectionRequestModalParams {
 
 interface Props {
   route: RouteProp<ModalStackParamList, 'WCConnectionRequestModal'>
-  navigation: StackNavigationProp<
-    ModalStackParamList & WalletConnectStackParamList
-  >
+  navigation: StackNavigationProp<ModalStackParamList & TabStackParamList>
 }
 
 const WCConnectionRequestModal = (props: Props) => {
+  useTreatNetworkOnWalletConnectFlow()
   const controller = useSwiperController(true)
   const walletConnectCtx = useWalletConnect()
   const navigation = useNavigation()
-  const [blockchain, setBlockchain] = useState<BlockchainServiceKey>('neo3')
-  const [sessionIsValid, setSessionIsValid] = useState<boolean>()
-  const {handleAsyncOnlyOnline, handleOnlyOnline} = useHandleOfflineFunctions()
+  const {isConnected} = useSelector((state: RootState) => state.network)
+
+  const blockchain = useRef<BlockchainServiceKey>('neo3')
+
+  const sessionProposal = useMemo(() => {
+    if (walletConnectCtx.sessionProposals.length > 0) {
+      return walletConnectCtx.sessionProposals[0]
+    }
+  }, [walletConnectCtx.sessionProposals])
+  const sessionProposalIsValid = useMemo(() => {
+    if (sessionProposal) {
+      const isValid = isValidWcChain(
+        sessionProposal.permissions.blockchain.chains,
+        blockchain.current
+      )
+
+      return isValid
+    }
+  }, [sessionProposal])
+
   const {uri} = props.route.params
-  const activityName = 'loadWCConnection'
-  const timeoutToRequest = 8000
 
   const handleAccept = useCallback(async () => {
     if (walletConnectCtx.sessionProposals.length > 0) {
@@ -52,82 +68,34 @@ const WCConnectionRequestModal = (props: Props) => {
     }
   }, [walletConnectCtx.sessionProposals])
 
-  const connectionFailed = useCallback(() => {
-    return setTimeout(() => {
-      showMessage({
-        message: i18n.t('walletconnect.internetConnectionLost1'),
-        type: 'danger',
-        duration: 5000,
-      })
-      props.navigation.reset({
-        index: 0,
-        routes: [{name: wrapper.route.Tab.name}],
-      })
-      props.navigation.navigate(wrapper.route.WalletConnectPage.name, {})
-    }, timeoutToRequest)
-  }, [])
-
   const runOnURI = useCallback(async () => {
-    const resultConnectionFailed = connectionFailed()
-    Await.init(activityName)
     try {
-      console.log('debug runOnURI => ', uri)
       await walletConnectCtx.onURI(uri)
-      clearTimeout(resultConnectionFailed)
     } catch (error: any) {
-      clearTimeout(resultConnectionFailed)
-      console.log('error onUri => ', error)
-      controller.close()
-
       showMessage({
         message: error.message,
         type: 'danger',
         duration: 3000,
       })
 
+      controller.close()
       navigation.goBack()
-    } finally {
-      Await.done(activityName)
     }
   }, [uri])
 
-  const validateSessionProposal = useCallback(() => {
-    if (walletConnectCtx.sessionProposals.length > 0) {
-      const session = walletConnectCtx.sessionProposals[0]
-      const isValid = isValidWcChain(
-        session.permissions.blockchain.chains,
-        blockchain
-      )
-      setSessionIsValid(isValid)
-    }
-  }, [walletConnectCtx.sessionProposals, blockchain])
-
-  const handleAcceptSessionProposal = useCallback(async () => {
-    if (walletConnectCtx.sessionProposals.length < 1) {
-      await runOnURI()
-    }
-  }, [walletConnectCtx.sessionProposals])
-
   useEffect(() => {
-    handleAcceptSessionProposal()
+    Await.run('loadWCConnection', runOnURI)
   }, [])
 
   useEffect(() => {
-    validateSessionProposal()
-  }, [walletConnectCtx.sessionProposals])
-
-  useEffect(() => {
-    if (
-      walletConnectCtx.sessionProposals.length > 0 &&
-      sessionIsValid === false
-    ) {
+    if (sessionProposalIsValid === false) {
       showMessage({
         message: i18n.t('walletconnect.invalidSession'),
         type: 'danger',
         duration: 3000,
       })
     }
-  }, [sessionIsValid, walletConnectCtx.sessionProposals])
+  }, [sessionProposalIsValid])
 
   return (
     <SwiperPanel
@@ -143,21 +111,17 @@ const WCConnectionRequestModal = (props: Props) => {
       solidColorBG={true}
     >
       <AwaitActivity
-        name={activityName}
+        name={'loadWCConnection'}
         loadingView={<ScreenLoader transparent={true} />}
       >
-        {walletConnectCtx.sessionProposals.length > 0 ? (
+        {sessionProposal && (
           <LinearLayout height={'100%'} justifyContent={'space-between'}>
             <LinearLayout height={'50%'} mt={3}>
               <ConnectionHeader
                 title={i18n.t('modals.WCConnectionRequest.subtitle_1', {
-                  dAppName:
-                    walletConnectCtx.sessionProposals[0].proposer.metadata.name,
+                  dAppName: sessionProposal.proposer.metadata.name,
                 })}
-                imageUri={
-                  walletConnectCtx.sessionProposals[0].proposer.metadata
-                    .icons[0]
-                }
+                imageUri={sessionProposal.proposer.metadata.icons[0]}
               />
 
               <LinearLayout
@@ -178,7 +142,7 @@ const WCConnectionRequestModal = (props: Props) => {
                   </TextView>
                   <LinearLayout orientation={'horiz'} mt={3}>
                     <ImageView
-                      source={getBlockchainLogo(blockchain)}
+                      source={getBlockchainLogo(blockchain.current)}
                       resizeMode="contain"
                       width={'20px'}
                       height={'20px'}
@@ -189,7 +153,7 @@ const WCConnectionRequestModal = (props: Props) => {
                       color={'#fff'}
                       fontSize={'16px'}
                     >
-                      {i18n.t(`blockchainServices.${blockchain}.id`)}
+                      {i18n.t(`blockchainServices.${blockchain.current}.id`)}
                     </TextView>
                   </LinearLayout>
                 </LinearLayout>
@@ -202,7 +166,8 @@ const WCConnectionRequestModal = (props: Props) => {
                   >
                     {i18n.t('modals.WCConnectionRequest.features')}
                   </TextView>
-                  {walletConnectCtx.sessionProposals[0].permissions.jsonrpc.methods.map(
+
+                  {sessionProposal.permissions.jsonrpc.methods.map(
                     (it, index) => (
                       <TextView
                         key={index}
@@ -223,7 +188,7 @@ const WCConnectionRequestModal = (props: Props) => {
               </TextView>
               <LinearLayout>
                 <ThemedButton
-                  disabled={!sessionIsValid}
+                  disabled={!sessionProposalIsValid || !isConnected}
                   label={i18n.t('modals.WCConnectionRequest.acceptLabel')}
                   onPress={handleAccept}
                 />
@@ -253,8 +218,6 @@ const WCConnectionRequestModal = (props: Props) => {
               </LinearLayout>
             </LinearLayout>
           </LinearLayout>
-        ) : (
-          <LinearLayout />
         )}
       </AwaitActivity>
     </SwiperPanel>

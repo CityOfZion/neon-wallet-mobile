@@ -32,12 +32,6 @@
     "add": "Add",
     "createNow": "Create Now"
   },
-  "contexts": {
-    "walletConnect": {
-      "clientPairError": "Problem with client pair",
-      "unsupportedMethod": "The method %{method} is not supported"
-    }
-  },
   "routes": {
     "GetWallet": "Wallet",
     "Contacts": "Contacts",
@@ -872,7 +866,8 @@
   },
   "walletconnect": {
     "alert": {
-      "text": "%{text} Connected"
+      "text": "%{text} Connected",
+      "unexpectedErrorToSelectAccount": "Unexpected error to select account"
     },
     "noDAppsConnected": "No dApps connected",
     "waitingDAppConnect": "Please be a patient, we are now connecting with %{dAppName}",
@@ -881,7 +876,6 @@
     "connectedDApps": "Connected dApps",
     "offline": "You need to be online to connect to a dApp",
     "invalidSession": "Trying to connect to unsupported network",
-    "internetConnectionLost1": "Internet connection lost. Reconnect and try again",
-    "internetConnectionLost2": "Internet connection lost. You were disconnected from all dapps."
+    "internetConnectionLost": "Internet connection lost. You were disconnected from all dapps."
   }
 }

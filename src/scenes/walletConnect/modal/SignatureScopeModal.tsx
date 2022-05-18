@@ -6,6 +6,7 @@ import i18n from 'i18n-js'
 import React from 'react'
 import {useSelector} from 'react-redux'
 
+import {useTreatNetworkOnWalletConnectFlow} from '~/src/hooks'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import SwiperPanel, {
   CloseButton,
@@ -45,6 +46,7 @@ const SignatureScopeModal = (props: Props) => {
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
   const controller = useSwiperController(true)
+  useTreatNetworkOnWalletConnectFlow()
 
   return (
     <SwiperPanel

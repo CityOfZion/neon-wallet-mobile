@@ -1,15 +1,15 @@
 import {RouteProp, useNavigation} from '@react-navigation/native'
 import i18n from 'i18n-js'
 import moment from 'moment'
-import React, {useEffect, useState, useCallback} from 'react'
+import React, {useEffect, useState, useCallback, useMemo} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
+import {useSelector} from 'react-redux'
 
 import {getBlockchainLogo} from '~/src/blockchain'
 import {
   BlockchainServiceKey,
   getBlockchainByWCChain,
 } from '~/src/blockchain/common'
-import {useHandleOfflineFunctions} from '~/src/hooks'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
@@ -32,17 +32,19 @@ const WCConnectionDetailsModal = (props: Props) => {
   const controller = useSwiperController(true)
   const walletConnectCtx = useWalletConnect()
   const navigation = useNavigation()
-  const [blockchain, setBlockchain] = useState<BlockchainServiceKey>('neo3')
-  const {handleOnlyOnline} = useHandleOfflineFunctions()
+  const {isConnected} = useSelector((state: RootState) => state.network)
+
   const {dapp} = props.route.params
-  useEffect(() => {
-    if (walletConnectCtx.sessions.length > 0) {
-      const blockchainByWCChain = getBlockchainByWCChain(
-        dapp.session.permissions.blockchain.chains
-      )
-      blockchainByWCChain && setBlockchain(blockchainByWCChain)
-    }
-  }, [walletConnectCtx.sessions])
+
+  const blockchain = useMemo<BlockchainServiceKey>(() => {
+    const blockchainByWCChain = getBlockchainByWCChain(
+      dapp.session.permissions.blockchain.chains
+    )
+
+    if (blockchainByWCChain) return blockchainByWCChain
+
+    return 'neo3'
+  }, [dapp])
 
   const handleDisconnect = useCallback(async () => {
     await walletConnectCtx.disconnect(dapp.session.topic)
@@ -62,134 +64,133 @@ const WCConnectionDetailsModal = (props: Props) => {
       onRightPress={controller.close}
       solidColorBG={true}
     >
-      {walletConnectCtx.sessions.length > 0 ? (
-        <LinearLayout height={'100%'} justifyContent={'space-between'}>
-          <LinearLayout height={'50%'} mt={3}>
-            <LinearLayout alignItems={'center'} pb={'38px'}>
-              {dapp.connectedAcc.map((it, index) => {
-                const accountInfo = dapp.session.state.accounts[index].split(
-                  ':'
-                )
-                return (
-                  <LinearLayout orientation={'horiz'} key={index}>
-                    <TextView color={'text.10'} fontSize={'12px'}>
-                      {it.wallet ? `${it.wallet.name} - ` : ''}
-                    </TextView>
-                    {it.account ? (
-                      <>
-                        <LinearLayout
-                          width="7px"
-                          height="7px"
-                          mr="3px"
-                          mt="6px"
-                          bg={it.account.backgroundColor}
-                          borderRadius={9999}
-                        />
-                        <TextView color={'text.10'} fontSize={'12px'}>
-                          {it.account?.name ?? ''}
-                        </TextView>
-                      </>
-                    ) : (
+      <LinearLayout height={'100%'} justifyContent={'space-between'}>
+        <LinearLayout height={'50%'} mt={3}>
+          <LinearLayout alignItems={'center'} pb={'38px'}>
+            {dapp.connectedAcc.map((it, index) => {
+              const accountInfo = dapp.session.state.accounts[index].split(':')
+              return (
+                <LinearLayout orientation={'horiz'} key={index}>
+                  <TextView color={'text.10'} fontSize={'12px'}>
+                    {it.wallet ? `${it.wallet.name} - ` : ''}
+                  </TextView>
+
+                  {it.account ? (
+                    <>
+                      <LinearLayout
+                        width="7px"
+                        height="7px"
+                        mr="3px"
+                        mt="6px"
+                        bg={it.account.backgroundColor}
+                        borderRadius={9999}
+                      />
                       <TextView color={'text.10'} fontSize={'12px'}>
-                        {accountInfo[2]}
+                        {it.account?.name ?? ''}
                       </TextView>
-                    )}
-                  </LinearLayout>
-                )
-              })}
+                    </>
+                  ) : (
+                    <TextView color={'text.10'} fontSize={'12px'}>
+                      {accountInfo[2]}
+                    </TextView>
+                  )}
+                </LinearLayout>
+              )
+            })}
+
+            {dapp.approvedDate && (
               <TextView color={'text.10'} fontSize={'12px'}>
                 {moment.unix(dapp.approvedDate).format('HH:mm Do MMM YYYY')}
               </TextView>
-            </LinearLayout>
-            <ConnectionHeader
-              title={dapp.session.peer.metadata.name}
-              imageUri={dapp.session.peer.metadata.icons[0]}
-            />
-
-            <LinearLayout
-              width={'100%'}
-              backgroundColor={'background.15'}
-              orientation={'horiz'}
-              padding={3}
-              borderRadius={'7px'}
-            >
-              <LinearLayout width={'50%'} ml={3}>
-                <TextView
-                  fontFamily={'bold'}
-                  color={'text.10'}
-                  fontSize={'14px'}
-                  fontWeight={'700'}
-                >
-                  {i18n.t('modals.WCConnectionDetails.chain')}
-                </TextView>
-                <LinearLayout orientation={'horiz'} mt={3}>
-                  <ImageView
-                    source={getBlockchainLogo(blockchain)}
-                    resizeMode="contain"
-                    width={'20px'}
-                    height={'20px'}
-                    mr={1}
-                  />
-                  <TextView
-                    fontFamily={'medium'}
-                    color={'#fff'}
-                    fontSize={'16px'}
-                  >
-                    {i18n.t(`blockchainServices.${blockchain}.id`)}
-                  </TextView>
-                </LinearLayout>
-              </LinearLayout>
-              <LinearLayout>
-                <TextView
-                  fontFamily={'bold'}
-                  color={'text.10'}
-                  fontSize={'14px'}
-                  fontWeight={'700'}
-                >
-                  {i18n.t('modals.WCConnectionDetails.features')}
-                </TextView>
-                {dapp.session.permissions.jsonrpc.methods.map((it, index) => (
-                  <TextView
-                    key={index}
-                    color={'#fff'}
-                    fontFamily={'medium'}
-                    fontSize={'16px'}
-                  >
-                    {it}
-                  </TextView>
-                ))}
-              </LinearLayout>
-            </LinearLayout>
+            )}
           </LinearLayout>
-          <LinearLayout height={'30%'} justifyContent={'flex-end'} mb={'12px'}>
-            <TouchableWithoutFeedback
-              onPress={() => handleOnlyOnline(handleDisconnect)}
-            >
-              <LinearLayout
-                width="100%"
-                borderRadius="4px"
-                borderWidth="1px"
-                borderColor="primary"
-                justifyContent="center"
-                alignItems="center"
-                orientation="horiz"
-                p="10px"
+          <ConnectionHeader
+            title={dapp.session.peer.metadata.name}
+            imageUri={dapp.session.peer.metadata.icons[0]}
+          />
+
+          <LinearLayout
+            width={'100%'}
+            backgroundColor={'background.15'}
+            orientation={'horiz'}
+            padding={3}
+            borderRadius={'7px'}
+          >
+            <LinearLayout width={'50%'} ml={3}>
+              <TextView
+                fontFamily={'bold'}
+                color={'text.10'}
+                fontSize={'14px'}
+                fontWeight={'700'}
               >
+                {i18n.t('modals.WCConnectionDetails.chain')}
+              </TextView>
+              <LinearLayout orientation={'horiz'} mt={3}>
+                <ImageView
+                  source={getBlockchainLogo(blockchain)}
+                  resizeMode="contain"
+                  width={'20px'}
+                  height={'20px'}
+                  mr={1}
+                />
                 <TextView
-                  style={{includeFontPadding: false}}
-                  ml={3}
-                  color={'primary'}
-                  fontSize={20}
+                  fontFamily={'medium'}
+                  color={'#fff'}
+                  fontSize={'16px'}
                 >
-                  {i18n.t('modals.WCConnectionDetails.disconnect')}
+                  {i18n.t(`blockchainServices.${blockchain}.id`)}
                 </TextView>
               </LinearLayout>
-            </TouchableWithoutFeedback>
+            </LinearLayout>
+            <LinearLayout>
+              <TextView
+                fontFamily={'bold'}
+                color={'text.10'}
+                fontSize={'14px'}
+                fontWeight={'700'}
+              >
+                {i18n.t('modals.WCConnectionDetails.features')}
+              </TextView>
+              {dapp.session.permissions.jsonrpc.methods.map((it, index) => (
+                <TextView
+                  key={index}
+                  color={'#fff'}
+                  fontFamily={'medium'}
+                  fontSize={'16px'}
+                >
+                  {it}
+                </TextView>
+              ))}
+            </LinearLayout>
           </LinearLayout>
         </LinearLayout>
-      ) : (
-        <LinearLayout />
-      )}
+        <LinearLayout height={'30%'} justifyContent={'flex-end'} mb={'12px'}>
+          <TouchableWithoutFeedback
+            onPress={handleDisconnect}
+            disabled={!isConnected}
+          >
+            <LinearLayout
+              width="100%"
+              borderRadius="4px"
+              borderWidth="1px"
+              borderColor="primary"
+              justifyContent="center"
+              alignItems="center"
+              orientation="horiz"
+              p="10px"
+            >
+              <TextView
+                style={{includeFontPadding: false}}
+                ml={3}
+                color={'primary'}
+                fontSize={20}
+              >
+                {i18n.t('modals.WCConnectionDetails.disconnect')}
+              </TextView>
+            </LinearLayout>
+          </TouchableWithoutFeedback>
+        </LinearLayout>
+      </LinearLayout>
     </SwiperPanel>
   )
 }
