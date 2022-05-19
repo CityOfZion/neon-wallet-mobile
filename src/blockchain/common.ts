@@ -3,6 +3,7 @@ import {ImageLoadEventData} from 'react-native'
 
 import {ContractInvocationMulti} from '../helpers/NeonWcAdapter'
 import {ContractResponse} from '../models/response/ContractResponse'
+import {Neo3Provider} from './Neo3/providers/common'
 import {BSNeo3, ContractParam} from './Neo3/services/BSNeo3'
 import {BSNeoLegacy} from './NeoLegacy/services/BSNeoLegacy'
 
@@ -270,6 +271,14 @@ export const hasWalletconnect = (account: Account) => {
   const bs = blockchainServices[account.blockchain]
 
   return hasWCIntegration(bs)
+}
+
+export function hasNFTIntegration(
+  object: BlockchainDataProvider
+): object is Neo3Provider {
+  const methodsName = ['getNFTS']
+
+  return methodsName.every((methodName) => methodName in object)
 }
 
 export type BlockchainServiceKey = 'neoLegacy' | 'neo3'

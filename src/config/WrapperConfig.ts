@@ -114,6 +114,7 @@ export class WrapperConfig {
     'RawJsonModal',
     'SignatureScopeModal',
     'WCInvocationDetailsModal',
+    'WebViewModal',
   ] as const
 }
 

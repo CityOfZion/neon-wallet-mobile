@@ -3,6 +3,7 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import WebViewModal, {WebViewModalParams} from '../scenes/WebViewModal'
 import WCInvocationDetailsModal, {
   WCInvocationDetailsModalParams,
 } from '../scenes/walletConnect/modal/WCInvocationDetailsModal'
@@ -131,6 +132,7 @@ export type ModalStackParamList = {
   WCConnectionDetailsModal: WCConnectionDetailsModalParams
   WCInvocationDetailsModal: WCInvocationDetailsModalParams
   SignatureScopeModal: SignatureScopeModalParams
+  WebViewModal: WebViewModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -159,6 +161,7 @@ export type ModalParams =
   | DefaultNavigationParam<SignatureScopeModalParams>
   | DefaultNavigationParam<WCInvocationDetailsModalParams>
   | DefaultNavigationParam<WCConnectDappModalParams>
+  | DefaultNavigationParam<WebViewModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -293,6 +296,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={wrapper.route.WCInvocationDetailsModal.name}
           component={WCInvocationDetailsModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.WebViewModal.name}
+          component={WebViewModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>
