@@ -115,11 +115,7 @@ const ImportKey = (props: ImportKeyProps) => {
       }
       return allAccountsInfo
     } else {
-      Alert.alert(
-        i18n.t('importKey.mnemonicAlreadyExists', {
-          mnemonic,
-        })
-      )
+      Alert.alert(i18n.t('importKey.mnemonicAlreadyExists'))
       return null
     }
   }
@@ -231,59 +227,67 @@ const ImportKey = (props: ImportKeyProps) => {
   }, [inputValue])
 
   const persistImport = useCallback(async () => {
-    Await.init('importKey')
-    if (validateAddressAllBlockchains(inputValue)) {
-      Alert.alert(
-        '',
-        i18n.t('importKey.alertText'),
-        [
-          {
-            text: i18n.t('importKey.alertCancelButton'),
-            style: 'cancel',
-          },
-          {
-            text: i18n.t('importKey.alertConfirmButton'),
-            onPress: () =>
-              props.navigation.navigate(wrapper.route.ImportReadAccount.name, {
-                address: inputValue,
-              }),
-          },
-        ],
-        {cancelable: true}
-      )
-      Await.done('importKey')
-    } else if (validatePrivateKeyWithPasswordAllBlockchains(inputValue)) {
-      Await.done('importKey')
-      props.navigation.navigate(wrapper.route.Passphrase.name, {
-        encryptedKey: inputValue,
-      })
-    } else if (validateWifAllBlockchains(inputValue)) {
-      const mnemonic = blockchainServices[
-        addressesSelected[0].blockchain
-      ].generateMnemonic()
-      if (!Array.isArray(mnemonic)) {
-        throw new Error(
-          i18n.t('importKey.mnemonicAlreadyExists', {
-            mnemonic,
-          })
+    try {
+      Await.init('importKey')
+      if (validateAddressAllBlockchains(inputValue)) {
+        Alert.alert(
+          '',
+          i18n.t('importKey.alertText'),
+          [
+            {
+              text: i18n.t('importKey.alertCancelButton'),
+              style: 'cancel',
+            },
+            {
+              text: i18n.t('importKey.alertConfirmButton'),
+              onPress: () =>
+                props.navigation.navigate(
+                  wrapper.route.ImportReadAccount.name,
+                  {
+                    address: inputValue,
+                  }
+                ),
+            },
+          ],
+          {cancelable: true}
         )
-      }
-      blockchainActionsHook.init()
-      await blockchainActionsHook.createWallet(
-        i18n.t('defaultNameWallet.importedWallet'),
-        mnemonic.join(','),
-        'standard',
-        true
-      )
-    } else if (validateMnemonic(inputValue)) {
-      const dataAccountsToImport = await importMnemonic(inputValue)
-      if (dataAccountsToImport) {
         Await.done('importKey')
-        props.navigation.navigate(wrapper.route.MnemonicSelectionList.name, {
-          data: dataAccountsToImport,
-          mnemonic: inputValue,
+      } else if (validatePrivateKeyWithPasswordAllBlockchains(inputValue)) {
+        Await.done('importKey')
+        props.navigation.navigate(wrapper.route.Passphrase.name, {
+          encryptedKey: inputValue,
         })
+      } else if (validateWifAllBlockchains(inputValue)) {
+        const mnemonic = blockchainServices[
+          addressesSelected[0].blockchain
+        ].generateMnemonic()
+        if (!Array.isArray(mnemonic)) {
+          throw new Error(
+            i18n.t('importKey.mnemonicAlreadyExists', {
+              mnemonic,
+            })
+          )
+        }
+        blockchainActionsHook.init()
+        await blockchainActionsHook.createWallet(
+          i18n.t('defaultNameWallet.importedWallet'),
+          mnemonic.join(','),
+          'standard',
+          true
+        )
+      } else if (validateMnemonic(inputValue)) {
+        const dataAccountsToImport = await importMnemonic(inputValue)
+        if (dataAccountsToImport) {
+          Await.done('importKey')
+          props.navigation.navigate(wrapper.route.MnemonicSelectionList.name, {
+            data: dataAccountsToImport,
+            mnemonic: inputValue,
+          })
+        }
       }
+    } catch (error) {
+    } finally {
+      Await.done('importKey')
     }
   }, [addressesSelected, inputValue])
 
