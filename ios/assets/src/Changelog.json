@@ -1,6 +1,16 @@
 {
     "changelog": [
     	{
+            "version": "V1.0.29-1",
+            "date": "May 20 2022",
+            "changes": [
+                " -Support for WalletConnect authenthication methods:",
+                	" -signMessage",
+               		" -verifyMessage",
+                " -Minor bugfixes",
+            ]
+        },
+    	{
             "version": "V1.0.28-1",
             "date": "April 08 2022",
             "changes": [

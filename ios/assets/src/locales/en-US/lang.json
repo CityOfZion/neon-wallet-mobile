@@ -360,7 +360,8 @@
     "screenLayout": {
       "assets": "Assets",
       "transactions": "Transactions",
-      "connections": "Connections"
+      "connections": "Connections",
+      "nfts": "NFTS"
     },
     "WCAccountConnectionsScreen": {
       "noDAppsConnected": "No dApps connected",
@@ -613,16 +614,16 @@
       "viewTransaction": "View transaction"
     },
     "verifyMessage": {
-        "button": {
-          "accept": "Authenticate"
-        },
-        "title": "%{dAppName} asks for authentication",
-        "authenticateSuccess": "Wallet Authenticated!",
-        "authenticateFailed": " Wallet Authentication Failed!"
+      "button": {
+        "accept": "Authenticate"
+      },
+      "title": "%{dAppName} asks for authentication",
+      "authenticateSuccess": "Wallet Authenticated!",
+      "authenticateFailed": " Wallet Authentication Failed!"
     },
     "signMessage": {
       "button": {
-        "accept":"Sign Message"
+        "accept": "Sign Message"
       },
       "title": "%{dAppName} asks for authentication",
       "labelMessage": "message",
@@ -877,6 +878,10 @@
     "waitingDAppConnect": "Please be a patient, we are now connecting with %{dAppName}",
     "connectDAppLabel": "Connect a dApp",
     "connectNewDAppLabel": "Connect a new dApp",
-    "connectedDApps": "Connected dApps"
+    "connectedDApps": "Connected dApps",
+    "offline": "You need to be online to connect to a dApp",
+    "invalidSession": "Trying to connect to unsupported network",
+    "internetConnectionLost1": "Internet connection lost. Reconnect and try again",
+    "internetConnectionLost2": "Internet connection lost. You were disconnected from all dapps."
   }
 }
