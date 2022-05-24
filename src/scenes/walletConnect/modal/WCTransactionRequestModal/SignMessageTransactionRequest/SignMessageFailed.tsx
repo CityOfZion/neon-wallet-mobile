@@ -1,18 +1,26 @@
+import {useNavigation} from '@react-navigation/native'
 import i18n from 'i18n-js'
 import React from 'react'
 import {useSelector} from 'react-redux'
 
-import {ResponseModalProps} from '../TransactionRequestModal'
+import {TransactionRequestFailedElementProps} from '../TransactionRequestBase'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Normalize} from '~src/app/Normalize'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
-export const VerifyMessageFailed = (props: ResponseModalProps) => {
+export const SignMessageFailed = ({
+  errorMessage,
+}: TransactionRequestFailedElementProps) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
+  const navigation = useNavigation()
+
+  function handleOnPress() {
+    navigation.goBack()
+  }
 
   return (
     <LinearLayout
@@ -44,7 +52,7 @@ export const VerifyMessageFailed = (props: ResponseModalProps) => {
               textAlign={'center'}
               mb={15}
             >
-              {i18n.t('modals.verifyMessage.authenticateFailed')}
+              {i18n.t('modals.signMessage.signMessageFailed')}
             </TextView>
 
             <TextView
@@ -71,13 +79,13 @@ export const VerifyMessageFailed = (props: ResponseModalProps) => {
               py={2}
               mb={'auto'}
             >
-              {props.errorMessage}
+              {errorMessage}
             </TextView>
           </LinearLayout>
         </LinearLayout>
       </LinearLayout>
       <LinearLayout width="100%">
-        <ThemedButton label="Done" onPress={props.onClose} />
+        <ThemedButton label="Done" onPress={handleOnPress} />
       </LinearLayout>
     </LinearLayout>
   )

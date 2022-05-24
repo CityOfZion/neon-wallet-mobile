@@ -1,18 +1,24 @@
+import {useNavigation} from '@react-navigation/native'
 import i18n from 'i18n-js'
 import React from 'react'
 import {useSelector} from 'react-redux'
 
-import {ResponseModalProps} from '../TransactionRequestModal'
+import {TransactionRequestSuccessElementProps} from '../TransactionRequestBase'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {Normalize} from '~/src/app/Normalize'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {ImageView, LinearLayout, TextView} from '~/src/styles/styled-components'
 
-export const VerifyMessageSuccess = (props: ResponseModalProps) => {
+export const SignMessageSuccess = () => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
+  const navigation = useNavigation()
+
+  function handleOnPress() {
+    navigation.goBack()
+  }
 
   return (
     <LinearLayout orientation={'verti'} justfyContent="center">
@@ -37,10 +43,10 @@ export const VerifyMessageSuccess = (props: ResponseModalProps) => {
             textAlign={'center'}
             mb={15}
           >
-            {i18n.t('modals.verifyMessage.authenticateSuccess')}
+            {i18n.t('modals.signMessage.signMessageSucess')}
           </TextView>
         </LinearLayout>
-        <ThemedButton label="Done" onPress={props.onClose} />
+        <ThemedButton label="Done" onPress={handleOnPress} />
       </LinearLayout>
     </LinearLayout>
   )

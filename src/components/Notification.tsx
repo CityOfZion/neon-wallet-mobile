@@ -5,11 +5,12 @@ import React, {useState} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import {useDispatch} from 'react-redux'
 
+import {TabStackParamList} from '../navigation/TabNavigation'
+
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import styled, {
@@ -20,7 +21,7 @@ import styled, {
 } from '~src/styles/styled-components'
 
 type Props = WalletStackParamList &
-  MoreStackParamList &
+  TabStackParamList &
   RootStackParamList &
   ModalStackParamList
 

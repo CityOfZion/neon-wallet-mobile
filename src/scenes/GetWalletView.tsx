@@ -3,7 +3,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import moment from 'moment'
-import React, {useEffect, useState, Fragment, useRef} from 'react'
+import React, {useEffect, useState, Fragment, useRef, useMemo} from 'react'
 import {
   Animated,
   Easing,
@@ -25,7 +25,9 @@ import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
-export interface GetWalletParams {}
+export interface GetWalletParams {
+  wallet?: Wallet
+}
 
 interface GetWalletProps {
   route: RouteProp<WalletStackParamList, 'GetWallet'>
@@ -118,11 +120,12 @@ const GetWalletView = (props: GetWalletProps) => {
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
 
   const [accounts, setAccounts] = useState<Account[]>([])
-  const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
-
-  useEffect(() => {
-    Await.run('populate', populate, 500)
-  }, [accountsPool])
+  const wallet = useMemo(
+    () =>
+      props.route.params.wallet ??
+      dispatchWallet(RootStore.wallet.actions.getFromSelection()),
+    []
+  )
 
   props.navigation.setOptions({
     headerTitle: () =>
@@ -142,10 +145,7 @@ const GetWalletView = (props: GetWalletProps) => {
   const pressEvent = async (account: Account) => {
     dispatch(RootStore.account.actions.selectAccount(account.address))
     dispatch(RootStore.account.actions.setBlockchain(account.blockchain))
-    props.navigation.navigate(wrapper.route.GetAccount.name, {
-      key: wrapper.route.GetAccount.name,
-      navigateToTransactions: false,
-    })
+    props.navigation.navigate(wrapper.route.GetAccount.name, {})
   }
 
   const createEvent = async () => {
@@ -160,6 +160,10 @@ const GetWalletView = (props: GetWalletProps) => {
       })
     }
   }
+
+  useEffect(() => {
+    Await.run('populate', populate, 500)
+  }, [accountsPool])
 
   return (
     <ScreenLayout darkerSolidColorBG={true}>

@@ -1,12 +1,11 @@
-import {RouteProp, useFocusEffect} from '@react-navigation/native'
+import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, {useState, useEffect, useRef, useCallback} from 'react'
+import React, {useState, useEffect, useRef, useCallback, useMemo} from 'react'
 import {
   Animated,
   Easing,
-  InteractionManager,
   LayoutChangeEvent,
   Dimensions,
   View,
@@ -45,7 +44,7 @@ import {RootState, RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface GetAccountParams {
-  key: string
+  account?: Account
 }
 
 interface GetAccountViewProps {
@@ -75,7 +74,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const {language} = useSelector((state: RootState) => state.settings)
   const {address} = useSelector((state: RootState) => state.account)
-  const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const posYFactor = useRef(new Animated.Value(0))
   const {isConnected} = useSelector((state: RootState) => state.network)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
@@ -98,9 +96,11 @@ const GetAccountView = (props: GetAccountViewProps) => {
       setSenderAddress(address)
     }
   }
-
-  const [account, setAccount] = useState(
-    dispatchAccount(RootStore.account.actions.getFromSelection())
+  const account = useMemo(
+    () =>
+      props.route.params.account ??
+      dispatchAccount(RootStore.account.actions.getFromSelection()),
+    [address]
   )
 
   const [totTokenFeeAccount, setTotTokenFeeAccount] = useState<number>(
@@ -150,22 +150,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
         },
       }),
   })
-
-  useFocusEffect(() => {
-    const account = dispatchAccount(
-      RootStore.account.actions.getFromSelection()
-    )
-    setAccount(account)
-  })
-
-  useEffect(() => {
-    if (address) {
-      const account = dispatchAccount(
-        RootStore.account.actions.getFromSelection()
-      )
-      setAccount(account)
-    }
-  }, [address])
 
   useEffect(() => {
     changeSenderAddress()

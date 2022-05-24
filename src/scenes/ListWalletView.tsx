@@ -9,6 +9,7 @@ import {Alert, TouchableWithoutFeedback, View, Animated} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {useBalanceHook} from '../hooks/BalanceHook'
+import {TabStackParamList} from '../navigation/TabNavigation'
 
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Normalize} from '~src/app/Normalize'
@@ -36,8 +37,8 @@ import {ApplicationTheme} from '~src/themes/ApplicationTheme'
 export interface ListWalletParams {}
 
 type Props = WalletStackParamList &
-  MoreStackParamList &
   RootStackParamList &
+  TabStackParamList &
   ModalStackParamList
 
 interface WalletProps {
@@ -270,9 +271,7 @@ const ListWalletView = (props: WalletProps) => {
         RootStore.account.actions.selectAccount(accountsFromWallet[0].address)
       )
 
-      props.navigation.navigate(wrapper.route.GetAccount.name, {
-        key: wrapper.route.GetAccount.name,
-      })
+      props.navigation.navigate(wrapper.route.GetAccount.name, {})
     } else {
       // Fall back
       props.navigation.navigate(wrapper.route.GetWallet.name, {})
