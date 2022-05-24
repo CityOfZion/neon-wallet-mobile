@@ -5,6 +5,8 @@ import i18n from 'i18n-js'
 import React, {useState, useCallback, useEffect} from 'react'
 import {useSelector} from 'react-redux'
 
+import {WatchAccountToImport} from '../hooks/BlockchainActionsHook'
+
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {
   BlockchainServiceKey,
@@ -30,9 +32,7 @@ export interface ImportReadAccountParams {
 }
 
 interface ImportReadAccountProps {
-  navigation: StackNavigationProp<
-    MoreStackParamList & WalletStackParamList & RootStackParamList
-  >
+  navigation: StackNavigationProp<MoreStackParamList & RootStackParamList>
   route: RouteProp<MoreStackParamList, 'ImportReadAccount'>
 }
 
@@ -56,13 +56,15 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   const accounts = useSelector((state: RootState) => state.app.accounts)
   const {isConnected} = useSelector((state: RootState) => state.network)
   const blockchainActionsHook = useBlockchainActionsHook()
-  const {walletIdState} = blockchainActionsHook
   const persist = async () => {
     if (!isValid()) {
       return
     }
+
     const blockchainName = getBlockchainByAddress(inputValue)
+
     if (!blockchainName) return
+
     const mnemonic = blockchainServices[blockchainName].generateMnemonic()
     if (!Array.isArray(mnemonic)) {
       throw new Error(
@@ -71,41 +73,33 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
         })
       )
     }
+
     Await.init('importWatchAccount')
+
     blockchainActionsHook.init()
-    await blockchainActionsHook.createWallet(
+    const walletId = await blockchainActionsHook.createWallet(
       i18n.t('defaultNameWallet.watchAccount'),
       mnemonic.join(','),
       'watch'
     )
-  }
 
-  const importAccounts = useCallback(
-    async (walletId: string) => {
-      for (const addressInfo of addressesListSelected) {
-        await blockchainActionsHook.importWatchAccount(
-          walletId,
-          `${i18n.t(
-            `blockchainServices.${addressInfo.blockchain}.label`
-          )} ${i18n.t('modals.blockchainList.typeAccount', {type: 'Watch'})}`,
-          addressInfo.address,
-          addressInfo.blockchain
-        )
-      }
-      blockchainActionsHook.finish()
-      Await.done('importWatchAccount')
-      props.navigation.replace(wrapper.route.Tab.name, {
-        screen: wrapper.route.ListWallets.name,
+    const accountToImport = addressesListSelected.map(
+      ({address, blockchain}): WatchAccountToImport => ({
+        address,
+        blockchain,
+        type: 'watch',
+        walletId,
       })
-    },
-    [addressesListSelected]
-  )
+    )
+    await blockchainActionsHook.importAccounts(accountToImport)
+    blockchainActionsHook.finish()
 
-  useEffect(() => {
-    if (walletIdState) {
-      importAccounts(walletIdState)
-    }
-  }, [walletIdState])
+    Await.done('importWatchAccount')
+
+    props.navigation.replace(wrapper.route.Tab.name, {
+      screen: wrapper.route.ListWallets.name,
+    })
+  }
 
   const isValid = () => {
     const conditions: boolean[] = [validateAddressAllBlockchains(inputValue)]

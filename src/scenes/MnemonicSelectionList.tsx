@@ -13,6 +13,8 @@ import {
 } from 'react-native'
 import Accordion from 'react-native-collapsible/Accordion'
 
+import {AccountToImport} from '../hooks/BlockchainActionsHook'
+
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {
   BlockchainServiceKey,
@@ -208,7 +210,6 @@ const MnemonicSelectionList = (props: Props) => {
     {address: string; blockchain: BlockchainServiceKey; wif: string}[]
   >([])
   const blockchainActionsHook = useBlockchainActionsHook()
-  const {walletIdState} = blockchainActionsHook
   const handleSelectAddress = useCallback(
     (address: string, wif: string, blockchain: BlockchainServiceKey) => {
       setAddressesSelected((prevState) => {
@@ -233,44 +234,33 @@ const MnemonicSelectionList = (props: Props) => {
   const handleImportAccounts = useCallback(async () => {
     Await.init('importMnemonic')
     blockchainActionsHook.init()
-    await blockchainActionsHook.createWallet(
+    const walletId = await blockchainActionsHook.createWallet(
       i18n.t('defaultNameWallet.mnemonicWallet'),
       mnemonic,
       'standard'
     )
+
+    const accountsToImport = addressesSelected.map(
+      ({address, blockchain, wif}): AccountToImport => ({
+        walletId,
+        address,
+        blockchain,
+        wif,
+        type: 'account',
+      })
+    )
+
+    await blockchainActionsHook.importAccounts(accountsToImport)
+    blockchainActionsHook.finish()
+    Await.done('importMnemonic')
+    props.navigation.reset({
+      index: 0,
+      routes: [{name: wrapper.route.Tab.name}],
+    })
+    props.navigation.navigate(wrapper.route.ListWallets.name, {
+      screen: 'ListWalletsPage',
+    })
   }, [addressesSelected])
-
-  const importAccounts = useCallback(
-    async (walletId: string) => {
-      for (let i = 0; i < addressesSelected.length; i++) {
-        await blockchainActionsHook.importAccount(
-          walletId,
-          `${i18n.t(
-            `blockchainServices.${addressesSelected[i].blockchain}.accountName`
-          )} ${i}`,
-          addressesSelected[i].wif,
-          addressesSelected[i].address,
-          addressesSelected[i].blockchain
-        )
-      }
-      blockchainActionsHook.finish()
-      Await.done('importMnemonic')
-      props.navigation.reset({
-        index: 0,
-        routes: [{name: wrapper.route.Tab.name}],
-      })
-      props.navigation.navigate(wrapper.route.ListWallets.name, {
-        screen: 'ListWalletsPage',
-      })
-    },
-    [addressesSelected]
-  )
-
-  useEffect(() => {
-    if (walletIdState) {
-      importAccounts(walletIdState)
-    }
-  }, [walletIdState])
 
   return (
     <ScreenLayout>

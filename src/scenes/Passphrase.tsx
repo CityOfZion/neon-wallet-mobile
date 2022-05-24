@@ -7,7 +7,8 @@ import {View} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
 
-import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
+import {AccountToImport} from '../hooks/BlockchainActionsHook'
+
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {
   BlockchainServiceKey,
@@ -31,9 +32,7 @@ export interface PassphraseParams {
 }
 
 interface PassphraseProps {
-  navigation: StackNavigationProp<
-    MoreStackParamList & WalletStackParamList & RootStackParamList
-  >
+  navigation: StackNavigationProp<MoreStackParamList & RootStackParamList>
   route: RouteProp<MoreStackParamList, 'Passphrase'>
 }
 
@@ -43,7 +42,6 @@ const Passphrase = (props: PassphraseProps) => {
   )
   const {accounts} = useSelector((state: RootState) => state.app)
   const blockchainActionsHook = useBlockchainActionsHook()
-  const {walletIdState} = blockchainActionsHook
   const [inputValue, setInputValue] = useState('')
   const [addressesInfo, setAdrresesInfo] = useState<
     {address: string; blockchain: BlockchainServiceKey}[]
@@ -133,32 +131,60 @@ const Passphrase = (props: PassphraseProps) => {
   const handleDisableNextButton = useCallback(() => {
     if (inputValue.length > 0 || addressesInfoSelected.length > 0) {
       return false
-    } else {
-      return true
     }
+
+    return true
   }, [inputValue, addressesInfoSelected])
 
   const persist = useCallback(async () => {
     try {
-      if (mnemonicEncryptedWallet) {
-        blockchainActionsHook.init()
-        await blockchainActionsHook.createWallet(
-          `${i18n.t('modals.blockchainList.encryptedWallet')}`,
-          mnemonicEncryptedWallet,
-          'standard',
-          true
-        )
-      } else {
+      if (!mnemonicEncryptedWallet) {
         showMessage({
           message: i18n.t('messages.problemToGenerateWallet'),
           type: 'danger',
         })
+        return
       }
-    } catch (error) {
+
+      blockchainActionsHook.init()
+      const walletId = await blockchainActionsHook.createWallet(
+        `${i18n.t('modals.blockchainList.encryptedWallet')}`,
+        mnemonicEncryptedWallet,
+        'standard',
+        true
+      )
+
+      const accountsToImportPromises = addressesInfoSelected.map(
+        async ({address, blockchain}): Promise<AccountToImport> => {
+          const {wif} = await blockchainServices[blockchain].decryptKey(
+            encryptedKey,
+            correctPassword
+          )
+
+          return {
+            address,
+            blockchain,
+            walletId,
+            wif,
+            type: 'account',
+          }
+        }
+      )
+
+      const accountToImport = await Promise.all(accountsToImportPromises)
+
+      await blockchainActionsHook.importAccounts(accountToImport)
+
+      blockchainActionsHook.finish()
+      props.navigation.replace(wrapper.route.Tab.name, {
+        screen: wrapper.route.ListWallets.name,
+      })
+    } catch {
       showMessage({
         message: i18n.t('messages.problemToGenerateWallet'),
         type: 'danger',
       })
+    } finally {
       Await.done('importEncryptedKey')
     }
   }, [
@@ -167,44 +193,6 @@ const Passphrase = (props: PassphraseProps) => {
     showInputField,
     mnemonicEncryptedWallet,
   ])
-
-  const importAccounts = useCallback(
-    async (walletId: string) => {
-      try {
-        for (const {address, blockchain} of addressesInfoSelected) {
-          const {wif} = await blockchainServices[blockchain].decryptKey(
-            encryptedKey,
-            correctPassword
-          )
-          await blockchainActionsHook.importAccount(
-            walletId,
-            i18n.t(`blockchainServices.${blockchain}.accountName`),
-            wif,
-            address,
-            blockchain
-          )
-        }
-        blockchainActionsHook.finish()
-        props.navigation.replace(wrapper.route.Tab.name, {
-          screen: wrapper.route.ListWallets.name,
-        })
-      } catch (error) {
-        showMessage({
-          message: i18n.t('messages.problemToGenerateWallet'),
-          type: 'danger',
-        })
-      } finally {
-        Await.done('importEncryptedKey')
-      }
-    },
-    [addressesInfoSelected]
-  )
-
-  useEffect(() => {
-    if (walletIdState) {
-      importAccounts(walletIdState)
-    }
-  }, [walletIdState])
 
   const handleClickNext = useCallback(async () => {
     Await.init('importEncryptedKey')

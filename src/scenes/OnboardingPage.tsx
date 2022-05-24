@@ -1,10 +1,13 @@
 import {StackNavigationProp} from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, {useEffect, useState, useRef} from 'react'
-import {ImageLoadEventData, SafeAreaView, StyleSheet, View} from 'react-native'
+import allSettled from 'promise.allsettled'
+import React, {useEffect, useState, useRef, useCallback} from 'react'
+import {ImageLoadEventData, SafeAreaView, StyleSheet} from 'react-native'
 import Carousel, {Pagination} from 'react-native-snap-carousel'
 import {useSelector} from 'react-redux'
 
+import {blockchainList} from '../blockchain'
+import {AsteroidHelper} from '../helpers/AsteroidHelper'
 import {useBlockchainActionsHook} from '../hooks'
 
 import {useHeaderHeight} from '~/node_modules/@react-navigation/stack'
@@ -102,11 +105,34 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     props.navigation.replace(wrapper.route.Login.name)
   }
 
-  useEffect(() => {
+  const createInitialWallet = useCallback(async () => {
+    const words = AsteroidHelper.generateMnemonic() ?? []
     blockchainActionsHook.init()
-    if (wallets.length === 0) {
-      blockchainActionsHook.createInitialWallet()
-    }
+    const walletId = await blockchainActionsHook.createWallet(
+      i18n.t('onboarding.firstWalletName'),
+      words.join(' '),
+      'standard'
+    )
+
+    const accountsPromise = blockchainList.map((blockchain) =>
+      blockchainActionsHook.createAccount(
+        walletId,
+        i18n.t('modals.blockchainList.countAccount', {
+          count: 1,
+        }),
+        blockchain
+      )
+    )
+
+    allSettled.shim()
+
+    await Promise.allSettled(accountsPromise)
+
+    blockchainActionsHook.finish()
+  }, [])
+
+  useEffect(() => {
+    if (wallets.length === 0) createInitialWallet()
   }, [])
 
   useEffect(() => {

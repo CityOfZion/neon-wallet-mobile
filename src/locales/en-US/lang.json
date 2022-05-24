@@ -30,7 +30,8 @@
     "done": "Done",
     "copyToClipboard": "Copy to clipboard",
     "add": "Add",
-    "createNow": "Create Now"
+    "createNow": "Create Now",
+    "timeout": "Timeout exceeded"
   },
   "routes": {
     "GetWallet": "Wallet",
@@ -227,7 +228,8 @@
     "areImportingMnemonic": "Looks like you are importing a mnemonic",
     "areWatchAccount": "Looks like you are importing a watch account",
     "mnemonicAlreadyExists": "Mnemonic already exists",
-    "offline": "You need to be online to import informations"
+    "offline": "You need to be online to import informations",
+    "genericError": "Occurs a generic error. Try Again"
   },
   "passphrase": {
     "enterPassphrase": "Enter a Passphrase for your encrypted key",
