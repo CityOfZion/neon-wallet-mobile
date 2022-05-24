@@ -48,7 +48,7 @@ const RootStack = createStackNavigator<RootStackParamList>()
 
 const deepLinking = new DeepLinkingConfig()
 
-const AppNavigation = (props: Props) => {
+const AppNavigation: React.FC<Props> = (props) => {
   const theme = useSelector((state: RootState) => {
     return wrapper.theme[state.settings.theme]
   })

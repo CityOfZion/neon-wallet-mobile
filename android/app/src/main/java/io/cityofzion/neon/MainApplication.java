@@ -13,6 +13,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.facebook.react.BuildConfig;
 import io.cityofzion.neon.generated.BasePackageList;
 
 import org.unimodules.adapters.react.ReactAdapterPackage;
