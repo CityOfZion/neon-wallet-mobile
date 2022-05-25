@@ -3,62 +3,63 @@ PODS:
   - DoubleConversion (1.1.6)
   - EXApplication (4.0.2):
     - ExpoModulesCore
-  - EXBarCodeScanner (11.1.2):
+  - EXBarCodeScanner (11.2.1):
     - EXImageLoader
     - ExpoModulesCore
     - ZXingObjC/OneD
     - ZXingObjC/PDF417
-  - EXBlur (10.0.3):
+  - EXBlur (11.0.0):
     - ExpoModulesCore
-  - EXConstants (12.1.3):
+  - EXConstants (13.0.2):
     - ExpoModulesCore
-  - EXCrypto (10.0.3):
+  - EXCrypto (10.1.2):
     - ExpoModulesCore
-  - EXFileSystem (13.0.3):
+  - EXFileSystem (13.1.4):
     - ExpoModulesCore
   - EXFont (10.0.5):
     - ExpoModulesCore
-  - EXImageLoader (3.0.0):
+  - EXImageLoader (3.1.1):
     - ExpoModulesCore
     - React-Core
   - EXJSONUtils (0.2.1)
   - EXKeepAwake (10.0.2):
     - ExpoModulesCore
-  - EXLinearGradient (10.0.3):
-    - ExpoModulesCore
-  - EXLocalAuthentication (12.0.1):
+  - EXLocalAuthentication (12.1.1):
     - ExpoModulesCore
   - EXManifests (0.2.4):
     - EXJSONUtils
-  - EXPermissions (13.0.3):
+  - EXPermissions (13.1.1):
     - ExpoModulesCore
-  - Expo (43.0.5):
+  - Expo (44.0.6):
     - ExpoModulesCore
-  - ExpoModulesCore (0.4.10):
+  - ExpoLinearGradient (11.0.3):
+    - ExpoModulesCore
+  - ExpoModulesCore (0.6.5):
     - React-Core
-  - EXPrint (11.0.4):
+    - ReactCommon/turbomodule/core
+  - EXPrint (11.1.1):
     - ExpoModulesCore
-  - EXRandom (12.0.1):
+  - EXRandom (12.1.2):
     - React-Core
-  - EXScreenOrientation (4.0.3):
-    - ExpoModulesCore
-    - React-Core
-  - EXSecureStore (11.0.3):
-    - ExpoModulesCore
-  - EXSharing (10.0.3):
-    - ExpoModulesCore
-  - EXSplashScreen (0.13.5):
+  - EXScreenOrientation (4.1.2):
     - ExpoModulesCore
     - React-Core
-  - EXStructuredHeaders (2.0.0)
-  - EXUpdates (0.10.15):
+  - EXSecureStore (11.1.1):
+    - ExpoModulesCore
+  - EXSharing (10.1.1):
+    - ExpoModulesCore
+  - EXSplashScreen (0.14.2):
+    - ExpoModulesCore
+    - React-Core
+  - EXStructuredHeaders (2.1.1)
+  - EXUpdates (0.11.7):
     - EXManifests
     - ExpoModulesCore
     - EXStructuredHeaders
     - EXUpdatesInterface
     - React-Core
-  - EXUpdatesInterface (0.4.0)
-  - EXWebBrowser (10.0.3):
+  - EXUpdatesInterface (0.5.2)
+  - EXWebBrowser (10.1.1):
     - ExpoModulesCore
   - FBLazyVector (0.64.3)
   - FBReactNativeSpec (0.64.3):
@@ -327,7 +328,7 @@ PODS:
   - React-jsinspector (0.64.3)
   - react-native-get-random-values (1.7.2):
     - React-Core
-  - react-native-netinfo (6.0.2):
+  - react-native-netinfo (7.1.3):
     - React-Core
   - react-native-randombytes (3.6.1):
     - React-Core
@@ -335,7 +336,7 @@ PODS:
     - React-Core
   - react-native-view-shot (3.1.2):
     - React
-  - react-native-webview (11.13.0):
+  - react-native-webview (11.15.0):
     - React-Core
   - React-perflogger (0.64.3)
   - React-RCTActionSheet (0.64.3):
@@ -414,11 +415,11 @@ PODS:
   - RNFBApp (10.4.0):
     - Firebase/CoreOnly (~> 7.3.0)
     - React-Core
-  - RNGestureHandler (1.10.3):
+  - RNGestureHandler (2.1.3):
     - React-Core
   - RNNeoSdkBindings (1.0.0):
     - React
-  - RNReanimated (2.2.4):
+  - RNReanimated (2.3.3):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -444,10 +445,9 @@ PODS:
     - React-RCTNetwork
     - React-RCTSettings
     - React-RCTText
-    - React-RCTVibration
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.8.0):
+  - RNScreens (3.10.2):
     - React-Core
     - React-RCTImage
   - RNSVG (12.1.1):
@@ -471,11 +471,11 @@ DEPENDENCIES:
   - EXImageLoader (from `../node_modules/expo-image-loader/ios`)
   - EXJSONUtils (from `../node_modules/expo-json-utils/ios`)
   - EXKeepAwake (from `../node_modules/expo-keep-awake/ios`)
-  - EXLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
   - EXLocalAuthentication (from `../node_modules/expo-local-authentication/ios`)
   - EXManifests (from `../node_modules/expo-manifests/ios`)
   - EXPermissions (from `../node_modules/expo-permissions/ios`)
   - Expo (from `../node_modules/expo/ios`)
+  - ExpoLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core/ios`)
   - EXPrint (from `../node_modules/expo-print/ios`)
   - EXRandom (from `../node_modules/expo-random/ios`)
@@ -571,8 +571,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-json-utils/ios"
   EXKeepAwake:
     :path: "../node_modules/expo-keep-awake/ios"
-  EXLinearGradient:
-    :path: "../node_modules/expo-linear-gradient/ios"
   EXLocalAuthentication:
     :path: "../node_modules/expo-local-authentication/ios"
   EXManifests:
@@ -581,6 +579,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-permissions/ios"
   Expo:
     :path: "../node_modules/expo/ios"
+  ExpoLinearGradient:
+    :path: "../node_modules/expo-linear-gradient/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core/ios"
   EXPrint:
@@ -694,31 +694,31 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   EXApplication: 54fe5bd6268d697771645e8f1aef8b806a65247a
-  EXBarCodeScanner: cc450529b9c5e02dd9e2498cc0dddf153f120dfe
-  EXBlur: 71eea96f591726398c1d41f0a8eb527b6c65660e
-  EXConstants: 6d585d93723b18d7a8c283591a335609e3bc153e
-  EXCrypto: 7bcda085ffaccdaf3a252c20774a08be4277b8e3
-  EXFileSystem: 99aac7962c11c680681819dd9cbca24e20e5b1e7
+  EXBarCodeScanner: e5ca0062d8ad1c4c1d2e386d6a308d5a32213020
+  EXBlur: 82055865de17cf2cf797ff064c50fb59fcbe703f
+  EXConstants: 88bf79622fbd9b476c96d8ec57fe97ca44fe8e3c
+  EXCrypto: ab2ba0df3136a5f2407b8c7e70eb498ac20d704f
+  EXFileSystem: 08a3033ac372b6346becf07839e1ccef26fb1058
   EXFont: 2597c10ac85a69d348d44d7873eccf5a7576ef5e
-  EXImageLoader: 939451be6f7b731aaa6588920b90743f20121a4d
+  EXImageLoader: 347b72c2ec2df65120ccec40ea65a4c4f24317ff
   EXJSONUtils: 5ee0d5cf76da70ad86f0be1a41cc70f47d69e06f
   EXKeepAwake: bf48d7f740a5cd2befed6cf9a49911d385c6c47d
-  EXLinearGradient: 4d727eacb53d19ef25b02dd810e0199b453489ce
-  EXLocalAuthentication: c0ec9379a81c3c823a362382b6a2145e880d9840
+  EXLocalAuthentication: 3c5f368ee954b79c3778158eb8000cbce4e2f8a2
   EXManifests: d3464cd2278f4a19cd80c1aa673231570b534c11
-  EXPermissions: 7696f4c16e89981f84c04d96327f7e1e592373c0
-  Expo: d9588796cd19999da4d440d87bf7eb7ae4dbd608
-  ExpoModulesCore: c9438f6add0fb7b04b7c64eb97a833d2752a7834
-  EXPrint: 54ca648e0053ec1162f8fdf30082f75dd82c4f12
-  EXRandom: 64c954ae24619b8d0c18ff46aa96401e98efc977
-  EXScreenOrientation: 80c8c07ab3f2beb8e83ba94ab6ee4fb7a6bf01a6
-  EXSecureStore: 919bf7c28472862020d2cd7b59b69aae160b5d40
-  EXSharing: 9c58d207a43c2661b2f5b78a644d9c7642f19de9
-  EXSplashScreen: 57f329dbf25c5c12800feed79068a056453dc772
-  EXStructuredHeaders: 873e7f329c2f6279c1b1e0229df59c9861560b53
-  EXUpdates: 061b67c33f0e7f8fd335bbb48697c4a4fc8a5157
-  EXUpdatesInterface: e1c01b4f5ec76bd1d6cc714938f9edf5ef6379b9
-  EXWebBrowser: ecb70d9e6edb279d9b10b2bbc9ad4320fcdc4060
+  EXPermissions: 2f8db9cfb1919d6c6776f462bb2c5a903e423b2a
+  Expo: 534e51e607aba8229293297da5585f4b26f50fa1
+  ExpoLinearGradient: fd591c223c81f6779036ed4cef4deb20ecb87c50
+  ExpoModulesCore: 32c0ccb47f477d330ee93db72505380adf0de09a
+  EXPrint: 35b4f82e323f40edc8fe86db417f55666d5abbb6
+  EXRandom: 1d00fd04d7d874c0c9d1ff87cee59ffe0b638a3d
+  EXScreenOrientation: ca9375ec57e5706128062867516da0b03a97ef64
+  EXSecureStore: b80c74c5ee29d0160c2aace3fd9a24a5edc20015
+  EXSharing: 328228a9f14503cfdec68892796478a7a15b8d4d
+  EXSplashScreen: 21669e598804ee810547dbb6692c8deb5dd8dbf3
+  EXStructuredHeaders: 4993087b2010dbcc510f5d92555b36f523425e8d
+  EXUpdates: a83e036243b0f6ece53a8c1cb883b6751c88a5f8
+  EXUpdatesInterface: 13270752afb8c61f83a09117e6b04a682b2db9eb
+  EXWebBrowser: f1573262c5de753987ed526c630076eda130804d
   FBLazyVector: c71c5917ec0ad2de41d5d06a5855f6d5eda06971
   FBReactNativeSpec: 5dfcc11907b64f3ea52709ec405a1b86df0d36d3
   Firebase: 26223c695fe322633274198cb19dca8cb7e54416
@@ -744,11 +744,11 @@ SPEC CHECKSUMS:
   React-jsiexecutor: df6abc9fafbecb8e5b7a5fbc5e6d4bd017d594d5
   React-jsinspector: 34e23860273a23695342f58eed3ffd3ba10c31e0
   react-native-get-random-values: 30b3f74ca34e30e2e480de48e4add2706a40ac8f
-  react-native-netinfo: 92e6e4476eb8bf6fc2d7c0a6ca0a1406f663d73a
+  react-native-netinfo: 42c0965fca99069b92e3f7360ab2d425985e5104
   react-native-randombytes: 421f1c7d48c0af8dbcd471b0324393ebf8fe7846
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-view-shot: 4475fde003fe8a210053d1f98fb9e06c1d834e1c
-  react-native-webview: 133a6a5149f963259646e710b4545c67ef35d7c9
+  react-native-webview: e89bf2dba26a04cda967814df3ed1be99f291233
   React-perflogger: cc76a4254d19640f1d8ad1c66fdee800414b805c
   React-RCTActionSheet: 7448f049318d8d7e8a9a1ebb742ada721757eea8
   React-RCTAnimation: fb9b3fa1a4a9f5e6ab01b3368693ce69860ba76a
@@ -766,14 +766,14 @@ SPEC CHECKSUMS:
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNFBAnalytics: dbe60bec27fa2d4876983581f98a1ebdd46a3c95
   RNFBApp: a9af8372c9c2b2135ffa78817fd2d8baf3ee632e
-  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNGestureHandler: e1099204721a17a89c81fcd1cc2e92143dc040fb
   RNNeoSdkBindings: 4611f9b70ba945396ff13092e7afc050a1b7ac8e
-  RNReanimated: 024eff8202342abf4b24e11575a16afc441dabfe
-  RNScreens: 6e1ea5787989f92b0671049b808aef64fa1ef98c
+  RNReanimated: 0e5ef4a7e4e79f84efbe5b40771c31044c51e7d0
+  RNScreens: d6da2b9e29cf523832c2542f47bf1287318b1868
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   Yoga: e6ecf3fa25af9d4c87e94ad7d5d292eedef49749
   ZXingObjC: fdbb269f25dd2032da343e06f10224d62f537bdb
 
-PODFILE CHECKSUM: f1aaaafe07b5a56d16e8b0214b6ed1428aabbec5
+PODFILE CHECKSUM: 5e406331a8b2ed5ca370e6d3ff144dee5da6d491
 
 COCOAPODS: 1.11.3

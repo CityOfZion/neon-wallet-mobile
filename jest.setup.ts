@@ -7,6 +7,6 @@ import mockAsyncStorage from '@react-native-community/async-storage/jest/async-s
 
 import { Setup } from '~src/app/Setup'
 
-jest.mock('@react-native-community/async-storage', () => mockAsyncStorage)
+jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage)
 
 Setup.init()
