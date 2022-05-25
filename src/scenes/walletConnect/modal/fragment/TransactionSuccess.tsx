@@ -1,5 +1,5 @@
 import i18n from 'i18n-js'
-import React from 'react'
+import React, {useMemo} from 'react'
 import {showMessage} from 'react-native-flash-message'
 import {useSelector} from 'react-redux'
 
@@ -7,6 +7,7 @@ import {ResponseModalProps} from '../TransactionRequestModal'
 import {ThemedButtonViewOnDora} from './ThemedButtonViewOnDora'
 import {ThemedButtonViewTransaction} from './ThemedButtonViewTransaction'
 
+import {ContractInvocationMulti} from '~/src/helpers/NeonWcAdapter'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Normalize} from '~src/app/Normalize'
 import {UtilsHelper} from '~src/helpers/UtilsHelper'
@@ -21,6 +22,19 @@ const TransactionSuccess = (props: ResponseModalProps) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
+  const accountsPool = useSelector((state: RootState) => state.app.accounts)
+
+  const account = useMemo(() => {
+    const [sessionAccount] = props.session.state.accounts
+
+    const [, , sessionAccountAddress] = sessionAccount.split(':')
+
+    const account = accountsPool.find(
+      (account) => account.address && account.address === sessionAccountAddress
+    )
+
+    return account
+  }, [props.session])
 
   return (
     <LinearLayout
@@ -106,9 +120,13 @@ const TransactionSuccess = (props: ResponseModalProps) => {
           />
         </ButtonView>
       )}
-      <ThemedButtonViewTransaction request={props.request} />
+      <ThemedButtonViewTransaction account={account} />
       {props.transactionHash && (
-        <ThemedButtonViewOnDora txid={props.transactionHash} mt="10px" />
+        <ThemedButtonViewOnDora
+          txid={props.transactionHash}
+          mt="10px"
+          account={account}
+        />
       )}
     </LinearLayout>
   )

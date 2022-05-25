@@ -84,7 +84,7 @@ const TransactionFailed = (props: ResponseModalProps) => {
       >
         {props.errorMessage}
       </TextView>
-      <ThemedButtonViewTransaction request={props.request} disable />
+      <ThemedButtonViewTransaction disable />
       {props.errorMessage && (
         <ThemedButtonViewOnDora txid={props.errorMessage} disable mt="10px" />
       )}

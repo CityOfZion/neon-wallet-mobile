@@ -12,20 +12,25 @@ interface Props {
   mt?: string
   disable?: boolean
   txid: string
+  account?: Account
 }
 
 export const ThemedButtonViewOnDora = (props: Props) => {
   const dispatch = useDispatch<SyncDispatch<Account>>()
-  const account = useSelector((state: RootState) => state.account)
+
   const navigateToDora = useCallback(() => {
-    const acc = dispatch(RootStore.account.actions.getFromSelection())
-    Linking.openURL(
-      blockchainServices[acc.blockchain]?.provider.siteUrlQuery + props.txid
-    )
-  }, [account])
+    if (props.account) {
+      Linking.openURL(
+        blockchainServices[props.account.blockchain]?.provider.siteUrlQuery +
+          props.txid
+      )
+    }
+  }, [props.account])
+
   return (
     <LinearLayout width="100%" mt={props.mt}>
       <ThemedButton
+        onPress={navigateToDora}
         disabled={props.disable ?? false}
         label={i18n.t('modals.transactionSent.viewOnDora')}
       />
