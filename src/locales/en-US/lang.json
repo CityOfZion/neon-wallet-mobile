@@ -226,7 +226,7 @@
     "mnemonicIncorrect": "Mnemonic incorrect",
     "areImportingMnemonic": "Looks like you are importing a mnemonic",
     "areWatchAccount": "Looks like you are importing a watch account",
-    "mnemonicAlreadyExists": "The mnemonic: %{mnemonic} already exists",
+    "mnemonicAlreadyExists": "Mnemonic already exists",
     "offline": "You need to be online to import informations"
   },
   "passphrase": {
