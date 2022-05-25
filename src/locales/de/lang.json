@@ -27,7 +27,8 @@
     "save": "#translateme",
     "done": "#translateme",
     "close": "#translateme",
-    "copyToClipboard": "Copy to clipboard"
+    "copyToClipboard": "Copy to clipboard",
+    "timeout": "#translateme"
   },
   "routes": {
     "GetWallet": "#translateme",

@@ -68,4 +68,24 @@ export abstract class UtilsHelper {
     const multiplier = 1 / Math.pow(10, decimals)
     return (num * multiplier).toFixed(decimals)
   }
+
+  static putTimeout<T extends any>(
+    callback: () => Promise<T> | T,
+    timeoutMs: number = 5000
+  ): Promise<T> {
+    return new Promise<T>(async (resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error(t('app.timeout')))
+      }, timeoutMs)
+
+      try {
+        const result = await callback()
+
+        clearTimeout(timeout)
+        resolve(result)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 }
