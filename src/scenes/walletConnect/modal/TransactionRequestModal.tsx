@@ -22,7 +22,7 @@ import {VerifyMessageSuccess} from './fragment/VerifyMessageSuccess'
 import {blockchainServices, hasWCIntegration} from '~/src/blockchain'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
-import {useHandleOfflineFunctions} from '~/src/hooks'
+import {useTreatNetworkOnWalletConnectFlow} from '~/src/hooks'
 import {Account} from '~/src/models/redux/Account'
 import {RootStore} from '~/src/store/RootStore'
 import {wrapper} from '~src/app/ApplicationWrapper'
@@ -330,6 +330,7 @@ const RequestWhenInvokeFunction = ({
 
 const TransactionRequestModal = (props: Props) => {
   const {request, session} = props.route.params
+  useTreatNetworkOnWalletConnectFlow()
   const controller = useSwiperController(true)
   const {accounts} = useSelector((state: RootState) => state.app)
   const {requests, approveRequest, rejectRequest} = useWalletConnect()
@@ -347,6 +348,7 @@ const TransactionRequestModal = (props: Props) => {
 
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+
   const [feeRequest, setFeeRequest] = useState<number>()
   const [showModalSuccess, setshowModalSuccess] = useState<boolean>(false)
   const [showModalFailed, setShowModalFailed] = useState<boolean>(false)
@@ -354,8 +356,6 @@ const TransactionRequestModal = (props: Props) => {
   const [isAcceptetdRequest, setIsAcceptedRequest] = useState<boolean>(false)
   const [buttonsIsDisabled, setButtonsIsDisabled] = useState<boolean>(false)
   const shouldProcessButtons = useRef<boolean>(true)
-
-  const {handleOnlyOnline} = useHandleOfflineFunctions()
 
   const handleAddPendingTransaction = useCallback(
     async (txid: string, accountRequest?: Account) => {
@@ -594,11 +594,9 @@ const TransactionRequestModal = (props: Props) => {
         fullSize={true}
         title={i18n.t('modals.transactionRequest.title')}
         rightButton={<CloseButton mr={'20px'} />}
-        onRightPress={() =>
-          handleOnlyOnline(listComponentByMethod[request.request.method].reject)
-        }
+        onRightPress={listComponentByMethod[request.request.method].reject}
         onClose={() => {
-          handleOnlyOnline(listComponentByMethod[request.request.method].reject)
+          listComponentByMethod[request.request.method].reject()
           props.navigation.goBack()
         }}
         solidColorBG
@@ -649,20 +647,16 @@ const TransactionRequestModal = (props: Props) => {
                   onPress={() =>
                     Await.run(
                       'handleAcceptRequest',
-                      async () =>
-                        handleOnlyOnline(
-                          listComponentByMethod[request.request.method].accept
-                        ),
+                      listComponentByMethod[request.request.method].accept,
+
                       500
                     )
                   }
                 />
                 <LinearLayout mt={'24px'}>
                   <TouchableWithoutFeedback
-                    onPress={() =>
-                      handleOnlyOnline(
-                        listComponentByMethod[request.request.method].reject
-                      )
+                    onPress={
+                      listComponentByMethod[request.request.method].reject
                     }
                     disabled={buttonsIsDisabled}
                   >

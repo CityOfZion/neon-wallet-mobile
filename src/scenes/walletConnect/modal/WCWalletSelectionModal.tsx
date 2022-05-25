@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {FilterHelper} from '~/src/helpers/FilterHelper'
+import {useTreatNetworkOnWalletConnectFlow} from '~/src/hooks'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
 import {hasWalletconnect} from '~src/blockchain/common'
 import SwiperPanel, {
@@ -29,15 +30,10 @@ interface Props {
 }
 
 const WCWalletSelectionModal = (props: Props) => {
+  useTreatNetworkOnWalletConnectFlow()
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
-
   const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
-
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
-
   const {wallets, exchange} = useSelector((state: RootState) => state.app)
   const {currency, language} = useSelector((state: RootState) => state.settings)
 
@@ -45,10 +41,6 @@ const WCWalletSelectionModal = (props: Props) => {
     (value: Wallet) =>
       value.walletType !== 'watch' &&
       value.getAccounts(accountsPool).some((it) => hasWalletconnect(it))
-  )
-
-  const walletWithFunds = usableWallets.filter(
-    (value: Wallet) => value.hasFunds
   )
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(

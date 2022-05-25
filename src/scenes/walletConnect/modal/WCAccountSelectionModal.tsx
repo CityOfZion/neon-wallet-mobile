@@ -10,11 +10,11 @@ import {wrapper} from '~/src/app/ApplicationWrapper'
 import {getWCChainByBlockchain, hasWalletconnect} from '~/src/blockchain/common'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import {IURI} from '~/src/helpers/UriHelper'
-import {useHandleOfflineFunctions} from '~/src/hooks'
+import {useTreatNetworkOnWalletConnectFlow} from '~/src/hooks'
 import {Account} from '~/src/models/redux/Account'
 import {Wallet} from '~/src/models/redux/Wallet'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
-import {WalletConnectStackParamList} from '~/src/navigation/WalletConnectStackNavigation'
+import {TabStackParamList} from '~/src/navigation/TabNavigation'
 import {LinearLayout, TextView} from '~/src/styles/styled-components'
 import SwiperPanel, {
   CloseButton,
@@ -28,83 +28,58 @@ export interface WCAccountSelectionModalParams {
 }
 
 interface Props {
-  navigation: StackNavigationProp<
-    ModalStackParamList & WalletConnectStackParamList
-  >
+  navigation: StackNavigationProp<ModalStackParamList & TabStackParamList>
   route: RouteProp<ModalStackParamList, 'WCAccountSelectionModal'>
 }
 
 export const WCAccountSelectionModal = (props: Props) => {
+  useTreatNetworkOnWalletConnectFlow()
   const controller = useSwiperController(true)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const walletConnectCtx = useWalletConnect()
-  const {handleOnlyOnline} = useHandleOfflineFunctions()
   const accounts = props.route.params.wallet
     .getAccounts(accountsPool)
     .filter((it) => hasWalletconnect(it))
 
-  const nameDApp = useMemo(
-    () => walletConnectCtx.sessionProposals[0].proposer.metadata.name,
-    []
-  )
-  const timeoutToRequest = 10000
-  const connectionFailed = useCallback(() => {
-    return setTimeout(() => {
-      showMessage({
-        message: i18n.t('walletconnect.internetConnectionLost1'),
-        type: 'danger',
-        duration: 5000,
-      })
-      props.navigation.reset({
-        index: 0,
-        routes: [{name: wrapper.route.Tab.name}],
-      })
-      props.navigation.navigate(wrapper.route.WalletConnectPage.name, {})
-    }, timeoutToRequest)
-  }, [])
+  const sessionProposal = useMemo(() => walletConnectCtx.sessionProposals[0], [
+    walletConnectCtx.sessionProposals,
+  ])
 
   const handleConnectDApp = useCallback(
     async (account: Account) => {
-      const resultConnectionFailed = connectionFailed()
-      Await.init('connectDapp')
       try {
-        if (walletConnectCtx.sessionProposals.length > 0 && account?.address) {
-          const wcChain = getWCChainByBlockchain(account.blockchain)
-          if (wcChain) {
-            walletConnectCtx.setsessionsWasClean(true)
+        const wcChain = getWCChainByBlockchain(account.blockchain)
 
-            await walletConnectCtx.approveSession(
-              walletConnectCtx.sessionProposals[0],
-              [{address: account.address, chain: wcChain}]
-            )
-            clearTimeout(resultConnectionFailed)
-            showMessage({
-              message: i18n.t('walletconnect.alert.text', {text: nameDApp}),
-              duration: 7000,
-              type: 'warning',
-            })
-          }
+        if (!wcChain || !sessionProposal || !account?.address) {
+          throw new Error(
+            i18n.t('walletconnect.alert.unexpectedErrorToSelectAccount')
+          )
         }
 
-        props.navigation.reset({
-          index: 0,
-          routes: [{name: wrapper.route.Tab.name}],
+        await walletConnectCtx.approveSession(sessionProposal, [
+          {address: account.address, chain: wcChain},
+        ])
+
+        showMessage({
+          message: i18n.t('walletconnect.alert.text', {
+            text: sessionProposal.proposer.metadata.name,
+          }),
+          duration: 7000,
+          type: 'warning',
         })
-        props.navigation.navigate(wrapper.route.WalletConnectPage.name, {})
-      } catch (error) {
-        clearTimeout(resultConnectionFailed)
-        const message = (error as {message: string}).message
-        showMessage({message, duration: 7000, type: 'danger'})
-        props.navigation.reset({
-          index: 0,
-          routes: [{name: wrapper.route.Tab.name}],
-        })
-        props.navigation.navigate(wrapper.route.WalletConnectPage.name, {})
+      } catch (error: any) {
+        showMessage({message: error.message, duration: 7000, type: 'danger'})
       } finally {
+        props.navigation.reset({
+          index: 0,
+          routes: [{name: wrapper.route.Tab.name}],
+        })
+        props.navigation.navigate(wrapper.route.WalletConnectPage.name, {})
+
         Await.done('connectDapp')
       }
     },
-    [walletConnectCtx.sessionProposals]
+    [sessionProposal]
   )
 
   return (
@@ -127,9 +102,7 @@ export const WCAccountSelectionModal = (props: Props) => {
           </TextView>
           <AccountCardsComponent
             accounts={accounts}
-            onPress={(account) =>
-              handleOnlyOnline(() => handleConnectDApp(account))
-            }
+            onPress={handleConnectDApp}
             disableSecondTouch={true}
           />
         </LinearLayout>

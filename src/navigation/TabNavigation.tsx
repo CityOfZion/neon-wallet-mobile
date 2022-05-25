@@ -7,6 +7,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {RootStore} from '../store/RootStore'
+import WalletConnectStackNavigation from './WalletConnectStackNavigation'
 
 import * as data from '~src/Changelog.json'
 import {appBus} from '~src/app/AppBus'
@@ -23,7 +24,6 @@ import MoreStackNavigation, {
   MoreStackParam,
 } from '~src/navigation/MoreStackNavigation'
 import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation'
-import WalletConnectStackNavigation from '~src/navigation/WalletConnectStackNavigation'
 import WalletStackNavigation, {
   WalletStackParams,
 } from '~src/navigation/WalletsStackNavigation'
@@ -31,8 +31,8 @@ import WalletStackNavigation, {
 export type TabStackParamList = {
   ListWallets: WalletStackParams
   Contacts: ContactsStackParams
-  WalletConnectPage: undefined
   More: MoreStackParam
+  WalletConnectPage: undefined
 }
 
 export type TabParams =
@@ -57,6 +57,7 @@ const TabNavigation = (props: Props) => {
   const {requests, sessions} = useWalletConnect()
   const dispatch = useDispatch()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+
   useEffect(() => {
     async function handleData() {
       const currentNumberOfVersions = Object.keys(data.changelog).length

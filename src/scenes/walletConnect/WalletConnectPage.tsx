@@ -1,13 +1,14 @@
 import {RouteProp, useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {Buffer} from 'buffer'
-import React, {useEffect, useCallback} from 'react'
+import React, {useEffect} from 'react'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import HeaderActionButton from '~/src/components/layout/HeaderActionButton'
 import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
 import {UriHelper} from '~/src/helpers/UriHelper'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
+import {TabStackParamList} from '~/src/navigation/TabNavigation'
 import {WalletConnectStackParamList} from '~/src/navigation/WalletConnectStackNavigation'
 import {WCConnectedDapps} from '~/src/scenes/walletConnect/components/WCConnectedDapps'
 import {WCNoConnectDapps} from '~/src/scenes/walletConnect/components/WCNoConnectDapps'
@@ -17,13 +18,12 @@ export interface WalletConnectPageParams {
 
 interface WalletConnectPageProps {
   navigation: StackNavigationProp<
-    WalletConnectStackParamList & ModalStackParamList
+    ModalStackParamList & WalletConnectStackParamList
   >
   route: RouteProp<WalletConnectStackParamList, 'WalletConnectPage'>
 }
 
 const WalletConnectPage = (props: WalletConnectPageProps) => {
-  const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
   const {sessions} = useWalletConnect()
 
   props.navigation.setOptions({
@@ -31,7 +31,7 @@ const WalletConnectPage = (props: WalletConnectPageProps) => {
       HeaderActionButton({
         actionButtonStyle: 'add',
         actionOnPress: () => {
-          navigation.navigate(wrapper.route.Modal.name, {
+          props.navigation.navigate(wrapper.route.Modal.name, {
             screen: wrapper.route.WCConnectDappModal.name,
           })
         },

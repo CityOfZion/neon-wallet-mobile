@@ -13,12 +13,6 @@
     "transactionTime": "hh:mm:a",
     "transactionsPerDate": "DD MMMM"
   },
-  "contexts": {
-    "walletConnect": {
-      "timeoutError": "Connection URL Expired",
-      "clientPairError": "Problem with client pair"
-    }
-  },
   "app": {
     "neoBlockHeight": "NEO BLOCK HEIGHT",
     "back": "#translateme",
@@ -352,5 +346,19 @@
       "regex": "(\\d{5})$",
       "format": "$1"
     }
+  },
+  "walletconnect": {
+    "alert": {
+      "text": "#translateme",
+      "unexpectedErrorToSelectAccount": "#translateme"
+    },
+    "noDAppsConnected": "#translateme",
+    "waitingDAppConnect": "#translateme",
+    "connectDAppLabel": "#translateme",
+    "connectNewDAppLabel": "#translateme",
+    "connectedDApps": "#translateme",
+    "offline": "#translateme",
+    "invalidSession": "#translateme",
+    "internetConnectionLost": "#translateme"
   }
 }

@@ -16,6 +16,7 @@ import SwiperPanel, {
   CloseButton,
   useSwiperController,
 } from '~/src/components/SwiperPanel'
+import {useTreatNetworkOnWalletConnectFlow} from '~/src/hooks'
 import {ContractResponse} from '~/src/models/response/ContractResponse'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
 import {TextView, LinearLayout, ImageView} from '~/src/styles/styled-components'
@@ -40,6 +41,7 @@ export type Param = {
 
 const WCInvocationDetailsModal = ({navigation, route}: Props) => {
   const {session, contract} = route.params
+  useTreatNetworkOnWalletConnectFlow()
   const swipperController = useSwiperController(true)
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
@@ -47,27 +49,31 @@ const WCInvocationDetailsModal = ({navigation, route}: Props) => {
 
   const [contractInfo, setContractInfo] = useState<ContractResponse>()
   const [paramsWithValue, setParamsWithValue] = useState<Param[]>()
-  const handleGetContractInfo = useCallback(async () => {
-    const blockchain = getBlockchainByWCChain(
-      session.permissions.blockchain.chains ?? []
-    )
-
-    if (blockchain && session) {
-      const contractInfo = await blockchainServices[
-        blockchain
-      ].provider.getContract(contract.scriptHash)
-      setContractInfo(contractInfo)
-    }
-  }, [session])
-
-  useEffect(() => {
-    handleGetContractInfo()
-  }, [handleGetContractInfo])
 
   const infos = {
     dAppName: session.peer.metadata.name,
     dAppIcon: session.peer.metadata.icons[0],
   }
+
+  const handleGetContractInfo = useCallback(async () => {
+    if (!session) {
+      return
+    }
+
+    const blockchain = getBlockchainByWCChain(
+      session.permissions.blockchain.chains ?? []
+    )
+
+    if (!blockchain) {
+      return
+    }
+
+    const contractInfo = await blockchainServices[
+      blockchain
+    ].provider.getContract(contract.scriptHash)
+
+    setContractInfo(contractInfo)
+  }, [session])
 
   const sanitizeValue = (value: ParamValue) => {
     if (!value) {
@@ -102,6 +108,10 @@ const WCInvocationDetailsModal = ({navigation, route}: Props) => {
 
     setParamsWithValue(paramsWithValue)
   }
+
+  useEffect(() => {
+    handleGetContractInfo()
+  }, [handleGetContractInfo])
 
   useEffect(() => {
     if (contractInfo) {

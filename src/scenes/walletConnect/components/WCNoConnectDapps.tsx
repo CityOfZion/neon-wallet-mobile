@@ -3,21 +3,23 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, {useCallback} from 'react'
 import {Dimensions, TouchableWithoutFeedback} from 'react-native'
+import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
-import {useHandleOfflineFunctions} from '~/src/hooks/HandleOfflineFunctions'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
 import {TextView, LinearLayout, ImageView} from '~/src/styles/styled-components'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 
 export const WCNoConnectDapps = () => {
   const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
-  const {handleOnlyOnline} = useHandleOfflineFunctions()
+  const {isConnected} = useSelector((state: RootState) => state.network)
+
   const handleNavigation = useCallback(() => {
     navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.WCConnectDappModal.name,
     })
   }, [])
+
   return (
     <ScreenLayout darkerSolidColorBG={true}>
       <LinearLayout height={'100%'} pt={Dimensions.get('window').height * 0.2}>
@@ -31,7 +33,8 @@ export const WCNoConnectDapps = () => {
             {i18n.t('walletconnect.noDAppsConnected')}
           </TextView>
           <TouchableWithoutFeedback
-            onPress={() => handleOnlyOnline(handleNavigation)}
+            onPress={handleNavigation}
+            disabled={!isConnected}
           >
             <LinearLayout
               orientation="horiz"

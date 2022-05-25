@@ -1,17 +1,14 @@
 import {RouteProp, useNavigation} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, {useState, useCallback, useEffect} from 'react'
-import {showMessage} from 'react-native-flash-message'
+import React, {useState, useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import {UriHelper} from '~/src/helpers/UriHelper'
-import {useHandleOfflineFunctions} from '~/src/hooks/HandleOfflineFunctions'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
-import {RootStore} from '~/src/store/RootStore'
 import {LinearLayout, TextView} from '~/src/styles/styled-components'
 import SwiperPanel, {
   CloseButton,
@@ -28,14 +25,9 @@ interface WCConnectDappModalProps {
 
 export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
   const [url, setUrl] = useState<string>(props.route.params?.uri ?? '')
-  const {handleOnlyOnline} = useHandleOfflineFunctions()
   const {isConnected} = useSelector((state: RootState) => state.network)
   const controller = useSwiperController(true)
   const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
-  const {dappConnectionStart} = useSelector(
-    (state: RootState) => state.wcReducer
-  )
-  const dispatch = useDispatch()
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
@@ -59,30 +51,6 @@ export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
       },
     })
   }, [url])
-
-  const handleNavigationOffline = useCallback(() => {
-    if (!isConnected) {
-      showMessage({
-        message: i18n.t('walletconnect.internetConnectionLost1'),
-        type: 'danger',
-        duration: 7000,
-      })
-      navigation.replace(wrapper.route.Tab.name, {
-        screen: wrapper.route.WalletConnectPage.name,
-      })
-    }
-  }, [isConnected])
-
-  useEffect(() => {
-    handleNavigationOffline()
-  }, [isConnected])
-
-  useEffect(() => {
-    dispatch(RootStore.wcReducer.actions.setDappConnectionStart(true))
-    return () => {
-      dispatch(RootStore.wcReducer.actions.setDappConnectionStart(false))
-    }
-  }, [])
 
   return (
     <SwiperPanel
@@ -137,8 +105,8 @@ export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
         <LinearLayout>
           <ThemedButton
             label={i18n.t('modals.connectDApp.connectLabel')}
-            disabled={!validateURL()}
-            onPress={() => handleOnlyOnline(handleNavigation)}
+            disabled={!validateURL() || !isConnected}
+            onPress={handleNavigation}
           />
         </LinearLayout>
       </LinearLayout>

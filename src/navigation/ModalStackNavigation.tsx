@@ -88,7 +88,6 @@ import WCConnectionDetailsModal, {
 import WCConnectionRequestModal, {
   WCConnectionRequestModalParams,
 } from '~src/scenes/walletConnect/modal/WCConnectionRequestModal'
-import {WCTransactionSentModalParams} from '~src/scenes/walletConnect/modal/WCTransactionSentModal'
 import WCWalletSelectionModal, {
   WCWalletSelectionModalModalParams,
 } from '~src/scenes/walletConnect/modal/WCWalletSelectionModal'
@@ -121,7 +120,6 @@ export type ModalStackParamList = {
   ChangelogModal: ChangelogModalParams
   TipConfirmationModal: TipConfirmationModalParams
   BlockchainListModal: BlockchainListModalParams
-  WCTransactionSentModal: WCTransactionSentModalParams
   WCConnectionRequestModal: WCConnectionRequestModalParams
   WCConnectDappModal: WCConnectDappModalParams
   WCWalletSelectionModal: WCWalletSelectionModalModalParams | undefined
@@ -148,7 +146,6 @@ export type ModalParams =
   | DefaultNavigationParam<WelcomeModalParam>
   | DefaultNavigationParam<WalletContextModalParams>
   | DefaultNavigationParam<BlockchainListModalParams>
-  | DefaultNavigationParam<WCTransactionSentModalParams>
   | DefaultNavigationParam<WCConnectionRequestModalParams>
   | DefaultNavigationParam<WCWalletSelectionModalModalParams>
   | DefaultNavigationParam<TransactionRequestModalParams>
