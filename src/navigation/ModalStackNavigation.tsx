@@ -9,13 +9,19 @@ import WCInvocationDetailsModal, {
 import ReceiveModalStackNavigation from './ReceiveModalStackNavigation'
 import {TabParams} from './TabNavigation'
 
-import TransactionRequestModal, {
-  TransactionRequestModalParams,
-} from '~/src/scenes/walletConnect/modal/TransactionRequestModal'
 import {
   WCConnectDappModal,
   WCConnectDappModalParams,
 } from '~/src/scenes/walletConnect/modal/WCConnectDappModal'
+import RawJsonModal, {
+  RawJsonModalParams,
+} from '~/src/scenes/walletConnect/modal/WCTransactionRequestModal/RawJsonModal'
+import SignatureScopeModal, {
+  SignatureScopeModalParams,
+} from '~/src/scenes/walletConnect/modal/WCTransactionRequestModal/SignatureScopeModal'
+import WCTransactionRequestModal, {
+  WCTransactionRequestModalParams,
+} from '~/src/scenes/walletConnect/modal/WCTransactionRequestModal/WCTransactionRequestModal'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import EditWalletModal, {
   EditWalletParams,
@@ -72,12 +78,6 @@ import WalletContextModal, {
   WalletContextModalParams,
 } from '~src/scenes/WalletContextModal'
 import WelcomePage, {WelcomeModalParam} from '~src/scenes/WelcomePage'
-import RawJsonModal, {
-  RawJsonModalParams,
-} from '~src/scenes/walletConnect/modal/RawJsonModal'
-import SignatureScopeModal, {
-  SignatureScopeModalParams,
-} from '~src/scenes/walletConnect/modal/SignatureScopeModal'
 import {
   WCAccountSelectionModal,
   WCAccountSelectionModalParams,
@@ -124,7 +124,7 @@ export type ModalStackParamList = {
   WCConnectDappModal: WCConnectDappModalParams
   WCWalletSelectionModal: WCWalletSelectionModalModalParams | undefined
   WCAccountSelectionModal: WCAccountSelectionModalParams
-  TransactionRequestModal: TransactionRequestModalParams
+  WCTransactionRequestModal: WCTransactionRequestModalParams
   RawJsonModal: RawJsonModalParams
   WCConnectionDetailsModal: WCConnectionDetailsModalParams
   WCInvocationDetailsModal: WCInvocationDetailsModalParams
@@ -148,7 +148,7 @@ export type ModalParams =
   | DefaultNavigationParam<BlockchainListModalParams>
   | DefaultNavigationParam<WCConnectionRequestModalParams>
   | DefaultNavigationParam<WCWalletSelectionModalModalParams>
-  | DefaultNavigationParam<TransactionRequestModalParams>
+  | DefaultNavigationParam<WCTransactionRequestModalParams>
   | DefaultNavigationParam<RawJsonModalParams>
   | DefaultNavigationParam<WCConnectionDetailsModalParams>
   | DefaultNavigationParam<WCInvocationDetailsModalParams>
@@ -268,8 +268,8 @@ const ModalStackNavigation = () => {
           component={WCWalletSelectionModal}
         />
         <ModalStack.Screen
-          name={wrapper.route.TransactionRequestModal.name}
-          component={TransactionRequestModal}
+          name={wrapper.route.WCTransactionRequestModal.name}
+          component={WCTransactionRequestModal}
         />
         <ModalStack.Screen
           name={wrapper.route.RawJsonModal.name}

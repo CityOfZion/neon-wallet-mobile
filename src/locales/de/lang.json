@@ -297,6 +297,11 @@
       "subtitle": "Drag a wallet to a new position to reorder",
       "cancel": "Cancel",
       "save": "Save"
+    },
+    "WCTransactionRequestModal": {
+      "unsupportedMethod": "#translateme",
+      "errorToGetAccount": "#translateme",
+      "unexpectedError": "#translateme"
     }
   },
   "components": {

@@ -70,9 +70,7 @@ const EditAccountModal = (props: Props) => {
       index: 0,
       routes: [{name: wrapper.route.Tab.name}],
     })
-    props.navigation.navigate(wrapper.route.GetAccount.name, {
-      key: wrapper.route.GetAccount.name,
-    })
+    props.navigation.navigate(wrapper.route.GetAccount.name, {})
   }
 
   const isValid = () => {

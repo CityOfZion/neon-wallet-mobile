@@ -2,15 +2,16 @@ import i18n from 'i18n-js'
 import React from 'react'
 import {useSelector} from 'react-redux'
 
-import {ResponseModalProps} from '../TransactionRequestModal'
-import {ThemedButtonViewOnDora} from './ThemedButtonViewOnDora'
-import {ThemedButtonViewTransaction} from './ThemedButtonViewTransaction'
+import {TransactionRequestFailedElementProps} from '../TransactionRequestBase'
 
+import ThemedButton from '~/src/components/themed/ThemedButton'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Normalize} from '~src/app/Normalize'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
-const TransactionFailed = (props: ResponseModalProps) => {
+export const InvokeFunctionFailed = ({
+  errorMessage,
+}: TransactionRequestFailedElementProps) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
@@ -82,14 +83,22 @@ const TransactionFailed = (props: ResponseModalProps) => {
         py={2}
         mb={'auto'}
       >
-        {props.errorMessage}
+        {errorMessage}
       </TextView>
-      <ThemedButtonViewTransaction disable />
-      {props.errorMessage && (
-        <ThemedButtonViewOnDora txid={props.errorMessage} disable mt="10px" />
-      )}
+
+      <LinearLayout width="100%">
+        <ThemedButton
+          label={i18n.t('modals.transactionSent.viewTransaction')}
+          disabled
+        />
+      </LinearLayout>
+
+      <LinearLayout width="100%" mt="10px">
+        <ThemedButton
+          label={i18n.t('modals.transactionSent.viewOnDora')}
+          disabled
+        />
+      </LinearLayout>
     </LinearLayout>
   )
 }
-
-export default TransactionFailed

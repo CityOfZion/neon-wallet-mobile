@@ -104,7 +104,7 @@ const TabNavigation = (props: Props) => {
 
       if (foundSession) {
         props.navigation.navigate(wrapper.route.Modal.name, {
-          screen: wrapper.route.TransactionRequestModal.name,
+          screen: wrapper.route.WCTransactionRequestModal.name,
           params: {
             request: requests[0],
             session: foundSession,

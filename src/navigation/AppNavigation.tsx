@@ -188,7 +188,10 @@ const AppNavigation = (props: Props) => {
                 headerMode="none"
                 screenOptions={screenConfig}
               >
-                <RootStack.Screen name="Tab" component={TabNavigation} />
+                <RootStack.Screen
+                  name={wrapper.route.Tab.name}
+                  component={TabNavigation}
+                />
                 <RootStack.Screen
                   name={wrapper.route.Onboarding.name}
                   component={OnboardingPage}
