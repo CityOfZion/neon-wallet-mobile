@@ -24,9 +24,6 @@ export const TransactionItemDate = React.memo(
     const dispatch = useDispatch<SyncDispatch<Account>>()
     const account = dispatch(RootStore.account.actions.getFromSelection())
 
-    const checkRenderTransactionInfo =
-      props.transactionType === 'sendTransaction'
-
     return (
       <View style={{marginBottom: 5}}>
         <View
@@ -71,13 +68,11 @@ export const TransactionItemDate = React.memo(
             </TextView>
           </View>
 
-          {checkRenderTransactionInfo && (
-            <View>
-              {props.transfers.map((transfer) => (
-                <TransferItem key={transfer.hash} {...transfer} />
-              ))}
-            </View>
-          )}
+          <View>
+            {props.transfers.map((transfer) => (
+              <TransferItem key={transfer.hash} {...transfer} />
+            ))}
+          </View>
 
           <View
             style={{

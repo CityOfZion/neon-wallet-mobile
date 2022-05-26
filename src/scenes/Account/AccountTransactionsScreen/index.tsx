@@ -285,21 +285,9 @@ const AccountTransactionsScreen = (props: Props) => {
   }, [handleLoadTransactions])
 
   useEffect(() => {
-    const wcPendingTransactions = account
-      .getPendingTransactions()
-      .filter((it) =>
-        it.transactions.filter((it) => it.qtyInvocations !== null)
-      )
     const sendPendingTransactions = account.getPendingTransactions()
 
-    if (wcPendingTransactions.length > 0) {
-      populatePendingTransactionList(wcPendingTransactions, 'wcTransaction')
-      return
-    }
-
-    if (sendPendingTransactions.length > 0) {
-      populatePendingTransactionList(sendPendingTransactions, 'sendTransaction')
-    }
+    populatePendingTransactionList(sendPendingTransactions, 'sendTransaction')
   }, [populatePendingTransactionList])
 
   return (

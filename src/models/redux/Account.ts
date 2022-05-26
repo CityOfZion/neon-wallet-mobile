@@ -229,9 +229,9 @@ export class Account implements AccountState {
 
       senderTxs = [...transactions, ...senderTxs]
 
-      const txids = response.entries
-        .map((it) => it.txid ?? '')
+      const txids = response.transactions
         .filter((it) => it)
+        .map((it) => it.hash)
 
       // Try to find similar transactions in cache
       // If it does then break the loop

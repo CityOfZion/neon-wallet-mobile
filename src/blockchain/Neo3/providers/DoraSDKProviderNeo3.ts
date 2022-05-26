@@ -55,7 +55,7 @@ export class DoraSDKProvider implements Neo3Provider {
         const transaction = new TransactionAddressSummary({
           blockHeight: block,
           hash,
-          time: Number(time.replace('.', '')) / 1000,
+          time: Number(time),
         })
         transaction.qtyInvocations = invocations.length
         transaction.qtyNotifications = notifications.length
