@@ -73,7 +73,7 @@ const ImportKey = (props: ImportKeyProps) => {
     {address: string; blockchain: BlockchainServiceKey}[]
   >([])
   const [showImportList, setShowImportList] = useState<boolean>(false)
-  const [disableButton, setDisableButton] = useState<boolean>(false)
+  const [disableButton, setDisableButton] = useState<boolean>(true)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const blockchainActionsHook = useBlockchainActionsHook()
 
@@ -118,7 +118,7 @@ const ImportKey = (props: ImportKeyProps) => {
     }
   }
 
-  const importMnemonic = async (mnemonic: string) => {
+  const importMnemonic = useCallback(async (mnemonic: string) => {
     const mnemonicIsImported = (await dispatchAsync(
       RootStore.wallet.actions.mnemonicIsImported(mnemonic)
     )) as boolean
@@ -164,7 +164,7 @@ const ImportKey = (props: ImportKeyProps) => {
     }
 
     return allAccountsInfo
-  }
+  }, [])
 
   const addressAlreadyExist = useCallback(
     (address: string) =>
@@ -314,7 +314,7 @@ const ImportKey = (props: ImportKeyProps) => {
       data: dataAccountsToImport,
       mnemonic: inputValue,
     })
-  }, [inputValue])
+  }, [inputValue, importMnemonic])
 
   const functionsByInputTypes = useMemo<
     Record<InputType, FunctionsByInputType>
@@ -415,116 +415,108 @@ const ImportKey = (props: ImportKeyProps) => {
   return (
     <ScreenLayout darkerSolidColorBG={true}>
       <AwaitActivity name={'importKey'} loadingView={<ScreenLoader />}>
-        <ScrollView>
-          <LinearLayout orientation="verti" width="100%" height="100%">
-            <TextView
-              textAlign="center"
-              fontSize={18}
-              color={theme.colors.text[0]}
-              alignSelf="center"
-              justifyContent={'flex-end'}
-              mb={!isConnected ? '14%' : '10px'}
-              flexWrap="wrap"
-              m={40}
-            >
-              {i18n.t('importKey.enterAnAddress')}
-            </TextView>
-            <LinearLayout
-              orientation={'horiz'}
-              justifyContent={'center'}
-              mb={21}
-            >
-              {isMnemonic(inputValue) && (
-                <>
-                  <LinearLayout>
-                    <ImageView
-                      resizeMode="center"
-                      source={
-                        validateMnemonic(inputValue)
-                          ? require('~/src/assets/images/check-material.png')
-                          : require('~/src/assets/images/clear-material.png')
-                      }
-                    />
-                  </LinearLayout>
-                  <TextView
-                    ml={'10px'}
-                    textAlign="center"
-                    fontSize={'16px'}
-                    color={
+        <LinearLayout width={'100%'} height={'100%'}>
+          <TextView
+            textAlign={'center'}
+            fontSize={18}
+            color={theme.colors.text[0]}
+            alignSelf={'center'}
+            justifyContent={'flex-end'}
+            mb={!isConnected ? '14%' : '10px'}
+            flexWrap={'wrap'}
+            m={40}
+          >
+            {i18n.t('importKey.enterAnAddress')}
+          </TextView>
+          <LinearLayout orientation={'horiz'} justifyContent={'center'} mb={21}>
+            {isMnemonic(inputValue) && (
+              <>
+                <LinearLayout>
+                  <ImageView
+                    resizeMode={'center'}
+                    source={
                       validateMnemonic(inputValue)
-                        ? theme.colors.primary
-                        : theme.colors.quinary
+                        ? require('~/src/assets/images/check-material.png')
+                        : require('~/src/assets/images/clear-material.png')
                     }
-                    alignSelf="center"
-                    flexWrap="wrap"
-                  >
-                    {i18n.t(
-                      validateMnemonic(inputValue)
-                        ? 'importKey.mnemonicComplete'
-                        : 'importKey.mnemonicIncorrect'
-                    )}
-                  </TextView>
-                </>
-              )}
-            </LinearLayout>
-            <InputWithValidation
-              onChangeText={handleOnChangeText}
-              autoCapitalize={Platform.OS === 'android' ? 'none' : undefined} //fix duplicate words in android OS, in IOS the issue doesn't happen
-              secure={Platform.OS === 'android' ? true : undefined}
-              keyboardType={
-                Platform.OS === 'android' ? 'visible-password' : undefined
-              }
-              color={theme.colors.text[0]}
-              invalidColor={theme.colors.background[3]}
-              value={inputValue}
-              validator={validator}
-              separatorColor={theme.colors.background[5]}
-              invalidSeparatorColor={theme.colors.background[4]}
-              invalidMessageColor={theme.colors.quinary}
-              isMultiline={isMnemonic(inputValue)}
-              fromImportKey={true}
-              sideMargins={0}
-              onScan={handleOnScan}
-            />
-
-            {showImportList && (
-              <View style={{marginTop: 20}}>
+                  />
+                </LinearLayout>
                 <TextView
-                  textAlign="center"
+                  ml={'10px'}
+                  textAlign={'center'}
                   fontSize={'16px'}
-                  alignSelf="center"
-                  color={'text.3'}
-                  mb={'10px'}
+                  color={
+                    validateMnemonic(inputValue)
+                      ? theme.colors.primary
+                      : theme.colors.quinary
+                  }
+                  alignSelf={'center'}
+                  flexWrap={'wrap'}
                 >
-                  Select the correct account from the list below
+                  {i18n.t(
+                    validateMnemonic(inputValue)
+                      ? 'importKey.mnemonicComplete'
+                      : 'importKey.mnemonicIncorrect'
+                  )}
                 </TextView>
-                <AddressesImportList
-                  onSelectAddress={(addressesSelected) => {
-                    setAddressesSelected(addressesSelected)
-                  }}
-                  addressesInfo={addressesFound}
-                />
-              </View>
-            )}
-
-            {inputIsValid && (
-              <LinearLayout
-                mt={20}
-                width="90%"
-                flex={1}
-                alignSelf="center"
-                justifyContent={'flex-end'}
-                mb={!isConnected ? '12%' : '10px'}
-              >
-                <ThemedButton
-                  label="Next"
-                  onPress={persistImport}
-                  disabled={disableButton}
-                />
-              </LinearLayout>
+              </>
             )}
           </LinearLayout>
-        </ScrollView>
+          <InputWithValidation
+            onChangeText={handleOnChangeText}
+            autoCapitalize={Platform.OS === 'android' ? 'none' : undefined} //fix duplicate words in android OS, in IOS the issue doesn't happen
+            secure={Platform.OS === 'android' ? true : undefined}
+            keyboardType={
+              Platform.OS === 'android' ? 'visible-password' : undefined
+            }
+            color={theme.colors.text[0]}
+            invalidColor={theme.colors.background[3]}
+            value={inputValue}
+            validator={validator}
+            separatorColor={theme.colors.background[5]}
+            invalidSeparatorColor={theme.colors.background[4]}
+            invalidMessageColor={theme.colors.quinary}
+            isMultiline={isMnemonic(inputValue)}
+            fromImportKey={true}
+            sideMargins={0}
+            onScan={handleOnScan}
+          />
+
+          {showImportList && (
+            <LinearLayout mt={'20px'}>
+              <TextView
+                textAlign={'center'}
+                fontSize={'16px'}
+                alignSelf="center"
+                color={'text.3'}
+                mb={'10px'}
+              >
+                Select the correct account from the list below
+              </TextView>
+              <AddressesImportList
+                onSelectAddress={(addressesSelected) => {
+                  setAddressesSelected(addressesSelected)
+                }}
+                addressesInfo={addressesFound}
+              />
+            </LinearLayout>
+          )}
+
+          <LinearLayout
+            mt={20}
+            width={'90%'}
+            flex={1}
+            alignSelf="center"
+            justifyContent={'flex-end'}
+            mb={'40px'}
+          >
+            <ThemedButton
+              label={i18n.t('app.next')}
+              onPress={persistImport}
+              disabled={disableButton}
+            />
+          </LinearLayout>
+        </LinearLayout>
       </AwaitActivity>
     </ScreenLayout>
   )
