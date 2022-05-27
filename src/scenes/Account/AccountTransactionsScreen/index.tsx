@@ -35,15 +35,12 @@ export interface TransfersDataScreen {
   symbol: string
 }
 
-export type ITransactionType = 'wcTransaction' | 'sendTransaction'
-
 export interface TransactionDataScreen {
   txid: string
   time: number
   qtyInvocations: number
   qtyNotifications: number
   transfers: TransfersDataScreen[]
-  transactionType: ITransactionType
 }
 
 const AccountTransactionsScreen = (props: Props) => {
@@ -162,7 +159,6 @@ const AccountTransactionsScreen = (props: Props) => {
         }
 
         formatedTransactions.push({
-          transactionType: 'sendTransaction',
           txid: hash,
           qtyInvocations,
           qtyNotifications,
@@ -184,10 +180,7 @@ const AccountTransactionsScreen = (props: Props) => {
   )
 
   const populatePendingTransactionList = useCallback(
-    async (
-      pendingTransactions: TransactionDateGroup[],
-      transactionType: ITransactionType
-    ) => {
+    async (pendingTransactions: TransactionDateGroup[]) => {
       if (pendingTransactions.length <= 0) {
         return
       }
@@ -226,7 +219,7 @@ const AccountTransactionsScreen = (props: Props) => {
           const transfer: TransfersDataScreen = {
             addressFrom: senderAddress,
             addressTo: receiverAddress,
-            amount: String(token.amount / 10 ** decimals),
+            amount: String(token.amount),
             hash: token.hash,
             symbol,
             decimals,
@@ -246,7 +239,6 @@ const AccountTransactionsScreen = (props: Props) => {
 
           const transactionDataScreen: TransactionDataScreen = {
             txid: transactionHash,
-            transactionType,
             qtyInvocations: 0,
             qtyNotifications: 0,
             time: moment(sentAt).unix(),
@@ -281,14 +273,14 @@ const AccountTransactionsScreen = (props: Props) => {
   )
 
   useEffect(() => {
-    Await.run('populateTransactionsList', handleLoadTransactions)
-  }, [handleLoadTransactions])
+    Await.run('populateTransactionsList', async () => {
+      await handleLoadTransactions()
 
-  useEffect(() => {
-    const sendPendingTransactions = account.getPendingTransactions()
+      const sendPendingTransactions = account.getPendingTransactions()
 
-    populatePendingTransactionList(sendPendingTransactions, 'sendTransaction')
-  }, [populatePendingTransactionList])
+      await populatePendingTransactionList(sendPendingTransactions)
+    })
+  }, [])
 
   return (
     <AwaitActivity
