@@ -87,16 +87,12 @@ const InputWithValidation = (props: Props) => {
     StackNavigationProp<RootStackParamList>
   >()
   const sideMargins = props.sideMargins ?? 20
-  const fontStyle =
-    props.value && props.validator(props.value)
-      ? props.fontStyle ?? 'normal'
-      : 'italic'
-  const fontColor =
-    props.validator(props.value) && props.value
-      ? props.color
-      : props.invalidColor
 
-  const isValid = props.validator(props.value)
+  const isInvalid = props.value ? !props.validator(props.value) : undefined
+
+  const fontStyle = isInvalid ? 'italic' : props.fontStyle ?? 'normal'
+
+  const fontColor = isInvalid ? props.invalidColor : props.color
 
   const [contact, setContact] = useState<Contact | undefined>(
     props.selectedContact
@@ -139,9 +135,7 @@ const InputWithValidation = (props: Props) => {
           <LinearLayout
             bg={props.fromImportKey ? theme.colors.background[12] : undefined}
             borderColor={
-              !props.validator(props.value)
-                ? theme.colors.quinary
-                : theme.colors.background[12]
+              isInvalid ? theme.colors.quinary : theme.colors.background[12]
             }
             borderRadius={10}
             borderWidth={props.fromImportKey ? 1 : 0}
@@ -190,7 +184,7 @@ const InputWithValidation = (props: Props) => {
                 justifyContent: 'space-between',
               }}
             >
-              {!props.isMultiline && !isValid && (
+              {!props.isMultiline && isInvalid && (
                 <ImageView
                   resizeMode={'center'}
                   alignSelf="center"
@@ -216,9 +210,9 @@ const InputWithValidation = (props: Props) => {
         <LinearLayout
           mt={1}
           bg={
-            props.validator(props.value)
-              ? props.separatorColor
-              : props.invalidSeparatorColor ?? props.separatorColor
+            isInvalid
+              ? props.invalidSeparatorColor ?? props.separatorColor
+              : props.separatorColor
           }
           height={1}
           width="100%"
@@ -233,7 +227,7 @@ const InputWithValidation = (props: Props) => {
             fontFamily="regular"
             textAlign="right"
             mt={2}
-            opacity={isValid ? 0 : 1}
+            opacity={isInvalid ? 1 : 0}
             height={Platform.OS === 'ios' ? '15px' : undefined}
           >
             {props.invalidMessage ??
