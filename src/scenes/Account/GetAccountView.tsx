@@ -43,10 +43,6 @@ import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootState, RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
-export interface GetAccountParams {
-  account?: Account
-}
-
 interface GetAccountViewProps {
   navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>
   route: RouteProp<WalletStackParamList, 'GetAccount'>
@@ -96,10 +92,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
       setSenderAddress(address)
     }
   }
-  const [account, setAccount] = useState(
-    () =>
-      props.route.params.account ??
-      dispatchAccount(RootStore.account.actions.getFromSelection())
+  const [account, setAccount] = useState(() =>
+    dispatchAccount(RootStore.account.actions.getFromSelection())
   )
 
   const [totTokenFeeAccount, setTotTokenFeeAccount] = useState<number>(

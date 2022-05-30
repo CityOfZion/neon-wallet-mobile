@@ -25,10 +25,6 @@ import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
-export interface GetWalletParams {
-  wallet?: Wallet
-}
-
 interface GetWalletProps {
   route: RouteProp<WalletStackParamList, 'GetWallet'>
   navigation: StackNavigationProp<WalletStackParamList>
@@ -121,9 +117,7 @@ const GetWalletView = (props: GetWalletProps) => {
 
   const [accounts, setAccounts] = useState<Account[]>([])
   const wallet = useMemo(
-    () =>
-      props.route.params.wallet ??
-      dispatchWallet(RootStore.wallet.actions.getFromSelection()),
+    () => dispatchWallet(RootStore.wallet.actions.getFromSelection()),
     []
   )
 
@@ -145,7 +139,7 @@ const GetWalletView = (props: GetWalletProps) => {
   const pressEvent = async (account: Account) => {
     dispatch(RootStore.account.actions.selectAccount(account.address))
     dispatch(RootStore.account.actions.setBlockchain(account.blockchain))
-    props.navigation.navigate(wrapper.route.GetAccount.name, {})
+    props.navigation.navigate(wrapper.route.GetAccount.name)
   }
 
   const createEvent = async () => {

@@ -8,6 +8,7 @@ import {ThemeProvider} from 'styled-components'
 
 import {RootStore} from '../store/RootStore'
 import WalletConnectStackNavigation from './WalletConnectStackNavigation'
+import WalletStackNavigation from './WalletsStackNavigation'
 
 import * as data from '~src/Changelog.json'
 import {appBus} from '~src/app/AppBus'
@@ -24,23 +25,15 @@ import MoreStackNavigation, {
   MoreStackParam,
 } from '~src/navigation/MoreStackNavigation'
 import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation'
-import WalletStackNavigation, {
-  WalletStackParams,
-} from '~src/navigation/WalletsStackNavigation'
 
 export type TabStackParamList = {
-  ListWallets: WalletStackParams
+  ListWallets: undefined
   Contacts: ContactsStackParams
   More: MoreStackParam
   WalletConnectPage: undefined
 }
 
-export type TabParams =
-  | (
-      | DefaultNavigationParam<MoreStackParam>
-      | DefaultNavigationParam<WalletStackParams>
-    )
-  | undefined
+export type TabParams = DefaultNavigationParam<MoreStackParam> | undefined
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList>

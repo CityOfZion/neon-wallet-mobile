@@ -9,6 +9,7 @@ import {useSelector, useDispatch} from 'react-redux'
 
 import {IURI} from '../helpers/UriHelper'
 import {AccountToImport} from '../hooks/BlockchainActionsHook'
+import {TabStackParamList} from '../navigation/TabNavigation'
 import {MnemonicSelectionInfo} from './MnemonicSelectionList'
 
 import {wrapper} from '~src/app/ApplicationWrapper'
@@ -31,9 +32,14 @@ import {UtilsHelper} from '~src/helpers/UtilsHelper'
 import {useBlockchainActionsHook} from '~src/hooks'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootState, RootStore} from '~src/store/RootStore'
 import {LinearLayout, ImageView, TextView} from '~src/styles/styled-components'
-type ParamList = MoreStackParamList & RootStackParamList
+
+type ParamList = MoreStackParamList &
+  RootStackParamList &
+  TabStackParamList &
+  WalletStackParamList
 interface ImportKeyProps {
   navigation: StackNavigationProp<ParamList>
   route: RouteProp<MoreStackParamList, 'ImportKey'>
@@ -300,7 +306,7 @@ const ImportKey = (props: ImportKeyProps) => {
     props.navigation.replace(wrapper.route.Tab.name, {
       screen: wrapper.route.ListWallets.name,
     })
-    props.navigation.navigate(wrapper.route.GetWallet.name, {})
+    props.navigation.navigate(wrapper.route.GetWallet.name)
   }, [blockchainActionsHook, inputValue])
 
   const persistWhenMnemonic = useCallback(async () => {

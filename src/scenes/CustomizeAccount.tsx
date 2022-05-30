@@ -136,7 +136,6 @@ const CustomizeAccount = (props: Props) => {
       params: {
         screen: wrapper.route.GetAccount.name,
         initial: false,
-        params: {},
       },
     })
   }

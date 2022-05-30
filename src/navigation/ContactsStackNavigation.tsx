@@ -10,13 +10,11 @@ import {wrapper} from '~src/app/ApplicationWrapper'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {GetAccountParams} from '~src/scenes/Account/GetAccountView'
 import {
   ContactDetails,
   ContactDetailsParams,
 } from '~src/scenes/Contacts/ContactsDetails'
 import ContactsPage from '~src/scenes/Contacts/ContactsPage'
-import {GetWalletParams} from '~src/scenes/GetWalletView'
 
 export type ContactsStackParamList = {
   Contacts: HeaderActionButtonProps

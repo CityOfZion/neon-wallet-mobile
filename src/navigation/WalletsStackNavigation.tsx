@@ -23,30 +23,20 @@ import AccountAssetDetail, {
   AccountAssetDetailParams,
 } from '~src/scenes/Account/AccountAssetDetail'
 import AccountAssetScreen from '~src/scenes/Account/AccountAssetsScreen'
-import GetAccountView, {
-  GetAccountParams,
-} from '~src/scenes/Account/GetAccountView'
-import GetWalletView, {GetWalletParams} from '~src/scenes/GetWalletView'
+import GetAccountView from '~src/scenes/Account/GetAccountView'
+import GetWalletView from '~src/scenes/GetWalletView'
 import ListWalletView, {ListWalletParams} from '~src/scenes/ListWalletView'
 
 export type WalletStackParamList = {
   ListWalletsPage: ListWalletParams
-  GetWallet: GetWalletParams
-  GetAccount: GetAccountParams
+  GetWallet: undefined
+  GetAccount: undefined
   AccountAssetDetail: AccountAssetDetailParams
-  Modal: ModalParams
-  Settings: SettingsStackParamList
-  Step1BackupWallet: {wallet: Wallet} & HeaderActionButtonProps
-  More: MoreStackParamList
   AccountAssetScreen: undefined
   AccountTransactionsScreen: AccountTransactionsScreenParams
   WCAccountConnectionsScreen: WCAccountConnectionsScreenParams
   AccountNFTSScreen: AccountNFTSScreenParams
 }
-
-export type WalletStackParams =
-  | DefaultNavigationParam<GetWalletParams>
-  | DefaultNavigationParam<GetAccountParams>
 
 const WalletStack = createStackNavigator<WalletStackParamList>()
 
