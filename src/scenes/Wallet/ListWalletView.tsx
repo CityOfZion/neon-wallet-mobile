@@ -4,11 +4,10 @@ import {AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import moment from 'moment'
 import PropTypes from 'prop-types'
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useMemo, useRef, useState} from 'react'
 import {Alert, TouchableWithoutFeedback, View, Animated} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {useBalanceHook} from '../../hooks/BalanceHook'
 import {TabStackParamList} from '../../navigation/TabNavigation'
 
 import {wrapper} from '~src/app/ApplicationWrapper'
@@ -24,7 +23,6 @@ import {TokenAsset} from '~src/models/TokenAsset'
 import {Wallet} from '~src/models/redux/Wallet'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {
@@ -58,29 +56,35 @@ const WalletChangeComponent = (props: {
 }) => {
   const {currency, language} = useSelector((state: RootState) => state.settings)
   const {exchange, accounts} = useSelector((state: RootState) => state.app)
+
   const [variationInPercent, setVariationInPercent] = useState<number>()
+  const [formattedBalance, setFormattedBalance] = useState<string>()
+  const walletMemo = useMemo(() => props.wallet, [props.wallet])
 
-  const {walletBalance} = useBalanceHook()
-  if (!props.wallet) return <View />
-
-  useEffect(() => {
-    setVariationInPercent(undefined)
-    populate()
-  }, [props.wallet])
+  if (!walletMemo) return <View />
 
   const populate = async () => {
     const pastOneDay = moment().add(-1, 'day')
 
     const variation =
-      (await props.wallet?.getBalanceVariationFromPastExchange(
+      (await walletMemo.getBalanceVariationFromPastExchange(
         currency,
         pastOneDay,
         exchange
       )) ?? 0
 
-    props.wallet?.populateTokenAssets(accounts)
+    walletMemo.populateTokenAssets(accounts)
 
-    const balance = props.wallet?.calculateBalance(currency, exchange) ?? 0
+    const balance = walletMemo.calculateBalance(currency, exchange) ?? 0
+
+    const balanceFormatted = walletMemo.calculateBalanceFormatted(
+      currency,
+      language,
+      exchange,
+      balance
+    )
+
+    setFormattedBalance(balanceFormatted)
 
     if (balance !== 0) {
       setVariationInPercent((variation / balance) * 100)
@@ -90,20 +94,19 @@ const WalletChangeComponent = (props: {
   }
 
   const showListTokenAssets = (tokenAssets: TokenAsset[]) => {
-    let show = false
-    tokenAssets.forEach((token) => {
-      if (token.amount > 0) {
-        show = true
-      }
-    })
-    return show
+    return tokenAssets.some((token) => token.amount > 0)
   }
+
+  useEffect(() => {
+    setFormattedBalance(undefined)
+    populate()
+  }, [walletMemo])
 
   return (
     <LinearLayout mb={6} alignItems={'center'}>
       {showListTokenAssets(props.tokenAssets) ? (
         <TextView fontSize={'11px'} color={'text.2'}>
-          {props.wallet.formattedLastVisitedAt}
+          {walletMemo.formattedLastVisitedAt}
         </TextView>
       ) : (
         <View />
@@ -111,10 +114,10 @@ const WalletChangeComponent = (props: {
 
       <LinearLayout orientation={'horiz'} minHeight={56}>
         <TextView fontSize={'36px'} color={'text.0'} fontFamily={'medium'}>
-          {walletBalance}
+          {formattedBalance ?? '-'}
         </TextView>
 
-        {props.wallet.hasFunds && (
+        {walletMemo.hasFunds && (
           <ButtonView onPress={props.onPressWarning}>
             <ImageView
               mt={'8px'}

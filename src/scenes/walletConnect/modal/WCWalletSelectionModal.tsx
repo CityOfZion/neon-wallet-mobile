@@ -96,19 +96,11 @@ const WCWalletSelectionModal = (props: Props) => {
               color="text.0"
               fontFamily="medium"
             >
-              {selectedWallet?.calculateBalance(currency, exchange) !== 0
-                ? selectedWallet?.calculateBalanceFormatted(
-                    currency,
-                    language,
-                    exchange
-                  )
-                : FilterHelper.currency(
-                    selectedWallet?.calculateBalance(currency, exchange),
-                    currency,
-                    language,
-                    0,
-                    0
-                  )}
+              {selectedWallet?.calculateBalanceFormatted(
+                currency,
+                language,
+                exchange
+              )}
             </TextView>
           </Fragment>
         </TouchableHighlight>

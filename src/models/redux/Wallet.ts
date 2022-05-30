@@ -131,9 +131,20 @@ export class Wallet implements WalletState {
   calculateBalanceFormatted(
     currency: Currency,
     language: Lang,
-    multichainExchange: MultichainExchange
+    multichainExchange: MultichainExchange,
+    balanceToFormat?: number
   ) {
-    const balance = this.calculateBalance(currency, multichainExchange)
-    return FilterHelper.currency(balance, currency, language)
+    const balance =
+      balanceToFormat ?? this.calculateBalance(currency, multichainExchange)
+
+    const fractionDigits = balance > 0 ? 0 : undefined
+
+    return FilterHelper.currency(
+      balance,
+      currency,
+      language,
+      fractionDigits,
+      fractionDigits
+    )
   }
 }
