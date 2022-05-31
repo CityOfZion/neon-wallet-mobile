@@ -39,7 +39,6 @@ import {
   AccountQRCode,
   AccountQRCodeParams,
 } from '~src/scenes/Account/AccountQRCode'
-import {GetAccountParams} from '~src/scenes/Account/GetAccountView'
 import BlockchainListModal, {
   BlockchainListModalParams,
 } from '~src/scenes/BlockchainListModal'
@@ -58,7 +57,6 @@ import CustomColorPage, {
 import EditAccountModal, {
   EditAccountModalParam,
 } from '~src/scenes/EditAccountModal'
-import {GetWalletParams} from '~src/scenes/GetWalletView'
 import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
 import ListTokenModal, {ListTokenModalParams} from '~src/scenes/ListTokenModal'
 import {VerifyPasscodePageParams} from '~src/scenes/LoginPage/VerifyPasscodePage'
@@ -134,8 +132,6 @@ export type ModalStackParamList = {
 // Add here params for modals that you need to navigate directly to, from a different stack
 export type ModalParams =
   | DefaultNavigationParam<CustomColorPageParam>
-  | DefaultNavigationParam<GetWalletParams>
-  | DefaultNavigationParam<GetAccountParams>
   | DefaultNavigationParam<EditAccountModalParam>
   | DefaultNavigationParam<AccountQRCodeParams>
   | DefaultNavigationParam<ContactsModalParams>

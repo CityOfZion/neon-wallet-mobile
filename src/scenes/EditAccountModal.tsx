@@ -70,7 +70,7 @@ const EditAccountModal = (props: Props) => {
       index: 0,
       routes: [{name: wrapper.route.Tab.name}],
     })
-    props.navigation.navigate(wrapper.route.GetAccount.name, {})
+    props.navigation.navigate(wrapper.route.GetAccount.name)
   }
 
   const isValid = () => {
@@ -95,7 +95,7 @@ const EditAccountModal = (props: Props) => {
         routes: [{name: wrapper.route.Tab.name}],
       })
       props.navigation.replace(wrapper.route.ListWalletsPage.name, {})
-      props.navigation.navigate(wrapper.route.GetWallet.name, {})
+      props.navigation.navigate(wrapper.route.GetWallet.name)
     } else {
       props.navigation.goBack()
     }
