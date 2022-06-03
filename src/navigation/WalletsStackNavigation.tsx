@@ -4,7 +4,9 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
-import {AccountNFTSScreenParams} from '../scenes/Account/AccountNFTSScreen'
+import AccountNFTSScreen, {
+  AccountNFTSScreenParams,
+} from '../scenes/Account/AccountNFTSScreen'
 import WCAccountConnectionsScreen, {
   WCAccountConnectionsScreenParams,
 } from '../scenes/walletConnect/WCAccountConnectionsScreen'
@@ -125,7 +127,7 @@ const WalletStackNavigation = () => {
         />
         <WalletStack.Screen
           name={wrapper.route.AccountNFTSScreen.name}
-          component={AccountTransactionsScreen}
+          component={AccountNFTSScreen}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               theme,
