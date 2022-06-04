@@ -1,10 +1,11 @@
 import {JsonRpcRequest, JsonRpcResponse} from '@json-rpc-tools/utils'
 import {ImageLoadEventData} from 'react-native'
 
-import {ContractInvocationMulti} from '../helpers/NeonWcAdapter'
 import {ContractResponse} from '../models/response/ContractResponse'
+import {NFTResponse} from '../models/response/NFTResponse'
+import {NFTSResponse} from '../models/response/NFTSResponse'
 import {Neo3Provider} from './Neo3/providers/common'
-import {BSNeo3, ContractParam} from './Neo3/services/BSNeo3'
+import {BSNeo3} from './Neo3/services/BSNeo3'
 import {BSNeoLegacy} from './NeoLegacy/services/BSNeoLegacy'
 
 import {Node} from '~/src/models/Node'
@@ -90,6 +91,11 @@ export interface IWalletConnect {
     request: JsonRpcRequest
   ) => Promise<JsonRpcResponse>
   calculateFee(senderAddress: string, cim: JsonRpcRequest): Promise<string>
+}
+
+export interface INFT {
+  getNFTS(address: string, page: number): Promise<NFTSResponse>
+  getNFT: (tokenId: string, hash: string) => Promise<NFTResponse>
 }
 
 export interface IBlockchainService {
@@ -273,10 +279,8 @@ export const hasWalletconnect = (account: Account) => {
   return hasWCIntegration(bs)
 }
 
-export function hasNFTIntegration(
-  object: BlockchainDataProvider
-): object is Neo3Provider {
-  const methodsName = ['getNFTS']
+export function hasNFTIntegration(object: any): object is INFT {
+  const methodsName = ['getNFTS', 'getNFT']
 
   return methodsName.every((methodName) => methodName in object)
 }

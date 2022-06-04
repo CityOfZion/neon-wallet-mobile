@@ -1,9 +1,9 @@
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
+import I18n from 'i18n-js'
 import React, {useCallback, useEffect, useRef, useState} from 'react'
 import {FlatList} from 'react-native'
-import {useSelector} from 'react-redux'
 
 import {NFTItem} from './NFTItem'
 
@@ -11,6 +11,8 @@ import {wrapper} from '~/src/app/ApplicationWrapper'
 import {blockchainServices} from '~/src/blockchain'
 import {hasNFTIntegration} from '~/src/blockchain/common'
 import AccountSubTitle from '~/src/components/AccountSubTitle'
+import {FlatListEmpty} from '~/src/components/FlatListEmpty'
+import {FlatListFooter} from '~/src/components/FlatListFooter'
 import ScreenLayoutWithoutScroll from '~/src/components/layout/ScreenLayoutWithoutScroll'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import {Loader} from '~/src/components/loader/loader'
@@ -27,28 +29,6 @@ export interface AccountNFTSScreenParams {
 interface Props {
   navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>
   route: RouteProp<WalletStackParamList, 'AccountNFTSScreen'>
-}
-
-const ListFooterComponent = () => {
-  return (
-    <LinearLayout mt="12px" alignItems="center">
-      <Loader />
-    </LinearLayout>
-  )
-}
-
-const ListEmptyComponent = () => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
-
-  return (
-    <LinearLayout alignItems="center" justifyContent="center">
-      <TextView color={theme.colors.text[6]} fontFamily="bold" fontSize="24px">
-        No NFT to list
-      </TextView>
-    </LinearLayout>
-  )
 }
 
 const AccountNFTSScreen = (props: Props) => {
@@ -73,13 +53,13 @@ const AccountNFTSScreen = (props: Props) => {
   }
 
   const handleLoadNFTS = useCallback(async () => {
-    const provider = blockchainServices[account.blockchain].provider
+    const service = blockchainServices[account.blockchain]
 
-    if (!hasNFTIntegration(provider) || !account.address) {
+    if (!hasNFTIntegration(service) || !account.address) {
       return
     }
 
-    const {items, totalPages} = await provider.getNFTS(
+    const {items, totalPages} = await service.getNFTS(
       account.address,
       pageControl.current
     )
@@ -106,16 +86,18 @@ const AccountNFTSScreen = (props: Props) => {
         name="populateNFTS"
         loadingView={<ScreenLoader darkerSolidColorBG />}
       >
-        <LinearLayout mt="44px">
+        <LinearLayout mt="44px" mb="44px">
           <FlatList
             data={NFTS}
             renderItem={({item}) => (
               <NFTItem nft={item} navigation={props.navigation} />
             )}
             ListFooterComponent={
-              showMoreLoading ? <ListFooterComponent /> : undefined
+              showMoreLoading ? <FlatListFooter /> : undefined
             }
-            ListEmptyComponent={<ListEmptyComponent />}
+            ListEmptyComponent={
+              <FlatListEmpty label={I18n.t('screens.accountNFT.emptyList')} />
+            }
             keyExtractor={({id}) => id}
             onEndReached={handleEndReached}
             onEndReachedThreshold={0.5}

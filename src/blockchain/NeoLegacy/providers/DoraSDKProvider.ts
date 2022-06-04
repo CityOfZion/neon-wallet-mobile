@@ -9,10 +9,11 @@ import {NeoNode} from '~/src/models/NeoNode'
 import {Node} from '~/src/models/Node'
 import {TokenAsset} from '~/src/models/TokenAsset'
 import {Transaction} from '~/src/models/Transaction'
+import {TransactionAddressAsset} from '~/src/models/TransactionAddressAsset'
 import {TransactionAddressSummary} from '~/src/models/TransactionAddressSummary'
-import {TransactionAddressTransfer} from '~/src/models/TransactionAddressTransfer'
 import {BalanceResponse} from '~/src/models/response/BalanceResponse'
 import {ContractResponse} from '~/src/models/response/ContractResponse'
+import {NFTResponse} from '~/src/models/response/NFTResponse'
 import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
 import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
 import {Exchange, ExchangeResponse} from '~/src/types/exchange'
@@ -48,7 +49,11 @@ export class DoraSDKProvider implements NeoLegacyProvider {
       ({address_from, address_to, amount, asset, block_height, time, txid}) => {
         const amountConverted = this.convertScientifcNotationToDecimal(amount)
 
-        const transfer = new TransactionAddressTransfer({
+        if (address_from !== address && address_to !== address) {
+          return
+        }
+
+        const transfer = new TransactionAddressAsset({
           amount: Number(amountConverted),
           hash: asset,
           from: address_from ?? 'Mint',

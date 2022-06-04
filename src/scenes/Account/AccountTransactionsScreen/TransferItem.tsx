@@ -1,36 +1,35 @@
 import i18n from 'i18n-js'
-import React, {useState, useEffect, useCallback} from 'react'
-import {View, TouchableWithoutFeedback} from 'react-native'
-import {useDispatch, useSelector} from 'react-redux'
+import React from 'react'
+import {useSelector} from 'react-redux'
 
-import {TransfersDataScreen} from '.'
+import {
+  FormattedTransferAsset,
+  FormattedTransferNFT,
+} from './AccountTransactionsScreen'
+import {TransferAssetItem} from './TransferAssetItem'
+import {TransferNFTItem} from './TransferNFTItem'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
-import {FilterHelper} from '~/src/helpers/FilterHelper'
+import {TransactionTransferType} from '~/src/models/TransactionAddressSummary'
 import {Account} from '~/src/models/redux/Account'
-import {RootStore} from '~/src/store/RootStore'
-import {ImageView, TextView} from '~/src/styles/styled-components'
+import {TextView, LinearLayout} from '~/src/styles/styled-components'
 
-type Props = TransfersDataScreen
+type Props = (FormattedTransferAsset | FormattedTransferNFT) & {
+  account: Account
+}
 
-export const TransferItem = (props: Props) => {
-  const dispatch = useDispatch<SyncDispatch<Account>>()
-  const account = dispatch(RootStore.account.actions.getFromSelection())
+// eslint-disable-next-line react/display-name
+export const TransferItem = React.memo((props: Props) => {
   const contacts = useSelector((state: RootState) => state.app.contacts)
-  const {exchange, tokens} = useSelector((state: RootState) => state.app)
-  const {currency} = useSelector((state: RootState) => state.settings)
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
 
-  const [fiatAmount, setFiatAmount] = useState<string>('')
-  const [addressEllipsizeWidth, setAddressEllipsizeWidth] = useState('40%')
-
   const handleSentOrReceived = () => {
     const [address, status] =
-      props.addressTo === account.address
-        ? [props.addressFrom, 'received']
-        : [props.addressTo, 'sent']
+      props.to === props.account.address
+        ? [props.from, 'received']
+        : [props.to, 'sent']
 
     const contact = contacts.find(
       (contact) =>
@@ -49,96 +48,48 @@ export const TransferItem = (props: Props) => {
       identification,
     }
   }
-
-  const getTokenIcon = () => {
-    return tokens.find(
-      (token) =>
-        token.symbol === props.symbol && token.blockchain === account.blockchain
-    )?.srcIcon
-  }
-
-  const handleChangeAddressSize = useCallback(() => {
-    setAddressEllipsizeWidth((prevState) =>
-      prevState === '40%' ? '100%' : '40%'
-    )
-  }, [])
-
   const {identification, statusLabel} = handleSentOrReceived()
 
-  useEffect(() => {
-    const {symbol, amount} = props
-    if (symbol && exchange[account.blockchain][symbol]) {
-      const ratio = exchange[account.blockchain][symbol].to[currency]
-      const fiatCalculated = ratio * Number(amount)
-      setFiatAmount(`$${FilterHelper.decimal(fiatCalculated, undefined, 2)}`)
-    }
-  }, [exchange, currency])
-
   return (
-    <View
-      style={{
-        paddingBottom: 8,
-        marginBottom: 16,
-        borderBottomColor: theme.colors.text[3],
-        borderBottomWidth: 1,
-      }}
+    <LinearLayout
+      pb="8px"
+      mb="16px"
+      borderBottomColor={theme.colors.text[3]}
+      borderBottomWidth="1px"
     >
       <TextView color="#899fa8" fontSize="14px" fontFamily="medium">
         {statusLabel}
       </TextView>
-      <TouchableWithoutFeedback onPress={handleChangeAddressSize}>
+      <LinearLayout
+        orientation="horiz"
+        justifyContent="space-between"
+        pb={3}
+        width="100%"
+      >
         <TextView
           ellipsizeMode={'middle'}
           numberOfLines={1}
           color="primary"
           fontSize="17px"
           fontFamily="medium"
-          width={addressEllipsizeWidth}
-          pb={3}
+          width="40%"
         >
           {identification}
         </TextView>
-      </TouchableWithoutFeedback>
-      <View
-        style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-        }}
-      >
-        <View style={{flexDirection: 'row'}}>
-          {!!getTokenIcon() && (
-            <ImageView
-              width="21px"
-              height="21px"
-              resizeMode="contain"
-              alignSelf="center"
-              source={getTokenIcon()}
-              mr="5px"
-            />
-          )}
-          <TextView color="#fff" fontFamily="bold" fontSize="16px">
-            {props.symbol}
-          </TextView>
-        </View>
         <TextView
-          color="#fff"
-          fontSize="16px"
-          fontFamily="medium"
-          flex={1}
-          textAlign="right"
+          color={theme.colors.text[6]}
+          fontSize="14px"
+          fontFamily="bold"
         >
-          {props.amount}
+          {i18n.t(`screens.accountTransaction.${props.type}`).toUpperCase()}
         </TextView>
-        <TextView
-          color="#fff"
-          fontSize="16px"
-          fontFamily="medium"
-          width={125}
-          textAlign="right"
-        >
-          {fiatAmount}
-        </TextView>
-      </View>
-    </View>
+      </LinearLayout>
+
+      {props.type === TransactionTransferType.ASSET ? (
+        <TransferAssetItem {...props} />
+      ) : (
+        <TransferNFTItem {...props} />
+      )}
+    </LinearLayout>
   )
-}
+})

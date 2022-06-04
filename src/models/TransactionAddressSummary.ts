@@ -4,8 +4,13 @@ import {
   ResponseSerialize,
 } from '@simpli/serialized-request'
 
-import {TransactionAddressTransfer} from './TransactionAddressTransfer'
+import {TransactionAddressAsset} from './TransactionAddressAsset'
+import {TransactionAddressNFT} from './TransactionAddressNFT'
 
+export enum TransactionTransferType {
+  ASSET = 'asset',
+  NFT = 'nft',
+}
 @HttpExclude()
 export class TransactionAddressSummary {
   @HttpExpose()
@@ -18,8 +23,7 @@ export class TransactionAddressSummary {
   blockHeight: number
 
   @HttpExpose()
-  @ResponseSerialize(TransactionAddressTransfer)
-  transfers: TransactionAddressTransfer[] = []
+  transfers: (TransactionAddressAsset | TransactionAddressNFT)[] = []
 
   @HttpExpose()
   qtyInvocations: number = 0
