@@ -43,6 +43,7 @@ export const TransactionListItem = React.memo(
             </View>
             <FlatList
               data={pendingTransactions}
+              listKey={`pendingTransaction-${date}`}
               keyExtractor={(item) => item.hash}
               renderItem={({item}) => (
                 <TransactionItem
@@ -68,6 +69,7 @@ export const TransactionListItem = React.memo(
             </View>
             <FlatList
               data={completedTransactions}
+              listKey={`completedTransaction-${date}`}
               keyExtractor={(item) => item.hash}
               renderItem={({item}) => (
                 <TransactionItem account={account} {...item} />

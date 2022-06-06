@@ -239,7 +239,7 @@ const AccountTransactionsScreen = (props: Props) => {
   }, [account, getDecimalsAndSymbolToken, getNFTInfo])
 
   const loadPendingTransactions = useCallback(
-    async (completedTransaction?: FormattedTransaction[]) => {
+    async (completedTransaction: FormattedTransaction[]) => {
       const transactions = account
         .getPendingTransactions()
         .filter(
@@ -261,8 +261,7 @@ const AccountTransactionsScreen = (props: Props) => {
           !!transaction.senderAddress &&
           !!transaction.receiverAddress &&
           !!transaction.token &&
-          !!transaction.token.decimals &&
-          !!completedTransaction?.some(
+          !completedTransaction.some(
             ({hash}) => hash === transaction.transactionHash
           )
       )
@@ -283,7 +282,7 @@ const AccountTransactionsScreen = (props: Props) => {
             {
               from: senderAddress,
               to: receiverAddress,
-              amount: String(token.amount / 10 ** token.decimals),
+              amount: String(token.amount),
               hash: token.hash,
               symbol: token.symbol,
               type: TransactionTransferType.ASSET,
@@ -299,7 +298,7 @@ const AccountTransactionsScreen = (props: Props) => {
 
   const populateTransactions = useCallback(async () => {
     const completedTransaction = await loadCompletedTransactions()
-    await loadPendingTransactions(completedTransaction)
+    await loadPendingTransactions(completedTransaction ?? [])
   }, [loadCompletedTransactions, loadPendingTransactions])
 
   useEffect(() => {
