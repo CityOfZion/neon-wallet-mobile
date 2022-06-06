@@ -6,21 +6,16 @@ import {ThemeProvider} from 'styled-components'
 
 import AccountNFTSScreen, {
   AccountNFTSScreenParams,
-} from '../scenes/Account/AccountNFTSScreen'
+} from '../scenes/Account/AccountNFTSScreen/AccountNFTSScreen'
 import WCAccountConnectionsScreen, {
   WCAccountConnectionsScreenParams,
 } from '../scenes/walletConnect/WCAccountConnectionsScreen'
-import {MoreStackParamList} from './MoreStackNavigation'
-import {SettingsStackParamList} from './SettingsStackNavigation'
 
 import AccountTransactionsScreen, {
   AccountTransactionsScreenParams,
 } from '~/src/scenes/Account/AccountTransactionsScreen/AccountTransactionsScreen'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Navigator} from '~src/app/Navigator'
-import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
-import {Wallet} from '~src/models/redux/Wallet'
-import {ModalParams} from '~src/navigation/ModalStackNavigation'
 import AccountAssetDetail, {
   AccountAssetDetailParams,
 } from '~src/scenes/Account/AccountAssetDetail'

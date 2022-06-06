@@ -7,7 +7,6 @@ import {FlatList} from 'react-native'
 
 import {NFTItem} from './NFTItem'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
 import {blockchainServices} from '~/src/blockchain'
 import {hasNFTIntegration} from '~/src/blockchain/common'
 import AccountSubTitle from '~/src/components/AccountSubTitle'
@@ -98,7 +97,7 @@ const AccountNFTSScreen = (props: Props) => {
             ListEmptyComponent={
               <FlatListEmpty label={I18n.t('screens.accountNFT.emptyList')} />
             }
-            keyExtractor={({id}) => id}
+            keyExtractor={({id}, index) => `${id}-${index}`}
             onEndReached={handleEndReached}
             onEndReachedThreshold={0.5}
             onMomentumScrollBegin={handleMomentumScrollBegin}
