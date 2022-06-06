@@ -39,7 +39,6 @@
     "ReceiveQrCode": "Receive QR Code",
     "CustomColor": "Personalizar Cor",
     "CreateWallet": "Create Wallet",
-    "MyWallets": "Minhas Carteiras",
     "Step1CreateWallet": "Criar carteira",
     "Step2CreateWallet": "Criar carteira",
     "Step3CreateWallet": "Criar carteira",
@@ -98,10 +97,6 @@
       "buttonTitle": "#translateme"
     }
   },
-  "myWalletOptions": {
-    "details": "Detalhes",
-    "backupWallet": "Backup da carteira"
-  },
   "step1CreateWallet": {
     "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",
     "label_1": "#translateme",
@@ -148,7 +143,6 @@
   },
   "settings": {
     "title": "Configurações",
-    "myWallets": "Minhas Wallets",
     "security": "Segurança",
     "currency": "Moeda",
     "language": "Idioma",
@@ -237,6 +231,19 @@
       "transactions": "Transactions",
       "connections": "Connections",
       "nfts": "NFTS"
+    },
+    "walletSettingsView": {
+      "title": "#translateme",
+      "customize": "#translateme",
+      "backup": "#translateme",
+      "deleteTitle": "#translateme",
+      "deleteSubtitle": "#translateme",
+      "deleteButtom": "#translateme",
+      "deleteAlert": "#translateme",
+      "navigation": {
+        "cancel": "#translateme",
+        "delete": "#translateme"
+      }
     }
   },
   "modals": {

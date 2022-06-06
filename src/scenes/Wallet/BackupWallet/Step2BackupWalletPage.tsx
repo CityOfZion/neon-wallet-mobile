@@ -10,17 +10,17 @@ import {Alert, FlatList} from 'react-native'
 import {useDispatch} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
+import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 import {RootStore} from '~src/store/RootStore'
 import {TextView, LinearLayout} from '~src/styles/styled-components'
 
 interface Props {
-  route: RouteProp<SettingsStackParamList, 'Step2BackupWallet'>
-  navigation: StackNavigationProp<SettingsStackParamList>
+  route: RouteProp<WalletStackParamList, 'Step2BackupWallet'>
+  navigation: StackNavigationProp<WalletStackParamList>
 }
 
 const Step2BackupWalletPage: React.FC<Props> = (props) => {

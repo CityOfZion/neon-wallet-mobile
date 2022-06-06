@@ -5,6 +5,7 @@ import {LinearLayout} from '~/src/styles/styled-components'
 import ThemedAddButton from '~src/components/themed/ThemedAddButton'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
+import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
 
 export interface HeaderActionButtonProps {
   actionTitle?: string
@@ -13,6 +14,7 @@ export interface HeaderActionButtonProps {
     | 'highlight'
     | 'close'
     | 'add'
+    | 'more'
     | 'hightlightdisabled'
   actionOnPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
 }
@@ -73,6 +75,14 @@ const HeaderActionButton: React.FC<HeaderActionButtonProps> = (
 
   if (actionButtonStyle === 'add') {
     return <ThemedAddButton onPress={props?.actionOnPress} />
+  }
+
+  if (actionButtonStyle === 'more') {
+    return (
+      <LinearLayout mt={3}>
+        <ThemedMoreButton onPress={props?.actionOnPress} />
+      </LinearLayout>
+    )
   }
 
   return <View />

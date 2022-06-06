@@ -72,7 +72,7 @@ const Step5CreateWalletPage = (props: Props) => {
             props.navigation.replace(wrapper.route.Tab.name, {
               screen: wrapper.route.ListWallets.name,
             })
-            props.navigation.navigate(wrapper.route.ListWalletsPage.name, {})
+            props.navigation.navigate(wrapper.route.ListWalletsPage.name)
           }}
           label={i18n.t('step5CreateWallet.viewWallet')}
         />

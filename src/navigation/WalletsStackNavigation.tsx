@@ -4,9 +4,19 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {HeaderActionButtonProps} from '../components/layout/HeaderActionButton'
 import AccountNFTSScreen, {
   AccountNFTSScreenParams,
 } from '../scenes/Account/AccountNFTSScreen/AccountNFTSScreen'
+import Step1BackupWalletPage, {
+  StepsBackupWalletPageParams,
+} from '../scenes/Wallet/BackupWallet/Step1BackupWalletPage'
+import Step2BackupWalletPage from '../scenes/Wallet/BackupWallet/Step2BackupWalletPage'
+import Step3BackupWalletPage from '../scenes/Wallet/BackupWallet/Step3BackupWalletPage'
+import {
+  WalletSettingsView,
+  WalletSettingViewParams,
+} from '../scenes/Wallet/WalletSettingsView'
 import WCAccountConnectionsScreen, {
   WCAccountConnectionsScreenParams,
 } from '../scenes/walletConnect/WCAccountConnectionsScreen'
@@ -14,6 +24,8 @@ import WCAccountConnectionsScreen, {
 import AccountTransactionsScreen, {
   AccountTransactionsScreenParams,
 } from '~/src/scenes/Account/AccountTransactionsScreen/AccountTransactionsScreen'
+import GetWalletView from '~/src/scenes/Wallet/GetWalletView'
+import ListWalletView from '~/src/scenes/Wallet/ListWalletView'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Navigator} from '~src/app/Navigator'
 import AccountAssetDetail, {
@@ -21,11 +33,9 @@ import AccountAssetDetail, {
 } from '~src/scenes/Account/AccountAssetDetail'
 import AccountAssetScreen from '~src/scenes/Account/AccountAssetsScreen'
 import GetAccountView from '~src/scenes/Account/GetAccountView'
-import GetWalletView from '~src/scenes/GetWalletView'
-import ListWalletView, {ListWalletParams} from '~src/scenes/ListWalletView'
 
 export type WalletStackParamList = {
-  ListWalletsPage: ListWalletParams
+  ListWalletsPage: undefined
   GetWallet: undefined
   GetAccount: undefined
   AccountAssetDetail: AccountAssetDetailParams
@@ -33,6 +43,10 @@ export type WalletStackParamList = {
   AccountTransactionsScreen: AccountTransactionsScreenParams
   WCAccountConnectionsScreen: WCAccountConnectionsScreenParams
   AccountNFTSScreen: AccountNFTSScreenParams
+  WalletSettingsView: WalletSettingViewParams
+  Step1BackupWallet: StepsBackupWalletPageParams & HeaderActionButtonProps
+  Step2BackupWallet: StepsBackupWalletPageParams & HeaderActionButtonProps
+  Step3BackupWallet: StepsBackupWalletPageParams & HeaderActionButtonProps
 }
 
 const WalletStack = createStackNavigator<WalletStackParamList>()
@@ -128,6 +142,53 @@ const WalletStackNavigation = () => {
               theme,
               route,
               title: i18n.t('screens.screenLayout.nfts'),
+            })
+          }
+        />
+        <WalletStack.Screen
+          name={wrapper.route.WalletSettingsView.name}
+          component={WalletSettingsView}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              theme,
+              route,
+              title: i18n.t('screens.walletSettingsView.title'),
+            })
+          }
+        />
+
+        <WalletStack.Screen
+          name={wrapper.route.Step1BackupWallet.name}
+          component={Step1BackupWalletPage}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: wrapper.route.Step1BackupWallet.translate(),
+              theme,
+              route,
+            })
+          }
+        />
+
+        <WalletStack.Screen
+          name={wrapper.route.Step2BackupWallet.name}
+          component={Step2BackupWalletPage}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: wrapper.route.Step2BackupWallet.translate(),
+              theme,
+              route,
+            })
+          }
+        />
+
+        <WalletStack.Screen
+          name={wrapper.route.Step3BackupWallet.name}
+          component={Step3BackupWalletPage}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: wrapper.route.Step3BackupWallet.translate(),
+              theme,
+              route,
             })
           }
         />

@@ -6,14 +6,14 @@ import React from 'react'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {Normalize} from '~/src/app/Normalize'
+import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 import {TextView, LinearLayout, ImageView} from '~src/styles/styled-components'
 
 interface Props {
-  navigation: StackNavigationProp<ParamList>
-  route: RouteProp<SettingsStackParamList, 'Step3BackupWallet'>
+  navigation: StackNavigationProp<WalletStackParamList>
+  route: RouteProp<WalletStackParamList, 'Step3BackupWallet'>
 }
 
 const Step3BackupWalletPage: React.FC<Props> = (props) => {

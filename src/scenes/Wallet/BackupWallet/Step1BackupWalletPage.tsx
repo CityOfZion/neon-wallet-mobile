@@ -10,14 +10,13 @@ import {Alert} from 'react-native'
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {Normalize} from '~/src/app/Normalize'
 import {UtilsHelper} from '~/src/helpers/UtilsHelper'
+import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCard from '~src/components/themed/ThemedCard'
 import {Wallet} from '~src/models/redux/Wallet'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
 import {TextView, LinearLayout} from '~src/styles/styled-components'
 
 export interface StepsBackupWalletPageParams {
@@ -26,8 +25,8 @@ export interface StepsBackupWalletPageParams {
 }
 
 interface Props {
-  route: RouteProp<SettingsStackParamList, 'Step1BackupWallet'>
-  navigation: StackNavigationProp<SettingsStackParamList>
+  route: RouteProp<WalletStackParamList, 'Step1BackupWallet'>
+  navigation: StackNavigationProp<WalletStackParamList>
 }
 
 const WordComponent = (props: {value: string}) => {

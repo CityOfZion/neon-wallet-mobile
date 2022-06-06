@@ -29,15 +29,6 @@ const SettingsPage = (props: SettingsProps) => {
   return (
     <ScreenLayout padding={20} darkerSolidColorBG={true}>
       <MenuItem
-        title={i18n.t('settings.myWallets')}
-        icon={require('~/src/assets/images/wallet-icon-green.png')}
-        iconMarginRight={12}
-        iconHeight={24}
-        arrowDirection={RightIconType.ARROW_RIGHT}
-        onPress={() => props.navigation.navigate(wrapper.route.MyWallets.name)}
-      />
-
-      <MenuItem
         title={i18n.t('settings.security')}
         icon={require('~/src/assets/images/security-icon-green.png')}
         iconWidth={18}
