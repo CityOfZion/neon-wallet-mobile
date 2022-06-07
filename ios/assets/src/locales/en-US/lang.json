@@ -30,13 +30,8 @@
     "done": "Done",
     "copyToClipboard": "Copy to clipboard",
     "add": "Add",
-    "createNow": "Create Now"
-  },
-  "contexts": {
-    "walletConnect": {
-      "clientPairError": "Problem with client pair",
-      "unsupportedMethod": "The method %{method} is not supported"
-    }
+    "createNow": "Create Now",
+    "timeout": "Timeout exceeded"
   },
   "routes": {
     "GetWallet": "Wallet",
@@ -232,8 +227,9 @@
     "mnemonicIncorrect": "Mnemonic incorrect",
     "areImportingMnemonic": "Looks like you are importing a mnemonic",
     "areWatchAccount": "Looks like you are importing a watch account",
-    "mnemonicAlreadyExists": "The mnemonic: %{mnemonic} already exists",
-    "offline": "You need to be online to import informations"
+    "mnemonicAlreadyExists": "Mnemonic already exists",
+    "offline": "You need to be online to import informations",
+    "genericError": "Occurs a generic error. Try Again"
   },
   "passphrase": {
     "enterPassphrase": "Enter a Passphrase for your encrypted key",
@@ -330,7 +326,14 @@
       "pendingTransactions": "PENDING TRANSACTIONS",
       "completedTransactions": "COMPLETED TRANSACTIONS",
       "invocationsLabel": "Invocations",
-      "notificationsLabel": "Notifications"
+      "notificationsLabel": "Notifications",
+      "asset": "Asset",
+      "nft": "NFT",
+      "errorToGetTransactions": "Unexpected error to get transactions",
+      "emptyList": "No transaction to list"
+    },
+    "accountNFT": {
+      "emptyList": "No NFT to list"
     },
     "customizeAccount": {
       "title": "Create account",
@@ -662,6 +665,11 @@
       "title": "Connection details",
       "disconnect": "Disconnect"
     },
+    "WCTransactionRequestModal": {
+      "unsupportedMethod": "The method %{method} is not supported",
+      "errorToGetAccount": "Error to get account from session",
+      "unexpectedError": "Unexpected Error to accept request"
+    },
     "signatureScope": {
       "title": "Signature Scope",
       "scopeTitle": "Scope",
@@ -872,7 +880,8 @@
   },
   "walletconnect": {
     "alert": {
-      "text": "%{text} Connected"
+      "text": "%{text} Connected",
+      "unexpectedErrorToSelectAccount": "Unexpected error to select account"
     },
     "noDAppsConnected": "No dApps connected",
     "waitingDAppConnect": "Please be a patient, we are now connecting with %{dAppName}",
@@ -881,7 +890,6 @@
     "connectedDApps": "Connected dApps",
     "offline": "You need to be online to connect to a dApp",
     "invalidSession": "Trying to connect to unsupported network",
-    "internetConnectionLost1": "Internet connection lost. Reconnect and try again",
-    "internetConnectionLost2": "Internet connection lost. You were disconnected from all dapps."
+    "internetConnectionLost": "Internet connection lost. You were disconnected from all dapps."
   }
 }

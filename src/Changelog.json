@@ -1,6 +1,23 @@
 {
     "changelog": [
     	{
+            "version": "V1.0.31-1",
+            "date": "June 09 2022",
+            "changes": [
+                " -Basic NFT Features:",
+                " -View owned NFTs",
+                " -View NFT transfers",
+                " -Minor Bugfixes",
+            ]
+        },
+    	{
+            "version": "V1.0.30-1",
+            "date": "June 06 2022",
+            "changes": [
+                " -Bugfixes",
+            ]
+        },
+    	{
             "version": "V1.0.29-1",
             "date": "May 20 2022",
             "changes": [

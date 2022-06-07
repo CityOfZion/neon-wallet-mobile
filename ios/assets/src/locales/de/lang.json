@@ -13,12 +13,6 @@
     "transactionTime": "hh:mm:a",
     "transactionsPerDate": "DD MMMM"
   },
-  "contexts": {
-    "walletConnect": {
-      "timeoutError": "Connection URL Expired",
-      "clientPairError": "Problem with client pair"
-    }
-  },
   "app": {
     "neoBlockHeight": "NEO BLOCK HEIGHT",
     "back": "#translateme",
@@ -33,7 +27,8 @@
     "save": "#translateme",
     "done": "#translateme",
     "close": "#translateme",
-    "copyToClipboard": "Copy to clipboard"
+    "copyToClipboard": "Copy to clipboard",
+    "timeout": "#translateme"
   },
   "routes": {
     "GetWallet": "#translateme",
@@ -202,7 +197,14 @@
       "pendingTransactions": "#translateme",
       "completedTransactions": "#translateme",
       "invocationsLabel": "#translateme",
-      "notificationsLabel": "#translateme"
+      "notificationsLabel": "#translateme",
+      "asset": "#translateme",
+      "nft": "#translateme",
+      "errorToGetTransactions": "#translateme",
+      "emptyList": "#translateme"
+    },
+    "accountNFT": {
+      "emptyList": "#translateme"
     },
     "createAccount": {
       "title": "#translateme",
@@ -302,6 +304,11 @@
       "subtitle": "Drag a wallet to a new position to reorder",
       "cancel": "Cancel",
       "save": "Save"
+    },
+    "WCTransactionRequestModal": {
+      "unsupportedMethod": "#translateme",
+      "errorToGetAccount": "#translateme",
+      "unexpectedError": "#translateme"
     }
   },
   "components": {
@@ -352,5 +359,19 @@
       "regex": "(\\d{5})$",
       "format": "$1"
     }
+  },
+  "walletconnect": {
+    "alert": {
+      "text": "#translateme",
+      "unexpectedErrorToSelectAccount": "#translateme"
+    },
+    "noDAppsConnected": "#translateme",
+    "waitingDAppConnect": "#translateme",
+    "connectDAppLabel": "#translateme",
+    "connectNewDAppLabel": "#translateme",
+    "connectedDApps": "#translateme",
+    "offline": "#translateme",
+    "invalidSession": "#translateme",
+    "internetConnectionLost": "#translateme"
   }
 }
