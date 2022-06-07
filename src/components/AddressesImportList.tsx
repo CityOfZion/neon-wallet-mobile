@@ -14,6 +14,7 @@ import {BlockchainServiceKey, getBlockchainLogo} from '~src/blockchain'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface AddressImportItem {
+  blockSelection?: boolean
   address: string
   blockchain: BlockchainServiceKey
   onSelectAddress: (
@@ -27,8 +28,8 @@ const AddressImportItem = (props: AddressImportItem) => {
   const [isSelected, setIsSelected] = useState<boolean>(true)
 
   const handleClickActive = useCallback(() => {
-    setIsSelected(!isSelected)
-  }, [isSelected])
+    !props.blockSelection && setIsSelected(!isSelected)
+  }, [isSelected, props.blockSelection])
 
   useEffect(() => {
     props.onSelectAddress(props.address, props.blockchain, isSelected)
@@ -59,7 +60,7 @@ const AddressImportItem = (props: AddressImportItem) => {
             </TextView>
           </View>
         </View>
-        {isSelected && (
+        {(isSelected ?? !props.blockSelection) && (
           <Image source={require('~src/assets/images/icon-check-green.png')} />
         )}
       </View>
@@ -68,6 +69,7 @@ const AddressImportItem = (props: AddressImportItem) => {
 }
 
 export interface AddressesImportList {
+  blockSelection?: boolean
   addressesInfo: {address: string; blockchain: BlockchainServiceKey}[]
   onSelectAddress: (
     addressInfoSelected: {address: string; blockchain: BlockchainServiceKey}[]
@@ -137,6 +139,7 @@ const AddressesImportList = (props: AddressesImportList) => {
           data={props.addressesInfo}
           renderItem={({item, index}) => (
             <AddressImportItem
+              blockSelection={props.blockSelection}
               onSelectAddress={handleChangeAddressesSelected}
               blockchain={item.blockchain}
               key={index}

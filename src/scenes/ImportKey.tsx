@@ -283,11 +283,8 @@ const ImportKey = (props: ImportKeyProps) => {
     }
 
     blockchainActionsHook.init()
-    const walletId = await blockchainActionsHook.createWallet(
-      i18n.t('defaultNameWallet.importedWallet'),
-      mnemonic.join(','),
-      'standard',
-      true
+    const walletId = await blockchainActionsHook.createLegacyWallet(
+      i18n.t('defaultNameWallet.importedWallet')
     )
 
     const accountToImport = addressesSelected.map(
@@ -497,13 +494,14 @@ const ImportKey = (props: ImportKeyProps) => {
                 color={'text.3'}
                 mb={'10px'}
               >
-                Select the correct account from the list below
+                {i18n.t('importKey.selectAccountTitile')}
               </TextView>
               <AddressesImportList
                 onSelectAddress={(addressesSelected) => {
                   setAddressesSelected(addressesSelected)
                 }}
                 addressesInfo={addressesFound}
+                blockSelection={inputType.current !== 'mnemonic'}
               />
             </LinearLayout>
           )}

@@ -45,6 +45,28 @@ export function useBlockchainActionsHook() {
     dispatch(RootStore.timer.actions.setTimerOn())
   }, [])
 
+  const createLegacyWallet = useCallback(
+    async (name: string) => {
+      if (!timerStatus) {
+        throw new Error('The hook need be initialized')
+      }
+      dispatch(RootStore.wallet.actions.setName(name))
+      dispatch(RootStore.wallet.actions.setType('legacy'))
+      const walletId = await dispatchAsyncString(
+        RootStore.wallet.actions.createAndSave()
+      )
+      await dispatchAsync(
+        RootStore.wallet.actions.setShowBackupAlert(walletId, false)
+      )
+      await dispatchAsync(RootStore.app.actions.syncWallets())
+
+      dispatch(RootStore.wallet.actions.selectWallet(walletId))
+
+      return walletId
+    },
+    [timerStatus]
+  )
+
   const createWallet = useCallback(
     async (
       name: string,
@@ -221,5 +243,6 @@ export function useBlockchainActionsHook() {
     importAccount,
     importAccounts,
     importWatchAccount,
+    createLegacyWallet,
   }
 }
