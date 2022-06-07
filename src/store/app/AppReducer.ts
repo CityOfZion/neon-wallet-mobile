@@ -9,11 +9,8 @@ import {
 
 import {appBus} from '~/src/app/AppBus'
 import {applicationConfig} from '~/src/config/ApplicationConfig'
-import {AsteroidHelper} from '~/src/helpers/AsteroidHelper'
 import {SecurityHelper} from '~/src/helpers/SecurityHelper'
-import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import {Node} from '~/src/models/Node'
-import {wrapper} from '~src/app/ApplicationWrapper'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
 import {blockchainList, blockchainServices} from '~src/blockchain'

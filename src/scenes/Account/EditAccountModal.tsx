@@ -1,7 +1,6 @@
 import {RouteProp} from '@react-navigation/native'
 import i18n from 'i18n-js'
 import React, {useState} from 'react'
-import {Alert, TouchableWithoutFeedback} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
@@ -19,7 +18,8 @@ import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootStore, RootState} from '~src/store/RootStore'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import {LinearLayout} from '~src/styles/styled-components'
+
 type ParamList = ModalStackParamList & RootStackParamList & WalletStackParamList
 
 export interface EditAccountModalParam {
@@ -35,7 +35,6 @@ const EditAccountModal = (props: Props) => {
   const tokenAssets = props.route.params.account.tokenAssets
   const account = UtilsHelper.clone(props.route.params.account)
   account.tokenAssets = tokenAssets
-  var isDeleted: boolean = false
 
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
@@ -66,11 +65,7 @@ const EditAccountModal = (props: Props) => {
     dispatch(RootStore.account.actions.selectAccount(address))
     dispatch(RootStore.wallet.actions.selectWallet(account.idWallet))
 
-    props.navigation.reset({
-      index: 0,
-      routes: [{name: wrapper.route.Tab.name}],
-    })
-    props.navigation.navigate(wrapper.route.GetAccount.name)
+    props.navigation.goBack()
   }
 
   const isValid = () => {
@@ -88,46 +83,8 @@ const EditAccountModal = (props: Props) => {
     Await.run('swiperRight', submit, 300)
   }
 
-  const handleNavigation = () => {
-    if (isDeleted) {
-      props.navigation.reset({
-        index: 0,
-        routes: [{name: wrapper.route.Tab.name}],
-      })
-      props.navigation.replace(wrapper.route.ListWalletsPage.name)
-      props.navigation.navigate(wrapper.route.GetWallet.name)
-    } else {
-      props.navigation.goBack()
-    }
-  }
-
-  const deleteAction = async () => {
-    if (account?.address) {
-      await dispatchAsync(RootStore.account.actions.delete(account.address))
-    }
-
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
-
-    isDeleted = true
-    handleNavigation()
-  }
-
-  const alertDelete = () => {
-    Alert.alert(
-      '',
-      i18n.t('modals.editAccount.deleteAccountAlert'),
-      [
-        {
-          text: i18n.t('modals.editAccount.navigation.cancel'),
-          style: 'cancel',
-        },
-        {
-          text: i18n.t('modals.editAccount.navigation.delete'),
-          onPress: deleteAction,
-        },
-      ],
-      {cancelable: true}
-    )
+  const handleOnClose = () => {
+    props.navigation.goBack()
   }
 
   return (
@@ -141,7 +98,7 @@ const EditAccountModal = (props: Props) => {
       disableRightButton={!name}
       onLeftPress={() => controller.close()}
       onRightPress={save}
-      onClose={() => handleNavigation()}
+      onClose={handleOnClose}
       solidColorBG={true}
     >
       <AwaitActivity
@@ -189,44 +146,6 @@ const EditAccountModal = (props: Props) => {
           />
 
           <ColorSelector onSelect={setColor} account={account} />
-          <LinearLayout>
-            <InputLabel
-              title={i18n.t('modals.editAccount.deleteAccount')}
-              capitalize={true}
-              marginBottom={'5px'}
-              marginTop={'27px'}
-            />
-            <TextView color={theme.colors.text[0]} marginBottom={'20px'}>
-              {i18n.t('modals.editAccount.deleteAccountSubtitle')}
-            </TextView>
-            <TouchableWithoutFeedback onPress={alertDelete}>
-              <LinearLayout
-                width="100%"
-                borderRadius="4px"
-                borderWidth="1px"
-                borderColor="primary"
-                justifyContent="center"
-                alignItems="center"
-                orientation="horiz"
-                p="10px"
-              >
-                <ImageView
-                  resizeMode="center"
-                  imageSize={[20, 20]}
-                  source={require('~/src/assets/images/icon-trash-can-primary.png')}
-                />
-
-                <TextView
-                  style={{includeFontPadding: false}}
-                  ml={3}
-                  color={'primary'}
-                  fontSize={20}
-                >
-                  {i18n.t('modals.editAccount.deleteButtom')}
-                </TextView>
-              </LinearLayout>
-            </TouchableWithoutFeedback>
-          </LinearLayout>
         </LinearLayout>
       </AwaitActivity>
     </SwiperPanel>

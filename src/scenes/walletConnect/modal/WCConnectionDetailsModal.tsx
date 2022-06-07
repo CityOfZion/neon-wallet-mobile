@@ -1,4 +1,5 @@
 import {RouteProp, useNavigation} from '@react-navigation/native'
+import {SessionTypes} from '@walletconnect/types'
 import i18n from 'i18n-js'
 import moment from 'moment'
 import React, {useEffect, useState, useCallback, useMemo} from 'react'
@@ -10,6 +11,7 @@ import {
   BlockchainServiceKey,
   getBlockchainByWCChain,
 } from '~/src/blockchain/common'
+import {ConnectedAccountAndWallet} from '~/src/components/ConnectionItem'
 import SwiperPanel, {
   CloseButton,
   useSwiperController,
@@ -17,11 +19,11 @@ import SwiperPanel, {
 import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
 import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
-import {IDappInfo} from '~src/scenes/walletConnect/components/WCConnectedDapps'
 import {LinearLayout, TextView, ImageView} from '~src/styles/styled-components'
 
 export interface WCConnectionDetailsModalParams {
-  dapp: IDappInfo
+  session: SessionTypes.Settled
+  connectedAccountsAndWallets: ConnectedAccountAndWallet[]
 }
 
 interface Props {
@@ -29,25 +31,29 @@ interface Props {
 }
 
 const WCConnectionDetailsModal = (props: Props) => {
+  const {session, connectedAccountsAndWallets} = props.route.params
+  const approvalDate = useSelector((state: RootState) =>
+    state.wcReducer.approvalDates?.find(
+      (approvalDate) => approvalDate.sessionTopic === session.topic
+    )
+  )
   const controller = useSwiperController(true)
   const walletConnectCtx = useWalletConnect()
   const navigation = useNavigation()
   const {isConnected} = useSelector((state: RootState) => state.network)
 
-  const {dapp} = props.route.params
-
   const blockchain = useMemo<BlockchainServiceKey>(() => {
     const blockchainByWCChain = getBlockchainByWCChain(
-      dapp.session.permissions.blockchain.chains
+      session.permissions.blockchain.chains
     )
 
     if (blockchainByWCChain) return blockchainByWCChain
 
     return 'neo3'
-  }, [dapp])
+  }, [session])
 
   const handleDisconnect = useCallback(async () => {
-    await walletConnectCtx.disconnect(dapp.session.topic)
+    await walletConnectCtx.disconnect(session.topic)
     controller.close()
   }, [walletConnectCtx.sessions])
 
@@ -67,46 +73,37 @@ const WCConnectionDetailsModal = (props: Props) => {
       <LinearLayout height={'100%'} justifyContent={'space-between'}>
         <LinearLayout height={'50%'} mt={3}>
           <LinearLayout alignItems={'center'} pb={'38px'}>
-            {dapp.connectedAcc.map((it, index) => {
-              const accountInfo = dapp.session.state.accounts[index].split(':')
-              return (
-                <LinearLayout orientation={'horiz'} key={index}>
-                  <TextView color={'text.10'} fontSize={'12px'}>
-                    {it.wallet ? `${it.wallet.name} - ` : ''}
-                  </TextView>
+            {connectedAccountsAndWallets.map((it, index) => (
+              <LinearLayout orientation={'horiz'} key={index}>
+                <TextView color={'text.10'} fontSize={'12px'}>
+                  {`${it.wallet.name} - `}
+                </TextView>
 
-                  {it.account ? (
-                    <>
-                      <LinearLayout
-                        width="7px"
-                        height="7px"
-                        mr="3px"
-                        mt="6px"
-                        bg={it.account.backgroundColor}
-                        borderRadius={9999}
-                      />
-                      <TextView color={'text.10'} fontSize={'12px'}>
-                        {it.account?.name ?? ''}
-                      </TextView>
-                    </>
-                  ) : (
-                    <TextView color={'text.10'} fontSize={'12px'}>
-                      {accountInfo[2]}
-                    </TextView>
-                  )}
-                </LinearLayout>
-              )
-            })}
+                <LinearLayout
+                  width="7px"
+                  height="7px"
+                  mr="3px"
+                  mt="6px"
+                  bg={it.account.backgroundColor}
+                  borderRadius={9999}
+                />
+                <TextView color={'text.10'} fontSize={'12px'}>
+                  {it.account?.name ?? ''}
+                </TextView>
+              </LinearLayout>
+            ))}
 
-            {dapp.approvedDate && (
+            {approvalDate && (
               <TextView color={'text.10'} fontSize={'12px'}>
-                {moment.unix(dapp.approvedDate).format('HH:mm Do MMM YYYY')}
+                {moment
+                  .unix(approvalDate.approvalDate)
+                  .format('HH:mm Do MMM YYYY')}
               </TextView>
             )}
           </LinearLayout>
           <ConnectionHeader
-            title={dapp.session.peer.metadata.name}
-            imageUri={dapp.session.peer.metadata.icons[0]}
+            title={session.peer.metadata.name}
+            imageUri={session.peer.metadata.icons[0]}
           />
 
           <LinearLayout
@@ -151,7 +148,7 @@ const WCConnectionDetailsModal = (props: Props) => {
               >
                 {i18n.t('modals.WCConnectionDetails.features')}
               </TextView>
-              {dapp.session.permissions.jsonrpc.methods.map((it, index) => (
+              {session.permissions.jsonrpc.methods.map((it, index) => (
                 <TextView
                   key={index}
                   color={'#fff'}

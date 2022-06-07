@@ -56,13 +56,16 @@ export abstract class UtilsHelper {
     // eslint-disable-next-line no-undef
     return new Promise((resolve) => setTimeout(resolve, ms))
   }
+
   static clearText(text: string) {
     const cleanText = text.replace(/\r?\n|\r/, '') //remove enter
     return cleanText
   }
+
   static removeAccents(text: string) {
     return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   }
+
   static convertToArbitraryDecimals(num: number, decimals: number = 8) {
     // eslint-disable-next-line
     const multiplier = 1 / Math.pow(10, decimals)
@@ -87,5 +90,9 @@ export abstract class UtilsHelper {
         reject(error)
       }
     })
+  }
+
+  static getRandomNumber(max: number) {
+    return Math.floor(Math.random() * Math.floor(max))
   }
 }

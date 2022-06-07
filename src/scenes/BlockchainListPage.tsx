@@ -7,7 +7,7 @@ import {View} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {getRandomColor} from './CustomizeAccount'
+import {UtilsHelper} from '../helpers/UtilsHelper'
 
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {BlockchainServiceKey, blockchainServices} from '~src/blockchain'
@@ -61,7 +61,7 @@ const BlockchainListPage = (props: Props) => {
         )
         dispatch(
           RootStore.account.actions.setBackgroundColor(
-            theme.colors.card[getRandomColor(6)]
+            theme.colors.card[UtilsHelper.getRandomNumber(6)]
           )
         )
 

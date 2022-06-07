@@ -85,7 +85,7 @@ const AccountNFTSScreen = (props: Props) => {
         name="populateNFTS"
         loadingView={<ScreenLoader darkerSolidColorBG />}
       >
-        <LinearLayout mt="44px" mb="44px">
+        <LinearLayout my="44px">
           <FlatList
             data={NFTS}
             renderItem={({item}) => (

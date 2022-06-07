@@ -5,9 +5,16 @@ import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {HeaderActionButtonProps} from '../components/layout/HeaderActionButton'
+import AccountConnectionsScreen, {
+  AccountConnectionsScreenParams,
+} from '../scenes/Account/AccountConnectionsScreen'
 import AccountNFTSScreen, {
   AccountNFTSScreenParams,
 } from '../scenes/Account/AccountNFTSScreen/AccountNFTSScreen'
+import {
+  AccountSettingsView,
+  AccountSettingsViewParams,
+} from '../scenes/Account/AccountSettingsView'
 import Step1BackupWalletPage, {
   StepsBackupWalletPageParams,
 } from '../scenes/Wallet/BackupWallet/Step1BackupWalletPage'
@@ -17,9 +24,6 @@ import {
   WalletSettingsView,
   WalletSettingViewParams,
 } from '../scenes/Wallet/WalletSettingsView'
-import WCAccountConnectionsScreen, {
-  WCAccountConnectionsScreenParams,
-} from '../scenes/walletConnect/WCAccountConnectionsScreen'
 
 import AccountTransactionsScreen, {
   AccountTransactionsScreenParams,
@@ -41,8 +45,9 @@ export type WalletStackParamList = {
   AccountAssetDetail: AccountAssetDetailParams
   AccountAssetScreen: undefined
   AccountTransactionsScreen: AccountTransactionsScreenParams
-  WCAccountConnectionsScreen: WCAccountConnectionsScreenParams
+  AccountConnectionsScreen: AccountConnectionsScreenParams
   AccountNFTSScreen: AccountNFTSScreenParams
+  AccountSettingsView: AccountSettingsViewParams
   WalletSettingsView: WalletSettingViewParams
   Step1BackupWallet: StepsBackupWalletPageParams & HeaderActionButtonProps
   Step2BackupWallet: StepsBackupWalletPageParams & HeaderActionButtonProps
@@ -113,8 +118,8 @@ const WalletStackNavigation = () => {
           }
         />
         <WalletStack.Screen
-          name={wrapper.route.WCAccountConnectionsScreen.name}
-          component={WCAccountConnectionsScreen}
+          name={wrapper.route.AccountConnectionsScreen.name}
+          component={AccountConnectionsScreen}
           options={({route}) =>
             Navigator.defaultStackNavigatorOptions({
               theme,
@@ -189,6 +194,18 @@ const WalletStackNavigation = () => {
               title: wrapper.route.Step3BackupWallet.translate(),
               theme,
               route,
+            })
+          }
+        />
+
+        <WalletStack.Screen
+          name={wrapper.route.AccountSettingsView.name}
+          component={AccountSettingsView}
+          options={({route}) =>
+            Navigator.defaultStackNavigatorOptions({
+              theme,
+              route,
+              title: i18n.t('screens.accountSettingsView.title'),
             })
           }
         />
