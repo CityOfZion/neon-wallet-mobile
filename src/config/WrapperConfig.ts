@@ -113,6 +113,7 @@ export class WrapperConfig {
     'WebViewModal',
     'WalletSettingsView',
     'AccountSettingsView',
+    'ExportWIFModal',
   ] as const
 }
 

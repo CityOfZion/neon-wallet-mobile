@@ -57,6 +57,7 @@ interface SwiperProps {
   // It's not there by default in case the content is a scrollable list, or it would look weird
   // (ask Joao if any questions)
   disableDefaultScrollView?: boolean
+  subHeader?: React.ReactNode
 }
 
 enum State {
@@ -430,9 +431,8 @@ export default function SwiperPanel(props: SwiperProps) {
               {props.draggable ? (
                 <DragBar noHeader={props.noHeader} mb={paddingTop} />
               ) : undefined}
-              {props.noHeader ? undefined : (
-                <Header {...props} mb={paddingBottom} />
-              )}
+              {!props.noHeader && <Header {...props} mb={paddingBottom} />}
+              {props.subHeader}
               {props.disableDefaultScrollView ? (
                 <LinearLayout
                   width="100%"

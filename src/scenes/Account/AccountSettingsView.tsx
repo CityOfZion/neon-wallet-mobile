@@ -91,6 +91,14 @@ export const AccountSettingsView = (props: Props) => {
           iconMarginLeft={2}
           iconMarginRight={4}
           arrowDirection={RightIconType.ARROW_RIGHT}
+          onPress={() =>
+            props.navigation.navigate(wrapper.route.Modal.name, {
+              screen: wrapper.route.ExportWIFModal.name,
+              params: {
+                account,
+              },
+            })
+          }
         />
       )}
 

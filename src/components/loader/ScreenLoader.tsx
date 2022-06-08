@@ -104,6 +104,8 @@ const ScreenLoader = (props?: {
                   ? theme.colors.background[14]
                   : props?.solidColorBG
                   ? theme.colors.background[2]
+                  : props?.transparent
+                  ? 'transparent'
                   : '#23282e',
                 justifyContent: 'center',
               }}

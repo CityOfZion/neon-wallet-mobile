@@ -3,6 +3,10 @@ import React from 'react'
 import {useSelector} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
+import {
+  ExportWIFModal,
+  ExportWIFModalParams,
+} from '../scenes/Account/ExportWIFModal'
 import WebViewModal, {WebViewModalParams} from '../scenes/WebViewModal'
 import WCInvocationDetailsModal, {
   WCInvocationDetailsModalParams,
@@ -127,6 +131,7 @@ export type ModalStackParamList = {
   WCInvocationDetailsModal: WCInvocationDetailsModalParams
   SignatureScopeModal: SignatureScopeModalParams
   WebViewModal: WebViewModalParams
+  ExportWIFModal: ExportWIFModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -154,6 +159,7 @@ export type ModalParams =
   | DefaultNavigationParam<WCConnectDappModalParams>
   | DefaultNavigationParam<WebViewModalParams>
   | DefaultNavigationParam<TransactionDetailsParams>
+  | DefaultNavigationParam<ExportWIFModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -292,6 +298,10 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={wrapper.route.WebViewModal.name}
           component={WebViewModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.ExportWIFModal.name}
+          component={ExportWIFModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>
