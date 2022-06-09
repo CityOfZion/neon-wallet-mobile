@@ -94,7 +94,7 @@ const EditAccountModal = (props: Props) => {
         index: 0,
         routes: [{name: wrapper.route.Tab.name}],
       })
-      props.navigation.replace(wrapper.route.ListWalletsPage.name, {})
+      props.navigation.replace(wrapper.route.ListWalletsPage.name)
       props.navigation.navigate(wrapper.route.GetWallet.name)
     } else {
       props.navigation.goBack()

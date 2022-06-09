@@ -4,17 +4,15 @@ import {Await, AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import moment from 'moment'
 import React, {useEffect, useState, Fragment, useRef, useMemo} from 'react'
-import {
-  Animated,
-  Easing,
-  LayoutChangeEvent,
-  TouchableWithoutFeedback,
-} from 'react-native'
+import {TouchableWithoutFeedback} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
+import {RootStackParamList} from '../../navigation/AppNavigation'
+import {ModalStackParamList} from '../../navigation/ModalStackNavigation'
+import {TabStackParamList} from '../../navigation/TabNavigation'
+
+import {AccountCards} from '~/src/components/AccountCards'
 import {wrapper} from '~src/app/ApplicationWrapper'
-import {Normalize} from '~src/app/Normalize'
-import AccountCard from '~src/components/AccountCard'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -27,93 +25,20 @@ import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 interface GetWalletProps {
   route: RouteProp<WalletStackParamList, 'GetWallet'>
-  navigation: StackNavigationProp<WalletStackParamList>
-}
-
-export const AccountCardsComponent = (props: {
-  accounts: Account[]
-  onPress: (account: Account) => void
-  disableSecondTouch?: boolean
-}) => {
-  const [viewHeight, setViewHeight] = useState<number>(0)
-
-  const posYFactor = useRef(new Animated.Value(0))
-
-  const layoutEvent = (event: LayoutChangeEvent) => {
-    const {height} = event.nativeEvent.layout
-    setViewHeight(height)
-
-    Animated.timing(posYFactor.current, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-      easing: Easing.out((val) => val ** 2),
-    }).start()
-  }
-
-  return (
-    <Animated.View onLayout={layoutEvent} style={{opacity: posYFactor.current}}>
-      {props.accounts.map((account: Account, i: number) => {
-        const marginTop = i !== 0 ? Normalize.scale(-130) : undefined
-        return (
-          <Animated.View
-            key={i}
-            style={[
-              {
-                transform: [
-                  {
-                    translateY: posYFactor.current.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [-viewHeight * (1 + 0.1 * i), 0],
-                    }),
-                  },
-                ],
-              },
-              {
-                zIndex: i,
-                marginTop,
-              },
-            ]}
-          >
-            <LinearLayout>
-              <AccountCard
-                account={account}
-                isCompacted={true}
-                isStackMode={i !== props.accounts.length - 1}
-                onPress={() => props.onPress(account)}
-                disableSecondTouch={props.disableSecondTouch}
-              />
-            </LinearLayout>
-          </Animated.View>
-        )
-      })}
-    </Animated.View>
-  )
+  navigation: StackNavigationProp<
+    WalletStackParamList &
+      ModalStackParamList &
+      TabStackParamList &
+      RootStackParamList
+  >
 }
 
 const GetWalletView = (props: GetWalletProps) => {
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const fromWalletDetailsPage = false
-
-  props.navigation.setOptions({
-    headerRight: () =>
-      HeaderActionButton({
-        actionTitle: i18n.t('app.edit'),
-        actionButtonStyle: 'default',
-        actionOnPress: () => {
-          props.navigation.navigate(wrapper.route.Modal.name, {
-            screen: wrapper.route.EditWalletModal.name,
-            params: {
-              wallet,
-              fromWalletDetailsPage,
-            },
-          })
-        },
-      }),
-  })
 
   const dispatch = useDispatch()
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
+  const dispatchAsync = useDispatch<AsyncDispatch>()
 
   const [accounts, setAccounts] = useState<Account[]>([])
   const wallet = useMemo(
@@ -126,12 +51,21 @@ const GetWalletView = (props: GetWalletProps) => {
       HeaderBar({
         title: wallet.name ?? '-',
       }),
+    headerRight: () =>
+      HeaderActionButton({
+        actionButtonStyle: 'more',
+        actionOnPress: () => {
+          props.navigation.navigate(wrapper.route.WalletSettingsView.name, {
+            wallet,
+          })
+        },
+      }),
   })
 
   const populate = async () => {
     wallet.lastVisitedAt = moment().format()
 
-    await dispatch(RootStore.app.actions.updateAndSaveWallet(wallet))
+    await dispatchAsync(RootStore.app.actions.updateAndSaveWallet(wallet))
     const accounts = wallet.getAccounts(accountsPool)
     setAccounts(accounts)
   }
@@ -163,7 +97,7 @@ const GetWalletView = (props: GetWalletProps) => {
     <ScreenLayout darkerSolidColorBG={true}>
       <AwaitActivity name={'populate'} loadingView={<ScreenLoader />}>
         <LinearLayout mt={6}>
-          <AccountCardsComponent accounts={accounts} onPress={pressEvent} />
+          <AccountCards accounts={accounts} onPress={pressEvent} />
         </LinearLayout>
 
         {wallet.walletType === 'watch' || wallet.walletType === 'legacy' ? (

@@ -6,21 +6,21 @@ import {ThemeProvider} from 'styled-components'
 
 import SettingsStackNavigation from './SettingsStackNavigation'
 
+import Step1CreateWalletPage, {
+  Step1CreateWalletParams,
+} from '~/src/scenes/Wallet/CreateWallet/Step1CreateWalletPage'
+import Step2CreateWalletPage from '~/src/scenes/Wallet/CreateWallet/Step2CreateWalletPage'
+import Step3CreateWalletPage, {
+  ParamsCreateWalletPage,
+} from '~/src/scenes/Wallet/CreateWallet/Step3CreateWalletPage'
+import Step4CreateWalletPage, {
+  Step4CreateWalletParams,
+} from '~/src/scenes/Wallet/CreateWallet/Step4CreateWalletPage'
+import Step5CreateWalletPage from '~/src/scenes/Wallet/CreateWallet/Step5CreateWalletPage'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Navigator} from '~src/app/Navigator'
 import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
 import BlockchainListPage from '~src/scenes/BlockchainListPage'
-import Step1CreateWalletPage, {
-  Step1CreateWalletParams,
-} from '~src/scenes/CreateWalletPage/Step1CreateWalletPage'
-import Step2CreateWalletPage from '~src/scenes/CreateWalletPage/Step2CreateWalletPage'
-import Step3CreateWalletPage, {
-  ParamsCreateWalletPage,
-} from '~src/scenes/CreateWalletPage/Step3CreateWalletPage'
-import Step4CreateWalletPage, {
-  Step4CreateWalletParams,
-} from '~src/scenes/CreateWalletPage/Step4CreateWalletPage'
-import Step5CreateWalletPage from '~src/scenes/CreateWalletPage/Step5CreateWalletPage'
 import CustomizeAccount, {
   CustomizeAccountParams,
 } from '~src/scenes/CustomizeAccount'

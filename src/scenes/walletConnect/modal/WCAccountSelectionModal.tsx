@@ -8,6 +8,7 @@ import {useSelector} from 'react-redux'
 
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {getWCChainByBlockchain, hasWalletconnect} from '~/src/blockchain/common'
+import {AccountCards} from '~/src/components/AccountCards'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import {IURI} from '~/src/helpers/UriHelper'
 import {useTreatNetworkOnWalletConnectFlow} from '~/src/hooks'
@@ -21,7 +22,6 @@ import SwiperPanel, {
   useSwiperController,
 } from '~src/components/SwiperPanel'
 import {useWalletConnect} from '~src/contexts/WalletConnectContext'
-import {AccountCardsComponent} from '~src/scenes/GetWalletView'
 export interface WCAccountSelectionModalParams {
   wallet: Wallet
   uri?: IURI
@@ -74,7 +74,7 @@ export const WCAccountSelectionModal = (props: Props) => {
           index: 0,
           routes: [{name: wrapper.route.Tab.name}],
         })
-        props.navigation.navigate(wrapper.route.WalletConnectPage.name, {})
+        props.navigation.navigate(wrapper.route.WalletConnectPage.name)
 
         Await.done('connectDapp')
       }
@@ -100,7 +100,7 @@ export const WCAccountSelectionModal = (props: Props) => {
           <TextView color="text.0" fontSize={18} textAlign="center" mb={'30px'}>
             {i18n.t('modals.WCAccountSelection.subtitle')}
           </TextView>
-          <AccountCardsComponent
+          <AccountCards
             accounts={accounts}
             onPress={handleConnectDApp}
             disableSecondTouch={true}

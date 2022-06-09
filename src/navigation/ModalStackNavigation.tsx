@@ -10,6 +10,13 @@ import WCInvocationDetailsModal, {
 import ReceiveModalStackNavigation from './ReceiveModalStackNavigation'
 import {TabParams} from './TabNavigation'
 
+import EditWalletModal, {
+  EditWalletParams,
+} from '~/src/scenes/Wallet/EditWalletModal'
+import ReorderWalletModal from '~/src/scenes/Wallet/ReorderWalletModal'
+import WalletContextModal, {
+  WalletContextModalParams,
+} from '~/src/scenes/Wallet/WalletContextModal'
 import {
   WCConnectDappModal,
   WCConnectDappModalParams,
@@ -24,9 +31,6 @@ import WCTransactionRequestModal, {
   WCTransactionRequestModalParams,
 } from '~/src/scenes/walletConnect/modal/WCTransactionRequestModal/WCTransactionRequestModal'
 import {wrapper} from '~src/app/ApplicationWrapper'
-import EditWalletModal, {
-  EditWalletParams,
-} from '~src/components/EditWalletModal'
 import {
   PersistContact,
   PersistContactParams,
@@ -61,7 +65,6 @@ import EditAccountModal, {
 import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
 import ListTokenModal, {ListTokenModalParams} from '~src/scenes/ListTokenModal'
 import {VerifyPasscodePageParams} from '~src/scenes/LoginPage/VerifyPasscodePage'
-import ReorderWalletModal from '~src/scenes/ReorderWalletModal'
 import SecurityPickerModal, {
   SecurityPickerModalParams,
 } from '~src/scenes/SecurityPickerModal'
@@ -73,9 +76,6 @@ import {
   TransactionDetails,
   TransactionDetailsParams,
 } from '~src/scenes/TransactionDetails'
-import WalletContextModal, {
-  WalletContextModalParams,
-} from '~src/scenes/WalletContextModal'
 import WelcomePage, {WelcomeModalParam} from '~src/scenes/WelcomePage'
 import {
   WCAccountSelectionModal,

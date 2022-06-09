@@ -36,9 +36,7 @@ const CustomBackButton = (props: Props) => {
               props.route.params?.source ===
               wrapper.route.WalletContextModal.name
             ) {
-              props.navigation.navigate(wrapper.route.ListWallets.name, {
-                screen: wrapper.route.ListWallets.name,
-              })
+              props.navigation.navigate(wrapper.route.ListWallets.name)
               props.navigation.pop()
             } else {
               if (props.navigation.canGoBack()) {

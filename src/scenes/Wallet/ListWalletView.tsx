@@ -8,8 +8,8 @@ import React, {useEffect, useRef, useState} from 'react'
 import {Alert, TouchableWithoutFeedback, View, Animated} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {useBalanceHook} from '../hooks/BalanceHook'
-import {TabStackParamList} from '../navigation/TabNavigation'
+import {useBalanceHook} from '../../hooks/BalanceHook'
+import {TabStackParamList} from '../../navigation/TabNavigation'
 
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Normalize} from '~src/app/Normalize'
@@ -34,7 +34,6 @@ import {
   TextView,
 } from '~src/styles/styled-components'
 import {ApplicationTheme} from '~src/themes/ApplicationTheme'
-export interface ListWalletParams {}
 
 type Props = WalletStackParamList &
   RootStackParamList &

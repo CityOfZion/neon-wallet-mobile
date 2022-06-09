@@ -41,9 +41,6 @@ export class WrapperConfig {
     'More',
     'GetWallet',
     'GetAccount',
-    'MyWallets',
-    'MyWalletOptions',
-    'WalletDetails',
     'MorePage',
     'Step1CreateWallet',
     'Step2CreateWallet',
@@ -115,6 +112,7 @@ export class WrapperConfig {
     'SignatureScopeModal',
     'WCInvocationDetailsModal',
     'WebViewModal',
+    'WalletSettingsView',
   ] as const
 }
 
