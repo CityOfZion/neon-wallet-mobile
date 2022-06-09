@@ -5,7 +5,7 @@ import {NeoLegacyProvider} from './common'
 
 import {NeoNode} from '~/src/models/NeoNode'
 import {Node} from '~/src/models/Node'
-import {TokenAsset} from '~/src/models/TokenAsset'
+import {TokenResponse, Tokens} from '~/src/models/TokenResponse'
 import {Transaction} from '~/src/models/Transaction'
 import {BalanceResponse} from '~/src/models/response/BalanceResponse'
 import {ContractResponse} from '~/src/models/response/ContractResponse'
@@ -13,7 +13,6 @@ import {NFTResponse} from '~/src/models/response/NFTResponse'
 import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
 import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
 import {ExchangeResponse} from '~/src/types/exchange'
-import {TokenResponse} from '~/src/types/token'
 
 export type NeoscanNetworkOptions = 'main_net' | 'test_net'
 
@@ -78,12 +77,14 @@ export class NeoscanProvider implements NeoLegacyProvider {
   }
 
   async getTokenList() {
-    return Request.get(
+    const tokenList = await Request.get(
       `https://raw.githubusercontent.com/CityOfZion/neo-tokens/master/tokenList.json?timestamp=${new Date().getTime()}`
     )
       .name('getTokens')
-      .as<TokenResponse>()
+      .as<Tokens>()
       .getData()
+
+    return new TokenResponse({tokens: tokenList})
   }
 
   async getExchangeData(params: {

@@ -5,12 +5,14 @@ import {rpc, u, wallet} from '@cityofzion/neon-core-next'
 import {Request} from '@simpli/serialized-request'
 import {mapValues} from 'lodash'
 
+import n3TokenList from '../../../assets/tokens/n3.json'
 import {Neo3Provider} from './common'
 
 import {ContractMethod} from '~/src/models/ContractMethod'
 import {ContractParameter} from '~/src/models/ContractParameter'
 import {NeoNode} from '~/src/models/NeoNode'
 import {Node} from '~/src/models/Node'
+import {TokenResponse} from '~/src/models/TokenResponse'
 import {Transaction} from '~/src/models/Transaction'
 import {TransactionAddressAsset} from '~/src/models/TransactionAddressAsset'
 import {TransactionAddressNFT} from '~/src/models/TransactionAddressNFT'
@@ -20,7 +22,6 @@ import {ContractResponse} from '~/src/models/response/ContractResponse'
 import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
 import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
 import {ExchangeResponse} from '~/src/types/exchange'
-import {TokenResponse} from '~/src/types/token'
 import {IRPCContract} from '~src/blockchain'
 
 export type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
@@ -228,12 +229,7 @@ export class DoraSDKProvider implements Neo3Provider {
   }
 
   async getTokenList() {
-    return Request.get(
-      `https://raw.githubusercontent.com/CityOfZion/neo-tokens/master/tokenList.json?timestamp=${new Date().getTime()}`
-    )
-      .name('getTokens')
-      .as<TokenResponse>()
-      .getData()
+    return new TokenResponse({tokens: n3TokenList})
   }
 
   async getAllNodes() {

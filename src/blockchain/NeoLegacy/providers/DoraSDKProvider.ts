@@ -1,13 +1,11 @@
 import {api} from '@cityofzion/dora-ts'
-import {rpc, u} from '@cityofzion/neon-js'
 import {Request} from '@simpli/serialized-request'
 import {mapValues} from 'lodash'
 
 import {NeoLegacyProvider} from './common'
 
-import {NeoNode} from '~/src/models/NeoNode'
 import {Node} from '~/src/models/Node'
-import {TokenAsset} from '~/src/models/TokenAsset'
+import {TokenResponse, Tokens} from '~/src/models/TokenResponse'
 import {Transaction} from '~/src/models/Transaction'
 import {TransactionAddressAsset} from '~/src/models/TransactionAddressAsset'
 import {TransactionAddressSummary} from '~/src/models/TransactionAddressSummary'
@@ -16,8 +14,7 @@ import {ContractResponse} from '~/src/models/response/ContractResponse'
 import {NFTResponse} from '~/src/models/response/NFTResponse'
 import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
 import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
-import {Exchange, ExchangeResponse} from '~/src/types/exchange'
-import {TokenResponse} from '~/src/types/token'
+import {ExchangeResponse} from '~/src/types/exchange'
 type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
 export class DoraSDKProvider implements NeoLegacyProvider {
   //eslint-disable-next-line
@@ -155,12 +152,14 @@ export class DoraSDKProvider implements NeoLegacyProvider {
   }
 
   async getTokenList() {
-    return Request.get(
+    const tokenList = await Request.get(
       `https://raw.githubusercontent.com/CityOfZion/neo-tokens/master/tokenList.json?timestamp=${new Date().getTime()}`
     )
       .name('getTokens')
-      .as<TokenResponse>()
+      .as<Tokens>()
       .getData()
+
+    return new TokenResponse({tokens: tokenList})
   }
 
   async getExchangeData(params: {

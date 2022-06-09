@@ -1,5 +1,4 @@
 import {ReducerWrapper} from '@simpli/redux-wrapper'
-import {plainToClass} from 'class-transformer'
 import i18n from 'i18n-js'
 import _ from 'lodash'
 import {showMessage} from 'react-native-flash-message'
@@ -17,11 +16,7 @@ import {Node} from '~/src/models/Node'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {Model} from '~src/app/Model'
 import {Storage} from '~src/app/Storage'
-import {
-  BlockchainServiceKey,
-  blockchainList,
-  blockchainServices,
-} from '~src/blockchain'
+import {blockchainList, blockchainServices} from '~src/blockchain'
 import {NeoNode} from '~src/models/NeoNode'
 import {TokenAsset} from '~src/models/TokenAsset'
 import {Account} from '~src/models/redux/Account'
@@ -29,19 +24,13 @@ import {App} from '~src/models/redux/App'
 import {Contact} from '~src/models/redux/Contact'
 import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 import {Wallet} from '~src/models/redux/Wallet'
-import {getRandomColor} from '~src/scenes/CustomizeAccount'
 import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
 import {ContactsDispatcher} from '~src/store/app/dispatchers/ContactsDispatcher'
 import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
 import {NodesDispatcher} from '~src/store/app/dispatchers/NodesDispatcher'
 import {TokensDispatcher} from '~src/store/app/dispatchers/TokensDispatcher'
 import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
-import {
-  Exchange,
-  ExchangeResponse,
-  MultichainExchange,
-} from '~src/types/exchange'
-import {TokenResponse} from '~src/types/token'
+import {MultichainExchange} from '~src/types/exchange'
 
 export class AppReducer extends ReducerWrapper<
   AppActionsType,
@@ -61,7 +50,7 @@ export class AppReducer extends ReducerWrapper<
 
   readonly actions = {
     syncExchange: (): AsyncAction<MultichainExchange> => {
-      return async (dispatch, getState) => {
+      return async (dispatch) => {
         const exchange = await Storage.exchange.load()
         const multichainExchange =
           (await Storage.multichainExchange.load()) ??
@@ -75,48 +64,16 @@ export class AppReducer extends ReducerWrapper<
     },
 
     fetchExchange: (): AsyncAction => {
-      const tokenToAsset = (
-        response: TokenResponse,
-        blockchainName: BlockchainServiceKey
-      ): TokenAsset[] => {
-        return _.map(
-          response,
-          (it) =>
-            new TokenAsset(
-              it.companyName,
-              it.symbol,
-              it.networks[1].hash,
-              blockchainName,
-              it.networks[1].decimals
-            )
-        )
-      }
-
       return async (dispatch) => {
         try {
-          let tokenList = (await Storage.tokenAssets.load()) ?? []
-          if (tokenList.length < 1) {
-            const assetsBlockchain: TokenAsset[] = []
-            let tokensBlockchain: TokenAsset[] = []
-            await Promise.all(
-              blockchainList.map(async (blockchainName) => {
-                const {assets, provider} = blockchainServices[blockchainName]
-                const tokenListResponse = await provider.getTokenList()
-                assets.forEach(({hash, name, symbol, decimals}) => {
-                  assetsBlockchain.push(
-                    new TokenAsset(name, symbol, hash, blockchainName, decimals)
-                  )
-                  tokensBlockchain = tokenToAsset(
-                    tokenListResponse,
-                    blockchainName
-                  )
-                })
-              })
-            )
-            tokenList = [...tokensBlockchain, ...assetsBlockchain]
+          const tokenList = await Storage.tokenAssets.load()
+
+          if (!tokenList || tokenList.length) {
+            return
           }
 
           const result: MultichainExchange = {} as MultichainExchange
+
           await Promise.all(
             blockchainList.map(async (blockchainName) => {
               const {provider} = blockchainServices[blockchainName]
@@ -130,6 +87,7 @@ export class AppReducer extends ReducerWrapper<
               })
             })
           )
+
           await Storage.multichainExchange.save(result)
         } catch (error) {
           console.log(error)
@@ -139,25 +97,9 @@ export class AppReducer extends ReducerWrapper<
     },
 
     syncTokens: (): AsyncAction<TokenAsset[]> => {
-      const tokenToAsset = (
-        response: TokenResponse,
-        blockchainName: BlockchainServiceKey
-      ): TokenAsset[] => {
-        return _.map(
-          response,
-          (it) =>
-            new TokenAsset(
-              it.companyName,
-              it.symbol,
-              it.networks[1].hash,
-              blockchainName,
-              it.networks[1].decimals
-            )
-        )
-      }
-
-      return async (dispatch, getState) => {
+      return async (dispatch) => {
         const tokenAssets = await Storage.tokenAssets.load()
+
         if (tokenAssets) {
           const tokens = tokenAssets.map((token) => {
             token.adaptToMultichain()
@@ -165,81 +107,37 @@ export class AppReducer extends ReducerWrapper<
           })
           dispatch(this.commit('SET_TOKENS', {tokens}))
           return tokenAssets
-        } else {
-          const assetsBlockchain: TokenAsset[] = []
-          let tokensBlockchain: TokenAsset[] = []
-          try {
-            await Promise.all(
-              blockchainList.map(async (blockchainName) => {
-                const {assets, provider} = blockchainServices[blockchainName]
-                const tokenList = await provider.getTokenList()
-                assets.forEach(({hash, name, symbol, decimals}) => {
-                  assetsBlockchain.push(
-                    new TokenAsset(name, symbol, hash, blockchainName, decimals)
-                  )
-                  tokensBlockchain = tokenToAsset(tokenList, blockchainName)
-                })
-              })
-            )
-            const tokens = [...assetsBlockchain, ...tokensBlockchain]
-            dispatch(this.commit('SET_TOKENS', {tokens}))
-            return tokens
-          } catch (error) {
-            console.log(error)
-            throw new Error('Problema para consultar token list')
-          }
         }
+
+        return []
       }
     },
 
     fetchTokens: (): AsyncAction<TokenAsset[]> => {
-      const tokenToAsset = (
-        response: TokenResponse,
-        blockchain: BlockchainServiceKey
-      ): TokenAsset[] => {
-        return _.map(
-          response,
-          (it) =>
-            new TokenAsset(
-              it.companyName,
-              it.symbol,
-              it.networks[1].hash,
-              blockchain,
-              it.networks[1].decimals
-            )
-        )
-      }
       return async () => {
         const assetsBlockchain: TokenAsset[] = []
-        let tokensBlockchain: TokenAsset[] = []
         const tokensAllBlockchains: TokenAsset[] = []
+
         try {
           await Promise.all(
             blockchainList.map(async (blockchainName) => {
               const {assets, provider} = blockchainServices[blockchainName]
               const tokenList = await provider.getTokenList()
+
               assets.forEach(({hash, name, symbol, decimals}) => {
                 assetsBlockchain.push(
                   new TokenAsset(name, symbol, hash, blockchainName, decimals)
                 )
-                tokensBlockchain = tokenToAsset(tokenList, blockchainName)
               })
-              tokensBlockchain.forEach(
-                ({hash, name, symbol, blockchain, decimals}) => {
-                  tokensAllBlockchains.push(
-                    new TokenAsset(
-                      name,
-                      symbol,
-                      hash,
-                      blockchain,
-                      decimals ?? undefined
-                    )
-                  )
-                }
+
+              tokensAllBlockchains.push(
+                ...tokenList.toTokenAsset(blockchainName)
               )
             })
           )
+
           const tokens = [...assetsBlockchain, ...tokensAllBlockchains]
+
           await Storage.tokenAssets.save(tokens)
           return tokens
         } catch (error) {
