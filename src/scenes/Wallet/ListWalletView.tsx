@@ -254,27 +254,8 @@ const ListWalletView = (props: WalletProps) => {
     dispatch(RootStore.wallet.actions.selectWallet(wallet.id))
   }
 
-  const pressEvent = async (wallet: Wallet) => {
-    if (wallet.walletType === 'standard') {
-      props.navigation.navigate(wrapper.route.GetWallet.name)
-    } else {
-      goToFirstAccount(wallet)
-    }
-  }
-
-  const goToFirstAccount = (wallet: Wallet) => {
-    const accountsFromWallet = wallet.getAccounts(accounts)
-
-    if (accountsFromWallet.length > 0) {
-      dispatch(
-        RootStore.account.actions.selectAccount(accountsFromWallet[0].address)
-      )
-
-      props.navigation.navigate(wrapper.route.GetAccount.name)
-    } else {
-      // Fall back
-      props.navigation.navigate(wrapper.route.GetWallet.name)
-    }
+  const pressEvent = async () => {
+    props.navigation.navigate(wrapper.route.GetWallet.name)
   }
 
   const fadeValue = useRef(new Animated.Value(1)).current

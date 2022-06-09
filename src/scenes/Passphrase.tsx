@@ -55,9 +55,6 @@ const Passphrase = (props: PassphraseProps) => {
   const [correctPassword, setCorrectPassword] = useState<string>('')
   const [inputIsValid, setInputIsValid] = useState(true)
   const [showInputField, setShowInputField] = useState(true)
-  const [mnemonicEncryptedWallet, setMnemonicEncryptedWallet] = useState<
-    string
-  >()
   const encryptedKey = props.route.params.encryptedKey
 
   const account = new Account()
@@ -84,12 +81,6 @@ const Passphrase = (props: PassphraseProps) => {
           )
           const addressExist = accounts.some((acc) => acc.address === address)
           if (!addressExist) {
-            const mnemonic = blockchainServices[blockchain]
-              .generateMnemonic()
-              ?.join(',')
-            if (mnemonic) {
-              setMnemonicEncryptedWallet(mnemonic)
-            }
             setAdrresesInfo((prevState) => {
               const data = prevState
               data.push({address, blockchain})
@@ -138,20 +129,9 @@ const Passphrase = (props: PassphraseProps) => {
 
   const persist = useCallback(async () => {
     try {
-      if (!mnemonicEncryptedWallet) {
-        showMessage({
-          message: i18n.t('messages.problemToGenerateWallet'),
-          type: 'danger',
-        })
-        return
-      }
-
       blockchainActionsHook.init()
-      const walletId = await blockchainActionsHook.createWallet(
-        `${i18n.t('modals.blockchainList.encryptedWallet')}`,
-        mnemonicEncryptedWallet,
-        'standard',
-        true
+      const walletId = await blockchainActionsHook.createLegacyWallet(
+        `${i18n.t('modals.blockchainList.encryptedWallet')}`
       )
 
       const accountsToImportPromises = addressesInfoSelected.map(
@@ -187,12 +167,7 @@ const Passphrase = (props: PassphraseProps) => {
     } finally {
       Await.done('importEncryptedKey')
     }
-  }, [
-    inputValue,
-    addressesInfoSelected,
-    showInputField,
-    mnemonicEncryptedWallet,
-  ])
+  }, [inputValue, addressesInfoSelected, showInputField])
 
   const handleClickNext = useCallback(async () => {
     Await.init('importEncryptedKey')

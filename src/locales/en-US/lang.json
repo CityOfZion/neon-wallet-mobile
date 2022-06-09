@@ -211,7 +211,8 @@
     "areWatchAccount": "Looks like you are importing a watch account",
     "mnemonicAlreadyExists": "Mnemonic already exists",
     "offline": "You need to be online to import informations",
-    "genericError": "Occurs a generic error. Try Again"
+    "genericError": "Occurs a generic error. Try Again",
+    "selectAccountTitile": "These are the accounts that will be imported"
   },
   "passphrase": {
     "enterPassphrase": "Enter a Passphrase for your encrypted key",
