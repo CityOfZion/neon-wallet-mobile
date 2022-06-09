@@ -3,11 +3,14 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, {useCallback, useEffect, useState} from 'react'
+import {ScrollView} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 
+import {wrapper} from '~/src/app/ApplicationWrapper'
 import AccountSubTitle from '~/src/components/AccountSubTitle'
 import NeonQRCode from '~/src/components/QRCode'
 import SwiperPanel, {useSwiperController} from '~/src/components/SwiperPanel'
+import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
@@ -16,7 +19,7 @@ import {Account} from '~/src/models/redux/Account'
 import {RootStackParamList} from '~/src/navigation/AppNavigation'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
 import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
-import {LinearLayout, TextView} from '~/src/styles/styled-components'
+import {ImageView, LinearLayout, TextView} from '~/src/styles/styled-components'
 
 export interface ExportWIFModalParams {
   account: Account

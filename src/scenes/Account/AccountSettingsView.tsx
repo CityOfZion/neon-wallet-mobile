@@ -8,7 +8,9 @@ import {useDispatch, useSelector} from 'react-redux'
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import MenuItem, {RightIconType} from '~/src/components/MenuItem'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
+import {useLocalAuthentication} from '~/src/hooks'
 import {Account} from '~/src/models/redux/Account'
+import {RootStackParamList} from '~/src/navigation/AppNavigation'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~/src/navigation/TabNavigation'
 import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
@@ -22,7 +24,10 @@ export interface AccountSettingsViewParams {
 interface Props {
   route: RouteProp<WalletStackParamList, 'AccountSettingsView'>
   navigation: StackNavigationProp<
-    TabStackParamList & ModalStackParamList & WalletStackParamList
+    RootStackParamList &
+      TabStackParamList &
+      ModalStackParamList &
+      WalletStackParamList
   >
 }
 
@@ -32,6 +37,7 @@ export const AccountSettingsView = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
+  const {authenticate} = useLocalAuthentication()
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
@@ -67,6 +73,19 @@ export const AccountSettingsView = (props: Props) => {
     )
   }
 
+  const handlePressExportWif = async () => {
+    try {
+      await authenticate()
+
+      props.navigation.navigate(wrapper.route.Modal.name, {
+        screen: wrapper.route.ExportWIFModal.name,
+        params: {
+          account,
+        },
+      })
+    } catch {}
+  }
+
   return (
     <ScreenLayout padding={20} darkerSolidColorBG>
       <MenuItem
@@ -91,14 +110,7 @@ export const AccountSettingsView = (props: Props) => {
           iconMarginLeft={2}
           iconMarginRight={4}
           arrowDirection={RightIconType.ARROW_RIGHT}
-          onPress={() =>
-            props.navigation.navigate(wrapper.route.Modal.name, {
-              screen: wrapper.route.ExportWIFModal.name,
-              params: {
-                account,
-              },
-            })
-          }
+          onPress={handlePressExportWif}
         />
       )}
 

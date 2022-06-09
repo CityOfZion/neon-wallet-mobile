@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import MenuItem, {RightIconType} from '~/src/components/MenuItem'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
+import {useLocalAuthentication} from '~/src/hooks'
 import {Wallet} from '~/src/models/redux/Wallet'
 import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
 import {TabStackParamList} from '~/src/navigation/TabNavigation'
@@ -32,6 +33,7 @@ export const WalletSettingsView = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
   )
+  const {authenticate} = useLocalAuthentication()
 
   const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
@@ -75,9 +77,13 @@ export const WalletSettingsView = (props: Props) => {
   }
 
   const handlePressOnBackup = async () => {
-    props.navigation.navigate(wrapper.route.Step1BackupWallet.name, {
-      wallet,
-    })
+    try {
+      await authenticate()
+
+      props.navigation.navigate(wrapper.route.Step1BackupWallet.name, {
+        wallet,
+      })
+    } catch {}
   }
 
   return (

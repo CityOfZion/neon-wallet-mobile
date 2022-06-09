@@ -397,6 +397,18 @@
       "customColor": "Cor personalizada"
     }
   },
+  "hooks": {
+    "useLocalAuthentication": {
+      "errorToGetPasscode": "#translateme",
+      "errorDismiss": "#translateme",
+      "dialog": {
+        "title": "#translateme",
+        "subtitle": "#translateme",
+        "confirm": "#translateme",
+        "cancel": "#translateme"
+      }
+    }
+  },
   "boolean": {
     "true": "Sim",
     "false": "Não"
