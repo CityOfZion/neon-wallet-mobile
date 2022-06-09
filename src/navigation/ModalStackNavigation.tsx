@@ -112,9 +112,7 @@ export type ModalStackParamList = {
   EditWalletModal: EditWalletParams
   ReceiveModalStack: undefined
   SecurityModal: SecurityPickerModalParams
-  Tab: TabParams
   PasscodeStack: PasscodeStackParams
-  Modal: object
   VerifyPasscode: VerifyPasscodePageParams
   ChangelogModal: ChangelogModalParams
   TipConfirmationModal: TipConfirmationModalParams
@@ -155,6 +153,7 @@ export type ModalParams =
   | DefaultNavigationParam<WCInvocationDetailsModalParams>
   | DefaultNavigationParam<WCConnectDappModalParams>
   | DefaultNavigationParam<WebViewModalParams>
+  | DefaultNavigationParam<TransactionDetailsParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 

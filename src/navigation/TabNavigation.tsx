@@ -1,12 +1,13 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {RouteProp} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import React, {useCallback, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import {StatusBar} from 'react-native'
 import {useSelector, useDispatch} from 'react-redux'
 import {ThemeProvider} from 'styled-components'
 
 import {RootStore} from '../store/RootStore'
+import {ModalStackParamList} from './ModalStackNavigation'
 import WalletConnectStackNavigation from './WalletConnectStackNavigation'
 import WalletStackNavigation from './WalletsStackNavigation'
 
@@ -36,7 +37,7 @@ export type TabStackParamList = {
 export type TabParams = DefaultNavigationParam<MoreStackParam> | undefined
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList>
+  navigation: StackNavigationProp<RootStackParamList & ModalStackParamList>
   route: RouteProp<RootStackParamList, 'Tab'>
 }
 
@@ -91,25 +92,25 @@ const TabNavigation = (props: Props) => {
     )
   }, [])
 
-  const navigateToTransactionRequetModal = useCallback(async () => {
-    if (requests.length > 0 && sessions.length > 0) {
-      const foundSession = sessions.find((it) => it.topic === requests[0].topic)
-
-      if (foundSession) {
-        props.navigation.navigate(wrapper.route.Modal.name, {
-          screen: wrapper.route.WCTransactionRequestModal.name,
-          params: {
-            request: requests[0],
-            session: foundSession,
-          },
-        })
-      }
-    }
-  }, [requests, sessions])
-
   useEffect(() => {
-    navigateToTransactionRequetModal()
-  }, [requests])
+    if (requests.length || sessions.length) {
+      return
+    }
+    const [request] = requests
+    const foundSession = sessions.find((it) => it.topic === request.topic)
+
+    if (!foundSession) {
+      return
+    }
+
+    props.navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.WCTransactionRequestModal.name,
+      params: {
+        request,
+        session: foundSession,
+      },
+    })
+  }, [requests, sessions])
 
   return (
     <ThemeProvider theme={theme}>

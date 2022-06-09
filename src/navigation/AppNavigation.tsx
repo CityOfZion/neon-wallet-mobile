@@ -2,7 +2,7 @@ import {JsonRpcRequest} from '@json-rpc-tools/utils'
 import {NavigationContainer, RouteProp} from '@react-navigation/native'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {InteractionManager} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
@@ -13,6 +13,7 @@ import {
   getBlockchainByAddress,
   hasWCIntegration,
 } from '../blockchain'
+import {applicationConfig} from '../config/ApplicationConfig'
 import {useWalletConnect} from '../contexts/WalletConnectContext'
 import PasscodeStackNavigation, {
   PasscodeStackParams,
@@ -24,7 +25,6 @@ import {Storage} from '~src/app/Storage'
 import {Sync} from '~src/app/Sync'
 import LoadingOverlay from '~src/components/LoadingOverlay'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import {applicationConfig} from '~src/config/ApplicationConfig'
 import {DeepLinkingConfig} from '~src/config/DeepLinkingConfig'
 import {screenConfig} from '~src/config/ScreenConfig'
 import ModalStackNavigation, {
@@ -56,11 +56,12 @@ const AppNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => {
     return wrapper.theme[state.settings.theme]
   })
-  const {isConnected} = useSelector((state: RootState) => state.network)
   const {isLoading, loadingText, progress} = useSelector(
     (state: RootState) => state.loading
   )
   const {status: timerStatus} = useSelector((state: RootState) => state.timer)
+  const {isConnected} = useSelector((state: RootState) => state.network)
+
   const walletConnectCtx = useWalletConnect()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
@@ -68,7 +69,9 @@ const AppNavigation = (props: Props) => {
   const [welcomeToNWSeen, setWelcomeToNWSeen] = useState(true)
   const [hasAuthentication, setHasAuthentication] = useState(false)
   const [hasInit, setInit] = useState(false)
-  const [syncFetchInterval, setFetchSyncInterval] = useState(10000)
+
+  const interactionRef = useRef<any>()
+  const intervalRef = useRef<NodeJS.Timeout>()
 
   const startApplication = async () => {
     const onboardingSeen = await Storage.onboardingSeen.load()
@@ -82,38 +85,57 @@ const AppNavigation = (props: Props) => {
     await Sync.init(dispatchAsync)
     await walletConnectCtx.init()
     setInit(true)
+
+    InteractionManager.runAfterInteractions(async () => {
+      await Sync.fetchs(dispatchAsync)
+      await Sync.refresh(dispatchAsync)
+    })
   }
 
   useEffect(() => {
-    if (hasInit) {
-      let interactionPromise = InteractionManager.runAfterInteractions()
-      const interval = setInterval(() => {
-        interactionPromise = InteractionManager.runAfterInteractions(() => {
-          Await.run('refreshData', () => Sync.refresh(dispatchAsync))
-          Await.run('fetchData', () => Sync.fetchs(dispatchAsync))
-        })
-      }, syncFetchInterval)
-
-      if (isConnected) {
-        setFetchSyncInterval(
-          applicationConfig.defaultDataRefreshTimeInMilliseconds
-        )
-      } else {
-        clearInterval(interval)
-      }
-
-      if (!timerStatus) {
-        clearInterval(interval)
-      }
-
-      return () => {
-        interactionPromise.cancel()
-        clearInterval(interval)
-      }
-    } else {
-      !hasInit && Await.run('application', startApplication)
+    if (!hasInit) {
+      Await.run('application', startApplication)
     }
-  }, [hasInit, syncFetchInterval, isConnected, timerStatus])
+  }, [hasInit])
+
+  useEffect(() => {
+    if (!hasInit) {
+      return
+    }
+
+    if (!isConnected || !timerStatus) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = undefined
+      }
+
+      if (interactionRef.current) {
+        interactionRef.current.cancel()
+        interactionRef.current = undefined
+      }
+
+      return
+    }
+
+    if (intervalRef.current && interactionRef.current) {
+      return
+    }
+
+    intervalRef.current = setInterval(() => {
+      interactionRef.current = InteractionManager.runAfterInteractions(
+        async () => {
+          await Sync.fetchs(dispatchAsync)
+          await Sync.refresh(dispatchAsync)
+        }
+      )
+    }, applicationConfig.defaultDataRefreshTimeInMilliseconds)
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+
+      if (interactionRef.current) interactionRef.current.cancel()
+    }
+  }, [isConnected, timerStatus, hasInit])
 
   useEffect(() => {
     async function handle() {
