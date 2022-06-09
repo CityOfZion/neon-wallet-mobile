@@ -494,13 +494,7 @@
         "recipient": "Recipient",
         "priorityFee": "%{tokenSymbol} Fee",
         "feeAmount": "(Fee %{amount})",
-        "pleaseReview": "Please review transaction",
-        "dialog": {
-          "title": "Authentication",
-          "subtitle": "Authentication unsuccessful. Try again?",
-          "confirm": "Yes",
-          "cancel": "No"
-        }
+        "pleaseReview": "Please review transaction"
       }
     },
     "receive": {
@@ -759,6 +753,18 @@
     },
     "accountList": {
       "watch": "Watch"
+    }
+  },
+  "hooks": {
+    "useLocalAuthentication": {
+      "errorToGetPasscode": "Unexpected error to get passcode",
+      "errorDismiss": "Security requests denied",
+      "dialog": {
+        "title": "Authentication",
+        "subtitle": "Authentication unsuccessful. Try again?",
+        "confirm": "Yes",
+        "cancel": "No"
+      }
     }
   },
   "boolean": {

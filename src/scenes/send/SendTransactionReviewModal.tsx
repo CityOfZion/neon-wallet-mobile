@@ -2,18 +2,16 @@ import {useNavigationState} from '@react-navigation/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {Await, AwaitActivity} from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, {useCallback} from 'react'
-import {Alert, ScrollView, View} from 'react-native'
+import React from 'react'
+import {ScrollView, View} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
 import {useDispatch, useSelector} from 'react-redux'
 
 import {useHeaderHeight} from '~/node_modules/@react-navigation/stack'
-import * as LocalAuthentication from '~/node_modules/expo-local-authentication'
 import {wrapper} from '~/src/app/ApplicationWrapper'
 import {Normalize} from '~/src/app/Normalize'
 import {FilterHelper} from '~/src/helpers/FilterHelper'
-import {SecurityHelper} from '~/src/helpers/SecurityHelper'
-import {Storage} from '~src/app/Storage'
+import {useLocalAuthentication} from '~/src/hooks'
 import {AccountView} from '~src/components/AccountView'
 import {HeaderColumn} from '~src/components/HeaderColumn'
 import {PANEL_OFFSET} from '~src/components/SwiperPanel'
@@ -33,6 +31,7 @@ interface Props {
 }
 
 const SendTransactionReviewModal = (props: Props) => {
+  const {authenticate} = useLocalAuthentication()
   const {isConnected} = useSelector((state: RootState) => state.network)
   const {senderTransaction} = useSelector((state: RootState) => state)
   const contacts = useSelector((state: RootState) => state.app.contacts)
@@ -88,100 +87,41 @@ const SendTransactionReviewModal = (props: Props) => {
       wrapper.route.SendTransactionReviewModal.name
   )
 
-  const checkForAuth = useCallback(async () => {
-    // If user has set up authentication (either hardware or passcode)
-    const hasAuth = await Storage.hasAuthentication.load()
-    const useHardware = await Storage.hasAuthenticationForHardware.load()
-
-    if (hasAuth === true) {
-      // Checks if user set up a passcode
-      const passcode = await SecurityHelper.loadPasscode()
-
-      // If passcode, navigates to passcode confirmation screen
-      if (passcode) {
-        props.navigation.navigate(wrapper.route.PasscodeStack.name, {
-          screen: wrapper.route.VerifyPasscode.name,
-          params: {
-            onValidate: (it) => {
-              if (it) {
-                Await.run('submit', submit)
-              }
-            },
-          },
-        })
-      } else {
-        // If no passcode, hardware authentication
-        await tryAuth()
-      }
-    } else if (useHardware) {
-      await tryAuth()
-    } else {
-      Await.run('submit', submit)
-    }
-  }, [])
-
-  const tryAuth = async () => {
-    const canUseHardware = await LocalAuthentication.hasHardwareAsync()
-
-    if (canUseHardware) {
-      const result = await LocalAuthentication.authenticateAsync()
-
-      if (!result.success) {
-        alertDialog()
-      } else {
-        Await.run('submit', submit)
-      }
-    }
-  }
-
-  const alertDialog = () =>
-    Alert.alert(
-      i18n.t('modals.send.transactionReview.dialog.title'),
-      i18n.t('modals.send.transactionReview.dialog.subtitle'),
-      [
-        {
-          text: i18n.t('modals.send.transactionReview.dialog.confirm'),
-          onPress: async () => await tryAuth,
-        },
-        {
-          text: i18n.t('modals.send.transactionReview.dialog.cancel'),
-          style: 'cancel',
-        },
-      ],
-      {cancelable: true}
-    )
-
   const submit = async () => {
-    let transactionHash: string | null | undefined
-    const account = accounts.find(
-      (it) => it.address === senderTransaction.senderAddress
-    )
+    try {
+      await authenticate()
 
-    if (account) {
-      transactionHash = await dispatchAsyncString(
-        RootStore.senderTransaction.actions.sendAsset(account)
+      let transactionHash: string | null | undefined
+      const account = accounts.find(
+        (it) => it.address === senderTransaction.senderAddress
       )
 
-      if (!transactionHash) {
-        showMessage({
-          message: i18n.t('messages.transactionFailed'),
-          type: 'danger',
-        })
-        throw new Error(i18n.t('messages.transactionFailed'))
-      }
-      await account.addPendingTransaction(senderTransaction, transactionHash)
-      await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
-    }
+      if (account) {
+        transactionHash = await dispatchAsyncString(
+          RootStore.senderTransaction.actions.sendAsset(account)
+        )
 
-    props.navigation.reset({
-      index: 0,
-      routes: [
-        {
-          name: wrapper.route.SendTransactionConfirmationModal.name,
-          params: {transactionHash},
-        },
-      ],
-    })
+        if (!transactionHash) {
+          showMessage({
+            message: i18n.t('messages.transactionFailed'),
+            type: 'danger',
+          })
+          throw new Error(i18n.t('messages.transactionFailed'))
+        }
+        await account.addPendingTransaction(senderTransaction, transactionHash)
+        await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
+      }
+
+      props.navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: wrapper.route.SendTransactionConfirmationModal.name,
+            params: {transactionHash},
+          },
+        ],
+      })
+    } catch {}
   }
 
   const calcValue = () => {
@@ -211,66 +151,87 @@ const SendTransactionReviewModal = (props: Props) => {
       }}
     >
       <AwaitActivity
-        name={'auth'}
+        name={'submit'}
         loadingView={<ScreenLoader transparent={true} />}
       >
-        <AwaitActivity
-          name={'submit'}
-          loadingView={<ScreenLoader transparent={true} />}
-        >
-          <View>
+        <View>
+          <LinearLayout
+            height="100%"
+            width="100%"
+            orientation="verti"
+            alignItems="center"
+            justifyContent="space-between"
+          >
             <LinearLayout
-              height="100%"
               width="100%"
               orientation="verti"
-              alignItems="center"
-              justifyContent="space-between"
+              alignContent={'flex-start'}
             >
-              <LinearLayout
-                width="100%"
-                orientation="verti"
-                alignContent={'flex-start'}
-              >
-                <LinearLayout width="100%" alignItems="center">
-                  <TextView
-                    color="text.0"
-                    fontFamily="medium"
-                    fontSize="18px"
-                    mb="18px"
-                  >
-                    {i18n.t('modals.send.transactionReview.pleaseReview')}
-                  </TextView>
-                  <LinearLayout orientation={'horiz'}>
-                    <HeaderColumn
-                      title={i18n
-                        .t('modals.send.transactionReview.value')
-                        .toUpperCase()}
-                      value={calcValue()}
-                      weight={2}
-                    />
-                    <HeaderColumn
-                      title={i18n
-                        .t('modals.send.transactionReview.priorityFee', {
-                          tokenSymbol: senderTransaction.token?.symbol,
-                        })
-                        .toUpperCase()}
-                      value={
-                        senderTransaction.feeAmount?.fee
-                          ? `${senderTransaction.feeAmount?.fee}`
-                          : ''
-                      }
-                      weight={1.2}
-                      priorityFee={senderTransaction.feeAmount ?? undefined}
-                    />
-                  </LinearLayout>
+              <LinearLayout width="100%" alignItems="center">
+                <TextView
+                  color="text.0"
+                  fontFamily="medium"
+                  fontSize="18px"
+                  mb="18px"
+                >
+                  {i18n.t('modals.send.transactionReview.pleaseReview')}
+                </TextView>
+                <LinearLayout orientation={'horiz'}>
+                  <HeaderColumn
+                    title={i18n
+                      .t('modals.send.transactionReview.value')
+                      .toUpperCase()}
+                    value={calcValue()}
+                    weight={2}
+                  />
+                  <HeaderColumn
+                    title={i18n
+                      .t('modals.send.transactionReview.priorityFee', {
+                        tokenSymbol: senderTransaction.token?.symbol,
+                      })
+                      .toUpperCase()}
+                    value={
+                      senderTransaction.feeAmount?.fee
+                        ? `${senderTransaction.feeAmount?.fee}`
+                        : ''
+                    }
+                    weight={1.2}
+                    priorityFee={senderTransaction.feeAmount ?? undefined}
+                  />
                 </LinearLayout>
+              </LinearLayout>
 
-                <LinearLayout orientation={'horiz'} alignContent={'flex-start'}>
+              <LinearLayout orientation={'horiz'} alignContent={'flex-start'}>
+                <LinearLayout mr={2} mt={5} alignSelf={'center'}>
+                  <ImageView
+                    width={Normalize.scale(18)}
+                    resizeMode={'contain'}
+                    source={require('~src/assets/images/arrow-gray.png')}
+                  />
+                </LinearLayout>
+                <TextView
+                  color={'text.10'}
+                  fontFamily={'medium'}
+                  fontSize={18}
+                  mt={4}
+                >
+                  {i18n.t('modals.send.transactionReview.sender')}
+                </TextView>
+              </LinearLayout>
+              <LinearLayout width={'100%'}>
+                <AccountView
+                  contactName={senderName}
+                  address={senderAddress ?? ''}
+                  accountName={senderAccount?.name ?? undefined}
+                  walletName={senderWallet ?? undefined}
+                  hideButton={true}
+                />
+                <LinearLayout orientation={'horiz'}>
                   <LinearLayout mr={2} mt={5} alignSelf={'center'}>
                     <ImageView
                       width={Normalize.scale(18)}
                       resizeMode={'contain'}
-                      source={require('~src/assets/images/arrow-gray.png')}
+                      source={require('~src/assets/images/arrow-receive-gray.png')}
                     />
                   </LinearLayout>
                   <TextView
@@ -279,65 +240,39 @@ const SendTransactionReviewModal = (props: Props) => {
                     fontSize={18}
                     mt={4}
                   >
-                    {i18n.t('modals.send.transactionReview.sender')}
+                    {i18n.t('modals.send.transactionReview.recipient')}
                   </TextView>
                 </LinearLayout>
-                <LinearLayout width={'100%'}>
-                  <AccountView
-                    contactName={senderName}
-                    address={senderAddress ?? ''}
-                    accountName={senderAccount?.name ?? undefined}
-                    walletName={senderWallet ?? undefined}
-                    hideButton={true}
-                  />
-                  <LinearLayout orientation={'horiz'}>
-                    <LinearLayout mr={2} mt={5} alignSelf={'center'}>
-                      <ImageView
-                        width={Normalize.scale(18)}
-                        resizeMode={'contain'}
-                        source={require('~src/assets/images/arrow-receive-gray.png')}
-                      />
-                    </LinearLayout>
-                    <TextView
-                      color={'text.10'}
-                      fontFamily={'medium'}
-                      fontSize={18}
-                      mt={4}
-                    >
-                      {i18n.t('modals.send.transactionReview.recipient')}
-                    </TextView>
-                  </LinearLayout>
-                  <AccountView
-                    contactName={receiverName}
-                    address={receiverAddress ?? ''}
-                    accountName={receiverAccount?.name ?? undefined}
-                    walletName={receiverWallet ?? undefined}
-                  />
-                  <TokenView
-                    transaction={senderTransaction}
-                    hideSingleTokenPrice={true}
-                    widthIcon="20px"
-                    heightIcon="20px"
-                    hideAmountAbove={true}
-                    hideTokenInWallet={true}
-                    hidePriorityFee={true}
-                  />
-                  {tip && <TipView amount={tip.amount} />}
-                </LinearLayout>
-              </LinearLayout>
-
-              <LinearLayout width="90%" mt="32px" alignSelf="center">
-                <ThemedButton
-                  label={i18n.t('app.send')}
-                  onPress={() => Await.run('auth', checkForAuth)}
-                  rounded={true}
-                  radius={8}
-                  disabled={!isConnected}
+                <AccountView
+                  contactName={receiverName}
+                  address={receiverAddress ?? ''}
+                  accountName={receiverAccount?.name ?? undefined}
+                  walletName={receiverWallet ?? undefined}
                 />
+                <TokenView
+                  transaction={senderTransaction}
+                  hideSingleTokenPrice={true}
+                  widthIcon="20px"
+                  heightIcon="20px"
+                  hideAmountAbove={true}
+                  hideTokenInWallet={true}
+                  hidePriorityFee={true}
+                />
+                {tip && <TipView amount={tip.amount} />}
               </LinearLayout>
             </LinearLayout>
-          </View>
-        </AwaitActivity>
+
+            <LinearLayout width="90%" mt="32px" alignSelf="center">
+              <ThemedButton
+                label={i18n.t('app.send')}
+                onPress={() => Await.run('submit', submit)}
+                rounded={true}
+                radius={8}
+                disabled={!isConnected}
+              />
+            </LinearLayout>
+          </LinearLayout>
+        </View>
       </AwaitActivity>
     </ScrollView>
   ) : (
