@@ -714,6 +714,10 @@
         "no": "No",
         "ok": "OK, I understand"
       }
+    },
+    "ExportWIFModal": {
+      "unexpectedError": "Unexpected error to get WIF",
+      "details": "WIF DETAILS"
     }
   },
   "components": {
