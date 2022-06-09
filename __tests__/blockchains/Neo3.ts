@@ -1,4 +1,4 @@
-import {blockchainServices} from '~src/blockchain'
+import {blockchainServices} from '../../src/blockchain'
 
 const blockchain = blockchainServices['neo3']
 const address = 'NV96QgerjXNmu4jLdMW4ZWkhySVMYX52Ex'

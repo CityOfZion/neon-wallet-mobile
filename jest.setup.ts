@@ -1,6 +1,5 @@
 import 'react-native'
 import 'reflect-metadata'
-import '~src/vendor/window-crypto'
 
 // @ts-ignore
 import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock'

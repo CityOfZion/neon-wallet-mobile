@@ -1,4 +1,4 @@
-import {validateAddressAllBlockchains, validateWifAllBlockchains, validatePrivateKeyWithPasswordAllBlockchains} from '~src/~src/src/blockchain'
+import {validateAddressAllBlockchains, validateWifAllBlockchains, validatePrivateKeyWithPasswordAllBlockchains} from '../../src/blockchain'
 
 const addressNeoLegacy = 'AeGgZTTWPzyVtNiQRcpngkV75Xip1hznmi'
 const wifNeoLegacy = 'Kwbo91nddqMhgpJi8MiWNpMpaz8wECRV5Abw6kpRRCVU4AF3bFmZ'
