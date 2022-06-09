@@ -84,7 +84,7 @@ export const TransactionsList = ({
   }
 
   return (
-    <LinearLayout mt="44px" mb="44px">
+    <LinearLayout my="44px">
       <FlatList
         data={dates}
         ListFooterComponent={showMoreLoading ? <FlatListFooter /> : undefined}

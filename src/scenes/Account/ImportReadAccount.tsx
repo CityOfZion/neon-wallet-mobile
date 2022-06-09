@@ -5,7 +5,7 @@ import i18n from 'i18n-js'
 import React, {useState, useCallback, useEffect} from 'react'
 import {useSelector} from 'react-redux'
 
-import {WatchAccountToImport} from '../hooks/BlockchainActionsHook'
+import {WatchAccountToImport} from '../../hooks/BlockchainActionsHook'
 
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {
@@ -23,7 +23,6 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import {useBlockchainActionsHook} from '~src/hooks'
 import {RootStackParamList} from '~src/navigation/AppNavigation'
 import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
 import {RootState} from '~src/store/RootStore'
 import {LinearLayout, TextView} from '~src/styles/styled-components'
 

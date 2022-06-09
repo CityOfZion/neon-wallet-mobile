@@ -10,6 +10,9 @@ import WCInvocationDetailsModal, {
 import ReceiveModalStackNavigation from './ReceiveModalStackNavigation'
 import {TabParams} from './TabNavigation'
 
+import EditAccountModal, {
+  EditAccountModalParam,
+} from '~/src/scenes/Account/EditAccountModal'
 import EditWalletModal, {
   EditWalletParams,
 } from '~/src/scenes/Wallet/EditWalletModal'
@@ -59,9 +62,6 @@ import CurrencyPickerModal from '~src/scenes/CurrencyPickerModal'
 import CustomColorPage, {
   CustomColorPageParam,
 } from '~src/scenes/CustomColorPage'
-import EditAccountModal, {
-  EditAccountModalParam,
-} from '~src/scenes/EditAccountModal'
 import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
 import ListTokenModal, {ListTokenModalParams} from '~src/scenes/ListTokenModal'
 import {VerifyPasscodePageParams} from '~src/scenes/LoginPage/VerifyPasscodePage'

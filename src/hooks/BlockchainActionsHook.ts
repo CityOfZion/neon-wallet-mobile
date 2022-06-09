@@ -1,14 +1,12 @@
 import i18n from 'i18n-js'
 import allSetlled from 'promise.allsettled'
 import {useCallback, useState} from 'react'
-import {Alert} from 'react-native'
 import {useSelector, useDispatch} from 'react-redux'
 
 import {UtilsHelper} from '../helpers/UtilsHelper'
 
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {BlockchainServiceKey, blockchainServices} from '~src/blockchain'
-import {getRandomColor} from '~src/scenes/CustomizeAccount'
 import {RootStore} from '~src/store/RootStore'
 
 export type AccountToImport = {
@@ -114,7 +112,7 @@ export function useBlockchainActionsHook() {
       dispatch(RootStore.account.actions.setBlockchain(blockchain))
       dispatch(
         RootStore.account.actions.setBackgroundColor(
-          theme.colors.card[getRandomColor(6)]
+          theme.colors.card[UtilsHelper.getRandomNumber(6)]
         )
       )
       dispatch(
@@ -151,7 +149,7 @@ export function useBlockchainActionsHook() {
         dispatch(RootStore.account.actions.setBlockchain(blockchain))
         dispatch(
           RootStore.account.actions.setBackgroundColor(
-            theme.colors.card[getRandomColor(6)]
+            theme.colors.card[UtilsHelper.getRandomNumber(6)]
           )
         )
         dispatch(
@@ -187,7 +185,7 @@ export function useBlockchainActionsHook() {
         dispatch(RootStore.account.actions.setBlockchain(blockchain))
         dispatch(
           RootStore.account.actions.setBackgroundColor(
-            theme.colors.card[getRandomColor(6)]
+            theme.colors.card[UtilsHelper.getRandomNumber(6)]
           )
         )
         dispatch(

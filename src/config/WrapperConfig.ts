@@ -105,7 +105,6 @@ export class WrapperConfig {
     'AccountAssetScreen',
     'WCConnectionDetailsModal',
     'AccountConnectionsScreen',
-    'WCAccountConnectionsScreen',
     'AccountTransactionsScreen',
     'AccountNFTSScreen',
     'RawJsonModal',
@@ -113,6 +112,7 @@ export class WrapperConfig {
     'WCInvocationDetailsModal',
     'WebViewModal',
     'WalletSettingsView',
+    'AccountSettingsView',
   ] as const
 }
 

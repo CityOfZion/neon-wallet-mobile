@@ -244,6 +244,23 @@
         "cancel": "#translateme",
         "delete": "#translateme"
       }
+    },
+    "accountSettingsView": {
+      "title": "#translateme",
+      "customize": "#translateme",
+      "exportWif": "#translateme",
+      "deleteTitle": "#translateme",
+      "deleteSubtitle": "#translateme",
+      "deleteButtom": "#translateme",
+      "deleteAlert": "#translateme",
+      "navigation": {
+        "cancel": "#translateme",
+        "delete": "#translateme"
+      }
+    },
+    "AccountConnectionsScreen": {
+      "noDAppsConnected": "#translateme",
+      "title": "#translateme"
     }
   },
   "modals": {

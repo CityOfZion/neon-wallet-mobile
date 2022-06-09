@@ -131,14 +131,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
       TitleComponent({nodesPool: nodesPoolBlockchain, language}),
     headerRight: () =>
       HeaderActionButton({
-        actionTitle: i18n.t('app.edit'),
-        actionButtonStyle: 'default',
+        actionButtonStyle: 'more',
         actionOnPress: () => {
-          props.navigation.navigate(wrapper.route.Modal.name, {
-            screen: wrapper.route.EditAccountModal.name,
-            params: {
-              account,
-            },
+          props.navigation.navigate(wrapper.route.AccountSettingsView.name, {
+            account,
           })
         },
       }),
@@ -492,7 +488,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           iconSize={[28, 30]}
           onPress={() => {
             props.navigation.navigate(
-              wrapper.route.WCAccountConnectionsScreen.name,
+              wrapper.route.AccountConnectionsScreen.name,
               {
                 account,
               }

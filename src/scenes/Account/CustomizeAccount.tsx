@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import {Await, AwaitActivity} from '~/node_modules/@simpli/react-native-await'
 import {ImageLoadEventData} from '~/node_modules/@types/react-native'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
 import {wrapper} from '~src/app/ApplicationWrapper'
 import {BlockchainServiceKey} from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
@@ -47,10 +48,6 @@ type ContentCollection = {
   [key in keyof Partial<MoreStackParamList>]: ContentParams
 }
 
-export const getRandomColor = (max: number) => {
-  return Math.floor(Math.random() * Math.floor(max))
-}
-
 const CustomizeAccount = (props: Props) => {
   const theme = useSelector(
     (state: RootState) => wrapper.theme[state.settings.theme]
@@ -63,7 +60,7 @@ const CustomizeAccount = (props: Props) => {
 
   const [name, setName] = useState<string>('')
   const [color, setColor] = useState<string>(
-    theme.colors.card[getRandomColor(6)]
+    theme.colors.card[UtilsHelper.getRandomNumber(6)]
   )
   const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
   const {isConnected} = useSelector((state: RootState) => state.network)

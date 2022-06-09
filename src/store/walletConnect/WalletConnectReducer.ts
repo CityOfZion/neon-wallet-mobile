@@ -17,29 +17,28 @@ export class WalletConnectReducer extends ReducerWrapper<
   protected readonly dispatchers = [SetApprovalDateDispatcher]
 
   readonly actions = {
-    setApprovalDate: (approvalDates: WCApprovalDate[]) => {
-      return this.commit('SET_APPROVAL_DATES', {approvalDates})
-    },
     updateApprovalDate: (sessionTopic: string): AsyncAction => {
       return async (dispatch, getState) => {
         const approvalDates = (await Storage.wcApprovalDates.load()) ?? []
         approvalDates.push({sessionTopic, approvalDate: moment().unix()})
         await Storage.wcApprovalDates.save(approvalDates)
+        dispatch(this.commit('SET_APPROVAL_DATES', {approvalDates}))
       }
     },
     delete: (sessionTopic: string): AsyncAction => {
       return async (dispatch, getState) => {
-        const wcApprovalDates = (await Storage.wcApprovalDates.load()) ?? []
+        const approvalDates = (await Storage.wcApprovalDates.load()) ?? []
 
-        const wcApprovalDate = wcApprovalDates.find(
+        const wcApprovalDate = approvalDates.find(
           (it) => it.sessionTopic === sessionTopic
         )
 
         if (wcApprovalDate) {
-          const index = wcApprovalDates.indexOf(wcApprovalDate)
-          wcApprovalDates.splice(index, 1)
+          const index = approvalDates.indexOf(wcApprovalDate)
+          approvalDates.splice(index, 1)
         }
-        await Storage.wcApprovalDates.save(wcApprovalDates)
+        await Storage.wcApprovalDates.save(approvalDates)
+        dispatch(this.commit('SET_APPROVAL_DATES', {approvalDates}))
       }
     },
   }

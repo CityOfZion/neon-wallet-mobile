@@ -361,7 +361,20 @@
         "delete": "Delete"
       }
     },
-    "WCAccountConnectionsScreen": {
+    "accountSettingsView": {
+      "title": "Account Settings",
+      "customize": "Customize account",
+      "exportWif": "Export WIF",
+      "deleteTitle": "Delete Wallet",
+      "deleteSubtitle": "This will remove your account and all transaction history.",
+      "deleteButtom": "Delete Account",
+      "deleteAlert": "Are you sure you want to delete this account?",
+      "navigation": {
+        "cancel": "Cancel",
+        "delete": "Delete"
+      }
+    },
+    "AccountConnectionsScreen": {
       "noDAppsConnected": "No dApps connected",
       "title": "Connections"
     }
@@ -415,13 +428,8 @@
       "selectColor": "Customize your card",
       "navigation": {
         "cancel": "Cancel",
-        "delete": "Delete",
         "save": "Save"
-      },
-      "deleteAccount": "Delete Account",
-      "deleteAccountSubtitle": "This will remove your account and its transaction history.",
-      "deleteButtom": "Delete account",
-      "deleteAccountAlert": "Are you sure you want to delete this account?"
+      }
     },
     "editWallet": {
       "title": "Edit",
