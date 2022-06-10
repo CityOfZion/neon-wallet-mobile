@@ -61,28 +61,12 @@ export class AppReducer extends ReducerWrapper<
     },
 
     fetchExchange: (): AsyncAction => {
-      return async (dispatch, getState) => {
+      return async (dispatch) => {
         try {
-          let tokenList = getState().app.tokens
+          const tokenList = await Storage.tokenAssets.load()
 
-          if (tokenList.length < 1) {
-            const assetsBlockchain: TokenAsset[] = []
-
-            await Promise.all(
-              blockchainList.map(async (blockchainName) => {
-                const {assets, provider} = blockchainServices[blockchainName]
-                const tokenListResponse = await provider.getTokenList()
-                assets.forEach(({hash, name, symbol, decimals}) => {
-                  assetsBlockchain.push(
-                    new TokenAsset(name, symbol, hash, blockchainName, decimals)
-                  )
-                  tokenList = [
-                    ...tokenListResponse.toTokenAsset(blockchainName),
-                    ...assetsBlockchain,
-                  ]
-                })
-              })
-            )
+          if (!tokenList || tokenList.length) {
+            return
           }
 
           const result: MultichainExchange = {} as MultichainExchange
