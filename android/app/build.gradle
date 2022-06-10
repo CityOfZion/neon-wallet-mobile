@@ -135,8 +135,8 @@ android {
         applicationId 'io.cityofzion.neon'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1028
-        versionName "1.0.28"
+        versionCode 1032
+        versionName "1.0.31"
         multiDexEnabled true
     }
     splits {

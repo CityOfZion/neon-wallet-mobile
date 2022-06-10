@@ -186,11 +186,11 @@ workflows:
           filters:
             branches:
               only:
-                - development     
-      - deployIOS:
-          requires:
-            - test            
+                - ios_fastlane
+                - android_fastlane     
+      - deployIOS:           
           filters:
             branches:
               only:
-                - development  
+                - ios_fastlane
+                - android_fastlane  
