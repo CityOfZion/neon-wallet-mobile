@@ -95,7 +95,18 @@ jobs:
       - run:
           name: Keystore
           command: echo $ANDROID_JKS | base64 -di > ./neon.jks
-      - run: cd .. && npm install react-native-unimodules
+      - run: cd .. && yarn install
+
+      - save_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+          paths:
+            - ~/.cache/yarn
+
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+          paths:
+            - node_modules
+      
       - run:
           name: fastlane
           command: bundle exec fastlane android beta
