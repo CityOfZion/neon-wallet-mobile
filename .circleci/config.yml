@@ -98,14 +98,10 @@ jobs:
       - run: cd .. && yarn install
 
       - save_cache:
+          working_directory: ~/neon-wallet-mobile
           key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
           paths:
             - ~/.cache/yarn
-
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-          paths:
-            - node_modules
       
       - run:
           name: fastlane

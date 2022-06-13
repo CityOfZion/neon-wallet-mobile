@@ -20,7 +20,7 @@ platform :android do
 
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
-    releaseFilePath = File.join(Dir.pwd, "./neon.jks")
+    releaseFilePath = File.join(Dir.pwd, "neon.jks")
     store_password = ENV['ANDROID_STORE_PASS']
     key_password = ENV['ANDROID_KEY_PASS']
     key_alias = ENV['ANDROID_KEY_ALIAS']
