@@ -91,11 +91,11 @@ jobs:
 
       - run:
           name: Key JSON
-          command: echo $ANDROID_KEY_JSON | base64 -di > ./fastlane/key.json
+          command: echo $ANDROID_KEY_JSON | base64 -di > ./key.json
       - run:
           name: Keystore
           command: echo $ANDROID_JKS | base64 -di > ./fastlane/neon.jks
-          
+
       - run: cd .. && yarn install
       
       - run:
