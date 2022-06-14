@@ -3,7 +3,6 @@ import {useHeaderHeight} from '@react-navigation/stack'
 import I18n from 'i18n-js'
 import React, {useCallback, useEffect, useState} from 'react'
 import {Keyboard} from 'react-native'
-import {showMessage} from 'react-native-flash-message'
 import InputScrollView from 'react-native-input-scroll-view'
 import {useDispatch, useSelector} from 'react-redux'
 
@@ -217,7 +216,7 @@ const SendTransactionInputModal = (prop: Props) => {
   }
 
   const validateAddress = (val: string) => {
-    return validateAddressAllBlockchains(val) || val?.length === 0
+    return blockchainServices[account.blockchain].validateAddress(val)
   }
 
   const validateFields = () => {
@@ -236,8 +235,9 @@ const SendTransactionInputModal = (prop: Props) => {
     ) {
       inputIsValid = false
     } else if (!isConnected) {
-      return false
+      inputIsValid = false
     }
+
     return inputIsValid
   }
 
@@ -473,6 +473,7 @@ const SendTransactionInputModal = (prop: Props) => {
             />
           </>
         )}
+
         {account.blockchain === 'neo3' && (
           <TransactionFeeNeo3
             blockchain={account.blockchain}
@@ -488,6 +489,7 @@ const SendTransactionInputModal = (prop: Props) => {
             }}
           />
         )}
+
         {cozTip && (
           <TipCheckbox
             tokenTipAmount={tokenTipAmount}
