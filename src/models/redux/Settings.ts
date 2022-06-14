@@ -1,6 +1,7 @@
 import { HttpExclude, HttpExpose } from '@simpli/serialized-request'
 
 import { localeConfig } from '~/src/config/LocaleConfig'
+import { SettingsState } from '~/src/types/reducers/settings'
 import { Theme } from '~src/enums/Theme'
 
 @HttpExclude()

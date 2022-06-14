@@ -42,12 +42,9 @@ const navigationScheme: INavigationScheme = {
     return [
       wrapper.route.Modal.name,
       {
-        screen: wrapper.route.SendModalStack.name,
+        screen: wrapper.route.SendTransactionWalletSelectionModal.name,
         params: {
-          screen: wrapper.route.SendWalletSelectionModal.name,
-          params: {
-            uri: UriHelper.parse(key),
-          },
+          address: UriHelper.parse(key)?.address,
         },
       },
     ]

@@ -290,14 +290,7 @@ const ListWalletView = (props: WalletProps) => {
                   )}
 
                   {isListNotEmpty() && (
-                    <BalanceList
-                      mb={6}
-                      tokenAssets={selectedWallet.tokenAssets ?? []}
-                      walletId={selectedWallet.id ?? undefined}
-                      fromAccountView={false}
-                      showBlockchain
-                      fromSendAccountSelectionModal={false}
-                    />
+                    <BalanceList mb={6} tokenAssets={selectedWallet.tokenAssets ?? []} showBlockchain />
                   )}
                 </LinearLayout>
               </Animated.View>

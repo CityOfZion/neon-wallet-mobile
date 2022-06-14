@@ -4,7 +4,6 @@ import { ImageLoadEventData } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
-import { PriorityFee } from '~src/models/PriorityFee'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface IHeaderValue {
@@ -19,12 +18,21 @@ interface Props {
   title: string
   value: string | IHeaderValue[]
   image?: ImageLoadEventData
-  priorityFee?: PriorityFee
   showCopy?: boolean
   valueTextColor?: string
 }
 
 export const HeaderColumn = (props: Props) => {
+  const handlePressCopy = () => {
+    if (typeof props.value !== 'string') return
+
+    UtilsHelper.copyToClipboard(props.value)
+    showMessage({
+      message: i18n.t('toast.copiedToClipboard'),
+      type: 'success',
+    })
+  }
+
   return (
     <LinearLayout orientation="verti" weight={props.weight} pt={2} mr={4}>
       <TextView color="text.10" fontFamily="medium" fontSize={14}>
@@ -34,6 +42,8 @@ export const HeaderColumn = (props: Props) => {
         {props.image && <ImageView alignSelf="center" source={props.image} mr={2} mt={1} />}
         {typeof props.value === 'string' ? (
           <TextView
+            width={props.showCopy ? '90%' : '100%'}
+            mr={props.showCopy ? '4px' : undefined}
             color={props.valueTextColor ?? 'text.0'}
             fontFamily="medium"
             fontSize={16}
@@ -57,37 +67,16 @@ export const HeaderColumn = (props: Props) => {
             </TextView>
           ))
         )}
-        {props.priorityFee && (
-          <TextView color="#fff" fontFamily="semibold" fontSize={16} mr={2}>
-            {` ${props.priorityFee.name.toUpperCase()}`}
-          </TextView>
+        {props.showCopy && (
+          <ButtonView activeOpacity={0.4} onPress={handlePressCopy}>
+            <ImageView
+              width="16px"
+              resizeMode="contain"
+              source={require('~src/assets/images/icon-copy-green.png')}
+              ml={2}
+            />
+          </ButtonView>
         )}
-        <ButtonView
-          width="100%"
-          activeOpacity={props.showCopy ? 0.4 : 1}
-          onPress={() => {
-            if (props.showCopy && typeof props.value === 'string') {
-              UtilsHelper.copyToClipboard(props.value)
-              showMessage({
-                message: i18n.t('toast.copiedToClipboard'),
-                type: 'success',
-              })
-            }
-          }}
-        >
-          <LinearLayout orientation="horiz" maxWidth={props.showCopy ? '93%' : '100%'} alignItems="flex-end">
-            {props.showCopy && (
-              <LinearLayout>
-                <ImageView
-                  width="16px"
-                  resizeMode="contain"
-                  source={require('~src/assets/images/icon-copy-green.png')}
-                  ml={2}
-                />
-              </LinearLayout>
-            )}
-          </LinearLayout>
-        </ButtonView>
       </LinearLayout>
     </LinearLayout>
   )

@@ -22,16 +22,7 @@ const AccountAssetScreen = () => {
   return (
     <ScreenLayout darkerSolidColorBG>
       <AccountSubTitle account={account} />
-      <BalanceList
-        my="16px"
-        tokenAssets={account.getTokenAssets()}
-        address={account.address ?? undefined}
-        showHoldingValueColumn={false}
-        showBlockchain
-        fromAccountView={false}
-        fromSendAccountSelectionModal={false}
-        zeroBalance
-      />
+      <BalanceList my="16px" tokenAssets={account.getTokenAssets()} showHoldingValue={false} showBlockchain />
     </ScreenLayout>
   )
 }

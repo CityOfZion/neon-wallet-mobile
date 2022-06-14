@@ -8,12 +8,9 @@ import type * as AsteroidSDK from '@moonlight-io/asteroid-sdk-js'
 import axios from 'axios'
 import { ImageLoadEventData, NativeModules, Platform } from 'react-native'
 
-import { INFT } from '../../common'
-
 import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { NeoNode } from '~/src/models/NeoNode'
-import { TokenAsset } from '~/src/models/TokenAsset'
 import { Account } from '~/src/models/redux/Account'
 import { NFTResponse } from '~/src/models/response/NFTResponse'
 import { NFTSResponse } from '~/src/models/response/NFTSResponse'
@@ -21,10 +18,11 @@ import { NeoNative } from '~/src/native/NeoNative'
 import {
   IBlockchainService,
   BlockchainServiceKey,
-  SenderTransactionInfo,
+  SendTransactionData,
   AssetInfo,
   IClaimable,
   IWalletConnect,
+  INFT,
 } from '~src/blockchain'
 import { Neo3ProviderOptions } from '~src/blockchain/Neo3'
 import { Neo3Provider } from '~src/blockchain/Neo3/providers/common'
@@ -112,7 +110,12 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
   }
 
   validateAddress(address: string) {
-    return address.startsWith('n') || address.startsWith('N') //the method wallet.isAddress doesn't work correctly
+    const regex = new RegExp('^N\\S{33}$')
+    const validAddress = regex.exec(address)
+
+    if (validAddress?.[0]) return true
+
+    return false
   }
   validateWif(wif: string) {
     return wallet.isWIF(wif)
@@ -147,10 +150,9 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     return address
   }
 
-  async sendTransaction(sendtx: SenderTransactionInfo) {
-    const { senderAddress } = sendtx
+  async sendTransaction(data: SendTransactionData) {
     try {
-      if (!senderAddress) throw new Error('Sender address not defined')
+      if (!data.senderAddress) throw new Error('Sender address not defined')
 
       const nodes = await this.provider.getAllNodes()
       const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
@@ -159,8 +161,8 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
 
       const facade = await api.NetworkFacade.fromConfig({ node: bestUrl })
 
-      const intents = await this.buildNep17(sendtx)
-      const signing = await this.signing(senderAddress)
+      const intents = await this.buildNep17(data)
+      const signing = await this.signing(data.senderAddress)
 
       const result = await facade.transferToken(intents, signing)
 
@@ -208,12 +210,11 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     if (neoBalance.length < 1) throw new Error("Address don't have NEO to make a claim")
     if (!neoHash) throw new Error('NEO not found')
 
-    const tokenFee = new TokenAsset('NEO', 'NEO', neoHash, this.key)
-    tokenFee.amount = neoBalance[0].amount ?? 0
     const gasFee = await this.calculateTransferFee({
       receiverAddress: address,
       senderAddress: address,
-      token: tokenFee,
+      tokenHash: neoHash,
+      amount: neoBalance[0].amount ?? 0,
     })
     const gasAmount = gasBalance[0].amount ?? 0
 
@@ -236,6 +237,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       txid,
       token: this.feeToken.token,
       hash: this.feeToken.hash,
+      fee: gasFee,
     }
   }
 
@@ -255,14 +257,9 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     return UtilsHelper.convertToArbitraryDecimals(Number(testInvokeResult.gasconsumed))
   }
 
-  async calculateTransferFee(sendtx: Omit<SenderTransactionInfo, 'feeAmount'>) {
+  async calculateTransferFee(data: Omit<SendTransactionData, 'fee'>) {
     try {
-      const { receiverAddress, senderAddress, token } = sendtx
-      if (!receiverAddress) throw new Error('Receiver address is invalid')
-      if (!senderAddress) throw new Error('Sender address is invalid')
-      if (!token) throw new Error('Token is invalid')
-
-      const fromAccount = await this.getNeoAccount(senderAddress)
+      const fromAccount = await this.getNeoAccount(data.senderAddress)
 
       if (!fromAccount) throw new Error('Account not found')
 
@@ -272,7 +269,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
 
       const rpcClient = new rpc.NeoServerRpcClient(endpoint ?? defaultEndpoint)
 
-      const intents = await this.buildNep17(sendtx)
+      const intents = await this.buildNep17(data)
 
       const txbuilder = new api.TransactionBuilder()
       for (const intent of intents) {
@@ -373,12 +370,14 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     return result
   }
 
-  private async buildNep17(sendtx: Omit<SenderTransactionInfo, 'feeAmount'>) {
+  private async buildNep17({
+    tokenHash,
+    amount,
+    receiverAddress,
+    senderAddress,
+    tip,
+  }: Omit<SendTransactionData, 'fee'>) {
     const intents: Nep17TransferIntent[] = []
-    const { token, receiverAddress, senderAddress, tip } = sendtx
-    if (!token) throw new Error('Token not defined')
-    if (!senderAddress) throw new Error('Sender address not defined')
-    if (!receiverAddress) throw new Error('Receiver address not defined')
 
     const neoAccount = await this.getNeoAccount(senderAddress)
     if (!neoAccount) throw new Error('Sender Address in invalid')
@@ -386,18 +385,19 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     intents.push({
       to: receiverAddress,
       from: neoAccount,
-      contractHash: token.hash,
-      decimalAmt: token.amount,
+      contractHash: tokenHash,
+      decimalAmt: amount,
     })
 
     if (tip) {
       intents.push({
-        to: tip.address,
+        to: this.cozTip.address,
         from: neoAccount,
         contractHash: this.cozTip.hash,
-        decimalAmt: tip.amount,
+        decimalAmt: tip,
       })
     }
+
     return intents
   }
 

@@ -1,23 +1,26 @@
 import { SendAssetConfig, DoInvokeConfig } from '@cityofzion/neon-api/lib/funcs/types'
 import { tx } from '@cityofzion/neon-core'
 import { api, nep5, wallet } from '@cityofzion/neon-js'
+import { u } from '@cityofzion/neon-js-next'
 import type * as AsteroidSDK from '@moonlight-io/asteroid-sdk-js'
 import i18n from 'i18n-js'
 import moment from 'moment'
 import { Platform, NativeModules, ImageLoadEventData } from 'react-native'
 
 import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
-import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { Account } from '~/src/models/redux/Account'
-import { BlockchainServiceKey, IBlockchainService, AssetInfo, IClaimable, SenderTransactionInfo } from '~src/blockchain'
+import { BlockchainServiceKey, IBlockchainService, AssetInfo, IClaimable, SendTransactionData } from '~src/blockchain'
 import { NeoLegacyProviderOption } from '~src/blockchain/NeoLegacy'
 import { TNeoLegacyProvider } from '~src/blockchain/NeoLegacy/providers'
-import { TokenAsset } from '~src/models/TokenAsset'
 import { NeoNative } from '~src/native/NeoNative'
 
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 const feeTokenImg = require('~src/assets/nep5/png/GAS.png')
 const SDK: typeof AsteroidSDK = require('~src/vendor/asteroid-sdk')
+
+interface NativeAsset extends AssetInfo {
+  symbol: 'GAS' | 'NEO'
+}
 export class BSNeoLegacy implements IClaimable, IBlockchainService {
   readonly networkDeprecatedLabel = 'MainNet'
   readonly defaultNodeNet = 'http://seed1.ngd.network:10332'
@@ -27,7 +30,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   readonly icon = icon
   readonly derivationPath = "m/44'/888'/0'/0/?"
   readonly platform = 'neo'
-  readonly assets: AssetInfo[] = [
+  readonly assets: NativeAsset[] = [
     {
       name: 'NEO',
       hash: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
@@ -87,41 +90,24 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     return address
   }
 
-  async sendTransaction(sendTx: SenderTransactionInfo) {
-    const { token, senderAddress, receiverAddress, feeAmount, tip } = sendTx
-    const fees = feeAmount
+  async sendTransaction(data: SendTransactionData) {
+    const hexHash = u.HexString.fromHex(data.tokenHash).toString()
 
-    if (!token) throw new Error('Token not defined')
-    if (!senderAddress) throw new Error('Sender address not defined')
-    if (!receiverAddress) throw new Error('Receiver address not defined')
+    const nativeAsset = this.assets.find(({ hash }) => hash === hexHash)
 
-    const { symbol, amount } = token
-    const nativeAssets = this.assets.map(({ name }) => {
-      return name
-    })
-
-    if (nativeAssets.includes(symbol)) {
-      const assets = symbol as 'GAS' | 'NEO'
-
+    if (nativeAsset) {
       return await this.sendNativeAsset(
-        senderAddress,
-        receiverAddress,
-        assets,
-        amount,
-        fees?.fee,
-        tip ? tip.amount : undefined,
-        tip ? tip.address : undefined
+        data.senderAddress,
+        data.receiverAddress,
+        nativeAsset.symbol,
+        data.amount,
+        data.fee,
+        data.tip,
+        this.cozTip.address
       )
     }
 
-    return await this.sendNep5Asset(
-      senderAddress,
-      receiverAddress,
-      token,
-      fees?.fee,
-      tip ? tip.amount : undefined,
-      tip ? tip.address : undefined
-    )
+    return await this.sendNep5Asset(data)
   }
 
   async decryptKey(encryptedKey: string, password: string) {
@@ -165,7 +151,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     return wallet.isWIF(privateKey)
   }
 
-  async calculateTransferFee(sendtx: Omit<SenderTransactionInfo, 'feeAmount'>) {
+  async calculateTransferFee() {
     return 0
   }
 
@@ -241,14 +227,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     return (await sendResponse).tx?.hash ?? null
   }
 
-  private async sendNep5Asset(
-    senderAddress: string,
-    receiverAddress: string,
-    token: TokenAsset,
-    fees?: number,
-    tipAmount?: number,
-    tipReceiverAddress?: string
-  ) {
+  private async sendNep5Asset({ amount, receiverAddress, senderAddress, tokenHash, fee, tip }: SendTransactionData) {
     const neoAccount = await this.getNeoAccount(senderAddress)
     const pool = await this.provider.getAllNodes()
     const height = pool.reduce((max, node) => Math.max(max, node.height ?? 0), pool[0]?.height ?? 0)
@@ -260,18 +239,18 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
 
     const apiProvider = new api.neoscan.instance(this.networkDeprecatedLabel)
 
-    const scBuilder = nep5.abi.transfer(token.hash, neoAccount.address, receiverAddress, token.amount)
+    const scBuilder = nep5.abi.transfer(tokenHash, neoAccount.address, receiverAddress, amount)
 
     let invokeResponse: DoInvokeConfig
 
-    if (tipAmount && tipReceiverAddress) {
-      const tipIntent = api.makeIntent({ GAS: tipAmount }, tipReceiverAddress)
+    if (tip) {
+      const tipIntent = api.makeIntent({ GAS: tip }, this.cozTip.address)
       invokeResponse = await api.doInvoke({
         api: apiProvider,
         url,
         account: neoAccount,
         script: scBuilder().str,
-        fees,
+        fees: fee,
         intents: tipIntent,
       })
     } else {
@@ -280,7 +259,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
         url,
         account: neoAccount,
         script: scBuilder().str,
-        fees,
+        fees: fee,
       })
     }
 
@@ -330,23 +309,10 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
         txid: claimGasResponse.response?.txid ?? null,
         token: this.cozTip.token,
         hash: this.cozTip.hash,
+        fee: claimGasResponse.fees ?? null,
       }
     } catch (error: any) {
       throw new Error(error.message)
-    }
-  }
-
-  private async watchTransaction(txid: string, onComplete?: () => void, maxAttempts = 10, intervalInMs = 3000) {
-    await UtilsHelper.sleep(intervalInMs)
-
-    try {
-      await this.provider.getTransaction(txid)
-
-      if (onComplete) onComplete()
-    } catch {
-      if (maxAttempts > 0) {
-        await this.watchTransaction(txid, onComplete, maxAttempts - 1, intervalInMs)
-      }
     }
   }
 }

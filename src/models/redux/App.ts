@@ -1,5 +1,6 @@
 import { HttpExclude, HttpExpose } from '@simpli/serialized-request'
 
+import { AppState } from '~/src/types/reducers/app'
 import { Node } from '~src/models/Node'
 import { TokenAsset } from '~src/models/TokenAsset'
 import { Account } from '~src/models/redux/Account'

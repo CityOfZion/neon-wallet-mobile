@@ -1,14 +1,12 @@
 import { HttpExclude, HttpExpose, ResponseSerialize } from '@simpli/serialized-request'
-import { plainToClass } from 'class-transformer'
 import _ from 'lodash'
 import moment from 'moment'
 import { ImageLoadEventData } from 'react-native'
 
-import { appBus } from '~/src/app/AppBus'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { SecurityHelper } from '~/src/helpers/SecurityHelper'
+import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { AccountState } from '~/src/types/reducers/account'
-import { SenderTransactionState } from '~/src/types/reducers/sendTransaction'
 import { WalletType } from '~/src/types/reducers/wallet'
 import { BlockchainServiceKey, blockchainServices, getBlockchainLogo } from '~src/blockchain'
 import { Currency } from '~src/enums/Currency'
@@ -266,51 +264,25 @@ export class Account implements AccountState {
     return groupedTokenAssets
   }
 
-  async addPendingTransaction(senderTransaction: SenderTransactionState, transactionHash: string) {
-    const senderTx = plainToClass(SenderTransaction, senderTransaction)
-    senderTx.sentAt = moment().format()
-    senderTx.transactionHash = transactionHash
-    senderTx.isPending = true
-    senderTx.token = senderTransaction.token
-
-    await senderTx.populateExchange()
-
-    const senderTxs = this.flattedPendingTransactions
-    senderTxs.push(senderTx)
-
-    this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(senderTxs)
-
-    appBus.emit('addPendingTransaction', senderTx)
-  }
-
-  async removePendingTransactions(senderTransaction: SenderTransaction, transactionHash: string | null) {
-    if (transactionHash !== null) {
-      senderTransaction.sentAt = moment().format()
-      senderTransaction.transactionHash = transactionHash
-      senderTransaction.isPending = true
-
-      await senderTransaction.populateExchange()
-
-      const senderTxs = this.flattedPendingTransactions.filter(it => it.transactionHash !== transactionHash)
-
-      this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(senderTxs)
-    }
-  }
-
-  async addPendingUnclaimedGasTransaction(
+  async addPendingTransaction(
+    hash: string,
+    senderAddress: string,
+    receiverAddress: string,
+    token: TokenAsset,
     amount: number,
-    transactionHash: string,
-    claimedToken: string,
-    claimedTokenHash: string
-  ) {
+    fee: number
+  ): Promise<void> {
+    const tokenCloned = UtilsHelper.clone(token)
+    tokenCloned.amount = amount
+
     const senderTx = new SenderTransaction()
-    senderTx.senderAddress = 'claim'
-    senderTx.receiverAddress = this.address
     senderTx.sentAt = moment().format()
-    senderTx.transactionHash = transactionHash
+    senderTx.transactionHash = hash
     senderTx.isPending = true
-    senderTx.token = new TokenAsset(claimedToken, claimedToken, claimedTokenHash, this.blockchain)
-    senderTx.token.amount = amount
+    senderTx.token = tokenCloned
+    senderTx.senderAddress = senderAddress
+    senderTx.receiverAddress = receiverAddress
+    senderTx.fee = fee
 
     await senderTx.populateExchange()
 
@@ -320,17 +292,10 @@ export class Account implements AccountState {
     this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(senderTxs)
   }
 
-  async addPendingWCTransaction(transactionHash: string, qtyInvocations: number) {
-    const senderTx = new SenderTransaction()
-    senderTx.isPending = true
-    senderTx.qtyInvocations = qtyInvocations
-    senderTx.transactionHash = transactionHash
-    senderTx.sentAt = moment().format()
-    senderTx.senderAddress = ''
-    senderTx.receiverAddress = ''
+  async removePendingTransactions(transactionHash: string) {
+    if (!this.flattedPendingTransactions.some(it => it.transactionHash === transactionHash)) return
 
-    const senderTxs = this.flattedAllTransactions
-    senderTxs.push(senderTx)
+    const senderTxs = this.flattedPendingTransactions.filter(it => it.transactionHash !== transactionHash)
 
     this.pendingTransactions = TransactionDateGroup.toTransactionDateGroup(senderTxs)
   }
@@ -342,12 +307,15 @@ export class Account implements AccountState {
   getPendingTransactions() {
     return this.pendingTransactions
   }
+
   getTransactions() {
     return this.transactions
   }
+
   setTokenAssets(tokens: TokenAsset[]) {
     this.tokenAssets = tokens
   }
+
   clearTransactions() {
     this.transactions = []
   }

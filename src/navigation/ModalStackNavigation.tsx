@@ -4,6 +4,23 @@ import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
 import { ExportWIFModal, ExportWIFModalParams } from '../scenes/Account/ExportWIFModal'
+import SendTransactionAccountSelectionModal, {
+  SendTransactionAccountSelectionModalParams,
+} from '../scenes/Account/SendTransaction/SendTransactionAccountSelectionModal'
+import SendTransactionConfirmationModal, {
+  SendTransactionConfirmationModalParams,
+} from '../scenes/Account/SendTransaction/SendTransactionConfirmationModal'
+import {
+  SendTransactionModal,
+  SendTransactionModalParams,
+} from '../scenes/Account/SendTransaction/SendTransactionModal/SendTransactionModal'
+import {
+  SendTransactionReviewModal,
+  SendTransactionReviewModalParams,
+} from '../scenes/Account/SendTransaction/SendTransactionReviewModal'
+import SendTransactionWalletSelectionModal, {
+  SendTransactionWalletSelectionModalParams,
+} from '../scenes/Account/SendTransaction/SendTransactionWalletSelectionModal'
 import WebViewModal, { WebViewModalParams } from '../scenes/WebViewModal'
 import WCInvocationDetailsModal, {
   WCInvocationDetailsModalParams,
@@ -30,7 +47,6 @@ import { wrapper } from '~src/app/ApplicationWrapper'
 import { PersistContact, PersistContactParams } from '~src/components/contacts/PersistContact'
 import { screenConfig } from '~src/config/ScreenConfig'
 import { PasscodeStackParams } from '~src/navigation/PasscodeStackNavigation'
-import SendModalStackNavigation, { SendStackModalParams } from '~src/navigation/SendModalStackNavigation'
 import { AccountQRCode, AccountQRCodeParams } from '~src/scenes/Account/AccountQRCode'
 import BlockchainListModal, { BlockchainListModalParams } from '~src/scenes/BlockchainListModal'
 import ChangelogModal, { ChangelogModalParams } from '~src/scenes/ChangelogModal'
@@ -44,7 +60,6 @@ import { VerifyPasscodePageParams } from '~src/scenes/LoginPage/VerifyPasscodePa
 import SecurityPickerModal, { SecurityPickerModalParams } from '~src/scenes/SecurityPickerModal'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import TipConfirmationModal, { TipConfirmationModalParams } from '~src/scenes/TipConfirmationModal'
-import { TransactionDetails, TransactionDetailsParams } from '~src/scenes/TransactionDetails'
 import WelcomePage, { WelcomeModalParam } from '~src/scenes/WelcomePage'
 import {
   WCAccountSelectionModal,
@@ -75,9 +90,7 @@ export type ModalStackParamList = {
   NetworkPickerModal: undefined
   PersistContact: PersistContactParams
   ContactsModal: ContactsModalParams
-  TransactionDetails: TransactionDetailsParams
   CopyContextModal: CopyContextModalParams
-  SendModalStack: undefined
   EditWalletModal: EditWalletParams
   ReceiveModalStack: undefined
   SecurityModal: SecurityPickerModalParams
@@ -97,6 +110,11 @@ export type ModalStackParamList = {
   SignatureScopeModal: SignatureScopeModalParams
   WebViewModal: WebViewModalParams
   ExportWIFModal: ExportWIFModalParams
+  SendTransactionModal: SendTransactionModalParams
+  SendTransactionReviewModal: SendTransactionReviewModalParams
+  SendTransactionConfirmationModal: SendTransactionConfirmationModalParams
+  SendTransactionWalletSelectionModal: SendTransactionWalletSelectionModalParams
+  SendTransactionAccountSelectionModal: SendTransactionAccountSelectionModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -106,7 +124,6 @@ export type ModalParams =
   | DefaultNavigationParam<AccountQRCodeParams>
   | DefaultNavigationParam<ContactsModalParams>
   | DefaultNavigationParam<PersistContactParams>
-  | DefaultNavigationParam<SendStackModalParams>
   | DefaultNavigationParam<EditWalletParams>
   | DefaultNavigationParam<ChangelogModalParams>
   | DefaultNavigationParam<WelcomeModalParam>
@@ -123,8 +140,13 @@ export type ModalParams =
   | DefaultNavigationParam<WCInvocationDetailsModalParams>
   | DefaultNavigationParam<WCConnectDappModalParams>
   | DefaultNavigationParam<WebViewModalParams>
-  | DefaultNavigationParam<TransactionDetailsParams>
   | DefaultNavigationParam<ExportWIFModalParams>
+  | DefaultNavigationParam<TipConfirmationModalParams>
+  | DefaultNavigationParam<SendTransactionModalParams>
+  | DefaultNavigationParam<SendTransactionReviewModalParams>
+  | DefaultNavigationParam<SendTransactionConfirmationModalParams>
+  | DefaultNavigationParam<SendTransactionWalletSelectionModalParams>
+  | DefaultNavigationParam<SendTransactionAccountSelectionModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -141,7 +163,6 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen name={wrapper.route.ChangelogModal.name} component={ChangelogModal} />
         <ModalStack.Screen name={wrapper.route.WelcomeModal.name} component={WelcomePage} />
         <ModalStack.Screen name={wrapper.route.EditAccountModal.name} component={EditAccountModal} />
-        <ModalStack.Screen name={wrapper.route.SendModalStack.name} component={SendModalStackNavigation} />
         <ModalStack.Screen name={wrapper.route.ReceiveModalStack.name} component={ReceiveModalStackNavigation} />
         <ModalStack.Screen name={wrapper.route.CustomColor.name} component={CustomColorPage} />
         <ModalStack.Screen name={wrapper.route.WalletContextModal.name} component={WalletContextModal} />
@@ -154,7 +175,6 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen name={wrapper.route.AccountQRCode.name} component={AccountQRCode} />
         <ModalStack.Screen name={wrapper.route.ContactsModal.name} component={ContactPicker} />
         <ModalStack.Screen name={wrapper.route.CopyContextModal.name} component={CopyContextModal} />
-        <ModalStack.Screen name={wrapper.route.TransactionDetails.name} component={TransactionDetails} />
         <ModalStack.Screen name={wrapper.route.EditWalletModal.name} component={EditWalletModal} />
         <ModalStack.Screen name={wrapper.route.SecurityModal.name} component={SecurityPickerModal} />
         <ModalStack.Screen name={wrapper.route.TipConfirmationModal.name} component={TipConfirmationModal} />
@@ -170,6 +190,24 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen name={wrapper.route.WCInvocationDetailsModal.name} component={WCInvocationDetailsModal} />
         <ModalStack.Screen name={wrapper.route.WebViewModal.name} component={WebViewModal} />
         <ModalStack.Screen name={wrapper.route.ExportWIFModal.name} component={ExportWIFModal} />
+
+        <ModalStack.Screen name={wrapper.route.SendTransactionModal.name} component={SendTransactionModal} />
+        <ModalStack.Screen
+          name={wrapper.route.SendTransactionReviewModal.name}
+          component={SendTransactionReviewModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.SendTransactionConfirmationModal.name}
+          component={SendTransactionConfirmationModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.SendTransactionWalletSelectionModal.name}
+          component={SendTransactionWalletSelectionModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.SendTransactionAccountSelectionModal.name}
+          component={SendTransactionAccountSelectionModal}
+        />
       </ModalStack.Navigator>
     </ThemeProvider>
   )

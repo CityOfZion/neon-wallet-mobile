@@ -15,8 +15,6 @@ import { TransactionAddressResponse } from '~/src/models/response/TransactionAdd
 import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
 import { Exchange } from '~/src/types/exchange'
 import * as BlockchainIcons from '~src/assets/blockchainIcons'
-import { PriorityFee } from '~src/models/PriorityFee'
-import { TokenAsset } from '~src/models/TokenAsset'
 import { Account } from '~src/models/redux/Account'
 
 export interface IRPCContract {
@@ -42,12 +40,13 @@ export interface IRPCContract {
   }
 }
 
-export interface SenderTransactionInfo {
-  token: TokenAsset | null
-  senderAddress: string | null
-  receiverAddress: string | null
-  feeAmount: PriorityFee | null
-  tip?: { amount: number; address: string }
+export interface SendTransactionData {
+  amount: number
+  tokenHash: string
+  senderAddress: string
+  receiverAddress: string
+  fee?: number
+  tip?: number
 }
 
 export interface BlockchainDataProvider {
@@ -71,7 +70,9 @@ export interface AssetInfo {
 }
 
 export interface IClaimable {
-  claimGas: (address: string) => Promise<{ txid: string | null; token: string; hash: string } | null>
+  claimGas: (
+    address: string
+  ) => Promise<{ txid: string | null; token: string; hash: string; fee: number | null } | null>
 }
 
 export interface IWalletConnect {
@@ -94,7 +95,7 @@ export interface IBlockchainService {
   readonly cozTip?: { address: string; token: string; hash: string } //config token with the symbol name
   readonly feeToken: { hash: string; token: string; img: ImageLoadEventData }
   readonly wcChains: string[]
-  sendTransaction: (sendTx: SenderTransactionInfo) => Promise<string | null>
+  sendTransaction: (data: SendTransactionData) => Promise<string | null>
   generateMnemonic: () => string[] | null
   generateWif(mnemonic: string, index: number): string
   generateAccount(mnemonic: string, index: number): { wif: string; address: string }
@@ -103,7 +104,7 @@ export interface IBlockchainService {
   validateAddress(address: string): boolean
   validatePrivateKeyWithPassword(privateKey: string): boolean
   validateWif(privateKey: string): boolean
-  calculateTransferFee: (sendtx: Omit<SenderTransactionInfo, 'feeAmount'>) => Promise<number>
+  calculateTransferFee: (data: Omit<SendTransactionData, 'fee'>) => Promise<number>
   setAccountsPool: (accounts: Account[]) => void
 }
 

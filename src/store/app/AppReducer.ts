@@ -1,9 +1,8 @@
 import { ReducerWrapper } from '@simpli/redux-wrapper'
-import i18n from 'i18n-js'
-import { showMessage } from 'react-native-flash-message'
 
 import { appBus } from '~/src/app/AppBus'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { PollingHelper } from '~/src/helpers/PollingHelper'
 import { SecurityHelper } from '~/src/helpers/SecurityHelper'
 import { Node } from '~/src/models/Node'
 import { AppAction, AppActionsType, AppState } from '~/src/types/reducers/app'
@@ -16,7 +15,6 @@ import { TokenAsset } from '~src/models/TokenAsset'
 import { Account } from '~src/models/redux/Account'
 import { App } from '~src/models/redux/App'
 import { Contact } from '~src/models/redux/Contact'
-import { SenderTransaction } from '~src/models/redux/SenderTransaction'
 import { Wallet } from '~src/models/redux/Wallet'
 import { AccountsDispatcher } from '~src/store/app/dispatchers/AccountsDispatcher'
 import { ContactsDispatcher } from '~src/store/app/dispatchers/ContactsDispatcher'
@@ -319,87 +317,26 @@ export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppActi
       }
     },
 
-    syncCheckPendingTransactions: (): AsyncAction => {
+    watchPendingTransaction: (account: Account, transactionHash: string, isClaim?: boolean): AsyncAction => {
       return async (dispatch, getState) => {
-        const accountsPool = getState().app.accounts
+        const polling = new PollingHelper()
         const tokensPool = getState().app.tokens
 
-        type TransactionType = 'isClaim' | 'isTransaction'
+        polling.run(async () => {
+          const transaction = await blockchainServices[account.blockchain].provider.getTransaction(transactionHash)
 
-        const refreshAccounts = async (updatedAccounts: Account[], isRefresh: boolean) => {
-          if (isRefresh) {
-            dispatch(this.commit('SET_ACCOUNTS', { accounts: updatedAccounts }))
-            await Storage.accounts.save(updatedAccounts)
+          if (!transaction.txid || transaction.txid !== transactionHash) {
+            return
           }
-        }
+          await account.removePendingTransactions(transactionHash)
 
-        const showToastFeedback = (
-          showToast: boolean,
-          typeTransaction: TransactionType,
-          transaction?: SenderTransaction
-        ) => {
-          if (showToast) {
-            switch (typeTransaction) {
-              case 'isClaim':
-                showMessage({
-                  message: i18n.t('toast.gasClaimSuccess'),
-                  type: 'success',
-                  duration: 2000,
-                })
-                appBus.emit('claimGasEnd')
-                break
-              case 'isTransaction':
-                showMessage({
-                  duration: 2000,
-                  message: i18n.t('toast.transactionCompleted'),
-                  type: 'success',
-                  onPress: () => {
-                    appBus.emit('navigateTransactionDetails', transaction)
-                  },
-                })
-                break
-              default:
-                break
-            }
-          }
-        }
+          await account.populateTokenAssets()
+          await account.populateTransactions(tokensPool)
 
-        if (accountsPool.some(acc => acc.flattedPendingTransactions.length > 0)) {
-          let refreshAccountsControl: boolean = false
-          let typeTransaction: TransactionType = 'isTransaction'
-          let transactionFound: SenderTransaction = new SenderTransaction()
-          const updatedAccounts = await Promise.all(
-            accountsPool.map(async (account, index) => {
-              if (account.flattedPendingTransactions.length > 0) {
-                for (const pendingTransaction of account.flattedPendingTransactions) {
-                  if (pendingTransaction.transactionHash) {
-                    const transaction = await blockchainServices[account.blockchain].provider.getTransaction(
-                      pendingTransaction.transactionHash
-                    )
-                    if (transaction.txid === pendingTransaction.transactionHash) {
-                      await account.removePendingTransactions(pendingTransaction, pendingTransaction.transactionHash)
-                      await account.populateTokenAssets()
-                      await account.populateTransactions(tokensPool)
-                      refreshAccountsControl = true
-                      if (
-                        pendingTransaction.receiverAddress === 'claim' ||
-                        pendingTransaction.receiverAddress === account.address
-                      ) {
-                        typeTransaction = 'isClaim'
-                      } else {
-                        typeTransaction = 'isTransaction'
-                      }
-                      transactionFound = pendingTransaction
-                    }
-                  }
-                }
-              }
-              return account
-            })
-          )
-          await refreshAccounts(updatedAccounts, refreshAccountsControl)
-          showToastFeedback(refreshAccountsControl, typeTransaction, transactionFound)
-        }
+          dispatch(this.actions.updateAndSaveAccount(account))
+          appBus.emit(isClaim ? 'claimGasEnd' : 'pendingTransactionConfirmed', account)
+          polling.stop()
+        })
       }
     },
 

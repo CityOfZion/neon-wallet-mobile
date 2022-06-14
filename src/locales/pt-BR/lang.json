@@ -264,6 +264,64 @@
     }
   },
   "modals": {
+    "sendTransactionAccountSelectionModal": {
+      "title": "#translateme",
+      "label": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "sendTransactionConfirmationModal": {
+      "title": "#translateme",
+      "header": "#translateme",
+      "subheader": "#translateme",
+      "transactionId": "#translateme"
+    },
+    "sendTransactionReviewModal": {
+      "transactionFailed": "#translateme",
+      "title": "#translateme",
+      "pleaseReview": "#translateme",
+      "value": "#translateme",
+      "fee": "%{tokenSymbol} #translateme",
+      "sender": "#translateme",
+      "recipient": "#translateme"
+    },
+    "sendTransactionWalletSelectionModal": {
+      "title": "#translateme",
+      "subtitle": "#translateme",
+      "noFunds": "#translateme"
+    },
+    "sendTransactionModal": {
+      "title": "#translateme",
+      "transactionDetails": "#translateme",
+      "amount": "#translateme",
+      "totalAfterTransaction": "#translateme",
+      "max": "#translateme",
+      "enterValue": "#translateme %{value}",
+      "insufficientFunds": "#translateme",
+      "roundDown": "#translateme",
+      "destinationAddress": "#translateme",
+      "enterDestination": "#translateme",
+      "prioritiseTransfer": "#translateme",
+      "tipCheckboxLabel": "#translateme \n %{tipValue} GAS (Optional)",
+      "token": "#translateme",
+      "selectToken": "#translateme",
+      "totalFee": "#translateme",
+      "insufficientGas": "#translateme"
+    },
+    "transactionDetails": {
+      "title": "#translateme",
+      "time": "#translateme",
+      "date": "#translateme",
+      "status": "#translateme",
+      "value": "#translateme",
+      "fee": "#translateme",
+      "sender": "#translateme",
+      "recipient": "#translateme",
+      "hash": "#translateme",
+      "viewOnDora": "#translateme",
+      "confirmed": "#translateme",
+      "pending": "#translateme",
+      "price": "#translateme"
+    },
     "invocationDetails": {
       "title": "Detalhes da Invocação",
       "detailsTitle": "Detalhes",
@@ -357,7 +415,10 @@
         "enterAmount": "Enter amount",
         "addReference": "Add a reference",
         "reference": "Reference",
-        "generateQrCode": "Generate QR Code"
+        "generateQrCode": "Generate QR Code",
+        "token": "#translateme",
+        "amount": "#translateme",
+        "selectDifferentAccount": "#translateme"
       }
     },
     "walletContext": {
@@ -425,6 +486,15 @@
     },
     "colorSelector": {
       "customColor": "Cor personalizada"
+    },
+    "transactionTipCard": {
+      "qty": "#translateme",
+      "value": "#translateme"
+    },
+    "transactionTokenCard": {
+      "qty": "#translateme",
+      "value": "#translateme",
+      "fee": "#translateme"
     }
   },
   "hooks": {

@@ -19,13 +19,13 @@ interface ContactListProps {
   mt?: number | string
   mb?: number | string
   searchBar?: boolean
-  onContactSelected?: (contact: Contact, addressSelected?: string) => void
+  onContactSelected?: (contact: Contact, address: string) => void
   filterByBlockchain?: BlockchainServiceKey
 }
 
 interface Item {
   data: Contact
-  onContactSelected?: (contact: Contact, addressSelected?: string) => void
+  onContactSelected?: (contact: Contact, address: string) => void
 }
 
 interface IconItem {
@@ -77,7 +77,7 @@ const IconText: React.FC = ({ children }) => {
 
 interface IAddressItem {
   address: string
-  onContactSelected?: (contact: Contact, addressSelected?: string) => void
+  onContactSelected?: (contact: Contact, address: string) => void
   contact: Contact
 }
 const AddressItem: React.FC<IAddressItem> = ({ address, onContactSelected, contact }) => {

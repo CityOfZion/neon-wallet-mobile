@@ -9,7 +9,7 @@ import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface TipConfirmationModalParams {
-  callback?: (arg: boolean) => void
+  onConfirmation?: (value: boolean) => void
 }
 
 interface Props {
@@ -18,12 +18,13 @@ interface Props {
 }
 
 const TipConfirmationModal = (props: Props) => {
-  const controller = useSwiperController(true)
-  const [value, setValue] = useState(true)
+  const { onConfirmation } = props.route.params
 
-  const setAndClose = () => {
-    props.route?.params?.callback?.(value)
-    props.navigation.goBack()
+  const controller = useSwiperController(true)
+
+  const handleOnPress = (value: boolean) => {
+    if (onConfirmation) onConfirmation(value)
+    controller.close()
   }
 
   return (
@@ -32,7 +33,7 @@ const TipConfirmationModal = (props: Props) => {
       title={i18n.t('modals.tipping.title')}
       fullSize
       padding={16}
-      onClose={setAndClose}
+      onClose={props.navigation.goBack}
       rightButton={<CloseButton mr="20px" />}
       onRightPress={controller.close}
       solidColorBG
@@ -64,8 +65,7 @@ const TipConfirmationModal = (props: Props) => {
             label={i18n.t('modals.tipping.keepTip')}
             subLabel={i18n.t('modals.tipping.recommended')}
             onPress={() => {
-              setValue(true)
-              controller.close()
+              handleOnPress(true)
             }}
             rounded
             radius={8}
@@ -75,8 +75,7 @@ const TipConfirmationModal = (props: Props) => {
           <ThemedButton
             label={i18n.t('modals.tipping.removeTip')}
             onPress={() => {
-              setValue(false)
-              controller.close()
+              handleOnPress(false)
             }}
             rounded
             radius={8}

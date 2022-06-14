@@ -4,7 +4,7 @@ import { SessionTypes } from '@walletconnect/types'
 import i18n from 'i18n-js'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import ContractDetailsBox from '../../../components/ContractDetailsBox'
 import { TransactionRequestBase } from '../TransactionRequestBase'
@@ -15,9 +15,8 @@ import { InvokeFunctionSuccess } from './InvokeFunctionSuccess'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { blockchainServices, hasWCIntegration } from '~/src/blockchain'
 import { ContractInvocation, ContractInvocationMulti, Signer } from '~/src/helpers/NeonWcAdapter'
-import { RootState, RootStore } from '~/src/store/RootStore'
+import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
-import { AsyncDispatch } from '~/src/types/reducers/root'
 
 type ContractDetailsBoxButtonProps = {
   contract: ContractInvocation
@@ -123,7 +122,6 @@ export const InvokeFunctionTransactionRequest = ({
 }: TransactionRequestMethodComponentProps) => {
   const requestParams = request.request.params as ContractInvocationMulti
 
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const navigation = useNavigation()
 
@@ -144,14 +142,6 @@ export const InvokeFunctionTransactionRequest = ({
     }
   }, [account])
 
-  async function handleOnAccept(transactionId: string) {
-    if (account?.address) {
-      await account.addPendingWCTransaction(transactionId, requestParams.invocations.length)
-
-      await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
-    }
-  }
-
   useEffect(() => {
     handleCalculateFee()
   }, [handleCalculateFee])
@@ -162,7 +152,6 @@ export const InvokeFunctionTransactionRequest = ({
       rejectButtonLabel={i18n.t('modals.transactionRequest.buttom.decline')}
       title={i18n.t('modals.transactionRequest.confirmToProceed')}
       hideDappName={false}
-      onAccept={handleOnAccept}
       request={request}
       session={session}
       account={account}

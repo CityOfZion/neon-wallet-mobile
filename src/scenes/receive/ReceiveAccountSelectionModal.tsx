@@ -11,6 +11,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { TokenAsset } from '~/src/models/TokenAsset'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ReceiveModalStackParamList } from '~/src/navigation/ReceiveModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'
 import BalanceList from '~src/components/BalanceList'
@@ -27,7 +28,7 @@ export interface ReceiveAccountSelectionModalParams {
 }
 
 interface Props {
-  navigation: StackNavigationProp<ModalStackParamList & WalletStackParamList>
+  navigation: StackNavigationProp<RootStackParamList & ModalStackParamList & WalletStackParamList>
   route: RouteProp<ReceiveModalStackParamList, 'ReceiveAccountSelectionModal'>
 }
 
@@ -115,13 +116,7 @@ const ReceiveAccountSelectionModal = (props: Props) => {
                       .toUpperCase()}`}
                   </TextView>
                   <LinearLayout width="100%" px={5}>
-                    <BalanceList
-                      hideEmptyMessage
-                      zeroBalance={false}
-                      tokenAssets={selectedAccount.tokenAssets}
-                      fromAccountView={false}
-                      fromSendAccountSelectionModal={false}
-                    />
+                    <BalanceList hideEmptyMessage removeZeroBalance tokenAssets={selectedAccount.tokenAssets} />
                   </LinearLayout>
                 </>
               ) : (
