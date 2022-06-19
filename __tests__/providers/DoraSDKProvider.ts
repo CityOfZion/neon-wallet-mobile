@@ -1,8 +1,8 @@
-import { NeoLegacyProviderOption } from '../../src/blockchain/NeoLegacy'
-import { Transaction } from '../../src/models/Transaction'
-import {BalanceResponse} from '../../src/models/response/BalanceResponse'
-import {TransactionAddressResponse} from '../../src/models/response/TransactionAddressResponse'
-import {UnclaimedResponse} from '../../src/models/response/UnclaimedResponse'
+import { NeoLegacyProviderOption } from '~src/~src/src/blockchain/NeoLegacy'
+import { Transaction } from '~src/~src/src/models/Transaction'
+import {BalanceResponse} from '~src/~src/src/models/response/BalanceResponse'
+import {TransactionAddressResponse} from '~src/~src/src/models/response/TransactionAddressResponse'
+import {UnclaimedResponse} from '~src/~src/src/models/response/UnclaimedResponse'
 const provider = NeoLegacyProviderOption('doraSdk')
 const address = 'AeGgZTTWPzyVtNiQRcpngkV75Xip1hznmi'
 const txid = '02e8f3f51b59c4bf7ec7b8b9474494c437e2f45acc510b9a108d4367935329b2'

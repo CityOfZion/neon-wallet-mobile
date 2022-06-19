@@ -9,6 +9,9 @@ jobs:
       - attach_workspace:
           at: ~/neon-wallet-mobile
       - run:
+          name: type check
+          command: npm run ts-build
+      - run:
           name: lint
           command: npm run lint
       - run:
@@ -18,7 +21,7 @@ jobs:
   node:
     working_directory: ~/neon-wallet-mobile
     docker:
-      - image: cimg/node:14.19.1
+      - image: cimg/node:12.16
 
     steps:
       - checkout
@@ -101,7 +104,7 @@ jobs:
   deployIOS:
     working_directory: ~/neon-wallet-mobile
     macos:
-      xcode: 13.1.0
+      xcode: 12.4.0
     environment:
       FL_OUTPUT_DIR: output
       FASTLANE_LANE: beta
@@ -174,13 +177,20 @@ workflows:
   build:
     jobs:
       - node
-      - deployAndroid:          
+      - test:
+          requires:
+            - node
+      - deployAndroid:
+          requires:
+            - test            
           filters:
             branches:
               only:
-                - ios_fastlane     
-      - deployIOS:           
+                - development     
+      - deployIOS:
+          requires:
+            - test            
           filters:
             branches:
               only:
-                - ios_fastlane  
+                - development  

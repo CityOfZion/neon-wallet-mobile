@@ -1,7 +1,7 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
 
-import QrCodeGenerateTest from '../../src/scenes/TestPage/QrCodeGenerateTest'
+import QrCodeGenerateTest from '~src/scenes/TestPage/QrCodeGenerateTest'
 
 describe('<QrCodeGenerateTest />', () => {
   it('has 2 child', () => {
