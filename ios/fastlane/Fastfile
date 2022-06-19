@@ -19,43 +19,12 @@ platform :ios do
   before_all do
     setup_circle_ci
   end
-  desc "Get certificates"
-  lane :certificates do
-    sync_code_signing(
-      type: "development",
-      app_identifier: ['io.cityofzion.neon'],
-      force_for_new_devices: true,
-      readonly: true
-    )
-
-    # You can repeate the sync_code_signing with other types of certificates such as appstore and adhoc
-    sync_code_signing(
-      type: "appstore",
-      app_identifier: 'io.cityofzion.neon',
-      readonly: true
-    )
-  end
-
-  desc "Generate new certificates"
-  lane :generate_new_certificates do
-    sync_code_signing(
-      type: "development",
-      app_identifier: ['io.cityofzion.neon'],
-      force_for_new_devices: true,
-      readonly: false
-    )
-    
-    # You can repeate the sync_code_signing with other types of certificates such as appstore and adhoc
-
-  end
-  
   desc "Push a new beta build to TestFlight"
   lane :beta do
     increment_build_number(xcodeproj: "Neon.xcodeproj")
     
     match(
       type: "adhoc",
-      clone_branch_directly: true,
       verbose: true
     )
 

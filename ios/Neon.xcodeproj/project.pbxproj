@@ -426,7 +426,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
-				PROVISIONING_PROFILE_SPECIFIER = "match Development io.cityofzion.neon";
+				PROVISIONING_PROFILE_SPECIFIER = "kenedy distribution";
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
