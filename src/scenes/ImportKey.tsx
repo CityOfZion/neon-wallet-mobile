@@ -62,7 +62,7 @@ const isMnemonic = (word: string) => {
 const ImportKey = (props: ImportKeyProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const { accounts, exchange } = useSelector((state: RootState) => state.app)
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const [inputValue, setInputValue] = useState(props.route.params ? props.route.params.key ?? '' : '')
   const [addressesFound, setAddressesFound] = useState<{ address: string; blockchain: BlockchainServiceKey }[]>([])
   const [inputIsValid, setInputIsValid] = useState<boolean>(false)

@@ -49,8 +49,8 @@ const AppNavigation = (props: Props) => {
     return wrapper.theme[state.settings.theme]
   })
   const { isLoading, loadingText, progress } = useSelector((state: RootState) => state.loading)
-  const { status: timerStatus } = useSelector((state: RootState) => state.timer)
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const timerStatus = useSelector((state: RootState) => state.timer.status)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
 
   const walletConnectCtx = useWalletConnect()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
@@ -73,7 +73,6 @@ const AppNavigation = (props: Props) => {
     setHasAuthentication(hasAuthentication ?? false)
 
     await Sync.init(dispatchAsync)
-    await walletConnectCtx.init()
     setInit(true)
 
     InteractionManager.runAfterInteractions(async () => {
@@ -147,7 +146,7 @@ const AppNavigation = (props: Props) => {
     }
 
     handle()
-  }, [isConnected])
+  }, [isConnected, hasInit])
 
   useEffect(() => {
     walletConnectCtx.autoAcceptIntercept(

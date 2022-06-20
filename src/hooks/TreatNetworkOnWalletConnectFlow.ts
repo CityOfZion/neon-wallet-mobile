@@ -7,7 +7,7 @@ import { wrapper } from '../app/ApplicationWrapper'
 export type UseOnlineCallbackReturn<T> = (...args: any[]) => Promise<T>
 
 export const useTreatNetworkOnWalletConnectFlow = () => {
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const navigation = useNavigation()
 
   useEffect(() => {

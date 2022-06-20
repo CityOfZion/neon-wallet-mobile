@@ -37,6 +37,10 @@ interface ImportReadAccountProps {
 
 const ImportReadAccount = (props: ImportReadAccountProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const accounts = useSelector((state: RootState) => state.app.accounts)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
+  const blockchainActionsHook = useBlockchainActionsHook()
+
   const [inputValue, setInputValue] = useState(props.route.params ? props.route.params.address ?? '' : '')
   const [errorMessage, setErrorMessage] = useState(i18n.t('components.inputTextWithValidation.incorrectFormat'))
   const [canAddAccount, setCanAddAccount] = useState(false)
@@ -44,9 +48,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   const [addressesListSelected, setAddressesListSelected] = useState<
     { address: string; blockchain: BlockchainServiceKey }[]
   >([])
-  const accounts = useSelector((state: RootState) => state.app.accounts)
-  const { isConnected } = useSelector((state: RootState) => state.network)
-  const blockchainActionsHook = useBlockchainActionsHook()
+
   const persist = async () => {
     if (!isValid()) {
       return

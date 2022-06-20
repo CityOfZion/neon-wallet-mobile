@@ -8,6 +8,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import { UriHelper } from '~/src/helpers/UriHelper'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { LinearLayout, TextView } from '~/src/styles/styled-components'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
@@ -17,14 +18,14 @@ export interface WCConnectDappModalParams {
 }
 
 interface WCConnectDappModalProps {
+  navigation: StackNavigationProp<RootStackParamList & ModalStackParamList>
   route: RouteProp<ModalStackParamList, 'WCConnectDappModal'>
 }
 
 export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
   const [url, setUrl] = useState<string>(props.route.params?.uri ?? '')
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const controller = useSwiperController(true)
-  const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const validateURL = useCallback(() => {
@@ -39,7 +40,7 @@ export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
   )
 
   const handleNavigation = useCallback(() => {
-    navigation.navigate(wrapper.route.Modal.name, {
+    props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.WCConnectionRequestModal.name,
       params: {
         uri: url,
@@ -54,9 +55,7 @@ export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
       controller={controller}
       rightButton={<CloseButton mr="20px" />}
       title={i18n.t('modals.connectDApp.title')}
-      onClose={() => {
-        navigation.goBack()
-      }}
+      onClose={props.navigation.goBack}
       onRightPress={controller.close}
       solidColorBG
     >

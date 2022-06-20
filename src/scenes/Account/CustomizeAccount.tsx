@@ -59,7 +59,7 @@ const CustomizeAccount = (props: Props) => {
   const [name, setName] = useState<string>('')
   const [color, setColor] = useState<string>(theme.colors.card[UtilsHelper.getRandomNumber(6)])
   const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
   const [saving, setSaving] = useState(false)
 

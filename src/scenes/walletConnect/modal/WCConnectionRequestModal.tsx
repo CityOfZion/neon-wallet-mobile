@@ -34,7 +34,7 @@ const WCConnectionRequestModal = (props: Props) => {
   const controller = useSwiperController(true)
   const walletConnectCtx = useWalletConnect()
   const navigation = useNavigation()
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
 
   const blockchain = useRef<BlockchainServiceKey>('neo3')
 

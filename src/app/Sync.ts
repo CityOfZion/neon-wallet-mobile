@@ -13,7 +13,6 @@ export type SyncResult = {
 
 export abstract class Sync {
   static async init(dispatch: AsyncDispatch<any>): Promise<SyncResult> {
-    await dispatch(RootStore.app.actions.syncNetworkStatus())
     const settings: Settings = await dispatch(RootStore.settings.actions.syncSettings())
     const exchange: MultichainExchange = await dispatch(RootStore.app.actions.syncExchange())
     const tokens: TokenAsset[] = await dispatch(RootStore.app.actions.syncTokens())

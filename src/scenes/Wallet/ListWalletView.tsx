@@ -41,7 +41,7 @@ interface EmptyListProps {
 }
 
 const WalletChangeComponent = (props: {
-  wallet?: Wallet
+  wallet: Wallet
   language: Lang
   tokenAssets: TokenAsset[]
   onPressWarning: () => void
@@ -51,20 +51,17 @@ const WalletChangeComponent = (props: {
 
   const [variationInPercent, setVariationInPercent] = useState<number>()
   const [formattedBalance, setFormattedBalance] = useState<string>()
-  const walletMemo = useMemo(() => props.wallet, [props.wallet])
 
   const populate = async () => {
-    if (!walletMemo) return
-
     const pastOneDay = moment().add(-1, 'day')
 
-    const variation = (await walletMemo.getBalanceVariationFromPastExchange(currency, pastOneDay, exchange)) ?? 0
+    const variation = (await props.wallet.getBalanceVariationFromPastExchange(currency, pastOneDay, exchange)) ?? 0
 
-    walletMemo.populateTokenAssets(accounts)
+    props.wallet.populateTokenAssets(accounts)
 
-    const balance = walletMemo.calculateBalance(currency, exchange) ?? 0
+    const balance = props.wallet.calculateBalance(currency, exchange) ?? 0
 
-    const balanceFormatted = walletMemo.calculateBalanceFormatted(currency, language, exchange, balance)
+    const balanceFormatted = props.wallet.calculateBalanceFormatted(currency, language, exchange, balance)
 
     setFormattedBalance(balanceFormatted)
 
@@ -82,13 +79,13 @@ const WalletChangeComponent = (props: {
   useEffect(() => {
     setFormattedBalance(undefined)
     populate()
-  }, [walletMemo])
+  }, [props.wallet])
 
   return (
     <LinearLayout mb={6} alignItems="center">
       {showListTokenAssets(props.tokenAssets) ? (
         <TextView fontSize="11px" color="text.2">
-          {walletMemo.formattedLastVisitedAt}
+          {props.wallet.formattedLastVisitedAt}
         </TextView>
       ) : (
         <View />
@@ -99,7 +96,7 @@ const WalletChangeComponent = (props: {
           {formattedBalance ?? '-'}
         </TextView>
 
-        {walletMemo.hasFunds && (
+        {props.wallet.hasFunds && (
           <ButtonView onPress={props.onPressWarning}>
             <ImageView mt="8px" mx="4px" source={require('~src/assets/images/icon-warning-green.png')} />
           </ButtonView>
@@ -182,7 +179,7 @@ const EmptyListComponent: React.FC<EmptyListProps> = props => {
 
 const ListWalletView = (props: WalletProps) => {
   const { wallets, accounts } = useSelector((state: RootState) => state.app)
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const { language } = useSelector((state: RootState) => state.settings)
   const { id } = useSelector((state: RootState) => state.wallet)
   const dispatch = useDispatch()
