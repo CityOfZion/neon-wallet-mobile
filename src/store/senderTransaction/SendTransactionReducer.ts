@@ -1,17 +1,23 @@
 import { ReducerWrapper } from '@simpli/redux-wrapper'
 
-import { blockchainServices } from '~/src/blockchain'
-import { Account } from '~/src/models/redux/Account'
-import { Model } from '~src/app/Model'
-import { PriorityFee } from '~src/models/PriorityFee'
-import { TokenAsset } from '~src/models/TokenAsset'
-import { SenderTransaction } from '~src/models/redux/SenderTransaction'
-import { FeeAmountDispatcher } from '~src/store/senderTransaction/dispatchers/FeeAmountDispatcher'
-import { FiatDispatcher } from '~src/store/senderTransaction/dispatchers/FiatDispatcher'
-import { ReceiverAddressDispatcher } from '~src/store/senderTransaction/dispatchers/ReceiverAddressDispatcher'
-import { SenderAddressDispatcher } from '~src/store/senderTransaction/dispatchers/SenderAddressDispatcher'
-import { TipDispatcher } from '~src/store/senderTransaction/dispatchers/TipDispatcher'
-import { TokenDispatcher } from '~src/store/senderTransaction/dispatchers/TokenDispatcher'
+import {blockchainServices} from '~/src/blockchain'
+import {Account} from '~/src/models/redux/Account'
+import {AsyncAction} from '~/src/types/reducers/root'
+import {
+  SenderTransactionAction,
+  SenderTransactionActionsType,
+  SenderTransactionState,
+} from '~/src/types/reducers/sendTransaction'
+import {Model} from '~src/app/Model'
+import {PriorityFee} from '~src/models/PriorityFee'
+import {TokenAsset} from '~src/models/TokenAsset'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
+import {FeeAmountDispatcher} from '~src/store/senderTransaction/dispatchers/FeeAmountDispatcher'
+import {FiatDispatcher} from '~src/store/senderTransaction/dispatchers/FiatDispatcher'
+import {ReceiverAddressDispatcher} from '~src/store/senderTransaction/dispatchers/ReceiverAddressDispatcher'
+import {SenderAddressDispatcher} from '~src/store/senderTransaction/dispatchers/SenderAddressDispatcher'
+import {TipDispatcher} from '~src/store/senderTransaction/dispatchers/TipDispatcher'
+import {TokenDispatcher} from '~src/store/senderTransaction/dispatchers/TokenDispatcher'
 
 export class SendTransactionReducer extends ReducerWrapper<
   SenderTransactionActionsType,

@@ -1,6 +1,17 @@
 import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
-export class AddressDispatcher extends DispatcherWrapper<ContactActionsType, ContactState, ContactAction> {
+import {
+  ContactAction,
+  ContactActionsType,
+  ContactReducer,
+  ContactState,
+} from '~/src/types/reducers/contact'
+
+export class AddressDispatcher extends DispatcherWrapper<
+  ContactActionsType,
+  ContactState,
+  ContactAction
+> {
   readonly type = 'SET_ADDRESSES'
 
   readonly reducer: ContactReducer = (state, action) => {

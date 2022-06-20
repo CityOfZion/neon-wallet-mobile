@@ -3,8 +3,10 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-import { wrapper } from '~src/app/ApplicationWrapper'
-import { BlockchainServiceKey } from '~src/blockchain'
+import {RootState} from '../store/RootStore'
+
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {BlockchainServiceKey} from '~src/blockchain'
 import ThemedCheckBox from '~src/components/themed/ThemedCheckbox'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { SendModalStackParamList } from '~src/navigation/SendModalStackNavigation'

@@ -1,12 +1,19 @@
 import { ReducerWrapper } from '@simpli/redux-wrapper'
 import { plainToClass } from 'class-transformer'
 
-import { UtilsHelper } from '~/src/helpers/UtilsHelper'
-import { Model } from '~src/app/Model'
-import { Storage } from '~src/app/Storage'
-import { Contact } from '~src/models/redux/Contact'
-import { AddressDispatcher } from '~src/store/contact/dispatchers/AddressDispatcher'
-import { NameDispatcher } from '~src/store/contact/dispatchers/NameDispatcher'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
+import {
+  ContactAction,
+  ContactActionsType,
+  ContactAddressesList,
+  ContactState,
+} from '~/src/types/reducers/contact'
+import {AsyncAction} from '~/src/types/reducers/root'
+import {Model} from '~src/app/Model'
+import {Storage} from '~src/app/Storage'
+import {Contact} from '~src/models/redux/Contact'
+import {AddressDispatcher} from '~src/store/contact/dispatchers/AddressDispatcher'
+import {NameDispatcher} from '~src/store/contact/dispatchers/NameDispatcher'
 
 export class ContactReducer extends ReducerWrapper<ContactActionsType, ContactState, ContactAction> {
   protected readonly initialState = Model.parse<ContactState>(Contact)

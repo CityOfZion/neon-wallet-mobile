@@ -2,7 +2,8 @@ import { useNavigation } from '@react-navigation/native'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-import { wrapper } from '../app/ApplicationWrapper'
+import {wrapper} from '../app/ApplicationWrapper'
+import {RootState} from '../store/RootStore'
 
 export type UseOnlineCallbackReturn<T> = (...args: any[]) => Promise<T>
 

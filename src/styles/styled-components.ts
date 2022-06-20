@@ -2,7 +2,18 @@ import { LinearGradient } from 'expo-linear-gradient'
 import * as styledComponents from 'styled-components/native'
 import { border, color, flexbox, layout, position, space, textStyle, typography, borderRadius } from 'styled-system'
 
-import { orientation, weight } from '~src/styles/styled-system.config'
+import {
+  ButtonViewProps,
+  ImageViewProps,
+  InputTextViewProps,
+  LinearGradientLayoutProps,
+  LinearLayoutProps,
+  RelativeLayoutProps,
+  StyledScrollViewProps,
+  TextViewProps,
+} from '../types/styled-components'
+
+import {orientation, weight} from '~src/styles/styled-system.config'
 
 const styled = styledComponents.default
 

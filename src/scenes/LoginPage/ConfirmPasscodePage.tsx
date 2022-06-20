@@ -13,11 +13,14 @@ import { Storage } from '~src/app/Storage'
 import Keypad from '~src/components/Keypad'
 import PasscodeBar from '~src/components/PasscodeBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { PasscodeStackParamList } from '~src/navigation/PasscodeStackNavigation'
-import { PasscodeHeader, PASSCODE_LENGTH } from '~src/scenes/LoginPage/PasscodePage'
-import { RootStore } from '~src/store/RootStore'
-import { LinearLayout, TextView } from '~src/styles/styled-components'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {PasscodeStackParamList} from '~src/navigation/PasscodeStackNavigation'
+import {
+  PasscodeHeader,
+  PASSCODE_LENGTH,
+} from '~src/scenes/LoginPage/PasscodePage'
+import {RootState, RootStore} from '~src/store/RootStore'
+import {LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface ConfirmPasscodePageParams {
   passcode: number[]

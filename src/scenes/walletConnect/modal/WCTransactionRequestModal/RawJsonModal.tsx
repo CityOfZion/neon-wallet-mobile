@@ -7,13 +7,17 @@ import { TouchableOpacity, ScrollView } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
-import { wrapper } from '~/src/app/ApplicationWrapper'
-import { UtilsHelper } from '~/src/helpers/UtilsHelper'
-import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks'
-import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
-import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { TabStackParamList } from '~src/navigation/TabNavigation'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {UtilsHelper} from '~/src/helpers/UtilsHelper'
+import {useTreatNetworkOnWalletConnectFlow} from '~/src/hooks'
+import {RootState} from '~/src/store/RootStore'
+import SwiperPanel, {
+  CloseButton,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {TabStackParamList} from '~src/navigation/TabNavigation'
 import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
 import { LinearLayout, TextView, ImageView } from '~src/styles/styled-components'
 type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList

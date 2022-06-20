@@ -1,5 +1,7 @@
 import { HttpExclude, HttpExpose } from '@simpli/serialized-request'
 
+import {ContactAddressesList, ContactState} from '~/src/types/reducers/contact'
+
 @HttpExclude()
 export class Contact implements ContactState {
   @HttpExpose()

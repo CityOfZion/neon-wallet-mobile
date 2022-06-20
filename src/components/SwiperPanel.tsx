@@ -17,7 +17,9 @@ import {
 } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { wrapper } from '~src/app/ApplicationWrapper'
+import {RootState} from '../store/RootStore'
+
+import {wrapper} from '~src/app/ApplicationWrapper'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
 import { TextView, ImageView, LinearLayout } from '~src/styles/styled-components'

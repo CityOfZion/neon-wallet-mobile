@@ -1,8 +1,9 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import { wrapper } from '../app/ApplicationWrapper'
-import { LinearLayout, TextView } from '../styles/styled-components'
+import {wrapper} from '../app/ApplicationWrapper'
+import {RootState} from '../store/RootStore'
+import {LinearLayout, TextView} from '../styles/styled-components'
 
 type Props = {
   label: string

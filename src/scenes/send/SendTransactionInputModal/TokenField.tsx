@@ -6,12 +6,19 @@ import { useSelector } from 'react-redux'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import InputLabel from '~/src/components/InputLabel'
-import { TokenAsset } from '~/src/models/TokenAsset'
-import { Account } from '~/src/models/redux/Account'
-import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
-import { SendModalStackParamList } from '~/src/navigation/SendModalStackNavigation'
-import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
-import { ButtonView, LinearLayout, ImageView, TextView } from '~/src/styles/styled-components'
+import InputWithValidation from '~/src/components/InputWithValidation'
+import {TokenAsset} from '~/src/models/TokenAsset'
+import {Account} from '~/src/models/redux/Account'
+import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
+import {SendModalStackParamList} from '~/src/navigation/SendModalStackNavigation'
+import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
+import {RootState} from '~/src/store/RootStore'
+import {
+  ButtonView,
+  LinearLayout,
+  ImageView,
+  TextView,
+} from '~/src/styles/styled-components'
 
 const TokenField = (props: {
   navigation: StackNavigationProp<ModalStackParamList & SendModalStackParamList & WalletStackParamList>

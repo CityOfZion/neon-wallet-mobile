@@ -9,12 +9,19 @@ import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { layout, LayoutProps } from 'styled-system'
 
-import { wrapper } from '~src/app/ApplicationWrapper'
-import { FilterHelper } from '~src/helpers/FilterHelper'
-import { UtilsHelper } from '~src/helpers/UtilsHelper'
-import { Account } from '~src/models/redux/Account'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { ImageView, LinearLayout, RelativeLayout, TextView } from '~src/styles/styled-components'
+import {RootState} from '../store/RootStore'
+
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {FilterHelper} from '~src/helpers/FilterHelper'
+import {UtilsHelper} from '~src/helpers/UtilsHelper'
+import {Account} from '~src/models/redux/Account'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {
+  ImageView,
+  LinearLayout,
+  RelativeLayout,
+  TextView,
+} from '~src/styles/styled-components'
 
 interface Props {
   onSelect?: (hex: string) => void

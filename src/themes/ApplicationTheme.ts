@@ -1,4 +1,6 @@
-import { Normalize } from '~src/app/Normalize'
+import {ColorTheme} from '../types/styled-components'
+
+import {Normalize} from '~src/app/Normalize'
 
 const scale = Normalize.scale
 

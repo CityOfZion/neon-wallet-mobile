@@ -2,17 +2,20 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import * as LocalAuthentication from 'expo-local-authentication'
 import i18n from 'i18n-js'
-import React, { useState, useEffect } from 'react'
-import { Platform } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import React, {useState, useEffect} from 'react'
+import {Platform} from 'react-native'
+import {useDispatch, useSelector} from 'react-redux'
 
-import { wrapper } from '~src/app/ApplicationWrapper'
-import { Storage } from '~src/app/Storage'
-import SelectorList, { SelectorItem } from '~src/components/SelectorList'
-import SwiperPanel, { useSwiperController, CloseButton } from '~src/components/SwiperPanel' //precisa modificar essa tela para exibir opções de segurança
-import { Security } from '~src/enums/Security'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { RootStore } from '~src/store/RootStore'
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {Storage} from '~src/app/Storage'
+import SelectorList, {SelectorItem} from '~src/components/SelectorList'
+import SwiperPanel, {
+  useSwiperController,
+  CloseButton,
+} from '~src/components/SwiperPanel' //precisa modificar essa tela para exibir opções de segurança
+import {Security} from '~src/enums/Security'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {RootState, RootStore} from '~src/store/RootStore'
 
 export interface SecurityPickerModalParams {}
 

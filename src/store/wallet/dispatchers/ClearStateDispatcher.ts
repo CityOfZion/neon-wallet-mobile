@@ -1,7 +1,13 @@
 import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
-import { Model } from '~src/app/Model'
-import { Wallet } from '~src/models/redux/Wallet'
+import {
+  WalletActionsType,
+  WalletState,
+  WalletAction,
+  WalletReducer,
+} from '~/src/types/reducers/wallet'
+import {Model} from '~src/app/Model'
+import {Wallet} from '~src/models/redux/Wallet'
 
 export class ClearStateDispatcher extends DispatcherWrapper<WalletActionsType, WalletState, WalletAction> {
   readonly type = 'CLEAR_STATE_WALLET'

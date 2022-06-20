@@ -1,23 +1,33 @@
-import { ReducerWrapper } from '@simpli/redux-wrapper'
-import { plainToClass } from 'class-transformer'
-import { ImageLoadEventData } from 'react-native'
+import {ReducerWrapper} from '@simpli/redux-wrapper'
+import {plainToClass} from 'class-transformer'
+import {ImageLoadEventData} from 'react-native'
 
-import { BlockchainServiceKey, blockchainServices } from '~/src/blockchain'
-import { SecurityHelper } from '~/src/helpers/SecurityHelper'
-import { TokenAsset } from '~/src/models/TokenAsset'
-import { Wallet } from '~/src/models/redux/Wallet'
-import { Model } from '~src/app/Model'
-import { Storage } from '~src/app/Storage'
-import { Account } from '~src/models/redux/Account'
-import { AddressDispatcher } from '~src/store/account/dispatchers/AddressDispatcher'
-import { BackgroundDispatcher } from '~src/store/account/dispatchers/BackgroundDispatcher'
-import { BlockchainDispatcher } from '~src/store/account/dispatchers/BlockchainDispatcher'
-import { IdWalletDispatcher } from '~src/store/account/dispatchers/IdWalletDispatcher'
-import { IndexDispatcher } from '~src/store/account/dispatchers/IndexDispatcher'
-import { NameDispatcher } from '~src/store/account/dispatchers/NameDispatcher'
-import { SrcIconDispatcher } from '~src/store/account/dispatchers/SrcIconDispatcher'
-import { TokenAssetsDispatcher } from '~src/store/account/dispatchers/TokenAssetsDispatcher'
-export class AccountReducer extends ReducerWrapper<AccountActionsType, AccountState, AccountAction> {
+import {BlockchainServiceKey, blockchainServices} from '~/src/blockchain'
+import {SecurityHelper} from '~/src/helpers/SecurityHelper'
+import {TokenAsset} from '~/src/models/TokenAsset'
+import {Wallet} from '~/src/models/redux/Wallet'
+import {
+  AccountAction,
+  AccountActionsType,
+  AccountState,
+} from '~/src/types/reducers/account'
+import {AsyncAction, SyncAction} from '~/src/types/reducers/root'
+import {Model} from '~src/app/Model'
+import {Storage} from '~src/app/Storage'
+import {Account} from '~src/models/redux/Account'
+import {AddressDispatcher} from '~src/store/account/dispatchers/AddressDispatcher'
+import {BackgroundDispatcher} from '~src/store/account/dispatchers/BackgroundDispatcher'
+import {BlockchainDispatcher} from '~src/store/account/dispatchers/BlockchainDispatcher'
+import {IdWalletDispatcher} from '~src/store/account/dispatchers/IdWalletDispatcher'
+import {IndexDispatcher} from '~src/store/account/dispatchers/IndexDispatcher'
+import {NameDispatcher} from '~src/store/account/dispatchers/NameDispatcher'
+import {SrcIconDispatcher} from '~src/store/account/dispatchers/SrcIconDispatcher'
+import {TokenAssetsDispatcher} from '~src/store/account/dispatchers/TokenAssetsDispatcher'
+export class AccountReducer extends ReducerWrapper<
+  AccountActionsType,
+  AccountState,
+  AccountAction
+> {
   protected readonly initialState = Model.parse<AccountState>(Account)
 
   protected readonly dispatchers = [

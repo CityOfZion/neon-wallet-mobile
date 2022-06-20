@@ -5,12 +5,13 @@ import React, { Fragment } from 'react'
 import { ImageLoadEventData, TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { wrapper } from '~src/app/ApplicationWrapper'
-import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
-import { Wallet } from '~src/models/redux/Wallet'
-import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import {RootState} from '~/src/store/RootStore'
+import {wrapper} from '~src/app/ApplicationWrapper'
+import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import {Wallet} from '~src/models/redux/Wallet'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export interface WalletContextModalParams {
   wallets: Wallet[]

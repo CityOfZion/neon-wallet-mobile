@@ -2,13 +2,19 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
-import { FlatList, Keyboard } from 'react-native'
-import { useSelector } from 'react-redux'
+import React, {useEffect, useState} from 'react'
+import {FlatList, Keyboard} from 'react-native'
+import {useSelector} from 'react-redux'
 
-import { Normalize } from '~src/app/Normalize'
-import SwiperPanel, { PANEL_OFFSET, SwiperController, useSwiperController } from '~src/components/SwiperPanel'
-import { SearchBar } from '~src/components/input/SearchBar'
+import {RootState} from '../store/RootStore'
+
+import {Normalize} from '~src/app/Normalize'
+import SwiperPanel, {
+  PANEL_OFFSET,
+  SwiperController,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
+import {SearchBar} from '~src/components/input/SearchBar'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import { TokenAsset } from '~src/models/TokenAsset'
 import { Account } from '~src/models/redux/Account'

@@ -1,8 +1,13 @@
 import { ReducerWrapper } from '@simpli/redux-wrapper'
 
-import { ClearLoadingDispatcher } from '~src/store/loading/dispatchers/ClearLoadingDispatcher'
-import { LoadingDispatcher } from '~src/store/loading/dispatchers/LoadingDispatcher'
-import { LoadingProgressDispatcher } from '~src/store/loading/dispatchers/LoadingProgressDispatcher'
+import {
+  LoadingAction,
+  LoadingActionsType,
+  LoadingState,
+} from '~/src/types/reducers/loading'
+import {ClearLoadingDispatcher} from '~src/store/loading/dispatchers/ClearLoadingDispatcher'
+import {LoadingDispatcher} from '~src/store/loading/dispatchers/LoadingDispatcher'
+import {LoadingProgressDispatcher} from '~src/store/loading/dispatchers/LoadingProgressDispatcher'
 
 export class LoadingReducer extends ReducerWrapper<LoadingActionsType, LoadingState, LoadingAction> {
   protected readonly initialState: LoadingState = {

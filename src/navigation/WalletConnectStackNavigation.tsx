@@ -3,9 +3,13 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
-import { wrapper } from '~src/app/ApplicationWrapper'
-import { Navigator } from '~src/app/Navigator'
-import WalletConnectPage, { WalletConnectPageParams } from '~src/scenes/walletConnect/WalletConnectPage'
+import {RootState} from '../store/RootStore'
+
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {Navigator} from '~src/app/Navigator'
+import WalletConnectPage, {
+  WalletConnectPageParams,
+} from '~src/scenes/walletConnect/WalletConnectPage'
 export type WalletConnectStackParamList = {
   WalletConnectPage: WalletConnectPageParams
 }

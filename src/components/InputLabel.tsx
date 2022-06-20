@@ -1,8 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import { wrapper } from '~src/app/ApplicationWrapper'
-import { TextView } from '~src/styles/styled-components'
+import {RootState} from '../store/RootStore'
+
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {TextView} from '~src/styles/styled-components'
 
 const InputLabel = (props: {
   title: string

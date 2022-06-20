@@ -6,13 +6,17 @@ import i18n from 'i18n-js'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks'
-import { wrapper } from '~src/app/ApplicationWrapper'
-import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
-import { Signer } from '~src/helpers/NeonWcAdapter'
-import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { TabStackParamList } from '~src/navigation/TabNavigation'
+import {useTreatNetworkOnWalletConnectFlow} from '~/src/hooks'
+import {RootState} from '~/src/store/RootStore'
+import {wrapper} from '~src/app/ApplicationWrapper'
+import SwiperPanel, {
+  CloseButton,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
+import {Signer} from '~src/helpers/NeonWcAdapter'
+import {RootStackParamList} from '~src/navigation/AppNavigation'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {TabStackParamList} from '~src/navigation/TabNavigation'
 import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList

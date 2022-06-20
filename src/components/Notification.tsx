@@ -5,7 +5,8 @@ import React, { useState } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 import { useDispatch } from 'react-redux'
 
-import { TabStackParamList } from '../navigation/TabNavigation'
+import {TabStackParamList} from '../navigation/TabNavigation'
+import {AsyncDispatch} from '../types/reducers/root'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Wallet } from '~src/models/redux/Wallet'

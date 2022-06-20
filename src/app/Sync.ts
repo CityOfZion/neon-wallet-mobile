@@ -1,12 +1,14 @@
-import { Node } from '~src/models/Node'
-import { TokenAsset } from '~src/models/TokenAsset'
-import { Account } from '~src/models/redux/Account'
-import { App } from '~src/models/redux/App'
-import { Contact } from '~src/models/redux/Contact'
-import { Settings } from '~src/models/redux/Settings'
-import { Wallet } from '~src/models/redux/Wallet'
-import { RootStore } from '~src/store/RootStore'
-import { MultichainExchange } from '~src/types/exchange'
+import {AsyncDispatch} from '../types/reducers/root'
+
+import {Node} from '~src/models/Node'
+import {TokenAsset} from '~src/models/TokenAsset'
+import {Account} from '~src/models/redux/Account'
+import {App} from '~src/models/redux/App'
+import {Contact} from '~src/models/redux/Contact'
+import {Settings} from '~src/models/redux/Settings'
+import {Wallet} from '~src/models/redux/Wallet'
+import {RootStore} from '~src/store/RootStore'
+import {MultichainExchange} from '~src/types/exchange'
 export type SyncResult = {
   settings: Settings
 } & App

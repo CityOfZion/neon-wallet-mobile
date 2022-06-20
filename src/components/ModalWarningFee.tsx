@@ -4,8 +4,10 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Modal, View, TouchableOpacity, ImageLoadEventData } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { FilterHelper } from '~src/helpers/FilterHelper'
-import { ImageView, TextView } from '~src/styles/styled-components'
+import {RootState} from '../store/RootStore'
+
+import {FilterHelper} from '~src/helpers/FilterHelper'
+import {ImageView, TextView} from '~src/styles/styled-components'
 
 interface Props {
   showWarning: boolean

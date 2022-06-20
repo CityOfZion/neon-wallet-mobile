@@ -4,8 +4,9 @@ import { MessageComponentProps } from 'react-native-flash-message'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useSelector } from 'react-redux'
 
-import { wrapper } from '~/src/app/ApplicationWrapper'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {RootState} from '~/src/store/RootStore'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export const ThemedAlert: React.FC<MessageComponentProps> = props => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])

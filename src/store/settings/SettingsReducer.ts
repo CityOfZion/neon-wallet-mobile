@@ -1,18 +1,28 @@
 import { ReducerWrapper } from '@simpli/redux-wrapper'
 
-import { Security } from '~/src/enums/Security'
-import { Model } from '~src/app/Model'
-import { Storage } from '~src/app/Storage'
-import { Currency } from '~src/enums/Currency'
-import { Lang } from '~src/enums/Lang'
-import { Theme } from '~src/enums/Theme'
-import { Settings } from '~src/models/redux/Settings'
-import { CurrencyDispatcher } from '~src/store/settings/dispatchers/CurrencyDispatcher'
-import { IsFirstTimeDispatcher } from '~src/store/settings/dispatchers/IsFirstTimeDispatcher'
-import { LanguageDispatcher } from '~src/store/settings/dispatchers/LanguageDispatcher'
-import { SecurityDispatcher } from '~src/store/settings/dispatchers/SecurityDispatcher'
-import { ThemeDispatcher } from '~src/store/settings/dispatchers/ThemeDispatcher'
-export class SettingsReducer extends ReducerWrapper<SettingsActionsType, SettingsState, SettingsAction> {
+import {Security} from '~/src/enums/Security'
+import {AsyncAction} from '~/src/types/reducers/root'
+import {
+  SettingsActionsType,
+  SettingsState,
+  SettingsAction,
+} from '~/src/types/reducers/settings'
+import {Model} from '~src/app/Model'
+import {Storage} from '~src/app/Storage'
+import {Currency} from '~src/enums/Currency'
+import {Lang} from '~src/enums/Lang'
+import {Theme} from '~src/enums/Theme'
+import {Settings} from '~src/models/redux/Settings'
+import {CurrencyDispatcher} from '~src/store/settings/dispatchers/CurrencyDispatcher'
+import {IsFirstTimeDispatcher} from '~src/store/settings/dispatchers/IsFirstTimeDispatcher'
+import {LanguageDispatcher} from '~src/store/settings/dispatchers/LanguageDispatcher'
+import {SecurityDispatcher} from '~src/store/settings/dispatchers/SecurityDispatcher'
+import {ThemeDispatcher} from '~src/store/settings/dispatchers/ThemeDispatcher'
+export class SettingsReducer extends ReducerWrapper<
+  SettingsActionsType,
+  SettingsState,
+  SettingsAction
+> {
   protected readonly initialState = Model.parse<SettingsState>(Settings)
 
   protected readonly dispatchers = [

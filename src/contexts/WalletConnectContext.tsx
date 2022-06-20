@@ -8,7 +8,9 @@ import PropTypes from 'prop-types'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { RootStore } from '~src/store/RootStore'
+import {AsyncDispatch} from '../types/reducers/root'
+
+import {RootStore} from '~src/store/RootStore'
 
 type OnRequestCallback = (accountAddress: string, chainId: string, request: JsonRpcRequest) => Promise<JsonRpcResponse>
 type AutoAcceptCallback = (

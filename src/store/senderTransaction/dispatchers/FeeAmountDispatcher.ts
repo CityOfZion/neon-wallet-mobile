@@ -1,5 +1,12 @@
 import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
+import {
+  SenderTransactionAction,
+  SenderTransactionActionsType,
+  SenderTransactionReducer,
+  SenderTransactionState,
+} from '~/src/types/reducers/sendTransaction'
+
 export class FeeAmountDispatcher extends DispatcherWrapper<
   SenderTransactionActionsType,
   SenderTransactionState,

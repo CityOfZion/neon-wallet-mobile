@@ -6,11 +6,17 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { BlockchainServiceKey } from '~/src/blockchain'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
-import { Currency } from '~/src/enums/Currency'
-import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { TokenAsset } from '~/src/models/TokenAsset'
-import { Account } from '~/src/models/redux/Account'
-import { LinearLayout, TextView, ButtonView, ImageView } from '~/src/styles/styled-components'
+import {Currency} from '~/src/enums/Currency'
+import {FilterHelper} from '~/src/helpers/FilterHelper'
+import {TokenAsset} from '~/src/models/TokenAsset'
+import {Account} from '~/src/models/redux/Account'
+import {RootState} from '~/src/store/RootStore'
+import {
+  LinearLayout,
+  TextView,
+  ButtonView,
+  ImageView,
+} from '~/src/styles/styled-components'
 
 const AmountField = (props: {
   validatorAmount: (val: string) => boolean
