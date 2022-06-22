@@ -26,14 +26,19 @@ platform :android do
     key_alias = ENV['ANDROID_KEY_ALIAS']
 
     current_version = google_play_track_version_codes(
-      track: 'Simpli Testing Group',
+      track: 'Group Beta',
       json_key: './key.json'
     )
     current_version = current_version[0] + 1
 
     gradle(task: 'clean')
+
     android_set_version_code(
       version_code: current_version
+    )
+
+    android_set_version_name(
+      version_name: 'NWM-' + String(current_version)
     )
     gradle(
       task: 'bundleReleaseJsAndAssets',
@@ -50,7 +55,7 @@ platform :android do
       }
     )
     upload_to_play_store(
-      track: 'Simpli Testing Group'
+      track: 'Group Beta'
     )
     # sh "your_script.sh"
     # You can also use other beta testing services here
@@ -63,10 +68,11 @@ platform :android do
     key_alias = ENV['ANDROID_KEY_ALIAS']
     
     current_version = google_play_track_version_codes(
-      track: 'Simpli Testing Group',
+      track: 'Group Beta',
       json_key: './key.json'
     )
+
     current_version = current_version[0] + 1
-    puts current_version
+    puts 'NWM-' + String(current_version)
   end
 end
