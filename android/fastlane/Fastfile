@@ -18,7 +18,7 @@ default_platform(:android)
 platform :android do
   desc "Runs all the tests"
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
+  desc "Submit a new Beta Build"
   lane :beta do
     releaseFilePath = File.join(Dir.pwd, "neon.jks")
     store_password = ENV['ANDROID_STORE_PASS']
@@ -56,6 +56,49 @@ platform :android do
     )
     upload_to_play_store(
       track: 'Group Beta'
+    )
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Submit a new Staging Build"
+  lane :staging do
+    releaseFilePath = File.join(Dir.pwd, "neon.jks")
+    store_password = ENV['ANDROID_STORE_PASS']
+    key_password = ENV['ANDROID_KEY_PASS']
+    key_alias = ENV['ANDROID_KEY_ALIAS']
+
+    current_version = google_play_track_version_codes(
+      track: 'Group Beta',
+      json_key: './key.json'
+    )
+    current_version = current_version[0] + 1
+
+    gradle(task: 'clean')
+
+    android_set_version_code(
+      version_code: current_version
+    )
+
+    android_set_version_name(
+      version_name: 'NWM-' + String(current_version)
+    )
+    gradle(
+      task: 'bundleReleaseJsAndAssets',
+    )
+    gradle(
+      task: 'assemble',
+      build_type: 'Release',
+      print_command: false,
+      properties: {
+        "android.injected.signing.store.file" => releaseFilePath,
+        "android.injected.signing.store.password" => store_password,
+        "android.injected.signing.key.alias" => key_alias,
+        "android.injected.signing.key.password" => key_password,
+      }
+    )
+    upload_to_play_store(
+      track: 'Group Staging'
     )
     # sh "your_script.sh"
     # You can also use other beta testing services here

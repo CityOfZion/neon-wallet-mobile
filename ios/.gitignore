@@ -3,3 +3,4 @@ neon.ipa
 *.dSYM.zip
 *.mobileprovision
 *.cer
+.env
