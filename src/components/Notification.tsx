@@ -1,29 +1,21 @@
-import {useNavigation} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, {useState} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
-import {useDispatch} from 'react-redux'
+import React, { useState } from 'react'
+import { TouchableWithoutFeedback } from 'react-native'
+import { useDispatch } from 'react-redux'
 
-import {TabStackParamList} from '../navigation/TabNavigation'
+import { TabStackParamList } from '../navigation/TabNavigation'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Wallet} from '~src/models/redux/Wallet'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
-import {RootStore} from '~src/store/RootStore'
-import styled, {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Wallet } from '~src/models/redux/Wallet'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
+import { RootStore } from '~src/store/RootStore'
+import styled, { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
-type Props = WalletStackParamList &
-  TabStackParamList &
-  RootStackParamList &
-  ModalStackParamList
+type Props = WalletStackParamList & TabStackParamList & RootStackParamList & ModalStackParamList
 
 interface NotificationProps {
   wallet: Wallet
@@ -42,9 +34,7 @@ const Notification = (props: NotificationProps) => {
     setSeen(true)
 
     if (props.wallet.id) {
-      await dispatchAsync(
-        RootStore.wallet.actions.setShowBackupAlert(props.wallet.id, false)
-      )
+      await dispatchAsync(RootStore.wallet.actions.setShowBackupAlert(props.wallet.id, false))
       await dispatchAsync(RootStore.app.actions.syncWallets())
     }
   }
@@ -70,38 +60,16 @@ const Notification = (props: NotificationProps) => {
         }
       }}
     >
-      <NotificationBox
-        orientation="verti"
-        height={72}
-        width="100%"
-        bg="background.1"
-        borderColor="primary"
-      >
+      <NotificationBox orientation="verti" height={72} width="100%" bg="background.1" borderColor="primary">
         <LinearLayout orientation="horiz" justifyContent="space-between">
           <TextView color="text.2" fontSize="10px" mb="4px" px="11px" pt="8px">
             {i18n.t('components.notification.title')}
           </TextView>
-          <ButtonView
-            alignSelf="flex-start"
-            onPress={() => close()}
-            px="11px"
-            py="8px"
-          >
-            <ImageView
-              height={'9px'}
-              width={'9px'}
-              source={require('~src/assets/images/button_close_white.png')}
-            />
+          <ButtonView alignSelf="flex-start" onPress={() => close()} px="11px" py="8px">
+            <ImageView height="9px" width="9px" source={require('~src/assets/images/button_close_white.png')} />
           </ButtonView>
         </LinearLayout>
-        <TextView
-          color="text.0"
-          fontSize="15px"
-          lineHeight="15px"
-          weight={1}
-          px="11px"
-          pb="8px"
-        >
+        <TextView color="text.0" fontSize="15px" lineHeight="15px" weight={1} px="11px" pb="8px">
           {props.text}
         </TextView>
       </NotificationBox>

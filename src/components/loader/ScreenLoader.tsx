@@ -1,18 +1,11 @@
-import {LinearGradient} from 'expo-linear-gradient'
-import React, {useState} from 'react'
-import {
-  Platform,
-  Dimensions,
-  StyleSheet,
-  SafeAreaView,
-  ActivityIndicator,
-} from 'react-native'
-import {WebView} from 'react-native-webview'
-import {useSelector} from 'react-redux'
-import {paddingLeft} from 'styled-system'
+import { LinearGradient } from 'expo-linear-gradient'
+import React, { useState } from 'react'
+import { StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native'
+import { WebView } from 'react-native-webview'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {ImageView, LinearLayout} from '~/src/styles/styled-components'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { ImageView, LinearLayout } from '~/src/styles/styled-components'
 
 const ScreenLoader = (props?: {
   transparent?: boolean
@@ -21,15 +14,8 @@ const ScreenLoader = (props?: {
   darkerSolidColorBG?: boolean
   gradient?: boolean
 }) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
-  const [renderedOnce, setRenderedOnce] = useState(false)
-
-  const updateSource = () => {
-    setRenderedOnce(true)
-  }
   /* eslint-disable */
   const loader = `<!DOCTYPE html>
   <html>
@@ -75,7 +61,7 @@ const ScreenLoader = (props?: {
 
   return (
     <LinearGradient colors={chooseColorBG()}>
-      <SafeAreaView style={{height: '100%'}}>
+      <SafeAreaView style={{ height: '100%' }}>
         <WebView
           style={{
             backgroundColor: 'transparent',
@@ -85,10 +71,10 @@ const ScreenLoader = (props?: {
           source={{
             html: loader,
           }}
-          bounces={true}
+          bounces
           startInLoadingState
           scalesPageToFit
-          javaScriptEnabled={true}
+          javaScriptEnabled
           onLoadEnd={() => {
             setLoadingWebView(false)
           }}
@@ -123,10 +109,7 @@ const ScreenLoader = (props?: {
                   : '#23282e'
               }
             >
-              <ImageView
-                style={styles.image}
-                source={require('~src/assets/images/Non-animated-logo.png')}
-              />
+              <ImageView style={styles.image} source={require('~src/assets/images/Non-animated-logo.png')} />
             </LinearLayout>
           ))}
       </SafeAreaView>

@@ -1,19 +1,14 @@
 import i18n from 'i18n-js'
-import React, {useState} from 'react'
-import {FlatList, ListRenderItemInfo, ScrollView} from 'react-native'
-import {useSelector} from 'react-redux'
+import React, { useState } from 'react'
+import { FlatList, ListRenderItemInfo, ScrollView } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {BlockchainServiceKey, getBlockchainLogo} from '~/src/blockchain'
-import {SearchBar} from '~src/components/input/SearchBar'
-import {Account} from '~src/models/redux/Account'
-import {Wallet} from '~src/models/redux/Wallet'
-import {RootState} from '~src/store/RootStore'
-import {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import { BlockchainServiceKey, getBlockchainLogo } from '~/src/blockchain'
+import { SearchBar } from '~src/components/input/SearchBar'
+import { Account } from '~src/models/redux/Account'
+import { Wallet } from '~src/models/redux/Wallet'
+import { RootState } from '~src/store/RootStore'
+import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface AccountListProps {
   mt?: string | number
@@ -46,12 +41,7 @@ const ItemComponent = (props: ListRenderItemInfo<Item>) => {
 
   return (
     <ButtonView onPress={() => props.item.onClick?.(props.item.account)}>
-      <LinearLayout
-        orientation="horiz"
-        width="100%"
-        alignItems="flex-start"
-        p="16px"
-      >
+      <LinearLayout orientation="horiz" width="100%" alignItems="flex-start" p="16px">
         <LinearLayout
           width="18px"
           height="18px"
@@ -69,32 +59,23 @@ const ItemComponent = (props: ListRenderItemInfo<Item>) => {
             <TextView fontSize="12px" fontFamily="bold" color="background.10">
               {walletName?.toUpperCase()}
             </TextView>
-            {walletIcon ? (
-              <ImageView ml="8px" source={walletIcon} />
-            ) : undefined}
+            {walletIcon ? <ImageView ml="8px" source={walletIcon} /> : undefined}
           </LinearLayout>
 
-          <LinearLayout orientation={'horiz'}>
+          <LinearLayout orientation="horiz">
             <ImageView
               width={22}
               height={23}
               source={getBlockchainLogo(props.item.account.blockchain)}
-              resizeMode={'center'}
+              resizeMode="center"
               mr={3}
-              alignSelf={'center'}
+              alignSelf="center"
             />
             <LinearLayout orientation="verti" width="92%">
               <TextView color="text.2" fontFamily="regular" fontSize={14}>
-                {i18n.t(
-                  `blockchainServices.${props.item.account.blockchain}.id`
-                )}
+                {i18n.t(`blockchainServices.${props.item.account.blockchain}.id`)}
               </TextView>
-              <TextView
-                fontSize="16px"
-                color="primary"
-                ellipsizeMode="middle"
-                numberOfLines={1}
-              >
+              <TextView fontSize="16px" color="primary" ellipsizeMode="middle" numberOfLines={1}>
                 {props.item.account.address}
               </TextView>
             </LinearLayout>
@@ -113,14 +94,14 @@ export const AccountList = (props: AccountListProps) => {
   const accounts = useSelector((state: RootState) => state.app.accounts)
   const wallets = useSelector((state: RootState) => state.app.wallets)
   const items = accounts
-    .filter((account) => {
+    .filter(account => {
       if (props.filterByBlockchain) {
         return account.blockchain === props.filterByBlockchain
       } else {
         return account
       }
     })
-    .map((account) => {
+    .map(account => {
       return {
         account,
         wallet: account.getWallet(wallets),
@@ -136,8 +117,8 @@ export const AccountList = (props: AccountListProps) => {
           prevData={items}
           emptySearchList={setEmptySearchList}
           dispatchData={setAccountsListItem}
-          callbackFilter={(searchText) => {
-            const filterAccounts = items.filter(({account, wallet}) => {
+          callbackFilter={searchText => {
+            const filterAccounts = items.filter(({ account, wallet }) => {
               if (account.name && account.address && wallet && wallet.name) {
                 return (
                   account.name.includes(searchText) ||
@@ -156,25 +137,16 @@ export const AccountList = (props: AccountListProps) => {
         />
       )}
 
-      <ScrollView style={{marginBottom: props.mb}}>
+      <ScrollView style={{ marginBottom: props.mb }}>
         {emptySearchList ? (
-          <TextView
-            font={'semi-bold'}
-            color={'text.0'}
-            fontSize={18}
-            pt={5}
-            textAlign={'center'}
-          >
+          <TextView font="semi-bold" color="text.0" fontSize={18} pt={5} textAlign="center">
             {i18n.t('persistContact.noResultsFound')}
           </TextView>
         ) : (
           <FlatList
             data={accountsListItem.sort((item, item2) => {
               if (item.account.name !== null && item2.account.name !== null) {
-                if (
-                  item.account.name.toLowerCase() <
-                  item2.account.name.toLowerCase()
-                ) {
+                if (item.account.name.toLowerCase() < item2.account.name.toLowerCase()) {
                   return -1
                 } else {
                   return 0

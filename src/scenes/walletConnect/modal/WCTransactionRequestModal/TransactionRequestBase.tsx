@@ -1,19 +1,16 @@
-import {useNavigation} from '@react-navigation/native'
-import {SessionTypes} from '@walletconnect/types'
+import { useNavigation } from '@react-navigation/native'
+import { SessionTypes } from '@walletconnect/types'
 import i18n from 'i18n-js'
-import React, {useRef, useState} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
+import React, { useRef, useState } from 'react'
+import { TouchableWithoutFeedback } from 'react-native'
 
 import ConnectionHeader from '../../components/ConnectionHeader'
 
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~/src/components/SwiperPanel'
+import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import {useWalletConnect} from '~/src/contexts/WalletConnectContext'
-import {Account} from '~/src/models/redux/Account'
-import {LinearLayout, TextView} from '~/src/styles/styled-components'
+import { useWalletConnect } from '~/src/contexts/WalletConnectContext'
+import { Account } from '~/src/models/redux/Account'
+import { LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type SuccessOrFailedValues = {
   type: 'success' | 'failed'
@@ -59,13 +56,11 @@ export const TransactionRequestBase = ({
   account,
 }: Props) => {
   const controller = useSwiperController(true)
-  const {approveRequest, rejectRequest} = useWalletConnect()
+  const { approveRequest, rejectRequest } = useWalletConnect()
   const navigation = useNavigation()
 
   const [buttonsIsDisabled, setButtonsIsDisabled] = useState<boolean>(false)
-  const [successOrFailedValues, setSuccessOrFailedValues] = useState<
-    SuccessOrFailedValues
-  >()
+  const [successOrFailedValues, setSuccessOrFailedValues] = useState<SuccessOrFailedValues>()
 
   const shouldProcessButtons = useRef<boolean>(true)
 
@@ -98,12 +93,10 @@ export const TransactionRequestBase = ({
       const response = await approveRequest(request)
 
       if (!response || !('result' in response)) {
-        throw new Error(
-          i18n.t('modals.WCTransactionRequestModal.unexpectedError')
-        )
+        throw new Error(i18n.t('modals.WCTransactionRequestModal.unexpectedError'))
       }
 
-      const {result: transactionId} = response
+      const { result: transactionId } = response
 
       if (onAccept) onAccept(transactionId)
 
@@ -127,9 +120,9 @@ export const TransactionRequestBase = ({
     <SwiperPanel
       controller={controller}
       padding={20}
-      fullSize={true}
+      fullSize
       title={i18n.t('modals.transactionRequest.title')}
-      rightButton={<CloseButton mr={'20px'} />}
+      rightButton={<CloseButton mr="20px" />}
       onRightPress={controller.close}
       onClose={handleSwiperOnClose}
       solidColorBG
@@ -137,30 +130,23 @@ export const TransactionRequestBase = ({
       <LinearLayout orientation="verti" mr={2} ml={2} mt={5} mb={5}>
         {successOrFailedValues ? (
           successOrFailedValues.type === 'success' ? (
-            <SuccessElement
-              account={account}
-              transactionId={successOrFailedValues.value}
-            />
+            <SuccessElement account={account} transactionId={successOrFailedValues.value} />
           ) : (
             <FailedElement errorMessage={successOrFailedValues.value} />
           )
         ) : (
           <LinearLayout height="100%" justifyContent="space-between">
             <LinearLayout>
-              <ConnectionHeader
-                title={session.peer.metadata.name}
-                imageUri={''}
-                hideTitle={hideDappName}
-              />
+              <ConnectionHeader title={session.peer.metadata.name} imageUri="" hideTitle={hideDappName} />
               <TextView
-                mt={'2%'}
-                mr={'20px'}
-                ml={'20px'}
-                mb={'31px'}
-                color={'white'}
-                fontSize={'18px'}
-                alignself={'center'}
-                textAlign={'center'}
+                mt="2%"
+                mr="20px"
+                ml="20px"
+                mb="31px"
+                color="white"
+                fontSize="18px"
+                alignself="center"
+                textAlign="center"
               >
                 {title}
               </TextView>
@@ -168,16 +154,9 @@ export const TransactionRequestBase = ({
               {children}
             </LinearLayout>
             <LinearLayout>
-              <ThemedButton
-                label={acceptButtonLabel}
-                disabled={buttonsIsDisabled}
-                onPress={handlePressAcceptButton}
-              />
-              <LinearLayout mt={'24px'}>
-                <TouchableWithoutFeedback
-                  onPress={handlePressRejectButton}
-                  disabled={buttonsIsDisabled}
-                >
+              <ThemedButton label={acceptButtonLabel} disabled={buttonsIsDisabled} onPress={handlePressAcceptButton} />
+              <LinearLayout mt="24px">
+                <TouchableWithoutFeedback onPress={handlePressRejectButton} disabled={buttonsIsDisabled}>
                   <LinearLayout
                     width="100%"
                     borderRadius="4px"
@@ -189,12 +168,7 @@ export const TransactionRequestBase = ({
                     p="10px"
                     opacity={buttonsIsDisabled ? '0.3' : '1'}
                   >
-                    <TextView
-                      style={{includeFontPadding: false}}
-                      ml={3}
-                      color={'primary'}
-                      fontSize={20}
-                    >
+                    <TextView style={{ includeFontPadding: false }} ml={3} color="primary" fontSize={20}>
                       {rejectButtonLabel}
                     </TextView>
                   </LinearLayout>

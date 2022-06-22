@@ -1,11 +1,7 @@
-import {
-  HttpExclude,
-  HttpExpose,
-  ResponseSerialize,
-} from '@simpli/serialized-request'
+import { HttpExclude, HttpExpose } from '@simpli/serialized-request'
 
-import {TransactionAddressAsset} from './TransactionAddressAsset'
-import {TransactionAddressNFT} from './TransactionAddressNFT'
+import { TransactionAddressAsset } from './TransactionAddressAsset'
+import { TransactionAddressNFT } from './TransactionAddressNFT'
 
 export enum TransactionTransferType {
   ASSET = 'asset',
@@ -31,12 +27,7 @@ export class TransactionAddressSummary {
   @HttpExpose()
   qtyNotifications: number = 0
 
-  constructor(
-    data: Omit<
-      TransactionAddressSummary,
-      'qtyInvocations' | 'qtyNotifications' | 'transfers'
-    >
-  ) {
+  constructor(data: Omit<TransactionAddressSummary, 'qtyInvocations' | 'qtyNotifications' | 'transfers'>) {
     this.hash = data.hash
     this.time = data.time
     this.blockHeight = data.blockHeight

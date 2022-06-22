@@ -1,12 +1,12 @@
-import {useNavigation} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import {Alert} from 'react-native'
+import { Alert } from 'react-native'
 
-import {wrapper} from '../app/ApplicationWrapper'
+import { wrapper } from '../app/ApplicationWrapper'
 
 import * as LocalAuthentication from '~/node_modules/expo-local-authentication'
-import {SecurityHelper} from '~/src/helpers/SecurityHelper'
-import {Storage} from '~src/app/Storage'
+import { SecurityHelper } from '~/src/helpers/SecurityHelper'
+import { Storage } from '~src/app/Storage'
 
 export const useLocalAuthentication = () => {
   const navigation = useNavigation()
@@ -24,18 +24,12 @@ export const useLocalAuthentication = () => {
           {
             text: i18n.t('hooks.useLocalAuthentication.dialog.cancel'),
             style: 'cancel',
-            onPress: () =>
-              reject(
-                new Error(i18n.t('hooks.useLocalAuthentication.errorDismiss'))
-              ),
+            onPress: () => reject(new Error(i18n.t('hooks.useLocalAuthentication.errorDismiss'))),
           },
         ],
         {
           cancelable: true,
-          onDismiss: () =>
-            reject(
-              new Error(i18n.t('hooks.useLocalAuthentication.errorDismiss'))
-            ),
+          onDismiss: () => reject(new Error(i18n.t('hooks.useLocalAuthentication.errorDismiss'))),
         }
       )
     })
@@ -50,9 +44,7 @@ export const useLocalAuthentication = () => {
         const passcode = await SecurityHelper.loadPasscode()
 
         if (!passcode) {
-          reject(
-            new Error(i18n.t('hooks.useLocalAuthentication.errorToGetPasscode'))
-          )
+          reject(new Error(i18n.t('hooks.useLocalAuthentication.errorToGetPasscode')))
           return
         }
 

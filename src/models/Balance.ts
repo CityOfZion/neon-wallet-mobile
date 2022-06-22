@@ -1,4 +1,4 @@
-import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
+import { HttpExclude, HttpExpose } from '@simpli/serialized-request'
 
 @HttpExclude()
 export class Balance {

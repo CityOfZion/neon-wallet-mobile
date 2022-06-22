@@ -1,4 +1,4 @@
-import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
+import { HttpExclude, HttpExpose } from '@simpli/serialized-request'
 import i18n from 'i18n-js'
 
 @HttpExclude()
@@ -31,11 +31,7 @@ export class PriorityFee {
 }
 
 export const NoPriority = () => new PriorityFee(0, i18n.t('priorityFee.none'))
-export const FastPriority = () =>
-  new PriorityFee(0.001, i18n.t('priorityFee.priorityFast'))
-export const FasterPriority = () =>
-  new PriorityFee(0.05, i18n.t('priorityFee.priorityFaster'))
-export const FastestPriority = () =>
-  new PriorityFee(0.1, i18n.t('priorityFee.priorityFastest'))
-export const CustomPriotity = (value: number, text?: string) =>
-  new PriorityFee(value, text)
+export const FastPriority = () => new PriorityFee(0.001, i18n.t('priorityFee.priorityFast'))
+export const FasterPriority = () => new PriorityFee(0.05, i18n.t('priorityFee.priorityFaster'))
+export const FastestPriority = () => new PriorityFee(0.1, i18n.t('priorityFee.priorityFastest'))
+export const CustomPriotity = (value: number, text?: string) => new PriorityFee(value, text)

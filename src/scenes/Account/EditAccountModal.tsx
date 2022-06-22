@@ -1,24 +1,24 @@
-import {RouteProp} from '@react-navigation/native'
+import { RouteProp } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import React, {useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import {Await, AwaitActivity} from '~/node_modules/@simpli/react-native-await'
-import {wrapper} from '~src/app/ApplicationWrapper'
+import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import { Await, AwaitActivity } from '~/node_modules/@simpli/react-native-await'
+import { wrapper } from '~src/app/ApplicationWrapper'
 import AccountCard from '~src/components/AccountCard'
 import ColorSelector from '~src/components/ColorSelector'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import {UtilsHelper} from '~src/helpers/UtilsHelper'
-import {Account} from '~src/models/redux/Account'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
-import {RootStore, RootState} from '~src/store/RootStore'
-import {LinearLayout} from '~src/styles/styled-components'
+import { UtilsHelper } from '~src/helpers/UtilsHelper'
+import { Account } from '~src/models/redux/Account'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
+import { RootStore, RootState } from '~src/store/RootStore'
+import { LinearLayout } from '~src/styles/styled-components'
 
 type ParamList = ModalStackParamList & RootStackParamList & WalletStackParamList
 
@@ -36,9 +36,7 @@ const EditAccountModal = (props: Props) => {
   const account = UtilsHelper.clone(props.route.params.account)
   account.tokenAssets = tokenAssets
 
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const controller = useSwiperController(true)
   const dispatch = useDispatch()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
@@ -71,7 +69,7 @@ const EditAccountModal = (props: Props) => {
   const isValid = () => {
     const conditions: boolean[] = [!!name, !!color, !!account.address]
 
-    return conditions.every((it) => it)
+    return conditions.every(it => it)
   }
 
   const save = () => {
@@ -90,7 +88,7 @@ const EditAccountModal = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      fullSize={true}
+      fullSize
       paddingTop={0}
       title={i18n.t('modals.editAccount.title')}
       leftButton={i18n.t('modals.editAccount.navigation.cancel')}
@@ -99,32 +97,21 @@ const EditAccountModal = (props: Props) => {
       onLeftPress={() => controller.close()}
       onRightPress={save}
       onClose={handleOnClose}
-      solidColorBG={true}
+      solidColorBG
     >
-      <AwaitActivity
-        name={'swiperRight'}
-        loadingView={<ScreenLoader solidColorBG={true} />}
-      >
-        <LinearLayout
-          orientation="verti"
-          justifyContent="space-between"
-          mt="10px"
-        >
-          <AccountCard
-            account={account}
-            isStackMode={false}
-            hasShadow={false}
-          />
+      <AwaitActivity name="swiperRight" loadingView={<ScreenLoader solidColorBG />}>
+        <LinearLayout orientation="verti" justifyContent="space-between" mt="10px">
+          <AccountCard account={account} isStackMode={false} hasShadow={false} />
 
           <InputLabel
             title={i18n.t('modals.editAccount.accountInput.title')}
-            capitalize={true}
+            capitalize
             marginTop="20px"
             marginBottom="5px"
           />
           <InputWithValidation
             value={name}
-            validator={(text) => !(showInvalid && !text)}
+            validator={text => !(showInvalid && !text)}
             placeholder={i18n.t('modals.editAccount.accountInput.placeholder')}
             onChangeText={setName}
             onClearPress={() => setName('')}
@@ -134,16 +121,12 @@ const EditAccountModal = (props: Props) => {
             separatorColor={theme.colors.background[5]}
             invalidSeparatorColor={theme.colors.quinary}
             invalidMessageColor={theme.colors.quinary}
-            hidePaste={true}
-            hideScan={true}
+            hidePaste
+            hideScan
             sideMargins={0}
           />
 
-          <InputLabel
-            title={i18n.t('modals.editAccount.selectColor')}
-            capitalize={true}
-            marginBottom="13px"
-          />
+          <InputLabel title={i18n.t('modals.editAccount.selectColor')} capitalize marginBottom="13px" />
 
           <ColorSelector onSelect={setColor} account={account} />
         </LinearLayout>

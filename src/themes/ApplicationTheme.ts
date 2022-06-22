@@ -1,4 +1,4 @@
-import {Normalize} from '~src/app/Normalize'
+import { Normalize } from '~src/app/Normalize'
 
 const scale = Normalize.scale
 
@@ -21,7 +21,5 @@ export abstract class ApplicationTheme {
     '5xl': scale(64),
   }
 
-  readonly space = [0, 2, 4, 8, 12, 16, 32, 64, 128, 256, 512].map((it) =>
-    scale(it)
-  )
+  readonly space = [0, 2, 4, 8, 12, 16, 32, 64, 128, 256, 512].map(it => scale(it))
 }

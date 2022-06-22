@@ -1,15 +1,11 @@
-import {DispatcherWrapper} from '@simpli/redux-wrapper'
+import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
-export class LoadingProgressDispatcher extends DispatcherWrapper<
-  LoadingActionsType,
-  LoadingState,
-  LoadingAction
-> {
+export class LoadingProgressDispatcher extends DispatcherWrapper<LoadingActionsType, LoadingState, LoadingAction> {
   readonly type = 'SET_LOADING_PROGRESS'
 
   readonly reducer: LoadingReducer = (state, action) => {
-    const {progress} = action
+    const { progress } = action
 
-    return this.set(state, {progress})
+    return this.set(state, { progress })
   }
 }

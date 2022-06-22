@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import {View, StyleSheet, Platform} from 'react-native'
-import {BoxShadow} from 'react-native-shadow'
+import { View, StyleSheet, Platform } from 'react-native'
+import { BoxShadow } from 'react-native-shadow'
 interface IThemedeShadowContainer {
   radius?: number
   color?: string
@@ -18,13 +18,13 @@ interface IThemedeShadowContainer {
   children?: React.ReactNode
 }
 
-const ThemedShadowContainer: React.FC<IThemedeShadowContainer> = (props) => {
+const ThemedShadowContainer: React.FC<IThemedeShadowContainer> = props => {
   const styles = StyleSheet.create({
     design: {
       shadowRadius: props.radius ?? 15,
       shadowOpacity: props.opacity ?? 0.5,
       shadowColor: props.color ?? '#000',
-      shadowOffset: {height: 5, width: 5},
+      shadowOffset: { height: 5, width: 5 },
     },
   })
   return Platform.OS === 'ios' ? (

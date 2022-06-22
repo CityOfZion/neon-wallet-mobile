@@ -1,5 +1,4 @@
-import {HttpExpose} from '@simpli/serialized-request'
-import moment from 'moment'
+import { HttpExpose } from '@simpli/serialized-request'
 
 export class WCApprovalDate {
   @HttpExpose()

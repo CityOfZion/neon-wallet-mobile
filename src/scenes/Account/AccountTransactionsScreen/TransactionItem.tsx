@@ -1,15 +1,15 @@
 import i18n from 'i18n-js'
 import moment from 'moment'
 import React from 'react'
-import {Linking, View, TouchableWithoutFeedback} from 'react-native'
+import { Linking, View, TouchableWithoutFeedback } from 'react-native'
 
-import {FormattedTransaction} from './AccountTransactionsScreen'
-import {TransferItem} from './TransferItem'
+import { FormattedTransaction } from './AccountTransactionsScreen'
+import { TransferItem } from './TransferItem'
 
-import {blockchainServices} from '~/src/blockchain'
-import {BoxLabelNumber} from '~/src/components/BoxLabelNumber'
-import {Account} from '~/src/models/redux/Account'
-import {ImageView, TextView} from '~/src/styles/styled-components'
+import { blockchainServices } from '~/src/blockchain'
+import { BoxLabelNumber } from '~/src/components/BoxLabelNumber'
+import { Account } from '~/src/models/redux/Account'
+import { ImageView, TextView } from '~/src/styles/styled-components'
 
 type Props = FormattedTransaction & {
   hideLinkDora?: boolean
@@ -19,7 +19,7 @@ type Props = FormattedTransaction & {
 // eslint-disable-next-line react/display-name
 export const TransactionItem = React.memo((props: Props) => {
   return (
-    <View style={{marginBottom: 5}}>
+    <View style={{ marginBottom: 5 }}>
       <View
         style={{
           backgroundColor: '#0f0f10',
@@ -46,7 +46,7 @@ export const TransactionItem = React.memo((props: Props) => {
               {i18n.t('screens.accountTransaction.txidLabel')}
             </TextView>
             <TextView
-              ellipsizeMode={'middle'}
+              ellipsizeMode="middle"
               numberOfLines={1}
               color="primary"
               fontFamily="medium"
@@ -58,19 +58,13 @@ export const TransactionItem = React.memo((props: Props) => {
             </TextView>
           </View>
           <TextView color="#fff" fontFamily="medium" fontSize="16px">
-            {moment
-              .unix(props.time)
-              .format(i18n.t('formatters.transactionTime'))}
+            {moment.unix(props.time).format(i18n.t('formatters.transactionTime'))}
           </TextView>
         </View>
 
         <View>
-          {props.transfers.map((transfer) => (
-            <TransferItem
-              key={transfer.hash}
-              account={props.account}
-              {...transfer}
-            />
+          {props.transfers.map(transfer => (
+            <TransferItem key={transfer.hash} account={props.account} {...transfer} />
           ))}
         </View>
 
@@ -81,14 +75,14 @@ export const TransactionItem = React.memo((props: Props) => {
             marginTop: 10,
           }}
         >
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <BoxLabelNumber
-              color={'#1f2b33'}
+              color="#1f2b33"
               label={i18n.t('screens.accountTransaction.invocationsLabel')}
               number={props.qtyInvocations}
             />
             <BoxLabelNumber
-              color={'#1f2b33'}
+              color="#1f2b33"
               label={i18n.t('screens.accountTransaction.notificationsLabel')}
               number={props.qtyNotifications}
             />
@@ -97,10 +91,7 @@ export const TransactionItem = React.memo((props: Props) => {
           {!props.hideLinkDora && (
             <TouchableWithoutFeedback
               onPress={() => {
-                Linking.openURL(
-                  blockchainServices[props.account.blockchain].provider
-                    .siteUrlQuery + props.hash
-                )
+                Linking.openURL(blockchainServices[props.account.blockchain].provider.siteUrlQuery + props.hash)
               }}
             >
               <ImageView

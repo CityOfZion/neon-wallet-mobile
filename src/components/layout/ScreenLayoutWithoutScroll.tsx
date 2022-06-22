@@ -1,22 +1,16 @@
 import Constants from 'expo-constants'
-import {LinearGradient} from 'expo-linear-gradient'
+import { LinearGradient } from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {
-  LayoutChangeEvent,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  SafeAreaView,
-  ScrollView,
-} from 'react-native'
-import {useSelector} from 'react-redux'
+import { LayoutChangeEvent, SafeAreaView } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {Normalize} from '~/src/app/Normalize'
-import {applicationConfig} from '~/src/config/ApplicationConfig'
-import {UtilsHelper} from '~/src/helpers/UtilsHelper'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Normalize } from '~/src/app/Normalize'
+import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import OfflineBar from '~src/components/OfflineBar'
-import {LinearLayout} from '~src/styles/styled-components'
+import { LinearLayout } from '~src/styles/styled-components'
 
 interface Props {
   onLayout?: (event: LayoutChangeEvent) => void
@@ -34,22 +28,13 @@ interface Props {
   hideOfflineBar?: boolean
 }
 
-const ScreenLayoutWithoutScroll: React.FC<Props> = (props) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+const ScreenLayoutWithoutScroll: React.FC<Props> = props => {
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
-  const headerHeight = props.useHeaderPadding
-    ? applicationConfig.headerHeight
-    : 0
-  const tabBarHeight = props.useFooterPadding
-    ? applicationConfig.footerHeight
-    : 0
-  const headerExtraHeight =
-    props.useStatusBarPadding && UtilsHelper.isAndroid
-      ? Constants.statusBarHeight
-      : 0
-  const {isConnected} = useSelector((state: RootState) => state.network)
+  const headerHeight = props.useHeaderPadding ? applicationConfig.headerHeight : 0
+  const tabBarHeight = props.useFooterPadding ? applicationConfig.footerHeight : 0
+  const headerExtraHeight = props.useStatusBarPadding && UtilsHelper.isAndroid ? Constants.statusBarHeight : 0
+  const { isConnected } = useSelector((state: RootState) => state.network)
 
   const chooseColorBG = () => {
     let color
@@ -68,18 +53,9 @@ const ScreenLayoutWithoutScroll: React.FC<Props> = (props) => {
   }
 
   return (
-    <LinearGradient
-      onLayout={props.onLayout}
-      colors={chooseColorBG()}
-      start={[1, 0]}
-      end={[1, 1]}
-    >
-      <SafeAreaView style={{height: '100%'}}>
-        <LinearLayout
-          flex={1}
-          mt={headerHeight + headerExtraHeight}
-          mb={tabBarHeight}
-        >
+    <LinearGradient onLayout={props.onLayout} colors={chooseColorBG()} start={[1, 0]} end={[1, 1]}>
+      <SafeAreaView style={{ height: '100%' }}>
+        <LinearLayout flex={1} mt={headerHeight + headerExtraHeight} mb={tabBarHeight}>
           {!props.hideOfflineBar && <OfflineBar />}
           <LinearLayout
             alignItems={props.alignX}
@@ -88,8 +64,8 @@ const ScreenLayoutWithoutScroll: React.FC<Props> = (props) => {
               padding: Normalize.scale(props.padding ?? 10),
               marginTop: !isConnected ? 45 : undefined,
             }}
-            position={'relative'}
-            height={'100%'}
+            position="relative"
+            height="100%"
           >
             {props.children}
           </LinearLayout>

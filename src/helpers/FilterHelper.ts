@@ -1,8 +1,8 @@
 import i18n from 'i18n-js'
 import moment from 'moment'
 
-import {Currency} from '~src/enums/Currency'
-import {Lang} from '~src/enums/Lang'
+import { Currency } from '~src/enums/Currency'
+import { Lang } from '~src/enums/Lang'
 
 export type InputType = string | number | null
 
@@ -15,16 +15,12 @@ export abstract class FilterHelper {
   }
 
   static bool(input?: InputType | boolean) {
-    return input !== undefined && input !== null
-      ? (i18n.t(`boolean.${Boolean(input)}`) as string)
-      : ''
+    return input !== undefined && input !== null ? (i18n.t(`boolean.${Boolean(input)}`) as string) : ''
   }
 
   static datetime(input?: moment.MomentInput | null) {
     return moment(input ?? undefined).isValid()
-      ? moment(input ?? undefined).format(
-          i18n.t('dateFormat.datetime') as string
-        )
+      ? moment(input ?? undefined).format(i18n.t('dateFormat.datetime') as string)
       : ''
   }
 
@@ -55,19 +51,13 @@ export abstract class FilterHelper {
   static phone(input?: InputType) {
     return this.toString(input)
       .replace(/\D/g, '')
-      .replace(
-        new RegExp(i18n.t('filter.phone.regex') as string),
-        i18n.t('filter.phone.format') as string
-      )
+      .replace(new RegExp(i18n.t('filter.phone.regex') as string), i18n.t('filter.phone.format') as string)
   }
 
   static zipcode(input?: InputType) {
     return this.toString(input)
       .replace(/\D/g, '')
-      .replace(
-        new RegExp(i18n.t('filter.zipcode.regex') as string),
-        i18n.t('filter.zipcode.format') as string
-      )
+      .replace(new RegExp(i18n.t('filter.zipcode.regex') as string), i18n.t('filter.zipcode.format') as string)
   }
 
   static pad(input?: InputType, length = 2) {
@@ -76,11 +66,7 @@ export abstract class FilterHelper {
     return value
   }
 
-  static decimal(
-    input?: InputType,
-    language = Lang.EN_US,
-    minimumFractionDigits = 0
-  ) {
+  static decimal(input?: InputType, language = Lang.EN_US, minimumFractionDigits = 0) {
     const num = Number(input)
 
     try {
@@ -194,10 +180,7 @@ export abstract class FilterHelper {
   }
 
   static hexToHsl(hex: string) {
-    const value =
-      hex.length === 4
-        ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}`
-        : hex
+    const value = hex.length === 4 ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}` : hex
 
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(value)
     if (!result) return [0, 0, 0]
@@ -237,16 +220,8 @@ export abstract class FilterHelper {
     return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)]
   }
 
-  static toDarkerShade(
-    color: string,
-    saturationFactor = SATURATION_FACTOR,
-    luminanceFactor = LUMINANCE_FACTOR
-  ) {
+  static toDarkerShade(color: string, saturationFactor = SATURATION_FACTOR, luminanceFactor = LUMINANCE_FACTOR) {
     const hsl = this.hexToHsl(color)
-    return this.hslToHex(
-      hsl[0],
-      hsl[1] * saturationFactor,
-      hsl[2] * luminanceFactor
-    )
+    return this.hslToHex(hsl[0], hsl[1] * saturationFactor, hsl[2] * luminanceFactor)
   }
 }

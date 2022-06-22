@@ -1,14 +1,14 @@
 import i18n from 'i18n-js'
 import React from 'react'
-import {showMessage} from 'react-native-flash-message'
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler'
+import { showMessage } from 'react-native-flash-message'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
-import {UtilsHelper} from '../helpers/UtilsHelper'
-import {ImageView, LinearLayout} from '../styles/styled-components'
+import { UtilsHelper } from '../helpers/UtilsHelper'
+import { ImageView, LinearLayout } from '../styles/styled-components'
 
-type Props = {disabled?: boolean; text: string}
+type Props = { disabled?: boolean; text: string }
 
-export const CopyButton = ({disabled, text}: Props) => {
+export const CopyButton = ({ disabled, text }: Props) => {
   const handlePress = () => {
     UtilsHelper.copyToClipboard(text)
     showMessage({
@@ -21,7 +21,7 @@ export const CopyButton = ({disabled, text}: Props) => {
     <LinearLayout>
       <TouchableWithoutFeedback onPress={handlePress}>
         <ImageView
-          resizeMode={'contain'}
+          resizeMode="contain"
           source={require('~/src/assets/images/icon-copy-green.png')}
           height={20}
           width={20}

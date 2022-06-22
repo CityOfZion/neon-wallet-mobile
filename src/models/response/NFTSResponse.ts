@@ -1,10 +1,6 @@
-import {
-  HttpExclude,
-  ResponseExpose,
-  ResponseSerialize,
-} from '@simpli/serialized-request'
+import { HttpExclude, ResponseExpose, ResponseSerialize } from '@simpli/serialized-request'
 
-import {NFTResponse} from './NFTResponse'
+import { NFTResponse } from './NFTResponse'
 
 @HttpExclude()
 export class NFTSResponse {

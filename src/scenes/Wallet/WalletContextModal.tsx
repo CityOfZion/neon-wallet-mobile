@@ -1,17 +1,16 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, {Fragment} from 'react'
-import {ImageLoadEventData, TouchableWithoutFeedback} from 'react-native'
-import {useSelector} from 'react-redux'
+import React, { Fragment } from 'react'
+import { ImageLoadEventData, TouchableWithoutFeedback } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
-import {Wallet} from '~src/models/redux/Wallet'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {TabStackParamList} from '~src/navigation/TabNavigation'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
+import { Wallet } from '~src/models/redux/Wallet'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface WalletContextModalParams {
   wallets: Wallet[]
@@ -29,9 +28,7 @@ interface ListItem {
 }
 
 export default function WalletContextModal(props: Props) {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const controller = useSwiperController(true)
   const items: ListItem[] =
     props.route.params.wallets.length > 1
@@ -85,14 +82,8 @@ export default function WalletContextModal(props: Props) {
   }
 
   return (
-    <SwiperPanel
-      controller={controller}
-      noHeader={true}
-      padding={36}
-      onClose={props.navigation.goBack}
-      solidColorBG={true}
-    >
-      <Fragment>
+    <SwiperPanel controller={controller} noHeader padding={36} onClose={props.navigation.goBack} solidColorBG>
+      <>
         {items.map((item, index) => (
           <TouchableWithoutFeedback
             key={index}
@@ -101,25 +92,14 @@ export default function WalletContextModal(props: Props) {
             }}
           >
             <LinearLayout>
-              <LinearLayout
-                orientation="horiz"
-                pb="18px"
-                pt="16px"
-                alignItems="center"
-                justifyContent="space-between"
-              >
+              <LinearLayout orientation="horiz" pb="18px" pt="16px" alignItems="center" justifyContent="space-between">
                 <LinearLayout>
                   <TextView color={theme.colors.text[0]} fontSize={18}>
                     {item.title}
                   </TextView>
                 </LinearLayout>
 
-                <ImageView
-                  width={35}
-                  height={35}
-                  ml="13px"
-                  source={item.source}
-                />
+                <ImageView width={35} height={35} ml="13px" source={item.source} />
               </LinearLayout>
 
               <LinearLayout height="1px" bg={theme.colors.background[5]} />
@@ -127,17 +107,11 @@ export default function WalletContextModal(props: Props) {
           </TouchableWithoutFeedback>
         ))}
         <TouchableWithoutFeedback onPress={controller.close}>
-          <TextView
-            mt={38}
-            mb={12}
-            color="primary"
-            fontSize={22}
-            textAlign="center"
-          >
+          <TextView mt={38} mb={12} color="primary" fontSize={22} textAlign="center">
             {i18n.t('modals.walletContext.cancel')}
           </TextView>
         </TouchableWithoutFeedback>
-      </Fragment>
+      </>
     </SwiperPanel>
   )
 }

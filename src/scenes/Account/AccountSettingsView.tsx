@@ -1,21 +1,21 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
-import {Alert, TouchableWithoutFeedback, View} from 'react-native'
-import {useDispatch, useSelector} from 'react-redux'
+import { Alert, TouchableWithoutFeedback } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import MenuItem, {RightIconType} from '~/src/components/MenuItem'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import MenuItem, { RightIconType } from '~/src/components/MenuItem'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
-import {useLocalAuthentication} from '~/src/hooks'
-import {Account} from '~/src/models/redux/Account'
-import {RootStackParamList} from '~/src/navigation/AppNavigation'
-import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
-import {TabStackParamList} from '~/src/navigation/TabNavigation'
-import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
-import {RootStore} from '~/src/store/RootStore'
-import {ImageView, LinearLayout, TextView} from '~/src/styles/styled-components'
+import { useLocalAuthentication } from '~/src/hooks'
+import { Account } from '~/src/models/redux/Account'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
+import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
+import { TabStackParamList } from '~/src/navigation/TabNavigation'
+import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
+import { RootStore } from '~/src/store/RootStore'
+import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 export interface AccountSettingsViewParams {
   account: Account
@@ -23,21 +23,14 @@ export interface AccountSettingsViewParams {
 
 interface Props {
   route: RouteProp<WalletStackParamList, 'AccountSettingsView'>
-  navigation: StackNavigationProp<
-    RootStackParamList &
-      TabStackParamList &
-      ModalStackParamList &
-      WalletStackParamList
-  >
+  navigation: StackNavigationProp<RootStackParamList & TabStackParamList & ModalStackParamList & WalletStackParamList>
 }
 
 export const AccountSettingsView = (props: Props) => {
-  const {account} = props.route.params
+  const { account } = props.route.params
 
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
-  const {authenticate} = useLocalAuthentication()
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const { authenticate } = useLocalAuthentication()
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
@@ -50,7 +43,7 @@ export const AccountSettingsView = (props: Props) => {
 
     props.navigation.reset({
       index: 0,
-      routes: [{name: wrapper.route.Tab.name}],
+      routes: [{ name: wrapper.route.Tab.name }],
     })
     props.navigation.navigate(wrapper.route.GetWallet.name)
   }
@@ -69,7 +62,7 @@ export const AccountSettingsView = (props: Props) => {
           onPress: deleteAction,
         },
       ],
-      {cancelable: true}
+      { cancelable: true }
     )
   }
 
@@ -114,21 +107,11 @@ export const AccountSettingsView = (props: Props) => {
         />
       )}
 
-      <LinearLayout
-        alignItems="center"
-        flex={1}
-        justifyContent="flex-end"
-        marginBottom="40px"
-      >
-        <TextView
-          fontSize={14}
-          fontFamily="bold"
-          color={theme.colors.background[3]}
-          alignItems="center"
-        >
+      <LinearLayout alignItems="center" flex={1} justifyContent="flex-end" marginBottom="40px">
+        <TextView fontSize={14} fontFamily="bold" color={theme.colors.background[3]} alignItems="center">
           {i18n.t('screens.accountSettingsView.deleteTitle').toUpperCase()}
         </TextView>
-        <TextView color={theme.colors.text[0]} marginBottom={'30px'}>
+        <TextView color={theme.colors.text[0]} marginBottom="30px">
           {i18n.t('screens.accountSettingsView.deleteSubtitle')}
         </TextView>
 
@@ -149,12 +132,7 @@ export const AccountSettingsView = (props: Props) => {
               source={require('~/src/assets/images/icon-trash-can-primary.png')}
             />
 
-            <TextView
-              style={{includeFontPadding: false}}
-              ml={3}
-              color={'primary'}
-              fontSize={20}
-            >
+            <TextView style={{ includeFontPadding: false }} ml={3} color="primary" fontSize={20}>
               {i18n.t('screens.accountSettingsView.deleteButtom')}
             </TextView>
           </LinearLayout>

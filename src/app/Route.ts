@@ -1,5 +1,5 @@
 import i18n from 'i18n-js'
-import {snakeCase} from 'lodash'
+import { snakeCase } from 'lodash'
 
 export class Route<T extends string> {
   id: string

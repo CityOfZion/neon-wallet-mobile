@@ -1,30 +1,20 @@
 import i18n from 'i18n-js'
-import React, {useState, useCallback, useEffect} from 'react'
-import {
-  View,
-  ScrollView,
-  FlatList,
-  Image,
-  TouchableWithoutFeedback,
-} from 'react-native'
-import {useSelector} from 'react-redux'
+import React, { useState, useCallback, useEffect } from 'react'
+import { View, ScrollView, FlatList, Image, TouchableWithoutFeedback } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {BlockchainServiceKey, getBlockchainLogo} from '~src/blockchain'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { BlockchainServiceKey, getBlockchainLogo } from '~src/blockchain'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
-export interface AddressImportItem {
+export interface AddressImportItemProps {
   blockSelection?: boolean
   address: string
   blockchain: BlockchainServiceKey
-  onSelectAddress: (
-    address: string,
-    blockchain: BlockchainServiceKey,
-    isSelected: boolean
-  ) => void
+  onSelectAddress: (address: string, blockchain: BlockchainServiceKey, isSelected: boolean) => void
 }
 
-const AddressImportItem = (props: AddressImportItem) => {
+const AddressImportItem = (props: AddressImportItemProps) => {
   const [isSelected, setIsSelected] = useState<boolean>(true)
 
   const handleClickActive = useCallback(() => {
@@ -44,57 +34,47 @@ const AddressImportItem = (props: AddressImportItem) => {
           justifyContent: 'space-between',
         }}
       >
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image
-            style={{marginRight: 10, width: 25, height: 26}}
+            style={{ marginRight: 10, width: 25, height: 26 }}
             source={getBlockchainLogo(props.blockchain)}
             width={25}
             height={26}
           />
           <View>
-            <TextView fontSize={'10px'} color={'text.3'}>
+            <TextView fontSize="10px" color="text.3">
               {i18n.t(`blockchainServices.${props.blockchain}.label`)}
             </TextView>
-            <TextView color="#fff" fontFamily={'medium'} fontSize={'14px'}>
+            <TextView color="#fff" fontFamily="medium" fontSize="14px">
               {props.address}
             </TextView>
           </View>
         </View>
-        {(isSelected ?? !props.blockSelection) && (
-          <Image source={require('~src/assets/images/icon-check-green.png')} />
-        )}
+        {(isSelected ?? !props.blockSelection) && <Image source={require('~src/assets/images/icon-check-green.png')} />}
       </View>
     </TouchableWithoutFeedback>
   )
 }
 
-export interface AddressesImportList {
+export interface AddressesImportListProps {
   blockSelection?: boolean
-  addressesInfo: {address: string; blockchain: BlockchainServiceKey}[]
-  onSelectAddress: (
-    addressInfoSelected: {address: string; blockchain: BlockchainServiceKey}[]
-  ) => void
+  addressesInfo: { address: string; blockchain: BlockchainServiceKey }[]
+  onSelectAddress: (addressInfoSelected: { address: string; blockchain: BlockchainServiceKey }[]) => void
 }
 
-const AddressesImportList = (props: AddressesImportList) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
+const AddressesImportList = (props: AddressesImportListProps) => {
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const [addressesSelected, setAddressesSelected] = useState<{ address: string; blockchain: BlockchainServiceKey }[]>(
+    []
   )
-  const [addressesSelected, setAddressesSelected] = useState<
-    {address: string; blockchain: BlockchainServiceKey}[]
-  >([])
   const handleChangeAddressesSelected = useCallback(
-    (
-      address: string,
-      blockchain: BlockchainServiceKey,
-      isSelected: boolean
-    ) => {
+    (address: string, blockchain: BlockchainServiceKey, isSelected: boolean) => {
       if (isSelected) {
         const foundAddressesSelected = addressesSelected.find(
-          (it) => it.address === address && it.blockchain === blockchain
+          it => it.address === address && it.blockchain === blockchain
         )
         if (foundAddressesSelected) {
-          setAddressesSelected((prevState) => {
+          setAddressesSelected(prevState => {
             const data = prevState
             data[addressesSelected.indexOf(foundAddressesSelected)] = {
               address,
@@ -103,20 +83,16 @@ const AddressesImportList = (props: AddressesImportList) => {
             return [...data]
           })
         } else {
-          setAddressesSelected((prevState) => {
+          setAddressesSelected(prevState => {
             const data = prevState
-            data.push({address, blockchain})
+            data.push({ address, blockchain })
             return [...data]
           })
         }
       } else {
-        setAddressesSelected((prevState) => {
+        setAddressesSelected(prevState => {
           const data = prevState
-          return [
-            ...data.filter(
-              (it) => it.address !== address && it.blockchain !== blockchain
-            ),
-          ]
+          return [...data.filter(it => it.address !== address && it.blockchain !== blockchain)]
         })
       }
     },
@@ -137,7 +113,7 @@ const AddressesImportList = (props: AddressesImportList) => {
       <ScrollView>
         <FlatList
           data={props.addressesInfo}
-          renderItem={({item, index}) => (
+          renderItem={({ item, index }) => (
             <AddressImportItem
               blockSelection={props.blockSelection}
               onSelectAddress={handleChangeAddressesSelected}

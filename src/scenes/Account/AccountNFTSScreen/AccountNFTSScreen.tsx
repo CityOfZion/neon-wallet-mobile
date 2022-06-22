@@ -1,25 +1,24 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {Await, AwaitActivity} from '@simpli/react-native-await'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { Await, AwaitActivity } from '@simpli/react-native-await'
 import I18n from 'i18n-js'
-import React, {useCallback, useEffect, useRef, useState} from 'react'
-import {FlatList} from 'react-native'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { FlatList } from 'react-native'
 
-import {NFTItem} from './NFTItem'
+import { NFTItem } from './NFTItem'
 
-import {blockchainServices} from '~/src/blockchain'
-import {hasNFTIntegration} from '~/src/blockchain/common'
+import { blockchainServices } from '~/src/blockchain'
+import { hasNFTIntegration } from '~/src/blockchain/common'
 import AccountSubTitle from '~/src/components/AccountSubTitle'
-import {FlatListEmpty} from '~/src/components/FlatListEmpty'
-import {FlatListFooter} from '~/src/components/FlatListFooter'
+import { FlatListEmpty } from '~/src/components/FlatListEmpty'
+import { FlatListFooter } from '~/src/components/FlatListFooter'
 import ScreenLayoutWithoutScroll from '~/src/components/layout/ScreenLayoutWithoutScroll'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
-import {Loader} from '~/src/components/loader/loader'
-import {Account} from '~/src/models/redux/Account'
-import {NFTResponse} from '~/src/models/response/NFTResponse'
-import {RootStackParamList} from '~/src/navigation/AppNavigation'
-import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
-import {LinearLayout, TextView} from '~/src/styles/styled-components'
+import { Account } from '~/src/models/redux/Account'
+import { NFTResponse } from '~/src/models/response/NFTResponse'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
+import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
+import { LinearLayout } from '~/src/styles/styled-components'
 
 export interface AccountNFTSScreenParams {
   account: Account
@@ -31,7 +30,7 @@ interface Props {
 }
 
 const AccountNFTSScreen = (props: Props) => {
-  const {account} = props.route.params
+  const { account } = props.route.params
 
   const [NFTS, setNFTS] = useState<NFTResponse[]>([])
   const [showMoreLoading, setShowMoreLoading] = useState(false)
@@ -58,12 +57,9 @@ const AccountNFTSScreen = (props: Props) => {
       return
     }
 
-    const {items, totalPages} = await service.getNFTS(
-      account.address,
-      pageControl.current
-    )
+    const { items, totalPages } = await service.getNFTS(account.address, pageControl.current)
 
-    setNFTS((prevState) => [...prevState, ...items])
+    setNFTS(prevState => [...prevState, ...items])
 
     if (totalPages && pageControl.current < totalPages) {
       setShowMoreLoading(true)
@@ -81,23 +77,14 @@ const AccountNFTSScreen = (props: Props) => {
   return (
     <ScreenLayoutWithoutScroll darkerSolidColorBG>
       <AccountSubTitle account={account} />
-      <AwaitActivity
-        name="populateNFTS"
-        loadingView={<ScreenLoader darkerSolidColorBG />}
-      >
+      <AwaitActivity name="populateNFTS" loadingView={<ScreenLoader darkerSolidColorBG />}>
         <LinearLayout my="44px">
           <FlatList
             data={NFTS}
-            renderItem={({item}) => (
-              <NFTItem nft={item} navigation={props.navigation} />
-            )}
-            ListFooterComponent={
-              showMoreLoading ? <FlatListFooter /> : undefined
-            }
-            ListEmptyComponent={
-              <FlatListEmpty label={I18n.t('screens.accountNFT.emptyList')} />
-            }
-            keyExtractor={({id}, index) => `${id}-${index}`}
+            renderItem={({ item }) => <NFTItem nft={item} navigation={props.navigation} />}
+            ListFooterComponent={showMoreLoading ? <FlatListFooter /> : undefined}
+            ListEmptyComponent={<FlatListEmpty label={I18n.t('screens.accountNFT.emptyList')} />}
+            keyExtractor={({ id }, index) => `${id}-${index}`}
             onEndReached={handleEndReached}
             onEndReachedThreshold={0.5}
             onMomentumScrollBegin={handleMomentumScrollBegin}

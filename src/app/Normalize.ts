@@ -1,4 +1,4 @@
-import {Dimensions, PixelRatio} from 'react-native'
+import { Dimensions, PixelRatio } from 'react-native'
 
 export abstract class Normalize {
   static scale<T extends string | number>(value?: string | number): T {

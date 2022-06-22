@@ -1,30 +1,24 @@
-import {ReducerWrapper} from '@simpli/redux-wrapper'
-import {plainToClass} from 'class-transformer'
+import { ReducerWrapper } from '@simpli/redux-wrapper'
+import { plainToClass } from 'class-transformer'
 
-import {BlockchainServiceKey} from '~/src/blockchain'
-import {UtilsHelper} from '~/src/helpers/UtilsHelper'
-import {Model} from '~src/app/Model'
-import {Storage} from '~src/app/Storage'
-import {Contact} from '~src/models/redux/Contact'
-import {AddressDispatcher} from '~src/store/contact/dispatchers/AddressDispatcher'
-import {ClearStateDispatcher} from '~src/store/contact/dispatchers/ClearStateDispatcher'
-import {NameDispatcher} from '~src/store/contact/dispatchers/NameDispatcher'
+import { UtilsHelper } from '~/src/helpers/UtilsHelper'
+import { Model } from '~src/app/Model'
+import { Storage } from '~src/app/Storage'
+import { Contact } from '~src/models/redux/Contact'
+import { AddressDispatcher } from '~src/store/contact/dispatchers/AddressDispatcher'
+import { NameDispatcher } from '~src/store/contact/dispatchers/NameDispatcher'
 
-export class ContactReducer extends ReducerWrapper<
-  ContactActionsType,
-  ContactState,
-  ContactAction
-> {
+export class ContactReducer extends ReducerWrapper<ContactActionsType, ContactState, ContactAction> {
   protected readonly initialState = Model.parse<ContactState>(Contact)
 
   protected readonly dispatchers = [NameDispatcher, AddressDispatcher]
 
   readonly actions = {
     setName: (name: string) => {
-      return this.commit('SET_NAME', {name})
+      return this.commit('SET_NAME', { name })
     },
     setAddress: (addresses: ContactAddressesList) => {
-      return this.commit('SET_ADDRESSES', {addresses})
+      return this.commit('SET_ADDRESSES', { addresses })
     },
     createAndSave: (): AsyncAction<string> => {
       return async (dispatch, getState) => {
@@ -44,7 +38,7 @@ export class ContactReducer extends ReducerWrapper<
       return async (dispatch, getState) => {
         const contacts = (await Storage.contacts.load()) ?? []
 
-        const contact = contacts.find((it) => it.id === id)
+        const contact = contacts.find(it => it.id === id)
 
         if (contact) {
           contact.name = getState().contact.name
@@ -55,10 +49,10 @@ export class ContactReducer extends ReducerWrapper<
       }
     },
     delete: (id: string): AsyncAction => {
-      return async (dispatch) => {
+      return async dispatch => {
         const contacts = (await Storage.contacts.load()) ?? []
 
-        const contact = contacts.find((it) => it.id === id)
+        const contact = contacts.find(it => it.id === id)
 
         if (contact) {
           const index = contacts.indexOf(contact)

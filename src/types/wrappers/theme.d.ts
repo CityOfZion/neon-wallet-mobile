@@ -1,4 +1,4 @@
-import {ApplicationTheme} from '~src/themes/ApplicationTheme'
+import { ApplicationTheme } from '~src/themes/ApplicationTheme'
 
 export declare global {
   type ThemeWrapper = {

@@ -1,30 +1,26 @@
-import {StackNavigationProp} from '@react-navigation/stack/lib/typescript/src/types'
+import { StackNavigationProp } from '@react-navigation/stack/lib/typescript/src/types'
 import PropTypes from 'prop-types'
-import React, {useState, useEffect} from 'react'
-import {useSelector} from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {BlockchainServiceKey} from '~src/blockchain'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { BlockchainServiceKey } from '~src/blockchain'
 import ThemedCheckBox from '~src/components/themed/ThemedCheckbox'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
-import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { SendModalStackParamList } from '~src/navigation/SendModalStackNavigation'
+import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
 
 interface ITipCheckbox {
   tokenTipAmount: number
   label: string
   tokenTip: string
   fiat: number
-  dispatchTip: React.Dispatch<
-    React.SetStateAction<{amount: number; address: string} | undefined>
-  >
+  dispatchTip: React.Dispatch<React.SetStateAction<{ amount: number; address: string } | undefined>>
   percentage?: number
   address: string
   mainAsset?: string
   feeAmount?: number
-  navigation: StackNavigationProp<
-    ModalStackParamList & SendModalStackParamList & WalletStackParamList
-  >
+  navigation: StackNavigationProp<ModalStackParamList & SendModalStackParamList & WalletStackParamList>
   blockchain: BlockchainServiceKey
 }
 
@@ -42,20 +38,15 @@ export const TipCheckbox: React.FC<ITipCheckbox> = ({
   navigation,
 }) => {
   const [visible, setVisible] = useState(false)
-  const [tip, setTip] = useState<{amount: number; address: string} | undefined>(
-    undefined
-  )
+  const [tip, setTip] = useState<{ amount: number; address: string } | undefined>(undefined)
   const [checked, setChecked] = useState<boolean>(true)
 
-  const {exchange} = useSelector((state: RootState) => state.app)
-  const {currency} = useSelector((state: RootState) => state.settings)
+  const { exchange } = useSelector((state: RootState) => state.app)
+  const { currency } = useSelector((state: RootState) => state.settings)
   const isVisible = () => {
     const tipValue = (fiat / 100) * (percentage ?? 1) //by pattern, the value is 1%
-    const gasValue =
-      exchange[blockchain][tokenTip].to[currency] *
-      (tokenTipAmount ? tokenTipAmount : 0)
-    const feeValue =
-      exchange[blockchain][tokenTip].to[currency] * (feeAmount ? feeAmount : 0)
+    const gasValue = exchange[blockchain][tokenTip].to[currency] * (tokenTipAmount ? tokenTipAmount : 0)
+    const feeValue = exchange[blockchain][tokenTip].to[currency] * (feeAmount ? feeAmount : 0)
     if (
       (gasValue >= tipValue && fiat > 0 && mainAsset !== tokenTip) ||
       (mainAsset === tokenTip && gasValue >= fiat + tipValue + feeValue)
@@ -79,13 +70,11 @@ export const TipCheckbox: React.FC<ITipCheckbox> = ({
   }
 
   const checkTip = () => {
-    const tipValue =
-      ((fiat / 100) * (percentage ?? 1)) /
-      exchange[blockchain][tokenTip].to[currency]
+    const tipValue = ((fiat / 100) * (percentage ?? 1)) / exchange[blockchain][tokenTip].to[currency]
     if (tip === undefined) {
-      setTip({address, amount: tipValue})
+      setTip({ address, amount: tipValue })
     } else if (tip) {
-      tip.amount !== tipValue && setTip({address, amount: tipValue})
+      tip.amount !== tipValue && setTip({ address, amount: tipValue })
     }
   }
 

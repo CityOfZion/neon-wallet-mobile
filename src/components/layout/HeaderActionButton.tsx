@@ -1,7 +1,7 @@
 import React from 'react'
-import {NativeSyntheticEvent, NativeTouchEvent, View} from 'react-native'
+import { NativeSyntheticEvent, NativeTouchEvent, View } from 'react-native'
 
-import {LinearLayout} from '~/src/styles/styled-components'
+import { LinearLayout } from '~/src/styles/styled-components'
 import ThemedAddButton from '~src/components/themed/ThemedAddButton'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
@@ -9,31 +9,17 @@ import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
 
 export interface HeaderActionButtonProps {
   actionTitle?: string
-  actionButtonStyle?:
-    | 'default'
-    | 'highlight'
-    | 'close'
-    | 'add'
-    | 'more'
-    | 'hightlightdisabled'
+  actionButtonStyle?: 'default' | 'highlight' | 'close' | 'add' | 'more' | 'hightlightdisabled'
   actionOnPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
 }
 
-const HeaderActionButton: React.FC<HeaderActionButtonProps> = (
-  props?: HeaderActionButtonProps
-) => {
+const HeaderActionButton: React.FC<HeaderActionButtonProps> = (props?: HeaderActionButtonProps) => {
   const actionButtonStyle = props?.actionButtonStyle ?? 'default'
 
   if (actionButtonStyle === 'default' && props?.actionTitle) {
     return (
       <LinearLayout mt={3}>
-        <ThemedButton
-          onPress={props.actionOnPress}
-          label={props.actionTitle}
-          flat={true}
-          textColor={'text.0'}
-          fontSize={'lg'}
-        />
+        <ThemedButton onPress={props.actionOnPress} label={props.actionTitle} flat textColor="text.0" fontSize="lg" />
       </LinearLayout>
     )
   }
@@ -43,10 +29,10 @@ const HeaderActionButton: React.FC<HeaderActionButtonProps> = (
       <ThemedButton
         onPress={props.actionOnPress}
         label={props.actionTitle}
-        flat={true}
-        fontFamily={'light'}
-        textColor={'primary'}
-        fontSize={'lg'}
+        flat
+        fontFamily="light"
+        textColor="primary"
+        fontSize="lg"
       />
     )
   }
@@ -56,11 +42,11 @@ const HeaderActionButton: React.FC<HeaderActionButtonProps> = (
       <ThemedButton
         onPress={props.actionOnPress}
         label={props.actionTitle}
-        flat={true}
-        fontFamily={'light'}
-        textColor={'primary'}
-        fontSize={'lg'}
-        disabled={true}
+        flat
+        fontFamily="light"
+        textColor="primary"
+        fontSize="lg"
+        disabled
       />
     )
   }

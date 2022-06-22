@@ -1,26 +1,23 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {SessionTypes} from '@walletconnect/types'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { SessionTypes } from '@walletconnect/types'
 import i18n from 'i18n-js'
-import React, {useCallback, useState, useEffect} from 'react'
-import {showMessage} from 'react-native-flash-message'
-import {useSelector} from 'react-redux'
+import React, { useCallback, useState, useEffect } from 'react'
+import { showMessage } from 'react-native-flash-message'
+import { useSelector } from 'react-redux'
 
 import ConnectionHeader from '../components/ConnectionHeader'
 import ContractDetailsBox from '../components/ContractDetailsBox'
 import InvocationDetailsParametersBox from '../components/InvocationDetailsParametersBox'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {blockchainServices, getBlockchainByWCChain} from '~/src/blockchain'
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~/src/components/SwiperPanel'
-import {useTreatNetworkOnWalletConnectFlow} from '~/src/hooks'
-import {ContractResponse} from '~/src/models/response/ContractResponse'
-import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
-import {TextView, LinearLayout, ImageView} from '~/src/styles/styled-components'
-import {ContractInvocation} from '~src/helpers/NeonWcAdapter'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { blockchainServices, getBlockchainByWCChain } from '~/src/blockchain'
+import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
+import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks'
+import { ContractResponse } from '~/src/models/response/ContractResponse'
+import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
+import { TextView, LinearLayout } from '~/src/styles/styled-components'
+import { ContractInvocation } from '~src/helpers/NeonWcAdapter'
 
 export interface WCInvocationDetailsModalParams {
   session: SessionTypes.Settled
@@ -39,13 +36,11 @@ export type Param = {
   type: string | null
 }
 
-const WCInvocationDetailsModal = ({navigation, route}: Props) => {
-  const {session, contract} = route.params
+const WCInvocationDetailsModal = ({ navigation, route }: Props) => {
+  const { session, contract } = route.params
   useTreatNetworkOnWalletConnectFlow()
   const swipperController = useSwiperController(true)
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const [contractInfo, setContractInfo] = useState<ContractResponse>()
   const [paramsWithValue, setParamsWithValue] = useState<Param[]>()
@@ -60,17 +55,13 @@ const WCInvocationDetailsModal = ({navigation, route}: Props) => {
       return
     }
 
-    const blockchain = getBlockchainByWCChain(
-      session.permissions.blockchain.chains ?? []
-    )
+    const blockchain = getBlockchainByWCChain(session.permissions.blockchain.chains ?? [])
 
     if (!blockchain) {
       return
     }
 
-    const contractInfo = await blockchainServices[
-      blockchain
-    ].provider.getContract(contract.scriptHash)
+    const contractInfo = await blockchainServices[blockchain].provider.getContract(contract.scriptHash)
 
     setContractInfo(contractInfo)
   }, [session])
@@ -88,9 +79,7 @@ const WCInvocationDetailsModal = ({navigation, route}: Props) => {
   }
 
   const populateParamsWithValues = () => {
-    const method = contractInfo?.methods.find(
-      (item) => item.name === contract.operation
-    )
+    const method = contractInfo?.methods.find(item => item.name === contract.operation)
 
     if (!method) {
       showMessage({
@@ -123,7 +112,7 @@ const WCInvocationDetailsModal = ({navigation, route}: Props) => {
     <SwiperPanel
       controller={swipperController}
       title={i18n.t('modals.invocationDetails.title')}
-      rightButton={<CloseButton mr={'20px'} />}
+      rightButton={<CloseButton mr="20px" />}
       onClose={navigation.goBack}
       onRightPress={swipperController.close}
       smallerSize
@@ -133,26 +122,11 @@ const WCInvocationDetailsModal = ({navigation, route}: Props) => {
       <ConnectionHeader title={infos.dAppName} imageUri={infos.dAppIcon} />
 
       <LinearLayout>
-        <TextView
-          fontFamily={'regular'}
-          fontSize={'18px'}
-          fontWeight={'500'}
-          mb={'6px'}
-          color={theme.colors.text[10]}
-        >
+        <TextView fontFamily="regular" fontSize="18px" fontWeight="500" mb="6px" color={theme.colors.text[10]}>
           {i18n.t('modals.invocationDetails.detailsTitle')}
         </TextView>
-        <ContractDetailsBox
-          session={route.params.session}
-          contract={contract}
-        />
-        <TextView
-          fontFamily={'regular'}
-          fontSize={'18px'}
-          fontWeight={'500'}
-          color={theme.colors.text[10]}
-          mb={'6px'}
-        >
+        <ContractDetailsBox session={route.params.session} contract={contract} />
+        <TextView fontFamily="regular" fontSize="18px" fontWeight="500" color={theme.colors.text[10]} mb="6px">
           {i18n.t('modals.invocationDetails.parametersTitle')}
         </TextView>
         {paramsWithValue && paramsWithValue.length > 0 ? (
@@ -169,11 +143,11 @@ const WCInvocationDetailsModal = ({navigation, route}: Props) => {
           ))
         ) : (
           <TextView
-            fontFamily={'regular'}
-            textAlign={'center'}
+            fontFamily="regular"
+            textAlign="center"
             mt={18}
-            fontSize={'18px'}
-            fontWeight={'400'}
+            fontSize="18px"
+            fontWeight="400"
             color={theme.colors.text[12]}
           >
             {i18n.t('modals.invocationDetails.noParameters')}

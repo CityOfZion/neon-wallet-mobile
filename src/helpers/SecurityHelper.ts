@@ -30,11 +30,7 @@ export abstract class SecurityHelper {
   }
 
   static async loadPasscode() {
-    return (
-      (await SecureStore.getItemAsync('passcode'))
-        ?.split(',')
-        .map((it) => Number(it)) ?? null
-    )
+    return (await SecureStore.getItemAsync('passcode'))?.split(',').map(it => Number(it)) ?? null
   }
 
   static async removePasscode() {

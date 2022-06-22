@@ -1,8 +1,8 @@
 import React from 'react'
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {TextView} from '~src/styles/styled-components'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { TextView } from '~src/styles/styled-components'
 
 const InputLabel = (props: {
   title: string
@@ -14,9 +14,7 @@ const InputLabel = (props: {
   capitalize?: boolean
   lightText?: boolean
 }) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const marginBottom = props.marginBottom ?? 0
   const marginTop = props.marginTop ?? 1
 
@@ -28,7 +26,7 @@ const InputLabel = (props: {
       weight={props.weight ?? undefined}
       mb={marginBottom}
       mt={marginTop}
-      alignItems={'center'}
+      alignItems="center"
     >
       {props.capitalize ? props.title.toUpperCase() : props.title}
     </TextView>

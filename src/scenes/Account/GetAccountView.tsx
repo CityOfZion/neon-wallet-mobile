@@ -1,77 +1,64 @@
-import {RouteProp, useFocusEffect} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {Await, AwaitActivity} from '@simpli/react-native-await'
+import { RouteProp, useFocusEffect } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, {useState, useEffect, useRef, useCallback, useMemo} from 'react'
-import {
-  Animated,
-  Easing,
-  LayoutChangeEvent,
-  Dimensions,
-  View,
-} from 'react-native'
-import {showMessage} from 'react-native-flash-message'
-import {useDispatch, useSelector} from 'react-redux'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { Animated, Easing, LayoutChangeEvent, Dimensions, View } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {appBus} from '~/src/app/AppBus'
-import {wrapper} from '~/src/app/ApplicationWrapper'
+import { appBus } from '~/src/app/AppBus'
+import { wrapper } from '~/src/app/ApplicationWrapper'
 import ModalWarningFee from '~/src/components/ModalWarningFee'
-import {ThemedClaimButton} from '~/src/components/themed/ThemedClaimButton'
-import {ThemedSendButton} from '~/src/components/themed/ThemedSendButton'
-import {FilterHelper} from '~/src/helpers/FilterHelper'
-import {useAmountFee} from '~/src/hooks/AmountFeeHook'
-import {Node} from '~/src/models/Node'
-import {TokenAsset} from '~/src/models/TokenAsset'
-import {
-  blockchainServices,
-  hasWCIntegration,
-  isClaimable,
-} from '~src/blockchain'
+import { ThemedClaimButton } from '~/src/components/themed/ThemedClaimButton'
+import { ThemedSendButton } from '~/src/components/themed/ThemedSendButton'
+import { FilterHelper } from '~/src/helpers/FilterHelper'
+import { useAmountFee } from '~/src/hooks/AmountFeeHook'
+import { Node } from '~/src/models/Node'
+import { TokenAsset } from '~/src/models/TokenAsset'
+import { blockchainServices, hasWCIntegration, isClaimable } from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {ThemedReceiveButton} from '~src/components/themed/ThemedReceiveButton'
-import {useWalletConnect} from '~src/contexts/WalletConnectContext'
-import {Lang} from '~src/enums/Lang'
-import {NeoNode} from '~src/models/NeoNode'
-import {Account} from '~src/models/redux/Account'
-import {Wallet} from '~src/models/redux/Wallet'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
-import {RootState, RootStore} from '~src/store/RootStore'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import { ThemedReceiveButton } from '~src/components/themed/ThemedReceiveButton'
+import { useWalletConnect } from '~src/contexts/WalletConnectContext'
+import { Lang } from '~src/enums/Lang'
+import { NeoNode } from '~src/models/NeoNode'
+import { Account } from '~src/models/redux/Account'
+import { Wallet } from '~src/models/redux/Wallet'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
+import { RootState, RootStore } from '~src/store/RootStore'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface GetAccountViewProps {
   navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>
   route: RouteProp<WalletStackParamList, 'GetAccount'>
 }
 
-const TitleComponent = (props: {nodesPool: NeoNode[]; language: Lang}) => {
+const TitleComponent = (props: { nodesPool: NeoNode[]; language: Lang }) => {
   return (
     <LinearLayout alignItems="center" justifyContent="center">
-      <TextView color={'text.3'} textAlign={'center'} fontSize={10}>
+      <TextView color="text.3" textAlign="center" fontSize={10}>
         {i18n.t('app.neoBlockHeight')}
       </TextView>
 
-      <TextView color={'text.0'} textAlign={'center'}>
-        {FilterHelper.decimal(
-          NeoNode.getHighestNodeHeightFromPool(props.nodesPool),
-          props.language
-        )}
+      <TextView color="text.0" textAlign="center">
+        {FilterHelper.decimal(NeoNode.getHighestNodeHeightFromPool(props.nodesPool), props.language)}
       </TextView>
     </LinearLayout>
   )
 }
 
 const GetAccountView = (props: GetAccountViewProps) => {
-  const {sessions} = useWalletConnect()
+  const { sessions } = useWalletConnect()
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
-  const {language} = useSelector((state: RootState) => state.settings)
-  const {address} = useSelector((state: RootState) => state.account)
+  const { language } = useSelector((state: RootState) => state.settings)
+  const { address } = useSelector((state: RootState) => state.account)
   const posYFactor = useRef(new Animated.Value(0))
-  const {isConnected} = useSelector((state: RootState) => state.network)
+  const { isConnected } = useSelector((state: RootState) => state.network)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const [currentPage, setCurrentPage] = useState(1)
@@ -92,31 +79,19 @@ const GetAccountView = (props: GetAccountViewProps) => {
       setSenderAddress(address)
     }
   }
-  const [account, setAccount] = useState(() =>
-    dispatchAccount(RootStore.account.actions.getFromSelection())
+  const [account, setAccount] = useState(() => dispatchAccount(RootStore.account.actions.getFromSelection()))
+
+  const [totTokenFeeAccount] = useState<number>(
+    account.tokenAssets.find(token => token.symbol === blockchainServices[account.blockchain].feeToken.token)?.amount ??
+      0
   )
 
-  const [totTokenFeeAccount, setTotTokenFeeAccount] = useState<number>(
-    account.tokenAssets.find(
-      (token) =>
-        token.symbol === blockchainServices[account.blockchain].feeToken.token
-    )?.amount ?? 0
-  )
-
-  const {amount: amountFee, calc: calcFee} = useAmountFee(account.blockchain)
+  const { amount: amountFee, calc: calcFee } = useAmountFee(account.blockchain)
 
   const handleCalcFee = useCallback(() => {
-    const tokenFee = account.tokenAssets.find(
-      (it) =>
-        blockchainServices[account.blockchain].feeToken.token === it.symbol
-    )
+    const tokenFee = account.tokenAssets.find(it => blockchainServices[account.blockchain].feeToken.token === it.symbol)
     if (tokenFee && account.address && unclaimedGasAmount > 0) {
-      const token = new TokenAsset(
-        tokenFee.name,
-        tokenFee.symbol,
-        tokenFee.hash,
-        tokenFee.blockchain
-      )
+      const token = new TokenAsset(tokenFee.name, tokenFee.symbol, tokenFee.hash, tokenFee.blockchain)
       token.amount = unclaimedGasAmount
       calcFee(token, account, account.address)
     }
@@ -127,8 +102,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const isWatchAccount = account.accountType === 'watch'
 
   props.navigation.setOptions({
-    headerTitle: () =>
-      TitleComponent({nodesPool: nodesPoolBlockchain, language}),
+    headerTitle: () => TitleComponent({ nodesPool: nodesPoolBlockchain, language }),
     headerRight: () =>
       HeaderActionButton({
         actionButtonStyle: 'more',
@@ -141,9 +115,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   })
 
   useFocusEffect(() => {
-    const account = dispatchAccount(
-      RootStore.account.actions.getFromSelection()
-    )
+    const account = dispatchAccount(RootStore.account.actions.getFromSelection())
 
     setAccount(account)
   })
@@ -209,10 +181,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }
 
   const fetchTransaction = async (currentPage: number) => {
-    const {pageNumber} = await account.populateTransactions(
-      tokensPool,
-      currentPage
-    )
+    const { pageNumber } = await account.populateTransactions(tokensPool, currentPage)
 
     setCurrentPage(pageNumber + 1)
 
@@ -244,9 +213,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
             responseClaim.token,
             responseClaim.hash
           )
-          await dispatchAsync(
-            RootStore.app.actions.updateAndSaveAccount(account)
-          )
+          await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
         }
       }
     } catch (e) {
@@ -267,7 +234,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
       toValue: 1,
       duration: 500,
       useNativeDriver: true,
-      easing: Easing.out((val) => val ** 2),
+      easing: Easing.out(val => val ** 2),
     }).start()
   }
 
@@ -294,14 +261,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   return (
     <ScreenLayout
-      darkerSolidColorBG={true}
+      darkerSolidColorBG
       onReachBottom={() => {
         if (Await.inAction('loadMoreTransaction')) return
-        Await.run(
-          'loadMoreTransaction',
-          () => fetchTransaction(currentPage),
-          500
-        )
+        Await.run('loadMoreTransaction', () => fetchTransaction(currentPage), 500)
       }}
     >
       <Animated.View
@@ -316,11 +279,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         }}
       >
         <LinearLayout mt={4}>
-          <AccountCard
-            account={account}
-            hasShadow={false}
-            isStackMode={false}
-          />
+          <AccountCard account={account} hasShadow={false} isStackMode={false} />
         </LinearLayout>
       </Animated.View>
       <View
@@ -346,19 +305,16 @@ const GetAccountView = (props: GetAccountViewProps) => {
               },
             })
           }
-          isDark={true}
+          isDark
         />
-        <AwaitActivity name={'populateUnclaimed'}>
-          <AwaitActivity
-            name={`ClaimGas@${account.address}`}
-            loadingView={<ClaimGasLoader />}
-          >
+        <AwaitActivity name="populateUnclaimed">
+          <AwaitActivity name={`ClaimGas@${account.address}`} loadingView={<ClaimGasLoader />}>
             <ThemedClaimButton
               onPress={handleClaimGas}
               isClaimAvailable={isClaimAvailable}
               unclaimedGasAmount={unclaimedGasAmount ?? 0}
               fee={amountFee}
-              isDark={true}
+              isDark
             />
           </AwaitActivity>
         </AwaitActivity>
@@ -381,7 +337,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
                   })
                 }
           }
-          isDark={true}
+          isDark
         />
       </View>
       <LinearLayout>
@@ -389,10 +345,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
           px={30}
           my={5}
           height={88}
-          textAlignX={'flex-start'}
-          textColor={'text.0'}
-          fontSize={'17px'}
-          fontFamily={'medium'}
+          textAlignX="flex-start"
+          textColor="text.0"
+          fontSize="17px"
+          fontFamily="medium"
           label={i18n.t('screens.screenLayout.assets').toUpperCase()}
           srcIcon={require('~/src/assets/images/Equalizer_-_simple-line-icons.png')}
           iconSize={[28, 24]}
@@ -403,57 +359,54 @@ const GetAccountView = (props: GetAccountViewProps) => {
             <ImageView
               width={20}
               height={20}
-              resizeMode={'contain'}
+              resizeMode="contain"
               source={require('~src/assets/images/icon-arrow-right-green.png')}
             />
           }
-          isDark={true}
+          isDark
         />
         <ThemedButton
           px={30}
           my={5}
           height={88}
-          textAlignX={'flex-start'}
-          textColor={'text.0'}
-          fontSize={'17px'}
-          fontFamily={'medium'}
+          textAlignX="flex-start"
+          textColor="text.0"
+          fontSize="17px"
+          fontFamily="medium"
           label={i18n.t('screens.screenLayout.transactions').toUpperCase()}
           srcIcon={require('~/src/assets/images/icon-reselect-green.png')}
           iconSize={[28, 30]}
           onPress={() => {
-            props.navigation.navigate(
-              wrapper.route.AccountTransactionsScreen.name,
-              {
-                account,
-              }
-            )
+            props.navigation.navigate(wrapper.route.AccountTransactionsScreen.name, {
+              account,
+            })
           }}
           suffix={
             <ImageView
               width={20}
               height={20}
-              resizeMode={'contain'}
+              resizeMode="contain"
               source={require('~src/assets/images/icon-arrow-right-green.png')}
             />
           }
-          isDark={true}
+          isDark
         />
 
         <ThemedButton
           px={30}
           my={5}
           height={88}
-          textAlignX={'flex-start'}
-          textColor={'text.0'}
-          fontSize={'17px'}
-          fontFamily={'medium'}
+          textAlignX="flex-start"
+          textColor="text.0"
+          fontSize="17px"
+          fontFamily="medium"
           label={i18n.t('screens.screenLayout.nfts').toUpperCase()}
           srcIcon={require('~/src/assets/images/diamond-green.png')}
           suffix={
             <ImageView
               width={20}
               height={20}
-              resizeMode={'contain'}
+              resizeMode="contain"
               source={require('~src/assets/images/icon-arrow-right-green.png')}
             />
           }
@@ -463,7 +416,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
               account,
             })
           }}
-          isDark={true}
+          isDark
         />
 
         <ThemedButton
@@ -471,30 +424,27 @@ const GetAccountView = (props: GetAccountViewProps) => {
           my={5}
           height={88}
           disabled={!hasWalletconnect() || !hasSession}
-          textAlignX={'flex-start'}
-          textColor={'text.0'}
-          fontSize={'17px'}
-          fontFamily={'medium'}
+          textAlignX="flex-start"
+          textColor="text.0"
+          fontSize="17px"
+          fontFamily="medium"
           label={i18n.t('screens.screenLayout.connections').toUpperCase()}
           srcIcon={require('~/src/assets/images/connections.png')}
           suffix={
             <ImageView
               width={20}
               height={20}
-              resizeMode={'contain'}
+              resizeMode="contain"
               source={require('~src/assets/images/icon-arrow-right-green.png')}
             />
           }
           iconSize={[28, 30]}
           onPress={() => {
-            props.navigation.navigate(
-              wrapper.route.AccountConnectionsScreen.name,
-              {
-                account,
-              }
-            )
+            props.navigation.navigate(wrapper.route.AccountConnectionsScreen.name, {
+              account,
+            })
           }}
-          isDark={true}
+          isDark
         />
       </LinearLayout>
       <ModalWarningFee
@@ -503,7 +453,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         unclaimedGasAmount={unclaimedGasAmount ?? 0}
         amountFee={amountFee ?? 0}
         showWarning={showWarning}
-        setShowWarning={(show) => setShowWarning(show)}
+        setShowWarning={show => setShowWarning(show)}
       />
     </ScreenLayout>
   )

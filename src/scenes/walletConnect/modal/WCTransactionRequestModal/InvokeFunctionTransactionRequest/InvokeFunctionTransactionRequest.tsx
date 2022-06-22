@@ -1,26 +1,22 @@
-import {WitnessScope} from '@cityofzion/neon-core-next/lib/tx'
-import {useNavigation} from '@react-navigation/native'
-import {SessionTypes} from '@walletconnect/types'
+import { WitnessScope } from '@cityofzion/neon-core-next/lib/tx'
+import { useNavigation } from '@react-navigation/native'
+import { SessionTypes } from '@walletconnect/types'
 import i18n from 'i18n-js'
-import React, {useCallback, useEffect, useMemo, useState} from 'react'
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler'
-import {useDispatch, useSelector} from 'react-redux'
+import React, { useCallback, useEffect, useState } from 'react'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { useDispatch, useSelector } from 'react-redux'
 
 import ContractDetailsBox from '../../../components/ContractDetailsBox'
-import {TransactionRequestBase} from '../TransactionRequestBase'
-import {TransactionRequestMethodComponentProps} from '../WCTransactionRequestModal'
-import {InvokeFunctionFailed} from './InvokeFunctionFailed'
-import {InvokeFunctionSuccess} from './InvokeFunctionSuccess'
+import { TransactionRequestBase } from '../TransactionRequestBase'
+import { TransactionRequestMethodComponentProps } from '../WCTransactionRequestModal'
+import { InvokeFunctionFailed } from './InvokeFunctionFailed'
+import { InvokeFunctionSuccess } from './InvokeFunctionSuccess'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {blockchainServices, hasWCIntegration} from '~/src/blockchain'
-import {
-  ContractInvocation,
-  ContractInvocationMulti,
-  Signer,
-} from '~/src/helpers/NeonWcAdapter'
-import {RootStore} from '~/src/store/RootStore'
-import {ImageView, LinearLayout, TextView} from '~/src/styles/styled-components'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { blockchainServices, hasWCIntegration } from '~/src/blockchain'
+import { ContractInvocation, ContractInvocationMulti, Signer } from '~/src/helpers/NeonWcAdapter'
+import { RootStore } from '~/src/store/RootStore'
+import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type ContractDetailsBoxButtonProps = {
   contract: ContractInvocation
@@ -33,10 +29,7 @@ type SignerBoxProps = {
   session: SessionTypes.Settled
 }
 
-const ContractDetailsBoxButton = ({
-  contract,
-  session,
-}: ContractDetailsBoxButtonProps) => {
+const ContractDetailsBoxButton = ({ contract, session }: ContractDetailsBoxButtonProps) => {
   const navigation = useNavigation()
 
   return (
@@ -52,21 +45,19 @@ const ContractDetailsBoxButton = ({
       }
     >
       <ImageView
-        alignSelf={'center'}
-        resizeMode={'contain'}
+        alignSelf="center"
+        resizeMode="contain"
         width={7}
         height={12}
-        pr={'40px'}
+        pr="40px"
         source={require('~src/assets/images/icon-arrow-right-green.png')}
       />
     </TouchableWithoutFeedback>
   )
 }
 
-const SignerBox = ({signer, showWarning, session}: SignerBoxProps) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+const SignerBox = ({ signer, showWarning, session }: SignerBoxProps) => {
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const navigation = useNavigation()
 
   return (
@@ -80,48 +71,42 @@ const SignerBox = ({signer, showWarning, session}: SignerBoxProps) => {
     >
       <LinearLayout
         bg={theme.colors.background[1]}
-        orientation={'horiz'}
+        orientation="horiz"
         borderRadius={6}
-        mb={'13px'}
-        pt={'13px'}
-        pb={'13px'}
-        justifyContent={'space-between'}
+        mb="13px"
+        pt="13px"
+        pb="13px"
+        justifyContent="space-between"
       >
-        <TextView
-          color={theme.colors.text[10]}
-          weight={2}
-          fontFamily={'bold'}
-          fontSize={14}
-          pl={'18px'}
-        >
+        <TextView color={theme.colors.text[10]} weight={2} fontFamily="bold" fontSize={14} pl="18px">
           {i18n.t('modals.transactionRequest.signatureScope')}
         </TextView>
-        <LinearLayout orientation={'horiz'}>
+        <LinearLayout orientation="horiz">
           {showWarning && (
             <ImageView
-              alignSelf={'center'}
-              resizeMode={'contain'}
+              alignSelf="center"
+              resizeMode="contain"
               width={7}
               height={12}
-              pr={'20px'}
+              pr="20px"
               source={require('~src/assets/images/red-alert.png')}
             />
           )}
           <TextView
             color={showWarning ? '#ea5d8e' : 'white'}
-            alignSelf={'flex-end'}
-            pb={'3px'}
+            alignSelf="flex-end"
+            pb="3px"
             fontSize={12}
-            fontFamily={'bold'}
+            fontFamily="bold"
           >
             {i18n.t(`modals.signatureScope.${signer.scopes}.scope`)}
           </TextView>
           <ImageView
-            alignSelf={'center'}
-            resizeMode={'contain'}
+            alignSelf="center"
+            resizeMode="contain"
             width={7}
             height={12}
-            pr={'35px'}
+            pr="35px"
             source={require('~src/assets/images/icon-arrow-right-green.png')}
           />
         </LinearLayout>
@@ -138,30 +123,20 @@ export const InvokeFunctionTransactionRequest = ({
   const requestParams = request.request.params as ContractInvocationMulti
 
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const navigation = useNavigation()
 
   const [feeRequest, setFeeRequest] = useState<number>()
 
-  const scopes = requestParams.signers.map((signer) => signer.scopes) ?? [
-    WitnessScope.CalledByEntry,
-  ]
+  const scopes = requestParams.signers.map(signer => signer.scopes) ?? [WitnessScope.CalledByEntry]
 
-  const showWarning = scopes.some(
-    (scope) =>
-      scope !== WitnessScope.None && scope !== WitnessScope.CalledByEntry
-  )
+  const showWarning = scopes.some(scope => scope !== WitnessScope.None && scope !== WitnessScope.CalledByEntry)
 
   const handleCalculateFee = useCallback(async () => {
     if (account?.address) {
       const bs = blockchainServices[account.blockchain]
       if (hasWCIntegration(bs)) {
-        const resultFee = await bs.calculateFee(
-          account.address,
-          request.request
-        )
+        const resultFee = await bs.calculateFee(account.address, request.request)
 
         setFeeRequest(Number(resultFee))
       }
@@ -170,10 +145,7 @@ export const InvokeFunctionTransactionRequest = ({
 
   async function handleOnAccept(transactionId: string) {
     if (account?.address) {
-      await account.addPendingWCTransaction(
-        transactionId,
-        requestParams.invocations.length
-      )
+      await account.addPendingWCTransaction(transactionId, requestParams.invocations.length)
 
       await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
     }
@@ -201,48 +173,28 @@ export const InvokeFunctionTransactionRequest = ({
           key={`${contract.operation}-${index}`}
           session={session}
           contract={contract}
-          rightButton={
-            <ContractDetailsBoxButton contract={contract} session={session} />
-          }
+          rightButton={<ContractDetailsBoxButton contract={contract} session={session} />}
         />
       ))}
 
       {requestParams.signers.map((signer, index) => (
-        <SignerBox
-          key={`${signer.scopes}-${index}`}
-          session={session}
-          showWarning={showWarning}
-          signer={signer}
-        />
+        <SignerBox key={`${signer.scopes}-${index}`} session={session} showWarning={showWarning} signer={signer} />
       ))}
 
       <LinearLayout
         bg={theme.colors.background[1]}
-        orientation={'horiz'}
+        orientation="horiz"
         borderRadius={6}
-        mb={'13px'}
-        pt={'13px'}
-        pb={'13px'}
-        justifyContent={'space-between'}
+        mb="13px"
+        pt="13px"
+        pb="13px"
+        justifyContent="space-between"
       >
-        <TextView
-          color={theme.colors.text[10]}
-          weight={2}
-          fontFamily={'bold'}
-          fontSize={14}
-          pl={'18px'}
-        >
+        <TextView color={theme.colors.text[10]} weight={2} fontFamily="bold" fontSize={14} pl="18px">
           {i18n.t('modals.transactionRequest.transactionFee')}
         </TextView>
-        <LinearLayout orientation={'horiz'}>
-          <TextView
-            color={'primary'}
-            alignSelf={'flex-end'}
-            pb={'3px'}
-            fontSize={'16px'}
-            fontFamily={'bold'}
-            pr={'20px'}
-          >
+        <LinearLayout orientation="horiz">
+          <TextView color="primary" alignSelf="flex-end" pb="3px" fontSize="16px" fontFamily="bold" pr="20px">
             {i18n.t('modals.transactionRequest.xGas', {
               amount: feeRequest ? (feeRequest / 8).toFixed(8) : '',
             })}
@@ -259,29 +211,23 @@ export const InvokeFunctionTransactionRequest = ({
       >
         <LinearLayout
           bg={theme.colors.background[1]}
-          orientation={'horiz'}
+          orientation="horiz"
           borderRadius={6}
-          mb={'13px'}
-          pt={'13px'}
-          pb={'13px'}
-          justifyContent={'space-between'}
+          mb="13px"
+          pt="13px"
+          pb="13px"
+          justifyContent="space-between"
         >
-          <TextView
-            color={theme.colors.text[10]}
-            weight={2}
-            fontFamily={'bold'}
-            fontSize={14}
-            pl={'18px'}
-          >
+          <TextView color={theme.colors.text[10]} weight={2} fontFamily="bold" fontSize={14} pl="18px">
             {i18n.t('modals.transactionRequest.json')}
           </TextView>
-          <LinearLayout orientation={'horiz'}>
+          <LinearLayout orientation="horiz">
             <ImageView
-              alignSelf={'center'}
-              resizeMode={'contain'}
+              alignSelf="center"
+              resizeMode="contain"
               width={7}
               height={12}
-              pr={'35px'}
+              pr="35px"
               source={require('~src/assets/images/icon-arrow-right-green.png')}
             />
           </LinearLayout>

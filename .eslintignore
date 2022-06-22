@@ -1,3 +1,8 @@
+node_modules/
+android/
+ios/
+native_modules/
+react-native-randombytes/
 src/vendor
 __tests__
 build

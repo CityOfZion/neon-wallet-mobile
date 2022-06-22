@@ -1,4 +1,4 @@
-import {DispatcherWrapper} from '@simpli/redux-wrapper'
+import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
 export class FeeAmountDispatcher extends DispatcherWrapper<
   SenderTransactionActionsType,
@@ -8,8 +8,8 @@ export class FeeAmountDispatcher extends DispatcherWrapper<
   readonly type = 'SET_FEE_AMOUNT'
 
   readonly reducer: SenderTransactionReducer = (state, action) => {
-    const {feeAmount} = action
+    const { feeAmount } = action
 
-    return this.set(state, {feeAmount})
+    return this.set(state, { feeAmount })
   }
 }

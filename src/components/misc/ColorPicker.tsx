@@ -1,19 +1,16 @@
 import PropTypes from 'prop-types'
-import React, {useState, useEffect} from 'react'
-import {GestureResponderEvent, LayoutChangeEvent} from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { GestureResponderEvent, LayoutChangeEvent } from 'react-native'
 
-import {FilterHelper} from '~/src/helpers/FilterHelper'
-import styled, {
-  LinearLayout,
-  RelativeLayout,
-} from '~src/styles/styled-components'
+import { FilterHelper } from '~/src/helpers/FilterHelper'
+import styled, { LinearLayout, RelativeLayout } from '~src/styles/styled-components'
 
 interface Props {
   onChange?: (hex: string) => void
   color?: string
 }
 
-const ColorPicker: React.FC<Props> = (props) => {
+const ColorPicker: React.FC<Props> = props => {
   const [viewHeight, setViewHeight] = useState<number>(0)
 
   const [hueAngle, setHueAngle] = useState<number>(0)
@@ -83,8 +80,7 @@ const ColorPicker: React.FC<Props> = (props) => {
 
   const getLuminosityRadius = () => {
     const base = viewHeight * 0.016
-    const variation =
-      Math.abs(Math.cos((luminosityAngle * Math.PI) / 60)) * base
+    const variation = Math.abs(Math.cos((luminosityAngle * Math.PI) / 60)) * base
 
     return viewHeight * 0.16 - variation
   }
@@ -94,7 +90,7 @@ const ColorPicker: React.FC<Props> = (props) => {
   }
 
   const layoutEvent = (event: LayoutChangeEvent) => {
-    const {height} = event.nativeEvent.layout
+    const { height } = event.nativeEvent.layout
     setViewHeight(height)
   }
 
@@ -211,37 +207,27 @@ const ColorPicker: React.FC<Props> = (props) => {
   `
 
   return (
-    <ColorPickerView
-      onLayout={layoutEvent}
-      maxWidth={'100%'}
-      height={'100%'}
-      style={{aspectRatio: 8 / 9}}
-    >
-      <ColorPickerContainer
-        source={require('~src/assets/images/colorpicker-container.png')}
-        resizeMode="contain"
-      />
+    <ColorPickerView onLayout={layoutEvent} maxWidth="100%" height="100%" style={{ aspectRatio: 8 / 9 }}>
+      <ColorPickerContainer source={require('~src/assets/images/colorpicker-container.png')} resizeMode="contain" />
 
-      <LuminosityView position={'absolute'}>
-        {!isColored() && <LuminositySelectorView position={'relative'} />}
+      <LuminosityView position="absolute">
+        {!isColored() && <LuminositySelectorView position="relative" />}
       </LuminosityView>
 
-      <HueView position={'absolute'}>
-        {isColored() && <HueSelectorView position={'relative'} />}
-      </HueView>
+      <HueView position="absolute">{isColored() && <HueSelectorView position="relative" />}</HueView>
 
       <HueAreaView
-        position={'absolute'}
+        position="absolute"
         onTouchStart={hueAreaEvent}
         onTouchMove={hueAreaEvent}
-        pointerEvents={'box-only'}
+        pointerEvents="box-only"
       />
 
       <LuminosityAreaView
-        position={'absolute'}
+        position="absolute"
         onTouchStart={luminosityAreaEvent}
         onTouchMove={luminosityAreaEvent}
-        pointerEvents={'box-only'}
+        pointerEvents="box-only"
       />
     </ColorPickerView>
   )

@@ -1,14 +1,14 @@
-import {CommonActions} from '@react-navigation/native'
+import { CommonActions } from '@react-navigation/native'
 import i18n from 'i18n-js'
 import React from 'react'
-import {ImageLoadEventData, TouchableWithoutFeedback} from 'react-native'
-import {useSelector} from 'react-redux'
+import { ImageLoadEventData, TouchableWithoutFeedback } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Normalize} from '~src/app/Normalize'
-import SwiperPanel, {SwiperController} from '~src/components/SwiperPanel'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Normalize } from '~src/app/Normalize'
+import SwiperPanel, { SwiperController } from '~src/components/SwiperPanel'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface ListItem {
   title: string
@@ -24,9 +24,7 @@ export interface Props {
 }
 
 const HandleQRModal = (props: Props) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const items: ListItem[] = [
     {
@@ -40,7 +38,7 @@ const HandleQRModal = (props: Props) => {
             params: {
               screen: wrapper.route.SendWalletSelectionModal.name,
               params: {
-                uri: {address: props.address},
+                uri: { address: props.address },
               },
             },
           })
@@ -87,10 +85,10 @@ const HandleQRModal = (props: Props) => {
       draggable={false}
       paddingTop={0}
       paddingBottom={42}
-      noHeader={true}
-      solidColorBG={true}
+      noHeader
+      solidColorBG
     >
-      <LinearLayout height={'35px'} />
+      <LinearLayout height="35px" />
       <LinearLayout>
         {items.map((item, index) => (
           <>
@@ -107,11 +105,7 @@ const HandleQRModal = (props: Props) => {
                     <TextView color={theme.colors.text[0]} fontSize={18}>
                       {item.title}
                     </TextView>
-                    <TextView
-                      color={theme.colors.text[6]}
-                      fontSize={16}
-                      fontFamily="medium"
-                    >
+                    <TextView color={theme.colors.text[6]} fontSize={16} fontFamily="medium">
                       {item.subtitle}
                     </TextView>
                   </LinearLayout>
@@ -125,15 +119,8 @@ const HandleQRModal = (props: Props) => {
           </>
         ))}
       </LinearLayout>
-      <LinearLayout
-        position={'absolute'}
-        right={Normalize.scale(-18)}
-        top={Normalize.scale(3)}
-      >
-        <ThemedCloseButton
-          iconSize={[18, 27]}
-          onPress={props.controller.close}
-        />
+      <LinearLayout position="absolute" right={Normalize.scale(-18)} top={Normalize.scale(3)}>
+        <ThemedCloseButton iconSize={[18, 27]} onPress={props.controller.close} />
       </LinearLayout>
     </SwiperPanel>
   )

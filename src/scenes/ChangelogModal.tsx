@@ -1,22 +1,19 @@
-import {RouteProp, CommonActions} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {AwaitActivity} from '@simpli/react-native-await'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, {useState} from 'react'
+import React from 'react'
 
 import * as data from '~src/Changelog.json'
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Storage} from '~src/app/Storage'
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Storage } from '~src/app/Storage'
+import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import Changelog from '~src/components/changelog/Changelog'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {TabStackParamList} from '~src/navigation/TabNavigation'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { TabStackParamList } from '~src/navigation/TabNavigation'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
 export interface ChangelogModalParams {
@@ -31,11 +28,9 @@ interface Props {
 const ChangelogModal = (props: Props) => {
   const currentNumberOfVersions = Object.keys(data.changelog).length
   const controller = useSwiperController(true)
-  const [action, setAction] = useState<CommonActions.Action>()
 
-  const closeTo = (...arg: NavParam<ParamList>) => {
+  const closeTo = () => {
     Storage.numberOfVersions.save(currentNumberOfVersions)
-    setAction(CommonActions.navigate(...arg))
     controller.close()
   }
 
@@ -43,31 +38,20 @@ const ChangelogModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       padding={20}
-      fullSize={true}
+      fullSize
       title={i18n.t('modals.changelog.title')}
-      rightButton={<CloseButton mr={'20px'} />}
-      onRightPress={() =>
-        closeTo(
-          // TODO: figure out a way to remove the explicity of 'undefined'
-          wrapper.route.Tab.name,
-          undefined
-        )
-      }
+      rightButton={<CloseButton mr="20px" />}
+      onRightPress={closeTo}
       onClose={() => {
         Storage.numberOfVersions.save(currentNumberOfVersions)
         props.navigation.navigate(wrapper.route.Tab.name, undefined)
       }}
-      solidColorBG={true}
+      solidColorBG
     >
-      <AwaitActivity
-        name={'swiperRight'}
-        loadingView={<ScreenLoader transparent={true} />}
-      >
+      <AwaitActivity name="swiperRight" loadingView={<ScreenLoader transparent />}>
         <LinearLayout orientation="verti" mr={5} pl={42} mt={5} mb={5}>
-          <TextView color="white">
-            {i18n.t('modals.changelog.thankYouText')}
-          </TextView>
-          <TextView color="white" textAlign="right" fontFamily={'bold'}>
+          <TextView color="white">{i18n.t('modals.changelog.thankYouText')}</TextView>
+          <TextView color="white" textAlign="right" fontFamily="bold">
             {i18n.t('modals.changelog.cozTeam')}
           </TextView>
         </LinearLayout>

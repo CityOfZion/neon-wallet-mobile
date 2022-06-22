@@ -1,21 +1,21 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {Await, AwaitActivity} from '@simpli/react-native-await'
-import React, {useEffect, useState, useCallback} from 'react'
-import {useSelector} from 'react-redux'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { Await, AwaitActivity } from '@simpli/react-native-await'
+import React, { useEffect, useState, useCallback } from 'react'
+import { useSelector } from 'react-redux'
 
-import {UtilsHelper} from '~/src/helpers/UtilsHelper'
-import {Wallet} from '~/src/models/redux/Wallet'
+import { UtilsHelper } from '~/src/helpers/UtilsHelper'
+import { Wallet } from '~/src/models/redux/Wallet'
 import AssetQuoteComponent from '~src/components/AssetQuoteComponent'
 import TransactionsList from '~src/components/TransactionsList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
-import {Account} from '~src/models/redux/Account'
-import {QuickToolsStackParamList} from '~src/navigation/QuickToolsStackNavigation'
-import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
-import {LinearLayout} from '~src/styles/styled-components'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { TransactionDateGroup } from '~src/models/TransactionDateGroup'
+import { Account } from '~src/models/redux/Account'
+import { QuickToolsStackParamList } from '~src/navigation/QuickToolsStackNavigation'
+import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
+import { LinearLayout } from '~src/styles/styled-components'
 
 interface AccountAssetDetailProps {
   route: RouteProp<WalletStackParamList, 'AccountAssetDetail'>
@@ -29,7 +29,7 @@ export interface AccountAssetDetailParams {
 }
 
 const AccountAssetDetail = (props: AccountAssetDetailProps) => {
-  const {token, address, walletId} = props.route.params
+  const { token, address, walletId } = props.route.params
 
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
@@ -38,8 +38,8 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
   const [transactions, setTransactions] = useState<TransactionDateGroup[]>([])
   const [currentPage, setCurrentPage] = useState(1)
 
-  const account = accountsPool.find((it) => it.address === address)
-  const wallet = walletsPool.find((it) => it.id === walletId)
+  const account = accountsPool.find(it => it.address === address)
+  const wallet = walletsPool.find(it => it.id === walletId)
 
   useEffect(() => {
     Await.run('populateTransaction', () => fetchTransaction(1))
@@ -57,16 +57,11 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
 
   const fetchTransactionAccount = useCallback(
     async (account: Account, currentPage: number) => {
-      const {entries} = await account.populateTransactions(
-        tokensPool,
-        currentPage
-      )
-      const senderTxs = entries.filter((it) => {
+      const { entries } = await account.populateTransactions(tokensPool, currentPage)
+      const senderTxs = entries.filter(it => {
         return fixStringHashToken(it.token?.hash) === token.hash
       })
-      const transactions = TransactionDateGroup.toTransactionDateGroup(
-        senderTxs
-      )
+      const transactions = TransactionDateGroup.toTransactionDateGroup(senderTxs)
       setTransactions(transactions)
       return senderTxs.length
     },
@@ -75,19 +70,13 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
 
   const fetchTransactionWallet = useCallback(
     async (wallet: Wallet) => {
-      const entries = await wallet.getTransactions(
-        accountsPool,
-        tokensPool,
-        currentPage
-      )
+      const entries = await wallet.getTransactions(accountsPool, tokensPool, currentPage)
 
-      const senderTxs = entries.filter((it) => {
+      const senderTxs = entries.filter(it => {
         return fixStringHashToken(it.token?.hash) === token.hash
       })
 
-      const transactions = TransactionDateGroup.toTransactionDateGroup(
-        senderTxs
-      )
+      const transactions = TransactionDateGroup.toTransactionDateGroup(senderTxs)
 
       setTransactions(transactions)
       return senderTxs.length
@@ -123,32 +112,18 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
     <ScreenLayout
       onReachBottom={() => {
         if (Await.inAction('loadMoreTransaction')) return
-        Await.run(
-          'loadMoreTransaction',
-          () => fetchTransaction(currentPage),
-          500
-        )
+        Await.run('loadMoreTransaction', () => fetchTransaction(currentPage), 500)
       }}
     >
-      <AwaitActivity
-        name={'populateTransaction'}
-        loadingView={<ScreenLoader />}
-      >
+      <AwaitActivity name="populateTransaction" loadingView={<ScreenLoader />}>
         <>
           <LinearLayout mb={5}>
             <AssetQuoteComponent token={token} />
           </LinearLayout>
 
-          <TransactionsList
-            address={address}
-            transactionGroups={transactions}
-          />
+          <TransactionsList address={address} transactionGroups={transactions} />
 
-          <AwaitActivity
-            name={'loadMoreTransaction'}
-            size={'large'}
-            style={{minHeight: 100}}
-          />
+          <AwaitActivity name="loadMoreTransaction" size="large" style={{ minHeight: 100 }} />
         </>
       </AwaitActivity>
     </ScreenLayout>

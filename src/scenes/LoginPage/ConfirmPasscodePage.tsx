@@ -1,40 +1,35 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import _ from 'lodash'
-import React, {useState, useEffect} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {Security} from '~/src/enums/Security'
-import {SecurityHelper} from '~/src/helpers/SecurityHelper'
-import {MoreStackParamList} from '~/src/navigation/MoreStackNavigation'
-import {Storage} from '~src/app/Storage'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Security } from '~/src/enums/Security'
+import { SecurityHelper } from '~/src/helpers/SecurityHelper'
+import { MoreStackParamList } from '~/src/navigation/MoreStackNavigation'
+import { Storage } from '~src/app/Storage'
 import Keypad from '~src/components/Keypad'
 import PasscodeBar from '~src/components/PasscodeBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {PasscodeStackParamList} from '~src/navigation/PasscodeStackNavigation'
-import {
-  PasscodeHeader,
-  PASSCODE_LENGTH,
-} from '~src/scenes/LoginPage/PasscodePage'
-import {RootStore} from '~src/store/RootStore'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { PasscodeStackParamList } from '~src/navigation/PasscodeStackNavigation'
+import { PasscodeHeader, PASSCODE_LENGTH } from '~src/scenes/LoginPage/PasscodePage'
+import { RootStore } from '~src/store/RootStore'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface ConfirmPasscodePageParams {
   passcode: number[]
 }
 
 interface Props {
-  navigation: StackNavigationProp<
-    PasscodeStackParamList & RootStackParamList & MoreStackParamList
-  >
+  navigation: StackNavigationProp<PasscodeStackParamList & RootStackParamList & MoreStackParamList>
   route: RouteProp<PasscodeStackParamList, 'ConfirmPasscode'>
 }
 
 const ConfirmPasscodePage = (props: Props) => {
-  const {isFirstTime} = useSelector((state: RootState) => state.settings)
+  const { isFirstTime } = useSelector((state: RootState) => state.settings)
   const dispatch = useDispatch()
   const [passcode, setPasscode] = useState<number[]>([])
   const originalPasscode = props.route.params.passcode
@@ -78,13 +73,7 @@ const ConfirmPasscodePage = (props: Props) => {
   }
 
   return (
-    <ScreenLayout
-      useHeaderPadding={false}
-      useFooterPadding={false}
-      useStatusBarPadding={true}
-      alignX="center"
-      padding={16}
-    >
+    <ScreenLayout useHeaderPadding={false} useFooterPadding={false} useStatusBarPadding alignX="center" padding={16}>
       <PasscodeHeader
         deletePasscode={deletePasscode}
         passcode={props.route.params.passcode}
@@ -104,10 +93,7 @@ const ConfirmPasscodePage = (props: Props) => {
 
       <LinearLayout weight={1} width="100%" />
 
-      <Keypad
-        onClick={clickKey}
-        disabled={passcode.length >= PASSCODE_LENGTH}
-      />
+      <Keypad onClick={clickKey} disabled={passcode.length >= PASSCODE_LENGTH} />
 
       <LinearLayout weight={2} maxHeight="180px" width="100%" />
     </ScreenLayout>

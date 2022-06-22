@@ -1,4 +1,4 @@
-import {GestureResponderEvent, PanResponderGestureState} from 'react-native'
+import { GestureResponderEvent, PanResponderGestureState } from 'react-native'
 
 export declare global {
   // react-native-sortable-list
@@ -16,10 +16,7 @@ export declare global {
     key?: K
     index?: number
     disabled?: boolean
-    toggleRowActive?: (
-      event: GestureResponderEvent,
-      gestureState?: PanResponderGestureState
-    ) => void
+    toggleRowActive?: (event: GestureResponderEvent, gestureState?: PanResponderGestureState) => void
   }
 
   // Navigation param list

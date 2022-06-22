@@ -1,4 +1,4 @@
-import {DispatcherWrapper} from '@simpli/redux-wrapper'
+import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
 export class TokenDispatcher extends DispatcherWrapper<
   SenderTransactionActionsType,
@@ -8,8 +8,8 @@ export class TokenDispatcher extends DispatcherWrapper<
   readonly type = 'SET_TOKEN'
 
   readonly reducer: SenderTransactionReducer = (state, action) => {
-    const {token} = action
+    const { token } = action
 
-    return this.set(state, {token})
+    return this.set(state, { token })
   }
 }

@@ -1,10 +1,6 @@
-import {
-  HttpExclude,
-  HttpExpose,
-  ResponseSerialize,
-} from '@simpli/serialized-request'
+import { HttpExclude, HttpExpose, ResponseSerialize } from '@simpli/serialized-request'
 
-import {Script} from '~src/models/Script'
+import { Script } from '~src/models/Script'
 
 @HttpExclude()
 export class Block {

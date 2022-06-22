@@ -1,28 +1,16 @@
 import _ from 'lodash'
 import PropTypes from 'prop-types'
-import React, {useEffect, useState, useCallback, useMemo} from 'react'
-import {
-  ImageLoadEventData,
-  NativeSyntheticEvent,
-  NativeTouchEvent,
-  StyleProp,
-} from 'react-native'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import { ImageLoadEventData, NativeSyntheticEvent, NativeTouchEvent, StyleProp } from 'react-native'
 
-import {Normalize} from '~/src/app/Normalize'
-import {UtilsHelper} from '~/src/helpers/UtilsHelper'
+import { Normalize } from '~/src/app/Normalize'
+import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import ThemedCard from '~src/components/themed/ThemedCard'
-import styled, {
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import styled, { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
   alignX?: string
-  onPress?: (
-    e: NativeSyntheticEvent<NativeTouchEvent>,
-    active?: boolean
-  ) => void
+  onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>, active?: boolean) => void
   label?: string
   subLabel?: string
   textColor?: string
@@ -63,11 +51,7 @@ const LabelComponent = (props: Props) => {
   const subFontSize = Normalize.scale(props.subFontSize ?? 18)
 
   return (
-    <LinearLayout
-      width={props.labelWidth}
-      orientation={'horiz'}
-      alignItems={'center'}
-    >
+    <LinearLayout width={props.labelWidth} orientation="horiz" alignItems="center">
       {props.srcIcon && (
         <ImageView
           width={width as number}
@@ -81,9 +65,9 @@ const LabelComponent = (props: Props) => {
       {Boolean(props.label) && (
         <LinearLayout
           width={props.labelWidth ?? props.width}
-          mt={'2px'}
+          mt="2px"
           orientation="horiz"
-          alignItems={'center'}
+          alignItems="center"
           justifyContent={props.textAlignX}
           flex={!props.width && !props.flat ? 1 : undefined}
         >
@@ -92,7 +76,7 @@ const LabelComponent = (props: Props) => {
             px={props.labelPx ?? (props.srcIcon ? '15px' : '')}
             fontSize={fontSize}
             fontFamily={props.fontFamily ?? (props.flat ? 'bold' : 'regular')}
-            allowFontScaling={true}
+            allowFontScaling
             adjustsFontSizeToFit={props.adjustsFontSizeToFit}
             numberOfLines={1}
           >
@@ -104,7 +88,7 @@ const LabelComponent = (props: Props) => {
               color={props.textColor}
               fontSize={subFontSize}
               fontFamily={props.fontFamily ?? (props.flat ? 'bold' : 'regular')}
-              allowFontScaling={true}
+              allowFontScaling
               adjustsFontSizeToFit={props.adjustsFontSizeToFit}
               numberOfLines={1}
             >
@@ -119,7 +103,7 @@ const LabelComponent = (props: Props) => {
   )
 }
 
-const ThemedButton: React.FC<Props> = (props) => {
+const ThemedButton: React.FC<Props> = props => {
   const [isActive, setActive] = useState<boolean>(props.active ?? false)
   const [isSelected, setSelected] = useState(false)
 
@@ -144,9 +128,7 @@ const ThemedButton: React.FC<Props> = (props) => {
     return _.merge(style, isActive ? styleActive : {}, props.contentStyle ?? {})
   }, [isActive, props.contentStyle])
 
-  const MemoLabelComponent = useMemo(() => <LabelComponent {...props} />, [
-    props,
-  ])
+  const MemoLabelComponent = useMemo(() => <LabelComponent {...props} />, [props])
 
   return (
     <ButtonView

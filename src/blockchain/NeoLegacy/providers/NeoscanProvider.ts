@@ -1,18 +1,17 @@
-import {Request} from '@simpli/serialized-request'
-import {mapValues} from 'lodash'
+import { Request } from '@simpli/serialized-request'
+import { mapValues } from 'lodash'
 
-import {NeoLegacyProvider} from './common'
+import { NeoLegacyProvider } from './common'
 
-import {NeoNode} from '~/src/models/NeoNode'
-import {Node} from '~/src/models/Node'
-import {TokenResponse, Tokens} from '~/src/models/TokenResponse'
-import {Transaction} from '~/src/models/Transaction'
-import {BalanceResponse} from '~/src/models/response/BalanceResponse'
-import {ContractResponse} from '~/src/models/response/ContractResponse'
-import {NFTResponse} from '~/src/models/response/NFTResponse'
-import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
-import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
-import {ExchangeResponse} from '~/src/types/exchange'
+import { NeoNode } from '~/src/models/NeoNode'
+import { Node } from '~/src/models/Node'
+import { TokenResponse, Tokens } from '~/src/models/TokenResponse'
+import { Transaction } from '~/src/models/Transaction'
+import { BalanceResponse } from '~/src/models/response/BalanceResponse'
+import { ContractResponse } from '~/src/models/response/ContractResponse'
+import { TransactionAddressResponse } from '~/src/models/response/TransactionAddressResponse'
+import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
+import { ExchangeResponse } from '~/src/types/exchange'
 
 export type NeoscanNetworkOptions = 'main_net' | 'test_net'
 
@@ -26,33 +25,25 @@ export class NeoscanProvider implements NeoLegacyProvider {
   }
 
   async getAddressAbstracts(address: string, page: number = 1) {
-    return Request.get(
-      `${this.baseUrl}/${this.network}/v1/get_address_abstracts/${address}/${page}`
-    )
+    return Request.get(`${this.baseUrl}/${this.network}/v1/get_address_abstracts/${address}/${page}`)
       .name('getAddressAbstracts')
       .as(TransactionAddressResponse)
       .getData()
   }
   async getBalance(address: string) {
-    return Request.get(
-      `${this.baseUrl}/${this.network}/v1/get_balance/${address}`
-    )
+    return Request.get(`${this.baseUrl}/${this.network}/v1/get_balance/${address}`)
       .name('getBalance')
       .as(BalanceResponse)
       .getData()
   }
   async getTransaction(txid: string) {
-    return Request.get(
-      `${this.baseUrl}/${this.network}/v1/get_transaction/${txid}`
-    )
+    return Request.get(`${this.baseUrl}/${this.network}/v1/get_transaction/${txid}`)
       .name('getTransaction')
       .as(Transaction)
       .getData()
   }
   async getUnclaimed(address: string) {
-    return Request.get(
-      `${this.baseUrl}/${this.network}/v1/get_unclaimed/${address}`
-    )
+    return Request.get(`${this.baseUrl}/${this.network}/v1/get_unclaimed/${address}`)
       .name('getUnclaimed')
       .as(UnclaimedResponse)
       .getData()
@@ -62,15 +53,13 @@ export class NeoscanProvider implements NeoLegacyProvider {
   }
   async getAllNodes() {
     const result: Node[] = []
-    const response = await Request.get(
-      `${this.baseUrl}/${this.network}/v1/get_all_nodes`
-    )
+    const response = await Request.get(`${this.baseUrl}/${this.network}/v1/get_all_nodes`)
       .name('getAllNodes')
       .asArrayOf(NeoNode)
       .getData()
 
-    response.forEach(({height, url}) => {
-      result.push({url, height, blockchain: 'neoLegacy'})
+    response.forEach(({ height, url }) => {
+      result.push({ url, height, blockchain: 'neoLegacy' })
     })
 
     return result
@@ -84,32 +73,25 @@ export class NeoscanProvider implements NeoLegacyProvider {
       .as<Tokens>()
       .getData()
 
-    return new TokenResponse({tokens: tokenList})
+    return new TokenResponse({ tokens: tokenList })
   }
 
-  async getExchangeData(params: {
-    tokenAssetSymbols: string[]
-    currencies: string
-  }) {
-    const {tokenAssetSymbols, currencies} = params
+  async getExchangeData(params: { tokenAssetSymbols: string[]; currencies: string }) {
+    const { tokenAssetSymbols, currencies } = params
     const paramRequest = {
       fsyms: tokenAssetSymbols.join(','),
       tsyms: currencies,
     }
 
-    const response = await Request.get(
-      'https://min-api.cryptocompare.com/data/pricemultifull',
-      {params: paramRequest}
-    )
+    const response = await Request.get('https://min-api.cryptocompare.com/data/pricemultifull', {
+      params: paramRequest,
+    })
       .name('syncExchange')
       .as<ExchangeResponse>()
       .getData()
 
-    return mapValues(response.RAW, (symbolRef) => {
-      const symbolRefMap = mapValues(
-        symbolRef,
-        (symbolToUse) => symbolToUse.PRICE
-      )
+    return mapValues(response.RAW, symbolRef => {
+      const symbolRefMap = mapValues(symbolRef, symbolToUse => symbolToUse.PRICE)
 
       return {
         to: symbolRefMap,
@@ -117,9 +99,7 @@ export class NeoscanProvider implements NeoLegacyProvider {
     })
   }
 
-  async getAssetByHash(
-    hash: string
-  ): Promise<{symbol: string; decimals: number} | null> {
+  async getAssetByHash(hash: string): Promise<{ symbol: string; decimals: number } | null> {
     throw new Error('not implement endpoint')
   }
 }

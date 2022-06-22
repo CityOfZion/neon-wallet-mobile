@@ -1,39 +1,31 @@
-import {ReducerWrapper} from '@simpli/redux-wrapper'
+import { ReducerWrapper } from '@simpli/redux-wrapper'
 import i18n from 'i18n-js'
-import _ from 'lodash'
-import {showMessage} from 'react-native-flash-message'
-import {
-  checkInternetConnection,
-  offlineActionCreators,
-} from 'react-native-offline'
+import { showMessage } from 'react-native-flash-message'
+import { checkInternetConnection, offlineActionCreators } from 'react-native-offline'
 
-import {appBus} from '~/src/app/AppBus'
-import {applicationConfig} from '~/src/config/ApplicationConfig'
-import {SecurityHelper} from '~/src/helpers/SecurityHelper'
-import {Node} from '~/src/models/Node'
-import {Model} from '~src/app/Model'
-import {Storage} from '~src/app/Storage'
-import {blockchainList, blockchainServices} from '~src/blockchain'
-import {NeoNode} from '~src/models/NeoNode'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
-import {App} from '~src/models/redux/App'
-import {Contact} from '~src/models/redux/Contact'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
-import {Wallet} from '~src/models/redux/Wallet'
-import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
-import {ContactsDispatcher} from '~src/store/app/dispatchers/ContactsDispatcher'
-import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
-import {NodesDispatcher} from '~src/store/app/dispatchers/NodesDispatcher'
-import {TokensDispatcher} from '~src/store/app/dispatchers/TokensDispatcher'
-import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
-import {MultichainExchange} from '~src/types/exchange'
+import { appBus } from '~/src/app/AppBus'
+import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { SecurityHelper } from '~/src/helpers/SecurityHelper'
+import { Node } from '~/src/models/Node'
+import { Model } from '~src/app/Model'
+import { Storage } from '~src/app/Storage'
+import { blockchainList, blockchainServices } from '~src/blockchain'
+import { NeoNode } from '~src/models/NeoNode'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Account } from '~src/models/redux/Account'
+import { App } from '~src/models/redux/App'
+import { Contact } from '~src/models/redux/Contact'
+import { SenderTransaction } from '~src/models/redux/SenderTransaction'
+import { Wallet } from '~src/models/redux/Wallet'
+import { AccountsDispatcher } from '~src/store/app/dispatchers/AccountsDispatcher'
+import { ContactsDispatcher } from '~src/store/app/dispatchers/ContactsDispatcher'
+import { ExchangeDispatcher } from '~src/store/app/dispatchers/ExchangeDispatcher'
+import { NodesDispatcher } from '~src/store/app/dispatchers/NodesDispatcher'
+import { TokensDispatcher } from '~src/store/app/dispatchers/TokensDispatcher'
+import { WalletsDispatcher } from '~src/store/app/dispatchers/WalletsDispatcher'
+import { MultichainExchange } from '~src/types/exchange'
 
-export class AppReducer extends ReducerWrapper<
-  AppActionsType,
-  AppState,
-  AppAction
-> {
+export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppAction> {
   protected readonly initialState = Model.parse<AppState>(App)
 
   protected readonly dispatchers = [
@@ -47,15 +39,13 @@ export class AppReducer extends ReducerWrapper<
 
   readonly actions = {
     syncExchange: (): AsyncAction<MultichainExchange> => {
-      return async (dispatch) => {
+      return async dispatch => {
         const exchange = await Storage.exchange.load()
-        const multichainExchange =
-          (await Storage.multichainExchange.load()) ??
-          ({} as MultichainExchange)
+        const multichainExchange = (await Storage.multichainExchange.load()) ?? ({} as MultichainExchange)
         if (!Object.keys(multichainExchange).length && exchange) {
           multichainExchange['neoLegacy'] = exchange
         }
-        dispatch(this.commit('SET_EXCHANGE', {exchange: multichainExchange}))
+        dispatch(this.commit('SET_EXCHANGE', { exchange: multichainExchange }))
         return multichainExchange
       }
     },
@@ -69,17 +59,12 @@ export class AppReducer extends ReducerWrapper<
             const assetsBlockchain: TokenAsset[] = []
 
             await Promise.all(
-              blockchainList.map(async (blockchainName) => {
-                const {assets, provider} = blockchainServices[blockchainName]
+              blockchainList.map(async blockchainName => {
+                const { assets, provider } = blockchainServices[blockchainName]
                 const tokenListResponse = await provider.getTokenList()
-                assets.forEach(({hash, name, symbol, decimals}) => {
-                  assetsBlockchain.push(
-                    new TokenAsset(name, symbol, hash, blockchainName, decimals)
-                  )
-                  tokenList = [
-                    ...tokenListResponse.toTokenAsset(blockchainName),
-                    ...assetsBlockchain,
-                  ]
+                assets.forEach(({ hash, name, symbol, decimals }) => {
+                  assetsBlockchain.push(new TokenAsset(name, symbol, hash, blockchainName, decimals))
+                  tokenList = [...tokenListResponse.toTokenAsset(blockchainName), ...assetsBlockchain]
                 })
               })
             )
@@ -88,11 +73,11 @@ export class AppReducer extends ReducerWrapper<
           const result: MultichainExchange = {} as MultichainExchange
 
           await Promise.all(
-            blockchainList.map(async (blockchainName) => {
-              const {provider} = blockchainServices[blockchainName]
+            blockchainList.map(async blockchainName => {
+              const { provider } = blockchainServices[blockchainName]
               const tokenAssetSymbols = tokenList
-                .filter((token) => token.blockchain === blockchainName)
-                .map((token) => token.symbol)
+                .filter(token => token.blockchain === blockchainName)
+                .map(token => token.symbol)
 
               result[blockchainName] = await provider.getExchangeData({
                 tokenAssetSymbols,
@@ -110,15 +95,15 @@ export class AppReducer extends ReducerWrapper<
     },
 
     syncTokens: (): AsyncAction<TokenAsset[]> => {
-      return async (dispatch) => {
+      return async dispatch => {
         const tokenAssets = await Storage.tokenAssets.load()
 
         if (tokenAssets) {
-          const tokens = tokenAssets.map((token) => {
+          const tokens = tokenAssets.map(token => {
             token.adaptToMultichain()
             return token
           })
-          dispatch(this.commit('SET_TOKENS', {tokens}))
+          dispatch(this.commit('SET_TOKENS', { tokens }))
           return tokenAssets
         }
 
@@ -133,19 +118,15 @@ export class AppReducer extends ReducerWrapper<
 
         try {
           await Promise.all(
-            blockchainList.map(async (blockchainName) => {
-              const {assets, provider} = blockchainServices[blockchainName]
+            blockchainList.map(async blockchainName => {
+              const { assets, provider } = blockchainServices[blockchainName]
               const tokenList = await provider.getTokenList()
 
-              assets.forEach(({hash, name, symbol, decimals}) => {
-                assetsBlockchain.push(
-                  new TokenAsset(name, symbol, hash, blockchainName, decimals)
-                )
+              assets.forEach(({ hash, name, symbol, decimals }) => {
+                assetsBlockchain.push(new TokenAsset(name, symbol, hash, blockchainName, decimals))
               })
 
-              tokensAllBlockchains.push(
-                ...tokenList.toTokenAsset(blockchainName)
-              )
+              tokensAllBlockchains.push(...tokenList.toTokenAsset(blockchainName))
             })
           )
 
@@ -166,11 +147,9 @@ export class AppReducer extends ReducerWrapper<
         neoNodes = (await Storage.neoNodes.load()) ?? []
         const nodes = (await Storage.nodes.load()) ?? []
         if (!nodes.length) {
-          neoNodes.forEach(({height, url}) =>
-            nodes.push({url, height, blockchain: 'neoLegacy'})
-          )
+          neoNodes.forEach(({ height, url }) => nodes.push({ url, height, blockchain: 'neoLegacy' }))
         }
-        dispatch(this.commit('SET_NODES', {nodes}))
+        dispatch(this.commit('SET_NODES', { nodes }))
         return nodes
       }
     },
@@ -179,8 +158,8 @@ export class AppReducer extends ReducerWrapper<
       return async () => {
         try {
           let nodes: Node[] = []
-          blockchainList.forEach(async (blockchainName) => {
-            const {provider} = blockchainServices[blockchainName]
+          blockchainList.forEach(async blockchainName => {
+            const { provider } = blockchainServices[blockchainName]
             nodes = await provider.getAllNodes()
             await Storage.nodes.save(nodes)
           })
@@ -196,16 +175,14 @@ export class AppReducer extends ReducerWrapper<
         const wallets = await Storage.wallets.load()
 
         // get the balance cache in order to avoid to recalculate
-        const walletsTokenAssets = getState().app.wallets.map(
-          (it) => it.tokenAssets
-        )
+        const walletsTokenAssets = getState().app.wallets.map(it => it.tokenAssets)
 
         if (wallets) {
           wallets.forEach((it, i) => {
             it.tokenAssets = walletsTokenAssets[i] ?? []
           })
 
-          dispatch(this.commit('SET_WALLETS', {wallets}))
+          dispatch(this.commit('SET_WALLETS', { wallets }))
         }
 
         return wallets ?? []
@@ -214,7 +191,7 @@ export class AppReducer extends ReducerWrapper<
 
     updateAndSaveWallet: (wallet: Wallet): AsyncAction => {
       return async (dispatch, getState) => {
-        const wallets = getState().app.wallets.map((it) => {
+        const wallets = getState().app.wallets.map(it => {
           if (it.id === wallet.id) {
             wallet.securityPhrase = it.securityPhrase
             return wallet
@@ -222,7 +199,7 @@ export class AppReducer extends ReducerWrapper<
 
           return it
         })
-        dispatch(this.commit('SET_WALLETS', {wallets}))
+        dispatch(this.commit('SET_WALLETS', { wallets }))
         await Storage.wallets.save(wallets)
       }
     },
@@ -239,12 +216,10 @@ export class AppReducer extends ReducerWrapper<
             it.pendingTransactions = it.pendingTransactions ?? []
             it.adaptToMultichain()
           })
-          blockchainList.forEach((blockchain) => {
-            blockchainServices[blockchain].setAccountsPool(
-              accounts.filter((acc) => acc.blockchain === blockchain)
-            )
+          blockchainList.forEach(blockchain => {
+            blockchainServices[blockchain].setAccountsPool(accounts.filter(acc => acc.blockchain === blockchain))
           })
-          dispatch(this.commit('SET_ACCOUNTS', {accounts}))
+          dispatch(this.commit('SET_ACCOUNTS', { accounts }))
         }
 
         return accounts ?? []
@@ -253,21 +228,21 @@ export class AppReducer extends ReducerWrapper<
 
     updateAndSaveAccount: (account: Account): AsyncAction => {
       return async (dispatch, getState) => {
-        const accounts = getState().app.accounts.map((it) => {
+        const accounts = getState().app.accounts.map(it => {
           if (it.address === account.address) return account
           return it
         })
 
-        dispatch(this.commit('SET_ACCOUNTS', {accounts}))
+        dispatch(this.commit('SET_ACCOUNTS', { accounts }))
         await Storage.accounts.save(accounts)
       }
     },
 
     syncTokenAssetsByAddress: (address: string): AsyncAction => {
       return async (dispatch, getState) => {
-        const {accounts, wallets} = getState().app
+        const { accounts, wallets } = getState().app
 
-        const account = accounts.find((it) => it.address === address) //TODO: alem de checar o address precisa tbm ter certeza do blockchain
+        const account = accounts.find(it => it.address === address) //TODO: alem de checar o address precisa tbm ter certeza do blockchain
 
         if (account) {
           await account.populateTokenAssets()
@@ -282,11 +257,11 @@ export class AppReducer extends ReducerWrapper<
 
     syncTokenAssets: (): AsyncAction => {
       return async (dispatch, getState) => {
-        const {wallets} = getState().app
+        const { wallets } = getState().app
         const accounts = await Storage.accounts.load()
 
         if (accounts) {
-          wallets.map((it) => it.populateTokenAssets(accounts))
+          wallets.map(it => it.populateTokenAssets(accounts))
         }
       }
     },
@@ -298,51 +273,42 @@ export class AppReducer extends ReducerWrapper<
       }
       return async (dispatch, getState) => {
         try {
-          const {accounts} = getState().app
+          const { accounts } = getState().app
           const balanceAccounts = await Promise.all(
             accounts
-              .map(async (acc) => {
-                const {address} = acc
+              .map(async acc => {
+                const { address } = acc
                 if (address) {
-                  const response = await blockchainServices[
-                    acc.blockchain
-                  ].provider.getBalance(address)
+                  const response = await blockchainServices[acc.blockchain].provider.getBalance(address)
 
                   const tokens = response.balance
-                    .map((it) => {
-                      const {asset, assetSymbol, assetHash} = it
+                    .map(it => {
+                      const { asset, assetSymbol, assetHash } = it
 
                       if (asset && assetSymbol && assetHash) {
-                        const tokenAsset = new TokenAsset(
-                          asset,
-                          assetSymbol,
-                          assetHash,
-                          acc.blockchain
-                        )
+                        const tokenAsset = new TokenAsset(asset, assetSymbol, assetHash, acc.blockchain)
                         tokenAsset.amount = it.amount ?? 0
                         return tokenAsset
                       }
 
                       return null
                     })
-                    .filter((it) => it) as TokenAsset[]
+                    .filter(it => it) as TokenAsset[]
 
-                  return {address, tokens}
+                  return { address, tokens }
                 }
               })
-              .filter((res) => res !== undefined)
+              .filter(res => res !== undefined)
           )
 
           const updatedAccounts = balanceAccounts
-            .map((balanceAccount) => {
-              const {address, tokens} = balanceAccount as IBalanceAccounts
-              const updatedAccount = accounts.find(
-                (acc) => acc.address === address
-              ) as Account
+            .map(balanceAccount => {
+              const { address, tokens } = balanceAccount as IBalanceAccounts
+              const updatedAccount = accounts.find(acc => acc.address === address) as Account
               updatedAccount.tokenAssets = tokens
               return updatedAccount
             })
-            .filter((acc) => acc !== undefined)
+            .filter(acc => acc !== undefined)
 
           await Storage.accounts.save(updatedAccounts)
         } catch (error) {
@@ -359,12 +325,9 @@ export class AppReducer extends ReducerWrapper<
 
         type TransactionType = 'isClaim' | 'isTransaction'
 
-        const refreshAccounts = async (
-          updatedAccounts: Account[],
-          isRefresh: boolean
-        ) => {
+        const refreshAccounts = async (updatedAccounts: Account[], isRefresh: boolean) => {
           if (isRefresh) {
-            dispatch(this.commit('SET_ACCOUNTS', {accounts: updatedAccounts}))
+            dispatch(this.commit('SET_ACCOUNTS', { accounts: updatedAccounts }))
             await Storage.accounts.save(updatedAccounts)
           }
         }
@@ -400,9 +363,7 @@ export class AppReducer extends ReducerWrapper<
           }
         }
 
-        if (
-          accountsPool.some((acc) => acc.flattedPendingTransactions.length > 0)
-        ) {
+        if (accountsPool.some(acc => acc.flattedPendingTransactions.length > 0)) {
           let refreshAccountsControl: boolean = false
           let typeTransaction: TransactionType = 'isTransaction'
           let transactionFound: SenderTransaction = new SenderTransaction()
@@ -411,18 +372,11 @@ export class AppReducer extends ReducerWrapper<
               if (account.flattedPendingTransactions.length > 0) {
                 for (const pendingTransaction of account.flattedPendingTransactions) {
                   if (pendingTransaction.transactionHash) {
-                    const transaction = await blockchainServices[
-                      account.blockchain
-                    ].provider.getTransaction(
+                    const transaction = await blockchainServices[account.blockchain].provider.getTransaction(
                       pendingTransaction.transactionHash
                     )
-                    if (
-                      transaction.txid === pendingTransaction.transactionHash
-                    ) {
-                      await account.removePendingTransactions(
-                        pendingTransaction,
-                        pendingTransaction.transactionHash
-                      )
+                    if (transaction.txid === pendingTransaction.transactionHash) {
+                      await account.removePendingTransactions(pendingTransaction, pendingTransaction.transactionHash)
                       await account.populateTokenAssets()
                       await account.populateTransactions(tokensPool)
                       refreshAccountsControl = true
@@ -443,11 +397,7 @@ export class AppReducer extends ReducerWrapper<
             })
           )
           await refreshAccounts(updatedAccounts, refreshAccountsControl)
-          showToastFeedback(
-            refreshAccountsControl,
-            typeTransaction,
-            transactionFound
-          )
+          showToastFeedback(refreshAccountsControl, typeTransaction, transactionFound)
         }
       }
     },
@@ -456,14 +406,14 @@ export class AppReducer extends ReducerWrapper<
       return async (dispatch, getState) => {
         let contacts = await Storage.contacts.load()
         if (contacts) {
-          contacts.forEach((contact) => contact.adaptNewFormat())
+          contacts.forEach(contact => contact.adaptNewFormat())
           contacts = contacts.sort((c1: Contact, c2: Contact) => {
             if (!c1.name && !c2.name) return 0
             if (!c1.name) return 1
             if (!c2.name) return -1
             return c2.name.localeCompare(c1.name)
           })
-          dispatch(this.commit('SET_CONTACTS', {contacts}))
+          dispatch(this.commit('SET_CONTACTS', { contacts }))
         }
         return contacts ?? []
       }
@@ -473,7 +423,7 @@ export class AppReducer extends ReducerWrapper<
       return async () => {
         const wallets = await Storage.wallets.load()
         if (wallets) {
-          wallets.forEach((wallet) => {
+          wallets.forEach(wallet => {
             wallet.showBackupAlert = !wallet.lastBackup
           })
           await Storage.wallets.save(wallets)
@@ -485,7 +435,7 @@ export class AppReducer extends ReducerWrapper<
       return async (dispatch, getState) => {
         setInterval(async () => {
           const isConnected = await checkInternetConnection()
-          const {connectionChange} = offlineActionCreators
+          const { connectionChange } = offlineActionCreators
           dispatch(connectionChange(isConnected))
         }, 2000)
       }
@@ -501,7 +451,7 @@ export class AppReducer extends ReducerWrapper<
           account.pendingTransactions = []
         }
 
-        dispatch(this.commit('SET_ACCOUNTS', {accounts}))
+        dispatch(this.commit('SET_ACCOUNTS', { accounts }))
         await Storage.accounts.save(accounts)
       }
     },

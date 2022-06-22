@@ -1,14 +1,14 @@
 import i18n from 'i18n-js'
 import React from 'react'
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 
-import {TransactionRequestBase} from '../TransactionRequestBase'
-import {TransactionRequestMethodComponentProps} from '../WCTransactionRequestModal'
-import {SignMessageFailed} from './SignMessageFailed'
-import {SignMessageSuccess} from './SignMessageSuccess'
+import { TransactionRequestBase } from '../TransactionRequestBase'
+import { TransactionRequestMethodComponentProps } from '../WCTransactionRequestModal'
+import { SignMessageFailed } from './SignMessageFailed'
+import { SignMessageSuccess } from './SignMessageSuccess'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {LinearLayout, TextView} from '~/src/styles/styled-components'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { LinearLayout, TextView } from '~/src/styles/styled-components'
 
 export const SignMessageTransactionRequest = ({
   request,
@@ -16,9 +16,7 @@ export const SignMessageTransactionRequest = ({
   account,
 }: TransactionRequestMethodComponentProps) => {
   const requestParams = request.request.params as string
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   return (
     <TransactionRequestBase
@@ -34,13 +32,13 @@ export const SignMessageTransactionRequest = ({
       successElement={SignMessageSuccess}
       failedElement={SignMessageFailed}
     >
-      <LinearLayout orientation={'verti'} alignItems={'center'}>
+      <LinearLayout orientation="verti" alignItems="center">
         <TextView
           color={theme.colors.text[6]}
           fontSize={14}
           fontWeight={500}
           fontFamily="medium"
-          textAlign={'center'}
+          textAlign="center"
           mb={4}
           borderRadius={5}
         >
@@ -52,12 +50,12 @@ export const SignMessageTransactionRequest = ({
           fontWeight={300}
           lineHeight="20px"
           fontFamily="light"
-          width={'90%'}
-          minHeight={'73px'}
+          width="90%"
+          minHeight="73px"
           bg={theme.colors.background[7]}
           px={5}
           py={2}
-          mb={'auto'}
+          mb="auto"
           borderRadius={5}
         >
           {requestParams}

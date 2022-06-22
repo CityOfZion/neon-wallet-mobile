@@ -1,39 +1,33 @@
-import {StackNavigationProp} from '@react-navigation/stack'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
-import React, {useState, useEffect} from 'react'
-import {Platform, TouchableWithoutFeedback} from 'react-native'
-import {useSelector} from 'react-redux'
+import React, { useState } from 'react'
+import { Platform, TouchableWithoutFeedback } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {AccountList} from '~/src/components/accounts/AccountList'
-import {LinearLayout, TextView} from '~/src/styles/styled-components'
-import {PANEL_OFFSET} from '~src/components/SwiperPanel'
-import {ContactList} from '~src/components/contacts/ContactList'
-import {NoContacts} from '~src/components/contacts/NoContacts'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { AccountList } from '~/src/components/accounts/AccountList'
+import { LinearLayout, TextView } from '~/src/styles/styled-components'
+import { PANEL_OFFSET } from '~src/components/SwiperPanel'
+import { ContactList } from '~src/components/contacts/ContactList'
+import { NoContacts } from '~src/components/contacts/NoContacts'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ContactsStackParamList} from '~src/navigation/ContactsStackNavigation'
-import {RootState} from '~src/store/RootStore'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { ContactsStackParamList } from '~src/navigation/ContactsStackNavigation'
+import { RootState } from '~src/store/RootStore'
 interface Props {
   navigation: StackNavigationProp<ContactsStackParamList & RootStackParamList>
 }
 
 type Tab = 'contacts' | 'accounts'
 
-const TabSelector = (props: {selected: Tab; onSelect: (t: Tab) => void}) => {
+const TabSelector = (props: { selected: Tab; onSelect: (t: Tab) => void }) => {
   const contactsSelected = props.selected === 'contacts'
-  const {isConnected} = useSelector((state: RootState) => state.network)
+  const { isConnected } = useSelector((state: RootState) => state.network)
   return (
-    <LinearLayout
-      orientation="horiz"
-      mx="16px"
-      marginTop={!isConnected ? 30 : undefined}
-    >
-      <TouchableWithoutFeedback
-        onPress={() => !contactsSelected && props.onSelect('contacts')}
-      >
+    <LinearLayout orientation="horiz" mx="16px" marginTop={!isConnected ? 30 : undefined}>
+      <TouchableWithoutFeedback onPress={() => !contactsSelected && props.onSelect('contacts')}>
         <LinearLayout orientation="verti" weight="1">
           <TextView
             width="100%"
@@ -52,9 +46,7 @@ const TabSelector = (props: {selected: Tab; onSelect: (t: Tab) => void}) => {
           />
         </LinearLayout>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback
-        onPress={() => contactsSelected && props.onSelect('accounts')}
-      >
+      <TouchableWithoutFeedback onPress={() => contactsSelected && props.onSelect('accounts')}>
         <LinearLayout orientation="verti" weight="1">
           <TextView
             width="100%"
@@ -77,7 +69,7 @@ const TabSelector = (props: {selected: Tab; onSelect: (t: Tab) => void}) => {
   )
 }
 
-const ContactsPage: React.FC<Props> = (prop) => {
+const ContactsPage: React.FC<Props> = prop => {
   const contacts = useSelector((state: RootState) => state.app.contacts)
 
   const [tab, setTab] = useState<Tab>('contacts')
@@ -95,16 +87,16 @@ const ContactsPage: React.FC<Props> = (prop) => {
   })
 
   return (
-    <ScreenLayout padding={0} darkerSolidColorBG={true}>
-      <TabSelector selected={tab} onSelect={(t) => setTab(t)} />
+    <ScreenLayout padding={0} darkerSolidColorBG>
+      <TabSelector selected={tab} onSelect={t => setTab(t)} />
       {tab === 'contacts' ? (
         !contacts || contacts.length === 0 ? (
           <NoContacts />
         ) : (
-          <ContactList mt={40} searchBar={true} />
+          <ContactList mt={40} searchBar />
         )
       ) : (
-        <AccountList mb={PANEL_OFFSET} searchBar={true} />
+        <AccountList mb={PANEL_OFFSET} searchBar />
       )}
     </ScreenLayout>
   )

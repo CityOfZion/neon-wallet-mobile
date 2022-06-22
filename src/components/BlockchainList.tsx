@@ -1,23 +1,13 @@
 import i18n from 'i18n-js'
-import React, {useState, useEffect, useCallback} from 'react'
-import {
-  TouchableWithoutFeedback,
-  View,
-  Image,
-  FlatList,
-  ScrollView,
-} from 'react-native'
-import {useSelector, useDispatch} from 'react-redux'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { TouchableWithoutFeedback, View, Image, FlatList, ScrollView } from 'react-native'
+import { useSelector, useDispatch } from 'react-redux'
 
-import {
-  blockchainList,
-  BlockchainServiceKey,
-  getBlockchainLogo,
-} from '~src/blockchain'
-import {SearchBar} from '~src/components/input/SearchBar'
-import {Wallet} from '~src/models/redux/Wallet'
-import {RootStore} from '~src/store/RootStore'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { blockchainList, BlockchainServiceKey, getBlockchainLogo } from '~src/blockchain'
+import { SearchBar } from '~src/components/input/SearchBar'
+import { Wallet } from '~src/models/redux/Wallet'
+import { RootStore } from '~src/store/RootStore'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface IBlockchainItem {
   item: BlockchainServiceKey
@@ -42,9 +32,9 @@ const BlockchainItem = (props: IBlockchainItem) => {
           justifyContent: 'space-between',
         }}
       >
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image
-            style={{marginRight: 10, height: 29, width: 28}}
+            style={{ marginRight: 10, height: 29, width: 28 }}
             source={getBlockchainLogo(props.item)}
             width={28}
             height={29}
@@ -65,17 +55,10 @@ const BlockchainItem = (props: IBlockchainItem) => {
             })}
           </TextView>
         )}
-        {props.isSelected && (
-          <Image source={require('~src/assets/images/icon-check-green.png')} />
-        )}
+        {props.isSelected && <Image source={require('~src/assets/images/icon-check-green.png')} />}
       </View>
     </TouchableWithoutFeedback>
   )
-}
-
-interface InfoBlockchainSelected {
-  blockchain: BlockchainServiceKey
-  isActive: boolean
 }
 
 interface IBlockchainList {
@@ -96,35 +79,26 @@ interface IBlockchainListMap {
 
 const BlockchainList = (props: IBlockchainList) => {
   const [blockchainSelected, setBlockchainSelected] = useState<
-    {blockchain: BlockchainServiceKey; isActive: boolean}[]
+    { blockchain: BlockchainServiceKey; isActive: boolean }[]
   >(
-    blockchainList.map<{blockchain: BlockchainServiceKey; isActive: boolean}>(
-      (it) => {
-        return {blockchain: it, isActive: false}
-      }
-    )
+    blockchainList.map<{ blockchain: BlockchainServiceKey; isActive: boolean }>(it => {
+      return { blockchain: it, isActive: false }
+    })
   )
-  const [blockchainListFiltered, setBlockchainListFiltered] = useState<
-    BlockchainServiceKey[]
-  >(blockchainList)
-  const [blockchainListMap, setBlockchainListMap] = useState<
-    IBlockchainListMap[]
-  >([])
+  const [blockchainListFiltered, setBlockchainListFiltered] = useState<BlockchainServiceKey[]>(blockchainList)
+  const [blockchainListMap, setBlockchainListMap] = useState<IBlockchainListMap[]>([])
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
-  const [selectedWallet, setSelectedWallet] = useState<Wallet>(
-    dispatchWallet(RootStore.wallet.actions.getFromSelection())
-  )
+
+  const selectedWallet = useMemo(() => dispatchWallet(RootStore.wallet.actions.getFromSelection()), [])
 
   const selectBlockchain = (blockchain: BlockchainServiceKey) => {
     if (!props.isMulti) {
       unselectAllBlockchains()
     }
-    const foundBlockchain = blockchainSelected.find(
-      (it) => it.blockchain === blockchain
-    )
+    const foundBlockchain = blockchainSelected.find(it => it.blockchain === blockchain)
     if (foundBlockchain) {
-      setBlockchainSelected((prevState) => {
+      setBlockchainSelected(prevState => {
         const data = prevState
         data[blockchainSelected.indexOf(foundBlockchain)] = {
           blockchain,
@@ -137,9 +111,7 @@ const BlockchainList = (props: IBlockchainList) => {
 
   const blockchainIsActive = useCallback(
     (blockchain: BlockchainServiceKey) => {
-      const isActive = blockchainSelected.find(
-        (it) => it.blockchain === blockchain
-      )?.isActive
+      const isActive = blockchainSelected.find(it => it.blockchain === blockchain)?.isActive
       return isActive ? isActive : false
     },
     [blockchainSelected]
@@ -149,8 +121,8 @@ const BlockchainList = (props: IBlockchainList) => {
     const stateBlockchains = blockchainList.map<{
       blockchain: BlockchainServiceKey
       isActive: boolean
-    }>((it) => {
-      return {blockchain: it, isActive: true}
+    }>(it => {
+      return { blockchain: it, isActive: true }
     })
     setBlockchainSelected(stateBlockchains)
   }, [blockchainSelected])
@@ -159,8 +131,8 @@ const BlockchainList = (props: IBlockchainList) => {
     const stateBlockchains = blockchainList.map<{
       blockchain: BlockchainServiceKey
       isActive: boolean
-    }>((it) => {
-      return {blockchain: it, isActive: false}
+    }>(it => {
+      return { blockchain: it, isActive: false }
     })
     setBlockchainSelected(stateBlockchains)
   }, [blockchainSelected])
@@ -171,9 +143,7 @@ const BlockchainList = (props: IBlockchainList) => {
     } else {
       selectBlockchain('neo3')
     }
-    const mapLabelsBlockchain: IBlockchainListMap[] = blockchainList.map<
-      IBlockchainListMap
-    >((it) => {
+    const mapLabelsBlockchain: IBlockchainListMap[] = blockchainList.map<IBlockchainListMap>(it => {
       return {
         blockchainKey: it,
         label: i18n.t(`blockchainServices.${it}.label`).toLowerCase(),
@@ -188,36 +158,28 @@ const BlockchainList = (props: IBlockchainList) => {
   return (
     <View>
       <SearchBar
-        callbackFilter={(text) => {
+        callbackFilter={text => {
           unselectAllBlockchains()
-          const mapedBlockchain = blockchainListMap.filter((it) =>
-            it.label.startsWith(text.toLowerCase())
-          )
-          setBlockchainListFiltered(
-            mapedBlockchain.map((it) => it.blockchainKey)
-          )
+          const mapedBlockchain = blockchainListMap.filter(it => it.label.startsWith(text.toLowerCase()))
+          setBlockchainListFiltered(mapedBlockchain.map(it => it.blockchainKey))
         }}
         prevData={blockchainList}
         dispatchData={setBlockchainListFiltered}
-        lighterColor={true}
+        lighterColor
       />
 
       <ScrollView>
         <FlatList
           data={blockchainListFiltered}
-          ItemSeparatorComponent={() => (
-            <LinearLayout bg="background.10" height={1} />
-          )}
-          renderItem={({item}) => (
+          ItemSeparatorComponent={() => <LinearLayout bg="background.10" height={1} />}
+          renderItem={({ item }) => (
             <BlockchainItem
               isSelected={blockchainIsActive(item)}
               selectBlockchain={selectBlockchain}
               item={item}
               key={item}
               qtyAccounts={
-                selectedWallet
-                  .getAccounts(accountsPool)
-                  .filter((account) => account.blockchain === item).length
+                selectedWallet.getAccounts(accountsPool).filter(account => account.blockchain === item).length
               }
               hideQtyAccounts={props.hideQtyAccounts}
             />

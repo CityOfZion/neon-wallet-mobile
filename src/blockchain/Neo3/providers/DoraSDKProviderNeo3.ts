@@ -1,28 +1,28 @@
-import {api} from '@cityofzion/dora-ts'
-import {TypedResponse} from '@cityofzion/dora-ts/dist/interfaces/api/common'
-import {AddressTransactionsResponse} from '@cityofzion/dora-ts/dist/interfaces/api/neo'
-import {rpc, u, wallet} from '@cityofzion/neon-core-next'
-import {Request} from '@simpli/serialized-request'
-import {mapValues} from 'lodash'
+import { api } from '@cityofzion/dora-ts'
+import { TypedResponse } from '@cityofzion/dora-ts/dist/interfaces/api/common'
+import { AddressTransactionsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
+import { rpc, u, wallet } from '@cityofzion/neon-core-next'
+import { Request } from '@simpli/serialized-request'
+import { mapValues } from 'lodash'
 
 import n3TokenList from '../../../assets/tokens/n3.json'
-import {Neo3Provider} from './common'
+import { Neo3Provider } from './common'
 
-import {ContractMethod} from '~/src/models/ContractMethod'
-import {ContractParameter} from '~/src/models/ContractParameter'
-import {NeoNode} from '~/src/models/NeoNode'
-import {Node} from '~/src/models/Node'
-import {TokenResponse} from '~/src/models/TokenResponse'
-import {Transaction} from '~/src/models/Transaction'
-import {TransactionAddressAsset} from '~/src/models/TransactionAddressAsset'
-import {TransactionAddressNFT} from '~/src/models/TransactionAddressNFT'
-import {TransactionAddressSummary} from '~/src/models/TransactionAddressSummary'
-import {BalanceResponse} from '~/src/models/response/BalanceResponse'
-import {ContractResponse} from '~/src/models/response/ContractResponse'
-import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
-import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
-import {ExchangeResponse} from '~/src/types/exchange'
-import {IRPCContract} from '~src/blockchain'
+import { ContractMethod } from '~/src/models/ContractMethod'
+import { ContractParameter } from '~/src/models/ContractParameter'
+import { NeoNode } from '~/src/models/NeoNode'
+import { Node } from '~/src/models/Node'
+import { TokenResponse } from '~/src/models/TokenResponse'
+import { Transaction } from '~/src/models/Transaction'
+import { TransactionAddressAsset } from '~/src/models/TransactionAddressAsset'
+import { TransactionAddressNFT } from '~/src/models/TransactionAddressNFT'
+import { TransactionAddressSummary } from '~/src/models/TransactionAddressSummary'
+import { BalanceResponse } from '~/src/models/response/BalanceResponse'
+import { ContractResponse } from '~/src/models/response/ContractResponse'
+import { TransactionAddressResponse } from '~/src/models/response/TransactionAddressResponse'
+import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
+import { ExchangeResponse } from '~/src/types/exchange'
+import { IRPCContract } from '~src/blockchain'
 
 export type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
 export class DoraSDKProvider implements Neo3Provider {
@@ -42,24 +42,20 @@ export class DoraSDKProvider implements Neo3Provider {
 
     let txFullResponse: AddressTransactionsResponse | any[] = []
 
-    txFullResponse = await api.NeoRest.addressTXFull(
-      address,
-      page,
-      this.network
-    )
+    txFullResponse = await api.NeoRest.addressTXFull(address, page, this.network)
 
     if (Array.isArray(txFullResponse)) {
       return result
     }
 
-    const {totalCount, items} = txFullResponse
+    const { totalCount, items } = txFullResponse
     result.pageNumber = page
     result.pageSize = items.length
     result.totalEntries = totalCount
     result.totalPages = Math.ceil(totalCount / 15)
 
     for (const item of items) {
-      const {block, hash, invocations, notifications, time} = item
+      const { block, hash, invocations, notifications, time } = item
 
       const transaction = new TransactionAddressSummary({
         blockHeight: block,
@@ -70,8 +66,8 @@ export class DoraSDKProvider implements Neo3Provider {
       transaction.qtyNotifications = notifications.length
 
       for (const notification of notifications) {
-        const {contract, event_name: eventName} = notification
-        const state = (notification.state as any) as TypedResponse[]
+        const { contract, event_name: eventName } = notification
+        const state = notification.state as any as TypedResponse[]
 
         if (eventName !== 'Transfer') {
           continue
@@ -81,11 +77,9 @@ export class DoraSDKProvider implements Neo3Provider {
           continue
         }
 
-        const [{value: from}, {value: to}] = state
+        const [{ value: from }, { value: to }] = state
 
-        const convertedFrom = from
-          ? this.convertByteStringToAddress(from)
-          : 'Mint'
+        const convertedFrom = from ? this.convertByteStringToAddress(from) : 'Mint'
 
         const convertedTo = to ? this.convertByteStringToAddress(to) : 'Burn'
 
@@ -94,7 +88,7 @@ export class DoraSDKProvider implements Neo3Provider {
         }
 
         if (state.length === 3) {
-          const [, , {value: amount}] = state
+          const [, , { value: amount }] = state
 
           const asset = new TransactionAddressAsset({
             amount,
@@ -107,7 +101,7 @@ export class DoraSDKProvider implements Neo3Provider {
           continue
         }
 
-        const [, , , {value: tokenId}] = state
+        const [, , , { value: tokenId }] = state
 
         const convertedTokenId = this.convertByteStringToInteger(tokenId)
 
@@ -131,7 +125,7 @@ export class DoraSDKProvider implements Neo3Provider {
     const result = new BalanceResponse()
     const response = await api.NeoRest.balance(address, this.network)
     const balances = Array.from(response.values())
-    balances.forEach(({asset, asset_name, balance, symbol}) => {
+    balances.forEach(({ asset, asset_name, balance, symbol }) => {
       result.balance.push({
         amount: balance,
         asset: asset_name,
@@ -162,12 +156,12 @@ export class DoraSDKProvider implements Neo3Provider {
     contract.hash = response.hash
     contract.name = response.manifest.name
 
-    response.manifest.abi?.methods.forEach((method) => {
+    response.manifest.abi?.methods.forEach(method => {
       const contractMethod = new ContractMethod()
 
       contractMethod.name = method.name
 
-      method.parameters.forEach((parameter) => {
+      method.parameters.forEach(parameter => {
         const contractParameter = new ContractParameter()
 
         contractParameter.name = parameter.name
@@ -184,12 +178,9 @@ export class DoraSDKProvider implements Neo3Provider {
 
   async getTransaction(transactionID: string) {
     const result = new Transaction()
-    const neoRestTransaction = await api.NeoRest.transaction(
-      transactionID,
-      this.network
-    )
+    const neoRestTransaction = await api.NeoRest.transaction(transactionID, this.network)
     if (neoRestTransaction) {
-      const {hash, size, block, time} = neoRestTransaction
+      const { hash, size, block, time } = neoRestTransaction
       result.txid = hash
       result.size = size
       result.blockHeight = block
@@ -198,29 +189,22 @@ export class DoraSDKProvider implements Neo3Provider {
     return result
   }
 
-  async getExchangeData(params: {
-    tokenAssetSymbols: string[]
-    currencies: string
-  }) {
-    const {tokenAssetSymbols, currencies} = params
+  async getExchangeData(params: { tokenAssetSymbols: string[]; currencies: string }) {
+    const { tokenAssetSymbols, currencies } = params
     const paramRequest = {
       fsyms: tokenAssetSymbols.join(','),
       tsyms: currencies,
     }
 
-    const response = await Request.get(
-      'https://min-api.cryptocompare.com/data/pricemultifull',
-      {params: paramRequest}
-    )
+    const response = await Request.get('https://min-api.cryptocompare.com/data/pricemultifull', {
+      params: paramRequest,
+    })
       .name('syncExchange')
       .as<ExchangeResponse>()
       .getData()
 
-    return mapValues(response.RAW, (symbolRef) => {
-      const symbolRefMap = mapValues(
-        symbolRef,
-        (symbolToUse) => symbolToUse.PRICE
-      )
+    return mapValues(response.RAW, symbolRef => {
+      const symbolRefMap = mapValues(symbolRef, symbolToUse => symbolToUse.PRICE)
 
       return {
         to: symbolRefMap,
@@ -229,7 +213,7 @@ export class DoraSDKProvider implements Neo3Provider {
   }
 
   async getTokenList() {
-    return new TokenResponse({tokens: n3TokenList})
+    return new TokenResponse({ tokens: n3TokenList })
   }
 
   async getAllNodes() {
@@ -237,8 +221,8 @@ export class DoraSDKProvider implements Neo3Provider {
     const response = await api.NeoRest.getAllNodes(this.network)
 
     const nodes = Array.from(response.values())
-    nodes.forEach(({height, url}) => {
-      result.push({height, url, blockchain: 'neoLegacy'})
+    nodes.forEach(({ height, url }) => {
+      result.push({ height, url, blockchain: 'neoLegacy' })
     })
     const allNodes = result.sort((node1, node2) => {
       if (node1.height && node2.height) {
@@ -252,8 +236,8 @@ export class DoraSDKProvider implements Neo3Provider {
       }
     })
 
-    const nodesHttps = allNodes.filter((node) => node.url?.includes('https'))
-    const nodesHttp = allNodes.filter((node) => !node.url?.includes('https'))
+    const nodesHttps = allNodes.filter(node => node.url?.includes('https'))
+    const nodesHttp = allNodes.filter(node => !node.url?.includes('https'))
 
     return [...nodesHttps, ...nodesHttp]
   }
@@ -265,8 +249,8 @@ export class DoraSDKProvider implements Neo3Provider {
     if (!url) throw new Error('Problem get unclaimed')
 
     const rpcClient = new rpc.RPCClient(url)
-    const {unclaimed} = await rpcClient.execute(
-      new rpc.Query<string[], {unclaimed: string}>({
+    const { unclaimed } = await rpcClient.execute(
+      new rpc.Query<string[], { unclaimed: string }>({
         method: 'getunclaimedgas',
         params: [address],
       })
@@ -291,17 +275,13 @@ export class DoraSDKProvider implements Neo3Provider {
   }
 
   private convertByteStringToAddress(byteString: string): string {
-    const account = new wallet.Account(
-      u.reverseHex(u.HexString.fromBase64(byteString).toString())
-    )
+    const account = new wallet.Account(u.reverseHex(u.HexString.fromBase64(byteString).toString()))
 
     return account.address
   }
 
   private convertByteStringToInteger(byteString: string): string {
-    const integer = u.BigInteger.fromHex(
-      u.reverseHex(u.HexString.fromBase64(byteString).toString())
-    ).toString()
+    const integer = u.BigInteger.fromHex(u.reverseHex(u.HexString.fromBase64(byteString).toString())).toString()
 
     return integer
   }

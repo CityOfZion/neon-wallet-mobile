@@ -1,6 +1,6 @@
-import {Action} from 'redux'
-import {ReducerApplied} from '@simpli/redux-wrapper'
-import {TokenAsset} from '~/src/models/TokenAsset'
+import { Action } from 'redux'
+import { ReducerApplied } from '@simpli/redux-wrapper'
+import { TokenAsset } from '~/src/models/TokenAsset'
 
 export declare global {
   type WalletActionsType =

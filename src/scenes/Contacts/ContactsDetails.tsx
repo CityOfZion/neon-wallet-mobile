@@ -1,28 +1,22 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
-import React, {useState, useEffect} from 'react'
-import {
-  View,
-  StyleSheet,
-  Text,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native'
-import {useSelector} from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { View, StyleSheet, Text, Dimensions, TouchableOpacity } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {getBlockchainByAddress, getBlockchainLogo} from '~/src/blockchain'
-import {UtilsHelper} from '~/src/helpers/UtilsHelper'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { getBlockchainByAddress, getBlockchainLogo } from '~/src/blockchain'
+import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedShadowContainer from '~src/components/themed/ThemedShadowContainer'
-import {Contact} from '~src/models/redux/Contact'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ContactsStackParamList} from '~src/navigation/ContactsStackNavigation'
-import {RootState} from '~src/store/RootStore'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import { Contact } from '~src/models/redux/Contact'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { ContactsStackParamList } from '~src/navigation/ContactsStackNavigation'
+import { RootState } from '~src/store/RootStore'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface ContactDetailsParams {
   contact: Contact
@@ -36,11 +30,9 @@ interface ContactDetailsProps {
 interface IItemAddress {
   address: string
 }
-const ItemAddress: React.FC<IItemAddress> = ({address}) => {
+const ItemAddress: React.FC<IItemAddress> = ({ address }) => {
   const blockchainName = getBlockchainByAddress(address)
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const styles = StyleSheet.create({
     text: {
       color: theme.colors.primary,
@@ -61,28 +53,23 @@ const ItemAddress: React.FC<IItemAddress> = ({address}) => {
     },
   })
   return (
-    <TouchableOpacity
-      onPress={() => UtilsHelper.copyToClipboard(address)}
-      style={styles.container}
-    >
-      <LinearLayout orientation={'horiz'}>
+    <TouchableOpacity onPress={() => UtilsHelper.copyToClipboard(address)} style={styles.container}>
+      <LinearLayout orientation="horiz">
         {blockchainName && (
           <ImageView
             width={17}
             height={18}
             source={getBlockchainLogo(blockchainName)}
-            resizeMode={'center'}
+            resizeMode="center"
             mr={3}
-            alignSelf={'center'}
+            alignSelf="center"
           />
         )}
-        <LinearLayout orientation={'verti'} width={'90%'}>
+        <LinearLayout orientation="verti" width="90%">
           {blockchainName && (
-            <Text style={styles.nameBlockchain}>
-              {i18n.t(`blockchainServices.${blockchainName}.id`)}
-            </Text>
+            <Text style={styles.nameBlockchain}>{i18n.t(`blockchainServices.${blockchainName}.id`)}</Text>
           )}
-          <Text style={styles.text} numberOfLines={1} ellipsizeMode={'middle'}>
+          <Text style={styles.text} numberOfLines={1} ellipsizeMode="middle">
             {address}
           </Text>
         </LinearLayout>
@@ -91,7 +78,7 @@ const ItemAddress: React.FC<IItemAddress> = ({address}) => {
           width={20}
           height={20}
           source={require('~/src/assets/images/icon-copy-green.png')}
-          alignSelf={'center'}
+          alignSelf="center"
         />
       </LinearLayout>
     </TouchableOpacity>
@@ -104,7 +91,7 @@ export const ContactDetails = (props: ContactDetailsProps) => {
   const [contact, setContact] = useState(props.route.params.contact)
 
   useEffect(() => {
-    const freshContact = contacts.find((it) => it.id === contact.id)
+    const freshContact = contacts.find(it => it.id === contact.id)
 
     if (freshContact) {
       setContact(freshContact)
@@ -133,7 +120,7 @@ export const ContactDetails = (props: ContactDetailsProps) => {
       width: 126,
       height: 127,
       shadowColor: '#3e464d',
-      shadowOffset: {width: 4, height: 4},
+      shadowOffset: { width: 4, height: 4 },
       shadowRadius: 36,
       alignItems: 'center',
       justifyContent: 'center',
@@ -157,10 +144,7 @@ export const ContactDetails = (props: ContactDetailsProps) => {
   })
   return (
     <ScreenLayout>
-      <LinearLayout
-        alignItems={'center'}
-        mt={Dimensions.get('screen').height * 0.07}
-      >
+      <LinearLayout alignItems="center" mt={Dimensions.get('screen').height * 0.07}>
         <ThemedShadowContainer
           android={{
             width: 126,
@@ -172,26 +156,24 @@ export const ContactDetails = (props: ContactDetailsProps) => {
           }}
         >
           <View style={styles.containerLetter}>
-            <Text style={styles.textLetter}>
-              {contact.name?.charAt(0).toLocaleUpperCase()}
-            </Text>
+            <Text style={styles.textLetter}>{contact.name?.charAt(0).toLocaleUpperCase()}</Text>
           </View>
         </ThemedShadowContainer>
         <TextView
-          fontFamily={'semibold'}
-          fontSize={'20px'}
-          color={'text.0'}
+          fontFamily="semibold"
+          fontSize="20px"
+          color="text.0"
           mb={Dimensions.get('screen').height * 0.05}
           mt={Dimensions.get('screen').height * 0.02}
         >
           {contact.name}
         </TextView>
-        <TextView textAlign={'center'} color={'text.6'} fontSize={'14px'}>
+        <TextView textAlign="center" color="text.6" fontSize="14px">
           {i18n.t('screens.contactDetails.walletAddress')}
         </TextView>
 
         <View style={styles.containerAddresses}>
-          {contact.addresses.map(({address}, index) => (
+          {contact.addresses.map(({ address }, index) => (
             <ItemAddress key={index} address={address} />
           ))}
         </View>

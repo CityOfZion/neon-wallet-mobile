@@ -1,9 +1,9 @@
 import _ from 'lodash'
 import PropTypes from 'prop-types'
-import React, {Fragment} from 'react'
-import {TouchableOpacity} from 'react-native'
+import React, { Fragment } from 'react'
+import { TouchableOpacity } from 'react-native'
 
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
   onClick?: (number: number) => void
@@ -15,18 +15,10 @@ export interface Key {
   text?: string
 }
 
-const KeyComponent = (props: Props & {keyButton: Key}) => {
+const KeyComponent = (props: Props & { keyButton: Key }) => {
   return (
-    <TouchableOpacity
-      disabled={props.disabled}
-      onPress={() => props.onClick?.(props.keyButton.number)}
-    >
-      <LinearLayout
-        justifyContent="center"
-        alignItems="center"
-        mx="14px"
-        my="8px"
-      >
+    <TouchableOpacity disabled={props.disabled} onPress={() => props.onClick?.(props.keyButton.number)}>
+      <LinearLayout justifyContent="center" alignItems="center" mx="14px" my="8px">
         <LinearLayout
           width="75px"
           height="75px"
@@ -41,14 +33,7 @@ const KeyComponent = (props: Props & {keyButton: Key}) => {
             {props.keyButton.number}
           </TextView>
           {props.keyButton.text !== undefined ? (
-            <TextView
-              mt="-6px"
-              mb="6px"
-              color="text.0"
-              textAlign="center"
-              fontSize="10px"
-              letterSpacing={3}
-            >
+            <TextView mt="-6px" mb="6px" color="text.0" textAlign="center" fontSize="10px" letterSpacing={3}>
               {props.keyButton.text}
             </TextView>
           ) : undefined}
@@ -58,7 +43,7 @@ const KeyComponent = (props: Props & {keyButton: Key}) => {
   )
 }
 
-const KeyRowComponent = (props: Props & {row: Key[]}) => {
+const KeyRowComponent = (props: Props & { row: Key[] }) => {
   return (
     <LinearLayout width="100%" justifyContent="center" orientation="horiz">
       {props.row.map((key, i) => (
@@ -114,11 +99,11 @@ const Keypad = (props: Props) => {
   const keypad = _.chunk(keyArray, 3)
 
   return (
-    <Fragment>
+    <>
       {keypad.map((row, i) => (
         <KeyRowComponent {...props} key={i} row={row} />
       ))}
-    </Fragment>
+    </>
   )
 }
 

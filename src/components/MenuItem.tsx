@@ -1,8 +1,8 @@
 import React from 'react'
-import {TouchableOpacity} from 'react-native'
+import { TouchableOpacity } from 'react-native'
 
-import {Normalize} from '~src/app/Normalize'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import { Normalize } from '~src/app/Normalize'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 export enum RightIconType {
   NONE,
@@ -25,12 +25,7 @@ export interface MenuItemProps {
 
 const MenuItem = (props: MenuItemProps) => {
   let arrowIcon = null
-  let [
-    rightIconWidth,
-    rightIconHeight,
-    rightIconRightMargin,
-    rightIconTopMargin,
-  ] = [0, 0, 0, 0]
+  let [rightIconWidth, rightIconHeight, rightIconRightMargin, rightIconTopMargin] = [0, 0, 0, 0]
   switch (props.arrowDirection) {
     case RightIconType.ARROW_DOWN:
       arrowIcon = require('~/src/assets/images/icon-arrow-down-green.png')
@@ -75,21 +70,16 @@ const MenuItem = (props: MenuItemProps) => {
           <TextView
             weight={1}
             color="text.0"
-            fontSize={'lg'}
+            fontSize="lg"
             fontFamily="regular"
-            allowFontScaling={true}
-            adjustsFontSizeToFit={true}
+            allowFontScaling
+            adjustsFontSizeToFit
             numberOfLines={1}
           >
             {props.title}
           </TextView>
 
-          <TextView
-            fontSize={'md'}
-            fontFamily="semibold"
-            mr={Normalize.scale(3)}
-            color="#869ca5"
-          >
+          <TextView fontSize="md" fontFamily="semibold" mr={Normalize.scale(3)} color="#869ca5">
             {props.subtitle}
           </TextView>
           {arrowIcon && (

@@ -1,7 +1,7 @@
 import React from 'react'
 
-import {LinearLayout} from '../styles/styled-components'
-import {Loader} from './loader/loader'
+import { LinearLayout } from '../styles/styled-components'
+import { Loader } from './loader/loader'
 
 export const FlatListFooter = () => {
   return (

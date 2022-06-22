@@ -1,10 +1,10 @@
-import {InvokeResult} from '@cityofzion/neon-core-next/lib/rpc'
-import {ContractParam} from '@cityofzion/neon-core-next/lib/sc'
-import {WitnessScope} from '@cityofzion/neon-core-next/lib/tx/components/WitnessScope'
-import {Account} from '@cityofzion/neon-core-next/lib/wallet'
-import Neon, {rpc, sc, tx, wallet, u} from '@cityofzion/neon-js-next'
-import {JsonRpcRequest, JsonRpcResponse} from '@json-rpc-tools/utils'
-import {randomBytes} from 'crypto'
+import { InvokeResult } from '@cityofzion/neon-core-next/lib/rpc'
+import { ContractParam } from '@cityofzion/neon-core-next/lib/sc'
+import { WitnessScope } from '@cityofzion/neon-core-next/lib/tx/components/WitnessScope'
+import { Account } from '@cityofzion/neon-core-next/lib/wallet'
+import Neon, { rpc, sc, tx, wallet, u } from '@cityofzion/neon-js-next'
+import { JsonRpcRequest, JsonRpcResponse } from '@json-rpc-tools/utils'
+import { randomBytes } from 'crypto'
 
 export type Signer = {
   scopes: WitnessScope
@@ -40,14 +40,8 @@ export class NeonWcAdapter {
     this.networkMagic = networkMagic
   }
 
-  static init = async (
-    rpcAddress: string,
-    networkMagic?: number
-  ): Promise<NeonWcAdapter> => {
-    return new NeonWcAdapter(
-      rpcAddress,
-      networkMagic ?? (await NeonWcAdapter.getMagicOfRpcAddress(rpcAddress))
-    )
+  static init = async (rpcAddress: string, networkMagic?: number): Promise<NeonWcAdapter> => {
+    return new NeonWcAdapter(rpcAddress, networkMagic ?? (await NeonWcAdapter.getMagicOfRpcAddress(rpcAddress)))
   }
 
   static getMagicOfRpcAddress = async (rpcAddress: string): Promise<number> => {
@@ -63,10 +57,7 @@ export class NeonWcAdapter {
     return resp.protocol.network
   }
 
-  rpcCall = async (
-    account: Account | undefined,
-    request: JsonRpcRequest
-  ): Promise<JsonRpcResponse> => {
+  rpcCall = async (account: Account | undefined, request: JsonRpcRequest): Promise<JsonRpcResponse> => {
     let result: any
 
     if (request.method === 'invokeFunction') {
@@ -90,10 +81,8 @@ export class NeonWcAdapter {
     } else if (request.method === 'verifyMessage') {
       result = await this.verifyMessage(request.params)
     } else {
-      const {jsonrpc, ...queryLike} = request
-      result = await new rpc.RPCClient(this.rpcAddress).execute(
-        Neon.create.query({...queryLike, jsonrpc: '2.0'})
-      )
+      const { jsonrpc, ...queryLike } = request
+      result = await new rpc.RPCClient(this.rpcAddress).execute(Neon.create.query({ ...queryLike, jsonrpc: '2.0' }))
     }
 
     return {
@@ -103,13 +92,10 @@ export class NeonWcAdapter {
     }
   }
 
-  testInvoke = async (
-    account: Account,
-    cim: ContractInvocationMulti
-  ): Promise<InvokeResult> => {
+  testInvoke = async (account: Account, cim: ContractInvocationMulti): Promise<InvokeResult> => {
     const sb = Neon.create.scriptBuilder()
 
-    cim.invocations.forEach((c) => {
+    cim.invocations.forEach(c => {
       sb.emitContractCall({
         scriptHash: c.scriptHash,
         operation: c.operation,
@@ -128,13 +114,10 @@ export class NeonWcAdapter {
     )
   }
 
-  invokeFunction = async (
-    account: Account,
-    cim: ContractInvocationMulti
-  ): Promise<any> => {
+  invokeFunction = async (account: Account, cim: ContractInvocationMulti): Promise<any> => {
     const sb = Neon.create.scriptBuilder()
 
-    cim.invocations.forEach((c) => {
+    cim.invocations.forEach(c => {
       sb.emitContractCall({
         scriptHash: c.scriptHash,
         operation: c.operation,
@@ -184,15 +167,11 @@ export class NeonWcAdapter {
   }
 
   verifyMessage = (verifyArgs: SignedMessage): boolean => {
-    return wallet.verify(
-      verifyArgs.messageHex,
-      verifyArgs.data,
-      verifyArgs.publicKey
-    )
+    return wallet.verify(verifyArgs.messageHex, verifyArgs.data, verifyArgs.publicKey)
   }
 
   static convertParams(args: any[]): ContractParam[] {
-    return args.map((a) =>
+    return args.map(a =>
       a.value === undefined
         ? a
         : a.type === 'Address'
@@ -212,14 +191,10 @@ export class NeonWcAdapter {
 
     signer.scopes = signerEntry?.scopes ?? WitnessScope.CalledByEntry
     if (signerEntry?.allowedContracts) {
-      signer.allowedContracts = signerEntry.allowedContracts.map((ac) =>
-        Neon.u.HexString.fromHex(ac)
-      )
+      signer.allowedContracts = signerEntry.allowedContracts.map(ac => Neon.u.HexString.fromHex(ac))
     }
     if (signerEntry?.allowedGroups) {
-      signer.allowedGroups = signerEntry.allowedGroups.map((ac) =>
-        Neon.u.HexString.fromHex(ac)
-      )
+      signer.allowedGroups = signerEntry.allowedGroups.map(ac => Neon.u.HexString.fromHex(ac))
     }
 
     return signer
@@ -228,6 +203,6 @@ export class NeonWcAdapter {
   static buildMultipleSigner(account: Account, signers: Signer[]) {
     return !signers?.length
       ? [NeonWcAdapter.buildSigner(account)]
-      : signers.map((s) => NeonWcAdapter.buildSigner(account, s))
+      : signers.map(s => NeonWcAdapter.buildSigner(account, s))
   }
 }

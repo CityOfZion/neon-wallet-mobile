@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types'
-import React, {useState, useEffect} from 'react'
-import {NativeScrollEvent, NativeSyntheticEvent} from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native'
 import Carousel from 'react-native-snap-carousel'
-import {useDispatch} from 'react-redux'
+import { useDispatch } from 'react-redux'
 
-import {applicationConfig} from '~/src/config/ApplicationConfig'
+import { applicationConfig } from '~/src/config/ApplicationConfig'
 import WalletCard from '~src/components/WalletCard'
-import {Wallet} from '~src/models/redux/Wallet'
-import {RootStore} from '~src/store/RootStore'
-import {LinearLayout} from '~src/styles/styled-components'
+import { Wallet } from '~src/models/redux/Wallet'
+import { RootStore } from '~src/store/RootStore'
+import { LinearLayout } from '~src/styles/styled-components'
 
 interface Props {
   onPress?: (wallet: Wallet) => void
@@ -20,14 +20,12 @@ interface Props {
 }
 
 const WalletPicker: React.FC<Props> = (props: Props) => {
-  const {wallets} = props
+  const { wallets } = props
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
 
   const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
 
-  const [index, setIndex] = useState<number>(
-    wallet ? wallets.findIndex((it) => it.id === wallet.id) : 0
-  )
+  const [index, setIndex] = useState<number>(wallet ? wallets.findIndex(it => it.id === wallet.id) : 0)
 
   const pressEvent = async (wallet: Wallet) => {
     if (props.onPress) {
@@ -55,37 +53,33 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
     <Carousel<Wallet>
       onScrollBeginDrag={props.onScrollBegin}
       onScrollEndDrag={props.onScrollEnd}
-      layout={'default'}
-      containerCustomStyle={{overflow: 'visible'}}
+      layout="default"
+      containerCustomStyle={{ overflow: 'visible' }}
       data={wallets}
       sliderWidth={applicationConfig.windowWidth}
       itemWidth={240}
       inactiveSlideScale={0.8}
       inactiveSlideOpacity={1}
       inactiveSlideShift={12}
-      lockScrollWhileSnapping={true}
+      lockScrollWhileSnapping
       lockScrollTimeoutDuration={200}
       activeSlideOffset={5}
       swipeThreshold={5}
-      enableSnap={true}
-      useScrollView={true}
+      enableSnap
+      useScrollView
       firstItem={index > 0 ? index : 0}
-      onSnapToItem={(index) => selectEvent(index)}
-      renderItem={(wallet: {item: Wallet; index: number}) => (
+      onSnapToItem={index => selectEvent(index)}
+      renderItem={(wallet: { item: Wallet; index: number }) => (
         <LinearLayout
           weight={1}
-          justifyContent={'center'}
-          alignItems={'center'}
+          justifyContent="center"
+          alignItems="center"
           py={6}
           pointerEvents={wallet.index !== index ? 'none' : undefined}
         >
           <WalletCard
             width={240}
-            onPress={
-              !isInactive(wallet.item)
-                ? () => pressEvent(wallet.item)
-                : undefined
-            }
+            onPress={!isInactive(wallet.item) ? () => pressEvent(wallet.item) : undefined}
             wallet={wallet.item}
             canBeInactive={props.canBeInactive}
           />
@@ -98,8 +92,7 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
 WalletPicker.propTypes = {
   onPress: PropTypes.func,
   onSelect: PropTypes.func,
-  wallets: PropTypes.arrayOf(PropTypes.instanceOf(Wallet).isRequired)
-    .isRequired,
+  wallets: PropTypes.arrayOf(PropTypes.instanceOf(Wallet).isRequired).isRequired,
   canBeInactive: PropTypes.bool,
 }
 

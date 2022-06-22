@@ -1,6 +1,6 @@
-import {Currency} from '~src/enums/Currency'
-import {Lang} from '~src/enums/Lang'
-import {Security} from '~src/enums/Security'
+import { Currency } from '~src/enums/Currency'
+import { Lang } from '~src/enums/Lang'
+import { Security } from '~src/enums/Security'
 
 /**
  * Locale Configuration

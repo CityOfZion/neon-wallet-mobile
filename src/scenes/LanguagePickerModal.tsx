@@ -1,15 +1,15 @@
-import {StackNavigationProp} from '@react-navigation/stack'
-import {Await} from '@simpli/react-native-await'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { Await } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import SelectorList, {SelectorItem} from '~src/components/SelectorList'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import SelectorList, { SelectorItem } from '~src/components/SelectorList'
+import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import {Lang} from '~src/enums/Lang'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {RootStore} from '~src/store/RootStore'
+import { Lang } from '~src/enums/Lang'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { RootStore } from '~src/store/RootStore'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -18,15 +18,11 @@ interface Props {
 const LanguagePickerModal = (props: Props) => {
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
-  const {language} = useSelector((state: RootState) => state.settings)
+  const { language } = useSelector((state: RootState) => state.settings)
 
   const changeLanguage = async (val: Lang) => {
     dispatch(RootStore.settings.actions.setLanguage(val))
-    await Await.run(
-      'application',
-      async () => await dispatch(RootStore.settings.actions.save()),
-      1000
-    )
+    await Await.run('application', async () => await dispatch(RootStore.settings.actions.save()), 1000)
   }
 
   const isSelected = (l: Lang) => l === language
@@ -56,12 +52,12 @@ const LanguagePickerModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={i18n.t('modals.language.title')}
-      fullSize={true}
+      fullSize
       padding={24}
       onClose={props.navigation.goBack}
       rightButton={<ThemedCloseButton onPress={controller.close} />}
       onLeftPress={controller.close}
-      disableDefaultScrollView={true}
+      disableDefaultScrollView
     >
       <SelectorList items={languages} />
     </SwiperPanel>

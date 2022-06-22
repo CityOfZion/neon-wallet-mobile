@@ -1,18 +1,13 @@
-import {
-  HttpExclude,
-  HttpExpose,
-  Request,
-  ResponseSerialize,
-} from '@simpli/serialized-request'
+import { HttpExclude, HttpExpose, Request, ResponseSerialize } from '@simpli/serialized-request'
 import i18n from 'i18n-js'
 import _ from 'lodash'
 import moment from 'moment'
 
-import {applicationConfig} from '~/src/config/ApplicationConfig'
-import {NoPriority, PriorityFee} from '~src/models/PriorityFee'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {Contact} from '~src/models/redux/Contact'
-import {ExchangeHistoryResponse} from '~src/types/exchange'
+import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { NoPriority, PriorityFee } from '~src/models/PriorityFee'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Contact } from '~src/models/redux/Contact'
+import { ExchangeHistoryResponse } from '~src/types/exchange'
 
 @HttpExclude()
 export class SenderTransaction implements SenderTransactionState {
@@ -61,21 +56,15 @@ export class SenderTransaction implements SenderTransactionState {
   }
 
   doSenderHasContactName(contactsPool: Contact[]) {
-    return contactsPool.find((it) =>
-      it.addresses.find(({address}) => address === this.senderAddress)
-    )
+    return contactsPool.find(it => it.addresses.find(({ address }) => address === this.senderAddress))
   }
 
   doReceiverHasContactName(contactsPool: Contact[]) {
-    return contactsPool.find((it) =>
-      it.addresses.find(({address}) => address === this.senderAddress)
-    )
+    return contactsPool.find(it => it.addresses.find(({ address }) => address === this.senderAddress))
   }
 
   senderAddressOrContactName(contactsPool: Contact[]) {
-    const contact = contactsPool.find((it) =>
-      it.addresses.find(({address}) => address === this.senderAddress)
-    )
+    const contact = contactsPool.find(it => it.addresses.find(({ address }) => address === this.senderAddress))
 
     if (contact) {
       return contact.name
@@ -85,9 +74,7 @@ export class SenderTransaction implements SenderTransactionState {
   }
 
   receiverAddressOrContactName(contactsPool: Contact[]) {
-    const contact = contactsPool.find((it) =>
-      it.addresses.find(({address}) => address === this.senderAddress)
-    )
+    const contact = contactsPool.find(it => it.addresses.find(({ address }) => address === this.senderAddress))
 
     if (contact) {
       return contact.name
@@ -121,15 +108,12 @@ export class SenderTransaction implements SenderTransactionState {
       ts: moment(this.sentAt).unix(),
     }
 
-    const exchangeResponse = await Request.get(
-      'https://min-api.cryptocompare.com/data/pricehistorical',
-      {params}
-    )
+    const exchangeResponse = await Request.get('https://min-api.cryptocompare.com/data/pricehistorical', { params })
       .name('populateExchange')
       .as<ExchangeHistoryResponse>()
       .getData()
 
-    this.token.exchange = _.mapValues(exchangeResponse, (it) => ({
+    this.token.exchange = _.mapValues(exchangeResponse, it => ({
       to: it,
     }))
   }

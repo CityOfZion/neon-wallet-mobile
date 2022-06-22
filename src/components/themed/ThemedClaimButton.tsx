@@ -1,24 +1,12 @@
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
-import React, {useState, useEffect, useCallback} from 'react'
-import {
-  StyleSheet,
-  GestureResponderEvent,
-  Platform,
-  ImageLoadEventData,
-  Dimensions,
-} from 'react-native'
-import {useSelector} from 'react-redux'
+import React, { useState, useEffect, useCallback } from 'react'
+import { GestureResponderEvent, ImageLoadEventData, Dimensions } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import ThemedButton from './ThemedButton'
 
-import {FilterHelper} from '~/src/helpers/FilterHelper'
-import {
-  RelativeLayout,
-  LinearLayout,
-  TextView,
-  ImageView,
-} from '~/src/styles/styled-components'
+import { FilterHelper } from '~/src/helpers/FilterHelper'
 
 interface Props {
   onPress: (evt: GestureResponderEvent) => void
@@ -28,12 +16,8 @@ interface Props {
   isDark?: boolean
 }
 
-const ThemedClaimButton: React.FC<Props> = (props) => {
-  const gradientButton =
-    Platform.OS === 'android'
-      ? ['#464c52', '#1c2329']
-      : ['#1c232999', '#464c52BB']
-  const {language} = useSelector((state: RootState) => state.settings)
+const ThemedClaimButton: React.FC<Props> = props => {
+  const { language } = useSelector((state: RootState) => state.settings)
   const [infoClaim, setInfoClaim] = useState<{
     textColor: string
     text: string
@@ -78,21 +62,15 @@ const ThemedClaimButton: React.FC<Props> = (props) => {
       srcIcon={infoClaim?.icon}
       label={infoClaim?.text}
       width={Dimensions.get('window').width * 0.6}
-      fontSize={'15px'}
+      fontSize="15px"
       labelPx={0}
       adjustsFontSizeToFit={false}
       iconSize={[15, 15]}
-      textColor={
-        infoClaim?.icon
-          ? props.isClaimAvailable
-            ? infoClaim.textColor
-            : undefined
-          : '#ffffff99'
-      }
+      textColor={infoClaim?.icon ? (props.isClaimAvailable ? infoClaim.textColor : undefined) : '#ffffff99'}
       iconAlignX="flex-end"
       labelWidth="100%"
       disabled={!props.isClaimAvailable}
-    ></ThemedButton>
+    />
   )
 }
 
@@ -104,4 +82,4 @@ ThemedClaimButton.propTypes = {
   isDark: PropTypes.bool,
 }
 
-export {ThemedClaimButton}
+export { ThemedClaimButton }

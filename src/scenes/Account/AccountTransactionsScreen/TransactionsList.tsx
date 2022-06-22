@@ -1,15 +1,15 @@
 import I18n from 'i18n-js'
 import moment from 'moment'
-import React, {useCallback, useMemo, useRef} from 'react'
-import {FlatList} from 'react-native'
+import React, { useCallback, useMemo, useRef } from 'react'
+import { FlatList } from 'react-native'
 
-import {FormattedTransaction} from './AccountTransactionsScreen'
-import {TransactionListItem} from './TransactionListItem'
+import { FormattedTransaction } from './AccountTransactionsScreen'
+import { TransactionListItem } from './TransactionListItem'
 
-import {FlatListEmpty} from '~/src/components/FlatListEmpty'
-import {FlatListFooter} from '~/src/components/FlatListFooter'
-import {Account} from '~/src/models/redux/Account'
-import {LinearLayout} from '~/src/styles/styled-components'
+import { FlatListEmpty } from '~/src/components/FlatListEmpty'
+import { FlatListFooter } from '~/src/components/FlatListFooter'
+import { Account } from '~/src/models/redux/Account'
+import { LinearLayout } from '~/src/styles/styled-components'
 
 interface TransactionsListDateProps {
   completedTransactions: FormattedTransaction[]
@@ -26,27 +26,24 @@ export const TransactionsList = ({
   onEndReached,
   showMoreLoading,
 }: TransactionsListDateProps) => {
-  const separateTransactionsPerDate = useCallback(
-    (transactions: FormattedTransaction[]) => {
-      const transactionsPerDate: Record<string, FormattedTransaction[]> = {}
+  const separateTransactionsPerDate = useCallback((transactions: FormattedTransaction[]) => {
+    const transactionsPerDate: Record<string, FormattedTransaction[]> = {}
 
-      transactions.forEach((transaction) => {
-        const {time} = transaction
+    transactions.forEach(transaction => {
+      const { time } = transaction
 
-        const date = moment.unix(time).format('YYYY-MM-DD')
+      const date = moment.unix(time).format('YYYY-MM-DD')
 
-        if (date in transactionsPerDate) {
-          transactionsPerDate[date].push(transaction)
-          return
-        }
+      if (date in transactionsPerDate) {
+        transactionsPerDate[date].push(transaction)
+        return
+      }
 
-        transactionsPerDate[date] = [transaction]
-      })
+      transactionsPerDate[date] = [transaction]
+    })
 
-      return transactionsPerDate
-    },
-    []
-  )
+    return transactionsPerDate
+  }, [])
 
   const completedTransactionsPerDate = useMemo(
     () => separateTransactionsPerDate(completedTransactions),
@@ -60,10 +57,7 @@ export const TransactionsList = ({
 
   const dates = useMemo(
     () =>
-      [
-        ...Object.keys(completedTransactionsPerDate),
-        ...Object.keys(pendingTransactionsPerDate),
-      ]
+      [...Object.keys(completedTransactionsPerDate), ...Object.keys(pendingTransactionsPerDate)]
         .filter((date, index, array) => array.indexOf(date) === index) //Remove duplicates
         .sort((a, b) => moment(b).diff(a)),
     [completedTransactionsPerDate, pendingTransactionsPerDate]
@@ -88,16 +82,12 @@ export const TransactionsList = ({
       <FlatList
         data={dates}
         ListFooterComponent={showMoreLoading ? <FlatListFooter /> : undefined}
-        ListEmptyComponent={
-          <FlatListEmpty
-            label={I18n.t('screens.accountTransaction.emptyList')}
-          />
-        }
+        ListEmptyComponent={<FlatListEmpty label={I18n.t('screens.accountTransaction.emptyList')} />}
         onEndReached={handleEndReached}
         onMomentumScrollBegin={handleMomentumScrollBegin}
         onEndReachedThreshold={0.5}
-        keyExtractor={(item) => item}
-        renderItem={({item: date}) => (
+        keyExtractor={item => item}
+        renderItem={({ item: date }) => (
           <TransactionListItem
             account={account}
             completedTransactions={completedTransactionsPerDate[date]}

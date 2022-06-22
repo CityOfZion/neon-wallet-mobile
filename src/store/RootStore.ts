@@ -1,18 +1,15 @@
-import {
-  reducer as network,
-  createReducer as createNetworkReducer,
-} from 'react-native-offline'
-import {combineReducers} from 'redux'
+import { createReducer as createNetworkReducer } from 'react-native-offline'
+import { combineReducers } from 'redux'
 
-import {AccountReducer} from '~src/store/account/AccountReducer'
-import {AppReducer} from '~src/store/app/AppReducer'
-import {ContactReducer} from '~src/store/contact/ContactReducer'
-import {LoadingReducer} from '~src/store/loading/LoadingReducer'
-import {SendTransactionReducer} from '~src/store/senderTransaction/SendTransactionReducer'
-import {SettingsReducer} from '~src/store/settings/SettingsReducer'
-import {TimerReducer} from '~src/store/timer/TimerReducer'
-import {WalletReducer} from '~src/store/wallet/WalletReducer'
-import {WalletConnectReducer} from '~src/store/walletConnect/WalletConnectReducer'
+import { AccountReducer } from '~src/store/account/AccountReducer'
+import { AppReducer } from '~src/store/app/AppReducer'
+import { ContactReducer } from '~src/store/contact/ContactReducer'
+import { LoadingReducer } from '~src/store/loading/LoadingReducer'
+import { SendTransactionReducer } from '~src/store/senderTransaction/SendTransactionReducer'
+import { SettingsReducer } from '~src/store/settings/SettingsReducer'
+import { TimerReducer } from '~src/store/timer/TimerReducer'
+import { WalletReducer } from '~src/store/wallet/WalletReducer'
+import { WalletConnectReducer } from '~src/store/walletConnect/WalletConnectReducer'
 export type RootState = ReturnType<typeof RootStore.reducers>
 
 export abstract class RootStore {

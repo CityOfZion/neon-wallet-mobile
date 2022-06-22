@@ -1,21 +1,16 @@
 import I18n from 'i18n-js'
-import React, {Fragment, useEffect, useState, useCallback} from 'react'
-import {useSelector} from 'react-redux'
+import React, { Fragment, useEffect, useState, useCallback } from 'react'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {BlockchainServiceKey, blockchainServices} from '~/src/blockchain'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { BlockchainServiceKey } from '~/src/blockchain'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
-import {Currency} from '~/src/enums/Currency'
-import {FilterHelper} from '~/src/helpers/FilterHelper'
-import {TokenAsset} from '~/src/models/TokenAsset'
-import {Account} from '~/src/models/redux/Account'
-import {
-  LinearLayout,
-  TextView,
-  ButtonView,
-  ImageView,
-} from '~/src/styles/styled-components'
+import { Currency } from '~/src/enums/Currency'
+import { FilterHelper } from '~/src/helpers/FilterHelper'
+import { TokenAsset } from '~/src/models/TokenAsset'
+import { Account } from '~/src/models/redux/Account'
+import { LinearLayout, TextView, ButtonView, ImageView } from '~/src/styles/styled-components'
 
 const AmountField = (props: {
   validatorAmount: (val: string) => boolean
@@ -37,7 +32,7 @@ const AmountField = (props: {
 
   const setValue = useCallback(
     (val: string, roundDown?: boolean) => {
-      var valueNumber
+      let valueNumber
       if (roundDown) {
         valueNumber = Math.floor(Number(val))
       } else valueNumber = Number(val)
@@ -45,11 +40,7 @@ const AmountField = (props: {
       if (!valueNumber) return
 
       val = val.replace(',', '.')
-      if (
-        tokenDecimalPlaces !== undefined &&
-        tokenDecimalPlaces !== null &&
-        tokenDecimalPlaces < 1
-      )
+      if (tokenDecimalPlaces !== undefined && tokenDecimalPlaces !== null && tokenDecimalPlaces < 1)
         val = val.replace('.', '')
 
       props.setAmount(Number(val))
@@ -57,75 +48,56 @@ const AmountField = (props: {
     [tokenDecimalPlaces]
   )
 
-  const {language} = useSelector((state: RootState) => state.settings)
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
-  const {tokens} = useSelector((state: RootState) => state.app)
+  const { language } = useSelector((state: RootState) => state.settings)
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const { tokens } = useSelector((state: RootState) => state.app)
 
   const getDecimals = useCallback(
     async (tokenSymbol: string, blockchain: BlockchainServiceKey) => {
-      return tokens.find(
-        (it) => it.symbol === tokenSymbol && it.blockchain === blockchain
-      )?.decimals
+      return tokens.find(it => it.symbol === tokenSymbol && it.blockchain === blockchain)?.decimals
     },
     [props.token]
   )
 
   useEffect(() => {
     if (props.token) {
-      getDecimals(props.token.symbol, props.token.blockchain).then((result) => {
+      getDecimals(props.token.symbol, props.token.blockchain).then(result => {
         setTokenDecimalPlaces(result)
       })
     }
   }, [props.token])
 
   return (
-    <Fragment>
-      <LinearLayout
-        orientation={'horiz'}
-        justifyContent={'space-between'}
-        mt={30}
-        mb={20}
-      >
+    <>
+      <LinearLayout orientation="horiz" justifyContent="space-between" mt={30} mb={20}>
         <LinearLayout weight={2}>
-          <InputLabel
-            title={I18n.t('modals.send.transactionInput.amount')}
-            color={'text.0'}
-            capitalize={true}
-          />
+          <InputLabel title={I18n.t('modals.send.transactionInput.amount')} color="text.0" capitalize />
         </LinearLayout>
-        <LinearLayout orientation={'horiz'} alignItems={'center'}>
-          <TextView mr={'6px'} color={'text.10'}>
+        <LinearLayout orientation="horiz" alignItems="center">
+          <TextView mr="6px" color="text.10">
             {I18n.t('modals.send.transactionInput.totalAfterTransaction')}
           </TextView>
-          <TextView color={'text.0'} fontFamily={'bold'} fontSize={'16px'}>
-            {props.remainingTokenBalance >= 0
-              ? FilterHelper.decimal(props.remainingTokenBalance, language)
-              : '-'}
+          <TextView color="text.0" fontFamily="bold" fontSize="16px">
+            {props.remainingTokenBalance >= 0 ? FilterHelper.decimal(props.remainingTokenBalance, language) : '-'}
           </TextView>
         </LinearLayout>
         <ButtonView
-          p={'8px'}
+          p="8px"
           onPress={() => {
             props.setFieldTyping('amountField')
             setValue(String(props.tokenBalance))
           }}
         >
-          <TextView color={'primary'} fontSize={'15px'} fontFamily={'medium'}>
+          <TextView color="primary" fontSize="15px" fontFamily="medium">
             {I18n.t('modals.send.transactionInput.max')}
           </TextView>
         </ButtonView>
       </LinearLayout>
-      <LinearLayout
-        position={'relative'}
-        orientation={'horiz'}
-        justifyContent={'space-between'}
-      >
-        <LinearLayout width={'50%'}>
+      <LinearLayout position="relative" orientation="horiz" justifyContent="space-between">
+        <LinearLayout width="50%">
           <InputWithValidation
             onFocus={() => props.setFieldTyping('amountField')}
-            onChangeText={(val) => props.onAmountChanged(val)}
+            onChangeText={val => props.onAmountChanged(val)}
             color={theme.colors.text[0]}
             invalidColor={theme.colors.text[10]}
             invalidMessageColor={theme.colors.quinary}
@@ -133,31 +105,24 @@ const AmountField = (props: {
             placeholder={I18n.t('modals.send.transactionInput.enterValue', {
               value: props.token ? props.token.symbol : 'Token',
             })}
-            validator={(val) => props.validatorAmount(val)}
-            invalidMessage={I18n.t(
-              'modals.send.transactionInput.insufficientFunds'
-            )}
+            validator={val => props.validatorAmount(val)}
+            invalidMessage={I18n.t('modals.send.transactionInput.insufficientFunds')}
             separatorColor={theme.colors.background[13]}
             sideMargins={0}
-            hidePaste={true}
-            hideScan={true}
+            hidePaste
+            hideScan
             keyboardType="numeric"
             editable={Boolean(props.token)}
           />
         </LinearLayout>
-        <LinearLayout width={'45%'}>
-          <LinearLayout height={'50px'} orientation={'horiz'}>
-            <TextView
-              color={'white'}
-              fontSize={'20px'}
-              fontFamily={'medium'}
-              mr={5}
-            >
+        <LinearLayout width="45%">
+          <LinearLayout height="50px" orientation="horiz">
+            <TextView color="white" fontSize="20px" fontFamily="medium" mr={5}>
               {`${props.currency}:`}
             </TextView>
             <InputWithValidation
               onFocus={() => props.setFieldTyping('fiatField')}
-              onChangeText={(val) => props.onFiatChanged(val)}
+              onChangeText={val => props.onFiatChanged(val)}
               color={theme.colors.text[0]}
               invalidColor={theme.colors.text[10]}
               invalidMessageColor={theme.colors.quinary}
@@ -166,45 +131,38 @@ const AmountField = (props: {
                 value: props.currency,
               })}
               validator={() => true}
-              invalidMessage={I18n.t(
-                'modals.send.transactionInput.insufficientFunds'
-              )}
+              invalidMessage={I18n.t('modals.send.transactionInput.insufficientFunds')}
               separatorColor={theme.colors.background[13]}
               sideMargins={0}
-              hidePaste={true}
-              hideScan={true}
+              hidePaste
+              hideScan
               keyboardType="numeric"
               editable={!!tokenDecimalPlaces}
             />
           </LinearLayout>
           <ButtonView
             mt={2}
-            alignSelf={'flex-end'}
+            alignSelf="flex-end"
             onPress={() => {
               props.setFieldTyping('fiatField')
               props.setFiat(Math.floor(Number(props.fiat)))
             }}
           >
-            <LinearLayout orientation={'horiz'}>
+            <LinearLayout orientation="horiz">
               <ImageView
-                mr={'3'}
-                alignSelf={'center'}
+                mr="3"
+                alignSelf="center"
                 source={require('~src/assets/images/round-down-arrows.png')}
                 resizeMode="contain"
               />
-              <TextView
-                color={'primary'}
-                fontSize={'15px'}
-                fontFamily={'medium'}
-                mb={'2'}
-              >
+              <TextView color="primary" fontSize="15px" fontFamily="medium" mb="2">
                 {I18n.t('modals.send.transactionInput.roundDown')}
               </TextView>
             </LinearLayout>
           </ButtonView>
         </LinearLayout>
       </LinearLayout>
-    </Fragment>
+    </>
   )
 }
 

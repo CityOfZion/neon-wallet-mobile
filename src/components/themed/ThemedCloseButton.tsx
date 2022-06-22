@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import {NativeSyntheticEvent, NativeTouchEvent} from 'react-native'
+import { NativeSyntheticEvent, NativeTouchEvent } from 'react-native'
 
-import {Normalize} from '~/src/app/Normalize'
+import { Normalize } from '~/src/app/Normalize'
 import ThemedButton from '~src/components/themed/ThemedButton'
 
 interface Props {
@@ -10,16 +10,16 @@ interface Props {
   iconSize?: [number, number]
 }
 
-const ThemedCloseButton: React.FC<Props> = (props) => {
+const ThemedCloseButton: React.FC<Props> = props => {
   return (
     <ThemedButton
       iconSize={props.iconSize}
       onPress={props.onPress}
       srcIcon={require('~src/assets/images/button_close_white.png')}
-      textColor={'text.0'}
+      textColor="text.0"
       rounded={false}
-      flat={true}
-      contentStyle={{height: Normalize.scale(40)}}
+      flat
+      contentStyle={{ height: Normalize.scale(40) }}
     />
   )
 }

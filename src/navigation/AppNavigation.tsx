@@ -1,39 +1,31 @@
-import {JsonRpcRequest} from '@json-rpc-tools/utils'
-import {NavigationContainer, RouteProp} from '@react-navigation/native'
-import {Await, AwaitActivity} from '@simpli/react-native-await'
+import { JsonRpcRequest } from '@json-rpc-tools/utils'
+import { NavigationContainer, RouteProp } from '@react-navigation/native'
+import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, {useEffect, useRef, useState} from 'react'
-import {InteractionManager} from 'react-native'
-import {showMessage} from 'react-native-flash-message'
-import {useDispatch, useSelector} from 'react-redux'
-import {ThemeProvider} from 'styled-components'
+import React, { useEffect, useRef, useState } from 'react'
+import { InteractionManager } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
+import { useDispatch, useSelector } from 'react-redux'
+import { ThemeProvider } from 'styled-components'
 
-import {
-  blockchainServices,
-  getBlockchainByAddress,
-  hasWCIntegration,
-} from '../blockchain'
-import {applicationConfig} from '../config/ApplicationConfig'
-import {useWalletConnect} from '../contexts/WalletConnectContext'
-import PasscodeStackNavigation, {
-  PasscodeStackParams,
-} from './PasscodeStackNavigation'
+import { blockchainServices, getBlockchainByAddress, hasWCIntegration } from '../blockchain'
+import { applicationConfig } from '../config/ApplicationConfig'
+import { useWalletConnect } from '../contexts/WalletConnectContext'
+import PasscodeStackNavigation, { PasscodeStackParams } from './PasscodeStackNavigation'
 
-import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Storage} from '~src/app/Storage'
-import {Sync} from '~src/app/Sync'
+import { createStackNavigator } from '~/node_modules/@react-navigation/stack'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Storage } from '~src/app/Storage'
+import { Sync } from '~src/app/Sync'
 import LoadingOverlay from '~src/components/LoadingOverlay'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import {DeepLinkingConfig} from '~src/config/DeepLinkingConfig'
-import {screenConfig} from '~src/config/ScreenConfig'
-import ModalStackNavigation, {
-  ModalParams,
-} from '~src/navigation/ModalStackNavigation'
-import TabNavigation, {TabParams} from '~src/navigation/TabNavigation'
+import { DeepLinkingConfig } from '~src/config/DeepLinkingConfig'
+import { screenConfig } from '~src/config/ScreenConfig'
+import ModalStackNavigation, { ModalParams } from '~src/navigation/ModalStackNavigation'
+import TabNavigation, { TabParams } from '~src/navigation/TabNavigation'
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import OnboardingPage from '~src/scenes/OnboardingPage'
-import QRCodeScan, {QRCodeScanParams} from '~src/scenes/QRCodeScan'
+import QRCodeScan, { QRCodeScanParams } from '~src/scenes/QRCodeScan'
 
 export type RootStackParamList = {
   Tab: TabParams
@@ -56,11 +48,9 @@ const AppNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => {
     return wrapper.theme[state.settings.theme]
   })
-  const {isLoading, loadingText, progress} = useSelector(
-    (state: RootState) => state.loading
-  )
-  const {status: timerStatus} = useSelector((state: RootState) => state.timer)
-  const {isConnected} = useSelector((state: RootState) => state.network)
+  const { isLoading, loadingText, progress } = useSelector((state: RootState) => state.loading)
+  const { status: timerStatus } = useSelector((state: RootState) => state.timer)
+  const { isConnected } = useSelector((state: RootState) => state.network)
 
   const walletConnectCtx = useWalletConnect()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
@@ -122,12 +112,10 @@ const AppNavigation = (props: Props) => {
     }
 
     intervalRef.current = setInterval(() => {
-      interactionRef.current = InteractionManager.runAfterInteractions(
-        async () => {
-          await Sync.fetchs(dispatchAsync)
-          await Sync.refresh(dispatchAsync)
-        }
-      )
+      interactionRef.current = InteractionManager.runAfterInteractions(async () => {
+        await Sync.fetchs(dispatchAsync)
+        await Sync.refresh(dispatchAsync)
+      })
     }, applicationConfig.defaultDataRefreshTimeInMilliseconds)
 
     return () => {
@@ -167,22 +155,20 @@ const AppNavigation = (props: Props) => {
         request.method === 'testInvoke' || request.method === 'multiTestInvoke'
     )
 
-    walletConnectCtx.onRequestListener(
-      async (accountAddress, _chain, request: JsonRpcRequest) => {
-        const blockchain = getBlockchainByAddress(accountAddress)
+    walletConnectCtx.onRequestListener(async (accountAddress, _chain, request: JsonRpcRequest) => {
+      const blockchain = getBlockchainByAddress(accountAddress)
 
-        if (blockchain) {
-          const bs = blockchainServices[blockchain]
+      if (blockchain) {
+        const bs = blockchainServices[blockchain]
 
-          if (hasWCIntegration(bs)) {
-            const result = await bs.rpcCall(accountAddress, request)
+        if (hasWCIntegration(bs)) {
+          const result = await bs.rpcCall(accountAddress, request)
 
-            return result
-          }
+          return result
         }
-        throw new Error('Failed request listener')
       }
-    )
+      throw new Error('Failed request listener')
+    })
   }, [])
 
   const getInitialRouteName = () => {
@@ -199,37 +185,20 @@ const AppNavigation = (props: Props) => {
   return (
     <>
       <>
-        <AwaitActivity name={'application'} loadingView={<ScreenLoader />}>
+        <AwaitActivity name="application" loadingView={<ScreenLoader />}>
           <NavigationContainer linking={linking} fallback={<ScreenLoader />}>
-            {isLoading && (
-              <LoadingOverlay progress={progress} loadingText={loadingText} />
-            )}
+            {isLoading && <LoadingOverlay progress={progress} loadingText={loadingText} />}
             <ThemeProvider theme={theme}>
               <RootStack.Navigator
                 initialRouteName={getInitialRouteName()}
                 headerMode="none"
                 screenOptions={screenConfig}
               >
-                <RootStack.Screen
-                  name={wrapper.route.Tab.name}
-                  component={TabNavigation}
-                />
-                <RootStack.Screen
-                  name={wrapper.route.Onboarding.name}
-                  component={OnboardingPage}
-                />
-                <RootStack.Screen
-                  name={wrapper.route.QRCodeScan.name}
-                  component={QRCodeScan}
-                />
-                <RootStack.Screen
-                  name={wrapper.route.Login.name}
-                  component={LoginPage}
-                />
-                <RootStack.Screen
-                  name={wrapper.route.PasscodeStack.name}
-                  component={PasscodeStackNavigation}
-                />
+                <RootStack.Screen name={wrapper.route.Tab.name} component={TabNavigation} />
+                <RootStack.Screen name={wrapper.route.Onboarding.name} component={OnboardingPage} />
+                <RootStack.Screen name={wrapper.route.QRCodeScan.name} component={QRCodeScan} />
+                <RootStack.Screen name={wrapper.route.Login.name} component={LoginPage} />
+                <RootStack.Screen name={wrapper.route.PasscodeStack.name} component={PasscodeStackNavigation} />
                 <RootStack.Screen
                   name={wrapper.route.Modal.name}
                   component={ModalStackNavigation}

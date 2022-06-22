@@ -1,12 +1,12 @@
-import {BlurView} from 'expo-blur'
+import { BlurView } from 'expo-blur'
 import PropTypes from 'prop-types'
-import React, {useState, useEffect, useCallback} from 'react'
-import {Dimensions} from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { Dimensions } from 'react-native'
 import * as Progress from 'react-native-progress'
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 interface IProgressBar {
   show: boolean
   timeToComplete: number
@@ -14,10 +14,8 @@ interface IProgressBar {
   onFinish: () => void
 }
 
-export const ProgressBar: React.FC<IProgressBar> = (props) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+export const ProgressBar: React.FC<IProgressBar> = props => {
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const [progressBarStatus, setProgressBarStatus] = useState<number>(0)
   useEffect(() => {
     if (props.show) {
@@ -25,7 +23,7 @@ export const ProgressBar: React.FC<IProgressBar> = (props) => {
       const progressTime = 1 / secondsToComplete
       const timer = setInterval(() => {
         if (!(progressBarStatus >= 1)) {
-          setProgressBarStatus((prevState) => {
+          setProgressBarStatus(prevState => {
             if (prevState + progressTime >= 1) {
               return 1
             } else {
@@ -58,12 +56,8 @@ export const ProgressBar: React.FC<IProgressBar> = (props) => {
         alignItems: 'center',
       }}
     >
-      <LinearLayout
-        alignItems={'center'}
-        height={'90px'}
-        justifyContent={'space-between'}
-      >
-        <TextView color={'#fff'} textAlign={'center'} fontSize={'18px'}>
+      <LinearLayout alignItems="center" height="90px" justifyContent="space-between">
+        <TextView color="#fff" textAlign="center" fontSize="18px">
           {props.text}
         </TextView>
         <Progress.Bar
@@ -79,7 +73,7 @@ export const ProgressBar: React.FC<IProgressBar> = (props) => {
           width={Dimensions.get('window').width * 0.8}
           height={10}
           color={theme.colors.primary}
-          borderColor={'transparent'}
+          borderColor="transparent"
         />
       </LinearLayout>
     </BlurView>

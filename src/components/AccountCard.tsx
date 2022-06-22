@@ -1,8 +1,8 @@
-import {useNavigation} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
-import React, {useState, useRef, useEffect} from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
   LayoutChangeEvent,
   NativeSyntheticEvent,
@@ -11,8 +11,8 @@ import {
   Animated,
   Platform,
 } from 'react-native'
-import {showMessage} from 'react-native-flash-message'
-import {useSelector} from 'react-redux'
+import { showMessage } from 'react-native-flash-message'
+import { useSelector } from 'react-redux'
 import {
   border,
   BorderProps,
@@ -28,20 +28,15 @@ import {
   SpaceProps,
 } from 'styled-system'
 
-import {wrapper} from '~src/app/ApplicationWrapper' //@ts-ignore
+import { wrapper } from '~src/app/ApplicationWrapper' //@ts-ignore
 import CardSvg from '~src/assets/images/card.svg'
-import {getBlockchainLogo} from '~src/blockchain'
-import {FilterHelper} from '~src/helpers/FilterHelper'
-import {UtilsHelper} from '~src/helpers/UtilsHelper'
-import {Account} from '~src/models/redux/Account'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import styled, {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
-import {orientation, weight} from '~src/styles/styled-system.config'
+import { getBlockchainLogo } from '~src/blockchain'
+import { FilterHelper } from '~src/helpers/FilterHelper'
+import { UtilsHelper } from '~src/helpers/UtilsHelper'
+import { Account } from '~src/models/redux/Account'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import styled, { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { orientation, weight } from '~src/styles/styled-system.config'
 
 interface Props {
   onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
@@ -59,9 +54,9 @@ interface Props {
   disableSecondTouch?: boolean
 }
 
-const AccountCard: React.FC<Props> = (props) => {
-  const {exchange} = useSelector((state: RootState) => state.app)
-  const {language, currency} = useSelector((state: RootState) => state.settings)
+const AccountCard: React.FC<Props> = props => {
+  const { exchange } = useSelector((state: RootState) => state.app)
+  const { language, currency } = useSelector((state: RootState) => state.settings)
   const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
   const [viewHeight, setViewHeight] = useState<number>(0)
   const [disableTouch, setDisableTouch] = useState<boolean>(false)
@@ -75,7 +70,7 @@ const AccountCard: React.FC<Props> = (props) => {
   }
 
   const layoutEvent = (event: LayoutChangeEvent) => {
-    const {height} = event.nativeEvent.layout
+    const { height } = event.nativeEvent.layout
     setViewHeight(height)
   }
   const fadeAnim = useRef(new Animated.Value(0)).current
@@ -108,27 +103,22 @@ const AccountCard: React.FC<Props> = (props) => {
       disabled={props.disableSecondTouch ? disableTouch : false}
     >
       {props.hasShadow && (
-        <ShadowView pointerEvents={'none'}>
+        <ShadowView pointerEvents="none">
           <ImageView
             source={require('~src/assets/images/card-shadow.png')}
-            width={'112%'}
-            height={'112%'}
+            width="112%"
+            height="112%"
             resizeMode="contain"
           />
         </ShadowView>
       )}
 
-      <SvgView pointerEvents={'none'}>
-        <CardSvg
-          width={'115%'}
-          height={'115%'}
-          fill={bg()}
-          fillSecondary={FilterHelper.toDarkerShade(bg(), 1, 0.4)}
-        />
+      <SvgView pointerEvents="none">
+        <CardSvg width="115%" height="115%" fill={bg()} fillSecondary={FilterHelper.toDarkerShade(bg(), 1, 0.4)} />
       </SvgView>
 
       <BevelView
-        pointerEvents={'none'}
+        pointerEvents="none"
         style={{
           borderWidth: unit,
           borderRadius: 16 * unit,
@@ -138,110 +128,83 @@ const AccountCard: React.FC<Props> = (props) => {
           borderBottomColor: props.isVertical ? bright : dark,
         }}
       />
-      <Animated.View style={{opacity: fadeAnim}}>
+      <Animated.View style={{ opacity: fadeAnim }}>
         {!props.isInactive && (
-          <LinearLayout
-            orientation={'verti'}
-            width={'100%'}
-            height={'100%'}
-            pl={5 * unit}
-            pr={15 * unit}
-            py={10 * unit}
-          >
-            <LinearLayout
-              mt={'5px'}
-              orientation={'horiz'}
-              alignItems={'flex-end'}
-              width={'100%'}
-              pr={10 * unit}
-            >
+          <LinearLayout orientation="verti" width="100%" height="100%" pl={5 * unit} pr={15 * unit} py={10 * unit}>
+            <LinearLayout mt="5px" orientation="horiz" alignItems="flex-end" width="100%" pr={10 * unit}>
               <ImageView
                 width={30 * unit}
                 height={30 * unit}
                 source={getBlockchainLogo(props.account.blockchain, 'white')}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 ml={unit * 10}
                 mr={unit * 10}
                 mt={unit * 7}
-                alignSelf={'center'}
+                alignSelf="center"
               />
-              <LinearLayout weight={1} orientation={'verti'} height={'100%'}>
-                <LinearLayout orientation={'horiz'} alignItems={'center'}>
+              <LinearLayout weight={1} orientation="verti" height="100%">
+                <LinearLayout orientation="horiz" alignItems="center">
                   <TextView
                     mb={-4 * unit}
-                    fontFamily={'semibold'}
+                    fontFamily="semibold"
                     fontSize={22 * unit}
                     color="white"
                     textAlign="left"
                     numberOfLines={1}
-                    width={'88%'}
-                    allowFontScaling={true}
+                    width="88%"
+                    allowFontScaling
                   >
-                    {props.account.name?.length !== 0
-                      ? props.account.name
-                      : i18n.t('paymentCard.accountPlaceholder')}
+                    {props.account.name?.length !== 0 ? props.account.name : i18n.t('paymentCard.accountPlaceholder')}
                   </TextView>
                 </LinearLayout>
-                <LinearLayout
-                  mb={3 * unit}
-                  orientation={'horiz'}
-                  alignItems={'flex-end'}
-                  width={'100%'}
-                >
+                <LinearLayout mb={3 * unit} orientation="horiz" alignItems="flex-end" width="100%">
                   <TextView
                     mb={-2 * unit}
-                    fontFamily={'semibold'}
+                    fontFamily="semibold"
                     fontSize={13 * unit}
                     color="white"
                     textAlign="left"
                     numberOfLines={1}
-                    width={'88%'}
+                    width="88%"
                   >
-                    {i18n.t(
-                      `blockchainServices.${props.account.blockchain}.id`
-                    )}
+                    {i18n.t(`blockchainServices.${props.account.blockchain}.id`)}
                   </TextView>
                 </LinearLayout>
               </LinearLayout>
 
               {props.isCompacted ? (
-                <LinearLayout ml={10 * unit} alignItems={'flex-start'}>
+                <LinearLayout ml={10 * unit} alignItems="flex-start">
                   <TextView
-                    fontFamily={'bold'}
+                    fontFamily="bold"
                     fontSize={12 * unit}
                     color="white"
                     textAlign="left"
                     fontWeight="bold"
-                    includeFontPadding={true}
+                    includeFontPadding
                   >
-                    {(!props.hideBalance && i18n.t('paymentCard.balance')) ||
-                      ''}
+                    {(!props.hideBalance && i18n.t('paymentCard.balance')) || ''}
                   </TextView>
 
                   <TextView
                     mt={-6 * unit}
-                    fontFamily={'semibold'}
+                    fontFamily="semibold"
                     fontSize={21 * unit}
                     color="white"
                     textAlign="center"
                     fontWeight="bold"
-                    allowFontScaling={true}
-                    adjustsFontSizeToFit={true}
+                    allowFontScaling
+                    adjustsFontSizeToFit
                     numberOfLines={1}
                   >
                     {!props.hideBalance
-                      ? props.account.formattedBalanceAmount(
-                          currency,
-                          language,
-                          exchange[props.account.blockchain]
-                        )
+                      ? props.account.formattedBalanceAmount(currency, language, exchange[props.account.blockchain])
                       : ''}
                   </TextView>
                 </LinearLayout>
               ) : (
                 !props.hideQRCode && (
                   <ButtonView
-                    style={{alignSelf: 'baseline'}}
+                    style={{ alignSelf: 'baseline' }}
                     onPress={() => {
                       navigation.navigate(wrapper.route.Modal.name, {
                         screen: wrapper.route.AccountQRCode.name,
@@ -277,12 +240,7 @@ const AccountCard: React.FC<Props> = (props) => {
             )}
 
             {!props.isStackMode && (
-              <LinearLayout
-                orientation={'verti'}
-                justifyContent={'center'}
-                alignItems={'center'}
-                weight={1}
-              >
+              <LinearLayout orientation="verti" justifyContent="center" alignItems="center" weight={1}>
                 {!props.isCompacted && (
                   <TextView
                     mb={3 * unit}
@@ -290,16 +248,12 @@ const AccountCard: React.FC<Props> = (props) => {
                     color="white"
                     textAlign="center"
                     fontFamily="semibold"
-                    allowFontScaling={true}
-                    adjustsFontSizeToFit={true}
+                    allowFontScaling
+                    adjustsFontSizeToFit
                     numberOfLines={1}
                   >
                     {!props.hideBalance
-                      ? props.account.formattedBalanceAmount(
-                          currency,
-                          language,
-                          exchange[props.account.blockchain]
-                        )
+                      ? props.account.formattedBalanceAmount(currency, language, exchange[props.account.blockchain])
                       : ''}
                   </TextView>
                 )}
@@ -309,14 +263,14 @@ const AccountCard: React.FC<Props> = (props) => {
             {props.account.address && (
               <LinearLayout
                 mt={10 * unit}
-                orientation={'horiz'}
-                alignItems={'flex-end'}
-                justifyContent={'space-between'}
+                orientation="horiz"
+                alignItems="flex-end"
+                justifyContent="space-between"
                 mb={5 * unit}
                 pr={30 * unit}
               >
                 <LinearLayout>
-                  <LinearLayout orientation={'horiz'}>
+                  <LinearLayout orientation="horiz">
                     {props.account.accountType === 'watch' ? (
                       <ImageView
                         width={21 * unit}
@@ -325,7 +279,7 @@ const AccountCard: React.FC<Props> = (props) => {
                         ml={7 * unit}
                         mt={4 * unit}
                         mb={4 * unit}
-                        alignSelf={'center'}
+                        alignSelf="center"
                         mr={8 * unit}
                       />
                     ) : (
@@ -333,24 +287,19 @@ const AccountCard: React.FC<Props> = (props) => {
                     )}
 
                     <LinearLayout width={285 * unit}>
-                      <TextView
-                        fontSize={12 * unit}
-                        color="white"
-                        textAlign="left"
-                        fontFamily="bold"
-                      >
+                      <TextView fontSize={12 * unit} color="white" textAlign="left" fontFamily="bold">
                         {i18n.t('paymentCard.address')}
                       </TextView>
 
                       <TextView
-                        color={'primary'}
+                        color="primary"
                         opacity={0.6}
                         textAlign="left"
-                        fontFamily={'medium'}
-                        ellipsizeMode={'middle'}
-                        pr={'1px'}
+                        fontFamily="medium"
+                        ellipsizeMode="middle"
+                        pr="1px"
                         numberOfLines={1}
-                        fontSize={'14'}
+                        fontSize="14"
                       >
                         {props.account.address}
                       </TextView>
@@ -378,19 +327,18 @@ const AccountCard: React.FC<Props> = (props) => {
                           }
                         : {
                             marginBottom: 15 * unit,
-                            marginRight:
-                              Platform.OS !== 'ios' ? 24 * unit : 38 * unit,
+                            marginRight: Platform.OS !== 'ios' ? 24 * unit : 38 * unit,
                           }
                     }
                   >
                     <ImageView
                       width={!props.isCustomAccount ? 14 * unit : 10}
                       height={!props.isCustomAccount ? 18 * unit : 14}
-                      resizeMode={'contain'}
+                      resizeMode="contain"
                       source={require('~src/assets/images/icon-copy-green.png')}
                       style={
                         !props.isCustomAccount
-                          ? {opacity: 0.5}
+                          ? { opacity: 0.5 }
                           : {
                               opacity: 0.5,
                               width: 10,
@@ -436,14 +384,7 @@ AccountCard.defaultProps = {
 }
 
 const PaymentCardView = styled.TouchableOpacity<
-  ColorProps &
-    FlexboxProps &
-    SpaceProps &
-    BorderProps &
-    LayoutProps &
-    OrientationProps &
-    PositionProps &
-    WeightProps
+  ColorProps & FlexboxProps & SpaceProps & BorderProps & LayoutProps & OrientationProps & PositionProps & WeightProps
 >`
   ${layout}
   ${color}

@@ -1,10 +1,10 @@
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {StyleSheet, View, Image, TextInput} from 'react-native'
-import {useSelector} from 'react-redux'
+import { StyleSheet, View, Image, TextInput } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
+import { wrapper } from '~/src/app/ApplicationWrapper'
 
 type TSearchBar<P = any> = {
   prevData: P[]
@@ -23,9 +23,7 @@ export const SearchBar: React.FC<TSearchBar> = ({
   lighterColor,
   emptySearchList,
 }) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const handleFilter = (searchText: string) => {
     if (searchText === '') {
@@ -61,12 +59,9 @@ export const SearchBar: React.FC<TSearchBar> = ({
   })
   return (
     <View style={styles.design}>
-      <Image
-        source={require('~/src/assets/images/icon-search-gray.png')}
-        style={styles.icon}
-      />
+      <Image source={require('~/src/assets/images/icon-search-gray.png')} style={styles.icon} />
       <TextInput
-        onChange={(e) => handleFilter(e.nativeEvent.text)}
+        onChange={e => handleFilter(e.nativeEvent.text)}
         style={styles.input}
         placeholder={i18n.t('persistContact.search')}
         placeholderTextColor="#899fa8"

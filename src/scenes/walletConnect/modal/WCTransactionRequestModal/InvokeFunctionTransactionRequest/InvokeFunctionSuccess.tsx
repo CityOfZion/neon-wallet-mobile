@@ -1,34 +1,22 @@
-import {CommonActions, useNavigation} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
 import React from 'react'
-import {Linking} from 'react-native'
-import {useDispatch, useSelector} from 'react-redux'
+import { Linking } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {TransactionRequestSuccessElementProps} from '../TransactionRequestBase'
+import { TransactionRequestSuccessElementProps } from '../TransactionRequestBase'
 
-import {blockchainServices} from '~/src/blockchain'
+import { blockchainServices } from '~/src/blockchain'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import {RootStore} from '~/src/store/RootStore'
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Normalize} from '~src/app/Normalize'
-import {UtilsHelper} from '~src/helpers/UtilsHelper'
-import {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import { RootStore } from '~/src/store/RootStore'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Normalize } from '~src/app/Normalize'
+import { UtilsHelper } from '~src/helpers/UtilsHelper'
+import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
-export const InvokeFunctionSuccess = ({
-  account,
-  transactionId,
-}: TransactionRequestSuccessElementProps) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
-  const wallet = useSelector((state: RootState) =>
-    state.app.wallets.find((wallet) => wallet.id === account.idWallet)
-  )
+export const InvokeFunctionSuccess = ({ account, transactionId }: TransactionRequestSuccessElementProps) => {
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const wallet = useSelector((state: RootState) => state.app.wallets.find(wallet => wallet.id === account.idWallet))
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
@@ -39,7 +27,7 @@ export const InvokeFunctionSuccess = ({
 
     navigation.reset({
       index: 0,
-      routes: [{name: wrapper.route.Tab.name}],
+      routes: [{ name: wrapper.route.Tab.name }],
     })
 
     dispatch(RootStore.wallet.actions.selectWallet(wallet.id))
@@ -47,30 +35,22 @@ export const InvokeFunctionSuccess = ({
 
     navigation.navigate(wrapper.route.GetWallet.name)
     navigation.navigate(wrapper.route.GetAccount.name)
-    navigation.navigate(wrapper.route.AccountTransactionsScreen.name, {account})
+    navigation.navigate(wrapper.route.AccountTransactionsScreen.name, { account })
   }
 
   const navigateToDora = () => {
-    Linking.openURL(
-      blockchainServices[account.blockchain]?.provider.siteUrlQuery +
-        transactionId
-    )
+    Linking.openURL(blockchainServices[account.blockchain]?.provider.siteUrlQuery + transactionId)
   }
 
   return (
-    <LinearLayout
-      orientation={'verti'}
-      alignItems={'center'}
-      width={'100%'}
-      height={'100%'}
-    >
+    <LinearLayout orientation="verti" alignItems="center" width="100%" height="100%">
       <ImageView
-        alignSelf={'center'}
-        resizeMode={'contain'}
+        alignSelf="center"
+        resizeMode="contain"
         width={Normalize.scale(115)}
         height={Normalize.scale(110)}
         mb={22}
-        mt={'5%'}
+        mt="5%"
         source={require('~src/assets/images/icon-circle-check-green.png')}
       />
 
@@ -80,7 +60,7 @@ export const InvokeFunctionSuccess = ({
         fontWeight={500}
         lineHeight="22px"
         fontFamily="medium"
-        textAlign={'center'}
+        textAlign="center"
         mb={15}
       >
         {i18n.t('modals.transactionSent.transactionSent')}
@@ -99,14 +79,7 @@ export const InvokeFunctionSuccess = ({
         {i18n.t('modals.transactionSent.transactionSuccessText')}
       </TextView>
 
-      <TextView
-        color={theme.colors.text[6]}
-        fontSize={14}
-        fontFamily="medium"
-        fontWeight={500}
-        textAlign="left"
-        mb={3}
-      >
+      <TextView color={theme.colors.text[6]} fontSize={14} fontFamily="medium" fontWeight={500} textAlign="left" mb={3}>
         {i18n.t('modals.transactionSent.transactionId').toUpperCase()}
       </TextView>
       <ButtonView
@@ -128,11 +101,7 @@ export const InvokeFunctionSuccess = ({
         >
           {transactionId}
         </TextView>
-        <ImageView
-          width="16px"
-          resizeMode="contain"
-          source={require('~src/assets/images/icon-copy-green.png')}
-        />
+        <ImageView width="16px" resizeMode="contain" source={require('~src/assets/images/icon-copy-green.png')} />
       </ButtonView>
 
       <LinearLayout width="100%">
@@ -144,10 +113,7 @@ export const InvokeFunctionSuccess = ({
       </LinearLayout>
 
       <LinearLayout width="100%" mt="10px">
-        <ThemedButton
-          onPress={navigateToDora}
-          label={i18n.t('modals.transactionSent.viewOnDora')}
-        />
+        <ThemedButton onPress={navigateToDora} label={i18n.t('modals.transactionSent.viewOnDora')} />
       </LinearLayout>
     </LinearLayout>
   )

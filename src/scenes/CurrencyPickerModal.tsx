@@ -1,17 +1,13 @@
-import {StackNavigationProp} from '@react-navigation/stack'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import SelectorList, {SelectorItem} from '~src/components/SelectorList'
-import SwiperPanel, {
-  useSwiperController,
-  CloseButton,
-} from '~src/components/SwiperPanel'
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import {Currency} from '~src/enums/Currency'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {RootStore} from '~src/store/RootStore'
+import SelectorList, { SelectorItem } from '~src/components/SelectorList'
+import SwiperPanel, { useSwiperController, CloseButton } from '~src/components/SwiperPanel'
+import { Currency } from '~src/enums/Currency'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { RootStore } from '~src/store/RootStore'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -20,7 +16,7 @@ interface Props {
 const CurrencyPickerModal = (props: Props) => {
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
-  const {currency} = useSelector((state: RootState) => state.settings)
+  const { currency } = useSelector((state: RootState) => state.settings)
 
   const changeCurrency = async (val: Currency) => {
     dispatch(RootStore.settings.actions.setCurrency(val))
@@ -51,15 +47,15 @@ const CurrencyPickerModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={i18n.t('modals.currency.title')}
-      fullSize={true}
+      fullSize
       padding={16}
       paddingTop={24}
       onClose={props.navigation.goBack}
       onLeftPress={controller.close}
-      rightButton={<CloseButton mr={'20px'} />}
-      disableDefaultScrollView={true}
+      rightButton={<CloseButton mr="20px" />}
+      disableDefaultScrollView
       onRightPress={controller.close}
-      solidColorBG={true}
+      solidColorBG
     >
       <SelectorList items={currencies} />
     </SwiperPanel>

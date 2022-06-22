@@ -1,14 +1,14 @@
-import {StackNavigationProp} from '@react-navigation/stack'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import SelectorList, {SelectorItem} from '~src/components/SelectorList'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import SelectorList, { SelectorItem } from '~src/components/SelectorList'
+import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import {Theme} from '~src/enums/Theme'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {RootStore} from '~src/store/RootStore'
+import { Theme } from '~src/enums/Theme'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { RootStore } from '~src/store/RootStore'
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
 }
@@ -16,7 +16,7 @@ interface Props {
 const ThemePickerModal = (props: Props) => {
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
-  const {theme} = useSelector((state: RootState) => state.settings)
+  const { theme } = useSelector((state: RootState) => state.settings)
 
   const changeTheme = async (val: Theme) => {
     dispatch(RootStore.settings.actions.setTheme(val))
@@ -44,13 +44,13 @@ const ThemePickerModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={i18n.t('modals.theme.title')}
-      fullSize={true}
+      fullSize
       padding={16}
       paddingTop={24}
       onClose={props.navigation.goBack}
       rightButton={<ThemedCloseButton onPress={controller.close} />}
       onLeftPress={controller.close}
-      disableDefaultScrollView={true}
+      disableDefaultScrollView
     >
       <SelectorList items={themes} />
     </SwiperPanel>

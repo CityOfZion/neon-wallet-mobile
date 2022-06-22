@@ -1,28 +1,22 @@
-import {StackNavigationProp} from '@react-navigation/stack'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import allSettled from 'promise.allsettled'
-import React, {useEffect, useState, useRef, useCallback} from 'react'
-import {ImageLoadEventData, SafeAreaView, StyleSheet} from 'react-native'
-import Carousel, {Pagination} from 'react-native-snap-carousel'
-import {useSelector} from 'react-redux'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
+import { ImageLoadEventData, SafeAreaView } from 'react-native'
+import Carousel, { Pagination } from 'react-native-snap-carousel'
+import { useSelector } from 'react-redux'
 
-import {blockchainList} from '../blockchain'
-import {AsteroidHelper} from '../helpers/AsteroidHelper'
-import {useBlockchainActionsHook} from '../hooks'
+import { blockchainList } from '../blockchain'
+import { AsteroidHelper } from '../helpers/AsteroidHelper'
+import { useBlockchainActionsHook } from '../hooks'
 
-import {useHeaderHeight} from '~/node_modules/@react-navigation/stack'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Normalize} from '~src/app/Normalize'
-import {Storage} from '~src/app/Storage'
-import {applicationConfig} from '~src/config/ApplicationConfig'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import styled, {
-  ImageView,
-  LinearLayout,
-  RelativeLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Normalize } from '~src/app/Normalize'
+import { Storage } from '~src/app/Storage'
+import { applicationConfig } from '~src/config/ApplicationConfig'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import styled, { ImageView, LinearLayout, RelativeLayout, TextView } from '~src/styles/styled-components'
 
 interface OnboardingSlideProps {
   header: string
@@ -36,17 +30,13 @@ interface OnboardingPageProps {
 
 const OnboardingSlide = (props: OnboardingSlideProps) => {
   return (
-    <LinearLayout orientation={'verti'} height={'100%'}>
+    <LinearLayout orientation="verti" height="100%">
       <RelativeLayout weight={3} mt={100}>
-        <ImageView
-          style={{width: '100%', height: '100%'}}
-          resizeMode="contain"
-          source={props.image}
-        />
+        <ImageView style={{ width: '100%', height: '100%' }} resizeMode="contain" source={props.image} />
       </RelativeLayout>
 
-      <LinearLayout justifyContent={'center'} weight={2} mb={50}>
-        <LinearLayout width={'100%'} mb={20} alignItems={'center'}>
+      <LinearLayout justifyContent="center" weight={2} mb={50}>
+        <LinearLayout width="100%" mb={20} alignItems="center">
           {props.bottomContent}
         </LinearLayout>
       </LinearLayout>
@@ -54,29 +44,16 @@ const OnboardingSlide = (props: OnboardingSlideProps) => {
   )
 }
 
-const FeatureText = (props: {title: string; subtitle: string}) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
-  const headerHeight = useHeaderHeight()
-  const unit = headerHeight * 0.015
+const FeatureText = (props: { title: string; subtitle: string }) => {
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   return (
-    <LinearLayout orientation={'verti'} mx={'7%'}>
-      <TextView
-        color={theme.colors.text[0]}
-        fontFamily={'semibold'}
-        fontSize={'22px'}
-        textAlign={'center'}
-      >
+    <LinearLayout orientation="verti" mx="7%">
+      <TextView color={theme.colors.text[0]} fontFamily="semibold" fontSize="22px" textAlign="center">
         {props.title}
       </TextView>
 
-      <FeatureDescription
-        mt={'2%'}
-        color={theme.colors.text[4]}
-        style={{lineHeight: 24}}
-      >
+      <FeatureDescription mt="2%" color={theme.colors.text[4]} style={{ lineHeight: 24 }}>
         {props.subtitle}
       </FeatureDescription>
     </LinearLayout>
@@ -90,14 +67,12 @@ const FeatureDescription = styled(TextView)`
 `
 
 const OnboardingPage = (props: OnboardingPageProps) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const carousel = useRef<Carousel<any>>(null)
   const [isLastPage, setIsLastPage] = useState(false)
   const [carouselIndex, setCarouselIndex] = useState(0)
   const blockchainActionsHook = useBlockchainActionsHook()
-  const {wallets} = useSelector((state: RootState) => state.app)
+  const { wallets } = useSelector((state: RootState) => state.app)
 
   const finish = async () => {
     await Storage.onboardingSeen.save(true)
@@ -114,7 +89,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
       'standard'
     )
 
-    const accountsPromise = blockchainList.map((blockchain) =>
+    const accountsPromise = blockchainList.map(blockchain =>
       blockchainActionsHook.createAccount(
         walletId,
         i18n.t('modals.blockchainList.countAccount', {
@@ -168,17 +143,11 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   ]
 
   return (
-    <LinearLayout flex={1} bg={'background.14'}>
+    <LinearLayout flex={1} bg="background.14">
       <SafeAreaView>
-        <LinearLayout
-          orientation={'verti'}
-          alignItems={'center'}
-          width={'100%'}
-          height={'100%'}
-          bg={'background.14'}
-        >
+        <LinearLayout orientation="verti" alignItems="center" width="100%" height="100%" bg="background.14">
           <Carousel
-            layout={'default'}
+            layout="default"
             ref={carousel}
             data={data}
             sliderWidth={applicationConfig.windowWidth}
@@ -186,14 +155,14 @@ const OnboardingPage = (props: OnboardingPageProps) => {
             inactiveSlideScale={1}
             inactiveSlideOpacity={0}
             inactiveSlideShift={25}
-            lockScrollWhileSnapping={true}
+            lockScrollWhileSnapping
             lockScrollTimeoutDuration={1000}
             activeSlideOffset={5}
             swipeThreshold={5}
-            enableSnap={true}
-            useScrollView={true}
+            enableSnap
+            useScrollView
             firstItem={0}
-            onSnapToItem={(index) => setCarouselIndex(index)}
+            onSnapToItem={index => setCarouselIndex(index)}
             renderItem={(imageList: {
               item: {
                 header: string
@@ -203,51 +172,32 @@ const OnboardingPage = (props: OnboardingPageProps) => {
               }
               index: number
             }) => {
-              const {item, index} = imageList
+              const { item, index } = imageList
               return (
-                <LinearLayout
-                  weight={1}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                  py={6}
-                >
+                <LinearLayout weight={1} justifyContent="center" alignItems="center" py={6}>
                   {index < data.length - 1 ? (
                     <OnboardingSlide
                       header={item.header}
                       image={item.image}
-                      bottomContent={
-                        <FeatureText
-                          title={i18n.t(item.title)}
-                          subtitle={i18n.t(item.subtitle)}
-                        />
-                      }
+                      bottomContent={<FeatureText title={i18n.t(item.title)} subtitle={i18n.t(item.subtitle)} />}
                     />
                   ) : (
                     <OnboardingSlide
                       header={item.header}
                       image={item.image}
                       bottomContent={
-                        <LinearLayout
-                          width={'100%'}
-                          mt={'15%'}
-                          alignItems={'center'}
-                        >
-                          <LinearLayout mb={'8%'}>
-                            <FeatureText
-                              title={i18n.t(item.title)}
-                              subtitle={i18n.t(item.subtitle)}
-                            />
+                        <LinearLayout width="100%" mt="15%" alignItems="center">
+                          <LinearLayout mb="8%">
+                            <FeatureText title={i18n.t(item.title)} subtitle={i18n.t(item.subtitle)} />
                           </LinearLayout>
 
-                          <LinearLayout width={'100%'} px={'7%'}>
+                          <LinearLayout width="100%" px="7%">
                             <ThemedButton
                               onPress={() => finish()}
-                              label={i18n.t(
-                                'onboarding.getStarted.buttonTitle'
-                              )}
-                              basic={true}
-                              bgColor={'primary'}
-                              textColor={'black'}
+                              label={i18n.t('onboarding.getStarted.buttonTitle')}
+                              basic
+                              bgColor="primary"
+                              textColor="black"
                             />
                           </LinearLayout>
                         </LinearLayout>
@@ -277,9 +227,9 @@ const OnboardingPage = (props: OnboardingPageProps) => {
             <>
               <NextButton
                 mb={Normalize.scale(30)}
-                color={'primary'}
+                color="primary"
                 onPress={() => carousel.current?.snapToNext()}
-                position={'absolute'}
+                position="absolute"
                 right={0}
                 bottom={0}
                 mr={Normalize.scale(30)}
@@ -287,15 +237,15 @@ const OnboardingPage = (props: OnboardingPageProps) => {
                 next
               </NextButton>
               <SkipButton
-                position={'absolute'}
+                position="absolute"
                 left={0}
                 bottom={0}
-                color={'text.0'}
+                color="text.0"
                 opacity={0.5}
                 mb={Normalize.scale(30)}
                 ml={Normalize.scale(30)}
                 onPress={() => finish()}
-                style={{textTransform: 'lowercase'}}
+                style={{ textTransform: 'lowercase' }}
               >
                 {i18n.t('app.skip')}
               </SkipButton>
@@ -318,20 +268,5 @@ const SkipButton = styled(TextView)`
   font-family: 'medium';
   letter-spacing: 1.71px;
 `
-
-const styles = StyleSheet.create({
-  swiperButtonWrapperStyle: {
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    flex: 1,
-    paddingHorizontal: 30,
-    paddingVertical: '2.5%',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-  },
-})
 
 export default OnboardingPage

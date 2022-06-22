@@ -1,12 +1,12 @@
-import {RouteProp, CommonActions} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {BarCodeEvent, BarCodeScanner} from 'expo-barcode-scanner'
+import { RouteProp, CommonActions } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { BarCodeEvent, BarCodeScanner } from 'expo-barcode-scanner'
 import ExpoBarCodeScannerModule from 'expo-barcode-scanner/src/ExpoBarCodeScannerModule'
 import i18n from 'i18n-js'
-import React, {useState, useEffect, useRef} from 'react'
-import {StyleSheet, Animated} from 'react-native'
+import React, { useState, useEffect, useRef } from 'react'
+import { StyleSheet, Animated } from 'react-native'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
+import { wrapper } from '~src/app/ApplicationWrapper'
 import {
   blockchainServices,
   getBlockchainByWif,
@@ -15,19 +15,13 @@ import {
   validateTextAllBlockchains,
   validateWifAllBlockchains,
 } from '~src/blockchain'
-import {useSwiperController} from '~src/components/SwiperPanel'
-import {IURI, TScheme, UriHelper} from '~src/helpers/UriHelper'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
+import { useSwiperController } from '~src/components/SwiperPanel'
+import { IURI, TScheme, UriHelper } from '~src/helpers/UriHelper'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
 import HandleQRModal from '~src/scenes/HandleQRModal'
-import {
-  ButtonView,
-  ImageView,
-  RelativeLayout,
-  TextView,
-  LinearLayout,
-} from '~src/styles/styled-components'
+import { ButtonView, ImageView, RelativeLayout, TextView, LinearLayout } from '~src/styles/styled-components'
 
-const {BarCodeType} = ExpoBarCodeScannerModule
+const { BarCodeType } = ExpoBarCodeScannerModule
 
 export interface QRCodeScanParams {
   onScan?: (data: IURI | string) => void
@@ -39,13 +33,10 @@ export interface Props {
   route: RouteProp<RootStackParamList, 'QRCodeScan'>
 }
 
-type INavigationScheme = Record<
-  TScheme,
-  (key: string) => NavParam<RootStackParamList> | undefined
->
+type INavigationScheme = Record<TScheme, (key: string) => NavParam<RootStackParamList> | undefined>
 
 const navigationScheme: INavigationScheme = {
-  'neo:': (key) => {
+  'neo:': key => {
     return [
       wrapper.route.Modal.name,
       {
@@ -59,7 +50,7 @@ const navigationScheme: INavigationScheme = {
       },
     ]
   },
-  'wc:': (key) => {
+  'wc:': key => {
     return [
       wrapper.route.Modal.name,
       {
@@ -130,8 +121,7 @@ const QRCodeScan = (props: Props) => {
     }
   }
 
-  const isValid = (key: string) =>
-    validateTextAllBlockchains(key) || UriHelper.isValid(key)
+  const isValid = (key: string) => validateTextAllBlockchains(key) || UriHelper.isValid(key)
 
   const goTo = (key: string): NavParam<RootStackParamList> | undefined => {
     if (validatePrivateKeyWithPasswordAllBlockchains(key)) {
@@ -160,9 +150,7 @@ const QRCodeScan = (props: Props) => {
               initial: false,
               params: {
                 source: wrapper.route.ImportKey.name,
-                address: blockchainServices[
-                  blockchainName
-                ].generateAccountFromWif(key),
+                address: blockchainServices[blockchainName].generateAccountFromWif(key),
                 legacy: true,
                 wif: key,
                 blockchain: blockchainName,
@@ -196,10 +184,7 @@ const QRCodeScan = (props: Props) => {
         } else {
           // If scanned QR is an address, opens modal
           if (validateAddressAllBlockchains(info as string)) {
-            let data: IURI | string = info
-
             if (UriHelper.isValid(info as string)) {
-              data = UriHelper.parse(info as string) ?? info
               const destination = goTo(info as string)
               props.navigation.pop(1)
               destination && props.navigation.navigate(...destination)
@@ -230,12 +215,7 @@ const QRCodeScan = (props: Props) => {
   }
 
   return (
-    <RelativeLayout
-      bg="background.12"
-      alignItems={'center'}
-      justifyContent={'center'}
-      height="100%"
-    >
+    <RelativeLayout bg="background.12" alignItems="center" justifyContent="center" height="100%">
       {hasPermission && (
         <BarCodeScanner
           barCodeTypes={[BarCodeType.qr]}
@@ -244,22 +224,18 @@ const QRCodeScan = (props: Props) => {
         />
       )}
 
-      <ImageView
-        width="100%"
-        resizeMode="contain"
-        source={require('~src/assets/images/qr-code-frame.png')}
-      />
+      <ImageView width="100%" resizeMode="contain" source={require('~src/assets/images/qr-code-frame.png')} />
 
       <ButtonView
         position="absolute"
         bottom={0}
-        width={'100%'}
+        width="100%"
         height="100px"
         borderTopLeftRadius="18px"
         borderTopRightRadius="18px"
-        bg={'#333d46'}
-        alignItems={'center'}
-        justifyContent={'center'}
+        bg="#333d46"
+        alignItems="center"
+        justifyContent="center"
         onPress={props.navigation.goBack}
       >
         <LinearLayout mb={6}>
@@ -277,22 +253,12 @@ const QRCodeScan = (props: Props) => {
           justifyContent: 'center',
         }}
       >
-        <TextView
-          bg="white"
-          textAlign="center"
-          p="20px"
-          borderRadius="30px"
-          fontSize="20px"
-        >
+        <TextView bg="white" textAlign="center" p="20px" borderRadius="30px" fontSize="20px">
           {message}
         </TextView>
       </Animated.View>
 
-      <HandleQRModal
-        controller={controller}
-        address={address ?? ''}
-        onClick={modalNavigate}
-      />
+      <HandleQRModal controller={controller} address={address ?? ''} onClick={modalNavigate} />
     </RelativeLayout>
   )
 }
