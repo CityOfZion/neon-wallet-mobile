@@ -49,7 +49,7 @@ jobs:
           paths:
             - node_modules
 
-  deployAndroid:
+  deployAndroidBeta:
     docker:
       - image: circleci/android:api-29-node
     working_directory: ~/neon-wallet-mobile/android
@@ -94,14 +94,72 @@ jobs:
           command: echo $ANDROID_KEY_JSON | base64 -di > ./key.json
       - run:
           name: Keystore
-          command: echo $ANDROID_JKS | base64 -di > ./neon.jks
-      - run: cd .. && npm install react-native-unimodules
+          command: echo $ANDROID_JKS | base64 -di > ./fastlane/neon.jks
+
+      - run: cd .. && yarn install
+      
       - run:
           name: fastlane
           command: bundle exec fastlane android beta
       - store_artifacts:
           path: output
-  deployIOS:
+
+  deployAndroidStaging:
+    docker:
+      - image: circleci/android:api-29-node
+    working_directory: ~/neon-wallet-mobile/android
+    resource_class: xlarge
+    environment:
+      JAVA_OPTS: '-Xms512m -Xmx2g'
+      GRADLE_OPTS: '-Xmx3g -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx2g -XX:+HeapDumpOnOutOfMemoryError"'
+    steps:
+      - checkout:
+          path: ~/neon-wallet-mobile
+
+      - attach_workspace:
+          at: ~/neon-wallet-mobile
+
+      - restore_cache:
+          key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
+
+      - run: bundle check || bundle install --path vendor/bundle
+
+      - save_cache:
+          key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
+          paths:
+            - vendor/bundle
+
+      - run:
+          name: Setting ANDROID_KEY_JSON
+          working_directory: ~/neon-wallet-mobile/android/fastlane
+          command: echo ANDROID_KEY_JSON = $ANDROID_KEY_JSON >> .env
+
+      - run:
+          name: Setting ANDROID_KEY_ALIAS
+          working_directory: ~/neon-wallet-mobile/android/fastlane
+          command: echo ANDROID_KEY_ALIAS = $ANDROID_KEY_ALIAS >> .env
+
+      - run:
+          name: Setting ANDROID_KEY_PASS
+          working_directory: ~/neon-wallet-mobile/android/fastlane
+          command: echo ANDROID_KEY_PASS = $ANDROID_KEY_PASS >> .env
+
+      - run:
+          name: Key JSON
+          command: echo $ANDROID_KEY_JSON | base64 -di > ./key.json
+      - run:
+          name: Keystore
+          command: echo $ANDROID_JKS | base64 -di > ./fastlane/neon.jks
+
+      - run: cd .. && yarn install
+      
+      - run:
+          name: fastlane
+          command: bundle exec fastlane android staging
+      - store_artifacts:
+          path: output   
+
+  deployIOSBeta:
     working_directory: ~/neon-wallet-mobile
     macos:
       xcode: 12.4.0
@@ -163,7 +221,7 @@ jobs:
 
       - run:
           name: Fastlane
-          command: bundle exec fastlane $FASTLANE_LANE
+          command: bundle exec fastlane beta
           working_directory: ios
 
       - store_artifacts:
@@ -172,25 +230,101 @@ jobs:
       - store_test_results:
           path: output/scan
 
+  deployIOSStaging:
+    working_directory: ~/neon-wallet-mobile
+    macos:
+      xcode: 13.1.0
+    environment:
+      FL_OUTPUT_DIR: output
+      FASTLANE_LANE: beta
+
+    steps:
+      - checkout
+      - restore_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+
+      - restore_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+
+      - run: yarn install
+
+      - save_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+          paths:
+            - ~/.cache/yarn
+
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+          paths:
+            - node_modules
+      
+      - run: npm run build:ios
+
+      - restore_cache:
+          key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
+
+      #Pods directory is ignored to match default RN setup, but can also check them into source control
+      #https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
+      - restore_cache:
+          key: pods-v1-{{ checksum "ios/Podfile.lock" }}-{{ arch }}
+
+      - run: 
+          command: pod install
+          working_directory: ios
+
+      - run:
+          command: gem install bundler:1.17.3
+          working_directory: ios    
+
+      - run: 
+          command: bundle install
+          working_directory: ios
+
+      - save_cache:
+          key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
+          paths:
+            - vendor/bundle
+
+      - save_cache:
+          key: pods-v1-{{ checksum "ios/Podfile.lock" }}-{{ arch }}
+          paths:
+            - ios/Pods
+
+      - run:
+          name: Fastlane
+          command: bundle exec fastlane staging
+          working_directory: ios
+
+      - store_artifacts:
+          path: output
+          
+      - store_test_results:
+          path: output/scan        
+
 workflows:
   version: 2
   build:
     jobs:
       - node
-      - test:
-          requires:
-            - node
-      - deployAndroid:
-          requires:
-            - test            
+      - deployAndroidBeta:          
           filters:
             branches:
               only:
-                - development     
-      - deployIOS:
-          requires:
-            - test            
+                - development   
+      - deployIOSBeta:           
           filters:
             branches:
               only:
-                - development  
+                - development
+      - deployIOSStaging:
+          filters:
+            branches:
+              only:
+                - staging
+                - master
+      - deployAndroidStaging:
+          filters:
+            branches:
+              only:
+                - staging
+                - master          

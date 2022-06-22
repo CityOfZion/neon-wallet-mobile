@@ -22,6 +22,22 @@ fastlane ios beta
 ```
 Push a new beta build to TestFlight
 
+### ios staging
+
+```sh
+[bundle exec] fastlane ios staging
+```
+
+Push a new staging build to TestFlight
+
+### ios check_build_number
+
+```sh
+[bundle exec] fastlane ios check_build_number
+```
+
+check build number
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [fastlane](https://fastlane.tools) is run.

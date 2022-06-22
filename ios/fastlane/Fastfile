@@ -19,23 +19,126 @@ platform :ios do
   before_all do
     setup_circle_ci
   end
+
+  desc "Get certificates"
+  lane :certificates do
+    sync_code_signing(
+      type: "appstore",
+      app_identifier: ['io.cityofzion.neon'],
+      force_for_new_devices: true,
+      readonly: true
+    )
+
+    # You can repeate the sync_code_signing with other types of certificates such as appstore and adhoc
+    sync_code_signing(
+      type: "appstore",
+      app_identifier: 'io.cityofzion.neon',
+      readonly: true
+    )
+  end
+
+  desc "Generate new certificates"
+  lane :generate_new_certificates do
+    sync_code_signing(
+      type: "appstore",
+      app_identifier: ['io.cityofzion.neon'],
+      force_for_new_devices: true,
+      readonly: false
+    )
+    
+    # You can repeate the sync_code_signing with other types of certificates such as appstore and adhoc
+
+  end
+  
   desc "Push a new beta build to TestFlight"
   lane :beta do
-    increment_build_number(xcodeproj: "Neon.xcodeproj")
-    
-    match(
-      type: "adhoc",
-      verbose: true
-    )
+    lane :beta do
+      keyFilePath = File.join(Dir.pwd, "AuthKey.p8")
+      keyId = ENV['APP_STORE_CONNECT_API_KEY_KEY_ID']
+      issuerId = ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID']
 
-    build_app(
-      workspace: "Neon.xcworkspace",
-      scheme: "Neon-release",
+      current_version_number = latest_testflight_build_number(
+        team_id: 'bb874eec-4755-42a7-a707-c0ddd1b61389',
+        team_name: 'Beta'
+      )
+      increment_build_number(
+        xcodeproj: "Neon.xcodeproj",
+        build_number: current_build_version + 1,
+        skip_info_plist: true
+      )
+      
+      match(
+        type: "appstore",
+        clone_branch_directly: true,
+        verbose: true
+      )
+  
+      build_app(
+        workspace: "Neon.xcworkspace",
+        scheme: "Neon-release",
+        export_method: "app-store"
+      )
+  
+      app_store_connect_api_key(
+        key_id: keyId,
+        issuer_id: issuerId,
+        key_filepath: keyFilePath
+      )
+  
+      upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      distribute_external: true,
+      notify_external_testers: true,
+      team_id: 'bb874eec-4755-42a7-a707-c0ddd1b61389',
+      team_name: 'Beta'
     )
+  end
 
-    upload_to_testflight(
-      skip_waiting_for_build_processing: true
-    )
-    
+  desc "Push a new staging build to TestFlight"
+  lane :staging do
+    keyFilePath = File.join(Dir.pwd, "AuthKey.p8")
+      keyId = ENV['APP_STORE_CONNECT_API_KEY_KEY_ID']
+      issuerId = ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID']
+      
+      current_version_number = latest_testflight_build_number(
+        team_id: '89de6f4f-6d90-4e68-8394-69ddb6276eb3',
+        team_name: 'Staging'
+      )
+      increment_build_number(
+        xcodeproj: "Neon.xcodeproj",
+        build_number: current_build_version + 1,
+        skip_info_plist: true
+      )
+      
+      match(
+        type: "appstore",
+        clone_branch_directly: true,
+        verbose: true
+      )
+  
+      build_app(
+        workspace: "Neon.xcworkspace",
+        scheme: "Neon-release",
+        export_method: "app-store"
+      )
+  
+      app_store_connect_api_key(
+        key_id: keyId,
+        issuer_id: issuerId,
+        key_filepath: keyFilePath
+      )
+  
+      upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      distribute_external: true,
+      notify_external_testers: true,
+      team_id: '89de6f4f-6d90-4e68-8394-69ddb6276eb3',
+      team_name: 'Staging'
+  end
+
+  desc 'check build number'
+  lane :check_build_number do
+    current_version_number = latest_testflight_build_number()
+    puts current_version_number
   end
 end
