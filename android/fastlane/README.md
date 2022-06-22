@@ -25,6 +25,14 @@ Runs all the tests
 
 Submit a new Beta Build to Crashlytics Beta
 
+### android check_version
+
+```sh
+[bundle exec] fastlane android check_version
+```
+
+
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
