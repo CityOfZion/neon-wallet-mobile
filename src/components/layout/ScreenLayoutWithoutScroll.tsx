@@ -30,11 +30,11 @@ interface Props {
 
 const ScreenLayoutWithoutScroll: React.FC<Props> = props => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
 
   const headerHeight = props.useHeaderPadding ? applicationConfig.headerHeight : 0
   const tabBarHeight = props.useFooterPadding ? applicationConfig.footerHeight : 0
   const headerExtraHeight = props.useStatusBarPadding && UtilsHelper.isAndroid ? Constants.statusBarHeight : 0
-  const { isConnected } = useSelector((state: RootState) => state.network)
 
   const chooseColorBG = () => {
     let color

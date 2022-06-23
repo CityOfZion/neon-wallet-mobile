@@ -5,8 +5,9 @@ import { useSelector } from 'react-redux'
 import { wrapper } from '../app/ApplicationWrapper'
 
 const OfflineBar = () => {
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+
   const styles = StyleSheet.create({
     container: {
       width: '100%',

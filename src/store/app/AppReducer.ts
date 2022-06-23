@@ -1,7 +1,6 @@
 import { ReducerWrapper } from '@simpli/redux-wrapper'
 import i18n from 'i18n-js'
 import { showMessage } from 'react-native-flash-message'
-import { checkInternetConnection, offlineActionCreators } from 'react-native-offline'
 
 import { appBus } from '~/src/app/AppBus'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
@@ -428,16 +427,6 @@ export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppActi
           })
           await Storage.wallets.save(wallets)
         }
-      }
-    },
-
-    syncNetworkStatus: (): AsyncAction => {
-      return async (dispatch, getState) => {
-        setInterval(async () => {
-          const isConnected = await checkInternetConnection()
-          const { connectionChange } = offlineActionCreators
-          dispatch(connectionChange(isConnected))
-        }, 2000)
       }
     },
 

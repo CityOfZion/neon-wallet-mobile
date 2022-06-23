@@ -29,7 +29,7 @@ interface WalletConnectPageProps {
 const WalletConnectPage = ({ navigation, route }: WalletConnectPageProps) => {
   const { sessions } = useWalletConnect()
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
 
   const validSessions = useMemo(
     () =>

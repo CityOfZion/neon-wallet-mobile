@@ -32,7 +32,7 @@ const WCConnectionDetailsModal = (props: Props) => {
   const controller = useSwiperController(true)
   const walletConnectCtx = useWalletConnect()
   const navigation = useNavigation()
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
 
   const blockchain = useMemo<BlockchainServiceKey>(() => {
     const blockchainByWCChain = getBlockchainByWCChain(session.permissions.blockchain.chains)

@@ -24,7 +24,8 @@ type Tab = 'contacts' | 'accounts'
 
 const TabSelector = (props: { selected: Tab; onSelect: (t: Tab) => void }) => {
   const contactsSelected = props.selected === 'contacts'
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
+
   return (
     <LinearLayout orientation="horiz" mx="16px" marginTop={!isConnected ? 30 : undefined}>
       <TouchableWithoutFeedback onPress={() => !contactsSelected && props.onSelect('contacts')}>

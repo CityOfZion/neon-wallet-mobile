@@ -15,7 +15,7 @@ interface Props {
 const ThemedSendButton: React.FC<Props> = props => {
   const isWatchAccount = props.account?.accountType === 'watch'
   const isNotEmpty = props.account?.hasFunds
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
 
   return (
     <ThemedButton

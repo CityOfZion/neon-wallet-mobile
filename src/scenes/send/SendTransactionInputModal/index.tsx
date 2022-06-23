@@ -67,7 +67,7 @@ const SendTransactionInputModal = (prop: Props) => {
 
   const dispatch = useDispatch<DispatchResult>()
 
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const show = useNavigationState(
     state => state.routes[state.routes.length - 1].name === wrapper.route.SendTransactionInputModal.name
   )

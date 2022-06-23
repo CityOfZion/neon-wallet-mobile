@@ -38,7 +38,8 @@ const ScreenLayout: React.FC<Props> = props => {
   const headerHeight = props.useHeaderPadding ? applicationConfig.headerHeight : 0
   const tabBarHeight = props.useFooterPadding ? applicationConfig.footerHeight : 0
   const headerExtraHeight = props.useStatusBarPadding && UtilsHelper.isAndroid ? Constants.statusBarHeight : 0
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
+
   const chooseColorBG = () => {
     let color
     if (props.transparent) {
@@ -54,6 +55,7 @@ const ScreenLayout: React.FC<Props> = props => {
     }
     return color
   }
+
   return (
     <LinearGradient onLayout={props.onLayout} colors={chooseColorBG()} start={[1, 0]} end={[1, 1]}>
       <SafeAreaView style={{ height: '100%' }}>

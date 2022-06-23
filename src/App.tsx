@@ -4,6 +4,7 @@ import * as Font from 'expo-font'
 import React, { useState } from 'react'
 import { StatusBar } from 'react-native'
 import FlashMessage from 'react-native-flash-message'
+import { ReduxNetworkProvider } from 'react-native-offline'
 import { Provider as StoreProvider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
@@ -53,13 +54,15 @@ const App = () => {
 
   return (
     <StoreProvider store={store}>
-      <StatusBar barStyle="light-content" />
-      <ErrorBound>
-        <WalletConnectContextProvider options={wcOptions}>
-          <AppNavigation />
-        </WalletConnectContextProvider>
-      </ErrorBound>
-      <FlashMessage position="top" MessageComponent={ThemedAlert} />
+      <ReduxNetworkProvider>
+        <StatusBar barStyle="light-content" />
+        <ErrorBound>
+          <WalletConnectContextProvider options={wcOptions}>
+            <AppNavigation />
+          </WalletConnectContextProvider>
+        </ErrorBound>
+        <FlashMessage position="top" MessageComponent={ThemedAlert} />
+      </ReduxNetworkProvider>
     </StoreProvider>
   )
 }

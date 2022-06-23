@@ -1,4 +1,4 @@
-import { createReducer as createNetworkReducer } from 'react-native-offline'
+import { reducer as networkReducer } from 'react-native-offline'
 import { combineReducers } from 'redux'
 
 import { AccountReducer } from '~src/store/account/AccountReducer'
@@ -31,7 +31,7 @@ export abstract class RootStore {
     loading: RootStore.loading.reducer,
     contact: RootStore.contact.reducer,
     senderTransaction: RootStore.senderTransaction.reducer,
-    network: createNetworkReducer(),
+    network: networkReducer,
     timer: RootStore.timer.reducer,
     wcReducer: RootStore.wcReducer.reducer,
   })

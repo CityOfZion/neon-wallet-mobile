@@ -32,7 +32,7 @@ interface Props {
 
 const SendTransactionReviewModal = (props: Props) => {
   const { authenticate } = useLocalAuthentication()
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const { senderTransaction } = useSelector((state: RootState) => state)
   const contacts = useSelector((state: RootState) => state.app.contacts)
   const accounts = useSelector((state: RootState) => state.app.accounts)

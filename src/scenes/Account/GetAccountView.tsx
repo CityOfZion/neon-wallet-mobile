@@ -58,7 +58,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const { language } = useSelector((state: RootState) => state.settings)
   const { address } = useSelector((state: RootState) => state.account)
   const posYFactor = useRef(new Animated.Value(0))
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const [currentPage, setCurrentPage] = useState(1)

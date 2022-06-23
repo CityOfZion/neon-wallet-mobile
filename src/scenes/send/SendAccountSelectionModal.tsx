@@ -35,7 +35,7 @@ const SendAccountSelectionModal = (props: Props) => {
   const show = useNavigationState(
     state => state.routes[state.routes.length - 1].name === wrapper.route.SendAccountSelectionModal.name
   )
-  const { isConnected } = useSelector((state: RootState) => state.network)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const headerHeight = useHeaderHeight()
 
