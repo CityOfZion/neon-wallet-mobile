@@ -1,26 +1,26 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {Await, AwaitActivity} from '@simpli/react-native-await'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import moment from 'moment'
-import React, {useCallback, useState, useEffect, useRef, useMemo} from 'react'
-import {showMessage} from 'react-native-flash-message'
+import React, { useCallback, useState, useEffect, useRef } from 'react'
+import { showMessage } from 'react-native-flash-message'
 
-import {TransactionsList} from './TransactionsList'
+import { TransactionsList } from './TransactionsList'
 
-import {blockchainServices} from '~/src/blockchain'
-import {hasNFTIntegration} from '~/src/blockchain/common'
+import { blockchainServices } from '~/src/blockchain'
+import { hasNFTIntegration } from '~/src/blockchain/common'
 import AccountSubTitle from '~/src/components/AccountSubTitle'
 import ScreenLayoutWithoutScroll from '~/src/components/layout/ScreenLayoutWithoutScroll'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
-import {TokenAsset} from '~/src/models/TokenAsset'
-import {TransactionTransferType} from '~/src/models/TransactionAddressSummary'
-import {TransactionDateGroup} from '~/src/models/TransactionDateGroup'
-import {Account} from '~/src/models/redux/Account'
-import {SenderTransaction} from '~/src/models/redux/SenderTransaction'
-import {NFTResponse} from '~/src/models/response/NFTResponse'
-import {RootStackParamList} from '~/src/navigation/AppNavigation'
-import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
+import { TokenAsset } from '~/src/models/TokenAsset'
+import { TransactionTransferType } from '~/src/models/TransactionAddressSummary'
+import { TransactionDateGroup } from '~/src/models/TransactionDateGroup'
+import { Account } from '~/src/models/redux/Account'
+import { SenderTransaction } from '~/src/models/redux/SenderTransaction'
+import { NFTResponse } from '~/src/models/response/NFTResponse'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
+import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
 export interface AccountTransactionsScreenParams {
   account: Account
 }
@@ -65,26 +65,18 @@ export type FormattedTransaction = {
 export type FormattedTransactionPerDate = Record<string, FormattedTransaction[]>
 
 const AccountTransactionsScreen = (props: Props) => {
-  const {account} = props.route.params
+  const { account } = props.route.params
 
-  const [completedTransactions, setCompletedTransactions] = useState<
-    FormattedTransaction[]
-  >([])
-  const [pendingTransactions, setPendingTransactions] = useState<
-    FormattedTransaction[]
-  >([])
-  const [hasMoreTransactionsToLoad, setHasMoreTransactionsToLoad] = useState(
-    true
-  )
+  const [completedTransactions, setCompletedTransactions] = useState<FormattedTransaction[]>([])
+  const [pendingTransactions, setPendingTransactions] = useState<FormattedTransaction[]>([])
+  const [hasMoreTransactionsToLoad, setHasMoreTransactionsToLoad] = useState(true)
 
   const pageControl = useRef<number>(1)
   const requestControl = useRef<boolean>(false)
   const nftCache = useRef<Map<string, NFTResponse>>(new Map())
-  const decimalsCache = useRef<Map<string, {symbol: string; decimals: number}>>(
+  const decimalsCache = useRef<Map<string, { symbol: string; decimals: number }>>(
     new Map(
-      blockchainServices[
-        account.blockchain
-      ].assets.map(({symbol, decimals, hash}) => [hash, {symbol, decimals}])
+      blockchainServices[account.blockchain].assets.map(({ symbol, decimals, hash }) => [hash, { symbol, decimals }])
     )
   )
 
@@ -96,9 +88,7 @@ const AccountTransactionsScreen = (props: Props) => {
     }
 
     try {
-      const tokenAsset = await blockchainServices[
-        account.blockchain
-      ].provider.getAssetByHash(hash)
+      const tokenAsset = await blockchainServices[account.blockchain].provider.getAssetByHash(hash)
 
       if (tokenAsset) {
         decimalsCache.current.set(hash, tokenAsset)
@@ -110,7 +100,7 @@ const AccountTransactionsScreen = (props: Props) => {
         symbol: '',
         decimals: 0,
       }
-    } catch (error) {}
+    } catch {}
   }, [])
 
   const getNFTInfo = useCallback(async (tokenId: string, hash: string) => {
@@ -134,7 +124,7 @@ const AccountTransactionsScreen = (props: Props) => {
       }
 
       return nftResponse
-    } catch (error) {}
+    } catch {}
   }, [])
 
   const handleEndReached = async () => {
@@ -142,47 +132,33 @@ const AccountTransactionsScreen = (props: Props) => {
   }
 
   const loadCompletedTransactions = useCallback(async () => {
-    if (
-      account.address &&
-      !requestControl.current &&
-      hasMoreTransactionsToLoad
-    ) {
+    if (account.address && !requestControl.current && hasMoreTransactionsToLoad) {
       requestControl.current = true
 
       try {
-        const {transactions, totalPages} = await blockchainServices[
-          account.blockchain
-        ].provider.getAddressAbstracts(account.address, pageControl.current)
+        const { transactions, totalPages } = await blockchainServices[account.blockchain].provider.getAddressAbstracts(
+          account.address,
+          pageControl.current
+        )
 
         const formattedTransactions = await Promise.all(
-          transactions.map(async (transaction) => {
+          transactions.map(async transaction => {
             const formattedTransfers = await Promise.all(
               transaction.transfers.map(
-                async (
-                  transfer
-                ): Promise<
-                  FormattedTransferAsset | FormattedTransferNFT | undefined
-                > => {
+                async (transfer): Promise<FormattedTransferAsset | FormattedTransferNFT | undefined> => {
                   if (transfer.type === TransactionTransferType.ASSET) {
-                    const decimalsAndSymbol = await getDecimalsAndSymbolToken(
-                      transfer.hash
-                    )
+                    const decimalsAndSymbol = await getDecimalsAndSymbolToken(transfer.hash)
 
                     if (!decimalsAndSymbol) return
 
                     return {
                       ...transfer,
-                      amount: String(
-                        transfer.amount / 10 ** decimalsAndSymbol.decimals
-                      ),
+                      amount: String(transfer.amount / 10 ** decimalsAndSymbol.decimals),
                       symbol: decimalsAndSymbol.symbol,
                     }
                   }
 
-                  const nftInfo = await getNFTInfo(
-                    transfer.tokenId,
-                    transfer.hash
-                  )
+                  const nftInfo = await getNFTInfo(transfer.tokenId, transfer.hash)
 
                   if (!nftInfo) return
 
@@ -197,10 +173,7 @@ const AccountTransactionsScreen = (props: Props) => {
             )
 
             const filteredTransfers = formattedTransfers.filter(
-              (
-                transfer
-              ): transfer is FormattedTransferAsset | FormattedTransferNFT =>
-                !!transfer
+              (transfer): transfer is FormattedTransferAsset | FormattedTransferNFT => !!transfer
             )
 
             return {
@@ -213,10 +186,7 @@ const AccountTransactionsScreen = (props: Props) => {
           })
         )
 
-        setCompletedTransactions((prevState) => [
-          ...formattedTransactions,
-          ...prevState,
-        ])
+        setCompletedTransactions(prevState => [...formattedTransactions, ...prevState])
 
         pageControl.current += 1
         requestControl.current = false
@@ -228,7 +198,7 @@ const AccountTransactionsScreen = (props: Props) => {
         }
 
         return formattedTransactions
-      } catch (error: any) {
+      } catch {
         showMessage({
           message: i18n.t('screens.accountTransaction.errorToGetTransactions'),
           type: 'danger',
@@ -242,13 +212,8 @@ const AccountTransactionsScreen = (props: Props) => {
     async (completedTransaction: FormattedTransaction[]) => {
       const transactions = account
         .getPendingTransactions()
-        .filter(
-          (
-            transaction
-          ): transaction is NoUndefinedField<TransactionDateGroup> =>
-            !!transaction.date
-        )
-        .flatMap(({transactions}) => transactions)
+        .filter((transaction): transaction is NoUndefinedField<TransactionDateGroup> => !!transaction.date)
+        .flatMap(({ transactions }) => transactions)
 
       const filteredTransactions = transactions.filter(
         (
@@ -261,19 +226,11 @@ const AccountTransactionsScreen = (props: Props) => {
           !!transaction.senderAddress &&
           !!transaction.receiverAddress &&
           !!transaction.token &&
-          !completedTransaction.some(
-            ({hash}) => hash === transaction.transactionHash
-          )
+          !completedTransaction.some(({ hash }) => hash === transaction.transactionHash)
       )
 
       const formattedTransactions = filteredTransactions.map(
-        ({
-          senderAddress,
-          receiverAddress,
-          token,
-          transactionHash,
-          sentAt,
-        }): FormattedTransaction => ({
+        ({ senderAddress, receiverAddress, token, transactionHash, sentAt }): FormattedTransaction => ({
           hash: transactionHash,
           qtyInvocations: 0,
           qtyNotifications: 0,

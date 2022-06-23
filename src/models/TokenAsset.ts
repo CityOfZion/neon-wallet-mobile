@@ -1,10 +1,10 @@
-import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
+import { HttpExclude, HttpExpose } from '@simpli/serialized-request'
 
 import * as Color from '~src/assets/nep5/color'
 import * as Image from '~src/assets/nep5/png'
-import {BlockchainServiceKey} from '~src/blockchain'
-import {Currency} from '~src/enums/Currency'
-import {Exchange} from '~src/types/exchange'
+import { BlockchainServiceKey } from '~src/blockchain'
+import { Currency } from '~src/enums/Currency'
+import { Exchange } from '~src/types/exchange'
 
 @HttpExclude()
 export class TokenAsset {
@@ -28,13 +28,7 @@ export class TokenAsset {
   @HttpExpose()
   decimals: number | null = null
 
-  constructor(
-    name: string,
-    symbol: string,
-    hash: string,
-    blockchain: BlockchainServiceKey,
-    decimals?: number
-  ) {
+  constructor(name: string, symbol: string, hash: string, blockchain: BlockchainServiceKey, decimals?: number) {
     this.name = name
     this.symbol = symbol
     this.hash = hash
@@ -48,14 +42,11 @@ export class TokenAsset {
   }
 
   get srcIcon() {
-    return (
-      (Image as any)[this.blockchain][this.symbol] ??
-      require('~/src/assets/images/icon-default-nep5.png')
-    )
+    return (Image as any)[this.blockchain][this.symbol] ?? require('~/src/assets/images/icon-default-nep5.png')
   }
 
   getCurrencyRatio(currency: Currency, exchange: Exchange) {
-    const {symbol} = this
+    const { symbol } = this
     if (!symbol) return null
 
     return exchange[symbol]?.to[currency] ?? null

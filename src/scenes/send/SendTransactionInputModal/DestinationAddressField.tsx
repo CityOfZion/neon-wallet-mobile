@@ -1,14 +1,14 @@
 import I18n from 'i18n-js'
-import React, {Fragment, useCallback, useEffect} from 'react'
-import {useSelector} from 'react-redux'
+import React, { Fragment, useCallback, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {BlockchainServiceKey, blockchainServices} from '~/src/blockchain'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { BlockchainServiceKey, blockchainServices } from '~/src/blockchain'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
-import {IURI} from '~/src/helpers/UriHelper'
-import {Account} from '~/src/models/redux/Account'
-import {Contact} from '~/src/models/redux/Contact'
+import { IURI } from '~/src/helpers/UriHelper'
+import { Account } from '~/src/models/redux/Account'
+import { Contact } from '~/src/models/redux/Contact'
 
 const DestinationAddressField = (props: {
   blockchain: BlockchainServiceKey
@@ -20,9 +20,7 @@ const DestinationAddressField = (props: {
   validateAddress: (val: string) => boolean
   onValidateAddress: (addressIsValid: boolean) => void
 }) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const validateAddress = useCallback(() => {
     return blockchainServices[props.blockchain].validateAddress(props.address)
@@ -33,13 +31,13 @@ const DestinationAddressField = (props: {
   }, [props.address])
 
   return (
-    <Fragment>
+    <>
       <InputLabel
         title={I18n.t('modals.send.transactionInput.destinationAddress')}
-        color={'text.0'}
+        color="text.0"
         marginTop={30}
         marginBottom={30}
-        capitalize={true}
+        capitalize
       />
       <InputWithValidation
         onChangeText={props.onAddressChanged}
@@ -50,14 +48,14 @@ const DestinationAddressField = (props: {
         validator={() => validateAddress()}
         separatorColor={theme.colors.background[13]}
         sideMargins={0}
-        showContacts={true}
+        showContacts
         selectedContact={props.contact}
         onSelected={props.onSelected}
         onScan={props.handleQrCode}
         invalidMessageColor={theme.colors.quinary}
         addressSelected={props.address}
       />
-    </Fragment>
+    </>
   )
 }
 

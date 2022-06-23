@@ -1,30 +1,22 @@
-import {RouteProp, useNavigation, CommonActions} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
-import {Linking} from 'react-native'
-import {useSelector} from 'react-redux'
+import { Linking } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {blockchainServices} from '../blockchain'
+import { blockchainServices } from '../blockchain'
 
-import {Normalize} from '~src/app/Normalize'
-import {AccountView} from '~src/components/AccountView'
-import {HeaderColumn} from '~src/components/HeaderColumn'
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
-import {TokenView} from '~src/components/TokenView'
+import { Normalize } from '~src/app/Normalize'
+import { AccountView } from '~src/components/AccountView'
+import { HeaderColumn } from '~src/components/HeaderColumn'
+import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
+import { TokenView } from '~src/components/TokenView'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {FilterHelper} from '~src/helpers/FilterHelper'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import { FilterHelper } from '~src/helpers/FilterHelper'
+import { SenderTransaction } from '~src/models/redux/SenderTransaction'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface TransactionDetailsParams {
   transaction: SenderTransaction
@@ -41,7 +33,7 @@ export const TransactionDetails = (props: Props) => {
   const contacts = useSelector((state: RootState) => state.app.contacts)
   const accounts = useSelector((state: RootState) => state.app.accounts)
   const wallets = useSelector((state: RootState) => state.app.wallets)
-  const {currency, language} = useSelector((state: RootState) => state.settings)
+  const { currency, language } = useSelector((state: RootState) => state.settings)
 
   let senderName: null | undefined | string = undefined
   const senderAddress = transaction.senderAddress ?? undefined
@@ -52,48 +44,35 @@ export const TransactionDetails = (props: Props) => {
   let receiverName: null | undefined | string = undefined
   const receiverAddress = transaction.receiverAddress ?? undefined
 
-  const senderAccount = accounts.find(
-    (account) => account.address === senderAddress
-  )
+  const senderAccount = accounts.find(account => account.address === senderAddress)
   if (senderAccount) {
     senderWallet = senderAccount.getWallet(wallets)?.name
   } else {
-    const contact = contacts.find((value) =>
-      value.addresses.find(({address}) => address === transaction.senderAddress)
-    )
+    const contact = contacts.find(value => value.addresses.find(({ address }) => address === transaction.senderAddress))
     senderName = contact?.name ?? undefined
   }
-  const receiverAccount = accounts.find(
-    (account) => account.address === receiverAddress
-  )
+  const receiverAccount = accounts.find(account => account.address === receiverAddress)
 
   if (receiverAccount) {
     receiverWallet = receiverAccount.getWallet(wallets)?.name
   } else {
-    const contact = contacts.find((value) =>
-      value.addresses.find(
-        ({address}) => address === transaction.receiverAddress
-      )
+    const contact = contacts.find(value =>
+      value.addresses.find(({ address }) => address === transaction.receiverAddress)
     )
     receiverName = contact?.name ?? undefined
   }
   return (
     <SwiperPanel
       controller={controller}
-      title={'Transaction details'}
-      fullSize={true}
+      title="Transaction details"
+      fullSize
       onClose={() => props.navigation.goBack()}
       onRightPress={controller.close}
       rightButton={<CloseButton mr="30px" />}
-      solidColorBG={true}
+      solidColorBG
     >
-      <LinearLayout
-        orientation={'verti'}
-        alignContent={'flex-start'}
-        mt={'5px'}
-        flex={1}
-      >
-        <LinearLayout orientation={'horiz'}>
+      <LinearLayout orientation="verti" alignContent="flex-start" mt="5px" flex={1}>
+        <LinearLayout orientation="horiz">
           <HeaderColumn
             title={i18n.t('transactionDetails.time').toUpperCase()}
             value={transaction.formattedTime ?? 'undefined'}
@@ -107,22 +86,16 @@ export const TransactionDetails = (props: Props) => {
           <HeaderColumn
             title={i18n.t('transactionDetails.status').toUpperCase()}
             value={
-              transaction.isPending
-                ? i18n.t('transactionDetails.pending')
-                : i18n.t('transactionDetails.confirmed')
+              transaction.isPending ? i18n.t('transactionDetails.pending') : i18n.t('transactionDetails.confirmed')
             }
             weight={1.6}
             image={require('~/src/assets/images/icon-pending-white.png')}
           />
         </LinearLayout>
-        <LinearLayout orientation={'horiz'}>
+        <LinearLayout orientation="horiz">
           <HeaderColumn
             title={i18n.t('transactionDetails.value').toUpperCase()}
-            value={FilterHelper.currency(
-              transaction.token?.exchangeToken(currency),
-              currency,
-              language
-            )}
+            value={FilterHelper.currency(transaction.token?.exchangeToken(currency), currency, language)}
             weight={2}
           />
           <HeaderColumn
@@ -132,28 +105,23 @@ export const TransactionDetails = (props: Props) => {
             priorityFee={transaction.feeAmount ?? undefined}
           />
         </LinearLayout>
-        <LinearLayout orientation={'horiz'}>
+        <LinearLayout orientation="horiz">
           <HeaderColumn
             weight={1}
             title={i18n.t('transactionDetails.hash').toUpperCase()}
             value={transaction.transactionHash ?? ''}
-            showCopy={true}
+            showCopy
           />
         </LinearLayout>
-        <LinearLayout orientation={'horiz'}>
-          <LinearLayout mr={2} mt={5} alignSelf={'center'}>
+        <LinearLayout orientation="horiz">
+          <LinearLayout mr={2} mt={5} alignSelf="center">
             <ImageView
               width={Normalize.scale(18)}
-              resizeMode={'contain'}
+              resizeMode="contain"
               source={require('~src/assets/images/arrow-gray.png')}
             />
           </LinearLayout>
-          <TextView
-            color={'text.10'}
-            fontFamily={'medium'}
-            fontSize={18}
-            mt={4}
-          >
+          <TextView color="text.10" fontFamily="medium" fontSize={18} mt={4}>
             {i18n.t('transactionDetails.sender')}
           </TextView>
         </LinearLayout>
@@ -163,20 +131,15 @@ export const TransactionDetails = (props: Props) => {
           accountName={senderAccount?.name ?? undefined}
           walletName={senderWallet ?? undefined}
         />
-        <LinearLayout orientation={'horiz'}>
-          <LinearLayout mr={2} mt={5} alignSelf={'center'}>
+        <LinearLayout orientation="horiz">
+          <LinearLayout mr={2} mt={5} alignSelf="center">
             <ImageView
               width={Normalize.scale(18)}
-              resizeMode={'contain'}
+              resizeMode="contain"
               source={require('~src/assets/images/arrow-receive-gray.png')}
             />
           </LinearLayout>
-          <TextView
-            color={'text.10'}
-            fontFamily={'medium'}
-            fontSize={18}
-            mt={4}
-          >
+          <TextView color="text.10" fontFamily="medium" fontSize={18} mt={4}>
             {i18n.t('transactionDetails.recipient')}
           </TextView>
         </LinearLayout>
@@ -186,19 +149,13 @@ export const TransactionDetails = (props: Props) => {
           accountName={receiverAccount?.name ?? undefined}
           walletName={receiverWallet ?? undefined}
         />
-        <TokenView
-          hideTokenInWallet={true}
-          hideSingleTokenPrice={false}
-          hideAmountAbove={true}
-          transaction={transaction}
-        />
-        <LinearLayout weight={1} mt={'30px'}>
+        <TokenView hideTokenInWallet hideSingleTokenPrice={false} hideAmountAbove transaction={transaction} />
+        <LinearLayout weight={1} mt="30px">
           {senderAccount && (
             <ThemedButton
               onPress={() => {
                 Linking.openURL(
-                  blockchainServices[senderAccount.blockchain].provider
-                    .siteUrlQuery + transaction.transactionHash
+                  blockchainServices[senderAccount.blockchain].provider.siteUrlQuery + transaction.transactionHash
                 )
               }}
               label={i18n.t('transactionDetails.viewOnDora')}

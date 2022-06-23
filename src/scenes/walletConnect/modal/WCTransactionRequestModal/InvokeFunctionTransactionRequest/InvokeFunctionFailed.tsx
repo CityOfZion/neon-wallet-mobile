@@ -1,36 +1,26 @@
 import i18n from 'i18n-js'
 import React from 'react'
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 
-import {TransactionRequestFailedElementProps} from '../TransactionRequestBase'
+import { TransactionRequestFailedElementProps } from '../TransactionRequestBase'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Normalize} from '~src/app/Normalize'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Normalize } from '~src/app/Normalize'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
-export const InvokeFunctionFailed = ({
-  errorMessage,
-}: TransactionRequestFailedElementProps) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+export const InvokeFunctionFailed = ({ errorMessage }: TransactionRequestFailedElementProps) => {
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   return (
-    <LinearLayout
-      orientation={'verti'}
-      alignItems={'center'}
-      width={'100%'}
-      paddingBottom={50}
-      height="100%"
-    >
+    <LinearLayout orientation="verti" alignItems="center" width="100%" paddingBottom={50} height="100%">
       <ImageView
-        alignSelf={'center'}
-        resizeMode={'contain'}
+        alignSelf="center"
+        resizeMode="contain"
         width={Normalize.scale(115)}
         height={Normalize.scale(110)}
         mb={22}
-        mt={'5%'}
+        mt="5%"
         source={require('~src/assets/images/ion-ios-close-outline_-_Ionicons_Copy_2.png')}
       />
 
@@ -40,7 +30,7 @@ export const InvokeFunctionFailed = ({
         fontWeight={500}
         lineHeight="22px"
         fontFamily="medium"
-        textAlign={'center'}
+        textAlign="center"
         mb={15}
       >
         {i18n.t('modals.transactionSent.transactionFailed')}
@@ -64,7 +54,7 @@ export const InvokeFunctionFailed = ({
         fontSize={14}
         fontWeight={500}
         fontFamily="medium"
-        textAlign={'center'}
+        textAlign="center"
         mb={4}
       >
         {i18n.t('modals.transactionSent.transactionError').toUpperCase()}
@@ -76,28 +66,22 @@ export const InvokeFunctionFailed = ({
         fontWeight={300}
         lineHeight="20px"
         fontFamily="light"
-        width={'90%'}
-        minHeight={'73px'}
+        width="90%"
+        minHeight="73px"
         bg={theme.colors.background[7]}
         px={5}
         py={2}
-        mb={'auto'}
+        mb="auto"
       >
         {errorMessage}
       </TextView>
 
       <LinearLayout width="100%">
-        <ThemedButton
-          label={i18n.t('modals.transactionSent.viewTransaction')}
-          disabled
-        />
+        <ThemedButton label={i18n.t('modals.transactionSent.viewTransaction')} disabled />
       </LinearLayout>
 
       <LinearLayout width="100%" mt="10px">
-        <ThemedButton
-          label={i18n.t('modals.transactionSent.viewOnDora')}
-          disabled
-        />
+        <ThemedButton label={i18n.t('modals.transactionSent.viewOnDora')} disabled />
       </LinearLayout>
     </LinearLayout>
   )

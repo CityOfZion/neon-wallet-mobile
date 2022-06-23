@@ -1,9 +1,9 @@
-import React, {useRef, useState} from 'react'
-import {LayoutChangeEvent, Animated, Easing} from 'react-native'
+import React, { useRef, useState } from 'react'
+import { LayoutChangeEvent, Animated, Easing } from 'react-native'
 
-import {Normalize} from '../app/Normalize'
-import {Account} from '../models/redux/Account'
-import {LinearLayout} from '../styles/styled-components'
+import { Normalize } from '../app/Normalize'
+import { Account } from '../models/redux/Account'
+import { LinearLayout } from '../styles/styled-components'
 import AccountCard from './AccountCard'
 
 export const AccountCards = (props: {
@@ -16,19 +16,19 @@ export const AccountCards = (props: {
   const posYFactor = useRef(new Animated.Value(0))
 
   const layoutEvent = (event: LayoutChangeEvent) => {
-    const {height} = event.nativeEvent.layout
+    const { height } = event.nativeEvent.layout
     setViewHeight(height)
 
     Animated.timing(posYFactor.current, {
       toValue: 1,
       duration: 1000,
       useNativeDriver: true,
-      easing: Easing.out((val) => val ** 2),
+      easing: Easing.out(val => val ** 2),
     }).start()
   }
 
   return (
-    <Animated.View onLayout={layoutEvent} style={{opacity: posYFactor.current}}>
+    <Animated.View onLayout={layoutEvent} style={{ opacity: posYFactor.current }}>
       {props.accounts.map((account: Account, i: number) => {
         const marginTop = i !== 0 ? Normalize.scale(-130) : undefined
         return (
@@ -54,7 +54,7 @@ export const AccountCards = (props: {
             <LinearLayout>
               <AccountCard
                 account={account}
-                isCompacted={true}
+                isCompacted
                 isStackMode={i !== props.accounts.length - 1}
                 onPress={() => props.onPress(account)}
                 disableSecondTouch={props.disableSecondTouch}

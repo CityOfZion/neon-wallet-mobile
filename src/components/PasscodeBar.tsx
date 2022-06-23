@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import {LinearLayout} from '~src/styles/styled-components'
+import { LinearLayout } from '~src/styles/styled-components'
 
 interface Props {
   data: number[]

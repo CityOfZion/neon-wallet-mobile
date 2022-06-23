@@ -1,23 +1,23 @@
-import Neon, {api, wallet, u, rpc, tx} from '@cityofzion/neon-js-next'
+import { api, wallet, u, rpc, tx } from '@cityofzion/neon-js-next'
 import {
   Nep17TransferIntent,
   signingConfig,
 } from '@cityofzion/neon-js-next/node_modules/@cityofzion/neon-api/lib/NetworkFacade'
-import {JsonRpcRequest, JsonRpcResponse} from '@json-rpc-tools/utils'
+import { JsonRpcRequest, JsonRpcResponse } from '@json-rpc-tools/utils'
 import type * as AsteroidSDK from '@moonlight-io/asteroid-sdk-js'
 import axios from 'axios'
-import {ImageLoadEventData, NativeModules, Platform} from 'react-native'
+import { ImageLoadEventData, NativeModules, Platform } from 'react-native'
 
-import {INFT} from '../../common'
+import { INFT } from '../../common'
 
-import {AsteroidHelper} from '~/src/helpers/AsteroidHelper'
-import {UtilsHelper} from '~/src/helpers/UtilsHelper'
-import {NeoNode} from '~/src/models/NeoNode'
-import {TokenAsset} from '~/src/models/TokenAsset'
-import {Account} from '~/src/models/redux/Account'
-import {NFTResponse} from '~/src/models/response/NFTResponse'
-import {NFTSResponse} from '~/src/models/response/NFTSResponse'
-import {NeoNative} from '~/src/native/NeoNative'
+import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
+import { UtilsHelper } from '~/src/helpers/UtilsHelper'
+import { NeoNode } from '~/src/models/NeoNode'
+import { TokenAsset } from '~/src/models/TokenAsset'
+import { Account } from '~/src/models/redux/Account'
+import { NFTResponse } from '~/src/models/response/NFTResponse'
+import { NFTSResponse } from '~/src/models/response/NFTSResponse'
+import { NeoNative } from '~/src/native/NeoNative'
 import {
   IBlockchainService,
   BlockchainServiceKey,
@@ -26,12 +26,9 @@ import {
   IClaimable,
   IWalletConnect,
 } from '~src/blockchain'
-import {Neo3ProviderOptions} from '~src/blockchain/Neo3'
-import {Neo3Provider} from '~src/blockchain/Neo3/providers/common'
-import {
-  ContractInvocationMulti,
-  NeonWcAdapter,
-} from '~src/helpers/NeonWcAdapter'
+import { Neo3ProviderOptions } from '~src/blockchain/Neo3'
+import { Neo3Provider } from '~src/blockchain/Neo3/providers/common'
+import { ContractInvocationMulti, NeonWcAdapter } from '~src/helpers/NeonWcAdapter'
 
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 const feeTokenImg = require('~src/assets/nep5/png/GAS.png')
@@ -62,12 +59,11 @@ export interface ContractParam {
   type: string
   name: string
 }
-export class BSNeo3
-  implements IBlockchainService, IClaimable, IWalletConnect, INFT {
+export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, INFT {
   provider: Neo3Provider
   key: BlockchainServiceKey
   icon = icon
-  cozTip: {address: string; token: string; hash: string}
+  cozTip: { address: string; token: string; hash: string }
   accountsPool: Account[] = []
   readonly magicNumber = 844378958
   readonly derivationPath = "m/44'/888'/0'/0/?"
@@ -86,7 +82,7 @@ export class BSNeo3
       decimals: 8,
     },
   ]
-  readonly feeToken: {hash: string; token: string; img: ImageLoadEventData}
+  readonly feeToken: { hash: string; token: string; img: ImageLoadEventData }
   readonly wcChains: string[]
   constructor() {
     this.provider = Neo3ProviderOptions('doraSDK')
@@ -104,10 +100,7 @@ export class BSNeo3
     this.wcChains = ['neo3:mainnet']
   }
 
-  rpcCall = async (
-    address: string,
-    request: JsonRpcRequest
-  ): Promise<JsonRpcResponse> => {
+  rpcCall = async (address: string, request: JsonRpcRequest): Promise<JsonRpcResponse> => {
     const neoAccount = await this.getNeoAccount(address)
     const nodes = await this.provider.getAllNodes()
     const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
@@ -115,10 +108,7 @@ export class BSNeo3
     if (!neoAccount) throw new Error('No account')
     if (!bestUrl) throw new Error('Blockchain unavailable, try again')
 
-    return await (await NeonWcAdapter.init(bestUrl)).rpcCall(
-      neoAccount,
-      request
-    )
+    return await (await NeonWcAdapter.init(bestUrl)).rpcCall(neoAccount, request)
   }
 
   validateAddress(address: string) {
@@ -141,30 +131,24 @@ export class BSNeo3
   generateWif(mnemonic: string, index: number) {
     const keychain = AsteroidHelper.getKeychainFromMnemonic(mnemonic)
 
-    const childKey = keychain.generateChildKey(
-      this.platform,
-      this.derivationPath.replace(/\?$/, index.toString())
-    )
+    const childKey = keychain.generateChildKey(this.platform, this.derivationPath.replace(/\?$/, index.toString()))
 
     return childKey.getWIF()
   }
 
-  generateAccount(
-    mnemonic: string,
-    index: number
-  ): {wif: string; address: string} {
+  generateAccount(mnemonic: string, index: number): { wif: string; address: string } {
     const wif = this.generateWif(mnemonic, index)
-    const {WIF, address} = new wallet.Account(wif)
-    return {wif: WIF, address}
+    const { WIF, address } = new wallet.Account(wif)
+    return { wif: WIF, address }
   }
 
   generateAccountFromWif(wif: string) {
-    const {address} = new wallet.Account(wif)
+    const { address } = new wallet.Account(wif)
     return address
   }
 
   async sendTransaction(sendtx: SenderTransactionInfo) {
-    const {senderAddress} = sendtx
+    const { senderAddress } = sendtx
     try {
       if (!senderAddress) throw new Error('Sender address not defined')
 
@@ -173,7 +157,7 @@ export class BSNeo3
 
       if (!bestUrl) throw new Error('Blockchain unavailable, try again')
 
-      const facade = await api.NetworkFacade.fromConfig({node: bestUrl})
+      const facade = await api.NetworkFacade.fromConfig({ node: bestUrl })
 
       const intents = await this.buildNep17(sendtx)
       const signing = await this.signing(senderAddress)
@@ -187,53 +171,41 @@ export class BSNeo3
   }
 
   async decryptKey(encryptedKey: string, password: string) {
-    return new Promise<{address: string; wif: string}>(
-      async (resolve, reject) => {
-        if (Platform.OS === 'ios') {
-          try {
-            NativeModules.RNNeoSdkBindings.decryptNep2(
-              encryptedKey,
-              password,
-              (wif: string | null) => {
-                if (wif) {
-                  const newAccount = new wallet.Account(wif)
-                  if (newAccount.address)
-                    resolve({address: newAccount.address, wif})
-                  else reject(new Error('Key decryption failed'))
-                } else {
-                  reject(new Error('Key decryption failed'))
-                }
-              }
-            )
-          } catch (error) {
-            reject(new Error('Key decryption failed'))
-          }
-        } else {
-          try {
-            const wif = await NeoNative.decryptNep2(password, encryptedKey)
-            const newAccount = new wallet.Account(wif)
-            if (newAccount.address) resolve({address: newAccount.address, wif})
-            else reject(new Error('Key decryption failed'))
-          } catch (error) {
-            reject(new Error('Key decryption failed'))
-          }
+    return new Promise<{ address: string; wif: string }>(async (resolve, reject) => {
+      if (Platform.OS === 'ios') {
+        try {
+          NativeModules.RNNeoSdkBindings.decryptNep2(encryptedKey, password, (wif: string | null) => {
+            if (wif) {
+              const newAccount = new wallet.Account(wif)
+              if (newAccount.address) resolve({ address: newAccount.address, wif })
+              else reject(new Error('Key decryption failed'))
+            } else {
+              reject(new Error('Key decryption failed'))
+            }
+          })
+        } catch {
+          reject(new Error('Key decryption failed'))
+        }
+      } else {
+        try {
+          const wif = await NeoNative.decryptNep2(password, encryptedKey)
+          const newAccount = new wallet.Account(wif)
+          if (newAccount.address) resolve({ address: newAccount.address, wif })
+          else reject(new Error('Key decryption failed'))
+        } catch {
+          reject(new Error('Key decryption failed'))
         }
       }
-    )
+    })
   }
 
   async claimGas(address: string) {
     const response = await this.provider.getBalance(address)
-    const neoHash = this.assets.find((asset) => asset.symbol === 'NEO')?.hash
-    const neoBalance = response.balance.filter(
-      (balance) => balance.assetSymbol === 'NEO'
-    )
-    const gasBalance = response.balance.filter(
-      (balance) => balance.assetSymbol === 'GAS'
-    )
+    const neoHash = this.assets.find(asset => asset.symbol === 'NEO')?.hash
+    const neoBalance = response.balance.filter(balance => balance.assetSymbol === 'NEO')
+    const gasBalance = response.balance.filter(balance => balance.assetSymbol === 'GAS')
 
-    if (neoBalance.length < 1)
-      throw new Error("Address don't have NEO to make a claim")
+    if (neoBalance.length < 1) throw new Error("Address don't have NEO to make a claim")
     if (!neoHash) throw new Error('NEO not found')
 
     const tokenFee = new TokenAsset('NEO', 'NEO', neoHash, this.key)
@@ -258,7 +230,7 @@ export class BSNeo3
 
     if (!url) throw new Error('Problem to do claim')
 
-    const facade = await api.NetworkFacade.fromConfig({node: url})
+    const facade = await api.NetworkFacade.fromConfig({ node: url })
     const txid = await facade.claimGas(neoAccount, signing)
     return {
       txid,
@@ -271,9 +243,6 @@ export class BSNeo3
     const fromAccount = await this.getNeoAccount(senderAddress)
 
     if (!fromAccount) throw new Error('Account not found')
-    const sb = Neon.create.scriptBuilder()
-
-    const script = sb.build()
 
     const defaultEndpoint = 'http://seed1.neo.org:10332'
     const node = (await this.provider.getAllNodes())[0]
@@ -281,19 +250,14 @@ export class BSNeo3
 
     const nwcAdapter = await NeonWcAdapter.init(endpoint ?? defaultEndpoint)
     const requestParams: ContractInvocationMulti = request.params
-    const testInvokeResult = await nwcAdapter.testInvoke(
-      fromAccount,
-      requestParams
-    )
+    const testInvokeResult = await nwcAdapter.testInvoke(fromAccount, requestParams)
 
-    return UtilsHelper.convertToArbitraryDecimals(
-      Number(testInvokeResult.gasconsumed)
-    )
+    return UtilsHelper.convertToArbitraryDecimals(Number(testInvokeResult.gasconsumed))
   }
 
   async calculateTransferFee(sendtx: Omit<SenderTransactionInfo, 'feeAmount'>) {
     try {
-      const {receiverAddress, senderAddress, token} = sendtx
+      const { receiverAddress, senderAddress, token } = sendtx
       if (!receiverAddress) throw new Error('Receiver address is invalid')
       if (!senderAddress) throw new Error('Sender address is invalid')
       if (!token) throw new Error('Token is invalid')
@@ -313,48 +277,24 @@ export class BSNeo3
       const txbuilder = new api.TransactionBuilder()
       for (const intent of intents) {
         if (intent.decimalAmt) {
-          const [tokenInfo] = await api.getTokenInfos(
-            [intent.contractHash],
-            rpcClient
-          )
-          const amt = u.BigInteger.fromDecimal(
-            intent.decimalAmt,
-            tokenInfo.decimals
-          )
-          txbuilder.addNep17Transfer(
-            intent.from,
-            intent.to,
-            intent.contractHash,
-            amt
-          )
+          const [tokenInfo] = await api.getTokenInfos([intent.contractHash], rpcClient)
+          const amt = u.BigInteger.fromDecimal(intent.decimalAmt, tokenInfo.decimals)
+          txbuilder.addNep17Transfer(intent.from, intent.to, intent.contractHash, amt)
         }
       }
-      const {feePerByte, executionFeeFactor} = await api.getFeeInformation(
-        rpcClient
-      )
+      const { feePerByte, executionFeeFactor } = await api.getFeeInformation(rpcClient)
 
       const txn = txbuilder.build()
-      const networkFee = api.calculateNetworkFee(
-        txn,
-        feePerByte,
-        executionFeeFactor
-      )
-      const invokeFunctionResponse = await rpcClient.invokeScript(
-        u.HexString.fromHex(txn.script),
-        [
-          {
-            account: fromAccount.scriptHash,
-            scopes: String(tx.WitnessScope.CalledByEntry),
-          },
-        ]
-      )
-      const requiredSystemFee = u.BigInteger.fromNumber(
-        invokeFunctionResponse.gasconsumed
-      )
+      const networkFee = api.calculateNetworkFee(txn, feePerByte, executionFeeFactor)
+      const invokeFunctionResponse = await rpcClient.invokeScript(u.HexString.fromHex(txn.script), [
+        {
+          account: fromAccount.scriptHash,
+          scopes: String(tx.WitnessScope.CalledByEntry),
+        },
+      ])
+      const requiredSystemFee = u.BigInteger.fromNumber(invokeFunctionResponse.gasconsumed)
 
-      return (
-        Number(requiredSystemFee.toDecimal(8)) + Number(networkFee.toDecimal(8))
-      )
+      return Number(requiredSystemFee.toDecimal(8)) + Number(networkFee.toDecimal(8))
     } catch (error: any) {
       console.log('Error calculate fee')
       console.log(error)
@@ -376,15 +316,15 @@ export class BSNeo3
       with_total: 1,
     })
 
-    const {data} = await axios.get(url)
+    const { data } = await axios.get(url)
 
-    const {assets, total_results: totalResults} = data as GhostMarketAssets
+    const { assets, total_results: totalResults } = data as GhostMarketAssets
 
     const totalPages = Math.ceil(totalResults / nftPageLimit)
 
-    const nftsResponse = new NFTSResponse({totalPages})
+    const nftsResponse = new NFTSResponse({ totalPages })
 
-    assets.forEach(({nft}) => {
+    assets.forEach(({ nft }) => {
       const nftResponse = new NFTResponse({
         collectionImage: this.treatGhostMarketImage(nft.collection.logo_url),
         collectionName: nft.collection.name,
@@ -407,9 +347,9 @@ export class BSNeo3
       contract: hash,
     })
 
-    const {data} = await axios.get(url)
+    const { data } = await axios.get(url)
 
-    const [{nft}] = data.assets
+    const [{ nft }] = data.assets
 
     const nftResponse = new NFTResponse({
       collectionImage: this.treatGhostMarketImage(nft.collection.logo_url),
@@ -435,7 +375,7 @@ export class BSNeo3
 
   private async buildNep17(sendtx: Omit<SenderTransactionInfo, 'feeAmount'>) {
     const intents: Nep17TransferIntent[] = []
-    const {token, receiverAddress, senderAddress, tip} = sendtx
+    const { token, receiverAddress, senderAddress, tip } = sendtx
     if (!token) throw new Error('Token not defined')
     if (!senderAddress) throw new Error('Sender address not defined')
     if (!receiverAddress) throw new Error('Receiver address not defined')
@@ -462,7 +402,7 @@ export class BSNeo3
   }
 
   private async getNeoAccount(address: string) {
-    const account = this.accountsPool.find((it) => it.address === address)
+    const account = this.accountsPool.find(it => it.address === address)
     const wifAccount = await account?.getWif()
     return wifAccount ? new wallet.Account(wifAccount) : null
   }
@@ -481,20 +421,14 @@ export class BSNeo3
     return srcImage
   }
 
-  private buildGhostMarketURL(
-    path: string,
-    params?: Record<string, string | number>
-  ) {
+  private buildGhostMarketURL(path: string, params?: Record<string, string | number>) {
     const chain = 'n3'
 
     const baseUrl = 'https://api.ghostmarket.io/api/v1'
 
     const parameters =
       params && Object.keys(params).length > 0
-        ? Object.keys(params).reduce(
-            (acc, item) => acc + `&${item}=${params[item]}`,
-            ''
-          )
+        ? Object.keys(params).reduce((acc, item) => acc + `&${item}=${params[item]}`, '')
         : ''
 
     const url = `${baseUrl}/${path}?chain=${chain}${parameters}`

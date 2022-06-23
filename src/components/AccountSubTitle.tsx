@@ -1,30 +1,19 @@
 import React from 'react'
 
-import {ButtonView, LinearLayout, TextView} from '../styles/styled-components'
+import { ButtonView, LinearLayout, TextView } from '../styles/styled-components'
 
-import {Account} from '~src/models/redux/Account'
+import { Account } from '~src/models/redux/Account'
 
 interface Props {
   account: Account
 }
 
-const AccountSubTitle = ({account}: Props) => {
+const AccountSubTitle = ({ account }: Props) => {
   return (
-    <LinearLayout
-      orientation={'horiz'}
-      justifyContent={'center'}
-      alignItems={'center'}
-    >
-      <ButtonView
-        borderRadius={100}
-        disabled={true}
-        width={12}
-        height={12}
-        backgroundColor={account.backgroundColor}
-        mr={3}
-      />
+    <LinearLayout orientation="horiz" justifyContent="center" alignItems="center">
+      <ButtonView borderRadius={100} disabled width={12} height={12} backgroundColor={account.backgroundColor} mr={3} />
 
-      <TextView color={'text.2'}>{account.name?.toUpperCase()}</TextView>
+      <TextView color="text.2">{account.name?.toUpperCase()}</TextView>
     </LinearLayout>
   )
 }

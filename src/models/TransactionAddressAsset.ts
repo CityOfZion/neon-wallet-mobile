@@ -1,6 +1,6 @@
-import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
+import { HttpExclude, HttpExpose } from '@simpli/serialized-request'
 
-import {TransactionTransferType} from './TransactionAddressSummary'
+import { TransactionTransferType } from './TransactionAddressSummary'
 
 @HttpExclude()
 export class TransactionAddressAsset {
@@ -20,6 +20,6 @@ export class TransactionAddressAsset {
   type!: TransactionTransferType.ASSET
 
   constructor(data: Omit<TransactionAddressAsset, 'type'>) {
-    Object.assign(this, {...data, type: TransactionTransferType.ASSET})
+    Object.assign(this, { ...data, type: TransactionTransferType.ASSET })
   }
 }

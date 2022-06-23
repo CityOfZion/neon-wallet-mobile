@@ -1,7 +1,7 @@
 import React from 'react'
-import {ColorValue, View} from 'react-native'
+import { ColorValue, View } from 'react-native'
 
-import {TextView} from '../styles/styled-components'
+import { TextView } from '../styles/styled-components'
 
 interface BoxLabelNumberProps {
   color: ColorValue

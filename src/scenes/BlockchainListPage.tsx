@@ -1,23 +1,23 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {Await, AwaitActivity} from '@simpli/react-native-await'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, {useCallback, useState, useEffect} from 'react'
-import {View} from 'react-native'
-import {showMessage} from 'react-native-flash-message'
-import {useDispatch, useSelector} from 'react-redux'
+import React, { useCallback, useState, useEffect } from 'react'
+import { View } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {UtilsHelper} from '../helpers/UtilsHelper'
+import { UtilsHelper } from '../helpers/UtilsHelper'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {BlockchainServiceKey, blockchainServices} from '~src/blockchain'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { BlockchainServiceKey, blockchainServices } from '~src/blockchain'
 import BlockchainList from '~src/components/BlockchainList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {RootStore} from '~src/store/RootStore'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
+import { RootStore } from '~src/store/RootStore'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<MoreStackParamList>
@@ -28,12 +28,8 @@ const BlockchainListPage = (props: Props) => {
   const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
-  const [blockchainsSelected, setBlockchainsSelected] = useState<
-    BlockchainServiceKey[]
-  >([])
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const [blockchainsSelected, setBlockchainsSelected] = useState<BlockchainServiceKey[]>([])
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const createWallet = useCallback(async () => {
     let id: string | undefined
 
@@ -48,22 +44,14 @@ const BlockchainListPage = (props: Props) => {
         dispatch(RootStore.account.actions.setIdWallet(id))
         dispatch(
           RootStore.account.actions.setName(
-            `${i18n.t(
-              `blockchainServices.${blockchain}.label`
-            )} ${i18n.t('modals.blockchainList.countAccount', {count: 1})}`
+            `${i18n.t(`blockchainServices.${blockchain}.label`)} ${i18n.t('modals.blockchainList.countAccount', {
+              count: 1,
+            })}`
           )
         )
         dispatch(RootStore.account.actions.setBlockchain(blockchain))
-        dispatch(
-          RootStore.account.actions.setSrcIcon(
-            blockchainServices[blockchain].icon
-          )
-        )
-        dispatch(
-          RootStore.account.actions.setBackgroundColor(
-            theme.colors.card[UtilsHelper.getRandomNumber(6)]
-          )
-        )
+        dispatch(RootStore.account.actions.setSrcIcon(blockchainServices[blockchain].icon))
+        dispatch(RootStore.account.actions.setBackgroundColor(theme.colors.card[UtilsHelper.getRandomNumber(6)]))
 
         await dispatchAsyncString(RootStore.account.actions.createAndSave())
         await dispatchAsync(RootStore.app.actions.syncAccounts())
@@ -81,7 +69,7 @@ const BlockchainListPage = (props: Props) => {
           },
         ],
       })
-    } catch (error) {
+    } catch {
       if (id) {
         await dispatchAsync(RootStore.wallet.actions.delete(id))
         await dispatchAsync(RootStore.app.actions.syncWallets())
@@ -104,36 +92,25 @@ const BlockchainListPage = (props: Props) => {
 
   return (
     <ScreenLayout>
-      <AwaitActivity
-        name={'createWallet'}
-        size={'large'}
-        loadingView={<ScreenLoader />}
-      >
-        <LinearLayout mt={'15px'} weight={1}>
-          <View style={{alignContent: 'center'}}>
-            <TextView
-              textAlign="center"
-              fontFamily="medium"
-              fontSize={18}
-              color="text.0"
-            >
+      <AwaitActivity name="createWallet" size="large" loadingView={<ScreenLoader />}>
+        <LinearLayout mt="15px" weight={1}>
+          <View style={{ alignContent: 'center' }}>
+            <TextView textAlign="center" fontFamily="medium" fontSize={18} color="text.0">
               {i18n.t('modals.blockchainList.walletPage.subtitle')}
             </TextView>
           </View>
 
           <BlockchainList
-            hideQtyAccounts={true}
-            isMulti={true}
-            onBlockchainSelected={(blockchainList) => {
-              const mapBlockchainList = blockchainList
-                .filter((it) => it.isActive === true)
-                .map((it) => it.blockchain)
+            hideQtyAccounts
+            isMulti
+            onBlockchainSelected={blockchainList => {
+              const mapBlockchainList = blockchainList.filter(it => it.isActive === true).map(it => it.blockchain)
               setBlockchainsSelected(mapBlockchainList)
             }}
           />
         </LinearLayout>
 
-        <LinearLayout mt={5} mb={7} px={5} width={'100%'}>
+        <LinearLayout mt={5} mb={7} px={5} width="100%">
           <ThemedButton
             disabled={blockchainsSelected.length < 1}
             onPress={() => {

@@ -1,11 +1,8 @@
-import {Action} from 'redux'
-import {ReducerApplied} from '@simpli/redux-wrapper'
+import { Action } from 'redux'
+import { ReducerApplied } from '@simpli/redux-wrapper'
 
 export declare global {
-  type LoadingActionsType =
-    | 'SET_LOADING'
-    | 'SET_LOADING_PROGRESS'
-    | 'CLEAR_LOADING'
+  type LoadingActionsType = 'SET_LOADING' | 'SET_LOADING_PROGRESS' | 'CLEAR_LOADING'
 
   interface LoadingState {
     progress: number

@@ -1,19 +1,18 @@
-import {RouteProp, useNavigation} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import Constants from 'expo-constants'
 import * as WebBrowser from 'expo-web-browser'
 import i18n from 'i18n-js'
-import React, {useEffect} from 'react'
-import {TouchableWithoutFeedback, Platform} from 'react-native'
-import {useSelector} from 'react-redux'
-import {DefaultTheme} from 'styled-components'
+import React from 'react'
+import { TouchableWithoutFeedback, Platform } from 'react-native'
+import { DefaultTheme } from 'styled-components'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import MenuItem, {RightIconType} from '~src/components/MenuItem'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import MenuItem, { RightIconType } from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface MoreProps {
   navigation: StackNavigationProp<MoreStackParamList & ModalStackParamList>
@@ -23,20 +22,14 @@ interface MoreProps {
 }
 
 const MorePage = (props: MoreProps) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
-
   const handlePressHelp = async () => {
-    const result = await WebBrowser.openBrowserAsync(
-      'https://app.pipefy.com/public/form/wUJ8xQoC?embedded=true'
-    )
+    const result = await WebBrowser.openBrowserAsync('https://app.pipefy.com/public/form/wUJ8xQoC?embedded=true')
     return result
   }
 
   return (
-    <ScreenLayout padding={20} darkerSolidColorBG={true}>
-      <LinearLayout mb={'20px'} />
+    <ScreenLayout padding={20} darkerSolidColorBG>
+      <LinearLayout mb="20px" />
       <MenuItem
         title={i18n.t('more.createWallet')}
         icon={require('~/src/assets/images/wallet-icon-green.png')}
@@ -101,23 +94,9 @@ const MorePage = (props: MoreProps) => {
           })
         }}
       >
-        <LinearLayout
-          position={'absolute'}
-          left={'5%'}
-          right={'5%'}
-          bottom={'3%'}
-        >
-          <TextView
-            fontSize={14}
-            color="white"
-            textAlign="left"
-            numberOfLines={1}
-            width={'88%'}
-            allowFontScaling={true}
-          >
-            {`v${Constants.nativeAppVersion}-${Constants.nativeBuildVersion}${
-              Platform.OS === 'ios' ? 'i' : 'a'
-            }`}
+        <LinearLayout position="absolute" left="5%" right="5%" bottom="3%">
+          <TextView fontSize={14} color="white" textAlign="left" numberOfLines={1} width="88%" allowFontScaling>
+            {`v${Constants.nativeAppVersion}-${Constants.nativeBuildVersion}${Platform.OS === 'ios' ? 'i' : 'a'}`}
           </TextView>
         </LinearLayout>
       </TouchableWithoutFeedback>

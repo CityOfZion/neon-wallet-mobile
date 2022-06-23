@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react'
-import {Image} from 'react-native'
-import {useSelector} from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { Image } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {LinearLayout, TextView, ImageView} from '~/src/styles/styled-components'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {
   imageUri: string
@@ -11,10 +11,8 @@ type Props = {
   hideTitle?: boolean
 }
 
-const WalletConnectBox = ({imageUri, title, hideTitle}: Props) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+const WalletConnectBox = ({ imageUri, title, hideTitle }: Props) => {
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const [imgUriState, setImgUriState] = useState<string | undefined>(undefined)
   const imgDefault = require('~src/assets/logos/icon-dapp-default.png')
   useEffect(() => {
@@ -22,14 +20,8 @@ const WalletConnectBox = ({imageUri, title, hideTitle}: Props) => {
   }, [imageUri])
 
   return (
-    <LinearLayout alignItems="center" mb={'20px'}>
-      <LinearLayout
-        backgroundColor={'#1c2228'}
-        borderRadius={4}
-        padding={4}
-        width={'77px'}
-        height={'75px'}
-      >
+    <LinearLayout alignItems="center" mb="20px">
+      <LinearLayout backgroundColor="#1c2228" borderRadius={4} padding={4} width="77px" height="75px">
         {imgUriState ? (
           <Image
             source={{
@@ -57,12 +49,12 @@ const WalletConnectBox = ({imageUri, title, hideTitle}: Props) => {
       </LinearLayout>
       {!hideTitle && (
         <TextView
-          mt={'14px'}
-          fontFamily={'regular'}
-          fontSize={'18px'}
-          fontWeight={'500'}
+          mt="14px"
+          fontFamily="regular"
+          fontSize="18px"
+          fontWeight="500"
           color={theme.colors.text[0]}
-          textAlign={'center'}
+          textAlign="center"
         >
           {title}
         </TextView>

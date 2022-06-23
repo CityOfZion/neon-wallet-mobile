@@ -1,4 +1,4 @@
-import {DispatcherWrapper} from '@simpli/redux-wrapper'
+import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
 export class FiatDispatcher extends DispatcherWrapper<
   SenderTransactionActionsType,
@@ -8,8 +8,8 @@ export class FiatDispatcher extends DispatcherWrapper<
   readonly type = 'SET_FIAT'
 
   readonly reducer: SenderTransactionReducer = (state, action) => {
-    const {fiat} = action
+    const { fiat } = action
 
-    return this.set(state, {fiat})
+    return this.set(state, { fiat })
   }
 }

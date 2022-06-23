@@ -1,25 +1,11 @@
-import React, {useState} from 'react'
-import {
-  StyleSheet,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  Keyboard,
-  TouchableWithoutFeedback,
-} from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, View, TextInput, TouchableOpacity, Text, Keyboard, TouchableWithoutFeedback } from 'react-native'
 // TODO: define a typed module for this dependency
 // @ts-ignore
-import {QRCode} from 'react-native-custom-qr-codes-expo'
+import { QRCode } from 'react-native-custom-qr-codes-expo'
 
-const DismissKeyboard: React.FC<{children: React.ReactNode}> = ({
-  children,
-}: {
-  children: React.ReactNode
-}) => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    {children}
-  </TouchableWithoutFeedback>
+const DismissKeyboard: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode }) => (
+  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
 )
 
 const QrCodeGenerateTest: React.FC<object> = () => {
@@ -54,16 +40,12 @@ const QrCodeGenerateTest: React.FC<object> = () => {
         <TextInput
           // Input to get the value to set on QRCode
           style={styles.TextInputStyle}
-          onChangeText={(text) => setInputValue(text)}
+          onChangeText={text => setInputValue(text)}
           underlineColorAndroid="transparent"
           placeholder="Enter text to Generate QR Code"
         />
 
-        <TouchableOpacity
-          onPress={getTextInputValue}
-          activeOpacity={0.7}
-          style={styles.button}
-        >
+        <TouchableOpacity onPress={getTextInputValue} activeOpacity={0.7} style={styles.button}>
           <Text style={styles.TextStyle}> Generate QR Code </Text>
         </TouchableOpacity>
       </View>

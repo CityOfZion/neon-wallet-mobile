@@ -1,44 +1,35 @@
-import {StackNavigationProp} from '@react-navigation/stack'
-import {Await, AwaitActivity} from '@simpli/react-native-await'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { Await, AwaitActivity } from '@simpli/react-native-await'
 import * as Print from 'expo-print'
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
-import React, {useEffect, useState} from 'react'
-import {Alert} from 'react-native'
-import {useDispatch} from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { Alert } from 'react-native'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {Normalize} from '~/src/app/Normalize'
-import {AsteroidHelper} from '~/src/helpers/AsteroidHelper'
-import {UtilsHelper} from '~/src/helpers/UtilsHelper'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Normalize } from '~/src/app/Normalize'
+import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
+import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCard from '~src/components/themed/ThemedCard'
-import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {RootStore} from '~src/store/RootStore'
-import {TextView, LinearLayout} from '~src/styles/styled-components'
+import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
+import { TextView, LinearLayout } from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<MoreStackParamList>
 }
 
-const WordComponent = (props: {value: string}) => {
+const WordComponent = (props: { value: string }) => {
   return (
-    <TextView
-      my={3}
-      mx={4}
-      color={'text.0'}
-      fontSize={'2xl'}
-      fontFamily={'semibold'}
-    >
+    <TextView my={3} mx={4} color="text.0" fontSize="2xl" fontFamily="semibold">
       {props.value}
     </TextView>
   )
 }
 
-const Step2CreateWalletPage: React.FC<Props> = (props) => {
-  const dispatch = useDispatch()
+const Step2CreateWalletPage: React.FC<Props> = props => {
   const [words, setWords] = useState<string[]>([])
 
   const seeds = words.join(' ')
@@ -52,49 +43,40 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
   }
 
   const infoDialog = () => {
-    Alert.alert(
-      i18n.t('step2CreateWallet.dialog_title'),
-      i18n.t('step2CreateWallet.dialog_body'),
-      [
-        {
-          text: i18n.t('step2CreateWallet.dialog_dismiss'),
-          onPress: () =>
-            props.navigation.navigate(wrapper.route.Step3CreateWallet.name, {
-              mnemonic: words,
-            }),
-        },
-      ]
-    )
+    Alert.alert(i18n.t('step2CreateWallet.dialog_title'), i18n.t('step2CreateWallet.dialog_body'), [
+      {
+        text: i18n.t('step2CreateWallet.dialog_dismiss'),
+        onPress: () =>
+          props.navigation.navigate(wrapper.route.Step3CreateWallet.name, {
+            mnemonic: words,
+          }),
+      },
+    ])
   }
 
   return (
-    <ScreenLayout alignX={'center'} darkerSolidColorBG={true}>
+    <ScreenLayout alignX="center" darkerSolidColorBG>
       <AwaitActivity
-        name={'populate'}
+        name="populate"
         loadingView={
-          <LinearLayout width={'100%'} height={'100%'}>
-            <ScreenLoader transparent={true} />
+          <LinearLayout width="100%" height="100%">
+            <ScreenLoader transparent />
           </LinearLayout>
         }
       >
         <LinearLayout mt={5} weight={1}>
-          <LinearLayout mb={6} width={'100%'}>
-            <LinearLayout width={'100%'} orientation={'horiz'}>
-              <TextView
-                weight={1}
-                color={'text.0'}
-                fontSize={'lg'}
-                fontFamily={'bold'}
-              >
+          <LinearLayout mb={6} width="100%">
+            <LinearLayout width="100%" orientation="horiz">
+              <TextView weight={1} color="text.0" fontSize="lg" fontFamily="bold">
                 {i18n.t('step2CreateWallet.label_1')}
               </TextView>
 
-              <TextView color={'text.0'} fontSize={'lg'} fontFamily={'bold'}>
+              <TextView color="text.0" fontSize="lg" fontFamily="bold">
                 {i18n.t('step2CreateWallet.oneOfThree')}
               </TextView>
             </LinearLayout>
 
-            <TextView fontFamily={'light'} color={'text.0'} fontSize={'lg'}>
+            <TextView fontFamily="light" color="text.0" fontSize="lg">
               {i18n.t('step2CreateWallet.body_1')}
             </TextView>
           </LinearLayout>
@@ -110,31 +92,27 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
               }}
             >
               <LinearLayout
-                orientation={'horiz'}
-                flexWrap={'wrap'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                width={'100%'}
+                orientation="horiz"
+                flexWrap="wrap"
+                alignItems="center"
+                justifyContent="center"
+                width="100%"
               >
-                {words.map((it) => (
+                {words.map(it => (
                   <WordComponent key={it} value={it} />
                 ))}
               </LinearLayout>
             </ThemedCard>
           </LinearLayout>
 
-          <LinearLayout
-            mb={5}
-            orientation={'horiz'}
-            justifyContent={'flex-end'}
-          >
+          <LinearLayout mb={5} orientation="horiz" justifyContent="flex-end">
             <ThemedButton
               onPress={() => UtilsHelper.copyToClipboard(seeds)}
               label={i18n.t('app.copy')}
               srcIcon={require('~/src/assets/images/icon-copy-green.png')}
               iconSize={[Normalize.scale(25), Normalize.scale(25)]}
               fontSize={18}
-              flat={true}
+              flat
             />
 
             <ThemedButton
@@ -147,34 +125,21 @@ const Step2CreateWalletPage: React.FC<Props> = (props) => {
               srcIcon={require('~/src/assets/images/icon-print-green.png')}
               iconSize={[25, 25]}
               fontSize={18}
-              flat={true}
+              flat
             />
           </LinearLayout>
 
-          <TextView
-            fontFamily={'light'}
-            mb={4}
-            color={'text.0'}
-            fontSize={'lg'}
-          >
+          <TextView fontFamily="light" mb={4} color="text.0" fontSize="lg">
             {i18n.t('step2CreateWallet.body_2')}
           </TextView>
 
-          <TextView
-            fontFamily={'light'}
-            mb={5}
-            color={'text.0'}
-            fontSize={'lg'}
-          >
+          <TextView fontFamily="light" mb={5} color="text.0" fontSize="lg">
             {i18n.t('step2CreateWallet.body_3')}
           </TextView>
         </LinearLayout>
 
-        <LinearLayout mt={5} mb={7} px={5} width={'100%'}>
-          <ThemedButton
-            onPress={() => infoDialog()}
-            label={i18n.t('app.continue')}
-          />
+        <LinearLayout mt={5} mb={7} px={5} width="100%">
+          <ThemedButton onPress={() => infoDialog()} label={i18n.t('app.continue')} />
         </LinearLayout>
       </AwaitActivity>
     </ScreenLayout>

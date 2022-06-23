@@ -1,34 +1,23 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {Await, AwaitActivity} from '@simpli/react-native-await'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, {useState, useCallback, useEffect} from 'react'
-import {
-  View,
-  Text,
-  Image,
-  FlatList,
-  TouchableWithoutFeedback,
-  ScrollView,
-} from 'react-native'
+import React, { useState, useCallback, useEffect } from 'react'
+import { View, Text, Image, FlatList, TouchableWithoutFeedback, ScrollView } from 'react-native'
 import Accordion from 'react-native-collapsible/Accordion'
 
-import {AccountToImport} from '../hooks/BlockchainActionsHook'
+import { AccountToImport } from '../hooks/BlockchainActionsHook'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {
-  BlockchainServiceKey,
-  blockchainServices,
-  getBlockchainLogo,
-} from '~src/blockchain'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { BlockchainServiceKey, blockchainServices, getBlockchainLogo } from '~src/blockchain'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {useBlockchainActionsHook} from '~src/hooks'
-import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
+import { useBlockchainActionsHook } from '~src/hooks'
+import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 export type MnemonicSelectionInfo = Map<
   BlockchainServiceKey,
-  {address: string; wif: string; derivationIndex: number}[]
+  { address: string; wif: string; derivationIndex: number }[]
 >
 
 interface Props {
@@ -61,33 +50,33 @@ const HeaderMnemonicSelection = (props: HeaderMnemonicSelectionProps) => {
         borderColor: '#ffffff44',
       }}
     >
-      <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+      <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
         <Image
           source={getBlockchainLogo(blockchainName)}
           width={32}
           height={33}
-          style={{height: 28, width: 27, marginHorizontal: 10}}
+          style={{ height: 28, width: 27, marginHorizontal: 10 }}
         />
         <View>
-          <Text style={{color: '#899fa8', fontSize: 12, fontFamily: 'medium'}}>
+          <Text style={{ color: '#899fa8', fontSize: 12, fontFamily: 'medium' }}>
             {i18n.t(`blockchainServices.${blockchainName}.id`)}
           </Text>
-          <Text style={{color: '#fff', fontSize: 18, fontFamily: 'bold'}}>
+          <Text style={{ color: '#fff', fontSize: 18, fontFamily: 'bold' }}>
             {i18n.t(`blockchainServices.${blockchainName}.label`)}
           </Text>
         </View>
       </View>
-      <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-        <Text style={{color: '#899fa8', marginRight: 15, fontFamily: 'medium'}}>
+      <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+        <Text style={{ color: '#899fa8', marginRight: 15, fontFamily: 'medium' }}>
           {i18n.t('mnemonicSelectionList.qtySelectedOfTotal', {
             qtySelected: props.qtyAddressesSelected,
             total: props.totAddresses,
           })}
         </Text>
         {props.isActive ? (
-          <Text style={{fontSize: 30, color: '#4cffb3'}}>-</Text>
+          <Text style={{ fontSize: 30, color: '#4cffb3' }}>-</Text>
         ) : (
-          <Text style={{fontSize: 30, color: '#4cffb3'}}>+</Text>
+          <Text style={{ fontSize: 30, color: '#4cffb3' }}>+</Text>
         )}
       </View>
     </View>
@@ -101,12 +90,7 @@ interface ContentMnemonicItemProps {
     derivationIndex: number
   }
   blockchain: BlockchainServiceKey
-  onAddressChange: (
-    address: string,
-    wif: string,
-    isSelected: boolean,
-    blockchain: BlockchainServiceKey
-  ) => void
+  onAddressChange: (address: string, wif: string, isSelected: boolean, blockchain: BlockchainServiceKey) => void
 }
 
 const ContentMnemonicItem = (props: ContentMnemonicItemProps) => {
@@ -117,12 +101,7 @@ const ContentMnemonicItem = (props: ContentMnemonicItemProps) => {
   }, [addressIsSelected])
 
   useEffect(() => {
-    props.onAddressChange(
-      props.data.address,
-      props.data.wif,
-      addressIsSelected,
-      props.blockchain
-    )
+    props.onAddressChange(props.data.address, props.data.wif, addressIsSelected, props.blockchain)
   }, [addressIsSelected])
   return (
     <TouchableWithoutFeedback onPress={handleIsSelected}>
@@ -134,22 +113,17 @@ const ContentMnemonicItem = (props: ContentMnemonicItemProps) => {
           padding: 10,
         }}
       >
-        <View style={{backgroundColor: '#13191D'}}>
-          <Text style={{fontFamily: 'medium', color: '#899fa8', fontSize: 16}}>
-            {blockchainServices[props.blockchain].derivationPath.replace(
-              '?',
-              String(props.data.derivationIndex)
-            )}
+        <View style={{ backgroundColor: '#13191D' }}>
+          <Text style={{ fontFamily: 'medium', color: '#899fa8', fontSize: 16 }}>
+            {blockchainServices[props.blockchain].derivationPath.replace('?', String(props.data.derivationIndex))}
           </Text>
-          <Text style={{fontFamily: 'medium', color: '#fff', fontSize: 16}}>
-            {props.data.address}
-          </Text>
+          <Text style={{ fontFamily: 'medium', color: '#fff', fontSize: 16 }}>{props.data.address}</Text>
         </View>
         {addressIsSelected && (
           <Image
             width={30}
             height={30}
-            style={{width: 18, height: 18, alignSelf: 'center'}}
+            style={{ width: 18, height: 18, alignSelf: 'center' }}
             source={require('~src/assets/images/icon-check-green.png')}
           />
         )}
@@ -159,14 +133,9 @@ const ContentMnemonicItem = (props: ContentMnemonicItemProps) => {
 }
 
 interface ContentMnemonicSelectionProps {
-  data: {address: string; wif: string; derivationIndex: number}[]
+  data: { address: string; wif: string; derivationIndex: number }[]
   blockchain: BlockchainServiceKey
-  onAddressChange: (
-    address: string,
-    wif: string,
-    isSelected: boolean,
-    blockchain: BlockchainServiceKey
-  ) => void
+  onAddressChange: (address: string, wif: string, isSelected: boolean, blockchain: BlockchainServiceKey) => void
 }
 
 const ContentMnemonicSelection = (props: ContentMnemonicSelectionProps) => {
@@ -182,7 +151,7 @@ const ContentMnemonicSelection = (props: ContentMnemonicSelectionProps) => {
         />
       )}
       data={props.data}
-      renderItem={({item}) => (
+      renderItem={({ item }) => (
         <ContentMnemonicItem
           data={item}
           blockchain={props.blockchain}
@@ -201,20 +170,20 @@ export interface MnemonicSelectionListParams {
 }
 
 const MnemonicSelectionList = (props: Props) => {
-  const {mnemonic} = props.route.params
+  const { mnemonic } = props.route.params
   const [itensActives, setItemActives] = useState<number[]>([0])
   const handleActiveItens = (itens: number[]) => {
     setItemActives(itens)
   }
   const [addressesSelected, setAddressesSelected] = useState<
-    {address: string; blockchain: BlockchainServiceKey; wif: string}[]
+    { address: string; blockchain: BlockchainServiceKey; wif: string }[]
   >([])
   const blockchainActionsHook = useBlockchainActionsHook()
   const handleSelectAddress = useCallback(
     (address: string, wif: string, blockchain: BlockchainServiceKey) => {
-      setAddressesSelected((prevState) => {
+      setAddressesSelected(prevState => {
         const data = prevState
-        data.push({address, wif, blockchain})
+        data.push({ address, wif, blockchain })
         return [...data]
       })
     },
@@ -223,9 +192,9 @@ const MnemonicSelectionList = (props: Props) => {
 
   const handleUnselectAddress = useCallback(
     (address: string) => {
-      setAddressesSelected((prevState) => {
+      setAddressesSelected(prevState => {
         const data = prevState
-        return [...data.filter((it) => it.address !== address)]
+        return [...data.filter(it => it.address !== address)]
       })
     },
     [addressesSelected]
@@ -241,7 +210,7 @@ const MnemonicSelectionList = (props: Props) => {
     )
 
     const accountsToImport = addressesSelected.map(
-      ({address, blockchain, wif}): AccountToImport => ({
+      ({ address, blockchain, wif }): AccountToImport => ({
         walletId,
         address,
         blockchain,
@@ -255,7 +224,7 @@ const MnemonicSelectionList = (props: Props) => {
     Await.done('importMnemonic')
     props.navigation.reset({
       index: 0,
-      routes: [{name: wrapper.route.Tab.name}],
+      routes: [{ name: wrapper.route.Tab.name }],
     })
     props.navigation.navigate(wrapper.route.ListWallets.name, {
       screen: 'ListWalletsPage',
@@ -265,7 +234,7 @@ const MnemonicSelectionList = (props: Props) => {
   return (
     <ScreenLayout>
       <AwaitActivity name="importMnemonic" loadingView={<ScreenLoader />}>
-        <View style={{height: '100%'}}>
+        <View style={{ height: '100%' }}>
           <ScrollView>
             <Text
               style={{
@@ -279,14 +248,12 @@ const MnemonicSelectionList = (props: Props) => {
               We found the following
             </Text>
             <Accordion
-              expandMultiple={true}
+              expandMultiple
               activeSections={itensActives}
               sections={Array.from(props.route.params.data.entries())}
               renderHeader={(content, _, isActive) => {
                 const [blockchain, data] = content
-                const qtyAddressesSelected = addressesSelected.filter(
-                  (it) => it.blockchain === blockchain
-                ).length
+                const qtyAddressesSelected = addressesSelected.filter(it => it.blockchain === blockchain).length
                 return (
                   <HeaderMnemonicSelection
                     data={content}
@@ -296,8 +263,8 @@ const MnemonicSelectionList = (props: Props) => {
                   />
                 )
               }}
-              onChange={(indexes) => handleActiveItens(indexes)}
-              renderContent={(content) => {
+              onChange={indexes => handleActiveItens(indexes)}
+              renderContent={content => {
                 const [blockchain, data] = content
 
                 return (

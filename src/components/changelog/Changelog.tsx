@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import Timeline from 'react-native-timeline-flatlist'
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {LinearLayout} from '~src/styles/styled-components'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { LinearLayout } from '~src/styles/styled-components'
 
 interface IChanges {
   version: string
@@ -17,13 +16,11 @@ interface IChangelog {
   changelog: IChanges[]
 }
 
-const Changelog: React.FC<IChangelog> = ({changelog}) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
-  const convert = (x: {version: string; date: string; changes: string[]}) => {
+const Changelog: React.FC<IChangelog> = ({ changelog }) => {
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const convert = (x: { version: string; date: string; changes: string[] }) => {
     const description = x.changes.join('\n')
-    return {time: x.version, title: x.date, description}
+    return { time: x.version, title: x.date, description }
   }
 
   const formatChangelog = () => changelog.map((x: any) => convert(x))
@@ -33,20 +30,20 @@ const Changelog: React.FC<IChangelog> = ({changelog}) => {
       pl={22}
       pr={22}
       pb={22}
-      justifyContent={'center'}
-      alignItems={'center'}
+      justifyContent="center"
+      alignItems="center"
       borderRadius={4}
-      borderColor={'rgba(0, 0, 0, 0.1)'}
-      height={'100%'}
+      borderColor="rgba(0, 0, 0, 0.1)"
+      height="100%"
     >
-      <LinearLayout flex={1} padding={20} width={'100%'} borderRadius={13}>
+      <LinearLayout flex={1} padding={20} width="100%" borderRadius={13}>
         <Timeline
           data={changelog ? formatChangelog() : []}
           circleSize={20}
           circleColor={theme.colors.primary}
           lineColor={theme.colors.background[3]}
-          timeContainerStyle={{minWidth: 52, marginTop: 0}}
-          titleStyle={{marginTop: -10, color: theme.colors.text[0]}}
+          timeContainerStyle={{ minWidth: 52, marginTop: 0 }}
+          titleStyle={{ marginTop: -10, color: theme.colors.text[0] }}
           timeStyle={{
             textAlign: 'center',
             backgroundColor: theme.colors.primary,
@@ -54,9 +51,9 @@ const Changelog: React.FC<IChangelog> = ({changelog}) => {
             padding: 5,
             borderRadius: 13,
           }}
-          descriptionStyle={{color: theme.colors.text[4]}}
+          descriptionStyle={{ color: theme.colors.text[4] }}
           options={{
-            style: {paddingTop: 5},
+            style: { paddingTop: 5 },
             showsVerticalScrollIndicator: false,
           }}
         />

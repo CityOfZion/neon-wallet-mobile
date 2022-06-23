@@ -1,15 +1,11 @@
-import {DispatcherWrapper} from '@simpli/redux-wrapper'
+import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
-export class AddressDispatcher extends DispatcherWrapper<
-  AccountActionsType,
-  AccountState,
-  AccountAction
-> {
+export class AddressDispatcher extends DispatcherWrapper<AccountActionsType, AccountState, AccountAction> {
   readonly type = 'SET_ADDRESS'
 
   readonly reducer: AccountReducer = (state, action) => {
-    const {address} = action
+    const { address } = action
 
-    return this.set(state, {address})
+    return this.set(state, { address })
   }
 }

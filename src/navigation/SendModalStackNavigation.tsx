@@ -1,33 +1,27 @@
-import {RouteProp} from '@react-navigation/native'
-import {createStackNavigator} from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
-import {View} from 'react-native'
-import {useSelector} from 'react-redux'
-import {ThemeProvider} from 'styled-components'
+import { View } from 'react-native'
+import { useSelector } from 'react-redux'
+import { ThemeProvider } from 'styled-components'
 
-import {StackNavigationProp} from '~/node_modules/@react-navigation/stack'
-import {wrapper} from '~src/app/ApplicationWrapper'
-import SwiperPanel, {useSwiperController} from '~src/components/SwiperPanel'
+import { StackNavigationProp } from '~/node_modules/@react-navigation/stack'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBackButton from '~src/components/layout/HeaderBackButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import {screenConfig} from '~src/config/ScreenConfig'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import SendAccountSelectionModal, {
-  SendAccountSelectionModalParams,
-} from '~src/scenes/send/SendAccountSelectionModal'
+import { screenConfig } from '~src/config/ScreenConfig'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import SendAccountSelectionModal, { SendAccountSelectionModalParams } from '~src/scenes/send/SendAccountSelectionModal'
 import SendTransactionConfirmationModal, {
   SendTransactionConfirmationModalParams,
 } from '~src/scenes/send/SendTransactionConfirmationModal'
-import SendTransactionInputModal, {
-  SendTransactionInputModalParams,
-} from '~src/scenes/send/SendTransactionInputModal'
+import SendTransactionInputModal, { SendTransactionInputModalParams } from '~src/scenes/send/SendTransactionInputModal'
 import SendTransactionReviewModal from '~src/scenes/send/SendTransactionReviewModal'
-import SendWalletSelectionModal, {
-  SendWalletSelectionModalParams,
-} from '~src/scenes/send/SendWalletSelectionModal'
+import SendWalletSelectionModal, { SendWalletSelectionModalParams } from '~src/scenes/send/SendWalletSelectionModal'
 export type SendModalStackParamList = {
   SendWalletSelectionModal: SendWalletSelectionModalParams
   SendAccountSelectionModal: SendAccountSelectionModalParams
@@ -58,14 +52,14 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
     <ThemeProvider theme={theme}>
       <SwiperPanel
         controller={controller}
-        noHeader={true}
-        fullSize={true}
-        title={'Ué'}
+        noHeader
+        fullSize
+        title="Ué"
         padding={0}
         rightButton={<ThemedCloseButton onPress={controller.close} />}
         onClose={() => props.navigation.goBack()}
-        disableDefaultScrollView={true}
-        solidColorBG={true}
+        disableDefaultScrollView
+        solidColorBG
       >
         <View
           style={{
@@ -73,7 +67,7 @@ const SendModalStackNavigation = (props: SendModalStackProps) => {
           }}
         >
           <SendModalStack.Navigator
-            initialRouteName={'SendWalletSelectionModal'}
+            initialRouteName="SendWalletSelectionModal"
             screenOptions={{
               ...screenConfig,
               headerLeft: HeaderBackButton,

@@ -1,7 +1,7 @@
-import {BottomTabBarProps} from '@react-navigation/bottom-tabs'
-import React, {useEffect, useRef} from 'react'
-import {Animated, View, Easing, ImageLoadEventData} from 'react-native'
-import {useSelector} from 'react-redux'
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
+import React, { useEffect, useRef } from 'react'
+import { Animated, View, Easing, ImageLoadEventData } from 'react-native'
+import { useSelector } from 'react-redux'
 import {
   border,
   BorderProps,
@@ -17,20 +17,13 @@ import {
   SpaceProps,
 } from 'styled-system'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {applicationConfig} from '~/src/config/ApplicationConfig'
-import {Route} from '~src/app/Route'
-import {
-  SwiperController,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { Route } from '~src/app/Route'
+import { SwiperController, useSwiperController } from '~src/components/SwiperPanel'
 import QuickToolsMenu from '~src/scenes/QuickToolsMenu'
-import styled, {
-  ImageView,
-  LinearLayout,
-  RelativeLayout,
-} from '~src/styles/styled-components'
-import {orientation, weight} from '~src/styles/styled-system.config'
+import styled, { ImageView, LinearLayout, RelativeLayout } from '~src/styles/styled-components'
+import { orientation, weight } from '~src/styles/styled-system.config'
 
 interface TabButtonContent {
   enabledSource: ImageLoadEventData
@@ -69,15 +62,9 @@ const TabButton = (props: BottomTabBarProps & TabButtonProps) => {
 }
 
 const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
-  const {state, descriptors} = props
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const { state, descriptors } = props
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const focusedOptions = descriptors[state.routes[state.index].key].options
-
-  if (focusedOptions.tabBarVisible === false) {
-    return null
-  }
 
   const quickToolColor = useRef(new Animated.Value(0))
   const colorInterpolator = quickToolColor.current.interpolate({
@@ -135,59 +122,39 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
     animateQuickToolsButton()
   }, [controller.isShowing])
 
+  if (focusedOptions.tabBarVisible === false) {
+    return <></>
+  }
+
   return (
-    <LinearLayout
-      height="100%"
-      width="100%"
-      justifyContent="flex-end"
-      position="absolute"
-      pointerEvents={'box-none'}
-    >
+    <LinearLayout height="100%" width="100%" justifyContent="flex-end" position="absolute" pointerEvents="box-none">
       <QuickToolsMenu controller={controller} />
-      <TabBarContainer
-        height={applicationConfig.footerHeight}
-        width={applicationConfig.windowWidth}
-        bg={'#12181A'}
-      >
+      <TabBarContainer height={applicationConfig.footerHeight} width={applicationConfig.windowWidth} bg="#12181A">
         <RelativeLayout height="100%" width="100%">
-          <View pointerEvents={'none'}>
+          <View pointerEvents="none">
             <ImageView
               opacity={0.25}
               position="absolute"
-              bottom={'100%'}
-              width={'100%'}
-              resizeMode={'stretch'}
+              bottom="100%"
+              width="100%"
+              resizeMode="stretch"
               source={require('~src/assets/images/TabBarShadow.png')}
             />
           </View>
           <ImageView
-            position={'absolute'}
+            position="absolute"
             bottom={0}
-            width={'100%'}
-            resizeMode={'cover'}
+            width="100%"
+            resizeMode="cover"
             source={require('~src/assets/images/TabBar.png')}
           />
 
           {/*This should be absolute to float above of outbounds area*/}
-          <LinearLayout
-            position={'absolute'}
-            bottom={0}
-            orientation="horiz"
-            alignItems="center"
-            pointerEvents={'box-none'}
-          >
-            <TabButton
-              {...props}
-              button={walletButton}
-              controller={controller}
-            />
-            <TabButton
-              {...props}
-              button={dappsButton}
-              controller={controller}
-            />
+          <LinearLayout position="absolute" bottom={0} orientation="horiz" alignItems="center" pointerEvents="box-none">
+            <TabButton {...props} button={walletButton} controller={controller} />
+            <TabButton {...props} button={dappsButton} controller={controller} />
             <StyledTouchable
-              underlayColor={'transparent'}
+              underlayColor="transparent"
               mx="6px"
               bottom="10px"
               width={66}
@@ -209,16 +176,12 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
                   resizeMode="contain"
                   source={require('~src/assets/images/plus-sign-tabbar.png')}
                   style={{
-                    transform: [{rotate: spinInterpolator}],
+                    transform: [{ rotate: spinInterpolator }],
                   }}
                 />
               </AnimatedLinearLayout>
             </StyledTouchable>
-            <TabButton
-              {...props}
-              button={contactsButton}
-              controller={controller}
-            />
+            <TabButton {...props} button={contactsButton} controller={controller} />
             <TabButton {...props} button={moreButton} controller={controller} />
           </LinearLayout>
         </RelativeLayout>
@@ -227,26 +190,20 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   )
 }
 
-const TabBarContainer = styled.SafeAreaView<
-  LayoutProps & ColorProps & PositionProps
->`
+const TabBarContainer = styled.SafeAreaView<LayoutProps & ColorProps & PositionProps>`
   ${layout}
   ${color}
   ${position}
 `
 
-const StyledTouchable = styled.TouchableHighlight<
-  SpaceProps & LayoutProps & PositionProps & WeightProps
->`
+const StyledTouchable = styled.TouchableHighlight<SpaceProps & LayoutProps & PositionProps & WeightProps>`
   ${space}
   ${layout}
   ${position}
   ${weight}
 `
 
-const AnimatedImageView = styled(Animated.Image)<
-  SpaceProps & LayoutProps & FlexboxProps & PositionProps & WeightProps
->`
+const AnimatedImageView = styled(Animated.Image)<SpaceProps & LayoutProps & FlexboxProps & PositionProps & WeightProps>`
   ${space}
   ${layout}
   ${flexbox}
@@ -255,14 +212,7 @@ const AnimatedImageView = styled(Animated.Image)<
 `
 
 const AnimatedLinearLayout = styled(Animated.View)<
-  BorderProps &
-    ColorProps &
-    OrientationProps &
-    SpaceProps &
-    LayoutProps &
-    FlexboxProps &
-    WeightProps &
-    PositionProps
+  BorderProps & ColorProps & OrientationProps & SpaceProps & LayoutProps & FlexboxProps & WeightProps & PositionProps
 >`
   ${border}
   ${color}

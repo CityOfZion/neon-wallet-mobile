@@ -1,5 +1,5 @@
-import {StackNavigationOptions} from '@react-navigation/stack/lib/typescript/src/types'
-import {StyleProp, ViewStyle} from 'react-native'
+import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
+import { StyleProp, ViewStyle } from 'react-native'
 
 /**
  * Screen Configuration

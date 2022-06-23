@@ -1,15 +1,11 @@
-import {DispatcherWrapper} from '@simpli/redux-wrapper'
+import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
-export class PassphraseDispatcher extends DispatcherWrapper<
-  WalletActionsType,
-  WalletState,
-  WalletAction
-> {
+export class PassphraseDispatcher extends DispatcherWrapper<WalletActionsType, WalletState, WalletAction> {
   readonly type = 'SET_PASSPHRASE'
 
   readonly reducer: WalletReducer = (state, action) => {
-    const {passphrase} = action
+    const { passphrase } = action
 
-    return this.set(state, {passphrase})
+    return this.set(state, { passphrase })
   }
 }

@@ -1,42 +1,34 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {AwaitActivity} from '@simpli/react-native-await'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import moment from 'moment'
 import PropTypes from 'prop-types'
-import React, {useEffect, useMemo, useRef, useState} from 'react'
-import {Alert, TouchableWithoutFeedback, View, Animated} from 'react-native'
-import {useDispatch, useSelector} from 'react-redux'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { Alert, TouchableWithoutFeedback, View, Animated } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {TabStackParamList} from '../../navigation/TabNavigation'
+import { TabStackParamList } from '../../navigation/TabNavigation'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Normalize} from '~src/app/Normalize'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Normalize } from '~src/app/Normalize'
 import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import WalletPicker from '~src/components/misc/WalletPicker'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
-import {Lang} from '~src/enums/Lang'
-import {FilterHelper} from '~src/helpers/FilterHelper'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {Wallet} from '~src/models/redux/Wallet'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
-import {RootStore} from '~src/store/RootStore'
-import {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
-import {ApplicationTheme} from '~src/themes/ApplicationTheme'
+import { Lang } from '~src/enums/Lang'
+import { FilterHelper } from '~src/helpers/FilterHelper'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Wallet } from '~src/models/redux/Wallet'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
+import { RootStore } from '~src/store/RootStore'
+import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ApplicationTheme } from '~src/themes/ApplicationTheme'
 
-type Props = WalletStackParamList &
-  RootStackParamList &
-  TabStackParamList &
-  ModalStackParamList
+type Props = WalletStackParamList & RootStackParamList & TabStackParamList & ModalStackParamList
 
 interface WalletProps {
   navigation: StackNavigationProp<Props>
@@ -54,35 +46,25 @@ const WalletChangeComponent = (props: {
   tokenAssets: TokenAsset[]
   onPressWarning: () => void
 }) => {
-  const {currency, language} = useSelector((state: RootState) => state.settings)
-  const {exchange, accounts} = useSelector((state: RootState) => state.app)
+  const { currency, language } = useSelector((state: RootState) => state.settings)
+  const { exchange, accounts } = useSelector((state: RootState) => state.app)
 
   const [variationInPercent, setVariationInPercent] = useState<number>()
   const [formattedBalance, setFormattedBalance] = useState<string>()
   const walletMemo = useMemo(() => props.wallet, [props.wallet])
 
-  if (!walletMemo) return <View />
-
   const populate = async () => {
+    if (!walletMemo) return
+
     const pastOneDay = moment().add(-1, 'day')
 
-    const variation =
-      (await walletMemo.getBalanceVariationFromPastExchange(
-        currency,
-        pastOneDay,
-        exchange
-      )) ?? 0
+    const variation = (await walletMemo.getBalanceVariationFromPastExchange(currency, pastOneDay, exchange)) ?? 0
 
     walletMemo.populateTokenAssets(accounts)
 
     const balance = walletMemo.calculateBalance(currency, exchange) ?? 0
 
-    const balanceFormatted = walletMemo.calculateBalanceFormatted(
-      currency,
-      language,
-      exchange,
-      balance
-    )
+    const balanceFormatted = walletMemo.calculateBalanceFormatted(currency, language, exchange, balance)
 
     setFormattedBalance(balanceFormatted)
 
@@ -94,7 +76,7 @@ const WalletChangeComponent = (props: {
   }
 
   const showListTokenAssets = (tokenAssets: TokenAsset[]) => {
-    return tokenAssets.some((token) => token.amount > 0)
+    return tokenAssets.some(token => token.amount > 0)
   }
 
   useEffect(() => {
@@ -103,62 +85,41 @@ const WalletChangeComponent = (props: {
   }, [walletMemo])
 
   return (
-    <LinearLayout mb={6} alignItems={'center'}>
+    <LinearLayout mb={6} alignItems="center">
       {showListTokenAssets(props.tokenAssets) ? (
-        <TextView fontSize={'11px'} color={'text.2'}>
+        <TextView fontSize="11px" color="text.2">
           {walletMemo.formattedLastVisitedAt}
         </TextView>
       ) : (
         <View />
       )}
 
-      <LinearLayout orientation={'horiz'} minHeight={56}>
-        <TextView fontSize={'36px'} color={'text.0'} fontFamily={'medium'}>
+      <LinearLayout orientation="horiz" minHeight={56}>
+        <TextView fontSize="36px" color="text.0" fontFamily="medium">
           {formattedBalance ?? '-'}
         </TextView>
 
         {walletMemo.hasFunds && (
           <ButtonView onPress={props.onPressWarning}>
-            <ImageView
-              mt={'8px'}
-              mx={'4px'}
-              source={require('~src/assets/images/icon-warning-green.png')}
-            />
+            <ImageView mt="8px" mx="4px" source={require('~src/assets/images/icon-warning-green.png')} />
           </ButtonView>
         )}
       </LinearLayout>
 
-      <AwaitActivity name={'populateVariation'}>
-        <LinearLayout orientation={'horiz'}>
-          <TextView
-            mr={2}
-            fontSize={'sm'}
-            color={'text.2'}
-            fontFamily={'semibold'}
-          >
+      <AwaitActivity name="populateVariation">
+        <LinearLayout orientation="horiz">
+          <TextView mr={2} fontSize="sm" color="text.2" fontFamily="semibold">
             {i18n.t('screens.listWallets.changeInLast24hours')}
           </TextView>
 
           {variationInPercent !== undefined && (
             <TextView
-              fontSize={'sm'}
-              color={
-                variationInPercent > 0
-                  ? 'success'
-                  : variationInPercent === 0
-                  ? 'text.2'
-                  : 'danger'
-              }
-              fontFamily={'semibold'}
+              fontSize="sm"
+              color={variationInPercent > 0 ? 'success' : variationInPercent === 0 ? 'text.2' : 'danger'}
+              fontFamily="semibold"
             >
-              {variationInPercent > 0
-                ? '+'
-                : variationInPercent === 0
-                ? '-'
-                : ''}
-              {variationInPercent === 0
-                ? ''
-                : `${FilterHelper.decimal(variationInPercent, language, 2)}%`}
+              {variationInPercent > 0 ? '+' : variationInPercent === 0 ? '-' : ''}
+              {variationInPercent === 0 ? '' : `${FilterHelper.decimal(variationInPercent, language, 2)}%`}
             </TextView>
           )}
         </LinearLayout>
@@ -167,18 +128,18 @@ const WalletChangeComponent = (props: {
   )
 }
 
-const EmptyListComponent: React.FC<EmptyListProps> = (props) => {
-  const {navigation} = props
+const EmptyListComponent: React.FC<EmptyListProps> = props => {
+  const { navigation } = props
   return (
-    <LinearLayout alignItems={'center'} mx={3}>
+    <LinearLayout alignItems="center" mx={3}>
       <TouchableWithoutFeedback
         onPress={() => {
           props.navigation.reset({
             index: 0,
             routes: [
-              {name: wrapper.route.Tab.name},
-              {name: wrapper.route.Step1CreateWallet.name},
-              {name: wrapper.route.MorePage.name},
+              { name: wrapper.route.Tab.name },
+              { name: wrapper.route.Step1CreateWallet.name },
+              { name: wrapper.route.MorePage.name },
             ],
           })
           navigation.navigate(wrapper.route.Tab.name, {
@@ -195,30 +156,22 @@ const EmptyListComponent: React.FC<EmptyListProps> = (props) => {
       >
         <LinearLayout
           my={6}
-          orientation={'horiz'}
+          orientation="horiz"
           width={Normalize.scale(300)}
-          maxWidth={'100%'}
-          alignItems={'center'}
-          justifyContent={'center'}
-          borderStyle={'dashed'}
-          borderColor={'text.0'}
+          maxWidth="100%"
+          alignItems="center"
+          justifyContent="center"
+          borderStyle="dashed"
+          borderColor="text.0"
           borderRadius={17}
           borderWidth={1}
           style={{
             aspectRatio: 20 / 25,
           }}
         >
-          <ImageView
-            source={require('~src/assets/images/icon-plus-white.png')}
-          />
+          <ImageView source={require('~src/assets/images/icon-plus-white.png')} />
 
-          <TextView
-            color="white"
-            fontSize={18}
-            mt={2}
-            ml={3}
-            fontFamily="medium"
-          >
+          <TextView color="white" fontSize={18} mt={2} ml={3} fontFamily="medium">
             {i18n.t('screens.listWallets.createFirstWallet')}
           </TextView>
         </LinearLayout>
@@ -228,18 +181,14 @@ const EmptyListComponent: React.FC<EmptyListProps> = (props) => {
 }
 
 const ListWalletView = (props: WalletProps) => {
-  const {wallets, accounts, exchange} = useSelector(
-    (state: RootState) => state.app
-  )
-  const {isConnected} = useSelector((state: RootState) => state.network)
-  const {currency, language} = useSelector((state: RootState) => state.settings)
-  const {id} = useSelector((state: RootState) => state.wallet)
+  const { wallets, accounts } = useSelector((state: RootState) => state.app)
+  const { isConnected } = useSelector((state: RootState) => state.network)
+  const { language } = useSelector((state: RootState) => state.settings)
+  const { id } = useSelector((state: RootState) => state.wallet)
   const dispatch = useDispatch()
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
 
-  const selectedWallet = dispatchWallet(
-    RootStore.wallet.actions.getFromSelection()
-  )
+  const selectedWallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
 
   useEffect(() => {
     if (!id) {
@@ -290,35 +239,27 @@ const ListWalletView = (props: WalletProps) => {
     Alert.alert(
       i18n.t('screens.listWallets.incompleteBalanceWarningTitle'),
       i18n.t('screens.listWallets.incompleteBalanceWarningText'),
-      [{text: i18n.t('screens.listWallets.incompleteBalanceWarningButton')}],
-      {cancelable: false}
+      [{ text: i18n.t('screens.listWallets.incompleteBalanceWarningButton') }],
+      { cancelable: false }
     )
 
   return (
-    <ScreenLayout
-      useHeaderPadding={false}
-      useStatusBarPadding={true}
-      padding={0}
-      darkerSolidColorBG={true}
-    >
+    <ScreenLayout useHeaderPadding={false} useStatusBarPadding padding={0} darkerSolidColorBG>
       <>
-        <LinearLayout
-          alignSelf={'flex-end'}
-          style={{marginTop: !isConnected ? 14 : undefined}}
-        >
+        <LinearLayout alignSelf="flex-end" style={{ marginTop: !isConnected ? 14 : undefined }}>
           <ThemedMoreButton
             onPress={() =>
               props.navigation.navigate(wrapper.route.Modal.name, {
                 screen: wrapper.route.WalletContextModal.name,
-                params: {wallets},
+                params: { wallets },
               })
             }
           />
         </LinearLayout>
 
-        <AwaitActivity name={'populateWallet'}>
+        <AwaitActivity name="populateWallet">
           <>
-            <LinearLayout mt={-5} justifyContent={'center'} height={385}>
+            <LinearLayout mt={-5} justifyContent="center" height={385}>
               {isListNotEmpty() ? (
                 <WalletPicker
                   wallets={wallets}
@@ -332,24 +273,23 @@ const ListWalletView = (props: WalletProps) => {
             </LinearLayout>
 
             {selectedWallet && (
-              <Animated.View style={{opacity: fadeValue}}>
+              <Animated.View style={{ opacity: fadeValue }}>
                 <WalletChangeComponent
                   language={language}
                   wallet={selectedWallet}
                   tokenAssets={selectedWallet.tokenAssets ?? []}
                   onPressWarning={openWarning}
                 />
-                <LinearLayout mx={'16px'}>
-                  {selectedWallet.showBackupAlert &&
-                    selectedWallet.walletType === 'standard' && (
-                      <LinearLayout mb={6}>
-                        <Notification
-                          text={i18n.t('screens.listWallets.noBackup')}
-                          wallet={selectedWallet}
-                          propsNavigation={props.navigation}
-                        />
-                      </LinearLayout>
-                    )}
+                <LinearLayout mx="16px">
+                  {selectedWallet.showBackupAlert && selectedWallet.walletType === 'standard' && (
+                    <LinearLayout mb={6}>
+                      <Notification
+                        text={i18n.t('screens.listWallets.noBackup')}
+                        wallet={selectedWallet}
+                        propsNavigation={props.navigation}
+                      />
+                    </LinearLayout>
+                  )}
 
                   {isListNotEmpty() && (
                     <BalanceList
@@ -357,7 +297,7 @@ const ListWalletView = (props: WalletProps) => {
                       tokenAssets={selectedWallet.tokenAssets ?? []}
                       walletId={selectedWallet.id ?? undefined}
                       fromAccountView={false}
-                      showBlockchain={true}
+                      showBlockchain
                       fromSendAccountSelectionModal={false}
                     />
                   )}

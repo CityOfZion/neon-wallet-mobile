@@ -1,16 +1,12 @@
-import React, {useEffect, useCallback, useState} from 'react'
-import {View} from 'react-native'
-import {useSelector} from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { View } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {Normalize} from '~src/app/Normalize'
-import {
-  BlockchainServiceKey,
-  blockchainServices,
-  SenderTransactionInfo,
-} from '~src/blockchain'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
-import {ImageView, TextView, ButtonView} from '~src/styles/styled-components'
+import { Normalize } from '~src/app/Normalize'
+import { BlockchainServiceKey, blockchainServices, SenderTransactionInfo } from '~src/blockchain'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Account } from '~src/models/redux/Account'
+import { ImageView, TextView } from '~src/styles/styled-components'
 interface Props {
   receiverAddress: string
   account: Account
@@ -24,16 +20,15 @@ interface Props {
 type ITransaction = Omit<SenderTransactionInfo, 'feeAmount'>
 
 export const TransactionFeeNeo3 = (props: Props) => {
-  const {currency} = useSelector((state: RootState) => state.settings)
-  const {exchange} = useSelector((state: RootState) => state.app)
+  const { currency } = useSelector((state: RootState) => state.settings)
+  const { exchange } = useSelector((state: RootState) => state.app)
   const [feeAmount, setFeeAmount] = useState<number>(0)
   const [fiatAmount, setFiatAmount] = useState<number>(0)
   const [transaction, setTransaction] = useState<ITransaction>()
   const [isInsuficientFunds, setIsInsuficientFounds] = useState<boolean>(false)
   const calcFiatFee = async () => {
     if (props.token && props.amount > 0) {
-      const ratio =
-        exchange[props.blockchain][props.token.symbol]?.to[currency] ?? null
+      const ratio = exchange[props.blockchain][props.token.symbol]?.to[currency] ?? null
       const fiatResult = ratio * feeAmount
       setFiatAmount(fiatResult)
     }
@@ -41,9 +36,7 @@ export const TransactionFeeNeo3 = (props: Props) => {
 
   const handleCalcFee = async () => {
     if (transaction) {
-      const result = await blockchainServices[
-        props.blockchain
-      ].calculateTransferFee(transaction)
+      const result = await blockchainServices[props.blockchain].calculateTransferFee(transaction)
       setFeeAmount(result)
     } else {
       setFeeAmount(0)
@@ -54,8 +47,7 @@ export const TransactionFeeNeo3 = (props: Props) => {
   const handleInsuficientFunds = async () => {
     if (props.token && props.amount > 0) {
       const feeToken = props.account.tokenAssets.find(
-        (token) =>
-          token.symbol === blockchainServices[props.blockchain].feeToken.token
+        token => token.symbol === blockchainServices[props.blockchain].feeToken.token
       )
       if (!feeToken) {
         setIsInsuficientFounds(true)
@@ -78,14 +70,9 @@ export const TransactionFeeNeo3 = (props: Props) => {
   }
 
   useEffect(() => {
-    const {account, amount, receiverAddress, token} = props
+    const { account, amount, receiverAddress, token } = props
     if (token && amount > 0) {
-      const transactionToken = new TokenAsset(
-        token.name,
-        token.symbol,
-        token.hash,
-        token.blockchain
-      )
+      const transactionToken = new TokenAsset(token.name, token.symbol, token.hash, token.blockchain)
       transactionToken.amount = amount
       setTransaction({
         receiverAddress,
@@ -116,7 +103,7 @@ export const TransactionFeeNeo3 = (props: Props) => {
   }, [isInsuficientFunds])
 
   return (
-    <View style={{marginBottom: 20}}>
+    <View style={{ marginBottom: 20 }}>
       <View
         style={{
           flexDirection: 'row',
@@ -124,23 +111,18 @@ export const TransactionFeeNeo3 = (props: Props) => {
           marginVertical: 20,
         }}
       >
-        <TextView
-          fontWeight={700}
-          color="#fff"
-          fontFamily={'bold'}
-          fontSize={'14px'}
-        >
+        <TextView fontWeight={700} color="#fff" fontFamily="bold" fontSize="14px">
           TOTAL GAS FEE
         </TextView>
         {isInsuficientFunds && (
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <ImageView
-              width={'14px'}
-              height={'14px'}
+              width="14px"
+              height="14px"
               source={require('~/src/assets/images/icon-alert-purple.png')}
               mr={2}
             />
-            <TextView fontFamily={'bold'} fontSize={'13px'} color="#d355e7">
+            <TextView fontFamily="bold" fontSize="13px" color="#d355e7">
               INSUFICIENT GAS FOR TRANSACTION
             </TextView>
           </View>
@@ -163,21 +145,21 @@ export const TransactionFeeNeo3 = (props: Props) => {
             alignItems: 'center',
           }}
         >
-          <View style={{flexDirection: 'row', paddingHorizontal: 7}}>
+          <View style={{ flexDirection: 'row', paddingHorizontal: 7 }}>
             <ImageView
               mr={4}
               mt={1}
               width={Normalize.scale(19)}
               height={Normalize.scale(21)}
-              resizeMode={'contain'}
+              resizeMode="contain"
               source={blockchainServices[props.blockchain].feeToken.img}
             />
-            <TextView color={'#fff'} fontFamily={'semibold'} fontSize={'18px'}>
+            <TextView color="#fff" fontFamily="semibold" fontSize="18px">
               {feeAmount.toFixed(8)}
             </TextView>
           </View>
         </View>
-        <View style={{backgroundColor: '#ffffff99', height: 50, width: 1}} />
+        <View style={{ backgroundColor: '#ffffff99', height: 50, width: 1 }} />
         <View
           style={{
             width: '48%',
@@ -186,16 +168,11 @@ export const TransactionFeeNeo3 = (props: Props) => {
             alignItems: 'center',
           }}
         >
-          <View style={{flexDirection: 'row', paddingHorizontal: 7}}>
-            <TextView color={'#4cffb3'} fontFamily={'bold'} fontSize={'18px'}>
+          <View style={{ flexDirection: 'row', paddingHorizontal: 7 }}>
+            <TextView color="#4cffb3" fontFamily="bold" fontSize="18px">
               {currency}
             </TextView>
-            <TextView
-              color={'#fff'}
-              fontFamily={'semibold'}
-              fontSize={'18px'}
-              pl={3}
-            >
+            <TextView color="#fff" fontFamily="semibold" fontSize="18px" pl={3}>
               {fiatAmount.toFixed(2)}
             </TextView>
           </View>

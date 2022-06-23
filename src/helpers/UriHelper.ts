@@ -1,7 +1,7 @@
 import base64 from 'react-native-base64'
 
-import {validateAddressAllBlockchains} from '~src/blockchain'
-import {TokenAsset} from '~src/models/TokenAsset'
+import { validateAddressAllBlockchains } from '~src/blockchain'
+import { TokenAsset } from '~src/models/TokenAsset'
 export type TScheme = 'wc:' | 'neo:'
 
 export const SCHEME: TScheme[] = ['neo:', 'wc:']
@@ -15,12 +15,7 @@ export interface IURI {
 }
 
 export abstract class UriHelper {
-  static generate(
-    address: string,
-    amount?: number,
-    token?: TokenAsset,
-    reference?: string
-  ) {
+  static generate(address: string, amount?: number, token?: TokenAsset, reference?: string) {
     const params = []
     token && params.push(`asset=${token.hash}`)
     amount && params.push(`amount=${amount}`)
@@ -36,7 +31,7 @@ export abstract class UriHelper {
   }
 
   static isValidAsString(str: string) {
-    const key = SCHEME.find((it) => str.startsWith(it))
+    const key = SCHEME.find(it => str.startsWith(it))
 
     if (UriHelper.isValid(str)) {
       return key
@@ -44,21 +39,18 @@ export abstract class UriHelper {
   }
 
   static isValid(str: string) {
-    const key = SCHEME.find((it) => str.startsWith(it))
+    const key = SCHEME.find(it => str.startsWith(it))
     const isNeo = key === 'neo:'
 
     if (isNeo) {
-      return (
-        key &&
-        validateAddressAllBlockchains(str.substr(key.length).split('?')[0])
-      )
+      return key && validateAddressAllBlockchains(str.substr(key.length).split('?')[0])
     }
 
     return !!key
   }
 
   static parse(str: string): IURI | undefined {
-    const key = SCHEME.find((it) => str.startsWith(it)) ?? ''
+    const key = SCHEME.find(it => str.startsWith(it)) ?? ''
     const isNeo = key === 'neo:'
 
     if (!this.isValid(str) || !isNeo) return undefined
@@ -80,7 +72,7 @@ export abstract class UriHelper {
       reference = this._getParam(params, 'remark')
     }
 
-    return {address, tokenHash, amount, reference}
+    return { address, tokenHash, amount, reference }
   }
 
   static checkIsBase64(uri: string) {
@@ -95,10 +87,7 @@ export abstract class UriHelper {
     return uri
   }
 
-  private static _getParam<T extends string | number>(
-    params: string[],
-    param: string
-  ): T | undefined {
+  private static _getParam<T extends string | number>(params: string[], param: string): T | undefined {
     for (const kv of params) {
       const substrings = kv.split('=')
       const key = substrings[0]

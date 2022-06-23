@@ -1,15 +1,11 @@
-import {DispatcherWrapper} from '@simpli/redux-wrapper'
+import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
-export class ContactsDispatcher extends DispatcherWrapper<
-  AppActionsType,
-  AppState,
-  AppAction
-> {
+export class ContactsDispatcher extends DispatcherWrapper<AppActionsType, AppState, AppAction> {
   readonly type = 'SET_CONTACTS'
 
   readonly reducer: AppReducer = (state, action) => {
-    const {contacts} = action
+    const { contacts } = action
 
-    return this.set(state, {contacts})
+    return this.set(state, { contacts })
   }
 }

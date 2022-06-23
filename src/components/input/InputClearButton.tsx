@@ -1,9 +1,9 @@
 import React from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native'
 
-import {ImageView} from '~src/styles/styled-components'
+import { ImageView } from '~src/styles/styled-components'
 
-export const InputClearButton = (props: {onPress: () => void}) => {
+export const InputClearButton = (props: { onPress: () => void }) => {
   return (
     <TouchableWithoutFeedback onPress={props.onPress}>
       <ImageView
@@ -11,7 +11,7 @@ export const InputClearButton = (props: {onPress: () => void}) => {
         height={14}
         mr="4px"
         ml="4px"
-        resizeMode={'center'}
+        resizeMode="center"
         alignSelf="center"
         source={require('~/src/assets/images/icon-cancel-grey.png')}
       />

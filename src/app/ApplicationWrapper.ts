@@ -1,7 +1,7 @@
-import {DataKey} from '~src/app/DataKey'
-import {Route} from '~src/app/Route'
-import {wrapperConfig} from '~src/config/WrapperConfig'
-import {ApplicationTheme} from '~src/themes/ApplicationTheme'
+import { DataKey } from '~src/app/DataKey'
+import { Route } from '~src/app/Route'
+import { wrapperConfig } from '~src/config/WrapperConfig'
+import { ApplicationTheme } from '~src/themes/ApplicationTheme'
 
 export class ApplicationWrapper {
   readonly theme: ThemeWrapper
@@ -13,16 +13,16 @@ export class ApplicationWrapper {
     const storage: Record<string, DataKey<string>> = {}
     const route: Record<string, Route<string>> = {}
 
-    wrapperConfig.themes.forEach((ApplicationTheme) => {
+    wrapperConfig.themes.forEach(ApplicationTheme => {
       const applicationTheme: ApplicationTheme = new ApplicationTheme()
       theme[applicationTheme.id] = applicationTheme
     })
 
-    wrapperConfig.dataKeys.forEach((it) => {
+    wrapperConfig.dataKeys.forEach(it => {
       storage[it] = new DataKey(it)
     })
 
-    wrapperConfig.routes.forEach((it) => {
+    wrapperConfig.routes.forEach(it => {
       route[it] = new Route(it)
     })
 

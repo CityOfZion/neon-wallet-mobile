@@ -1,23 +1,19 @@
-import {RouteProp} from '@react-navigation/native'
-import {createStackNavigator} from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
-import {useSelector} from 'react-redux'
-import {ThemeProvider} from 'styled-components'
+import { useSelector } from 'react-redux'
+import { ThemeProvider } from 'styled-components'
 
-import ReceiveQrCodeModal, {
-  ReceiveQrCodeModalParams,
-} from '../scenes/receive/ReceiveQrCodeModal'
+import ReceiveQrCodeModal, { ReceiveQrCodeModalParams } from '../scenes/receive/ReceiveQrCodeModal'
 
-import {StackNavigationProp} from '~/node_modules/@react-navigation/stack'
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {screenConfig} from '~src/config/ScreenConfig'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import { StackNavigationProp } from '~/node_modules/@react-navigation/stack'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { screenConfig } from '~src/config/ScreenConfig'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import ReceiveAccountSelectionModal, {
   ReceiveAccountSelectionModalParams,
 } from '~src/scenes/receive/ReceiveAccountSelectionModal'
-import ReceiveToAccountModal, {
-  ReceiveToAccountModalParams,
-} from '~src/scenes/receive/ReceiveToAccountModal'
+import ReceiveToAccountModal, { ReceiveToAccountModalParams } from '~src/scenes/receive/ReceiveToAccountModal'
 import ReceiveWalletSelectionModal from '~src/scenes/receive/ReceiveWalletSelectionModal'
 
 export type ReceiveModalStackParamList = {
@@ -47,7 +43,7 @@ const ReceiveModalStackNavigation = (props: ReceiveModalStackProps) => {
   return (
     <ThemeProvider theme={theme}>
       <ReceiveModalStack.Navigator
-        initialRouteName={'ReceiveWalletSelectionModal'}
+        initialRouteName="ReceiveWalletSelectionModal"
         screenOptions={screenConfig}
         headerMode="none"
       >
@@ -59,14 +55,8 @@ const ReceiveModalStackNavigation = (props: ReceiveModalStackProps) => {
           name={wrapper.route.ReceiveAccountSelectionModal.name}
           component={ReceiveAccountSelectionModal}
         />
-        <ReceiveModalStack.Screen
-          name={wrapper.route.ReceiveToAccountModal.name}
-          component={ReceiveToAccountModal}
-        />
-        <ReceiveModalStack.Screen
-          name={wrapper.route.ReceiveQrCodeModal.name}
-          component={ReceiveQrCodeModal}
-        />
+        <ReceiveModalStack.Screen name={wrapper.route.ReceiveToAccountModal.name} component={ReceiveToAccountModal} />
+        <ReceiveModalStack.Screen name={wrapper.route.ReceiveQrCodeModal.name} component={ReceiveQrCodeModal} />
       </ReceiveModalStack.Navigator>
     </ThemeProvider>
   )

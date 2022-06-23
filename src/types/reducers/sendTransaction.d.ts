@@ -1,8 +1,7 @@
-import {Action} from 'redux'
-import {ReducerApplied} from '@simpli/redux-wrapper'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {PriorityFee} from '~src/models/PriorityFee'
-import {SenderTransactionInfo} from '~/src/blockchain'
+import { Action } from 'redux'
+import { ReducerApplied } from '@simpli/redux-wrapper'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { SenderTransactionInfo } from '~/src/blockchain'
 
 export declare global {
   type SenderTransactionActionsType =
@@ -19,11 +18,7 @@ export declare global {
     tokens: TokenAsset[]
   }
 
-  type SenderTransactionAction = SenderTransactionState &
-    Action<SenderTransactionActionsType>
+  type SenderTransactionAction = SenderTransactionState & Action<SenderTransactionActionsType>
 
-  type SenderTransactionReducer = ReducerApplied<
-    SenderTransactionState,
-    SenderTransactionAction
-  >
+  type SenderTransactionReducer = ReducerApplied<SenderTransactionState, SenderTransactionAction>
 }

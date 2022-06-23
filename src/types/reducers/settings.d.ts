@@ -1,17 +1,12 @@
-import {Action} from 'redux'
-import {Lang} from '~src/enums/Lang'
-import {Currency} from '~src/enums/Currency'
-import {Theme} from '~src/enums/Theme'
-import {ReducerApplied} from '@simpli/redux-wrapper'
-import {Security} from '~/src/enums/Security'
+import { Action } from 'redux'
+import { Lang } from '~src/enums/Lang'
+import { Currency } from '~src/enums/Currency'
+import { Theme } from '~src/enums/Theme'
+import { ReducerApplied } from '@simpli/redux-wrapper'
+import { Security } from '~/src/enums/Security'
 
 export declare global {
-  type SettingsActionsType =
-    | 'SET_LANGUAGE'
-    | 'SET_CURRENCY'
-    | 'SET_THEME'
-    | 'SET_SECURITY'
-    | 'SET_IS_FIRST_TIME'
+  type SettingsActionsType = 'SET_LANGUAGE' | 'SET_CURRENCY' | 'SET_THEME' | 'SET_SECURITY' | 'SET_IS_FIRST_TIME'
 
   interface SettingsState {
     language: Lang

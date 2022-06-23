@@ -1,15 +1,11 @@
-import {DispatcherWrapper} from '@simpli/redux-wrapper'
+import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
-export class IdWalletDispatcher extends DispatcherWrapper<
-  AccountActionsType,
-  AccountState,
-  AccountAction
-> {
+export class IdWalletDispatcher extends DispatcherWrapper<AccountActionsType, AccountState, AccountAction> {
   readonly type = 'SET_ID_WALLET'
 
   readonly reducer: AccountReducer = (state, action) => {
-    const {idWallet} = action
+    const { idWallet } = action
 
-    return this.set(state, {idWallet})
+    return this.set(state, { idWallet })
   }
 }

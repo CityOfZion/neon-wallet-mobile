@@ -1,17 +1,17 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import _ from 'lodash'
-import React, {useState, useEffect} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { TouchableWithoutFeedback } from 'react-native'
 
-import {SecurityHelper} from '~/src/helpers/SecurityHelper'
+import { SecurityHelper } from '~/src/helpers/SecurityHelper'
 import Keypad from '~src/components/Keypad'
 import PasscodeBar from '~src/components/PasscodeBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {PasscodeStackParamList} from '~src/navigation/PasscodeStackNavigation'
-import {PASSCODE_LENGTH} from '~src/scenes/LoginPage/PasscodePage'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import { PasscodeStackParamList } from '~src/navigation/PasscodeStackNavigation'
+import { PASSCODE_LENGTH } from '~src/scenes/LoginPage/PasscodePage'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface VerifyPasscodePageParams {
   onValidate: (result: boolean) => void
@@ -74,13 +74,7 @@ const VerifyPasscodePage = (props: Props) => {
   }
 
   return (
-    <ScreenLayout
-      useHeaderPadding={false}
-      useFooterPadding={false}
-      useStatusBarPadding={true}
-      alignX="center"
-      padding={16}
-    >
+    <ScreenLayout useHeaderPadding={false} useFooterPadding={false} useStatusBarPadding alignX="center" padding={16}>
       <PasscodeHeader navigation={props.navigation} route={props.route} />
 
       <TextView fontSize={22} color="text.0" mb={18}>
@@ -89,21 +83,13 @@ const VerifyPasscodePage = (props: Props) => {
 
       <PasscodeBar data={passcode} length={PASSCODE_LENGTH} />
 
-      <TextView
-        color="primary"
-        fontSize={22}
-        opacity={showErrorMessage ? 1 : 0}
-        my={18}
-      >
+      <TextView color="primary" fontSize={22} opacity={showErrorMessage ? 1 : 0} my={18}>
         {i18n.t('passcode.wrong')}
       </TextView>
 
       <LinearLayout weight={1} width="100%" />
 
-      <Keypad
-        onClick={clickKey}
-        disabled={passcode.length >= PASSCODE_LENGTH}
-      />
+      <Keypad onClick={clickKey} disabled={passcode.length >= PASSCODE_LENGTH} />
 
       <LinearLayout weight={2} maxHeight="180px" width="100%" />
     </ScreenLayout>

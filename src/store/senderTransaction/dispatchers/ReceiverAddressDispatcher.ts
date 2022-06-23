@@ -1,4 +1,4 @@
-import {DispatcherWrapper} from '@simpli/redux-wrapper'
+import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
 export class ReceiverAddressDispatcher extends DispatcherWrapper<
   SenderTransactionActionsType,
@@ -8,8 +8,8 @@ export class ReceiverAddressDispatcher extends DispatcherWrapper<
   readonly type = 'SET_RECEIVER_ADDRESS'
 
   readonly reducer: SenderTransactionReducer = (state, action) => {
-    const {receiverAddress} = action
+    const { receiverAddress } = action
 
-    return this.set(state, {receiverAddress})
+    return this.set(state, { receiverAddress })
   }
 }

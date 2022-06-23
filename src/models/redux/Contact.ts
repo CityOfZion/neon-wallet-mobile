@@ -1,4 +1,4 @@
-import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
+import { HttpExclude, HttpExpose } from '@simpli/serialized-request'
 
 @HttpExclude()
 export class Contact implements ContactState {
@@ -21,13 +21,11 @@ export class Contact implements ContactState {
   adaptNewFormat() {
     if (this.address && !this.addresses) {
       this.addresses = []
-      this.addresses.push({address: this.address, blockchain: 'neoLegacy'})
+      this.addresses.push({ address: this.address, blockchain: 'neoLegacy' })
     }
     this.adaptToMultichain()
   }
-  private adressesIsStringArray(
-    addresses: ContactAddressesList | string[]
-  ): addresses is string[] {
+  private adressesIsStringArray(addresses: ContactAddressesList | string[]): addresses is string[] {
     return (
       (addresses as ContactAddressesList)[0].address === undefined ||
       (addresses as ContactAddressesList)[0].blockchain === undefined
@@ -38,8 +36,8 @@ export class Contact implements ContactState {
     if (this.adressesIsStringArray(this.addresses)) {
       const addressesStringArray = this.addresses as string[]
       this.addresses = []
-      addressesStringArray.forEach((address) => {
-        this.addresses.push({address, blockchain: 'neoLegacy'})
+      addressesStringArray.forEach(address => {
+        this.addresses.push({ address, blockchain: 'neoLegacy' })
       })
     }
   }

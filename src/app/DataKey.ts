@@ -1,4 +1,4 @@
-import {DataStorage} from '@simpli/react-native-storage'
+import { DataStorage } from '@simpli/react-native-storage'
 
 export class DataKey<T extends string> {
   key: string

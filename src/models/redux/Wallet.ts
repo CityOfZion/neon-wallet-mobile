@@ -1,21 +1,17 @@
-import {
-  HttpExclude,
-  HttpExpose,
-  ResponseSerialize,
-} from '@simpli/serialized-request'
-import {t} from 'i18n-js'
+import { HttpExclude, HttpExpose, ResponseSerialize } from '@simpli/serialized-request'
+import { t } from 'i18n-js'
 import _ from 'lodash'
-import moment, {Moment} from 'moment'
+import moment, { Moment } from 'moment'
 
-import {Currency} from '~src/enums/Currency'
-import {Lang} from '~src/enums/Lang'
-import {FilterHelper} from '~src/helpers/FilterHelper'
-import {SecurityHelper} from '~src/helpers/SecurityHelper'
-import {UtilsHelper} from '~src/helpers/UtilsHelper'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
-import {MultichainExchange} from '~src/types/exchange'
+import { Currency } from '~src/enums/Currency'
+import { Lang } from '~src/enums/Lang'
+import { FilterHelper } from '~src/helpers/FilterHelper'
+import { SecurityHelper } from '~src/helpers/SecurityHelper'
+import { UtilsHelper } from '~src/helpers/UtilsHelper'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Account } from '~src/models/redux/Account'
+import { SenderTransaction } from '~src/models/redux/SenderTransaction'
+import { MultichainExchange } from '~src/types/exchange'
 @HttpExclude()
 export class Wallet implements WalletState {
   @HttpExpose()
@@ -48,7 +44,7 @@ export class Wallet implements WalletState {
   securityPhrase: string | null = null
 
   get hasFunds() {
-    return _.sumBy(this.tokenAssets, (it) => Number(it.amount) ?? 0) > 0
+    return _.sumBy(this.tokenAssets, it => Number(it.amount) ?? 0) > 0
   }
 
   get isInactive() {
@@ -65,7 +61,7 @@ export class Wallet implements WalletState {
   }
 
   getAccounts(pool: Account[]) {
-    return pool.filter((it) => it.idWallet === this.id)
+    return pool.filter(it => it.idWallet === this.id)
   }
 
   async getMnemonic() {
@@ -86,15 +82,11 @@ export class Wallet implements WalletState {
 
     await Promise.all(promises)
 
-    const balances = txs.map((it) => it.token?.exchangeToken(currency) ?? 0)
+    const balances = txs.map(it => it.token?.exchangeToken(currency) ?? 0)
     return _.sum(balances)
   }
 
-  async getBalanceVariationFromPastExchange(
-    currency: Currency,
-    date: Moment,
-    multichainExchange: MultichainExchange
-  ) {
+  async getBalanceVariationFromPastExchange(currency: Currency, date: Moment, multichainExchange: MultichainExchange) {
     const pastBalance = await this.getBalanceFromPastExchange(currency, date)
     const balance = this.calculateBalance(currency, multichainExchange)
 
@@ -106,26 +98,17 @@ export class Wallet implements WalletState {
     this.tokenAssets = Account.generateTokenAssetsFromPool(walletAccounts)
   }
 
-  async getTransactions(
-    pool: Account[],
-    tokensPool: TokenAsset[],
-    currentPage?: number
-  ) {
+  async getTransactions(pool: Account[], tokensPool: TokenAsset[], currentPage?: number) {
     const walletAccounts = this.getAccounts(pool)
-    const promises = walletAccounts.map((it) =>
-      it.populateTransactions(tokensPool, currentPage)
-    )
+    const promises = walletAccounts.map(it => it.populateTransactions(tokensPool, currentPage))
 
     await Promise.all(promises)
 
-    return walletAccounts.flatMap((it) => it.flattedTransactions)
+    return walletAccounts.flatMap(it => it.flattedTransactions)
   }
 
   calculateBalance(currency: Currency, multichainExchange: MultichainExchange) {
-    return _.sumBy(
-      this.tokenAssets,
-      (it) => it.exchangeToken(currency, multichainExchange[it.blockchain]) ?? 0
-    )
+    return _.sumBy(this.tokenAssets, it => it.exchangeToken(currency, multichainExchange[it.blockchain]) ?? 0)
   }
 
   calculateBalanceFormatted(
@@ -134,17 +117,10 @@ export class Wallet implements WalletState {
     multichainExchange: MultichainExchange,
     balanceToFormat?: number
   ) {
-    const balance =
-      balanceToFormat ?? this.calculateBalance(currency, multichainExchange)
+    const balance = balanceToFormat ?? this.calculateBalance(currency, multichainExchange)
 
     const fractionDigits = balance > 0 ? 0 : undefined
 
-    return FilterHelper.currency(
-      balance,
-      currency,
-      language,
-      fractionDigits,
-      fractionDigits
-    )
+    return FilterHelper.currency(balance, currency, language, fractionDigits, fractionDigits)
   }
 }

@@ -1,14 +1,12 @@
 import React from 'react'
-import {Text, StyleSheet, ScrollView, Image, View} from 'react-native'
-import {useSelector} from 'react-redux'
+import { Text, StyleSheet, Image, View } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
+import { wrapper } from '../app/ApplicationWrapper'
 
 const OfflineBar = () => {
-  const {isConnected} = useSelector((state: RootState) => state.network)
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const { isConnected } = useSelector((state: RootState) => state.network)
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const styles = StyleSheet.create({
     container: {
       width: '100%',

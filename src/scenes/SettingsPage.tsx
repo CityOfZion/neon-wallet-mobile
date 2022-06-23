@@ -1,15 +1,15 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
-import {useSelector} from 'react-redux'
-import {DefaultTheme} from 'styled-components'
+import { useSelector } from 'react-redux'
+import { DefaultTheme } from 'styled-components'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import MenuItem, {RightIconType} from '~src/components/MenuItem'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import MenuItem, { RightIconType } from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {SettingsStackParamList} from '~src/navigation/SettingsStackNavigation'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { SettingsStackParamList } from '~src/navigation/SettingsStackNavigation'
 
 interface SettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList & RootStackParamList>
@@ -22,12 +22,10 @@ const SettingsPage = (props: SettingsProps) => {
   const showLanguage = false
   const showTheme = false
 
-  const {language, currency, theme, security} = useSelector(
-    (state: RootState) => state.settings
-  )
+  const { language, currency, theme } = useSelector((state: RootState) => state.settings)
 
   return (
-    <ScreenLayout padding={20} darkerSolidColorBG={true}>
+    <ScreenLayout padding={20} darkerSolidColorBG>
       <MenuItem
         title={i18n.t('settings.security')}
         icon={require('~/src/assets/images/security-icon-green.png')}

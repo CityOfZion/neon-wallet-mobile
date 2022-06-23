@@ -1,13 +1,13 @@
 import i18n from 'i18n-js'
 import allSetlled from 'promise.allsettled'
-import {useCallback, useState} from 'react'
-import {useSelector, useDispatch} from 'react-redux'
+import { useCallback } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
-import {UtilsHelper} from '../helpers/UtilsHelper'
+import { UtilsHelper } from '../helpers/UtilsHelper'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {BlockchainServiceKey, blockchainServices} from '~src/blockchain'
-import {RootStore} from '~src/store/RootStore'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { BlockchainServiceKey, blockchainServices } from '~src/blockchain'
+import { RootStore } from '~src/store/RootStore'
 
 export type AccountToImport = {
   address: string
@@ -29,9 +29,7 @@ export function useBlockchainActionsHook() {
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const timerStatus = useSelector((state: RootState) => state.timer.status)
 
@@ -50,12 +48,8 @@ export function useBlockchainActionsHook() {
       }
       dispatch(RootStore.wallet.actions.setName(name))
       dispatch(RootStore.wallet.actions.setType('legacy'))
-      const walletId = await dispatchAsyncString(
-        RootStore.wallet.actions.createAndSave()
-      )
-      await dispatchAsync(
-        RootStore.wallet.actions.setShowBackupAlert(walletId, false)
-      )
+      const walletId = await dispatchAsyncString(RootStore.wallet.actions.createAndSave())
+      await dispatchAsync(RootStore.wallet.actions.setShowBackupAlert(walletId, false))
       await dispatchAsync(RootStore.app.actions.syncWallets())
 
       dispatch(RootStore.wallet.actions.selectWallet(walletId))
@@ -66,12 +60,7 @@ export function useBlockchainActionsHook() {
   )
 
   const createWallet = useCallback(
-    async (
-      name: string,
-      securityPhrase: string,
-      type: WalletType,
-      isImport?: boolean
-    ) => {
+    async (name: string, securityPhrase: string, type: WalletType, isImport?: boolean) => {
       if (!timerStatus) {
         throw new Error('The hook need be initialized')
       }
@@ -79,13 +68,9 @@ export function useBlockchainActionsHook() {
       dispatch(RootStore.wallet.actions.setSecurityPhrase(securityPhrase))
       dispatch(RootStore.wallet.actions.setType(type))
 
-      const walletId = await dispatchAsyncString(
-        RootStore.wallet.actions.createAndSave()
-      )
+      const walletId = await dispatchAsyncString(RootStore.wallet.actions.createAndSave())
 
-      await dispatchAsync(
-        RootStore.wallet.actions.setShowBackupAlert(walletId, !isImport)
-      )
+      await dispatchAsync(RootStore.wallet.actions.setShowBackupAlert(walletId, !isImport))
 
       await dispatchAsync(RootStore.app.actions.syncWallets())
 
@@ -97,12 +82,7 @@ export function useBlockchainActionsHook() {
   )
 
   const createAccount = useCallback(
-    async (
-      walletId: string,
-      name: string,
-      blockchain: BlockchainServiceKey,
-      index?: number
-    ) => {
+    async (walletId: string, name: string, blockchain: BlockchainServiceKey, index?: number) => {
       if (!timerStatus) {
         throw new Error('The hook need be initialized')
       }
@@ -110,19 +90,9 @@ export function useBlockchainActionsHook() {
       dispatch(RootStore.account.actions.setIdWallet(walletId))
       dispatch(RootStore.account.actions.setName(name))
       dispatch(RootStore.account.actions.setBlockchain(blockchain))
-      dispatch(
-        RootStore.account.actions.setBackgroundColor(
-          theme.colors.card[UtilsHelper.getRandomNumber(6)]
-        )
-      )
-      dispatch(
-        RootStore.account.actions.setSrcIcon(
-          blockchainServices[blockchain].icon
-        )
-      )
-      const address = await dispatchAsyncString(
-        RootStore.account.actions.createAndSave(index)
-      )
+      dispatch(RootStore.account.actions.setBackgroundColor(theme.colors.card[UtilsHelper.getRandomNumber(6)]))
+      dispatch(RootStore.account.actions.setSrcIcon(blockchainServices[blockchain].icon))
+      const address = await dispatchAsyncString(RootStore.account.actions.createAndSave(index))
       await dispatchAsync(RootStore.app.actions.syncAccounts())
       await dispatchAsync(RootStore.app.actions.syncWallets())
 
@@ -132,13 +102,7 @@ export function useBlockchainActionsHook() {
   )
 
   const importAccount = useCallback(
-    (
-      walletId: string,
-      name: string,
-      wif: string,
-      address: string,
-      blockchain: BlockchainServiceKey
-    ) => {
+    (walletId: string, name: string, wif: string, address: string, blockchain: BlockchainServiceKey) => {
       return UtilsHelper.putTimeout(async () => {
         if (!timerStatus) {
           throw new Error('The hook need be initialized')
@@ -147,19 +111,9 @@ export function useBlockchainActionsHook() {
         dispatch(RootStore.account.actions.setIdWallet(walletId))
         dispatch(RootStore.account.actions.setName(name))
         dispatch(RootStore.account.actions.setBlockchain(blockchain))
-        dispatch(
-          RootStore.account.actions.setBackgroundColor(
-            theme.colors.card[UtilsHelper.getRandomNumber(6)]
-          )
-        )
-        dispatch(
-          RootStore.account.actions.setSrcIcon(
-            blockchainServices[blockchain].icon
-          )
-        )
-        await dispatchAsync(
-          RootStore.account.actions.importAndSave(address, wif)
-        )
+        dispatch(RootStore.account.actions.setBackgroundColor(theme.colors.card[UtilsHelper.getRandomNumber(6)]))
+        dispatch(RootStore.account.actions.setSrcIcon(blockchainServices[blockchain].icon))
+        await dispatchAsync(RootStore.account.actions.importAndSave(address, wif))
         await dispatchAsync(RootStore.app.actions.fetchBalanceAccounts())
         await dispatchAsync(RootStore.app.actions.syncAccounts())
         await dispatchAsync(RootStore.app.actions.syncWallets())
@@ -169,12 +123,7 @@ export function useBlockchainActionsHook() {
   )
 
   const importWatchAccount = useCallback(
-    (
-      walletId: string,
-      name: string,
-      address: string,
-      blockchain: BlockchainServiceKey
-    ) => {
+    (walletId: string, name: string, address: string, blockchain: BlockchainServiceKey) => {
       return UtilsHelper.putTimeout(async () => {
         if (!timerStatus) {
           throw new Error('The hook need be initialized')
@@ -183,16 +132,8 @@ export function useBlockchainActionsHook() {
         dispatch(RootStore.account.actions.setIdWallet(walletId))
         dispatch(RootStore.account.actions.setName(name))
         dispatch(RootStore.account.actions.setBlockchain(blockchain))
-        dispatch(
-          RootStore.account.actions.setBackgroundColor(
-            theme.colors.card[UtilsHelper.getRandomNumber(6)]
-          )
-        )
-        dispatch(
-          RootStore.account.actions.setSrcIcon(
-            blockchainServices[blockchain].icon
-          )
-        )
+        dispatch(RootStore.account.actions.setBackgroundColor(theme.colors.card[UtilsHelper.getRandomNumber(6)]))
+        dispatch(RootStore.account.actions.setSrcIcon(blockchainServices[blockchain].icon))
         await dispatchAsync(RootStore.account.actions.importAndSave(address))
         await dispatchAsync(RootStore.app.actions.syncAccounts())
         await dispatchAsync(RootStore.app.actions.syncWallets())
@@ -203,13 +144,11 @@ export function useBlockchainActionsHook() {
 
   const importAccounts = useCallback(
     async (accounts: (AccountToImport | WatchAccountToImport)[]) => {
-      const promises = accounts.map((account) => {
+      const promises = accounts.map(account => {
         if (account.type === 'account') {
           return importAccount(
             account.walletId,
-            `${i18n.t(
-              `blockchainServices.${account.blockchain}.accountName`
-            )} 1`,
+            `${i18n.t(`blockchainServices.${account.blockchain}.accountName`)} 1`,
             account.wif,
             account.address,
             account.blockchain
@@ -218,9 +157,9 @@ export function useBlockchainActionsHook() {
 
         return importWatchAccount(
           account.walletId,
-          `${i18n.t(
-            `blockchainServices.${account.blockchain}.label`
-          )} ${i18n.t('modals.blockchainList.typeAccount', {type: 'Watch'})}`,
+          `${i18n.t(`blockchainServices.${account.blockchain}.label`)} ${i18n.t('modals.blockchainList.typeAccount', {
+            type: 'Watch',
+          })}`,
           account.address,
           account.blockchain
         )

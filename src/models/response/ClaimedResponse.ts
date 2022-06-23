@@ -1,10 +1,6 @@
-import {
-  HttpExclude,
-  ResponseExpose,
-  ResponseSerialize,
-} from '@simpli/serialized-request'
+import { HttpExclude, ResponseExpose, ResponseSerialize } from '@simpli/serialized-request'
 
-import {TransactionClaimed} from '~src/models/TransactionClaimed'
+import { TransactionClaimed } from '~src/models/TransactionClaimed'
 
 @HttpExclude()
 export class ClaimedResponse {

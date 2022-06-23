@@ -1,21 +1,18 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import * as LocalAuthentication from 'expo-local-authentication'
 import i18n from 'i18n-js'
-import React, {useState, useEffect} from 'react'
-import {Platform} from 'react-native'
-import {useDispatch, useSelector} from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { Platform } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Storage} from '~src/app/Storage'
-import SelectorList, {SelectorItem} from '~src/components/SelectorList'
-import SwiperPanel, {
-  useSwiperController,
-  CloseButton,
-} from '~src/components/SwiperPanel' //precisa modificar essa tela para exibir opções de segurança
-import {Security} from '~src/enums/Security'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {RootStore} from '~src/store/RootStore'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Storage } from '~src/app/Storage'
+import SelectorList, { SelectorItem } from '~src/components/SelectorList'
+import SwiperPanel, { useSwiperController, CloseButton } from '~src/components/SwiperPanel' //precisa modificar essa tela para exibir opções de segurança
+import { Security } from '~src/enums/Security'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { RootStore } from '~src/store/RootStore'
 
 export interface SecurityPickerModalParams {}
 
@@ -25,9 +22,7 @@ interface Props {
 }
 
 const SecurityPickerModal = (props: Props) => {
-  const {security, isFirstTime} = useSelector(
-    (state: RootState) => state.settings
-  )
+  const { security, isFirstTime } = useSelector((state: RootState) => state.settings)
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
   const [controlSecurity, setControlSecurity] = useState<Security>(security)
@@ -64,9 +59,7 @@ const SecurityPickerModal = (props: Props) => {
     if (security === Security.disabled) {
       return setNewSecurity(newSecurity)
     } else {
-      return (await validateSecurity(newSecurity))
-        ? setNewSecurity(newSecurity)
-        : false
+      return (await validateSecurity(newSecurity)) ? setNewSecurity(newSecurity) : false
     }
   }
 
@@ -89,7 +82,7 @@ const SecurityPickerModal = (props: Props) => {
         props.navigation.navigate(wrapper.route.PasscodeStack.name, {
           screen: wrapper.route.VerifyPasscode.name,
           params: {
-            onValidate: (validate) => {
+            onValidate: validate => {
               if (validate) {
                 setNewSecurity(sec)
               } else {
@@ -177,15 +170,15 @@ const SecurityPickerModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={i18n.t('modals.security.title')}
-      fullSize={true}
+      fullSize
       padding={16}
       paddingTop={24}
       onClose={handleOnClose}
       onLeftPress={controller.close}
-      rightButton={<CloseButton mr={'20px'} />}
-      disableDefaultScrollView={true}
+      rightButton={<CloseButton mr="20px" />}
+      disableDefaultScrollView
       onRightPress={controller.close}
-      solidColorBG={true}
+      solidColorBG
     >
       <SelectorList items={securities} />
     </SwiperPanel>

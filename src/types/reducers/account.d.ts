@@ -1,9 +1,8 @@
-import {Action} from 'redux'
-import {ReducerApplied} from '@simpli/redux-wrapper'
-import {ImageLoadEventData} from 'react-native'
-import {Currency} from '~src/enums/Currency'
-import {TokenAsset} from '~/src/models/TokenAsset'
-import {BlockchainServiceKey} from '~/src/blockchain'
+import { Action } from 'redux'
+import { ReducerApplied } from '@simpli/redux-wrapper'
+import { ImageLoadEventData } from 'react-native'
+import { TokenAsset } from '~/src/models/TokenAsset'
+import { BlockchainServiceKey } from '~/src/blockchain'
 
 export declare global {
   type AccountActionsType =

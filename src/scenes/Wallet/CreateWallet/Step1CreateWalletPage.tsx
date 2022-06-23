@@ -1,18 +1,18 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {TouchableOpacity, View} from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {Normalize} from '~/src/app/Normalize'
-import {UtilsHelper} from '~/src/helpers/UtilsHelper'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Normalize } from '~/src/app/Normalize'
+import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {TextView, LinearLayout, ImageView} from '~src/styles/styled-components'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
+import { TextView, LinearLayout, ImageView } from '~src/styles/styled-components'
 
 export interface Step1CreateWalletParams {
   source?: keyof ModalStackParamList
@@ -25,17 +25,13 @@ interface Props {
 
 const CustomBackButton = (props: Props) => {
   const showButton =
-    props.route.params?.source === wrapper.route.WalletContextModal.name ||
-    props.navigation.canGoBack()
+    props.route.params?.source === wrapper.route.WalletContextModal.name || props.navigation.canGoBack()
   return (
     <View>
       {showButton && (
         <TouchableOpacity
           onPress={() => {
-            if (
-              props.route.params?.source ===
-              wrapper.route.WalletContextModal.name
-            ) {
+            if (props.route.params?.source === wrapper.route.WalletContextModal.name) {
               props.navigation.navigate(wrapper.route.ListWallets.name)
               props.navigation.pop()
             } else {
@@ -45,17 +41,13 @@ const CustomBackButton = (props: Props) => {
             }
           }}
         >
-          <LinearLayout orientation={'horiz'} alignItems={'center'}>
-            <ImageView
-              ml={4}
-              mr={3}
-              source={require('~src/assets/images/icon_arrow_left_white.png')}
-            />
+          <LinearLayout orientation="horiz" alignItems="center">
+            <ImageView ml={4} mr={3} source={require('~src/assets/images/icon_arrow_left_white.png')} />
 
             <TextView
               mt={UtilsHelper.isAndroid ? -2 : 2}
-              fontSize={'lg'}
-              color={'text.0'}
+              fontSize="lg"
+              color="text.0"
               style={{
                 includeFontPadding: false,
               }}
@@ -69,35 +61,29 @@ const CustomBackButton = (props: Props) => {
   )
 }
 
-const ItemComponent = (props: {index: number; title: string; body: string}) => {
+const ItemComponent = (props: { index: number; title: string; body: string }) => {
   return (
-    <LinearLayout mb={6} orientation={'horiz'}>
+    <LinearLayout mb={6} orientation="horiz">
       <LinearLayout
         mt={1}
         mr={3}
         height={Normalize.scale(26)}
         width={Normalize.scale(26)}
         borderRadius={Normalize.scale(13)}
-        bg={'primary'}
-        alignItems={'center'}
+        bg="primary"
+        alignItems="center"
       >
-        <TextView
-          mt={1}
-          color={'black'}
-          fontSize={'md'}
-          fontFamily={'bold'}
-          style={{includeFontPadding: false}}
-        >
+        <TextView mt={1} color="black" fontSize="md" fontFamily="bold" style={{ includeFontPadding: false }}>
           {props.index}
         </TextView>
       </LinearLayout>
 
       <LinearLayout weight={1}>
-        <TextView mr={4} color={'text.0'} fontSize={'xl'} fontFamily={'bold'}>
+        <TextView mr={4} color="text.0" fontSize="xl" fontFamily="bold">
           {props.title}
         </TextView>
 
-        <TextView fontFamily={'light'} color={'text.0'} fontSize={'lg'}>
+        <TextView fontFamily="light" color="text.0" fontSize="lg">
           {props.body}
         </TextView>
       </LinearLayout>
@@ -105,14 +91,14 @@ const ItemComponent = (props: {index: number; title: string; body: string}) => {
   )
 }
 
-const Step1CreateWalletPage: React.FC<Props> = (props) => {
+const Step1CreateWalletPage: React.FC<Props> = props => {
   props.navigation.setOptions({
     headerLeft: () => CustomBackButton(props),
   })
 
   return (
-    <ScreenLayout alignX={'center'} darkerSolidColorBG={true}>
-      <LinearLayout mt={5} weight={1} width={'100%'}>
+    <ScreenLayout alignX="center" darkerSolidColorBG>
+      <LinearLayout mt={5} weight={1} width="100%">
         <ItemComponent
           index={1}
           title={i18n.t('step1CreateWallet.label_1')}
@@ -130,14 +116,9 @@ const Step1CreateWalletPage: React.FC<Props> = (props) => {
         />
       </LinearLayout>
 
-      <LinearLayout mt={5} mb={7} px={5} width={'100%'}>
+      <LinearLayout mt={5} mb={7} px={5} width="100%">
         <ThemedButton
-          onPress={() =>
-            props.navigation.navigate(
-              wrapper.route.Step2CreateWallet.name,
-              undefined
-            )
-          }
+          onPress={() => props.navigation.navigate(wrapper.route.Step2CreateWallet.name, undefined)}
           label={i18n.t('step1CreateWallet.createWallet')}
         />
       </LinearLayout>

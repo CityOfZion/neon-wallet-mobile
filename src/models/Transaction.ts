@@ -1,12 +1,8 @@
-import {
-  HttpExclude,
-  HttpExpose,
-  ResponseSerialize,
-} from '@simpli/serialized-request'
+import { HttpExclude, HttpExpose, ResponseSerialize } from '@simpli/serialized-request'
 
-import {Attribute} from '~src/models/Attribute'
-import {Script} from '~src/models/Script'
-import {TransactionSummary} from '~src/models/TransactionSummary'
+import { Attribute } from '~src/models/Attribute'
+import { Script } from '~src/models/Script'
+import { TransactionSummary } from '~src/models/TransactionSummary'
 
 @HttpExclude()
 export class Transaction {

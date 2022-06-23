@@ -1,21 +1,18 @@
-import {BlurView} from 'expo-blur'
-import React, {ReactElement} from 'react'
-import {SafeAreaView, StyleSheet, Text, Dimensions} from 'react-native'
+import { BlurView } from 'expo-blur'
+import React, { ReactElement } from 'react'
+import { StyleSheet, Dimensions } from 'react-native'
 import * as Progress from 'react-native-progress'
 
-import {TextView} from '~src/styles/styled-components'
+import { TextView } from '~src/styles/styled-components'
 
-const {width, height} = Dimensions.get('window')
+const { width, height } = Dimensions.get('window')
 
 type LoadingOverlayProps = {
   progress: number
   loadingText: ReactElement | string
 }
 
-const LoadingOverlay = ({
-  progress = 0.5,
-  loadingText = 'Loading...',
-}: LoadingOverlayProps) => {
+const LoadingOverlay = ({ progress = 0.5, loadingText = 'Loading...' }: LoadingOverlayProps) => {
   return (
     <BlurView tint="dark" intensity={90} style={styles.container}>
       <TextView style={styles.loadingText}>{loadingText}</TextView>

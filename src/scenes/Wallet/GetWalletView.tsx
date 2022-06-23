@@ -1,36 +1,31 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {Await, AwaitActivity} from '@simpli/react-native-await'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import moment from 'moment'
-import React, {useEffect, useState, Fragment, useRef, useMemo} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
-import {useDispatch, useSelector} from 'react-redux'
+import React, { useEffect, useState, useMemo } from 'react'
+import { TouchableWithoutFeedback } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {RootStackParamList} from '../../navigation/AppNavigation'
-import {ModalStackParamList} from '../../navigation/ModalStackNavigation'
-import {TabStackParamList} from '../../navigation/TabNavigation'
+import { RootStackParamList } from '../../navigation/AppNavigation'
+import { ModalStackParamList } from '../../navigation/ModalStackNavigation'
+import { TabStackParamList } from '../../navigation/TabNavigation'
 
-import {AccountCards} from '~/src/components/AccountCards'
-import {wrapper} from '~src/app/ApplicationWrapper'
+import { AccountCards } from '~/src/components/AccountCards'
+import { wrapper } from '~src/app/ApplicationWrapper'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import {Account} from '~src/models/redux/Account'
-import {Wallet} from '~src/models/redux/Wallet'
-import {WalletStackParamList} from '~src/navigation/WalletsStackNavigation'
-import {RootStore} from '~src/store/RootStore'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import { Account } from '~src/models/redux/Account'
+import { Wallet } from '~src/models/redux/Wallet'
+import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
+import { RootStore } from '~src/store/RootStore'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface GetWalletProps {
   route: RouteProp<WalletStackParamList, 'GetWallet'>
-  navigation: StackNavigationProp<
-    WalletStackParamList &
-      ModalStackParamList &
-      TabStackParamList &
-      RootStackParamList
-  >
+  navigation: StackNavigationProp<WalletStackParamList & ModalStackParamList & TabStackParamList & RootStackParamList>
 }
 
 const GetWalletView = (props: GetWalletProps) => {
@@ -41,10 +36,7 @@ const GetWalletView = (props: GetWalletProps) => {
   const dispatchAsync = useDispatch<AsyncDispatch>()
 
   const [accounts, setAccounts] = useState<Account[]>([])
-  const wallet = useMemo(
-    () => dispatchWallet(RootStore.wallet.actions.getFromSelection()),
-    []
-  )
+  const wallet = useMemo(() => dispatchWallet(RootStore.wallet.actions.getFromSelection()), [])
 
   props.navigation.setOptions({
     headerTitle: () =>
@@ -94,14 +86,14 @@ const GetWalletView = (props: GetWalletProps) => {
   }, [accountsPool])
 
   return (
-    <ScreenLayout darkerSolidColorBG={true}>
-      <AwaitActivity name={'populate'} loadingView={<ScreenLoader />}>
+    <ScreenLayout darkerSolidColorBG>
+      <AwaitActivity name="populate" loadingView={<ScreenLoader />}>
         <LinearLayout mt={6}>
           <AccountCards accounts={accounts} onPress={pressEvent} />
         </LinearLayout>
 
         {wallet.walletType === 'watch' || wallet.walletType === 'legacy' ? (
-          <Fragment />
+          <></>
         ) : (
           <TouchableWithoutFeedback onPress={() => createEvent()}>
             <LinearLayout
@@ -118,17 +110,9 @@ const GetWalletView = (props: GetWalletProps) => {
                 aspectRatio: 38 / 25,
               }}
             >
-              <ImageView
-                source={require('~src/assets/images/icon-plus-white.png')}
-              />
+              <ImageView source={require('~src/assets/images/icon-plus-white.png')} />
 
-              <TextView
-                color="white"
-                fontSize={18}
-                mt={2}
-                ml={3}
-                fontFamily="medium"
-              >
+              <TextView color="white" fontSize={18} mt={2} ml={3} fontFamily="medium">
                 {i18n.t('screens.getWallet.addNewAccount')}
               </TextView>
             </LinearLayout>

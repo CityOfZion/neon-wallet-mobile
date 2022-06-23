@@ -1,8 +1,8 @@
 /**
  * Theme Configuration
  */
-import {Theme} from '~src/enums/Theme'
-import {ApplicationTheme} from '~src/themes/ApplicationTheme'
+import { Theme } from '~src/enums/Theme'
+import { ApplicationTheme } from '~src/themes/ApplicationTheme'
 
 export class LightTheme extends ApplicationTheme {
   readonly id = Theme.LIGHT

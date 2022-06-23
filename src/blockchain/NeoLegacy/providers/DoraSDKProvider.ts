@@ -1,20 +1,19 @@
-import {api} from '@cityofzion/dora-ts'
-import {Request} from '@simpli/serialized-request'
-import {mapValues} from 'lodash'
+import { api } from '@cityofzion/dora-ts'
+import { Request } from '@simpli/serialized-request'
+import { mapValues } from 'lodash'
 
-import {NeoLegacyProvider} from './common'
+import { NeoLegacyProvider } from './common'
 
-import {Node} from '~/src/models/Node'
-import {TokenResponse, Tokens} from '~/src/models/TokenResponse'
-import {Transaction} from '~/src/models/Transaction'
-import {TransactionAddressAsset} from '~/src/models/TransactionAddressAsset'
-import {TransactionAddressSummary} from '~/src/models/TransactionAddressSummary'
-import {BalanceResponse} from '~/src/models/response/BalanceResponse'
-import {ContractResponse} from '~/src/models/response/ContractResponse'
-import {NFTResponse} from '~/src/models/response/NFTResponse'
-import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
-import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
-import {ExchangeResponse} from '~/src/types/exchange'
+import { Node } from '~/src/models/Node'
+import { TokenResponse, Tokens } from '~/src/models/TokenResponse'
+import { Transaction } from '~/src/models/Transaction'
+import { TransactionAddressAsset } from '~/src/models/TransactionAddressAsset'
+import { TransactionAddressSummary } from '~/src/models/TransactionAddressSummary'
+import { BalanceResponse } from '~/src/models/response/BalanceResponse'
+import { ContractResponse } from '~/src/models/response/ContractResponse'
+import { TransactionAddressResponse } from '~/src/models/response/TransactionAddressResponse'
+import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
+import { ExchangeResponse } from '~/src/types/exchange'
 type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
 export class DoraSDKProvider implements NeoLegacyProvider {
   //eslint-disable-next-line
@@ -27,13 +26,11 @@ export class DoraSDKProvider implements NeoLegacyProvider {
 
   async getAddressAbstracts(address: string, page: number = 1) {
     const result = new TransactionAddressResponse()
-    const {
-      page_number,
-      page_size,
-      total_entries,
-      total_pages,
-      entries,
-    } = await api.NeoLegacyREST.getAddressAbstracts(address, page, this.network)
+    const { page_number, page_size, total_entries, total_pages, entries } = await api.NeoLegacyREST.getAddressAbstracts(
+      address,
+      page,
+      this.network
+    )
 
     result.pageNumber = page_number
     result.pageSize = page_size
@@ -42,37 +39,35 @@ export class DoraSDKProvider implements NeoLegacyProvider {
 
     const transactions = new Map<string, TransactionAddressSummary>()
 
-    entries.forEach(
-      ({address_from, address_to, amount, asset, block_height, time, txid}) => {
-        const amountConverted = this.convertScientifcNotationToDecimal(amount)
+    entries.forEach(({ address_from, address_to, amount, asset, block_height, time, txid }) => {
+      const amountConverted = this.convertScientifcNotationToDecimal(amount)
 
-        if (address_from !== address && address_to !== address) {
-          return
-        }
-
-        const transfer = new TransactionAddressAsset({
-          amount: Number(amountConverted),
-          hash: asset,
-          from: address_from ?? 'Mint',
-          to: address_to ?? 'Burn',
-        })
-
-        const existingTransaction = transactions.get(txid)
-
-        if (existingTransaction) {
-          existingTransaction.transfers.push(transfer)
-          return
-        }
-
-        const transaction = new TransactionAddressSummary({
-          blockHeight: block_height,
-          time,
-          hash: txid,
-        })
-        transaction.transfers.push(transfer)
-        transactions.set(txid, transaction)
+      if (address_from !== address && address_to !== address) {
+        return
       }
-    )
+
+      const transfer = new TransactionAddressAsset({
+        amount: Number(amountConverted),
+        hash: asset,
+        from: address_from ?? 'Mint',
+        to: address_to ?? 'Burn',
+      })
+
+      const existingTransaction = transactions.get(txid)
+
+      if (existingTransaction) {
+        existingTransaction.transfers.push(transfer)
+        return
+      }
+
+      const transaction = new TransactionAddressSummary({
+        blockHeight: block_height,
+        time,
+        hash: txid,
+      })
+      transaction.transfers.push(transfer)
+      transactions.set(txid, transaction)
+    })
 
     result.transactions = Array.from(transactions.values())
 
@@ -83,7 +78,7 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     const result = new BalanceResponse()
     const response = await api.NeoLegacyREST.balance(address, this.network)
     const balances = Array.from(response.values())
-    balances.forEach(({asset, asset_name, balance, symbol}) => {
+    balances.forEach(({ asset, asset_name, balance, symbol }) => {
       result.balance.push({
         amount: Number(balance),
         asset: asset_name,
@@ -97,10 +92,7 @@ export class DoraSDKProvider implements NeoLegacyProvider {
 
   async getTransaction(transactionID: string) {
     const result = new Transaction()
-    const {block, size, time, txid, type} = await api.NeoLegacyREST.transaction(
-      transactionID,
-      this.network
-    )
+    const { block, size, time, txid, type } = await api.NeoLegacyREST.transaction(transactionID, this.network)
     result.txid = txid
     result.type = type
     result.size = size
@@ -117,8 +109,8 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     const result = [] as Node[]
     const response = await api.NeoLegacyREST.getAllNodes(this.network)
     const nodes = Array.from(response.values())
-    nodes.forEach(({height, url}) => {
-      result.push({height, url, blockchain: 'neoLegacy'})
+    nodes.forEach(({ height, url }) => {
+      result.push({ height, url, blockchain: 'neoLegacy' })
     })
     const allNodes = result.sort((node1, node2) => {
       if (node1.height && node2.height) {
@@ -132,15 +124,15 @@ export class DoraSDKProvider implements NeoLegacyProvider {
       }
     })
 
-    const nodesHttps = allNodes.filter((node) => node.url?.includes('https'))
-    const nodesHttp = allNodes.filter((node) => !node.url?.includes('https'))
+    const nodesHttps = allNodes.filter(node => node.url?.includes('https'))
+    const nodesHttp = allNodes.filter(node => !node.url?.includes('https'))
 
     return [...nodesHttps, ...nodesHttp]
   }
 
   async getUnclaimed(address: string) {
     const result = new UnclaimedResponse()
-    const {unclaimed} = await api.NeoLegacyREST.getUnclaimed(address)
+    const { unclaimed } = await api.NeoLegacyREST.getUnclaimed(address)
     result.address = address
     result.unclaimed = unclaimed
     return result
@@ -159,32 +151,25 @@ export class DoraSDKProvider implements NeoLegacyProvider {
       .as<Tokens>()
       .getData()
 
-    return new TokenResponse({tokens: tokenList})
+    return new TokenResponse({ tokens: tokenList })
   }
 
-  async getExchangeData(params: {
-    tokenAssetSymbols: string[]
-    currencies: string
-  }) {
-    const {tokenAssetSymbols, currencies} = params
+  async getExchangeData(params: { tokenAssetSymbols: string[]; currencies: string }) {
+    const { tokenAssetSymbols, currencies } = params
     const paramRequest = {
       fsyms: tokenAssetSymbols.join(','),
       tsyms: currencies,
     }
 
-    const response = await Request.get(
-      'https://min-api.cryptocompare.com/data/pricemultifull',
-      {params: paramRequest}
-    )
+    const response = await Request.get('https://min-api.cryptocompare.com/data/pricemultifull', {
+      params: paramRequest,
+    })
       .name('syncExchange')
       .as<ExchangeResponse>()
       .getData()
 
-    return mapValues(response.RAW, (symbolRef) => {
-      const symbolRefMap = mapValues(
-        symbolRef,
-        (symbolToUse) => symbolToUse.PRICE
-      )
+    return mapValues(response.RAW, symbolRef => {
+      const symbolRefMap = mapValues(symbolRef, symbolToUse => symbolToUse.PRICE)
 
       return {
         to: symbolRefMap,

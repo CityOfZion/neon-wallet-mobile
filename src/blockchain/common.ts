@@ -1,23 +1,23 @@
-import {JsonRpcRequest, JsonRpcResponse} from '@json-rpc-tools/utils'
-import {ImageLoadEventData} from 'react-native'
+import { JsonRpcRequest, JsonRpcResponse } from '@json-rpc-tools/utils'
+import { ImageLoadEventData } from 'react-native'
 
-import {TokenResponse} from '../models/TokenResponse'
-import {ContractResponse} from '../models/response/ContractResponse'
-import {NFTResponse} from '../models/response/NFTResponse'
-import {NFTSResponse} from '../models/response/NFTSResponse'
-import {BSNeo3} from './Neo3/services/BSNeo3'
-import {BSNeoLegacy} from './NeoLegacy/services/BSNeoLegacy'
+import { TokenResponse } from '../models/TokenResponse'
+import { ContractResponse } from '../models/response/ContractResponse'
+import { NFTResponse } from '../models/response/NFTResponse'
+import { NFTSResponse } from '../models/response/NFTSResponse'
+import { BSNeo3 } from './Neo3/services/BSNeo3'
+import { BSNeoLegacy } from './NeoLegacy/services/BSNeoLegacy'
 
-import {Node} from '~/src/models/Node'
-import {Transaction} from '~/src/models/Transaction'
-import {BalanceResponse} from '~/src/models/response/BalanceResponse'
-import {TransactionAddressResponse} from '~/src/models/response/TransactionAddressResponse'
-import {UnclaimedResponse} from '~/src/models/response/UnclaimedResponse'
-import {Exchange} from '~/src/types/exchange'
+import { Node } from '~/src/models/Node'
+import { Transaction } from '~/src/models/Transaction'
+import { BalanceResponse } from '~/src/models/response/BalanceResponse'
+import { TransactionAddressResponse } from '~/src/models/response/TransactionAddressResponse'
+import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
+import { Exchange } from '~/src/types/exchange'
 import * as BlockchainIcons from '~src/assets/blockchainIcons'
-import {PriorityFee} from '~src/models/PriorityFee'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
+import { PriorityFee } from '~src/models/PriorityFee'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Account } from '~src/models/redux/Account'
 
 export interface IRPCContract {
   hash: string
@@ -34,7 +34,7 @@ export interface IRPCContract {
       methods: {
         name: string
         offset: number
-        parameters: {name: string; type: string}[]
+        parameters: { name: string; type: string }[]
         returntype: string
         safe: boolean
       }[]
@@ -47,28 +47,20 @@ export interface SenderTransactionInfo {
   senderAddress: string | null
   receiverAddress: string | null
   feeAmount: PriorityFee | null
-  tip?: {amount: number; address: string}
+  tip?: { amount: number; address: string }
 }
 
 export interface BlockchainDataProvider {
   readonly siteUrlQuery: string
   getTransaction: (txid: string) => Promise<Transaction>
-  getAddressAbstracts: (
-    address: string,
-    page?: number
-  ) => Promise<TransactionAddressResponse>
+  getAddressAbstracts: (address: string, page?: number) => Promise<TransactionAddressResponse>
   getContract: (hash: string) => Promise<ContractResponse>
   getBalance: (address: string) => Promise<BalanceResponse>
   getUnclaimed: (address: string) => Promise<UnclaimedResponse>
   getAllNodes: () => Promise<Node[]>
   getTokenList: () => Promise<TokenResponse>
-  getExchangeData: (params: {
-    tokenAssetSymbols: string[]
-    currencies: string
-  }) => Promise<Exchange>
-  getAssetByHash: (
-    hash: string
-  ) => Promise<{symbol: string; decimals: number} | null>
+  getExchangeData: (params: { tokenAssetSymbols: string[]; currencies: string }) => Promise<Exchange>
+  getAssetByHash: (hash: string) => Promise<{ symbol: string; decimals: number } | null>
 }
 
 export interface AssetInfo {
@@ -79,16 +71,11 @@ export interface AssetInfo {
 }
 
 export interface IClaimable {
-  claimGas: (
-    address: string
-  ) => Promise<{txid: string | null; token: string; hash: string} | null>
+  claimGas: (address: string) => Promise<{ txid: string | null; token: string; hash: string } | null>
 }
 
 export interface IWalletConnect {
-  rpcCall: (
-    account: string,
-    request: JsonRpcRequest
-  ) => Promise<JsonRpcResponse>
+  rpcCall: (account: string, request: JsonRpcRequest) => Promise<JsonRpcResponse>
   calculateFee(senderAddress: string, cim: JsonRpcRequest): Promise<string>
 }
 
@@ -104,56 +91,36 @@ export interface IBlockchainService {
   readonly derivationPath: string
   readonly platform: string
   readonly assets: AssetInfo[]
-  readonly cozTip?: {address: string; token: string; hash: string} //config token with the symbol name
-  readonly feeToken: {hash: string; token: string; img: ImageLoadEventData}
+  readonly cozTip?: { address: string; token: string; hash: string } //config token with the symbol name
+  readonly feeToken: { hash: string; token: string; img: ImageLoadEventData }
   readonly wcChains: string[]
   sendTransaction: (sendTx: SenderTransactionInfo) => Promise<string | null>
   generateMnemonic: () => string[] | null
   generateWif(mnemonic: string, index: number): string
-  generateAccount(
-    mnemonic: string,
-    index: number
-  ): {wif: string; address: string}
+  generateAccount(mnemonic: string, index: number): { wif: string; address: string }
   generateAccountFromWif(wif: string): string
-  decryptKey(
-    encryptedKey: string,
-    password: string
-  ): Promise<{wif: string; address: string}>
+  decryptKey(encryptedKey: string, password: string): Promise<{ wif: string; address: string }>
   validateAddress(address: string): boolean
   validatePrivateKeyWithPassword(privateKey: string): boolean
   validateWif(privateKey: string): boolean
-  calculateTransferFee: (
-    sendtx: Omit<SenderTransactionInfo, 'feeAmount'>
-  ) => Promise<number>
+  calculateTransferFee: (sendtx: Omit<SenderTransactionInfo, 'feeAmount'>) => Promise<number>
   setAccountsPool: (accounts: Account[]) => void
 }
 
-export type IBlockchainServices = Record<
-  BlockchainServiceKey,
-  IBlockchainService
->
+export type IBlockchainServices = Record<BlockchainServiceKey, IBlockchainService>
 
 export const blockchainServices: IBlockchainServices = {
   neo3: new BSNeo3(),
   neoLegacy: new BSNeoLegacy(),
 }
 
-export const blockchainList = Object.keys(
-  blockchainServices
-) as BlockchainServiceKey[]
+export const blockchainList = Object.keys(blockchainServices) as BlockchainServiceKey[]
 
 export function validateTextAllBlockchains(text: string) {
   return blockchainList.reduce((validate, blockchainName) => {
     if (!validate) {
-      const {
-        validateAddress,
-        validatePrivateKeyWithPassword,
-        validateWif,
-      } = blockchainServices[blockchainName]
-      validate =
-        validateAddress(text) ||
-        validatePrivateKeyWithPassword(text) ||
-        validateWif(text)
+      const { validateAddress, validatePrivateKeyWithPassword, validateWif } = blockchainServices[blockchainName]
+      validate = validateAddress(text) || validatePrivateKeyWithPassword(text) || validateWif(text)
     }
     return validate
   }, false)
@@ -162,7 +129,7 @@ export function validateTextAllBlockchains(text: string) {
 export function validateAddressAllBlockchains(address: string) {
   return blockchainList.reduce((validate, blockchainName) => {
     if (!validate) {
-      const {validateAddress} = blockchainServices[blockchainName]
+      const { validateAddress } = blockchainServices[blockchainName]
       validate = validateAddress(address)
     }
     return validate
@@ -172,21 +139,17 @@ export function validateAddressAllBlockchains(address: string) {
 export function validateWifAllBlockchains(wif: string) {
   return blockchainList.reduce((validate, blockchainName) => {
     if (!validate) {
-      const {validateWif} = blockchainServices[blockchainName]
+      const { validateWif } = blockchainServices[blockchainName]
       validate = validateWif(wif)
     }
     return validate
   }, false)
 }
 
-export function validatePrivateKeyWithPasswordAllBlockchains(
-  privateKey: string
-) {
+export function validatePrivateKeyWithPasswordAllBlockchains(privateKey: string) {
   return blockchainList.reduce((validate, blockchainName) => {
     if (!validate) {
-      const {validatePrivateKeyWithPassword} = blockchainServices[
-        blockchainName
-      ]
+      const { validatePrivateKeyWithPassword } = blockchainServices[blockchainName]
       validate = validatePrivateKeyWithPassword(privateKey)
     }
     return validate
@@ -196,7 +159,7 @@ export function validatePrivateKeyWithPasswordAllBlockchains(
 export function getBlockchainByAddress(address: string) {
   return blockchainList.reduce((result, blockchainName) => {
     if (!result) {
-      const {validateAddress} = blockchainServices[blockchainName]
+      const { validateAddress } = blockchainServices[blockchainName]
       const validate = validateAddress(address)
       result = validate ? blockchainName : null
     }
@@ -207,7 +170,7 @@ export function getBlockchainByAddress(address: string) {
 export function getBlockchainByWif(wif: string) {
   return blockchainList.reduce((result, blockchainName) => {
     if (!result) {
-      const {validateWif} = blockchainServices[blockchainName]
+      const { validateWif } = blockchainServices[blockchainName]
       const validate = validateWif(wif)
       result = validate ? blockchainName : null
     }
@@ -218,9 +181,7 @@ export function getBlockchainByWif(wif: string) {
 export function getBlockchainByPrivateKeyWithPassword(encryptedKey: string) {
   return blockchainList.reduce((result, blockchainName) => {
     if (!result) {
-      const {validatePrivateKeyWithPassword} = blockchainServices[
-        blockchainName
-      ]
+      const { validatePrivateKeyWithPassword } = blockchainServices[blockchainName]
       const validate = validatePrivateKeyWithPassword(encryptedKey)
       result = validate ? blockchainName : null
     }
@@ -231,15 +192,8 @@ export function getBlockchainByPrivateKeyWithPassword(encryptedKey: string) {
 export function getBlockchainBySomeText(text: string) {
   return blockchainList.reduce((result, blockchainName) => {
     if (!result) {
-      const {
-        validatePrivateKeyWithPassword,
-        validateAddress,
-        validateWif,
-      } = blockchainServices[blockchainName]
-      const validate =
-        validatePrivateKeyWithPassword(text) ||
-        validateAddress(text) ||
-        validateWif(text)
+      const { validatePrivateKeyWithPassword, validateAddress, validateWif } = blockchainServices[blockchainName]
+      const validate = validatePrivateKeyWithPassword(text) || validateAddress(text) || validateWif(text)
       result = validate ? blockchainName : null
     }
     return result
@@ -248,10 +202,7 @@ export function getBlockchainBySomeText(text: string) {
 
 type TColorLogo = 'white' | 'default'
 
-export function getBlockchainLogo(
-  blockchain: BlockchainServiceKey,
-  color: TColorLogo = 'default'
-) {
+export function getBlockchainLogo(blockchain: BlockchainServiceKey, color: TColorLogo = 'default') {
   const blockchainWithColor = `${blockchain}${color === 'default' ? '' : color}`
   return ((BlockchainIcons as any)[blockchainWithColor] ??
     require('~/src/assets/images/icon-default-nep5.png')) as ImageLoadEventData //need a default logo
@@ -281,7 +232,7 @@ export const hasWalletconnect = (account: Account) => {
 export function hasNFTIntegration(object: any): object is INFT {
   const methodsName = ['getNFTS', 'getNFT']
 
-  return methodsName.every((methodName) => methodName in object)
+  return methodsName.every(methodName => methodName in object)
 }
 
 export type BlockchainServiceKey = 'neoLegacy' | 'neo3'
@@ -291,9 +242,7 @@ export function getBlockchainByWCChain(chains: string[]) {
 
   for (const blockchain of blockchainList) {
     for (const chain of chains) {
-      const chainFound = blockchainServices[blockchain].wcChains.find(
-        (it) => it === chain
-      )
+      const chainFound = blockchainServices[blockchain].wcChains.find(it => it === chain)
       if (chainFound) {
         result = blockchain
         break
@@ -311,11 +260,6 @@ export function getWCChainByBlockchain(blockchain: BlockchainServiceKey) {
   return result
 }
 
-export function isValidWcChain(
-  wcChains: string[],
-  blockchain: BlockchainServiceKey
-) {
-  return blockchainServices[blockchain].wcChains.some((chain) =>
-    wcChains.includes(chain)
-  )
+export function isValidWcChain(wcChains: string[], blockchain: BlockchainServiceKey) {
+  return blockchainServices[blockchain].wcChains.some(chain => wcChains.includes(chain))
 }

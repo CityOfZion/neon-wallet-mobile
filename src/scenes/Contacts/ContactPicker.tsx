@@ -1,23 +1,19 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, {Fragment, useState, useEffect} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
-import {useSelector} from 'react-redux'
+import React, { Fragment, useState } from 'react'
+import { TouchableWithoutFeedback } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {BlockchainServiceKey, getBlockchainByAddress} from '~/src/blockchain'
-import SwiperPanel, {
-  PANEL_OFFSET,
-  useSwiperController,
-  CloseButton,
-} from '~src/components/SwiperPanel'
-import {AccountList} from '~src/components/accounts/AccountList'
-import {ContactList} from '~src/components/contacts/ContactList'
-import {NoContacts} from '~src/components/contacts/NoContacts'
-import {Account} from '~src/models/redux/Account'
-import {Contact} from '~src/models/redux/Contact'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { BlockchainServiceKey } from '~/src/blockchain'
+import SwiperPanel, { PANEL_OFFSET, useSwiperController, CloseButton } from '~src/components/SwiperPanel'
+import { AccountList } from '~src/components/accounts/AccountList'
+import { ContactList } from '~src/components/contacts/ContactList'
+import { NoContacts } from '~src/components/contacts/NoContacts'
+import { Account } from '~src/models/redux/Account'
+import { Contact } from '~src/models/redux/Contact'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 export interface ContactsModalParams {
   onSelected: (item: Contact | Account, addressSelected?: string) => void
   filterByBlockchain?: BlockchainServiceKey
@@ -30,14 +26,12 @@ interface ContactsModalProps {
 
 type Tab = 'contacts' | 'accounts'
 
-const TabSelector = (props: {selected: Tab; onSelect: (t: Tab) => void}) => {
+const TabSelector = (props: { selected: Tab; onSelect: (t: Tab) => void }) => {
   const contactsSelected = props.selected === 'contacts'
 
   return (
     <LinearLayout orientation="horiz" mx="16px">
-      <TouchableWithoutFeedback
-        onPress={() => !contactsSelected && props.onSelect('contacts')}
-      >
+      <TouchableWithoutFeedback onPress={() => !contactsSelected && props.onSelect('contacts')}>
         <LinearLayout orientation="verti" weight="1">
           <TextView
             width="100%"
@@ -56,9 +50,7 @@ const TabSelector = (props: {selected: Tab; onSelect: (t: Tab) => void}) => {
           />
         </LinearLayout>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback
-        onPress={() => contactsSelected && props.onSelect('accounts')}
-      >
+      <TouchableWithoutFeedback onPress={() => contactsSelected && props.onSelect('accounts')}>
         <LinearLayout orientation="verti" weight="1">
           <TextView
             width="100%"
@@ -94,30 +86,23 @@ export const ContactPicker = (props: ContactsModalProps) => {
       onClose={props.navigation.goBack}
       padding={0}
       paddingTop={40}
-      fullSize={true}
-      disableDefaultScrollView={true}
+      fullSize
+      disableDefaultScrollView
       onRightPress={controller.close}
       rightButton={<CloseButton mr="20px" />}
     >
-      <Fragment>
-        <TextView
-          color={'text.0'}
-          alignSelf={'center'}
-          fontFamily={'medium'}
-          fontSize={18}
-        >
+      <>
+        <TextView color="text.0" alignSelf="center" fontFamily="medium" fontSize={18}>
           {i18n.t('contactPicker.selectContact')}
         </TextView>
-        <TabSelector selected={tab} onSelect={(t) => setTab(t)} />
+        <TabSelector selected={tab} onSelect={t => setTab(t)} />
         {tab === 'contacts' ? (
           contacts.length ? (
             <ContactList
               mt={20}
               mb={PANEL_OFFSET}
-              onContactSelected={(it, address) =>
-                props.route.params.onSelected(it, address)
-              }
-              searchBar={true}
+              onContactSelected={(it, address) => props.route.params.onSelected(it, address)}
+              searchBar
               filterByBlockchain={props.route.params.filterByBlockchain}
             />
           ) : (
@@ -126,12 +111,12 @@ export const ContactPicker = (props: ContactsModalProps) => {
         ) : (
           <AccountList
             mb={PANEL_OFFSET}
-            onAccountSelected={(it) => props.route.params.onSelected(it)}
-            searchBar={true}
+            onAccountSelected={it => props.route.params.onSelected(it)}
+            searchBar
             filterByBlockchain={props.route.params.filterByBlockchain}
           />
         )}
-      </Fragment>
+      </>
     </SwiperPanel>
   )
 }

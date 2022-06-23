@@ -1,16 +1,16 @@
-import {RouteProp} from '@react-navigation/native'
+import { RouteProp } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import React, {useState, useEffect} from 'react'
-import {View} from 'react-native'
-import {showMessage} from 'react-native-flash-message'
-import {useDispatch, useSelector} from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { View } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import {Await, AwaitActivity} from '~/node_modules/@simpli/react-native-await'
-import {ImageLoadEventData} from '~/node_modules/@types/react-native'
-import {UtilsHelper} from '~/src/helpers/UtilsHelper'
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {BlockchainServiceKey} from '~src/blockchain'
+import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import { Await, AwaitActivity } from '~/node_modules/@simpli/react-native-await'
+import { ImageLoadEventData } from '~/node_modules/@types/react-native'
+import { UtilsHelper } from '~/src/helpers/UtilsHelper'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { BlockchainServiceKey } from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
 import ColorSelector from '~src/components/ColorSelector'
 import InputLabel from '~src/components/InputLabel'
@@ -19,12 +19,12 @@ import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {RootState, RootStore} from '~src/store/RootStore'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Account } from '~src/models/redux/Account'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
+import { RootState, RootStore } from '~src/store/RootStore'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 export interface CustomizeAccountParams {
   address: string
   source: keyof MoreStackParamList
@@ -49,9 +49,7 @@ type ContentCollection = {
 }
 
 const CustomizeAccount = (props: Props) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
@@ -59,11 +57,9 @@ const CustomizeAccount = (props: Props) => {
   const dispatchAsyncAccount = useDispatch<AsyncDispatch<Account>>()
 
   const [name, setName] = useState<string>('')
-  const [color, setColor] = useState<string>(
-    theme.colors.card[UtilsHelper.getRandomNumber(6)]
-  )
+  const [color, setColor] = useState<string>(theme.colors.card[UtilsHelper.getRandomNumber(6)])
   const [tokenAssets, setTokenAssets] = useState<TokenAsset[]>([])
-  const {isConnected} = useSelector((state: RootState) => state.network)
+  const { isConnected } = useSelector((state: RootState) => state.network)
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
   const [saving, setSaving] = useState(false)
 
@@ -142,15 +138,9 @@ const CustomizeAccount = (props: Props) => {
 
     // Creates a legacy or watch wallet, depending if address
     // was obtained from a private key (WIF)
-    dispatch(
-      RootStore.wallet.actions.setType(
-        props.route.params.legacy ? 'legacy' : 'watch'
-      )
-    )
+    dispatch(RootStore.wallet.actions.setType(props.route.params.legacy ? 'legacy' : 'watch'))
 
-    const walletId = await dispatchAsyncString(
-      RootStore.wallet.actions.createAndSave()
-    )
+    const walletId = await dispatchAsyncString(RootStore.wallet.actions.createAndSave())
     dispatch(RootStore.wallet.actions.selectWallet(walletId))
     await dispatchAsync(RootStore.app.actions.syncWallets())
 
@@ -160,7 +150,7 @@ const CustomizeAccount = (props: Props) => {
   const createAccount = async (walletId: string) => {
     const wif = props.route.params.wif
     const address = account.address
-    const {blockchain: blockchainName} = props.route.params
+    const { blockchain: blockchainName } = props.route.params
     if (!address) throw new Error('Address not defined')
 
     dispatch(RootStore.account.actions.setIdWallet(walletId))
@@ -169,9 +159,7 @@ const CustomizeAccount = (props: Props) => {
     dispatch(RootStore.account.actions.setTokenAssets(tokenAssets))
     dispatch(RootStore.account.actions.setBlockchain(blockchainName))
 
-    const importedAccount = await dispatchAsyncAccount(
-      RootStore.account.actions.importAndSave(address, wif)
-    )
+    const importedAccount = await dispatchAsyncAccount(RootStore.account.actions.importAndSave(address, wif))
     dispatch(RootStore.account.actions.selectAccount(address))
     await dispatchAsync(RootStore.app.actions.syncAccounts())
 
@@ -181,7 +169,7 @@ const CustomizeAccount = (props: Props) => {
   const isValid = () => {
     const conditions: boolean[] = [!!account.address, !!name]
 
-    return conditions.every((it) => it)
+    return conditions.every(it => it)
   }
 
   const save = () => {
@@ -211,45 +199,30 @@ const CustomizeAccount = (props: Props) => {
   return (
     <ScreenLayout padding={16}>
       <AwaitActivity
-        name={'customizeAccount'}
-        loadingView={<ScreenLoader transparent={true} />}
+        name="customizeAccount"
+        loadingView={<ScreenLoader transparent />}
         onLoadingStart={() => setSaving(true)}
         onLoadingEnd={() => setSaving(false)}
       >
         <LinearLayout width="100%" height="100%" pt={24}>
-          <TextView
-            mb="32px"
-            color={theme.colors.text[0]}
-            fontSize={18}
-            textAlign="center"
-          >
+          <TextView mb="32px" color={theme.colors.text[0]} fontSize={18} textAlign="center">
             {contentMap[props.route.params.source]?.subtitle ?? ''}
           </TextView>
-          <InputLabel
-            title={i18n.t('screens.customizeAccount.preview')}
-            capitalize={true}
-            marginBottom="24px"
-          />
+          <InputLabel title={i18n.t('screens.customizeAccount.preview')} capitalize marginBottom="24px" />
 
-          <AccountCard
-            account={account}
-            isStackMode={false}
-            hideQRCode={true}
-          />
+          <AccountCard account={account} isStackMode={false} hideQRCode />
 
           <InputLabel
             title={i18n.t('screens.customizeAccount.accountInput.title')}
-            capitalize={true}
+            capitalize
             marginTop="48px"
             marginBottom="10px"
           />
           <View>
             <InputWithValidation
               value={name}
-              validator={(text) => !(showInvalid && !text)}
-              placeholder={i18n.t(
-                'screens.customizeAccount.accountInput.placeholder'
-              )}
+              validator={text => !(showInvalid && !text)}
+              placeholder={i18n.t('screens.customizeAccount.accountInput.placeholder')}
               onChangeText={setName}
               onClearPress={() => setName('')}
               onFocus={() => setShowInvalid(false)}
@@ -258,15 +231,15 @@ const CustomizeAccount = (props: Props) => {
               separatorColor={theme.colors.background[5]}
               invalidSeparatorColor={theme.colors.quinary}
               invalidMessageColor={theme.colors.quinary}
-              hidePaste={true}
-              hideScan={true}
+              hidePaste
+              hideScan
               sideMargins={0}
             />
           </View>
 
           <InputLabel
             title={i18n.t('screens.customizeAccount.selectColor')}
-            capitalize={true}
+            capitalize
             marginTop="12px"
             marginBottom="24px"
           />

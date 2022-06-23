@@ -1,13 +1,13 @@
-import {LinearGradient} from 'expo-linear-gradient'
+import { LinearGradient } from 'expo-linear-gradient'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {Platform, StyleProp} from 'react-native'
-import {useSelector} from 'react-redux'
+import { Platform, StyleProp } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {Normalize} from '~/src/app/Normalize'
-import styled, {LinearLayout} from '~src/styles/styled-components'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Normalize } from '~/src/app/Normalize'
+import styled, { LinearLayout } from '~src/styles/styled-components'
 
 interface Props {
   children?: any
@@ -27,10 +27,8 @@ interface Props {
   isDark?: boolean
 }
 
-const ThemedCard: React.FC<Props> = (props) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+const ThemedCard: React.FC<Props> = props => {
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const getBorderRadius = () => {
     if (props.rounded) {
@@ -38,21 +36,6 @@ const ThemedCard: React.FC<Props> = (props) => {
     }
 
     return 5
-  }
-
-  const getStyle = (): StyleProp<any> => {
-    const styleShadow = {
-      shadowColor: '#ffffff',
-      shadowOffset: {
-        width: 0,
-        height: -6,
-      },
-      shadowOpacity: 0.1,
-      shadowRadius: 6,
-      marginBottom: 8,
-    }
-
-    return props.hasShadow ? styleShadow : {}
   }
 
   const getContentStyle = (): StyleProp<any> => {
@@ -91,11 +74,7 @@ const ThemedCard: React.FC<Props> = (props) => {
     <DarkCardView>
       <DarkCardContentView
         style={getContentStyle()}
-        backgroundColor={
-          props.flat
-            ? 'transparent'
-            : props.baseBgColor ?? theme.colors.background[8]
-        }
+        backgroundColor={props.flat ? 'transparent' : props.baseBgColor ?? theme.colors.background[8]}
         border={props.flat ? props.borderThickness : undefined}
         borderColor={props.flat ? props.borderColor : undefined}
         borderRadius={getBorderRadius()}
@@ -112,7 +91,7 @@ const ThemedCard: React.FC<Props> = (props) => {
             locations={[0, 1]}
             start={[1, 0]}
             end={[1, 1]}
-            style={{borderRadius: getBorderRadius()}}
+            style={{ borderRadius: getBorderRadius() }}
           />
         )}
 
@@ -126,7 +105,7 @@ const ThemedCard: React.FC<Props> = (props) => {
             locations={[0, 1]}
             start={[1, 0]}
             end={[1, 1]}
-            style={{borderRadius: getBorderRadius() - (props.rounded ? 2 : 0)}}
+            style={{ borderRadius: getBorderRadius() - (props.rounded ? 2 : 0) }}
           />
         )}
 

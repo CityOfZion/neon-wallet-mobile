@@ -1,19 +1,16 @@
-import {RouteProp, useNavigation} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { RouteProp, useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, {useState, useCallback} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import React, { useState, useCallback } from 'react'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
+import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import {UriHelper} from '~/src/helpers/UriHelper'
-import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
-import {LinearLayout, TextView} from '~/src/styles/styled-components'
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import { UriHelper } from '~/src/helpers/UriHelper'
+import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
+import { LinearLayout, TextView } from '~/src/styles/styled-components'
+import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 
 export interface WCConnectDappModalParams {
   uri?: string
@@ -25,12 +22,10 @@ interface WCConnectDappModalProps {
 
 export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
   const [url, setUrl] = useState<string>(props.route.params?.uri ?? '')
-  const {isConnected} = useSelector((state: RootState) => state.network)
+  const { isConnected } = useSelector((state: RootState) => state.network)
   const controller = useSwiperController(true)
   const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const validateURL = useCallback(() => {
     return UriHelper.isValid(url)
@@ -55,44 +50,32 @@ export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
   return (
     <SwiperPanel
       padding={20}
-      fullSize={true}
+      fullSize
       controller={controller}
-      rightButton={<CloseButton mr={'20px'} />}
+      rightButton={<CloseButton mr="20px" />}
       title={i18n.t('modals.connectDApp.title')}
       onClose={() => {
         navigation.goBack()
       }}
       onRightPress={controller.close}
-      solidColorBG={true}
+      solidColorBG
     >
-      <LinearLayout height={'100%'} justifyContent={'space-between'}>
-        <LinearLayout height={'50%'} justifyContent={'space-between'} pb={5}>
-          <TextView
-            color="#fff"
-            fontFamily="regular"
-            fontSize="18px"
-            pt={5}
-            textAlign="center"
-          >
+      <LinearLayout height="100%" justifyContent="space-between">
+        <LinearLayout height="50%" justifyContent="space-between" pb={5}>
+          <TextView color="#fff" fontFamily="regular" fontSize="18px" pt={5} textAlign="center">
             {i18n.t('modals.connectDApp.subtitle')}
           </TextView>
 
           <LinearLayout>
-            <TextView
-              color="#fff"
-              fontFamily="bold"
-              fontSize="14px"
-              pt={7}
-              pb={3}
-            >
+            <TextView color="#fff" fontFamily="bold" fontSize="14px" pt={7} pb={3}>
               {i18n.t('modals.connectDApp.url')}
             </TextView>
             <LinearLayout ml={-5} mr={-5}>
               <InputWithValidation
                 onChangeText={handleChangeURL}
-                color={'text.10'}
-                separatorColor={'text.3'}
-                invalidColor={'text.10'}
+                color="text.10"
+                separatorColor="text.3"
+                invalidColor="text.10"
                 validator={validateURL}
                 value={url}
                 placeholder={i18n.t('modals.connectDApp.placeholder')}

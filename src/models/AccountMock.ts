@@ -1,4 +1,4 @@
-import {ImageLoadEventData} from 'react-native'
+import { ImageLoadEventData } from 'react-native'
 
 export class AccountMock {
   srcIcon?: ImageLoadEventData

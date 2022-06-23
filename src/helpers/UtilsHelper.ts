@@ -1,8 +1,8 @@
-import {classToClass, ClassTransformOptions} from 'class-transformer'
-import {t} from 'i18n-js'
-import {chunk} from 'lodash'
-import {Clipboard, Platform} from 'react-native'
-import {showMessage} from 'react-native-flash-message'
+import { classToClass, ClassTransformOptions } from 'class-transformer'
+import { t } from 'i18n-js'
+import { chunk } from 'lodash'
+import { Clipboard, Platform } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
 export abstract class UtilsHelper {
   static get isIos() {
     return Platform.OS === 'ios'
@@ -14,7 +14,7 @@ export abstract class UtilsHelper {
 
   static uuid() {
     let dt = new Date().getTime()
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
       const r = (dt + Math.random() * 16) % 16 | 0
       dt = Math.floor(dt / 16)
       return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16)
@@ -54,7 +54,7 @@ export abstract class UtilsHelper {
 
   static sleep(ms: number) {
     // eslint-disable-next-line no-undef
-    return new Promise((resolve) => setTimeout(resolve, ms))
+    return new Promise(resolve => setTimeout(resolve, ms))
   }
 
   static clearText(text: string) {
@@ -72,10 +72,7 @@ export abstract class UtilsHelper {
     return (num * multiplier).toFixed(decimals)
   }
 
-  static putTimeout<T extends any>(
-    callback: () => Promise<T> | T,
-    timeoutMs: number = 5000
-  ): Promise<T> {
+  static putTimeout<T extends any>(callback: () => Promise<T> | T, timeoutMs: number = 5000): Promise<T> {
     return new Promise<T>(async (resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error(t('app.timeout')))

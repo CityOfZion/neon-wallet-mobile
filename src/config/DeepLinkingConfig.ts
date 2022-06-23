@@ -1,11 +1,6 @@
-import {
-  getStateFromPath,
-  LinkingOptions,
-  PathConfig,
-  PathConfigMap,
-} from '@react-navigation/native'
+import { getStateFromPath, LinkingOptions } from '@react-navigation/native'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
+import { wrapper } from '~src/app/ApplicationWrapper'
 
 export class DeepLinkingConfig {
   linkingConfig: LinkingOptions
@@ -40,8 +35,7 @@ export class DeepLinkingConfig {
               [wrapper.route.ListWallets.name]: {
                 initialRouteName: wrapper.route.ListWalletsPage.name,
                 screens: {
-                  [wrapper.route.ListWalletsPage.name]:
-                    wrapper.route.ListWalletsPage.name,
+                  [wrapper.route.ListWalletsPage.name]: wrapper.route.ListWalletsPage.name,
                   [wrapper.route.GetAccount.name]: {
                     path: 'send',
                   },
@@ -62,7 +56,7 @@ export class DeepLinkingConfig {
       },
       getStateFromPath: (path, options) => {
         if (path.includes('uri')) {
-          const [_, paramUri] = path.split('=')
+          const [, paramUri] = path.split('=')
           return {
             routes: [
               {
@@ -71,12 +65,12 @@ export class DeepLinkingConfig {
                   routes: [
                     {
                       name: wrapper.route.WalletConnectPage.name,
-                      params: {uri: paramUri},
+                      params: { uri: paramUri },
                       state: {
                         routes: [
                           {
                             name: wrapper.route.WalletConnectPage.name,
-                            params: {uri: paramUri},
+                            params: { uri: paramUri },
                           },
                         ],
                       },

@@ -1,13 +1,13 @@
-import {StackNavigationProp} from '@react-navigation/stack'
-import React, {useState} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
-import {useSelector} from 'react-redux'
+import { StackNavigationProp } from '@react-navigation/stack'
+import React, { useState } from 'react'
+import { TouchableWithoutFeedback } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {NFTResponse} from '~/src/models/response/NFTResponse'
-import {RootStackParamList} from '~/src/navigation/AppNavigation'
-import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
-import {ImageView, LinearLayout, TextView} from '~/src/styles/styled-components'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { NFTResponse } from '~/src/models/response/NFTResponse'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
+import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
+import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {
   nft: NFTResponse
@@ -15,13 +15,9 @@ type Props = {
 }
 
 // eslint-disable-next-line react/display-name
-export const NFTItem = React.memo(({nft, navigation}: Props) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
-  const [shouldShowDefaultNFTImage, setShouldShowDefaultNFTImage] = useState(
-    false
-  )
+export const NFTItem = React.memo(({ nft, navigation }: Props) => {
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const [shouldShowDefaultNFTImage, setShouldShowDefaultNFTImage] = useState(false)
 
   function handleOnPressButtonDora() {
     navigation.navigate(wrapper.route.Modal.name, {
@@ -62,15 +58,11 @@ export const NFTItem = React.memo(({nft, navigation}: Props) => {
           source={
             !shouldShowDefaultNFTImage
               ? nft.image
-                ? {uri: nft.image}
+                ? { uri: nft.image }
                 : require('~/src/assets/images/diamond-green.png')
               : require('~/src/assets/images/diamond-green.png')
           }
-          onError={
-            !shouldShowDefaultNFTImage
-              ? () => setShouldShowDefaultNFTImage(true)
-              : undefined
-          }
+          onError={!shouldShowDefaultNFTImage ? () => setShouldShowDefaultNFTImage(true) : undefined}
         />
       </LinearLayout>
 
@@ -109,24 +101,13 @@ export const NFTItem = React.memo(({nft, navigation}: Props) => {
           </LinearLayout>
 
           <LinearLayout flex={1} ml="8px">
-            <TextView
-              ellipsizeMode="middle"
-              numberOfLines={1}
-              color="primary"
-              fontFamily="medium"
-              fontSize="12px"
-            >
+            <TextView ellipsizeMode="middle" numberOfLines={1} color="primary" fontFamily="medium" fontSize="12px">
               {`#${nft.id}`}
             </TextView>
           </LinearLayout>
         </LinearLayout>
 
-        <TextView
-          numberOfLines={1}
-          color={theme.colors.text[0]}
-          fontFamily="medium"
-          fontSize="18px"
-        >
+        <TextView numberOfLines={1} color={theme.colors.text[0]} fontFamily="medium" fontSize="18px">
           {nft.name}
         </TextView>
       </LinearLayout>

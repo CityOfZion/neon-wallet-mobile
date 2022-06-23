@@ -1,4 +1,4 @@
-import {ConfigStyle} from 'styled-system'
+import { ConfigStyle } from 'styled-system'
 
 /**
  * Style Configuration

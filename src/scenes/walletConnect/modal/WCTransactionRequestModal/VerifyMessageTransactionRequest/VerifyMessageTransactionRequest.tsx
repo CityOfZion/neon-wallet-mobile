@@ -1,10 +1,10 @@
 import i18n from 'i18n-js'
 import React from 'react'
 
-import {TransactionRequestBase} from '../TransactionRequestBase'
-import {TransactionRequestMethodComponentProps} from '../WCTransactionRequestModal'
-import {VerifyMessageFailed} from './VerifyMessageFailed'
-import {VerifyMessageSuccess} from './VerifyMessageSuccess'
+import { TransactionRequestBase } from '../TransactionRequestBase'
+import { TransactionRequestMethodComponentProps } from '../WCTransactionRequestModal'
+import { VerifyMessageFailed } from './VerifyMessageFailed'
+import { VerifyMessageSuccess } from './VerifyMessageSuccess'
 
 export const VerifyMessageTransactionRequest = ({
   request,

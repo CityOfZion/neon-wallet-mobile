@@ -1,11 +1,11 @@
-import {BlurView} from 'expo-blur'
+import { BlurView } from 'expo-blur'
 import i18n from 'i18n-js'
-import React, {useState, useEffect, useCallback} from 'react'
-import {Modal, View, TouchableOpacity, ImageLoadEventData} from 'react-native'
-import {useSelector} from 'react-redux'
+import React, { useState, useEffect, useCallback } from 'react'
+import { Modal, View, TouchableOpacity, ImageLoadEventData } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {FilterHelper} from '~src/helpers/FilterHelper'
-import {ImageView, TextView} from '~src/styles/styled-components'
+import { FilterHelper } from '~src/helpers/FilterHelper'
+import { ImageView, TextView } from '~src/styles/styled-components'
 
 interface Props {
   showWarning: boolean
@@ -26,15 +26,15 @@ const ModalWarningFee = ({
   unclaimedGasAmount,
   totTokenFeeAccount,
 }: Props) => {
-  const {language} = useSelector((state: RootState) => state.settings)
+  const { language } = useSelector((state: RootState) => state.settings)
   const warningInfo: Record<
     TStatusWarning,
     {
       icon: ImageLoadEventData
-      title: {label: string; color: string}
+      title: { label: string; color: string }
       subtitle: string
-      observations: {title: string; content: string}[]
-      buttons: {label: string; onPress: () => void}[]
+      observations: { title: string; content: string }[]
+      buttons: { label: string; onPress: () => void }[]
       question?: string
     }
   > = {
@@ -96,13 +96,9 @@ const ModalWarningFee = ({
     },
   }
 
-  const [statusWarning, setStatusWarning] = useState<TStatusWarning>(
-    'insuficient'
-  )
+  const [statusWarning, setStatusWarning] = useState<TStatusWarning>('insuficient')
 
-  const {buttons, icon, observations, subtitle, title, question} = warningInfo[
-    statusWarning
-  ]
+  const { buttons, icon, observations, subtitle, title, question } = warningInfo[statusWarning]
 
   const handleStatusWarning = useCallback(() => {
     if (amountFee > totTokenFeeAccount) {
@@ -117,8 +113,8 @@ const ModalWarningFee = ({
   }, [amountFee, unclaimedGasAmount, showWarning])
 
   return showWarning ? (
-    <Modal transparent={true} animationType="fade" visible={showWarning}>
-      <BlurView intensity={40} tint="dark" style={{height: '100%'}}>
+    <Modal transparent animationType="fade" visible={showWarning}>
+      <BlurView intensity={40} tint="dark" style={{ height: '100%' }}>
         <View
           style={{
             alignItems: 'center',
@@ -173,9 +169,7 @@ const ModalWarningFee = ({
               {question}
             </TextView>
           )}
-          <View
-            style={{height: 1, width: '100%', backgroundColor: '#ffffff44'}}
-          />
+          <View style={{ height: 1, width: '100%', backgroundColor: '#ffffff44' }} />
           <View
             style={{
               flexDirection: 'row',
@@ -187,7 +181,7 @@ const ModalWarningFee = ({
               <TouchableOpacity
                 key={index}
                 onPress={() => btn.onPress()}
-                style={{alignItems: 'center', width: '50%'}}
+                style={{ alignItems: 'center', width: '50%' }}
               >
                 <TextView color="#4cffb3" fontSize="20px">
                   {btn.label}

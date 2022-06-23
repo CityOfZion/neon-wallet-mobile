@@ -1,24 +1,16 @@
 module.exports = {
-  globals: {
-    setTimeout: true,
-    setInterval: true,
-    process: true,
-    clearInterval: true,
-    window: true,
-    Intl: true,
-    clearTimeout: true
+  env: {
+    es2021: true,
   },
-  extends: [
-    'universe',
-    'universe/shared/typescript-analysis',
-    'plugin:react/recommended',
-  ],
-
-  rules: {
-    'prettier/prettier': 'error',
-    '@typescript-eslint/no-unused-vars': 'off',
+  extends: ['universe/native', 'universe/shared/typescript-analysis'],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 'latest',
+    sourceType: 'module',
   },
-
   overrides: [
     {
       files: ['*.ts', '*.tsx', '*.d.ts'],
@@ -27,4 +19,9 @@ module.exports = {
       },
     },
   ],
+  plugins: ['prettier'],
+  rules: {
+    'prettier/prettier': 'error',
+    'import/namespace': 'off',
+  },
 }

@@ -1,31 +1,27 @@
-import {RouteProp} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
-import {Await, AwaitActivity} from '@simpli/react-native-await'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, {useState, useCallback, useEffect} from 'react'
-import {View} from 'react-native'
-import {showMessage} from 'react-native-flash-message'
-import {useSelector} from 'react-redux'
+import React, { useState, useCallback, useEffect } from 'react'
+import { View } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
+import { useSelector } from 'react-redux'
 
-import {AccountToImport} from '../hooks/BlockchainActionsHook'
+import { AccountToImport } from '../hooks/BlockchainActionsHook'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {
-  BlockchainServiceKey,
-  blockchainList,
-  blockchainServices,
-} from '~src/blockchain'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { BlockchainServiceKey, blockchainList, blockchainServices } from '~src/blockchain'
 import AddressesImportList from '~src/components/AddressesImportList'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {useBlockchainActionsHook} from '~src/hooks'
-import {Account} from '~src/models/redux/Account'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {RootState} from '~src/store/RootStore'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { useBlockchainActionsHook } from '~src/hooks'
+import { Account } from '~src/models/redux/Account'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
+import { RootState } from '~src/store/RootStore'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface PassphraseParams {
   encryptedKey: string
@@ -37,23 +33,17 @@ interface PassphraseProps {
 }
 
 const Passphrase = (props: PassphraseProps) => {
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
-  const {accounts} = useSelector((state: RootState) => state.app)
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const { accounts } = useSelector((state: RootState) => state.app)
   const blockchainActionsHook = useBlockchainActionsHook()
   const [inputValue, setInputValue] = useState('')
-  const [addressesInfo, setAdrresesInfo] = useState<
-    {address: string; blockchain: BlockchainServiceKey}[]
-  >([])
+  const [addressesInfo, setAdrresesInfo] = useState<{ address: string; blockchain: BlockchainServiceKey }[]>([])
   const [addressesInfoSelected, setAdrresesInfoSelected] = useState<
-    {address: string; blockchain: BlockchainServiceKey}[]
+    { address: string; blockchain: BlockchainServiceKey }[]
   >([])
-  const [titlePage, setTitlePage] = useState<string>(
-    i18n.t('passphrase.enterPassphrase')
-  )
+  const [titlePage, setTitlePage] = useState<string>(i18n.t('passphrase.enterPassphrase'))
   const [correctPassword, setCorrectPassword] = useState<string>('')
-  const [inputIsValid, setInputIsValid] = useState(true)
+  const [inputIsValid] = useState(true)
   const [showInputField, setShowInputField] = useState(true)
   const encryptedKey = props.route.params.encryptedKey
 
@@ -71,19 +61,14 @@ const Passphrase = (props: PassphraseProps) => {
     setShowInputField(false)
     try {
       for (const blockchain of blockchainList) {
-        const isEncryptedKey = blockchainServices[
-          blockchain
-        ].validatePrivateKeyWithPassword(encryptedKey)
+        const isEncryptedKey = blockchainServices[blockchain].validatePrivateKeyWithPassword(encryptedKey)
         if (isEncryptedKey) {
-          const {address} = await blockchainServices[blockchain].decryptKey(
-            encryptedKey,
-            inputValue
-          )
-          const addressExist = accounts.some((acc) => acc.address === address)
+          const { address } = await blockchainServices[blockchain].decryptKey(encryptedKey, inputValue)
+          const addressExist = accounts.some(acc => acc.address === address)
           if (!addressExist) {
-            setAdrresesInfo((prevState) => {
+            setAdrresesInfo(prevState => {
               const data = prevState
-              data.push({address, blockchain})
+              data.push({ address, blockchain })
               return [...data]
             })
           }
@@ -95,20 +80,16 @@ const Passphrase = (props: PassphraseProps) => {
       }
       if (addressesInfo.length < 1) {
         showMessage({
-          message: i18n.t(
-            'blockchainServices.errorMessages.keyWrongOrAddressesImported'
-          ),
+          message: i18n.t('blockchainServices.errorMessages.keyWrongOrAddressesImported'),
           type: 'danger',
           duration: 4000,
         })
         setShowInputField(true)
       }
-    } catch (error) {
+    } catch {
       if (addressesInfo.length < 1) {
         showMessage({
-          message: i18n.t(
-            'blockchainServices.errorMessages.keyWrongOrAddressesImported'
-          ),
+          message: i18n.t('blockchainServices.errorMessages.keyWrongOrAddressesImported'),
           type: 'danger',
           duration: 4000,
         })
@@ -135,11 +116,8 @@ const Passphrase = (props: PassphraseProps) => {
       )
 
       const accountsToImportPromises = addressesInfoSelected.map(
-        async ({address, blockchain}): Promise<AccountToImport> => {
-          const {wif} = await blockchainServices[blockchain].decryptKey(
-            encryptedKey,
-            correctPassword
-          )
+        async ({ address, blockchain }): Promise<AccountToImport> => {
+          const { wif } = await blockchainServices[blockchain].decryptKey(encryptedKey, correctPassword)
 
           return {
             address,
@@ -201,19 +179,19 @@ const Passphrase = (props: PassphraseProps) => {
           </TextView>
 
           {showInputField && (
-            <View style={{minHeight: 100}}>
+            <View style={{ minHeight: 100 }}>
               <InputWithValidation
                 value={inputValue}
                 onChangeText={setInputValue}
-                validator={(text) => inputIsValid || !text}
+                validator={text => inputIsValid || !text}
                 color={theme.colors.primary}
                 invalidColor={theme.colors.primary}
                 separatorColor={theme.colors.background[4]}
                 invalidSeparatorColor={theme.colors.background[5]}
                 placeholder={i18n.t('passphrase.inputPlaceholder')}
-                secure={true}
+                secure
                 onFocus={clearOnFocus}
-                hideScan={true}
+                hideScan
               />
             </View>
           )}
@@ -221,7 +199,7 @@ const Passphrase = (props: PassphraseProps) => {
           {addressesInfo.length > 0 && (
             <AddressesImportList
               addressesInfo={addressesInfo}
-              onSelectAddress={(it) => {
+              onSelectAddress={it => {
                 setAdrresesInfoSelected(it)
               }}
             />

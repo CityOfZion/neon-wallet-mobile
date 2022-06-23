@@ -1,19 +1,11 @@
 import i18n from 'i18n-js'
 import React from 'react'
 
-import {
-  ImageView,
-  RelativeLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import { ImageView, RelativeLayout, TextView } from '~src/styles/styled-components'
 
 const ClaimGasLoader = () => {
   return (
-    <RelativeLayout
-      orientation={'horiz'}
-      alignItems={'center'}
-      justifyContent={'center'}
-    >
+    <RelativeLayout orientation="horiz" alignItems="center" justifyContent="center">
       <ImageView
         mt={-2}
         mr={4}
@@ -23,7 +15,7 @@ const ClaimGasLoader = () => {
         resizeMode="contain"
       />
 
-      <TextView fontSize={'sm'} color={'primary'}>
+      <TextView fontSize="sm" color="primary">
         {i18n.t('screens.getAccount.claimInProgress')}
       </TextView>
     </RelativeLayout>

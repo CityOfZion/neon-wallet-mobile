@@ -1,5 +1,5 @@
 export declare global {
-  import {TextInputProps} from 'react-native'
+  import { TextInputProps } from 'react-native'
   import {
     BorderProps,
     ColorProps,
@@ -58,11 +58,7 @@ export declare global {
     PositionProps &
     TextStyleProps
 
-  type ImageViewProps = SpaceProps &
-    LayoutProps &
-    FlexboxProps &
-    PositionProps &
-    WeightProps
+  type ImageViewProps = SpaceProps & LayoutProps & FlexboxProps & PositionProps & WeightProps
 
   type LinearLayoutProps = BorderProps &
     ColorProps &
@@ -91,13 +87,7 @@ export declare global {
     PositionProps &
     WeightProps
 
-  type LinearGradientLayoutProps = ColorProps &
-    SpaceProps &
-    LayoutProps &
-    FlexboxProps
+  type LinearGradientLayoutProps = ColorProps & SpaceProps & LayoutProps & FlexboxProps
 
-  type StyledScrollViewProps = FlexboxProps &
-    OrientationProps &
-    LayoutProps &
-    SpaceProps
+  type StyledScrollViewProps = FlexboxProps & OrientationProps & LayoutProps & SpaceProps
 }

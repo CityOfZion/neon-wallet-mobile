@@ -1,19 +1,8 @@
-import {LinearGradient} from 'expo-linear-gradient'
+import { LinearGradient } from 'expo-linear-gradient'
 import * as styledComponents from 'styled-components/native'
-import {
-  border,
-  color,
-  flexbox,
-  layout,
-  position,
-  space,
-  textStyle,
-  typography,
-  borderRadius,
-  alignSelf,
-} from 'styled-system'
+import { border, color, flexbox, layout, position, space, textStyle, typography, borderRadius } from 'styled-system'
 
-import {orientation, weight} from '~src/styles/styled-system.config'
+import { orientation, weight } from '~src/styles/styled-system.config'
 
 const styled = styledComponents.default
 
@@ -90,9 +79,7 @@ export const ButtonView = styled.TouchableOpacity<ButtonViewProps>`
   ${borderRadius}
 `
 
-export const LinearGradientLayout = styled(LinearGradient)<
-  LinearGradientLayoutProps
->`
+export const LinearGradientLayout = styled(LinearGradient)<LinearGradientLayoutProps>`
   ${layout}
   ${color}
   ${space}

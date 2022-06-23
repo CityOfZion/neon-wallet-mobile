@@ -1,23 +1,20 @@
-import {RouteProp, CommonActions} from '@react-navigation/native'
+import { RouteProp, CommonActions } from '@react-navigation/native'
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
-import React, {useState} from 'react'
-import {Image, ScrollView, Dimensions} from 'react-native'
+import React, { useState } from 'react'
+import { Image, ScrollView, Dimensions } from 'react-native'
 
-import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Normalize} from '~src/app/Normalize'
-import {Storage} from '~src/app/Storage'
-import SwiperPanel, {
-  PANEL_OFFSET,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Normalize } from '~src/app/Normalize'
+import { Storage } from '~src/app/Storage'
+import SwiperPanel, { PANEL_OFFSET, useSwiperController } from '~src/components/SwiperPanel'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import {ThemedFlatButton} from '~src/components/themed/ThemedFlatButton'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {TabStackParamList} from '~src/navigation/TabNavigation'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import { ThemedFlatButton } from '~src/components/themed/ThemedFlatButton'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { TabStackParamList } from '~src/navigation/TabNavigation'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 // Why are you like this, Typescript
 type ParamList = TabStackParamList & RootStackParamList
 
@@ -49,9 +46,9 @@ const WelcomePage = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      fullSize={true}
+      fullSize
       paddingTop={20}
-      noHeader={true}
+      noHeader
       onClose={() => {
         if (showChangelog) {
           persist(true)
@@ -65,10 +62,10 @@ const WelcomePage = (props: Props) => {
         }
       }}
       image={require('~/src/assets/images/icon-plus-circle-white.png')}
-      disableDefaultScrollView={true}
-      darkerSolidColorBG={true}
+      disableDefaultScrollView
+      darkerSolidColorBG
     >
-      <ScrollView style={{marginHorizontal: -20}}>
+      <ScrollView style={{ marginHorizontal: -20 }}>
         <LinearLayout mb={PANEL_OFFSET} pt={30} flex={1}>
           <LinearLayout weight={1} />
           <Image
@@ -83,36 +80,19 @@ const WelcomePage = (props: Props) => {
             }}
             width={imgWidth}
             height={imgHeight}
-            resizeMode={'contain'}
+            resizeMode="contain"
           />
-          <TextView
-            mb={5}
-            color={'primary'}
-            fontSize={Normalize.scale(30)}
-            fontFamily={'regular'}
-            textAlign="center"
-          >
+          <TextView mb={5} color="primary" fontSize={Normalize.scale(30)} fontFamily="regular" textAlign="center">
             {i18n.t('welcome.title')}
           </TextView>
 
-          <TextView
-            mb={6}
-            mr={5}
-            ml={5}
-            color={'text.0'}
-            fontSize={'lg'}
-            textAlign={'center'}
-          >
+          <TextView mb={6} mr={5} ml={5} color="text.0" fontSize="lg" textAlign="center">
             {i18n.t('welcome.body_1_1_2')}
           </TextView>
 
           <LinearLayout weight={1} />
 
-          <LinearLayout
-            mt={3}
-            mb={6}
-            style={{alignSelf: 'center', width: '85%'}}
-          >
+          <LinearLayout mt={3} mb={6} style={{ alignSelf: 'center', width: '85%' }}>
             <ThemedFlatButton
               text={i18n.t('welcome.button_3')}
               onPress={() => {
@@ -122,16 +102,12 @@ const WelcomePage = (props: Props) => {
                   undefined
                 )
               }}
-              alignItems={'flex-start'}
-              textAlign={'center'}
+              alignItems="flex-start"
+              textAlign="center"
             />
           </LinearLayout>
 
-          <LinearLayout
-            position={'absolute'}
-            right={Normalize.scale(2)}
-            top={Normalize.scale(-10)}
-          >
+          <LinearLayout position="absolute" right={Normalize.scale(2)} top={Normalize.scale(-10)}>
             <ThemedCloseButton
               iconSize={[18, 18]}
               onPress={() =>

@@ -1,7 +1,7 @@
-import {useNavigation} from '@react-navigation/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import { useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   ImageLoadEventData,
   Keyboard,
@@ -13,29 +13,24 @@ import {
   Dimensions,
   View,
 } from 'react-native'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Normalize} from '~src/app/Normalize'
-import {ContactsButton} from '~src/components/input/ContactsButton'
-import {InputClearButton} from '~src/components/input/InputClearButton'
-import {PasteButton} from '~src/components/input/PasteButton'
-import {ScanButton} from '~src/components/input/ScanButton'
-import {SelectedContactView} from '~src/components/input/SelectedContactView'
-import {IURI} from '~src/helpers/UriHelper'
-import {UtilsHelper} from '~src/helpers/UtilsHelper'
-import {Account} from '~src/models/redux/Account'
-import {Contact} from '~src/models/redux/Contact'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {SendModalStackParamList} from '~src/navigation/SendModalStackNavigation'
-import {RootState, RootStore} from '~src/store/RootStore'
-import {
-  ImageView,
-  LinearLayout,
-  TextView,
-  InputTextView,
-} from '~src/styles/styled-components'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Normalize } from '~src/app/Normalize'
+import { ContactsButton } from '~src/components/input/ContactsButton'
+import { InputClearButton } from '~src/components/input/InputClearButton'
+import { PasteButton } from '~src/components/input/PasteButton'
+import { ScanButton } from '~src/components/input/ScanButton'
+import { SelectedContactView } from '~src/components/input/SelectedContactView'
+import { IURI } from '~src/helpers/UriHelper'
+import { UtilsHelper } from '~src/helpers/UtilsHelper'
+import { Account } from '~src/models/redux/Account'
+import { Contact } from '~src/models/redux/Contact'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { SendModalStackParamList } from '~src/navigation/SendModalStackNavigation'
+import { RootState, RootStore } from '~src/store/RootStore'
+import { ImageView, LinearLayout, TextView, InputTextView } from '~src/styles/styled-components'
 
 interface Props {
   onChangeText?: (text: string) => void
@@ -74,18 +69,12 @@ interface Props {
 
 const InputWithValidation = (props: Props) => {
   const dispatchAccount = useDispatch<SyncDispatch<Account>>()
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const width = Normalize.scale(props.iconSize ? props.iconSize[0] : 25)
   const height = Normalize.scale(props.iconSize ? props.iconSize[1] : 25)
   const account = dispatchAccount(RootStore.account.actions.getFromSelection())
-  const navigation = useNavigation<
-    StackNavigationProp<ModalStackParamList & SendModalStackParamList>
-  >()
-  const navigationScan = useNavigation<
-    StackNavigationProp<RootStackParamList>
-  >()
+  const navigation = useNavigation<StackNavigationProp<ModalStackParamList & SendModalStackParamList>>()
+  const navigationScan = useNavigation<StackNavigationProp<RootStackParamList>>()
   const sideMargins = props.sideMargins ?? 20
 
   const isInvalid = props.value ? !props.validator(props.value) : undefined
@@ -94,9 +83,7 @@ const InputWithValidation = (props: Props) => {
 
   const fontColor = isInvalid ? props.invalidColor : props.color
 
-  const [contact, setContact] = useState<Contact | undefined>(
-    props.selectedContact
-  )
+  const [contact, setContact] = useState<Contact | undefined>(props.selectedContact)
 
   const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     setContact(props.selectedContact)
@@ -106,7 +93,7 @@ const InputWithValidation = (props: Props) => {
   }
 
   const handleChangeText = (text: string) => {
-    props.onChangeText && props.onChangeText(UtilsHelper.clearText(text))
+    if (props.onChangeText) props.onChangeText(UtilsHelper.clearText(text))
   }
 
   useEffect(() => {
@@ -114,12 +101,7 @@ const InputWithValidation = (props: Props) => {
   }, [props.selectedContact])
 
   return (
-    <LinearLayout
-      orientation="verti"
-      ml={sideMargins}
-      mr={sideMargins}
-      flex={1}
-    >
+    <LinearLayout orientation="verti" ml={sideMargins} mr={sideMargins} flex={1}>
       {!contact ? (
         <LinearLayout orientation="horiz">
           {props.srcIcon && (
@@ -129,18 +111,16 @@ const InputWithValidation = (props: Props) => {
               mr={props.value ? 3 : undefined}
               resizeMode="contain"
               source={props.srcIcon}
-              alignSelf={'center'}
+              alignSelf="center"
             />
           )}
           <LinearLayout
             bg={props.fromImportKey ? theme.colors.background[12] : undefined}
-            borderColor={
-              isInvalid ? theme.colors.quinary : theme.colors.background[12]
-            }
+            borderColor={isInvalid ? theme.colors.quinary : theme.colors.background[12]}
             borderRadius={10}
             borderWidth={props.fromImportKey ? 1 : 0}
-            width={'100%'}
-            orientation={'horiz'}
+            width="100%"
+            orientation="horiz"
             p={props.fromImportKey ? '2%' : undefined}
           >
             <InputTextView
@@ -149,10 +129,7 @@ const InputWithValidation = (props: Props) => {
               color={fontColor}
               placeholderTextColor={props.placeholderColor ?? '#7d929a'}
               underlineColorAndroid="transparent"
-              placeholder={
-                props.placeholder ??
-                i18n.t('components.inputTextWithValidation.inputPlaceholder')
-              }
+              placeholder={props.placeholder ?? i18n.t('components.inputTextWithValidation.inputPlaceholder')}
               fontFamily="regular"
               fontStyle={fontStyle}
               fontSize={18}
@@ -164,17 +141,13 @@ const InputWithValidation = (props: Props) => {
               onBlur={handleBlur}
               editable={props.editable ?? true}
               keyboardType={props.keyboardType}
-              returnKeyType={'done'}
+              returnKeyType="done"
               onSubmitEditing={Keyboard.dismiss}
               multiline={Platform.OS === 'ios' ? true : props.isMultiline}
               numberOfLines={props.isMultiline ? 10 : 1}
-              style={props.isMultiline ? {textAlignVertical: 'top'} : undefined}
+              style={props.isMultiline ? { textAlignVertical: 'top' } : undefined}
               clearTextOnFocus={false}
-              height={
-                props.isMultiline && Platform.OS === 'ios'
-                  ? Dimensions.get('screen').height * 0.25
-                  : undefined
-              }
+              height={props.isMultiline && Platform.OS === 'ios' ? Dimensions.get('screen').height * 0.25 : undefined}
             />
 
             <View
@@ -186,15 +159,13 @@ const InputWithValidation = (props: Props) => {
             >
               {!props.isMultiline && isInvalid && (
                 <ImageView
-                  resizeMode={'center'}
+                  resizeMode="center"
                   alignSelf="center"
                   source={require('~/src/assets/images/icon-alert-purple.png')}
                 />
               )}
               {(props.onClearPress && props.value.length > 0) ||
-                (props.onClearPress && props.forceClearButton && (
-                  <InputClearButton onPress={props.onClearPress} />
-                ))}
+                (props.onClearPress && props.forceClearButton && <InputClearButton onPress={props.onClearPress} />)}
             </View>
           </LinearLayout>
         </LinearLayout>
@@ -209,11 +180,7 @@ const InputWithValidation = (props: Props) => {
       {!props.fromImportKey && (
         <LinearLayout
           mt={1}
-          bg={
-            isInvalid
-              ? props.invalidSeparatorColor ?? props.separatorColor
-              : props.separatorColor
-          }
+          bg={isInvalid ? props.invalidSeparatorColor ?? props.separatorColor : props.separatorColor}
           height={1}
           width="100%"
         />
@@ -230,35 +197,23 @@ const InputWithValidation = (props: Props) => {
             opacity={isInvalid ? 1 : 0}
             height={Platform.OS === 'ios' ? '15px' : undefined}
           >
-            {props.invalidMessage ??
-              i18n.t('components.inputTextWithValidation.incorrectFormat')}
+            {props.invalidMessage ?? i18n.t('components.inputTextWithValidation.incorrectFormat')}
           </TextView>
         </LinearLayout>
       )}
 
-      <LinearLayout
-        orientation="horiz"
-        mt={5}
-        flex={1}
-        justifyContent={'space-between'}
-      >
+      <LinearLayout orientation="horiz" mt={5} flex={1} justifyContent="space-between">
         {props.showContacts ? (
           <ContactsButton
             onPress={() => {
               navigation.navigate(wrapper.route.ContactsModal.name, {
-                onSelected: (
-                  item: Contact | Account,
-                  addressSelected?: string
-                ) => {
+                onSelected: (item: Contact | Account, addressSelected?: string) => {
                   if (props.onSelected) {
                     props.onSelected(item, addressSelected)
-                    navigation.navigate(
-                      wrapper.route.SendTransactionInputModal.name,
-                      {
-                        account,
-                        walletTitle: '',
-                      }
-                    )
+                    navigation.navigate(wrapper.route.SendTransactionInputModal.name, {
+                      account,
+                      walletTitle: '',
+                    })
                   }
                 },
                 filterByBlockchain: account.blockchain,

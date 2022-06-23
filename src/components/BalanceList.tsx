@@ -1,19 +1,19 @@
-import {useNavigation} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
 import React from 'react'
-import {FlatList, TouchableOpacity, View} from 'react-native'
-import {useSelector} from 'react-redux'
+import { FlatList, TouchableOpacity, View } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Normalize} from '~src/app/Normalize'
-import {Currency} from '~src/enums/Currency'
-import {Lang} from '~src/enums/Lang'
-import {FilterHelper} from '~src/helpers/FilterHelper'
-import {IURI} from '~src/helpers/UriHelper'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
-import {Exchange} from '~src/types/exchange'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Normalize } from '~src/app/Normalize'
+import { Currency } from '~src/enums/Currency'
+import { Lang } from '~src/enums/Lang'
+import { FilterHelper } from '~src/helpers/FilterHelper'
+import { IURI } from '~src/helpers/UriHelper'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Account } from '~src/models/redux/Account'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { Exchange } from '~src/types/exchange'
 
 interface Props extends LinearLayoutProps {
   tokenAssets: TokenAsset[]
@@ -48,27 +48,23 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
   const showBlockchain = props.showBlockchain
 
   return (
-    <LinearLayout
-      orientation="horiz"
-      alignItems="center"
-      alignContent={'center'}
-    >
+    <LinearLayout orientation="horiz" alignItems="center" alignContent="center">
       {props.showBlockchain ? (
         <LinearLayout
-          mr={'8px'}
+          mr="8px"
           width={12}
           height={12}
           borderRadius={12 / 2}
           backgroundColor={props.item.color}
-          alginSelf={'center'}
+          alginSelf="center"
         />
       ) : (
         <ImageView
-          mr={'8px'}
+          mr="8px"
           width={Normalize.scale(24)}
           height={Normalize.scale(24)}
-          resizeMode={'contain'}
-          alginSelf={'center'}
+          resizeMode="contain"
+          alginSelf="center"
           source={props.item.srcIcon}
         />
       )}
@@ -78,8 +74,8 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
           color="text.0"
           fontSize="xl"
           fontFamily="medium"
-          allowFontScaling={true}
-          adjustsFontSizeToFit={true}
+          allowFontScaling
+          adjustsFontSizeToFit
           numberOfLines={1}
           mb={showBlockchain ? '-5px' : '6px'}
         >
@@ -90,10 +86,10 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
             color="text.2"
             fontSize="sm"
             fontFamily="medium"
-            allowFontScaling={true}
-            adjustsFontSizeToFit={true}
+            allowFontScaling
+            adjustsFontSizeToFit
             numberOfLines={1}
-            mb={'6px'}
+            mb="6px"
           >
             {i18n.t(`blockchainServices.${props.item.blockchain}.id`)}
           </TextView>
@@ -102,16 +98,12 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
 
       {props.showHoldingValueColumn && (
         <LinearLayout weight={1} ml={4}>
-          <LinearLayout
-            weight={1}
-            orientation="verti"
-            justifyContent={'center'}
-          >
+          <LinearLayout weight={1} orientation="verti" justifyContent="center">
             <TextView
               mb="-6px"
               color="text.2"
               fontSize="sm"
-              allowFontScaling={true}
+              allowFontScaling
               numberOfLines={1}
               ellipsizeMode="tail"
               mr={4}
@@ -123,8 +115,8 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
               color="text.2"
               fontSize="sm"
               fontFamily="medium"
-              allowFontScaling={true}
-              adjustsFontSizeToFit={true}
+              allowFontScaling
+              adjustsFontSizeToFit
               numberOfLines={1}
             >
               {i18n.t('components.balanceList.value')}
@@ -134,21 +126,15 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
       )}
       <LinearLayout weight={1} />
       <LinearLayout weight={1} ml={4}>
-        <LinearLayout
-          weight={1}
-          orientation="verti"
-          mt={5}
-          mb={4}
-          alignItems={'flex-end'}
-        >
+        <LinearLayout weight={1} orientation="verti" mt={5} mb={4} alignItems="flex-end">
           <TextView
             mb="-6px"
             color="text.0"
             fontSize="md"
-            allowFontScaling={true}
+            allowFontScaling
             numberOfLines={1}
             ellipsizeMode="tail"
-            textAlign={'right'}
+            textAlign="right"
           >
             {String(props.item.amount)}
           </TextView>
@@ -157,8 +143,8 @@ const ViewBalanceItem = (props: ItemProps & ListProps) => {
             color="primary"
             fontSize="md"
             fontFamily="medium"
-            allowFontScaling={true}
-            adjustsFontSizeToFit={true}
+            allowFontScaling
+            adjustsFontSizeToFit
             numberOfLines={1}
           >
             {FilterHelper.currency(
@@ -225,36 +211,30 @@ BalanceListItem.defaultProps = {
 }
 
 const BalanceList = (props: Props) => {
-  const {exchange} = useSelector((state: RootState) => state.app)
-  const {currency, language} = useSelector((state: RootState) => state.settings)
+  const { exchange } = useSelector((state: RootState) => state.app)
+  const { currency, language } = useSelector((state: RootState) => state.settings)
 
   const orderByValue = (token1: TokenAsset, token2: TokenAsset) => {
-    const value1 =
-      token1.exchangeToken(currency, exchange[token1.blockchain]) ?? 0
-    const value2 =
-      token2.exchangeToken(currency, exchange[token2.blockchain]) ?? 0
+    const value1 = token1.exchangeToken(currency, exchange[token1.blockchain]) ?? 0
+    const value2 = token2.exchangeToken(currency, exchange[token2.blockchain]) ?? 0
     if (value1 < value2) return 1
     if (value1 > value2) return -1
     return 0
   }
-  const innerProps = {...props} //@ts-ignore
+  const innerProps = { ...props } //@ts-ignore
   delete innerProps.tokenAssets //@ts-ignore
   delete innerProps.fromAccountView
   delete innerProps.account
 
   const zeroBalanceFilter = (token: TokenAsset) => {
-    if (
-      token.symbol === 'NEO' ||
-      token.symbol === 'GAS' ||
-      token.amount !== 0
-    ) {
+    if (token.symbol === 'NEO' || token.symbol === 'GAS' || token.amount !== 0) {
       return token
     }
   }
 
   const showListTokenAssets = (tokenAssets: TokenAsset[]) => {
     let show = false
-    tokenAssets.forEach((token) => {
+    tokenAssets.forEach(token => {
       if (token.amount > 0) {
         show = true
       }
@@ -272,7 +252,7 @@ const BalanceList = (props: Props) => {
     return tokens
   }
   return (
-    <LinearLayout {...innerProps} width={'100%'}>
+    <LinearLayout {...innerProps} width="100%">
       {showListTokenAssets(props.tokenAssets) ? (
         <>
           <TextView color="text.2" fontSize="sm">
@@ -280,18 +260,14 @@ const BalanceList = (props: Props) => {
           </TextView>
           <FlatList<TokenAsset>
             data={getTokenAssets()}
-            keyExtractor={(item) => item.hash}
-            ItemSeparatorComponent={() => (
-              <LinearLayout bg="text.2" height={1} />
-            )}
-            renderItem={({item}) => (
+            keyExtractor={item => item.hash}
+            ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
+            renderItem={({ item }) => (
               <BalanceListItem
                 item={item}
                 fromAccountView={props.fromAccountView}
                 showBlockchain={props.showBlockchain}
-                fromSendAccountSelectionModal={
-                  props.fromSendAccountSelectionModal
-                }
+                fromSendAccountSelectionModal={props.fromSendAccountSelectionModal}
                 address={props.address}
                 walletId={props.walletId}
                 currency={currency}

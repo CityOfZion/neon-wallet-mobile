@@ -7,7 +7,7 @@
  * See https://github.com/axios/axios
  */
 
-import axios, {AxiosError} from 'axios'
+import axios, { AxiosError } from 'axios'
 // @ts-ignore
 import qs from 'qs'
 
@@ -19,7 +19,7 @@ export class HttpConfig {
    * Web Server request & response config
    */
   readonly axiosInstance = axios.create({
-    paramsSerializer: (params) => qs.stringify(params, {arrayFormat: 'repeat'}), // myendpoint?myarray=1&myarray=2
+    paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' }), // myendpoint?myarray=1&myarray=2
   })
 
   constructor() {
@@ -27,7 +27,7 @@ export class HttpConfig {
      * Interceptor for every HTTP response of this app
      */
     this.axiosInstance.interceptors.response.use(
-      (response) => response,
+      response => response,
       (error: AxiosError) => {
         const response = error.response
 

@@ -1,4 +1,4 @@
-import {BlockchainServiceKey} from '~src/blockchain'
+import { BlockchainServiceKey } from '~src/blockchain'
 
 export type MultichainExchange = Record<BlockchainServiceKey, Exchange>
 

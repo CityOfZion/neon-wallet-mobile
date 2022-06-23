@@ -1,36 +1,26 @@
-import {RouteProp, useNavigationState} from '@react-navigation/native'
-import {useHeaderHeight} from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import React, {Fragment, useState} from 'react'
-import {ScrollView, TouchableWithoutFeedback} from 'react-native'
-import {useSelector} from 'react-redux'
+import React, { Fragment, useState } from 'react'
+import { TouchableWithoutFeedback } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {ReceiveModalStackParamList} from '~/src/navigation/ReceiveModalStackNavigation'
+import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { ReceiveModalStackParamList } from '~/src/navigation/ReceiveModalStackNavigation'
 import AccountCard from '~src/components/AccountCard'
-import {DismissKeyboard} from '~src/components/DismissKeyboard'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
-import {QRCodeWithCopyButton} from '~src/components/QRCodeWithCopyButton'
-import SwiperPanel, {
-  PANEL_OFFSET,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import { QRCodeWithCopyButton } from '~src/components/QRCodeWithCopyButton'
+import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import TabSelector from '~src/components/TabSelector'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
-import {Wallet} from '~src/models/redux/Wallet'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
-import {ApplicationTheme} from '~src/themes/ApplicationTheme'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Account } from '~src/models/redux/Account'
+import { Wallet } from '~src/models/redux/Wallet'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ApplicationTheme } from '~src/themes/ApplicationTheme'
 
 const TokenField = (props: {
   theme: ApplicationTheme
@@ -40,13 +30,13 @@ const TokenField = (props: {
   account: Account
 }) => {
   return (
-    <Fragment>
+    <>
       <InputLabel
         title={i18n.t('modals.send.transactionInput.token')}
-        color={'text.0'}
+        color="text.0"
         marginTop={0}
         marginBottom={20}
-        capitalize={true}
+        capitalize
       />
 
       <ButtonView
@@ -63,16 +53,14 @@ const TokenField = (props: {
           <InputWithValidation
             color={props.theme.colors.text[0]}
             invalidColor={props.theme.colors.text[10]}
-            fontStyle={'normal'}
+            fontStyle="normal"
             value={props.token?.name ?? ''}
-            placeholder={i18n.t(
-              'modals.receive.toAccount.selectTokenToReceive'
-            )}
+            placeholder={i18n.t('modals.receive.toAccount.selectTokenToReceive')}
             validator={() => true}
             separatorColor={props.theme.colors.background[13]}
             sideMargins={0}
-            hidePaste={true}
-            hideScan={true}
+            hidePaste
+            hideScan
             editable={false}
           />
           <ImageView
@@ -85,7 +73,7 @@ const TokenField = (props: {
           />
         </LinearLayout>
       </ButtonView>
-    </Fragment>
+    </>
   )
 }
 
@@ -105,29 +93,29 @@ const AmountField = (props: {
   }
 
   return (
-    <Fragment>
+    <>
       <InputLabel
         title={i18n.t('modals.send.transactionInput.amount')}
-        color={'text.0'}
+        color="text.0"
         marginTop={42}
         marginBottom={20}
-        capitalize={true}
+        capitalize
       />
       <InputWithValidation
-        onChangeText={(text) => setValue(text)}
+        onChangeText={text => setValue(text)}
         color={props.theme.colors.text[0]}
         invalidColor={props.theme.colors.text[10]}
-        fontStyle={'normal'}
+        fontStyle="normal"
         value={props.amount !== null ? String(props.amount) : ''}
         placeholder={i18n.t('modals.receive.toAccount.enterAmount')}
         validator={() => true}
         separatorColor={props.theme.colors.background[13]}
         sideMargins={0}
-        hidePaste={true}
-        hideScan={true}
+        hidePaste
+        hideScan
         keyboardType="numeric"
       />
-    </Fragment>
+    </>
   )
 }
 
@@ -137,13 +125,13 @@ const ReferenceField = (props: {
   setReference: React.Dispatch<React.SetStateAction<string>>
 }) => {
   return (
-    <Fragment>
+    <>
       <InputLabel
         title={i18n.t('modals.receive.toAccount.reference')}
-        color={'text.0'}
+        color="text.0"
         marginTop={42}
         marginBottom={20}
-        capitalize={true}
+        capitalize
       />
       <InputWithValidation
         onChangeText={props.setReference}
@@ -154,10 +142,10 @@ const ReferenceField = (props: {
         validator={() => true}
         separatorColor={props.theme.colors.background[13]}
         sideMargins={0}
-        hidePaste={true}
-        hideScan={true}
+        hidePaste
+        hideScan
       />
-    </Fragment>
+    </>
   )
 }
 
@@ -172,17 +160,13 @@ interface Props {
 }
 const ReceiveToAccountModal = (props: Props) => {
   const controller = useSwiperController(true)
-  const theme = useSelector(
-    (state: RootState) => wrapper.theme[state.settings.theme]
-  )
-  const [isAddressTabSelected, setAddressTabAsSelected] = useState<boolean>(
-    true
-  )
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const [isAddressTabSelected, setAddressTabAsSelected] = useState<boolean>(true)
   const [amount, setAmount] = useState<number | string>('')
   const [reference, setReference] = useState<string>('')
   const [token, setToken] = useState<TokenAsset | null | undefined>(null)
 
-  const {wallet, account} = props.route.params
+  const { wallet, account } = props.route.params
 
   const navigate = () => {
     if (!isValid()) return
@@ -204,45 +188,28 @@ const ReceiveToAccountModal = (props: Props) => {
 
   const isValid = () => {
     const conditions: boolean[] = [Boolean(account.address), Boolean(token)]
-    return conditions.every((it) => it)
+    return conditions.every(it => it)
   }
 
   return (
     <SwiperPanel
       controller={controller}
-      fullSize={true}
+      fullSize
       title={i18n.t('modals.receive.title')}
       padding={0}
       rightButton={<ThemedCloseButton onPress={controller.close} />}
       onRightPress={controller.close}
       onClose={() => props.navigation.goBack()}
-      solidColorBG={true}
+      solidColorBG
     >
       <LinearLayout height="100%" width="100%" px="24px" orientation="verti">
-        <TextView
-          mb="24px"
-          alignSelf="center"
-          color="text.3"
-          fontSize="md"
-          fontFamily="bold"
-        >
+        <TextView mb="24px" alignSelf="center" color="text.3" fontSize="md" fontFamily="bold">
           {props.route.params.wallet.name?.toUpperCase() ?? ''}
         </TextView>
-        <AccountCard
-          account={props.route.params.account}
-          hideCopy={true}
-          hideQRCode={true}
-        />
+        <AccountCard account={props.route.params.account} hideCopy hideQRCode />
         <TouchableWithoutFeedback onPress={props.navigation.goBack}>
-          <LinearLayout
-            orientation="horiz"
-            alignSelf="center"
-            alignItems="center"
-            mt="40px"
-          >
-            <ImageView
-              source={require('~/src/assets/images/icon-reselect-green.png')}
-            />
+          <LinearLayout orientation="horiz" alignSelf="center" alignItems="center" mt="40px">
+            <ImageView source={require('~/src/assets/images/icon-reselect-green.png')} />
             <TextView ml="6px" color="primary" fontFamily="medium">
               {i18n.t('modals.send.transactionInput.selectDifferentAccount')}
             </TextView>
@@ -254,28 +221,16 @@ const ReceiveToAccountModal = (props: Props) => {
           firstTabLabel={i18n.t('modals.receive.toAccount.yourAddress')}
           secondTabLabel={i18n.t('modals.receive.toAccount.requestTokens')}
           mb={isAddressTabSelected ? 38 : 46}
-          capitalize={true}
+          capitalize
         />
         {isAddressTabSelected ? (
-          <QRCodeWithCopyButton
-            qrCodeValue={props.route.params.account.address ?? ''}
-          />
+          <QRCodeWithCopyButton qrCodeValue={props.route.params.account.address ?? ''} />
         ) : (
           <LinearLayout orientation="verti" justifyContent="space-between">
-            <TokenField
-              theme={theme}
-              token={token}
-              setToken={setToken}
-              nav={props.navigation}
-              account={account}
-            />
+            <TokenField theme={theme} token={token} setToken={setToken} nav={props.navigation} account={account} />
             <AmountField theme={theme} amount={amount} setAmount={setAmount} />
-            <ReferenceField
-              theme={theme}
-              reference={reference}
-              setReference={setReference}
-            />
-            <LinearLayout width={'100%'} my={30}>
+            <ReferenceField theme={theme} reference={reference} setReference={setReference} />
+            <LinearLayout width="100%" my={30}>
               <ThemedButton
                 label={i18n.t('modals.receive.toAccount.generateQrCode')}
                 srcIcon={require('~/src/assets/images/icon-qrcode-green.png')}

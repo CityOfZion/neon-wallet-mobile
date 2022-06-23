@@ -1,6 +1,6 @@
-import {HttpExclude, HttpExpose} from '@simpli/serialized-request'
+import { HttpExclude, HttpExpose } from '@simpli/serialized-request'
 
-import {TransactionTransferType} from './TransactionAddressSummary'
+import { TransactionTransferType } from './TransactionAddressSummary'
 
 @HttpExclude()
 export class TransactionAddressNFT {
@@ -20,6 +20,6 @@ export class TransactionAddressNFT {
   tokenId!: string
 
   constructor(data: Omit<TransactionAddressNFT, 'type'>) {
-    Object.assign(this, {...data, type: TransactionTransferType.NFT})
+    Object.assign(this, { ...data, type: TransactionTransferType.NFT })
   }
 }

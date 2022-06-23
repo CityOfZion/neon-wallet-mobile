@@ -1,31 +1,19 @@
-import {
-  SendAssetConfig,
-  DoInvokeConfig,
-} from '@cityofzion/neon-api/lib/funcs/types'
-import {tx} from '@cityofzion/neon-core'
-import {api, nep5, wallet} from '@cityofzion/neon-js'
+import { SendAssetConfig, DoInvokeConfig } from '@cityofzion/neon-api/lib/funcs/types'
+import { tx } from '@cityofzion/neon-core'
+import { api, nep5, wallet } from '@cityofzion/neon-js'
 import type * as AsteroidSDK from '@moonlight-io/asteroid-sdk-js'
 import i18n from 'i18n-js'
 import moment from 'moment'
-import {Platform, NativeModules, ImageLoadEventData} from 'react-native'
+import { Platform, NativeModules, ImageLoadEventData } from 'react-native'
 
-import {appBus} from '~/src/app/AppBus'
-import {AsteroidHelper} from '~/src/helpers/AsteroidHelper'
-import {ContractInvocationMulti} from '~/src/helpers/NeonWcAdapter'
-import {UtilsHelper} from '~/src/helpers/UtilsHelper'
-import {Account} from '~/src/models/redux/Account'
-import {Settings} from '~/src/models/redux/Settings'
-import {
-  BlockchainServiceKey,
-  IBlockchainService,
-  AssetInfo,
-  IClaimable,
-  SenderTransactionInfo,
-} from '~src/blockchain'
-import {NeoLegacyProviderOption} from '~src/blockchain/NeoLegacy'
-import {TNeoLegacyProvider} from '~src/blockchain/NeoLegacy/providers'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {NeoNative} from '~src/native/NeoNative'
+import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
+import { UtilsHelper } from '~/src/helpers/UtilsHelper'
+import { Account } from '~/src/models/redux/Account'
+import { BlockchainServiceKey, IBlockchainService, AssetInfo, IClaimable, SenderTransactionInfo } from '~src/blockchain'
+import { NeoLegacyProviderOption } from '~src/blockchain/NeoLegacy'
+import { TNeoLegacyProvider } from '~src/blockchain/NeoLegacy/providers'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { NeoNative } from '~src/native/NeoNative'
 
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 const feeTokenImg = require('~src/assets/nep5/png/GAS.png')
@@ -33,7 +21,7 @@ const SDK: typeof AsteroidSDK = require('~src/vendor/asteroid-sdk')
 export class BSNeoLegacy implements IClaimable, IBlockchainService {
   readonly networkDeprecatedLabel = 'MainNet'
   readonly defaultNodeNet = 'http://seed1.ngd.network:10332'
-  cozTip: {address: string; token: string; hash: string}
+  cozTip: { address: string; token: string; hash: string }
   provider: TNeoLegacyProvider
   key: BlockchainServiceKey
   readonly icon = icon
@@ -53,7 +41,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
       decimals: 8,
     },
   ]
-  readonly feeToken: {hash: string; token: string; img: ImageLoadEventData}
+  readonly feeToken: { hash: string; token: string; img: ImageLoadEventData }
   readonly wcChains: string[]
   accountsPool: Account[] = []
   constructor() {
@@ -83,38 +71,32 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   generateWif(mnemonic: string, index: number) {
     const keychain = AsteroidHelper.getKeychainFromMnemonic(mnemonic)
 
-    const childKey = keychain.generateChildKey(
-      this.platform,
-      this.derivationPath.replace(/\?$/, index.toString())
-    )
+    const childKey = keychain.generateChildKey(this.platform, this.derivationPath.replace(/\?$/, index.toString()))
 
     return childKey.getWIF()
   }
 
-  generateAccount(
-    mnemonic: string,
-    index: number
-  ): {wif: string; address: string} {
+  generateAccount(mnemonic: string, index: number): { wif: string; address: string } {
     const wif = this.generateWif(mnemonic, index)
-    const {WIF, address} = new wallet.Account(wif)
-    return {wif: WIF, address}
+    const { WIF, address } = new wallet.Account(wif)
+    return { wif: WIF, address }
   }
 
   generateAccountFromWif(wif: string) {
-    const {address} = new wallet.Account(wif)
+    const { address } = new wallet.Account(wif)
     return address
   }
 
   async sendTransaction(sendTx: SenderTransactionInfo) {
-    const {token, senderAddress, receiverAddress, feeAmount, tip} = sendTx
+    const { token, senderAddress, receiverAddress, feeAmount, tip } = sendTx
     const fees = feeAmount
 
     if (!token) throw new Error('Token not defined')
     if (!senderAddress) throw new Error('Sender address not defined')
     if (!receiverAddress) throw new Error('Receiver address not defined')
 
-    const {symbol, amount} = token
-    const nativeAssets = this.assets.map(({name}) => {
+    const { symbol, amount } = token
+    const nativeAssets = this.assets.map(({ name }) => {
       return name
     })
 
@@ -143,39 +125,32 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   }
 
   async decryptKey(encryptedKey: string, password: string) {
-    return new Promise<{address: string; wif: string}>(
-      async (resolve, reject) => {
-        if (Platform.OS === 'ios') {
-          try {
-            NativeModules.RNNeoSdkBindings.decryptNep2(
-              encryptedKey,
-              password,
-              (wif: string | null) => {
-                if (wif) {
-                  const newAccount = new wallet.Account(wif)
-                  if (newAccount.address)
-                    resolve({address: newAccount.address, wif})
-                  else reject(new Error('Key decryption failed'))
-                } else {
-                  reject(new Error('Key decryption failed'))
-                }
-              }
-            )
-          } catch (error) {
-            reject(new Error('Key decryption failed'))
-          }
-        } else {
-          try {
-            const wif = await NeoNative.decryptNep2(password, encryptedKey)
-            const newAccount = new wallet.Account(wif)
-            if (newAccount.address) resolve({address: newAccount.address, wif})
-            else reject(new Error('Key decryption failed'))
-          } catch (error) {
-            reject(new Error('Key decryption failed'))
-          }
+    return new Promise<{ address: string; wif: string }>(async (resolve, reject) => {
+      if (Platform.OS === 'ios') {
+        try {
+          NativeModules.RNNeoSdkBindings.decryptNep2(encryptedKey, password, (wif: string | null) => {
+            if (wif) {
+              const newAccount = new wallet.Account(wif)
+              if (newAccount.address) resolve({ address: newAccount.address, wif })
+              else reject(new Error('Key decryption failed'))
+            } else {
+              reject(new Error('Key decryption failed'))
+            }
+          })
+        } catch {
+          reject(new Error('Key decryption failed'))
+        }
+      } else {
+        try {
+          const wif = await NeoNative.decryptNep2(password, encryptedKey)
+          const newAccount = new wallet.Account(wif)
+          if (newAccount.address) resolve({ address: newAccount.address, wif })
+          else reject(new Error('Key decryption failed'))
+        } catch {
+          reject(new Error('Key decryption failed'))
         }
       }
-    )
+    })
   }
 
   validateAddress(address: string) {
@@ -195,7 +170,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   }
 
   private async getNeoAccount(address: string) {
-    const account = this.accountsPool.find((it) => it.address === address)
+    const account = this.accountsPool.find(it => it.address === address)
     const wifAccount = await account?.getWif()
     return wifAccount ? new wallet.Account(wifAccount) : null
   }
@@ -217,16 +192,16 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     tipReceiverAddress?: string
   ) {
     const neoAccount = await this.getNeoAccount(senderAddress)
-    const listUrls = (await this.provider.getAllNodes()).map((node) => node.url)
+    const listUrls = (await this.provider.getAllNodes()).map(node => node.url)
 
     let intents: tx.TransactionOutput[]
 
     if (tipAmount && tipReceiverAddress) {
-      const tipIntent = api.makeIntent({GAS: tipAmount}, tipReceiverAddress)
-      const assetIntent = api.makeIntent({[asset]: amount}, receiverAddress)
+      const tipIntent = api.makeIntent({ GAS: tipAmount }, tipReceiverAddress)
+      const assetIntent = api.makeIntent({ [asset]: amount }, receiverAddress)
       intents = assetIntent.concat(tipIntent)
     } else {
-      intents = api.makeIntent({[asset]: amount}, receiverAddress)
+      intents = api.makeIntent({ [asset]: amount }, receiverAddress)
     }
 
     if (!neoAccount) {
@@ -235,35 +210,33 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
 
     const apiProvider = new api.neoscan.instance(this.networkDeprecatedLabel)
 
-    const sendResponse = new Promise<SendAssetConfig>(
-      async (resolve, reject) => {
-        let stopSend = true
-        for (let i = 0; i < listUrls.length; i++) {
-          if (!stopSend) {
-            break
-          }
-          const url = listUrls[i]
-          if (url) {
-            setTimeout(async () => {
-              try {
-                const sendResponse = await api.sendAsset({
-                  url,
-                  account: neoAccount,
-                  api: apiProvider,
-                  intents,
-                  fees,
-                })
-                stopSend = true
-                resolve(sendResponse)
-              } catch (error) {
-                reject(error)
-                throw new Error(error.message)
-              }
-            }, 8000)
-          }
+    const sendResponse = new Promise<SendAssetConfig>(async (resolve, reject) => {
+      let stopSend = true
+      for (let i = 0; i < listUrls.length; i++) {
+        if (!stopSend) {
+          break
+        }
+        const url = listUrls[i]
+        if (url) {
+          setTimeout(async () => {
+            try {
+              const sendResponse = await api.sendAsset({
+                url,
+                account: neoAccount,
+                api: apiProvider,
+                intents,
+                fees,
+              })
+              stopSend = true
+              resolve(sendResponse)
+            } catch (error: any) {
+              reject(error)
+              throw new Error(error.message)
+            }
+          }, 8000)
         }
       }
-    )
+    })
 
     return (await sendResponse).tx?.hash ?? null
   }
@@ -278,12 +251,8 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   ) {
     const neoAccount = await this.getNeoAccount(senderAddress)
     const pool = await this.provider.getAllNodes()
-    const height = pool.reduce(
-      (max, node) => Math.max(max, node.height ?? 0),
-      pool[0]?.height ?? 0
-    )
-    const url =
-      pool.find((it) => it.height === height)?.url ?? this.defaultNodeNet
+    const height = pool.reduce((max, node) => Math.max(max, node.height ?? 0), pool[0]?.height ?? 0)
+    const url = pool.find(it => it.height === height)?.url ?? this.defaultNodeNet
 
     if (!neoAccount) {
       throw new Error('Neo Account not found')
@@ -291,17 +260,12 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
 
     const apiProvider = new api.neoscan.instance(this.networkDeprecatedLabel)
 
-    const scBuilder = nep5.abi.transfer(
-      token.hash,
-      neoAccount.address,
-      receiverAddress,
-      token.amount
-    )
+    const scBuilder = nep5.abi.transfer(token.hash, neoAccount.address, receiverAddress, token.amount)
 
     let invokeResponse: DoInvokeConfig
 
     if (tipAmount && tipReceiverAddress) {
-      const tipIntent = api.makeIntent({GAS: tipAmount}, tipReceiverAddress)
+      const tipIntent = api.makeIntent({ GAS: tipAmount }, tipReceiverAddress)
       invokeResponse = await api.doInvoke({
         api: apiProvider,
         url,
@@ -325,7 +289,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
 
   async claimGas(address: string) {
     try {
-      const account = this.accountsPool.find((it) => it.address === address)
+      const account = this.accountsPool.find(it => it.address === address)
 
       const neoAccount = await this.getNeoAccount(address)
 
@@ -334,16 +298,15 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
       }
 
       const response = await this.provider.getBalance(address)
-      const balance = response.balance.find((it) => it.assetSymbol === 'NEO')
+      const balance = response.balance.find(it => it.assetSymbol === 'NEO')
       const amount = balance?.amount ?? null
       const requiresTransaction = Boolean(amount)
 
       const apiProvider = new api.neoscan.instance(this.networkDeprecatedLabel)
 
       const lastClaimedTransaction =
-        account?.flattedAllTransactions.find(
-          (it) => it.senderAddress === 'claim' || it.receiverAddress === 'claim'
-        ) ?? null
+        account?.flattedAllTransactions.find(it => it.senderAddress === 'claim' || it.receiverAddress === 'claim') ??
+        null
 
       const nextClaimAllowed = lastClaimedTransaction?.sentAt
         ? moment(lastClaimedTransaction.sentAt).add(5, 'minutes')
@@ -368,17 +331,12 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
         token: this.cozTip.token,
         hash: this.cozTip.hash,
       }
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error.message)
     }
   }
 
-  private async watchTransaction(
-    txid: string,
-    onComplete?: () => void,
-    maxAttempts = 10,
-    intervalInMs = 3000
-  ) {
+  private async watchTransaction(txid: string, onComplete?: () => void, maxAttempts = 10, intervalInMs = 3000) {
     await UtilsHelper.sleep(intervalInMs)
 
     try {
@@ -387,12 +345,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
       if (onComplete) onComplete()
     } catch {
       if (maxAttempts > 0) {
-        await this.watchTransaction(
-          txid,
-          onComplete,
-          maxAttempts - 1,
-          intervalInMs
-        )
+        await this.watchTransaction(txid, onComplete, maxAttempts - 1, intervalInMs)
       }
     }
   }

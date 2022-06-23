@@ -1,5 +1,5 @@
-import type {DataType} from '@simpli/react-native-storage'
-import {classToPlain} from 'class-transformer'
+import type { DataType } from '@simpli/react-native-storage'
+import { classToPlain } from 'class-transformer'
 
 export abstract class Model {
   static parse<T = any>(dataType: DataType<any>) {

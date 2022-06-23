@@ -1,16 +1,11 @@
 import i18n from 'i18n-js'
 import React from 'react'
-import {ImageLoadEventData} from 'react-native'
-import {showMessage} from 'react-native-flash-message'
+import { ImageLoadEventData } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
 
-import {UtilsHelper} from '~src/helpers/UtilsHelper'
-import {PriorityFee} from '~src/models/PriorityFee'
-import {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import { UtilsHelper } from '~src/helpers/UtilsHelper'
+import { PriorityFee } from '~src/models/PriorityFee'
+import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface IHeaderValue {
   value?: string
@@ -31,21 +26,19 @@ interface Props {
 
 export const HeaderColumn = (props: Props) => {
   return (
-    <LinearLayout orientation={'verti'} weight={props.weight} pt={2} mr={4}>
-      <TextView color={'text.10'} fontFamily={'medium'} fontSize={14}>
+    <LinearLayout orientation="verti" weight={props.weight} pt={2} mr={4}>
+      <TextView color="text.10" fontFamily="medium" fontSize={14}>
         {props.title}
       </TextView>
-      <LinearLayout orientation={'horiz'}>
-        {props.image && (
-          <ImageView alignSelf={'center'} source={props.image} mr={2} mt={1} />
-        )}
+      <LinearLayout orientation="horiz">
+        {props.image && <ImageView alignSelf="center" source={props.image} mr={2} mt={1} />}
         {typeof props.value === 'string' ? (
           <TextView
             color={props.valueTextColor ?? 'text.0'}
-            fontFamily={'medium'}
+            fontFamily="medium"
             fontSize={16}
             numberOfLines={1}
-            ellipsizeMode={'middle'}
+            ellipsizeMode="middle"
           >
             {props.value}
           </TextView>
@@ -54,10 +47,10 @@ export const HeaderColumn = (props: Props) => {
             <TextView
               key={index}
               color={value.color ?? 'text.0'}
-              fontFamily={'medium'}
+              fontFamily="medium"
               fontSize={value.size ?? 16}
               numberOfLines={1}
-              ellipsizeMode={'middle'}
+              ellipsizeMode="middle"
               textAlign={value.align ?? undefined}
             >
               {`${value.value} `}
@@ -65,12 +58,12 @@ export const HeaderColumn = (props: Props) => {
           ))
         )}
         {props.priorityFee && (
-          <TextView color={'#fff'} fontFamily={'semibold'} fontSize={16} mr={2}>
+          <TextView color="#fff" fontFamily="semibold" fontSize={16} mr={2}>
             {` ${props.priorityFee.name.toUpperCase()}`}
           </TextView>
         )}
         <ButtonView
-          width={'100%'}
+          width="100%"
           activeOpacity={props.showCopy ? 0.4 : 1}
           onPress={() => {
             if (props.showCopy && typeof props.value === 'string') {
@@ -82,11 +75,7 @@ export const HeaderColumn = (props: Props) => {
             }
           }}
         >
-          <LinearLayout
-            orientation={'horiz'}
-            maxWidth={props.showCopy ? '93%' : '100%'}
-            alignItems={'flex-end'}
-          >
+          <LinearLayout orientation="horiz" maxWidth={props.showCopy ? '93%' : '100%'} alignItems="flex-end">
             {props.showCopy && (
               <LinearLayout>
                 <ImageView

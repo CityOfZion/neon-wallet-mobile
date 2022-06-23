@@ -1,10 +1,6 @@
-import {
-  HttpExclude,
-  ResponseExpose,
-  ResponseSerialize,
-} from '@simpli/serialized-request'
+import { HttpExclude, ResponseExpose, ResponseSerialize } from '@simpli/serialized-request'
 
-import {ContractMethod} from '../ContractMethod'
+import { ContractMethod } from '../ContractMethod'
 
 @HttpExclude()
 export class ContractResponse {

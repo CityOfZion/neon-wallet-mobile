@@ -15,7 +15,7 @@ export type DoraTypeColors =
   | 'Void'
   | 'Any'
 
-type DoraTypeColorValue = {color: string; textColor: 'dark' | 'light'}
+type DoraTypeColorValue = { color: string; textColor: 'dark' | 'light' }
 
 export const doraTypeColors: Record<DoraTypeColors, DoraTypeColorValue> = {
   Signature: {

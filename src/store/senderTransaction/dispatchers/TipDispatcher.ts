@@ -1,4 +1,4 @@
-import {DispatcherWrapper} from '@simpli/redux-wrapper'
+import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
 export class TipDispatcher extends DispatcherWrapper<
   SenderTransactionActionsType,
@@ -8,8 +8,8 @@ export class TipDispatcher extends DispatcherWrapper<
   readonly type = 'SET_TIP'
 
   readonly reducer: SenderTransactionReducer = (state, action) => {
-    const {tip} = action
+    const { tip } = action
 
-    return this.set(state, {tip})
+    return this.set(state, { tip })
   }
 }
