@@ -1,7 +1,13 @@
 import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
-import { Model } from '~src/app/Model'
-import { SenderTransaction } from '~src/models/redux/SenderTransaction'
+import {
+  SenderTransactionAction,
+  SenderTransactionActionsType,
+  SenderTransactionReducer,
+  SenderTransactionState,
+} from '~/src/types/reducers/sendTransaction'
+import {Model} from '~src/app/Model'
+import {SenderTransaction} from '~src/models/redux/SenderTransaction'
 
 export class ClearStateDispatcher extends DispatcherWrapper<
   SenderTransactionActionsType,

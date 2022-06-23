@@ -6,9 +6,10 @@ import { useSelector } from 'react-redux'
 import { TransactionRequestFailedElementProps } from '../TransactionRequestBase'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import { wrapper } from '~src/app/ApplicationWrapper'
-import { Normalize } from '~src/app/Normalize'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import {RootState} from '~/src/store/RootStore'
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {Normalize} from '~src/app/Normalize'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
 
 export const VerifyMessageFailed = ({ errorMessage }: TransactionRequestFailedElementProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])

@@ -5,18 +5,21 @@ import { Theme } from '~src/enums/Theme'
 import { ReducerApplied } from '@simpli/redux-wrapper'
 import { Security } from '~/src/enums/Security'
 
-export declare global {
-  type SettingsActionsType = 'SET_LANGUAGE' | 'SET_CURRENCY' | 'SET_THEME' | 'SET_SECURITY' | 'SET_IS_FIRST_TIME'
+export type SettingsActionsType =
+  | 'SET_LANGUAGE'
+  | 'SET_CURRENCY'
+  | 'SET_THEME'
+  | 'SET_SECURITY'
+  | 'SET_IS_FIRST_TIME'
 
-  interface SettingsState {
-    language: Lang
-    currency: Currency
-    theme: Theme
-    security: Security
-    isFirstTime: boolean
-  }
-
-  type SettingsAction = SettingsState & Action<SettingsActionsType>
-
-  type SettingsReducer = ReducerApplied<SettingsState, SettingsAction>
+export interface SettingsState {
+  language: Lang
+  currency: Currency
+  theme: Theme
+  security: Security
+  isFirstTime: boolean
 }
+
+export type SettingsAction = SettingsState & Action<SettingsActionsType>
+
+export type SettingsReducer = ReducerApplied<SettingsState, SettingsAction>

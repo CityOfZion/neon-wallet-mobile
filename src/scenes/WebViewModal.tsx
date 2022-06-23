@@ -8,9 +8,10 @@ import { wrapper } from '../app/ApplicationWrapper'
 import { BackButton } from '../components/BackButton'
 import { CopyButton } from '../components/CopyButton'
 import ScreenLayout from '../components/layout/ScreenLayout'
-import { RootStackParamList } from '../navigation/AppNavigation'
-import { ModalStackParamList } from '../navigation/ModalStackNavigation'
-import { LinearLayout, TextView } from '../styles/styled-components'
+import {RootStackParamList} from '../navigation/AppNavigation'
+import {ModalStackParamList} from '../navigation/ModalStackNavigation'
+import {RootState} from '../store/RootStore'
+import {LinearLayout, TextView} from '../styles/styled-components'
 
 export interface WebViewModalParams {
   uri: string

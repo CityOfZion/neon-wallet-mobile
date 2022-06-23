@@ -1,7 +1,13 @@
 import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
-import { Model } from '~src/app/Model'
-import { Account } from '~src/models/redux/Account'
+import {
+  AccountAction,
+  AccountActionsType,
+  AccountReducer,
+  AccountState,
+} from '~/src/types/reducers/account'
+import {Model} from '~src/app/Model'
+import {Account} from '~src/models/redux/Account'
 
 export class ClearStateDispatcher extends DispatcherWrapper<AccountActionsType, AccountState, AccountAction> {
   readonly type = 'CLEAR_STATE_ACCOUNT'

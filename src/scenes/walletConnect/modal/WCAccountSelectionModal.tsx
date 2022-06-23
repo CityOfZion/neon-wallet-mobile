@@ -10,15 +10,19 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { getWCChainByBlockchain, hasWalletconnect } from '~/src/blockchain/common'
 import { AccountCards } from '~/src/components/AccountCards'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
-import { IURI } from '~/src/helpers/UriHelper'
-import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks'
-import { Account } from '~/src/models/redux/Account'
-import { Wallet } from '~/src/models/redux/Wallet'
-import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
-import { TabStackParamList } from '~/src/navigation/TabNavigation'
-import { LinearLayout, TextView } from '~/src/styles/styled-components'
-import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
-import { useWalletConnect } from '~src/contexts/WalletConnectContext'
+import {IURI} from '~/src/helpers/UriHelper'
+import {useTreatNetworkOnWalletConnectFlow} from '~/src/hooks'
+import {Account} from '~/src/models/redux/Account'
+import {Wallet} from '~/src/models/redux/Wallet'
+import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
+import {TabStackParamList} from '~/src/navigation/TabNavigation'
+import {RootState} from '~/src/store/RootStore'
+import {LinearLayout, TextView} from '~/src/styles/styled-components'
+import SwiperPanel, {
+  CloseButton,
+  useSwiperController,
+} from '~src/components/SwiperPanel'
+import {useWalletConnect} from '~src/contexts/WalletConnectContext'
 export interface WCAccountSelectionModalParams {
   wallet: Wallet
   uri?: IURI

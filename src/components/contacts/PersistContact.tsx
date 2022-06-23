@@ -3,21 +3,39 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
-import { Alert, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, Text, Image, ScrollView } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import React, {useCallback, useEffect, useState} from 'react'
+import {
+  Alert,
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  Text,
+  Image,
+  ScrollView,
+  FlatList,
+} from 'react-native'
+import {useDispatch, useSelector} from 'react-redux'
 
-import { wrapper } from '~/src/app/ApplicationWrapper'
-import { getBlockchainByAddress, validateAddressAllBlockchains } from '~/src/blockchain'
-import { TabStackParamList } from '~/src/navigation/TabNavigation'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {
+  getBlockchainByAddress,
+  validateAddressAllBlockchains,
+} from '~/src/blockchain'
+import {TabStackParamList} from '~/src/navigation/TabNavigation'
+import {
+  ContactAddresses,
+  ContactAddressesList,
+} from '~/src/types/reducers/contact'
+import {AsyncDispatch, DispatchResult} from '~/src/types/reducers/root'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import { Contact } from '~src/models/redux/Contact'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { RootStore } from '~src/store/RootStore'
-import { LinearLayout, TextView, ImageView } from '~src/styles/styled-components'
+import {Contact} from '~src/models/redux/Contact'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {RootState, RootStore} from '~src/store/RootStore'
+import {LinearLayout, TextView, ImageView} from '~src/styles/styled-components'
 export interface PersistContactParams {
   contact?: Contact
   startingAddress: string

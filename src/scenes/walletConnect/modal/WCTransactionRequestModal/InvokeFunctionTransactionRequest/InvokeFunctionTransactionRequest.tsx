@@ -12,11 +12,16 @@ import { TransactionRequestMethodComponentProps } from '../WCTransactionRequestM
 import { InvokeFunctionFailed } from './InvokeFunctionFailed'
 import { InvokeFunctionSuccess } from './InvokeFunctionSuccess'
 
-import { wrapper } from '~/src/app/ApplicationWrapper'
-import { blockchainServices, hasWCIntegration } from '~/src/blockchain'
-import { ContractInvocation, ContractInvocationMulti, Signer } from '~/src/helpers/NeonWcAdapter'
-import { RootStore } from '~/src/store/RootStore'
-import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {blockchainServices, hasWCIntegration} from '~/src/blockchain'
+import {
+  ContractInvocation,
+  ContractInvocationMulti,
+  Signer,
+} from '~/src/helpers/NeonWcAdapter'
+import {RootState, RootStore} from '~/src/store/RootStore'
+import {ImageView, LinearLayout, TextView} from '~/src/styles/styled-components'
+import {AsyncDispatch} from '~/src/types/reducers/root'
 
 type ContractDetailsBoxButtonProps = {
   contract: ContractInvocation

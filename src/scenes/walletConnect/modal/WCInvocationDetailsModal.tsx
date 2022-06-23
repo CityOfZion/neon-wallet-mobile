@@ -10,14 +10,18 @@ import ConnectionHeader from '../components/ConnectionHeader'
 import ContractDetailsBox from '../components/ContractDetailsBox'
 import InvocationDetailsParametersBox from '../components/InvocationDetailsParametersBox'
 
-import { wrapper } from '~/src/app/ApplicationWrapper'
-import { blockchainServices, getBlockchainByWCChain } from '~/src/blockchain'
-import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
-import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks'
-import { ContractResponse } from '~/src/models/response/ContractResponse'
-import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
-import { TextView, LinearLayout } from '~/src/styles/styled-components'
-import { ContractInvocation } from '~src/helpers/NeonWcAdapter'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {blockchainServices, getBlockchainByWCChain} from '~/src/blockchain'
+import SwiperPanel, {
+  CloseButton,
+  useSwiperController,
+} from '~/src/components/SwiperPanel'
+import {useTreatNetworkOnWalletConnectFlow} from '~/src/hooks'
+import {ContractResponse} from '~/src/models/response/ContractResponse'
+import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
+import {RootState} from '~/src/store/RootStore'
+import {TextView, LinearLayout} from '~/src/styles/styled-components'
+import {ContractInvocation} from '~src/helpers/NeonWcAdapter'
 
 export interface WCInvocationDetailsModalParams {
   session: SessionTypes.Settled

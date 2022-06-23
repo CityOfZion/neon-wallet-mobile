@@ -6,9 +6,10 @@ import { ImageLoadEventData, SafeAreaView } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { useSelector } from 'react-redux'
 
-import { blockchainList } from '../blockchain'
-import { AsteroidHelper } from '../helpers/AsteroidHelper'
-import { useBlockchainActionsHook } from '../hooks'
+import {blockchainList} from '../blockchain'
+import {AsteroidHelper} from '../helpers/AsteroidHelper'
+import {useBlockchainActionsHook} from '../hooks'
+import {RootState} from '../store/RootStore'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import { wrapper } from '~src/app/ApplicationWrapper'

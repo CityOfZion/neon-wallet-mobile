@@ -1,7 +1,5 @@
 import { ApplicationTheme } from '~src/themes/ApplicationTheme'
 
-export declare global {
-  type ThemeWrapper = {
-    [T: string]: ApplicationTheme
-  }
+export type ThemeWrapper = {
+  [T: string]: ApplicationTheme
 }

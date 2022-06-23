@@ -7,8 +7,10 @@ import React from 'react'
 import { TouchableWithoutFeedback, Platform } from 'react-native'
 import { DefaultTheme } from 'styled-components'
 
-import { wrapper } from '~src/app/ApplicationWrapper'
-import MenuItem, { RightIconType } from '~src/components/MenuItem'
+import {RootState} from '../store/RootStore'
+
+import {wrapper} from '~src/app/ApplicationWrapper'
+import MenuItem, {RightIconType} from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'

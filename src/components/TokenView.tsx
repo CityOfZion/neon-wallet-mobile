@@ -3,11 +3,13 @@ import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { blockchainServices } from '../blockchain'
+import {blockchainServices} from '../blockchain'
+import {RootState} from '../store/RootStore'
 
 import { HeaderColumn } from '~src/components/HeaderColumn'
 import { FilterHelper } from '~src/helpers/FilterHelper'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { SenderTransactionState } from '../types/reducers/sendTransaction'
 
 interface Props {
   transaction: SenderTransactionState

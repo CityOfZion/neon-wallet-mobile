@@ -7,9 +7,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import SelectorList, { SelectorItem } from '~src/components/SelectorList'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import { Lang } from '~src/enums/Lang'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { RootStore } from '~src/store/RootStore'
+import {Lang} from '~src/enums/Lang'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {RootState, RootStore} from '~src/store/RootStore'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>

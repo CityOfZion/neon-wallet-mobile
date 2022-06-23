@@ -1,13 +1,12 @@
-import { ReducerApplied } from '@simpli/redux-wrapper'
-import { Action } from 'redux'
-export declare global {
-  type TimerActionsType = 'SET_TIMER_STATUS'
+import {ReducerApplied} from '@simpli/redux-wrapper'
+import {Action} from 'redux'
 
-  interface TimerState {
-    status: boolean
-  }
+export type TimerActionsType = 'SET_TIMER_STATUS'
 
-  type TimerAction = TimerState & Action<TimerActionsType>
-
-  type TimerReducer = ReducerApplied<TimerState, TimerAction>
+export interface TimerState {
+  status: boolean
 }
+
+export type TimerAction = TimerState & Action<TimerActionsType>
+
+export type TimerReducer = ReducerApplied<TimerState, TimerAction>

@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Image } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { wrapper } from '~/src/app/ApplicationWrapper'
-import { LinearLayout, TextView } from '~/src/styles/styled-components'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {RootState} from '~/src/store/RootStore'
+import {LinearLayout, TextView} from '~/src/styles/styled-components'
 
 type Props = {
   imageUri: string

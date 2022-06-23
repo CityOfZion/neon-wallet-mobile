@@ -19,11 +19,12 @@ import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import { Loader } from '~src/components/loader/loader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import { TokenAsset } from '~src/models/TokenAsset'
-import { Account } from '~src/models/redux/Account'
-import { Wallet } from '~src/models/redux/Wallet'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import {TokenAsset} from '~src/models/TokenAsset'
+import {Account} from '~src/models/redux/Account'
+import {Wallet} from '~src/models/redux/Wallet'
+import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import { RootState } from '~/src/store/RootStore'
 
 export interface ReceiveQrCodeModalParams {
   wallet: Wallet

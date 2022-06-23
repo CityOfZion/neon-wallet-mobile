@@ -2,11 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { Normalize } from '~src/app/Normalize'
-import { BlockchainServiceKey, blockchainServices, SenderTransactionInfo } from '~src/blockchain'
-import { TokenAsset } from '~src/models/TokenAsset'
-import { Account } from '~src/models/redux/Account'
-import { ImageView, TextView } from '~src/styles/styled-components'
+import {RootState} from '../store/RootStore'
+
+import {Normalize} from '~src/app/Normalize'
+import {
+  BlockchainServiceKey,
+  blockchainServices,
+  SenderTransactionInfo,
+} from '~src/blockchain'
+import {TokenAsset} from '~src/models/TokenAsset'
+import {Account} from '~src/models/redux/Account'
+import {ImageView, TextView, ButtonView} from '~src/styles/styled-components'
 interface Props {
   receiverAddress: string
   account: Account

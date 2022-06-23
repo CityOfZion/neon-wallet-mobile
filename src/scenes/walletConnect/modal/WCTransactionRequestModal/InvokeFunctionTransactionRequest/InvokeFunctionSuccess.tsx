@@ -8,11 +8,16 @@ import { TransactionRequestSuccessElementProps } from '../TransactionRequestBase
 
 import { blockchainServices } from '~/src/blockchain'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import { RootStore } from '~/src/store/RootStore'
-import { wrapper } from '~src/app/ApplicationWrapper'
-import { Normalize } from '~src/app/Normalize'
-import { UtilsHelper } from '~src/helpers/UtilsHelper'
-import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import {RootState, RootStore} from '~/src/store/RootStore'
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {Normalize} from '~src/app/Normalize'
+import {UtilsHelper} from '~src/helpers/UtilsHelper'
+import {
+  ButtonView,
+  ImageView,
+  LinearLayout,
+  TextView,
+} from '~src/styles/styled-components'
 
 export const InvokeFunctionSuccess = ({ account, transactionId }: TransactionRequestSuccessElementProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])

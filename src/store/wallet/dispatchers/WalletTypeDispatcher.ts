@@ -1,6 +1,17 @@
 import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
-export class WalletTypeDispatcher extends DispatcherWrapper<WalletActionsType, WalletState, WalletAction> {
+import {
+  WalletAction,
+  WalletActionsType,
+  WalletReducer,
+  WalletState,
+} from '~/src/types/reducers/wallet'
+
+export class WalletTypeDispatcher extends DispatcherWrapper<
+  WalletActionsType,
+  WalletState,
+  WalletAction
+> {
   readonly type = 'SET_WALLET_TYPE'
 
   readonly reducer: WalletReducer = (state, action) => {

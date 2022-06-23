@@ -6,10 +6,11 @@ import React, { useMemo, useState } from 'react'
 import { TouchableHighlight } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { wrapper } from '../app/ApplicationWrapper'
-import { WalletConnectHelper } from '../helpers/WalletConnectHelper'
-import { Account } from '../models/redux/Account'
-import { Wallet } from '../models/redux/Wallet'
+import {wrapper} from '../app/ApplicationWrapper'
+import {WalletConnectHelper} from '../helpers/WalletConnectHelper'
+import {Account} from '../models/redux/Account'
+import {Wallet} from '../models/redux/Wallet'
+import {RootState} from '../store/RootStore'
 
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 

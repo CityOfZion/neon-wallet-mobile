@@ -7,8 +7,9 @@ import { TransactionRequestMethodComponentProps } from '../WCTransactionRequestM
 import { SignMessageFailed } from './SignMessageFailed'
 import { SignMessageSuccess } from './SignMessageSuccess'
 
-import { wrapper } from '~/src/app/ApplicationWrapper'
-import { LinearLayout, TextView } from '~/src/styles/styled-components'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {RootState} from '~/src/store/RootStore'
+import {LinearLayout, TextView} from '~/src/styles/styled-components'
 
 export const SignMessageTransactionRequest = ({
   request,

@@ -3,6 +3,8 @@ import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Animated, Easing, LayoutChangeEvent } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import {RootState} from '../store/RootStore'
+
 import AccountCard from '~src/components/AccountCard'
 import ThemedShadowContainer from '~src/components/themed/ThemedShadowContainer'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'

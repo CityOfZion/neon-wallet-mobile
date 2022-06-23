@@ -3,8 +3,10 @@ import React from 'react'
 import Timeline from 'react-native-timeline-flatlist'
 import { useSelector } from 'react-redux'
 
-import { wrapper } from '~/src/app/ApplicationWrapper'
-import { LinearLayout } from '~src/styles/styled-components'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {RootState} from '~/src/store/RootStore'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
+import {LinearLayout} from '~src/styles/styled-components'
 
 interface IChanges {
   version: string

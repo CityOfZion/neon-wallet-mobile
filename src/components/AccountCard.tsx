@@ -28,7 +28,10 @@ import {
   SpaceProps,
 } from 'styled-system'
 
-import { wrapper } from '~src/app/ApplicationWrapper' //@ts-ignore
+import {RootState} from '../store/RootStore'
+import {OrientationProps, WeightProps} from '../types/styled-components'
+
+import {wrapper} from '~src/app/ApplicationWrapper' //@ts-ignore
 import CardSvg from '~src/assets/images/card.svg'
 import { getBlockchainLogo } from '~src/blockchain'
 import { FilterHelper } from '~src/helpers/FilterHelper'

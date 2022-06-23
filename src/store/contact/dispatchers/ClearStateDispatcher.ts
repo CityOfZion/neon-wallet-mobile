@@ -1,7 +1,13 @@
 import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
-import { Model } from '~src/app/Model'
-import { Contact } from '~src/models/redux/Contact'
+import {
+  ContactAction,
+  ContactActionsType,
+  ContactReducer,
+  ContactState,
+} from '~/src/types/reducers/contact'
+import {Model} from '~src/app/Model'
+import {Contact} from '~src/models/redux/Contact'
 
 export class ClearStateDispatcher extends DispatcherWrapper<ContactActionsType, ContactState, ContactAction> {
   readonly type = 'CLEAR_STATE_CONTACT'

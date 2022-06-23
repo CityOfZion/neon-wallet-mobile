@@ -3,11 +3,13 @@ import allSetlled from 'promise.allsettled'
 import { useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { UtilsHelper } from '../helpers/UtilsHelper'
+import {UtilsHelper} from '../helpers/UtilsHelper'
+import {AsyncDispatch} from '../types/reducers/root'
 
-import { wrapper } from '~src/app/ApplicationWrapper'
-import { BlockchainServiceKey, blockchainServices } from '~src/blockchain'
-import { RootStore } from '~src/store/RootStore'
+import {wrapper} from '~src/app/ApplicationWrapper'
+import {BlockchainServiceKey, blockchainServices} from '~src/blockchain'
+import {RootState, RootStore} from '~src/store/RootStore'
+import { WalletType } from '../types/reducers/wallet'
 
 export type AccountToImport = {
   address: string

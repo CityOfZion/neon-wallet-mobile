@@ -3,11 +3,12 @@ import React, { useState } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { wrapper } from '~/src/app/ApplicationWrapper'
-import { NFTResponse } from '~/src/models/response/NFTResponse'
-import { RootStackParamList } from '~/src/navigation/AppNavigation'
-import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
-import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
+import {wrapper} from '~/src/app/ApplicationWrapper'
+import {NFTResponse} from '~/src/models/response/NFTResponse'
+import {RootStackParamList} from '~/src/navigation/AppNavigation'
+import {WalletStackParamList} from '~/src/navigation/WalletsStackNavigation'
+import {RootState} from '~/src/store/RootStore'
+import {ImageView, LinearLayout, TextView} from '~/src/styles/styled-components'
 
 type Props = {
   nft: NFTResponse
