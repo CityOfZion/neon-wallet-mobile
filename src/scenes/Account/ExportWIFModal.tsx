@@ -78,7 +78,7 @@ export const ExportWIFModal = ({ navigation, route }: Props) => {
       controller={controller}
       fullSize
       paddingTop={0}
-      title={i18n.t('modals.editAccount.title')}
+      title={i18n.t('modals.ExportWIFModal.title')}
       rightButton={<ThemedCloseButton />}
       onRightPress={controller.close}
       onClose={handleClose}
