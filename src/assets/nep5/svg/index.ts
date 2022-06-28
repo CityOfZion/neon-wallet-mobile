@@ -1,3 +1,5 @@
+export const LRB = require('./LRB.svg')
+export const USDL = require('./USDL.svg')
 export const ACAT = require('./ACAT.svg')
 export const APH = require('./APH.svg')
 export const APT = require('./APT.svg')
