@@ -1,4 +1,5 @@
 import { JsonRpcRequest } from '@json-rpc-tools/utils'
+import { NetInfoSubscription } from '@react-native-community/netinfo'
 import { NavigationContainer, RouteProp, NavigationContainerRef } from '@react-navigation/native'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
@@ -58,7 +59,7 @@ const AppNavigation: React.FC<Props> = props => {
 
   const walletConnectCtx = useWalletConnect()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<any>()
 
   const [onboardingSeen, setOnboardingSeen] = useState(true)
   const [welcomeToNWSeen, setWelcomeToNWSeen] = useState(true)
@@ -236,6 +237,14 @@ const AppNavigation: React.FC<Props> = props => {
       },
     })
   }, [walletConnectCtx.requests, walletConnectCtx.sessions])
+
+  useEffect(() => {
+    const unsubscribe: NetInfoSubscription = dispatch(RootStore.network.actions.watchConnection())
+
+    return () => {
+      unsubscribe()
+    }
+  }, [])
 
   const getInitialRouteName = () => {
     return onboardingSeen

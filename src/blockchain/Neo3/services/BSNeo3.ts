@@ -11,12 +11,12 @@ import { ImageLoadEventData, NativeModules, Platform } from 'react-native'
 import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { NeoNode } from '~/src/models/NeoNode'
-import { Tokens } from '~/src/models/TokenResponse';
-import { Account } from '~/src/models/redux/Account';
-import { NFTResponse } from '~/src/models/response/NFTResponse';
-import { NFTSResponse } from '~/src/models/response/NFTSResponse';
+import { Tokens } from '~/src/models/TokenResponse'
+import { Account } from '~/src/models/redux/Account'
+import { NFTResponse } from '~/src/models/response/NFTResponse'
+import { NFTSResponse } from '~/src/models/response/NFTSResponse'
 import { NeoNative } from '~/src/native/NeoNative'
-import tokens from '~src/assets/tokens/neo3.json';
+import tokens from '~src/assets/tokens/neo3.json'
 import {
   IBlockchainService,
   BlockchainServiceKey,
@@ -25,10 +25,10 @@ import {
   IClaimable,
   IWalletConnect,
   INFT,
-} from '~src/blockchain';
-import { Neo3ProviderOptions } from '~src/blockchain/Neo3';
-import { Neo3Provider } from '~src/blockchain/Neo3/providers/common';
-import { ContractInvocationMulti, NeonWcAdapter } from '~src/helpers/NeonWcAdapter';
+} from '~src/blockchain'
+import { Neo3ProviderOptions } from '~src/blockchain/Neo3'
+import { Neo3Provider } from '~src/blockchain/Neo3/providers/common'
+import { ContractInvocationMulti, NeonWcAdapter } from '~src/helpers/NeonWcAdapter'
 
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 const feeTokenImg = require('~src/assets/nep5/png/GAS.png')

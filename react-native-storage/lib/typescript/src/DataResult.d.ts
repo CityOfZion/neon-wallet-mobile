@@ -1,6 +1,6 @@
-import {ClassTransformOptions} from 'class-transformer'
-import type {DataType} from './types'
-import type {DataStorage} from './DataStorage'
+import { ClassTransformOptions } from 'class-transformer'
+import type { DataType } from './types'
+import type { DataStorage } from './DataStorage'
 export declare class DataResult<T = any> {
   constructor(dataStore: DataStorage, dataType?: DataType<T>)
   private readonly dataStore

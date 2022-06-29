@@ -22,7 +22,7 @@ const AssetQuoteComponent: React.FC<Props> = props => {
   const amountExchanged = props.token.exchangeToken(currency, exchange)
 
   const ratio = useMemo(() => {
-    if(exchange){
+    if (exchange) {
       return props.token.getCurrencyRatio(currency, exchange)
     }
     return null
@@ -33,7 +33,6 @@ const AssetQuoteComponent: React.FC<Props> = props => {
     : ''
 
   const valueText = FilterHelper.currency(amountExchanged, currency, language)
-
 
   return (
     <LinearLayout orientation="horiz" width="100%" alignItems="center">
@@ -106,4 +105,4 @@ AssetQuoteComponent.propTypes = {
   token: PropTypes.instanceOf(TokenAsset).isRequired,
 }
 
-export default AssetQuoteComponent;
+export default AssetQuoteComponent

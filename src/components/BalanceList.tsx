@@ -4,8 +4,8 @@ import { FlatList, TouchableOpacity } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { RootState } from '../store/RootStore'
-import { Exchange } from '../types/exchange';
-import { LinearLayoutProps } from '../types/styled-components';
+import { Exchange } from '../types/exchange'
+import { LinearLayoutProps } from '../types/styled-components'
 import SkeletonContainer from './SkeletonContainer'
 
 import { Normalize } from '~src/app/Normalize'

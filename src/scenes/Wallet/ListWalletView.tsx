@@ -10,27 +10,27 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { TabStackParamList } from '../../navigation/TabNavigation'
 
-import SkeletonContainer from '~/src/components/SkeletonContainer';
+import SkeletonContainer from '~/src/components/SkeletonContainer'
 import { useExchange } from '~/src/hooks/useExchange'
 import { Exchange } from '~/src/types/exchange'
-import { SyncDispatch } from '~/src/types/reducers/root';
-import { wrapper } from '~src/app/ApplicationWrapper';
-import { Normalize } from '~src/app/Normalize';
-import BalanceList from '~src/components/BalanceList';
-import Notification from '~src/components/Notification';
-import ScreenLayout from '~src/components/layout/ScreenLayout';
-import WalletPicker from '~src/components/misc/WalletPicker';
-import ThemedMoreButton from '~src/components/themed/ThemedMoreButton';
-import { Lang } from '~src/enums/Lang';
-import { FilterHelper } from '~src/helpers/FilterHelper';
-import { TokenAsset } from '~src/models/TokenAsset';
-import { Wallet } from '~src/models/redux/Wallet';
-import { RootStackParamList } from '~src/navigation/AppNavigation';
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation';
-import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation';
-import { RootState, RootStore } from '~src/store/RootStore';
-import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components';
-import { ApplicationTheme } from '~src/themes/ApplicationTheme';
+import { SyncDispatch } from '~/src/types/reducers/root'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Normalize } from '~src/app/Normalize'
+import BalanceList from '~src/components/BalanceList'
+import Notification from '~src/components/Notification'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
+import WalletPicker from '~src/components/misc/WalletPicker'
+import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
+import { Lang } from '~src/enums/Lang'
+import { FilterHelper } from '~src/helpers/FilterHelper'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Wallet } from '~src/models/redux/Wallet'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
+import { RootState, RootStore } from '~src/store/RootStore'
+import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ApplicationTheme } from '~src/themes/ApplicationTheme'
 
 type Props = WalletStackParamList & RootStackParamList & TabStackParamList & ModalStackParamList
 

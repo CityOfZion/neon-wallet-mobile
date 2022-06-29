@@ -8,8 +8,8 @@ import moment from 'moment'
 import { Platform, NativeModules, ImageLoadEventData } from 'react-native'
 
 import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
-import { Tokens } from '~/src/models/TokenResponse';
-import { Account } from '~/src/models/redux/Account';
+import { Tokens } from '~/src/models/TokenResponse'
+import { Account } from '~/src/models/redux/Account'
 import tokens from '~src/assets/tokens/neoLgeacy.json'
 import { BlockchainServiceKey, IBlockchainService, AssetInfo, IClaimable, SendTransactionData } from '~src/blockchain'
 import { NeoLegacyProviderOption } from '~src/blockchain/NeoLegacy'

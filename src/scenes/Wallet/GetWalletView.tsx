@@ -12,18 +12,18 @@ import { ModalStackParamList } from '../../navigation/ModalStackNavigation'
 import { TabStackParamList } from '../../navigation/TabNavigation'
 
 import { AccountCards } from '~/src/components/AccountCards'
-import { useExchange } from '~/src/hooks/useExchange';
-import { AsyncDispatch, SyncDispatch } from '~/src/types/reducers/root';
-import { wrapper } from '~src/app/ApplicationWrapper';
-import HeaderActionButton from '~src/components/layout/HeaderActionButton';
-import HeaderBar from '~src/components/layout/HeaderBar';
-import ScreenLayout from '~src/components/layout/ScreenLayout';
-import ScreenLoader from '~src/components/loader/ScreenLoader';
-import { Account } from '~src/models/redux/Account';
-import { Wallet } from '~src/models/redux/Wallet';
-import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation';
-import { RootState, RootStore } from '~src/store/RootStore';
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components';
+import { useExchange } from '~/src/hooks/useExchange'
+import { AsyncDispatch, SyncDispatch } from '~/src/types/reducers/root'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import HeaderActionButton from '~src/components/layout/HeaderActionButton'
+import HeaderBar from '~src/components/layout/HeaderBar'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
+import { Account } from '~src/models/redux/Account'
+import { Wallet } from '~src/models/redux/Wallet'
+import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
+import { RootState, RootStore } from '~src/store/RootStore'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface GetWalletProps {
   route: RouteProp<WalletStackParamList, 'GetWallet'>

@@ -18,16 +18,16 @@ import AccountCard from '~/src/components/AccountCard'
 import SwiperPanel, { PANEL_OFFSET, useSwiperController } from '~/src/components/SwiperPanel'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
-import { useExchange } from '~/src/hooks/useExchange';
-import { TokenAsset } from '~/src/models/TokenAsset';
-import { Account } from '~/src/models/redux/Account';
-import { Contact } from '~/src/models/redux/Contact';
-import { Wallet } from '~/src/models/redux/Wallet';
-import { RootStackParamList } from '~/src/navigation/AppNavigation';
-import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation';
-import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation';
-import { RootState } from '~/src/store/RootStore';
-import { LinearLayout, TextView } from '~/src/styles/styled-components';
+import { useExchange } from '~/src/hooks/useExchange'
+import { TokenAsset } from '~/src/models/TokenAsset'
+import { Account } from '~/src/models/redux/Account'
+import { Contact } from '~/src/models/redux/Contact'
+import { Wallet } from '~/src/models/redux/Wallet'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
+import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
+import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
+import { RootState } from '~/src/store/RootStore'
+import { LinearLayout, TextView } from '~/src/styles/styled-components'
 
 export interface SendTransactionModalParams {
   account: Account

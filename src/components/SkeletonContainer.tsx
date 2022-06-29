@@ -50,4 +50,4 @@ const SkeletonContainer: React.FC<ISkeletonContainer> = ({ children, skeletonTyp
   )
 }
 
-export default SkeletonContainer;
+export default SkeletonContainer

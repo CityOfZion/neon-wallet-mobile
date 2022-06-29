@@ -29,9 +29,9 @@ import {
 } from 'styled-system'
 
 import { RootState } from '../store/RootStore'
-import { Exchange } from '../types/exchange';
-import { OrientationProps, WeightProps } from '../types/styled-components';
-import SkeletonContainer from './SkeletonContainer';
+import { Exchange } from '../types/exchange'
+import { OrientationProps, WeightProps } from '../types/styled-components'
+import SkeletonContainer from './SkeletonContainer'
 
 import { wrapper } from '~src/app/ApplicationWrapper' //@ts-ignore
 import CardSvg from '~src/assets/images/card.svg'

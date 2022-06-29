@@ -1,10 +1,10 @@
-import { reducer as networkReducer } from 'react-native-offline'
 import { combineReducers } from 'redux'
 
 import { AccountReducer } from '~src/store/account/AccountReducer'
 import { AppReducer } from '~src/store/app/AppReducer'
 import { ContactReducer } from '~src/store/contact/ContactReducer'
 import { LoadingReducer } from '~src/store/loading/LoadingReducer'
+import { NetworkReducer } from '~src/store/network/NetworkReducer'
 import { SettingsReducer } from '~src/store/settings/SettingsReducer'
 import { TimerReducer } from '~src/store/timer/TimerReducer'
 import { WalletReducer } from '~src/store/wallet/WalletReducer'
@@ -20,6 +20,7 @@ export abstract class RootStore {
   static readonly contact = new ContactReducer()
   static readonly timer = new TimerReducer()
   static readonly wcReducer = new WalletConnectReducer()
+  static readonly network = new NetworkReducer()
 
   static readonly reducers = combineReducers({
     app: RootStore.app.reducer,
@@ -28,7 +29,7 @@ export abstract class RootStore {
     account: RootStore.account.reducer,
     loading: RootStore.loading.reducer,
     contact: RootStore.contact.reducer,
-    network: networkReducer,
+    network: RootStore.network.reducer,
     timer: RootStore.timer.reducer,
     wcReducer: RootStore.wcReducer.reducer,
   })

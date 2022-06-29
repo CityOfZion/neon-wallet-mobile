@@ -7,9 +7,9 @@ import { TokenAsset } from '../models/TokenAsset'
 import { RootState } from '../store/RootStore'
 import { Exchange } from '../types/exchange'
 
-import { HeaderColumn } from '~src/components/HeaderColumn';
-import { FilterHelper } from '~src/helpers/FilterHelper';
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components';
+import { HeaderColumn } from '~src/components/HeaderColumn'
+import { FilterHelper } from '~src/helpers/FilterHelper'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
   token: TokenAsset

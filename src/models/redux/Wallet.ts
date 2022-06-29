@@ -3,16 +3,16 @@ import { t } from 'i18n-js'
 import _ from 'lodash'
 import moment, { Moment } from 'moment'
 
-import { Exchange } from '~/src/types/exchange';
-import { WalletState, WalletType } from '~/src/types/reducers/wallet';
-import { Currency } from '~src/enums/Currency';
-import { Lang } from '~src/enums/Lang';
-import { FilterHelper } from '~src/helpers/FilterHelper';
-import { SecurityHelper } from '~src/helpers/SecurityHelper';
-import { UtilsHelper } from '~src/helpers/UtilsHelper';
-import { TokenAsset } from '~src/models/TokenAsset';
-import { Account } from '~src/models/redux/Account';
-import { SenderTransaction } from '~src/models/redux/SenderTransaction';
+import { Exchange } from '~/src/types/exchange'
+import { WalletState, WalletType } from '~/src/types/reducers/wallet'
+import { Currency } from '~src/enums/Currency'
+import { Lang } from '~src/enums/Lang'
+import { FilterHelper } from '~src/helpers/FilterHelper'
+import { SecurityHelper } from '~src/helpers/SecurityHelper'
+import { UtilsHelper } from '~src/helpers/UtilsHelper'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Account } from '~src/models/redux/Account'
+import { SenderTransaction } from '~src/models/redux/SenderTransaction'
 
 @HttpExclude()
 export class Wallet implements WalletState {

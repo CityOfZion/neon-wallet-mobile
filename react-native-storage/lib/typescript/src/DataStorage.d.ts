@@ -1,5 +1,5 @@
-import type {DataType} from './types'
-import {DataResult} from './DataResult'
+import type { DataType } from './types'
+import { DataResult } from './DataResult'
 export declare class DataStorage {
   constructor(key: string)
   readonly key: string

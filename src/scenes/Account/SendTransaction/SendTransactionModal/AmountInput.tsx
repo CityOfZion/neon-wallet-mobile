@@ -6,11 +6,11 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { useExchange } from '~/src/hooks/useExchange';
-import { TokenAsset } from '~/src/models/TokenAsset';
-import { Account } from '~/src/models/redux/Account';
-import { RootState } from '~/src/store/RootStore';
-import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components';
+import { useExchange } from '~/src/hooks/useExchange'
+import { TokenAsset } from '~/src/models/TokenAsset'
+import { Account } from '~/src/models/redux/Account'
+import { RootState } from '~/src/store/RootStore'
+import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {
   selectedToken?: TokenAsset

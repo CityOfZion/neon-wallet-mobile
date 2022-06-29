@@ -105,7 +105,7 @@ export const WalletConnectContextProvider: React.FC<{
             reason: ERROR.GENERIC.format(),
           })
         )
-      );
+      )
     } catch {}
 
     setStorage(st)
@@ -264,8 +264,8 @@ export const WalletConnectContextProvider: React.FC<{
         if (alreadyApproved) {
           await approve()
         } else if (autoAcceptCallback) {
-          let address: string | undefined;
-          let chainId: string | undefined;
+          let address: string | undefined
+          let chainId: string | undefined
           const foundSession = findSessionByTopic(requestEvent.topic)
           const acc = foundSession?.state.accounts[0]
           if (acc) {

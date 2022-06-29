@@ -1,4 +1,4 @@
-import type {CallbackType} from './types'
+import type { CallbackType } from './types'
 export declare const StorageListener: {
   emitStorageStart(name: string): void
   emitStorageEnd(name: string): void
@@ -15,8 +15,5 @@ export declare const StorageListener: {
   clearListeners(): void
   startListenerCount(cb?: CallbackType | null): number
   endListenerCount(cb?: CallbackType | null): number
-  listenerCount(
-    cb: CallbackType | null | undefined,
-    callbacks: CallbackType[]
-  ): number
+  listenerCount(cb: CallbackType | null | undefined, callbacks: CallbackType[]): number
 }
