@@ -33,7 +33,7 @@ const TabSelector = (props: { selected: Tab; onSelect: (t: Tab) => void }) => {
   return (
     <LinearLayout orientation="horiz" mx="16px">
       <TouchableWithoutFeedback onPress={() => !contactsSelected && props.onSelect('contacts')}>
-        <LinearLayout orientation="verti" weight="1">
+        <LinearLayout orientation="verti" weight={1}>
           <TextView
             width="100%"
             fontFamily="bold"
@@ -52,7 +52,7 @@ const TabSelector = (props: { selected: Tab; onSelect: (t: Tab) => void }) => {
         </LinearLayout>
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback onPress={() => contactsSelected && props.onSelect('accounts')}>
-        <LinearLayout orientation="verti" weight="1">
+        <LinearLayout orientation="verti" weight={1}>
           <TextView
             width="100%"
             fontFamily="bold"

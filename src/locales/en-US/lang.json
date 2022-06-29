@@ -432,7 +432,7 @@
       }
     },
     "editWallet": {
-      "title": "Edit",
+      "title": "Customize wallet",
       "preview": "Preview",
       "accountInput": {
         "title": "Account name",

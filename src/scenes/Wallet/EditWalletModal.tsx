@@ -71,7 +71,7 @@ export const EditWalletModal = (props: EditWalletModalProps & EditWalletParams) 
     <SwiperPanel
       padding={20}
       fullSize
-      title={i18n.t('modals.editAccount.title')}
+      title={i18n.t('modals.editWallet.title')}
       rightButton={i18n.t('modals.editWallet.navigation.save')}
       leftButton={i18n.t('modals.editWallet.navigation.cancel')}
       imageSize={[22, 22]}
