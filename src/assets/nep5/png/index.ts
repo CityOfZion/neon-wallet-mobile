@@ -1,4 +1,6 @@
 export const neo3 = {
+  USDL: require('./USDL.png'),
+  LRB: require('./LRB.png'),
   GUARD: require('./GUARD.png'),
   SENNO: require('./SENNO.png'),
   COUP: require('./COUP.png'),
