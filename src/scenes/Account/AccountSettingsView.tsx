@@ -6,6 +6,7 @@ import { Alert, TouchableWithoutFeedback } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Normalize } from '~/src/app/Normalize'
 import MenuItem, { RightIconType } from '~/src/components/MenuItem'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import { useLocalAuthentication } from '~/src/hooks'
@@ -97,7 +98,7 @@ export const AccountSettingsView = (props: Props) => {
         }
       />
 
-      {account.accountType === 'standard' && (
+      {account.accountType !== 'watch' && (
         <MenuItem
           title={i18n.t('screens.accountSettingsView.exportWif')}
           icon={require('~src/assets/images/icon-screen-lock-green.png')}
@@ -129,7 +130,8 @@ export const AccountSettingsView = (props: Props) => {
           >
             <ImageView
               resizeMode="center"
-              imageSize={[20, 20]}
+              width={Normalize.scale(20)}
+              height={Normalize.scale(20)}
               source={require('~/src/assets/images/icon-trash-can-primary.png')}
             />
 
