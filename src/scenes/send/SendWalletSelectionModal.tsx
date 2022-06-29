@@ -1,6 +1,6 @@
 import { RouteProp, useNavigationState } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import React, { useState, Fragment } from 'react'
+import React, { useState } from 'react'
 import { ScrollView, TouchableHighlight } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 

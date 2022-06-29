@@ -257,6 +257,36 @@
       "parametersTitle": "Request Parameters",
       "noParameters": "No Parameters"
     },
+    "editAccount": {
+      "title": "#translateme",
+      "preview": "#translateme",
+      "accountInput": {
+        "title": "#translateme",
+        "placeholder": "#translateme"
+      },
+      "selectColor": "#translateme",
+      "navigation": {
+        "cancel": "#translateme",
+        "save": "#translateme"
+      }
+    },
+    "editWallet": {
+      "title": "#translateme",
+      "preview": "#translateme",
+      "accountInput": {
+        "title": "#translateme",
+        "placeholder": "#translateme"
+      },
+      "navigation": {
+        "ok": "#translateme",
+        "cancel": "#translateme",
+        "save": "#translateme"
+      },
+      "walletName": "#translateme",
+      "namePlaceholder": "#translateme",
+      "invalidName": "#translateme",
+      "search": "#translateme"
+    },
     "send": {
       "title": "Send",
       "walletSelection": {

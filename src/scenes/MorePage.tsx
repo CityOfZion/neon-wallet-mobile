@@ -7,6 +7,8 @@ import React from 'react'
 import { TouchableWithoutFeedback, Platform } from 'react-native'
 import { DefaultTheme } from 'styled-components'
 
+import { RootStackParamList } from '../navigation/AppNavigation'
+
 import { wrapper } from '~src/app/ApplicationWrapper'
 import MenuItem, { RightIconType } from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -15,7 +17,7 @@ import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface MoreProps {
-  navigation: StackNavigationProp<MoreStackParamList & ModalStackParamList>
+  navigation: StackNavigationProp<RootStackParamList & MoreStackParamList & ModalStackParamList>
   theme: DefaultTheme
   navigationOptions: object
   route: RouteProp<MoreStackParamList, 'MorePage'>

@@ -6,6 +6,7 @@ import { Alert, TouchableWithoutFeedback } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Normalize } from '~/src/app/Normalize'
 import MenuItem, { RightIconType } from '~/src/components/MenuItem'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import { useLocalAuthentication } from '~/src/hooks'
@@ -116,7 +117,7 @@ export const WalletSettingsView = (props: Props) => {
         <TextView fontSize={14} fontFamily="bold" color={theme.colors.background[3]} alignItems="center">
           {i18n.t('screens.walletSettingsView.deleteTitle').toUpperCase()}
         </TextView>
-        <TextView color={theme.colors.text[0]} marginBottom="30px">
+        <TextView color={theme.colors.text[0]} marginBottom="30px" paddingX="24px" textAlign="center">
           {i18n.t('screens.walletSettingsView.deleteSubtitle')}
         </TextView>
 
@@ -133,7 +134,8 @@ export const WalletSettingsView = (props: Props) => {
           >
             <ImageView
               resizeMode="center"
-              imageSize={[20, 20]}
+              width={Normalize.scale(20)}
+              height={Normalize.scale(20)}
               source={require('~/src/assets/images/icon-trash-can-primary.png')}
             />
 
