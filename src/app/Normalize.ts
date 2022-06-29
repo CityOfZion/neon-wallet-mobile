@@ -1,7 +1,7 @@
 import { Dimensions, PixelRatio } from 'react-native'
 
 export abstract class Normalize {
-  static scale<T extends string | number>(value?: string | number): T {
+  static scale<T extends string | number>(value?: T): T {
     let size: number
 
     if (typeof value === 'string') {

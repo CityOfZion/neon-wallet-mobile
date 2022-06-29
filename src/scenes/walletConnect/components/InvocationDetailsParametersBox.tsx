@@ -7,11 +7,11 @@ import { useSelector } from 'react-redux'
 import { Param } from '../modal/WCInvocationDetailsModal'
 import WalletConnectBox from './WalletConnectBox'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {DoraTypeColors, doraTypeColors} from '~/src/assets/doraTypeColors'
-import {UtilsHelper} from '~/src/helpers/UtilsHelper'
-import {RootState} from '~/src/store/RootStore'
-import {ImageView, LinearLayout, TextView} from '~/src/styles/styled-components'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { DoraTypeColors, doraTypeColors } from '~/src/assets/doraTypeColors'
+import { UtilsHelper } from '~/src/helpers/UtilsHelper'
+import { RootState } from '~/src/store/RootStore'
+import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 export type Props = {
   data: Param

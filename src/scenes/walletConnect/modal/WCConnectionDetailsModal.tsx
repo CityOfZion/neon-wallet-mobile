@@ -6,19 +6,13 @@ import React, { useCallback, useMemo } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import {getBlockchainLogo} from '~/src/blockchain'
-import {
-  BlockchainServiceKey,
-  getBlockchainByWCChain,
-} from '~/src/blockchain/common'
-import {ConnectedAccountAndWallet} from '~/src/components/ConnectionItem'
-import {RootState} from '~/src/store/RootStore'
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
-import {useWalletConnect} from '~src/contexts/WalletConnectContext'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
+import { getBlockchainLogo } from '~/src/blockchain'
+import { BlockchainServiceKey, getBlockchainByWCChain } from '~/src/blockchain/common'
+import { ConnectedAccountAndWallet } from '~/src/components/ConnectionItem'
+import { RootState } from '~/src/store/RootStore'
+import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
+import { useWalletConnect } from '~src/contexts/WalletConnectContext'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
 import { LinearLayout, TextView, ImageView } from '~src/styles/styled-components'
 

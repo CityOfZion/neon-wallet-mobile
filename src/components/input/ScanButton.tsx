@@ -2,14 +2,9 @@ import i18n from 'i18n-js'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {RootState} from '~/src/store/RootStore'
-import {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { RootState } from '~/src/store/RootStore'
+import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 export const ScanButton = (props: { onPress: () => any; disabled?: boolean }) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])

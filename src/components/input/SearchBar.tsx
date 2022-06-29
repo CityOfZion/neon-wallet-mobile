@@ -4,8 +4,8 @@ import React from 'react'
 import { StyleSheet, View, Image, TextInput } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {RootState} from '~/src/store/RootStore'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { RootState } from '~/src/store/RootStore'
 
 type TSearchBar<P = any> = {
   prevData: P[]

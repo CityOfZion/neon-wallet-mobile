@@ -6,10 +6,10 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { BlockchainServiceKey, blockchainServices } from '~/src/blockchain'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
-import {IURI} from '~/src/helpers/UriHelper'
-import {Account} from '~/src/models/redux/Account'
-import {Contact} from '~/src/models/redux/Contact'
-import {RootState} from '~/src/store/RootStore'
+import { IURI } from '~/src/helpers/UriHelper'
+import { Account } from '~/src/models/redux/Account'
+import { Contact } from '~/src/models/redux/Contact'
+import { RootState } from '~/src/store/RootStore'
 
 const DestinationAddressField = (props: {
   blockchain: BlockchainServiceKey

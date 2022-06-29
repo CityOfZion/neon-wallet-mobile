@@ -7,11 +7,11 @@ import { useSelector } from 'react-redux'
 
 import WalletConnectBox from './WalletConnectBox'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {blockchainServices, getBlockchainByWCChain} from '~/src/blockchain'
-import {ContractInvocation} from '~/src/helpers/NeonWcAdapter'
-import {RootState} from '~/src/store/RootStore'
-import {ImageView, LinearLayout, TextView} from '~/src/styles/styled-components'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { blockchainServices, getBlockchainByWCChain } from '~/src/blockchain'
+import { ContractInvocation } from '~/src/helpers/NeonWcAdapter'
+import { RootState } from '~/src/store/RootStore'
+import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {
   rightButton?: React.ReactNode

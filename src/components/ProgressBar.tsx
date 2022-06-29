@@ -5,10 +5,10 @@ import { Dimensions } from 'react-native'
 import * as Progress from 'react-native-progress'
 import { useSelector } from 'react-redux'
 
-import {RootState} from '../store/RootStore'
+import { RootState } from '../store/RootStore'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 interface IProgressBar {
   show: boolean
   timeToComplete: number

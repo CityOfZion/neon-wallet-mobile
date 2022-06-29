@@ -1,19 +1,16 @@
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
 import React from 'react'
-import {useSelector} from 'react-redux'
-import {ThemeProvider} from 'styled-components'
+import { useSelector } from 'react-redux'
+import { ThemeProvider } from 'styled-components'
 
-import {RootState} from '../store/RootStore'
-import {DefaultNavigationParam} from '../types/global'
+import { RootState } from '../store/RootStore'
+import { DefaultNavigationParam } from '../types/global'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Navigator} from '~src/app/Navigator'
-import {HeaderActionButtonProps} from '~src/components/layout/HeaderActionButton'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {
-  ContactDetails,
-  ContactDetailsParams,
-} from '~src/scenes/Contacts/ContactsDetails'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Navigator } from '~src/app/Navigator'
+import { HeaderActionButtonProps } from '~src/components/layout/HeaderActionButton'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { ContactDetails, ContactDetailsParams } from '~src/scenes/Contacts/ContactsDetails'
 import ContactsPage from '~src/scenes/Contacts/ContactsPage'
 
 export type ContactsStackParamList = {

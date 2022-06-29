@@ -6,8 +6,8 @@ import {
   SenderTransactionReducer,
   SenderTransactionState,
 } from '~/src/types/reducers/sendTransaction'
-import {Model} from '~src/app/Model'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
+import { Model } from '~src/app/Model'
+import { SenderTransaction } from '~src/models/redux/SenderTransaction'
 
 export class ClearStateDispatcher extends DispatcherWrapper<
   SenderTransactionActionsType,

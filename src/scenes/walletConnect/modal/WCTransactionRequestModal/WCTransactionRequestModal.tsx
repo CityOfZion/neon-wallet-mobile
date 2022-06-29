@@ -2,24 +2,21 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { SessionTypes } from '@walletconnect/types'
 import i18n from 'i18n-js'
-import React, {useMemo} from 'react'
-import {showMessage} from 'react-native-flash-message'
-import {useSelector} from 'react-redux'
+import React, { useMemo } from 'react'
+import { showMessage } from 'react-native-flash-message'
+import { useSelector } from 'react-redux'
 
-import {InvokeFunctionTransactionRequest} from './InvokeFunctionTransactionRequest/InvokeFunctionTransactionRequest'
-import {SignMessageTransactionRequest} from './SignMessageTransactionRequest/SignMessageTransactionRequest'
-import {VerifyMessageTransactionRequest} from './VerifyMessageTransactionRequest/VerifyMessageTransactionRequest'
+import { InvokeFunctionTransactionRequest } from './InvokeFunctionTransactionRequest/InvokeFunctionTransactionRequest'
+import { SignMessageTransactionRequest } from './SignMessageTransactionRequest/SignMessageTransactionRequest'
+import { VerifyMessageTransactionRequest } from './VerifyMessageTransactionRequest/VerifyMessageTransactionRequest'
 
-import {
-  SupportedMethods,
-  WalletConnectHelper,
-} from '~/src/helpers/WalletConnectHelper'
-import {useTreatNetworkOnWalletConnectFlow} from '~/src/hooks'
-import {Account} from '~/src/models/redux/Account'
-import {RootState} from '~/src/store/RootStore'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {TabStackParamList} from '~src/navigation/TabNavigation'
+import { SupportedMethods, WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
+import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks'
+import { Account } from '~/src/models/redux/Account'
+import { RootState } from '~/src/store/RootStore'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { TabStackParamList } from '~src/navigation/TabNavigation'
 
 export interface WCTransactionRequestModalParams {
   request: SessionTypes.RequestEvent

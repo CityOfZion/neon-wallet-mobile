@@ -6,13 +6,13 @@ import { ImageLoadEventData, Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useSelector } from 'react-redux'
 
-import {RootState} from '../store/RootStore'
+import { RootState } from '../store/RootStore'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import SwiperPanel, {SwiperController} from '~src/components/SwiperPanel'
-import {applicationConfig} from '~src/config/ApplicationConfig'
-import {RootStackParamList} from '~src/navigation/AppNavigation'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import SwiperPanel, { SwiperController } from '~src/components/SwiperPanel'
+import { applicationConfig } from '~src/config/ApplicationConfig'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface ListItem {
   title: string

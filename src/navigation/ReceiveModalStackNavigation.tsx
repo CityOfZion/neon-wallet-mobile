@@ -4,11 +4,9 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
-import ReceiveQrCodeModal, {
-  ReceiveQrCodeModalParams,
-} from '../scenes/receive/ReceiveQrCodeModal'
-import {RootState} from '../store/RootStore'
-import {DefaultNavigationParam} from '../types/global'
+import ReceiveQrCodeModal, { ReceiveQrCodeModalParams } from '../scenes/receive/ReceiveQrCodeModal'
+import { RootState } from '../store/RootStore'
+import { DefaultNavigationParam } from '../types/global'
 
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack'
 import { wrapper } from '~src/app/ApplicationWrapper'

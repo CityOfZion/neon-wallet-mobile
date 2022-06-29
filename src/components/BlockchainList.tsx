@@ -1,25 +1,15 @@
 import i18n from 'i18n-js'
-import React, {useState, useEffect, useCallback, useMemo} from 'react'
-import {
-  TouchableWithoutFeedback,
-  View,
-  Image,
-  FlatList,
-  ScrollView,
-} from 'react-native'
-import {useSelector, useDispatch} from 'react-redux'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { TouchableWithoutFeedback, View, Image, FlatList, ScrollView } from 'react-native'
+import { useSelector, useDispatch } from 'react-redux'
 
-import {SyncDispatch} from '../types/reducers/root'
+import { SyncDispatch } from '../types/reducers/root'
 
-import {
-  blockchainList,
-  BlockchainServiceKey,
-  getBlockchainLogo,
-} from '~src/blockchain'
-import {SearchBar} from '~src/components/input/SearchBar'
-import {Wallet} from '~src/models/redux/Wallet'
-import {RootState, RootStore} from '~src/store/RootStore'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { blockchainList, BlockchainServiceKey, getBlockchainLogo } from '~src/blockchain'
+import { SearchBar } from '~src/components/input/SearchBar'
+import { Wallet } from '~src/models/redux/Wallet'
+import { RootState, RootStore } from '~src/store/RootStore'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface IBlockchainItem {
   item: BlockchainServiceKey

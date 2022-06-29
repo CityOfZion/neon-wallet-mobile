@@ -7,8 +7,8 @@ import { View } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useDispatch, useSelector } from 'react-redux'
 
-import {UtilsHelper} from '../helpers/UtilsHelper'
-import {AsyncDispatch, DispatchResult} from '../types/reducers/root'
+import { UtilsHelper } from '../helpers/UtilsHelper'
+import { AsyncDispatch, DispatchResult } from '../types/reducers/root'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { BlockchainServiceKey, blockchainServices } from '~src/blockchain'
@@ -16,9 +16,9 @@ import BlockchainList from '~src/components/BlockchainList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import {MoreStackParamList} from '~src/navigation/MoreStackNavigation'
-import {RootState, RootStore} from '~src/store/RootStore'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
+import { RootState, RootStore } from '~src/store/RootStore'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<MoreStackParamList>

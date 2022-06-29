@@ -7,24 +7,19 @@ import React from 'react'
 import { FlatList, Image } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import {RootState} from '../store/RootStore'
+import { RootState } from '../store/RootStore'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Normalize} from '~src/app/Normalize'
-import {Currency} from '~src/enums/Currency'
-import {Lang} from '~src/enums/Lang'
-import {FilterHelper} from '~src/helpers/FilterHelper'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {TransactionDateGroup} from '~src/models/TransactionDateGroup'
-import {Contact} from '~src/models/redux/Contact'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {
-  ButtonView,
-  ImageView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Normalize } from '~src/app/Normalize'
+import { Currency } from '~src/enums/Currency'
+import { Lang } from '~src/enums/Lang'
+import { FilterHelper } from '~src/helpers/FilterHelper'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { TransactionDateGroup } from '~src/models/TransactionDateGroup'
+import { Contact } from '~src/models/redux/Contact'
+import { SenderTransaction } from '~src/models/redux/SenderTransaction'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
   title?: string

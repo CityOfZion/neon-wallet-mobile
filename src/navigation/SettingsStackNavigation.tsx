@@ -3,10 +3,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
-import {RootState} from '../store/RootStore'
-import PasscodeStackNavigation, {
-  PasscodeStackParams,
-} from './PasscodeStackNavigation'
+import { RootState } from '../store/RootStore'
+import PasscodeStackNavigation, { PasscodeStackParams } from './PasscodeStackNavigation'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Navigator } from '~src/app/Navigator'

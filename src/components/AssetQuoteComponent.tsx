@@ -2,12 +2,12 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import {RootState} from '../store/RootStore'
+import { RootState } from '../store/RootStore'
 
-import {Normalize} from '~src/app/Normalize'
-import {FilterHelper} from '~src/helpers/FilterHelper'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {ImageView, LinearLayout, TextView} from '~src/styles/styled-components'
+import { Normalize } from '~src/app/Normalize'
+import { FilterHelper } from '~src/helpers/FilterHelper'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
   token: TokenAsset

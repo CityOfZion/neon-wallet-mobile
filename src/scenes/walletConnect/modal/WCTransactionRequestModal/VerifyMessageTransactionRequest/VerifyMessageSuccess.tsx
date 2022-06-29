@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import {RootState} from '~/src/store/RootStore'
-import {ImageView, LinearLayout, TextView} from '~/src/styles/styled-components'
+import { RootState } from '~/src/store/RootStore'
+import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 export const VerifyMessageSuccess = () => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])

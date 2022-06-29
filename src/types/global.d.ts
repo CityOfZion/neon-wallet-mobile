@@ -1,5 +1,5 @@
-import {GestureResponderEvent, PanResponderGestureState} from 'react-native'
-import {RouteName} from '~src/types/wrappers/route'
+import { GestureResponderEvent, PanResponderGestureState } from 'react-native'
+import { RouteName } from '~src/types/wrappers/route'
 
 export interface DataByNumber<T> {
   [key: number]: T
@@ -11,10 +11,7 @@ export interface RowProps<T = any, K = number> {
   key?: K
   index?: number
   disabled?: boolean
-  toggleRowActive?: (
-    event: GestureResponderEvent,
-    gestureState?: PanResponderGestureState
-  ) => void
+  toggleRowActive?: (event: GestureResponderEvent, gestureState?: PanResponderGestureState) => void
 }
 
 // Navigation param list

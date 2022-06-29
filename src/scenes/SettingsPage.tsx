@@ -5,10 +5,10 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { DefaultTheme } from 'styled-components'
 
-import {RootState} from '../store/RootStore'
+import { RootState } from '../store/RootStore'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
-import MenuItem, {RightIconType} from '~src/components/MenuItem'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import MenuItem, { RightIconType } from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { SettingsStackParamList } from '~src/navigation/SettingsStackNavigation'
