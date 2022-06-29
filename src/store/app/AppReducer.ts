@@ -1,41 +1,32 @@
 import { ReducerWrapper } from '@simpli/redux-wrapper'
 import i18n from 'i18n-js'
-import _ from 'lodash'
-import {showMessage} from 'react-native-flash-message'
-import {
-  checkInternetConnection,
-  offlineActionCreators,
-} from 'react-native-offline'
+import { showMessage } from 'react-native-flash-message'
 
-import {appBus} from '~/src/app/AppBus'
-import {applicationConfig} from '~/src/config/ApplicationConfig'
-import {SecurityHelper} from '~/src/helpers/SecurityHelper'
-import {Node} from '~/src/models/Node'
-import {AppAction, AppActionsType, AppState} from '~/src/types/reducers/app'
-import {AsyncAction} from '~/src/types/reducers/root'
-import {Model} from '~src/app/Model'
-import {Storage} from '~src/app/Storage'
-import {blockchainList, blockchainServices} from '~src/blockchain'
-import {NeoNode} from '~src/models/NeoNode'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
-import {App} from '~src/models/redux/App'
-import {Contact} from '~src/models/redux/Contact'
-import {SenderTransaction} from '~src/models/redux/SenderTransaction'
-import {Wallet} from '~src/models/redux/Wallet'
-import {AccountsDispatcher} from '~src/store/app/dispatchers/AccountsDispatcher'
-import {ContactsDispatcher} from '~src/store/app/dispatchers/ContactsDispatcher'
-import {ExchangeDispatcher} from '~src/store/app/dispatchers/ExchangeDispatcher'
-import {NodesDispatcher} from '~src/store/app/dispatchers/NodesDispatcher'
-import {TokensDispatcher} from '~src/store/app/dispatchers/TokensDispatcher'
-import {WalletsDispatcher} from '~src/store/app/dispatchers/WalletsDispatcher'
-import {MultichainExchange} from '~src/types/exchange'
+import { appBus } from '~/src/app/AppBus'
+import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { SecurityHelper } from '~/src/helpers/SecurityHelper'
+import { Node } from '~/src/models/Node'
+import { AppAction, AppActionsType, AppState } from '~/src/types/reducers/app'
+import { AsyncAction } from '~/src/types/reducers/root'
+import { Model } from '~src/app/Model'
+import { Storage } from '~src/app/Storage'
+import { blockchainList, blockchainServices } from '~src/blockchain'
+import { NeoNode } from '~src/models/NeoNode'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Account } from '~src/models/redux/Account'
+import { App } from '~src/models/redux/App'
+import { Contact } from '~src/models/redux/Contact'
+import { SenderTransaction } from '~src/models/redux/SenderTransaction'
+import { Wallet } from '~src/models/redux/Wallet'
+import { AccountsDispatcher } from '~src/store/app/dispatchers/AccountsDispatcher'
+import { ContactsDispatcher } from '~src/store/app/dispatchers/ContactsDispatcher'
+import { ExchangeDispatcher } from '~src/store/app/dispatchers/ExchangeDispatcher'
+import { NodesDispatcher } from '~src/store/app/dispatchers/NodesDispatcher'
+import { TokensDispatcher } from '~src/store/app/dispatchers/TokensDispatcher'
+import { WalletsDispatcher } from '~src/store/app/dispatchers/WalletsDispatcher'
+import { MultichainExchange } from '~src/types/exchange'
 
-export class AppReducer extends ReducerWrapper<
-  AppActionsType,
-  AppState,
-  AppAction
-> {
+export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppAction> {
   protected readonly initialState = Model.parse<AppState>(App)
 
   protected readonly dispatchers = [

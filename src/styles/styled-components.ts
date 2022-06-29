@@ -13,7 +13,7 @@ import {
   TextViewProps,
 } from '../types/styled-components'
 
-import {orientation, weight} from '~src/styles/styled-system.config'
+import { orientation, weight } from '~src/styles/styled-system.config'
 
 const styled = styledComponents.default
 

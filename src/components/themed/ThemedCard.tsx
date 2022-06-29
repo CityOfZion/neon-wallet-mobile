@@ -5,10 +5,10 @@ import React from 'react'
 import { Platform, StyleProp } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {Normalize} from '~/src/app/Normalize'
-import {RootState} from '~/src/store/RootStore'
-import styled, {LinearLayout} from '~src/styles/styled-components'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Normalize } from '~/src/app/Normalize'
+import { RootState } from '~/src/store/RootStore'
+import styled, { LinearLayout } from '~src/styles/styled-components'
 
 interface Props {
   children?: any

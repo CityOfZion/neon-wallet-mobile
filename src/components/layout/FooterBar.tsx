@@ -17,16 +17,13 @@ import {
   SpaceProps,
 } from 'styled-system'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {applicationConfig} from '~/src/config/ApplicationConfig'
-import {RootState} from '~/src/store/RootStore'
-import {OrientationProps, WeightProps} from '~/src/types/styled-components'
-import {RouteName} from '~/src/types/wrappers/route'
-import {Route} from '~src/app/Route'
-import {
-  SwiperController,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { RootState } from '~/src/store/RootStore'
+import { OrientationProps, WeightProps } from '~/src/types/styled-components'
+import { RouteName } from '~/src/types/wrappers/route'
+import { Route } from '~src/app/Route'
+import { SwiperController, useSwiperController } from '~src/components/SwiperPanel'
 import QuickToolsMenu from '~src/scenes/QuickToolsMenu'
 import styled, { ImageView, LinearLayout, RelativeLayout } from '~src/styles/styled-components'
 import { orientation, weight } from '~src/styles/styled-system.config'

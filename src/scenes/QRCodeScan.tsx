@@ -6,9 +6,9 @@ import i18n from 'i18n-js'
 import React, { useState, useEffect, useRef } from 'react'
 import { StyleSheet, Animated } from 'react-native'
 
-import {NavParam} from '../types/global'
+import { NavParam } from '../types/global'
 
-import {wrapper} from '~src/app/ApplicationWrapper'
+import { wrapper } from '~src/app/ApplicationWrapper'
 import {
   blockchainServices,
   getBlockchainByWif,

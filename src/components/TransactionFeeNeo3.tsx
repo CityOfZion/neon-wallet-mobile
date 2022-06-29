@@ -2,17 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import {RootState} from '../store/RootStore'
+import { RootState } from '../store/RootStore'
 
-import {Normalize} from '~src/app/Normalize'
-import {
-  BlockchainServiceKey,
-  blockchainServices,
-  SenderTransactionInfo,
-} from '~src/blockchain'
-import {TokenAsset} from '~src/models/TokenAsset'
-import {Account} from '~src/models/redux/Account'
-import {ImageView, TextView, ButtonView} from '~src/styles/styled-components'
+import { Normalize } from '~src/app/Normalize'
+import { BlockchainServiceKey, blockchainServices, SenderTransactionInfo } from '~src/blockchain'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Account } from '~src/models/redux/Account'
+import { ImageView, TextView } from '~src/styles/styled-components'
 interface Props {
   receiverAddress: string
   account: Account
@@ -123,8 +119,8 @@ export const TransactionFeeNeo3 = (props: Props) => {
         {isInsuficientFunds && (
           <View style={{ flexDirection: 'row' }}>
             <ImageView
-              width="14px"
-              height="14px"
+              width={Normalize.scale(14)}
+              height={Normalize.scale(14)}
               source={require('~/src/assets/images/icon-alert-purple.png')}
               mr={2}
             />

@@ -3,11 +3,11 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { View, ScrollView, FlatList, Image, TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import {RootState} from '../store/RootStore'
+import { RootState } from '../store/RootStore'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {BlockchainServiceKey, getBlockchainLogo} from '~src/blockchain'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { BlockchainServiceKey, getBlockchainLogo } from '~src/blockchain'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface AddressImportItemProps {
   blockSelection?: boolean

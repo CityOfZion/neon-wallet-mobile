@@ -1,4 +1,4 @@
-import { RouteProp, useNavigation } from '@react-navigation/native'
+import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, { useState, useCallback } from 'react'
@@ -7,15 +7,12 @@ import { useSelector } from 'react-redux'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import {UriHelper} from '~/src/helpers/UriHelper'
+import { UriHelper } from '~/src/helpers/UriHelper'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
-import {ModalStackParamList} from '~/src/navigation/ModalStackNavigation'
-import {RootState} from '~/src/store/RootStore'
-import {LinearLayout, TextView} from '~/src/styles/styled-components'
-import SwiperPanel, {
-  CloseButton,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
+import { RootState } from '~/src/store/RootStore'
+import { LinearLayout, TextView } from '~/src/styles/styled-components'
+import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 
 export interface WCConnectDappModalParams {
   uri?: string

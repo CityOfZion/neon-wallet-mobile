@@ -3,15 +3,11 @@ import moment from 'moment'
 
 import { SetApprovalDateDispatcher } from './dispatchers/SetApprovalDateDispatcher'
 
-import {Model} from '~/src/app/Model'
-import {AsyncAction} from '~/src/types/reducers/root'
-import {
-  WCAction,
-  WCActionsType,
-  WCState,
-} from '~/src/types/reducers/wcApprovalDate'
-import {Storage} from '~src/app/Storage'
-import {WCApprovalDate} from '~src/models/redux/WCApprovalDate'
+import { Model } from '~/src/app/Model'
+import { AsyncAction } from '~/src/types/reducers/root'
+import { WCAction, WCActionsType, WCState } from '~/src/types/reducers/wcApprovalDate'
+import { Storage } from '~src/app/Storage'
+import { WCApprovalDate } from '~src/models/redux/WCApprovalDate'
 
 export class WalletConnectReducer extends ReducerWrapper<WCActionsType, WCState, WCAction> {
   protected readonly initialState = Model.parse<WCState>(WCApprovalDate)

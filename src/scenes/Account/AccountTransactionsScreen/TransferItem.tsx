@@ -6,11 +6,11 @@ import { FormattedTransferAsset, FormattedTransferNFT } from './AccountTransacti
 import { TransferAssetItem } from './TransferAssetItem'
 import { TransferNFTItem } from './TransferNFTItem'
 
-import {wrapper} from '~/src/app/ApplicationWrapper'
-import {TransactionTransferType} from '~/src/models/TransactionAddressSummary'
-import {Account} from '~/src/models/redux/Account'
-import {RootState} from '~/src/store/RootStore'
-import {TextView, LinearLayout} from '~/src/styles/styled-components'
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { TransactionTransferType } from '~/src/models/TransactionAddressSummary'
+import { Account } from '~/src/models/redux/Account'
+import { RootState } from '~/src/store/RootStore'
+import { TextView, LinearLayout } from '~/src/styles/styled-components'
 
 type Props = (FormattedTransferAsset | FormattedTransferNFT) & {
   account: Account

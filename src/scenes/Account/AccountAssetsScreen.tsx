@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import AccountSubTitle from '~/src/components/AccountSubTitle'
-import {SyncDispatch} from '~/src/types/reducers/root'
+import { SyncDispatch } from '~/src/types/reducers/root'
 import BalanceList from '~src/components/BalanceList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import {Account} from '~src/models/redux/Account'
-import {RootState, RootStore} from '~src/store/RootStore'
+import { Account } from '~src/models/redux/Account'
+import { RootState, RootStore } from '~src/store/RootStore'
 
 const AccountAssetScreen = () => {
   const dispatchAccount = useDispatch<SyncDispatch<Account>>()

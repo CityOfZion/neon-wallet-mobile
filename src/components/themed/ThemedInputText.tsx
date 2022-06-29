@@ -1,12 +1,8 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import {InputTextViewProps} from '~/src/types/styled-components'
-import {
-  InputTextView,
-  LinearLayout,
-  TextView,
-} from '~src/styles/styled-components'
+import { InputTextViewProps } from '~/src/types/styled-components'
+import { InputTextView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props extends InputTextViewProps {
   label?: string

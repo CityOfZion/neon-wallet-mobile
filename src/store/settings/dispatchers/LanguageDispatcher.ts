@@ -1,13 +1,8 @@
 import { DispatcherWrapper } from '@simpli/redux-wrapper'
 
-import {localeConfig} from '~/src/config/LocaleConfig'
-import {
-  SettingsActionsType,
-  SettingsState,
-  SettingsAction,
-  SettingsReducer,
-} from '~/src/types/reducers/settings'
-import {Setup} from '~src/app/Setup'
+import { localeConfig } from '~/src/config/LocaleConfig'
+import { SettingsActionsType, SettingsState, SettingsAction, SettingsReducer } from '~/src/types/reducers/settings'
+import { Setup } from '~src/app/Setup'
 
 export class LanguageDispatcher extends DispatcherWrapper<SettingsActionsType, SettingsState, SettingsAction> {
   readonly type = 'SET_LANGUAGE'

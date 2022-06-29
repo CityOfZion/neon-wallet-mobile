@@ -4,8 +4,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
-import {RootState} from '../store/RootStore'
-import {DefaultNavigationParam} from '../types/global'
+import { RootState } from '../store/RootStore'
+import { DefaultNavigationParam } from '../types/global'
 import SettingsStackNavigation from './SettingsStackNavigation'
 
 import CustomizeAccount, { CustomizeAccountParams } from '~/src/scenes/Account/CustomizeAccount'

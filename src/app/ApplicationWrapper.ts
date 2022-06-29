@@ -1,11 +1,11 @@
-import {StorageWrapper} from '../types/wrappers/data'
-import {RouteWrapper} from '../types/wrappers/route'
-import {ThemeWrapper} from '../types/wrappers/theme'
+import { StorageWrapper } from '../types/wrappers/data'
+import { RouteWrapper } from '../types/wrappers/route'
+import { ThemeWrapper } from '../types/wrappers/theme'
 
-import {DataKey} from '~src/app/DataKey'
-import {Route} from '~src/app/Route'
-import {wrapperConfig} from '~src/config/WrapperConfig'
-import {ApplicationTheme} from '~src/themes/ApplicationTheme'
+import { DataKey } from '~src/app/DataKey'
+import { Route } from '~src/app/Route'
+import { wrapperConfig } from '~src/config/WrapperConfig'
+import { ApplicationTheme } from '~src/themes/ApplicationTheme'
 
 export class ApplicationWrapper {
   readonly theme: ThemeWrapper

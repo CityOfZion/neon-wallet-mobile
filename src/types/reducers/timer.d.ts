@@ -1,5 +1,5 @@
-import {ReducerApplied} from '@simpli/redux-wrapper'
-import {Action} from 'redux'
+import { ReducerApplied } from '@simpli/redux-wrapper'
+import { Action } from 'redux'
 
 export type TimerActionsType = 'SET_TIMER_STATUS'
 

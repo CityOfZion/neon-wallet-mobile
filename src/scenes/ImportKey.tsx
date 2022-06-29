@@ -7,11 +7,11 @@ import { Alert, Platform } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector, useDispatch } from 'react-redux'
 
-import {IURI} from '../helpers/UriHelper'
-import {AccountToImport} from '../hooks/BlockchainActionsHook'
-import {TabStackParamList} from '../navigation/TabNavigation'
-import {AsyncDispatch} from '../types/reducers/root'
-import {MnemonicSelectionInfo} from './MnemonicSelectionList'
+import { IURI } from '../helpers/UriHelper'
+import { AccountToImport } from '../hooks/BlockchainActionsHook'
+import { TabStackParamList } from '../navigation/TabNavigation'
+import { AsyncDispatch } from '../types/reducers/root'
+import { MnemonicSelectionInfo } from './MnemonicSelectionList'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import {

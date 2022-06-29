@@ -1,4 +1,4 @@
-import {TextInputProps} from 'react-native'
+import { TextInputProps } from 'react-native'
 import {
   BorderProps,
   ColorProps,
@@ -57,11 +57,7 @@ export type InputTextViewProps = TextInputProps &
   PositionProps &
   TextStyleProps
 
-export type ImageViewProps = SpaceProps &
-  LayoutProps &
-  FlexboxProps &
-  PositionProps &
-  WeightProps
+export type ImageViewProps = SpaceProps & LayoutProps & FlexboxProps & PositionProps & WeightProps
 
 export type LinearLayoutProps = BorderProps &
   ColorProps &
@@ -90,12 +86,6 @@ export type ButtonViewProps = ColorProps &
   PositionProps &
   WeightProps
 
-export type LinearGradientLayoutProps = ColorProps &
-  SpaceProps &
-  LayoutProps &
-  FlexboxProps
+export type LinearGradientLayoutProps = ColorProps & SpaceProps & LayoutProps & FlexboxProps
 
-export type StyledScrollViewProps = FlexboxProps &
-  OrientationProps &
-  LayoutProps &
-  SpaceProps
+export type StyledScrollViewProps = FlexboxProps & OrientationProps & LayoutProps & SpaceProps

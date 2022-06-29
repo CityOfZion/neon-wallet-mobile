@@ -17,10 +17,6 @@ export interface SenderTransactionState extends SenderTransactionInfo {
   tokens: TokenAsset[]
 }
 
-export type SenderTransactionAction = SenderTransactionState &
-  Action<SenderTransactionActionsType>
+export type SenderTransactionAction = SenderTransactionState & Action<SenderTransactionActionsType>
 
-export type SenderTransactionReducer = ReducerApplied<
-  SenderTransactionState,
-  SenderTransactionAction
->
+export type SenderTransactionReducer = ReducerApplied<SenderTransactionState, SenderTransactionAction>

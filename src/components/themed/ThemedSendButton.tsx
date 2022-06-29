@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux'
 
 import ThemedButton from './ThemedButton'
 
-import {RootState} from '~/src/store/RootStore'
-import {Account} from '~src/models/redux/Account'
+import { RootState } from '~/src/store/RootStore'
+import { Account } from '~src/models/redux/Account'
 interface Props {
   account?: Account
   onPress?: (evt: GestureResponderEvent) => void

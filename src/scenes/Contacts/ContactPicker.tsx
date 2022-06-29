@@ -5,20 +5,16 @@ import React, { Fragment, useState } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import {BlockchainServiceKey, getBlockchainByAddress} from '~/src/blockchain'
-import {RootState} from '~/src/store/RootStore'
-import SwiperPanel, {
-  PANEL_OFFSET,
-  useSwiperController,
-  CloseButton,
-} from '~src/components/SwiperPanel'
-import {AccountList} from '~src/components/accounts/AccountList'
-import {ContactList} from '~src/components/contacts/ContactList'
-import {NoContacts} from '~src/components/contacts/NoContacts'
-import {Account} from '~src/models/redux/Account'
-import {Contact} from '~src/models/redux/Contact'
-import {ModalStackParamList} from '~src/navigation/ModalStackNavigation'
-import {LinearLayout, TextView} from '~src/styles/styled-components'
+import { BlockchainServiceKey } from '~/src/blockchain'
+import { RootState } from '~/src/store/RootStore'
+import SwiperPanel, { PANEL_OFFSET, useSwiperController, CloseButton } from '~src/components/SwiperPanel'
+import { AccountList } from '~src/components/accounts/AccountList'
+import { ContactList } from '~src/components/contacts/ContactList'
+import { NoContacts } from '~src/components/contacts/NoContacts'
+import { Account } from '~src/models/redux/Account'
+import { Contact } from '~src/models/redux/Contact'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 export interface ContactsModalParams {
   onSelected: (item: Contact | Account, addressSelected?: string) => void
   filterByBlockchain?: BlockchainServiceKey

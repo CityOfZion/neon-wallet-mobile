@@ -5,8 +5,8 @@ import React from 'react'
 import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import {blockchainServices} from '../blockchain'
-import {RootState} from '../store/RootStore'
+import { blockchainServices } from '../blockchain'
+import { RootState } from '../store/RootStore'
 
 import { Normalize } from '~src/app/Normalize'
 import { AccountView } from '~src/components/AccountView'

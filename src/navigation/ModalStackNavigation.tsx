@@ -8,8 +8,8 @@ import WebViewModal, { WebViewModalParams } from '../scenes/WebViewModal'
 import WCInvocationDetailsModal, {
   WCInvocationDetailsModalParams,
 } from '../scenes/walletConnect/modal/WCInvocationDetailsModal'
-import {RootState} from '../store/RootStore'
-import {DefaultNavigationParam} from '../types/global'
+import { RootState } from '../store/RootStore'
+import { DefaultNavigationParam } from '../types/global'
 import ReceiveModalStackNavigation from './ReceiveModalStackNavigation'
 
 import EditAccountModal, { EditAccountModalParam } from '~/src/scenes/Account/EditAccountModal'

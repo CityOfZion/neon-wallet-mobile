@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux'
 
 import { FormattedTransferAsset } from './AccountTransactionsScreen'
 
-import {FilterHelper} from '~/src/helpers/FilterHelper'
-import {Account} from '~/src/models/redux/Account'
-import {RootState} from '~/src/store/RootStore'
-import {ImageView, TextView, LinearLayout} from '~/src/styles/styled-components'
+import { FilterHelper } from '~/src/helpers/FilterHelper'
+import { Account } from '~/src/models/redux/Account'
+import { RootState } from '~/src/store/RootStore'
+import { ImageView, TextView, LinearLayout } from '~/src/styles/styled-components'
 
 type Props = FormattedTransferAsset & {
   account: Account

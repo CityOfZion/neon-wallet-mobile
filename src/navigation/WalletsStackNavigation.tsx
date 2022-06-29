@@ -11,11 +11,8 @@ import { AccountSettingsView, AccountSettingsViewParams } from '../scenes/Accoun
 import Step1BackupWalletPage, { StepsBackupWalletPageParams } from '../scenes/Wallet/BackupWallet/Step1BackupWalletPage'
 import Step2BackupWalletPage from '../scenes/Wallet/BackupWallet/Step2BackupWalletPage'
 import Step3BackupWalletPage from '../scenes/Wallet/BackupWallet/Step3BackupWalletPage'
-import {
-  WalletSettingsView,
-  WalletSettingViewParams,
-} from '../scenes/Wallet/WalletSettingsView'
-import {RootState} from '../store/RootStore'
+import { WalletSettingsView, WalletSettingViewParams } from '../scenes/Wallet/WalletSettingsView'
+import { RootState } from '../store/RootStore'
 
 import AccountTransactionsScreen, {
   AccountTransactionsScreenParams,

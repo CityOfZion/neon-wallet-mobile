@@ -4,16 +4,13 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { Image, ScrollView, Dimensions } from 'react-native'
 
-import {NavParam} from '../types/global'
+import { NavParam } from '../types/global'
 
-import {StackNavigationProp} from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {Normalize} from '~src/app/Normalize'
-import {Storage} from '~src/app/Storage'
-import SwiperPanel, {
-  PANEL_OFFSET,
-  useSwiperController,
-} from '~src/components/SwiperPanel'
+import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { Normalize } from '~src/app/Normalize'
+import { Storage } from '~src/app/Storage'
+import SwiperPanel, { PANEL_OFFSET, useSwiperController } from '~src/components/SwiperPanel'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import { ThemedFlatButton } from '~src/components/themed/ThemedFlatButton'
 import { RootStackParamList } from '~src/navigation/AppNavigation'

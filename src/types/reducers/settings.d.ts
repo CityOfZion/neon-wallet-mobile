@@ -5,12 +5,7 @@ import { Theme } from '~src/enums/Theme'
 import { ReducerApplied } from '@simpli/redux-wrapper'
 import { Security } from '~/src/enums/Security'
 
-export type SettingsActionsType =
-  | 'SET_LANGUAGE'
-  | 'SET_CURRENCY'
-  | 'SET_THEME'
-  | 'SET_SECURITY'
-  | 'SET_IS_FIRST_TIME'
+export type SettingsActionsType = 'SET_LANGUAGE' | 'SET_CURRENCY' | 'SET_THEME' | 'SET_SECURITY' | 'SET_IS_FIRST_TIME'
 
 export interface SettingsState {
   language: Lang

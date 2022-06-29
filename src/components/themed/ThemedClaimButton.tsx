@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux'
 
 import ThemedButton from './ThemedButton'
 
-import {FilterHelper} from '~/src/helpers/FilterHelper'
-import {RootState} from '~/src/store/RootStore'
+import { FilterHelper } from '~/src/helpers/FilterHelper'
+import { RootState } from '~/src/store/RootStore'
 
 interface Props {
   onPress: (evt: GestureResponderEvent) => void

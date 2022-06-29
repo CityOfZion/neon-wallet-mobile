@@ -3,21 +3,15 @@ import { StatusBar } from 'react-native'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
-import {RootState} from '../store/RootStore'
-import {DefaultNavigationParam} from '../types/global'
+import { RootState } from '../store/RootStore'
+import { DefaultNavigationParam } from '../types/global'
 
-import {createStackNavigator} from '~/node_modules/@react-navigation/stack'
-import {wrapper} from '~src/app/ApplicationWrapper'
-import {screenConfig} from '~src/config/ScreenConfig'
-import ConfirmPasscodePage, {
-  ConfirmPasscodePageParams,
-} from '~src/scenes/LoginPage/ConfirmPasscodePage'
-import PasscodePage, {
-  PasscodePageParams,
-} from '~src/scenes/LoginPage/PasscodePage'
-import VerifyPasscodePage, {
-  VerifyPasscodePageParams,
-} from '~src/scenes/LoginPage/VerifyPasscodePage'
+import { createStackNavigator } from '~/node_modules/@react-navigation/stack'
+import { wrapper } from '~src/app/ApplicationWrapper'
+import { screenConfig } from '~src/config/ScreenConfig'
+import ConfirmPasscodePage, { ConfirmPasscodePageParams } from '~src/scenes/LoginPage/ConfirmPasscodePage'
+import PasscodePage, { PasscodePageParams } from '~src/scenes/LoginPage/PasscodePage'
+import VerifyPasscodePage, { VerifyPasscodePageParams } from '~src/scenes/LoginPage/VerifyPasscodePage'
 
 export type PasscodeStackParamList = {
   Passcode: PasscodePageParams
