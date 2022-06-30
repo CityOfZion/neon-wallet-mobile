@@ -419,7 +419,7 @@
       }
     },
     "editAccount": {
-      "title": "Edit",
+      "title": "Customize account",
       "preview": "Preview",
       "accountInput": {
         "title": "Account name",
