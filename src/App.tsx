@@ -1,10 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { AppLoading } from 'expo'
 import * as Font from 'expo-font'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react'
 import { StatusBar } from 'react-native'
 import FlashMessage from 'react-native-flash-message'
-import { ReduxNetworkProvider } from 'react-native-offline'
 import { Provider as StoreProvider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
@@ -21,6 +19,8 @@ import {
 import { CtxOptions, WalletConnectContextProvider } from '~src/contexts/WalletConnectContext'
 import AppNavigation from '~src/navigation/AppNavigation'
 import { RootStore } from '~src/store/RootStore'
+import * as SplashScreen from 'expo-splash-screen'
+import { ReduxNetworkProvider } from 'react-native-offline'
 
 const wcOptions: CtxOptions = {
   appMetadata: DEFAULT_APP_METADATA,
@@ -35,21 +35,44 @@ const wcOptions: CtxOptions = {
 
 const store = createStore(RootStore.reducers, {}, applyMiddleware(thunk))
 
-const fetchFonts = async () =>
-  await Font.loadAsync({
-    bold: require('~src/assets/fonts/sofiapro-bold.otf'),
-    medium: require('~src/assets/fonts/sofiapro-medium.otf'),
-    regular: require('~src/assets/fonts/sofiapro-regular.otf'),
-    italic: require('~src/assets/fonts/sofiapro-regularitalic.otf'),
-    semibold: require('~src/assets/fonts/sofiapro-semibold.otf'),
-    light: require('~src/assets/fonts/sofiapro-light.otf'),
-  })
-
 const App = () => {
   const [dataLoaded, setDataLoaded] = useState(false)
 
+  const fetchFonts = useCallback(async () => {
+    try {
+      await SplashScreen.preventAutoHideAsync()
+      await Font.loadAsync({
+        bold: require('~src/assets/fonts/sofiapro-bold.otf'),
+        medium: require('~src/assets/fonts/sofiapro-medium.otf'),
+        regular: require('~src/assets/fonts/sofiapro-regular.otf'),
+        italic: require('~src/assets/fonts/sofiapro-regularitalic.otf'),
+        semibold: require('~src/assets/fonts/sofiapro-semibold.otf'),
+        light: require('~src/assets/fonts/sofiapro-light.otf'),
+      })
+    
+    } catch (error) {
+
+    } finally {
+      setDataLoaded(true)
+    }
+  }, [])
+
+  const onLayoutRootView = useCallback(async () => {
+    if (dataLoaded) {
+      await SplashScreen.hideAsync()
+    }
+  }, [dataLoaded])
+
+  useEffect(() => {
+    fetchFonts()
+  }, [])
+
+  useLayoutEffect(() => {
+    onLayoutRootView()
+  }, [onLayoutRootView])
+
   if (!dataLoaded) {
-    return <AppLoading onError={console.warn} startAsync={fetchFonts} onFinish={() => setDataLoaded(true)} />
+    return null;
   }
 
   return (
