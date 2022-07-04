@@ -17,7 +17,6 @@ import * as data from '~src/Changelog.json'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Storage } from '~src/app/Storage'
 import FooterBar from '~src/components/layout/FooterBar'
-import { useWalletConnect } from '~src/contexts/WalletConnectContext'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import ContactsStackNavigation, { ContactsStackParams } from '~src/navigation/ContactsStackNavigation'
 import MoreStackNavigation, { MoreStackParam } from '~src/navigation/MoreStackNavigation'
@@ -42,7 +41,6 @@ const Tab = createBottomTabNavigator()
 const TabNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const { isFirstTime } = useSelector((state: RootState) => state.settings)
-  const { requests, sessions } = useWalletConnect()
   const dispatch = useDispatch()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
@@ -71,26 +69,6 @@ const TabNavigation = (props: Props) => {
 
     handleData()
   }, [])
-
-  useEffect(() => {
-    if (requests.length || sessions.length) {
-      return
-    }
-    const [request] = requests
-    const foundSession = sessions.find(it => it.topic === request.topic)
-
-    if (!foundSession) {
-      return
-    }
-
-    props.navigation.navigate(wrapper.route.Modal.name, {
-      screen: wrapper.route.WCTransactionRequestModal.name,
-      params: {
-        request,
-        session: foundSession,
-      },
-    })
-  }, [requests, sessions])
 
   return (
     <ThemeProvider theme={theme}>

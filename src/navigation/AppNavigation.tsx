@@ -210,6 +210,23 @@ const AppNavigation = (props: Props) => {
     })
   }, [])
 
+  useEffect(() => {
+    if (!walletConnectCtx.requests.length || !walletConnectCtx.sessions.length || !navigationRef.current) return
+
+    const [request] = walletConnectCtx.requests
+    const foundSession = walletConnectCtx.sessions.find(it => it.topic === request.topic)
+
+    if (!foundSession) return
+
+    navigationRef.current.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.WCTransactionRequestModal.name,
+      params: {
+        request,
+        session: foundSession,
+      },
+    })
+  }, [walletConnectCtx.requests, walletConnectCtx.sessions])
+
   const getInitialRouteName = () => {
     return onboardingSeen
       ? hasAuthentication || welcomeToNWSeen
