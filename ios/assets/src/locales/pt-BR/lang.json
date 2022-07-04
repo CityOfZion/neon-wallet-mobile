@@ -39,7 +39,6 @@
     "ReceiveQrCode": "Receive QR Code",
     "CustomColor": "Personalizar Cor",
     "CreateWallet": "Create Wallet",
-    "MyWallets": "Minhas Carteiras",
     "Step1CreateWallet": "Criar carteira",
     "Step2CreateWallet": "Criar carteira",
     "Step3CreateWallet": "Criar carteira",
@@ -98,10 +97,6 @@
       "buttonTitle": "#translateme"
     }
   },
-  "myWalletOptions": {
-    "details": "Detalhes",
-    "backupWallet": "Backup da carteira"
-  },
   "step1CreateWallet": {
     "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",
     "label_1": "#translateme",
@@ -148,7 +143,6 @@
   },
   "settings": {
     "title": "Configurações",
-    "myWallets": "Minhas Wallets",
     "security": "Segurança",
     "currency": "Moeda",
     "language": "Idioma",
@@ -237,14 +231,132 @@
       "transactions": "Transactions",
       "connections": "Connections",
       "nfts": "NFTS"
+    },
+    "walletSettingsView": {
+      "title": "#translateme",
+      "customize": "#translateme",
+      "backup": "#translateme",
+      "deleteTitle": "#translateme",
+      "deleteSubtitle": "#translateme",
+      "deleteButtom": "#translateme",
+      "deleteAlert": "#translateme",
+      "navigation": {
+        "cancel": "#translateme",
+        "delete": "#translateme"
+      }
+    },
+    "accountSettingsView": {
+      "title": "#translateme",
+      "customize": "#translateme",
+      "exportWif": "#translateme",
+      "deleteTitle": "#translateme",
+      "deleteSubtitle": "#translateme",
+      "deleteButtom": "#translateme",
+      "deleteAlert": "#translateme",
+      "navigation": {
+        "cancel": "#translateme",
+        "delete": "#translateme"
+      }
+    },
+    "AccountConnectionsScreen": {
+      "noDAppsConnected": "#translateme",
+      "title": "#translateme"
     }
   },
   "modals": {
+    "sendTransactionAccountSelectionModal": {
+      "title": "#translateme",
+      "label": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "sendTransactionConfirmationModal": {
+      "title": "#translateme",
+      "header": "#translateme",
+      "subheader": "#translateme",
+      "transactionId": "#translateme"
+    },
+    "sendTransactionReviewModal": {
+      "transactionFailed": "#translateme",
+      "title": "#translateme",
+      "pleaseReview": "#translateme",
+      "value": "#translateme",
+      "fee": "%{tokenSymbol} #translateme",
+      "sender": "#translateme",
+      "recipient": "#translateme"
+    },
+    "sendTransactionWalletSelectionModal": {
+      "title": "#translateme",
+      "subtitle": "#translateme",
+      "noFunds": "#translateme"
+    },
+    "sendTransactionModal": {
+      "title": "#translateme",
+      "transactionDetails": "#translateme",
+      "amount": "#translateme",
+      "totalAfterTransaction": "#translateme",
+      "max": "#translateme",
+      "enterValue": "#translateme %{value}",
+      "insufficientFunds": "#translateme",
+      "roundDown": "#translateme",
+      "destinationAddress": "#translateme",
+      "enterDestination": "#translateme",
+      "prioritiseTransfer": "#translateme",
+      "tipCheckboxLabel": "#translateme \n %{tipValue} GAS (Optional)",
+      "token": "#translateme",
+      "selectToken": "#translateme",
+      "totalFee": "#translateme",
+      "insufficientGas": "#translateme"
+    },
+    "transactionDetails": {
+      "title": "#translateme",
+      "time": "#translateme",
+      "date": "#translateme",
+      "status": "#translateme",
+      "value": "#translateme",
+      "fee": "#translateme",
+      "sender": "#translateme",
+      "recipient": "#translateme",
+      "hash": "#translateme",
+      "viewOnDora": "#translateme",
+      "confirmed": "#translateme",
+      "pending": "#translateme",
+      "price": "#translateme"
+    },
     "invocationDetails": {
       "title": "Detalhes da Invocação",
       "detailsTitle": "Detalhes",
       "parametersTitle": "Parâmetros da solicitação",
       "noParameters": "Sem parâmetros"
+    },
+    "editAccount": {
+      "title": "#translateme",
+      "preview": "#translateme",
+      "accountInput": {
+        "title": "#translateme",
+        "placeholder": "#translateme"
+      },
+      "selectColor": "#translateme",
+      "navigation": {
+        "cancel": "#translateme",
+        "save": "#translateme"
+      }
+    },
+    "editWallet": {
+      "title": "#translateme",
+      "preview": "#translateme",
+      "accountInput": {
+        "title": "#translateme",
+        "placeholder": "#translateme"
+      },
+      "navigation": {
+        "ok": "#translateme",
+        "cancel": "#translateme",
+        "save": "#translateme"
+      },
+      "walletName": "#translateme",
+      "namePlaceholder": "#translateme",
+      "invalidName": "#translateme",
+      "search": "#translateme"
     },
     "send": {
       "title": "Send",
@@ -303,7 +415,10 @@
         "enterAmount": "Enter amount",
         "addReference": "Add a reference",
         "reference": "Reference",
-        "generateQrCode": "Generate QR Code"
+        "generateQrCode": "Generate QR Code",
+        "token": "#translateme",
+        "amount": "#translateme",
+        "selectDifferentAccount": "#translateme"
       }
     },
     "walletContext": {
@@ -371,6 +486,27 @@
     },
     "colorSelector": {
       "customColor": "Cor personalizada"
+    },
+    "transactionTipCard": {
+      "qty": "#translateme",
+      "value": "#translateme"
+    },
+    "transactionTokenCard": {
+      "qty": "#translateme",
+      "value": "#translateme",
+      "fee": "#translateme"
+    }
+  },
+  "hooks": {
+    "useLocalAuthentication": {
+      "errorToGetPasscode": "#translateme",
+      "errorDismiss": "#translateme",
+      "dialog": {
+        "title": "#translateme",
+        "subtitle": "#translateme",
+        "confirm": "#translateme",
+        "cancel": "#translateme"
+      }
     }
   },
   "boolean": {
