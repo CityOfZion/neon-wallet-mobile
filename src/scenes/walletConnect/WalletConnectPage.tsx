@@ -6,6 +6,7 @@ import { FlatList, TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Normalize } from '~/src/app/Normalize'
 import { ConnectionItem } from '~/src/components/ConnectionItem'
 import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 import HeaderActionButton from '~/src/components/layout/HeaderActionButton'
@@ -69,8 +70,8 @@ const WalletConnectPage = ({ navigation, route }: WalletConnectPageProps) => {
 
   return (
     <ScreenLayoutWithoutScroll>
-      <LinearLayout justifyContent="space-between" height="100%">
-        <LinearLayout height="100%">
+      <LinearLayout height="100%">
+        <LinearLayout flexGrow={1}>
           {validSessions.length > 0 && (
             <TextView color="white" fontSize="18px" textAlign="center" pb="24px">
               {i18n.t('walletconnect.connectedDApps')}
@@ -117,7 +118,7 @@ const WalletConnectPage = ({ navigation, route }: WalletConnectPageProps) => {
         </LinearLayout>
 
         {validSessions.length > 0 && (
-          <LinearLayout justifyContent="flex-end" mb="5px">
+          <LinearLayout mb="15px">
             <TouchableWithoutFeedback
               onPress={() => {
                 navigation.navigate(wrapper.route.Modal.name, {
@@ -137,8 +138,8 @@ const WalletConnectPage = ({ navigation, route }: WalletConnectPageProps) => {
               >
                 <ImageView
                   source={require('~src/assets/images/icon-plus-green.png')}
-                  width="20px"
-                  height="20px"
+                  width={Normalize.scale(20)}
+                  height={Normalize.scale(20)}
                   alignSelf="center"
                   mr="4px"
                 />
