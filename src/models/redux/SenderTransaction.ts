@@ -4,13 +4,12 @@ import _ from 'lodash'
 import moment from 'moment'
 
 import { applicationConfig } from '~/src/config/ApplicationConfig'
-import { NoPriority, PriorityFee } from '~src/models/PriorityFee'
 import { TokenAsset } from '~src/models/TokenAsset'
 import { Contact } from '~src/models/redux/Contact'
 import { ExchangeHistoryResponse } from '~src/types/exchange'
 
 @HttpExclude()
-export class SenderTransaction implements SenderTransactionState {
+export class SenderTransaction {
   @HttpExpose()
   @ResponseSerialize(TokenAsset)
   tokens: TokenAsset[] = []
@@ -21,9 +20,8 @@ export class SenderTransaction implements SenderTransactionState {
   @HttpExpose()
   receiverAddress: string | null = null
 
-  @ResponseSerialize(PriorityFee)
   @HttpExpose()
-  feeAmount: PriorityFee = NoPriority()
+  fee: number | null = null
 
   @HttpExpose()
   sentAt: string | null = null // moment format

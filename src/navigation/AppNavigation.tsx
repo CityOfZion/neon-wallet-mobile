@@ -1,5 +1,5 @@
 import { JsonRpcRequest } from '@json-rpc-tools/utils'
-import { NavigationContainer, RouteProp } from '@react-navigation/native'
+import { NavigationContainer, RouteProp, NavigationContainerRef } from '@react-navigation/native'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, { useEffect, useRef, useState } from 'react'
@@ -8,10 +8,12 @@ import { showMessage } from 'react-native-flash-message'
 import { useDispatch, useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
+import { appBus } from '../app/AppBus'
 import { blockchainServices, getBlockchainByAddress, hasWCIntegration } from '../blockchain'
 import { applicationConfig } from '../config/ApplicationConfig'
 import { useWalletConnect } from '../contexts/WalletConnectContext'
-import { RootState } from '../store/RootStore'
+import { Account } from '../models/redux/Account'
+import { RootState, RootStore } from '../store/RootStore'
 import { AsyncDispatch } from '../types/reducers/root'
 import PasscodeStackNavigation, { PasscodeStackParams } from './PasscodeStackNavigation'
 
@@ -56,6 +58,7 @@ const AppNavigation = (props: Props) => {
 
   const walletConnectCtx = useWalletConnect()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatch = useDispatch()
 
   const [onboardingSeen, setOnboardingSeen] = useState(true)
   const [welcomeToNWSeen, setWelcomeToNWSeen] = useState(true)
@@ -64,6 +67,7 @@ const AppNavigation = (props: Props) => {
 
   const interactionRef = useRef<any>()
   const intervalRef = useRef<number>()
+  const navigationRef = useRef<NavigationContainerRef>(null)
 
   const startApplication = async () => {
     const onboardingSeen = await Storage.onboardingSeen.load()
@@ -111,7 +115,6 @@ const AppNavigation = (props: Props) => {
     if (intervalRef.current && interactionRef.current) {
       return
     }
-
     intervalRef.current = setInterval(() => {
       interactionRef.current = InteractionManager.runAfterInteractions(async () => {
         await Sync.fetchs(dispatchAsync)
@@ -172,6 +175,41 @@ const AppNavigation = (props: Props) => {
     })
   }, [])
 
+  useEffect(() => {
+    appBus.on('pendingTransactionConfirmed', (account: Account) => {
+      showMessage({
+        duration: 2000,
+        message: i18n.t('toast.transactionCompleted'),
+        type: 'success',
+        onPress: () => {
+          const navigation = navigationRef.current
+
+          if (!navigation) return
+
+          dispatch(RootStore.wallet.actions.selectWallet(account.idWallet))
+          dispatch(RootStore.account.actions.selectAccount(account.address))
+          navigation.reset({
+            index: 0,
+            routes: [{ name: wrapper.route.Tab.name }],
+          })
+          navigation.navigate(wrapper.route.GetWallet.name)
+          navigation.navigate(wrapper.route.GetAccount.name)
+          navigation.navigate(wrapper.route.AccountTransactionsScreen.name, {
+            account,
+          })
+        },
+      })
+    })
+
+    appBus.on('claimGasEnd', () => {
+      showMessage({
+        message: i18n.t('toast.gasClaimSuccess'),
+        type: 'success',
+        duration: 2000,
+      })
+    })
+  }, [])
+
   const getInitialRouteName = () => {
     return onboardingSeen
       ? hasAuthentication || welcomeToNWSeen
@@ -187,7 +225,7 @@ const AppNavigation = (props: Props) => {
     <>
       <>
         <AwaitActivity name="application" loadingView={<ScreenLoader />}>
-          <NavigationContainer linking={linking} fallback={<ScreenLoader />}>
+          <NavigationContainer linking={linking} fallback={<ScreenLoader />} ref={navigationRef}>
             {isLoading && <LoadingOverlay progress={progress} loadingText={loadingText} />}
             <ThemeProvider theme={theme}>
               <RootStack.Navigator

@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux'
 
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Normalize } from '~/src/app/Normalize'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ReceiveModalStackParamList } from '~/src/navigation/ReceiveModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'
 import AccountCard from '~src/components/AccountCard'
@@ -27,13 +29,13 @@ const TokenField = (props: {
   theme: ApplicationTheme
   token: TokenAsset | null | undefined
   setToken: React.Dispatch<React.SetStateAction<TokenAsset | null | undefined>>
-  nav: StackNavigationProp<ModalStackParamList>
+  nav: StackNavigationProp<RootStackParamList & ModalStackParamList>
   account: Account
 }) => {
   return (
     <>
       <InputLabel
-        title={i18n.t('modals.send.transactionInput.token')}
+        title={i18n.t('modals.receive.toAccount.token')}
         color="text.0"
         marginTop={0}
         marginBottom={20}
@@ -43,8 +45,7 @@ const TokenField = (props: {
       <ButtonView
         onPress={() => {
           props.nav.navigate(wrapper.route.ListTokenModal.name, {
-            selectedToken: props.token ?? null,
-            setToken: props.setToken,
+            onChangeToken: props.setToken,
             account: props.account,
             filterBy: 'receive',
           })
@@ -69,7 +70,7 @@ const TokenField = (props: {
             top="10px"
             right="15px"
             resizeMode="contain"
-            width="12px"
+            width={Normalize.scale(12)}
             source={require('~/src/assets/images/icon-arrow-down-green.png')}
           />
         </LinearLayout>
@@ -96,7 +97,7 @@ const AmountField = (props: {
   return (
     <>
       <InputLabel
-        title={i18n.t('modals.send.transactionInput.amount')}
+        title={i18n.t('modals.receive.toAccount.amount')}
         color="text.0"
         marginTop={42}
         marginBottom={20}
@@ -156,7 +157,7 @@ export interface ReceiveToAccountModalParams {
 }
 
 interface Props {
-  navigation: StackNavigationProp<ModalStackParamList>
+  navigation: StackNavigationProp<RootStackParamList & ModalStackParamList>
   route: RouteProp<ReceiveModalStackParamList, 'ReceiveToAccountModal'>
 }
 const ReceiveToAccountModal = (props: Props) => {
@@ -212,7 +213,7 @@ const ReceiveToAccountModal = (props: Props) => {
           <LinearLayout orientation="horiz" alignSelf="center" alignItems="center" mt="40px">
             <ImageView source={require('~/src/assets/images/icon-reselect-green.png')} />
             <TextView ml="6px" color="primary" fontFamily="medium">
-              {i18n.t('modals.send.transactionInput.selectDifferentAccount')}
+              {i18n.t('modals.receive.toAccount.selectDifferentAccount')}
             </TextView>
           </LinearLayout>
         </TouchableWithoutFeedback>

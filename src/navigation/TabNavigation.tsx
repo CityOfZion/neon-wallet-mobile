@@ -14,12 +14,10 @@ import WalletConnectStackNavigation from './WalletConnectStackNavigation'
 import WalletStackNavigation from './WalletsStackNavigation'
 
 import * as data from '~src/Changelog.json'
-import { appBus } from '~src/app/AppBus'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Storage } from '~src/app/Storage'
 import FooterBar from '~src/components/layout/FooterBar'
 import { useWalletConnect } from '~src/contexts/WalletConnectContext'
-import { SenderTransaction } from '~src/models/redux/SenderTransaction'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import ContactsStackNavigation, { ContactsStackParams } from '~src/navigation/ContactsStackNavigation'
 import MoreStackNavigation, { MoreStackParam } from '~src/navigation/MoreStackNavigation'
@@ -72,17 +70,6 @@ const TabNavigation = (props: Props) => {
     }
 
     handleData()
-  }, [])
-
-  useEffect(() => {
-    appBus.on('navigateTransactionDetails', (transaction: SenderTransaction) => {
-      props.navigation.navigate(wrapper.route.Modal.name, {
-        screen: wrapper.route.TransactionDetails.name,
-        params: {
-          transaction,
-        },
-      })
-    })
   }, [])
 
   useEffect(() => {

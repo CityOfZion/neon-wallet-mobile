@@ -16,7 +16,8 @@ import { Contact } from '~src/models/redux/Contact'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
 export interface ContactsModalParams {
-  onSelected: (item: Contact | Account, addressSelected?: string) => void
+  onContactSelected?: (contact: Contact, address: string) => void
+  onAccountSelected?: (account: Account) => void
   filterByBlockchain?: BlockchainServiceKey
 }
 
@@ -102,7 +103,10 @@ export const ContactPicker = (props: ContactsModalProps) => {
             <ContactList
               mt={20}
               mb={PANEL_OFFSET}
-              onContactSelected={(it, address) => props.route.params.onSelected(it, address)}
+              onContactSelected={(contact, address) => {
+                if (props.route.params.onContactSelected) props.route.params.onContactSelected(contact, address)
+                controller.close()
+              }}
               searchBar
               filterByBlockchain={props.route.params.filterByBlockchain}
             />
@@ -112,7 +116,10 @@ export const ContactPicker = (props: ContactsModalProps) => {
         ) : (
           <AccountList
             mb={PANEL_OFFSET}
-            onAccountSelected={it => props.route.params.onSelected(it)}
+            onAccountSelected={account => {
+              if (props.route.params.onAccountSelected) props.route.params.onAccountSelected(account)
+              controller.close()
+            }}
             searchBar
             filterByBlockchain={props.route.params.filterByBlockchain}
           />

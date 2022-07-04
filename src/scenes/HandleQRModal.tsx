@@ -36,12 +36,9 @@ const HandleQRModal = (props: Props) => {
       onClick: () =>
         props?.onClick?.(
           CommonActions.navigate(wrapper.route.Modal.name, {
-            screen: wrapper.route.SendModalStack.name,
+            screen: wrapper.route.SendTransactionWalletSelectionModal.name,
             params: {
-              screen: wrapper.route.SendWalletSelectionModal.name,
-              params: {
-                uri: { address: props.address },
-              },
+              address: props.address,
             },
           })
         ),

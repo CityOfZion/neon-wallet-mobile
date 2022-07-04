@@ -13,9 +13,7 @@ import ModalWarningFee from '~/src/components/ModalWarningFee'
 import { ThemedClaimButton } from '~/src/components/themed/ThemedClaimButton'
 import { ThemedSendButton } from '~/src/components/themed/ThemedSendButton'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { useAmountFee } from '~/src/hooks/AmountFeeHook'
 import { Node } from '~/src/models/Node'
-import { TokenAsset } from '~/src/models/TokenAsset'
 import { AsyncDispatch, SyncDispatch } from '~/src/types/reducers/root'
 import { blockchainServices, hasWCIntegration, isClaimable } from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
@@ -87,16 +85,21 @@ const GetAccountView = (props: GetAccountViewProps) => {
       0
   )
 
-  const { amount: amountFee, calc: calcFee } = useAmountFee(account.blockchain)
+  const [fee, setFee] = useState<number>()
 
-  const handleCalcFee = useCallback(() => {
+  const handleCalcFee = useCallback(async () => {
     const tokenFee = account.tokenAssets.find(it => blockchainServices[account.blockchain].feeToken.token === it.symbol)
     if (tokenFee && account.address && unclaimedGasAmount > 0) {
-      const token = new TokenAsset(tokenFee.name, tokenFee.symbol, tokenFee.hash, tokenFee.blockchain)
-      token.amount = unclaimedGasAmount
-      calcFee(token, account, account.address)
+      const calculatedFee = await blockchainServices[account.blockchain].calculateTransferFee({
+        receiverAddress: account.address,
+        senderAddress: account.address,
+        amount: unclaimedGasAmount,
+        tokenHash: tokenFee.hash,
+      })
+
+      setFee(calculatedFee)
     }
-  }, [account, unclaimedGasAmount, amountFee])
+  }, [account, unclaimedGasAmount])
 
   const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
 
@@ -145,10 +148,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }, [unclaimedGasAmount])
 
   useEffect(() => {
-    if (amountFee >= 0) {
+    if (fee && fee >= 0) {
       handleIsClaimAvailable()
     }
-  }, [amountFee])
+  }, [fee])
 
   const keepUpdatedInfo = async () => {
     await dispatchAsync(RootStore.app.actions.syncAccounts())
@@ -192,30 +195,42 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }
 
   const handleClaimGas = useCallback(async () => {
-    if (unclaimedGasAmount && unclaimedGasAmount > amountFee) {
+    if (unclaimedGasAmount && fee && unclaimedGasAmount > fee) {
       await claimGas()
     } else {
       setShowWarning(true)
     }
-  }, [amountFee, totTokenFeeAccount, showWarning, unclaimedGasAmount])
+  }, [fee, totTokenFeeAccount, showWarning, unclaimedGasAmount])
 
   const claimGas = async () => {
     if (!account.address || !unclaimedGasAmount || !isConnected) return
 
     try {
       const bs = blockchainServices[account.blockchain]
+
       if (isClaimable(bs)) {
         Await.init(`ClaimGas@${account.address}`)
+
         const responseClaim = await bs.claimGas(account.address)
-        if (responseClaim?.txid) {
-          await account.addPendingUnclaimedGasTransaction(
-            unclaimedGasAmount,
-            responseClaim.txid,
-            responseClaim.token,
-            responseClaim.hash
-          )
-          await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
-        }
+
+        if (!responseClaim || !responseClaim.txid || !responseClaim.fee) return
+
+        const tokenAsset = tokensPool.find(token => token.hash === responseClaim.hash)
+
+        if (!tokenAsset) return
+
+        await account.addPendingTransaction(
+          responseClaim.txid,
+          'claim',
+          account.address,
+          tokenAsset,
+          unclaimedGasAmount,
+          responseClaim.fee
+        )
+
+        await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
+        dispatchAsync(RootStore.app.actions.syncAccounts())
+        dispatchAsync(RootStore.app.actions.watchPendingTransaction(account, responseClaim.txid, true))
       }
     } catch (e) {
       console.log('error claim gas => ', e)
@@ -314,7 +329,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
               onPress={handleClaimGas}
               isClaimAvailable={isClaimAvailable}
               unclaimedGasAmount={unclaimedGasAmount ?? 0}
-              fee={amountFee}
+              fee={fee ?? 0}
               isDark
             />
           </AwaitActivity>
@@ -327,13 +342,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
               ? undefined
               : () => {
                   props.navigation.navigate(wrapper.route.Modal.name, {
-                    screen: wrapper.route.SendModalStack.name,
+                    screen: wrapper.route.SendTransactionModal.name,
                     params: {
-                      screen: wrapper.route.SendTransactionInputModal.name,
-                      params: {
-                        walletTitle: wallet?.name ?? '',
-                        account,
-                      },
+                      wallet,
+                      account,
                     },
                   })
                 }
@@ -452,7 +464,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         onPress={claimGas}
         totTokenFeeAccount={totTokenFeeAccount}
         unclaimedGasAmount={unclaimedGasAmount ?? 0}
-        amountFee={amountFee ?? 0}
+        amountFee={fee ?? 0}
         showWarning={showWarning}
         setShowWarning={show => setShowWarning(show)}
       />

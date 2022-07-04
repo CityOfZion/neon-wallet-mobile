@@ -380,6 +380,64 @@
     }
   },
   "modals": {
+    "sendTransactionAccountSelectionModal": {
+      "title": "Send",
+      "label": "TRADING ACCOUNT TOKENS VALUE",
+      "subtitle": "Please select an account to send from"
+    },
+    "sendTransactionConfirmationModal": {
+      "title": "Send",
+      "header": "Transaction successfully sent!",
+      "subheader": "Once your transaction has been confirmed it will appear in your transaction history",
+      "transactionId": "TRANSACTION ID"
+    },
+    "sendTransactionReviewModal": {
+      "transactionFailed": "Transaction has failed",
+      "title": "Send",
+      "pleaseReview": "Please review transaction",
+      "value": "Value",
+      "fee": "%{tokenSymbol} Fee",
+      "sender": "Sent from",
+      "recipient": "Recipient"
+    },
+    "sendTransactionWalletSelectionModal": {
+      "title": "Send",
+      "subtitle": "Please select a wallet to send from",
+      "noFunds": "Your wallets currently have no funds, please add funds in order to send"
+    },
+    "sendTransactionModal": {
+      "title": "Send",
+      "transactionDetails": "TRANSACTION DETAILS",
+      "amount": "Amount",
+      "totalAfterTransaction": "total after transaction",
+      "max": "Max",
+      "enterValue": "Enter %{value}",
+      "insufficientFunds": "Insufficient funds!",
+      "roundDown": "round down",
+      "destinationAddress": "Destination Address",
+      "enterDestination": "Please enter destination address",
+      "prioritiseTransfer": "Prioritise your transfer with a fee?",
+      "tipCheckboxLabel": "I am happy to support my network and chip in \n %{tipValue} GAS (Optional)",
+      "token": "Token",
+      "selectToken": "Select token to send",
+      "totalFee": "TOTAL GAS FEE",
+      "insufficientGas": "INSUFICIENT GAS FOR TRANSACTION"
+    },
+    "transactionDetails": {
+      "title": "Transaction details",
+      "time": "Time",
+      "date": "Date",
+      "status": "Status",
+      "value": "Value",
+      "fee": "Fee",
+      "sender": "Sent from",
+      "recipient": "Recipient",
+      "hash": "Hash",
+      "viewOnDora": "View on Dora",
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "price": "Price"
+    },
     "invocationDetails": {
       "title": "Invocation Details",
       "detailsTitle": "Details",
@@ -448,55 +506,6 @@
       "invalidName": "Invalid Name",
       "search": "Search"
     },
-    "send": {
-      "title": "Send",
-      "walletSelection": {
-        "subtitle": "Please select a wallet to send from",
-        "noFunds": "Your wallets currently have no funds, please add funds in order to send"
-      },
-      "accountSelection": {
-        "subtitle": "Please select an account to send from",
-        "label": "TRADING ACCOUNT TOKENS VALUE"
-      },
-      "transactionConfirmation": {
-        "header": "Transaction successfully sent!",
-        "subheader": "Once your transaction has been confirmed it will appear in your transaction history",
-        "transactionId": "TRANSACTION ID"
-      },
-      "transactionInput": {
-        "selectDifferentAccount": "Select a different Account",
-        "transactionDetails": "TRANSACTION DETAILS",
-        "totalAfterTransaction": "total after transaction",
-        "max": "Max",
-        "roundDown": "round down",
-        "prioritiseTransfer": "Prioritise your transfer with a fee?",
-        "enterAmount": "Enter amount",
-        "enterValue": "Enter %{value} ",
-        "selectToken": "Select token to send",
-        "enterDestination": "Please enter destination address",
-        "destinationAddress": "Destination Address",
-        "token": "Token",
-        "amount": "Amount",
-        "insufficientFunds": "Insufficient funds!",
-        "contacts": "Contacts",
-        "paste": "Paste",
-        "scan": "Scan",
-        "tipCheckboxLabel": "(I am happy to support my network and chip in %{tipValue} GAS (Optional)"
-      },
-      "transactionReview": {
-        "token": "Token",
-        "amount": "Amount",
-        "remainingInWallet": "(%{token} in wallet)",
-        "value": "Value",
-        "price": "Price",
-        "priority": "Priority",
-        "sender": "Sent from",
-        "recipient": "Recipient",
-        "priorityFee": "%{tokenSymbol} Fee",
-        "feeAmount": "(Fee %{amount})",
-        "pleaseReview": "Please review transaction"
-      }
-    },
     "receive": {
       "title": "Receive",
       "walletSelection": {
@@ -513,7 +522,10 @@
         "enterAmount": "Enter amount",
         "addReference": "Add a reference",
         "reference": "Reference",
-        "generateQrCode": "Generate QR Code"
+        "generateQrCode": "Generate QR Code",
+        "token": "Token",
+        "amount": "Amount",
+        "selectDifferentAccount": "Select a different Account"
       }
     },
     "listTokenModal": {
@@ -754,6 +766,15 @@
     },
     "accountList": {
       "watch": "Watch"
+    },
+    "transactionTipCard": {
+      "qty": "Qty",
+      "value": "Value"
+    },
+    "transactionTokenCard": {
+      "qty": "Qty",
+      "value": "Value",
+      "fee": "Fee"
     }
   },
   "hooks": {
@@ -833,23 +854,6 @@
     "copiedToClipboard": "Copied to clipboard",
     "transactionWarning": "Transaction is pending"
   },
-  "transactionDetails": {
-    "time": "Time",
-    "date": "Date",
-    "status": "Status",
-    "value": "Value",
-    "priorityFee": "Priority Fee",
-    "sender": "Sent from",
-    "recipient": "Recipient",
-    "hash": "Hash",
-    "qty": "Qty",
-    "viewOnDora": "View on Dora",
-    "confirmed": "Confirmed",
-    "pending": "Pending",
-    "price": "Price",
-    "amount": "Amount",
-    "amountTokenNameInWallet": "%{amount} %{tokenName} in Wallet"
-  },
   "priorityFee": {
     "none": "None",
     "priorityFast": "Fast",
@@ -858,8 +862,7 @@
   },
   "messages": {
     "encryptedKeyNotValid": "Encrypted key is not valid",
-    "problemToGenerateWallet": "Problem to generate Wallet",
-    "transactionFailed": "Transaction has failed"
+    "problemToGenerateWallet": "Problem to generate Wallet"
   },
   "defaultNameWallet": {
     "importedWallet": "Imported Wallet",

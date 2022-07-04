@@ -15,13 +15,14 @@ import {
   getBlockchainByPrivateKeyWithPassword,
   BlockchainDataProvider,
   getBlockchainLogo,
-  SenderTransactionInfo,
+  SendTransactionData,
   IWalletConnect,
   hasWCIntegration,
   getBlockchainByWCChain,
   getWCChainByBlockchain,
   IRPCContract,
   isValidWcChain,
+  INFT,
 } from '~src/blockchain/common'
 
 export {
@@ -41,11 +42,12 @@ export {
   getBlockchainByPrivateKeyWithPassword,
   BlockchainDataProvider,
   getBlockchainLogo,
-  SenderTransactionInfo,
+  SendTransactionData,
   IWalletConnect,
   hasWCIntegration,
   getBlockchainByWCChain,
   getWCChainByBlockchain,
   IRPCContract,
   isValidWcChain,
+  INFT,
 }

@@ -104,7 +104,6 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
     setCurrentPage(pagination.pageNumber + 1)
 
     if (collector < 15) {
-      // handling pagination with post filter
       await fetchTransaction(currentPage + 1, collector)
     }
   }

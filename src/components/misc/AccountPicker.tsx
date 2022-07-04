@@ -1,8 +1,6 @@
-import PropTypes from 'prop-types'
 import React from 'react'
 import Carousel from 'react-native-snap-carousel'
 
-import { Normalize } from '~/src/app/Normalize'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
 import AccountCard from '~src/components/AccountCard'
 import { Account } from '~src/models/redux/Account'
@@ -16,9 +14,7 @@ interface Props {
   isCompacted?: boolean
 }
 
-const AccountPicker: React.FC<Props> = (props: Props) => {
-  const { accounts } = props
-
+const AccountPicker: React.FC<Props> = ({ isCompacted = true, accounts, ...props }: Props) => {
   const pressEvent = async (account: Account) => {
     if (props.onPress) {
       props.onPress(account)
@@ -36,7 +32,7 @@ const AccountPicker: React.FC<Props> = (props: Props) => {
       layout="default"
       data={accounts}
       sliderWidth={applicationConfig.windowWidth}
-      itemWidth={Normalize.scale(applicationConfig.windowWidth - 150) as number}
+      itemWidth={applicationConfig.windowWidth - 125}
       inactiveSlideScale={0.9}
       inactiveSlideOpacity={1}
       inactiveSlideShift={12}
@@ -48,33 +44,13 @@ const AccountPicker: React.FC<Props> = (props: Props) => {
       useScrollView
       firstItem={props.initialAccount ? props.initialAccount : 0}
       onSnapToItem={index => selectEvent(index)}
-      renderItem={(accountList: { item: Account; index: number }) => {
-        const { item } = accountList
-        return (
-          <LinearLayout justifyContent="center" alignItems="center">
-            <AccountCard
-              onPress={() => pressEvent(item)}
-              account={item}
-              isCompacted={props.isCompacted}
-              hideCopy
-              hideQRCode
-            />
-          </LinearLayout>
-        )
-      }}
+      renderItem={({ item }) => (
+        <LinearLayout justifyContent="center" alignItems="center">
+          <AccountCard onPress={() => pressEvent(item)} account={item} isCompacted={isCompacted} hideCopy hideQRCode />
+        </LinearLayout>
+      )}
     />
   )
-}
-
-AccountPicker.propTypes = {
-  onPress: PropTypes.func,
-  onSelect: PropTypes.func,
-  accounts: PropTypes.arrayOf(PropTypes.instanceOf(Account).isRequired).isRequired,
-  isCompacted: PropTypes.bool,
-}
-
-AccountPicker.defaultProps = {
-  isCompacted: true,
 }
 
 export default AccountPicker

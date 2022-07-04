@@ -18,9 +18,8 @@ import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface ListTokenModalParams {
-  selectedToken: TokenAsset | null | undefined
-  setToken: React.Dispatch<React.SetStateAction<TokenAsset | null | undefined>>
-  account?: Account
+  onChangeToken(token: TokenAsset): void
+  account: Account
   filterBy?: 'send' | 'receive'
 }
 
@@ -29,24 +28,20 @@ interface Props {
   route: RouteProp<ModalStackParamList, 'ListTokenModal'>
 }
 
-const Item = (props: {
-  controller: SwiperController
-  item: TokenAsset
-  setToken: React.Dispatch<React.SetStateAction<TokenAsset | null | undefined>>
-}) => {
+const Item = (props: { controller: SwiperController; item: TokenAsset; onChangeToken(token: TokenAsset): void }) => {
   return (
     <ButtonView
       py="12px"
       orientation="horiz"
       alignItems="center"
       onPress={() => {
-        props.setToken(props.item)
+        props.onChangeToken(props.item)
         props.controller.close()
       }}
     >
       <ImageView
-        height="29px"
-        width="29px"
+        height={Normalize.scale(29)}
+        width={Normalize.scale(29)}
         alignSelf="center"
         mr="12px"
         resizeMode="contain"
@@ -56,7 +51,7 @@ const Item = (props: {
         {props.item.symbol}
       </TextView>
 
-      <LinearLayout orientation="vert" mr="15px">
+      <LinearLayout mr="15px">
         <TextView textAlign="right" fontFamily="medium" fontSize="14px" color="text.2">
           {i18n.t('modals.listTokenModal.holding')}
         </TextView>
@@ -79,7 +74,7 @@ const Item = (props: {
 
 const ListTokenModal: React.FC<Props> = (props: Props) => {
   const controller = useSwiperController(true)
-  const { tokens } = useSelector((state: RootState) => state.app)
+  const tokens = useSelector((state: RootState) => state.app.tokens)
 
   const [tokenList, setTokenList] = useState<TokenAsset[]>([])
   const [emptySearchList, setEmptySearchList] = useState<boolean>(false)
@@ -168,7 +163,7 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
           }}
         />
         {emptySearchList ? (
-          <TextView font="semi-bold" color="text.0" fontSize={18} pt={5} textAlign="center">
+          <TextView fontWeight="medium" color="text.0" fontSize={18} pt={5} textAlign="center">
             {i18n.t('persistContact.noResultsFound')}
           </TextView>
         ) : (
@@ -177,7 +172,7 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
             keyExtractor={item => item.symbol}
             ItemSeparatorComponent={() => <LinearLayout bg="background.10" height={1} />}
             renderItem={({ item }) => (
-              <Item controller={controller} item={item} setToken={props.route.params.setToken} />
+              <Item controller={controller} item={item} onChangeToken={props.route.params.onChangeToken} />
             )}
           />
         )}

@@ -1,45 +1,40 @@
-import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import { TouchableOpacity } from 'react-native'
 
-import styled, { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
-  onChange?: (checked: boolean) => void
-  onClick?: () => void
+  onPress?: () => void
   checked?: boolean
   label: string
-  singleRow?: boolean
-  labelStyle?: {
-    color: string
-    size: string | number
-    numberOfLines: number
-    marginHorizontal: number
-    marginVertical: number
-  }
+  disabled?: boolean
 }
 
-const ThemedCheckbox: React.FC<Props> = props => {
-  const [value, setValue] = useState<boolean>(props.checked ?? false)
-
-  useEffect(() => {
-    if (value !== props.checked) {
-      setValue(props.checked ?? false)
-      props.onChange?.(value)
-    }
-  }, [props.checked])
+const ThemedCheckbox = (props: Props) => {
   return (
-    <CheckboxView style={{ width: '90%' }} onPress={props?.onClick}>
-      <CheckboxContentView orientation="horiz" alignItems="center" width="100%">
-        <CheckboxBoxView
+    <TouchableOpacity
+      style={{
+        maxWidth: '100%',
+        width: '90%',
+        opacity: props.disabled ? 0.5 : 1,
+      }}
+      onPress={props.onPress}
+      disabled={props.disabled}
+    >
+      <LinearLayout orientation="horiz" alignItems="center" width="100%">
+        <LinearLayout
+          borderWidth="1px"
+          borderStyle="solid"
+          borderRadius="7px"
           orientation="horiz"
           justifyContent="center"
           alignItems="center"
-          width={35}
-          height={35}
+          width={36}
+          height={36}
           borderColor="text.0"
           mr={4}
         >
-          {value && (
+          {props.checked && (
             <ImageView
               width={24}
               height={24}
@@ -47,58 +42,22 @@ const ThemedCheckbox: React.FC<Props> = props => {
               source={require('~src/assets/images/icon-check-green.png')}
             />
           )}
-        </CheckboxBoxView>
+        </LinearLayout>
 
-        <LabelView
-          weight={props.singleRow ? 1 : undefined}
-          color={props.labelStyle?.color ?? 'text.0'}
-          fontSize={props.labelStyle?.size ?? 'lg'}
+        <TextView
+          color="primary"
+          fontSize="14px"
           fontFamily="bold"
+          textAlign="left"
           allowFontScaling
           adjustsFontSizeToFit
-          numberOfLines={props.labelStyle?.numberOfLines ?? 3}
-          style={{
-            textAlign: 'left',
-            marginVertical: props.labelStyle?.marginVertical ?? 0,
-            marginHorizontal: props.labelStyle?.marginHorizontal ?? 0,
-          }}
+          numberOfLines={3}
         >
           {props.label}
-        </LabelView>
-      </CheckboxContentView>
-    </CheckboxView>
+        </TextView>
+      </LinearLayout>
+    </TouchableOpacity>
   )
 }
-
-ThemedCheckbox.propTypes = {
-  onChange: PropTypes.func,
-  onClick: PropTypes.func,
-  checked: PropTypes.bool,
-  label: PropTypes.string.isRequired,
-  singleRow: PropTypes.bool,
-  labelStyle: PropTypes.any,
-}
-
-ThemedCheckbox.defaultProps = {
-  checked: false,
-  singleRow: false,
-}
-
-const CheckboxView = styled.TouchableOpacity`
-  box-shadow: 0 -6px 6px rgba(255, 255, 255, 0.1);
-  max-width: 100%;
-`
-
-const CheckboxContentView = styled(LinearLayout)``
-
-const CheckboxBoxView = styled(LinearLayout)`
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 7px;
-`
-
-const LabelView = styled(TextView)`
-  text-align: center;
-`
 
 export default ThemedCheckbox
