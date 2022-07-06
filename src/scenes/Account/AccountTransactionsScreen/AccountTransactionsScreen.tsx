@@ -78,7 +78,7 @@ const AccountTransactionsScreen = (props: Props) => {
     new Map(
       blockchainServices[account.blockchain].assets.map(({ symbol, decimals, hash }) => [hash, { symbol, decimals }])
     )
-  );
+  )
 
   const getDecimalsAndSymbolToken = useCallback(async (hash: string) => {
     const cachedAsset = decimalsCache.current.get(hash)
@@ -174,7 +174,7 @@ const AccountTransactionsScreen = (props: Props) => {
                   }
                 }
               )
-            );
+            )
 
             const filteredTransfers = formattedTransfers.filter(
               (transfer): transfer is FormattedTransferAsset | FormattedTransferNFT => !!transfer

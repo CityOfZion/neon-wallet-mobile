@@ -42,7 +42,6 @@ export abstract class Sync {
   static async refresh(dispatch: AsyncDispatch<any>) {
     const promises = [
       dispatch(RootStore.app.actions.syncTokens()),
-      dispatch(RootStore.app.actions.syncExchange()),
       dispatch(RootStore.app.actions.syncNodes()),
       dispatch(RootStore.app.actions.syncTokenAssets()),
     ]
@@ -53,7 +52,6 @@ export abstract class Sync {
   static async fetchs(dispatch: AsyncDispatch<any>) {
     const promises = [
       dispatch(RootStore.app.actions.fetchTokens()),
-      dispatch(RootStore.app.actions.fetchExchange()),
       dispatch(RootStore.app.actions.fetchBalanceAccounts()),
       dispatch(RootStore.app.actions.fetchNodes()),
     ]

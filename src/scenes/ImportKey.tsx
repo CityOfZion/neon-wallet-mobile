@@ -9,12 +9,12 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { IURI } from '../helpers/UriHelper'
 import { AccountToImport } from '../hooks/BlockchainActionsHook'
-import { useExchange } from '../hooks/useExchange';
-import { TabStackParamList } from '../navigation/TabNavigation';
-import { AsyncDispatch } from '../types/reducers/root';
-import { MnemonicSelectionInfo } from './MnemonicSelectionList';
+import { useExchange } from '../hooks/useExchange'
+import { TabStackParamList } from '../navigation/TabNavigation'
+import { AsyncDispatch } from '../types/reducers/root'
+import { MnemonicSelectionInfo } from './MnemonicSelectionList'
 
-import { wrapper } from '~src/app/ApplicationWrapper';
+import { wrapper } from '~src/app/ApplicationWrapper'
 import {
   BlockchainServiceKey,
   blockchainList,
@@ -24,19 +24,19 @@ import {
   validateWifAllBlockchains,
   getBlockchainByAddress,
   blockchainServices,
-} from '~src/blockchain';
-import AddressesImportList from '~src/components/AddressesImportList';
-import InputWithValidation from '~src/components/InputWithValidation';
-import ScreenLayout from '~src/components/layout/ScreenLayout';
-import ScreenLoader from '~src/components/loader/ScreenLoader';
-import ThemedButton from '~src/components/themed/ThemedButton';
-import { UtilsHelper } from '~src/helpers/UtilsHelper';
-import { useBlockchainActionsHook } from '~src/hooks';
-import { RootStackParamList } from '~src/navigation/AppNavigation';
-import { MoreStackParamList } from '~src/navigation/MoreStackNavigation';
-import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation';
-import { RootState, RootStore } from '~src/store/RootStore';
-import { LinearLayout, ImageView, TextView } from '~src/styles/styled-components';
+} from '~src/blockchain'
+import AddressesImportList from '~src/components/AddressesImportList'
+import InputWithValidation from '~src/components/InputWithValidation'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
+import ThemedButton from '~src/components/themed/ThemedButton'
+import { UtilsHelper } from '~src/helpers/UtilsHelper'
+import { useBlockchainActionsHook } from '~src/hooks'
+import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
+import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
+import { RootState, RootStore } from '~src/store/RootStore'
+import { LinearLayout, ImageView, TextView } from '~src/styles/styled-components'
 
 type ParamList = MoreStackParamList & RootStackParamList & TabStackParamList & WalletStackParamList
 interface ImportKeyProps {

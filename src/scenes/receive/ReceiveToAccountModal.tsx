@@ -7,24 +7,24 @@ import { useSelector } from 'react-redux'
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
-import { useExchange } from '~/src/hooks/useExchange';
-import { RootStackParamList } from '~/src/navigation/AppNavigation';
-import { ReceiveModalStackParamList } from '~/src/navigation/ReceiveModalStackNavigation';
-import { RootState } from '~/src/store/RootStore';
-import AccountCard from '~src/components/AccountCard';
-import InputLabel from '~src/components/InputLabel';
-import InputWithValidation from '~src/components/InputWithValidation';
-import { QRCodeWithCopyButton } from '~src/components/QRCodeWithCopyButton';
-import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel';
-import TabSelector from '~src/components/TabSelector';
-import ThemedButton from '~src/components/themed/ThemedButton';
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton';
-import { TokenAsset } from '~src/models/TokenAsset';
-import { Account } from '~src/models/redux/Account';
-import { Wallet } from '~src/models/redux/Wallet';
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation';
-import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components';
-import { ApplicationTheme } from '~src/themes/ApplicationTheme';
+import { useExchange } from '~/src/hooks/useExchange'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
+import { ReceiveModalStackParamList } from '~/src/navigation/ReceiveModalStackNavigation'
+import { RootState } from '~/src/store/RootStore'
+import AccountCard from '~src/components/AccountCard'
+import InputLabel from '~src/components/InputLabel'
+import InputWithValidation from '~src/components/InputWithValidation'
+import { QRCodeWithCopyButton } from '~src/components/QRCodeWithCopyButton'
+import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
+import TabSelector from '~src/components/TabSelector'
+import ThemedButton from '~src/components/themed/ThemedButton'
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { Account } from '~src/models/redux/Account'
+import { Wallet } from '~src/models/redux/Wallet'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ApplicationTheme } from '~src/themes/ApplicationTheme'
 
 const TokenField = (props: {
   theme: ApplicationTheme

@@ -7,16 +7,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks'
-import { useExchange } from '~/src/hooks/useExchange';
-import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation';
-import { SyncDispatch } from '~/src/types/reducers/root';
-import { hasWalletconnect } from '~src/blockchain/common';
-import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel';
-import WalletPicker from '~src/components/misc/WalletPicker';
-import { IURI } from '~src/helpers/UriHelper';
-import { Wallet } from '~src/models/redux/Wallet';
-import { RootState, RootStore } from '~src/store/RootStore';
-import { TextView } from '~src/styles/styled-components';
+import { useExchange } from '~/src/hooks/useExchange'
+import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
+import { SyncDispatch } from '~/src/types/reducers/root'
+import { hasWalletconnect } from '~src/blockchain/common'
+import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
+import WalletPicker from '~src/components/misc/WalletPicker'
+import { IURI } from '~src/helpers/UriHelper'
+import { Wallet } from '~src/models/redux/Wallet'
+import { RootState, RootStore } from '~src/store/RootStore'
+import { TextView } from '~src/styles/styled-components'
 
 export interface WCWalletSelectionModalModalParams {
   uri?: IURI
@@ -38,7 +38,7 @@ const WCWalletSelectionModal = (props: Props) => {
 
   const usableWallets = wallets.filter(
     (value: Wallet) => value.walletType !== 'watch' && value.getAccounts(accountsPool).some(it => hasWalletconnect(it))
-  );
+  )
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(wallet)
 

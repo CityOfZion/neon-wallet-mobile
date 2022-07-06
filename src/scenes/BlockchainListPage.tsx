@@ -49,7 +49,7 @@ const BlockchainListPage = (props: Props) => {
               count: 1,
             })}`
           )
-        );
+        )
         dispatch(RootStore.account.actions.setBlockchain(blockchain))
         dispatch(RootStore.account.actions.setSrcIcon(blockchainServices[blockchain].icon))
         dispatch(RootStore.account.actions.setBackgroundColor(theme.colors.card[UtilsHelper.getRandomNumber(6)]))

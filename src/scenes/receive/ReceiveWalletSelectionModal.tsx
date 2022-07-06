@@ -7,16 +7,16 @@ import { useSelector, useDispatch } from 'react-redux'
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
-import { useExchange } from '~/src/hooks/useExchange';
-import { RootStackParamList } from '~/src/navigation/AppNavigation';
-import { SyncDispatch } from '~/src/types/reducers/root';
-import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel';
-import WalletPicker from '~src/components/misc/WalletPicker';
-import { Wallet } from '~src/models/redux/Wallet';
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation';
-import { ReceiveModalStackParamList } from '~src/navigation/ReceiveModalStackNavigation';
-import { RootState, RootStore } from '~src/store/RootStore';
-import { LinearLayout, TextView } from '~src/styles/styled-components';
+import { useExchange } from '~/src/hooks/useExchange'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
+import { SyncDispatch } from '~/src/types/reducers/root'
+import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
+import WalletPicker from '~src/components/misc/WalletPicker'
+import { Wallet } from '~src/models/redux/Wallet'
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
+import { ReceiveModalStackParamList } from '~src/navigation/ReceiveModalStackNavigation'
+import { RootState, RootStore } from '~src/store/RootStore'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList & ModalStackParamList>

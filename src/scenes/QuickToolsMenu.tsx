@@ -88,6 +88,7 @@ export default function QuickToolsMenu(props: Props) {
       onClick: () =>
         navigation.navigate(wrapper.route.Modal.name, {
           screen: wrapper.route.SendTransactionWalletSelectionModal.name,
+          params: {},
         }),
     },
     {

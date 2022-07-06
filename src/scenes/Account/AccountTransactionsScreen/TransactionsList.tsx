@@ -4,15 +4,15 @@ import React, { useCallback, useMemo, useRef } from 'react'
 import { FlatList, RefreshControl } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { FormattedTransaction } from './AccountTransactionsScreen';
-import { TransactionListItem } from './TransactionListItem';
+import { FormattedTransaction } from './AccountTransactionsScreen'
+import { TransactionListItem } from './TransactionListItem'
 
-import { FlatListEmpty } from '~/src/components/FlatListEmpty';
-import { FlatListFooter } from '~/src/components/FlatListFooter';
-import { useExchange } from '~/src/hooks/useExchange';
+import { FlatListEmpty } from '~/src/components/FlatListEmpty'
+import { FlatListFooter } from '~/src/components/FlatListFooter'
+import { useExchange } from '~/src/hooks/useExchange'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
-import { LinearLayout } from '~/src/styles/styled-components';
+import { LinearLayout } from '~/src/styles/styled-components'
 
 interface TransactionsListDateProps {
   completedTransactions: FormattedTransaction[]

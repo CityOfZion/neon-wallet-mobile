@@ -6,12 +6,12 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../store/RootStore'
 import { Exchange } from '../types/exchange'
 
-import AccountCard from '~src/components/AccountCard';
-import ThemedShadowContainer from '~src/components/themed/ThemedShadowContainer';
-import { UtilsHelper } from '~src/helpers/UtilsHelper';
-import { Account } from '~src/models/redux/Account';
-import { Wallet } from '~src/models/redux/Wallet';
-import styled, { ButtonView, ImageView, LinearLayout, RelativeLayout, TextView } from '~src/styles/styled-components';
+import AccountCard from '~src/components/AccountCard'
+import ThemedShadowContainer from '~src/components/themed/ThemedShadowContainer'
+import { UtilsHelper } from '~src/helpers/UtilsHelper'
+import { Account } from '~src/models/redux/Account'
+import { Wallet } from '~src/models/redux/Wallet'
+import styled, { ButtonView, ImageView, LinearLayout, RelativeLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
   wallet: Wallet

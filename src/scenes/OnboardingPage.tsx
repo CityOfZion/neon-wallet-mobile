@@ -98,7 +98,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
         }),
         blockchain
       )
-    );
+    )
 
     allSettled.shim()
 

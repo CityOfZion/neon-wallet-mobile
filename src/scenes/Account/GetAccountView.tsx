@@ -84,7 +84,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   const [totTokenFeeAccount] = useState<number>(
     account.tokenAssets.find(token => token.symbol === blockchainServices[account.blockchain].feeToken.token)?.amount ??
-      0,
+      0
   )
 
   const [fee, setFee] = useState<number>()

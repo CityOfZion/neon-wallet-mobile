@@ -1,4 +1,4 @@
-import type {ClassType} from 'class-transformer/ClassTransformer'
+import type { ClassType } from 'class-transformer/ClassTransformer'
 
 export type DataType<T> = ClassType<T> | T
 

@@ -5,19 +5,19 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
-import { useExchange } from '~/src/hooks/useExchange';
-import { Wallet } from '~/src/models/redux/Wallet';
-import { RootState } from '~/src/store/RootStore';
-import AssetQuoteComponent from '~src/components/AssetQuoteComponent';
-import TransactionsList from '~src/components/TransactionsList';
-import ScreenLayout from '~src/components/layout/ScreenLayout';
-import ScreenLoader from '~src/components/loader/ScreenLoader';
-import { TokenAsset } from '~src/models/TokenAsset';
-import { TransactionDateGroup } from '~src/models/TransactionDateGroup';
-import { Account } from '~src/models/redux/Account';
-import { QuickToolsStackParamList } from '~src/navigation/QuickToolsStackNavigation';
-import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation';
-import { LinearLayout } from '~src/styles/styled-components';
+import { useExchange } from '~/src/hooks/useExchange'
+import { Wallet } from '~/src/models/redux/Wallet'
+import { RootState } from '~/src/store/RootStore'
+import AssetQuoteComponent from '~src/components/AssetQuoteComponent'
+import TransactionsList from '~src/components/TransactionsList'
+import ScreenLayout from '~src/components/layout/ScreenLayout'
+import ScreenLoader from '~src/components/loader/ScreenLoader'
+import { TokenAsset } from '~src/models/TokenAsset'
+import { TransactionDateGroup } from '~src/models/TransactionDateGroup'
+import { Account } from '~src/models/redux/Account'
+import { QuickToolsStackParamList } from '~src/navigation/QuickToolsStackNavigation'
+import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
+import { LinearLayout } from '~src/styles/styled-components'
 
 interface AccountAssetDetailProps {
   route: RouteProp<WalletStackParamList, 'AccountAssetDetail'>

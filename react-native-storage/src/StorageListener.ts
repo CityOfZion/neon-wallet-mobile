@@ -1,4 +1,4 @@
-import type {CallbackType} from './types'
+import type { CallbackType } from './types'
 
 const callbacksStart: CallbackType[] = []
 const callbacksEnd: CallbackType[] = []
@@ -12,7 +12,7 @@ export const StorageListener = {
   },
   emitStorage(name: string, callbacks: CallbackType[] | null) {
     if (callbacks) {
-      callbacks.forEach((c) => c(name))
+      callbacks.forEach(c => c(name))
     }
   },
   onStorageStart(cb: CallbackType) {

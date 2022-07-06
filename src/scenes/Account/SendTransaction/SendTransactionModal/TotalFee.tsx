@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux'
 
 import { Normalize } from '~/src/app/Normalize'
 import { blockchainServices } from '~/src/blockchain'
-import { useExchange } from '~/src/hooks/useExchange';
-import { TokenAsset } from '~/src/models/TokenAsset';
-import { Account } from '~/src/models/redux/Account';
-import { RootState } from '~/src/store/RootStore';
-import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components';
+import { useExchange } from '~/src/hooks/useExchange'
+import { TokenAsset } from '~/src/models/TokenAsset'
+import { Account } from '~/src/models/redux/Account'
+import { RootState } from '~/src/store/RootStore'
+import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {
   amount?: number

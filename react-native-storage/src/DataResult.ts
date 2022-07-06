@@ -1,15 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import {
-  classToPlain,
-  ClassTransformOptions,
-  plainToClass,
-  plainToClassFromExist,
-} from 'class-transformer'
-import type {ClassType} from 'class-transformer/ClassTransformer'
+import { classToPlain, ClassTransformOptions, plainToClass, plainToClassFromExist } from 'class-transformer'
+import type { ClassType } from 'class-transformer/ClassTransformer'
 
-import type {DataStorage} from './DataStorage'
-import {StorageListener} from './StorageListener'
-import type {DataType} from './types'
+import type { DataStorage } from './DataStorage'
+import { StorageListener } from './StorageListener'
+import type { DataType } from './types'
 
 export class DataResult<T = any> {
   constructor(dataStore: DataStorage, dataType?: DataType<T>) {

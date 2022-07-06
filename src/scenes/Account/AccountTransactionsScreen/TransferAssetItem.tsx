@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux'
 
 import { FormattedTransferAsset } from './AccountTransactionsScreen'
 
-import SkeletonContainer from '~/src/components/SkeletonContainer';
-import { FilterHelper } from '~/src/helpers/FilterHelper';
+import SkeletonContainer from '~/src/components/SkeletonContainer'
+import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { useExchange } from '~/src/hooks/useExchange'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
