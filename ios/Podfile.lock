@@ -24,6 +24,8 @@ PODS:
   - EXJSONUtils (0.2.1)
   - EXKeepAwake (10.0.2):
     - ExpoModulesCore
+  - EXLinearGradient (10.0.3):
+    - ExpoModulesCore
   - EXLocalAuthentication (12.1.1):
     - ExpoModulesCore
   - EXManifests (0.2.4):
@@ -31,8 +33,6 @@ PODS:
   - EXPermissions (13.1.1):
     - ExpoModulesCore
   - Expo (44.0.6):
-    - ExpoModulesCore
-  - ExpoLinearGradient (11.0.3):
     - ExpoModulesCore
   - ExpoModulesCore (0.6.5):
     - React-Core
@@ -419,7 +419,7 @@ PODS:
     - React-Core
   - RNNeoSdkBindings (1.0.0):
     - React
-  - RNReanimated (2.3.3):
+  - RNReanimated (2.2.4):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -445,6 +445,7 @@ PODS:
     - React-RCTNetwork
     - React-RCTSettings
     - React-RCTText
+    - React-RCTVibration
     - ReactCommon/turbomodule/core
     - Yoga
   - RNScreens (3.10.2):
@@ -471,11 +472,11 @@ DEPENDENCIES:
   - EXImageLoader (from `../node_modules/expo-image-loader/ios`)
   - EXJSONUtils (from `../node_modules/expo-json-utils/ios`)
   - EXKeepAwake (from `../node_modules/expo-keep-awake/ios`)
+  - EXLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
   - EXLocalAuthentication (from `../node_modules/expo-local-authentication/ios`)
   - EXManifests (from `../node_modules/expo-manifests/ios`)
   - EXPermissions (from `../node_modules/expo-permissions/ios`)
   - Expo (from `../node_modules/expo/ios`)
-  - ExpoLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core/ios`)
   - EXPrint (from `../node_modules/expo-print/ios`)
   - EXRandom (from `../node_modules/expo-random/ios`)
@@ -571,6 +572,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-json-utils/ios"
   EXKeepAwake:
     :path: "../node_modules/expo-keep-awake/ios"
+  EXLinearGradient:
+    :path: "../node_modules/expo-linear-gradient/ios"
   EXLocalAuthentication:
     :path: "../node_modules/expo-local-authentication/ios"
   EXManifests:
@@ -579,8 +582,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-permissions/ios"
   Expo:
     :path: "../node_modules/expo/ios"
-  ExpoLinearGradient:
-    :path: "../node_modules/expo-linear-gradient/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core/ios"
   EXPrint:
@@ -703,11 +704,11 @@ SPEC CHECKSUMS:
   EXImageLoader: 347b72c2ec2df65120ccec40ea65a4c4f24317ff
   EXJSONUtils: 5ee0d5cf76da70ad86f0be1a41cc70f47d69e06f
   EXKeepAwake: bf48d7f740a5cd2befed6cf9a49911d385c6c47d
+  EXLinearGradient: 4d727eacb53d19ef25b02dd810e0199b453489ce
   EXLocalAuthentication: 3c5f368ee954b79c3778158eb8000cbce4e2f8a2
   EXManifests: d3464cd2278f4a19cd80c1aa673231570b534c11
   EXPermissions: 2f8db9cfb1919d6c6776f462bb2c5a903e423b2a
   Expo: 534e51e607aba8229293297da5585f4b26f50fa1
-  ExpoLinearGradient: fd591c223c81f6779036ed4cef4deb20ecb87c50
   ExpoModulesCore: 32c0ccb47f477d330ee93db72505380adf0de09a
   EXPrint: 35b4f82e323f40edc8fe86db417f55666d5abbb6
   EXRandom: 1d00fd04d7d874c0c9d1ff87cee59ffe0b638a3d
@@ -768,7 +769,7 @@ SPEC CHECKSUMS:
   RNFBApp: a9af8372c9c2b2135ffa78817fd2d8baf3ee632e
   RNGestureHandler: e1099204721a17a89c81fcd1cc2e92143dc040fb
   RNNeoSdkBindings: 4611f9b70ba945396ff13092e7afc050a1b7ac8e
-  RNReanimated: 0e5ef4a7e4e79f84efbe5b40771c31044c51e7d0
+  RNReanimated: 024eff8202342abf4b24e11575a16afc441dabfe
   RNScreens: d6da2b9e29cf523832c2542f47bf1287318b1868
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   Yoga: e6ecf3fa25af9d4c87e94ad7d5d292eedef49749

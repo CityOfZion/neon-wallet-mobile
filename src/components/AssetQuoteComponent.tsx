@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { RootState } from '../store/RootStore'
@@ -19,8 +19,14 @@ interface Props {
 const AssetQuoteComponent: React.FC<Props> = props => {
   const { exchange } = props
   const { language, currency } = useSelector((state: RootState) => state.settings)
-  const [ratio, setRatio] = useState<number | null>(null)
   const amountExchanged = props.token.exchangeToken(currency, exchange)
+
+  const ratio = useMemo(() => {
+    if(exchange){
+      return props.token.getCurrencyRatio(currency, exchange)
+    }
+    return null
+  }, [exchange])
 
   const quoteText = ratio
     ? `${props.token.symbol} 1 = ${FilterHelper.currencyExtendedMaxLimit(ratio, currency, language)}`
@@ -28,15 +34,6 @@ const AssetQuoteComponent: React.FC<Props> = props => {
 
   const valueText = FilterHelper.currency(amountExchanged, currency, language)
 
-  const calcRatio = () => {
-    if (exchange) {
-      setRatio(props.token.getCurrencyRatio(currency, exchange))
-    }
-  }
-
-  useEffect(() => {
-    calcRatio()
-  }, [exchange])
 
   return (
     <LinearLayout orientation="horiz" width="100%" alignItems="center">

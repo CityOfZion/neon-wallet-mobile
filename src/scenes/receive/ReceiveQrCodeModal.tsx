@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import ViewShot from 'react-native-view-shot'
 import { useSelector } from 'react-redux'
 
@@ -48,8 +48,14 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
   const { exchange } = useExchange({ filter: { currencies: currency } })
   const controller = useSwiperController(true)
   const [showQr, setShowQr] = useState(false)
-  const [ratio, setRatio] = useState<number>(0)
   const { wallet, account, amount, token, reference } = props.route.params
+
+  const ratio = useMemo(() => {
+    if(exchange){
+      return exchange[token.symbol]?.to[currency] ?? 0
+    }
+    return 0
+  }, [exchange])
 
   const value = FilterHelper.currency(amount * ratio, currency)
   const labelWeight = 1.5
@@ -65,12 +71,6 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
     })
   }
 
-  const calcRatio = useCallback(() => {
-    if (exchange) {
-      setRatio(exchange[token.symbol]?.to[currency] ?? 0)
-    }
-  }, [exchange])
-
   const renderQr = async () => {
     await UtilsHelper.sleep(1000)
     setShowQr(true)
@@ -79,10 +79,6 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
   useEffect(() => {
     Await.run('renderQr', renderQr)
   }, [])
-
-  useEffect(() => {
-    calcRatio()
-  }, [calcRatio])
 
   return (
     <SwiperPanel
