@@ -18,15 +18,16 @@ import AccountCard from '~/src/components/AccountCard'
 import SwiperPanel, { PANEL_OFFSET, useSwiperController } from '~/src/components/SwiperPanel'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
-import { TokenAsset } from '~/src/models/TokenAsset'
-import { Account } from '~/src/models/redux/Account'
-import { Contact } from '~/src/models/redux/Contact'
-import { Wallet } from '~/src/models/redux/Wallet'
-import { RootStackParamList } from '~/src/navigation/AppNavigation'
-import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
-import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
-import { RootState } from '~/src/store/RootStore'
-import { LinearLayout, TextView } from '~/src/styles/styled-components'
+import { useExchange } from '~/src/hooks/useExchange';
+import { TokenAsset } from '~/src/models/TokenAsset';
+import { Account } from '~/src/models/redux/Account';
+import { Contact } from '~/src/models/redux/Contact';
+import { Wallet } from '~/src/models/redux/Wallet';
+import { RootStackParamList } from '~/src/navigation/AppNavigation';
+import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation';
+import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation';
+import { RootState } from '~/src/store/RootStore';
+import { LinearLayout, TextView } from '~/src/styles/styled-components';
 
 export interface SendTransactionModalParams {
   account: Account
@@ -63,6 +64,9 @@ export const SendTransactionModal = (props: Props) => {
   const [tipIsChecked, setTipIsChecked] = useState<boolean>(true)
   const [tipIsDisabled, setTipIsDisabled] = useState<boolean>(false)
 
+  const currency = useSelector((state: RootState) => state.settings.currency)
+  const { exchange } = useExchange({ filter: { currencies: currency } })
+
   const handleChangeToken = (token: TokenAsset) => {
     setToken(token)
     setAmount(undefined)
@@ -82,7 +86,9 @@ export const SendTransactionModal = (props: Props) => {
   }
 
   const submit = () => {
-    if (!validateField) return
+    if (!validateField) {
+      return
+    }
 
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.SendTransactionReviewModal.name,
@@ -131,7 +137,7 @@ export const SendTransactionModal = (props: Props) => {
                 {wallet.name}
               </TextView>
 
-              <AccountCard account={account} />
+              <AccountCard exchange={exchange} account={account} />
 
               <TextView mt="40px" alignSelf="center" color="text.3" fontSize="md" fontFamily="bold">
                 {i18n.t('modals.sendTransactionModal.transactionDetails')}

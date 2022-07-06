@@ -3,7 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { Animated, Easing, LayoutChangeEvent, Dimensions, View } from 'react-native'
+import { Animated, Easing, LayoutChangeEvent, Dimensions, View, RefreshControl } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -13,6 +13,7 @@ import ModalWarningFee from '~/src/components/ModalWarningFee'
 import { ThemedClaimButton } from '~/src/components/themed/ThemedClaimButton'
 import { ThemedSendButton } from '~/src/components/themed/ThemedSendButton'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
+import { useExchange } from '~/src/hooks/useExchange'
 import { Node } from '~/src/models/Node'
 import { AsyncDispatch, SyncDispatch } from '~/src/types/reducers/root'
 import { blockchainServices, hasWCIntegration, isClaimable } from '~src/blockchain'
@@ -54,10 +55,11 @@ const TitleComponent = (props: { nodesPool: NeoNode[]; language: Lang }) => {
 const GetAccountView = (props: GetAccountViewProps) => {
   const { sessions } = useWalletConnect()
   const tokensPool = useSelector((state: RootState) => state.app.tokens)
-  const { language } = useSelector((state: RootState) => state.settings)
+  const { language, currency } = useSelector((state: RootState) => state.settings)
   const { address } = useSelector((state: RootState) => state.account)
   const posYFactor = useRef(new Animated.Value(0))
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
+  const { exchange, isRefetching, refetch } = useExchange({ filter: { currencies: currency } })
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const [currentPage, setCurrentPage] = useState(1)
@@ -82,7 +84,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   const [totTokenFeeAccount] = useState<number>(
     account.tokenAssets.find(token => token.symbol === blockchainServices[account.blockchain].feeToken.token)?.amount ??
-      0
+      0,
   )
 
   const [fee, setFee] = useState<number>()
@@ -170,7 +172,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }, [account, unclaimedGasAmount, isWatchAccount, isConnected])
 
   const populateUnclaimed = async () => {
-    if (!account.address) return
+    if (!account.address) {
+      return
+    }
 
     const request = blockchainServices[account.blockchain].provider
     const response = await request.getUnclaimed(account.address)
@@ -203,7 +207,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }, [fee, totTokenFeeAccount, showWarning, unclaimedGasAmount])
 
   const claimGas = async () => {
-    if (!account.address || !unclaimedGasAmount || !isConnected) return
+    if (!account.address || !unclaimedGasAmount || !isConnected) {
+      return
+    }
 
     try {
       const bs = blockchainServices[account.blockchain]
@@ -213,11 +219,15 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
         const responseClaim = await bs.claimGas(account.address)
 
-        if (!responseClaim || !responseClaim.txid || !responseClaim.fee) return
+        if (!responseClaim || !responseClaim.txid || !responseClaim.fee) {
+          return
+        }
 
         const tokenAsset = tokensPool.find(token => token.hash === responseClaim.hash)
 
-        if (!tokenAsset) return
+        if (!tokenAsset) {
+          return
+        }
 
         await account.addPendingTransaction(
           responseClaim.txid,
@@ -277,9 +287,12 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   return (
     <ScreenLayout
+      refreshControl={<RefreshControl tintColor="#fff" refreshing={isRefetching} onRefresh={refetch} />}
       darkerSolidColorBG
       onReachBottom={() => {
-        if (Await.inAction('loadMoreTransaction')) return
+        if (Await.inAction('loadMoreTransaction')) {
+          return
+        }
         Await.run('loadMoreTransaction', () => fetchTransaction(currentPage), 500)
       }}
     >
@@ -295,7 +308,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
         }}
       >
         <LinearLayout mt={4}>
-          <AccountCard account={account} hasShadow={false} isStackMode={false} />
+          <AccountCard exchange={exchange} account={account} hasShadow={false} isStackMode={false} />
         </LinearLayout>
       </Animated.View>
       <View

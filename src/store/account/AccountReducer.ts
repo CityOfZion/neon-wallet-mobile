@@ -68,7 +68,9 @@ export class AccountReducer extends ReducerWrapper<AccountActionsType, AccountSt
     createAndSave: (indexAccount?: number): AsyncAction<string> => {
       const generateAccount = async (wallet: Wallet, index: number, blockchain: BlockchainServiceKey) => {
         const mnemonic = await wallet.getMnemonic()
-        if (!mnemonic) return null
+        if (!mnemonic) {
+          return null
+        }
         return blockchainServices[blockchain].generateAccount(mnemonic, index)
       }
 

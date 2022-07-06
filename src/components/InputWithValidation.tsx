@@ -85,11 +85,15 @@ const InputWithValidation = (props: Props) => {
   const fontColor = isInvalid ? props.invalidColor : props.color
 
   const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-    if (props.onBlur) props.onBlur(e)
+    if (props.onBlur) {
+      props.onBlur(e)
+    }
   }
 
   const handleChangeText = (text: string) => {
-    if (props.onChangeText) props.onChangeText(UtilsHelper.clearText(text))
+    if (props.onChangeText) {
+      props.onChangeText(UtilsHelper.clearText(text))
+    }
   }
 
   return (

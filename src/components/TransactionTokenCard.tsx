@@ -5,10 +5,11 @@ import { useSelector } from 'react-redux'
 import { Normalize } from '../app/Normalize'
 import { TokenAsset } from '../models/TokenAsset'
 import { RootState } from '../store/RootStore'
+import { Exchange } from '../types/exchange'
 
-import { HeaderColumn } from '~src/components/HeaderColumn'
-import { FilterHelper } from '~src/helpers/FilterHelper'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { HeaderColumn } from '~src/components/HeaderColumn';
+import { FilterHelper } from '~src/helpers/FilterHelper';
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components';
 
 interface Props {
   token: TokenAsset
@@ -17,17 +18,22 @@ interface Props {
   fee: number
   hideSingleTokenPrice?: boolean
   hideFee?: boolean
+  exchange?: Exchange
 }
 
-export const TransactionTokenCard = ({ amount, fee, fiat, token, hideFee, hideSingleTokenPrice }: Props) => {
+export const TransactionTokenCard = ({ amount, fee, fiat, token, hideFee, hideSingleTokenPrice, exchange }: Props) => {
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
-  const exchange = useSelector((state: RootState) => state.app.exchange)
 
   const singlePrice = useMemo(() => {
-    const ratio = exchange[token.blockchain][token.symbol]?.to[currency]
+    if (!exchange) {
+      return
+    }
+    const ratio = exchange[token.symbol]?.to[currency]
 
-    if (!ratio) return
+    if (!ratio) {
+      return
+    }
 
     const price = 1 * ratio
 
@@ -62,7 +68,7 @@ export const TransactionTokenCard = ({ amount, fee, fiat, token, hideFee, hideSi
         {!hideSingleTokenPrice && singlePrice && (
           <LinearLayout justifyContent="center">
             <TextView fontFamily="medium" fontSize="16px" color="text.0" mr={2}>
-              {singlePrice}
+              {singlePrice} {/** TODO SkeletonContainer */}
             </TextView>
             <TextView ml={2} fontFamily="medium" color="text.10" fontSize="12px">
               1 {token.symbol}

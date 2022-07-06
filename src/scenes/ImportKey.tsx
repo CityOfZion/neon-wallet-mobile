@@ -9,11 +9,12 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { IURI } from '../helpers/UriHelper'
 import { AccountToImport } from '../hooks/BlockchainActionsHook'
-import { TabStackParamList } from '../navigation/TabNavigation'
-import { AsyncDispatch } from '../types/reducers/root'
-import { MnemonicSelectionInfo } from './MnemonicSelectionList'
+import { useExchange } from '../hooks/useExchange';
+import { TabStackParamList } from '../navigation/TabNavigation';
+import { AsyncDispatch } from '../types/reducers/root';
+import { MnemonicSelectionInfo } from './MnemonicSelectionList';
 
-import { wrapper } from '~src/app/ApplicationWrapper'
+import { wrapper } from '~src/app/ApplicationWrapper';
 import {
   BlockchainServiceKey,
   blockchainList,
@@ -23,19 +24,19 @@ import {
   validateWifAllBlockchains,
   getBlockchainByAddress,
   blockchainServices,
-} from '~src/blockchain'
-import AddressesImportList from '~src/components/AddressesImportList'
-import InputWithValidation from '~src/components/InputWithValidation'
-import ScreenLayout from '~src/components/layout/ScreenLayout'
-import ScreenLoader from '~src/components/loader/ScreenLoader'
-import ThemedButton from '~src/components/themed/ThemedButton'
-import { UtilsHelper } from '~src/helpers/UtilsHelper'
-import { useBlockchainActionsHook } from '~src/hooks'
-import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
-import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
-import { RootState, RootStore } from '~src/store/RootStore'
-import { LinearLayout, ImageView, TextView } from '~src/styles/styled-components'
+} from '~src/blockchain';
+import AddressesImportList from '~src/components/AddressesImportList';
+import InputWithValidation from '~src/components/InputWithValidation';
+import ScreenLayout from '~src/components/layout/ScreenLayout';
+import ScreenLoader from '~src/components/loader/ScreenLoader';
+import ThemedButton from '~src/components/themed/ThemedButton';
+import { UtilsHelper } from '~src/helpers/UtilsHelper';
+import { useBlockchainActionsHook } from '~src/hooks';
+import { RootStackParamList } from '~src/navigation/AppNavigation';
+import { MoreStackParamList } from '~src/navigation/MoreStackNavigation';
+import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation';
+import { RootState, RootStore } from '~src/store/RootStore';
+import { LinearLayout, ImageView, TextView } from '~src/styles/styled-components';
 
 type ParamList = MoreStackParamList & RootStackParamList & TabStackParamList & WalletStackParamList
 interface ImportKeyProps {
@@ -62,7 +63,7 @@ const isMnemonic = (word: string) => {
 
 const ImportKey = (props: ImportKeyProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const { accounts, exchange } = useSelector((state: RootState) => state.app)
+  const accounts = useSelector((state: RootState) => state.app.accounts)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const [inputValue, setInputValue] = useState(props.route.params ? props.route.params.key ?? '' : '')
   const [addressesFound, setAddressesFound] = useState<{ address: string; blockchain: BlockchainServiceKey }[]>([])
@@ -335,7 +336,9 @@ const ImportKey = (props: ImportKeyProps) => {
       return isValid
     })
 
-    if (!functionsByInputType) return
+    if (!functionsByInputType) {
+      return
+    }
 
     const [key, functions] = functionsByInputType
 
@@ -363,13 +366,6 @@ const ImportKey = (props: ImportKeyProps) => {
     }
   }, [functionsByInputTypes])
 
-  const grantPopulateExchange = useCallback(async () => {
-    if (Object.keys(exchange).length < 1) {
-      await dispatchAsync(RootStore.app.actions.fetchExchange())
-      await dispatchAsync(RootStore.app.actions.syncExchange())
-    }
-  }, [exchange])
-
   useEffect(() => {
     if (inputIsValid) {
       handleChangeInput()
@@ -380,10 +376,6 @@ const ImportKey = (props: ImportKeyProps) => {
     setAddressesFound([])
     setDisableButton(true)
   }, [inputIsValid])
-
-  useEffect(() => {
-    grantPopulateExchange()
-  }, [grantPopulateExchange])
 
   return (
     <ScreenLayout darkerSolidColorBG>

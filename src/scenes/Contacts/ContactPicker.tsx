@@ -104,7 +104,9 @@ export const ContactPicker = (props: ContactsModalProps) => {
               mt={20}
               mb={PANEL_OFFSET}
               onContactSelected={(contact, address) => {
-                if (props.route.params.onContactSelected) props.route.params.onContactSelected(contact, address)
+                if (props.route.params.onContactSelected) {
+                  props.route.params.onContactSelected(contact, address)
+                }
                 controller.close()
               }}
               searchBar
@@ -117,7 +119,9 @@ export const ContactPicker = (props: ContactsModalProps) => {
           <AccountList
             mb={PANEL_OFFSET}
             onAccountSelected={account => {
-              if (props.route.params.onAccountSelected) props.route.params.onAccountSelected(account)
+              if (props.route.params.onAccountSelected) {
+                props.route.params.onAccountSelected(account)
+              }
               controller.close()
             }}
             searchBar

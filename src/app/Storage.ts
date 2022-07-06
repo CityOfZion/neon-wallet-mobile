@@ -8,7 +8,7 @@ import { Contact } from '~src/models/redux/Contact'
 import { Settings } from '~src/models/redux/Settings'
 import { WCApprovalDate } from '~src/models/redux/WCApprovalDate'
 import { Wallet } from '~src/models/redux/Wallet'
-import { Exchange, MultichainExchange } from '~src/types/exchange'
+import { Exchange } from '~src/types/exchange'
 
 export abstract class Storage {
   /**
@@ -98,9 +98,6 @@ export abstract class Storage {
   }
   static get nodes() {
     return wrapper.storage['@nodes'].bind().asArrayOf(Node)
-  }
-  static get multichainExchange() {
-    return wrapper.storage['@MultichainExchange'].bind().as<MultichainExchange>()
   }
   static get wcApprovalDates() {
     return wrapper.storage['@wcApprovalDate'].bind().asArrayOf(WCApprovalDate)

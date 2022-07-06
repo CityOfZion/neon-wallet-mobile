@@ -198,7 +198,6 @@ export const ContactList = (props: ContactListProps) => {
 
   contactsList.forEach(contact => {
     if (contactsMap.has(contact.name?.[0] ?? '')) {
-      // eslint-disable-next-line no-unused-expressions
       contactsMap
         .get(contact.name?.[0].toUpperCase() ?? '')
         ?.push({ data: contact, onContactSelected: props.onContactSelected })

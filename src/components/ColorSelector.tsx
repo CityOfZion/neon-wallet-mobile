@@ -37,7 +37,9 @@ export default function ColorSelector(props: Props) {
     <TouchableWithoutFeedback
       key={key}
       onPress={() => {
-        if (props.onSelect) props.onSelect(color)
+        if (props.onSelect) {
+          props.onSelect(color)
+        }
       }}
     >
       <RelativeLayout width={63} height={63} alignItems="center" justifyContent="center" borderRadius={9}>
@@ -76,7 +78,9 @@ export default function ColorSelector(props: Props) {
           params: {
             onColorPicked: (hex: string) => {
               setColor(hex)
-              if (props.onSelect) props.onSelect(hex)
+              if (props.onSelect) {
+                props.onSelect(hex)
+              }
             },
             account: props.account,
           },

@@ -16,7 +16,6 @@ interface Props {
   date: string
 }
 
-// eslint-disable-next-line react/display-name
 export const TransactionListItem = React.memo(
   ({ account, completedTransactions, pendingTransactions, date }: Props) => {
     return (

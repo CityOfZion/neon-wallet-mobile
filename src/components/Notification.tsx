@@ -29,7 +29,9 @@ const Notification = (props: NotificationProps) => {
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
 
-  if (seen) return null
+  if (seen) {
+    return null
+  }
 
   const close = async () => {
     setSeen(true)

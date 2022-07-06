@@ -98,7 +98,9 @@ export class SenderTransaction {
   }
 
   async populateExchange() {
-    if (!this.token || !moment(this.sentAt).isValid()) return
+    if (!this.token || !moment(this.sentAt).isValid()) {
+      return
+    }
 
     const params = {
       fsym: this.token.symbol,

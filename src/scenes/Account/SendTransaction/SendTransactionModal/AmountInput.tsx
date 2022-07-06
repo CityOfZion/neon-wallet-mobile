@@ -6,10 +6,11 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { TokenAsset } from '~/src/models/TokenAsset'
-import { Account } from '~/src/models/redux/Account'
-import { RootState } from '~/src/store/RootStore'
-import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
+import { useExchange } from '~/src/hooks/useExchange';
+import { TokenAsset } from '~/src/models/TokenAsset';
+import { Account } from '~/src/models/redux/Account';
+import { RootState } from '~/src/store/RootStore';
+import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components';
 
 type Props = {
   selectedToken?: TokenAsset
@@ -32,21 +33,24 @@ export const AmountInput = ({
 }: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const currency = useSelector((state: RootState) => state.settings.currency)
-  const exchange = useSelector((state: RootState) => state.app.exchange)
+  const { exchange } = useExchange({ filter: { currencies: currency } })
   const tokens = useSelector((state: RootState) => state.app.tokens)
   const language = useSelector((state: RootState) => state.settings.language)
 
   const [remaining, setRemaining] = useState<number>()
 
   const tokenDecimals = useMemo(() => {
-    if (!selectedToken) return
+    if (!selectedToken) {
+      return
+    }
 
     const findedToken = tokens.find(
       token => token.symbol === selectedToken.symbol && token.blockchain === account.blockchain
     )
 
-    if (!findedToken) return
-
+    if (!findedToken) {
+      return
+    }
     return findedToken.decimals ?? undefined
   }, [selectedToken, tokens])
 
@@ -71,7 +75,9 @@ export const AmountInput = ({
   }
 
   const handleChangeAmount = (text: string) => {
-    if (!selectedToken) return
+    if (!selectedToken) {
+      return
+    }
 
     if (text.length <= 0) {
       onAmountChange()
@@ -84,15 +90,21 @@ export const AmountInput = ({
       .replace(/\s|-/g, '')
       .replace(/[0-9]+\.[0-9]{9,}$/g, Number(text).toFixed(tokenDecimals ?? 8))
 
-    if (tokenDecimals && tokenDecimals < 1) formattedAmount = formattedAmount.replace('.', '')
+    if (tokenDecimals && tokenDecimals < 1) {
+      formattedAmount = formattedAmount.replace('.', '')
+    }
 
     onAmountChange(formattedAmount)
 
-    if (!tokenDecimals) return
+    if (tokenDecimals === undefined || !exchange) {
+      return
+    }
 
-    const ratio = exchange[account.blockchain][selectedToken.symbol]?.to[currency]
+    const ratio = exchange[selectedToken.symbol]?.to[currency]
 
-    if (!ratio) return
+    if (!ratio) {
+      return
+    }
 
     let newFiat = String(ratio * Number(formattedAmount)).replace(/[\d.]+e-[0-9]+/g, '0')
 
@@ -102,21 +114,29 @@ export const AmountInput = ({
   }
 
   const handleValidateFiat = (text: string) => {
-    if (!selectedToken || text.length <= 0 || Number(text) <= 0) return false
+    if (!selectedToken || text.length <= 0 || Number(text) <= 0 || !exchange) {
+      return false
+    }
 
-    const ratio = exchange[account.blockchain][selectedToken.symbol]?.to[currency]
+    const ratio = exchange[selectedToken.symbol]?.to[currency]
 
-    if (!ratio) return false
+    if (!ratio) {
+      return false
+    }
 
     const accountBalance = account.getBalanceAmountByAsset(selectedToken.symbol)
 
-    if (!accountBalance) return false
+    if (!accountBalance) {
+      return false
+    }
 
-    return accountBalance * ratio >= Number(text)
+    return accountBalance * ratio > Number(text)
   }
 
   const handleChangeFiat = (text: string) => {
-    if (!selectedToken) return
+    if (!selectedToken) {
+      return
+    }
 
     if (text.length <= 0) {
       onAmountChange()
@@ -131,9 +151,15 @@ export const AmountInput = ({
 
     onFiatChange(formattedFiat)
 
-    const ratio = exchange[account.blockchain][selectedToken.symbol]?.to[currency]
+    if (!exchange) {
+      return
+    }
 
-    if (!ratio) return
+    const ratio = exchange[selectedToken.symbol]?.to[currency]
+
+    if (!ratio) {
+      return
+    }
 
     let newAmount = String(Number(formattedFiat) / ratio)
     newAmount = newAmount.replace(/[0-9]+\.[0-9]{9,}$/g, Number(newAmount).toFixed(selectedToken.decimals ?? 8))
@@ -142,17 +168,23 @@ export const AmountInput = ({
   }
 
   const handlePressRoundButton = () => {
-    if (!fiat || fiat.length <= 0 || Number(fiat) <= 1) return
+    if (!fiat || fiat.length <= 0 || Number(fiat) <= 1) {
+      return
+    }
 
     handleChangeFiat(String(Math.floor(Number(fiat))))
   }
 
   const handlePressMaxButton = () => {
-    if (!selectedToken) return
+    if (!selectedToken) {
+      return
+    }
 
     const accountBalance = account.getBalanceAmountByAsset(selectedToken.symbol)
 
-    if (!accountBalance) return
+    if (!accountBalance) {
+      return
+    }
 
     handleChangeAmount(String(accountBalance))
   }

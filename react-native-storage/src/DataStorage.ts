@@ -1,5 +1,5 @@
-import type {DataType} from './types'
 import {DataResult} from './DataResult'
+import type {DataType} from './types'
 
 export class DataStorage {
   constructor(key: string) {

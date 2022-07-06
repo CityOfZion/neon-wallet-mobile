@@ -16,7 +16,6 @@ type Props = (FormattedTransferAsset | FormattedTransferNFT) & {
   account: Account
 }
 
-// eslint-disable-next-line react/display-name
 export const TransferItem = React.memo((props: Props) => {
   const contacts = useSelector((state: RootState) => state.app.contacts)
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])

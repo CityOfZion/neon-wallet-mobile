@@ -1,10 +1,12 @@
 import i18n from 'i18n-js'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { FlatList, TouchableOpacity } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { RootState } from '../store/RootStore'
-import { LinearLayoutProps } from '../types/styled-components'
+import { Exchange } from '../types/exchange';
+import { LinearLayoutProps } from '../types/styled-components';
+import SkeletonContainer from './SkeletonContainer'
 
 import { Normalize } from '~src/app/Normalize'
 import { FilterHelper } from '~src/helpers/FilterHelper'
@@ -19,6 +21,7 @@ interface ViewBalanceItemProps {
 
 interface BalanceListItemProps extends ViewBalanceItemProps {
   onPress?: (token: TokenAsset) => void
+  exchange?: Exchange
 }
 
 interface Props extends Omit<BalanceListItemProps, 'token'>, LinearLayoutProps {
@@ -28,125 +31,129 @@ interface Props extends Omit<BalanceListItemProps, 'token'>, LinearLayoutProps {
   orderByValue?: boolean
 }
 
-const BalanceListItem = React.memo(
-  ({ showBlockchain = false, showHoldingValue = true, onPress, token }: BalanceListItemProps) => {
-    const exchange = useSelector((state: RootState) => state.app.exchange)
-    const language = useSelector((state: RootState) => state.settings.language)
-    const currency = useSelector((state: RootState) => state.settings.currency)
+const BalanceListItem = ({
+  showBlockchain = false,
+  showHoldingValue = true,
+  onPress,
+  token,
+  exchange,
+}: BalanceListItemProps) => {
+  const language = useSelector((state: RootState) => state.settings.language)
+  const currency = useSelector((state: RootState) => state.settings.currency)
 
-    const handlePress = () => {
-      if (onPress) onPress(token)
+  const handlePress = () => {
+    if (onPress) {
+      onPress(token)
     }
+  }
 
-    return (
-      <TouchableOpacity onPress={handlePress}>
-        <LinearLayout orientation="horiz" alignItems="center" justifyContent="space-between" mt={5} mb={5}>
-          <LinearLayout orientation="horiz" alignItems="center" width="100px">
-            {showBlockchain ? (
-              <LinearLayout
-                mr="8px"
-                width={12}
-                height={12}
-                borderRadius={6}
-                backgroundColor={token.color}
-                alignSelf="center"
-              />
-            ) : (
-              <ImageView
-                mr="8px"
-                width={Normalize.scale(24)}
-                height={Normalize.scale(24)}
-                resizeMode="contain"
-                alignSelf="center"
-                source={token.srcIcon}
-              />
-            )}
+  return (
+    <TouchableOpacity onPress={handlePress}>
+      <LinearLayout orientation="horiz" alignItems="center" justifyContent="space-between" mt={5} mb={5}>
+        <LinearLayout orientation="horiz" alignItems="center" width="100px">
+          {showBlockchain ? (
+            <LinearLayout
+              mr="8px"
+              width={12}
+              height={12}
+              borderRadius={6}
+              backgroundColor={token.color}
+              alignSelf="center"
+            />
+          ) : (
+            <ImageView
+              mr="8px"
+              width={Normalize.scale(24)}
+              height={Normalize.scale(24)}
+              resizeMode="contain"
+              alignSelf="center"
+              source={token.srcIcon}
+            />
+          )}
 
-            <LinearLayout>
+          <LinearLayout>
+            <TextView
+              color="text.0"
+              fontSize="xl"
+              fontFamily="medium"
+              allowFontScaling
+              adjustsFontSizeToFit
+              numberOfLines={1}
+              mb={showBlockchain ? '-5px' : undefined}
+            >
+              {token.symbol}
+            </TextView>
+
+            {showBlockchain && (
               <TextView
-                color="text.0"
-                fontSize="xl"
+                color="text.2"
+                fontSize="sm"
                 fontFamily="medium"
                 allowFontScaling
                 adjustsFontSizeToFit
                 numberOfLines={1}
-                mb={showBlockchain ? '-5px' : undefined}
               >
-                {token.symbol}
+                {i18n.t(`blockchainServices.${token.blockchain}.id`)}
               </TextView>
-
-              {showBlockchain && (
-                <TextView
-                  color="text.2"
-                  fontSize="sm"
-                  fontFamily="medium"
-                  allowFontScaling
-                  adjustsFontSizeToFit
-                  numberOfLines={1}
-                >
-                  {i18n.t(`blockchainServices.${token.blockchain}.id`)}
-                </TextView>
-              )}
-            </LinearLayout>
-          </LinearLayout>
-
-          {showHoldingValue && (
-            <LinearLayout>
-              <LinearLayout justifyContent="center">
-                <TextView
-                  mb="-6px"
-                  color="text.2"
-                  fontSize="sm"
-                  allowFontScaling
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                  mr={4}
-                >
-                  {i18n.t('components.balanceList.holdings')}
-                </TextView>
-                <TextView
-                  mt={1}
-                  color="text.2"
-                  fontSize="sm"
-                  fontFamily="medium"
-                  allowFontScaling
-                  adjustsFontSizeToFit
-                  numberOfLines={1}
-                >
-                  {i18n.t('components.balanceList.value')}
-                </TextView>
-              </LinearLayout>
-            </LinearLayout>
-          )}
-
-          <LinearLayout width="80px">
-            <TextView
-              mb="-5px"
-              color="text.0"
-              fontSize="md"
-              allowFontScaling
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              textAlign="right"
-            >
-              {String(token.amount)}
-            </TextView>
-            <TextView
-              color="primary"
-              fontSize="md"
-              fontFamily="medium"
-              ellipsizeMode="tail"
-              numberOfLines={1}
-              textAlign="right"
-            >
-              {FilterHelper.currency(token.exchangeToken(currency, exchange[token.blockchain]), currency, language)}
-            </TextView>
+            )}
           </LinearLayout>
         </LinearLayout>
-      </TouchableOpacity>
-    )
-  }
-)
+
+        {showHoldingValue && (
+          <LinearLayout>
+            <LinearLayout justifyContent="center">
+              <TextView
+                mb="-6px"
+                color="text.2"
+                fontSize="sm"
+                allowFontScaling
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                mr={4}
+              >
+                {i18n.t('components.balanceList.holdings')}
+              </TextView>
+              <TextView
+                mt={1}
+                color="text.2"
+                fontSize="sm"
+                fontFamily="medium"
+                allowFontScaling
+                adjustsFontSizeToFit
+                numberOfLines={1}
+              >
+                {i18n.t('components.balanceList.value')}
+              </TextView>
+            </LinearLayout>
+          </LinearLayout>
+        )}
+
+        <LinearLayout width="80px">
+          <TextView
+            color="text.0"
+            fontSize="md"
+            allowFontScaling
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            textAlign="right"
+          >
+            {String(token.amount)}
+          </TextView>
+          <TextView
+            color="primary"
+            fontSize="md"
+            fontFamily="medium"
+            ellipsizeMode="tail"
+            numberOfLines={1}
+            textAlign="right"
+          >
+            {FilterHelper.currency(token.exchangeToken(currency, exchange), currency, language)}
+          </TextView>
+        </LinearLayout>
+      </LinearLayout>
+    </TouchableOpacity>
+  )
+}
 
 const BalanceList = ({
   tokenAssets,
@@ -156,6 +163,7 @@ const BalanceList = ({
   showBlockchain,
   showHoldingValue,
   removeZeroBalance = true,
+  exchange,
   ...props
 }: Props) => {
   const validAndOrdedTokens = useMemo(() => {
@@ -167,8 +175,12 @@ const BalanceList = ({
 
     if (orderByValue) {
       allTokens.sort((token1, token2) => {
-        if (token1.amount < token2.amount) return 1
-        if (token1.amount > token2.amount) return -1
+        if (token1.amount < token2.amount) {
+          return 1
+        }
+        if (token1.amount > token2.amount) {
+          return -1
+        }
         return 0
       })
     }
@@ -198,6 +210,7 @@ const BalanceList = ({
         ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
         renderItem={({ item }) => (
           <BalanceListItem
+            exchange={exchange}
             token={item}
             showBlockchain={showBlockchain}
             showHoldingValue={showHoldingValue}

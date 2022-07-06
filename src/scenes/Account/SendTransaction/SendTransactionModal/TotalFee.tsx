@@ -4,10 +4,11 @@ import { useSelector } from 'react-redux'
 
 import { Normalize } from '~/src/app/Normalize'
 import { blockchainServices } from '~/src/blockchain'
-import { TokenAsset } from '~/src/models/TokenAsset'
-import { Account } from '~/src/models/redux/Account'
-import { RootState } from '~/src/store/RootStore'
-import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
+import { useExchange } from '~/src/hooks/useExchange';
+import { TokenAsset } from '~/src/models/TokenAsset';
+import { Account } from '~/src/models/redux/Account';
+import { RootState } from '~/src/store/RootStore';
+import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components';
 
 type Props = {
   amount?: number
@@ -32,13 +33,15 @@ export const TotalFee = ({
   onFeeChange,
   onRequest,
 }: Props) => {
-  const exchange = useSelector((state: RootState) => state.app.exchange)
   const currency = useSelector((state: RootState) => state.settings.currency)
+  const { exchange } = useExchange({ filter: { currencies: currency } })
 
   const fiatFee = useMemo(() => {
-    if (!token || !fee) return
+    if (!token || !fee || !exchange) {
+      return
+    }
 
-    const ratio = exchange[account.blockchain][token.symbol]?.to[currency]
+    const ratio = exchange[token.symbol]?.to[currency]
 
     return ratio * fee
   }, [fee, token, account, currency])
@@ -58,7 +61,9 @@ export const TotalFee = ({
 
     let calculatedFee = feeToken.amount - fee
 
-    if (token.symbol === feeToken.symbol) calculatedFee -= amount
+    if (token.symbol === feeToken.symbol) {
+      calculatedFee -= amount
+    }
 
     if (calculatedFee <= 0) {
       return true
@@ -146,7 +151,7 @@ export const TotalFee = ({
               {currency}
             </TextView>
             <TextView color="text.0" fontFamily="semibold" fontSize="18px" pl={3}>
-              {fiatFee ? fiatFee.toFixed(2) : 0}
+              {fiatFee ? fiatFee.toFixed(2) : 0} {/** TODO set SkeletonContainer */}
             </TextView>
           </LinearLayout>
         </LinearLayout>

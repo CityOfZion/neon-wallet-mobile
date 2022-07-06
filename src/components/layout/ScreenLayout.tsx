@@ -2,7 +2,14 @@ import Constants from 'expo-constants'
 import { LinearGradient } from 'expo-linear-gradient'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, SafeAreaView, ScrollView } from 'react-native'
+import {
+  LayoutChangeEvent,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  RefreshControlProps,
+  SafeAreaView,
+  ScrollView,
+} from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
@@ -31,6 +38,7 @@ interface Props {
   solidColorBG?: boolean
   darkerSolidColorBG?: boolean
   hideOfflineBar?: boolean
+  refreshControl?: React.ReactElement<RefreshControlProps, string | React.JSXElementConstructor<any>>
 }
 
 const ScreenLayout: React.FC<Props> = props => {
@@ -61,11 +69,14 @@ const ScreenLayout: React.FC<Props> = props => {
     <LinearGradient onLayout={props.onLayout} colors={chooseColorBG()} start={[1, 0]} end={[1, 1]}>
       <SafeAreaView style={{ height: '100%' }}>
         <ScrollView
+          refreshControl={props.refreshControl}
           scrollEnabled={props.autoScroll}
           scrollEventThrottle={props.scrollEventThrottle}
           onScroll={e => {
             const { nativeEvent } = e
-            if (props.onScroll) props.onScroll(e)
+            if (props.onScroll) {
+              props.onScroll(e)
+            }
 
             const isScrollReachedBottom =
               nativeEvent.layoutMeasurement.height + nativeEvent.contentOffset.y >= nativeEvent.contentSize.height

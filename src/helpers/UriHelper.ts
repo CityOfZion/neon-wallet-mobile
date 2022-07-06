@@ -53,7 +53,9 @@ export abstract class UriHelper {
     const key = SCHEME.find(it => str.startsWith(it)) ?? ''
     const isNeo = key === 'neo:'
 
-    if (!this.isValid(str) || !isNeo) return undefined
+    if (!this.isValid(str) || !isNeo) {
+      return undefined
+    }
 
     const substrings = str.substr(key.length).split('?')
     const address = substrings[0]

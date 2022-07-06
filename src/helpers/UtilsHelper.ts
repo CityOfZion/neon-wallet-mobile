@@ -53,8 +53,7 @@ export abstract class UtilsHelper {
   }
 
   static sleep(ms: number) {
-    // eslint-disable-next-line no-undef
-    return new Promise(resolve => setTimeout(resolve, ms))
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   static clearText(text: string) {

@@ -73,7 +73,9 @@ export const SendTransactionReviewModal = (props: Props) => {
   const totalAmount = Number(amount) + fee + (tip ?? 0)
 
   const submit = async () => {
-    if (!account.address) return
+    if (!account.address) {
+      return
+    }
 
     try {
       await authenticate()

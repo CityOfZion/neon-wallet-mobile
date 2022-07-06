@@ -1,5 +1,4 @@
-/* eslint-disable react/display-name */
-import { RouteProp } from '@react-navigation/native'
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, { useEffect, useCallback, useState } from 'react'

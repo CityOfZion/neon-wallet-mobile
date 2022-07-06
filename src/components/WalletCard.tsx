@@ -4,19 +4,21 @@ import { Animated, Easing, LayoutChangeEvent } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { RootState } from '../store/RootStore'
+import { Exchange } from '../types/exchange'
 
-import AccountCard from '~src/components/AccountCard'
-import ThemedShadowContainer from '~src/components/themed/ThemedShadowContainer'
-import { UtilsHelper } from '~src/helpers/UtilsHelper'
-import { Account } from '~src/models/redux/Account'
-import { Wallet } from '~src/models/redux/Wallet'
-import styled, { ButtonView, ImageView, LinearLayout, RelativeLayout, TextView } from '~src/styles/styled-components'
+import AccountCard from '~src/components/AccountCard';
+import ThemedShadowContainer from '~src/components/themed/ThemedShadowContainer';
+import { UtilsHelper } from '~src/helpers/UtilsHelper';
+import { Account } from '~src/models/redux/Account';
+import { Wallet } from '~src/models/redux/Wallet';
+import styled, { ButtonView, ImageView, LinearLayout, RelativeLayout, TextView } from '~src/styles/styled-components';
 
 interface Props {
   wallet: Wallet
   width?: number
   canBeInactive?: boolean
   onPress?: () => void
+  exchange?: Exchange
 }
 
 const WalletLabel = (props: { wallet: Wallet; canBeInactive?: boolean }) => {
@@ -91,19 +93,18 @@ const WalletLabel = (props: { wallet: Wallet; canBeInactive?: boolean }) => {
   )
 }
 
-const AssetBarFillsComponent = (props: { wallet: Wallet }) => {
+const AssetBarFillsComponent = (props: { wallet: Wallet; exchange?: Exchange }) => {
   const { currency } = useSelector((state: RootState) => state.settings)
-  const { exchange } = useSelector((state: RootState) => state.app)
-  const totalBalance = props.wallet.calculateBalance(currency, exchange)
+  const totalBalance = props.wallet.calculateBalance(currency, props.exchange) // TODO totalBalance need change
 
   return (
     <>
       {props.wallet.tokenAssets
         .filter(token => {
-          return (Math.round(totalBalance * 100) && token.exchangeToken(currency, exchange[token.blockchain])) ?? 0
+          return (Math.round(totalBalance * 100) && token.exchangeToken(currency, props.exchange)) ?? 0
         })
         .map((token, i) => {
-          const tokenBalance = token.exchangeToken(currency, exchange[token.blockchain]) ?? 0
+          const tokenBalance = token.exchangeToken(currency, props.exchange) ?? 0
           const weight = Math.round((tokenBalance / totalBalance) * 100)
 
           return (
@@ -153,11 +154,11 @@ const AccountContainer = (props: {
   wallet: Wallet
   index: number
   canBeInactive?: boolean
+  exchange?: Exchange
 }) => {
   const ratio = 38 / 25
   const cardWidth = props.viewHeight - 12
   const cardHeight = cardWidth / ratio
-
   return (
     <LinearLayout
       mt={`${props.index * 4}px`}
@@ -176,6 +177,7 @@ const AccountContainer = (props: {
         }}
       >
         <AccountCard
+          exchange={props.exchange}
           isInactive={props.wallet.isInactive && props.canBeInactive}
           isVertical
           hideQRCode
@@ -215,7 +217,9 @@ const WalletCard: React.FC<Props> = props => {
         easing: Easing.in(val => val ** 2),
         useNativeDriver: true,
       }).start(async () => {
-        if (props.onPress) props.onPress()
+        if (props.onPress) {
+          props.onPress()
+        }
         await UtilsHelper.sleep(500)
         posYFactor.current.setValue(0)
       })
@@ -270,6 +274,7 @@ const WalletCard: React.FC<Props> = props => {
                 }}
               >
                 <AccountContainer
+                  exchange={props.exchange}
                   viewHeight={viewHeight}
                   account={it}
                   wallet={props.wallet}
@@ -293,7 +298,9 @@ const WalletCard: React.FC<Props> = props => {
               source={require('~src/assets/images/wallet-card-label.png')}
             />
             <AssetsBar bottom="7px" height="5px" width="99.5%" px="2px" orientation="horiz">
-              {(!props.wallet.isInactive || !props.canBeInactive) && <AssetBarFillsComponent wallet={props.wallet} />}
+              {(!props.wallet.isInactive || !props.canBeInactive) && (
+                <AssetBarFillsComponent exchange={props.exchange} wallet={props.wallet} />
+              )}
             </AssetsBar>
           </RelativeLayout>
         </LinearLayout>

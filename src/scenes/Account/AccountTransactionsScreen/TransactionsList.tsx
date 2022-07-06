@@ -1,15 +1,18 @@
 import I18n from 'i18n-js'
 import moment from 'moment'
 import React, { useCallback, useMemo, useRef } from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, RefreshControl } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import { FormattedTransaction } from './AccountTransactionsScreen'
-import { TransactionListItem } from './TransactionListItem'
+import { FormattedTransaction } from './AccountTransactionsScreen';
+import { TransactionListItem } from './TransactionListItem';
 
-import { FlatListEmpty } from '~/src/components/FlatListEmpty'
-import { FlatListFooter } from '~/src/components/FlatListFooter'
+import { FlatListEmpty } from '~/src/components/FlatListEmpty';
+import { FlatListFooter } from '~/src/components/FlatListFooter';
+import { useExchange } from '~/src/hooks/useExchange';
 import { Account } from '~/src/models/redux/Account'
-import { LinearLayout } from '~/src/styles/styled-components'
+import { RootState } from '~/src/store/RootStore'
+import { LinearLayout } from '~/src/styles/styled-components';
 
 interface TransactionsListDateProps {
   completedTransactions: FormattedTransaction[]
@@ -17,6 +20,7 @@ interface TransactionsListDateProps {
   account: Account
   onEndReached(): Promise<void>
   showMoreLoading: boolean
+  refetchTransacions?: () => Promise<void>
 }
 
 export const TransactionsList = ({
@@ -25,7 +29,10 @@ export const TransactionsList = ({
   account,
   onEndReached,
   showMoreLoading,
+  refetchTransacions,
 }: TransactionsListDateProps) => {
+  const currency = useSelector((state: RootState) => state.settings.currency)
+  const { isRefetching, refetch } = useExchange({ filter: { currencies: currency } })
   const separateTransactionsPerDate = useCallback((transactions: FormattedTransaction[]) => {
     const transactionsPerDate: Record<string, FormattedTransaction[]> = {}
 
@@ -77,9 +84,17 @@ export const TransactionsList = ({
     }
   }
 
+  const handleRefetch = async () => {
+    await refetch()
+    if (refetchTransacions) {
+      await refetchTransacions()
+    }
+  }
+
   return (
     <LinearLayout my="44px">
       <FlatList
+        refreshControl={<RefreshControl tintColor="#fff" refreshing={isRefetching} onRefresh={handleRefetch} />}
         data={dates}
         ListFooterComponent={showMoreLoading ? <FlatListFooter /> : undefined}
         ListEmptyComponent={<FlatListEmpty label={I18n.t('screens.accountTransaction.emptyList')} />}

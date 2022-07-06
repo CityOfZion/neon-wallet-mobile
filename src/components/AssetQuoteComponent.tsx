@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { RootState } from '../store/RootStore'
+import { Exchange } from '../types/exchange'
+import SkeletonContainer from './SkeletonContainer'
 
 import { Normalize } from '~src/app/Normalize'
 import { FilterHelper } from '~src/helpers/FilterHelper'
@@ -11,20 +13,27 @@ import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components
 
 interface Props {
   token: TokenAsset
+  exchange?: Exchange
 }
 
 const AssetQuoteComponent: React.FC<Props> = props => {
-  const { exchange } = useSelector((state: RootState) => state.app)
+  const { exchange } = props
   const { language, currency } = useSelector((state: RootState) => state.settings)
+  const amountExchanged = props.token.exchangeToken(currency, exchange)
 
-  const ratio = props.token.getCurrencyRatio(currency, exchange[props.token.blockchain])
-  const amountExchanged = props.token.exchangeToken(currency, exchange[props.token.blockchain])
+  const ratio = useMemo(() => {
+    if(exchange){
+      return props.token.getCurrencyRatio(currency, exchange)
+    }
+    return null
+  }, [exchange])
 
   const quoteText = ratio
     ? `${props.token.symbol} 1 = ${FilterHelper.currencyExtendedMaxLimit(ratio, currency, language)}`
     : ''
 
   const valueText = FilterHelper.currency(amountExchanged, currency, language)
+
 
   return (
     <LinearLayout orientation="horiz" width="100%" alignItems="center">
@@ -63,27 +72,31 @@ const AssetQuoteComponent: React.FC<Props> = props => {
       </LinearLayout>
 
       <LinearLayout alignItems="flex-end">
-        <TextView
-          mb={-1}
-          fontFamily="medium"
-          fontSize="md"
-          color="text.2"
-          numberOfLines={1}
-          allowFontScaling
-          adjustsFontSizeToFit
-        >
-          {valueText}
-        </TextView>
-        <TextView
-          fontFamily="medium"
-          fontSize="lg"
-          color="text.0"
-          numberOfLines={1}
-          allowFontScaling
-          adjustsFontSizeToFit
-        >
-          {quoteText}
-        </TextView>
+        <SkeletonContainer isLoading={!exchange} skeletonType="assetDetail">
+          <LinearLayout alignItems="flex-end">
+            <TextView
+              mb={-1}
+              fontFamily="medium"
+              fontSize="md"
+              color="text.2"
+              numberOfLines={1}
+              allowFontScaling
+              adjustsFontSizeToFit
+            >
+              {valueText}
+            </TextView>
+            <TextView
+              fontFamily="medium"
+              fontSize="lg"
+              color="text.0"
+              numberOfLines={1}
+              allowFontScaling
+              adjustsFontSizeToFit
+            >
+              {quoteText}
+            </TextView>
+          </LinearLayout>
+        </SkeletonContainer>
       </LinearLayout>
     </LinearLayout>
   )
@@ -93,4 +106,4 @@ AssetQuoteComponent.propTypes = {
   token: PropTypes.instanceOf(TokenAsset).isRequired,
 }
 
-export default AssetQuoteComponent
+export default AssetQuoteComponent;

@@ -4,12 +4,14 @@ import { LayoutChangeEvent, Animated, Easing } from 'react-native'
 import { Normalize } from '../app/Normalize'
 import { Account } from '../models/redux/Account'
 import { LinearLayout } from '../styles/styled-components'
+import { Exchange } from '../types/exchange'
 import AccountCard from './AccountCard'
 
 export const AccountCards = (props: {
   accounts: Account[]
   onPress: (account: Account) => void
   disableSecondTouch?: boolean
+  exchange?: Exchange
 }) => {
   const [viewHeight, setViewHeight] = useState<number>(0)
 
@@ -53,6 +55,7 @@ export const AccountCards = (props: {
           >
             <LinearLayout>
               <AccountCard
+                exchange={props.exchange}
                 account={account}
                 isCompacted
                 isStackMode={i !== props.accounts.length - 1}

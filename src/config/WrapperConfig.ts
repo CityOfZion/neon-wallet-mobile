@@ -23,7 +23,6 @@ export class WrapperConfig {
     '@token_assets',
     '@neo_nodes',
     '@nodes',
-    '@MultichainExchange',
     '@wcApprovalDate',
   ] as const
 

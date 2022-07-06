@@ -38,7 +38,9 @@ const WCConnectionDetailsModal = (props: Props) => {
   const blockchain = useMemo<BlockchainServiceKey>(() => {
     const blockchainByWCChain = getBlockchainByWCChain(session.permissions.blockchain.chains)
 
-    if (blockchainByWCChain) return blockchainByWCChain
+    if (blockchainByWCChain) {
+      return blockchainByWCChain
+    }
 
     return 'neo3'
   }, [session])

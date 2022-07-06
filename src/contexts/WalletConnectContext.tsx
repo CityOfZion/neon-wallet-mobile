@@ -105,7 +105,7 @@ export const WalletConnectContextProvider: React.FC<{
             reason: ERROR.GENERIC.format(),
           })
         )
-      )
+      );
     } catch {}
 
     setStorage(st)
@@ -215,7 +215,9 @@ export const WalletConnectContextProvider: React.FC<{
       })
       const unsupportedChains: string[] = []
       proposal.permissions.blockchain.chains.forEach(chainId => {
-        if (chains.includes(chainId)) return
+        if (chains.includes(chainId)) {
+          return
+        }
         unsupportedChains.push(chainId)
       })
       if (unsupportedChains.length) {
@@ -223,7 +225,9 @@ export const WalletConnectContextProvider: React.FC<{
       }
       const unsupportedMethods: string[] = []
       proposal.permissions.jsonrpc.methods.forEach(method => {
-        if (options.methods.includes(method)) return
+        if (options.methods.includes(method)) {
+          return
+        }
         unsupportedMethods.push(method)
       })
       if (unsupportedMethods.length) {
@@ -260,8 +264,8 @@ export const WalletConnectContextProvider: React.FC<{
         if (alreadyApproved) {
           await approve()
         } else if (autoAcceptCallback) {
-          let address: string | undefined = undefined
-          let chainId: string | undefined = undefined
+          let address: string | undefined;
+          let chainId: string | undefined;
           const foundSession = findSessionByTopic(requestEvent.topic)
           const acc = foundSession?.state.accounts[0]
           if (acc) {
@@ -311,7 +315,9 @@ export const WalletConnectContextProvider: React.FC<{
     try {
       const uri = typeof data === 'string' ? data : ''
 
-      if (!uri) return
+      if (!uri) {
+        return
+      }
 
       if (typeof wcClient === 'undefined') {
         throw new Error('Client is not initialized')

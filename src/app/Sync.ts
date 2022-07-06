@@ -8,7 +8,6 @@ import { Contact } from '~src/models/redux/Contact'
 import { Settings } from '~src/models/redux/Settings'
 import { Wallet } from '~src/models/redux/Wallet'
 import { RootStore } from '~src/store/RootStore'
-import { MultichainExchange } from '~src/types/exchange'
 export type SyncResult = {
   settings: Settings
 } & App
@@ -16,7 +15,6 @@ export type SyncResult = {
 export abstract class Sync {
   static async init(dispatch: AsyncDispatch<any>): Promise<SyncResult> {
     const settings: Settings = await dispatch(RootStore.settings.actions.syncSettings())
-    const exchange: MultichainExchange = await dispatch(RootStore.app.actions.syncExchange())
     const tokens: TokenAsset[] = await dispatch(RootStore.app.actions.syncTokens())
 
     const nodes: Node[] = await dispatch(RootStore.app.actions.syncNodes())
@@ -33,7 +31,6 @@ export abstract class Sync {
 
     return {
       settings,
-      exchange,
       tokens,
       nodes,
       wallets,

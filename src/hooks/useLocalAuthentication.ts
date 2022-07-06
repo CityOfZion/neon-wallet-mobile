@@ -83,7 +83,9 @@ export const useLocalAuthentication = () => {
     return new Promise<void>(async (resolve, reject) => {
       const canUseHardware = await LocalAuthentication.hasHardwareAsync()
 
-      if (!canUseHardware) return
+      if (!canUseHardware) {
+        return
+      }
 
       const result = await LocalAuthentication.authenticateAsync()
 

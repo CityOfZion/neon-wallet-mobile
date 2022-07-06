@@ -7,23 +7,24 @@ import { useSelector } from 'react-redux'
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
-import { RootStackParamList } from '~/src/navigation/AppNavigation'
-import { ReceiveModalStackParamList } from '~/src/navigation/ReceiveModalStackNavigation'
-import { RootState } from '~/src/store/RootStore'
-import AccountCard from '~src/components/AccountCard'
-import InputLabel from '~src/components/InputLabel'
-import InputWithValidation from '~src/components/InputWithValidation'
-import { QRCodeWithCopyButton } from '~src/components/QRCodeWithCopyButton'
-import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
-import TabSelector from '~src/components/TabSelector'
-import ThemedButton from '~src/components/themed/ThemedButton'
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import { TokenAsset } from '~src/models/TokenAsset'
-import { Account } from '~src/models/redux/Account'
-import { Wallet } from '~src/models/redux/Wallet'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
-import { ApplicationTheme } from '~src/themes/ApplicationTheme'
+import { useExchange } from '~/src/hooks/useExchange';
+import { RootStackParamList } from '~/src/navigation/AppNavigation';
+import { ReceiveModalStackParamList } from '~/src/navigation/ReceiveModalStackNavigation';
+import { RootState } from '~/src/store/RootStore';
+import AccountCard from '~src/components/AccountCard';
+import InputLabel from '~src/components/InputLabel';
+import InputWithValidation from '~src/components/InputWithValidation';
+import { QRCodeWithCopyButton } from '~src/components/QRCodeWithCopyButton';
+import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel';
+import TabSelector from '~src/components/TabSelector';
+import ThemedButton from '~src/components/themed/ThemedButton';
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton';
+import { TokenAsset } from '~src/models/TokenAsset';
+import { Account } from '~src/models/redux/Account';
+import { Wallet } from '~src/models/redux/Wallet';
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation';
+import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components';
+import { ApplicationTheme } from '~src/themes/ApplicationTheme';
 
 const TokenField = (props: {
   theme: ApplicationTheme
@@ -89,7 +90,9 @@ const AmountField = (props: {
     val = val.replace(/,|\.\.|\.,/g, '.')
     val = val.replace(/\s|-/g, '')
     val = val.replace(/[0-9]+\.[0-9]{9,}$/g, String(Number(val).toFixed(8)))
-    if (props.token?.symbol === 'NEO') val = val.replace('.', '')
+    if (props.token?.symbol === 'NEO') {
+      val = val.replace('.', '')
+    }
 
     props.setAmount(val)
   }
@@ -167,11 +170,15 @@ const ReceiveToAccountModal = (props: Props) => {
   const [amount, setAmount] = useState<number | string>('')
   const [reference, setReference] = useState<string>('')
   const [token, setToken] = useState<TokenAsset | null | undefined>(null)
+  const currency = useSelector((state: RootState) => state.settings.currency)
+  const { exchange } = useExchange({ filter: { currencies: currency } })
 
   const { wallet, account } = props.route.params
 
   const navigate = () => {
-    if (!isValid()) return
+    if (!isValid()) {
+      return
+    }
 
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.ReceiveModalStack.name,
@@ -208,7 +215,7 @@ const ReceiveToAccountModal = (props: Props) => {
         <TextView mb="24px" alignSelf="center" color="text.3" fontSize="md" fontFamily="bold">
           {props.route.params.wallet.name?.toUpperCase() ?? ''}
         </TextView>
-        <AccountCard account={props.route.params.account} hideCopy hideQRCode />
+        <AccountCard exchange={exchange} account={props.route.params.account} hideCopy hideQRCode />
         <TouchableWithoutFeedback onPress={props.navigation.goBack}>
           <LinearLayout orientation="horiz" alignSelf="center" alignItems="center" mt="40px">
             <ImageView source={require('~/src/assets/images/icon-reselect-green.png')} />

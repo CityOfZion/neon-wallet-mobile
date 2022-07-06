@@ -49,7 +49,9 @@ const ColorPicker: React.FC<Props> = props => {
       setLuminosityAngle(Math.abs(359 - (15 + (330 * l) / 100)))
 
       const hex = FilterHelper.hslToHex(hue, saturation, luminosity)
-      if (props.onChange) props.onChange(hex)
+      if (props.onChange) {
+        props.onChange(hex)
+      }
     }
   }, [])
 
@@ -108,7 +110,9 @@ const ColorPicker: React.FC<Props> = props => {
     setLuminosity(luminosity)
 
     const hex = FilterHelper.hslToHex(hue, saturation, luminosity)
-    if (props.onChange) props.onChange(hex)
+    if (props.onChange) {
+      props.onChange(hex)
+    }
 
     return false
   }
@@ -130,8 +134,12 @@ const ColorPicker: React.FC<Props> = props => {
     const variation = Math.round(distance - radius)
     const limit = Math.round(viewHeight * 0.085 - getHueSelectorRadius() / 2)
 
-    if (variation > limit) return limit
-    if (variation < -limit) return -limit
+    if (variation > limit) {
+      return limit
+    }
+    if (variation < -limit) {
+      return -limit
+    }
     return variation
   }
 
@@ -149,7 +157,9 @@ const ColorPicker: React.FC<Props> = props => {
     setLuminosity(luminosity)
 
     const hex = FilterHelper.hslToHex(hue, saturation, luminosity)
-    if (props.onChange) props.onChange(hex)
+    if (props.onChange) {
+      props.onChange(hex)
+    }
 
     return false
   }
@@ -163,7 +173,9 @@ const ColorPicker: React.FC<Props> = props => {
 
   const normalizeAngle = (angleInDegree: number) => {
     let angle = Math.round(angleInDegree % 360)
-    while (angle < 0) angle += 360
+    while (angle < 0) {
+      angle += 360
+    }
     return angle
   }
 

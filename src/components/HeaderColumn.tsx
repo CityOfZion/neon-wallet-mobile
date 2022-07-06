@@ -24,7 +24,9 @@ interface Props {
 
 export const HeaderColumn = (props: Props) => {
   const handlePressCopy = () => {
-    if (typeof props.value !== 'string') return
+    if (typeof props.value !== 'string') {
+      return
+    }
 
     UtilsHelper.copyToClipboard(props.value)
     showMessage({

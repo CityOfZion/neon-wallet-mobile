@@ -39,7 +39,7 @@ const InvocationDetailsParametersBox = ({ data, count }: Props) => {
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
-  const value = !data.value ? null : typeof data.value == 'string' ? data.value : JSON.stringify(data.value)
+  const value = !data.value ? null : typeof data.value === 'string' ? data.value : JSON.stringify(data.value)
 
   const handleRightButtonPress = (text: string) => {
     UtilsHelper.copyToClipboard(text)

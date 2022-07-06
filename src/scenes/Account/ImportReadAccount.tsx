@@ -56,7 +56,9 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
 
     const blockchainName = getBlockchainByAddress(inputValue)
 
-    if (!blockchainName) return
+    if (!blockchainName) {
+      return
+    }
 
     const mnemonic = blockchainServices[blockchainName].generateMnemonic()
     if (!Array.isArray(mnemonic)) {
