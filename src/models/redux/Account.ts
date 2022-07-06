@@ -101,7 +101,9 @@ export class Account implements AccountState {
 
   getBalanceAmountByAsset(assetSymbol: string) {
     const tokenAsset = this.tokenAssets.find(it => it.symbol === assetSymbol && it.blockchain === this.blockchain)
-    if (!tokenAsset) return null
+    if (!tokenAsset) {
+      return null
+    }
 
     return tokenAsset.amount
   }
@@ -117,11 +119,15 @@ export class Account implements AccountState {
   }
 
   exchangeBalanceAmountByAsset(assetSymbol: string, currency: Currency, exchange: Exchange) {
-    const ratio = exchange[assetSymbol]?.to[currency] ?? null
-    if (!ratio) return null
+    const ratio = exchange[assetSymbol] ? exchange[assetSymbol].to[currency] : null
+    if (!ratio) {
+      return null
+    }
 
     const amount = this.getBalanceAmountByAsset(assetSymbol)
-    if (!amount) return null
+    if (!amount) {
+      return null
+    }
 
     return amount * ratio
   }
@@ -148,7 +154,9 @@ export class Account implements AccountState {
   }
 
   async populateTokenAssets() {
-    if (!this.address) return
+    if (!this.address) {
+      return
+    }
 
     const request = blockchainServices[this.blockchain].provider
     const response = await request.getBalance(this.address)
@@ -202,7 +210,9 @@ export class Account implements AccountState {
 
       // Try to find similar transactions in cache
       // If it does then break the loop
-      if (hasSomeTxs(txids)) break
+      if (hasSomeTxs(txids)) {
+        break
+      }
     } while (this.transactions.length && counter++ < 20)
 
     // Remove duplications
@@ -250,7 +260,9 @@ export class Account implements AccountState {
       const filteredTokenAssets = tokenAssets.filter(it => it.hash === assetHash)
 
       const firstOne = filteredTokenAssets[0]
-      if (!firstOne) continue
+      if (!firstOne) {
+        continue
+      }
 
       const { name, symbol, hash, blockchain } = firstOne
 
@@ -293,7 +305,9 @@ export class Account implements AccountState {
   }
 
   async removePendingTransactions(transactionHash: string) {
-    if (!this.flattedPendingTransactions.some(it => it.transactionHash === transactionHash)) return
+    if (!this.flattedPendingTransactions.some(it => it.transactionHash === transactionHash)) {
+      return
+    }
 
     const senderTxs = this.flattedPendingTransactions.filter(it => it.transactionHash !== transactionHash)
 

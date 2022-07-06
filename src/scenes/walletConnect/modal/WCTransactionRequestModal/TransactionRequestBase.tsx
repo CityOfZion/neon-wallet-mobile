@@ -75,7 +75,9 @@ export const TransactionRequestBase = ({
 
       await rejectRequest(request)
 
-      if (onReject) onReject()
+      if (onReject) {
+        onReject()
+      }
     } finally {
       navigation.goBack()
     }
@@ -98,7 +100,9 @@ export const TransactionRequestBase = ({
 
       const { result: transactionId } = response
 
-      if (onAccept) onAccept(transactionId)
+      if (onAccept) {
+        onAccept(transactionId)
+      }
 
       setSuccessOrFailedValues({
         type: 'success',

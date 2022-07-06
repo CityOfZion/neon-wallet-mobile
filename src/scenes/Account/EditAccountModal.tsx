@@ -50,10 +50,14 @@ const EditAccountModal = (props: Props) => {
   account.name = name
 
   const submit = async () => {
-    if (!isValid()) return
+    if (!isValid()) {
+      return
+    }
     const address = account.address
 
-    if (!address) throw new Error('Address not defined')
+    if (!address) {
+      throw new Error('Address not defined')
+    }
 
     dispatch(RootStore.account.actions.setName(name))
     dispatch(RootStore.account.actions.setBackgroundColor(color))

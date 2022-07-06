@@ -25,7 +25,9 @@ export const TransactionAccountCard = (props: Props) => {
   const blockchain = props.address ? getBlockchainByAddress(props.address) : undefined
 
   const handlePress = () => {
-    if (!props.address) return
+    if (!props.address) {
+      return
+    }
 
     navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.PersistContact.name,

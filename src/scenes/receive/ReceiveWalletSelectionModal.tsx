@@ -7,15 +7,16 @@ import { useSelector, useDispatch } from 'react-redux'
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
-import { RootStackParamList } from '~/src/navigation/AppNavigation'
-import { SyncDispatch } from '~/src/types/reducers/root'
-import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
-import WalletPicker from '~src/components/misc/WalletPicker'
-import { Wallet } from '~src/models/redux/Wallet'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { ReceiveModalStackParamList } from '~src/navigation/ReceiveModalStackNavigation'
-import { RootState, RootStore } from '~src/store/RootStore'
-import { LinearLayout, TextView } from '~src/styles/styled-components'
+import { useExchange } from '~/src/hooks/useExchange';
+import { RootStackParamList } from '~/src/navigation/AppNavigation';
+import { SyncDispatch } from '~/src/types/reducers/root';
+import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel';
+import WalletPicker from '~src/components/misc/WalletPicker';
+import { Wallet } from '~src/models/redux/Wallet';
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation';
+import { ReceiveModalStackParamList } from '~src/navigation/ReceiveModalStackNavigation';
+import { RootState, RootStore } from '~src/store/RootStore';
+import { LinearLayout, TextView } from '~src/styles/styled-components';
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList & ModalStackParamList>
@@ -29,8 +30,9 @@ const ReceiveWalletSelectionModal = (props: Props) => {
 
   const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
 
-  const { wallets, exchange } = useSelector((state: RootState) => state.app)
+  const wallets = useSelector((state: RootState) => state.app.wallets)
   const { currency, language } = useSelector((state: RootState) => state.settings)
+  const { exchange } = useExchange({ filter: { currencies: currency } })
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(wallet)
 
@@ -74,7 +76,7 @@ const ReceiveWalletSelectionModal = (props: Props) => {
         />
 
         <TextView alignSelf="center" fontSize="36px" color="text.0" fontFamily="medium">
-          {selectedWallet?.calculateBalanceFormatted(currency, language, exchange)}
+          {selectedWallet?.calculateBalanceFormatted(currency, language, exchange)} {/** TODO set SekeletonContainer */}
         </TextView>
       </LinearLayout>
     </SwiperPanel>

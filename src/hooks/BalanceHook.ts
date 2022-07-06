@@ -1,19 +1,23 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
+import { SyncDispatch } from '../types/reducers/root'
+import { useExchange } from './useExchange'
+
 import { FilterHelper } from '~src/helpers/FilterHelper'
 import { Wallet } from '~src/models/redux/Wallet'
-import { RootStore } from '~src/store/RootStore'
+import { RootState, RootStore } from '~src/store/RootStore'
 export function useBalanceHook() {
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
   const selectedWallet = useSelector((state: RootState) => state.wallet)
   const { currency, language } = useSelector((state: RootState) => state.settings)
-  const { exchange, accounts } = useSelector((state: RootState) => state.app)
+  const accounts = useSelector((state: RootState) => state.app.accounts)
+  const { exchange } = useExchange({ filter: { currencies: currency } })
   const [walletBalance, setWalletBalance] = useState<string>('')
   const [wallet, setWallet] = useState<Wallet>()
 
   const getWalletBalance = useCallback(() => {
-    if (wallet) {
+    if (wallet && exchange) {
       const balance = wallet.calculateBalance(currency, exchange)
       const formatedBalance =
         balance !== 0

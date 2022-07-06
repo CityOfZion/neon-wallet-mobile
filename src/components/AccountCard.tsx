@@ -29,7 +29,9 @@ import {
 } from 'styled-system'
 
 import { RootState } from '../store/RootStore'
-import { OrientationProps, WeightProps } from '../types/styled-components'
+import { Exchange } from '../types/exchange';
+import { OrientationProps, WeightProps } from '../types/styled-components';
+import SkeletonContainer from './SkeletonContainer';
 
 import { wrapper } from '~src/app/ApplicationWrapper' //@ts-ignore
 import CardSvg from '~src/assets/images/card.svg'
@@ -55,10 +57,10 @@ interface Props {
   orientBy?: 'height' | 'width'
   isCustomAccount?: boolean
   disableSecondTouch?: boolean
+  exchange?: Exchange
 }
 
 const AccountCard: React.FC<Props> = props => {
-  const { exchange } = useSelector((state: RootState) => state.app)
   const { language, currency } = useSelector((state: RootState) => state.settings)
   const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
   const [viewHeight, setViewHeight] = useState<number>(0)
@@ -188,21 +190,29 @@ const AccountCard: React.FC<Props> = props => {
                     {(!props.hideBalance && i18n.t('paymentCard.balance')) || ''}
                   </TextView>
 
-                  <TextView
-                    mt={-6 * unit}
-                    fontFamily="semibold"
-                    fontSize={21 * unit}
-                    color="white"
-                    textAlign="center"
-                    fontWeight="bold"
-                    allowFontScaling
-                    adjustsFontSizeToFit
-                    numberOfLines={1}
+                  <SkeletonContainer
+                    isLoading={!props.exchange}
+                    skeletonType="balanceAccountIsCompacted"
+                    boneColor={props.account.backgroundColor}
                   >
-                    {!props.hideBalance
-                      ? props.account.formattedBalanceAmount(currency, language, exchange[props.account.blockchain])
-                      : ''}
-                  </TextView>
+                    {props.exchange && (
+                      <TextView
+                        mt={-6 * unit}
+                        fontFamily="semibold"
+                        fontSize={21 * unit}
+                        color="white"
+                        textAlign="center"
+                        fontWeight="bold"
+                        allowFontScaling
+                        adjustsFontSizeToFit
+                        numberOfLines={1}
+                      >
+                        {!props.hideBalance
+                          ? props.account.formattedBalanceAmount(currency, language, props.exchange)
+                          : ''}
+                      </TextView>
+                    )}
+                  </SkeletonContainer>
                 </LinearLayout>
               ) : (
                 !props.hideQRCode && (
@@ -244,21 +254,23 @@ const AccountCard: React.FC<Props> = props => {
 
             {!props.isStackMode && (
               <LinearLayout orientation="verti" justifyContent="center" alignItems="center" weight={1}>
-                {!props.isCompacted && (
-                  <TextView
-                    mb={3 * unit}
-                    fontSize={48 * unit}
-                    color="white"
-                    textAlign="center"
-                    fontFamily="semibold"
-                    allowFontScaling
-                    adjustsFontSizeToFit
-                    numberOfLines={1}
-                  >
-                    {!props.hideBalance
-                      ? props.account.formattedBalanceAmount(currency, language, exchange[props.account.blockchain])
-                      : ''}
-                  </TextView>
+                {!props.isCompacted && props.exchange && (
+                  <SkeletonContainer isLoading={!props.exchange} skeletonType="balanceAccount">
+                    <TextView
+                      mb={3 * unit}
+                      fontSize={48 * unit}
+                      color="white"
+                      textAlign="center"
+                      fontFamily="semibold"
+                      allowFontScaling
+                      adjustsFontSizeToFit
+                      numberOfLines={1}
+                    >
+                      {!props.hideBalance
+                        ? props.account.formattedBalanceAmount(currency, language, props.exchange)
+                        : ''}
+                    </TextView>
+                  </SkeletonContainer>
                 )}
               </LinearLayout>
             )}

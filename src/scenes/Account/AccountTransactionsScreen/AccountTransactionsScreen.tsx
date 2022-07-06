@@ -78,7 +78,7 @@ const AccountTransactionsScreen = (props: Props) => {
     new Map(
       blockchainServices[account.blockchain].assets.map(({ symbol, decimals, hash }) => [hash, { symbol, decimals }])
     )
-  )
+  );
 
   const getDecimalsAndSymbolToken = useCallback(async (hash: string) => {
     const cachedAsset = decimalsCache.current.get(hash)
@@ -149,7 +149,9 @@ const AccountTransactionsScreen = (props: Props) => {
                   if (transfer.type === TransactionTransferType.ASSET) {
                     const decimalsAndSymbol = await getDecimalsAndSymbolToken(transfer.hash)
 
-                    if (!decimalsAndSymbol) return
+                    if (!decimalsAndSymbol) {
+                      return
+                    }
 
                     return {
                       ...transfer,
@@ -160,7 +162,9 @@ const AccountTransactionsScreen = (props: Props) => {
 
                   const nftInfo = await getNFTInfo(transfer.tokenId, transfer.hash)
 
-                  if (!nftInfo) return
+                  if (!nftInfo) {
+                    return
+                  }
 
                   return {
                     ...transfer,
@@ -170,7 +174,7 @@ const AccountTransactionsScreen = (props: Props) => {
                   }
                 }
               )
-            )
+            );
 
             const filteredTransfers = formattedTransfers.filter(
               (transfer): transfer is FormattedTransferAsset | FormattedTransferNFT => !!transfer
@@ -267,6 +271,9 @@ const AccountTransactionsScreen = (props: Props) => {
       <AccountSubTitle account={account} />
       <AwaitActivity name="populateTransactions" loadingView={<ScreenLoader />}>
         <TransactionsList
+          refetchTransacions={async () => {
+            await populateTransactions()
+          }}
           account={account}
           completedTransactions={completedTransactions}
           pendingTransactions={pendingTransactions}

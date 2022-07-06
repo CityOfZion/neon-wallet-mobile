@@ -116,7 +116,9 @@ const CustomizeAccount = (props: Props) => {
   }
 
   const submit = async () => {
-    if (!isValid()) return
+    if (!isValid()) {
+      return
+    }
 
     // Creates a wallet
     const walletId = await createWallet()
@@ -152,7 +154,9 @@ const CustomizeAccount = (props: Props) => {
     const wif = props.route.params.wif
     const address = account.address
     const { blockchain: blockchainName } = props.route.params
-    if (!address) throw new Error('Address not defined')
+    if (!address) {
+      throw new Error('Address not defined')
+    }
 
     dispatch(RootStore.account.actions.setIdWallet(walletId))
     dispatch(RootStore.account.actions.setName(name))

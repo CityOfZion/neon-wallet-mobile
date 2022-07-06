@@ -7,15 +7,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks'
-import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
-import { SyncDispatch } from '~/src/types/reducers/root'
-import { hasWalletconnect } from '~src/blockchain/common'
-import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
-import WalletPicker from '~src/components/misc/WalletPicker'
-import { IURI } from '~src/helpers/UriHelper'
-import { Wallet } from '~src/models/redux/Wallet'
-import { RootState, RootStore } from '~src/store/RootStore'
-import { TextView } from '~src/styles/styled-components'
+import { useExchange } from '~/src/hooks/useExchange';
+import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation';
+import { SyncDispatch } from '~/src/types/reducers/root';
+import { hasWalletconnect } from '~src/blockchain/common';
+import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel';
+import WalletPicker from '~src/components/misc/WalletPicker';
+import { IURI } from '~src/helpers/UriHelper';
+import { Wallet } from '~src/models/redux/Wallet';
+import { RootState, RootStore } from '~src/store/RootStore';
+import { TextView } from '~src/styles/styled-components';
 
 export interface WCWalletSelectionModalModalParams {
   uri?: IURI
@@ -31,12 +32,13 @@ const WCWalletSelectionModal = (props: Props) => {
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
   const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const { wallets, exchange } = useSelector((state: RootState) => state.app)
+  const wallets = useSelector((state: RootState) => state.app.wallets)
   const { currency, language } = useSelector((state: RootState) => state.settings)
+  const { exchange } = useExchange({ filter: { currencies: currency } })
 
   const usableWallets = wallets.filter(
     (value: Wallet) => value.walletType !== 'watch' && value.getAccounts(accountsPool).some(it => hasWalletconnect(it))
-  )
+  );
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(wallet)
 
@@ -75,7 +77,8 @@ const WCWalletSelectionModal = (props: Props) => {
               }}
             />
             <TextView alignSelf="center" fontSize="36px" color="text.0" fontFamily="medium">
-              {selectedWallet?.calculateBalanceFormatted(currency, language, exchange)}
+              {selectedWallet?.calculateBalanceFormatted(currency, language, exchange)}{' '}
+              {/** TODO set SkeletonContainer */}
             </TextView>
           </>
         </TouchableHighlight>

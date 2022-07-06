@@ -62,7 +62,9 @@ export abstract class FilterHelper {
 
   static pad(input?: InputType, length = 2) {
     let value = this.toString(input)
-    while (value.length < length) value = `0${value}`
+    while (value.length < length) {
+      value = `0${value}`
+    }
     return value
   }
 
@@ -183,7 +185,9 @@ export abstract class FilterHelper {
     const value = hex.length === 4 ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}` : hex
 
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(value)
-    if (!result) return [0, 0, 0]
+    if (!result) {
+      return [0, 0, 0]
+    }
 
     const r = parseInt(result[1], 16) / 255
     const g = parseInt(result[2], 16) / 255

@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import ViewShot from 'react-native-view-shot'
 import { useSelector } from 'react-redux'
 
@@ -12,19 +12,20 @@ import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { UriHelper } from '~/src/helpers/UriHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
-import { ReceiveModalStackParamList } from '~/src/navigation/ReceiveModalStackNavigation'
-import { RootState } from '~/src/store/RootStore'
-import InputLabel from '~src/components/InputLabel'
-import NeonQRCode from '~src/components/QRCode'
-import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
-import { Loader } from '~src/components/loader/loader'
-import ThemedButton from '~src/components/themed/ThemedButton'
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import { TokenAsset } from '~src/models/TokenAsset'
-import { Account } from '~src/models/redux/Account'
-import { Wallet } from '~src/models/redux/Wallet'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { useExchange } from '~/src/hooks/useExchange';
+import { ReceiveModalStackParamList } from '~/src/navigation/ReceiveModalStackNavigation';
+import { RootState } from '~/src/store/RootStore';
+import InputLabel from '~src/components/InputLabel';
+import NeonQRCode from '~src/components/QRCode';
+import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel';
+import { Loader } from '~src/components/loader/loader';
+import ThemedButton from '~src/components/themed/ThemedButton';
+import ThemedCloseButton from '~src/components/themed/ThemedCloseButton';
+import { TokenAsset } from '~src/models/TokenAsset';
+import { Account } from '~src/models/redux/Account';
+import { Wallet } from '~src/models/redux/Wallet';
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation';
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components';
 
 export interface ReceiveQrCodeModalParams {
   wallet: Wallet
@@ -44,12 +45,12 @@ const buttonWidth = applicationConfig.screenWidth - 76
 const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const { currency } = useSelector((state: RootState) => state.settings)
-  const { exchange } = useSelector((state: RootState) => state.app)
+  const { exchange } = useExchange({ filter: { currencies: currency } })
   const controller = useSwiperController(true)
   const [showQr, setShowQr] = useState(false)
-
+  const [ratio, setRatio] = useState<number>(0)
   const { wallet, account, amount, token, reference } = props.route.params
-  const ratio = exchange[account.blockchain][token.symbol]?.to[currency] ?? 0
+
   const value = FilterHelper.currency(amount * ratio, currency)
   const labelWeight = 1.5
 
@@ -64,6 +65,12 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
     })
   }
 
+  const calcRatio = useCallback(() => {
+    if (exchange) {
+      setRatio(exchange[token.symbol]?.to[currency] ?? 0)
+    }
+  }, [exchange])
+
   const renderQr = async () => {
     await UtilsHelper.sleep(1000)
     setShowQr(true)
@@ -72,6 +79,11 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
   useEffect(() => {
     Await.run('renderQr', renderQr)
   }, [])
+
+  useEffect(() => {
+    calcRatio()
+  }, [calcRatio])
+
   return (
     <SwiperPanel
       controller={controller}
@@ -145,7 +157,7 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
 
               <InputLabel title={i18n.t('receive.value')} weight={labelWeight} lightText />
             </LinearLayout>
-            <LinearLayout orientation="horiz" width="100%" mb={16}>
+            <LinearLayout orientation="horiz">
               <TextView color="white" fontFamily="semibold" fontSize={18} weight={5}>
                 {amount}
               </TextView>

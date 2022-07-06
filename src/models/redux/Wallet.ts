@@ -3,16 +3,17 @@ import { t } from 'i18n-js'
 import _ from 'lodash'
 import moment, { Moment } from 'moment'
 
-import { WalletState, WalletType } from '~/src/types/reducers/wallet'
-import { Currency } from '~src/enums/Currency'
-import { Lang } from '~src/enums/Lang'
-import { FilterHelper } from '~src/helpers/FilterHelper'
-import { SecurityHelper } from '~src/helpers/SecurityHelper'
-import { UtilsHelper } from '~src/helpers/UtilsHelper'
-import { TokenAsset } from '~src/models/TokenAsset'
-import { Account } from '~src/models/redux/Account'
-import { SenderTransaction } from '~src/models/redux/SenderTransaction'
-import { MultichainExchange } from '~src/types/exchange'
+import { Exchange } from '~/src/types/exchange';
+import { WalletState, WalletType } from '~/src/types/reducers/wallet';
+import { Currency } from '~src/enums/Currency';
+import { Lang } from '~src/enums/Lang';
+import { FilterHelper } from '~src/helpers/FilterHelper';
+import { SecurityHelper } from '~src/helpers/SecurityHelper';
+import { UtilsHelper } from '~src/helpers/UtilsHelper';
+import { TokenAsset } from '~src/models/TokenAsset';
+import { Account } from '~src/models/redux/Account';
+import { SenderTransaction } from '~src/models/redux/SenderTransaction';
+
 @HttpExclude()
 export class Wallet implements WalletState {
   @HttpExpose()
@@ -53,7 +54,9 @@ export class Wallet implements WalletState {
   }
 
   get formattedLastVisitedAt() {
-    if (!moment(this.lastVisitedAt).isValid()) return null
+    if (!moment(this.lastVisitedAt).isValid()) {
+      return null
+    }
 
     return t('screens.listWallets.changeSinceLastVisit', {
       // TODO: translate date format
@@ -87,9 +90,9 @@ export class Wallet implements WalletState {
     return _.sum(balances)
   }
 
-  async getBalanceVariationFromPastExchange(currency: Currency, date: Moment, multichainExchange: MultichainExchange) {
+  async getBalanceVariationFromPastExchange(currency: Currency, date: Moment, exchange: Exchange) {
     const pastBalance = await this.getBalanceFromPastExchange(currency, date)
-    const balance = this.calculateBalance(currency, multichainExchange)
+    const balance = this.calculateBalance(currency, exchange)
 
     return balance - pastBalance
   }
@@ -108,17 +111,12 @@ export class Wallet implements WalletState {
     return walletAccounts.flatMap(it => it.flattedTransactions)
   }
 
-  calculateBalance(currency: Currency, multichainExchange: MultichainExchange) {
-    return _.sumBy(this.tokenAssets, it => it.exchangeToken(currency, multichainExchange[it.blockchain]) ?? 0)
+  calculateBalance(currency: Currency, exchange: Exchange) {
+    return _.sumBy(this.tokenAssets, it => it.exchangeToken(currency, exchange) ?? 0)
   }
 
-  calculateBalanceFormatted(
-    currency: Currency,
-    language: Lang,
-    multichainExchange: MultichainExchange,
-    balanceToFormat?: number
-  ) {
-    const balance = balanceToFormat ?? this.calculateBalance(currency, multichainExchange)
+  calculateBalanceFormatted(currency: Currency, language: Lang, exchange: Exchange, balanceToFormat?: number) {
+    const balance = balanceToFormat ?? this.calculateBalance(currency, exchange)
 
     const fractionDigits = balance > 0 ? 0 : undefined
 

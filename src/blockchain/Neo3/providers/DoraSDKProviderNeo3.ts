@@ -5,7 +5,7 @@ import { rpc, u, wallet } from '@cityofzion/neon-core-next'
 import { Request } from '@simpli/serialized-request'
 import { mapValues } from 'lodash'
 
-import n3TokenList from '../../../assets/tokens/n3.json'
+import n3TokenList from '../../../assets/tokens/neo3.json'
 import { Neo3Provider } from './common'
 
 import { ContractMethod } from '~/src/models/ContractMethod'
@@ -142,7 +142,9 @@ export class DoraSDKProvider implements Neo3Provider {
 
     const nodes = await this.getAllNodes()
     const url = NeoNode.getHighestNodeUrlFromPool(nodes)
-    if (!url) throw new Error('Problem get contract')
+    if (!url) {
+      throw new Error('Problem get contract')
+    }
 
     const rpcClient = new rpc.RPCClient(url)
 
@@ -246,7 +248,9 @@ export class DoraSDKProvider implements Neo3Provider {
     const result = new UnclaimedResponse()
     const nodes = await this.getAllNodes()
     const url = NeoNode.getHighestNodeUrlFromPool(nodes)
-    if (!url) throw new Error('Problem get unclaimed')
+    if (!url) {
+      throw new Error('Problem get unclaimed')
+    }
 
     const rpcClient = new rpc.RPCClient(url)
     const { unclaimed } = await rpcClient.execute(

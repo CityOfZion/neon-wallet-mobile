@@ -5,6 +5,7 @@ import Carousel from 'react-native-snap-carousel'
 import { useDispatch } from 'react-redux'
 
 import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { Exchange } from '~/src/types/exchange'
 import { SyncDispatch } from '~/src/types/reducers/root'
 import WalletCard from '~src/components/WalletCard'
 import { Wallet } from '~src/models/redux/Wallet'
@@ -18,6 +19,7 @@ interface Props {
   canBeInactive?: boolean
   onScrollBegin?: (evt?: NativeSyntheticEvent<NativeScrollEvent>) => void
   onScrollEnd?: (evt?: NativeSyntheticEvent<NativeScrollEvent>) => void
+  exchange?: Exchange
 }
 
 const WalletPicker: React.FC<Props> = (props: Props) => {
@@ -79,6 +81,7 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
           pointerEvents={wallet.index !== index ? 'none' : undefined}
         >
           <WalletCard
+            exchange={props.exchange}
             width={240}
             onPress={!isInactive(wallet.item) ? () => pressEvent(wallet.item) : undefined}
             wallet={wallet.item}

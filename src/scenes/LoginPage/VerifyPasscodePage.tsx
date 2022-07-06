@@ -51,7 +51,9 @@ const VerifyPasscodePage = (props: Props) => {
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false)
 
   useEffect(() => {
-    if (passcode.length) setShowErrorMessage(false)
+    if (passcode.length) {
+      setShowErrorMessage(false)
+    }
     if (passcode.length === PASSCODE_LENGTH) {
       validate()
     }

@@ -6,14 +6,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
-import { RootStackParamList } from '~/src/navigation/AppNavigation'
-import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
-import { SyncDispatch } from '~/src/types/reducers/root'
-import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
-import WalletPicker from '~src/components/misc/WalletPicker'
-import { Wallet } from '~src/models/redux/Wallet'
-import { RootState, RootStore } from '~src/store/RootStore'
-import { LinearLayout, TextView } from '~src/styles/styled-components'
+import { useExchange } from '~/src/hooks/useExchange';
+import { RootStackParamList } from '~/src/navigation/AppNavigation';
+import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation';
+import { SyncDispatch } from '~/src/types/reducers/root';
+import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel';
+import WalletPicker from '~src/components/misc/WalletPicker';
+import { Wallet } from '~src/models/redux/Wallet';
+import { RootState, RootStore } from '~src/store/RootStore';
+import { LinearLayout, TextView } from '~src/styles/styled-components';
 
 export interface SendTransactionWalletSelectionModalParams {
   address?: string
@@ -31,9 +32,9 @@ const SendTransactionWalletSelectionModal = (props: Props) => {
   const controller = useSwiperController(true)
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const wallets = useSelector((state: RootState) => state.app.wallets)
-  const exchange = useSelector((state: RootState) => state.app.exchange)
   const language = useSelector((state: RootState) => state.settings.language)
   const currency = useSelector((state: RootState) => state.settings.currency)
+  const { exchange } = useExchange({ filter: { currencies: currency } })
   const accounts = useSelector((state: RootState) => state.app.accounts)
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(
@@ -43,12 +44,16 @@ const SendTransactionWalletSelectionModal = (props: Props) => {
   const validWallets = useMemo(() => wallets.filter((value: Wallet) => value.walletType !== 'watch'), [wallets])
 
   useEffect(() => {
-    if (!address) return
+    if (!address) {
+      return
+    }
 
     const account = accounts.find(account => account.address && account.address === address)
     const wallet = account?.getWallet(wallets)
 
-    if (!account || !wallet) return
+    if (!account || !wallet) {
+      return
+    }
 
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.SendTransactionAccountSelectionModal.name,
@@ -95,7 +100,7 @@ const SendTransactionWalletSelectionModal = (props: Props) => {
         />
 
         <TextView alignSelf="center" fontSize="36px" color="text.0" fontFamily="medium">
-          {selectedWallet?.calculateBalanceFormatted(currency, language, exchange)}
+          {selectedWallet?.calculateBalanceFormatted(currency, language, exchange)} {/** TODO set SkeletonContainer */}
         </TextView>
 
         {validWallets?.every(wallet => !wallet.hasFunds) && (

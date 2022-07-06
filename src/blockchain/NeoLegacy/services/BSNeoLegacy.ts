@@ -8,7 +8,9 @@ import moment from 'moment'
 import { Platform, NativeModules, ImageLoadEventData } from 'react-native'
 
 import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
-import { Account } from '~/src/models/redux/Account'
+import { Tokens } from '~/src/models/TokenResponse';
+import { Account } from '~/src/models/redux/Account';
+import tokens from '~src/assets/tokens/neoLgeacy.json'
 import { BlockchainServiceKey, IBlockchainService, AssetInfo, IClaimable, SendTransactionData } from '~src/blockchain'
 import { NeoLegacyProviderOption } from '~src/blockchain/NeoLegacy'
 import { TNeoLegacyProvider } from '~src/blockchain/NeoLegacy/providers'
@@ -47,6 +49,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   readonly feeToken: { hash: string; token: string; img: ImageLoadEventData }
   readonly wcChains: string[]
   accountsPool: Account[] = []
+  readonly tokens: Tokens = tokens
   constructor() {
     this.provider = NeoLegacyProviderOption('doraSdk')
     this.key = 'neoLegacy'
@@ -117,8 +120,11 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
           NativeModules.RNNeoSdkBindings.decryptNep2(encryptedKey, password, (wif: string | null) => {
             if (wif) {
               const newAccount = new wallet.Account(wif)
-              if (newAccount.address) resolve({ address: newAccount.address, wif })
-              else reject(new Error('Key decryption failed'))
+              if (newAccount.address) {
+                resolve({ address: newAccount.address, wif })
+              } else {
+                reject(new Error('Key decryption failed'))
+              }
             } else {
               reject(new Error('Key decryption failed'))
             }
@@ -130,8 +136,11 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
         try {
           const wif = await NeoNative.decryptNep2(password, encryptedKey)
           const newAccount = new wallet.Account(wif)
-          if (newAccount.address) resolve({ address: newAccount.address, wif })
-          else reject(new Error('Key decryption failed'))
+          if (newAccount.address) {
+            resolve({ address: newAccount.address, wif })
+          } else {
+            reject(new Error('Key decryption failed'))
+          }
         } catch {
           reject(new Error('Key decryption failed'))
         }

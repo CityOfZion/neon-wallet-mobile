@@ -119,11 +119,15 @@ const Header = (props: SwiperProps & { mb: number }) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   function handleLeftPress() {
-    if (props.onLeftPress) props.onLeftPress()
+    if (props.onLeftPress) {
+      props.onLeftPress()
+    }
   }
 
   function handleRightPress() {
-    if (props.onRightPress) props.onRightPress()
+    if (props.onRightPress) {
+      props.onRightPress()
+    }
   }
 
   return (
@@ -229,7 +233,9 @@ export default function SwiperPanel(props: SwiperProps) {
     () =>
       PanResponder.create({
         onStartShouldSetPanResponder: evt => {
-          if (evt.nativeEvent.locationY > 50) return false
+          if (evt.nativeEvent.locationY > 50) {
+            return false
+          }
 
           return props.draggable
         },
@@ -271,11 +277,15 @@ export default function SwiperPanel(props: SwiperProps) {
   })
 
   const resetScroll = () => {
-    if (scrollView.current) scrollView.current.scrollTo({ x: 0, y: 0, animated: false })
+    if (scrollView.current) {
+      scrollView.current.scrollTo({ x: 0, y: 0, animated: false })
+    }
   }
 
   const open = () => {
-    if (state === State.OPEN) return
+    if (state === State.OPEN) {
+      return
+    }
 
     Animated.parallel([
       Animated.spring(pan.current, {
@@ -297,7 +307,9 @@ export default function SwiperPanel(props: SwiperProps) {
   }
 
   const close = () => {
-    if (state === State.CLOSED) return
+    if (state === State.CLOSED) {
+      return
+    }
 
     Animated.parallel([
       Animated.spring(pan.current, {
@@ -313,7 +325,9 @@ export default function SwiperPanel(props: SwiperProps) {
         useNativeDriver: true,
       }),
     ]).start(() => {
-      if (props.onClose) props.onClose()
+      if (props.onClose) {
+        props.onClose()
+      }
     })
 
     resetScroll()

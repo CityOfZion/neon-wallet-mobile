@@ -1,7 +1,7 @@
 import { JsonRpcRequest, JsonRpcResponse } from '@json-rpc-tools/utils'
 import { ImageLoadEventData } from 'react-native'
 
-import { TokenResponse } from '../models/TokenResponse'
+import { TokenResponse, Tokens } from '../models/TokenResponse'
 import { ContractResponse } from '../models/response/ContractResponse'
 import { NFTResponse } from '../models/response/NFTResponse'
 import { NFTSResponse } from '../models/response/NFTSResponse'
@@ -95,6 +95,7 @@ export interface IBlockchainService {
   readonly cozTip?: { address: string; token: string; hash: string } //config token with the symbol name
   readonly feeToken: { hash: string; token: string; img: ImageLoadEventData }
   readonly wcChains: string[]
+  readonly tokens: Tokens
   sendTransaction: (data: SendTransactionData) => Promise<string | null>
   generateMnemonic: () => string[] | null
   generateWif(mnemonic: string, index: number): string
@@ -263,4 +264,15 @@ export function getWCChainByBlockchain(blockchain: BlockchainServiceKey) {
 
 export function isValidWcChain(wcChains: string[], blockchain: BlockchainServiceKey) {
   return blockchainServices[blockchain].wcChains.some(chain => wcChains.includes(chain))
+}
+
+export function getAllTokenSymbolList() {
+  const symbolList = blockchainList.reduce<string[]>((previousValue, blockchain) => {
+    return [
+      ...previousValue,
+      ...Object.keys(blockchainServices[blockchain].tokens),
+      ...blockchainServices[blockchain].assets.map(asset => asset.symbol),
+    ]
+  }, [])
+  return symbolList.filter((symbol, index) => symbolList.indexOf(symbol) === index)
 }

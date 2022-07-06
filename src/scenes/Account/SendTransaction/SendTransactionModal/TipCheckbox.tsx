@@ -65,7 +65,9 @@ export const TipCheckbox = ({
 
     const newTip = (amount / 100) * PERCENTAGE
 
-    if (onTipChange) onTipChange(newTip)
+    if (onTipChange) {
+      onTipChange(newTip)
+    }
   }, [amount])
 
   useEffect(() => {

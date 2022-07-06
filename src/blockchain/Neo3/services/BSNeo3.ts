@@ -11,10 +11,12 @@ import { ImageLoadEventData, NativeModules, Platform } from 'react-native'
 import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { NeoNode } from '~/src/models/NeoNode'
-import { Account } from '~/src/models/redux/Account'
-import { NFTResponse } from '~/src/models/response/NFTResponse'
-import { NFTSResponse } from '~/src/models/response/NFTSResponse'
+import { Tokens } from '~/src/models/TokenResponse';
+import { Account } from '~/src/models/redux/Account';
+import { NFTResponse } from '~/src/models/response/NFTResponse';
+import { NFTSResponse } from '~/src/models/response/NFTSResponse';
 import { NeoNative } from '~/src/native/NeoNative'
+import tokens from '~src/assets/tokens/neo3.json';
 import {
   IBlockchainService,
   BlockchainServiceKey,
@@ -23,10 +25,10 @@ import {
   IClaimable,
   IWalletConnect,
   INFT,
-} from '~src/blockchain'
-import { Neo3ProviderOptions } from '~src/blockchain/Neo3'
-import { Neo3Provider } from '~src/blockchain/Neo3/providers/common'
-import { ContractInvocationMulti, NeonWcAdapter } from '~src/helpers/NeonWcAdapter'
+} from '~src/blockchain';
+import { Neo3ProviderOptions } from '~src/blockchain/Neo3';
+import { Neo3Provider } from '~src/blockchain/Neo3/providers/common';
+import { ContractInvocationMulti, NeonWcAdapter } from '~src/helpers/NeonWcAdapter';
 
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 const feeTokenImg = require('~src/assets/nep5/png/GAS.png')
@@ -82,6 +84,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
   ]
   readonly feeToken: { hash: string; token: string; img: ImageLoadEventData }
   readonly wcChains: string[]
+  readonly tokens: Tokens = tokens
   constructor() {
     this.provider = Neo3ProviderOptions('doraSDK')
     this.key = 'neo3'
@@ -103,8 +106,12 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     const nodes = await this.provider.getAllNodes()
     const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
 
-    if (!neoAccount) throw new Error('No account')
-    if (!bestUrl) throw new Error('Blockchain unavailable, try again')
+    if (!neoAccount) {
+      throw new Error('No account')
+    }
+    if (!bestUrl) {
+      throw new Error('Blockchain unavailable, try again')
+    }
 
     return await (await NeonWcAdapter.init(bestUrl)).rpcCall(neoAccount, request)
   }
@@ -113,7 +120,9 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     const regex = new RegExp('^N\\S{33}$')
     const validAddress = regex.exec(address)
 
-    if (validAddress?.[0]) return true
+    if (validAddress?.[0]) {
+      return true
+    }
 
     return false
   }
@@ -152,12 +161,16 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
 
   async sendTransaction(data: SendTransactionData) {
     try {
-      if (!data.senderAddress) throw new Error('Sender address not defined')
+      if (!data.senderAddress) {
+        throw new Error('Sender address not defined')
+      }
 
       const nodes = await this.provider.getAllNodes()
       const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
 
-      if (!bestUrl) throw new Error('Blockchain unavailable, try again')
+      if (!bestUrl) {
+        throw new Error('Blockchain unavailable, try again')
+      }
 
       const facade = await api.NetworkFacade.fromConfig({ node: bestUrl })
 
@@ -179,8 +192,11 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
           NativeModules.RNNeoSdkBindings.decryptNep2(encryptedKey, password, (wif: string | null) => {
             if (wif) {
               const newAccount = new wallet.Account(wif)
-              if (newAccount.address) resolve({ address: newAccount.address, wif })
-              else reject(new Error('Key decryption failed'))
+              if (newAccount.address) {
+                resolve({ address: newAccount.address, wif })
+              } else {
+                reject(new Error('Key decryption failed'))
+              }
             } else {
               reject(new Error('Key decryption failed'))
             }
@@ -192,8 +208,11 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
         try {
           const wif = await NeoNative.decryptNep2(password, encryptedKey)
           const newAccount = new wallet.Account(wif)
-          if (newAccount.address) resolve({ address: newAccount.address, wif })
-          else reject(new Error('Key decryption failed'))
+          if (newAccount.address) {
+            resolve({ address: newAccount.address, wif })
+          } else {
+            reject(new Error('Key decryption failed'))
+          }
         } catch {
           reject(new Error('Key decryption failed'))
         }
@@ -207,8 +226,12 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     const neoBalance = response.balance.filter(balance => balance.assetSymbol === 'NEO')
     const gasBalance = response.balance.filter(balance => balance.assetSymbol === 'GAS')
 
-    if (neoBalance.length < 1) throw new Error("Address don't have NEO to make a claim")
-    if (!neoHash) throw new Error('NEO not found')
+    if (neoBalance.length < 1) {
+      throw new Error("Address don't have NEO to make a claim")
+    }
+    if (!neoHash) {
+      throw new Error('NEO not found')
+    }
 
     const gasFee = await this.calculateTransferFee({
       receiverAddress: address,
@@ -223,13 +246,17 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     }
 
     const neoAccount = await this.getNeoAccount(address)
-    if (!neoAccount) throw new Error('Account invalid to get claim')
+    if (!neoAccount) {
+      throw new Error('Account invalid to get claim')
+    }
 
     const signing = await this.signing(address)
     const nodes = await this.provider.getAllNodes()
     const url = NeoNode.getHighestNodeUrlFromPool(nodes)
 
-    if (!url) throw new Error('Problem to do claim')
+    if (!url) {
+      throw new Error('Problem to do claim')
+    }
 
     const facade = await api.NetworkFacade.fromConfig({ node: url })
     const txid = await facade.claimGas(neoAccount, signing)
@@ -244,7 +271,9 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
   async calculateFee(senderAddress: string, request: JsonRpcRequest) {
     const fromAccount = await this.getNeoAccount(senderAddress)
 
-    if (!fromAccount) throw new Error('Account not found')
+    if (!fromAccount) {
+      throw new Error('Account not found')
+    }
 
     const defaultEndpoint = 'http://seed1.neo.org:10332'
     const node = (await this.provider.getAllNodes())[0]
@@ -261,7 +290,9 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     try {
       const fromAccount = await this.getNeoAccount(data.senderAddress)
 
-      if (!fromAccount) throw new Error('Account not found')
+      if (!fromAccount) {
+        throw new Error('Account not found')
+      }
 
       const defaultEndpoint = 'http://seed1.neo.org:10332'
       const node = (await this.provider.getAllNodes())[0]
@@ -363,7 +394,9 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
 
   private async signing(address: string) {
     const neoAccount = await this.getNeoAccount(address)
-    if (!neoAccount) throw new Error('Sender Address in invalid')
+    if (!neoAccount) {
+      throw new Error('Sender Address in invalid')
+    }
     const result: signingConfig = {
       signingCallback: api.signWithAccount(neoAccount),
     }
@@ -380,7 +413,9 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     const intents: Nep17TransferIntent[] = []
 
     const neoAccount = await this.getNeoAccount(senderAddress)
-    if (!neoAccount) throw new Error('Sender Address in invalid')
+    if (!neoAccount) {
+      throw new Error('Sender Address in invalid')
+    }
 
     intents.push({
       to: receiverAddress,

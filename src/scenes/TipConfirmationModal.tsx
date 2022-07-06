@@ -23,7 +23,9 @@ const TipConfirmationModal = (props: Props) => {
   const controller = useSwiperController(true)
 
   const handleOnPress = (value: boolean) => {
-    if (onConfirmation) onConfirmation(value)
+    if (onConfirmation) {
+      onConfirmation(value)
+    }
     controller.close()
   }
 

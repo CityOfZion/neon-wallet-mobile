@@ -1,5 +1,13 @@
-import { useLocalAuthentication } from './useLocalAuthentication'
+import { useLocalAuthentication } from './useLocalAuthentication';
 
 import { useBlockchainActionsHook } from '~src/hooks/BlockchainActionsHook'
 import { useTreatNetworkOnWalletConnectFlow } from '~src/hooks/TreatNetworkOnWalletConnectFlow'
-export { useBlockchainActionsHook, useTreatNetworkOnWalletConnectFlow, useLocalAuthentication }
+import { useAppState } from '~src/hooks/useAppState';
+import { useOnlineManager } from '~src/hooks/useOnlineManager';
+export {
+  useBlockchainActionsHook,
+  useTreatNetworkOnWalletConnectFlow,
+  useLocalAuthentication,
+  useOnlineManager,
+  useAppState,
+}

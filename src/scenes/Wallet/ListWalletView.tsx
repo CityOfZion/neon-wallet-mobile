@@ -5,29 +5,32 @@ import i18n from 'i18n-js'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import React, { useEffect, useRef, useState } from 'react'
-import { Alert, TouchableWithoutFeedback, View, Animated } from 'react-native'
+import { Alert, TouchableWithoutFeedback, View, Animated, RefreshControl } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { TabStackParamList } from '../../navigation/TabNavigation'
 
-import { SyncDispatch } from '~/src/types/reducers/root'
-import { wrapper } from '~src/app/ApplicationWrapper'
-import { Normalize } from '~src/app/Normalize'
-import BalanceList from '~src/components/BalanceList'
-import Notification from '~src/components/Notification'
-import ScreenLayout from '~src/components/layout/ScreenLayout'
-import WalletPicker from '~src/components/misc/WalletPicker'
-import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
-import { Lang } from '~src/enums/Lang'
-import { FilterHelper } from '~src/helpers/FilterHelper'
-import { TokenAsset } from '~src/models/TokenAsset'
-import { Wallet } from '~src/models/redux/Wallet'
-import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
-import { RootState, RootStore } from '~src/store/RootStore'
-import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
-import { ApplicationTheme } from '~src/themes/ApplicationTheme'
+import SkeletonContainer from '~/src/components/SkeletonContainer';
+import { useExchange } from '~/src/hooks/useExchange'
+import { Exchange } from '~/src/types/exchange'
+import { SyncDispatch } from '~/src/types/reducers/root';
+import { wrapper } from '~src/app/ApplicationWrapper';
+import { Normalize } from '~src/app/Normalize';
+import BalanceList from '~src/components/BalanceList';
+import Notification from '~src/components/Notification';
+import ScreenLayout from '~src/components/layout/ScreenLayout';
+import WalletPicker from '~src/components/misc/WalletPicker';
+import ThemedMoreButton from '~src/components/themed/ThemedMoreButton';
+import { Lang } from '~src/enums/Lang';
+import { FilterHelper } from '~src/helpers/FilterHelper';
+import { TokenAsset } from '~src/models/TokenAsset';
+import { Wallet } from '~src/models/redux/Wallet';
+import { RootStackParamList } from '~src/navigation/AppNavigation';
+import { ModalStackParamList } from '~src/navigation/ModalStackNavigation';
+import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation';
+import { RootState, RootStore } from '~src/store/RootStore';
+import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components';
+import { ApplicationTheme } from '~src/themes/ApplicationTheme';
 
 type Props = WalletStackParamList & RootStackParamList & TabStackParamList & ModalStackParamList
 
@@ -46,30 +49,37 @@ const WalletChangeComponent = (props: {
   language: Lang
   tokenAssets: TokenAsset[]
   onPressWarning: () => void
+  exchange?: Exchange
 }) => {
   const { currency, language } = useSelector((state: RootState) => state.settings)
-  const { exchange, accounts } = useSelector((state: RootState) => state.app)
-
+  const { accounts } = useSelector((state: RootState) => state.app)
   const [variationInPercent, setVariationInPercent] = useState<number>()
-  const [formattedBalance, setFormattedBalance] = useState<string>()
+
+  const formattedBalance = props.exchange
+    ? props.wallet.calculateBalanceFormatted(
+        currency,
+        language,
+        props.exchange,
+        props.wallet.calculateBalance(currency, props.exchange) ?? 0
+      )
+    : '-'
 
   const populate = async () => {
-    const pastOneDay = moment().add(-1, 'day')
+    const { exchange } = props
+    if (exchange) {
+      const pastOneDay = moment().add(-1, 'day')
 
-    const variation = (await props.wallet.getBalanceVariationFromPastExchange(currency, pastOneDay, exchange)) ?? 0
+      const variation = (await props.wallet.getBalanceVariationFromPastExchange(currency, pastOneDay, exchange)) ?? 0
 
-    props.wallet.populateTokenAssets(accounts)
+      props.wallet.populateTokenAssets(accounts)
 
-    const balance = props.wallet.calculateBalance(currency, exchange) ?? 0
+      const balance = props.wallet.calculateBalance(currency, exchange) ?? 0
 
-    const balanceFormatted = props.wallet.calculateBalanceFormatted(currency, language, exchange, balance)
-
-    setFormattedBalance(balanceFormatted)
-
-    if (balance !== 0) {
-      setVariationInPercent((variation / balance) * 100)
-    } else {
-      setVariationInPercent(0)
+      if (balance !== 0) {
+        setVariationInPercent((variation / balance) * 100)
+      } else {
+        setVariationInPercent(0)
+      }
     }
   }
 
@@ -78,9 +88,8 @@ const WalletChangeComponent = (props: {
   }
 
   useEffect(() => {
-    setFormattedBalance(undefined)
     populate()
-  }, [props.wallet])
+  }, [props.wallet, props.exchange, formattedBalance])
 
   return (
     <LinearLayout mb={6} alignItems="center">
@@ -91,18 +100,18 @@ const WalletChangeComponent = (props: {
       ) : (
         <View />
       )}
-
-      <LinearLayout orientation="horiz" minHeight={56}>
-        <TextView fontSize="36px" color="text.0" fontFamily="medium">
-          {formattedBalance ?? '-'}
-        </TextView>
-
-        {props.wallet.hasFunds && (
-          <ButtonView onPress={props.onPressWarning}>
-            <ImageView mt="8px" mx="4px" source={require('~src/assets/images/icon-warning-green.png')} />
-          </ButtonView>
-        )}
-      </LinearLayout>
+      <SkeletonContainer isLoading={!props.exchange} skeletonType="balanceWallet">
+        <LinearLayout orientation="horiz" minHeight={56}>
+          <TextView fontSize="36px" color="text.0" fontFamily="medium">
+            {formattedBalance}
+          </TextView>
+          {props.wallet.hasFunds && (
+            <ButtonView onPress={props.onPressWarning}>
+              <ImageView mt="8px" mx="4px" source={require('~src/assets/images/icon-warning-green.png')} />
+            </ButtonView>
+          )}
+        </LinearLayout>
+      </SkeletonContainer>
 
       <AwaitActivity name="populateVariation">
         <LinearLayout orientation="horiz">
@@ -181,10 +190,11 @@ const EmptyListComponent: React.FC<EmptyListProps> = props => {
 const ListWalletView = (props: WalletProps) => {
   const { wallets, accounts } = useSelector((state: RootState) => state.app)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
-  const { language } = useSelector((state: RootState) => state.settings)
+  const { language, currency } = useSelector((state: RootState) => state.settings)
   const { id } = useSelector((state: RootState) => state.wallet)
   const dispatch = useDispatch()
   const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
+  const { exchange, isRefetching, refetch } = useExchange({ filter: { currencies: currency } })
 
   const selectedWallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
 
@@ -242,7 +252,13 @@ const ListWalletView = (props: WalletProps) => {
     )
 
   return (
-    <ScreenLayout useHeaderPadding={false} useStatusBarPadding padding={0} darkerSolidColorBG>
+    <ScreenLayout
+      useHeaderPadding={false}
+      useStatusBarPadding
+      padding={0}
+      darkerSolidColorBG
+      refreshControl={<RefreshControl tintColor="#fff" refreshing={isRefetching} onRefresh={refetch} />}
+    >
       <>
         <LinearLayout alignSelf="flex-end" style={{ marginTop: !isConnected ? 14 : undefined }}>
           <ThemedMoreButton
@@ -260,6 +276,7 @@ const ListWalletView = (props: WalletProps) => {
             <LinearLayout mt={-5} justifyContent="center" height={385}>
               {isListNotEmpty() ? (
                 <WalletPicker
+                  exchange={exchange}
                   wallets={wallets}
                   onSelect={selectEvent}
                   onPress={pressEvent}
@@ -273,6 +290,7 @@ const ListWalletView = (props: WalletProps) => {
             {selectedWallet && (
               <Animated.View style={{ opacity: fadeValue }}>
                 <WalletChangeComponent
+                  exchange={exchange}
                   language={language}
                   wallet={selectedWallet}
                   tokenAssets={selectedWallet.tokenAssets ?? []}
@@ -290,7 +308,12 @@ const ListWalletView = (props: WalletProps) => {
                   )}
 
                   {isListNotEmpty() && (
-                    <BalanceList mb={6} tokenAssets={selectedWallet.tokenAssets ?? []} showBlockchain />
+                    <BalanceList
+                      exchange={exchange}
+                      mb={6}
+                      tokenAssets={selectedWallet.tokenAssets ?? []}
+                      showBlockchain
+                    />
                   )}
                 </LinearLayout>
               </Animated.View>

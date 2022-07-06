@@ -15,7 +15,6 @@ type Props = {
   navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>
 }
 
-// eslint-disable-next-line react/display-name
 export const NFTItem = React.memo(({ nft, navigation }: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const [shouldShowDefaultNFTImage, setShouldShowDefaultNFTImage] = useState(false)

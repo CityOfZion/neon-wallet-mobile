@@ -5,7 +5,7 @@ import { FormattedTransferNFT } from './AccountTransactionsScreen'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type TransferNFTItemProps = FormattedTransferNFT
-// eslint-disable-next-line react/display-name
+
 export const TransferNFTItem = React.memo((props: TransferNFTItemProps) => {
   return (
     <LinearLayout orientation="horiz" alignItems="flex-end">

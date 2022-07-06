@@ -22,13 +22,11 @@ import { ExchangeDispatcher } from '~src/store/app/dispatchers/ExchangeDispatche
 import { NodesDispatcher } from '~src/store/app/dispatchers/NodesDispatcher'
 import { TokensDispatcher } from '~src/store/app/dispatchers/TokensDispatcher'
 import { WalletsDispatcher } from '~src/store/app/dispatchers/WalletsDispatcher'
-import { MultichainExchange } from '~src/types/exchange'
 
 export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppAction> {
   protected readonly initialState = Model.parse<AppState>(App)
 
   protected readonly dispatchers = [
-    ExchangeDispatcher,
     TokensDispatcher,
     NodesDispatcher,
     WalletsDispatcher,
@@ -37,62 +35,6 @@ export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppActi
   ]
 
   readonly actions = {
-    syncExchange: (): AsyncAction<MultichainExchange> => {
-      return async dispatch => {
-        const exchange = await Storage.exchange.load()
-        const multichainExchange = (await Storage.multichainExchange.load()) ?? ({} as MultichainExchange)
-        if (!Object.keys(multichainExchange).length && exchange) {
-          multichainExchange['neoLegacy'] = exchange
-        }
-        dispatch(this.commit('SET_EXCHANGE', { exchange: multichainExchange }))
-        return multichainExchange
-      }
-    },
-
-    fetchExchange: (): AsyncAction => {
-      return async (dispatch, getState) => {
-        try {
-          let tokenList = getState().app.tokens
-
-          if (tokenList.length < 1) {
-            const assetsBlockchain: TokenAsset[] = []
-
-            await Promise.all(
-              blockchainList.map(async blockchainName => {
-                const { assets, provider } = blockchainServices[blockchainName]
-                const tokenListResponse = await provider.getTokenList()
-                assets.forEach(({ hash, name, symbol, decimals }) => {
-                  assetsBlockchain.push(new TokenAsset(name, symbol, hash, blockchainName, decimals))
-                  tokenList = [...tokenListResponse.toTokenAsset(blockchainName), ...assetsBlockchain]
-                })
-              })
-            )
-          }
-
-          const result: MultichainExchange = {} as MultichainExchange
-
-          await Promise.all(
-            blockchainList.map(async blockchainName => {
-              const { provider } = blockchainServices[blockchainName]
-              const tokenAssetSymbols = tokenList
-                .filter(token => token.blockchain === blockchainName)
-                .map(token => token.symbol)
-
-              result[blockchainName] = await provider.getExchangeData({
-                tokenAssetSymbols,
-                currencies: applicationConfig.currencies,
-              })
-            })
-          )
-
-          await Storage.multichainExchange.save(result)
-        } catch (error) {
-          console.log(error)
-          throw new Error('Problema para sincronizar exchange')
-        }
-      }
-    },
-
     syncTokens: (): AsyncAction<TokenAsset[]> => {
       return async dispatch => {
         const tokenAssets = await Storage.tokenAssets.load()
@@ -228,7 +170,9 @@ export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppActi
     updateAndSaveAccount: (account: Account): AsyncAction => {
       return async (dispatch, getState) => {
         const accounts = getState().app.accounts.map(it => {
-          if (it.address === account.address) return account
+          if (it.address === account.address) {
+            return account
+          }
           return it
         })
 
@@ -346,9 +290,15 @@ export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppActi
         if (contacts) {
           contacts.forEach(contact => contact.adaptNewFormat())
           contacts = contacts.sort((c1: Contact, c2: Contact) => {
-            if (!c1.name && !c2.name) return 0
-            if (!c1.name) return 1
-            if (!c2.name) return -1
+            if (!c1.name && !c2.name) {
+              return 0
+            }
+            if (!c1.name) {
+              return 1
+            }
+            if (!c2.name) {
+              return -1
+            }
             return c2.name.localeCompare(c1.name)
           })
           dispatch(this.commit('SET_CONTACTS', { contacts }))

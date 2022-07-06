@@ -48,7 +48,7 @@ const RootStack = createStackNavigator<RootStackParamList>()
 
 const deepLinking = new DeepLinkingConfig()
 
-const AppNavigation: React.FC<Props> = (props) => {
+const AppNavigation: React.FC<Props> = props => {
   const theme = useSelector((state: RootState) => {
     return wrapper.theme[state.settings.theme]
   })
@@ -123,9 +123,13 @@ const AppNavigation: React.FC<Props> = (props) => {
     }, applicationConfig.defaultDataRefreshTimeInMilliseconds)
 
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
 
-      if (interactionRef.current) interactionRef.current.cancel()
+      if (interactionRef.current) {
+        interactionRef.current.cancel()
+      }
     }
   }, [isConnected, timerStatus, hasInit])
 
@@ -184,7 +188,9 @@ const AppNavigation: React.FC<Props> = (props) => {
         onPress: () => {
           const navigation = navigationRef.current
 
-          if (!navigation) return
+          if (!navigation) {
+            return
+          }
 
           dispatch(RootStore.wallet.actions.selectWallet(account.idWallet))
           dispatch(RootStore.account.actions.selectAccount(account.address))
@@ -211,12 +217,16 @@ const AppNavigation: React.FC<Props> = (props) => {
   }, [])
 
   useEffect(() => {
-    if (!walletConnectCtx.requests.length || !walletConnectCtx.sessions.length || !navigationRef.current) return
+    if (!walletConnectCtx.requests.length || !walletConnectCtx.sessions.length || !navigationRef.current) {
+      return
+    }
 
     const [request] = walletConnectCtx.requests
     const foundSession = walletConnectCtx.sessions.find(it => it.topic === request.topic)
 
-    if (!foundSession) return
+    if (!foundSession) {
+      return
+    }
 
     navigationRef.current.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.WCTransactionRequestModal.name,

@@ -43,7 +43,9 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
   const blockchainActionsHook = useBlockchainActionsHook()
 
   const createAccount = useCallback(async () => {
-    if (!wallet.id) throw new Error('No wallet selected')
+    if (!wallet.id) {
+      throw new Error('No wallet selected')
+    }
     if (!blockchainSelected) {
       showMessage({
         message: i18n.t('blockchainServices.errorMessages.blockchainNotFound'),

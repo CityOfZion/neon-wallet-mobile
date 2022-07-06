@@ -6,31 +6,37 @@ import { Normalize } from '../app/Normalize'
 import { blockchainServices } from '../blockchain'
 import { FilterHelper } from '../helpers/FilterHelper'
 import { Account } from '../models/redux/Account'
+import { RootState } from '../store/RootStore'
 import { LinearLayout, TextView, ImageView } from '../styles/styled-components'
+import { Exchange } from '../types/exchange'
 import { HeaderColumn } from './HeaderColumn'
 
 interface Props {
   tip: number
   account: Account
+  exchange?: Exchange
 }
 
-export const TransactionTipCard = ({ account, tip }: Props) => {
+export const TransactionTipCard = ({ account, tip, exchange }: Props) => {
   const tokens = useSelector((state: RootState) => state.app.tokens)
-  const exchange = useSelector((state: RootState) => state.app.exchange)
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
 
   const tipToken = useMemo(() => {
     const cozTip = blockchainServices[account.blockchain].cozTip
 
-    if (!cozTip) return
+    if (!cozTip) {
+      return
+    }
 
     return tokens.find(token => token.symbol === cozTip.token)
   }, [account, tokens])
   const tipFiat = useMemo(() => {
-    if (!tipToken) return
+    if (!tipToken || !exchange) {
+      return
+    }
 
-    const price = exchange[account.blockchain][tipToken.symbol].to[currency] * tip
+    const price = exchange[tipToken.symbol].to[currency] * tip
 
     return FilterHelper.currency(price, currency, language)
   }, [exchange, currency, language, tip, account, tipToken])
@@ -78,8 +84,8 @@ export const TransactionTipCard = ({ account, tip }: Props) => {
           title={i18n.t('components.transactionTipCard.qty')}
           value={tipToken?.decimals ? tip.toFixed(tipToken.decimals) : String(tip)}
         />
-
-        {tipFiat && <HeaderColumn weight={1.6} title={i18n.t('components.transactionTipCard.value')} value={tipFiat} />}
+        {tipFiat && <HeaderColumn weight={1.6} title={i18n.t('components.transactionTipCard.value')} value={tipFiat} />}{' '}
+        {/** TODO set SkeletonContainer */}
       </LinearLayout>
     </LinearLayout>
   )

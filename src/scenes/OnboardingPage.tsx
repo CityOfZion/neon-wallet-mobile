@@ -98,7 +98,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
         }),
         blockchain
       )
-    )
+    );
 
     allSettled.shim()
 
@@ -108,12 +108,17 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   }, [])
 
   useEffect(() => {
-    if (wallets.length === 0) createInitialWallet()
+    if (wallets.length === 0) {
+      createInitialWallet()
+    }
   }, [])
 
   useEffect(() => {
-    if (carouselIndex === 3) setIsLastPage(true)
-    else setIsLastPage(false)
+    if (carouselIndex === 3) {
+      setIsLastPage(true)
+    } else {
+      setIsLastPage(false)
+    }
   }, [carouselIndex])
 
   const data = [

@@ -16,7 +16,6 @@ type Props = FormattedTransaction & {
   account: Account
 }
 
-// eslint-disable-next-line react/display-name
 export const TransactionItem = React.memo((props: Props) => {
   return (
     <View style={{ marginBottom: 5 }}>

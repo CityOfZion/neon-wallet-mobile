@@ -47,17 +47,23 @@ export class TokenAsset {
 
   getCurrencyRatio(currency: Currency, exchange: Exchange) {
     const { symbol } = this
-    if (!symbol) return null
+    if (!symbol) {
+      return null
+    }
 
     return exchange[symbol]?.to[currency] ?? null
   }
 
   exchangeToken(currency: Currency, exchange?: Exchange) {
     const exchangeModel = exchange ?? this.exchange
-    if (!exchangeModel) return null
+    if (!exchangeModel) {
+      return null
+    }
 
     const ratio = this.getCurrencyRatio(currency, exchangeModel)
-    if (!ratio) return null
+    if (!ratio) {
+      return null
+    }
 
     const amount = this.amount ?? 0
 
