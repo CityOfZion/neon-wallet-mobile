@@ -594,14 +594,8 @@
       "removeTip": "Remove Tip"
     },
     "blockchainList": {
-      "accountPage": {
-        "title": "Add new account",
-        "subtitle": "Select the desired blockchain for your new account"
-      },
-      "walletPage": {
-        "title": "Create Wallet",
-        "subtitle": "Please select which account types you require in your wallet"
-      },
+      "title": "Add new account",
+      "subtitle": "Select the desired blockchain for your new account",
       "xExisting": "%{amount} existing",
       "countAccount": "Account %{count}",
       "typeAccount": "%{type} Account",

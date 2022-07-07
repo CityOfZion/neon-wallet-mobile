@@ -1,7 +1,6 @@
 import { ReducerWrapper } from '@simpli/redux-wrapper'
 
 import { appBus } from '~/src/app/AppBus'
-import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { PollingHelper } from '~/src/helpers/PollingHelper'
 import { SecurityHelper } from '~/src/helpers/SecurityHelper'
 import { Node } from '~/src/models/Node'
@@ -18,70 +17,15 @@ import { Contact } from '~src/models/redux/Contact'
 import { Wallet } from '~src/models/redux/Wallet'
 import { AccountsDispatcher } from '~src/store/app/dispatchers/AccountsDispatcher'
 import { ContactsDispatcher } from '~src/store/app/dispatchers/ContactsDispatcher'
-import { ExchangeDispatcher } from '~src/store/app/dispatchers/ExchangeDispatcher'
 import { NodesDispatcher } from '~src/store/app/dispatchers/NodesDispatcher'
-import { TokensDispatcher } from '~src/store/app/dispatchers/TokensDispatcher'
 import { WalletsDispatcher } from '~src/store/app/dispatchers/WalletsDispatcher'
 
 export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppAction> {
   protected readonly initialState = Model.parse<AppState>(App)
 
-  protected readonly dispatchers = [
-    TokensDispatcher,
-    NodesDispatcher,
-    WalletsDispatcher,
-    AccountsDispatcher,
-    ContactsDispatcher,
-  ]
+  protected readonly dispatchers = [NodesDispatcher, WalletsDispatcher, AccountsDispatcher, ContactsDispatcher]
 
   readonly actions = {
-    syncTokens: (): AsyncAction<TokenAsset[]> => {
-      return async dispatch => {
-        const tokenAssets = await Storage.tokenAssets.load()
-
-        if (tokenAssets) {
-          const tokens = tokenAssets.map(token => {
-            token.adaptToMultichain()
-            return token
-          })
-          dispatch(this.commit('SET_TOKENS', { tokens }))
-          return tokenAssets
-        }
-
-        return []
-      }
-    },
-
-    fetchTokens: (): AsyncAction<TokenAsset[]> => {
-      return async () => {
-        const assetsBlockchain: TokenAsset[] = []
-        const tokensAllBlockchains: TokenAsset[] = []
-
-        try {
-          await Promise.all(
-            blockchainList.map(async blockchainName => {
-              const { assets, provider } = blockchainServices[blockchainName]
-              const tokenList = await provider.getTokenList()
-
-              assets.forEach(({ hash, name, symbol, decimals }) => {
-                assetsBlockchain.push(new TokenAsset(name, symbol, hash, blockchainName, decimals))
-              })
-
-              tokensAllBlockchains.push(...tokenList.toTokenAsset(blockchainName))
-            })
-          )
-
-          const tokens = [...assetsBlockchain, ...tokensAllBlockchains]
-
-          await Storage.tokenAssets.save(tokens)
-          return tokens
-        } catch (error) {
-          console.log(error)
-          throw new Error('Problema para consultar token list')
-        }
-      }
-    },
-
     syncNodes: (): AsyncAction<Node[]> => {
       return async (dispatch, getState) => {
         let neoNodes: NeoNode[] = []
@@ -262,9 +206,8 @@ export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppActi
     },
 
     watchPendingTransaction: (account: Account, transactionHash: string, isClaim?: boolean): AsyncAction => {
-      return async (dispatch, getState) => {
+      return async dispatch => {
         const polling = new PollingHelper()
-        const tokensPool = getState().app.tokens
 
         polling.run(async () => {
           const transaction = await blockchainServices[account.blockchain].provider.getTransaction(transactionHash)
@@ -275,7 +218,6 @@ export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppActi
           await account.removePendingTransactions(transactionHash)
 
           await account.populateTokenAssets()
-          await account.populateTransactions(tokensPool)
 
           dispatch(this.actions.updateAndSaveAccount(account))
           appBus.emit(isClaim ? 'claimGasEnd' : 'pendingTransactionConfirmed', account)

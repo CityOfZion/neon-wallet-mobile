@@ -2,7 +2,6 @@ import {
   BlockchainServiceKey,
   IBlockchainService,
   blockchainServices,
-  AssetInfo,
   blockchainList,
   validateTextAllBlockchains,
   validateAddressAllBlockchains,
@@ -23,13 +22,14 @@ import {
   IRPCContract,
   isValidWcChain,
   INFT,
+  Token,
+  getAllTokens,
 } from '~src/blockchain/common'
 
 export {
   BlockchainServiceKey,
   IBlockchainService,
   blockchainServices,
-  AssetInfo,
   blockchainList,
   validateTextAllBlockchains,
   validateAddressAllBlockchains,
@@ -50,4 +50,6 @@ export {
   IRPCContract,
   isValidWcChain,
   INFT,
+  Token,
+  getAllTokens,
 }

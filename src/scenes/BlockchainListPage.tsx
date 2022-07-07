@@ -29,8 +29,11 @@ const BlockchainListPage = (props: Props) => {
   const dispatch = useDispatch<DispatchResult>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
+
   const [blockchainsSelected, setBlockchainsSelected] = useState<BlockchainServiceKey[]>([])
+
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+
   const createWallet = useCallback(async () => {
     let id: string | undefined
 
@@ -40,6 +43,7 @@ const BlockchainListPage = (props: Props) => {
       if (!id) {
         throw new Error('modals.blockchainList.errorCreateWallet')
       }
+
       await dispatchAsync(RootStore.app.actions.syncWallets())
       for (const blockchain of blockchainsSelected) {
         dispatch(RootStore.account.actions.setIdWallet(id))
@@ -101,14 +105,7 @@ const BlockchainListPage = (props: Props) => {
             </TextView>
           </View>
 
-          <BlockchainList
-            hideQtyAccounts
-            isMulti
-            onBlockchainSelected={blockchainList => {
-              const mapBlockchainList = blockchainList.filter(it => it.isActive === true).map(it => it.blockchain)
-              setBlockchainsSelected(mapBlockchainList)
-            }}
-          />
+          <BlockchainList isMulti onSelect={setBlockchainsSelected} />
         </LinearLayout>
 
         <LinearLayout mt={5} mb={7} px={5} width="100%">

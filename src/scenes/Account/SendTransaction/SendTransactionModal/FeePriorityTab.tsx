@@ -52,7 +52,7 @@ const Button = ({ fee, name, isSelected, onPress, blockchain, ...props }: Button
           </TextView>
           <TextView color={isSelected ? 'primary' : 'text.3'} fontSize="12px">
             {fee}
-            {blockchainServices[blockchain as BlockchainServiceKey].feeToken.token}
+            {blockchainServices[blockchain].feeToken.token}
           </TextView>
         </LinearLayout>
       </LinearLayout>

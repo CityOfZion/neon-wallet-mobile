@@ -2,15 +2,14 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { FlatList, Keyboard } from 'react-native'
-import { useSelector } from 'react-redux'
 
-import { RootState } from '../store/RootStore'
+import { useTokens } from '../hooks/useTokens'
 
 import { Normalize } from '~src/app/Normalize'
+import { SearchBar } from '~src/components/SearchBar'
 import SwiperPanel, { PANEL_OFFSET, SwiperController, useSwiperController } from '~src/components/SwiperPanel'
-import { SearchBar } from '~src/components/input/SearchBar'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import { TokenAsset } from '~src/models/TokenAsset'
 import { Account } from '~src/models/redux/Account'
@@ -73,56 +72,34 @@ const Item = (props: { controller: SwiperController; item: TokenAsset; onChangeT
 }
 
 const ListTokenModal: React.FC<Props> = (props: Props) => {
+  const { account, filterBy = 'receive' } = props.route.params
+
   const controller = useSwiperController(true)
-  const tokens = useSelector((state: RootState) => state.app.tokens)
+  const tokens = useTokens({ blockchain: account.blockchain })
 
-  const [tokenList, setTokenList] = useState<TokenAsset[]>([])
-  const [emptySearchList, setEmptySearchList] = useState<boolean>(false)
+  const [filter, setFilter] = useState('')
 
-  const { account } = props.route.params
-  const filterBy = props.route.params.filterBy ?? 'receive'
+  const tokenList = useMemo(() => {
+    if (filterBy === 'receive') {
+      return tokens.map(token => {
+        const accountToken = account.tokenAssets.find(it => it.hash === token.hash)
 
-  const [searchTokens, setSearchTokens] = useState<TokenAsset[]>([])
-
-  const forceCloseKeyboard = () => {
-    Keyboard.dismiss()
-  }
-
-  useEffect(() => {
-    forceCloseKeyboard()
-  }, [])
-
-  useEffect(() => {
-    populate()
-  }, [filterBy])
-
-  useEffect(() => {
-    setSearchTokens(tokenList)
-  }, [tokenList])
-
-  const populate = async () => {
-    if (filterBy === 'send') {
-      setTokenList(account?.tokenAssets ?? tokens)
-    } else if (account?.tokenAssets) {
-      const newTokenList: TokenAsset[] = []
-
-      tokens.forEach(token => {
-        if (token.name !== '\u0000') {
-          const tokenFromAccount = account.tokenAssets.find(it => it.hash === token.hash)
-          if (token.blockchain === account.blockchain) {
-            if (tokenFromAccount) {
-              newTokenList.push(tokenFromAccount)
-            } else {
-              newTokenList.push(token)
-            }
-          }
-        }
+        return accountToken ?? token
       })
-      setTokenList(newTokenList)
-    } else {
-      setTokenList(tokens)
     }
-  }
+
+    return account.tokenAssets
+  }, [filterBy, account, tokens])
+
+  const filteredTokens = useMemo(() => {
+    if (!filter) return tokenList
+
+    return tokenList.filter(token => token.name.includes(filter) || token.symbol.includes(filter))
+  }, [filter, tokenList])
+
+  useEffect(() => {
+    Keyboard.dismiss()
+  }, [])
 
   return (
     <SwiperPanel
@@ -144,38 +121,21 @@ const ListTokenModal: React.FC<Props> = (props: Props) => {
             ? i18n.t('modals.listTokenModal.selectTokenSend')
             : i18n.t('modals.listTokenModal.selectTokenReceive')}
         </TextView>
-        <SearchBar
-          lighterColor
-          emptySearchList={setEmptySearchList}
-          marginH={-5}
-          prevData={tokenList}
-          dispatchData={setSearchTokens}
-          callbackFilter={searchText => {
-            const filterToken = tokenList.filter(sToken => {
-              return sToken.name.includes(searchText) || sToken.symbol.includes(searchText)
-            })
-            if (filterToken.length > 0) {
-              setEmptySearchList(false)
-              setSearchTokens(filterToken)
-            } else {
-              setEmptySearchList(true)
-            }
-          }}
+        <SearchBar lighterColor marginX={-5} onFilter={setFilter} />
+
+        <FlatList
+          data={filteredTokens}
+          keyExtractor={item => item.symbol}
+          ItemSeparatorComponent={() => <LinearLayout bg="background.10" height={1} />}
+          renderItem={({ item }) => (
+            <Item controller={controller} item={item} onChangeToken={props.route.params.onChangeToken} />
+          )}
+          ListEmptyComponent={
+            <TextView fontWeight="500" color="text.0" fontSize={18} pt={5} textAlign="center">
+              {i18n.t('persistContact.noResultsFound')}
+            </TextView>
+          }
         />
-        {emptySearchList ? (
-          <TextView fontWeight="medium" color="text.0" fontSize={18} pt={5} textAlign="center">
-            {i18n.t('persistContact.noResultsFound')}
-          </TextView>
-        ) : (
-          <FlatList
-            data={searchTokens}
-            keyExtractor={item => item.symbol}
-            ItemSeparatorComponent={() => <LinearLayout bg="background.10" height={1} />}
-            renderItem={({ item }) => (
-              <Item controller={controller} item={item} onChangeToken={props.route.params.onChangeToken} />
-            )}
-          />
-        )}
       </LinearLayout>
     </SwiperPanel>
   )

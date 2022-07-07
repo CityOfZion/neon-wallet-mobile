@@ -5,7 +5,6 @@ import { mapValues } from 'lodash'
 import { NeoLegacyProvider } from './common'
 
 import { Node } from '~/src/models/Node'
-import { TokenResponse, Tokens } from '~/src/models/TokenResponse'
 import { Transaction } from '~/src/models/Transaction'
 import { TransactionAddressAsset } from '~/src/models/TransactionAddressAsset'
 import { TransactionAddressSummary } from '~/src/models/TransactionAddressSummary'
@@ -141,17 +140,6 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     return String(scientificNotation).includes('e')
       ? new Number(scientificNotation).toFixed(this.baseNumeric)
       : scientificNotation
-  }
-
-  async getTokenList() {
-    const tokenList = await Request.get(
-      `https://raw.githubusercontent.com/CityOfZion/neo-tokens/master/tokenList.json?timestamp=${new Date().getTime()}`
-    )
-      .name('getTokens')
-      .as<Tokens>()
-      .getData()
-
-    return new TokenResponse({ tokens: tokenList })
   }
 
   async getExchangeData(params: { tokenAssetSymbols: string[]; currencies: string }) {

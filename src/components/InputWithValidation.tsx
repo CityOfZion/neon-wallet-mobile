@@ -200,7 +200,6 @@ const InputWithValidation = (props: Props) => {
       {(props.showContacts || !props.hidePaste || !props.hideScan) && (
         <LinearLayout
           orientation="horiz"
-          mt={5}
           justifyContent={props.showContacts && !props.hidePaste && !props.hideScan ? 'space-between' : 'flex-end'}
         >
           {props.showContacts && (

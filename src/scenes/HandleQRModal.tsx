@@ -70,7 +70,6 @@ const HandleQRModal = (props: Props) => {
           CommonActions.navigate(wrapper.route.Modal.name, {
             screen: wrapper.route.PersistContact.name,
             params: {
-              addingContact: true,
               startingAddress: props.address,
             },
           })

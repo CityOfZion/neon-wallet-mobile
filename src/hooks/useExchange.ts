@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { useQuery, UseQueryOptions } from 'react-query'
 
-import { getAllTokenSymbolList } from '../blockchain/common'
+import { getAllTokens } from '../blockchain/common'
 import { getExchangeData } from '../blockchain/genericProvider'
 import { applicationConfig } from '../config/ApplicationConfig'
 import { Exchange } from '../types/exchange'
@@ -65,7 +65,10 @@ export function useExchange({ queryOptions, filter }: IUseExchange) {
   }
 
   const fetchExchanges = useCallback(async () => {
-    return await getExchangeData({ currencies: currenciesDefault, tokenAssetSymbols: getAllTokenSymbolList() })
+    return await getExchangeData({
+      currencies: currenciesDefault,
+      tokenAssetSymbols: getAllTokens().map(token => token.symbol),
+    })
   }, [])
 
   const { data, ...rest } = useQuery(['exchange'], fetchExchanges, queryOptions)

@@ -7,22 +7,20 @@ import i18n from 'i18n-js'
 import moment from 'moment'
 import { Platform, NativeModules, ImageLoadEventData } from 'react-native'
 
+import tokens from '../tokens.json'
+
 import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
-import { Tokens } from '~/src/models/TokenResponse'
 import { Account } from '~/src/models/redux/Account'
-import tokens from '~src/assets/tokens/neoLgeacy.json'
-import { BlockchainServiceKey, IBlockchainService, AssetInfo, IClaimable, SendTransactionData } from '~src/blockchain'
+import { BlockchainServiceKey, IBlockchainService, IClaimable, SendTransactionData, Token } from '~src/blockchain'
 import { NeoLegacyProviderOption } from '~src/blockchain/NeoLegacy'
 import { TNeoLegacyProvider } from '~src/blockchain/NeoLegacy/providers'
 import { NeoNative } from '~src/native/NeoNative'
 
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
-const feeTokenImg = require('~src/assets/nep5/png/GAS.png')
 const SDK: typeof AsteroidSDK = require('~src/vendor/asteroid-sdk')
 
-interface NativeAsset extends AssetInfo {
-  symbol: 'GAS' | 'NEO'
-}
+type NativeAsset = 'GAS' | 'NEO'
+
 export class BSNeoLegacy implements IClaimable, IBlockchainService {
   readonly networkDeprecatedLabel = 'MainNet'
   readonly defaultNodeNet = 'http://seed1.ngd.network:10332'
@@ -32,24 +30,11 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   readonly icon = icon
   readonly derivationPath = "m/44'/888'/0'/0/?"
   readonly platform = 'neo'
-  readonly assets: NativeAsset[] = [
-    {
-      name: 'NEO',
-      hash: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
-      symbol: 'NEO',
-      decimals: 0,
-    },
-    {
-      name: 'GAS',
-      hash: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
-      symbol: 'GAS',
-      decimals: 8,
-    },
-  ]
-  readonly feeToken: { hash: string; token: string; img: ImageLoadEventData }
+  readonly nativeAssets: NativeAsset[] = ['NEO', 'GAS']
+  readonly feeToken: { hash: string; token: string }
   readonly wcChains: string[]
   accountsPool: Account[] = []
-  readonly tokens: Tokens = tokens
+  readonly tokens: Token[] = tokens as Token[]
   constructor() {
     this.provider = NeoLegacyProviderOption('doraSdk')
     this.key = 'neoLegacy'
@@ -61,7 +46,6 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     this.feeToken = {
       hash: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
       token: 'GAS',
-      img: feeTokenImg,
     }
     this.wcChains = [] //neoLegacy doesn't support wallet connect
   }
@@ -96,13 +80,15 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   async sendTransaction(data: SendTransactionData) {
     const hexHash = u.HexString.fromHex(data.tokenHash).toString()
 
-    const nativeAsset = this.assets.find(({ hash }) => hash === hexHash)
+    const token = this.tokens.find(token => token.hash === hexHash)
+
+    const nativeAsset = this.nativeAssets.find(symbol => symbol === token?.symbol)
 
     if (nativeAsset) {
       return await this.sendNativeAsset(
         data.senderAddress,
         data.receiverAddress,
-        nativeAsset.symbol,
+        nativeAsset,
         data.amount,
         data.fee,
         data.tip,
