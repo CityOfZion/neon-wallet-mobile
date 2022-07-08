@@ -43,8 +43,6 @@ platform :android do
 
     new_current_version = current_version + 1
 
-    gradle(task: 'clean')
-
     android_set_version_code(
       version_code: new_current_version
     )
@@ -54,8 +52,9 @@ platform :android do
     )
 
     gradle(
-      task: 'bundleReleaseJsAndAssets',
+      task: 'clean'
     )
+   
     gradle(
       task: 'assemble',
       build_type: 'Release',
@@ -108,9 +107,7 @@ platform :android do
     android_set_version_name(
       version_name: '1.0.46b' + String(new_current_version)
     )
-    gradle(
-      task: 'bundleReleaseJsAndAssets',
-    )
+   
     gradle(
       task: 'assemble',
       build_type: 'Release',
@@ -177,6 +174,55 @@ platform :android do
       track: 'Group Staging',
       version_code: new_current_version,
       skip_upload_changelogs: true
+    )
+  end
+
+  lane :gradle_test do
+    releaseFilePath = File.join(Dir.pwd, "neon.jks")
+    store_password = ENV['ANDROID_STORE_PASS']
+    key_password = ENV['ANDROID_KEY_PASS']
+    key_alias = ENV['ANDROID_KEY_ALIAS']
+
+    current_version_beta = google_play_track_version_codes(
+      track: 'Group Beta',
+      json_key: './key.json'
+    )
+
+    current_version_staging = google_play_track_version_codes(
+      track: 'Group Staging',
+      json_key: './key.json'
+    )
+
+    current_version_production = google_play_track_version_codes(
+      json_key: './key.json'
+    )
+
+    current_version = [current_version_beta, current_version_staging, current_version_production].max()[0]
+
+    new_current_version = current_version + 1
+
+    android_set_version_code(
+      version_code: new_current_version
+    )
+
+    android_set_version_name(
+      version_name: '1.0.46b' + String(new_current_version)
+    )
+    
+    gradle(
+      task: 'clean'
+    )
+
+    gradle(
+      task: 'assemble',
+      build_type: 'Release',
+      print_command: false,
+      properties: {
+        "android.injected.signing.store.file" => releaseFilePath,
+        "android.injected.signing.store.password" => store_password,
+        "android.injected.signing.key.alias" => key_alias,
+        "android.injected.signing.key.password" => key_password,
+      }
     )
   end
 end
