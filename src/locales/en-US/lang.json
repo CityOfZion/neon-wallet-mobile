@@ -40,7 +40,6 @@
     "Account": "Account",
     "Settings": "Settings",
     "WalletConnectPage": "Connection",
-    "ReceiveQrCode": "Receive QR Code",
     "CustomColor": "Custom Colour",
     "CreateWallet": "Create Wallet",
     "WalletDetails": "Details",
@@ -263,19 +262,6 @@
     "address": "ADDRESS",
     "accountPlaceholder": "My Account"
   },
-  "receive": {
-    "paymentRequestDetails": "PAYMENT REQUEST DETAILS",
-    "token": "Token",
-    "amount": "Amount",
-    "qty": "Qty",
-    "value": "Value",
-    "location": "Location",
-    "wallet": "Wallet",
-    "account": "Account",
-    "address": "Address",
-    "reference": "Reference",
-    "shareOrCopy": "Share or Copy to clipboard"
-  },
   "screens": {
     "contactDetails": {
       "walletAddress": "WALLET ADDRESS"
@@ -299,7 +285,8 @@
     "getAccount": {
       "claimAsset": "Claim %{amount} GAS",
       "claimInProgress": "Claim in progress",
-      "gasUnavailable": "GAS unavailable"
+      "gasUnavailable": "GAS unavailable",
+      "claimError": "Claim has been failed"
     },
     "accountTransaction": {
       "txidLabel": "TX ID:",
@@ -380,6 +367,40 @@
     }
   },
   "modals": {
+    "receiveTransactionAccountSelectionModal": {
+      "title": "Receive",
+      "subtitle": "Please select a wallet to receive to",
+      "label": "TOKENS VALUE"
+    },
+    "receiveTransactionWalletSelectionModal": {
+      "title": "Receive",
+      "subtitle": "Please select an account to receive to",
+      "label": "TOKENS VALUE"
+    },
+    "receiveTransactionModal": {
+      "title": "Receive",
+      "yourAddress": "Your Address",
+      "requestTokens": "Request Tokens",
+      "generateQrCode": "Generate QR Code",
+      "amount": "Amount",
+      "enterAmount": "Enter amount",
+      "addReference": "Add a reference",
+      "reference": "Reference",
+      "token": "Token",
+      "selectToken": "Select token to receive"
+    },
+    "ReceiveTransactionQrCodeModal": {
+      "title": "Receive QR Code",
+      "token": "Token",
+      "qty": "Qty",
+      "value": "Value",
+      "wallet": "Wallet",
+      "account": "Account",
+      "address": "Address",
+      "reference": "Reference",
+      "shareOrCopy": "Share or Copy to clipboard",
+      "paymentRequestDetails": "PAYMENT REQUEST DETAILS"
+    },
     "sendTransactionAccountSelectionModal": {
       "title": "Send",
       "label": "TRADING ACCOUNT TOKENS VALUE",
@@ -505,28 +526,6 @@
       "namePlaceholder": "Enter wallet name",
       "invalidName": "Invalid Name",
       "search": "Search"
-    },
-    "receive": {
-      "title": "Receive",
-      "walletSelection": {
-        "subtitle": "Please select a wallet to receive to"
-      },
-      "accountSelection": {
-        "subtitle": "Please select an account to receive to",
-        "tokensValue": "Tokens Value"
-      },
-      "toAccount": {
-        "yourAddress": "Your Address",
-        "requestTokens": "Request Tokens",
-        "selectTokenToReceive": "Select token to receive",
-        "enterAmount": "Enter amount",
-        "addReference": "Add a reference",
-        "reference": "Reference",
-        "generateQrCode": "Generate QR Code",
-        "token": "Token",
-        "amount": "Amount",
-        "selectDifferentAccount": "Select a different Account"
-      }
     },
     "listTokenModal": {
       "holding": "Holdings",

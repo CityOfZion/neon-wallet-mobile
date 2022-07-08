@@ -3,42 +3,50 @@ import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Normalize } from '../app/Normalize'
-import { TokenAsset } from '../models/TokenAsset'
+import { TokenHelper } from '../helpers/TokenHelper'
+import { useTokens } from '../hooks/useTokens'
+import { Token } from '../models/Token'
+import { Account } from '../models/redux/Account'
 import { RootState } from '../store/RootStore'
-import { Exchange } from '../types/exchange'
 
 import { HeaderColumn } from '~src/components/HeaderColumn'
 import { FilterHelper } from '~src/helpers/FilterHelper'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
-  token: TokenAsset
+  account: Account
+  token: Token
   amount: string
   fiat?: string
   fee: number
   hideSingleTokenPrice?: boolean
   hideFee?: boolean
-  exchange?: Exchange
+  ratio?: number
 }
 
-export const TransactionTokenCard = ({ amount, fee, fiat, token, hideFee, hideSingleTokenPrice, exchange }: Props) => {
+export const TransactionTokenCard = ({
+  amount,
+  account,
+  fee,
+  fiat,
+  token,
+  hideFee,
+  hideSingleTokenPrice,
+  ratio,
+}: Props) => {
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
+  const { getTokenBySymbol } = useTokens({ blockchain: account.blockchain })
+
+  const supportedToken = useMemo(() => getTokenBySymbol(token.symbol), [getTokenBySymbol])
 
   const singlePrice = useMemo(() => {
-    if (!exchange) {
-      return
-    }
-    const ratio = exchange[token.symbol]?.to[currency]
-
-    if (!ratio) {
-      return
-    }
+    if (!ratio) return
 
     const price = 1 * ratio
 
     return FilterHelper.currency(price, currency, language)
-  }, [exchange, currency, token])
+  }, [ratio, currency, language])
 
   return (
     <LinearLayout
@@ -54,7 +62,7 @@ export const TransactionTokenCard = ({ amount, fee, fiat, token, hideFee, hideSi
       <LinearLayout orientation="horiz" justifyContent="space-between">
         <LinearLayout orientation="horiz" alignItems="center">
           <ImageView
-            source={token.srcIcon}
+            source={TokenHelper.getIcon(token.symbol, account.blockchain)}
             width={Normalize.scale(18)}
             height={Normalize.scale(18)}
             resizeMode="contain"
@@ -68,7 +76,7 @@ export const TransactionTokenCard = ({ amount, fee, fiat, token, hideFee, hideSi
         {!hideSingleTokenPrice && singlePrice && (
           <LinearLayout justifyContent="center">
             <TextView fontFamily="medium" fontSize="16px" color="text.0" mr={2}>
-              {singlePrice} {/** TODO SkeletonContainer */}
+              {singlePrice}
             </TextView>
             <TextView ml={2} fontFamily="medium" color="text.10" fontSize="12px">
               1 {token.symbol}
@@ -81,7 +89,7 @@ export const TransactionTokenCard = ({ amount, fee, fiat, token, hideFee, hideSi
         <HeaderColumn
           weight={2}
           title={i18n.t('components.transactionTokenCard.qty')}
-          value={token.decimals ? Number(amount).toFixed(8) : amount}
+          value={supportedToken?.decimals ? Number(amount).toFixed(8) : amount}
         />
 
         {fiat && (

@@ -3,8 +3,6 @@ import { tx } from '@cityofzion/neon-core'
 import { api, nep5, wallet } from '@cityofzion/neon-js'
 import { u } from '@cityofzion/neon-js-next'
 import type * as AsteroidSDK from '@moonlight-io/asteroid-sdk-js'
-import i18n from 'i18n-js'
-import moment from 'moment'
 import { Platform, NativeModules, ImageLoadEventData } from 'react-native'
 
 import tokens from '../tokens.json'
@@ -263,36 +261,19 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
 
   async claimGas(address: string) {
     try {
-      const account = this.accountsPool.find(it => it.address === address)
-
       const neoAccount = await this.getNeoAccount(address)
 
       if (!neoAccount) {
         throw new Error('Neo Account not found')
       }
 
-      const response = await this.provider.getBalance(address)
-      const balance = response.balance.find(it => it.assetSymbol === 'NEO')
-      const amount = balance?.amount ?? null
-      const requiresTransaction = Boolean(amount)
+      const balances = await this.provider.getBalance(address)
+      const balance = balances.find(balance => balance.symbol === 'NEO')
 
       const apiProvider = new api.neoscan.instance(this.networkDeprecatedLabel)
 
-      const lastClaimedTransaction =
-        account?.flattedAllTransactions.find(it => it.senderAddress === 'claim' || it.receiverAddress === 'claim') ??
-        null
-
-      const nextClaimAllowed = lastClaimedTransaction?.sentAt
-        ? moment(lastClaimedTransaction.sentAt).add(5, 'minutes')
-        : null
-
-      // NW-473 After you claim gas, you have to wait 5 minutes to claim again
-      if (nextClaimAllowed && moment().isBefore(nextClaimAllowed)) {
-        throw new Error(i18n.t('toast.gasClaimGapError'))
-      }
-
-      if (requiresTransaction) {
-        await this.sendNativeAsset(address, address, 'NEO', amount ?? 0)
+      if (balance) {
+        await this.sendNativeAsset(address, address, 'NEO', balance.amount)
       }
 
       const claimGasResponse = await api.claimGas({

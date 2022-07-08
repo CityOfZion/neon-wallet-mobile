@@ -2,6 +2,9 @@ import React from 'react'
 import Carousel from 'react-native-snap-carousel'
 
 import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { BalanceHelper } from '~/src/helpers/BalanceHelper'
+import { Balance } from '~/src/types/balance'
+import { Exchange } from '~/src/types/exchange'
 import AccountCard from '~src/components/AccountCard'
 import { Account } from '~src/models/redux/Account'
 import { LinearLayout } from '~src/styles/styled-components'
@@ -10,21 +13,49 @@ interface Props {
   onPress?: (account: Account) => void
   onSelect?: (account: Account) => void
   accounts: Account[]
-  initialAccount?: number
+  isCompacted?: boolean
+  exchange?: Exchange
+  balances?: Balance[]
+}
+
+interface ItemProps {
+  exchange?: Exchange
+  balance?: Balance
+  account: Account
+  onPress(): void
   isCompacted?: boolean
 }
 
-const AccountPicker: React.FC<Props> = ({ isCompacted = true, accounts, ...props }: Props) => {
-  const pressEvent = async (account: Account) => {
-    if (props.onPress) {
-      props.onPress(account)
-    }
+const Item = React.memo(({ balance, exchange, account, onPress, isCompacted }: ItemProps) => {
+  return (
+    <LinearLayout justifyContent="center" alignItems="center">
+      <AccountCard
+        balance={balance}
+        exchange={exchange}
+        onPress={onPress}
+        account={account}
+        isCompacted={isCompacted}
+        hideCopy
+        hideQRCode
+      />
+    </LinearLayout>
+  )
+})
+
+const AccountPicker: React.FC<Props> = ({
+  isCompacted = true,
+  accounts,
+  exchange,
+  onPress,
+  onSelect,
+  balances,
+}: Props) => {
+  const handlePress = async (account: Account) => {
+    if (onPress) onPress(account)
   }
 
-  const selectEvent = async (index: number) => {
-    if (props.onSelect) {
-      props.onSelect(accounts[index])
-    }
+  const handleSelect = async (index: number) => {
+    if (onSelect) onSelect(accounts[index])
   }
 
   return (
@@ -42,12 +73,15 @@ const AccountPicker: React.FC<Props> = ({ isCompacted = true, accounts, ...props
       swipeThreshold={5}
       enableSnap
       useScrollView
-      firstItem={props.initialAccount ? props.initialAccount : 0}
-      onSnapToItem={index => selectEvent(index)}
-      renderItem={({ item }) => (
-        <LinearLayout justifyContent="center" alignItems="center">
-          <AccountCard onPress={() => pressEvent(item)} account={item} isCompacted={isCompacted} hideCopy hideQRCode />
-        </LinearLayout>
+      onSnapToItem={index => handleSelect(index)}
+      renderItem={({ item, index }) => (
+        <Item
+          account={item}
+          isCompacted={isCompacted}
+          exchange={exchange}
+          balance={BalanceHelper.getBalanceByAccount(item, balances)}
+          onPress={() => handlePress(item)}
+        />
       )}
     />
   )

@@ -136,12 +136,14 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
         <RelativeLayout height="100%" width="100%">
           <View pointerEvents="none">
             <ImageView
-              opacity={0.25}
               position="absolute"
               bottom="100%"
-              width="100%"
               resizeMode="stretch"
               source={require('~src/assets/images/TabBarShadow.png')}
+              style={{
+                width: '100%',
+                opacity: 0.25,
+              }}
             />
           </View>
           <ImageView

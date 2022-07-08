@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { Await, AwaitActivity } from '~/node_modules/@simpli/react-native-await'
+import { useBalance } from '~/src/hooks/useBalance'
+import { useExchange } from '~/src/hooks/useExchange'
 import { AsyncDispatch } from '~/src/types/reducers/root'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import AccountCard from '~src/components/AccountCard'
@@ -13,7 +15,6 @@ import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import { UtilsHelper } from '~src/helpers/UtilsHelper'
 import { Account } from '~src/models/redux/Account'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
@@ -33,21 +34,19 @@ interface Props {
 }
 
 const EditAccountModal = (props: Props) => {
-  const tokenAssets = props.route.params.account.tokenAssets
-  const account = UtilsHelper.clone(props.route.params.account)
-  account.tokenAssets = tokenAssets
+  const { account } = props.route.params
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const controller = useSwiperController(true)
   const dispatch = useDispatch()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
+  const { exchange } = useExchange({})
+  const { data: balance } = useBalance(account)
+
   const [name, setName] = useState<string>(account.name ?? '')
   const [color, setColor] = useState<string>(account.backgroundColor)
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
-
-  account.backgroundColor = color
-  account.name = name
 
   const submit = async () => {
     if (!isValid()) {
@@ -106,7 +105,7 @@ const EditAccountModal = (props: Props) => {
     >
       <AwaitActivity name="swiperRight" loadingView={<ScreenLoader solidColorBG />}>
         <LinearLayout orientation="verti" justifyContent="space-between" mt="10px">
-          <AccountCard account={account} isStackMode={false} hasShadow={false} />
+          <AccountCard account={account} isStackMode={false} hasShadow={false} balance={balance} exchange={exchange} />
 
           <InputLabel
             title={i18n.t('modals.editAccount.accountInput.title')}

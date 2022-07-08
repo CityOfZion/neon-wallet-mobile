@@ -1,6 +1,6 @@
-import { BlockchainServiceKey, Token } from '../blockchain'
-import { TokenAsset } from '../models/TokenAsset'
+import { BlockchainServiceKey } from '../blockchain'
 
+import { colors } from '~src/assets/tokens/colors'
 import { icons } from '~src/assets/tokens/icons'
 
 export class TokenHelper {
@@ -8,9 +8,7 @@ export class TokenHelper {
     return icons[blockchain][symbol] ?? require('~src/assets/tokens/images/Default.png')
   }
 
-  static toTokenAsset(tokens: Token[]): TokenAsset[] {
-    return tokens.map(
-      token => new TokenAsset(token.companyName, token.symbol, token.hash, token.blockchain, token.decimals)
-    )
+  static getColor(symbol: string) {
+    return colors[symbol] ?? `#${(0x1000000 + Math.random() * 0xffffff).toString(16).substr(1, 6)}`
   }
 }

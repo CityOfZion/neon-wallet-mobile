@@ -1,16 +1,14 @@
 import { Request } from '@simpli/serialized-request'
-import { mapValues } from 'lodash'
 
 import { NeoLegacyProvider } from './common'
 
 import { NeoNode } from '~/src/models/NeoNode'
 import { Node } from '~/src/models/Node'
 import { Transaction } from '~/src/models/Transaction'
-import { BalanceResponse } from '~/src/models/response/BalanceResponse'
+import { BalanceInfo } from '~/src/models/response/BalanceInfo'
 import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { TransactionAddressResponse } from '~/src/models/response/TransactionAddressResponse'
 import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
-import { ExchangeResponse } from '~/src/types/exchange'
 
 export type NeoscanNetworkOptions = 'main_net' | 'test_net'
 
@@ -29,12 +27,21 @@ export class NeoscanProvider implements NeoLegacyProvider {
       .as(TransactionAddressResponse)
       .getData()
   }
-  async getBalance(address: string) {
-    return Request.get(`${this.baseUrl}/${this.network}/v1/get_balance/${address}`)
-      .name('getBalance')
-      .as(BalanceResponse)
+  async getBalance(address: string): Promise<BalanceInfo[]> {
+    const { balance: balances } = await Request.get(`${this.baseUrl}/${this.network}/v1/get_balance/${address}`)
+      .asAny()
       .getData()
+
+    return balances.map(
+      (balance: any): BalanceInfo => ({
+        amount: balance.amount,
+        hash: balance.assetHash,
+        name: balance.asset,
+        symbol: balance.assetSymbol,
+      })
+    )
   }
+
   async getTransaction(txid: string) {
     return Request.get(`${this.baseUrl}/${this.network}/v1/get_transaction/${txid}`)
       .name('getTransaction')
@@ -62,29 +69,6 @@ export class NeoscanProvider implements NeoLegacyProvider {
     })
 
     return result
-  }
-
-  async getExchangeData(params: { tokenAssetSymbols: string[]; currencies: string }) {
-    const { tokenAssetSymbols, currencies } = params
-    const paramRequest = {
-      fsyms: tokenAssetSymbols.join(','),
-      tsyms: currencies,
-    }
-
-    const response = await Request.get('https://min-api.cryptocompare.com/data/pricemultifull', {
-      params: paramRequest,
-    })
-      .name('syncExchange')
-      .as<ExchangeResponse>()
-      .getData()
-
-    return mapValues(response.RAW, symbolRef => {
-      const symbolRefMap = mapValues(symbolRef, symbolToUse => symbolToUse.PRICE)
-
-      return {
-        to: symbolRefMap,
-      }
-    })
   }
 
   async getAssetByHash(hash: string): Promise<{ symbol: string; decimals: number } | null> {

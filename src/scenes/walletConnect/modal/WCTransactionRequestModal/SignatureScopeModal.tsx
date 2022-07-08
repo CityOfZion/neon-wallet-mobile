@@ -6,7 +6,7 @@ import i18n from 'i18n-js'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks'
+import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
 import { RootState } from '~/src/store/RootStore'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'

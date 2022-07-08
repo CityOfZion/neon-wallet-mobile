@@ -10,10 +10,12 @@ import { blockchainServices } from '~/src/blockchain'
 import { BoxLabelNumber } from '~/src/components/BoxLabelNumber'
 import { Account } from '~/src/models/redux/Account'
 import { ImageView, TextView } from '~/src/styles/styled-components'
+import { Exchange } from '~/src/types/exchange'
 
 type Props = FormattedTransaction & {
   hideLinkDora?: boolean
   account: Account
+  exchange?: Exchange
 }
 
 export const TransactionItem = React.memo((props: Props) => {
@@ -63,7 +65,7 @@ export const TransactionItem = React.memo((props: Props) => {
 
         <View>
           {props.transfers.map(transfer => (
-            <TransferItem key={transfer.hash} account={props.account} {...transfer} />
+            <TransferItem key={transfer.hash} account={props.account} exchange={props.exchange} {...transfer} />
           ))}
         </View>
 
@@ -94,11 +96,13 @@ export const TransactionItem = React.memo((props: Props) => {
               }}
             >
               <ImageView
-                width="28px"
-                height="28px"
                 resizeMode="contain"
                 alignSelf="center"
                 source={require('~src/assets/images/dora-link.png')}
+                style={{
+                  width: 28,
+                  height: 28,
+                }}
               />
             </TouchableWithoutFeedback>
           )}

@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState } from 'react'
 import { View } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useDispatch, useSelector } from 'react-redux'
@@ -87,13 +87,6 @@ const BlockchainListPage = (props: Props) => {
       })
     }
   }, [blockchainsSelected])
-
-  useEffect(() => {
-    dispatch(RootStore.timer.actions.setTimerOff())
-    return () => {
-      dispatch(RootStore.timer.actions.setTimerOn())
-    }
-  }, [])
 
   return (
     <ScreenLayout>

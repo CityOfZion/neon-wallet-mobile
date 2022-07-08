@@ -459,17 +459,6 @@
       "value": "#translateme",
       "empty": "#translateme"
     },
-    "transactionsList": {
-      "title": "#translateme",
-      "sent": "#translateme",
-      "received": "#translateme",
-      "pending": "#translateme",
-      "sentTo": "#translateme",
-      "receivedFrom": "#translateme",
-      "token": "#translateme",
-      "value": "#translateme"
-    },
-
     "transactionInput": {
       "selectDifferentAccount": "Select a different Account",
       "transactionDetails": "TRANSACTION DETAILS",

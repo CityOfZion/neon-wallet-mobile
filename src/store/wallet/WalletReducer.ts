@@ -3,7 +3,6 @@ import { plainToClass } from 'class-transformer'
 
 import { SecurityHelper } from '~/src/helpers/SecurityHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
-import { TokenAsset } from '~/src/models/TokenAsset'
 import { AsyncAction, SyncAction } from '~/src/types/reducers/root'
 import { WalletActionsType, WalletState, WalletAction } from '~/src/types/reducers/wallet'
 import { Model } from '~src/app/Model'
@@ -13,7 +12,6 @@ import { IdDispatcher } from '~src/store/wallet/dispatchers/IdDispatcher'
 import { NameDispatcher } from '~src/store/wallet/dispatchers/NameDispatcher'
 import { PassphraseDispatcher } from '~src/store/wallet/dispatchers/PassphraseDispatcher'
 import { SecurityPhraseDispatcher } from '~src/store/wallet/dispatchers/SecurityPhraseDispatcher'
-import { TokenAssetsDispatcher } from '~src/store/wallet/dispatchers/TokenAssetsDispatcher'
 import { WalletTypeDispatcher } from '~src/store/wallet/dispatchers/WalletTypeDispatcher'
 export class WalletReducer extends ReducerWrapper<WalletActionsType, WalletState, WalletAction> {
   protected readonly initialState = Model.parse<WalletState>(Wallet)
@@ -24,7 +22,6 @@ export class WalletReducer extends ReducerWrapper<WalletActionsType, WalletState
     PassphraseDispatcher,
     SecurityPhraseDispatcher,
     WalletTypeDispatcher,
-    TokenAssetsDispatcher,
   ]
 
   readonly actions = {
@@ -42,9 +39,6 @@ export class WalletReducer extends ReducerWrapper<WalletActionsType, WalletState
     },
     setType: (walletType: 'standard' | 'watch' | 'legacy') => {
       return this.commit('SET_WALLET_TYPE', { walletType })
-    },
-    setTokenAssets: (tokenAssets: TokenAsset[]) => {
-      return this.commit('SET_TOKENASSETS_WALLET', { tokenAssets })
     },
     getFromSelection: (): SyncAction<Wallet> => {
       return (dispatch, getState) => {

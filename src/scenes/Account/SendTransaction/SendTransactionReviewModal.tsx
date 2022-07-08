@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { showMessage } from 'react-native-flash-message'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -13,9 +13,11 @@ import SwiperPanel, { useSwiperController } from '~/src/components/SwiperPanel'
 import { TransactionTipCard } from '~/src/components/TransactionTipCard'
 import { TransactionTokenCard } from '~/src/components/TransactionTokenCard'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
+import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { useLocalAuthentication } from '~/src/hooks'
-import { TokenAsset } from '~/src/models/TokenAsset'
+import { useExchange } from '~/src/hooks/useExchange'
+import { useLocalAuthentication } from '~/src/hooks/useLocalAuthentication'
+import { Token } from '~/src/models/Token'
 import { Account } from '~/src/models/redux/Account'
 import { Contact } from '~/src/models/redux/Contact'
 import { Wallet } from '~/src/models/redux/Wallet'
@@ -34,7 +36,7 @@ export interface SendTransactionReviewModalParams {
   fee: number
   account: Account
   wallet: Wallet
-  token: TokenAsset
+  token: Token
   destinationAddress: string
   fiat?: string
   tip?: number
@@ -69,8 +71,15 @@ export const SendTransactionReviewModal = (props: Props) => {
   const language = useSelector((state: RootState) => state.settings.language)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const controller = useSwiperController(true)
+  const { exchange } = useExchange({})
 
   const totalAmount = Number(amount) + fee + (tip ?? 0)
+
+  const ratio = useMemo(() => {
+    if (!exchange) return
+
+    return BalanceHelper.getExchangeRatio(token.symbol, exchange, currency)
+  }, [exchange, currency, token])
 
   const submit = async () => {
     if (!account.address) {
@@ -197,7 +206,16 @@ export const SendTransactionReviewModal = (props: Props) => {
                 accountName={destinationAccount?.name ?? undefined}
                 walletName={destinationWallet?.name ?? undefined}
               />
-              <TransactionTokenCard amount={amount} fee={fee} fiat={fiat} token={token} hideSingleTokenPrice hideFee />
+              <TransactionTokenCard
+                account={account}
+                amount={amount}
+                fee={fee}
+                fiat={fiat}
+                token={token}
+                hideSingleTokenPrice
+                hideFee
+                ratio={ratio}
+              />
               {tip && <TransactionTipCard account={account} tip={tip} />}
             </LinearLayout>
           </LinearLayout>

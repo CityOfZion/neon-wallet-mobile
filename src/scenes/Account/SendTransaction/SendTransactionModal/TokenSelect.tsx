@@ -8,7 +8,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import InputLabel from '~/src/components/InputLabel'
 import { TokenHelper } from '~/src/helpers/TokenHelper'
-import { TokenAsset } from '~/src/models/TokenAsset'
+import { Token } from '~/src/models/Token'
 import { Account } from '~/src/models/redux/Account'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
@@ -16,18 +16,18 @@ import { RootState } from '~/src/store/RootStore'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {
-  token?: TokenAsset
-  onTokenChange(token: TokenAsset): void
+  token?: Token
+  onTokenSelect(token: Token): void
   account: Account
 }
 
-export const TokenSelect = ({ onTokenChange, account, token }: Props) => {
+export const TokenSelect = ({ onTokenSelect, account, token }: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const navigation = useNavigation<StackNavigationProp<RootStackParamList & ModalStackParamList>>()
 
   const handlePress = () => {
     navigation.navigate(wrapper.route.ListTokenModal.name, {
-      onChangeToken: onTokenChange,
+      onPress: onTokenSelect,
       account,
       filterBy: 'send',
     })

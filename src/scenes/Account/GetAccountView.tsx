@@ -1,9 +1,9 @@
-import { RouteProp, useFocusEffect } from '@react-navigation/native'
+import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { Animated, Easing, LayoutChangeEvent, Dimensions, View, RefreshControl } from 'react-native'
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { Animated, Easing, ImageLoadEventData, LayoutChangeEvent, RefreshControl } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -12,11 +12,13 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import ModalWarningFee from '~/src/components/ModalWarningFee'
 import { ThemedClaimButton } from '~/src/components/themed/ThemedClaimButton'
 import { ThemedSendButton } from '~/src/components/themed/ThemedSendButton'
+import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
+import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
+import { useBalance } from '~/src/hooks/useBalance'
 import { useExchange } from '~/src/hooks/useExchange'
-import { useTokens } from '~/src/hooks/useTokens'
-import { Node } from '~/src/models/Node'
-import { AsyncDispatch, SyncDispatch } from '~/src/types/reducers/root'
+import { Wallet } from '~/src/models/redux/Wallet'
+import { AsyncDispatch } from '~/src/types/reducers/root'
 import { blockchainServices, hasWCIntegration, isClaimable } from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
@@ -25,21 +27,50 @@ import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { ThemedReceiveButton } from '~src/components/themed/ThemedReceiveButton'
 import { useWalletConnect } from '~src/contexts/WalletConnectContext'
-import { Lang } from '~src/enums/Lang'
 import { NeoNode } from '~src/models/NeoNode'
 import { Account } from '~src/models/redux/Account'
-import { Wallet } from '~src/models/redux/Wallet'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
 import { RootState, RootStore } from '~src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
+export interface GetAccountViewParams {
+  account: Account
+  wallet: Wallet
+}
 interface GetAccountViewProps {
   navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>
   route: RouteProp<WalletStackParamList, 'GetAccount'>
 }
 
-const TitleComponent = (props: { nodesPool: NeoNode[]; language: Lang }) => {
+interface ButtonProps {
+  onPress: () => void
+  label: string
+  srcIcon: ImageLoadEventData
+  iconSize: [number, number]
+  disabled?: boolean
+}
+
+interface TitleProps {
+  account: Account
+}
+
+const Title = ({ account }: TitleProps) => {
+  const language = useSelector((state: RootState) => state.settings.language)
+  const [highestNode, setHighestNode] = useState<string>()
+
+  const handleGetHighestNode = async () => {
+    const nodes = await blockchainServices[account.blockchain].provider.getAllNodes()
+
+    const highest = NeoNode.getHighestNodeHeightFromPool(nodes)
+
+    setHighestNode(FilterHelper.decimal(highest, language))
+  }
+
+  useEffect(() => {
+    handleGetHighestNode()
+  }, [language])
+
   return (
     <LinearLayout alignItems="center" justifyContent="center">
       <TextView color="text.3" textAlign="center" fontSize={10}>
@@ -47,130 +78,164 @@ const TitleComponent = (props: { nodesPool: NeoNode[]; language: Lang }) => {
       </TextView>
 
       <TextView color="text.0" textAlign="center">
-        {FilterHelper.decimal(NeoNode.getHighestNodeHeightFromPool(props.nodesPool), props.language)}
+        {highestNode}
       </TextView>
     </LinearLayout>
   )
 }
 
-const GetAccountView = (props: GetAccountViewProps) => {
-  const { sessions } = useWalletConnect()
-  const { language, currency } = useSelector((state: RootState) => state.settings)
-  const { address } = useSelector((state: RootState) => state.account)
-  const posYFactor = useRef(new Animated.Value(0))
-  const isConnected = useSelector((state: RootState) => state.network.isConnected)
-  const { exchange, isRefetching, refetch } = useExchange({ filter: { currencies: currency } })
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
-  const dispatchAccount = useDispatch<SyncDispatch<Account>>()
-
-  const [account, setAccount] = useState(() => dispatchAccount(RootStore.account.actions.getFromSelection()))
-  const [currentPage, setCurrentPage] = useState(1)
-  const [hasSession, setHasSession] = useState(false)
-  const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>(0)
-  const [isClaimAvailable, setIsClaimAvaliable] = useState<boolean>(false)
-
-  const [showWarning, setShowWarning] = useState<boolean>(false)
-  const [nodesPoolBlockchain, setNodesPoolBlockchain] = useState<Node[]>([])
-
-  const tokens = useTokens({ blockchain: account.blockchain })
-
-  const [senderAddress, setSenderAddress] = useState<string>('')
-
-  const changeSenderAddress = () => {
-    if (senderAddress === '' && address !== null) {
-      setSenderAddress(address)
-    }
-  }
-
-  const [totTokenFeeAccount] = useState<number>(
-    account.tokenAssets.find(token => token.symbol === blockchainServices[account.blockchain].feeToken.token)?.amount ??
-      0
+const Button = ({ label, onPress, srcIcon, iconSize, disabled }: ButtonProps) => {
+  return (
+    <ThemedButton
+      px={30}
+      my={5}
+      height={88}
+      disabled={disabled}
+      textAlignX="flex-start"
+      textColor="text.0"
+      fontSize="17px"
+      fontFamily="medium"
+      label={label}
+      srcIcon={srcIcon}
+      suffix={
+        <ImageView
+          width={20}
+          height={20}
+          resizeMode="contain"
+          source={require('~src/assets/images/icon-arrow-right-green.png')}
+        />
+      }
+      iconSize={iconSize}
+      onPress={onPress}
+      isDark
+    />
   )
+}
 
-  const [fee, setFee] = useState<number>()
-
-  const handleCalcFee = useCallback(async () => {
-    const tokenFee = account.tokenAssets.find(it => blockchainServices[account.blockchain].feeToken.token === it.symbol)
-    if (tokenFee && account.address && unclaimedGasAmount > 0) {
-      const calculatedFee = await blockchainServices[account.blockchain].calculateTransferFee({
-        receiverAddress: account.address,
-        senderAddress: account.address,
-        amount: unclaimedGasAmount,
-        tokenHash: tokenFee.hash,
-      })
-
-      setFee(calculatedFee)
-    }
-  }, [account, unclaimedGasAmount])
-
-  const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
-
-  const isWatchAccount = account.accountType === 'watch'
+const GetAccountView = (props: GetAccountViewProps) => {
+  const { account, wallet } = props.route.params
 
   props.navigation.setOptions({
-    headerTitle: () => TitleComponent({ nodesPool: nodesPoolBlockchain, language }),
+    headerTitle: () => <Title account={account} />,
     headerRight: () =>
       HeaderActionButton({
         actionButtonStyle: 'more',
         actionOnPress: () => {
           props.navigation.navigate(wrapper.route.AccountSettingsView.name, {
             account,
+            wallet,
           })
         },
       }),
   })
 
-  useFocusEffect(() => {
-    const account = dispatchAccount(RootStore.account.actions.getFromSelection())
+  const wallets = useSelector((state: RootState) => state.app.wallets)
+  const currency = useSelector((state: RootState) => state.settings.currency)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
+  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const { sessions } = useWalletConnect()
 
-    setAccount(account)
-  })
+  const posYFactor = useRef(new Animated.Value(0))
 
-  useEffect(() => {
-    changeSenderAddress()
-    getNodesfromBlockchain()
-  }, [account])
+  const {
+    exchange,
+    isRefetching: exchangeIsRefetching,
+    refetch: exchangeRefetch,
+  } = useExchange({ filter: { currencies: currency } })
+  const { data: balance, isRefetching: balanceIsRefetching, refetch: balanceRefetch } = useBalance(account)
 
-  useEffect(() => {
-    appBus.on('claimGasEnd', async () => {
-      await populateUnclaimed()
-      Await.done(`ClaimGas@${account.address}`)
-    })
-    populateUnclaimed()
+  const [showWarning, setShowWarning] = useState<boolean>(false)
+  const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>()
+  const [fee, setFee] = useState<number>()
 
-    return () => {
-      appBus.off('claimGasEnd', () => {
-        Await.done(`ClaimGas@${account.address}`)
-      })
+  const isClaimAvailable = useMemo(() => {
+    if (fee && unclaimedGasAmount && account.accountType !== 'watch' && isConnected) {
+      return true
     }
-  }, [account.tokenAssets])
 
-  useEffect(() => {
-    handleCalcFee()
-  }, [unclaimedGasAmount])
+    return false
+  }, [fee, unclaimedGasAmount, account, isConnected])
 
-  useEffect(() => {
-    if (fee && fee >= 0) {
-      handleIsClaimAvailable()
+  const hasWalletConnectSessions = useMemo(
+    () =>
+      sessions.some(session => {
+        const [{ address }] = WalletConnectHelper.getAccountInformationFromSession(session)
+
+        return address === account.address
+      }),
+    [sessions]
+  )
+
+  const totTokenFeeAccount = useMemo(() => {
+    if (!balance) return 0
+
+    const tokenBalance = balance.tokensBalances.find(
+      tokenBalance => tokenBalance.symbol === blockchainServices[account.blockchain].feeToken.token
+    )
+
+    if (!tokenBalance) return 0
+
+    return tokenBalance.amount
+  }, [balance, account])
+
+  const handleClaimGas = () => {
+    if (!unclaimedGasAmount || !fee || unclaimedGasAmount < fee) {
+      setShowWarning(true)
+      return
     }
-  }, [fee])
 
-  const keepUpdatedInfo = async () => {
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
+    claimGas()
   }
 
-  useEffect(() => {
-    keepUpdatedInfo()
-  }, [])
+  const claimGas = async () => {
+    if (!account.address || !isConnected || !unclaimedGasAmount) return
 
-  const handleIsClaimAvailable = useCallback(() => {
-    if (unclaimedGasAmount > 0 && !isWatchAccount && isConnected) {
-      setIsClaimAvaliable(true)
-    } else {
-      setIsClaimAvaliable(false)
+    try {
+      const bs = blockchainServices[account.blockchain]
+
+      if (isClaimable(bs)) {
+        Await.init(`claimGas`)
+
+        const responseClaim = await bs.claimGas(account.address)
+
+        if (!responseClaim || !responseClaim.txid || !responseClaim.fee) return
+
+        await account.addPendingTransaction(
+          responseClaim.txid,
+          'claim',
+          account.address,
+          { hash: responseClaim.hash, symbol: responseClaim.token, name: '' },
+          unclaimedGasAmount,
+          responseClaim.fee
+        )
+
+        dispatchAsync(RootStore.app.actions.watchPendingTransaction(account, responseClaim.txid, true))
+        await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
+        await dispatchAsync(RootStore.app.actions.syncAccounts())
+      }
+    } catch {
+      showMessage({
+        message: i18n.t('screens.getAccount.claimError'),
+        type: 'danger',
+        duration: 3000,
+      })
+    } finally {
+      Await.done(`claimGas`)
     }
-  }, [account, unclaimedGasAmount, isWatchAccount, isConnected])
+  }
+
+  const populateFee = useCallback(async () => {
+    if (!account.address || !unclaimedGasAmount) return
+
+    const calculatedFee = await blockchainServices[account.blockchain].calculateTransferFee({
+      receiverAddress: account.address,
+      senderAddress: account.address,
+      amount: unclaimedGasAmount,
+      tokenHash: blockchainServices[account.blockchain].feeToken.hash,
+    })
+
+    setFee(calculatedFee)
+  }, [account, unclaimedGasAmount])
 
   const populateUnclaimed = async () => {
     if (!account.address) {
@@ -179,80 +244,114 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
     const request = blockchainServices[account.blockchain].provider
     const response = await request.getUnclaimed(account.address)
-    setUnclaimedGasAmount(response.unclaimed ?? 0)
+    setUnclaimedGasAmount(response.unclaimed ?? undefined)
   }
 
-  const getNodesfromBlockchain = async () => {
-    const request = blockchainServices[account.blockchain].provider
-    const response = await request.getAllNodes()
+  const hasWalletconnect = () => {
+    const bs = blockchainServices[account.blockchain]
 
-    setNodesPoolBlockchain(response ?? [])
+    return hasWCIntegration(bs)
   }
 
-  const fetchTransaction = async (currentPage: number) => {
-    const { pageNumber } = await account.populateTransactions(tokens, currentPage)
-
-    setCurrentPage(pageNumber + 1)
-
-    // Save the new cache
-    await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
+  const handlePressReceiveButton = () => {
+    props.navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.ReceiveTransactionModal.name,
+      params: {
+        account,
+        wallet,
+      },
+    })
   }
 
-  const handleClaimGas = useCallback(async () => {
-    if (unclaimedGasAmount && fee && unclaimedGasAmount > fee) {
-      await claimGas()
-    } else {
-      setShowWarning(true)
-    }
-  }, [fee, totTokenFeeAccount, showWarning, unclaimedGasAmount])
+  const handlePressSendButton = () => {
+    const wallet = account.getWallet(wallets)
 
-  const claimGas = async () => {
-    if (!account.address || !unclaimedGasAmount || !isConnected) {
-      return
-    }
+    if (account.accountType === 'watch' || !isConnected || !wallet) return
 
-    try {
-      const bs = blockchainServices[account.blockchain]
+    const totalBalance = BalanceHelper.calculateTotalBalances(balance, exchange, currency)
 
-      if (isClaimable(bs)) {
-        Await.init(`ClaimGas@${account.address}`)
+    if (totalBalance && totalBalance <= 0) return
 
-        const responseClaim = await bs.claimGas(account.address)
+    props.navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.SendTransactionModal.name,
+      params: {
+        account,
+        wallet,
+      },
+    })
+  }
 
-        if (!responseClaim || !responseClaim.txid || !responseClaim.fee) {
-          return
-        }
+  const handlePressAssetsButton = () => {
+    props.navigation.navigate(wrapper.route.Tab.name, {
+      screen: wrapper.route.ListWallets.name,
+      params: {
+        screen: wrapper.route.AccountAssetScreen.name,
+        params: {
+          account,
+        },
+      },
+    })
+  }
 
-        const tokenAsset = tokens.find(token => token.hash === responseClaim.hash)
+  const handlePressTransactionsButton = () => {
+    props.navigation.navigate(wrapper.route.Tab.name, {
+      screen: wrapper.route.ListWallets.name,
+      params: {
+        screen: wrapper.route.AccountTransactionsScreen.name,
+        params: {
+          account,
+        },
+      },
+    })
+  }
 
-        if (!tokenAsset) {
-          return
-        }
+  const handlePressNFTsButton = () => {
+    props.navigation.navigate(wrapper.route.Tab.name, {
+      screen: wrapper.route.ListWallets.name,
+      params: {
+        screen: wrapper.route.AccountNFTSScreen.name,
+        params: {
+          account,
+        },
+      },
+    })
+  }
 
-        await account.addPendingTransaction(
-          responseClaim.txid,
-          'claim',
-          account.address,
-          tokenAsset,
-          unclaimedGasAmount,
-          responseClaim.fee
-        )
+  const handlePressConnectionsButton = () => {
+    props.navigation.navigate(wrapper.route.Tab.name, {
+      screen: wrapper.route.ListWallets.name,
+      params: {
+        screen: wrapper.route.AccountConnectionsScreen.name,
+        params: {
+          account,
+        },
+      },
+    })
+  }
 
-        await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
-        dispatchAsync(RootStore.app.actions.syncAccounts())
-        dispatchAsync(RootStore.app.actions.watchPendingTransaction(account, responseClaim.txid, true))
-      }
-    } catch (e) {
-      console.log('error claim gas => ', e)
+  const handleRefetch = () => {
+    exchangeRefetch()
+    balanceRefetch()
+  }
+
+  useEffect(() => {
+    appBus.on('claimGasEnd', async () => {
+      await populateUnclaimed()
       Await.done(`ClaimGas@${account.address}`)
-      showMessage({
-        message: 'Gas has been failed', //TODO: config a message error
-        type: 'danger',
-        duration: 3000,
+    })
+
+    populateUnclaimed()
+
+    return () => {
+      appBus.off('claimGasEnd', () => {
+        Await.done(`ClaimGas@${account.address}`)
       })
     }
-  }
+  }, [account])
+
+  useEffect(() => {
+    populateFee()
+  }, [unclaimedGasAmount])
 
   const cardLayoutEvent = (event: LayoutChangeEvent) => {
     posYFactor.current.setValue(1)
@@ -265,37 +364,16 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }).start()
   }
 
-  const hasWalletconnect = () => {
-    const bs = blockchainServices[account.blockchain]
-
-    return hasWCIntegration(bs)
-  }
-
-  useEffect(() => {
-    if (sessions.length > 0) {
-      for (const it of sessions) {
-        const [firstAccount] = it.state.accounts
-        const [, , address] = firstAccount.split(':')
-        const found = account.address === address
-
-        if (found) {
-          setHasSession(found)
-          break
-        }
-      }
-    }
-  }, [sessions])
-
   return (
     <ScreenLayout
-      refreshControl={<RefreshControl tintColor="#fff" refreshing={isRefetching} onRefresh={refetch} />}
+      refreshControl={
+        <RefreshControl
+          tintColor="#fff"
+          refreshing={exchangeIsRefetching || balanceIsRefetching}
+          onRefresh={handleRefetch}
+        />
+      }
       darkerSolidColorBG
-      onReachBottom={() => {
-        if (Await.inAction('loadMoreTransaction')) {
-          return
-        }
-        Await.run('loadMoreTransaction', () => fetchTransaction(currentPage), 500)
-      }}
     >
       <Animated.View
         onLayout={cardLayoutEvent}
@@ -309,171 +387,63 @@ const GetAccountView = (props: GetAccountViewProps) => {
         }}
       >
         <LinearLayout mt={4}>
-          <AccountCard exchange={exchange} account={account} hasShadow={false} isStackMode={false} />
+          <AccountCard balance={balance} exchange={exchange} account={account} hasShadow={false} isStackMode={false} />
         </LinearLayout>
       </Animated.View>
-      <View
+      <LinearLayout
+        orientation="horiz"
+        width="100%"
+        marginX="15px"
+        justifyContent="space-around"
+        alignSelf="center"
+        marginY="20px"
         style={{
-          flexDirection: 'row',
-          width: Dimensions.get('screen').width - 15,
-          justifyContent: 'space-around',
-          alignSelf: 'center',
-          marginVertical: 20,
           elevation: 30,
         }}
       >
-        <ThemedReceiveButton
-          onPress={() =>
-            props.navigation.navigate(wrapper.route.Modal.name, {
-              screen: wrapper.route.ReceiveModalStack.name,
-              params: {
-                screen: wrapper.route.ReceiveToAccountModal.name,
-                params: {
-                  wallet,
-                  account,
-                },
-              },
-            })
-          }
-          isDark
-        />
-        <AwaitActivity name="populateUnclaimed">
-          <AwaitActivity name={`ClaimGas@${account.address}`} loadingView={<ClaimGasLoader />}>
-            <ThemedClaimButton
-              onPress={handleClaimGas}
-              isClaimAvailable={isClaimAvailable}
-              unclaimedGasAmount={unclaimedGasAmount ?? 0}
-              fee={fee ?? 0}
-              isDark
-            />
-          </AwaitActivity>
+        <ThemedReceiveButton onPress={handlePressReceiveButton} isDark />
+        <AwaitActivity name={`ClaimGas@${account.address}`} loadingView={<ClaimGasLoader />}>
+          <ThemedClaimButton
+            onPress={handleClaimGas}
+            isClaimAvailable={isClaimAvailable}
+            unclaimedGasAmount={unclaimedGasAmount ?? 0}
+            fee={fee ?? null}
+            isDark
+          />
         </AwaitActivity>
 
-        <ThemedSendButton
-          account={account}
-          onPress={
-            isWatchAccount || !account.getBalanceAmount() || !isConnected
-              ? undefined
-              : () => {
-                  props.navigation.navigate(wrapper.route.Modal.name, {
-                    screen: wrapper.route.SendTransactionModal.name,
-                    params: {
-                      wallet,
-                      account,
-                    },
-                  })
-                }
-          }
-          isDark
-        />
-      </View>
+        <ThemedSendButton onPress={handlePressSendButton} isDark />
+      </LinearLayout>
       <LinearLayout>
-        <ThemedButton
-          px={30}
-          my={5}
-          height={88}
-          textAlignX="flex-start"
-          textColor="text.0"
-          fontSize="17px"
-          fontFamily="medium"
+        <Button
           label={i18n.t('screens.screenLayout.assets').toUpperCase()}
           srcIcon={require('~/src/assets/images/Equalizer_-_simple-line-icons.png')}
           iconSize={[28, 24]}
-          onPress={() => {
-            props.navigation.navigate(wrapper.route.AccountAssetScreen.name)
-          }}
-          suffix={
-            <ImageView
-              width={20}
-              height={20}
-              resizeMode="contain"
-              source={require('~src/assets/images/icon-arrow-right-green.png')}
-            />
-          }
-          isDark
+          onPress={handlePressAssetsButton}
         />
-        <ThemedButton
-          px={30}
-          my={5}
-          height={88}
-          textAlignX="flex-start"
-          textColor="text.0"
-          fontSize="17px"
-          fontFamily="medium"
+        <Button
           label={i18n.t('screens.screenLayout.transactions').toUpperCase()}
           srcIcon={require('~/src/assets/images/icon-reselect-green.png')}
           iconSize={[28, 30]}
-          onPress={() => {
-            props.navigation.navigate(wrapper.route.AccountTransactionsScreen.name, {
-              account,
-            })
-          }}
-          suffix={
-            <ImageView
-              width={20}
-              height={20}
-              resizeMode="contain"
-              source={require('~src/assets/images/icon-arrow-right-green.png')}
-            />
-          }
-          isDark
+          onPress={handlePressTransactionsButton}
         />
 
-        <ThemedButton
-          px={30}
-          my={5}
-          height={88}
-          textAlignX="flex-start"
-          textColor="text.0"
-          fontSize="17px"
-          fontFamily="medium"
+        <Button
           label={i18n.t('screens.screenLayout.nfts').toUpperCase()}
           srcIcon={require('~/src/assets/images/diamond-green.png')}
-          suffix={
-            <ImageView
-              width={20}
-              height={20}
-              resizeMode="contain"
-              source={require('~src/assets/images/icon-arrow-right-green.png')}
-            />
-          }
           iconSize={[28, 30]}
-          onPress={() => {
-            props.navigation.navigate(wrapper.route.AccountNFTSScreen.name, {
-              account,
-            })
-          }}
-          isDark
+          onPress={handlePressNFTsButton}
         />
 
-        <ThemedButton
-          px={30}
-          my={5}
-          height={88}
-          disabled={!hasWalletconnect() || !hasSession}
-          textAlignX="flex-start"
-          textColor="text.0"
-          fontSize="17px"
-          fontFamily="medium"
+        <Button
+          disabled={!hasWalletconnect() || !hasWalletConnectSessions}
           label={i18n.t('screens.screenLayout.connections').toUpperCase()}
           srcIcon={require('~/src/assets/images/connections.png')}
-          suffix={
-            <ImageView
-              width={20}
-              height={20}
-              resizeMode="contain"
-              source={require('~src/assets/images/icon-arrow-right-green.png')}
-            />
-          }
           iconSize={[28, 30]}
-          onPress={() => {
-            props.navigation.navigate(wrapper.route.AccountConnectionsScreen.name, {
-              account,
-            })
-          }}
-          isDark
+          onPress={handlePressConnectionsButton}
         />
       </LinearLayout>
+
       <ModalWarningFee
         onPress={claimGas}
         totTokenFeeAccount={totTokenFeeAccount}

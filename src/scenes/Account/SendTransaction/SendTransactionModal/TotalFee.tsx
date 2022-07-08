@@ -5,26 +5,29 @@ import { useSelector } from 'react-redux'
 import { Normalize } from '~/src/app/Normalize'
 import { blockchainServices } from '~/src/blockchain'
 import { TokenHelper } from '~/src/helpers/TokenHelper'
-import { useExchange } from '~/src/hooks/useExchange'
-import { TokenAsset } from '~/src/models/TokenAsset'
+import { TokenBalance } from '~/src/hooks/useBalance'
+import { Token } from '~/src/models/Token'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {
+  ratio?: number
   amount?: number
   tip?: number
   fee?: number
-  token?: TokenAsset
+  token?: Token
   account: Account
   destinationAddress?: string
   destinationAddressIsValid?: boolean
   onFeeChange(fee?: number): void
   onRequest(isRequesting: boolean): void
+  feeTokenBalance?: TokenBalance
 }
 
 export const TotalFee = ({
   amount,
+  ratio,
   tip,
   fee,
   token,
@@ -33,36 +36,24 @@ export const TotalFee = ({
   destinationAddressIsValid,
   onFeeChange,
   onRequest,
+  feeTokenBalance,
 }: Props) => {
   const currency = useSelector((state: RootState) => state.settings.currency)
-  const { exchange } = useExchange({ filter: { currencies: currency } })
 
   const fiatFee = useMemo(() => {
-    if (!token || !fee || !exchange) {
+    if (!fee || !ratio) {
       return
     }
-
-    const ratio = exchange[token.symbol]?.to[currency]
 
     return ratio * fee
   }, [fee, token, account, currency])
 
   const isInsuficientFunds = useMemo(() => {
-    if (!token || !amount || amount <= 0 || !fee) {
-      return
-    }
+    if (!token || !amount || amount <= 0 || !fee || !feeTokenBalance) return
 
-    const feeToken = account.tokenAssets.find(
-      token => token.symbol === blockchainServices[account.blockchain].feeToken.token
-    )
+    let calculatedFee = feeTokenBalance.amount - fee
 
-    if (!feeToken) {
-      return false
-    }
-
-    let calculatedFee = feeToken.amount - fee
-
-    if (token.symbol === feeToken.symbol) {
+    if (token.symbol === feeTokenBalance.symbol) {
       calculatedFee -= amount
     }
 

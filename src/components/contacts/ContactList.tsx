@@ -198,7 +198,7 @@ export const ContactList = ({ filterByBlockchain, onSelect, ...props }: ContactL
 
   return (
     <LinearLayout {...props}>
-      <SearchBar onFilter={setFilter} marginX="4px" />
+      <SearchBar onFilter={setFilter} />
       <SectionList
         sections={sectionsByFirstLetter}
         keyExtractor={(item, index) => `${item.id}-${index}`}

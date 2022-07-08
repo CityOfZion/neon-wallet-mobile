@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useMemo } from 'react'
 import {
   LayoutChangeEvent,
   NativeSyntheticEvent,
@@ -13,27 +13,14 @@ import {
 } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
-import {
-  border,
-  BorderProps,
-  color,
-  ColorProps,
-  flexbox,
-  FlexboxProps,
-  layout,
-  LayoutProps,
-  position,
-  PositionProps,
-  space,
-  SpaceProps,
-} from 'styled-system'
 
+import { BalanceHelper } from '../helpers/BalanceHelper'
+import { RootStackParamList } from '../navigation/AppNavigation'
 import { RootState } from '../store/RootStore'
+import { Balance } from '../types/balance'
 import { Exchange } from '../types/exchange'
-import { OrientationProps, WeightProps } from '../types/styled-components'
-import SkeletonContainer from './SkeletonContainer'
 
-import { wrapper } from '~src/app/ApplicationWrapper' //@ts-ignore
+import { wrapper } from '~src/app/ApplicationWrapper'
 import CardSvg from '~src/assets/images/card.svg'
 import { getBlockchainLogo } from '~src/blockchain'
 import { FilterHelper } from '~src/helpers/FilterHelper'
@@ -41,7 +28,6 @@ import { UtilsHelper } from '~src/helpers/UtilsHelper'
 import { Account } from '~src/models/redux/Account'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import styled, { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
-import { orientation, weight } from '~src/styles/styled-system.config'
 
 interface Props {
   onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
@@ -57,14 +43,22 @@ interface Props {
   orientBy?: 'height' | 'width'
   isCustomAccount?: boolean
   disableSecondTouch?: boolean
+  balance?: Balance
   exchange?: Exchange
 }
 
 const AccountCard: React.FC<Props> = props => {
-  const { language, currency } = useSelector((state: RootState) => state.settings)
-  const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
+  const language = useSelector((state: RootState) => state.settings.language)
+  const currency = useSelector((state: RootState) => state.settings.currency)
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList & ModalStackParamList>>()
   const [viewHeight, setViewHeight] = useState<number>(0)
   const [disableTouch, setDisableTouch] = useState<boolean>(false)
+
+  const totalTokenBalance = useMemo(() => {
+    const total = BalanceHelper.calculateTotalBalances(props.balance, props.exchange, currency)
+
+    return FilterHelper.currency(total, currency, language)
+  }, [props.balance, props.exchange, currency, language])
 
   const unit = (viewHeight * 0.1) / 24
   const bright = 'rgba(255, 255, 255, 0.2)'
@@ -93,7 +87,7 @@ const AccountCard: React.FC<Props> = props => {
   }, [viewHeight])
 
   return (
-    <PaymentCardView
+    <ButtonView
       onLayout={layoutEvent}
       onPress={(e: NativeSyntheticEvent<NativeTouchEvent>) => {
         props.onPress?.(e)
@@ -111,9 +105,11 @@ const AccountCard: React.FC<Props> = props => {
         <ShadowView pointerEvents="none">
           <ImageView
             source={require('~src/assets/images/card-shadow.png')}
-            width="112%"
-            height="112%"
             resizeMode="contain"
+            style={{
+              width: '112%',
+              height: '112%',
+            }}
           />
         </ShadowView>
       )}
@@ -179,40 +175,25 @@ const AccountCard: React.FC<Props> = props => {
 
               {props.isCompacted ? (
                 <LinearLayout ml={10 * unit} alignItems="flex-start">
-                  <TextView
-                    fontFamily="bold"
-                    fontSize={12 * unit}
-                    color="white"
-                    textAlign="left"
-                    fontWeight="bold"
-                    includeFontPadding
-                  >
+                  <TextView fontFamily="bold" fontSize={12 * unit} color="white" textAlign="left" fontWeight="bold">
                     {(!props.hideBalance && i18n.t('paymentCard.balance')) || ''}
                   </TextView>
 
-                  <SkeletonContainer
-                    isLoading={!props.exchange}
-                    skeletonType="balanceAccountIsCompacted"
-                    boneColor={props.account.backgroundColor}
-                  >
-                    {props.exchange && (
-                      <TextView
-                        mt={-6 * unit}
-                        fontFamily="semibold"
-                        fontSize={21 * unit}
-                        color="white"
-                        textAlign="center"
-                        fontWeight="bold"
-                        allowFontScaling
-                        adjustsFontSizeToFit
-                        numberOfLines={1}
-                      >
-                        {!props.hideBalance
-                          ? props.account.formattedBalanceAmount(currency, language, props.exchange)
-                          : ''}
-                      </TextView>
-                    )}
-                  </SkeletonContainer>
+                  {!props.hideBalance && (
+                    <TextView
+                      mt={-6 * unit}
+                      fontFamily="semibold"
+                      fontSize={21 * unit}
+                      color="white"
+                      textAlign="center"
+                      fontWeight="bold"
+                      allowFontScaling
+                      adjustsFontSizeToFit
+                      numberOfLines={1}
+                    >
+                      {totalTokenBalance}
+                    </TextView>
+                  )}
                 </LinearLayout>
               ) : (
                 !props.hideQRCode && (
@@ -254,23 +235,19 @@ const AccountCard: React.FC<Props> = props => {
 
             {!props.isStackMode && (
               <LinearLayout orientation="verti" justifyContent="center" alignItems="center" weight={1}>
-                {!props.isCompacted && props.exchange && (
-                  <SkeletonContainer isLoading={!props.exchange} skeletonType="balanceAccount">
-                    <TextView
-                      mb={3 * unit}
-                      fontSize={48 * unit}
-                      color="white"
-                      textAlign="center"
-                      fontFamily="semibold"
-                      allowFontScaling
-                      adjustsFontSizeToFit
-                      numberOfLines={1}
-                    >
-                      {!props.hideBalance
-                        ? props.account.formattedBalanceAmount(currency, language, props.exchange)
-                        : ''}
-                    </TextView>
-                  </SkeletonContainer>
+                {!props.isCompacted && !props.hideBalance && (
+                  <TextView
+                    mb={3 * unit}
+                    fontSize={48 * unit}
+                    color="white"
+                    textAlign="center"
+                    fontFamily="semibold"
+                    allowFontScaling
+                    adjustsFontSizeToFit
+                    numberOfLines={1}
+                  >
+                    {totalTokenBalance}
+                  </TextView>
                 )}
               </LinearLayout>
             )}
@@ -368,7 +345,7 @@ const AccountCard: React.FC<Props> = props => {
           </LinearLayout>
         )}
       </Animated.View>
-    </PaymentCardView>
+    </ButtonView>
   )
 }
 
@@ -397,19 +374,6 @@ AccountCard.defaultProps = {
   hasShadow: true,
   orientBy: 'width',
 }
-
-const PaymentCardView = styled.TouchableOpacity<
-  ColorProps & FlexboxProps & SpaceProps & BorderProps & LayoutProps & OrientationProps & PositionProps & WeightProps
->`
-  ${layout}
-  ${color}
-  ${flexbox}
-  ${space}
-  ${border}
-  ${orientation}
-  ${position}
-  ${weight}
-`
 
 const ShadowView = styled.View`
   position: absolute;

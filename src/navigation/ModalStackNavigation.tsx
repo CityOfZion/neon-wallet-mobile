@@ -4,6 +4,18 @@ import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
 import { ExportWIFModal, ExportWIFModalParams } from '../scenes/Account/ExportWIFModal'
+import ReceiveTransactionAccountSelectionModal, {
+  ReceiveTransactionAccountSelectionModalParams,
+} from '../scenes/Account/ReceiveTransaction/ReceiveTransactionAccountSelectionModal'
+import ReceiveTransactionModal, {
+  ReceiveTransactionModalParams,
+} from '../scenes/Account/ReceiveTransaction/ReceiveTransactionModal/ReceiveTransactionModal'
+import ReceiveTransactionQrCodeModal, {
+  ReceiveTransactionQrCodeModalParams,
+} from '../scenes/Account/ReceiveTransaction/ReceiveTransactionQrCodeModal'
+import ReceiveTransactionWalletSelectionModal, {
+  ReceiveTransactionWalletSelectionModalParams,
+} from '../scenes/Account/ReceiveTransaction/ReceiveTransactionWalletSelectionModal'
 import SendTransactionAccountSelectionModal, {
   SendTransactionAccountSelectionModalParams,
 } from '../scenes/Account/SendTransaction/SendTransactionAccountSelectionModal'
@@ -27,7 +39,6 @@ import WCInvocationDetailsModal, {
 } from '../scenes/walletConnect/modal/WCInvocationDetailsModal'
 import { RootState } from '../store/RootStore'
 import { DefaultNavigationParam } from '../types/global'
-import ReceiveModalStackNavigation from './ReceiveModalStackNavigation'
 
 import EditAccountModal, { EditAccountModalParam } from '~/src/scenes/Account/EditAccountModal'
 import EditWalletModal, { EditWalletParams } from '~/src/scenes/Wallet/EditWalletModal'
@@ -115,6 +126,10 @@ export type ModalStackParamList = {
   SendTransactionConfirmationModal: SendTransactionConfirmationModalParams
   SendTransactionWalletSelectionModal: SendTransactionWalletSelectionModalParams
   SendTransactionAccountSelectionModal: SendTransactionAccountSelectionModalParams
+  ReceiveTransactionQrCodeModal: ReceiveTransactionQrCodeModalParams
+  ReceiveTransactionModal: ReceiveTransactionModalParams
+  ReceiveTransactionAccountSelectionModal: ReceiveTransactionAccountSelectionModalParams
+  ReceiveTransactionWalletSelectionModal: ReceiveTransactionWalletSelectionModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -147,6 +162,10 @@ export type ModalParams =
   | DefaultNavigationParam<SendTransactionConfirmationModalParams>
   | DefaultNavigationParam<SendTransactionWalletSelectionModalParams>
   | DefaultNavigationParam<SendTransactionAccountSelectionModalParams>
+  | DefaultNavigationParam<ReceiveTransactionModalParams>
+  | DefaultNavigationParam<ReceiveTransactionAccountSelectionModalParams>
+  | DefaultNavigationParam<ReceiveTransactionQrCodeModalParams>
+  | DefaultNavigationParam<ReceiveTransactionWalletSelectionModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -163,7 +182,6 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen name={wrapper.route.ChangelogModal.name} component={ChangelogModal} />
         <ModalStack.Screen name={wrapper.route.WelcomeModal.name} component={WelcomePage} />
         <ModalStack.Screen name={wrapper.route.EditAccountModal.name} component={EditAccountModal} />
-        <ModalStack.Screen name={wrapper.route.ReceiveModalStack.name} component={ReceiveModalStackNavigation} />
         <ModalStack.Screen name={wrapper.route.CustomColor.name} component={CustomColorPage} />
         <ModalStack.Screen name={wrapper.route.WalletContextModal.name} component={WalletContextModal} />
         <ModalStack.Screen name={wrapper.route.ReorderWalletModal.name} component={ReorderWalletModal} />
@@ -207,6 +225,20 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen
           name={wrapper.route.SendTransactionAccountSelectionModal.name}
           component={SendTransactionAccountSelectionModal}
+        />
+
+        <ModalStack.Screen
+          name={wrapper.route.ReceiveTransactionWalletSelectionModal.name}
+          component={ReceiveTransactionWalletSelectionModal}
+        />
+        <ModalStack.Screen
+          name={wrapper.route.ReceiveTransactionAccountSelectionModal.name}
+          component={ReceiveTransactionAccountSelectionModal}
+        />
+        <ModalStack.Screen name={wrapper.route.ReceiveTransactionModal.name} component={ReceiveTransactionModal} />
+        <ModalStack.Screen
+          name={wrapper.route.ReceiveTransactionQrCodeModal.name}
+          component={ReceiveTransactionQrCodeModal}
         />
       </ModalStack.Navigator>
     </ThemeProvider>

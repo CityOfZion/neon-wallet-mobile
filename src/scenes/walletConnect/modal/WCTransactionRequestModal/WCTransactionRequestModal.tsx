@@ -11,7 +11,7 @@ import { SignMessageTransactionRequest } from './SignMessageTransactionRequest/S
 import { VerifyMessageTransactionRequest } from './VerifyMessageTransactionRequest/VerifyMessageTransactionRequest'
 
 import { SupportedMethods, WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
-import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks'
+import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
 import { RootStackParamList } from '~src/navigation/AppNavigation'

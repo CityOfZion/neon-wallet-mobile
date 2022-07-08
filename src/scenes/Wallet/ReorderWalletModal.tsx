@@ -55,7 +55,6 @@ export default function ReorderWalletModal(props: Props) {
       Await.init('populateWallet')
       await dispatchAsync(RootStore.wallet.actions.reorderAndSave(order))
       await dispatchAsync(RootStore.app.actions.syncWallets())
-      await dispatchAsync(RootStore.app.actions.syncTokenAssets())
       dispatch(RootStore.wallet.actions.selectWallet(null))
       await UtilsHelper.sleep(1000)
       Await.done('populateWallet')

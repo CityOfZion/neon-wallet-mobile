@@ -1,22 +1,23 @@
 import { RouteProp } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import React, { useState, Fragment } from 'react'
-import { ScrollView, TouchableHighlight } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState, useMemo } from 'react'
+import { useSelector } from 'react-redux'
 
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks'
+import { BalanceHelper } from '~/src/helpers/BalanceHelper'
+import { FilterHelper } from '~/src/helpers/FilterHelper'
+import { useBalances } from '~/src/hooks/useBalances'
 import { useExchange } from '~/src/hooks/useExchange'
+import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
-import { SyncDispatch } from '~/src/types/reducers/root'
 import { hasWalletconnect } from '~src/blockchain/common'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import WalletPicker from '~src/components/misc/WalletPicker'
 import { IURI } from '~src/helpers/UriHelper'
 import { Wallet } from '~src/models/redux/Wallet'
-import { RootState, RootStore } from '~src/store/RootStore'
-import { TextView } from '~src/styles/styled-components'
+import { RootState } from '~src/store/RootStore'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface WCWalletSelectionModalModalParams {
   uri?: IURI
@@ -29,20 +30,30 @@ interface Props {
 
 const WCWalletSelectionModal = (props: Props) => {
   useTreatNetworkOnWalletConnectFlow()
-  const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
-  const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
-  const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const accounts = useSelector((state: RootState) => state.app.accounts)
   const wallets = useSelector((state: RootState) => state.app.wallets)
-  const { currency, language } = useSelector((state: RootState) => state.settings)
-  const { exchange } = useExchange({ filter: { currencies: currency } })
-
-  const usableWallets = wallets.filter(
-    (value: Wallet) => value.walletType !== 'watch' && value.getAccounts(accountsPool).some(it => hasWalletconnect(it))
-  )
-
-  const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(wallet)
-
+  const currency = useSelector((state: RootState) => state.settings.currency)
+  const language = useSelector((state: RootState) => state.settings.language)
   const controller = useSwiperController(true)
+
+  const validWallets = useMemo(
+    () =>
+      wallets.filter(
+        (wallet: Wallet) =>
+          wallet.walletType !== 'watch' && wallet.getAccounts(accounts).some(it => hasWalletconnect(it))
+      ),
+    [wallets, accounts]
+  )
+  const [selectedWallet, setSelectedWallet] = useState<Wallet>(validWallets[0])
+
+  const { exchange } = useExchange({})
+  const { data: selectedWalletBalances } = useBalances(selectedWallet.getAccounts(accounts))
+
+  const formattedAllBalance = useMemo(() => {
+    const totalBalance = BalanceHelper.calculateTotalBalances(selectedWalletBalances, exchange, currency)
+
+    return FilterHelper.currency(totalBalance, currency, language)
+  }, [selectedWalletBalances, exchange, currency, language])
 
   return (
     <SwiperPanel
@@ -51,38 +62,32 @@ const WCWalletSelectionModal = (props: Props) => {
       controller={controller}
       rightButton={<CloseButton mr="20px" />}
       title={i18n.t('modals.WCAccountSelection.title')}
-      onClose={() => {
-        props.navigation.goBack()
-      }}
+      onClose={props.navigation.goBack}
       onRightPress={controller.close}
       solidColorBG
     >
-      <ScrollView
-        contentContainerStyle={{
-          alignItems: 'center',
-        }}
-      >
-        <TouchableHighlight>
-          <>
-            <TextView mb={49} color="text.0" fontSize={18} fontFamily="medium" textAlign="center">
-              {i18n.t('modals.WCWalletSelection.title')}
-            </TextView>
-            <WalletPicker
-              wallets={usableWallets}
-              onSelect={setSelectedWallet}
-              onPress={wallet => {
-                props.navigation.navigate(wrapper.route.WCAccountSelectionModal.name, {
-                  wallet,
-                })
-              }}
-            />
-            <TextView alignSelf="center" fontSize="36px" color="text.0" fontFamily="medium">
-              {selectedWallet?.calculateBalanceFormatted(currency, language, exchange)}{' '}
-              {/** TODO set SkeletonContainer */}
-            </TextView>
-          </>
-        </TouchableHighlight>
-      </ScrollView>
+      <LinearLayout>
+        <TextView mb={20} color="text.0" fontSize={18} fontFamily="medium" textAlign="center">
+          {i18n.t('modals.receiveTransactionAccountSelectionModal.subtitle')}
+        </TextView>
+
+        <WalletPicker
+          selectedWallet={selectedWallet}
+          selectedWalletBalances={selectedWalletBalances}
+          exchange={exchange}
+          wallets={validWallets}
+          onSelect={setSelectedWallet}
+          onPress={wallet => {
+            props.navigation.navigate(wrapper.route.WCAccountSelectionModal.name, {
+              wallet,
+            })
+          }}
+        />
+
+        <TextView alignSelf="center" fontSize="36px" color="text.0" fontFamily="medium">
+          {formattedAllBalance}
+        </TextView>
+      </LinearLayout>
     </SwiperPanel>
   )
 }

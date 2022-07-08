@@ -57,7 +57,7 @@ export type InputTextViewProps = TextInputProps &
   PositionProps &
   TextStyleProps
 
-export type ImageViewProps = SpaceProps & LayoutProps & FlexboxProps & PositionProps & WeightProps
+export type ImageViewProps = SpaceProps & LayoutProps & FlexboxProps & PositionProps & WeightProps & ColorProps
 
 export type LinearLayoutProps = BorderProps &
   ColorProps &

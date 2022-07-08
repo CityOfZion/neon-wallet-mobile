@@ -6,14 +6,15 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { View, Text, Image, FlatList, TouchableWithoutFeedback, ScrollView } from 'react-native'
 import Accordion from 'react-native-collapsible/Accordion'
 
-import { AccountToImport } from '../hooks/BlockchainActionsHook'
+import { RootStackParamList } from '../navigation/AppNavigation'
+import { WalletStackParamList } from '../navigation/WalletsStackNavigation'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { BlockchainServiceKey, blockchainServices, getBlockchainLogo } from '~src/blockchain'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { useBlockchainActionsHook } from '~src/hooks'
+import { useBlockchainActionsHook, AccountToImport } from '~src/hooks/useBlockchainActionsHook'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 export type MnemonicSelectionInfo = Map<
   BlockchainServiceKey,
@@ -21,7 +22,7 @@ export type MnemonicSelectionInfo = Map<
 >
 
 interface Props {
-  navigation: StackNavigationProp<MoreStackParamList>
+  navigation: StackNavigationProp<RootStackParamList & WalletStackParamList & MoreStackParamList>
   route: RouteProp<MoreStackParamList, 'MnemonicSelectionList'>
 }
 
@@ -202,7 +203,6 @@ const MnemonicSelectionList = (props: Props) => {
 
   const handleImportAccounts = useCallback(async () => {
     Await.init('importMnemonic')
-    blockchainActionsHook.init()
     const walletId = await blockchainActionsHook.createWallet(
       i18n.t('defaultNameWallet.mnemonicWallet'),
       mnemonic,
@@ -220,14 +220,13 @@ const MnemonicSelectionList = (props: Props) => {
     )
 
     await blockchainActionsHook.importAccounts(accountsToImport)
-    blockchainActionsHook.finish()
     Await.done('importMnemonic')
     props.navigation.reset({
       index: 0,
       routes: [{ name: wrapper.route.Tab.name }],
     })
-    props.navigation.navigate(wrapper.route.ListWallets.name, {
-      screen: 'ListWalletsPage',
+    props.navigation.navigate(wrapper.route.Tab.name, {
+      screen: wrapper.route.ListWallets.name,
     })
   }, [addressesSelected])
 

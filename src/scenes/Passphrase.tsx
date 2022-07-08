@@ -16,7 +16,7 @@ import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { useBlockchainActionsHook } from '~src/hooks'
+import { useBlockchainActionsHook } from '~src/hooks/useBlockchainActionsHook'
 import { Account } from '~src/models/redux/Account'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
@@ -110,7 +110,6 @@ const Passphrase = (props: PassphraseProps) => {
 
   const persist = useCallback(async () => {
     try {
-      blockchainActionsHook.init()
       const walletId = await blockchainActionsHook.createLegacyWallet(
         `${i18n.t('modals.blockchainList.encryptedWallet')}`
       )
@@ -133,7 +132,6 @@ const Passphrase = (props: PassphraseProps) => {
 
       await blockchainActionsHook.importAccounts(accountToImport)
 
-      blockchainActionsHook.finish()
       props.navigation.replace(wrapper.route.Tab.name, {
         screen: wrapper.route.ListWallets.name,
       })

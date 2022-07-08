@@ -8,16 +8,18 @@ import { TransactionItem } from './TransactionItem'
 
 import { Account } from '~/src/models/redux/Account'
 import { LinearLayout, TextView } from '~/src/styles/styled-components'
+import { Exchange } from '~/src/types/exchange'
 
 interface Props {
   completedTransactions: FormattedTransaction[] | undefined
   pendingTransactions: FormattedTransaction[] | undefined
   account: Account
   date: string
+  exchange?: Exchange
 }
 
 export const TransactionListItem = React.memo(
-  ({ account, completedTransactions, pendingTransactions, date }: Props) => {
+  ({ account, completedTransactions, pendingTransactions, date, exchange }: Props) => {
     return (
       <LinearLayout mb="10px">
         <TextView mb="20px" color="#fff" fontFamily="semibold" fontSize="30px">
@@ -37,7 +39,9 @@ export const TransactionListItem = React.memo(
               data={pendingTransactions}
               listKey={`pendingTransaction-${date}`}
               keyExtractor={item => item.hash}
-              renderItem={({ item }) => <TransactionItem account={account} hideLinkDora {...item} />}
+              renderItem={({ item }) => (
+                <TransactionItem exchange={exchange} account={account} hideLinkDora {...item} />
+              )}
             />
           </>
         )}
@@ -55,7 +59,7 @@ export const TransactionListItem = React.memo(
               data={completedTransactions}
               listKey={`completedTransaction-${date}`}
               keyExtractor={item => item.hash}
-              renderItem={({ item }) => <TransactionItem account={account} {...item} />}
+              renderItem={({ item }) => <TransactionItem exchange={exchange} account={account} {...item} />}
             />
           </>
         )}

@@ -97,7 +97,8 @@ export default function QuickToolsMenu(props: Props) {
       source: require('~src/assets/images/icon-circle-receive-primary.png'),
       onClick: () =>
         navigation.navigate(wrapper.route.Modal.name, {
-          screen: wrapper.route.ReceiveModalStack.name,
+          screen: wrapper.route.ReceiveTransactionWalletSelectionModal.name,
+          params: {},
         }),
     },
   ]

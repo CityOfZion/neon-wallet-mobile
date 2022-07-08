@@ -6,67 +6,56 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { useExchange } from '~/src/hooks/useExchange'
+import { TokenBalance } from '~/src/hooks/useBalance'
 import { useTokens } from '~/src/hooks/useTokens'
-import { TokenAsset } from '~/src/models/TokenAsset'
+import { Token } from '~/src/models/Token'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {
-  selectedToken?: TokenAsset
+  account: Account
+  token?: Token
+  tokenBalance?: TokenBalance
   amount?: string
   fiat?: string
-  account: Account
+  ratio?: number
   onAmountChange(amount?: string): void
   onFiatChange(fiat?: string): void
   onAmountValidation(isValid: boolean): void
 }
 
 export const AmountInput = ({
-  selectedToken,
   account,
+  token,
+  tokenBalance,
   amount,
   onAmountChange,
   onAmountValidation,
   onFiatChange,
   fiat,
+  ratio,
 }: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
-  const { exchange } = useExchange({ filter: { currencies: currency } })
-  const tokens = useTokens({ blockchain: account.blockchain })
+  const { getTokenBySymbol } = useTokens({ blockchain: account.blockchain })
+
+  const supportedToken = useMemo(() => {
+    if (!token) return
+
+    return getTokenBySymbol(token.symbol)
+  }, [getTokenBySymbol, token])
 
   const [remaining, setRemaining] = useState<number>()
 
-  const tokenDecimals = useMemo(() => {
-    if (!selectedToken) {
-      return
-    }
-
-    const findedToken = tokens.find(token => token.symbol === selectedToken.symbol)
-
-    if (!findedToken) {
-      return
-    }
-    return findedToken.decimals ?? undefined
-  }, [selectedToken, tokens])
-
   const handleValidateAmount = (text: string) => {
-    if (text.length <= 0 || Number(text) <= 0 || !selectedToken) {
+    if (text.length <= 0 || Number(text) <= 0 || !token || !tokenBalance) {
       onAmountValidation(false)
       return false
     }
 
-    const accountBalance = account.getBalanceAmountByAsset(selectedToken.symbol)
-
-    if (!accountBalance) {
-      onAmountValidation(false)
-      return false
-    }
-
-    const isValid = accountBalance >= Number(text)
+    const isValid = tokenBalance.amount >= Number(text)
 
     onAmountValidation(isValid)
 
@@ -74,9 +63,7 @@ export const AmountInput = ({
   }
 
   const handleChangeAmount = (text: string) => {
-    if (!selectedToken) {
-      return
-    }
+    if (!token) return
 
     if (text.length <= 0) {
       onAmountChange()
@@ -87,23 +74,15 @@ export const AmountInput = ({
     let formattedAmount = text
       .replace(/,|\.\.|\.,/g, '.')
       .replace(/\s|-/g, '')
-      .replace(/[0-9]+\.[0-9]{9,}$/g, Number(text).toFixed(tokenDecimals ?? 8))
+      .replace(/[0-9]+\.[0-9]{9,}$/g, Number(text).toFixed(supportedToken?.decimals ?? 8))
 
-    if (tokenDecimals && tokenDecimals < 1) {
+    if (supportedToken && supportedToken.decimals < 1) {
       formattedAmount = formattedAmount.replace('.', '')
     }
 
     onAmountChange(formattedAmount)
 
-    if (tokenDecimals === undefined || !exchange) {
-      return
-    }
-
-    const ratio = exchange[selectedToken.symbol]?.to[currency]
-
-    if (!ratio) {
-      return
-    }
+    if (!ratio) return
 
     let newFiat = String(ratio * Number(formattedAmount)).replace(/[\d.]+e-[0-9]+/g, '0')
 
@@ -113,29 +92,13 @@ export const AmountInput = ({
   }
 
   const handleValidateFiat = (text: string) => {
-    if (!selectedToken || text.length <= 0 || Number(text) <= 0 || !exchange) {
-      return false
-    }
+    if (!token || text.length <= 0 || Number(text) <= 0 || !tokenBalance || !ratio) return false
 
-    const ratio = exchange[selectedToken.symbol]?.to[currency]
-
-    if (!ratio) {
-      return false
-    }
-
-    const accountBalance = account.getBalanceAmountByAsset(selectedToken.symbol)
-
-    if (!accountBalance) {
-      return false
-    }
-
-    return accountBalance * ratio > Number(text)
+    return tokenBalance.amount * ratio > Number(text)
   }
 
   const handleChangeFiat = (text: string) => {
-    if (!selectedToken) {
-      return
-    }
+    if (!supportedToken) return
 
     if (text.length <= 0) {
       onAmountChange()
@@ -150,18 +113,10 @@ export const AmountInput = ({
 
     onFiatChange(formattedFiat)
 
-    if (!exchange) {
-      return
-    }
-
-    const ratio = exchange[selectedToken.symbol]?.to[currency]
-
-    if (!ratio) {
-      return
-    }
+    if (!ratio) return
 
     let newAmount = String(Number(formattedFiat) / ratio)
-    newAmount = newAmount.replace(/[0-9]+\.[0-9]{9,}$/g, Number(newAmount).toFixed(selectedToken.decimals ?? 8))
+    newAmount = newAmount.replace(/[0-9]+\.[0-9]{9,}$/g, Number(newAmount).toFixed(supportedToken.decimals))
 
     onAmountChange(newAmount)
   }
@@ -175,36 +130,21 @@ export const AmountInput = ({
   }
 
   const handlePressMaxButton = () => {
-    if (!selectedToken) {
-      return
-    }
+    if (!token || !tokenBalance) return
 
-    const accountBalance = account.getBalanceAmountByAsset(selectedToken.symbol)
-
-    if (!accountBalance) {
-      return
-    }
-
-    handleChangeAmount(String(accountBalance))
+    handleChangeAmount(String(tokenBalance.amount))
   }
 
   useEffect(() => {
-    if (!selectedToken) {
+    if (!token || !tokenBalance) {
       setRemaining(undefined)
       return
     }
 
-    const accountBalance = account.getBalanceAmountByAsset(selectedToken.symbol)
-
-    if (!accountBalance) {
-      setRemaining(undefined)
-      return
-    }
-
-    const remaining = accountBalance - (amount ? Number(amount) : 0)
+    const remaining = tokenBalance.amount - (amount ? Number(amount) : 0)
 
     setRemaining(remaining > 0 ? remaining : undefined)
-  }, [amount, account, selectedToken])
+  }, [amount, token])
 
   return (
     <>
@@ -218,7 +158,7 @@ export const AmountInput = ({
           <TextView color="text.0" fontFamily="bold" fontSize="16px">
             {remaining ? FilterHelper.decimal(remaining, language) : '-'}
           </TextView>
-          <ButtonView ml="6px" onPress={handlePressMaxButton} disabled={!selectedToken}>
+          <ButtonView ml="6px" onPress={handlePressMaxButton} disabled={!token}>
             <TextView color="primary" fontSize="15px" fontFamily="medium">
               {i18n.t('modals.sendTransactionModal.max')}
             </TextView>
@@ -235,7 +175,7 @@ export const AmountInput = ({
             invalidMessageColor={theme.colors.quinary}
             value={amount ?? ''}
             placeholder={i18n.t('modals.sendTransactionModal.enterValue', {
-              value: selectedToken ? selectedToken.symbol : 'Token',
+              value: token ? token.symbol : 'Token',
             })}
             validator={handleValidateAmount}
             invalidMessage={i18n.t('modals.sendTransactionModal.insufficientFunds')}
@@ -244,7 +184,7 @@ export const AmountInput = ({
             hidePaste
             hideScan
             keyboardType="numeric"
-            editable={!!selectedToken}
+            editable={!!token}
           />
         </LinearLayout>
 
@@ -269,10 +209,10 @@ export const AmountInput = ({
               hidePaste
               hideScan
               keyboardType="numeric"
-              editable={!!tokenDecimals}
+              editable={!!supportedToken?.decimals}
             />
           </LinearLayout>
-          <ButtonView alignSelf="flex-end" onPress={handlePressRoundButton} disabled={!tokenDecimals} mt={3}>
+          <ButtonView alignSelf="flex-end" onPress={handlePressRoundButton} disabled={!supportedToken?.decimals} mt={3}>
             <LinearLayout orientation="horiz">
               <ImageView
                 mr={3}

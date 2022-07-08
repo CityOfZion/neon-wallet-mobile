@@ -1,5 +1,5 @@
 import Neon, { api, u, rpc, experimental, sc, tx, wallet } from '@cityofzion/neon-js-next'
-
+import { CommonConfig } from '@cityofzion/neon-js-next/lib/experimental/types'
 import {
   Nep17TransferIntent,
   signingConfig,
@@ -30,8 +30,6 @@ import {
 import { Neo3ProviderOptions } from '~src/blockchain/Neo3'
 import { Neo3Provider } from '~src/blockchain/Neo3/providers/common'
 import { ContractInvocationMulti, NeonWcAdapter } from '~src/helpers/NeonWcAdapter'
-import ScriptBuilder from '@cityofzion/neon-core-next/lib/sc/ScriptBuilder'
-import { CommonConfig } from '@cityofzion/neon-js-next/lib/experimental/types'
 
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 const SDK: typeof AsteroidSDK = require('~src/vendor/asteroid-sdk')
@@ -213,7 +211,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
 
     const neoHash = this.tokens.find(token => token.symbol === 'NEO')?.hash
 
-    const neoBalance = response.balance.filter(balance => balance.assetSymbol === 'NEO')
+    const neoBalance = response.filter(balance => balance.assetSymbol === 'NEO')
     const gasBalance = response.balance.filter(balance => balance.assetSymbol === 'GAS')
 
     if (neoBalance.length < 1) {
@@ -298,13 +296,11 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
         sc.ContractParam.string(''),
       ]
 
-      const script = Neon.create
-        .scriptBuilder()
-        .emitContractCall({
-          scriptHash: data.tokenHash,
-          operation: 'transfer',
-          args
-        })
+      const script = Neon.create.scriptBuilder().emitContractCall({
+        scriptHash: data.tokenHash,
+        operation: 'transfer',
+        args,
+      })
 
       if (data.tip) {
         script.emitContractCall({
@@ -314,15 +310,17 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
             sc.ContractParam.hash160(data.senderAddress),
             sc.ContractParam.hash160(this.cozTip.address),
             sc.ContractParam.integer(data.tip),
-            sc.ContractParam.string('')
-          ]
+            sc.ContractParam.string(''),
+          ],
         })
       }
 
       const buildScript = script.build()
 
       const currentHeight = await rpcClient.getBlockCount()
-      const { protocol: { network: networkMagic } } = await rpcClient.getVersion()
+      const {
+        protocol: { network: networkMagic },
+      } = await rpcClient.getVersion()
 
       const config: CommonConfig = {
         networkMagic,
@@ -335,9 +333,9 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
         signers: [
           new tx.Signer({
             account: fromAccount.scriptHash,
-            scopes: String(tx.WitnessScope.CalledByEntry)
-          })
-        ]
+            scopes: String(tx.WitnessScope.CalledByEntry),
+          }),
+        ],
       })
       const networkFee = await experimental.txHelpers.calculateNetworkFee(txn, fromAccount, config)
       const invokeFunctionResponse = await rpcClient.invokeScript(u.HexString.fromHex(buildScript), [

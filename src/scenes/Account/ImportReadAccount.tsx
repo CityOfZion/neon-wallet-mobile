@@ -20,7 +20,7 @@ import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { useBlockchainActionsHook } from '~src/hooks'
+import { useBlockchainActionsHook } from '~src/hooks/useBlockchainActionsHook'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { RootState } from '~src/store/RootStore'
@@ -71,7 +71,6 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
 
     Await.init('importWatchAccount')
 
-    blockchainActionsHook.init()
     const walletId = await blockchainActionsHook.createWallet(
       i18n.t('defaultNameWallet.watchAccount'),
       mnemonic.join(','),
@@ -87,7 +86,6 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
       })
     )
     await blockchainActionsHook.importAccounts(accountToImport)
-    blockchainActionsHook.finish()
 
     Await.done('importWatchAccount')
 

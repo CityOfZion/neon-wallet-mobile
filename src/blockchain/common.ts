@@ -1,6 +1,7 @@
 import { JsonRpcRequest, JsonRpcResponse } from '@json-rpc-tools/utils'
 import { ImageLoadEventData } from 'react-native'
 
+import { BalanceInfo } from '../models/response/BalanceInfo'
 import { ContractResponse } from '../models/response/ContractResponse'
 import { NFTResponse } from '../models/response/NFTResponse'
 import { NFTSResponse } from '../models/response/NFTSResponse'
@@ -9,10 +10,8 @@ import { BSNeoLegacy } from './NeoLegacy/services/BSNeoLegacy'
 
 import { Node } from '~/src/models/Node'
 import { Transaction } from '~/src/models/Transaction'
-import { BalanceResponse } from '~/src/models/response/BalanceResponse'
 import { TransactionAddressResponse } from '~/src/models/response/TransactionAddressResponse'
 import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
-import { Exchange } from '~/src/types/exchange'
 import * as BlockchainIcons from '~src/assets/blockchainIcons'
 import { Account } from '~src/models/redux/Account'
 
@@ -65,10 +64,9 @@ export interface BlockchainDataProvider {
   getTransaction: (txid: string) => Promise<Transaction>
   getAddressAbstracts: (address: string, page?: number) => Promise<TransactionAddressResponse>
   getContract: (hash: string) => Promise<ContractResponse>
-  getBalance: (address: string) => Promise<BalanceResponse>
+  getBalance: (address: string) => Promise<BalanceInfo[]>
   getUnclaimed: (address: string) => Promise<UnclaimedResponse>
   getAllNodes: () => Promise<Node[]>
-  getExchangeData: (params: { tokenAssetSymbols: string[]; currencies: string }) => Promise<Exchange>
   getAssetByHash: (hash: string) => Promise<{ symbol: string; decimals: number } | null>
 }
 

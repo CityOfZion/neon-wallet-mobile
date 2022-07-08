@@ -95,18 +95,14 @@ export abstract class FilterHelper {
     const num = Number(input)
 
     try {
-      if (!isNaN(num)) {
-        return new Intl.NumberFormat(language, {
-          style: 'currency',
-          currency: currency ?? undefined,
-          minimumFractionDigits,
-          maximumFractionDigits,
-        }).format(num)
-      }
-
-      return String(input)
+      return new Intl.NumberFormat(language, {
+        style: 'currency',
+        currency: currency ?? undefined,
+        minimumFractionDigits,
+        maximumFractionDigits,
+      }).format(isNaN(num) ? 0 : num)
     } catch {
-      return String(input)
+      return '0'
     }
   }
 

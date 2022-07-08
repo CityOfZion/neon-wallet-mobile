@@ -11,7 +11,7 @@ import { DefaultNavigationParam } from '../types/global'
 import { AsyncDispatch } from '../types/reducers/root'
 import { ModalStackParamList } from './ModalStackNavigation'
 import WalletConnectStackNavigation from './WalletConnectStackNavigation'
-import WalletStackNavigation from './WalletsStackNavigation'
+import WalletStackNavigation, { WalletStackParam } from './WalletsStackNavigation'
 
 import * as data from '~src/Changelog.json'
 import { wrapper } from '~src/app/ApplicationWrapper'
@@ -20,16 +20,15 @@ import FooterBar from '~src/components/layout/FooterBar'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import ContactsStackNavigation, { ContactsStackParams } from '~src/navigation/ContactsStackNavigation'
 import MoreStackNavigation, { MoreStackParam } from '~src/navigation/MoreStackNavigation'
-import QuickToolsStackNavigation from '~src/navigation/QuickToolsStackNavigation'
 
 export type TabStackParamList = {
-  ListWallets: undefined
+  ListWallets: WalletStackParam
   Contacts: ContactsStackParams
   More: MoreStackParam
   WalletConnectPage: undefined
 }
 
-export type TabParams = DefaultNavigationParam<MoreStackParam> | undefined
+export type TabParams = DefaultNavigationParam<WalletStackParam> | DefaultNavigationParam<MoreStackParam> | undefined
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList & ModalStackParamList>
@@ -77,7 +76,6 @@ const TabNavigation = (props: Props) => {
         <Tab.Screen name={wrapper.route.ListWallets.name} component={WalletStackNavigation} />
         <Tab.Screen name={wrapper.route.WalletConnectPage.name} component={WalletConnectStackNavigation} />
         <Tab.Screen name={wrapper.route.Contacts.name} component={ContactsStackNavigation} />
-        <Tab.Screen name={wrapper.route.QuickTools.name} component={QuickToolsStackNavigation} />
         <Tab.Screen name={wrapper.route.More.name} component={MoreStackNavigation} />
       </Tab.Navigator>
     </ThemeProvider>

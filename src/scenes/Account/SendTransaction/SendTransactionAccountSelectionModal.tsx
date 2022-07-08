@@ -7,8 +7,11 @@ import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
+import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { TokenAsset } from '~/src/models/TokenAsset'
+import { TokenBalance } from '~/src/hooks/useBalance'
+import { useBalances } from '~/src/hooks/useBalances'
+import { useExchange } from '~/src/hooks/useExchange'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'
@@ -32,6 +35,7 @@ interface Props {
 const SendTransactionAccountSelectionModal = (props: Props) => {
   const { wallet } = props.route.params
 
+  const currency = useSelector((state: RootState) => state.settings.currency)
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const accounts = useSelector((state: RootState) => state.app.accounts)
@@ -39,7 +43,20 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
 
   const validAccounts = useMemo(() => wallet.getAccounts(accounts), [accounts])
 
-  const [selectedAccount, setSelectedAccount] = useState<Account | undefined>(validAccounts[0])
+  const [selectedAccount, setSelectedAccount] = useState<Account>(validAccounts[0])
+
+  const { data: balances } = useBalances(validAccounts)
+  const { exchange } = useExchange({ filter: { currencies: currency } })
+
+  const selectedAccountBalance = useMemo(
+    () => BalanceHelper.getBalanceByAccount(selectedAccount, balances),
+    [selectedAccount, balances]
+  )
+
+  const selectedAccountTotalTokenBalance = useMemo(
+    () => BalanceHelper.calculateTotalBalances(selectedAccountBalance, exchange, currency),
+    [selectedAccountBalance, currency, exchange]
+  )
 
   const handleChangeAccount = (account: Account) => {
     setSelectedAccount(account)
@@ -55,13 +72,13 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
     })
   }
 
-  const handleBalancePress = (token: TokenAsset) => {
+  const handleBalancePress = (tokenBalance: TokenBalance) => {
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.SendTransactionModal.name,
       params: {
         wallet,
         account: selectedAccount,
-        token,
+        token: tokenBalance,
       },
     })
   }
@@ -90,21 +107,30 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
           </TextView>
 
           <LinearLayout minHeight="190px">
-            <AccountPicker accounts={validAccounts} onSelect={handleChangeAccount} isCompacted={false} />
+            <AccountPicker
+              balances={balances}
+              exchange={exchange}
+              accounts={validAccounts}
+              onSelect={handleChangeAccount}
+              isCompacted={false}
+            />
           </LinearLayout>
 
-          <TextView mb={4} color="text.3" fontSize="md" textAlign="center">
-            {i18n.t('modals.sendTransactionAccountSelectionModal.label')}
-          </TextView>
+          {!!selectedAccountTotalTokenBalance && selectedAccountTotalTokenBalance > 0 && (
+            <>
+              <TextView mb={4} color="text.3" fontSize="md" textAlign="center">
+                {i18n.t('modals.sendTransactionAccountSelectionModal.label')}
+              </TextView>
 
-          {!!selectedAccount && (
-            <LinearLayout pl={20} pr={20}>
-              <BalanceList
-                hideEmptyMessage
-                tokenAssets={selectedAccount.getTokenAssets()}
-                onPress={handleBalancePress}
-              />
-            </LinearLayout>
+              <LinearLayout pl={20} pr={20}>
+                <BalanceList
+                  hideEmptyMessage
+                  balances={selectedAccountBalance}
+                  exchange={exchange}
+                  onPress={handleBalancePress}
+                />
+              </LinearLayout>
+            </>
           )}
         </LinearLayout>
       </SwiperPanel>
@@ -122,7 +148,7 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
             <ThemedButton
               label={i18n.t('app.next')}
               onPress={handlePressNext}
-              disabled={!selectedAccount?.hasFunds || !isConnected}
+              disabled={!selectedAccountTotalTokenBalance || selectedAccountTotalTokenBalance <= 0 || !isConnected}
             />
           </LinearLayout>
         </LinearGradient>
