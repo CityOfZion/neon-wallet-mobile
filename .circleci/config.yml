@@ -3,25 +3,25 @@ jobs:
   test:
     working_directory: ~/neon-wallet-mobile
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/node:14.19.1
     steps:
       - checkout
       - attach_workspace:
           at: ~/neon-wallet-mobile
       - run:
           name: type check
-          command: npm run ts-build
+          command: yarn ts-build
       - run:
           name: lint
-          command: npm run lint
+          command: yarn lint
       - run:
           name: test
-          command: npm run test
+          command: yarn test
 
   node:
     working_directory: ~/neon-wallet-mobile
     docker:
-      - image: cimg/node:12.16
+      - image: cimg/node:14.19.1
 
     steps:
       - checkout
@@ -162,7 +162,7 @@ jobs:
   deployIOSBeta:
     working_directory: ~/neon-wallet-mobile
     macos:
-      xcode: 12.4.0
+      xcode: 13.1.0
     environment:
       FL_OUTPUT_DIR: output
       FASTLANE_LANE: beta
@@ -187,7 +187,7 @@ jobs:
           paths:
             - node_modules
       
-      - run: npm run build:ios
+      - run: yarn build:ios
 
       - restore_cache:
           key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
@@ -258,7 +258,7 @@ jobs:
           paths:
             - node_modules
       
-      - run: npm run build:ios
+      - run: yarn build:ios
 
       - restore_cache:
           key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
