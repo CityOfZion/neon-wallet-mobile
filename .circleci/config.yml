@@ -51,7 +51,7 @@ jobs:
 
   deployAndroidBeta:
     docker:
-      - image: circleci/android:api-29-node
+      - image: circleci/android:api-30-node
     working_directory: ~/neon-wallet-mobile/android
     resource_class: xlarge
     environment:

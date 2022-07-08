@@ -56,15 +56,16 @@ platform :ios do
       keyId = ENV['APP_STORE_CONNECT_API_KEY_KEY_ID']
       issuerId = ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID']
 
-      testflight_current_build = latest_testflight_build_number()
-
-
       api_key = app_store_connect_api_key(
         key_id: keyId,
         issuer_id: issuerId,
         key_filepath: keyFilePath,
       )
-  
+
+      testflight_current_build = latest_testflight_build_number(
+        api_key: api_key
+      )
+
       store_current_build = app_store_build_number(
         api_key: api_key
       )
@@ -115,63 +116,58 @@ platform :ios do
   desc "Push a new staging build to TestFlight"
   lane :staging do
     keyFilePath = File.join(Dir.pwd, "AuthKey.p8")
-      keyId = ENV['APP_STORE_CONNECT_API_KEY_KEY_ID']
-      issuerId = ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID']
+    keyId = ENV['APP_STORE_CONNECT_API_KEY_KEY_ID']
+    issuerId = ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID']
+    
+    api_key = app_store_connect_api_key(
+      key_id: keyId,
+      issuer_id: issuerId,
+      key_filepath: keyFilePath,
+    )
+    testflight_current_build = latest_testflight_build_number(
+      api_key: api_key
+    )
+    store_current_build = app_store_build_number(
+      api_key: api_key
+    )
+    current_build_version = [testflight_current_build, store_current_build].max()
+    new_build_version = current_build_version + 1
+    increment_version_number(
+      version_number: '1.0.46'
+    )
+    increment_build_number(
+      xcodeproj: "Neon.xcodeproj",
+      build_number: new_build_version,
+      skip_info_plist: true
+    )
+    
+    match(
+      type: "appstore",
+      clone_branch_directly: true,
+      verbose: true
+    )
 
-      testflight_current_build = latest_testflight_build_number()
+    build_app(
+      workspace: "Neon.xcworkspace",
+      scheme: "Neon-release",
+      export_method: "app-store"
+    )
 
+    app_store_connect_api_key(
+      key_id: keyId,
+      issuer_id: issuerId,
+      key_filepath: keyFilePath
+    )
 
-      api_key = app_store_connect_api_key(
-        key_id: keyId,
-        issuer_id: issuerId,
-        key_filepath: keyFilePath,
-      )
-  
-      store_current_build = app_store_build_number(
-        api_key: api_key
-      )
-
-      current_build_version = [testflight_current_build, store_current_build].max()
-
-      new_build_version = current_build_version + 1
-
-      increment_version_number(
-        version_number: '1.0.46'
-      )
-
-      increment_build_number(
-        xcodeproj: "Neon.xcodeproj",
-        build_number: new_build_version,
-        skip_info_plist: true
-      )
-      
-      match(
-        type: "appstore",
-        clone_branch_directly: true,
-        verbose: true
-      )
-  
-      build_app(
-        workspace: "Neon.xcworkspace",
-        scheme: "Neon-release",
-        export_method: "app-store"
-      )
-  
-      app_store_connect_api_key(
-        key_id: keyId,
-        issuer_id: issuerId,
-        key_filepath: keyFilePath
-      )
-  
-      upload_to_testflight(
-        skip_waiting_for_build_processing: true,
-        distribute_external: true,
-        notify_external_testers: true,
-        team_id: '89de6f4f-6d90-4e68-8394-69ddb6276eb3',
-        team_name: 'Staging',
-        api_key: api_key,
-        changelog: 'deploy with fastlane'
-      )
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      distribute_external: true,
+      notify_external_testers: true,
+      team_id: '89de6f4f-6d90-4e68-8394-69ddb6276eb3',
+      team_name: 'Staging',
+      api_key: api_key,
+      changelog: 'deploy with fastlane'
+    )
   end
 
   lane :check_build_version do
@@ -179,12 +175,14 @@ platform :ios do
     keyId = ENV['APP_STORE_CONNECT_API_KEY_KEY_ID']
     issuerId = ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID']
 
-    current_build_number = latest_testflight_build_number()
-
     api_key = app_store_connect_api_key(
       key_id: keyId,
       issuer_id: issuerId,
       key_filepath: keyFilePath,
+    )
+
+    current_build_number = latest_testflight_build_number(
+      api_key: api_key
     )
    
    current_app_build = app_store_build_number(

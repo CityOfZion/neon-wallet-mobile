@@ -49,6 +49,14 @@ Submit a new Staging Build
 
 
 
+### android gradle_test
+
+```sh
+[bundle exec] fastlane android gradle_test
+```
+
+
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
