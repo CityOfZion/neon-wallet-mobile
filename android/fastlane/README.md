@@ -23,12 +23,28 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Runs all the tests
 
-Submit a new Beta Build to Crashlytics Beta
+Submit a new Beta Build
+
+### android staging
+
+```sh
+[bundle exec] fastlane android staging
+```
+
+Submit a new Staging Build
 
 ### android check_version
 
 ```sh
 [bundle exec] fastlane android check_version
+```
+
+
+
+### android deploy
+
+```sh
+[bundle exec] fastlane android deploy
 ```
 
 

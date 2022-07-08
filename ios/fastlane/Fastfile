@@ -51,19 +51,35 @@ platform :ios do
   end
   
   desc "Push a new beta build to TestFlight"
-  lane :beta do
     lane :beta do
       keyFilePath = File.join(Dir.pwd, "AuthKey.p8")
       keyId = ENV['APP_STORE_CONNECT_API_KEY_KEY_ID']
       issuerId = ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID']
 
-      current_version_number = latest_testflight_build_number(
-        team_id: 'bb874eec-4755-42a7-a707-c0ddd1b61389',
-        team_name: 'Beta'
+      testflight_current_build = latest_testflight_build_number()
+
+
+      api_key = app_store_connect_api_key(
+        key_id: keyId,
+        issuer_id: issuerId,
+        key_filepath: keyFilePath,
       )
+  
+      store_current_build = app_store_build_number(
+        api_key: api_key
+      )
+
+      current_build_version = [testflight_current_build, store_current_build].max()
+
+      new_build_version = current_build_version + 1
+
+      increment_version_number(
+        version_number: '1.0.46'
+      )
+
       increment_build_number(
         xcodeproj: "Neon.xcodeproj",
-        build_number: current_build_version + 1,
+        build_number: new_build_version,
         skip_info_plist: true
       )
       
@@ -86,27 +102,46 @@ platform :ios do
       )
   
       upload_to_testflight(
-      skip_waiting_for_build_processing: true,
-      distribute_external: true,
-      notify_external_testers: true,
-      team_id: 'bb874eec-4755-42a7-a707-c0ddd1b61389',
-      team_name: 'Beta'
-    )
-  end
+        skip_waiting_for_build_processing: true,
+        distribute_external: true,
+        notify_external_testers: true,
+        team_id: 'bb874eec-4755-42a7-a707-c0ddd1b61389',
+        team_name: 'Beta',
+        api_key: api_key,
+        changelog: 'deploy with fastlane'
+      )
+    end
 
   desc "Push a new staging build to TestFlight"
   lane :staging do
     keyFilePath = File.join(Dir.pwd, "AuthKey.p8")
       keyId = ENV['APP_STORE_CONNECT_API_KEY_KEY_ID']
       issuerId = ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID']
-      
-      current_version_number = latest_testflight_build_number(
-        team_id: '89de6f4f-6d90-4e68-8394-69ddb6276eb3',
-        team_name: 'Staging'
+
+      testflight_current_build = latest_testflight_build_number()
+
+
+      api_key = app_store_connect_api_key(
+        key_id: keyId,
+        issuer_id: issuerId,
+        key_filepath: keyFilePath,
       )
+  
+      store_current_build = app_store_build_number(
+        api_key: api_key
+      )
+
+      current_build_version = [testflight_current_build, store_current_build].max()
+
+      new_build_version = current_build_version + 1
+
+      increment_version_number(
+        version_number: '1.0.46'
+      )
+
       increment_build_number(
         xcodeproj: "Neon.xcodeproj",
-        build_number: current_build_version + 1,
+        build_number: new_build_version,
         skip_info_plist: true
       )
       
@@ -129,16 +164,36 @@ platform :ios do
       )
   
       upload_to_testflight(
-      skip_waiting_for_build_processing: true,
-      distribute_external: true,
-      notify_external_testers: true,
-      team_id: '89de6f4f-6d90-4e68-8394-69ddb6276eb3',
-      team_name: 'Staging'
+        skip_waiting_for_build_processing: true,
+        distribute_external: true,
+        notify_external_testers: true,
+        team_id: '89de6f4f-6d90-4e68-8394-69ddb6276eb3',
+        team_name: 'Staging',
+        api_key: api_key,
+        changelog: 'deploy with fastlane'
+      )
   end
 
-  desc 'check build number'
-  lane :check_build_number do
-    current_version_number = latest_testflight_build_number()
-    puts current_version_number
+  lane :check_build_version do
+    keyFilePath = File.join(Dir.pwd, "AuthKey.p8")
+    keyId = ENV['APP_STORE_CONNECT_API_KEY_KEY_ID']
+    issuerId = ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID']
+
+    current_build_number = latest_testflight_build_number()
+
+    api_key = app_store_connect_api_key(
+      key_id: keyId,
+      issuer_id: issuerId,
+      key_filepath: keyFilePath,
+    )
+   
+   current_app_build = app_store_build_number(
+      api_key: api_key
+    )
+   
+    puts [current_app_build, current_build_number]
+    puts [current_app_build, current_build_number].max()
+    puts [current_app_build, current_build_number].max().is_a? Integer
+    puts [current_app_build, current_build_number].max().is_a? String
   end
 end

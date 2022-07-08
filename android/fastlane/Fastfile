@@ -25,21 +25,34 @@ platform :android do
     key_password = ENV['ANDROID_KEY_PASS']
     key_alias = ENV['ANDROID_KEY_ALIAS']
 
-    current_version = google_play_track_version_codes(
+    current_version_beta = google_play_track_version_codes(
       track: 'Group Beta',
       json_key: './key.json'
     )
-    current_version = current_version[0] + 1
+
+    current_version_staging = google_play_track_version_codes(
+      track: 'Group Staging',
+      json_key: './key.json'
+    )
+
+    current_version_production = google_play_track_version_codes(
+      json_key: './key.json'
+    )
+
+    current_version = [current_version_beta, current_version_staging, current_version_production].max()[0]
+
+    new_current_version = current_version + 1
 
     gradle(task: 'clean')
 
     android_set_version_code(
-      version_code: current_version
+      version_code: new_current_version
     )
 
     android_set_version_name(
-      version_name: 'NWM-' + String(current_version)
+      version_name: '1.0.46b' + String(new_current_version)
     )
+
     gradle(
       task: 'bundleReleaseJsAndAssets',
     )
@@ -68,20 +81,32 @@ platform :android do
     key_password = ENV['ANDROID_KEY_PASS']
     key_alias = ENV['ANDROID_KEY_ALIAS']
 
-    current_version = google_play_track_version_codes(
+    current_version_beta = google_play_track_version_codes(
       track: 'Group Beta',
       json_key: './key.json'
     )
-    current_version = current_version[0] + 1
+
+    current_version_staging = google_play_track_version_codes(
+      track: 'Group Staging',
+      json_key: './key.json'
+    )
+
+    current_version_production = google_play_track_version_codes(
+      json_key: './key.json'
+    )
+
+    current_version = [current_version_beta, current_version_staging, current_version_production].max()[0]
+
+    new_current_version = current_version + 1
 
     gradle(task: 'clean')
 
     android_set_version_code(
-      version_code: current_version
+      version_code: new_current_version
     )
 
     android_set_version_name(
-      version_name: 'NWM-' + String(current_version)
+      version_name: '1.0.46b' + String(new_current_version)
     )
     gradle(
       task: 'bundleReleaseJsAndAssets',
@@ -105,17 +130,53 @@ platform :android do
   end
 
   lane :check_version do
-    releaseFilePath = File.join(Dir.pwd, "neon.jks")
+   releaseFilePath = File.join(Dir.pwd, "neon.jks")
     store_password = ENV['ANDROID_STORE_PASS']
     key_password = ENV['ANDROID_KEY_PASS']
     key_alias = ENV['ANDROID_KEY_ALIAS']
+
+    current_version_beta = google_play_track_version_codes(
+      track: 'Group Beta',
+      json_key: './key.json'
+    )
+
+    current_version_staging = google_play_track_version_codes(
+      track: 'Group Staging',
+      json_key: './key.json'
+    )
+
+    current_version_production = google_play_track_version_codes(
+      json_key: './key.json'
+    )
+
+    current_version = [current_version_beta, current_version_staging, current_version_production].max()
+
+    puts current_version[0].is_a? Integer
+
+  end
+
+  lane :deploy do
+
+    gradle(task: 'clean')
     
     current_version = google_play_track_version_codes(
       track: 'Group Beta',
       json_key: './key.json'
     )
+    new_current_version = current_version[0]
 
-    current_version = current_version[0] + 1
-    puts 'NWM-' + String(current_version)
+    android_set_version_code(
+      version_code: new_current_version
+    )
+
+    android_set_version_name(
+      version_name: '1.0.46b' + String(new_current_version)
+    )
+
+    upload_to_play_store(
+      track: 'Group Staging',
+      version_code: new_current_version,
+      skip_upload_changelogs: true
+    )
   end
 end
