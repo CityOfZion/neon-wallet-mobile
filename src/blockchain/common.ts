@@ -1,7 +1,6 @@
 import { JsonRpcRequest, JsonRpcResponse } from '@json-rpc-tools/utils'
 import { ImageLoadEventData } from 'react-native'
 
-import { TokenResponse, Tokens } from '../models/TokenResponse'
 import { ContractResponse } from '../models/response/ContractResponse'
 import { NFTResponse } from '../models/response/NFTResponse'
 import { NFTSResponse } from '../models/response/NFTSResponse'
@@ -16,6 +15,18 @@ import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
 import { Exchange } from '~/src/types/exchange'
 import * as BlockchainIcons from '~src/assets/blockchainIcons'
 import { Account } from '~src/models/redux/Account'
+
+export interface Token {
+  symbol: string
+  cryptocompareSymbol?: string
+  companyName: string
+  type: string
+  name: string
+  hash: string
+  decimals: number
+  totalSupply: number
+  blockchain: BlockchainServiceKey
+}
 
 export interface IRPCContract {
   hash: string
@@ -57,16 +68,8 @@ export interface BlockchainDataProvider {
   getBalance: (address: string) => Promise<BalanceResponse>
   getUnclaimed: (address: string) => Promise<UnclaimedResponse>
   getAllNodes: () => Promise<Node[]>
-  getTokenList: () => Promise<TokenResponse>
   getExchangeData: (params: { tokenAssetSymbols: string[]; currencies: string }) => Promise<Exchange>
   getAssetByHash: (hash: string) => Promise<{ symbol: string; decimals: number } | null>
-}
-
-export interface AssetInfo {
-  name: string
-  hash: string
-  symbol: string
-  decimals: number
 }
 
 export interface IClaimable {
@@ -91,11 +94,11 @@ export interface IBlockchainService {
   readonly icon: ImageLoadEventData
   readonly derivationPath: string
   readonly platform: string
-  readonly assets: AssetInfo[]
+  readonly nativeAssets: string[]
   readonly cozTip?: { address: string; token: string; hash: string } //config token with the symbol name
-  readonly feeToken: { hash: string; token: string; img: ImageLoadEventData }
+  readonly feeToken: { hash: string; token: string }
+  readonly tokens: Token[]
   readonly wcChains: string[]
-  readonly tokens: Tokens
   sendTransaction: (data: SendTransactionData) => Promise<string | null>
   generateMnemonic: () => string[] | null
   generateWif(mnemonic: string, index: number): string
@@ -206,8 +209,7 @@ type TColorLogo = 'white' | 'default'
 
 export function getBlockchainLogo(blockchain: BlockchainServiceKey, color: TColorLogo = 'default') {
   const blockchainWithColor = `${blockchain}${color === 'default' ? '' : color}`
-  return ((BlockchainIcons as any)[blockchainWithColor] ??
-    require('~/src/assets/images/icon-default-nep5.png')) as ImageLoadEventData //need a default logo
+  return (BlockchainIcons as any)[blockchainWithColor] ?? require('~/src/assets/images/icon-default-nep5.png') //need a default logo
 }
 
 export function isClaimable(object: any): object is IClaimable {
@@ -266,13 +268,8 @@ export function isValidWcChain(wcChains: string[], blockchain: BlockchainService
   return blockchainServices[blockchain].wcChains.some(chain => wcChains.includes(chain))
 }
 
-export function getAllTokenSymbolList() {
-  const symbolList = blockchainList.reduce<string[]>((previousValue, blockchain) => {
-    return [
-      ...previousValue,
-      ...Object.keys(blockchainServices[blockchain].tokens),
-      ...blockchainServices[blockchain].assets.map(asset => asset.symbol),
-    ]
-  }, [])
-  return symbolList.filter((symbol, index) => symbolList.indexOf(symbol) === index)
+export function getAllTokens() {
+  const tokens = blockchainList.flatMap(blockchain => blockchainServices[blockchain].tokens)
+
+  return tokens
 }

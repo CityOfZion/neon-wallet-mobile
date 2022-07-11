@@ -1,12 +1,11 @@
 import i18n from 'i18n-js'
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { FlatList, TouchableOpacity } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { RootState } from '../store/RootStore'
 import { Exchange } from '../types/exchange'
 import { LinearLayoutProps } from '../types/styled-components'
-import SkeletonContainer from './SkeletonContainer'
 
 import { Normalize } from '~src/app/Normalize'
 import { FilterHelper } from '~src/helpers/FilterHelper'

@@ -8,30 +8,29 @@ import type * as AsteroidSDK from '@moonlight-io/asteroid-sdk-js'
 import axios from 'axios'
 import { ImageLoadEventData, NativeModules, Platform } from 'react-native'
 
+import tokens from '../tokens.json'
+
 import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { NeoNode } from '~/src/models/NeoNode'
-import { Tokens } from '~/src/models/TokenResponse'
 import { Account } from '~/src/models/redux/Account'
 import { NFTResponse } from '~/src/models/response/NFTResponse'
 import { NFTSResponse } from '~/src/models/response/NFTSResponse'
 import { NeoNative } from '~/src/native/NeoNative'
-import tokens from '~src/assets/tokens/neo3.json'
 import {
   IBlockchainService,
   BlockchainServiceKey,
   SendTransactionData,
-  AssetInfo,
   IClaimable,
   IWalletConnect,
   INFT,
+  Token,
 } from '~src/blockchain'
 import { Neo3ProviderOptions } from '~src/blockchain/Neo3'
 import { Neo3Provider } from '~src/blockchain/Neo3/providers/common'
 import { ContractInvocationMulti, NeonWcAdapter } from '~src/helpers/NeonWcAdapter'
 
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
-const feeTokenImg = require('~src/assets/nep5/png/GAS.png')
 const SDK: typeof AsteroidSDK = require('~src/vendor/asteroid-sdk')
 
 interface GhostMarketNFT {
@@ -68,30 +67,16 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
   readonly magicNumber = 844378958
   readonly derivationPath = "m/44'/888'/0'/0/?"
   readonly platform = 'neo'
-  readonly assets: AssetInfo[] = [
-    {
-      name: 'NEO',
-      hash: 'ef4073a0f2b305a38ec4050e4d3d28bc40ea63f5',
-      symbol: 'NEO',
-      decimals: 0,
-    },
-    {
-      name: 'GAS',
-      hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
-      symbol: 'GAS',
-      decimals: 8,
-    },
-  ]
-  readonly feeToken: { hash: string; token: string; img: ImageLoadEventData }
+  readonly nativeAssets: string[] = ['NEO', 'GAS']
+  readonly feeToken: { hash: string; token: string }
   readonly wcChains: string[]
-  readonly tokens: Tokens = tokens
+  readonly tokens: Token[] = tokens as Token[]
   constructor() {
     this.provider = Neo3ProviderOptions('doraSDK')
     this.key = 'neo3'
     this.feeToken = {
       hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
       token: 'GAS',
-      img: feeTokenImg,
     }
     this.cozTip = {
       address: 'NXWJfovnpRaj2r3yrYQXDMvBLixv9zJZsk',
@@ -222,7 +207,9 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
 
   async claimGas(address: string) {
     const response = await this.provider.getBalance(address)
-    const neoHash = this.assets.find(asset => asset.symbol === 'NEO')?.hash
+
+    const neoHash = this.tokens.find(token => token.symbol === 'NEO')?.hash
+
     const neoBalance = response.balance.filter(balance => balance.assetSymbol === 'NEO')
     const gasBalance = response.balance.filter(balance => balance.assetSymbol === 'GAS')
 
@@ -239,6 +226,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       tokenHash: neoHash,
       amount: neoBalance[0].amount ?? 0,
     })
+
     const gasAmount = gasBalance[0].amount ?? 0
 
     if (gasAmount < gasFee) {

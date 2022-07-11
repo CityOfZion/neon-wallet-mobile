@@ -3,8 +3,10 @@ import { useSelector } from 'react-redux'
 
 import { FormattedTransferAsset } from './AccountTransactionsScreen'
 
+import { Normalize } from '~/src/app/Normalize'
 import SkeletonContainer from '~/src/components/SkeletonContainer'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
+import { TokenHelper } from '~/src/helpers/TokenHelper'
 import { useExchange } from '~/src/hooks/useExchange'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
@@ -15,16 +17,11 @@ type Props = FormattedTransferAsset & {
 }
 
 export const TransferAssetItem = React.memo((props: Props) => {
-  const tokens = useSelector((state: RootState) => state.app.tokens)
   const { currency } = useSelector((state: RootState) => state.settings)
 
   const { exchange } = useExchange({ filter: { currencies: currency } })
 
   const [fiatAmount, setFiatAmount] = useState<string>()
-
-  const getTokenIcon = () => {
-    return tokens.find(token => token.symbol === props.symbol && token.blockchain === props.account.blockchain)?.srcIcon
-  }
 
   useEffect(() => {
     const { symbol, amount } = props
@@ -38,16 +35,15 @@ export const TransferAssetItem = React.memo((props: Props) => {
   return (
     <LinearLayout orientation="horiz">
       <LinearLayout orientation="horiz" width={80}>
-        {!!getTokenIcon() && (
-          <ImageView
-            width="21px"
-            height="21px"
-            resizeMode="contain"
-            alignSelf="center"
-            source={getTokenIcon()}
-            mr="5px"
-          />
-        )}
+        <ImageView
+          width={Normalize.scale(21)}
+          height={Normalize.scale(21)}
+          resizeMode="contain"
+          alignSelf="center"
+          source={TokenHelper.getIcon(props.symbol, props.account.blockchain)}
+          mr="5px"
+        />
+
         <TextView color="#fff" fontFamily="bold" fontSize="16px" numberOfLines={1} ellipsizeMode="tail">
           {props.symbol}
         </TextView>

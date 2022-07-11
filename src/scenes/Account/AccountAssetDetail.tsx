@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { useExchange } from '~/src/hooks/useExchange'
+import { useTokens } from '~/src/hooks/useTokens'
 import { Wallet } from '~/src/models/redux/Wallet'
 import { RootState } from '~/src/store/RootStore'
 import AssetQuoteComponent from '~src/components/AssetQuoteComponent'
@@ -33,17 +34,18 @@ export interface AccountAssetDetailParams {
 const AccountAssetDetail = (props: AccountAssetDetailProps) => {
   const { token, address, walletId } = props.route.params
 
-  const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const walletsPool = useSelector((state: RootState) => state.app.wallets)
-
-  const [transactions, setTransactions] = useState<TransactionDateGroup[]>([])
-  const [currentPage, setCurrentPage] = useState(1)
+  const currency = useSelector((state: RootState) => state.settings.currency)
+  const { exchange } = useExchange({ filter: { currencies: currency } })
 
   const account = accountsPool.find(it => it.address === address)
   const wallet = walletsPool.find(it => it.id === walletId)
-  const currency = useSelector((state: RootState) => state.settings.currency)
-  const { exchange } = useExchange({ filter: { currencies: currency } })
+
+  const tokens = useTokens({ blockchain: account?.blockchain ?? 'all' })
+
+  const [transactions, setTransactions] = useState<TransactionDateGroup[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     Await.run('populateTransaction', () => fetchTransaction(1))
@@ -61,7 +63,7 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
 
   const fetchTransactionAccount = useCallback(
     async (account: Account, currentPage: number) => {
-      const { entries } = await account.populateTransactions(tokensPool, currentPage)
+      const { entries } = await account.populateTransactions(tokens, currentPage)
       const senderTxs = entries.filter(it => {
         return fixStringHashToken(it.token?.hash) === token.hash
       })
@@ -74,7 +76,7 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
 
   const fetchTransactionWallet = useCallback(
     async (wallet: Wallet) => {
-      const entries = await wallet.getTransactions(accountsPool, tokensPool, currentPage)
+      const entries = await wallet.getTransactions(accountsPool, tokens, currentPage)
 
       const senderTxs = entries.filter(it => {
         return fixStringHashToken(it.token?.hash) === token.hash
@@ -103,7 +105,7 @@ const AccountAssetDetail = (props: AccountAssetDetailProps) => {
 
     const model = UtilsHelper.clone(account ?? new Account())
 
-    const pagination = await model.populateTransactions(tokensPool, currentPage)
+    const pagination = await model.populateTransactions(tokens, currentPage)
     setCurrentPage(pagination.pageNumber + 1)
 
     if (collector < 15) {

@@ -13,6 +13,7 @@ import { hasNFTIntegration } from '~/src/blockchain/common'
 import AccountSubTitle from '~/src/components/AccountSubTitle'
 import ScreenLayoutWithoutScroll from '~/src/components/layout/ScreenLayoutWithoutScroll'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
+import { useTokens } from '~/src/hooks/useTokens'
 import { TokenAsset } from '~/src/models/TokenAsset'
 import { TransactionTransferType } from '~/src/models/TransactionAddressSummary'
 import { TransactionDateGroup } from '~/src/models/TransactionDateGroup'
@@ -67,6 +68,8 @@ export type FormattedTransactionPerDate = Record<string, FormattedTransaction[]>
 const AccountTransactionsScreen = (props: Props) => {
   const { account } = props.route.params
 
+  const tokens = useTokens({ blockchain: account.blockchain })
+
   const [completedTransactions, setCompletedTransactions] = useState<FormattedTransaction[]>([])
   const [pendingTransactions, setPendingTransactions] = useState<FormattedTransaction[]>([])
   const [hasMoreTransactionsToLoad, setHasMoreTransactionsToLoad] = useState(true)
@@ -76,7 +79,9 @@ const AccountTransactionsScreen = (props: Props) => {
   const nftCache = useRef<Map<string, NFTResponse>>(new Map())
   const decimalsCache = useRef<Map<string, { symbol: string; decimals: number }>>(
     new Map(
-      blockchainServices[account.blockchain].assets.map(({ symbol, decimals, hash }) => [hash, { symbol, decimals }])
+      tokens
+        .filter(token => blockchainServices[account.blockchain].nativeAssets.includes(token.symbol))
+        .map(({ hash, symbol, decimals }) => [hash, { symbol, decimals: decimals ?? 0 }])
     )
   )
 

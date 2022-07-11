@@ -5,7 +5,6 @@ import { NeoLegacyProvider } from './common'
 
 import { NeoNode } from '~/src/models/NeoNode'
 import { Node } from '~/src/models/Node'
-import { TokenResponse, Tokens } from '~/src/models/TokenResponse'
 import { Transaction } from '~/src/models/Transaction'
 import { BalanceResponse } from '~/src/models/response/BalanceResponse'
 import { ContractResponse } from '~/src/models/response/ContractResponse'
@@ -63,17 +62,6 @@ export class NeoscanProvider implements NeoLegacyProvider {
     })
 
     return result
-  }
-
-  async getTokenList() {
-    const tokenList = await Request.get(
-      `https://raw.githubusercontent.com/CityOfZion/neo-tokens/master/tokenList.json?timestamp=${new Date().getTime()}`
-    )
-      .name('getTokens')
-      .as<Tokens>()
-      .getData()
-
-    return new TokenResponse({ tokens: tokenList })
   }
 
   async getExchangeData(params: { tokenAssetSymbols: string[]; currencies: string }) {

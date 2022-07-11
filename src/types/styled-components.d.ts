@@ -86,6 +86,15 @@ export type ButtonViewProps = ColorProps &
   PositionProps &
   WeightProps
 
+export type ButtonWithoutFeedbackViewProps = ColorProps &
+  FlexboxProps &
+  SpaceProps &
+  BorderProps &
+  LayoutProps &
+  OrientationProps &
+  PositionProps &
+  WeightProps
+
 export type LinearGradientLayoutProps = ColorProps & SpaceProps & LayoutProps & FlexboxProps
 
 export type StyledScrollViewProps = FlexboxProps & OrientationProps & LayoutProps & SpaceProps

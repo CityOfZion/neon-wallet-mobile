@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux'
 import { Normalize } from '../app/Normalize'
 import { blockchainServices } from '../blockchain'
 import { FilterHelper } from '../helpers/FilterHelper'
+import { TokenHelper } from '../helpers/TokenHelper'
+import { useTokens } from '../hooks/useTokens'
 import { Account } from '../models/redux/Account'
 import { RootState } from '../store/RootStore'
 import { LinearLayout, TextView, ImageView } from '../styles/styled-components'
@@ -18,16 +20,14 @@ interface Props {
 }
 
 export const TransactionTipCard = ({ account, tip, exchange }: Props) => {
-  const tokens = useSelector((state: RootState) => state.app.tokens)
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
+  const tokens = useTokens({ blockchain: account.blockchain })
 
   const tipToken = useMemo(() => {
     const cozTip = blockchainServices[account.blockchain].cozTip
 
-    if (!cozTip) {
-      return
-    }
+    if (!cozTip) return
 
     return tokens.find(token => token.symbol === cozTip.token)
   }, [account, tokens])
@@ -59,20 +59,13 @@ export const TransactionTipCard = ({ account, tip, exchange }: Props) => {
       {tipToken && (
         <LinearLayout orientation="horiz">
           <ImageView
-            source={tipToken.srcIcon}
+            source={TokenHelper.getIcon(tipToken.symbol, account.blockchain)}
             width={Normalize.scale(18)}
             height={Normalize.scale(18)}
             resizeMode="contain"
             alignSelf="center"
           />
-          <TextView
-            ml="4px"
-            fontFamily="medium"
-            color="text.0"
-            fontSize="16px"
-            textAlignVertical="bottom"
-            includeFontPadding={false}
-          >
+          <TextView ml="4px" fontFamily="medium" color="text.0" fontSize="16px">
             {tipToken.symbol}
           </TextView>
         </LinearLayout>
@@ -84,8 +77,7 @@ export const TransactionTipCard = ({ account, tip, exchange }: Props) => {
           title={i18n.t('components.transactionTipCard.qty')}
           value={tipToken?.decimals ? tip.toFixed(tipToken.decimals) : String(tip)}
         />
-        {tipFiat && <HeaderColumn weight={1.6} title={i18n.t('components.transactionTipCard.value')} value={tipFiat} />}{' '}
-        {/** TODO set SkeletonContainer */}
+        {tipFiat && <HeaderColumn weight={1.6} title={i18n.t('components.transactionTipCard.value')} value={tipFiat} />}
       </LinearLayout>
     </LinearLayout>
   )

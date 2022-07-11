@@ -81,7 +81,7 @@ const GetWalletView = (props: GetWalletProps) => {
       props.navigation.navigate(wrapper.route.Modal.name, {
         screen: wrapper.route.BlockchainListModal.name,
         params: {
-          walletOrAccount: 'account',
+          wallet,
         },
       })
     }

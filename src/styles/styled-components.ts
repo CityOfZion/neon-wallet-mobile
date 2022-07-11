@@ -4,6 +4,7 @@ import { border, color, flexbox, layout, position, space, textStyle, typography,
 
 import {
   ButtonViewProps,
+  ButtonWithoutFeedbackViewProps,
   ImageViewProps,
   InputTextViewProps,
   LinearGradientLayoutProps,
@@ -79,6 +80,18 @@ export const RelativeLayout = styled.View<RelativeLayoutProps>`
 `
 
 export const ButtonView = styled.TouchableOpacity<ButtonViewProps>`
+  ${layout}
+  ${color}
+  ${flexbox}
+  ${space}
+  ${border}
+  ${orientation}
+  ${position}
+  ${weight}
+  ${borderRadius}
+`
+
+export const ButtonWithoutFeedbackView = styled.TouchableWithoutFeedback<ButtonWithoutFeedbackViewProps>`
   ${layout}
   ${color}
   ${flexbox}

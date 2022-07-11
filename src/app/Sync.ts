@@ -1,7 +1,6 @@
 import { AsyncDispatch } from '../types/reducers/root'
 
 import { Node } from '~src/models/Node'
-import { TokenAsset } from '~src/models/TokenAsset'
 import { Account } from '~src/models/redux/Account'
 import { App } from '~src/models/redux/App'
 import { Contact } from '~src/models/redux/Contact'
@@ -15,7 +14,6 @@ export type SyncResult = {
 export abstract class Sync {
   static async init(dispatch: AsyncDispatch<any>): Promise<SyncResult> {
     const settings: Settings = await dispatch(RootStore.settings.actions.syncSettings())
-    const tokens: TokenAsset[] = await dispatch(RootStore.app.actions.syncTokens())
 
     const nodes: Node[] = await dispatch(RootStore.app.actions.syncNodes())
 
@@ -31,7 +29,6 @@ export abstract class Sync {
 
     return {
       settings,
-      tokens,
       nodes,
       wallets,
       accounts,
@@ -40,18 +37,13 @@ export abstract class Sync {
   }
 
   static async refresh(dispatch: AsyncDispatch<any>) {
-    const promises = [
-      dispatch(RootStore.app.actions.syncTokens()),
-      dispatch(RootStore.app.actions.syncNodes()),
-      dispatch(RootStore.app.actions.syncTokenAssets()),
-    ]
+    const promises = [dispatch(RootStore.app.actions.syncNodes()), dispatch(RootStore.app.actions.syncTokenAssets())]
 
     await Promise.all(promises)
   }
 
   static async fetchs(dispatch: AsyncDispatch<any>) {
     const promises = [
-      dispatch(RootStore.app.actions.fetchTokens()),
       dispatch(RootStore.app.actions.fetchBalanceAccounts()),
       dispatch(RootStore.app.actions.fetchNodes()),
     ]

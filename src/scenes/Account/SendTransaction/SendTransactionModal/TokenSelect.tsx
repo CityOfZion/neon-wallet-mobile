@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import InputLabel from '~/src/components/InputLabel'
+import { TokenHelper } from '~/src/helpers/TokenHelper'
 import { TokenAsset } from '~/src/models/TokenAsset'
 import { Account } from '~/src/models/redux/Account'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
@@ -44,12 +45,12 @@ export const TokenSelect = ({ onTokenChange, account, token }: Props) => {
 
       <ButtonView onPress={handlePress}>
         <LinearLayout borderBottomWidth={1} borderBottomColor={theme.colors.background[13]} orientation="horiz">
-          {!!token?.srcIcon && (
+          {!!token && (
             <ImageView
               resizeMode="contain"
               width={Normalize.scale(25)}
               height={Normalize.scale(25)}
-              source={token?.srcIcon}
+              source={TokenHelper.getIcon(token.symbol, account.blockchain)}
               mr="8px"
             />
           )}

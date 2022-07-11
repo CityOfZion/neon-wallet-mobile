@@ -14,6 +14,7 @@ import { ThemedClaimButton } from '~/src/components/themed/ThemedClaimButton'
 import { ThemedSendButton } from '~/src/components/themed/ThemedSendButton'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { useExchange } from '~/src/hooks/useExchange'
+import { useTokens } from '~/src/hooks/useTokens'
 import { Node } from '~/src/models/Node'
 import { AsyncDispatch, SyncDispatch } from '~/src/types/reducers/root'
 import { blockchainServices, hasWCIntegration, isClaimable } from '~src/blockchain'
@@ -54,14 +55,16 @@ const TitleComponent = (props: { nodesPool: NeoNode[]; language: Lang }) => {
 
 const GetAccountView = (props: GetAccountViewProps) => {
   const { sessions } = useWalletConnect()
-  const tokensPool = useSelector((state: RootState) => state.app.tokens)
   const { language, currency } = useSelector((state: RootState) => state.settings)
   const { address } = useSelector((state: RootState) => state.account)
   const posYFactor = useRef(new Animated.Value(0))
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const { exchange, isRefetching, refetch } = useExchange({ filter: { currencies: currency } })
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
+  const dispatchAccount = useDispatch<SyncDispatch<Account>>()
 
+  const [account, setAccount] = useState(() => dispatchAccount(RootStore.account.actions.getFromSelection()))
   const [currentPage, setCurrentPage] = useState(1)
   const [hasSession, setHasSession] = useState(false)
   const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>(0)
@@ -70,8 +73,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const [showWarning, setShowWarning] = useState<boolean>(false)
   const [nodesPoolBlockchain, setNodesPoolBlockchain] = useState<Node[]>([])
 
-  const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
-  const dispatchAccount = useDispatch<SyncDispatch<Account>>()
+  const tokens = useTokens({ blockchain: account.blockchain })
 
   const [senderAddress, setSenderAddress] = useState<string>('')
 
@@ -80,7 +82,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
       setSenderAddress(address)
     }
   }
-  const [account, setAccount] = useState(() => dispatchAccount(RootStore.account.actions.getFromSelection()))
 
   const [totTokenFeeAccount] = useState<number>(
     account.tokenAssets.find(token => token.symbol === blockchainServices[account.blockchain].feeToken.token)?.amount ??
@@ -189,7 +190,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }
 
   const fetchTransaction = async (currentPage: number) => {
-    const { pageNumber } = await account.populateTransactions(tokensPool, currentPage)
+    const { pageNumber } = await account.populateTransactions(tokens, currentPage)
 
     setCurrentPage(pageNumber + 1)
 
@@ -223,7 +224,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           return
         }
 
-        const tokenAsset = tokensPool.find(token => token.hash === responseClaim.hash)
+        const tokenAsset = tokens.find(token => token.hash === responseClaim.hash)
 
         if (!tokenAsset) {
           return

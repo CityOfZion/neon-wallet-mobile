@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { Normalize } from '~/src/app/Normalize'
 import { blockchainServices } from '~/src/blockchain'
+import { TokenHelper } from '~/src/helpers/TokenHelper'
 import { useExchange } from '~/src/hooks/useExchange'
 import { TokenAsset } from '~/src/models/TokenAsset'
 import { Account } from '~/src/models/redux/Account'
@@ -135,7 +136,7 @@ export const TotalFee = ({
               width={Normalize.scale(19)}
               height={Normalize.scale(21)}
               resizeMode="contain"
-              source={blockchainServices[account.blockchain].feeToken.img}
+              source={TokenHelper.getIcon(blockchainServices[account.blockchain].feeToken.token, account.blockchain)}
             />
             <TextView color="text.0" fontFamily="semibold" fontSize="18px">
               {fee ? fee.toFixed(8) : 0}
@@ -151,7 +152,7 @@ export const TotalFee = ({
               {currency}
             </TextView>
             <TextView color="text.0" fontFamily="semibold" fontSize="18px" pl={3}>
-              {fiatFee ? fiatFee.toFixed(2) : 0} {/** TODO set SkeletonContainer */}
+              {fiatFee ? fiatFee.toFixed(2) : 0}
             </TextView>
           </LinearLayout>
         </LinearLayout>

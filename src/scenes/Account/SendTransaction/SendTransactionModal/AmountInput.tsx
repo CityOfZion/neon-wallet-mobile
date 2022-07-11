@@ -7,6 +7,7 @@ import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { useExchange } from '~/src/hooks/useExchange'
+import { useTokens } from '~/src/hooks/useTokens'
 import { TokenAsset } from '~/src/models/TokenAsset'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
@@ -33,9 +34,9 @@ export const AmountInput = ({
 }: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const currency = useSelector((state: RootState) => state.settings.currency)
-  const { exchange } = useExchange({ filter: { currencies: currency } })
-  const tokens = useSelector((state: RootState) => state.app.tokens)
   const language = useSelector((state: RootState) => state.settings.language)
+  const { exchange } = useExchange({ filter: { currencies: currency } })
+  const tokens = useTokens({ blockchain: account.blockchain })
 
   const [remaining, setRemaining] = useState<number>()
 
@@ -44,9 +45,7 @@ export const AmountInput = ({
       return
     }
 
-    const findedToken = tokens.find(
-      token => token.symbol === selectedToken.symbol && token.blockchain === account.blockchain
-    )
+    const findedToken = tokens.find(token => token.symbol === selectedToken.symbol)
 
     if (!findedToken) {
       return

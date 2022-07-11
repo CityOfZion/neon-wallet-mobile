@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -160,9 +160,10 @@ export interface ReceiveToAccountModalParams {
 }
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList & ModalStackParamList>
+  navigation: StackNavigationProp<RootStackParamList & ModalStackParamList & ReceiveModalStackParamList>
   route: RouteProp<ReceiveModalStackParamList, 'ReceiveToAccountModal'>
 }
+
 const ReceiveToAccountModal = (props: Props) => {
   const controller = useSwiperController(true)
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
