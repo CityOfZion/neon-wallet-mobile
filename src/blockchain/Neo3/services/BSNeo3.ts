@@ -1,4 +1,5 @@
-import { api, wallet, u, rpc, tx } from '@cityofzion/neon-js-next'
+import Neon, { api, u, rpc, experimental, sc, tx, wallet } from '@cityofzion/neon-js-next'
+
 import {
   Nep17TransferIntent,
   signingConfig,
@@ -29,6 +30,8 @@ import {
 import { Neo3ProviderOptions } from '~src/blockchain/Neo3'
 import { Neo3Provider } from '~src/blockchain/Neo3/providers/common'
 import { ContractInvocationMulti, NeonWcAdapter } from '~src/helpers/NeonWcAdapter'
+import ScriptBuilder from '@cityofzion/neon-core-next/lib/sc/ScriptBuilder'
+import { CommonConfig } from '@cityofzion/neon-js-next/lib/experimental/types'
 
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 const feeTokenImg = require('~src/assets/nep5/png/GAS.png')
@@ -300,21 +303,56 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
 
       const rpcClient = new rpc.NeoServerRpcClient(endpoint ?? defaultEndpoint)
 
-      const intents = await this.buildNep17(data)
+      const args = [
+        sc.ContractParam.hash160(data.senderAddress),
+        sc.ContractParam.hash160(data.receiverAddress),
+        sc.ContractParam.integer(data.amount),
+        sc.ContractParam.string(''),
+      ]
 
-      const txbuilder = new api.TransactionBuilder()
-      for (const intent of intents) {
-        if (intent.decimalAmt) {
-          const [tokenInfo] = await api.getTokenInfos([intent.contractHash], rpcClient)
-          const amt = u.BigInteger.fromDecimal(intent.decimalAmt, tokenInfo.decimals)
-          txbuilder.addNep17Transfer(intent.from, intent.to, intent.contractHash, amt)
-        }
+      const script = Neon.create
+        .scriptBuilder()
+        .emitContractCall({
+          scriptHash: data.tokenHash,
+          operation: 'transfer',
+          args
+        })
+
+      if (data.tip) {
+        script.emitContractCall({
+          scriptHash: this.cozTip.hash,
+          operation: 'transfer',
+          args: [
+            sc.ContractParam.hash160(data.senderAddress),
+            sc.ContractParam.hash160(this.cozTip.address),
+            sc.ContractParam.integer(data.tip),
+            sc.ContractParam.string('')
+          ]
+        })
       }
-      const { feePerByte, executionFeeFactor } = await api.getFeeInformation(rpcClient)
 
-      const txn = txbuilder.build()
-      const networkFee = api.calculateNetworkFee(txn, feePerByte, executionFeeFactor)
-      const invokeFunctionResponse = await rpcClient.invokeScript(u.HexString.fromHex(txn.script), [
+      const buildScript = script.build()
+
+      const currentHeight = await rpcClient.getBlockCount()
+      const { protocol: { network: networkMagic } } = await rpcClient.getVersion()
+
+      const config: CommonConfig = {
+        networkMagic,
+        rpcAddress: 'http://seed1t4.neo.org:20332',
+      }
+
+      const txn = new tx.Transaction({
+        script: buildScript,
+        validUntilBlock: currentHeight + 100,
+        signers: [
+          new tx.Signer({
+            account: fromAccount.scriptHash,
+            scopes: String(tx.WitnessScope.CalledByEntry)
+          })
+        ]
+      })
+      const networkFee = await experimental.txHelpers.calculateNetworkFee(txn, fromAccount, config)
+      const invokeFunctionResponse = await rpcClient.invokeScript(u.HexString.fromHex(buildScript), [
         {
           account: fromAccount.scriptHash,
           scopes: String(tx.WitnessScope.CalledByEntry),

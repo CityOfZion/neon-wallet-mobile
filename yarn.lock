@@ -1777,10 +1777,10 @@
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-api/-/neon-api-5.0.0.tgz#7f8e68b14923dfb8c1292836c276b178f5184372"
   integrity sha512-nvslHi77gv1Vc44rZb2QamQyWhWGhooXDnVCIA6BZUpiArMWZ3TNYaDCXLWQTSvz14UdcYN8WIIt9v/vcD/wqg==
 
-"@cityofzion/neon-core-next@npm:@cityofzion/neon-core@5.0.0-next.16":
-  version "5.0.0-next.16"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neon-core/-/neon-core-5.0.0-next.16.tgz#f76224a564592c00b0d50fe5f620fe0dbba2a3d2"
-  integrity sha512-C9YoomPA5JuOh2HpYY99OYicJBRg+LncPbtTQ4WZ8ujQ4w9DA8DIdLJ0cfWCWFPvGxAt3dW2sxYMzWn+5oNWxg==
+"@cityofzion/neon-core-next@npm:@cityofzion/neon-core@5.0.0-next.17":
+  version "5.0.0-next.17"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-core/-/neon-core-5.0.0-next.17.tgz#fe666b9432eabc7743be926882499d01a33c4f05"
+  integrity sha512-+yb9J+gJSvmOEP6raKOLJdg88GsVP6I6ITFAkdxeWe32PzgtMl1NxZc3QrWBOJ8PQ9t5CGN+KW2l+fwgMqfavQ==
   dependencies:
     abort-controller "3.0.0"
     bignumber.js "7.2.1"
@@ -1790,7 +1790,8 @@
     cross-fetch "^3.1.4"
     crypto-js "4.1.1"
     elliptic "6.5.4"
-    loglevel "1.7.1"
+    lodash "4.17.21"
+    loglevel "1.8.0"
     loglevel-plugin-prefix "0.8.4"
     scrypt-js "3.0.1"
 
@@ -11952,11 +11953,6 @@ loglevel@1.6.8:
   version "1.6.8"
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.6.8.tgz#8a25fb75d092230ecd4457270d80b54e28011171"
   integrity sha512-bsU7+gc9AJ2SqpzxwU3+1fedl8zAntbtC5XYlt3s2j1hJcn2PsXSmgN8TaLG/J1/2mod4+cE/3vNL70/c1RNCA==
-
-loglevel@1.7.1:
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.7.1.tgz#005fde2f5e6e47068f935ff28573e125ef72f197"
-  integrity sha512-Hesni4s5UkWkwCGJMQGAh71PaLUmKFM60dHvq0zi/vDhhrzuk+4GgNbTXJ12YYQJn6ZKBDNIjYcuQGKudvqrIw==
 
 loglevel@1.8.0, loglevel@^1.6.8:
   version "1.8.0"
