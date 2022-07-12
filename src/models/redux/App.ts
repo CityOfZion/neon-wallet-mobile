@@ -8,8 +8,6 @@ import { Wallet } from '~src/models/redux/Wallet'
 
 @HttpExclude()
 export class App implements AppState {
-  @HttpExpose()
-  nodes: Node[] = []
 
   @HttpExpose()
   wallets: Wallet[] = []
