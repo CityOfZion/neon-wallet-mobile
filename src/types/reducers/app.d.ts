@@ -6,7 +6,6 @@ import { Contact } from '~src/models/redux/Contact'
 import { Node } from '~src/models/Node'
 
 export type AppActionsType =
-  | 'SET_NODES'
   | 'SET_WALLETS'
   | 'SET_ACCOUNTS'
   | 'SET_CONTACTS'
@@ -14,7 +13,6 @@ export type AppActionsType =
   | 'SET_PRE_ACCOUNT_CREATE'
 
 export interface AppState {
-  nodes: Node[]
   wallets: Wallet[]
   accounts: Account[]
   contacts: Contact[]

@@ -3,13 +3,11 @@ import { ReducerWrapper } from '@simpli/redux-wrapper'
 import { appBus } from '~/src/app/AppBus'
 import { PollingHelper } from '~/src/helpers/PollingHelper'
 import { SecurityHelper } from '~/src/helpers/SecurityHelper'
-import { Node } from '~/src/models/Node'
 import { AppAction, AppActionsType, AppState } from '~/src/types/reducers/app'
 import { AsyncAction } from '~/src/types/reducers/root'
 import { Model } from '~src/app/Model'
 import { Storage } from '~src/app/Storage'
 import { blockchainList, blockchainServices } from '~src/blockchain'
-import { NeoNode } from '~src/models/NeoNode'
 import { TokenAsset } from '~src/models/TokenAsset'
 import { Account } from '~src/models/redux/Account'
 import { App } from '~src/models/redux/App'
@@ -17,44 +15,14 @@ import { Contact } from '~src/models/redux/Contact'
 import { Wallet } from '~src/models/redux/Wallet'
 import { AccountsDispatcher } from '~src/store/app/dispatchers/AccountsDispatcher'
 import { ContactsDispatcher } from '~src/store/app/dispatchers/ContactsDispatcher'
-import { NodesDispatcher } from '~src/store/app/dispatchers/NodesDispatcher'
 import { WalletsDispatcher } from '~src/store/app/dispatchers/WalletsDispatcher'
 
 export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppAction> {
   protected readonly initialState = Model.parse<AppState>(App)
 
-  protected readonly dispatchers = [NodesDispatcher, WalletsDispatcher, AccountsDispatcher, ContactsDispatcher]
+  protected readonly dispatchers = [WalletsDispatcher, AccountsDispatcher, ContactsDispatcher]
 
   readonly actions = {
-    syncNodes: (): AsyncAction<Node[]> => {
-      return async (dispatch, getState) => {
-        let neoNodes: NeoNode[] = []
-        neoNodes = (await Storage.neoNodes.load()) ?? []
-        const nodes = (await Storage.nodes.load()) ?? []
-        if (!nodes.length) {
-          neoNodes.forEach(({ height, url }) => nodes.push({ url, height, blockchain: 'neoLegacy' }))
-        }
-        dispatch(this.commit('SET_NODES', { nodes }))
-        return nodes
-      }
-    },
-
-    fetchNodes: (): AsyncAction => {
-      return async () => {
-        try {
-          let nodes: Node[] = []
-          blockchainList.forEach(async blockchainName => {
-            const { provider } = blockchainServices[blockchainName]
-            nodes = await provider.getAllNodes()
-            await Storage.nodes.save(nodes)
-          })
-        } catch (error) {
-          console.log(error)
-          throw new Error('não carregou os nodes')
-        }
-      }
-    },
-
     syncWallets: (): AsyncAction<Wallet[]> => {
       return async (dispatch, getState) => {
         const wallets = await Storage.wallets.load()

@@ -15,8 +15,6 @@ export abstract class Sync {
   static async init(dispatch: AsyncDispatch<any>): Promise<SyncResult> {
     const settings: Settings = await dispatch(RootStore.settings.actions.syncSettings())
 
-    const nodes: Node[] = await dispatch(RootStore.app.actions.syncNodes())
-
     const wallets: Wallet[] = await dispatch(RootStore.app.actions.syncWallets())
 
     const accounts: Account[] = await dispatch(RootStore.app.actions.syncAccounts())
@@ -29,7 +27,6 @@ export abstract class Sync {
 
     return {
       settings,
-      nodes,
       wallets,
       accounts,
       contacts,
@@ -37,7 +34,7 @@ export abstract class Sync {
   }
 
   static async refresh(dispatch: AsyncDispatch<any>) {
-    const promises = [dispatch(RootStore.app.actions.syncNodes()), dispatch(RootStore.app.actions.syncTokenAssets())]
+    const promises = [dispatch(RootStore.app.actions.syncTokenAssets())]
 
     await Promise.all(promises)
   }
@@ -45,7 +42,6 @@ export abstract class Sync {
   static async fetchs(dispatch: AsyncDispatch<any>) {
     const promises = [
       dispatch(RootStore.app.actions.fetchBalanceAccounts()),
-      dispatch(RootStore.app.actions.fetchNodes()),
     ]
 
     await Promise.all(promises)
