@@ -37,13 +37,14 @@ export default function LoginPage(props: Props) {
       <LinearLayout weight={1} width="100%" minHeight="12px" />
 
       <LinearLayout width="100%" alignItems="center">
-        <TextView mb={24} color="primary" fontSize={26} letterSpacing={0.46} textAlign="center" fontFamily="semibold">
+        <TextView color="primary" fontSize={26} letterSpacing={0.46} textAlign="center" fontFamily="semibold">
           {i18n.t('login.title')}
         </TextView>
 
-        <TextView color="text.0" fontSize="18px" letterSpacing={0.2} textAlign="center">
+        <TextView width="90%" color="text.0" fontSize="md" letterSpacing={0.2} textAlign="center">
           {i18n.t('login.body')}
         </TextView>
+
         <LinearLayout weight={1} width="100%" minHeight="24px" maxHeight="60px" />
 
         <LinearLayout width="100%">

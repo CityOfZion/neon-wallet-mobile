@@ -156,7 +156,7 @@ export const ContactList = ({ filterByBlockchain, onSelect, ...props }: ContactL
 
     return filteredByBlockchain.filter(
       contact =>
-        contact.name?.toLowerCase().includes(filter.toLowerCase()) ||
+        contact.name?.toLowerCase().includes(filter.toLowerCase()) ??
         contact.addresses.find(infoContact => infoContact.address.toLowerCase().includes(filter.toLowerCase()))
     )
   }, [filter, filteredByBlockchain])

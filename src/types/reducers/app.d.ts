@@ -3,7 +3,6 @@ import { ReducerApplied } from '@simpli/redux-wrapper'
 import { Wallet } from '~src/models/redux/Wallet'
 import { Account } from '~src/models/redux/Account'
 import { Contact } from '~src/models/redux/Contact'
-import { Node } from '~src/models/Node'
 
 export type AppActionsType =
   | 'SET_WALLETS'
