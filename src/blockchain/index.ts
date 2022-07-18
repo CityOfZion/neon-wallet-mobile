@@ -22,7 +22,7 @@ import {
   IRPCContract,
   isValidWcChain,
   INFT,
-  Token,
+  IToken,
   getAllTokens,
 } from '~src/blockchain/common'
 
@@ -50,6 +50,6 @@ export {
   IRPCContract,
   isValidWcChain,
   INFT,
-  Token,
+  IToken,
   getAllTokens,
 }

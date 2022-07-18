@@ -9,7 +9,7 @@ import tokens from '../tokens.json'
 
 import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
 import { Account } from '~/src/models/redux/Account'
-import { BlockchainServiceKey, IBlockchainService, IClaimable, SendTransactionData, Token } from '~src/blockchain'
+import { BlockchainServiceKey, IBlockchainService, IClaimable, SendTransactionData, IToken } from '~src/blockchain'
 import { NeoLegacyProviderOption } from '~src/blockchain/NeoLegacy'
 import { TNeoLegacyProvider } from '~src/blockchain/NeoLegacy/providers'
 import { NeoNative } from '~src/native/NeoNative'
@@ -32,7 +32,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   readonly feeToken: { hash: string; token: string }
   readonly wcChains: string[]
   accountsPool: Account[] = []
-  readonly tokens: Token[] = tokens as Token[]
+  readonly tokens: IToken[] = tokens as IToken[]
   constructor() {
     this.provider = NeoLegacyProviderOption('doraSdk')
     this.key = 'neoLegacy'

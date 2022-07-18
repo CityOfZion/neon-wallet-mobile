@@ -25,7 +25,7 @@ import {
   IClaimable,
   IWalletConnect,
   INFT,
-  Token,
+  IToken,
 } from '~src/blockchain'
 import { Neo3ProviderOptions } from '~src/blockchain/Neo3'
 import { Neo3Provider } from '~src/blockchain/Neo3/providers/common'
@@ -71,7 +71,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
   readonly nativeAssets: string[] = ['NEO', 'GAS']
   readonly feeToken: { hash: string; token: string }
   readonly wcChains: string[]
-  readonly tokens: Token[] = tokens as Token[]
+  readonly tokens: IToken[] = tokens as IToken[]
   constructor() {
     this.provider = Neo3ProviderOptions('doraSDK')
     this.key = 'neo3'
