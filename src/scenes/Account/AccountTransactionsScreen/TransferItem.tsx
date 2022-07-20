@@ -11,11 +11,11 @@ import { TransactionTransferType } from '~/src/models/TransactionAddressSummary'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
 import { TextView, LinearLayout } from '~/src/styles/styled-components'
-import { Exchange } from '~/src/types/exchange'
+import { MultiExchange } from '~/src/types/exchange'
 
 type Props = (FormattedTransferAsset | FormattedTransferNFT) & {
   account: Account
-  exchange?: Exchange
+  exchange?: MultiExchange
 }
 
 export const TransferItem = React.memo((props: Props) => {

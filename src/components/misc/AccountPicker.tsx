@@ -4,7 +4,7 @@ import Carousel from 'react-native-snap-carousel'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { Balance } from '~/src/types/balance'
-import { Exchange } from '~/src/types/exchange'
+import { MultiExchange } from '~/src/types/exchange'
 import AccountCard from '~src/components/AccountCard'
 import { Account } from '~src/models/redux/Account'
 import { LinearLayout } from '~src/styles/styled-components'
@@ -14,12 +14,12 @@ interface Props {
   onSelect?: (account: Account) => void
   accounts: Account[]
   isCompacted?: boolean
-  exchange?: Exchange
+  exchange?: MultiExchange
   balances?: Balance[]
 }
 
 interface ItemProps {
-  exchange?: Exchange
+  exchange?: MultiExchange
   balance?: Balance
   account: Account
   onPress(): void

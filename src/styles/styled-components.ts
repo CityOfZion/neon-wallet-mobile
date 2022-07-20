@@ -1,6 +1,17 @@
 import { LinearGradient } from 'expo-linear-gradient'
 import * as styledComponents from 'styled-components/native'
-import { border, color, flexbox, layout, position, space, textStyle, typography, borderRadius } from 'styled-system'
+import {
+  border,
+  color,
+  flexbox,
+  layout,
+  position,
+  space,
+  textStyle,
+  typography,
+  borderRadius,
+  shadow,
+} from 'styled-system'
 
 import {
   ButtonViewProps,
@@ -63,6 +74,7 @@ export const LinearLayout = styled.View<LinearLayoutProps>`
   ${flexbox}
   ${weight}
   ${position}
+  ${shadow}
 `
 
 export const RelativeLayout = styled.View<RelativeLayoutProps>`

@@ -3,7 +3,6 @@ import i18n from 'i18n-js'
 import React, { useState } from 'react'
 import { TouchableHighlight } from 'react-native'
 import InputScrollView from 'react-native-input-scroll-view'
-import { useSelector } from 'react-redux'
 
 import { AmountInput } from './AmountInput'
 import { ReferenceInput } from './ReferenceInput'
@@ -15,7 +14,6 @@ import { useBalance } from '~/src/hooks/useBalance'
 import { useExchange } from '~/src/hooks/useExchange'
 import { Token } from '~/src/models/Token'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
-import { RootState } from '~/src/store/RootStore'
 import AccountCard from '~src/components/AccountCard'
 import { QRCodeWithCopyButton } from '~src/components/QRCodeWithCopyButton'
 import SwiperPanel, { PANEL_OFFSET, useSwiperController } from '~src/components/SwiperPanel'
@@ -43,7 +41,6 @@ const ReceiveTransactionModal = (props: Props) => {
   const { wallet, account } = props.route.params
 
   const controller = useSwiperController(true)
-  const currency = useSelector((state: RootState) => state.settings.currency)
 
   const [selectedTab, setSelectedTab] = useState<SelectedTab>('myAddress')
 
@@ -51,8 +48,8 @@ const ReceiveTransactionModal = (props: Props) => {
   const [reference, setReference] = useState<string>()
   const [token, setToken] = useState<Token>()
 
-  const { exchange } = useExchange({ filter: { currencies: currency } })
-  const { data: balance } = useBalance(account)
+  const { exchange } = useExchange()
+  const { balance } = useBalance(account)
 
   const navigate = () => {
     if (!token || !amount) return

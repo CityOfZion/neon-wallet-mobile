@@ -8,14 +8,14 @@ import { TransactionItem } from './TransactionItem'
 
 import { Account } from '~/src/models/redux/Account'
 import { LinearLayout, TextView } from '~/src/styles/styled-components'
-import { Exchange } from '~/src/types/exchange'
+import { MultiExchange } from '~/src/types/exchange'
 
 interface Props {
   completedTransactions: FormattedTransaction[] | undefined
   pendingTransactions: FormattedTransaction[] | undefined
   account: Account
   date: string
-  exchange?: Exchange
+  exchange?: MultiExchange
 }
 
 export const TransactionListItem = React.memo(

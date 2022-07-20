@@ -9,12 +9,12 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { TokenBalance } from '~/src/hooks/useBalance'
 import { useBalances } from '~/src/hooks/useBalances'
 import { useExchange } from '~/src/hooks/useExchange'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'
+import { TokenBalance } from '~/src/types/balance'
 import BalanceList from '~src/components/BalanceList'
 import SwiperPanel, { BackButton, useSwiperController } from '~src/components/SwiperPanel'
 import AccountPicker from '~src/components/misc/AccountPicker'
@@ -35,7 +35,6 @@ interface Props {
 const SendTransactionAccountSelectionModal = (props: Props) => {
   const { wallet } = props.route.params
 
-  const currency = useSelector((state: RootState) => state.settings.currency)
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const accounts = useSelector((state: RootState) => state.app.accounts)
@@ -45,8 +44,8 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
 
   const [selectedAccount, setSelectedAccount] = useState<Account>(validAccounts[0])
 
-  const { data: balances } = useBalances(validAccounts)
-  const { exchange } = useExchange({ filter: { currencies: currency } })
+  const { balances } = useBalances(validAccounts)
+  const { exchange } = useExchange()
 
   const selectedAccountBalance = useMemo(
     () => BalanceHelper.getBalanceByAccount(selectedAccount, balances),
@@ -54,8 +53,8 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
   )
 
   const selectedAccountTotalTokenBalance = useMemo(
-    () => BalanceHelper.calculateTotalBalances(selectedAccountBalance, exchange, currency),
-    [selectedAccountBalance, currency, exchange]
+    () => BalanceHelper.calculateTotalBalances(selectedAccountBalance, exchange),
+    [selectedAccountBalance, exchange]
   )
 
   const handleChangeAccount = (account: Account) => {

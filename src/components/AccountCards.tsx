@@ -6,26 +6,24 @@ import { BalanceHelper } from '../helpers/BalanceHelper'
 import { Account } from '../models/redux/Account'
 import { LinearLayout } from '../styles/styled-components'
 import { Balance } from '../types/balance'
-import { Exchange } from '../types/exchange'
+import { MultiExchange } from '../types/exchange'
 import AccountCard from './AccountCard'
 
 interface Props {
   accounts: Account[]
   onPress: (account: Account) => void
-  disableSecondTouch?: boolean
-  exchange?: Exchange
+  exchange?: MultiExchange
   balances?: Balance[]
 }
 interface ItemProps {
-  exchange?: Exchange
+  exchange?: MultiExchange
   balance?: Balance
   account: Account
   isStackMode: boolean
   onPress(): void
-  disableSecondTouch?: boolean
 }
 
-const Item = React.memo(({ balance, exchange, account, disableSecondTouch, isStackMode, onPress }: ItemProps) => {
+const Item = React.memo(({ balance, exchange, account, isStackMode, onPress }: ItemProps) => {
   return (
     <LinearLayout>
       <AccountCard
@@ -35,7 +33,6 @@ const Item = React.memo(({ balance, exchange, account, disableSecondTouch, isSta
         isStackMode={isStackMode}
         isCompacted
         onPress={onPress}
-        disableSecondTouch={disableSecondTouch}
       />
     </LinearLayout>
   )
@@ -84,7 +81,6 @@ export const AccountCards = (props: Props) => {
             account={account}
             balance={BalanceHelper.getBalanceByAccount(account, props.balances)}
             exchange={props.exchange}
-            disableSecondTouch={props.disableSecondTouch}
             isStackMode={index !== props.accounts.length - 1}
             onPress={() => props.onPress(account)}
           />

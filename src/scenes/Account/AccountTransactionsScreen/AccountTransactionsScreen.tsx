@@ -62,7 +62,7 @@ const AccountTransactionsScreen = (props: Props) => {
   const { account } = props.route.params
 
   const { tokens } = useTokens({ blockchain: account.blockchain })
-  const { exchange } = useExchange({})
+  const { exchange } = useExchange()
 
   const [completedTransactions, setCompletedTransactions] = useState<FormattedTransaction[]>([])
   const [pendingTransactions, setPendingTransactions] = useState<FormattedTransaction[]>([])
@@ -256,7 +256,7 @@ const AccountTransactionsScreen = (props: Props) => {
       <AwaitActivity name="populateTransactions" loadingView={<ScreenLoader />}>
         <TransactionsList
           account={account}
-          exchange={exchange} //Implement a  skeleton here
+          exchange={exchange}
           completedTransactions={completedTransactions}
           pendingTransactions={pendingTransactions}
           onEndReached={handleEndReached}

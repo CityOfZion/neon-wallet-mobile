@@ -22,6 +22,7 @@ import { RootState } from '~/src/store/RootStore'
 import { LinearLayout, TextView } from '~/src/styles/styled-components'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import { useWalletConnect } from '~src/contexts/WalletConnectContext'
+
 export interface WCAccountSelectionModalParams {
   wallet: Wallet
   uri?: IURI
@@ -45,8 +46,8 @@ export const WCAccountSelectionModal = (props: Props) => {
     [wallet, accounts]
   )
 
-  const { exchange } = useExchange({})
-  const { data: balances } = useBalances(validAccounts)
+  const { exchange } = useExchange()
+  const { balances } = useBalances(validAccounts)
 
   const sessionProposal = useMemo(() => walletConnectCtx.sessionProposals[0], [walletConnectCtx.sessionProposals])
 
@@ -97,13 +98,7 @@ export const WCAccountSelectionModal = (props: Props) => {
             {i18n.t('modals.WCAccountSelection.subtitle')}
           </TextView>
 
-          <AccountCards
-            balances={balances}
-            exchange={exchange}
-            accounts={validAccounts}
-            onPress={handleConnectDApp}
-            disableSecondTouch
-          />
+          <AccountCards balances={balances} exchange={exchange} accounts={validAccounts} onPress={handleConnectDApp} />
         </LinearLayout>
       </AwaitActivity>
     </SwiperPanel>

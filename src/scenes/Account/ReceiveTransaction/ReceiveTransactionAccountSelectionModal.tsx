@@ -43,8 +43,8 @@ const ReceiveTransactionAccountSelectionModal = (props: Props) => {
 
   const [selectedAccount, setSelectedAccount] = useState<Account>(validAccounts[0])
 
-  const { data: balances } = useBalances(validAccounts)
-  const { exchange } = useExchange({})
+  const { balances } = useBalances(validAccounts)
+  const { exchange } = useExchange()
 
   const selectedAccountBalance = useMemo(
     () => BalanceHelper.getBalanceByAccount(selectedAccount, balances),
@@ -52,7 +52,7 @@ const ReceiveTransactionAccountSelectionModal = (props: Props) => {
   )
 
   const selectedAccountTotalTokenBalance = useMemo(
-    () => BalanceHelper.calculateTotalBalances(selectedAccountBalance, exchange, currency),
+    () => BalanceHelper.calculateTotalBalances(selectedAccountBalance, exchange),
     [selectedAccountBalance, currency, exchange]
   )
 

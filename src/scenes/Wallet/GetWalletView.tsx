@@ -52,19 +52,14 @@ const GetWalletView = (props: GetWalletProps) => {
   })
 
   const accounts = useSelector((state: RootState) => state.app.accounts)
-  const currency = useSelector((state: RootState) => state.settings.currency)
 
   const dispatch = useDispatch()
 
   const walletAccounts = useMemo(() => wallet.getAccounts(accounts), [accounts, wallet])
 
-  const {
-    exchange,
-    isRefetching: exchangeIsRefetching,
-    refetch: exchangeRefetch,
-  } = useExchange({ filter: { currencies: currency } })
+  const { exchange, isRefetching: exchangeIsRefetching, refetch: exchangeRefetch } = useExchange()
 
-  const { data: balances, queryResults: balanceQueryResult } = useBalances(wallet.getAccounts(accounts))
+  const { balances, queryResults: balanceQueryResult } = useBalances(wallet.getAccounts(accounts))
 
   const handlePress = async (account: Account) => {
     dispatch(RootStore.account.actions.selectAccount(account.address))

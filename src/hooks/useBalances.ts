@@ -25,7 +25,7 @@ export const useBalances = <T extends UseBalanceParams | Account>(
   const data = useMemo(() => results.flatMap(({ data }) => data).filter((data): data is Balance => !!data), [results])
 
   return {
-    data,
+    balances: data,
     queryResults: results,
   }
 }

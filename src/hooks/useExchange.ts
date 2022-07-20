@@ -1,87 +1,32 @@
-import { useCallback, useMemo } from 'react'
+import lodash from 'lodash'
 import { useQuery, UseQueryOptions } from 'react-query'
+import { useSelector } from 'react-redux'
 
-import { getAllTokens } from '../blockchain/common'
-import { getExchangeData } from '../blockchain/genericProvider'
-import { applicationConfig } from '../config/ApplicationConfig'
-import { Exchange } from '../types/exchange'
+import { blockchainList, blockchainServices } from '../blockchain'
+import { RootState } from '../store/RootStore'
+import { MultiExchange } from '../types/exchange'
 
-type TExchangeFilter = {
-  currencies?: string
-  symbols?: string[]
+export const fetchExchanges = async (currency: string): Promise<MultiExchange> => {
+  const exchanges = await Promise.all(
+    blockchainList.map(async blockchain => ({
+      [blockchain]: await blockchainServices[blockchain].getExchange(currency),
+    }))
+  )
+
+  return lodash.merge({}, ...exchanges)
 }
 
-interface IUseExchange {
-  filter?: TExchangeFilter
-  queryOptions?: Omit<UseQueryOptions<Exchange, unknown, Exchange, string[]>, 'queryKey' | 'queryFn'>
-}
+export function useExchange(
+  queryOptions?: Omit<UseQueryOptions<MultiExchange, unknown, MultiExchange, string[]>, 'queryKey' | 'queryFn'>
+) {
+  const currency = useSelector((state: RootState) => state.settings.currency)
 
-export function useExchange({ queryOptions, filter }: IUseExchange) {
-  const currenciesDefault = applicationConfig.currencies
+  const { data, ...rest } = useQuery(['exchange'], () => fetchExchanges(currency), queryOptions)
 
-  const execFilters = (exchange: Exchange) => {
-    const groupFilters: ((exchange: Exchange) => Exchange | undefined)[] = [filterBySymbols, filterByCurrencies]
-    return groupFilters.reduce<Exchange | undefined>((prevExchange, callback) => {
-      if (prevExchange) {
-        return callback(prevExchange)
-      } else {
-        return prevExchange
-      }
-    }, exchange)
-  }
-
-  const filterBySymbols = (exchange: Exchange) => {
-    if (filter?.symbols) {
-      const filteredExchange = filter.symbols.reduce<Exchange>((prevExchange, symbol) => {
-        if (exchange[symbol]) {
-          prevExchange = { ...prevExchange, [symbol]: exchange[symbol] }
-          return prevExchange
-        } else {
-          return prevExchange
-        }
-      }, {})
-      return Object.keys(filteredExchange).length > 0 ? filteredExchange : undefined
-    } else {
-      return exchange
-    }
-  }
-
-  const filterByCurrencies = (exchange: Exchange) => {
-    if (filter?.currencies) {
-      const filteredExchange = filter.currencies.split(',').reduce<Exchange>((_, currency) => {
-        return Object.keys(exchange).reduce<Exchange>((prevExchange, symbol) => {
-          if (exchange[symbol].to[currency]) {
-            prevExchange = { ...prevExchange, [symbol]: { to: { [currency]: exchange[symbol].to[currency] } } }
-            return prevExchange
-          } else {
-            return prevExchange
-          }
-        }, {})
-      }, {})
-      return Object.keys(filteredExchange).length > 0 ? filteredExchange : undefined
-    } else {
-      return exchange
-    }
-  }
-
-  const fetchExchanges = useCallback(async () => {
-    return await getExchangeData({
-      currencies: currenciesDefault,
-      tokenAssetSymbols: getAllTokens().map(token => token.symbol),
-    })
-  }, [])
-
-  const { data, ...rest } = useQuery(['exchange'], fetchExchanges, queryOptions)
-
-  const exchange = useMemo<Exchange | undefined>(() => {
-    if (data) {
-      return execFilters(data)
-    }
-    return data
-  }, [data])
+  console.log({ data })
 
   return {
-    exchange,
+    exchange: data,
     ...rest,
   }
 }

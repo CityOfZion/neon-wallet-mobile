@@ -10,12 +10,12 @@ import { blockchainServices } from '~/src/blockchain'
 import { BoxLabelNumber } from '~/src/components/BoxLabelNumber'
 import { Account } from '~/src/models/redux/Account'
 import { ImageView, TextView } from '~/src/styles/styled-components'
-import { Exchange } from '~/src/types/exchange'
+import { MultiExchange } from '~/src/types/exchange'
 
 type Props = FormattedTransaction & {
   hideLinkDora?: boolean
   account: Account
-  exchange?: Exchange
+  exchange?: MultiExchange
 }
 
 export const TransactionItem = React.memo((props: Props) => {

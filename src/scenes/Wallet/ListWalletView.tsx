@@ -12,7 +12,7 @@ import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { useBalances } from '~/src/hooks/useBalances'
 import { useExchange } from '~/src/hooks/useExchange'
 import { Balance } from '~/src/types/balance'
-import { Exchange } from '~/src/types/exchange'
+import { MultiExchange } from '~/src/types/exchange'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
@@ -34,7 +34,7 @@ interface WalletProps {
 interface SelectedWalletInfoProps {
   selectedWallet: Wallet
   selectedWalletBalances: Balance[]
-  exchange?: Exchange
+  exchange?: MultiExchange
 }
 
 const SelectedWalletInfo = ({ selectedWallet, selectedWalletBalances, exchange }: SelectedWalletInfoProps) => {
@@ -42,8 +42,8 @@ const SelectedWalletInfo = ({ selectedWallet, selectedWalletBalances, exchange }
   const language = useSelector((state: RootState) => state.settings.language)
 
   const totalTokensBalances = useMemo(
-    () => BalanceHelper.calculateTotalBalances(selectedWalletBalances, exchange, currency),
-    [selectedWalletBalances, exchange, currency]
+    () => BalanceHelper.calculateTotalBalances(selectedWalletBalances, exchange),
+    [selectedWalletBalances, exchange]
   )
 
   const formattedTotalTokensBalances = useMemo(
@@ -114,20 +114,15 @@ const ListWalletView = (props: WalletProps) => {
   const wallets = useSelector((state: RootState) => state.app.wallets)
   const accounts = useSelector((state: RootState) => state.app.accounts)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
-  const currency = useSelector((state: RootState) => state.settings.currency)
   const dispatch = useDispatch()
 
   const fadeValue = useRef(new Animated.Value(1)).current
 
   const [selectedWallet, setSelectedWallet] = useState(wallets[0])
 
-  const {
-    exchange,
-    isRefetching: exchangeIsRefetching,
-    refetch: exchangeRefetch,
-  } = useExchange({ filter: { currencies: currency }, queryOptions: {} })
+  const { exchange, isRefetching: exchangeIsRefetching, refetch: exchangeRefetch } = useExchange()
 
-  const { data: selectedWalletBalances, queryResults: balanceQueryResult } = useBalances(
+  const { balances: selectedWalletBalances, queryResults: balanceQueryResult } = useBalances(
     selectedWallet.getAccounts(accounts)
   )
 

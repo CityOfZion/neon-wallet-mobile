@@ -14,6 +14,7 @@ import { TransactionAddressResponse } from '~/src/models/response/TransactionAdd
 import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
 import * as BlockchainIcons from '~src/assets/blockchainIcons'
 import { Account } from '~src/models/redux/Account'
+import { ExchangeInfo } from '~src/models/response/ExchangeInfo'
 
 export interface IToken {
   symbol: string
@@ -105,6 +106,7 @@ export interface IBlockchainService {
   validateWif(privateKey: string): boolean
   calculateTransferFee: (data: Omit<SendTransactionData, 'fee'>) => Promise<number>
   setAccountsPool: (accounts: Account[]) => void
+  getExchange: (currency: string) => Promise<ExchangeInfo[]>
 }
 
 export type IBlockchainServices = Record<BlockchainServiceKey, IBlockchainService>

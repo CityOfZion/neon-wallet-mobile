@@ -10,7 +10,7 @@ import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 import { FlatListFooter } from '~/src/components/FlatListFooter'
 import { Account } from '~/src/models/redux/Account'
 import { LinearLayout } from '~/src/styles/styled-components'
-import { Exchange } from '~/src/types/exchange'
+import { MultiExchange } from '~/src/types/exchange'
 
 interface TransactionsListDateProps {
   completedTransactions: FormattedTransaction[]
@@ -18,7 +18,7 @@ interface TransactionsListDateProps {
   account: Account
   onEndReached(): Promise<void>
   showMoreLoading: boolean
-  exchange?: Exchange
+  exchange?: MultiExchange
 }
 
 export const TransactionsList = ({
