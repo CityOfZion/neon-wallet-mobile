@@ -7,7 +7,7 @@ import { BalanceConvertedToExchange, BalanceHelper } from '../helpers/BalanceHel
 import { TokenHelper } from '../helpers/TokenHelper'
 import { RootState } from '../store/RootStore'
 import { Balance, TokenBalance } from '../types/balance'
-import { Exchange } from '../types/exchange'
+import { MultiExchange } from '../types/exchange'
 import { LinearLayoutProps } from '../types/styled-components'
 
 import { Normalize } from '~src/app/Normalize'
@@ -23,7 +23,7 @@ interface BalanceListItemProps {
 
 interface Props extends LinearLayoutProps {
   balances?: Balance | Balance[]
-  exchange?: Exchange
+  exchange?: MultiExchange
   hideEmptyMessage?: boolean
   removeZeroBalance?: boolean
   orderByValue?: boolean
@@ -161,11 +161,9 @@ const BalanceList = ({
   exchange,
   ...props
 }: Props) => {
-  const currency = useSelector((state: RootState) => state.settings.currency)
-
   const tokensBalancesConverted = useMemo(
-    () => BalanceHelper.convertBalancesToCurrency(balances, exchange, currency),
-    [balances, exchange, currency]
+    () => BalanceHelper.convertBalancesToCurrency(balances, exchange),
+    [balances, exchange]
   )
 
   const validAndOrdedTokensBalances = useMemo(() => {

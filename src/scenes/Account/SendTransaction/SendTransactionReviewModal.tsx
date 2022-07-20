@@ -71,14 +71,14 @@ export const SendTransactionReviewModal = (props: Props) => {
   const language = useSelector((state: RootState) => state.settings.language)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const controller = useSwiperController(true)
-  const { exchange } = useExchange({})
+  const { exchange } = useExchange()
 
   const totalAmount = Number(amount) + fee + (tip ?? 0)
 
   const ratio = useMemo(() => {
     if (!exchange) return
 
-    return BalanceHelper.getExchangeRatio(token.symbol, exchange, currency)
+    return BalanceHelper.getExchangeRatio(token.symbol, token.blockchain, exchange)
   }, [exchange, currency, token])
 
   const submit = async () => {

@@ -1,43 +1,44 @@
-import { Currency } from '../enums/Currency'
+import { BlockchainServiceKey } from '../blockchain'
 import { Account } from '../models/redux/Account'
 import { Balance, TokenBalance } from '../types/balance'
-import { Exchange } from '../types/exchange'
+import { MultiExchange } from '../types/exchange'
 
 export type BalanceConvertedToExchange = TokenBalance & {
   convertedAmount: number
 }
 
 export class BalanceHelper {
-  static calculateTotalBalances(balances?: Balance[] | Balance, exchange?: Exchange, currency?: Currency) {
-    if (!balances || !exchange || !currency) return
+  static calculateTotalBalances(balances?: Balance[] | Balance, multiExchange?: MultiExchange) {
+    if (!balances || !multiExchange) return
 
     const tokensBalances = this.getTokensBalance(balances)
 
     return tokensBalances.reduce((prev, actual) => {
-      const ratio = this.getExchangeRatio(actual.symbol, exchange, currency)
+      const ratio = this.getExchangeRatio(actual.symbol, actual.blockchain, multiExchange)
 
       return prev + (ratio ? actual.amount * ratio : 0)
     }, 0)
   }
 
-  static getExchangeRatio(symbol: string, exchange?: Exchange, currency?: Currency): number | undefined {
-    if (!exchange || !currency) return
+  static getExchangeRatio(
+    symbol: string,
+    blockchain: BlockchainServiceKey,
+    multiExchange?: MultiExchange
+  ): number | undefined {
+    if (!multiExchange) return
 
-    const exchangeSymbol = exchange[symbol]
+    const exchange = multiExchange[blockchain].find(exchange => exchange.symbol === symbol)
 
-    if (!exchangeSymbol) return
-
-    return exchangeSymbol.to[currency]
+    return exchange?.amount
   }
 
   static convertBalanceToCurrency(
     balance?: TokenBalance,
-    exchange?: Exchange,
-    currency?: Currency
+    multiExchange?: MultiExchange
   ): BalanceConvertedToExchange | undefined {
-    if (!balance || !exchange || !currency) return
+    if (!balance || !multiExchange) return
 
-    const ratio = BalanceHelper.getExchangeRatio(balance.symbol, exchange, currency)
+    const ratio = this.getExchangeRatio(balance.symbol, balance.blockchain, multiExchange)
 
     return {
       ...balance,
@@ -47,15 +48,14 @@ export class BalanceHelper {
 
   static convertBalancesToCurrency(
     balances?: Balance[] | Balance,
-    exchange?: Exchange,
-    currency?: Currency
+    multiExchange?: MultiExchange
   ): BalanceConvertedToExchange[] | undefined {
-    if (!balances || !exchange || !currency) return
+    if (!balances || !multiExchange) return
 
     const tokensBalances = this.getTokensBalance(balances)
 
     return tokensBalances
-      .map(tokenBalance => this.convertBalanceToCurrency(tokenBalance, exchange, currency))
+      .map(tokenBalance => this.convertBalanceToCurrency(tokenBalance, multiExchange))
       .filter((tokenBalance): tokenBalance is BalanceConvertedToExchange => !!tokenBalance)
   }
 

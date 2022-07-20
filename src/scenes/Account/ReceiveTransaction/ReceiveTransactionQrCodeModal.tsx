@@ -50,10 +50,10 @@ const ReceiveTransactionQrCodeModal = (props: Props) => {
   const language = useSelector((state: RootState) => state.settings.language)
   const controller = useSwiperController(true)
 
-  const { exchange } = useExchange({})
+  const { exchange } = useExchange()
 
   const fiat = useMemo(() => {
-    const ratio = BalanceHelper.getExchangeRatio(token.symbol, exchange, currency)
+    const ratio = BalanceHelper.getExchangeRatio(token.symbol, token.blockchain, exchange)
 
     return FilterHelper.currency(ratio ? Number(amount) * ratio : 0, currency, language)
   }, [exchange, currency, language, amount])

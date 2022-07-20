@@ -27,8 +27,8 @@ const CustomColorPage = (props: Props) => {
   const { account } = props.route.params
   const controller = useSwiperController(true)
 
-  const { exchange } = useExchange({})
-  const { data: balance } = useBalance(account)
+  const { exchange } = useExchange()
+  const { balance } = useBalance(account)
 
   const [color, setColor] = useState<string>(props.route.params.account.backgroundColor)
 
@@ -59,13 +59,7 @@ const CustomColorPage = (props: Props) => {
     >
       <LinearLayout height="100%">
         <LinearLayout mb={5} maxHeight={`${Dimensions.get('window').width * 0.6}px`} alignSelf="center">
-          <AccountCard
-            balance={balance}
-            exchange={exchange}
-            orientBy="height"
-            account={props.route.params.account}
-            isCustomAccount
-          />
+          <AccountCard balance={balance} exchange={exchange} account={props.route.params.account} />
         </LinearLayout>
 
         <TextView

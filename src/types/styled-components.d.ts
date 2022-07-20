@@ -8,6 +8,7 @@ import {
   SpaceProps,
   TextStyleProps,
   TypographyProps,
+  ShadowProps,
 } from 'styled-system'
 
 export interface ColorTheme {
@@ -66,7 +67,8 @@ export type LinearLayoutProps = BorderProps &
   LayoutProps &
   FlexboxProps &
   WeightProps &
-  PositionProps
+  PositionProps &
+  ShadowProps
 
 export type RelativeLayoutProps = BorderProps &
   ColorProps &

@@ -23,7 +23,14 @@ export const useBalance = <T extends UseBalanceParams>(
 ) => {
   const { address, blockchain } = params
 
-  const result = useQuery(['balance', address ?? ''], () => fetchBalance(address ?? '', blockchain), queryOptions)
+  const { data, ...rest } = useQuery(
+    ['balance', address ?? ''],
+    () => fetchBalance(address ?? '', blockchain),
+    queryOptions
+  )
 
-  return result
+  return {
+    balance: data,
+    ...rest,
+  }
 }

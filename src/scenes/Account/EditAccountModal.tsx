@@ -41,8 +41,8 @@ const EditAccountModal = (props: Props) => {
   const dispatch = useDispatch()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
-  const { exchange } = useExchange({})
-  const { data: balance } = useBalance(account)
+  const { exchange } = useExchange()
+  const { balance } = useBalance(account)
 
   const [name, setName] = useState<string>(account.name ?? '')
   const [color, setColor] = useState<string>(account.backgroundColor)

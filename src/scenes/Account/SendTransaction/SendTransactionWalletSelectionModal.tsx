@@ -40,12 +40,12 @@ const SendTransactionWalletSelectionModal = (props: Props) => {
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet>(validWallets[0])
 
-  const { exchange } = useExchange({ filter: { currencies: currency } })
-  const { data: selectedWalletBalances } = useBalances(selectedWallet.getAccounts(accounts))
+  const { exchange } = useExchange()
+  const { balances: selectedWalletBalances } = useBalances(selectedWallet.getAccounts(accounts))
 
   const totalTokenBalance = useMemo(
-    () => BalanceHelper.calculateTotalBalances(selectedWalletBalances, exchange, currency),
-    [selectedWalletBalances, exchange, currency]
+    () => BalanceHelper.calculateTotalBalances(selectedWalletBalances, exchange),
+    [selectedWalletBalances, exchange]
   )
 
   const formattedAllBalance = useMemo(() => {

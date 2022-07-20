@@ -79,7 +79,7 @@ const ListTokenModal = (props: Props) => {
 
   const controller = useSwiperController(true)
   const { tokens } = useTokens({ blockchain: account.blockchain })
-  const { data: balance } = useBalance(account)
+  const { balance } = useBalance(account)
 
   const [filter, setFilter] = useState('')
 

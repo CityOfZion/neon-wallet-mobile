@@ -1,15 +1,13 @@
-import i18n from 'i18n-js'
 import React, { useMemo, useRef, useState } from 'react'
 import { Animated, Easing, LayoutChangeEvent } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { getBlockchainLogo } from '../blockchain'
 import { BalanceHelper } from '../helpers/BalanceHelper'
-import { FilterHelper } from '../helpers/FilterHelper'
 import { TokenHelper } from '../helpers/TokenHelper'
 import { RootState } from '../store/RootStore'
 import { Balance } from '../types/balance'
-import { Exchange } from '../types/exchange'
+import { MultiExchange } from '../types/exchange'
+import AccountCard from './AccountCard'
 
 import ThemedShadowContainer from '~src/components/themed/ThemedShadowContainer'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
@@ -22,26 +20,24 @@ interface Props {
   width?: number
   isInactive?: boolean
   onPress?: () => void
-  exchange?: Exchange
+  exchange?: MultiExchange
   balances?: Balance[]
 }
 
 type AccountContainerProps = {
   viewHeight: number
   account: Account
+  exchange?: MultiExchange
+  balances?: Balance[]
   index: number
   isInactive?: boolean
-}
-
-type AccountCardProps = {
-  account: Account
 }
 
 type WalletOverlayProps = { walletType: string }
 
 type WalletLabelProps = { wallet: Wallet; isInactive?: boolean }
 
-type AssetBarFillsProps = { exchange?: Exchange; balances?: Balance[]; isInactive?: boolean }
+type AssetBarFillsProps = { exchange?: MultiExchange; balances?: Balance[]; isInactive?: boolean }
 
 const WalletLabel = ({ wallet, isInactive }: WalletLabelProps) => {
   return (
@@ -118,16 +114,14 @@ const WalletLabel = ({ wallet, isInactive }: WalletLabelProps) => {
 }
 
 const AssetBarFills = ({ balances, exchange, isInactive }: AssetBarFillsProps) => {
-  const currency = useSelector((state: RootState) => state.settings.currency)
-
   const totalTokensBalances = useMemo(
-    () => BalanceHelper.calculateTotalBalances(balances, exchange, currency),
-    [balances, exchange, currency]
+    () => BalanceHelper.calculateTotalBalances(balances, exchange),
+    [balances, exchange]
   )
 
   const tokensBalancesConverted = useMemo(
-    () => BalanceHelper.convertBalancesToCurrency(balances, exchange, currency),
-    [balances, exchange, currency]
+    () => BalanceHelper.convertBalancesToCurrency(balances, exchange),
+    [balances, exchange]
   )
 
   return (
@@ -195,6 +189,11 @@ const AccountContainer = (props: AccountContainerProps) => {
   const cardWidth = props.viewHeight - 12
   const cardHeight = cardWidth / ratio
 
+  const balance = useMemo(
+    () => BalanceHelper.getBalanceByAccount(props.account, props.balances),
+    [props.account, props.balances]
+  )
+
   return (
     <LinearLayout
       mt={`${props.index * 4}px`}
@@ -212,136 +211,8 @@ const AccountContainer = (props: AccountContainerProps) => {
           transform: [{ rotate: '90deg' }],
         }}
       >
-        <AccountCard account={props.account} />
+        <AccountCard account={props.account} balance={balance} exchange={props.exchange} hideBalance />
       </RelativeLayout>
-    </LinearLayout>
-  )
-}
-
-const AccountCard = (props: AccountCardProps) => {
-  const [viewHeight, setViewHeight] = useState<number>(0)
-
-  const unit = (viewHeight * 0.1) / 24
-
-  const layoutEvent = (event: LayoutChangeEvent) => {
-    const { height } = event.nativeEvent.layout
-    setViewHeight(height)
-  }
-
-  return (
-    <LinearLayout
-      onLayout={layoutEvent}
-      width="100%"
-      style={{
-        aspectRatio: 38 / 25,
-      }}
-      borderRadius="18px"
-      overflow="hidden"
-      backgroundColor={FilterHelper.toDarkerShade(props.account.backgroundColor, 1, 0.7)} //Arrumar isso
-    >
-      <ImageView
-        opacity={0.15}
-        position="absolute"
-        source={require('~src/assets/images/placeholder-card.png')}
-        resizeMode="contain"
-        right="-160px"
-        bottom="8px"
-        style={{
-          height: 160,
-        }}
-      />
-      <LinearLayout orientation="verti" width="100%" height="100%" pl={5 * unit} pr={15 * unit} py={10 * unit}>
-        <LinearLayout mt="5px" orientation="horiz" alignItems="flex-end" width="100%" pr={10 * unit}>
-          <ImageView
-            width={30 * unit}
-            height={30 * unit}
-            source={getBlockchainLogo(props.account.blockchain, 'white')}
-            resizeMode="contain"
-            ml={unit * 10}
-            mr={unit * 10}
-            mt={unit * 7}
-            alignSelf="center"
-          />
-          <LinearLayout weight={1} orientation="verti" height="100%">
-            <LinearLayout orientation="horiz" alignItems="center">
-              <TextView
-                mb={-4 * unit}
-                fontFamily="semibold"
-                fontSize={22 * unit}
-                color="white"
-                textAlign="left"
-                numberOfLines={1}
-                width="88%"
-                allowFontScaling
-              >
-                {props.account.name?.length !== 0 ? props.account.name : i18n.t('paymentCard.accountPlaceholder')}
-              </TextView>
-            </LinearLayout>
-            <LinearLayout mb={3 * unit} orientation="horiz" alignItems="flex-end" width="100%">
-              <TextView
-                mb={-2 * unit}
-                fontFamily="semibold"
-                fontSize={13 * unit}
-                color="white"
-                textAlign="left"
-                numberOfLines={1}
-                width="88%"
-              >
-                {i18n.t(`blockchainServices.${props.account.blockchain}.id`)}
-              </TextView>
-            </LinearLayout>
-          </LinearLayout>
-        </LinearLayout>
-
-        {props.account.address && (
-          <LinearLayout
-            mt={10 * unit}
-            orientation="horiz"
-            alignItems="flex-end"
-            justifyContent="space-between"
-            mb={5 * unit}
-            pr={30 * unit}
-          >
-            <LinearLayout>
-              <LinearLayout orientation="horiz">
-                {props.account.accountType === 'watch' ? (
-                  <ImageView
-                    width={21 * unit}
-                    height={21 * unit}
-                    source={require('~/src/assets/images/icon-watch-white.png')}
-                    ml={7 * unit}
-                    mt={4 * unit}
-                    mb={4 * unit}
-                    alignSelf="center"
-                    mr={8 * unit}
-                  />
-                ) : (
-                  <LinearLayout ml={10 * unit} />
-                )}
-
-                <LinearLayout width={285 * unit}>
-                  <TextView fontSize={12 * unit} color="white" textAlign="left" fontFamily="bold">
-                    {i18n.t('paymentCard.address')}
-                  </TextView>
-
-                  <TextView
-                    color="primary"
-                    opacity={0.6}
-                    textAlign="left"
-                    fontFamily="medium"
-                    ellipsizeMode="middle"
-                    pr="1px"
-                    numberOfLines={1}
-                    fontSize="14"
-                  >
-                    {props.account.address}
-                  </TextView>
-                </LinearLayout>
-              </LinearLayout>
-            </LinearLayout>
-          </LinearLayout>
-        )}
-      </LinearLayout>
     </LinearLayout>
   )
 }
@@ -423,7 +294,14 @@ const WalletCard = ({ wallet, balances, exchange, isInactive, onPress, width }: 
                   ],
                 }}
               >
-                <AccountContainer viewHeight={viewHeight} account={it} index={i} isInactive={isInactive} />
+                <AccountContainer
+                  viewHeight={viewHeight}
+                  account={it}
+                  index={i}
+                  isInactive={isInactive}
+                  balances={balances}
+                  exchange={exchange}
+                />
               </Animated.View>
             ))}
           </RelativeLayout>

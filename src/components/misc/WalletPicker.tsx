@@ -12,7 +12,7 @@ import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { MoreStackParamList } from '~/src/navigation/MoreStackNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { Balance } from '~/src/types/balance'
-import { Exchange } from '~/src/types/exchange'
+import { MultiExchange } from '~/src/types/exchange'
 import WalletCard from '~src/components/WalletCard'
 import { Wallet } from '~src/models/redux/Wallet'
 import { ButtonWithoutFeedbackView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
@@ -25,7 +25,7 @@ interface Props {
   isInactive?: boolean
   onScrollBegin?: (evt?: NativeSyntheticEvent<NativeScrollEvent>) => void
   onScrollEnd?: (evt?: NativeSyntheticEvent<NativeScrollEvent>) => void
-  exchange?: Exchange
+  exchange?: MultiExchange
   selectedWalletBalances?: Balance[]
 }
 
@@ -33,7 +33,7 @@ interface ItemProps {
   disablePointerEvents?: boolean
   wallet: Wallet
   isInactive?: boolean
-  exchange?: Exchange
+  exchange?: MultiExchange
   balances?: Balance[]
   onPress?: () => void
 }

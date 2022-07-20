@@ -15,6 +15,7 @@ import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { NeoNode } from '~/src/models/NeoNode'
 import { Account } from '~/src/models/redux/Account'
+import { ExchangeInfo } from '~/src/models/response/ExchangeInfo'
 import { NFTResponse } from '~/src/models/response/NFTResponse'
 import { NFTSResponse } from '~/src/models/response/NFTSResponse'
 import { NeoNative } from '~/src/native/NeoNative'
@@ -59,6 +60,11 @@ export interface ContractParam {
   type: string
   name: string
 }
+
+export type FlamingoExchangeResponse = {
+  symbol: string
+  usd_price: number
+}[]
 export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, INFT {
   provider: Neo3Provider
   key: BlockchainServiceKey
@@ -211,8 +217,8 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
 
     const neoHash = this.tokens.find(token => token.symbol === 'NEO')?.hash
 
-    const neoBalance = response.filter(balance => balance.assetSymbol === 'NEO')
-    const gasBalance = response.balance.filter(balance => balance.assetSymbol === 'GAS')
+    const neoBalance = response.filter(balance => balance.symbol === 'NEO')
+    const gasBalance = response.filter(balance => balance.symbol === 'GAS')
 
     if (neoBalance.length < 1) {
       throw new Error("Address don't have NEO to make a claim")
@@ -414,6 +420,23 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     })
 
     return nftResponse
+  }
+
+  async getExchange(currency: string): Promise<ExchangeInfo[]> {
+    const { data: prices } = await axios.get<FlamingoExchangeResponse>('https://api.flamingo.finance/token-info/prices')
+
+    let currencyRatio: number = 1
+
+    if (currency !== 'USD') {
+      const { data } = await axios.get<number>(`https://api.flamingo.finance/fiat/exchange-rate?pair=USD_${currency}`)
+
+      currencyRatio = data
+    }
+
+    return prices.map(price => ({
+      amount: price.usd_price * currencyRatio,
+      symbol: price.symbol,
+    }))
   }
 
   private async signing(address: string) {

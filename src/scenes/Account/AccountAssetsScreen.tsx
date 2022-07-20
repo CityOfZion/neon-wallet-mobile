@@ -28,18 +28,8 @@ const AccountAssetScreen = ({ route }: Props) => {
   const { account } = route.params
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const currency = useSelector((state: RootState) => state.settings.currency)
-  const {
-    exchange,
-    isRefetching: exchangeIsRefetching,
-    refetch: exchangeRefetch,
-  } = useExchange({ filter: { currencies: currency } })
-
-  const {
-    data: balance,
-    isRefetching: balanceIsRefetching,
-    refetch: balanceRefetch,
-  } = useBalance({ address: account.address ?? '', blockchain: account.blockchain })
+  const { exchange, isRefetching: exchangeIsRefetching, refetch: exchangeRefetch } = useExchange()
+  const { balance, isRefetching: balanceIsRefetching, refetch: balanceRefetch } = useBalance(account)
 
   function handleRefresh() {
     exchangeRefetch()

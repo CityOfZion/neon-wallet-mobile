@@ -49,8 +49,8 @@ export const SendTransactionModal = (props: Props) => {
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const currency = useSelector((state: RootState) => state.settings.currency)
   const controller = useSwiperController(true)
-  const { exchange } = useExchange({ filter: { currencies: currency } })
-  const { data: balance } = useBalance(account)
+  const { exchange } = useExchange()
+  const { balance } = useBalance(account)
 
   const [destinationAddress, setDestinationAdress] = useState<string>()
   const [destinationAddressIsValid, setDestinationAddressIsValid] = useState<boolean>()
@@ -79,10 +79,11 @@ export const SendTransactionModal = (props: Props) => {
 
     return BalanceHelper.getTokenBalanceBySymbol(token.symbol, balance)
   }, [balance, token])
+
   const ratio = useMemo(() => {
     if (!token) return
 
-    return BalanceHelper.getExchangeRatio(token.symbol, exchange, currency)
+    return BalanceHelper.getExchangeRatio(token.symbol, token.blockchain, exchange)
   }, [token, exchange, currency])
 
   const handleSelectToken = (token: Token) => {

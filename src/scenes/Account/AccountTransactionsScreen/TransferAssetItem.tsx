@@ -10,11 +10,11 @@ import { TokenHelper } from '~/src/helpers/TokenHelper'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, TextView, LinearLayout } from '~/src/styles/styled-components'
-import { Exchange } from '~/src/types/exchange'
+import { MultiExchange } from '~/src/types/exchange'
 
 type Props = FormattedTransferAsset & {
   account: Account
-  exchange?: Exchange
+  exchange?: MultiExchange
 }
 
 export const TransferAssetItem = React.memo((props: Props) => {
@@ -22,7 +22,7 @@ export const TransferAssetItem = React.memo((props: Props) => {
   const language = useSelector((state: RootState) => state.settings.language)
 
   const fiatAmount = useMemo(() => {
-    const ratio = BalanceHelper.getExchangeRatio(props.symbol, props.exchange, currency)
+    const ratio = BalanceHelper.getExchangeRatio(props.symbol, props.account.blockchain, props.exchange)
 
     const calculateAmount = ratio ? ratio * Number(props.amount) : undefined
 

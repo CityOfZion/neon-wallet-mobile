@@ -130,19 +130,14 @@ const GetAccountView = (props: GetAccountViewProps) => {
   })
 
   const wallets = useSelector((state: RootState) => state.app.wallets)
-  const currency = useSelector((state: RootState) => state.settings.currency)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const { sessions } = useWalletConnect()
 
   const posYFactor = useRef(new Animated.Value(0))
 
-  const {
-    exchange,
-    isRefetching: exchangeIsRefetching,
-    refetch: exchangeRefetch,
-  } = useExchange({ filter: { currencies: currency } })
-  const { data: balance, isRefetching: balanceIsRefetching, refetch: balanceRefetch } = useBalance(account)
+  const { exchange, isRefetching: exchangeIsRefetching, refetch: exchangeRefetch } = useExchange()
+  const { balance, isRefetching: balanceIsRefetching, refetch: balanceRefetch } = useBalance(account)
 
   const [showWarning, setShowWarning] = useState<boolean>(false)
   const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>()
@@ -268,7 +263,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
     if (account.accountType === 'watch' || !isConnected || !wallet) return
 
-    const totalBalance = BalanceHelper.calculateTotalBalances(balance, exchange, currency)
+    const totalBalance = BalanceHelper.calculateTotalBalances(balance, exchange)
 
     if (totalBalance && totalBalance <= 0) return
 
