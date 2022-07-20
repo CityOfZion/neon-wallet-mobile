@@ -55,8 +55,8 @@ jobs:
     working_directory: ~/neon-wallet-mobile/android
     resource_class: xlarge
     environment:
-      JAVA_OPTS: '-Xms512m -Xmx2g'
-      GRADLE_OPTS: '-Xmx3g -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx2g -XX:+HeapDumpOnOutOfMemoryError"'
+      JAVA_OPTS: '-Xms2048m -Xmx4g'
+      GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx8g -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.debug=true'
     steps:
       - checkout:
           path: ~/neon-wallet-mobile
