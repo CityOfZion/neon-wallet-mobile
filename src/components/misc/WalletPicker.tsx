@@ -1,61 +1,137 @@
-import PropTypes from 'prop-types'
-import React, { useState, useEffect } from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import i18n from 'i18n-js'
+import React, { useMemo } from 'react'
 import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native'
 import Carousel from 'react-native-snap-carousel'
-import { useDispatch } from 'react-redux'
 
+import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Normalize } from '~/src/app/Normalize'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
+import { MoreStackParamList } from '~/src/navigation/MoreStackNavigation'
+import { TabStackParamList } from '~/src/navigation/TabNavigation'
+import { Balance } from '~/src/types/balance'
 import { Exchange } from '~/src/types/exchange'
-import { SyncDispatch } from '~/src/types/reducers/root'
 import WalletCard from '~src/components/WalletCard'
 import { Wallet } from '~src/models/redux/Wallet'
-import { RootStore } from '~src/store/RootStore'
-import { LinearLayout } from '~src/styles/styled-components'
+import { ButtonWithoutFeedbackView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
   onPress?: (wallet: Wallet) => void
   onSelect?: (wallet: Wallet) => void
+  selectedWallet: Wallet
   wallets: Wallet[]
-  canBeInactive?: boolean
+  isInactive?: boolean
   onScrollBegin?: (evt?: NativeSyntheticEvent<NativeScrollEvent>) => void
   onScrollEnd?: (evt?: NativeSyntheticEvent<NativeScrollEvent>) => void
   exchange?: Exchange
+  selectedWalletBalances?: Balance[]
 }
 
-const WalletPicker: React.FC<Props> = (props: Props) => {
-  const { wallets } = props
-  const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
+interface ItemProps {
+  disablePointerEvents?: boolean
+  wallet: Wallet
+  isInactive?: boolean
+  exchange?: Exchange
+  balances?: Balance[]
+  onPress?: () => void
+}
 
-  const wallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
+const EmptyListComponent = () => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList & TabStackParamList & MoreStackParamList>>()
 
-  const [index, setIndex] = useState<number>(wallet ? wallets.findIndex(it => it.id === wallet.id) : 0)
+  const handlePress = () => {
+    navigation.navigate(wrapper.route.Tab.name, {
+      screen: wrapper.route.More.name,
+      params: {
+        screen: wrapper.route.Step1CreateWallet.name,
+        initial: false,
+        params: {
+          source: wrapper.route.WalletContextModal.name,
+        },
+      },
+    })
+  }
+
+  return (
+    <LinearLayout alignItems="center" mx={3}>
+      <ButtonWithoutFeedbackView onPress={handlePress}>
+        <LinearLayout
+          my={6}
+          orientation="horiz"
+          width={Normalize.scale(300)}
+          maxWidth="100%"
+          alignItems="center"
+          justifyContent="center"
+          borderStyle="dashed"
+          borderColor="text.0"
+          borderRadius={17}
+          borderWidth={1}
+          style={{
+            aspectRatio: 20 / 25,
+          }}
+        >
+          <ImageView source={require('~src/assets/images/icon-plus-white.png')} />
+
+          <TextView color="white" fontSize={18} mt={2} ml={3} fontFamily="medium">
+            {i18n.t('screens.listWallets.createFirstWallet')}
+          </TextView>
+        </LinearLayout>
+      </ButtonWithoutFeedbackView>
+    </LinearLayout>
+  )
+}
+
+const Item = React.memo(({ wallet, balances, exchange, isInactive, onPress, disablePointerEvents }: ItemProps) => {
+  return (
+    <LinearLayout
+      weight={1}
+      justifyContent="center"
+      alignItems="center"
+      py={6}
+      pointerEvents={disablePointerEvents ? 'none' : undefined}
+    >
+      <WalletCard
+        exchange={exchange}
+        balances={balances}
+        width={240}
+        onPress={onPress}
+        wallet={wallet}
+        isInactive={isInactive}
+      />
+    </LinearLayout>
+  )
+})
+
+const WalletPicker = ({
+  selectedWallet,
+  exchange,
+  selectedWalletBalances,
+  isInactive,
+  onPress,
+  onScrollBegin,
+  onScrollEnd,
+  onSelect,
+  wallets,
+}: Props) => {
+  const selectWalletIndex = useMemo(
+    () => wallets.findIndex(it => it.id === selectedWallet.id) ?? 0,
+    [wallets, selectedWallet]
+  )
 
   const pressEvent = async (wallet: Wallet) => {
-    if (props.onPress) {
-      props.onPress(wallet)
-    }
+    if (onPress) onPress(wallet)
   }
 
   const selectEvent = async (index: number) => {
-    setIndex(index)
-    if (props.onSelect) {
-      props.onSelect(wallets[index])
-    }
+    if (onSelect) onSelect(wallets[index])
   }
-
-  const isInactive = (wallet: Wallet) => {
-    return Boolean(wallet.isInactive && props.canBeInactive)
-  }
-
-  useEffect(() => {
-    const index = wallets.indexOf(wallet) < 0 ? 0 : wallets.indexOf(wallet)
-    setIndex(index)
-  }, [wallet])
 
   return (
     <Carousel<Wallet>
-      onScrollBeginDrag={props.onScrollBegin}
-      onScrollEndDrag={props.onScrollEnd}
+      onScrollBeginDrag={onScrollBegin}
+      onScrollEndDrag={onScrollEnd}
       layout="default"
       containerCustomStyle={{ overflow: 'visible' }}
       data={wallets}
@@ -68,36 +144,22 @@ const WalletPicker: React.FC<Props> = (props: Props) => {
       lockScrollTimeoutDuration={200}
       activeSlideOffset={5}
       swipeThreshold={5}
-      enableSnap
       useScrollView
-      firstItem={index > 0 ? index : 0}
+      firstItem={selectWalletIndex}
+      ListEmptyComponent={EmptyListComponent}
       onSnapToItem={index => selectEvent(index)}
-      renderItem={(wallet: { item: Wallet; index: number }) => (
-        <LinearLayout
-          weight={1}
-          justifyContent="center"
-          alignItems="center"
-          py={6}
-          pointerEvents={wallet.index !== index ? 'none' : undefined}
-        >
-          <WalletCard
-            exchange={props.exchange}
-            width={240}
-            onPress={!isInactive(wallet.item) ? () => pressEvent(wallet.item) : undefined}
-            wallet={wallet.item}
-            canBeInactive={props.canBeInactive}
-          />
-        </LinearLayout>
+      renderItem={({ item, index }) => (
+        <Item
+          disablePointerEvents={index !== selectWalletIndex}
+          exchange={exchange}
+          balances={index === selectWalletIndex ? selectedWalletBalances : undefined}
+          onPress={() => pressEvent(item)}
+          wallet={item}
+          isInactive={isInactive}
+        />
       )}
     />
   )
-}
-
-WalletPicker.propTypes = {
-  onPress: PropTypes.func,
-  onSelect: PropTypes.func,
-  wallets: PropTypes.arrayOf(PropTypes.instanceOf(Wallet).isRequired).isRequired,
-  canBeInactive: PropTypes.bool,
 }
 
 export default WalletPicker

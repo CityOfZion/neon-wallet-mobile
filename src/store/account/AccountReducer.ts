@@ -4,7 +4,6 @@ import { ImageLoadEventData } from 'react-native'
 
 import { BlockchainServiceKey, blockchainServices } from '~/src/blockchain'
 import { SecurityHelper } from '~/src/helpers/SecurityHelper'
-import { TokenAsset } from '~/src/models/TokenAsset'
 import { Wallet } from '~/src/models/redux/Wallet'
 import { AccountAction, AccountActionsType, AccountState } from '~/src/types/reducers/account'
 import { AsyncAction, SyncAction } from '~/src/types/reducers/root'
@@ -18,7 +17,6 @@ import { IdWalletDispatcher } from '~src/store/account/dispatchers/IdWalletDispa
 import { IndexDispatcher } from '~src/store/account/dispatchers/IndexDispatcher'
 import { NameDispatcher } from '~src/store/account/dispatchers/NameDispatcher'
 import { SrcIconDispatcher } from '~src/store/account/dispatchers/SrcIconDispatcher'
-import { TokenAssetsDispatcher } from '~src/store/account/dispatchers/TokenAssetsDispatcher'
 export class AccountReducer extends ReducerWrapper<AccountActionsType, AccountState, AccountAction> {
   protected readonly initialState = Model.parse<AccountState>(Account)
 
@@ -28,7 +26,6 @@ export class AccountReducer extends ReducerWrapper<AccountActionsType, AccountSt
     NameDispatcher,
     SrcIconDispatcher,
     BackgroundDispatcher,
-    TokenAssetsDispatcher,
     BlockchainDispatcher,
     IndexDispatcher,
   ]
@@ -48,9 +45,6 @@ export class AccountReducer extends ReducerWrapper<AccountActionsType, AccountSt
     },
     setBackgroundColor: (backgroundColor: string) => {
       return this.commit('SET_BACKGROUND_COLOR', { backgroundColor })
-    },
-    setTokenAssets: (tokenAssets: TokenAsset[]) => {
-      return this.commit('SET_TOKENASSETS_ACCOUNT', { tokenAssets })
     },
     setBlockchain: (blockchain: BlockchainServiceKey) => {
       return this.commit('SET_BLOCKCHAIN_ACCOUNT', { blockchain })
@@ -114,7 +108,6 @@ export class AccountReducer extends ReducerWrapper<AccountActionsType, AccountSt
         if (account) {
           account.name = edited.name
           account.backgroundColor = edited.backgroundColor
-          account.tokenAssets = edited.tokenAssets
         }
 
         await Storage.accounts.save(accounts)

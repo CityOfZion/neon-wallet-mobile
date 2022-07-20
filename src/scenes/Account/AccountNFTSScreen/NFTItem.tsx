@@ -51,8 +51,6 @@ export const NFTItem = React.memo(({ nft, navigation }: Props) => {
         justifyContent="center"
       >
         <ImageView
-          width={!shouldShowDefaultNFTImage ? '100%' : '60%'}
-          height={!shouldShowDefaultNFTImage ? '100%' : '60%'}
           resizeMode="cover"
           alignSelf="center"
           source={
@@ -63,6 +61,10 @@ export const NFTItem = React.memo(({ nft, navigation }: Props) => {
               : require('~/src/assets/images/diamond-green.png')
           }
           onError={!shouldShowDefaultNFTImage ? () => setShouldShowDefaultNFTImage(true) : undefined}
+          style={{
+            width: !shouldShowDefaultNFTImage ? '100%' : '60%',
+            height: !shouldShowDefaultNFTImage ? '100%' : '60%',
+          }}
         />
       </LinearLayout>
 
@@ -78,12 +80,14 @@ export const NFTItem = React.memo(({ nft, navigation }: Props) => {
             justifyContent="center"
           >
             <ImageView
-              width="100%"
-              height="100%"
               resizeMode="cover"
               alignSelf="center"
               source={{
                 uri: nft.collectionImage,
+              }}
+              style={{
+                width: '100%',
+                height: '100%',
               }}
             />
           </LinearLayout>
@@ -114,11 +118,13 @@ export const NFTItem = React.memo(({ nft, navigation }: Props) => {
 
       <TouchableWithoutFeedback onPress={handleOnPressButtonDora}>
         <ImageView
-          width="28px"
-          height="28px"
           resizeMode="contain"
           alignSelf="center"
           source={require('~src/assets/images/dora-link.png')}
+          style={{
+            width: 28,
+            height: 28,
+          }}
         />
       </TouchableWithoutFeedback>
     </LinearLayout>

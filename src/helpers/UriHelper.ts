@@ -1,7 +1,6 @@
 import base64 from 'react-native-base64'
 
 import { validateAddressAllBlockchains } from '~src/blockchain'
-import { TokenAsset } from '~src/models/TokenAsset'
 export type TScheme = 'wc:' | 'neo:'
 
 export const SCHEME: TScheme[] = ['neo:', 'wc:']
@@ -15,9 +14,9 @@ export interface IURI {
 }
 
 export abstract class UriHelper {
-  static generate(address: string, amount?: number, token?: TokenAsset, reference?: string) {
+  static generate(address: string, amount?: number | string, tokenHash?: string, reference?: string) {
     const params = []
-    token && params.push(`asset=${token.hash}`)
+    tokenHash && params.push(`asset=${tokenHash}`)
     amount && params.push(`amount=${amount}`)
     reference && params.push(`remark=${amount}`)
 

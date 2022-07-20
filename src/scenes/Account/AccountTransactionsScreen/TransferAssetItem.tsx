@@ -1,36 +1,33 @@
-import React, { useState, useEffect } from 'react'
+import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { FormattedTransferAsset } from './AccountTransactionsScreen'
 
 import { Normalize } from '~/src/app/Normalize'
-import SkeletonContainer from '~/src/components/SkeletonContainer'
+import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { TokenHelper } from '~/src/helpers/TokenHelper'
-import { useExchange } from '~/src/hooks/useExchange'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, TextView, LinearLayout } from '~/src/styles/styled-components'
+import { Exchange } from '~/src/types/exchange'
 
 type Props = FormattedTransferAsset & {
   account: Account
+  exchange?: Exchange
 }
 
 export const TransferAssetItem = React.memo((props: Props) => {
-  const { currency } = useSelector((state: RootState) => state.settings)
+  const currency = useSelector((state: RootState) => state.settings.currency)
+  const language = useSelector((state: RootState) => state.settings.language)
 
-  const { exchange } = useExchange({ filter: { currencies: currency } })
+  const fiatAmount = useMemo(() => {
+    const ratio = BalanceHelper.getExchangeRatio(props.symbol, props.exchange, currency)
 
-  const [fiatAmount, setFiatAmount] = useState<string>()
+    const calculateAmount = ratio ? ratio * Number(props.amount) : undefined
 
-  useEffect(() => {
-    const { symbol, amount } = props
-    if (symbol && exchange && exchange[symbol]) {
-      const ratio = exchange[symbol].to[currency]
-      const fiatCalculated = ratio * Number(amount)
-      setFiatAmount(`$${FilterHelper.decimal(fiatCalculated, undefined, 2)}`)
-    }
-  }, [exchange, currency])
+    return FilterHelper.currency(calculateAmount, currency, language)
+  }, [currency, language, props.exchange, props.symbol, props.amount])
 
   return (
     <LinearLayout orientation="horiz">
@@ -51,13 +48,11 @@ export const TransferAssetItem = React.memo((props: Props) => {
       <TextView color="#fff" fontSize="16px" fontFamily="medium" flex={1} numberOfLines={1} textAlign="center">
         {props.amount}
       </TextView>
-      <SkeletonContainer isLoading={!exchange} skeletonType="transactionList">
-        <LinearLayout ml="30%">
-          <TextView color="#fff" fontSize="16px" numberOfLines={1} width={80} fontFamily="medium" textAlign="right">
-            {fiatAmount}
-          </TextView>
-        </LinearLayout>
-      </SkeletonContainer>
+      <LinearLayout ml="30%">
+        <TextView color="#fff" fontSize="16px" numberOfLines={1} width={80} fontFamily="medium" textAlign="right">
+          {fiatAmount}
+        </TextView>
+      </LinearLayout>
     </LinearLayout>
   )
 })

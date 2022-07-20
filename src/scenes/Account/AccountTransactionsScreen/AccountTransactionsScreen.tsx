@@ -2,7 +2,6 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import moment from 'moment'
 import React, { useCallback, useState, useEffect, useRef } from 'react'
 import { showMessage } from 'react-native-flash-message'
 
@@ -13,21 +12,15 @@ import { hasNFTIntegration } from '~/src/blockchain/common'
 import AccountSubTitle from '~/src/components/AccountSubTitle'
 import ScreenLayoutWithoutScroll from '~/src/components/layout/ScreenLayoutWithoutScroll'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
+import { useExchange } from '~/src/hooks/useExchange'
 import { useTokens } from '~/src/hooks/useTokens'
-import { TokenAsset } from '~/src/models/TokenAsset'
 import { TransactionTransferType } from '~/src/models/TransactionAddressSummary'
-import { TransactionDateGroup } from '~/src/models/TransactionDateGroup'
 import { Account } from '~/src/models/redux/Account'
-import { SenderTransaction } from '~/src/models/redux/SenderTransaction'
 import { NFTResponse } from '~/src/models/response/NFTResponse'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
 export interface AccountTransactionsScreenParams {
   account: Account
-}
-
-type NoUndefinedField<T> = {
-  [P in keyof T]-?: NonNullable<T[P]>
 }
 
 interface Props {
@@ -68,7 +61,8 @@ export type FormattedTransactionPerDate = Record<string, FormattedTransaction[]>
 const AccountTransactionsScreen = (props: Props) => {
   const { account } = props.route.params
 
-  const tokens = useTokens({ blockchain: account.blockchain })
+  const { tokens } = useTokens({ blockchain: account.blockchain })
+  const { exchange } = useExchange({})
 
   const [completedTransactions, setCompletedTransactions] = useState<FormattedTransaction[]>([])
   const [pendingTransactions, setPendingTransactions] = useState<FormattedTransaction[]>([])
@@ -219,36 +213,21 @@ const AccountTransactionsScreen = (props: Props) => {
 
   const loadPendingTransactions = useCallback(
     async (completedTransaction: FormattedTransaction[]) => {
-      const transactions = account
-        .getPendingTransactions()
-        .filter((transaction): transaction is NoUndefinedField<TransactionDateGroup> => !!transaction.date)
-        .flatMap(({ transactions }) => transactions)
-
-      const filteredTransactions = transactions.filter(
-        (
-          transaction
-        ): transaction is NoUndefinedField<SenderTransaction> & {
-          token: NoUndefinedField<TokenAsset>
-        } =>
-          !!transaction.sentAt &&
-          !!transaction.transactionHash &&
-          !!transaction.senderAddress &&
-          !!transaction.receiverAddress &&
-          !!transaction.token &&
-          !completedTransaction.some(({ hash }) => hash === transaction.transactionHash)
+      const filteredTransactions = account.pendingTransactions.filter(
+        transaction => !completedTransaction.some(({ hash }) => hash === transaction.hash)
       )
 
       const formattedTransactions = filteredTransactions.map(
-        ({ senderAddress, receiverAddress, token, transactionHash, sentAt }): FormattedTransaction => ({
-          hash: transactionHash,
+        ({ senderAddress, receiverAddress, token, hash, time, amount }): FormattedTransaction => ({
+          hash,
           qtyInvocations: 0,
           qtyNotifications: 0,
-          time: moment(sentAt).unix(),
+          time,
           transfers: [
             {
               from: senderAddress,
               to: receiverAddress,
-              amount: String(token.amount),
+              amount: String(amount),
               hash: token.hash,
               symbol: token.symbol,
               type: TransactionTransferType.ASSET,
@@ -276,10 +255,8 @@ const AccountTransactionsScreen = (props: Props) => {
       <AccountSubTitle account={account} />
       <AwaitActivity name="populateTransactions" loadingView={<ScreenLoader />}>
         <TransactionsList
-          refetchTransacions={async () => {
-            await populateTransactions()
-          }}
           account={account}
+          exchange={exchange} //Implement a  skeleton here
           completedTransactions={completedTransactions}
           pendingTransactions={pendingTransactions}
           onEndReached={handleEndReached}

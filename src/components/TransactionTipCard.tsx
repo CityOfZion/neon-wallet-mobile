@@ -10,36 +10,36 @@ import { useTokens } from '../hooks/useTokens'
 import { Account } from '../models/redux/Account'
 import { RootState } from '../store/RootStore'
 import { LinearLayout, TextView, ImageView } from '../styles/styled-components'
-import { Exchange } from '../types/exchange'
 import { HeaderColumn } from './HeaderColumn'
 
 interface Props {
   tip: number
   account: Account
-  exchange?: Exchange
+  ratio?: number
 }
 
-export const TransactionTipCard = ({ account, tip, exchange }: Props) => {
+export const TransactionTipCard = ({ account, tip, ratio }: Props) => {
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
-  const tokens = useTokens({ blockchain: account.blockchain })
+  const { getTokenBySymbol } = useTokens({ blockchain: account.blockchain })
 
   const tipToken = useMemo(() => {
     const cozTip = blockchainServices[account.blockchain].cozTip
 
     if (!cozTip) return
 
-    return tokens.find(token => token.symbol === cozTip.token)
-  }, [account, tokens])
+    return getTokenBySymbol(cozTip.token)
+  }, [getTokenBySymbol, account])
+
   const tipFiat = useMemo(() => {
-    if (!tipToken || !exchange) {
+    if (!tipToken || !ratio) {
       return
     }
 
-    const price = exchange[tipToken.symbol].to[currency] * tip
+    const price = ratio * tip
 
     return FilterHelper.currency(price, currency, language)
-  }, [exchange, currency, language, tip, account, tipToken])
+  }, [ratio, currency, language, tip, tipToken])
 
   return (
     <LinearLayout

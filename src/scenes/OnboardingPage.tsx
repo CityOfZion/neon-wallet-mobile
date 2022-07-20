@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 
 import { blockchainList } from '../blockchain'
 import { AsteroidHelper } from '../helpers/AsteroidHelper'
-import { useBlockchainActionsHook } from '../hooks'
+import { useBlockchainActionsHook } from '../hooks/useBlockchainActionsHook'
 import { RootState } from '../store/RootStore'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
@@ -83,7 +83,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
 
   const createInitialWallet = useCallback(async () => {
     const words = AsteroidHelper.generateMnemonic() ?? []
-    blockchainActionsHook.init()
+
     const walletId = await blockchainActionsHook.createWallet(
       i18n.t('onboarding.firstWalletName'),
       words.join(' '),
@@ -103,8 +103,6 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     allSettled.shim()
 
     await Promise.allSettled(accountsPromise)
-
-    blockchainActionsHook.finish()
   }, [])
 
   useEffect(() => {

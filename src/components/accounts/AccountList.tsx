@@ -43,7 +43,7 @@ const Item = React.memo(({ account, onPress, wallet }: ItemProps) => {
 
   return (
     <ButtonView onPress={handlePress}>
-      <LinearLayout orientation="horiz" width="100%" alignItems="flex-start" p="16px">
+      <LinearLayout orientation="horiz" width="100%" alignItems="flex-start" py="16px">
         <LinearLayout width="18px" height="18px" mr="16px" mt="6px" bg={account.backgroundColor} borderRadius={9} />
 
         <LinearLayout orientation="verti" weight={1}>
@@ -72,7 +72,7 @@ const Item = React.memo(({ account, onPress, wallet }: ItemProps) => {
               <TextView color="text.2" fontFamily="regular" fontSize={14}>
                 {i18n.t(`blockchainServices.${account.blockchain}.id`)}
               </TextView>
-              <TextView fontSize="16px" color="primary" ellipsizeMode="middle" numberOfLines={1}>
+              <TextView width="88%" fontSize="16px" color="primary" ellipsizeMode="middle" numberOfLines={1}>
                 {account.address}
               </TextView>
             </LinearLayout>

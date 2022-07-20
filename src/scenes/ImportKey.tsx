@@ -8,8 +8,6 @@ import { showMessage } from 'react-native-flash-message'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { IURI } from '../helpers/UriHelper'
-import { AccountToImport } from '../hooks/BlockchainActionsHook'
-import { useExchange } from '../hooks/useExchange'
 import { TabStackParamList } from '../navigation/TabNavigation'
 import { AsyncDispatch } from '../types/reducers/root'
 import { MnemonicSelectionInfo } from './MnemonicSelectionList'
@@ -31,7 +29,7 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
-import { useBlockchainActionsHook } from '~src/hooks'
+import { useBlockchainActionsHook, AccountToImport } from '~src/hooks/useBlockchainActionsHook'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
@@ -64,6 +62,7 @@ const isMnemonic = (word: string) => {
 const ImportKey = (props: ImportKeyProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const accounts = useSelector((state: RootState) => state.app.accounts)
+  const wallets = useSelector((state: RootState) => state.app.wallets)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const [inputValue, setInputValue] = useState(props.route.params ? props.route.params.key ?? '' : '')
   const [addressesFound, setAddressesFound] = useState<{ address: string; blockchain: BlockchainServiceKey }[]>([])
@@ -259,7 +258,6 @@ const ImportKey = (props: ImportKeyProps) => {
       return
     }
 
-    blockchainActionsHook.init()
     const walletId = await blockchainActionsHook.createLegacyWallet(i18n.t('defaultNameWallet.importedWallet'))
 
     const accountToImport = addressesSelected.map(
@@ -274,12 +272,16 @@ const ImportKey = (props: ImportKeyProps) => {
 
     await blockchainActionsHook.importAccounts(accountToImport)
 
-    blockchainActionsHook.finish()
+    const wallet = wallets.find(wallet => wallet.id === walletId)
+
     props.navigation.replace(wrapper.route.Tab.name, {
       screen: wrapper.route.ListWallets.name,
     })
-    props.navigation.navigate(wrapper.route.GetWallet.name)
-  }, [blockchainActionsHook, inputValue])
+
+    if (wallet) {
+      props.navigation.navigate(wrapper.route.GetWallet.name, { wallet })
+    }
+  }, [blockchainActionsHook, inputValue, wallets])
 
   const persistWhenMnemonic = useCallback(async () => {
     const dataAccountsToImport = await importMnemonic(inputValue)

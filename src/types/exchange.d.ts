@@ -1,5 +1,3 @@
-import { BlockchainServiceKey } from '~src/blockchain'
-
 export interface Exchange {
   [symbolRef: string]: {
     to: {

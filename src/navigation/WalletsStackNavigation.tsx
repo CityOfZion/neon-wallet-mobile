@@ -13,24 +13,23 @@ import Step2BackupWalletPage from '../scenes/Wallet/BackupWallet/Step2BackupWall
 import Step3BackupWalletPage from '../scenes/Wallet/BackupWallet/Step3BackupWalletPage'
 import { WalletSettingsView, WalletSettingViewParams } from '../scenes/Wallet/WalletSettingsView'
 import { RootState } from '../store/RootStore'
+import { DefaultNavigationParam } from '../types/global'
 
 import AccountTransactionsScreen, {
   AccountTransactionsScreenParams,
 } from '~/src/scenes/Account/AccountTransactionsScreen/AccountTransactionsScreen'
-import GetWalletView from '~/src/scenes/Wallet/GetWalletView'
+import GetWalletView, { GetWalletViewParams } from '~/src/scenes/Wallet/GetWalletView'
 import ListWalletView from '~/src/scenes/Wallet/ListWalletView'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Navigator } from '~src/app/Navigator'
-import AccountAssetDetail, { AccountAssetDetailParams } from '~src/scenes/Account/AccountAssetDetail'
-import AccountAssetScreen from '~src/scenes/Account/AccountAssetsScreen'
-import GetAccountView from '~src/scenes/Account/GetAccountView'
+import AccountAssetScreen, { AccountAssetScreenParams } from '~src/scenes/Account/AccountAssetsScreen'
+import GetAccountView, { GetAccountViewParams } from '~src/scenes/Account/GetAccountView'
 
 export type WalletStackParamList = {
   ListWalletsPage: undefined
-  GetWallet: undefined
-  GetAccount: undefined
-  AccountAssetDetail: AccountAssetDetailParams
-  AccountAssetScreen: undefined
+  GetWallet: GetWalletViewParams
+  GetAccount: GetAccountViewParams
+  AccountAssetScreen: AccountAssetScreenParams
   AccountTransactionsScreen: AccountTransactionsScreenParams
   AccountConnectionsScreen: AccountConnectionsScreenParams
   AccountNFTSScreen: AccountNFTSScreenParams
@@ -40,6 +39,21 @@ export type WalletStackParamList = {
   Step2BackupWallet: StepsBackupWalletPageParams & HeaderActionButtonProps
   Step3BackupWallet: StepsBackupWalletPageParams & HeaderActionButtonProps
 }
+
+export type WalletStackParam =
+  | DefaultNavigationParam<
+      | GetWalletViewParams
+      | GetAccountViewParams
+      | AccountAssetScreenParams
+      | AccountTransactionsScreenParams
+      | AccountConnectionsScreenParams
+      | AccountNFTSScreenParams
+      | AccountSettingsViewParams
+      | WalletSettingViewParams
+      | StepsBackupWalletPageParams
+      | undefined
+    >
+  | undefined
 
 const WalletStack = createStackNavigator<WalletStackParamList>()
 
@@ -72,16 +86,6 @@ const WalletStackNavigation = () => {
         <WalletStack.Screen
           name={wrapper.route.GetAccount.name}
           component={GetAccountView}
-          options={({ route }) =>
-            Navigator.defaultStackNavigatorOptions({
-              theme,
-              route,
-            })
-          }
-        />
-        <WalletStack.Screen
-          name={wrapper.route.AccountAssetDetail.name}
-          component={AccountAssetDetail}
           options={({ route }) =>
             Navigator.defaultStackNavigatorOptions({
               theme,

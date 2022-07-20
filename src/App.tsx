@@ -19,7 +19,8 @@ import {
   DEFAULT_RELAY_PROVIDER,
 } from '~src/config/walletConnect/constants'
 import { CtxOptions, WalletConnectContextProvider } from '~src/contexts/WalletConnectContext'
-import { useAppState, useOnlineManager } from '~src/hooks'
+import { useAppState } from '~src/hooks/useAppState'
+import { useOnlineManager } from '~src/hooks/useOnlineManager'
 import AppNavigation from '~src/navigation/AppNavigation'
 import { RootStore } from '~src/store/RootStore'
 

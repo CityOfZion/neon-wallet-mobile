@@ -13,7 +13,7 @@ import InvocationDetailsParametersBox from '../components/InvocationDetailsParam
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { blockchainServices, getBlockchainByWCChain } from '~/src/blockchain'
 import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
-import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks'
+import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
 import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'

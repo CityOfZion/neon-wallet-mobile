@@ -1,224 +1,136 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import { AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import moment from 'moment'
-import PropTypes from 'prop-types'
-import React, { useEffect, useRef, useState } from 'react'
-import { Alert, TouchableWithoutFeedback, View, Animated, RefreshControl } from 'react-native'
+import React, { useMemo, useRef, useState } from 'react'
+import { Alert, Animated, RefreshControl } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { TabStackParamList } from '../../navigation/TabNavigation'
 
-import SkeletonContainer from '~/src/components/SkeletonContainer'
+import { BalanceHelper } from '~/src/helpers/BalanceHelper'
+import { FilterHelper } from '~/src/helpers/FilterHelper'
+import { useBalances } from '~/src/hooks/useBalances'
 import { useExchange } from '~/src/hooks/useExchange'
+import { Balance } from '~/src/types/balance'
 import { Exchange } from '~/src/types/exchange'
-import { SyncDispatch } from '~/src/types/reducers/root'
 import { wrapper } from '~src/app/ApplicationWrapper'
-import { Normalize } from '~src/app/Normalize'
 import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import WalletPicker from '~src/components/misc/WalletPicker'
 import ThemedMoreButton from '~src/components/themed/ThemedMoreButton'
-import { Lang } from '~src/enums/Lang'
-import { FilterHelper } from '~src/helpers/FilterHelper'
-import { TokenAsset } from '~src/models/TokenAsset'
 import { Wallet } from '~src/models/redux/Wallet'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
 import { RootState, RootStore } from '~src/store/RootStore'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
-import { ApplicationTheme } from '~src/themes/ApplicationTheme'
-
-type Props = WalletStackParamList & RootStackParamList & TabStackParamList & ModalStackParamList
 
 interface WalletProps {
-  navigation: StackNavigationProp<Props>
+  navigation: StackNavigationProp<WalletStackParamList & RootStackParamList & TabStackParamList & ModalStackParamList>
   route: RouteProp<WalletStackParamList, 'ListWalletsPage'>
-  theme: ApplicationTheme
 }
 
-interface EmptyListProps {
-  navigation: StackNavigationProp<Props>
-}
-
-const WalletChangeComponent = (props: {
-  wallet: Wallet
-  language: Lang
-  tokenAssets: TokenAsset[]
-  onPressWarning: () => void
+interface SelectedWalletInfoProps {
+  selectedWallet: Wallet
+  selectedWalletBalances: Balance[]
   exchange?: Exchange
-}) => {
-  const { currency, language } = useSelector((state: RootState) => state.settings)
-  const { accounts } = useSelector((state: RootState) => state.app)
-  const [variationInPercent, setVariationInPercent] = useState<number>()
+}
 
-  const formattedBalance = props.exchange
-    ? props.wallet.calculateBalanceFormatted(
-        currency,
-        language,
-        props.exchange,
-        props.wallet.calculateBalance(currency, props.exchange) ?? 0
-      )
-    : '-'
+const SelectedWalletInfo = ({ selectedWallet, selectedWalletBalances, exchange }: SelectedWalletInfoProps) => {
+  const currency = useSelector((state: RootState) => state.settings.currency)
+  const language = useSelector((state: RootState) => state.settings.language)
 
-  const populate = async () => {
-    const { exchange } = props
-    if (exchange) {
-      const pastOneDay = moment().add(-1, 'day')
+  const totalTokensBalances = useMemo(
+    () => BalanceHelper.calculateTotalBalances(selectedWalletBalances, exchange, currency),
+    [selectedWalletBalances, exchange, currency]
+  )
 
-      const variation = (await props.wallet.getBalanceVariationFromPastExchange(currency, pastOneDay, exchange)) ?? 0
+  const formattedTotalTokensBalances = useMemo(
+    () => FilterHelper.currency(totalTokensBalances, currency, language),
+    [totalTokensBalances, currency, language]
+  )
 
-      props.wallet.populateTokenAssets(accounts)
+  const [notificationIsVisible, setNotificationIsVisible] = useState(
+    selectedWallet.showBackupAlert && selectedWallet.walletType === 'standard'
+  )
 
-      const balance = props.wallet.calculateBalance(currency, exchange) ?? 0
+  const handlePressWarning = () =>
+    Alert.alert(
+      i18n.t('screens.listWallets.incompleteBalanceWarningTitle'),
+      i18n.t('screens.listWallets.incompleteBalanceWarningText'),
+      [{ text: i18n.t('screens.listWallets.incompleteBalanceWarningButton') }],
+      { cancelable: false }
+    )
 
-      if (balance !== 0) {
-        setVariationInPercent((variation / balance) * 100)
-      } else {
-        setVariationInPercent(0)
-      }
-    }
+  const handleCloseNotification = () => {
+    setNotificationIsVisible(false)
   }
-
-  const showListTokenAssets = (tokenAssets: TokenAsset[]) => {
-    return tokenAssets.some(token => token.amount > 0)
-  }
-
-  useEffect(() => {
-    populate()
-  }, [props.wallet, props.exchange, formattedBalance])
 
   return (
-    <LinearLayout mb={6} alignItems="center">
-      {showListTokenAssets(props.tokenAssets) ? (
+    <LinearLayout>
+      <LinearLayout alignItems="center">
         <TextView fontSize="11px" color="text.2">
-          {props.wallet.formattedLastVisitedAt}
+          {selectedWallet.formattedLastVisitedAt}
         </TextView>
-      ) : (
-        <View />
-      )}
-      <SkeletonContainer isLoading={!props.exchange} skeletonType="balanceWallet">
+
         <LinearLayout orientation="horiz" minHeight={56}>
           <TextView fontSize="36px" color="text.0" fontFamily="medium">
-            {formattedBalance}
+            {formattedTotalTokensBalances}
           </TextView>
-          {props.wallet.hasFunds && (
-            <ButtonView onPress={props.onPressWarning}>
+
+          {!!totalTokensBalances && totalTokensBalances > 0 && (
+            <ButtonView onPress={handlePressWarning}>
               <ImageView mt="8px" mx="4px" source={require('~src/assets/images/icon-warning-green.png')} />
             </ButtonView>
           )}
         </LinearLayout>
-      </SkeletonContainer>
 
-      <AwaitActivity name="populateVariation">
         <LinearLayout orientation="horiz">
           <TextView mr={2} fontSize="sm" color="text.2" fontFamily="semibold">
             {i18n.t('screens.listWallets.changeInLast24hours')}
           </TextView>
-
-          {variationInPercent !== undefined && (
-            <TextView
-              fontSize="sm"
-              color={variationInPercent > 0 ? 'success' : variationInPercent === 0 ? 'text.2' : 'danger'}
-              fontFamily="semibold"
-            >
-              {variationInPercent > 0 ? '+' : variationInPercent === 0 ? '-' : ''}
-              {variationInPercent === 0 ? '' : `${FilterHelper.decimal(variationInPercent, language, 2)}%`}
-            </TextView>
-          )}
         </LinearLayout>
-      </AwaitActivity>
-    </LinearLayout>
-  )
-}
+      </LinearLayout>
 
-const EmptyListComponent: React.FC<EmptyListProps> = props => {
-  const { navigation } = props
-  return (
-    <LinearLayout alignItems="center" mx={3}>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          props.navigation.reset({
-            index: 0,
-            routes: [
-              { name: wrapper.route.Tab.name },
-              { name: wrapper.route.Step1CreateWallet.name },
-              { name: wrapper.route.MorePage.name },
-            ],
-          })
-          navigation.navigate(wrapper.route.Tab.name, {
-            screen: wrapper.route.More.name,
-            params: {
-              screen: wrapper.route.Step1CreateWallet.name,
-              initial: false,
-              params: {
-                source: wrapper.route.WalletContextModal.name,
-              },
-            },
-          })
-        }}
-      >
-        <LinearLayout
-          my={6}
-          orientation="horiz"
-          width={Normalize.scale(300)}
-          maxWidth="100%"
-          alignItems="center"
-          justifyContent="center"
-          borderStyle="dashed"
-          borderColor="text.0"
-          borderRadius={17}
-          borderWidth={1}
-          style={{
-            aspectRatio: 20 / 25,
-          }}
-        >
-          <ImageView source={require('~src/assets/images/icon-plus-white.png')} />
+      <LinearLayout mx="16px">
+        {notificationIsVisible && (
+          <LinearLayout mt="24px">
+            <Notification
+              text={i18n.t('screens.listWallets.noBackup')}
+              wallet={selectedWallet}
+              onClose={handleCloseNotification}
+            />
+          </LinearLayout>
+        )}
 
-          <TextView color="white" fontSize={18} mt={2} ml={3} fontFamily="medium">
-            {i18n.t('screens.listWallets.createFirstWallet')}
-          </TextView>
-        </LinearLayout>
-      </TouchableWithoutFeedback>
+        <BalanceList my="24px" exchange={exchange} balances={selectedWalletBalances} showBlockchain />
+      </LinearLayout>
     </LinearLayout>
   )
 }
 
 const ListWalletView = (props: WalletProps) => {
-  const { wallets, accounts } = useSelector((state: RootState) => state.app)
+  const wallets = useSelector((state: RootState) => state.app.wallets)
+  const accounts = useSelector((state: RootState) => state.app.accounts)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
-  const { language, currency } = useSelector((state: RootState) => state.settings)
-  const { id } = useSelector((state: RootState) => state.wallet)
+  const currency = useSelector((state: RootState) => state.settings.currency)
   const dispatch = useDispatch()
-  const dispatchWallet = useDispatch<SyncDispatch<Wallet>>()
-  const { exchange, isRefetching, refetch } = useExchange({ filter: { currencies: currency } })
-
-  const selectedWallet = dispatchWallet(RootStore.wallet.actions.getFromSelection())
-
-  useEffect(() => {
-    if (!id) {
-      dispatch(RootStore.wallet.actions.selectWallet(wallets[0]?.id ?? null))
-    }
-    fadeIn()
-  }, [id, wallets, accounts])
-
-  const isListNotEmpty = () => {
-    return Boolean(wallets.length)
-  }
-
-  const selectEvent = async (wallet: Wallet) => {
-    fadeIn()
-    dispatch(RootStore.wallet.actions.selectWallet(wallet.id))
-  }
-
-  const pressEvent = async () => {
-    props.navigation.navigate(wrapper.route.GetWallet.name)
-  }
 
   const fadeValue = useRef(new Animated.Value(1)).current
+
+  const [selectedWallet, setSelectedWallet] = useState(wallets[0])
+
+  const {
+    exchange,
+    isRefetching: exchangeIsRefetching,
+    refetch: exchangeRefetch,
+  } = useExchange({ filter: { currencies: currency }, queryOptions: {} })
+
+  const { data: selectedWalletBalances, queryResults: balanceQueryResult } = useBalances(
+    selectedWallet.getAccounts(accounts)
+  )
+
   const fadeIn = () => {
     Animated.timing(fadeValue, {
       toValue: 1,
@@ -226,6 +138,7 @@ const ListWalletView = (props: WalletProps) => {
       useNativeDriver: true,
     }).start()
   }
+
   const fadeOut = () => {
     Animated.timing(fadeValue, {
       toValue: 0,
@@ -243,13 +156,24 @@ const ListWalletView = (props: WalletProps) => {
     }, 3000)
   }
 
-  const openWarning = () =>
-    Alert.alert(
-      i18n.t('screens.listWallets.incompleteBalanceWarningTitle'),
-      i18n.t('screens.listWallets.incompleteBalanceWarningText'),
-      [{ text: i18n.t('screens.listWallets.incompleteBalanceWarningButton') }],
-      { cancelable: false }
-    )
+  const pressEvent = async (wallet: Wallet) => {
+    dispatch(RootStore.wallet.actions.selectWallet(wallet.id))
+    props.navigation.navigate(wrapper.route.GetWallet.name, { wallet })
+  }
+
+  const selectEvent = async (wallet: Wallet) => {
+    fadeIn()
+    setSelectedWallet(wallet)
+  }
+
+  const isRefetching = () => {
+    return exchangeIsRefetching || balanceQueryResult.some(balance => balance.isRefetching)
+  }
+
+  const handleRefetch = () => {
+    exchangeRefetch()
+    balanceQueryResult.map(balance => balance.refetch())
+  }
 
   return (
     <ScreenLayout
@@ -257,76 +181,40 @@ const ListWalletView = (props: WalletProps) => {
       useStatusBarPadding
       padding={0}
       darkerSolidColorBG
-      refreshControl={<RefreshControl tintColor="#fff" refreshing={isRefetching} onRefresh={refetch} />}
+      refreshControl={<RefreshControl tintColor="#fff" refreshing={isRefetching()} onRefresh={handleRefetch} />}
     >
-      <>
-        <LinearLayout alignSelf="flex-end" style={{ marginTop: !isConnected ? 14 : undefined }}>
-          <ThemedMoreButton
-            onPress={() =>
-              props.navigation.navigate(wrapper.route.Modal.name, {
-                screen: wrapper.route.WalletContextModal.name,
-                params: { wallets },
-              })
-            }
-          />
-        </LinearLayout>
+      <LinearLayout alignSelf="flex-end" style={{ marginTop: !isConnected ? 14 : undefined }}>
+        <ThemedMoreButton
+          onPress={() =>
+            props.navigation.navigate(wrapper.route.Modal.name, {
+              screen: wrapper.route.WalletContextModal.name,
+              params: { wallets },
+            })
+          }
+        />
+      </LinearLayout>
 
-        <AwaitActivity name="populateWallet">
-          <>
-            <LinearLayout mt={-5} justifyContent="center" height={385}>
-              {isListNotEmpty() ? (
-                <WalletPicker
-                  exchange={exchange}
-                  wallets={wallets}
-                  onSelect={selectEvent}
-                  onPress={pressEvent}
-                  onScrollBegin={fadeOutWallet}
-                />
-              ) : (
-                <EmptyListComponent navigation={props.navigation} />
-              )}
-            </LinearLayout>
+      <LinearLayout mt={-5} justifyContent="center" height={385}>
+        <WalletPicker
+          wallets={wallets}
+          exchange={exchange}
+          selectedWallet={selectedWallet}
+          selectedWalletBalances={selectedWalletBalances}
+          onSelect={selectEvent}
+          onPress={pressEvent}
+          onScrollBegin={fadeOutWallet}
+        />
+      </LinearLayout>
 
-            {selectedWallet && (
-              <Animated.View style={{ opacity: fadeValue }}>
-                <WalletChangeComponent
-                  exchange={exchange}
-                  language={language}
-                  wallet={selectedWallet}
-                  tokenAssets={selectedWallet.tokenAssets ?? []}
-                  onPressWarning={openWarning}
-                />
-                <LinearLayout mx="16px">
-                  {selectedWallet.showBackupAlert && selectedWallet.walletType === 'standard' && (
-                    <LinearLayout mb={6}>
-                      <Notification
-                        text={i18n.t('screens.listWallets.noBackup')}
-                        wallet={selectedWallet}
-                        propsNavigation={props.navigation}
-                      />
-                    </LinearLayout>
-                  )}
-
-                  {isListNotEmpty() && (
-                    <BalanceList
-                      exchange={exchange}
-                      mb={6}
-                      tokenAssets={selectedWallet.tokenAssets ?? []}
-                      showBlockchain
-                    />
-                  )}
-                </LinearLayout>
-              </Animated.View>
-            )}
-          </>
-        </AwaitActivity>
-      </>
+      <Animated.View style={{ opacity: fadeValue }}>
+        <SelectedWalletInfo
+          exchange={exchange}
+          selectedWallet={selectedWallet}
+          selectedWalletBalances={selectedWalletBalances}
+        />
+      </Animated.View>
     </ScreenLayout>
   )
-}
-
-EmptyListComponent.propTypes = {
-  navigation: PropTypes.any.isRequired,
 }
 
 export default ListWalletView

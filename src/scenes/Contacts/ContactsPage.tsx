@@ -1,9 +1,12 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { TabSelectorContact } from '~/src/components/TabSelectorContacts'
+import { ContactList } from '~/src/components/contacts/ContactList'
+import { NoContacts } from '~/src/components/contacts/NoContacts'
 import { Contact } from '~/src/models/redux/Contact'
+import { RootState } from '~/src/store/RootStore'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
@@ -26,6 +29,8 @@ const ContactsPage: React.FC<Props> = props => {
       }),
   })
 
+  const contacts = useSelector((state: RootState) => state.app.contacts)
+
   const handleContactSelected = (contact: Contact) => {
     props.navigation.navigate(wrapper.route.ContactDetails.name, {
       contact,
@@ -34,7 +39,7 @@ const ContactsPage: React.FC<Props> = props => {
 
   return (
     <ScreenLayout padding={0} darkerSolidColorBG>
-      <TabSelectorContact onContactSelected={handleContactSelected} />
+      {contacts.length ? <ContactList onSelect={handleContactSelected} /> : <NoContacts />}
     </ScreenLayout>
   )
 }

@@ -9,8 +9,9 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import MenuItem, { RightIconType } from '~/src/components/MenuItem'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
-import { useLocalAuthentication } from '~/src/hooks'
+import { useLocalAuthentication } from '~/src/hooks/useLocalAuthentication'
 import { Account } from '~/src/models/redux/Account'
+import { Wallet } from '~/src/models/redux/Wallet'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
@@ -21,6 +22,7 @@ import { AsyncDispatch } from '~/src/types/reducers/root'
 
 export interface AccountSettingsViewParams {
   account: Account
+  wallet: Wallet
 }
 
 interface Props {
@@ -29,7 +31,7 @@ interface Props {
 }
 
 export const AccountSettingsView = (props: Props) => {
-  const { account } = props.route.params
+  const { account, wallet } = props.route.params
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const { authenticate } = useLocalAuthentication()
@@ -47,7 +49,7 @@ export const AccountSettingsView = (props: Props) => {
       index: 0,
       routes: [{ name: wrapper.route.Tab.name }],
     })
-    props.navigation.navigate(wrapper.route.GetWallet.name)
+    props.navigation.navigate(wrapper.route.GetWallet.name, { wallet })
   }
 
   const alertDelete = () => {

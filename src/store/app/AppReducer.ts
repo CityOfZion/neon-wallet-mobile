@@ -8,7 +8,6 @@ import { AsyncAction } from '~/src/types/reducers/root'
 import { Model } from '~src/app/Model'
 import { Storage } from '~src/app/Storage'
 import { blockchainList, blockchainServices } from '~src/blockchain'
-import { TokenAsset } from '~src/models/TokenAsset'
 import { Account } from '~src/models/redux/Account'
 import { App } from '~src/models/redux/App'
 import { Contact } from '~src/models/redux/Contact'
@@ -27,16 +26,7 @@ export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppActi
       return async (dispatch, getState) => {
         const wallets = await Storage.wallets.load()
 
-        // get the balance cache in order to avoid to recalculate
-        const walletsTokenAssets = getState().app.wallets.map(it => it.tokenAssets)
-
-        if (wallets) {
-          wallets.forEach((it, i) => {
-            it.tokenAssets = walletsTokenAssets[i] ?? []
-          })
-
-          dispatch(this.commit('SET_WALLETS', { wallets }))
-        }
+        dispatch(this.commit('SET_WALLETS', { wallets: wallets ?? [] }))
 
         return wallets ?? []
       }
@@ -65,7 +55,6 @@ export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppActi
         if (accounts && wallets) {
           accounts.forEach((it, i) => {
             it.accountType = it.getWallet(wallets)?.walletType ?? null
-            it.transactions = it.transactions ?? []
             it.pendingTransactions = it.pendingTransactions ?? []
             it.adaptToMultichain()
           })
@@ -93,86 +82,6 @@ export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppActi
       }
     },
 
-    syncTokenAssetsByAddress: (address: string): AsyncAction => {
-      return async (dispatch, getState) => {
-        const { accounts, wallets } = getState().app
-
-        const account = accounts.find(it => it.address === address) //TODO: alem de checar o address precisa tbm ter certeza do blockchain
-
-        if (account) {
-          await account.populateTokenAssets()
-
-          const wallet = account.getWallet(wallets)
-          if (wallet) {
-            wallet.populateTokenAssets(accounts)
-          }
-        }
-      }
-    },
-
-    syncTokenAssets: (): AsyncAction => {
-      return async (dispatch, getState) => {
-        const { wallets } = getState().app
-        const accounts = await Storage.accounts.load()
-
-        if (accounts) {
-          wallets.map(it => it.populateTokenAssets(accounts))
-        }
-      }
-    },
-
-    fetchBalanceAccounts: (): AsyncAction => {
-      interface IBalanceAccounts {
-        address: string
-        tokens: TokenAsset[]
-      }
-      return async (dispatch, getState) => {
-        try {
-          const { accounts } = getState().app
-          const balanceAccounts = await Promise.all(
-            accounts
-              .map(async acc => {
-                const { address } = acc
-                if (address) {
-                  const response = await blockchainServices[acc.blockchain].provider.getBalance(address)
-
-                  const tokens = response.balance
-                    .map(it => {
-                      const { asset, assetSymbol, assetHash } = it
-
-                      if (asset && assetSymbol && assetHash) {
-                        const tokenAsset = new TokenAsset(asset, assetSymbol, assetHash, acc.blockchain)
-                        tokenAsset.amount = it.amount ?? 0
-                        return tokenAsset
-                      }
-
-                      return null
-                    })
-                    .filter(it => it) as TokenAsset[]
-
-                  return { address, tokens }
-                }
-              })
-              .filter(res => res !== undefined)
-          )
-
-          const updatedAccounts = balanceAccounts
-            .map(balanceAccount => {
-              const { address, tokens } = balanceAccount as IBalanceAccounts
-              const updatedAccount = accounts.find(acc => acc.address === address) as Account
-              updatedAccount.tokenAssets = tokens
-              return updatedAccount
-            })
-            .filter(acc => acc !== undefined)
-
-          await Storage.accounts.save(updatedAccounts)
-        } catch (error) {
-          console.log(error)
-          throw new Error('Problema para consultar os balances')
-        }
-      }
-    },
-
     watchPendingTransaction: (account: Account, transactionHash: string, isClaim?: boolean): AsyncAction => {
       return async dispatch => {
         const polling = new PollingHelper()
@@ -184,8 +93,6 @@ export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppActi
             return
           }
           await account.removePendingTransactions(transactionHash)
-
-          await account.populateTokenAssets()
 
           dispatch(this.actions.updateAndSaveAccount(account))
           appBus.emit(isClaim ? 'claimGasEnd' : 'pendingTransactionConfirmed', account)
@@ -235,7 +142,6 @@ export class AppReducer extends ReducerWrapper<AppActionsType, AppState, AppActi
         const accounts = (await Storage.accounts.load()) ?? []
 
         for (const account of accounts) {
-          account.transactions = []
           account.pendingTransactions = []
         }
 

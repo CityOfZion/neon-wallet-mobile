@@ -2,8 +2,6 @@ import { api } from '@cityofzion/dora-ts'
 import { TypedResponse } from '@cityofzion/dora-ts/dist/interfaces/api/common'
 import { AddressTransactionsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 import { rpc, u, wallet } from '@cityofzion/neon-core-next'
-import { Request } from '@simpli/serialized-request'
-import { mapValues } from 'lodash'
 
 import { Neo3Provider } from './common'
 
@@ -15,11 +13,10 @@ import { Transaction } from '~/src/models/Transaction'
 import { TransactionAddressAsset } from '~/src/models/TransactionAddressAsset'
 import { TransactionAddressNFT } from '~/src/models/TransactionAddressNFT'
 import { TransactionAddressSummary } from '~/src/models/TransactionAddressSummary'
-import { BalanceResponse } from '~/src/models/response/BalanceResponse'
+import { BalanceInfo } from '~/src/models/response/BalanceInfo'
 import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { TransactionAddressResponse } from '~/src/models/response/TransactionAddressResponse'
 import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
-import { ExchangeResponse } from '~/src/types/exchange'
 import { IRPCContract } from '~src/blockchain'
 
 export type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
@@ -120,19 +117,20 @@ export class DoraSDKProvider implements Neo3Provider {
   }
 
   async getBalance(address: string) {
-    const result = new BalanceResponse()
     const response = await api.NeoRest.balance(address, this.network)
+
     const balances = Array.from(response.values())
-    balances.forEach(({ asset, asset_name, balance, symbol }) => {
-      result.balance.push({
+
+    const mappedBalance = balances.map(
+      ({ balance, asset, asset_name, symbol }): BalanceInfo => ({
         amount: balance,
-        asset: asset_name,
-        assetHash: asset,
-        assetSymbol: symbol,
+        hash: asset,
+        name: asset_name,
+        symbol,
       })
-    })
-    result.address = address
-    return result
+    )
+
+    return mappedBalance
   }
 
   async getContract(hash: string): Promise<ContractResponse> {
@@ -187,29 +185,6 @@ export class DoraSDKProvider implements Neo3Provider {
       result.time = Number(time)
     }
     return result
-  }
-
-  async getExchangeData(params: { tokenAssetSymbols: string[]; currencies: string }) {
-    const { tokenAssetSymbols, currencies } = params
-    const paramRequest = {
-      fsyms: tokenAssetSymbols.join(','),
-      tsyms: currencies,
-    }
-
-    const response = await Request.get('https://min-api.cryptocompare.com/data/pricemultifull', {
-      params: paramRequest,
-    })
-      .name('syncExchange')
-      .as<ExchangeResponse>()
-      .getData()
-
-    return mapValues(response.RAW, symbolRef => {
-      const symbolRefMap = mapValues(symbolRef, symbolToUse => symbolToUse.PRICE)
-
-      return {
-        to: symbolRefMap,
-      }
-    })
   }
 
   async getAllNodes() {

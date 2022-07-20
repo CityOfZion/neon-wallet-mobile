@@ -741,19 +741,6 @@
       "value": "Value",
       "empty": "Your wallet is currently empty, why not add some funds today?"
     },
-    "transactionsList": {
-      "title": "PENDING TRANSACTIONS",
-      "sent": "Sent",
-      "received": "Received",
-      "pending": "Pending",
-      "sentTo": "Sent to",
-      "receivedFrom": "Received from",
-      "token": "Token",
-      "value": "Value",
-      "quantity": "Qty",
-      "today": "Today",
-      "yesterday": "Yesterday"
-    },
     "colorSelector": {
       "customColor": "Custom color"
     },

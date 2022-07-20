@@ -4,24 +4,20 @@ import { NavigationContainer, RouteProp, NavigationContainerRef } from '@react-n
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, { useEffect, useRef, useState } from 'react'
-import { InteractionManager } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useDispatch, useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
 import { appBus } from '../app/AppBus'
 import { blockchainServices, getBlockchainByAddress, hasWCIntegration } from '../blockchain'
-import { applicationConfig } from '../config/ApplicationConfig'
 import { useWalletConnect } from '../contexts/WalletConnectContext'
 import { Account } from '../models/redux/Account'
 import { RootState, RootStore } from '../store/RootStore'
-import { AsyncDispatch } from '../types/reducers/root'
 import PasscodeStackNavigation, { PasscodeStackParams } from './PasscodeStackNavigation'
 
 import { createStackNavigator } from '~/node_modules/@react-navigation/stack'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Storage } from '~src/app/Storage'
-import { Sync } from '~src/app/Sync'
 import LoadingOverlay from '~src/components/LoadingOverlay'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import { DeepLinkingConfig } from '~src/config/DeepLinkingConfig'
@@ -54,11 +50,10 @@ const AppNavigation: React.FC<Props> = props => {
     return wrapper.theme[state.settings.theme]
   })
   const { isLoading, loadingText, progress } = useSelector((state: RootState) => state.loading)
-  const timerStatus = useSelector((state: RootState) => state.timer.status)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
+  const wallets = useSelector((state: RootState) => state.app.wallets)
 
   const walletConnectCtx = useWalletConnect()
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const dispatch = useDispatch<any>()
 
   const [onboardingSeen, setOnboardingSeen] = useState(true)
@@ -66,8 +61,6 @@ const AppNavigation: React.FC<Props> = props => {
   const [hasAuthentication, setHasAuthentication] = useState(false)
   const [hasInit, setInit] = useState(false)
 
-  const interactionRef = useRef<any>()
-  const intervalRef = useRef<number>()
   const navigationRef = useRef<NavigationContainerRef>(null)
 
   const startApplication = async () => {
@@ -79,13 +72,13 @@ const AppNavigation: React.FC<Props> = props => {
     setWelcomeToNWSeen(welcomeToNWSeen ?? false)
     setHasAuthentication(hasAuthentication ?? false)
 
-    await Sync.init(dispatchAsync)
-    setInit(true)
+    await dispatch(RootStore.settings.actions.syncSettings())
+    await dispatch(RootStore.app.actions.syncWallets())
+    await dispatch(RootStore.app.actions.syncAccounts())
+    await dispatch(RootStore.app.actions.syncContacts())
+    await dispatch(RootStore.app.actions.syncBackupAlerts())
 
-    InteractionManager.runAfterInteractions(async () => {
-      await Sync.fetchs(dispatchAsync)
-      await Sync.refresh(dispatchAsync)
-    })
+    setInit(true)
   }
 
   useEffect(() => {
@@ -93,46 +86,6 @@ const AppNavigation: React.FC<Props> = props => {
       Await.run('application', startApplication)
     }
   }, [hasInit])
-
-  useEffect(() => {
-    if (!hasInit) {
-      return
-    }
-
-    if (!isConnected || !timerStatus) {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-        intervalRef.current = undefined
-      }
-
-      if (interactionRef.current) {
-        interactionRef.current.cancel()
-        interactionRef.current = undefined
-      }
-
-      return
-    }
-
-    if (intervalRef.current && interactionRef.current) {
-      return
-    }
-    intervalRef.current = setInterval(() => {
-      interactionRef.current = InteractionManager.runAfterInteractions(async () => {
-        await Sync.fetchs(dispatchAsync)
-        await Sync.refresh(dispatchAsync)
-      })
-    }, applicationConfig.defaultDataRefreshTimeInMilliseconds)
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-      }
-
-      if (interactionRef.current) {
-        interactionRef.current.cancel()
-      }
-    }
-  }, [isConnected, timerStatus, hasInit])
 
   useEffect(() => {
     async function handle() {
@@ -188,10 +141,9 @@ const AppNavigation: React.FC<Props> = props => {
         type: 'success',
         onPress: () => {
           const navigation = navigationRef.current
+          const wallet = account.getWallet(wallets)
 
-          if (!navigation) {
-            return
-          }
+          if (!navigation || !wallet) return
 
           dispatch(RootStore.wallet.actions.selectWallet(account.idWallet))
           dispatch(RootStore.account.actions.selectAccount(account.address))
@@ -199,8 +151,8 @@ const AppNavigation: React.FC<Props> = props => {
             index: 0,
             routes: [{ name: wrapper.route.Tab.name }],
           })
-          navigation.navigate(wrapper.route.GetWallet.name)
-          navigation.navigate(wrapper.route.GetAccount.name)
+          navigation.navigate(wrapper.route.GetWallet.name, { wallet })
+          navigation.navigate(wrapper.route.GetAccount.name, { account, wallet })
           navigation.navigate(wrapper.route.AccountTransactionsScreen.name, {
             account,
           })

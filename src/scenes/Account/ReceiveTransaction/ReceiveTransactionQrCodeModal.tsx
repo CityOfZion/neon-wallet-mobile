@@ -1,68 +1,70 @@
 import { RouteProp } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import React, { useRef, useMemo } from 'react'
 import ViewShot from 'react-native-view-shot'
 import { useSelector } from 'react-redux'
 
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
-import { Await, AwaitActivity } from '~/node_modules/@simpli/react-native-await'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
+import { TokenHelper } from '~/src/helpers/TokenHelper'
 import { UriHelper } from '~/src/helpers/UriHelper'
-import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { useExchange } from '~/src/hooks/useExchange'
-import { ReceiveModalStackParamList } from '~/src/navigation/ReceiveModalStackNavigation'
+import { Token } from '~/src/models/Token'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { RootState } from '~/src/store/RootStore'
 import InputLabel from '~src/components/InputLabel'
 import NeonQRCode from '~src/components/QRCode'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
-import { Loader } from '~src/components/loader/loader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
-import { TokenAsset } from '~src/models/TokenAsset'
 import { Account } from '~src/models/redux/Account'
 import { Wallet } from '~src/models/redux/Wallet'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
-export interface ReceiveQrCodeModalParams {
+export interface ReceiveTransactionQrCodeModalParams {
   wallet: Wallet
   account: Account
-  amount: number
-  token: TokenAsset
+  amount: string
+  token: Token
   reference?: string
 }
 
-export interface ReceiveQrCodeProps {
-  navigation: StackNavigationProp<ModalStackParamList & ReceiveModalStackParamList>
-  route: RouteProp<ReceiveModalStackParamList, 'ReceiveQrCodeModal'>
+interface Props {
+  navigation: StackNavigationProp<RootStackParamList & ModalStackParamList>
+  route: RouteProp<ModalStackParamList, 'ReceiveTransactionQrCodeModal'>
 }
 
-const buttonWidth = applicationConfig.screenWidth - 76
-
-const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
-  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const { currency } = useSelector((state: RootState) => state.settings)
-  const { exchange } = useExchange({ filter: { currencies: currency } })
-  const controller = useSwiperController(true)
-  const [showQr, setShowQr] = useState(false)
+const ReceiveTransactionQrCodeModal = (props: Props) => {
   const { wallet, account, amount, token, reference } = props.route.params
 
-  const ratio = useMemo(() => {
-    if (exchange) {
-      return exchange[token.symbol]?.to[currency] ?? 0
-    }
-    return 0
-  }, [exchange])
-
-  const value = FilterHelper.currency(amount * ratio, currency)
+  const buttonWidth = applicationConfig.screenWidth - 76
   const labelWeight = 1.5
 
-  const qrCodeContent = UriHelper.generate(account.address ?? '', amount, token, reference)
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const currency = useSelector((state: RootState) => state.settings.currency)
+  const language = useSelector((state: RootState) => state.settings.language)
+  const controller = useSwiperController(true)
+
+  const { exchange } = useExchange({})
+
+  const fiat = useMemo(() => {
+    const ratio = BalanceHelper.getExchangeRatio(token.symbol, exchange, currency)
+
+    return FilterHelper.currency(ratio ? Number(amount) * ratio : 0, currency, language)
+  }, [exchange, currency, language, amount])
+
+  const qrCodeContent = useMemo(
+    () => UriHelper.generate(account.address ?? '', amount, token.hash, reference),
+    [account, amount, token, reference]
+  )
 
   const qrCodeView = useRef<ViewShot>(null)
+
   const captureAndNavigate = async () => {
     const uri = await qrCodeView.current?.capture?.()
     props.navigation.navigate(wrapper.route.CopyContextModal.name, {
@@ -71,19 +73,10 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
     })
   }
 
-  const renderQr = async () => {
-    await UtilsHelper.sleep(1000)
-    setShowQr(true)
-  }
-
-  useEffect(() => {
-    Await.run('renderQr', renderQr)
-  }, [])
-
   return (
     <SwiperPanel
       controller={controller}
-      title={i18n.t('routes.ReceiveQrCode')}
+      title={i18n.t('modals.ReceiveTransactionQrCodeModal.title')}
       rightButton={<ThemedCloseButton />}
       onRightPress={controller.close}
       onClose={() => props.navigation.goBack()}
@@ -91,18 +84,15 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
       smallerSize
     >
       <LinearLayout mt="43px" height="100%" alignItems="center">
-        <AwaitActivity name="renderQr" loadingView={<Loader />}>
-          {showQr ? (
-            <LinearLayout width={buttonWidth} height={buttonWidth}>
-              <ViewShot ref={qrCodeView}>
-                <NeonQRCode content={qrCodeContent} qrCodeWidth={buttonWidth} />
-              </ViewShot>
-            </LinearLayout>
-          ) : undefined}
-        </AwaitActivity>
+        <LinearLayout width={buttonWidth} height={buttonWidth}>
+          <ViewShot ref={qrCodeView}>
+            <NeonQRCode content={qrCodeContent} qrCodeWidth={buttonWidth} />
+          </ViewShot>
+        </LinearLayout>
+
         <LinearLayout width={buttonWidth} height={54} mt={34}>
           <ThemedButton
-            label={i18n.t('receive.shareOrCopy')}
+            label={i18n.t('modals.ReceiveTransactionQrCodeModal.shareOrCopy')}
             srcIcon={require('~src/assets/images/icon-copy-green.png')}
             iconSize={[19, 23]}
             onPress={captureAndNavigate}
@@ -120,12 +110,12 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
               mb={18}
               style={{ includeFontPadding: false }}
             >
-              {i18n.t('receive.paymentRequestDetails')}
+              {i18n.t('modals.ReceiveTransactionQrCodeModal.paymentRequestDetails')}
             </TextView>
           </LinearLayout>
           <LinearLayout bg="background.14" pb="12px" pr="10px" mt="4px" borderRadius="7px" pl="10px" pt="13px">
             <LinearLayout width="100%" mb={14}>
-              <InputLabel title={i18n.t('receive.token')} weight={labelWeight} lightText />
+              <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.token')} weight={labelWeight} lightText />
 
               <LinearLayout orientation="horiz" weight={5}>
                 <ImageView
@@ -133,8 +123,8 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
                   width={Normalize.scale(18)}
                   height={Normalize.scale(18)}
                   resizeMode="contain"
-                  alginSelf="center"
-                  source={token.srcIcon}
+                  alignSelf="center"
+                  source={TokenHelper.getIcon(token.symbol, account.blockchain)}
                 />
                 <TextView
                   color="white"
@@ -149,9 +139,9 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
               </LinearLayout>
             </LinearLayout>
             <LinearLayout orientation="horiz" width="100%">
-              <InputLabel title={i18n.t('receive.qty')} weight={labelWeight} lightText />
+              <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.qty')} weight={labelWeight} lightText />
 
-              <InputLabel title={i18n.t('receive.value')} weight={labelWeight} lightText />
+              <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.value')} weight={labelWeight} lightText />
             </LinearLayout>
             <LinearLayout orientation="horiz">
               <TextView color="white" fontFamily="semibold" fontSize={18} weight={5}>
@@ -159,14 +149,22 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
               </TextView>
 
               <TextView color="primary" fontFamily="semibold" fontSize={18} weight={5}>
-                {value}
+                {fiat}
               </TextView>
             </LinearLayout>
 
             <LinearLayout orientation="horiz" width="100%">
-              <InputLabel title={i18n.t('receive.wallet')} weight={labelWeight} lightText />
+              <InputLabel
+                title={i18n.t('modals.ReceiveTransactionQrCodeModal.wallet')}
+                weight={labelWeight}
+                lightText
+              />
 
-              <InputLabel title={i18n.t('receive.account')} weight={labelWeight} lightText />
+              <InputLabel
+                title={i18n.t('modals.ReceiveTransactionQrCodeModal.account')}
+                weight={labelWeight}
+                lightText
+              />
             </LinearLayout>
             <LinearLayout orientation="horiz" width="100%" mb={16}>
               <TextView
@@ -192,7 +190,11 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
               </TextView>
             </LinearLayout>
             <LinearLayout width="100%" mb={16}>
-              <InputLabel title={i18n.t('receive.address')} weight={labelWeight} lightText />
+              <InputLabel
+                title={i18n.t('modals.ReceiveTransactionQrCodeModal.address')}
+                weight={labelWeight}
+                lightText
+              />
 
               <TextView
                 color={theme.colors.primary}
@@ -205,23 +207,29 @@ const ReceiveQrCodeModal = (props: ReceiveQrCodeProps) => {
                 {account.address}
               </TextView>
             </LinearLayout>
-            <LinearLayout width="100%" mb={16}>
-              <InputLabel title={i18n.t('receive.reference')} weight={labelWeight} lightText />
-              <TextView
-                color="white"
-                fontFamily="semibold"
-                fontSize={16}
-                weight={5}
-                mr={1}
-                style={{ includeFontPadding: false }}
-              >
-                {reference}
-              </TextView>
-            </LinearLayout>
+            {!!reference && (
+              <LinearLayout width="100%" mb={16}>
+                <InputLabel
+                  title={i18n.t('modals.ReceiveTransactionQrCodeModal.reference')}
+                  weight={labelWeight}
+                  lightText
+                />
+                <TextView
+                  color="white"
+                  fontFamily="semibold"
+                  fontSize={16}
+                  weight={5}
+                  mr={1}
+                  style={{ includeFontPadding: false }}
+                >
+                  {reference}
+                </TextView>
+              </LinearLayout>
+            )}
           </LinearLayout>
         </LinearLayout>
       </LinearLayout>
     </SwiperPanel>
   )
 }
-export default ReceiveQrCodeModal
+export default ReceiveTransactionQrCodeModal

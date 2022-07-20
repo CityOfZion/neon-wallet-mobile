@@ -6,7 +6,6 @@ import { ContactReducer } from '~src/store/contact/ContactReducer'
 import { LoadingReducer } from '~src/store/loading/LoadingReducer'
 import { NetworkReducer } from '~src/store/network/NetworkReducer'
 import { SettingsReducer } from '~src/store/settings/SettingsReducer'
-import { TimerReducer } from '~src/store/timer/TimerReducer'
 import { WalletReducer } from '~src/store/wallet/WalletReducer'
 import { WalletConnectReducer } from '~src/store/walletConnect/WalletConnectReducer'
 export type RootState = ReturnType<typeof RootStore.reducers>
@@ -18,7 +17,6 @@ export abstract class RootStore {
   static readonly account = new AccountReducer()
   static readonly loading = new LoadingReducer()
   static readonly contact = new ContactReducer()
-  static readonly timer = new TimerReducer()
   static readonly wcReducer = new WalletConnectReducer()
   static readonly network = new NetworkReducer()
 
@@ -30,7 +28,6 @@ export abstract class RootStore {
     loading: RootStore.loading.reducer,
     contact: RootStore.contact.reducer,
     network: RootStore.network.reducer,
-    timer: RootStore.timer.reducer,
     wcReducer: RootStore.wcReducer.reducer,
   })
 }

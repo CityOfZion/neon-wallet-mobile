@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { TouchableHighlight } from 'react-native'
 import InputScrollView from 'react-native-input-scroll-view'
 import { useSelector } from 'react-redux'
@@ -14,12 +14,15 @@ import { TokenSelect } from './TokenSelect'
 import { TotalFee } from './TotalFee'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { blockchainServices } from '~/src/blockchain'
 import AccountCard from '~/src/components/AccountCard'
 import SwiperPanel, { PANEL_OFFSET, useSwiperController } from '~/src/components/SwiperPanel'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
+import { BalanceHelper } from '~/src/helpers/BalanceHelper'
+import { useBalance } from '~/src/hooks/useBalance'
 import { useExchange } from '~/src/hooks/useExchange'
-import { TokenAsset } from '~/src/models/TokenAsset'
+import { Token } from '~/src/models/Token'
 import { Account } from '~/src/models/redux/Account'
 import { Contact } from '~/src/models/redux/Contact'
 import { Wallet } from '~/src/models/redux/Wallet'
@@ -32,7 +35,7 @@ import { LinearLayout, TextView } from '~/src/styles/styled-components'
 export interface SendTransactionModalParams {
   account: Account
   wallet: Wallet
-  token?: TokenAsset
+  token?: Token
 }
 
 interface Props {
@@ -44,7 +47,10 @@ export const SendTransactionModal = (props: Props) => {
   const { account, wallet, token: initialToken } = props.route.params
 
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
+  const currency = useSelector((state: RootState) => state.settings.currency)
   const controller = useSwiperController(true)
+  const { exchange } = useExchange({ filter: { currencies: currency } })
+  const { data: balance } = useBalance(account)
 
   const [destinationAddress, setDestinationAdress] = useState<string>()
   const [destinationAddressIsValid, setDestinationAddressIsValid] = useState<boolean>()
@@ -52,7 +58,7 @@ export const SendTransactionModal = (props: Props) => {
   const [destinationWallet, setDestinationWallet] = useState<Wallet>()
   const [destinationContact, setDestinationContact] = useState<Contact>()
 
-  const [token, setToken] = useState<TokenAsset | undefined>(initialToken)
+  const [token, setToken] = useState<Token | undefined>(initialToken)
   const [amount, setAmount] = useState<string>()
   const [fiat, setFiat] = useState<string>()
   const [amountIsValid, setAmountIsValid] = useState<boolean>()
@@ -64,10 +70,22 @@ export const SendTransactionModal = (props: Props) => {
   const [tipIsChecked, setTipIsChecked] = useState<boolean>(true)
   const [tipIsDisabled, setTipIsDisabled] = useState<boolean>(false)
 
-  const currency = useSelector((state: RootState) => state.settings.currency)
-  const { exchange } = useExchange({ filter: { currencies: currency } })
+  const feeTokenBalance = useMemo(
+    () => BalanceHelper.getTokenBalanceBySymbol(blockchainServices[account.blockchain].feeToken.token, balance),
+    [balance, account]
+  )
+  const tokenBalance = useMemo(() => {
+    if (!token) return
 
-  const handleChangeToken = (token: TokenAsset) => {
+    return BalanceHelper.getTokenBalanceBySymbol(token.symbol, balance)
+  }, [balance, token])
+  const ratio = useMemo(() => {
+    if (!token) return
+
+    return BalanceHelper.getExchangeRatio(token.symbol, exchange, currency)
+  }, [token, exchange, currency])
+
+  const handleSelectToken = (token: Token) => {
     setToken(token)
     setAmount(undefined)
     setFiat(undefined)
@@ -137,7 +155,7 @@ export const SendTransactionModal = (props: Props) => {
                 {wallet.name}
               </TextView>
 
-              <AccountCard exchange={exchange} account={account} />
+              <AccountCard balance={balance} exchange={exchange} account={account} />
 
               <TextView mt="40px" alignSelf="center" color="text.3" fontSize="md" fontFamily="bold">
                 {i18n.t('modals.sendTransactionModal.transactionDetails')}
@@ -156,22 +174,25 @@ export const SendTransactionModal = (props: Props) => {
                 destinationWallet={destinationWallet}
               />
 
-              <TokenSelect account={account} token={token} onTokenChange={handleChangeToken} />
+              <TokenSelect account={account} token={token} onTokenSelect={handleSelectToken} />
 
               <AmountInput
                 account={account}
-                selectedToken={token}
+                ratio={ratio}
+                token={token}
                 onAmountChange={setAmount}
                 onFiatChange={setFiat}
                 amount={amount}
                 fiat={fiat}
                 onAmountValidation={setAmountIsValid}
+                tokenBalance={tokenBalance}
               />
 
               {account.blockchain === 'neoLegacy' && <FeePriorityTab onFeeChange={setFee} account={account} />}
 
               {account.blockchain === 'neo3' && (
                 <TotalFee
+                  ratio={ratio}
                   account={account}
                   amount={amount ? Number(amount) : undefined}
                   tip={!tipIsDisabled && tipIsChecked ? tip : undefined}
@@ -179,6 +200,7 @@ export const SendTransactionModal = (props: Props) => {
                   destinationAddress={destinationAddress}
                   destinationAddressIsValid={destinationAddressIsValid}
                   token={token}
+                  feeTokenBalance={feeTokenBalance}
                   onFeeChange={setFee}
                   onRequest={setIsRequestFee}
                 />
@@ -195,6 +217,7 @@ export const SendTransactionModal = (props: Props) => {
                 onTipChange={setTip}
                 onCheckChange={setTipIsChecked}
                 onDisableChange={setTipIsDisabled}
+                tokenBalance={tokenBalance}
               />
             </LinearLayout>
             <LinearLayout mt={30} mb={20} alignSelf="center" width="100%">

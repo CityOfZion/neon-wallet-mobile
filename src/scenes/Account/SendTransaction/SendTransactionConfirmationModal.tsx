@@ -35,7 +35,13 @@ const SendTransactionConfirmationModal = (props: Props) => {
       solidColorBG
     >
       <LinearLayout height="100%" width="100%" orientation="verti" alignItems="center">
-        <ImageView width="66%" resizeMode="contain" source={require('~src/assets/images/transaction-sent.png')} />
+        <ImageView
+          resizeMode="contain"
+          source={require('~src/assets/images/transaction-sent.png')}
+          style={{
+            width: '66%',
+          }}
+        />
 
         <LinearLayout orientation="horiz">
           <ImageView

@@ -9,7 +9,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import MenuItem, { RightIconType } from '~/src/components/MenuItem'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
-import { useLocalAuthentication } from '~/src/hooks'
+import { useLocalAuthentication } from '~/src/hooks/useLocalAuthentication'
 import { Wallet } from '~/src/models/redux/Wallet'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
@@ -46,7 +46,6 @@ export const WalletSettingsView = (props: Props) => {
 
     await dispatchAsync(RootStore.app.actions.syncWallets())
     await dispatchAsync(RootStore.app.actions.syncAccounts())
-    await dispatchAsync(RootStore.app.actions.syncTokenAssets())
     dispatch(RootStore.wallet.actions.selectWallet(null))
 
     props.navigation.reset({

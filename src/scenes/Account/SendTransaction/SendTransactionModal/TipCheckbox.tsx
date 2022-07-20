@@ -5,6 +5,8 @@ import React, { useEffect } from 'react'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { blockchainServices } from '~/src/blockchain'
+import { TokenBalance } from '~/src/hooks/useBalance'
+import { Token } from '~/src/models/Token'
 import { Account } from '~/src/models/redux/Account'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
@@ -20,8 +22,9 @@ type Props = {
   onTipChange: (tip?: number) => void
   onDisableChange: (value: boolean) => void
   onCheckChange: (value: boolean) => void
-  token?: TokenAsset
+  token?: Token
   account: Account
+  tokenBalance?: TokenBalance
 }
 
 const PERCENTAGE = 1
@@ -37,6 +40,7 @@ export const TipCheckbox = ({
   onTipChange,
   token,
   account,
+  tokenBalance,
 }: Props) => {
   const cozTip = blockchainServices[account.blockchain].cozTip
 
@@ -70,20 +74,13 @@ export const TipCheckbox = ({
   }, [amount])
 
   useEffect(() => {
-    if (!token || !cozTip || !amount || fee === undefined || !tip) {
+    if (!token || !cozTip || !amount || fee === undefined || !tip || !tokenBalance) {
       onDisableChange(true)
       return
     }
 
-    const accountBalance = account.getBalanceAmountByAsset(cozTip.token)
-
-    if (!accountBalance) {
-      onDisableChange(true)
-      return
-    }
-
-    if (accountBalance && token.symbol === cozTip.token) {
-      if (accountBalance >= tip + amount + fee) {
+    if (token.symbol === cozTip.token) {
+      if (tokenBalance.amount >= tip + amount + fee) {
         onDisableChange(false)
         return
       }
@@ -92,13 +89,13 @@ export const TipCheckbox = ({
       return
     }
 
-    if (accountBalance - fee >= tip) {
+    if (tokenBalance.amount - fee >= tip) {
       onDisableChange(false)
       return
     }
 
     onDisableChange(true)
-  }, [token, account, tip, amount, fee])
+  }, [token, tip, amount, fee, tokenBalance])
 
   return (
     <LinearLayout mt={30}>

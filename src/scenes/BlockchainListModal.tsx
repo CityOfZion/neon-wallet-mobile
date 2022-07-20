@@ -6,14 +6,13 @@ import React, { useState, useCallback } from 'react'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
-import { useBlockchainActionsHook } from '../hooks'
-
 import { BlockchainServiceKey } from '~src/blockchain'
 import BlockchainList from '~src/components/BlockchainList'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
+import { useBlockchainActionsHook } from '~src/hooks/useBlockchainActionsHook'
 import { Wallet } from '~src/models/redux/Wallet'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { RootState } from '~src/store/RootStore'
@@ -53,7 +52,6 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
       .getAccounts(accounts)
       .filter(account => account.blockchain === blockchainSelected).length
 
-    blockchainActionsHook.init()
     await blockchainActionsHook.createAccount(
       wallet.id,
       `${i18n.t(`blockchainServices.${blockchainSelected}.label`)} ${i18n.t('modals.blockchainList.countAccount', {
@@ -63,7 +61,6 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
       indexAccount
     )
 
-    blockchainActionsHook.finish()
     controller.close()
   }, [accounts, wallet, blockchainSelected])
 

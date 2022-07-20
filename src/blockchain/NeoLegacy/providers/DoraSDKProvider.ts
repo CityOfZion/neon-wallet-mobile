@@ -1,6 +1,4 @@
 import { api } from '@cityofzion/dora-ts'
-import { Request } from '@simpli/serialized-request'
-import { mapValues } from 'lodash'
 
 import { NeoLegacyProvider } from './common'
 
@@ -8,11 +6,10 @@ import { Node } from '~/src/models/Node'
 import { Transaction } from '~/src/models/Transaction'
 import { TransactionAddressAsset } from '~/src/models/TransactionAddressAsset'
 import { TransactionAddressSummary } from '~/src/models/TransactionAddressSummary'
-import { BalanceResponse } from '~/src/models/response/BalanceResponse'
+import { BalanceInfo } from '~/src/models/response/BalanceInfo'
 import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { TransactionAddressResponse } from '~/src/models/response/TransactionAddressResponse'
 import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
-import { ExchangeResponse } from '~/src/types/exchange'
 type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
 export class DoraSDKProvider implements NeoLegacyProvider {
   //eslint-disable-next-line
@@ -73,20 +70,21 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     return result
   }
 
-  async getBalance(address: string) {
-    const result = new BalanceResponse()
+  async getBalance(address: string): Promise<BalanceInfo[]> {
     const response = await api.NeoLegacyREST.balance(address, this.network)
+
     const balances = Array.from(response.values())
-    balances.forEach(({ asset, asset_name, balance, symbol }) => {
-      result.balance.push({
-        amount: Number(balance),
-        asset: asset_name,
-        assetHash: asset,
-        assetSymbol: symbol,
+
+    const mappedBalance = balances.map(
+      ({ balance, asset, asset_name, symbol }): BalanceInfo => ({
+        amount: balance,
+        hash: asset,
+        name: asset_name,
+        symbol,
       })
-    })
-    result.address = address
-    return result
+    )
+
+    return mappedBalance
   }
 
   async getTransaction(transactionID: string) {
@@ -142,28 +140,6 @@ export class DoraSDKProvider implements NeoLegacyProvider {
       : scientificNotation
   }
 
-  async getExchangeData(params: { tokenAssetSymbols: string[]; currencies: string }) {
-    const { tokenAssetSymbols, currencies } = params
-    const paramRequest = {
-      fsyms: tokenAssetSymbols.join(','),
-      tsyms: currencies,
-    }
-
-    const response = await Request.get('https://min-api.cryptocompare.com/data/pricemultifull', {
-      params: paramRequest,
-    })
-      .name('syncExchange')
-      .as<ExchangeResponse>()
-      .getData()
-
-    return mapValues(response.RAW, symbolRef => {
-      const symbolRefMap = mapValues(symbolRef, symbolToUse => symbolToUse.PRICE)
-
-      return {
-        to: symbolRefMap,
-      }
-    })
-  }
   async getAssetByHash(hash: string) {
     const response = await api.NeoLegacyREST.asset(hash, this.network)
 

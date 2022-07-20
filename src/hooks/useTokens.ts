@@ -1,7 +1,6 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import { BlockchainServiceKey, blockchainServices, getAllTokens } from '../blockchain'
-import { TokenHelper } from '../helpers/TokenHelper'
 
 type Props = {
   blockchain: BlockchainServiceKey | 'all'
@@ -10,11 +9,18 @@ type Props = {
 export const useTokens = ({ blockchain }: Props) => {
   const tokens = useMemo(() => {
     if (blockchain === 'all') {
-      return TokenHelper.toTokenAsset(getAllTokens())
+      return getAllTokens()
     }
 
-    return TokenHelper.toTokenAsset(blockchainServices[blockchain].tokens)
+    return blockchainServices[blockchain].tokens
   }, [blockchain])
 
-  return tokens
+  const getTokenBySymbol = useCallback(
+    (symbol: string) => {
+      return tokens.find(token => token.symbol === symbol)
+    },
+    [tokens]
+  )
+
+  return { tokens, getTokenBySymbol }
 }

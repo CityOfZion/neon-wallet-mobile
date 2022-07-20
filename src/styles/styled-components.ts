@@ -51,6 +51,7 @@ export const ImageView = styled.Image<ImageViewProps>`
   ${flexbox}
   ${position}
   ${weight}
+  ${color}
 `
 
 export const LinearLayout = styled.View<LinearLayoutProps>`

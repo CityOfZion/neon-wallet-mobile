@@ -2,13 +2,13 @@ import { useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
 import React from 'react'
 import { Linking } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { TransactionRequestSuccessElementProps } from '../TransactionRequestBase'
 
 import { blockchainServices } from '~/src/blockchain'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import { RootState, RootStore } from '~/src/store/RootStore'
+import { RootState } from '~/src/store/RootStore'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Normalize } from '~src/app/Normalize'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
@@ -18,7 +18,6 @@ export const InvokeFunctionSuccess = ({ account, transactionId }: TransactionReq
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const wallet = useSelector((state: RootState) => state.app.wallets.find(wallet => wallet.id === account.idWallet))
   const navigation = useNavigation()
-  const dispatch = useDispatch()
 
   const navigateToTransactions = () => {
     if (!wallet) {
@@ -30,11 +29,8 @@ export const InvokeFunctionSuccess = ({ account, transactionId }: TransactionReq
       routes: [{ name: wrapper.route.Tab.name }],
     })
 
-    dispatch(RootStore.wallet.actions.selectWallet(wallet.id))
-    dispatch(RootStore.account.actions.selectAccount(account.address))
-
-    navigation.navigate(wrapper.route.GetWallet.name)
-    navigation.navigate(wrapper.route.GetAccount.name)
+    navigation.navigate(wrapper.route.GetWallet.name, { wallet })
+    navigation.navigate(wrapper.route.GetAccount.name, { account, wallet })
     navigation.navigate(wrapper.route.AccountTransactionsScreen.name, { account })
   }
 
@@ -101,7 +97,11 @@ export const InvokeFunctionSuccess = ({ account, transactionId }: TransactionReq
         >
           {transactionId}
         </TextView>
-        <ImageView width="16px" resizeMode="contain" source={require('~src/assets/images/icon-copy-green.png')} />
+        <ImageView
+          resizeMode="contain"
+          source={require('~src/assets/images/icon-copy-green.png')}
+          style={{ width: 16 }}
+        />
       </ButtonView>
 
       <LinearLayout width="100%">

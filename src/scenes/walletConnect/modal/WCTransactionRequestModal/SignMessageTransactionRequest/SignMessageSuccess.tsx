@@ -18,7 +18,7 @@ export const SignMessageSuccess = () => {
   }
 
   return (
-    <LinearLayout orientation="verti" justfyContent="center">
+    <LinearLayout orientation="verti" justifyContent="center">
       <LinearLayout height="100%" justifyContent="space-between">
         <LinearLayout justifyContent="center" height="90%">
           <ImageView
