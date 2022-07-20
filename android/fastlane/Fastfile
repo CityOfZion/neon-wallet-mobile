@@ -110,7 +110,6 @@ platform :android do
    
     gradle(
       task: 'assemble',
-      flags: '--debug',
       build_type: 'Release',
       print_command: false,
       properties: {
