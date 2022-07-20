@@ -15,15 +15,12 @@ import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
 import * as BlockchainIcons from '~src/assets/blockchainIcons'
 import { Account } from '~src/models/redux/Account'
 
-export interface Token {
+export interface IToken {
   symbol: string
-  cryptocompareSymbol?: string
-  companyName: string
   type: string
   name: string
   hash: string
   decimals: number
-  totalSupply: number
   blockchain: BlockchainServiceKey
 }
 
@@ -95,7 +92,7 @@ export interface IBlockchainService {
   readonly nativeAssets: string[]
   readonly cozTip?: { address: string; token: string; hash: string } //config token with the symbol name
   readonly feeToken: { hash: string; token: string }
-  readonly tokens: Token[]
+  readonly tokens: IToken[]
   readonly wcChains: string[]
   sendTransaction: (data: SendTransactionData) => Promise<string | null>
   generateMnemonic: () => string[] | null
