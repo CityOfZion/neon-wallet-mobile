@@ -55,8 +55,7 @@ jobs:
     working_directory: ~/neon-wallet-mobile/android
     resource_class: xlarge
     environment:
-      JAVA_OPTS: '-Xms8g -Xmx16g'
-      GRADLE_OPTS: '-Dorg.gradle.daemon=false'
+      JAVA_OPTS: '-Xms8g -Xmx8g'
     steps:
       - checkout:
           path: ~/neon-wallet-mobile
