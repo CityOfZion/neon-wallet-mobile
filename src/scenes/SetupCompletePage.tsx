@@ -25,8 +25,7 @@ interface Props {
 }
 
 const SetupCompletePage = (props: Props) => {
-  const currency = useSelector((state: RootState) => state.settings.currency)
-  const { exchange } = useExchange({ filter: { currencies: currency } })
+  const { exchange } = useExchange()
   const wallets = useSelector((state: RootState) => state.app.wallets)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const wallet = wallets[0]

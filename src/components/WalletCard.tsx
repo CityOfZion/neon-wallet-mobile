@@ -1,6 +1,5 @@
 import React, { useMemo, useRef, useState, Fragment, useEffect } from 'react'
 import { Animated, Easing, LayoutChangeEvent, Dimensions, Platform } from 'react-native'
-
 import { useSelector } from 'react-redux'
 
 import { BalanceHelper } from '../helpers/BalanceHelper'
@@ -15,8 +14,6 @@ import { UtilsHelper } from '~src/helpers/UtilsHelper'
 import { Account } from '~src/models/redux/Account'
 import { Wallet } from '~src/models/redux/Wallet'
 import { ButtonView, ImageView, LinearLayout, RelativeLayout, TextView } from '~src/styles/styled-components'
-import { getBlockchainLogo } from '../blockchain'
-import { FilterHelper } from '../helpers/FilterHelper'
 
 interface Props {
   wallet: Wallet
@@ -234,7 +231,7 @@ const AccountContainer = (props: AccountContainerProps) => {
               : undefined,
           }}
         >
-           <AccountCard account={props.account} balance={balance} exchange={props.exchange} hideBalance />
+          <AccountCard account={props.account} balance={balance} exchange={props.exchange} hideBalance />
         </Animated.View>
       </RelativeLayout>
     </LinearLayout>

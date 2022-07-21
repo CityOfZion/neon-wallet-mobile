@@ -148,6 +148,7 @@ const WalletPicker = ({
         onSnapToItem={index => selectEvent(index)}
         renderItem={({ item, index }) => (
           <Item
+            key={index}
             onPress={() => pressEvent(item)}
             wallet={item}
             balances={index === selectWalletIndex ? selectedWalletBalances : undefined}
