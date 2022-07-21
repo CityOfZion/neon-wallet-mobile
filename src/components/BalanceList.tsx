@@ -198,7 +198,7 @@ const BalanceList = ({
     <LinearLayout {...props} width="100%">
       <FlatList
         data={validAndOrdedTokensBalances}
-        keyExtractor={item => item.hash}
+        keyExtractor={(item, index) => `${item.hash}-${index}`}
         ListHeaderComponent={
           !!validAndOrdedTokensBalances && validAndOrdedTokensBalances.length > 0 ? (
             <TextView color="text.2" fontSize="sm">
@@ -216,6 +216,7 @@ const BalanceList = ({
         ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
         renderItem={({ item }) => (
           <BalanceListItem
+            key={item.hash}
             tokenBalanceConverted={item}
             showBlockchain={showBlockchain}
             showHoldingValue={showHoldingValue}

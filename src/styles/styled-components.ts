@@ -117,6 +117,8 @@ export const ButtonWithoutFeedbackView = styled.TouchableWithoutFeedback<ButtonW
 `
 
 export const LinearGradientLayout = styled(LinearGradient)<LinearGradientLayoutProps>`
+  ${border}
+  ${orientation}
   ${layout}
   ${color}
   ${space}

@@ -1,5 +1,5 @@
-import React, { useMemo, useRef, useState } from 'react'
-import { Animated, Easing, LayoutChangeEvent } from 'react-native'
+import React, { useMemo, useRef, useState, Fragment, useEffect } from 'react'
+import { Animated, Easing, LayoutChangeEvent, Dimensions, Platform } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { BalanceHelper } from '../helpers/BalanceHelper'
@@ -22,6 +22,7 @@ interface Props {
   onPress?: () => void
   exchange?: MultiExchange
   balances?: Balance[]
+  sizeCard?: number
 }
 
 type AccountContainerProps = {
@@ -32,8 +33,6 @@ type AccountContainerProps = {
   index: number
   isInactive?: boolean
 }
-
-type WalletOverlayProps = { walletType: string }
 
 type WalletLabelProps = { wallet: Wallet; isInactive?: boolean }
 
@@ -55,7 +54,6 @@ const WalletLabel = ({ wallet, isInactive }: WalletLabelProps) => {
           <LinearLayout bottom={40} orientation="horiz" alignItems="center">
             {isInactive ? (
               <ImageView
-                ml="12px"
                 width={28}
                 height={24}
                 resizeMode="contain"
@@ -63,7 +61,6 @@ const WalletLabel = ({ wallet, isInactive }: WalletLabelProps) => {
               />
             ) : (
               <ImageView
-                ml="12px"
                 width={28}
                 height={24}
                 resizeMode="contain"
@@ -163,22 +160,16 @@ const AssetBarFills = ({ balances, exchange, isInactive }: AssetBarFillsProps) =
   )
 }
 
-const WalletOverlay = ({ walletType }: WalletOverlayProps) => {
-  const isStandard = walletType === 'standard'
-
+const WalletOverlay = (props: { walletType: string }) => {
   return (
     <ImageView
       position="absolute"
       bottom="-2px"
       resizeMode="stretch"
-      source={
-        isStandard
-          ? require('~src/assets/images/wallet-card-front.png')
-          : require('~src/assets/images/wallet-semi-front.png')
-      }
+      source={require('~src/assets/images/wallet-semi-front.png')}
       style={{
         width: '100%',
-        height: isStandard ? '100%' : '75%',
+        height: '75%',
       }}
     />
   )
@@ -193,6 +184,21 @@ const AccountContainer = (props: AccountContainerProps) => {
     () => BalanceHelper.getBalanceByAccount(props.account, props.balances),
     [props.account, props.balances]
   )
+  const initialAccountPosition = -Dimensions.get('window').height * 0.35
+  const posYFactor = useRef(new Animated.Value(initialAccountPosition))
+  const isFirstTime = useSelector((state: RootState) => state.settings.isFirstTime)
+
+  const accountEntering = () => {
+    Animated.timing(posYFactor.current, {
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start()
+  }
+
+  useEffect(() => {
+    isFirstTime && accountEntering()
+  }, [])
 
   return (
     <LinearLayout
@@ -211,13 +217,28 @@ const AccountContainer = (props: AccountContainerProps) => {
           transform: [{ rotate: '90deg' }],
         }}
       >
-        <AccountCard account={props.account} balance={balance} exchange={props.exchange} hideBalance />
+        <Animated.View
+          style={{
+            transform: isFirstTime
+              ? [
+                  {
+                    translateX: posYFactor.current.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0, 1],
+                    }),
+                  },
+                ]
+              : undefined,
+          }}
+        >
+          <AccountCard account={props.account} balance={balance} exchange={props.exchange} hideBalance />
+        </Animated.View>
       </RelativeLayout>
     </LinearLayout>
   )
 }
 
-const WalletCard = ({ wallet, balances, exchange, isInactive, onPress, width }: Props) => {
+const WalletCard = ({ wallet, balances, exchange, isInactive, onPress, width, sizeCard }: Props) => {
   const accounts = useSelector((state: RootState) => state.app.accounts)
 
   const [viewHeight, setViewHeight] = useState<number>(0)
@@ -250,7 +271,7 @@ const WalletCard = ({ wallet, balances, exchange, isInactive, onPress, width }: 
     <ThemedShadowContainer
       android={{
         width,
-        height: 365,
+        height: sizeCard ?? 365,
         border: 7,
         radius: 30,
         opacity: 0.18,
@@ -268,7 +289,7 @@ const WalletCard = ({ wallet, balances, exchange, isInactive, onPress, width }: 
         onLayout={layoutEvent}
         style={{
           aspectRatio: 25 / 38,
-          height: 350,
+          height: sizeCard ?? 350,
         }}
       >
         <LinearLayout
@@ -309,7 +330,7 @@ const WalletCard = ({ wallet, balances, exchange, isInactive, onPress, width }: 
 
         <WalletOverlay walletType={wallet.walletType ?? ''} />
 
-        <LinearLayout position="absolute" bottom={40} width="80%">
+        <LinearLayout position="absolute" bottom={Platform.OS === 'ios' ? '9%' : '10%'} width="80%">
           <WalletLabel wallet={wallet} isInactive={isInactive} />
 
           <AssetBarFills exchange={exchange} balances={balances} isInactive={isInactive} />

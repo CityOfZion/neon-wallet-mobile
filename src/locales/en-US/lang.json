@@ -99,25 +99,28 @@
     "wrong": "Invalid passcode. Try again"
   },
   "onboarding": {
+    "initalSetup": "Initial Setup",
+    "welcomeNW": " Welcome to Neon Wallet",
+    "creatingWallet": "We are creating your Wallet with an Account inside. In the meanwhile here's an overview of the many features you'll find in the app.",
+    "progressMessageStep1": "Starting app setup...",
+    "progressMessageStep2": "Creating your wallet...",
+    "progressMessageStep3": "Creating your first account...",
+    "progressMessageStep4": "Wrapping everything up...",
     "feature1": {
-      "header": "Feature 1",
-      "title": "The original wallet on the move",
-      "subtitle": "All the best features of our desktop wallet plus more in the palm of your hand"
+      "header": "Easily organize your assets",
+      "subtitle": "Create multiple Accounts inside a Wallet, each with it's unique address."
     },
     "feature2": {
-      "header": "Feature 2",
-      "title": "First class user experience",
-      "subtitle": "Neon Wallet has been designed to make managing your crypto assets as intuitive as possible"
+      "header": "The most flexible Wallet App in Neo",
+      "subtitle": "Easily bring your Private Keys to Neon or add any address as a watch account to keep an eye on their public transactions."
     },
     "feature3": {
-      "header": "Feature 3",
-      "title": "BIP39 wallet",
-      "subtitle": "BIP39 wallet standard, create infinite child accounts using a single mnemonic"
+      "header": "Mobile Dapp Connection",
+      "subtitle": "Safely interact with multiple Dapps directly from your device through the established Wallet Connect Protocol."
     },
     "feature4": {
-      "header": "Time to get started!",
-      "title": "Packed pipeline of updates",
-      "subtitle": "The team is working around the clock to bring you the latest new features"
+      "header": "Introducing NFT support",
+      "subtitle": "View your collection and keep track of all your NFT transactions in a single place"
     },
     "getStarted": {
       "title": "Packed pipeline of updates",
@@ -125,6 +128,11 @@
       "buttonTitle": "Get Started!"
     },
     "firstWalletName": "My First Wallet"
+  },
+  "setupComplete": {
+    "title": "Setup Complete!",
+    "subtitle": "Your new wallet and account are ready to go.",
+    "titleAddressList": "Account Addresses"
   },
   "step1CreateWallet": {
     "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",
@@ -277,7 +285,11 @@
       "noBackup": "No backup found. Backup your wallet to avoid fund loss.",
       "incompleteBalanceWarningTitle": "Incomplete price data",
       "incompleteBalanceWarningText": "We haven't been able to retrieve price data for all your tokens so the total may not be accurate",
-      "incompleteBalanceWarningButton": "OK, I understand"
+      "incompleteBalanceWarningButton": "OK, I understand",
+      "isFirstWallet": {
+        "title": "Take a look inside!",
+        "subtitle": "Your new account are waiting"
+      }
     },
     "getWallet": {
       "addNewAccount": "Add new account"

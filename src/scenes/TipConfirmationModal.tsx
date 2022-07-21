@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, { useState } from 'react'
+import React from 'react'
 
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'

@@ -109,6 +109,7 @@ export class WrapperConfig {
     'WalletSettingsView',
     'AccountSettingsView',
     'ExportWIFModal',
+    'SetupCompletePage',
   ] as const
 }
 

@@ -40,7 +40,6 @@ const Tab = createBottomTabNavigator()
 const TabNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const { isFirstTime } = useSelector((state: RootState) => state.settings)
-  const dispatch = useDispatch()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   useEffect(() => {
@@ -55,13 +54,6 @@ const TabNavigation = (props: Props) => {
       }
 
       if (storageNumberOfVersion !== currentNumberOfVersions || isFirstTime) {
-        props.navigation.navigate(wrapper.route.Modal.name, {
-          screen: wrapper.route.WelcomeModal.name,
-          params: {
-            showChangelog: true,
-          },
-        })
-        dispatch(RootStore.settings.actions.setIsFirstTime(false))
         await dispatchAsync(RootStore.settings.actions.save())
       }
     }

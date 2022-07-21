@@ -12,6 +12,7 @@ import { appBus } from '../app/AppBus'
 import { blockchainServices, getBlockchainByAddress, hasWCIntegration } from '../blockchain'
 import { useWalletConnect } from '../contexts/WalletConnectContext'
 import { Account } from '../models/redux/Account'
+import SetupCompletePage, { SetupCompleteParamList } from '../scenes/SetupCompletePage'
 import { RootState, RootStore } from '../store/RootStore'
 import PasscodeStackNavigation, { PasscodeStackParams } from './PasscodeStackNavigation'
 
@@ -35,6 +36,7 @@ export type RootStackParamList = {
   PasscodeStack: PasscodeStackParams
   Onboarding: undefined
   QRCodeScan: QRCodeScanParams
+  SetupCompletePage: SetupCompleteParamList
 }
 
 interface Props {
@@ -226,6 +228,7 @@ const AppNavigation: React.FC<Props> = props => {
                 <RootStack.Screen name={wrapper.route.QRCodeScan.name} component={QRCodeScan} />
                 <RootStack.Screen name={wrapper.route.Login.name} component={LoginPage} />
                 <RootStack.Screen name={wrapper.route.PasscodeStack.name} component={PasscodeStackNavigation} />
+                <RootStack.Screen name={wrapper.route.SetupCompletePage.name} component={SetupCompletePage} />
                 <RootStack.Screen
                   name={wrapper.route.Modal.name}
                   component={ModalStackNavigation}
