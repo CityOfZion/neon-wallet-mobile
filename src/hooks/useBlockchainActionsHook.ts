@@ -65,7 +65,13 @@ export function useBlockchainActionsHook() {
   )
 
   const createAccount = useCallback(
-    async (walletId: string, name: string, blockchain: BlockchainServiceKey, index?: number, colorDefault?: boolean) => {
+    async (
+      walletId: string,
+      name: string,
+      blockchain: BlockchainServiceKey,
+      index?: number,
+      colorDefault?: boolean
+    ) => {
       dispatch(RootStore.account.actions.setIdWallet(walletId))
       dispatch(RootStore.account.actions.setName(name))
       dispatch(RootStore.account.actions.setBlockchain(blockchain))

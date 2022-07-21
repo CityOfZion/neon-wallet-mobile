@@ -7,15 +7,14 @@ import { useDispatch } from 'react-redux'
 
 import { ProgressBar } from '../components/ProgressBar'
 import { AsteroidHelper } from '../helpers/AsteroidHelper'
-import { RootState } from '../store/RootStore'
 import { UtilsHelper } from '../helpers/UtilsHelper'
-import { useBlockchainActionsHook } from '~src/hooks/useBlockchainActionsHook'
 import { useProgressHook } from '../hooks/useProgressHook'
 import { RootStore } from '../store/RootStore'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Storage } from '~src/app/Storage'
 import { applicationConfig } from '~src/config/ApplicationConfig'
+import { useBlockchainActionsHook } from '~src/hooks/useBlockchainActionsHook'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ImageView, LinearGradientLayout, LinearLayout, TextView } from '~src/styles/styled-components'
 
@@ -52,7 +51,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const carousel = useRef<Carousel<any>>(null)
   const blockchainActionsHook = useBlockchainActionsHook()
   const { currentProgress, increment } = useProgressHook()
-  const [progressMessage, setProgressMessage] = useState<string>('Starting app setup...')
+  const [progressMessage, setProgressMessage] = useState<string>(i18n.t('onboarding.progressMessageStep1'))
   const dispatch = useDispatch()
   const finish = async () => {
     await Storage.onboardingSeen.save(true)
@@ -93,15 +92,15 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     step1().then(() => {
       carousel.current?.snapToNext()
       increment(progressByStep)
-      setProgressMessage('Creating your wallet...')
+      setProgressMessage(i18n.t('onboarding.progressMessageStep2'))
       step2().then(walletID => {
         carousel.current?.snapToNext()
         increment(progressByStep)
-        setProgressMessage('Creating your first account...')
+        setProgressMessage(i18n.t('onboarding.progressMessageStep3'))
         step3(walletID).then(() => {
           carousel.current?.snapToNext()
           increment(progressByStep)
-          setProgressMessage('Wrapping everything up...')
+          setProgressMessage(i18n.t('onboarding.progressMessageStep4'))
           step4().then(() => {
             carousel.current?.snapToNext()
             increment(progressByStep)
@@ -113,33 +112,27 @@ const OnboardingPage = (props: OnboardingPageProps) => {
 
   const data = [
     {
-      header: 'Easily organise your assets',
+      header: i18n.t('onboarding.feature1.header'),
       image: require('~src/assets/images/onboarding-1.png') as ImageSourcePropType,
-      title: `Create multiple Accounts inside a Wallet, each with it's unique address.`,
-      subtitle: `Create multiple Accounts inside a Wallet, each with it's unique address.`,
+      subtitle: i18n.t('onboarding.feature1.subtitle'),
       resizeMode: 'contain' as ImageResizeMode,
     },
     {
-      header: 'The most flexible App in Neo',
+      header: i18n.t('onboarding.feature2.header'),
       image: require('~src/assets/images/onboarding-2.png') as ImageSourcePropType,
-      title: 'onboarding.feature2.title',
-      subtitle:
-        'Easily bring your Private Keys to Neon or add any address as a watch account to keep an eye on their public transactions.',
+      subtitle: i18n.t('onboarding.feature2.subtitle'),
       resizeMode: 'cover' as ImageResizeMode,
     },
     {
-      header: 'Mobile Dapp Connection',
+      header: i18n.t('onboarding.feature3.header'),
       image: require('~src/assets/images/onboarding-3.png') as ImageSourcePropType,
-      title: 'onboarding.feature3.title',
-      subtitle:
-        'Safely interact with multiple Dapps directly from your device through the established Wallet Connect Protocol.',
+      subtitle: i18n.t('onboarding.feature3.subtitle'),
       resizeMode: 'contain' as ImageResizeMode,
     },
     {
-      header: 'Introducing NFT support',
+      header: i18n.t('onboarding.feature4.header'),
       image: require('~src/assets/images/onboarding-4.png') as ImageSourcePropType,
-      title: 'onboarding.feature4.title',
-      subtitle: 'View your collection and keep track of all your NFT transactions in a single place',
+      subtitle: i18n.t('onboarding.feature4.subtitle'),
       resizeMode: 'contain' as ImageResizeMode,
     },
   ]
@@ -173,15 +166,14 @@ const OnboardingPage = (props: OnboardingPageProps) => {
               <LinearLayout height="100%">
                 <LinearLayout pl="3%" pt="3%" orientation="verti" width="100%">
                   <TextView fontSize="sm" color="#4CFFB3">
-                    INITIAL SETUP
+                    {i18n.t('onboarding.initalSetup')}
                   </TextView>
                   <TextView fontSize="3xl" color="#fff">
-                    Welcome to Neon Wallet
+                    {i18n.t('onboarding.welcomeNW')}
                   </TextView>
                   <LinearLayout width="85%">
                     <TextView fontSize="sm" color="#fff">
-                      We are creating your Wallet with an Account inside. In the meanwhile here's an overview of the
-                      many features you'll find in the app.
+                      {i18n.t('onboarding.creatingWallet')}
                     </TextView>
                   </LinearLayout>
                 </LinearLayout>
@@ -207,7 +199,6 @@ const OnboardingPage = (props: OnboardingPageProps) => {
                     item: {
                       header: string
                       image: ImageSourcePropType
-                      title: string
                       subtitle: string
                       resizeMode: ImageResizeMode
                     }

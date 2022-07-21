@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import React, { useRef, useMemo} from 'react'
+import React, { useRef, useMemo } from 'react'
 import ViewShot from 'react-native-view-shot'
 import { useSelector } from 'react-redux'
 

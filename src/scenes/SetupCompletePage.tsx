@@ -1,5 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React, { useCallback } from 'react'
 import { Dimensions, Platform } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -42,16 +43,16 @@ const SetupCompletePage = (props: Props) => {
             <LinearLayout mt={Dimensions.get('window').height * 0.05}>
               <LinearLayout width="60%" justifyContent="center" alignItems="center">
                 <TextView color="primary" fontSize="3xl">
-                  Setup Complete!
+                  {i18n.t('setupComplete.title')}
                 </TextView>
                 <TextView color="text.0" textAlign="center" fontSize="lg">
-                  Your new wallet and account are ready to go.
+                  {i18n.t('setupComplete.subtitle')}
                 </TextView>
               </LinearLayout>
             </LinearLayout>
             <LinearLayout mt={Dimensions.get('window').height * 0.04} borderRadius="7px" bg="#282F35" width="80%" p={4}>
               <TextView color="text.2" fontSize="md">
-                Account Addresses
+                {i18n.t('setupComplete.titleAddressList')}
               </TextView>
               <LinearLayout>
                 {accountsPool.map(acc => {

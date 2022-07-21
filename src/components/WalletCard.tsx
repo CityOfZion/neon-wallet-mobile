@@ -1,7 +1,6 @@
 import React, { useMemo, useRef, useState, Fragment, useEffect } from 'react'
-import { Animated, Easing, LayoutChangeEvent, Dimensions } from 'react-native'
-import i18n from 'i18n-js'
-import PropTypes from 'prop-types'
+import { Animated, Easing, LayoutChangeEvent, Dimensions, Platform } from 'react-native'
+
 import { useSelector } from 'react-redux'
 
 import { BalanceHelper } from '../helpers/BalanceHelper'
@@ -37,8 +36,6 @@ type AccountContainerProps = {
   index: number
   isInactive?: boolean
 }
-
-type WalletOverlayProps = { walletType: string }
 
 type WalletLabelProps = { wallet: Wallet; isInactive?: boolean }
 
@@ -167,7 +164,6 @@ const AssetBarFills = ({ balances, exchange, isInactive }: AssetBarFillsProps) =
 }
 
 const WalletOverlay = (props: { walletType: string }) => {
- 
   return (
     <ImageView
       position="absolute"
@@ -277,7 +273,7 @@ const WalletCard = ({ wallet, balances, exchange, isInactive, onPress, width, si
   return (
     <ThemedShadowContainer
       android={{
-        width: width,
+        width,
         height: sizeCard ?? 365,
         border: 7,
         radius: 30,
@@ -337,7 +333,7 @@ const WalletCard = ({ wallet, balances, exchange, isInactive, onPress, width, si
 
         <WalletOverlay walletType={wallet.walletType ?? ''} />
 
-        <LinearLayout position="absolute" bottom={40} width="80%">
+        <LinearLayout position="absolute" bottom={Platform.OS === 'ios' ? '9%' : '10%'} width="80%">
           <WalletLabel wallet={wallet} isInactive={isInactive} />
 
           <AssetBarFills exchange={exchange} balances={balances} isInactive={isInactive} />

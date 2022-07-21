@@ -1,23 +1,17 @@
-import { useNavigation } from '@react-navigation/native'
-import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, { useMemo } from 'react'
 import { NativeScrollEvent, NativeSyntheticEvent, Dimensions, Platform } from 'react-native'
-import Carousel from 'react-native-snap-carousel'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import Carousel from 'react-native-snap-carousel'
 import { useDispatch, useSelector } from 'react-redux'
-import { wrapper } from '~/src/app/ApplicationWrapper'
-import { Normalize } from '~/src/app/Normalize'
+
 import { applicationConfig } from '~/src/config/ApplicationConfig'
-import { RootStackParamList } from '~/src/navigation/AppNavigation'
-import { MoreStackParamList } from '~/src/navigation/MoreStackNavigation'
-import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { Balance } from '~/src/types/balance'
 import { MultiExchange } from '~/src/types/exchange'
 import WalletCard from '~src/components/WalletCard'
 import { Wallet } from '~src/models/redux/Wallet'
-import { ButtonWithoutFeedbackView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 import { RootState, RootStore } from '~src/store/RootStore'
+import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
   onPress?: (wallet: Wallet) => void
@@ -38,51 +32,6 @@ interface ItemProps {
   exchange?: MultiExchange
   balances?: Balance[]
   onPress?: () => void
-}
-
-const EmptyListComponent = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList & TabStackParamList & MoreStackParamList>>()
-
-  const handlePress = () => {
-    navigation.navigate(wrapper.route.Tab.name, {
-      screen: wrapper.route.More.name,
-      params: {
-        screen: wrapper.route.Step1CreateWallet.name,
-        initial: false,
-        params: {
-          source: wrapper.route.WalletContextModal.name,
-        },
-      },
-    })
-  }
-
-  return (
-    <LinearLayout alignItems="center" mx={3}>
-      <ButtonWithoutFeedbackView onPress={handlePress}>
-        <LinearLayout
-          my={6}
-          orientation="horiz"
-          width={Normalize.scale(300)}
-          maxWidth="100%"
-          alignItems="center"
-          justifyContent="center"
-          borderStyle="dashed"
-          borderColor="text.0"
-          borderRadius={17}
-          borderWidth={1}
-          style={{
-            aspectRatio: 20 / 25,
-          }}
-        >
-          <ImageView source={require('~src/assets/images/icon-plus-white.png')} />
-
-          <TextView color="white" fontSize={18} mt={2} ml={3} fontFamily="medium">
-            {i18n.t('screens.listWallets.createFirstWallet')}
-          </TextView>
-        </LinearLayout>
-      </ButtonWithoutFeedbackView>
-    </LinearLayout>
-  )
 }
 
 const Item = React.memo(({ wallet, balances, exchange, isInactive, onPress, disablePointerEvents }: ItemProps) => {
@@ -169,10 +118,10 @@ const WalletPicker = ({
             </LinearLayout>
             <LinearLayout>
               <TextView fontWeight={500} fontSize="md" color="primary">
-                Take a look inside!
+                {i18n.t('screens.listWallets.isFirstWallet.title')}
               </TextView>
               <TextView color="text.0" fontSize="xs" textAlign="center">
-                Your new accounts are waiting.
+                {i18n.t('screens.listWallets.isFirstWallet.subtitle')}
               </TextView>
             </LinearLayout>
           </TouchableWithoutFeedback>
@@ -197,22 +146,15 @@ const WalletPicker = ({
         useScrollView
         firstItem={selectWalletIndex > 0 ? selectWalletIndex : 0}
         onSnapToItem={index => selectEvent(index)}
-        renderItem={(wallet: { item: Wallet; index: number }) => (
-          <LinearLayout
-            weight={1}
-            justifyContent="center"
-            alignItems="center"
-            py={6}
-            pointerEvents={wallet.index !== selectWalletIndex ? 'none' : undefined}
-          >
-            <WalletCard
-              exchange={exchange}
-              width={240}
-              onPress={() => pressEvent(wallet.item)}
-              isInactive={isInactive}
-              wallet={wallet.item}
-            />
-          </LinearLayout>
+        renderItem={({ item, index }) => (
+          <Item
+            onPress={() => pressEvent(item)}
+            wallet={item}
+            balances={index === selectWalletIndex ? selectedWalletBalances : undefined}
+            exchange={exchange}
+            isInactive={isInactive}
+            disablePointerEvents={index !== selectWalletIndex}
+          />
         )}
       />
     </>
