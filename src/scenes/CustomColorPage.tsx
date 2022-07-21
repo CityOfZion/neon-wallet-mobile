@@ -4,8 +4,7 @@ import i18n from 'i18n-js'
 import React, { useState } from 'react'
 import { Dimensions } from 'react-native'
 
-import { useBalance } from '../hooks/useBalance'
-import { useExchange } from '../hooks/useExchange'
+import { useBalancesAndExchange } from '../hooks/useBalancesAndExchange'
 
 import AccountCard from '~src/components/AccountCard'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
@@ -27,8 +26,7 @@ const CustomColorPage = (props: Props) => {
   const { account } = props.route.params
   const controller = useSwiperController(true)
 
-  const { exchange } = useExchange()
-  const { balance } = useBalance(account)
+  const balanceExchange = useBalancesAndExchange(account)
 
   const [color, setColor] = useState<string>(props.route.params.account.backgroundColor)
 
@@ -59,7 +57,7 @@ const CustomColorPage = (props: Props) => {
     >
       <LinearLayout height="100%">
         <LinearLayout mb={5} maxHeight={`${Dimensions.get('window').width * 0.6}px`} alignSelf="center">
-          <AccountCard balance={balance} exchange={exchange} account={props.route.params.account} />
+          <AccountCard balanceExchange={balanceExchange} hideBalance={false} account={props.route.params.account} />
         </LinearLayout>
 
         <TextView

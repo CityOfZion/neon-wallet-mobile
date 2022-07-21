@@ -9,10 +9,9 @@ import { useSelector } from 'react-redux'
 
 import { wrapper } from '../app/ApplicationWrapper'
 import { getBlockchainLogo } from '../blockchain'
-import WalletCard from '../components/WalletCard'
+import { WalletCard } from '../components/WalletCard/WalletCard'
 import ThemedButton from '../components/themed/ThemedButton'
 import { UtilsHelper } from '../helpers/UtilsHelper'
-import { useExchange } from '../hooks/useExchange'
 import { RootStackParamList } from '../navigation/AppNavigation'
 import { RootState } from '../store/RootStore'
 import { ImageView, LinearLayout, TextView } from '../styles/styled-components'
@@ -25,7 +24,6 @@ interface Props {
 }
 
 const SetupCompletePage = (props: Props) => {
-  const { exchange } = useExchange()
   const wallets = useSelector((state: RootState) => state.app.wallets)
   const accountsPool = useSelector((state: RootState) => state.app.accounts)
   const wallet = wallets[0]
@@ -38,7 +36,13 @@ const SetupCompletePage = (props: Props) => {
       <SafeAreaView style={{ height: '100%' }}>
         <LinearLayout mt={Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.1 : 0.15)}>
           <LinearLayout alignItems="center">
-            <WalletCard sizeCard={Platform.OS === 'ios' ? 244 : 290} exchange={exchange} width={210} wallet={wallet} />
+            <WalletCard
+              wallet={wallet}
+              withBalanceBar={false}
+              animationType="in"
+              width={210}
+              height={Platform.OS === 'ios' ? 244 : 290}
+            />
             <LinearLayout mt={Dimensions.get('window').height * 0.05}>
               <LinearLayout width="60%" justifyContent="center" alignItems="center">
                 <TextView color="primary" fontSize="3xl">

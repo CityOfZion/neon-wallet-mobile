@@ -29,7 +29,7 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
-import { useBlockchainActionsHook, AccountToImport } from '~src/hooks/useBlockchainActionsHook'
+import { useBlockchainActions, AccountToImport } from '~src/hooks/useBlockchainActions'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
@@ -73,7 +73,7 @@ const ImportKey = (props: ImportKeyProps) => {
   const [showImportList, setShowImportList] = useState<boolean>(false)
   const [disableButton, setDisableButton] = useState<boolean>(true)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const blockchainActionsHook = useBlockchainActionsHook()
+  const blockchainActions = useBlockchainActions()
 
   const inputType = useRef<InputType>()
 
@@ -258,7 +258,7 @@ const ImportKey = (props: ImportKeyProps) => {
       return
     }
 
-    const walletId = await blockchainActionsHook.createLegacyWallet(i18n.t('defaultNameWallet.importedWallet'))
+    const walletId = await blockchainActions.createLegacyWallet(i18n.t('defaultNameWallet.importedWallet'))
 
     const accountToImport = addressesSelected.map(
       ({ address, blockchain }): AccountToImport => ({
@@ -270,7 +270,7 @@ const ImportKey = (props: ImportKeyProps) => {
       })
     )
 
-    await blockchainActionsHook.importAccounts(accountToImport)
+    await blockchainActions.importAccounts(accountToImport)
 
     const wallet = wallets.find(wallet => wallet.id === walletId)
 
@@ -281,7 +281,7 @@ const ImportKey = (props: ImportKeyProps) => {
     if (wallet) {
       props.navigation.navigate(wrapper.route.GetWallet.name, { wallet })
     }
-  }, [blockchainActionsHook, inputValue, wallets])
+  }, [blockchainActions, inputValue, wallets])
 
   const persistWhenMnemonic = useCallback(async () => {
     const dataAccountsToImport = await importMnemonic(inputValue)

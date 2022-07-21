@@ -5,12 +5,12 @@ import React, { useEffect } from 'react'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { blockchainServices } from '~/src/blockchain'
-import { TokenBalance } from '~/src/hooks/useBalance'
 import { Token } from '~/src/models/Token'
 import { Account } from '~/src/models/redux/Account'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { LinearLayout } from '~/src/styles/styled-components'
+import { TokenBalance } from '~/src/types/query'
 import ThemedCheckBox from '~src/components/themed/ThemedCheckbox'
 
 type Props = {

@@ -16,7 +16,6 @@ export class NetworkReducer extends ReducerWrapper<NetworkActionsType, NetworkSt
   actions = {
     watchConnection: (): SyncAction<NetInfoSubscription> => {
       return dispatch => {
-        dispatch(this.commit('SET_IS_CONNECTED', { isConnected: true }))
         const unsubscribe = NetInfo.addEventListener(({ isInternetReachable }) => {
           dispatch(this.commit('SET_IS_CONNECTED', { isConnected: isInternetReachable ?? undefined }))
         })

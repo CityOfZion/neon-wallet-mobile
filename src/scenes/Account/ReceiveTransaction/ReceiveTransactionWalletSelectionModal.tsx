@@ -5,11 +5,11 @@ import { useSelector } from 'react-redux'
 
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Skeleton } from '~/src/components/Skeleton'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { useBalances } from '~/src/hooks/useBalances'
-import { useExchange } from '~/src/hooks/useExchange'
+import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
@@ -36,14 +36,16 @@ const ReceiveTransactionWalletSelectionModal = (props: Props) => {
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet>(validWallets[0])
 
-  const { exchange } = useExchange()
-  const { balances: selectedWalletBalances } = useBalances(selectedWallet.getAccounts(accounts))
+  const balancesExchange = useBalancesAndExchange(selectedWallet.getAccounts(accounts))
 
   const formattedAllBalance = useMemo(() => {
-    const totalBalance = BalanceHelper.calculateTotalBalances(selectedWalletBalances, exchange)
+    const totalBalance = BalanceHelper.calculateTotalBalances(
+      balancesExchange.balance.data,
+      balancesExchange.exchange.data
+    )
 
     return FilterHelper.currency(totalBalance, currency, language)
-  }, [selectedWalletBalances, exchange, currency, language])
+  }, [balancesExchange, currency, language])
 
   return (
     <SwiperPanel
@@ -63,8 +65,7 @@ const ReceiveTransactionWalletSelectionModal = (props: Props) => {
         <WalletPicker
           wallets={validWallets}
           selectedWallet={selectedWallet}
-          exchange={exchange}
-          selectedWalletBalances={selectedWalletBalances}
+          balanceExchange={balancesExchange}
           onSelect={setSelectedWallet}
           onPress={wallet =>
             props.navigation.navigate(wrapper.route.Modal.name, {
@@ -76,9 +77,11 @@ const ReceiveTransactionWalletSelectionModal = (props: Props) => {
           }
         />
 
-        <TextView alignSelf="center" fontSize="36px" color="text.0" fontFamily="medium">
-          {formattedAllBalance}
-        </TextView>
+        <Skeleton isLoading={balancesExchange.isLoading} layout={{ width: 100, height: 36, alignSelf: 'center' }}>
+          <TextView alignSelf="center" fontSize="36px" color="text.0" fontFamily="medium">
+            {formattedAllBalance}
+          </TextView>
+        </Skeleton>
       </LinearLayout>
     </SwiperPanel>
   )

@@ -6,11 +6,10 @@ import { useSelector } from 'react-redux'
 import { BalanceConvertedToExchange, BalanceHelper } from '../helpers/BalanceHelper'
 import { TokenHelper } from '../helpers/TokenHelper'
 import { RootState } from '../store/RootStore'
-import { Balance, TokenBalance } from '../types/balance'
-import { MultiExchange } from '../types/exchange'
+import { UseBalanceExchangeResult, TokenBalance } from '../types/query'
 import { LinearLayoutProps } from '../types/styled-components'
+import { Skeleton } from './Skeleton'
 
-import { Normalize } from '~src/app/Normalize'
 import { FilterHelper } from '~src/helpers/FilterHelper'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
@@ -22,8 +21,7 @@ interface BalanceListItemProps {
 }
 
 interface Props extends LinearLayoutProps {
-  balances?: Balance | Balance[]
-  exchange?: MultiExchange
+  balanceExchange: UseBalanceExchangeResult
   hideEmptyMessage?: boolean
   removeZeroBalance?: boolean
   orderByValue?: boolean
@@ -57,11 +55,13 @@ const BalanceListItem = React.memo(
             ) : (
               <ImageView
                 mr="8px"
-                width={Normalize.scale(24)}
-                height={Normalize.scale(24)}
                 resizeMode="contain"
                 alignSelf="center"
                 source={TokenHelper.getIcon(tokenBalanceConverted.symbol, tokenBalanceConverted.blockchain)}
+                style={{
+                  width: 24,
+                  height: 24,
+                }}
               />
             )}
 
@@ -70,8 +70,6 @@ const BalanceListItem = React.memo(
                 color="text.0"
                 fontSize="xl"
                 fontFamily="medium"
-                allowFontScaling
-                adjustsFontSizeToFit
                 numberOfLines={1}
                 mb={showBlockchain ? '-5px' : undefined}
               >
@@ -79,14 +77,7 @@ const BalanceListItem = React.memo(
               </TextView>
 
               {showBlockchain && (
-                <TextView
-                  color="text.2"
-                  fontSize="sm"
-                  fontFamily="medium"
-                  allowFontScaling
-                  adjustsFontSizeToFit
-                  numberOfLines={1}
-                >
+                <TextView color="text.2" fontSize="sm" fontFamily="medium" numberOfLines={1}>
                   {i18n.t(`blockchainServices.${tokenBalanceConverted.blockchain}.id`)}
                 </TextView>
               )}
@@ -151,19 +142,18 @@ const BalanceListItem = React.memo(
 )
 
 const BalanceList = ({
-  balances,
   hideEmptyMessage = false,
   orderByValue = true,
   onPress,
   showBlockchain,
   showHoldingValue,
   removeZeroBalance = true,
-  exchange,
+  balanceExchange,
   ...props
 }: Props) => {
   const tokensBalancesConverted = useMemo(
-    () => BalanceHelper.convertBalancesToCurrency(balances, exchange),
-    [balances, exchange]
+    () => BalanceHelper.convertBalancesToCurrency(balanceExchange.balance.data, balanceExchange.exchange.data),
+    [balanceExchange]
   )
 
   const validAndOrdedTokensBalances = useMemo(() => {
@@ -188,7 +178,7 @@ const BalanceList = ({
     }
 
     return tokenBalances
-  }, [balances])
+  }, [tokensBalancesConverted])
 
   const handlePress = (token: TokenBalance) => {
     if (onPress) onPress(token)
@@ -196,34 +186,42 @@ const BalanceList = ({
 
   return (
     <LinearLayout {...props} width="100%">
-      <FlatList
-        data={validAndOrdedTokensBalances}
-        keyExtractor={(item, index) => `${item.hash}-${index}`}
-        ListHeaderComponent={
-          !!validAndOrdedTokensBalances && validAndOrdedTokensBalances.length > 0 ? (
-            <TextView color="text.2" fontSize="sm">
-              {i18n.t('components.balanceList.title')}
-            </TextView>
-          ) : undefined
-        }
-        ListEmptyComponent={
-          !hideEmptyMessage ? (
-            <TextView my="32px" color="text.0" fontSize="18px" textAlign="center">
-              {i18n.t('components.balanceList.empty')}
-            </TextView>
-          ) : undefined
-        }
-        ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
-        renderItem={({ item }) => (
-          <BalanceListItem
-            key={item.hash}
-            tokenBalanceConverted={item}
-            showBlockchain={showBlockchain}
-            showHoldingValue={showHoldingValue}
-            onPress={() => handlePress(item)}
-          />
-        )}
-      />
+      <Skeleton
+        isLoading={balanceExchange.isLoading}
+        layout={[
+          { width: '100%', height: 48, marginVertical: 5 },
+          { width: '100%', height: 48, marginVertical: 5 },
+          { width: '100%', height: 48, marginVertical: 5 },
+        ]}
+      >
+        <FlatList
+          data={validAndOrdedTokensBalances}
+          keyExtractor={item => item.hash}
+          ListHeaderComponent={
+            !!validAndOrdedTokensBalances && validAndOrdedTokensBalances.length > 0 ? (
+              <TextView color="text.2" fontSize="sm">
+                {i18n.t('components.balanceList.title')}
+              </TextView>
+            ) : undefined
+          }
+          ListEmptyComponent={
+            !hideEmptyMessage ? (
+              <TextView my="32px" color="text.0" fontSize="18px" textAlign="center">
+                {i18n.t('components.balanceList.empty')}
+              </TextView>
+            ) : undefined
+          }
+          ItemSeparatorComponent={() => <LinearLayout bg="text.2" height={1} />}
+          renderItem={({ item }) => (
+            <BalanceListItem
+              tokenBalanceConverted={item}
+              showBlockchain={showBlockchain}
+              showHoldingValue={showHoldingValue}
+              onPress={() => handlePress(item)}
+            />
+          )}
+        />
+      </Skeleton>
     </LinearLayout>
   )
 }

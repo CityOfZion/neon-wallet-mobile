@@ -5,8 +5,6 @@ import i18n from 'i18n-js'
 import React, { useState, useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-import { WatchAccountToImport } from '../../hooks/BlockchainActionsHook'
-
 import { wrapper } from '~src/app/ApplicationWrapper'
 import {
   BlockchainServiceKey,
@@ -20,7 +18,7 @@ import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { useBlockchainActionsHook } from '~src/hooks/useBlockchainActionsHook'
+import { useBlockchainActions, WatchAccountToImport } from '~src/hooks/useBlockchainActions'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { RootState } from '~src/store/RootStore'
@@ -39,7 +37,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const accounts = useSelector((state: RootState) => state.app.accounts)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
-  const blockchainActionsHook = useBlockchainActionsHook()
+  const blockchainActions = useBlockchainActions()
 
   const [inputValue, setInputValue] = useState(props.route.params ? props.route.params.address ?? '' : '')
   const [errorMessage, setErrorMessage] = useState(i18n.t('components.inputTextWithValidation.incorrectFormat'))
@@ -71,7 +69,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
 
     Await.init('importWatchAccount')
 
-    const walletId = await blockchainActionsHook.createWallet(
+    const walletId = await blockchainActions.createWallet(
       i18n.t('defaultNameWallet.watchAccount'),
       mnemonic.join(','),
       'watch'
@@ -85,7 +83,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
         walletId,
       })
     )
-    await blockchainActionsHook.importAccounts(accountToImport)
+    await blockchainActions.importAccounts(accountToImport)
 
     Await.done('importWatchAccount')
 

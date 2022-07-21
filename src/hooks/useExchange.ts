@@ -1,10 +1,11 @@
 import lodash from 'lodash'
+import { useCallback, useState } from 'react'
 import { useQuery, UseQueryOptions } from 'react-query'
 import { useSelector } from 'react-redux'
 
 import { blockchainList, blockchainServices } from '../blockchain'
 import { RootState } from '../store/RootStore'
-import { MultiExchange } from '../types/exchange'
+import { MultiExchange, UseExchangeResult } from '../types/query'
 
 export const fetchExchanges = async (currency: string): Promise<MultiExchange> => {
   const exchanges = await Promise.all(
@@ -18,15 +19,26 @@ export const fetchExchanges = async (currency: string): Promise<MultiExchange> =
 
 export function useExchange(
   queryOptions?: Omit<UseQueryOptions<MultiExchange, unknown, MultiExchange, string[]>, 'queryKey' | 'queryFn'>
-) {
+): UseExchangeResult {
   const currency = useSelector((state: RootState) => state.settings.currency)
 
-  const { data, ...rest } = useQuery(['exchange'], () => fetchExchanges(currency), queryOptions)
+  const [isRefetchingByUser, setIsRefetchingByUser] = useState(false)
 
-  console.log({ data })
+  const { refetch, ...rest } = useQuery(['exchange'], () => fetchExchanges(currency), queryOptions)
+
+  const customRefetch = useCallback(async () => {
+    setIsRefetchingByUser(true)
+
+    try {
+      await refetch()
+    } finally {
+      setIsRefetchingByUser(false)
+    }
+  }, [refetch])
 
   return {
-    exchange: data,
     ...rest,
+    refetch: customRefetch,
+    isRefetchingByUser,
   }
 }

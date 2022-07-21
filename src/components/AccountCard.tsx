@@ -9,8 +9,8 @@ import { useSelector } from 'react-redux'
 import { BalanceHelper } from '../helpers/BalanceHelper'
 import { RootStackParamList } from '../navigation/AppNavigation'
 import { RootState } from '../store/RootStore'
-import { Balance } from '../types/balance'
-import { MultiExchange } from '../types/exchange'
+import { UseUniqueBalanceAndExchangeResult } from '../types/query'
+import { Skeleton } from './Skeleton'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { getBlockchainLogo } from '~src/blockchain'
@@ -20,46 +20,100 @@ import { Account } from '~src/models/redux/Account'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
-interface Props {
-  onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
+type VisibleProps = {
+  hideBalance: false
+  balanceExchange?: UseUniqueBalanceAndExchangeResult
+}
+
+type HiddenProps = {
+  hideBalance: true
+}
+
+type Props = {
   account: Account
   isCompacted?: boolean
   isStackMode?: boolean
-  isVertical?: boolean
   isInactive?: boolean
   hasShadow?: boolean
   hideQRCode?: boolean
-  hideBalance?: boolean
   hideCopy?: boolean
-  balance?: Balance
-  exchange?: MultiExchange
+  onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
+} & (VisibleProps | HiddenProps)
+
+type BalanceProps = {
+  type: 'small' | 'big'
+  unit: number
+  balanceExchange?: UseUniqueBalanceAndExchangeResult
+}
+
+const Balance = ({ balanceExchange, type, unit }: BalanceProps) => {
+  const language = useSelector((state: RootState) => state.settings.language)
+  const currency = useSelector((state: RootState) => state.settings.currency)
+
+  const total = useMemo(() => {
+    const total = balanceExchange
+      ? BalanceHelper.calculateTotalBalances(balanceExchange.balance.data, balanceExchange.exchange.data)
+      : undefined
+
+    return FilterHelper.currency(total, currency, language)
+  }, [balanceExchange, currency, language])
+
+  return type === 'small' ? (
+    <Skeleton
+      isLoading={balanceExchange?.isLoading}
+      layout={{ width: 60 * unit, height: 32 * unit }}
+      withDefaultStyle={false}
+    >
+      <LinearLayout ml={10 * unit} alignItems="flex-start">
+        <TextView fontFamily="bold" fontSize={12 * unit} color="white">
+          {i18n.t('paymentCard.balance')}
+        </TextView>
+        <TextView
+          mt={-6 * unit}
+          fontFamily="semibold"
+          fontSize={21 * unit}
+          color="white"
+          textAlign="center"
+          fontWeight="bold"
+          numberOfLines={1}
+        >
+          {total}
+        </TextView>
+      </LinearLayout>
+    </Skeleton>
+  ) : (
+    <Skeleton
+      isLoading={balanceExchange?.isLoading}
+      layout={{ width: '100%', height: 62 * unit }}
+      containerStyle={{ paddingHorizontal: 40 * unit }}
+    >
+      <LinearLayout>
+        <TextView px={40 * unit} fontSize={14 * unit} color="white" fontFamily="bold">
+          {i18n.t('paymentCard.balance')}
+        </TextView>
+        <TextView fontSize={48 * unit} color="white" textAlign="center" fontFamily="semibold" numberOfLines={1}>
+          {total}
+        </TextView>
+      </LinearLayout>
+    </Skeleton>
+  )
 }
 
 const AccountCard = ({
   isCompacted = false,
   isStackMode = false,
-  isVertical = false,
   isInactive = false,
   hasShadow = true,
   account,
-  balance,
-  exchange,
-  hideBalance,
   hideCopy,
   hideQRCode,
   onPress,
+  ...props
 }: Props) => {
-  const language = useSelector((state: RootState) => state.settings.language)
-  const currency = useSelector((state: RootState) => state.settings.currency)
   const navigation = useNavigation<StackNavigationProp<RootStackParamList & ModalStackParamList>>()
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const [viewHeight, setViewHeight] = useState<number>(0)
-
-  const totalTokenBalance = useMemo(() => {
-    const total = BalanceHelper.calculateTotalBalances(balance, exchange)
-
-    return FilterHelper.currency(total, currency, language)
-  }, [balance, exchange, currency, language])
 
   const unit = (viewHeight * 0.1) / 24
 
@@ -107,17 +161,18 @@ const AccountCard = ({
       <LinearGradient
         colors={[account.backgroundColor, FilterHelper.toDarkerShade(account.backgroundColor, 1, 0.4)]}
         style={{
-          opacity: isInactive ? 0.5 : 1,
           borderRadius: 18,
           aspectRatio: 38 / 25,
-          shadowOffset: { width: 7, height: 7 },
-          shadowColor: '#000000',
-          shadowOpacity: 0.2,
-          elevation: 7,
+          shadowRadius: hasShadow ? 15 : undefined,
+          shadowOpacity: hasShadow ? 0.5 : undefined,
+          shadowColor: hasShadow ? theme.colors.black : undefined,
+          shadowOffset: hasShadow ? { height: 5, width: 5 } : undefined,
+          elevation: hasShadow ? 6 : undefined,
         }}
       >
         <Animated.View style={{ opacity: fadeAnim.current }}>
           <ImageView
+            opacity={0.7}
             position="absolute"
             bottom="0"
             left="0"
@@ -134,10 +189,9 @@ const AccountCard = ({
                 height={30 * unit}
                 source={getBlockchainLogo(account.blockchain, 'white')}
                 resizeMode="contain"
-                mr={unit * 10}
                 alignSelf="center"
               />
-              <LinearLayout orientation="verti" flex={1}>
+              <LinearLayout orientation="verti" flex={1} paddingX={10 * unit}>
                 <TextView mb={-4 * unit} fontFamily="semibold" fontSize={22 * unit} color="white" numberOfLines={1}>
                   {account.name ?? i18n.t('paymentCard.accountPlaceholder')}
                 </TextView>
@@ -147,24 +201,7 @@ const AccountCard = ({
               </LinearLayout>
 
               {isCompacted
-                ? !hideBalance && (
-                    <LinearLayout ml={10 * unit} alignItems="flex-start">
-                      <TextView fontFamily="bold" fontSize={12 * unit} color="white">
-                        {i18n.t('paymentCard.balance')}
-                      </TextView>
-                      <TextView
-                        mt={-6 * unit}
-                        fontFamily="semibold"
-                        fontSize={21 * unit}
-                        color="white"
-                        textAlign="center"
-                        fontWeight="bold"
-                        numberOfLines={1}
-                      >
-                        {totalTokenBalance}
-                      </TextView>
-                    </LinearLayout>
-                  )
+                ? !props.hideBalance && <Balance type="small" balanceExchange={props.balanceExchange} unit={unit} />
                 : !hideQRCode && (
                     <ButtonView onPress={handlePressQRCode}>
                       <ImageView
@@ -177,15 +214,8 @@ const AccountCard = ({
                   )}
             </LinearLayout>
 
-            {!isStackMode && !isCompacted && !hideBalance ? (
-              <LinearLayout>
-                <TextView px={40 * unit} fontSize={14 * unit} color="white" fontFamily="bold">
-                  {i18n.t('paymentCard.balance')}
-                </TextView>
-                <TextView fontSize={48 * unit} color="white" textAlign="center" fontFamily="semibold" numberOfLines={1}>
-                  {totalTokenBalance}
-                </TextView>
-              </LinearLayout>
+            {!isStackMode && !isCompacted && !props.hideBalance ? (
+              <Balance type="big" balanceExchange={props.balanceExchange} unit={unit} />
             ) : (
               <LinearLayout />
             )}

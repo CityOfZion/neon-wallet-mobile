@@ -10,8 +10,7 @@ import { TokenSelect } from './TokenSelect'
 
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { useBalance } from '~/src/hooks/useBalance'
-import { useExchange } from '~/src/hooks/useExchange'
+import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { Token } from '~/src/models/Token'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import AccountCard from '~src/components/AccountCard'
@@ -48,8 +47,7 @@ const ReceiveTransactionModal = (props: Props) => {
   const [reference, setReference] = useState<string>()
   const [token, setToken] = useState<Token>()
 
-  const { exchange } = useExchange()
-  const { balance } = useBalance(account)
+  const balanceExchange = useBalancesAndExchange(account)
 
   const navigate = () => {
     if (!token || !amount) return
@@ -96,8 +94,8 @@ const ReceiveTransactionModal = (props: Props) => {
             </TextView>
 
             <AccountCard
-              exchange={exchange}
-              balance={balance}
+              balanceExchange={balanceExchange}
+              hideBalance={false}
               account={props.route.params.account}
               hideCopy
               hideQRCode

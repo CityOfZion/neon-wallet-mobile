@@ -8,13 +8,13 @@ import { useDispatch } from 'react-redux'
 import { ProgressBar } from '../components/ProgressBar'
 import { AsteroidHelper } from '../helpers/AsteroidHelper'
 import { UtilsHelper } from '../helpers/UtilsHelper'
-import { useProgressHook } from '../hooks/useProgressHook'
+import { useProgress } from '../hooks/useProgress'
 import { RootStore } from '../store/RootStore'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Storage } from '~src/app/Storage'
 import { applicationConfig } from '~src/config/ApplicationConfig'
-import { useBlockchainActionsHook } from '~src/hooks/useBlockchainActionsHook'
+import { useBlockchainActions } from '~src/hooks/useBlockchainActions'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ImageView, LinearGradientLayout, LinearLayout, TextView } from '~src/styles/styled-components'
 
@@ -49,10 +49,11 @@ const OnboardingSlide = (props: OnboardingSlideProps) => {
 
 const OnboardingPage = (props: OnboardingPageProps) => {
   const carousel = useRef<Carousel<any>>(null)
-  const blockchainActionsHook = useBlockchainActionsHook()
-  const { currentProgress, increment } = useProgressHook()
+  const blockchainActions = useBlockchainActions()
+  const { currentProgress, increment } = useProgress()
   const [progressMessage, setProgressMessage] = useState<string>(i18n.t('onboarding.progressMessageStep1'))
   const dispatch = useDispatch()
+
   const finish = async () => {
     await Storage.onboardingSeen.save(true)
     dispatch(RootStore.settings.actions.setIsFirstTime(true))
@@ -66,12 +67,12 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const step2 = async () => {
     await UtilsHelper.sleep(1500)
     const words = AsteroidHelper.generateMnemonic() ?? []
-    return blockchainActionsHook.createWallet(i18n.t('onboarding.firstWalletName'), words.join(' '), 'standard')
+    return blockchainActions.createWallet(i18n.t('onboarding.firstWalletName'), words.join(' '), 'standard')
   }
 
   const step3 = async (walletId: string) => {
     await UtilsHelper.sleep(1500)
-    return blockchainActionsHook.createAccount(
+    return blockchainActions.createAccount(
       walletId,
       i18n.t('modals.blockchainList.countAccount', {
         count: 1,

@@ -20,8 +20,7 @@ import SwiperPanel, { PANEL_OFFSET, useSwiperController } from '~/src/components
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
-import { useBalance } from '~/src/hooks/useBalance'
-import { useExchange } from '~/src/hooks/useExchange'
+import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { Token } from '~/src/models/Token'
 import { Account } from '~/src/models/redux/Account'
 import { Contact } from '~/src/models/redux/Contact'
@@ -49,8 +48,8 @@ export const SendTransactionModal = (props: Props) => {
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const currency = useSelector((state: RootState) => state.settings.currency)
   const controller = useSwiperController(true)
-  const { exchange } = useExchange()
-  const { balance } = useBalance(account)
+
+  const balanceExchange = useBalancesAndExchange(account)
 
   const [destinationAddress, setDestinationAdress] = useState<string>()
   const [destinationAddressIsValid, setDestinationAddressIsValid] = useState<boolean>()
@@ -71,20 +70,24 @@ export const SendTransactionModal = (props: Props) => {
   const [tipIsDisabled, setTipIsDisabled] = useState<boolean>(false)
 
   const feeTokenBalance = useMemo(
-    () => BalanceHelper.getTokenBalanceBySymbol(blockchainServices[account.blockchain].feeToken.token, balance),
-    [balance, account]
+    () =>
+      BalanceHelper.getTokenBalanceBySymbol(
+        blockchainServices[account.blockchain].feeToken.token,
+        balanceExchange.balance.data
+      ),
+    [balanceExchange, account]
   )
   const tokenBalance = useMemo(() => {
     if (!token) return
 
-    return BalanceHelper.getTokenBalanceBySymbol(token.symbol, balance)
-  }, [balance, token])
+    return BalanceHelper.getTokenBalanceBySymbol(token.symbol, balanceExchange.balance.data)
+  }, [balanceExchange, token])
 
   const ratio = useMemo(() => {
     if (!token) return
 
-    return BalanceHelper.getExchangeRatio(token.symbol, token.blockchain, exchange)
-  }, [token, exchange, currency])
+    return BalanceHelper.getExchangeRatio(token.symbol, token.blockchain, balanceExchange.exchange.data)
+  }, [balanceExchange, currency])
 
   const handleSelectToken = (token: Token) => {
     setToken(token)
@@ -156,7 +159,7 @@ export const SendTransactionModal = (props: Props) => {
                 {wallet.name}
               </TextView>
 
-              <AccountCard balance={balance} exchange={exchange} account={account} />
+              <AccountCard hideBalance={false} balanceExchange={balanceExchange} account={account} />
 
               <TextView mt="40px" alignSelf="center" color="text.3" fontSize="md" fontFamily="bold">
                 {i18n.t('modals.sendTransactionModal.transactionDetails')}

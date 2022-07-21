@@ -9,12 +9,11 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { useBalances } from '~/src/hooks/useBalances'
-import { useExchange } from '~/src/hooks/useExchange'
+import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'
-import { TokenBalance } from '~/src/types/balance'
+import { TokenBalance } from '~/src/types/query'
 import BalanceList from '~src/components/BalanceList'
 import SwiperPanel, { BackButton, useSwiperController } from '~src/components/SwiperPanel'
 import AccountPicker from '~src/components/misc/AccountPicker'
@@ -44,18 +43,22 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
 
   const [selectedAccount, setSelectedAccount] = useState<Account>(validAccounts[0])
 
-  const { balances } = useBalances(validAccounts)
-  const { exchange } = useExchange()
+  const balancesExchange = useBalancesAndExchange(validAccounts)
 
-  const selectedAccountBalance = useMemo(
-    () => BalanceHelper.getBalanceByAccount(selectedAccount, balances),
-    [selectedAccount, balances]
-  )
+  const selectedAccountBalanceExchange = useMemo(() => {
+    if (!selectedAccount.address) return
 
-  const selectedAccountTotalTokenBalance = useMemo(
-    () => BalanceHelper.calculateTotalBalances(selectedAccountBalance, exchange),
-    [selectedAccountBalance, exchange]
-  )
+    return balancesExchange.findByBalanceKey(selectedAccount.address)
+  }, [selectedAccount, balancesExchange])
+
+  const selectedAccountTotalTokenBalance = useMemo(() => {
+    if (!selectedAccountBalanceExchange) return
+
+    return BalanceHelper.calculateTotalBalances(
+      selectedAccountBalanceExchange.balance.data,
+      selectedAccountBalanceExchange.exchange.data
+    )
+  }, [selectedAccountBalanceExchange])
 
   const handleChangeAccount = (account: Account) => {
     setSelectedAccount(account)
@@ -107,25 +110,32 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
 
           <LinearLayout minHeight="190px">
             <AccountPicker
-              balances={balances}
-              exchange={exchange}
+              balancesExchange={balancesExchange}
               accounts={validAccounts}
               onSelect={handleChangeAccount}
               isCompacted={false}
             />
           </LinearLayout>
 
-          {!!selectedAccountTotalTokenBalance && selectedAccountTotalTokenBalance > 0 && (
+          {!!selectedAccountBalanceExchange && (
             <>
-              <TextView mb={4} color="text.3" fontSize="md" textAlign="center">
-                {i18n.t('modals.sendTransactionAccountSelectionModal.label')}
-              </TextView>
+              {selectedAccountBalanceExchange.isLoading ? (
+                <TextView mb={4} color="text.3" fontSize="md" textAlign="center">
+                  {i18n.t('modals.sendTransactionAccountSelectionModal.label')}
+                </TextView>
+              ) : (
+                !!selectedAccountTotalTokenBalance &&
+                selectedAccountTotalTokenBalance > 0 && (
+                  <TextView mb={4} color="text.3" fontSize="md" textAlign="center">
+                    {i18n.t('modals.sendTransactionAccountSelectionModal.label')}
+                  </TextView>
+                )
+              )}
 
               <LinearLayout pl={20} pr={20}>
                 <BalanceList
                   hideEmptyMessage
-                  balances={selectedAccountBalance}
-                  exchange={exchange}
+                  balanceExchange={selectedAccountBalanceExchange}
                   onPress={handleBalancePress}
                 />
               </LinearLayout>

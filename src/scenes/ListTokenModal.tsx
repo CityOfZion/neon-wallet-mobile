@@ -4,9 +4,10 @@ import i18n from 'i18n-js'
 import React, { useEffect, useMemo, useState } from 'react'
 import { FlatList, Keyboard } from 'react-native'
 
+import { Skeleton } from '../components/Skeleton'
 import ThemedCloseButton from '../components/themed/ThemedCloseButton'
 import { TokenHelper } from '../helpers/TokenHelper'
-import { useBalance } from '../hooks/useBalance'
+import { useBalances } from '../hooks/useBalances'
 import { useTokens } from '../hooks/useTokens'
 import { Token } from '../models/Token'
 
@@ -79,14 +80,14 @@ const ListTokenModal = (props: Props) => {
 
   const controller = useSwiperController(true)
   const { tokens } = useTokens({ blockchain: account.blockchain })
-  const { balance } = useBalance(account)
+  const balance = useBalances(account)
 
   const [filter, setFilter] = useState('')
 
   const tokenList = useMemo<TokenToList[] | undefined>(() => {
     if (filterBy === 'receive') {
       return tokens.map(token => {
-        const tokenBalance = balance?.tokensBalances.find(tokenBalance => tokenBalance.symbol === token.symbol)
+        const tokenBalance = balance.data?.tokensBalances.find(tokenBalance => tokenBalance.symbol === token.symbol)
 
         return {
           ...token,
@@ -95,7 +96,7 @@ const ListTokenModal = (props: Props) => {
       })
     }
 
-    return balance?.tokensBalances
+    return balance.data?.tokensBalances
   }, [filterBy, tokens, balance])
 
   const filteredTokens = useMemo(() => {
@@ -133,19 +134,32 @@ const ListTokenModal = (props: Props) => {
             ? i18n.t('modals.listTokenModal.selectTokenSend')
             : i18n.t('modals.listTokenModal.selectTokenReceive')}
         </TextView>
-        <SearchBar lighterColor marginX={-5} onFilter={setFilter} />
+        <SearchBar lighterColor marginX={-5} isDisabled={balance.isLoading} onFilter={setFilter} />
 
-        <FlatList
-          data={filteredTokens}
-          keyExtractor={item => item.symbol}
-          ItemSeparatorComponent={() => <LinearLayout bg="background.10" height={1} />}
-          renderItem={({ item }) => <Item onPress={() => handlePress(item)} token={item} account={account} />}
-          ListEmptyComponent={
-            <TextView fontWeight="500" color="text.0" fontSize={18} pt={5} textAlign="center">
-              {i18n.t('persistContact.noResultsFound')}
-            </TextView>
-          }
-        />
+        <Skeleton
+          isLoading={balance.isLoading}
+          layout={[
+            { width: '100%', height: 48, marginVertical: 5 },
+            { width: '100%', height: 48, marginVertical: 5 },
+            { width: '100%', height: 48, marginVertical: 5 },
+            { width: '100%', height: 48, marginVertical: 5 },
+            { width: '100%', height: 48, marginVertical: 5 },
+            { width: '100%', height: 48, marginVertical: 5 },
+            { width: '100%', height: 48, marginVertical: 5 },
+          ]}
+        >
+          <FlatList
+            data={filteredTokens}
+            keyExtractor={item => item.symbol}
+            ItemSeparatorComponent={() => <LinearLayout bg="background.10" height={1} />}
+            renderItem={({ item }) => <Item onPress={() => handlePress(item)} token={item} account={account} />}
+            ListEmptyComponent={
+              <TextView fontWeight="500" color="text.0" fontSize={18} pt={5} textAlign="center">
+                {i18n.t('persistContact.noResultsFound')}
+              </TextView>
+            }
+          />
+        </Skeleton>
       </LinearLayout>
     </SwiperPanel>
   )

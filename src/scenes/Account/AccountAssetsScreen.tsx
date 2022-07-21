@@ -6,8 +6,7 @@ import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import AccountSubTitle from '~/src/components/AccountSubTitle'
-import { useBalance } from '~/src/hooks/useBalance'
-import { useExchange } from '~/src/hooks/useExchange'
+import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
 import BalanceList from '~src/components/BalanceList'
@@ -28,28 +27,23 @@ const AccountAssetScreen = ({ route }: Props) => {
   const { account } = route.params
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const { exchange, isRefetching: exchangeIsRefetching, refetch: exchangeRefetch } = useExchange()
-  const { balance, isRefetching: balanceIsRefetching, refetch: balanceRefetch } = useBalance(account)
 
-  function handleRefresh() {
-    exchangeRefetch()
-    balanceRefetch()
-  }
+  const balanceExchange = useBalancesAndExchange(account)
 
   return (
     <ScreenLayout
       refreshControl={
         <RefreshControl
           tintColor={theme.colors.text[0]}
-          refreshing={exchangeIsRefetching || balanceIsRefetching}
-          onRefresh={handleRefresh}
+          refreshing={balanceExchange.isRefetchingByUser}
+          onRefresh={balanceExchange.refetch}
         />
       }
       darkerSolidColorBG
     >
       <AccountSubTitle account={account} />
 
-      <BalanceList exchange={exchange} balances={balance} my="16px" showHoldingValue={false} showBlockchain />
+      <BalanceList balanceExchange={balanceExchange} my="16px" showHoldingValue={false} showBlockchain />
     </ScreenLayout>
   )
 }

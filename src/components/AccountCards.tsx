@@ -2,48 +2,22 @@ import React, { useRef, useState } from 'react'
 import { LayoutChangeEvent, Animated, Easing } from 'react-native'
 
 import { Normalize } from '../app/Normalize'
-import { BalanceHelper } from '../helpers/BalanceHelper'
 import { Account } from '../models/redux/Account'
-import { LinearLayout } from '../styles/styled-components'
-import { Balance } from '../types/balance'
-import { MultiExchange } from '../types/exchange'
+import { UseMultipleBalanceAndExchangeResult } from '../types/query'
 import AccountCard from './AccountCard'
 
 interface Props {
   accounts: Account[]
   onPress: (account: Account) => void
-  exchange?: MultiExchange
-  balances?: Balance[]
-}
-interface ItemProps {
-  exchange?: MultiExchange
-  balance?: Balance
-  account: Account
-  isStackMode: boolean
-  onPress(): void
+  balanceExchange: UseMultipleBalanceAndExchangeResult
 }
 
-const Item = React.memo(({ balance, exchange, account, isStackMode, onPress }: ItemProps) => {
-  return (
-    <LinearLayout>
-      <AccountCard
-        balance={balance}
-        exchange={exchange}
-        account={account}
-        isStackMode={isStackMode}
-        isCompacted
-        onPress={onPress}
-      />
-    </LinearLayout>
-  )
-})
-
-export const AccountCards = (props: Props) => {
+export const AccountCards = ({ accounts, balanceExchange, onPress }: Props) => {
   const [viewHeight, setViewHeight] = useState<number>(0)
 
   const posYFactor = useRef(new Animated.Value(0))
 
-  const layoutEvent = (event: LayoutChangeEvent) => {
+  const handleLayout = (event: LayoutChangeEvent) => {
     const { height } = event.nativeEvent.layout
     setViewHeight(height)
 
@@ -55,9 +29,15 @@ export const AccountCards = (props: Props) => {
     }).start()
   }
 
+  const getBalanceExchange = (account: Account) => {
+    if (!account.address) return
+
+    return balanceExchange.findByBalanceKey(account.address)
+  }
+
   return (
-    <Animated.View onLayout={layoutEvent} style={{ opacity: posYFactor.current }}>
-      {props.accounts.map((account, index) => (
+    <Animated.View onLayout={handleLayout} style={{ opacity: posYFactor.current }}>
+      {accounts.map((account, index) => (
         <Animated.View
           key={index}
           style={[
@@ -77,12 +57,12 @@ export const AccountCards = (props: Props) => {
             },
           ]}
         >
-          <Item
+          <AccountCard
+            hideBalance={false}
+            balanceExchange={getBalanceExchange(account)}
             account={account}
-            balance={BalanceHelper.getBalanceByAccount(account, props.balances)}
-            exchange={props.exchange}
-            isStackMode={index !== props.accounts.length - 1}
-            onPress={() => props.onPress(account)}
+            isCompacted
+            onPress={() => onPress(account)}
           />
         </Animated.View>
       ))}

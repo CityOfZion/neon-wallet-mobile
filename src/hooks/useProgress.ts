@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export function useProgressHook() {
+export function useProgress() {
   const [progressState, setProgressState] = useState<number>(0)
 
   const increment = (progress: number) => {
