@@ -44,7 +44,6 @@ const TabNavigation = (props: Props) => {
 
   useEffect(() => {
     async function handleData() {
-      //TODO needs refactor to new flow onboarding
       const currentNumberOfVersions = Object.keys(data.changelog).length
       const storageNumberOfVersion = await Storage.numberOfVersions.load()
 
