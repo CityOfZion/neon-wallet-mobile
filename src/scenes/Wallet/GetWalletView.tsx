@@ -11,8 +11,7 @@ import { ModalStackParamList } from '../../navigation/ModalStackNavigation'
 import { TabStackParamList } from '../../navigation/TabNavigation'
 
 import { AccountCards } from '~/src/components/AccountCards'
-import { useBalances } from '~/src/hooks/useBalances'
-import { useExchange } from '~/src/hooks/useExchange'
+import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
@@ -57,9 +56,7 @@ const GetWalletView = (props: GetWalletProps) => {
 
   const walletAccounts = useMemo(() => wallet.getAccounts(accounts), [accounts, wallet])
 
-  const { exchange, isRefetching: exchangeIsRefetching, refetch: exchangeRefetch } = useExchange()
-
-  const { balances, queryResults: balanceQueryResult } = useBalances(wallet.getAccounts(accounts))
+  const balanceExchange = useBalancesAndExchange(wallet.getAccounts(accounts))
 
   const handlePress = async (account: Account) => {
     dispatch(RootStore.account.actions.selectAccount(account.address))
@@ -86,15 +83,6 @@ const GetWalletView = (props: GetWalletProps) => {
     })
   }
 
-  const isRefetching = () => {
-    return exchangeIsRefetching || balanceQueryResult.some(balance => balance.isRefetching)
-  }
-
-  const refetch = () => {
-    exchangeRefetch()
-    balanceQueryResult.map(balance => balance.refetch())
-  }
-
   useEffect(() => {
     wallet.lastVisitedAt = moment().format()
     dispatch(RootStore.app.actions.updateAndSaveWallet(wallet))
@@ -102,11 +90,17 @@ const GetWalletView = (props: GetWalletProps) => {
 
   return (
     <ScreenLayout
-      refreshControl={<RefreshControl tintColor="#fff" refreshing={isRefetching()} onRefresh={refetch} />}
+      refreshControl={
+        <RefreshControl
+          tintColor="#fff"
+          refreshing={balanceExchange.isRefetchingByUser}
+          onRefresh={balanceExchange.refetch}
+        />
+      }
       darkerSolidColorBG
     >
       <LinearLayout mt={6}>
-        <AccountCards exchange={exchange} balances={balances} accounts={walletAccounts} onPress={handlePress} />
+        <AccountCards balanceExchange={balanceExchange} accounts={walletAccounts} onPress={handlePress} />
       </LinearLayout>
 
       {wallet.walletType === 'standard' && (

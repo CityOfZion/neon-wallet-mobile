@@ -26,7 +26,7 @@ export type WatchAccountToImport = {
   type: 'watch'
 }
 
-export function useBlockchainActionsHook() {
+export function useBlockchainActions() {
   const dispatch = useDispatch()
   const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()

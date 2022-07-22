@@ -21,6 +21,7 @@ export interface ColorTheme {
   text: ColorGroup
   card: ColorGroup
   danger: string
+  black: string
 }
 
 interface ColorGroup {

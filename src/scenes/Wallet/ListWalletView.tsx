@@ -7,12 +7,11 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { TabStackParamList } from '../../navigation/TabNavigation'
 
+import { Skeleton } from '~/src/components/Skeleton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { useBalances } from '~/src/hooks/useBalances'
-import { useExchange } from '~/src/hooks/useExchange'
-import { Balance } from '~/src/types/balance'
-import { MultiExchange } from '~/src/types/exchange'
+import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
+import { UseMultipleBalanceAndExchangeResult } from '~/src/types/query'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import BalanceList from '~src/components/BalanceList'
 import Notification from '~src/components/Notification'
@@ -24,7 +23,7 @@ import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
 import { RootState, RootStore } from '~src/store/RootStore'
-import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ButtonView, ButtonWithoutFeedbackView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface WalletProps {
   navigation: StackNavigationProp<WalletStackParamList & RootStackParamList & TabStackParamList & ModalStackParamList>
@@ -33,17 +32,63 @@ interface WalletProps {
 
 interface SelectedWalletInfoProps {
   selectedWallet: Wallet
-  selectedWalletBalances: Balance[]
-  exchange?: MultiExchange
+  balanceExchange: UseMultipleBalanceAndExchangeResult
 }
 
-const SelectedWalletInfo = ({ selectedWallet, selectedWalletBalances, exchange }: SelectedWalletInfoProps) => {
+interface FirstWalletModalProps {
+  onPress: () => void
+}
+
+const FirstWalletModal = ({ onPress }: FirstWalletModalProps) => {
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+
+  return (
+    <LinearLayout
+      backgroundColor={`${theme.colors.black}A6`}
+      zIndex={1}
+      position="absolute"
+      left="50%"
+      top="50%"
+      width={150}
+      height={150}
+      borderRadius="14px"
+      style={{
+        transform: [{ translateX: -75 }, { translateY: -75 }],
+      }}
+    >
+      <ButtonWithoutFeedbackView onPress={onPress}>
+        <LinearLayout alignItems="center" justifyContent="space-evenly" flex={1} p="8px">
+          <LinearLayout border={1} width={44} height={44} borderColor="primary" p={4} borderRadius={50}>
+            <ImageView
+              source={require('~src/assets/images/icon-arrow-curve-down-green.png')}
+              resizeMode="contain"
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+            />
+          </LinearLayout>
+          <LinearLayout>
+            <TextView fontWeight={500} fontSize="xl" color="primary">
+              {i18n.t('screens.listWallets.isFirstWallet.title')}
+            </TextView>
+            <TextView color="text.0" fontSize="md" textAlign="center" px="8px">
+              {i18n.t('screens.listWallets.isFirstWallet.subtitle')}
+            </TextView>
+          </LinearLayout>
+        </LinearLayout>
+      </ButtonWithoutFeedbackView>
+    </LinearLayout>
+  )
+}
+
+const SelectedWalletInfo = ({ selectedWallet, balanceExchange }: SelectedWalletInfoProps) => {
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
 
   const totalTokensBalances = useMemo(
-    () => BalanceHelper.calculateTotalBalances(selectedWalletBalances, exchange),
-    [selectedWalletBalances, exchange]
+    () => BalanceHelper.calculateTotalBalances(balanceExchange.balance.data, balanceExchange.exchange.data),
+    [balanceExchange]
   )
 
   const formattedTotalTokensBalances = useMemo(
@@ -74,28 +119,24 @@ const SelectedWalletInfo = ({ selectedWallet, selectedWalletBalances, exchange }
           {selectedWallet.formattedLastVisitedAt}
         </TextView>
 
-        <LinearLayout orientation="horiz" minHeight={56}>
-          <TextView fontSize="36px" color="text.0" fontFamily="medium">
-            {formattedTotalTokensBalances}
-          </TextView>
+        <Skeleton isLoading={balanceExchange.isLoading} layout={{ width: 100, height: 36, marginVertical: 12 }}>
+          <LinearLayout orientation="horiz" my="12px">
+            <TextView fontSize="36px" color="text.0" fontFamily="medium">
+              {formattedTotalTokensBalances}
+            </TextView>
 
-          {!!totalTokensBalances && totalTokensBalances > 0 && (
-            <ButtonView onPress={handlePressWarning}>
-              <ImageView mt="8px" mx="4px" source={require('~src/assets/images/icon-warning-green.png')} />
-            </ButtonView>
-          )}
-        </LinearLayout>
-
-        <LinearLayout orientation="horiz">
-          <TextView mr={2} fontSize="sm" color="text.2" fontFamily="semibold">
-            {i18n.t('screens.listWallets.changeInLast24hours')}
-          </TextView>
-        </LinearLayout>
+            {!!totalTokensBalances && totalTokensBalances > 0 && (
+              <ButtonView onPress={handlePressWarning}>
+                <ImageView mt="8px" mx="4px" source={require('~src/assets/images/icon-warning-green.png')} />
+              </ButtonView>
+            )}
+          </LinearLayout>
+        </Skeleton>
       </LinearLayout>
 
       <LinearLayout mx="16px">
         {notificationIsVisible && (
-          <LinearLayout mt="24px">
+          <LinearLayout>
             <Notification
               text={i18n.t('screens.listWallets.noBackup')}
               wallet={selectedWallet}
@@ -104,7 +145,7 @@ const SelectedWalletInfo = ({ selectedWallet, selectedWalletBalances, exchange }
           </LinearLayout>
         )}
 
-        <BalanceList my="24px" exchange={exchange} balances={selectedWalletBalances} showBlockchain />
+        <BalanceList my="24px" balanceExchange={balanceExchange} showBlockchain />
       </LinearLayout>
     </LinearLayout>
   )
@@ -114,17 +155,14 @@ const ListWalletView = (props: WalletProps) => {
   const wallets = useSelector((state: RootState) => state.app.wallets)
   const accounts = useSelector((state: RootState) => state.app.accounts)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
+  const isFirstTime = useSelector((state: RootState) => state.settings.isFirstTime)
   const dispatch = useDispatch()
 
   const fadeValue = useRef(new Animated.Value(1)).current
 
   const [selectedWallet, setSelectedWallet] = useState(wallets[0])
 
-  const { exchange, isRefetching: exchangeIsRefetching, refetch: exchangeRefetch } = useExchange()
-
-  const { balances: selectedWalletBalances, queryResults: balanceQueryResult } = useBalances(
-    selectedWallet.getAccounts(accounts)
-  )
+  const balanceExchange = useBalancesAndExchange(selectedWallet.getAccounts(accounts))
 
   const fadeIn = () => {
     Animated.timing(fadeValue, {
@@ -146,28 +184,25 @@ const ListWalletView = (props: WalletProps) => {
     if (wallets.length > 1) {
       fadeOut()
     }
+
     setTimeout(() => {
       fadeIn()
     }, 3000)
   }
 
-  const pressEvent = async (wallet: Wallet) => {
+  const handlePress = async (wallet: Wallet) => {
     dispatch(RootStore.wallet.actions.selectWallet(wallet.id))
     props.navigation.navigate(wrapper.route.GetWallet.name, { wallet })
   }
 
-  const selectEvent = async (wallet: Wallet) => {
+  const handlePressFirstTime = () => {
+    dispatch(RootStore.settings.actions.setIsFirstTime(false))
+    handlePress(wallets[0])
+  }
+
+  const handleSelect = async (wallet: Wallet) => {
     fadeIn()
     setSelectedWallet(wallet)
-  }
-
-  const isRefetching = () => {
-    return exchangeIsRefetching || balanceQueryResult.some(balance => balance.isRefetching)
-  }
-
-  const handleRefetch = () => {
-    exchangeRefetch()
-    balanceQueryResult.map(balance => balance.refetch())
   }
 
   return (
@@ -176,7 +211,13 @@ const ListWalletView = (props: WalletProps) => {
       useStatusBarPadding
       padding={0}
       darkerSolidColorBG
-      refreshControl={<RefreshControl tintColor="#fff" refreshing={isRefetching()} onRefresh={handleRefetch} />}
+      refreshControl={
+        <RefreshControl
+          tintColor="#fff"
+          refreshing={balanceExchange.isRefetchingByUser}
+          onRefresh={balanceExchange.refetch}
+        />
+      }
     >
       <LinearLayout alignSelf="flex-end" style={{ marginTop: !isConnected ? 14 : undefined }}>
         <ThemedMoreButton
@@ -190,23 +231,19 @@ const ListWalletView = (props: WalletProps) => {
       </LinearLayout>
 
       <LinearLayout mt={-5} justifyContent="center" height={385}>
+        {isFirstTime && <FirstWalletModal onPress={handlePressFirstTime} />}
         <WalletPicker
           wallets={wallets}
-          exchange={exchange}
+          balanceExchange={balanceExchange}
           selectedWallet={selectedWallet}
-          selectedWalletBalances={selectedWalletBalances}
-          onSelect={selectEvent}
-          onPress={pressEvent}
+          onSelect={handleSelect}
+          onPress={handlePress}
           onScrollBegin={fadeOutWallet}
         />
       </LinearLayout>
 
       <Animated.View style={{ opacity: fadeValue }}>
-        <SelectedWalletInfo
-          exchange={exchange}
-          selectedWallet={selectedWallet}
-          selectedWalletBalances={selectedWalletBalances}
-        />
+        <SelectedWalletInfo selectedWallet={selectedWallet} balanceExchange={balanceExchange} />
       </Animated.View>
     </ScreenLayout>
   )

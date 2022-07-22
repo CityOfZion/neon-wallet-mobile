@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux'
 
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Skeleton } from '~/src/components/Skeleton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { useBalances } from '~/src/hooks/useBalances'
-import { useExchange } from '~/src/hooks/useExchange'
+import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { hasWalletconnect } from '~src/blockchain/common'
@@ -46,14 +46,16 @@ const WCWalletSelectionModal = (props: Props) => {
   )
   const [selectedWallet, setSelectedWallet] = useState<Wallet>(validWallets[0])
 
-  const { exchange } = useExchange()
-  const { balances: selectedWalletBalances } = useBalances(selectedWallet.getAccounts(accounts))
+  const balancesExchange = useBalancesAndExchange(selectedWallet.getAccounts(accounts))
 
   const formattedAllBalance = useMemo(() => {
-    const totalBalance = BalanceHelper.calculateTotalBalances(selectedWalletBalances, exchange)
+    const totalBalance = BalanceHelper.calculateTotalBalances(
+      balancesExchange.balance.data,
+      balancesExchange.exchange.data
+    )
 
     return FilterHelper.currency(totalBalance, currency, language)
-  }, [selectedWalletBalances, exchange, currency, language])
+  }, [balancesExchange, currency, language])
 
   return (
     <SwiperPanel
@@ -73,8 +75,7 @@ const WCWalletSelectionModal = (props: Props) => {
 
         <WalletPicker
           selectedWallet={selectedWallet}
-          selectedWalletBalances={selectedWalletBalances}
-          exchange={exchange}
+          balanceExchange={balancesExchange}
           wallets={validWallets}
           onSelect={setSelectedWallet}
           onPress={wallet => {
@@ -84,9 +85,11 @@ const WCWalletSelectionModal = (props: Props) => {
           }}
         />
 
-        <TextView alignSelf="center" fontSize="36px" color="text.0" fontFamily="medium">
-          {formattedAllBalance}
-        </TextView>
+        <Skeleton isLoading={balancesExchange.isLoading} layout={{ width: 100, height: 36, alignSelf: 'center' }}>
+          <TextView alignSelf="center" fontSize="36px" color="text.0" fontFamily="medium">
+            {formattedAllBalance}
+          </TextView>
+        </Skeleton>
       </LinearLayout>
     </SwiperPanel>
   )

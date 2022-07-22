@@ -15,8 +15,7 @@ import { ThemedSendButton } from '~/src/components/themed/ThemedSendButton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
-import { useBalance } from '~/src/hooks/useBalance'
-import { useExchange } from '~/src/hooks/useExchange'
+import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { Wallet } from '~/src/models/redux/Wallet'
 import { AsyncDispatch } from '~/src/types/reducers/root'
 import { blockchainServices, hasWCIntegration, isClaimable } from '~src/blockchain'
@@ -136,8 +135,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   const posYFactor = useRef(new Animated.Value(0))
 
-  const { exchange, isRefetching: exchangeIsRefetching, refetch: exchangeRefetch } = useExchange()
-  const { balance, isRefetching: balanceIsRefetching, refetch: balanceRefetch } = useBalance(account)
+  const balanceExchange = useBalancesAndExchange(account)
 
   const [showWarning, setShowWarning] = useState<boolean>(false)
   const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>()
@@ -162,16 +160,18 @@ const GetAccountView = (props: GetAccountViewProps) => {
   )
 
   const totTokenFeeAccount = useMemo(() => {
-    if (!balance) return 0
+    const { balance } = balanceExchange
 
-    const tokenBalance = balance.tokensBalances.find(
+    if (!balance.data) return 0
+
+    const tokenBalance = balance.data.tokensBalances.find(
       tokenBalance => tokenBalance.symbol === blockchainServices[account.blockchain].feeToken.token
     )
 
     if (!tokenBalance) return 0
 
     return tokenBalance.amount
-  }, [balance, account])
+  }, [balanceExchange, account])
 
   const handleClaimGas = () => {
     if (!unclaimedGasAmount || !fee || unclaimedGasAmount < fee) {
@@ -263,7 +263,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
     if (account.accountType === 'watch' || !isConnected || !wallet) return
 
-    const totalBalance = BalanceHelper.calculateTotalBalances(balance, exchange)
+    const totalBalance = BalanceHelper.calculateTotalBalances(
+      balanceExchange.balance.data,
+      balanceExchange.exchange.data
+    )
 
     if (totalBalance && totalBalance <= 0) return
 
@@ -324,9 +327,15 @@ const GetAccountView = (props: GetAccountViewProps) => {
     })
   }
 
-  const handleRefetch = () => {
-    exchangeRefetch()
-    balanceRefetch()
+  const handleLayout = (event: LayoutChangeEvent) => {
+    posYFactor.current.setValue(1)
+
+    Animated.timing(posYFactor.current, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+      easing: Easing.out(val => val ** 2),
+    }).start()
   }
 
   useEffect(() => {
@@ -348,30 +357,19 @@ const GetAccountView = (props: GetAccountViewProps) => {
     populateFee()
   }, [unclaimedGasAmount])
 
-  const cardLayoutEvent = (event: LayoutChangeEvent) => {
-    posYFactor.current.setValue(1)
-
-    Animated.timing(posYFactor.current, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-      easing: Easing.out(val => val ** 2),
-    }).start()
-  }
-
   return (
     <ScreenLayout
       refreshControl={
         <RefreshControl
           tintColor="#fff"
-          refreshing={exchangeIsRefetching || balanceIsRefetching}
-          onRefresh={handleRefetch}
+          refreshing={balanceExchange.isRefetchingByUser}
+          onRefresh={balanceExchange.refetch}
         />
       }
       darkerSolidColorBG
     >
       <Animated.View
-        onLayout={cardLayoutEvent}
+        onLayout={handleLayout}
         style={{
           opacity: posYFactor.current,
           transform: [
@@ -382,7 +380,13 @@ const GetAccountView = (props: GetAccountViewProps) => {
         }}
       >
         <LinearLayout mt={4}>
-          <AccountCard balance={balance} exchange={exchange} account={account} hasShadow={false} isStackMode={false} />
+          <AccountCard
+            hideBalance={false}
+            balanceExchange={balanceExchange}
+            account={account}
+            hasShadow={false}
+            isStackMode={false}
+          />
         </LinearLayout>
       </Animated.View>
       <LinearLayout

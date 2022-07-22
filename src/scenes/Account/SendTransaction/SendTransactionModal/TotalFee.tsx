@@ -5,11 +5,11 @@ import { useSelector } from 'react-redux'
 import { Normalize } from '~/src/app/Normalize'
 import { blockchainServices } from '~/src/blockchain'
 import { TokenHelper } from '~/src/helpers/TokenHelper'
-import { TokenBalance } from '~/src/hooks/useBalance'
 import { Token } from '~/src/models/Token'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
+import { TokenBalance } from '~/src/types/query'
 
 type Props = {
   ratio?: number

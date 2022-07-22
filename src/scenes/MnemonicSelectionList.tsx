@@ -14,7 +14,7 @@ import { BlockchainServiceKey, blockchainServices, getBlockchainLogo } from '~sr
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { useBlockchainActionsHook, AccountToImport } from '~src/hooks/useBlockchainActionsHook'
+import { useBlockchainActions, AccountToImport } from '~src/hooks/useBlockchainActions'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 export type MnemonicSelectionInfo = Map<
   BlockchainServiceKey,
@@ -179,7 +179,7 @@ const MnemonicSelectionList = (props: Props) => {
   const [addressesSelected, setAddressesSelected] = useState<
     { address: string; blockchain: BlockchainServiceKey; wif: string }[]
   >([])
-  const blockchainActionsHook = useBlockchainActionsHook()
+  const blockchainActions = useBlockchainActions()
   const handleSelectAddress = useCallback(
     (address: string, wif: string, blockchain: BlockchainServiceKey) => {
       setAddressesSelected(prevState => {
@@ -203,7 +203,7 @@ const MnemonicSelectionList = (props: Props) => {
 
   const handleImportAccounts = useCallback(async () => {
     Await.init('importMnemonic')
-    const walletId = await blockchainActionsHook.createWallet(
+    const walletId = await blockchainActions.createWallet(
       i18n.t('defaultNameWallet.mnemonicWallet'),
       mnemonic,
       'standard'
@@ -219,7 +219,7 @@ const MnemonicSelectionList = (props: Props) => {
       })
     )
 
-    await blockchainActionsHook.importAccounts(accountsToImport)
+    await blockchainActions.importAccounts(accountsToImport)
     Await.done('importMnemonic')
     props.navigation.reset({
       index: 0,

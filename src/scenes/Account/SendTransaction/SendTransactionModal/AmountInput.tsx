@@ -6,12 +6,12 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { TokenBalance } from '~/src/hooks/useBalance'
 import { useTokens } from '~/src/hooks/useTokens'
 import { Token } from '~/src/models/Token'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
+import { TokenBalance } from '~/src/types/query'
 
 type Props = {
   account: Account

@@ -11,8 +11,7 @@ import { getWCChainByBlockchain, hasWalletconnect } from '~/src/blockchain/commo
 import { AccountCards } from '~/src/components/AccountCards'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import { IURI } from '~/src/helpers/UriHelper'
-import { useBalances } from '~/src/hooks/useBalances'
-import { useExchange } from '~/src/hooks/useExchange'
+import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
 import { Account } from '~/src/models/redux/Account'
 import { Wallet } from '~/src/models/redux/Wallet'
@@ -46,8 +45,7 @@ export const WCAccountSelectionModal = (props: Props) => {
     [wallet, accounts]
   )
 
-  const { exchange } = useExchange()
-  const { balances } = useBalances(validAccounts)
+  const balancesExchange = useBalancesAndExchange(validAccounts)
 
   const sessionProposal = useMemo(() => walletConnectCtx.sessionProposals[0], [walletConnectCtx.sessionProposals])
 
@@ -98,7 +96,7 @@ export const WCAccountSelectionModal = (props: Props) => {
             {i18n.t('modals.WCAccountSelection.subtitle')}
           </TextView>
 
-          <AccountCards balances={balances} exchange={exchange} accounts={validAccounts} onPress={handleConnectDApp} />
+          <AccountCards balanceExchange={balancesExchange} accounts={validAccounts} onPress={handleConnectDApp} />
         </LinearLayout>
       </AwaitActivity>
     </SwiperPanel>

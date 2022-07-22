@@ -7,8 +7,6 @@ import { View } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
-import { AccountToImport } from '../hooks/BlockchainActionsHook'
-
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { BlockchainServiceKey, blockchainList, blockchainServices } from '~src/blockchain'
 import AddressesImportList from '~src/components/AddressesImportList'
@@ -16,7 +14,7 @@ import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { useBlockchainActionsHook } from '~src/hooks/useBlockchainActionsHook'
+import { useBlockchainActions, AccountToImport } from '~src/hooks/useBlockchainActions'
 import { Account } from '~src/models/redux/Account'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
@@ -35,7 +33,7 @@ interface PassphraseProps {
 const Passphrase = (props: PassphraseProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const { accounts } = useSelector((state: RootState) => state.app)
-  const blockchainActionsHook = useBlockchainActionsHook()
+  const blockchainActions = useBlockchainActions()
   const [inputValue, setInputValue] = useState('')
   const [addressesInfo, setAdrresesInfo] = useState<{ address: string; blockchain: BlockchainServiceKey }[]>([])
   const [addressesInfoSelected, setAdrresesInfoSelected] = useState<
@@ -110,9 +108,7 @@ const Passphrase = (props: PassphraseProps) => {
 
   const persist = useCallback(async () => {
     try {
-      const walletId = await blockchainActionsHook.createLegacyWallet(
-        `${i18n.t('modals.blockchainList.encryptedWallet')}`
-      )
+      const walletId = await blockchainActions.createLegacyWallet(`${i18n.t('modals.blockchainList.encryptedWallet')}`)
 
       const accountsToImportPromises = addressesInfoSelected.map(
         async ({ address, blockchain }): Promise<AccountToImport> => {
@@ -130,7 +126,7 @@ const Passphrase = (props: PassphraseProps) => {
 
       const accountToImport = await Promise.all(accountsToImportPromises)
 
-      await blockchainActionsHook.importAccounts(accountToImport)
+      await blockchainActions.importAccounts(accountToImport)
 
       props.navigation.replace(wrapper.route.Tab.name, {
         screen: wrapper.route.ListWallets.name,

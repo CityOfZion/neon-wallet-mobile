@@ -13,9 +13,10 @@ import { LinearLayoutProps } from '~/src/types/styled-components'
 type Props = {
   onFilter: (text: string) => void
   lighterColor?: boolean
+  isDisabled?: boolean
 } & LinearLayoutProps
 
-export const SearchBar = ({ onFilter, lighterColor, ...props }: Props) => {
+export const SearchBar = ({ onFilter, lighterColor, isDisabled = false, ...props }: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const handleFilter = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
@@ -31,6 +32,7 @@ export const SearchBar = ({ onFilter, lighterColor, ...props }: Props) => {
       orientation="horiz"
       alignItems="center"
       paddingX={20}
+      opacity={isDisabled ? 0.4 : 1}
       {...props}
     >
       <LinearLayout>
@@ -52,6 +54,7 @@ export const SearchBar = ({ onFilter, lighterColor, ...props }: Props) => {
         textAlignVertical="center"
         fontSize={20}
         placeholderTextColor={theme.colors.text[6]}
+        editable={!isDisabled}
       />
     </LinearLayout>
   )

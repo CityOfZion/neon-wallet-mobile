@@ -5,8 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { Await, AwaitActivity } from '~/node_modules/@simpli/react-native-await'
-import { useBalance } from '~/src/hooks/useBalance'
-import { useExchange } from '~/src/hooks/useExchange'
+import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { AsyncDispatch } from '~/src/types/reducers/root'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import AccountCard from '~src/components/AccountCard'
@@ -41,8 +40,7 @@ const EditAccountModal = (props: Props) => {
   const dispatch = useDispatch()
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
-  const { exchange } = useExchange()
-  const { balance } = useBalance(account)
+  const balanceExchange = useBalancesAndExchange(account)
 
   const [name, setName] = useState<string>(account.name ?? '')
   const [color, setColor] = useState<string>(account.backgroundColor)
@@ -105,7 +103,13 @@ const EditAccountModal = (props: Props) => {
     >
       <AwaitActivity name="swiperRight" loadingView={<ScreenLoader solidColorBG />}>
         <LinearLayout orientation="verti" justifyContent="space-between" mt="10px">
-          <AccountCard account={account} isStackMode={false} hasShadow={false} balance={balance} exchange={exchange} />
+          <AccountCard
+            account={account}
+            isStackMode={false}
+            hasShadow={false}
+            balanceExchange={balanceExchange}
+            hideBalance={false}
+          />
 
           <InputLabel
             title={i18n.t('modals.editAccount.accountInput.title')}

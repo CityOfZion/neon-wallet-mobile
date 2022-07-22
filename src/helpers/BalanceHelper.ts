@@ -1,7 +1,6 @@
 import { BlockchainServiceKey } from '../blockchain'
 import { Account } from '../models/redux/Account'
-import { Balance, TokenBalance } from '../types/balance'
-import { MultiExchange } from '../types/exchange'
+import { Balance, TokenBalance, MultiExchange } from '../types/query'
 
 export type BalanceConvertedToExchange = TokenBalance & {
   convertedAmount: number
