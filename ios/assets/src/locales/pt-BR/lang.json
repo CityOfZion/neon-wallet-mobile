@@ -36,7 +36,6 @@
     "More": "Mais",
     "Account": "Conta",
     "Settings": "Configurações",
-    "ReceiveQrCode": "Receive QR Code",
     "CustomColor": "Personalizar Cor",
     "CreateWallet": "Create Wallet",
     "Step1CreateWallet": "Criar carteira",
@@ -174,15 +173,6 @@
     "balance": "SALDO",
     "address": "ENDEREÇO"
   },
-  "receive": {
-    "paymentRequestDetails": "#translateme",
-    "token": "#translateme",
-    "amount": "#translateme",
-    "value": "#translateme",
-    "location": "#translateme",
-    "address": "#translateme",
-    "reference": "#translateme"
-  },
   "screens": {
     "listWallets": {
       "changeSinceLastVisit": "#translateme",
@@ -195,7 +185,8 @@
     "getAccount": {
       "claimAsset": "#translateme",
       "claimInProgress": "#translateme",
-      "gasUnavailable": "#translateme"
+      "gasUnavailable": "#translateme",
+      "claimError": "#translateme"
     },
     "accountTransaction": {
       "txidLabel": "#translateme",
@@ -264,6 +255,40 @@
     }
   },
   "modals": {
+    "receiveTransactionAccountSelectionModal": {
+      "title": "#translateme",
+      "subtitle": "#translateme",
+      "label": "#translateme"
+    },
+    "receiveTransactionWalletSelectionModal": {
+      "title": "#translateme",
+      "subtitle": "#translateme",
+      "label": "#translateme"
+    },
+    "receiveTransactionModal": {
+      "title": "#translateme",
+      "yourAddress": "#translateme",
+      "requestTokens": "#translateme",
+      "generateQrCode": "#translateme",
+      "amount": "#translateme",
+      "enterAmount": "#translateme",
+      "addReference": "#translateme",
+      "reference": "#translateme",
+      "token": "#translateme",
+      "selectToken": "#translateme"
+    },
+    "ReceiveTransactionQrCodeModal": {
+      "title": "#translateme",
+      "token": "#translateme",
+      "qty": "#translateme",
+      "value": "#translateme",
+      "wallet": "#translateme",
+      "account": "#translateme",
+      "address": "#translateme",
+      "reference": "#translateme",
+      "shareOrCopy": "#translateme",
+      "paymentRequestDetails": "#translateme"
+    },
     "sendTransactionAccountSelectionModal": {
       "title": "#translateme",
       "label": "#translateme",
@@ -358,69 +383,6 @@
       "invalidName": "#translateme",
       "search": "#translateme"
     },
-    "send": {
-      "title": "Send",
-      "walletSelection": {
-        "subtitle": "Please select a wallet to send from"
-      },
-      "accountSelection": {
-        "subtitle": "Please select an account to send from",
-        "label": "TRADING ACCOUNT TOKENS VALUE"
-      },
-      "transactionConfirmation": {
-        "header": "Transaction successfully sent!",
-        "subheader": "Once your transaction has been confirmed it will appear in your transaction history",
-        "transactionId": "TRANSACTION ID"
-      },
-      "transactionInput": {
-        "selectDifferentAccount": "Select a different Account",
-        "transactionDetails": "TRANSACTION DETAILS",
-        "prioritiseTransfer": "PRIORITISE YOUR TRANSFER WITH A FEE?",
-        "enterAmount": "Enter amount",
-        "selectToken": "Select token to send",
-        "enterDestination": "Enter destination address",
-        "destinationAddress": "DESTINATION ADDRESS",
-        "token": "TOKEN",
-        "amount": "AMOUNT",
-        "contacts": "Contacts",
-        "paste": "Paste",
-        "scan": "Scan",
-        "priorityFast": "Rápida",
-        "priorityFaster": "Muito rápida",
-        "priorityFastest": "Rapidíssima"
-      },
-      "transactionReview": {
-        "token": "Token",
-        "amount": "Amount",
-        "remainingInWallet": "(%{token} in wallet)",
-        "value": "Value",
-        "price": "Price",
-        "priority": "Priority",
-        "feeAmount": "(Fee %{amount})",
-        "pleaseReview": "Please review transaction"
-      }
-    },
-    "receive": {
-      "title": "Receive",
-      "walletSelection": {
-        "subtitle": "Please select a wallet to receive to"
-      },
-      "accountSelection": {
-        "subtitle": "Please select an account to receive to"
-      },
-      "toAccount": {
-        "yourAddress": "Your Address",
-        "requestTokens": "Request Tokens",
-        "selectTokenToReceive": "Select token to receive",
-        "enterAmount": "Enter amount",
-        "addReference": "Add a reference",
-        "reference": "Reference",
-        "generateQrCode": "Generate QR Code",
-        "token": "#translateme",
-        "amount": "#translateme",
-        "selectDifferentAccount": "#translateme"
-      }
-    },
     "walletContext": {
       "create": "Create new wallet",
       "reorder": "Reorder wallets",
@@ -459,6 +421,17 @@
       "value": "#translateme",
       "empty": "#translateme"
     },
+    "transactionsList": {
+      "title": "#translateme",
+      "sent": "#translateme",
+      "received": "#translateme",
+      "pending": "#translateme",
+      "sentTo": "#translateme",
+      "receivedFrom": "#translateme",
+      "token": "#translateme",
+      "value": "#translateme"
+    },
+
     "transactionInput": {
       "selectDifferentAccount": "Select a different Account",
       "transactionDetails": "TRANSACTION DETAILS",

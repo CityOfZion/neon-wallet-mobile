@@ -8,7 +8,7 @@ export const PasteButton = (props: { onPress: () => Promise<void> }) => {
     <LinearLayout>
       <ButtonView onPress={props.onPress}>
         <LinearLayout orientation="horiz">
-          <ImageView resizeMode="center" source={require('~/src/assets/images/icon-paste-green.png')} />
+          <ImageView source={require('~/src/assets/images/icon-paste-green.png')} />
 
           <TextView
             style={{ includeFontPadding: false }}

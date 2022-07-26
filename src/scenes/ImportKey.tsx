@@ -400,7 +400,6 @@ const ImportKey = (props: ImportKeyProps) => {
               <>
                 <LinearLayout>
                   <ImageView
-                    resizeMode="center"
                     source={
                       validateMnemonic(inputValue)
                         ? require('~/src/assets/images/check-material.png')

@@ -13,10 +13,10 @@ export const ScanButton = (props: { onPress: () => any; disabled?: boolean }) =>
       <ButtonView onPress={props.onPress}>
         <LinearLayout orientation="horiz">
           {!props.disabled ? (
-            <ImageView resizeMode="center" source={require('~/src/assets/images/icon-qrcode-green.png')} />
+            <ImageView source={require('~/src/assets/images/icon-qrcode-green.png')} />
           ) : (
             <LinearLayout mt={-2}>
-              <ImageView resizeMode="center" source={require('~/src/assets/images/qrcode-anticon.png')} />
+              <ImageView source={require('~/src/assets/images/qrcode-anticon.png')} />
             </LinearLayout>
           )}
 

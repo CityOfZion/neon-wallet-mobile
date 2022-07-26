@@ -43,7 +43,6 @@ const TipConfirmationModal = (props: Props) => {
       <LinearLayout height="100%" orientation="verti">
         <ImageView
           mr="-50px" // Negative margin because the original image has a shadow offset to the right
-          resizeMode="center"
           source={require('~/src/assets/images/neo-tipping-logo.png')}
           alignSelf="center"
           style={{
@@ -51,12 +50,7 @@ const TipConfirmationModal = (props: Props) => {
           }}
         />
         <LinearLayout orientation="horiz" justifyContent="center" mb="20px">
-          <ImageView
-            mr="4px"
-            resizeMode="center"
-            source={require('~/src/assets/images/star-primary.png')}
-            alignSelf="center"
-          />
+          <ImageView mr="4px" source={require('~/src/assets/images/star-primary.png')} alignSelf="center" />
           <TextView fontFamily="medium" fontSize="22px" color="text.0">
             {i18n.t('modals.tipping.subtitle')}
           </TextView>

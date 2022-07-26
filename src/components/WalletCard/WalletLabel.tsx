@@ -2,6 +2,8 @@ import i18n from 'i18n-js'
 import React from 'react'
 import { ImageSourcePropType } from 'react-native'
 
+import { TANimationType } from './WalletCard'
+
 import { Wallet } from '~/src/models/redux/Wallet'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 import { WalletType } from '~/src/types/reducers/wallet'
@@ -9,6 +11,7 @@ import { WalletType } from '~/src/types/reducers/wallet'
 type Props = {
   wallet: Wallet
   isInactive?: boolean
+  animationType?: TANimationType
 }
 
 const walletIconSources: Record<WalletType, ImageSourcePropType> = {

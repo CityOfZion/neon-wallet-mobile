@@ -97,7 +97,7 @@ const InputWithValidation = (props: Props) => {
   }
 
   return (
-    <LinearLayout orientation="verti" ml={sideMargins} mr={sideMargins} flex={1}>
+    <LinearLayout orientation="verti" ml={sideMargins} mr={sideMargins}>
       {!!props.title && (
         <LinearLayout width="100%">
           <TextView width="100%" fontFamily="regular" color="text.0" fontSize="18px">
@@ -160,11 +160,7 @@ const InputWithValidation = (props: Props) => {
             }}
           >
             {!props.isMultiline && isInvalid && (
-              <ImageView
-                resizeMode="center"
-                alignSelf="center"
-                source={require('~/src/assets/images/icon-alert-purple.png')}
-              />
+              <ImageView alignSelf="center" source={require('~/src/assets/images/icon-alert-purple.png')} />
             )}
             {(props.onClearPress && props.value.length > 0) ||
               (props.onClearPress && props.forceClearButton && <InputClearButton onPress={props.onClearPress} />)}
@@ -188,7 +184,6 @@ const InputWithValidation = (props: Props) => {
             fontSize={12}
             fontFamily="regular"
             textAlign="right"
-            mt={2}
             opacity={isInvalid ? 1 : 0}
             height={Platform.OS === 'ios' ? '15px' : undefined}
           >
@@ -199,6 +194,7 @@ const InputWithValidation = (props: Props) => {
 
       {(props.showContacts || !props.hidePaste || !props.hideScan) && (
         <LinearLayout
+          my="3%"
           orientation="horiz"
           justifyContent={props.showContacts && !props.hidePaste && !props.hideScan ? 'space-between' : 'flex-end'}
         >

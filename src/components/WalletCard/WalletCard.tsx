@@ -21,11 +21,13 @@ type WithoutBalanceBarProps = {
   withBalanceBar: false
 }
 
+export type TANimationType = 'in' | 'out'
+
 type Props = {
   wallet: Wallet
   isInactive?: boolean
   onPress?: () => void
-  animationType?: 'in' | 'out'
+  animationType?: TANimationType
   width?: number
   height?: number
 } & (WithBalanceBarProps | WithoutBalanceBarProps)

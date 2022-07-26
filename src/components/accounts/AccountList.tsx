@@ -64,7 +64,6 @@ const Item = React.memo(({ account, onPress, wallet }: ItemProps) => {
               width={22}
               height={23}
               source={getBlockchainLogo(account.blockchain)}
-              resizeMode="center"
               mr={3}
               alignSelf="center"
             />

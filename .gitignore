@@ -130,3 +130,7 @@ buck-out/
 web-build/
 debug.log
 android/app/release/app-release.apk
+
+# Assets Images IOS
+ios/assets/src/assets/images
+ios/assets/src/assets/tokens/images

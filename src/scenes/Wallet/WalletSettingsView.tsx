@@ -132,7 +132,6 @@ export const WalletSettingsView = (props: Props) => {
             p="10px"
           >
             <ImageView
-              resizeMode="center"
               width={Normalize.scale(20)}
               height={Normalize.scale(20)}
               source={require('~/src/assets/images/icon-trash-can-primary.png')}

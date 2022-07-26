@@ -76,13 +76,7 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
       onRightPress={controller.close}
       solidColorBG
     >
-      <AwaitActivity
-        name="createAccount"
-        loadingView={<ScreenLoader solidColorBG />}
-        onLoadingEnd={() => {
-          props.navigation.goBack()
-        }}
-      >
+      <AwaitActivity name="createAccount" loadingView={<ScreenLoader solidColorBG />}>
         <LinearLayout height="100%" justifyContent="space-between">
           <LinearLayout>
             <LinearLayout width="100%">

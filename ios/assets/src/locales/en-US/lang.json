@@ -40,7 +40,6 @@
     "Account": "Account",
     "Settings": "Settings",
     "WalletConnectPage": "Connection",
-    "ReceiveQrCode": "Receive QR Code",
     "CustomColor": "Custom Colour",
     "CreateWallet": "Create Wallet",
     "WalletDetails": "Details",
@@ -100,25 +99,28 @@
     "wrong": "Invalid passcode. Try again"
   },
   "onboarding": {
+    "initalSetup": "Initial Setup",
+    "welcomeNW": " Welcome to Neon Wallet",
+    "creatingWallet": "We are creating your Wallet with an Account inside. In the meanwhile here's an overview of the many features you'll find in the app.",
+    "progressMessageStep1": "Starting app setup...",
+    "progressMessageStep2": "Creating your wallet...",
+    "progressMessageStep3": "Creating your first account...",
+    "progressMessageStep4": "Wrapping everything up...",
     "feature1": {
-      "header": "Feature 1",
-      "title": "The original wallet on the move",
-      "subtitle": "All the best features of our desktop wallet plus more in the palm of your hand"
+      "header": "Easily organize your assets",
+      "subtitle": "Create multiple Accounts inside a Wallet, each with it's unique address."
     },
     "feature2": {
-      "header": "Feature 2",
-      "title": "First class user experience",
-      "subtitle": "Neon Wallet has been designed to make managing your crypto assets as intuitive as possible"
+      "header": "The most flexible Wallet App in Neo",
+      "subtitle": "Easily bring your Private Keys to Neon or add any address as a watch account to keep an eye on their public transactions."
     },
     "feature3": {
-      "header": "Feature 3",
-      "title": "BIP39 wallet",
-      "subtitle": "BIP39 wallet standard, create infinite child accounts using a single mnemonic"
+      "header": "Mobile Dapp Connection",
+      "subtitle": "Safely interact with multiple Dapps directly from your device through the established Wallet Connect Protocol."
     },
     "feature4": {
-      "header": "Time to get started!",
-      "title": "Packed pipeline of updates",
-      "subtitle": "The team is working around the clock to bring you the latest new features"
+      "header": "Introducing NFT support",
+      "subtitle": "View your collection and keep track of all your NFT transactions in a single place"
     },
     "getStarted": {
       "title": "Packed pipeline of updates",
@@ -126,6 +128,11 @@
       "buttonTitle": "Get Started!"
     },
     "firstWalletName": "My First Wallet"
+  },
+  "setupComplete": {
+    "title": "Setup Complete!",
+    "subtitle": "Your new wallet and account are ready to go.",
+    "titleAddressList": "Account Addresses"
   },
   "step1CreateWallet": {
     "header": "Certe, inquam, pertinax non fuisse torquem detraxit hosti et quidem rerum necessitatibus non fuisse torquem saepe.",
@@ -263,19 +270,6 @@
     "address": "ADDRESS",
     "accountPlaceholder": "My Account"
   },
-  "receive": {
-    "paymentRequestDetails": "PAYMENT REQUEST DETAILS",
-    "token": "Token",
-    "amount": "Amount",
-    "qty": "Qty",
-    "value": "Value",
-    "location": "Location",
-    "wallet": "Wallet",
-    "account": "Account",
-    "address": "Address",
-    "reference": "Reference",
-    "shareOrCopy": "Share or Copy to clipboard"
-  },
   "screens": {
     "contactDetails": {
       "walletAddress": "WALLET ADDRESS"
@@ -291,7 +285,11 @@
       "noBackup": "No backup found. Backup your wallet to avoid fund loss.",
       "incompleteBalanceWarningTitle": "Incomplete price data",
       "incompleteBalanceWarningText": "We haven't been able to retrieve price data for all your tokens so the total may not be accurate",
-      "incompleteBalanceWarningButton": "OK, I understand"
+      "incompleteBalanceWarningButton": "OK, I understand",
+      "isFirstWallet": {
+        "title": "Take a look inside!",
+        "subtitle": "Your new account are waiting"
+      }
     },
     "getWallet": {
       "addNewAccount": "Add new account"
@@ -299,7 +297,8 @@
     "getAccount": {
       "claimAsset": "Claim %{amount} GAS",
       "claimInProgress": "Claim in progress",
-      "gasUnavailable": "GAS unavailable"
+      "gasUnavailable": "GAS unavailable",
+      "claimError": "Claim has been failed"
     },
     "accountTransaction": {
       "txidLabel": "TX ID:",
@@ -380,6 +379,40 @@
     }
   },
   "modals": {
+    "receiveTransactionAccountSelectionModal": {
+      "title": "Receive",
+      "subtitle": "Please select a wallet to receive to",
+      "label": "TOKENS VALUE"
+    },
+    "receiveTransactionWalletSelectionModal": {
+      "title": "Receive",
+      "subtitle": "Please select an account to receive to",
+      "label": "TOKENS VALUE"
+    },
+    "receiveTransactionModal": {
+      "title": "Receive",
+      "yourAddress": "Your Address",
+      "requestTokens": "Request Tokens",
+      "generateQrCode": "Generate QR Code",
+      "amount": "Amount",
+      "enterAmount": "Enter amount",
+      "addReference": "Add a reference",
+      "reference": "Reference",
+      "token": "Token",
+      "selectToken": "Select token to receive"
+    },
+    "ReceiveTransactionQrCodeModal": {
+      "title": "Receive QR Code",
+      "token": "Token",
+      "qty": "Qty",
+      "value": "Value",
+      "wallet": "Wallet",
+      "account": "Account",
+      "address": "Address",
+      "reference": "Reference",
+      "shareOrCopy": "Share or Copy to clipboard",
+      "paymentRequestDetails": "PAYMENT REQUEST DETAILS"
+    },
     "sendTransactionAccountSelectionModal": {
       "title": "Send",
       "label": "TRADING ACCOUNT TOKENS VALUE",
@@ -506,28 +539,6 @@
       "invalidName": "Invalid Name",
       "search": "Search"
     },
-    "receive": {
-      "title": "Receive",
-      "walletSelection": {
-        "subtitle": "Please select a wallet to receive to"
-      },
-      "accountSelection": {
-        "subtitle": "Please select an account to receive to",
-        "tokensValue": "Tokens Value"
-      },
-      "toAccount": {
-        "yourAddress": "Your Address",
-        "requestTokens": "Request Tokens",
-        "selectTokenToReceive": "Select token to receive",
-        "enterAmount": "Enter amount",
-        "addReference": "Add a reference",
-        "reference": "Reference",
-        "generateQrCode": "Generate QR Code",
-        "token": "Token",
-        "amount": "Amount",
-        "selectDifferentAccount": "Select a different Account"
-      }
-    },
     "listTokenModal": {
       "holding": "Holdings",
       "tokens": "Tokens",
@@ -594,14 +605,8 @@
       "removeTip": "Remove Tip"
     },
     "blockchainList": {
-      "accountPage": {
-        "title": "Add new account",
-        "subtitle": "Select the desired blockchain for your new account"
-      },
-      "walletPage": {
-        "title": "Create Wallet",
-        "subtitle": "Please select which account types you require in your wallet"
-      },
+      "title": "Add new account",
+      "subtitle": "Select the desired blockchain for your new account",
       "xExisting": "%{amount} existing",
       "countAccount": "Account %{count}",
       "typeAccount": "%{type} Account",
@@ -740,6 +745,19 @@
       "holdings": "Holdings",
       "value": "Value",
       "empty": "Your wallet is currently empty, why not add some funds today?"
+    },
+    "transactionsList": {
+      "title": "PENDING TRANSACTIONS",
+      "sent": "Sent",
+      "received": "Received",
+      "pending": "Pending",
+      "sentTo": "Sent to",
+      "receivedFrom": "Received from",
+      "token": "Token",
+      "value": "Value",
+      "quantity": "Qty",
+      "today": "Today",
+      "yesterday": "Yesterday"
     },
     "colorSelector": {
       "customColor": "Custom color"

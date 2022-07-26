@@ -103,7 +103,9 @@ export const PersistContact = (props: Props) => {
   }
 
   const handleDeleteAddress = (index: number) => {
-    setAddresses(prevState => prevState.filter((_address, addressIndex) => addressIndex !== index))
+    if (addresses.length > 1) {
+      setAddresses(prevState => prevState.filter((_address, addressIndex) => addressIndex !== index))
+    }
   }
 
   const save = () => {
@@ -175,7 +177,7 @@ export const PersistContact = (props: Props) => {
 
             <InputLabel title={i18n.t('persistContact.address')} marginTop="12px" />
             {addresses.map((address, index) => (
-              <LinearLayout marginTop="8px">
+              <LinearLayout>
                 <InputWithValidation
                   placeholder={i18n.t('persistContact.addressPlaceholder')}
                   onChangeText={text => handleChangeAddress(index, text)}
@@ -191,7 +193,7 @@ export const PersistContact = (props: Props) => {
                   onClearPress={() => {
                     handleDeleteAddress(index)
                   }}
-                  forceClearButton
+                  forceClearButton={addresses.length > 1}
                 />
               </LinearLayout>
             ))}
@@ -240,7 +242,6 @@ export const PersistContact = (props: Props) => {
                   p="10px"
                 >
                   <ImageView
-                    resizeMode="center"
                     source={require('~/src/assets/images/icon-trash-can-primary.png')}
                     style={{
                       width: 20,
