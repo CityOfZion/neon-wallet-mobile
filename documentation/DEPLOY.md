@@ -1,8 +1,26 @@
 # Deployment Process
 
+## Master
+
+- List the issues that will be deployed
+- **git checkout master**
+- **git pull**
+- **git checkout staging**
+- **git pull**
+- cat package.json | grep version
+  - Write down this version
+- **git checkout -b release-** `version copied`
+- **git rebase -i master**
+- On each line, replace `pick` by `drop`. And then, find the commits you want to add to this version and replace `drop` by `p`. Save and close the file.
+- If there is a conflict, resolve them, then `git add .` and `git rebase --continue`
+- **git checkout master**
+- **git merge release-** `version`
+- **git push origin**
+- dá close em todas aquelas issues
+- For each of these issues on Clickup, change the Code Location to "Production"
+
 ## Staging
 - List the issues that will be deployed
-- cd C:\Workspace\neon-wallet-mobile
 - git checkout staging
 - git pull
 - cat package.json | grep version
