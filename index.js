@@ -1,13 +1,17 @@
 import './shim'
-import {registerRootComponent} from 'expo'
+import { registerRootComponent } from 'expo'
 
 import 'text-encoding-polyfill'
 import 'reflect-metadata'
 
 import App from './src/App'
-import {Setup} from './src/app/Setup'
+import { Setup } from './src/app/Setup'
 
 import 'react-native-get-random-values'
+
+import { fetch as fetchPolyfill } from 'whatwg-fetch'
+
+global.fetch = fetchPolyfill
 
 Setup.init()
 
