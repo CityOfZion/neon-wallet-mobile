@@ -11,12 +11,11 @@
   - Write down this version
 - **git checkout -b release-** `version copied`
 - **git rebase -i master**
-- On each line, replace `pick` by `drop`. And then, find the commits you want to add to this version and replace `drop` by `p`. Save and close the file.
+- On each line, replace `pick` by `drop`. And then, find the commits you want to add to this version and replace `drop` by `p`. Do this for the release candidate commit as well. Save and close the file.
 - If there is a conflict, resolve them, then `git add .` and `git rebase --continue`
 - **git checkout master**
 - **git merge release-** `version`
 - **git push origin**
-- dá close em todas aquelas issues
 - For each of these issues on Clickup, change the Code Location to "Production"
 
 ## Staging
@@ -25,17 +24,18 @@
 - git pull
 - cat package.json | grep version
     - Write down this version
+    - The new version will be the current version with "minor" increased, example:
+      - `1.1.3` -> `1.2.0`
 - git checkout development
 - git pull
-- git checkout -b rc-`new version: with minor imediately after the minor of the version and patch zero`
+- Change the version on package.json with the new version
+- git add .
+- git commit -m "release candidate `new version`"
+- git checkout -b rc-`new version`
 - git rebase -i staging
 - On each line, replace `pick` by `drop`. And then, find the commits you want to add to this version and replace `drop` by `p`. Save and close the file.
 - If there is a conflict, resolve them, then `git add .` and `git rebase --continue`
-- Change the version on package.json with the branch version
-- Build the project to check if it compiles
-- git add .
-- git commit -m "release candidate `version`"
 - git checkout staging
-- git merge rc-`version`
+- git merge rc-`new version`
 - git push origin
 - For each of these issues on Clickup, change the Code Location to "Staging"
