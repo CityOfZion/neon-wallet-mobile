@@ -33,7 +33,7 @@
 - git commit -m "release candidate `new version`"
 - git checkout -b rc-`new version`
 - git rebase -i staging
-- On each line, replace `pick` by `drop`. And then, find the commits you want to add to this version and replace `drop` by `p`. Save and close the file.
+- On each line, replace `pick` by `drop`. And then, find the commits you want to add to this version and replace `drop` by `p`. Do this for the release candidate commit as well. Save and close the file.
 - If there is a conflict, resolve them, then `git add .` and `git rebase --continue`
 - git checkout staging
 - git merge rc-`new version`
