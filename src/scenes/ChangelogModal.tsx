@@ -1,15 +1,12 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import { AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React from 'react'
+import { FlatList } from 'react-native'
 
-import * as data from '~src/Changelog.json'
-import { wrapper } from '~src/app/ApplicationWrapper'
+import changelogData from '~src/Changelog.json'
 import { Storage } from '~src/app/Storage'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
-import Changelog from '~src/components/changelog/Changelog'
-import ScreenLoader from '~src/components/loader/ScreenLoader'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~src/navigation/TabNavigation'
@@ -25,11 +22,58 @@ interface Props {
   route: RouteProp<ModalStackParamList, 'ChangelogModal'>
 }
 
+interface ItemProps {
+  version: string
+  date: string
+  changes: string[]
+}
+
+const Item = (props: ItemProps) => {
+  return (
+    <LinearLayout orientation="horiz" justifyContent="center">
+      <LinearLayout width="120px" alignItems="flex-end">
+        <TextView color="text.1" p="4px" fontSize="lg" borderRadius="12px" backgroundColor="primary">
+          {props.version}
+        </TextView>
+      </LinearLayout>
+
+      <LinearLayout
+        width="20px"
+        height="20px"
+        borderRadius="10px"
+        backgroundColor="primary"
+        position="relative"
+        left="10px"
+        zIndex={2}
+      />
+
+      <LinearLayout backgroundColor="background.3" width="2px" />
+
+      <LinearLayout ml="20px" width="120px" mb="12px">
+        <TextView fontSize="lg" color="text.0" fontWeight="bold">
+          {props.date}
+        </TextView>
+
+        <LinearLayout>
+          {props.changes.map(change => (
+            <TextView fontSize="md" color="text.4">
+              {change}
+            </TextView>
+          ))}
+        </LinearLayout>
+      </LinearLayout>
+    </LinearLayout>
+  )
+}
+
 const ChangelogModal = (props: Props) => {
-  const currentNumberOfVersions = Object.keys(data.changelog).length
+  const { changelog } = changelogData
+
   const controller = useSwiperController(true)
 
-  const closeTo = () => {
+  const handleRightPress = () => {
+    const currentNumberOfVersions = Object.keys(changelog).length
+
     Storage.numberOfVersions.save(currentNumberOfVersions)
     controller.close()
   }
@@ -41,24 +85,24 @@ const ChangelogModal = (props: Props) => {
       fullSize
       title={i18n.t('modals.changelog.title')}
       rightButton={<CloseButton mr="20px" />}
-      onRightPress={closeTo}
-      onClose={() => {
-        Storage.numberOfVersions.save(currentNumberOfVersions)
-        props.navigation.navigate(wrapper.route.Tab.name, undefined)
-      }}
+      onRightPress={handleRightPress}
+      onClose={props.navigation.goBack}
       solidColorBG
     >
-      <AwaitActivity name="swiperRight" loadingView={<ScreenLoader transparent />}>
-        <LinearLayout orientation="verti" mr={5} pl={42} mt={5} mb={5}>
-          <TextView color="white">{i18n.t('modals.changelog.thankYouText')}</TextView>
-          <TextView color="white" textAlign="right" fontFamily="bold">
-            {i18n.t('modals.changelog.cozTeam')}
-          </TextView>
-        </LinearLayout>
-        <LinearLayout orientation="verti" width="100%">
-          <Changelog changelog={data.changelog} />
-        </LinearLayout>
-      </AwaitActivity>
+      <FlatList
+        data={changelog}
+        scrollEnabled
+        ListHeaderComponent={
+          <LinearLayout orientation="verti" mr={5} pl={42} mt={5} mb={5}>
+            <TextView color="white">{i18n.t('modals.changelog.thankYouText')}</TextView>
+            <TextView color="white" textAlign="right" fontFamily="bold">
+              {i18n.t('modals.changelog.cozTeam')}
+            </TextView>
+          </LinearLayout>
+        }
+        renderItem={({ item }) => <Item changes={item.changes} date={item.date} version={item.version} />}
+        keyExtractor={item => item.date}
+      />
     </SwiperPanel>
   )
 }
