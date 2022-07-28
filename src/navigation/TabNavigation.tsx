@@ -39,7 +39,7 @@ const Tab = createBottomTabNavigator()
 
 const TabNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const { isFirstTime } = useSelector((state: RootState) => state.settings)
+  const isFirstTime = useSelector((state: RootState) => state.settings.isFirstTime)
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   useEffect(() => {
