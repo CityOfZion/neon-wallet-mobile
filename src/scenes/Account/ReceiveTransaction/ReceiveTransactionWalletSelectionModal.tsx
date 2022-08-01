@@ -36,16 +36,16 @@ const ReceiveTransactionWalletSelectionModal = (props: Props) => {
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet>(validWallets[0])
 
-  const balancesExchange = useBalancesAndExchange(selectedWallet.getAccounts(accounts))
+  const selectedWalletBalanceExchange = useBalancesAndExchange(selectedWallet.getAccounts(accounts))
 
   const formattedAllBalance = useMemo(() => {
     const totalBalance = BalanceHelper.calculateTotalBalances(
-      balancesExchange.balance.data,
-      balancesExchange.exchange.data
+      selectedWalletBalanceExchange.balance.data,
+      selectedWalletBalanceExchange.exchange.data
     )
 
     return FilterHelper.currency(totalBalance, currency, language)
-  }, [balancesExchange, currency, language])
+  }, [selectedWalletBalanceExchange, currency, language])
 
   return (
     <SwiperPanel
@@ -65,7 +65,7 @@ const ReceiveTransactionWalletSelectionModal = (props: Props) => {
         <WalletPicker
           wallets={validWallets}
           selectedWallet={selectedWallet}
-          balanceExchange={balancesExchange}
+          selectedWalletBalanceExchange={selectedWalletBalanceExchange}
           onSelect={setSelectedWallet}
           onPress={wallet =>
             props.navigation.navigate(wrapper.route.Modal.name, {
@@ -77,7 +77,10 @@ const ReceiveTransactionWalletSelectionModal = (props: Props) => {
           }
         />
 
-        <Skeleton isLoading={balancesExchange.isLoading} layout={{ width: 100, height: 36, alignSelf: 'center' }}>
+        <Skeleton
+          isLoading={selectedWalletBalanceExchange.isLoading}
+          layout={{ width: 100, height: 36, alignSelf: 'center' }}
+        >
           <TextView alignSelf="center" fontSize="36px" color="text.0" fontFamily="medium">
             {formattedAllBalance}
           </TextView>

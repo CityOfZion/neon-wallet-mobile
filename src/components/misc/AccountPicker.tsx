@@ -41,7 +41,7 @@ const AccountPicker: React.FC<Props> = ({
       layout="default"
       data={accounts}
       sliderWidth={applicationConfig.windowWidth}
-      itemWidth={applicationConfig.windowWidth - 125}
+      itemWidth={240}
       inactiveSlideScale={0.9}
       inactiveSlideOpacity={1}
       inactiveSlideShift={12}
@@ -62,6 +62,7 @@ const AccountPicker: React.FC<Props> = ({
             isCompacted={isCompacted}
             hideCopy
             hideQRCode
+            width={240}
           />
         </LinearLayout>
       )}

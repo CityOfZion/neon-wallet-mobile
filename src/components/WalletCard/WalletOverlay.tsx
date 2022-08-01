@@ -8,7 +8,7 @@ export const WalletOverlay = () => {
       position="absolute"
       bottom="-2px"
       resizeMode="stretch"
-      source={require('~src/assets/images/wallet-semi-front.png')}
+      source={require('~src/assets/images/wallet-front.png')}
       style={{
         width: '100%',
         height: '75%',

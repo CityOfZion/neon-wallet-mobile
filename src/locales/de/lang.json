@@ -419,6 +419,13 @@
       "qty": "#translateme",
       "value": "#translateme",
       "fee": "#translateme"
+    },
+    "walletCard": {
+      "walletLabel": {
+        "legacy": "#translateme",
+        "standard": "#translateme",
+        "watch": "#translateme"
+      }
     }
   },
   "hooks": {

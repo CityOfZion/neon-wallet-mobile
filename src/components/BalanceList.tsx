@@ -49,7 +49,7 @@ const BalanceListItem = React.memo(
                 width={12}
                 height={12}
                 borderRadius={6}
-                backgroundColor={TokenHelper.getColor(tokenBalanceConverted.hash)}
+                backgroundColor={TokenHelper.getColor(tokenBalanceConverted.symbol)}
                 alignSelf="center"
               />
             ) : (

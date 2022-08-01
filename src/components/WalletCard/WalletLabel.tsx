@@ -1,121 +1,72 @@
+import i18n from 'i18n-js'
 import React from 'react'
+import { ImageSourcePropType } from 'react-native'
 
 import { Wallet } from '~/src/models/redux/Wallet'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
+import { WalletType } from '~/src/types/reducers/wallet'
 
 type Props = {
   wallet: Wallet
   isInactive?: boolean
 }
 
-const StandardLabel = ({ isInactive, wallet }: Props) => {
-  return (
-    <LinearLayout>
-      <ImageView
-        position="absolute"
-        left={0}
-        bottom="50%"
-        resizeMode="contain"
-        source={require('~src/assets/images/wallet-card-label.png')}
-        style={{
-          height: 50,
-          width: '100%',
-          transform: [{ translateY: 25 }],
-        }}
-      />
-      <LinearLayout orientation="horiz" alignItems="center" px="12px">
-        {isInactive ? (
-          <ImageView
-            width={24}
-            height={24}
-            resizeMode="contain"
-            source={require('~src/assets/images/wallet-icon-inactive.png')}
-          />
-        ) : (
-          <ImageView
-            width={24}
-            height={24}
-            resizeMode="contain"
-            source={require('~src/assets/images/wallet-icon.png')}
-          />
-        )}
-
-        <TextView fontFamily="bold" color={isInactive ? 'text.2' : 'text.0'} numberOfLines={1} ml="8px">
-          {wallet.name?.toUpperCase()}
-        </TextView>
-      </LinearLayout>
-    </LinearLayout>
-  )
-}
-
-const WatchLabel = () => {
-  return (
-    <LinearLayout>
-      <ImageView
-        position="absolute"
-        left={0}
-        bottom="50%"
-        source={require('~src/assets/images/wallet-icon-label.png')}
-        resizeMode="contain"
-        style={{
-          height: 50,
-          width: '100%',
-          transform: [{ translateY: 25 }],
-        }}
-      />
-      <LinearLayout px="12px">
-        <ImageView
-          resizeMode="contain"
-          source={require('~src/assets/images/icon-watch-green.png')}
-          style={{
-            width: 24,
-            height: 24,
-          }}
-        />
-      </LinearLayout>
-    </LinearLayout>
-  )
-}
-
-const LegacyLabel = () => {
-  return (
-    <LinearLayout>
-      <ImageView
-        position="absolute"
-        left={0}
-        bottom="50%"
-        source={require('~src/assets/images/wallet-icon-label.png')}
-        resizeMode="contain"
-        style={{
-          height: 50,
-          width: '100%',
-          transform: [{ translateY: 25 }],
-        }}
-      />
-      <LinearLayout px="12px">
-        <ImageView
-          resizeMode="contain"
-          source={require('~src/assets/images/icon-legacy-grey.png')}
-          style={{
-            width: 24,
-            height: 24,
-          }}
-        />
-      </LinearLayout>
-    </LinearLayout>
-  )
+const walletIconSources: Record<WalletType, ImageSourcePropType> = {
+  legacy: require('~src/assets/images/wallet-icon-legacy.png'),
+  standard: require('~src/assets/images/wallet-icon-standard.png'),
+  watch: require('~src/assets/images/wallet-icon-watch.png'),
 }
 
 export const WalletLabel = ({ wallet, isInactive }: Props) => {
   return (
-    <LinearLayout position="absolute" bottom="20%">
-      {wallet.walletType === 'standard' ? (
-        <StandardLabel isInactive={isInactive} wallet={wallet} />
-      ) : wallet.walletType === 'watch' ? (
-        <WatchLabel />
-      ) : (
-        <LegacyLabel />
-      )}
+    <LinearLayout position="absolute" bottom="20%" width="100%">
+      <LinearLayout width="100%" height="58px" justifyContent="center">
+        <ImageView
+          position="absolute"
+          left={0}
+          bottom="50%"
+          resizeMode="contain"
+          source={require('~src/assets/images/wallet-card-label.png')}
+          style={{
+            height: '100%',
+            width: '85%',
+            transform: [{ translateY: 29 }],
+          }}
+        />
+        {wallet.walletType && (
+          <LinearLayout orientation="horiz" alignItems="center" py="12px" pl="20px" pr="38px">
+            <ImageView
+              source={walletIconSources[wallet.walletType]}
+              resizeMode="contain"
+              style={{
+                height: 34,
+                width: 34,
+              }}
+            />
+
+            <LinearLayout>
+              <TextView
+                fontFamily="bold"
+                fontSize="md"
+                color={isInactive ? 'text.2' : 'text.0'}
+                numberOfLines={1}
+                ml="6px"
+              >
+                {wallet.name?.toUpperCase()}
+              </TextView>
+              <TextView
+                fontFamily="bold"
+                fontSize="xs"
+                color={isInactive ? 'text.2' : 'text.10'}
+                numberOfLines={1}
+                ml="6px"
+              >
+                {i18n.t(`components.walletCard.walletLabel.${wallet.walletType}`).toUpperCase()}
+              </TextView>
+            </LinearLayout>
+          </LinearLayout>
+        )}
+      </LinearLayout>
     </LinearLayout>
   )
 }

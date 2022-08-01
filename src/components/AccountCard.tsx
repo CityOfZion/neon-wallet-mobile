@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { LinearGradient } from 'expo-linear-gradient'
 import i18n from 'i18n-js'
-import React, { useState, useRef, useMemo } from 'react'
+import React, { useState, useRef, useMemo, useEffect } from 'react'
 import { LayoutChangeEvent, NativeSyntheticEvent, NativeTouchEvent, Animated } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -32,11 +32,12 @@ type HiddenProps = {
 type Props = {
   account: Account
   isCompacted?: boolean
-  isStackMode?: boolean
   isInactive?: boolean
-  hasShadow?: boolean
   hideQRCode?: boolean
   hideCopy?: boolean
+  width?: number
+  height?: number
+  onLayout?: (event: LayoutChangeEvent) => void
   onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
 } & (VisibleProps | HiddenProps)
 
@@ -101,36 +102,30 @@ const Balance = ({ balanceExchange, type, unit }: BalanceProps) => {
 
 const AccountCard = ({
   isCompacted = false,
-  isStackMode = false,
   isInactive = false,
-  hasShadow = true,
   account,
   hideCopy,
   hideQRCode,
   onPress,
+  height,
+  width,
+  onLayout,
   ...props
 }: Props) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList & ModalStackParamList>>()
-  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
-  const [viewHeight, setViewHeight] = useState<number>(0)
+  const [viewWidth, setViewWidth] = useState<number | undefined>(width ?? undefined)
 
-  const unit = (viewHeight * 0.1) / 24
+  const viewHeight = height ? height : viewWidth ? viewWidth * 0.66 : undefined
+  const unit = viewWidth ? viewWidth / 340 : 0
 
-  const fadeAnim = useRef(new Animated.Value(0))
   const touchDisabled = useRef(false)
-
-  const fadeIn = () => {
-    Animated.timing(fadeAnim.current, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start()
-  }
+  const opacityValue = useRef(new Animated.Value(0)).current
 
   const handleLayout = (event: LayoutChangeEvent) => {
-    setViewHeight(event.nativeEvent.layout.height)
-    fadeIn()
+    if (width) return
+
+    setViewWidth(event.nativeEvent.layout.width)
   }
 
   const handlePress = (event: NativeSyntheticEvent<NativeTouchEvent>) => {
@@ -156,120 +151,133 @@ const AccountCard = ({
     UtilsHelper.copyToClipboard(account.address)
   }
 
+  useEffect(() => {
+    if (!viewWidth) return
+
+    Animated.timing(opacityValue, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: true,
+    }).start()
+  }, [viewWidth])
+
   return (
-    <ButtonView onLayout={handleLayout} onPress={handlePress} width="100%" disabled={isInactive} activeOpacity={1}>
-      <LinearGradient
-        colors={[account.backgroundColor, FilterHelper.toDarkerShade(account.backgroundColor, 1, 0.4)]}
-        style={{
-          borderRadius: 18,
-          aspectRatio: 38 / 25,
-          shadowRadius: hasShadow ? 15 : undefined,
-          shadowOpacity: hasShadow ? 0.5 : undefined,
-          shadowColor: hasShadow ? theme.colors.black : undefined,
-          shadowOffset: hasShadow ? { height: 5, width: 5 } : undefined,
-          elevation: hasShadow ? 6 : undefined,
-        }}
-      >
-        <Animated.View style={{ opacity: fadeAnim.current }}>
-          <ImageView
-            opacity={0.7}
-            position="absolute"
-            bottom="0"
-            left="0"
-            source={require('~src/assets/images/card-placeholder.png')}
+    <LinearLayout onLayout={onLayout}>
+      <Animated.View style={[{ opacity: opacityValue }]}>
+        <ButtonView
+          onLayout={handleLayout}
+          onPress={handlePress}
+          width={width ?? '100%'}
+          height={viewHeight}
+          disabled={isInactive}
+          activeOpacity={1}
+        >
+          <LinearGradient
+            colors={[account.backgroundColor, FilterHelper.toDarkerShade(account.backgroundColor, 1, 0.4)]}
             style={{
-              width: '80%',
-              height: '80%',
+              borderRadius: 18,
             }}
-          />
-          <LinearLayout orientation="verti" width="100%" height="100%" p={16 * unit} justifyContent="space-between">
-            <LinearLayout orientation="horiz" alignItems="center">
-              <ImageView
-                width={30 * unit}
-                height={30 * unit}
-                source={getBlockchainLogo(account.blockchain, 'white')}
-                resizeMode="contain"
-                alignSelf="center"
-              />
-              <LinearLayout orientation="verti" flex={1} paddingX={10 * unit}>
-                <TextView mb={-4 * unit} fontFamily="semibold" fontSize={22 * unit} color="white" numberOfLines={1}>
-                  {account.name ?? i18n.t('paymentCard.accountPlaceholder')}
-                </TextView>
-                <TextView fontFamily="semibold" fontSize={12 * unit} color="white" numberOfLines={1} width="88%">
-                  {i18n.t(`blockchainServices.${account.blockchain}.id`)}
-                </TextView>
-              </LinearLayout>
-
-              {isCompacted
-                ? !props.hideBalance && <Balance type="small" balanceExchange={props.balanceExchange} unit={unit} />
-                : !hideQRCode && (
-                    <ButtonView onPress={handlePressQRCode}>
-                      <ImageView
-                        ml={10 * unit}
-                        width={25 * unit}
-                        height={25 * unit}
-                        source={require('~src/assets/images/card-qrcode.png')}
-                      />
-                    </ButtonView>
-                  )}
-            </LinearLayout>
-
-            {!isStackMode && !isCompacted && !props.hideBalance ? (
-              <Balance type="big" balanceExchange={props.balanceExchange} unit={unit} />
-            ) : (
-              <LinearLayout />
-            )}
-
-            {account.address && (
+          >
+            <ImageView
+              opacity={0.7}
+              position="absolute"
+              bottom="0"
+              left="0"
+              source={require('~src/assets/images/card-placeholder.png')}
+              style={{
+                width: '80%',
+                height: '80%',
+              }}
+            />
+            <LinearLayout orientation="verti" width="100%" height="100%" p={16 * unit} justifyContent="space-between">
               <LinearLayout orientation="horiz" alignItems="center">
-                {account.accountType === 'watch' && (
-                  <ImageView
-                    source={require('~/src/assets/images/icon-watch-white.png')}
-                    resizeMode="contain"
-                    mr={8 * unit}
-                    style={{
-                      width: 21 * unit,
-                      height: 21 * unit,
-                    }}
-                  />
-                )}
-
-                <LinearLayout flex={1}>
-                  <TextView fontSize={12 * unit} color="white" fontFamily="bold">
-                    {i18n.t('paymentCard.address')}
+                <ImageView
+                  width={30 * unit}
+                  height={30 * unit}
+                  source={getBlockchainLogo(account.blockchain, 'white')}
+                  resizeMode="contain"
+                  alignSelf="center"
+                />
+                <LinearLayout orientation="verti" flex={1} paddingX={10 * unit}>
+                  <TextView mb={-4 * unit} fontFamily="semibold" fontSize={22 * unit} color="white" numberOfLines={1}>
+                    {account.name ?? i18n.t('paymentCard.accountPlaceholder')}
                   </TextView>
-
-                  <TextView
-                    color="primary"
-                    opacity={0.6}
-                    fontFamily="medium"
-                    ellipsizeMode="middle"
-                    numberOfLines={1}
-                    fontSize={14 * unit}
-                  >
-                    {account.address}
+                  <TextView fontFamily="semibold" fontSize={12 * unit} color="white" numberOfLines={1} width="88%">
+                    {i18n.t(`blockchainServices.${account.blockchain}.id`)}
                   </TextView>
                 </LinearLayout>
 
-                {!hideCopy && (
-                  <ButtonView onPress={handlePressCopy} ml={8 * unit}>
+                {isCompacted
+                  ? !props.hideBalance && <Balance type="small" balanceExchange={props.balanceExchange} unit={unit} />
+                  : !hideQRCode && (
+                      <ButtonView onPress={handlePressQRCode}>
+                        <ImageView
+                          ml={10 * unit}
+                          width={25 * unit}
+                          height={25 * unit}
+                          source={require('~src/assets/images/card-qrcode.png')}
+                        />
+                      </ButtonView>
+                    )}
+              </LinearLayout>
+
+              {!isCompacted && !props.hideBalance ? (
+                <Balance type="big" balanceExchange={props.balanceExchange} unit={unit} />
+              ) : (
+                <LinearLayout />
+              )}
+
+              {account.address && (
+                <LinearLayout orientation="horiz" alignItems="center">
+                  {account.accountType === 'watch' && (
                     <ImageView
+                      source={require('~/src/assets/images/icon-watch-white.png')}
                       resizeMode="contain"
-                      source={require('~src/assets/images/icon-copy-green.png')}
+                      mr={8 * unit}
                       style={{
-                        opacity: 0.5,
-                        width: 14,
-                        height: 14,
+                        width: 21 * unit,
+                        height: 21 * unit,
                       }}
                     />
-                  </ButtonView>
-                )}
-              </LinearLayout>
-            )}
-          </LinearLayout>
-        </Animated.View>
-      </LinearGradient>
-    </ButtonView>
+                  )}
+
+                  <LinearLayout flex={1}>
+                    <TextView fontSize={12 * unit} color="white" fontFamily="bold">
+                      {i18n.t('paymentCard.address')}
+                    </TextView>
+
+                    <TextView
+                      color="primary"
+                      opacity={0.6}
+                      fontFamily="medium"
+                      ellipsizeMode="middle"
+                      numberOfLines={1}
+                      fontSize={14 * unit}
+                    >
+                      {account.address}
+                    </TextView>
+                  </LinearLayout>
+
+                  {!hideCopy && (
+                    <ButtonView onPress={handlePressCopy} ml={8 * unit}>
+                      <ImageView
+                        resizeMode="contain"
+                        source={require('~src/assets/images/icon-copy-green.png')}
+                        style={{
+                          opacity: 0.5,
+                          width: 14,
+                          height: 14,
+                        }}
+                      />
+                    </ButtonView>
+                  )}
+                </LinearLayout>
+              )}
+            </LinearLayout>
+          </LinearGradient>
+        </ButtonView>
+      </Animated.View>
+    </LinearLayout>
   )
 }
 

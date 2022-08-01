@@ -3,7 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import { Animated, Easing, ImageLoadEventData, LayoutChangeEvent, RefreshControl } from 'react-native'
+import { Animated, ImageLoadEventData, RefreshControl } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -133,7 +133,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const { sessions } = useWalletConnect()
 
-  const posYFactor = useRef(new Animated.Value(0))
+  const opacityValue = useRef(new Animated.Value(0))
 
   const balanceExchange = useBalancesAndExchange(account)
 
@@ -199,7 +199,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           responseClaim.txid,
           'claim',
           account.address,
-          { hash: responseClaim.hash, symbol: responseClaim.token, name: '' },
+          { hash: responseClaim.hash, symbol: responseClaim.token, name: '', blockchain: account.blockchain },
           unclaimedGasAmount,
           responseClaim.fee
         )
@@ -327,14 +327,11 @@ const GetAccountView = (props: GetAccountViewProps) => {
     })
   }
 
-  const handleLayout = (event: LayoutChangeEvent) => {
-    posYFactor.current.setValue(1)
-
-    Animated.timing(posYFactor.current, {
+  const handleLayout = () => {
+    Animated.timing(opacityValue.current, {
       toValue: 1,
       duration: 500,
       useNativeDriver: true,
-      easing: Easing.out(val => val ** 2),
     }).start()
   }
 
@@ -368,89 +365,78 @@ const GetAccountView = (props: GetAccountViewProps) => {
       }
       darkerSolidColorBG
     >
+      <LinearLayout mt={4}>
+        <AccountCard onLayout={handleLayout} hideBalance={false} balanceExchange={balanceExchange} account={account} />
+      </LinearLayout>
+
       <Animated.View
-        onLayout={handleLayout}
         style={{
-          opacity: posYFactor.current,
-          transform: [
-            {
-              translateY: 0,
-            },
-          ],
+          opacity: opacityValue.current,
         }}
       >
-        <LinearLayout mt={4}>
-          <AccountCard
-            hideBalance={false}
-            balanceExchange={balanceExchange}
-            account={account}
-            hasShadow={false}
-            isStackMode={false}
+        <LinearLayout
+          orientation="horiz"
+          width="100%"
+          marginX="15px"
+          justifyContent="space-around"
+          alignSelf="center"
+          marginY="20px"
+          style={{
+            elevation: 30,
+          }}
+        >
+          <ThemedReceiveButton onPress={handlePressReceiveButton} isDark />
+          <AwaitActivity name={`ClaimGas@${account.address}`} loadingView={<ClaimGasLoader />}>
+            <ThemedClaimButton
+              onPress={handleClaimGas}
+              isClaimAvailable={isClaimAvailable}
+              unclaimedGasAmount={unclaimedGasAmount ?? 0}
+              fee={fee ?? null}
+              isDark
+            />
+          </AwaitActivity>
+
+          <ThemedSendButton onPress={handlePressSendButton} isDark />
+        </LinearLayout>
+        <LinearLayout>
+          <Button
+            label={i18n.t('screens.screenLayout.assets').toUpperCase()}
+            srcIcon={require('~/src/assets/images/Equalizer_-_simple-line-icons.png')}
+            iconSize={[28, 24]}
+            onPress={handlePressAssetsButton}
+          />
+          <Button
+            label={i18n.t('screens.screenLayout.transactions').toUpperCase()}
+            srcIcon={require('~/src/assets/images/icon-reselect-green.png')}
+            iconSize={[28, 30]}
+            onPress={handlePressTransactionsButton}
+          />
+
+          <Button
+            label={i18n.t('screens.screenLayout.nfts').toUpperCase()}
+            srcIcon={require('~/src/assets/images/diamond-green.png')}
+            iconSize={[28, 30]}
+            onPress={handlePressNFTsButton}
+          />
+
+          <Button
+            disabled={!hasWalletconnect() || !hasWalletConnectSessions}
+            label={i18n.t('screens.screenLayout.connections').toUpperCase()}
+            srcIcon={require('~/src/assets/images/connections.png')}
+            iconSize={[28, 30]}
+            onPress={handlePressConnectionsButton}
           />
         </LinearLayout>
+
+        <ModalWarningFee
+          onPress={claimGas}
+          totTokenFeeAccount={totTokenFeeAccount}
+          unclaimedGasAmount={unclaimedGasAmount ?? 0}
+          amountFee={fee ?? 0}
+          showWarning={showWarning}
+          setShowWarning={show => setShowWarning(show)}
+        />
       </Animated.View>
-      <LinearLayout
-        orientation="horiz"
-        width="100%"
-        marginX="15px"
-        justifyContent="space-around"
-        alignSelf="center"
-        marginY="20px"
-        style={{
-          elevation: 30,
-        }}
-      >
-        <ThemedReceiveButton onPress={handlePressReceiveButton} isDark />
-        <AwaitActivity name={`ClaimGas@${account.address}`} loadingView={<ClaimGasLoader />}>
-          <ThemedClaimButton
-            onPress={handleClaimGas}
-            isClaimAvailable={isClaimAvailable}
-            unclaimedGasAmount={unclaimedGasAmount ?? 0}
-            fee={fee ?? null}
-            isDark
-          />
-        </AwaitActivity>
-
-        <ThemedSendButton onPress={handlePressSendButton} isDark />
-      </LinearLayout>
-      <LinearLayout>
-        <Button
-          label={i18n.t('screens.screenLayout.assets').toUpperCase()}
-          srcIcon={require('~/src/assets/images/Equalizer_-_simple-line-icons.png')}
-          iconSize={[28, 24]}
-          onPress={handlePressAssetsButton}
-        />
-        <Button
-          label={i18n.t('screens.screenLayout.transactions').toUpperCase()}
-          srcIcon={require('~/src/assets/images/icon-reselect-green.png')}
-          iconSize={[28, 30]}
-          onPress={handlePressTransactionsButton}
-        />
-
-        <Button
-          label={i18n.t('screens.screenLayout.nfts').toUpperCase()}
-          srcIcon={require('~/src/assets/images/diamond-green.png')}
-          iconSize={[28, 30]}
-          onPress={handlePressNFTsButton}
-        />
-
-        <Button
-          disabled={!hasWalletconnect() || !hasWalletConnectSessions}
-          label={i18n.t('screens.screenLayout.connections').toUpperCase()}
-          srcIcon={require('~/src/assets/images/connections.png')}
-          iconSize={[28, 30]}
-          onPress={handlePressConnectionsButton}
-        />
-      </LinearLayout>
-
-      <ModalWarningFee
-        onPress={claimGas}
-        totTokenFeeAccount={totTokenFeeAccount}
-        unclaimedGasAmount={unclaimedGasAmount ?? 0}
-        amountFee={fee ?? 0}
-        showWarning={showWarning}
-        setShowWarning={show => setShowWarning(show)}
-      />
     </ScreenLayout>
   )
 }

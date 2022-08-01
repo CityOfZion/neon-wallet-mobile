@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
+import { Animated } from 'react-native'
 
 import { Skeleton } from '../Skeleton'
 
@@ -22,44 +23,56 @@ export const WalletBalanceBar = ({ balanceExchange }: Props) => {
     [balanceExchange]
   )
 
+  const opacityValue = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    Animated.timing(opacityValue, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start()
+  }, [])
+
   return (
     <LinearLayout position="absolute" bottom="10%" height="12px" width="90%">
-      <Skeleton
-        isLoading={balanceExchange.isLoading}
-        layout={{ width: '100%', height: 12, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-      >
-        {!!totalTokensBalances && tokensBalancesConverted && (
-          <LinearLayout>
-            <ImageView
-              resizeMode="cover"
-              source={require('~src/assets/images/wallet-card-label.png')}
-              style={{
-                width: '100%',
-                height: '100%',
-                borderBottomRightRadius: 9999,
-                borderTopRightRadius: 9999,
-              }}
-            />
-            <LinearLayout position="absolute" top="3.5px" px="2px" orientation="horiz" width="100%">
-              {tokensBalancesConverted.map((tokenBalances, index) => {
-                return (
-                  <>
-                    <LinearLayout
-                      key={index}
-                      height="5px"
-                      weight={(tokenBalances.convertedAmount * 100) / totalTokensBalances}
-                      borderRadius="2.5px"
-                      minWidth="2px"
-                      mx="1px"
-                      backgroundColor={TokenHelper.getColor(tokenBalances.symbol)}
-                    />
-                  </>
-                )
-              })}
+      <Animated.View style={{ opacity: opacityValue }}>
+        <Skeleton
+          isLoading={balanceExchange.isLoading}
+          layout={{ width: '100%', height: 12, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+        >
+          {!!totalTokensBalances && tokensBalancesConverted && (
+            <LinearLayout>
+              <ImageView
+                resizeMode="cover"
+                source={require('~src/assets/images/wallet-card-label.png')}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderBottomRightRadius: 9999,
+                  borderTopRightRadius: 9999,
+                }}
+              />
+              <LinearLayout position="absolute" top="3.5px" px="2px" orientation="horiz" width="100%">
+                {tokensBalancesConverted.map((tokenBalances, index) => {
+                  return (
+                    <>
+                      <LinearLayout
+                        key={index}
+                        height="5px"
+                        weight={(tokenBalances.convertedAmount * 100) / totalTokensBalances}
+                        borderRadius="2.5px"
+                        minWidth="2px"
+                        mx="1px"
+                        backgroundColor={TokenHelper.getColor(tokenBalances.symbol)}
+                      />
+                    </>
+                  )
+                })}
+              </LinearLayout>
             </LinearLayout>
-          </LinearLayout>
-        )}
-      </Skeleton>
+          )}
+        </Skeleton>
+      </Animated.View>
     </LinearLayout>
   )
 }

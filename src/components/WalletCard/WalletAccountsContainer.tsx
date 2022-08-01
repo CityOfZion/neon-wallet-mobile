@@ -4,53 +4,19 @@ import { useSelector } from 'react-redux'
 
 import AccountCard from '../AccountCard'
 
-import { Account } from '~/src/models/redux/Account'
 import { Wallet } from '~/src/models/redux/Wallet'
 import { RootState } from '~/src/store/RootStore'
-import { LinearLayout, RelativeLayout } from '~src/styles/styled-components'
+import { LinearLayout } from '~src/styles/styled-components'
 
 type Props = {
-  viewHeight: number
+  height: number
+  width: number
   wallet: Wallet
   outAnimatedValue?: Animated.Value
   inAnimatedValue?: Animated.Value
 }
 
-type WalletAccountProps = {
-  viewHeight: number
-  account: Account
-  index: number
-}
-
-const WalletAccount = ({ account, index, viewHeight }: WalletAccountProps) => {
-  const ratio = 38 / 25
-  const cardWidth = viewHeight - 12
-  const cardHeight = cardWidth / ratio
-
-  return (
-    <LinearLayout
-      mt={`${index * 4}px`}
-      position="absolute"
-      style={{
-        top: 3 + cardHeight * ratio * 0.5,
-        left: 5 + cardHeight * 0.5,
-      }}
-    >
-      <RelativeLayout
-        width={cardWidth}
-        style={{
-          top: -cardHeight * 0.5,
-          left: -(cardHeight * ratio) * 0.5,
-          transform: [{ rotate: '90deg' }],
-        }}
-      >
-        <AccountCard account={account} hideBalance />
-      </RelativeLayout>
-    </LinearLayout>
-  )
-}
-
-export const WalletAccountsContainer = ({ wallet, inAnimatedValue, outAnimatedValue, viewHeight }: Props) => {
+export const WalletAccountsContainer = ({ wallet, inAnimatedValue, outAnimatedValue, height, width }: Props) => {
   const accounts = useSelector((state: RootState) => state.app.accounts)
 
   const limitedWalletAccounts = useMemo(() => wallet.getAccounts(accounts).slice(0, 10), [wallet, accounts])
@@ -58,53 +24,51 @@ export const WalletAccountsContainer = ({ wallet, inAnimatedValue, outAnimatedVa
   return (
     <LinearLayout
       position="absolute"
-      bottom={0}
-      width="100%"
-      height={3 * viewHeight}
-      overflow="hidden"
-      borderRadius="18px"
+      width={width}
+      height={height}
+      top="50%"
+      left="50%"
+      style={{ transform: [{ translateX: -width / 2 }, { translateY: -height / 2 }, { rotate: '90deg' }] }}
     >
-      <RelativeLayout top={2 * viewHeight}>
-        {limitedWalletAccounts.map((account, index) => (
-          <Animated.View
-            key={index}
-            style={
-              outAnimatedValue
-                ? {
-                    transform: [
-                      {
-                        translateY: outAnimatedValue.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [0, -viewHeight * (1.2 + 0.1 * (limitedWalletAccounts.length - index))],
-                        }),
-                      },
-                    ],
-                  }
-                : undefined
-            }
-          >
-            <Animated.View
-              key={index}
-              style={
-                inAnimatedValue
-                  ? {
-                      transform: [
-                        {
-                          translateY: inAnimatedValue.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [0, 1],
-                          }),
-                        },
-                      ],
-                    }
-                  : undefined
+      <Animated.View
+        style={
+          outAnimatedValue
+            ? {
+                transform: [
+                  {
+                    translateX: outAnimatedValue.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0, -height * 1.8],
+                    }),
+                  },
+                ],
               }
-            >
-              <WalletAccount viewHeight={viewHeight} account={account} index={index} />
-            </Animated.View>
-          </Animated.View>
-        ))}
-      </RelativeLayout>
+            : undefined
+        }
+      >
+        <Animated.View
+          style={
+            inAnimatedValue
+              ? {
+                  transform: [
+                    {
+                      translateX: inAnimatedValue.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, 1],
+                      }),
+                    },
+                  ],
+                }
+              : undefined
+          }
+        >
+          {limitedWalletAccounts.map((account, index) => (
+            <LinearLayout position="absolute" left={`${index * 4}px`}>
+              <AccountCard width={width} height={height} account={account} hideBalance />
+            </LinearLayout>
+          ))}
+        </Animated.View>
+      </Animated.View>
     </LinearLayout>
   )
 }

@@ -46,16 +46,16 @@ const WCWalletSelectionModal = (props: Props) => {
   )
   const [selectedWallet, setSelectedWallet] = useState<Wallet>(validWallets[0])
 
-  const balancesExchange = useBalancesAndExchange(selectedWallet.getAccounts(accounts))
+  const selectedWalletBalanceExchange = useBalancesAndExchange(selectedWallet.getAccounts(accounts))
 
   const formattedAllBalance = useMemo(() => {
     const totalBalance = BalanceHelper.calculateTotalBalances(
-      balancesExchange.balance.data,
-      balancesExchange.exchange.data
+      selectedWalletBalanceExchange.balance.data,
+      selectedWalletBalanceExchange.exchange.data
     )
 
     return FilterHelper.currency(totalBalance, currency, language)
-  }, [balancesExchange, currency, language])
+  }, [selectedWalletBalanceExchange, currency, language])
 
   return (
     <SwiperPanel
@@ -68,14 +68,14 @@ const WCWalletSelectionModal = (props: Props) => {
       onRightPress={controller.close}
       solidColorBG
     >
-      <LinearLayout>
+      <LinearLayout alignItems="center">
         <TextView mb={20} color="text.0" fontSize={18} fontFamily="medium" textAlign="center">
           {i18n.t('modals.receiveTransactionAccountSelectionModal.subtitle')}
         </TextView>
 
         <WalletPicker
           selectedWallet={selectedWallet}
-          balanceExchange={balancesExchange}
+          selectedWalletBalanceExchange={selectedWalletBalanceExchange}
           wallets={validWallets}
           onSelect={setSelectedWallet}
           onPress={wallet => {
@@ -85,7 +85,10 @@ const WCWalletSelectionModal = (props: Props) => {
           }}
         />
 
-        <Skeleton isLoading={balancesExchange.isLoading} layout={{ width: 100, height: 36, alignSelf: 'center' }}>
+        <Skeleton
+          isLoading={selectedWalletBalanceExchange.isLoading}
+          layout={{ width: 100, height: 36, alignSelf: 'center' }}
+        >
           <TextView alignSelf="center" fontSize="36px" color="text.0" fontFamily="medium">
             {formattedAllBalance}
           </TextView>
