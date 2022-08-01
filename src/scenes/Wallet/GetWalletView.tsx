@@ -2,8 +2,8 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import moment from 'moment'
-import React, { useEffect, useMemo } from 'react'
-import { RefreshControl, TouchableWithoutFeedback } from 'react-native'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { Animated, Easing, LayoutChangeEvent, RefreshControl } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { RootStackParamList } from '../../navigation/AppNavigation'
@@ -20,7 +20,7 @@ import { Account } from '~src/models/redux/Account'
 import { Wallet } from '~src/models/redux/Wallet'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
 import { RootState, RootStore } from '~src/store/RootStore'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ButtonWithoutFeedbackView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface GetWalletViewParams {
   wallet: Wallet
@@ -51,12 +51,35 @@ const GetWalletView = (props: GetWalletProps) => {
   })
 
   const accounts = useSelector((state: RootState) => state.app.accounts)
-
   const dispatch = useDispatch()
 
   const walletAccounts = useMemo(() => wallet.getAccounts(accounts), [accounts, wallet])
 
-  const balanceExchange = useBalancesAndExchange(wallet.getAccounts(accounts))
+  const balanceExchange = useBalancesAndExchange(walletAccounts)
+
+  const [viewHeight, setViewHeight] = useState<number>(0)
+  const posYFactor = useRef(new Animated.Value(0)).current
+  const opacityValue = useRef(new Animated.Value(0)).current
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { height } = event.nativeEvent.layout
+    setViewHeight(height)
+
+    Animated.parallel([
+      Animated.timing(posYFactor, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+        easing: Easing.out(val => val ** 2),
+      }),
+
+      Animated.timing(opacityValue, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start()
+  }
 
   const handlePress = async (account: Account) => {
     dispatch(RootStore.account.actions.selectAccount(account.address))
@@ -98,35 +121,56 @@ const GetWalletView = (props: GetWalletProps) => {
         />
       }
       darkerSolidColorBG
+      onLayout={handleLayout}
     >
-      <LinearLayout mt={6}>
-        <AccountCards balanceExchange={balanceExchange} accounts={walletAccounts} onPress={handlePress} />
-      </LinearLayout>
+      <Animated.View style={{ opacity: opacityValue }}>
+        <Animated.View
+          style={[
+            {
+              transform: [
+                {
+                  translateY: posYFactor.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [-viewHeight, 0],
+                  }),
+                },
+              ],
+            },
+          ]}
+        >
+          <AccountCards balanceExchange={balanceExchange} accounts={walletAccounts} onPress={handlePress} />
+        </Animated.View>
 
-      {wallet.walletType === 'standard' && (
-        <TouchableWithoutFeedback onPress={handleCreate}>
-          <LinearLayout
-            my={6}
-            orientation="horiz"
-            width="100%"
-            alignItems="center"
-            justifyContent="center"
-            borderStyle="dashed"
-            borderColor="text.0"
-            borderRadius={17}
-            borderWidth={1}
-            style={{
-              aspectRatio: 38 / 25,
-            }}
-          >
-            <ImageView source={require('~src/assets/images/icon-plus-white.png')} />
+        {wallet.walletType === 'standard' && (
+          <ButtonWithoutFeedbackView onPress={handleCreate}>
+            <LinearLayout
+              my={6}
+              orientation="horiz"
+              width="100%"
+              alignItems="center"
+              justifyContent="center"
+              borderStyle="dashed"
+              borderColor="text.0"
+              borderRadius={18}
+              borderWidth={1}
+              height={220}
+            >
+              <ImageView
+                source={require('~src/assets/images/icon-plus-white.png')}
+                resizeMode="contain"
+                style={{
+                  width: 20,
+                  height: 20,
+                }}
+              />
 
-            <TextView color="white" fontSize={18} mt={2} ml={3} fontFamily="medium">
-              {i18n.t('screens.getWallet.addNewAccount')}
-            </TextView>
-          </LinearLayout>
-        </TouchableWithoutFeedback>
-      )}
+              <TextView color="text.0" fontSize="lg" ml={3} fontWeight={500}>
+                {i18n.t('screens.getWallet.addNewAccount')}
+              </TextView>
+            </LinearLayout>
+          </ButtonWithoutFeedbackView>
+        )}
+      </Animated.View>
     </ScreenLayout>
   )
 }

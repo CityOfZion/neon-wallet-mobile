@@ -40,11 +40,15 @@ const SendTransactionWalletSelectionModal = (props: Props) => {
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet>(validWallets[0])
 
-  const balancesExchange = useBalancesAndExchange(selectedWallet.getAccounts(accounts))
+  const selectedWalletBalanceExchange = useBalancesAndExchange(selectedWallet.getAccounts(accounts))
 
   const totalTokenBalance = useMemo(
-    () => BalanceHelper.calculateTotalBalances(balancesExchange.balance.data, balancesExchange.exchange.data),
-    [balancesExchange]
+    () =>
+      BalanceHelper.calculateTotalBalances(
+        selectedWalletBalanceExchange.balance.data,
+        selectedWalletBalanceExchange.exchange.data
+      ),
+    [selectedWalletBalanceExchange]
   )
 
   const formattedAllBalance = useMemo(() => {
@@ -102,13 +106,16 @@ const SendTransactionWalletSelectionModal = (props: Props) => {
         <WalletPicker
           wallets={validWallets}
           selectedWallet={selectedWallet}
-          balanceExchange={balancesExchange}
+          selectedWalletBalanceExchange={selectedWalletBalanceExchange}
           isInactive={totalTokenBalance ? totalTokenBalance <= 0 : true}
           onSelect={setSelectedWallet}
           onPress={handlePress}
           inactiveNotSelected
         />
-        <Skeleton isLoading={balancesExchange.isLoading} layout={{ width: 100, height: 36, alignSelf: 'center' }}>
+        <Skeleton
+          isLoading={selectedWalletBalanceExchange.isLoading}
+          layout={{ width: 100, height: 36, alignSelf: 'center' }}
+        >
           <TextView alignSelf="center" fontSize="36px" color="text.0" fontFamily="medium">
             {formattedAllBalance}
           </TextView>

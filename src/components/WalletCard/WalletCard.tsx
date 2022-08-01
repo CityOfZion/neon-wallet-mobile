@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Animated, Dimensions, Easing, LayoutChangeEvent } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { Animated, Dimensions, Easing } from 'react-native'
 
 import { WalletAccountsContainer } from './WalletAccountsContainer'
 import { WalletBalanceBar } from './WalletBalanceBar'
@@ -10,7 +10,7 @@ import { UseMultipleBalanceAndExchangeResult } from '~/src/types/query'
 import ThemedShadowContainer from '~src/components/themed/ThemedShadowContainer'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
 import { Wallet } from '~src/models/redux/Wallet'
-import { ButtonView } from '~src/styles/styled-components'
+import { ButtonView, LinearLayout } from '~src/styles/styled-components'
 
 type WithBalanceBarProps = {
   withBalanceBar: true
@@ -31,14 +31,11 @@ type Props = {
 } & (WithBalanceBarProps | WithoutBalanceBarProps)
 
 export const WalletCard = ({ wallet, isInactive, onPress, animationType = 'out', height, width, ...props }: Props) => {
-  const [viewHeight, setViewHeight] = useState<number>(0)
+  const viewWidth = width ?? 280
+  const viewHeight = height ?? 386
 
   const outAnimatedFactor = useRef(new Animated.Value(0))
   const inAnimatedFactor = useRef(new Animated.Value(-Dimensions.get('window').height * 0.35))
-
-  const handleLayout = (event: LayoutChangeEvent) => {
-    setViewHeight(event.nativeEvent.layout.height)
-  }
 
   const handlePress = () => {
     if (!onPress || isInactive) return
@@ -71,43 +68,42 @@ export const WalletCard = ({ wallet, isInactive, onPress, animationType = 'out',
   }, [animationType])
 
   return (
-    <ThemedShadowContainer
-      android={{
-        width: width ?? 240,
-        height: height ?? 365,
-        border: 7,
-        radius: 30,
-        opacity: 0.18,
-        y: 7,
-        x: 7,
-      }}
-    >
-      <ButtonView
-        position="relative"
-        width={width ?? 240}
-        height={height ?? 365}
-        borderRadius="18px"
-        bg="background.9"
-        activeOpacity={1}
-        onPress={handlePress}
-        onLayout={handleLayout}
-        style={{
-          aspectRatio: 25 / 38,
+    <LinearLayout pb={15}>
+      <ThemedShadowContainer
+        android={{
+          width: viewWidth,
+          height: viewHeight,
+          border: 7,
+          radius: 30,
+          opacity: 0.18,
+          y: 7,
+          x: 7,
         }}
       >
-        <WalletAccountsContainer
-          wallet={wallet}
-          viewHeight={viewHeight}
-          outAnimatedValue={animationType === 'out' ? outAnimatedFactor.current : undefined}
-          inAnimatedValue={animationType === 'in' ? inAnimatedFactor.current : undefined}
-        />
+        <ButtonView
+          position="relative"
+          width={viewWidth}
+          height={viewHeight}
+          borderRadius="18px"
+          bg="background.9"
+          activeOpacity={1}
+          onPress={handlePress}
+        >
+          <WalletAccountsContainer
+            wallet={wallet}
+            width={viewHeight - 10}
+            height={viewWidth - 15}
+            outAnimatedValue={animationType === 'out' ? outAnimatedFactor.current : undefined}
+            inAnimatedValue={animationType === 'in' ? inAnimatedFactor.current : undefined}
+          />
 
-        <WalletOverlay />
+          <WalletOverlay />
 
-        <WalletLabel wallet={wallet} isInactive={isInactive} />
+          <WalletLabel wallet={wallet} isInactive={isInactive} />
 
-        {props.withBalanceBar && !isInactive && <WalletBalanceBar balanceExchange={props.balanceExchange} />}
-      </ButtonView>
-    </ThemedShadowContainer>
+          {props.withBalanceBar && !isInactive && <WalletBalanceBar balanceExchange={props.balanceExchange} />}
+        </ButtonView>
+      </ThemedShadowContainer>
+    </LinearLayout>
   )
 }

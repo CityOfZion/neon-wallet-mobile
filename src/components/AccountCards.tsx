@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react'
-import { LayoutChangeEvent, Animated, Easing } from 'react-native'
+import React from 'react'
+import { FlatList } from 'react-native'
 
-import { Normalize } from '../app/Normalize'
 import { Account } from '../models/redux/Account'
+import { LinearLayout } from '../styles/styled-components'
 import { UseMultipleBalanceAndExchangeResult } from '../types/query'
 import AccountCard from './AccountCard'
 
@@ -12,23 +12,15 @@ interface Props {
   balanceExchange: UseMultipleBalanceAndExchangeResult
 }
 
+type CellProps = {
+  index: number
+}
+
+const Cell = React.memo((props: CellProps) => (
+  <LinearLayout marginTop={props.index > 0 ? `-130px` : undefined} zIndex={props.index} {...props} />
+))
+
 export const AccountCards = ({ accounts, balanceExchange, onPress }: Props) => {
-  const [viewHeight, setViewHeight] = useState<number>(0)
-
-  const posYFactor = useRef(new Animated.Value(0))
-
-  const handleLayout = (event: LayoutChangeEvent) => {
-    const { height } = event.nativeEvent.layout
-    setViewHeight(height)
-
-    Animated.timing(posYFactor.current, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-      easing: Easing.out(val => val ** 2),
-    }).start()
-  }
-
   const getBalanceExchange = (account: Account) => {
     if (!account.address) return
 
@@ -36,36 +28,19 @@ export const AccountCards = ({ accounts, balanceExchange, onPress }: Props) => {
   }
 
   return (
-    <Animated.View onLayout={handleLayout} style={{ opacity: posYFactor.current }}>
-      {accounts.map((account, index) => (
-        <Animated.View
-          key={index}
-          style={[
-            {
-              transform: [
-                {
-                  translateY: posYFactor.current.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [-viewHeight * (1 + 0.1 * index), 0],
-                  }),
-                },
-              ],
-            },
-            {
-              zIndex: index,
-              marginTop: index !== 0 ? Normalize.scale(-130) : undefined,
-            },
-          ]}
-        >
-          <AccountCard
-            hideBalance={false}
-            balanceExchange={getBalanceExchange(account)}
-            account={account}
-            isCompacted
-            onPress={() => onPress(account)}
-          />
-        </Animated.View>
-      ))}
-    </Animated.View>
+    <FlatList
+      data={accounts}
+      keyExtractor={item => `${item.address}`}
+      CellRendererComponent={Cell}
+      renderItem={({ item }) => (
+        <AccountCard
+          hideBalance={false}
+          balanceExchange={getBalanceExchange(item)}
+          account={item}
+          isCompacted
+          onPress={() => onPress(item)}
+        />
+      )}
+    />
   )
 }

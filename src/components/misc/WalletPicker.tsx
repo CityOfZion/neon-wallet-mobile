@@ -13,16 +13,16 @@ interface Props {
   onSelect?: (wallet: Wallet) => void
   selectedWallet: Wallet
   wallets: Wallet[]
+  selectedWalletBalanceExchange: UseMultipleBalanceAndExchangeResult
   isInactive?: boolean
   inactiveNotSelected?: boolean
   onScrollBegin?: (evt?: NativeSyntheticEvent<NativeScrollEvent>) => void
   onScrollEnd?: (evt?: NativeSyntheticEvent<NativeScrollEvent>) => void
-  balanceExchange: UseMultipleBalanceAndExchangeResult
 }
 
 const WalletPicker = ({
   selectedWallet,
-  balanceExchange,
+  selectedWalletBalanceExchange,
   isInactive,
   onPress,
   onScrollBegin,
@@ -46,13 +46,9 @@ const WalletPicker = ({
 
   return (
     <Carousel<Wallet>
-      onScrollBeginDrag={onScrollBegin}
-      onScrollEndDrag={onScrollEnd}
-      layout="default"
-      containerCustomStyle={{ overflow: 'visible' }}
       data={wallets}
       sliderWidth={applicationConfig.windowWidth}
-      itemWidth={240}
+      itemWidth={280}
       inactiveSlideScale={0.8}
       inactiveSlideOpacity={1}
       inactiveSlideShift={12}
@@ -63,16 +59,12 @@ const WalletPicker = ({
       useScrollView
       firstItem={selectWalletIndex}
       onSnapToItem={handleSelect}
+      onScrollBeginDrag={onScrollBegin}
+      onScrollEndDrag={onScrollEnd}
       renderItem={({ item, index }) => (
-        <LinearLayout
-          weight={1}
-          justifyContent="center"
-          alignItems="center"
-          py={6}
-          pointerEvents={index !== selectWalletIndex ? 'none' : undefined}
-        >
+        <LinearLayout pointerEvents={index !== selectWalletIndex ? 'none' : undefined}>
           <WalletCard
-            balanceExchange={balanceExchange}
+            balanceExchange={selectedWalletBalanceExchange}
             withBalanceBar={index === selectWalletIndex}
             onPress={() => handlePress(item)}
             wallet={item}
