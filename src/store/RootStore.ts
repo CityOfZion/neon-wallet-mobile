@@ -1,33 +1,29 @@
-import { combineReducers } from 'redux'
+import storage from '@react-native-async-storage/async-storage'
+import { combineReducers } from '@reduxjs/toolkit'
+import { persistReducer } from 'redux-persist'
 
-import { AccountReducer } from '~src/store/account/AccountReducer'
-import { AppReducer } from '~src/store/app/AppReducer'
-import { ContactReducer } from '~src/store/contact/ContactReducer'
-import { LoadingReducer } from '~src/store/loading/LoadingReducer'
-import { NetworkReducer } from '~src/store/network/NetworkReducer'
-import { SettingsReducer } from '~src/store/settings/SettingsReducer'
-import { WalletReducer } from '~src/store/wallet/WalletReducer'
-import { WalletConnectReducer } from '~src/store/walletConnect/WalletConnectReducer'
+import AccountReducer, { accountReducerName } from './account/AccountReducer'
+import NetworkReducer from './network/NetworkReducer'
+import WalletConnectReducer, { walletConnectReducerName } from './walletConnect/WalletConnectReducer'
+
+import ContactReducer, { contactReducerName } from '~/src/store/contact/ContactReducer'
+import SettingsReducer, { settingsReducerName } from '~/src/store/settings/SettingsReducer'
+import WalletReducer, { walletReducerName } from '~/src/store/wallet/WalletReducer'
 export type RootState = ReturnType<typeof RootStore.reducers>
 
-export abstract class RootStore {
-  static readonly app = new AppReducer()
-  static readonly settings = new SettingsReducer()
-  static readonly wallet = new WalletReducer()
-  static readonly account = new AccountReducer()
-  static readonly loading = new LoadingReducer()
-  static readonly contact = new ContactReducer()
-  static readonly wcReducer = new WalletConnectReducer()
-  static readonly network = new NetworkReducer()
+const persistedWalletReducer = persistReducer({ key: walletReducerName, storage }, WalletReducer)
+const persistedAccountReducer = persistReducer({ key: accountReducerName, storage }, AccountReducer)
+const persistedContactReducer = persistReducer({ key: contactReducerName, storage }, ContactReducer)
+const persistedSettingsReducer = persistReducer({ key: settingsReducerName, storage }, SettingsReducer)
+const persistedWalletConnectedReducer = persistReducer({ key: walletConnectReducerName, storage }, WalletConnectReducer)
 
+export abstract class RootStore {
   static readonly reducers = combineReducers({
-    app: RootStore.app.reducer,
-    settings: RootStore.settings.reducer,
-    wallet: RootStore.wallet.reducer,
-    account: RootStore.account.reducer,
-    loading: RootStore.loading.reducer,
-    contact: RootStore.contact.reducer,
-    network: RootStore.network.reducer,
-    wcReducer: RootStore.wcReducer.reducer,
+    network: NetworkReducer,
+    wallet: persistedWalletReducer,
+    account: persistedAccountReducer,
+    contact: persistedContactReducer,
+    settings: persistedSettingsReducer,
+    wcReducer: persistedWalletConnectedReducer,
   })
 }

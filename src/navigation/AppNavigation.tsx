@@ -1,5 +1,5 @@
 import { JsonRpcRequest } from '@json-rpc-tools/utils'
-import { NetInfoSubscription } from '@react-native-community/netinfo'
+import NetInfo from '@react-native-community/netinfo'
 import { NavigationContainer, RouteProp, NavigationContainerRef } from '@react-navigation/native'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
@@ -13,13 +13,19 @@ import { blockchainServices, getBlockchainByAddress, hasWCIntegration } from '..
 import { useWalletConnect } from '../contexts/WalletConnectContext'
 import { Account } from '../models/redux/Account'
 import SetupCompletePage, { SetupCompleteParamList } from '../scenes/SetupCompletePage'
-import { RootState, RootStore } from '../store/RootStore'
+import { RootState } from '../store/RootStore'
+import { networkReducerActions } from '../store/network/NetworkReducer'
+import { settingsReducerActions } from '../store/settings/SettingsReducer'
+import { selectWallets } from '../store/wallet/SelectorWallet'
+import { walletReducerActions } from '../store/wallet/WalletReducer'
+import { walletConnectReducerActions } from '../store/walletConnect/WalletConnectReducer'
 import PasscodeStackNavigation, { PasscodeStackParams } from './PasscodeStackNavigation'
 
 import { createStackNavigator } from '~/node_modules/@react-navigation/stack'
+import { accountReducerActions } from '~/src/store/account/AccountReducer'
+import { contactReducerActions } from '~/src/store/contact/ContactReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Storage } from '~src/app/Storage'
-import LoadingOverlay from '~src/components/LoadingOverlay'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import { DeepLinkingConfig } from '~src/config/DeepLinkingConfig'
 import { screenConfig } from '~src/config/ScreenConfig'
@@ -51,9 +57,9 @@ const AppNavigation: React.FC<Props> = props => {
   const theme = useSelector((state: RootState) => {
     return wrapper.theme[state.settings.theme]
   })
-  const { isLoading, loadingText, progress } = useSelector((state: RootState) => state.loading)
+
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
-  const wallets = useSelector((state: RootState) => state.app.wallets)
+  const wallets = useSelector(selectWallets)
 
   const walletConnectCtx = useWalletConnect()
   const dispatch = useDispatch<any>()
@@ -65,6 +71,14 @@ const AppNavigation: React.FC<Props> = props => {
 
   const navigationRef = useRef<NavigationContainerRef>(null)
 
+  const migrateStorage = async () => {
+    await dispatch(walletReducerActions.migrateWalletsFromStorage())
+    await dispatch(accountReducerActions.migrateAccountsFromStorage())
+    await dispatch(contactReducerActions.migrateContactsFromStorage())
+    await dispatch(settingsReducerActions.migrateSettingsStorage())
+    await dispatch(walletConnectReducerActions.migrateWalletConnectFromStorage())
+  }
+
   const startApplication = async () => {
     const onboardingSeen = await Storage.onboardingSeen.load()
     const welcomeToNWSeen = await Storage.welcomeToNWSeen.load()
@@ -74,11 +88,7 @@ const AppNavigation: React.FC<Props> = props => {
     setWelcomeToNWSeen(welcomeToNWSeen ?? false)
     setHasAuthentication(hasAuthentication ?? false)
 
-    await dispatch(RootStore.settings.actions.syncSettings())
-    await dispatch(RootStore.app.actions.syncWallets())
-    await dispatch(RootStore.app.actions.syncAccounts())
-    await dispatch(RootStore.app.actions.syncContacts())
-    await dispatch(RootStore.app.actions.syncBackupAlerts())
+    await migrateStorage()
 
     setInit(true)
   }
@@ -147,8 +157,6 @@ const AppNavigation: React.FC<Props> = props => {
 
           if (!navigation || !wallet) return
 
-          dispatch(RootStore.wallet.actions.selectWallet(account.idWallet))
-          dispatch(RootStore.account.actions.selectAccount(account.address))
           navigation.reset({
             index: 0,
             routes: [{ name: wrapper.route.Tab.name }],
@@ -193,7 +201,9 @@ const AppNavigation: React.FC<Props> = props => {
   }, [walletConnectCtx.requests, walletConnectCtx.sessions])
 
   useEffect(() => {
-    const unsubscribe: NetInfoSubscription = dispatch(RootStore.network.actions.watchConnection())
+    const unsubscribe = NetInfo.addEventListener(({ isInternetReachable }) => {
+      dispatch(networkReducerActions.setIsConnected(isInternetReachable ?? false))
+    })
 
     return () => {
       unsubscribe()
@@ -216,7 +226,6 @@ const AppNavigation: React.FC<Props> = props => {
       <>
         <AwaitActivity name="application" loadingView={<ScreenLoader />}>
           <NavigationContainer linking={linking} fallback={<ScreenLoader />} ref={navigationRef}>
-            {isLoading && <LoadingOverlay progress={progress} loadingText={loadingText} />}
             <ThemeProvider theme={theme}>
               <RootStack.Navigator
                 initialRouteName={getInitialRouteName()}

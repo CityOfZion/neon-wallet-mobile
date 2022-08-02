@@ -13,7 +13,8 @@ import { WalletCard } from '../components/WalletCard/WalletCard'
 import ThemedButton from '../components/themed/ThemedButton'
 import { UtilsHelper } from '../helpers/UtilsHelper'
 import { RootStackParamList } from '../navigation/AppNavigation'
-import { RootState } from '../store/RootStore'
+import { selectAccounts } from '../store/account/SelectorAccount'
+import { selectWallets } from '../store/wallet/SelectorWallet'
 import { ImageView, LinearLayout, TextView } from '../styles/styled-components'
 
 export interface SetupCompleteParamList {}
@@ -24,8 +25,8 @@ interface Props {
 }
 
 const SetupCompletePage = (props: Props) => {
-  const wallets = useSelector((state: RootState) => state.app.wallets)
-  const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const wallets = useSelector(selectWallets)
+  const accountsPool = useSelector(selectAccounts)
   const wallet = wallets[0]
 
   const handleViewWallet = useCallback(() => {

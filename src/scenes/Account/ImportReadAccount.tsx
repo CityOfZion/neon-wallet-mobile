@@ -5,6 +5,7 @@ import i18n from 'i18n-js'
 import React, { useState, useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import {
   BlockchainServiceKey,
@@ -35,7 +36,7 @@ interface ImportReadAccountProps {
 
 const ImportReadAccount = (props: ImportReadAccountProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const accounts = useSelector((state: RootState) => state.app.accounts)
+  const accounts = useSelector(selectAccounts)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const blockchainActions = useBlockchainActions()
 

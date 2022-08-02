@@ -89,8 +89,14 @@ export class Account implements AccountState {
     })
   }
 
-  async removePendingTransactions(transactionHash: string) {
+  removePendingTransactions(transactionHash: string) {
     this.pendingTransactions = this.pendingTransactions.filter(transaction => transaction.hash !== transactionHash)
+  }
+
+  getIndex(accountsPool: Account[]) {
+    const accountsSameWallet = this.getAccountsWithSameWallet(accountsPool)
+    const accountsSameBlockchain = accountsSameWallet.filter(it => it.blockchain === this.blockchain)
+    return accountsSameBlockchain.length
   }
 
   adaptToMultichain() {
@@ -100,5 +106,20 @@ export class Account implements AccountState {
     if (!this.srcIcon) {
       this.srcIcon = getBlockchainLogo(this.blockchain, 'white')
     }
+  }
+
+  get deserialize() {
+    const {
+      getWallet,
+      getWif,
+      getAccountsWithSameWallet,
+      getIndex,
+      adaptToMultichain,
+      addPendingTransaction,
+      removePendingTransactions,
+      ...deserializedAccount
+    } = this
+    const result: AccountState = deserializedAccount
+    return result
   }
 }

@@ -6,15 +6,15 @@ import SortableList from 'react-native-sortable-list'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Await, AwaitActivity } from '~/node_modules/@simpli/react-native-await'
+import { selectWallets } from '~/src/store/wallet/SelectorWallet'
+import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { DataByNumber, RowProps } from '~/src/types/global'
-import { AsyncDispatch } from '~/src/types/reducers/root'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~src/navigation/TabNavigation'
-import { RootState, RootStore } from '~src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList & TabStackParamList>
@@ -38,10 +38,9 @@ const ItemComponent = (props: RowProps<string>) => {
 export default function ReorderWalletModal(props: Props) {
   const controller = useSwiperController(true)
 
-  const { wallets } = useSelector((state: RootState) => state.app)
+  const wallets = useSelector(selectWallets)
 
   const dispatch = useDispatch()
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const [order, setOrder] = useState<number[]>([])
   const listData: DataByNumber<string> = {}
@@ -53,9 +52,7 @@ export default function ReorderWalletModal(props: Props) {
   const commitAndClose = async () => {
     if (order.length > 0) {
       Await.init('populateWallet')
-      await dispatchAsync(RootStore.wallet.actions.reorderAndSave(order))
-      await dispatchAsync(RootStore.app.actions.syncWallets())
-      dispatch(RootStore.wallet.actions.selectWallet(null))
+      dispatch(walletReducerActions.reorder(order))
       await UtilsHelper.sleep(1000)
       Await.done('populateWallet')
     }

@@ -3,12 +3,14 @@ import i18n from 'i18n-js'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { settingsReducerActions } from '../store/settings/SettingsReducer'
+
 import SelectorList, { SelectorItem } from '~src/components/SelectorList'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import { Theme } from '~src/enums/Theme'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { RootState, RootStore } from '~src/store/RootStore'
+import { RootState } from '~src/store/RootStore'
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
 }
@@ -19,8 +21,7 @@ const ThemePickerModal = (props: Props) => {
   const { theme } = useSelector((state: RootState) => state.settings)
 
   const changeTheme = async (val: Theme) => {
-    dispatch(RootStore.settings.actions.setTheme(val))
-    dispatch(RootStore.settings.actions.save())
+    dispatch(settingsReducerActions.setTheme(val))
   }
 
   const isSelected = (t: Theme) => t === theme

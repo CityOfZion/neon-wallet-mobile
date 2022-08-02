@@ -3,11 +3,13 @@ import i18n from 'i18n-js'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { settingsReducerActions } from '../store/settings/SettingsReducer'
+
 import SelectorList, { SelectorItem } from '~src/components/SelectorList'
 import SwiperPanel, { useSwiperController, CloseButton } from '~src/components/SwiperPanel'
 import { Currency } from '~src/enums/Currency'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { RootState, RootStore } from '~src/store/RootStore'
+import { RootState } from '~src/store/RootStore'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -19,8 +21,7 @@ const CurrencyPickerModal = (props: Props) => {
   const { currency } = useSelector((state: RootState) => state.settings)
 
   const changeCurrency = async (val: Currency) => {
-    dispatch(RootStore.settings.actions.setCurrency(val))
-    dispatch(RootStore.settings.actions.save())
+    dispatch(settingsReducerActions.setCurrency(val))
   }
 
   const isSelected = (c: Currency) => c === currency

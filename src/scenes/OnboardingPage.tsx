@@ -9,7 +9,7 @@ import { ProgressBar } from '../components/ProgressBar'
 import { AsteroidHelper } from '../helpers/AsteroidHelper'
 import { UtilsHelper } from '../helpers/UtilsHelper'
 import { useProgress } from '../hooks/useProgress'
-import { RootStore } from '../store/RootStore'
+import { settingsReducerActions } from '../store/settings/SettingsReducer'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Storage } from '~src/app/Storage'
@@ -77,7 +77,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
 
   const finish = async () => {
     await Storage.onboardingSeen.save(true)
-    dispatch(RootStore.settings.actions.setIsFirstTime(true))
+    dispatch(settingsReducerActions.setIsFirstTime(true))
     props.navigation.replace(wrapper.route.SetupCompletePage.name, {})
   }
 

@@ -5,20 +5,31 @@ import i18n from 'i18n-js'
 import React, { useCallback, useState } from 'react'
 import { View } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
-import { UtilsHelper } from '../helpers/UtilsHelper'
-import { AsyncDispatch, DispatchResult } from '../types/reducers/root'
+import { useBlockchainActions } from '../hooks/useBlockchainActions'
+import { DispatchResult } from '../types/reducers/root'
+import { WalletType } from '../types/reducers/wallet'
 
+import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
-import { BlockchainServiceKey, blockchainServices } from '~src/blockchain'
+import { BlockchainServiceKey } from '~src/blockchain'
 import BlockchainList from '~src/components/BlockchainList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
-import { RootState, RootStore } from '~src/store/RootStore'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
+
+export interface BlockchainListPageParams {
+  config?: {
+    creatingWallet?: {
+      mnemonic: string
+      walletName: string
+      walletType: WalletType
+    }
+  }
+}
 
 interface Props {
   navigation: StackNavigationProp<MoreStackParamList>
@@ -27,44 +38,23 @@ interface Props {
 
 const BlockchainListPage = (props: Props) => {
   const dispatch = useDispatch<DispatchResult>()
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
-  const dispatchAsyncString = useDispatch<AsyncDispatch<string>>()
-
+  const blockchainActions = useBlockchainActions()
   const [blockchainsSelected, setBlockchainsSelected] = useState<BlockchainServiceKey[]>([])
-
-  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const createWallet = useCallback(async () => {
     let id: string | undefined
 
     try {
-      id = await dispatchAsyncString(RootStore.wallet.actions.createAndSave())
-
-      if (!id) {
+      if (!props.route.params.config?.creatingWallet) {
         throw new Error('modals.blockchainList.errorCreateWallet')
       }
+      const { mnemonic, walletName, walletType } = props.route.params.config.creatingWallet
 
-      await dispatchAsync(RootStore.app.actions.syncWallets())
+      const walletId = await blockchainActions.createWallet(walletName, mnemonic, walletType, false)
+
       for (const blockchain of blockchainsSelected) {
-        dispatch(RootStore.account.actions.setIdWallet(id))
-        dispatch(
-          RootStore.account.actions.setName(
-            `${i18n.t(`blockchainServices.${blockchain}.label`)} ${i18n.t('modals.blockchainList.countAccount', {
-              count: 1,
-            })}`
-          )
-        )
-        dispatch(RootStore.account.actions.setBlockchain(blockchain))
-        dispatch(RootStore.account.actions.setSrcIcon(blockchainServices[blockchain].icon))
-        dispatch(RootStore.account.actions.setBackgroundColor(theme.colors.card[UtilsHelper.getRandomNumber(6)]))
-
-        await dispatchAsyncString(RootStore.account.actions.createAndSave())
-        await dispatchAsync(RootStore.app.actions.syncAccounts())
+        await blockchainActions.createAccount(walletId, walletName, blockchain, undefined)
       }
-
-      dispatch(RootStore.wallet.actions.selectWallet(id))
-
-      await dispatchAsync(RootStore.app.actions.syncWallets())
 
       props.navigation.reset({
         index: 0,
@@ -76,8 +66,7 @@ const BlockchainListPage = (props: Props) => {
       })
     } catch {
       if (id) {
-        await dispatchAsync(RootStore.wallet.actions.delete(id))
-        await dispatchAsync(RootStore.app.actions.syncWallets())
+        dispatch(walletReducerActions.deleteWallet(id))
       }
 
       showMessage({

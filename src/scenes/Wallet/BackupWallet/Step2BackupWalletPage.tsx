@@ -11,12 +11,11 @@ import { useDispatch } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
-import { AsyncDispatch } from '~/src/types/reducers/root'
+import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { RootStore } from '~src/store/RootStore'
 import { TextView, LinearLayout } from '~src/styles/styled-components'
 
 interface Props {
@@ -27,7 +26,6 @@ interface Props {
 const Step2BackupWalletPage: React.FC<Props> = props => {
   const { wallet, accessByNotification } = props.route.params
   const dispatch = useDispatch()
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const [words, setWords] = useState<string[]>([])
   const [formedWords, setFormedWords] = useState<string[]>([])
   const [shuffledWords, setShuffledWords] = useState<string[]>([])
@@ -65,8 +63,7 @@ const Step2BackupWalletPage: React.FC<Props> = props => {
     if (formedWords.join() === words.join()) {
       wallet.lastBackup = moment().format()
       wallet.showBackupAlert = false
-      dispatch(RootStore.app.actions.updateAndSaveWallet(wallet))
-      await dispatchAsync(RootStore.app.actions.syncWallets())
+      dispatch(walletReducerActions.saveWallet(wallet))
 
       props.navigation.navigate(wrapper.route.Step3BackupWallet.name, {
         wallet,

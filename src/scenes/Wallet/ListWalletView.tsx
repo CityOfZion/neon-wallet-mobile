@@ -1,6 +1,7 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
+import moment from 'moment'
 import React, { useMemo, useRef, useState } from 'react'
 import { Alert, Animated, RefreshControl } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -11,6 +12,10 @@ import { Skeleton } from '~/src/components/Skeleton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
+import { settingsReducerActions } from '~/src/store/settings/SettingsReducer'
+import { selectWallets } from '~/src/store/wallet/SelectorWallet'
+import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { UseMultipleBalanceAndExchangeResult } from '~/src/types/query'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import BalanceList from '~src/components/BalanceList'
@@ -22,7 +27,7 @@ import { Wallet } from '~src/models/redux/Wallet'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
-import { RootState, RootStore } from '~src/store/RootStore'
+import { RootState } from '~src/store/RootStore'
 import { ButtonView, ButtonWithoutFeedbackView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface WalletProps {
@@ -160,11 +165,10 @@ const SelectedWalletInfo = ({ selectedWallet, selectedWalletBalanceExchange, opa
 }
 
 const ListWalletView = (props: WalletProps) => {
-  const wallets = useSelector((state: RootState) => state.app.wallets)
-  const accounts = useSelector((state: RootState) => state.app.accounts)
+  const wallets = useSelector(selectWallets)
+  const accounts = useSelector(selectAccounts)
   const isFirstTime = useSelector((state: RootState) => state.settings.isFirstTime)
   const dispatch = useDispatch()
-
   const fadeValue = useRef(new Animated.Value(1)).current
 
   const [selectedWallet, setSelectedWallet] = useState(wallets[0])
@@ -196,13 +200,14 @@ const ListWalletView = (props: WalletProps) => {
   }
 
   const handlePress = async (wallet: Wallet) => {
-    dispatch(RootStore.wallet.actions.selectWallet(wallet.id))
+    //dispatch(RootStore.wallet.actions.selectWallet(wallet.id))
+    wallet.lastVisitedAt = moment().format()
+    dispatch(walletReducerActions.saveWallet(wallet))
     props.navigation.navigate(wrapper.route.GetWallet.name, { wallet })
   }
 
   const handlePressFirstTime = () => {
-    dispatch(RootStore.settings.actions.setIsFirstTime(false))
-    dispatch(RootStore.settings.actions.save())
+    dispatch(settingsReducerActions.setIsFirstTime(false))
     handlePress(wallets[0])
   }
 

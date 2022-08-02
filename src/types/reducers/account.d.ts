@@ -1,17 +1,6 @@
-import { Action } from 'redux'
-import { ReducerApplied } from '@simpli/redux-wrapper'
 import { ImageLoadEventData } from 'react-native'
 import { BlockchainServiceKey } from '~/src/blockchain'
-
-export type AccountActionsType =
-  | 'SET_ADDRESS'
-  | 'SET_ID_WALLET'
-  | 'SET_NAME_ACCOUNT'
-  | 'SET_SRC_ICON'
-  | 'SET_BACKGROUND_COLOR'
-  | 'CLEAR_STATE_ACCOUNT'
-  | 'SET_BLOCKCHAIN_ACCOUNT'
-  | 'SET_INDEX_ACCOUNT'
+import { PendingTransactions } from '~src/models/redux/Account'
 
 export interface AccountState {
   address: string | null
@@ -21,8 +10,5 @@ export interface AccountState {
   srcIcon: ImageLoadEventData
   backgroundColor: string | null
   blockchain: BlockchainServiceKey
+  pendingTransactions: PendingTransactions[] = []
 }
-
-export type AccountAction = AccountState & Action<AccountActionsType>
-
-export type AccountReducer = ReducerApplied<AccountState, AccountAction>

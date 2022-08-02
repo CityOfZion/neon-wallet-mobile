@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { configureStore } from '@reduxjs/toolkit'
 import * as Font from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react'
@@ -6,8 +7,8 @@ import { AppStateStatus, Platform, StatusBar } from 'react-native'
 import FlashMessage from 'react-native-flash-message'
 import { QueryClient, QueryClientProvider, focusManager } from 'react-query'
 import { Provider as StoreProvider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
+import { FLUSH, PAUSE, PERSIST, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
 
 import { ThemedAlert } from '~src/components/themed/ThemedAlert'
 import ErrorBound from '~src/config/ErrorBound'
@@ -35,7 +36,18 @@ const wcOptions: CtxOptions = {
   },
 }
 
-const store = createStore(RootStore.reducers, {}, applyMiddleware(thunk))
+const store = configureStore({
+  reducer: RootStore.reducers,
+  middleware: getDefaultMiddleware => [
+    ...getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+  ],
+})
+
+const persistor = persistStore(store)
 
 function onAppStateChange(status: AppStateStatus) {
   // React Query already supports in web browser refetch on window focus by default
@@ -91,15 +103,17 @@ const App = () => {
 
   return (
     <StoreProvider store={store}>
-      <StatusBar barStyle="light-content" />
-      <ErrorBound>
-        <WalletConnectContextProvider options={wcOptions}>
-          <QueryClientProvider client={queryClient}>
-            <AppNavigation />
-          </QueryClientProvider>
-        </WalletConnectContextProvider>
-      </ErrorBound>
-      <FlashMessage position="top" MessageComponent={ThemedAlert} />
+      <PersistGate loading={null} persistor={persistor}>
+        <StatusBar barStyle="light-content" />
+        <ErrorBound>
+          <WalletConnectContextProvider options={wcOptions}>
+            <QueryClientProvider client={queryClient}>
+              <AppNavigation />
+            </QueryClientProvider>
+          </WalletConnectContextProvider>
+        </ErrorBound>
+        <FlashMessage position="top" MessageComponent={ThemedAlert} />
+      </PersistGate>
     </StoreProvider>
   )
 }

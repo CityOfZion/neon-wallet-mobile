@@ -16,6 +16,8 @@ import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import { useWalletConnect } from '~/src/contexts/WalletConnectContext'
 import { WCApprovalDate } from '~/src/models/redux/WCApprovalDate'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
+import { selectWallets } from '~/src/store/wallet/SelectorWallet'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { Account } from '~src/models/redux/Account'
@@ -93,8 +95,8 @@ const DappConnectedItem = (props: ListRenderItemInfo<IDappInfo>) => {
 export const WCConnectedDapps = () => {
   const { sessions } = useWalletConnect()
   const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
-  const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const walletsPool = useSelector((state: RootState) => state.app.wallets)
+  const accountsPool = useSelector(selectAccounts)
+  const walletsPool = useSelector(selectWallets)
   const [dApps, setDApps] = useState<IDappInfo[]>([])
 
   const getConnectedDapps = useCallback(async () => {

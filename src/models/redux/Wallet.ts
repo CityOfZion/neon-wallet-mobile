@@ -51,4 +51,10 @@ export class Wallet implements WalletState {
   async getMnemonic() {
     return (await SecurityHelper.loadMnemonic(this.id ?? '')) ?? null
   }
+
+  get deserialize() {
+    const { formattedLastVisitedAt, getAccounts, getMnemonic, ...deserializeWallet } = this
+    const result: WalletState = deserializeWallet
+    return result
+  }
 }

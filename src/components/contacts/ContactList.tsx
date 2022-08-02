@@ -4,10 +4,10 @@ import { FlatList, SectionList, SectionListData } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { BlockchainServiceKey, getBlockchainByAddress, getBlockchainLogo } from '~/src/blockchain'
+import { selectContacts } from '~/src/store/contact/SelectorContact'
 import { LinearLayoutProps } from '~/src/types/styled-components'
 import { SearchBar } from '~src/components/SearchBar'
 import { Contact } from '~src/models/redux/Contact'
-import { RootState } from '~src/store/RootStore'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface ContactListProps extends LinearLayoutProps {
@@ -127,7 +127,7 @@ const SectionHeader = React.memo(({ label }: SectionHeaderProps) => {
 })
 
 export const ContactList = ({ filterByBlockchain, onSelect, ...props }: ContactListProps) => {
-  const contacts = useSelector((state: RootState) => state.app.contacts)
+  const contacts = useSelector(selectContacts)
 
   const [filter, setFilter] = useState('')
 

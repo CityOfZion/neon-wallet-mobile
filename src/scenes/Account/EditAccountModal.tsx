@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { Await, AwaitActivity } from '~/node_modules/@simpli/react-native-await'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
-import { AsyncDispatch } from '~/src/types/reducers/root'
+import { accountReducerActions } from '~/src/store/account/AccountReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import AccountCard from '~src/components/AccountCard'
 import ColorSelector from '~src/components/ColorSelector'
@@ -19,7 +19,7 @@ import { Account } from '~src/models/redux/Account'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
-import { RootStore, RootState } from '~src/store/RootStore'
+import { RootState } from '~src/store/RootStore'
 import { LinearLayout } from '~src/styles/styled-components'
 
 type ParamList = ModalStackParamList & RootStackParamList & WalletStackParamList
@@ -39,7 +39,6 @@ const EditAccountModal = (props: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const controller = useSwiperController(true)
   const dispatch = useDispatch()
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const opacityValue = useRef(new Animated.Value(0))
 
@@ -59,14 +58,9 @@ const EditAccountModal = (props: Props) => {
       throw new Error('Address not defined')
     }
 
-    dispatch(RootStore.account.actions.setName(name))
-    dispatch(RootStore.account.actions.setBackgroundColor(color))
-
-    await dispatchAsync(RootStore.account.actions.updateAndSave(address))
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
-
-    dispatch(RootStore.account.actions.selectAccount(address))
-    dispatch(RootStore.wallet.actions.selectWallet(account.idWallet))
+    account.name = name
+    account.backgroundColor = color
+    dispatch(accountReducerActions.saveAccount({ account }))
 
     props.navigation.goBack()
   }

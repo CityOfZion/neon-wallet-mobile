@@ -1,27 +1,27 @@
-import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo'
-import { ReducerWrapper } from '@simpli/redux-wrapper'
+import { createSlice, CaseReducer, PayloadAction } from '@reduxjs/toolkit'
 
-import { SetIsConnectedDispatcher } from './dispatchers/SetIsConnectedDispatcher'
+import { NetworkState } from '~/src/types/reducers/network'
 
-import { NetworkAction, NetworkActionsType, NetworkState } from '~/src/types/reducers/network'
-import { SyncAction } from '~/src/types/reducers/root'
+export const networkReducername = 'networkReducer'
 
-export class NetworkReducer extends ReducerWrapper<NetworkActionsType, NetworkState, NetworkAction> {
-  protected initialState: NetworkState = {
-    isConnected: undefined,
-  }
+interface INetworkReducer extends NetworkState {}
 
-  protected dispatchers = [SetIsConnectedDispatcher]
+const initialState: INetworkReducer = {
+  isConnected: undefined,
+} as INetworkReducer
 
-  actions = {
-    watchConnection: (): SyncAction<NetInfoSubscription> => {
-      return dispatch => {
-        const unsubscribe = NetInfo.addEventListener(({ isInternetReachable }) => {
-          dispatch(this.commit('SET_IS_CONNECTED', { isConnected: isInternetReachable ?? undefined }))
-        })
-
-        return unsubscribe
-      }
-    },
-  }
+const setIsConnected: CaseReducer<INetworkReducer, PayloadAction<boolean>> = (state, action) => {
+  const isConnected = action.payload
+  state.isConnected = isConnected
 }
+
+const NetworkReducer = createSlice({
+  initialState,
+  name: networkReducername,
+  reducers: {
+    setIsConnected,
+  },
+})
+
+export const networkReducerActions = NetworkReducer.actions
+export default NetworkReducer.reducer

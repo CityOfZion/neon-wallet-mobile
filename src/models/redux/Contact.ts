@@ -43,4 +43,9 @@ export class Contact implements ContactState {
       })
     }
   }
+  get deserialize() {
+    const { adaptNewFormat, adaptToMultichain, adressesIsStringArray, ...deserializedContact } = this
+    const result: ContactState = deserializedContact
+    return result
+  }
 }

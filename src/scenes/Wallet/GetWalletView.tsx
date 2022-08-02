@@ -1,10 +1,9 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import moment from 'moment'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { Animated, Easing, LayoutChangeEvent, RefreshControl } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { RootStackParamList } from '../../navigation/AppNavigation'
 import { ModalStackParamList } from '../../navigation/ModalStackNavigation'
@@ -12,6 +11,7 @@ import { TabStackParamList } from '../../navigation/TabNavigation'
 
 import { AccountCards } from '~/src/components/AccountCards'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
@@ -19,7 +19,6 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { Account } from '~src/models/redux/Account'
 import { Wallet } from '~src/models/redux/Wallet'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
-import { RootState, RootStore } from '~src/store/RootStore'
 import { ButtonWithoutFeedbackView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface GetWalletViewParams {
@@ -50,8 +49,7 @@ const GetWalletView = (props: GetWalletProps) => {
       }),
   })
 
-  const accounts = useSelector((state: RootState) => state.app.accounts)
-  const dispatch = useDispatch()
+  const accounts = useSelector(selectAccounts)
 
   const walletAccounts = useMemo(() => wallet.getAccounts(accounts), [accounts, wallet])
 
@@ -82,7 +80,6 @@ const GetWalletView = (props: GetWalletProps) => {
   }
 
   const handlePress = async (account: Account) => {
-    dispatch(RootStore.account.actions.selectAccount(account.address))
     props.navigation.navigate(wrapper.route.Tab.name, {
       screen: wrapper.route.ListWallets.name,
       params: {
@@ -105,11 +102,6 @@ const GetWalletView = (props: GetWalletProps) => {
       },
     })
   }
-
-  useEffect(() => {
-    wallet.lastVisitedAt = moment().format()
-    dispatch(RootStore.app.actions.updateAndSaveWallet(wallet))
-  }, [])
 
   return (
     <ScreenLayout

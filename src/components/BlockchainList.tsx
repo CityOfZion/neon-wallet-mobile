@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react'
 import { TouchableWithoutFeedback, FlatList } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import { selectAccounts } from '../store/account/SelectorAccount'
+
 import { blockchainList, BlockchainServiceKey, getBlockchainLogo } from '~src/blockchain'
 import { SearchBar } from '~src/components/SearchBar'
 import { Wallet } from '~src/models/redux/Wallet'
-import { RootState } from '~src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface IBlockchainList {
@@ -25,7 +26,7 @@ interface IBlockchainItem {
 }
 
 const BlockchainItem = ({ onPress, item, isSelected, hideQtyAccounts, wallet }: IBlockchainItem) => {
-  const accounts = useSelector((state: RootState) => state.app.accounts)
+  const accounts = useSelector(selectAccounts)
 
   const handlePress = () => {
     onPress(item)

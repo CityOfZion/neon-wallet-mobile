@@ -7,6 +7,8 @@ import { View } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
+import { selectAccounts } from '../store/account/SelectorAccount'
+
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { BlockchainServiceKey, blockchainList, blockchainServices } from '~src/blockchain'
 import AddressesImportList from '~src/components/AddressesImportList'
@@ -32,7 +34,7 @@ interface PassphraseProps {
 
 const Passphrase = (props: PassphraseProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const { accounts } = useSelector((state: RootState) => state.app)
+  const accounts = useSelector(selectAccounts)
   const blockchainActions = useBlockchainActions()
   const [inputValue, setInputValue] = useState('')
   const [addressesInfo, setAdrresesInfo] = useState<{ address: string; blockchain: BlockchainServiceKey }[]>([])

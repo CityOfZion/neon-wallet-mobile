@@ -12,6 +12,8 @@ import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
+import { selectWallets } from '~/src/store/wallet/SelectorWallet'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import WalletPicker from '~src/components/misc/WalletPicker'
 import { Wallet } from '~src/models/redux/Wallet'
@@ -31,10 +33,10 @@ const SendTransactionWalletSelectionModal = (props: Props) => {
   const { address } = props.route.params
 
   const controller = useSwiperController(true)
-  const wallets = useSelector((state: RootState) => state.app.wallets)
+  const wallets = useSelector(selectWallets)
   const language = useSelector((state: RootState) => state.settings.language)
   const currency = useSelector((state: RootState) => state.settings.currency)
-  const accounts = useSelector((state: RootState) => state.app.accounts)
+  const accounts = useSelector(selectAccounts)
 
   const validWallets = useMemo(() => wallets.filter((value: Wallet) => value.walletType !== 'watch'), [wallets])
 

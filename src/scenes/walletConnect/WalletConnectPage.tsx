@@ -17,6 +17,7 @@ import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { WalletConnectStackParamList } from '~/src/navigation/WalletConnectStackNavigation'
 import { RootState } from '~/src/store/RootStore'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 interface WalletConnectPageProps {
@@ -26,7 +27,7 @@ interface WalletConnectPageProps {
 
 const WalletConnectPage = ({ navigation, route }: WalletConnectPageProps) => {
   const { sessions } = useWalletConnect()
-  const accountsPool = useSelector((state: RootState) => state.app.accounts)
+  const accountsPool = useSelector(selectAccounts)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
 
   const validSessions = useMemo(
