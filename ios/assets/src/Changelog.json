@@ -1,61 +1,44 @@
 {
-    "changelog": [
-    	{
-            "version": "V1.0.31-1",
-            "date": "June 09 2022",
-            "changes": [
-                " -Basic NFT Features:",
-                " -View owned NFTs",
-                " -View NFT transfers",
-                " -Minor Bugfixes",
-            ]
-        },
-    	{
-            "version": "V1.0.30-1",
-            "date": "June 06 2022",
-            "changes": [
-                " -Bugfixes",
-            ]
-        },
-    	{
-            "version": "V1.0.29-1",
-            "date": "May 20 2022",
-            "changes": [
-                " -Support for WalletConnect authenthication methods:",
-                	" -signMessage",
-               		" -verifyMessage",
-                " -Minor bugfixes",
-            ]
-        },
-    	{
-            "version": "V1.0.28-1",
-            "date": "April 08 2022",
-            "changes": [
-                " -Wallet Connect Integration",
-                " -Design Enhancements",
-                " -Minor bugfixes",
-            ]
-        },
-    	{
-            "version": "V1.0.27-1",
-            "date": "December 13 2021",
-            "changes": [
-                " -N3 support and minor bugfixes",
-            ]
-        },
-    	{
-            "version": "V1.0.25-1",
-            "date": "November 16 2021",
-            "changes": [
-                " -N3 support and minor bugfixes",
-            ]
-        },
-    	{
-            "version": "V1.0.16-54",
-            "date": "August 20 2021",
-            "changes": [
-                " -Presenting the Neon Wallet Mobile",
-            ]
-        },
-    ]
-}       
+  "changelog": [
+    {
+      "version": "V1.0.31-1",
+      "date": "June 09 2022",
+      "changes": [" -Basic NFT Features:", " -View owned NFTs", " -View NFT transfers", " -Minor Bugfixes"]
+    },
+    {
+      "version": "V1.0.30-1",
+      "date": "June 06 2022",
+      "changes": [" -Bugfixes"]
+    },
+    {
+      "version": "V1.0.29-1",
+      "date": "May 20 2022",
+      "changes": [
+        " -Support for WalletConnect authenthication methods:",
+        " -signMessage",
+        " -verifyMessage",
+        " -Minor bugfixes"
+      ]
+    },
+    {
+      "version": "V1.0.28-1",
+      "date": "April 08 2022",
+      "changes": [" -Wallet Connect Integration", " -Design Enhancements", " -Minor bugfixes"]
+    },
+    {
+      "version": "V1.0.27-1",
+      "date": "December 13 2021",
+      "changes": [" -N3 support and minor bugfixes"]
+    },
+    {
+      "version": "V1.0.25-1",
+      "date": "November 16 2021",
+      "changes": [" -N3 support and minor bugfixes"]
+    },
+    {
+      "version": "V1.0.16-54",
+      "date": "August 20 2021",
+      "changes": [" -Presenting the Neon Wallet Mobile"]
+    }
+  ]
+}

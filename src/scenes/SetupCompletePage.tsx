@@ -16,7 +16,7 @@ import { RootStackParamList } from '../navigation/AppNavigation'
 import { RootState } from '../store/RootStore'
 import { ImageView, LinearLayout, TextView } from '../styles/styled-components'
 
-export interface SetupCompleteParamList {}
+export interface SetupCompleteParamList { }
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList>
@@ -40,10 +40,10 @@ const SetupCompletePage = (props: Props) => {
               wallet={wallet}
               withBalanceBar={false}
               animationType="in"
-              width={210}
-              height={Platform.OS === 'ios' ? 244 : 290}
+              width={178}
+              height={244}
             />
-            <LinearLayout mt={Dimensions.get('window').height * 0.05}>
+            <LinearLayout mt={Dimensions.get('window').height * 0.03}>
               <LinearLayout width="60%" justifyContent="center" alignItems="center">
                 <TextView color="primary" fontSize="3xl">
                   {i18n.t('setupComplete.title')}
@@ -53,42 +53,44 @@ const SetupCompletePage = (props: Props) => {
                 </TextView>
               </LinearLayout>
             </LinearLayout>
-            <LinearLayout mt={Dimensions.get('window').height * 0.04} borderRadius="7px" bg="#282F35" width="80%" p={4}>
-              <TextView color="text.2" fontSize="md">
+            <LinearLayout mt={Dimensions.get('window').height * 0.04} borderRadius="7px" bg="#282F35" width="95%" p={4}>
+              <TextView color="text.2" fontSize="sm">
                 {i18n.t('setupComplete.titleAddressList')}
               </TextView>
               <LinearLayout>
                 {accountsPool.map(acc => {
                   return (
-                    <LinearLayout mt={5} orientation="horiz" justifyContent="space-between">
-                      <LinearLayout orientation="horiz">
-                        <ImageView
-                          style={{
-                            width: Dimensions.get('screen').width * 0.04,
-                            height: Dimensions.get('screen').height * 0.02,
-                          }}
-                          source={getBlockchainLogo(acc.blockchain)}
-                        />
-                        <TextView ml={3} color="primary" fontSize="xs">
-                          {acc.address}
-                        </TextView>
-                      </LinearLayout>
-                      <LinearLayout alignSelf="stretch">
-                        <TouchableOpacity onPress={() => UtilsHelper.copyToClipboard(acc.address ?? undefined)}>
+                    <TouchableOpacity onPress={() => UtilsHelper.copyToClipboard(acc.address ?? undefined)}>
+                      <LinearLayout mt={'1%'} orientation="horiz" justifyContent={'space-between'}>
+                        <LinearLayout orientation="horiz">
+                          <ImageView
+                            style={{
+                              width: Dimensions.get('screen').width * 0.04,
+                              height: Dimensions.get('screen').height * 0.02,
+                            }}
+                            source={getBlockchainLogo(acc.blockchain)}
+                          />
+                          <LinearLayout>
+                            <TextView ml={3} color="primary" fontSize="md">
+                              {acc.address}
+                            </TextView>
+                          </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout alignSelf={'center'}>
                           <ImageView
                             style={{ width: 12, height: 14 }}
                             source={require('~src/assets/images/icon-copy-green.png')}
                           />
-                        </TouchableOpacity>
+                        </LinearLayout>
                       </LinearLayout>
-                    </LinearLayout>
+                    </TouchableOpacity>
                   )
                 })}
               </LinearLayout>
             </LinearLayout>
           </LinearLayout>
         </LinearLayout>
-        <LinearLayout mt={Dimensions.get('window').height * 0.05} height="100%" alignItems="center">
+        <LinearLayout mt={Dimensions.get('window').height * 0.15} height="100%" alignItems="center">
           <ThemedButton
             onPress={handleViewWallet}
             width="85%"

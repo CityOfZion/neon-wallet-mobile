@@ -780,6 +780,13 @@
       "qty": "Qty",
       "value": "Value",
       "fee": "Fee"
+    },
+    "walletCard": {
+      "walletLabel": {
+        "legacy": "LEGACY",
+        "standard": "WALLET",
+        "watch": "WATCH"
+      }
     }
   },
   "hooks": {
