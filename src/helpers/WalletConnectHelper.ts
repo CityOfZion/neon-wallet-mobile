@@ -1,9 +1,8 @@
-import { SessionTypes } from '@walletconnect/types'
 import base64 from 'react-native-base64'
 
-import { DefaultMethods } from '~/src/config/walletConnect/constants'
+import { Session } from '../contexts/WalletConnectContext'
 
-export type SupportedMethods = Exclude<DefaultMethods, 'testInvoke'>
+import { DEFAULT_BLOCKCHAIN, DEFAULT_METHODS } from '~/src/config/walletConnect/constants'
 
 type AccountInformation = {
   namespace: string
@@ -12,15 +11,13 @@ type AccountInformation = {
   chainId: string
 }
 
-const SUPPORTED_METHODS: SupportedMethods[] = ['invokeFunction', 'signMessage', 'verifyMessage']
-
 export abstract class WalletConnectHelper {
   static checkSupportedMethods(method: string) {
-    return SUPPORTED_METHODS.includes(method as any)
+    return DEFAULT_METHODS.includes(method as any)
   }
 
-  static getAccountInformationFromSession(session: SessionTypes.Settled): AccountInformation[] {
-    const accounts = session.state.accounts.map((account): AccountInformation => {
+  static getAccountInformationFromSession(session: Session): AccountInformation[] {
+    const accounts = session.namespaces[DEFAULT_BLOCKCHAIN].accounts.map((account): AccountInformation => {
       const [namespace, reference, address] = account.split(':')
 
       return {

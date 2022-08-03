@@ -1,6 +1,9 @@
-import { JsonRpcRequest, JsonRpcResponse } from '@json-rpc-tools/utils'
+import { JsonRpcResponse } from '@json-rpc-tools/utils'
 import { ImageLoadEventData } from 'react-native'
 
+import { DEFAULT_BLOCKCHAIN } from '../config/walletConnect/constants'
+import { Session, SessionRequest } from '../contexts/WalletConnectContext'
+import { ContractInvocationMulti } from '../helpers/NeonWcAdapter'
 import { BalanceInfo } from '../models/response/BalanceInfo'
 import { ContractResponse } from '../models/response/ContractResponse'
 import { NFTResponse } from '../models/response/NFTResponse'
@@ -75,8 +78,8 @@ export interface IClaimable {
 }
 
 export interface IWalletConnect {
-  rpcCall: (account: string, request: JsonRpcRequest) => Promise<JsonRpcResponse>
-  calculateFee(senderAddress: string, cim: JsonRpcRequest): Promise<string>
+  rpcCall: (account: string, request: SessionRequest) => Promise<JsonRpcResponse>
+  calculateFee(senderAddress: string, requestParams: ContractInvocationMulti): Promise<string>
 }
 
 export interface INFT {
@@ -238,8 +241,9 @@ export function hasNFTIntegration(object: any): object is INFT {
 
 export type BlockchainServiceKey = 'neoLegacy' | 'neo3'
 
-export function getBlockchainByWCChain(chains: string[]) {
+export function getBlockchainByWCChain(session: Session) {
   let result: BlockchainServiceKey | null = null
+  const chains = session.requiredNamespaces[DEFAULT_BLOCKCHAIN].chains
 
   for (const blockchain of blockchainList) {
     for (const chain of chains) {

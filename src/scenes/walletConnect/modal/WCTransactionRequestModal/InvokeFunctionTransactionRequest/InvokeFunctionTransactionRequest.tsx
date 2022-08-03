@@ -1,6 +1,5 @@
 import { WitnessScope } from '@cityofzion/neon-core-next/lib/tx'
 import { useNavigation } from '@react-navigation/native'
-import { SessionTypes } from '@walletconnect/types'
 import i18n from 'i18n-js'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
@@ -13,47 +12,22 @@ import { InvokeFunctionFailed } from './InvokeFunctionFailed'
 import { InvokeFunctionSuccess } from './InvokeFunctionSuccess'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { blockchainServices, hasWCIntegration } from '~/src/blockchain'
+import { blockchainServices, getBlockchainByWCChain, hasWCIntegration } from '~/src/blockchain'
+import { Session } from '~/src/contexts/WalletConnectContext'
 import { ContractInvocation, ContractInvocationMulti, Signer } from '~/src/helpers/NeonWcAdapter'
+import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
-
-type ContractDetailsBoxButtonProps = {
-  contract: ContractInvocation
-  session: SessionTypes.Settled
-}
 
 type SignerBoxProps = {
   signer: Signer
   showWarning: boolean
-  session: SessionTypes.Settled
+  session: Session
 }
 
-const ContractDetailsBoxButton = ({ contract, session }: ContractDetailsBoxButtonProps) => {
-  const navigation = useNavigation()
-
-  return (
-    <TouchableWithoutFeedback
-      onPress={() =>
-        navigation.navigate(wrapper.route.Modal.name, {
-          screen: wrapper.route.WCInvocationDetailsModal.name,
-          params: {
-            session,
-            contract,
-          },
-        })
-      }
-    >
-      <ImageView
-        alignSelf="center"
-        resizeMode="contain"
-        width={7}
-        height={12}
-        pr="40px"
-        source={require('~src/assets/images/icon-arrow-right-green.png')}
-      />
-    </TouchableWithoutFeedback>
-  )
+type ContractDetailsProps = {
+  session: Session
+  contract: ContractInvocation
 }
 
 const SignerBox = ({ signer, showWarning, session }: SignerBoxProps) => {
@@ -115,12 +89,54 @@ const SignerBox = ({ signer, showWarning, session }: SignerBoxProps) => {
   )
 }
 
+const ContractDetails = ({ contract, session }: ContractDetailsProps) => {
+  const navigation = useNavigation()
+
+  const [contractInfo, setContractInfo] = useState<ContractResponse>()
+
+  const handleGetContractInfo = useCallback(async () => {
+    const blockchain = getBlockchainByWCChain(session)
+
+    if (blockchain && session) {
+      const info = await blockchainServices[blockchain].provider.getContract(contract.scriptHash)
+      setContractInfo(info)
+    }
+  }, [session])
+
+  const handlePressRightButton = () => {
+    if (!contractInfo) return
+
+    navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.WCInvocationDetailsModal.name,
+      params: {
+        session,
+        contract,
+        contractInfo,
+      },
+    })
+  }
+
+  useEffect(() => {
+    handleGetContractInfo()
+  }, [handleGetContractInfo])
+
+  return (
+    <ContractDetailsBox
+      session={session}
+      contract={contract}
+      title={contractInfo?.name ?? ''}
+      withRightButton
+      onPressRightButton={handlePressRightButton}
+    />
+  )
+}
+
 export const InvokeFunctionTransactionRequest = ({
   request,
   session,
   account,
 }: TransactionRequestMethodComponentProps) => {
-  const requestParams = request.request.params as ContractInvocationMulti
+  const requestParams = request.params.request.params as ContractInvocationMulti
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const navigation = useNavigation()
@@ -135,7 +151,7 @@ export const InvokeFunctionTransactionRequest = ({
     if (account?.address) {
       const bs = blockchainServices[account.blockchain]
       if (hasWCIntegration(bs)) {
-        const resultFee = await bs.calculateFee(account.address, request.request)
+        const resultFee = await bs.calculateFee(account.address, requestParams)
 
         setFeeRequest(Number(resultFee))
       }
@@ -159,12 +175,7 @@ export const InvokeFunctionTransactionRequest = ({
       failedElement={InvokeFunctionFailed}
     >
       {requestParams.invocations.map((contract, index) => (
-        <ContractDetailsBox
-          key={`${contract.operation}-${index}`}
-          session={session}
-          contract={contract}
-          rightButton={<ContractDetailsBoxButton contract={contract} session={session} />}
-        />
+        <ContractDetails key={`${contract.operation}-${index}`} session={session} contract={contract} />
       ))}
 
       {requestParams.signers.map((signer, index) => (

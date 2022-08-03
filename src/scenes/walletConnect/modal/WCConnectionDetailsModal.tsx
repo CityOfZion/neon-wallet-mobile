@@ -1,5 +1,4 @@
 import { RouteProp, useNavigation } from '@react-navigation/native'
-import { SessionTypes } from '@walletconnect/types'
 import i18n from 'i18n-js'
 import moment from 'moment'
 import React, { useCallback, useMemo } from 'react'
@@ -9,15 +8,16 @@ import { useSelector } from 'react-redux'
 import { getBlockchainLogo } from '~/src/blockchain'
 import { BlockchainServiceKey, getBlockchainByWCChain } from '~/src/blockchain/common'
 import { ConnectedAccountAndWallet } from '~/src/components/ConnectionItem'
+import { DEFAULT_BLOCKCHAIN } from '~/src/config/walletConnect/constants'
 import { RootState } from '~/src/store/RootStore'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
-import { useWalletConnect } from '~src/contexts/WalletConnectContext'
+import { Session, useWalletConnect } from '~src/contexts/WalletConnectContext'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
 import { LinearLayout, TextView, ImageView } from '~src/styles/styled-components'
 
 export interface WCConnectionDetailsModalParams {
-  session: SessionTypes.Settled
+  session: Session
   connectedAccountsAndWallets: ConnectedAccountAndWallet[]
 }
 
@@ -27,6 +27,7 @@ interface Props {
 
 const WCConnectionDetailsModal = (props: Props) => {
   const { session, connectedAccountsAndWallets } = props.route.params
+  const methods = session.requiredNamespaces[DEFAULT_BLOCKCHAIN].methods
   const approvalDate = useSelector((state: RootState) =>
     state.wcReducer.approvalDates?.find(approvalDate => approvalDate.sessionTopic === session.topic)
   )
@@ -36,19 +37,17 @@ const WCConnectionDetailsModal = (props: Props) => {
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
 
   const blockchain = useMemo<BlockchainServiceKey>(() => {
-    const blockchainByWCChain = getBlockchainByWCChain(session.permissions.blockchain.chains)
+    const blockchainByWCChain = getBlockchainByWCChain(session)
 
-    if (blockchainByWCChain) {
-      return blockchainByWCChain
-    }
-
-    return 'neo3'
+    return blockchainByWCChain ?? 'neo3'
   }, [session])
 
   const handleDisconnect = useCallback(async () => {
     await walletConnectCtx.disconnect(session.topic)
     controller.close()
   }, [walletConnectCtx.sessions])
+
+  console.log({ sessionLog: session.expiry })
 
   return (
     <SwiperPanel
@@ -103,9 +102,11 @@ const WCConnectionDetailsModal = (props: Props) => {
                 <ImageView
                   source={getBlockchainLogo(blockchain)}
                   resizeMode="contain"
-                  width="20px"
-                  height="20px"
                   mr={1}
+                  style={{
+                    width: 20,
+                    height: 20,
+                  }}
                 />
                 <TextView fontFamily="medium" color="#fff" fontSize="16px">
                   {i18n.t(`blockchainServices.${blockchain}.id`)}
@@ -116,9 +117,10 @@ const WCConnectionDetailsModal = (props: Props) => {
               <TextView fontFamily="bold" color="text.10" fontSize="14px" fontWeight="700">
                 {i18n.t('modals.WCConnectionDetails.features')}
               </TextView>
-              {session.permissions.jsonrpc.methods.map((it, index) => (
+
+              {methods.map((method, index) => (
                 <TextView key={index} color="#fff" fontFamily="medium" fontSize="16px">
-                  {it}
+                  {method}
                 </TextView>
               ))}
             </LinearLayout>

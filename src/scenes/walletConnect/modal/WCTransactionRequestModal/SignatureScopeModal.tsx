@@ -1,11 +1,11 @@
 import { WitnessScope } from '@cityofzion/neon-core-next/lib/tx/components/WitnessScope'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import { SessionTypes } from '@walletconnect/types'
 import i18n from 'i18n-js'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
+import { Session } from '~/src/contexts/WalletConnectContext'
 import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
 import { RootState } from '~/src/store/RootStore'
 import { wrapper } from '~src/app/ApplicationWrapper'
@@ -20,7 +20,7 @@ type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
 export interface SignatureScopeModalParams {
   data?: Signer
-  session: SessionTypes.Settled
+  session: Session
 }
 
 interface Props {
@@ -61,10 +61,12 @@ const SignatureScopeModal = (props: Props) => {
               <LinearLayout bg="#ea5d8e" borderRadius="3px" px="8px" py="3px" orientation="horiz" mb="7px">
                 <ImageView
                   source={require('~src/assets/images/icon-warning-black.png')}
-                  width="24px"
-                  height="24px"
                   resizeMode="contain"
                   alignSelf="center"
+                  style={{
+                    width: 24,
+                    height: 24,
+                  }}
                 />
                 <TextView px="5px" color="#141b20" fontFamily="medium" fontSize="14px">
                   {i18n.t(`modals.signatureScope.${scope}.warning`)}

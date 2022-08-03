@@ -4,13 +4,14 @@ import {
   Nep17TransferIntent,
   signingConfig,
 } from '@cityofzion/neon-js-next/node_modules/@cityofzion/neon-api/lib/NetworkFacade'
-import { JsonRpcRequest, JsonRpcResponse } from '@json-rpc-tools/utils'
+import { JsonRpcResponse } from '@json-rpc-tools/utils'
 import type * as AsteroidSDK from '@moonlight-io/asteroid-sdk-js'
 import axios from 'axios'
 import { ImageLoadEventData, NativeModules, Platform } from 'react-native'
 
 import tokens from '../tokens.json'
 
+import { SessionRequest } from '~/src/contexts/WalletConnectContext'
 import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { NeoNode } from '~/src/models/NeoNode'
@@ -93,7 +94,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     this.wcChains = ['neo3:mainnet']
   }
 
-  rpcCall = async (address: string, request: JsonRpcRequest): Promise<JsonRpcResponse> => {
+  rpcCall = async (address: string, request: SessionRequest): Promise<JsonRpcResponse> => {
     const neoAccount = await this.getNeoAccount(address)
     const nodes = await this.provider.getAllNodes()
     const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
@@ -263,7 +264,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     }
   }
 
-  async calculateFee(senderAddress: string, request: JsonRpcRequest) {
+  async calculateFee(senderAddress: string, requestParams: ContractInvocationMulti) {
     const fromAccount = await this.getNeoAccount(senderAddress)
 
     if (!fromAccount) {
@@ -275,7 +276,6 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     const endpoint = node.url
 
     const nwcAdapter = await NeonWcAdapter.init(endpoint ?? defaultEndpoint)
-    const requestParams: ContractInvocationMulti = request.params
     const testInvokeResult = await nwcAdapter.testInvoke(fromAccount, requestParams)
 
     return UtilsHelper.convertToArbitraryDecimals(Number(testInvokeResult.gasconsumed))

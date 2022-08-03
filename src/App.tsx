@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { configureStore } from '@reduxjs/toolkit'
+import { SignClientTypes } from '@walletconnect/types'
 import * as Font from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react'
@@ -15,25 +15,20 @@ import ErrorBound from '~src/config/ErrorBound'
 import {
   DEFAULT_APP_METADATA,
   DEFAULT_LOGGER,
-  DEFAULT_METHODS,
-  DEFAULT_NETWORKS,
-  DEFAULT_RELAY_PROVIDER,
+  DEFAULT_RELAY_URL,
+  DEFAULT_PROJECT_ID,
 } from '~src/config/walletConnect/constants'
-import { CtxOptions, WalletConnectContextProvider } from '~src/contexts/WalletConnectContext'
+import { WalletConnectContextProvider } from '~src/contexts/WalletConnectContext'
 import { useAppState } from '~src/hooks/useAppState'
 import { useOnlineManager } from '~src/hooks/useOnlineManager'
 import AppNavigation from '~src/navigation/AppNavigation'
 import { RootStore } from '~src/store/RootStore'
 
-const wcOptions: CtxOptions = {
-  appMetadata: DEFAULT_APP_METADATA,
-  chainIds: Object.keys(DEFAULT_NETWORKS),
+const wcOptions: SignClientTypes.Options = {
+  projectId: DEFAULT_PROJECT_ID,
+  metadata: DEFAULT_APP_METADATA,
   logger: DEFAULT_LOGGER,
-  methods: DEFAULT_METHODS,
-  relayServer: DEFAULT_RELAY_PROVIDER,
-  storageOptions: {
-    asyncStorage: AsyncStorage as any,
-  },
+  relayUrl: DEFAULT_RELAY_URL,
 }
 
 const store = configureStore({
@@ -50,7 +45,6 @@ const store = configureStore({
 const persistor = persistStore(store)
 
 function onAppStateChange(status: AppStateStatus) {
-  // React Query already supports in web browser refetch on window focus by default
   if (Platform.OS !== 'web') {
     focusManager.setFocused(status === 'active')
   }

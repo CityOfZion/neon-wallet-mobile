@@ -1,6 +1,5 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import { AppMetadata } from '@walletconnect/types'
 import i18n from 'i18n-js'
 import React from 'react'
 import { TouchableOpacity, ScrollView } from 'react-native'
@@ -8,6 +7,7 @@ import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Metadata } from '~/src/contexts/WalletConnectContext'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
 import { RootState } from '~/src/store/RootStore'
@@ -21,7 +21,7 @@ type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
 export interface RawJsonModalParams {
   dataJson: string
-  metadata: AppMetadata
+  metadata: Metadata
 }
 
 interface Props {
@@ -67,10 +67,12 @@ const RawJsonModal = (props: Props) => {
               }}
             >
               <ImageView
-                width="20px"
-                height="20px"
                 resizeMode="contain"
                 source={require('~src/assets/images/icon-copy-green.png')}
+                style={{
+                  width: 20,
+                  height: 20,
+                }}
               />
             </TouchableOpacity>
           </LinearLayout>
