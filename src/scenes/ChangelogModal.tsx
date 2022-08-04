@@ -32,9 +32,11 @@ const Item = (props: ItemProps) => {
   return (
     <LinearLayout orientation="horiz" justifyContent="center">
       <LinearLayout width="120px" alignItems="flex-end">
-        <TextView color="text.1" p="4px" fontSize="lg" borderRadius="12px" backgroundColor="primary">
-          {props.version}
-        </TextView>
+        <LinearLayout borderRadius="12px" backgroundColor="primary">
+          <TextView color="text.1" p="4px" fontSize="lg">
+            {props.version}
+          </TextView>
+        </LinearLayout>
       </LinearLayout>
 
       <LinearLayout
@@ -50,13 +52,13 @@ const Item = (props: ItemProps) => {
       <LinearLayout backgroundColor="background.3" width="2px" />
 
       <LinearLayout ml="20px" width="120px" mb="12px">
-        <TextView fontSize="lg" color="text.0" fontWeight="bold">
+        <TextView fontSize="lg" color="text.0" fontWeight="bold" mb="12px">
           {props.date}
         </TextView>
 
         <LinearLayout>
           {props.changes.map(change => (
-            <TextView fontSize="md" color="text.4">
+            <TextView fontSize="md" color="text.4" mb="4px">
               {change}
             </TextView>
           ))}
