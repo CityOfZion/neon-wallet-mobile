@@ -13,6 +13,12 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		4B2C3D3C9C6BDC5B7284B5EC /* libPods-Neon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 218C09F00E3A2C9965A7321C /* libPods-Neon.a */; };
+		71220401288EFB7500F60089 /* sofiapro-regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 712203FB288EFB7500F60089 /* sofiapro-regular.otf */; };
+		71220402288EFB7500F60089 /* sofiapro-light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 712203FC288EFB7500F60089 /* sofiapro-light.otf */; };
+		71220403288EFB7500F60089 /* sofiapro-medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 712203FD288EFB7500F60089 /* sofiapro-medium.otf */; };
+		71220404288EFB7500F60089 /* sofiapro-regularitalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 712203FE288EFB7500F60089 /* sofiapro-regularitalic.otf */; };
+		71220405288EFB7500F60089 /* sofiapro-semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 712203FF288EFB7500F60089 /* sofiapro-semibold.otf */; };
+		71220406288EFB7500F60089 /* sofiapro-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 71220400288EFB7500F60089 /* sofiapro-bold.otf */; };
 		90A84349EB50AF046272353E /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E742A5274A549EA5D538EADB /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		FA142A3025DC4F3500FEFBC8 /* Base58.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A2A25DC4F3400FEFBC8 /* Base58.swift */; };
@@ -42,6 +48,12 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Neon/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Neon/main.m; sourceTree = "<group>"; };
 		218C09F00E3A2C9965A7321C /* libPods-Neon.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Neon.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		712203FB288EFB7500F60089 /* sofiapro-regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "sofiapro-regular.otf"; path = "assets/src/assets/fonts/sofiapro-regular.otf"; sourceTree = SOURCE_ROOT; };
+		712203FC288EFB7500F60089 /* sofiapro-light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "sofiapro-light.otf"; path = "assets/src/assets/fonts/sofiapro-light.otf"; sourceTree = SOURCE_ROOT; };
+		712203FD288EFB7500F60089 /* sofiapro-medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "sofiapro-medium.otf"; path = "assets/src/assets/fonts/sofiapro-medium.otf"; sourceTree = SOURCE_ROOT; };
+		712203FE288EFB7500F60089 /* sofiapro-regularitalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "sofiapro-regularitalic.otf"; path = "assets/src/assets/fonts/sofiapro-regularitalic.otf"; sourceTree = SOURCE_ROOT; };
+		712203FF288EFB7500F60089 /* sofiapro-semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "sofiapro-semibold.otf"; path = "assets/src/assets/fonts/sofiapro-semibold.otf"; sourceTree = SOURCE_ROOT; };
+		71220400288EFB7500F60089 /* sofiapro-bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "sofiapro-bold.otf"; path = "assets/src/assets/fonts/sofiapro-bold.otf"; sourceTree = SOURCE_ROOT; };
 		71A4DE0A25DB334E0003DCD9 /* Neon-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Neon-Bridging-Header.h"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = Neon/SplashScreen.storyboard; sourceTree = "<group>"; };
 		AB55857A2A8580A996CF06FC /* Pods-Neon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Neon.debug.xcconfig"; path = "Target Support Files/Pods-Neon/Pods-Neon.debug.xcconfig"; sourceTree = "<group>"; };
@@ -114,6 +126,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		712203FA288EFB3600F60089 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				71220400288EFB7500F60089 /* sofiapro-bold.otf */,
+				712203FC288EFB7500F60089 /* sofiapro-light.otf */,
+				712203FD288EFB7500F60089 /* sofiapro-medium.otf */,
+				712203FB288EFB7500F60089 /* sofiapro-regular.otf */,
+				712203FE288EFB7500F60089 /* sofiapro-regularitalic.otf */,
+				712203FF288EFB7500F60089 /* sofiapro-semibold.otf */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -124,6 +149,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				712203FA288EFB3600F60089 /* Resources */,
 				71A4DE0A25DB334E0003DCD9 /* Neon-Bridging-Header.h */,
 				FAC4877025800A790076ACC1 /* assets */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
@@ -263,12 +289,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAD7DCB7257FC2C00092EF9B /* main.jsbundle in Resources */,
+				71220403288EFB7500F60089 /* sofiapro-medium.otf in Resources */,
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				FAC4877125800A790076ACC1 /* assets in Resources */,
+				71220404288EFB7500F60089 /* sofiapro-regularitalic.otf in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				71220401288EFB7500F60089 /* sofiapro-regular.otf in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
+				71220406288EFB7500F60089 /* sofiapro-bold.otf in Resources */,
+				71220402288EFB7500F60089 /* sofiapro-light.otf in Resources */,
 				FAE7F48325A4ECB40014C2EC /* GoogleService-Info.plist in Resources */,
+				71220405288EFB7500F60089 /* sofiapro-semibold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,7 +463,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore io.cityofzion.neon";
+				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc io.cityofzion.neon";
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -466,7 +498,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore io.cityofzion.neon";
+				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc io.cityofzion.neon";
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

@@ -11,7 +11,6 @@ export const InputClearButton = (props: { onPress: () => void }) => {
         height={14}
         mr="4px"
         ml="4px"
-        resizeMode="center"
         alignSelf="center"
         source={require('~/src/assets/images/icon-cancel-grey.png')}
       />

@@ -2,7 +2,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, { useRef, useCallback, useState, useEffect } from 'react'
 import { ImageBackground, ImageResizeMode, ImageSourcePropType, SafeAreaView } from 'react-native'
-import Carousel from 'react-native-snap-carousel'
+import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { useDispatch } from 'react-redux'
 
 import { ProgressBar } from '../components/ProgressBar'
@@ -16,13 +16,15 @@ import { Storage } from '~src/app/Storage'
 import { applicationConfig } from '~src/config/ApplicationConfig'
 import { useBlockchainActions } from '~src/hooks/useBlockchainActions'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { ImageView, LinearGradientLayout, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ButtonView, ImageView, LinearGradientLayout, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface OnboardingSlideProps {
   header: string
   subtitle: string
   image: ImageSourcePropType
   resizeMode?: ImageResizeMode
+  imgIsBG?: boolean,
+  heightBG?: string
 }
 
 interface OnboardingPageProps {
@@ -30,11 +32,11 @@ interface OnboardingPageProps {
 }
 
 const OnboardingSlide = (props: OnboardingSlideProps) => {
-  return (
+  return !props.imgIsBG ? (
     <LinearLayout orientation="verti" height="100%" width="100%">
       <LinearLayout orientation="verti" height="100%" width="100%">
-        <ImageView style={{ width: '100%', height: '85%' }} resizeMode="stretch" source={props.image} />
-        <LinearLayout pl="3%">
+        <ImageView style={{ width: '100%', height: props.heightBG ?? '85%' }} resizeMode="cover" source={props.image} />
+        <LinearLayout p={'4%'}>
           <TextView fontSize="md" color="#4CFFB3">
             {props.header}
           </TextView>
@@ -44,7 +46,21 @@ const OnboardingSlide = (props: OnboardingSlideProps) => {
         </LinearLayout>
       </LinearLayout>
     </LinearLayout>
+  ) : (
+    <LinearLayout>
+      <ImageBackground imageStyle={{width: '100%', height: props.heightBG }} resizeMode='cover' source={props.image} style={{ height: '100%', justifyContent: 'flex-end'}}>
+        <LinearLayout px="3%">
+          <TextView fontFamily={'bold'} fontSize="md" color="#4CFFB3">
+            {props.header}
+          </TextView>
+          <TextView fontSize="md" color="#fff">
+            {props.subtitle}
+          </TextView>
+        </LinearLayout>
+      </ImageBackground>
+    </LinearLayout>
   )
+
 }
 
 const OnboardingPage = (props: OnboardingPageProps) => {
@@ -52,6 +68,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const blockchainActions = useBlockchainActions()
   const { currentProgress, increment } = useProgress()
   const [progressMessage, setProgressMessage] = useState<string>(i18n.t('onboarding.progressMessageStep1'))
+  const [currentPage, setCurrentPage] = useState<number>(0)
   const dispatch = useDispatch()
 
   const finish = async () => {
@@ -91,19 +108,15 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     const stepsToComplete = 4
     const progressByStep = 1 / stepsToComplete
     step1().then(() => {
-      carousel.current?.snapToNext()
       increment(progressByStep)
       setProgressMessage(i18n.t('onboarding.progressMessageStep2'))
       step2().then(walletID => {
-        carousel.current?.snapToNext()
         increment(progressByStep)
         setProgressMessage(i18n.t('onboarding.progressMessageStep3'))
         step3(walletID).then(() => {
-          carousel.current?.snapToNext()
           increment(progressByStep)
           setProgressMessage(i18n.t('onboarding.progressMessageStep4'))
           step4().then(() => {
-            carousel.current?.snapToNext()
             increment(progressByStep)
           })
         })
@@ -117,24 +130,32 @@ const OnboardingPage = (props: OnboardingPageProps) => {
       image: require('~src/assets/images/onboarding-1.png') as ImageSourcePropType,
       subtitle: i18n.t('onboarding.feature1.subtitle'),
       resizeMode: 'contain' as ImageResizeMode,
+      isBG: true,
+      heightBG: '100%'
     },
     {
       header: i18n.t('onboarding.feature2.header'),
       image: require('~src/assets/images/onboarding-2.png') as ImageSourcePropType,
       subtitle: i18n.t('onboarding.feature2.subtitle'),
       resizeMode: 'cover' as ImageResizeMode,
+      isBG: false,
+      heightBG: undefined
     },
     {
       header: i18n.t('onboarding.feature3.header'),
       image: require('~src/assets/images/onboarding-3.png') as ImageSourcePropType,
       subtitle: i18n.t('onboarding.feature3.subtitle'),
       resizeMode: 'contain' as ImageResizeMode,
+      isBG: false,
+      heightBG: undefined 
     },
     {
       header: i18n.t('onboarding.feature4.header'),
       image: require('~src/assets/images/onboarding-4.png') as ImageSourcePropType,
       subtitle: i18n.t('onboarding.feature4.subtitle'),
       resizeMode: 'contain' as ImageResizeMode,
+      isBG: true,
+      heightBG: '100%'
     },
   ]
 
@@ -148,8 +169,8 @@ const OnboardingPage = (props: OnboardingPageProps) => {
         <ImageBackground
           source={require('~src/assets/images/onboarding-background.png')}
           imageStyle={{ transform: [{ rotate: '180deg' }] }}
-          style={{ height: '92%' }}
-          resizeMode="cover"
+          style={{ height: '93%' }}
+          resizeMode="stretch"
         >
           <LinearGradientLayout
             colors={['#000', 'rgba(0,0,0,0.0)']}
@@ -164,12 +185,12 @@ const OnboardingPage = (props: OnboardingPageProps) => {
               start={[0.3, 0.7]}
               end={[0.5, 0.2]}
             >
-              <LinearLayout height="100%">
-                <LinearLayout pl="3%" pt="3%" orientation="verti" width="100%">
-                  <TextView fontSize="sm" color="#4CFFB3">
+              <LinearLayout height="100%" >
+                <LinearLayout p={'2%'} marginY={'5%'} orientation="verti" width="100%">
+                  <TextView fontFamily={'bold'} fontSize="sm" color="#4CFFB3">
                     {i18n.t('onboarding.initalSetup')}
                   </TextView>
-                  <TextView fontSize="3xl" color="#fff">
+                  <TextView ml={'-2%'} mt={'-2%'} fontSize="3xl" color="#fff">
                     {i18n.t('onboarding.welcomeNW')}
                   </TextView>
                   <LinearLayout width="85%">
@@ -180,7 +201,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
                 </LinearLayout>
 
                 <Carousel
-                  scrollEnabled={false}
+                  onSnapToItem={(index) => setCurrentPage(index)}
                   layout="default"
                   ref={carousel}
                   data={data}
@@ -202,27 +223,45 @@ const OnboardingPage = (props: OnboardingPageProps) => {
                       image: ImageSourcePropType
                       subtitle: string
                       resizeMode: ImageResizeMode
+                      isBG: boolean,
+                      heightBG?: string
                     }
                     index: number
                   }) => {
                     const { item, index } = imageList
                     return (
-                      <LinearLayout weight={1} py="5%">
-                        {index < data.length - 1 ? (
-                          <OnboardingSlide subtitle={item.subtitle} header={item.header} image={item.image} />
-                        ) : (
-                          <OnboardingSlide subtitle={item.subtitle} header={item.header} image={item.image} />
-                        )}
-                      </LinearLayout>
+                      <OnboardingSlide heightBG={item.heightBG} imgIsBG={item.isBG} subtitle={item.subtitle} header={item.header} image={item.image} />
                     )
                   }}
+                />
+                <Pagination
+                  activeDotIndex={currentPage}
+                  dotsLength={data.length}
+                  containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)', width: '10%', alignSelf: 'center' }}
+                  dotStyle={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: 5,
+                    marginHorizontal: 8,
+                    backgroundColor: '#4cffb3'
+                  }}
+                  inactiveDotStyle={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.92)'
+                  }}
+                  inactiveDotOpacity={0.4}
+                  inactiveDotScale={0.6}
                 />
               </LinearLayout>
             </LinearGradientLayout>
           </LinearGradientLayout>
         </ImageBackground>
-        <LinearLayout mt="5%">
-          <ProgressBar progressBarStatus={currentProgress} onFinish={finish} show text={progressMessage} />
+        <LinearLayout mt="3%">
+          <ProgressBar progressBarStatus={currentProgress} show={currentProgress < 1} text={progressMessage} />
+          {currentProgress >= 1 && (
+            <ButtonView onPress={finish} border={1} borderColor={'primary'} borderRadius={7} width={'90%'} alignSelf={'center'}>
+              <TextView fontSize={'lg'} py={'3%'} color={'primary'} textAlign={'center'}>Continue</TextView>
+            </ButtonView>
+          )}
         </LinearLayout>
       </SafeAreaView>
     </LinearLayout>

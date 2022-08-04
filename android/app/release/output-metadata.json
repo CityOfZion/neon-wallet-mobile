@@ -11,8 +11,8 @@
       "type": "SINGLE",
       "filters": [],
       "properties": [],
-      "versionCode": 1041,
-      "versionName": "NWM-1041",
+      "versionCode": 1048,
+      "versionName": "1.0.46b1048",
       "enabled": true,
       "outputFile": "app-release.apk"
     }

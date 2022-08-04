@@ -64,9 +64,3 @@ const styles = StyleSheet.create({
   macos: {},
   windows: {},
 })
-
-ProgressBar.propTypes = {
-  show: PropTypes.any.isRequired,
-  onFinish: PropTypes.any.isRequired,
-  text: PropTypes.any.isRequired,
-}

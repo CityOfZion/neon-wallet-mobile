@@ -2,6 +2,8 @@ import i18n from 'i18n-js'
 import React from 'react'
 import { ImageSourcePropType } from 'react-native'
 
+import { TANimationType } from './WalletCard'
+
 import { Wallet } from '~/src/models/redux/Wallet'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 import { WalletType } from '~/src/types/reducers/wallet'
@@ -9,6 +11,8 @@ import { WalletType } from '~/src/types/reducers/wallet'
 type Props = {
   wallet: Wallet
   isInactive?: boolean
+  animationType?: TANimationType
+  width: number
 }
 
 const walletIconSources: Record<WalletType, ImageSourcePropType> = {
@@ -17,9 +21,9 @@ const walletIconSources: Record<WalletType, ImageSourcePropType> = {
   watch: require('~src/assets/images/wallet-icon-watch.png'),
 }
 
-export const WalletLabel = ({ wallet, isInactive }: Props) => {
+export const WalletLabel = ({ wallet, isInactive, width }: Props) => {
   return (
-    <LinearLayout position="absolute" bottom="20%" width="100%">
+    <LinearLayout  position="absolute" bottom="15%" width="100%">
       <LinearLayout width="100%" height="58px" justifyContent="center">
         <ImageView
           position="absolute"
@@ -34,20 +38,20 @@ export const WalletLabel = ({ wallet, isInactive }: Props) => {
           }}
         />
         {wallet.walletType && (
-          <LinearLayout orientation="horiz" alignItems="center" py="12px" pl="20px" pr="38px">
+          <LinearLayout orientation="horiz" alignItems="center" py={width * 0.08} pl={width * 0.08} pr="38px">
             <ImageView
               source={walletIconSources[wallet.walletType]}
               resizeMode="contain"
               style={{
-                height: 34,
-                width: 34,
+                height: width * 0.15,
+                width: width * 0.15,
               }}
             />
 
             <LinearLayout>
               <TextView
                 fontFamily="bold"
-                fontSize="md"
+                fontSize={width * 0.05}
                 color={isInactive ? 'text.2' : 'text.0'}
                 numberOfLines={1}
                 ml="6px"
@@ -56,7 +60,7 @@ export const WalletLabel = ({ wallet, isInactive }: Props) => {
               </TextView>
               <TextView
                 fontFamily="bold"
-                fontSize="xs"
+                fontSize={`${width * 0.04}`}
                 color={isInactive ? 'text.2' : 'text.10'}
                 numberOfLines={1}
                 ml="6px"

@@ -21,11 +21,13 @@ type WithoutBalanceBarProps = {
   withBalanceBar: false
 }
 
+export type TANimationType = 'in' | 'out'
+
 type Props = {
   wallet: Wallet
   isInactive?: boolean
   onPress?: () => void
-  animationType?: 'in' | 'out'
+  animationType?: TANimationType
   width?: number
   height?: number
 } & (WithBalanceBarProps | WithoutBalanceBarProps)
@@ -99,7 +101,7 @@ export const WalletCard = ({ wallet, isInactive, onPress, animationType = 'out',
 
           <WalletOverlay />
 
-          <WalletLabel wallet={wallet} isInactive={isInactive} />
+          <WalletLabel width={viewWidth} wallet={wallet} isInactive={isInactive} />
 
           {props.withBalanceBar && !isInactive && <WalletBalanceBar balanceExchange={props.balanceExchange} />}
         </ButtonView>

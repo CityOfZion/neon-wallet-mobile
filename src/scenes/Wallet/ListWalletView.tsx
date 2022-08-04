@@ -48,18 +48,18 @@ const FirstWalletModal = ({ onPress }: FirstWalletModalProps) => {
       backgroundColor={`${theme.colors.black}A6`}
       zIndex={1}
       position="absolute"
-      left="50%"
-      top="50%"
-      width={150}
-      height={150}
+      left="48%"
+      top="40%"
+      width={160}
+      height="45%"
       borderRadius="14px"
       style={{
         transform: [{ translateX: -75 }, { translateY: -75 }],
       }}
     >
       <ButtonWithoutFeedbackView onPress={onPress}>
-        <LinearLayout alignItems="center" justifyContent="space-evenly" flex={1} p="8px">
-          <LinearLayout border={1} width={44} height={44} borderColor="primary" p={4} borderRadius={50}>
+        <LinearLayout height="100%" alignItems="center" justifyContent="space-evenly" p="8px">
+          <LinearLayout border={1} width={50} height={50} borderColor="primary" p={4} borderRadius={50}>
             <ImageView
               source={require('~src/assets/images/icon-arrow-curve-down-green.png')}
               resizeMode="contain"
@@ -70,10 +70,10 @@ const FirstWalletModal = ({ onPress }: FirstWalletModalProps) => {
             />
           </LinearLayout>
           <LinearLayout>
-            <TextView fontWeight={500} fontSize="xl" color="primary">
+            <TextView textAlign="center" alignSelf="center" fontWeight={500} fontSize="lg" color="primary">
               {i18n.t('screens.listWallets.isFirstWallet.title')}
             </TextView>
-            <TextView color="text.0" fontSize="md" textAlign="center" px="8px">
+            <TextView alignSelf="center" color="text.0" fontSize="sm" textAlign="center" px="8px">
               {i18n.t('screens.listWallets.isFirstWallet.subtitle')}
             </TextView>
           </LinearLayout>

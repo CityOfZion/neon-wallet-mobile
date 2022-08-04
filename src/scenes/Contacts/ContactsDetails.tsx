@@ -46,7 +46,6 @@ const ItemAddress: React.FC<IItemAddress> = ({ address }) => {
     },
     container: {
       paddingVertical: 17,
-      flexDirection: 'row',
       justifyContent: 'space-between',
       borderBottomWidth: 1,
       borderBottomColor: '#ffffff55',
@@ -56,16 +55,9 @@ const ItemAddress: React.FC<IItemAddress> = ({ address }) => {
     <TouchableOpacity onPress={() => UtilsHelper.copyToClipboard(address)} style={styles.container}>
       <LinearLayout orientation="horiz">
         {blockchainName && (
-          <ImageView
-            width={17}
-            height={18}
-            source={getBlockchainLogo(blockchainName)}
-            resizeMode="center"
-            mr={3}
-            alignSelf="center"
-          />
+          <ImageView width={17} height={18} source={getBlockchainLogo(blockchainName)} mr={3} alignSelf="center" />
         )}
-        <LinearLayout orientation="verti" width="90%">
+        <LinearLayout orientation="verti" width="85%">
           {blockchainName && (
             <Text style={styles.nameBlockchain}>{i18n.t(`blockchainServices.${blockchainName}.id`)}</Text>
           )}
@@ -73,13 +65,7 @@ const ItemAddress: React.FC<IItemAddress> = ({ address }) => {
             {address}
           </Text>
         </LinearLayout>
-        <ImageView
-          resizeMode="center"
-          width={20}
-          height={20}
-          source={require('~/src/assets/images/icon-copy-green.png')}
-          alignSelf="center"
-        />
+        <ImageView source={require('~/src/assets/images/icon-copy-green.png')} alignSelf="center" />
       </LinearLayout>
     </TouchableOpacity>
   )

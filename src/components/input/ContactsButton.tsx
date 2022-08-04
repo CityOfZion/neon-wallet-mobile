@@ -7,7 +7,7 @@ export const ContactsButton = (props: { onPress: () => void }) => {
   return (
     <ButtonView onPress={props.onPress}>
       <LinearLayout orientation="horiz">
-        <ImageView resizeMode="center" source={require('~/src/assets/images/icon-contacts-green.png')} />
+        <ImageView source={require('~/src/assets/images/icon-contacts-green.png')} />
 
         <TextView
           style={{ includeFontPadding: false }}
