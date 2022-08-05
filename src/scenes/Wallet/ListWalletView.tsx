@@ -172,12 +172,19 @@ const ListWalletView = (props: WalletProps) => {
   const selectedWalletBalanceExchange = useBalancesAndExchange(selectedWallet.getAccounts(accounts))
 
   const fadeIn = () => {
-    Animated.timing(fadeValue, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-      delay: 300,
-    }).start()
+    Animated.sequence([
+      Animated.timing(fadeValue, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(fadeValue, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+        delay: 400,
+      }),
+    ]).start()
   }
 
   const fadeOut = () => {
@@ -213,7 +220,7 @@ const ListWalletView = (props: WalletProps) => {
         />
       }
     >
-      <LinearLayout alignSelf="flex-end">
+      <LinearLayout alignSelf="flex-end" position="absolute">
         <ThemedMoreButton
           onPress={() =>
             props.navigation.navigate(wrapper.route.Modal.name, {
@@ -234,6 +241,7 @@ const ListWalletView = (props: WalletProps) => {
           onPress={handlePress}
           onScrollBegin={fadeOut}
           onScrollEnd={fadeIn}
+          walletContainerStyle={{ paddingTop: 48 }}
         />
       </LinearLayout>
 

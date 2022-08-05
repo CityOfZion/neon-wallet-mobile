@@ -11,17 +11,10 @@ interface Props {
   onPress?: (account: Account) => void
   onSelect?: (account: Account) => void
   accounts: Account[]
-  isCompacted?: boolean
   balancesExchange: UseMultipleBalanceAndExchangeResult
 }
 
-const AccountPicker: React.FC<Props> = ({
-  isCompacted = true,
-  accounts,
-  onPress,
-  onSelect,
-  balancesExchange,
-}: Props) => {
+const AccountPicker: React.FC<Props> = ({ accounts, onPress, onSelect, balancesExchange }: Props) => {
   const handlePress = async (account: Account) => {
     if (onPress) onPress(account)
   }
@@ -52,14 +45,13 @@ const AccountPicker: React.FC<Props> = ({
       enableSnap
       useScrollView
       onSnapToItem={index => handleSelect(index)}
-      renderItem={({ item, index }) => (
+      renderItem={({ item }) => (
         <LinearLayout justifyContent="center" alignItems="center">
           <AccountCard
             balanceExchange={getAccountBalanceExchange(item)}
             hideBalance={false}
             onPress={() => handlePress(item)}
             account={item}
-            isCompacted={isCompacted}
             hideCopy
             hideQRCode
             width={240}

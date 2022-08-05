@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
+import { Shadow } from 'react-native-shadow-2'
 import { useDispatch } from 'react-redux'
 
 import { TabStackParamList } from '../navigation/TabNavigation'
@@ -48,39 +49,35 @@ const Notification = (props: Props) => {
 
   return (
     <ButtonWithoutFeedbackView onPress={handlePress}>
-      <LinearLayout
-        orientation="verti"
-        height={72}
-        width="100%"
-        bg="background.1"
-        borderColor="primary"
-        borderRadius="7px"
-        borderLeftWidth="7px"
-        style={{
-          shadowOffset: { width: 2, height: 6 },
-          shadowOpacity: 0.39,
-          shadowRadius: 8.3,
-          elevation: 7,
-        }}
-      >
-        <LinearLayout orientation="horiz" justifyContent="space-between">
-          <TextView color="text.2" fontSize="10px" mb="4px" px="11px" pt="8px">
-            {i18n.t('components.notification.title')}
+      <Shadow viewStyle={{ width: '100%' }}>
+        <LinearLayout
+          orientation="verti"
+          height={72}
+          width="100%"
+          bg="background.1"
+          borderColor="primary"
+          borderRadius="7px"
+          borderLeftWidth="7px"
+        >
+          <LinearLayout orientation="horiz" justifyContent="space-between">
+            <TextView color="text.2" fontSize="10px" mb="4px" px="11px" pt="8px">
+              {i18n.t('components.notification.title')}
+            </TextView>
+            <ButtonView alignSelf="flex-start" onPress={() => close()} px="11px" py="8px">
+              <ImageView
+                source={require('~src/assets/images/button_close_white.png')}
+                style={{
+                  height: 9,
+                  width: 9,
+                }}
+              />
+            </ButtonView>
+          </LinearLayout>
+          <TextView color="text.0" fontSize="15px" lineHeight="15px" weight={1} px="11px" pb="8px">
+            {props.text}
           </TextView>
-          <ButtonView alignSelf="flex-start" onPress={() => close()} px="11px" py="8px">
-            <ImageView
-              source={require('~src/assets/images/button_close_white.png')}
-              style={{
-                height: 9,
-                width: 9,
-              }}
-            />
-          </ButtonView>
         </LinearLayout>
-        <TextView color="text.0" fontSize="15px" lineHeight="15px" weight={1} px="11px" pb="8px">
-          {props.text}
-        </TextView>
-      </LinearLayout>
+      </Shadow>
     </ButtonWithoutFeedbackView>
   )
 }

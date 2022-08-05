@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, StyleProp, ViewStyle } from 'react-native'
 
 import { Account } from '../models/redux/Account'
 import { LinearLayout } from '../styles/styled-components'
@@ -10,6 +10,7 @@ interface Props {
   accounts: Account[]
   onPress: (account: Account) => void
   balanceExchange: UseMultipleBalanceAndExchangeResult
+  contentContainerStyle?: StyleProp<ViewStyle>
 }
 
 type CellProps = {
@@ -17,10 +18,10 @@ type CellProps = {
 }
 
 const Cell = React.memo((props: CellProps) => (
-  <LinearLayout marginTop={props.index > 0 ? `-130px` : undefined} zIndex={props.index} {...props} />
+  <LinearLayout marginTop={props.index > 0 ? `-125px` : undefined} zIndex={props.index} {...props} />
 ))
 
-export const AccountCards = ({ accounts, balanceExchange, onPress }: Props) => {
+export const AccountCards = ({ accounts, balanceExchange, onPress, contentContainerStyle }: Props) => {
   const getBalanceExchange = (account: Account) => {
     if (!account.address) return
 
@@ -31,12 +32,14 @@ export const AccountCards = ({ accounts, balanceExchange, onPress }: Props) => {
     <FlatList
       data={accounts}
       keyExtractor={item => `${item.address}`}
+      contentContainerStyle={contentContainerStyle}
       CellRendererComponent={Cell}
-      renderItem={({ item }) => (
+      renderItem={({ item, index }) => (
         <AccountCard
           hideBalance={false}
           balanceExchange={getBalanceExchange(item)}
           account={item}
+          isStack={accounts.length - 1 !== index}
           isCompacted
           onPress={() => onPress(item)}
         />

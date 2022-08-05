@@ -1,18 +1,24 @@
 import React from 'react'
 
-import { ImageView } from '~/src/styles/styled-components'
+import { ImageView, LinearLayout } from '~/src/styles/styled-components'
 
-export const WalletOverlay = () => {
+type Props = {
+  width: number
+  height: number
+}
+
+export const WalletOverlay = ({ height, width }: Props) => {
   return (
-    <ImageView
-      position="absolute"
-      bottom="-2px"
-      resizeMode="stretch"
-      source={require('~src/assets/images/wallet-front.png')}
-      style={{
-        width: '100%',
-        height: '75%',
-      }}
-    />
+    <LinearLayout width={width} height={height} overflow="hidden" borderRadius="18px">
+      <ImageView
+        position="absolute"
+        bottom="-8px"
+        left="0px"
+        source={require('~src/assets/images/wallet-front.png')}
+        style={{
+          width: '102%',
+        }}
+      />
+    </LinearLayout>
   )
 }

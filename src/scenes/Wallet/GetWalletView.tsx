@@ -122,8 +122,21 @@ const GetWalletView = (props: GetWalletProps) => {
       }
       darkerSolidColorBG
       onLayout={handleLayout}
+      padding={0}
     >
-      <Animated.View style={{ opacity: opacityValue }}>
+      <Animated.View
+        style={{
+          opacity: opacityValue,
+          transform: [
+            {
+              translateY: posYFactor.interpolate({
+                inputRange: [0, 1],
+                outputRange: [-viewHeight, 0],
+              }),
+            },
+          ],
+        }}
+      >
         <Animated.View
           style={[
             {
@@ -138,29 +151,36 @@ const GetWalletView = (props: GetWalletProps) => {
             },
           ]}
         >
-          <AccountCards balanceExchange={balanceExchange} accounts={walletAccounts} onPress={handlePress} />
+          <AccountCards
+            balanceExchange={balanceExchange}
+            accounts={walletAccounts}
+            onPress={handlePress}
+            contentContainerStyle={{
+              paddingHorizontal: 10,
+            }}
+          />
         </Animated.View>
 
         {wallet.walletType === 'standard' && (
           <ButtonWithoutFeedbackView onPress={handleCreate}>
             <LinearLayout
-              my={6}
+              my="36px"
               orientation="horiz"
               width="100%"
               alignItems="center"
               justifyContent="center"
               borderStyle="dashed"
-              borderColor="text.0"
-              borderRadius={18}
-              borderWidth={1}
-              height={220}
+              borderColor="text.5"
+              borderRadius="18px"
+              borderWidth="1px"
+              height="220px"
             >
               <ImageView
                 source={require('~src/assets/images/icon-plus-white.png')}
                 resizeMode="contain"
                 style={{
-                  width: 20,
-                  height: 20,
+                  width: 16,
+                  height: 16,
                 }}
               />
 
