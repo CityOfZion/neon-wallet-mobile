@@ -26,12 +26,13 @@ interface ItemProps {
   version: string
   date: string
   changes: string[]
+  biggestVersionLength: number
 }
 
 const Item = (props: ItemProps) => {
   return (
     <LinearLayout orientation="horiz" justifyContent="center">
-      <LinearLayout width="120px" alignItems="flex-end">
+      <LinearLayout width={`${8 * props.biggestVersionLength}px`} alignItems="flex-end">
         <LinearLayout borderRadius="12px" backgroundColor="primary">
           <TextView color="text.1" p="4px" fontSize="lg">
             {props.version}
@@ -80,6 +81,8 @@ const ChangelogModal = (props: Props) => {
     controller.close()
   }
 
+  const biggestVersionLength = changelog.map(({ version }) => version.length).reduce((a, b) => Math.max(a, b))
+
   return (
     <SwiperPanel
       controller={controller}
@@ -102,7 +105,14 @@ const ChangelogModal = (props: Props) => {
             </TextView>
           </LinearLayout>
         }
-        renderItem={({ item }) => <Item changes={item.changes} date={item.date} version={item.version} />}
+        renderItem={({ item }) => (
+          <Item
+            changes={item.changes}
+            date={item.date}
+            version={item.version}
+            biggestVersionLength={biggestVersionLength}
+          />
+        )}
         keyExtractor={item => item.date}
       />
     </SwiperPanel>
