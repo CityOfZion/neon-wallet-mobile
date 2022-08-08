@@ -23,7 +23,7 @@ const walletIconSources: Record<WalletType, ImageSourcePropType> = {
 
 export const WalletLabel = ({ wallet, isInactive, width }: Props) => {
   return (
-    <LinearLayout  position="absolute" bottom="15%" width="100%">
+    <LinearLayout position="absolute" bottom="15%" width="85%">
       <LinearLayout width="100%" height="58px" justifyContent="center">
         <ImageView
           position="absolute"
@@ -33,7 +33,7 @@ export const WalletLabel = ({ wallet, isInactive, width }: Props) => {
           source={require('~src/assets/images/wallet-card-label.png')}
           style={{
             height: '100%',
-            width: '85%',
+            width: '100%',
             transform: [{ translateY: 29 }],
           }}
         />

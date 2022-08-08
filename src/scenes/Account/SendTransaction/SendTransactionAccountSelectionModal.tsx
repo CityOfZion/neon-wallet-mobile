@@ -113,7 +113,6 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
               balancesExchange={balancesExchange}
               accounts={validAccounts}
               onSelect={handleChangeAccount}
-              isCompacted={false}
             />
           </LinearLayout>
 

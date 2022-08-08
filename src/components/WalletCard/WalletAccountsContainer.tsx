@@ -30,37 +30,25 @@ export const WalletAccountsContainer = ({ wallet, inAnimatedValue, outAnimatedVa
       left="50%"
       style={{ transform: [{ translateX: -width / 2 }, { translateY: -height / 2 }, { rotate: '90deg' }] }}
     >
-      <Animated.View
-        style={
-          outAnimatedValue
-            ? {
-                transform: [
-                  {
-                    translateX: outAnimatedValue.interpolate({
+      <LinearLayout position="relative" left="-4px">
+        <Animated.View
+          style={{
+            transform: [
+              {
+                translateX: outAnimatedValue
+                  ? outAnimatedValue.interpolate({
                       inputRange: [0, 1],
                       outputRange: [0, -height * 1.8],
-                    }),
-                  },
-                ],
-              }
-            : undefined
-        }
-      >
-        <Animated.View
-          style={
-            inAnimatedValue
-              ? {
-                  transform: [
-                    {
-                      translateX: inAnimatedValue.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0, 1],
-                      }),
-                    },
-                  ],
-                }
-              : undefined
-          }
+                    })
+                  : inAnimatedValue
+                  ? inAnimatedValue.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [-height * 1.8, 0],
+                    })
+                  : 0,
+              },
+            ],
+          }}
         >
           {limitedWalletAccounts.map((account, index) => (
             <LinearLayout position="absolute" left={`${index * 4}px`}>
@@ -68,7 +56,7 @@ export const WalletAccountsContainer = ({ wallet, inAnimatedValue, outAnimatedVa
             </LinearLayout>
           ))}
         </Animated.View>
-      </Animated.View>
+      </LinearLayout>
     </LinearLayout>
   )
 }

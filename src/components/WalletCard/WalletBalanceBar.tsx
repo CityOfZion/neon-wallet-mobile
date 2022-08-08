@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react'
 import { Animated } from 'react-native'
+import { Shadow } from 'react-native-shadow-2'
 
 import { Skeleton } from '../Skeleton'
 
@@ -34,7 +35,7 @@ export const WalletBalanceBar = ({ balanceExchange }: Props) => {
   }, [])
 
   return (
-    <LinearLayout position="absolute" bottom="10%" height="12px" width="90%">
+    <LinearLayout position="absolute" bottom="10%" height="12px" width="85%">
       <Animated.View style={{ opacity: opacityValue }}>
         <Skeleton
           isLoading={balanceExchange.isLoading}
@@ -43,29 +44,37 @@ export const WalletBalanceBar = ({ balanceExchange }: Props) => {
           {!!totalTokensBalances && tokensBalancesConverted && (
             <LinearLayout>
               <ImageView
+                position="absolute"
+                top="-2px"
                 resizeMode="cover"
-                source={require('~src/assets/images/wallet-card-label.png')}
+                source={require('~src/assets/images/wallet-card-bar-label.png')}
                 style={{
                   width: '100%',
-                  height: '100%',
-                  borderBottomRightRadius: 9999,
-                  borderTopRightRadius: 9999,
                 }}
               />
-              <LinearLayout position="absolute" top="3.5px" px="2px" orientation="horiz" width="100%">
+              <LinearLayout orientation="horiz" width="100%" px="1px">
                 {tokensBalancesConverted.map((tokenBalances, index) => {
                   return (
-                    <>
-                      <LinearLayout
-                        key={index}
-                        height="5px"
-                        weight={(tokenBalances.convertedAmount * 100) / totalTokensBalances}
-                        borderRadius="2.5px"
-                        minWidth="2px"
-                        mx="1px"
-                        backgroundColor={TokenHelper.getColor(tokenBalances.symbol)}
-                      />
-                    </>
+                    <LinearLayout
+                      key={index}
+                      height="4px"
+                      weight={(tokenBalances.convertedAmount * 100) / totalTokensBalances}
+                      minWidth="4px"
+                      mx="1px"
+                    >
+                      <Shadow
+                        distance={9}
+                        startColor={`${TokenHelper.getColor(tokenBalances.symbol)}1A`}
+                        viewStyle={{ width: '100%', height: '100%' }}
+                      >
+                        <LinearLayout
+                          height="100%"
+                          width="100%"
+                          borderRadius="2.5px"
+                          backgroundColor={TokenHelper.getColor(tokenBalances.symbol)}
+                        />
+                      </Shadow>
+                    </LinearLayout>
                   )
                 })}
               </LinearLayout>

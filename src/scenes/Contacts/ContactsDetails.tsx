@@ -4,6 +4,7 @@ import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, Text, Dimensions, TouchableOpacity } from 'react-native'
+import { Shadow } from 'react-native-shadow-2'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
@@ -11,7 +12,6 @@ import { getBlockchainByAddress, getBlockchainLogo } from '~/src/blockchain'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import ThemedShadowContainer from '~src/components/themed/ThemedShadowContainer'
 import { Contact } from '~src/models/redux/Contact'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ContactsStackParamList } from '~src/navigation/ContactsStackNavigation'
@@ -104,13 +104,9 @@ export const ContactDetails = (props: ContactDetailsProps) => {
       borderRadius: 100,
       backgroundColor: '#252d34',
       width: 126,
-      height: 127,
-      shadowColor: '#3e464d',
-      shadowOffset: { width: 4, height: 4 },
-      shadowRadius: 36,
+      height: 126,
       alignItems: 'center',
       justifyContent: 'center',
-      marginBottom: 30,
     },
     textLetter: {
       color: '#899fa8',
@@ -131,20 +127,11 @@ export const ContactDetails = (props: ContactDetailsProps) => {
   return (
     <ScreenLayout>
       <LinearLayout alignItems="center" mt={Dimensions.get('screen').height * 0.07}>
-        <ThemedShadowContainer
-          android={{
-            width: 126,
-            height: 127,
-            opacity: 0.5,
-            x: 5,
-            y: 5,
-            radius: 60,
-          }}
-        >
+        <Shadow distance={20} offset={[5, 5]} containerViewStyle={{ marginBottom: 30 }}>
           <View style={styles.containerLetter}>
             <Text style={styles.textLetter}>{contact.name?.charAt(0).toLocaleUpperCase()}</Text>
           </View>
-        </ThemedShadowContainer>
+        </Shadow>
         <TextView
           fontFamily="semibold"
           fontSize="20px"
