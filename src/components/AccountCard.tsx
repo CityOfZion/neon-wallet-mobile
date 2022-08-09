@@ -48,6 +48,14 @@ type BalanceProps = {
   balanceExchange?: UseUniqueBalanceAndExchangeResult
 }
 
+const treatSize = (value: number, unit: number): number => {
+  return Number(value * unit)
+}
+
+const treatSizePx = (value: number, unit: number): string => {
+  return `${value * unit}px`
+}
+
 const Balance = ({ balanceExchange, type, unit }: BalanceProps) => {
   const language = useSelector((state: RootState) => state.settings.language)
   const currency = useSelector((state: RootState) => state.settings.currency)
@@ -63,14 +71,20 @@ const Balance = ({ balanceExchange, type, unit }: BalanceProps) => {
   return type === 'small' ? (
     <Skeleton
       isLoading={balanceExchange?.isLoading}
-      layout={{ width: 60 * unit, height: 34 * unit }}
+      layout={{ width: treatSize(60, unit), height: treatSize(34, unit) }}
       withDefaultStyle={false}
     >
-      <LinearLayout alignItems="flex-start" maxWidth="120px">
-        <TextView fontFamily="bold" fontSize={12 * unit} color="white" lineHeight={12 * unit}>
+      <LinearLayout alignItems="flex-start" maxWidth={treatSizePx(120, unit)}>
+        <TextView fontFamily="bold" fontSize={treatSizePx(12, unit)} color="white" lineHeight={treatSizePx(12, unit)}>
           {i18n.t('paymentCard.balance').toUpperCase()}
         </TextView>
-        <TextView fontFamily="semibold" fontSize={22 * unit} lineHeight={22 * unit} color="white" numberOfLines={1}>
+        <TextView
+          fontFamily="semibold"
+          fontSize={treatSizePx(22, unit)}
+          lineHeight={treatSizePx(22, unit)}
+          color="white"
+          numberOfLines={1}
+        >
           {total}
         </TextView>
       </LinearLayout>
@@ -78,14 +92,20 @@ const Balance = ({ balanceExchange, type, unit }: BalanceProps) => {
   ) : (
     <Skeleton
       isLoading={balanceExchange?.isLoading}
-      layout={{ width: '100%', height: 62 * unit }}
-      containerStyle={{ paddingHorizontal: 40 * unit }}
+      layout={{ width: '100%', height: treatSize(62, unit) }}
+      containerStyle={{ paddingHorizontal: treatSize(40, unit) }}
     >
       <LinearLayout>
-        <TextView px={40 * unit} fontSize={14 * unit} color="white" fontFamily="bold">
+        <TextView px={treatSizePx(40, unit)} fontSize={treatSizePx(14, unit)} color="white" fontFamily="bold">
           {i18n.t('paymentCard.balance')}
         </TextView>
-        <TextView fontSize={48 * unit} color="white" textAlign="center" fontFamily="semibold" numberOfLines={1}>
+        <TextView
+          fontSize={treatSizePx(48, unit)}
+          color="white"
+          textAlign="center"
+          fontFamily="semibold"
+          numberOfLines={1}
+        >
           {total}
         </TextView>
       </LinearLayout>
@@ -115,10 +135,6 @@ const AccountCard = ({
 
   const touchDisabled = useRef(false)
   const opacityValue = useRef(new Animated.Value(0)).current
-
-  const treatSize = (value: number): string => {
-    return `${value * unit}px`
-  }
 
   const handleLayout = (event: LayoutChangeEvent) => {
     if (width) return
@@ -210,8 +226,8 @@ const AccountCard = ({
             orientation="verti"
             width="100%"
             height="100%"
-            px={treatSize(16)}
-            py={treatSize(24)}
+            px={treatSizePx(16, unit)}
+            py={treatSizePx(24, unit)}
             justifyContent={!isStack ? 'space-between' : undefined}
           >
             <LinearLayout orientation="horiz" alignItems="center">
@@ -220,27 +236,27 @@ const AccountCard = ({
                 resizeMode="contain"
                 alignSelf="center"
                 style={{
-                  width: 24,
-                  height: 24,
+                  width: treatSize(24, unit),
+                  height: treatSize(24, unit),
                 }}
               />
 
-              <LinearLayout orientation="verti" flex={1} paddingX={treatSize(8)}>
+              <LinearLayout orientation="verti" flex={1} paddingX={treatSizePx(8, unit)}>
                 <TextView
                   fontFamily="semibold"
-                  fontSize={treatSize(22)}
+                  fontSize={treatSizePx(22, unit)}
                   color="white"
                   numberOfLines={1}
-                  lineHeight={treatSize(22)}
+                  lineHeight={treatSizePx(22, unit)}
                 >
                   {account.name ?? i18n.t('paymentCard.accountPlaceholder')}
                 </TextView>
                 <TextView
                   fontFamily="semibold"
-                  fontSize={treatSize(14)}
+                  fontSize={treatSizePx(14, unit)}
                   color="white"
                   numberOfLines={1}
-                  lineHeight={treatSize(16)}
+                  lineHeight={treatSizePx(16, unit)}
                 >
                   {i18n.t(`blockchainServices.${account.blockchain}.id`).toUpperCase()}
                 </TextView>
@@ -251,11 +267,11 @@ const AccountCard = ({
                 : !hideQRCode && (
                     <ButtonView onPress={handlePressQRCode}>
                       <ImageView
-                        ml={treatSize(10)}
+                        ml={treatSizePx(10, unit)}
                         source={require('~src/assets/images/card-qrcode.png')}
                         style={{
-                          width: 24,
-                          height: 24,
+                          width: treatSize(24, unit),
+                          height: treatSize(24, unit),
                         }}
                       />
                     </ButtonView>
@@ -267,22 +283,27 @@ const AccountCard = ({
             )}
 
             {account.address && (
-              <LinearLayout orientation="horiz" alignItems="center" mt={isStack ? '6px' : undefined}>
-                <LinearLayout width={treatSize(24)} height={treatSize(24)} alignItems="center" justifyContent="center">
+              <LinearLayout orientation="horiz" alignItems="center" mt={isStack ? treatSizePx(6, unit) : undefined}>
+                <LinearLayout
+                  width={treatSizePx(24, unit)}
+                  height={treatSizePx(24, unit)}
+                  alignItems="center"
+                  justifyContent="center"
+                >
                   {account.accountType === 'watch' && (
                     <ImageView
                       source={require('~/src/assets/images/icon-watch-white.png')}
                       resizeMode="cover"
                       style={{
-                        width: treatSize(18),
-                        height: treatSize(18),
+                        width: treatSize(18, unit),
+                        height: treatSize(18, unit),
                       }}
                     />
                   )}
                 </LinearLayout>
 
-                <LinearLayout flex={1} paddingX={treatSize(10)}>
-                  <TextView fontSize={treatSize(12)} color="white" fontFamily="bold">
+                <LinearLayout flex={1} paddingX={treatSizePx(10, unit)}>
+                  <TextView fontSize={treatSizePx(12, unit)} color="white" fontFamily="bold">
                     {i18n.t('paymentCard.address')}
                   </TextView>
 
@@ -292,8 +313,8 @@ const AccountCard = ({
                     fontFamily="medium"
                     ellipsizeMode="middle"
                     numberOfLines={1}
-                    fontSize={treatSize(14)}
-                    lineHeight={treatSize(14)}
+                    fontSize={treatSizePx(14, unit)}
+                    lineHeight={treatSizePx(14, unit)}
                     mt="2px"
                   >
                     {account.address}
@@ -307,8 +328,8 @@ const AccountCard = ({
                       source={require('~src/assets/images/icon-copy-white.png')}
                       style={{
                         opacity: 0.5,
-                        width: 14,
-                        height: 14,
+                        width: treatSize(14, unit),
+                        height: treatSize(14, unit),
                       }}
                     />
                   </ButtonView>

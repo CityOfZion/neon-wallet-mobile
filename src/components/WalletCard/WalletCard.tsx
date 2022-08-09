@@ -74,7 +74,7 @@ export const WalletCard = ({
     if (animationType !== 'in') return
 
     Animated.timing(inAnimatedFactor.current, {
-      toValue: 0,
+      toValue: 1,
       duration: 1000,
       useNativeDriver: true,
     }).start()
@@ -93,15 +93,15 @@ export const WalletCard = ({
         >
           <WalletAccountsContainer
             wallet={wallet}
-            width={viewHeight - 20}
-            height={viewWidth - 16}
+            width={viewHeight * 0.95}
+            height={viewWidth * 0.95}
             outAnimatedValue={animationType === 'out' ? outAnimatedFactor.current : undefined}
             inAnimatedValue={animationType === 'in' ? inAnimatedFactor.current : undefined}
           />
 
           <WalletOverlay width={viewWidth} height={viewHeight} />
 
-          <WalletLabel width={viewWidth} wallet={wallet} isInactive={isInactive} />
+          <WalletLabel width={viewWidth} height={viewHeight} wallet={wallet} isInactive={isInactive} />
 
           {props.withBalanceBar && !isInactive && <WalletBalanceBar balanceExchange={props.balanceExchange} />}
         </ButtonView>

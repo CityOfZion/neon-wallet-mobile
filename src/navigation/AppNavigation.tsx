@@ -203,8 +203,8 @@ const AppNavigation: React.FC<Props> = props => {
   const getInitialRouteName = () => {
     return onboardingSeen
       ? hasAuthentication || welcomeToNWSeen
-        ? wrapper.route.Tab.name
-        : wrapper.route.Login.name
+        ? wrapper.route.SetupCompletePage.name
+        : wrapper.route.SetupCompletePage.name
       : wrapper.route.Onboarding.name
   }
 

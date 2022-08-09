@@ -35,7 +35,7 @@ export const WalletBalanceBar = ({ balanceExchange }: Props) => {
   }, [])
 
   return (
-    <LinearLayout position="absolute" bottom="10%" height="12px" width="85%">
+    <LinearLayout position="absolute" bottom="8%" height="12px" width="85%">
       <Animated.View style={{ opacity: opacityValue }}>
         <Skeleton
           isLoading={balanceExchange.isLoading}

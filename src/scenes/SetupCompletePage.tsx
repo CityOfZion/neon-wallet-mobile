@@ -16,7 +16,7 @@ import { RootStackParamList } from '../navigation/AppNavigation'
 import { RootState } from '../store/RootStore'
 import { ImageView, LinearLayout, TextView } from '../styles/styled-components'
 
-export interface SetupCompleteParamList { }
+export interface SetupCompleteParamList {}
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList>
@@ -36,13 +36,7 @@ const SetupCompletePage = (props: Props) => {
       <SafeAreaView style={{ height: '100%' }}>
         <LinearLayout mt={Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.1 : 0.15)}>
           <LinearLayout alignItems="center">
-            <WalletCard
-              wallet={wallet}
-              withBalanceBar={false}
-              animationType="in"
-              width={178}
-              height={244}
-            />
+            <WalletCard wallet={wallet} withBalanceBar={false} animationType="in" width={178} height={244} />
             <LinearLayout mt={Dimensions.get('window').height * 0.03}>
               <LinearLayout width="60%" justifyContent="center" alignItems="center">
                 <TextView color="primary" fontSize="3xl">
@@ -61,7 +55,7 @@ const SetupCompletePage = (props: Props) => {
                 {accountsPool.map(acc => {
                   return (
                     <TouchableOpacity onPress={() => UtilsHelper.copyToClipboard(acc.address ?? undefined)}>
-                      <LinearLayout mt={'1%'} orientation="horiz" justifyContent={'space-between'}>
+                      <LinearLayout mt="1%" orientation="horiz" justifyContent="space-between">
                         <LinearLayout orientation="horiz">
                           <ImageView
                             style={{
@@ -76,7 +70,7 @@ const SetupCompletePage = (props: Props) => {
                             </TextView>
                           </LinearLayout>
                         </LinearLayout>
-                        <LinearLayout alignSelf={'center'}>
+                        <LinearLayout alignSelf="center">
                           <ImageView
                             style={{ width: 12, height: 14 }}
                             source={require('~src/assets/images/icon-copy-green.png')}
