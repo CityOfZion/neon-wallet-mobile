@@ -17,7 +17,7 @@ import { Token } from '~/src/models/Token'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { RootState } from '~/src/store/RootStore'
 import InputLabel from '~src/components/InputLabel'
-import NeonQRCode from '~src/components/QRCode'
+import NeonQRCode from '~src/components/NeonQRCode'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
@@ -50,7 +50,7 @@ const ReceiveTransactionQrCodeModal = (props: Props) => {
   const language = useSelector((state: RootState) => state.settings.language)
   const controller = useSwiperController(true)
 
-  const { exchange } = useExchange()
+  const { data: exchange } = useExchange()
 
   const fiat = useMemo(() => {
     const ratio = BalanceHelper.getExchangeRatio(token.symbol, token.blockchain, exchange)
@@ -86,7 +86,7 @@ const ReceiveTransactionQrCodeModal = (props: Props) => {
       <LinearLayout mt="43px" height="100%" alignItems="center">
         <LinearLayout width={buttonWidth} height={buttonWidth}>
           <ViewShot ref={qrCodeView}>
-            <NeonQRCode content={qrCodeContent} qrCodeWidth={buttonWidth} />
+            <NeonQRCode content={qrCodeContent} size={buttonWidth} />
           </ViewShot>
         </LinearLayout>
 

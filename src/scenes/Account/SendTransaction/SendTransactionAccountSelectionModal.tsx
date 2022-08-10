@@ -24,6 +24,7 @@ import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface SendTransactionAccountSelectionModalParams {
   wallet: Wallet
+  address?: string
 }
 
 interface Props {
@@ -32,7 +33,7 @@ interface Props {
 }
 
 const SendTransactionAccountSelectionModal = (props: Props) => {
-  const { wallet } = props.route.params
+  const { wallet, address } = props.route.params
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
@@ -70,6 +71,7 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
       params: {
         wallet,
         account: selectedAccount,
+        address,
       },
     })
   }
@@ -81,6 +83,7 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
         wallet,
         account: selectedAccount,
         token: tokenBalance,
+        address,
       },
     })
   }

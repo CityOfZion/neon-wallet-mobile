@@ -1,11 +1,5 @@
-import base64 from 'react-native-base64'
-
 import { validateAddressAllBlockchains } from '~src/blockchain'
-export type TScheme = 'wc:' | 'neo:'
 
-export const SCHEME: TScheme[] = ['neo:', 'wc:']
-
-// URI interface
 export interface IURI {
   address: string
   tokenHash?: string
@@ -29,66 +23,34 @@ export abstract class UriHelper {
     }
   }
 
-  static isValidAsString(str: string) {
-    const key = SCHEME.find(it => str.startsWith(it))
-
-    if (UriHelper.isValid(str)) {
-      return key
-    }
-  }
-
   static isValid(str: string) {
-    const key = SCHEME.find(it => str.startsWith(it))
-    const isNeo = key === 'neo:'
-
-    if (isNeo) {
-      return key && validateAddressAllBlockchains(str.substr(key.length).split('?')[0])
-    }
-
-    return !!key
+    return str.startsWith('neo')
   }
 
-  static parse(str: string): IURI | undefined {
-    const key = SCHEME.find(it => str.startsWith(it)) ?? ''
-    const isNeo = key === 'neo:'
+  static validateAndParse(str: string): IURI | undefined {
+    if (!this.isValid(str)) return
 
-    if (!this.isValid(str) || !isNeo) {
-      return undefined
-    }
+    const [address, params] = str.substring(3).split('?')
 
-    const substrings = str.substr(key.length).split('?')
-    const address = substrings[0]
+    if (!validateAddressAllBlockchains(address)) return
 
     let tokenHash: string | undefined
     let amount: number | undefined
     let reference: string | undefined
 
-    // If params
-    if (substrings.length > 1) {
-      const params = substrings[1].split('&')
+    if (params) {
+      const splitedParams = params.split('&')
 
-      tokenHash = this._getParam(params, 'asset')
+      tokenHash = this.getParam(splitedParams, 'asset')
 
-      amount = this._getParam(params, 'amount')
-      reference = this._getParam(params, 'remark')
+      amount = this.getParam(splitedParams, 'amount')
+      reference = this.getParam(splitedParams, 'remark')
     }
 
     return { address, tokenHash, amount, reference }
   }
 
-  static checkIsBase64(uri: string) {
-    const regexBase64 = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
-    return regexBase64.test(uri)
-  }
-
-  static convertBase64ToUri(uri: string) {
-    if (UriHelper.checkIsBase64(uri)) {
-      return base64.decode(uri)
-    }
-    return uri
-  }
-
-  private static _getParam<T extends string | number>(params: string[], param: string): T | undefined {
+  private static getParam<T extends string | number>(params: string[], param: string): T | undefined {
     for (const kv of params) {
       const substrings = kv.split('=')
       const key = substrings[0]

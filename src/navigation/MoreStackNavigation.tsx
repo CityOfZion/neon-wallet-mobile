@@ -8,7 +8,6 @@ import { RootState } from '../store/RootStore'
 import { DefaultNavigationParam } from '../types/global'
 import SettingsStackNavigation from './SettingsStackNavigation'
 
-import CustomizeAccount, { CustomizeAccountParams } from '~/src/scenes/Account/CustomizeAccount'
 import ImportReadAccount, { ImportReadAccountParams } from '~/src/scenes/Account/ImportReadAccount'
 import Step1CreateWalletPage, { Step1CreateWalletParams } from '~/src/scenes/Wallet/CreateWallet/Step1CreateWalletPage'
 import Step2CreateWalletPage from '~/src/scenes/Wallet/CreateWallet/Step2CreateWalletPage'
@@ -26,12 +25,7 @@ import Passphrase, { PassphraseParams } from '~src/scenes/Passphrase'
 
 export type MoreStackParam =
   | DefaultNavigationParam<
-      | Partial<CustomizeAccountParams>
-      | ImportReadAccountParams
-      | PassphraseParams
-      | Step1CreateWalletParams
-      | Step4CreateWalletParams
-      | undefined
+      ImportReadAccountParams | PassphraseParams | Step1CreateWalletParams | Step4CreateWalletParams | undefined
     >
   | undefined
 
@@ -45,7 +39,6 @@ export type MoreStackParamList = {
   ImportKey: { key?: string }
   ImportReadAccount: ImportReadAccountParams
   Passphrase: PassphraseParams
-  CustomizeAccount: CustomizeAccountParams
   ListWallets: undefined
   BlockchainListPage: undefined
   MnemonicSelectionList: MnemonicSelectionListParams
@@ -161,14 +154,6 @@ const MoreStackNavigation = () => {
               route,
             })
           }
-        />
-        <MoreStack.Screen
-          name={wrapper.route.CustomizeAccount.name}
-          component={CustomizeAccount}
-          options={Navigator.defaultStackNavigatorOptions({
-            title: wrapper.route.CustomizeAccount.translate(),
-            theme,
-          })}
         />
         <MoreStack.Screen
           name={wrapper.route.BlockchainListPage.name}

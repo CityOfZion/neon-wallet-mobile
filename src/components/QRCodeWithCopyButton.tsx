@@ -5,7 +5,7 @@ import React, { Fragment, useRef } from 'react'
 import ViewShot from 'react-native-view-shot'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
-import NeonQRCode from '~src/components/QRCode'
+import NeonQRCode from '~src/components/NeonQRCode'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { LinearLayout } from '~src/styles/styled-components'
@@ -30,7 +30,7 @@ export const QRCodeWithCopyButton = (props: QRCodeWithCopyButtonProps) => {
   return (
     <>
       <ViewShot ref={qrCodeView}>
-        <NeonQRCode content={props.qrCodeValue} qrCodeWidth={300} />
+        <NeonQRCode content={props.qrCodeValue} size={300} />
       </ViewShot>
       <LinearLayout width="100%" height={54} my="12%">
         <ThemedButton

@@ -254,7 +254,8 @@
   "quickTools": {
     "qrCode": {
       "title": "Scan QR code",
-      "subtitle": "Launch QR code scanner"
+      "subtitle": "Launch QR code scanner",
+      "accountAlreadyExists": "Account already exists"
     },
     "send": {
       "title": "Send",

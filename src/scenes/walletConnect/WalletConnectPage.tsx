@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { FlatList, TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -12,16 +12,12 @@ import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 import HeaderActionButton from '~/src/components/layout/HeaderActionButton'
 import ScreenLayoutWithoutScroll from '~/src/components/layout/ScreenLayoutWithoutScroll'
 import { useWalletConnect } from '~/src/contexts/WalletConnectContext'
-import { UriHelper } from '~/src/helpers/UriHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { WalletConnectStackParamList } from '~/src/navigation/WalletConnectStackNavigation'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
-export interface WalletConnectPageParams {
-  uri?: string
-}
 
 interface WalletConnectPageProps {
   navigation: StackNavigationProp<RootStackParamList & ModalStackParamList & WalletConnectStackParamList>
@@ -56,17 +52,6 @@ const WalletConnectPage = ({ navigation, route }: WalletConnectPageProps) => {
       screen: wrapper.route.WCConnectDappModal.name,
     })
   }
-
-  useEffect(() => {
-    if (route.params?.uri) {
-      navigation.navigate(wrapper.route.Modal.name, {
-        screen: wrapper.route.WCConnectDappModal.name,
-        params: {
-          uri: UriHelper.convertBase64ToUri(route.params.uri),
-        },
-      })
-    }
-  }, [route.params])
 
   return (
     <ScreenLayoutWithoutScroll>

@@ -1,33 +1,15 @@
-import { RouteProp, CommonActions } from '@react-navigation/native'
+import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { BarCodeEvent, BarCodeScanner } from 'expo-barcode-scanner'
-import ExpoBarCodeScannerModule from 'expo-barcode-scanner/src/ExpoBarCodeScannerModule'
 import i18n from 'i18n-js'
-import React, { useState, useEffect, useRef } from 'react'
-import { StyleSheet, Animated } from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react'
+import { StyleSheet } from 'react-native'
 
-import { NavParam } from '../types/global'
-
-import { wrapper } from '~src/app/ApplicationWrapper'
-import {
-  blockchainServices,
-  getBlockchainByWif,
-  validateAddressAllBlockchains,
-  validatePrivateKeyWithPasswordAllBlockchains,
-  validateTextAllBlockchains,
-  validateWifAllBlockchains,
-} from '~src/blockchain'
-import { useSwiperController } from '~src/components/SwiperPanel'
-import { IURI, TScheme, UriHelper } from '~src/helpers/UriHelper'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
-import HandleQRModal from '~src/scenes/HandleQRModal'
-import { ButtonView, ImageView, RelativeLayout, TextView, LinearLayout } from '~src/styles/styled-components'
-
-const { BarCodeType } = ExpoBarCodeScannerModule
+import { ImageView, RelativeLayout, TextView, LinearLayout, ButtonView } from '~src/styles/styled-components'
 
 export interface QRCodeScanParams {
-  onScan?: (data: IURI | string) => void
-  address?: string
+  onScan?: (data: string) => void
 }
 
 export interface Props {
@@ -35,231 +17,78 @@ export interface Props {
   route: RouteProp<RootStackParamList, 'QRCodeScan'>
 }
 
-type INavigationScheme = Record<TScheme, (key: string) => NavParam<RootStackParamList> | undefined>
+export const QRCodeScan = (props: Props) => {
+  const { onScan } = props.route.params
 
-const navigationScheme: INavigationScheme = {
-  'neo:': key => {
-    return [
-      wrapper.route.Modal.name,
-      {
-        screen: wrapper.route.SendTransactionWalletSelectionModal.name,
-        params: {
-          address: UriHelper.parse(key)?.address,
-        },
-      },
-    ]
-  },
-  'wc:': key => {
-    return [
-      wrapper.route.Modal.name,
-      {
-        screen: wrapper.route.WCConnectionRequestModal.name,
-        params: {
-          uri: key,
-        },
-      },
-    ]
-  },
-}
+  const [hasPermission, setHasPermission] = useState<boolean>()
+  const [isRequesting, setIsRequesting] = useState<boolean>()
 
-const QRCodeScan = (props: Props) => {
-  const controller = useSwiperController(false)
-  const popupVisibility = useRef(new Animated.Value(0))
-  const [hasPermission, setHasPermission] = useState(false)
-  const [message, setMessage] = useState<string>()
-  const [address, setAddress] = useState<string>()
-  useEffect(() => {
-    getScanPermission()
-  }, [hasPermission])
+  const getScanPermission = useCallback(async () => {
+    const { granted } = await BarCodeScanner.getPermissionsAsync()
 
-  useEffect(() => {
-    showMessage()
-  }, [message])
-
-  useEffect(() => {
-    if (props.route.params?.address) {
-      if (validateAddressAllBlockchains(props.route.params.address)) {
-        whatDoWithData(props.route.params.address)
-      }
+    if (granted) {
+      setHasPermission(true)
+      return
     }
+
+    setIsRequesting(true)
+
+    const { granted: requestGranted } = await BarCodeScanner.requestPermissionsAsync()
+    setHasPermission(requestGranted)
+    setIsRequesting(false)
+
+    if (!requestGranted) props.navigation.goBack()
   }, [])
 
-  const showMessage = () => {
-    if (message) {
-      Animated.sequence([
-        Animated.timing(popupVisibility.current, {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(popupVisibility.current, {
-          toValue: 0,
-          duration: 200,
-          delay: 3000,
-          useNativeDriver: true,
-        }),
-      ]).start(() => setMessage(undefined))
-    }
+  const handleBarCodeScanned = ({ data }: BarCodeEvent) => {
+    props.navigation.goBack()
+    if (onScan) onScan(data)
   }
 
-  const getScanPermission = async () => {
-    let granted = (await BarCodeScanner.getPermissionsAsync()).granted
-
-    if (!granted) {
-      setMessage(i18n.t('screens.scanQrCode.requesting'))
-
-      granted = (await BarCodeScanner.requestPermissionsAsync()).granted
-
-      if (!granted) {
-        setMessage(i18n.t('screens.scanQrCode.noAccess'))
-      } else {
-        setHasPermission(granted)
-      }
-    } else {
-      setHasPermission(granted)
-    }
-  }
-
-  const isValid = (key: string) => validateTextAllBlockchains(key) || UriHelper.isValid(key)
-
-  const goTo = (key: string): NavParam<RootStackParamList> | undefined => {
-    if (validatePrivateKeyWithPasswordAllBlockchains(key)) {
-      return [
-        wrapper.route.Tab.name,
-        {
-          screen: wrapper.route.More.name,
-          params: {
-            screen: wrapper.route.Passphrase.name,
-            initial: false,
-            params: {
-              encryptedKey: key,
-            },
-          },
-        },
-      ]
-    } else if (validateWifAllBlockchains(key)) {
-      const blockchainName = getBlockchainByWif(key)
-      if (blockchainName) {
-        return [
-          wrapper.route.Tab.name,
-          {
-            screen: wrapper.route.More.name,
-            params: {
-              screen: wrapper.route.CustomizeAccount.name,
-              initial: false,
-              params: {
-                source: wrapper.route.ImportKey.name,
-                address: blockchainServices[blockchainName].generateAccountFromWif(key),
-                legacy: true,
-                wif: key,
-                blockchain: blockchainName,
-              },
-            },
-          },
-        ]
-      }
-    }
-
-    const scheme = UriHelper.isValidAsString(key)
-
-    if (scheme) {
-      return navigationScheme[scheme](key)
-    }
-  }
-
-  const whatDoWithData = (info: string | IURI) => {
-    if (!controller.isShowing) {
-      if (isValid(info as string)) {
-        setMessage(i18n.t('screens.scanQrCode.success'))
-        // If there's a callback, calls the callback and navigates back
-        if (props.route.params?.onScan) {
-          let data: IURI | string = info
-
-          if (UriHelper.isValid(info as string)) {
-            data = UriHelper.parse(info as string) ?? info
-          }
-          props.navigation.goBack()
-          props.route.params.onScan(data)
-        } else {
-          // If scanned QR is an address, opens modal
-          if (validateAddressAllBlockchains(info as string)) {
-            if (UriHelper.isValid(info as string)) {
-              const destination = goTo(info as string)
-              props.navigation.pop(1)
-              destination && props.navigation.navigate(...destination)
-            }
-            setAddress(info as string)
-            controller.open()
-          } else {
-            // Otherwise, navigates to corresponding page
-            const destination = goTo(info as string)
-            props.navigation.pop(1)
-            destination && props.navigation.navigate(...destination)
-          }
-        }
-      } else {
-        setMessage(i18n.t('screens.scanQrCode.tryAgain'))
-      }
-    }
-  }
-
-  const handleBarCodeScanned = (evt: BarCodeEvent) => {
-    whatDoWithData(evt.data)
-  }
-
-  const modalNavigate = (action: CommonActions.Action) => {
-    controller.close()
-    props.navigation.pop(1)
-    props.navigation.dispatch(action)
-  }
+  useEffect(() => {
+    getScanPermission()
+  }, [getScanPermission])
 
   return (
     <RelativeLayout bg="background.12" alignItems="center" justifyContent="center" height="100%">
       {hasPermission && (
         <BarCodeScanner
-          barCodeTypes={[BarCodeType.qr]}
           onBarCodeScanned={handleBarCodeScanned}
+          barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
           style={StyleSheet.absoluteFillObject}
         />
       )}
 
-      <ImageView width="100%" resizeMode="contain" source={require('~src/assets/images/qr-code-frame.png')} />
+      <ImageView
+        resizeMode="contain"
+        source={require('~src/assets/images/qr-code-frame.png')}
+        style={{
+          height: '100%',
+        }}
+      />
 
       <ButtonView
         position="absolute"
         bottom={0}
         width="100%"
         height="100px"
-        borderTopLeftRadius="18px"
-        borderTopRightRadius="18px"
-        bg="#333d46"
+        bg="background.17"
         alignItems="center"
         justifyContent="center"
         onPress={props.navigation.goBack}
       >
-        <LinearLayout mb={6}>
-          <TextView fontSize="22px" color="primary" fontFamily="regular">
-            {i18n.t('screens.scanQrCode.cancel')}
-          </TextView>
-        </LinearLayout>
+        <TextView fontSize="22px" color="primary" fontFamily="regular">
+          {i18n.t('screens.scanQrCode.cancel')}
+        </TextView>
       </ButtonView>
 
-      <Animated.View
-        style={{
-          opacity: popupVisibility.current,
-          position: 'absolute',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <TextView bg="white" textAlign="center" p="20px" borderRadius="30px" fontSize="20px">
-          {message}
-        </TextView>
-      </Animated.View>
-
-      <HandleQRModal controller={controller} address={address ?? ''} onClick={modalNavigate} />
+      {(hasPermission === false || isRequesting) && (
+        <LinearLayout position="absolute" alignItems="center" justifyContent="center">
+          <TextView bg="white" textAlign="center" p="20px" borderRadius="30px" fontSize="20px">
+            {isRequesting ? i18n.t('screens.scanQrCode.requesting') : i18n.t('screens.scanQrCode.noAccess')}
+          </TextView>
+        </LinearLayout>
+      )}
     </RelativeLayout>
   )
 }
-
-export default QRCodeScan

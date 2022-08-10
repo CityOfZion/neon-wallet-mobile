@@ -23,7 +23,6 @@ import { ContactsButton } from '~src/components/input/ContactsButton'
 import { InputClearButton } from '~src/components/input/InputClearButton'
 import { PasteButton } from '~src/components/input/PasteButton'
 import { ScanButton } from '~src/components/input/ScanButton'
-import { IURI } from '~src/helpers/UriHelper'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
 import { Account } from '~src/models/redux/Account'
 import { Contact } from '~src/models/redux/Contact'
@@ -50,7 +49,7 @@ interface Props {
   showContacts?: boolean
   filterBlockchain?: BlockchainServiceKey
   onClearPress?: () => void
-  onScan?: (data: IURI | string) => void
+  onScan?: (data: string) => void
   onSelectContact?: (contact: Contact, address: string) => void
   onSelectAccount?: (account: Account) => void
   placeholder?: string

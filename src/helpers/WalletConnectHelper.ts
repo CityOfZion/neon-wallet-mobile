@@ -1,4 +1,5 @@
 import { SessionTypes } from '@walletconnect/types'
+import base64 from 'react-native-base64'
 
 import { DefaultMethods } from '~/src/config/walletConnect/constants'
 
@@ -31,5 +32,25 @@ export abstract class WalletConnectHelper {
     })
 
     return accounts
+  }
+
+  static isValidURI(uri: string) {
+    if (uri.startsWith('wc')) {
+      return true
+    }
+
+    return false
+  }
+
+  static checkIsBase64(uri: string) {
+    const regexBase64 = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
+    return regexBase64.test(uri)
+  }
+
+  static convertBase64ToUri(uri: string) {
+    if (WalletConnectHelper.checkIsBase64(uri)) {
+      return base64.decode(uri)
+    }
+    return uri
   }
 }

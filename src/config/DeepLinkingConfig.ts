@@ -1,5 +1,7 @@
 import { getStateFromPath, LinkingOptions } from '@react-navigation/native'
 
+import { WalletConnectHelper } from '../helpers/WalletConnectHelper'
+
 import { wrapper } from '~src/app/ApplicationWrapper'
 
 export class DeepLinkingConfig {
@@ -10,7 +12,7 @@ export class DeepLinkingConfig {
       prefixes: ['neon://', 'nep9://', 'wc://'],
       config: {
         screens: {
-          Tab: {
+          [wrapper.route.Tab.name]: {
             screens: {
               [wrapper.route.More.name]: {
                 initialRouteName: wrapper.route.MorePage.name,
@@ -24,72 +26,49 @@ export class DeepLinkingConfig {
                   },
                 },
               },
-              [wrapper.route.WalletConnectPage.name]: {
-                initialRouteName: wrapper.route.WalletConnectPage.name,
-                screens: {
-                  [wrapper.route.WalletConnectPage.name]: {
-                    path: 'uri/:uri',
-                  },
-                },
-              },
-              [wrapper.route.ListWallets.name]: {
-                initialRouteName: wrapper.route.ListWalletsPage.name,
-                screens: {
-                  [wrapper.route.ListWalletsPage.name]: wrapper.route.ListWalletsPage.name,
-                  [wrapper.route.GetAccount.name]: {
-                    path: 'send',
-                  },
-                },
-              },
             },
           },
-          [wrapper.route.QRCodeScan.name]: {
-            initialRouteName: 'Tab',
+          [wrapper.route.Modal.name]: {
             screens: {
-              Tab: 'Tab',
-              [wrapper.route.QRCodeScan.name]: {
-                path: 'address/:address?',
+              [wrapper.route.AddressScanQuickToolsModal.name]: {
+                path: 'address/:address',
               },
             },
           },
         },
       },
       getStateFromPath: (path, options) => {
-        if (path.includes('uri')) {
-          const [, paramUri] = path.split('=')
-          return {
-            routes: [
-              {
-                name: wrapper.route.Tab.name,
-                state: {
-                  routes: [
-                    {
-                      name: wrapper.route.WalletConnectPage.name,
-                      params: { uri: paramUri },
-                      state: {
-                        routes: [
-                          {
-                            name: wrapper.route.WalletConnectPage.name,
-                            params: { uri: paramUri },
-                          },
-                        ],
-                      },
-                    },
-                  ],
-                },
+        if (!path.startsWith('uri=')) return getStateFromPath(path, options)
+
+        const [, uri] = path.split('=')
+
+        const convertedUri = WalletConnectHelper.convertBase64ToUri(uri)
+
+        return {
+          routes: [
+            {
+              name: wrapper.route.Modal.name,
+              state: {
+                routes: [
+                  {
+                    name: wrapper.route.WCConnectionRequestModal.name,
+                    params: { uri: convertedUri },
+                  },
+                ],
               },
-            ],
-          }
+            },
+          ],
         }
-        return getStateFromPath(path, options)
       },
     }
   }
+
   setInitialRoute(initialRoute: string) {
     if (this.linkingConfig.config) {
       this.linkingConfig.config.initialRouteName = initialRoute
     }
   }
+
   getLinkingConfig() {
     return this.linkingConfig
   }

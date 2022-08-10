@@ -8,15 +8,12 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import { UriHelper } from '~/src/helpers/UriHelper'
+import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'
 import { LinearLayout, TextView } from '~/src/styles/styled-components'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
-
-export interface WCConnectDappModalParams {
-  uri?: string
-}
 
 interface WCConnectDappModalProps {
   navigation: StackNavigationProp<RootStackParamList & ModalStackParamList>
@@ -24,7 +21,7 @@ interface WCConnectDappModalProps {
 }
 
 export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
-  const [url, setUrl] = useState<string>(props.route.params?.uri ?? '')
+  const [url, setUrl] = useState<string>('')
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const controller = useSwiperController(true)
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
@@ -33,14 +30,22 @@ export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
     return UriHelper.isValid(url)
   }, [url])
 
-  const handleChangeURL = useCallback(
-    (text: string) => {
-      setUrl(text)
-    },
-    [url]
-  )
+  const handleChange = (text: string) => {
+    setUrl(text)
+  }
 
-  const handleNavigation = useCallback(() => {
+  const handleScan = (data: string) => {
+    if (!WalletConnectHelper.isValidURI(data)) return
+
+    props.navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.WCConnectionRequestModal.name,
+      params: {
+        uri: data,
+      },
+    })
+  }
+
+  const handlePress = useCallback(() => {
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.WCConnectionRequestModal.name,
       params: {
@@ -72,7 +77,8 @@ export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
             </TextView>
             <LinearLayout ml={-5} mr={-5}>
               <InputWithValidation
-                onChangeText={handleChangeURL}
+                onChangeText={handleChange}
+                onScan={handleScan}
                 color="text.10"
                 separatorColor="text.3"
                 invalidColor="text.10"
@@ -89,7 +95,7 @@ export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
           <ThemedButton
             label={i18n.t('modals.connectDApp.connectLabel')}
             disabled={!validateURL() || !isConnected}
-            onPress={handleNavigation}
+            onPress={handlePress}
           />
         </LinearLayout>
       </LinearLayout>

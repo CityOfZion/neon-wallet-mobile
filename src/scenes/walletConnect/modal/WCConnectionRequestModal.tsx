@@ -98,9 +98,7 @@ const WCConnectionRequestModal = (props: Props) => {
       controller={controller}
       rightButton={<CloseButton mr="20px" />}
       title={i18n.t('modals.transactionSent.title')}
-      onClose={() => {
-        navigation.goBack()
-      }}
+      onClose={navigation.goBack}
       onRightPress={controller.close}
       solidColorBG
     >
@@ -124,9 +122,8 @@ const WCConnectionRequestModal = (props: Props) => {
                     <ImageView
                       source={getBlockchainLogo(blockchain.current)}
                       resizeMode="contain"
-                      width="20px"
-                      height="20px"
                       mr={1}
+                      style={{ width: 20, height: 20 }}
                     />
                     <TextView fontFamily="medium" color="#fff" fontSize="16px">
                       {i18n.t(`blockchainServices.${blockchain.current}.id`)}
