@@ -154,7 +154,7 @@ const ImportKey = (props: ImportKeyProps) => {
         index = 0
         while (!stop && isConnected) {
           const { wif, address } = blockchainServices[blockchainName].generateAccount(mnemonic, index)
-          console.log({wif, address, index})
+          console.log({ wif, address, index })
           if (!accounts.find(account => account.address === address)) {
             await UtilsHelper.sleep(200)
             const req = blockchainServices[blockchainName].provider

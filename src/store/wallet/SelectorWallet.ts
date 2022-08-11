@@ -14,13 +14,11 @@ export const selectWalletIds = createSelector(
   state => state.wallet.data.map(wallet => wallet.id).filter(id => id !== null) as string[]
 )
 
-export const selectWalletByID = (idWallet: string | null) => createSelector(
-  rootState,
-  (state) => {
+export const selectWalletByID = (idWallet: string | null) =>
+  createSelector(rootState, state => {
     const foundWallet = state.wallet.data.find(wallet => wallet.id === idWallet)
-    if(foundWallet){
+    if (foundWallet) {
       return plainToClass(Wallet, foundWallet)
     }
     return undefined
-  }
-)
+  })

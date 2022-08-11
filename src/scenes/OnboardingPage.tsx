@@ -232,7 +232,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
                     }
                     index: number
                   }) => {
-                    const { item, index } = imageList
+                    const { item } = imageList
                     return (
                       <OnboardingSlide
                         heightBG={item.heightBG}

@@ -258,13 +258,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
     })
   }
 
-  const handleCanSend = () => {
-    if (account.accountType === 'watch' || !isConnected || !wallet) {
-      return false
-    }
-    return true
-  }
-
   const handlePressSendButton = () => {
     const wallet = account.getWallet(wallets)
 

@@ -9,11 +9,11 @@ import { TransactionRequestSuccessElementProps } from '../TransactionRequestBase
 import { blockchainServices } from '~/src/blockchain'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import { RootState } from '~/src/store/RootStore'
+import { selectWalletByID } from '~/src/store/wallet/SelectorWallet'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Normalize } from '~src/app/Normalize'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
-import { selectWalletByID } from '~/src/store/wallet/SelectorWallet'
 
 export const InvokeFunctionSuccess = ({ account, transactionId }: TransactionRequestSuccessElementProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])

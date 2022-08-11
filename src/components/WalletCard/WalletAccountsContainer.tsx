@@ -6,7 +6,7 @@ import AccountCard from '../AccountCard'
 
 import { Wallet } from '~/src/models/redux/Wallet'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
-import { LinearLayout, RelativeLayout } from '~src/styles/styled-components'
+import { LinearLayout } from '~src/styles/styled-components'
 
 type Props = {
   height: number
@@ -16,41 +16,7 @@ type Props = {
   inAnimatedValue?: Animated.Value
 }
 
-type WalletAccountProps = {
-  viewHeight: number
-  account: Account
-  index: number
-}
-
-const WalletAccount = ({ account, index, viewHeight }: WalletAccountProps) => {
-  const ratio = 38 / 25
-  const cardWidth = viewHeight - 12
-  const cardHeight = cardWidth / ratio
-
-  return (
-    <LinearLayout
-      mt={`${index * 4}px`}
-      position="absolute"
-      style={{
-        top: 3 + cardHeight * ratio * 0.5,
-        left: 5 + cardHeight * 0.5,
-      }}
-    >
-      <RelativeLayout
-        width={cardWidth}
-        style={{
-          top: -cardHeight * 0.5,
-          left: -(cardHeight * ratio) * 0.5,
-          transform: [{ rotate: '90deg' }],
-        }}
-      >
-        <AccountCard account={account} hideBalance />
-      </RelativeLayout>
-    </LinearLayout>
-  )
-}
-
-export const WalletAccountsContainer = ({ wallet, inAnimatedValue, outAnimatedValue, viewHeight }: Props) => {
+export const WalletAccountsContainer = ({ wallet, inAnimatedValue, outAnimatedValue, height, width }: Props) => {
   const accounts = useSelector(selectAccounts)
 
   const limitedWalletAccounts = useMemo(() => wallet.getAccounts(accounts).slice(0, 10), [wallet, accounts])
