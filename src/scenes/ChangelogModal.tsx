@@ -32,7 +32,7 @@ interface ItemProps {
 const Item = (props: ItemProps) => {
   return (
     <LinearLayout orientation="horiz" justifyContent="center">
-      <LinearLayout width={`${8 * props.biggestVersionLength}px`} alignItems="flex-end">
+      <LinearLayout width={`${10 * props.biggestVersionLength}px`} alignItems="flex-end">
         <LinearLayout borderRadius="12px" backgroundColor="primary">
           <TextView color="text.1" p="4px" fontSize="lg">
             {props.version}
