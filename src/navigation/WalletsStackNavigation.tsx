@@ -4,13 +4,12 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
-import { HeaderActionButtonProps } from '../components/layout/HeaderActionButton'
 import AccountConnectionsScreen, { AccountConnectionsScreenParams } from '../scenes/Account/AccountConnectionsScreen'
 import AccountNFTSScreen, { AccountNFTSScreenParams } from '../scenes/Account/AccountNFTSScreen/AccountNFTSScreen'
 import { AccountSettingsView, AccountSettingsViewParams } from '../scenes/Account/AccountSettingsView'
-import Step1BackupWalletPage, { StepsBackupWalletPageParams } from '../scenes/Wallet/BackupWallet/Step1BackupWalletPage'
-import Step2BackupWalletPage from '../scenes/Wallet/BackupWallet/Step2BackupWalletPage'
-import Step3BackupWalletPage from '../scenes/Wallet/BackupWallet/Step3BackupWalletPage'
+import Step1BackupWalletPage, { Step1BackupWalletPageParams } from '../scenes/Wallet/BackupWallet/Step1BackupWalletPage'
+import Step2BackupWalletPage, { Step2BackupWalletPageParams } from '../scenes/Wallet/BackupWallet/Step2BackupWalletPage'
+import Step3BackupWalletPage, { Step3BackupWalletPageParams } from '../scenes/Wallet/BackupWallet/Step3BackupWalletPage'
 import { WalletSettingsView, WalletSettingViewParams } from '../scenes/Wallet/WalletSettingsView'
 import { RootState } from '../store/RootStore'
 import { DefaultNavigationParam } from '../types/global'
@@ -19,7 +18,7 @@ import AccountTransactionsScreen, {
   AccountTransactionsScreenParams,
 } from '~/src/scenes/Account/AccountTransactionsScreen/AccountTransactionsScreen'
 import GetWalletView, { GetWalletViewParams } from '~/src/scenes/Wallet/GetWalletView'
-import ListWalletView from '~/src/scenes/Wallet/ListWalletView'
+import { ListWalletView } from '~/src/scenes/Wallet/ListWalletView/ListWalletView'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Navigator } from '~src/app/Navigator'
 import AccountAssetScreen, { AccountAssetScreenParams } from '~src/scenes/Account/AccountAssetsScreen'
@@ -35,9 +34,9 @@ export type WalletStackParamList = {
   AccountNFTSScreen: AccountNFTSScreenParams
   AccountSettingsView: AccountSettingsViewParams
   WalletSettingsView: WalletSettingViewParams
-  Step1BackupWallet: StepsBackupWalletPageParams & HeaderActionButtonProps
-  Step2BackupWallet: StepsBackupWalletPageParams & HeaderActionButtonProps
-  Step3BackupWallet: StepsBackupWalletPageParams & HeaderActionButtonProps
+  Step1BackupWallet: Step1BackupWalletPageParams
+  Step2BackupWallet: Step2BackupWalletPageParams
+  Step3BackupWallet: Step3BackupWalletPageParams
 }
 
 export type WalletStackParam =
@@ -50,7 +49,9 @@ export type WalletStackParam =
       | AccountNFTSScreenParams
       | AccountSettingsViewParams
       | WalletSettingViewParams
-      | StepsBackupWalletPageParams
+      | Step1BackupWalletPageParams
+      | Step2BackupWalletPageParams
+      | Step3BackupWalletPageParams
       | undefined
     >
   | undefined

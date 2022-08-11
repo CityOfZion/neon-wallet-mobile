@@ -27,6 +27,7 @@ export type TANimationType = 'in' | 'out'
 type Props = {
   wallet: Wallet
   isInactive?: boolean
+  wasPressed?: boolean
   onPress?: () => void
   animationType?: TANimationType
   width?: number
@@ -42,6 +43,7 @@ export const WalletCard = ({
   height,
   width,
   containerStyle,
+  wasPressed,
   ...props
 }: Props) => {
   const viewWidth = width ?? 280
@@ -80,9 +82,15 @@ export const WalletCard = ({
     }).start()
   }, [animationType])
 
+  useEffect(() => {
+    if (animationType === 'in' || !wasPressed) return
+
+    handlePress()
+  }, [animationType, wasPressed])
+
   return (
-    <Shadow radius={18} offset={[4, 4]}>
-      <LinearLayout overflow="hidden" {...containerStyle}>
+    <LinearLayout overflow="hidden" {...containerStyle}>
+      <Shadow radius={18} offset={[4, 4]}>
         <ButtonView
           width={viewWidth}
           height={viewHeight}
@@ -105,7 +113,7 @@ export const WalletCard = ({
 
           {props.withBalanceBar && !isInactive && <WalletBalanceBar balanceExchange={props.balanceExchange} />}
         </ButtonView>
-      </LinearLayout>
-    </Shadow>
+      </Shadow>
+    </LinearLayout>
   )
 }

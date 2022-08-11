@@ -1,22 +1,23 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import _ from 'lodash'
-import moment from 'moment'
-import PropTypes from 'prop-types'
-import React, { useEffect, useState, useCallback } from 'react'
-import { Alert, FlatList } from 'react-native'
-import { useDispatch } from 'react-redux'
+import React, { useState, useMemo } from 'react'
+import { FlatList } from 'react-native'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Alert } from '~/src/components/Alert'
+import { Button } from '~/src/components/Button'
+import { Wallet } from '~/src/models/redux/Wallet'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
-import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import ScreenLoader from '~src/components/loader/ScreenLoader'
-import ThemedButton from '~src/components/themed/ThemedButton'
 import { TextView, LinearLayout } from '~src/styles/styled-components'
+
+export interface Step2BackupWalletPageParams {
+  wallet: Wallet
+  mnemonic: string
+}
 
 interface Props {
   route: RouteProp<WalletStackParamList, 'Step2BackupWallet'>
@@ -24,26 +25,7 @@ interface Props {
 }
 
 const Step2BackupWalletPage: React.FC<Props> = props => {
-  const { wallet, accessByNotification } = props.route.params
-  const dispatch = useDispatch()
-  const [words, setWords] = useState<string[]>([])
-  const [formedWords, setFormedWords] = useState<string[]>([])
-  const [shuffledWords, setShuffledWords] = useState<string[]>([])
-  const [indexesPressedWords, setIndexesPressedWords] = useState<number[]>([])
-
-  useEffect(() => {
-    Await.run('populateStep2', populate)
-  }, [wallet.id])
-
-  const populate = useCallback(async () => {
-    const mnemonic = await wallet.getMnemonic()
-
-    if (mnemonic) {
-      const words = mnemonic.split(' ')
-      setWords(words)
-      setShuffledWords(_.shuffle(words))
-    }
-  }, [wallet.id])
+  const { wallet, mnemonic } = props.route.params
 
   props.navigation.setOptions({
     headerRight: () =>
@@ -51,112 +33,114 @@ const Step2BackupWalletPage: React.FC<Props> = props => {
         actionTitle: i18n.t('app.cancel'),
         actionButtonStyle: 'highlight',
         actionOnPress: () => {
-          props.navigation.reset({
-            index: 0,
-            routes: accessByNotification ? [{ name: wrapper.route.Tab.name }] : [{ name: wrapper.route.More.name }],
-          })
+          props.navigation.goBack()
+          props.navigation.goBack()
         },
       }),
   })
 
+  const words = useMemo(() => mnemonic.split(' '), [mnemonic])
+  const shuffledWords = useMemo(() => _.shuffle(words), [words])
+
+  const [pressedWords, setPressedWords] = useState<string[]>([])
+  const [alertIsVisible, setAlertIsVisible] = useState(false)
+
+  const isActive = (word: string) => pressedWords.some(pressedWord => pressedWord === word)
+
+  const isDisabled = () => pressedWords.length !== words.length
+
+  const handlePress = (word: string) => {
+    const exist = isActive(word)
+
+    setPressedWords(prevState => (exist ? prevState.filter(state => state !== word) : [...prevState, word]))
+  }
+
+  const handleRetry = () => {
+    setPressedWords([])
+  }
+
   const validateAndNext = async () => {
-    if (formedWords.join() === words.join()) {
-      wallet.lastBackup = moment().format()
-      wallet.showBackupAlert = false
-      dispatch(walletReducerActions.saveWallet(wallet))
-
-      props.navigation.navigate(wrapper.route.Step3BackupWallet.name, {
-        wallet,
-        accessByNotification,
-      })
-    } else {
-      Alert.alert(i18n.t('step2BackupWallet.dialog_1_title'), i18n.t('step2BackupWallet.dialog_1_body'), [
-        {
-          text: i18n.t('app.retry'),
-          onPress: () => setFormedWords([]),
-        },
-      ])
+    if (pressedWords.join() !== words.join()) {
+      setAlertIsVisible(true)
+      return
     }
-  }
 
-  const isDisabled = () => {
-    return formedWords.length !== words.length
-  }
-
-  const toggleWordEvent = (word: string, active: boolean, indexWord: number) => {
-    if (active) {
-      const words = [...formedWords, word]
-      setFormedWords(words)
-      setIndexesPressedWords([...indexesPressedWords, indexWord])
-    } else {
-      setFormedWords([])
-      setIndexesPressedWords([])
-    }
+    props.navigation.navigate(wrapper.route.Step3BackupWallet.name, {
+      wallet,
+    })
   }
 
   return (
     <ScreenLayout alignX="center" darkerSolidColorBG>
-      <AwaitActivity name="populateStep2" loadingView={<ScreenLoader />}>
-        <TextView alignSelf="flex-start" color="text.0" fontSize="lg" fontFamily="semibold">
-          {wallet.name}
-        </TextView>
+      <LinearLayout height="100%" justifyContent="space-between" width="100%">
+        <LinearLayout width="100%">
+          <TextView alignSelf="flex-start" color="text.0" fontSize="lg" fontFamily="semibold">
+            {wallet.name}
+          </TextView>
 
-        <LinearLayout mt={5} weight={1}>
-          <LinearLayout mb={6} width="100%">
-            <LinearLayout width="100%" orientation="horiz">
-              <TextView weight={1} color="text.0" fontSize="lg" fontFamily="semibold">
-                {i18n.t('step2BackupWallet.label_1')}
-              </TextView>
+          <LinearLayout justifyContent="space-between" orientation="horiz" mt="28px">
+            <TextView color="text.0" fontSize="lg" fontFamily="regular">
+              {i18n.t('screens.step2BackupWallet.label_1')}
+            </TextView>
 
-              <TextView color="text.0" fontSize="lg" fontFamily="bold">
-                {i18n.t('step2BackupWallet.twoOfThree')}
-              </TextView>
-            </LinearLayout>
-
-            <TextView fontFamily="light" color="text.0" fontSize="lg">
-              {i18n.t('step2BackupWallet.body_1')}
+            <TextView color="text.0" fontSize="lg" fontFamily="regular">
+              {i18n.t('screens.step2BackupWallet.twoOfThree')}
             </TextView>
           </LinearLayout>
 
-          <LinearLayout
-            mb={6}
-            orientation="horiz"
-            flexWrap="wrap"
-            alignItems="center"
-            justifyContent="center"
-            width="100%"
-          >
+          <TextView fontFamily="light" color="text.0" fontSize="lg" mt="6px">
+            {i18n.t('screens.step2BackupWallet.body_1')}
+          </TextView>
+
+          <LinearLayout orientation="horiz" width="100%">
             <FlatList
               data={shuffledWords}
               horizontal={false}
               scrollEnabled={false}
               numColumns={3}
-              renderItem={({ item, index }) => (
-                <LinearLayout weight={1} mx={2} my={5}>
-                  <ThemedButton
-                    onPress={(event, active) => toggleWordEvent(String(item), Boolean(active), index)}
-                    label={item}
-                    toggleable
-                    rounded={false}
-                    active={indexesPressedWords.includes(index)}
-                  />
-                </LinearLayout>
+              renderItem={({ item }) => (
+                <Button
+                  onPress={() => handlePress(item)}
+                  flex={1}
+                  label={item}
+                  variant="contained"
+                  backgroundColor="background.9"
+                  labelStyle={{ color: 'primary', fontSize: '2xl' }}
+                  width="3%"
+                  height="52px"
+                  mx="4px"
+                  my="8px"
+                  borderWidth="1px"
+                  borderStyle="solid"
+                  borderColor={isActive(item) ? 'primary' : 'transparent'}
+                />
               )}
             />
           </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout mt={5} mb={6} px={5} width="100%">
-          <ThemedButton onPress={() => validateAndNext()} label={i18n.t('app.continue')} disabled={isDisabled()} />
-        </LinearLayout>
-      </AwaitActivity>
+        <Button
+          variant="contained"
+          label={i18n.t('app.continue')}
+          py="12px"
+          mx="18px"
+          labelStyle={{ fontSize: '2xl' }}
+          mb="36px"
+          disabled={isDisabled()}
+          onPress={validateAndNext}
+        />
+      </LinearLayout>
+
+      <Alert
+        title={i18n.t('screens.step2BackupWallet.dialog_1_title')}
+        subtitle={i18n.t('screens.step2BackupWallet.dialog_1_body')}
+        buttonLabel={i18n.t('app.retry')}
+        onRequestClose={() => setAlertIsVisible(false)}
+        visible={alertIsVisible}
+        onPress={handleRetry}
+      />
     </ScreenLayout>
   )
-}
-
-Step2BackupWalletPage.propTypes = {
-  navigation: PropTypes.any,
-  route: PropTypes.any,
 }
 
 export default Step2BackupWalletPage

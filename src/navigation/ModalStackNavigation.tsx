@@ -34,6 +34,9 @@ import SendTransactionWalletSelectionModal, {
   SendTransactionWalletSelectionModalParams,
 } from '../scenes/Account/SendTransaction/SendTransactionWalletSelectionModal'
 import { AddressScanQuickToolsModal, AddressScanQuickToolsModalParams } from '../scenes/AddressScanQuickToolsModal'
+import ConfirmPasscodePage, { ConfirmPasscodePageParams } from '../scenes/Settings/ConfirmPasscodePage'
+import PasscodePage, { PasscodePageParams } from '../scenes/Settings/PasscodePage/PasscodePage'
+import { BackupInfoModal, BackupInfoModalParams } from '../scenes/Wallet/BackupInfoModal'
 import WebViewModal, { WebViewModalParams } from '../scenes/WebViewModal'
 import WCInvocationDetailsModal, {
   WCInvocationDetailsModalParams,
@@ -58,7 +61,6 @@ import WCTransactionRequestModal, {
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { PersistContact, PersistContactParams } from '~src/components/contacts/PersistContact'
 import { screenConfig } from '~src/config/ScreenConfig'
-import { PasscodeStackParams } from '~src/navigation/PasscodeStackNavigation'
 import { AccountQRCode, AccountQRCodeParams } from '~src/scenes/Account/AccountQRCode'
 import BlockchainListModal, { BlockchainListModalParams } from '~src/scenes/BlockchainListModal'
 import ChangelogModal, { ChangelogModalParams } from '~src/scenes/ChangelogModal'
@@ -68,8 +70,8 @@ import CurrencyPickerModal from '~src/scenes/CurrencyPickerModal'
 import CustomColorPage, { CustomColorPageParam } from '~src/scenes/CustomColorPage'
 import LanguagePickerModal from '~src/scenes/LanguagePickerModal'
 import ListTokenModal, { ListTokenModalParams } from '~src/scenes/ListTokenModal'
-import { VerifyPasscodePageParams } from '~src/scenes/LoginPage/VerifyPasscodePage'
-import SecurityPickerModal, { SecurityPickerModalParams } from '~src/scenes/SecurityPickerModal'
+import SecurityPickerModal from '~src/scenes/Settings/SecurityPickerModal'
+import VerifyPasscodePage, { VerifyPasscodePageParams } from '~src/scenes/Settings/VerifyPasscodePage'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import TipConfirmationModal, { TipConfirmationModalParams } from '~src/scenes/TipConfirmationModal'
 import WelcomePage, { WelcomeModalParam } from '~src/scenes/WelcomePage'
@@ -105,9 +107,7 @@ export type ModalStackParamList = {
   CopyContextModal: CopyContextModalParams
   EditWalletModal: EditWalletParams
   ReceiveModalStack: undefined
-  SecurityModal: SecurityPickerModalParams
-  PasscodeStack: PasscodeStackParams
-  VerifyPasscode: VerifyPasscodePageParams
+  SecurityPickerModal: undefined
   ChangelogModal: ChangelogModalParams
   TipConfirmationModal: TipConfirmationModalParams
   BlockchainListModal: BlockchainListModalParams
@@ -132,6 +132,10 @@ export type ModalStackParamList = {
   ReceiveTransactionAccountSelectionModal: ReceiveTransactionAccountSelectionModalParams
   ReceiveTransactionWalletSelectionModal: ReceiveTransactionWalletSelectionModalParams
   AddressScanQuickToolsModal: AddressScanQuickToolsModalParams
+  BackupInfoModal: BackupInfoModalParams
+  Passcode: PasscodePageParams
+  ConfirmPasscode: ConfirmPasscodePageParams
+  VerifyPasscode: VerifyPasscodePageParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -168,6 +172,10 @@ export type ModalParams =
   | DefaultNavigationParam<ReceiveTransactionQrCodeModalParams>
   | DefaultNavigationParam<ReceiveTransactionWalletSelectionModalParams>
   | DefaultNavigationParam<AddressScanQuickToolsModalParams>
+  | DefaultNavigationParam<PasscodePageParams>
+  | DefaultNavigationParam<ConfirmPasscodePageParams>
+  | DefaultNavigationParam<VerifyPasscodePageParams>
+  | DefaultNavigationParam<BackupInfoModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -200,7 +208,7 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen name={wrapper.route.ContactsModal.name} component={ContactPicker} />
         <ModalStack.Screen name={wrapper.route.CopyContextModal.name} component={CopyContextModal} />
         <ModalStack.Screen name={wrapper.route.EditWalletModal.name} component={EditWalletModal} />
-        <ModalStack.Screen name={wrapper.route.SecurityModal.name} component={SecurityPickerModal} />
+        <ModalStack.Screen name={wrapper.route.SecurityPickerModal.name} component={SecurityPickerModal} />
         <ModalStack.Screen name={wrapper.route.TipConfirmationModal.name} component={TipConfirmationModal} />
         <ModalStack.Screen name={wrapper.route.BlockchainListModal.name} component={BlockchainListModal} />
         <ModalStack.Screen name={wrapper.route.WCConnectionRequestModal.name} component={WCConnectionRequestModal} />
@@ -246,6 +254,12 @@ const ModalStackNavigation = () => {
           name={wrapper.route.ReceiveTransactionQrCodeModal.name}
           component={ReceiveTransactionQrCodeModal}
         />
+
+        <ModalStack.Screen name={wrapper.route.BackupInfoModal.name} component={BackupInfoModal} />
+
+        <ModalStack.Screen name={wrapper.route.Passcode.name} component={PasscodePage} />
+        <ModalStack.Screen name={wrapper.route.ConfirmPasscode.name} component={ConfirmPasscodePage} />
+        <ModalStack.Screen name={wrapper.route.VerifyPasscode.name} component={VerifyPasscodePage} />
       </ModalStack.Navigator>
     </ThemeProvider>
   )

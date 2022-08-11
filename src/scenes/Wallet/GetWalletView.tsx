@@ -1,9 +1,10 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, { useMemo, useRef, useState } from 'react'
+import moment from 'moment'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Animated, Easing, LayoutChangeEvent, RefreshControl } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { RootStackParamList } from '../../navigation/AppNavigation'
 import { ModalStackParamList } from '../../navigation/ModalStackNavigation'
@@ -12,6 +13,7 @@ import { TabStackParamList } from '../../navigation/TabNavigation'
 import { AccountCards } from '~/src/components/AccountCards'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
+import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import HeaderBar from '~src/components/layout/HeaderBar'
@@ -50,6 +52,7 @@ const GetWalletView = (props: GetWalletProps) => {
   })
 
   const accounts = useSelector(selectAccounts)
+  const dispatch = useDispatch()
 
   const walletAccounts = useMemo(() => wallet.getAccounts(accounts), [accounts, wallet])
 
@@ -102,6 +105,11 @@ const GetWalletView = (props: GetWalletProps) => {
       },
     })
   }
+
+  useEffect(() => {
+    wallet.lastVisitedAt = moment().format()
+    dispatch(walletReducerActions.saveWallet(wallet))
+  }, [])
 
   return (
     <ScreenLayout

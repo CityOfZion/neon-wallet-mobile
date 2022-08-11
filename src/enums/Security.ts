@@ -1,6 +1,5 @@
 export enum Security {
   hardware = 'Device Default',
-  pin = 'PIN',
-  disabled = 'Disabled', //descontinued
+  disabled = 'Disabled',
   password = 'Password',
 }

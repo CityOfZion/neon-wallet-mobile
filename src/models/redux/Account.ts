@@ -28,12 +28,6 @@ export class Account implements AccountState {
   @HttpExpose()
   address: string | null = null
 
-  /**
-   * Used for derivationPath
-   */
-  @HttpExpose()
-  index: number | null = null
-
   @HttpExpose()
   accountType: WalletType | null = null
 
@@ -60,10 +54,6 @@ export class Account implements AccountState {
 
   getWallet(pool: Wallet[]) {
     return pool.find(it => it.id === this.idWallet)
-  }
-
-  getAccountsWithSameWallet(pool: Account[]) {
-    return pool.filter(it => it.idWallet === this.idWallet)
   }
 
   async getWif() {
@@ -93,12 +83,6 @@ export class Account implements AccountState {
     this.pendingTransactions = this.pendingTransactions.filter(transaction => transaction.hash !== transactionHash)
   }
 
-  getIndex(accountsPool: Account[]) {
-    const accountsSameWallet = this.getAccountsWithSameWallet(accountsPool)
-    const accountsSameBlockchain = accountsSameWallet.filter(it => it.blockchain === this.blockchain)
-    return accountsSameBlockchain.length
-  }
-
   adaptToMultichain() {
     if (!this.blockchain) {
       this.blockchain = 'neoLegacy'
@@ -112,8 +96,6 @@ export class Account implements AccountState {
     const {
       getWallet,
       getWif,
-      getAccountsWithSameWallet,
-      getIndex,
       adaptToMultichain,
       addPendingTransaction,
       removePendingTransactions,

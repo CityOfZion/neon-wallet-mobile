@@ -12,7 +12,7 @@ export const settingsReducerName = 'settingsReducer'
 const initialState: SettingsState = {
   language: localeConfig.defaultLanguage,
   currency: localeConfig.defaultCurrency,
-  isFirstTime: false,
+  isFirstTime: true,
   security: localeConfig.defaultSecurity,
   theme: Theme.DARK,
 }

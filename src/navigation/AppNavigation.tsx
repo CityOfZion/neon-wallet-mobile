@@ -19,27 +19,22 @@ import { settingsReducerActions } from '../store/settings/SettingsReducer'
 import { selectWallets } from '../store/wallet/SelectorWallet'
 import { walletReducerActions } from '../store/wallet/WalletReducer'
 import { walletConnectReducerActions } from '../store/walletConnect/WalletConnectReducer'
-import PasscodeStackNavigation, { PasscodeStackParams } from './PasscodeStackNavigation'
 
 import { createStackNavigator } from '~/node_modules/@react-navigation/stack'
 import { accountReducerActions } from '~/src/store/account/AccountReducer'
 import { contactReducerActions } from '~/src/store/contact/ContactReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
-import { Storage } from '~src/app/Storage'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import { DeepLinkingConfig } from '~src/config/DeepLinkingConfig'
 import { screenConfig } from '~src/config/ScreenConfig'
 import ModalStackNavigation, { ModalParams } from '~src/navigation/ModalStackNavigation'
 import TabNavigation, { TabParams } from '~src/navigation/TabNavigation'
-import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import OnboardingPage from '~src/scenes/OnboardingPage'
 import { QRCodeScan, QRCodeScanParams } from '~src/scenes/QRCodeScan'
 
 export type RootStackParamList = {
   Tab: TabParams
   Modal: ModalParams
-  Login: undefined
-  PasscodeStack: PasscodeStackParams
   Onboarding: undefined
   QRCodeScan: QRCodeScanParams
   SetupCompletePage: SetupCompleteParamList
@@ -59,14 +54,12 @@ const AppNavigation: React.FC<Props> = props => {
   })
 
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
+  const isFirstTime = useSelector((state: RootState) => state.settings.isFirstTime)
   const wallets = useSelector(selectWallets)
 
   const walletConnectCtx = useWalletConnect()
   const dispatch = useDispatch<any>()
 
-  const [onboardingSeen, setOnboardingSeen] = useState(true)
-  const [welcomeToNWSeen, setWelcomeToNWSeen] = useState(true)
-  const [hasAuthentication, setHasAuthentication] = useState(false)
   const [hasInit, setInit] = useState(false)
 
   const navigationRef = useRef<NavigationContainerRef>(null)
@@ -80,18 +73,18 @@ const AppNavigation: React.FC<Props> = props => {
   }
 
   const startApplication = async () => {
-    const onboardingSeen = await Storage.onboardingSeen.load()
-    const welcomeToNWSeen = await Storage.welcomeToNWSeen.load()
-    const hasAuthentication = await Storage.hasAuthentication.load()
-
-    setOnboardingSeen(onboardingSeen ?? false)
-    setWelcomeToNWSeen(welcomeToNWSeen ?? false)
-    setHasAuthentication(hasAuthentication ?? false)
-
     await migrateStorage()
 
     setInit(true)
   }
+
+  const getInitialRouteName = () => {
+    return isFirstTime ? wrapper.route.Onboarding.name : wrapper.route.Tab.name
+  }
+
+  deepLinking.setInitialRoute(getInitialRouteName())
+
+  const linking = deepLinking.getLinkingConfig()
 
   useEffect(() => {
     if (!hasInit) {
@@ -210,45 +203,24 @@ const AppNavigation: React.FC<Props> = props => {
     }
   }, [])
 
-  const getInitialRouteName = () => {
-    return onboardingSeen
-      ? hasAuthentication || welcomeToNWSeen
-        ? wrapper.route.Tab.name
-        : wrapper.route.Login.name
-      : wrapper.route.Onboarding.name
-  }
-
-  deepLinking.setInitialRoute(getInitialRouteName())
-
-  const linking = deepLinking.getLinkingConfig()
   return (
-    <>
-      <>
-        <AwaitActivity name="application" loadingView={<ScreenLoader />}>
-          <NavigationContainer linking={linking} fallback={<ScreenLoader />} ref={navigationRef}>
-            <ThemeProvider theme={theme}>
-              <RootStack.Navigator
-                initialRouteName={getInitialRouteName()}
-                headerMode="none"
-                screenOptions={screenConfig}
-              >
-                <RootStack.Screen name={wrapper.route.Tab.name} component={TabNavigation} />
-                <RootStack.Screen name={wrapper.route.Onboarding.name} component={OnboardingPage} />
-                <RootStack.Screen name={wrapper.route.QRCodeScan.name} component={QRCodeScan} />
-                <RootStack.Screen name={wrapper.route.Login.name} component={LoginPage} />
-                <RootStack.Screen name={wrapper.route.PasscodeStack.name} component={PasscodeStackNavigation} />
-                <RootStack.Screen name={wrapper.route.SetupCompletePage.name} component={SetupCompletePage} />
-                <RootStack.Screen
-                  name={wrapper.route.Modal.name}
-                  component={ModalStackNavigation}
-                  initialParams={props.route?.params}
-                />
-              </RootStack.Navigator>
-            </ThemeProvider>
-          </NavigationContainer>
-        </AwaitActivity>
-      </>
-    </>
+    <AwaitActivity name="application" loadingView={<ScreenLoader />}>
+      <NavigationContainer linking={linking} fallback={<ScreenLoader />} ref={navigationRef}>
+        <ThemeProvider theme={theme}>
+          <RootStack.Navigator initialRouteName={getInitialRouteName()} headerMode="none" screenOptions={screenConfig}>
+            <RootStack.Screen name={wrapper.route.Tab.name} component={TabNavigation} />
+            <RootStack.Screen name={wrapper.route.Onboarding.name} component={OnboardingPage} />
+            <RootStack.Screen name={wrapper.route.QRCodeScan.name} component={QRCodeScan} />
+            <RootStack.Screen name={wrapper.route.SetupCompletePage.name} component={SetupCompletePage} />
+            <RootStack.Screen
+              name={wrapper.route.Modal.name}
+              component={ModalStackNavigation}
+              initialParams={props.route?.params}
+            />
+          </RootStack.Navigator>
+        </ThemeProvider>
+      </NavigationContainer>
+    </AwaitActivity>
   )
 }
 

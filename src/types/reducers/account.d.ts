@@ -4,7 +4,6 @@ import { PendingTransactions } from '~src/models/redux/Account'
 
 export interface AccountState {
   address: string | null
-  index: number | null
   idWallet: string | null
   name: string | null
   srcIcon: ImageLoadEventData

@@ -1,15 +1,18 @@
 import { useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
 import { Alert } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import { wrapper } from '../app/ApplicationWrapper'
+import { Security } from '../enums/Security'
+import { RootState } from '../store/RootStore'
 
 import * as LocalAuthentication from '~/node_modules/expo-local-authentication'
 import { SecurityHelper } from '~/src/helpers/SecurityHelper'
-import { Storage } from '~src/app/Storage'
 
 export const useLocalAuthentication = () => {
   const navigation = useNavigation()
+  const security = useSelector((state: RootState) => state.settings.security)
 
   const alertDialog = () => {
     return new Promise<void>((resolve, reject) => {
@@ -37,10 +40,7 @@ export const useLocalAuthentication = () => {
 
   const authenticate = async () => {
     return new Promise<void>(async (resolve, reject) => {
-      const hasAuth = await Storage.hasAuthentication.load()
-      const hasAuthHard = await Storage.hasAuthenticationForHardware.load()
-
-      if (hasAuth) {
+      if (security === Security.password) {
         const passcode = await SecurityHelper.loadPasscode()
 
         if (!passcode) {
@@ -48,7 +48,7 @@ export const useLocalAuthentication = () => {
           return
         }
 
-        navigation.navigate(wrapper.route.PasscodeStack.name, {
+        navigation.navigate(wrapper.route.Modal.name, {
           screen: wrapper.route.VerifyPasscode.name,
           params: {
             onValidate: (isValid: boolean) => {
@@ -63,7 +63,7 @@ export const useLocalAuthentication = () => {
         return
       }
 
-      if (hasAuthHard) {
+      if (security === Security.hardware) {
         try {
           await tryAuth()
 

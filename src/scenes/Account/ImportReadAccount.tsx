@@ -19,7 +19,7 @@ import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { useBlockchainActions, WatchAccountToImport } from '~src/hooks/useBlockchainActions'
+import { AccountToImport, useBlockchainActions } from '~src/hooks/useBlockchainActions'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { RootState } from '~src/store/RootStore'
@@ -70,14 +70,10 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
 
     Await.init('importWatchAccount')
 
-    const walletId = await blockchainActions.createWallet(
-      i18n.t('defaultNameWallet.watchAccount'),
-      mnemonic.join(','),
-      'watch'
-    )
+    const walletId = await blockchainActions.createWallet(i18n.t('defaultNameWallet.watchAccount'), 'watch')
 
     const accountToImport = addressesListSelected.map(
-      ({ address, blockchain }): WatchAccountToImport => ({
+      ({ address, blockchain }): AccountToImport => ({
         address,
         blockchain,
         type: 'watch',

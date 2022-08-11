@@ -3,22 +3,20 @@ import i18n from 'i18n-js'
 import React, { useRef, useCallback, useState, useEffect } from 'react'
 import { ImageBackground, ImageResizeMode, ImageSourcePropType, Platform, SafeAreaView } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { ProgressBar } from '../components/ProgressBar'
 import { AsteroidHelper } from '../helpers/AsteroidHelper'
 import { UtilsHelper } from '../helpers/UtilsHelper'
 import { useProgress } from '../hooks/useProgress'
-import { settingsReducerActions } from '../store/settings/SettingsReducer'
+import { selectAccounts } from '../store/account/SelectorAccount'
+import { selectWallets } from '../store/wallet/SelectorWallet'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
-import { Storage } from '~src/app/Storage'
 import { applicationConfig } from '~src/config/ApplicationConfig'
 import { useBlockchainActions } from '~src/hooks/useBlockchainActions'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ButtonView, ImageView, LinearGradientLayout, LinearLayout, TextView } from '~src/styles/styled-components'
-import { selectWallets } from '../store/wallet/SelectorWallet'
-import { selectAccounts } from '../store/account/SelectorAccount'
 
 interface OnboardingSlideProps {
   header: string
@@ -56,7 +54,7 @@ const OnboardingSlide = (props: OnboardingSlideProps) => {
         source={props.image}
         style={{ height: '100%', justifyContent: 'flex-end' }}
       >
-        <LinearLayout px={Platform.OS === 'ios' ? "2%" : "5%"}>
+        <LinearLayout px={Platform.OS === 'ios' ? '2%' : '5%'}>
           <TextView fontFamily="bold" fontSize="md" color="#4CFFB3">
             {props.header}
           </TextView>
@@ -77,11 +75,8 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const [currentPage, setCurrentPage] = useState<number>(0)
   const wallets = useSelector(selectWallets)
   const accounts = useSelector(selectAccounts)
-  const dispatch = useDispatch()
 
   const finish = async () => {
-    await Storage.onboardingSeen.save(true)
-    dispatch(settingsReducerActions.setIsFirstTime(true))
     props.navigation.replace(wrapper.route.SetupCompletePage.name, {})
   }
 
@@ -91,14 +86,14 @@ const OnboardingPage = (props: OnboardingPageProps) => {
 
   const step2 = async () => {
     await UtilsHelper.sleep(1500)
-    if(wallets.length > 0) return
+    if (wallets.length > 0) return
     const words = AsteroidHelper.generateMnemonic() ?? []
-    return blockchainActions.createWallet(i18n.t('onboarding.firstWalletName'), words.join(' '), 'standard')
+    return blockchainActions.createWallet(i18n.t('onboarding.firstWalletName'), 'standard', words.join(' '))
   }
 
   const step3 = async (walletId?: string) => {
     await UtilsHelper.sleep(1500)
-    if(accounts.length > 0 || !walletId) return
+    if (accounts.length > 0 || !walletId) return
     return blockchainActions.createAccount(
       walletId,
       i18n.t('modals.blockchainList.countAccount', {
@@ -197,7 +192,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
                 end={[0.5, 0.2]}
               >
                 <LinearLayout height="100%">
-                  <LinearLayout p={Platform.OS === 'ios' ? "2%" : "5%"} marginY="5%" orientation="verti" width="100%">
+                  <LinearLayout p={Platform.OS === 'ios' ? '2%' : '5%'} marginY="5%" orientation="verti" width="100%">
                     <TextView fontFamily="bold" fontSize="sm" color="#4CFFB3">
                       {i18n.t('onboarding.initalSetup')}
                     </TextView>
@@ -272,7 +267,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
               </LinearGradientLayout>
             </LinearGradientLayout>
           </ImageBackground>
-          <LinearLayout mt={currentProgress >= 1 ? "2%" : "6%"}>
+          <LinearLayout mt={currentProgress >= 1 ? '2%' : '6%'}>
             <ProgressBar progressBarStatus={currentProgress} show={currentProgress < 1} text={progressMessage} />
             {currentProgress >= 1 && (
               <ButtonView

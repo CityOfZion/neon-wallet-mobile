@@ -86,7 +86,7 @@ export class WrapperConfig {
     'ContactsModal',
     'CopyContextModal',
     'EditWalletModal',
-    'SecurityModal',
+    'SecurityPickerModal',
     'ChangelogModal',
     'BlockchainListModal',
     'BlockchainListPage',
@@ -110,6 +110,9 @@ export class WrapperConfig {
     'AccountSettingsView',
     'ExportWIFModal',
     'SetupCompletePage',
+    'BackupInfoModal',
+    'SecurityBackupCheckPage',
+    'SecurityPage',
   ] as const
 }
 

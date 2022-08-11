@@ -4,7 +4,6 @@ import Carousel from 'react-native-snap-carousel'
 
 import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { UseMultipleBalanceAndExchangeResult } from '~/src/types/query'
-import { LinearLayoutProps } from '~/src/types/styled-components'
 import { WalletCard } from '~src/components/WalletCard/WalletCard'
 import { Wallet } from '~src/models/redux/Wallet'
 import { LinearLayout } from '~src/styles/styled-components'
@@ -16,10 +15,11 @@ interface Props {
   wallets: Wallet[]
   selectedWalletBalanceExchange: UseMultipleBalanceAndExchangeResult
   isInactive?: boolean
+  pressedWallet?: Wallet
   inactiveNotSelected?: boolean
   onScrollBegin?: (evt?: NativeSyntheticEvent<NativeScrollEvent>) => void
   onScrollEnd?: (evt?: NativeSyntheticEvent<NativeScrollEvent>) => void
-  walletContainerStyle?: LinearLayoutProps
+  scrollEnabled?: boolean
 }
 
 const WalletPicker = ({
@@ -32,7 +32,8 @@ const WalletPicker = ({
   onSelect,
   wallets,
   inactiveNotSelected,
-  walletContainerStyle,
+  scrollEnabled,
+  pressedWallet,
 }: Props) => {
   const selectWalletIndex = useMemo(
     () => wallets.findIndex(it => it.id === selectedWallet.id) ?? 0,
@@ -65,6 +66,7 @@ const WalletPicker = ({
       onSnapToItem={handleSelect}
       onScrollBeginDrag={onScrollBegin}
       onScrollEndDrag={onScrollEnd}
+      scrollEnabled={scrollEnabled}
       renderItem={({ item, index }) => (
         <LinearLayout pointerEvents={index !== selectWalletIndex ? 'none' : undefined}>
           <WalletCard
@@ -73,7 +75,7 @@ const WalletPicker = ({
             onPress={() => handlePress(item)}
             wallet={item}
             isInactive={index === selectWalletIndex ? isInactive : inactiveNotSelected ? true : undefined}
-            containerStyle={walletContainerStyle}
+            wasPressed={pressedWallet?.id === item.id}
           />
         </LinearLayout>
       )}

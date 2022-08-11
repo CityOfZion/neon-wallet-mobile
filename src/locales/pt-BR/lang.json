@@ -28,7 +28,8 @@
     "done": "Feito",
     "close": "Fechar",
     "copyToClipboard": "Copy to clipboard",
-    "timeout": "#translateme"
+    "timeout": "#translateme",
+    "delete": "#translateme"
   },
   "routes": {
     "GetWallet": "Carteira",
@@ -36,6 +37,7 @@
     "More": "Mais",
     "Account": "Conta",
     "Settings": "Configurações",
+    "SecurityBackupCheckPage": "#translateme",
     "CustomColor": "Personalizar Cor",
     "CreateWallet": "Create Wallet",
     "Step1CreateWallet": "Criar carteira",
@@ -46,7 +48,9 @@
     "Step1BackupWallet": "Backup da carteira",
     "Step2BackupWallet": "Backup da carteira",
     "Step3BackupWallet": "Backup da carteira",
-    "Step4BackupWallet": "Backup da carteira"
+    "Step4BackupWallet": "Backup da carteira",
+    "CustomizeAccount": "#translateme",
+    "SecurityPage": "#translateme"
   },
   "home": {
     "welcome": "Bem-vindo ao Neon Wallet!"
@@ -174,6 +178,45 @@
     "address": "ENDEREÇO"
   },
   "screens": {
+    "listWalletView": {
+      "walletBackupButtonLabel": "#translateme"
+    },
+    "securityBackupCheckPage": {
+      "withoutAccountsToBackup": {
+        "button_label": "#translateme",
+        "description": "#translateme"
+      },
+      "withAccountsToBackup": {
+        "description_1": "#translateme",
+        "description_2": "#translateme",
+        "description_3": "#translateme",
+        "description_4": "#translateme"
+      }
+    },
+    "securityPage": {
+      "authentication": "#translateme",
+      "subtitle": "#translateme"
+    },
+    "step3BackupWallet": {
+      "label_1": "#translateme"
+    },
+    "step2BackupWallet": {
+      "twoOfThree": "#translateme",
+      "label_1": "#translateme",
+      "body_1": "#translateme",
+      "dialog_1_title": "#translateme",
+      "dialog_1_body": "#translateme"
+    },
+    "step1BackupWallet": {
+      "oneOfThree": "#translateme",
+      "label_1": "#translateme",
+      "body_1": "#translateme",
+      "body_2": "#translateme",
+      "body_3": "#translateme",
+      "dialog_title": "#translateme",
+      "dialog_body": "#translateme",
+      "dialog_dismiss": "#translateme"
+    },
     "listWallets": {
       "changeSinceLastVisit": "#translateme",
       "changeInLast24hours": "#translateme",
@@ -255,6 +298,13 @@
     }
   },
   "modals": {
+    "backupInfoModal": {
+      "title": "#translateme",
+      "description1": "#translateme",
+      "description2": "#translateme",
+      "description3": "#translateme",
+      "buttonLabel": "#translateme"
+    },
     "receiveTransactionAccountSelectionModal": {
       "title": "#translateme",
       "subtitle": "#translateme",
@@ -384,6 +434,7 @@
       "search": "#translateme"
     },
     "walletContext": {
+      "backup": "#translateme",
       "create": "Create new wallet",
       "reorder": "Reorder wallets",
       "cancel": "Cancel"
@@ -410,9 +461,6 @@
     "contractDetailsBox": {
       "hash": "Hash",
       "method": "Método"
-    },
-    "notification": {
-      "title": "#translateme"
     },
     "balanceList": {
       "title": "#translateme",

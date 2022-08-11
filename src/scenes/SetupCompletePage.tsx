@@ -55,7 +55,10 @@ const SetupCompletePage = (props: Props) => {
               <LinearLayout>
                 {accountsPool.map(acc => {
                   return (
-                    <TouchableOpacity key={acc.address} onPress={() => UtilsHelper.copyToClipboard(acc.address ?? undefined)}>
+                    <TouchableOpacity
+                      key={acc.address}
+                      onPress={() => UtilsHelper.copyToClipboard(acc.address ?? undefined)}
+                    >
                       <LinearLayout mt="1%" orientation="horiz" justifyContent="space-between">
                         <LinearLayout orientation="horiz">
                           <ImageView
@@ -85,7 +88,7 @@ const SetupCompletePage = (props: Props) => {
             </LinearLayout>
           </LinearLayout>
         </LinearLayout>
-        <LinearLayout mt={Dimensions.get('window').height * 0.20} height="100%" alignItems="center">
+        <LinearLayout mt={Dimensions.get('window').height * 0.2} height="100%" alignItems="center">
           <ThemedButton
             onPress={handleViewWallet}
             width="85%"
