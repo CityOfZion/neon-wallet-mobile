@@ -117,7 +117,6 @@ const ImportKey = (props: ImportKeyProps) => {
   const mnemonicIsImported = useCallback(
     async (mnemonic: string) => {
       const mnemonics = await Promise.all(walletIds.map(id => SecurityHelper.loadMnemonic(id)))
-      alert(JSON.stringify(mnemonics))
       const foundMnemonic = mnemonics.find(it => it === mnemonic)
       if (foundMnemonic) {
         return true
