@@ -200,7 +200,6 @@ const ListWalletView = (props: WalletProps) => {
   }
 
   const handlePress = async (wallet: Wallet) => {
-    //dispatch(RootStore.wallet.actions.selectWallet(wallet.id))
     wallet.lastVisitedAt = moment().format()
     dispatch(walletReducerActions.saveWallet(wallet))
     props.navigation.navigate(wrapper.route.GetWallet.name, { wallet })
