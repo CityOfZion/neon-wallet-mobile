@@ -18,7 +18,7 @@ export const useTreatNetworkOnWalletConnectFlow = () => {
         routes: [{ name: wrapper.route.Tab.name }],
       })
 
-      navigation.navigate(wrapper.route.WalletConnectPage.name, {})
+      navigation.navigate(wrapper.route.WalletConnectPage.name)
     }
   }, [isConnected])
 }

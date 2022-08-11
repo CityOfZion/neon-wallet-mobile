@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
@@ -60,32 +60,10 @@ const SendTransactionWalletSelectionModal = (props: Props) => {
       screen: wrapper.route.SendTransactionAccountSelectionModal.name,
       params: {
         wallet,
+        address,
       },
     })
   }
-
-  useEffect(() => {
-    if (!address) return
-
-    const account = accounts.find(account => account.address && account.address === address)
-    const wallet = account?.getWallet(wallets)
-
-    if (!account || !wallet) return
-
-    props.navigation.navigate(wrapper.route.Modal.name, {
-      screen: wrapper.route.SendTransactionAccountSelectionModal.name,
-      params: {
-        wallet,
-      },
-    })
-    props.navigation.navigate(wrapper.route.Modal.name, {
-      screen: wrapper.route.SendTransactionModal.name,
-      params: {
-        wallet,
-        account,
-      },
-    })
-  }, [address])
 
   return (
     <SwiperPanel

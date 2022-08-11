@@ -6,7 +6,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { showMessage } from 'react-native-flash-message'
 
 import AccountSubTitle from '~/src/components/AccountSubTitle'
-import NeonQRCode from '~/src/components/QRCode'
+import NeonQRCode from '~/src/components/NeonQRCode'
 import SwiperPanel, { useSwiperController } from '~/src/components/SwiperPanel'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import ThemedButton from '~/src/components/themed/ThemedButton'

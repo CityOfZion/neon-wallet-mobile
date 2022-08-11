@@ -33,6 +33,7 @@ import {
 import SendTransactionWalletSelectionModal, {
   SendTransactionWalletSelectionModalParams,
 } from '../scenes/Account/SendTransaction/SendTransactionWalletSelectionModal'
+import { AddressScanQuickToolsModal, AddressScanQuickToolsModalParams } from '../scenes/AddressScanQuickToolsModal'
 import WebViewModal, { WebViewModalParams } from '../scenes/WebViewModal'
 import WCInvocationDetailsModal, {
   WCInvocationDetailsModalParams,
@@ -44,7 +45,7 @@ import EditAccountModal, { EditAccountModalParam } from '~/src/scenes/Account/Ed
 import EditWalletModal, { EditWalletParams } from '~/src/scenes/Wallet/EditWalletModal'
 import ReorderWalletModal from '~/src/scenes/Wallet/ReorderWalletModal'
 import WalletContextModal, { WalletContextModalParams } from '~/src/scenes/Wallet/WalletContextModal'
-import { WCConnectDappModal, WCConnectDappModalParams } from '~/src/scenes/walletConnect/modal/WCConnectDappModal'
+import { WCConnectDappModal } from '~/src/scenes/walletConnect/modal/WCConnectDappModal'
 import RawJsonModal, {
   RawJsonModalParams,
 } from '~/src/scenes/walletConnect/modal/WCTransactionRequestModal/RawJsonModal'
@@ -111,7 +112,7 @@ export type ModalStackParamList = {
   TipConfirmationModal: TipConfirmationModalParams
   BlockchainListModal: BlockchainListModalParams
   WCConnectionRequestModal: WCConnectionRequestModalParams
-  WCConnectDappModal: WCConnectDappModalParams
+  WCConnectDappModal: undefined
   WCWalletSelectionModal: WCWalletSelectionModalModalParams | undefined
   WCAccountSelectionModal: WCAccountSelectionModalParams
   WCTransactionRequestModal: WCTransactionRequestModalParams
@@ -130,6 +131,7 @@ export type ModalStackParamList = {
   ReceiveTransactionModal: ReceiveTransactionModalParams
   ReceiveTransactionAccountSelectionModal: ReceiveTransactionAccountSelectionModalParams
   ReceiveTransactionWalletSelectionModal: ReceiveTransactionWalletSelectionModalParams
+  AddressScanQuickToolsModal: AddressScanQuickToolsModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -153,7 +155,6 @@ export type ModalParams =
   | DefaultNavigationParam<RawJsonModalParams>
   | DefaultNavigationParam<SignatureScopeModalParams>
   | DefaultNavigationParam<WCInvocationDetailsModalParams>
-  | DefaultNavigationParam<WCConnectDappModalParams>
   | DefaultNavigationParam<WebViewModalParams>
   | DefaultNavigationParam<ExportWIFModalParams>
   | DefaultNavigationParam<TipConfirmationModalParams>
@@ -166,6 +167,7 @@ export type ModalParams =
   | DefaultNavigationParam<ReceiveTransactionAccountSelectionModalParams>
   | DefaultNavigationParam<ReceiveTransactionQrCodeModalParams>
   | DefaultNavigationParam<ReceiveTransactionWalletSelectionModalParams>
+  | DefaultNavigationParam<AddressScanQuickToolsModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
@@ -179,6 +181,10 @@ const ModalStackNavigation = () => {
         headerMode="none"
         screenOptions={screenConfig}
       >
+        <ModalStack.Screen
+          name={wrapper.route.AddressScanQuickToolsModal.name}
+          component={AddressScanQuickToolsModal}
+        />
         <ModalStack.Screen name={wrapper.route.ChangelogModal.name} component={ChangelogModal} />
         <ModalStack.Screen name={wrapper.route.WelcomeModal.name} component={WelcomePage} />
         <ModalStack.Screen name={wrapper.route.EditAccountModal.name} component={EditAccountModal} />

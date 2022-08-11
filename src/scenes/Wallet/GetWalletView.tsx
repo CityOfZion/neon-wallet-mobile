@@ -126,6 +126,7 @@ const GetWalletView = (props: GetWalletProps) => {
     >
       <Animated.View
         style={{
+          paddingHorizontal: 10,
           opacity: opacityValue,
           transform: [
             {
@@ -151,14 +152,7 @@ const GetWalletView = (props: GetWalletProps) => {
             },
           ]}
         >
-          <AccountCards
-            balanceExchange={balanceExchange}
-            accounts={walletAccounts}
-            onPress={handlePress}
-            contentContainerStyle={{
-              paddingHorizontal: 10,
-            }}
-          />
+          <AccountCards balanceExchange={balanceExchange} accounts={walletAccounts} onPress={handlePress} />
         </Animated.View>
 
         {wallet.walletType === 'standard' && (

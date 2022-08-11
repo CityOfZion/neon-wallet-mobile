@@ -2,108 +2,138 @@ import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
-import { ImageLoadEventData, Pressable } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useSelector } from 'react-redux'
 
+import {
+  blockchainServices,
+  getBlockchainByWif,
+  validateAddressAllBlockchains,
+  validatePrivateKeyWithPasswordAllBlockchains,
+  validateWifAllBlockchains,
+} from '../blockchain'
+import { QuickToolsItem, QuickToolsItemSeparator } from '../components/QuickToolsItem'
+import { UriHelper } from '../helpers/UriHelper'
+import { WalletConnectHelper } from '../helpers/WalletConnectHelper'
+import { useBlockchainActions } from '../hooks/useBlockchainActions'
+import { ModalStackParamList } from '../navigation/ModalStackNavigation'
+import { WalletStackParamList } from '../navigation/WalletsStackNavigation'
 import { RootState } from '../store/RootStore'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import SwiperPanel, { SwiperController } from '~src/components/SwiperPanel'
 import { applicationConfig } from '~src/config/ApplicationConfig'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
-
-interface ListItem {
-  title: string
-  subtitle: string
-  source: ImageLoadEventData
-  onClick: () => void
-}
 
 interface Props {
   controller: SwiperController
 }
 
-function QuickToolsItem(props: { onPress: () => void; item: ListItem; index: number; listItems: ListItem[] }) {
-  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-
-  return (
-    <Pressable
-      onPress={props.onPress}
-      style={({ pressed }) => [
-        {
-          backgroundColor: pressed ? theme.colors.background[16] : undefined,
-        },
-      ]}
-    >
-      {() => (
-        <LinearLayout paddingRight={25} paddingLeft={25}>
-          <LinearLayout orientation="horiz" pb="18px" pt="16px" alignItems="center">
-            <LinearLayout>
-              <TextView
-                style={{ includeFontPadding: false }}
-                color={theme.colors.text[0]}
-                fontSize={18}
-                fontFamily="regular"
-              >
-                {props.item.title}
-              </TextView>
-              <TextView
-                style={{ includeFontPadding: false }}
-                color={theme.colors.text[6]}
-                fontSize={16}
-                fontFamily="medium"
-              >
-                {props.item.subtitle}
-              </TextView>
-            </LinearLayout>
-            <LinearLayout weight={1} />
-            <ImageView width={35} height={35} mr="13px" source={props.item.source} />
-          </LinearLayout>
-
-          {props.index !== props.listItems.length - 1 && (
-            <LinearLayout height="1px" bg={theme.colors.background[10]} width="96%" />
-          )}
-        </LinearLayout>
-      )}
-    </Pressable>
-  )
-}
-
 export default function QuickToolsMenu(props: Props) {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamList & ModalStackParamList & WalletStackParamList>>()
+  const blockchainActions = useBlockchainActions()
+  const wallets = useSelector((state: RootState) => state.app.wallets)
+  const accounts = useSelector((state: RootState) => state.app.accounts)
 
-  const items: ListItem[] = [
-    {
-      title: i18n.t('quickTools.qrCode.title'),
-      subtitle: i18n.t('quickTools.qrCode.subtitle'),
-      source: require('~src/assets/images/icon-circle-qr-primary.png'),
-      onClick: () => navigation.navigate(wrapper.route.QRCodeScan.name, {}),
-    },
-    {
-      title: i18n.t('quickTools.send.title'),
-      subtitle: i18n.t('quickTools.send.subtitle'),
-      source: require('~src/assets/images/icon-circle-send-primary.png'),
-      onClick: () =>
-        navigation.navigate(wrapper.route.Modal.name, {
-          screen: wrapper.route.SendTransactionWalletSelectionModal.name,
-          params: {},
-        }),
-    },
-    {
-      title: i18n.t('quickTools.receive.title'),
-      subtitle: i18n.t('quickTools.receive.subtitle'),
-      source: require('~src/assets/images/icon-circle-receive-primary.png'),
-      onClick: () =>
-        navigation.navigate(wrapper.route.Modal.name, {
-          screen: wrapper.route.ReceiveTransactionWalletSelectionModal.name,
-          params: {},
-        }),
-    },
-  ]
+  const handleScanQrCode = async (data: string) => {
+    const sendUri = UriHelper.validateAndParse(data)
 
-  function runClosing(callback: () => void) {
+    if (sendUri) {
+      navigation.navigate(wrapper.route.Modal.name, {
+        screen: wrapper.route.SendTransactionWalletSelectionModal.name,
+        params: {
+          address: sendUri.address,
+        },
+      })
+      return
+    }
+
+    if (WalletConnectHelper.isValidURI(data)) {
+      navigation.navigate(wrapper.route.Modal.name, {
+        screen: wrapper.route.WCConnectionRequestModal.name,
+        params: {
+          uri: data,
+        },
+      })
+      return
+    }
+
+    if (validateAddressAllBlockchains(data)) {
+      navigation.navigate(wrapper.route.Modal.name, {
+        screen: wrapper.route.AddressScanQuickToolsModal.name,
+        params: {
+          address: data,
+        },
+      })
+      return
+    }
+
+    if (validatePrivateKeyWithPasswordAllBlockchains(data)) {
+      navigation.navigate(wrapper.route.Tab.name, {
+        screen: wrapper.route.More.name,
+        params: {
+          screen: wrapper.route.Passphrase.name,
+          initial: false,
+          params: {
+            encryptedKey: data,
+          },
+        },
+      })
+      return
+    }
+
+    if (validateWifAllBlockchains(data)) {
+      const blockchain = getBlockchainByWif(data)
+      if (blockchain) {
+        const address = blockchainServices[blockchain].generateAccountFromWif(data)
+
+        if (accounts.some(account => account.address === address)) {
+          showMessage({ message: i18n.t('quickTools.send.accountAlreadyExists') })
+          return
+        }
+
+        const walletId = await blockchainActions.createLegacyWallet(i18n.t('modals.blockchainList.encryptedWallet'))
+
+        await blockchainActions.importAccounts([{ address, blockchain, type: 'account', walletId, wif: data }])
+
+        const account = accounts.find(account => account.address === address)
+        const wallet = wallets.find(wallet => wallet.id === walletId)
+
+        if (!account || !wallet) return
+
+        navigation.navigate(wrapper.route.GetWallet.name, { wallet })
+        navigation.navigate(wrapper.route.GetAccount.name, { account, wallet })
+        navigation.navigate(wrapper.route.Modal.name, {
+          screen: wrapper.route.EditAccountModal.name,
+          params: { account },
+        })
+      }
+    }
+  }
+
+  const handlePressQrCode = () => {
+    navigation.navigate(wrapper.route.QRCodeScan.name, {
+      onScan: handleScanQrCode,
+    })
+  }
+
+  const handlePressSend = () => {
+    navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.SendTransactionWalletSelectionModal.name,
+      params: {},
+    })
+  }
+
+  const handlePressReceive = () => {
+    navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.ReceiveTransactionWalletSelectionModal.name,
+      params: {},
+    })
+  }
+
+  const runClosing = (callback: () => void) => {
     props.controller.close()
     callback()
   }
@@ -119,17 +149,30 @@ export default function QuickToolsMenu(props: Props) {
       paddingRight={0}
       solidColorBG
     >
-      {items.map((item, index) => (
-        <QuickToolsItem
-          key={index}
-          onPress={() => {
-            runClosing(item.onClick)
-          }}
-          item={item}
-          index={index}
-          listItems={items}
-        />
-      ))}
+      <QuickToolsItem
+        onPress={() => runClosing(handlePressQrCode)}
+        sourceIcon={require('~src/assets/images/icon-circle-qr-primary.png')}
+        title={i18n.t('quickTools.qrCode.title')}
+        subtitle={i18n.t('quickTools.qrCode.subtitle')}
+      />
+
+      <QuickToolsItemSeparator />
+
+      <QuickToolsItem
+        onPress={() => runClosing(handlePressSend)}
+        sourceIcon={require('~src/assets/images/icon-circle-send-primary.png')}
+        title={i18n.t('quickTools.send.title')}
+        subtitle={i18n.t('quickTools.send.subtitle')}
+      />
+
+      <QuickToolsItemSeparator />
+
+      <QuickToolsItem
+        onPress={() => runClosing(handlePressReceive)}
+        sourceIcon={require('~src/assets/images/icon-circle-receive-primary.png')}
+        title={i18n.t('quickTools.receive.title')}
+        subtitle={i18n.t('quickTools.receive.subtitle')}
+      />
     </SwiperPanel>
   )
 }

@@ -6,12 +6,14 @@ import { Dimensions, TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
+import { RootState } from '~/src/store/RootStore'
 import { TextView, LinearLayout, ImageView } from '~/src/styles/styled-components'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 
 export const WCNoConnectDapps = () => {
-  const navigation = useNavigation<StackNavigationProp<ModalStackParamList>>()
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList & ModalStackParamList>>()
   const { isConnected } = useSelector((state: RootState) => state.network)
 
   const handleNavigation = useCallback(() => {

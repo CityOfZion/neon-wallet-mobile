@@ -35,6 +35,7 @@ export interface SendTransactionModalParams {
   account: Account
   wallet: Wallet
   token?: Token
+  address?: string
 }
 
 interface Props {
@@ -43,7 +44,7 @@ interface Props {
 }
 
 export const SendTransactionModal = (props: Props) => {
-  const { account, wallet, token: initialToken } = props.route.params
+  const { account, wallet, token: initialToken, address: initialAddress } = props.route.params
 
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const currency = useSelector((state: RootState) => state.settings.currency)
@@ -51,7 +52,7 @@ export const SendTransactionModal = (props: Props) => {
 
   const balanceExchange = useBalancesAndExchange(account)
 
-  const [destinationAddress, setDestinationAdress] = useState<string>()
+  const [destinationAddress, setDestinationAdress] = useState<string>(initialAddress)
   const [destinationAddressIsValid, setDestinationAddressIsValid] = useState<boolean>()
   const [destinationAccount, setDestinationAccount] = useState<Account>()
   const [destinationWallet, setDestinationWallet] = useState<Wallet>()

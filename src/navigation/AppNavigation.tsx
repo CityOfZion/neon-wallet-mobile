@@ -27,7 +27,7 @@ import ModalStackNavigation, { ModalParams } from '~src/navigation/ModalStackNav
 import TabNavigation, { TabParams } from '~src/navigation/TabNavigation'
 import LoginPage from '~src/scenes/LoginPage/LoginPage'
 import OnboardingPage from '~src/scenes/OnboardingPage'
-import QRCodeScan, { QRCodeScanParams } from '~src/scenes/QRCodeScan'
+import { QRCodeScan, QRCodeScanParams } from '~src/scenes/QRCodeScan'
 
 export type RootStackParamList = {
   Tab: TabParams
@@ -203,8 +203,8 @@ const AppNavigation: React.FC<Props> = props => {
   const getInitialRouteName = () => {
     return onboardingSeen
       ? hasAuthentication || welcomeToNWSeen
-        ? wrapper.route.SetupCompletePage.name
-        : wrapper.route.SetupCompletePage.name
+        ? wrapper.route.Tab.name
+        : wrapper.route.Login.name
       : wrapper.route.Onboarding.name
   }
 

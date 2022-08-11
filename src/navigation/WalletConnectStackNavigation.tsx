@@ -7,9 +7,9 @@ import { RootState } from '../store/RootStore'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Navigator } from '~src/app/Navigator'
-import WalletConnectPage, { WalletConnectPageParams } from '~src/scenes/walletConnect/WalletConnectPage'
+import WalletConnectPage from '~src/scenes/walletConnect/WalletConnectPage'
 export type WalletConnectStackParamList = {
-  WalletConnectPage: WalletConnectPageParams
+  WalletConnectPage: undefined
 }
 
 const WalletConnectStack = createStackNavigator<WalletConnectStackParamList>()
