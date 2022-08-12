@@ -3,12 +3,10 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Alert, FlatList } from 'react-native'
-import { useDispatch } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { RootStore } from '~/src/store/RootStore'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
@@ -28,7 +26,7 @@ const Step3CreateWalletPage: React.FC<Props> = props => {
   const words = props.route.params.mnemonic
   const [formedWords, setFormedWords] = useState<string[]>([])
   const [shuffledWords] = useState<string[]>(_.shuffle(words))
-  const dispatch = useDispatch()
+
   props.navigation.setOptions({
     headerRight: () =>
       HeaderActionButton({
@@ -45,6 +43,7 @@ const Step3CreateWalletPage: React.FC<Props> = props => {
         onPress: () =>
           props.navigation.navigate(wrapper.route.Step4CreateWallet.name, {
             hasBackup: false,
+            mnemonic: words.join(' '),
           }),
       },
       {
@@ -58,6 +57,7 @@ const Step3CreateWalletPage: React.FC<Props> = props => {
     if (formedWords.join(' ') === words.join(' ')) {
       props.navigation.navigate(wrapper.route.Step4CreateWallet.name, {
         hasBackup: true,
+        mnemonic: words.join(' '),
       })
     } else {
       Alert.alert(i18n.t('step3CreateWallet.dialog_2_title'), i18n.t('step3CreateWallet.dialog_2_body'), [
@@ -96,10 +96,6 @@ const Step3CreateWalletPage: React.FC<Props> = props => {
     ),
     [formedWords]
   )
-
-  useEffect(() => {
-    dispatch(RootStore.wallet.actions.setSecurityPhrase(words.join(' ')))
-  }, [words])
 
   return (
     <ScreenLayout alignX="center" darkerSolidColorBG>

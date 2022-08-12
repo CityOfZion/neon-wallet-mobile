@@ -10,14 +10,14 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { getBlockchainByAddress, validateAddressAllBlockchains } from '~/src/blockchain'
 import { Contact } from '~/src/models/redux/Contact'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
+import { contactReducerActions } from '~/src/store/contact/ContactReducer'
 import { ContactAddresses } from '~/src/types/reducers/contact'
-import { AsyncDispatch, DispatchResult } from '~/src/types/reducers/root'
+import { DispatchResult } from '~/src/types/reducers/root'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { RootStore } from '~src/store/RootStore'
 import { LinearLayout, TextView, ImageView, ButtonView, ButtonWithoutFeedbackView } from '~src/styles/styled-components'
 
 export interface PersistContactParams {
@@ -35,7 +35,6 @@ export const PersistContact = (props: Props) => {
 
   const controller = useSwiperController(true)
   const dispatch = useDispatch<DispatchResult>()
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const [name, setName] = useState(contact?.name ?? '')
   const [addresses, setAddresses] = useState<string[]>(() => {
@@ -64,8 +63,6 @@ export const PersistContact = (props: Props) => {
       return
     }
 
-    dispatch(RootStore.contact.actions.setName(name))
-
     const addressesToSave = addresses
       .map((address): ContactAddresses | undefined => {
         const blockchain = getBlockchainByAddress(address)
@@ -76,15 +73,17 @@ export const PersistContact = (props: Props) => {
       })
       .filter((contactAddress): contactAddress is ContactAddresses => !!contactAddress)
 
-    dispatch(RootStore.contact.actions.setAddress(addressesToSave))
-
     if (contact?.id) {
-      await dispatchAsync(RootStore.contact.actions.update(contact.id))
+      contact.name = name
+      contact.addresses = addressesToSave
+      dispatch(contactReducerActions.saveContact(contact))
     } else {
-      await dispatchAsync(RootStore.contact.actions.createAndSave())
+      const newContact = new Contact()
+      newContact.name = name
+      newContact.addresses = addressesToSave
+      dispatch(contactReducerActions.saveContact(newContact))
     }
 
-    dispatch(RootStore.app.actions.syncContacts())
     controller.close()
   }
 
@@ -132,10 +131,8 @@ export const PersistContact = (props: Props) => {
 
   const deleteAction = async () => {
     if (contact?.id) {
-      await dispatchAsync(RootStore.contact.actions.delete(contact.id))
+      dispatch(contactReducerActions.deleteContact(contact.id))
     }
-
-    await dispatchAsync(RootStore.app.actions.syncContacts())
 
     props.navigation.navigate(wrapper.route.Contacts.name, {
       screen: wrapper.route.Contacts.name,

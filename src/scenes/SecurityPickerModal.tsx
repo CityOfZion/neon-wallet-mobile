@@ -6,13 +6,15 @@ import React, { useState, useEffect } from 'react'
 import { Platform } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { settingsReducerActions } from '../store/settings/SettingsReducer'
+
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Storage } from '~src/app/Storage'
 import SelectorList, { SelectorItem } from '~src/components/SelectorList'
 import SwiperPanel, { useSwiperController, CloseButton } from '~src/components/SwiperPanel' //precisa modificar essa tela para exibir opções de segurança
 import { Security } from '~src/enums/Security'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { RootState, RootStore } from '~src/store/RootStore'
+import { RootState } from '~src/store/RootStore'
 
 export interface SecurityPickerModalParams {}
 
@@ -49,8 +51,7 @@ const SecurityPickerModal = (props: Props) => {
 
   const saveSecurity = async () => {
     if (security !== controlSecurity) {
-      dispatch(RootStore.settings.actions.setSecurity(controlSecurity)) //hardware is fixed
-      dispatch(RootStore.settings.actions.save())
+      dispatch(settingsReducerActions.setSecurity(controlSecurity)) //hardware is fixed
 
       controller.close()
     }

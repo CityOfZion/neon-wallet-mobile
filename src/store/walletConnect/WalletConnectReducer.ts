@@ -1,41 +1,72 @@
-import { ReducerWrapper } from '@simpli/redux-wrapper'
+import { createSlice, CaseReducer, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
 import moment from 'moment'
 
-import { SetApprovalDateDispatcher } from './dispatchers/SetApprovalDateDispatcher'
+import { Storage } from '~/src/app/Storage'
+import { WCState } from '~src/types/reducers/wcApprovalDate'
 
-import { Model } from '~/src/app/Model'
-import { AsyncAction } from '~/src/types/reducers/root'
-import { WCAction, WCActionsType, WCState } from '~/src/types/reducers/wcApprovalDate'
-import { Storage } from '~src/app/Storage'
-import { WCApprovalDate } from '~src/models/redux/WCApprovalDate'
+export const walletConnectReducerName = 'walletConnectReducer'
+const initialState = {} as WCState
 
-export class WalletConnectReducer extends ReducerWrapper<WCActionsType, WCState, WCAction> {
-  protected readonly initialState = Model.parse<WCState>(WCApprovalDate)
+const migrateWalletConnectFromStorage = createAsyncThunk('walletConnect/migrateWalletConnectFromStorage', async () => {
+  return Storage.wcApprovalDates.load()
+})
 
-  protected readonly dispatchers = [SetApprovalDateDispatcher]
-
-  readonly actions = {
-    updateApprovalDate: (sessionTopic: string): AsyncAction => {
-      return async (dispatch, getState) => {
-        const approvalDates = (await Storage.wcApprovalDates.load()) ?? []
-        approvalDates.push({ sessionTopic, approvalDate: moment().unix() })
-        await Storage.wcApprovalDates.save(approvalDates)
-        dispatch(this.commit('SET_APPROVAL_DATES', { approvalDates }))
-      }
-    },
-    delete: (sessionTopic: string): AsyncAction => {
-      return async (dispatch, getState) => {
-        const approvalDates = (await Storage.wcApprovalDates.load()) ?? []
-
-        const wcApprovalDate = approvalDates.find(it => it.sessionTopic === sessionTopic)
-
-        if (wcApprovalDate) {
-          const index = approvalDates.indexOf(wcApprovalDate)
-          approvalDates.splice(index, 1)
-        }
-        await Storage.wcApprovalDates.save(approvalDates)
-        dispatch(this.commit('SET_APPROVAL_DATES', { approvalDates }))
-      }
-    },
+const updateApprovalDate: CaseReducer<WCState, PayloadAction<string>> = (state, action) => {
+  const sessionTopic = action.payload
+  if (!('approvalDates' in state)) {
+    state.approvalDates = [{ sessionTopic, approvalDate: moment().unix() }]
+  } else {
+    const indexApprovalDate = state.approvalDates.findIndex(it => it.sessionTopic === sessionTopic)
+    if (indexApprovalDate < 0) {
+      state.approvalDates = [...state.approvalDates, { sessionTopic, approvalDate: moment().unix() }]
+    } else {
+      state.approvalDates[indexApprovalDate] = { sessionTopic, approvalDate: moment().unix() }
+    }
   }
 }
+
+const deleteApprovalDate: CaseReducer<WCState, PayloadAction<string>> = (state, action) => {
+  const sessionTopic = action.payload
+  if ('approvalDates' in state) {
+    state.approvalDates = state.approvalDates.filter(it => it.sessionTopic !== sessionTopic)
+  }
+}
+
+const WalletConnectReducer = createSlice({
+  initialState,
+  name: walletConnectReducerName,
+  reducers: {
+    updateApprovalDate,
+    deleteApprovalDate,
+  },
+  extraReducers(builder) {
+    builder.addCase(migrateWalletConnectFromStorage.fulfilled, (state, action) => {
+      const approvalDates = action.payload
+      if (approvalDates) {
+        if ('approvalDates' in state) {
+          const appAprovalDates = [...state.approvalDates, ...approvalDates]
+          const notRepeatedApprovalDates = new Set<string>()
+          state.approvalDates = appAprovalDates.filter(approvalDate => {
+            const isRepeated = notRepeatedApprovalDates.has(approvalDate.sessionTopic)
+            notRepeatedApprovalDates.add(approvalDate.sessionTopic)
+            if (!isRepeated) {
+              return true
+            } else {
+              return false
+            }
+          })
+        } else {
+          state.approvalDates = approvalDates
+        }
+        Storage.wcApprovalDates.erase()
+      }
+    })
+  },
+})
+
+export const walletConnectReducerActions = {
+  ...WalletConnectReducer.actions,
+  migrateWalletConnectFromStorage,
+}
+
+export default WalletConnectReducer.reducer

@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { Dimensions, Platform, StyleSheet } from 'react-native'
 import * as Progress from 'react-native-progress'

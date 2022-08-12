@@ -11,6 +11,8 @@ import { WalletConnectHelper } from '../helpers/WalletConnectHelper'
 import { Account } from '../models/redux/Account'
 import { Wallet } from '../models/redux/Wallet'
 import { RootState } from '../store/RootStore'
+import { selectAccounts } from '../store/account/SelectorAccount'
+import { selectWallets } from '../store/wallet/SelectorWallet'
 
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
@@ -28,8 +30,8 @@ export const ConnectionItem = ({ session }: Props) => {
   const approvalDate = useSelector((state: RootState) =>
     state.wcReducer.approvalDates?.find(approvalDate => approvalDate.sessionTopic === session.topic)
   )
-  const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const walletsPool = useSelector((state: RootState) => state.app.wallets)
+  const accountsPool = useSelector(selectAccounts)
+  const walletsPool = useSelector(selectWallets)
 
   const connectedAccountsAndWallets = useMemo(() => {
     const sessionAccounts = WalletConnectHelper.getAccountInformationFromSession(session)

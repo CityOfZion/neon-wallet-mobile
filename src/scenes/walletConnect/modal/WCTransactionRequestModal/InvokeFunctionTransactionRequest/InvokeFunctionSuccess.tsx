@@ -9,6 +9,7 @@ import { TransactionRequestSuccessElementProps } from '../TransactionRequestBase
 import { blockchainServices } from '~/src/blockchain'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import { RootState } from '~/src/store/RootStore'
+import { selectWalletByID } from '~/src/store/wallet/SelectorWallet'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Normalize } from '~src/app/Normalize'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
@@ -16,7 +17,7 @@ import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/style
 
 export const InvokeFunctionSuccess = ({ account, transactionId }: TransactionRequestSuccessElementProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const wallet = useSelector((state: RootState) => state.app.wallets.find(wallet => wallet.id === account.idWallet))
+  const wallet = useSelector(selectWalletByID(account.idWallet))
   const navigation = useNavigation()
 
   const navigateToTransactions = () => {

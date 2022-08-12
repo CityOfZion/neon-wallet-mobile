@@ -11,6 +11,9 @@ import { Account } from '~/src/models/redux/Account'
 import { Contact } from '~/src/models/redux/Contact'
 import { Wallet } from '~/src/models/redux/Wallet'
 import { RootState } from '~/src/store/RootStore'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
+import { selectContacts } from '~/src/store/contact/SelectorContact'
+import { selectWallets } from '~/src/store/wallet/SelectorWallet'
 
 type Props = {
   destinationAddress?: string
@@ -44,9 +47,9 @@ export const DestinationInput = ({
   onWalletChange,
   onAddressValidation,
 }: Props) => {
-  const accounts = useSelector((state: RootState) => state.app.accounts)
-  const wallets = useSelector((state: RootState) => state.app.wallets)
-  const contacts = useSelector((state: RootState) => state.app.contacts)
+  const accounts = useSelector(selectAccounts)
+  const wallets = useSelector(selectWallets)
+  const contacts = useSelector(selectContacts)
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 

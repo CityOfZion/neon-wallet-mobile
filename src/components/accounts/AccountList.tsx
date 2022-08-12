@@ -4,11 +4,12 @@ import { FlatList } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { BlockchainServiceKey, getBlockchainLogo } from '~/src/blockchain'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
+import { selectWallets } from '~/src/store/wallet/SelectorWallet'
 import { LinearLayoutProps } from '~/src/types/styled-components'
 import { SearchBar } from '~src/components/SearchBar'
 import { Account } from '~src/models/redux/Account'
 import { Wallet } from '~src/models/redux/Wallet'
-import { RootState } from '~src/store/RootStore'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface AccountListProps extends LinearLayoutProps {
@@ -83,8 +84,8 @@ const Item = React.memo(({ account, onPress, wallet }: ItemProps) => {
 })
 
 export const AccountList = ({ filterByBlockchain, onSelect, ...props }: AccountListProps) => {
-  const accounts = useSelector((state: RootState) => state.app.accounts)
-  const wallets = useSelector((state: RootState) => state.app.wallets)
+  const accounts = useSelector(selectAccounts)
+  const wallets = useSelector(selectWallets)
 
   const [filter, setFilter] = useState('')
 

@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import AccountCard from '../AccountCard'
 
 import { Wallet } from '~/src/models/redux/Wallet'
-import { RootState } from '~/src/store/RootStore'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { LinearLayout } from '~src/styles/styled-components'
 
 type Props = {
@@ -17,7 +17,7 @@ type Props = {
 }
 
 export const WalletAccountsContainer = ({ wallet, inAnimatedValue, outAnimatedValue, height, width }: Props) => {
-  const accounts = useSelector((state: RootState) => state.app.accounts)
+  const accounts = useSelector(selectAccounts)
 
   const limitedWalletAccounts = useMemo(() => wallet.getAccounts(accounts).slice(0, 10), [wallet, accounts])
 

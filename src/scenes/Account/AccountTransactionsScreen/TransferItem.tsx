@@ -10,6 +10,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { TransactionTransferType } from '~/src/models/TransactionAddressSummary'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
+import { selectContacts } from '~/src/store/contact/SelectorContact'
 import { TextView, LinearLayout } from '~/src/styles/styled-components'
 import { MultiExchange } from '~/src/types/exchange'
 
@@ -19,7 +20,7 @@ type Props = (FormattedTransferAsset | FormattedTransferNFT) & {
 }
 
 export const TransferItem = React.memo((props: Props) => {
-  const contacts = useSelector((state: RootState) => state.app.contacts)
+  const contacts = useSelector(selectContacts)
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const handleSentOrReceived = () => {

@@ -11,6 +11,8 @@ import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
+import { selectWallets } from '~/src/store/wallet/SelectorWallet'
 import { hasWalletconnect } from '~src/blockchain/common'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import WalletPicker from '~src/components/misc/WalletPicker'
@@ -30,8 +32,8 @@ interface Props {
 
 const WCWalletSelectionModal = (props: Props) => {
   useTreatNetworkOnWalletConnectFlow()
-  const accounts = useSelector((state: RootState) => state.app.accounts)
-  const wallets = useSelector((state: RootState) => state.app.wallets)
+  const accounts = useSelector(selectAccounts)
+  const wallets = useSelector(selectWallets)
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
   const controller = useSwiperController(true)

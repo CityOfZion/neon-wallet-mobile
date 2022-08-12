@@ -9,6 +9,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Security } from '~/src/enums/Security'
 import { SecurityHelper } from '~/src/helpers/SecurityHelper'
 import { MoreStackParamList } from '~/src/navigation/MoreStackNavigation'
+import { settingsReducerActions } from '~/src/store/settings/SettingsReducer'
 import { Storage } from '~src/app/Storage'
 import Keypad from '~src/components/Keypad'
 import PasscodeBar from '~src/components/PasscodeBar'
@@ -16,7 +17,7 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { PasscodeStackParamList } from '~src/navigation/PasscodeStackNavigation'
 import { PasscodeHeader, PASSCODE_LENGTH } from '~src/scenes/LoginPage/PasscodePage'
-import { RootState, RootStore } from '~src/store/RootStore'
+import { RootState } from '~src/store/RootStore'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface ConfirmPasscodePageParams {
@@ -56,8 +57,7 @@ const ConfirmPasscodePage = (props: Props) => {
 
   const persist = async () => {
     await SecurityHelper.savePasscode(originalPasscode)
-    dispatch(RootStore.settings.actions.setSecurity(Security.password))
-    dispatch(RootStore.settings.actions.save())
+    dispatch(settingsReducerActions.setSecurity(Security.password))
     await Storage.hasAuthentication.save(true)
     await Storage.hasAuthenticationForHardware.save(false)
     if (isFirstTime) {

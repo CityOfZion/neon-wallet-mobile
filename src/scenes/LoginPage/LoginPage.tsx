@@ -7,9 +7,9 @@ import { useDispatch } from 'react-redux'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { ThemedFlatButton } from '~/src/components/themed/ThemedFlatButton'
 import { Security } from '~/src/enums/Security'
+import { settingsReducerActions } from '~/src/store/settings/SettingsReducer'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { RootStore } from '~src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 interface Props {
   navigation: StackNavigationProp<RootStackParamList>
@@ -18,7 +18,7 @@ interface Props {
 export default function LoginPage(props: Props) {
   const dispatch = useDispatch()
   const continueButton = async () => {
-    dispatch(RootStore.settings.actions.setIsFirstTime(true))
+    dispatch(settingsReducerActions.setIsFirstTime(true))
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.SecurityModal.name,
     })
@@ -55,8 +55,7 @@ export default function LoginPage(props: Props) {
 
         <TouchableWithoutFeedback
           onPress={() => {
-            dispatch(RootStore.settings.actions.setSecurity(Security.disabled))
-            dispatch(RootStore.settings.actions.save())
+            dispatch(settingsReducerActions.setSecurity(Security.disabled))
             props.navigation.replace(wrapper.route.Tab.name, {
               screen: wrapper.route.ListWallets.name,
             })

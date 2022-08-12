@@ -22,8 +22,8 @@ import { Account } from '~/src/models/redux/Account'
 import { Contact } from '~/src/models/redux/Contact'
 import { Wallet } from '~/src/models/redux/Wallet'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
-import { RootState, RootStore } from '~/src/store/RootStore'
-import { AsyncDispatch } from '~/src/types/reducers/root'
+import { RootState } from '~/src/store/RootStore'
+import { accountReducerActions } from '~/src/store/account/AccountReducer'
 import { HeaderColumn } from '~src/components/HeaderColumn'
 import { TransactionAccountCard } from '~src/components/TransactionAccountCard'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
@@ -69,7 +69,7 @@ export const SendTransactionReviewModal = (props: Props) => {
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatch = useDispatch()
   const controller = useSwiperController(true)
   const { exchange } = useExchange()
 
@@ -114,9 +114,8 @@ export const SendTransactionReviewModal = (props: Props) => {
         Number(amount),
         fee
       )
-      await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
-      dispatchAsync(RootStore.app.actions.syncAccounts())
-      dispatchAsync(RootStore.app.actions.watchPendingTransaction(account, transactionHash))
+      dispatch(accountReducerActions.saveAccount({ account }))
+      dispatch(accountReducerActions.watchPendingTransaction({ account, transactionHash, isClaim: false }))
 
       props.navigation.popToTop()
       props.navigation.goBack()

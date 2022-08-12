@@ -16,9 +16,9 @@ import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
-import { RootState, RootStore } from '~/src/store/RootStore'
+import { RootState } from '~/src/store/RootStore'
+import { accountReducerActions } from '~/src/store/account/AccountReducer'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
-import { AsyncDispatch } from '~/src/types/reducers/root'
 
 export interface AccountSettingsViewParams {
   account: Account
@@ -36,14 +36,12 @@ export const AccountSettingsView = (props: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const { authenticate } = useLocalAuthentication()
 
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatch = useDispatch()
 
   const deleteAction = async () => {
     if (account?.address) {
-      await dispatchAsync(RootStore.account.actions.delete(account.address))
+      dispatch(accountReducerActions.deleteAccount(account.address))
     }
-
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
 
     props.navigation.reset({
       index: 0,

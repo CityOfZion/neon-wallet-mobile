@@ -13,6 +13,7 @@ import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import BalanceList from '~src/components/BalanceList'
 import SwiperPanel, { BackButton, useSwiperController } from '~src/components/SwiperPanel'
 import AccountPicker from '~src/components/misc/AccountPicker'
@@ -34,7 +35,7 @@ const ReceiveTransactionAccountSelectionModal = (props: Props) => {
   const { wallet } = props.route.params
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const accounts = useSelector((state: RootState) => state.app.accounts)
+  const accounts = useSelector(selectAccounts)
   const controller = useSwiperController(true)
 
   const validAccounts = useMemo(() => wallet.getAccounts(accounts), [accounts])

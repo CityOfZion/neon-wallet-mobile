@@ -6,7 +6,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { ContactList } from '~/src/components/contacts/ContactList'
 import { NoContacts } from '~/src/components/contacts/NoContacts'
 import { Contact } from '~/src/models/redux/Contact'
-import { RootState } from '~/src/store/RootStore'
+import { selectContacts } from '~/src/store/contact/SelectorContact'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
@@ -29,7 +29,7 @@ const ContactsPage: React.FC<Props> = props => {
       }),
   })
 
-  const contacts = useSelector((state: RootState) => state.app.contacts)
+  const contacts = useSelector(selectContacts)
 
   const handleContactSelected = (contact: Contact) => {
     props.navigation.navigate(wrapper.route.ContactDetails.name, {

@@ -17,7 +17,8 @@ import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { Wallet } from '~/src/models/redux/Wallet'
-import { AsyncDispatch } from '~/src/types/reducers/root'
+import { accountReducerActions } from '~/src/store/account/AccountReducer'
+import { selectWallets } from '~/src/store/wallet/SelectorWallet'
 import { blockchainServices, hasWCIntegration, isClaimable } from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
@@ -30,7 +31,7 @@ import { NeoNode } from '~src/models/NeoNode'
 import { Account } from '~src/models/redux/Account'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
-import { RootState, RootStore } from '~src/store/RootStore'
+import { RootState } from '~src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface GetAccountViewParams {
@@ -128,9 +129,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
       }),
   })
 
-  const wallets = useSelector((state: RootState) => state.app.wallets)
+  const wallets = useSelector(selectWallets)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatch = useDispatch()
   const { sessions } = useWalletConnect()
 
   const opacityValue = useRef(new Animated.Value(0))
@@ -203,10 +204,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
           unclaimedGasAmount,
           responseClaim.fee
         )
-
-        dispatchAsync(RootStore.app.actions.watchPendingTransaction(account, responseClaim.txid, true))
-        await dispatchAsync(RootStore.app.actions.updateAndSaveAccount(account))
-        await dispatchAsync(RootStore.app.actions.syncAccounts())
+        dispatch(
+          accountReducerActions.watchPendingTransaction({ account, transactionHash: responseClaim.txid, isClaim: true })
+        )
       }
     } catch {
       showMessage({
@@ -256,13 +256,6 @@ const GetAccountView = (props: GetAccountViewProps) => {
         wallet,
       },
     })
-  }
-
-  const handleCanSend = () => {
-    if (account.accountType === 'watch' || !isConnected || !wallet) {
-      return false
-    }
-    return true
   }
 
   const handlePressSendButton = () => {

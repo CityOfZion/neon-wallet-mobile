@@ -5,11 +5,13 @@ import i18n from 'i18n-js'
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { Alert, Platform } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
+import { SecurityHelper } from '../helpers/SecurityHelper'
 import { IURI } from '../helpers/UriHelper'
 import { TabStackParamList } from '../navigation/TabNavigation'
-import { AsyncDispatch } from '../types/reducers/root'
+import { selectAccounts } from '../store/account/SelectorAccount'
+import { selectWalletIds, selectWallets } from '../store/wallet/SelectorWallet'
 import { MnemonicSelectionInfo } from './MnemonicSelectionList'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
@@ -33,7 +35,7 @@ import { useBlockchainActions, AccountToImport } from '~src/hooks/useBlockchainA
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
-import { RootState, RootStore } from '~src/store/RootStore'
+import { RootState } from '~src/store/RootStore'
 import { LinearLayout, ImageView, TextView } from '~src/styles/styled-components'
 
 type ParamList = MoreStackParamList & RootStackParamList & TabStackParamList & WalletStackParamList
@@ -61,8 +63,9 @@ const isMnemonic = (word: string) => {
 
 const ImportKey = (props: ImportKeyProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const accounts = useSelector((state: RootState) => state.app.accounts)
-  const wallets = useSelector((state: RootState) => state.app.wallets)
+  const accounts = useSelector(selectAccounts)
+  const wallets = useSelector(selectWallets)
+  const walletIds = useSelector(selectWalletIds)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const [inputValue, setInputValue] = useState(props.route.params ? props.route.params.key ?? '' : '')
   const [addressesFound, setAddressesFound] = useState<{ address: string; blockchain: BlockchainServiceKey }[]>([])
@@ -72,7 +75,6 @@ const ImportKey = (props: ImportKeyProps) => {
   )
   const [showImportList, setShowImportList] = useState<boolean>(false)
   const [disableButton, setDisableButton] = useState<boolean>(true)
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
   const blockchainActions = useBlockchainActions()
 
   const inputType = useRef<InputType>()
@@ -112,49 +114,66 @@ const ImportKey = (props: ImportKeyProps) => {
     }
   }
 
-  const importMnemonic = useCallback(async (mnemonic: string) => {
-    const mnemonicIsImported = (await dispatchAsync(RootStore.wallet.actions.mnemonicIsImported(mnemonic))) as boolean
-
-    if (mnemonicIsImported) {
-      showMessage({
-        message: i18n.t('importKey.mnemonicAlreadyExists'),
-        type: 'danger',
-      })
-      return
-    }
-
-    let index: number = 0
-    let stop: boolean = false
-    const allAccountsInfo: MnemonicSelectionInfo = new Map()
-    let accountsInfo: {
-      address: string
-      wif: string
-      derivationIndex: number
-    }[] = []
-
-    for (const blockchainName of blockchainList) {
-      stop = false
-      index = 0
-      while (!stop && isConnected) {
-        const { wif, address } = blockchainServices[blockchainName].generateAccount(mnemonic, index)
-        if (!accounts.find(account => account.address === address)) {
-          await UtilsHelper.sleep(200)
-          const req = blockchainServices[blockchainName].provider
-          const { totalEntries } = await req.getAddressAbstracts(address, 1)
-          if ((totalEntries && totalEntries > 0) || index === 0) {
-            accountsInfo.push({ address, wif, derivationIndex: index })
-          } else {
-            stop = true
-          }
-        }
-        index++
+  const mnemonicIsImported = useCallback(
+    async (mnemonic: string) => {
+      const mnemonics = await Promise.all(walletIds.map(id => SecurityHelper.loadMnemonic(id)))
+      const foundMnemonic = mnemonics.find(it => it === mnemonic)
+      if (foundMnemonic) {
+        return true
+      } else {
+        return false
       }
-      allAccountsInfo.set(blockchainName, accountsInfo)
-      accountsInfo = []
-    }
+    },
+    [walletIds]
+  )
 
-    return allAccountsInfo
-  }, [])
+  const importMnemonic = useCallback(
+    async (mnemonic: string) => {
+      const IsImported = await mnemonicIsImported(mnemonic)
+
+      if (IsImported) {
+        showMessage({
+          message: i18n.t('importKey.mnemonicAlreadyExists'),
+          type: 'danger',
+        })
+        return
+      }
+
+      let index: number = 0
+      let stop: boolean = false
+      const allAccountsInfo: MnemonicSelectionInfo = new Map()
+      let accountsInfo: {
+        address: string
+        wif: string
+        derivationIndex: number
+      }[] = []
+
+      for (const blockchainName of blockchainList) {
+        stop = false
+        index = 0
+        while (!stop && isConnected) {
+          const { wif, address } = blockchainServices[blockchainName].generateAccount(mnemonic, index)
+          console.log({ wif, address, index })
+          if (!accounts.find(account => account.address === address)) {
+            await UtilsHelper.sleep(200)
+            const req = blockchainServices[blockchainName].provider
+            const { totalEntries } = await req.getAddressAbstracts(address, 1)
+            if ((totalEntries && totalEntries > 0) || index === 0) {
+              accountsInfo.push({ address, wif, derivationIndex: index })
+            } else {
+              stop = true
+            }
+          }
+          index++
+        }
+        allAccountsInfo.set(blockchainName, accountsInfo)
+        accountsInfo = []
+      }
+
+      return allAccountsInfo
+    },
+    [mnemonicIsImported]
+  )
 
   const addressAlreadyExist = useCallback(
     (address: string) => accounts.some(account => account.address === address),

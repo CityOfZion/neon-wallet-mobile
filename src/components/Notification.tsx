@@ -7,12 +7,11 @@ import { useDispatch } from 'react-redux'
 
 import { TabStackParamList } from '../navigation/TabNavigation'
 import { WalletStackParamList } from '../navigation/WalletsStackNavigation'
-import { AsyncDispatch } from '../types/reducers/root'
+import { walletReducerActions } from '../store/wallet/WalletReducer'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Wallet } from '~src/models/redux/Wallet'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { RootStore } from '~src/store/RootStore'
 import { ButtonView, ButtonWithoutFeedbackView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
@@ -22,14 +21,14 @@ interface Props {
 }
 
 const Notification = (props: Props) => {
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatch = useDispatch()
   const navigation = useNavigation<StackNavigationProp<RootStackParamList & TabStackParamList & WalletStackParamList>>()
 
   const close = async () => {
     if (!props.wallet.id) return
 
-    await dispatchAsync(RootStore.wallet.actions.setShowBackupAlert(props.wallet.id, false))
-    await dispatchAsync(RootStore.app.actions.syncWallets())
+    props.wallet.showBackupAlert = false
+    dispatch(walletReducerActions.saveWallet(props.wallet))
 
     if (props.onClose) props.onClose()
   }

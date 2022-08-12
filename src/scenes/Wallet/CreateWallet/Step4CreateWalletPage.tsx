@@ -5,21 +5,19 @@ import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { Alert } from 'react-native'
-import { useDispatch } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { BlockchainServiceKey } from '~/src/blockchain'
-import { DispatchResult } from '~/src/types/reducers/root'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedInputText from '~src/components/themed/ThemedInputText'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
-import { RootStore } from '~src/store/RootStore'
 import { TextView, LinearLayout } from '~src/styles/styled-components'
 
 export interface Step4CreateWalletParams {
   hasBackup?: boolean
   blockchain?: BlockchainServiceKey
+  mnemonic: string
 }
 
 interface Props {
@@ -30,18 +28,21 @@ interface Props {
 const Step4CreateWalletPage: React.FC<Props> = props => {
   const [walletName, setWalletName] = useState<string>()
 
-  const dispatch = useDispatch<DispatchResult>()
-
   const next = async () => {
     if (!walletName) {
       Alert.alert(i18n.t('step4CreateWallet.setName'))
       return
     }
 
-    dispatch(RootStore.wallet.actions.setName(walletName))
-    dispatch(RootStore.wallet.actions.setType('standard'))
-
-    props.navigation.navigate(wrapper.route.BlockchainListPage.name)
+    props.navigation.navigate(wrapper.route.BlockchainListPage.name, {
+      config: {
+        creatingWallet: {
+          mnemonic: props.route.params.mnemonic,
+          walletName,
+          walletType: 'standard',
+        },
+      },
+    })
   }
 
   return (

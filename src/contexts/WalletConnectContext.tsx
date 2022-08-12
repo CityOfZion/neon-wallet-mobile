@@ -8,9 +8,7 @@ import PropTypes from 'prop-types'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { AsyncDispatch } from '../types/reducers/root'
-
-import { RootStore } from '~src/store/RootStore'
+import { walletConnectReducerActions } from '../store/walletConnect/WalletConnectReducer'
 
 type OnRequestCallback = (accountAddress: string, chainId: string, request: JsonRpcRequest) => Promise<JsonRpcResponse>
 type AutoAcceptCallback = (
@@ -86,7 +84,7 @@ export const WalletConnectContextProvider: React.FC<{
   const [onRequestCallback, setOnRequestCallback] = useState<OnRequestCallback | undefined>(undefined)
   const [autoAcceptCallback, setAutoAcceptCallback] = useState<AutoAcceptCallback | undefined>(undefined)
 
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatch = useDispatch()
 
   const init = async () => {
     const st = new KeyValueStorage(options.storageOptions)
@@ -373,7 +371,7 @@ export const WalletConnectContextProvider: React.FC<{
           return [...old, session]
         }
       })
-      await dispatchAsync(RootStore.wcReducer.actions.updateApprovalDate(session.topic))
+      dispatch(walletConnectReducerActions.updateApprovalDate(session.topic))
     } catch (error) {
       throw error
     }
@@ -397,7 +395,7 @@ export const WalletConnectContextProvider: React.FC<{
       topic,
       reason: ERROR.USER_DISCONNECTED.format(),
     })
-    await dispatchAsync(RootStore.wcReducer.actions.delete(topic))
+    dispatch(walletConnectReducerActions.deleteApprovalDate(topic))
   }
 
   const removeFromPending = async (requestEvent: SessionTypes.RequestEvent) => {

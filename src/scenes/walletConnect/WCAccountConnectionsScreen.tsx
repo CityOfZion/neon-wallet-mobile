@@ -17,6 +17,8 @@ import { Account } from '~/src/models/redux/Account'
 import { WCApprovalDate } from '~/src/models/redux/WCApprovalDate'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
+import { selectWallets } from '~/src/store/wallet/SelectorWallet'
 import { LinearLayout, TextView } from '~/src/styles/styled-components'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 
@@ -31,8 +33,8 @@ interface Props {
 
 const WCAccountConnectionsScreen = ({ route, navigation }: Props) => {
   const walletConnectCtx = useWalletConnect()
-  const accountsPool = useSelector((state: RootState) => state.app.accounts)
-  const walletsPool = useSelector((state: RootState) => state.app.wallets)
+  const accountsPool = useSelector(selectAccounts)
+  const walletsPool = useSelector(selectWallets)
   const [approvalDatesPool, setApprovalDatesPool] = useState<WCApprovalDate[] | null>(null)
 
   const syncApprovalDates = useCallback(async () => {

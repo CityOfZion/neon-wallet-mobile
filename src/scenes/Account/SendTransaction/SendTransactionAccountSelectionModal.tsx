@@ -13,6 +13,7 @@ import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { TokenBalance } from '~/src/types/query'
 import BalanceList from '~src/components/BalanceList'
 import SwiperPanel, { BackButton, useSwiperController } from '~src/components/SwiperPanel'
@@ -37,7 +38,7 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
-  const accounts = useSelector((state: RootState) => state.app.accounts)
+  const accounts = useSelector(selectAccounts)
   const controller = useSwiperController(true)
 
   const validAccounts = useMemo(() => wallet.getAccounts(accounts), [accounts])

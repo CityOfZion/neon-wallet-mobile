@@ -7,7 +7,7 @@ import { Alert } from 'react-native'
 import { useDispatch } from 'react-redux'
 
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
-import { AsyncDispatch, DispatchResult } from '~/src/types/reducers/root'
+import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
@@ -17,7 +17,6 @@ import { Wallet } from '~src/models/redux/Wallet'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { SettingsStackParamList } from '~src/navigation/SettingsStackNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
-import { RootStore } from '~src/store/RootStore'
 import { LinearLayout } from '~src/styles/styled-components'
 
 type ParamList = ModalStackParamList & TabStackParamList & SettingsStackParamList & WalletStackParamList
@@ -37,24 +36,15 @@ export const EditWalletModal = (props: EditWalletModalProps & EditWalletParams) 
   const [name, setName] = useState(wallet?.name ?? '')
   const controller = useSwiperController(true)
 
-  const dispatch = useDispatch<DispatchResult>()
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
+  const dispatch = useDispatch()
 
   const submit = async () => {
     if (name.length === 0 || name.length > 20) {
       Alert.alert(i18n.t('modals.editWallet.invalidName'))
       return
     }
-
-    dispatch(RootStore.wallet.actions.setName(name))
-
-    if (wallet?.id) {
-      await dispatchAsync(RootStore.wallet.actions.update(wallet.id))
-    } else {
-      await dispatchAsync(RootStore.wallet.actions.createAndSave())
-    }
-
-    await dispatchAsync(RootStore.app.actions.syncWallets())
+    wallet.name = name
+    dispatch(walletReducerActions.saveWallet(wallet))
 
     props.navigation.navigate(wrapper.route.ListWalletsPage.name)
   }

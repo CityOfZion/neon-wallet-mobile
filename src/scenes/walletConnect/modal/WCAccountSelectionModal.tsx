@@ -17,7 +17,7 @@ import { Account } from '~/src/models/redux/Account'
 import { Wallet } from '~/src/models/redux/Wallet'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
-import { RootState } from '~/src/store/RootStore'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { LinearLayout, TextView } from '~/src/styles/styled-components'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import { useWalletConnect } from '~src/contexts/WalletConnectContext'
@@ -37,7 +37,7 @@ export const WCAccountSelectionModal = (props: Props) => {
 
   useTreatNetworkOnWalletConnectFlow()
   const controller = useSwiperController(true)
-  const accounts = useSelector((state: RootState) => state.app.accounts)
+  const accounts = useSelector(selectAccounts)
   const walletConnectCtx = useWalletConnect()
 
   const validAccounts = useMemo(

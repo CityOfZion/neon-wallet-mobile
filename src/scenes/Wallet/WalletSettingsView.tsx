@@ -15,9 +15,12 @@ import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
-import { RootState, RootStore } from '~/src/store/RootStore'
+import { RootState } from '~/src/store/RootStore'
+import { accountReducerActions } from '~/src/store/account/AccountReducer'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
+import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
-import { AsyncDispatch, DispatchResult } from '~/src/types/reducers/root'
+import { DispatchResult } from '~/src/types/reducers/root'
 
 export interface WalletSettingViewParams {
   wallet: Wallet
@@ -32,21 +35,20 @@ export const WalletSettingsView = (props: Props) => {
   const { wallet } = props.route.params
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const accountsPool = useSelector(selectAccounts)
   const { authenticate } = useLocalAuthentication()
 
   const dispatch = useDispatch<DispatchResult>()
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   const deleteAction = async () => {
     if (!wallet.id) {
       return
     }
-
-    await dispatchAsync(RootStore.wallet.actions.delete(wallet.id))
-
-    await dispatchAsync(RootStore.app.actions.syncWallets())
-    await dispatchAsync(RootStore.app.actions.syncAccounts())
-    dispatch(RootStore.wallet.actions.selectWallet(null))
+    const accounts = wallet.getAccounts(accountsPool)
+    accounts.forEach(account => {
+      dispatch(accountReducerActions.deleteAccount(account.address))
+    })
+    dispatch(walletReducerActions.deleteWallet(wallet.id))
 
     props.navigation.reset({
       index: 0,

@@ -25,6 +25,8 @@ import { wrapper } from '~src/app/ApplicationWrapper'
 import SwiperPanel, { SwiperController } from '~src/components/SwiperPanel'
 import { applicationConfig } from '~src/config/ApplicationConfig'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
+import { selectWallets } from '../store/wallet/SelectorWallet'
+import { selectAccounts } from '../store/account/SelectorAccount'
 
 interface Props {
   controller: SwiperController
@@ -34,8 +36,8 @@ export default function QuickToolsMenu(props: Props) {
   const navigation =
     useNavigation<StackNavigationProp<RootStackParamList & ModalStackParamList & WalletStackParamList>>()
   const blockchainActions = useBlockchainActions()
-  const wallets = useSelector((state: RootState) => state.app.wallets)
-  const accounts = useSelector((state: RootState) => state.app.accounts)
+  const wallets = useSelector(selectWallets)
+  const accounts = useSelector(selectAccounts)
 
   const handleScanQrCode = async (data: string) => {
     const sendUri = UriHelper.validateAndParse(data)

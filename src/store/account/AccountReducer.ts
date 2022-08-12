@@ -1,155 +1,143 @@
-import { ReducerWrapper } from '@simpli/redux-wrapper'
-import { plainToClass } from 'class-transformer'
-import { ImageLoadEventData } from 'react-native'
+import { CaseReducer, PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-import { BlockchainServiceKey, blockchainServices } from '~/src/blockchain'
+import { appBus } from '~/src/app/AppBus'
+import { Storage } from '~/src/app/Storage'
+import { blockchainServices } from '~/src/blockchain'
+import { PollingHelper } from '~/src/helpers/PollingHelper'
 import { SecurityHelper } from '~/src/helpers/SecurityHelper'
-import { Wallet } from '~/src/models/redux/Wallet'
-import { AccountAction, AccountActionsType, AccountState } from '~/src/types/reducers/account'
-import { AsyncAction, SyncAction } from '~/src/types/reducers/root'
-import { Model } from '~src/app/Model'
-import { Storage } from '~src/app/Storage'
-import { Account } from '~src/models/redux/Account'
-import { AddressDispatcher } from '~src/store/account/dispatchers/AddressDispatcher'
-import { BackgroundDispatcher } from '~src/store/account/dispatchers/BackgroundDispatcher'
-import { BlockchainDispatcher } from '~src/store/account/dispatchers/BlockchainDispatcher'
-import { IdWalletDispatcher } from '~src/store/account/dispatchers/IdWalletDispatcher'
-import { IndexDispatcher } from '~src/store/account/dispatchers/IndexDispatcher'
-import { NameDispatcher } from '~src/store/account/dispatchers/NameDispatcher'
-import { SrcIconDispatcher } from '~src/store/account/dispatchers/SrcIconDispatcher'
-export class AccountReducer extends ReducerWrapper<AccountActionsType, AccountState, AccountAction> {
-  protected readonly initialState = Model.parse<AccountState>(Account)
+import { Account } from '~/src/models/redux/Account'
+import { AccountState } from '~/src/types/reducers/account'
 
-  protected readonly dispatchers = [
-    AddressDispatcher,
-    IdWalletDispatcher,
-    NameDispatcher,
-    SrcIconDispatcher,
-    BackgroundDispatcher,
-    BlockchainDispatcher,
-    IndexDispatcher,
-  ]
+interface IAccountReducer {
+  data: AccountState[]
+}
 
-  readonly actions = {
-    selectAccount: (address: string | null) => {
-      return this.commit('SET_ADDRESS', { address })
-    },
-    setIdWallet: (idWallet: string) => {
-      return this.commit('SET_ID_WALLET', { idWallet })
-    },
-    setName: (name: string) => {
-      return this.commit('SET_NAME_ACCOUNT', { name })
-    },
-    setSrcIcon: (srcIcon: ImageLoadEventData) => {
-      return this.commit('SET_SRC_ICON', { srcIcon })
-    },
-    setBackgroundColor: (backgroundColor: string) => {
-      return this.commit('SET_BACKGROUND_COLOR', { backgroundColor })
-    },
-    setBlockchain: (blockchain: BlockchainServiceKey) => {
-      return this.commit('SET_BLOCKCHAIN_ACCOUNT', { blockchain })
-    },
-    setIndex: (index: number) => {
-      return this.commit('SET_INDEX_ACCOUNT', { index })
-    },
-    getFromSelection: (): SyncAction<Account> => {
-      return (dispatch, getState) => {
-        const accounts = getState().app.accounts
-        const { address } = getState().account
-        return accounts.find(it => it.address === address) ?? new Account()
-      }
-    },
-    createAndSave: (indexAccount?: number): AsyncAction<string> => {
-      const generateAccount = async (wallet: Wallet, index: number, blockchain: BlockchainServiceKey) => {
-        const mnemonic = await wallet.getMnemonic()
-        if (!mnemonic) {
-          return null
-        }
-        return blockchainServices[blockchain].generateAccount(mnemonic, index)
-      }
+export const accountReducerName = 'accountReducer'
 
-      return async (dispatch, getState) => {
-        const accounts = getState().app.accounts
+const initialState = {
+  data: [],
+} as IAccountReducer
 
-        const account = plainToClass(Account, getState().account)
-        const blockchain = getState().account.blockchain
-        const index = getState().account.index
-        const wallet = account.getWallet(getState().app.wallets)
-        const indexes = account.getAccountsWithSameWallet(getState().app.accounts).map(it => it.index ?? 0)
+const migrateAccountsFromStorage = createAsyncThunk('accounts/migrateAccountsFromStorage', async () => {
+  return Storage.accounts.load()
+})
 
-        account.index = indexAccount ?? (indexes.length ? Math.max(...indexes) + 1 : index ?? 0)
-        account.blockchain = blockchain
+const saveAccount = createAsyncThunk('accounts/save', async ({ account, wif }: { account: Account; wif?: string }) => {
+  const wifAccount = (await account.getWif()) ?? wif
+  if (!account.address) throw new Error('address is undefined')
 
-        if (wallet && wallet.walletType === 'standard') {
-          const newAccount = await generateAccount(wallet, account.index, blockchain)
-          if (newAccount) {
-            account.address = newAccount.address
+  if (!account.idWallet) throw new Error('wallet not found to create account')
 
-            await SecurityHelper.saveWif(account.address, newAccount.wif)
+  if (!wifAccount && (account.accountType === 'standard' || account.accountType === 'legacy'))
+    throw new Error('Wif not defined')
 
-            accounts.push(account)
+  if (wifAccount && account.address) {
+    await SecurityHelper.saveWif(account.address, wifAccount)
+    return account.deserialize
+  } else {
+    return account.deserialize
+  }
+})
 
-            await Storage.accounts.save(accounts)
+const watchPendingTransaction = createAsyncThunk(
+  'accounts/watchPendingTransaction',
+  async ({ account, transactionHash, isClaim }: { account: Account; transactionHash: string; isClaim?: boolean }) => {
+    const polling = new PollingHelper()
 
-            return account.address
-          }
-        }
-        throw Error('Something went wrong')
-      }
-    },
-    updateAndSave: (address: string): AsyncAction => {
-      return async (dispatch, getState) => {
-        const accounts = plainToClass(Account, getState().app.accounts)
-
-        const edited = plainToClass(Account, getState().account)
-
-        const account = accounts.find(acc => acc.address && acc.address === address)
-
-        if (account) {
-          account.name = edited.name
-          account.backgroundColor = edited.backgroundColor
-        }
-
-        await Storage.accounts.save(accounts)
-      }
-    },
-    importAndSave: (address: string, wif?: string): AsyncAction<Account> => {
-      return async (dispatch, getState) => {
-        const accounts = getState().app.accounts
-        const account = plainToClass(Account, getState().account)
-        account.address = address
-        const wallet = account.getWallet(getState().app.wallets)
-
-        if (wallet) {
-          if (wif) {
-            await SecurityHelper.saveWif(account.address, wif)
+    return await new Promise<AccountState>((resolve, reject) => {
+      let attemptCounter = 0
+      polling.run(async () => {
+        blockchainServices[account.blockchain].provider.getTransaction(transactionHash).then(transaction => {
+          attemptCounter++
+          if (transaction) {
+            account.removePendingTransactions(transactionHash)
+            appBus.emit(isClaim ? 'claimGasEnd' : 'pendingTransactionConfirmed', account)
+            resolve(account.deserialize)
+            polling.stop()
           } else {
-            if (wallet.walletType === 'legacy' || wallet.walletType === 'standard') {
-              throw Error('Wif not defined')
+            if (attemptCounter > 10) {
+              reject(new Error(`transaction ${transactionHash} not found`))
+              polling.stop()
             }
           }
+        })
+      })
+    })
+  }
+)
 
-          accounts.push(account)
-          await Storage.accounts.save(accounts)
-
-          return account
-        }
-
-        throw Error('Something went wrong')
-      }
-    },
-    delete: (address: string): AsyncAction => {
-      return async dispatch => {
-        const accounts = (await Storage.accounts.load()) ?? []
-
-        const account = accounts.find(it => it.address === address)
-
-        if (account) {
-          const indexAccount = accounts.indexOf(account)
-          accounts.splice(indexAccount, 1)
-        }
-        await Storage.accounts.save(accounts)
-      }
-    },
+const deleteAccount: CaseReducer<IAccountReducer, PayloadAction<string>> = (state, action) => {
+  if ('data' in state) {
+    const address = action.payload
+    state.data = state.data.filter(account => account.address !== address)
   }
 }
+
+const AccountReducer = createSlice({
+  name: accountReducerName,
+  initialState,
+  reducers: {
+    deleteAccount,
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(migrateAccountsFromStorage.fulfilled, (state, action) => {
+        const accounts = action.payload?.map(it => {
+          it.adaptToMultichain()
+          return it.deserialize
+        })
+        if (accounts) {
+          if ('data' in state) {
+            const appAccounts = [...state.data, ...accounts]
+            const notRepeatedAccounts = new Set<string | null>()
+            state.data = appAccounts.filter((account, index) => {
+              const isRepeated = notRepeatedAccounts.has(account.address)
+              notRepeatedAccounts.add(account.address)
+              if (!isRepeated) {
+                return true
+              } else {
+                return false
+              }
+            })
+          } else {
+            state.data = accounts
+          }
+          Storage.accounts.erase()
+        }
+      })
+      .addCase(saveAccount.fulfilled, (state, action) => {
+        const account = action.payload
+        if (!('data' in state)) {
+          state.data = [account]
+        } else {
+          const findIndex = state.data.findIndex(it => it.address === account.address)
+          if (findIndex < 0) {
+            state.data = [...state.data, account]
+          } else {
+            state.data[findIndex] = account
+          }
+        }
+      })
+      .addCase(watchPendingTransaction.fulfilled, (state, action) => {
+        const account = action.payload
+        if (!('data' in state)) {
+          state.data = [account]
+        } else {
+          const findIndex = state.data.findIndex(it => it.address === account.address)
+          if (findIndex < 0) {
+            state.data = [...state.data, account]
+          } else {
+            state.data[findIndex] = account
+          }
+        }
+      })
+  },
+})
+
+export const accountReducerActions = {
+  ...AccountReducer.actions,
+  saveAccount,
+  watchPendingTransaction,
+  migrateAccountsFromStorage,
+}
+export default AccountReducer.reducer

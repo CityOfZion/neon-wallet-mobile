@@ -1,74 +1,81 @@
-import { ReducerWrapper } from '@simpli/redux-wrapper'
+import { createSlice, CaseReducer, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
 
+import { Storage } from '~/src/app/Storage'
+import { localeConfig } from '~/src/config/LocaleConfig'
+import { Currency } from '~/src/enums/Currency'
+import { Lang } from '~/src/enums/Lang'
 import { Security } from '~/src/enums/Security'
-import { AsyncAction } from '~/src/types/reducers/root'
-import { SettingsActionsType, SettingsState, SettingsAction } from '~/src/types/reducers/settings'
-import { Model } from '~src/app/Model'
-import { Storage } from '~src/app/Storage'
-import { Currency } from '~src/enums/Currency'
-import { Lang } from '~src/enums/Lang'
-import { Theme } from '~src/enums/Theme'
-import { Settings } from '~src/models/redux/Settings'
-import { CurrencyDispatcher } from '~src/store/settings/dispatchers/CurrencyDispatcher'
-import { IsFirstTimeDispatcher } from '~src/store/settings/dispatchers/IsFirstTimeDispatcher'
-import { LanguageDispatcher } from '~src/store/settings/dispatchers/LanguageDispatcher'
-import { SecurityDispatcher } from '~src/store/settings/dispatchers/SecurityDispatcher'
-import { ThemeDispatcher } from '~src/store/settings/dispatchers/ThemeDispatcher'
-export class SettingsReducer extends ReducerWrapper<SettingsActionsType, SettingsState, SettingsAction> {
-  protected readonly initialState = Model.parse<SettingsState>(Settings)
+import { Theme } from '~/src/enums/Theme'
+import { SettingsState } from '~/src/types/reducers/settings'
+export const settingsReducerName = 'settingsReducer'
 
-  protected readonly dispatchers = [
-    LanguageDispatcher,
-    CurrencyDispatcher,
-    ThemeDispatcher,
-    SecurityDispatcher,
-    IsFirstTimeDispatcher,
-  ]
-
-  readonly actions = {
-    setLanguage: (language: Lang) => {
-      return this.commit('SET_LANGUAGE', { language })
-    },
-
-    setCurrency: (currency: Currency) => {
-      return this.commit('SET_CURRENCY', { currency })
-    },
-
-    setSecurity: (security: Security) => {
-      return this.commit('SET_SECURITY', { security })
-    },
-
-    setTheme: (theme: Theme) => {
-      return this.commit('SET_THEME', { theme })
-    },
-
-    setIsFirstTime: (isFirstTime: boolean) => {
-      return this.commit('SET_IS_FIRST_TIME', { isFirstTime })
-    },
-
-    syncSettings: (): AsyncAction<Settings> => {
-      return async (dispatch, getState) => {
-        const settings = await Storage.settings.load()
-
-        if (settings) {
-          const { language, currency, theme, security, isFirstTime } = settings
-
-          dispatch(this.commit('SET_LANGUAGE', { language }))
-          dispatch(this.commit('SET_CURRENCY', { currency }))
-          dispatch(this.commit('SET_THEME', { theme }))
-          dispatch(this.commit('SET_SECURITY', { security }))
-          dispatch(this.commit('SET_IS_FIRST_TIME', { isFirstTime }))
-        }
-
-        return settings ?? new Settings()
-      }
-    },
-
-    save: (): AsyncAction => {
-      return async (dispatch, getState) => {
-        const state = getState().settings
-        await Storage.settings.save(state)
-      }
-    },
-  }
+const initialState: SettingsState = {
+  language: localeConfig.defaultLanguage,
+  currency: localeConfig.defaultCurrency,
+  isFirstTime: false,
+  security: localeConfig.defaultSecurity,
+  theme: Theme.DARK,
 }
+
+const migrateSettingsStorage = createAsyncThunk('settings/migrateSettingsStorage', async () => {
+  return Storage.settings.load()
+})
+
+const setTheme: CaseReducer<SettingsState, PayloadAction<Theme>> = (state, action) => {
+  const theme = action.payload
+  state.theme = theme
+}
+
+const setLanguage: CaseReducer<SettingsState, PayloadAction<Lang>> = (state, action) => {
+  const language = action.payload
+  state.language = language
+}
+
+const setSecurity: CaseReducer<SettingsState, PayloadAction<Security>> = (state, action) => {
+  const security = action.payload
+  state.security = security
+}
+
+const setCurrency: CaseReducer<SettingsState, PayloadAction<Currency>> = (state, action) => {
+  const currency = action.payload
+  state.currency = currency
+}
+
+const setIsFirstTime: CaseReducer<SettingsState, PayloadAction<boolean>> = (state, action) => {
+  const isFirstTime = action.payload
+  state.isFirstTime = isFirstTime
+}
+
+const SettingsReducer = createSlice({
+  name: settingsReducerName,
+  initialState,
+  reducers: {
+    setTheme,
+    setLanguage,
+    setSecurity,
+    setCurrency,
+    setIsFirstTime,
+  },
+  extraReducers(builder) {
+    builder.addCase(migrateSettingsStorage.fulfilled, (state, action) => {
+      const settings = action.payload
+      if (Object.keys(state).length < 1 && settings) {
+        state = {
+          currency: settings.currency,
+          isFirstTime: settings.isFirstTime,
+          language: settings.language,
+          security: settings.security,
+          theme: settings.theme,
+        }
+      }
+      Storage.settings.erase()
+    })
+  },
+})
+
+export const settingsReducerActions = {
+  ...SettingsReducer.actions,
+  migrateSettingsStorage,
+}
+
+export default SettingsReducer.reducer

@@ -13,7 +13,7 @@ import { VerifyMessageTransactionRequest } from './VerifyMessageTransactionReque
 import { SupportedMethods, WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
 import { Account } from '~/src/models/redux/Account'
-import { RootState } from '~/src/store/RootStore'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~src/navigation/TabNavigation'
@@ -42,7 +42,7 @@ const componentsByMethod: Record<SupportedMethods, React.FC<TransactionRequestMe
 
 const WCTransactionRequestModal = ({ navigation, route }: Props) => {
   const { request, session } = route.params
-  const { accounts } = useSelector((state: RootState) => state.app)
+  const accounts = useSelector(selectAccounts)
   useTreatNetworkOnWalletConnectFlow()
 
   const account = useMemo(() => {

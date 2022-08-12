@@ -1,15 +1,16 @@
 import { StackNavigationProp } from '@react-navigation/stack'
-import { Await } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+
+import { settingsReducerActions } from '../store/settings/SettingsReducer'
 
 import SelectorList, { SelectorItem } from '~src/components/SelectorList'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import { Lang } from '~src/enums/Lang'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { RootState, RootStore } from '~src/store/RootStore'
+import { RootState } from '~src/store/RootStore'
 
 interface Props {
   navigation: StackNavigationProp<ModalStackParamList>
@@ -21,8 +22,7 @@ const LanguagePickerModal = (props: Props) => {
   const { language } = useSelector((state: RootState) => state.settings)
 
   const changeLanguage = async (val: Lang) => {
-    dispatch(RootStore.settings.actions.setLanguage(val))
-    await Await.run('application', async () => await dispatch(RootStore.settings.actions.save()), 1000)
+    dispatch(settingsReducerActions.setLanguage(val))
   }
 
   const isSelected = (l: Lang) => l === language

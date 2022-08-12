@@ -1,15 +1,3 @@
-import { Action } from 'redux'
-import { ReducerApplied } from '@simpli/redux-wrapper'
-
-export type WalletActionsType =
-  | 'SET_ID'
-  | 'SET_NAME_WALLET'
-  | 'SET_PASSPHRASE'
-  | 'SET_SECURITY_PHRASE'
-  | 'SET_WALLET_TYPE'
-  | 'SET_SHOW_BACKUP_ALERT'
-  | 'CLEAR_STATE_WALLET'
-
 export type WalletType = 'standard' | 'watch' | 'legacy'
 
 export interface WalletState {
@@ -21,7 +9,3 @@ export interface WalletState {
   lastVisitedAt: string | null
   showBackupAlert: boolean
 }
-
-export type WalletAction = WalletState & Action<WalletActionsType>
-
-export type WalletReducer = ReducerApplied<WalletState, WalletAction>

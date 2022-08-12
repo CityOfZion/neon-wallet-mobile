@@ -3,17 +3,15 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useEffect } from 'react'
 import { StatusBar } from 'react-native'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
-import { RootState, RootStore } from '../store/RootStore'
+import { RootState } from '../store/RootStore'
 import { DefaultNavigationParam } from '../types/global'
-import { AsyncDispatch } from '../types/reducers/root'
 import { ModalStackParamList } from './ModalStackNavigation'
 import WalletConnectStackNavigation from './WalletConnectStackNavigation'
 import WalletStackNavigation, { WalletStackParam } from './WalletsStackNavigation'
 
-import * as data from '~src/Changelog.json'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Storage } from '~src/app/Storage'
 import FooterBar from '~src/components/layout/FooterBar'
@@ -40,21 +38,13 @@ const Tab = createBottomTabNavigator()
 const TabNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const isFirstTime = useSelector((state: RootState) => state.settings.isFirstTime)
-  const dispatchAsync = useDispatch<AsyncDispatch<any>>()
 
   useEffect(() => {
     async function handleData() {
-      const currentNumberOfVersions = Object.keys(data.changelog).length
-      const storageNumberOfVersion = await Storage.numberOfVersions.load()
-
       if (isFirstTime) {
         Storage.changelogHidden.save(true)
         Storage.welcomeHidden.save(true)
         Storage.welcomeToNWSeen.save(true)
-      }
-
-      if (storageNumberOfVersion !== currentNumberOfVersions || isFirstTime) {
-        await dispatchAsync(RootStore.settings.actions.save())
       }
     }
 

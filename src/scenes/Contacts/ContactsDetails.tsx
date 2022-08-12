@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { getBlockchainByAddress, getBlockchainLogo } from '~/src/blockchain'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
+import { selectContacts } from '~/src/store/contact/SelectorContact'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { Contact } from '~src/models/redux/Contact'
@@ -72,7 +73,7 @@ const ItemAddress: React.FC<IItemAddress> = ({ address }) => {
 }
 
 export const ContactDetails = (props: ContactDetailsProps) => {
-  const contacts = useSelector((state: RootState) => state.app.contacts)
+  const contacts = useSelector(selectContacts)
 
   const [contact, setContact] = useState(props.route.params.contact)
 
