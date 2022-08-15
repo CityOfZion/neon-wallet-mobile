@@ -25,6 +25,10 @@ platform :android do
     key_password = ENV['ANDROID_KEY_PASS']
     key_alias = ENV['ANDROID_KEY_ALIAS']
 
+    package_json = read_json(
+      json_path: "../package.json"
+    )
+
     current_version_beta = google_play_track_version_codes(
       track: 'Group Beta',
       json_key: './key.json'
@@ -48,7 +52,7 @@ platform :android do
     )
 
     android_set_version_name(
-      version_name: '1.0.46b' + String(new_current_version)
+      version_name: package_json[:version] + 'b' + String(new_current_version)
     )
 
     gradle(
@@ -80,6 +84,10 @@ platform :android do
     key_password = ENV['ANDROID_KEY_PASS']
     key_alias = ENV['ANDROID_KEY_ALIAS']
 
+    package_json = read_json(
+      json_path: "../package.json"
+    )
+
     current_version_beta = google_play_track_version_codes(
       track: 'Group Beta',
       json_key: './key.json'
@@ -105,7 +113,7 @@ platform :android do
     )
 
     android_set_version_name(
-      version_name: '1.0.46b' + String(new_current_version)
+      version_name: package_json[:version] 'b' + String(new_current_version)
     )
    
     gradle(
@@ -224,5 +232,13 @@ platform :android do
         "android.injected.signing.key.password" => key_password,
       }
     )
+  end
+
+  lane :read_package_json do
+    package_json = read_json(
+      json_path: "../package.json"
+    )
+    puts package_json
+    puts (package_json[:version])
   end
 end

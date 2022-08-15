@@ -61,6 +61,10 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 
+# fastlane bundle
+/ios/vendor/
+/android/vendor/
+
 # Expo
 .expo/*
 web-build/
