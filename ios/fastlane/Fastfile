@@ -56,6 +56,10 @@ platform :ios do
       keyId = ENV['APP_STORE_CONNECT_API_KEY_KEY_ID']
       issuerId = ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID']
 
+      package_json = read_json(
+        json_path: "../package.json"
+      )
+
       api_key = app_store_connect_api_key(
         key_id: keyId,
         issuer_id: issuerId,
@@ -75,7 +79,7 @@ platform :ios do
       new_build_version = current_build_version + 1
 
       increment_version_number(
-        version_number: '1.0.46'
+        version_number: package_json[:version]
       )
 
       increment_build_number(
@@ -118,6 +122,10 @@ platform :ios do
     keyFilePath = File.join(Dir.pwd, "AuthKey.p8")
     keyId = ENV['APP_STORE_CONNECT_API_KEY_KEY_ID']
     issuerId = ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID']
+
+    package_json = read_json(
+      json_path: "../package.json"
+    )
     
     api_key = app_store_connect_api_key(
       key_id: keyId,
@@ -133,7 +141,7 @@ platform :ios do
     current_build_version = [testflight_current_build, store_current_build].max()
     new_build_version = current_build_version + 1
     increment_version_number(
-      version_number: '1.0.46'
+      version_number: package_json[:version]
     )
     increment_build_number(
       xcodeproj: "Neon.xcodeproj",
@@ -193,5 +201,13 @@ platform :ios do
     puts [current_app_build, current_build_number].max()
     puts [current_app_build, current_build_number].max().is_a? Integer
     puts [current_app_build, current_build_number].max().is_a? String
+  end
+
+  lane :read_package_json do
+    package_json = read_json(
+      json_path: "../package.json"
+    )
+    puts package_json
+    puts (package_json[:version])
   end
 end
