@@ -15,6 +15,9 @@ import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
 import * as BlockchainIcons from '~src/assets/blockchainIcons'
 import { Account } from '~src/models/redux/Account'
 import { ExchangeInfo } from '~src/models/response/ExchangeInfo'
+import { TokenBalance } from '../types/query'
+import tokensNeo2 from './NeoLegacy/tokens.json'
+import tokensNeo3 from './Neo3/tokens.json'
 
 export interface IToken {
   symbol: string
@@ -269,4 +272,18 @@ export function getAllTokens() {
   const tokens = blockchainList.flatMap(blockchain => blockchainServices[blockchain].tokens)
 
   return tokens
+}
+
+export function getHashBySymbol(symbol: string): Record<BlockchainServiceKey, string | undefined> {
+  return {
+    neo3: tokensNeo3.find(token => token.symbol === symbol)?.hash,
+    neoLegacy: tokensNeo2.find(token => token.symbol === symbol)?.hash
+  }
+}
+
+export function getTokenNameBySymbol(symbol: string): Record<BlockchainServiceKey, string | undefined>{
+  return {
+    neo3: tokensNeo3.find(token => token.symbol === symbol)?.name,
+    neoLegacy: tokensNeo2.find(token => token.symbol === symbol)?.name
+  }
 }
