@@ -19,14 +19,13 @@ import { WalletConnectHelper } from '../helpers/WalletConnectHelper'
 import { useBlockchainActions } from '../hooks/useBlockchainActions'
 import { ModalStackParamList } from '../navigation/ModalStackNavigation'
 import { WalletStackParamList } from '../navigation/WalletsStackNavigation'
-import { RootState } from '../store/RootStore'
+import { selectAccounts } from '../store/account/SelectorAccount'
+import { selectWallets } from '../store/wallet/SelectorWallet'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import SwiperPanel, { SwiperController } from '~src/components/SwiperPanel'
 import { applicationConfig } from '~src/config/ApplicationConfig'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { selectWallets } from '../store/wallet/SelectorWallet'
-import { selectAccounts } from '../store/account/SelectorAccount'
 
 interface Props {
   controller: SwiperController
