@@ -3,6 +3,8 @@ import React, { useMemo } from 'react'
 import { FlatList } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import { BlockchainServiceKey } from '../blockchain'
+import { mappedTokensBySymbol } from '../blockchain/common'
 import { BalanceConvertedToExchange, BalanceHelper } from '../helpers/BalanceHelper'
 import { TokenHelper } from '../helpers/TokenHelper'
 import { RootState } from '../store/RootStore'
@@ -151,6 +153,16 @@ const BalanceList = ({
   balanceExchange,
   ...props
 }: Props) => {
+  const mandatorySymbols: { blockchain: BlockchainServiceKey; symbol: string }[] = [
+    { blockchain: 'neo3', symbol: 'NEO' },
+    { blockchain: 'neo3', symbol: 'GAS' },
+    { blockchain: 'neo3', symbol: 'FLM' },
+    { blockchain: 'neo3', symbol: 'GM' },
+    { blockchain: 'neo3', symbol: 'fUSDT' },
+    { blockchain: 'neo3', symbol: 'bNEO' },
+    { blockchain: 'neo3', symbol: 'fWBTC' },
+  ]
+
   const tokensBalancesConverted = useMemo(
     () => BalanceHelper.convertBalancesToCurrency(balanceExchange.balance.data, balanceExchange.exchange.data),
     [balanceExchange]
@@ -176,6 +188,24 @@ const BalanceList = ({
         return 0
       })
     }
+
+    mandatorySymbols.forEach(({ blockchain, symbol }) => {
+      if (!tokenBalances.some(token => token.symbol === symbol)) {
+        const foundToken = mappedTokensBySymbol(symbol)
+          .get(blockchain)
+          ?.find(token => token.symbol === symbol)
+        if (foundToken) {
+          tokenBalances.push({
+            amount: 0,
+            blockchain,
+            convertedAmount: 0,
+            hash: foundToken.hash,
+            name: foundToken.name,
+            symbol,
+          })
+        }
+      }
+    })
 
     return tokenBalances
   }, [tokensBalancesConverted])

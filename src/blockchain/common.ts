@@ -270,3 +270,15 @@ export function getAllTokens() {
 
   return tokens
 }
+
+export function mappedTokensBySymbol(symbol: string) {
+  const result = new Map<BlockchainServiceKey, IToken[]>()
+
+  blockchainList.forEach(blockchain => {
+    result.set(
+      blockchain,
+      blockchainServices[blockchain].tokens.filter(token => token.symbol === symbol)
+    )
+  })
+  return result
+}
