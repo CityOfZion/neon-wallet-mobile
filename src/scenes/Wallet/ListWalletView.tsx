@@ -224,7 +224,7 @@ const ListWalletView = (props: WalletProps) => {
         />
       }
     >
-      <LinearLayout alignSelf="flex-end" position="absolute">
+      <LinearLayout alignSelf="flex-end">
         <ThemedMoreButton
           onPress={() =>
             props.navigation.navigate(wrapper.route.Modal.name, {
@@ -245,7 +245,6 @@ const ListWalletView = (props: WalletProps) => {
           onPress={handlePress}
           onScrollBegin={fadeOut}
           onScrollEnd={fadeIn}
-          walletContainerStyle={{ paddingTop: 48 }}
         />
       </LinearLayout>
 
