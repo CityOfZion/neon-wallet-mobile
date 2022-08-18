@@ -116,67 +116,68 @@ const GetWalletView = (props: GetWalletProps) => {
       onLayout={handleLayout}
       padding={0}
     >
-      <Animated.View
-        style={{
-          paddingHorizontal: 10,
-          opacity: opacityValue,
-          transform: [
-            {
-              translateY: posYFactor.interpolate({
-                inputRange: [0, 1],
-                outputRange: [-viewHeight, 0],
-              }),
-            },
-          ],
-        }}
-      >
+      <LinearLayout px="10px">
         <Animated.View
-          style={[
-            {
-              transform: [
-                {
-                  translateY: posYFactor.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [-viewHeight, 0],
-                  }),
-                },
-              ],
-            },
-          ]}
+          style={{
+            opacity: opacityValue,
+            transform: [
+              {
+                translateY: posYFactor.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [-viewHeight, 0],
+                }),
+              },
+            ],
+          }}
         >
-          <AccountCards balanceExchange={balanceExchange} accounts={walletAccounts} onPress={handlePress} />
+          <Animated.View
+            style={[
+              {
+                transform: [
+                  {
+                    translateY: posYFactor.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [-viewHeight, 0],
+                    }),
+                  },
+                ],
+              },
+            ]}
+          >
+            <AccountCards balanceExchange={balanceExchange} accounts={walletAccounts} onPress={handlePress} />
+          </Animated.View>
+
+          {wallet.walletType === 'standard' && (
+            <ButtonWithoutFeedbackView onPress={handleCreate}>
+              <LinearLayout
+                my="36px"
+                orientation="horiz"
+                width="100%"
+                alignItems="center"
+                justifyContent="center"
+                borderStyle="dashed"
+                borderColor="text.5"
+                borderRadius="18px"
+                borderWidth="1px"
+                height="220px"
+              >
+                <ImageView
+                  source={require('~src/assets/images/icon-plus-white.png')}
+                  resizeMode="contain"
+                  style={{
+                    width: 16,
+                    height: 16,
+                  }}
+                />
+
+                <TextView color="text.0" fontSize="lg" ml={3} fontWeight={500}>
+                  {i18n.t('screens.getWallet.addNewAccount')}
+                </TextView>
+              </LinearLayout>
+            </ButtonWithoutFeedbackView>
+          )}
         </Animated.View>
-
-        {wallet.walletType === 'standard' && (
-          <ButtonWithoutFeedbackView onPress={handleCreate}>
-            <LinearLayout
-              my="36px"
-              orientation="horiz"
-              width="100%"
-              alignItems="center"
-              justifyContent="center"
-              borderStyle="dashed"
-              borderColor="text.5"
-              borderRadius="18px"
-              borderWidth="1px"
-              height="220px"
-            >
-              <ImageView
-                source={require('~src/assets/images/icon-plus-white.png')}
-                resizeMode="contain"
-                style={{
-                  width: 16,
-                  height: 16,
-                }}
-              />
-
-              <TextView color="text.0" fontSize="lg" ml={3} fontWeight={500}>
-                {i18n.t('screens.getWallet.addNewAccount')}
-              </TextView>
-            </LinearLayout>
-          </ButtonWithoutFeedbackView>
-        )}
-      </Animated.View>
+      </LinearLayout>
     </ScreenLayout>
   )
 }
