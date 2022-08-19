@@ -40,7 +40,7 @@ const SetupCompletePage = (props: Props) => {
             <WalletCard wallet={wallet} withBalanceBar={false} animationType="in" width={178} height={244} />
             <LinearLayout mt={Dimensions.get('window').height * 0.03}>
               <LinearLayout width="60%" justifyContent="center" alignItems="center">
-                <TextView color="primary" fontSize="3xl">
+                <TextView textAlign="center" color="primary" fontSize="3xl">
                   {i18n.t('setupComplete.title')}
                 </TextView>
                 <TextView color="text.0" textAlign="center" fontSize="lg">
@@ -88,7 +88,7 @@ const SetupCompletePage = (props: Props) => {
             </LinearLayout>
           </LinearLayout>
         </LinearLayout>
-        <LinearLayout mt={Dimensions.get('window').height * 0.2} height="100%" alignItems="center">
+        <LinearLayout position="absolute" bottom={0} width="100%" mb="11%" alignItems="center">
           <ThemedButton
             onPress={handleViewWallet}
             width="85%"
