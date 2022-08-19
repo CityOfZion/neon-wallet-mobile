@@ -10,6 +10,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { getWCChainByBlockchain, hasWalletconnect } from '~/src/blockchain/common'
 import { AccountCards } from '~/src/components/AccountCards'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
+import { DEFAULT_NAMESPACES } from '~/src/config/walletConnect/constants'
 import { IURI } from '~/src/helpers/UriHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
@@ -47,21 +48,25 @@ export const WCAccountSelectionModal = (props: Props) => {
 
   const balancesExchange = useBalancesAndExchange(validAccounts)
 
-  const sessionProposal = useMemo(() => walletConnectCtx.sessionProposals[0], [walletConnectCtx.sessionProposals])
-
   const handleConnectDApp = async (account: Account) => {
     try {
+      const firstSessionProposal = walletConnectCtx.sessionProposals[0]
+
       const wcChain = getWCChainByBlockchain(account.blockchain)
 
-      if (!wcChain || !sessionProposal || !account?.address) {
+      if (!wcChain || !firstSessionProposal || !account?.address) {
         throw new Error(i18n.t('walletconnect.alert.unexpectedErrorToSelectAccount'))
       }
 
-      await walletConnectCtx.approveSession(sessionProposal, [{ address: account.address, chain: wcChain }])
+      await walletConnectCtx.approveSession(
+        firstSessionProposal,
+        [{ address: account.address, chain: wcChain }],
+        DEFAULT_NAMESPACES
+      )
 
       showMessage({
         message: i18n.t('walletconnect.alert.text', {
-          text: sessionProposal.proposer.metadata.name,
+          text: firstSessionProposal.params.proposer.metadata.name,
         }),
         duration: 7000,
         type: 'warning',

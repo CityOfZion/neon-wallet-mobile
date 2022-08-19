@@ -8,7 +8,7 @@ import ConnectionHeader from '../../components/ConnectionHeader'
 
 import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import { useWalletConnect } from '~/src/contexts/WalletConnectContext'
+import { SessionRequest, useWalletConnect } from '~/src/contexts/WalletConnectContext'
 import { Account } from '~/src/models/redux/Account'
 import { LinearLayout, TextView } from '~/src/styles/styled-components'
 
@@ -35,8 +35,8 @@ type Props = {
   title: string
   acceptButtonLabel: string
   rejectButtonLabel: string
-  request: SessionTypes.RequestEvent
-  session: SessionTypes.Settled
+  request: SessionRequest
+  session: SessionTypes.Struct
   account: Account
   children?: React.ReactNode
 }
@@ -109,6 +109,7 @@ export const TransactionRequestBase = ({
         value: transactionId,
       })
     } catch (error: any) {
+      console.log(error)
       setSuccessOrFailedValues({
         type: 'failed',
         value: error.message,
@@ -149,7 +150,7 @@ export const TransactionRequestBase = ({
                 mb="31px"
                 color="white"
                 fontSize="18px"
-                alignself="center"
+                alignSelf="center"
                 textAlign="center"
               >
                 {title}

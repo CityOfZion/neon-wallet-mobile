@@ -16,7 +16,7 @@ export const SignMessageTransactionRequest = ({
   session,
   account,
 }: TransactionRequestMethodComponentProps) => {
-  const requestParams = request.request.params as string
+  const requestParams = request.params.request.params as string
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   return (

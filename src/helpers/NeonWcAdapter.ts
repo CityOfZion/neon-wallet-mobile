@@ -1,10 +1,10 @@
-import { InvokeResult } from '@cityofzion/neon-core-next/lib/rpc'
 import { ContractParam } from '@cityofzion/neon-core-next/lib/sc'
 import { WitnessScope } from '@cityofzion/neon-core-next/lib/tx/components/WitnessScope'
 import { Account } from '@cityofzion/neon-core-next/lib/wallet'
 import Neon, { rpc, sc, tx, wallet, u } from '@cityofzion/neon-js-next'
-import { JsonRpcRequest, JsonRpcResponse } from '@json-rpc-tools/utils'
 import { randomBytes } from 'crypto'
+
+import { SessionRequest } from '../contexts/WalletConnectContext'
 
 export type Signer = {
   scopes: WitnessScope
@@ -22,6 +22,11 @@ export type ContractInvocation = {
 export type ContractInvocationMulti = {
   signers: Signer[]
   invocations: ContractInvocation[]
+}
+
+export type SignMessagePayload = {
+  message: string
+  version: number
 }
 
 export type SignedMessage = {
@@ -57,7 +62,10 @@ export class NeonWcAdapter {
     return resp.protocol.network
   }
 
-  rpcCall = async (account: Account | undefined, request: JsonRpcRequest): Promise<JsonRpcResponse> => {
+  rpcCall = async (account: Account | undefined, sessionRequest: SessionRequest): Promise<any> => {
+    const {
+      params: { request },
+    } = sessionRequest
     let result: any
 
     if (request.method === 'invokeFunction') {
@@ -80,19 +88,20 @@ export class NeonWcAdapter {
       result = await this.signMessage(account, request.params)
     } else if (request.method === 'verifyMessage') {
       result = await this.verifyMessage(request.params)
+    } else if (request.method === 'getapplicationlog') {
+      result = await new rpc.RPCClient(this.rpcAddress).getApplicationLog(request.params[0])
     } else {
-      const { jsonrpc, ...queryLike } = request
-      result = await new rpc.RPCClient(this.rpcAddress).execute(Neon.create.query({ ...queryLike, jsonrpc: '2.0' }))
+      throw new Error('Invalid Request method')
     }
 
     return {
-      id: request.id,
+      id: sessionRequest.id,
       jsonrpc: '2.0',
       result,
     }
   }
 
-  testInvoke = async (account: Account, cim: ContractInvocationMulti): Promise<InvokeResult> => {
+  testInvoke = async (account: Account, cim: ContractInvocationMulti): Promise<any> => {
     const sb = Neon.create.scriptBuilder()
 
     cim.invocations.forEach(c => {
@@ -152,7 +161,19 @@ export class NeonWcAdapter {
     return await rpcClient.sendRawTransaction(trx)
   }
 
-  signMessage = (account: Account, message: string): SignedMessage => {
+  signMessage = (account: Account, message: string | SignMessagePayload): SignedMessage => {
+    if (typeof message === 'string') {
+      return this.signMessageLegacy(account, message)
+    } else if (message.version === 1) {
+      return this.signMessageLegacy(account, message.message)
+    } else if (message.version === 2) {
+      return this.signMessageNew(account, message.message)
+    } else {
+      throw new Error('Invalid signMessage version')
+    }
+  }
+
+  signMessageLegacy = (account: Account, message: string): SignedMessage => {
     const salt = randomBytes(16).toString('hex')
     const parameterHexString = u.str2hexstring(salt + message)
     const lengthHex = u.num2VarInt(parameterHexString.length / 2)
@@ -166,11 +187,23 @@ export class NeonWcAdapter {
     }
   }
 
+  signMessageNew = (account: Account, message: string): SignedMessage => {
+    const salt = randomBytes(16).toString('hex')
+    const messageHex = u.str2hexstring(message)
+
+    return {
+      publicKey: account.publicKey,
+      data: wallet.sign(messageHex, account.privateKey, salt),
+      salt,
+      messageHex,
+    }
+  }
+
   verifyMessage = (verifyArgs: SignedMessage): boolean => {
     return wallet.verify(verifyArgs.messageHex, verifyArgs.data, verifyArgs.publicKey)
   }
 
-  static convertParams(args: any[]): ContractParam[] {
+  private static convertParams(args: any[]): ContractParam[] {
     return args.map(a =>
       a.value === undefined
         ? a
@@ -200,7 +233,7 @@ export class NeonWcAdapter {
     return signer
   }
 
-  static buildMultipleSigner(account: Account, signers: Signer[]) {
+  private static buildMultipleSigner(account: Account, signers: Signer[]) {
     return !signers?.length
       ? [NeonWcAdapter.buildSigner(account)]
       : signers.map(s => NeonWcAdapter.buildSigner(account, s))

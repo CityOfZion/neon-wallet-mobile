@@ -1,4 +1,3 @@
-import { JsonRpcRequest } from '@json-rpc-tools/utils'
 import NetInfo from '@react-native-community/netinfo'
 import { NavigationContainer, RouteProp, NavigationContainerRef } from '@react-navigation/native'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
@@ -10,7 +9,8 @@ import { ThemeProvider } from 'styled-components'
 
 import { appBus } from '../app/AppBus'
 import { blockchainServices, getBlockchainByAddress, hasWCIntegration } from '../blockchain'
-import { useWalletConnect } from '../contexts/WalletConnectContext'
+import { DEFAULT_AUTOACCEPT_METHODS } from '../config/walletConnect/constants'
+import { SessionRequest, useWalletConnect } from '../contexts/WalletConnectContext'
 import { Account } from '../models/redux/Account'
 import SetupCompletePage, { SetupCompleteParamList } from '../scenes/SetupCompletePage'
 import { RootState } from '../store/RootStore'
@@ -52,8 +52,6 @@ const AppNavigation: React.FC<Props> = props => {
   const theme = useSelector((state: RootState) => {
     return wrapper.theme[state.settings.theme]
   })
-
-  const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const isFirstTime = useSelector((state: RootState) => state.settings.isFirstTime)
   const wallets = useSelector(selectWallets)
 
@@ -75,54 +73,10 @@ const AppNavigation: React.FC<Props> = props => {
   const startApplication = async () => {
     await migrateStorage()
 
-    setInit(true)
-  }
-
-  const getInitialRouteName = () => {
-    return isFirstTime ? wrapper.route.Onboarding.name : wrapper.route.Tab.name
-  }
-
-  deepLinking.setInitialRoute(getInitialRouteName())
-
-  const linking = deepLinking.getLinkingConfig()
-
-  useEffect(() => {
-    if (!hasInit) {
-      Await.run('application', startApplication)
-    }
-  }, [hasInit])
-
-  useEffect(() => {
-    async function handle() {
-      if (!hasInit) {
-        return
-      }
-
-      if (!isConnected && walletConnectCtx.initialized) {
-        showMessage({
-          message: i18n.t('walletconnect.internetConnectionLost'),
-          type: 'danger',
-          duration: 5000,
-        })
-        await walletConnectCtx.resetApp()
-        return
-      }
-
-      if (isConnected && !walletConnectCtx.initialized) {
-        await walletConnectCtx.init()
-      }
-    }
-
-    handle()
-  }, [isConnected, hasInit])
-
-  useEffect(() => {
-    walletConnectCtx.autoAcceptIntercept(
-      (_accountAddress, _chain, request: JsonRpcRequest) =>
-        request.method === 'testInvoke' || request.method === 'multiTestInvoke'
+    walletConnectCtx.autoAcceptIntercept((_accountAddress, _chain, request: SessionRequest) =>
+      DEFAULT_AUTOACCEPT_METHODS.includes(request.params.request.method)
     )
-
-    walletConnectCtx.onRequestListener(async (accountAddress, _chain, request: JsonRpcRequest) => {
+    walletConnectCtx.onRequestListener(async (accountAddress, _chain, request: SessionRequest) => {
       const blockchain = getBlockchainByAddress(accountAddress)
 
       if (blockchain) {
@@ -136,7 +90,24 @@ const AppNavigation: React.FC<Props> = props => {
       }
       throw new Error('Failed request listener')
     })
-  }, [])
+    walletConnectCtx.init()
+
+    setInit(true)
+  }
+
+  const getInitialRouteName = () => {
+    return isFirstTime ? wrapper.route.Onboarding.name : wrapper.route.Tab.name
+  }
+
+  deepLinking.setInitialRoute(getInitialRouteName())
+
+  const linking = deepLinking.getLinkingConfig()
+
+  useEffect(() => {
+    if (hasInit) return
+
+    Await.run('application', startApplication)
+  }, [hasInit])
 
   useEffect(() => {
     appBus.on('pendingTransactionConfirmed', (account: Account) => {

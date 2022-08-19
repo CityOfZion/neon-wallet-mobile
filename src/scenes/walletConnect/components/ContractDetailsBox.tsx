@@ -1,53 +1,55 @@
-import { SessionTypes } from '@walletconnect/types'
 import * as WebBrowser from 'expo-web-browser'
 import i18n from 'i18n-js'
-import React, { useState, useEffect, useCallback } from 'react'
+import React from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import WalletConnectBox from './WalletConnectBox'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { blockchainServices, getBlockchainByWCChain } from '~/src/blockchain'
+import { Session } from '~/src/contexts/WalletConnectContext'
 import { ContractInvocation } from '~/src/helpers/NeonWcAdapter'
+import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {
-  rightButton?: React.ReactNode
-  session: SessionTypes.Settled
+  withRightButton?: boolean
+  onPressRightButton?: () => void
+  session: Session
   contract: ContractInvocation
+  title: string
 }
 
-const ContractDetailsBox = ({ rightButton, session, contract }: Props) => {
+const ContractDetailsBox = ({ onPressRightButton, withRightButton, session, contract, title }: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
-  const [title, setTitle] = useState<string>('')
-
   const handlePressDoraIcon = async () => {
-    const [blockchain, network] = session.state.accounts[0].split(':')
-    const result = await WebBrowser.openBrowserAsync(
-      `https://dora.coz.io/contract/${blockchain}/${network}/${contract.scriptHash}`
-    )
+    const accountInfos = WalletConnectHelper.getAccountInformationFromSession(session)
 
-    return result
+    const { namespace, reference } = accountInfos[0]
+
+    await WebBrowser.openBrowserAsync(`https://dora.coz.io/contract/${namespace}/${reference}/${contract.scriptHash}`)
   }
 
-  const handleGetContractInfo = useCallback(async () => {
-    const blockchain = getBlockchainByWCChain(session.permissions.blockchain.chains ?? [])
-
-    if (blockchain && session) {
-      const contractInfo = await blockchainServices[blockchain].provider.getContract(contract.scriptHash)
-      setTitle(contractInfo.name ?? '')
-    }
-  }, [session])
-
-  useEffect(() => {
-    handleGetContractInfo()
-  }, [handleGetContractInfo])
-
   return (
-    <WalletConnectBox rightButton={rightButton} title={title}>
+    <WalletConnectBox
+      title={title}
+      rightButton={
+        withRightButton ? (
+          <TouchableWithoutFeedback onPress={onPressRightButton}>
+            <ImageView
+              alignSelf="center"
+              resizeMode="contain"
+              width={7}
+              height={12}
+              pr="40px"
+              source={require('~src/assets/images/icon-arrow-right-green.png')}
+            />
+          </TouchableWithoutFeedback>
+        ) : undefined
+      }
+    >
       <LinearLayout pt="13px" pb="13px">
         <LinearLayout pb="13px" orientation="horiz" justifyContent="space-between">
           <TextView color={theme.colors.text[10]} weight={2} fontFamily="bold" fontSize={14} pl="18px">

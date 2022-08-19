@@ -1,10 +1,14 @@
-export const DEFAULT_RELAY_PROVIDER = 'wss://relay.walletconnect.org'
+import { SessionTypes } from '@walletconnect/types'
 
-export type DefaultMethods = 'invokeFunction' | 'testInvoke' | 'signMessage' | 'verifyMessage'
+export const DEFAULT_RELAY_URL = 'wss://relay.walletconnect.com'
 
-export const DEFAULT_METHODS: DefaultMethods[] = ['invokeFunction', 'testInvoke', 'signMessage', 'verifyMessage']
+export const DEFAULT_METHODS = ['invokeFunction', 'testInvoke', 'signMessage', 'verifyMessage']
+
+export const DEFAULT_AUTOACCEPT_METHODS = ['testInvoke']
 
 export const DEFAULT_LOGGER = 'debug'
+
+export const DEFAULT_PROJECT_ID = '31bee1bce685377492bb0b03cbd3a69c'
 
 export const DEFAULT_APP_METADATA = {
   name: 'Neon Wallet Mobile',
@@ -21,4 +25,14 @@ export const DEFAULT_NETWORKS = {
   'neo3:testnet': 'https://testnet1.neo.coz.io:443',
   'neo3:mainnet': 'http://seed1.neo.org:10332',
   'neo3:private': null,
+}
+
+export const DEFAULT_BLOCKCHAIN = 'neo3'
+
+export const DEFAULT_NAMESPACES: SessionTypes.Namespaces = {
+  [DEFAULT_BLOCKCHAIN]: {
+    accounts: [], // will be overridden
+    methods: [...DEFAULT_METHODS],
+    events: [],
+  },
 }

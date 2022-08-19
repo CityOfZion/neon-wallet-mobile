@@ -11,6 +11,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { getBlockchainLogo } from '~/src/blockchain'
 import { BlockchainServiceKey, isValidWcChain } from '~/src/blockchain/common'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
+import { DEFAULT_BLOCKCHAIN } from '~/src/config/walletConnect/constants'
 import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { RootState } from '~/src/store/RootStore'
@@ -44,9 +45,13 @@ const WCConnectionRequestModal = (props: Props) => {
       return walletConnectCtx.sessionProposals[0]
     }
   }, [walletConnectCtx.sessionProposals])
+
   const sessionProposalIsValid = useMemo(() => {
     if (sessionProposal) {
-      const isValid = isValidWcChain(sessionProposal.permissions.blockchain.chains, blockchain.current)
+      const isValid = isValidWcChain(
+        sessionProposal.params.requiredNamespaces[DEFAULT_BLOCKCHAIN].chains,
+        blockchain.current
+      )
 
       return isValid
     }
@@ -108,9 +113,9 @@ const WCConnectionRequestModal = (props: Props) => {
             <LinearLayout height="50%" mt={3}>
               <ConnectionHeader
                 title={i18n.t('modals.WCConnectionRequest.subtitle_1', {
-                  dAppName: sessionProposal.proposer.metadata.name,
+                  dAppName: sessionProposal.params.proposer.metadata.name,
                 })}
-                imageUri={sessionProposal.proposer.metadata.icons[0]}
+                imageUri={sessionProposal.params.proposer.metadata.icons[0]}
               />
 
               <LinearLayout width="100%" backgroundColor="#282f35" orientation="horiz" padding={3} borderRadius="7px">
@@ -123,7 +128,10 @@ const WCConnectionRequestModal = (props: Props) => {
                       source={getBlockchainLogo(blockchain.current)}
                       resizeMode="contain"
                       mr={1}
-                      style={{ width: 20, height: 20 }}
+                      style={{
+                        width: 20,
+                        height: 20,
+                      }}
                     />
                     <TextView fontFamily="medium" color="#fff" fontSize="16px">
                       {i18n.t(`blockchainServices.${blockchain.current}.id`)}
@@ -135,7 +143,7 @@ const WCConnectionRequestModal = (props: Props) => {
                     {i18n.t('modals.WCConnectionRequest.features')}
                   </TextView>
 
-                  {sessionProposal.permissions.jsonrpc.methods.map((it, index) => (
+                  {sessionProposal.params.requiredNamespaces[DEFAULT_BLOCKCHAIN].methods.map((it, index) => (
                     <TextView key={index} color="#fff" fontFamily="medium" fontSize="16px">
                       {it}
                     </TextView>
