@@ -8,52 +8,10 @@ import { Wallet } from '~src/models/redux/Wallet'
 
 export abstract class Storage {
   /**
-   * Controls the span of onboarding screen
-   */
-  static get onboardingSeen() {
-    return wrapper.storage['@onboarding_seen'].bind().asBoolean()
-  }
-
-  /**
-   * Controls the span of welcome to neonwallet screen
-   */
-  static get welcomeToNWSeen() {
-    return wrapper.storage['@welcome_to_nw_seen'].bind().asBoolean()
-  }
-
-  /**
-   * Controls the span of welcome screen
-   */
-  static get welcomeHidden() {
-    return wrapper.storage['@welcome_hidden'].bind().asBoolean()
-  }
-
-  /**
-   * Controls the span of changelog screen
-   */
-  static get changelogHidden() {
-    return wrapper.storage['@changelog_hidden'].bind().asBoolean()
-  }
-
-  /**
    * Controls the number of versions
    */
   static get numberOfVersions() {
     return wrapper.storage['@number_of_versions'].bind().asNumber()
-  }
-
-  /**
-   * Controls if authentication was set up
-   */
-  static get hasAuthentication() {
-    return wrapper.storage['@has_authentication'].bind().asBoolean()
-  }
-
-  /**
-   * Controls if authentication for hardware was set up
-   */
-  static get hasAuthenticationForHardware() {
-    return wrapper.storage['@has_authentication_hard'].bind().asBoolean()
   }
 
   /**

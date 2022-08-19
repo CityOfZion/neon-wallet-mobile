@@ -40,6 +40,7 @@ const Step4CreateWalletPage: React.FC<Props> = props => {
           mnemonic: props.route.params.mnemonic,
           walletName,
           walletType: 'standard',
+          hasBackup: props.route.params.hasBackup,
         },
       },
     })

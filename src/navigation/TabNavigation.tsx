@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { StatusBar } from 'react-native'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
@@ -13,7 +13,6 @@ import WalletConnectStackNavigation from './WalletConnectStackNavigation'
 import WalletStackNavigation, { WalletStackParam } from './WalletsStackNavigation'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
-import { Storage } from '~src/app/Storage'
 import FooterBar from '~src/components/layout/FooterBar'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import ContactsStackNavigation, { ContactsStackParams } from '~src/navigation/ContactsStackNavigation'
@@ -37,19 +36,6 @@ const Tab = createBottomTabNavigator()
 
 const TabNavigation = (props: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const isFirstTime = useSelector((state: RootState) => state.settings.isFirstTime)
-
-  useEffect(() => {
-    async function handleData() {
-      if (isFirstTime) {
-        Storage.changelogHidden.save(true)
-        Storage.welcomeHidden.save(true)
-        Storage.welcomeToNWSeen.save(true)
-      }
-    }
-
-    handleData()
-  }, [])
 
   return (
     <ThemeProvider theme={theme}>

@@ -15,23 +15,13 @@ export class Wallet implements WalletState {
   name: string | null = null
 
   @HttpExpose()
-  passphrase: string | null = null
-
-  @HttpExpose()
   lastVisitedAt: string | null = null
-
-  @HttpExpose()
-  lastBackup: string | null = null
-
-  @HttpExpose()
-  showBackupAlert: boolean = false
 
   @HttpExpose()
   walletType: WalletType | null = null
 
-  // Do not expose security phrase
-  @HttpExclude()
-  securityPhrase: string | null = null
+  @HttpExpose()
+  backupStatus: 'successful' | 'unsuccessful' | 'unsuccessful_with_knowledge' = 'unsuccessful'
 
   get formattedLastVisitedAt() {
     if (!moment(this.lastVisitedAt).isValid()) {

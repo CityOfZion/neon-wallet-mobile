@@ -27,6 +27,7 @@ export interface BlockchainListPageParams {
       mnemonic: string
       walletName: string
       walletType: WalletType
+      hasBackup?: boolean
     }
   }
 }
@@ -48,9 +49,9 @@ const BlockchainListPage = (props: Props) => {
       if (!props.route.params.config?.creatingWallet) {
         throw new Error('modals.blockchainList.errorCreateWallet')
       }
-      const { mnemonic, walletName, walletType } = props.route.params.config.creatingWallet
+      const { mnemonic, walletName, walletType, hasBackup } = props.route.params.config.creatingWallet
 
-      const walletId = await blockchainActions.createWallet(walletName, mnemonic, walletType, false)
+      const walletId = await blockchainActions.createWallet(walletName, walletType, mnemonic, hasBackup)
 
       for (const blockchain of blockchainsSelected) {
         await blockchainActions.createAccount(walletId, walletName, blockchain, undefined)

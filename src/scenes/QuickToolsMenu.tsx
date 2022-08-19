@@ -13,7 +13,7 @@ import {
   validatePrivateKeyWithPasswordAllBlockchains,
   validateWifAllBlockchains,
 } from '../blockchain'
-import { QuickToolsItem, QuickToolsItemSeparator } from '../components/QuickToolsItem'
+import { AlterMenuItem } from '../components/AlterMenuItem'
 import { UriHelper } from '../helpers/UriHelper'
 import { WalletConnectHelper } from '../helpers/WalletConnectHelper'
 import { useBlockchainActions } from '../hooks/useBlockchainActions'
@@ -95,9 +95,9 @@ export default function QuickToolsMenu(props: Props) {
           return
         }
 
-        const walletId = await blockchainActions.createLegacyWallet(i18n.t('modals.blockchainList.encryptedWallet'))
+        const walletId = await blockchainActions.createWallet(i18n.t('modals.blockchainList.encryptedWallet'), 'legacy')
 
-        await blockchainActions.importAccounts([{ address, blockchain, type: 'account', walletId, wif: data }])
+        await blockchainActions.importAccounts([{ address, blockchain, type: 'legacy', walletId, wif: data }])
 
         const account = accounts.find(account => account.address === address)
         const wallet = wallets.find(wallet => wallet.id === walletId)
@@ -144,35 +144,30 @@ export default function QuickToolsMenu(props: Props) {
       controller={props.controller}
       noHeader
       draggable
-      paddingTop={20}
+      padding={36}
       paddingBottom={24 + applicationConfig.footerHeight + useSafeAreaInsets().bottom}
-      paddingLeft={0}
-      paddingRight={0}
       solidColorBG
     >
-      <QuickToolsItem
+      <AlterMenuItem
         onPress={() => runClosing(handlePressQrCode)}
-        sourceIcon={require('~src/assets/images/icon-circle-qr-primary.png')}
+        icon={require('~src/assets/images/icon-circle-qr-primary.png')}
         title={i18n.t('quickTools.qrCode.title')}
         subtitle={i18n.t('quickTools.qrCode.subtitle')}
       />
 
-      <QuickToolsItemSeparator />
-
-      <QuickToolsItem
+      <AlterMenuItem
         onPress={() => runClosing(handlePressSend)}
-        sourceIcon={require('~src/assets/images/icon-circle-send-primary.png')}
+        icon={require('~src/assets/images/icon-circle-send-primary.png')}
         title={i18n.t('quickTools.send.title')}
         subtitle={i18n.t('quickTools.send.subtitle')}
       />
 
-      <QuickToolsItemSeparator />
-
-      <QuickToolsItem
+      <AlterMenuItem
         onPress={() => runClosing(handlePressReceive)}
-        sourceIcon={require('~src/assets/images/icon-circle-receive-primary.png')}
+        icon={require('~src/assets/images/icon-circle-receive-primary.png')}
         title={i18n.t('quickTools.receive.title')}
         subtitle={i18n.t('quickTools.receive.subtitle')}
+        withSeparator={false}
       />
     </SwiperPanel>
   )

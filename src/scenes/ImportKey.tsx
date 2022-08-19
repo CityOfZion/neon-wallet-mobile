@@ -277,7 +277,7 @@ const ImportKey = (props: ImportKeyProps) => {
       return
     }
 
-    const walletId = await blockchainActions.createLegacyWallet(i18n.t('defaultNameWallet.importedWallet'))
+    const walletId = await blockchainActions.createWallet(i18n.t('defaultNameWallet.importedWallet'), 'legacy')
 
     const accountToImport = addressesSelected.map(
       ({ address, blockchain }): AccountToImport => ({
@@ -285,7 +285,7 @@ const ImportKey = (props: ImportKeyProps) => {
         blockchain,
         walletId,
         wif: inputValue,
-        type: 'account',
+        type: 'legacy',
       })
     )
 

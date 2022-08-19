@@ -5,8 +5,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { DefaultTheme } from 'styled-components'
 
-import { RootState } from '../store/RootStore'
-
+import { TabStackParamList } from '~/src/navigation/TabNavigation'
+import { RootState } from '~/src/store/RootStore'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import MenuItem, { RightIconType } from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -14,7 +14,7 @@ import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { SettingsStackParamList } from '~src/navigation/SettingsStackNavigation'
 
 interface SettingsProps {
-  navigation: StackNavigationProp<SettingsStackParamList & RootStackParamList>
+  navigation: StackNavigationProp<SettingsStackParamList & RootStackParamList & TabStackParamList>
   theme: DefaultTheme
   navigationOptions: object
   route: RouteProp<SettingsStackParamList, 'SettingsPage'>
@@ -35,11 +35,7 @@ const SettingsPage = (props: SettingsProps) => {
         iconMarginLeft={2}
         iconMarginRight={18}
         arrowDirection={RightIconType.ARROW_RIGHT}
-        onPress={() =>
-          props.navigation.navigate(wrapper.route.Modal.name, {
-            screen: wrapper.route.SecurityModal.name,
-          })
-        }
+        onPress={() => props.navigation.navigate(wrapper.route.SecurityBackupCheckPage.name)}
       />
 
       <MenuItem

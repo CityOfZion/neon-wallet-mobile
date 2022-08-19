@@ -79,7 +79,7 @@ const MenuItem = (props: MenuItemProps) => {
             {props.title}
           </TextView>
 
-          <TextView fontSize="md" fontFamily="semibold" mr={Normalize.scale(3)} color="#869ca5">
+          <TextView fontSize="md" fontFamily="bold" color="#869ca5">
             {props.subtitle}
           </TextView>
           {arrowIcon && (
@@ -87,6 +87,7 @@ const MenuItem = (props: MenuItemProps) => {
               width={rightIconWidth}
               height={rightIconHeight}
               mr={rightIconRightMargin}
+              ml="18px"
               mt={rightIconTopMargin}
               source={arrowIcon}
             />

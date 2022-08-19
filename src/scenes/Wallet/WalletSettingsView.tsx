@@ -45,9 +45,13 @@ export const WalletSettingsView = (props: Props) => {
       return
     }
     const accounts = wallet.getAccounts(accountsPool)
+
     accounts.forEach(account => {
+      if (!account.address) return
+
       dispatch(accountReducerActions.deleteAccount(account.address))
     })
+
     dispatch(walletReducerActions.deleteWallet(wallet.id))
 
     props.navigation.reset({

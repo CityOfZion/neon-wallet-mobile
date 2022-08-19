@@ -205,8 +205,8 @@ const MnemonicSelectionList = (props: Props) => {
     Await.init('importMnemonic')
     const walletId = await blockchainActions.createWallet(
       i18n.t('defaultNameWallet.mnemonicWallet'),
-      mnemonic,
-      'standard'
+      'standard',
+      mnemonic
     )
 
     const accountsToImport = addressesSelected.map(
@@ -215,7 +215,7 @@ const MnemonicSelectionList = (props: Props) => {
         address,
         blockchain,
         wif,
-        type: 'account',
+        type: 'standard',
       })
     )
 

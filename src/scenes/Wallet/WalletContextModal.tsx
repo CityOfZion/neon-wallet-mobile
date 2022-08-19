@@ -1,118 +1,106 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, { Fragment } from 'react'
-import { ImageLoadEventData, TouchableWithoutFeedback } from 'react-native'
+import React from 'react'
 import { useSelector } from 'react-redux'
 
-import { RootState } from '~/src/store/RootStore'
+import { AlterMenuItem } from '~/src/components/AlterMenuItem'
+import { Button } from '~/src/components/Button'
+import { useLocalAuthentication } from '~/src/hooks/useLocalAuthentication'
+import { Wallet } from '~/src/models/redux/Wallet'
+import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
+import { selectWallets } from '~/src/store/wallet/SelectorWallet'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
-import { Wallet } from '~src/models/redux/Wallet'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { LinearLayout } from '~src/styles/styled-components'
 
 export interface WalletContextModalParams {
-  wallets: Wallet[]
+  wallet?: Wallet
 }
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList & ModalStackParamList>
+  navigation: StackNavigationProp<RootStackParamList & WalletStackParamList & ModalStackParamList>
   route: RouteProp<ModalStackParamList, 'WalletContextModal'>
 }
 
-interface ListItem {
-  title: string
-  source: ImageLoadEventData
-  onClick: () => void
-}
-
 export default function WalletContextModal(props: Props) {
-  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const controller = useSwiperController(true)
-  const items: ListItem[] =
-    props.route.params.wallets.length > 1
-      ? [
-          {
-            title: i18n.t('modals.walletContext.create'),
-            source: require('~src/assets/images/icon-circle-plus-green.png'),
-            onClick: () => {
-              props.navigation.navigate(wrapper.route.Tab.name, {
-                screen: wrapper.route.More.name,
-                params: {
-                  screen: wrapper.route.Step1CreateWallet.name,
-                  initial: false,
-                  params: {
-                    source: wrapper.route.WalletContextModal.name,
-                  },
-                },
-              })
-            },
-          },
-          {
-            title: i18n.t('modals.walletContext.reorder'),
-            source: require('~src/assets/images/icon-circle-swap-green.png'),
-            onClick: () => {
-              props.navigation.navigate(wrapper.route.ReorderWalletModal.name)
-            },
-          },
-        ]
-      : [
-          {
-            title: i18n.t('modals.walletContext.create'),
-            source: require('~src/assets/images/icon-circle-plus-green.png'),
-            onClick: () => {
-              props.navigation.navigate(wrapper.route.Tab.name, {
-                screen: wrapper.route.More.name,
-                params: {
-                  screen: wrapper.route.Step1CreateWallet.name,
-                  initial: false,
-                  params: {
-                    source: wrapper.route.WalletContextModal.name,
-                  },
-                },
-              })
-            },
-          },
-        ]
+  const { wallet } = props.route.params
 
-  function runClosing(callback: () => void) {
+  const wallets = useSelector(selectWallets)
+  const controller = useSwiperController(true)
+  const { authenticate } = useLocalAuthentication()
+
+  const handlePressCreate = () => {
     controller.close()
-    callback()
+    props.navigation.navigate(wrapper.route.Tab.name, {
+      screen: wrapper.route.More.name,
+      params: {
+        screen: wrapper.route.Step1CreateWallet.name,
+        initial: false,
+        params: {
+          source: wrapper.route.WalletContextModal.name,
+        },
+      },
+    })
+  }
+
+  const handlePressBackup = async () => {
+    if (!wallet) return
+
+    try {
+      await authenticate()
+
+      props.navigation.navigate(wrapper.route.Step1BackupWallet.name, {
+        wallet,
+      })
+    } catch {}
+  }
+
+  const handlePressReorder = () => {
+    controller.close()
+    props.navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.ReorderWalletModal.name,
+    })
   }
 
   return (
     <SwiperPanel controller={controller} noHeader padding={36} onClose={props.navigation.goBack} solidColorBG>
-      <>
-        {items.map((item, index) => (
-          <TouchableWithoutFeedback
-            key={index}
-            onPress={() => {
-              runClosing(item.onClick)
-            }}
-          >
-            <LinearLayout>
-              <LinearLayout orientation="horiz" pb="18px" pt="16px" alignItems="center" justifyContent="space-between">
-                <LinearLayout>
-                  <TextView color={theme.colors.text[0]} fontSize={18}>
-                    {item.title}
-                  </TextView>
-                </LinearLayout>
+      <LinearLayout>
+        {wallets.length > 0 && !!wallet && wallet.walletType === 'standard' && (
+          <AlterMenuItem
+            title={i18n.t('modals.walletContext.backup')}
+            titleIcon={
+              wallet.backupStatus !== 'successful' ? require('~src/assets/images/icon-warning-green.png') : undefined
+            }
+            icon={require('~src/assets/images/icon-circle-backup-green.png')}
+            onPress={handlePressBackup}
+          />
+        )}
 
-                <ImageView width={35} height={35} ml="13px" source={item.source} />
-              </LinearLayout>
+        <AlterMenuItem
+          title={i18n.t('modals.walletContext.create')}
+          icon={require('~src/assets/images/icon-circle-plus-green.png')}
+          onPress={handlePressCreate}
+        />
 
-              <LinearLayout height="1px" bg={theme.colors.background[5]} />
-            </LinearLayout>
-          </TouchableWithoutFeedback>
-        ))}
-        <TouchableWithoutFeedback onPress={controller.close}>
-          <TextView mt={38} mb={12} color="primary" fontSize={22} textAlign="center">
-            {i18n.t('modals.walletContext.cancel')}
-          </TextView>
-        </TouchableWithoutFeedback>
-      </>
+        {wallets.length > 0 && (
+          <AlterMenuItem
+            title={i18n.t('modals.walletContext.reorder')}
+            icon={require('~src/assets/images/icon-circle-swap-green.png')}
+            onPress={handlePressReorder}
+          />
+        )}
+
+        <Button
+          label={i18n.t('modals.walletContext.cancel')}
+          justifyContent="center"
+          mt="36px"
+          labelStyle={{ fontSize: '2xl' }}
+          onPress={controller.close}
+        />
+      </LinearLayout>
     </SwiperPanel>
   )
 }

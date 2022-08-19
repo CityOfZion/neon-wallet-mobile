@@ -4,7 +4,6 @@ import { appBus } from '~/src/app/AppBus'
 import { Storage } from '~/src/app/Storage'
 import { blockchainServices } from '~/src/blockchain'
 import { PollingHelper } from '~/src/helpers/PollingHelper'
-import { SecurityHelper } from '~/src/helpers/SecurityHelper'
 import { Account } from '~/src/models/redux/Account'
 import { AccountState } from '~/src/types/reducers/account'
 
@@ -22,21 +21,12 @@ const migrateAccountsFromStorage = createAsyncThunk('accounts/migrateAccountsFro
   return Storage.accounts.load()
 })
 
-const saveAccount = createAsyncThunk('accounts/save', async ({ account, wif }: { account: Account; wif?: string }) => {
-  const wifAccount = (await account.getWif()) ?? wif
+const saveAccount = createAsyncThunk('accounts/save', async (account: Account) => {
   if (!account.address) throw new Error('address is undefined')
 
   if (!account.idWallet) throw new Error('wallet not found to create account')
 
-  if (!wifAccount && (account.accountType === 'standard' || account.accountType === 'legacy'))
-    throw new Error('Wif not defined')
-
-  if (wifAccount && account.address) {
-    await SecurityHelper.saveWif(account.address, wifAccount)
-    return account.deserialize
-  } else {
-    return account.deserialize
-  }
+  return account.deserialize
 })
 
 const watchPendingTransaction = createAsyncThunk(

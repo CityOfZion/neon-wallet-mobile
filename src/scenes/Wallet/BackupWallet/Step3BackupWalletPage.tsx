@@ -1,60 +1,63 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
-import { wrapper } from '~/src/app/ApplicationWrapper'
-import { Normalize } from '~/src/app/Normalize'
-import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
-import HeaderActionButton from '~src/components/layout/HeaderActionButton'
+import { Button } from '~/src/components/Button'
+import { Wallet } from '~/src/models/redux/Wallet'
+import { SettingsStackParamList } from '~/src/navigation/SettingsStackNavigation'
+import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { TextView, LinearLayout, ImageView } from '~src/styles/styled-components'
 
+export interface Step3BackupWalletPageParams {
+  wallet: Wallet
+}
 interface Props {
-  navigation: StackNavigationProp<WalletStackParamList>
-  route: RouteProp<WalletStackParamList, 'Step3BackupWallet'>
+  navigation: StackNavigationProp<SettingsStackParamList>
+  route: RouteProp<SettingsStackParamList, 'Step3BackupWallet'>
 }
 
 const Step3BackupWalletPage: React.FC<Props> = props => {
-  const { accessByNotification } = props.route.params
+  const { wallet } = props.route.params
 
-  props.navigation.setOptions({
-    headerRight: () =>
-      HeaderActionButton({
-        actionTitle: i18n.t('app.done'),
-        actionButtonStyle: 'highlight',
-        actionOnPress: () => {
-          props.navigation.reset({
-            index: 0,
-            routes: accessByNotification ? [{ name: wrapper.route.Tab.name }] : [{ name: wrapper.route.More.name }],
-          })
-        },
-      }),
-    headerLeft: () => null,
-  })
+  const dispatch = useDispatch()
+
+  const handlePress = () => {
+    props.navigation.goBack()
+    props.navigation.goBack()
+    props.navigation.goBack()
+  }
+
+  useEffect(() => {
+    wallet.backupStatus = 'successful'
+
+    dispatch(walletReducerActions.saveWallet(wallet))
+  }, [wallet])
 
   return (
     <ScreenLayout alignX="center" alignY="center" darkerSolidColorBG>
-      <LinearLayout alignItems="center">
-        <ImageView
-          mt={6}
-          mb={4}
-          source={require('~/src/assets/images/logo-3d.png')}
-          style={{ marginLeft: Normalize.scale(60) }}
+      <LinearLayout px="34px" flex={1}>
+        <LinearLayout alignItems="center" justifyContent="center" flex={1}>
+          <ImageView source={require('~/src/assets/images/logo-3d.png')} />
+
+          <TextView color="text.0" fontSize="2xl" fontFamily="medium" textAlign="center">
+            {i18n.t('screens.step3BackupWallet.label_1')}
+          </TextView>
+        </LinearLayout>
+
+        <Button
+          variant="contained"
+          label={i18n.t('app.continue')}
+          py="12px"
+          labelStyle={{ fontSize: '2xl' }}
+          mb="36px"
+          onPress={handlePress}
         />
       </LinearLayout>
-
-      <TextView mb={5} color="text.0" fontSize="2xl" textAlign="center" lineHeight={Normalize.scale(24)}>
-        {i18n.t('step3BackupWallet.label_1')}
-      </TextView>
     </ScreenLayout>
   )
-}
-
-Step3BackupWalletPage.propTypes = {
-  navigation: PropTypes.any,
-  route: PropTypes.any,
 }
 
 export default Step3BackupWalletPage

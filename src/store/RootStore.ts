@@ -9,6 +9,7 @@ import WalletConnectReducer, { walletConnectReducerName } from './walletConnect/
 import ContactReducer, { contactReducerName } from '~/src/store/contact/ContactReducer'
 import SettingsReducer, { settingsReducerName } from '~/src/store/settings/SettingsReducer'
 import WalletReducer, { walletReducerName } from '~/src/store/wallet/WalletReducer'
+
 export type RootState = ReturnType<typeof RootStore.reducers>
 
 const persistedWalletReducer = persistReducer({ key: walletReducerName, storage }, WalletReducer)

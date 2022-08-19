@@ -24,13 +24,8 @@ const migrateWalletsFromStorage = createAsyncThunk('wallets/migrateWalletsFromSt
 
 const saveWallet = createAsyncThunk('wallets/save', async (wallet: Wallet) => {
   if (!wallet.id) throw new Error('the wallet needs have id')
-  if (wallet.walletType !== 'standard') {
-    return wallet.deserialize
-  } else if (wallet.securityPhrase) {
-    await SecurityHelper.saveMnemonic(wallet.id, wallet.securityPhrase)
-    return wallet.deserialize
-  }
-  throw new Error('missing informations in wallet')
+
+  return wallet.deserialize
 })
 
 const deleteWallet: CaseReducer<IWalletReducer, PayloadAction<string>> = (state, action) => {

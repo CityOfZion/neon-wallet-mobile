@@ -2,12 +2,10 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { wrapper } from '../app/ApplicationWrapper'
-import { QuickToolsItem, QuickToolsItemSeparator } from '../components/QuickToolsItem'
+import { AlterMenuItem } from '../components/AlterMenuItem'
 import SwiperPanel, { useSwiperController } from '../components/SwiperPanel'
-import { applicationConfig } from '../config/ApplicationConfig'
 import { RootStackParamList } from '../navigation/AppNavigation'
 import { ModalStackParamList } from '../navigation/ModalStackNavigation'
 
@@ -71,36 +69,30 @@ export const AddressScanQuickToolsModal = (props: Props) => {
       controller={controller}
       noHeader
       draggable
-      paddingTop={20}
-      paddingBottom={24 + applicationConfig.footerHeight + useSafeAreaInsets().bottom}
-      paddingLeft={0}
-      paddingRight={0}
+      paddingTop={36}
       solidColorBG
       onClose={props.navigation.goBack}
     >
-      <QuickToolsItem
+      <AlterMenuItem
         onPress={() => runClosing(handlePressSend)}
-        sourceIcon={require('~src/assets/images/icon-circle-send-primary.png')}
+        icon={require('~src/assets/images/icon-circle-send-primary.png')}
         title={i18n.t('modals.handleQrCode.send.title')}
         subtitle={i18n.t('modals.handleQrCode.send.subtitle')}
       />
 
-      <QuickToolsItemSeparator />
-
-      <QuickToolsItem
+      <AlterMenuItem
         onPress={() => runClosing(handlePressImport)}
-        sourceIcon={require('~src/assets/images/icon-cicle-watch-primary.png')}
+        icon={require('~src/assets/images/icon-cicle-watch-primary.png')}
         title={i18n.t('modals.handleQrCode.watch.title')}
         subtitle={i18n.t('modals.handleQrCode.watch.subtitle')}
       />
 
-      <QuickToolsItemSeparator />
-
-      <QuickToolsItem
+      <AlterMenuItem
         onPress={() => runClosing(handlePressContact)}
-        sourceIcon={require('~src/assets/images/icon-cicle-contacts-primary.png')}
+        icon={require('~src/assets/images/icon-cicle-contacts-primary.png')}
         title={i18n.t('modals.handleQrCode.contact.title')}
         subtitle={i18n.t('modals.handleQrCode.contact.subtitle')}
+        withSeparator={false}
       />
     </SwiperPanel>
   )

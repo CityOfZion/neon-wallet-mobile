@@ -3,25 +3,21 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import * as Print from 'expo-print'
 import i18n from 'i18n-js'
-import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
-import { Alert } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { Normalize } from '~/src/app/Normalize'
+import { Alert } from '~/src/components/Alert'
+import { Button } from '~/src/components/Button'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import ThemedButton from '~src/components/themed/ThemedButton'
-import ThemedCard from '~src/components/themed/ThemedCard'
 import { Wallet } from '~src/models/redux/Wallet'
 import { TextView, LinearLayout } from '~src/styles/styled-components'
 
-export interface StepsBackupWalletPageParams {
+export interface Step1BackupWalletPageParams {
   wallet: Wallet
-  accessByNotification?: boolean
 }
 
 interface Props {
@@ -29,58 +25,57 @@ interface Props {
   navigation: StackNavigationProp<WalletStackParamList>
 }
 
-const WordComponent = (props: { value: string }) => {
-  return (
-    <TextView my={3} mx={4} color="text.0" fontSize="2xl" fontFamily="regular">
-      {props.value}
-    </TextView>
-  )
-}
-
 const Step1BackupWalletPage: React.FC<Props> = props => {
-  const [words, setWords] = useState<string[]>([])
-
-  const { wallet, accessByNotification } = props.route.params
-  const seeds = words.join(' ')
-
-  useEffect(() => {
-    Await.run('populateStep1', populate)
-  }, [wallet.id])
-
-  const populate = async () => {
-    const mnemonic = await wallet.getMnemonic()
-
-    if (mnemonic) {
-      setWords(mnemonic.split(' '))
-    }
-  }
+  const { wallet } = props.route.params
 
   props.navigation.setOptions({
     headerRight: () =>
       HeaderActionButton({
         actionTitle: i18n.t('app.cancel'),
         actionButtonStyle: 'highlight',
-        actionOnPress: () => {
-          props.navigation.reset({
-            index: 0,
-            routes: accessByNotification ? [{ name: wrapper.route.Tab.name }] : [{ name: wrapper.route.More.name }],
-          })
-        },
+        actionOnPress: props.navigation.goBack,
       }),
   })
 
-  const infoDialog = () => {
-    Alert.alert(i18n.t('step1BackupWallet.dialog_title'), i18n.t('step1BackupWallet.dialog_body'), [
-      {
-        text: i18n.t('step1BackupWallet.dialog_dismiss'),
-        onPress: () =>
-          props.navigation.navigate(wrapper.route.Step2BackupWallet.name, {
-            wallet,
-            accessByNotification,
-          }),
-      },
-    ])
+  const [mnemonic, setMnemonic] = useState<string>()
+  const [modalIsVisible, setModalIsVisible] = useState(false)
+
+  const words = mnemonic?.split(' ')
+
+  const populate = useCallback(async () => {
+    const walletMnemonic = await wallet.getMnemonic()
+
+    setMnemonic(walletMnemonic ?? undefined)
+  }, [wallet])
+
+  const handlePressCopy = () => {
+    UtilsHelper.copyToClipboard(mnemonic ?? '')
   }
+
+  const handlePressPrint = () => {
+    Print.printAsync({
+      html: `<html><body><br><br>&emsp;&emsp;${mnemonic}</body></html>`,
+    })
+  }
+
+  const handlePressContinue = () => {
+    setModalIsVisible(true)
+  }
+
+  const handlePressConfirmation = () => {
+    setModalIsVisible(false)
+
+    if (!mnemonic) return
+
+    props.navigation.navigate(wrapper.route.Step2BackupWallet.name, {
+      wallet,
+      mnemonic,
+    })
+  }
+
+  useEffect(() => {
+    Await.run('populateStep1', populate)
+  }, [populate])
 
   return (
     <ScreenLayout alignX="center" darkerSolidColorBG>
@@ -93,87 +88,82 @@ const Step1BackupWalletPage: React.FC<Props> = props => {
           <LinearLayout mb={6} width="100%">
             <LinearLayout width="100%" orientation="horiz">
               <TextView weight={1} color="text.0" fontSize="lg" fontFamily="semibold">
-                {i18n.t('step1BackupWallet.label_1')}
+                {i18n.t('screens.step1BackupWallet.label_1')}
               </TextView>
 
               <TextView color="text.0" fontSize="lg" fontFamily="bold">
-                {i18n.t('step1BackupWallet.oneOfThree')}
+                {i18n.t('screens.step1BackupWallet.oneOfThree')}
               </TextView>
             </LinearLayout>
 
             <TextView fontFamily="light" color="text.0" fontSize="lg">
-              {i18n.t('step1BackupWallet.body_1')}
+              {i18n.t('screens.step1BackupWallet.body_1')}
             </TextView>
           </LinearLayout>
 
-          <LinearLayout mb={5}>
-            <ThemedCard
-              rounded={false}
-              contentStyle={{
-                paddingTop: Normalize.scale(26),
-                paddingBottom: Normalize.scale(26),
-                paddingLeft: Normalize.scale(10),
-                paddingRight: Normalize.scale(10),
-              }}
-            >
-              <LinearLayout
-                orientation="horiz"
-                flexWrap="wrap"
-                alignItems="center"
-                justifyContent="center"
-                width="100%"
-              >
-                {words.map(it => (
-                  <WordComponent key={it} value={it} />
-                ))}
-              </LinearLayout>
-            </ThemedCard>
+          <LinearLayout
+            backgroundColor="background.1"
+            orientation="horiz"
+            flexWrap="wrap"
+            alignItems="center"
+            justifyContent="center"
+            mb={5}
+            py="28px"
+            borderRadius="8px"
+          >
+            {!!words &&
+              words.map(word => (
+                <TextView my={3} mx={4} color="text.0" fontSize="2xl" fontFamily="regular">
+                  {word}
+                </TextView>
+              ))}
           </LinearLayout>
 
           <LinearLayout mb={5} orientation="horiz" justifyContent="flex-end">
-            <ThemedButton
-              onPress={() => UtilsHelper.copyToClipboard(seeds ?? '')}
+            <Button
               label={i18n.t('app.copy')}
-              srcIcon={require('~/src/assets/images/icon-copy-green.png')}
-              iconSize={[Normalize.scale(25), Normalize.scale(25)]}
-              fontSize={18}
-              flat
+              onPress={handlePressCopy}
+              icon={require('~/src/assets/images/icon-copy-green.png')}
+              mr="18px"
             />
 
-            <ThemedButton
-              onPress={() =>
-                Print.printAsync({
-                  html: `<html><body><br><br>&emsp;&emsp;${seeds}</body></html>`,
-                })
-              }
+            <Button
+              onPress={handlePressPrint}
               label={i18n.t('app.print')}
-              srcIcon={require('~/src/assets/images/icon-print-green.png')}
-              iconSize={[25, 25]}
-              fontSize={18}
-              flat
+              icon={require('~/src/assets/images/icon-print-green.png')}
             />
           </LinearLayout>
 
           <TextView fontFamily="light" mb={4} color="text.0" fontSize="lg">
-            {i18n.t('step1BackupWallet.body_2')}
+            {i18n.t('screens.step1BackupWallet.body_2')}
           </TextView>
 
           <TextView fontFamily="light" mb={5} color="text.0" fontSize="lg">
-            {i18n.t('step1BackupWallet.body_3')}
+            {i18n.t('screens.step1BackupWallet.body_3')}
           </TextView>
         </LinearLayout>
 
         <LinearLayout mt={5} mb={6} px={5} width="100%">
-          <ThemedButton onPress={() => infoDialog()} label={i18n.t('app.continue')} />
+          <Button
+            onPress={handlePressContinue}
+            label={i18n.t('app.continue')}
+            variant="contained"
+            py="12px"
+            labelStyle={{ fontSize: '2xl' }}
+          />
         </LinearLayout>
       </AwaitActivity>
+
+      <Alert
+        title={i18n.t('screens.step1BackupWallet.dialog_title')}
+        subtitle={i18n.t('screens.step1BackupWallet.dialog_body')}
+        buttonLabel={i18n.t('screens.step1BackupWallet.dialog_dismiss')}
+        visible={modalIsVisible}
+        onRequestClose={() => setModalIsVisible(false)}
+        onPress={handlePressConfirmation}
+      />
     </ScreenLayout>
   )
-}
-
-Step1BackupWalletPage.propTypes = {
-  navigation: PropTypes.any,
-  route: PropTypes.any,
 }
 
 export default Step1BackupWalletPage
