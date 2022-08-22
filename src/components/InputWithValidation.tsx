@@ -120,8 +120,8 @@ const InputWithValidation = (props: Props) => {
           borderColor={isInvalid ? theme.colors.quinary : theme.colors.background[12]}
           borderRadius={10}
           borderWidth={props.fromImportKey ? 1 : 0}
-          width="100%"
           orientation="horiz"
+          flex={1}
           p={props.fromImportKey ? '2%' : undefined}
         >
           <InputTextView
@@ -159,7 +159,11 @@ const InputWithValidation = (props: Props) => {
             }}
           >
             {!props.isMultiline && isInvalid && (
-              <ImageView alignSelf="center" source={require('~/src/assets/images/icon-alert-purple.png')} />
+              <ImageView
+                alignSelf="center"
+                source={require('~/src/assets/images/icon-alert-purple.png')}
+                resizeMode="contain"
+              />
             )}
             {(props.onClearPress && props.value.length > 0) ||
               (props.onClearPress && props.forceClearButton && <InputClearButton onPress={props.onClearPress} />)}
@@ -176,19 +180,16 @@ const InputWithValidation = (props: Props) => {
         />
       )}
       {!props.isMultiline && (
-        <LinearLayout height="12px" justifyContent="flex-start">
-          <TextView
-            fontStyle="italic"
-            color={props.invalidMessageColor ?? theme.colors.background[5]}
-            fontSize={12}
-            fontFamily="regular"
-            textAlign="right"
-            opacity={isInvalid ? 1 : 0}
-            height={Platform.OS === 'ios' ? '15px' : undefined}
-          >
-            {props.invalidMessage ?? i18n.t('components.inputTextWithValidation.incorrectFormat')}
-          </TextView>
-        </LinearLayout>
+        <TextView
+          fontStyle="italic"
+          color={props.invalidMessageColor ?? theme.colors.background[5]}
+          fontSize="xs"
+          fontFamily="regular"
+          opacity={isInvalid ? 1 : 0}
+          textAlign="right"
+        >
+          {props.invalidMessage ?? i18n.t('components.inputTextWithValidation.incorrectFormat')}
+        </TextView>
       )}
 
       {(props.showContacts || !props.hidePaste || !props.hideScan) && (
