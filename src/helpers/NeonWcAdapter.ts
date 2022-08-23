@@ -22,6 +22,10 @@ export type ContractInvocation = {
 export type ContractInvocationMulti = {
   signers: Signer[]
   invocations: ContractInvocation[]
+  extraSystemFee?: number
+  systemFeeOverride?: number
+  extraNetworkFee?: number
+  networkFeeOverride?: number
 }
 
 export type SignMessagePayload = {
@@ -101,6 +105,50 @@ export class NeonWcAdapter {
     }
   }
 
+  calculateFee = async (account: Account, cim: ContractInvocationMulti): Promise<string> => {
+    const sb = Neon.create.scriptBuilder()
+
+    cim.invocations.forEach(c => {
+      sb.emitContractCall({
+        scriptHash: c.scriptHash,
+        operation: c.operation,
+        args: NeonWcAdapter.convertParams(c.args),
+      })
+
+      if (c.abortOnFail) {
+        sb.emit(0x39)
+      }
+    })
+
+    const script = sb.build()
+
+    const rpcClient = new rpc.RPCClient(this.rpcAddress)
+
+    const currentHeight = await rpcClient.getBlockCount()
+
+    const trx = new tx.Transaction({
+      script: Neon.u.HexString.fromHex(script),
+      validUntilBlock: currentHeight + 100,
+      signers: NeonWcAdapter.buildMultipleSigner(account, cim.signers),
+    })
+
+    const config = {
+      rpcAddress: this.rpcAddress,
+      networkMagic: this.networkMagic,
+      account,
+    }
+
+    const systemFee = cim.systemFeeOverride
+      ? u.BigInteger.fromNumber(cim.systemFeeOverride)
+      : (await Neon.experimental.txHelpers.getSystemFee(trx.script, config, trx.signers)).add(cim.extraSystemFee ?? 0)
+
+    const networkFee = cim.networkFeeOverride
+      ? u.BigInteger.fromNumber(cim.networkFeeOverride)
+      : (await Neon.experimental.txHelpers.calculateNetworkFee(trx, account, config)).add(cim.extraNetworkFee ?? 0)
+
+    return systemFee.add(networkFee).toDecimal(8)
+  }
+
   testInvoke = async (account: Account, cim: ContractInvocationMulti): Promise<any> => {
     const sb = Neon.create.scriptBuilder()
 
@@ -117,6 +165,7 @@ export class NeonWcAdapter {
     })
 
     const script = sb.build()
+
     return await new rpc.RPCClient(this.rpcAddress).invokeScript(
       Neon.u.HexString.fromHex(script),
       NeonWcAdapter.buildMultipleSigner(account, cim.signers)
@@ -150,10 +199,28 @@ export class NeonWcAdapter {
       signers: NeonWcAdapter.buildMultipleSigner(account, cim.signers),
     })
 
-    await Neon.experimental.txHelpers.addFees(trx, {
+    const config = {
       rpcAddress: this.rpcAddress,
       networkMagic: this.networkMagic,
       account,
+    }
+
+    const systemFeeOverride = cim.systemFeeOverride
+      ? u.BigInteger.fromNumber(cim.systemFeeOverride)
+      : cim.extraSystemFee
+      ? (await Neon.experimental.txHelpers.getSystemFee(trx.script, config, trx.signers)).add(cim.extraSystemFee)
+      : undefined
+
+    const networkFeeOverride = cim.networkFeeOverride
+      ? u.BigInteger.fromNumber(cim.networkFeeOverride)
+      : cim.extraNetworkFee
+      ? (await Neon.experimental.txHelpers.calculateNetworkFee(trx, account, config)).add(cim.extraNetworkFee)
+      : undefined
+
+    await Neon.experimental.txHelpers.addFees(trx, {
+      ...config,
+      systemFeeOverride,
+      networkFeeOverride,
     })
 
     trx.sign(account, this.networkMagic)

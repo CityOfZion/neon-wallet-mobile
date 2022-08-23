@@ -515,7 +515,7 @@
     "transactionRequest": {
       "title": "WalletConnect",
       "xWantsToCall": "%{dappName} wants to call",
-
+      "overrideFeeInfo": "The dApp has overwritten the fees",
       "signatureScope": "Signature Scope",
       "transactionFee": "Transaction Fee",
       "xGas": "%{amount} GAS",

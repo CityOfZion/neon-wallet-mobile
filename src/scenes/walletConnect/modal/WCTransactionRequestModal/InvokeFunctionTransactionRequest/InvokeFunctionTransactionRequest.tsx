@@ -1,7 +1,8 @@
 import { WitnessScope } from '@cityofzion/neon-core-next/lib/tx'
 import { useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { showMessage } from 'react-native-flash-message'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useSelector } from 'react-redux'
 
@@ -15,6 +16,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { blockchainServices, getBlockchainByWCChain, hasWCIntegration } from '~/src/blockchain'
 import { Session } from '~/src/contexts/WalletConnectContext'
 import { ContractInvocation, ContractInvocationMulti, Signer } from '~/src/helpers/NeonWcAdapter'
+import { Account } from '~/src/models/redux/Account'
 import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
@@ -28,6 +30,11 @@ type SignerBoxProps = {
 type ContractDetailsProps = {
   session: Session
   contract: ContractInvocation
+}
+
+type TransactionFeeProps = {
+  account: Account
+  requestParams: ContractInvocationMulti
 }
 
 const SignerBox = ({ signer, showWarning, session }: SignerBoxProps) => {
@@ -131,36 +138,73 @@ const ContractDetails = ({ contract, session }: ContractDetailsProps) => {
   )
 }
 
+const TransactionFee = ({ account, requestParams }: TransactionFeeProps) => {
+  const [feeRequest, setFeeRequest] = useState<number>()
+
+  const handleCalculateFee = useCallback(async () => {
+    if (!account.address) return
+
+    const bs = blockchainServices[account.blockchain]
+
+    if (!hasWCIntegration(bs)) return
+
+    const resultFee = await bs.calculateFee(account.address, requestParams)
+
+    setFeeRequest(Number(resultFee))
+  }, [account, requestParams])
+
+  useEffect(() => {
+    handleCalculateFee()
+  }, [handleCalculateFee])
+
+  return (
+    <LinearLayout
+      bg="background.1"
+      orientation="horiz"
+      borderRadius={6}
+      mb="13px"
+      pt="13px"
+      pb="13px"
+      justifyContent="space-between"
+    >
+      <TextView color="text.10" weight={2} fontFamily="bold" fontSize={14} pl="18px">
+        {i18n.t('modals.transactionRequest.transactionFee')}
+      </TextView>
+      <LinearLayout orientation="horiz">
+        <TextView color="primary" alignSelf="flex-end" pb="3px" fontSize="16px" fontFamily="bold" pr="20px">
+          {i18n.t('modals.transactionRequest.xGas', {
+            amount: feeRequest ? (feeRequest / 8).toFixed(8) : '',
+          })}
+        </TextView>
+      </LinearLayout>
+    </LinearLayout>
+  )
+}
+
 export const InvokeFunctionTransactionRequest = ({
   request,
   session,
   account,
 }: TransactionRequestMethodComponentProps) => {
-  const requestParams = request.params.request.params as ContractInvocationMulti
-
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const navigation = useNavigation()
 
-  const [feeRequest, setFeeRequest] = useState<number>()
+  const requestParams = useMemo<ContractInvocationMulti>(
+    () => request.params.request.params,
+    [request.params.request.params]
+  )
 
   const scopes = requestParams.signers.map(signer => signer.scopes) ?? [WitnessScope.CalledByEntry]
 
   const showWarning = scopes.some(scope => scope !== WitnessScope.None && scope !== WitnessScope.CalledByEntry)
 
-  const handleCalculateFee = useCallback(async () => {
-    if (account?.address) {
-      const bs = blockchainServices[account.blockchain]
-      if (hasWCIntegration(bs)) {
-        const resultFee = await bs.calculateFee(account.address, requestParams)
-
-        setFeeRequest(Number(resultFee))
-      }
-    }
-  }, [account])
-
   useEffect(() => {
-    handleCalculateFee()
-  }, [handleCalculateFee])
+    const { extraNetworkFee, extraSystemFee, networkFeeOverride, systemFeeOverride } = requestParams
+
+    if (!extraNetworkFee && !extraSystemFee && !networkFeeOverride && !systemFeeOverride) return
+
+    showMessage({ type: 'info', message: i18n.t('modals.transactionRequest.overrideFeeInfo'), duration: 3000 })
+  }, [requestParams])
 
   return (
     <TransactionRequestBase
@@ -182,26 +226,8 @@ export const InvokeFunctionTransactionRequest = ({
         <SignerBox key={`${signer.scopes}-${index}`} session={session} showWarning={showWarning} signer={signer} />
       ))}
 
-      <LinearLayout
-        bg={theme.colors.background[1]}
-        orientation="horiz"
-        borderRadius={6}
-        mb="13px"
-        pt="13px"
-        pb="13px"
-        justifyContent="space-between"
-      >
-        <TextView color={theme.colors.text[10]} weight={2} fontFamily="bold" fontSize={14} pl="18px">
-          {i18n.t('modals.transactionRequest.transactionFee')}
-        </TextView>
-        <LinearLayout orientation="horiz">
-          <TextView color="primary" alignSelf="flex-end" pb="3px" fontSize="16px" fontFamily="bold" pr="20px">
-            {i18n.t('modals.transactionRequest.xGas', {
-              amount: feeRequest ? (feeRequest / 8).toFixed(8) : '',
-            })}
-          </TextView>
-        </LinearLayout>
-      </LinearLayout>
+      <TransactionFee account={account} requestParams={requestParams} />
+
       <TouchableWithoutFeedback
         onPress={() => {
           navigation.navigate(wrapper.route.RawJsonModal.name, {

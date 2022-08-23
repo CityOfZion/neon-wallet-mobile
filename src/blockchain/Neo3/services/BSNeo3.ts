@@ -12,7 +12,6 @@ import tokens from '../tokens.json'
 
 import { SessionRequest } from '~/src/contexts/WalletConnectContext'
 import { AsteroidHelper, keychain } from '~/src/helpers/AsteroidHelper'
-import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { NeoNode } from '~/src/models/NeoNode'
 import { Account } from '~/src/models/redux/Account'
 import { ExchangeInfo } from '~/src/models/response/ExchangeInfo'
@@ -272,10 +271,10 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     const node = (await this.provider.getAllNodes())[0]
     const endpoint = node.url
 
-    const nwcAdapter = await NeonWcAdapter.init(endpoint ?? this.defaultEndpoint)
-    const testInvokeResult = await nwcAdapter.testInvoke(fromAccount, requestParams)
+    const nwcAdapter = await NeonWcAdapter.init(endpoint ?? defaultEndpoint)
+    const fee = await nwcAdapter.calculateFee(fromAccount, requestParams)
 
-    return UtilsHelper.convertToArbitraryDecimals(Number(testInvokeResult.gasconsumed))
+    return fee
   }
 
   async calculateTransferFee(data: Omit<SendTransactionData, 'fee'>) {
