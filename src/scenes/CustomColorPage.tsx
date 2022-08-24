@@ -2,7 +2,6 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, { useState } from 'react'
-import { Dimensions } from 'react-native'
 
 import { useBalancesAndExchange } from '../hooks/useBalancesAndExchange'
 
@@ -56,12 +55,9 @@ const CustomColorPage = (props: Props) => {
       smallerSize
     >
       <LinearLayout height="100%">
-        <LinearLayout mb={5} maxHeight={`${Dimensions.get('window').width * 0.6}px`} alignSelf="center">
-          <AccountCard balanceExchange={balanceExchange} hideBalance={false} account={props.route.params.account} />
-        </LinearLayout>
-
+        <AccountCard balanceExchange={balanceExchange} hideBalance={false} account={props.route.params.account} />
         <TextView
-          mb={3}
+          my={3}
           color="text.0"
           textAlign="center"
           fontSize="lg"
