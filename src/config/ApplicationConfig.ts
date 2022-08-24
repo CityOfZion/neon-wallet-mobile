@@ -1,4 +1,4 @@
-import { Dimensions, Platform, StatusBar } from 'react-native'
+import { Dimensions, StatusBar } from 'react-native'
 
 import { Theme } from '~src/enums/Theme'
 /**
@@ -7,7 +7,7 @@ import { Theme } from '~src/enums/Theme'
 export class ApplicationConfig {
   readonly defaultTheme = Theme.DARK
   readonly defaultDataRefreshTimeInMilliseconds = 7000
-  readonly headerHeight = Platform.OS === 'ios' ? 40 : 72 + (StatusBar.currentHeight ?? 0)
+  readonly headerHeight = 72 + (StatusBar.currentHeight ?? 0)
   readonly footerHeight = 66
 
   readonly windowWidth = Dimensions.get('window').width

@@ -45,6 +45,7 @@ const Footer = () => {
         label={i18n.t('screens.securityBackupCheckPage.withoutAccountsToBackup.button_label')}
         variant="contained"
         my="42px"
+        mx="18px"
         py="12px"
         labelStyle={{ fontSize: '2xl' }}
       />

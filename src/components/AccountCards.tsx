@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, Platform, StyleProp, ViewStyle } from 'react-native'
+import { FlatList, StyleProp, ViewStyle } from 'react-native'
 
 import { Account } from '../models/redux/Account'
 import { LinearLayout } from '../styles/styled-components'
@@ -29,23 +29,21 @@ export const AccountCards = ({ accounts, balanceExchange, onPress, contentContai
   }
 
   return (
-    <LinearLayout mt={Platform.OS === 'ios' ? '5%' : 0}>
-      <FlatList
-        data={accounts}
-        keyExtractor={item => `${item.address}`}
-        contentContainerStyle={contentContainerStyle}
-        CellRendererComponent={Cell}
-        renderItem={({ item, index }) => (
-          <AccountCard
-            hideBalance={false}
-            balanceExchange={getBalanceExchange(item)}
-            account={item}
-            isStack={accounts.length - 1 !== index}
-            isCompacted
-            onPress={() => onPress(item)}
-          />
-        )}
-      />
-    </LinearLayout>
+    <FlatList
+      data={accounts}
+      keyExtractor={item => `${item.address}`}
+      contentContainerStyle={contentContainerStyle}
+      CellRendererComponent={Cell}
+      renderItem={({ item, index }) => (
+        <AccountCard
+          hideBalance={false}
+          balanceExchange={getBalanceExchange(item)}
+          account={item}
+          isStack={accounts.length - 1 !== index}
+          isCompacted
+          onPress={() => onPress(item)}
+        />
+      )}
+    />
   )
 }
