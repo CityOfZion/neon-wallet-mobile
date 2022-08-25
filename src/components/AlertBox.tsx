@@ -5,20 +5,21 @@ import { useSelector } from 'react-redux'
 
 import { wrapper } from '../app/ApplicationWrapper'
 import { RootState } from '../store/RootStore'
-import { ButtonWithoutFeedbackView, LinearLayout } from '../styles/styled-components'
+import { ButtonView, LinearLayout } from '../styles/styled-components'
+import { LinearLayoutProps } from '../types/styled-components'
 
 type Props = {
   visible: boolean
   onRequestClose?: () => void
   children?: React.ReactNode
-}
+} & LinearLayoutProps
 
-export const AlertBox = ({ onRequestClose, visible, children }: Props) => {
+export const AlertBox = ({ onRequestClose, visible, children, ...props }: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   return (
     <Modal visible={visible} transparent onRequestClose={onRequestClose}>
-      <ButtonWithoutFeedbackView onPress={onRequestClose}>
+      <ButtonView onPress={onRequestClose} activeOpacity={0}>
         <BlurView
           style={{
             width: '100%',
@@ -29,13 +30,13 @@ export const AlertBox = ({ onRequestClose, visible, children }: Props) => {
           intensity={100}
           tint="dark"
         >
-          <ButtonWithoutFeedbackView width="100%">
-            <LinearLayout backgroundColor={`${theme.colors.black}B3`} borderRadius="14px" maxWidth="75%">
+          <ButtonView activeOpacity={0} maxWidth="75%" {...props}>
+            <LinearLayout backgroundColor={`${theme.colors.black}B3`} borderRadius="14px">
               {children}
             </LinearLayout>
-          </ButtonWithoutFeedbackView>
+          </ButtonView>
         </BlurView>
-      </ButtonWithoutFeedbackView>
+      </ButtonView>
     </Modal>
   )
 }

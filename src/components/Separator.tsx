@@ -6,5 +6,5 @@ import { LinearLayoutProps } from '../types/styled-components'
 type Props = LinearLayoutProps
 
 export const Separator = (props: Props) => {
-  return <LinearLayout height="1px" bg="background.10" width="100%" {...props} />
+  return <LinearLayout height="0.5px" bg="background.10" width="100%" {...props} />
 }
