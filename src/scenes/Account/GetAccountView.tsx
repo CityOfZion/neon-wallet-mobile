@@ -174,6 +174,11 @@ const GetAccountView = (props: GetAccountViewProps) => {
     return tokenBalance.amount
   }, [balanceExchange, account])
 
+  const totalBalance = useMemo(
+    () => BalanceHelper.calculateTotalBalances(balanceExchange.balance.data, balanceExchange.exchange.data),
+    [balanceExchange]
+  )
+
   const handleClaimGas = () => {
     if (!unclaimedGasAmount || !fee || unclaimedGasAmount < fee) {
       setShowWarning(true)
@@ -261,14 +266,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const handlePressSendButton = () => {
     const wallet = account.getWallet(wallets)
 
-    if (account.accountType === 'watch' || !isConnected || !wallet) return
-
-    const totalBalance = BalanceHelper.calculateTotalBalances(
-      balanceExchange.balance.data,
-      balanceExchange.exchange.data
-    )
-
-    if (totalBalance && totalBalance <= 0) return
+    if (!wallet) return
 
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.SendTransactionModal.name,
@@ -396,7 +394,11 @@ const GetAccountView = (props: GetAccountViewProps) => {
             />
           </AwaitActivity>
 
-          <ThemedSendButton onPress={handlePressSendButton} isDark />
+          <ThemedSendButton
+            onPress={handlePressSendButton}
+            isDark
+            isInactive={!totalBalance || totalBalance <= 0 || account.accountType === 'watch' || !isConnected}
+          />
         </LinearLayout>
         <LinearLayout>
           <Button
