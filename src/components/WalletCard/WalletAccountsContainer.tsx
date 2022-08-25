@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Animated } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -19,7 +19,9 @@ type Props = {
 export const WalletAccountsContainer = ({ wallet, inAnimatedValue, outAnimatedValue, height, width }: Props) => {
   const accounts = useSelector(selectAccounts)
 
-  const limitedWalletAccounts = useMemo(() => wallet.getAccounts(accounts).slice(0, 10), [wallet, accounts])
+  const ordenedWalletAccounts = wallet.getAccounts(accounts).sort(account => (account.blockchain === 'neo3' ? 1 : -1))
+
+  const limitedWalletAccounts = ordenedWalletAccounts.slice(0, 10)
 
   return (
     <LinearLayout
