@@ -25,7 +25,7 @@ export type AccountToImport = {
 }
 
 export function useBlockchainActions() {
-  const { saveWallet } = walletReducerActions
+  const { saveWallet, selectedWallet } = walletReducerActions
   const { saveAccount } = accountReducerActions
   const dispatch = useDispatch()
   const accounts = useSelector(selectAccounts)
@@ -49,6 +49,7 @@ export function useBlockchainActions() {
       }
 
       dispatch(saveWallet(newWallet))
+      dispatch(selectedWallet(newWallet))
 
       return walletId
     },

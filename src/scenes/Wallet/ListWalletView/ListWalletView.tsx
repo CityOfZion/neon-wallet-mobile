@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Animated, RefreshControl } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -13,7 +13,7 @@ import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { RootState } from '~/src/store/RootStore'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { settingsReducerActions } from '~/src/store/settings/SettingsReducer'
-import { selectWallets } from '~/src/store/wallet/SelectorWallet'
+import { selectSelectedWallet, selectWallets } from '~/src/store/wallet/SelectorWallet'
 import { LinearLayout } from '~/src/styles/styled-components'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -23,6 +23,7 @@ import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~src/navigation/TabNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
+import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 
 interface WalletProps {
   navigation: StackNavigationProp<WalletStackParamList & RootStackParamList & TabStackParamList & ModalStackParamList>
@@ -32,12 +33,12 @@ interface WalletProps {
 export const ListWalletView = (props: WalletProps) => {
   const wallets = useSelector(selectWallets)
   const accounts = useSelector(selectAccounts)
+  const selectedWallet = useSelector(selectSelectedWallet)
   const isFirstTime = useSelector((state: RootState) => state.settings.isFirstTime)
   const dispatch = useDispatch()
 
   const fadeValue = useRef(new Animated.Value(1)).current
-
-  const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(wallets[0])
+  
   const [pressedWallet, setPressedWallet] = useState<Wallet>()
 
   const selectedWalletBalanceExchange = useBalancesAndExchange(selectedWallet?.getAccounts(accounts) ?? [])
@@ -99,7 +100,7 @@ export const ListWalletView = (props: WalletProps) => {
               wallets={wallets}
               selectedWalletBalanceExchange={selectedWalletBalanceExchange}
               selectedWallet={selectedWallet}
-              onSelect={setSelectedWallet}
+              onSelect={(wallet) => dispatch(walletReducerActions.selectedWallet(wallet))}
               onPress={handlePress}
               onScrollBegin={fadeOut}
               onScrollEnd={fadeIn}

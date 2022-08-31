@@ -1,4 +1,4 @@
-import { CaseReducer, PayloadAction, createSlice, createAsyncThunk, SerializedError } from '@reduxjs/toolkit'
+import { CaseReducer, PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { PURGE } from 'redux-persist'
 
 import { Storage } from '~/src/app/Storage'
@@ -10,8 +10,7 @@ export const walletReducerName = 'walletReducer'
 
 export interface IWalletReducer {
   data: WalletState[]
-  selectedWallet: Wallet
-  error: SerializedError
+  selectedWallet: WalletState
 }
 
 const initialState = {
@@ -45,12 +44,20 @@ const reorder: CaseReducer<IWalletReducer, PayloadAction<number[]>> = (state, ac
   }
 }
 
+const selectedWallet: CaseReducer<IWalletReducer, PayloadAction<Wallet>> = (state, action) => {
+  if ('data' in state) {
+    const walletDeserialized = action.payload.deserialize
+    state.selectedWallet = walletDeserialized
+  }
+}
+
 const WalletReducer = createSlice({
   initialState,
   name: walletReducerName,
   reducers: {
     deleteWallet,
     reorder,
+    selectedWallet
   },
   extraReducers(builder) {
     builder
@@ -88,11 +95,8 @@ const WalletReducer = createSlice({
           }
         }
       })
-      .addCase(saveWallet.rejected, (state, action) => {
-        state.error = action.error
-      })
       .addCase(PURGE, state => {
-        state.error = {} as SerializedError
+        state.selectedWallet = state.data[0]
       })
   },
 })
