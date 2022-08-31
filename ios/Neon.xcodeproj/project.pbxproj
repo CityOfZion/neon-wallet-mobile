@@ -240,6 +240,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				24F379FC7E457F05734246A1 /* [CP] Copy Pods Resources */,
 				0838A02E381833D930D9E258 /* [CP-User] [RNFB] Core Configuration */,
+				C3B7199F88DDC773F1D2885E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -351,6 +352,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Neon/Pods-Neon-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C3B7199F88DDC773F1D2885E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Neon/Pods-Neon-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal/OpenSSL.framework/OpenSSL",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Neon/Pods-Neon-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EDC41A2503E7E1024C5D45C8 /* [CP] Check Pods Manifest.lock */ = {
