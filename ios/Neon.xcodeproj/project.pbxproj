@@ -31,8 +31,8 @@
 		FA142A4025DC4F5200FEFBC8 /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A3D25DC4F5200FEFBC8 /* DataExtension.swift */; };
 		FA142A8D25DC57B800FEFBC8 /* NEPReturn.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A8C25DC57B800FEFBC8 /* NEPReturn.swift */; };
 		FA142A9125DC580D00FEFBC8 /* NeoSwift.m in Sources */ = {isa = PBXBuildFile; fileRef = FA142A9025DC580D00FEFBC8 /* NeoSwift.m */; };
-		FAB2F31028BF978D0090CDF9 /* neoutils.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAB2F30F28BF978D0090CDF9 /* neoutils.xcframework */; };
 		FAC4877125800A790076ACC1 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = FAC4877025800A790076ACC1 /* assets */; };
+		FAD3497228BFA69500D19D33 /* neoutils.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAD3497128BFA69500D19D33 /* neoutils.xcframework */; };
 		FAD7DCB7257FC2C00092EF9B /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		FAE7F48325A4ECB40014C2EC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAE7F48225A4ECB40014C2EC /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
@@ -72,8 +72,8 @@
 		FA142A8C25DC57B800FEFBC8 /* NEPReturn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NEPReturn.swift; sourceTree = "<group>"; };
 		FA142A8F25DC580D00FEFBC8 /* NeoSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NeoSwift.h; sourceTree = "<group>"; };
 		FA142A9025DC580D00FEFBC8 /* NeoSwift.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NeoSwift.m; sourceTree = "<group>"; };
-		FAB2F30F28BF978D0090CDF9 /* neoutils.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = neoutils.xcframework; path = ../../../Downloads/neoutils.xcframework; sourceTree = "<group>"; };
 		FAC4877025800A790076ACC1 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
+		FAD3497128BFA69500D19D33 /* neoutils.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = neoutils.xcframework; sourceTree = "<group>"; };
 		FAE7F48225A4ECB40014C2EC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FAB2F31028BF978D0090CDF9 /* neoutils.xcframework in Frameworks */,
+				FAD3497228BFA69500D19D33 /* neoutils.xcframework in Frameworks */,
 				4B2C3D3C9C6BDC5B7284B5EC /* libPods-Neon.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -118,7 +118,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FAB2F30F28BF978D0090CDF9 /* neoutils.xcframework */,
+				FAD3497128BFA69500D19D33 /* neoutils.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				218C09F00E3A2C9965A7321C /* libPods-Neon.a */,
