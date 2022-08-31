@@ -15,13 +15,12 @@ import Neoutils
         guard let wallet = NeoutilsGenerateFromPrivateKey(nepResult.decryptedKey?.hexString ?? "", &error) else { return nil }
       
         guard let nepResultAddreshash = nepResult.addressHash else { return nil }
-        guard let walletAddress = wallet.address() else { return nil }
         
-        if (!verify(addressHash: nepResultAddreshash, address: walletAddress)) {
+        if (!verify(addressHash: nepResultAddreshash, address: wallet.address)) {
             return nil
         }
         
-        return wallet.wif()
+        return wallet.wif
     }
     
     @objc public static func decryptKey(_ key: String, passphrase: String, scryptParameter: Scrypt?) -> NEPReturn? {
