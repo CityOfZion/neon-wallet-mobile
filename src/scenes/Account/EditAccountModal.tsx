@@ -19,6 +19,7 @@ import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
 import { RootState } from '~src/store/RootStore'
 import { LinearLayout } from '~src/styles/styled-components'
+import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 
 type ParamList = ModalStackParamList & RootStackParamList & WalletStackParamList
 
@@ -41,6 +42,8 @@ const EditAccountModal = (props: Props) => {
   const [name, setName] = useState<string>(account.name ?? '')
   const [color, setColor] = useState<string>(account.backgroundColor)
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
+
+  const balanceExchange = useBalancesAndExchange(account)
 
   account.backgroundColor = color
   account.name = name
@@ -89,7 +92,7 @@ const EditAccountModal = (props: Props) => {
     >
       <AwaitActivity name="swiperRight" loadingView={<ScreenLoader solidColorBG />}>
         <LinearLayout orientation="verti" justifyContent="space-between" mt="10px">
-          <AccountCard account={account} isStack={false} hideBalance={false} />
+          <AccountCard balanceExchange={balanceExchange} account={account} isStack={false} hideBalance={false} />
 
           <InputLabel
             title={i18n.t('modals.editAccount.accountInput.title')}
