@@ -66,11 +66,6 @@ const EditAccountModal = (props: Props) => {
   }
 
   const save = () => {
-    if (!isValid()) {
-      setShowInvalid(true)
-      return
-    }
-
     Await.run('swiperRight', submit, 300)
   }
 
