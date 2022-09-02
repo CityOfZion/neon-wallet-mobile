@@ -110,7 +110,7 @@ const Passphrase = (props: PassphraseProps) => {
 
   const persist = useCallback(async () => {
     try {
-      const walletId = await blockchainActions.createWallet(i18n.t('modals.blockchainList.encryptedWallet'), 'legacy')
+      const wallet = await blockchainActions.createWallet(i18n.t('modals.blockchainList.encryptedWallet'), 'legacy')
 
       const accountsToImportPromises = addressesInfoSelected.map(
         async ({ address, blockchain }): Promise<AccountToImport> => {
@@ -119,7 +119,7 @@ const Passphrase = (props: PassphraseProps) => {
           return {
             address,
             blockchain,
-            walletId,
+            wallet,
             wif,
             type: 'legacy',
           }
@@ -132,6 +132,10 @@ const Passphrase = (props: PassphraseProps) => {
 
       props.navigation.replace(wrapper.route.Tab.name, {
         screen: wrapper.route.ListWallets.name,
+        params: {
+          screen: wrapper.route.ListWalletsPage.name,
+          params: { wallet },
+        },
       })
     } catch {
       showMessage({

@@ -20,7 +20,6 @@ import { useBlockchainActions } from '../hooks/useBlockchainActions'
 import { ModalStackParamList } from '../navigation/ModalStackNavigation'
 import { WalletStackParamList } from '../navigation/WalletsStackNavigation'
 import { selectAccounts } from '../store/account/SelectorAccount'
-import { selectWallets } from '../store/wallet/SelectorWallet'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import SwiperPanel, { SwiperController } from '~src/components/SwiperPanel'
@@ -35,7 +34,6 @@ export default function QuickToolsMenu(props: Props) {
   const navigation =
     useNavigation<StackNavigationProp<RootStackParamList & ModalStackParamList & WalletStackParamList>>()
   const blockchainActions = useBlockchainActions()
-  const wallets = useSelector(selectWallets)
   const accounts = useSelector(selectAccounts)
 
   const handleScanQrCode = async (data: string) => {
@@ -95,12 +93,11 @@ export default function QuickToolsMenu(props: Props) {
           return
         }
 
-        const walletId = await blockchainActions.createWallet(i18n.t('modals.blockchainList.encryptedWallet'), 'legacy')
+        const wallet = await blockchainActions.createWallet(i18n.t('modals.blockchainList.encryptedWallet'), 'legacy')
 
-        await blockchainActions.importAccounts([{ address, blockchain, type: 'legacy', walletId, wif: data }])
+        await blockchainActions.importAccounts([{ address, blockchain, type: 'legacy', wallet, wif: data }])
 
         const account = accounts.find(account => account.address === address)
-        const wallet = wallets.find(wallet => wallet.id === walletId)
 
         if (!account || !wallet) return
 

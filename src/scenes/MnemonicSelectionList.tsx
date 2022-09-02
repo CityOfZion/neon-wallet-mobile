@@ -203,7 +203,7 @@ const MnemonicSelectionList = (props: Props) => {
 
   const handleImportAccounts = useCallback(async () => {
     Await.init('importMnemonic')
-    const walletId = await blockchainActions.createWallet(
+    const wallet = await blockchainActions.createWallet(
       i18n.t('defaultNameWallet.mnemonicWallet'),
       'standard',
       mnemonic
@@ -211,7 +211,7 @@ const MnemonicSelectionList = (props: Props) => {
 
     const accountsToImport = addressesSelected.map(
       ({ address, blockchain, wif }): AccountToImport => ({
-        walletId,
+        wallet,
         address,
         blockchain,
         wif,
@@ -221,12 +221,12 @@ const MnemonicSelectionList = (props: Props) => {
 
     await blockchainActions.importAccounts(accountsToImport)
     Await.done('importMnemonic')
-    props.navigation.reset({
-      index: 0,
-      routes: [{ name: wrapper.route.Tab.name }],
-    })
-    props.navigation.navigate(wrapper.route.Tab.name, {
+    props.navigation.replace(wrapper.route.Tab.name, {
       screen: wrapper.route.ListWallets.name,
+      params: {
+        screen: wrapper.route.ListWalletsPage.name,
+        params: { wallet },
+      },
     })
   }, [addressesSelected])
 

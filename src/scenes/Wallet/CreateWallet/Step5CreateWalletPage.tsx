@@ -6,12 +6,17 @@ import React from 'react'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
+import { Wallet } from '~/src/models/redux/Wallet'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { TextView, LinearLayout, ImageView } from '~src/styles/styled-components'
+
+export interface Step5CreateWalletPageParams {
+  wallet: Wallet
+}
 
 interface Props {
   navigation: StackNavigationProp<MoreStackParamList & WalletStackParamList & RootStackParamList>
@@ -51,8 +56,11 @@ const Step5CreateWalletPage = (props: Props) => {
           onPress={() => {
             props.navigation.replace(wrapper.route.Tab.name, {
               screen: wrapper.route.ListWallets.name,
+              params: {
+                screen: wrapper.route.ListWalletsPage.name,
+                params: { wallet: props.route.params?.wallet },
+              },
             })
-            props.navigation.navigate(wrapper.route.ListWalletsPage.name)
           }}
           label={i18n.t('step5CreateWallet.viewWallet')}
         />

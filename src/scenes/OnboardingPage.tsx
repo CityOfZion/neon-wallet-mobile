@@ -9,6 +9,7 @@ import { ProgressBar } from '../components/ProgressBar'
 import { AsteroidHelper } from '../helpers/AsteroidHelper'
 import { UtilsHelper } from '../helpers/UtilsHelper'
 import { useProgress } from '../hooks/useProgress'
+import { Wallet } from '../models/redux/Wallet'
 import { selectAccounts } from '../store/account/SelectorAccount'
 import { selectWallets } from '../store/wallet/SelectorWallet'
 
@@ -91,11 +92,11 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     return blockchainActions.createWallet(i18n.t('onboarding.firstWalletName'), 'standard', words.join(' '))
   }
 
-  const step3 = async (walletId?: string) => {
+  const step3 = async (wallet?: Wallet) => {
     await UtilsHelper.sleep(1500)
-    if (accounts.length > 0 || !walletId) return
+    if (accounts.length > 0 || !wallet) return
     return blockchainActions.createAccount(
-      walletId,
+      wallet,
       i18n.t('modals.blockchainList.countAccount', {
         count: 1,
       }),

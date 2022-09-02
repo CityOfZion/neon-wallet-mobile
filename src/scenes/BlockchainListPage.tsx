@@ -51,10 +51,10 @@ const BlockchainListPage = (props: Props) => {
       }
       const { mnemonic, walletName, walletType, hasBackup } = props.route.params.config.creatingWallet
 
-      const walletId = await blockchainActions.createWallet(walletName, walletType, mnemonic, hasBackup)
+      const wallet = await blockchainActions.createWallet(walletName, walletType, mnemonic, hasBackup)
 
       for (const blockchain of blockchainsSelected) {
-        await blockchainActions.createAccount(walletId, walletName, blockchain, undefined)
+        await blockchainActions.createAccount(wallet, walletName, blockchain, undefined)
       }
 
       props.navigation.reset({
@@ -62,6 +62,7 @@ const BlockchainListPage = (props: Props) => {
         routes: [
           {
             name: wrapper.route.Step5CreateWallet.name,
+            params: { wallet },
           },
         ],
       })

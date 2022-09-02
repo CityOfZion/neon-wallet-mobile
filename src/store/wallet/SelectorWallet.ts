@@ -22,8 +22,3 @@ export const selectWalletByID = (idWallet: string | null) =>
     }
     return undefined
   })
-
-export const selectSelectedWallet = createSelector(
-  rootState,
-  state => plainToClass(Wallet, state.wallet.selectedWallet)
-)

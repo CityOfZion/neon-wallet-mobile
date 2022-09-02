@@ -19,13 +19,13 @@ import { RootState } from '~src/store/RootStore'
 export type AccountToImport = {
   address: string
   blockchain: BlockchainServiceKey
-  walletId: string
+  wallet: Wallet
   type: WalletType
   wif?: string
 }
 
 export function useBlockchainActions() {
-  const { saveWallet, selectedWallet } = walletReducerActions
+  const { saveWallet } = walletReducerActions
   const { saveAccount } = accountReducerActions
   const dispatch = useDispatch()
   const accounts = useSelector(selectAccounts)
@@ -49,35 +49,30 @@ export function useBlockchainActions() {
       }
 
       dispatch(saveWallet(newWallet))
-      dispatch(selectedWallet(newWallet))
 
-      return walletId
+      return newWallet
     },
     []
   )
 
   const createAccount = useCallback(
-    async (
-      walletId: string,
-      name: string,
-      blockchain: BlockchainServiceKey,
-      index?: number,
-      colorDefault?: boolean
-    ) => {
+    async (wallet: Wallet, name: string, blockchain: BlockchainServiceKey, index?: number, colorDefault?: boolean) => {
+      if (!wallet.id) throw new Error('Account needs wallet id')
+
       const newAccount = new Account()
-      newAccount.idWallet = walletId
+      newAccount.idWallet = wallet.id
       newAccount.name = name
       newAccount.blockchain = blockchain
       newAccount.backgroundColor = colorDefault
         ? theme.colors.card[0]
         : theme.colors.card[UtilsHelper.getRandomNumber(6)]
 
-      const mnemonic = await SecurityHelper.loadMnemonic(walletId)
+      const mnemonic = await SecurityHelper.loadMnemonic(wallet.id)
 
       if (!mnemonic) throw new Error('Problem to create account')
 
       const accountIndex =
-        index ?? accounts.filter(account => account.idWallet === walletId && account.blockchain === blockchain).length
+        index ?? accounts.filter(account => account.idWallet === wallet.id && account.blockchain === blockchain).length
 
       const generatedAccount = blockchainServices[blockchain].generateAccount(mnemonic, accountIndex)
 
@@ -94,7 +89,7 @@ export function useBlockchainActions() {
 
   const importAccount = useCallback(
     async (
-      walletId: string,
+      wallet: Wallet,
       name: string,
       address: string,
       blockchain: BlockchainServiceKey,
@@ -102,7 +97,7 @@ export function useBlockchainActions() {
       wif?: string
     ) => {
       const newAccount = new Account()
-      newAccount.idWallet = walletId
+      newAccount.idWallet = wallet.id ?? ''
       newAccount.name = name
       newAccount.blockchain = blockchain
       newAccount.backgroundColor = theme.colors.card[UtilsHelper.getRandomNumber(6)]
@@ -116,6 +111,7 @@ export function useBlockchainActions() {
       }
 
       dispatch(saveAccount(newAccount))
+      return newAccount
     },
     [theme]
   )
@@ -124,7 +120,7 @@ export function useBlockchainActions() {
     async (accounts: AccountToImport[]) => {
       const promises = accounts.map(account =>
         importAccount(
-          account.walletId,
+          account.wallet,
           `${i18n.t(`blockchainServices.${account.blockchain}.accountName`)} 1`,
           account.address,
           account.blockchain,

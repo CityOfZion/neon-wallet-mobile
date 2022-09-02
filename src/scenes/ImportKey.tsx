@@ -277,13 +277,13 @@ const ImportKey = (props: ImportKeyProps) => {
       return
     }
 
-    const walletId = await blockchainActions.createWallet(i18n.t('defaultNameWallet.importedWallet'), 'legacy')
+    const wallet = await blockchainActions.createWallet(i18n.t('defaultNameWallet.importedWallet'), 'legacy')
 
     const accountToImport = addressesSelected.map(
       ({ address, blockchain }): AccountToImport => ({
         address,
         blockchain,
-        walletId,
+        wallet,
         wif: inputValue,
         type: 'legacy',
       })
@@ -291,15 +291,13 @@ const ImportKey = (props: ImportKeyProps) => {
 
     await blockchainActions.importAccounts(accountToImport)
 
-    const wallet = wallets.find(wallet => wallet.id === walletId)
-
     props.navigation.replace(wrapper.route.Tab.name, {
       screen: wrapper.route.ListWallets.name,
+      params: {
+        screen: wrapper.route.ListWalletsPage.name,
+        params: { wallet },
+      },
     })
-
-    if (wallet) {
-      props.navigation.navigate(wrapper.route.GetWallet.name, { wallet })
-    }
   }, [blockchainActions, inputValue, wallets])
 
   const persistWhenMnemonic = useCallback(async () => {

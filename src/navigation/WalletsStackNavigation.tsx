@@ -18,14 +18,14 @@ import AccountTransactionsScreen, {
   AccountTransactionsScreenParams,
 } from '~/src/scenes/Account/AccountTransactionsScreen/AccountTransactionsScreen'
 import GetWalletView, { GetWalletViewParams } from '~/src/scenes/Wallet/GetWalletView'
-import { ListWalletView } from '~/src/scenes/Wallet/ListWalletView/ListWalletView'
+import { ListWalletView, ListWalletViewParams } from '~/src/scenes/Wallet/ListWalletView/ListWalletView'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Navigator } from '~src/app/Navigator'
 import AccountAssetScreen, { AccountAssetScreenParams } from '~src/scenes/Account/AccountAssetsScreen'
 import GetAccountView, { GetAccountViewParams } from '~src/scenes/Account/GetAccountView'
 
 export type WalletStackParamList = {
-  ListWalletsPage: undefined
+  ListWalletsPage: ListWalletViewParams | undefined
   GetWallet: GetWalletViewParams
   GetAccount: GetAccountViewParams
   AccountAssetScreen: AccountAssetScreenParams
@@ -52,7 +52,7 @@ export type WalletStackParam =
       | Step1BackupWalletPageParams
       | Step2BackupWalletPageParams
       | Step3BackupWalletPageParams
-      | undefined
+      | ListWalletViewParams
     >
   | undefined
 

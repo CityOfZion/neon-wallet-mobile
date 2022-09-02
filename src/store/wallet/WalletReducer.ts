@@ -1,5 +1,4 @@
 import { CaseReducer, PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { PURGE } from 'redux-persist'
 
 import { Storage } from '~/src/app/Storage'
 import { SecurityHelper } from '~/src/helpers/SecurityHelper'
@@ -10,7 +9,6 @@ export const walletReducerName = 'walletReducer'
 
 export interface IWalletReducer {
   data: WalletState[]
-  selectedWallet: WalletState
 }
 
 const initialState = {
@@ -44,20 +42,12 @@ const reorder: CaseReducer<IWalletReducer, PayloadAction<number[]>> = (state, ac
   }
 }
 
-const selectedWallet: CaseReducer<IWalletReducer, PayloadAction<Wallet>> = (state, action) => {
-  if ('data' in state) {
-    const walletDeserialized = action.payload.deserialize
-    state.selectedWallet = walletDeserialized
-  }
-}
-
 const WalletReducer = createSlice({
   initialState,
   name: walletReducerName,
   reducers: {
     deleteWallet,
     reorder,
-    selectedWallet
   },
   extraReducers(builder) {
     builder
@@ -94,9 +84,6 @@ const WalletReducer = createSlice({
             state.data[indexWallet] = wallet
           }
         }
-      })
-      .addCase(PURGE, state => {
-        state.selectedWallet = state.data[0]
       })
   },
 })
