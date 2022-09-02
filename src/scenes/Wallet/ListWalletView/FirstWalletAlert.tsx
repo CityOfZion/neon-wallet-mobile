@@ -1,5 +1,6 @@
 import i18n from 'i18n-js'
 import React from 'react'
+import { Dimensions } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
@@ -28,7 +29,7 @@ export const FirstWalletAlert = ({ onPress }: Props) => {
       }}
     >
       <ButtonWithoutFeedbackView onPress={onPress}>
-        <LinearLayout height="100%" alignItems="center" justifyContent="space-evenly" p="8px">
+        <LinearLayout height="100%" alignItems="center" justifyContent="space-evenly" p={Dimensions.get('screen').width * 0.02}>
           <ImageView
             source={require('~src/assets/images/icon-circle-arrow-curve-down-green.png')}
             resizeMode="contain"
@@ -37,10 +38,10 @@ export const FirstWalletAlert = ({ onPress }: Props) => {
               height: 64,
             }}
           />
-          <TextView textAlign="center" fontFamily="medium" fontSize="2xl" color="primary">
+          <TextView textAlign="center" fontFamily="medium" fontSize={20} color="primary">
             {i18n.t('screens.listWallets.isFirstWallet.title')}
           </TextView>
-          <TextView color="text.0" fontSize="lg" textAlign="center">
+          <TextView color="text.0" fontSize={17} textAlign="center">
             {i18n.t('screens.listWallets.isFirstWallet.subtitle')}
           </TextView>
         </LinearLayout>
