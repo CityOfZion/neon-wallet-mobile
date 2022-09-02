@@ -62,7 +62,13 @@ export const SelectedWalletInfo = ({ selectedWallet, selectedWalletBalanceExchan
 
             {!!totalTokensBalances && totalTokensBalances > 0 && (
               <ButtonView onPress={handlePressWarning}>
-                <ImageView mt="8px" mx="4px" source={require('~src/assets/images/icon-warning-green.png')} />
+                <ImageView
+                  mt="8px"
+                  mx="4px"
+                  source={require('~src/assets/images/icon-warning-green.png')}
+                  resizeMode="contain"
+                  style={{ width: 16, height: 16 }}
+                />
               </ButtonView>
             )}
           </LinearLayout>
