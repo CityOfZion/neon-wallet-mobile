@@ -50,7 +50,7 @@ const AddressItem = React.memo(({ address, blockchain, onPress, contact }: Addre
           }}
         />
 
-        <LinearLayout orientation="verti" flex={1}>
+        <LinearLayout orientation="verti">
           <TextView color="text.2" fontFamily="regular" fontSize="14px">
             {i18n.t(`blockchainServices.${blockchain}.id`)}
           </TextView>
@@ -104,7 +104,7 @@ const Item = React.memo(({ contact, onPress }: ItemProps) => {
           </TextView>
         )}
       </LinearLayout>
-      <LinearLayout flex={1} marginLeft="48px">
+      <LinearLayout marginLeft="48px">
         <FlatList
           data={contact.addresses}
           renderItem={({ item }) => (
