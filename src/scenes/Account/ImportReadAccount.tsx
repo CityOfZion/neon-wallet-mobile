@@ -70,14 +70,14 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
 
     Await.init('importWatchAccount')
 
-    const walletId = await blockchainActions.createWallet(i18n.t('defaultNameWallet.watchAccount'), 'watch')
+    const wallet = await blockchainActions.createWallet(i18n.t('defaultNameWallet.watchAccount'), 'watch')
 
     const accountToImport = addressesListSelected.map(
       ({ address, blockchain }): AccountToImport => ({
         address,
         blockchain,
         type: 'watch',
-        walletId,
+        wallet,
       })
     )
     await blockchainActions.importAccounts(accountToImport)
@@ -86,6 +86,10 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
 
     props.navigation.replace(wrapper.route.Tab.name, {
       screen: wrapper.route.ListWallets.name,
+      params: {
+        screen: wrapper.route.ListWalletsPage.name,
+        params: { wallet },
+      },
     })
   }
 

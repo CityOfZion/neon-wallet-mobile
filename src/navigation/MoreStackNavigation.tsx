@@ -13,7 +13,9 @@ import Step1CreateWalletPage, { Step1CreateWalletParams } from '~/src/scenes/Wal
 import Step2CreateWalletPage from '~/src/scenes/Wallet/CreateWallet/Step2CreateWalletPage'
 import Step3CreateWalletPage, { ParamsCreateWalletPage } from '~/src/scenes/Wallet/CreateWallet/Step3CreateWalletPage'
 import Step4CreateWalletPage, { Step4CreateWalletParams } from '~/src/scenes/Wallet/CreateWallet/Step4CreateWalletPage'
-import Step5CreateWalletPage from '~/src/scenes/Wallet/CreateWallet/Step5CreateWalletPage'
+import Step5CreateWalletPage, {
+  Step5CreateWalletPageParams,
+} from '~/src/scenes/Wallet/CreateWallet/Step5CreateWalletPage'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Navigator } from '~src/app/Navigator'
 import { HeaderActionButtonProps } from '~src/components/layout/HeaderActionButton'
@@ -35,7 +37,7 @@ export type MoreStackParamList = {
   Step2CreateWallet: undefined
   Step3CreateWallet: HeaderActionButtonProps & ParamsCreateWalletPage
   Step4CreateWallet: Step4CreateWalletParams
-  Step5CreateWallet: undefined
+  Step5CreateWallet: Step5CreateWalletPageParams | undefined
   ImportKey: { key?: string }
   ImportReadAccount: ImportReadAccountParams
   Passphrase: PassphraseParams

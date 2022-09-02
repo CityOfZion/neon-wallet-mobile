@@ -24,6 +24,10 @@ import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~src/navigation/TabNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
 
+export interface ListWalletViewParams {
+  wallet?: Wallet
+}
+
 interface WalletProps {
   navigation: StackNavigationProp<WalletStackParamList & RootStackParamList & TabStackParamList & ModalStackParamList>
   route: RouteProp<WalletStackParamList, 'ListWalletsPage'>
@@ -32,12 +36,12 @@ interface WalletProps {
 export const ListWalletView = (props: WalletProps) => {
   const wallets = useSelector(selectWallets)
   const accounts = useSelector(selectAccounts)
+  const [selectedWallet, setSelectedWallet] = useState<Wallet>(props.route.params?.wallet ?? wallets[0])
   const isFirstTime = useSelector((state: RootState) => state.settings.isFirstTime)
   const dispatch = useDispatch()
 
   const fadeValue = useRef(new Animated.Value(1)).current
 
-  const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(wallets[0])
   const [pressedWallet, setPressedWallet] = useState<Wallet>()
 
   const selectedWalletBalanceExchange = useBalancesAndExchange(selectedWallet?.getAccounts(accounts) ?? [])
