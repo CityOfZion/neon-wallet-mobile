@@ -91,7 +91,7 @@ export default function QuickToolsMenu(props: Props) {
         const address = blockchainServices[blockchain].generateAccountFromWif(data)
 
         if (accounts.some(account => account.address === address)) {
-          showMessage({ message: i18n.t('quickTools.send.accountAlreadyExists') })
+          showMessage({ message: i18n.t('quickTools.qrCode.accountAlreadyExists') })
           return
         }
 
