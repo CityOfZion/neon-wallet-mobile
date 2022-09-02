@@ -3,7 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import Constants from 'expo-constants'
 import * as WebBrowser from 'expo-web-browser'
 import i18n from 'i18n-js'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { TouchableWithoutFeedback, Platform } from 'react-native'
 import { DefaultTheme } from 'styled-components'
 
@@ -15,6 +15,8 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
+import {useDispatch} from 'react-redux'
+import { settingsReducerActions } from '../store/settings/SettingsReducer'
 
 interface MoreProps {
   navigation: StackNavigationProp<RootStackParamList & MoreStackParamList & ModalStackParamList>
@@ -28,6 +30,11 @@ const MorePage = (props: MoreProps) => {
     const result = await WebBrowser.openBrowserAsync('https://app.pipefy.com/public/form/wUJ8xQoC?embedded=true')
     return result
   }
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(settingsReducerActions.setIsFirstTime(false))
+  }, [])
 
   return (
     <ScreenLayout padding={20} darkerSolidColorBG>

@@ -32,21 +32,7 @@ interface OnboardingPageProps {
 }
 
 const OnboardingSlide = (props: OnboardingSlideProps) => {
-  return !props.imgIsBG ? (
-    <LinearLayout orientation="verti" height="100%" width="100%">
-      <LinearLayout orientation="verti" height="100%" width="100%">
-        <ImageView style={{ width: '100%', height: props.heightBG ?? '85%' }} resizeMode="cover" source={props.image} />
-        <LinearLayout p="4%">
-          <TextView fontSize="md" color="#4CFFB3">
-            {props.header}
-          </TextView>
-          <TextView fontSize="md" color="#fff">
-            {props.subtitle}
-          </TextView>
-        </LinearLayout>
-      </LinearLayout>
-    </LinearLayout>
-  ) : (
+  return (
     <LinearLayout>
       <ImageBackground
         imageStyle={{ width: '100%', height: props.heightBG }}
@@ -143,16 +129,16 @@ const OnboardingPage = (props: OnboardingPageProps) => {
       image: require('~src/assets/images/onboarding-2.png') as ImageSourcePropType,
       subtitle: i18n.t('onboarding.feature2.subtitle'),
       resizeMode: 'cover' as ImageResizeMode,
-      isBG: false,
-      heightBG: undefined,
+      isBG: true,
+      heightBG: '90%',
     },
     {
       header: i18n.t('onboarding.feature3.header'),
       image: require('~src/assets/images/onboarding-3.png') as ImageSourcePropType,
       subtitle: i18n.t('onboarding.feature3.subtitle'),
       resizeMode: 'contain' as ImageResizeMode,
-      isBG: false,
-      heightBG: undefined,
+      isBG: true,
+      heightBG: '90%',
     },
     {
       header: i18n.t('onboarding.feature4.header'),
