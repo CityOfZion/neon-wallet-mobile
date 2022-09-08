@@ -29,7 +29,12 @@ export const FirstWalletAlert = ({ onPress }: Props) => {
       }}
     >
       <ButtonWithoutFeedbackView onPress={onPress}>
-        <LinearLayout height="100%" alignItems="center" justifyContent="space-evenly" p={Dimensions.get('screen').width * 0.02}>
+        <LinearLayout
+          height="100%"
+          alignItems="center"
+          justifyContent="space-evenly"
+          p={Dimensions.get('screen').width * 0.02}
+        >
           <ImageView
             source={require('~src/assets/images/icon-circle-arrow-curve-down-green.png')}
             resizeMode="contain"

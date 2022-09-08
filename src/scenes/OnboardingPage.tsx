@@ -17,7 +17,7 @@ import { wrapper } from '~src/app/ApplicationWrapper'
 import { applicationConfig } from '~src/config/ApplicationConfig'
 import { useBlockchainActions } from '~src/hooks/useBlockchainActions'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
-import { ButtonView, ImageView, LinearGradientLayout, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ButtonView, LinearGradientLayout, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface OnboardingSlideProps {
   header: string
