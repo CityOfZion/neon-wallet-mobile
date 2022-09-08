@@ -5,9 +5,11 @@ import * as WebBrowser from 'expo-web-browser'
 import i18n from 'i18n-js'
 import React, { useEffect } from 'react'
 import { TouchableWithoutFeedback, Platform } from 'react-native'
+import { useDispatch } from 'react-redux'
 import { DefaultTheme } from 'styled-components'
 
 import { RootStackParamList } from '../navigation/AppNavigation'
+import { settingsReducerActions } from '../store/settings/SettingsReducer'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import MenuItem, { RightIconType } from '~src/components/MenuItem'
@@ -15,8 +17,6 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
-import {useDispatch} from 'react-redux'
-import { settingsReducerActions } from '../store/settings/SettingsReducer'
 
 interface MoreProps {
   navigation: StackNavigationProp<RootStackParamList & MoreStackParamList & ModalStackParamList>

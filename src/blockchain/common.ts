@@ -100,8 +100,8 @@ export interface IBlockchainService {
   readonly wcChains: string[]
   sendTransaction: (data: SendTransactionData) => Promise<string | null>
   generateMnemonic: () => string[] | null
-  generateWif(mnemonic: string, index: number): string
-  generateAccount(mnemonic: string, index: number): { wif: string; address: string }
+  generateWif(mnemonic: string, index: number): Promise<string>
+  generateAccount(mnemonic: string, index: number): Promise<{ wif: string; address: string }>
   generateAccountFromWif(wif: string): string
   decryptKey(encryptedKey: string, password: string): Promise<{ wif: string; address: string }>
   validateAddress(address: string): boolean

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { Await, AwaitActivity } from '~/node_modules/@simpli/react-native-await'
+import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { accountReducerActions } from '~/src/store/account/AccountReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import AccountCard from '~src/components/AccountCard'
@@ -19,7 +20,6 @@ import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
 import { RootState } from '~src/store/RootStore'
 import { LinearLayout } from '~src/styles/styled-components'
-import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 
 type ParamList = ModalStackParamList & RootStackParamList & WalletStackParamList
 

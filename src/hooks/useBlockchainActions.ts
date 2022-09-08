@@ -74,7 +74,7 @@ export function useBlockchainActions() {
       const accountIndex =
         index ?? accounts.filter(account => account.idWallet === wallet.id && account.blockchain === blockchain).length
 
-      const generatedAccount = blockchainServices[blockchain].generateAccount(mnemonic, accountIndex)
+      const generatedAccount = await blockchainServices[blockchain].generateAccount(mnemonic, accountIndex)
 
       newAccount.address = generatedAccount.address
 

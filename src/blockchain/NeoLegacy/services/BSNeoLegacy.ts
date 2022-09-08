@@ -2,13 +2,12 @@ import { SendAssetConfig, DoInvokeConfig } from '@cityofzion/neon-api/lib/funcs/
 import { tx } from '@cityofzion/neon-core'
 import { api, nep5, wallet } from '@cityofzion/neon-js'
 import { u } from '@cityofzion/neon-js-next'
-import type * as AsteroidSDK from '@moonlight-io/asteroid-sdk-js'
 import axios from 'axios'
 import { Platform, NativeModules, ImageLoadEventData } from 'react-native'
 
 import tokens from '../tokens.json'
 
-import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
+import { AsteroidHelper, keychain } from '~/src/helpers/AsteroidHelper'
 import { Account } from '~/src/models/redux/Account'
 import { ExchangeInfo } from '~/src/models/response/ExchangeInfo'
 import { BlockchainServiceKey, IBlockchainService, IClaimable, SendTransactionData, IToken } from '~src/blockchain'
@@ -17,7 +16,6 @@ import { TNeoLegacyProvider } from '~src/blockchain/NeoLegacy/providers'
 import { NeoNative } from '~src/native/NeoNative'
 
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
-const SDK: typeof AsteroidSDK = require('~src/vendor/asteroid-sdk')
 
 type NativeAsset = 'GAS' | 'NEO'
 
@@ -61,23 +59,23 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   }
 
   generateMnemonic() {
-    const keychain = new SDK.Keychain()
     keychain.generateMnemonic(128) // 12 words
 
     const list = keychain.mnemonic?.toString() ?? null
     return list?.split(' ') ?? null
   }
 
-  generateWif(mnemonic: string, index: number) {
-    const keychain = AsteroidHelper.getKeychainFromMnemonic(mnemonic)
-
-    const childKey = keychain.generateChildKey(this.platform, this.derivationPath.replace(/\?$/, index.toString()))
+  async generateWif(mnemonic: string, index: number) {
+    const childKey = AsteroidHelper.getKeychainFromMnemonic(mnemonic).generateChildKey(
+      this.platform,
+      this.derivationPath.replace(/\?$/, index.toString())
+    )
 
     return childKey.getWIF()
   }
 
-  generateAccount(mnemonic: string, index: number): { wif: string; address: string } {
-    const wif = this.generateWif(mnemonic, index)
+  async generateAccount(mnemonic: string, index: number) {
+    const wif = await this.generateWif(mnemonic, index)
     const { WIF, address } = new wallet.Account(wif)
     return { wif: WIF, address }
   }
