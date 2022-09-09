@@ -70,6 +70,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
   icon = icon
   cozTip: { address: string; token: string; hash: string }
   accountsPool: Account[] = []
+  private defaultEndpoint = 'https://mainnet1.neo.coz.io:443'
   readonly magicNumber = 844378958
   readonly derivationPath = "m/44'/888'/0'/0/?"
   readonly platform = 'neo'
@@ -268,11 +269,10 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       throw new Error('Account not found')
     }
 
-    const defaultEndpoint = 'http://seed1.neo.org:10332'
     const node = (await this.provider.getAllNodes())[0]
     const endpoint = node.url
 
-    const nwcAdapter = await NeonWcAdapter.init(endpoint ?? defaultEndpoint)
+    const nwcAdapter = await NeonWcAdapter.init(endpoint ?? this.defaultEndpoint)
     const testInvokeResult = await nwcAdapter.testInvoke(fromAccount, requestParams)
 
     return UtilsHelper.convertToArbitraryDecimals(Number(testInvokeResult.gasconsumed))
@@ -286,11 +286,10 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
         throw new Error('Account not found')
       }
 
-      const defaultEndpoint = 'http://seed1.neo.org:10332'
       const node = (await this.provider.getAllNodes())[0]
       const endpoint = node.url
 
-      const rpcClient = new rpc.NeoServerRpcClient(endpoint ?? defaultEndpoint)
+      const rpcClient = new rpc.NeoServerRpcClient(endpoint ?? this.defaultEndpoint)
 
       const args = [
         sc.ContractParam.hash160(data.senderAddress),
@@ -327,7 +326,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
 
       const config: CommonConfig = {
         networkMagic,
-        rpcAddress: 'http://seed1t4.neo.org:20332',
+        rpcAddress: endpoint ?? this.defaultEndpoint,
       }
 
       const txn = new tx.Transaction({
