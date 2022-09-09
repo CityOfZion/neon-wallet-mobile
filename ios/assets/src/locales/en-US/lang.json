@@ -31,7 +31,8 @@
     "copyToClipboard": "Copy to clipboard",
     "add": "Add",
     "createNow": "Create Now",
-    "timeout": "Timeout exceeded"
+    "timeout": "Timeout exceeded",
+    "delete": "Delete"
   },
   "routes": {
     "GetWallet": "Wallet",
@@ -39,6 +40,7 @@
     "More": "More",
     "Account": "Account",
     "Settings": "Settings",
+    "SecurityBackupCheckPage": "Security",
     "WalletConnectPage": "Connection",
     "CustomColor": "Custom Colour",
     "CreateWallet": "Create Wallet",
@@ -55,7 +57,8 @@
     "ImportKey": "Import",
     "Passphrase": "Create Wallet",
     "ImportReadAccount": "Add a watch",
-    "CustomizeAccount": "Customize account"
+    "CustomizeAccount": "Customize account",
+    "SecurityPage": "Security"
   },
   "home": {
     "welcome": "Welcome to Neon Wallet!"
@@ -178,26 +181,6 @@
     "body_2": "If you need to find out a wallets secret phrase you can find it in the settings page for that wallet. ",
     "viewWallet": "View wallet"
   },
-  "step1BackupWallet": {
-    "oneOfThree": "1 of 3",
-    "label_1": "Security phrase",
-    "body_1": "Below you will find your secret phrase",
-    "body_2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it below but be sure to keep it safe.",
-    "body_3": "Anyone with this phrase will be able to steal your hard earned assets and you won’t be able to get them back!",
-    "dialog_title": "Make sure you keep your security phrase safe",
-    "dialog_body": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
-    "dialog_dismiss": "OK, I understand"
-  },
-  "step2BackupWallet": {
-    "twoOfThree": "2 of 3",
-    "label_1": "Confirm back up",
-    "body_1": "To confirm you have backed up you key words please select your words in the correct order from the list below.",
-    "dialog_1_title": "Incorrect word order",
-    "dialog_1_body": "Please try again to confirm your back up"
-  },
-  "step3BackupWallet": {
-    "label_1": "Congratulations, You have confirmed your back up"
-  },
   "more": {
     "createWallet": "Create wallet",
     "createWatchAccount": "Create watch account",
@@ -254,7 +237,8 @@
   "quickTools": {
     "qrCode": {
       "title": "Scan QR code",
-      "subtitle": "Launch QR code scanner"
+      "subtitle": "Launch QR code scanner",
+      "accountAlreadyExists": "Account already exists"
     },
     "send": {
       "title": "Send",
@@ -271,6 +255,46 @@
     "accountPlaceholder": "My Account"
   },
   "screens": {
+    "listWalletView": {
+      "walletBackupButtonLabel": "WALLET NOT BACKED UP"
+    },
+    "securityBackupCheckPage": {
+      "withoutAccountsToBackup": {
+        "button_label": "Continue to Security",
+        "description": "All wallets are backed up, please continue to setup security"
+      },
+      "withAccountsToBackup": {
+        "description_1": "A requirement of securing your wallet through password or biometric authentication is to first back up your wallets.",
+        "description_2": "This is a precautionary step to prevent you from losing your password or otherwise not be able to authenticate and losing access to all your funds.",
+        "description_3": "Please back up the following wallets",
+        "description_4": "If you have multiple wallets you will be brought back here after each back up to back up the next wallet."
+      }
+    },
+    "securityPage": {
+      "authentication": "Authentication",
+      "subtitle": "Use biometric authentication to login and authenticate Neon wallet"
+    },
+    "step3BackupWallet": {
+      "label_1": "Congratulations, You have confirmed your back up"
+    },
+    "step2BackupWallet": {
+      "twoOfThree": "2 of 3",
+      "label_1": "Confirm back up",
+      "body_1": "To confirm you have backed up you key words please select your words in the correct order from the list below.",
+      "dialog_1_title": "Incorrect word order",
+      "dialog_1_body": "Please try again to confirm your back up"
+    },
+    "step1BackupWallet": {
+      "oneOfThree": "1 of 3",
+      "label_1": "Security phrase",
+      "body_1": "Below you will find your secret phrase",
+      "body_2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it below but be sure to keep it safe.",
+      "body_3": "Anyone with this phrase will be able to steal your hard earned assets and you won’t be able to get them back!",
+      "dialog_title": "Make sure you keep your security phrase safe",
+      "dialog_body": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
+      "dialog_dismiss": "OK, I understand"
+    },
+
     "contactDetails": {
       "walletAddress": "WALLET ADDRESS"
     },
@@ -379,6 +403,13 @@
     }
   },
   "modals": {
+    "backupInfoModal": {
+      "title": "Wallet backup",
+      "description1": "Backing up your wallet is a precautionary and crucial step in managing your assets.",
+      "description2": "Having a back up will prevent you from losing your funds in the event of losing your phone or otherwise not being able to access this app.",
+      "description3": "To back up simply close this panel, click the 3 dots at the top right of the screen and select Back up wallet. You will then be guided through the quick process.",
+      "buttonLabel": "Back up now"
+    },
     "receiveTransactionAccountSelectionModal": {
       "title": "Receive",
       "subtitle": "Please select a wallet to receive to",
@@ -546,6 +577,7 @@
       "selectTokenReceive": "Select a token to receive"
     },
     "walletContext": {
+      "backup": "Back up wallet",
       "create": "Create new wallet",
       "reorder": "Reorder wallets",
       "cancel": "Cancel"
@@ -736,9 +768,6 @@
     "contractDetailsBox": {
       "hash": "Hash",
       "method": "Method"
-    },
-    "notification": {
-      "title": "NOTIFICATION"
     },
     "balanceList": {
       "title": "TOKEN BALANCES",
