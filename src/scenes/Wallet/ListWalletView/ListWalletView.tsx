@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Animated, RefreshControl } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -88,7 +88,7 @@ export const ListWalletView = (props: WalletProps) => {
       refreshControl={
         <RefreshControl
           tintColor="#fff"
-          refreshing={selectedWalletBalanceExchange.isRefetchingByUser}
+          refreshing={selectedWalletBalanceExchange.isLoading ?? selectedWalletBalanceExchange.isRefetchingByUser}
           onRefresh={selectedWalletBalanceExchange.refetch}
         />
       }
