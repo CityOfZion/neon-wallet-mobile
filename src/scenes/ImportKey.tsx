@@ -373,7 +373,8 @@ const ImportKey = (props: ImportKeyProps) => {
       }
 
       await functionsByInputTypes[inputType.current].persist()
-    } catch {
+    } catch (error) {
+      console.log({ error })
       showMessage({
         message: i18n.t('importKey.genericError'),
         duration: 5000,

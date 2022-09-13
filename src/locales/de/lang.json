@@ -436,6 +436,20 @@
       "unsupportedMethod": "#translateme",
       "errorToGetAccount": "#translateme",
       "unexpectedError": "#translateme"
+    },
+    "transactionRequest": {
+      "title": "#translateme",
+      "xWantsToCall": "#translateme",
+      "overrideFeeInfo": "#translateme",
+      "signatureScope": "#translateme",
+      "transactionFee": "#translateme",
+      "xGas": "#translateme",
+      "json": "#translateme",
+      "confirmToProceed": "#translateme",
+      "buttom": {
+        "accept": "#translateme",
+        "decline": "#translateme"
+      }
     }
   },
   "components": {
