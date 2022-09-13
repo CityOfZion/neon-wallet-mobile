@@ -35,7 +35,7 @@ const AccountAssetScreen = ({ route }: Props) => {
       refreshControl={
         <RefreshControl
           tintColor={theme.colors.text[0]}
-          refreshing={balanceExchange.isRefetchingByUser}
+          refreshing={balanceExchange.isLoading ?? balanceExchange.isRefetchingByUser}
           onRefresh={balanceExchange.refetch}
         />
       }

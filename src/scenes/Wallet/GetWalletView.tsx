@@ -116,7 +116,7 @@ const GetWalletView = (props: GetWalletProps) => {
       refreshControl={
         <RefreshControl
           tintColor="#fff"
-          refreshing={balanceExchange.isRefetchingByUser}
+          refreshing={balanceExchange.isLoading ?? balanceExchange.isRefetchingByUser}
           onRefresh={balanceExchange.refetch}
         />
       }

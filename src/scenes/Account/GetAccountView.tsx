@@ -357,7 +357,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
       refreshControl={
         <RefreshControl
           tintColor="#fff"
-          refreshing={balanceExchange.isRefetchingByUser}
+          refreshing={balanceExchange.isLoading ?? balanceExchange.isRefetchingByUser}
           onRefresh={balanceExchange.refetch}
         />
       }
