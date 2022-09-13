@@ -1,13 +1,10 @@
 import './shim'
 import { registerRootComponent } from 'expo'
-
-import 'text-encoding-polyfill'
+import '@walletconnect/react-native-compat'
 import 'reflect-metadata'
 
 import App from './src/App'
 import { Setup } from './src/app/Setup'
-
-import 'react-native-get-random-values'
 
 import { fetch as fetchPolyfill } from 'whatwg-fetch'
 

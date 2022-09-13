@@ -90,7 +90,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       token: 'GAS',
       hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
     } //eslint-disable-next-line
-    this.wcChains = ['neo3:mainnet']
+    this.wcChains = ['neo3:testnet']
   }
 
   rpcCall = async (address: string, request: SessionRequest): Promise<JsonRpcResponse> => {
