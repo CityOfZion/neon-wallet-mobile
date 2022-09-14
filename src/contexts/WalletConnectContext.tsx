@@ -62,12 +62,12 @@ export const WalletConnectContextProvider: React.FC<{
   const [autoAcceptCallback, setAutoAcceptCallback] = useState<AutoAcceptCallback | undefined>(undefined)
 
   const init = useCallback(async () => {
-    const eventEmitter = new EventEmitter()
-
-    eventEmitter.removeAllListeners()
-
-    const client = await SignClient.init(options)
-    setSignClient(client)
+    try {
+      const client = await SignClient.init(options)
+      setSignClient(client)
+    } catch (error) {
+      console.log(error)
+    }
   }, [options])
 
   const loadSessions = useCallback(async () => {

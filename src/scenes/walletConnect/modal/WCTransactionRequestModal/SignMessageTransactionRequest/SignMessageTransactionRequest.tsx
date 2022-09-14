@@ -16,7 +16,7 @@ export const SignMessageTransactionRequest = ({
   session,
   account,
 }: TransactionRequestMethodComponentProps) => {
-  const requestParams = request.params.request.params as string
+  const requestParams = request.params.request.params as {message: string, version: number}
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   return (
@@ -59,7 +59,7 @@ export const SignMessageTransactionRequest = ({
           mb="auto"
           borderRadius={5}
         >
-          {requestParams}
+          {requestParams.message}
         </TextView>
       </LinearLayout>
     </TransactionRequestBase>

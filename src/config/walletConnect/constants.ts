@@ -20,7 +20,7 @@ export const DEFAULT_APP_METADATA = {
   ],
 }
 
-export const DEFAULT_CHAIN = 'neo3:mainnet'
+export const DEFAULT_CHAIN = 'neo3:testnet'
 export const DEFAULT_NETWORKS = {
   'neo3:testnet': 'https://testnet1.neo.coz.io:443',
   'neo3:mainnet': 'http://seed1.neo.org:10332',
