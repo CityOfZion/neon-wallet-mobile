@@ -191,6 +191,8 @@ export const SendTransactionModal = (props: Props) => {
                 fiat={fiat}
                 onAmountValidation={setAmountIsValid}
                 tokenBalance={tokenBalance}
+                feeTokenBalance={feeTokenBalance}
+                fee={fee}
               />
 
               {account.blockchain === 'neoLegacy' && <FeePriorityTab onFeeChange={setFee} account={account} />}
