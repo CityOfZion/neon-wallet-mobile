@@ -1,7 +1,6 @@
 import { formatJsonRpcError, JsonRpcResponse } from '@json-rpc-tools/utils'
 import SignClient from '@walletconnect/sign-client'
 import { SignClientTypes, SessionTypes } from '@walletconnect/types'
-import { EventEmitter } from 'events'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 
 export type OnRequestCallback = (
