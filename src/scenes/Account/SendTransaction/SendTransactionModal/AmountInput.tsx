@@ -38,7 +38,7 @@ export const AmountInput = ({
   fiat,
   ratio,
   feeTokenBalance,
-  fee
+  fee,
 }: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const currency = useSelector((state: RootState) => state.settings.currency)
@@ -89,7 +89,7 @@ export const AmountInput = ({
     if (!ratio) return
 
     let newFiat = String(ratio * Number(formattedAmount)).replace(/[\d.]+e-[0-9]+/g, '0')
-    
+
     newFiat = newFiat.replace(/[0-9]+\.[0-9]{3,}$/g, Number(newFiat).toFixed(2))
 
     onFiatChange(newFiat)
@@ -97,11 +97,11 @@ export const AmountInput = ({
 
   const handleValidateFiat = (text: string) => {
     if (!token || text.length <= 0 || Number(text) <= 0 || !tokenBalance || !ratio || !amount) return false
-    if(tokenBalance.symbol === feeTokenBalance?.symbol){
-      if(!fee) return false
-      return Number(text) + (fee * ratio) <= (tokenBalance.amount * ratio)
+    if (tokenBalance.symbol === feeTokenBalance?.symbol) {
+      if (!fee) return false
+      return Number(text) + fee * ratio <= tokenBalance.amount * ratio
     }
-    return Number(text) <= (tokenBalance.amount * ratio)
+    return Number(text) <= tokenBalance.amount * ratio
   }
 
   const handleChangeFiat = (text: string) => {

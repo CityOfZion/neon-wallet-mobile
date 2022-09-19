@@ -40,6 +40,28 @@ export type SignedMessage = {
   messageHex: string
 }
 
+export const SUPPORTED_ARG_TYPES = [
+  'Any',
+  'Signature',
+  'Boolean',
+  'Integer',
+  'Hash160',
+  'Address',
+  'ScriptHash',
+  'Null',
+  'Hash256',
+  'ByteArray',
+  'PublicKey',
+  'String',
+  'ByteString',
+  'Array',
+  'Buffer',
+  'InteropInterface',
+  'Void',
+] as const
+
+export type ArgType = typeof SUPPORTED_ARG_TYPES[number]
+
 export class NeonWcAdapter {
   private readonly rpcAddress: string
   private readonly networkMagic: number
@@ -271,17 +293,35 @@ export class NeonWcAdapter {
   }
 
   private static convertParams(args: any[]): ContractParam[] {
-    return args.map(a =>
-      a.value === undefined
-        ? a
-        : a.type === 'Address'
-        ? sc.ContractParam.hash160(a.value)
-        : a.type === 'ScriptHash'
-        ? sc.ContractParam.hash160(Neon.u.HexString.fromHex(a.value))
-        : a.type === 'Array'
-        ? sc.ContractParam.array(...NeonWcAdapter.convertParams(a.value))
-        : a
-    )
+    return args.map(a => {
+      if (a.value === undefined) return a
+
+      switch (a.type as ArgType) {
+        case 'Any':
+          return sc.ContractParam.any(a.value)
+        case 'String':
+          return sc.ContractParam.string(a.value)
+        case 'Boolean':
+          return sc.ContractParam.boolean(a.value)
+        case 'PublicKey':
+          return sc.ContractParam.publicKey(a.value)
+        case 'Address':
+        case 'Hash160':
+          return sc.ContractParam.hash160(a.value)
+        case 'Hash256':
+          return sc.ContractParam.hash256(a.value)
+        case 'Integer':
+          return sc.ContractParam.integer(a.value)
+        case 'ScriptHash':
+          return sc.ContractParam.hash160(Neon.u.HexString.fromHex(a.value))
+        case 'Array':
+          return sc.ContractParam.array(...NeonWcAdapter.convertParams(a.value))
+        case 'ByteArray':
+          return sc.ContractParam.byteArray(a.value)
+        default:
+          return a
+      }
+    })
   }
 
   private static buildSigner(account: Account, signerEntry?: Signer) {
