@@ -238,7 +238,6 @@ export const WalletConnectContextProvider: React.FC<{
     if (!signClient) {
       throw new Error('Client is not initialized')
     }
-    alert('desconectando')
     await signClient.disconnect({
       topic,
       reason: { code: 5900, message: 'USER_DISCONNECTED' },
