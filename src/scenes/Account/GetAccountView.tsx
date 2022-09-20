@@ -201,7 +201,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
         if (!responseClaim || !responseClaim.txid || !responseClaim.fee) return
 
-        await account.addPendingTransaction(
+        account.addPendingTransaction(
           responseClaim.txid,
           'claim',
           account.address,

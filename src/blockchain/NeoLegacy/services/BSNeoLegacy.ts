@@ -1,7 +1,7 @@
-import { SendAssetConfig, DoInvokeConfig } from '@cityofzion/neon-api/lib/funcs/types'
 import { tx } from '@cityofzion/neon-core'
 import { api, nep5, wallet } from '@cityofzion/neon-js'
 import { u } from '@cityofzion/neon-js-next'
+import { SendAssetConfig, DoInvokeConfig } from '@cityofzion/neon-js/node_modules/@cityofzion/neon-api/lib/funcs/types'
 import axios from 'axios'
 import { Platform, NativeModules, ImageLoadEventData } from 'react-native'
 
@@ -294,30 +294,34 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
 
     const apiProvider = new api.neoscan.instance(this.networkDeprecatedLabel)
 
-    const scBuilder = nep5.abi.transfer(tokenHash, neoAccount.address, receiverAddress, amount)
+    const scBuilder = nep5.abi.transfer(tokenHash.replace('0x', ''), neoAccount.address, receiverAddress, amount)
 
     let invokeResponse: DoInvokeConfig
 
-    if (tip) {
-      const tipIntent = api.makeIntent({ GAS: tip }, this.cozTip.address)
-      invokeResponse = await api.doInvoke({
-        api: apiProvider,
-        url,
-        account: neoAccount,
-        script: scBuilder().str,
-        fees: fee,
-        intents: tipIntent,
-      })
-    } else {
-      invokeResponse = await api.doInvoke({
-        api: apiProvider,
-        url,
-        account: neoAccount,
-        script: scBuilder().str,
-        fees: fee,
-      })
+    try {
+      if (tip) {
+        const tipIntent = api.makeIntent({ GAS: tip }, this.cozTip.address)
+        invokeResponse = await api.doInvoke({
+          api: apiProvider,
+          url,
+          account: neoAccount,
+          script: {},
+          fees: fee,
+          intents: tipIntent,
+        })
+      } else {
+        invokeResponse = await api.doInvoke({
+          api: apiProvider,
+          url,
+          account: neoAccount,
+          script: scBuilder().str,
+          fees: fee,
+        })
+      }
+      return invokeResponse.tx?.hash ?? null
+    } catch (error) {
+      console.log(error)
+      throw error
     }
-
-    return invokeResponse.tx?.hash ?? null
   }
 }

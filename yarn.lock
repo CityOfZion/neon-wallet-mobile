@@ -1917,7 +1917,7 @@
     "@cityofzion/neon-core" "^4.8.1"
     "@cityofzion/neon-nep5" "^4.8.1"
 
-"@cityofzion/neon-js@^4.8.0":
+"@cityofzion/neon-js@^4.8.3":
   version "4.9.0"
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-js/-/neon-js-4.9.0.tgz#39f46720cff76f807128d5882832a3d722d9fd25"
   integrity sha512-YYeMbQGZJkC8Wq2UQt98OUys8f8tPCaXMplbV8GwiJEdG+PJJOFGg3NkvrDGUfcuasff0dcn8LWjXTPKPp+Gyw==
