@@ -71,7 +71,7 @@ export const SendTransactionReviewModal = (props: Props) => {
   const language = useSelector((state: RootState) => state.settings.language)
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
-  const { exchange } = useExchange()
+  const { data: exchange } = useExchange()
 
   const totalAmount = Number(amount) + fee + (tip ?? 0)
 
@@ -106,15 +106,8 @@ export const SendTransactionReviewModal = (props: Props) => {
         throw new Error(i18n.t('modals.sendTransactionReviewModal.transactionFailed'))
       }
 
-      await account.addPendingTransaction(
-        transactionHash,
-        account.address,
-        destinationAddress,
-        token,
-        Number(amount),
-        fee
-      )
-      dispatch(accountReducerActions.saveAccount({ account }))
+      account.addPendingTransaction(transactionHash, account.address, destinationAddress, token, Number(amount), fee)
+      dispatch(accountReducerActions.saveAccount(account))
       dispatch(accountReducerActions.watchPendingTransaction({ account, transactionHash, isClaim: false }))
 
       props.navigation.popToTop()
@@ -125,7 +118,8 @@ export const SendTransactionReviewModal = (props: Props) => {
           transactionHash,
         },
       })
-    } catch {
+    } catch (error) {
+      console.log(error)
       showMessage({
         message: i18n.t('modals.sendTransactionReviewModal.transactionFailed'),
         type: 'danger',

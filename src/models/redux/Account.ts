@@ -60,14 +60,14 @@ export class Account implements AccountState {
     return (await SecurityHelper.loadWif(this.address ?? '')) ?? null
   }
 
-  async addPendingTransaction(
+  addPendingTransaction(
     hash: string,
     senderAddress: string,
     receiverAddress: string,
     token: Token,
     amount: number,
     fee: number
-  ): Promise<void> {
+  ) {
     this.pendingTransactions.push({
       amount,
       fee,
