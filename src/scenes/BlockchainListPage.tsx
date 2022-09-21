@@ -85,7 +85,7 @@ const BlockchainListPage = (props: Props) => {
         <LinearLayout mt="15px" weight={1}>
           <View style={{ alignContent: 'center' }}>
             <TextView textAlign="center" fontFamily="medium" fontSize={18} color="text.0">
-              {i18n.t('modals.blockchainList.walletPage.subtitle')}
+              {i18n.t('modals.blockchainList.subtitle')}
             </TextView>
           </View>
 
