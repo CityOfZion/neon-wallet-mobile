@@ -460,7 +460,7 @@
 				CODE_SIGN_ENTITLEMENTS = Neon/neon.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5DRRKCU6DK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -477,7 +477,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.1.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -485,7 +485,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
-				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc io.cityofzion.neon";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore io.cityofzion.neon";
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -502,7 +502,7 @@
 				CODE_SIGN_ENTITLEMENTS = Neon/neon.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5DRRKCU6DK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -515,7 +515,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.1.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -523,7 +523,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
 				PRODUCT_NAME = neon;
-				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc io.cityofzion.neon";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore io.cityofzion.neon";
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
