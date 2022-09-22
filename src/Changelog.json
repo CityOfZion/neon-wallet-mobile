@@ -1,11 +1,11 @@
 {
   "changelog": [
       {
-          "version": "V1.1.2-6",
+          "version": "V1.1.4-1",
           "date": "September 27 2022",
           "changes": [
               " - Major App Performance Optimization",
-              " - Flaming integration",
+              " - Flamingo integration",
               " - Enhanced Backup and Security Flow",
               " - Enhanced Welcome Flow",
               " - Upgrade Wallet Connect Integration to use 2.0.0-rc.3",
