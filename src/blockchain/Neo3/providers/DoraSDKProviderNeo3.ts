@@ -121,7 +121,7 @@ export class DoraSDKProvider implements Neo3Provider {
     const url = NeoNode.getHighestNodeUrlFromPool(nodes)
 
     if (!url) {
-      throw new Error('Problem get contract')
+      throw new Error('Problem get balance')
     }
 
     const rpcClient = new rpc.RPCClient(url)
@@ -143,8 +143,7 @@ export class DoraSDKProvider implements Neo3Provider {
         symbol,
       })
     )
-    console.log('balanceResponse', balanceResponse)
-    console.log('mappedbalanceResponse', mappedbalanceResponse)
+
     return mappedbalanceResponse
   }
 
