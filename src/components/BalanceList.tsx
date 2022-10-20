@@ -153,15 +153,18 @@ const BalanceList = ({
   balanceExchange,
   ...props
 }: Props) => {
-  const mandatorySymbols: { blockchain: BlockchainServiceKey; symbol: string }[] = [
-    { blockchain: 'neo3', symbol: 'NEO' },
-    { blockchain: 'neo3', symbol: 'GAS' },
-    { blockchain: 'neo3', symbol: 'FLM' },
-    { blockchain: 'neo3', symbol: 'GM' },
-    { blockchain: 'neo3', symbol: 'fUSDT' },
-    { blockchain: 'neo3', symbol: 'bNEO' },
-    { blockchain: 'neo3', symbol: 'fWBTC' },
-  ]
+  const mandatorySymbols: Record<BlockchainServiceKey, { [symbol: string]: string }> = {
+    neo3: {
+      NEO: `NEO`,
+      GAS: `GAS`,
+      FLM: `FML`,
+      GM: 'GM',
+      fUSDT: `fUSDT`,
+      bNEO: `bNEO`,
+      fWBTC: `fWBTC`,
+    },
+    neoLegacy: {}
+  }
 
   const tokensBalancesConverted = useMemo(
     () => BalanceHelper.convertBalancesToCurrency(balanceExchange.balance.data, balanceExchange.exchange.data),
@@ -189,21 +192,17 @@ const BalanceList = ({
       })
     }
 
-    mandatorySymbols.forEach(({ blockchain, symbol }) => {
-      if (!tokenBalances.some(token => token.symbol === symbol)) {
-        const foundToken = mappedTokensBySymbol(symbol)
-          .get(blockchain)
-          ?.find(token => token.symbol === symbol)
-        if (foundToken) {
-          tokenBalances.push({
-            amount: 0,
-            blockchain,
-            convertedAmount: 0,
-            hash: foundToken.hash,
-            name: foundToken.name,
-            symbol,
-          })
-        }
+    tokenBalances.forEach(({ blockchain, symbol, hash, name }) => {
+      const mandatorySymbolByBlockchain = Object.values(mandatorySymbols[blockchain])
+      if (mandatorySymbolByBlockchain.length > 0 && !mandatorySymbolByBlockchain.includes(symbol)) {
+        tokenBalances.push({
+          amount: 0,
+          blockchain,
+          convertedAmount: 0,
+          hash,
+          name,
+          symbol,
+        })
       }
     })
 
