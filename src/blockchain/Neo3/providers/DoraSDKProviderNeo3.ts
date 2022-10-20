@@ -117,20 +117,35 @@ export class DoraSDKProvider implements Neo3Provider {
   }
 
   async getBalance(address: string) {
-    const response = await api.NeoRest.balance(address, this.network)
+    const nodes = await this.getAllNodes()
+    const url = NeoNode.getHighestNodeUrlFromPool(nodes)
 
-    const balances = Array.from(response.values())
+    if (!url) {
+      throw new Error('Problem get contract')
+    }
 
-    const mappedBalance = balances.map(
-      ({ balance, asset, asset_name, symbol }): BalanceInfo => ({
-        amount: balance,
-        hash: asset,
-        name: asset_name,
+    const rpcClient = new rpc.RPCClient(url)
+
+    const balanceResponse = (await rpcClient.getNep17Balances(address)).balance as {
+      assethash: string
+      amount: string
+      lastupdatedblock: number
+      name: string
+      symbol: string
+      decimals: string
+    }[]
+
+    const mappedbalanceResponse = balanceResponse.map(
+      ({ amount, assethash, name, symbol, decimals }): BalanceInfo => ({
+        amount: this.formatAmount(amount, Number(decimals)),
+        hash: assethash,
+        name,
         symbol,
       })
     )
-
-    return mappedBalance
+    console.log('balanceResponse', balanceResponse)
+    console.log('mappedbalanceResponse', mappedbalanceResponse)
+    return mappedbalanceResponse
   }
 
   async getContract(hash: string): Promise<ContractResponse> {
@@ -257,5 +272,10 @@ export class DoraSDKProvider implements Neo3Provider {
     const integer = u.BigInteger.fromHex(u.reverseHex(u.HexString.fromBase64(byteString).toString())).toString()
 
     return integer
+  }
+
+  private formatAmount(amount: string, decimals: number) {
+    const amountNumber = Number(amount)
+    return amountNumber / 10 ** decimals
   }
 }
