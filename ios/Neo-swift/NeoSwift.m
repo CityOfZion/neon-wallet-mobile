@@ -19,7 +19,7 @@ RCT_EXPORT_METHOD(decryptNep2:(NSString*)key
                   callback: (RCTResponseSenderBlock)callback)
 {
   @try {
-    NSString * wif = [NEP2 getWifWithEncryptedPrivateKey:key passphrase:passharase];
+    NSString * wif = [NEP2 getWifNeo2WithEncryptedPrivateKey:key passphrase:passharase];
     
     callback(@[wif]);
   } @catch (NSException *exception) {
