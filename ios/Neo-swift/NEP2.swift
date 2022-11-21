@@ -9,10 +9,24 @@ import Foundation
 import Neoutils
 
 @objc public class NEP2: NSObject {
-    @objc public static func getWif(encryptedPrivateKey: String, passphrase: String) -> String? {
+    @objc public static func getWifNeo2(encryptedPrivateKey: String, passphrase: String) -> String? {
         var error: NSError?
         guard let nepResult = decryptKey(encryptedPrivateKey, passphrase: passphrase, scryptParameter: nil) else { return nil }
         guard let wallet = NeoutilsGenerateFromPrivateKey(nepResult.decryptedKey?.hexString ?? "", &error) else { return nil }
+      
+        guard let nepResultAddreshash = nepResult.addressHash else { return nil }
+        
+        if (!verify(addressHash: nepResultAddreshash, address: wallet.address)) {
+            return nil
+        }
+        
+        return wallet.wif
+    }
+  
+    @objc public static func getWifNeo3(encryptedPrivateKey: String, passphrase: String) -> String? {
+        var error: NSError?
+        guard let nepResult = decryptKey(encryptedPrivateKey, passphrase: passphrase, scryptParameter: nil) else { return nil }
+        guard let wallet = NeoutilsGenerateFromPrivateKeyNeo3(nepResult.decryptedKey?.hexString ?? "", &error) else { return nil }
       
         guard let nepResultAddreshash = nepResult.addressHash else { return nil }
         
