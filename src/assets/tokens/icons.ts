@@ -66,6 +66,7 @@ export const icons: Record<BlockchainServiceKey, Record<string, any>> = {
     pONT: require('./images/pONT.png'),
     WING: require('./images/WING.png'),
     SOM: require('./images/SOM.png'),
+    FDE: require('./images/FDE.png'),
   },
   neoLegacy: {
     GUARD: require('./images/GUARD.png'),
