@@ -60,7 +60,10 @@ export const NFTItem = React.memo(({ nft, navigation }: Props) => {
                 : require('~/src/assets/images/diamond-green.png')
               : require('~/src/assets/images/diamond-green.png')
           }
-          onError={!shouldShowDefaultNFTImage ? () => setShouldShowDefaultNFTImage(true) : undefined}
+          onError={error => {
+            console.log(error.nativeEvent.error)
+            setShouldShowDefaultNFTImage(true)
+          }}
           style={{
             width: !shouldShowDefaultNFTImage ? '100%' : '60%',
             height: !shouldShowDefaultNFTImage ? '100%' : '60%',

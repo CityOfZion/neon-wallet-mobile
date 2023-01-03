@@ -67,6 +67,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.27.0",
     "promise.allsettled": "^1.0.5",
+    "query-string": "^8.1.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "^0.64",
