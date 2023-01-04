@@ -385,16 +385,6 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       page,
       getTotal: true,
     }
-    // const url = this.buildGhostMarketURL('assets', {
-    //   owner: address,
-    //   limit: nftPageLimit,
-    //   offset: nftPageLimit * (page - 1),
-    //   with_total: 1,
-    // })
-
-    // const { data } = await axios.get(url)
-
-    // const { assets, total: totalResults } = data as GhostMarketAssets
 
     const { nfts, total } = await this.getGhostMarketNFT(params)
 
