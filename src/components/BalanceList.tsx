@@ -163,7 +163,7 @@ const BalanceList = ({
       bNEO: `bNEO`,
       fWBTC: `fWBTC`,
     },
-    neoLegacy: {}
+    neoLegacy: {},
   }
 
   const tokensBalancesConverted = useMemo(

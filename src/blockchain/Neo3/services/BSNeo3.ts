@@ -6,6 +6,7 @@ import {
 } from '@cityofzion/neon-js-next/node_modules/@cityofzion/neon-api/lib/NetworkFacade'
 import { JsonRpcResponse } from '@json-rpc-tools/utils'
 import axios from 'axios'
+import queryString from 'query-string'
 import { ImageLoadEventData, NativeModules, Platform } from 'react-native'
 
 import tokens from '../tokens.json'
@@ -33,25 +34,42 @@ import { ContractInvocationMulti, NeonWcAdapter } from '~src/helpers/NeonWcAdapt
 
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 
+type ImgMediaTypes = 'image/svg+xml' | 'image/png' | 'image/jpeg'
+
 interface GhostMarketNFT {
-  nft: {
-    token_id: string
-    symbol: string
-    contract: string
-    collection: {
-      name: string
-      logo_url: string
+  tokenId?: string
+  contract: {
+    chain?: string
+    hash?: string
+    symbol?: string
+  }
+  creator: {
+    address?: string
+    offchainName?: string
+  }
+  apiUrl?: string
+  ownerships: {
+    owner: {
+      address?: string
     }
-    nft_metadata: {
-      name: string
-      image: string
-    }
+  }[]
+  collection: {
+    name?: string
+    logoUrl?: string
+  }
+  metadata: {
+    description: string
+    mediaType: ImgMediaTypes
+    mediaUri: string
+    mintDate: number
+    mintNumber: number
+    name: string
   }
 }
 
 interface GhostMarketAssets {
   assets: GhostMarketNFT[]
-  total_results: number
+  total: number
 }
 
 export interface ContractParam {
@@ -361,30 +379,27 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
 
   async getNFTS(address: string, page: number = 1): Promise<NFTSResponse> {
     const nftPageLimit = 18
+    const params = {
+      owners: [address],
+      size: nftPageLimit,
+      page,
+      getTotal: true,
+    }
 
-    const url = this.buildGhostMarketURL('assets', {
-      owner: address,
-      limit: nftPageLimit,
-      offset: nftPageLimit * (page - 1),
-      with_total: 1,
-    })
+    const { nfts, total } = await this.getGhostMarketNFT(params)
 
-    const { data } = await axios.get(url)
-
-    const { assets, total_results: totalResults } = data as GhostMarketAssets
-
-    const totalPages = Math.ceil(totalResults / nftPageLimit)
+    const totalPages = Math.ceil(total / nftPageLimit)
 
     const nftsResponse = new NFTSResponse({ totalPages })
 
-    assets.forEach(({ nft }) => {
+    nfts.forEach(nft => {
       const nftResponse = new NFTResponse({
-        collectionImage: this.treatGhostMarketImage(nft.collection.logo_url),
+        collectionImage: this.treatGhostMarketImage(nft.collection.image),
         collectionName: nft.collection.name,
-        image: this.treatGhostMarketImage(nft.nft_metadata.image),
-        name: nft.nft_metadata.name,
+        image: this.treatGhostMarketImage(nft.image),
+        name: nft.name,
         symbol: nft.symbol,
-        id: nft.token_id,
+        id: nft.id,
         contractHash: nft.contract,
       })
 
@@ -396,7 +411,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
 
   async getNFT(tokenId: string, hash: string): Promise<NFTResponse> {
     const url = this.buildGhostMarketURL('assets', {
-      token_id: tokenId,
+      tokenId,
       contract: hash,
     })
 
@@ -410,7 +425,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       image: this.treatGhostMarketImage(nft.nft_metadata.image),
       name: nft.nft_metadata.name,
       symbol: nft.symbol,
-      id: nft.token_id,
+      id: nft.tokenId,
       contractHash: nft.contract,
     })
 
@@ -492,24 +507,60 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     if (srcImage.startsWith('ipfs://')) {
       const [, imageId] = srcImage.split('://')
 
-      return `https://ipfs.ghostmarket.io/ipfs/${imageId}`
+      return `https://ghostmarket.mypinata.cloud/ipfs/${imageId}`
     }
 
     return srcImage
   }
 
-  private buildGhostMarketURL(path: string, params?: Record<string, string | number>) {
+  private buildGhostMarketURL(path: string, params?: Record<string, any | any[]>) {
     const chain = 'n3'
 
-    const baseUrl = 'https://api.ghostmarket.io/api/v1'
+    const baseUrl = 'https://api.ghostmarket.io/api/v2'
 
-    const parameters =
-      params && Object.keys(params).length > 0
-        ? Object.keys(params).reduce((acc, item) => acc + `&${item}=${params[item]}`, '')
-        : ''
+    const parameters = queryString.stringify(
+      {
+        chain,
+        ...params,
+      },
+      { arrayFormat: 'bracket' }
+    )
 
-    const url = `${baseUrl}/${path}?chain=${chain}${parameters}`
+    const url = `${baseUrl}/${path}?${parameters}`
 
     return url
+  }
+
+  private async getGhostMarketNFT(params: Record<string, any | any[]>) {
+    const response = await fetch(this.buildGhostMarketURL('assets', params))
+
+    const data = await response.json()
+
+    const { assets, total } = data as GhostMarketAssets
+
+    const nfts = assets.map(nft => {
+      return {
+        imageType: nft.metadata.mediaType,
+        name: nft.metadata.name,
+        image: nft.metadata.mediaUri,
+        chain: nft.contract.chain || '',
+        symbol: nft.contract.symbol || '',
+        contract: nft.contract.hash || '',
+        id: nft.tokenId || '',
+        creatorName: nft.creator.offchainName || '',
+        creatorAddress: nft.creator.address || '',
+        ownerAddress: nft.ownerships[0].owner.address || '',
+        apiUrl: nft.apiUrl || '',
+        collection: {
+          image: nft.collection.logoUrl || '',
+          name: nft.collection.name || '',
+        },
+      }
+    })
+
+    return {
+      nfts,
+      total,
+    }
   }
 }
