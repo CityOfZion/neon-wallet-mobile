@@ -60,6 +60,27 @@ export interface SendTransactionData {
   tip?: number
 }
 
+export interface IconDappsListResponse {
+  [key: string]: {
+    'icon/25x25': string
+    'icon/288x288': string
+  }
+}
+
+export interface IconDapps {
+  iconDappsScriptHash: string
+  getIconList(scriptHashList: string[]): Promise<
+    Map<
+      string,
+      {
+        sm: string
+        lg: string
+      }
+    >
+  >
+  getIconByScriptHash(scriptHash: string): Promise<string>
+}
+
 export interface BlockchainDataProvider {
   readonly siteUrlQuery: string
   getTransaction: (txid: string) => Promise<Transaction>
@@ -239,6 +260,11 @@ export function hasNFTIntegration(object: any): object is INFT {
   return methodsName.every(methodName => methodName in object)
 }
 
+export function hasIconDapps(object: any): object is IconDapps {
+  const methodName = ['getIconList']
+  return methodName.every(methodName => methodName in object)
+}
+
 export type BlockchainServiceKey = 'neoLegacy' | 'neo3'
 
 export function getBlockchainByWCChain(session: Session) {
@@ -282,6 +308,18 @@ export function mappedTokensBySymbol(symbol: string) {
     result.set(
       blockchain,
       blockchainServices[blockchain].tokens.filter(token => token.symbol === symbol)
+    )
+  })
+  return result
+}
+
+export function mappedTokensByScriptHash(scriptHash: string) {
+  const result = new Map<BlockchainServiceKey, IToken[]>()
+
+  blockchainList.forEach(blockchain => {
+    result.set(
+      blockchain,
+      blockchainServices[blockchain].tokens.filter(token => token.hash === scriptHash)
     )
   })
   return result

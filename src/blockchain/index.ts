@@ -24,6 +24,7 @@ import {
   INFT,
   IToken,
   getAllTokens,
+  IconDapps,
 } from '~src/blockchain/common'
 
 export {
@@ -52,4 +53,5 @@ export {
   INFT,
   IToken,
   getAllTokens,
+  IconDapps,
 }

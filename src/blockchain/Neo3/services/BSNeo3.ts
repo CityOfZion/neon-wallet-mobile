@@ -1,13 +1,17 @@
+import { ContractInvocation, StackItemJson } from '@cityofzion/neo3-invoker'
+import { NeonInvoker } from '@cityofzion/neon-invoker'
 import Neon, { api, u, rpc, experimental, sc, tx, wallet } from '@cityofzion/neon-js-next'
 import { CommonConfig } from '@cityofzion/neon-js-next/lib/experimental/types'
 import {
   Nep17TransferIntent,
   signingConfig,
 } from '@cityofzion/neon-js-next/node_modules/@cityofzion/neon-api/lib/NetworkFacade'
+import { NeonParser } from '@cityofzion/neon-parser'
 import { JsonRpcResponse } from '@json-rpc-tools/utils'
 import axios from 'axios'
 import { ImageLoadEventData, NativeModules, Platform } from 'react-native'
 
+import { IconDappsListResponse } from '../../common'
 import tokens from '../tokens.json'
 
 import { SessionRequest } from '~/src/contexts/WalletConnectContext'
@@ -26,6 +30,7 @@ import {
   IWalletConnect,
   INFT,
   IToken,
+  IconDapps,
 } from '~src/blockchain'
 import { Neo3ProviderOptions } from '~src/blockchain/Neo3'
 import { Neo3Provider } from '~src/blockchain/Neo3/providers/common'
@@ -63,7 +68,7 @@ export type FlamingoExchangeResponse = {
   symbol: string
   usd_price: number
 }[]
-export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, INFT {
+export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, INFT, IconDapps {
   provider: Neo3Provider
   key: BlockchainServiceKey
   icon = icon
@@ -90,6 +95,73 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
     } //eslint-disable-next-line
     this.wcChains = ['neo3:mainnet']
+  }
+  iconDappsScriptHash: string = '489e98351485bbd85be99618285932172f1862e4'
+
+  async getIconList(scriptHashList: string[]): Promise<Map<string, { sm: string; lg: string }>> {
+    const nodes = await this.provider.getAllNodes()
+    const rpcAddress = NeoNode.getHighestNodeUrlFromPool(nodes) ?? this.defaultEndpoint
+    const parser = NeonParser
+    const invoker = await NeonInvoker.init(rpcAddress)
+    const res = await invoker.testInvoke({
+      invocations: [this.buildGetMultipleMetaDataInvocation({ contractHashes: scriptHashList })],
+    })
+    if (res.stack.length === 0) {
+      throw new Error(res.exception ?? 'unrecognized response')
+    }
+    const formattedResult: IconDappsListResponse = parser.parseRpcResponse(res.stack[0], {
+      ByteStringToScriptHash: true,
+    })
+
+    return this.adaptGetIconList(formattedResult)
+  }
+
+  async getIconByScriptHash(scriptHash: string): Promise<string> {
+    const nodes = await this.provider.getAllNodes()
+    const rpcAddress = NeoNode.getHighestNodeUrlFromPool(nodes) ?? this.defaultEndpoint
+    const parser = NeonParser
+    const invoker = await NeonInvoker.init(rpcAddress)
+    const res = await invoker.testInvoke({
+      invocations: [this.buildGetMetaDataInvocation({ scriptHash })],
+    })
+    if (res.stack.length === 0) {
+      throw new Error(res.exception ?? 'unrecognized response')
+    }
+    const formattedResult: IconDappsListResponse = parser.parseRpcResponse(res.stack[0], {
+      ByteStringToScriptHash: true,
+    })
+    console.log(formattedResult)
+    throw new Error('Method not implemented.')
+  }
+
+  private adaptGetIconList(parseResponse: IconDappsListResponse) {
+    const adaptedResult = new Map<string, { sm: string; lg: string }>()
+    Object.keys(parseResponse).forEach(parseResponseKey => {
+      const parseResponseValue = parseResponse[parseResponseKey]
+      if (Object.keys(parseResponseValue).length > 0) {
+        adaptedResult.set(parseResponseKey.startsWith('0x') ? parseResponseKey : `0x${parseResponseKey}`, {
+          sm: parseResponseValue['icon/25x25'],
+          lg: parseResponseValue['icon/288x288'],
+        })
+      }
+    })
+    return adaptedResult
+  }
+
+  private buildGetMultipleMetaDataInvocation(params: { contractHashes: string[] }): ContractInvocation {
+    return {
+      scriptHash: this.iconDappsScriptHash,
+      operation: 'getMultipleMetaData',
+      args: [{ type: 'Array', value: params.contractHashes.map(hash => ({ type: 'Hash160', value: hash })) }],
+    }
+  }
+
+  private buildGetMetaDataInvocation(params: { scriptHash: string }): ContractInvocation {
+    return {
+      scriptHash: this.iconDappsScriptHash,
+      operation: 'getMetaData',
+      args: [{ type: 'Hash160', value: params.scriptHash }],
+    }
   }
 
   rpcCall = async (address: string, request: SessionRequest): Promise<JsonRpcResponse> => {

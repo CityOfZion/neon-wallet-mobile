@@ -1,10 +1,10 @@
 import i18n from 'i18n-js'
-import React, { useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { FlatList } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { BlockchainServiceKey } from '../blockchain'
-import { mappedTokensBySymbol } from '../blockchain/common'
+import { blockchainServices, hasIconDapps, mappedTokensBySymbol } from '../blockchain/common'
 import { BalanceConvertedToExchange, BalanceHelper } from '../helpers/BalanceHelper'
 import { TokenHelper } from '../helpers/TokenHelper'
 import { RootState } from '../store/RootStore'
@@ -41,31 +41,23 @@ const BalanceListItem = React.memo(
       if (onPress) onPress()
     }
 
+    const image =
+      tokenBalanceConverted.icon ?? TokenHelper.getIcon(tokenBalanceConverted.symbol, tokenBalanceConverted.blockchain)
+
     return (
       <ButtonView onPress={handlePress}>
         <LinearLayout orientation="horiz" alignItems="center" justifyContent="space-between" mt={5} mb={5}>
           <LinearLayout orientation="horiz" alignItems="center" width="100px">
-            {showBlockchain ? (
-              <LinearLayout
-                mr="8px"
-                width={12}
-                height={12}
-                borderRadius={6}
-                backgroundColor={TokenHelper.getColor(tokenBalanceConverted.symbol)}
-                alignSelf="center"
-              />
-            ) : (
-              <ImageView
-                mr="8px"
-                resizeMode="contain"
-                alignSelf="center"
-                source={TokenHelper.getIcon(tokenBalanceConverted.symbol, tokenBalanceConverted.blockchain)}
-                style={{
-                  width: 24,
-                  height: 24,
-                }}
-              />
-            )}
+            <ImageView
+              mr="8px"
+              resizeMode="contain"
+              alignSelf="center"
+              source={image}
+              style={{
+                width: 24,
+                height: 24,
+              }}
+            />
 
             <LinearLayout>
               <TextView
@@ -213,6 +205,22 @@ const BalanceList = ({
   const handlePress = (token: TokenBalance) => {
     if (onPress) onPress(token)
   }
+
+  const populateIcons = useCallback(async () => {
+    if (validAndOrdedTokensBalances) {
+      const service = blockchainServices[validAndOrdedTokensBalances[0].blockchain]
+      if (hasIconDapps(service)) {
+        const icons = await service.getIconList(validAndOrdedTokensBalances.map(it => it.hash))
+        validAndOrdedTokensBalances.forEach(it => {
+          it.icon = icons.get(it.hash)?.sm
+        })
+      }
+    }
+  }, [validAndOrdedTokensBalances])
+
+  useEffect(() => {
+    populateIcons()
+  }, [validAndOrdedTokensBalances])
 
   return (
     <LinearLayout {...props} width="100%">
