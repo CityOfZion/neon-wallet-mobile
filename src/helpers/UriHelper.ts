@@ -24,7 +24,8 @@ export abstract class UriHelper {
   }
 
   static isValid(str: string) {
-    return str.startsWith('neo')
+    const listOfPrefix = ['wc', 'neo']
+    return listOfPrefix.some(prefix => str.startsWith(prefix))
   }
 
   static validateAndParse(str: string): IURI | undefined {
