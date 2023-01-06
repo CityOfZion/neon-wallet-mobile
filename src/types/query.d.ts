@@ -14,7 +14,7 @@ export type BaseOptions<T = unknown> = Omit<UseQueryOptions<T, unknown, T, Query
 export type Exchange = ExchangeInfo
 export type MultiExchange = Record<BlockchainServiceKey, Exchange[]>
 
-export type TokenBalance = BalanceInfo & { blockchain: BlockchainServiceKey }
+export type TokenBalance = BalanceInfo & { blockchain: BlockchainServiceKey; icon?: string }
 export type Balance = {
   address: string
   tokensBalances: TokenBalance[]
