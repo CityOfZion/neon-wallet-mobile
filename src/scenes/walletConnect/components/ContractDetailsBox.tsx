@@ -1,3 +1,4 @@
+import { ContractInvocation } from '@cityofzion/neo3-invoker'
 import * as WebBrowser from 'expo-web-browser'
 import i18n from 'i18n-js'
 import React from 'react'
@@ -8,7 +9,6 @@ import WalletConnectBox from './WalletConnectBox'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Session } from '~/src/contexts/WalletConnectContext'
-import { ContractInvocation } from '~/src/helpers/NeonWcAdapter'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'

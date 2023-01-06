@@ -1,5 +1,4 @@
-import { ContractInvocation, StackItemJson } from '@cityofzion/neo3-invoker'
-import { NeonInvoker } from '@cityofzion/neon-invoker'
+import { ContractInvocationMulti, ContractInvocation } from '@cityofzion/neo3-invoker'
 import Neon, { api, u, rpc, experimental, sc, tx, wallet } from '@cityofzion/neon-js-next'
 import { CommonConfig } from '@cityofzion/neon-js-next/lib/experimental/types'
 import {
@@ -35,8 +34,8 @@ import {
 } from '~src/blockchain'
 import { Neo3ProviderOptions } from '~src/blockchain/Neo3'
 import { Neo3Provider } from '~src/blockchain/Neo3/providers/common'
-import { ContractInvocationMulti, NeonWcAdapter } from '~src/helpers/NeonWcAdapter'
-
+import { NeonWcAdapter } from '~src/helpers/NeonWcAdapter'
+import { NeonInvoker } from '@cityofzion/neon-invoker'
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 
 type ImgMediaTypes = 'image/svg+xml' | 'image/png' | 'image/jpeg'
@@ -361,10 +360,13 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     const node = (await this.provider.getAllNodes())[0]
     const endpoint = node.url
 
-    const nwcAdapter = await NeonWcAdapter.init(endpoint ?? defaultEndpoint)
-    const fee = await nwcAdapter.calculateFee(fromAccount, requestParams)
-
-    return fee
+    const nwcAdapter = await NeonWcAdapter.init(endpoint ?? this.defaultEndpoint)
+    const testInvoke = await nwcAdapter.invoke.testInvoke(requestParams)
+    const extraNetworkFee = requestParams.extraNetworkFee ? this.fixDecimalPlaces(requestParams.extraNetworkFee, 8) : 0
+    const extraSystemFee = requestParams.extraSystemFee ? this.fixDecimalPlaces(requestParams.extraSystemFee, 8) : 0
+    const gasconsumed = this.fixDecimalPlaces(Number(testInvoke.gasconsumed), 8)
+    const summedFee = gasconsumed + extraNetworkFee + extraSystemFee
+    return summedFee.toString()
   }
 
   async calculateTransferFee(data: Omit<SendTransactionData, 'fee'>) {
@@ -634,5 +636,8 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       nfts,
       total,
     }
+  }
+  private fixDecimalPlaces(value: number, decimalPlaces: number) {
+    return value / 10 ** decimalPlaces
   }
 }

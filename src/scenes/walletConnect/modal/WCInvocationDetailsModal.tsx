@@ -1,3 +1,4 @@
+import { ContractInvocation } from '@cityofzion/neo3-invoker'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
@@ -17,7 +18,6 @@ import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'
 import { TextView, LinearLayout } from '~/src/styles/styled-components'
-import { ContractInvocation } from '~src/helpers/NeonWcAdapter'
 
 export interface WCInvocationDetailsModalParams {
   session: Session
@@ -43,7 +43,7 @@ const WCInvocationDetailsModal = ({ navigation, route }: Props) => {
   const swipperController = useSwiperController(true)
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
-  const sanitizeValue = useCallback((value: ParamValue) => {
+  const sanitizeValue = useCallback((value?: ParamValue) => {
     if (!value) {
       return null
     }
@@ -66,11 +66,13 @@ const WCInvocationDetailsModal = ({ navigation, route }: Props) => {
       return
     }
 
-    return method.parameters.map((parameter, index) => ({
-      value: sanitizeValue(contract.args[index].value),
-      type: parameter.type,
-      name: parameter.name,
-    }))
+    return method.parameters.map((parameter, index) => {
+      return {
+        value: sanitizeValue(contract.args ? contract.args[index].value : undefined),
+        type: parameter.type,
+        name: parameter.name,
+      }
+    })
   }, [contractInfo, sanitizeValue])
 
   const infos = {
