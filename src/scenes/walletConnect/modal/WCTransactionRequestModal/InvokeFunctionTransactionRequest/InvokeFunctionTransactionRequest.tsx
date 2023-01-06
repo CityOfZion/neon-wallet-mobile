@@ -1,3 +1,4 @@
+import { Signer, ContractInvocation, ContractInvocationMulti } from '@cityofzion/neo3-invoker'
 import { WitnessScope } from '@cityofzion/neon-core-next/lib/tx'
 import { useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
@@ -15,12 +16,10 @@ import { InvokeFunctionSuccess } from './InvokeFunctionSuccess'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { blockchainServices, getBlockchainByWCChain, hasWCIntegration } from '~/src/blockchain'
 import { Session } from '~/src/contexts/WalletConnectContext'
-import { ContractInvocation, ContractInvocationMulti, Signer } from '~/src/helpers/NeonWcAdapter'
 import { Account } from '~/src/models/redux/Account'
 import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
-
 type SignerBoxProps = {
   signer: Signer
   showWarning: boolean
@@ -194,7 +193,7 @@ export const InvokeFunctionTransactionRequest = ({
     [request.params.request.params]
   )
 
-  const scopes = requestParams.signers.map(signer => signer.scopes) ?? [WitnessScope.CalledByEntry]
+  const scopes = requestParams.signers?.map(signer => signer.scopes) ?? [WitnessScope.CalledByEntry]
 
   const showWarning = scopes.some(scope => scope !== WitnessScope.None && scope !== WitnessScope.CalledByEntry)
 
@@ -222,7 +221,7 @@ export const InvokeFunctionTransactionRequest = ({
         <ContractDetails key={`${contract.operation}-${index}`} session={session} contract={contract} />
       ))}
 
-      {requestParams.signers.map((signer, index) => (
+      {requestParams.signers?.map((signer, index) => (
         <SignerBox key={`${signer.scopes}-${index}`} session={session} showWarning={showWarning} signer={signer} />
       ))}
 

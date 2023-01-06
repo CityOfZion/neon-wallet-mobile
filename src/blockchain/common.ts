@@ -1,9 +1,9 @@
+import { ContractInvocationMulti } from '@cityofzion/neo3-invoker'
 import { JsonRpcResponse } from '@json-rpc-tools/utils'
 import { ImageLoadEventData } from 'react-native'
 
 import { DEFAULT_BLOCKCHAIN } from '../config/walletConnect/constants'
 import { Session, SessionRequest } from '../contexts/WalletConnectContext'
-import { ContractInvocationMulti } from '../helpers/NeonWcAdapter'
 import { BalanceInfo } from '../models/response/BalanceInfo'
 import { ContractResponse } from '../models/response/ContractResponse'
 import { NFTResponse } from '../models/response/NFTResponse'
