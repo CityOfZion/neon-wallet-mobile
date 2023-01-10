@@ -1806,6 +1806,11 @@
   resolved "https://registry.yarnpkg.com/@cityofzion/neo3-parser/-/neo3-parser-1.5.2.tgz#25eafbc1e9f2f22efeaf84d18794c6580322a57b"
   integrity sha512-VVWBNeJIXFVdFEgzchZmX09UGJazNUM/caq+mwyzEy2vsZ60JKjWiCzNo9yjViSe4YaWoE8RwUEcuZkMw8Ku0A==
 
+"@cityofzion/neo3-signer@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neo3-signer/-/neo3-signer-1.0.1.tgz#01736c3e5de639601b642108dc5b5a0db6f71da7"
+  integrity sha512-3E7A2iePdrbWiQ2CP6NGP6AKlsEFgWnQ9v8lyXsbXKtRT+nQw4FyRgP6LYw7oSSW8WDYJJaR8Pv/EyTqw0+wnA==
+
 "@cityofzion/neon-api@^4.8.1":
   version "4.8.1"
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-api/-/neon-api-4.8.1.tgz#c173eae102e5edc15e824016d0173131dce10fea"
@@ -1915,7 +1920,7 @@
     loglevel-plugin-prefix "0.8.4"
     scrypt-js "3.0.1"
 
-"@cityofzion/neon-core@^5.3.0":
+"@cityofzion/neon-core@^5.2.0", "@cityofzion/neon-core@^5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-core/-/neon-core-5.3.0.tgz#ce3bede855e39d8d153b4f9c3a491803603019e3"
   integrity sha512-iOHY7rFuDZavH87klFIxOYpu3PnPm6pS1xY7qhkFrRtcuTqRBMzhoZstE70XLDh01ujC5y2+gXvgz4OOpzgdXQ==
@@ -1996,6 +2001,16 @@
   dependencies:
     "@cityofzion/neo3-parser" "1.5.2"
     "@cityofzion/neon-js" "^5.2.0"
+
+"@cityofzion/neon-signer@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-signer/-/neon-signer-1.0.1.tgz#5047b9e2507cab921e918454202962c58d7e0617"
+  integrity sha512-ghubi6rsFS5tIDrY3Q+mDObSooaGoLG652JIHFyzPYbdIopRVrzpGUwurEhOLWM4nlLsAHcs8ba7Ms5X+tI08Q==
+  dependencies:
+    "@cityofzion/neo3-signer" "^1.0.1"
+    "@cityofzion/neon-core" "^5.2.0"
+    "@cityofzion/neon-js" "^5.2.0"
+    randombytes "^2.1.0"
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
