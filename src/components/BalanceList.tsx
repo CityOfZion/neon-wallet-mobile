@@ -4,7 +4,7 @@ import { FlatList } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { BlockchainServiceKey } from '../blockchain'
-import { blockchainServices, hasIconDapps, mappedTokensBySymbol } from '../blockchain/common'
+import { blockchainList, blockchainServices, hasIconDapps, IToken, mappedTokensBySymbol } from '../blockchain/common'
 import { BalanceConvertedToExchange, BalanceHelper } from '../helpers/BalanceHelper'
 import { TokenHelper } from '../helpers/TokenHelper'
 import { RootState } from '../store/RootStore'
@@ -14,6 +14,7 @@ import { Skeleton } from './Skeleton'
 
 import { FilterHelper } from '~src/helpers/FilterHelper'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { useTokens } from '../hooks/useTokens'
 
 interface BalanceListItemProps {
   onPress?: () => void
@@ -145,11 +146,12 @@ const BalanceList = ({
   balanceExchange,
   ...props
 }: Props) => {
+  const { getTokenBySymbol } = useTokens({ blockchain: 'all' })
   const mandatorySymbols: Record<BlockchainServiceKey, { [symbol: string]: string }> = {
     neo3: {
       NEO: `NEO`,
       GAS: `GAS`,
-      FLM: `FML`,
+      FLM: `FLM`,
       GM: 'GM',
       fUSDT: `fUSDT`,
       bNEO: `bNEO`,
@@ -157,6 +159,47 @@ const BalanceList = ({
     },
     neoLegacy: {},
   }
+
+  const populateMandatoryTokens = useCallback((tokenBalances: BalanceConvertedToExchange[]) => {
+  
+    tokenBalances.forEach(({ blockchain }) => {
+      const mandatorySymbolByBlockchain = Object.values(mandatorySymbols[blockchain])
+      const missingMandatoryTokens = mandatorySymbolByBlockchain.filter(symbol => !tokenBalances.some(token => token.symbol === symbol))
+      const mandatoryTokens = missingMandatoryTokens.map(symbol => getTokenBySymbol(symbol)).filter(token => token !== undefined) as IToken[]
+      mandatoryTokens.forEach((token) => {
+        tokenBalances.push({
+          amount: 0,
+          blockchain: token.blockchain,
+          convertedAmount: 0,
+          hash: token.hash,
+          name: token.name,
+          symbol: token.symbol,
+        })
+      })
+    })
+    if (tokenBalances.length < 1) {
+      blockchainList.forEach(blockchain => {
+        const mandatorySymbolByBlockchain = Object.values(mandatorySymbols[blockchain])
+        const mandatoryTokens = mandatorySymbolByBlockchain.map(symbol => getTokenBySymbol(symbol)).filter(token => token !== undefined) as IToken[]
+        const rulesToPopulate: Boolean[] = [
+          mandatorySymbolByBlockchain.length > 0,
+        ]
+        if (rulesToPopulate.every(rule => rule === true)) {
+          mandatoryTokens.forEach(token => {
+            tokenBalances.push({
+              amount: 0,
+              blockchain: token.blockchain,
+              convertedAmount: 0,
+              hash: token.hash,
+              name: token.name,
+              symbol: token.symbol
+            })
+          })
+        }
+      })
+    }
+    return tokenBalances
+  }, [mandatorySymbols, getTokenBySymbol])
 
   const tokensBalancesConverted = useMemo(
     () => BalanceHelper.convertBalancesToCurrency(balanceExchange.balance.data, balanceExchange.exchange.data),
@@ -184,21 +227,7 @@ const BalanceList = ({
       })
     }
 
-    tokenBalances.forEach(({ blockchain, symbol, hash, name }) => {
-      const mandatorySymbolByBlockchain = Object.values(mandatorySymbols[blockchain])
-      if (mandatorySymbolByBlockchain.length > 0 && !mandatorySymbolByBlockchain.includes(symbol)) {
-        tokenBalances.push({
-          amount: 0,
-          blockchain,
-          convertedAmount: 0,
-          hash,
-          name,
-          symbol,
-        })
-      }
-    })
-
-    return tokenBalances
+    return populateMandatoryTokens(tokenBalances)
   }, [tokensBalancesConverted])
 
   const handlePress = (token: TokenBalance) => {
@@ -206,7 +235,7 @@ const BalanceList = ({
   }
 
   const populateIcons = useCallback(async () => {
-    if (validAndOrdedTokensBalances) {
+    if (validAndOrdedTokensBalances && validAndOrdedTokensBalances[0]) {
       const service = blockchainServices[validAndOrdedTokensBalances[0].blockchain]
       if (hasIconDapps(service)) {
         const icons = await service.getIconList(validAndOrdedTokensBalances.map(it => it.hash))
