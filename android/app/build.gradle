@@ -83,6 +83,7 @@ project.ext.react = [
     cliPath: new File(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim()).getParentFile().getAbsolutePath() + "/cli.js",
     hermesCommand: new File(["node", "--print", "require.resolve('hermes-engine/package.json')"].execute(null, rootDir).text.trim()).getParentFile().getAbsolutePath() + "/%OS-BIN%/hermesc",
     composeSourceMapsPath: new File(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim()).getParentFile().getAbsolutePath() + "/scripts/compose-source-maps.js",
+    jsBundleDirRelease: "$buildDir/intermediates/merged_assets/release/mergeReleaseAssets/out",
 ]
 
 apply from: new File(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim(), "../react.gradle")
