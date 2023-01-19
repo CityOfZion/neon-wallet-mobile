@@ -193,7 +193,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       throw new Error('Blockchain unavailable, try again')
     }
 
-    return await (await NeonWcAdapter.init(bestUrl, neoAccount)).rpcCall(neoAccount, request)
+    return await (await NeonWcAdapter.init(bestUrl, neoAccount)).rpcCall(request)
   }
 
   validateAddress(address: string) {
@@ -360,7 +360,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     const node = (await this.provider.getAllNodes())[0]
     const endpoint = node.url
 
-    const nwcAdapter = await NeonWcAdapter.init(endpoint ?? this.defaultEndpoint)
+    const nwcAdapter = await NeonWcAdapter.init(endpoint ?? this.defaultEndpoint, fromAccount)
     const testInvoke = await nwcAdapter.invoke.testInvoke(requestParams)
     const extraNetworkFee = requestParams.extraNetworkFee ? this.fixDecimalPlaces(requestParams.extraNetworkFee, 8) : 0
     const extraSystemFee = requestParams.extraSystemFee ? this.fixDecimalPlaces(requestParams.extraSystemFee, 8) : 0
