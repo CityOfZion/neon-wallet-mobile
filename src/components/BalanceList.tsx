@@ -7,6 +7,7 @@ import { BlockchainServiceKey } from '../blockchain'
 import { blockchainList, blockchainServices, hasIconDapps, IToken, mappedTokensBySymbol } from '../blockchain/common'
 import { BalanceConvertedToExchange, BalanceHelper } from '../helpers/BalanceHelper'
 import { TokenHelper } from '../helpers/TokenHelper'
+import { useTokens } from '../hooks/useTokens'
 import { RootState } from '../store/RootStore'
 import { UseBalanceExchangeResult, TokenBalance } from '../types/query'
 import { LinearLayoutProps } from '../types/styled-components'
@@ -14,7 +15,6 @@ import { Skeleton } from './Skeleton'
 
 import { FilterHelper } from '~src/helpers/FilterHelper'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
-import { useTokens } from '../hooks/useTokens'
 
 interface BalanceListItemProps {
   onPress?: () => void
@@ -160,46 +160,52 @@ const BalanceList = ({
     neoLegacy: {},
   }
 
-  const populateMandatoryTokens = useCallback((tokenBalances: BalanceConvertedToExchange[]) => {
-  
-    tokenBalances.forEach(({ blockchain }) => {
-      const mandatorySymbolByBlockchain = Object.values(mandatorySymbols[blockchain])
-      const missingMandatoryTokens = mandatorySymbolByBlockchain.filter(symbol => !tokenBalances.some(token => token.symbol === symbol))
-      const mandatoryTokens = missingMandatoryTokens.map(symbol => getTokenBySymbol(symbol)).filter(token => token !== undefined) as IToken[]
-      mandatoryTokens.forEach((token) => {
-        tokenBalances.push({
-          amount: 0,
-          blockchain: token.blockchain,
-          convertedAmount: 0,
-          hash: token.hash,
-          name: token.name,
-          symbol: token.symbol,
+  const populateMandatoryTokens = useCallback(
+    (tokenBalances: BalanceConvertedToExchange[]) => {
+      tokenBalances.forEach(({ blockchain }) => {
+        const mandatorySymbolByBlockchain = Object.values(mandatorySymbols[blockchain])
+        const missingMandatoryTokens = mandatorySymbolByBlockchain.filter(
+          symbol => !tokenBalances.some(token => token.symbol === symbol)
+        )
+        const mandatoryTokens = missingMandatoryTokens
+          .map(symbol => getTokenBySymbol(symbol))
+          .filter(token => token !== undefined) as IToken[]
+        mandatoryTokens.forEach(token => {
+          tokenBalances.push({
+            amount: 0,
+            blockchain: token.blockchain,
+            convertedAmount: 0,
+            hash: token.hash,
+            name: token.name,
+            symbol: token.symbol,
+          })
         })
       })
-    })
-    if (tokenBalances.length < 1) {
-      blockchainList.forEach(blockchain => {
-        const mandatorySymbolByBlockchain = Object.values(mandatorySymbols[blockchain])
-        const mandatoryTokens = mandatorySymbolByBlockchain.map(symbol => getTokenBySymbol(symbol)).filter(token => token !== undefined) as IToken[]
-        const rulesToPopulate: Boolean[] = [
-          mandatorySymbolByBlockchain.length > 0,
-        ]
-        if (rulesToPopulate.every(rule => rule === true)) {
-          mandatoryTokens.forEach(token => {
-            tokenBalances.push({
-              amount: 0,
-              blockchain: token.blockchain,
-              convertedAmount: 0,
-              hash: token.hash,
-              name: token.name,
-              symbol: token.symbol
+      if (tokenBalances.length < 1) {
+        blockchainList.forEach(blockchain => {
+          const mandatorySymbolByBlockchain = Object.values(mandatorySymbols[blockchain])
+          const mandatoryTokens = mandatorySymbolByBlockchain
+            .map(symbol => getTokenBySymbol(symbol))
+            .filter(token => token !== undefined) as IToken[]
+          const rulesToPopulate: boolean[] = [mandatorySymbolByBlockchain.length > 0]
+          if (rulesToPopulate.every(rule => rule === true)) {
+            mandatoryTokens.forEach(token => {
+              tokenBalances.push({
+                amount: 0,
+                blockchain: token.blockchain,
+                convertedAmount: 0,
+                hash: token.hash,
+                name: token.name,
+                symbol: token.symbol,
+              })
             })
-          })
-        }
-      })
-    }
-    return tokenBalances
-  }, [mandatorySymbols, getTokenBySymbol])
+          }
+        })
+      }
+      return tokenBalances
+    },
+    [mandatorySymbols, getTokenBySymbol]
+  )
 
   const tokensBalancesConverted = useMemo(
     () => BalanceHelper.convertBalancesToCurrency(balanceExchange.balance.data, balanceExchange.exchange.data),
