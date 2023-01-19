@@ -1,4 +1,5 @@
 import { ContractInvocationMulti, ContractInvocation } from '@cityofzion/neo3-invoker'
+import { NeonInvoker } from '@cityofzion/neon-invoker'
 import Neon, { api, u, rpc, experimental, sc, tx, wallet } from '@cityofzion/neon-js-next'
 import { CommonConfig } from '@cityofzion/neon-js-next/lib/experimental/types'
 import {
@@ -35,7 +36,6 @@ import {
 import { Neo3ProviderOptions } from '~src/blockchain/Neo3'
 import { Neo3Provider } from '~src/blockchain/Neo3/providers/common'
 import { NeonWcAdapter } from '~src/helpers/NeonWcAdapter'
-import { NeonInvoker } from '@cityofzion/neon-invoker'
 const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 
 type ImgMediaTypes = 'image/svg+xml' | 'image/png' | 'image/jpeg'
@@ -193,7 +193,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       throw new Error('Blockchain unavailable, try again')
     }
 
-    return await (await NeonWcAdapter.init(bestUrl)).rpcCall(neoAccount, request)
+    return await (await NeonWcAdapter.init(bestUrl, neoAccount)).rpcCall(neoAccount, request)
   }
 
   validateAddress(address: string) {

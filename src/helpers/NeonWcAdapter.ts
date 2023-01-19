@@ -1,5 +1,3 @@
-import { Neo3Signer } from '@cityofzion/neo3-signer'
-import { WitnessScope } from '@cityofzion/neon-core-next/lib/tx/components/WitnessScope'
 import { Account } from '@cityofzion/neon-core-next/lib/wallet'
 import { NeonInvoker } from '@cityofzion/neon-invoker'
 import { NeonSigner } from '@cityofzion/neon-signer'
@@ -8,16 +6,17 @@ import { SessionRequest } from '../contexts/WalletConnectContext'
 
 export class NeonWcAdapter {
   readonly invoke: NeonInvoker
-  private signer: Neo3Signer = new NeonSigner()
+  readonly signer: NeonSigner
 
-  constructor(invoke: NeonInvoker) {
+  constructor(invoke: NeonInvoker, sign: NeonSigner) {
     this.invoke = invoke
+    this.signer = sign
   }
 
-  static init = async (rpcAddress: string): Promise<NeonWcAdapter> => {
+  static init = async (rpcAddress: string, account?: Account): Promise<NeonWcAdapter> => {
     const invoker = await NeonInvoker.init(rpcAddress)
-
-    return new NeonWcAdapter(invoker)
+    const signer = new NeonSigner(account)
+    return new NeonWcAdapter(invoker, signer)
   }
 
   rpcCall = async (account: Account | undefined, sessionRequest: SessionRequest): Promise<any> => {
@@ -25,11 +24,12 @@ export class NeonWcAdapter {
       params: { request },
     } = sessionRequest
     let result: any
-    this.invoke.account = account
+
     if (request.method === 'invokeFunction') {
       if (!account) {
         throw new Error('No account')
       }
+      if (this.signer.getAccountAddress() === null) throw new Error('No account')
 
       result = await this.invoke.invokeFunction(request.params)
     } else if (request.method === 'testInvoke') {
@@ -42,10 +42,10 @@ export class NeonWcAdapter {
       if (!account) {
         throw new Error('No account')
       }
-
-      result = this.signer.signMessage(request.params)
+      result = await this.signer.signMessage(request.params)
     } else if (request.method === 'verifyMessage') {
-      result = this.signer.verifyMessage(request.params)
+      alert(`verifyMessage => ${this.signer.getAccountAddress()}`)
+      result = await this.signer.verifyMessage(request.params)
     } else {
       throw new Error('Invalid Request method')
     }
