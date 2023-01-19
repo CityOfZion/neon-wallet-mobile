@@ -45,7 +45,6 @@ export class NeonWcAdapter {
       }
       result = await this.signer.signMessage(request.params)
     } else if (request.method === 'verifyMessage') {
-      alert(`verifyMessage => ${this.signer.getAccountAddress()}`)
       result = await this.signer.verifyMessage(request.params)
     } else {
       throw new Error('Invalid Request method')
