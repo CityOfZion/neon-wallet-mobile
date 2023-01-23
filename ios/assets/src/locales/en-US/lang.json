@@ -738,6 +738,11 @@
         "scope": "Custom Groups",
         "allowedList": "Allowed Groups",
         "explanation": "Your signature can be used by the set of groups listed above."
+      },
+      "64": {
+        "warning": "Dapp requesting a very complex permission. Proceed with care.",
+        "scope": "WitnessRules",
+        "explanation": "Your signature is only valid for transactions that match the specified rules and conditions, such as the current script hash, group, or calling script hash. This allows for more complex and expressive signature scoping to address edge cases and potential reentrancy attacks."
       }
     },
     "warningFee": {

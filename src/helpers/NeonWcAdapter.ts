@@ -15,7 +15,7 @@ export class NeonWcAdapter {
   }
 
   static init = async (rpcAddress: string, account?: Account): Promise<NeonWcAdapter> => {
-    const invoker = await NeonInvoker.init(rpcAddress)
+    const invoker = await NeonInvoker.init(rpcAddress, account)
     const signer = new NeonSigner(account)
     return new NeonWcAdapter(invoker, signer, account)
   }
@@ -31,7 +31,6 @@ export class NeonWcAdapter {
         throw new Error('No account')
       }
       if (this.signer.getAccountAddress() === null) throw new Error('No account')
-
       result = await this.invoke.invokeFunction(request.params)
     } else if (request.method === 'testInvoke') {
       if (!this.account) {
