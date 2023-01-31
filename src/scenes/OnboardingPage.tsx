@@ -157,7 +157,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
 
   return (
     
-    <LinearLayout bg="background.14" flex={1} mb={Platform.OS === 'ios' ? 0 && currentProgress >= 1 : '12%'}>
+    <LinearLayout height={'100%'} bg="background.14" flex={1}>
       <StatusBar
         hidden={true}
       />
