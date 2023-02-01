@@ -137,8 +137,8 @@ android {
         applicationId 'io.cityofzion.neon'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1141
-        versionName "1.1.4-1"
+        versionCode 1151
+        versionName "1.1.5"
         multiDexEnabled true
     }
     splits {
@@ -194,6 +194,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.work:work-runtime-ktx:2.7.0'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
