@@ -67,6 +67,13 @@ const WCConnectionRequestModal = (props: Props) => {
     }
   }, [walletConnectCtx.sessionProposals])
 
+  const handleReject = useCallback(async () => {
+    if (!sessionProposal) return
+
+    await walletConnectCtx.rejectSession(sessionProposal)
+    controller.close()
+  }, [sessionProposal, walletConnectCtx.rejectSession])
+
   const runOnURI = useCallback(async () => {
     try {
       await walletConnectCtx.onURI(uri)
@@ -162,7 +169,7 @@ const WCConnectionRequestModal = (props: Props) => {
                   onPress={handleAccept}
                 />
                 <LinearLayout mt={5}>
-                  <TouchableWithoutFeedback onPress={controller.close}>
+                  <TouchableWithoutFeedback onPress={handleReject}>
                     <LinearLayout
                       width="100%"
                       borderRadius="4px"
