@@ -189,30 +189,35 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }
 
   const claimGas = async () => {
-    if (!account.address || !isConnected || !unclaimedGasAmount) return
-
     try {
+      const balance = balanceExchange.balance.data
+
+      if (!account.address || !isConnected || !unclaimedGasAmount || !balance || !fee) return
+
       const bs = blockchainServices[account.blockchain]
 
-      if (isClaimable(bs)) {
-        Await.init(`claimGas`)
+      const neoToken = bs.tokens.find(token => token.symbol === 'NEO')
+      if (!neoToken) throw new Error('Neo token not found')
 
-        const responseClaim = await bs.claimGas(account.address)
+      const gasToken = bs.tokens.find(token => token.symbol === 'GAS')
+      if (!gasToken) throw new Error('Gas token not found')
 
-        if (!responseClaim || !responseClaim.txid || !responseClaim.fee) return
+      const GASBalance = BalanceHelper.getTokenBalanceBySymbol(gasToken.symbol, balance)
+      if (!GASBalance) throw new Error("Address don't have GAS to make a claim")
 
-        account.addPendingTransaction(
-          responseClaim.txid,
-          'claim',
-          account.address,
-          { hash: responseClaim.hash, symbol: responseClaim.token, name: '', blockchain: account.blockchain },
-          unclaimedGasAmount,
-          responseClaim.fee
-        )
-        dispatch(
-          accountReducerActions.watchPendingTransaction({ account, transactionHash: responseClaim.txid, isClaim: true })
-        )
-      }
+      if (!isClaimable(bs)) return
+
+      if (GASBalance.amount < fee) throw new Error('Insufficient GAS to complete transaction')
+
+      Await.init(`claimGas`)
+
+      const transactionHash = await bs.claimGas(account.address)
+
+      if (!transactionHash) throw new Error('Transaction hash not provided')
+
+      account.addPendingTransaction(transactionHash, 'claim', account.address, neoToken, unclaimedGasAmount, fee)
+
+      dispatch(accountReducerActions.watchPendingTransaction({ account, transactionHash, isClaim: true }))
     } catch {
       showMessage({
         message: i18n.t('screens.getAccount.claimError'),
@@ -227,11 +232,20 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const populateFee = useCallback(async () => {
     if (!account.address || !unclaimedGasAmount) return
 
+    if (account.blockchain === 'neoLegacy') {
+      setFee(0)
+      return
+    }
+
+    const neoToken = blockchainServices[account.blockchain].tokens.find(token => token.symbol === 'NEO')
+    if (!neoToken) return
+
     const calculatedFee = await blockchainServices[account.blockchain].calculateTransferFee({
       receiverAddress: account.address,
       senderAddress: account.address,
-      amount: unclaimedGasAmount,
-      tokenHash: blockchainServices[account.blockchain].feeToken.hash,
+      amount: 0,
+      tokenHash: neoToken.hash,
+      tokenDecimals: neoToken.decimals,
     })
 
     setFee(calculatedFee)

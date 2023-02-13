@@ -96,7 +96,22 @@ const ListTokenModal = (props: Props) => {
       })
     }
 
-    return balance.data?.tokensBalances
+    if (!balance.data) return
+
+    const sendTokenList: TokenToList[] = []
+
+    balance.data.tokensBalances.forEach(tokenBalance => {
+      const token = tokens.find(token => token.symbol === tokenBalance.symbol)
+
+      if (!token) return
+
+      sendTokenList.push({
+        ...token,
+        amount: tokenBalance.amount,
+      })
+    })
+
+    return sendTokenList
   }, [filterBy, tokens, balance])
 
   const filteredTokens = useMemo(() => {

@@ -1,4 +1,5 @@
-import { WitnessScope } from '@cityofzion/neon-core-next/lib/tx/components/WitnessScope'
+import { tx } from '@cityofzion/n3-neon-core'
+import { Signer } from '@cityofzion/neo3-invoker'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
@@ -10,7 +11,6 @@ import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkO
 import { RootState } from '~/src/store/RootStore'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
-import { Signer } from '~src/helpers/NeonWcAdapter'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~src/navigation/TabNavigation'
@@ -30,10 +30,10 @@ interface Props {
 
 const SignatureScopeModal = (props: Props) => {
   const { data, session } = props.route.params
-  const scope = data?.scopes ?? WitnessScope.CalledByEntry
-  const showWarning = scope !== WitnessScope.None && scope !== WitnessScope.CalledByEntry
-  const showAllowedList = scope === WitnessScope.CustomContracts || scope === WitnessScope.CustomGroups
-  const isCustomContracts = scope === WitnessScope.CustomContracts
+  const scope = data?.scopes ?? tx.WitnessScope.CalledByEntry
+  const showWarning = scope !== tx.WitnessScope.None && scope !== tx.WitnessScope.CalledByEntry
+  const showAllowedList = scope === tx.WitnessScope.CustomContracts || scope === tx.WitnessScope.CustomGroups
+  const isCustomContracts = scope === tx.WitnessScope.CustomContracts
   const allowedList = isCustomContracts ? data?.allowedContracts : data?.allowedGroups
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const controller = useSwiperController(true)

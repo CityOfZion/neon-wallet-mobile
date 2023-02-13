@@ -97,6 +97,7 @@ export const SendTransactionReviewModal = (props: Props) => {
         receiverAddress: destinationAddress,
         senderAddress: account.address,
         tokenHash: token.hash,
+        tokenDecimals: token.decimals,
         amount: Number(amount),
         fee,
         tip,

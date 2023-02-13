@@ -156,11 +156,8 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   }, [])
 
   return (
-    
-    <LinearLayout height={'100%'} bg="background.14" flex={1}>
-      <StatusBar
-        hidden={true}
-      />
+    <LinearLayout height="100%" bg="background.14" flex={1}>
+      <StatusBar hidden />
       <ImageBackground
         source={require('~src/assets/images/onboarding-background.png')}
         imageStyle={{ transform: [{ rotate: '180deg' }] }}
@@ -174,14 +171,9 @@ const OnboardingPage = (props: OnboardingPageProps) => {
           start={[0, 0.8]}
           end={[0.2, 0.3]}
         >
-          <LinearGradientLayout
-            colors={['transparent', '#000000fa']}
-            height="100%"
-            start={[0.3, 0.7]}
-            end={[0.5, 0.2]}
-          >
+          <LinearGradientLayout colors={['transparent', '#000000fa']} height="100%" start={[0.3, 0.7]} end={[0.5, 0.2]}>
             <LinearLayout pt={Dimensions.get('screen').height * 0.03} height="100%">
-              <LinearLayout pb={'5%'}  px={'3%'} orientation="verti" width="100%">
+              <LinearLayout pb="5%" px="3%" orientation="verti" width="100%">
                 <TextView fontFamily="bold" fontSize="sm" color="#4CFFB3">
                   {i18n.t('onboarding.initalSetup')}
                 </TextView>
@@ -259,14 +251,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
       <LinearLayout mt={currentProgress >= 1 ? '2%' : '6%'}>
         <ProgressBar progressBarStatus={currentProgress} show={currentProgress < 1} text={progressMessage} />
         {currentProgress >= 1 && (
-          <ButtonView
-            onPress={finish}
-            border={1}
-            borderColor="primary"
-            borderRadius={7}
-            width="90%"
-            alignSelf="center"
-          >
+          <ButtonView onPress={finish} border={1} borderColor="primary" borderRadius={7} width="90%" alignSelf="center">
             <TextView fontSize="19px" py="3%" color="primary" textAlign="center">
               Continue
             </TextView>
@@ -274,7 +259,6 @@ const OnboardingPage = (props: OnboardingPageProps) => {
         )}
       </LinearLayout>
     </LinearLayout>
-
   )
 }
 

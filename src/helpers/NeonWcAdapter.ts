@@ -1,4 +1,4 @@
-import { Account } from '@cityofzion/neon-core-next/lib/wallet'
+import { Account } from '@cityofzion/n3-neon-core/lib/wallet'
 import { NeonInvoker } from '@cityofzion/neon-invoker'
 import { NeonSigner } from '@cityofzion/neon-signer'
 

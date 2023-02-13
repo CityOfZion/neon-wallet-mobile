@@ -1,7 +1,6 @@
-import { tx } from '@cityofzion/neon-core'
 import { api, nep5, wallet } from '@cityofzion/neon-js'
-import { u } from '@cityofzion/neon-js-next'
 import { SendAssetConfig, DoInvokeConfig } from '@cityofzion/neon-js/node_modules/@cityofzion/neon-api/lib/funcs/types'
+import { TransactionOutput } from '@cityofzion/neon-js/node_modules/@cityofzion/neon-core/lib/tx/components/TransactionOutput'
 import axios from 'axios'
 import { Platform, NativeModules, ImageLoadEventData } from 'react-native'
 
@@ -39,7 +38,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   readonly derivationPath = "m/44'/888'/0'/0/?"
   readonly platform = 'neo'
   readonly nativeAssets: NativeAsset[] = ['NEO', 'GAS']
-  readonly feeToken: { hash: string; token: string }
+  readonly feeToken: { hash: string; token: string; decimals: number }
   readonly wcChains: string[]
   accountsPool: Account[] = []
   readonly tokens: IToken[] = tokens as IToken[]
@@ -54,6 +53,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     this.feeToken = {
       hash: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
       token: 'GAS',
+      decimals: 8,
     }
     this.wcChains = [] //neoLegacy doesn't support wallet connect
   }
@@ -86,9 +86,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   }
 
   async sendTransaction(data: SendTransactionData) {
-    const hexHash = u.HexString.fromHex(data.tokenHash).toString()
-
-    const token = this.tokens.find(token => token.hash === hexHash)
+    const token = this.tokens.find(token => token.hash === data.tokenHash)
 
     const nativeAsset = this.nativeAssets.find(symbol => symbol === token?.symbol)
 
@@ -155,36 +153,27 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   }
 
   async claimGas(address: string) {
-    try {
-      const neoAccount = await this.getNeoAccount(address)
+    const neoAccount = await this.getNeoAccount(address)
 
-      if (!neoAccount) {
-        throw new Error('Neo Account not found')
-      }
-
-      const balances = await this.provider.getBalance(address)
-      const balance = balances.find(balance => balance.symbol === 'NEO')
-
-      const apiProvider = new api.neoscan.instance(this.networkDeprecatedLabel)
-
-      if (balance) {
-        await this.sendNativeAsset(address, address, 'NEO', balance.amount)
-      }
-
-      const claimGasResponse = await api.claimGas({
-        api: apiProvider,
-        account: neoAccount,
-      })
-
-      return {
-        txid: claimGasResponse.response?.txid ?? null,
-        token: this.cozTip.token,
-        hash: this.cozTip.hash,
-        fee: claimGasResponse.fees ?? null,
-      }
-    } catch (error: any) {
-      throw new Error(error.message)
+    if (!neoAccount) {
+      throw new Error('Neo Account not found')
     }
+
+    const balances = await this.provider.getBalance(address)
+    const balance = balances.find(balance => balance.symbol === 'NEO')
+
+    const apiProvider = new api.neoscan.instance(this.networkDeprecatedLabel)
+
+    if (balance) {
+      await this.sendNativeAsset(address, address, 'NEO', balance.amount)
+    }
+
+    const claimGasResponse = await api.claimGas({
+      api: apiProvider,
+      account: neoAccount,
+    })
+
+    return claimGasResponse.response?.txid ?? null
   }
 
   async getExchange(currency: string): Promise<ExchangeInfo[]> {
@@ -235,7 +224,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     const neoAccount = await this.getNeoAccount(senderAddress)
     const listUrls = (await this.provider.getAllNodes()).map(node => node.url)
 
-    let intents: tx.TransactionOutput[]
+    let intents: TransactionOutput[]
 
     if (tipAmount && tipReceiverAddress) {
       const tipIntent = api.makeIntent({ GAS: tipAmount }, tipReceiverAddress)

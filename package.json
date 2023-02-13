@@ -20,10 +20,10 @@
   "dependencies": {
     "@cityofzion/dora-ts": "^0.0.10",
     "@cityofzion/neo3-invoker": "^1.3.0",
-    "@cityofzion/neon-core-next": "npm:@cityofzion/neon-core@5.0.0-next.17",
     "@cityofzion/neon-invoker": "^1.3.1",
     "@cityofzion/neon-js": "^4.8.3",
-    "@cityofzion/neon-js-next": "npm:@cityofzion/neon-js@5.0.0-next.17",
+    "@cityofzion/n3-neon-js": "npm:@cityofzion/neon-js@5.3.0",
+    "@cityofzion/n3-neon-core": "npm:@cityofzion/neon-core@5.3.0",
     "@cityofzion/neon-nep5": "^4.9.0",
     "@cityofzion/neon-parser": "^1.5.2",
     "@cityofzion/neon-signer": "^1.0.1",
