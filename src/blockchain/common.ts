@@ -54,6 +54,7 @@ export interface IRPCContract {
 export interface SendTransactionData {
   amount: number
   tokenHash: string
+  tokenDecimals: number
   senderAddress: string
   receiverAddress: string
   fee?: number
@@ -78,7 +79,6 @@ export interface IconDapps {
       }
     >
   >
-  getIconByScriptHash(scriptHash: string): Promise<string>
 }
 
 export interface BlockchainDataProvider {
@@ -93,9 +93,7 @@ export interface BlockchainDataProvider {
 }
 
 export interface IClaimable {
-  claimGas: (
-    address: string
-  ) => Promise<{ txid: string | null; token: string; hash: string; fee: number | null } | null>
+  claimGas: (address: string) => Promise<string | null>
 }
 
 export interface IWalletConnect {
@@ -116,7 +114,7 @@ export interface IBlockchainService {
   readonly platform: string
   readonly nativeAssets: string[]
   readonly cozTip?: { address: string; token: string; hash: string } //config token with the symbol name
-  readonly feeToken: { hash: string; token: string }
+  readonly feeToken: { hash: string; token: string; decimals: number }
   readonly tokens: IToken[]
   readonly wcChains: string[]
   sendTransaction: (data: SendTransactionData) => Promise<string | null>

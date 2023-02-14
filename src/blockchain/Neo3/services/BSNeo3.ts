@@ -1,11 +1,7 @@
+import { wallet } from '@cityofzion/n3-neon-core'
+import Neon, { api } from '@cityofzion/n3-neon-js'
 import { ContractInvocationMulti, ContractInvocation } from '@cityofzion/neo3-invoker'
 import { NeonInvoker } from '@cityofzion/neon-invoker'
-import Neon, { api, u, rpc, experimental, sc, tx, wallet } from '@cityofzion/neon-js-next'
-import { CommonConfig } from '@cityofzion/neon-js-next/lib/experimental/types'
-import {
-  Nep17TransferIntent,
-  signingConfig,
-} from '@cityofzion/neon-js-next/node_modules/@cityofzion/neon-api/lib/NetworkFacade'
 import { NeonParser } from '@cityofzion/neon-parser'
 import { JsonRpcResponse } from '@json-rpc-tools/utils'
 import axios from 'axios'
@@ -96,7 +92,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
   readonly derivationPath = "m/44'/888'/0'/0/?"
   readonly platform = 'neo'
   readonly nativeAssets: string[] = ['NEO', 'GAS']
-  readonly feeToken: { hash: string; token: string }
+  readonly feeToken: { hash: string; token: string; decimals: number }
   readonly wcChains: string[]
   readonly tokens: IToken[] = tokens as IToken[]
   constructor() {
@@ -105,6 +101,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     this.feeToken = {
       hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
       token: 'GAS',
+      decimals: 8,
     }
     this.cozTip = {
       address: 'NXWJfovnpRaj2r3yrYQXDMvBLixv9zJZsk',
@@ -115,14 +112,25 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
   }
   iconDappsScriptHash: string = '489e98351485bbd85be99618285932172f1862e4'
 
+  setAccountsPool(accounts: Account[]) {
+    this.accountsPool = accounts
+  }
+
   async getIconList(scriptHashList: string[]): Promise<Map<string, { sm: string; lg: string }>> {
     const nodes = await this.provider.getAllNodes()
     const rpcAddress = NeoNode.getHighestNodeUrlFromPool(nodes) ?? this.defaultEndpoint
     const parser = NeonParser
     const invoker = await NeonInvoker.init(rpcAddress)
     const res = await invoker.testInvoke({
-      invocations: [this.buildGetMultipleMetaDataInvocation({ contractHashes: scriptHashList })],
+      invocations: [
+        {
+          scriptHash: this.iconDappsScriptHash,
+          operation: 'getMultipleMetaData',
+          args: [{ type: 'Array', value: scriptHashList.map(hash => ({ type: 'Hash160', value: hash })) }],
+        },
+      ],
     })
+
     if (res.stack.length === 0) {
       throw new Error(res.exception ?? 'unrecognized response')
     }
@@ -131,24 +139,6 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     })
 
     return this.adaptGetIconList(formattedResult)
-  }
-
-  async getIconByScriptHash(scriptHash: string): Promise<string> {
-    const nodes = await this.provider.getAllNodes()
-    const rpcAddress = NeoNode.getHighestNodeUrlFromPool(nodes) ?? this.defaultEndpoint
-    const parser = NeonParser
-    const invoker = await NeonInvoker.init(rpcAddress)
-    const res = await invoker.testInvoke({
-      invocations: [this.buildGetMetaDataInvocation({ scriptHash })],
-    })
-    if (res.stack.length === 0) {
-      throw new Error(res.exception ?? 'unrecognized response')
-    }
-    const formattedResult: IconDappsListResponse = parser.parseRpcResponse(res.stack[0], {
-      ByteStringToScriptHash: true,
-    })
-    console.log(formattedResult)
-    throw new Error('Method not implemented.')
   }
 
   private adaptGetIconList(parseResponse: IconDappsListResponse) {
@@ -165,35 +155,36 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     return adaptedResult
   }
 
-  private buildGetMultipleMetaDataInvocation(params: { contractHashes: string[] }): ContractInvocation {
-    return {
-      scriptHash: this.iconDappsScriptHash,
-      operation: 'getMultipleMetaData',
-      args: [{ type: 'Array', value: params.contractHashes.map(hash => ({ type: 'Hash160', value: hash })) }],
-    }
-  }
-
-  private buildGetMetaDataInvocation(params: { scriptHash: string }): ContractInvocation {
-    return {
-      scriptHash: this.iconDappsScriptHash,
-      operation: 'getMetaData',
-      args: [{ type: 'Hash160', value: params.scriptHash }],
-    }
-  }
-
   rpcCall = async (address: string, request: SessionRequest): Promise<JsonRpcResponse> => {
     const neoAccount = await this.getNeoAccount(address)
-    const nodes = await this.provider.getAllNodes()
-    const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
 
     if (!neoAccount) {
       throw new Error('No account')
     }
-    if (!bestUrl) {
-      throw new Error('Blockchain unavailable, try again')
+
+    const nodes = await this.provider.getAllNodes()
+    const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
+
+    return await (await NeonWcAdapter.init(bestUrl ?? this.defaultEndpoint, neoAccount)).rpcCall(request)
+  }
+
+  async calculateFee(senderAddress: string, requestParams: ContractInvocationMulti) {
+    const fromAccount = await this.getNeoAccount(senderAddress)
+
+    if (!fromAccount) {
+      throw new Error('Account not found')
     }
 
-    return await (await NeonWcAdapter.init(bestUrl, neoAccount)).rpcCall(request)
+    const nodes = await this.provider.getAllNodes()
+    const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
+
+    const nwcAdapter = await NeonWcAdapter.init(bestUrl ?? this.defaultEndpoint, fromAccount)
+    const testInvoke = await nwcAdapter.invoke.testInvoke(requestParams)
+    const extraNetworkFee = requestParams.extraNetworkFee ? this.fixDecimalPlaces(requestParams.extraNetworkFee, 8) : 0
+    const extraSystemFee = requestParams.extraSystemFee ? this.fixDecimalPlaces(requestParams.extraSystemFee, 8) : 0
+    const gasconsumed = this.fixDecimalPlaces(Number(testInvoke.gasconsumed), 8)
+    const summedFee = gasconsumed + extraNetworkFee + extraSystemFee
+    return summedFee.toString()
   }
 
   validateAddress(address: string) {
@@ -206,12 +197,15 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
 
     return false
   }
+
   validateWif(wif: string) {
     return wallet.isWIF(wif)
   }
+
   validatePrivateKeyWithPassword(privateKey: string) {
     return wallet.isNEP2(privateKey)
   }
+
   generateMnemonic() {
     keychain.generateMnemonic(128) // 12 words
 
@@ -236,32 +230,6 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
   generateAccountFromWif(wif: string) {
     const { address } = new wallet.Account(wif)
     return address
-  }
-
-  async sendTransaction(data: SendTransactionData) {
-    try {
-      if (!data.senderAddress) {
-        throw new Error('Sender address not defined')
-      }
-
-      const nodes = await this.provider.getAllNodes()
-      const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
-
-      if (!bestUrl) {
-        throw new Error('Blockchain unavailable, try again')
-      }
-
-      const facade = await api.NetworkFacade.fromConfig({ node: bestUrl })
-
-      const intents = await this.buildNep17(data)
-      const signing = await this.signing(data.senderAddress)
-
-      const result = await facade.transferToken(intents, signing)
-
-      return result
-    } catch (error: any) {
-      throw new Error(error.message)
-    }
   }
 
   async decryptKey(encryptedKey: string, password: string) {
@@ -299,156 +267,111 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     })
   }
 
-  async claimGas(address: string) {
-    const response = await this.provider.getBalance(address)
+  async sendTransaction(data: SendTransactionData) {
+    const account = await this.getNeoAccount(data.senderAddress)
 
-    const neoHash = this.tokens.find(token => token.symbol === 'NEO')?.hash
-
-    const neoBalance = response.filter(balance => balance.symbol === 'NEO')
-    const gasBalance = response.filter(balance => balance.symbol === 'GAS')
-
-    if (neoBalance.length < 1) {
-      throw new Error("Address don't have NEO to make a claim")
-    }
-    if (!neoHash) {
-      throw new Error('NEO not found')
+    if (!account) {
+      throw new Error('Account not found')
     }
 
-    const gasFee = await this.calculateTransferFee({
-      receiverAddress: address,
-      senderAddress: address,
-      tokenHash: neoHash,
-      amount: neoBalance[0].amount ?? 0,
+    const nodes = await this.provider.getAllNodes()
+    const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
+
+    const invocations: ContractInvocation[] = [
+      {
+        operation: 'transfer',
+        scriptHash: data.tokenHash,
+        args: [
+          { type: 'Hash160', value: data.senderAddress },
+          { type: 'Hash160', value: data.receiverAddress },
+          { type: 'Integer', value: Neon.u.BigInteger.fromDecimal(data.amount, data.tokenDecimals).toString() },
+          { type: 'Any', value: '' },
+        ],
+      },
+    ]
+
+    if (data.tip) {
+      invocations.push({
+        operation: 'transfer',
+        scriptHash: this.cozTip.hash,
+        args: [
+          { type: 'Hash160', value: data.senderAddress },
+          { type: 'Hash160', value: this.cozTip.address },
+          { type: 'Integer', value: Neon.u.BigInteger.fromDecimal(data.tip, 8).toString() },
+          { type: 'Any', value: '' },
+        ],
+      })
+    }
+
+    const invoker = await NeonInvoker.init(bestUrl ?? this.defaultEndpoint, account)
+    const transactionHash = await invoker.invokeFunction({
+      invocations,
+      signers: [],
     })
 
-    const gasAmount = gasBalance[0].amount ?? 0
+    return transactionHash
+  }
 
-    if (gasAmount < gasFee) {
-      throw new Error('Insuficient GAS to complete transaction')
-    }
-
+  async claimGas(address: string) {
     const neoAccount = await this.getNeoAccount(address)
     if (!neoAccount) {
       throw new Error('Account invalid to get claim')
     }
 
-    const signing = await this.signing(address)
     const nodes = await this.provider.getAllNodes()
-    const url = NeoNode.getHighestNodeUrlFromPool(nodes)
+    const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
 
-    if (!url) {
-      throw new Error('Problem to do claim')
-    }
+    const facade = await api.NetworkFacade.fromConfig({ node: bestUrl ?? this.defaultEndpoint })
+    const transactionHash = await facade.claimGas(neoAccount, {
+      signingCallback: api.signWithAccount(neoAccount),
+    })
 
-    const facade = await api.NetworkFacade.fromConfig({ node: url })
-    const txid = await facade.claimGas(neoAccount, signing)
-    return {
-      txid,
-      token: this.feeToken.token,
-      hash: this.feeToken.hash,
-      fee: gasFee,
-    }
-  }
-
-  async calculateFee(senderAddress: string, requestParams: ContractInvocationMulti) {
-    const fromAccount = await this.getNeoAccount(senderAddress)
-
-    if (!fromAccount) {
-      throw new Error('Account not found')
-    }
-
-    const node = (await this.provider.getAllNodes())[0]
-    const endpoint = node.url
-
-    const nwcAdapter = await NeonWcAdapter.init(endpoint ?? this.defaultEndpoint, fromAccount)
-    const testInvoke = await nwcAdapter.invoke.testInvoke(requestParams)
-    const extraNetworkFee = requestParams.extraNetworkFee ? this.fixDecimalPlaces(requestParams.extraNetworkFee, 8) : 0
-    const extraSystemFee = requestParams.extraSystemFee ? this.fixDecimalPlaces(requestParams.extraSystemFee, 8) : 0
-    const gasconsumed = this.fixDecimalPlaces(Number(testInvoke.gasconsumed), 8)
-    const summedFee = gasconsumed + extraNetworkFee + extraSystemFee
-    return summedFee.toString()
+    return transactionHash
   }
 
   async calculateTransferFee(data: Omit<SendTransactionData, 'fee'>) {
-    try {
-      const fromAccount = await this.getNeoAccount(data.senderAddress)
+    const account = await this.getNeoAccount(data.senderAddress)
 
-      if (!fromAccount) {
-        throw new Error('Account not found')
-      }
+    if (!account) {
+      throw new Error('Account not found')
+    }
 
-      const node = (await this.provider.getAllNodes())[0]
-      const endpoint = node.url
+    const nodes = await this.provider.getAllNodes()
+    const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
 
-      const rpcClient = new rpc.NeoServerRpcClient(endpoint ?? this.defaultEndpoint)
-
-      const args = [
-        sc.ContractParam.hash160(data.senderAddress),
-        sc.ContractParam.hash160(data.receiverAddress),
-        sc.ContractParam.integer(data.amount),
-        sc.ContractParam.string(''),
-      ]
-
-      const script = Neon.create.scriptBuilder().emitContractCall({
-        scriptHash: data.tokenHash,
+    const invocations: ContractInvocation[] = [
+      {
         operation: 'transfer',
-        args,
-      })
+        scriptHash: data.tokenHash,
+        args: [
+          { type: 'Hash160', value: data.senderAddress },
+          { type: 'Hash160', value: data.receiverAddress },
+          { type: 'Integer', value: Neon.u.BigInteger.fromDecimal(data.amount, data.tokenDecimals).toString() },
+          { type: 'Any', value: '' },
+        ],
+      },
+    ]
 
-      if (data.tip) {
-        script.emitContractCall({
-          scriptHash: this.cozTip.hash,
-          operation: 'transfer',
-          args: [
-            sc.ContractParam.hash160(data.senderAddress),
-            sc.ContractParam.hash160(this.cozTip.address),
-            sc.ContractParam.integer(data.tip),
-            sc.ContractParam.string(''),
-          ],
-        })
-      }
-
-      const buildScript = script.build()
-
-      const currentHeight = await rpcClient.getBlockCount()
-      const {
-        protocol: { network: networkMagic },
-      } = await rpcClient.getVersion()
-
-      const config: CommonConfig = {
-        networkMagic,
-        rpcAddress: endpoint ?? this.defaultEndpoint,
-      }
-
-      const txn = new tx.Transaction({
-        script: buildScript,
-        validUntilBlock: currentHeight + 100,
-        signers: [
-          new tx.Signer({
-            account: fromAccount.scriptHash,
-            scopes: String(tx.WitnessScope.CalledByEntry),
-          }),
+    if (data.tip) {
+      invocations.push({
+        operation: 'transfer',
+        scriptHash: this.cozTip.hash,
+        args: [
+          { type: 'Hash160', value: data.senderAddress },
+          { type: 'Hash160', value: this.cozTip.address },
+          { type: 'Integer', value: Neon.u.BigInteger.fromDecimal(data.tip, 8).toString() },
+          { type: 'Any', value: '' },
         ],
       })
-      const networkFee = await experimental.txHelpers.calculateNetworkFee(txn, fromAccount, config)
-      const invokeFunctionResponse = await rpcClient.invokeScript(u.HexString.fromHex(buildScript), [
-        {
-          account: fromAccount.scriptHash,
-          scopes: String(tx.WitnessScope.CalledByEntry),
-        },
-      ])
-      const requiredSystemFee = u.BigInteger.fromNumber(invokeFunctionResponse.gasconsumed)
-
-      return Number(requiredSystemFee.toDecimal(8)) + Number(networkFee.toDecimal(8))
-    } catch (error: any) {
-      console.log('Error calculate fee')
-      console.log(error)
-      throw new Error(error)
     }
-  }
 
-  setAccountsPool(accounts: Account[]) {
-    this.accountsPool = accounts
+    const invoker = await NeonInvoker.init(bestUrl ?? this.defaultEndpoint, account)
+    const { total } = await invoker.calculateFee({
+      invocations,
+      signers: [],
+    })
+
+    return total
   }
 
   async getNFTS(address: string, page: number = 1): Promise<NFTSResponse> {
@@ -523,50 +446,6 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     }))
   }
 
-  private async signing(address: string) {
-    const neoAccount = await this.getNeoAccount(address)
-    if (!neoAccount) {
-      throw new Error('Sender Address in invalid')
-    }
-    const result: signingConfig = {
-      signingCallback: api.signWithAccount(neoAccount),
-    }
-    return result
-  }
-
-  private async buildNep17({
-    tokenHash,
-    amount,
-    receiverAddress,
-    senderAddress,
-    tip,
-  }: Omit<SendTransactionData, 'fee'>) {
-    const intents: Nep17TransferIntent[] = []
-
-    const neoAccount = await this.getNeoAccount(senderAddress)
-    if (!neoAccount) {
-      throw new Error('Sender Address in invalid')
-    }
-
-    intents.push({
-      to: receiverAddress,
-      from: neoAccount,
-      contractHash: tokenHash,
-      decimalAmt: amount,
-    })
-
-    if (tip) {
-      intents.push({
-        to: this.cozTip.address,
-        from: neoAccount,
-        contractHash: this.cozTip.hash,
-        decimalAmt: tip,
-      })
-    }
-
-    return intents
-  }
-
   private async getNeoAccount(address: string) {
     const account = this.accountsPool.find(it => it.address === address)
     const wifAccount = await account?.getWif()
@@ -617,17 +496,17 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
         imageType: nft.metadata.mediaType,
         name: nft.metadata.name,
         image: nft.metadata.mediaUri,
-        chain: nft.contract.chain || '',
-        symbol: nft.contract.symbol || '',
-        contract: nft.contract.hash || '',
-        id: nft.tokenId || '',
-        creatorName: nft.creator.offchainName || '',
-        creatorAddress: nft.creator.address || '',
-        ownerAddress: nft.ownerships[0].owner.address || '',
-        apiUrl: nft.apiUrl || '',
+        chain: nft.contract.chain ?? '',
+        symbol: nft.contract.symbol ?? '',
+        contract: nft.contract.hash ?? '',
+        id: nft.tokenId ?? '',
+        creatorName: nft.creator.offchainName ?? '',
+        creatorAddress: nft.creator.address ?? '',
+        ownerAddress: nft.ownerships[0].owner.address ?? '',
+        apiUrl: nft.apiUrl ?? '',
         collection: {
-          image: nft.collection.logoUrl || '',
-          name: nft.collection.name || '',
+          image: nft.collection.logoUrl ?? '',
+          name: nft.collection.name ?? '',
         },
       }
     })
@@ -637,6 +516,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       total,
     }
   }
+
   private fixDecimalPlaces(value: number, decimalPlaces: number) {
     return value / 10 ** decimalPlaces
   }

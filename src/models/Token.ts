@@ -5,4 +5,5 @@ export interface Token {
   name: string
   hash: string
   blockchain: BlockchainServiceKey
+  decimals: number
 }

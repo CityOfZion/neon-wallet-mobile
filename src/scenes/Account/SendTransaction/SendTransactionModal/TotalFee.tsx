@@ -79,6 +79,7 @@ export const TotalFee = ({
       senderAddress,
       amount,
       tokenHash: token.hash,
+      tokenDecimals: token.decimals,
       tip,
     })
 

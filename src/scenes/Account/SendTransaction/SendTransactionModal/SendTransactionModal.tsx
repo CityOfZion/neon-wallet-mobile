@@ -52,7 +52,7 @@ export const SendTransactionModal = (props: Props) => {
 
   const balanceExchange = useBalancesAndExchange(account)
 
-  const [destinationAddress, setDestinationAdress] = useState<string>(initialAddress)
+  const [destinationAddress, setDestinationAdress] = useState<string | undefined>(initialAddress)
   const [destinationAddressIsValid, setDestinationAddressIsValid] = useState<boolean>()
   const [destinationAccount, setDestinationAccount] = useState<Account>()
   const [destinationWallet, setDestinationWallet] = useState<Wallet>()
