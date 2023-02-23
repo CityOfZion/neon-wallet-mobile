@@ -2,9 +2,9 @@ import { SessionTypes } from '@walletconnect/types'
 
 export const DEFAULT_RELAY_URL = 'wss://relay.walletconnect.com'
 
-export const DEFAULT_METHODS = ['invokeFunction', 'testInvoke', 'signMessage', 'verifyMessage']
+export const DEFAULT_METHODS = ['invokeFunction', 'testInvoke', 'signMessage', 'verifyMessage', 'traverseIterator']
 
-export const DEFAULT_AUTOACCEPT_METHODS = ['testInvoke']
+export const DEFAULT_AUTOACCEPT_METHODS = ['testInvoke', 'traverseIterator']
 
 export const DEFAULT_LOGGER = 'debug'
 
