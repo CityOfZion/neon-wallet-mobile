@@ -2,22 +2,18 @@ import { api } from '@cityofzion/dora-ts'
 
 import { NeoLegacyProvider } from './common'
 
-import { Node } from '~/src/models/Node'
+import { TNetwork } from '~/src/blockchain'
 import { Transaction } from '~/src/models/Transaction'
 import { TransactionAddressAsset } from '~/src/models/TransactionAddressAsset'
 import { TransactionAddressSummary } from '~/src/models/TransactionAddressSummary'
 import { BalanceInfo } from '~/src/models/response/BalanceInfo'
-import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { TransactionAddressResponse } from '~/src/models/response/TransactionAddressResponse'
 import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
-type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
 export class DoraSDKProvider implements NeoLegacyProvider {
-  //eslint-disable-next-line
-  readonly network: DoraNetworkOptions = 'mainnet'
-  readonly siteUrlQuery: string = `https://dora.coz.io/transaction/neo2/${this.network}/`
-  baseNumeric: number
-  constructor() {
-    this.baseNumeric = 8
+  constructor(readonly network: TNetwork) {
+    if (network.type === 'custom') throw new Error('DoraSDKProvider does not supports custom networks')
+
+    this.network = network
   }
 
   async getAddressAbstracts(address: string, page: number = 1) {
@@ -25,7 +21,7 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     const { page_number, page_size, total_entries, total_pages, entries } = await api.NeoLegacyREST.getAddressAbstracts(
       address,
       page,
-      this.network
+      this.network.type
     )
 
     result.pageNumber = page_number
@@ -35,35 +31,40 @@ export class DoraSDKProvider implements NeoLegacyProvider {
 
     const transactions = new Map<string, TransactionAddressSummary>()
 
-    entries.forEach(({ address_from, address_to, amount, asset, block_height, time, txid }) => {
-      const amountConverted = this.convertScientifcNotationToDecimal(amount)
+    await Promise.all(
+      entries.map(async ({ address_from, address_to, amount, asset, block_height, time, txid }) => {
+        if (address_from !== address && address_to !== address) return
 
-      if (address_from !== address && address_to !== address) {
-        return
-      }
+        const assetInfo = await api.NeoLegacyREST.asset(asset, this.network.type)
+        const decimals = assetInfo.decimals ?? 0
+        const symbol = assetInfo.symbol ?? ''
 
-      const transfer = new TransactionAddressAsset({
-        amount: Number(amountConverted),
-        hash: asset,
-        from: address_from ?? 'Mint',
-        to: address_to ?? 'Burn',
+        const amountConverted = this.convertScientifcNotationToDecimal(amount, decimals)
+
+        const transfer = new TransactionAddressAsset({
+          amount: Number(amountConverted),
+          hash: asset,
+          from: address_from ?? 'Mint',
+          to: address_to ?? 'Burn',
+          decimals: assetInfo.decimals ?? 0,
+          symbol,
+        })
+
+        const existingTransaction = transactions.get(txid)
+        if (existingTransaction) {
+          existingTransaction.transfers.push(transfer)
+          return
+        }
+
+        const transaction = new TransactionAddressSummary({
+          blockHeight: block_height,
+          time,
+          hash: txid,
+        })
+        transaction.transfers.push(transfer)
+        transactions.set(txid, transaction)
       })
-
-      const existingTransaction = transactions.get(txid)
-
-      if (existingTransaction) {
-        existingTransaction.transfers.push(transfer)
-        return
-      }
-
-      const transaction = new TransactionAddressSummary({
-        blockHeight: block_height,
-        time,
-        hash: txid,
-      })
-      transaction.transfers.push(transfer)
-      transactions.set(txid, transaction)
-    })
+    )
 
     result.transactions = Array.from(transactions.values())
 
@@ -71,16 +72,22 @@ export class DoraSDKProvider implements NeoLegacyProvider {
   }
 
   async getBalance(address: string): Promise<BalanceInfo[]> {
-    const response = await api.NeoLegacyREST.balance(address, this.network)
+    const response = await api.NeoLegacyREST.balance(address, this.network.type)
 
     const balances = Array.from(response.values())
 
-    const mappedBalance = balances.map(
-      ({ balance, asset, asset_name, symbol }): BalanceInfo => ({
-        amount: balance,
-        hash: asset,
-        name: asset_name,
-        symbol,
+    const mappedBalance = await Promise.all(
+      balances.map(async ({ balance, asset, asset_name, symbol }): Promise<BalanceInfo> => {
+        const response = await api.NeoLegacyREST.asset(asset, this.network.type)
+
+        return {
+          amount: Number(balance),
+          hash: asset,
+          name: asset_name,
+          symbol,
+          decimals: Number(response.decimals),
+          blockchain: 'neoLegacy',
+        }
       })
     )
 
@@ -89,7 +96,7 @@ export class DoraSDKProvider implements NeoLegacyProvider {
 
   async getTransaction(transactionID: string) {
     const result = new Transaction()
-    const { block, size, time, txid, type } = await api.NeoLegacyREST.transaction(transactionID, this.network)
+    const { block, size, time, txid, type } = await api.NeoLegacyREST.transaction(transactionID, this.network.type)
     result.txid = txid
     result.type = type
     result.size = size
@@ -98,58 +105,17 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     return result
   }
 
-  async getContract(hash: string): Promise<ContractResponse> {
-    throw new Error('Method not implemented')
-  }
-
-  async getAllNodes() {
-    const result = [] as Node[]
-    const response = await api.NeoLegacyREST.getAllNodes(this.network)
-    const nodes = Array.from(response.values())
-    nodes.forEach(({ height, url }) => {
-      result.push({ height, url, blockchain: 'neoLegacy' })
-    })
-    const allNodes = result.sort((node1, node2) => {
-      if (node1.height && node2.height) {
-        if (node1.height < node2.height) {
-          return 1
-        } else {
-          return -1
-        }
-      } else {
-        return 0
-      }
-    })
-
-    const nodesHttps = allNodes.filter(node => node.url?.includes('https'))
-    const nodesHttp = allNodes.filter(node => !node.url?.includes('https'))
-
-    return [...nodesHttps, ...nodesHttp]
-  }
-
   async getUnclaimed(address: string) {
     const result = new UnclaimedResponse()
-    const { unclaimed } = await api.NeoLegacyREST.getUnclaimed(address)
+    const { unclaimed } = await api.NeoLegacyREST.getUnclaimed(address, this.network.type)
     result.address = address
     result.unclaimed = unclaimed
     return result
   }
-  private convertScientifcNotationToDecimal(scientificNotation: number) {
+
+  private convertScientifcNotationToDecimal(scientificNotation: number, decimals: number) {
     return String(scientificNotation).includes('e')
-      ? new Number(scientificNotation).toFixed(this.baseNumeric)
+      ? new Number(scientificNotation).toFixed(decimals)
       : scientificNotation
-  }
-
-  async getAssetByHash(hash: string) {
-    const response = await api.NeoLegacyREST.asset(hash, this.network)
-
-    if (response) {
-      return {
-        symbol: response.symbol,
-        decimals: Number(response.decimals),
-      }
-    } else {
-      return null
-    }
   }
 }

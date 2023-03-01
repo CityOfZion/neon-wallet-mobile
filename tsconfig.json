@@ -4,10 +4,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
-    "lib": [
-      "dom",
-      "esnext"
-    ],
+    "lib": ["dom", "esnext"],
     "moduleResolution": "node",
     "noEmit": false,
     "skipLibCheck": true,
@@ -16,18 +13,11 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": [
-        "./*"
-      ],
-      "~src/*": [
-        "src/*"
-      ]
+      "~/*": ["./*"],
+      "~src/*": ["src/*"]
     },
     "outDir": "build"
   },
-  "exclude": [
-    "node_modules",
-    "__tests__/**/*"
-  ],
+  "exclude": ["node_modules", "__tests__/**/*"],
   "extends": "expo/tsconfig.base"
 }

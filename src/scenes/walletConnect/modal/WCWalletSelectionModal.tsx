@@ -9,11 +9,11 @@ import { Skeleton } from '~/src/components/Skeleton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
+import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
 import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { selectWallets } from '~/src/store/wallet/SelectorWallet'
-import { hasWalletconnect } from '~src/blockchain/common'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import WalletPicker from '~src/components/misc/WalletPicker'
 import { IURI } from '~src/helpers/UriHelper'
@@ -37,13 +37,20 @@ const WCWalletSelectionModal = (props: Props) => {
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
   const controller = useSwiperController(true)
+  const { getBlockchainService } = useBlockchainServiceUtils()
 
   const validWallets = useMemo(
     () =>
-      wallets.filter(
-        (wallet: Wallet) =>
-          wallet.walletType !== 'watch' && wallet.getAccounts(accounts).some(it => hasWalletconnect(it))
-      ),
+      wallets.filter((wallet: Wallet) => {
+        const walletAccounts = wallet.getAccounts(accounts)
+
+        const hasAccountWithWalletConnect = walletAccounts.some(account => {
+          const service = getBlockchainService(account.blockchain)
+          return service.hasWalletConnectIntegration()
+        })
+
+        return wallet.walletType !== 'watch' && hasAccountWithWalletConnect
+      }),
     [wallets, accounts]
   )
   const [selectedWallet, setSelectedWallet] = useState<Wallet>(validWallets[0])

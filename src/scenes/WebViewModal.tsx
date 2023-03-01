@@ -33,7 +33,7 @@ const WebViewModal = ({ navigation, route }: Props) => {
   }
 
   return (
-    <ScreenLayout useHeaderPadding={false} useStatusBarPadding useFooterPadding={false} padding={0}>
+    <ScreenLayout useHeaderPadding={false} useFooterPadding={false} padding={0}>
       <LinearLayout orientation="horiz" alignItems="center" padding={12}>
         <BackButton onPress={handleOnPressBack} />
 

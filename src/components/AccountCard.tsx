@@ -7,13 +7,13 @@ import { LayoutChangeEvent, NativeSyntheticEvent, NativeTouchEvent, Animated } f
 import { useSelector } from 'react-redux'
 
 import { BalanceHelper } from '../helpers/BalanceHelper'
+import { BlockchainHelper } from '../helpers/BlockchainHelper'
 import { RootStackParamList } from '../navigation/AppNavigation'
 import { RootState } from '../store/RootStore'
 import { UseUniqueBalanceAndExchangeResult } from '../types/query'
 import { Skeleton } from './Skeleton'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
-import { getBlockchainLogo } from '~src/blockchain'
 import { FilterHelper } from '~src/helpers/FilterHelper'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
 import { Account } from '~src/models/redux/Account'
@@ -232,7 +232,7 @@ const AccountCard = ({
           >
             <LinearLayout orientation="horiz" alignItems="center">
               <ImageView
-                source={getBlockchainLogo(account.blockchain, 'white')}
+                source={BlockchainHelper.getIcon(account.blockchain, 'white')}
                 resizeMode="contain"
                 alignSelf="center"
                 style={{

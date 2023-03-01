@@ -1,8 +1,10 @@
 import { CaseReducer, PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
+import { RootState } from '../RootStore'
+
 import { appBus } from '~/src/app/AppBus'
 import { Storage } from '~/src/app/Storage'
-import { blockchainServices } from '~/src/blockchain'
+import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
 import { PollingHelper } from '~/src/helpers/PollingHelper'
 import { Account } from '~/src/models/redux/Account'
 import { AccountState } from '~/src/types/reducers/account'
@@ -10,6 +12,8 @@ import { AccountState } from '~/src/types/reducers/account'
 interface IAccountReducer {
   data: AccountState[]
 }
+
+type TWatchPendingTransactionParams = { account: Account; transactionHash: string; isClaim?: boolean }
 
 export const accountReducerName = 'accountReducer'
 
@@ -31,26 +35,32 @@ const saveAccount = createAsyncThunk('accounts/save', async (account: Account) =
 
 const watchPendingTransaction = createAsyncThunk(
   'accounts/watchPendingTransaction',
-  async ({ account, transactionHash, isClaim }: { account: Account; transactionHash: string; isClaim?: boolean }) => {
+  ({ account, transactionHash, isClaim }: TWatchPendingTransactionParams, { getState }) => {
     const polling = new PollingHelper()
+    const state = getState() as RootState
 
-    return await new Promise<AccountState>((resolve, reject) => {
+    return new Promise<AccountState>((resolve, reject) => {
       let attemptCounter = 0
       polling.run(async () => {
-        blockchainServices[account.blockchain].provider.getTransaction(transactionHash).then(transaction => {
-          attemptCounter++
-          if (transaction) {
-            account.removePendingTransactions(transactionHash)
-            appBus.emit(isClaim ? 'claimGasEnd' : 'pendingTransactionConfirmed', account)
-            resolve(account.deserialize)
-            polling.stop()
-          } else {
-            if (attemptCounter > 10) {
-              reject(new Error(`transaction ${transactionHash} not found`))
-              polling.stop()
-            }
-          }
+        attemptCounter++
+
+        const service = BlockchainHelper.getBlockchainService({
+          blockchain: account.blockchain,
+          network: state.settings.selectedBlockchainNetworks[account.blockchain],
         })
+        try {
+          await service.provider.getTransaction(transactionHash)
+
+          account.removePendingTransactions(transactionHash)
+          appBus.emit(isClaim ? 'claimGasEnd' : 'pendingTransactionConfirmed', account)
+          resolve(account.deserialize)
+          polling.stop()
+        } catch {
+          if (attemptCounter > 10) {
+            reject(new Error(`transaction ${transactionHash} not found`))
+            polling.stop()
+          }
+        }
       })
     })
   }

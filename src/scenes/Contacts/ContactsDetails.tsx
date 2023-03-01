@@ -8,8 +8,9 @@ import { Shadow } from 'react-native-shadow-2'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { getBlockchainByAddress, getBlockchainLogo } from '~/src/blockchain'
+import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
+import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
 import { selectContacts } from '~/src/store/contact/SelectorContact'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -32,6 +33,8 @@ interface IItemAddress {
   address: string
 }
 const ItemAddress: React.FC<IItemAddress> = ({ address }) => {
+  const { getBlockchainByAddress } = useBlockchainServiceUtils()
+
   const blockchainName = getBlockchainByAddress(address)
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const styles = StyleSheet.create({
@@ -56,7 +59,13 @@ const ItemAddress: React.FC<IItemAddress> = ({ address }) => {
     <TouchableOpacity onPress={() => UtilsHelper.copyToClipboard(address)} style={styles.container}>
       <LinearLayout orientation="horiz">
         {blockchainName && (
-          <ImageView width={17} height={18} source={getBlockchainLogo(blockchainName)} mr={3} alignSelf="center" />
+          <ImageView
+            width={17}
+            height={18}
+            source={BlockchainHelper.getIcon(blockchainName)}
+            mr={3}
+            alignSelf="center"
+          />
         )}
         <LinearLayout orientation="verti" width="85%">
           {blockchainName && (

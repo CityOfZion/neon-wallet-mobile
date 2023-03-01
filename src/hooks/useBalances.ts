@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useQueries, UseQueryOptions, QueryKey, UseQueryResult } from 'react-query'
 
-import { BlockchainServiceKey, blockchainServices } from '../blockchain'
+import { BlockchainServiceKey } from '../blockchain'
 import {
   Balance,
   BaseOptions,
@@ -10,20 +10,7 @@ import {
   UseUniqueBalancesResult,
   UseBalancesResult,
 } from '../types/query'
-
-async function fetchBalance(address: string, blockchain: BlockchainServiceKey): Promise<Balance> {
-  const balance = await blockchainServices[blockchain].provider.getBalance(address)
-
-  const mappedBalance = balance.map(balance => ({
-    ...balance,
-    blockchain,
-  }))
-
-  return {
-    address,
-    tokensBalances: mappedBalance,
-  }
-}
+import { useBlockchainServiceUtils } from './useBlockchainServices'
 
 export function useBalances(params: UseBalancesParams[], queryOptions?: BaseOptions<Balance>): UseMultipleBalancesResult
 
@@ -38,7 +25,21 @@ export function useBalances(
   params: UseBalancesParams | UseBalancesParams[],
   queryOptions?: BaseOptions<Balance>
 ): UseBalancesResult {
+  const { getBlockchainService } = useBlockchainServiceUtils()
   const [isRefetchingByUser, setIsRefetchingByUser] = useState(false)
+
+  const fetchBalance = useCallback(
+    async (address: string, blockchain: BlockchainServiceKey): Promise<Balance> => {
+      const service = getBlockchainService(blockchain)
+      const balance = await service.provider.getBalance(address)
+
+      return {
+        address,
+        tokensBalances: balance,
+      }
+    },
+    [getBlockchainService]
+  )
 
   const generateQuery = useCallback(
     (param: UseBalancesParams): UseQueryOptions<Balance, unknown, Balance, QueryKey> => {
@@ -48,7 +49,7 @@ export function useBalances(
         ...queryOptions,
       }
     },
-    [queryOptions]
+    [queryOptions, fetchBalance]
   )
 
   const queries = useMemo(() => {

@@ -5,10 +5,10 @@ import React, { useCallback, useMemo } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { getBlockchainLogo } from '~/src/blockchain'
-import { BlockchainServiceKey, getBlockchainByWCChain } from '~/src/blockchain/common'
 import { ConnectedAccountAndWallet } from '~/src/components/ConnectionItem'
-import { DEFAULT_BLOCKCHAIN } from '~/src/config/walletConnect/constants'
+import { walletConnectConfig } from '~/src/config/WalletConnectConfig'
+import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
+import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { RootState } from '~/src/store/RootStore'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import { Session, useWalletConnect } from '~src/contexts/WalletConnectContext'
@@ -27,7 +27,7 @@ interface Props {
 
 const WCConnectionDetailsModal = (props: Props) => {
   const { session, connectedAccountsAndWallets } = props.route.params
-  const methods = session.requiredNamespaces[DEFAULT_BLOCKCHAIN].methods
+  const methods = session.requiredNamespaces[walletConnectConfig.defaultBlockchain].methods
   const approvalDate = useSelector((state: RootState) =>
     state.wcReducer.approvalDates?.find(approvalDate => approvalDate.sessionTopic === session.topic)
   )
@@ -36,11 +36,10 @@ const WCConnectionDetailsModal = (props: Props) => {
   const navigation = useNavigation()
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
 
-  const blockchain = useMemo<BlockchainServiceKey>(() => {
-    const blockchainByWCChain = getBlockchainByWCChain(session)
-
-    return blockchainByWCChain ?? 'neo3'
-  }, [session])
+  const blockchain = useMemo(
+    () => WalletConnectHelper.getAccountInformationFromSession(session)[0].blockchain,
+    [session]
+  )
 
   const handleDisconnect = useCallback(async () => {
     await walletConnectCtx.disconnect(session.topic)
@@ -100,7 +99,7 @@ const WCConnectionDetailsModal = (props: Props) => {
               </TextView>
               <LinearLayout orientation="horiz" mt={3}>
                 <ImageView
-                  source={getBlockchainLogo(blockchain)}
+                  source={BlockchainHelper.getIcon(blockchain)}
                   resizeMode="contain"
                   mr={1}
                   style={{

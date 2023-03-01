@@ -3,6 +3,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
+import { ProtocolEditPage, ProtocolEditPageParams } from '../scenes/Settings/ProtocolEditPage'
+import { ProtocolsPage } from '../scenes/Settings/ProtocolsPage'
 import { SecurityBackupCheckPage } from '../scenes/Settings/SecurityBackupCheckPage/SecurityBackupCheckPage'
 import { SecurityPage } from '../scenes/Settings/SecurityPage'
 import Step1BackupWalletPage, { Step1BackupWalletPageParams } from '../scenes/Wallet/BackupWallet/Step1BackupWalletPage'
@@ -18,6 +20,8 @@ export type SettingsStackParamList = {
   SettingsPage: undefined
   SecurityBackupCheckPage: undefined
   SecurityPage: undefined
+  ProtocolEditPage: ProtocolEditPageParams
+  ProtocolsPage: undefined
   Step1BackupWallet: Step1BackupWalletPageParams
   Step2BackupWallet: Step2BackupWalletPageParams
   Step3BackupWallet: Step3BackupWalletPageParams
@@ -97,6 +101,30 @@ const SettingsStackNavigation = () => {
           options={({ route }) =>
             Navigator.defaultStackNavigatorOptions({
               title: wrapper.route.SecurityPage.translate(),
+              theme,
+              route,
+            })
+          }
+        />
+
+        <SettingsStack.Screen
+          name={wrapper.route.ProtocolsPage.name}
+          component={ProtocolsPage}
+          options={({ route }) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: wrapper.route.ProtocolsPage.translate(),
+              theme,
+              route,
+            })
+          }
+        />
+
+        <SettingsStack.Screen
+          name={wrapper.route.ProtocolEditPage.name}
+          component={ProtocolEditPage}
+          options={({ route }) =>
+            Navigator.defaultStackNavigatorOptions({
+              title: wrapper.route.ProtocolsPage.translate(),
               theme,
               route,
             })

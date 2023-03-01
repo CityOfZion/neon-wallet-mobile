@@ -3,7 +3,8 @@ import React, { useMemo, useState } from 'react'
 import { FlatList } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { BlockchainServiceKey, getBlockchainLogo } from '~/src/blockchain'
+import { BlockchainServiceKey } from '~/src/blockchain'
+import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { selectWallets } from '~/src/store/wallet/SelectorWallet'
 import { LinearLayoutProps } from '~/src/types/styled-components'
@@ -64,7 +65,7 @@ const Item = React.memo(({ account, onPress, wallet }: ItemProps) => {
             <ImageView
               width={22}
               height={23}
-              source={getBlockchainLogo(account.blockchain)}
+              source={BlockchainHelper.getIcon(account.blockchain)}
               mr={3}
               alignSelf="center"
             />

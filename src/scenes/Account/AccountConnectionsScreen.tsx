@@ -7,7 +7,7 @@ import { FlatList } from 'react-native'
 import AccountSubTitle from '~/src/components/AccountSubTitle'
 import { ConnectionItem } from '~/src/components/ConnectionItem'
 import { FlatListEmpty } from '~/src/components/FlatListEmpty'
-import ScreenLayoutWithoutScroll from '~/src/components/layout/ScreenLayoutWithoutScroll'
+import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import { useWalletConnect } from '~/src/contexts/WalletConnectContext'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { Account } from '~/src/models/redux/Account'
@@ -39,7 +39,7 @@ const AccountConnectionsScreen = ({ route, navigation }: Props) => {
   )
 
   return (
-    <ScreenLayoutWithoutScroll darkerSolidColorBG>
+    <ScreenLayout darkerSolidColorBG scrollable={false}>
       <AccountSubTitle account={account} />
 
       <LinearLayout my="44px">
@@ -50,7 +50,7 @@ const AccountConnectionsScreen = ({ route, navigation }: Props) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </LinearLayout>
-    </ScreenLayoutWithoutScroll>
+    </ScreenLayout>
   )
 }
 

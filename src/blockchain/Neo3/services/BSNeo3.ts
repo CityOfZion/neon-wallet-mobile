@@ -1,20 +1,20 @@
-import { wallet } from '@cityofzion/n3-neon-core'
+import { rpc, wallet } from '@cityofzion/n3-neon-core'
 import Neon, { api } from '@cityofzion/n3-neon-js'
-import { ContractInvocationMulti, ContractInvocation } from '@cityofzion/neo3-invoker'
+import { ContractInvocation } from '@cityofzion/neo3-invoker'
 import { NeonInvoker } from '@cityofzion/neon-invoker'
 import { NeonParser } from '@cityofzion/neon-parser'
-import { JsonRpcResponse } from '@json-rpc-tools/utils'
 import axios from 'axios'
 import queryString from 'query-string'
-import { ImageLoadEventData, NativeModules, Platform } from 'react-native'
+import { NativeModules, Platform } from 'react-native'
 
-import { IconDappsListResponse } from '../../common'
-import tokens from '../tokens.json'
+import { TCOZTip, TFeeToken, TNetwork, TNetworkType } from '../../common'
+import { DoraSDKProvider } from '../providers/DoraSDKProviderNeo3'
 
-import { SessionRequest } from '~/src/contexts/WalletConnectContext'
+import { blockchainConfig } from '~/src/config/BlockchainConfig'
 import { AsteroidHelper, keychain } from '~/src/helpers/AsteroidHelper'
-import { NeoNode } from '~/src/models/NeoNode'
-import { Account } from '~/src/models/redux/Account'
+import { ContractMethod } from '~/src/models/ContractMethod'
+import { ContractParameter } from '~/src/models/ContractParameter'
+import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { ExchangeInfo } from '~/src/models/response/ExchangeInfo'
 import { NFTResponse } from '~/src/models/response/NFTResponse'
 import { NFTSResponse } from '~/src/models/response/NFTSResponse'
@@ -26,13 +26,9 @@ import {
   IClaimable,
   IWalletConnect,
   INFT,
-  IToken,
-  IconDapps,
+  IIconDapps,
 } from '~src/blockchain'
-import { Neo3ProviderOptions } from '~src/blockchain/Neo3'
 import { Neo3Provider } from '~src/blockchain/Neo3/providers/common'
-import { NeonWcAdapter } from '~src/helpers/NeonWcAdapter'
-const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
 
 type ImgMediaTypes = 'image/svg+xml' | 'image/png' | 'image/jpeg'
 
@@ -81,52 +77,64 @@ export type FlamingoExchangeResponse = {
   symbol: string
   usd_price: number
 }[]
-export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, INFT, IconDapps {
-  provider: Neo3Provider
-  key: BlockchainServiceKey
-  icon = icon
-  cozTip: { address: string; token: string; hash: string }
-  accountsPool: Account[] = []
-  private defaultEndpoint = 'https://mainnet1.neo.coz.io:443'
+
+export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, INFT, IIconDapps {
+  network!: TNetwork
+  provider!: Neo3Provider
+
+  readonly key: BlockchainServiceKey = 'neo3'
+  readonly cozTip: TCOZTip = {
+    address: 'NXWJfovnpRaj2r3yrYQXDMvBLixv9zJZsk',
+    symbol: 'GAS',
+    hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
+    decimals: 8,
+  }
+  readonly feeToken: TFeeToken = {
+    hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
+    token: 'GAS',
+    decimals: 8,
+  }
   readonly magicNumber = 844378958
   readonly derivationPath = "m/44'/888'/0'/0/?"
   readonly platform = 'neo'
-  readonly nativeAssets: string[] = ['NEO', 'GAS']
-  readonly feeToken: { hash: string; token: string; decimals: number }
-  readonly wcChains: string[]
-  readonly tokens: IToken[] = tokens as IToken[]
+
   constructor() {
-    this.provider = Neo3ProviderOptions('doraSDK')
-    this.key = 'neo3'
-    this.feeToken = {
-      hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
-      token: 'GAS',
-      decimals: 8,
-    }
-    this.cozTip = {
-      address: 'NXWJfovnpRaj2r3yrYQXDMvBLixv9zJZsk',
-      token: 'GAS',
-      hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
-    } //eslint-disable-next-line
-    this.wcChains = ['neo3:mainnet']
-  }
-  iconDappsScriptHash: string = '489e98351485bbd85be99618285932172f1862e4'
-
-  setAccountsPool(accounts: Account[]) {
-    this.accountsPool = accounts
+    this.setNetwork(blockchainConfig.defaultSelectedNetworks.neo3)
   }
 
-  async getIconList(scriptHashList: string[]): Promise<Map<string, { sm: string; lg: string }>> {
-    const nodes = await this.provider.getAllNodes()
-    const rpcAddress = NeoNode.getHighestNodeUrlFromPool(nodes) ?? this.defaultEndpoint
+  isClaimable(): this is IClaimable {
+    return true
+  }
+
+  hasNFTIntegration(): this is INFT {
+    return true
+  }
+
+  hasWalletConnectIntegration(): this is IWalletConnect {
+    return true
+  }
+
+  hasIconDappsIntegration(): this is IIconDapps {
+    return true
+  }
+
+  setNetwork(network: TNetwork) {
+    this.network = network
+    this.provider = new DoraSDKProvider(this.network)
+  }
+
+  async getIcon(hash: string): Promise<string | undefined> {
+    if (this.network.type !== 'mainnet') throw new Error('Not supported on custom networks')
+
+    const contractHash = '489e98351485bbd85be99618285932172f1862e4'
     const parser = NeonParser
-    const invoker = await NeonInvoker.init(rpcAddress)
+    const invoker = await NeonInvoker.init(this.network.url)
     const res = await invoker.testInvoke({
       invocations: [
         {
-          scriptHash: this.iconDappsScriptHash,
-          operation: 'getMultipleMetaData',
-          args: [{ type: 'Array', value: scriptHashList.map(hash => ({ type: 'Hash160', value: hash })) }],
+          scriptHash: contractHash,
+          operation: 'getMetaData',
+          args: [{ type: 'Hash160', value: hash }],
         },
       ],
     })
@@ -134,57 +142,11 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     if (res.stack.length === 0) {
       throw new Error(res.exception ?? 'unrecognized response')
     }
-    const formattedResult: IconDappsListResponse = parser.parseRpcResponse(res.stack[0], {
+    const formattedResult = parser.parseRpcResponse(res.stack[0], {
       ByteStringToScriptHash: true,
     })
 
-    return this.adaptGetIconList(formattedResult)
-  }
-
-  private adaptGetIconList(parseResponse: IconDappsListResponse) {
-    const adaptedResult = new Map<string, { sm: string; lg: string }>()
-    Object.keys(parseResponse).forEach(parseResponseKey => {
-      const parseResponseValue = parseResponse[parseResponseKey]
-      if (Object.keys(parseResponseValue).length > 0) {
-        adaptedResult.set(parseResponseKey.startsWith('0x') ? parseResponseKey : `0x${parseResponseKey}`, {
-          sm: parseResponseValue['icon/25x25'],
-          lg: parseResponseValue['icon/288x288'],
-        })
-      }
-    })
-    return adaptedResult
-  }
-
-  rpcCall = async (address: string, request: SessionRequest): Promise<JsonRpcResponse> => {
-    const neoAccount = await this.getNeoAccount(address)
-
-    if (!neoAccount) {
-      throw new Error('No account')
-    }
-
-    const nodes = await this.provider.getAllNodes()
-    const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
-
-    return await (await NeonWcAdapter.init(bestUrl ?? this.defaultEndpoint, neoAccount)).rpcCall(request)
-  }
-
-  async calculateFee(senderAddress: string, requestParams: ContractInvocationMulti) {
-    const fromAccount = await this.getNeoAccount(senderAddress)
-
-    if (!fromAccount) {
-      throw new Error('Account not found')
-    }
-
-    const nodes = await this.provider.getAllNodes()
-    const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
-
-    const nwcAdapter = await NeonWcAdapter.init(bestUrl ?? this.defaultEndpoint, fromAccount)
-    const testInvoke = await nwcAdapter.invoke.testInvoke(requestParams)
-    const extraNetworkFee = requestParams.extraNetworkFee ? this.fixDecimalPlaces(requestParams.extraNetworkFee, 8) : 0
-    const extraSystemFee = requestParams.extraSystemFee ? this.fixDecimalPlaces(requestParams.extraSystemFee, 8) : 0
-    const gasconsumed = this.fixDecimalPlaces(Number(testInvoke.gasconsumed), 8)
-    const summedFee = gasconsumed + extraNetworkFee + extraSystemFee
-    return summedFee.toString()
+    return formattedResult['icon/288x288']
   }
 
   validateAddress(address: string) {
@@ -268,21 +230,14 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
   }
 
   async sendTransaction(data: SendTransactionData) {
-    const account = await this.getNeoAccount(data.senderAddress)
-
-    if (!account) {
-      throw new Error('Account not found')
-    }
-
-    const nodes = await this.provider.getAllNodes()
-    const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
+    const account = new wallet.Account(data.senderWif)
 
     const invocations: ContractInvocation[] = [
       {
         operation: 'transfer',
         scriptHash: data.tokenHash,
         args: [
-          { type: 'Hash160', value: data.senderAddress },
+          { type: 'Hash160', value: account.address },
           { type: 'Hash160', value: data.receiverAddress },
           { type: 'Integer', value: Neon.u.BigInteger.fromDecimal(data.amount, data.tokenDecimals).toString() },
           { type: 'Any', value: '' },
@@ -295,7 +250,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
         operation: 'transfer',
         scriptHash: this.cozTip.hash,
         args: [
-          { type: 'Hash160', value: data.senderAddress },
+          { type: 'Hash160', value: account.address },
           { type: 'Hash160', value: this.cozTip.address },
           { type: 'Integer', value: Neon.u.BigInteger.fromDecimal(data.tip, 8).toString() },
           { type: 'Any', value: '' },
@@ -303,7 +258,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       })
     }
 
-    const invoker = await NeonInvoker.init(bestUrl ?? this.defaultEndpoint, account)
+    const invoker = await NeonInvoker.init(this.network.url, account)
     const transactionHash = await invoker.invokeFunction({
       invocations,
       signers: [],
@@ -312,39 +267,26 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     return transactionHash
   }
 
-  async claimGas(address: string) {
-    const neoAccount = await this.getNeoAccount(address)
-    if (!neoAccount) {
-      throw new Error('Account invalid to get claim')
-    }
+  async claimGas(wif: string) {
+    const account = new wallet.Account(wif)
 
-    const nodes = await this.provider.getAllNodes()
-    const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
-
-    const facade = await api.NetworkFacade.fromConfig({ node: bestUrl ?? this.defaultEndpoint })
-    const transactionHash = await facade.claimGas(neoAccount, {
-      signingCallback: api.signWithAccount(neoAccount),
+    const facade = await api.NetworkFacade.fromConfig({ node: this.network.url })
+    const transactionHash = await facade.claimGas(account, {
+      signingCallback: api.signWithAccount(account),
     })
 
     return transactionHash
   }
 
   async calculateTransferFee(data: Omit<SendTransactionData, 'fee'>) {
-    const account = await this.getNeoAccount(data.senderAddress)
-
-    if (!account) {
-      throw new Error('Account not found')
-    }
-
-    const nodes = await this.provider.getAllNodes()
-    const bestUrl = NeoNode.getHighestNodeUrlFromPool(nodes)
+    const account = new wallet.Account(data.senderWif)
 
     const invocations: ContractInvocation[] = [
       {
         operation: 'transfer',
         scriptHash: data.tokenHash,
         args: [
-          { type: 'Hash160', value: data.senderAddress },
+          { type: 'Hash160', value: account.address },
           { type: 'Hash160', value: data.receiverAddress },
           { type: 'Integer', value: Neon.u.BigInteger.fromDecimal(data.amount, data.tokenDecimals).toString() },
           { type: 'Any', value: '' },
@@ -357,7 +299,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
         operation: 'transfer',
         scriptHash: this.cozTip.hash,
         args: [
-          { type: 'Hash160', value: data.senderAddress },
+          { type: 'Hash160', value: account.address },
           { type: 'Hash160', value: this.cozTip.address },
           { type: 'Integer', value: Neon.u.BigInteger.fromDecimal(data.tip, 8).toString() },
           { type: 'Any', value: '' },
@@ -365,13 +307,18 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       })
     }
 
-    const invoker = await NeonInvoker.init(bestUrl ?? this.defaultEndpoint, account)
+    const invoker = await NeonInvoker.init(this.network.url, account)
     const { total } = await invoker.calculateFee({
       invocations,
       signers: [],
     })
 
     return total
+  }
+
+  async getBlockCount(): Promise<number> {
+    const rpcClient = new rpc.RPCClient(this.network.url)
+    return await rpcClient.getBlockCount()
   }
 
   async getNFTS(address: string, page: number = 1): Promise<NFTSResponse> {
@@ -430,13 +377,16 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
   }
 
   async getExchange(currency: string): Promise<ExchangeInfo[]> {
-    const { data: prices } = await axios.get<FlamingoExchangeResponse>('https://api.flamingo.finance/token-info/prices')
+    if (this.network.type !== 'mainnet') throw new Error('Exchange is only available on mainnet')
+
+    const pricesURL = 'https://api.flamingo.finance/token-info/prices'
+    const { data: prices } = await axios.get<FlamingoExchangeResponse>(pricesURL)
 
     let currencyRatio: number = 1
 
     if (currency !== 'USD') {
-      const { data } = await axios.get<number>(`https://api.flamingo.finance/fiat/exchange-rate?pair=USD_${currency}`)
-
+      const exchangeURL = `https://api.flamingo.finance/fiat/exchange-rate?pair=USD_${currency}`
+      const { data } = await axios.get<number>(exchangeURL)
       currencyRatio = data
     }
 
@@ -446,10 +396,32 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     }))
   }
 
-  private async getNeoAccount(address: string) {
-    const account = this.accountsPool.find(it => it.address === address)
-    const wifAccount = await account?.getWif()
-    return wifAccount ? new wallet.Account(wifAccount) : null
+  async getContract(hash: string): Promise<ContractResponse> {
+    const contract = new ContractResponse()
+    const rpcClient = new rpc.RPCClient(this.network.url)
+    const contractState = await rpcClient.getContractState(hash)
+
+    contract.hash = contractState.hash
+    contract.name = contractState.manifest.name
+
+    contractState.manifest.abi?.methods.forEach(method => {
+      const contractMethod = new ContractMethod()
+
+      contractMethod.name = method.name
+
+      method.parameters.forEach(parameter => {
+        const contractParameter = new ContractParameter()
+
+        contractParameter.name = parameter.name
+        contractParameter.type = parameter.type
+
+        contractMethod.parameters.push(contractParameter)
+      })
+
+      contract.methods.push(contractMethod)
+    })
+
+    return contract
   }
 
   private treatGhostMarketImage(srcImage?: string) {
@@ -467,9 +439,23 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
   }
 
   private buildGhostMarketURL(path: string, params?: Record<string, any | any[]>) {
-    const chain = 'n3'
+    if (this.network.type === 'custom') throw new Error('This method does not support custom networks')
 
-    const baseUrl = 'https://api.ghostmarket.io/api/v2'
+    const chainsByNetwork: Partial<Record<TNetworkType, string>> = {
+      mainnet: 'n3',
+      testnet: 'n3t',
+    }
+
+    const baseURlByNetwork: Partial<Record<TNetworkType, string>> = {
+      mainnet: 'https://api.ghostmarket.io/api/v2',
+      testnet: 'https://api-testnet.ghostmarket.io/api/v2',
+    }
+
+    const chain = chainsByNetwork[this.network.type]
+    if (!chain) throw new Error('Invalid network')
+
+    const baseUrl = baseURlByNetwork[this.network.type]
+    if (!baseUrl) throw new Error('Invalid network')
 
     const parameters = queryString.stringify(
       {
@@ -515,9 +501,5 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       nfts,
       total,
     }
-  }
-
-  private fixDecimalPlaces(value: number, decimalPlaces: number) {
-    return value / 10 ** decimalPlaces
   }
 }

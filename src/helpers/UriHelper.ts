@@ -1,5 +1,3 @@
-import { validateAddressAllBlockchains } from '~src/blockchain'
-
 export interface IURI {
   address: string
   tokenHash?: string
@@ -24,7 +22,7 @@ export abstract class UriHelper {
   }
 
   static isValid(str: string) {
-    const listOfPrefix = ['wc', 'neo']
+    const listOfPrefix = ['neo']
     return listOfPrefix.some(prefix => str.startsWith(prefix))
   }
 
@@ -32,8 +30,6 @@ export abstract class UriHelper {
     if (!this.isValid(str)) return
 
     const [address, params] = str.substring(3).split('?')
-
-    if (!validateAddressAllBlockchains(address)) return
 
     let tokenHash: string | undefined
     let amount: number | undefined

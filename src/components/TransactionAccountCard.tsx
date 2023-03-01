@@ -3,9 +3,9 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import I18n from 'i18n-js'
 import React from 'react'
 
+import { useBlockchainServiceUtils } from '../hooks/useBlockchainServices'
 import { RootStackParamList } from '../navigation/AppNavigation'
 
-import { getBlockchainByAddress } from '~/src/blockchain'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Normalize } from '~src/app/Normalize'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
@@ -22,6 +22,7 @@ interface Props {
 
 export const TransactionAccountCard = (props: Props) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList & ModalStackParamList>>()
+  const { getBlockchainByAddress } = useBlockchainServiceUtils()
   const blockchain = props.address ? getBlockchainByAddress(props.address) : undefined
 
   const handlePress = () => {

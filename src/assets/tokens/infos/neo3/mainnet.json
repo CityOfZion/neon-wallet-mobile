@@ -1,25 +1,9 @@
 [
   {
-    "symbol": "GAS",
-    "type": "NEP17",
-    "name": "GASToken",
-    "hash": "d2a4cff31913016155e38e474a2c06d08be276cf",
-    "decimals": 8,
-    "blockchain": "neo3"
-  },
-  {
-    "symbol": "NEO",
-    "type": "NEP17",
-    "name": "NeoToken",
-    "hash": "ef4073a0f2b305a38ec4050e4d3d28bc40ea63f5",
-    "decimals": 0,
-    "blockchain": "neo3"
-  },
-  {
     "symbol": "LRB",
     "type": "NEP17",
     "name": "LyrebirdToken",
-    "hash": "8c07b4c9f5bc170a3922eac4f5bb7ef17b0acc8b",
+    "hash": "0x8c07b4c9f5bc170a3922eac4f5bb7ef17b0acc8b",
     "decimals": 8,
     "blockchain": "neo3"
   },
@@ -27,7 +11,7 @@
     "symbol": "USDL",
     "type": "NEP17",
     "name": "LyrebirdUSDToken",
-    "hash": "a8c51aa0c177187aeed3db88bdfa908ccbc9b1a5",
+    "hash": "0xa8c51aa0c177187aeed3db88bdfa908ccbc9b1a5",
     "decimals": 8,
     "blockchain": "neo3"
   },

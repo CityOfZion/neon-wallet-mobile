@@ -32,8 +32,12 @@ type Props = {
   animationType?: TANimationType
   width?: number
   height?: number
+  disablePointer?: boolean
   containerStyle?: LinearLayoutProps
 } & (WithBalanceBarProps | WithoutBalanceBarProps)
+
+export const walletCardWidth = 300
+export const walletCardHeight = 386
 
 export const WalletCard = ({
   wallet,
@@ -46,8 +50,10 @@ export const WalletCard = ({
   wasPressed,
   ...props
 }: Props) => {
-  const viewWidth = width ?? 280
-  const viewHeight = height ?? 386
+  const containerWidth = width ?? walletCardWidth
+  const containerHeight = height ?? walletCardHeight
+  const viewWidth = containerWidth * 0.95
+  const viewHeight = containerHeight * 0.95
 
   const outAnimatedFactor = useRef(new Animated.Value(0))
   const inAnimatedFactor = useRef(new Animated.Value(0))
@@ -89,7 +95,15 @@ export const WalletCard = ({
   }, [animationType, wasPressed])
 
   return (
-    <LinearLayout overflow="hidden" {...containerStyle}>
+    <LinearLayout
+      overflow="hidden"
+      {...containerStyle}
+      width={containerWidth}
+      height={containerHeight}
+      alignItems="center"
+      justifyContent="center"
+      pointerEvents={props.disablePointer ? 'none' : 'auto'}
+    >
       <Shadow radius={18} offset={[4, 4]}>
         <ButtonView
           width={viewWidth}

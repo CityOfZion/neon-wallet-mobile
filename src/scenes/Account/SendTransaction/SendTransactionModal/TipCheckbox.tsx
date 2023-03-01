@@ -4,7 +4,7 @@ import i18n from 'i18n-js'
 import React, { useEffect } from 'react'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { blockchainServices } from '~/src/blockchain'
+import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { Token } from '~/src/models/Token'
 import { Account } from '~/src/models/redux/Account'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
@@ -42,7 +42,7 @@ export const TipCheckbox = ({
   account,
   tokenBalance,
 }: Props) => {
-  const cozTip = blockchainServices[account.blockchain].cozTip
+  const { blockchainService } = useBlockchainService(account.blockchain)
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList & ModalStackParamList>>()
 
@@ -74,12 +74,12 @@ export const TipCheckbox = ({
   }, [amount])
 
   useEffect(() => {
-    if (!token || !cozTip || !amount || fee === undefined || !tip || !tokenBalance) {
+    if (!token || !amount || fee === undefined || !tip || !tokenBalance || !blockchainService.cozTip) {
       onDisableChange(true)
       return
     }
 
-    if (token.symbol === cozTip.token) {
+    if (token.symbol === blockchainService.cozTip.symbol) {
       if (tokenBalance.amount >= tip + amount + fee) {
         onDisableChange(false)
         return

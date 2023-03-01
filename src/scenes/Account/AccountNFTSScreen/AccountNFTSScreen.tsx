@@ -7,13 +7,12 @@ import { FlatList } from 'react-native'
 
 import { NFTItem } from './NFTItem'
 
-import { blockchainServices } from '~/src/blockchain'
-import { hasNFTIntegration } from '~/src/blockchain/common'
 import AccountSubTitle from '~/src/components/AccountSubTitle'
 import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 import { FlatListFooter } from '~/src/components/FlatListFooter'
-import ScreenLayoutWithoutScroll from '~/src/components/layout/ScreenLayoutWithoutScroll'
+import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
+import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { Account } from '~/src/models/redux/Account'
 import { NFTResponse } from '~/src/models/response/NFTResponse'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
@@ -35,6 +34,7 @@ const AccountNFTSScreen = (props: Props) => {
   const [NFTS, setNFTS] = useState<NFTResponse[]>([])
   const [showMoreLoading, setShowMoreLoading] = useState(false)
   const onEndReachedCalledDuringMomentum = useRef(true)
+  const { blockchainService } = useBlockchainService(account.blockchain)
 
   const pageControl = useRef<number>(1)
 
@@ -51,23 +51,21 @@ const AccountNFTSScreen = (props: Props) => {
   }
 
   const handleLoadNFTS = useCallback(async () => {
-    const service = blockchainServices[account.blockchain]
+    try {
+      if (!blockchainService.hasNFTIntegration() || !account.address) return
 
-    if (!hasNFTIntegration(service) || !account.address) {
-      return
-    }
+      const { items, totalPages } = await blockchainService.getNFTS(account.address, pageControl.current)
 
-    const { items, totalPages } = await service.getNFTS(account.address, pageControl.current)
+      setNFTS(prevState => [...prevState, ...items])
 
-    setNFTS(prevState => [...prevState, ...items])
+      if (totalPages && pageControl.current < totalPages) {
+        setShowMoreLoading(true)
+      } else {
+        setShowMoreLoading(false)
+      }
 
-    if (totalPages && pageControl.current < totalPages) {
-      setShowMoreLoading(true)
-    } else {
-      setShowMoreLoading(false)
-    }
-
-    pageControl.current += 1
+      pageControl.current += 1
+    } catch {}
   }, [account])
 
   useEffect(() => {
@@ -75,7 +73,7 @@ const AccountNFTSScreen = (props: Props) => {
   }, [handleLoadNFTS])
 
   return (
-    <ScreenLayoutWithoutScroll darkerSolidColorBG>
+    <ScreenLayout darkerSolidColorBG scrollable={false}>
       <AccountSubTitle account={account} />
       <AwaitActivity name="populateNFTS" loadingView={<ScreenLoader darkerSolidColorBG />}>
         <LinearLayout my="44px">
@@ -91,7 +89,7 @@ const AccountNFTSScreen = (props: Props) => {
           />
         </LinearLayout>
       </AwaitActivity>
-    </ScreenLayoutWithoutScroll>
+    </ScreenLayout>
   )
 }
 

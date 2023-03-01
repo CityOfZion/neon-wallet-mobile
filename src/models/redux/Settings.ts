@@ -5,7 +5,7 @@ import { SettingsState } from '~/src/types/reducers/settings'
 import { Theme } from '~src/enums/Theme'
 
 @HttpExclude()
-export class Settings implements SettingsState {
+export class Settings implements Omit<SettingsState, 'networks'> {
   @HttpExpose()
   language = localeConfig.defaultLanguage
 

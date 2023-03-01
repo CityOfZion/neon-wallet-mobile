@@ -1789,10 +1789,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cityofzion/dora-ts@^0.0.10":
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/@cityofzion/dora-ts/-/dora-ts-0.0.10.tgz#d73d51b6566153d0c04c05459ee207c7d3265875"
-  integrity sha512-K0VoIvYvbLT92SRffPMBSgUZudrF78UJ0v0KIDw4PUbN5U/4uVOHlEfPlGjISvHanVFgEB4lLVpzbkTkcydaCw==
+"@cityofzion/dora-ts@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@cityofzion/dora-ts/-/dora-ts-0.0.11.tgz#7656bfdeea185fc9ad90113407ab1bd26350240c"
+  integrity sha512-LJWGU29BHPTHkt0i/OwhNdMfUGM/rgAa4rqlDwBy95spxSoUHGSoAtOD5k4aSVKmLFwq77ghNna0Lpc7lEuHBA==
   dependencies:
     axios "^0.21.1"
 

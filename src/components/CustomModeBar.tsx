@@ -1,0 +1,35 @@
+import Constants from 'expo-constants'
+import React from 'react'
+
+import { Normalize } from '../app/Normalize'
+import { ImageView, LinearLayout, TextView } from '../styles/styled-components'
+
+export const CustomModeBar = () => {
+  return (
+    <LinearLayout
+      orientation="horiz"
+      backgroundColor="black"
+      width="100%"
+      justifyContent="center"
+      alignItems="flex-end"
+      padding={15}
+      paddingTop={15 + Constants.statusBarHeight}
+      borderBottomWidth="2px"
+      borderBottomColor="quinary"
+    >
+      <LinearLayout orientation="horiz">
+        <ImageView
+          source={require('~src/assets/images/icon-warning-purple.png')}
+          width={Normalize.scale(16)}
+          height={Normalize.scale(16)}
+          resizeMode="contain"
+          alignSelf="center"
+          marginRight="8px"
+        />
+        <TextView fontSize="18px" color="text.0">
+          Custom Network Mode
+        </TextView>
+      </LinearLayout>
+    </LinearLayout>
+  )
+}

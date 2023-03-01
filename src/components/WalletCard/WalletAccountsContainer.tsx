@@ -32,7 +32,7 @@ export const WalletAccountsContainer = ({ wallet, inAnimatedValue, outAnimatedVa
       left="50%"
       style={{ transform: [{ translateX: -width / 2 }, { translateY: -height / 2 }, { rotate: '90deg' }] }}
     >
-      <LinearLayout position="relative" left="-4px">
+      <LinearLayout position="relative">
         <Animated.View
           style={{
             transform: [
@@ -53,8 +53,13 @@ export const WalletAccountsContainer = ({ wallet, inAnimatedValue, outAnimatedVa
           }}
         >
           {limitedWalletAccounts.map((account, index) => (
-            <LinearLayout position="absolute" left={`${index * 4}px`}>
-              <AccountCard width={width} height={height} account={account} hideBalance />
+            <LinearLayout position="absolute" left={`${index * 4}px`} key={account.address}>
+              <AccountCard
+                width={index <= 2 ? width : width - (index - 2) * 4}
+                height={height}
+                account={account}
+                hideBalance
+              />
             </LinearLayout>
           ))}
         </Animated.View>

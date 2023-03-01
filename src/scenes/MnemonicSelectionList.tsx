@@ -6,11 +6,13 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { View, Text, Image, FlatList, TouchableWithoutFeedback, ScrollView } from 'react-native'
 import Accordion from 'react-native-collapsible/Accordion'
 
+import { BlockchainHelper } from '../helpers/BlockchainHelper'
+import { useBlockchainService } from '../hooks/useBlockchainServices'
 import { RootStackParamList } from '../navigation/AppNavigation'
 import { WalletStackParamList } from '../navigation/WalletsStackNavigation'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
-import { BlockchainServiceKey, blockchainServices, getBlockchainLogo } from '~src/blockchain'
+import { BlockchainServiceKey } from '~src/blockchain'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
@@ -53,7 +55,7 @@ const HeaderMnemonicSelection = (props: HeaderMnemonicSelectionProps) => {
     >
       <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
         <Image
-          source={getBlockchainLogo(blockchainName)}
+          source={BlockchainHelper.getIcon(blockchainName)}
           width={32}
           height={33}
           style={{ height: 28, width: 27, marginHorizontal: 10 }}
@@ -95,6 +97,7 @@ interface ContentMnemonicItemProps {
 }
 
 const ContentMnemonicItem = (props: ContentMnemonicItemProps) => {
+  const { blockchainService } = useBlockchainService(props.blockchain)
   const [addressIsSelected, setAddressIsSelected] = useState<boolean>(true)
 
   const handleIsSelected = useCallback(() => {
@@ -116,7 +119,7 @@ const ContentMnemonicItem = (props: ContentMnemonicItemProps) => {
       >
         <View style={{ backgroundColor: '#13191D' }}>
           <Text style={{ fontFamily: 'medium', color: '#899fa8', fontSize: 16 }}>
-            {blockchainServices[props.blockchain].derivationPath.replace('?', String(props.data.derivationIndex))}
+            {blockchainService.derivationPath.replace('?', String(props.data.derivationIndex))}
           </Text>
           <Text style={{ fontFamily: 'medium', color: '#fff', fontSize: 16 }}>{props.data.address}</Text>
         </View>

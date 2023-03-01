@@ -7,7 +7,7 @@ import { Alert } from 'react-native'
 import { useDispatch } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { getBlockchainByAddress, validateAddressAllBlockchains } from '~/src/blockchain'
+import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
 import { Contact } from '~/src/models/redux/Contact'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { contactReducerActions } from '~/src/store/contact/ContactReducer'
@@ -32,6 +32,7 @@ interface Props {
 
 export const PersistContact = (props: Props) => {
   const { startingAddress, contact } = props.route.params
+  const { validateAddressAllBlockchains, getBlockchainByAddress } = useBlockchainServiceUtils()
 
   const controller = useSwiperController(true)
   const dispatch = useDispatch<DispatchResult>()

@@ -2,19 +2,13 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
+import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { wrapper } from '~src/app/ApplicationWrapper'
-import {
-  BlockchainServiceKey,
-  getBlockchainByAddress,
-  validateAddressAllBlockchains,
-  blockchainList,
-  blockchainServices,
-} from '~src/blockchain'
-import AddressesImportList from '~src/components/AddressesImportList'
+import AddressesImportList, { AddressInfo } from '~src/components/AddressesImportList'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
@@ -35,39 +29,28 @@ interface ImportReadAccountProps {
 }
 
 const ImportReadAccount = (props: ImportReadAccountProps) => {
+  const { address } = props.route.params
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const accounts = useSelector(selectAccounts)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const blockchainActions = useBlockchainActions()
+  const { getBlockchainServices, validateAddressAllBlockchains } = useBlockchainServiceUtils()
 
-  const [inputValue, setInputValue] = useState(props.route.params ? props.route.params.address ?? '' : '')
+  const [inputValue, setInputValue] = useState('')
   const [errorMessage, setErrorMessage] = useState(i18n.t('components.inputTextWithValidation.incorrectFormat'))
   const [canAddAccount, setCanAddAccount] = useState(false)
-  const [addressesList, setAddressesList] = useState<{ address: string; blockchain: BlockchainServiceKey }[]>([])
-  const [addressesListSelected, setAddressesListSelected] = useState<
-    { address: string; blockchain: BlockchainServiceKey }[]
-  >([])
+  const [addressesList, setAddressesList] = useState<AddressInfo[]>([])
+  const [addressesListSelected, setAddressesListSelected] = useState<AddressInfo[]>([])
+
+  const handleSelect = (items: AddressInfo[]) => {
+    setAddressesListSelected(items)
+  }
+
+  const handleDeselect = (items: AddressInfo[]) => {
+    setAddressesListSelected(items)
+  }
 
   const persist = async () => {
-    if (!isValid()) {
-      return
-    }
-
-    const blockchainName = getBlockchainByAddress(inputValue)
-
-    if (!blockchainName) {
-      return
-    }
-
-    const mnemonic = blockchainServices[blockchainName].generateMnemonic()
-    if (!Array.isArray(mnemonic)) {
-      throw new Error(
-        i18n.t('importKey.mnemonicAlreadyExists', {
-          mnemonic,
-        })
-      )
-    }
-
     Await.init('importWatchAccount')
 
     const wallet = await blockchainActions.createWallet(i18n.t('defaultNameWallet.watchAccount'), 'watch')
@@ -93,45 +76,40 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
     })
   }
 
-  const isValid = () => {
-    const conditions: boolean[] = [validateAddressAllBlockchains(inputValue)]
+  function validateInput(text: string) {
+    let isValid = validateAddressAllBlockchains(text)
 
-    return conditions.every(it => it)
-  }
-
-  const handleChangeAddressesListSelected = useCallback(
-    (
-      addressInfoSelected: {
-        address: string
-        blockchain: BlockchainServiceKey
-      }[]
-    ) => {
-      setAddressesListSelected(addressInfoSelected)
-    },
-    [addressesListSelected]
-  )
-
-  function validateInput() {
-    let isInputValid = validateAddressAllBlockchains(inputValue)
-    if (!isInputValid) {
+    if (!isValid) {
       setErrorMessage(i18n.t('components.inputTextWithValidation.incorrectFormat'))
-    } else if (accounts.find(account => account.address === inputValue)) {
+    } else if (accounts.find(account => account.address === text)) {
       // don't allow to include if the account was already added
-      isInputValid = false
+      isValid = false
       setErrorMessage(i18n.t('importReadAccount.accountAlreadyExists'))
     }
-    setCanAddAccount(isInputValid)
-    return isInputValid
+    setCanAddAccount(isValid)
+    return isValid
   }
 
-  useEffect(() => {
-    for (const blockchain of blockchainList) {
-      const addressIsValid = blockchainServices[blockchain].validateAddress(inputValue)
-      if (addressIsValid) {
-        setAddressesList([...addressesList, { address: inputValue, blockchain }])
+  const handleChangeInput = useCallback(
+    (value: string) => {
+      setInputValue(value)
+      const services = getBlockchainServices()
+
+      for (const service of services) {
+        const addressIsValid = service.validateAddress(value)
+        if (!addressIsValid) continue
+
+        setAddressesList([...addressesList, { address: value, blockchain: service.key }])
       }
-    }
-  }, [inputValue])
+    },
+    [getBlockchainServices]
+  )
+
+  useEffect(() => {
+    if (!address) return
+
+    handleChangeInput(address)
+  }, [address])
 
   return (
     <ScreenLayout useHeaderPadding darkerSolidColorBG>
@@ -152,11 +130,11 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
           </TextView>
 
           <InputWithValidation
-            onChangeText={text => setInputValue(text)}
+            onChangeText={handleChangeInput}
             color={theme.colors.text[0]}
             invalidColor={theme.colors.background[3]}
             value={inputValue}
-            validator={() => validateInput() || !inputValue}
+            validator={validateInput}
             separatorColor={theme.colors.background[5]}
             invalidSeparatorColor={theme.colors.quinary}
             invalidMessageColor={theme.colors.quinary}
@@ -167,7 +145,12 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
             <TextView color="#7d929a" fontSize="16px" mb={5}>
               {i18n.t('importReadAccount.headerText2')}
             </TextView>
-            <AddressesImportList addressesInfo={addressesList} onSelectAddress={handleChangeAddressesListSelected} />
+            <AddressesImportList
+              items={addressesList}
+              selectedItems={addressesListSelected}
+              onSelect={handleSelect}
+              onDeselect={handleDeselect}
+            />
           </LinearLayout>
 
           {canAddAccount && (
@@ -181,7 +164,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
               <ThemedButton
                 label={i18n.t('importReadAccount.add')}
                 onPress={persist}
-                disabled={addressesListSelected.length < 1}
+                disabled={addressesListSelected.length <= 0}
               />
             </LinearLayout>
           )}

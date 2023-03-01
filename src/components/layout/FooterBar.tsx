@@ -1,36 +1,34 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
+import { useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import i18n from 'i18n-js'
 import React, { useEffect, useRef } from 'react'
-import { Animated, View, Easing, ImageLoadEventData } from 'react-native'
+import { Animated, Easing, ImageSourcePropType } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
+import { Shadow } from 'react-native-shadow-2'
 import { useSelector } from 'react-redux'
-import {
-  border,
-  BorderProps,
-  color,
-  ColorProps,
-  flexbox,
-  FlexboxProps,
-  layout,
-  LayoutProps,
-  position,
-  PositionProps,
-  space,
-  SpaceProps,
-} from 'styled-system'
+
+import { AlterMenuItem } from '../AlterMenuItem'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { UriHelper } from '~/src/helpers/UriHelper'
+import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
+import { useBlockchainActions } from '~/src/hooks/useBlockchainActions'
+import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
+import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
+import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
 import { RootState } from '~/src/store/RootStore'
-import { OrientationProps, WeightProps } from '~/src/types/styled-components'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { RouteName } from '~/src/types/wrappers/route'
 import { Route } from '~src/app/Route'
-import { SwiperController, useSwiperController } from '~src/components/SwiperPanel'
-import QuickToolsMenu from '~src/scenes/QuickToolsMenu'
-import styled, { ImageView, LinearLayout, RelativeLayout } from '~src/styles/styled-components'
-import { orientation, weight } from '~src/styles/styled-system.config'
+import SwiperPanel, { SwiperController, useSwiperController } from '~src/components/SwiperPanel'
+import { ButtonView, ImageView, LinearLayout } from '~src/styles/styled-components'
 
 interface TabButtonContent {
-  enabledSource: ImageLoadEventData
-  disabledSource: ImageLoadEventData
+  enabledSource: ImageSourcePropType
+  disabledSource: ImageSourcePropType
   route: Route<RouteName>
 }
 
@@ -39,28 +37,173 @@ interface TabButtonProps {
   controller: SwiperController
 }
 
+interface QuickToolsMenuProps {
+  controller: SwiperController
+}
+
+type NavigationProps = StackNavigationProp<RootStackParamList & ModalStackParamList & WalletStackParamList>
+
+const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
+  const navigation = useNavigation<NavigationProps>()
+  const blockchainActions = useBlockchainActions()
+  const accounts = useSelector(selectAccounts)
+  const {
+    getBlockchainService,
+    validateAddressAllBlockchains,
+    validatePrivateKeyWithPasswordAllBlockchains,
+    validateWifAllBlockchains,
+    getBlockchainByWif,
+  } = useBlockchainServiceUtils()
+
+  const handleScanQrCode = async (data: string) => {
+    const sendUri = UriHelper.validateAndParse(data)
+
+    if (sendUri && validateAddressAllBlockchains(sendUri.address)) {
+      navigation.navigate(wrapper.route.Modal.name, {
+        screen: wrapper.route.SendTransactionWalletSelectionModal.name,
+        params: {
+          address: sendUri.address,
+        },
+      })
+      return
+    }
+
+    if (WalletConnectHelper.isValidURI(data)) {
+      navigation.navigate(wrapper.route.Modal.name, {
+        screen: wrapper.route.WCConnectionRequestModal.name,
+        params: {
+          uri: data,
+        },
+      })
+      return
+    }
+
+    if (validateAddressAllBlockchains(data)) {
+      navigation.navigate(wrapper.route.Modal.name, {
+        screen: wrapper.route.AddressScanQuickToolsModal.name,
+        params: {
+          address: data,
+        },
+      })
+      return
+    }
+
+    if (validatePrivateKeyWithPasswordAllBlockchains(data)) {
+      navigation.navigate(wrapper.route.Tab.name, {
+        screen: wrapper.route.More.name,
+        params: {
+          screen: wrapper.route.Passphrase.name,
+          initial: false,
+          params: {
+            encryptedKey: data,
+          },
+        },
+      })
+      return
+    }
+
+    if (validateWifAllBlockchains(data)) {
+      const blockchain = getBlockchainByWif(data)
+      if (blockchain) {
+        const service = getBlockchainService(blockchain)
+        const address = service.generateAccountFromWif(data)
+
+        if (accounts.some(account => account.address === address)) {
+          showMessage({ message: i18n.t('quickTools.qrCode.accountAlreadyExists') })
+          return
+        }
+
+        const wallet = await blockchainActions.createWallet(i18n.t('modals.blockchainList.encryptedWallet'), 'legacy')
+
+        await blockchainActions.importAccounts([{ address, blockchain, type: 'legacy', wallet, wif: data }])
+
+        const account = accounts.find(account => account.address === address)
+
+        if (!account || !wallet) return
+
+        navigation.navigate(wrapper.route.GetWallet.name, { wallet })
+        navigation.navigate(wrapper.route.GetAccount.name, { account, wallet })
+        navigation.navigate(wrapper.route.Modal.name, {
+          screen: wrapper.route.EditAccountModal.name,
+          params: { account },
+        })
+      }
+    }
+  }
+
+  const handlePressQrCode = () => {
+    navigation.navigate(wrapper.route.QRCodeScan.name, {
+      onScan: handleScanQrCode,
+    })
+  }
+
+  const handlePressSend = () => {
+    navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.SendTransactionWalletSelectionModal.name,
+      params: {},
+    })
+  }
+
+  const handlePressReceive = () => {
+    navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.ReceiveTransactionWalletSelectionModal.name,
+      params: {},
+    })
+  }
+
+  const runClosing = (callback: () => void) => {
+    controller.close()
+    callback()
+  }
+
+  return (
+    <SwiperPanel controller={controller} solidColorBG paddingBottom={applicationConfig.footerHeight}>
+      <AlterMenuItem
+        onPress={() => runClosing(handlePressQrCode)}
+        icon={require('~src/assets/images/icon-circle-qr-primary.png')}
+        title={i18n.t('quickTools.qrCode.title')}
+        subtitle={i18n.t('quickTools.qrCode.subtitle')}
+      />
+
+      <AlterMenuItem
+        onPress={() => runClosing(handlePressSend)}
+        icon={require('~src/assets/images/icon-circle-send-primary.png')}
+        title={i18n.t('quickTools.send.title')}
+        subtitle={i18n.t('quickTools.send.subtitle')}
+      />
+
+      <AlterMenuItem
+        onPress={() => runClosing(handlePressReceive)}
+        icon={require('~src/assets/images/icon-circle-receive-primary.png')}
+        title={i18n.t('quickTools.receive.title')}
+        subtitle={i18n.t('quickTools.receive.subtitle')}
+        withSeparator={false}
+      />
+    </SwiperPanel>
+  )
+}
+
 const TabButton = (props: BottomTabBarProps & TabButtonProps) => {
   return (
-    <StyledTouchable
-      height="100%"
+    <ButtonView
       onPress={() => {
         props.controller.close()
         props.navigation.navigate(props.button.route.name)
       }}
+      height="100%"
       weight={1}
+      alignItems="center"
+      justifyContent="center"
     >
       <ImageView
         resizeMode="cover"
-        mx="auto"
-        mt="auto"
-        mb="13px"
         source={
           props.state.routes[props.state.index].name === props.button.route.name
             ? props.button.enabledSource
             : props.button.disabledSource
         }
       />
-    </StyledTouchable>
+    </ButtonView>
   )
 }
 
@@ -104,7 +247,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
     route: wrapper.route.More,
   }
 
-  function animateQuickToolsButton() {
+  useEffect(() => {
     Animated.parallel([
       Animated.timing(quickToolColor.current, {
         toValue: controller.isShowing ? 1 : 0,
@@ -119,10 +262,6 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
         useNativeDriver: true,
       }),
     ]).start()
-  }
-
-  useEffect(() => {
-    animateQuickToolsButton()
   }, [controller.isShowing])
 
   if (focusedOptions.tabBarVisible === false) {
@@ -132,101 +271,62 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   return (
     <LinearLayout height="100%" width="100%" justifyContent="flex-end" position="absolute" pointerEvents="box-none">
       <QuickToolsMenu controller={controller} />
-      <TabBarContainer height={applicationConfig.footerHeight} width={applicationConfig.windowWidth} bg="#12181A">
-        <RelativeLayout height="100%" width="100%">
-          <View pointerEvents="none">
+
+      <LinearLayout
+        width="100%"
+        height={applicationConfig.footerHeight}
+        zIndex={1001}
+        bottom={-1}
+        position="absolute"
+        orientation="horiz"
+      >
+        <Shadow
+          distance={12}
+          sides={['top']}
+          startColor={`${theme.colors.black}33`}
+          containerViewStyle={{ width: '100%', height: '100%' }}
+          viewStyle={{
+            width: '100%',
+            height: '100%',
+            flexDirection: 'row',
+          }}
+        >
+          <>
             <ImageView
               position="absolute"
-              bottom="100%"
-              resizeMode="stretch"
-              source={require('~src/assets/images/TabBarShadow.png')}
-              style={{
-                width: '100%',
-                opacity: 0.25,
-              }}
+              bottom={0}
+              width={'100%' as any}
+              source={require('~src/assets/images/TabBar.png')}
             />
-          </View>
-          <ImageView
-            position="absolute"
-            bottom={0}
-            width="100%"
-            resizeMode="cover"
-            source={require('~src/assets/images/TabBar.png')}
-          />
-
-          {/*This should be absolute to float above of outbounds area*/}
-          <LinearLayout position="absolute" bottom={0} orientation="horiz" alignItems="center" pointerEvents="box-none">
             <TabButton {...props} button={walletButton} controller={controller} />
             <TabButton {...props} button={dappsButton} controller={controller} />
-            <StyledTouchable
-              underlayColor="transparent"
-              mx="6px"
-              bottom="10px"
-              width={66}
-              height={66}
-              onPress={() => {
-                controller.toggle()
-              }}
-            >
-              <AnimatedLinearLayout
-                width="100%"
-                height="100%"
-                borderRadius="9999px"
+            <ButtonView mx="6px" bottom="10px" onPress={controller.toggle}>
+              <Animated.View
                 style={{
+                  width: 66,
+                  height: 66,
+                  borderRadius: 33,
                   backgroundColor: colorInterpolator,
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
-                <AnimatedImageView
-                  m="auto"
+                <Animated.Image
                   resizeMode="contain"
                   source={require('~src/assets/images/plus-sign-tabbar.png')}
                   style={{
                     transform: [{ rotate: spinInterpolator }],
                   }}
                 />
-              </AnimatedLinearLayout>
-            </StyledTouchable>
+              </Animated.View>
+            </ButtonView>
             <TabButton {...props} button={contactsButton} controller={controller} />
             <TabButton {...props} button={moreButton} controller={controller} />
-          </LinearLayout>
-        </RelativeLayout>
-      </TabBarContainer>
+          </>
+        </Shadow>
+      </LinearLayout>
     </LinearLayout>
   )
 }
-
-const TabBarContainer = styled.SafeAreaView<LayoutProps & ColorProps & PositionProps>`
-  ${layout}
-  ${color}
-  ${position}
-`
-
-const StyledTouchable = styled.TouchableHighlight<SpaceProps & LayoutProps & PositionProps & WeightProps>`
-  ${space}
-  ${layout}
-  ${position}
-  ${weight}
-`
-
-const AnimatedImageView = styled(Animated.Image)<SpaceProps & LayoutProps & FlexboxProps & PositionProps & WeightProps>`
-  ${space}
-  ${layout}
-  ${flexbox}
-  ${position}
-  ${weight}
-`
-
-const AnimatedLinearLayout = styled(Animated.View)<
-  BorderProps & ColorProps & OrientationProps & SpaceProps & LayoutProps & FlexboxProps & WeightProps & PositionProps
->`
-  ${border}
-  ${color}
-  ${orientation}
-  ${space}
-  ${layout}
-  ${flexbox}
-  ${weight}
-  ${position}
-`
 
 export default FooterBar

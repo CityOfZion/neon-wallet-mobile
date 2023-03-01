@@ -1,14 +1,17 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { FlatList, ListRenderItemInfo, TouchableWithoutFeedback } from 'react-native'
+import { FlatList, ImageSourcePropType, ListRenderItemInfo } from 'react-native'
 
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ButtonWithoutFeedbackView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface SelectorItem<T> {
   title?: string
   data: T
   onClick: (item: T) => void
   isSelected: (item: T) => boolean
+  description?: string
+  actionButtonImage?: ImageSourcePropType
+  onActionPress?: (item: T) => void
 }
 
 export interface SelectorItemProps<T> {
@@ -32,21 +35,40 @@ const SelectorItemComponent = <T extends unknown>(info: ListRenderItemInfo<Selec
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => info.item.onClick(info.item.data)}>
+    <ButtonWithoutFeedbackView onPress={() => info.item.onClick(info.item.data)}>
       <LinearLayout width="100%" orientation="horiz" alignItems="center" style={{ height: 60 }}>
-        <TextView weight={1} color="text.0" fontSize="18px">
-          {title}
-        </TextView>
+        <LinearLayout orientation="horiz" weight={1}>
+          <TextView color="text.0" fontSize="18px">
+            {title}
+          </TextView>
+          {info.item.description && (
+            <TextView color="text.14" fontSize="18px" marginLeft="4px">
+              {info.item.description}
+            </TextView>
+          )}
+
+          {info.item.actionButtonImage && (
+            <ButtonWithoutFeedbackView onPress={() => info.item.onActionPress?.(info.item.data)}>
+              <ImageView
+                width={18}
+                height={18}
+                resizeMode="contain"
+                source={info.item.actionButtonImage}
+                marginLeft="8px"
+              />
+            </ButtonWithoutFeedbackView>
+          )}
+        </LinearLayout>
         {info.item.isSelected(info.item.data) ? (
           <ImageView
-            w="30px"
-            h="30px"
+            width={20}
+            height={20}
             resizeMode="contain"
             source={require('~src/assets/images/icon-check-green.png')}
           />
         ) : undefined}
       </LinearLayout>
-    </TouchableWithoutFeedback>
+    </ButtonWithoutFeedbackView>
   )
 }
 

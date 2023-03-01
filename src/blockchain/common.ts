@@ -1,24 +1,14 @@
-import { ContractInvocationMulti } from '@cityofzion/neo3-invoker'
-import { JsonRpcResponse } from '@json-rpc-tools/utils'
-import { ImageLoadEventData } from 'react-native'
-
-import { DEFAULT_BLOCKCHAIN } from '../config/walletConnect/constants'
-import { Session, SessionRequest } from '../contexts/WalletConnectContext'
 import { BalanceInfo } from '../models/response/BalanceInfo'
 import { ContractResponse } from '../models/response/ContractResponse'
 import { NFTResponse } from '../models/response/NFTResponse'
 import { NFTSResponse } from '../models/response/NFTSResponse'
-import { BSNeo3 } from './Neo3/services/BSNeo3'
-import { BSNeoLegacy } from './NeoLegacy/services/BSNeoLegacy'
 
-import { Node } from '~/src/models/Node'
 import { Transaction } from '~/src/models/Transaction'
 import { TransactionAddressResponse } from '~/src/models/response/TransactionAddressResponse'
 import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
-import * as BlockchainIcons from '~src/assets/blockchainIcons'
-import { Account } from '~src/models/redux/Account'
 import { ExchangeInfo } from '~src/models/response/ExchangeInfo'
 
+export type BlockchainServiceKey = 'neoLegacy' | 'neo3'
 export interface IToken {
   symbol: string
   type: string
@@ -55,50 +45,30 @@ export interface SendTransactionData {
   amount: number
   tokenHash: string
   tokenDecimals: number
-  senderAddress: string
+  senderWif: string
   receiverAddress: string
   fee?: number
   tip?: number
 }
 
-export interface IconDappsListResponse {
-  [key: string]: {
-    'icon/25x25': string
-    'icon/288x288': string
-  }
-}
-
-export interface IconDapps {
-  iconDappsScriptHash: string
-  getIconList(scriptHashList: string[]): Promise<
-    Map<
-      string,
-      {
-        sm: string
-        lg: string
-      }
-    >
-  >
+export interface IIconDapps {
+  getIcon(hash: string): Promise<string | undefined>
 }
 
 export interface BlockchainDataProvider {
-  readonly siteUrlQuery: string
-  getTransaction: (txid: string) => Promise<Transaction>
+  readonly network: TNetwork
   getAddressAbstracts: (address: string, page?: number) => Promise<TransactionAddressResponse>
-  getContract: (hash: string) => Promise<ContractResponse>
   getBalance: (address: string) => Promise<BalanceInfo[]>
   getUnclaimed: (address: string) => Promise<UnclaimedResponse>
-  getAllNodes: () => Promise<Node[]>
-  getAssetByHash: (hash: string) => Promise<{ symbol: string; decimals: number } | null>
+  getTransaction: (txid: string) => Promise<Transaction>
 }
 
 export interface IClaimable {
-  claimGas: (address: string) => Promise<string | null>
+  claimGas: (wif: string) => Promise<string | null>
 }
 
 export interface IWalletConnect {
-  rpcCall: (account: string, request: SessionRequest) => Promise<JsonRpcResponse>
-  calculateFee(senderAddress: string, requestParams: ContractInvocationMulti): Promise<string>
+  getContract: (hash: string) => Promise<ContractResponse>
 }
 
 export interface INFT {
@@ -106,17 +76,22 @@ export interface INFT {
   getNFT: (tokenId: string, hash: string) => Promise<NFTResponse>
 }
 
+export type TCOZTip = { address: string; symbol: string; hash: string; decimals: number }
+export type TFeeToken = { hash: string; token: string; decimals: number }
+
+export type TNetworkType = 'mainnet' | 'testnet' | 'custom'
+export type TNetwork = {
+  type: TNetworkType
+  url: string
+}
 export interface IBlockchainService {
-  key: BlockchainServiceKey
   provider: BlockchainDataProvider
-  readonly icon: ImageLoadEventData
+  network: TNetwork
+  readonly key: BlockchainServiceKey
   readonly derivationPath: string
   readonly platform: string
-  readonly nativeAssets: string[]
-  readonly cozTip?: { address: string; token: string; hash: string } //config token with the symbol name
-  readonly feeToken: { hash: string; token: string; decimals: number }
-  readonly tokens: IToken[]
-  readonly wcChains: string[]
+  readonly cozTip?: TCOZTip
+  readonly feeToken: TFeeToken
   sendTransaction: (data: SendTransactionData) => Promise<string | null>
   generateMnemonic: () => string[] | null
   generateWif(mnemonic: string, index: number): Promise<string>
@@ -127,198 +102,11 @@ export interface IBlockchainService {
   validatePrivateKeyWithPassword(privateKey: string): boolean
   validateWif(privateKey: string): boolean
   calculateTransferFee: (data: Omit<SendTransactionData, 'fee'>) => Promise<number>
-  setAccountsPool: (accounts: Account[]) => void
+  setNetwork: (network: TNetwork) => void
   getExchange: (currency: string) => Promise<ExchangeInfo[]>
-}
-
-export type IBlockchainServices = Record<BlockchainServiceKey, IBlockchainService>
-
-export const blockchainServices: IBlockchainServices = {
-  neo3: new BSNeo3(),
-  neoLegacy: new BSNeoLegacy(),
-}
-
-export const blockchainList = Object.keys(blockchainServices) as BlockchainServiceKey[]
-
-export function validateTextAllBlockchains(text: string) {
-  return blockchainList.reduce((validate, blockchainName) => {
-    if (!validate) {
-      const { validateAddress, validatePrivateKeyWithPassword, validateWif } = blockchainServices[blockchainName]
-      validate = validateAddress(text) || validatePrivateKeyWithPassword(text) || validateWif(text)
-    }
-    return validate
-  }, false)
-}
-
-export function validateAddressAllBlockchains(address: string) {
-  return blockchainList.reduce((validate, blockchainName) => {
-    if (!validate) {
-      const { validateAddress } = blockchainServices[blockchainName]
-      validate = validateAddress(address)
-    }
-    return validate
-  }, false)
-}
-
-export function validateWifAllBlockchains(wif: string) {
-  return blockchainList.reduce((validate, blockchainName) => {
-    if (!validate) {
-      const { validateWif } = blockchainServices[blockchainName]
-      validate = validateWif(wif)
-    }
-    return validate
-  }, false)
-}
-
-export function validatePrivateKeyWithPasswordAllBlockchains(privateKey: string) {
-  return blockchainList.reduce((validate, blockchainName) => {
-    if (!validate) {
-      const { validatePrivateKeyWithPassword } = blockchainServices[blockchainName]
-      validate = validatePrivateKeyWithPassword(privateKey)
-    }
-    return validate
-  }, false)
-}
-
-export function getBlockchainByAddress(address: string) {
-  return blockchainList.reduce((result, blockchainName) => {
-    if (!result) {
-      const { validateAddress } = blockchainServices[blockchainName]
-      const validate = validateAddress(address)
-      result = validate ? blockchainName : null
-    }
-    return result
-  }, null as BlockchainServiceKey | null)
-}
-
-export function getBlockchainByWif(wif: string) {
-  return blockchainList.reduce((result, blockchainName) => {
-    if (!result) {
-      const { validateWif } = blockchainServices[blockchainName]
-      const validate = validateWif(wif)
-      result = validate ? blockchainName : null
-    }
-    return result
-  }, null as BlockchainServiceKey | null)
-}
-
-export function getBlockchainByPrivateKeyWithPassword(encryptedKey: string) {
-  return blockchainList.reduce((result, blockchainName) => {
-    if (!result) {
-      const { validatePrivateKeyWithPassword } = blockchainServices[blockchainName]
-      const validate = validatePrivateKeyWithPassword(encryptedKey)
-      result = validate ? blockchainName : null
-    }
-    return result
-  }, null as BlockchainServiceKey | null)
-}
-
-export function getBlockchainBySomeText(text: string) {
-  return blockchainList.reduce((result, blockchainName) => {
-    if (!result) {
-      const { validatePrivateKeyWithPassword, validateAddress, validateWif } = blockchainServices[blockchainName]
-      const validate = validatePrivateKeyWithPassword(text) || validateAddress(text) || validateWif(text)
-      result = validate ? blockchainName : null
-    }
-    return result
-  }, null as BlockchainServiceKey | null)
-}
-
-type TColorLogo = 'white' | 'default'
-
-export function getBlockchainLogo(blockchain: BlockchainServiceKey, color: TColorLogo = 'default') {
-  const blockchainWithColor = `${blockchain}${color === 'default' ? '' : color}`
-  return (BlockchainIcons as any)[blockchainWithColor] ?? require('~/src/assets/images/icon-default-nep5.png') //need a default logo
-}
-
-export function isClaimable(object: any): object is IClaimable {
-  return 'claimGas' in object
-}
-
-export function hasWCIntegration(object: any): object is IWalletConnect {
-  const methodsName = ['rpcCall', 'calculateFee']
-  let result = false
-  for (const methodName of methodsName) {
-    if (methodName in object) {
-      result = methodName in object
-    }
-  }
-  return result
-}
-
-export const hasWalletconnect = (account: Account) => {
-  const bs = blockchainServices[account.blockchain]
-
-  return hasWCIntegration(bs)
-}
-
-export function hasNFTIntegration(object: any): object is INFT {
-  const methodsName = ['getNFTS', 'getNFT']
-
-  return methodsName.every(methodName => methodName in object)
-}
-
-export function hasIconDapps(object: any): object is IconDapps {
-  const methodName = ['getIconList']
-  return methodName.every(methodName => methodName in object)
-}
-
-export type BlockchainServiceKey = 'neoLegacy' | 'neo3'
-
-export function getBlockchainByWCChain(session: Session) {
-  let result: BlockchainServiceKey | null = null
-  const chains = session.requiredNamespaces[DEFAULT_BLOCKCHAIN].chains
-
-  for (const blockchain of blockchainList) {
-    for (const chain of chains) {
-      const chainFound = blockchainServices[blockchain].wcChains.find(it => it === chain)
-      if (chainFound) {
-        result = blockchain
-        break
-      }
-    }
-  }
-  return result
-}
-
-export function getWCChainByBlockchain(blockchain: BlockchainServiceKey) {
-  let result: string | null = null
-
-  result = blockchainServices[blockchain].wcChains[0] ?? null
-
-  return result
-}
-
-export function isValidWcChain(wcChains: string[], blockchain: BlockchainServiceKey) {
-  return blockchainServices[blockchain].wcChains.some(chain => wcChains.includes(chain))
-}
-
-export function getAllTokens() {
-  const tokens = blockchainList.flatMap(blockchain => blockchainServices[blockchain].tokens)
-
-  return tokens
-}
-
-export function mappedTokensBySymbol(symbol: string) {
-  const result = new Map<BlockchainServiceKey, IToken[]>()
-
-  blockchainList.forEach(blockchain => {
-    result.set(
-      blockchain,
-      blockchainServices[blockchain].tokens.filter(token => token.symbol === symbol)
-    )
-  })
-  return result
-}
-
-export function mappedTokensByScriptHash(scriptHash: string) {
-  const result = new Map<BlockchainServiceKey, IToken[]>()
-
-  blockchainList.forEach(blockchain => {
-    result.set(
-      blockchain,
-      blockchainServices[blockchain].tokens.filter(token => token.hash === scriptHash)
-    )
-  })
-  return result
+  getBlockCount: () => Promise<number>
+  isClaimable: () => this is IClaimable
+  hasNFTIntegration: () => this is INFT
+  hasWalletConnectIntegration: () => this is IWalletConnect
+  hasIconDappsIntegration: () => this is IIconDapps
 }

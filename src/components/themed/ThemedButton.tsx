@@ -152,6 +152,7 @@ const ThemedButton: React.FC<Props> = props => {
         width: props.width,
         height: props.height,
         marginVertical: props.my,
+        justifyContent: 'center',
       }}
       disabled={props.disabled}
       underlayColor="transparent"

@@ -58,7 +58,9 @@
     "Passphrase": "Create Wallet",
     "ImportReadAccount": "Add a watch",
     "CustomizeAccount": "Customize account",
-    "SecurityPage": "Security"
+    "SecurityPage": "Security",
+    "ProtocolsPage": "Protocols",
+    "ProtocolEditPage": "Protocol Edit"
   },
   "home": {
     "welcome": "Welcome to Neon Wallet!"
@@ -224,7 +226,7 @@
     "currency": "Currency",
     "language": "Language",
     "theme": "Theme",
-    "network": "Network"
+    "protocols": "Protocols"
   },
   "customColorPage": {
     "title": "Custom Color",
@@ -255,6 +257,16 @@
     "accountPlaceholder": "My Account"
   },
   "screens": {
+    "protocolEditPage": {
+      "default": "(Default)",
+      "addLabel": "Custom network"
+    },
+    "protocolsPage": {
+      "labels": {
+        "neo3": "Neo (N3)",
+        "neoLegacy": "Neo Legacy"
+      }
+    },
     "listWalletView": {
       "walletBackupButtonLabel": "WALLET NOT BACKED UP"
     },
@@ -294,7 +306,6 @@
       "dialog_body": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
       "dialog_dismiss": "OK, I understand"
     },
-
     "contactDetails": {
       "walletAddress": "WALLET ADDRESS"
     },
@@ -403,6 +414,22 @@
     }
   },
   "modals": {
+    "editNetworkModal": {
+      "invalidUrl": "Invalid URL",
+      "connected": "Connection good",
+      "notConnected": "Not connected",
+      "editTitle": "Edit {{networkName}}",
+      "createTitle": "Custom network",
+      "delete": "Delete Network",
+      "inputLabels": {
+        "name": "Network Name",
+        "url": "New RPC URL"
+      },
+      "inputPlaceholder": {
+        "name": "Enter Network Name",
+        "url": "Example: https://mainnet1.neo.coz.io:443"
+      }
+    },
     "backupInfoModal": {
       "title": "Wallet backup",
       "description1": "Backing up your wallet is a precautionary and crucial step in managing your assets.",

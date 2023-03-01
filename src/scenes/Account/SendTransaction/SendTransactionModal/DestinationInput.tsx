@@ -3,10 +3,10 @@ import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { blockchainServices } from '~/src/blockchain'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import { IURI } from '~/src/helpers/UriHelper'
+import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { Account } from '~/src/models/redux/Account'
 import { Contact } from '~/src/models/redux/Contact'
 import { Wallet } from '~/src/models/redux/Wallet'
@@ -47,6 +47,7 @@ export const DestinationInput = ({
   onWalletChange,
   onAddressValidation,
 }: Props) => {
+  const { blockchainService } = useBlockchainService(account.blockchain)
   const accounts = useSelector(selectAccounts)
   const wallets = useSelector(selectWallets)
   const contacts = useSelector(selectContacts)
@@ -85,7 +86,7 @@ export const DestinationInput = ({
   }
 
   const handleValidateDestinationAddress = (text: string) => {
-    const isValid = blockchainServices[account.blockchain].validateAddress(text)
+    const isValid = blockchainService.validateAddress(text)
 
     onAddressValidation(isValid)
 

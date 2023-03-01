@@ -4,9 +4,8 @@ import Carousel from 'react-native-snap-carousel'
 
 import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { UseMultipleBalanceAndExchangeResult } from '~/src/types/query'
-import { WalletCard } from '~src/components/WalletCard/WalletCard'
+import { WalletCard, walletCardWidth } from '~src/components/WalletCard/WalletCard'
 import { Wallet } from '~src/models/redux/Wallet'
-import { LinearLayout } from '~src/styles/styled-components'
 
 interface Props {
   onPress?: (wallet: Wallet) => void
@@ -52,8 +51,7 @@ const WalletPicker = ({
     <Carousel<Wallet>
       data={wallets}
       sliderWidth={applicationConfig.windowWidth}
-      contentContainerCustomStyle={{ padding: 14 }}
-      itemWidth={280}
+      itemWidth={walletCardWidth}
       inactiveSlideScale={0.8}
       inactiveSlideOpacity={1}
       inactiveSlideShift={12}
@@ -68,16 +66,15 @@ const WalletPicker = ({
       onScrollEndDrag={onScrollEnd}
       scrollEnabled={scrollEnabled}
       renderItem={({ item, index }) => (
-        <LinearLayout pointerEvents={index !== selectWalletIndex ? 'none' : undefined}>
-          <WalletCard
-            balanceExchange={selectedWalletBalanceExchange}
-            withBalanceBar={index === selectWalletIndex}
-            onPress={() => handlePress(item)}
-            wallet={item}
-            isInactive={index === selectWalletIndex ? isInactive : inactiveNotSelected ? true : undefined}
-            wasPressed={pressedWallet?.id === item.id}
-          />
-        </LinearLayout>
+        <WalletCard
+          balanceExchange={selectedWalletBalanceExchange}
+          withBalanceBar={index === selectWalletIndex}
+          onPress={() => handlePress(item)}
+          wallet={item}
+          isInactive={index === selectWalletIndex ? isInactive : inactiveNotSelected ? true : undefined}
+          wasPressed={pressedWallet?.id === item.id}
+          disablePointer={index !== selectWalletIndex}
+        />
       )}
     />
   )

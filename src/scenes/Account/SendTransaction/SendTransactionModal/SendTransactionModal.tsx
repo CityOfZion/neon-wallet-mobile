@@ -14,13 +14,13 @@ import { TokenSelect } from './TokenSelect'
 import { TotalFee } from './TotalFee'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { blockchainServices } from '~/src/blockchain'
 import AccountCard from '~/src/components/AccountCard'
-import SwiperPanel, { PANEL_OFFSET, useSwiperController } from '~/src/components/SwiperPanel'
+import SwiperPanel, { useSwiperController } from '~/src/components/SwiperPanel'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
+import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { Token } from '~/src/models/Token'
 import { Account } from '~/src/models/redux/Account'
 import { Contact } from '~/src/models/redux/Contact'
@@ -49,6 +49,7 @@ export const SendTransactionModal = (props: Props) => {
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const currency = useSelector((state: RootState) => state.settings.currency)
   const controller = useSwiperController(true)
+  const { blockchainService } = useBlockchainService(account.blockchain)
 
   const balanceExchange = useBalancesAndExchange(account)
 
@@ -71,11 +72,7 @@ export const SendTransactionModal = (props: Props) => {
   const [tipIsDisabled, setTipIsDisabled] = useState<boolean>(false)
 
   const feeTokenBalance = useMemo(
-    () =>
-      BalanceHelper.getTokenBalanceBySymbol(
-        blockchainServices[account.blockchain].feeToken.token,
-        balanceExchange.balance.data
-      ),
+    () => BalanceHelper.getTokenBalanceBySymbol(blockchainService.feeToken.token, balanceExchange.balance.data),
     [balanceExchange, account]
   )
   const tokenBalance = useMemo(() => {
@@ -149,9 +146,6 @@ export const SendTransactionModal = (props: Props) => {
         alwaysBounceVertical={false}
         showsHorizontalScrollIndicator={false}
         nestedScrollEnabled
-        contentContainerStyle={{
-          paddingBottom: PANEL_OFFSET + 20,
-        }}
       >
         <TouchableHighlight>
           <LinearLayout>
@@ -182,7 +176,6 @@ export const SendTransactionModal = (props: Props) => {
               <TokenSelect account={account} token={token} onTokenSelect={handleSelectToken} />
 
               <AmountInput
-                account={account}
                 ratio={ratio}
                 token={token}
                 onAmountChange={setAmount}

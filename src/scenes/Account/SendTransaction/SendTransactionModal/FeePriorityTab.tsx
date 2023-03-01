@@ -1,7 +1,8 @@
 import i18n from 'i18n-js'
 import React, { useEffect, useState } from 'react'
 
-import { BlockchainServiceKey, blockchainServices } from '~/src/blockchain'
+import { BlockchainServiceKey } from '~/src/blockchain'
+import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { Account } from '~/src/models/redux/Account'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 import { ButtonViewProps } from '~/src/types/styled-components'
@@ -29,6 +30,7 @@ const feeByPriority: Record<PriorityName, number> = {
 }
 
 const Button = ({ fee, name, isSelected, onPress, blockchain, ...props }: ButtonProps) => {
+  const { blockchainService } = useBlockchainService(blockchain)
   return (
     <ButtonView
       weight={1}
@@ -52,7 +54,7 @@ const Button = ({ fee, name, isSelected, onPress, blockchain, ...props }: Button
           </TextView>
           <TextView color={isSelected ? 'primary' : 'text.3'} fontSize="12px">
             {fee}
-            {blockchainServices[blockchain].feeToken.token}
+            {blockchainService.feeToken.token}
           </TextView>
         </LinearLayout>
       </LinearLayout>

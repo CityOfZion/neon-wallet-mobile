@@ -1,264 +1,100 @@
 import { api } from '@cityofzion/dora-ts'
 import { TypedResponse } from '@cityofzion/dora-ts/dist/interfaces/api/common'
-import { AddressTransactionsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
-import { rpc, u, wallet } from '@cityofzion/n3-neon-core'
+import { u, wallet } from '@cityofzion/n3-neon-core'
 
+import { RPCProviderNeo3 } from './RPCProviderNeo3'
 import { Neo3Provider } from './common'
 
-import { ContractMethod } from '~/src/models/ContractMethod'
-import { ContractParameter } from '~/src/models/ContractParameter'
-import { NeoNode } from '~/src/models/NeoNode'
-import { Node } from '~/src/models/Node'
-import { Transaction } from '~/src/models/Transaction'
 import { TransactionAddressAsset } from '~/src/models/TransactionAddressAsset'
 import { TransactionAddressNFT } from '~/src/models/TransactionAddressNFT'
 import { TransactionAddressSummary } from '~/src/models/TransactionAddressSummary'
-import { BalanceInfo } from '~/src/models/response/BalanceInfo'
-import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { TransactionAddressResponse } from '~/src/models/response/TransactionAddressResponse'
-import { UnclaimedResponse } from '~/src/models/response/UnclaimedResponse'
-import { IRPCContract } from '~src/blockchain'
-
-export type DoraNetworkOptions = 'mainnet' | 'testnet' | 'testnet_rc4'
-export class DoraSDKProvider implements Neo3Provider {
-  //eslint-disable-next-line
-  readonly network: DoraNetworkOptions = 'mainnet'
-  readonly siteUrlQuery = `https://dora.coz.io/transaction/neo3/${this.network}/`
-  readonly baseNumeric: number = 8
-
-  constructor(network?: DoraNetworkOptions) {
-    if (network) {
-      this.network = network
-    }
+import { TNetwork } from '~src/blockchain'
+export class DoraSDKProvider extends RPCProviderNeo3 implements Neo3Provider {
+  constructor(readonly network: TNetwork) {
+    super(network)
   }
 
-  async getAddressAbstracts(address: string, page: number = 1) {
+  async getAddressAbstracts(address: string, page?: number): Promise<TransactionAddressResponse> {
+    if (this.network.type === 'custom') throw new Error('Custom network not supported')
+
     const result = new TransactionAddressResponse()
 
-    let txFullResponse: AddressTransactionsResponse | any[] = []
+    const { items, totalCount } = await api.NeoRest.addressTXFull(address, page, this.network.type)
 
-    txFullResponse = await api.NeoRest.addressTXFull(address, page, this.network)
-
-    if (Array.isArray(txFullResponse)) {
-      return result
-    }
-
-    const { totalCount, items } = txFullResponse
-    result.pageNumber = page
+    result.pageNumber = page ?? null
     result.pageSize = items.length
     result.totalEntries = totalCount
     result.totalPages = Math.ceil(totalCount / 15)
 
-    for (const item of items) {
-      const { block, hash, invocations, notifications, time } = item
-
-      const transaction = new TransactionAddressSummary({
-        blockHeight: block,
-        hash,
-        time: Number(time),
-      })
-      transaction.qtyInvocations = invocations.length
-      transaction.qtyNotifications = notifications.length
-
-      for (const notification of notifications) {
-        const { contract, event_name: eventName } = notification
-        const state = notification.state as any as TypedResponse[]
-
-        if (eventName !== 'Transfer') {
-          continue
-        }
-
-        if (state.length !== 3 && state.length !== 4) {
-          continue
-        }
-
-        const [{ value: from }, { value: to }] = state
-
-        const convertedFrom = from ? this.convertByteStringToAddress(from) : 'Mint'
-
-        const convertedTo = to ? this.convertByteStringToAddress(to) : 'Burn'
-
-        if (convertedFrom !== address && convertedTo !== address) {
-          continue
-        }
-
-        if (state.length === 3) {
-          const [, , { value: amount }] = state
-
-          const asset = new TransactionAddressAsset({
-            amount,
-            to: convertedTo,
-            from: convertedFrom,
-            hash: contract,
-          })
-
-          transaction.transfers.push(asset)
-          continue
-        }
-
-        const [, , , { value: tokenId }] = state
-
-        const convertedTokenId = this.convertByteStringToInteger(tokenId)
-
-        const nft = new TransactionAddressNFT({
-          tokenId: convertedTokenId,
-          to: convertedTo,
-          from: convertedFrom,
-          hash: contract,
+    const transactions = await Promise.all(
+      items.map(async ({ block, hash, invocations, notifications, time }) => {
+        const transaction = new TransactionAddressSummary({
+          blockHeight: block,
+          hash,
+          time: Number(time),
         })
+        transaction.qtyInvocations = invocations.length
+        transaction.qtyNotifications = notifications.length
 
-        transaction.transfers.push(nft)
-      }
+        const transfers = await Promise.all(
+          notifications.map(async notification => {
+            const { contract, event_name: eventName } = notification
+            const state = notification.state as any as TypedResponse[]
 
-      result.transactions.push(transaction)
-    }
+            if (eventName !== 'Transfer') return
 
-    return result
-  }
+            const isAsset = state.length === 3
+            const isNFT = state.length === 4
 
-  async getBalance(address: string) {
-    const nodes = await this.getAllNodes()
-    const url = NeoNode.getHighestNodeUrlFromPool(nodes)
+            if (!isAsset && !isNFT) return
 
-    if (!url) {
-      throw new Error('Problem get balance')
-    }
+            const [{ value: from }, { value: to }] = state
+            const convertedFrom = from ? this.convertByteStringToAddress(from) : 'Mint'
+            const convertedTo = to ? this.convertByteStringToAddress(to) : 'Burn'
 
-    const rpcClient = new rpc.RPCClient(url)
+            if (convertedFrom !== address && convertedTo !== address) return
 
-    const balanceResponse = (await rpcClient.getNep17Balances(address)).balance as {
-      assethash: string
-      amount: string
-      lastupdatedblock: number
-      name: string
-      symbol: string
-      decimals: string
-    }[]
+            if (isAsset) {
+              const [, , { value: amount }] = state
 
-    const mappedbalanceResponse = balanceResponse.map(
-      ({ amount, assethash, name, symbol, decimals }): BalanceInfo => ({
-        amount: this.formatAmount(amount, Number(decimals)),
-        hash: assethash,
-        name,
-        symbol,
+              const assetInfo = await api.NeoRest.asset(contract, this.network.type)
+
+              return new TransactionAddressAsset({
+                amount,
+                to: convertedTo,
+                from: convertedFrom,
+                hash: contract,
+                decimals: assetInfo.decimals ? Number(assetInfo.decimals) : 0,
+                symbol: assetInfo.symbol ?? '',
+              })
+            }
+
+            const [, , , { value: tokenId }] = state
+            const convertedTokenId = this.convertByteStringToInteger(tokenId)
+
+            return new TransactionAddressNFT({
+              tokenId: convertedTokenId,
+              to: convertedTo,
+              from: convertedFrom,
+              hash: contract,
+            })
+          })
+        )
+
+        const filteredTransfers = transfers.filter(
+          (transfer): transfer is TransactionAddressAsset | TransactionAddressNFT => transfer !== undefined
+        )
+
+        transaction.transfers = filteredTransfers
+
+        return transaction
       })
     )
 
-    return mappedbalanceResponse
-  }
+    result.transactions = transactions
 
-  async getContract(hash: string): Promise<ContractResponse> {
-    const contract = new ContractResponse()
-
-    const nodes = await this.getAllNodes()
-    const url = NeoNode.getHighestNodeUrlFromPool(nodes)
-    if (!url) {
-      throw new Error('Problem get contract')
-    }
-
-    const rpcClient = new rpc.RPCClient(url)
-
-    const response = await rpcClient.execute(
-      new rpc.Query<string[], IRPCContract>({
-        method: 'getcontractstate',
-        params: [hash],
-      })
-    )
-
-    contract.hash = response.hash
-    contract.name = response.manifest.name
-
-    response.manifest.abi?.methods.forEach(method => {
-      const contractMethod = new ContractMethod()
-
-      contractMethod.name = method.name
-
-      method.parameters.forEach(parameter => {
-        const contractParameter = new ContractParameter()
-
-        contractParameter.name = parameter.name
-        contractParameter.type = parameter.type
-
-        contractMethod.parameters.push(contractParameter)
-      })
-
-      contract.methods.push(contractMethod)
-    })
-
-    return contract
-  }
-
-  async getTransaction(transactionID: string) {
-    const result = new Transaction()
-    const neoRestTransaction = await api.NeoRest.transaction(transactionID, this.network)
-    if (neoRestTransaction) {
-      const { hash, size, block, time } = neoRestTransaction
-      result.txid = hash
-      result.size = size
-      result.blockHeight = block
-      result.time = Number(time)
-    }
     return result
-  }
-
-  async getAllNodes() {
-    const result = [] as Node[]
-    const response = await api.NeoRest.getAllNodes(this.network)
-
-    const nodes = Array.from(response.values())
-    nodes.forEach(({ height, url }) => {
-      result.push({ height, url, blockchain: 'neoLegacy' })
-    })
-    const allNodes = result.sort((node1, node2) => {
-      if (node1.height && node2.height) {
-        if (node1.height < node2.height) {
-          return 1
-        } else {
-          return -1
-        }
-      } else {
-        return 0
-      }
-    })
-
-    const nodesHttps = allNodes.filter(node => node.url?.includes('https'))
-    const nodesHttp = allNodes.filter(node => !node.url?.includes('https'))
-
-    return [...nodesHttps, ...nodesHttp]
-  }
-
-  async getUnclaimed(address: string) {
-    const result = new UnclaimedResponse()
-    const nodes = await this.getAllNodes()
-    const url = NeoNode.getHighestNodeUrlFromPool(nodes)
-    if (!url) {
-      throw new Error('Problem get unclaimed')
-    }
-
-    const rpcClient = new rpc.RPCClient(url)
-    const { unclaimed } = await rpcClient.execute(
-      new rpc.Query<string[], { unclaimed: string }>({
-        method: 'getunclaimedgas',
-        params: [address],
-      })
-    )
-    const unclaimedResult = u.BigInteger.fromNumber(unclaimed).toDecimal(8)
-    result.address = address
-    result.unclaimed = Number(unclaimedResult)
-    return result
-  }
-
-  async getAssetByHash(hash: string) {
-    const response = await api.NeoRest.asset(hash, this.network)
-
-    if (response) {
-      return {
-        symbol: response.symbol,
-        decimals: Number(response.decimals),
-      }
-    } else {
-      return null
-    }
   }
 
   private convertByteStringToAddress(byteString: string): string {
@@ -271,10 +107,5 @@ export class DoraSDKProvider implements Neo3Provider {
     const integer = u.BigInteger.fromHex(u.reverseHex(u.HexString.fromBase64(byteString).toString())).toString()
 
     return integer
-  }
-
-  private formatAmount(amount: string, decimals: number) {
-    const amountNumber = Number(amount)
-    return amountNumber / 10 ** decimals
   }
 }

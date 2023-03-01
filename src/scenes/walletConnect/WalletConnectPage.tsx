@@ -10,7 +10,7 @@ import { Normalize } from '~/src/app/Normalize'
 import { ConnectionItem } from '~/src/components/ConnectionItem'
 import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 import HeaderActionButton from '~/src/components/layout/HeaderActionButton'
-import ScreenLayoutWithoutScroll from '~/src/components/layout/ScreenLayoutWithoutScroll'
+import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import { useWalletConnect } from '~/src/contexts/WalletConnectContext'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
@@ -55,7 +55,7 @@ const WalletConnectPage = ({ navigation, route }: WalletConnectPageProps) => {
   }
 
   return (
-    <ScreenLayoutWithoutScroll>
+    <ScreenLayout scrollable={false}>
       <LinearLayout height="100%">
         <LinearLayout flexGrow={1}>
           {validSessions.length > 0 && (
@@ -137,7 +137,7 @@ const WalletConnectPage = ({ navigation, route }: WalletConnectPageProps) => {
           </LinearLayout>
         )}
       </LinearLayout>
-    </ScreenLayoutWithoutScroll>
+    </ScreenLayout>
   )
 }
 

@@ -8,7 +8,7 @@ import { TransactionItem } from './TransactionItem'
 
 import { Account } from '~/src/models/redux/Account'
 import { LinearLayout, TextView } from '~/src/styles/styled-components'
-import { MultiExchange } from '~/src/types/exchange'
+import { MultiExchange } from '~/src/types/query'
 
 interface Props {
   completedTransactions: FormattedTransaction[] | undefined
