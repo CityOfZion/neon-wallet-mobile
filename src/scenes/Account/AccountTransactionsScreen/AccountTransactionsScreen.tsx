@@ -7,13 +7,11 @@ import { showMessage } from 'react-native-flash-message'
 
 import { TransactionsList } from './TransactionsList'
 
-import { blockchainServices } from '~/src/blockchain'
-import { hasNFTIntegration } from '~/src/blockchain/common'
 import AccountSubTitle from '~/src/components/AccountSubTitle'
-import ScreenLayoutWithoutScroll from '~/src/components/layout/ScreenLayoutWithoutScroll'
+import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
+import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { useExchange } from '~/src/hooks/useExchange'
-import { useTokens } from '~/src/hooks/useTokens'
 import { TransactionTransferType } from '~/src/models/TransactionAddressSummary'
 import { Account } from '~/src/models/redux/Account'
 import { NFTResponse } from '~/src/models/response/NFTResponse'
@@ -61,8 +59,8 @@ export type FormattedTransactionPerDate = Record<string, FormattedTransaction[]>
 const AccountTransactionsScreen = (props: Props) => {
   const { account } = props.route.params
 
-  const { tokens } = useTokens({ blockchain: account.blockchain })
-  const { exchange } = useExchange()
+  const { blockchainService } = useBlockchainService(account.blockchain)
+  const { data: exchange } = useExchange()
 
   const [completedTransactions, setCompletedTransactions] = useState<FormattedTransaction[]>([])
   const [pendingTransactions, setPendingTransactions] = useState<FormattedTransaction[]>([])
@@ -71,57 +69,16 @@ const AccountTransactionsScreen = (props: Props) => {
   const pageControl = useRef<number>(1)
   const requestControl = useRef<boolean>(false)
   const nftCache = useRef<Map<string, NFTResponse>>(new Map())
-  const decimalsCache = useRef<Map<string, { symbol: string; decimals: number }>>(
-    new Map(
-      tokens
-        .filter(token => blockchainServices[account.blockchain].nativeAssets.includes(token.symbol))
-        .map(({ hash, symbol, decimals }) => [hash, { symbol, decimals: decimals ?? 0 }])
-    )
-  )
-
-  const getDecimalsAndSymbolToken = useCallback(async (hash: string) => {
-    const cachedAsset = decimalsCache.current.get(hash)
-
-    if (cachedAsset) {
-      return cachedAsset
-    }
-
-    try {
-      const tokenAsset = await blockchainServices[account.blockchain].provider.getAssetByHash(hash)
-
-      if (tokenAsset) {
-        decimalsCache.current.set(hash, tokenAsset)
-
-        return tokenAsset
-      }
-
-      return {
-        symbol: '',
-        decimals: 0,
-      }
-    } catch {}
-  }, [])
 
   const getNFTInfo = useCallback(async (tokenId: string, hash: string) => {
     const cachedNFT = nftCache.current.get(tokenId)
-
-    if (cachedNFT) {
-      return cachedNFT
-    }
+    if (cachedNFT) return cachedNFT
 
     try {
-      const service = blockchainServices[account.blockchain]
+      if (!blockchainService.hasNFTIntegration()) return
 
-      if (!hasNFTIntegration(service)) {
-        return
-      }
-
-      const nftResponse = await service.getNFT(tokenId, hash)
-
-      if (nftResponse.name || nftResponse.image || nftResponse.collectionName) {
-        nftCache.current.set(tokenId, nftResponse)
-      }
-
+      const nftResponse = await blockchainService.getNFT(tokenId, hash)
+      nftCache.current.set(tokenId, nftResponse)
       return nftResponse
     } catch {}
   }, [])
@@ -135,7 +92,7 @@ const AccountTransactionsScreen = (props: Props) => {
       requestControl.current = true
 
       try {
-        const { transactions, totalPages } = await blockchainServices[account.blockchain].provider.getAddressAbstracts(
+        const { transactions, totalPages } = await blockchainService.provider.getAddressAbstracts(
           account.address,
           pageControl.current
         )
@@ -146,24 +103,14 @@ const AccountTransactionsScreen = (props: Props) => {
               transaction.transfers.map(
                 async (transfer): Promise<FormattedTransferAsset | FormattedTransferNFT | undefined> => {
                   if (transfer.type === TransactionTransferType.ASSET) {
-                    const decimalsAndSymbol = await getDecimalsAndSymbolToken(transfer.hash)
-
-                    if (!decimalsAndSymbol) {
-                      return
-                    }
-
                     return {
                       ...transfer,
-                      amount: String(transfer.amount / 10 ** decimalsAndSymbol.decimals),
-                      symbol: decimalsAndSymbol.symbol,
+                      amount: String(transfer.amount / 10 ** transfer.decimals),
                     }
                   }
 
                   const nftInfo = await getNFTInfo(transfer.tokenId, transfer.hash)
-
-                  if (!nftInfo) {
-                    return
-                  }
+                  if (!nftInfo) return
 
                   return {
                     ...transfer,
@@ -209,7 +156,7 @@ const AccountTransactionsScreen = (props: Props) => {
         setHasMoreTransactionsToLoad(false)
       }
     }
-  }, [account, getDecimalsAndSymbolToken, getNFTInfo])
+  }, [account, getNFTInfo])
 
   const loadPendingTransactions = useCallback(
     async (completedTransaction: FormattedTransaction[]) => {
@@ -238,7 +185,7 @@ const AccountTransactionsScreen = (props: Props) => {
 
       setPendingTransactions(formattedTransactions)
     },
-    [getDecimalsAndSymbolToken, getDecimalsAndSymbolToken]
+    [account]
   )
 
   const populateTransactions = useCallback(async () => {
@@ -251,7 +198,7 @@ const AccountTransactionsScreen = (props: Props) => {
   }, [loadCompletedTransactions])
 
   return (
-    <ScreenLayoutWithoutScroll darkerSolidColorBG>
+    <ScreenLayout darkerSolidColorBG scrollable={false}>
       <AccountSubTitle account={account} />
       <AwaitActivity name="populateTransactions" loadingView={<ScreenLoader />}>
         <TransactionsList
@@ -263,7 +210,7 @@ const AccountTransactionsScreen = (props: Props) => {
           showMoreLoading={hasMoreTransactionsToLoad}
         />
       </AwaitActivity>
-    </ScreenLayoutWithoutScroll>
+    </ScreenLayout>
   )
 }
 

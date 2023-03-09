@@ -1,3 +1,5 @@
+import { cloneDeep } from 'lodash'
+
 import { BlockchainServiceKey } from '../blockchain'
 import { Account } from '../models/redux/Account'
 import { Balance, TokenBalance, MultiExchange } from '../types/query'
@@ -15,20 +17,19 @@ export class BalanceHelper {
     return tokensBalances.reduce((prev, actual) => {
       const ratio = this.getExchangeRatio(actual.symbol, actual.blockchain, multiExchange)
 
-      return prev + (ratio ? actual.amount * ratio : 0)
+      return prev + actual.amount * ratio
     }, 0)
   }
 
-  static getExchangeRatio(
-    symbol: string,
-    blockchain: BlockchainServiceKey,
-    multiExchange?: MultiExchange
-  ): number | undefined {
-    if (!multiExchange) return
+  static getExchangeRatio(symbol: string, blockchain: BlockchainServiceKey, multiExchange?: MultiExchange): number {
+    if (!multiExchange) return 0
 
-    const exchange = multiExchange[blockchain].find(exchange => exchange.symbol === symbol)
+    const blockchainExchange = multiExchange[blockchain]
+    if (!blockchainExchange) return 0
 
-    return exchange?.amount
+    const exchange = blockchainExchange.find(exchange => exchange.symbol === symbol)
+
+    return exchange?.amount ?? 0
   }
 
   static convertBalanceToCurrency(
@@ -41,7 +42,7 @@ export class BalanceHelper {
 
     return {
       ...balance,
-      convertedAmount: ratio ? balance.amount * ratio : 0,
+      convertedAmount: balance.amount * ratio,
     }
   }
 
@@ -53,7 +54,19 @@ export class BalanceHelper {
 
     const tokensBalances = this.getTokensBalance(balances)
 
-    return tokensBalances
+    const tokenBalanceWithoutRepeated = cloneDeep(tokensBalances).reduce<TokenBalance[]>((prev, current) => {
+      const tokenBalance = prev.find(tokenBalance => tokenBalance.symbol === current.symbol)
+
+      if (tokenBalance) {
+        tokenBalance.amount += current.amount
+      } else {
+        prev.push(current)
+      }
+
+      return prev
+    }, [])
+
+    return tokenBalanceWithoutRepeated
       .map(tokenBalance => this.convertBalanceToCurrency(tokenBalance, multiExchange))
       .filter((tokenBalance): tokenBalance is BalanceConvertedToExchange => !!tokenBalance)
   }
@@ -74,5 +87,13 @@ export class BalanceHelper {
     if (!balances) return
 
     return balances.find(balance => balance.address === account.address)
+  }
+
+  static hasSomeBalance(balances?: Balance[] | Balance) {
+    if (!balances) return false
+
+    const tokensBalances = BalanceHelper.getTokensBalance(balances)
+
+    return tokensBalances.some(tokenBalance => tokenBalance.amount > 0)
   }
 }

@@ -1,6 +1,5 @@
 import Constants from 'expo-constants'
 import { LinearGradient } from 'expo-linear-gradient'
-import PropTypes from 'prop-types'
 import React from 'react'
 import {
   LayoutChangeEvent,
@@ -15,21 +14,27 @@ import { useSelector } from 'react-redux'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
-import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { RootState } from '~/src/store/RootStore'
-import OfflineBar from '~src/components/OfflineBar'
+import { hasCustomSelector } from '~/src/store/settings/SettingsSelector'
 import { LinearLayout } from '~src/styles/styled-components'
 
-interface Props {
-  onLayout?: (event: LayoutChangeEvent) => void
+type PropsScrollable = {
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void
   onReachBottom?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void
   scrollEventThrottle?: number
-  children?: React.ReactNode | React.ReactNodeArray
-  useHeaderPadding?: boolean
-  useStatusBarPadding?: boolean
-  useFooterPadding?: boolean
   autoScroll?: boolean
+  scrollable?: true
+  refreshControl?: React.ReactElement<RefreshControlProps, string | React.JSXElementConstructor<any>>
+}
+
+type PropsNoScrollable = {
+  scrollable?: false
+}
+type Props = {
+  onLayout?: (event: LayoutChangeEvent) => void
+  children?: React.ReactNode[] | React.ReactNode
+  useHeaderPadding?: boolean
+  useFooterPadding?: boolean
   alignX?: string
   alignY?: string
   padding?: number | string
@@ -37,111 +42,109 @@ interface Props {
   invertedGradient?: boolean
   solidColorBG?: boolean
   darkerSolidColorBG?: boolean
-  hideOfflineBar?: boolean
-  refreshControl?: React.ReactElement<RefreshControlProps, string | React.JSXElementConstructor<any>>
-}
+} & (PropsScrollable | PropsNoScrollable)
 
-const ScreenLayout: React.FC<Props> = props => {
+const ScreenLayout = ({
+  onLayout,
+  children,
+  useHeaderPadding = true,
+  alignX,
+  alignY,
+  padding,
+  transparent = false,
+  invertedGradient = false,
+  solidColorBG = false,
+  darkerSolidColorBG = false,
+  useFooterPadding = true,
+  ...props
+}: Props) => {
+  props.scrollable = props.scrollable ?? true
+
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-
-  const headerHeight = props.useHeaderPadding ? applicationConfig.headerHeight : 0
-  const tabBarHeight = props.useFooterPadding ? applicationConfig.footerHeight : 0
-  const headerExtraHeight = props.useStatusBarPadding && UtilsHelper.isAndroid ? Constants.statusBarHeight : 0
+  const hasCustom = useSelector(hasCustomSelector)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
+
+  const headerHeight = useHeaderPadding ? applicationConfig.headerHeight : 0
+  const tabBarHeight = useFooterPadding ? applicationConfig.footerHeight : 0
 
   const chooseColorBG = () => {
     let color
-    if (props.transparent) {
+    if (transparent) {
       color = ['#00000000', '#00000000']
-    } else if (props.invertedGradient) {
+    } else if (invertedGradient) {
       color = [theme.colors.background[9], theme.colors.background[18]]
-    } else if (props.solidColorBG) {
+    } else if (solidColorBG) {
       color = [theme.colors.background[2], theme.colors.background[2]]
-    } else if (props.darkerSolidColorBG) {
+    } else if (darkerSolidColorBG) {
       color = [theme.colors.background[14], theme.colors.background[14]]
     } else {
       color = [theme.colors.background[14], theme.colors.background[2]]
     }
     return color
   }
-
   return (
-    <LinearGradient onLayout={props.onLayout} colors={chooseColorBG()} start={[1, 0]} end={[1, 1]}>
+    <LinearGradient onLayout={onLayout} colors={chooseColorBG()} start={[1, 0]} end={[1, 1]}>
       <SafeAreaView style={{ height: '100%' }}>
-        <ScrollView
-          refreshControl={props.refreshControl}
-          scrollEnabled={props.autoScroll}
-          scrollEventThrottle={props.scrollEventThrottle}
-          onScroll={e => {
-            const { nativeEvent } = e
-            if (props.onScroll) {
-              props.onScroll(e)
-            }
+        {props.scrollable ? (
+          <ScrollView
+            refreshControl={props.refreshControl}
+            scrollEnabled={props.autoScroll}
+            scrollEventThrottle={props.scrollEventThrottle}
+            onScroll={e => {
+              const { nativeEvent } = e
+              if (props.onScroll) {
+                props.onScroll(e)
+              }
 
-            const isScrollReachedBottom =
-              nativeEvent.layoutMeasurement.height + nativeEvent.contentOffset.y >= nativeEvent.contentSize.height
+              const isScrollReachedBottom =
+                nativeEvent.layoutMeasurement.height + nativeEvent.contentOffset.y >= nativeEvent.contentSize.height
 
-            if (isScrollReachedBottom && props.onReachBottom) {
-              props.onReachBottom(e)
-            }
-          }}
-          alwaysBounceVertical={false}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flexGrow: 1 }}
-          style={{
-            marginTop: headerHeight + headerExtraHeight,
-            marginBottom: tabBarHeight,
-          }}
-        >
-          {!props.hideOfflineBar && <OfflineBar />}
-          <LinearLayout
-            alignItems={props.alignX}
-            justifyContent={props.alignY}
-            style={{
-              padding: Normalize.scale(props.padding ?? 10),
-              marginTop: !isConnected ? 45 : undefined,
+              if (isScrollReachedBottom && props.onReachBottom) {
+                props.onReachBottom(e)
+              }
             }}
-            position="relative"
-            height="100%"
+            alwaysBounceVertical={false}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ flexGrow: 1 }}
+            style={{
+              marginTop: hasCustom || !isConnected ? headerHeight : Constants.statusBarHeight + headerHeight,
+              marginBottom: tabBarHeight,
+            }}
           >
-            {props.children}
+            <LinearLayout
+              alignItems={alignX}
+              justifyContent={alignY}
+              position="relative"
+              height="100%"
+              style={{
+                padding: Normalize.scale(padding ?? 10),
+              }}
+            >
+              {children}
+            </LinearLayout>
+          </ScrollView>
+        ) : (
+          <LinearLayout
+            flex={1}
+            mt={hasCustom || !isConnected ? headerHeight : Constants.statusBarHeight + headerHeight}
+            mb={tabBarHeight}
+          >
+            <LinearLayout
+              alignItems={alignX}
+              justifyContent={alignY}
+              position="relative"
+              height="100%"
+              style={{
+                padding: Normalize.scale(padding ?? 10),
+              }}
+            >
+              {children}
+            </LinearLayout>
           </LinearLayout>
-        </ScrollView>
+        )}
       </SafeAreaView>
     </LinearGradient>
   )
-}
-
-ScreenLayout.propTypes = {
-  onLayout: PropTypes.func,
-  children: PropTypes.any,
-  useHeaderPadding: PropTypes.bool,
-  useStatusBarPadding: PropTypes.bool,
-  useFooterPadding: PropTypes.bool,
-  autoScroll: PropTypes.bool,
-  alignX: PropTypes.string,
-  alignY: PropTypes.string,
-  padding: PropTypes.any,
-  transparent: PropTypes.bool,
-  invertedGradient: PropTypes.bool,
-  solidColorBG: PropTypes.bool,
-  darkerSolidColorBG: PropTypes.bool,
-  onScroll: PropTypes.func,
-  onReachBottom: PropTypes.func,
-  scrollEventThrottle: PropTypes.number,
-  hideOfflineBar: PropTypes.bool,
-}
-
-ScreenLayout.defaultProps = {
-  useHeaderPadding: true,
-  useStatusBarPadding: false,
-  useFooterPadding: true,
-  autoScroll: true,
-  transparent: false,
-  invertedGradient: false,
-  solidColorBG: false,
-  darkerSolidColorBG: false,
-  hideOfflineBar: false,
 }
 
 export default ScreenLayout

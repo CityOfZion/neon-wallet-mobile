@@ -1,20 +1,20 @@
 import i18n from 'i18n-js'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { FlatList } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { BlockchainServiceKey } from '../blockchain'
-import { blockchainList, blockchainServices, hasIconDapps, IToken, mappedTokensBySymbol } from '../blockchain/common'
+import { blockchainConfig } from '../config/BlockchainConfig'
 import { BalanceConvertedToExchange, BalanceHelper } from '../helpers/BalanceHelper'
-import { TokenHelper } from '../helpers/TokenHelper'
-import { useTokens } from '../hooks/useTokens'
+import { useLocalTokensUtils } from '../hooks/useTokens'
 import { RootState } from '../store/RootStore'
 import { UseBalanceExchangeResult, TokenBalance } from '../types/query'
 import { LinearLayoutProps } from '../types/styled-components'
 import { Skeleton } from './Skeleton'
+import { TokenIcon } from './TokenIcon'
 
 import { FilterHelper } from '~src/helpers/FilterHelper'
-import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ButtonView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface BalanceListItemProps {
   onPress?: () => void
@@ -42,23 +42,11 @@ const BalanceListItem = React.memo(
       if (onPress) onPress()
     }
 
-    const image =
-      tokenBalanceConverted.icon ?? TokenHelper.getIcon(tokenBalanceConverted.symbol, tokenBalanceConverted.blockchain)
-
     return (
       <ButtonView onPress={handlePress}>
         <LinearLayout orientation="horiz" alignItems="center" justifyContent="space-between" mt={5} mb={5}>
           <LinearLayout orientation="horiz" alignItems="center" width="100px">
-            <ImageView
-              mr="8px"
-              resizeMode="contain"
-              alignSelf="center"
-              source={image}
-              style={{
-                width: 24,
-                height: 24,
-              }}
-            />
+            <TokenIcon marginRight={8} resizeMode="contain" width={24} height={24} {...tokenBalanceConverted} />
 
             <LinearLayout>
               <TextView
@@ -146,73 +134,14 @@ const BalanceList = ({
   balanceExchange,
   ...props
 }: Props) => {
-  const { getTokenBySymbol } = useTokens({ blockchain: 'all' })
-  const mandatorySymbols: Record<BlockchainServiceKey, { [symbol: string]: string }> = {
-    neo3: {
-      NEO: `NEO`,
-      GAS: `GAS`,
-      FLM: `FLM`,
-      GM: 'GM',
-      fUSDT: `fUSDT`,
-      bNEO: `bNEO`,
-      fWBTC: `fWBTC`,
-    },
-    neoLegacy: {},
-  }
-
-  const populateMandatoryTokens = useCallback(
-    (tokenBalances: BalanceConvertedToExchange[]) => {
-      tokenBalances.forEach(({ blockchain }) => {
-        const mandatorySymbolByBlockchain = Object.values(mandatorySymbols[blockchain])
-        const missingMandatoryTokens = mandatorySymbolByBlockchain.filter(
-          symbol => !tokenBalances.some(token => token.symbol === symbol)
-        )
-        const mandatoryTokens = missingMandatoryTokens
-          .map(symbol => getTokenBySymbol(symbol))
-          .filter(token => token !== undefined) as IToken[]
-        mandatoryTokens.forEach(token => {
-          tokenBalances.push({
-            amount: 0,
-            blockchain: token.blockchain,
-            convertedAmount: 0,
-            hash: token.hash,
-            name: token.name,
-            symbol: token.symbol,
-          })
-        })
-      })
-      if (tokenBalances.length < 1) {
-        blockchainList.forEach(blockchain => {
-          const mandatorySymbolByBlockchain = Object.values(mandatorySymbols[blockchain])
-          const mandatoryTokens = mandatorySymbolByBlockchain
-            .map(symbol => getTokenBySymbol(symbol))
-            .filter(token => token !== undefined) as IToken[]
-          const rulesToPopulate: boolean[] = [mandatorySymbolByBlockchain.length > 0]
-          if (rulesToPopulate.every(rule => rule === true)) {
-            mandatoryTokens.forEach(token => {
-              tokenBalances.push({
-                amount: 0,
-                blockchain: token.blockchain,
-                convertedAmount: 0,
-                hash: token.hash,
-                name: token.name,
-                symbol: token.symbol,
-              })
-            })
-          }
-        })
-      }
-      return tokenBalances
-    },
-    [mandatorySymbols, getTokenBySymbol]
-  )
-
-  const tokensBalancesConverted = useMemo(
-    () => BalanceHelper.convertBalancesToCurrency(balanceExchange.balance.data, balanceExchange.exchange.data),
-    [balanceExchange]
-  )
+  const { getTokenBySymbol } = useLocalTokensUtils()
 
   const validAndOrdedTokensBalances = useMemo(() => {
+    const tokensBalancesConverted = BalanceHelper.convertBalancesToCurrency(
+      balanceExchange.balance.data,
+      balanceExchange.exchange.data
+    )
+
     if (!tokensBalancesConverted) return
 
     let tokenBalances = tokensBalancesConverted
@@ -220,6 +149,26 @@ const BalanceList = ({
     if (removeZeroBalance) {
       tokenBalances = tokenBalances.filter(token => token.amount > 0)
     }
+
+    const mandatoryBlockchains = Object.keys(blockchainConfig.mandatorySymbols) as BlockchainServiceKey[]
+
+    mandatoryBlockchains.forEach(blockchainKey => {
+      blockchainConfig.mandatorySymbols[blockchainKey].forEach(symbol => {
+        const balanceAlreadyHas = tokenBalances.some(
+          token => token.symbol === symbol && token.blockchain === blockchainKey
+        )
+        if (balanceAlreadyHas) return
+
+        const token = getTokenBySymbol(symbol, blockchainKey)
+        if (!token) return
+
+        tokenBalances.push({
+          amount: 0,
+          convertedAmount: 0,
+          ...token,
+        })
+      })
+    })
 
     if (orderByValue) {
       tokenBalances = tokenBalances.sort((prev, actual) => {
@@ -233,28 +182,12 @@ const BalanceList = ({
       })
     }
 
-    return populateMandatoryTokens(tokenBalances)
-  }, [tokensBalancesConverted])
+    return tokenBalances
+  }, [balanceExchange, getTokenBySymbol])
 
   const handlePress = (token: TokenBalance) => {
     if (onPress) onPress(token)
   }
-
-  const populateIcons = useCallback(async () => {
-    if (validAndOrdedTokensBalances && validAndOrdedTokensBalances[0]) {
-      const service = blockchainServices[validAndOrdedTokensBalances[0].blockchain]
-      if (hasIconDapps(service)) {
-        const icons = await service.getIconList(validAndOrdedTokensBalances.map(it => it.hash))
-        validAndOrdedTokensBalances.forEach(it => {
-          it.icon = icons.get(it.hash)?.sm
-        })
-      }
-    }
-  }, [validAndOrdedTokensBalances])
-
-  useEffect(() => {
-    populateIcons()
-  }, [validAndOrdedTokensBalances])
 
   return (
     <LinearLayout {...props} width="100%">

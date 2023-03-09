@@ -1,13 +1,12 @@
 import { HttpExclude, HttpExpose } from '@simpli/serialized-request'
 import moment from 'moment'
-import { ImageLoadEventData } from 'react-native'
 
 import { Token } from '../Token'
 
 import { SecurityHelper } from '~/src/helpers/SecurityHelper'
 import { AccountState } from '~/src/types/reducers/account'
 import { WalletType } from '~/src/types/reducers/wallet'
-import { BlockchainServiceKey, getBlockchainLogo } from '~src/blockchain'
+import { BlockchainServiceKey } from '~src/blockchain'
 import { Wallet } from '~src/models/redux/Wallet'
 
 export interface PendingTransactions {
@@ -49,9 +48,6 @@ export class Account implements AccountState {
   @HttpExpose()
   blockchain: BlockchainServiceKey = 'neoLegacy'
 
-  @HttpExpose()
-  srcIcon: ImageLoadEventData = getBlockchainLogo(this.blockchain, 'white')
-
   getWallet(pool: Wallet[]) {
     return pool.find(it => it.id === this.idWallet)
   }
@@ -86,9 +82,6 @@ export class Account implements AccountState {
   adaptToMultichain() {
     if (!this.blockchain) {
       this.blockchain = 'neoLegacy'
-    }
-    if (!this.srcIcon) {
-      this.srcIcon = getBlockchainLogo(this.blockchain, 'white')
     }
   }
 

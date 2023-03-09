@@ -60,7 +60,7 @@ const PasscodePage = (props: Props) => {
   }, [passcode])
 
   return (
-    <ScreenLayout useHeaderPadding={false} useFooterPadding={false} useStatusBarPadding padding={16}>
+    <ScreenLayout useHeaderPadding={false} useFooterPadding={false} padding={16}>
       <Passcode
         title={i18n.t('passcode.enter')}
         passcode={passcode}

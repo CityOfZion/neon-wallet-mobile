@@ -1,20 +1,17 @@
 import i18n from 'i18n-js'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { useTokens } from '~/src/hooks/useTokens'
 import { Token } from '~/src/models/Token'
-import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 import { TokenBalance } from '~/src/types/query'
 
 type Props = {
-  account: Account
   token?: Token
   tokenBalance?: TokenBalance
   amount?: string
@@ -28,7 +25,6 @@ type Props = {
 }
 
 export const AmountInput = ({
-  account,
   token,
   tokenBalance,
   amount,
@@ -43,13 +39,6 @@ export const AmountInput = ({
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
-  const { getTokenBySymbol } = useTokens({ blockchain: account.blockchain })
-
-  const supportedToken = useMemo(() => {
-    if (!token) return
-
-    return getTokenBySymbol(token.symbol)
-  }, [getTokenBySymbol, token])
 
   const [remaining, setRemaining] = useState<number>()
 
@@ -78,9 +67,9 @@ export const AmountInput = ({
     let formattedAmount = text
       .replace(/,|\.\.|\.,/g, '.')
       .replace(/\s|-/g, '')
-      .replace(/[0-9]+\.[0-9]{9,}$/g, Number(text).toFixed(supportedToken?.decimals ?? 8))
+      .replace(/[0-9]+\.[0-9]{9,}$/g, Number(text).toFixed(token.decimals))
 
-    if (supportedToken && supportedToken.decimals < 1) {
+    if (token && token.decimals < 1) {
       formattedAmount = formattedAmount.replace('.', '')
     }
 
@@ -90,13 +79,13 @@ export const AmountInput = ({
 
     let newFiat = String(ratio * Number(formattedAmount)).replace(/[\d.]+e-[0-9]+/g, '0')
 
-    newFiat = newFiat.replace(/[0-9]+\.[0-9]{3,}$/g, Number(newFiat).toFixed(2))
+    newFiat = newFiat.replace(/[0-9]+\.[0-9]{3,}$/g, Number(newFiat).toFixed(6))
 
     onFiatChange(newFiat)
   }
 
   const handleValidateFiat = (text: string) => {
-    if (!token || text.length <= 0 || Number(text) <= 0 || !tokenBalance || !ratio || !amount) return false
+    if (!token || text.length <= 0 || !tokenBalance || !ratio || !amount) return false
     if (tokenBalance.symbol === feeTokenBalance?.symbol) {
       if (!fee) return false
       return Number(text) + fee * ratio <= tokenBalance.amount * ratio
@@ -105,7 +94,7 @@ export const AmountInput = ({
   }
 
   const handleChangeFiat = (text: string) => {
-    if (!supportedToken) return
+    if (!token) return
 
     if (text.length <= 0) {
       onAmountChange()
@@ -116,14 +105,14 @@ export const AmountInput = ({
     const formattedFiat = text
       .replace(/,|\.\.|\.,/g, '.')
       .replace(/\s|-/g, '')
-      .replace(/[0-9]+\.[0-9]{3,}$/g, Number(text).toFixed(2))
+      .replace(/[0-9]+\.[0-9]{3,}$/g, text)
 
     onFiatChange(formattedFiat)
 
     if (!ratio) return
 
     let newAmount = String(Number(formattedFiat) / ratio)
-    newAmount = newAmount.replace(/[0-9]+\.[0-9]{9,}$/g, Number(newAmount).toFixed(supportedToken.decimals))
+    newAmount = newAmount.replace(/[0-9]+\.[0-9]{9,}$/g, Number(newAmount).toFixed(token.decimals))
 
     onAmountChange(newAmount)
   }
@@ -216,10 +205,10 @@ export const AmountInput = ({
               hidePaste
               hideScan
               keyboardType="numeric"
-              editable={!!supportedToken?.decimals}
+              editable={!!token?.decimals}
             />
           </LinearLayout>
-          <ButtonView alignSelf="flex-end" onPress={handlePressRoundButton} disabled={!supportedToken?.decimals} mt={3}>
+          <ButtonView alignSelf="flex-end" onPress={handlePressRoundButton} disabled={!token?.decimals} mt={3}>
             <LinearLayout orientation="horiz">
               <ImageView
                 mr={3}

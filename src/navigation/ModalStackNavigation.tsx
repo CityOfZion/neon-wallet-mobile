@@ -35,6 +35,7 @@ import SendTransactionWalletSelectionModal, {
 } from '../scenes/Account/SendTransaction/SendTransactionWalletSelectionModal'
 import { AddressScanQuickToolsModal, AddressScanQuickToolsModalParams } from '../scenes/AddressScanQuickToolsModal'
 import ConfirmPasscodePage, { ConfirmPasscodePageParams } from '../scenes/Settings/ConfirmPasscodePage'
+import { EditNetworkModal, EditNetworkModalParams } from '../scenes/Settings/EditNetworkModal'
 import PasscodePage, { PasscodePageParams } from '../scenes/Settings/PasscodePage/PasscodePage'
 import { BackupInfoModal, BackupInfoModalParams } from '../scenes/Wallet/BackupInfoModal'
 import WebViewModal, { WebViewModalParams } from '../scenes/WebViewModal'
@@ -74,7 +75,6 @@ import SecurityPickerModal from '~src/scenes/Settings/SecurityPickerModal'
 import VerifyPasscodePage, { VerifyPasscodePageParams } from '~src/scenes/Settings/VerifyPasscodePage'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import TipConfirmationModal, { TipConfirmationModalParams } from '~src/scenes/TipConfirmationModal'
-import WelcomePage, { WelcomeModalParam } from '~src/scenes/WelcomePage'
 import {
   WCAccountSelectionModal,
   WCAccountSelectionModalParams,
@@ -90,7 +90,6 @@ import WCWalletSelectionModal, {
 } from '~src/scenes/walletConnect/modal/WCWalletSelectionModal'
 
 export type ModalStackParamList = {
-  WelcomeModal: WelcomeModalParam
   CreateAccountModal: undefined
   EditAccountModal: EditAccountModalParam
   AccountQRCode: AccountQRCodeParams
@@ -136,6 +135,7 @@ export type ModalStackParamList = {
   Passcode: PasscodePageParams
   ConfirmPasscode: ConfirmPasscodePageParams
   VerifyPasscode: VerifyPasscodePageParams
+  EditNetworkModal: EditNetworkModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -147,7 +147,6 @@ export type ModalParams =
   | DefaultNavigationParam<PersistContactParams>
   | DefaultNavigationParam<EditWalletParams>
   | DefaultNavigationParam<ChangelogModalParams>
-  | DefaultNavigationParam<WelcomeModalParam>
   | DefaultNavigationParam<WalletContextModalParams>
   | DefaultNavigationParam<BlockchainListModalParams>
   | DefaultNavigationParam<WCConnectionRequestModalParams>
@@ -184,17 +183,12 @@ const ModalStackNavigation = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <ModalStack.Navigator
-        initialRouteName={wrapper.route.CreateAccountModal.name}
-        headerMode="none"
-        screenOptions={screenConfig}
-      >
+      <ModalStack.Navigator headerMode="none" screenOptions={screenConfig}>
         <ModalStack.Screen
           name={wrapper.route.AddressScanQuickToolsModal.name}
           component={AddressScanQuickToolsModal}
         />
         <ModalStack.Screen name={wrapper.route.ChangelogModal.name} component={ChangelogModal} />
-        <ModalStack.Screen name={wrapper.route.WelcomeModal.name} component={WelcomePage} />
         <ModalStack.Screen name={wrapper.route.EditAccountModal.name} component={EditAccountModal} />
         <ModalStack.Screen name={wrapper.route.CustomColor.name} component={CustomColorPage} />
         <ModalStack.Screen name={wrapper.route.WalletContextModal.name} component={WalletContextModal} />
@@ -260,6 +254,8 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen name={wrapper.route.Passcode.name} component={PasscodePage} />
         <ModalStack.Screen name={wrapper.route.ConfirmPasscode.name} component={ConfirmPasscodePage} />
         <ModalStack.Screen name={wrapper.route.VerifyPasscode.name} component={VerifyPasscodePage} />
+
+        <ModalStack.Screen name={wrapper.route.EditNetworkModal.name} component={EditNetworkModal} />
       </ModalStack.Navigator>
     </ThemeProvider>
   )

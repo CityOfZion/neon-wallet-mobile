@@ -1,52 +1,38 @@
+import Constants from 'expo-constants'
 import React from 'react'
-import { Text, StyleSheet, Image, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { RootState } from '../store/RootStore'
-
-import { wrapper } from '~src/app/ApplicationWrapper'
+import { hasCustomSelector } from '../store/settings/SettingsSelector'
+import { ImageView, LinearLayout, TextView } from '../styles/styled-components'
 
 const OfflineBar = () => {
-  const isConnected = useSelector((state: RootState) => state.network.isConnected)
-  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const hasCustom = useSelector(hasCustomSelector)
 
-  const styles = StyleSheet.create({
-    container: {
-      width: '100%',
-      padding: 15,
-      backgroundColor: theme.colors.background[12],
-      borderBottomWidth: 1,
-      borderBottomColor: theme.colors.primary,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'absolute',
-      zIndex: 99,
-    },
-    text: {
-      color: '#fff',
-      alignSelf: 'center',
-    },
-    textContainers: {
-      flexDirection: 'column',
-      marginLeft: 10,
-    },
-    title: {
-      color: theme.colors.primary,
-      fontSize: 10,
-    },
-  })
-
-  return !isConnected ? (
-    <View style={styles.container}>
-      <Image source={require('~src/assets/images/no-internet-icon.png')} />
-      <View style={styles.textContainers}>
-        <Text style={styles.title}>WARNING</Text>
-        <Text style={styles.text}>No internet connection</Text>
-      </View>
-    </View>
-  ) : (
-    <></>
+  return (
+    <LinearLayout
+      orientation="horiz"
+      width="100%"
+      padding={15}
+      paddingTop={15 + (!hasCustom ? Constants.statusBarHeight : 0)}
+      backgroundColor="background.12"
+      borderBottomWidth="1px"
+      borderBottomColor="primary"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <ImageView
+        source={require('~src/assets/images/no-internet-icon.png')}
+        width={34}
+        height={34}
+        resizeMode="contain"
+      />
+      <LinearLayout marginLeft="10px">
+        <TextView color="primary" fontSize="10px">
+          WARNING
+        </TextView>
+        <TextView color="text.0">No internet connection</TextView>
+      </LinearLayout>
+    </LinearLayout>
   )
 }
 

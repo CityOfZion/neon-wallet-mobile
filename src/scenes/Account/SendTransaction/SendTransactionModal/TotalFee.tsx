@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Normalize } from '~/src/app/Normalize'
-import { blockchainServices } from '~/src/blockchain'
-import { TokenHelper } from '~/src/helpers/TokenHelper'
+import { TokenIcon } from '~/src/components/TokenIcon'
+import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { Token } from '~/src/models/Token'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
@@ -38,6 +38,7 @@ export const TotalFee = ({
   onRequest,
   feeTokenBalance,
 }: Props) => {
+  const { blockchainService } = useBlockchainService(account.blockchain)
   const currency = useSelector((state: RootState) => state.settings.currency)
 
   const fiatFee = useMemo(() => {
@@ -65,18 +66,18 @@ export const TotalFee = ({
   }, [fee, account, token, amount])
 
   const calculateFee = useCallback(async () => {
-    const { address: senderAddress } = account
+    const senderWif = await account.getWif()
 
-    if (!destinationAddressIsValid || !destinationAddress || !senderAddress || !token || !amount) {
+    if (!destinationAddressIsValid || !destinationAddress || !senderWif || !token || !amount) {
       onFeeChange(undefined)
       return
     }
 
     onRequest(true)
 
-    const calculatedFee = await blockchainServices[account.blockchain].calculateTransferFee({
+    const calculatedFee = await blockchainService.calculateTransferFee({
       receiverAddress: destinationAddress,
-      senderAddress,
+      senderWif,
       amount,
       tokenHash: token.hash,
       tokenDecimals: token.decimals,
@@ -122,13 +123,15 @@ export const TotalFee = ({
       >
         <LinearLayout width="48%" orientation="horiz" alignItems="center">
           <LinearLayout orientation="horiz" paddingX="8px">
-            <ImageView
-              mr={4}
-              mt={1}
-              width={Normalize.scale(19)}
-              height={Normalize.scale(21)}
+            <TokenIcon
+              marginRight={4}
+              marginTop={1}
+              width={20}
+              height={20}
               resizeMode="contain"
-              source={TokenHelper.getIcon(blockchainServices[account.blockchain].feeToken.token, account.blockchain)}
+              blockchain={account.blockchain}
+              symbol={blockchainService.feeToken.token}
+              hash={blockchainService.feeToken.hash}
             />
             <TextView color="text.0" fontFamily="semibold" fontSize="18px">
               {fee ? fee.toFixed(8) : 0}

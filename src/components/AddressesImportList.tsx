@@ -1,33 +1,51 @@
 import i18n from 'i18n-js'
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState } from 'react'
 import { View, ScrollView, FlatList, Image, TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import { BlockchainHelper } from '../helpers/BlockchainHelper'
 import { RootState } from '../store/RootStore'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { BlockchainServiceKey, getBlockchainLogo } from '~src/blockchain'
+import { BlockchainServiceKey } from '~src/blockchain'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
 
-export interface AddressImportItemProps {
+export type AddressInfo = { address: string; blockchain: BlockchainServiceKey }
+
+export type AddressesImportListProps<T extends AddressInfo> = {
   blockSelection?: boolean
-  address: string
-  blockchain: BlockchainServiceKey
-  onSelectAddress: (address: string, blockchain: BlockchainServiceKey, isSelected: boolean) => void
+  items: T[]
+  selectedItems: T[]
+  onSelect: (items: T[], item: T) => void
+  onDeselect: (items: T[], item: T) => void
 }
 
-const AddressImportItem = (props: AddressImportItemProps) => {
+export type AddressImportItemProps<T extends AddressInfo> = {
+  item: T
+  blockSelection?: boolean
+  onSelect: (data: T) => void
+  onDeselect: (data: T) => void
+}
+
+const AddressImportItem = <T extends AddressInfo = AddressInfo>(props: AddressImportItemProps<T>) => {
   const [isSelected, setIsSelected] = useState<boolean>(true)
 
-  const handleClickActive = useCallback(() => {
-    !props.blockSelection && setIsSelected(!isSelected)
-  }, [isSelected, props.blockSelection])
+  const handleClick = () => {
+    if (!props.blockSelection) return
 
-  useEffect(() => {
-    props.onSelectAddress(props.address, props.blockchain, isSelected)
-  }, [isSelected])
+    const newSelected = !isSelected
+
+    setIsSelected(newSelected)
+
+    if (newSelected) {
+      props.onSelect(props.item)
+    } else {
+      props.onDeselect(props.item)
+    }
+  }
+
   return (
-    <TouchableWithoutFeedback onPress={handleClickActive}>
+    <TouchableWithoutFeedback onPress={handleClick}>
       <View
         style={{
           marginVertical: 15,
@@ -39,16 +57,16 @@ const AddressImportItem = (props: AddressImportItemProps) => {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image
             style={{ marginRight: 10, width: 25, height: 26 }}
-            source={getBlockchainLogo(props.blockchain)}
+            source={BlockchainHelper.getIcon(props.item.blockchain)}
             width={25}
             height={26}
           />
           <View>
             <TextView fontSize="10px" color="text.3">
-              {i18n.t(`blockchainServices.${props.blockchain}.label`)}
+              {i18n.t(`blockchainServices.${props.item.blockchain}.label`)}
             </TextView>
             <TextView color="#fff" fontFamily="medium" fontSize="14px">
-              {props.address}
+              {props.item.address}
             </TextView>
           </View>
         </View>
@@ -58,52 +76,26 @@ const AddressImportItem = (props: AddressImportItemProps) => {
   )
 }
 
-export interface AddressesImportListProps {
-  blockSelection?: boolean
-  addressesInfo: { address: string; blockchain: BlockchainServiceKey }[]
-  onSelectAddress: (addressInfoSelected: { address: string; blockchain: BlockchainServiceKey }[]) => void
-}
-
-const AddressesImportList = (props: AddressesImportListProps) => {
+const AddressesImportList = <T extends AddressInfo = AddressInfo>({
+  items,
+  onDeselect,
+  onSelect,
+  selectedItems,
+  blockSelection = true,
+}: AddressesImportListProps<T>) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const [addressesSelected, setAddressesSelected] = useState<{ address: string; blockchain: BlockchainServiceKey }[]>(
-    []
-  )
-  const handleChangeAddressesSelected = useCallback(
-    (address: string, blockchain: BlockchainServiceKey, isSelected: boolean) => {
-      if (isSelected) {
-        const foundAddressesSelected = addressesSelected.find(
-          it => it.address === address && it.blockchain === blockchain
-        )
-        if (foundAddressesSelected) {
-          setAddressesSelected(prevState => {
-            const data = prevState
-            data[addressesSelected.indexOf(foundAddressesSelected)] = {
-              address,
-              blockchain,
-            }
-            return [...data]
-          })
-        } else {
-          setAddressesSelected(prevState => {
-            const data = prevState
-            data.push({ address, blockchain })
-            return [...data]
-          })
-        }
-      } else {
-        setAddressesSelected(prevState => {
-          const data = prevState
-          return [...data.filter(it => it.address !== address && it.blockchain !== blockchain)]
-        })
-      }
-    },
-    [addressesSelected]
-  )
 
-  useEffect(() => {
-    props.onSelectAddress(addressesSelected)
-  }, [addressesSelected])
+  const handleSelect = (item: T) => {
+    onSelect([...items, item], item)
+  }
+
+  const handleDeselect = (item: T) => {
+    onDeselect(
+      items.filter(i => i.address !== item.address),
+      item
+    )
+  }
+
   return (
     <View
       style={{
@@ -114,14 +106,13 @@ const AddressesImportList = (props: AddressesImportListProps) => {
     >
       <ScrollView>
         <FlatList
-          data={props.addressesInfo}
+          data={items}
           renderItem={({ item, index }) => (
             <AddressImportItem
-              blockSelection={props.blockSelection}
-              onSelectAddress={handleChangeAddressesSelected}
-              blockchain={item.blockchain}
-              key={index}
-              address={item.address}
+              item={item}
+              blockSelection={blockSelection}
+              onDeselect={handleDeselect}
+              onSelect={handleSelect}
             />
           )}
           ItemSeparatorComponent={() => <LinearLayout bg="text.1" height={1} />}

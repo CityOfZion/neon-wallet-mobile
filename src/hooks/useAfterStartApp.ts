@@ -8,12 +8,13 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { appBus } from '../app/AppBus'
 import { wrapper } from '../app/ApplicationWrapper'
-import { blockchainServices, getBlockchainByAddress, hasWCIntegration } from '../blockchain'
-import { DEFAULT_AUTOACCEPT_METHODS } from '../config/walletConnect/constants'
+import { walletConnectConfig } from '../config/WalletConnectConfig'
 import { SessionRequest, useWalletConnect } from '../contexts/WalletConnectContext'
+import { NeonWcAdapter } from '../helpers/NeonWcAdapter'
 import { Account } from '../models/redux/Account'
 import { RootState } from '../store/RootStore'
 import { accountReducerActions } from '../store/account/AccountReducer'
+import { selectAccounts } from '../store/account/SelectorAccount'
 import { contactReducerActions } from '../store/contact/ContactReducer'
 import { networkReducerActions } from '../store/network/NetworkReducer'
 import { settingsReducerActions } from '../store/settings/SettingsReducer'
@@ -30,8 +31,9 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
   const dispatch = useDispatch()
   const walletConnectCtx = useWalletConnect()
   const wallets = useSelector(selectWallets)
+  const accounts = useSelector(selectAccounts)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
-
+  const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
   const [started, setStarted] = useState(false)
 
   const migrateStorageToReduxPersist = useCallback(() => {
@@ -54,22 +56,22 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
     if (!isConnected) return
 
     walletConnectCtx.autoAcceptIntercept((_accountAddress, _chain, request: SessionRequest) =>
-      DEFAULT_AUTOACCEPT_METHODS.includes(request.params.request.method)
+      walletConnectConfig.defaultAutoacceptMethods.includes(request.params.request.method)
     )
 
     walletConnectCtx.onRequestListener(async (accountAddress, _chain, request: SessionRequest) => {
-      const blockchain = getBlockchainByAddress(accountAddress)
+      try {
+        const account = accounts.find(account => account.address === accountAddress)
+        if (!account) throw new Error('Failed request listener')
 
-      if (blockchain) {
-        const bs = blockchainServices[blockchain]
+        const wif = await account.getWif()
+        if (!wif) throw new Error('Failed request listener')
 
-        if (hasWCIntegration(bs)) {
-          const result = await bs.rpcCall(accountAddress, request)
-
-          return result
-        }
+        const adapter = await NeonWcAdapter.init(selectedBlockchainNetworks[account.blockchain].url, wif)
+        return adapter.rpcCall(request)
+      } catch {
+        throw new Error('Failed request listener')
       }
-      throw new Error('Failed request listener')
     })
 
     await walletConnectCtx.init()
@@ -82,7 +84,7 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
         message: i18n.t('toast.transactionCompleted'),
         type: 'success',
         onPress: () => {
-          if (!navigationRef) return
+          if (!navigationRef || selectedBlockchainNetworks[account.blockchain].type === 'custom') return
 
           const wallet = account.getWallet(wallets)
 

@@ -82,6 +82,16 @@ const SettingsPage = (props: SettingsProps) => {
           }
         />
       )}
+
+      <MenuItem
+        title={i18n.t('settings.protocols')}
+        icon={require('~src/assets/images/protocols-green.png')}
+        arrowDirection={RightIconType.ARROW_RIGHT}
+        iconWidth={22}
+        iconMarginLeft={2}
+        iconMarginRight={16}
+        onPress={() => props.navigation.navigate(wrapper.route.ProtocolsPage.name)}
+      />
     </ScreenLayout>
   )
 }

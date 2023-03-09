@@ -49,7 +49,8 @@ const ThemePickerModal = (props: Props) => {
       padding={16}
       paddingTop={24}
       onClose={props.navigation.goBack}
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
+      rightButton={<ThemedCloseButton />}
+      onRightPress={controller.close}
       onLeftPress={controller.close}
       disableDefaultScrollView
     >

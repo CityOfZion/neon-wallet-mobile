@@ -2,13 +2,15 @@ import i18n from 'i18n-js'
 import moment from 'moment'
 import React from 'react'
 import { Linking, View, TouchableWithoutFeedback } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import { FormattedTransaction } from './AccountTransactionsScreen'
 import { TransferItem } from './TransferItem'
 
-import { blockchainServices } from '~/src/blockchain'
 import { BoxLabelNumber } from '~/src/components/BoxLabelNumber'
+import { DoraHelper } from '~/src/helpers/DoraHelper'
 import { Account } from '~/src/models/redux/Account'
+import { RootState } from '~/src/store/RootStore'
 import { ImageView, TextView } from '~/src/styles/styled-components'
 import { MultiExchange } from '~/src/types/query'
 
@@ -19,6 +21,10 @@ type Props = FormattedTransaction & {
 }
 
 export const TransactionItem = React.memo((props: Props) => {
+  const selectedNetwork = useSelector(
+    (state: RootState) => state.settings.selectedBlockchainNetworks[props.account.blockchain]
+  )
+
   return (
     <View style={{ marginBottom: 5 }}>
       <View
@@ -92,7 +98,9 @@ export const TransactionItem = React.memo((props: Props) => {
           {!props.hideLinkDora && (
             <TouchableWithoutFeedback
               onPress={() => {
-                Linking.openURL(blockchainServices[props.account.blockchain].provider.siteUrlQuery + props.hash)
+                Linking.openURL(
+                  DoraHelper.buildTransactionUrl(selectedNetwork.type, props.account.blockchain, props.hash)
+                )
               }}
             >
               <ImageView

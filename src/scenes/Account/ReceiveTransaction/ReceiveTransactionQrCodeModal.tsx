@@ -6,11 +6,10 @@ import { useSelector } from 'react-redux'
 
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { Normalize } from '~/src/app/Normalize'
+import { TokenIcon } from '~/src/components/TokenIcon'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { TokenHelper } from '~/src/helpers/TokenHelper'
 import { UriHelper } from '~/src/helpers/UriHelper'
 import { useExchange } from '~/src/hooks/useExchange'
 import { Token } from '~/src/models/Token'
@@ -24,7 +23,7 @@ import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import { Account } from '~src/models/redux/Account'
 import { Wallet } from '~src/models/redux/Wallet'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface ReceiveTransactionQrCodeModalParams {
   wallet: Wallet
@@ -118,14 +117,8 @@ const ReceiveTransactionQrCodeModal = (props: Props) => {
               <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.token')} weight={labelWeight} lightText />
 
               <LinearLayout orientation="horiz" weight={5}>
-                <ImageView
-                  mt={3}
-                  width={Normalize.scale(18)}
-                  height={Normalize.scale(18)}
-                  resizeMode="contain"
-                  alignSelf="center"
-                  source={TokenHelper.getIcon(token.symbol, account.blockchain)}
-                />
+                <TokenIcon marginTop={4} width={18} height={18} resizeMode="contain" {...token} />
+
                 <TextView
                   color="white"
                   ml={2}

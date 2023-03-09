@@ -8,13 +8,13 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
-import { blockchainServices } from '~/src/blockchain'
 import SwiperPanel, { useSwiperController } from '~/src/components/SwiperPanel'
 import { TransactionTipCard } from '~/src/components/TransactionTipCard'
 import { TransactionTokenCard } from '~/src/components/TransactionTokenCard'
 import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
+import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { useExchange } from '~/src/hooks/useExchange'
 import { useLocalAuthentication } from '~/src/hooks/useLocalAuthentication'
 import { Token } from '~/src/models/Token'
@@ -71,9 +71,14 @@ export const SendTransactionReviewModal = (props: Props) => {
   const language = useSelector((state: RootState) => state.settings.language)
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
+  const { blockchainService } = useBlockchainService(account.blockchain)
   const { data: exchange } = useExchange()
 
-  const totalAmount = Number(amount) + fee + (tip ?? 0)
+  const currencyAmount = BalanceHelper.convertBalanceToCurrency(
+    { amount: Number(amount) + fee + (tip ?? 0), ...token },
+    exchange
+  )
+  const convertedAmount = currencyAmount?.convertedAmount ?? 0
 
   const ratio = useMemo(() => {
     if (!exchange) return
@@ -86,6 +91,9 @@ export const SendTransactionReviewModal = (props: Props) => {
       return
     }
 
+    const wif = await account.getWif()
+    if (!wif) return
+
     try {
       await authenticate()
     } catch {
@@ -93,9 +101,9 @@ export const SendTransactionReviewModal = (props: Props) => {
     }
 
     try {
-      const transactionHash = await blockchainServices[account.blockchain].sendTransaction({
+      const transactionHash = await blockchainService.sendTransaction({
         receiverAddress: destinationAddress,
-        senderAddress: account.address,
+        senderWif: wif,
         tokenHash: token.hash,
         tokenDecimals: token.decimals,
         amount: Number(amount),
@@ -148,9 +156,10 @@ export const SendTransactionReviewModal = (props: Props) => {
               <LinearLayout orientation="horiz">
                 <HeaderColumn
                   title={i18n.t('modals.sendTransactionReviewModal.value').toUpperCase()}
-                  value={FilterHelper.currency(totalAmount, currency, language)}
+                  value={FilterHelper.currency(convertedAmount, currency, language)}
                   weight={2}
                 />
+                {}
                 <HeaderColumn
                   title={i18n
                     .t('modals.sendTransactionReviewModal.fee', {

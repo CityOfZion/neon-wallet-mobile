@@ -3,24 +3,38 @@ import { useCallback, useState } from 'react'
 import { useQuery, UseQueryOptions } from 'react-query'
 import { useSelector } from 'react-redux'
 
-import { blockchainList, blockchainServices } from '../blockchain'
+import { ExchangeInfo } from '../models/response/ExchangeInfo'
 import { RootState } from '../store/RootStore'
 import { MultiExchange, UseExchangeResult } from '../types/query'
+import { useBlockchainServiceUtils } from './useBlockchainServices'
 
-export const fetchExchanges = async (currency: string): Promise<MultiExchange> => {
-  const exchanges = await Promise.all(
-    blockchainList.map(async blockchain => ({
-      [blockchain]: await blockchainServices[blockchain].getExchange(currency),
-    }))
-  )
-
-  return lodash.merge({}, ...exchanges)
-}
+type ExchangeInfoByKey = Record<string, ExchangeInfo[]>
 
 export function useExchange(
   queryOptions?: Omit<UseQueryOptions<MultiExchange, unknown, MultiExchange, string[]>, 'queryKey' | 'queryFn'>
 ): UseExchangeResult {
   const currency = useSelector((state: RootState) => state.settings.currency)
+  const { getBlockchainServices } = useBlockchainServiceUtils()
+
+  const fetchExchanges = useCallback(
+    async (currency: string): Promise<MultiExchange> => {
+      const services = getBlockchainServices()
+
+      const promises = services.map(
+        async (service): Promise<ExchangeInfoByKey> => ({
+          [service.key]: await service.getExchange(currency),
+        })
+      )
+
+      const exchanges = await Promise.allSettled(promises)
+      const exchangesFiltered = exchanges
+        .filter((exchange): exchange is PromiseFulfilledResult<ExchangeInfoByKey> => exchange.status === 'fulfilled')
+        .map(exchange => exchange.value)
+
+      return lodash.merge({}, ...exchangesFiltered)
+    },
+    [getBlockchainServices]
+  )
 
   const [isRefetchingByUser, setIsRefetchingByUser] = useState(false)
 

@@ -31,7 +31,6 @@ export class WrapperConfig {
     'Tab',
     'Onboarding',
     'WelcomeModal',
-    'QuickTools',
     'AddressScanQuickToolsModal',
     'ListWallets',
     'ListWalletsPage',
@@ -113,6 +112,10 @@ export class WrapperConfig {
     'BackupInfoModal',
     'SecurityBackupCheckPage',
     'SecurityPage',
+    'ProtocolsPage',
+    'ProtocolEditPage',
+    'EditNetworkModal',
+    'QuickToolsModal',
   ] as const
 }
 

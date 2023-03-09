@@ -1,22 +1,34 @@
-import { api, nep5, wallet } from '@cityofzion/neon-js'
-import { SendAssetConfig, DoInvokeConfig } from '@cityofzion/neon-js/node_modules/@cityofzion/neon-api/lib/funcs/types'
+import { api, sc, wallet, u, CONST, rpc } from '@cityofzion/neon-js'
 import { TransactionOutput } from '@cityofzion/neon-js/node_modules/@cityofzion/neon-core/lib/tx/components/TransactionOutput'
 import axios from 'axios'
-import { Platform, NativeModules, ImageLoadEventData } from 'react-native'
+import { Platform, NativeModules } from 'react-native'
 
-import tokens from '../tokens.json'
+import { DoraSDKProvider } from '../providers/DoraSDKProvider'
+import { NeoLegacyProvider } from '../providers/common'
 
+import { tokensByBlockchain } from '~/src/assets/tokens/infos'
+import { blockchainConfig } from '~/src/config/BlockchainConfig'
 import { AsteroidHelper, keychain } from '~/src/helpers/AsteroidHelper'
-import { Account } from '~/src/models/redux/Account'
 import { ExchangeInfo } from '~/src/models/response/ExchangeInfo'
-import { BlockchainServiceKey, IBlockchainService, IClaimable, SendTransactionData, IToken } from '~src/blockchain'
-import { NeoLegacyProviderOption } from '~src/blockchain/NeoLegacy'
-import { TNeoLegacyProvider } from '~src/blockchain/NeoLegacy/providers'
+import {
+  BlockchainServiceKey,
+  IBlockchainService,
+  IClaimable,
+  SendTransactionData,
+  TCOZTip,
+  TFeeToken,
+  TNetwork,
+  INFT,
+  IWalletConnect,
+  IIconDapps,
+} from '~src/blockchain'
 import { NeoNative } from '~src/native/NeoNative'
 
-const icon = require('~/src/assets/images/icon-neo-white.png') as ImageLoadEventData
-
-type NativeAsset = 'GAS' | 'NEO'
+type TNativeAssetSymbol = 'GAS' | 'NEO'
+type NativeAsset = {
+  symbol: TNativeAssetSymbol
+  hash: string
+}
 
 export interface CryptoCompareExchangeResponse {
   RAW: {
@@ -29,33 +41,54 @@ export interface CryptoCompareExchangeResponse {
 }
 
 export class BSNeoLegacy implements IClaimable, IBlockchainService {
-  readonly networkDeprecatedLabel = 'MainNet'
-  readonly defaultNodeNet = 'http://seed1.ngd.network:10332'
-  cozTip: { address: string; token: string; hash: string }
-  provider: TNeoLegacyProvider
-  key: BlockchainServiceKey
-  readonly icon = icon
+  readonly key: BlockchainServiceKey = 'neoLegacy'
+
+  network!: TNetwork
+  provider!: NeoLegacyProvider
+
   readonly derivationPath = "m/44'/888'/0'/0/?"
   readonly platform = 'neo'
-  readonly nativeAssets: NativeAsset[] = ['NEO', 'GAS']
-  readonly feeToken: { hash: string; token: string; decimals: number }
-  readonly wcChains: string[]
-  accountsPool: Account[] = []
-  readonly tokens: IToken[] = tokens as IToken[]
+  readonly nativeAssets: NativeAsset[] = [
+    { hash: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7', symbol: 'GAS' },
+    { hash: 'c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b', symbol: 'NEO' },
+  ]
+  readonly feeToken: TFeeToken = {
+    hash: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
+    token: 'GAS',
+    decimals: 8,
+  }
+  readonly cozTip: TCOZTip = {
+    address: 'AVav2pJu9S5rpsLyne2iC4vG63ngqT7uv9',
+    symbol: 'GAS',
+    hash: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
+    decimals: 8,
+  }
+
   constructor() {
-    this.provider = NeoLegacyProviderOption('doraSdk')
-    this.key = 'neoLegacy'
-    this.cozTip = {
-      address: 'AVav2pJu9S5rpsLyne2iC4vG63ngqT7uv9',
-      token: 'GAS',
-      hash: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
-    }
-    this.feeToken = {
-      hash: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
-      token: 'GAS',
-      decimals: 8,
-    }
-    this.wcChains = [] //neoLegacy doesn't support wallet connect
+    this.setNetwork(blockchainConfig.defaultSelectedNetworks.neoLegacy)
+  }
+
+  isClaimable(): this is IClaimable {
+    return true
+  }
+
+  hasNFTIntegration(): this is INFT {
+    return false
+  }
+
+  hasWalletConnectIntegration(): this is IWalletConnect {
+    return false
+  }
+
+  hasIconDappsIntegration(): this is IIconDapps {
+    return false
+  }
+
+  setNetwork(network: TNetwork) {
+    if (network.type === 'custom') throw new Error('Custom network is not supported for NEO Legacy')
+
+    this.network = network
+    this.provider = new DoraSDKProvider(this.network)
   }
 
   generateMnemonic() {
@@ -86,19 +119,16 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   }
 
   async sendTransaction(data: SendTransactionData) {
-    const token = this.tokens.find(token => token.hash === data.tokenHash)
-
-    const nativeAsset = this.nativeAssets.find(symbol => symbol === token?.symbol)
+    const nativeAsset = this.nativeAssets.find(asset => asset.hash === data.tokenHash)
 
     if (nativeAsset) {
       return await this.sendNativeAsset(
-        data.senderAddress,
+        data.senderWif,
         data.receiverAddress,
-        nativeAsset,
+        nativeAsset.symbol,
         data.amount,
         data.fee,
-        data.tip,
-        this.cozTip.address
+        data.tip
       )
     }
 
@@ -152,42 +182,39 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     return wallet.isWIF(privateKey)
   }
 
-  async claimGas(address: string) {
-    const neoAccount = await this.getNeoAccount(address)
+  async claimGas(wif: string) {
+    const account = new wallet.Account(wif)
 
-    if (!neoAccount) {
-      throw new Error('Neo Account not found')
-    }
+    const balances = await this.provider.getBalance(account.address)
+    const NEOBalance = balances.find(balance => balance.symbol === 'NEO')
 
-    const balances = await this.provider.getBalance(address)
-    const balance = balances.find(balance => balance.symbol === 'NEO')
+    const apiProvider = new api.neoscan.instance(this.network.url)
 
-    const apiProvider = new api.neoscan.instance(this.networkDeprecatedLabel)
-
-    if (balance) {
-      await this.sendNativeAsset(address, address, 'NEO', balance.amount)
+    if (NEOBalance) {
+      await this.sendNativeAsset(account.address, account.address, 'NEO', NEOBalance.amount)
     }
 
     const claimGasResponse = await api.claimGas({
       api: apiProvider,
-      account: neoAccount,
+      url: this.network.url,
+      account,
     })
 
     return claimGasResponse.response?.txid ?? null
   }
 
   async getExchange(currency: string): Promise<ExchangeInfo[]> {
-    const tokensSymbols = tokens.map(token => token.symbol)
+    if (this.network.type !== 'mainnet') throw new Error('Exchange is only available on mainnet')
 
-    const { data: prices } = await axios.get<CryptoCompareExchangeResponse>(
-      'https://min-api.cryptocompare.com/data/pricemultifull',
-      {
-        params: {
-          fsyms: tokensSymbols.join(','),
-          tsyms: currency,
-        },
-      }
-    )
+    const tokensSymbols = tokensByBlockchain[this.key][this.network.type].map(token => token.symbol)
+
+    const url = 'https://min-api.cryptocompare.com/data/pricemultifull'
+    const { data: prices } = await axios.get<CryptoCompareExchangeResponse>(url, {
+      params: {
+        fsyms: tokensSymbols.join(','),
+        tsyms: currency,
+      },
+    })
 
     return Object.entries(prices.RAW).map(([symbol, price]) => ({
       symbol,
@@ -199,118 +226,81 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     return 0
   }
 
-  private async getNeoAccount(address: string) {
-    const account = this.accountsPool.find(it => it.address === address)
-    const wifAccount = await account?.getWif()
-    return wifAccount ? new wallet.Account(wifAccount) : null
-  }
-
-  setAccountsPool(accounts: Account[]) {
-    this.accountsPool = accounts
+  async getBlockCount(): Promise<number> {
+    const rpcClient = new rpc.RPCClient(this.network.url)
+    return await rpcClient.getBlockCount()
   }
 
   /**
    * Only GAS or NEO
    */
   private async sendNativeAsset(
-    senderAddress: string,
+    senderWif: string,
     receiverAddress: string,
-    asset: 'GAS' | 'NEO',
+    nativeAssetSymbol: TNativeAssetSymbol,
     amount: number,
     fees?: number,
-    tipAmount?: number,
-    tipReceiverAddress?: string
+    tip?: number
   ) {
-    const neoAccount = await this.getNeoAccount(senderAddress)
-    const listUrls = (await this.provider.getAllNodes()).map(node => node.url)
+    const account = new wallet.Account(senderWif)
 
     let intents: TransactionOutput[]
 
-    if (tipAmount && tipReceiverAddress) {
-      const tipIntent = api.makeIntent({ GAS: tipAmount }, tipReceiverAddress)
-      const assetIntent = api.makeIntent({ [asset]: amount }, receiverAddress)
+    if (tip) {
+      const tipIntent = api.makeIntent({ [this.cozTip.symbol]: tip }, this.cozTip.address)
+      const assetIntent = api.makeIntent({ [nativeAssetSymbol]: amount }, receiverAddress)
       intents = assetIntent.concat(tipIntent)
     } else {
-      intents = api.makeIntent({ [asset]: amount }, receiverAddress)
+      intents = api.makeIntent({ [nativeAssetSymbol]: amount }, receiverAddress)
     }
 
-    if (!neoAccount) {
-      throw new Error('Neo Account not found')
-    }
+    const apiProvider = new api.neoscan.instance(this.network.url)
 
-    const apiProvider = new api.neoscan.instance(this.networkDeprecatedLabel)
-
-    const sendResponse = new Promise<SendAssetConfig>(async (resolve, reject) => {
-      let stopSend = true
-      for (let i = 0; i < listUrls.length; i++) {
-        if (!stopSend) {
-          break
-        }
-        const url = listUrls[i]
-        if (url) {
-          setTimeout(async () => {
-            try {
-              const sendResponse = await api.sendAsset({
-                url,
-                account: neoAccount,
-                api: apiProvider,
-                intents,
-                fees,
-              })
-              stopSend = true
-              resolve(sendResponse)
-            } catch (error: any) {
-              reject(error)
-              throw new Error(error.message)
-            }
-          }, 8000)
-        }
-      }
+    const sendResponse = await api.sendAsset({
+      url: this.network.url,
+      account,
+      api: apiProvider,
+      intents,
+      fees,
     })
 
-    return (await sendResponse).tx?.hash ?? null
+    return sendResponse.tx?.hash ?? null
   }
 
-  private async sendNep5Asset({ amount, receiverAddress, senderAddress, tokenHash, fee, tip }: SendTransactionData) {
-    const neoAccount = await this.getNeoAccount(senderAddress)
-    const pool = await this.provider.getAllNodes()
-    const height = pool.reduce((max, node) => Math.max(max, node.height ?? 0), pool[0]?.height ?? 0)
-    const url = pool.find(it => it.height === height)?.url ?? this.defaultNodeNet
+  private async sendNep5Asset({ amount, receiverAddress, senderWif, tokenHash, fee, tip }: SendTransactionData) {
+    const account = new wallet.Account(senderWif)
 
-    if (!neoAccount) {
-      throw new Error('Neo Account not found')
+    const apiProvider = new api.neoscan.instance(this.network.url)
+    const scBuilder = new sc.ScriptBuilder()
+
+    const tokenHashFixed = tokenHash.replace('0x', '')
+    const fromHash = u.reverseHex(wallet.getScriptHashFromAddress(account.address))
+    const toHash = u.reverseHex(wallet.getScriptHashFromAddress(receiverAddress))
+    const adjustedAmt = new u.Fixed8(amount).toRawNumber()
+    scBuilder.emitAppCall(tokenHashFixed, 'transfer', [
+      fromHash,
+      toHash,
+      sc.ContractParam.integer(adjustedAmt.toString()),
+    ])
+
+    if (tip) {
+      const tipToHash = u.reverseHex(wallet.getScriptHashFromAddress(this.cozTip.address))
+      const tipAdjustedAmt = new u.Fixed8(tip).toRawNumber()
+      scBuilder.emitAppCall(CONST.ASSET_ID[this.cozTip.symbol], 'transfer', [
+        fromHash,
+        tipToHash,
+        sc.ContractParam.integer(tipAdjustedAmt.toString()),
+      ])
     }
 
-    const apiProvider = new api.neoscan.instance(this.networkDeprecatedLabel)
+    const invokeResponse = await api.doInvoke({
+      api: apiProvider,
+      url: this.network.url,
+      account,
+      script: scBuilder.str,
+      fees: fee,
+    })
 
-    const scBuilder = nep5.abi.transfer(tokenHash.replace('0x', ''), neoAccount.address, receiverAddress, amount)
-
-    let invokeResponse: DoInvokeConfig
-
-    try {
-      if (tip) {
-        const tipIntent = api.makeIntent({ GAS: tip }, this.cozTip.address)
-        invokeResponse = await api.doInvoke({
-          api: apiProvider,
-          url,
-          account: neoAccount,
-          script: {},
-          fees: fee,
-          intents: tipIntent,
-        })
-      } else {
-        invokeResponse = await api.doInvoke({
-          api: apiProvider,
-          url,
-          account: neoAccount,
-          script: scBuilder().str,
-          fees: fee,
-        })
-      }
-      return invokeResponse.tx?.hash ?? null
-    } catch (error) {
-      console.log(error)
-      throw error
-    }
+    return invokeResponse.tx?.hash ?? null
   }
 }

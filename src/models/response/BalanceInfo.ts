@@ -1,6 +1,5 @@
-export interface BalanceInfo {
+import { Token } from '../Token'
+
+export interface BalanceInfo extends Token {
   amount: number
-  hash: string
-  symbol: string
-  name: string
 }

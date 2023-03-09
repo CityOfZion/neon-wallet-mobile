@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux'
 
 import { TransactionRequestSuccessElementProps } from '../TransactionRequestBase'
 
-import { blockchainServices } from '~/src/blockchain'
 import ThemedButton from '~/src/components/themed/ThemedButton'
+import { DoraHelper } from '~/src/helpers/DoraHelper'
 import { RootState } from '~/src/store/RootStore'
 import { selectWalletByID } from '~/src/store/wallet/SelectorWallet'
 import { wrapper } from '~src/app/ApplicationWrapper'
@@ -18,10 +18,13 @@ import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/style
 export const InvokeFunctionSuccess = ({ account, transactionId }: TransactionRequestSuccessElementProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const wallet = useSelector(selectWalletByID(account.idWallet))
+  const selectedNetwork = useSelector(
+    (state: RootState) => state.settings.selectedBlockchainNetworks[account.blockchain]
+  )
   const navigation = useNavigation()
 
   const navigateToTransactions = () => {
-    if (!wallet) {
+    if (!wallet || selectedNetwork.type === 'custom') {
       return
     }
 
@@ -33,10 +36,6 @@ export const InvokeFunctionSuccess = ({ account, transactionId }: TransactionReq
     navigation.navigate(wrapper.route.GetWallet.name, { wallet })
     navigation.navigate(wrapper.route.GetAccount.name, { account, wallet })
     navigation.navigate(wrapper.route.AccountTransactionsScreen.name, { account })
-  }
-
-  const navigateToDora = () => {
-    Linking.openURL(blockchainServices[account.blockchain]?.provider.siteUrlQuery + transactionId)
   }
 
   return (
@@ -109,12 +108,17 @@ export const InvokeFunctionSuccess = ({ account, transactionId }: TransactionReq
         <ThemedButton
           onPress={navigateToTransactions}
           label={i18n.t('modals.transactionSent.viewTransaction')}
-          disabled={!wallet}
+          disabled={!wallet || selectedNetwork.type === 'custom'}
         />
       </LinearLayout>
 
       <LinearLayout width="100%" mt="10px">
-        <ThemedButton onPress={navigateToDora} label={i18n.t('modals.transactionSent.viewOnDora')} />
+        <ThemedButton
+          onPress={() =>
+            Linking.openURL(DoraHelper.buildTransactionUrl(selectedNetwork.type, account.blockchain, transactionId))
+          }
+          label={i18n.t('modals.transactionSent.viewOnDora')}
+        />
       </LinearLayout>
     </LinearLayout>
   )

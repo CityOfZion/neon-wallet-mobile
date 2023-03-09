@@ -7,17 +7,19 @@ import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { getWCChainByBlockchain, hasWalletconnect } from '~/src/blockchain/common'
 import { AccountCards } from '~/src/components/AccountCards'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
-import { DEFAULT_NAMESPACES } from '~/src/config/walletConnect/constants'
+import { walletConnectConfig } from '~/src/config/WalletConnectConfig'
 import { IURI } from '~/src/helpers/UriHelper'
+import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
+import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
 import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
 import { Account } from '~/src/models/redux/Account'
 import { Wallet } from '~/src/models/redux/Wallet'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
+import { RootState } from '~/src/store/RootStore'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { LinearLayout, TextView } from '~/src/styles/styled-components'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
@@ -40,9 +42,15 @@ export const WCAccountSelectionModal = (props: Props) => {
   const controller = useSwiperController(true)
   const accounts = useSelector(selectAccounts)
   const walletConnectCtx = useWalletConnect()
+  const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
+  const { getBlockchainService } = useBlockchainServiceUtils()
 
   const validAccounts = useMemo(
-    () => wallet.getAccounts(accounts).filter(account => hasWalletconnect(account)),
+    () =>
+      wallet.getAccounts(accounts).filter(account => {
+        const service = getBlockchainService(account.blockchain)
+        return service.hasWalletConnectIntegration()
+      }),
     [wallet, accounts]
   )
 
@@ -52,16 +60,19 @@ export const WCAccountSelectionModal = (props: Props) => {
     try {
       const firstSessionProposal = walletConnectCtx.sessionProposals[0]
 
-      const wcChain = getWCChainByBlockchain(account.blockchain)
-
-      if (!wcChain || !firstSessionProposal || !account?.address) {
+      if (!firstSessionProposal || !account?.address) {
         throw new Error(i18n.t('walletconnect.alert.unexpectedErrorToSelectAccount'))
       }
 
+      const chain = WalletConnectHelper.getChain(
+        selectedBlockchainNetworks[account.blockchain].type,
+        account.blockchain
+      )
+
       await walletConnectCtx.approveSession(
         firstSessionProposal,
-        [{ address: account.address, chain: wcChain }],
-        DEFAULT_NAMESPACES
+        [{ address: account.address, chain }],
+        walletConnectConfig.defaultNamespace
       )
 
       showMessage({

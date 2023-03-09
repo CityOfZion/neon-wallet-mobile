@@ -8,7 +8,7 @@ export class ApplicationConfig {
   readonly defaultTheme = Theme.DARK
   readonly defaultDataRefreshTimeInMilliseconds = 7000
   readonly headerHeight = 72 + (StatusBar.currentHeight ?? 0)
-  readonly footerHeight = 66
+  readonly footerHeight = 68
 
   readonly windowWidth = Dimensions.get('window').width
   readonly windowHeight = Dimensions.get('window').height

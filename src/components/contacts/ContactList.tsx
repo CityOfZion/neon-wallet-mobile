@@ -3,7 +3,9 @@ import React, { useState, useMemo } from 'react'
 import { FlatList, SectionList, SectionListData } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { BlockchainServiceKey, getBlockchainByAddress, getBlockchainLogo } from '~/src/blockchain'
+import { BlockchainServiceKey } from '~/src/blockchain'
+import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
+import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
 import { selectContacts } from '~/src/store/contact/SelectorContact'
 import { LinearLayoutProps } from '~/src/types/styled-components'
 import { SearchBar } from '~src/components/SearchBar'
@@ -40,7 +42,7 @@ const AddressItem = React.memo(({ address, blockchain, onPress, contact }: Addre
     <ButtonView onPress={handlePress} paddingY="18px">
       <LinearLayout orientation="horiz" alignItems="center">
         <ImageView
-          source={getBlockchainLogo(blockchain)}
+          source={BlockchainHelper.getIcon(blockchain)}
           resizeMode="contain"
           alignSelf="center"
           mr={3}
@@ -128,6 +130,7 @@ const SectionHeader = React.memo(({ label }: SectionHeaderProps) => {
 
 export const ContactList = ({ filterByBlockchain, onSelect, ...props }: ContactListProps) => {
   const contacts = useSelector(selectContacts)
+  const { getBlockchainByAddress } = useBlockchainServiceUtils()
 
   const [filter, setFilter] = useState('')
 
@@ -149,7 +152,7 @@ export const ContactList = ({ filterByBlockchain, onSelect, ...props }: ContactL
         return newContact
       })
       .filter(contact => contact.addresses.length > 0)
-  }, [contacts])
+  }, [contacts, getBlockchainByAddress])
 
   const filteredContacts = useMemo(() => {
     if (!filter) return filteredByBlockchain

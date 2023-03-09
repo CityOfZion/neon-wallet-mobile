@@ -1,5 +1,4 @@
 import React from 'react'
-import { StatusBar } from 'react-native'
 import FlashMessage from 'react-native-flash-message'
 import { QueryClientProvider } from 'react-query'
 import { Provider as StoreProvider } from 'react-redux'
@@ -25,7 +24,6 @@ const App = () => {
       <PersistGate persistor={contextsConfig.persistor}>
         <QueryClientProvider client={contextsConfig.queryClient}>
           <WalletConnectContextProvider options={contextsConfig.wcOptions}>
-            <StatusBar barStyle="light-content" />
             <ErrorBound>
               <AppNavigation />
             </ErrorBound>

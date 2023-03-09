@@ -5,10 +5,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { FlatList, Keyboard } from 'react-native'
 
 import { Skeleton } from '../components/Skeleton'
+import { TokenIcon } from '../components/TokenIcon'
 import ThemedCloseButton from '../components/themed/ThemedCloseButton'
-import { TokenHelper } from '../helpers/TokenHelper'
 import { useBalances } from '../hooks/useBalances'
-import { useTokens } from '../hooks/useTokens'
+import { useLocalTokens } from '../hooks/useTokens'
 import { Token } from '../models/Token'
 
 import { Normalize } from '~src/app/Normalize'
@@ -35,21 +35,14 @@ interface TokenToList extends Token {
 
 interface ItemProps {
   token: TokenToList
-  account: Account
   onPress(): void
 }
 
-const Item = React.memo(({ token, account, onPress }: ItemProps) => {
+const Item = React.memo(({ token, onPress }: ItemProps) => {
   return (
     <ButtonView py="12px" orientation="horiz" alignItems="center" onPress={onPress}>
-      <ImageView
-        height={Normalize.scale(29)}
-        width={Normalize.scale(29)}
-        alignSelf="center"
-        mr="12px"
-        resizeMode="contain"
-        source={TokenHelper.getIcon(token.symbol, account.blockchain)}
-      />
+      <TokenIcon height={28} width={28} marginRight={12} resizeMode="contain" {...token} />
+
       <TextView fontFamily="bold" fontSize="18px" color="text.0" weight={1}>
         {token.symbol}
       </TextView>
@@ -79,7 +72,7 @@ const ListTokenModal = (props: Props) => {
   const { account, filterBy = 'receive', onPress } = props.route.params
 
   const controller = useSwiperController(true)
-  const { tokens } = useTokens({ blockchain: account.blockchain })
+  const { tokens } = useLocalTokens({ blockchain: account.blockchain })
   const balance = useBalances(account)
 
   const [filter, setFilter] = useState('')
@@ -98,20 +91,7 @@ const ListTokenModal = (props: Props) => {
 
     if (!balance.data) return
 
-    const sendTokenList: TokenToList[] = []
-
-    balance.data.tokensBalances.forEach(tokenBalance => {
-      const token = tokens.find(token => token.symbol === tokenBalance.symbol)
-
-      if (!token) return
-
-      sendTokenList.push({
-        ...token,
-        amount: tokenBalance.amount,
-      })
-    })
-
-    return sendTokenList
+    return balance.data.tokensBalances
   }, [filterBy, tokens, balance])
 
   const filteredTokens = useMemo(() => {
@@ -167,7 +147,7 @@ const ListTokenModal = (props: Props) => {
             data={filteredTokens}
             keyExtractor={item => item.symbol}
             ItemSeparatorComponent={() => <LinearLayout bg="background.10" height={1} />}
-            renderItem={({ item }) => <Item onPress={() => handlePress(item)} token={item} account={account} />}
+            renderItem={({ item }) => <Item onPress={() => handlePress(item)} token={item} />}
             ListEmptyComponent={
               <TextView fontWeight="500" color="text.0" fontSize={18} pt={5} textAlign="center">
                 {i18n.t('persistContact.noResultsFound')}

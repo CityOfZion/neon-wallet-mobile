@@ -14,8 +14,11 @@ import { InvokeFunctionFailed } from './InvokeFunctionFailed'
 import { InvokeFunctionSuccess } from './InvokeFunctionSuccess'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { blockchainServices, getBlockchainByWCChain, hasWCIntegration } from '~/src/blockchain'
+import { BlockchainServiceKey } from '~/src/blockchain'
 import { Session } from '~/src/contexts/WalletConnectContext'
+import { NeonWcAdapter } from '~/src/helpers/NeonWcAdapter'
+import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
+import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { Account } from '~/src/models/redux/Account'
 import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { RootState } from '~/src/store/RootStore'
@@ -98,14 +101,20 @@ const SignerBox = ({ signer, showWarning, session }: SignerBoxProps) => {
 
 const ContractDetails = ({ contract, session }: ContractDetailsProps) => {
   const navigation = useNavigation()
+  const blockchain = useMemo<BlockchainServiceKey>(
+    () => WalletConnectHelper.getAccountInformationFromSession(session)[0].blockchain,
+    [session]
+  )
+
+  const { blockchainService } = useBlockchainService(blockchain)
 
   const [contractInfo, setContractInfo] = useState<ContractResponse>()
 
   const handleGetContractInfo = useCallback(async () => {
-    const blockchain = getBlockchainByWCChain(session)
+    if (!blockchainService.hasWalletConnectIntegration()) return
 
     if (blockchain && session) {
-      const info = await blockchainServices[blockchain].provider.getContract(contract.scriptHash)
+      const info = await blockchainService.getContract(contract.scriptHash)
       setContractInfo(info)
     }
   }, [session])
@@ -140,15 +149,16 @@ const ContractDetails = ({ contract, session }: ContractDetailsProps) => {
 
 const TransactionFee = ({ account, requestParams }: TransactionFeeProps) => {
   const [feeRequest, setFeeRequest] = useState<number>()
+  const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
 
   const handleCalculateFee = useCallback(async () => {
     if (!account.address) return
 
-    const bs = blockchainServices[account.blockchain]
+    const wif = await account.getWif()
+    if (!wif) return
 
-    if (!hasWCIntegration(bs)) return
-
-    const resultFee = await bs.calculateFee(account.address, requestParams)
+    const adapter = await NeonWcAdapter.init(selectedBlockchainNetworks[account.blockchain].url, wif)
+    const resultFee = await adapter.calculateFee(requestParams)
 
     setFeeRequest(Number(resultFee))
   }, [account, requestParams])

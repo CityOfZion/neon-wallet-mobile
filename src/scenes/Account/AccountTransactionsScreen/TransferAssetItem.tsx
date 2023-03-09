@@ -3,14 +3,13 @@ import { useSelector } from 'react-redux'
 
 import { FormattedTransferAsset } from './AccountTransactionsScreen'
 
-import { Normalize } from '~/src/app/Normalize'
+import { TokenIcon } from '~/src/components/TokenIcon'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { TokenHelper } from '~/src/helpers/TokenHelper'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
-import { ImageView, TextView, LinearLayout } from '~/src/styles/styled-components'
-import { MultiExchange } from '~/src/types/exchange'
+import { TextView, LinearLayout } from '~/src/styles/styled-components'
+import { MultiExchange } from '~/src/types/query'
 
 type Props = FormattedTransferAsset & {
   account: Account
@@ -32,13 +31,14 @@ export const TransferAssetItem = React.memo((props: Props) => {
   return (
     <LinearLayout orientation="horiz">
       <LinearLayout orientation="horiz" width={80}>
-        <ImageView
-          width={Normalize.scale(21)}
-          height={Normalize.scale(21)}
+        <TokenIcon
+          width={20}
+          height={20}
           resizeMode="contain"
-          alignSelf="center"
-          source={TokenHelper.getIcon(props.symbol, props.account.blockchain)}
-          mr="5px"
+          marginRight={12}
+          blockchain={props.account.blockchain}
+          symbol={props.symbol}
+          hash={props.hash}
         />
 
         <TextView color="#fff" fontFamily="bold" fontSize="16px" numberOfLines={1} ellipsizeMode="tail">

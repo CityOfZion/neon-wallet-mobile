@@ -4,14 +4,14 @@ import { QueryClient } from 'react-query'
 import { FLUSH, PAUSE, PERSIST, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 
 import { RootStore } from '../store/RootStore'
-import { DEFAULT_APP_METADATA, DEFAULT_LOGGER, DEFAULT_PROJECT_ID, DEFAULT_RELAY_URL } from './walletConnect/constants'
+import { walletConnectConfig } from './WalletConnectConfig'
 
 export class ContextsConfig {
   readonly wcOptions: SignClientTypes.Options = {
-    projectId: DEFAULT_PROJECT_ID,
-    metadata: DEFAULT_APP_METADATA,
-    logger: DEFAULT_LOGGER,
-    relayUrl: DEFAULT_RELAY_URL,
+    projectId: walletConnectConfig.defaultProjectId,
+    metadata: walletConnectConfig.defaultAppMetadata,
+    logger: walletConnectConfig.defaultLogger,
+    relayUrl: walletConnectConfig.defaultRelayURL,
   }
 
   readonly store = configureStore({

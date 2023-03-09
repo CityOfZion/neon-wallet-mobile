@@ -81,7 +81,7 @@ const SendTransactionConfirmationModal = (props: Props) => {
         </ButtonView>
 
         <LinearLayout mt="auto" width="100%">
-          <ThemedButton onPress={props.navigation.goBack} fontSize="22px" label={i18n.t('app.close')} />
+          <ThemedButton onPress={controller.close} fontSize="22px" label={i18n.t('app.close')} />
         </LinearLayout>
       </LinearLayout>
     </SwiperPanel>

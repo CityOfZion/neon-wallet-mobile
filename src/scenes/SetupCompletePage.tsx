@@ -8,9 +8,9 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '../app/ApplicationWrapper'
-import { getBlockchainLogo } from '../blockchain'
 import { WalletCard } from '../components/WalletCard/WalletCard'
 import ThemedButton from '../components/themed/ThemedButton'
+import { BlockchainHelper } from '../helpers/BlockchainHelper'
 import { UtilsHelper } from '../helpers/UtilsHelper'
 import { RootStackParamList } from '../navigation/AppNavigation'
 import { selectAccounts } from '../store/account/SelectorAccount'
@@ -66,7 +66,7 @@ const SetupCompletePage = (props: Props) => {
                               width: Dimensions.get('screen').width * 0.04,
                               height: Dimensions.get('screen').height * 0.02,
                             }}
-                            source={getBlockchainLogo(acc.blockchain)}
+                            source={BlockchainHelper.getIcon(acc.blockchain)}
                           />
                           <LinearLayout>
                             <TextView ml={3} color="primary" fontSize="md">

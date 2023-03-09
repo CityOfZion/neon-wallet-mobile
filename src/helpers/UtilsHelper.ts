@@ -74,4 +74,13 @@ export abstract class UtilsHelper {
   static getRandomNumber(max: number) {
     return Math.floor(Math.random() * Math.floor(max))
   }
+
+  static capitalize(text: string) {
+    return text.charAt(0).toUpperCase() + text.slice(1)
+  }
+
+  static validateURL(text: string) {
+    const res = text.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)
+    return res !== null
+  }
 }

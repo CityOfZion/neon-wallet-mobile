@@ -1,5 +1,4 @@
 import i18n from 'i18n-js'
-import allSetlled from 'promise.allsettled'
 import { useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -9,11 +8,12 @@ import { Account } from '../models/redux/Account'
 import { Wallet } from '../models/redux/Wallet'
 import { selectAccounts } from '../store/account/SelectorAccount'
 import { WalletType } from '../types/reducers/wallet'
+import { useBlockchainServiceUtils } from './useBlockchainServices'
 
 import { accountReducerActions } from '~/src/store/account/AccountReducer'
 import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
-import { BlockchainServiceKey, blockchainServices } from '~src/blockchain'
+import { BlockchainServiceKey } from '~src/blockchain'
 import { RootState } from '~src/store/RootStore'
 
 export type AccountToImport = {
@@ -30,6 +30,7 @@ export function useBlockchainActions() {
   const dispatch = useDispatch()
   const accounts = useSelector(selectAccounts)
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const { getBlockchainService } = useBlockchainServiceUtils()
 
   const createWallet = useCallback(
     async (name: string, type: WalletType, securityPhrase?: string, hasBackup?: boolean) => {
@@ -74,7 +75,8 @@ export function useBlockchainActions() {
       const accountIndex =
         index ?? accounts.filter(account => account.idWallet === wallet.id && account.blockchain === blockchain).length
 
-      const generatedAccount = await blockchainServices[blockchain].generateAccount(mnemonic, accountIndex)
+      const service = getBlockchainService(blockchain)
+      const generatedAccount = await service.generateAccount(mnemonic, accountIndex)
 
       newAccount.address = generatedAccount.address
 
@@ -84,7 +86,7 @@ export function useBlockchainActions() {
 
       return newAccount.address
     },
-    [theme, accounts]
+    [theme, accounts, getBlockchainService]
   )
 
   const importAccount = useCallback(
@@ -103,6 +105,11 @@ export function useBlockchainActions() {
       newAccount.backgroundColor = theme.colors.card[UtilsHelper.getRandomNumber(6)]
       newAccount.address = address
       newAccount.accountType = type
+
+      const service = getBlockchainService(blockchain)
+      const mnemonic = service.generateMnemonic()
+
+      if (!mnemonic) throw new Error('Problem to import account')
 
       if (type === 'standard' || type === 'legacy') {
         if (!wif) throw new Error('Wif not defined')
@@ -128,8 +135,6 @@ export function useBlockchainActions() {
           account.wif
         )
       )
-
-      allSetlled.shim()
 
       return await Promise.allSettled(promises)
     },

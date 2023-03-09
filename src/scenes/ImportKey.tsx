@@ -9,23 +9,14 @@ import { useSelector } from 'react-redux'
 
 import { SecurityHelper } from '../helpers/SecurityHelper'
 import { IURI } from '../helpers/UriHelper'
+import { useBlockchainServiceUtils } from '../hooks/useBlockchainServices'
 import { TabStackParamList } from '../navigation/TabNavigation'
 import { selectAccounts } from '../store/account/SelectorAccount'
 import { selectWalletIds, selectWallets } from '../store/wallet/SelectorWallet'
 import { MnemonicSelectionInfo } from './MnemonicSelectionList'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
-import {
-  BlockchainServiceKey,
-  blockchainList,
-  validateTextAllBlockchains,
-  validateAddressAllBlockchains,
-  validatePrivateKeyWithPasswordAllBlockchains,
-  validateWifAllBlockchains,
-  getBlockchainByAddress,
-  blockchainServices,
-} from '~src/blockchain'
-import AddressesImportList from '~src/components/AddressesImportList'
+import AddressesImportList, { AddressInfo } from '~src/components/AddressesImportList'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
@@ -67,17 +58,32 @@ const ImportKey = (props: ImportKeyProps) => {
   const wallets = useSelector(selectWallets)
   const walletIds = useSelector(selectWalletIds)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
+  const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
   const [inputValue, setInputValue] = useState(props.route.params ? props.route.params.key ?? '' : '')
-  const [addressesFound, setAddressesFound] = useState<{ address: string; blockchain: BlockchainServiceKey }[]>([])
+  const [addressesFound, setAddressesFound] = useState<AddressInfo[]>([])
   const [inputIsValid, setInputIsValid] = useState<boolean>(false)
-  const [addressesSelected, setAddressesSelected] = useState<{ address: string; blockchain: BlockchainServiceKey }[]>(
-    []
-  )
+  const [addressesSelected, setAddressesSelected] = useState<AddressInfo[]>([])
   const [showImportList, setShowImportList] = useState<boolean>(false)
   const [disableButton, setDisableButton] = useState<boolean>(true)
   const blockchainActions = useBlockchainActions()
+  const {
+    getBlockchainServices,
+    validateAddressAllBlockchains,
+    validatePrivateKeyWithPasswordAllBlockchains,
+    validateTextAllBlockchains,
+    validateWifAllBlockchains,
+    getBlockchainByAddress,
+  } = useBlockchainServiceUtils()
 
   const inputType = useRef<InputType>()
+
+  const handleSelect = (items: AddressInfo[]) => {
+    setAddressesSelected(items)
+  }
+
+  const handleDeselect = (items: AddressInfo[]) => {
+    setAddressesSelected(items)
+  }
 
   const handleOnScan = (data: string | IURI) => {
     if (typeof data !== 'string') {
@@ -116,13 +122,14 @@ const ImportKey = (props: ImportKeyProps) => {
 
   const mnemonicIsImported = useCallback(
     async (mnemonic: string) => {
-      const mnemonics = await Promise.all(walletIds.map(id => SecurityHelper.loadMnemonic(id)))
-      const foundMnemonic = mnemonics.find(it => it === mnemonic)
-      if (foundMnemonic) {
-        return true
-      } else {
-        return false
+      for (const walletId of walletIds) {
+        const mnemonicWallet = await SecurityHelper.loadMnemonic(walletId)
+        if (mnemonicWallet === mnemonic) {
+          return true
+        }
       }
+
+      return false
     },
     [walletIds]
   )
@@ -139,34 +146,42 @@ const ImportKey = (props: ImportKeyProps) => {
         return
       }
 
-      let index: number = 0
-      let stop: boolean = false
       const allAccountsInfo: MnemonicSelectionInfo = new Map()
-      let accountsInfo: {
-        address: string
-        wif: string
-        derivationIndex: number
-      }[] = []
+      const services = getBlockchainServices()
 
-      for (const blockchainName of blockchainList) {
-        stop = false
-        index = 0
-        while (!stop && isConnected) {
-          const { wif, address } = await blockchainServices[blockchainName].generateAccount(mnemonic, index)
+      for (const service of services) {
+        let index = 0
+        const accountsInfo: {
+          address: string
+          wif: string
+          derivationIndex: number
+        }[] = []
+
+        while (isConnected) {
+          const { wif, address } = await service.generateAccount(mnemonic, index)
+
           if (!accounts.find(account => account.address === address)) {
             await UtilsHelper.sleep(200)
-            const req = blockchainServices[blockchainName].provider
-            const { totalEntries } = await req.getAddressAbstracts(address, 1)
-            if ((totalEntries && totalEntries > 0) || index === 0) {
-              accountsInfo.push({ address, wif, derivationIndex: index })
-            } else {
-              stop = true
+
+            if (index !== 0) {
+              if (selectedBlockchainNetworks[service.key].type === 'custom') {
+                // When the user is using a custom network, we can't check if the address has transactions
+                break
+              }
+
+              const { totalEntries } = await service.provider.getAddressAbstracts(address, 1)
+
+              if (!totalEntries || totalEntries <= 0) {
+                break
+              }
             }
+
+            accountsInfo.push({ address, wif, derivationIndex: index })
           }
+
           index++
         }
-        allAccountsInfo.set(blockchainName, accountsInfo)
-        accountsInfo = []
+        allAccountsInfo.set(service.key, accountsInfo)
       }
 
       return allAccountsInfo
@@ -210,13 +225,12 @@ const ImportKey = (props: ImportKeyProps) => {
   }, [])
 
   const handleChangeWhenWIF = useCallback(() => {
-    for (const blockchainName of blockchainList) {
-      if (!blockchainServices[blockchainName].validateWif(inputValue)) {
-        return
-      }
+    const services = getBlockchainServices()
 
-      const addressFromWif = blockchainServices[blockchainName].generateAccountFromWif(inputValue)
+    for (const service of services) {
+      if (!service.validateWif(inputValue)) return
 
+      const addressFromWif = service.generateAccountFromWif(inputValue)
       if (addressAlreadyExist(addressFromWif)) {
         showMessage({
           message: `${i18n.t('importKey.accountAlreadyExists', {
@@ -228,7 +242,7 @@ const ImportKey = (props: ImportKeyProps) => {
         return
       }
 
-      setAddressesFound(prevState => [...prevState, { address: addressFromWif, blockchain: blockchainName }])
+      setAddressesFound(prevState => [...prevState, { address: addressFromWif, blockchain: service.key }])
       setShowImportList(true)
       setDisableButton(false)
     }
@@ -266,16 +280,6 @@ const ImportKey = (props: ImportKeyProps) => {
   }, [inputValue])
 
   const persistWhenWIF = useCallback(async () => {
-    const mnemonic = blockchainServices[addressesSelected[0].blockchain].generateMnemonic()
-
-    if (!mnemonic) {
-      showMessage({
-        message: i18n.t('importKey.mnemonicAlreadyExists'),
-        type: 'danger',
-      })
-      return
-    }
-
     const wallet = await blockchainActions.createWallet(i18n.t('defaultNameWallet.importedWallet'), 'legacy')
 
     const accountToImport = addressesSelected.map(
@@ -373,8 +377,7 @@ const ImportKey = (props: ImportKeyProps) => {
       }
 
       await functionsByInputTypes[inputType.current].persist()
-    } catch (error) {
-      console.log({ error })
+    } catch {
       showMessage({
         message: i18n.t('importKey.genericError'),
         duration: 5000,
@@ -461,10 +464,10 @@ const ImportKey = (props: ImportKeyProps) => {
                 {i18n.t('importKey.selectAccountTitile')}
               </TextView>
               <AddressesImportList
-                onSelectAddress={addressesSelected => {
-                  setAddressesSelected(addressesSelected)
-                }}
-                addressesInfo={addressesFound}
+                onDeselect={handleDeselect}
+                onSelect={handleSelect}
+                items={addressesFound}
+                selectedItems={addressesSelected}
                 blockSelection={inputType.current !== 'mnemonic'}
               />
             </LinearLayout>

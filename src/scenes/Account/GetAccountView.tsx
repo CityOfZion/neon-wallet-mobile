@@ -13,13 +13,12 @@ import ModalWarningFee from '~/src/components/ModalWarningFee'
 import { ThemedClaimButton } from '~/src/components/themed/ThemedClaimButton'
 import { ThemedSendButton } from '~/src/components/themed/ThemedSendButton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
-import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
+import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { Wallet } from '~/src/models/redux/Wallet'
 import { accountReducerActions } from '~/src/store/account/AccountReducer'
 import { selectWallets } from '~/src/store/wallet/SelectorWallet'
-import { blockchainServices, hasWCIntegration, isClaimable } from '~src/blockchain'
 import AccountCard from '~src/components/AccountCard'
 import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -27,7 +26,6 @@ import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { ThemedReceiveButton } from '~src/components/themed/ThemedReceiveButton'
 import { useWalletConnect } from '~src/contexts/WalletConnectContext'
-import { NeoNode } from '~src/models/NeoNode'
 import { Account } from '~src/models/redux/Account'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
@@ -57,18 +55,11 @@ interface TitleProps {
 
 const Title = ({ account }: TitleProps) => {
   const language = useSelector((state: RootState) => state.settings.language)
-  const [highestNode, setHighestNode] = useState<string>()
-
-  const handleGetHighestNode = async () => {
-    const nodes = await blockchainServices[account.blockchain].provider.getAllNodes()
-
-    const highest = NeoNode.getHighestNodeHeightFromPool(nodes)
-
-    setHighestNode(FilterHelper.decimal(highest, language))
-  }
+  const { blockchainService } = useBlockchainService(account.blockchain)
+  const [height, setHeight] = useState<number>()
 
   useEffect(() => {
-    handleGetHighestNode()
+    blockchainService.getBlockCount().then(setHeight)
   }, [language])
 
   return (
@@ -78,7 +69,7 @@ const Title = ({ account }: TitleProps) => {
       </TextView>
 
       <TextView color="text.0" textAlign="center">
-        {highestNode}
+        {height}
       </TextView>
     </LinearLayout>
   )
@@ -131,12 +122,16 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   const wallets = useSelector(selectWallets)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
+  const selectedNetwork = useSelector(
+    (state: RootState) => state.settings.selectedBlockchainNetworks[account.blockchain]
+  )
   const dispatch = useDispatch()
   const { sessions } = useWalletConnect()
 
   const opacityValue = useRef(new Animated.Value(0))
 
   const balanceExchange = useBalancesAndExchange(account)
+  const { blockchainService } = useBlockchainService(account.blockchain)
 
   const [showWarning, setShowWarning] = useState<boolean>(false)
   const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>()
@@ -166,18 +161,13 @@ const GetAccountView = (props: GetAccountViewProps) => {
     if (!balance.data) return 0
 
     const tokenBalance = balance.data.tokensBalances.find(
-      tokenBalance => tokenBalance.symbol === blockchainServices[account.blockchain].feeToken.token
+      tokenBalance => tokenBalance.symbol === blockchainService.feeToken.token
     )
 
     if (!tokenBalance) return 0
 
     return tokenBalance.amount
   }, [balanceExchange, account])
-
-  const totalBalance = useMemo(
-    () => BalanceHelper.calculateTotalBalances(balanceExchange.balance.data, balanceExchange.exchange.data),
-    [balanceExchange]
-  )
 
   const handleClaimGas = () => {
     if (!unclaimedGasAmount || !fee || unclaimedGasAmount < fee) {
@@ -194,25 +184,25 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
       if (!account.address || !isConnected || !unclaimedGasAmount || !balance || !fee) return
 
-      const bs = blockchainServices[account.blockchain]
-
-      const neoToken = bs.tokens.find(token => token.symbol === 'NEO')
+      const neoToken = blockchainService.tokens.find(token => token.symbol === 'NEO')
       if (!neoToken) throw new Error('Neo token not found')
 
-      const gasToken = bs.tokens.find(token => token.symbol === 'GAS')
+      const gasToken = blockchainService.tokens.find(token => token.symbol === 'GAS')
       if (!gasToken) throw new Error('Gas token not found')
 
       const GASBalance = BalanceHelper.getTokenBalanceBySymbol(gasToken.symbol, balance)
       if (!GASBalance) throw new Error("Address don't have GAS to make a claim")
 
-      if (!isClaimable(bs)) return
+      if (!blockchainService.isClaimable()) return
 
       if (GASBalance.amount < fee) throw new Error('Insufficient GAS to complete transaction')
 
       Await.init(`claimGas`)
 
-      const transactionHash = await bs.claimGas(account.address)
+      const wif = await account.getWif()
+      if (!wif) throw new Error('WIF not found')
 
+      const transactionHash = await blockchainService.claimGas(wif)
       if (!transactionHash) throw new Error('Transaction hash not provided')
 
       account.addPendingTransaction(transactionHash, 'claim', account.address, neoToken, unclaimedGasAmount, fee)
@@ -232,17 +222,20 @@ const GetAccountView = (props: GetAccountViewProps) => {
   const populateFee = useCallback(async () => {
     if (!account.address || !unclaimedGasAmount) return
 
+    const wif = await account.getWif()
+    if (!wif) return
+
     if (account.blockchain === 'neoLegacy') {
       setFee(0)
       return
     }
 
-    const neoToken = blockchainServices[account.blockchain].tokens.find(token => token.symbol === 'NEO')
+    const neoToken = blockchainService.tokens.find(token => token.symbol === 'NEO')
     if (!neoToken) return
 
-    const calculatedFee = await blockchainServices[account.blockchain].calculateTransferFee({
+    const calculatedFee = await blockchainService.calculateTransferFee({
       receiverAddress: account.address,
-      senderAddress: account.address,
+      senderWif: wif,
       amount: 0,
       tokenHash: neoToken.hash,
       tokenDecimals: neoToken.decimals,
@@ -256,15 +249,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
       return
     }
 
-    const request = blockchainServices[account.blockchain].provider
-    const response = await request.getUnclaimed(account.address)
+    const response = await blockchainService.provider.getUnclaimed(account.address)
     setUnclaimedGasAmount(response.unclaimed ?? undefined)
-  }
-
-  const hasWalletconnect = () => {
-    const bs = blockchainServices[account.blockchain]
-
-    return hasWCIntegration(bs)
   }
 
   const handlePressReceiveButton = () => {
@@ -411,7 +397,12 @@ const GetAccountView = (props: GetAccountViewProps) => {
           <ThemedSendButton
             onPress={handlePressSendButton}
             isDark
-            isInactive={!totalBalance || totalBalance <= 0 || account.accountType === 'watch' || !isConnected}
+            isInactive={
+              !balanceExchange.balance.data ||
+              !BalanceHelper.hasSomeBalance(balanceExchange.balance.data) ||
+              account.accountType === 'watch' ||
+              !isConnected
+            }
           />
         </LinearLayout>
         <LinearLayout>
@@ -426,6 +417,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
             srcIcon={require('~/src/assets/images/icon-reselect-green.png')}
             iconSize={[28, 30]}
             onPress={handlePressTransactionsButton}
+            disabled={selectedNetwork.type === 'custom'}
           />
 
           <Button
@@ -433,10 +425,11 @@ const GetAccountView = (props: GetAccountViewProps) => {
             srcIcon={require('~/src/assets/images/diamond-green.png')}
             iconSize={[28, 30]}
             onPress={handlePressNFTsButton}
+            disabled={selectedNetwork.type === 'custom'}
           />
 
           <Button
-            disabled={!hasWalletconnect() || !hasWalletConnectSessions}
+            disabled={!blockchainService.hasWalletConnectIntegration() || !hasWalletConnectSessions}
             label={i18n.t('screens.screenLayout.connections').toUpperCase()}
             srcIcon={require('~/src/assets/images/connections.png')}
             iconSize={[28, 30]}

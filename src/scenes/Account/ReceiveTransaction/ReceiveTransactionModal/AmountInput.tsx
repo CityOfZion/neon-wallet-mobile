@@ -1,11 +1,10 @@
 import i18n from 'i18n-js'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
-import { useTokens } from '~/src/hooks/useTokens'
 import { Token } from '~/src/models/Token'
 import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
@@ -19,15 +18,10 @@ interface Props {
 
 export const AmountInput = ({ onChange, amount, token, account }: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const { getTokenBySymbol } = useTokens({ blockchain: account.blockchain })
-
-  const supportedToken = useMemo(() => {
-    if (!token) return
-
-    return getTokenBySymbol(token.symbol)
-  }, [getTokenBySymbol, token])
 
   const handleChange = (text: string) => {
+    if (!token) return
+
     if (text.length <= 0) {
       onChange()
       return
@@ -36,9 +30,9 @@ export const AmountInput = ({ onChange, amount, token, account }: Props) => {
     let formattedAmount = text
       .replace(/,|\.\.|\.,/g, '.')
       .replace(/\s|-/g, '')
-      .replace(/[0-9]+\.[0-9]{9,}$/g, Number(text).toFixed(supportedToken?.decimals ?? 8))
+      .replace(/[0-9]+\.[0-9]{9,}$/g, Number(text).toFixed(token.decimals))
 
-    if (supportedToken && supportedToken.decimals < 1) {
+    if (token.decimals < 1) {
       formattedAmount = formattedAmount.replace('.', '')
     }
 

@@ -10,7 +10,7 @@ import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 import { FlatListFooter } from '~/src/components/FlatListFooter'
 import { Account } from '~/src/models/redux/Account'
 import { LinearLayout } from '~/src/styles/styled-components'
-import { MultiExchange } from '~/src/types/exchange'
+import { MultiExchange } from '~/src/types/query'
 
 interface TransactionsListDateProps {
   completedTransactions: FormattedTransaction[]

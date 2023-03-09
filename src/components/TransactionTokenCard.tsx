@@ -2,16 +2,15 @@ import i18n from 'i18n-js'
 import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Normalize } from '../app/Normalize'
-import { TokenHelper } from '../helpers/TokenHelper'
-import { useTokens } from '../hooks/useTokens'
+import { useLocalTokensUtils } from '../hooks/useTokens'
 import { Token } from '../models/Token'
 import { Account } from '../models/redux/Account'
 import { RootState } from '../store/RootStore'
+import { TokenIcon } from './TokenIcon'
 
 import { HeaderColumn } from '~src/components/HeaderColumn'
 import { FilterHelper } from '~src/helpers/FilterHelper'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface Props {
   account: Account
@@ -36,9 +35,9 @@ export const TransactionTokenCard = ({
 }: Props) => {
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
-  const { getTokenBySymbol } = useTokens({ blockchain: account.blockchain })
+  const { getTokenBySymbol } = useLocalTokensUtils()
 
-  const supportedToken = useMemo(() => getTokenBySymbol(token.symbol), [getTokenBySymbol])
+  const supportedToken = useMemo(() => getTokenBySymbol(token.symbol, token.blockchain), [getTokenBySymbol])
 
   const singlePrice = useMemo(() => {
     if (!ratio) return
@@ -61,13 +60,8 @@ export const TransactionTokenCard = ({
     >
       <LinearLayout orientation="horiz" justifyContent="space-between">
         <LinearLayout orientation="horiz" alignItems="center">
-          <ImageView
-            source={TokenHelper.getIcon(token.symbol, account.blockchain)}
-            width={Normalize.scale(18)}
-            height={Normalize.scale(18)}
-            resizeMode="contain"
-            alignSelf="center"
-          />
+          <TokenIcon width={18} height={18} resizeMode="contain" {...token} />
+
           <TextView ml="4px" color="text.0" fontFamily="medium" fontSize="16px">
             {token.symbol}
           </TextView>

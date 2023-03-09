@@ -12,7 +12,7 @@ import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
 import { selectContacts } from '~/src/store/contact/SelectorContact'
 import { TextView, LinearLayout } from '~/src/styles/styled-components'
-import { MultiExchange } from '~/src/types/exchange'
+import { MultiExchange } from '~/src/types/query'
 
 type Props = (FormattedTransferAsset | FormattedTransferNFT) & {
   account: Account
@@ -55,7 +55,7 @@ export const TransferItem = React.memo((props: Props) => {
           color="primary"
           fontSize="17px"
           fontFamily="medium"
-          width="40%"
+          width="50%"
         >
           {identification}
         </TextView>

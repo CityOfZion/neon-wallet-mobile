@@ -10,6 +10,7 @@ import { Header } from './Header'
 import { SelectedWalletInfo } from './SelectedWalletInfo'
 
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
+import { useRefetchOnFocus } from '~/src/hooks/useRefetchOnFocus'
 import { RootState } from '~/src/store/RootStore'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { settingsReducerActions } from '~/src/store/settings/SettingsReducer'
@@ -45,6 +46,7 @@ export const ListWalletView = (props: WalletProps) => {
   const [pressedWallet, setPressedWallet] = useState<Wallet>()
 
   const selectedWalletBalanceExchange = useBalancesAndExchange(selectedWallet?.getAccounts(accounts) ?? [])
+  useRefetchOnFocus(selectedWalletBalanceExchange.refetch)
 
   const fadeIn = () => {
     Animated.sequence([
@@ -82,7 +84,6 @@ export const ListWalletView = (props: WalletProps) => {
   return (
     <ScreenLayout
       useHeaderPadding={false}
-      useStatusBarPadding
       padding={0}
       darkerSolidColorBG
       refreshControl={

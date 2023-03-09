@@ -1,4 +1,5 @@
-import { Account } from '@cityofzion/n3-neon-core/lib/wallet'
+import { wallet } from '@cityofzion/n3-neon-core'
+import { ContractInvocationMulti } from '@cityofzion/neo3-invoker'
 import { NeonInvoker } from '@cityofzion/neon-invoker'
 import { NeonSigner } from '@cityofzion/neon-signer'
 
@@ -7,20 +8,21 @@ import { SessionRequest } from '../contexts/WalletConnectContext'
 export class NeonWcAdapter {
   readonly invoke: NeonInvoker
   readonly signer: NeonSigner
-  readonly account: Account | undefined
-  constructor(invoke: NeonInvoker, sign: NeonSigner, account?: Account) {
+  readonly account: wallet.Account | undefined
+  constructor(invoke: NeonInvoker, sign: NeonSigner, account?: wallet.Account) {
     this.invoke = invoke
     this.signer = sign
     this.account = account
   }
 
-  static init = async (rpcAddress: string, account?: Account): Promise<NeonWcAdapter> => {
-    const invoker = await NeonInvoker.init(rpcAddress, account)
+  static init = async (rpcURL: string, wif: string): Promise<NeonWcAdapter> => {
+    const account = new wallet.Account(wif)
+    const invoker = await NeonInvoker.init(rpcURL, account)
     const signer = new NeonSigner(account)
     return new NeonWcAdapter(invoker, signer, account)
   }
 
-  rpcCall = async (sessionRequest: SessionRequest): Promise<any> => {
+  async rpcCall(sessionRequest: SessionRequest): Promise<any> {
     const {
       params: { request },
     } = sessionRequest
@@ -56,5 +58,18 @@ export class NeonWcAdapter {
       jsonrpc: '2.0',
       result,
     }
+  }
+
+  async calculateFee(requestParams: ContractInvocationMulti) {
+    const testInvoke = await this.invoke.testInvoke(requestParams)
+    const extraNetworkFee = requestParams.extraNetworkFee ? this.fixDecimalPlaces(requestParams.extraNetworkFee, 8) : 0
+    const extraSystemFee = requestParams.extraSystemFee ? this.fixDecimalPlaces(requestParams.extraSystemFee, 8) : 0
+    const gasconsumed = this.fixDecimalPlaces(Number(testInvoke.gasconsumed), 8)
+    const summedFee = gasconsumed + extraNetworkFee + extraSystemFee
+    return summedFee.toString()
+  }
+
+  private fixDecimalPlaces(value: number, decimalPlaces: number) {
+    return value / 10 ** decimalPlaces
   }
 }
