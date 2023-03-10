@@ -38,7 +38,7 @@ export class BlockchainConfig {
         name: 'Mainnet',
       },
       {
-        id: 'neo3-mainnet',
+        id: 'neo3-testnet',
         type: 'testnet',
         url: this.defaultNetworksURLs.neo3.testnet,
         name: 'Testnet',
