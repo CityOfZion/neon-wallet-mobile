@@ -2,7 +2,7 @@ name: Detox Test
 on:
   push:
     branches:
-      - CU-864dqw292-2
+      - CU-864dqw282-2
 jobs:
   build-and-test:
     runs-on: macos-12
