@@ -1,5 +1,3 @@
-import { merge } from 'lodash'
-
 import neo3CommonToken from './neo3/common.json'
 import neo3MainnetToken from './neo3/mainnet.json'
 import neoLegacyCommonToken from './neoLegacy/common.json'
@@ -15,13 +13,13 @@ const castNeoLegacyCommonToken = neoLegacyCommonToken as IToken[]
 const castNeoLegacyMainnetToken = neoLegacyMainnetToken as IToken[]
 
 const neoLegacyTokensByNetwork: TokenByNetwork = {
-  mainnet: merge(castNeoLegacyCommonToken, castNeoLegacyMainnetToken),
+  mainnet: [...castNeoLegacyCommonToken, ...castNeoLegacyMainnetToken],
   testnet: castNeoLegacyCommonToken,
   custom: [],
 }
 
 const neo3TokensByNetwork: TokenByNetwork = {
-  mainnet: merge(castNeo3CommonToken, castNeo3MainnetToken),
+  mainnet: [...castNeo3CommonToken, ...castNeo3MainnetToken],
   testnet: castNeo3CommonToken,
   custom: castNeo3CommonToken,
 }
