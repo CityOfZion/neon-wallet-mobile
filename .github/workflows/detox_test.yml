@@ -2,7 +2,7 @@ name: Detox Test
 on:
   push:
     branches:
-      - CU-864dqw282-2
+      - CU-864dqw292-3
 jobs:
   build-and-test:
     runs-on: macos-12
@@ -17,6 +17,12 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '16.19.1'
+
+    - name: Install applesimutils
+      run: npm install -g applesimutils
+
+    - name: Check applesimutils
+      run: applesimutils --list --byType "iPhone 14"
 
     - name: Install Yarn
       run: npm install -g yarn
