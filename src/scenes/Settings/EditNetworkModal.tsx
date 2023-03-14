@@ -74,8 +74,8 @@ export const EditNetworkModal = (props: Props) => {
   )
 
   const handleChangeNetworkUrl = async (text: string) => {
-    setNetworkUrl(text)
-    validateURL(text)
+    setNetworkUrl(UtilsHelper.removeLineBreaks(text))
+    validateURL(UtilsHelper.removeLineBreaks(text))
   }
 
   const handleSave = () => {
