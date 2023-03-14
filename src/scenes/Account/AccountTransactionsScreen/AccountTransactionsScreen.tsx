@@ -78,6 +78,9 @@ const AccountTransactionsScreen = (props: Props) => {
       if (!blockchainService.hasNFTIntegration()) return
 
       const nftResponse = await blockchainService.getNFT(tokenId, hash)
+
+      if (!nftResponse) return
+
       nftCache.current.set(tokenId, nftResponse)
       return nftResponse
     } catch {}

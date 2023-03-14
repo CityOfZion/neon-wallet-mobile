@@ -19,11 +19,13 @@ export class DoraSDKProvider extends RPCProviderNeo3 implements Neo3Provider {
     if (this.network.type === 'custom') throw new Error('Custom network not supported')
 
     const result = new TransactionAddressResponse()
+    result.pageNumber = page ?? null
+    result.pageSize = 15
 
     const { items, totalCount } = await api.NeoRest.addressTXFull(address, page, this.network.type)
 
-    result.pageNumber = page ?? null
-    result.pageSize = items.length
+    if (!items || !totalCount) return result
+
     result.totalEntries = totalCount
     result.totalPages = Math.ceil(totalCount / 15)
 

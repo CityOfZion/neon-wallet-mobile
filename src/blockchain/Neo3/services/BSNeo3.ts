@@ -323,54 +323,57 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
 
   async getNFTS(address: string, page: number = 1): Promise<NFTSResponse> {
     const nftPageLimit = 18
-    const params = {
+
+    const url = this.buildGhostMarketURL('assets', {
       owners: [address],
       size: nftPageLimit,
       page,
       getTotal: true,
-    }
+    })
 
-    const { nfts, total } = await this.getGhostMarketNFT(params)
+    const {
+      data: { total, assets },
+    } = await axios.get(url)
 
     const totalPages = Math.ceil(total / nftPageLimit)
+    const nfts = assets.map((asset: any) => {
+      return new NFTResponse({
+        collectionImage: this.treatGhostMarketImage(asset.collection.logo_url),
+        collectionName: asset.collection.name,
+        image: this.treatGhostMarketImage(asset.metadata.mediaUri),
+        name: asset.metadata.name,
+        symbol: asset.contract.symbol,
+        id: asset.tokenId,
+        contractHash: asset.contract.hash,
+      })
+    })
 
     const nftsResponse = new NFTSResponse({ totalPages })
-
-    nfts.forEach(nft => {
-      const nftResponse = new NFTResponse({
-        collectionImage: this.treatGhostMarketImage(nft.collection.image),
-        collectionName: nft.collection.name,
-        image: this.treatGhostMarketImage(nft.image),
-        name: nft.name,
-        symbol: nft.symbol,
-        id: nft.id,
-        contractHash: nft.contract,
-      })
-
-      nftsResponse.items.push(nftResponse)
-    })
+    nftsResponse.items = nfts
 
     return nftsResponse
   }
 
-  async getNFT(tokenId: string, hash: string): Promise<NFTResponse> {
+  async getNFT(tokenId: string, hash: string): Promise<NFTResponse | undefined> {
     const url = this.buildGhostMarketURL('assets', {
-      tokenId,
+      tokenIds: [tokenId],
       contract: hash,
     })
 
     const { data } = await axios.get(url)
+
+    if (!data) return undefined
 
     const [{ nft }] = data.assets
 
     const nftResponse = new NFTResponse({
       collectionImage: this.treatGhostMarketImage(nft.collection.logo_url),
       collectionName: nft.collection.name,
-      image: this.treatGhostMarketImage(nft.nft_metadata.image),
-      name: nft.nft_metadata.name,
-      symbol: nft.symbol,
+      image: this.treatGhostMarketImage(nft.metadata.mediaUri),
+      name: nft.metadata.name,
+      symbol: nft.contract.symbol,
       id: nft.tokenId,
-      contractHash: nft.contract,
+      contractHash: nft.contract.hash,
     })
 
     return nftResponse
