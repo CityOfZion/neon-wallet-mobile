@@ -23,19 +23,16 @@ export type AddressesImportListProps<T extends AddressInfo> = {
 export type AddressImportItemProps<T extends AddressInfo> = {
   item: T
   blockSelection?: boolean
+  isSelected: boolean
   onSelect: (data: T) => void
   onDeselect: (data: T) => void
 }
 
 const AddressImportItem = <T extends AddressInfo = AddressInfo>(props: AddressImportItemProps<T>) => {
-  const [isSelected, setIsSelected] = useState<boolean>(true)
-
   const handleClick = () => {
     if (!props.blockSelection) return
 
-    const newSelected = !isSelected
-
-    setIsSelected(newSelected)
+    const newSelected = !props.isSelected
 
     if (newSelected) {
       props.onSelect(props.item)
@@ -70,7 +67,9 @@ const AddressImportItem = <T extends AddressInfo = AddressInfo>(props: AddressIm
             </TextView>
           </View>
         </View>
-        {(isSelected ?? !props.blockSelection) && <Image source={require('~src/assets/images/icon-check-green.png')} />}
+        {(props.isSelected ?? !props.blockSelection) && (
+          <Image source={require('~src/assets/images/icon-check-green.png')} />
+        )}
       </View>
     </TouchableWithoutFeedback>
   )
@@ -86,12 +85,12 @@ const AddressesImportList = <T extends AddressInfo = AddressInfo>({
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const handleSelect = (item: T) => {
-    onSelect([...items, item], item)
+    onSelect([...selectedItems, item], item)
   }
 
   const handleDeselect = (item: T) => {
     onDeselect(
-      items.filter(i => i.address !== item.address),
+      selectedItems.filter(i => i.address !== item.address),
       item
     )
   }
@@ -112,6 +111,7 @@ const AddressesImportList = <T extends AddressInfo = AddressInfo>({
               item={item}
               blockSelection={blockSelection}
               onDeselect={handleDeselect}
+              isSelected={selectedItems.some(i => i.address === item.address)}
               onSelect={handleSelect}
             />
           )}

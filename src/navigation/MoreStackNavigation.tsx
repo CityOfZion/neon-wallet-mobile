@@ -20,7 +20,7 @@ import { wrapper } from '~src/app/ApplicationWrapper'
 import { Navigator } from '~src/app/Navigator'
 import { HeaderActionButtonProps } from '~src/components/layout/HeaderActionButton'
 import BlockchainListPage, { BlockchainListPageParams } from '~src/scenes/BlockchainListPage'
-import ImportKey from '~src/scenes/ImportKey'
+import ImportKey, { ImportKeyParams } from '~src/scenes/ImportKey'
 import MnemonicSelectionList, { MnemonicSelectionListParams } from '~src/scenes/MnemonicSelectionList'
 import MorePage from '~src/scenes/MorePage'
 import Passphrase, { PassphraseParams } from '~src/scenes/Passphrase'
@@ -38,7 +38,7 @@ export type MoreStackParamList = {
   Step3CreateWallet: HeaderActionButtonProps & ParamsCreateWalletPage
   Step4CreateWallet: Step4CreateWalletParams
   Step5CreateWallet: Step5CreateWalletPageParams | undefined
-  ImportKey: { key?: string }
+  ImportKey: ImportKeyParams | undefined
   ImportReadAccount: ImportReadAccountParams
   Passphrase: PassphraseParams
   ListWallets: undefined

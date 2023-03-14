@@ -4,7 +4,6 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, { useEffect, useRef } from 'react'
 import { Animated, Easing, ImageSourcePropType } from 'react-native'
-import { showMessage } from 'react-native-flash-message'
 import { Shadow } from 'react-native-shadow-2'
 import { useSelector } from 'react-redux'
 
@@ -14,13 +13,13 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { UriHelper } from '~/src/helpers/UriHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
-import { useBlockchainActions } from '~/src/hooks/useBlockchainActions'
 import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
+import { MoreStackParamList } from '~/src/navigation/MoreStackNavigation'
+import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
 import { RootState } from '~/src/store/RootStore'
-import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { RouteName } from '~/src/types/wrappers/route'
 import { Route } from '~src/app/Route'
 import SwiperPanel, { SwiperController, useSwiperController } from '~src/components/SwiperPanel'
@@ -41,21 +40,16 @@ interface QuickToolsMenuProps {
   controller: SwiperController
 }
 
-type NavigationProps = StackNavigationProp<RootStackParamList & ModalStackParamList & WalletStackParamList>
+type NavigationProps = StackNavigationProp<
+  RootStackParamList & ModalStackParamList & WalletStackParamList & MoreStackParamList & TabStackParamList
+>
 
 const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
   const navigation = useNavigation<NavigationProps>()
-  const blockchainActions = useBlockchainActions()
-  const accounts = useSelector(selectAccounts)
-  const {
-    getBlockchainService,
-    validateAddressAllBlockchains,
-    validatePrivateKeyWithPasswordAllBlockchains,
-    validateWifAllBlockchains,
-    getBlockchainByWif,
-  } = useBlockchainServiceUtils()
+  const { validateAddressAllBlockchains, validatePrivateKeyWithPasswordAllBlockchains, validateWifAllBlockchains } =
+    useBlockchainServiceUtils()
 
-  const handleScanQrCode = async (data: string) => {
+  const handleScanQrCode = (data: string) => {
     const sendUri = UriHelper.validateAndParse(data)
 
     if (sendUri && validateAddressAllBlockchains(sendUri.address)) {
@@ -78,56 +72,21 @@ const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
       return
     }
 
-    if (validateAddressAllBlockchains(data)) {
-      navigation.navigate(wrapper.route.Modal.name, {
-        screen: wrapper.route.AddressScanQuickToolsModal.name,
-        params: {
-          address: data,
-        },
-      })
-      return
-    }
-
-    if (validatePrivateKeyWithPasswordAllBlockchains(data)) {
+    if (
+      validateAddressAllBlockchains(data) ||
+      validatePrivateKeyWithPasswordAllBlockchains(data) ||
+      validateWifAllBlockchains(data)
+    ) {
       navigation.navigate(wrapper.route.Tab.name, {
         screen: wrapper.route.More.name,
         params: {
-          screen: wrapper.route.Passphrase.name,
+          screen: wrapper.route.ImportKey.name,
           initial: false,
           params: {
-            encryptedKey: data,
-          },
+            data,
+          } as any,
         },
       })
-      return
-    }
-
-    if (validateWifAllBlockchains(data)) {
-      const blockchain = getBlockchainByWif(data)
-      if (blockchain) {
-        const service = getBlockchainService(blockchain)
-        const address = service.generateAccountFromWif(data)
-
-        if (accounts.some(account => account.address === address)) {
-          showMessage({ message: i18n.t('quickTools.qrCode.accountAlreadyExists') })
-          return
-        }
-
-        const wallet = await blockchainActions.createWallet(i18n.t('modals.blockchainList.encryptedWallet'), 'legacy')
-
-        await blockchainActions.importAccounts([{ address, blockchain, type: 'legacy', wallet, wif: data }])
-
-        const account = accounts.find(account => account.address === address)
-
-        if (!account || !wallet) return
-
-        navigation.navigate(wrapper.route.GetWallet.name, { wallet })
-        navigation.navigate(wrapper.route.GetAccount.name, { account, wallet })
-        navigation.navigate(wrapper.route.Modal.name, {
-          screen: wrapper.route.EditAccountModal.name,
-          params: { account },
-        })
-      }
     }
   }
 

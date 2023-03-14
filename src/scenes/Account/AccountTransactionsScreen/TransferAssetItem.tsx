@@ -30,7 +30,7 @@ export const TransferAssetItem = React.memo((props: Props) => {
 
   return (
     <LinearLayout orientation="horiz">
-      <LinearLayout orientation="horiz" width={80}>
+      <LinearLayout orientation="horiz" width="80px" marginRight="8px">
         <TokenIcon
           width={20}
           height={20}
@@ -45,11 +45,11 @@ export const TransferAssetItem = React.memo((props: Props) => {
           {props.symbol}
         </TextView>
       </LinearLayout>
-      <TextView color="#fff" fontSize="16px" fontFamily="medium" flex={1} numberOfLines={1} textAlign="center">
-        {props.amount}
-      </TextView>
-      <LinearLayout ml="30%">
-        <TextView color="#fff" fontSize="16px" numberOfLines={1} width={80} fontFamily="medium" textAlign="right">
+      <LinearLayout orientation="horiz" justifyContent="space-between" flex={1}>
+        <TextView color="#fff" fontSize="16px" width="100px" fontFamily="medium" numberOfLines={1} textAlign="right">
+          {props.amount}
+        </TextView>
+        <TextView color="#fff" fontSize="16px" width="100px" numberOfLines={1} fontFamily="medium" textAlign="right">
           {fiatAmount}
         </TextView>
       </LinearLayout>

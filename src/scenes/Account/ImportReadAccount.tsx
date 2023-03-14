@@ -95,12 +95,17 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
       setInputValue(value)
       const services = getBlockchainServices()
 
+      const addresses: AddressInfo[] = []
+
       for (const service of services) {
         const addressIsValid = service.validateAddress(value)
         if (!addressIsValid) continue
 
-        setAddressesList([...addressesList, { address: value, blockchain: service.key }])
+        addresses.push({ address: value, blockchain: service.key })
       }
+
+      setAddressesList(addresses)
+      setAddressesListSelected(addresses)
     },
     [getBlockchainServices]
   )

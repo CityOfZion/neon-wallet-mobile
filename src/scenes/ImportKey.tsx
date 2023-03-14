@@ -29,9 +29,12 @@ import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
 import { RootState } from '~src/store/RootStore'
 import { LinearLayout, ImageView, TextView } from '~src/styles/styled-components'
 
-type ParamList = MoreStackParamList & RootStackParamList & TabStackParamList & WalletStackParamList
+export type ImportKeyParams = {
+  data?: string
+}
+
 interface ImportKeyProps {
-  navigation: StackNavigationProp<ParamList>
+  navigation: StackNavigationProp<MoreStackParamList & RootStackParamList & TabStackParamList & WalletStackParamList>
   route: RouteProp<MoreStackParamList, 'ImportKey'>
 }
 
@@ -53,18 +56,13 @@ const isMnemonic = (word: string) => {
 }
 
 const ImportKey = (props: ImportKeyProps) => {
+  const params = props.route.params
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const accounts = useSelector(selectAccounts)
   const wallets = useSelector(selectWallets)
   const walletIds = useSelector(selectWalletIds)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
-  const [inputValue, setInputValue] = useState(props.route.params ? props.route.params.key ?? '' : '')
-  const [addressesFound, setAddressesFound] = useState<AddressInfo[]>([])
-  const [inputIsValid, setInputIsValid] = useState<boolean>(false)
-  const [addressesSelected, setAddressesSelected] = useState<AddressInfo[]>([])
-  const [showImportList, setShowImportList] = useState<boolean>(false)
-  const [disableButton, setDisableButton] = useState<boolean>(true)
   const blockchainActions = useBlockchainActions()
   const {
     getBlockchainServices,
@@ -74,6 +72,13 @@ const ImportKey = (props: ImportKeyProps) => {
     validateWifAllBlockchains,
     getBlockchainByAddress,
   } = useBlockchainServiceUtils()
+
+  const [inputValue, setInputValue] = useState(params?.data ?? '')
+  const [addressesFound, setAddressesFound] = useState<AddressInfo[]>([])
+  const [inputIsValid, setInputIsValid] = useState<boolean>(false)
+  const [addressesSelected, setAddressesSelected] = useState<AddressInfo[]>([])
+  const [showImportList, setShowImportList] = useState<boolean>(false)
+  const [disableButton, setDisableButton] = useState<boolean>(true)
 
   const inputType = useRef<InputType>()
 
@@ -134,61 +139,6 @@ const ImportKey = (props: ImportKeyProps) => {
     [walletIds]
   )
 
-  const importMnemonic = useCallback(
-    async (mnemonic: string) => {
-      const IsImported = await mnemonicIsImported(mnemonic)
-
-      if (IsImported) {
-        showMessage({
-          message: i18n.t('importKey.mnemonicAlreadyExists'),
-          type: 'danger',
-        })
-        return
-      }
-
-      const allAccountsInfo: MnemonicSelectionInfo = new Map()
-      const services = getBlockchainServices()
-
-      for (const service of services) {
-        let index = 0
-        const accountsInfo: {
-          address: string
-          wif: string
-          derivationIndex: number
-        }[] = []
-
-        while (isConnected) {
-          const { wif, address } = await service.generateAccount(mnemonic, index)
-
-          if (!accounts.find(account => account.address === address)) {
-            await UtilsHelper.sleep(200)
-
-            if (index !== 0) {
-              if (selectedBlockchainNetworks[service.key].type === 'custom') {
-                // When the user is using a custom network, we can't check if the address has transactions
-                break
-              }
-
-              const { totalEntries } = await service.provider.getAddressAbstracts(address, 1)
-
-              if (!totalEntries || totalEntries <= 0) {
-                break
-              }
-            }
-
-            accountsInfo.push({ address, wif, derivationIndex: index })
-          }
-
-          index++
-        }
-        allAccountsInfo.set(service.key, accountsInfo)
-      }
-
-      return allAccountsInfo
-    },
-    [mnemonicIsImported]
-  )
-
   const addressAlreadyExist = useCallback(
     (address: string) => accounts.some(account => account.address === address),
     [accounts]
@@ -216,6 +166,7 @@ const ImportKey = (props: ImportKeyProps) => {
       return
     }
 
+    setAddressesFound([{ address: inputValue, blockchain: blockchainName }])
     setAddressesSelected([{ address: inputValue, blockchain: blockchainName }])
     setDisableButton(false)
   }, [inputValue, addressAlreadyExist])
@@ -226,6 +177,8 @@ const ImportKey = (props: ImportKeyProps) => {
 
   const handleChangeWhenWIF = useCallback(() => {
     const services = getBlockchainServices()
+
+    const addresses: AddressInfo[] = []
 
     for (const service of services) {
       if (!service.validateWif(inputValue)) return
@@ -242,10 +195,15 @@ const ImportKey = (props: ImportKeyProps) => {
         return
       }
 
-      setAddressesFound(prevState => [...prevState, { address: addressFromWif, blockchain: service.key }])
-      setShowImportList(true)
-      setDisableButton(false)
+      addresses.push({ address: addressFromWif, blockchain: service.key })
     }
+
+    if (addresses.length === 0) return
+
+    setAddressesFound(addresses)
+    setAddressesSelected(addresses)
+    setShowImportList(true)
+    setDisableButton(true)
   }, [inputValue, addressAlreadyExist])
 
   const handleChangeWhenMnemonic = useCallback(async () => {
@@ -304,17 +262,63 @@ const ImportKey = (props: ImportKeyProps) => {
   }, [blockchainActions, inputValue, wallets])
 
   const persistWhenMnemonic = useCallback(async () => {
-    const dataAccountsToImport = await importMnemonic(inputValue)
+    const mnemonic = inputValue
 
-    if (!dataAccountsToImport) {
+    const IsImported = await mnemonicIsImported(mnemonic)
+
+    if (IsImported) {
+      showMessage({
+        message: i18n.t('importKey.mnemonicAlreadyExists'),
+        type: 'danger',
+      })
       return
     }
 
+    const allAccountsInfo: MnemonicSelectionInfo = new Map()
+    const services = getBlockchainServices()
+
+    for (const service of services) {
+      let index = 0
+      const accountsInfo: {
+        address: string
+        wif: string
+        derivationIndex: number
+      }[] = []
+
+      while (isConnected) {
+        const { wif, address } = await service.generateAccount(mnemonic, index)
+
+        if (!accounts.find(account => account.address === address)) {
+          await UtilsHelper.sleep(200)
+
+          if (index !== 0) {
+            if (selectedBlockchainNetworks[service.key].type === 'custom') {
+              // When the user is using a custom network, we can't check if the address has transactions
+              break
+            }
+
+            const { totalEntries } = await service.provider.getAddressAbstracts(address, 1)
+
+            console.log('totalEntries', totalEntries)
+
+            if (!totalEntries || totalEntries <= 0) {
+              break
+            }
+          }
+
+          accountsInfo.push({ address, wif, derivationIndex: index })
+        }
+
+        index++
+      }
+      allAccountsInfo.set(service.key, accountsInfo)
+    }
+
     props.navigation.navigate(wrapper.route.MnemonicSelectionList.name, {
-      data: dataAccountsToImport,
+      data: allAccountsInfo,
       mnemonic: inputValue,
     })
-  }, [inputValue, importMnemonic])
+  }, [inputValue])
 
   const functionsByInputTypes = useMemo<Record<InputType, FunctionsByInputType>>(
     () => ({
@@ -377,7 +381,7 @@ const ImportKey = (props: ImportKeyProps) => {
       }
 
       await functionsByInputTypes[inputType.current].persist()
-    } catch {
+    } catch (error: any) {
       showMessage({
         message: i18n.t('importKey.genericError'),
         duration: 5000,
@@ -387,6 +391,12 @@ const ImportKey = (props: ImportKeyProps) => {
       Await.done('importKey')
     }
   }, [functionsByInputTypes])
+
+  useEffect(() => {
+    if (!showImportList) return
+
+    setDisableButton(addressesSelected.length <= 0)
+  }, [showImportList, addressesSelected])
 
   useEffect(() => {
     if (inputIsValid) {
@@ -401,7 +411,7 @@ const ImportKey = (props: ImportKeyProps) => {
 
   return (
     <ScreenLayout darkerSolidColorBG>
-      <AwaitActivity name="importKey" loadingView={<ScreenLoader />}>
+      <AwaitActivity name="importKey" loadingView={<ScreenLoader darkerSolidColorBG />}>
         <LinearLayout width="100%" height="100%">
           <TextView
             textAlign="center"

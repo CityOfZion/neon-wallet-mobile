@@ -73,7 +73,7 @@ export interface IWalletConnect {
 
 export interface INFT {
   getNFTS(address: string, page: number): Promise<NFTSResponse>
-  getNFT: (tokenId: string, hash: string) => Promise<NFTResponse>
+  getNFT: (tokenId: string, hash: string) => Promise<NFTResponse | undefined>
 }
 
 export type TCOZTip = { address: string; symbol: string; hash: string; decimals: number }
