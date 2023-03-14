@@ -35,7 +35,7 @@ export const useLocalTokensUtils = () => {
   const getTokenBySymbol = useCallback(
     (symbol: string, key: BlockchainServiceKey) => {
       const tokens = getTokensByBlockchain(key)
-
+      alert(JSON.stringify(tokens))
       return tokens.find(token => token.symbol === symbol)
     },
     [getTokensByBlockchain]
