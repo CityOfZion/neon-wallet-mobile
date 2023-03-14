@@ -19,7 +19,9 @@ jobs:
         node-version: '16.19.1'
 
     - name: Install applesimutils
-      run: npm install -g applesimutils
+      run: |
+        brew tap wix/brew
+        brew install applesimutils
 
     - name: Check applesimutils
       run: applesimutils --list --byType "iPhone 14"
