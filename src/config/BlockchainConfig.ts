@@ -23,8 +23,8 @@ export class BlockchainConfig {
       custom: 'http://127.0.0.1:50012',
     },
     neoLegacy: {
-      mainnet: 'http://seed1.ngd.network:10332',
-      testnet: 'http://seed1.ngd.network:20332',
+      mainnet: 'http://seed9.ngd.network:10332',
+      testnet: 'http://seed5.ngd.network:20332',
       custom: '',
     },
   }
