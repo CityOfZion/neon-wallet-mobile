@@ -1,8 +1,8 @@
 name: Detox Test
 on:
   push:
-    branches:
-      - CU-864dqw292-3
+    tags:
+      - 'refs/tags/detox'
 jobs:
   build-and-test:
     runs-on: macos-12
