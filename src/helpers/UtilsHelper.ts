@@ -83,4 +83,8 @@ export abstract class UtilsHelper {
     const res = text.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)
     return res !== null
   }
+
+  static removeLineBreaks(text: string) {
+    return text.replace(/(\r\n|\n|\r)/gm, '')
+  }
 }
