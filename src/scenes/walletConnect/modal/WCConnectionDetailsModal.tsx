@@ -18,7 +18,7 @@ import { LinearLayout, TextView, ImageView } from '~src/styles/styled-components
 
 export interface WCConnectionDetailsModalParams {
   session: Session
-  connectedAccountsAndWallets: ConnectedAccountAndWallet[]
+  connectedAccountAndWallet: ConnectedAccountAndWallet
 }
 
 interface Props {
@@ -26,7 +26,7 @@ interface Props {
 }
 
 const WCConnectionDetailsModal = (props: Props) => {
-  const { session, connectedAccountsAndWallets } = props.route.params
+  const { session, connectedAccountAndWallet } = props.route.params
   const methods = session.requiredNamespaces[walletConnectConfig.defaultBlockchain].methods
   const approvalDate = useSelector((state: RootState) =>
     state.wcReducer.approvalDates?.find(approvalDate => approvalDate.sessionTopic === session.topic)
@@ -64,25 +64,23 @@ const WCConnectionDetailsModal = (props: Props) => {
       <LinearLayout height="100%" justifyContent="space-between">
         <LinearLayout height="50%" mt={3}>
           <LinearLayout alignItems="center" pb="38px">
-            {connectedAccountsAndWallets.map((it, index) => (
-              <LinearLayout orientation="horiz" key={index}>
-                <TextView color="text.10" fontSize="12px">
-                  {`${it.wallet.name} - `}
-                </TextView>
+            <LinearLayout orientation="horiz">
+              <TextView color="text.10" fontSize="12px">
+                {`${connectedAccountAndWallet.wallet.name} - `}
+              </TextView>
 
-                <LinearLayout
-                  width="7px"
-                  height="7px"
-                  mr="3px"
-                  mt="6px"
-                  bg={it.account.backgroundColor}
-                  borderRadius={9999}
-                />
-                <TextView color="text.10" fontSize="12px">
-                  {it.account?.name ?? ''}
-                </TextView>
-              </LinearLayout>
-            ))}
+              <LinearLayout
+                width="7px"
+                height="7px"
+                mr="3px"
+                mt="6px"
+                bg={connectedAccountAndWallet.account.backgroundColor}
+                borderRadius={9999}
+              />
+              <TextView color="text.10" fontSize="12px">
+                {connectedAccountAndWallet.account?.name ?? ''}
+              </TextView>
+            </LinearLayout>
 
             {approvalDate && (
               <TextView color="text.10" fontSize="12px">
