@@ -2,10 +2,8 @@ name: Build
 
 on:
   push:
-    branches:
-      - master
-      - staging
-      - development
+    tags:
+      - 'refs/tags/build'
       
 jobs:
   build:
