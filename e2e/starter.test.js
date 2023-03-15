@@ -7,7 +7,8 @@ describe('Example', () => {
     await device.reloadReactNative();
   });
 
-  it('app was installed', async () => {
-    expect(true).toBeTruthy()
+  it('teste se onboarding esta visivel', async () => {
+    const abc = await element(by.id('onboarding'));
+    expect(abc).toBeVisible();
   });
 });

@@ -1,0 +1,38 @@
+name: Detox Test
+on:
+  push:
+    branches:
+      - CU-864dqw292-2
+jobs:
+  build-and-test:
+    runs-on: macos-12
+
+    steps:
+    - name: Install Dependencies
+      run: |
+        brew install node
+        npm install -g detox-cli
+
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16.19.1'
+
+    - name: Install Yarn
+      run: npm install -g yarn
+
+    - name: Checkout and Install Project Dependencies
+      uses: actions/checkout@v2
+
+    - name: Install and Build Project
+      run: |
+        yarn
+        yarn build:ios
+        cd ios
+        pod install
+        cd ..
+        detox build -c ios.sim.release
+
+    - name: Run Detox Tests
+      run: |
+        detox test -c ios.sim.release
