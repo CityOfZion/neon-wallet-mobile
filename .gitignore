@@ -73,8 +73,8 @@ debug.log
 android/app/release/app-release.apk
 
 # Assets Images IOS
-ios/assets/src/assets/images
-ios/assets/src/assets/tokens/images
+ios/assets/src/assets/images/
+ios/assets/src/assets/tokens/images/
 
 # private network feature
 default.neo-express
