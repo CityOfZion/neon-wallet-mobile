@@ -2,22 +2,24 @@ import { useNavigation } from '@react-navigation/native'
 import { SessionTypes } from '@walletconnect/types'
 import I18n from 'i18n-js'
 import moment from 'moment'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { TouchableHighlight } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '../app/ApplicationWrapper'
 import { WalletConnectHelper } from '../helpers/WalletConnectHelper'
+import { useImageError } from '../hooks/useImageError'
 import { Account } from '../models/redux/Account'
 import { Wallet } from '../models/redux/Wallet'
 import { RootState } from '../store/RootStore'
 import { selectAccounts } from '../store/account/SelectorAccount'
 import { selectWallets } from '../store/wallet/SelectorWallet'
+import { Separator } from './Separator'
 
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {
-  session: SessionTypes.Settled
+  session: SessionTypes.Struct
 }
 
 export type ConnectedAccountAndWallet = {
@@ -27,111 +29,99 @@ export type ConnectedAccountAndWallet = {
 
 export const ConnectionItem = ({ session }: Props) => {
   const navigation = useNavigation()
-  const approvalDate = useSelector((state: RootState) =>
-    state.wcReducer.approvalDates?.find(approvalDate => approvalDate.sessionTopic === session.topic)
-  )
+
   const accountsPool = useSelector(selectAccounts)
   const walletsPool = useSelector(selectWallets)
+  const approvalDate = useSelector((state: RootState) => {
+    const date = state.wcReducer.approvalDates?.find(approvalDate => approvalDate.sessionTopic === session.topic)
+    if (!date) return
 
-  const connectedAccountsAndWallets = useMemo(() => {
-    const sessionAccounts = WalletConnectHelper.getAccountInformationFromSession(session)
+    return moment.unix(date.approvalDate).format(I18n.t('formatters.dappApprovedDate'))
+  })
 
-    const connectedWalletsAndAccounts = sessionAccounts.map((sessionAccount): Partial<ConnectedAccountAndWallet> => {
-      const account = accountsPool.find(account => account.address === sessionAccount.address)
-      return {
-        account,
-        wallet: account?.getWallet(walletsPool),
-      }
-    })
+  const connectedAccountAndWallet = useMemo<ConnectedAccountAndWallet | undefined>(() => {
+    const [{ address }] = WalletConnectHelper.getAccountInformationFromSession(session)
 
-    return connectedWalletsAndAccounts.filter(
-      (connectedWalletAndAccount): connectedWalletAndAccount is ConnectedAccountAndWallet =>
-        !!connectedWalletAndAccount.account && !!connectedWalletAndAccount.wallet
-    )
+    const account = accountsPool.find(account => account.address === address)
+    if (!account) return
+
+    const wallet = account.getWallet(walletsPool)
+    if (!wallet) return
+
+    return {
+      account,
+      wallet,
+    }
   }, [session])
 
-  const [shouldShowDefaultImage, setShouldShowDefaultImage] = useState(false)
+  const { handleError, imageSource } = useImageError({
+    source: {
+      uri: session.peer.metadata.icons[0],
+    },
+  })
 
   const handlePress = () => {
     navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.WCConnectionDetailsModal.name,
       params: {
         session,
-        connectedAccountsAndWallets,
+        connectedAccountAndWallet,
       },
     })
   }
 
   return (
-    <TouchableHighlight onPress={handlePress}>
-      <LinearLayout>
-        <LinearLayout orientation="horiz" justifyContent="space-between">
-          <LinearLayout orientation="horiz">
-            <LinearLayout borderRadius="4px" width="42px" height="41px" alignSelf="center" mr="10px">
-              <ImageView
-                source={
-                  !shouldShowDefaultImage
-                    ? {
-                        uri: session.peer.metadata.icons[0],
-                      }
-                    : require('~src/assets/logos/icon-dapp-default.png')
-                }
-                onError={
-                  !shouldShowDefaultImage
-                    ? () => {
-                        setShouldShowDefaultImage(true)
-                      }
-                    : undefined
-                }
-                width="100%"
-                height="100%"
-                resizeMode="contain"
-              />
+    <LinearLayout>
+      <TouchableHighlight onPress={handlePress}>
+        <LinearLayout orientation="horiz" justifyContent="space-between" alignItems="center" my="10px" mx="4px">
+          <LinearLayout orientation="horiz" alignItems="center" width="80%">
+            <LinearLayout borderRadius="4px" width="42px" height="42px" mr="10px">
+              <ImageView source={imageSource} onError={handleError} width={42} height={42} resizeMode="contain" />
             </LinearLayout>
+
             <LinearLayout>
               {!!approvalDate && (
                 <TextView color="text.10" fontSize="12px">
-                  {moment.unix(approvalDate.approvalDate).format(I18n.t('formatters.dappApprovedDate'))}
+                  {approvalDate}
                 </TextView>
               )}
-              <TextView color="white" fontFamily="medium" fontSize="18px">
+
+              <TextView color="white" fontFamily="medium" fontSize="18px" numberOfLines={1} ellipsizeMode="tail">
                 {session.peer.metadata.name}
               </TextView>
 
-              {connectedAccountsAndWallets &&
-                connectedAccountsAndWallets.length > 0 &&
-                connectedAccountsAndWallets.map((connectedAccountAndWallet, index) => (
-                  <LinearLayout orientation="horiz" key={index}>
-                    <TextView color="text.10" fontSize="12px">
-                      {`${connectedAccountAndWallet.wallet.name} - `}
-                    </TextView>
+              {connectedAccountAndWallet && (
+                <LinearLayout orientation="horiz" alignItems="center">
+                  <TextView color="text.10" fontSize="12px">
+                    {`${connectedAccountAndWallet.wallet.name} - `}
+                  </TextView>
 
-                    <LinearLayout
-                      width="7px"
-                      height="7px"
-                      mr="3px"
-                      mt="6px"
-                      bg={connectedAccountAndWallet.account.backgroundColor}
-                      borderRadius={9999}
-                    />
-                    <TextView color="text.10" fontSize="12px">
-                      {connectedAccountAndWallet.account?.name ?? ''}
-                    </TextView>
-                  </LinearLayout>
-                ))}
+                  <LinearLayout
+                    width="8px"
+                    height="8px"
+                    bg={connectedAccountAndWallet.account.backgroundColor}
+                    borderRadius="4px"
+                  />
+
+                  <TextView color="text.10" fontSize="12px">
+                    {` ${connectedAccountAndWallet.account.name}`}
+                  </TextView>
+                </LinearLayout>
+              )}
             </LinearLayout>
           </LinearLayout>
+
           <ImageView
             source={require('~src/assets/images/icon-arrow-right-green.png')}
-            width={12}
-            height={19}
-            alignSelf="center"
-            mr="5px"
+            width={18}
+            height={18}
+            resizeMode="contain"
+            ml="4px"
           />
         </LinearLayout>
+      </TouchableHighlight>
 
-        <LinearLayout height="1px" bg="background.10" alignSelf="stretch" my="10px" />
-      </LinearLayout>
-    </TouchableHighlight>
+      <Separator />
+    </LinearLayout>
   )
 }
