@@ -59,6 +59,12 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
       walletConnectConfig.defaultAutoacceptMethods.includes(request.params.request.method)
     )
 
+    await walletConnectCtx.init()
+  }, [walletConnectCtx.init, walletConnectCtx.autoAcceptIntercept, isConnected])
+
+  const registerWalletConnectRequestListener = useCallback(() => {
+    if (!walletConnectCtx.initialized) return
+
     walletConnectCtx.onRequestListener(async (accountAddress, _chain, request: SessionRequest) => {
       try {
         const account = accounts.find(account => account.address === accountAddress)
@@ -73,9 +79,7 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
         throw new Error('Failed request listener')
       }
     })
-
-    await walletConnectCtx.init()
-  }, [walletConnectCtx.init, walletConnectCtx.autoAcceptIntercept, walletConnectCtx.onRequestListener, isConnected])
+  }, [walletConnectCtx.initialized, accounts, selectedBlockchainNetworks])
 
   const detectAppBusEvents = useCallback(() => {
     const pendingTransactionConfirmedCallback = (account: Account) => {
@@ -150,6 +154,10 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
       setStarted(true)
     }
   }, [migrateStorageToReduxPersist, initWalletConnect])
+
+  useEffect(() => {
+    registerWalletConnectRequestListener()
+  }, [registerWalletConnectRequestListener])
 
   useEffect(() => {
     const unsubscribeWatchNetwork = watchNetwork()

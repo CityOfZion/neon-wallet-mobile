@@ -1,15 +1,18 @@
 import { getStateFromPath, LinkingOptions } from '@react-navigation/native'
+import * as Linking from 'expo-linking'
 
 import { WalletConnectHelper } from '../helpers/WalletConnectHelper'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
+
+const prefix = Linking.createURL('/')
 
 export class DeepLinkingConfig {
   linkingConfig: LinkingOptions
 
   constructor() {
     this.linkingConfig = {
-      prefixes: ['neon://', 'nep9://', 'wc://'],
+      prefixes: [prefix, 'neon://', 'nep9://', 'wc://'],
       config: {
         screens: {
           [wrapper.route.Tab.name]: {
@@ -42,17 +45,30 @@ export class DeepLinkingConfig {
 
         const [, uri] = path.split('=')
 
-        const convertedUri = WalletConnectHelper.convertBase64ToUri(uri)
+        const convertedUri = WalletConnectHelper.convertAndValidateBase64(uri)
+        if (!convertedUri) return getStateFromPath(path, options)
 
         return {
           routes: [
+            {
+              name: wrapper.route.Tab.name,
+              state: {
+                routes: [
+                  {
+                    name: wrapper.route.WalletConnectPage.name,
+                  },
+                ],
+              },
+            },
             {
               name: wrapper.route.Modal.name,
               state: {
                 routes: [
                   {
                     name: wrapper.route.WCConnectionRequestModal.name,
-                    params: { uri: convertedUri },
+                    params: {
+                      uri: convertedUri,
+                    },
                   },
                 ],
               },

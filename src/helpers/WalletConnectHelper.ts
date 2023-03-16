@@ -1,4 +1,4 @@
-import base64 from 'react-native-base64'
+import { u } from '@cityofzion/n3-neon-core'
 
 import { BlockchainServiceKey, TNetworkType } from '../blockchain'
 import { walletConnectConfig } from '../config/WalletConnectConfig'
@@ -48,15 +48,11 @@ export abstract class WalletConnectHelper {
     return false
   }
 
-  static checkIsBase64(uri: string) {
-    const regexBase64 = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
-    return regexBase64.test(uri)
-  }
+  static convertAndValidateBase64(base64: string) {
+    const uri = u.base642utf8(base64)
 
-  static convertBase64ToUri(uri: string) {
-    if (WalletConnectHelper.checkIsBase64(uri)) {
-      return base64.decode(uri)
-    }
+    if (!WalletConnectHelper.isValidURI(uri)) return
+
     return uri
   }
 
