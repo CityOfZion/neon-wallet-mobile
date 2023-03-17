@@ -79,8 +79,9 @@ export const WCAccountSelectionModal = (props: Props) => {
         message: i18n.t('walletconnect.alert.text', {
           text: firstSessionProposal.params.proposer.metadata.name,
         }),
+        description: i18n.t('walletconnect.alert.description'),
         duration: 7000,
-        type: 'warning',
+        type: 'success',
       })
     } catch (error: any) {
       showMessage({ message: error.message, duration: 7000, type: 'danger' })
