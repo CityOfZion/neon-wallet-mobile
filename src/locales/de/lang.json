@@ -529,6 +529,7 @@
   "walletconnect": {
     "alert": {
       "text": "#translateme",
+      "description": "#translateme",
       "unexpectedErrorToSelectAccount": "#translateme"
     },
     "noDAppsConnected": "#translateme",

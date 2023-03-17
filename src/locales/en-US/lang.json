@@ -962,6 +962,7 @@
   "walletconnect": {
     "alert": {
       "text": "%{text} Connected",
+      "description": "Wallet Connect",
       "unexpectedErrorToSelectAccount": "Unexpected error to select account"
     },
     "noDAppsConnected": "No dApps connected",

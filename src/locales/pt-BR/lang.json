@@ -493,7 +493,6 @@
       "token": "#translateme",
       "value": "#translateme"
     },
-
     "transactionInput": {
       "selectDifferentAccount": "Select a different Account",
       "transactionDetails": "TRANSACTION DETAILS",
@@ -567,6 +566,7 @@
   "walletconnect": {
     "alert": {
       "text": "#translateme",
+      "description": "#translateme",
       "unexpectedErrorToSelectAccount": "#translateme"
     },
     "noDAppsConnected": "#translateme",
