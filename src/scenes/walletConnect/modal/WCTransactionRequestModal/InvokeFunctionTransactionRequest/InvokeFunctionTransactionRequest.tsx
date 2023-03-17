@@ -1,5 +1,5 @@
-import { tx } from '@cityofzion/n3-neon-core/'
 import { Signer, ContractInvocation, ContractInvocationMulti } from '@cityofzion/neo3-invoker'
+import { tx } from '@cityofzion/neon-core/'
 import { useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'

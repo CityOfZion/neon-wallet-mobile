@@ -1,4 +1,4 @@
-import { u } from '@cityofzion/n3-neon-core'
+import { u } from '@cityofzion/neon-core'
 
 import { BlockchainServiceKey, TNetworkType } from '../blockchain'
 import { walletConnectConfig } from '../config/WalletConnectConfig'

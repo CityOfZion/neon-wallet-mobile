@@ -1,5 +1,5 @@
-import { tx } from '@cityofzion/n3-neon-core'
 import { Signer } from '@cityofzion/neo3-invoker'
+import { tx } from '@cityofzion/neon-core'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'

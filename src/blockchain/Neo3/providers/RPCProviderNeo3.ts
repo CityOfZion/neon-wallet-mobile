@@ -1,4 +1,4 @@
-import { rpc, u } from '@cityofzion/n3-neon-core'
+import { rpc, u } from '@cityofzion/neon-core'
 
 import { Neo3Provider } from './common'
 
