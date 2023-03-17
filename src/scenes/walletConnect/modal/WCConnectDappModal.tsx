@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import { UriHelper } from '~/src/helpers/UriHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
@@ -27,7 +26,7 @@ export const WCConnectDappModal = (props: WCConnectDappModalProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const validateURL = useCallback(() => {
-    return UriHelper.isValid(url)
+    return WalletConnectHelper.isValidURI(url)
   }, [url])
 
   const handleChange = (text: string) => {

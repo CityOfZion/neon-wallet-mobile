@@ -81,11 +81,24 @@ const WCConnectionRequestModal = (props: Props) => {
 
       controller.close()
       navigation.goBack()
+      Await.done('load')
     }
-  }, [uri])
+  }, [uri, walletConnectCtx.onURI, navigation, controller])
 
   useEffect(() => {
-    Await.run('loadWCConnection', runOnURI)
+    if (!walletConnectCtx.initialized) return
+
+    runOnURI()
+  }, [runOnURI, walletConnectCtx.initialized])
+
+  useEffect(() => {
+    if (!sessionProposal) return
+
+    Await.done('load')
+  }, [sessionProposal])
+
+  useEffect(() => {
+    Await.init('load')
   }, [])
 
   return (
@@ -99,7 +112,7 @@ const WCConnectionRequestModal = (props: Props) => {
       onRightPress={controller.close}
       solidColorBG
     >
-      <AwaitActivity name="loadWCConnection" loadingView={<ScreenLoader transparent />}>
+      <AwaitActivity name="load" loadingView={<ScreenLoader transparent />}>
         {sessionProposal && blockchain && (
           <LinearLayout height="100%" justifyContent="space-between">
             <LinearLayout height="50%" mt={3}>
