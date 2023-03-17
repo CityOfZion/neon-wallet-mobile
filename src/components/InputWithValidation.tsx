@@ -144,7 +144,7 @@ const InputWithValidation = (props: Props) => {
             keyboardType={props.keyboardType}
             returnKeyType="done"
             onSubmitEditing={Keyboard.dismiss}
-            multiline={Platform.OS === 'ios' ? true : props.isMultiline}
+            multiline={props.isMultiline}
             numberOfLines={props.isMultiline ? 10 : 1}
             style={props.isMultiline ? { textAlignVertical: 'top' } : undefined}
             clearTextOnFocus={false}
