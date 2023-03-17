@@ -1,18 +1,15 @@
 import { getStateFromPath, LinkingOptions } from '@react-navigation/native'
-import * as Linking from 'expo-linking'
 
 import { WalletConnectHelper } from '../helpers/WalletConnectHelper'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
-
-const prefix = Linking.createURL('/')
 
 export class DeepLinkingConfig {
   linkingConfig: LinkingOptions
 
   constructor() {
     this.linkingConfig = {
-      prefixes: [prefix, 'neon://', 'nep9://', 'wc://'],
+      prefixes: ['neon://', 'nep9://', 'wc://'],
       config: {
         screens: {
           [wrapper.route.Tab.name]: {
