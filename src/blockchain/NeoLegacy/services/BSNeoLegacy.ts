@@ -1,5 +1,5 @@
-import { api, sc, wallet, u, CONST, rpc } from '@cityofzion/neon-js'
-import { TransactionOutput } from '@cityofzion/neon-js/node_modules/@cityofzion/neon-core/lib/tx/components/TransactionOutput'
+import { api, sc, wallet, u, CONST, rpc } from '@cityofzion/neo-legacy-neon-js'
+import { TransactionOutput } from '@cityofzion/neo-legacy-neon-js/node_modules/@cityofzion/neon-core/lib/tx/components/TransactionOutput'
 import axios from 'axios'
 import { Platform, NativeModules } from 'react-native'
 

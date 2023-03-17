@@ -1,5 +1,5 @@
-import { wallet } from '@cityofzion/n3-neon-core'
 import { ContractInvocationMulti } from '@cityofzion/neo3-invoker'
+import * as Neon from '@cityofzion/neon-core'
 import { NeonInvoker } from '@cityofzion/neon-invoker'
 import { NeonSigner } from '@cityofzion/neon-signer'
 
@@ -8,15 +8,16 @@ import { SessionRequest } from '../contexts/WalletConnectContext'
 export class NeonWcAdapter {
   readonly invoke: NeonInvoker
   readonly signer: NeonSigner
-  readonly account: wallet.Account | undefined
-  constructor(invoke: NeonInvoker, sign: NeonSigner, account?: wallet.Account) {
+  readonly account: Neon.wallet.Account | undefined
+
+  constructor(invoke: NeonInvoker, sign: NeonSigner, account?: Neon.wallet.Account) {
     this.invoke = invoke
     this.signer = sign
     this.account = account
   }
 
   static init = async (rpcURL: string, wif: string): Promise<NeonWcAdapter> => {
-    const account = new wallet.Account(wif)
+    const account = new Neon.wallet.Account(wif)
     const invoker = await NeonInvoker.init(rpcURL, account)
     const signer = new NeonSigner(account)
     return new NeonWcAdapter(invoker, signer, account)

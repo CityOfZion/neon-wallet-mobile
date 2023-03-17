@@ -1,6 +1,6 @@
 import { api } from '@cityofzion/dora-ts'
 import { TypedResponse } from '@cityofzion/dora-ts/dist/interfaces/api/common'
-import { u, wallet } from '@cityofzion/n3-neon-core'
+import { u, wallet } from '@cityofzion/neon-core'
 
 import { RPCProviderNeo3 } from './RPCProviderNeo3'
 import { Neo3Provider } from './common'
