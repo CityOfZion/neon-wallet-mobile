@@ -47,5 +47,12 @@ target 'Neon' do
         end
       end
     end
+    installer.generated_projects.each do |project|
+      project.targets.each do |target|
+          target.build_configurations.each do |config|
+              config.build_settings["DEVELOPMENT_TEAM"] = "5DRRKCU6DK"
+           end
+      end
+    end
   end
 end
