@@ -19,6 +19,7 @@ export const ThemedAlert: React.FC<MessageComponentProps> = props => {
       paddingBottom="14px"
       paddingTop={`${14 + Constants.statusBarHeight}px`}
       orientation="horiz"
+      justifyContent="center"
       alignItems="center"
       borderBottomWidth="1px"
       borderBottomColor={
@@ -36,11 +37,11 @@ export const ThemedAlert: React.FC<MessageComponentProps> = props => {
           width={34}
           height={34}
           resizeMode="contain"
-          mr="15px"
+          mr="14px"
         />
       )}
 
-      <LinearLayout flex={1}>
+      <LinearLayout flexShrink={1}>
         {props.message.description && (
           <TextView
             fontFamily="bold"
