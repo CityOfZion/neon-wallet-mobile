@@ -22,6 +22,7 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import { Account } from '~src/models/redux/Account'
 import { Wallet } from '~src/models/redux/Wallet'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
+import { Dimensions } from 'react-native'
 
 export interface SendTransactionAccountSelectionModalParams {
   wallet: Wallet
@@ -103,7 +104,7 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
         onClose={props.navigation.goBack}
         solidColorBG
       >
-        <LinearLayout mb="100px">
+        <LinearLayout>
           <TextView mb={4} color="text.2" fontSize="14px" fontFamily="bold" textAlign="center">
             {props.route.params.wallet.name?.toUpperCase()}
           </TextView>
@@ -137,6 +138,7 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
 
               <LinearLayout pl={20} pr={20}>
                 <BalanceList
+                  height={Dimensions.get('window').height * 0.33}
                   hideEmptyMessage
                   balanceExchange={selectedAccountBalanceExchange}
                   onPress={handleBalancePress}

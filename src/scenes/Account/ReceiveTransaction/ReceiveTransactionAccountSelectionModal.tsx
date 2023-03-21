@@ -21,6 +21,7 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import { Account } from '~src/models/redux/Account'
 import { Wallet } from '~src/models/redux/Wallet'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
+import { Dimensions } from 'react-native'
 
 export interface ReceiveTransactionAccountSelectionModalParams {
   wallet: Wallet
@@ -120,7 +121,7 @@ const ReceiveTransactionAccountSelectionModal = (props: Props) => {
               )}
 
               <LinearLayout pl={20} pr={20}>
-                <BalanceList hideEmptyMessage balanceExchange={selectedAccountBalanceExchange} />
+                <BalanceList height={Dimensions.get('window').height * 0.36} hideEmptyMessage balanceExchange={selectedAccountBalanceExchange} />
               </LinearLayout>
             </>
           )}
