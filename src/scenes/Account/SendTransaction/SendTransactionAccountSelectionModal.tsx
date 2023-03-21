@@ -53,15 +53,6 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
     return balancesExchange.findByBalanceKey(selectedAccount.address)
   }, [selectedAccount, balancesExchange])
 
-  const selectedAccountTotalTokenBalance = useMemo(() => {
-    if (!selectedAccountBalanceExchange) return
-
-    return BalanceHelper.calculateTotalBalances(
-      selectedAccountBalanceExchange.balance.data,
-      selectedAccountBalanceExchange.exchange.data
-    )
-  }, [selectedAccountBalanceExchange])
-
   const handleChangeAccount = (account: Account) => {
     setSelectedAccount(account)
   }
@@ -78,6 +69,8 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
   }
 
   const handleBalancePress = (tokenBalance: TokenBalance) => {
+    if (tokenBalance.amount <= 0) return
+
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.SendTransactionModal.name,
       params: {
@@ -122,18 +115,9 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
 
           {!!selectedAccountBalanceExchange && (
             <>
-              {selectedAccountBalanceExchange.isLoading ? (
-                <TextView mb={4} color="text.3" fontSize="md" textAlign="center">
-                  {i18n.t('modals.sendTransactionAccountSelectionModal.label')}
-                </TextView>
-              ) : (
-                !!selectedAccountTotalTokenBalance &&
-                selectedAccountTotalTokenBalance > 0 && (
-                  <TextView mb={4} color="text.3" fontSize="md" textAlign="center">
-                    {i18n.t('modals.sendTransactionAccountSelectionModal.label')}
-                  </TextView>
-                )
-              )}
+              <TextView mb={4} color="text.3" fontSize="md" textAlign="center">
+                {i18n.t('modals.sendTransactionAccountSelectionModal.label')}
+              </TextView>
 
               <LinearLayout pl={20} pr={20}>
                 <BalanceList
@@ -160,7 +144,11 @@ const SendTransactionAccountSelectionModal = (props: Props) => {
             <ThemedButton
               label={i18n.t('app.next')}
               onPress={handlePressNext}
-              disabled={!selectedAccountTotalTokenBalance || selectedAccountTotalTokenBalance <= 0 || !isConnected}
+              disabled={
+                !selectedAccountBalanceExchange ||
+                !BalanceHelper.hasSomeBalance(selectedAccountBalanceExchange.balance.data) ||
+                !isConnected
+              }
             />
           </LinearLayout>
         </LinearGradient>

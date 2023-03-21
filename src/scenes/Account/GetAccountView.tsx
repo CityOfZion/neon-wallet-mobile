@@ -16,6 +16,7 @@ import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
+import { useLocalTokens } from '~/src/hooks/useTokens'
 import { Wallet } from '~/src/models/redux/Wallet'
 import { accountReducerActions } from '~/src/store/account/AccountReducer'
 import { selectWallets } from '~/src/store/wallet/SelectorWallet'
@@ -132,6 +133,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
   const balanceExchange = useBalancesAndExchange(account)
   const { blockchainService } = useBlockchainService(account.blockchain)
+  const { tokens } = useLocalTokens({ blockchain: account.blockchain })
 
   const [showWarning, setShowWarning] = useState<boolean>(false)
   const [unclaimedGasAmount, setUnclaimedGasAmount] = useState<number>()
@@ -184,10 +186,10 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
       if (!account.address || !isConnected || !unclaimedGasAmount || !balance || !fee) return
 
-      const neoToken = blockchainService.tokens.find(token => token.symbol === 'NEO')
+      const neoToken = tokens.find(token => token.symbol === 'NEO')
       if (!neoToken) throw new Error('Neo token not found')
 
-      const gasToken = blockchainService.tokens.find(token => token.symbol === 'GAS')
+      const gasToken = tokens.find(token => token.symbol === 'GAS')
       if (!gasToken) throw new Error('Gas token not found')
 
       const GASBalance = BalanceHelper.getTokenBalanceBySymbol(gasToken.symbol, balance)
@@ -230,7 +232,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
       return
     }
 
-    const neoToken = blockchainService.tokens.find(token => token.symbol === 'NEO')
+    const neoToken = tokens.find(token => token.symbol === 'NEO')
     if (!neoToken) return
 
     const calculatedFee = await blockchainService.calculateTransferFee({
@@ -242,7 +244,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
     })
 
     setFee(calculatedFee)
-  }, [account, unclaimedGasAmount])
+  }, [account, unclaimedGasAmount, tokens])
 
   const populateUnclaimed = async () => {
     if (!account.address) {
