@@ -3,6 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { LinearGradient } from 'expo-linear-gradient'
 import i18n from 'i18n-js'
 import React, { useMemo, useState } from 'react'
+import { Dimensions } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
@@ -21,7 +22,6 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import { Account } from '~src/models/redux/Account'
 import { Wallet } from '~src/models/redux/Wallet'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
-import { Dimensions } from 'react-native'
 
 export interface ReceiveTransactionAccountSelectionModalParams {
   wallet: Wallet
@@ -121,7 +121,11 @@ const ReceiveTransactionAccountSelectionModal = (props: Props) => {
               )}
 
               <LinearLayout pl={20} pr={20}>
-                <BalanceList height={Dimensions.get('window').height * 0.36} hideEmptyMessage balanceExchange={selectedAccountBalanceExchange} />
+                <BalanceList
+                  height={Dimensions.get('window').height * 0.36}
+                  hideEmptyMessage
+                  balanceExchange={selectedAccountBalanceExchange}
+                />
               </LinearLayout>
             </>
           )}

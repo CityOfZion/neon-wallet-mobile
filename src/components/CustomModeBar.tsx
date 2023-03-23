@@ -1,4 +1,3 @@
-import Constants from 'expo-constants'
 import React from 'react'
 
 import { Normalize } from '../app/Normalize'
@@ -13,7 +12,6 @@ export const CustomModeBar = () => {
       justifyContent="center"
       alignItems="flex-end"
       padding={15}
-      paddingTop={15 + Constants.statusBarHeight}
       borderBottomWidth="2px"
       borderBottomColor="quinary"
     >

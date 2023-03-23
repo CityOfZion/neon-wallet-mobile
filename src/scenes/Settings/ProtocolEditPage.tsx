@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import I18n from 'i18n-js'
+import i18n from 'i18n-js'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -8,6 +8,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { BlockchainServiceKey } from '~/src/blockchain'
 import SelectorList, { SelectorItem } from '~/src/components/SelectorList'
 import { Separator } from '~/src/components/Separator'
+import HeaderBar from '~/src/components/layout/HeaderBar'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import { blockchainConfig, TBlockchainNetwork } from '~/src/config/BlockchainConfig'
 import { useWalletConnect } from '~/src/contexts/WalletConnectContext'
@@ -17,7 +18,7 @@ import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { SettingsStackParamList } from '~/src/navigation/SettingsStackNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { settingsReducerActions } from '~/src/store/settings/SettingsReducer'
-import { ButtonView, ImageView, TextView } from '~/src/styles/styled-components'
+import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 import { RootState } from '~src/store/RootStore'
 
 export interface ProtocolEditPageParams {
@@ -31,6 +32,13 @@ interface Props {
 
 export const ProtocolEditPage = (props: Props) => {
   const { blockchain } = props.route.params
+
+  props.navigation.setOptions({
+    headerTitle: () =>
+      HeaderBar({
+        title: i18n.t(`screens.protocolsPage.labels.${blockchain}`),
+      }),
+  })
 
   const defaultNetworkType = blockchainConfig.defaultSelectedNetworks[blockchain].type
   const availableNetworks = blockchainConfig.availableNetworks[blockchain]
@@ -77,37 +85,39 @@ export const ProtocolEditPage = (props: Props) => {
     onClick: handleClick,
     isSelected,
     title: UtilsHelper.capitalize(network.name),
-    description: defaultNetworkType === network.type ? I18n.t('screens.protocolEditPage.default') : undefined,
+    description: defaultNetworkType === network.type ? i18n.t('screens.protocolEditPage.default') : undefined,
     actionButtonImage: network.type === 'custom' ? require('~src/assets/images/icon-pencil-green.png') : undefined,
     onActionPress: handleActionPress,
   }))
 
   return (
-    <ScreenLayout padding={20} darkerSolidColorBG scrollable={false}>
-      <SelectorList items={selectorItems} />
+    <ScreenLayout darkerSolidColorBG scrollable={false}>
+      <LinearLayout paddingX="10px" flexGrow={1}>
+        <SelectorList items={selectorItems} />
 
-      {availableNetworks.includes('custom') && (
-        <>
-          <Separator />
-          <ButtonView orientation="horiz" paddingY="18px" onPress={handleAddCustomNetwork}>
-            <ImageView
-              width={20}
-              height={20}
-              resizeMode="contain"
-              source={require('~src/assets/images/icon-unlink-green.png')}
-            />
-            <TextView marginX="12px" fontSize="18px" color="text.0" weight={1}>
-              {I18n.t('screens.protocolEditPage.addLabel')}
-            </TextView>
-            <ImageView
-              width={20}
-              height={20}
-              resizeMode="contain"
-              source={require('~src/assets/images/green_plus.png')}
-            />
-          </ButtonView>
-        </>
-      )}
+        {availableNetworks.includes('custom') && (
+          <>
+            <Separator />
+            <ButtonView orientation="horiz" paddingY="18px" onPress={handleAddCustomNetwork}>
+              <ImageView
+                width={20}
+                height={20}
+                resizeMode="contain"
+                source={require('~src/assets/images/icon-unlink-green.png')}
+              />
+              <TextView marginX="12px" fontSize="18px" color="text.0" weight={1}>
+                {i18n.t('screens.protocolEditPage.addLabel')}
+              </TextView>
+              <ImageView
+                width={20}
+                height={20}
+                resizeMode="contain"
+                source={require('~src/assets/images/green_plus.png')}
+              />
+            </ButtonView>
+          </>
+        )}
+      </LinearLayout>
     </ScreenLayout>
   )
 }

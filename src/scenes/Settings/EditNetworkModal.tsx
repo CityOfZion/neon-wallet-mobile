@@ -134,6 +134,7 @@ export const EditNetworkModal = (props: Props) => {
         <LinearLayout>
           <InputLabel
             title={I18n.t('modals.editNetworkModal.inputLabels.name')}
+            description={I18n.t('modals.editNetworkModal.inputLabels.nameDescription')}
             marginBottom="8px"
             capitalize
             color="text.0"
@@ -219,7 +220,7 @@ export const EditNetworkModal = (props: Props) => {
           </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout>
+        <LinearLayout mb="8px">
           <ThemedButton
             label={I18n.t('app.save')}
             onPress={handleSave}
