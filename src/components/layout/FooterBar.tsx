@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, { useEffect, useRef } from 'react'
-import { Animated, Easing, ImageSourcePropType } from 'react-native'
+import { Animated, Easing, ImageSourcePropType, Platform } from 'react-native'
 import { Shadow } from 'react-native-shadow-2'
 import { useSelector } from 'react-redux'
 
@@ -25,14 +25,10 @@ import { Route } from '~src/app/Route'
 import SwiperPanel, { SwiperController, useSwiperController } from '~src/components/SwiperPanel'
 import { ButtonView, ImageView, LinearLayout } from '~src/styles/styled-components'
 
-interface TabButtonContent {
+interface TabButtonProps {
   enabledSource: ImageSourcePropType
   disabledSource: ImageSourcePropType
   route: Route<RouteName>
-}
-
-interface TabButtonProps {
-  button: TabButtonContent
   controller: SwiperController
 }
 
@@ -147,19 +143,15 @@ const TabButton = (props: BottomTabBarProps & TabButtonProps) => {
     <ButtonView
       onPress={() => {
         props.controller.close()
-        props.navigation.navigate(props.button.route.name)
+        props.navigation.navigate(props.route.name)
       }}
-      height="100%"
-      weight={1}
       alignItems="center"
-      justifyContent="center"
+      weight={1}
     >
       <ImageView
         resizeMode="cover"
         source={
-          props.state.routes[props.state.index].name === props.button.route.name
-            ? props.button.enabledSource
-            : props.button.disabledSource
+          props.state.routes[props.state.index].name === props.route.name ? props.enabledSource : props.disabledSource
         }
       />
     </ButtonView>
@@ -184,27 +176,6 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   })
 
   const controller = useSwiperController()
-
-  const walletButton = {
-    enabledSource: require('~src/assets/images/button-wallet-white.png'),
-    disabledSource: require('~src/assets/images/button-wallet-disabled.png'),
-    route: wrapper.route.ListWallets,
-  }
-  const dappsButton = {
-    enabledSource: require('~src/assets/images/button-connections-white.png'),
-    disabledSource: require('~src/assets/images/button-connections-disabled.png'),
-    route: wrapper.route.WalletConnectPage,
-  }
-  const contactsButton = {
-    enabledSource: require('~src/assets/images/button-contacts-white.png'),
-    disabledSource: require('~src/assets/images/button-contacts-disabled.png'),
-    route: wrapper.route.Contacts,
-  }
-  const moreButton = {
-    enabledSource: require('~src/assets/images/button-more-white.png'),
-    disabledSource: require('~src/assets/images/button-more-disabled.png'),
-    route: wrapper.route.More,
-  }
 
   useEffect(() => {
     Animated.parallel([
@@ -231,58 +202,92 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
     <LinearLayout height="100%" width="100%" justifyContent="flex-end" position="absolute" pointerEvents="box-none">
       <QuickToolsMenu controller={controller} />
 
-      <LinearLayout
-        width="100%"
-        height={applicationConfig.footerHeight}
-        zIndex={1001}
-        bottom={-1}
-        position="absolute"
-        orientation="horiz"
-      >
+      <LinearLayout position="relative" width={'100%' as any} height={applicationConfig.footerHeight} bottom="-1px">
         <Shadow
           distance={12}
           sides={['top']}
           startColor={`${theme.colors.black}33`}
-          containerViewStyle={{ width: '100%', height: '100%' }}
           viewStyle={{
             width: '100%',
             height: '100%',
+          }}
+          containerViewStyle={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            bottom: -applicationConfig.footerOffset,
             flexDirection: 'row',
           }}
         >
-          <>
-            <ImageView
-              position="absolute"
-              bottom={0}
-              width={'100%' as any}
-              source={require('~src/assets/images/TabBar.png')}
-            />
-            <TabButton {...props} button={walletButton} controller={controller} />
-            <TabButton {...props} button={dappsButton} controller={controller} />
-            <ButtonView mx="6px" bottom="10px" onPress={controller.toggle}>
-              <Animated.View
-                style={{
-                  width: 66,
-                  height: 66,
-                  borderRadius: 33,
-                  backgroundColor: colorInterpolator,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Animated.Image
-                  resizeMode="contain"
-                  source={require('~src/assets/images/plus-sign-tabbar.png')}
-                  style={{
-                    transform: [{ rotate: spinInterpolator }],
-                  }}
-                />
-              </Animated.View>
-            </ButtonView>
-            <TabButton {...props} button={contactsButton} controller={controller} />
-            <TabButton {...props} button={moreButton} controller={controller} />
-          </>
+          <LinearLayout />
         </Shadow>
+
+        <ImageView
+          width={'100%' as any}
+          position="absolute"
+          bottom="0px"
+          height={applicationConfig.footerHeight}
+          source={
+            Platform.OS === 'ios'
+              ? require('~src/assets/images/tab-bar-ios.png')
+              : require('~src/assets/images/tab-bar-android.png')
+          }
+        />
+
+        <LinearLayout orientation="horiz" position="relative" alignItems="flex-end" top="6px">
+          <TabButton
+            enabledSource={require('~src/assets/images/button-wallet-white.png')}
+            disabledSource={require('~src/assets/images/button-wallet-disabled.png')}
+            route={wrapper.route.ListWallets}
+            controller={controller}
+            {...props}
+          />
+
+          <TabButton
+            enabledSource={require('~src/assets/images/button-connections-white.png')}
+            disabledSource={require('~src/assets/images/button-connections-disabled.png')}
+            route={wrapper.route.WalletConnectPage}
+            controller={controller}
+            {...props}
+          />
+
+          <ButtonView onPress={controller.toggle} position="relative" bottom="2px">
+            <Animated.View
+              style={{
+                width: 66,
+                height: 66,
+                borderRadius: 33,
+                backgroundColor: colorInterpolator,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Animated.Image
+                resizeMode="contain"
+                source={require('~src/assets/images/plus-sign-tabbar.png')}
+                style={{
+                  transform: [{ rotate: spinInterpolator }],
+                }}
+              />
+            </Animated.View>
+          </ButtonView>
+
+          <TabButton
+            enabledSource={require('~src/assets/images/button-contacts-white.png')}
+            disabledSource={require('~src/assets/images/button-contacts-disabled.png')}
+            route={wrapper.route.Contacts}
+            controller={controller}
+            {...props}
+          />
+
+          <TabButton
+            enabledSource={require('~src/assets/images/button-more-white.png')}
+            disabledSource={require('~src/assets/images/button-more-disabled.png')}
+            route={wrapper.route.More}
+            controller={controller}
+            {...props}
+          />
+        </LinearLayout>
       </LinearLayout>
     </LinearLayout>
   )

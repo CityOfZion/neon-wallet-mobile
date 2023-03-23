@@ -3,7 +3,6 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
 import {
-  ImageLoadEventData,
   Keyboard,
   KeyboardTypeOptions,
   NativeSyntheticEvent,
@@ -12,6 +11,7 @@ import {
   Platform,
   Dimensions,
   View,
+  ImageSourcePropType,
 } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -59,7 +59,7 @@ interface Props {
   editable?: boolean
   keyboardType?: KeyboardTypeOptions
   title?: string
-  srcIcon?: ImageLoadEventData
+  srcIcon?: ImageSourcePropType
   iconSize?: [number, number]
   isMultiline?: boolean
   fromImportKey?: boolean
@@ -146,7 +146,7 @@ const InputWithValidation = (props: Props) => {
             onSubmitEditing={Keyboard.dismiss}
             multiline={props.isMultiline}
             numberOfLines={props.isMultiline ? 10 : 1}
-            style={props.isMultiline ? { textAlignVertical: 'top' } : undefined}
+            style={{ textAlignVertical: props.isMultiline ? 'top' : 'auto' }}
             clearTextOnFocus={false}
             height={props.isMultiline && Platform.OS === 'ios' ? Dimensions.get('screen').height * 0.25 : undefined}
           />

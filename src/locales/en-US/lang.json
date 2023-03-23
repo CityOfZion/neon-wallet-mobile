@@ -423,6 +423,7 @@
       "delete": "Delete Network",
       "inputLabels": {
         "name": "Network Name",
+        "nameDescription": "(Max 10 Character)",
         "url": "New RPC URL"
       },
       "inputPlaceholder": {

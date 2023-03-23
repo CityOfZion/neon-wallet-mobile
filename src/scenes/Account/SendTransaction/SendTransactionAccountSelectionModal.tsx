@@ -3,6 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { LinearGradient } from 'expo-linear-gradient'
 import i18n from 'i18n-js'
 import React, { useMemo, useState } from 'react'
+import { Dimensions } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
@@ -22,7 +23,6 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import { Account } from '~src/models/redux/Account'
 import { Wallet } from '~src/models/redux/Wallet'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
-import { Dimensions } from 'react-native'
 
 export interface SendTransactionAccountSelectionModalParams {
   wallet: Wallet

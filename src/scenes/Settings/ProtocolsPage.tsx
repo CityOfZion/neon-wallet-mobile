@@ -30,9 +30,10 @@ export const ProtocolsPage = (props: Props) => {
   }
 
   return (
-    <ScreenLayout padding={20} darkerSolidColorBG scrollable={false}>
+    <ScreenLayout darkerSolidColorBG scrollable={false}>
       <FlatList
         data={Object.keys(networks) as BlockchainServiceKey[]}
+        style={{ paddingHorizontal: 10 }}
         renderItem={({ item }) => (
           <MenuItem
             icon={BlockchainHelper.getIcon(item)}

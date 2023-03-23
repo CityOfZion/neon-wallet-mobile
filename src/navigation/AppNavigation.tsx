@@ -60,7 +60,7 @@ const AppNavigation = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <StatusBar translucent barStyle={theme.statusBarStyle} backgroundColor="transparent" />
+      <StatusBar barStyle={theme.statusBarStyle} />
       {hasCustom && <CustomModeBar />}
       {!isConnected && <OfflineBar />}
       <NavigationContainer linking={linking} onReady={handleNavigationReady} ref={navigationRef}>

@@ -27,7 +27,7 @@ const SettingsPage = (props: SettingsProps) => {
   const { language, currency, theme } = useSelector((state: RootState) => state.settings)
 
   return (
-    <ScreenLayout padding={20} darkerSolidColorBG>
+    <ScreenLayout darkerSolidColorBG>
       <MenuItem
         title={i18n.t('settings.security')}
         icon={require('~/src/assets/images/security-icon-green.png')}

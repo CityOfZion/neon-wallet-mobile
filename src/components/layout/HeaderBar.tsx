@@ -2,8 +2,6 @@ import React from 'react'
 import { Route } from 'react-native'
 
 import { Normalize } from '~/src/app/Normalize'
-import { applicationConfig } from '~/src/config/ApplicationConfig'
-import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 import { ApplicationTheme } from '~src/themes/ApplicationTheme'
 
@@ -30,8 +28,6 @@ const HeaderTitle = (props: HeaderProps) => {
 
   return (
     <TextView
-      pt={2}
-      mt={UtilsHelper.isAndroid ? -2 : 0}
       textAlign="center"
       color="text.0"
       fontSize={Normalize.scale(24)}
@@ -48,25 +44,8 @@ const HeaderTitle = (props: HeaderProps) => {
 }
 
 const HeaderBar: React.FC<HeaderProps> = (headerProps: HeaderProps) => {
-  const getHeaderWidth = () => {
-    const { windowWidth } = applicationConfig
-
-    if (UtilsHelper.isIos) {
-      return windowWidth - Normalize.scale<number>(220)
-    }
-
-    return windowWidth - Normalize.scale<number>(160)
-  }
-
   return (
-    <LinearLayout
-      height={applicationConfig.headerHeight}
-      width={getHeaderWidth()}
-      orientation="horiz"
-      alignItems="center"
-      justifyContent="center"
-      style={{ alignSelf: 'center' }}
-    >
+    <LinearLayout orientation="horiz" alignItems="center" justifyContent="center" style={{ alignSelf: 'center' }}>
       {headerProps.image && (
         <ImageView
           width={Normalize.scale<number>(headerProps.iconWidth ?? 20)}
