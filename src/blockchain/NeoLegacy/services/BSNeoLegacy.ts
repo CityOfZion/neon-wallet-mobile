@@ -2,6 +2,7 @@ import { api, sc, wallet, u, CONST, rpc } from '@cityofzion/neo-legacy-neon-js'
 import { TransactionOutput } from '@cityofzion/neo-legacy-neon-js/node_modules/@cityofzion/neon-core/lib/tx/components/TransactionOutput'
 import axios from 'axios'
 import { Platform, NativeModules } from 'react-native'
+import { decryptNep2LegacyAndroid, decryptNep2LegacyIOS } from 'react-native-neo-sdk-bindings'
 
 import { DoraSDKProvider } from '../providers/DoraSDKProvider'
 import { NeoLegacyProvider } from '../providers/common'
@@ -22,7 +23,6 @@ import {
   IWalletConnect,
   IIconDapps,
 } from '~src/blockchain'
-import { NeoNative } from '~src/native/NeoNative'
 
 type TNativeAssetSymbol = 'GAS' | 'NEO'
 type NativeAsset = {
@@ -139,7 +139,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     return new Promise<{ address: string; wif: string }>(async (resolve, reject) => {
       if (Platform.OS === 'ios') {
         try {
-          NativeModules.RNNeoSdkBindings.decryptNep2(encryptedKey, password, (wif: string | null) => {
+          await decryptNep2LegacyIOS(encryptedKey, password, wif => {
             if (wif) {
               const newAccount = new wallet.Account(wif)
               if (newAccount.address) {
@@ -156,7 +156,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
         }
       } else {
         try {
-          const wif = await NeoNative.decryptNep2(password, encryptedKey)
+          const wif = await decryptNep2LegacyAndroid(password, encryptedKey)
           const newAccount = new wallet.Account(wif)
           if (newAccount.address) {
             resolve({ address: newAccount.address, wif })

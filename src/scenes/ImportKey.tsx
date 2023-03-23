@@ -7,6 +7,7 @@ import { Alert, Platform } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
+import { BlockchainServiceKey } from '../blockchain'
 import { SecurityHelper } from '../helpers/SecurityHelper'
 import { IURI } from '../helpers/UriHelper'
 import { useBlockchainServiceUtils } from '../hooks/useBlockchainServices'
@@ -232,8 +233,19 @@ const ImportKey = (props: ImportKeyProps) => {
   }, [inputValue])
 
   const persistWhenEncryptedKey = useCallback(() => {
-    props.navigation.navigate(wrapper.route.Passphrase.name, {
-      encryptedKey: inputValue,
+    props.navigation.navigate(wrapper.route.BlockchainListPage.name, {
+      config: {
+        custom: {
+          btnLabel: i18n.t('app.next'),
+          btnOnPress: async blockchain => {
+            props.navigation.navigate(wrapper.route.Passphrase.name, {
+              encryptedKey: inputValue,
+              blockchain,
+            })
+          },
+          hideIsMulti: true,
+        },
+      },
     })
   }, [inputValue])
 

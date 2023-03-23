@@ -29,6 +29,14 @@ export interface BlockchainListPageParams {
       walletType: WalletType
       hasBackup?: boolean
     }
+    importingNep2?: {
+      encryptedKey: string
+    }
+    custom?: {
+      btnLabel?: string
+      btnOnPress?: (blockchain: BlockchainServiceKey) => Promise<void>
+      hideIsMulti?: boolean
+    }
   }
 }
 
@@ -41,6 +49,14 @@ const BlockchainListPage = (props: Props) => {
   const dispatch = useDispatch<DispatchResult>()
   const blockchainActions = useBlockchainActions()
   const [blockchainsSelected, setBlockchainsSelected] = useState<BlockchainServiceKey[]>([])
+
+  const handlePress = async () => {
+    if (props.route.params.config?.custom?.btnOnPress) {
+      await props.route.params.config?.custom?.btnOnPress(blockchainsSelected[0])
+    } else {
+      await createWallet()
+    }
+  }
 
   const createWallet = useCallback(async () => {
     let id: string | undefined
@@ -89,16 +105,16 @@ const BlockchainListPage = (props: Props) => {
             </TextView>
           </View>
 
-          <BlockchainList isMulti onSelect={setBlockchainsSelected} />
+          <BlockchainList isMulti={!props.route.params.config?.custom?.hideIsMulti} onSelect={setBlockchainsSelected} />
         </LinearLayout>
 
         <LinearLayout mt={5} mb={7} px={5} width="100%">
           <ThemedButton
             disabled={blockchainsSelected.length < 1}
             onPress={() => {
-              Await.run('createWallet', createWallet, 1000)
+              Await.run('createWallet', handlePress, 1000)
             }}
-            label={i18n.t('app.createNow')}
+            label={props.route.params.config?.custom?.btnLabel ?? i18n.t('app.createNow')}
           />
         </LinearLayout>
       </AwaitActivity>
