@@ -130,7 +130,13 @@ export const EditNetworkModal = (props: Props) => {
       onRightPress={controller.close}
       solidColorBG
     >
-      <LinearLayout orientation="verti" justifyContent="space-between" height="100%">
+      <LinearLayout
+        orientation="verti"
+        justifyContent="space-between"
+        height="100%"
+        paddingTop="32px"
+        paddingBottom="16px"
+      >
         <LinearLayout>
           <InputLabel
             title={I18n.t('modals.editNetworkModal.inputLabels.name')}
