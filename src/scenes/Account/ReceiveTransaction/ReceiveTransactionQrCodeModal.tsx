@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux'
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { TokenIcon } from '~/src/components/TokenIcon'
-import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { UriHelper } from '~/src/helpers/UriHelper'
@@ -17,9 +16,8 @@ import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { RootState } from '~/src/store/RootStore'
 import InputLabel from '~src/components/InputLabel'
 import NeonQRCode from '~src/components/NeonQRCode'
-import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
+import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import { Account } from '~src/models/redux/Account'
 import { Wallet } from '~src/models/redux/Wallet'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
@@ -40,9 +38,6 @@ interface Props {
 
 const ReceiveTransactionQrCodeModal = (props: Props) => {
   const { wallet, account, amount, token, reference } = props.route.params
-
-  const buttonWidth = applicationConfig.screenWidth - 76
-  const labelWeight = 1.5
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const currency = useSelector((state: RootState) => state.settings.currency)
@@ -76,20 +71,16 @@ const ReceiveTransactionQrCodeModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={i18n.t('modals.ReceiveTransactionQrCodeModal.title')}
-      rightButton={<ThemedCloseButton />}
-      onRightPress={controller.close}
+      rightButton={<CloseButton onPress={controller.close} />}
       onClose={() => props.navigation.goBack()}
-      solidColorBG
-      smallerSize
+      size="small"
     >
-      <LinearLayout mt="43px" height="100%" alignItems="center">
-        <LinearLayout width={buttonWidth} height={buttonWidth}>
-          <ViewShot ref={qrCodeView}>
-            <NeonQRCode content={qrCodeContent} size={buttonWidth} />
-          </ViewShot>
-        </LinearLayout>
+      <LinearLayout alignItems="center" flexGrow={1} flexShrink={1}>
+        <ViewShot ref={qrCodeView}>
+          <NeonQRCode content={qrCodeContent} />
+        </ViewShot>
 
-        <LinearLayout width={buttonWidth} height={54} mt={34}>
+        <LinearLayout width="100%" my="34px">
           <ThemedButton
             label={i18n.t('modals.ReceiveTransactionQrCodeModal.shareOrCopy')}
             srcIcon={require('~src/assets/images/icon-copy-green.png')}
@@ -98,123 +89,68 @@ const ReceiveTransactionQrCodeModal = (props: Props) => {
           />
         </LinearLayout>
 
-        <LinearLayout width="99%" mt={22} flex={1} flexWrap="wrap" minHeight={400}>
-          <LinearLayout orientation="horiz">
-            <LinearLayout weight={labelWeight} />
-            <TextView
-              weight={5}
-              fontFamily="bold"
-              color="white"
-              fontSize={14}
-              mb={18}
-              style={{ includeFontPadding: false }}
-            >
-              {i18n.t('modals.ReceiveTransactionQrCodeModal.paymentRequestDetails')}
-            </TextView>
-          </LinearLayout>
-          <LinearLayout bg="background.14" pb="12px" pr="10px" mt="4px" borderRadius="7px" pl="10px" pt="13px">
-            <LinearLayout width="100%" mb={14}>
-              <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.token')} weight={labelWeight} lightText />
+        <LinearLayout width="100%">
+          <TextView fontFamily="bold" color="text.0" fontSize="14px" mb="18px" alignSelf="center">
+            {i18n.t('modals.ReceiveTransactionQrCodeModal.paymentRequestDetails')}
+          </TextView>
 
-              <LinearLayout orientation="horiz" weight={5}>
-                <TokenIcon marginTop={4} width={18} height={18} resizeMode="contain" {...token} />
+          <LinearLayout bg="background.14" p="12px" borderRadius="6px">
+            <LinearLayout>
+              <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.token')} lightText />
 
-                <TextView
-                  color="white"
-                  ml={2}
-                  mt={2}
-                  fontFamily="semibold"
-                  fontSize={18}
-                  style={{ includeFontPadding: false }}
-                >
+              <LinearLayout orientation="horiz" alignItems="center">
+                <TokenIcon width={18} height={18} resizeMode="contain" {...token} />
+
+                <TextView color="text.0" ml="4px" fontFamily="semibold" fontSize="18px">
                   {token.name}
                 </TextView>
               </LinearLayout>
             </LinearLayout>
-            <LinearLayout orientation="horiz" width="100%">
-              <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.qty')} weight={labelWeight} lightText />
 
-              <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.value')} weight={labelWeight} lightText />
+            <LinearLayout width="100%" orientation="horiz" mt="2px">
+              <LinearLayout width="50%" paddingRight="5px">
+                <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.qty')} lightText />
+                <TextView color="text.0" fontFamily="semibold" fontSize="18px">
+                  {amount}
+                </TextView>
+              </LinearLayout>
+
+              <LinearLayout width="50%">
+                <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.value')} lightText />
+                <TextView color="primary" fontFamily="semibold" fontSize="18px">
+                  {fiat}
+                </TextView>
+              </LinearLayout>
             </LinearLayout>
-            <LinearLayout orientation="horiz">
-              <TextView color="white" fontFamily="semibold" fontSize={18} weight={5}>
-                {amount}
-              </TextView>
 
-              <TextView color="primary" fontFamily="semibold" fontSize={18} weight={5}>
-                {fiat}
-              </TextView>
+            <LinearLayout width="100%" orientation="horiz" mt="2px">
+              <LinearLayout width="50%" paddingRight="5px">
+                <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.wallet')} lightText />
+                <TextView color="text.0" fontFamily="semibold" fontSize="16px" numberOfLines={1}>
+                  {wallet.name}
+                </TextView>
+              </LinearLayout>
+
+              <LinearLayout width="50%">
+                <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.account')} lightText />
+                <TextView color="text.0" fontFamily="semibold" fontSize="16px">
+                  {account.name}
+                </TextView>
+              </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout orientation="horiz" width="100%">
-              <InputLabel
-                title={i18n.t('modals.ReceiveTransactionQrCodeModal.wallet')}
-                weight={labelWeight}
-                lightText
-              />
+            <LinearLayout mt="16px">
+              <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.address')} lightText />
 
-              <InputLabel
-                title={i18n.t('modals.ReceiveTransactionQrCodeModal.account')}
-                weight={labelWeight}
-                lightText
-              />
-            </LinearLayout>
-            <LinearLayout orientation="horiz" width="100%" mb={16}>
-              <TextView
-                color="white"
-                fontFamily="semibold"
-                fontSize={16}
-                weight={5}
-                mr={5}
-                style={{ includeFontPadding: false }}
-              >
-                {wallet.name}
-              </TextView>
-
-              <TextView
-                color="white"
-                fontFamily="semibold"
-                fontSize={16}
-                weight={5}
-                mr={5}
-                style={{ includeFontPadding: false }}
-              >
-                {account.name}
-              </TextView>
-            </LinearLayout>
-            <LinearLayout width="100%" mb={16}>
-              <InputLabel
-                title={i18n.t('modals.ReceiveTransactionQrCodeModal.address')}
-                weight={labelWeight}
-                lightText
-              />
-
-              <TextView
-                color={theme.colors.primary}
-                fontFamily="medium"
-                fontSize={16}
-                weight={5}
-                style={{ includeFontPadding: false }}
-                mr={1}
-              >
+              <TextView color={theme.colors.primary} fontFamily="medium" fontSize="16px">
                 {account.address}
               </TextView>
             </LinearLayout>
+
             {!!reference && (
-              <LinearLayout width="100%" mb={16}>
-                <InputLabel
-                  title={i18n.t('modals.ReceiveTransactionQrCodeModal.reference')}
-                  weight={labelWeight}
-                  lightText
-                />
-                <TextView
-                  color="white"
-                  fontFamily="semibold"
-                  fontSize={16}
-                  weight={5}
-                  mr={1}
-                  style={{ includeFontPadding: false }}
-                >
+              <LinearLayout width="100%" mt="16px">
+                <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.reference')} lightText />
+                <TextView color="text.0" fontFamily="semibold" fontSize="16px">
                   {reference}
                 </TextView>
               </LinearLayout>

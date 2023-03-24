@@ -5,7 +5,7 @@ import React from 'react'
 
 import { BlockchainServiceKey } from '~/src/blockchain'
 import { TabSelectorContact } from '~/src/components/TabSelectorContacts'
-import SwiperPanel, { PANEL_OFFSET, useSwiperController, CloseButton } from '~src/components/SwiperPanel'
+import SwiperPanel, { useSwiperController, CloseButton } from '~src/components/SwiperPanel'
 import { Account } from '~src/models/redux/Account'
 import { Contact } from '~src/models/redux/Contact'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
@@ -44,20 +44,17 @@ export const ContactPicker = (props: ContactsModalProps) => {
       title={i18n.t('contactPicker.title')}
       controller={controller}
       onClose={props.navigation.goBack}
-      padding={0}
-      paddingTop={40}
-      fullSize
-      onRightPress={controller.close}
-      rightButton={<CloseButton mr="20px" />}
+      rightButton={<CloseButton onPress={controller.close} />}
+      withoutScrollView
     >
-      <TextView color="text.0" alignSelf="center" fontFamily="medium" fontSize={18}>
+      <TextView color="text.0" alignSelf="center" fontFamily="medium" fontSize="18px">
         {i18n.t('contactPicker.selectContact')}
       </TextView>
+
       <TabSelectorContact
         onAccountSelected={handleSelectAccount}
         onContactSelected={handleSelectContact}
         filterByBlockchain={props.route.params.filterByBlockchain}
-        mb={PANEL_OFFSET}
       />
     </SwiperPanel>
   )

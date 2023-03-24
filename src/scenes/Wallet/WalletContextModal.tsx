@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React from 'react'
+import React, { useRef } from 'react'
 import { useSelector } from 'react-redux'
 
 import { AlterMenuItem } from '~/src/components/AlterMenuItem'
@@ -14,7 +14,6 @@ import { wrapper } from '~src/app/ApplicationWrapper'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { LinearLayout } from '~src/styles/styled-components'
 
 export interface WalletContextModalParams {
   wallet?: Wallet
@@ -32,8 +31,9 @@ export default function WalletContextModal(props: Props) {
   const controller = useSwiperController(true)
   const { authenticate } = useLocalAuthentication()
 
+  const callback = useRef<() => Promise<void> | void>()
+
   const handlePressCreate = () => {
-    controller.close()
     props.navigation.navigate(wrapper.route.Tab.name, {
       screen: wrapper.route.More.name,
       params: {
@@ -51,7 +51,6 @@ export default function WalletContextModal(props: Props) {
 
     try {
       await authenticate()
-
       props.navigation.navigate(wrapper.route.Step1BackupWallet.name, {
         wallet,
       })
@@ -59,48 +58,58 @@ export default function WalletContextModal(props: Props) {
   }
 
   const handlePressReorder = () => {
-    controller.close()
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.ReorderWalletModal.name,
     })
   }
 
+  const run = (cb: () => void) => {
+    callback.current = cb
+    controller.close()
+  }
+
+  const handleClose = () => {
+    props.navigation.goBack()
+
+    if (callback.current) {
+      callback.current()
+    }
+  }
+
   return (
-    <SwiperPanel controller={controller} noHeader padding={36} onClose={props.navigation.goBack} solidColorBG>
-      <LinearLayout>
-        {wallets.length > 0 && !!wallet && wallet.walletType === 'standard' && (
-          <AlterMenuItem
-            title={i18n.t('modals.walletContext.backup')}
-            titleIcon={
-              wallet.backupStatus !== 'successful' ? require('~src/assets/images/icon-warning-green.png') : undefined
-            }
-            icon={require('~src/assets/images/icon-circle-backup-green.png')}
-            onPress={handlePressBackup}
-          />
-        )}
-
+    <SwiperPanel controller={controller} size="dinamic" withoutHeader onClose={handleClose}>
+      {wallets.length > 0 && !!wallet && wallet.walletType === 'standard' && (
         <AlterMenuItem
-          title={i18n.t('modals.walletContext.create')}
-          icon={require('~src/assets/images/icon-circle-plus-green.png')}
-          onPress={handlePressCreate}
+          title={i18n.t('modals.walletContext.backup')}
+          titleIcon={
+            wallet.backupStatus !== 'successful' ? require('~src/assets/images/icon-warning-green.png') : undefined
+          }
+          icon={require('~src/assets/images/icon-circle-backup-green.png')}
+          onPress={() => run(handlePressBackup)}
         />
+      )}
 
-        {wallets.length > 0 && (
-          <AlterMenuItem
-            title={i18n.t('modals.walletContext.reorder')}
-            icon={require('~src/assets/images/icon-circle-swap-green.png')}
-            onPress={handlePressReorder}
-          />
-        )}
+      <AlterMenuItem
+        title={i18n.t('modals.walletContext.create')}
+        icon={require('~src/assets/images/icon-circle-plus-green.png')}
+        onPress={() => run(handlePressCreate)}
+      />
 
-        <Button
-          label={i18n.t('modals.walletContext.cancel')}
-          justifyContent="center"
-          mt="36px"
-          labelStyle={{ fontSize: '2xl' }}
-          onPress={controller.close}
+      {wallets.length > 0 && (
+        <AlterMenuItem
+          title={i18n.t('modals.walletContext.reorder')}
+          icon={require('~src/assets/images/icon-circle-swap-green.png')}
+          onPress={() => run(handlePressReorder)}
         />
-      </LinearLayout>
+      )}
+
+      <Button
+        label={i18n.t('modals.walletContext.cancel')}
+        justifyContent="center"
+        mt="36px"
+        labelStyle={{ fontSize: '2xl' }}
+        onPress={controller.close}
+      />
     </SwiperPanel>
   )
 }

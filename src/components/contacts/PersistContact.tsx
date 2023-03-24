@@ -15,7 +15,7 @@ import { ContactAddresses } from '~/src/types/reducers/contact'
 import { DispatchResult } from '~/src/types/reducers/root'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
-import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
+import SwiperPanel, { LabelButton, useSwiperController } from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { LinearLayout, TextView, ImageView, ButtonView, ButtonWithoutFeedbackView } from '~src/styles/styled-components'
@@ -143,17 +143,11 @@ export const PersistContact = (props: Props) => {
 
   return (
     <SwiperPanel
-      padding={20}
-      fullSize
       title={contact ? i18n.t('modals.editAccount.title') : i18n.t('persistContact.title.create')}
-      rightButton={i18n.t('persistContact.save')}
-      leftButton={i18n.t('persistContact.cancel')}
-      imageSize={[22, 22]}
+      rightButton={<LabelButton label={i18n.t('persistContact.save')} onPress={save} />}
+      leftButton={<LabelButton label={i18n.t('persistContact.cancel')} onPress={controller.close} />}
       onClose={props.navigation.goBack}
-      onLeftPress={controller.close}
-      onRightPress={save}
       controller={controller}
-      solidColorBG
     >
       <AwaitActivity name="submit" loadingView={<ScreenLoader solidColorBG />}>
         <LinearLayout orientation="verti" justifyContent="space-between">

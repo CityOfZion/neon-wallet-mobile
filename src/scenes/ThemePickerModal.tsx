@@ -6,8 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { settingsReducerActions } from '../store/settings/SettingsReducer'
 
 import SelectorList, { SelectorItem } from '~src/components/SelectorList'
-import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
+import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import { Theme } from '~src/enums/Theme'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { RootState } from '~src/store/RootStore'
@@ -18,7 +17,7 @@ interface Props {
 const ThemePickerModal = (props: Props) => {
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
-  const { theme } = useSelector((state: RootState) => state.settings)
+  const theme = useSelector((state: RootState) => state.settings.theme)
 
   const changeTheme = async (val: Theme) => {
     dispatch(settingsReducerActions.setTheme(val))
@@ -45,14 +44,9 @@ const ThemePickerModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={i18n.t('modals.theme.title')}
-      fullSize
-      padding={16}
-      paddingTop={24}
       onClose={props.navigation.goBack}
-      rightButton={<ThemedCloseButton />}
-      onRightPress={controller.close}
-      onLeftPress={controller.close}
-      disableDefaultScrollView
+      rightButton={<CloseButton onPress={controller.close} />}
+      withoutScrollView
     >
       <SelectorList items={themes} />
     </SwiperPanel>

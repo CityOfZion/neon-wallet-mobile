@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, { Fragment, useRef } from 'react'
+import React, { useRef } from 'react'
 import ViewShot from 'react-native-view-shot'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
@@ -28,10 +28,11 @@ export const QRCodeWithCopyButton = (props: QRCodeWithCopyButtonProps) => {
   }
 
   return (
-    <>
+    <LinearLayout alignItems="center">
       <ViewShot ref={qrCodeView}>
-        <NeonQRCode content={props.qrCodeValue} size={300} />
+        <NeonQRCode content={props.qrCodeValue} />
       </ViewShot>
+
       <LinearLayout width="100%" height={54} my="12%">
         <ThemedButton
           label={i18n.t('app.copyToClipboard')}
@@ -40,6 +41,6 @@ export const QRCodeWithCopyButton = (props: QRCodeWithCopyButtonProps) => {
           onPress={captureAndNavigate}
         />
       </LinearLayout>
-    </>
+    </LinearLayout>
   )
 }

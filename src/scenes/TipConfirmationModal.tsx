@@ -33,18 +33,14 @@ const TipConfirmationModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={i18n.t('modals.tipping.title')}
-      fullSize
-      padding={16}
       onClose={props.navigation.goBack}
-      rightButton={<CloseButton mr="20px" />}
-      onRightPress={controller.close}
-      solidColorBG
+      rightButton={<CloseButton onPress={controller.close} />}
     >
-      <LinearLayout height="100%" orientation="verti">
+      <LinearLayout flexGrow={1} flexShrink={1} alignItems="center">
         <ImageView
           mr="-50px" // Negative margin because the original image has a shadow offset to the right
           source={require('~/src/assets/images/neo-tipping-logo.png')}
-          alignSelf="center"
+          resizeMode="contain"
           style={{
             height: 210,
           }}

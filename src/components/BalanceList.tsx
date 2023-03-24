@@ -1,6 +1,6 @@
 import i18n from 'i18n-js'
 import React, { useMemo } from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { BlockchainServiceKey } from '../blockchain'
@@ -17,7 +17,7 @@ import { FilterHelper } from '~src/helpers/FilterHelper'
 import { ButtonView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface BalanceListItemProps {
-  onPress?: () => void
+  onPress?: (token: TokenBalance) => void
   tokenBalanceConverted: BalanceConvertedToExchange
   showBlockchain?: boolean
   showHoldingValue?: boolean
@@ -26,11 +26,13 @@ interface BalanceListItemProps {
 interface Props extends LinearLayoutProps {
   balanceExchange: UseBalanceExchangeResult
   hideEmptyMessage?: boolean
+  hideTitle?: boolean
   removeZeroBalance?: boolean
   orderByValue?: boolean
   showBlockchain?: boolean
   showHoldingValue?: boolean
   onPress?: (token: TokenBalance) => void
+  contentContainerStyle?: StyleProp<ViewStyle>
 }
 
 const BalanceListItem = React.memo(
@@ -39,11 +41,11 @@ const BalanceListItem = React.memo(
     const currency = useSelector((state: RootState) => state.settings.currency)
 
     const handlePress = () => {
-      if (onPress) onPress()
+      if (onPress) onPress(tokenBalanceConverted)
     }
 
     return (
-      <ButtonView onPress={handlePress}>
+      <ButtonView onPress={handlePress} disabled={!onPress}>
         <LinearLayout orientation="horiz" alignItems="center" justifyContent="space-between" mt={5} mb={5}>
           <LinearLayout orientation="horiz" alignItems="center" width="100px">
             <TokenIcon marginRight={8} resizeMode="contain" width={24} height={24} {...tokenBalanceConverted} />
@@ -132,6 +134,8 @@ const BalanceList = ({
   showHoldingValue,
   removeZeroBalance = true,
   balanceExchange,
+  contentContainerStyle,
+  hideTitle,
   ...props
 }: Props) => {
   const { getTokenBySymbol } = useLocalTokensUtils()
@@ -185,14 +189,11 @@ const BalanceList = ({
     return tokenBalances
   }, [balanceExchange, getTokenBySymbol])
 
-  const handlePress = (token: TokenBalance) => {
-    if (onPress) onPress(token)
-  }
-
   return (
     <LinearLayout {...props} width="100%">
       <Skeleton
         isLoading={balanceExchange.isLoading}
+        containerStyle={{ flexGrow: 1 }}
         layout={[
           { width: '100%', height: 48, marginVertical: 5 },
           { width: '100%', height: 48, marginVertical: 5 },
@@ -202,8 +203,10 @@ const BalanceList = ({
         <FlatList
           data={validAndOrdedTokensBalances}
           keyExtractor={item => item.hash}
+          contentContainerStyle={contentContainerStyle}
+          showsVerticalScrollIndicator={false}
           ListHeaderComponent={
-            !!validAndOrdedTokensBalances && validAndOrdedTokensBalances.length > 0 ? (
+            !!validAndOrdedTokensBalances && validAndOrdedTokensBalances.length > 0 && !hideTitle ? (
               <TextView color="text.2" fontSize="sm">
                 {i18n.t('components.balanceList.title')}
               </TextView>
@@ -222,7 +225,7 @@ const BalanceList = ({
               tokenBalanceConverted={item}
               showBlockchain={showBlockchain}
               showHoldingValue={showHoldingValue}
-              onPress={() => handlePress(item)}
+              onPress={onPress}
             />
           )}
         />

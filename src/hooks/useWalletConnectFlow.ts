@@ -5,14 +5,12 @@ import { useSelector } from 'react-redux'
 import { wrapper } from '../app/ApplicationWrapper'
 import { RootState } from '../store/RootStore'
 
-export type UseOnlineCallbackReturn<T> = (...args: any[]) => Promise<T>
-
-export const useTreatNetworkOnWalletConnectFlow = () => {
+export const useWalletConnectFlow = (shouldRedirect = true) => {
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const navigation = useNavigation()
 
   useEffect(() => {
-    if (!isConnected) {
+    if (!isConnected && shouldRedirect) {
       navigation.reset({
         index: 0,
         routes: [{ name: wrapper.route.Tab.name }],
@@ -20,5 +18,5 @@ export const useTreatNetworkOnWalletConnectFlow = () => {
 
       navigation.navigate(wrapper.route.WalletConnectPage.name)
     }
-  }, [isConnected])
+  }, [isConnected, shouldRedirect])
 }

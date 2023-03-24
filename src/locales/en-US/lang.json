@@ -414,6 +414,38 @@
     }
   },
   "modals": {
+    "walletConnectSelectionModal": {
+      "account": {
+        "title": "Account Selection",
+        "subtitle": "Please select the account you wish to connect to"
+      },
+      "wallet": {
+        "title": "Wallet Selection",
+        "subtitle": "Please select the wallet where your account resides"
+      }
+    },
+    "sendSelectionModal": {
+      "wallet": {
+        "title": "Send",
+        "subtitle": "Please select a wallet to send from"
+      },
+      "account": {
+        "title": "Send",
+        "label": "TRADING ACCOUNT TOKENS VALUE",
+        "subtitle": "Please select an account to send from"
+      }
+    },
+    "receiveSelectionModal": {
+      "account": {
+        "title": "Receive",
+        "subtitle": "Please select a account to receive to",
+        "label": "TOKENS VALUE"
+      },
+      "wallet": {
+        "title": "Receive",
+        "subtitle": "Please select an wallet to receive to"
+      }
+    },
     "editNetworkModal": {
       "invalidUrl": "Invalid URL",
       "connected": "Connection good",
@@ -437,16 +469,6 @@
       "description2": "Having a back up will prevent you from losing your funds in the event of losing your phone or otherwise not being able to access this app.",
       "description3": "To back up simply close this panel, click the 3 dots at the top right of the screen and select Back up wallet. You will then be guided through the quick process.",
       "buttonLabel": "Back up now"
-    },
-    "receiveTransactionAccountSelectionModal": {
-      "title": "Receive",
-      "subtitle": "Please select a wallet to receive to",
-      "label": "TOKENS VALUE"
-    },
-    "receiveTransactionWalletSelectionModal": {
-      "title": "Receive",
-      "subtitle": "Please select an account to receive to",
-      "label": "TOKENS VALUE"
     },
     "receiveTransactionModal": {
       "title": "Receive",
@@ -472,11 +494,6 @@
       "shareOrCopy": "Share or Copy to clipboard",
       "paymentRequestDetails": "PAYMENT REQUEST DETAILS"
     },
-    "sendTransactionAccountSelectionModal": {
-      "title": "Send",
-      "label": "TRADING ACCOUNT TOKENS VALUE",
-      "subtitle": "Please select an account to send from"
-    },
     "sendTransactionConfirmationModal": {
       "title": "Send",
       "header": "Transaction successfully sent!",
@@ -491,11 +508,6 @@
       "fee": "%{tokenSymbol} Fee",
       "sender": "Sent from",
       "recipient": "Recipient"
-    },
-    "sendTransactionWalletSelectionModal": {
-      "title": "Send",
-      "subtitle": "Please select a wallet to send from",
-      "noFunds": "Your wallets currently have no funds, please add funds in order to send"
     },
     "sendTransactionModal": {
       "title": "Send",
@@ -708,10 +720,6 @@
       "placeholder": "Please enter dApp URL or scan QR code",
       "connectLabel": "Connect"
     },
-    "WCAccountSelection": {
-      "title": "Account Selection",
-      "subtitle": "Please select the account you wish to connect to"
-    },
     "WCConnectionRequest": {
       "chain": "Chain",
       "features": "Features",
@@ -719,9 +727,6 @@
       "subtitle_1": "%{dAppName} wants to connect to your wallet",
       "acceptLabel": "Accept",
       "declineLabel": "Decline"
-    },
-    "WCWalletSelection": {
-      "title": "Please select the wallet where your account resides"
     },
     "rawJson": {
       "title": "JSON",

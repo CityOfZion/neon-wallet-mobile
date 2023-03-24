@@ -11,7 +11,7 @@ import { VerifyMessageTransactionRequest } from './VerifyMessageTransactionReque
 
 import { Session, SessionRequest } from '~/src/contexts/WalletConnectContext'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
-import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
+import { useWalletConnectFlow } from '~/src/hooks/useWalletConnectFlow'
 import { Account } from '~/src/models/redux/Account'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
@@ -44,8 +44,9 @@ const WCTransactionRequestModal = ({ navigation, route }: Props) => {
   const { request, session } = route.params
   const method = request.params.request.method
 
+  useWalletConnectFlow()
+
   const accounts = useSelector(selectAccounts)
-  useTreatNetworkOnWalletConnectFlow()
 
   const account = useMemo(() => {
     const [{ address }] = WalletConnectHelper.getAccountInformationFromSession(session)

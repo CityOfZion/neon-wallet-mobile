@@ -22,7 +22,7 @@ export const TabSelectorContact = ({ filterByBlockchain, onAccountSelected, onCo
   const [selectedTab, setSelectedTab] = useState<TabSelectorContactType>('contacts')
 
   return (
-    <LinearLayout {...props} flex={1}>
+    <LinearLayout {...props} flexGrow={1} flexShrink={1}>
       <LinearLayout my="16px">
         <TabSelector
           selected={selectedTab}
@@ -34,13 +34,11 @@ export const TabSelectorContact = ({ filterByBlockchain, onAccountSelected, onCo
         />
       </LinearLayout>
 
-      <LinearLayout mx="16px">
-        {selectedTab === 'contacts' ? (
-          <ContactList onSelect={onContactSelected} filterByBlockchain={filterByBlockchain} />
-        ) : (
-          <AccountList onSelect={onAccountSelected} filterByBlockchain={filterByBlockchain} />
-        )}
-      </LinearLayout>
+      {selectedTab === 'contacts' ? (
+        <ContactList onSelect={onContactSelected} filterByBlockchain={filterByBlockchain} flexGrow={1} flexShrink={1} />
+      ) : (
+        <AccountList onSelect={onAccountSelected} filterByBlockchain={filterByBlockchain} flexGrow={1} flexShrink={1} />
+      )}
     </LinearLayout>
   )
 }

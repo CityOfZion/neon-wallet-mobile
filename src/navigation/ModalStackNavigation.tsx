@@ -3,22 +3,14 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
+import AccountSelectionModal, { AccountSelectionModalParams } from '../scenes/Account/AccountSelectionModal'
 import { ExportWIFModal, ExportWIFModalParams } from '../scenes/Account/ExportWIFModal'
-import ReceiveTransactionAccountSelectionModal, {
-  ReceiveTransactionAccountSelectionModalParams,
-} from '../scenes/Account/ReceiveTransaction/ReceiveTransactionAccountSelectionModal'
 import ReceiveTransactionModal, {
   ReceiveTransactionModalParams,
 } from '../scenes/Account/ReceiveTransaction/ReceiveTransactionModal/ReceiveTransactionModal'
 import ReceiveTransactionQrCodeModal, {
   ReceiveTransactionQrCodeModalParams,
 } from '../scenes/Account/ReceiveTransaction/ReceiveTransactionQrCodeModal'
-import ReceiveTransactionWalletSelectionModal, {
-  ReceiveTransactionWalletSelectionModalParams,
-} from '../scenes/Account/ReceiveTransaction/ReceiveTransactionWalletSelectionModal'
-import SendTransactionAccountSelectionModal, {
-  SendTransactionAccountSelectionModalParams,
-} from '../scenes/Account/SendTransaction/SendTransactionAccountSelectionModal'
 import SendTransactionConfirmationModal, {
   SendTransactionConfirmationModalParams,
 } from '../scenes/Account/SendTransaction/SendTransactionConfirmationModal'
@@ -30,14 +22,12 @@ import {
   SendTransactionReviewModal,
   SendTransactionReviewModalParams,
 } from '../scenes/Account/SendTransaction/SendTransactionReviewModal'
-import SendTransactionWalletSelectionModal, {
-  SendTransactionWalletSelectionModalParams,
-} from '../scenes/Account/SendTransaction/SendTransactionWalletSelectionModal'
 import { AddressScanQuickToolsModal, AddressScanQuickToolsModalParams } from '../scenes/AddressScanQuickToolsModal'
 import ConfirmPasscodePage, { ConfirmPasscodePageParams } from '../scenes/Settings/ConfirmPasscodePage'
 import { EditNetworkModal, EditNetworkModalParams } from '../scenes/Settings/EditNetworkModal'
 import PasscodePage, { PasscodePageParams } from '../scenes/Settings/PasscodePage/PasscodePage'
 import { BackupInfoModal, BackupInfoModalParams } from '../scenes/Wallet/BackupInfoModal'
+import WalletSelectionModal, { WalletSelectionModalParams } from '../scenes/Wallet/WalletSelectionModal'
 import WebViewModal, { WebViewModalParams } from '../scenes/WebViewModal'
 import WCInvocationDetailsModal, {
   WCInvocationDetailsModalParams,
@@ -75,19 +65,12 @@ import SecurityPickerModal from '~src/scenes/Settings/SecurityPickerModal'
 import VerifyPasscodePage, { VerifyPasscodePageParams } from '~src/scenes/Settings/VerifyPasscodePage'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import TipConfirmationModal, { TipConfirmationModalParams } from '~src/scenes/TipConfirmationModal'
-import {
-  WCAccountSelectionModal,
-  WCAccountSelectionModalParams,
-} from '~src/scenes/walletConnect/modal/WCAccountSelectionModal'
 import WCConnectionDetailsModal, {
   WCConnectionDetailsModalParams,
 } from '~src/scenes/walletConnect/modal/WCConnectionDetailsModal'
 import WCConnectionRequestModal, {
   WCConnectionRequestModalParams,
 } from '~src/scenes/walletConnect/modal/WCConnectionRequestModal'
-import WCWalletSelectionModal, {
-  WCWalletSelectionModalModalParams,
-} from '~src/scenes/walletConnect/modal/WCWalletSelectionModal'
 
 export type ModalStackParamList = {
   CreateAccountModal: undefined
@@ -112,8 +95,6 @@ export type ModalStackParamList = {
   BlockchainListModal: BlockchainListModalParams
   WCConnectionRequestModal: WCConnectionRequestModalParams
   WCConnectDappModal: undefined
-  WCWalletSelectionModal: WCWalletSelectionModalModalParams | undefined
-  WCAccountSelectionModal: WCAccountSelectionModalParams
   WCTransactionRequestModal: WCTransactionRequestModalParams
   RawJsonModal: RawJsonModalParams
   WCConnectionDetailsModal: WCConnectionDetailsModalParams
@@ -124,12 +105,10 @@ export type ModalStackParamList = {
   SendTransactionModal: SendTransactionModalParams
   SendTransactionReviewModal: SendTransactionReviewModalParams
   SendTransactionConfirmationModal: SendTransactionConfirmationModalParams
-  SendTransactionWalletSelectionModal: SendTransactionWalletSelectionModalParams
-  SendTransactionAccountSelectionModal: SendTransactionAccountSelectionModalParams
   ReceiveTransactionQrCodeModal: ReceiveTransactionQrCodeModalParams
   ReceiveTransactionModal: ReceiveTransactionModalParams
-  ReceiveTransactionAccountSelectionModal: ReceiveTransactionAccountSelectionModalParams
-  ReceiveTransactionWalletSelectionModal: ReceiveTransactionWalletSelectionModalParams
+  AccountSelectionModal: AccountSelectionModalParams
+  WalletSelectionModal: WalletSelectionModalParams
   AddressScanQuickToolsModal: AddressScanQuickToolsModalParams
   BackupInfoModal: BackupInfoModalParams
   Passcode: PasscodePageParams
@@ -150,7 +129,6 @@ export type ModalParams =
   | DefaultNavigationParam<WalletContextModalParams>
   | DefaultNavigationParam<BlockchainListModalParams>
   | DefaultNavigationParam<WCConnectionRequestModalParams>
-  | DefaultNavigationParam<WCWalletSelectionModalModalParams>
   | DefaultNavigationParam<WCTransactionRequestModalParams>
   | DefaultNavigationParam<RawJsonModalParams>
   | DefaultNavigationParam<WCConnectionDetailsModalParams>
@@ -164,12 +142,10 @@ export type ModalParams =
   | DefaultNavigationParam<SendTransactionModalParams>
   | DefaultNavigationParam<SendTransactionReviewModalParams>
   | DefaultNavigationParam<SendTransactionConfirmationModalParams>
-  | DefaultNavigationParam<SendTransactionWalletSelectionModalParams>
-  | DefaultNavigationParam<SendTransactionAccountSelectionModalParams>
   | DefaultNavigationParam<ReceiveTransactionModalParams>
-  | DefaultNavigationParam<ReceiveTransactionAccountSelectionModalParams>
+  | DefaultNavigationParam<AccountSelectionModalParams>
   | DefaultNavigationParam<ReceiveTransactionQrCodeModalParams>
-  | DefaultNavigationParam<ReceiveTransactionWalletSelectionModalParams>
+  | DefaultNavigationParam<WalletSelectionModalParams>
   | DefaultNavigationParam<AddressScanQuickToolsModalParams>
   | DefaultNavigationParam<PasscodePageParams>
   | DefaultNavigationParam<ConfirmPasscodePageParams>
@@ -207,11 +183,9 @@ const ModalStackNavigation = () => {
         <ModalStack.Screen name={wrapper.route.BlockchainListModal.name} component={BlockchainListModal} />
         <ModalStack.Screen name={wrapper.route.WCConnectionRequestModal.name} component={WCConnectionRequestModal} />
         <ModalStack.Screen name={wrapper.route.WCConnectDappModal.name} component={WCConnectDappModal} />
-        <ModalStack.Screen name={wrapper.route.WCWalletSelectionModal.name} component={WCWalletSelectionModal} />
         <ModalStack.Screen name={wrapper.route.WCTransactionRequestModal.name} component={WCTransactionRequestModal} />
         <ModalStack.Screen name={wrapper.route.RawJsonModal.name} component={RawJsonModal} />
         <ModalStack.Screen name={wrapper.route.WCConnectionDetailsModal.name} component={WCConnectionDetailsModal} />
-        <ModalStack.Screen name={wrapper.route.WCAccountSelectionModal.name} component={WCAccountSelectionModal} />
         <ModalStack.Screen name={wrapper.route.SignatureScopeModal.name} component={SignatureScopeModal} />
         <ModalStack.Screen name={wrapper.route.WCInvocationDetailsModal.name} component={WCInvocationDetailsModal} />
         <ModalStack.Screen name={wrapper.route.WebViewModal.name} component={WebViewModal} />
@@ -226,23 +200,10 @@ const ModalStackNavigation = () => {
           name={wrapper.route.SendTransactionConfirmationModal.name}
           component={SendTransactionConfirmationModal}
         />
-        <ModalStack.Screen
-          name={wrapper.route.SendTransactionWalletSelectionModal.name}
-          component={SendTransactionWalletSelectionModal}
-        />
-        <ModalStack.Screen
-          name={wrapper.route.SendTransactionAccountSelectionModal.name}
-          component={SendTransactionAccountSelectionModal}
-        />
 
-        <ModalStack.Screen
-          name={wrapper.route.ReceiveTransactionWalletSelectionModal.name}
-          component={ReceiveTransactionWalletSelectionModal}
-        />
-        <ModalStack.Screen
-          name={wrapper.route.ReceiveTransactionAccountSelectionModal.name}
-          component={ReceiveTransactionAccountSelectionModal}
-        />
+        <ModalStack.Screen name={wrapper.route.WalletSelectionModal.name} component={WalletSelectionModal} />
+        <ModalStack.Screen name={wrapper.route.AccountSelectionModal.name} component={AccountSelectionModal} />
+
         <ModalStack.Screen name={wrapper.route.ReceiveTransactionModal.name} component={ReceiveTransactionModal} />
         <ModalStack.Screen
           name={wrapper.route.ReceiveTransactionQrCodeModal.name}

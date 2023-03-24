@@ -13,11 +13,10 @@ import InvocationDetailsParametersBox from '../components/InvocationDetailsParam
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
 import { Session } from '~/src/contexts/WalletConnectContext'
-import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
 import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'
-import { TextView, LinearLayout } from '~/src/styles/styled-components'
+import { TextView } from '~/src/styles/styled-components'
 
 export interface WCInvocationDetailsModalParams {
   session: Session
@@ -39,7 +38,6 @@ export type Param = {
 
 const WCInvocationDetailsModal = ({ navigation, route }: Props) => {
   const { session, contract, contractInfo } = route.params
-  useTreatNetworkOnWalletConnectFlow()
   const swipperController = useSwiperController(true)
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
@@ -84,48 +82,46 @@ const WCInvocationDetailsModal = ({ navigation, route }: Props) => {
     <SwiperPanel
       controller={swipperController}
       title={i18n.t('modals.invocationDetails.title')}
-      rightButton={<CloseButton mr="20px" />}
+      rightButton={<CloseButton onPress={swipperController.close} />}
       onClose={navigation.goBack}
-      onRightPress={swipperController.close}
-      smallerSize
-      padding={20}
-      solidColorBG
+      size="small"
     >
       <ConnectionHeader title={infos.dAppName} imageUri={infos.dAppIcon} />
 
-      <LinearLayout>
-        <TextView fontFamily="regular" fontSize="18px" fontWeight="500" mb="6px" color={theme.colors.text[10]}>
-          {i18n.t('modals.invocationDetails.detailsTitle')}
+      <TextView fontFamily="regular" fontSize="18px" fontWeight="500" mb="6px" color={theme.colors.text[10]}>
+        {i18n.t('modals.invocationDetails.detailsTitle')}
+      </TextView>
+
+      <ContractDetailsBox title={contractInfo.name ?? ''} session={route.params.session} contract={contract} />
+
+      <TextView fontFamily="regular" fontSize="18px" fontWeight="500" color={theme.colors.text[10]} mb="6px">
+        {i18n.t('modals.invocationDetails.parametersTitle')}
+      </TextView>
+
+      {paramsWithValue && paramsWithValue.length > 0 ? (
+        paramsWithValue.map((param, index) => (
+          <InvocationDetailsParametersBox
+            key={param.name}
+            count={index}
+            data={{
+              name: param.name,
+              type: param.type,
+              value: param.value,
+            }}
+          />
+        ))
+      ) : (
+        <TextView
+          fontFamily="regular"
+          textAlign="center"
+          mt={18}
+          fontSize="18px"
+          fontWeight="400"
+          color={theme.colors.text[12]}
+        >
+          {i18n.t('modals.invocationDetails.noParameters')}
         </TextView>
-        <ContractDetailsBox title={contractInfo.name ?? ''} session={route.params.session} contract={contract} />
-        <TextView fontFamily="regular" fontSize="18px" fontWeight="500" color={theme.colors.text[10]} mb="6px">
-          {i18n.t('modals.invocationDetails.parametersTitle')}
-        </TextView>
-        {paramsWithValue && paramsWithValue.length > 0 ? (
-          paramsWithValue.map((param, index) => (
-            <InvocationDetailsParametersBox
-              key={param.name}
-              count={index}
-              data={{
-                name: param.name,
-                type: param.type,
-                value: param.value,
-              }}
-            />
-          ))
-        ) : (
-          <TextView
-            fontFamily="regular"
-            textAlign="center"
-            mt={18}
-            fontSize="18px"
-            fontWeight="400"
-            color={theme.colors.text[12]}
-          >
-            {i18n.t('modals.invocationDetails.noParameters')}
-          </TextView>
-        )}
-      </LinearLayout>
+      )}
     </SwiperPanel>
   )
 }

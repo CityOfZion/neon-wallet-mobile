@@ -5,14 +5,13 @@ import React from 'react'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Button } from '~/src/components/Button'
-import SwiperPanel, { useSwiperController } from '~/src/components/SwiperPanel'
-import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
+import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
 import { Wallet } from '~/src/models/redux/Wallet'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
-import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
+import { ImageView, TextView } from '~/src/styles/styled-components'
 
 export interface BackupInfoModalParams {
   wallet: Wallet
@@ -43,30 +42,27 @@ export const BackupInfoModal = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      fullSize
       title={i18n.t('modals.backupInfoModal.title')}
       onClose={props.navigation.goBack}
-      rightButton={<ThemedCloseButton />}
-      onRightPress={controller.close}
+      rightButton={<CloseButton onPress={controller.close} />}
+      contentStyle={{ alignItems: 'center' }}
     >
-      <LinearLayout alignItems="center">
-        <ImageView source={require('~src/assets/images/backup-info-feature.png')} />
+      <ImageView source={require('~src/assets/images/backup-info-feature.png')} />
 
-        <TextView fontFamily="bold" color="text.0" fontSize="lg" textAlign="center">
-          {i18n.t('modals.backupInfoModal.description1')}
-        </TextView>
-        <TextView fontFamily="bold" color="text.0" fontSize="lg" textAlign="center" mt="24px">
-          {i18n.t('modals.backupInfoModal.description2')}
-        </TextView>
+      <TextView fontFamily="bold" color="text.0" fontSize="lg" textAlign="center">
+        {i18n.t('modals.backupInfoModal.description1')}
+      </TextView>
+      <TextView fontFamily="bold" color="text.0" fontSize="lg" textAlign="center" mt="24px">
+        {i18n.t('modals.backupInfoModal.description2')}
+      </TextView>
 
-        <Button label={i18n.t('modals.backupInfoModal.buttonLabel')} my="32px" onPress={handlePress} />
+      <Button label={i18n.t('modals.backupInfoModal.buttonLabel')} my="32px" onPress={handlePress} />
 
-        <ImageView source={require('~src/assets/images/backup-info-explanation.png')} />
+      <ImageView source={require('~src/assets/images/backup-info-explanation.png')} />
 
-        <TextView fontFamily="regular" color="text.0" fontSize="lg" textAlign="center">
-          {i18n.t('modals.backupInfoModal.description3')}
-        </TextView>
-      </LinearLayout>
+      <TextView fontFamily="regular" color="text.0" fontSize="lg" textAlign="center">
+        {i18n.t('modals.backupInfoModal.description3')}
+      </TextView>
     </SwiperPanel>
   )
 }

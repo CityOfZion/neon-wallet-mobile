@@ -12,7 +12,7 @@ import AccountCard from '~src/components/AccountCard'
 import ColorSelector from '~src/components/ColorSelector'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
-import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
+import SwiperPanel, { LabelButton, useSwiperController } from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import { Account } from '~src/models/redux/Account'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
@@ -50,12 +50,9 @@ const EditAccountModal = (props: Props) => {
 
   const submit = async () => {
     if (!isValid()) return
+
     const address = account.address
-
     if (!address) throw new Error('Address not defined')
-
-    account.name = name
-    account.backgroundColor = color
 
     dispatch(accountReducerActions.saveAccount(account))
 
@@ -69,28 +66,20 @@ const EditAccountModal = (props: Props) => {
   }
 
   const save = () => {
-    Await.run('swiperRight', submit, 300)
-  }
+    if (!name) return
 
-  const handleOnClose = () => {
-    props.navigation.goBack()
+    Await.run('save', submit, 300)
   }
 
   return (
     <SwiperPanel
       controller={controller}
-      fullSize
-      paddingTop={0}
       title={i18n.t('modals.editAccount.title')}
-      leftButton={i18n.t('modals.editAccount.navigation.cancel')}
-      rightButton={i18n.t('modals.editAccount.navigation.save')}
-      disableRightButton={!name}
-      onLeftPress={() => controller.close()}
-      onRightPress={save}
-      onClose={handleOnClose}
-      solidColorBG
+      leftButton={<LabelButton label={i18n.t('modals.editAccount.navigation.cancel')} onPress={controller.close} />}
+      rightButton={<LabelButton label={i18n.t('modals.editAccount.navigation.save')} disabled={!name} onPress={save} />}
+      onClose={props.navigation.goBack}
     >
-      <AwaitActivity name="swiperRight" loadingView={<ScreenLoader solidColorBG />}>
+      <AwaitActivity name="save" loadingView={<ScreenLoader transparent />}>
         <LinearLayout orientation="verti" justifyContent="space-between" mt="10px">
           <AccountCard balanceExchange={balanceExchange} account={account} isStack={false} hideBalance={false} />
 

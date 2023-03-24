@@ -2,7 +2,6 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, { useMemo, useState } from 'react'
-import { TouchableHighlight } from 'react-native'
 import InputScrollView from 'react-native-input-scroll-view'
 import { useSelector } from 'react-redux'
 
@@ -15,9 +14,8 @@ import { TotalFee } from './TotalFee'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import AccountCard from '~/src/components/AccountCard'
-import SwiperPanel, { useSwiperController } from '~/src/components/SwiperPanel'
+import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
@@ -131,13 +129,10 @@ export const SendTransactionModal = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      fullSize
       title={i18n.t('modals.sendTransactionModal.title')}
-      rightButton={<ThemedCloseButton />}
-      onRightPress={controller.close}
+      rightButton={<CloseButton onPress={controller.close} />}
       onClose={props.navigation.goBack}
-      disableDefaultScrollView
-      solidColorBG
+      withoutScrollView
     >
       <InputScrollView
         keyboardOffset={300}
@@ -145,86 +140,83 @@ export const SendTransactionModal = (props: Props) => {
         disableScrollViewPanResponder
         alwaysBounceVertical={false}
         showsHorizontalScrollIndicator={false}
-        nestedScrollEnabled
       >
-        <TouchableHighlight>
-          <LinearLayout>
-            <LinearLayout orientation="verti">
-              <TextView mb="24px" alignSelf="center" color="text.3" fontSize="md" fontFamily="bold">
-                {wallet.name}
-              </TextView>
+        <LinearLayout>
+          <LinearLayout orientation="verti">
+            <TextView mb="24px" alignSelf="center" color="text.3" fontSize="md" fontFamily="bold">
+              {wallet.name}
+            </TextView>
 
-              <AccountCard hideBalance={false} balanceExchange={balanceExchange} account={account} />
+            <AccountCard hideBalance={false} balanceExchange={balanceExchange} account={account} />
 
-              <TextView mt="40px" alignSelf="center" color="text.3" fontSize="md" fontFamily="bold">
-                {i18n.t('modals.sendTransactionModal.transactionDetails')}
-              </TextView>
+            <TextView mt="40px" alignSelf="center" color="text.3" fontSize="md" fontFamily="bold">
+              {i18n.t('modals.sendTransactionModal.transactionDetails')}
+            </TextView>
 
-              <DestinationInput
-                onAddressChange={setDestinationAdress}
-                onAccountChange={setDestinationAccount}
-                onContactChange={setDestinationContact}
-                onWalletChange={setDestinationWallet}
-                onAddressValidation={setDestinationAddressIsValid}
-                account={account}
-                destinationAddress={destinationAddress}
-                destinationAccount={destinationAccount}
-                destinationContact={destinationContact}
-                destinationWallet={destinationWallet}
-              />
+            <DestinationInput
+              onAddressChange={setDestinationAdress}
+              onAccountChange={setDestinationAccount}
+              onContactChange={setDestinationContact}
+              onWalletChange={setDestinationWallet}
+              onAddressValidation={setDestinationAddressIsValid}
+              account={account}
+              destinationAddress={destinationAddress}
+              destinationAccount={destinationAccount}
+              destinationContact={destinationContact}
+              destinationWallet={destinationWallet}
+            />
 
-              <TokenSelect account={account} token={token} onTokenSelect={handleSelectToken} />
+            <TokenSelect account={account} token={token} onTokenSelect={handleSelectToken} />
 
-              <AmountInput
+            <AmountInput
+              ratio={ratio}
+              token={token}
+              onAmountChange={setAmount}
+              onFiatChange={setFiat}
+              amount={amount}
+              fiat={fiat}
+              onAmountValidation={setAmountIsValid}
+              tokenBalance={tokenBalance}
+              feeTokenBalance={feeTokenBalance}
+              fee={fee}
+            />
+
+            {account.blockchain === 'neoLegacy' && <FeePriorityTab onFeeChange={setFee} account={account} />}
+
+            {account.blockchain === 'neo3' && (
+              <TotalFee
                 ratio={ratio}
-                token={token}
-                onAmountChange={setAmount}
-                onFiatChange={setFiat}
-                amount={amount}
-                fiat={fiat}
-                onAmountValidation={setAmountIsValid}
-                tokenBalance={tokenBalance}
-                feeTokenBalance={feeTokenBalance}
-                fee={fee}
-              />
-
-              {account.blockchain === 'neoLegacy' && <FeePriorityTab onFeeChange={setFee} account={account} />}
-
-              {account.blockchain === 'neo3' && (
-                <TotalFee
-                  ratio={ratio}
-                  account={account}
-                  amount={amount ? Number(amount) : undefined}
-                  tip={!tipIsDisabled && tipIsChecked ? tip : undefined}
-                  fee={fee}
-                  destinationAddress={destinationAddress}
-                  destinationAddressIsValid={destinationAddressIsValid}
-                  token={token}
-                  feeTokenBalance={feeTokenBalance}
-                  onFeeChange={setFee}
-                  onRequest={setIsRequestFee}
-                />
-              )}
-
-              <TipCheckbox
                 account={account}
-                amount={Number(amount)}
-                token={token}
+                amount={amount ? Number(amount) : undefined}
+                tip={!tipIsDisabled && tipIsChecked ? tip : undefined}
                 fee={fee}
-                tip={tip}
-                disabled={tipIsDisabled}
-                checked={tipIsChecked}
-                onTipChange={setTip}
-                onCheckChange={setTipIsChecked}
-                onDisableChange={setTipIsDisabled}
-                tokenBalance={tokenBalance}
+                destinationAddress={destinationAddress}
+                destinationAddressIsValid={destinationAddressIsValid}
+                token={token}
+                feeTokenBalance={feeTokenBalance}
+                onFeeChange={setFee}
+                onRequest={setIsRequestFee}
               />
-            </LinearLayout>
-            <LinearLayout mt={30} mb={20} alignSelf="center" width="100%">
-              <ThemedButton label={i18n.t('app.next')} onPress={submit} disabled={!validateField() || !isConnected} />
-            </LinearLayout>
+            )}
+
+            <TipCheckbox
+              account={account}
+              amount={Number(amount)}
+              token={token}
+              fee={fee}
+              tip={tip}
+              disabled={tipIsDisabled}
+              checked={tipIsChecked}
+              onTipChange={setTip}
+              onCheckChange={setTipIsChecked}
+              onDisableChange={setTipIsDisabled}
+              tokenBalance={tokenBalance}
+            />
           </LinearLayout>
-        </TouchableHighlight>
+          <LinearLayout mt={30} mb={20} alignSelf="center" width="100%">
+            <ThemedButton label={i18n.t('app.next')} onPress={submit} disabled={!validateField() || !isConnected} />
+          </LinearLayout>
+        </LinearLayout>
       </InputScrollView>
     </SwiperPanel>
   )

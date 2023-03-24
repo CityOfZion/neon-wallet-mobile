@@ -1,4 +1,3 @@
-import Constants from 'expo-constants'
 import React from 'react'
 import { MessageComponentProps } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
@@ -14,10 +13,8 @@ export const ThemedAlert: React.FC<MessageComponentProps> = props => {
     <LinearLayout
       bg={theme.colors.black}
       width="100%"
-      paddingRight="14px"
-      paddingLeft="14px"
-      paddingBottom="14px"
-      paddingTop={`${14 + Constants.statusBarHeight}px`}
+      paddingX="14px"
+      paddingY="14px"
       orientation="horiz"
       justifyContent="center"
       alignItems="center"
