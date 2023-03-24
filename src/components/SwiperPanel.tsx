@@ -336,62 +336,62 @@ export default function SwiperPanel(props: SwiperProps) {
         ]}
         {...panResponder.current.panHandlers}
       >
-        <LinearGradient
-          colors={
-            props.darkerSolidColorBG
-              ? [theme.colors.background[14], theme.colors.background[14]]
-              : props.solidColorBG
-              ? [theme.colors.background[17], theme.colors.background[17]]
-              : [theme.colors.background[6], theme.colors.background[7]]
-          }
-          end={[1, 0.75]}
-          style={[
-            {
-              borderTopLeftRadius: 18,
-              borderTopRightRadius: 18,
-              width: '100%',
-              flexGrow: 1,
-              paddingBottom,
-              paddingTop,
-            },
-          ]}
-        >
-          {props.draggable && <DragBar />}
-          {!props.noHeader && <Header {...props} />}
-          {props.subHeader}
-          {props.disableDefaultScrollView ? (
-            <LinearLayout
-              width="100%"
-              weight={1}
-              style={{
-                paddingLeft,
-                paddingRight,
-                paddingBottom: PANEL_BOUNCE_OFFSET,
-              }}
-            >
-              {props.children}
-            </LinearLayout>
-          ) : (
-            <ScrollView
-              ref={scrollView}
-              contentContainerStyle={{
-                paddingLeft,
-                paddingRight,
-                paddingBottom: PANEL_BOUNCE_OFFSET,
+        <LinearLayout overflow="hidden" width="100%" flexGrow={1} borderTopLeftRadius={18} borderTopRightRadius={18}>
+          <LinearGradient
+            colors={
+              props.darkerSolidColorBG
+                ? [theme.colors.background[14], theme.colors.background[14]]
+                : props.solidColorBG
+                ? [theme.colors.background[17], theme.colors.background[17]]
+                : [theme.colors.background[6], theme.colors.background[7]]
+            }
+            end={[1, 0.75]}
+            style={[
+              {
+                width: '100%',
                 flexGrow: 1,
-              }}
-              alwaysBounceVertical={false}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              disableScrollViewPanResponder
-              nestedScrollEnabled
-            >
-              <TouchableHighlight>
-                <>{props.children}</>
-              </TouchableHighlight>
-            </ScrollView>
-          )}
-        </LinearGradient>
+                paddingBottom,
+                paddingTop,
+              },
+            ]}
+          >
+            {props.draggable && <DragBar />}
+            {!props.noHeader && <Header {...props} />}
+            {props.subHeader}
+            {props.disableDefaultScrollView ? (
+              <LinearLayout
+                width="100%"
+                weight={1}
+                style={{
+                  paddingLeft,
+                  paddingRight,
+                  paddingBottom: PANEL_BOUNCE_OFFSET,
+                }}
+              >
+                {props.children}
+              </LinearLayout>
+            ) : (
+              <ScrollView
+                ref={scrollView}
+                contentContainerStyle={{
+                  paddingLeft,
+                  paddingRight,
+                  paddingBottom: PANEL_BOUNCE_OFFSET,
+                  flexGrow: 1,
+                }}
+                alwaysBounceVertical={false}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                disableScrollViewPanResponder
+                nestedScrollEnabled
+              >
+                <TouchableHighlight>
+                  <>{props.children}</>
+                </TouchableHighlight>
+              </ScrollView>
+            )}
+          </LinearGradient>
+        </LinearLayout>
       </Animated.View>
     </LinearLayout>
   ) : (

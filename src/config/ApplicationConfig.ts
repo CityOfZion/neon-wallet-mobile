@@ -8,7 +8,7 @@ export class ApplicationConfig {
   readonly defaultTheme = Theme.DARK
   readonly defaultDataRefreshTimeInMilliseconds = 7000
   readonly headerHeight = 68
-  readonly footerHeight = Platform.OS === 'ios' ? 90 : 80
+  readonly footerHeight = Platform.OS === 'ios' ? 105 : 80
   readonly footerOffset = 12
 
   readonly windowWidth = Dimensions.get('window').width
