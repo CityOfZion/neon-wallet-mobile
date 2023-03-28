@@ -6,6 +6,7 @@ import { NeonParser } from '@cityofzion/neon-parser'
 import axios from 'axios'
 import queryString from 'query-string'
 import { NativeModules, Platform } from 'react-native'
+import { decryptNep2Android, decryptNep2IOS } from 'react-native-neo-sdk-bindings'
 
 import { TCOZTip, TFeeToken, TNetwork, TNetworkType } from '../../common'
 import { DoraSDKProvider } from '../providers/DoraSDKProviderNeo3'
@@ -18,7 +19,6 @@ import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { ExchangeInfo } from '~/src/models/response/ExchangeInfo'
 import { NFTResponse } from '~/src/models/response/NFTResponse'
 import { NFTSResponse } from '~/src/models/response/NFTSResponse'
-import { NeoNative } from '~/src/native/NeoNative'
 import {
   IBlockchainService,
   BlockchainServiceKey,
@@ -198,7 +198,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     return new Promise<{ address: string; wif: string }>(async (resolve, reject) => {
       if (Platform.OS === 'ios') {
         try {
-          NativeModules.RNNeoSdkBindings.decryptNep2(encryptedKey, password, (wif: string | null) => {
+          await decryptNep2IOS(encryptedKey, password, wif => {
             if (wif) {
               const newAccount = new wallet.Account(wif)
               if (newAccount.address) {
@@ -215,14 +215,15 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
         }
       } else {
         try {
-          const wif = await NeoNative.decryptNep2(password, encryptedKey)
+          const wif = await decryptNep2Android(encryptedKey, password)
           const newAccount = new wallet.Account(wif)
           if (newAccount.address) {
             resolve({ address: newAccount.address, wif })
           } else {
             reject(new Error('Key decryption failed'))
           }
-        } catch {
+        } catch (e) {
+          alert(e.message)
           reject(new Error('Key decryption failed'))
         }
       }

@@ -7,6 +7,7 @@ import { View } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
+import { BlockchainServiceKey } from '../blockchain'
 import { useBlockchainServiceUtils } from '../hooks/useBlockchainServices'
 import { selectAccounts } from '../store/account/SelectorAccount'
 
@@ -21,9 +22,9 @@ import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { RootState } from '~src/store/RootStore'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
-
 export interface PassphraseParams {
   encryptedKey: string
+  blockchain: BlockchainServiceKey
 }
 
 interface PassphraseProps {
@@ -35,59 +36,67 @@ type AddressInfoWithWif = AddressInfo & { wif: string }
 
 const Passphrase = (props: PassphraseProps) => {
   const encryptedKey = props.route.params.encryptedKey
-
+  const blockchain = props.route.params.blockchain
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const accounts = useSelector(selectAccounts)
   const blockchainActions = useBlockchainActions()
-  const { getBlockchainServices } = useBlockchainServiceUtils()
+  const { getBlockchainService } = useBlockchainServiceUtils()
 
   const [inputValue, setInputValue] = useState('')
   const [addressesList, setAddressesList] = useState<AddressInfoWithWif[]>([])
-  const [addressesListSelected, setAddressesListSelected] = useState<AddressInfoWithWif[]>([])
-  const [titlePage, setTitlePage] = useState<string>(i18n.t('passphrase.enterPassphrase'))
 
   const validatePassword = useCallback(async () => {
-    Await.init('importEncryptedKey')
-
     try {
-      const services = getBlockchainServices()
-      const newAddressesInfo: AddressInfoWithWif[] = []
+      const service = getBlockchainService(blockchain)
 
-      for (const service of services) {
-        const isEncryptedKey = service.validatePrivateKeyWithPassword(encryptedKey)
-        if (!isEncryptedKey) continue
+      const isEncryptedKey = service.validatePrivateKeyWithPassword(encryptedKey)
 
-        const { address, wif } = await service.decryptKey(encryptedKey, inputValue)
-        const addressExist = accounts.some(acc => acc.address === address)
-
-        if (addressExist) continue
-
-        newAddressesInfo.push({ address, blockchain: service.key, wif })
+      if (!isEncryptedKey) {
+        showMessage({
+          message: i18n.t('blockchainServices.errorMessages.keyWrongOrAddressesImported'),
+          type: 'danger',
+          duration: 4000,
+        })
+        return false
       }
-
-      if (newAddressesInfo.length < 1) throw new Error("Can't decrypt key")
-
-      setAddressesList(prevState => [...prevState, ...newAddressesInfo])
-      setInputValue('')
-      setTitlePage(i18n.t('passphrase.selectAccount'))
+      return true
     } catch {
       showMessage({
         message: i18n.t('blockchainServices.errorMessages.keyWrongOrAddressesImported'),
         type: 'danger',
         duration: 4000,
       })
-    } finally {
-      Await.done('importEncryptedKey')
     }
-  }, [inputValue, getBlockchainServices])
+  }, [inputValue, getBlockchainService, blockchain])
 
   const persist = useCallback(async () => {
     Await.init('importEncryptedKey')
-
+    const passwordIsValid = await validatePassword()
+    if (!passwordIsValid) return
     try {
+      const service = getBlockchainService(blockchain)
+      const newAddressesInfo: AddressInfoWithWif[] = []
+      const { address, wif } = await service.decryptKey(encryptedKey, inputValue)
+      const addressExist = accounts.some(acc => acc.address === address)
+
+      if (addressExist) {
+        showMessage({
+          message: i18n.t('blockchainServices.errorMessages.keyWrongOrAddressesImported'),
+          type: 'danger',
+          duration: 4000,
+        })
+        throw new Error('Address already exists')
+      }
+
+      newAddressesInfo.push({ address, blockchain, wif })
+
+      if (newAddressesInfo.length < 1) throw new Error("Can't decrypt key")
+
+      setInputValue('')
+
       const wallet = await blockchainActions.createWallet(i18n.t('modals.blockchainList.encryptedWallet'), 'legacy')
 
-      const accountsToImport = addressesListSelected.map(
+      const accountsToImport = newAddressesInfo.map(
         ({ address, blockchain, wif }): AccountToImport => ({
           address,
           blockchain,
@@ -96,6 +105,7 @@ const Passphrase = (props: PassphraseProps) => {
           type: 'legacy',
         })
       )
+
       await blockchainActions.importAccounts(accountsToImport)
 
       props.navigation.replace(wrapper.route.Tab.name, {
@@ -105,7 +115,8 @@ const Passphrase = (props: PassphraseProps) => {
           params: { wallet },
         },
       })
-    } catch {
+    } catch (e) {
+      console.log(e)
       showMessage({
         message: i18n.t('messages.problemToGenerateWallet'),
         type: 'danger',
@@ -113,15 +124,7 @@ const Passphrase = (props: PassphraseProps) => {
     } finally {
       Await.done('importEncryptedKey')
     }
-  }, [inputValue, addressesListSelected, blockchainActions])
-
-  const handleSelect = (items: AddressInfoWithWif[]) => {
-    setAddressesListSelected(items)
-  }
-
-  const handleDeselect = (items: AddressInfoWithWif[]) => {
-    setAddressesListSelected(items)
-  }
+  }, [inputValue, encryptedKey])
 
   return (
     <ScreenLayout>
@@ -136,39 +139,26 @@ const Passphrase = (props: PassphraseProps) => {
             flexWrap="wrap"
             m={40}
           >
-            {titlePage}
+            {i18n.t('passphrase.enterPassphrase')}
           </TextView>
 
-          {addressesList.length > 0 ? (
-            <AddressesImportList
-              items={addressesList}
-              selectedItems={addressesListSelected}
-              onSelect={handleSelect}
-              onDeselect={handleDeselect}
+          <View style={{ minHeight: 100 }}>
+            <InputWithValidation
+              value={inputValue}
+              onChangeText={setInputValue}
+              validator={() => true}
+              color={theme.colors.primary}
+              invalidColor={theme.colors.primary}
+              separatorColor={theme.colors.background[4]}
+              invalidSeparatorColor={theme.colors.background[5]}
+              placeholder={i18n.t('passphrase.inputPlaceholder')}
+              secure
+              hideScan
             />
-          ) : (
-            <View style={{ minHeight: 100 }}>
-              <InputWithValidation
-                value={inputValue}
-                onChangeText={setInputValue}
-                validator={() => true}
-                color={theme.colors.primary}
-                invalidColor={theme.colors.primary}
-                separatorColor={theme.colors.background[4]}
-                invalidSeparatorColor={theme.colors.background[5]}
-                placeholder={i18n.t('passphrase.inputPlaceholder')}
-                secure
-                hideScan
-              />
-            </View>
-          )}
+          </View>
 
           <LinearLayout mt={80} width="90%" alignSelf="center">
-            <ThemedButton
-              disabled={addressesList.length > 0 ? addressesListSelected.length <= 0 : inputValue.length <= 0}
-              label={i18n.t('passphrase.next')}
-              onPress={addressesList.length > 0 ? persist : validatePassword}
-            />
+            <ThemedButton disabled={inputValue.length <= 0} label={i18n.t('routes.ImportKey')} onPress={persist} />
           </LinearLayout>
         </LinearLayout>
       </AwaitActivity>

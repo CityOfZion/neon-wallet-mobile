@@ -17,7 +17,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "29.0.1"
 
     defaultConfig {
         minSdkVersion 16
@@ -40,6 +39,6 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'io.neow3j:contract:2.+'
+    implementation 'io.neow3j:contract:3.19.3'
+    implementation files('libs/neow3j-2.4.0.jar','libs/contract-2.4.0.jar', 'libs/core-2.4.0.jar', 'libs/crypto-2.4.0.jar', 'libs/model-2.4.0.jar', 'libs/utils-2.4.0.jar', 'libs/wallet-2.4.0.jar')
 }
-  
