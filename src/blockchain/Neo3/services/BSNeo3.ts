@@ -215,7 +215,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
         }
       } else {
         try {
-          const wif = await decryptNep2Android(password, encryptedKey)
+          const wif = await decryptNep2Android(encryptedKey, password)
           const newAccount = new wallet.Account(wif)
           if (newAccount.address) {
             resolve({ address: newAccount.address, wif })

@@ -156,14 +156,15 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
         }
       } else {
         try {
-          const wif = await decryptNep2LegacyAndroid(password, encryptedKey)
+          const wif = await decryptNep2LegacyAndroid(encryptedKey, password)
           const newAccount = new wallet.Account(wif)
           if (newAccount.address) {
             resolve({ address: newAccount.address, wif })
           } else {
             reject(new Error('Key decryption failed'))
           }
-        } catch {
+        } catch (e) {
+          console.log(e)
           reject(new Error('Key decryption failed'))
         }
       }
