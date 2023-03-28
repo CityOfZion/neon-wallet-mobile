@@ -50,6 +50,8 @@ export class NeonWcAdapter {
       result = await this.signer.verifyMessage(request.params)
     } else if (request.method === 'traverseIterator') {
       result = await this.invoke.traverseIterator(request.params[0], request.params[1], request.params[2])
+    } else if (request.method === 'getWalletInfo') {
+      result = { isLedger: false }
     } else {
       throw new Error('Invalid Request method')
     }
