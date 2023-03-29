@@ -15,7 +15,7 @@ export const SecurityBackupCheckPage = () => {
   const walletWithoutBackup = standartWallets.filter(wallet => wallet.backupStatus !== 'successful')
 
   return (
-    <ScreenLayout darkerSolidColorBG scrollable={false}>
+    <ScreenLayout withoutScrollView>
       {walletWithoutBackup.length > 0 ? (
         <WithAccountsToBackup wallets={walletWithoutBackup} />
       ) : (

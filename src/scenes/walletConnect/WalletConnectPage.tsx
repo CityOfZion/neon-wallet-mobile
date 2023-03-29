@@ -9,8 +9,8 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import { ConnectionItem } from '~/src/components/ConnectionItem'
 import { FlatListEmpty } from '~/src/components/FlatListEmpty'
-import HeaderActionButton from '~/src/components/layout/HeaderActionButton'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
+import ThemedAddButton from '~/src/components/themed/ThemedAddButton'
 import { useWalletConnect } from '~/src/contexts/WalletConnectContext'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
@@ -41,14 +41,6 @@ const WalletConnectPage = ({ navigation, route }: WalletConnectPageProps) => {
     [sessions]
   )
 
-  navigation.setOptions({
-    headerRight: () =>
-      HeaderActionButton({
-        actionButtonStyle: 'add',
-        actionOnPress: handlePress,
-      }),
-  })
-
   const handlePress = () => {
     navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.WCConnectDappModal.name,
@@ -56,7 +48,7 @@ const WalletConnectPage = ({ navigation, route }: WalletConnectPageProps) => {
   }
 
   return (
-    <ScreenLayout scrollable={false}>
+    <ScreenLayout withoutScrollView rightButton={<ThemedAddButton onPress={handlePress} />} hideBackButton>
       <LinearLayout height="100%">
         <LinearLayout flexGrow={1}>
           {validSessions.length > 0 && (

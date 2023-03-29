@@ -1,157 +1,128 @@
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
-import React, { useEffect, useMemo } from 'react'
-import {
-  LayoutChangeEvent,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  RefreshControlProps,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-} from 'react-native'
+import i18n from 'i18n-js'
+import React from 'react'
+import { LayoutChangeEvent, RefreshControlProps, ScrollView, View, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
+
+import { Bars } from './Bars'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { RootState } from '~/src/store/RootStore'
-import { hasCustomSelector } from '~/src/store/settings/SettingsSelector'
-import { LinearLayout } from '~src/styles/styled-components'
+import { ButtonWithoutFeedbackView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { RouteName } from '~src/types/wrappers/route'
 
-type PropsScrollable = {
-  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void
-  onReachBottom?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void
-  scrollEventThrottle?: number
-  autoScroll?: boolean
-  scrollable?: true
-  refreshControl?: React.ReactElement<RefreshControlProps, string | React.JSXElementConstructor<any>>
-}
-
-type PropsNoScrollable = {
-  scrollable?: false
-}
 type Props = {
   onLayout?: (event: LayoutChangeEvent) => void
   children?: React.ReactNode[] | React.ReactNode
-  useHeaderPadding?: boolean
-  useFooterPadding?: boolean
-  alignX?: string
-  alignY?: string
-  padding?: number | string
-  transparent?: boolean
-  invertedGradient?: boolean
-  solidColorBG?: boolean
-  darkerSolidColorBG?: boolean
-} & (PropsScrollable | PropsNoScrollable)
+  withoutHeader?: boolean
+  rightButton?: React.ReactNode
+  hideBackButton?: boolean
+  title?: string | React.ReactNode
+  withoutScrollView?: boolean
+  refreshControl?: React.ReactElement<RefreshControlProps, string | React.JSXElementConstructor<any>>
+  contentStyle?: ViewStyle
+}
+
+const Header = ({
+  rightButton,
+  hideBackButton = false,
+  title,
+}: Pick<Props, 'rightButton' | 'hideBackButton' | 'title'>) => {
+  const route = useRoute()
+  const navigation = useNavigation()
+
+  const routeTitle = wrapper.route[route.name as RouteName].translate()
+  const canGoBack = navigation.canGoBack()
+
+  return (
+    <LinearLayout
+      alignItems="center"
+      orientation="horiz"
+      position="relative"
+      style={{ height: applicationConfig.headerHeight }}
+    >
+      <TextView color="text.0" fontSize="22px" flex={1} textAlign="center">
+        {title ?? routeTitle}
+      </TextView>
+
+      <LinearLayout position="absolute" left="0px">
+        {!hideBackButton && canGoBack && (
+          <ButtonWithoutFeedbackView onPress={navigation.goBack}>
+            <LinearLayout orientation="horiz" alignItems="center" p="12px">
+              <ImageView
+                width={Normalize.scale(20)}
+                height={Normalize.scale(20)}
+                source={require('~src/assets/images/icon_arrow_left_white.png')}
+                resizeMode="contain"
+              />
+              <TextView color="text.0" fontSize="18px" fontFamily="regular" alignSelf="center" ml="4px">
+                {i18n.t('app.back')}
+              </TextView>
+            </LinearLayout>
+          </ButtonWithoutFeedbackView>
+        )}
+      </LinearLayout>
+
+      {rightButton && (
+        <LinearLayout position="absolute" right="0px">
+          {rightButton}
+        </LinearLayout>
+      )}
+    </LinearLayout>
+  )
+}
 
 const ScreenLayout = ({
   onLayout,
   children,
-  useHeaderPadding = true,
-  alignX,
-  alignY,
-  padding,
-  transparent = false,
-  invertedGradient = false,
-  solidColorBG = false,
-  darkerSolidColorBG = false,
-  useFooterPadding = true,
-  ...props
+  withoutHeader = false,
+  rightButton,
+  refreshControl,
+  hideBackButton,
+  title,
+  withoutScrollView = false,
+  contentStyle,
 }: Props) => {
-  props.scrollable = props.scrollable ?? true
-
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const hasCustom = useSelector(hasCustomSelector)
-  const isConnected = useSelector((state: RootState) => state.network.isConnected)
 
-  const headerHeight = useHeaderPadding ? applicationConfig.headerHeight : 0
-  const tabBarHeight = useFooterPadding ? applicationConfig.footerHeight - applicationConfig.footerOffset : 0
-
-  const colors = useMemo(
-    () =>
-      transparent
-        ? ['#00000000', '#00000000']
-        : invertedGradient
-        ? [theme.colors.background[9], theme.colors.background[18]]
-        : solidColorBG
-        ? [theme.colors.background[2], theme.colors.background[2]]
-        : darkerSolidColorBG
-        ? [theme.colors.background[14], theme.colors.background[14]]
-        : [theme.colors.background[14], theme.colors.background[2]],
-    [transparent, solidColorBG, darkerSolidColorBG, invertedGradient, theme]
-  )
-
-  useEffect(() => {
-    if (hasCustom) {
-      StatusBar.setBackgroundColor(theme.colors.black)
-      return
-    }
-
-    if (!isConnected) {
-      StatusBar.setBackgroundColor(theme.colors.background[12])
-      return
-    }
-
-    StatusBar.setBackgroundColor(colors[0])
-  }, [colors, hasCustom, isConnected])
+  const colors = [theme.colors.background[14], theme.colors.background[14]]
 
   return (
     <LinearGradient onLayout={onLayout} colors={colors} start={[1, 0]} end={[1, 1]}>
-      <SafeAreaView style={{ height: '100%' }}>
-        {props.scrollable ? (
+      <LinearLayout style={{ height: '100%' }}>
+        <Bars colors={colors} />
+        {!withoutHeader && <Header rightButton={rightButton} hideBackButton={hideBackButton} title={title} />}
+        {!withoutScrollView ? (
           <ScrollView
-            refreshControl={props.refreshControl}
-            scrollEnabled={props.autoScroll}
-            scrollEventThrottle={props.scrollEventThrottle}
-            onScroll={e => {
-              const { nativeEvent } = e
-              if (props.onScroll) {
-                props.onScroll(e)
-              }
-
-              const isScrollReachedBottom =
-                nativeEvent.layoutMeasurement.height + nativeEvent.contentOffset.y >= nativeEvent.contentSize.height
-
-              if (isScrollReachedBottom && props.onReachBottom) {
-                props.onReachBottom(e)
-              }
-            }}
+            refreshControl={refreshControl}
             alwaysBounceVertical={false}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ flexGrow: 1 }}
-            style={{
-              marginTop: headerHeight,
-              marginBottom: tabBarHeight,
+            contentContainerStyle={{
+              paddingBottom: applicationConfig.footerHeight,
+              padding: 20,
+              ...contentStyle,
+              flexGrow: 1,
             }}
           >
-            <LinearLayout
-              alignItems={alignX}
-              justifyContent={alignY}
-              position="relative"
-              height="100%"
-              style={{
-                padding: Normalize.scale(padding ?? 10),
-              }}
-            >
-              {children}
-            </LinearLayout>
+            {children}
           </ScrollView>
         ) : (
-          <LinearLayout flex={1} mt={headerHeight} mb={tabBarHeight}>
-            <LinearLayout
-              alignItems={alignX}
-              justifyContent={alignY}
-              position="relative"
-              height="100%"
-              style={{
-                padding: Normalize.scale(padding ?? 10),
-              }}
-            >
-              {children}
-            </LinearLayout>
-          </LinearLayout>
+          <View
+            style={{
+              padding: 20,
+              paddingBottom: applicationConfig.footerHeight,
+              ...contentStyle,
+              flexGrow: 1,
+              flexShrink: 1,
+            }}
+          >
+            {children}
+          </View>
         )}
-      </SafeAreaView>
+      </LinearLayout>
     </LinearGradient>
   )
 }

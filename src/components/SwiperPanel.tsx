@@ -6,6 +6,7 @@ import { Animated, PanResponder, Platform, ScrollView, useWindowDimensions, View
 import { useSelector } from 'react-redux'
 
 import { Normalize } from '../app/Normalize'
+import { applicationConfig } from '../config/ApplicationConfig'
 import { RootState } from '../store/RootStore'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
@@ -121,7 +122,7 @@ export const BackButton = ({ withText = true, onPress }: BackButtonProps) => {
 export const LabelButton = ({ label, disabled, onPress }: LabelButtonProps) => {
   return (
     <ButtonWithoutFeedbackView onPress={onPress} disabled={disabled}>
-      <TextView color="text.0" fontSize="16px" fontFamily="regular">
+      <TextView color="text.0" fontSize="16px" fontFamily="regular" style={{ padding: DEFAULT_PADDING }}>
         {label}
       </TextView>
     </ButtonWithoutFeedbackView>
@@ -161,6 +162,13 @@ export default function SwiperPanel({ draggable = true, size = 'full', contentSt
   const pan = useRef(new Animated.ValueXY({ x: 0, y: height }))
 
   const controller = props.controller ?? swiperController
+
+  const panelOffset =
+    size === 'dinamic'
+      ? undefined
+      : applicationConfig.statusBarHeight + size === 'full'
+      ? PANEL_OFFSET
+      : PANEL_OFFSET * 2
 
   const panResponder = useRef(
     PanResponder.create({
@@ -284,7 +292,7 @@ export default function SwiperPanel({ draggable = true, size = 'full', contentSt
             top: PANEL_BOUNCE_OFFSET,
             flexGrow: size !== 'dinamic' ? 1 : undefined,
             flexShrink: size !== 'dinamic' ? 1 : undefined,
-            paddingTop: size === 'full' ? PANEL_OFFSET : size === 'small' ? PANEL_OFFSET * 2 : undefined,
+            paddingTop: panelOffset,
           },
         ]}
       >

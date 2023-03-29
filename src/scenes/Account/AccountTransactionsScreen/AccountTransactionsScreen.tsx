@@ -201,7 +201,7 @@ const AccountTransactionsScreen = (props: Props) => {
   }, [loadCompletedTransactions])
 
   return (
-    <ScreenLayout darkerSolidColorBG scrollable={false}>
+    <ScreenLayout withoutScrollView>
       <AccountSubTitle account={account} />
       <AwaitActivity name="populateTransactions" loadingView={<ScreenLoader />}>
         <TransactionsList

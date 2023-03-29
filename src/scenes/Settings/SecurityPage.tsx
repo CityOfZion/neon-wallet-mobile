@@ -28,7 +28,7 @@ export const SecurityPage = (props: Props) => {
   }
 
   return (
-    <ScreenLayout padding={20} darkerSolidColorBG>
+    <ScreenLayout>
       <TextView fontFamily="regular" fontSize="lg" color="text.0" textAlign="center" mb="48px">
         {i18n.t('screens.securityPage.subtitle')}
       </TextView>

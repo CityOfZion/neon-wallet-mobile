@@ -39,7 +39,7 @@ const AccountConnectionsScreen = ({ route, navigation }: Props) => {
   )
 
   return (
-    <ScreenLayout darkerSolidColorBG scrollable={false}>
+    <ScreenLayout withoutScrollView>
       <AccountSubTitle account={account} />
 
       <LinearLayout my="44px">

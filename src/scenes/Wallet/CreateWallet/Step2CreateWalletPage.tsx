@@ -34,10 +34,6 @@ const Step2CreateWalletPage: React.FC<Props> = props => {
 
   const seeds = words.join(' ')
 
-  useEffect(() => {
-    Await.run('populate', populate, 500)
-  }, [])
-
   const populate = async () => {
     setWords(AsteroidHelper.generateMnemonic() ?? [])
   }
@@ -54,8 +50,12 @@ const Step2CreateWalletPage: React.FC<Props> = props => {
     ])
   }
 
+  useEffect(() => {
+    Await.run('populate', populate, 500)
+  }, [])
+
   return (
-    <ScreenLayout alignX="center" darkerSolidColorBG>
+    <ScreenLayout>
       <AwaitActivity
         name="populate"
         loadingView={

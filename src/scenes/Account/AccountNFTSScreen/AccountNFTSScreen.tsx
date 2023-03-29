@@ -73,7 +73,7 @@ const AccountNFTSScreen = (props: Props) => {
   }, [handleLoadNFTS])
 
   return (
-    <ScreenLayout darkerSolidColorBG scrollable={false}>
+    <ScreenLayout withoutScrollView>
       <AccountSubTitle account={account} />
       <AwaitActivity name="populateNFTS" loadingView={<ScreenLoader darkerSolidColorBG />}>
         <LinearLayout my="44px">

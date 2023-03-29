@@ -45,7 +45,7 @@ export const SelectedWalletInfo = ({ selectedWallet, selectedWalletBalanceExchan
     )
 
   return (
-    <Animated.View style={{ opacity }}>
+    <Animated.View style={{ opacity, flexGrow: 1 }}>
       <LinearLayout alignItems="center">
         <TextView fontSize="11px" color="text.2">
           {selectedWallet.formattedLastVisitedAt}
@@ -73,7 +73,7 @@ export const SelectedWalletInfo = ({ selectedWallet, selectedWalletBalanceExchan
         </Skeleton>
       </LinearLayout>
 
-      <BalanceList my="24px" px="16px" balanceExchange={selectedWalletBalanceExchange} showBlockchain />
+      <BalanceList mt="24px" px="16px" balanceExchange={selectedWalletBalanceExchange} showBlockchain />
     </Animated.View>
   )
 }

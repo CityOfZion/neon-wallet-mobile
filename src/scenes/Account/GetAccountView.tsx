@@ -11,6 +11,7 @@ import { appBus } from '~/src/app/AppBus'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import ModalWarningFee from '~/src/components/ModalWarningFee'
 import { ThemedClaimButton } from '~/src/components/themed/ThemedClaimButton'
+import ThemedMoreButton from '~/src/components/themed/ThemedMoreButton'
 import { ThemedSendButton } from '~/src/components/themed/ThemedSendButton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
@@ -21,7 +22,6 @@ import { Wallet } from '~/src/models/redux/Wallet'
 import { accountReducerActions } from '~/src/store/account/AccountReducer'
 import { selectWallets } from '~/src/store/wallet/SelectorWallet'
 import AccountCard from '~src/components/AccountCard'
-import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
@@ -106,20 +106,6 @@ const Button = ({ label, onPress, srcIcon, iconSize, disabled }: ButtonProps) =>
 
 const GetAccountView = (props: GetAccountViewProps) => {
   const { account, wallet } = props.route.params
-
-  props.navigation.setOptions({
-    headerTitle: () => <Title account={account} />,
-    headerRight: () =>
-      HeaderActionButton({
-        actionButtonStyle: 'more',
-        actionOnPress: () => {
-          props.navigation.navigate(wrapper.route.AccountSettingsView.name, {
-            account,
-            wallet,
-          })
-        },
-      }),
-  })
 
   const wallets = useSelector(selectWallets)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
@@ -335,6 +321,13 @@ const GetAccountView = (props: GetAccountViewProps) => {
     }).start()
   }
 
+  const handleMorePress = () => {
+    props.navigation.navigate(wrapper.route.AccountSettingsView.name, {
+      account,
+      wallet,
+    })
+  }
+
   useEffect(() => {
     appBus.on('claimGasEnd', async () => {
       await populateUnclaimed()
@@ -363,7 +356,8 @@ const GetAccountView = (props: GetAccountViewProps) => {
           onRefresh={balanceExchange.refetch}
         />
       }
-      darkerSolidColorBG
+      title={<Title account={account} />}
+      rightButton={<ThemedMoreButton onPress={handleMorePress} />}
     >
       <LinearLayout mt={4}>
         <AccountCard onLayout={handleLayout} hideBalance={false} balanceExchange={balanceExchange} account={account} />
@@ -374,18 +368,9 @@ const GetAccountView = (props: GetAccountViewProps) => {
           opacity: opacityValue.current,
         }}
       >
-        <LinearLayout
-          orientation="horiz"
-          width="100%"
-          marginX="15px"
-          justifyContent="space-around"
-          alignSelf="center"
-          marginY="20px"
-          style={{
-            elevation: 30,
-          }}
-        >
+        <LinearLayout orientation="horiz" width="100%" justifyContent="space-between" marginY="20px">
           <ThemedReceiveButton onPress={handlePressReceiveButton} isDark />
+
           <AwaitActivity name={`ClaimGas@${account.address}`} loadingView={<ClaimGasLoader />}>
             <ThemedClaimButton
               onPress={handleClaimGas}
@@ -407,15 +392,16 @@ const GetAccountView = (props: GetAccountViewProps) => {
             }
           />
         </LinearLayout>
+
         <LinearLayout>
           <Button
-            label={i18n.t('screens.screenLayout.assets').toUpperCase()}
+            label={i18n.t('screens.getAccount.assets').toUpperCase()}
             srcIcon={require('~/src/assets/images/Equalizer_-_simple-line-icons.png')}
             iconSize={[28, 24]}
             onPress={handlePressAssetsButton}
           />
           <Button
-            label={i18n.t('screens.screenLayout.transactions').toUpperCase()}
+            label={i18n.t('screens.getAccount.transactions').toUpperCase()}
             srcIcon={require('~/src/assets/images/icon-reselect-green.png')}
             iconSize={[28, 30]}
             onPress={handlePressTransactionsButton}
@@ -423,7 +409,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           />
 
           <Button
-            label={i18n.t('screens.screenLayout.nfts').toUpperCase()}
+            label={i18n.t('screens.getAccount.nfts').toUpperCase()}
             srcIcon={require('~/src/assets/images/diamond-green.png')}
             iconSize={[28, 30]}
             onPress={handlePressNFTsButton}
@@ -432,7 +418,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
 
           <Button
             disabled={!blockchainService.hasWalletConnectIntegration() || !hasWalletConnectSessions}
-            label={i18n.t('screens.screenLayout.connections').toUpperCase()}
+            label={i18n.t('screens.getAccount.connections').toUpperCase()}
             srcIcon={require('~/src/assets/images/connections.png')}
             iconSize={[28, 30]}
             onPress={handlePressConnectionsButton}

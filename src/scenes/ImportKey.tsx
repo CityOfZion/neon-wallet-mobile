@@ -7,7 +7,6 @@ import { Alert, Platform } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
-import { BlockchainServiceKey } from '../blockchain'
 import { SecurityHelper } from '../helpers/SecurityHelper'
 import { IURI } from '../helpers/UriHelper'
 import { useBlockchainServiceUtils } from '../hooks/useBlockchainServices'
@@ -393,7 +392,7 @@ const ImportKey = (props: ImportKeyProps) => {
       }
 
       await functionsByInputTypes[inputType.current].persist()
-    } catch (error: any) {
+    } catch {
       showMessage({
         message: i18n.t('importKey.genericError'),
         duration: 5000,
@@ -422,7 +421,7 @@ const ImportKey = (props: ImportKeyProps) => {
   }, [inputIsValid])
 
   return (
-    <ScreenLayout darkerSolidColorBG>
+    <ScreenLayout>
       <AwaitActivity name="importKey" loadingView={<ScreenLoader darkerSolidColorBG />}>
         <LinearLayout width="100%" height="100%">
           <TextView

@@ -8,7 +8,6 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { BlockchainServiceKey } from '~/src/blockchain'
 import SelectorList, { SelectorItem } from '~/src/components/SelectorList'
 import { Separator } from '~/src/components/Separator'
-import HeaderBar from '~/src/components/layout/HeaderBar'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import { blockchainConfig, TBlockchainNetwork } from '~/src/config/BlockchainConfig'
 import { useWalletConnect } from '~/src/contexts/WalletConnectContext'
@@ -32,13 +31,6 @@ interface Props {
 
 export const ProtocolEditPage = (props: Props) => {
   const { blockchain } = props.route.params
-
-  props.navigation.setOptions({
-    headerTitle: () =>
-      HeaderBar({
-        title: i18n.t(`screens.protocolsPage.labels.${blockchain}`),
-      }),
-  })
 
   const defaultNetworkType = blockchainConfig.defaultSelectedNetworks[blockchain].type
   const availableNetworks = blockchainConfig.availableNetworks[blockchain]
@@ -91,7 +83,7 @@ export const ProtocolEditPage = (props: Props) => {
   }))
 
   return (
-    <ScreenLayout darkerSolidColorBG scrollable={false}>
+    <ScreenLayout withoutScrollView title={i18n.t(`screens.protocolsPage.labels.${blockchain}`)}>
       <LinearLayout paddingX="10px" flexGrow={1}>
         <SelectorList items={selectorItems} />
 

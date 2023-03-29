@@ -60,7 +60,17 @@
     "CustomizeAccount": "Customize account",
     "SecurityPage": "Security",
     "ProtocolsPage": "Protocols",
-    "ProtocolEditPage": "Protocol Edit"
+    "ProtocolEditPage": "Protocol Edit",
+    "BlockchainListPage": "Create wallet",
+    "AccountAssetScreen": "Assets",
+    "AccountTransactionsScreen": "Transactions",
+    "AccountConnectionsScreen": "Connections",
+    "AccountNFTSScreen": "NFTS",
+    "WalletSettingsView": "Wallet Settings",
+    "AccountSettingsView": "Account Settings",
+    "MorePage": "More",
+    "SettingsPage": "Settings",
+    "ContactDetails": "Contacts"
   },
   "home": {
     "welcome": "Welcome to Neon Wallet!"
@@ -333,7 +343,11 @@
       "claimAsset": "Claim %{amount} GAS",
       "claimInProgress": "Claim in progress",
       "gasUnavailable": "GAS unavailable",
-      "claimError": "Claim has been failed"
+      "claimError": "Claim has been failed",
+      "assets": "Assets",
+      "transactions": "Transactions",
+      "connections": "Connections",
+      "nfts": "NFTS"
     },
     "accountTransaction": {
       "txidLabel": "TX ID:",
@@ -376,14 +390,7 @@
       "cancel": "Cancel",
       "tryAgain": "Try again"
     },
-    "screenLayout": {
-      "assets": "Assets",
-      "transactions": "Transactions",
-      "connections": "Connections",
-      "nfts": "NFTS"
-    },
     "walletSettingsView": {
-      "title": "Wallet Settings",
       "customize": "Customize wallet",
       "backup": "Backup Mnemonic",
       "deleteTitle": "Delete Wallet",
@@ -396,7 +403,6 @@
       }
     },
     "accountSettingsView": {
-      "title": "Account Settings",
       "customize": "Customize account",
       "exportWif": "Export WIF",
       "deleteTitle": "Delete Wallet",

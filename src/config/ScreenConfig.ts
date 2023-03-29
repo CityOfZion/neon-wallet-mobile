@@ -21,4 +21,10 @@ export class ScreenConfig implements StackNavigationOptions {
   })
 }
 
+export class StackConfig implements StackNavigationOptions {
+  readonly headerShown = false
+}
+
 export const screenConfig = new ScreenConfig()
+
+export const stackConfig = new StackConfig()

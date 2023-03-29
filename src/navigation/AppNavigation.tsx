@@ -4,8 +4,6 @@ import { StatusBar } from 'react-native'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
-import { CustomModeBar } from '../components/CustomModeBar'
-import OfflineBar from '../components/OfflineBar'
 import { DeepLinkingConfig } from '../config/DeepLinkingConfig'
 import { useAfterStartApp } from '../hooks/useAfterStartApp'
 import SetupCompletePage, { SetupCompleteParamList } from '../scenes/SetupCompletePage'
@@ -57,9 +55,7 @@ const AppNavigation = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <StatusBar barStyle={theme.statusBarStyle} />
-      <CustomModeBar />
-      <OfflineBar />
+      <StatusBar barStyle={theme.statusBarStyle} translucent />
       <NavigationContainer linking={linking} onReady={handleNavigationReady} ref={navigationRef}>
         <RootStack.Navigator initialRouteName={getInitialRouteName()} headerMode="none" screenOptions={screenConfig}>
           <RootStack.Screen name={wrapper.route.Tab.name} component={TabNavigation} />
