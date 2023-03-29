@@ -1,3 +1,4 @@
+import Constants from 'expo-constants'
 import { Dimensions, Platform } from 'react-native'
 
 import { Theme } from '~src/enums/Theme'
@@ -10,6 +11,7 @@ export class ApplicationConfig {
   readonly headerHeight = 68
   readonly footerHeight = Platform.OS === 'ios' ? 105 : 80
   readonly footerOffset = 12
+  readonly statusBarHeight = Constants.statusBarHeight
 
   readonly windowWidth = Dimensions.get('window').width
   readonly windowHeight = Dimensions.get('window').height

@@ -37,7 +37,7 @@ const MorePage = (props: MoreProps) => {
   }, [])
 
   return (
-    <ScreenLayout padding={20} darkerSolidColorBG>
+    <ScreenLayout hideBackButton>
       <MenuItem
         title={i18n.t('more.createWallet')}
         icon={require('~/src/assets/images/wallet-icon-green.png')}

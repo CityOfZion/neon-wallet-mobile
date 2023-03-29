@@ -117,7 +117,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   }, [address])
 
   return (
-    <ScreenLayout useHeaderPadding darkerSolidColorBG>
+    <ScreenLayout>
       <AwaitActivity name="importWatchAccount" loadingView={<ScreenLoader />}>
         <LinearLayout orientation="verti" width="100%" height="100%">
           <TextView

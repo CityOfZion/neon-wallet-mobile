@@ -37,7 +37,7 @@ const Step3BackupWalletPage: React.FC<Props> = props => {
   }, [wallet])
 
   return (
-    <ScreenLayout alignX="center" alignY="center" darkerSolidColorBG>
+    <ScreenLayout>
       <LinearLayout px="34px" flex={1}>
         <LinearLayout alignItems="center" justifyContent="center" flex={1}>
           <ImageView source={require('~/src/assets/images/logo-3d.png')} />

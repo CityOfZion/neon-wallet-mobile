@@ -1,10 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack'
-import i18n from 'i18n-js'
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { ThemeProvider } from 'styled-components'
 
-import { RootState } from '../store/RootStore'
+import { stackConfig } from '../config/ScreenConfig'
 import { DefaultNavigationParam } from '../types/global'
 import SettingsStackNavigation from './SettingsStackNavigation'
 
@@ -17,7 +14,6 @@ import Step5CreateWalletPage, {
   Step5CreateWalletPageParams,
 } from '~/src/scenes/Wallet/CreateWallet/Step5CreateWalletPage'
 import { wrapper } from '~src/app/ApplicationWrapper'
-import { Navigator } from '~src/app/Navigator'
 import { HeaderActionButtonProps } from '~src/components/layout/HeaderActionButton'
 import BlockchainListPage, { BlockchainListPageParams } from '~src/scenes/BlockchainListPage'
 import ImportKey, { ImportKeyParams } from '~src/scenes/ImportKey'
@@ -50,136 +46,21 @@ export type MoreStackParamList = {
 const MoreStack = createStackNavigator<MoreStackParamList>()
 
 const MoreStackNavigation = () => {
-  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-
   return (
-    <ThemeProvider theme={theme}>
-      <MoreStack.Navigator initialRouteName={wrapper.route.MorePage.name}>
-        <MoreStack.Screen
-          name={wrapper.route.MorePage.name}
-          component={MorePage}
-          options={({ route }) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: wrapper.route.More.translate(),
-              theme,
-              route,
-            })
-          }
-        />
-
-        <MoreStack.Screen
-          name={wrapper.route.Step1CreateWallet.name}
-          component={Step1CreateWalletPage}
-          options={({ route }) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: wrapper.route.Step1CreateWallet.translate(),
-              theme,
-              route,
-            })
-          }
-        />
-
-        <MoreStack.Screen
-          name={wrapper.route.Step2CreateWallet.name}
-          component={Step2CreateWalletPage}
-          options={Navigator.defaultStackNavigatorOptions({
-            title: wrapper.route.Step2CreateWallet.translate(),
-            theme,
-          })}
-        />
-
-        <MoreStack.Screen
-          name={wrapper.route.Step3CreateWallet.name}
-          component={Step3CreateWalletPage}
-          options={({ route }) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: wrapper.route.Step3CreateWallet.translate(),
-              theme,
-              route,
-            })
-          }
-        />
-
-        <MoreStack.Screen
-          name={wrapper.route.Step4CreateWallet.name}
-          component={Step4CreateWalletPage}
-          options={({ route }) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: wrapper.route.Step4CreateWallet.translate(),
-              theme,
-              route,
-            })
-          }
-        />
-
-        <MoreStack.Screen
-          name={wrapper.route.Step5CreateWallet.name}
-          component={Step5CreateWalletPage}
-          options={({ route }) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: wrapper.route.Step5CreateWallet.translate(),
-              theme,
-              route,
-            })
-          }
-        />
-
-        <MoreStack.Screen
-          name={wrapper.route.ImportKey.name}
-          component={ImportKey}
-          options={({ route }) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: wrapper.route.ImportKey.translate(),
-              theme,
-              route,
-            })
-          }
-        />
-        <MoreStack.Screen
-          name={wrapper.route.Passphrase.name}
-          component={Passphrase}
-          options={({ route }) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: wrapper.route.ImportKey.translate(),
-              theme,
-              route,
-            })
-          }
-        />
-        <MoreStack.Screen
-          name={wrapper.route.ImportReadAccount.name}
-          component={ImportReadAccount}
-          options={({ route }) =>
-            Navigator.defaultStackNavigatorOptions({
-              title: wrapper.route.ImportReadAccount.translate(),
-              theme,
-              route,
-            })
-          }
-        />
-        <MoreStack.Screen
-          name={wrapper.route.BlockchainListPage.name}
-          component={BlockchainListPage}
-          options={Navigator.defaultStackNavigatorOptions({
-            title: i18n.t('more.createWallet'),
-            theme,
-          })}
-        />
-        <MoreStack.Screen
-          name={wrapper.route.MnemonicSelectionList.name}
-          component={MnemonicSelectionList}
-          options={Navigator.defaultStackNavigatorOptions({
-            title: wrapper.route.ImportKey.translate(),
-            theme,
-          })}
-        />
-        <MoreStack.Screen
-          name={wrapper.route.Settings.name}
-          component={SettingsStackNavigation}
-          options={{ headerShown: false }}
-        />
-      </MoreStack.Navigator>
-    </ThemeProvider>
+    <MoreStack.Navigator initialRouteName={wrapper.route.MorePage.name} screenOptions={stackConfig}>
+      <MoreStack.Screen name={wrapper.route.MorePage.name} component={MorePage} />
+      <MoreStack.Screen name={wrapper.route.Step1CreateWallet.name} component={Step1CreateWalletPage} />
+      <MoreStack.Screen name={wrapper.route.Step2CreateWallet.name} component={Step2CreateWalletPage} />
+      <MoreStack.Screen name={wrapper.route.Step3CreateWallet.name} component={Step3CreateWalletPage} />
+      <MoreStack.Screen name={wrapper.route.Step4CreateWallet.name} component={Step4CreateWalletPage} />
+      <MoreStack.Screen name={wrapper.route.Step5CreateWallet.name} component={Step5CreateWalletPage} />
+      <MoreStack.Screen name={wrapper.route.ImportKey.name} component={ImportKey} />
+      <MoreStack.Screen name={wrapper.route.Passphrase.name} component={Passphrase} />
+      <MoreStack.Screen name={wrapper.route.ImportReadAccount.name} component={ImportReadAccount} />
+      <MoreStack.Screen name={wrapper.route.BlockchainListPage.name} component={BlockchainListPage} />
+      <MoreStack.Screen name={wrapper.route.MnemonicSelectionList.name} component={MnemonicSelectionList} />
+      <MoreStack.Screen name={wrapper.route.Settings.name} component={SettingsStackNavigation} />
+    </MoreStack.Navigator>
   )
 }
 

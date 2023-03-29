@@ -7,7 +7,6 @@ import React, { useState, useCallback } from 'react'
 import { Alert, FlatList } from 'react-native'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
@@ -26,15 +25,6 @@ const Step3CreateWalletPage: React.FC<Props> = props => {
   const words = props.route.params.mnemonic
   const [formedWords, setFormedWords] = useState<string[]>([])
   const [shuffledWords] = useState<string[]>(_.shuffle(words))
-
-  props.navigation.setOptions({
-    headerRight: () =>
-      HeaderActionButton({
-        actionTitle: i18n.t('app.skip'),
-        actionButtonStyle: 'highlight',
-        actionOnPress: () => skipDialog(),
-      }),
-  })
 
   const skipDialog = useCallback(() => {
     Alert.alert(i18n.t('step3CreateWallet.dialog_1_title'), i18n.t('step3CreateWallet.dialog_1_body'), [
@@ -98,7 +88,18 @@ const Step3CreateWalletPage: React.FC<Props> = props => {
   )
 
   return (
-    <ScreenLayout alignX="center" darkerSolidColorBG>
+    <ScreenLayout
+      rightButton={
+        <ThemedButton
+          onPress={skipDialog}
+          label={i18n.t('app.skip')}
+          flat
+          fontFamily="light"
+          textColor="primary"
+          fontSize="lg"
+        />
+      }
+    >
       <LinearLayout mt={5} weight={1}>
         <LinearLayout mb={6} width="100%">
           <LinearLayout width="100%" orientation="horiz">

@@ -8,9 +8,9 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Alert } from '~/src/components/Alert'
 import { Button } from '~/src/components/Button'
+import ThemedButton from '~/src/components/themed/ThemedButton'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
-import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import { Wallet } from '~src/models/redux/Wallet'
@@ -27,16 +27,6 @@ interface Props {
 
 const Step1BackupWalletPage: React.FC<Props> = props => {
   const { wallet } = props.route.params
-
-  props.navigation.setOptions({
-    headerRight: () =>
-      HeaderActionButton({
-        actionTitle: i18n.t('app.cancel'),
-        actionButtonStyle: 'highlight',
-        actionOnPress: props.navigation.goBack,
-      }),
-  })
-
   const [mnemonic, setMnemonic] = useState<string>()
   const [modalIsVisible, setModalIsVisible] = useState(false)
 
@@ -78,7 +68,18 @@ const Step1BackupWalletPage: React.FC<Props> = props => {
   }, [populate])
 
   return (
-    <ScreenLayout alignX="center" darkerSolidColorBG>
+    <ScreenLayout
+      rightButton={
+        <ThemedButton
+          onPress={props.navigation.goBack}
+          label={i18n.t('app.cancel')}
+          flat
+          fontFamily="light"
+          textColor="primary"
+          fontSize="lg"
+        />
+      }
+    >
       <AwaitActivity name="populateStep1" loadingView={<ScreenLoader />}>
         <TextView alignSelf="flex-start" color="text.0" fontSize="lg" fontFamily="semibold">
           {wallet.name}

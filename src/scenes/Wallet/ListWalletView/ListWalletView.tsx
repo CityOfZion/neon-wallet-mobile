@@ -84,9 +84,10 @@ export const ListWalletView = (props: WalletProps) => {
 
   return (
     <ScreenLayout
-      useHeaderPadding={false}
-      padding={0}
-      darkerSolidColorBG
+      withoutHeader
+      contentStyle={{
+        padding: 0,
+      }}
       refreshControl={
         <RefreshControl
           tintColor="#fff"

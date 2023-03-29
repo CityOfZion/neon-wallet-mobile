@@ -82,7 +82,7 @@ export const AccountSettingsView = (props: Props) => {
   }
 
   return (
-    <ScreenLayout padding={20} darkerSolidColorBG>
+    <ScreenLayout>
       <MenuItem
         title={i18n.t('screens.accountSettingsView.customize')}
         icon={require('~src/assets/images/icon-palette-green.png')}

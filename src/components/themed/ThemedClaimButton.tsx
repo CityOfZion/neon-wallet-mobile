@@ -1,7 +1,7 @@
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback } from 'react'
-import { GestureResponderEvent, ImageLoadEventData, Dimensions } from 'react-native'
+import { GestureResponderEvent, ImageLoadEventData } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import ThemedButton from './ThemedButton'
@@ -62,7 +62,7 @@ const ThemedClaimButton: React.FC<Props> = props => {
       onPress={props.onPress}
       srcIcon={infoClaim?.icon}
       label={infoClaim?.text}
-      width={Dimensions.get('window').width * 0.6}
+      width="60%"
       fontSize="15px"
       labelPx={0}
       adjustsFontSizeToFit={false}

@@ -39,7 +39,7 @@ const ConfirmPasscodePage = (props: Props) => {
   }, [passcode])
 
   return (
-    <ScreenLayout useHeaderPadding={false} useFooterPadding={false} alignX="center" padding={16}>
+    <ScreenLayout withoutHeader contentStyle={{ paddingBottom: undefined }}>
       <Passcode
         title={i18n.t('passcode.confirm')}
         passcode={passcode}

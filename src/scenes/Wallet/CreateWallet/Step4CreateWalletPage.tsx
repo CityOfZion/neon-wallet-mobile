@@ -47,7 +47,7 @@ const Step4CreateWalletPage: React.FC<Props> = props => {
   }
 
   return (
-    <ScreenLayout alignX="center">
+    <ScreenLayout>
       <LinearLayout mt="15px" weight={1} mr="5px" ml="5px">
         <LinearLayout mb="15px" width="100%">
           <LinearLayout width="100%" orientation="horiz">

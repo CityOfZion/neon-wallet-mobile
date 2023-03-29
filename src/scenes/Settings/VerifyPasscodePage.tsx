@@ -56,7 +56,7 @@ const VerifyPasscodePage = (props: Props) => {
   }, [validate])
 
   return (
-    <ScreenLayout useHeaderPadding={false} useFooterPadding={false} alignX="center" padding={16}>
+    <ScreenLayout withoutHeader contentStyle={{ paddingBottom: undefined }}>
       <Passcode
         title={i18n.t('passcode.enter')}
         passcode={passcode}

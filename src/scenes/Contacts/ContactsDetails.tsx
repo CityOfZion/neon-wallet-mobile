@@ -8,11 +8,11 @@ import { Shadow } from 'react-native-shadow-2'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import ThemedButton from '~/src/components/themed/ThemedButton'
 import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
 import { selectContacts } from '~/src/store/contact/SelectorContact'
-import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { Contact } from '~src/models/redux/Contact'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
@@ -86,29 +86,15 @@ export const ContactDetails = (props: ContactDetailsProps) => {
 
   const [contact, setContact] = useState(props.route.params.contact)
 
-  useEffect(() => {
-    const freshContact = contacts.find(it => it.id === contact.id)
+  const handleEditPress = () => {
+    props.navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.PersistContact.name,
+      params: {
+        contact,
+      },
+    })
+  }
 
-    if (freshContact) {
-      setContact(freshContact)
-    }
-  }, [contacts])
-
-  props.navigation.setOptions({
-    headerRight: () =>
-      HeaderActionButton({
-        actionTitle: i18n.t('app.edit'),
-        actionButtonStyle: 'default',
-        actionOnPress: () => {
-          props.navigation.navigate(wrapper.route.Modal.name, {
-            screen: wrapper.route.PersistContact.name,
-            params: {
-              contact,
-            },
-          })
-        },
-      }),
-  })
   const styles = StyleSheet.create({
     containerLetter: {
       borderRadius: 100,
@@ -134,8 +120,21 @@ export const ContactDetails = (props: ContactDetailsProps) => {
       paddingRight: 12,
     },
   })
+
+  useEffect(() => {
+    const freshContact = contacts.find(it => it.id === contact.id)
+
+    if (freshContact) {
+      setContact(freshContact)
+    }
+  }, [contacts])
+
   return (
-    <ScreenLayout>
+    <ScreenLayout
+      rightButton={
+        <ThemedButton onPress={handleEditPress} label={i18n.t('app.edit')} flat textColor="text.0" fontSize="lg" />
+      }
+    >
       <LinearLayout alignItems="center" mt={Dimensions.get('screen').height * 0.07}>
         <Shadow distance={20} offset={[5, 5]} containerViewStyle={{ marginBottom: 30 }}>
           <View style={styles.containerLetter}>

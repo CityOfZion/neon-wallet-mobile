@@ -1,7 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { ThemeProvider } from 'styled-components'
 
 import AccountSelectionModal, { AccountSelectionModalParams } from '../scenes/Account/AccountSelectionModal'
 import { ExportWIFModal, ExportWIFModalParams } from '../scenes/Account/ExportWIFModal'
@@ -32,7 +30,6 @@ import WebViewModal, { WebViewModalParams } from '../scenes/WebViewModal'
 import WCInvocationDetailsModal, {
   WCInvocationDetailsModalParams,
 } from '../scenes/walletConnect/modal/WCInvocationDetailsModal'
-import { RootState } from '../store/RootStore'
 import { DefaultNavigationParam } from '../types/global'
 
 import EditAccountModal, { EditAccountModalParam } from '~/src/scenes/Account/EditAccountModal'
@@ -155,70 +152,54 @@ export type ModalParams =
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
 const ModalStackNavigation = () => {
-  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-
   return (
-    <ThemeProvider theme={theme}>
-      <ModalStack.Navigator headerMode="none" screenOptions={screenConfig}>
-        <ModalStack.Screen
-          name={wrapper.route.AddressScanQuickToolsModal.name}
-          component={AddressScanQuickToolsModal}
-        />
-        <ModalStack.Screen name={wrapper.route.ChangelogModal.name} component={ChangelogModal} />
-        <ModalStack.Screen name={wrapper.route.EditAccountModal.name} component={EditAccountModal} />
-        <ModalStack.Screen name={wrapper.route.CustomColor.name} component={CustomColorPage} />
-        <ModalStack.Screen name={wrapper.route.WalletContextModal.name} component={WalletContextModal} />
-        <ModalStack.Screen name={wrapper.route.ReorderWalletModal.name} component={ReorderWalletModal} />
-        <ModalStack.Screen name={wrapper.route.ListTokenModal.name} component={ListTokenModal} />
-        <ModalStack.Screen name={wrapper.route.LanguagePickerModal.name} component={LanguagePickerModal} />
-        <ModalStack.Screen name={wrapper.route.CurrencyPickerModal.name} component={CurrencyPickerModal} />
-        <ModalStack.Screen name={wrapper.route.ThemePickerModal.name} component={ThemePickerModal} />
-        <ModalStack.Screen name={wrapper.route.PersistContact.name} component={PersistContact} />
-        <ModalStack.Screen name={wrapper.route.AccountQRCode.name} component={AccountQRCode} />
-        <ModalStack.Screen name={wrapper.route.ContactsModal.name} component={ContactPicker} />
-        <ModalStack.Screen name={wrapper.route.CopyContextModal.name} component={CopyContextModal} />
-        <ModalStack.Screen name={wrapper.route.EditWalletModal.name} component={EditWalletModal} />
-        <ModalStack.Screen name={wrapper.route.SecurityPickerModal.name} component={SecurityPickerModal} />
-        <ModalStack.Screen name={wrapper.route.TipConfirmationModal.name} component={TipConfirmationModal} />
-        <ModalStack.Screen name={wrapper.route.BlockchainListModal.name} component={BlockchainListModal} />
-        <ModalStack.Screen name={wrapper.route.WCConnectionRequestModal.name} component={WCConnectionRequestModal} />
-        <ModalStack.Screen name={wrapper.route.WCConnectDappModal.name} component={WCConnectDappModal} />
-        <ModalStack.Screen name={wrapper.route.WCTransactionRequestModal.name} component={WCTransactionRequestModal} />
-        <ModalStack.Screen name={wrapper.route.RawJsonModal.name} component={RawJsonModal} />
-        <ModalStack.Screen name={wrapper.route.WCConnectionDetailsModal.name} component={WCConnectionDetailsModal} />
-        <ModalStack.Screen name={wrapper.route.SignatureScopeModal.name} component={SignatureScopeModal} />
-        <ModalStack.Screen name={wrapper.route.WCInvocationDetailsModal.name} component={WCInvocationDetailsModal} />
-        <ModalStack.Screen name={wrapper.route.WebViewModal.name} component={WebViewModal} />
-        <ModalStack.Screen name={wrapper.route.ExportWIFModal.name} component={ExportWIFModal} />
-
-        <ModalStack.Screen name={wrapper.route.SendTransactionModal.name} component={SendTransactionModal} />
-        <ModalStack.Screen
-          name={wrapper.route.SendTransactionReviewModal.name}
-          component={SendTransactionReviewModal}
-        />
-        <ModalStack.Screen
-          name={wrapper.route.SendTransactionConfirmationModal.name}
-          component={SendTransactionConfirmationModal}
-        />
-
-        <ModalStack.Screen name={wrapper.route.WalletSelectionModal.name} component={WalletSelectionModal} />
-        <ModalStack.Screen name={wrapper.route.AccountSelectionModal.name} component={AccountSelectionModal} />
-
-        <ModalStack.Screen name={wrapper.route.ReceiveTransactionModal.name} component={ReceiveTransactionModal} />
-        <ModalStack.Screen
-          name={wrapper.route.ReceiveTransactionQrCodeModal.name}
-          component={ReceiveTransactionQrCodeModal}
-        />
-
-        <ModalStack.Screen name={wrapper.route.BackupInfoModal.name} component={BackupInfoModal} />
-
-        <ModalStack.Screen name={wrapper.route.Passcode.name} component={PasscodePage} />
-        <ModalStack.Screen name={wrapper.route.ConfirmPasscode.name} component={ConfirmPasscodePage} />
-        <ModalStack.Screen name={wrapper.route.VerifyPasscode.name} component={VerifyPasscodePage} />
-
-        <ModalStack.Screen name={wrapper.route.EditNetworkModal.name} component={EditNetworkModal} />
-      </ModalStack.Navigator>
-    </ThemeProvider>
+    <ModalStack.Navigator headerMode="none" screenOptions={screenConfig}>
+      <ModalStack.Screen name={wrapper.route.AddressScanQuickToolsModal.name} component={AddressScanQuickToolsModal} />
+      <ModalStack.Screen name={wrapper.route.ChangelogModal.name} component={ChangelogModal} />
+      <ModalStack.Screen name={wrapper.route.EditAccountModal.name} component={EditAccountModal} />
+      <ModalStack.Screen name={wrapper.route.CustomColor.name} component={CustomColorPage} />
+      <ModalStack.Screen name={wrapper.route.WalletContextModal.name} component={WalletContextModal} />
+      <ModalStack.Screen name={wrapper.route.ReorderWalletModal.name} component={ReorderWalletModal} />
+      <ModalStack.Screen name={wrapper.route.ListTokenModal.name} component={ListTokenModal} />
+      <ModalStack.Screen name={wrapper.route.LanguagePickerModal.name} component={LanguagePickerModal} />
+      <ModalStack.Screen name={wrapper.route.CurrencyPickerModal.name} component={CurrencyPickerModal} />
+      <ModalStack.Screen name={wrapper.route.ThemePickerModal.name} component={ThemePickerModal} />
+      <ModalStack.Screen name={wrapper.route.PersistContact.name} component={PersistContact} />
+      <ModalStack.Screen name={wrapper.route.AccountQRCode.name} component={AccountQRCode} />
+      <ModalStack.Screen name={wrapper.route.ContactsModal.name} component={ContactPicker} />
+      <ModalStack.Screen name={wrapper.route.CopyContextModal.name} component={CopyContextModal} />
+      <ModalStack.Screen name={wrapper.route.EditWalletModal.name} component={EditWalletModal} />
+      <ModalStack.Screen name={wrapper.route.SecurityPickerModal.name} component={SecurityPickerModal} />
+      <ModalStack.Screen name={wrapper.route.TipConfirmationModal.name} component={TipConfirmationModal} />
+      <ModalStack.Screen name={wrapper.route.BlockchainListModal.name} component={BlockchainListModal} />
+      <ModalStack.Screen name={wrapper.route.WCConnectionRequestModal.name} component={WCConnectionRequestModal} />
+      <ModalStack.Screen name={wrapper.route.WCConnectDappModal.name} component={WCConnectDappModal} />
+      <ModalStack.Screen name={wrapper.route.WCTransactionRequestModal.name} component={WCTransactionRequestModal} />
+      <ModalStack.Screen name={wrapper.route.RawJsonModal.name} component={RawJsonModal} />
+      <ModalStack.Screen name={wrapper.route.WCConnectionDetailsModal.name} component={WCConnectionDetailsModal} />
+      <ModalStack.Screen name={wrapper.route.SignatureScopeModal.name} component={SignatureScopeModal} />
+      <ModalStack.Screen name={wrapper.route.WCInvocationDetailsModal.name} component={WCInvocationDetailsModal} />
+      <ModalStack.Screen name={wrapper.route.WebViewModal.name} component={WebViewModal} />
+      <ModalStack.Screen name={wrapper.route.ExportWIFModal.name} component={ExportWIFModal} />
+      <ModalStack.Screen name={wrapper.route.SendTransactionModal.name} component={SendTransactionModal} />
+      <ModalStack.Screen name={wrapper.route.SendTransactionReviewModal.name} component={SendTransactionReviewModal} />
+      <ModalStack.Screen
+        name={wrapper.route.SendTransactionConfirmationModal.name}
+        component={SendTransactionConfirmationModal}
+      />
+      <ModalStack.Screen name={wrapper.route.WalletSelectionModal.name} component={WalletSelectionModal} />
+      <ModalStack.Screen name={wrapper.route.AccountSelectionModal.name} component={AccountSelectionModal} />
+      <ModalStack.Screen name={wrapper.route.ReceiveTransactionModal.name} component={ReceiveTransactionModal} />
+      <ModalStack.Screen
+        name={wrapper.route.ReceiveTransactionQrCodeModal.name}
+        component={ReceiveTransactionQrCodeModal}
+      />
+      <ModalStack.Screen name={wrapper.route.BackupInfoModal.name} component={BackupInfoModal} />
+      <ModalStack.Screen name={wrapper.route.Passcode.name} component={PasscodePage} />
+      <ModalStack.Screen name={wrapper.route.ConfirmPasscode.name} component={ConfirmPasscodePage} />
+      <ModalStack.Screen name={wrapper.route.VerifyPasscode.name} component={VerifyPasscodePage} />
+      <ModalStack.Screen name={wrapper.route.EditNetworkModal.name} component={EditNetworkModal} />
+    </ModalStack.Navigator>
   )
 }
 

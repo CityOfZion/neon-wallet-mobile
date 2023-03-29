@@ -83,6 +83,8 @@ const WalletPicker = ({
           swipeThreshold={5}
           useScrollView
           onSnapToItem={handleSelect}
+          onScrollBeginDrag={onScrollBegin}
+          onScrollEndDrag={onScrollEnd}
           renderItem={({ item, index }) => (
             <WalletCard
               balanceExchange={selectedWalletBalanceExchange}

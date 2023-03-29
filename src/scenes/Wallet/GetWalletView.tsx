@@ -11,12 +11,11 @@ import { ModalStackParamList } from '../../navigation/ModalStackNavigation'
 import { TabStackParamList } from '../../navigation/TabNavigation'
 
 import { AccountCards } from '~/src/components/AccountCards'
+import ThemedMoreButton from '~/src/components/themed/ThemedMoreButton'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
-import HeaderActionButton from '~src/components/layout/HeaderActionButton'
-import HeaderBar from '~src/components/layout/HeaderBar'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { Account } from '~src/models/redux/Account'
 import { Wallet } from '~src/models/redux/Wallet'
@@ -34,22 +33,6 @@ interface GetWalletProps {
 
 const GetWalletView = (props: GetWalletProps) => {
   const { wallet } = props.route.params
-
-  props.navigation.setOptions({
-    headerTitle: () =>
-      HeaderBar({
-        title: wallet.name ?? '-',
-      }),
-    headerRight: () =>
-      HeaderActionButton({
-        actionButtonStyle: 'more',
-        actionOnPress: () => {
-          props.navigation.navigate(wrapper.route.WalletSettingsView.name, {
-            wallet,
-          })
-        },
-      }),
-  })
 
   const accounts = useSelector(selectAccounts)
   const dispatch = useDispatch()
@@ -106,6 +89,12 @@ const GetWalletView = (props: GetWalletProps) => {
     })
   }
 
+  const handleMorePress = () => {
+    props.navigation.navigate(wrapper.route.WalletSettingsView.name, {
+      wallet,
+    })
+  }
+
   useEffect(() => {
     wallet.lastVisitedAt = moment().format()
     dispatch(walletReducerActions.saveWallet(wallet))
@@ -120,72 +109,71 @@ const GetWalletView = (props: GetWalletProps) => {
           onRefresh={balanceExchange.refetch}
         />
       }
-      darkerSolidColorBG
       onLayout={handleLayout}
-      padding={0}
+      contentStyle={{ padding: 0 }}
+      title={wallet.name ?? '-'}
+      rightButton={<ThemedMoreButton onPress={handleMorePress} />}
     >
-      <LinearLayout px="10px">
+      <Animated.View
+        style={{
+          opacity: opacityValue,
+          transform: [
+            {
+              translateY: posYFactor.interpolate({
+                inputRange: [0, 1],
+                outputRange: [-viewHeight, 0],
+              }),
+            },
+          ],
+        }}
+      >
         <Animated.View
-          style={{
-            opacity: opacityValue,
-            transform: [
-              {
-                translateY: posYFactor.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [-viewHeight, 0],
-                }),
-              },
-            ],
-          }}
+          style={[
+            {
+              transform: [
+                {
+                  translateY: posYFactor.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [-viewHeight, 0],
+                  }),
+                },
+              ],
+            },
+          ]}
         >
-          <Animated.View
-            style={[
-              {
-                transform: [
-                  {
-                    translateY: posYFactor.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [-viewHeight, 0],
-                    }),
-                  },
-                ],
-              },
-            ]}
-          >
-            <AccountCards balanceExchange={balanceExchange} accounts={walletAccounts} onPress={handlePress} />
-          </Animated.View>
-
-          {wallet.walletType === 'standard' && (
-            <ButtonWithoutFeedbackView onPress={handleCreate}>
-              <LinearLayout
-                my="36px"
-                orientation="horiz"
-                width="100%"
-                alignItems="center"
-                justifyContent="center"
-                borderStyle="dashed"
-                borderColor="text.5"
-                borderRadius="18px"
-                borderWidth="1px"
-                height="220px"
-              >
-                <ImageView
-                  source={require('~src/assets/images/icon-plus-white.png')}
-                  resizeMode="contain"
-                  style={{
-                    width: 16,
-                    height: 16,
-                  }}
-                />
-
-                <TextView color="text.0" fontSize="lg" ml={3} fontWeight={500}>
-                  {i18n.t('screens.getWallet.addNewAccount')}
-                </TextView>
-              </LinearLayout>
-            </ButtonWithoutFeedbackView>
-          )}
+          <AccountCards balanceExchange={balanceExchange} accounts={walletAccounts} onPress={handlePress} />
         </Animated.View>
-      </LinearLayout>
+
+        {wallet.walletType === 'standard' && (
+          <ButtonWithoutFeedbackView onPress={handleCreate}>
+            <LinearLayout
+              my="36px"
+              orientation="horiz"
+              width="100%"
+              alignItems="center"
+              justifyContent="center"
+              borderStyle="dashed"
+              borderColor="text.5"
+              borderRadius="18px"
+              borderWidth="1px"
+              height="220px"
+            >
+              <ImageView
+                source={require('~src/assets/images/icon-plus-white.png')}
+                resizeMode="contain"
+                style={{
+                  width: 16,
+                  height: 16,
+                }}
+              />
+
+              <TextView color="text.0" fontSize="lg" ml={3} fontWeight={500}>
+                {i18n.t('screens.getWallet.addNewAccount')}
+              </TextView>
+            </LinearLayout>
+          </ButtonWithoutFeedbackView>
+        )}
+      </Animated.View>
     </ScreenLayout>
   )
 }

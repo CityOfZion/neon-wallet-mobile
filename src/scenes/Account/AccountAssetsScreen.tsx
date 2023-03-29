@@ -27,7 +27,6 @@ const AccountAssetScreen = ({ route }: Props) => {
   const { account } = route.params
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-
   const balanceExchange = useBalancesAndExchange(account)
 
   return (
@@ -39,7 +38,6 @@ const AccountAssetScreen = ({ route }: Props) => {
           onRefresh={balanceExchange.refetch}
         />
       }
-      darkerSolidColorBG
     >
       <AccountSubTitle account={account} />
 

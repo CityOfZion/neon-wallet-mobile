@@ -8,9 +8,9 @@ import { FlatList } from 'react-native'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Alert } from '~/src/components/Alert'
 import { Button } from '~/src/components/Button'
+import ThemedButton from '~/src/components/themed/ThemedButton'
 import { Wallet } from '~/src/models/redux/Wallet'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
-import HeaderActionButton from '~src/components/layout/HeaderActionButton'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { TextView, LinearLayout } from '~src/styles/styled-components'
 
@@ -26,18 +26,6 @@ interface Props {
 
 const Step2BackupWalletPage: React.FC<Props> = props => {
   const { wallet, mnemonic } = props.route.params
-
-  props.navigation.setOptions({
-    headerRight: () =>
-      HeaderActionButton({
-        actionTitle: i18n.t('app.cancel'),
-        actionButtonStyle: 'highlight',
-        actionOnPress: () => {
-          props.navigation.goBack()
-          props.navigation.goBack()
-        },
-      }),
-  })
 
   const words = useMemo(() => mnemonic.split(' '), [mnemonic])
   const shuffledWords = useMemo(() => _.shuffle(words), [words])
@@ -70,8 +58,24 @@ const Step2BackupWalletPage: React.FC<Props> = props => {
     })
   }
 
+  const handlePressCancel = () => {
+    props.navigation.goBack()
+    props.navigation.goBack()
+  }
+
   return (
-    <ScreenLayout alignX="center" darkerSolidColorBG>
+    <ScreenLayout
+      rightButton={
+        <ThemedButton
+          onPress={handlePressCancel}
+          label={i18n.t('app.cancel')}
+          flat
+          fontFamily="light"
+          textColor="primary"
+          fontSize="lg"
+        />
+      }
+    >
       <LinearLayout height="100%" justifyContent="space-between" width="100%">
         <LinearLayout width="100%">
           <TextView alignSelf="flex-start" color="text.0" fontSize="lg" fontFamily="semibold">

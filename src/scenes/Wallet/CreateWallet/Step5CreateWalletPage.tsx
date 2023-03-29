@@ -25,7 +25,7 @@ interface Props {
 
 const Step5CreateWalletPage = (props: Props) => {
   return (
-    <ScreenLayout alignX="center">
+    <ScreenLayout>
       <LinearLayout mt={5} weight={1}>
         <LinearLayout mb={6} width="100%">
           <LinearLayout alignItems="center">

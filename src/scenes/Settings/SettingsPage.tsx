@@ -27,7 +27,7 @@ const SettingsPage = (props: SettingsProps) => {
   const { language, currency, theme } = useSelector((state: RootState) => state.settings)
 
   return (
-    <ScreenLayout darkerSolidColorBG>
+    <ScreenLayout>
       <MenuItem
         title={i18n.t('settings.security')}
         icon={require('~/src/assets/images/security-icon-green.png')}
