@@ -45,24 +45,23 @@ export const EditNetworkModal = (props: Props) => {
   const [networkUrl, setNetworkUrl] = useState('')
   const [isValidating, setIsValidating] = useState(false)
   const [urlIsValid, setUrlIsValid] = useState<boolean | undefined>(undefined)
+  const [networkNameIsValid, setNetworkNameIsValid] = useState<boolean>(false)
   const [message, setMessage] = useState<string | undefined>(undefined)
 
   const validateURL = useCallback(
     debounce(async (text: string) => {
       if (!UtilsHelper.validateURL(text)) {
-        setUrlIsValid(false)
         setMessage(I18n.t('modals.editNetworkModal.invalidUrl'))
-        return
+        setUrlIsValid(false)
+        return false
       }
-
+      setIsValidating(true)
       try {
-        setIsValidating(true)
-
         const service = getBlockchainService(blockchain, { type: 'custom', url: text })
         await service.getBlockCount()
-
         setUrlIsValid(true)
         setMessage(I18n.t('modals.editNetworkModal.connected'))
+        return true
       } catch {
         setUrlIsValid(false)
         setMessage(I18n.t('modals.editNetworkModal.notConnected'))
@@ -72,6 +71,12 @@ export const EditNetworkModal = (props: Props) => {
     }, 1000),
     [getBlockchainService]
   )
+
+  const validateNetworkName = useCallback(() => {
+    const isValid = networkName.length > 0 && networkName.length <= 10
+    setNetworkNameIsValid(isValid)
+    return isValid
+  }, [networkName])
 
   const handleChangeNetworkUrl = async (text: string) => {
     setNetworkUrl(UtilsHelper.removeLineBreaks(text))
@@ -141,7 +146,7 @@ export const EditNetworkModal = (props: Props) => {
           onChangeText={setNetworkName}
           color="white"
           value={networkName}
-          validator={() => true}
+          validator={validateNetworkName}
           separatorColor="background.3"
           invalidColor="background.3"
           invalidMessageColor="quinary"
@@ -222,7 +227,7 @@ export const EditNetworkModal = (props: Props) => {
         <ThemedButton
           label={I18n.t('app.save')}
           onPress={handleSave}
-          disabled={urlIsValid !== true || isValidating !== false}
+          disabled={!networkNameIsValid || !urlIsValid}
         />
         {network && (
           <ButtonWithoutFeedbackView onPress={handleDelete}>
