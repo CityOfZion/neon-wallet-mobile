@@ -1,23 +1,13 @@
-import React, { useEffect } from 'react'
-import { StatusBar } from 'react-native'
+import React from 'react'
 import { useSelector } from 'react-redux'
 
-import { wrapper } from '../app/ApplicationWrapper'
 import { RootState } from '../store/RootStore'
-import { hasCustomSelector } from '../store/settings/SettingsSelector'
 import { ImageView, LinearLayout, TextView } from '../styles/styled-components'
 
 const OfflineBar = () => {
-  const hasCustom = useSelector(hasCustomSelector)
-  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
 
-  useEffect(() => {
-    if (hasCustom) return
-
-    StatusBar.setBackgroundColor(theme.colors.background[12])
-  }, [hasCustom])
-
-  return (
+  return !isConnected ? (
     <LinearLayout
       orientation="horiz"
       width="100%"
@@ -41,7 +31,7 @@ const OfflineBar = () => {
         <TextView color="text.0">No internet connection</TextView>
       </LinearLayout>
     </LinearLayout>
-  )
+  ) : null
 }
 
 export default OfflineBar

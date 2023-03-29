@@ -1,4 +1,4 @@
-import { RouteProp, useNavigation } from '@react-navigation/native'
+import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { AwaitActivity, Await } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
@@ -7,12 +7,15 @@ import { TouchableWithoutFeedback } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
+import { TOnFinishSelectionParams } from '../../Wallet/WalletSelectionModal'
+
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import { walletConnectConfig } from '~/src/config/WalletConnectConfig'
 import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
-import { useTreatNetworkOnWalletConnectFlow } from '~/src/hooks/useTreatNetworkOnWalletConnectFlow'
+import { useWalletConnectFlow } from '~/src/hooks/useWalletConnectFlow'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { RootState } from '~/src/store/RootStore'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
@@ -28,17 +31,17 @@ export interface WCConnectionRequestModalParams {
 
 interface Props {
   route: RouteProp<ModalStackParamList, 'WCConnectionRequestModal'>
-  navigation: StackNavigationProp<ModalStackParamList & TabStackParamList>
+  navigation: StackNavigationProp<RootStackParamList & ModalStackParamList & TabStackParamList>
 }
 
 const WCConnectionRequestModal = (props: Props) => {
   const { uri } = props.route.params
 
-  useTreatNetworkOnWalletConnectFlow()
+  useWalletConnectFlow()
   const controller = useSwiperController(true)
   const walletConnectCtx = useWalletConnect()
-  const navigation = useNavigation()
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
+  const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
 
   const sessionProposal = useMemo<SessionProposal | undefined>(
     () => walletConnectCtx.sessionProposals[0],
@@ -51,11 +54,62 @@ const WCConnectionRequestModal = (props: Props) => {
     return WalletConnectHelper.getBlockchainFromProposal(sessionProposal)
   }, [sessionProposal])
 
+  const handleFinishSelect = useCallback(
+    async ({ account }: TOnFinishSelectionParams) => {
+      try {
+        Await.init('load')
+
+        props.navigation.goBack()
+        props.navigation.goBack()
+
+        if (!sessionProposal || !account?.address) {
+          throw new Error(i18n.t('walletconnect.alert.unexpectedErrorToSelectAccount'))
+        }
+
+        const chain = WalletConnectHelper.getChain(
+          selectedBlockchainNetworks[account.blockchain].type,
+          account.blockchain
+        )
+
+        await walletConnectCtx.approveSession(
+          sessionProposal,
+          [{ address: account.address, chain }],
+          walletConnectConfig.defaultNamespace
+        )
+
+        showMessage({
+          message: i18n.t('walletconnect.alert.text', {
+            text: sessionProposal.params.proposer.metadata.name,
+          }),
+          description: i18n.t('walletconnect.alert.description'),
+          duration: 7000,
+          type: 'success',
+        })
+      } catch (error: any) {
+        showMessage({ message: error.message, duration: 7000, type: 'danger' })
+      } finally {
+        props.navigation.reset({
+          index: 0,
+          routes: [{ name: wrapper.route.Tab.name }],
+        })
+        props.navigation.navigate(wrapper.route.WalletConnectPage.name)
+        Await.done('load')
+      }
+    },
+    [sessionProposal, selectedBlockchainNetworks, walletConnectCtx.approveSession]
+  )
+
   const handleAccept = useCallback(async () => {
     if (!sessionProposal) return
 
-    navigation.navigate(wrapper.route.Modal.name, {
-      screen: wrapper.route.WCWalletSelectionModal.name,
+    props.navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.WalletSelectionModal.name,
+      params: {
+        textSchema: 'modals.walletConnectSelectionModal',
+        onFinish: handleFinishSelect,
+        filter: 'walletConnect',
+        style: 'alter',
+      },
     })
   }, [sessionProposal])
 
@@ -80,42 +134,40 @@ const WCConnectionRequestModal = (props: Props) => {
       })
 
       controller.close()
-      navigation.goBack()
-      Await.done('load')
+      props.navigation.goBack()
     }
-  }, [uri, walletConnectCtx.onURI, navigation, controller])
+  }, [uri, walletConnectCtx.onURI, controller])
+
+  const handleClose = async () => {
+    if (sessionProposal) await walletConnectCtx.rejectSession(sessionProposal)
+    props.navigation.goBack()
+  }
 
   useEffect(() => {
-    if (!walletConnectCtx.initialized) return
+    if (!walletConnectCtx.initialized || sessionProposal) return
 
     runOnURI()
-  }, [runOnURI, walletConnectCtx.initialized])
+  }, [runOnURI, walletConnectCtx.initialized, sessionProposal])
 
   useEffect(() => {
-    if (!sessionProposal) return
-
+    if (!sessionProposal) {
+      Await.init('load')
+      return
+    }
     Await.done('load')
   }, [sessionProposal])
 
-  useEffect(() => {
-    Await.init('load')
-  }, [])
-
   return (
     <SwiperPanel
-      padding={20}
-      fullSize
       controller={controller}
-      rightButton={<CloseButton mr="20px" />}
+      rightButton={<CloseButton onPress={controller.close} />}
       title={i18n.t('modals.transactionSent.title')}
-      onClose={navigation.goBack}
-      onRightPress={controller.close}
-      solidColorBG
+      onClose={handleClose}
     >
       <AwaitActivity name="load" loadingView={<ScreenLoader transparent />}>
         {sessionProposal && blockchain && (
-          <LinearLayout height="100%" justifyContent="space-between">
-            <LinearLayout height="50%" mt={3}>
+          <LinearLayout flexGrow={1} justifyContent="space-between">
+            <LinearLayout>
               <ConnectionHeader
                 title={i18n.t('modals.WCConnectionRequest.subtitle_1', {
                   dAppName: sessionProposal.params.proposer.metadata.name,
@@ -123,34 +175,41 @@ const WCConnectionRequestModal = (props: Props) => {
                 imageUri={sessionProposal.params.proposer.metadata.icons[0]}
               />
 
-              <LinearLayout width="100%" backgroundColor="#282f35" orientation="horiz" padding={3} borderRadius="7px">
-                <LinearLayout width="50%" ml={3}>
-                  <TextView fontFamily="bold" color="#7b9098" fontSize="14px" fontWeight="700">
+              <LinearLayout
+                width="100%"
+                backgroundColor="background.15"
+                orientation="horiz"
+                paddingX="8px"
+                paddingY="8px"
+                borderRadius="8px"
+              >
+                <LinearLayout weight={1}>
+                  <TextView fontFamily="bold" color="text.12" fontSize="14px" fontWeight="700">
                     {i18n.t('modals.WCConnectionRequest.chain')}
                   </TextView>
-                  <LinearLayout orientation="horiz" mt={3}>
+
+                  <LinearLayout orientation="horiz" mt="6px">
                     <ImageView
                       source={BlockchainHelper.getIcon(blockchain)}
                       resizeMode="contain"
-                      mr={1}
-                      style={{
-                        width: 20,
-                        height: 20,
-                      }}
+                      width={20}
+                      height={20}
+                      mr="2px"
                     />
                     <TextView fontFamily="medium" color="#fff" fontSize="16px">
                       {i18n.t(`blockchainServices.${blockchain}.id`)}
                     </TextView>
                   </LinearLayout>
                 </LinearLayout>
-                <LinearLayout>
-                  <TextView fontFamily="bold" color="#7b9098" fontSize="14px" fontWeight="700">
+
+                <LinearLayout weight={1}>
+                  <TextView fontFamily="bold" color="text.12" fontSize="14px" fontWeight="700">
                     {i18n.t('modals.WCConnectionRequest.features')}
                   </TextView>
 
                   {sessionProposal.params.requiredNamespaces[walletConnectConfig.defaultBlockchain].methods.map(
                     (it, index) => (
-                      <TextView key={index} color="#fff" fontFamily="medium" fontSize="16px">
+                      <TextView key={index} color="text.0" fontFamily="medium" fontSize="16px">
                         {it}
                       </TextView>
                     )
@@ -158,35 +217,33 @@ const WCConnectionRequestModal = (props: Props) => {
                 </LinearLayout>
               </LinearLayout>
             </LinearLayout>
-            <LinearLayout height="35%" justifyContent="space-between">
-              <TextView color="#fff" fontSize="18px" textAlign="center">
+
+            <LinearLayout mt="24px">
+              <TextView color="text.0" fontSize="18px" textAlign="center">
                 {i18n.t('modals.WCConnectionRequest.subtitle')}
               </TextView>
-              <LinearLayout>
-                <ThemedButton
-                  disabled={!isConnected}
-                  label={i18n.t('modals.WCConnectionRequest.acceptLabel')}
-                  onPress={handleAccept}
-                />
-                <LinearLayout mt={5}>
-                  <TouchableWithoutFeedback onPress={handleReject}>
-                    <LinearLayout
-                      width="100%"
-                      borderRadius="4px"
-                      borderWidth="1px"
-                      borderColor="primary"
-                      justifyContent="center"
-                      alignItems="center"
-                      orientation="horiz"
-                      p="10px"
-                    >
-                      <TextView style={{ includeFontPadding: false }} ml={3} color="primary" fontSize={20}>
-                        {i18n.t('modals.WCConnectionRequest.declineLabel')}
-                      </TextView>
-                    </LinearLayout>
-                  </TouchableWithoutFeedback>
+
+              <ThemedButton
+                disabled={!isConnected}
+                label={i18n.t('modals.WCConnectionRequest.acceptLabel')}
+                onPress={handleAccept}
+                my={12}
+              />
+              <TouchableWithoutFeedback onPress={handleReject}>
+                <LinearLayout
+                  width="100%"
+                  borderRadius="4px"
+                  borderWidth="1px"
+                  borderColor="primary"
+                  justifyContent="center"
+                  alignItems="center"
+                  p="10px"
+                >
+                  <TextView color="primary" fontSize="20px">
+                    {i18n.t('modals.WCConnectionRequest.declineLabel')}
+                  </TextView>
                 </LinearLayout>
-              </LinearLayout>
+              </TouchableWithoutFeedback>
             </LinearLayout>
           </LinearLayout>
         )}

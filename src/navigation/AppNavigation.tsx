@@ -10,7 +10,6 @@ import { DeepLinkingConfig } from '../config/DeepLinkingConfig'
 import { useAfterStartApp } from '../hooks/useAfterStartApp'
 import SetupCompletePage, { SetupCompleteParamList } from '../scenes/SetupCompletePage'
 import { RootState } from '../store/RootStore'
-import { hasCustomSelector } from '../store/settings/SettingsSelector'
 
 import { createStackNavigator } from '~/node_modules/@react-navigation/stack'
 import { wrapper } from '~src/app/ApplicationWrapper'
@@ -37,8 +36,6 @@ const AppNavigation = () => {
     return wrapper.theme[state.settings.theme]
   })
   const isFirstTime = useSelector((state: RootState) => state.settings.isFirstTime)
-  const hasCustom = useSelector(hasCustomSelector)
-  const isConnected = useSelector((state: RootState) => state.network.isConnected)
 
   const [navigationStarted, setNavigationStarted] = useState(false)
 
@@ -61,8 +58,8 @@ const AppNavigation = () => {
   return (
     <ThemeProvider theme={theme}>
       <StatusBar barStyle={theme.statusBarStyle} />
-      {hasCustom && <CustomModeBar />}
-      {!isConnected && <OfflineBar />}
+      <CustomModeBar />
+      <OfflineBar />
       <NavigationContainer linking={linking} onReady={handleNavigationReady} ref={navigationRef}>
         <RootStack.Navigator initialRouteName={getInitialRouteName()} headerMode="none" screenOptions={screenConfig}>
           <RootStack.Screen name={wrapper.route.Tab.name} component={TabNavigation} />

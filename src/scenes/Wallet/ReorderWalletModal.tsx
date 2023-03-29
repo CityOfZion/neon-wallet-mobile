@@ -1,7 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, { useState } from 'react'
-import { Dimensions } from 'react-native'
+import React, { useMemo, useState } from 'react'
 import SortableList from 'react-native-sortable-list'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -9,10 +8,8 @@ import { Await, AwaitActivity } from '~/node_modules/@simpli/react-native-await'
 import { selectWallets } from '~/src/store/wallet/SelectorWallet'
 import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { DataByNumber, RowProps } from '~/src/types/global'
-import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
+import SwiperPanel, { LabelButton, useSwiperController } from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import ThemedButton from '~src/components/themed/ThemedButton'
-import { UtilsHelper } from '~src/helpers/UtilsHelper'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~src/navigation/TabNavigation'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
@@ -37,24 +34,16 @@ const ItemComponent = (props: RowProps<string>) => {
 
 export default function ReorderWalletModal(props: Props) {
   const controller = useSwiperController(true)
-
   const wallets = useSelector(selectWallets)
-
   const dispatch = useDispatch()
 
   const [order, setOrder] = useState<number[]>([])
-  const listData: DataByNumber<string> = {}
 
-  wallets.forEach((wallet, index) => {
-    listData[index] = wallet.name ?? ''
-  })
+  const data = useMemo<DataByNumber<string>>(() => wallets.map(wallet => wallet.name ?? ''), [wallets])
 
   const commitAndClose = async () => {
     if (order.length > 0) {
-      Await.init('populateWallet')
       dispatch(walletReducerActions.reorder(order))
-      await UtilsHelper.sleep(1000)
-      Await.done('populateWallet')
     }
 
     controller.close()
@@ -64,38 +53,25 @@ export default function ReorderWalletModal(props: Props) {
     <SwiperPanel
       controller={controller}
       title={i18n.t('modals.reorderWallet.title')}
-      fullSize
-      padding={24}
       onClose={props.navigation.goBack}
-      leftButton={i18n.t('modals.reorderWallet.cancel')}
+      withoutScrollView
+      leftButton={<LabelButton label={i18n.t('modals.reorderWallet.cancel')} onPress={controller.close} />}
       rightButton={
-        <ThemedButton
-          label={i18n.t('modals.reorderWallet.save')}
-          textColor="primary"
-          fontSize="16px"
-          rounded={false}
-          flat
-        />
+        <LabelButton label={i18n.t('modals.reorderWallet.save')} onPress={() => Await.run('save', commitAndClose)} />
       }
-      onLeftPress={controller.close}
-      onRightPress={() => Await.run('commitAndClose', commitAndClose)}
-      solidColorBG
     >
-      <AwaitActivity name="commitAndClose" loadingView={<ScreenLoader solidColorBG />}>
-        <LinearLayout height="100%" mt={Dimensions.get('screen').height * 0.02}>
-          <TextView textAlign="center" fontFamily="medium" fontSize={18} color="text.0">
-            {i18n.t('modals.reorderWallet.subtitle')}
-          </TextView>
-          <SortableList
-            contentContainerStyle={{
-              height: '100%',
-              paddingTop: Dimensions.get('screen').height * 0.07,
-            }}
-            data={listData}
-            renderRow={ItemComponent}
-            onChangeOrder={order => setOrder(order)}
-          />
-        </LinearLayout>
+      <AwaitActivity name="save" loadingView={<ScreenLoader solidColorBG />}>
+        <TextView textAlign="center" fontFamily="medium" fontSize={18} mb="18px" color="text.0">
+          {i18n.t('modals.reorderWallet.subtitle')}
+        </TextView>
+
+        <SortableList
+          style={{ flexGrow: 1, flexShrink: 1 }}
+          showsVerticalScrollIndicator={false}
+          data={data}
+          renderRow={ItemComponent}
+          onChangeOrder={setOrder}
+        />
       </AwaitActivity>
     </SwiperPanel>
   )

@@ -1,10 +1,14 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 import { Normalize } from '../app/Normalize'
+import { hasCustomSelector } from '../store/settings/SettingsSelector'
 import { ImageView, LinearLayout, TextView } from '../styles/styled-components'
 
 export const CustomModeBar = () => {
-  return (
+  const hasCustom = useSelector(hasCustomSelector)
+
+  return hasCustom ? (
     <LinearLayout
       orientation="horiz"
       backgroundColor="black"
@@ -29,5 +33,5 @@ export const CustomModeBar = () => {
         </TextView>
       </LinearLayout>
     </LinearLayout>
-  )
+  ) : null
 }

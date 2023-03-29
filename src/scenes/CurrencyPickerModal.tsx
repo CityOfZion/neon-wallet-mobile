@@ -48,15 +48,9 @@ const CurrencyPickerModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={i18n.t('modals.currency.title')}
-      fullSize
-      padding={16}
-      paddingTop={24}
       onClose={props.navigation.goBack}
-      onLeftPress={controller.close}
-      rightButton={<CloseButton mr="20px" />}
-      disableDefaultScrollView
-      onRightPress={controller.close}
-      solidColorBG
+      rightButton={<CloseButton onPress={controller.close} />}
+      withoutScrollView
     >
       <SelectorList items={currencies} />
     </SwiperPanel>

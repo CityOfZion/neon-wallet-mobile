@@ -10,10 +10,9 @@ import { selectAccounts } from '../store/account/SelectorAccount'
 
 import { BlockchainServiceKey } from '~src/blockchain'
 import BlockchainList from '~src/components/BlockchainList'
-import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
+import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import ThemedCloseButton from '~src/components/themed/ThemedCloseButton'
 import { useBlockchainActions } from '~src/hooks/useBlockchainActions'
 import { Wallet } from '~src/models/redux/Wallet'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
@@ -67,17 +66,12 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
 
   return (
     <SwiperPanel
-      fullSize
-      paddingTop={36}
-      paddingBottom={36}
       controller={controller}
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
+      rightButton={<CloseButton onPress={controller.close} />}
       title={i18n.t(`modals.blockchainList.title`)}
       onClose={props.navigation.goBack}
-      onRightPress={controller.close}
-      solidColorBG
     >
-      <AwaitActivity name="createAccount" loadingView={<ScreenLoader solidColorBG />}>
+      <AwaitActivity name="createAccount" loadingView={<ScreenLoader transparent />}>
         <LinearLayout height="100%" justifyContent="space-between">
           <LinearLayout>
             <LinearLayout width="100%">

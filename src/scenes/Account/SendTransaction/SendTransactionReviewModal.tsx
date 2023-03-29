@@ -8,10 +8,9 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
-import SwiperPanel, { useSwiperController } from '~/src/components/SwiperPanel'
+import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
 import { TransactionTipCard } from '~/src/components/TransactionTipCard'
 import { TransactionTokenCard } from '~/src/components/TransactionTokenCard'
-import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
@@ -127,8 +126,7 @@ export const SendTransactionReviewModal = (props: Props) => {
           transactionHash,
         },
       })
-    } catch (error) {
-      console.log(error)
+    } catch {
       showMessage({
         message: i18n.t('modals.sendTransactionReviewModal.transactionFailed'),
         type: 'danger',
@@ -139,12 +137,10 @@ export const SendTransactionReviewModal = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      smallerSize
+      size="small"
       title={i18n.t('modals.sendTransactionReviewModal.title')}
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
-      onRightPress={controller.close}
+      rightButton={<CloseButton onPress={controller.close} />}
       onClose={props.navigation.goBack}
-      solidColorBG
     >
       <AwaitActivity name="submit" loadingView={<ScreenLoader transparent />}>
         <LinearLayout height="100%" width="100%" orientation="verti" alignItems="center" justifyContent="space-between">

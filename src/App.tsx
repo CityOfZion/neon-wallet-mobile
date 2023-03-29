@@ -27,7 +27,7 @@ const App = () => {
             <ErrorBound>
               <AppNavigation />
             </ErrorBound>
-            <FlashMessage position="top" MessageComponent={ThemedAlert} />
+            <FlashMessage position="top" MessageComponent={ThemedAlert} hideStatusBar />
           </WalletConnectContextProvider>
         </QueryClientProvider>
       </PersistGate>

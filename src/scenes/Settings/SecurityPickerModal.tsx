@@ -80,8 +80,6 @@ const SecurityPickerModal = (props: Props) => {
     const handler = handleBySecurity[newSecurity]
 
     await handler()
-
-    controller.close()
   }
 
   const isSelected = (c: Security) => c === security
@@ -108,15 +106,8 @@ const SecurityPickerModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={i18n.t('modals.security.title')}
-      fullSize
-      padding={16}
-      paddingTop={24}
-      onClose={props.navigation.goBack}
-      onLeftPress={controller.close}
-      rightButton={<CloseButton mr="20px" />}
-      disableDefaultScrollView
-      onRightPress={controller.close}
-      solidColorBG
+      rightButton={<CloseButton onPress={controller.close} />}
+      withoutScrollView
     >
       <SelectorList items={securities} />
     </SwiperPanel>

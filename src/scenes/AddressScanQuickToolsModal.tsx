@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React from 'react'
+import React, { useRef } from 'react'
 
 import { wrapper } from '../app/ApplicationWrapper'
 import { AlterMenuItem } from '../components/AlterMenuItem'
@@ -21,11 +21,24 @@ export interface Props {
 export const AddressScanQuickToolsModal = (props: Props) => {
   const controller = useSwiperController(true)
 
+  const callback = useRef<() => Promise<void> | void>()
+
   const handlePressSend = () => {
     props.navigation.navigate(wrapper.route.Modal.name, {
-      screen: wrapper.route.SendTransactionWalletSelectionModal.name,
+      screen: wrapper.route.WalletSelectionModal.name,
       params: {
-        address: props.route.params.address,
+        textSchema: 'modals.sendSelectionModal',
+        disconnectDisable: true,
+        noBalanceDisable: true,
+        onFinish: params => {
+          props.navigation.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.SendTransactionModal.name,
+            params: {
+              ...params,
+              address: props.route.params.address,
+            },
+          })
+        },
       },
     })
   }
@@ -51,8 +64,12 @@ export const AddressScanQuickToolsModal = (props: Props) => {
     })
   }
 
-  const runClosing = (callback: () => void) => {
+  const run = (cb: () => void) => {
+    callback.current = cb
     controller.close()
+  }
+
+  const handleClose = () => {
     props.navigation.reset({
       index: 0,
       routes: [
@@ -61,34 +78,30 @@ export const AddressScanQuickToolsModal = (props: Props) => {
         },
       ],
     })
-    callback()
+
+    if (callback.current) {
+      callback.current()
+    }
   }
 
   return (
-    <SwiperPanel
-      controller={controller}
-      noHeader
-      draggable
-      paddingTop={36}
-      solidColorBG
-      onClose={props.navigation.goBack}
-    >
+    <SwiperPanel controller={controller} size="dinamic" withoutHeader onClose={handleClose}>
       <AlterMenuItem
-        onPress={() => runClosing(handlePressSend)}
+        onPress={() => run(handlePressSend)}
         icon={require('~src/assets/images/icon-circle-send-primary.png')}
         title={i18n.t('modals.handleQrCode.send.title')}
         subtitle={i18n.t('modals.handleQrCode.send.subtitle')}
       />
 
       <AlterMenuItem
-        onPress={() => runClosing(handlePressImport)}
+        onPress={() => run(handlePressImport)}
         icon={require('~src/assets/images/icon-cicle-watch-primary.png')}
         title={i18n.t('modals.handleQrCode.watch.title')}
         subtitle={i18n.t('modals.handleQrCode.watch.subtitle')}
       />
 
       <AlterMenuItem
-        onPress={() => runClosing(handlePressContact)}
+        onPress={() => run(handlePressContact)}
         icon={require('~src/assets/images/icon-cicle-contacts-primary.png')}
         title={i18n.t('modals.handleQrCode.contact.title')}
         subtitle={i18n.t('modals.handleQrCode.contact.subtitle')}

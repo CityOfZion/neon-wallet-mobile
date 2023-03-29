@@ -3,17 +3,16 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import * as Sharing from 'expo-sharing'
 import { SharingOptions } from 'expo-sharing/src/Sharing'
 import i18n from 'i18n-js'
-import React, { Fragment } from 'react'
-import { ImageLoadEventData, TouchableWithoutFeedback } from 'react-native'
-import { useSelector } from 'react-redux'
+import React, { Fragment, useRef } from 'react'
+import { ImageSourcePropType } from 'react-native'
 
-import { RootState } from '../store/RootStore'
+import { AlterMenuItem } from '../components/AlterMenuItem'
+import ThemedButton from '../components/themed/ThemedButton'
 
-import { wrapper } from '~src/app/ApplicationWrapper'
 import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { LinearLayout } from '~src/styles/styled-components'
 
 export interface CopyContextModalParams {
   qrCode: string // File URI
@@ -27,13 +26,14 @@ interface CopyContextModalProps {
 
 interface ListItem {
   title: string
-  source: ImageLoadEventData
+  source: ImageSourcePropType
   onClick: () => void
 }
 
 export const CopyContextModal = (props: CopyContextModalProps) => {
-  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const controller = useSwiperController(true)
+
+  const callback = useRef<() => Promise<void> | void>()
 
   const items: ListItem[] = [
     {
@@ -56,41 +56,28 @@ export const CopyContextModal = (props: CopyContextModalProps) => {
     },
   ]
 
-  const runClosing = (callback: () => void) => {
+  const run = (cb: () => void) => {
+    callback.current = cb
     controller.close()
-    callback()
   }
 
-  return (
-    <SwiperPanel controller={controller} noHeader padding={36} onClose={props.navigation.goBack} solidColorBG>
-      <>
-        {items.map((item, index) => (
-          <TouchableWithoutFeedback
-            key={index}
-            onPress={() => {
-              runClosing(item.onClick)
-            }}
-          >
-            <LinearLayout>
-              <LinearLayout orientation="horiz" pb="18px" pt="16px" alignItems="center">
-                <LinearLayout>
-                  <TextView color={theme.colors.text[0]} fontSize={18} fontFamily="regular">
-                    {item.title}
-                  </TextView>
-                </LinearLayout>
-                <LinearLayout weight={1} />
-                <ImageView width={35} height={35} mr="13px" source={item.source} />
-              </LinearLayout>
+  const handleClose = () => {
+    props.navigation.goBack()
 
-              <LinearLayout height="1px" bg={theme.colors.background[5]} />
-            </LinearLayout>
-          </TouchableWithoutFeedback>
+    if (callback.current) {
+      callback.current()
+    }
+  }
+  return (
+    <SwiperPanel controller={controller} withoutHeader size="dinamic" onClose={handleClose}>
+      <>
+        {items.map(item => (
+          <AlterMenuItem onPress={() => run(item.onClick)} icon={item.source} title={item.title} key={item.title} />
         ))}
-        <TouchableWithoutFeedback onPress={controller.close}>
-          <TextView mt={38} mb={12} color="primary" fontSize={22} textAlign="center">
-            {i18n.t('modals.copyContext.cancel')}
-          </TextView>
-        </TouchableWithoutFeedback>
+
+        <LinearLayout mt="38px">
+          <ThemedButton flat label={i18n.t('modals.copyContext.cancel')} />
+        </LinearLayout>
       </>
     </SwiperPanel>
   )

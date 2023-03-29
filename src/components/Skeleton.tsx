@@ -27,7 +27,8 @@ export const Skeleton = ({
           ? containerStyle
           : withDefaultStyle
           ? {
-              flex: 1,
+              flexGrow: 1,
+              flexShrink: 1,
             }
           : {}
       }

@@ -50,11 +50,23 @@ const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
 
     if (sendUri && validateAddressAllBlockchains(sendUri.address)) {
       navigation.navigate(wrapper.route.Modal.name, {
-        screen: wrapper.route.SendTransactionWalletSelectionModal.name,
+        screen: wrapper.route.WalletSelectionModal.name,
         params: {
-          address: sendUri.address,
+          textSchema: 'modals.sendSelectionModal',
+          disconnectDisable: true,
+          noBalanceDisable: true,
+          onFinish: params => {
+            navigation.navigate(wrapper.route.Modal.name, {
+              screen: wrapper.route.SendTransactionModal.name,
+              params: {
+                ...params,
+                address: sendUri.address,
+              },
+            })
+          },
         },
       })
+
       return
     }
 
@@ -68,11 +80,17 @@ const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
       return
     }
 
-    if (
-      validateAddressAllBlockchains(data) ||
-      validatePrivateKeyWithPasswordAllBlockchains(data) ||
-      validateWifAllBlockchains(data)
-    ) {
+    if (validateAddressAllBlockchains(data)) {
+      navigation.navigate(wrapper.route.Modal.name, {
+        screen: wrapper.route.AddressScanQuickToolsModal.name,
+        params: {
+          address: data,
+        },
+      })
+      return
+    }
+
+    if (validatePrivateKeyWithPasswordAllBlockchains(data) || validateWifAllBlockchains(data)) {
       navigation.navigate(wrapper.route.Tab.name, {
         screen: wrapper.route.More.name,
         params: {
@@ -94,15 +112,33 @@ const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
 
   const handlePressSend = () => {
     navigation.navigate(wrapper.route.Modal.name, {
-      screen: wrapper.route.SendTransactionWalletSelectionModal.name,
-      params: {},
+      screen: wrapper.route.WalletSelectionModal.name,
+      params: {
+        textSchema: 'modals.sendSelectionModal',
+        disconnectDisable: true,
+        noBalanceDisable: true,
+        onFinish: params => {
+          navigation.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.SendTransactionModal.name,
+            params,
+          })
+        },
+      },
     })
   }
 
   const handlePressReceive = () => {
     navigation.navigate(wrapper.route.Modal.name, {
-      screen: wrapper.route.ReceiveTransactionWalletSelectionModal.name,
-      params: {},
+      screen: wrapper.route.WalletSelectionModal.name,
+      params: {
+        textSchema: 'modals.receiveSelectionModal',
+        onFinish: params => {
+          navigation.navigate(wrapper.route.Modal.name, {
+            screen: wrapper.route.ReceiveTransactionModal.name,
+            params,
+          })
+        },
+      },
     })
   }
 
@@ -112,7 +148,12 @@ const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
   }
 
   return (
-    <SwiperPanel controller={controller} solidColorBG paddingBottom={applicationConfig.footerHeight}>
+    <SwiperPanel
+      controller={controller}
+      withoutHeader
+      size="dinamic"
+      contentStyle={{ paddingBottom: applicationConfig.footerHeight, paddingTop: 0 }}
+    >
       <AlterMenuItem
         onPress={() => runClosing(handlePressQrCode)}
         icon={require('~src/assets/images/icon-circle-qr-primary.png')}
@@ -202,7 +243,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
     <LinearLayout height="100%" width="100%" justifyContent="flex-end" position="absolute" pointerEvents="box-none">
       <QuickToolsMenu controller={controller} />
 
-      <LinearLayout position="relative" width={'100%' as any} height={applicationConfig.footerHeight} bottom="-1px">
+      <LinearLayout position="absolute" width={'100%' as any} height={applicationConfig.footerHeight} bottom="-1px">
         <Shadow
           distance={12}
           sides={['top']}
@@ -234,7 +275,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
           }
         />
 
-        <LinearLayout orientation="horiz" position="relative" alignItems="flex-end" top="6px">
+        <LinearLayout orientation="horiz" position="relative" alignItems="flex-end" top="2px">
           <TabButton
             enabledSource={require('~src/assets/images/button-wallet-white.png')}
             disabledSource={require('~src/assets/images/button-wallet-disabled.png')}
@@ -251,7 +292,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
             {...props}
           />
 
-          <ButtonView onPress={controller.toggle} position="relative" bottom="2px">
+          <ButtonView onPress={controller.toggle} position="relative" bottom="-2px">
             <Animated.View
               style={{
                 width: 66,

@@ -21,23 +21,20 @@ interface AccountQRCodeProps {
 
 export const AccountQRCode = (props: AccountQRCodeProps) => {
   const controller = useSwiperController(true)
+
   return (
     <SwiperPanel
-      rightButton={<CloseButton mr="25px" />}
-      fullSize
       controller={controller}
-      onClose={props.navigation.goBack}
       title={props.route.params.account.name ?? ''}
-      onRightPress={controller.close}
-      solidColorBG
+      rightButton={<CloseButton onPress={controller.close} />}
+      onClose={props.navigation.goBack}
     >
-      <LinearLayout justifyContent="space-between" height="100%">
-        <LinearLayout>
-          <InputLabel capitalize title={i18n.t('modals.accountQRCode.address')} />
-          <TextView color="primary" fontFamily="medium" fontSize="17px" mb="12%">
-            {props.route.params.account.address}
-          </TextView>
-        </LinearLayout>
+      <LinearLayout flexGrow={1} flexShrink={1}>
+        <InputLabel capitalize title={i18n.t('modals.accountQRCode.address')} />
+        <TextView color="primary" fontFamily="medium" fontSize="17px" mb="12%">
+          {props.route.params.account.address}
+        </TextView>
+
         <QRCodeWithCopyButton qrCodeValue={props.route.params.account.address ?? ''} />
       </LinearLayout>
     </SwiperPanel>

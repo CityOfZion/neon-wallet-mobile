@@ -124,65 +124,61 @@ export const TransactionRequestBase = ({
   return (
     <SwiperPanel
       controller={controller}
-      padding={20}
-      fullSize
       title={i18n.t('modals.transactionRequest.title')}
-      rightButton={<CloseButton mr="20px" />}
-      onRightPress={controller.close}
+      rightButton={<CloseButton onPress={controller.close} />}
       onClose={handleSwiperOnClose}
-      solidColorBG
+      contentStyle={{ justifyContent: 'space-between' }}
     >
-      <LinearLayout orientation="verti" mr={2} ml={2} mt={5} mb={5}>
-        {successOrFailedValues ? (
-          successOrFailedValues.type === 'success' ? (
-            <SuccessElement account={account} transactionId={successOrFailedValues.value} />
-          ) : (
-            <FailedElement errorMessage={successOrFailedValues.value} />
-          )
+      {successOrFailedValues ? (
+        successOrFailedValues.type === 'success' ? (
+          <SuccessElement account={account} transactionId={successOrFailedValues.value} />
         ) : (
-          <LinearLayout height="100%" justifyContent="space-between">
-            <LinearLayout>
-              <ConnectionHeader title={session.peer.metadata.name} imageUri="" hideTitle={hideDappName} />
-              <TextView
-                mt="2%"
-                mr="20px"
-                ml="20px"
-                mb="31px"
-                color="white"
-                fontSize="18px"
-                alignSelf="center"
-                textAlign="center"
-              >
-                {title}
-              </TextView>
+          <FailedElement errorMessage={successOrFailedValues.value} />
+        )
+      ) : (
+        <>
+          <LinearLayout>
+            <ConnectionHeader title={session.peer.metadata.name} imageUri="" hideTitle={hideDappName} />
+            <TextView
+              mt="2%"
+              mr="20px"
+              ml="20px"
+              mb="31px"
+              color="white"
+              fontSize="18px"
+              alignSelf="center"
+              textAlign="center"
+            >
+              {title}
+            </TextView>
 
-              {children}
-            </LinearLayout>
-            <LinearLayout>
-              <ThemedButton label={acceptButtonLabel} disabled={buttonsIsDisabled} onPress={handlePressAcceptButton} />
-              <LinearLayout mt="24px">
-                <TouchableWithoutFeedback onPress={handlePressRejectButton} disabled={buttonsIsDisabled}>
-                  <LinearLayout
-                    width="100%"
-                    borderRadius="4px"
-                    borderWidth="1px"
-                    borderColor="primary"
-                    justifyContent="center"
-                    alignItems="center"
-                    orientation="horiz"
-                    p="10px"
-                    opacity={buttonsIsDisabled ? '0.3' : '1'}
-                  >
-                    <TextView style={{ includeFontPadding: false }} ml={3} color="primary" fontSize={20}>
-                      {rejectButtonLabel}
-                    </TextView>
-                  </LinearLayout>
-                </TouchableWithoutFeedback>
-              </LinearLayout>
+            {children}
+          </LinearLayout>
+
+          <LinearLayout>
+            <ThemedButton label={acceptButtonLabel} disabled={buttonsIsDisabled} onPress={handlePressAcceptButton} />
+            <LinearLayout mt="12px">
+              <TouchableWithoutFeedback onPress={handlePressRejectButton} disabled={buttonsIsDisabled}>
+                <LinearLayout
+                  width="100%"
+                  borderRadius="4px"
+                  borderWidth="1px"
+                  borderColor="primary"
+                  justifyContent="center"
+                  alignItems="center"
+                  orientation="horiz"
+                  p="10px"
+                  opacity={buttonsIsDisabled ? '0.3' : '1'}
+                >
+                  <TextView style={{ includeFontPadding: false }} ml={3} color="primary" fontSize={20}>
+                    {rejectButtonLabel}
+                  </TextView>
+                </LinearLayout>
+              </TouchableWithoutFeedback>
             </LinearLayout>
           </LinearLayout>
-        )}
-      </LinearLayout>
+        </>
+      )}
     </SwiperPanel>
   )
 }

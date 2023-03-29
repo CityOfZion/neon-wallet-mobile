@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 import { useBalancesAndExchange } from '../hooks/useBalancesAndExchange'
 
 import AccountCard from '~src/components/AccountCard'
-import SwiperPanel, { useSwiperController } from '~src/components/SwiperPanel'
+import SwiperPanel, { LabelButton, useSwiperController } from '~src/components/SwiperPanel'
 import ColorPicker from '~src/components/misc/ColorPicker'
 import { Account } from '~src/models/redux/Account'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
@@ -44,33 +44,18 @@ const CustomColorPage = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={i18n.t('customColorPage.title')}
-      leftButton={i18n.t('customColorPage.navigation.cancel')}
-      rightButton={i18n.t('customColorPage.navigation.done')}
-      onLeftPress={controller.close}
-      onRightPress={pickAndClose}
-      padding={16}
-      paddingTop={20}
-      onClose={() => props.navigation.goBack()}
-      solidColorBG
-      smallerSize
+      leftButton={<LabelButton label={i18n.t('customColorPage.navigation.cancel')} onPress={controller.close} />}
+      rightButton={<LabelButton label={i18n.t('customColorPage.navigation.done')} onPress={pickAndClose} />}
+      onClose={props.navigation.goBack}
+      size="small"
     >
-      <LinearLayout height="100%">
-        <AccountCard balanceExchange={balanceExchange} hideBalance={false} account={props.route.params.account} />
-        <TextView
-          my={3}
-          color="text.0"
-          textAlign="center"
-          fontSize="lg"
-          allowFontScaling
-          adjustsFontSizeToFit
-          numberOfLines={1}
-        >
-          {i18n.t('customColorPage.subtitle')}
-        </TextView>
+      <AccountCard balanceExchange={balanceExchange} hideBalance={false} account={props.route.params.account} />
+      <TextView mt="12px" mb="6px" color="text.0" width="100%" textAlign="center" fontSize="lg">
+        {i18n.t('customColorPage.subtitle')}
+      </TextView>
 
-        <LinearLayout width="100%" weight={1} alignItems="center">
-          <ColorPicker color={color} onChange={colorPickerChangeEvent} />
-        </LinearLayout>
+      <LinearLayout weight={1} alignItems="center">
+        <ColorPicker color={color} onChange={colorPickerChangeEvent} />
       </LinearLayout>
     </SwiperPanel>
   )

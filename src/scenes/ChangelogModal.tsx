@@ -86,21 +86,18 @@ const ChangelogModal = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      padding={20}
-      fullSize
       title={i18n.t('modals.changelog.title')}
-      rightButton={<CloseButton mr="20px" />}
-      onRightPress={handleRightPress}
+      rightButton={<CloseButton onPress={handleRightPress} />}
       onClose={props.navigation.goBack}
-      solidColorBG
+      withoutScrollView
     >
       <FlatList
         data={changelog}
-        scrollEnabled
+        showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          <LinearLayout orientation="verti" mr={5} pl={42} mt={5} mb={5}>
-            <TextView color="white">{i18n.t('modals.changelog.thankYouText')}</TextView>
-            <TextView color="white" textAlign="right" fontFamily="bold">
+          <LinearLayout orientation="verti" mb="12px" px="24px">
+            <TextView color="text.0">{i18n.t('modals.changelog.thankYouText')}</TextView>
+            <TextView color="text.0" textAlign="right" fontFamily="bold">
               {i18n.t('modals.changelog.cozTeam')}
             </TextView>
           </LinearLayout>

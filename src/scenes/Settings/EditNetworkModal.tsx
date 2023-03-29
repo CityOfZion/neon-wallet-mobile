@@ -124,142 +124,133 @@ export const EditNetworkModal = (props: Props) => {
           ? I18n.t('modals.editNetworkModal.editTitle', { networkName: network.name })
           : I18n.t('modals.editNetworkModal.createTitle')
       }
-      fullSize
       onClose={props.navigation.goBack}
-      rightButton={<CloseButton mr="20px" />}
-      onRightPress={controller.close}
-      solidColorBG
+      rightButton={<CloseButton onPress={controller.close} />}
+      contentStyle={{ justifyContent: 'space-between' }}
     >
-      <LinearLayout
-        orientation="verti"
-        justifyContent="space-between"
-        height="100%"
-        paddingTop="32px"
-        paddingBottom="16px"
-      >
+      <LinearLayout>
+        <InputLabel
+          title={I18n.t('modals.editNetworkModal.inputLabels.name')}
+          description={I18n.t('modals.editNetworkModal.inputLabels.nameDescription')}
+          marginBottom="8px"
+          capitalize
+          color="text.0"
+        />
+        <InputWithValidation
+          placeholder={I18n.t('modals.editNetworkModal.inputPlaceholder.name')}
+          onChangeText={setNetworkName}
+          color="white"
+          value={networkName}
+          validator={() => true}
+          separatorColor="background.3"
+          invalidColor="background.3"
+          invalidMessageColor="quinary"
+          sideMargins={0}
+          hideScan
+          hidePaste
+        />
+
+        <InputLabel
+          title={I18n.t('modals.editNetworkModal.inputLabels.url')}
+          marginBottom="8px"
+          marginTop="74px"
+          capitalize
+          color="text.0"
+        />
         <LinearLayout>
-          <InputLabel
-            title={I18n.t('modals.editNetworkModal.inputLabels.name')}
-            description={I18n.t('modals.editNetworkModal.inputLabels.nameDescription')}
-            marginBottom="8px"
-            capitalize
-            color="text.0"
-          />
-          <InputWithValidation
-            placeholder={I18n.t('modals.editNetworkModal.inputPlaceholder.name')}
-            onChangeText={setNetworkName}
-            color="white"
-            value={networkName}
-            validator={() => true}
-            separatorColor="background.3"
-            invalidColor="background.3"
-            invalidMessageColor="quinary"
-            sideMargins={0}
-            hideScan
-            hidePaste
-          />
+          <LinearLayout orientation="horiz">
+            <InputTextView
+              onChangeText={handleChangeNetworkUrl}
+              color="text.0"
+              placeholderTextColor="#7d929a"
+              underlineColorAndroid="transparent"
+              placeholder={I18n.t('modals.editNetworkModal.inputPlaceholder.url')}
+              fontFamily="regular"
+              fontSize="18px"
+              value={networkUrl}
+              weight={1}
+              returnKeyType="done"
+              onSubmitEditing={Keyboard.dismiss}
+              multiline={Platform.OS === 'ios'}
+              numberOfLines={1}
+              clearTextOnFocus={false}
+            />
 
-          <InputLabel
-            title={I18n.t('modals.editNetworkModal.inputLabels.url')}
-            marginBottom="8px"
-            marginTop="74px"
-            capitalize
-            color="text.0"
-          />
-          <LinearLayout>
-            <LinearLayout borderRadius="10px" orientation="horiz" flex={1}>
-              <InputTextView
-                onChangeText={handleChangeNetworkUrl}
-                color="text.0"
-                placeholderTextColor="#7d929a"
-                underlineColorAndroid="transparent"
-                placeholder={I18n.t('modals.editNetworkModal.inputPlaceholder.url')}
-                fontFamily="regular"
-                fontSize="18px"
-                value={networkUrl}
-                weight={1}
-                returnKeyType="done"
-                onSubmitEditing={Keyboard.dismiss}
-                multiline={Platform.OS === 'ios'}
-                numberOfLines={1}
-                clearTextOnFocus={false}
-              />
-
-              {isValidating ? (
-                <ActivityIndicator size="small" color="#fff" />
-              ) : (
-                typeof urlIsValid === 'boolean' && (
-                  <>
-                    {urlIsValid ? (
-                      <ImageView
-                        width={18}
-                        height={18}
-                        alignSelf="center"
-                        source={require('~/src/assets/images/icon-circle-plus-green-fill.png')}
-                        resizeMode="contain"
-                      />
-                    ) : (
-                      <ImageView
-                        width={18}
-                        height={18}
-                        alignSelf="center"
-                        source={require('~/src/assets/images/icon-alert-purple.png')}
-                        resizeMode="contain"
-                      />
-                    )}
-                  </>
-                )
-              )}
-            </LinearLayout>
-            <Separator mt={1} backgroundColor="background.3" />
-            {typeof message !== 'undefined' && typeof urlIsValid !== 'undefined' && (
-              <TextView
-                fontSize="14px"
-                fontStyle="italic"
-                color={urlIsValid ? 'primary' : 'quinary'}
-                textAlign="right"
-                mt="8px"
-              >
-                {message}
-              </TextView>
+            {isValidating ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              typeof urlIsValid === 'boolean' && (
+                <>
+                  {urlIsValid ? (
+                    <ImageView
+                      width={18}
+                      height={18}
+                      alignSelf="center"
+                      source={require('~/src/assets/images/icon-circle-plus-green-fill.png')}
+                      resizeMode="contain"
+                    />
+                  ) : (
+                    <ImageView
+                      width={18}
+                      height={18}
+                      alignSelf="center"
+                      source={require('~/src/assets/images/icon-alert-purple.png')}
+                      resizeMode="contain"
+                    />
+                  )}
+                </>
+              )
             )}
           </LinearLayout>
-        </LinearLayout>
 
-        <LinearLayout mb="8px">
-          <ThemedButton
-            label={I18n.t('app.save')}
-            onPress={handleSave}
-            disabled={urlIsValid !== true || isValidating !== false}
-          />
-          {network && (
-            <ButtonWithoutFeedbackView onPress={handleDelete}>
-              <LinearLayout
-                width="100%"
-                borderRadius="4px"
-                borderWidth="1px"
-                borderColor="primary"
-                justifyContent="center"
-                alignItems="center"
-                orientation="horiz"
-                p="10px"
-                mt="36px"
-              >
-                <ImageView
-                  source={require('~/src/assets/images/icon-trash-can-primary.png')}
-                  style={{
-                    width: 20,
-                    height: 20,
-                  }}
-                />
-
-                <TextView ml="3px" color="primary" fontSize="20px">
-                  {I18n.t('modals.editNetworkModal.delete')}
-                </TextView>
-              </LinearLayout>
-            </ButtonWithoutFeedbackView>
+          <Separator mt={1} backgroundColor="background.3" />
+          {typeof message !== 'undefined' && typeof urlIsValid !== 'undefined' && (
+            <TextView
+              fontSize="14px"
+              fontStyle="italic"
+              color={urlIsValid ? 'primary' : 'quinary'}
+              textAlign="right"
+              mt="8px"
+            >
+              {message}
+            </TextView>
           )}
         </LinearLayout>
+      </LinearLayout>
+
+      <LinearLayout>
+        <ThemedButton
+          label={I18n.t('app.save')}
+          onPress={handleSave}
+          disabled={urlIsValid !== true || isValidating !== false}
+        />
+        {network && (
+          <ButtonWithoutFeedbackView onPress={handleDelete}>
+            <LinearLayout
+              width="100%"
+              borderRadius="4px"
+              borderWidth="1px"
+              borderColor="primary"
+              justifyContent="center"
+              alignItems="center"
+              orientation="horiz"
+              p="10px"
+              mt="36px"
+            >
+              <ImageView
+                source={require('~/src/assets/images/icon-trash-can-primary.png')}
+                style={{
+                  width: 20,
+                  height: 20,
+                }}
+              />
+
+              <TextView ml="3px" color="primary" fontSize="20px">
+                {I18n.t('modals.editNetworkModal.delete')}
+              </TextView>
+            </LinearLayout>
+          </ButtonWithoutFeedbackView>
+        )}
       </LinearLayout>
     </SwiperPanel>
   )

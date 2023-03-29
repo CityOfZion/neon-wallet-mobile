@@ -1,5 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient'
-import React from 'react'
+import React, { useEffect, useMemo } from 'react'
 import {
   LayoutChangeEvent,
   NativeScrollEvent,
@@ -7,6 +7,7 @@ import {
   RefreshControlProps,
   SafeAreaView,
   ScrollView,
+  StatusBar,
 } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -14,6 +15,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { RootState } from '~/src/store/RootStore'
+import { hasCustomSelector } from '~/src/store/settings/SettingsSelector'
 import { LinearLayout } from '~src/styles/styled-components'
 
 type PropsScrollable = {
@@ -59,27 +61,42 @@ const ScreenLayout = ({
   props.scrollable = props.scrollable ?? true
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const hasCustom = useSelector(hasCustomSelector)
+  const isConnected = useSelector((state: RootState) => state.network.isConnected)
 
   const headerHeight = useHeaderPadding ? applicationConfig.headerHeight : 0
   const tabBarHeight = useFooterPadding ? applicationConfig.footerHeight - applicationConfig.footerOffset : 0
 
-  const chooseColorBG = () => {
-    let color
-    if (transparent) {
-      color = ['#00000000', '#00000000']
-    } else if (invertedGradient) {
-      color = [theme.colors.background[9], theme.colors.background[18]]
-    } else if (solidColorBG) {
-      color = [theme.colors.background[2], theme.colors.background[2]]
-    } else if (darkerSolidColorBG) {
-      color = [theme.colors.background[14], theme.colors.background[14]]
-    } else {
-      color = [theme.colors.background[14], theme.colors.background[2]]
+  const colors = useMemo(
+    () =>
+      transparent
+        ? ['#00000000', '#00000000']
+        : invertedGradient
+        ? [theme.colors.background[9], theme.colors.background[18]]
+        : solidColorBG
+        ? [theme.colors.background[2], theme.colors.background[2]]
+        : darkerSolidColorBG
+        ? [theme.colors.background[14], theme.colors.background[14]]
+        : [theme.colors.background[14], theme.colors.background[2]],
+    [transparent, solidColorBG, darkerSolidColorBG, invertedGradient, theme]
+  )
+
+  useEffect(() => {
+    if (hasCustom) {
+      StatusBar.setBackgroundColor(theme.colors.black)
+      return
     }
-    return color
-  }
+
+    if (!isConnected) {
+      StatusBar.setBackgroundColor(theme.colors.background[12])
+      return
+    }
+
+    StatusBar.setBackgroundColor(colors[0])
+  }, [colors, hasCustom, isConnected])
+
   return (
-    <LinearGradient onLayout={onLayout} colors={chooseColorBG()} start={[1, 0]} end={[1, 1]}>
+    <LinearGradient onLayout={onLayout} colors={colors} start={[1, 0]} end={[1, 1]}>
       <SafeAreaView style={{ height: '100%' }}>
         {props.scrollable ? (
           <ScrollView

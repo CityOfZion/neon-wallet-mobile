@@ -6,14 +6,13 @@ import { FlatList, Keyboard } from 'react-native'
 
 import { Skeleton } from '../components/Skeleton'
 import { TokenIcon } from '../components/TokenIcon'
-import ThemedCloseButton from '../components/themed/ThemedCloseButton'
 import { useBalances } from '../hooks/useBalances'
 import { useLocalTokens } from '../hooks/useTokens'
 import { Token } from '../models/Token'
 
 import { Normalize } from '~src/app/Normalize'
 import { SearchBar } from '~src/components/SearchBar'
-import SwiperPanel, { PANEL_OFFSET, useSwiperController } from '~src/components/SwiperPanel'
+import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import { Account } from '~src/models/redux/Account'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
@@ -116,20 +115,18 @@ const ListTokenModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={i18n.t('modals.listTokenModal.tokens')}
-      onRightPress={controller.close}
-      padding={0}
-      smallerSize
-      rightButton={<ThemedCloseButton onPress={controller.close} />}
+      size="small"
+      rightButton={<CloseButton onPress={controller.close} />}
       onClose={props.navigation.goBack}
-      solidColorBG
+      withoutScrollView
     >
-      <LinearLayout width="100%" paddingX={16} pb={PANEL_OFFSET}>
+      <LinearLayout width="100%" flexGrow={1} flexShrink={1}>
         <TextView textAlign="center" fontFamily="medium" fontSize={18} color="text.0">
           {filterBy === 'send'
             ? i18n.t('modals.listTokenModal.selectTokenSend')
             : i18n.t('modals.listTokenModal.selectTokenReceive')}
         </TextView>
-        <SearchBar lighterColor marginX={-5} isDisabled={balance.isLoading} onFilter={setFilter} />
+        <SearchBar lighterColor isDisabled={balance.isLoading} onFilter={setFilter} />
 
         <Skeleton
           isLoading={balance.isLoading}

@@ -7,10 +7,9 @@ import { showMessage } from 'react-native-flash-message'
 
 import AccountSubTitle from '~/src/components/AccountSubTitle'
 import NeonQRCode from '~/src/components/NeonQRCode'
-import SwiperPanel, { useSwiperController } from '~/src/components/SwiperPanel'
+import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import ThemedCloseButton from '~/src/components/themed/ThemedCloseButton'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { Account } from '~/src/models/redux/Account'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
@@ -33,10 +32,6 @@ export const ExportWIFModal = ({ navigation, route }: Props) => {
   const controller = useSwiperController(true)
 
   const [WIF, setWIF] = useState<string>()
-
-  const handleClose = () => {
-    navigation.goBack()
-  }
 
   const getWIF = useCallback(async () => {
     try {
@@ -76,14 +71,10 @@ export const ExportWIFModal = ({ navigation, route }: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      fullSize
-      paddingTop={0}
       title={i18n.t('modals.ExportWIFModal.title')}
-      rightButton={<ThemedCloseButton />}
-      onRightPress={controller.close}
-      onClose={handleClose}
-      solidColorBG
-      subHeader={<AccountSubTitle account={account} />}
+      rightButton={<CloseButton onPress={controller.close} />}
+      onClose={navigation.goBack}
+      subheader={<AccountSubTitle account={account} />}
     >
       <AwaitActivity name="getWIF" loadingView={<ScreenLoader transparent />}>
         <LinearLayout mt="44px" alignItems="center">
