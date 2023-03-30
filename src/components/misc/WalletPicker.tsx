@@ -73,18 +73,18 @@ const WalletPicker = ({
           data={wallets}
           sliderWidth={width ?? applicationConfig.windowWidth}
           itemWidth={walletCardWidth}
-          enableSnap
           inactiveSlideScale={0.85}
           inactiveSlideOpacity={1}
           lockScrollWhileSnapping
-          enableMomentum
           lockScrollTimeoutDuration={200}
           activeSlideOffset={5}
           swipeThreshold={5}
           useScrollView
+          firstItem={selectWalletIndex}
           onSnapToItem={handleSelect}
           onScrollBeginDrag={onScrollBegin}
           onScrollEndDrag={onScrollEnd}
+          scrollEnabled={scrollEnabled}
           renderItem={({ item, index }) => (
             <WalletCard
               balanceExchange={selectedWalletBalanceExchange}
