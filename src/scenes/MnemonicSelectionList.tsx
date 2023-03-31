@@ -247,7 +247,7 @@ const MnemonicSelectionList = (props: Props) => {
                 marginVertical: 30,
               }}
             >
-              We found the following
+              {i18n.t('importKey.foundAccountsMnemonic')}
             </Text>
             <Accordion
               expandMultiple
