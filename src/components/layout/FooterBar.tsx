@@ -138,6 +138,7 @@ const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
             params,
           })
         },
+        noBalanceDisable: false
       },
     })
   }

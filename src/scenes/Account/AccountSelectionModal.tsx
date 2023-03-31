@@ -32,6 +32,7 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import { Account } from '~src/models/redux/Account'
 import { Wallet } from '~src/models/redux/Wallet'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
+import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 
 export interface AccountSelectionModalParams {
   wallet: Wallet
@@ -92,8 +93,14 @@ const AccountSelectionModal = (props: Props) => {
     setSelectedAccount(account)
   }
 
+  const disableButton = useMemo(() => {
+    return disconnectDisable && !isConnected || noBalanceDisable && !BalanceHelper.hasSomeBalance(selectedAccountBalanceExchange?.balance.data)
+  }, [disconnectDisable, isConnected, noBalanceDisable, selectedAccountBalanceExchange])
+
   const handleNext = (token?: TokenBalance) => {
-    onFinish({ wallet, account: selectedAccount, token })
+    if (!disableButton) {
+      onFinish({ wallet, account: selectedAccount, token })
+    }
   }
 
   return (
@@ -132,7 +139,7 @@ const AccountSelectionModal = (props: Props) => {
                 onSelect={handleChangeAccount}
               />
 
-              {!!selectedAccountBalanceExchange && (
+              {!disableButton && !!selectedAccountBalanceExchange ? (
                 <>
                   <TextView my={4} color="text.3" fontSize="md" textAlign="center">
                     {i18n.t(`${textSchema}.account.label`)}
@@ -148,7 +155,10 @@ const AccountSelectionModal = (props: Props) => {
                     balanceExchange={selectedAccountBalanceExchange}
                   />
                 </>
-              )}
+              ) : (<LinearLayout px={'5%'} pt={'15%'}>
+                    <FlatListEmpty alignY='center' label={i18n.t('modals.sendTransactionModal.insufficientFunds')} />
+                  </LinearLayout>)
+              }
             </LinearLayout>
 
             <LinearGradient
@@ -166,10 +176,7 @@ const AccountSelectionModal = (props: Props) => {
             >
               <ThemedButton
                 label={i18n.t('app.next')}
-                disabled={
-                  (disconnectDisable && !isConnected) ||
-                  (noBalanceDisable && !BalanceHelper.hasSomeBalance(selectedAccountBalanceExchange?.balance.data))
-                }
+                disabled={disableButton}
                 onPress={() => handleNext()}
               />
             </LinearGradient>
