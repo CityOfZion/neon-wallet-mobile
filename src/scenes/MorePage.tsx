@@ -1,6 +1,5 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import Constants from 'expo-constants'
 import * as WebBrowser from 'expo-web-browser'
 import i18n from 'i18n-js'
 import React, { useEffect } from 'react'
@@ -17,6 +16,7 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
+import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application'
 
 interface MoreProps {
   navigation: StackNavigationProp<RootStackParamList & MoreStackParamList & ModalStackParamList>
@@ -38,76 +38,80 @@ const MorePage = (props: MoreProps) => {
 
   return (
     <ScreenLayout hideBackButton>
-      <MenuItem
-        title={i18n.t('more.createWallet')}
-        icon={require('~/src/assets/images/wallet-icon-green.png')}
-        iconMarginRight={3}
-        iconHeight={26}
-        arrowDirection={RightIconType.NONE}
-        onPress={() => {
-          props.navigation.navigate(wrapper.route.Step1CreateWallet.name, {})
-        }}
-      />
-      <MenuItem
-        title={i18n.t('more.createWatchAccount')}
-        icon={require('~/src/assets/images/icon-watch-green.png')}
-        iconHeight={20}
-        iconWidth={20}
-        iconMarginRight={5}
-        iconMarginLeft={2}
-        arrowDirection={RightIconType.NONE}
-        onPress={() => {
-          props.navigation.navigate(wrapper.route.ImportReadAccount.name, {})
-        }}
-      />
-      <MenuItem
-        title={i18n.t('more.import')}
-        icon={require('~/src/assets/images/icon-import-green.png')}
-        iconHeight={22}
-        iconWidth={22}
-        iconMarginRight={15}
-        iconMarginLeft={1}
-        arrowDirection={RightIconType.NONE}
-        onPress={() => {
-          props.navigation.navigate(wrapper.route.ImportKey.name, {})
-        }}
-      />
-      <MenuItem
-        title={i18n.t('more.settings')}
-        icon={require('~/src/assets/images/icon-settings-green.png')}
-        iconHeight={22}
-        iconWidth={22}
-        iconMarginRight={15}
-        iconMarginLeft={1}
-        arrowDirection={RightIconType.NONE}
-        onPress={() => {
-          props.navigation.navigate(wrapper.route.Settings.name)
-        }}
-      />
-      <MenuItem
-        title={i18n.t('more.help')}
-        icon={require('~/src/assets/images/icon-help-green.png')}
-        iconWidth={21}
-        iconMarginLeft={1}
-        iconMarginRight={17}
-        arrowDirection={RightIconType.NONE}
-        onPress={() => {
-          handlePressHelp()
-        }}
-      />
-      <TouchableWithoutFeedback
-        onPress={() => {
-          props.navigation.navigate(wrapper.route.Modal.name, {
-            screen: wrapper.route.ChangelogModal.name,
-          })
-        }}
-      >
-        <LinearLayout position="absolute" left="5%" right="5%" bottom="3%">
-          <TextView fontSize={14} color="white" textAlign="left" numberOfLines={1} width="88%" allowFontScaling>
-            {`v${Constants.nativeAppVersion}-${Constants.nativeBuildVersion}${Platform.OS === 'ios' ? 'i' : 'a'}`}
-          </TextView>
+      <LinearLayout height={'100%'} justifyContent={'space-between'}>
+        <LinearLayout>
+          <MenuItem
+            title={i18n.t('more.createWallet')}
+            icon={require('~/src/assets/images/wallet-icon-green.png')}
+            iconMarginRight={3}
+            iconHeight={26}
+            arrowDirection={RightIconType.NONE}
+            onPress={() => {
+              props.navigation.navigate(wrapper.route.Step1CreateWallet.name, {})
+            }}
+          />
+          <MenuItem
+            title={i18n.t('more.createWatchAccount')}
+            icon={require('~/src/assets/images/icon-watch-green.png')}
+            iconHeight={20}
+            iconWidth={20}
+            iconMarginRight={5}
+            iconMarginLeft={2}
+            arrowDirection={RightIconType.NONE}
+            onPress={() => {
+              props.navigation.navigate(wrapper.route.ImportReadAccount.name, {})
+            }}
+          />
+          <MenuItem
+            title={i18n.t('more.import')}
+            icon={require('~/src/assets/images/icon-import-green.png')}
+            iconHeight={22}
+            iconWidth={22}
+            iconMarginRight={15}
+            iconMarginLeft={1}
+            arrowDirection={RightIconType.NONE}
+            onPress={() => {
+              props.navigation.navigate(wrapper.route.ImportKey.name, {})
+            }}
+          />
+          <MenuItem
+            title={i18n.t('more.settings')}
+            icon={require('~/src/assets/images/icon-settings-green.png')}
+            iconHeight={22}
+            iconWidth={22}
+            iconMarginRight={15}
+            iconMarginLeft={1}
+            arrowDirection={RightIconType.NONE}
+            onPress={() => {
+              props.navigation.navigate(wrapper.route.Settings.name)
+            }}
+          />
+          <MenuItem
+            title={i18n.t('more.help')}
+            icon={require('~/src/assets/images/icon-help-green.png')}
+            iconWidth={21}
+            iconMarginLeft={1}
+            iconMarginRight={17}
+            arrowDirection={RightIconType.NONE}
+            onPress={() => {
+              handlePressHelp()
+            }}
+          />
         </LinearLayout>
-      </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            props.navigation.navigate(wrapper.route.Modal.name, {
+              screen: wrapper.route.ChangelogModal.name,
+            })
+          }}
+        >
+          <LinearLayout>
+            <TextView fontSize={14} color="white" textAlign="left" numberOfLines={1} width="88%" allowFontScaling>
+              {`v${nativeApplicationVersion}-${nativeBuildVersion}${Platform.OS === 'ios' ? 'i' : 'a'}`}
+            </TextView>
+          </LinearLayout>
+        </TouchableWithoutFeedback>
+      </LinearLayout>
     </ScreenLayout>
   )
 }
