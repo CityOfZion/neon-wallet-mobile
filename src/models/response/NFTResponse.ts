@@ -23,6 +23,9 @@ export class NFTResponse {
   @ResponseExpose()
   name?: string
 
+  @ResponseExpose()
+  isSVG?: boolean
+
   constructor(data: NFTResponse) {
     Object.assign(this, data)
   }

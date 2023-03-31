@@ -9,6 +9,7 @@ import { TFilterSelectionType, TOnFinishSelectionParams, TStyleSelectionType } f
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { AccountCards } from '~/src/components/AccountCards'
+import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
@@ -32,7 +33,6 @@ import ThemedButton from '~src/components/themed/ThemedButton'
 import { Account } from '~src/models/redux/Account'
 import { Wallet } from '~src/models/redux/Wallet'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
-import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 
 export interface AccountSelectionModalParams {
   wallet: Wallet
@@ -94,7 +94,10 @@ const AccountSelectionModal = (props: Props) => {
   }
 
   const disableButton = useMemo(() => {
-    return disconnectDisable && !isConnected || noBalanceDisable && !BalanceHelper.hasSomeBalance(selectedAccountBalanceExchange?.balance.data)
+    return (
+      (disconnectDisable && !isConnected) ||
+      (noBalanceDisable && !BalanceHelper.hasSomeBalance(selectedAccountBalanceExchange?.balance.data))
+    )
   }, [disconnectDisable, isConnected, noBalanceDisable, selectedAccountBalanceExchange])
 
   const handleNext = (token?: TokenBalance) => {
@@ -155,10 +158,11 @@ const AccountSelectionModal = (props: Props) => {
                     balanceExchange={selectedAccountBalanceExchange}
                   />
                 </>
-              ) : (<LinearLayout px={'5%'} pt={'15%'}>
-                    <FlatListEmpty alignY='center' label={i18n.t('modals.sendTransactionModal.insufficientFunds')} />
-                  </LinearLayout>)
-              }
+              ) : (
+                <LinearLayout px="5%" pt="15%">
+                  <FlatListEmpty alignY="center" label={i18n.t('modals.sendTransactionModal.insufficientFunds')} />
+                </LinearLayout>
+              )}
             </LinearLayout>
 
             <LinearGradient
@@ -174,11 +178,7 @@ const AccountSelectionModal = (props: Props) => {
               start={[1, 0]}
               end={[1, 0.5]}
             >
-              <ThemedButton
-                label={i18n.t('app.next')}
-                disabled={disableButton}
-                onPress={() => handleNext()}
-              />
+              <ThemedButton label={i18n.t('app.next')} disabled={disableButton} onPress={() => handleNext()} />
             </LinearGradient>
           </LinearLayout>
         ) : (

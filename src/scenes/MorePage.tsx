@@ -1,5 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
+import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application'
 import * as WebBrowser from 'expo-web-browser'
 import i18n from 'i18n-js'
 import React, { useEffect } from 'react'
@@ -16,7 +17,6 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
-import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application'
 
 interface MoreProps {
   navigation: StackNavigationProp<RootStackParamList & MoreStackParamList & ModalStackParamList>
@@ -38,7 +38,7 @@ const MorePage = (props: MoreProps) => {
 
   return (
     <ScreenLayout hideBackButton>
-      <LinearLayout height={'100%'} justifyContent={'space-between'}>
+      <LinearLayout height="100%" justifyContent="space-between">
         <LinearLayout>
           <MenuItem
             title={i18n.t('more.createWallet')}
