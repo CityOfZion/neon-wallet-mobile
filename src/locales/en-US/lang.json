@@ -70,7 +70,8 @@
     "AccountSettingsView": "Account Settings",
     "MorePage": "More",
     "SettingsPage": "Settings",
-    "ContactDetails": "Contacts"
+    "ContactDetails": "Contacts",
+    "MnemonicSelectionList": "Import"
   },
   "home": {
     "welcome": "Welcome to Neon Wallet!"
@@ -214,7 +215,8 @@
     "mnemonicAlreadyExists": "Mnemonic already exists",
     "offline": "You need to be online to import informations",
     "genericError": "Occurs a generic error. Try Again",
-    "selectAccountTitile": "These are the accounts that will be imported"
+    "selectAccountTitile": "These are the accounts that will be imported",
+    "foundAccountsMnemonic": "We found the following"
   },
   "passphrase": {
     "enterPassphrase": "Enter a Passphrase for your encrypted key",
