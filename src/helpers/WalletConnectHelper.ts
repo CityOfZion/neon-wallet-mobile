@@ -13,6 +13,12 @@ type AccountInformation = {
 }
 
 export abstract class WalletConnectHelper {
+  static networks: Record<TNetworkType, string> = {
+    custom: 'private',
+    mainnet: 'mainnet',
+    testnet: 'testnet',
+  }
+
   static checkSupportedMethods(method: string) {
     return walletConnectConfig.defaultMethods.includes(method as any)
   }
@@ -61,32 +67,32 @@ export abstract class WalletConnectHelper {
       neo3: 'neo3',
     }
 
-    const networks: Record<TNetworkType, string> = {
-      custom: 'private',
-      mainnet: 'mainnet',
-      testnet: 'testnet',
-    }
-
     if (!blockchains[blockchain]) throw new Error('Blockchain not supported')
 
-    return `${blockchains[blockchain]}:${networks[network]}`
+    return `${blockchains[blockchain]}:${this.networks[network]}`
   }
 
-  static getBlockchainFromProposal(proposal: SessionProposal): BlockchainServiceKey {
+  static getNetworkFromProposal(proposal: SessionProposal): {
+    blockchain: BlockchainServiceKey
+    network: TNetworkType
+  } {
     const chain = Object.values(proposal.params.requiredNamespaces)[0].chains[0]
-
-    return WalletConnectHelper.getBlockchainByChain(chain)
-  }
-
-  static getBlockchainByChain(chain: string): BlockchainServiceKey {
-    const [namespace] = chain.split(':')
+    const [proposalNamespace, proposalNetwork] = chain.split(':')
 
     const blockchains = walletConnectConfig.blockchainsByBlockchainServiceKey
     const blockchainKeys = Object.keys(blockchains) as BlockchainServiceKey[]
-    const blockchain = blockchainKeys.find(key => blockchains[key] === namespace)
+    const blockchain = blockchainKeys.find(key => blockchains[key] === proposalNamespace)
 
     if (!blockchain) throw new Error('Blockchain not supported')
 
-    return blockchain
+    const network = (Object.entries(this.networks) as [TNetworkType, string][]).find(
+      ([, value]) => value === proposalNetwork
+    )
+    if (!network) throw new Error('Network not supported')
+
+    return {
+      blockchain,
+      network: network[0],
+    }
   }
 }

@@ -224,11 +224,7 @@ export const EditNetworkModal = (props: Props) => {
       </LinearLayout>
 
       <LinearLayout>
-        <ThemedButton
-          label={I18n.t('app.save')}
-          onPress={handleSave}
-          disabled={!networkNameIsValid || !urlIsValid}
-        />
+        <ThemedButton label={I18n.t('app.save')} onPress={handleSave} disabled={!networkNameIsValid || !urlIsValid} />
         {network && (
           <ButtonWithoutFeedbackView onPress={handleDelete}>
             <LinearLayout

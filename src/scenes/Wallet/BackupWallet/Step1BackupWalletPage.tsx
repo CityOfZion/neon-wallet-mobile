@@ -6,7 +6,7 @@ import i18n from 'i18n-js'
 import React, { useCallback, useEffect, useState } from 'react'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { Alert } from '~/src/components/Alert'
+import { Alert, AlertButton } from '~/src/components/Alert'
 import { Button } from '~/src/components/Button'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
@@ -158,11 +158,11 @@ const Step1BackupWalletPage: React.FC<Props> = props => {
       <Alert
         title={i18n.t('screens.step1BackupWallet.dialog_title')}
         subtitle={i18n.t('screens.step1BackupWallet.dialog_body')}
-        buttonLabel={i18n.t('screens.step1BackupWallet.dialog_dismiss')}
         visible={modalIsVisible}
         onRequestClose={() => setModalIsVisible(false)}
-        onPress={handlePressConfirmation}
-      />
+      >
+        <AlertButton label={i18n.t('screens.step1BackupWallet.dialog_dismiss')} onPress={handlePressConfirmation} />
+      </Alert>
     </ScreenLayout>
   )
 }

@@ -15,7 +15,6 @@ import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { SettingsStackParamList } from '~/src/navigation/SettingsStackNavigation'
-import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { settingsReducerActions } from '~/src/store/settings/SettingsReducer'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 import { RootState } from '~src/store/RootStore'
@@ -25,7 +24,7 @@ export interface ProtocolEditPageParams {
 }
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList & TabStackParamList & SettingsStackParamList & ModalStackParamList>
+  navigation: StackNavigationProp<RootStackParamList & ModalStackParamList>
   route: RouteProp<SettingsStackParamList, 'ProtocolEditPage'>
 }
 
@@ -84,7 +83,7 @@ export const ProtocolEditPage = (props: Props) => {
 
   return (
     <ScreenLayout withoutScrollView title={i18n.t(`screens.protocolsPage.labels.${blockchain}`)}>
-      <LinearLayout paddingX="10px" flexGrow={1}>
+      <LinearLayout flexGrow={1}>
         <SelectorList items={selectorItems} />
 
         {availableNetworks.includes('custom') && (
