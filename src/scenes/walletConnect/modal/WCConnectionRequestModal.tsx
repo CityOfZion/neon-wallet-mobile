@@ -2,14 +2,15 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { AwaitActivity, Await } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, { useEffect, useCallback, useMemo } from 'react'
+import React, { useEffect, useCallback, useMemo, useState } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { TOnFinishSelectionParams } from '../../Wallet/WalletSelectionModal'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Alert, AlertButton, AlertButtonGroup } from '~/src/components/Alert'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import { walletConnectConfig } from '~/src/config/WalletConnectConfig'
 import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
@@ -18,6 +19,7 @@ import { useWalletConnectFlow } from '~/src/hooks/useWalletConnectFlow'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { RootState } from '~/src/store/RootStore'
+import { settingsReducerActions } from '~/src/store/settings/SettingsReducer'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { SessionProposal, useWalletConnect } from '~src/contexts/WalletConnectContext'
@@ -41,17 +43,20 @@ const WCConnectionRequestModal = (props: Props) => {
   const controller = useSwiperController(true)
   const walletConnectCtx = useWalletConnect()
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
+  const networks = useSelector((state: RootState) => state.settings.blockchainNetworks)
   const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
+  const dispatch = useDispatch()
+
+  const [alertIsVisible, setAlertIsVisible] = useState(false)
 
   const sessionProposal = useMemo<SessionProposal | undefined>(
     () => walletConnectCtx.sessionProposals[0],
     [walletConnectCtx.sessionProposals]
   )
-
-  const blockchain = useMemo(() => {
+  const sessionNetwork = useMemo(() => {
     if (!sessionProposal) return
 
-    return WalletConnectHelper.getBlockchainFromProposal(sessionProposal)
+    return WalletConnectHelper.getNetworkFromProposal(sessionProposal)
   }, [sessionProposal])
 
   const handleFinishSelect = useCallback(
@@ -111,7 +116,7 @@ const WCConnectionRequestModal = (props: Props) => {
         style: 'alter',
       },
     })
-  }, [sessionProposal])
+  }, [sessionProposal, handleFinishSelect])
 
   const handleReject = useCallback(async () => {
     if (!sessionProposal) return
@@ -119,6 +124,7 @@ const WCConnectionRequestModal = (props: Props) => {
     try {
       await walletConnectCtx.rejectSession(sessionProposal)
     } finally {
+      setAlertIsVisible(false)
       controller.close()
     }
   }, [sessionProposal, walletConnectCtx.rejectSession])
@@ -139,8 +145,23 @@ const WCConnectionRequestModal = (props: Props) => {
   }, [uri, walletConnectCtx.onURI, controller])
 
   const handleClose = async () => {
-    if (sessionProposal) await walletConnectCtx.rejectSession(sessionProposal)
     props.navigation.goBack()
+    if (sessionProposal) walletConnectCtx.rejectSession(sessionProposal)
+  }
+
+  const handleSwitchNetwork = () => {
+    if (!sessionNetwork) return
+
+    const value = networks[sessionNetwork.blockchain].find(network => network.type === sessionNetwork.network)
+    if (!value) return
+
+    dispatch(
+      settingsReducerActions.setSelectNetwork({
+        blockchain: sessionNetwork.blockchain,
+        id: value.id,
+      })
+    )
+    setAlertIsVisible(false)
   }
 
   useEffect(() => {
@@ -157,95 +178,127 @@ const WCConnectionRequestModal = (props: Props) => {
     Await.done('load')
   }, [sessionProposal])
 
+  useEffect(() => {
+    if (!sessionNetwork) return
+
+    const currentNetwork = selectedBlockchainNetworks[sessionNetwork.blockchain].type
+    const dAppNetwork = sessionNetwork.network
+
+    if (currentNetwork === dAppNetwork) return
+
+    setAlertIsVisible(true)
+  }, [sessionNetwork, selectedBlockchainNetworks])
+
   return (
     <SwiperPanel
       controller={controller}
       rightButton={<CloseButton onPress={controller.close} />}
-      title={i18n.t('modals.transactionSent.title')}
+      title={i18n.t('modals.WCConnectionRequest.title')}
       onClose={handleClose}
     >
       <AwaitActivity name="load" loadingView={<ScreenLoader transparent />}>
-        {sessionProposal && blockchain && (
-          <LinearLayout flexGrow={1} justifyContent="space-between">
-            <LinearLayout>
-              <ConnectionHeader
-                title={i18n.t('modals.WCConnectionRequest.subtitle_1', {
-                  dAppName: sessionProposal.params.proposer.metadata.name,
-                })}
-                imageUri={sessionProposal.params.proposer.metadata.icons[0]}
-              />
+        {sessionProposal && sessionNetwork && (
+          <>
+            <LinearLayout flexGrow={1} justifyContent="space-between">
+              <LinearLayout>
+                <ConnectionHeader
+                  title={i18n.t('modals.WCConnectionRequest.subtitle_1', {
+                    dAppName: sessionProposal.params.proposer.metadata.name,
+                  })}
+                  imageUri={sessionProposal.params.proposer.metadata.icons[0]}
+                />
 
-              <LinearLayout
-                width="100%"
-                backgroundColor="background.15"
-                orientation="horiz"
-                paddingX="8px"
-                paddingY="8px"
-                borderRadius="8px"
-              >
-                <LinearLayout weight={1}>
-                  <TextView fontFamily="bold" color="text.12" fontSize="14px" fontWeight="700">
-                    {i18n.t('modals.WCConnectionRequest.chain')}
-                  </TextView>
-
-                  <LinearLayout orientation="horiz" mt="6px">
-                    <ImageView
-                      source={BlockchainHelper.getIcon(blockchain)}
-                      resizeMode="contain"
-                      width={20}
-                      height={20}
-                      mr="2px"
-                    />
-                    <TextView fontFamily="medium" color="#fff" fontSize="16px">
-                      {i18n.t(`blockchainServices.${blockchain}.id`)}
+                <LinearLayout
+                  width="100%"
+                  backgroundColor="background.15"
+                  orientation="horiz"
+                  paddingX="8px"
+                  paddingY="8px"
+                  borderRadius="8px"
+                >
+                  <LinearLayout weight={1}>
+                    <TextView fontFamily="bold" color="text.12" fontSize="14px" fontWeight="700">
+                      {i18n.t('modals.WCConnectionRequest.chain')}
                     </TextView>
+
+                    <LinearLayout orientation="horiz" mt="6px">
+                      <ImageView
+                        source={BlockchainHelper.getIcon(sessionNetwork.blockchain)}
+                        resizeMode="contain"
+                        width={20}
+                        height={20}
+                        mr="2px"
+                      />
+                      <TextView fontFamily="medium" color="#fff" fontSize="16px">
+                        {i18n.t(`blockchainServices.${sessionNetwork.blockchain}.id`)}
+                      </TextView>
+                    </LinearLayout>
+                  </LinearLayout>
+
+                  <LinearLayout weight={1}>
+                    <TextView fontFamily="bold" color="text.12" fontSize="14px" fontWeight="700">
+                      {i18n.t('modals.WCConnectionRequest.features')}
+                    </TextView>
+
+                    {sessionProposal.params.requiredNamespaces[walletConnectConfig.defaultBlockchain].methods.map(
+                      (it, index) => (
+                        <TextView key={index} color="text.0" fontFamily="medium" fontSize="16px">
+                          {it}
+                        </TextView>
+                      )
+                    )}
                   </LinearLayout>
                 </LinearLayout>
+              </LinearLayout>
 
-                <LinearLayout weight={1}>
-                  <TextView fontFamily="bold" color="text.12" fontSize="14px" fontWeight="700">
-                    {i18n.t('modals.WCConnectionRequest.features')}
-                  </TextView>
+              <LinearLayout mt="24px">
+                <TextView color="text.0" fontSize="18px" textAlign="center">
+                  {i18n.t('modals.WCConnectionRequest.subtitle')}
+                </TextView>
 
-                  {sessionProposal.params.requiredNamespaces[walletConnectConfig.defaultBlockchain].methods.map(
-                    (it, index) => (
-                      <TextView key={index} color="text.0" fontFamily="medium" fontSize="16px">
-                        {it}
-                      </TextView>
-                    )
-                  )}
-                </LinearLayout>
+                <ThemedButton
+                  disabled={!isConnected}
+                  label={i18n.t('modals.WCConnectionRequest.acceptLabel')}
+                  onPress={handleAccept}
+                  my={12}
+                />
+                <TouchableWithoutFeedback onPress={handleReject}>
+                  <LinearLayout
+                    width="100%"
+                    borderRadius="4px"
+                    borderWidth="1px"
+                    borderColor="primary"
+                    justifyContent="center"
+                    alignItems="center"
+                    p="10px"
+                  >
+                    <TextView color="primary" fontSize="20px">
+                      {i18n.t('modals.WCConnectionRequest.declineLabel')}
+                    </TextView>
+                  </LinearLayout>
+                </TouchableWithoutFeedback>
               </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout mt="24px">
-              <TextView color="text.0" fontSize="18px" textAlign="center">
-                {i18n.t('modals.WCConnectionRequest.subtitle')}
-              </TextView>
-
-              <ThemedButton
-                disabled={!isConnected}
-                label={i18n.t('modals.WCConnectionRequest.acceptLabel')}
-                onPress={handleAccept}
-                my={12}
-              />
-              <TouchableWithoutFeedback onPress={handleReject}>
-                <LinearLayout
-                  width="100%"
-                  borderRadius="4px"
-                  borderWidth="1px"
-                  borderColor="primary"
-                  justifyContent="center"
-                  alignItems="center"
-                  p="10px"
-                >
-                  <TextView color="primary" fontSize="20px">
-                    {i18n.t('modals.WCConnectionRequest.declineLabel')}
-                  </TextView>
-                </LinearLayout>
-              </TouchableWithoutFeedback>
-            </LinearLayout>
-          </LinearLayout>
+            <Alert
+              title={i18n.t('modals.WCConnectionRequest.dialog_title')}
+              subtitle={i18n.t('modals.WCConnectionRequest.dialog_message', {
+                dAppName: sessionProposal.params.proposer.metadata.name,
+                dAppNetwork: i18n.t(`app.networks.${sessionNetwork.network}`),
+                currentNetwork: selectedBlockchainNetworks[sessionNetwork.blockchain].name,
+              })}
+              visible={alertIsVisible}
+              onRequestClose={() => setAlertIsVisible(false)}
+            >
+              <AlertButtonGroup>
+                <AlertButton label={i18n.t('modals.WCConnectionRequest.dialog_cancel')} onPress={handleReject} />
+                <AlertButton
+                  label={i18n.t('modals.WCConnectionRequest.dialog_confirm')}
+                  onPress={handleSwitchNetwork}
+                />
+              </AlertButtonGroup>
+            </Alert>
+          </>
         )}
       </AwaitActivity>
     </SwiperPanel>

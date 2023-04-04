@@ -1,3 +1,5 @@
+import i18n from 'i18n-js'
+
 import { BlockchainServiceKey, TNetwork, TNetworkType } from '../blockchain'
 
 export type TBlockchainNetwork = TNetwork & {
@@ -35,13 +37,13 @@ export class BlockchainConfig {
         id: 'neo3-mainnet',
         type: 'mainnet',
         url: this.defaultNetworksURLs.neo3.mainnet,
-        name: 'Mainnet',
+        name: i18n.t('app.networks.mainnet'),
       },
       {
         id: 'neo3-testnet',
         type: 'testnet',
         url: this.defaultNetworksURLs.neo3.testnet,
-        name: 'Testnet',
+        name: i18n.t('app.networks.testnet'),
       },
     ],
     neoLegacy: [
@@ -49,13 +51,13 @@ export class BlockchainConfig {
         id: 'neo-legacy-mainnet',
         type: 'mainnet',
         url: this.defaultNetworksURLs.neoLegacy.mainnet,
-        name: 'Mainnet',
+        name: i18n.t('app.networks.mainnet'),
       },
       {
         id: 'neo-legacy-testnet',
         type: 'testnet',
         url: this.defaultNetworksURLs.neoLegacy.testnet,
-        name: 'Testnet',
+        name: i18n.t('app.networks.testnet'),
       },
     ],
   }

@@ -32,7 +32,12 @@
     "add": "Add",
     "createNow": "Create Now",
     "timeout": "Timeout exceeded",
-    "delete": "Delete"
+    "delete": "Delete",
+    "networks": {
+      "mainnet": "MainNet",
+      "testnet": "TestNet",
+      "custom": "Custom"
+    }
   },
   "routes": {
     "GetWallet": "Wallet",
@@ -694,7 +699,6 @@
       "errorCreateWallet": "Problem to create wallet, try again"
     },
     "transactionSent": {
-      "title": "WalletConnect",
       "transactionSent": "Transaction successfully sent!",
       "transactionSuccessText": "Once your transaction has been confirmed it will appear in your activity feed.",
       "transactionId": "Transaction ID",
@@ -729,12 +733,17 @@
       "connectLabel": "Connect"
     },
     "WCConnectionRequest": {
+      "title": "WalletConnect",
       "chain": "Chain",
       "features": "Features",
       "subtitle": "If you would like to connect please accept and continue by selecting an account to connect with.",
       "subtitle_1": "%{dAppName} wants to connect to your wallet",
       "acceptLabel": "Accept",
-      "declineLabel": "Decline"
+      "declineLabel": "Decline",
+      "dialog_title": "Change networks?",
+      "dialog_message": "%{dAppName} has made a session request for %{dAppNetwork}. You are currently on %{currentNetwork}, would you like to switch networks ?",
+      "dialog_cancel": "Cancel",
+      "dialog_confirm": "Switch"
     },
     "rawJson": {
       "title": "JSON",
