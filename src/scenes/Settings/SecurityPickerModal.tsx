@@ -105,6 +105,7 @@ const SecurityPickerModal = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
+      onClose={props.navigation.goBack}
       title={i18n.t('modals.security.title')}
       rightButton={<CloseButton onPress={controller.close} />}
       withoutScrollView
