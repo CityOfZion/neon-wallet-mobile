@@ -5,7 +5,7 @@ import Neon, { api } from '@cityofzion/neon-js'
 import { NeonParser } from '@cityofzion/neon-parser'
 import axios from 'axios'
 import queryString from 'query-string'
-import { NativeModules, Platform } from 'react-native'
+import { Platform } from 'react-native'
 import { decryptNep2Android, decryptNep2IOS } from 'react-native-neo-sdk-bindings'
 
 import { TCOZTip, TFeeToken, TNetwork, TNetworkType } from '../../common'
@@ -332,20 +332,21 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       getTotal: true,
     })
 
-    const {
-      data: { total, assets },
-    } = await axios.get(url)
+    const response = await axios.get(url)
+    const assets = response.data.assets ?? []
+    const total = response.data.total
 
     const totalPages = Math.ceil(total / nftPageLimit)
     const nfts = assets.map((asset: any) => {
       return new NFTResponse({
-        collectionImage: this.treatGhostMarketImage(asset.collection.logo_url),
+        collectionImage: this.treatGhostMarketImage(asset.collection.logoUrl),
         collectionName: asset.collection.name,
         image: this.treatGhostMarketImage(asset.metadata.mediaUri),
         name: asset.metadata.name,
         symbol: asset.contract.symbol,
         id: asset.tokenId,
         contractHash: asset.contract.hash,
+        isSVG: String(asset.metadata.mediaType).includes('svg+xml'),
       })
     })
 
@@ -375,6 +376,7 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
       symbol: nft.contract.symbol,
       id: nft.tokenId,
       contractHash: nft.contract.hash,
+      isSVG: String(nft.metadata.mediaType).includes('svg+xml'),
     })
 
     return nftResponse

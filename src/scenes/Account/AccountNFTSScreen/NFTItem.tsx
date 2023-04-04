@@ -1,6 +1,7 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
-import { TouchableWithoutFeedback } from 'react-native'
+import { Dimensions, TouchableWithoutFeedback } from 'react-native'
+import { SvgUri } from 'react-native-svg'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
@@ -50,25 +51,33 @@ export const NFTItem = React.memo(({ nft, navigation }: Props) => {
         alignItems="center"
         justifyContent="center"
       >
-        <ImageView
-          resizeMode="cover"
-          alignSelf="center"
-          source={
-            !shouldShowDefaultNFTImage
-              ? nft.image
-                ? { uri: nft.image }
+        {nft.isSVG && nft.image ? (
+          <SvgUri
+            width={Dimensions.get('screen').width * 0.2}
+            height={Dimensions.get('screen').height * 0.2}
+            uri={nft.image}
+          />
+        ) : (
+          <ImageView
+            resizeMode="cover"
+            alignSelf="center"
+            source={
+              !shouldShowDefaultNFTImage
+                ? nft.image
+                  ? { uri: nft.image }
+                  : require('~/src/assets/images/diamond-green.png')
                 : require('~/src/assets/images/diamond-green.png')
-              : require('~/src/assets/images/diamond-green.png')
-          }
-          onError={error => {
-            console.log(error.nativeEvent.error)
-            setShouldShowDefaultNFTImage(true)
-          }}
-          style={{
-            width: !shouldShowDefaultNFTImage ? '100%' : '60%',
-            height: !shouldShowDefaultNFTImage ? '100%' : '60%',
-          }}
-        />
+            }
+            onError={error => {
+              console.log(error.nativeEvent.error)
+              setShouldShowDefaultNFTImage(true)
+            }}
+            style={{
+              width: !shouldShowDefaultNFTImage ? '100%' : '60%',
+              height: !shouldShowDefaultNFTImage ? '100%' : '60%',
+            }}
+          />
+        )}
       </LinearLayout>
 
       <LinearLayout ml="18px" mr="18px" flex={1}>
