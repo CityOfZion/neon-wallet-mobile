@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { AwaitActivity, Await } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, { useEffect, useCallback, useMemo, useState } from 'react'
+import React, { useEffect, useCallback, useMemo, useState, useRef } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { TOnFinishSelectionParams } from '../../Wallet/WalletSelectionModal'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { TNetworkType } from '~/src/blockchain'
 import { Alert, AlertButton, AlertButtonGroup } from '~/src/components/Alert'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
 import { walletConnectConfig } from '~/src/config/WalletConnectConfig'
@@ -47,6 +48,8 @@ const WCConnectionRequestModal = (props: Props) => {
   const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
   const dispatch = useDispatch()
 
+  const switchedNetwork = useRef<TNetworkType>()
+
   const [alertIsVisible, setAlertIsVisible] = useState(false)
 
   const sessionProposal = useMemo<SessionProposal | undefined>(
@@ -72,7 +75,7 @@ const WCConnectionRequestModal = (props: Props) => {
         }
 
         const chain = WalletConnectHelper.getChain(
-          selectedBlockchainNetworks[account.blockchain].type,
+          switchedNetwork.current ?? selectedBlockchainNetworks[account.blockchain].type,
           account.blockchain
         )
 
@@ -104,9 +107,7 @@ const WCConnectionRequestModal = (props: Props) => {
     [sessionProposal, selectedBlockchainNetworks, walletConnectCtx.approveSession]
   )
 
-  const handleAccept = useCallback(async () => {
-    if (!sessionProposal) return
-
+  const navigateToSelection = useCallback(() => {
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.WalletSelectionModal.name,
       params: {
@@ -116,18 +117,21 @@ const WCConnectionRequestModal = (props: Props) => {
         style: 'alter',
       },
     })
-  }, [sessionProposal, handleFinishSelect])
+  }, [handleFinishSelect])
 
-  const handleReject = useCallback(async () => {
-    if (!sessionProposal) return
+  const handleAccept = useCallback(async () => {
+    if (!sessionProposal || !sessionNetwork) return
 
-    try {
-      await walletConnectCtx.rejectSession(sessionProposal)
-    } finally {
-      setAlertIsVisible(false)
-      controller.close()
+    const currentNetwork = selectedBlockchainNetworks[sessionNetwork.blockchain].type
+    const dAppNetwork = sessionNetwork.network
+
+    if (currentNetwork !== dAppNetwork) {
+      setAlertIsVisible(true)
+      return
     }
-  }, [sessionProposal, walletConnectCtx.rejectSession])
+
+    navigateToSelection()
+  }, [sessionProposal, navigateToSelection, selectedBlockchainNetworks, sessionNetwork])
 
   const runOnURI = useCallback(async () => {
     try {
@@ -145,15 +149,24 @@ const WCConnectionRequestModal = (props: Props) => {
   }, [uri, walletConnectCtx.onURI, controller])
 
   const handleClose = async () => {
+    setAlertIsVisible(false)
     props.navigation.goBack()
     if (sessionProposal) walletConnectCtx.rejectSession(sessionProposal)
   }
 
   const handleSwitchNetwork = () => {
+    setAlertIsVisible(false)
     if (!sessionNetwork) return
 
     const value = networks[sessionNetwork.blockchain].find(network => network.type === sessionNetwork.network)
-    if (!value) return
+    if (!value) {
+      showMessage({
+        message: i18n.t('walletconnect.alert.networkNotFound', { network: sessionNetwork.network }),
+        type: 'danger',
+      })
+      controller.close()
+      return
+    }
 
     dispatch(
       settingsReducerActions.setSelectNetwork({
@@ -161,7 +174,8 @@ const WCConnectionRequestModal = (props: Props) => {
         id: value.id,
       })
     )
-    setAlertIsVisible(false)
+    switchedNetwork.current = value.type
+    navigateToSelection()
   }
 
   useEffect(() => {
@@ -177,17 +191,6 @@ const WCConnectionRequestModal = (props: Props) => {
     }
     Await.done('load')
   }, [sessionProposal])
-
-  useEffect(() => {
-    if (!sessionNetwork) return
-
-    const currentNetwork = selectedBlockchainNetworks[sessionNetwork.blockchain].type
-    const dAppNetwork = sessionNetwork.network
-
-    if (currentNetwork === dAppNetwork) return
-
-    setAlertIsVisible(true)
-  }, [sessionNetwork, selectedBlockchainNetworks])
 
   return (
     <SwiperPanel
@@ -262,7 +265,7 @@ const WCConnectionRequestModal = (props: Props) => {
                   onPress={handleAccept}
                   my={12}
                 />
-                <TouchableWithoutFeedback onPress={handleReject}>
+                <TouchableWithoutFeedback onPress={controller.close}>
                   <LinearLayout
                     width="100%"
                     borderRadius="4px"
@@ -285,13 +288,13 @@ const WCConnectionRequestModal = (props: Props) => {
               subtitle={i18n.t('modals.WCConnectionRequest.dialog_message', {
                 dAppName: sessionProposal.params.proposer.metadata.name,
                 dAppNetwork: i18n.t(`app.networks.${sessionNetwork.network}`),
-                currentNetwork: selectedBlockchainNetworks[sessionNetwork.blockchain].name,
+                currentNetwork: i18n.t(`app.networks.${selectedBlockchainNetworks[sessionNetwork.blockchain].type}`),
               })}
               visible={alertIsVisible}
               onRequestClose={() => setAlertIsVisible(false)}
             >
               <AlertButtonGroup>
-                <AlertButton label={i18n.t('modals.WCConnectionRequest.dialog_cancel')} onPress={handleReject} />
+                <AlertButton label={i18n.t('modals.WCConnectionRequest.dialog_cancel')} onPress={controller.close} />
                 <AlertButton
                   label={i18n.t('modals.WCConnectionRequest.dialog_confirm')}
                   onPress={handleSwitchNetwork}

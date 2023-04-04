@@ -986,7 +986,8 @@
     "alert": {
       "text": "%{text} Connected",
       "description": "Wallet Connect",
-      "unexpectedErrorToSelectAccount": "Unexpected error to select account"
+      "unexpectedErrorToSelectAccount": "Unexpected error to select account",
+      "networkNotFound": "We couldn't find any %{network} network registered"
     },
     "noDAppsConnected": "No dApps connected",
     "waitingDAppConnect": "Please be a patient, we are now connecting with %{dAppName}",
