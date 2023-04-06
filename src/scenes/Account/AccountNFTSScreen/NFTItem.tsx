@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
-import { Dimensions, TouchableWithoutFeedback } from 'react-native'
+import { Dimensions, Platform, TouchableWithoutFeedback } from 'react-native'
 import { SvgUri } from 'react-native-svg'
 import { useSelector } from 'react-redux'
 
@@ -51,23 +51,21 @@ export const NFTItem = React.memo(({ nft, navigation }: Props) => {
         alignItems="center"
         justifyContent="center"
       >
-        {nft.isSVG && nft.image ? (
+        {nft.isSVG && nft.image && Platform.OS === 'ios' ? (
           <SvgUri
             width={Dimensions.get('screen').width * 0.2}
             height={Dimensions.get('screen').height * 0.2}
             uri={nft.image}
           />
         ) : (
-          <ImageView
+          <ImageView 
             resizeMode="cover"
             alignSelf="center"
-            source={
-              !shouldShowDefaultNFTImage
-                ? nft.image
-                  ? { uri: nft.image }
-                  : require('~/src/assets/images/diamond-green.png')
-                : require('~/src/assets/images/diamond-green.png')
-            }
+            source={Platform.OS === 'android' ? require('~/src/assets/images/diamond-green.png') : !shouldShowDefaultNFTImage
+            ? nft.image
+              ? { uri: nft.image }
+              : require('~/src/assets/images/diamond-green.png')
+            : require('~/src/assets/images/diamond-green.png')}
             onError={error => {
               console.log(error.nativeEvent.error)
               setShouldShowDefaultNFTImage(true)
