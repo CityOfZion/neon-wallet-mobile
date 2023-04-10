@@ -456,7 +456,8 @@
     "WCTransactionRequestModal": {
       "unsupportedMethod": "#translateme",
       "errorToGetAccount": "#translateme",
-      "unexpectedError": "#translateme"
+      "unexpectedError": "#translateme",
+      "rejectByUser": "#translateme"
     },
     "transactionRequest": {
       "title": "#translateme",

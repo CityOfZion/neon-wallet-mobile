@@ -73,7 +73,7 @@ export const TransactionRequestBase = ({
       shouldProcessButtons.current = false
       setButtonsIsDisabled(true)
 
-      await rejectRequest(request)
+      await rejectRequest(request, i18n.t('modals.WCTransactionRequestModal.rejectByUser'))
 
       if (onReject) {
         onReject()

@@ -758,7 +758,8 @@
     "WCTransactionRequestModal": {
       "unsupportedMethod": "The method %{method} is not supported",
       "errorToGetAccount": "Error to get account from session",
-      "unexpectedError": "Unexpected Error to accept request"
+      "unexpectedError": "Unexpected Error to accept request",
+      "rejectByUser": "Request rejected by user"
     },
     "signatureScope": {
       "title": "Signature Scope",
