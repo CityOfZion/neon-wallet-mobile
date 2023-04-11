@@ -41,7 +41,7 @@ interface IWalletConnectContext {
   rejectSession: (proposal: SessionProposal) => Promise<void>
   disconnect: (topic: string) => Promise<void>
   approveRequest: (requestEvent: SessionRequest) => Promise<JsonRpcResponse | null>
-  rejectRequest: (requestEvent: SessionRequest) => Promise<void>
+  rejectRequest: (requestEvent: SessionRequest, error?: string) => Promise<void>
   onRequestListener: (listener: OnRequestCallback) => void
   autoAcceptIntercept: (listener: AutoAcceptCallback) => void
 }
@@ -262,22 +262,22 @@ export const WalletConnectContextProvider: React.FC<{
       })
       await removeFromPending(requestEvent)
       return response
-    } catch (error) {
+    } catch (error: any) {
       await signClient.respond({
         topic: requestEvent.topic,
-        response: formatJsonRpcError(requestEvent.id, 'Failed or Rejected Request'),
+        response: formatJsonRpcError(requestEvent.id, error.message ?? 'Failed or Rejected Request'),
       })
       throw error
     }
   } // this should not be a callback because it would require the developer to put it as dependency
 
-  const rejectRequest = async (requestEvent: SessionRequest) => {
+  const rejectRequest = async (requestEvent: SessionRequest, error?: string) => {
     if (!signClient) {
       throw new Error('Client is not initialized')
     }
     await signClient.respond({
       topic: requestEvent.topic,
-      response: formatJsonRpcError(requestEvent.id, 'Failed or Rejected Request'),
+      response: formatJsonRpcError(requestEvent.id, error ?? 'Failed or Rejected Request'),
     })
     await removeFromPending(requestEvent)
   } // this should not be a callback because it would require the developer to put it as dependency
