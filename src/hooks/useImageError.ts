@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { ImageSourcePropType } from 'react-native'
 
 type Props = {
@@ -7,17 +7,20 @@ type Props = {
 }
 
 export const useImageError = ({ source, defaultSource }: Props) => {
-  const shouldSwitch = useRef(true)
-  const [imageSource, setImageSource] = useState<ImageSourcePropType>(source)
+  const [isDefault, setIsDefault] = useState<boolean>(false)
+
+  const imageSource = useMemo(() => {
+    if (!isDefault) return source
+    return defaultSource ?? require('~src/assets/logos/icon-dapp-default.png')
+  }, [isDefault])
 
   const handleError = useCallback(() => {
-    if (!shouldSwitch.current) return
-
-    setImageSource(defaultSource ?? require('~src/assets/logos/icon-dapp-default.png'))
+    setIsDefault(true)
   }, [])
 
   return {
     imageSource,
     handleError,
+    isDefault,
   }
 }
