@@ -1,10 +1,11 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
-import { Dimensions, Platform, TouchableWithoutFeedback } from 'react-native'
+import { Dimensions, TouchableWithoutFeedback } from 'react-native'
 import { SvgUri } from 'react-native-svg'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { useImageError } from '~/src/hooks/useImageError'
 import { NFTResponse } from '~/src/models/response/NFTResponse'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
@@ -18,8 +19,10 @@ type Props = {
 
 export const NFTItem = React.memo(({ nft, navigation }: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const [shouldShowDefaultNFTImage, setShouldShowDefaultNFTImage] = useState(false)
-
+  const { imageSource, handleError, isDefault } = useImageError({
+    source: { uri: nft.image },
+    defaultSource: require('~/src/assets/images/diamond-green.png'),
+  })
   function handleOnPressButtonDora() {
     navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.WebViewModal.name,
@@ -51,28 +54,21 @@ export const NFTItem = React.memo(({ nft, navigation }: Props) => {
         alignItems="center"
         justifyContent="center"
       >
-        {nft.isSVG && nft.image && Platform.OS === 'ios' ? (
+        {nft.isSVG && nft.image ? (
           <SvgUri
             width={Dimensions.get('screen').width * 0.2}
             height={Dimensions.get('screen').height * 0.2}
             uri={nft.image}
           />
         ) : (
-          <ImageView 
+          <ImageView
             resizeMode="cover"
             alignSelf="center"
-            source={Platform.OS === 'android' ? require('~/src/assets/images/diamond-green.png') : !shouldShowDefaultNFTImage
-            ? nft.image
-              ? { uri: nft.image }
-              : require('~/src/assets/images/diamond-green.png')
-            : require('~/src/assets/images/diamond-green.png')}
-            onError={error => {
-              console.log(error.nativeEvent.error)
-              setShouldShowDefaultNFTImage(true)
-            }}
+            source={imageSource}
+            onError={handleError}
             style={{
-              width: !shouldShowDefaultNFTImage ? '100%' : '60%',
-              height: !shouldShowDefaultNFTImage ? '100%' : '60%',
+              width: !isDefault ? '100%' : '60%',
+              height: !isDefault ? '100%' : '60%',
             }}
           />
         )}
