@@ -3,6 +3,8 @@ import { MessageComponentProps } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Normalize } from '~/src/app/Normalize'
+import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
@@ -13,8 +15,9 @@ export const ThemedAlert: React.FC<MessageComponentProps> = props => {
     <LinearLayout
       bg={theme.colors.black}
       width="100%"
-      paddingX="14px"
-      paddingY="14px"
+      paddingX={Normalize.scale('14px')}
+      paddingBottom={Normalize.scale('14px')}
+      paddingTop={Normalize.scale(14) + applicationConfig.statusBarHeight}
       orientation="horiz"
       justifyContent="center"
       alignItems="center"
@@ -23,8 +26,8 @@ export const ThemedAlert: React.FC<MessageComponentProps> = props => {
         props.message.type === 'success'
           ? theme.colors.primary
           : props.message.type === 'danger'
-          ? theme.colors.danger
-          : theme.colors.text[0]
+            ? theme.colors.danger
+            : theme.colors.text[0]
       }
     >
       {props.message.type === 'success' && (
@@ -56,8 +59,8 @@ export const ThemedAlert: React.FC<MessageComponentProps> = props => {
             props.message.type === 'success'
               ? theme.colors.text[0]
               : props.message.type === 'danger'
-              ? theme.colors.danger
-              : theme.colors.text[0]
+                ? theme.colors.danger
+                : theme.colors.text[0]
           }
         >
           {props.message.message}
