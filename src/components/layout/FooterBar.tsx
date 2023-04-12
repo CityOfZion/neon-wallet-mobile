@@ -11,6 +11,7 @@ import { AlterMenuItem } from '../AlterMenuItem'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { PaperWalletHelper } from '~/src/helpers/PaperWalletHelper'
 import { UriHelper } from '~/src/helpers/UriHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
@@ -46,8 +47,21 @@ const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
     useBlockchainServiceUtils()
 
   const handleScanQrCode = (data: string) => {
-    const sendUri = UriHelper.validateAndParse(data)
+    const paperWIF = PaperWalletHelper.validateAndParse(data)
+    if (paperWIF && validateWifAllBlockchains(paperWIF)) {
+      navigation.navigate(wrapper.route.Tab.name, {
+        screen: wrapper.route.More.name,
+        params: {
+          screen: wrapper.route.ImportKey.name,
+          initial: false,
+          params: {
+            data: paperWIF,
+          } as any,
+        },
+      })
+    }
 
+    const sendUri = UriHelper.validateAndParse(data)
     if (sendUri && validateAddressAllBlockchains(sendUri.address)) {
       navigation.navigate(wrapper.route.Modal.name, {
         screen: wrapper.route.WalletSelectionModal.name,
