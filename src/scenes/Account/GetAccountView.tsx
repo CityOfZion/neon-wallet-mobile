@@ -3,12 +3,13 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import { Animated, ImageLoadEventData, RefreshControl } from 'react-native'
+import { Animated, Dimensions, ImageLoadEventData, Platform, RefreshControl } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { appBus } from '~/src/app/AppBus'
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Normalize } from '~/src/app/Normalize'
 import ModalWarningFee from '~/src/components/ModalWarningFee'
 import { ThemedClaimButton } from '~/src/components/themed/ThemedClaimButton'
 import ThemedMoreButton from '~/src/components/themed/ThemedMoreButton'
@@ -64,7 +65,7 @@ const Title = ({ account }: TitleProps) => {
   }, [language])
 
   return (
-    <LinearLayout alignItems="center" justifyContent="center">
+    <LinearLayout width={Normalize.scale(Dimensions.get('screen').width)} alignItems="center" justifyContent="center">
       <TextView color="text.3" textAlign="center" fontSize={10}>
         {i18n.t('app.neoBlockHeight')}
       </TextView>
