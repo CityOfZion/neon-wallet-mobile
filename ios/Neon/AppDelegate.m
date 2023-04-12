@@ -1,5 +1,5 @@
-#import <Firebase.h>
 #import "AppDelegate.h"
+#import <Firebase.h>
 #import <EXScreenOrientation/EXScreenOrientationViewController.h>
 #import <React/RCTLinkingManager.h>
 #import <React/RCTConvert.h>
@@ -30,9 +30,7 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  if ([FIRApp defaultApp] == nil) {
-    [FIRApp configure];
-  }
+[FIRApp configure];
 #if DEBUG
   InitializeFlipper(application);
 #endif
