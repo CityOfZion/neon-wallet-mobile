@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     tags:
-      - 'refs/tags/build'
+      - 'build'
       
 jobs:
   build:
