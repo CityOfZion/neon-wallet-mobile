@@ -37,13 +37,13 @@ export class BlockchainConfig {
         id: 'neo3-mainnet',
         type: 'mainnet',
         url: this.defaultNetworksURLs.neo3.mainnet,
-        name: i18n.t('app.networks.mainnet'),
+        name: 'Mainnet',
       },
       {
         id: 'neo3-testnet',
         type: 'testnet',
         url: this.defaultNetworksURLs.neo3.testnet,
-        name: i18n.t('app.networks.testnet'),
+        name: 'Testnet',
       },
     ],
     neoLegacy: [
@@ -51,13 +51,13 @@ export class BlockchainConfig {
         id: 'neo-legacy-mainnet',
         type: 'mainnet',
         url: this.defaultNetworksURLs.neoLegacy.mainnet,
-        name: i18n.t('app.networks.mainnet'),
+        name: 'Mainnet',
       },
       {
         id: 'neo-legacy-testnet',
         type: 'testnet',
         url: this.defaultNetworksURLs.neoLegacy.testnet,
-        name: i18n.t('app.networks.testnet'),
+        name: 'Testnet',
       },
     ],
   }
