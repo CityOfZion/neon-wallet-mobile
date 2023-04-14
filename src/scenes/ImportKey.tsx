@@ -7,8 +7,8 @@ import { Alert, Platform } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
+import { GenericWalletURLHelper } from '../helpers/GenericWalletURLHelper'
 import { SecurityHelper } from '../helpers/SecurityHelper'
-import { IURI } from '../helpers/UriHelper'
 import { useBlockchainServiceUtils } from '../hooks/useBlockchainServices'
 import { TabStackParamList } from '../navigation/TabNavigation'
 import { selectAccounts } from '../store/account/SelectorAccount'
@@ -90,14 +90,12 @@ const ImportKey = (props: ImportKeyProps) => {
     setAddressesSelected(items)
   }
 
-  const handleOnScan = (data: string | IURI) => {
-    if (typeof data !== 'string') {
-      return
-    }
+  const handleOnScan = (data: string) => {
+    if (typeof data !== 'string') return
 
-    const textValue = UtilsHelper.removeAccents(data)
+    const urlWIF = GenericWalletURLHelper.validateAndParse(data)
 
-    setInputValue(textValue)
+    setInputValue(urlWIF ?? UtilsHelper.removeAccents(data))
   }
 
   const handleOnChangeText = (text: string) => {
