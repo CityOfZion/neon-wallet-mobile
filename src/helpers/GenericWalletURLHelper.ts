@@ -2,7 +2,7 @@ import queryString from 'query-string'
 
 import { UtilsHelper } from './UtilsHelper'
 
-export class PaperWalletHelper {
+export class GenericWalletURLHelper {
   static validateAndParse(url: string): string | undefined {
     const urlIsValid = UtilsHelper.validateURL(url)
     if (!urlIsValid) return
