@@ -1,0 +1,62 @@
+name: Build iOS and Deploy to TestFlight
+on:
+  push:
+    tags:
+      - 'build_ios'
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+
+    steps:
+    - name: Set up certificate
+      uses: apple-actions/import-codesign-certs@v2
+      with:
+        p12-file-base64: ${{ secrets.CERTIFICATE_P12 }}
+        p12-password: ${{ secrets.CERTIFICATE_PASSWORD }}
+
+    - name: 'Download Provisioning Profiles'
+      id: provisioning
+      uses: apple-actions/download-provisioning-profiles@v1
+      with: 
+        bundle-id: 'io.cityofzion.neon'
+        profile-type: 'IOS_APP_STORE'
+        issuer-id: ${{ secrets.TESTFLIGHT_API_ISSUER }}
+        api-key-id: ${{ secrets.TESTFLIGHT_API_KEY }}
+        api-private-key: ${{ secrets.API_PRIVATE_KEY }}
+        
+    - name: Install Dependencies
+      run: |
+        brew install node
+        npm install -g detox-cli
+
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16.19.1'
+
+    - name: Install Yarn
+      run: npm install -g yarn
+
+    - name: Checkout and Install Project Dependencies
+      uses: actions/checkout@v2
+
+    - name: Install and Build Project
+      run: |
+        yarn
+        yarn build:ios
+        cd ios
+        pod install
+        cd ..
+        xcodebuild -workspace ./ios/Neon.xcworkspace -scheme Neon-release archive -archivePath ./Neon.xcarchive
+
+    - name: Export Archive
+      run: |
+        xcodebuild -exportArchive -archivePath ./Neon.xcarchive -exportOptionsPlist ios/ExportOptions.plist -exportPath Neon.ipa
+
+    - name: Upload to TestFlight
+      uses: apple-actions/upload-testflight-build@v1
+      with:
+        app-path: 'Neon.ipa/neon.ipa' 
+        issuer-id: ${{ secrets.TESTFLIGHT_API_ISSUER }}
+        api-key-id: ${{ secrets.TESTFLIGHT_API_KEY }}
+        api-private-key: ${{ secrets.API_PRIVATE_KEY }}
