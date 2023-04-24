@@ -110,7 +110,6 @@ const GetWalletView = (props: GetWalletProps) => {
         />
       }
       onLayout={handleLayout}
-      contentStyle={{ padding: 0 }}
       title={wallet.name ?? '-'}
       rightButton={<ThemedMoreButton onPress={handleMorePress} />}
     >
