@@ -119,7 +119,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   }
 
   async sendTransaction(data: SendTransactionData) {
-    const nativeAsset = this.nativeAssets.find(asset => asset.hash === data.tokenHash)
+    const nativeAsset = this.nativeAssets.find(asset => asset.hash === data.tokenHash.replace('0x', ''))
 
     if (nativeAsset) {
       return await this.sendNativeAsset(
@@ -255,7 +255,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
       intents = api.makeIntent({ [nativeAssetSymbol]: amount }, receiverAddress)
     }
 
-    const apiProvider = new api.neoscan.instance(this.network.url)
+    const apiProvider = new api.neoCli.instance(this.network.url)
 
     const sendResponse = await api.sendAsset({
       url: this.network.url,
@@ -271,7 +271,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
   private async sendNep5Asset({ amount, receiverAddress, senderWif, tokenHash, fee, tip }: SendTransactionData) {
     const account = new wallet.Account(senderWif)
 
-    const apiProvider = new api.neoscan.instance(this.network.url)
+    const apiProvider = new api.neoCli.instance(this.network.url)
     const scBuilder = new sc.ScriptBuilder()
 
     const tokenHashFixed = tokenHash.replace('0x', '')

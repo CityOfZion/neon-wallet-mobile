@@ -1989,16 +1989,16 @@
   dependencies:
     axios "^0.21.1"
 
-"@cityofzion/neo-legacy-neon-js@npm:@cityofzion/neon-js@4.8.3":
-  version "4.8.3"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neon-js/-/neon-js-4.8.3.tgz#a11f782633ebe58eacbb1f66f7c24c0a12eb1ccf"
-  integrity sha512-JEdDL//bdWp6sK1rT/mJo6kqxeTAnpfwKdUIr2SsImBzc8PvMO7Nwd6GrtTt1vxW3qhqGCSNs5urKJPAkY53gg==
+"@cityofzion/neo-legacy-neon-js@npm:@cityofzion/neon-js@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-js/-/neon-js-4.8.0.tgz#e2e596d7022cd59a6c7c90a818b478bc5ac44bd2"
+  integrity sha512-/ODBiLZYE0/8+JFZ4/M/xMuzw6z3t94E6Az36Oct4J5khlw7qF4BxcBBL1M+8ECFsePr4tp4I3HEv8Z7LhvL3Q==
   dependencies:
-    "@cityofzion/neon-api" "^4.8.3"
-    "@cityofzion/neon-core" "^4.8.2"
-    "@cityofzion/neon-nep5" "^4.8.3"
+    "@cityofzion/neon-api" "^4.8.0"
+    "@cityofzion/neon-core" "^4.8.0"
+    "@cityofzion/neon-nep5" "^4.8.0"
 
-"@cityofzion/neo-legacy-neon-nep5@npm:@cityofzion/neon-nep5@4.9.0", "@cityofzion/neon-nep5@^4.8.3":
+"@cityofzion/neo-legacy-neon-nep5@npm:@cityofzion/neon-nep5@4.9.0", "@cityofzion/neon-nep5@^4.8.0":
   version "4.9.0"
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-nep5/-/neon-nep5-4.9.0.tgz#aa170bfa83c5ef75270d10951e02f87e7faf4f47"
   integrity sha512-MSRXHl+UGYnh8f9FC7zZvMNRblnl496VxG3tjA+GIShtLR6u75/FK7syVXua9h8/khljL7qqSfnNqA+sy7q+eg==
@@ -2020,6 +2020,16 @@
   resolved "https://registry.yarnpkg.com/@cityofzion/neo3-signer/-/neo3-signer-1.0.1.tgz#01736c3e5de639601b642108dc5b5a0db6f71da7"
   integrity sha512-3E7A2iePdrbWiQ2CP6NGP6AKlsEFgWnQ9v8lyXsbXKtRT+nQw4FyRgP6LYw7oSSW8WDYJJaR8Pv/EyTqw0+wnA==
 
+"@cityofzion/neon-api@^4.8.0":
+  version "4.9.0"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-api/-/neon-api-4.9.0.tgz#ab11aef2c132baced5a764ac42573577938eaf9c"
+  integrity sha512-8eN3N3sGgd4L7qFaFATKr94kA/65626eo6hB7fHL+S8OGCVCrrl3tfh8GAOv50vLxd2YyoDu9pBY/0NPKY8tsQ==
+  dependencies:
+    "@types/node" "15.0.3"
+    axios "0.21.1"
+    isomorphic-ws "4.0.1"
+    ws "7.4.5"
+
 "@cityofzion/neon-api@^4.8.1":
   version "4.8.1"
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-api/-/neon-api-4.8.1.tgz#c173eae102e5edc15e824016d0173131dce10fea"
@@ -2030,20 +2040,32 @@
     isomorphic-ws "4.0.1"
     ws "7.3.0"
 
-"@cityofzion/neon-api@^4.8.3":
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neon-api/-/neon-api-4.9.0.tgz#ab11aef2c132baced5a764ac42573577938eaf9c"
-  integrity sha512-8eN3N3sGgd4L7qFaFATKr94kA/65626eo6hB7fHL+S8OGCVCrrl3tfh8GAOv50vLxd2YyoDu9pBY/0NPKY8tsQ==
-  dependencies:
-    "@types/node" "15.0.3"
-    axios "0.21.1"
-    isomorphic-ws "4.0.1"
-    ws "7.4.5"
-
 "@cityofzion/neon-api@^5.2.2":
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-api/-/neon-api-5.2.2.tgz#21554ddb7ece6f0a73df08ad0aaf59bae8668d95"
   integrity sha512-zNaGI+0C3r/w0olV6cpbdl1OarvX/Qen8bnEO3Xlqybc8uswu0AoL/mhfjXPFd75UkWmQTC7JCziKQULTfLblg==
+
+"@cityofzion/neon-core@^4.8.0", "@cityofzion/neon-core@^4.9.0":
+  version "4.9.0"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-core/-/neon-core-4.9.0.tgz#aed0c67997534a7ca1a4c4fbef43858551d0cbbb"
+  integrity sha512-z4UgEIjAS9E2QP6HSTzri02DFY++nYmfzbspi1818mvnTst6Lf8bDNYYxG/686wdYN2dEF3RuccMXraw2Bm31g==
+  dependencies:
+    "@types/bn.js" "5.1.0"
+    "@types/bs58" "4.0.1"
+    "@types/crypto-js" "4.0.1"
+    "@types/elliptic" "6.4.12"
+    axios "0.21.1"
+    bignumber.js "7.2.1"
+    bn.js "5.2.0"
+    bs58 "4.0.1"
+    bs58check "2.1.2"
+    crypto-js "4.0.0"
+    elliptic "6.5.4"
+    loglevel "1.7.1"
+    loglevel-plugin-prefix "0.8.4"
+    scrypt-js "3.0.1"
+    secure-random "1.1.2"
+    wif "2.0.6"
 
 "@cityofzion/neon-core@^4.8.1":
   version "4.8.1"
@@ -2064,28 +2086,6 @@
     loglevel "1.6.8"
     loglevel-plugin-prefix "0.8.4"
     scrypt-js "3.0.0"
-    secure-random "1.1.2"
-    wif "2.0.6"
-
-"@cityofzion/neon-core@^4.8.2", "@cityofzion/neon-core@^4.9.0":
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neon-core/-/neon-core-4.9.0.tgz#aed0c67997534a7ca1a4c4fbef43858551d0cbbb"
-  integrity sha512-z4UgEIjAS9E2QP6HSTzri02DFY++nYmfzbspi1818mvnTst6Lf8bDNYYxG/686wdYN2dEF3RuccMXraw2Bm31g==
-  dependencies:
-    "@types/bn.js" "5.1.0"
-    "@types/bs58" "4.0.1"
-    "@types/crypto-js" "4.0.1"
-    "@types/elliptic" "6.4.12"
-    axios "0.21.1"
-    bignumber.js "7.2.1"
-    bn.js "5.2.0"
-    bs58 "4.0.1"
-    bs58check "2.1.2"
-    crypto-js "4.0.0"
-    elliptic "6.5.4"
-    loglevel "1.7.1"
-    loglevel-plugin-prefix "0.8.4"
-    scrypt-js "3.0.1"
     secure-random "1.1.2"
     wif "2.0.6"
 
