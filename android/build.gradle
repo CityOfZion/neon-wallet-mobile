@@ -16,7 +16,7 @@ buildscript {
     }
     dependencies {
         classpath('com.android.tools.build:gradle:4.0.1')
-
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -30,6 +30,17 @@ allprojects {
             force "com.facebook.react:react-native:" + REACT_NATIVE_VERSION
         }
     }
+
+    afterEvaluate {		
+	    if (it.hasProperty('android')){		
+	        android {		
+	            defaultConfig {		
+	                minSdkVersion 26		
+	            }		
+	        }		
+	    }		
+    }
+
     repositories {
         mavenLocal()
         maven {
@@ -39,6 +50,11 @@ allprojects {
         maven {
             // Android JSC is installed from npm
             url(new File(["node", "--print", "require.resolve('jsc-android/package.json')"].execute(null, rootDir).text.trim(), "../dist"))
+        }
+
+        maven {
+            // All of Detox' artifacts are provided via the npm module
+            url "$rootDir/../node_modules/detox/Detox-android"
         }
 
         google()

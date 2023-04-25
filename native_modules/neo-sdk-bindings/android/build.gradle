@@ -27,6 +27,12 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    packagingOptions {
+        pickFirst  '**/legacy-en-mnemonic-word-list.txt'
+        pickFirst '**/legacy-logback.xml'
+    }
+
 }
 
 repositories {

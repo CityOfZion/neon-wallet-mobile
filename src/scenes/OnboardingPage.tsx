@@ -156,7 +156,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   }, [])
 
   return (
-    <LinearLayout height="100%" bg="background.14" flex={1}>
+    <LinearLayout testID='onboarding-page' height="100%" bg="background.14" flex={1}>
       <StatusBar hidden />
       <ImageBackground
         source={require('~src/assets/images/onboarding-background.png')}
