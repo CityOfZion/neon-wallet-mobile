@@ -1,9 +1,9 @@
-name: Build
+name: Build Android and Generate APK
 
 on:
   push:
     tags:
-      - 'build'
+      - 'build_android'
       
 jobs:
   build:
