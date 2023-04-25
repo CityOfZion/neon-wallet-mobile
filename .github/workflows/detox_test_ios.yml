@@ -1,8 +1,8 @@
-name: Detox Test
+name: Detox Test IOS
 on:
   push:
     tags:
-      - 'refs/tags/detox'
+      - 'detox_ios'
 jobs:
   build-and-test:
     runs-on: macos-12
@@ -11,7 +11,7 @@ jobs:
     - name: Install Dependencies
       run: |
         brew install node
-        npm install -g detox-cli
+        npm install -g detox-cli@^19.12.1
 
     - name: Install Node.js
       uses: actions/setup-node@v2
