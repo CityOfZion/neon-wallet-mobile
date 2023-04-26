@@ -38,17 +38,21 @@ jobs:
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: yarn detox build --configuration android.emu.release
 
-      - name: Get device name
-        id: device
-        run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator.device.avdName)" >> $GITHUB_OUTPUT
+      - name: Download Android Emulator Image
+        run: |
+          echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-31;google_apis;x86_64"
+          echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name emu --device "pixel" --abi "google_apis/x86_64" --package "system-images;android-31;google_apis;x86_64"
+          $ANDROID_HOME/emulator/emulator -list-avds
 
-      - name: Echo Avd Name
-        run: "echo ${{ steps.device.outputs.AVD_NAME }}"  
-
-      - name: Detox test
+      - name: Start Android emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
           arch: x86_64
-          avd-name: ${{ steps.device.outputs.AVD_NAME }}
-          script: yarn detox test --configuration android.emu.release
+          profile: Nexus 6P
+          extra-opts: -no-window -no-audio
+          exec: $ANDROID_HOME/emulator/emulator    
+
+      - name: Detox test
+        run: yarn detox test --configuration android.emu.release
+        
