@@ -284,14 +284,10 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
       sc.ContractParam.integer(adjustedAmt.toString()),
     ])
 
+    let intents: TransactionOutput[] | undefined = undefined
+
     if (tip) {
-      const tipToHash = u.reverseHex(wallet.getScriptHashFromAddress(this.cozTip.address))
-      const tipAdjustedAmt = new u.Fixed8(tip).toRawNumber()
-      scBuilder.emitAppCall(CONST.ASSET_ID[this.cozTip.symbol], 'transfer', [
-        fromHash,
-        tipToHash,
-        sc.ContractParam.integer(tipAdjustedAmt.toString()),
-      ])
+      intents = api.makeIntent({ [this.cozTip.symbol]: tip }, this.cozTip.address)
     }
 
     const invokeResponse = await api.doInvoke({
@@ -300,6 +296,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
       account,
       script: scBuilder.str,
       fees: fee,
+      intents: intents ?? undefined,
     })
 
     return invokeResponse.tx?.hash ?? null
