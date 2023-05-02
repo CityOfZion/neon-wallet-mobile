@@ -73,7 +73,6 @@ const ReceiveTransactionQrCodeModal = (props: Props) => {
       title={i18n.t('modals.ReceiveTransactionQrCodeModal.title')}
       rightButton={<CloseButton onPress={controller.close} />}
       onClose={() => props.navigation.goBack()}
-      size="small"
     >
       <LinearLayout alignItems="center" flexGrow={1} flexShrink={1}>
         <ViewShot ref={qrCodeView}>

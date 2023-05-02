@@ -4,7 +4,7 @@ import { GestureResponderEvent, ImageSourcePropType } from 'react-native'
 import { ButtonView, ImageView, TextView } from '../styles/styled-components'
 import { ButtonViewProps, ImageViewProps, TextViewProps } from '../types/styled-components'
 
-type Variant = 'text' | 'contained'
+type Variant = 'text' | 'contained' | 'outline'
 
 type Props = ButtonViewProps & {
   icon?: ImageSourcePropType
@@ -20,14 +20,16 @@ export const Button = ({ icon, label, iconStyle, labelStyle, onPress, variant, d
   return (
     <ButtonView
       orientation="horiz"
-      p="8px"
+      p="10px"
       alignItems="center"
       onPress={onPress}
       backgroundColor={variant === 'contained' ? 'primary' : 'transparent'}
-      borderRadius="8px"
+      borderRadius="4px"
       justifyContent="center"
       opacity={disabled ? 0.3 : 1}
       disabled={disabled}
+      borderWidth={variant === 'outline' ? '1px' : '0px'}
+      borderColor="primary"
       {...rest}
     >
       {!!icon && (
@@ -41,7 +43,7 @@ export const Button = ({ icon, label, iconStyle, labelStyle, onPress, variant, d
       )}
 
       <TextView
-        fontFamily={variant === 'contained' ? 'regular' : 'bold'}
+        fontFamily={variant === 'contained' || variant === 'outline' ? 'regular' : 'bold'}
         fontSize="lg"
         color={variant === 'contained' ? 'text.9' : 'primary'}
         {...labelStyle}

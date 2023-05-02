@@ -1,24 +1,25 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import PropTypes from 'prop-types'
-import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Text, Dimensions, TouchableOpacity } from 'react-native'
+import React from 'react'
+import { FlatList } from 'react-native'
 import { Shadow } from 'react-native-shadow-2'
 import { useSelector } from 'react-redux'
 
+import ListSeparator from '../walletConnect/components/ListSeparator'
+
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Normalize } from '~/src/app/Normalize'
+import { BlockchainServiceKey } from '~/src/blockchain'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
-import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
-import { selectContacts } from '~/src/store/contact/SelectorContact'
+import { selectContactById } from '~/src/store/contact/SelectorContact'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { Contact } from '~src/models/redux/Contact'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ContactsStackParamList } from '~src/navigation/ContactsStackNavigation'
-import { RootState } from '~src/store/RootStore'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface ContactDetailsParams {
   contact: Contact
@@ -29,105 +30,56 @@ interface ContactDetailsProps {
   route: RouteProp<ContactsStackParamList, 'ContactDetails'>
 }
 
-interface IItemAddress {
-  address: string
+interface ItemProps {
+  addressOrDomain: string
+  blockchain: BlockchainServiceKey
 }
-const ItemAddress: React.FC<IItemAddress> = ({ address }) => {
-  const { getBlockchainByAddress } = useBlockchainServiceUtils()
 
-  const blockchainName = getBlockchainByAddress(address)
-  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const styles = StyleSheet.create({
-    text: {
-      color: theme.colors.primary,
-      fontFamily: 'medium',
-      fontSize: 15,
-    },
-    nameBlockchain: {
-      color: theme.colors.text[2],
-      fontFamily: 'regular',
-      fontSize: 14,
-    },
-    container: {
-      paddingVertical: 17,
-      justifyContent: 'space-between',
-      borderBottomWidth: 1,
-      borderBottomColor: '#ffffff55',
-    },
-  })
+const Item = React.memo(({ addressOrDomain, blockchain }: ItemProps) => {
   return (
-    <TouchableOpacity onPress={() => UtilsHelper.copyToClipboard(address)} style={styles.container}>
-      <LinearLayout orientation="horiz">
-        {blockchainName && (
-          <ImageView
-            width={17}
-            height={18}
-            source={BlockchainHelper.getIcon(blockchainName)}
-            mr={3}
-            alignSelf="center"
-          />
-        )}
-        <LinearLayout orientation="verti" width="85%">
-          {blockchainName && (
-            <Text style={styles.nameBlockchain}>{i18n.t(`blockchainServices.${blockchainName}.id`)}</Text>
-          )}
-          <Text style={styles.text} numberOfLines={1} ellipsizeMode="middle">
-            {address}
-          </Text>
-        </LinearLayout>
-        <ImageView source={require('~/src/assets/images/icon-copy-green.png')} alignSelf="center" />
+    <ButtonView
+      onPress={() => UtilsHelper.copyToClipboard(addressOrDomain)}
+      paddingY="18px"
+      orientation="horiz"
+      alignItems="center"
+    >
+      <ImageView source={BlockchainHelper.getIcon(blockchain)} resizeMode="contain" width={20} height={20} />
+
+      <LinearLayout flexGrow={1} flexShrink={1} mx="14px">
+        <TextView color="text.10" fontSize="14px">
+          {i18n.t(`blockchainServices.${blockchain}.id`)}
+        </TextView>
+
+        <TextView color="primary" fontSize="16px" numberOfLines={1} ellipsizeMode="middle">
+          {addressOrDomain}
+        </TextView>
       </LinearLayout>
-    </TouchableOpacity>
+
+      <ImageView
+        source={require('~/src/assets/images/icon-copy-green.png')}
+        width={20}
+        height={20}
+        resizeMode="contain"
+      />
+    </ButtonView>
   )
-}
+})
 
 export const ContactDetails = (props: ContactDetailsProps) => {
-  const contacts = useSelector(selectContacts)
-
-  const [contact, setContact] = useState(props.route.params.contact)
+  const contact = useSelector(selectContactById(props.route.params.contact.id))
 
   const handleEditPress = () => {
     props.navigation.navigate(wrapper.route.Modal.name, {
-      screen: wrapper.route.PersistContact.name,
+      screen: wrapper.route.PersistContactModal.name,
       params: {
         contact,
       },
     })
   }
 
-  const styles = StyleSheet.create({
-    containerLetter: {
-      borderRadius: 100,
-      backgroundColor: '#252d34',
-      width: 126,
-      height: 126,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    textLetter: {
-      color: '#899fa8',
-      fontSize: 36,
-      fontWeight: '600',
-    },
-    container: {
-      alignItems: 'center',
-      marginRight: 10,
-      marginLeft: 10,
-      flexDirection: 'row',
-    },
-    containerAddresses: {
-      width: '100%',
-      paddingRight: 12,
-    },
-  })
-
-  useEffect(() => {
-    const freshContact = contacts.find(it => it.id === contact.id)
-
-    if (freshContact) {
-      setContact(freshContact)
-    }
-  }, [contacts])
+  if (!contact) {
+    return null
+  }
 
   return (
     <ScreenLayout
@@ -135,35 +87,38 @@ export const ContactDetails = (props: ContactDetailsProps) => {
         <ThemedButton onPress={handleEditPress} label={i18n.t('app.edit')} flat textColor="text.0" fontSize="lg" />
       }
     >
-      <LinearLayout alignItems="center" mt={Dimensions.get('screen').height * 0.07}>
-        <Shadow distance={20} offset={[5, 5]} containerViewStyle={{ marginBottom: 30 }}>
-          <View style={styles.containerLetter}>
-            <Text style={styles.textLetter}>{contact.name?.charAt(0).toLocaleUpperCase()}</Text>
-          </View>
+      <LinearLayout alignItems="center" mt="64px">
+        <Shadow distance={20} offset={[5, 5]} viewStyle={{ borderRadius: Normalize.scale(64) }}>
+          <LinearLayout
+            borderRadius={Normalize.scale(64)}
+            backgroundColor="background.14"
+            width={Normalize.scale(126)}
+            height={Normalize.scale(126)}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <TextView color="text.6" fontSize="36px">
+              {contact.name?.charAt(0).toLocaleUpperCase()}
+            </TextView>
+          </LinearLayout>
         </Shadow>
-        <TextView
-          fontFamily="semibold"
-          fontSize="20px"
-          color="text.0"
-          mb={Dimensions.get('screen').height * 0.05}
-          mt={Dimensions.get('screen').height * 0.02}
-        >
+
+        <TextView fontSize="20px" color="text.0" mb="24px" mt="54px">
           {contact.name}
         </TextView>
+
         <TextView textAlign="center" color="text.6" fontSize="14px">
           {i18n.t('screens.contactDetails.walletAddress')}
         </TextView>
 
-        <View style={styles.containerAddresses}>
-          {contact.addresses.map(({ address }, index) => (
-            <ItemAddress key={index} address={address} />
-          ))}
-        </View>
+        <FlatList
+          style={{ width: '100%' }}
+          data={contact.addresses}
+          renderItem={({ item }) => <Item addressOrDomain={item.addressOrDomain} blockchain={item.blockchain} />}
+          ItemSeparatorComponent={() => <ListSeparator />}
+          keyExtractor={(item, index) => `${item.addressOrDomain}-${index}`}
+        />
       </LinearLayout>
     </ScreenLayout>
   )
-}
-
-ItemAddress.propTypes = {
-  address: PropTypes.any,
 }

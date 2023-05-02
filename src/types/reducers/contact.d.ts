@@ -6,12 +6,6 @@ export interface ContactState {
   addresses: ContactAddressesList = []
 }
 
-export type ContactAddressesList = {
-  address: string
-  blockchain: BlockchainServiceKey
-}[]
+export type ContactAddressesList = ContactAddresses[]
 
-export type ContactAddresses = {
-  address: string
-  blockchain: BlockchainServiceKey
-}
+export type ContactAddresses = { addressOrDomain: string; blockchain: BlockchainServiceKey }

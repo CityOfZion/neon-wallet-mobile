@@ -5,6 +5,7 @@ import { BlockchainServiceKey } from '../blockchain'
 import { Account } from '../models/redux/Account'
 import { Contact } from '../models/redux/Contact'
 import { LinearLayout } from '../styles/styled-components'
+import { ContactAddresses } from '../types/reducers/contact'
 import { LinearLayoutProps } from '../types/styled-components'
 import { TabSelector } from './TabSelector'
 import { AccountList } from './accounts/AccountList'
@@ -13,7 +14,7 @@ import { ContactList } from './contacts/ContactList'
 export type TabSelectorContactType = 'contacts' | 'accounts'
 
 type Props = {
-  onContactSelected?: (contact: Contact, address: string) => void
+  onContactSelected?: (contact: Contact, address?: ContactAddresses) => void
   onAccountSelected?: (account: Account) => void
   filterByBlockchain?: BlockchainServiceKey
 } & LinearLayoutProps

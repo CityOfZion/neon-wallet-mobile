@@ -110,7 +110,6 @@ const AccountSelectionModal = (props: Props) => {
     <>
       <SwiperPanel
         controller={controller}
-        size="small"
         title={i18n.t(`${textSchema}.account.title`)}
         rightButton={<CloseButton onPress={controller.close} />}
         leftButton={<BackButton onPress={controller.close} />}

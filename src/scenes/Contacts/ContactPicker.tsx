@@ -5,13 +5,14 @@ import React from 'react'
 
 import { BlockchainServiceKey } from '~/src/blockchain'
 import { TabSelectorContact } from '~/src/components/TabSelectorContacts'
+import { ContactAddresses } from '~/src/types/reducers/contact'
 import SwiperPanel, { useSwiperController, CloseButton } from '~src/components/SwiperPanel'
 import { Account } from '~src/models/redux/Account'
 import { Contact } from '~src/models/redux/Contact'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { TextView } from '~src/styles/styled-components'
 export interface ContactsModalParams {
-  onContactSelected?: (contact: Contact, address: string) => void
+  onContactSelected?: (contact: Contact, address: ContactAddresses) => void
   onAccountSelected?: (account: Account) => void
   filterByBlockchain?: BlockchainServiceKey
 }
@@ -31,8 +32,8 @@ export const ContactPicker = (props: ContactsModalProps) => {
     controller.close()
   }
 
-  const handleSelectContact = (contact: Contact, address: string) => {
-    if (props.route.params.onContactSelected) {
+  const handleSelectContact = (contact: Contact, address?: ContactAddresses) => {
+    if (props.route.params.onContactSelected && address) {
       props.route.params.onContactSelected(contact, address)
     }
 

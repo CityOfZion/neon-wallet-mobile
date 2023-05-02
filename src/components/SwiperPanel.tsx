@@ -1,3 +1,4 @@
+import { useNavigationState, useRoute } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
 import { LinearGradient } from 'expo-linear-gradient'
 import I18n from 'i18n-js'
@@ -21,7 +22,7 @@ export interface SwiperController {
 
 export interface SwiperProps {
   controller?: SwiperController
-  size?: 'full' | 'small' | 'dinamic'
+  size?: 'full' | 'dinamic'
   withoutHeader?: boolean
   draggable?: boolean
   leftButton?: JSX.Element
@@ -121,8 +122,14 @@ export const BackButton = ({ withText = true, onPress }: BackButtonProps) => {
 
 export const LabelButton = ({ label, disabled, onPress }: LabelButtonProps) => {
   return (
-    <ButtonWithoutFeedbackView onPress={onPress} disabled={disabled}>
-      <TextView color="text.0" fontSize="16px" fontFamily="regular" style={{ padding: DEFAULT_PADDING }}>
+    <ButtonWithoutFeedbackView onPress={!disabled ? onPress : undefined} disabled={disabled}>
+      <TextView
+        color="text.0"
+        fontSize="16px"
+        fontFamily="regular"
+        style={{ padding: DEFAULT_PADDING }}
+        opacity={disabled ? 0.6 : 1}
+      >
         {label}
       </TextView>
     </ButtonWithoutFeedbackView>
@@ -155,6 +162,20 @@ export default function SwiperPanel({ draggable = true, size = 'full', contentSt
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const swiperController = useSwiperController(true)
   const { height } = useWindowDimensions()
+  const route = useRoute()
+
+  const panelOffset = useNavigationState(navigationState => {
+    if (size === 'dinamic') return undefined
+
+    let offset: number = 1
+
+    const routeIndex = navigationState.routes.findIndex(r => r.key === route.key)
+    if (routeIndex > 0) {
+      offset = routeIndex + 1
+    }
+
+    return applicationConfig.statusBarHeight + PANEL_OFFSET * offset
+  })
 
   const [state, setState] = useState(State.CLOSED)
 
@@ -162,13 +183,6 @@ export default function SwiperPanel({ draggable = true, size = 'full', contentSt
   const pan = useRef(new Animated.ValueXY({ x: 0, y: height }))
 
   const controller = props.controller ?? swiperController
-
-  const panelOffset =
-    size === 'dinamic'
-      ? undefined
-      : applicationConfig.statusBarHeight + size === 'full'
-      ? PANEL_OFFSET
-      : PANEL_OFFSET * 2
 
   const panResponder = useRef(
     PanResponder.create({

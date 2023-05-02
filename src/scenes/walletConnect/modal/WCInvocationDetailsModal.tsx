@@ -84,7 +84,6 @@ const WCInvocationDetailsModal = ({ navigation, route }: Props) => {
       title={i18n.t('modals.invocationDetails.title')}
       rightButton={<CloseButton onPress={swipperController.close} />}
       onClose={navigation.goBack}
-      size="small"
     >
       <ConnectionHeader title={infos.dAppName} imageUri={infos.dAppIcon} />
 

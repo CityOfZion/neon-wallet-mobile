@@ -115,7 +115,6 @@ const ListTokenModal = (props: Props) => {
     <SwiperPanel
       controller={controller}
       title={i18n.t('modals.listTokenModal.tokens')}
-      size="small"
       rightButton={<CloseButton onPress={controller.close} />}
       onClose={props.navigation.goBack}
       withoutScrollView

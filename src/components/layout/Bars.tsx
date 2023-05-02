@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
-import { StatusBar } from 'react-native'
+import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
@@ -79,10 +78,6 @@ export const Bars = ({ colors }: Props) => {
     () => (hasCustom ? theme.colors.black : !isConnected ? theme.colors.background[12] : colors[0]),
     [colors, theme, isConnected, hasCustom]
   )
-
-  useEffect(() => {
-    StatusBar.setBackgroundColor(backgroundColor)
-  }, [backgroundColor])
 
   return (
     <>

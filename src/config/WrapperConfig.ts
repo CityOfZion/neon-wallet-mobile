@@ -77,7 +77,7 @@ export class WrapperConfig {
     'CurrencyPickerModal',
     'ThemePickerModal',
     'NetworkPickerModal',
-    'PersistContact',
+    'PersistContactModal',
     'ContactDetails',
     'AccountQRCode',
     'ContactsModal',
@@ -112,6 +112,8 @@ export class WrapperConfig {
     'ProtocolEditPage',
     'EditNetworkModal',
     'QuickToolsModal',
+    'AddContactAddressModal',
+    'SelectChainModal',
   ] as const
 }
 

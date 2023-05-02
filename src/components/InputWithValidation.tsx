@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Keyboard,
   KeyboardTypeOptions,
@@ -12,10 +12,12 @@ import {
   Dimensions,
   View,
   ImageSourcePropType,
+  ActivityIndicator,
 } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { BlockchainServiceKey } from '../blockchain'
+import { ContactAddresses } from '../types/reducers/contact'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Normalize } from '~src/app/Normalize'
@@ -38,7 +40,8 @@ interface Props {
   invalidColor?: string
   fontStyle?: string
   value: string
-  validator: (text: string) => boolean
+  validator?: (text: string) => boolean | Promise<boolean>
+  isValid?: boolean
   invalidMessage?: string
   invalidMessageColor?: string
   separatorColor: string
@@ -50,7 +53,7 @@ interface Props {
   filterBlockchain?: BlockchainServiceKey
   onClearPress?: () => void
   onScan?: (data: string) => void
-  onSelectContact?: (contact: Contact, address: string) => void
+  onSelectContact?: (contact: Contact, address: ContactAddresses) => void
   onSelectAccount?: (account: Account) => void
   placeholder?: string
   secure?: boolean
@@ -66,22 +69,22 @@ interface Props {
   addressSelected?: string
   forceClearButton?: boolean
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters'
+  loading?: boolean
 }
 
 const InputWithValidation = (props: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+
+  const [isValid, setIsValid] = useState(true)
+
   const width = Normalize.scale(props.iconSize ? props.iconSize[0] : 25)
   const height = Normalize.scale(props.iconSize ? props.iconSize[1] : 25)
   const navigation = useNavigation<StackNavigationProp<RootStackParamList & ModalStackParamList>>()
   const sideMargins = props.sideMargins ?? 20
 
-  const resultValidator = props.validator(props.value)
+  const fontStyle = !isValid ? 'italic' : props.fontStyle ?? 'normal'
 
-  const isInvalid = props.value ? !resultValidator : undefined
-
-  const fontStyle = isInvalid ? 'italic' : props.fontStyle ?? 'normal'
-
-  const fontColor = isInvalid ? props.invalidColor : props.color
+  const fontColor = !isValid ? props.invalidColor : props.color
 
   const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     if (props.onBlur) {
@@ -95,11 +98,25 @@ const InputWithValidation = (props: Props) => {
     }
   }
 
+  useEffect(() => {
+    ;(async () => {
+      if (!props.validator || !props.value) return
+
+      const valid = await props.validator(props.value)
+      setIsValid(valid)
+    })()
+  }, [props.value, props.validator])
+
+  useEffect(() => {
+    if (typeof props.isValid === 'undefined') return
+    setIsValid(props.isValid)
+  }, [props.isValid])
+
   return (
     <LinearLayout orientation="verti" ml={sideMargins} mr={sideMargins}>
       {!!props.title && (
         <LinearLayout width="100%">
-          <TextView width="100%" fontFamily="regular" color="text.0" fontSize="18px">
+          <TextView width="100%" fontFamily="regular" color="primary" fontSize="18px">
             {props.title}
           </TextView>
         </LinearLayout>
@@ -117,7 +134,7 @@ const InputWithValidation = (props: Props) => {
         )}
         <LinearLayout
           bg={props.fromImportKey ? theme.colors.background[12] : undefined}
-          borderColor={isInvalid ? theme.colors.quinary : theme.colors.background[12]}
+          borderColor={!isValid ? theme.colors.quinary : theme.colors.background[12]}
           borderRadius={10}
           borderWidth={props.fromImportKey ? 1 : 0}
           orientation="horiz"
@@ -128,7 +145,7 @@ const InputWithValidation = (props: Props) => {
             autoCapitalize={props.autoCapitalize ?? 'none'}
             onChangeText={handleChangeText}
             color={fontColor}
-            placeholderTextColor={props.placeholderColor ?? '#7d929a'}
+            placeholderTextColor={props.placeholderColor ?? theme.colors.text[10]}
             underlineColorAndroid="transparent"
             placeholder={props.placeholder ?? i18n.t('components.inputTextWithValidation.inputPlaceholder')}
             fontFamily="regular"
@@ -158,7 +175,7 @@ const InputWithValidation = (props: Props) => {
               justifyContent: 'space-between',
             }}
           >
-            {!props.isMultiline && isInvalid && (
+            {!props.isMultiline && !isValid && (
               <ImageView
                 alignSelf="center"
                 source={require('~/src/assets/images/icon-alert-purple.png')}
@@ -167,6 +184,8 @@ const InputWithValidation = (props: Props) => {
             )}
             {(props.onClearPress && props.value.length > 0) ||
               (props.onClearPress && props.forceClearButton && <InputClearButton onPress={props.onClearPress} />)}
+
+            {props.loading && <ActivityIndicator size="small" color={theme.colors.text[10]} />}
           </View>
         </LinearLayout>
       </LinearLayout>
@@ -174,7 +193,7 @@ const InputWithValidation = (props: Props) => {
       {!props.fromImportKey && (
         <LinearLayout
           mt={1}
-          bg={isInvalid ? props.invalidSeparatorColor ?? props.separatorColor : props.separatorColor}
+          bg={!isValid ? props.invalidSeparatorColor ?? props.separatorColor : props.separatorColor}
           height={1}
           width="100%"
         />
@@ -185,7 +204,7 @@ const InputWithValidation = (props: Props) => {
           color={props.invalidMessageColor ?? theme.colors.background[5]}
           fontSize="xs"
           fontFamily="regular"
-          opacity={isInvalid ? 1 : 0}
+          opacity={!isValid ? 1 : 0}
           textAlign="right"
         >
           {props.invalidMessage ?? i18n.t('components.inputTextWithValidation.incorrectFormat')}
