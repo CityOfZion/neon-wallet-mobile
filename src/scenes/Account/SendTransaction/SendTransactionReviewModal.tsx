@@ -2,6 +2,7 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
+import moment from 'moment'
 import React, { useMemo } from 'react'
 import { showMessage } from 'react-native-flash-message'
 import { useDispatch, useSelector } from 'react-redux'
@@ -17,7 +18,7 @@ import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { useExchange } from '~/src/hooks/useExchange'
 import { useLocalAuthentication } from '~/src/hooks/useLocalAuthentication'
 import { Token } from '~/src/models/Token'
-import { Account } from '~/src/models/redux/Account'
+import { Account, PendingTransactions } from '~/src/models/redux/Account'
 import { Contact } from '~/src/models/redux/Contact'
 import { Wallet } from '~/src/models/redux/Wallet'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
@@ -114,7 +115,9 @@ export const SendTransactionReviewModal = (props: Props) => {
         throw new Error(i18n.t('modals.sendTransactionReviewModal.transactionFailed'))
       }
 
-      account.addPendingTransaction(transactionHash, account.address, destinationAddress, token, Number(amount), fee)
+      const pendingTransaction: PendingTransactions = { hash: transactionHash, senderAddress: account.address, receiverAddress: destinationAddress, token, amount: Number(amount), fee, time: moment().unix() }
+
+      account.pendingTransactions = [...account.pendingTransactions, pendingTransaction]
       dispatch(accountReducerActions.saveAccount(account))
       dispatch(accountReducerActions.watchPendingTransaction({ account, transactionHash, isClaim: false }))
 
