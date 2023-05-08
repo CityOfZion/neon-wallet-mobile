@@ -9,18 +9,21 @@ export class NeonWcAdapter {
   readonly invoke: NeonInvoker
   readonly signer: NeonSigner
   readonly account: Neon.wallet.Account | undefined
+  readonly rpc: Neon.rpc.RPCClient
 
-  constructor(invoke: NeonInvoker, sign: NeonSigner, account?: Neon.wallet.Account) {
+  constructor(invoke: NeonInvoker, sign: NeonSigner, rpc: Neon.rpc.RPCClient, account?: Neon.wallet.Account) {
     this.invoke = invoke
     this.signer = sign
     this.account = account
+    this.rpc = rpc
   }
 
   static init = async (rpcURL: string, wif: string): Promise<NeonWcAdapter> => {
     const account = new Neon.wallet.Account(wif)
     const invoker = await NeonInvoker.init(rpcURL, account)
     const signer = new NeonSigner(account)
-    return new NeonWcAdapter(invoker, signer, account)
+    const rpc = new Neon.rpc.RPCClient(rpcURL)
+    return new NeonWcAdapter(invoker, signer, rpc, account)
   }
 
   async rpcCall(sessionRequest: SessionRequest): Promise<any> {
@@ -52,6 +55,12 @@ export class NeonWcAdapter {
       result = await this.invoke.traverseIterator(request.params[0], request.params[1], request.params[2])
     } else if (request.method === 'getWalletInfo') {
       result = { isLedger: false }
+    } else if (request.method === 'getNetworkVersion') {
+      const response = await this.rpc.getVersion()
+      result = {
+        rpcAddress: this.rpc.url,
+        ...response,
+      }
     } else {
       throw new Error('Invalid Request method')
     }
