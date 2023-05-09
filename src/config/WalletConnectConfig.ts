@@ -5,9 +5,17 @@ import { BlockchainServiceKey } from '../blockchain'
 export class WalletConnectConfig {
   defaultRelayURL = 'wss://relay.walletconnect.com'
 
-  defaultMethods = ['invokeFunction', 'testInvoke', 'signMessage', 'verifyMessage', 'traverseIterator', 'getWalletInfo']
+  defaultMethods = [
+    'invokeFunction',
+    'testInvoke',
+    'signMessage',
+    'verifyMessage',
+    'traverseIterator',
+    'getWalletInfo',
+    'getNetworkVersion',
+  ]
 
-  defaultAutoacceptMethods = ['testInvoke', 'traverseIterator', 'getWalletInfo']
+  defaultAutoacceptMethods = ['testInvoke', 'traverseIterator', 'getWalletInfo', 'getNetworkVersion']
 
   defaultLogger = 'debug'
 

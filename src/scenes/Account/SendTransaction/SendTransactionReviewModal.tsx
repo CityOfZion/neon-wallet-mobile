@@ -115,7 +115,15 @@ export const SendTransactionReviewModal = (props: Props) => {
         throw new Error(i18n.t('modals.sendTransactionReviewModal.transactionFailed'))
       }
 
-      const pendingTransaction: PendingTransactions = { hash: transactionHash, senderAddress: account.address, receiverAddress: destinationAddress, token, amount: Number(amount), fee, time: moment().unix() }
+      const pendingTransaction: PendingTransactions = {
+        hash: transactionHash,
+        senderAddress: account.address,
+        receiverAddress: destinationAddress,
+        token,
+        amount: Number(amount),
+        fee,
+        time: moment().unix(),
+      }
 
       account.pendingTransactions = [...account.pendingTransactions, pendingTransaction]
       dispatch(accountReducerActions.saveAccount(account))
