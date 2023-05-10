@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import React, { useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { Animated, RefreshControl } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -35,11 +35,23 @@ interface WalletProps {
 }
 
 export const ListWalletView = (props: WalletProps) => {
+  const paramsWallet = props.route.params?.wallet
+
   const wallets = useSelector(selectWallets)
   const accounts = useSelector(selectAccounts)
-  const [selectedWallet, setSelectedWallet] = useState<Wallet>(props.route.params?.wallet ?? wallets[0])
   const isFirstTime = useSelector((state: RootState) => state.settings.isFirstTime)
   const dispatch = useDispatch()
+
+  const defaultWalletIndex = useMemo(() => {
+    if (!paramsWallet || wallets.length <= 0) return 0
+
+    const defaultWalletIndex = wallets.findIndex(wallet => wallet.id === paramsWallet.id)
+    const hasDefaultWallet = defaultWalletIndex > -1
+
+    return hasDefaultWallet ? defaultWalletIndex : 0
+  }, [wallets, paramsWallet])
+
+  const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(wallets[defaultWalletIndex])
 
   const fadeValue = useRef(new Animated.Value(1)).current
 
@@ -48,20 +60,16 @@ export const ListWalletView = (props: WalletProps) => {
   const selectedWalletBalanceExchange = useBalancesAndExchange(selectedWallet?.getAccounts(accounts) ?? [])
   useRefetchOnFocus(selectedWalletBalanceExchange.refetch)
 
+  const handleSelectWallet = (wallet: Wallet) => {
+    setSelectedWallet(wallet)
+  }
+
   const fadeIn = () => {
-    Animated.sequence([
-      Animated.timing(fadeValue, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(fadeValue, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true,
-        delay: 400,
-      }),
-    ]).start()
+    Animated.timing(fadeValue, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start()
   }
 
   const fadeOut = () => {
@@ -98,7 +106,7 @@ export const ListWalletView = (props: WalletProps) => {
     >
       <Header selectedWallet={selectedWallet} />
 
-      {wallets.length > 0 && !!selectedWallet ? (
+      {wallets.length > 0 ? (
         <>
           <LinearLayout>
             {isFirstTime && <FirstWalletAlert onPress={handlePressFirstTime} />}
@@ -106,20 +114,23 @@ export const ListWalletView = (props: WalletProps) => {
               wallets={wallets}
               selectedWalletBalanceExchange={selectedWalletBalanceExchange}
               selectedWallet={selectedWallet}
-              onSelect={setSelectedWallet}
+              onSelect={handleSelectWallet}
               onPress={handlePress}
               onScrollBegin={fadeOut}
               onScrollEnd={fadeIn}
               scrollEnabled={!isFirstTime}
               pressedWallet={pressedWallet}
+              defaultIndex={defaultWalletIndex}
             />
           </LinearLayout>
 
-          <SelectedWalletInfo
-            selectedWallet={selectedWallet}
-            selectedWalletBalanceExchange={selectedWalletBalanceExchange}
-            opacity={fadeValue}
-          />
+          {selectedWallet && (
+            <SelectedWalletInfo
+              selectedWallet={selectedWallet}
+              selectedWalletBalanceExchange={selectedWalletBalanceExchange}
+              opacity={fadeValue}
+            />
+          )}
         </>
       ) : (
         <EmptyList />

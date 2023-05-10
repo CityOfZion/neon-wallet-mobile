@@ -360,9 +360,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
       title={<Title account={account} />}
       rightButton={<ThemedMoreButton onPress={handleMorePress} />}
     >
-      <LinearLayout mt={4}>
-        <AccountCard onLayout={handleLayout} hideBalance={false} balanceExchange={balanceExchange} account={account} />
-      </LinearLayout>
+      <AccountCard onLayout={handleLayout} hideBalance={false} balanceExchange={balanceExchange} account={account} />
 
       <Animated.View
         style={{
