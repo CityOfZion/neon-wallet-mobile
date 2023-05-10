@@ -88,6 +88,7 @@ export class WrapperConfig {
     'BlockchainListModal',
     'BlockchainListPage',
     'MnemonicSelectionList',
+    'WalletConnect',
     'WalletConnectPage',
     'WCConnectionRequestModal',
     'WCConnectDappModal',
