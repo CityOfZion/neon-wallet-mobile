@@ -109,7 +109,7 @@ export const WalletConnectContextProvider: React.FC<{
       }
       return await onRequestCallback(address, chainId, requestEvent)
     },
-    [findSessionByTopic]
+    [findSessionByTopic, onRequestCallback]
   )
 
   const respondRequest = useCallback(
@@ -127,7 +127,9 @@ export const WalletConnectContextProvider: React.FC<{
       throw new Error('Client is not initialized')
     }
 
-    signClient.events.removeAllListeners()
+    signClient.events.removeAllListeners('session_proposal')
+    signClient.events.removeAllListeners('session_request')
+    signClient.events.removeAllListeners('session_delete')
 
     signClient.on('session_proposal', (proposal: SessionProposal) => {
       setSessionProposals(old => [...old, proposal])
@@ -167,10 +169,10 @@ export const WalletConnectContextProvider: React.FC<{
       }
       setSessions(signClient.session.values)
     })
-  }, [makeRequest, respondRequest, signClient, findSessionByTopic])
+  }, [makeRequest, respondRequest, signClient, findSessionByTopic, autoAcceptCallback])
 
-  const onURI = async (data: any) => {
-    try {
+  const onURI = useCallback(
+    async (data: string) => {
       const uri = typeof data === 'string' ? data : ''
       if (!uri) return
       if (!signClient) {
@@ -178,116 +180,133 @@ export const WalletConnectContextProvider: React.FC<{
       }
 
       await signClient.pair({ uri })
-    } catch (error) {
-      throw error
-    }
-  } // this should not be a callback because it would require the developer to put it as dependency
+    },
+    [signClient]
+  )
 
-  const getPeerOfRequest = async (requestEvent: SessionRequest) => {
-    if (!signClient) {
-      throw new Error('Client is not initialized')
-    }
-    const { peer } = await signClient.session.get(requestEvent.topic)
-    return peer
-  } // this should not be a callback because it would require the developer to put it as dependency
+  const getPeerOfRequest = useCallback(
+    async (requestEvent: SessionRequest) => {
+      if (!signClient) {
+        throw new Error('Client is not initialized')
+      }
+      const { peer } = await signClient.session.get(requestEvent.topic)
+      return peer
+    },
+    [signClient]
+  )
 
-  const approveSession = async (
-    proposal: SessionProposal,
-    accountsAndChains: AddressAndChain[],
-    namespacesWithoutAccounts: SessionTypes.Namespaces
-  ) => {
-    if (!signClient) {
-      throw new Error('Client is not initialized')
-    }
-    if (typeof accountsAndChains === 'undefined') {
-      throw new Error('Accounts is undefined')
-    }
-    const accounts = accountsAndChains.map(acc => `${acc.chain}:${acc.address}`)
+  const approveSession = useCallback(
+    async (
+      proposal: SessionProposal,
+      accountsAndChains: AddressAndChain[],
+      namespacesWithoutAccounts: SessionTypes.Namespaces
+    ) => {
+      if (!signClient) {
+        throw new Error('Client is not initialized')
+      }
+      if (typeof accountsAndChains === 'undefined') {
+        throw new Error('Accounts is undefined')
+      }
+      const accounts = accountsAndChains.map(acc => `${acc.chain}:${acc.address}`)
 
-    const namespaces = Object.keys(namespacesWithoutAccounts).reduce((result, key) => {
-      result[key] = { ...namespacesWithoutAccounts[key], accounts }
-      return result
-    }, {} as SessionTypes.Namespaces)
+      const namespaces = Object.keys(namespacesWithoutAccounts).reduce((result, key) => {
+        result[key] = { ...namespacesWithoutAccounts[key], accounts }
+        return result
+      }, {} as SessionTypes.Namespaces)
 
-    const { acknowledged } = await signClient.approve({
-      id: proposal.id,
-      namespaces,
-    })
+      const { acknowledged } = await signClient.approve({
+        id: proposal.id,
+        namespaces,
+      })
 
-    const session = await acknowledged()
+      const session = await acknowledged()
 
-    setSessionProposals(old => old.filter(i => i !== proposal))
-    setSessions([session])
-  } // this should not be a callback because it would require the developer to put it as dependency
+      setSessionProposals(old => old.filter(i => i !== proposal))
+      setSessions([session])
+    },
+    [signClient]
+  )
 
-  const rejectSession = async (proposal: SessionProposal) => {
-    if (!signClient) {
-      throw new Error('Client is not initialized')
-    }
-    await signClient.reject({
-      id: proposal.id,
-      reason: {
-        code: 1,
-        message: 'rejected by the user',
-      },
-    })
-    setSessionProposals(old => old.filter(i => i !== proposal))
-  } // this should not be a callback because it would require the developer to put it as dependency
+  const rejectSession = useCallback(
+    async (proposal: SessionProposal) => {
+      if (!signClient) {
+        throw new Error('Client is not initialized')
+      }
+      await signClient.reject({
+        id: proposal.id,
+        reason: {
+          code: 1,
+          message: 'rejected by the user',
+        },
+      })
+      setSessionProposals(old => old.filter(i => i !== proposal))
+    },
+    [signClient]
+  )
 
-  const disconnect = async (topic: string) => {
-    if (!signClient) {
-      throw new Error('Client is not initialized')
-    }
-    await signClient.disconnect({
-      topic,
-      reason: { code: 5900, message: 'USER_DISCONNECTED' },
-    })
+  const disconnect = useCallback(
+    async (topic: string) => {
+      if (!signClient) {
+        throw new Error('Client is not initialized')
+      }
+      await signClient.disconnect({
+        topic,
+        reason: { code: 5900, message: 'USER_DISCONNECTED' },
+      })
 
-    setSessions(signClient.session.values)
-  } // this should not be a callback because it would require the developer to put it as dependency
+      setSessions(signClient.session.values)
+    },
+    [signClient]
+  )
 
   const removeFromPending = useCallback(async (requestEvent: SessionRequest) => {
     setRequests(requests.filter(x => x.id !== requestEvent.id))
   }, [])
 
-  const approveRequest = async (requestEvent: SessionRequest) => {
-    if (!signClient) {
-      throw new Error('Client is not initialized')
-    }
-    try {
-      const response = await makeRequest(requestEvent)
+  const approveRequest = useCallback(
+    async (requestEvent: SessionRequest) => {
+      if (!signClient) {
+        throw new Error('Client is not initialized')
+      }
+      try {
+        const response = await makeRequest(requestEvent)
+        await signClient.respond({
+          topic: requestEvent.topic,
+          response,
+        })
+        await removeFromPending(requestEvent)
+        return response
+      } catch (error: any) {
+        await signClient.respond({
+          topic: requestEvent.topic,
+          response: formatJsonRpcError(requestEvent.id, error.message ?? 'Failed or Rejected Request'),
+        })
+        throw error
+      }
+    },
+    [signClient, removeFromPending, makeRequest]
+  )
+
+  const rejectRequest = useCallback(
+    async (requestEvent: SessionRequest, error?: string) => {
+      if (!signClient) {
+        throw new Error('Client is not initialized')
+      }
       await signClient.respond({
         topic: requestEvent.topic,
-        response,
+        response: formatJsonRpcError(requestEvent.id, error ?? 'Failed or Rejected Request'),
       })
       await removeFromPending(requestEvent)
-      return response
-    } catch (error: any) {
-      await signClient.respond({
-        topic: requestEvent.topic,
-        response: formatJsonRpcError(requestEvent.id, error.message ?? 'Failed or Rejected Request'),
-      })
-      throw error
-    }
-  } // this should not be a callback because it would require the developer to put it as dependency
-
-  const rejectRequest = async (requestEvent: SessionRequest, error?: string) => {
-    if (!signClient) {
-      throw new Error('Client is not initialized')
-    }
-    await signClient.respond({
-      topic: requestEvent.topic,
-      response: formatJsonRpcError(requestEvent.id, error ?? 'Failed or Rejected Request'),
-    })
-    await removeFromPending(requestEvent)
-  } // this should not be a callback because it would require the developer to put it as dependency
+    },
+    [signClient, removeFromPending]
+  )
 
   useEffect(() => {
-    if (signClient) {
+    try {
       subscribeToEvents()
       loadSessions()
-    }
-  }, [signClient, subscribeToEvents, loadSessions])
+    } catch {}
+  }, [subscribeToEvents, loadSessions])
 
   const contextValue: IWalletConnectContext = {
     signClient,

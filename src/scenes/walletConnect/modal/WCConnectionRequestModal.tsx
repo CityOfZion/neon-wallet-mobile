@@ -134,6 +134,8 @@ const WCConnectionRequestModal = (props: Props) => {
   }, [sessionProposal, navigateToSelection, selectedBlockchainNetworks, sessionNetwork])
 
   const runOnURI = useCallback(async () => {
+    if (!walletConnectCtx.initialized) return
+
     try {
       await walletConnectCtx.onURI(uri)
     } catch (error: any) {
@@ -146,7 +148,7 @@ const WCConnectionRequestModal = (props: Props) => {
       controller.close()
       props.navigation.goBack()
     }
-  }, [uri, walletConnectCtx.onURI, controller])
+  }, [uri, walletConnectCtx.onURI, controller.close, walletConnectCtx.initialized])
 
   const handleClose = async () => {
     setAlertIsVisible(false)
@@ -179,10 +181,8 @@ const WCConnectionRequestModal = (props: Props) => {
   }
 
   useEffect(() => {
-    if (!walletConnectCtx.initialized || sessionProposal) return
-
     runOnURI()
-  }, [runOnURI, walletConnectCtx.initialized, sessionProposal])
+  }, [runOnURI])
 
   useEffect(() => {
     if (!sessionProposal) {
