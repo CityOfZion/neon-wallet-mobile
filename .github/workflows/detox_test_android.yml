@@ -4,18 +4,19 @@ on:
   push:
     tags:
       - 'detox_android'
+      - 'e2e_android'
 jobs:
   e2e-android:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.19.1'
+          node-version: 16
 
       - name: Install yarn
         run: npm install --global yarn    
@@ -35,23 +36,16 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
-          NODE_OPTIONS: "--max_old_space_size=4096"
         run: yarn detox build --configuration android.emu.release
 
-      - name: Download Android Emulator Image
-        run: |
-          echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-31;google_apis;x86_64"
-          echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name emu --device "pixel" --abi "google_apis/x86_64" --package "system-images;android-31;google_apis;x86_64"
-          $ANDROID_HOME/emulator/emulator -list-avds
-
-      - name: Start Android emulator
+      - name: Create and start Android emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
+          target: google_apis
           arch: x86_64
-          profile: Nexus 6P
-          extra-opts: -no-window -no-audio
-          exec: $ANDROID_HOME/emulator/emulator    
+          profile: Pixel_6_API_31
+          hardware-profiles: pixel_6
 
       - name: Detox test
         run: yarn detox test --configuration android.emu.release
