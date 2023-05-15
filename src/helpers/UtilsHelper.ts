@@ -87,4 +87,8 @@ export abstract class UtilsHelper {
   static removeLineBreaks(text: string) {
     return text.replace(/(\r\n|\n|\r)/gm, '')
   }
+
+  static fixDecimalPlaces(value: number, decimalPlaces: number) {
+    return value / 10 ** decimalPlaces
+  }
 }

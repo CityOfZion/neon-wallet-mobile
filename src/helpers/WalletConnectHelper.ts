@@ -1,8 +1,7 @@
 import { u } from '@cityofzion/neon-core'
+import { TSession, TSessionProposal, Chain, Blockchain } from '@cityofzion/wallet-connect-sdk-wallet-react'
 
 import { BlockchainServiceKey, TNetworkType } from '../blockchain'
-import { walletConnectConfig } from '../config/WalletConnectConfig'
-import { Session, SessionProposal } from '../contexts/WalletConnectContext'
 
 type AccountInformation = {
   namespace: string
@@ -13,24 +12,25 @@ type AccountInformation = {
 }
 
 export abstract class WalletConnectHelper {
-  static networks: Record<TNetworkType, string> = {
+  static networks: Record<TNetworkType, Chain> = {
     custom: 'private',
     mainnet: 'mainnet',
     testnet: 'testnet',
   }
 
-  static checkSupportedMethods(method: string) {
-    return walletConnectConfig.defaultMethods.includes(method as any)
+  static blockchainsByBlockchainServiceKey: Partial<Record<BlockchainServiceKey, Blockchain>> = {
+    neo3: 'neo3',
   }
 
-  static getAccountInformationFromSession(session: Session): AccountInformation[] {
+  static getAccountInformationFromSession(session: TSession): AccountInformation[] {
     const accounts = Object.values(session.namespaces)[0].accounts
     const accountsInfos = accounts.map((account): AccountInformation => {
       const [namespace, reference, address] = account.split(':')
 
-      const blockchains = walletConnectConfig.blockchainsByBlockchainServiceKey
-      const blockchainKeys = Object.keys(blockchains) as BlockchainServiceKey[]
-      const blockchain = blockchainKeys.find(key => blockchains[key] === namespace)
+      const blockchain = (
+        Object.entries(this.blockchainsByBlockchainServiceKey) as [BlockchainServiceKey, Blockchain][]
+      ).find(([, value]) => value === namespace)
+      if (!blockchain) throw new Error('Blockchain not supported')
 
       if (!blockchain) throw new Error('Blockchain not supported')
 
@@ -39,7 +39,7 @@ export abstract class WalletConnectHelper {
         namespace,
         reference,
         chainId: `${namespace}:${reference}`,
-        blockchain,
+        blockchain: blockchain[0],
       }
     })
 
@@ -62,36 +62,30 @@ export abstract class WalletConnectHelper {
     return uri
   }
 
-  static getChain(network: TNetworkType, blockchain: BlockchainServiceKey) {
-    const blockchains: Partial<Record<BlockchainServiceKey, string>> = {
-      neo3: 'neo3',
-    }
-
-    if (!blockchains[blockchain]) throw new Error('Blockchain not supported')
-
-    return `${blockchains[blockchain]}:${this.networks[network]}`
+  static convertChain(network: TNetworkType): Chain {
+    return this.networks[network]
   }
 
-  static getNetworkFromProposal(proposal: SessionProposal): {
+  static getNetworkFromProposal(proposal: TSessionProposal): {
     blockchain: BlockchainServiceKey
     network: TNetworkType
   } {
-    const chain = Object.values(proposal.params.requiredNamespaces)[0].chains[0]
-    const [proposalNamespace, proposalNetwork] = chain.split(':')
+    const chainId = Object.values(proposal.params.requiredNamespaces)[0].chains?.[0]
+    if (!chainId) throw new Error('ChainId not found')
+    const [proposalBlockchain, proposalNetwork] = chainId.split(':') as [Blockchain, Chain]
 
-    const blockchains = walletConnectConfig.blockchainsByBlockchainServiceKey
-    const blockchainKeys = Object.keys(blockchains) as BlockchainServiceKey[]
-    const blockchain = blockchainKeys.find(key => blockchains[key] === proposalNamespace)
-
+    const blockchain = (
+      Object.entries(this.blockchainsByBlockchainServiceKey) as [BlockchainServiceKey, Blockchain][]
+    ).find(([, value]) => value === proposalBlockchain)
     if (!blockchain) throw new Error('Blockchain not supported')
 
-    const network = (Object.entries(this.networks) as [TNetworkType, string][]).find(
+    const network = (Object.entries(this.networks) as [TNetworkType, Chain][]).find(
       ([, value]) => value === proposalNetwork
     )
     if (!network) throw new Error('Network not supported')
 
     return {
-      blockchain,
+      blockchain: blockchain[0],
       network: network[0],
     }
   }

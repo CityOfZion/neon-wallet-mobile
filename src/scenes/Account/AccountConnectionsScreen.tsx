@@ -1,14 +1,14 @@
+import { useWalletConnectWallet } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { FlatList } from 'react-native'
 
 import AccountSubTitle from '~/src/components/AccountSubTitle'
 import { ConnectionItem } from '~/src/components/ConnectionItem'
 import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
-import { useWalletConnect } from '~/src/contexts/WalletConnectContext'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { Account } from '~/src/models/redux/Account'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
@@ -24,19 +24,15 @@ interface Props {
   route: RouteProp<WalletStackParamList, 'AccountConnectionsScreen'>
 }
 
-const AccountConnectionsScreen = ({ route, navigation }: Props) => {
+const AccountConnectionsScreen = ({ route }: Props) => {
   const account = route.params.account
 
-  const { sessions } = useWalletConnect()
-  const accountSessions = useMemo(
-    () =>
-      sessions.filter(session => {
-        const [walletConnectAccount] = WalletConnectHelper.getAccountInformationFromSession(session)
+  const { sessions } = useWalletConnectWallet()
 
-        return account.address === walletConnectAccount.address
-      }),
-    [sessions]
-  )
+  const accountSessions = sessions.filter(session => {
+    const [{ address }] = WalletConnectHelper.getAccountInformationFromSession(session)
+    return account.address === address
+  })
 
   return (
     <ScreenLayout withoutScrollView>

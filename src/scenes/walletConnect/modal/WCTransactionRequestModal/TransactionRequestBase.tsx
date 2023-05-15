@@ -1,5 +1,5 @@
+import { TSession, TSessionRequest, useWalletConnectWallet } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { useNavigation } from '@react-navigation/native'
-import { SessionTypes } from '@walletconnect/types'
 import i18n from 'i18n-js'
 import React, { useRef, useState } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
@@ -8,7 +8,6 @@ import ConnectionHeader from '../../components/ConnectionHeader'
 
 import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import { SessionRequest, useWalletConnect } from '~/src/contexts/WalletConnectContext'
 import { Account } from '~/src/models/redux/Account'
 import { LinearLayout, TextView } from '~/src/styles/styled-components'
 
@@ -35,8 +34,8 @@ type Props = {
   title: string
   acceptButtonLabel: string
   rejectButtonLabel: string
-  request: SessionRequest
-  session: SessionTypes.Struct
+  request: TSessionRequest
+  session: TSession
   account: Account
   children?: React.ReactNode
 }
@@ -56,7 +55,7 @@ export const TransactionRequestBase = ({
   account,
 }: Props) => {
   const controller = useSwiperController(true)
-  const { approveRequest, rejectRequest } = useWalletConnect()
+  const { approveRequest, rejectRequest } = useWalletConnectWallet()
   const navigation = useNavigation()
 
   const [buttonsIsDisabled, setButtonsIsDisabled] = useState<boolean>(false)
@@ -73,7 +72,7 @@ export const TransactionRequestBase = ({
       shouldProcessButtons.current = false
       setButtonsIsDisabled(true)
 
-      await rejectRequest(request, i18n.t('modals.WCTransactionRequestModal.rejectByUser'))
+      await rejectRequest(request)
 
       if (onReject) {
         onReject()
