@@ -1,35 +1,43 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { SignClientTypes } from '@walletconnect/types'
+import { TOptions } from '@cityofzion/wallet-connect-sdk-wallet-react'
+import i18n from 'i18n-js'
 import { QueryClient } from 'react-query'
-import { FLUSH, PAUSE, PERSIST, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 
+import { WalletConnectNeonAdapter } from '../adapters/WalletConnectNeonAdapter'
 import { RootStore } from '../store/RootStore'
-import { walletConnectConfig } from './WalletConnectConfig'
 
 export class ContextsConfig {
-  readonly wcOptions: SignClientTypes.Options = {
-    projectId: walletConnectConfig.defaultProjectId,
-    metadata: walletConnectConfig.defaultAppMetadata,
-    logger: walletConnectConfig.defaultLogger,
-    relayUrl: walletConnectConfig.defaultRelayURL,
+  readonly walletConnectOptions: TOptions = {
+    clientOptions: {
+      projectId: '31bee1bce685377492bb0b03cbd3a69c',
+      metadata: {
+        name: i18n.t('walletconnect.metadata.name'),
+        description: i18n.t('walletconnect.metadata.description'),
+        url: 'https://coz.io/',
+        icons: [
+          'https://raw.githubusercontent.com/CityOfZion/visual-identity/develop/_CoZ%20Branding/_Logo/_Logo%20icon/_PNG%20200x178px/CoZ_Icon_DARKBLUE_200x178px.png',
+        ],
+      },
+      logger: 'debug',
+      relayUrl: 'wss://relay.walletconnect.com',
+    },
+    methods: [
+      'invokeFunction',
+      'testInvoke',
+      'signMessage',
+      'verifyMessage',
+      'getWalletInfo',
+      'traverseIterator',
+      'getNetworkVersion',
+    ],
+    autoAcceptMethods: ['testInvoke', 'getWalletInfo', 'traverseIterator', 'getNetworkVersion'],
+    adapter: new WalletConnectNeonAdapter(),
   }
 
-  readonly store = configureStore({
-    reducer: RootStore.reducers,
-    middleware: getDefaultMiddleware => [
-      ...getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
-      }),
-    ],
-  })
+  readonly store = RootStore.store
 
-  readonly persistor = persistStore(this.store)
+  readonly persistor = RootStore.persistor
 
   readonly queryClient = new QueryClient({
     defaultOptions: { queries: { retry: 2 } },
   })
 }
-
-export const contextsConfig = new ContextsConfig()

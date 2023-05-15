@@ -1,3 +1,4 @@
+import { EStatus, useWalletConnectWallet } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
@@ -27,8 +28,9 @@ import SwiperPanel, { SwiperController, useSwiperController } from '~src/compone
 import { ButtonView, ImageView, LinearLayout } from '~src/styles/styled-components'
 
 interface TabButtonProps {
-  enabledSource: ImageSourcePropType
-  disabledSource: ImageSourcePropType
+  source: ImageSourcePropType
+  activeSource: ImageSourcePropType
+  disabled?: boolean
   route: Route<RouteName>
   controller: SwiperController
 }
@@ -203,12 +205,12 @@ const TabButton = (props: BottomTabBarProps & TabButtonProps) => {
       }}
       alignItems="center"
       weight={1}
+      opacity={props.disabled ? 0.5 : 1}
+      disabled={props.disabled}
     >
       <ImageView
         resizeMode="cover"
-        source={
-          props.state.routes[props.state.index].name === props.route.name ? props.enabledSource : props.disabledSource
-        }
+        source={props.state.routes[props.state.index].name === props.route.name ? props.activeSource : props.source}
       />
     </ButtonView>
   )
@@ -216,7 +218,9 @@ const TabButton = (props: BottomTabBarProps & TabButtonProps) => {
 
 const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
   const { state, descriptors } = props
+
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const { status } = useWalletConnectWallet()
   const focusedOptions = descriptors[state.routes[state.index].key].options
 
   const quickToolColor = useRef(new Animated.Value(0))
@@ -292,18 +296,19 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
 
         <LinearLayout orientation="horiz" position="relative" alignItems="flex-end" top="2px">
           <TabButton
-            enabledSource={require('~src/assets/images/button-wallet-white.png')}
-            disabledSource={require('~src/assets/images/button-wallet-disabled.png')}
+            activeSource={require('~src/assets/images/button-wallet-white.png')}
+            source={require('~src/assets/images/button-wallet-disabled.png')}
             route={wrapper.route.ListWallets}
             controller={controller}
             {...props}
           />
 
           <TabButton
-            enabledSource={require('~src/assets/images/button-connections-white.png')}
-            disabledSource={require('~src/assets/images/button-connections-disabled.png')}
+            activeSource={require('~src/assets/images/button-connections-white.png')}
+            source={require('~src/assets/images/button-connections-disabled.png')}
             route={wrapper.route.WalletConnectPage}
             controller={controller}
+            disabled={status !== EStatus.STARTED}
             {...props}
           />
 
@@ -329,16 +334,16 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
           </ButtonView>
 
           <TabButton
-            enabledSource={require('~src/assets/images/button-contacts-white.png')}
-            disabledSource={require('~src/assets/images/button-contacts-disabled.png')}
+            activeSource={require('~src/assets/images/button-contacts-white.png')}
+            source={require('~src/assets/images/button-contacts-disabled.png')}
             route={wrapper.route.Contacts}
             controller={controller}
             {...props}
           />
 
           <TabButton
-            enabledSource={require('~src/assets/images/button-more-white.png')}
-            disabledSource={require('~src/assets/images/button-more-disabled.png')}
+            activeSource={require('~src/assets/images/button-more-white.png')}
+            source={require('~src/assets/images/button-more-disabled.png')}
             route={wrapper.route.More}
             controller={controller}
             {...props}

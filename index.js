@@ -1,14 +1,8 @@
+import 'reflect-metadata'
 import './shim'
 import { registerRootComponent } from 'expo'
-import '@walletconnect/react-native-compat'
-import 'reflect-metadata'
-
-import App from './src/App'
 import { Setup } from './src/app/Setup'
-
-import { fetch as fetchPolyfill } from 'whatwg-fetch'
-
-global.fetch = fetchPolyfill
+import App from './src/App'
 
 Setup.init()
 
