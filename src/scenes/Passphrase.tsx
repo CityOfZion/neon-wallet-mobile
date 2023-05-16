@@ -12,7 +12,7 @@ import { useBlockchainServiceUtils } from '../hooks/useBlockchainServices'
 import { selectAccounts } from '../store/account/SelectorAccount'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
-import AddressesImportList, { AddressInfo } from '~src/components/AddressesImportList'
+import { AddressInfo } from '~src/components/AddressesImportList'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
@@ -43,7 +43,6 @@ const Passphrase = (props: PassphraseProps) => {
   const { getBlockchainService } = useBlockchainServiceUtils()
 
   const [inputValue, setInputValue] = useState('')
-  const [addressesList, setAddressesList] = useState<AddressInfoWithWif[]>([])
 
   const validatePassword = useCallback(async () => {
     try {
@@ -94,7 +93,12 @@ const Passphrase = (props: PassphraseProps) => {
 
       setInputValue('')
 
-      const wallet = await blockchainActions.createWallet(i18n.t('modals.blockchainList.encryptedWallet'), 'legacy')
+      const wallet = await blockchainActions.createWallet(
+        i18n.t('modals.blockchainList.encryptedWallet'),
+        'legacy',
+        undefined,
+        true
+      )
 
       const accountsToImport = newAddressesInfo.map(
         ({ address, blockchain, wif }): AccountToImport => ({
