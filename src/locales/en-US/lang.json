@@ -831,6 +831,12 @@
     }
   },
   "components": {
+    "bars": {
+      "customMode": "Custom Network Mode",
+      "testnetMode": "Testnet Network Mode",
+      "noInternet": "No internet connection",
+      "warning": "WARNING"
+    },
     "contractDetailsBox": {
       "hash": "Hash",
       "method": "Method"
