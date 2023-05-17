@@ -247,7 +247,12 @@ const ImportKey = (props: ImportKeyProps) => {
   }, [inputValue])
 
   const persistWhenWIF = useCallback(async () => {
-    const wallet = await blockchainActions.createWallet(i18n.t('defaultNameWallet.importedWallet'), 'legacy')
+    const wallet = await blockchainActions.createWallet(
+      i18n.t('defaultNameWallet.importedWallet'),
+      'legacy',
+      undefined,
+      true
+    )
 
     const accountToImport = addressesSelected.map(
       ({ address, blockchain }): AccountToImport => ({

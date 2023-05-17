@@ -53,7 +53,12 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   const persist = async () => {
     Await.init('importWatchAccount')
 
-    const wallet = await blockchainActions.createWallet(i18n.t('defaultNameWallet.watchAccount'), 'watch')
+    const wallet = await blockchainActions.createWallet(
+      i18n.t('defaultNameWallet.watchAccount'),
+      'watch',
+      undefined,
+      true
+    )
 
     const accountToImport = addressesListSelected.map(
       ({ address, blockchain }): AccountToImport => ({
