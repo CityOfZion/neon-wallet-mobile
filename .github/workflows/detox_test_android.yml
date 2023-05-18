@@ -18,6 +18,12 @@ jobs:
         with:
           node-version: 16
 
+      - name: Use specific Java version for sdkmanager to work
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11.0.16.1'
+          architecture: 'x64'    
+
       - name: Install yarn
         run: npm install --global yarn    
 
