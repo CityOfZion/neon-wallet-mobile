@@ -21,6 +21,7 @@ export interface MenuItemProps {
   iconMarginLeft?: number
   arrowDirection: RightIconType
   onPress?: () => void
+  testID?: string
 }
 
 const MenuItem = (props: MenuItemProps) => {
@@ -47,7 +48,7 @@ const MenuItem = (props: MenuItemProps) => {
   }
 
   return (
-    <TouchableOpacity onPress={props.onPress}>
+    <TouchableOpacity testID={props.testID} onPress={props.onPress}>
       <LinearLayout orientation="verti" width="100%">
         <LinearLayout
           alignItems="center"

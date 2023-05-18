@@ -11,6 +11,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { RootState } from '~/src/store/RootStore'
+import { LinearLayoutProps } from '~/src/types/styled-components'
 import { ButtonWithoutFeedbackView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 import { RouteName } from '~src/types/wrappers/route'
 
@@ -24,6 +25,7 @@ type Props = {
   withoutScrollView?: boolean
   refreshControl?: React.ReactElement<RefreshControlProps, string | React.JSXElementConstructor<any>>
   contentStyle?: ViewStyle
+  testID?: string
 }
 
 const Header = ({
@@ -85,13 +87,14 @@ const ScreenLayout = ({
   title,
   withoutScrollView = false,
   contentStyle,
+  testID,
 }: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
   const colors = [theme.colors.background[14], theme.colors.background[14]]
 
   return (
-    <LinearGradient onLayout={onLayout} colors={colors} start={[1, 0]} end={[1, 1]}>
+    <LinearGradient testID={testID} onLayout={onLayout} colors={colors} start={[1, 0]} end={[1, 1]}>
       <LinearLayout style={{ height: '100%' }}>
         <Bars colors={colors} />
         {!withoutHeader && <Header rightButton={rightButton} hideBackButton={hideBackButton} title={title} />}
