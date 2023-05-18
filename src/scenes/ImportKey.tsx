@@ -380,7 +380,7 @@ const ImportKey = (props: ImportKeyProps) => {
   }, [props.route.params, handleChangeInput])
 
   return (
-    <ScreenLayout>
+    <ScreenLayout testID="screen-import-key">
       <AwaitActivity name="importKey" loadingView={<ScreenLoader darkerSolidColorBG />}>
         <LinearLayout width="100%" height="100%">
           <TextView
@@ -422,6 +422,7 @@ const ImportKey = (props: ImportKeyProps) => {
           )}
 
           <InputWithValidation
+            testID="input-text-with-validation-import-key"
             onChangeText={handleChangeInput}
             autoCapitalize={Platform.OS === 'android' ? 'none' : undefined} //fix duplicate words in android OS, in IOS the issue doesn't happen
             secure={Platform.OS === 'android' ? true : undefined}
@@ -440,7 +441,7 @@ const ImportKey = (props: ImportKeyProps) => {
           />
 
           {addressesFound.length > 0 && (
-            <LinearLayout mt="20px">
+            <LinearLayout testID="list-imported-import-key" mt="20px">
               <TextView textAlign="center" fontSize="16px" alignSelf="center" color="text.3" mb="10px">
                 {i18n.t('importKey.selectAccountTitile')}
               </TextView>
@@ -456,6 +457,7 @@ const ImportKey = (props: ImportKeyProps) => {
 
           <LinearLayout mt={20} width="90%" flex={1} alignSelf="center" justifyContent="flex-end" mb="40px">
             <ThemedButton
+              testID="btn-next-import-key"
               label={i18n.t('app.next')}
               onPress={persistImport}
               disabled={!inputIsValid || (addressesFound.length > 0 && addressesSelected.length <= 0)}

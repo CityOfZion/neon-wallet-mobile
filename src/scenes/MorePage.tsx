@@ -63,6 +63,7 @@ const MorePage = (props: MoreProps) => {
             }}
           />
           <MenuItem
+            testID="menu-item-import-key"
             title={i18n.t('more.import')}
             icon={require('~/src/assets/images/icon-import-green.png')}
             iconHeight={22}

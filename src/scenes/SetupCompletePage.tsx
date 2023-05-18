@@ -33,7 +33,7 @@ const SetupCompletePage = (props: Props) => {
     props.navigation.replace(wrapper.route.Tab.name, { screen: wrapper.route.ListWalletsPage.name })
   }, [])
   return (
-    <LinearLayout bg="background.14">
+    <LinearLayout testID="screen-setup-complete" bg="background.14">
       <SafeAreaView style={{ height: '100%' }}>
         <LinearLayout mt={Dimensions.get('window').height * (Platform.OS === 'ios' ? 0.1 : 0.15)}>
           <LinearLayout alignItems="center">
@@ -90,6 +90,7 @@ const SetupCompletePage = (props: Props) => {
         </LinearLayout>
         <LinearLayout position="absolute" bottom={0} width="100%" mb="11%" alignItems="center">
           <ThemedButton
+            testID="btn-view-wallet-setup-complete"
             onPress={handleViewWallet}
             width="85%"
             bgColor="#4CFFB3"

@@ -13,7 +13,8 @@
     "lint:fix": "eslint --fix .",
     "ts-build": "tsc -b",
     "android-release": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/intermediates/res/merged/release/ && rm -rf android/app/src/main/res/drawable-* && rm -rf android/app/src/main/res/raw/* && cd android && ./gradlew assembleRelease && cd ..",
-    "e2e:ios": "detox test -c ios.sim.release",
+    "e2e:ios": "detox test -c ios.sim.release --artifacts-location=e2e/screenshots --take-screenshots=all",
+    "e2e:android": "detox test -c android.emu.release --artifacts-location=e2e/screenshots --take-screenshots=all",
     "build:ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
     "fix:dependencies": "expo doctor --fix-dependencies",
     "postinstall": "node_modules/.bin/rn-nodeify --install crypto,assert,url,stream,events --hack"
