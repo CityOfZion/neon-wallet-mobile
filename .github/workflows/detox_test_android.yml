@@ -45,12 +45,15 @@ jobs:
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
         run: yarn detox build --configuration android.emu.release
 
-      - name: E2E Tests
+      - name: Run Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
           target: google_apis
           arch: x86_64
           avd-name: Pixel_6_API_31
-          script: yarn detox test --configuration android.emu.release
+          script: y./gradlew connectedCheck
+
+      - name: Detox Test
+        run: yarn detox test -c android.emu.release    
         
