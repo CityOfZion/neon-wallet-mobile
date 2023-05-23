@@ -1,3 +1,4 @@
+import { useWalletConnectWallet } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import NetInfo from '@react-native-community/netinfo'
 import { NavigationContainerRef } from '@react-navigation/native'
 import * as SplashScreen from 'expo-splash-screen'
@@ -8,19 +9,13 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { appBus } from '../app/AppBus'
 import { wrapper } from '../app/ApplicationWrapper'
-import { walletConnectConfig } from '../config/WalletConnectConfig'
-import { SessionRequest, useWalletConnect } from '../contexts/WalletConnectContext'
-import { NeonWcAdapter } from '../helpers/NeonWcAdapter'
 import { Account } from '../models/redux/Account'
-import { RootState } from '../store/RootStore'
 import { accountReducerActions } from '../store/account/AccountReducer'
-import { selectAccounts } from '../store/account/SelectorAccount'
 import { contactReducerActions } from '../store/contact/ContactReducer'
 import { networkReducerActions } from '../store/network/NetworkReducer'
 import { settingsReducerActions } from '../store/settings/SettingsReducer'
 import { selectWallets } from '../store/wallet/SelectorWallet'
 import { walletReducerActions } from '../store/wallet/WalletReducer'
-import { walletConnectReducerActions } from '../store/walletConnect/WalletConnectReducer'
 
 type Props = {
   navigationStarted: boolean
@@ -29,11 +24,8 @@ type Props = {
 
 export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) => {
   const dispatch = useDispatch()
-  const walletConnectCtx = useWalletConnect()
+  const { requests, sessions } = useWalletConnectWallet()
   const wallets = useSelector(selectWallets)
-  const accounts = useSelector(selectAccounts)
-  const isConnected = useSelector((state: RootState) => state.network.isConnected)
-  const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
   const [started, setStarted] = useState(false)
 
   const migrateStorageToReduxPersist = useCallback(() => {
@@ -41,7 +33,6 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
     dispatch(accountReducerActions.migrateAccountsFromStorage())
     dispatch(contactReducerActions.migrateContactsFromStorage())
     dispatch(settingsReducerActions.migrateSettingsStorage())
-    dispatch(walletConnectReducerActions.migrateWalletConnectFromStorage())
   }, [])
 
   const watchNetwork = useCallback(() => {
@@ -52,34 +43,25 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
     return unsubscribe
   }, [])
 
-  const initWalletConnect = useCallback(async () => {
-    if (!isConnected) return
+  const detectWalletConnectRequest = useCallback(() => {
+    if (!requests.length || !navigationRef) {
+      return
+    }
 
-    walletConnectCtx.autoAcceptIntercept((_accountAddress, _chain, request: SessionRequest) =>
-      walletConnectConfig.defaultAutoacceptMethods.includes(request.params.request.method)
-    )
+    const [request] = requests
+    if (!request) return
 
-    await walletConnectCtx.init()
-  }, [walletConnectCtx.init, walletConnectCtx.autoAcceptIntercept, isConnected])
+    const session = sessions.find(session => session.topic === request.topic)
+    if (!session) return
 
-  const registerWalletConnectRequestListener = useCallback(() => {
-    if (!walletConnectCtx.initialized) return
-
-    walletConnectCtx.onRequestListener(async (accountAddress, _chain, request: SessionRequest) => {
-      try {
-        const account = accounts.find(account => account.address === accountAddress)
-        if (!account) throw new Error('Failed request listener')
-
-        const wif = await account.getWif()
-        if (!wif) throw new Error('Failed request listener')
-
-        const adapter = await NeonWcAdapter.init(selectedBlockchainNetworks[account.blockchain].url, wif)
-        return adapter.rpcCall(request)
-      } catch {
-        throw new Error('Failed request listener')
-      }
+    navigationRef.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.WCTransactionRequestModal.name,
+      params: {
+        request,
+        session,
+      },
     })
-  }, [walletConnectCtx.initialized, accounts, selectedBlockchainNetworks])
+  }, [requests, sessions])
 
   const detectAppBusEvents = useCallback(() => {
     const pendingTransactionConfirmedCallback = (account: Account) => {
@@ -88,7 +70,7 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
         message: i18n.t('toast.transactionCompleted'),
         type: 'success',
         onPress: () => {
-          if (!navigationRef || selectedBlockchainNetworks[account.blockchain].type === 'custom') return
+          if (!navigationRef) return
 
           const wallet = account.getWallet(wallets)
 
@@ -125,39 +107,17 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
     }
   }, [])
 
-  const detectWalletConnectTransactionRequest = useCallback(() => {
-    if (!walletConnectCtx.requests.length || !walletConnectCtx.sessions.length || !navigationRef) {
-      return
-    }
-
-    const [request] = walletConnectCtx.requests
-    const foundSession = walletConnectCtx.sessions.find(it => it.topic === request.topic)
-
-    if (!foundSession) {
-      return
-    }
-
-    navigationRef.navigate(wrapper.route.Modal.name, {
-      screen: wrapper.route.WCTransactionRequestModal.name,
-      params: {
-        request,
-        session: foundSession,
-      },
-    })
-  }, [walletConnectCtx.requests, walletConnectCtx.sessions])
-
   const start = useCallback(async () => {
     try {
       migrateStorageToReduxPersist()
-      await initWalletConnect()
     } finally {
       setStarted(true)
     }
-  }, [migrateStorageToReduxPersist, initWalletConnect])
+  }, [migrateStorageToReduxPersist])
 
   useEffect(() => {
-    registerWalletConnectRequestListener()
-  }, [registerWalletConnectRequestListener])
+    detectWalletConnectRequest()
+  }, [detectWalletConnectRequest])
 
   useEffect(() => {
     const unsubscribeWatchNetwork = watchNetwork()
@@ -168,10 +128,6 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
       unsubscribeDetectAppBusEvents()
     }
   }, [watchNetwork])
-
-  useEffect(() => {
-    detectWalletConnectTransactionRequest()
-  }, [detectWalletConnectTransactionRequest])
 
   useEffect(() => {
     start()
