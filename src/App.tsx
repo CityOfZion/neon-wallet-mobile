@@ -1,19 +1,18 @@
-import { WalletConnectWalletProvider } from '@cityofzion/wallet-connect-sdk-wallet-react'
-import React, { useRef } from 'react'
+import React from 'react'
 import FlashMessage from 'react-native-flash-message'
 import { QueryClientProvider } from 'react-query'
 import { Provider as StoreProvider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 
-import { ContextsConfig } from './config/ContextsConfig'
+import { contextsConfig } from './config/ContextsConfig'
 import { useBeforeStartApp } from './hooks/useBeforeStartApp'
 
 import { ThemedAlert } from '~src/components/themed/ThemedAlert'
 import ErrorBound from '~src/config/ErrorBound'
+import { WalletConnectContextProvider } from '~src/contexts/WalletConnectContext'
 import AppNavigation from '~src/navigation/AppNavigation'
 
 const App = () => {
-  const contextsConfig = useRef(new ContextsConfig()).current
   const started = useBeforeStartApp()
 
   if (!started) {
@@ -24,12 +23,12 @@ const App = () => {
     <StoreProvider store={contextsConfig.store}>
       <PersistGate persistor={contextsConfig.persistor}>
         <QueryClientProvider client={contextsConfig.queryClient}>
-          <WalletConnectWalletProvider options={contextsConfig.walletConnectOptions}>
+          <WalletConnectContextProvider options={contextsConfig.wcOptions}>
             <ErrorBound>
               <AppNavigation />
             </ErrorBound>
             <FlashMessage position="top" MessageComponent={ThemedAlert} hideStatusBar />
-          </WalletConnectWalletProvider>
+          </WalletConnectContextProvider>
         </QueryClientProvider>
       </PersistGate>
     </StoreProvider>

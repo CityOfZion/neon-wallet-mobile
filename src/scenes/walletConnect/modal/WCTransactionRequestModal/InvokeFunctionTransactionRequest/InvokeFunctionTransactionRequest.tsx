@@ -1,6 +1,5 @@
 import { Signer, ContractInvocation, ContractInvocationMulti } from '@cityofzion/neo3-invoker'
 import { tx } from '@cityofzion/neon-core/'
-import { TSession } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -16,6 +15,8 @@ import { InvokeFunctionSuccess } from './InvokeFunctionSuccess'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { BlockchainServiceKey } from '~/src/blockchain'
+import { Session } from '~/src/contexts/WalletConnectContext'
+import { NeonWcAdapter } from '~/src/helpers/NeonWcAdapter'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { Account } from '~/src/models/redux/Account'
@@ -26,11 +27,11 @@ import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-component
 type SignerBoxProps = {
   signer: Signer
   showWarning: boolean
-  session: TSession
+  session: Session
 }
 
 type ContractDetailsProps = {
-  session: TSession
+  session: Session
   contract: ContractInvocation
 }
 
@@ -148,17 +149,18 @@ const ContractDetails = ({ contract, session }: ContractDetailsProps) => {
 
 const TransactionFee = ({ account, requestParams }: TransactionFeeProps) => {
   const [feeRequest, setFeeRequest] = useState<number>()
-  const { blockchainService } = useBlockchainService(account.blockchain)
+  const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
 
   const handleCalculateFee = useCallback(async () => {
-    if (!blockchainService.hasWalletConnectIntegration()) return
+    if (!account.address) return
 
     const wif = await account.getWif()
     if (!wif) return
 
-    const fee = await blockchainService.calculateRequestFee(requestParams, wif)
+    const adapter = await NeonWcAdapter.init(selectedBlockchainNetworks[account.blockchain].url, wif)
+    const resultFee = await adapter.calculateFee(requestParams)
 
-    setFeeRequest(fee)
+    setFeeRequest(Number(resultFee))
   }, [account, requestParams])
 
   useEffect(() => {
@@ -239,8 +241,8 @@ export const InvokeFunctionTransactionRequest = ({
       <TouchableWithoutFeedback
         onPress={() => {
           navigation.navigate(wrapper.route.RawJsonModal.name, {
-            request,
-            session,
+            dataJson: JSON.stringify(request, null, 2),
+            metadata: session.peer.metadata,
           })
         }}
       >

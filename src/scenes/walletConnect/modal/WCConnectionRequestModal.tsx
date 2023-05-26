@@ -1,9 +1,3 @@
-import {
-  DEFAULT_BLOCKCHAIN,
-  EStatus,
-  TSessionProposal,
-  useWalletConnectWallet,
-} from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { AwaitActivity, Await } from '@simpli/react-native-await'
@@ -19,6 +13,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { TNetworkType } from '~/src/blockchain'
 import { Alert, AlertButton, AlertButtonGroup } from '~/src/components/Alert'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
+import { walletConnectConfig } from '~/src/config/WalletConnectConfig'
 import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useWalletConnectFlow } from '~/src/hooks/useWalletConnectFlow'
@@ -28,6 +23,7 @@ import { RootState } from '~/src/store/RootStore'
 import { settingsReducerActions } from '~/src/store/settings/SettingsReducer'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
+import { SessionProposal, useWalletConnect } from '~src/contexts/WalletConnectContext'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
 import { LinearLayout, TextView, ImageView } from '~src/styles/styled-components'
@@ -46,7 +42,7 @@ const WCConnectionRequestModal = (props: Props) => {
 
   useWalletConnectFlow()
   const controller = useSwiperController(true)
-  const { proposals, approveProposal, connect, rejectProposal, status } = useWalletConnectWallet()
+  const walletConnectCtx = useWalletConnect()
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const networks = useSelector((state: RootState) => state.settings.blockchainNetworks)
   const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
@@ -56,12 +52,15 @@ const WCConnectionRequestModal = (props: Props) => {
 
   const [alertIsVisible, setAlertIsVisible] = useState(false)
 
-  const proposal = useMemo<TSessionProposal | undefined>(() => proposals[0], [proposals])
+  const sessionProposal = useMemo<SessionProposal | undefined>(
+    () => walletConnectCtx.sessionProposals[0],
+    [walletConnectCtx.sessionProposals]
+  )
   const sessionNetwork = useMemo(() => {
-    if (!proposal) return
+    if (!sessionProposal) return
 
-    return WalletConnectHelper.getNetworkFromProposal(proposal)
-  }, [proposal])
+    return WalletConnectHelper.getNetworkFromProposal(sessionProposal)
+  }, [sessionProposal])
 
   const handleFinishSelect = useCallback(
     async ({ account }: TOnFinishSelectionParams) => {
@@ -71,19 +70,24 @@ const WCConnectionRequestModal = (props: Props) => {
         props.navigation.goBack()
         props.navigation.goBack()
 
-        if (!proposal || !account?.address) {
+        if (!sessionProposal || !account?.address) {
           throw new Error(i18n.t('walletconnect.alert.unexpectedErrorToSelectAccount'))
         }
 
-        const chain = WalletConnectHelper.convertChain(
-          switchedNetwork.current ?? selectedBlockchainNetworks[account.blockchain].type
+        const chain = WalletConnectHelper.getChain(
+          switchedNetwork.current ?? selectedBlockchainNetworks[account.blockchain].type,
+          account.blockchain
         )
 
-        await approveProposal(proposal, { account: { address: account.address, chain } })
+        await walletConnectCtx.approveSession(
+          sessionProposal,
+          [{ address: account.address, chain }],
+          walletConnectConfig.defaultNamespace
+        )
 
         showMessage({
           message: i18n.t('walletconnect.alert.text', {
-            text: proposal.params.proposer.metadata.name,
+            text: sessionProposal.params.proposer.metadata.name,
           }),
           description: i18n.t('walletconnect.alert.description'),
           duration: 7000,
@@ -92,11 +96,15 @@ const WCConnectionRequestModal = (props: Props) => {
       } catch (error: any) {
         showMessage({ message: error.message, duration: 7000, type: 'danger' })
       } finally {
+        props.navigation.reset({
+          index: 0,
+          routes: [{ name: wrapper.route.Tab.name }],
+        })
         props.navigation.navigate(wrapper.route.WalletConnectPage.name)
         Await.done('load')
       }
     },
-    [proposal, selectedBlockchainNetworks, approveProposal]
+    [sessionProposal, selectedBlockchainNetworks, walletConnectCtx.approveSession]
   )
 
   const navigateToSelection = useCallback(() => {
@@ -112,7 +120,7 @@ const WCConnectionRequestModal = (props: Props) => {
   }, [handleFinishSelect])
 
   const handleAccept = useCallback(async () => {
-    if (!proposal || !sessionNetwork) return
+    if (!sessionProposal || !sessionNetwork) return
 
     const currentNetwork = selectedBlockchainNetworks[sessionNetwork.blockchain].type
     const dAppNetwork = sessionNetwork.network
@@ -123,10 +131,14 @@ const WCConnectionRequestModal = (props: Props) => {
     }
 
     navigateToSelection()
-  }, [proposal, navigateToSelection, selectedBlockchainNetworks, sessionNetwork])
+  }, [sessionProposal, navigateToSelection, selectedBlockchainNetworks, sessionNetwork])
 
   const runOnURI = useCallback(async () => {
-    await connect(uri).catch(error => {
+    if (!walletConnectCtx.initialized) return
+
+    try {
+      await walletConnectCtx.onURI(uri)
+    } catch (error: any) {
       showMessage({
         message: error.message,
         type: 'danger',
@@ -135,13 +147,13 @@ const WCConnectionRequestModal = (props: Props) => {
 
       controller.close()
       props.navigation.goBack()
-    })
-  }, [controller.close, props.navigation.goBack, connect, uri])
+    }
+  }, [uri, walletConnectCtx.onURI, controller.close, walletConnectCtx.initialized])
 
   const handleClose = async () => {
     setAlertIsVisible(false)
     props.navigation.goBack()
-    if (proposal) rejectProposal(proposal)
+    if (sessionProposal) walletConnectCtx.rejectSession(sessionProposal)
   }
 
   const handleSwitchNetwork = () => {
@@ -169,19 +181,16 @@ const WCConnectionRequestModal = (props: Props) => {
   }
 
   useEffect(() => {
-    if (status !== EStatus.STARTED) return
-
     runOnURI()
-  }, [runOnURI, status])
+  }, [runOnURI])
 
   useEffect(() => {
-    if (proposal) {
-      Await.done('load')
+    if (!sessionProposal) {
+      Await.init('load')
       return
     }
-
-    Await.init('load')
-  }, [proposal])
+    Await.done('load')
+  }, [sessionProposal])
 
   return (
     <SwiperPanel
@@ -191,15 +200,15 @@ const WCConnectionRequestModal = (props: Props) => {
       onClose={handleClose}
     >
       <AwaitActivity name="load" loadingView={<ScreenLoader transparent />}>
-        {proposal && sessionNetwork && (
+        {sessionProposal && sessionNetwork && (
           <>
             <LinearLayout flexGrow={1} justifyContent="space-between">
               <LinearLayout>
                 <ConnectionHeader
                   title={i18n.t('modals.WCConnectionRequest.subtitle_1', {
-                    dAppName: proposal.params.proposer.metadata.name,
+                    dAppName: sessionProposal.params.proposer.metadata.name,
                   })}
-                  imageUri={proposal.params.proposer.metadata.icons[0]}
+                  imageUri={sessionProposal.params.proposer.metadata.icons[0]}
                 />
 
                 <LinearLayout
@@ -234,11 +243,13 @@ const WCConnectionRequestModal = (props: Props) => {
                       {i18n.t('modals.WCConnectionRequest.features')}
                     </TextView>
 
-                    {proposal.params.requiredNamespaces[DEFAULT_BLOCKCHAIN].methods.map((it, index) => (
-                      <TextView key={index} color="text.0" fontFamily="medium" fontSize="16px">
-                        {it}
-                      </TextView>
-                    ))}
+                    {sessionProposal.params.requiredNamespaces[walletConnectConfig.defaultBlockchain].methods.map(
+                      (it, index) => (
+                        <TextView key={index} color="text.0" fontFamily="medium" fontSize="16px">
+                          {it}
+                        </TextView>
+                      )
+                    )}
                   </LinearLayout>
                 </LinearLayout>
               </LinearLayout>
@@ -275,7 +286,7 @@ const WCConnectionRequestModal = (props: Props) => {
             <Alert
               title={i18n.t('modals.WCConnectionRequest.dialog_title')}
               subtitle={i18n.t('modals.WCConnectionRequest.dialog_message', {
-                dAppName: proposal.params.proposer.metadata.name,
+                dAppName: sessionProposal.params.proposer.metadata.name,
                 dAppNetwork: i18n.t(`app.networks.${sessionNetwork.network}`),
                 currentNetwork: i18n.t(`app.networks.${selectedBlockchainNetworks[sessionNetwork.blockchain].type}`),
               })}

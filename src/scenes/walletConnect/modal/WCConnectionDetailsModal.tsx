@@ -1,4 +1,3 @@
-import { DEFAULT_BLOCKCHAIN, TSession, useWalletConnectWallet } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { RouteProp, useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
 import moment from 'moment'
@@ -7,16 +6,18 @@ import { TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { ConnectedAccountAndWallet } from '~/src/components/ConnectionItem'
+import { walletConnectConfig } from '~/src/config/WalletConnectConfig'
 import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { RootState } from '~/src/store/RootStore'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
+import { Session, useWalletConnect } from '~src/contexts/WalletConnectContext'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
 import { LinearLayout, TextView, ImageView } from '~src/styles/styled-components'
 
 export interface WCConnectionDetailsModalParams {
-  session: TSession
+  session: Session
   connectedAccountAndWallet: ConnectedAccountAndWallet
 }
 
@@ -26,10 +27,12 @@ interface Props {
 
 const WCConnectionDetailsModal = (props: Props) => {
   const { session, connectedAccountAndWallet } = props.route.params
-  const methods = session.requiredNamespaces[DEFAULT_BLOCKCHAIN].methods
-
+  const methods = session.requiredNamespaces[walletConnectConfig.defaultBlockchain].methods
+  const approvalDate = useSelector((state: RootState) =>
+    state.wcReducer.approvalDates?.find(approvalDate => approvalDate.sessionTopic === session.topic)
+  )
   const controller = useSwiperController(true)
-  const { disconnect } = useWalletConnectWallet()
+  const walletConnectCtx = useWalletConnect()
   const navigation = useNavigation()
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
 
@@ -39,9 +42,9 @@ const WCConnectionDetailsModal = (props: Props) => {
   )
 
   const handleDisconnect = useCallback(async () => {
-    await disconnect(session)
+    await walletConnectCtx.disconnect(session.topic)
     controller.close()
-  }, [disconnect, session])
+  }, [walletConnectCtx.sessions])
 
   return (
     <SwiperPanel
@@ -71,9 +74,9 @@ const WCConnectionDetailsModal = (props: Props) => {
             </TextView>
           </LinearLayout>
 
-          {session.approvalUnix && (
+          {approvalDate && (
             <TextView color="text.10" fontSize="12px">
-              {moment.unix(session.approvalUnix).format(i18n.t('formatters.dappApprovedDate'))}
+              {moment.unix(approvalDate.approvalDate).format('HH:mm Do MMM YYYY')}
             </TextView>
           )}
         </LinearLayout>

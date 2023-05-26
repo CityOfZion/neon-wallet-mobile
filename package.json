@@ -28,7 +28,6 @@
     "@cityofzion/neon-js": "^5.3.0",
     "@cityofzion/neon-parser": "^1.5.2",
     "@cityofzion/neon-signer": "^1.0.1",
-    "@cityofzion/wallet-connect-sdk-wallet-react": "2.3.5",
     "@json-rpc-tools/utils": "^1.7.6",
     "@moonlight-io/asteroid-sdk-js": "git+https://github.com/Moonlight-io/asteroid-sdk-js",
     "@react-native-async-storage/async-storage": "~1.15.0",
@@ -45,6 +44,7 @@
     "@simpli/react-native-storage": "file:./react-native-storage",
     "@simpli/serialized-request": "^1.0.5",
     "@walletconnect/react-native-compat": "2.7.3",
+    "@walletconnect/sign-client": "2.7.3",
     "axios": "^0.19.2",
     "big-integer": "^1.6.51",
     "class-transformer": "^0.2.3",
@@ -166,8 +166,7 @@
     "uri-scheme": "^1.0.111"
   },
   "resolutions": {
-    "electron": "^11.0.1",
-    "react-native-reanimated": "~2.3.1"
+    "electron": "^11.0.1"
   },
   "husky": {
     "hooks": {

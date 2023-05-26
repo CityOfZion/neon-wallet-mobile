@@ -1,5 +1,4 @@
 import { ContractInvocation } from '@cityofzion/neo3-invoker'
-import { TSession } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import * as WebBrowser from 'expo-web-browser'
 import i18n from 'i18n-js'
 import React from 'react'
@@ -9,6 +8,7 @@ import { useSelector } from 'react-redux'
 import WalletConnectBox from './WalletConnectBox'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Session } from '~/src/contexts/WalletConnectContext'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
@@ -16,7 +16,7 @@ import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-component
 type Props = {
   withRightButton?: boolean
   onPressRightButton?: () => void
-  session: TSession
+  session: Session
   contract: ContractInvocation
   title: string
 }

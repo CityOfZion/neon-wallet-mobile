@@ -1,4 +1,3 @@
-import { TSession, TSessionRequest } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
@@ -8,6 +7,7 @@ import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { CopyButton } from '~/src/components/CopyButton'
+import { Metadata } from '~/src/contexts/WalletConnectContext'
 import { RootState } from '~/src/store/RootStore'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
@@ -18,8 +18,8 @@ import { LinearLayout, TextView } from '~src/styles/styled-components'
 type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
 export interface RawJsonModalParams {
-  request: TSessionRequest
-  session: TSession
+  dataJson: string
+  metadata: Metadata
 }
 
 interface Props {
@@ -28,7 +28,6 @@ interface Props {
 }
 
 const RawJsonModal = (props: Props) => {
-  const { request, session } = props.route.params
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const controller = useSwiperController(true)
 
@@ -44,10 +43,10 @@ const RawJsonModal = (props: Props) => {
         alignItems: 'center',
       }}
     >
-      <ConnectionHeader title={session.peer.metadata.name} imageUri={session.peer.metadata.icons[0]} />
+      <ConnectionHeader title={props.route.params.metadata.name} imageUri={props.route.params.metadata.icons[0]} />
 
       <LinearLayout orientation="horiz" width="100%" justifyContent="space-between" mt="30px" mb="7px">
-        <TextView fontSize="18px" fontFamily="medium" color="text.10">
+        <TextView fontSize="18px" fontFamily="medium" color={theme.colors.text[10]}>
           {i18n.t('modals.rawJson.data')}
         </TextView>
 
@@ -64,7 +63,7 @@ const RawJsonModal = (props: Props) => {
         }}
       >
         <TextView fontFamily="light" fontSize="16px" color="white">
-          {JSON.stringify(request, null, 2)}
+          {props.route.params.dataJson}
         </TextView>
       </ScrollView>
     </SwiperPanel>

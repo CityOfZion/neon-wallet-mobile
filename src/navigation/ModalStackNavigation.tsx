@@ -148,7 +148,6 @@ export type ModalParams =
   | DefaultNavigationParam<ConfirmPasscodePageParams>
   | DefaultNavigationParam<VerifyPasscodePageParams>
   | DefaultNavigationParam<BackupInfoModalParams>
-  | DefaultNavigationParam<EditNetworkModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
 
