@@ -1,8 +1,7 @@
-import { useWalletConnectWallet } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { FlatList, TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -12,10 +11,13 @@ import { ConnectionItem } from '~/src/components/ConnectionItem'
 import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import ThemedAddButton from '~/src/components/themed/ThemedAddButton'
+import { useWalletConnect } from '~/src/contexts/WalletConnectContext'
+import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { WalletConnectStackParamList } from '~/src/navigation/WalletConnectStackNavigation'
 import { RootState } from '~/src/store/RootStore'
+import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 interface WalletConnectPageProps {
@@ -24,8 +26,20 @@ interface WalletConnectPageProps {
 }
 
 const WalletConnectPage = ({ navigation, route }: WalletConnectPageProps) => {
+  const { sessions } = useWalletConnect()
+
+  const accountsPool = useSelector(selectAccounts)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
-  const { sessions } = useWalletConnectWallet()
+
+  const validSessions = useMemo(
+    () =>
+      sessions.filter(session => {
+        const [sessionsAccount] = WalletConnectHelper.getAccountInformationFromSession(session)
+
+        return accountsPool.some(account => account.address === sessionsAccount.address)
+      }),
+    [sessions]
+  )
 
   const handlePress = () => {
     navigation.navigate(wrapper.route.Modal.name, {
@@ -37,14 +51,14 @@ const WalletConnectPage = ({ navigation, route }: WalletConnectPageProps) => {
     <ScreenLayout withoutScrollView rightButton={<ThemedAddButton onPress={handlePress} />} hideBackButton>
       <LinearLayout height="100%">
         <LinearLayout flexGrow={1}>
-          {sessions.length > 0 && (
+          {validSessions.length > 0 && (
             <TextView color="white" fontSize="18px" textAlign="center" pb="24px">
               {i18n.t('walletconnect.connectedDApps')}
             </TextView>
           )}
 
           <FlatList
-            data={sessions}
+            data={validSessions}
             renderItem={({ item }) => <ConnectionItem session={item} />}
             keyExtractor={item => item.topic}
             contentContainerStyle={{ flexGrow: 1 }}
@@ -82,7 +96,7 @@ const WalletConnectPage = ({ navigation, route }: WalletConnectPageProps) => {
           />
         </LinearLayout>
 
-        {sessions.length > 0 && (
+        {validSessions.length > 0 && (
           <LinearLayout mb="15px">
             <TouchableWithoutFeedback
               onPress={() => {

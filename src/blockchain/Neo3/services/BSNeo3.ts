@@ -1,4 +1,4 @@
-import { ContractInvocation, ContractInvocationMulti } from '@cityofzion/neo3-invoker'
+import { ContractInvocation } from '@cityofzion/neo3-invoker'
 import { rpc, wallet } from '@cityofzion/neon-core'
 import { NeonInvoker } from '@cityofzion/neon-invoker'
 import Neon, { api } from '@cityofzion/neon-js'
@@ -13,7 +13,6 @@ import { DoraSDKProvider } from '../providers/DoraSDKProviderNeo3'
 
 import { blockchainConfig } from '~/src/config/BlockchainConfig'
 import { AsteroidHelper, keychain } from '~/src/helpers/AsteroidHelper'
-import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { ContractMethod } from '~/src/models/ContractMethod'
 import { ContractParameter } from '~/src/models/ContractParameter'
 import { ContractResponse } from '~/src/models/response/ContractResponse'
@@ -176,16 +175,6 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
     return list?.split(' ') ?? null
   }
 
-  async calculateRequestFee(requestParams: ContractInvocationMulti, wif: string): Promise<number> {
-    const account = new wallet.Account(wif)
-    const invoker = await NeonInvoker.init(this.network.url, account)
-    const { total } = await invoker.calculateFee(requestParams)
-
-    const extraNetworkFee = UtilsHelper.fixDecimalPlaces(requestParams.extraNetworkFee ?? 0, 8)
-    const extraSystemFee = UtilsHelper.fixDecimalPlaces(requestParams.extraSystemFee ?? 0, 8)
-    return total + extraNetworkFee + extraSystemFee
-  }
-
   async generateWif(mnemonic: string, index: number) {
     const childKey = AsteroidHelper.getKeychainFromMnemonic(mnemonic).generateChildKey(
       this.platform,
@@ -233,7 +222,8 @@ export class BSNeo3 implements IBlockchainService, IClaimable, IWalletConnect, I
           } else {
             reject(new Error('Key decryption failed'))
           }
-        } catch {
+        } catch (e) {
+          alert(e.message)
           reject(new Error('Key decryption failed'))
         }
       }

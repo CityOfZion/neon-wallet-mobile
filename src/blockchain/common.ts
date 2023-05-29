@@ -1,5 +1,3 @@
-import { ContractInvocationMulti } from '@cityofzion/neo3-invoker'
-
 import { BalanceInfo } from '../models/response/BalanceInfo'
 import { ContractResponse } from '../models/response/ContractResponse'
 import { NFTResponse } from '../models/response/NFTResponse'
@@ -71,8 +69,8 @@ export interface IClaimable {
 
 export interface IWalletConnect {
   getContract: (hash: string) => Promise<ContractResponse>
-  calculateRequestFee: (requestParams: ContractInvocationMulti, wif: string) => Promise<number>
 }
+
 export interface INFT {
   getNFTS(address: string, page: number): Promise<NFTSResponse>
   getNFT: (tokenId: string, hash: string) => Promise<NFTResponse | undefined>

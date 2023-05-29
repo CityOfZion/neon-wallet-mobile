@@ -1,4 +1,3 @@
-import { useWalletConnectWallet } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
@@ -11,6 +10,7 @@ import SelectorList, { SelectorItem } from '~/src/components/SelectorList'
 import { Separator } from '~/src/components/Separator'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import { blockchainConfig, TBlockchainNetwork } from '~/src/config/BlockchainConfig'
+import { useWalletConnect } from '~/src/contexts/WalletConnectContext'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
@@ -37,10 +37,10 @@ export const ProtocolEditPage = (props: Props) => {
   const networks = useSelector((state: RootState) => state.settings.blockchainNetworks[blockchain])
   const selectedNetwork = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks[blockchain])
   const dispatch = useDispatch()
-  const { sessions, disconnect } = useWalletConnectWallet()
+  const { sessions, disconnect } = useWalletConnect()
 
   const handleClick = (value: TBlockchainNetwork) => {
-    Promise.allSettled(sessions.map(session => disconnect(session)))
+    Promise.allSettled(sessions.map(session => disconnect(session.topic)))
 
     dispatch(
       settingsReducerActions.setSelectNetwork({

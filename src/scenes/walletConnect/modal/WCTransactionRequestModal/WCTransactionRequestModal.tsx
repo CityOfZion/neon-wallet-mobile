@@ -1,8 +1,7 @@
-import { TSession, TSessionRequest, useWalletConnectWallet } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
@@ -10,6 +9,7 @@ import { InvokeFunctionTransactionRequest } from './InvokeFunctionTransactionReq
 import { SignMessageTransactionRequest } from './SignMessageTransactionRequest/SignMessageTransactionRequest'
 import { VerifyMessageTransactionRequest } from './VerifyMessageTransactionRequest/VerifyMessageTransactionRequest'
 
+import { Session, SessionRequest } from '~/src/contexts/WalletConnectContext'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useWalletConnectFlow } from '~/src/hooks/useWalletConnectFlow'
 import { Account } from '~/src/models/redux/Account'
@@ -19,8 +19,8 @@ import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~src/navigation/TabNavigation'
 
 export interface WCTransactionRequestModalParams {
-  request: TSessionRequest
-  session: TSession
+  request: SessionRequest
+  session: Session
 }
 
 type Props = {
@@ -29,8 +29,8 @@ type Props = {
 }
 
 export type TransactionRequestMethodComponentProps = {
-  request: TSessionRequest
-  session: TSession
+  request: SessionRequest
+  session: Session
   account: Account
 }
 
@@ -43,7 +43,6 @@ const componentsByMethod: Record<string, React.FC<TransactionRequestMethodCompon
 const WCTransactionRequestModal = ({ navigation, route }: Props) => {
   const { request, session } = route.params
   const method = request.params.request.method
-  const { rejectRequest } = useWalletConnectWallet()
 
   useWalletConnectFlow()
 
@@ -53,33 +52,33 @@ const WCTransactionRequestModal = ({ navigation, route }: Props) => {
     const [{ address }] = WalletConnectHelper.getAccountInformationFromSession(session)
 
     return accounts.find(account => account.address && account.address === address)
-  }, [accounts, session])
+  }, [accounts])
 
-  const Component = useMemo(() => componentsByMethod[method], [method])
+  if (!WalletConnectHelper.checkSupportedMethods(method)) {
+    showMessage({
+      message: i18n.t('modals.WCTransactionRequestModal.unsupportedMethod', {
+        method,
+      }),
+    })
 
-  useEffect(() => {
-    ;(async () => {
-      if (!account || !Component) {
-        const message = i18n.t(
-          !Component
-            ? 'modals.WCTransactionRequestModal.unsupportedMethod'
-            : 'modals.WCTransactionRequestModal.errorToGetAccount',
-          {
-            method,
-          }
-        )
+    navigation.goBack()
+    return <></>
+  }
 
-        showMessage({
-          message,
-        })
+  if (!account) {
+    showMessage({
+      message: i18n.t('modals.WCTransactionRequestModal.errorToGetAccount', {
+        method,
+      }),
+    })
 
-        await rejectRequest(request, { code: 1, message })
-        navigation.goBack()
-      }
-    })()
-  }, [rejectRequest, account, Component, request])
+    navigation.goBack()
+    return <></>
+  }
 
-  return account && Component ? <Component account={account} request={request} session={session} /> : <></>
+  const Component = componentsByMethod[method]
+
+  return <Component account={account} request={request} session={session} />
 }
 
 export default WCTransactionRequestModal

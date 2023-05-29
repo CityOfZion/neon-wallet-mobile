@@ -984,10 +984,6 @@
     }
   },
   "walletconnect": {
-    "metadata": {
-      "name": "Neon Wallet Mobile",
-      "description": "Mobile version of the highly acclaimed Neon Wallet for the Neo Blockchain. Create and organize wallets, or easily import your existing ones, to safely manage and transfer your assets across multiple accounts with Neon’s slick interface."
-    },
     "alert": {
       "text": "%{text} Connected",
       "description": "Wallet Connect",

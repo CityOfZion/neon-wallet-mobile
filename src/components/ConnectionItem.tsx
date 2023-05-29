@@ -1,5 +1,5 @@
-import { TSession } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { useNavigation } from '@react-navigation/native'
+import { SessionTypes } from '@walletconnect/types'
 import I18n from 'i18n-js'
 import moment from 'moment'
 import React, { useMemo } from 'react'
@@ -11,6 +11,7 @@ import { WalletConnectHelper } from '../helpers/WalletConnectHelper'
 import { useImageError } from '../hooks/useImageError'
 import { Account } from '../models/redux/Account'
 import { Wallet } from '../models/redux/Wallet'
+import { RootState } from '../store/RootStore'
 import { selectAccounts } from '../store/account/SelectorAccount'
 import { selectWallets } from '../store/wallet/SelectorWallet'
 import { Separator } from './Separator'
@@ -18,7 +19,7 @@ import { Separator } from './Separator'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {
-  session: TSession
+  session: SessionTypes.Struct
 }
 
 export type ConnectedAccountAndWallet = {
@@ -31,6 +32,12 @@ export const ConnectionItem = ({ session }: Props) => {
 
   const accountsPool = useSelector(selectAccounts)
   const walletsPool = useSelector(selectWallets)
+  const approvalDate = useSelector((state: RootState) => {
+    const date = state.wcReducer.approvalDates?.find(approvalDate => approvalDate.sessionTopic === session.topic)
+    if (!date) return
+
+    return moment.unix(date.approvalDate).format(I18n.t('formatters.dappApprovedDate'))
+  })
 
   const connectedAccountAndWallet = useMemo<ConnectedAccountAndWallet | undefined>(() => {
     const [{ address }] = WalletConnectHelper.getAccountInformationFromSession(session)
@@ -73,9 +80,9 @@ export const ConnectionItem = ({ session }: Props) => {
             </LinearLayout>
 
             <LinearLayout>
-              {session.approvalUnix && (
+              {!!approvalDate && (
                 <TextView color="text.10" fontSize="12px">
-                  {moment.unix(session.approvalUnix).format(I18n.t('formatters.dappApprovedDate'))}
+                  {approvalDate}
                 </TextView>
               )}
 
