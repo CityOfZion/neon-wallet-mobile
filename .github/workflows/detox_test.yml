@@ -2,7 +2,7 @@ name: Detox Test
 on:
   push:
     tags:
-      - 'refs/tags/detox'
+      - 'detox_ios'
 jobs:
   build-and-test:
     runs-on: macos-12
