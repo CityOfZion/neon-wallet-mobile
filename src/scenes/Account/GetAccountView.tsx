@@ -1,9 +1,10 @@
+import { useWalletConnectWallet } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import { Animated, Dimensions, ImageLoadEventData, Platform, RefreshControl } from 'react-native'
+import { Animated, Dimensions, ImageLoadEventData, RefreshControl } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -27,7 +28,6 @@ import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ClaimGasLoader from '~src/components/loader/ClaimGasLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { ThemedReceiveButton } from '~src/components/themed/ThemedReceiveButton'
-import { useWalletConnect } from '~src/contexts/WalletConnectContext'
 import { Account } from '~src/models/redux/Account'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
@@ -114,7 +114,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
     (state: RootState) => state.settings.selectedBlockchainNetworks[account.blockchain]
   )
   const dispatch = useDispatch()
-  const { sessions } = useWalletConnect()
+  const { sessions } = useWalletConnectWallet()
 
   const opacityValue = useRef(new Animated.Value(0))
 
@@ -134,15 +134,15 @@ const GetAccountView = (props: GetAccountViewProps) => {
     return false
   }, [fee, unclaimedGasAmount, account, isConnected])
 
-  const hasWalletConnectSessions = useMemo(
-    () =>
-      sessions.some(session => {
-        const [{ address }] = WalletConnectHelper.getAccountInformationFromSession(session)
+  const hasWalletConnectSessions = useMemo(() => {
+    if (!blockchainService.hasWalletConnectIntegration()) return false
 
-        return address === account.address
-      }),
-    [sessions]
-  )
+    return sessions.some(session => {
+      const [{ address }] = WalletConnectHelper.getAccountInformationFromSession(session)
+
+      return address === account.address
+    })
+  }, [sessions])
 
   const totTokenFeeAccount = useMemo(() => {
     const { balance } = balanceExchange
@@ -416,7 +416,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
           />
 
           <Button
-            disabled={!blockchainService.hasWalletConnectIntegration() || !hasWalletConnectSessions}
+            disabled={!hasWalletConnectSessions}
             label={i18n.t('screens.getAccount.connections').toUpperCase()}
             srcIcon={require('~/src/assets/images/connections.png')}
             iconSize={[28, 30]}

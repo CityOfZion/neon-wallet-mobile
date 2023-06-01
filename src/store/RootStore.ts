@@ -1,10 +1,9 @@
 import storage from '@react-native-async-storage/async-storage'
-import { combineReducers } from '@reduxjs/toolkit'
-import { persistReducer } from 'redux-persist'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { persistReducer, FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistStore } from 'redux-persist'
 
 import AccountReducer, { accountReducerName } from './account/AccountReducer'
 import NetworkReducer from './network/NetworkReducer'
-import WalletConnectReducer, { walletConnectReducerName } from './walletConnect/WalletConnectReducer'
 
 import ContactReducer, { contactReducerName } from '~/src/store/contact/ContactReducer'
 import SettingsReducer, { settingsReducerName } from '~/src/store/settings/SettingsReducer'
@@ -16,7 +15,6 @@ const persistedWalletReducer = persistReducer({ key: walletReducerName, storage 
 const persistedAccountReducer = persistReducer({ key: accountReducerName, storage }, AccountReducer)
 const persistedContactReducer = persistReducer({ key: contactReducerName, storage }, ContactReducer)
 const persistedSettingsReducer = persistReducer({ key: settingsReducerName, storage }, SettingsReducer)
-const persistedWalletConnectedReducer = persistReducer({ key: walletConnectReducerName, storage }, WalletConnectReducer)
 
 export abstract class RootStore {
   static readonly reducers = combineReducers({
@@ -25,6 +23,18 @@ export abstract class RootStore {
     account: persistedAccountReducer,
     contact: persistedContactReducer,
     settings: persistedSettingsReducer,
-    wcReducer: persistedWalletConnectedReducer,
   })
+
+  static store = configureStore({
+    reducer: this.reducers,
+    middleware: getDefaultMiddleware => [
+      ...getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
+      }),
+    ],
+  })
+
+  static persistor = persistStore(RootStore.store)
 }

@@ -1,5 +1,6 @@
 import { Signer, ContractInvocation, ContractInvocationMulti } from '@cityofzion/neo3-invoker'
 import { tx } from '@cityofzion/neon-core/'
+import { TSession } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -15,8 +16,6 @@ import { InvokeFunctionSuccess } from './InvokeFunctionSuccess'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { BlockchainServiceKey } from '~/src/blockchain'
-import { Session } from '~/src/contexts/WalletConnectContext'
-import { NeonWcAdapter } from '~/src/helpers/NeonWcAdapter'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { Account } from '~/src/models/redux/Account'
@@ -27,11 +26,11 @@ import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-component
 type SignerBoxProps = {
   signer: Signer
   showWarning: boolean
-  session: Session
+  session: TSession
 }
 
 type ContractDetailsProps = {
-  session: Session
+  session: TSession
   contract: ContractInvocation
 }
 
@@ -149,18 +148,17 @@ const ContractDetails = ({ contract, session }: ContractDetailsProps) => {
 
 const TransactionFee = ({ account, requestParams }: TransactionFeeProps) => {
   const [feeRequest, setFeeRequest] = useState<number>()
-  const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
+  const { blockchainService } = useBlockchainService(account.blockchain)
 
   const handleCalculateFee = useCallback(async () => {
-    if (!account.address) return
+    if (!blockchainService.hasWalletConnectIntegration()) return
 
     const wif = await account.getWif()
     if (!wif) return
 
-    const adapter = await NeonWcAdapter.init(selectedBlockchainNetworks[account.blockchain].url, wif)
-    const resultFee = await adapter.calculateFee(requestParams)
+    const fee = await blockchainService.calculateRequestFee(requestParams, wif)
 
-    setFeeRequest(Number(resultFee))
+    setFeeRequest(fee)
   }, [account, requestParams])
 
   useEffect(() => {
@@ -241,8 +239,8 @@ export const InvokeFunctionTransactionRequest = ({
       <TouchableWithoutFeedback
         onPress={() => {
           navigation.navigate(wrapper.route.RawJsonModal.name, {
-            dataJson: JSON.stringify(request, null, 2),
-            metadata: session.peer.metadata,
+            request,
+            session,
           })
         }}
       >

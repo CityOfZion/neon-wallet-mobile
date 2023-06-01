@@ -1,12 +1,12 @@
 import { Signer } from '@cityofzion/neo3-invoker'
 import { tx } from '@cityofzion/neon-core'
+import { TSession } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import { Session } from '~/src/contexts/WalletConnectContext'
 import { RootState } from '~/src/store/RootStore'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
@@ -19,7 +19,7 @@ type ParamList = TabStackParamList & RootStackParamList & ModalStackParamList
 
 export interface SignatureScopeModalParams {
   data?: Signer
-  session: Session
+  session: TSession
 }
 
 interface Props {
