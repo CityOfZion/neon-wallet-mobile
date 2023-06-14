@@ -475,6 +475,12 @@
     }
   },
   "components": {
+    "bars": {
+      "customMode": "#translateme",
+      "testnetMode": "#translateme",
+      "noInternet": "#translateme",
+      "warning": "#translateme"
+    },
     "contractDetailsBox": {
       "hash": "Hash",
       "method": "Método"
