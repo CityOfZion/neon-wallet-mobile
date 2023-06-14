@@ -2,7 +2,7 @@ import { useWalletConnectWallet } from '@cityofzion/wallet-connect-sdk-wallet-re
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FlatList, TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
@@ -18,6 +18,10 @@ import { WalletConnectStackParamList } from '~/src/navigation/WalletConnectStack
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
+export interface WalletConnectPageParams {
+  uri?: string
+}
+
 interface WalletConnectPageProps {
   navigation: StackNavigationProp<RootStackParamList & ModalStackParamList & WalletConnectStackParamList>
   route: RouteProp<WalletConnectStackParamList, 'WalletConnectPage'>
@@ -32,6 +36,17 @@ const WalletConnectPage = ({ navigation, route }: WalletConnectPageProps) => {
       screen: wrapper.route.WCConnectDappModal.name,
     })
   }
+
+  useEffect(() => {
+    if (route.params?.uri) {
+      navigation.navigate(wrapper.route.Modal.name, {
+        screen: wrapper.route.WCConnectionRequestModal.name,
+        params: {
+          uri: route.params?.uri,
+        },
+      })
+    }
+  }, [route.params?.uri])
 
   return (
     <ScreenLayout withoutScrollView rightButton={<ThemedAddButton onPress={handlePress} />} hideBackButton>

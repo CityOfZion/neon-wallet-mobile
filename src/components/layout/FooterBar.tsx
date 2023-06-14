@@ -306,7 +306,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
           <TabButton
             activeSource={require('~src/assets/images/button-connections-white.png')}
             source={require('~src/assets/images/button-connections-disabled.png')}
-            route={wrapper.route.WalletConnectPage}
+            route={wrapper.route.WalletConnect}
             controller={controller}
             disabled={status !== EStatus.STARTED}
             {...props}

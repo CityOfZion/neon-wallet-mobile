@@ -2,11 +2,15 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 
 import { stackConfig } from '../config/ScreenConfig'
+import { DefaultNavigationParam } from '../types/global'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
-import WalletConnectPage from '~src/scenes/walletConnect/WalletConnectPage'
+import WalletConnectPage, { WalletConnectPageParams } from '~src/scenes/walletConnect/WalletConnectPage'
+
+export type WalletConnectStackParams = DefaultNavigationParam<WalletConnectPageParams>
+
 export type WalletConnectStackParamList = {
-  WalletConnectPage: undefined
+  WalletConnectPage?: WalletConnectPageParams
 }
 
 const WalletConnectStack = createStackNavigator<WalletConnectStackParamList>()

@@ -4,7 +4,7 @@ import {
   TSessionProposal,
   useWalletConnectWallet,
 } from '@cityofzion/wallet-connect-sdk-wallet-react'
-import { RouteProp } from '@react-navigation/native'
+import { RouteProp, useNavigationState } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { AwaitActivity, Await } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
@@ -92,7 +92,7 @@ const WCConnectionRequestModal = (props: Props) => {
       } catch (error: any) {
         showMessage({ message: error.message, duration: 7000, type: 'danger' })
       } finally {
-        props.navigation.navigate(wrapper.route.WalletConnectPage.name)
+        props.navigation.navigate(wrapper.route.WalletConnect.name, { screen: wrapper.route.WalletConnectPage.name })
         Await.done('load')
       }
     },
