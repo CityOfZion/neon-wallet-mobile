@@ -55,7 +55,7 @@ const AppNavigation = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <StatusBar barStyle={theme.statusBarStyle} translucent />
+      <StatusBar barStyle={theme.statusBarStyle} translucent backgroundColor="rgba(255,255,255,0)" />
       <NavigationContainer linking={linking} onReady={handleNavigationReady} ref={navigationRef}>
         <RootStack.Navigator initialRouteName={getInitialRouteName()} headerMode="none" screenOptions={screenConfig}>
           <RootStack.Screen name={wrapper.route.Tab.name} component={TabNavigation} />

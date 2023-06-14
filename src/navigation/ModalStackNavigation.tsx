@@ -21,6 +21,9 @@ import {
   SendTransactionReviewModalParams,
 } from '../scenes/Account/SendTransaction/SendTransactionReviewModal'
 import { AddressScanQuickToolsModal, AddressScanQuickToolsModalParams } from '../scenes/AddressScanQuickToolsModal'
+import { AddContactAddressModal, AddContactAddressModalParams } from '../scenes/Contacts/AddContactAddressModal'
+import { PersistContactModalParams, PersistContactModal } from '../scenes/Contacts/PersistContactModal'
+import { SelectChainModal, SelectChainModalParams } from '../scenes/Contacts/SelectChainModal'
 import ConfirmPasscodePage, { ConfirmPasscodePageParams } from '../scenes/Settings/ConfirmPasscodePage'
 import { EditNetworkModal, EditNetworkModalParams } from '../scenes/Settings/EditNetworkModal'
 import PasscodePage, { PasscodePageParams } from '../scenes/Settings/PasscodePage/PasscodePage'
@@ -47,7 +50,6 @@ import WCTransactionRequestModal, {
   WCTransactionRequestModalParams,
 } from '~/src/scenes/walletConnect/modal/WCTransactionRequestModal/WCTransactionRequestModal'
 import { wrapper } from '~src/app/ApplicationWrapper'
-import { PersistContact, PersistContactParams } from '~src/components/contacts/PersistContact'
 import { screenConfig } from '~src/config/ScreenConfig'
 import { AccountQRCode, AccountQRCodeParams } from '~src/scenes/Account/AccountQRCode'
 import BlockchainListModal, { BlockchainListModalParams } from '~src/scenes/BlockchainListModal'
@@ -81,7 +83,7 @@ export type ModalStackParamList = {
   CurrencyPickerModal: undefined
   ThemePickerModal: undefined
   NetworkPickerModal: undefined
-  PersistContact: PersistContactParams
+  PersistContactModal: PersistContactModalParams
   ContactsModal: ContactsModalParams
   CopyContextModal: CopyContextModalParams
   EditWalletModal: EditWalletParams
@@ -112,6 +114,8 @@ export type ModalStackParamList = {
   ConfirmPasscode: ConfirmPasscodePageParams
   VerifyPasscode: VerifyPasscodePageParams
   EditNetworkModal: EditNetworkModalParams
+  AddContactAddressModal: AddContactAddressModalParams
+  SelectChainModal: SelectChainModalParams
 }
 
 // Add here params for modals that you need to navigate directly to, from a different stack
@@ -120,7 +124,7 @@ export type ModalParams =
   | DefaultNavigationParam<EditAccountModalParam>
   | DefaultNavigationParam<AccountQRCodeParams>
   | DefaultNavigationParam<ContactsModalParams>
-  | DefaultNavigationParam<PersistContactParams>
+  | DefaultNavigationParam<PersistContactModalParams>
   | DefaultNavigationParam<EditWalletParams>
   | DefaultNavigationParam<ChangelogModalParams>
   | DefaultNavigationParam<WalletContextModalParams>
@@ -148,6 +152,8 @@ export type ModalParams =
   | DefaultNavigationParam<ConfirmPasscodePageParams>
   | DefaultNavigationParam<VerifyPasscodePageParams>
   | DefaultNavigationParam<BackupInfoModalParams>
+  | DefaultNavigationParam<AddContactAddressModalParams>
+  | DefaultNavigationParam<SelectChainModalParams>
   | DefaultNavigationParam<EditNetworkModalParams>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
@@ -165,7 +171,7 @@ const ModalStackNavigation = () => {
       <ModalStack.Screen name={wrapper.route.LanguagePickerModal.name} component={LanguagePickerModal} />
       <ModalStack.Screen name={wrapper.route.CurrencyPickerModal.name} component={CurrencyPickerModal} />
       <ModalStack.Screen name={wrapper.route.ThemePickerModal.name} component={ThemePickerModal} />
-      <ModalStack.Screen name={wrapper.route.PersistContact.name} component={PersistContact} />
+      <ModalStack.Screen name={wrapper.route.PersistContactModal.name} component={PersistContactModal} />
       <ModalStack.Screen name={wrapper.route.AccountQRCode.name} component={AccountQRCode} />
       <ModalStack.Screen name={wrapper.route.ContactsModal.name} component={ContactPicker} />
       <ModalStack.Screen name={wrapper.route.CopyContextModal.name} component={CopyContextModal} />
@@ -200,6 +206,8 @@ const ModalStackNavigation = () => {
       <ModalStack.Screen name={wrapper.route.ConfirmPasscode.name} component={ConfirmPasscodePage} />
       <ModalStack.Screen name={wrapper.route.VerifyPasscode.name} component={VerifyPasscodePage} />
       <ModalStack.Screen name={wrapper.route.EditNetworkModal.name} component={EditNetworkModal} />
+      <ModalStack.Screen name={wrapper.route.AddContactAddressModal.name} component={AddContactAddressModal} />
+      <ModalStack.Screen name={wrapper.route.SelectChainModal.name} component={SelectChainModal} />
     </ModalStack.Navigator>
   )
 }

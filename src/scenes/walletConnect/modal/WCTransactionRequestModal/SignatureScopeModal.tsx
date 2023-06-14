@@ -40,7 +40,6 @@ const SignatureScopeModal = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      size="small"
       title={i18n.t('modals.signatureScope.title')}
       rightButton={<CloseButton onPress={controller.close} />}
       onClose={props.navigation.goBack}

@@ -57,7 +57,7 @@ export const AddressScanQuickToolsModal = (props: Props) => {
 
   const handlePressContact = () => {
     props.navigation.navigate(wrapper.route.Modal.name, {
-      screen: wrapper.route.PersistContact.name,
+      screen: wrapper.route.PersistContactModal.name,
       params: {
         startingAddress: props.route.params.address,
       },

@@ -47,7 +47,6 @@ const CustomColorPage = (props: Props) => {
       leftButton={<LabelButton label={i18n.t('customColorPage.navigation.cancel')} onPress={controller.close} />}
       rightButton={<LabelButton label={i18n.t('customColorPage.navigation.done')} onPress={pickAndClose} />}
       onClose={props.navigation.goBack}
-      size="small"
     >
       <AccountCard balanceExchange={balanceExchange} hideBalance={false} account={props.route.params.account} />
       <TextView mt="12px" mb="6px" color="text.0" width="100%" textAlign="center" fontSize="lg">

@@ -427,6 +427,16 @@
     }
   },
   "modals": {
+    "selectChainModal": {
+      "title": "Select chain"
+    },
+    "addContactAddressModal": {
+      "title": "Add an address",
+      "chainLabel": "CHAIN",
+      "addressLabel": "ADDRESS",
+      "chainPlaceholder": "Select Chain associated with address",
+      "addressPlaceholder": "Enter wallet or NNS address"
+    },
     "walletConnectSelectionModal": {
       "account": {
         "title": "Account Selection",
@@ -922,14 +932,13 @@
     "delete": "Delete",
     "save": "Save",
     "cancel": "Cancel",
-    "invalidName": "Invalid Name",
-    "invalidNameSubtitle": "This name has %{nameLenght} characters, it must be above 0 and below 20.",
     "invalidAddress": "Invalid Address",
     "deleteContact": "DELETE CONTACT",
     "deleteContactSubtitle": "Deleting a contact will remove all their addresses from your contacts list and is permanent.",
     "deleteButtom": "Delete Contact",
     "deleteContactAlert": "Are you sure you want to delete this contact?",
     "search": "Search",
+    "addAddress": "Add address",
     "addAnotherAddress": "Add another address",
     "noResultsFound": "No results found"
   },

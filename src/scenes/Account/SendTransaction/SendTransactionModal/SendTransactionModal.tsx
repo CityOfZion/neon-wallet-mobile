@@ -158,6 +158,7 @@ export const SendTransactionModal = (props: Props) => {
               onAccountChange={setDestinationAccount}
               onContactChange={setDestinationContact}
               onWalletChange={setDestinationWallet}
+              destinationAddressIsValid={destinationAddressIsValid}
               onAddressValidation={setDestinationAddressIsValid}
               account={account}
               destinationAddress={destinationAddress}

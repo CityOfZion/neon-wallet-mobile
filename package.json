@@ -19,6 +19,9 @@
     "postinstall": "node_modules/.bin/rn-nodeify --install crypto,assert,url,stream,events --hack"
   },
   "dependencies": {
+    "@cityofzion/blockchain-service": "0.4.1",
+    "@cityofzion/bs-neo-legacy": "0.4.1",
+    "@cityofzion/bs-neo3": "0.4.1",
     "@cityofzion/dora-ts": "^0.0.11",
     "@cityofzion/neo-legacy-neon-js": "npm:@cityofzion/neon-js@4.8.0",
     "@cityofzion/neo-legacy-neon-nep5": "npm:@cityofzion/neon-nep5@4.9.0",
@@ -92,8 +95,8 @@
     "react-native-neo-sdk-bindings": "file:./native_modules/neo-sdk-bindings",
     "react-native-progress": "^5.0.0",
     "react-native-randombytes": "file:./react-native-randombytes",
-    "react-native-reanimated": "~2.3.1",
-    "react-native-reanimated-carousel": "^3.3.0",
+    "react-native-reanimated": "2.3.1",
+    "react-native-reanimated-carousel": "2.6.0",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
     "react-native-shadow-2": "^6.0.6",
@@ -166,7 +169,7 @@
   },
   "resolutions": {
     "electron": "^11.0.1",
-    "react-native-reanimated": "~2.3.1"
+    "react-native-reanimated": "2.3.1"
   },
   "husky": {
     "hooks": {

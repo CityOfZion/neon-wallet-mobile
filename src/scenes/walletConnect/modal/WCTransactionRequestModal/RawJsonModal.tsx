@@ -35,7 +35,6 @@ const RawJsonModal = (props: Props) => {
   return (
     <SwiperPanel
       controller={controller}
-      size="small"
       title={i18n.t('modals.rawJson.title')}
       rightButton={<CloseButton onPress={controller.close} />}
       onClose={props.navigation.goBack}

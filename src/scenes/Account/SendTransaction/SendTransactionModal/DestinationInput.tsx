@@ -1,11 +1,13 @@
 import i18n from 'i18n-js'
-import React, { useMemo } from 'react'
+import { debounce } from 'lodash'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import { IURI } from '~/src/helpers/UriHelper'
+import { useBlockchainServiceLib } from '~/src/hooks/useBlockchainServiceLib'
 import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { Account } from '~/src/models/redux/Account'
 import { Contact } from '~/src/models/redux/Contact'
@@ -14,12 +16,14 @@ import { RootState } from '~/src/store/RootStore'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { selectContacts } from '~/src/store/contact/SelectorContact'
 import { selectWallets } from '~/src/store/wallet/SelectorWallet'
+import { ContactAddresses } from '~/src/types/reducers/contact'
 
 type Props = {
   destinationAddress?: string
   destinationWallet?: Wallet
   destinationContact?: Contact
   destinationAccount?: Account
+  destinationAddressIsValid?: boolean
   account: Account
   onAddressChange(address?: string): void
   onContactChange(contact?: Contact): void
@@ -29,10 +33,10 @@ type Props = {
 }
 
 type HandleChange = {
-  address?: string
-  account?: Account
-  wallet?: Wallet
-  contact?: Contact
+  addressOrDomain: string
+  selectedAccount?: Account
+  selectedWallet?: Wallet
+  selectedContact?: Contact
 }
 
 export const DestinationInput = ({
@@ -40,6 +44,7 @@ export const DestinationInput = ({
   destinationWallet,
   destinationContact,
   destinationAccount,
+  destinationAddressIsValid,
   account,
   onAddressChange,
   onContactChange,
@@ -48,13 +53,21 @@ export const DestinationInput = ({
   onAddressValidation,
 }: Props) => {
   const { blockchainService } = useBlockchainService(account.blockchain)
+  const { getBlockchainServiceLib, hasNNS } = useBlockchainServiceLib()
   const accounts = useSelector(selectAccounts)
   const wallets = useSelector(selectWallets)
   const contacts = useSelector(selectContacts)
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
+  const [NNSAddress, setNNSAddress] = useState<string>()
+  const [loading, setLoading] = useState(false)
+
   const title = useMemo(() => {
+    if (NNSAddress) {
+      return NNSAddress
+    }
+
     if (destinationContact?.name) {
       return destinationContact.name
     }
@@ -62,64 +75,84 @@ export const DestinationInput = ({
     if (destinationWallet?.name && destinationAccount && destinationAccount.address) {
       return `${destinationWallet.name} / ${destinationAccount.name}`
     }
-  }, [destinationContact, destinationWallet, destinationAccount])
+  }, [destinationContact, destinationWallet, destinationAccount, NNSAddress])
 
-  const handleChanges = ({ account, address, contact, wallet }: HandleChange) => {
-    const foundedAccount = account
-      ? account
-      : address
-      ? accounts.find(account => account.address === address)
-      : undefined
+  const validateAddressOrNSS = useCallback(
+    debounce(async ({ addressOrDomain, selectedAccount, selectedContact, selectedWallet }: HandleChange) => {
+      setNNSAddress(undefined)
 
-    const foundedWallet = wallet ? wallet : address && foundedAccount ? foundedAccount.getWallet(wallets) : undefined
+      let isValid = false
+      let address: string | undefined
 
-    const foundedContact = contact
-      ? contact
-      : address && foundedAccount
-      ? contacts.find(contact => contact.addresses.some(address => address.address === foundedAccount.address))
-      : undefined
+      const serviceLib = getBlockchainServiceLib(account.blockchain)
+      if (hasNNS(serviceLib) && serviceLib.validateNNSFormat(addressOrDomain)) {
+        try {
+          setLoading(true)
+          const nnsAddress = await serviceLib.getOwnerOfNNS(addressOrDomain.toLowerCase())
+          setNNSAddress(addressOrDomain.toLowerCase())
+          isValid = true
+          address = nnsAddress
+          onAddressChange(nnsAddress)
+        } finally {
+          setLoading(false)
+        }
+      } else if (blockchainService.validateAddress(addressOrDomain)) {
+        isValid = true
+        address = addressOrDomain
+      }
 
-    onAddressChange(address)
-    onAccountChange(foundedAccount)
-    onWalletChange(foundedWallet)
-    onContactChange(foundedContact)
-  }
+      onAddressValidation(isValid)
+      const foundedAccount = selectedAccount
+        ? selectedAccount
+        : address
+        ? accounts.find(account => account.address === address)
+        : undefined
 
-  const handleValidateDestinationAddress = (text: string) => {
-    const isValid = blockchainService.validateAddress(text)
+      const foundedWallet = selectedWallet
+        ? selectedWallet
+        : address && foundedAccount
+        ? foundedAccount.getWallet(wallets)
+        : undefined
 
-    onAddressValidation(isValid)
+      const foundedContact = selectedContact
+        ? selectedContact
+        : contacts.find(contact => contact.addresses.some(address => address.addressOrDomain === addressOrDomain))
 
-    return isValid
-  }
+      onAccountChange(foundedAccount)
+      onWalletChange(foundedWallet)
+      onContactChange(foundedContact)
+    }, 1000),
+    [getBlockchainServiceLib, blockchainService]
+  )
 
-  const handleSelectContactDestination = (contact: Contact, address: string) => {
-    handleChanges({
-      address,
-      contact,
+  const handleSelectContactDestination = (selectedContact: Contact, { addressOrDomain }: ContactAddresses) => {
+    onAddressChange(addressOrDomain)
+    validateAddressOrNSS({
+      addressOrDomain,
+      selectedContact,
     })
   }
 
   const handleSelectAccountDestination = (selectedAccount: Account) => {
-    handleChanges({
-      address: selectedAccount.address ?? undefined,
-      account: selectedAccount,
+    if (!selectedAccount.address) return
+    onAddressChange(selectedAccount.address)
+    validateAddressOrNSS({
+      addressOrDomain: selectedAccount.address,
+      selectedAccount,
     })
   }
 
   const handleAddressDestinationChange = (text: string) => {
-    handleChanges({
-      address: text,
+    onAddressChange(text)
+    validateAddressOrNSS({
+      addressOrDomain: text,
     })
   }
 
   const handleScan = (data: IURI | string) => {
-    if (typeof data === 'string') {
-      handleChanges({ address: data })
-      return
-    }
-
-    handleChanges({ address: data.address })
+    const addressOrDomain = typeof data === 'string' ? data : data.address
+    onAddressChange(addressOrDomain)
+    validateAddressOrNSS({ addressOrDomain })
   }
 
   return (
@@ -138,7 +171,7 @@ export const DestinationInput = ({
         invalidColor={theme.colors.text[10]}
         value={destinationAddress ?? ''}
         placeholder={i18n.t('modals.sendTransactionModal.enterDestination')}
-        validator={handleValidateDestinationAddress}
+        isValid={destinationAddressIsValid}
         separatorColor={theme.colors.background[13]}
         sideMargins={0}
         showContacts
@@ -149,6 +182,7 @@ export const DestinationInput = ({
         invalidMessageColor={theme.colors.quinary}
         addressSelected={destinationAddress}
         filterBlockchain={account.blockchain}
+        loading={loading}
       />
     </>
   )

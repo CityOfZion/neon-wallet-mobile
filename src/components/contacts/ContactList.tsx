@@ -1,4 +1,5 @@
 import i18n from 'i18n-js'
+import { cloneDeep } from 'lodash'
 import React, { useState, useMemo } from 'react'
 import { FlatList, SectionList, SectionListData } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -6,212 +7,219 @@ import { useSelector } from 'react-redux'
 import { BlockchainServiceKey } from '~/src/blockchain'
 import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
 import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
+import ListSeparator from '~/src/scenes/walletConnect/components/ListSeparator'
 import { selectContacts } from '~/src/store/contact/SelectorContact'
+import { ContactAddresses } from '~/src/types/reducers/contact'
 import { LinearLayoutProps } from '~/src/types/styled-components'
 import { SearchBar } from '~src/components/SearchBar'
 import { Contact } from '~src/models/redux/Contact'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface ContactListProps extends LinearLayoutProps {
-  onSelect?: (contact: Contact, address: string) => void
+  onSelect?: (contact: Contact, address?: ContactAddresses) => void
   filterByBlockchain?: BlockchainServiceKey
+  emptyComponent?: JSX.Element
+  emptyHideHeader?: boolean
+  pressType?: 'all' | 'address'
 }
 
 interface ItemProps {
   contact: Contact
-  onPress?: (contact: Contact, address: string) => void
+  onPress?: (contact: Contact, address?: ContactAddresses) => void
+  pressType: 'all' | 'address'
 }
 
 interface AddressProps {
-  address: string
-  blockchain: BlockchainServiceKey
-  onPress?: (contact: Contact, address: string) => void
+  address: ContactAddresses
+  onPress?: (contact: Contact, address?: ContactAddresses) => void
   contact: Contact
+  pressType: 'all' | 'address'
 }
 
 interface SectionHeaderProps {
-  label?: string
+  label: string
 }
 
-const AddressItem = React.memo(({ address, blockchain, onPress, contact }: AddressProps) => {
-  const handlePress = () => {
-    if (onPress) onPress(contact, address)
+const AddressItem = React.memo(({ address, onPress, contact, pressType }: AddressProps) => {
+  const handlePress = async () => {
+    if (onPress && pressType === 'address') onPress(contact, address)
   }
 
   return (
-    <ButtonView onPress={handlePress} paddingY="18px">
-      <LinearLayout orientation="horiz" alignItems="center">
-        <ImageView
-          source={BlockchainHelper.getIcon(blockchain)}
-          resizeMode="contain"
-          alignSelf="center"
-          mr={3}
-          style={{
-            width: 18,
-            height: 18,
-          }}
-        />
+    <ButtonView
+      onPress={handlePress}
+      disabled={pressType !== 'address'}
+      paddingY="18px"
+      orientation="horiz"
+      alignItems="center"
+    >
+      <ImageView
+        source={BlockchainHelper.getIcon(address.blockchain)}
+        resizeMode="contain"
+        mr="14px"
+        width={20}
+        height={20}
+      />
 
-        <LinearLayout orientation="verti">
-          <TextView color="text.2" fontFamily="regular" fontSize="14px">
-            {i18n.t(`blockchainServices.${blockchain}.id`)}
-          </TextView>
-          <TextView color="primary" fontFamily="medium" fontSize="14px" numberOfLines={1} ellipsizeMode="middle">
-            {address}
-          </TextView>
-        </LinearLayout>
+      <LinearLayout flex={1}>
+        <TextView color="text.10" fontSize="14px">
+          {i18n.t(`blockchainServices.${address.blockchain}.id`)}
+        </TextView>
+
+        <TextView color="primary" fontSize="16px" numberOfLines={1} ellipsizeMode="middle">
+          {address.addressOrDomain}
+        </TextView>
       </LinearLayout>
     </ButtonView>
   )
 })
 
-const Item = React.memo(({ contact, onPress }: ItemProps) => {
+const Item = React.memo(({ contact, onPress, pressType }: ItemProps) => {
+  const handlePress = () => {
+    if (onPress && pressType === 'all') onPress(contact)
+  }
+
   return (
-    <LinearLayout py="16px" px="12px">
+    <ButtonView onPress={handlePress} disabled={pressType !== 'all'} py="20px" px="16px">
       <LinearLayout orientation="horiz" alignItems="center">
         <LinearLayout
           backgroundColor="background.22"
           width="36px"
           height="36px"
           borderRadius="18px"
-          marginRight="6px"
+          marginRight="12px"
           alignItems="center"
           justifyContent="center"
         >
-          {contact.name && (
-            <TextView
-              color="text.6"
-              fontFamily="semibold"
-              fontSize="18px"
-              fontWeight={600}
-              style={{
-                includeFontPadding: false,
-              }}
-            >
-              {contact.name.charAt(0).toUpperCase()}
-            </TextView>
-          )}
-        </LinearLayout>
-
-        {contact.name && (
           <TextView
-            fontWeight={600}
-            color="text.0"
+            color="text.6"
             fontSize="18px"
             style={{
               includeFontPadding: false,
             }}
           >
-            {contact.name}
+            {contact?.name?.charAt(0).toUpperCase()}
           </TextView>
-        )}
+        </LinearLayout>
+
+        <TextView color="text.0" fontSize="18px">
+          {contact?.name}
+        </TextView>
       </LinearLayout>
+
       <LinearLayout marginLeft="48px">
         <FlatList
           data={contact.addresses}
           renderItem={({ item }) => (
-            <AddressItem address={item.address} blockchain={item.blockchain} onPress={onPress} contact={contact} />
+            <AddressItem address={item} onPress={onPress} contact={contact} pressType={pressType} />
           )}
           ItemSeparatorComponent={() => <LinearLayout height="1px" bg="background.10" />}
-          keyExtractor={(item, index) => `${contact.id}-${item.address}-${index}`}
+          keyExtractor={(item, index) => `${contact.id}-${item.addressOrDomain}-${index}`}
         />
       </LinearLayout>
-    </LinearLayout>
+    </ButtonView>
   )
 })
 
 const SectionHeader = React.memo(({ label }: SectionHeaderProps) => {
   return (
-    <TextView pt="6px" pb="6px" pl="14px" fontWeight={500} color="primary" fontSize="18px" bg="background.12">
-      {label?.toUpperCase()}
+    <TextView py="6px" pl="16px" fontWeight={500} color="primary" fontSize="14px" bg="background.12">
+      {label.toUpperCase()}
     </TextView>
   )
 })
 
-export const ContactList = ({ filterByBlockchain, onSelect, ...props }: ContactListProps) => {
+export const ContactList = ({
+  filterByBlockchain,
+  onSelect,
+  emptyComponent,
+  emptyHideHeader,
+  pressType = 'address',
+  ...props
+}: ContactListProps) => {
   const contacts = useSelector(selectContacts)
   const { getBlockchainByAddress } = useBlockchainServiceUtils()
 
   const [filter, setFilter] = useState('')
 
-  const filteredByBlockchain = useMemo(() => {
-    if (!filterByBlockchain) return contacts
+  const filteredByBlockchain = useMemo<Contact[]>(() => {
+    const contactsCopy = cloneDeep(contacts)
 
-    return contacts
+    if (!filterByBlockchain) return contactsCopy
+
+    return contactsCopy
+      .filter(contact => contact.addresses.length > 0)
       .map(contact => {
-        const newContact = new Contact()
-
-        Object.assign(newContact, contact)
-
-        newContact.addresses = contact.addresses.filter(({ address }) => {
-          const blockchain = getBlockchainByAddress(address)
-
+        contact.addresses.filter(({ blockchain }) => {
           return blockchain === filterByBlockchain
         })
 
-        return newContact
+        return contact
       })
-      .filter(contact => contact.addresses.length > 0)
   }, [contacts, getBlockchainByAddress])
 
-  const filteredContacts = useMemo(() => {
-    if (!filter) return filteredByBlockchain
+  const data = useMemo<SectionListData<Contact>[]>(() => {
+    let items = filteredByBlockchain
 
-    return filteredByBlockchain.filter(
-      contact =>
-        contact.name?.toLowerCase().includes(filter.toLowerCase()) ??
-        contact.addresses.find(infoContact => infoContact.address.toLowerCase().includes(filter.toLowerCase()))
+    // Filter the contacts by the filter value
+    if (filter) {
+      const filterLowercase = filter.toLowerCase()
+      items = items.filter(
+        contact =>
+          contact.name?.toLowerCase().includes(filterLowercase) ||
+          contact.addresses.find(({ addressOrDomain }) => addressOrDomain.toLowerCase().includes(filterLowercase))
+      )
+    }
+
+    // Sort the contacts by name
+    items.sort((prev, actual) => {
+      if (!prev.name || !actual.name) return 1
+      if (prev.name.toLowerCase() < actual.name.toLowerCase()) return -1
+      if (prev.name.toLowerCase() > actual.name.toLowerCase()) return 1
+      return 0
+    })
+
+    // Group the contacts by first letter
+    const contactsByFirstLetter = new Map<string, Contact[]>()
+    items.forEach(contact => {
+      if (!contact.name) return
+
+      const key = contact.name[0].toUpperCase()
+
+      const lastContacts = contactsByFirstLetter.get(key) ?? []
+      contactsByFirstLetter.set(key, [...lastContacts, contact])
+    })
+
+    // Create the sections array
+    return Array.from(contactsByFirstLetter.entries()).map(
+      ([key, contacts]): SectionListData<Contact> => ({ data: contacts, key })
     )
   }, [filter, filteredByBlockchain])
 
-  const sortedContact = useMemo(
-    () =>
-      filteredContacts.sort((prev, actual) => {
-        if (!prev.name || !actual.name) return 1
-
-        if (prev.name.toLowerCase() < actual.name.toLowerCase()) return -1
-
-        return 0
-      }),
-    [filteredContacts]
-  )
-
-  const sectionsByFirstLetter = useMemo(() => {
-    const contactsMap: Map<string, Contact[]> = new Map()
-
-    sortedContact.forEach(contact => {
-      if (!contact.name) return
-
-      const firstLetterKey = contact.name[0].toUpperCase()
-
-      const gettedValues = contactsMap.get(firstLetterKey)
-
-      if (gettedValues) {
-        gettedValues.push(contact)
-        return
-      }
-
-      contactsMap.set(firstLetterKey, [contact])
-    })
-
-    return Array.from(contactsMap.entries()).map(
-      ([key, contacts]): SectionListData<Contact> => ({ data: contacts, key })
-    )
-  }, [sortedContact])
-
   return (
     <LinearLayout {...props}>
-      <SearchBar onFilter={setFilter} />
       <SectionList
-        sections={sectionsByFirstLetter}
+        contentContainerStyle={{ flexGrow: 1 }}
+        sections={data}
         keyExtractor={(item, index) => `${item.id}-${index}`}
-        renderItem={({ item }) => <Item contact={item} onPress={onSelect} />}
-        renderSectionHeader={({ section: { key } }) => <SectionHeader label={key} />}
-        ItemSeparatorComponent={() => <LinearLayout height="1px" mx="6px" bg="background.10" />}
+        renderItem={({ item }) => <Item contact={item} onPress={onSelect} pressType={pressType} />}
+        renderSectionHeader={({ section }) => <SectionHeader label={section.key ?? ''} />}
+        ItemSeparatorComponent={() => <ListSeparator marginX="16px" />}
+        ListHeaderComponent={
+          <>
+            {(!emptyHideHeader || (emptyHideHeader && data.length > 0)) && (
+              <LinearLayout paddingX="20px">
+                <SearchBar onFilter={setFilter} />
+              </LinearLayout>
+            )}
+          </>
+        }
         ListEmptyComponent={
-          <TextView fontWeight={600} color="text.0" fontSize="18px" pt="4px" textAlign="center">
-            {i18n.t('persistContact.noResultsFound')}
-          </TextView>
+          emptyComponent ?? (
+            <TextView fontWeight={600} color="text.0" fontSize="18px" pt="4px" textAlign="center">
+              {i18n.t('persistContact.noResultsFound')}
+            </TextView>
+          )
         }
       />
     </LinearLayout>

@@ -1,7 +1,7 @@
-import { api, sc, wallet, u, CONST, rpc } from '@cityofzion/neo-legacy-neon-js'
+import { api, sc, wallet, u, rpc } from '@cityofzion/neo-legacy-neon-js'
 import { TransactionOutput } from '@cityofzion/neo-legacy-neon-js/node_modules/@cityofzion/neon-core/lib/tx/components/TransactionOutput'
 import axios from 'axios'
-import { Platform, NativeModules } from 'react-native'
+import { Platform } from 'react-native'
 import { decryptNep2LegacyAndroid, decryptNep2LegacyIOS } from 'react-native-neo-sdk-bindings'
 
 import { DoraSDKProvider } from '../providers/DoraSDKProvider'
