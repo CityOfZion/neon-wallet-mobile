@@ -44,4 +44,8 @@ export class BlockchainHelper {
       return service
     })
   }
+
+  static isMnemonic = (word: string) => {
+    return word.split(' ').length > 1
+  }
 }

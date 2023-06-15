@@ -3452,22 +3452,6 @@
     lodash "^4.17.19"
     node-log-it "^2.0.0"
 
-"@moonlight-io/asteroid-sdk-js@git+https://github.com/Moonlight-io/asteroid-sdk-js.git":
-  version "0.25.0"
-  resolved "git+https://github.com/Moonlight-io/asteroid-sdk-js.git#7f067dc2f6be0bf77cabc10771c204035770be52"
-  dependencies:
-    "@cityofzion/neon-js" "^4.7.1"
-    "@types/lodash" "^4.14.157"
-    axios "^0.19.2"
-    bip39 "^3.0.2"
-    bs58 "^4.0.1"
-    build-url "^2.0.0"
-    crypto "^1.0.1"
-    elliptic "^6.5.3"
-    json-rpc-error "^2.0.0"
-    lodash "^4.17.19"
-    node-log-it "^2.0.0"
-
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"
