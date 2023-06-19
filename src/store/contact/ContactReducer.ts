@@ -2,7 +2,6 @@ import { CaseReducer, PayloadAction, createSlice, createAsyncThunk } from '@redu
 
 import { Storage } from '~/src/app/Storage'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
-import { Contact } from '~/src/models/redux/Contact'
 import { ContactState } from '~/src/types/reducers/contact'
 
 interface IContactReducer {
@@ -19,17 +18,17 @@ const migrateContactsFromStorage = createAsyncThunk('contacts/migrateContactFrom
   return Storage.contacts.load()
 })
 
-const saveContact: CaseReducer<IContactReducer, PayloadAction<Contact>> = (state, action) => {
-  const contact = action.payload
-  contact.id = contact.id === null ? UtilsHelper.uuid() : contact.id
+const saveContact: CaseReducer<IContactReducer, PayloadAction<ContactState>> = (state, action) => {
+  const contactState = action.payload
+  contactState.id = contactState.id === null ? UtilsHelper.uuid() : contactState.id
   if (!('data' in state)) {
-    state.data = [contact.deserialize]
+    state.data = [contactState]
   } else {
-    const findIndex = state.data.findIndex(it => it.id === contact.id)
+    const findIndex = state.data.findIndex(it => it.id === contactState.id)
     if (findIndex < 0) {
-      state.data = [...state.data, contact.deserialize]
+      state.data = [...state.data, contactState]
     } else {
-      state.data[findIndex] = contact.deserialize
+      state.data[findIndex] = contactState
     }
   }
 }
@@ -52,7 +51,7 @@ const ContactReducer = createSlice({
     builder.addCase(migrateContactsFromStorage.fulfilled, (state, action) => {
       const contacts = action.payload?.map(it => {
         it.adaptNewFormat()
-        return it.deserialize
+        return it.deserialize()
       })
       if (contacts) {
         if ('data' in state) {

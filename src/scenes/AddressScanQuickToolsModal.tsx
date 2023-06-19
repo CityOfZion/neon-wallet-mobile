@@ -6,6 +6,7 @@ import React, { useRef } from 'react'
 import { wrapper } from '../app/ApplicationWrapper'
 import { AlterMenuItem } from '../components/AlterMenuItem'
 import SwiperPanel, { useSwiperController } from '../components/SwiperPanel'
+import { useBlockchainServiceUtils } from '../hooks/useBlockchainServices'
 import { RootStackParamList } from '../navigation/AppNavigation'
 import { ModalStackParamList } from '../navigation/ModalStackNavigation'
 
@@ -20,6 +21,7 @@ export interface Props {
 
 export const AddressScanQuickToolsModal = (props: Props) => {
   const controller = useSwiperController(true)
+  const { getBlockchainByAddress } = useBlockchainServiceUtils()
 
   const callback = useRef<() => Promise<void> | void>()
 
@@ -56,10 +58,15 @@ export const AddressScanQuickToolsModal = (props: Props) => {
   }
 
   const handlePressContact = () => {
+    const blockchain = getBlockchainByAddress(props.route.params.address)
+    if (!blockchain) return
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.PersistContactModal.name,
       params: {
-        startingAddress: props.route.params.address,
+        startingAddress: {
+          blockchain,
+          addressOrDomain: props.route.params.address,
+        },
       },
     })
   }

@@ -19,9 +19,9 @@
     "postinstall": "node_modules/.bin/rn-nodeify --install crypto,assert,url,stream,events --hack"
   },
   "dependencies": {
-    "@cityofzion/blockchain-service": "0.4.1",
-    "@cityofzion/bs-neo-legacy": "0.4.1",
-    "@cityofzion/bs-neo3": "0.4.1",
+    "@cityofzion/blockchain-service": "0.4.2",
+    "@cityofzion/bs-neo-legacy": "0.4.2",
+    "@cityofzion/bs-neo3": "0.4.2",
     "@cityofzion/dora-ts": "^0.0.11",
     "@cityofzion/neo-legacy-neon-js": "npm:@cityofzion/neon-js@4.8.0",
     "@cityofzion/neo-legacy-neon-nep5": "npm:@cityofzion/neon-nep5@4.9.0",

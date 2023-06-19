@@ -15,6 +15,7 @@ interface Props {
   contactName?: string
   address?: string
   walletName?: string
+  addressAlias?: string
   accountName?: string
   hideTitles?: boolean
   hideButton?: boolean
@@ -26,14 +27,14 @@ export const TransactionAccountCard = (props: Props) => {
   const blockchain = props.address ? getBlockchainByAddress(props.address) : undefined
 
   const handlePress = () => {
-    if (!props.address) {
+    if (!props.address || !blockchain) {
       return
     }
 
     navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.PersistContactModal.name,
       params: {
-        startingAddress: props.address,
+        startingAddress: { addressOrDomain: props.address, blockchain },
       },
     })
   }
@@ -98,6 +99,11 @@ export const TransactionAccountCard = (props: Props) => {
               </ButtonView>
             )}
           </LinearLayout>
+          {props.addressAlias && (
+            <TextView numberOfLines={1} color="text.0" fontSize="16px" ellipsizeMode="middle" fontFamily="medium">
+              {props.addressAlias}
+            </TextView>
+          )}
           <TextView numberOfLines={1} color="primary" fontSize="16px" ellipsizeMode="middle" fontFamily="medium">
             {props.address}
           </TextView>

@@ -185,7 +185,11 @@ const InputWithValidation = (props: Props) => {
             {(props.onClearPress && props.value.length > 0) ||
               (props.onClearPress && props.forceClearButton && <InputClearButton onPress={props.onClearPress} />)}
 
-            {props.loading && <ActivityIndicator size="small" color={theme.colors.text[10]} />}
+            {props.loading && (
+              <LinearLayout ml="4px">
+                <ActivityIndicator size="small" color={theme.colors.text[10]} />
+              </LinearLayout>
+            )}
           </View>
         </LinearLayout>
       </LinearLayout>

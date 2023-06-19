@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Alert } from 'react-native'
 import { useDispatch } from 'react-redux'
 
@@ -25,7 +25,7 @@ import { LinearLayout, TextView, ImageView, ButtonView } from '~src/styles/style
 
 export interface PersistContactModalParams {
   contact?: Contact
-  // startingAddress?: string //FIX
+  startingAddress?: ContactAddresses
 }
 
 interface Props {
@@ -34,14 +34,18 @@ interface Props {
 }
 
 export const PersistContactModal = (props: Props) => {
-  const { contact } = props.route.params
+  const { contact, startingAddress } = props.route.params
 
   const controller = useSwiperController(true)
   const dispatch = useDispatch<DispatchResult>()
 
   const [name, setName] = useState(contact?.name ?? '')
-  const [nameIsValid, setNameIsValid] = useState(true)
-  const [addresses, setAddresses] = useState<ContactAddresses[]>(contact?.addresses ?? [])
+  const [nameIsValid, setNameIsValid] = useState(!!contact?.name)
+  const [addresses, setAddresses] = useState<ContactAddresses[]>(
+    contact?.addresses ? contact?.addresses : startingAddress ? [startingAddress] : []
+  )
+
+  const saving = useRef(false)
 
   const handleAddAddress = () => {
     props.navigation.navigate(wrapper.route.Modal.name, {
@@ -65,14 +69,21 @@ export const PersistContactModal = (props: Props) => {
     return isValid
   }
 
-  const save = () => {
-    Await.run('submit', async () => {
-      const contactToSave = contact ?? new Contact()
-      contactToSave.name = name
-      contactToSave.addresses = addresses
-      dispatch(contactReducerActions.saveContact(contactToSave))
-      controller.close()
-    })
+  const save = async () => {
+    try {
+      if (saving.current) return
+      saving.current = true
+
+      await Await.run('submit', async () => {
+        const contactToSave = contact ?? new Contact()
+        contactToSave.name = name
+        contactToSave.addresses = addresses
+        dispatch(contactReducerActions.saveContact(contactToSave.deserialize()))
+        controller.close()
+      })
+    } catch {
+      saving.current = false
+    }
   }
 
   const handleDelete = () => {
@@ -104,7 +115,13 @@ export const PersistContactModal = (props: Props) => {
   return (
     <SwiperPanel
       title={contact ? i18n.t('modals.editAccount.title') : i18n.t('persistContact.title.create')}
-      rightButton={<LabelButton label={i18n.t('persistContact.save')} onPress={save} disabled={!nameIsValid} />}
+      rightButton={
+        <LabelButton
+          label={i18n.t('persistContact.save')}
+          onPress={save}
+          disabled={!nameIsValid || addresses.length <= 0}
+        />
+      }
       leftButton={<LabelButton label={i18n.t('persistContact.cancel')} onPress={controller.close} />}
       onClose={props.navigation.goBack}
       controller={controller}
@@ -136,6 +153,7 @@ export const PersistContactModal = (props: Props) => {
                 borderBottomWidth="2px"
                 py="6px"
                 mb={index < addresses.length - 1 ? '36px' : '0px'}
+                key={index}
               >
                 <ImageView
                   source={BlockchainHelper.getIcon(address.blockchain)}

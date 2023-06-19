@@ -435,7 +435,7 @@
       "chainLabel": "CHAIN",
       "addressLabel": "ADDRESS",
       "chainPlaceholder": "Select Chain associated with address",
-      "addressPlaceholder": "Enter wallet or NNS address"
+      "addressPlaceholder": "Enter address or alias"
     },
     "walletConnectSelectionModal": {
       "account": {
@@ -934,11 +934,9 @@
     "name": "NAME",
     "namePlaceholder": "Enter contact name",
     "address": "ADDRESS",
-    "addressPlaceholder": "Enter contact address",
     "delete": "Delete",
     "save": "Save",
     "cancel": "Cancel",
-    "invalidAddress": "Invalid Address",
     "deleteContact": "DELETE CONTACT",
     "deleteContactSubtitle": "Deleting a contact will remove all their addresses from your contacts list and is permanent.",
     "deleteButtom": "Delete Contact",

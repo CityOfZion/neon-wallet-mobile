@@ -1982,30 +1982,30 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cityofzion/blockchain-service@0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/blockchain-service/-/blockchain-service-0.4.1.tgz#199446544f9c6fedf4092c2b913b5a6962306888"
-  integrity sha512-DLAw+6NyypchglvfKrIOv2NGBtLSo0+y126ZLKndWmY5pp3DtKOeo9EJER3c31wzqd3C79HR5CjlY6IyyLIf1g==
+"@cityofzion/blockchain-service@0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@cityofzion/blockchain-service/-/blockchain-service-0.4.2.tgz#d23ebd4b4991a34e5a0da392727aad38a875f134"
+  integrity sha512-RSms+vqEecFgGYvFDtalGXss/sazQkNJiavUk2iFKkM5HA0xFkppQqMP93iEm1wsh3BFt/dbQcsZIODz3FH9iQ==
   dependencies:
     "@moonlight-io/asteroid-sdk-js" "git+https://github.com/Moonlight-io/asteroid-sdk-js"
     axios "1.3.2"
 
-"@cityofzion/bs-neo-legacy@0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/bs-neo-legacy/-/bs-neo-legacy-0.4.1.tgz#6912df6563423f2f7ea9f72b809145d54a8da75d"
-  integrity sha512-cE21sQto5v7JHjhnfSG+SMrC0EgUyObSNcjMrgfJtFZPjiGJohTKPMwutCNL7n38yjLZIbULN3pUJ0PBuni1Kw==
+"@cityofzion/bs-neo-legacy@0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@cityofzion/bs-neo-legacy/-/bs-neo-legacy-0.4.2.tgz#c50430aed9bff2f7b27a84bf75538b34ca278b2a"
+  integrity sha512-0EibjyBs0XFjT5Z+u+sjkV8dvJK2oHAjUjGCV9WFc5UAkxpmWYGxn2bqJk6k6pztltpryP+4V2c1HZVe+l1/Tw==
   dependencies:
-    "@cityofzion/blockchain-service" "0.4.1"
+    "@cityofzion/blockchain-service" "0.4.2"
     "@cityofzion/dora-ts" "0.0.11"
     "@cityofzion/neon-js" "^4.8.3"
     axios "1.3.2"
 
-"@cityofzion/bs-neo3@0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/bs-neo3/-/bs-neo3-0.4.1.tgz#b162b1664870de586d8be611201dce8fed313a41"
-  integrity sha512-jBMWE10Va62HIvzII6ryt4u9VcA/WXuTXd8FLT3EPSw3VLJ3zqyxdYTgg20N0jgBlKnAeTtV3u8lXuBYzNbwGQ==
+"@cityofzion/bs-neo3@0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@cityofzion/bs-neo3/-/bs-neo3-0.4.2.tgz#b4a663f22628a7500981ed7d54a30d98cd3f94ea"
+  integrity sha512-Zlut3u9iSjBaCHQ6AHp3U/9udGmIY+OOwdOtfjfOJGjIYvST9DB2l+9ieQ8FI+Tx4tsnDb7a/NU7pjQFcEbEWg==
   dependencies:
-    "@cityofzion/blockchain-service" "0.4.1"
+    "@cityofzion/blockchain-service" "0.4.2"
     "@cityofzion/dora-ts" "0.0.11"
     "@cityofzion/neo3-parser" "1.6.0"
     "@cityofzion/neon-invoker" "1.4.0"
