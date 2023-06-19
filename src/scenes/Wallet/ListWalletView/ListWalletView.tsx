@@ -83,6 +83,7 @@ export const ListWalletView = (props: WalletProps) => {
   const handlePress = async (wallet: Wallet) => {
     dispatch(settingsReducerActions.setIsFirstTime(false))
     props.navigation.navigate(wrapper.route.GetWallet.name, { wallet })
+    fadeIn()
   }
 
   const handlePressFirstTime = () => {

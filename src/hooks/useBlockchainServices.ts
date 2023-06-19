@@ -90,6 +90,11 @@ export function useBlockchainServiceUtils() {
     [getBlockchainServices]
   )
 
+  const validateMnemonic = useCallback((word: string) => {
+    const list = String(word.trim()).split(' ')
+    return list.length === 12
+  }, [])
+
   const blockchainKeyList = useMemo(() => {
     const services = getBlockchainServices()
     return services.map(service => service.key)
@@ -102,6 +107,7 @@ export function useBlockchainServiceUtils() {
     validatePrivateKeyWithPasswordAllBlockchains,
     validateWifAllBlockchains,
     validateTextAllBlockchains,
+    validateMnemonic,
     getBlockchainByAddress,
     blockchainKeyList,
     getBlockchainByWif,

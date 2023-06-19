@@ -2,17 +2,19 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
+import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react'
 import { Alert, Platform } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
+import { Normalize } from '../app/Normalize'
+import { BlockchainHelper } from '../helpers/BlockchainHelper'
 import { GenericWalletURLHelper } from '../helpers/GenericWalletURLHelper'
 import { SecurityHelper } from '../helpers/SecurityHelper'
 import { useBlockchainServiceUtils } from '../hooks/useBlockchainServices'
 import { TabStackParamList } from '../navigation/TabNavigation'
 import { selectAccounts } from '../store/account/SelectorAccount'
-import { selectWalletIds, selectWallets } from '../store/wallet/SelectorWallet'
+import { selectWalletIds } from '../store/wallet/SelectorWallet'
 import { MnemonicSelectionInfo } from './MnemonicSelectionList'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
@@ -42,24 +44,13 @@ type InputType = 'address' | 'wif' | 'encryptedKey' | 'mnemonic'
 
 type FunctionsByInputType = {
   validation(value: string): boolean
-  handle(): void | Promise<void>
-  persist(): void | Promise<void>
-}
-
-const validateMnemonic = (word: string) => {
-  const list = String(word.trim()).split(' ')
-  return list.length === 12
-}
-
-const isMnemonic = (word: string) => {
-  return word.split(' ').length > 1
+  handle(value: string): void | Promise<void>
+  persist(value: string, addressSelected: AddressInfo[]): void | Promise<void>
 }
 
 const ImportKey = (props: ImportKeyProps) => {
-  const params = props.route.params
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const accounts = useSelector(selectAccounts)
-  const wallets = useSelector(selectWallets)
   const walletIds = useSelector(selectWalletIds)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
@@ -68,17 +59,16 @@ const ImportKey = (props: ImportKeyProps) => {
     getBlockchainServices,
     validateAddressAllBlockchains,
     validatePrivateKeyWithPasswordAllBlockchains,
-    validateTextAllBlockchains,
     validateWifAllBlockchains,
     getBlockchainByAddress,
+    validateMnemonic,
   } = useBlockchainServiceUtils()
 
-  const [inputValue, setInputValue] = useState(params?.data ?? '')
+  const [inputValue, setInputValue] = useState('')
   const [addressesFound, setAddressesFound] = useState<AddressInfo[]>([])
   const [inputIsValid, setInputIsValid] = useState<boolean>(false)
   const [addressesSelected, setAddressesSelected] = useState<AddressInfo[]>([])
-  const [showImportList, setShowImportList] = useState<boolean>(false)
-  const [disableButton, setDisableButton] = useState<boolean>(true)
+  const [isMnemonic, setIsMnemonic] = useState<boolean>(false)
 
   const inputType = useRef<InputType>()
 
@@ -92,35 +82,8 @@ const ImportKey = (props: ImportKeyProps) => {
 
   const handleOnScan = (data: string) => {
     if (typeof data !== 'string') return
-
     const urlWIF = GenericWalletURLHelper.validateAndParse(data)
-
-    setInputValue(urlWIF ?? UtilsHelper.removeAccents(data))
-  }
-
-  const handleOnChangeText = (text: string) => {
-    const textWithOutAccents = UtilsHelper.removeAccents(text)
-
-    const textValue = isMnemonic(text) ? textWithOutAccents.toLowerCase() : textWithOutAccents
-
-    setInputValue(textValue)
-  }
-
-  const validator = (text: string) => {
-    try {
-      const isValid = text.includes(' ') ? validateMnemonic(text) : validateTextAllBlockchains(text)
-
-      setInputIsValid(isValid)
-      return isValid
-    } catch {
-      showMessage({
-        message: i18n.t('blockchainServices.errorMessages.invalidInformation'),
-        type: 'danger',
-        duration: 8000,
-      })
-      setInputIsValid(false)
-      return false
-    }
+    handleChangeInput(UtilsHelper.removeAccents(urlWIF ?? data))
   }
 
   const mnemonicIsImported = useCallback(
@@ -142,73 +105,73 @@ const ImportKey = (props: ImportKeyProps) => {
     [accounts]
   )
 
-  const handleChangeWhenAddress = useCallback(() => {
-    const blockchainName = getBlockchainByAddress(inputValue)
+  const handleChangeWhenAddress = useCallback(
+    (address: string) => {
+      const blockchainName = getBlockchainByAddress(address)
 
-    if (!blockchainName) {
-      showMessage({
-        message: i18n.t('blockchainServices.errorMessages.blockchainNotFound'),
-        type: 'danger',
-      })
-      return
-    }
-
-    if (addressAlreadyExist(inputValue)) {
-      showMessage({
-        message: i18n.t('importKey.accountAlreadyExists', {
-          account: inputValue,
-        }),
-        animationDuration: 1000,
-        duration: 3000,
-      })
-      return
-    }
-
-    setAddressesFound([{ address: inputValue, blockchain: blockchainName }])
-    setAddressesSelected([{ address: inputValue, blockchain: blockchainName }])
-    setDisableButton(false)
-  }, [inputValue, addressAlreadyExist])
-
-  const handleChangeWhenEncryptedKey = useCallback(() => {
-    setDisableButton(false)
-  }, [])
-
-  const handleChangeWhenWIF = useCallback(() => {
-    const services = getBlockchainServices()
-
-    const addresses: AddressInfo[] = []
-
-    for (const service of services) {
-      if (!service.validateWif(inputValue)) return
-
-      const addressFromWif = service.generateAccountFromWif(inputValue)
-      if (addressAlreadyExist(addressFromWif)) {
+      if (!blockchainName) {
         showMessage({
-          message: `${i18n.t('importKey.accountAlreadyExists', {
-            account: addressFromWif,
-          })}`,
-          duration: 5000,
+          message: i18n.t('blockchainServices.errorMessages.blockchainNotFound'),
           type: 'danger',
         })
         return
       }
 
-      addresses.push({ address: addressFromWif, blockchain: service.key })
-    }
+      if (addressAlreadyExist(address)) {
+        showMessage({
+          message: i18n.t('importKey.accountAlreadyExists', {
+            account: address,
+          }),
+        })
+        return
+      }
 
-    if (addresses.length === 0) return
+      setInputIsValid(true)
+    },
+    [addressAlreadyExist, getBlockchainByAddress]
+  )
 
-    setAddressesFound(addresses)
-    setAddressesSelected(addresses)
-    setShowImportList(true)
-    setDisableButton(true)
-  }, [inputValue, addressAlreadyExist])
-
-  const handleChangeWhenMnemonic = useCallback(async () => {
-    setDisableButton(false)
+  const handleChangeWhenEncryptedKey = useCallback(() => {
+    setInputIsValid(true)
   }, [])
 
-  const persistWhenAddress = useCallback(() => {
+  const handleChangeWhenMnemonic = useCallback(() => {
+    setInputIsValid(true)
+  }, [])
+
+  const handleChangeWhenWIF = useCallback(
+    (wif: string) => {
+      const services = getBlockchainServices()
+
+      const addresses: AddressInfo[] = []
+
+      for (const service of services) {
+        if (!service.validateWif(wif)) return
+
+        const addressFromWif = service.generateAccountFromWif(wif)
+        if (addressAlreadyExist(addressFromWif)) {
+          showMessage({
+            message: `${i18n.t('importKey.accountAlreadyExists', {
+              account: addressFromWif,
+            })}`,
+            type: 'danger',
+          })
+          return
+        }
+
+        addresses.push({ address: addressFromWif, blockchain: service.key })
+      }
+
+      if (addresses.length === 0) return
+
+      setAddressesFound(addresses)
+      setAddressesSelected(addresses)
+      setInputIsValid(true)
+    },
+    [addressAlreadyExist, getBlockchainServices]
+  )
+
+  const persistWhenAddress = useCallback((address: string) => {
     Alert.alert(
       '',
       i18n.t('importKey.alertText'),
@@ -221,22 +184,22 @@ const ImportKey = (props: ImportKeyProps) => {
           text: i18n.t('importKey.alertConfirmButton'),
           onPress: () =>
             props.navigation.navigate(wrapper.route.ImportReadAccount.name, {
-              address: inputValue,
+              address,
             }),
         },
       ],
       { cancelable: true }
     )
-  }, [inputValue])
+  }, [])
 
-  const persistWhenEncryptedKey = useCallback(() => {
+  const persistWhenEncryptedKey = useCallback((encryptedKey: string) => {
     props.navigation.navigate(wrapper.route.BlockchainListPage.name, {
       config: {
         custom: {
           btnLabel: i18n.t('app.next'),
           btnOnPress: async blockchain => {
             props.navigation.navigate(wrapper.route.Passphrase.name, {
-              encryptedKey: inputValue,
+              encryptedKey,
               blockchain,
             })
           },
@@ -244,40 +207,41 @@ const ImportKey = (props: ImportKeyProps) => {
         },
       },
     })
-  }, [inputValue])
+  }, [])
 
-  const persistWhenWIF = useCallback(async () => {
-    const wallet = await blockchainActions.createWallet(
-      i18n.t('defaultNameWallet.importedWallet'),
-      'legacy',
-      undefined,
-      true
-    )
+  const persistWhenWIF = useCallback(
+    async (wif: string, addresses: AddressInfo[]) => {
+      const wallet = await blockchainActions.createWallet(
+        i18n.t('defaultNameWallet.importedWallet'),
+        'legacy',
+        undefined,
+        true
+      )
 
-    const accountToImport = addressesSelected.map(
-      ({ address, blockchain }): AccountToImport => ({
-        address,
-        blockchain,
-        wallet,
-        wif: inputValue,
-        type: 'legacy',
+      const accountToImport = addresses.map(
+        ({ address, blockchain }): AccountToImport => ({
+          address,
+          blockchain,
+          wallet,
+          wif,
+          type: 'legacy',
+        })
+      )
+
+      await blockchainActions.importAccounts(accountToImport)
+
+      props.navigation.replace(wrapper.route.Tab.name, {
+        screen: wrapper.route.ListWallets.name,
+        params: {
+          screen: wrapper.route.ListWalletsPage.name,
+          params: { wallet },
+        },
       })
-    )
+    },
+    [blockchainActions.createWallet, blockchainActions.importAccounts]
+  )
 
-    await blockchainActions.importAccounts(accountToImport)
-
-    props.navigation.replace(wrapper.route.Tab.name, {
-      screen: wrapper.route.ListWallets.name,
-      params: {
-        screen: wrapper.route.ListWalletsPage.name,
-        params: { wallet },
-      },
-    })
-  }, [blockchainActions, inputValue, wallets])
-
-  const persistWhenMnemonic = useCallback(async () => {
-    const mnemonic = inputValue
-
+  const persistWhenMnemonic = useCallback(async (mnemonic: string) => {
     const IsImported = await mnemonicIsImported(mnemonic)
 
     if (IsImported) {
@@ -312,12 +276,7 @@ const ImportKey = (props: ImportKeyProps) => {
             }
 
             const { totalEntries } = await service.provider.getAddressAbstracts(address, 1)
-
-            console.log('totalEntries', totalEntries)
-
-            if (!totalEntries || totalEntries <= 0) {
-              break
-            }
+            if (!totalEntries || totalEntries <= 0) break
           }
 
           accountsInfo.push({ address, wif, derivationIndex: index })
@@ -330,9 +289,9 @@ const ImportKey = (props: ImportKeyProps) => {
 
     props.navigation.navigate(wrapper.route.MnemonicSelectionList.name, {
       data: allAccountsInfo,
-      mnemonic: inputValue,
+      mnemonic,
     })
-  }, [inputValue])
+  }, [])
 
   const functionsByInputTypes = useMemo<Record<InputType, FunctionsByInputType>>(
     () => ({
@@ -366,62 +325,59 @@ const ImportKey = (props: ImportKeyProps) => {
       persistWhenWIF,
       handleChangeWhenMnemonic,
       persistWhenMnemonic,
+      validateMnemonic,
     ]
   )
 
-  const handleChangeInput = useCallback(async () => {
-    const functionsByInputType = Object.entries(functionsByInputTypes).find(([, values]) => {
-      const isValid = values.validation(inputValue)
+  const handleChangeInput = useCallback(
+    async (text: string) => {
+      setAddressesFound([])
+      setInputIsValid(false)
 
-      return isValid
-    })
+      const textWithOutAccents = UtilsHelper.removeAccents(text)
+      const isMnemonic = BlockchainHelper.isMnemonic(text)
+      const textValue = isMnemonic ? textWithOutAccents.toLowerCase() : textWithOutAccents
+      setInputValue(textValue)
+      setIsMnemonic(isMnemonic)
 
-    if (!functionsByInputType) {
-      return
-    }
+      const functionsByInputType = Object.entries(functionsByInputTypes).find(([, values]) => {
+        const isValid = values.validation(textValue)
 
-    const [key, functions] = functionsByInputType
+        return isValid
+      })
 
-    await functions.handle()
-    inputType.current = key as InputType
-  }, [inputValue, functionsByInputTypes])
+      if (!functionsByInputType) return
+      const [key, functions] = functionsByInputType
+
+      await functions.handle(textValue)
+
+      inputType.current = key as InputType
+    },
+    [functionsByInputTypes]
+  )
 
   const persistImport = useCallback(async () => {
     try {
       Await.init('importKey')
 
-      if (!inputType.current) {
-        return
-      }
+      if (!inputType.current) return
 
-      await functionsByInputTypes[inputType.current].persist()
+      await functionsByInputTypes[inputType.current].persist(inputValue, addressesSelected)
     } catch {
       showMessage({
         message: i18n.t('importKey.genericError'),
-        duration: 5000,
         type: 'danger',
       })
     } finally {
       Await.done('importKey')
     }
-  }, [functionsByInputTypes])
+  }, [functionsByInputTypes, inputValue, addressesSelected])
 
   useEffect(() => {
-    if (!showImportList) return
-
-    setDisableButton(addressesSelected.length <= 0)
-  }, [showImportList, addressesSelected])
-
-  useEffect(() => {
-    if (inputIsValid) {
-      handleChangeInput()
-      return
-    }
-
-    setShowImportList(false)
-    setAddressesFound([])
-    setDisableButton(true)
-  }, [inputIsValid])
+    const data = props.route.params?.data
+    if (!data) return
+    handleChangeInput(data)
+  }, [props.route.params, handleChangeInput])
 
   return (
     <ScreenLayout>
@@ -439,50 +395,51 @@ const ImportKey = (props: ImportKeyProps) => {
           >
             {i18n.t('importKey.enterAnAddress')}
           </TextView>
-          <LinearLayout orientation="horiz" justifyContent="center" mb={21}>
-            {isMnemonic(inputValue) && (
-              <>
-                <LinearLayout>
-                  <ImageView
-                    source={
-                      validateMnemonic(inputValue)
-                        ? require('~/src/assets/images/check-material.png')
-                        : require('~/src/assets/images/clear-material.png')
-                    }
-                  />
-                </LinearLayout>
-                <TextView
-                  ml="10px"
-                  textAlign="center"
-                  fontSize="16px"
-                  color={validateMnemonic(inputValue) ? theme.colors.primary : theme.colors.quinary}
-                  alignSelf="center"
-                  flexWrap="wrap"
-                >
-                  {i18n.t(validateMnemonic(inputValue) ? 'importKey.mnemonicComplete' : 'importKey.mnemonicIncorrect')}
-                </TextView>
-              </>
-            )}
-          </LinearLayout>
+
+          {isMnemonic && (
+            <LinearLayout orientation="horiz" justifyContent="center" mb={21}>
+              <ImageView
+                width={Normalize.scale(20)}
+                height={Normalize.scale(20)}
+                source={
+                  inputIsValid
+                    ? require('~/src/assets/images/check-material.png')
+                    : require('~/src/assets/images/clear-material.png')
+                }
+              />
+
+              <TextView
+                ml="10px"
+                textAlign="center"
+                fontSize="16px"
+                color={inputIsValid ? theme.colors.primary : theme.colors.quinary}
+                alignSelf="center"
+                flexWrap="wrap"
+              >
+                {i18n.t(inputIsValid ? 'importKey.mnemonicComplete' : 'importKey.mnemonicIncorrect')}
+              </TextView>
+            </LinearLayout>
+          )}
+
           <InputWithValidation
-            onChangeText={handleOnChangeText}
+            onChangeText={handleChangeInput}
             autoCapitalize={Platform.OS === 'android' ? 'none' : undefined} //fix duplicate words in android OS, in IOS the issue doesn't happen
             secure={Platform.OS === 'android' ? true : undefined}
             keyboardType={Platform.OS === 'android' ? 'visible-password' : undefined}
             color={theme.colors.text[0]}
             invalidColor={theme.colors.background[3]}
             value={inputValue}
-            validator={validator}
+            isValid={inputIsValid}
             separatorColor={theme.colors.background[5]}
             invalidSeparatorColor={theme.colors.background[4]}
             invalidMessageColor={theme.colors.quinary}
-            isMultiline={isMnemonic(inputValue)}
+            isMultiline={isMnemonic}
             fromImportKey
             sideMargins={0}
             onScan={handleOnScan}
           />
 
-          {showImportList && (
+          {addressesFound.length > 0 && (
             <LinearLayout mt="20px">
               <TextView textAlign="center" fontSize="16px" alignSelf="center" color="text.3" mb="10px">
                 {i18n.t('importKey.selectAccountTitile')}
@@ -498,7 +455,11 @@ const ImportKey = (props: ImportKeyProps) => {
           )}
 
           <LinearLayout mt={20} width="90%" flex={1} alignSelf="center" justifyContent="flex-end" mb="40px">
-            <ThemedButton label={i18n.t('app.next')} onPress={persistImport} disabled={disableButton} />
+            <ThemedButton
+              label={i18n.t('app.next')}
+              onPress={persistImport}
+              disabled={!inputIsValid || (addressesFound.length > 0 && addressesSelected.length <= 0)}
+            />
           </LinearLayout>
         </LinearLayout>
       </AwaitActivity>
