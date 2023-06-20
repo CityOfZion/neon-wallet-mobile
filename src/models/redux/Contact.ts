@@ -22,18 +22,20 @@ export class Contact implements ContactState {
 
   adaptNewFormat() {
     if (this.address && !this.addresses) {
-      this.addresses = []
-      this.addresses.push({ address: this.address, blockchain: 'neoLegacy' })
+      this.addresses = [{ addressOrDomain: this.address, blockchain: 'neoLegacy' }]
       return
     }
 
     if (this.addresses.every(address => typeof address === 'string')) {
-      this.addresses = (this.addresses as unknown as string[]).map(address => ({ address, blockchain: 'neoLegacy' }))
+      this.addresses = (this.addresses as unknown as string[]).map(address => ({
+        addressOrDomain: address,
+        blockchain: 'neoLegacy',
+      }))
     }
   }
 
-  get deserialize() {
-    const { adaptNewFormat, ...deserializedContact } = this
+  deserialize() {
+    const { adaptNewFormat, address, deserialize, ...deserializedContact } = this
     const result: ContactState = deserializedContact
     return result
   }

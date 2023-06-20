@@ -24,12 +24,14 @@ type Props = {
   destinationContact?: Contact
   destinationAccount?: Account
   destinationAddressIsValid?: boolean
+  destinationAddressAlias?: string
   account: Account
   onAddressChange(address?: string): void
   onContactChange(contact?: Contact): void
   onAccountChange(account?: Account): void
   onWalletChange(wallet?: Wallet): void
   onAddressValidation(isValid: boolean): void
+  onAddressAliasChange(addressAlias?: string): void
 }
 
 type HandleChange = {
@@ -45,12 +47,14 @@ export const DestinationInput = ({
   destinationContact,
   destinationAccount,
   destinationAddressIsValid,
+  destinationAddressAlias,
   account,
   onAddressChange,
   onContactChange,
   onAccountChange,
   onWalletChange,
   onAddressValidation,
+  onAddressAliasChange,
 }: Props) => {
   const { blockchainService } = useBlockchainService(account.blockchain)
   const { getBlockchainServiceLib, hasNNS } = useBlockchainServiceLib()
@@ -60,12 +64,11 @@ export const DestinationInput = ({
 
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
-  const [NNSAddress, setNNSAddress] = useState<string>()
   const [loading, setLoading] = useState(false)
 
   const title = useMemo(() => {
-    if (NNSAddress) {
-      return NNSAddress
+    if (destinationAddressAlias) {
+      return destinationAddressAlias
     }
 
     if (destinationContact?.name) {
@@ -75,11 +78,11 @@ export const DestinationInput = ({
     if (destinationWallet?.name && destinationAccount && destinationAccount.address) {
       return `${destinationWallet.name} / ${destinationAccount.name}`
     }
-  }, [destinationContact, destinationWallet, destinationAccount, NNSAddress])
+  }, [destinationContact, destinationWallet, destinationAccount, destinationAddressAlias])
 
   const validateAddressOrNSS = useCallback(
     debounce(async ({ addressOrDomain, selectedAccount, selectedContact, selectedWallet }: HandleChange) => {
-      setNNSAddress(undefined)
+      onAddressAliasChange(undefined)
 
       let isValid = false
       let address: string | undefined
@@ -89,7 +92,7 @@ export const DestinationInput = ({
         try {
           setLoading(true)
           const nnsAddress = await serviceLib.getOwnerOfNNS(addressOrDomain.toLowerCase())
-          setNNSAddress(addressOrDomain.toLowerCase())
+          onAddressAliasChange(addressOrDomain.toLowerCase())
           isValid = true
           address = nnsAddress
           onAddressChange(nnsAddress)

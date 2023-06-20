@@ -34,29 +34,38 @@ export const AddContactAddressModal = (props: Props) => {
   const controller = useSwiperController(true)
   const { getBlockchainServiceLib, hasNNS } = useBlockchainServiceLib()
 
-  const [blockchain, setBlockchain] = useState<BlockchainServiceKey>()
+  const [selectedBlockchain, setSelectedBlockchain] = useState<BlockchainServiceKey>()
   const [addressOrDomain, setAddressOrDomain] = useState<string>('')
   const [addressOrDomainIsValid, setAddressOrDomainIsValid] = useState(false)
+  const [validating, setValidating] = useState(false)
+  const [NNSAddress, setNNSAddress] = useState<string>('')
 
   const validateAddressOrNSS = useCallback(
-    debounce(async (input: string) => {
-      let isValid = false
-      if (blockchain) {
-        const service = getBlockchainServiceLib(blockchain)
+    debounce(async (input: string, blockchain?: BlockchainServiceKey) => {
+      try {
+        setValidating(true)
+        setNNSAddress('')
 
-        isValid = service.validateAddress(input)
-        if (!isValid && hasNNS(service) && service.validateNNSFormat(input)) {
-          try {
-            await service.getOwnerOfNNS('edge.neo')
-            isValid = true
-          } catch (error: any) {
-            alert(error.message)
+        let isValid = false
+        if (blockchain && input.length) {
+          const service = getBlockchainServiceLib(blockchain)
+
+          isValid = service.validateAddress(input)
+
+          if (!isValid && hasNNS(service) && service.validateNNSFormat(input)) {
+            try {
+              const nnsAddress = await service.getOwnerOfNNS(input)
+              setNNSAddress(nnsAddress)
+              isValid = true
+            } catch {}
           }
         }
+        setAddressOrDomainIsValid(isValid)
+      } finally {
+        setValidating(false)
       }
-      setAddressOrDomainIsValid(isValid)
     }, 1000),
-    [getBlockchainServiceLib, blockchain]
+    [getBlockchainServiceLib, hasNNS]
   )
 
   const handleSelectBlockchain = () => {
@@ -64,8 +73,8 @@ export const AddContactAddressModal = (props: Props) => {
       screen: wrapper.route.SelectChainModal.name,
       params: {
         onSelect: (blockchain: BlockchainServiceKey) => {
-          setBlockchain(blockchain)
-          validateAddressOrNSS(addressOrDomain)
+          setSelectedBlockchain(blockchain)
+          validateAddressOrNSS(addressOrDomain, blockchain)
         },
       },
     })
@@ -73,12 +82,12 @@ export const AddContactAddressModal = (props: Props) => {
 
   const handleChangeAddress = (input: string) => {
     setAddressOrDomain(input)
-    validateAddressOrNSS(input)
+    validateAddressOrNSS(input, selectedBlockchain)
   }
 
   const add = () => {
     controller.close()
-    if (onAdd && blockchain && addressOrDomain) onAdd({ blockchain, addressOrDomain })
+    if (onAdd && selectedBlockchain && addressOrDomain) onAdd({ blockchain: selectedBlockchain, addressOrDomain })
   }
 
   return (
@@ -93,10 +102,10 @@ export const AddContactAddressModal = (props: Props) => {
           <InputLabel title={i18n.t('modals.addContactAddressModal.chainLabel')} marginBottom="8px" />
           <Select
             value={
-              blockchain && (
+              selectedBlockchain && (
                 <LinearLayout orientation="horiz" alignItems="center" flexGrow={1} flexShrink={1}>
                   <ImageView
-                    source={BlockchainHelper.getIcon(blockchain)}
+                    source={BlockchainHelper.getIcon(selectedBlockchain)}
                     resizeMode="contain"
                     mr="12px"
                     width={28}
@@ -105,11 +114,11 @@ export const AddContactAddressModal = (props: Props) => {
 
                   <LinearLayout>
                     <TextView color="text.11" fontSize="12px" fontWeight={500}>
-                      {i18n.t(`blockchainServices.${blockchain}.label`)}
+                      {i18n.t(`blockchainServices.${selectedBlockchain}.label`)}
                     </TextView>
 
                     <TextView color="text.0" fontSize="18px" fontWeight={700}>
-                      {i18n.t(`blockchainServices.${blockchain}.id`)}
+                      {i18n.t(`blockchainServices.${selectedBlockchain}.id`)}
                     </TextView>
                   </LinearLayout>
                 </LinearLayout>
@@ -126,8 +135,10 @@ export const AddContactAddressModal = (props: Props) => {
           />
           <InputWithValidation
             placeholder={i18n.t('modals.addContactAddressModal.addressPlaceholder')}
+            loading={validating}
             onChangeText={handleChangeAddress}
-            color="primary"
+            title={NNSAddress}
+            color="text.0"
             isValid={addressOrDomainIsValid}
             value={addressOrDomain}
             invalidColor="quinary"
@@ -139,7 +150,11 @@ export const AddContactAddressModal = (props: Props) => {
           />
         </LinearLayout>
 
-        <ThemedButton label={i18n.t('app.add')} onPress={add} disabled={!addressOrDomainIsValid || !blockchain} />
+        <ThemedButton
+          label={i18n.t('app.add')}
+          onPress={add}
+          disabled={!addressOrDomainIsValid || !selectedBlockchain}
+        />
       </LinearLayout>
     </SwiperPanel>
   )

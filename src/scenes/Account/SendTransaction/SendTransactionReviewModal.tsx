@@ -40,6 +40,7 @@ export interface SendTransactionReviewModalParams {
   destinationAddress: string
   fiat?: string
   tip?: number
+  destinationAddressAlias?: string
   destinationAccount?: Account
   destinationWallet?: Wallet
   destinationContact?: Contact
@@ -60,6 +61,7 @@ export const SendTransactionReviewModal = (props: Props) => {
     destinationAccount,
     destinationContact,
     destinationWallet,
+    destinationAddressAlias,
     token,
     fee,
     tip,
@@ -211,6 +213,7 @@ export const SendTransactionReviewModal = (props: Props) => {
               </LinearLayout>
               <TransactionAccountCard
                 contactName={destinationContact?.name ?? undefined}
+                addressAlias={destinationAddressAlias}
                 address={destinationAddress}
                 accountName={destinationAccount?.name ?? undefined}
                 walletName={destinationWallet?.name ?? undefined}

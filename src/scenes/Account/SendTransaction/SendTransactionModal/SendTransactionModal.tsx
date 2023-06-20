@@ -56,6 +56,7 @@ export const SendTransactionModal = (props: Props) => {
   const [destinationAccount, setDestinationAccount] = useState<Account>()
   const [destinationWallet, setDestinationWallet] = useState<Wallet>()
   const [destinationContact, setDestinationContact] = useState<Contact>()
+  const [destinationAddressAlias, setDestinationAddressAlias] = useState<string>()
 
   const [token, setToken] = useState<Token | undefined>(initialToken)
   const [amount, setAmount] = useState<string>()
@@ -122,6 +123,7 @@ export const SendTransactionModal = (props: Props) => {
         destinationAccount,
         destinationWallet,
         destinationContact,
+        destinationAddressAlias,
       },
     })
   }
@@ -160,11 +162,13 @@ export const SendTransactionModal = (props: Props) => {
               onWalletChange={setDestinationWallet}
               destinationAddressIsValid={destinationAddressIsValid}
               onAddressValidation={setDestinationAddressIsValid}
+              onAddressAliasChange={setDestinationAddressAlias}
               account={account}
               destinationAddress={destinationAddress}
               destinationAccount={destinationAccount}
               destinationContact={destinationContact}
               destinationWallet={destinationWallet}
+              destinationAddressAlias={destinationAddressAlias}
             />
 
             <TokenSelect account={account} token={token} onTokenSelect={handleSelectToken} />
