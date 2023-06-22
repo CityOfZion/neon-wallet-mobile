@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import { debounce } from 'lodash'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { BlockchainServiceKey } from '~/src/blockchain'
@@ -21,6 +21,7 @@ import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components
 
 export interface AddContactAddressModalParams {
   onAdd?: (address: ContactAddresses) => void
+  address?: ContactAddresses
 }
 
 interface Props {
@@ -29,14 +30,14 @@ interface Props {
 }
 
 export const AddContactAddressModal = (props: Props) => {
-  const { onAdd } = props.route.params
+  const { onAdd, address: editAddress } = props.route.params
 
   const controller = useSwiperController(true)
   const { getBlockchainServiceLib, hasNNS } = useBlockchainServiceLib()
 
   const [selectedBlockchain, setSelectedBlockchain] = useState<BlockchainServiceKey>()
-  const [addressOrDomain, setAddressOrDomain] = useState<string>('')
-  const [addressOrDomainIsValid, setAddressOrDomainIsValid] = useState(false)
+  const [address, setAddress] = useState<string>('')
+  const [addressIsValid, setAddressIsValid] = useState<boolean>()
   const [validating, setValidating] = useState(false)
   const [NNSAddress, setNNSAddress] = useState<string>('')
 
@@ -48,19 +49,19 @@ export const AddContactAddressModal = (props: Props) => {
 
         let isValid = false
         if (blockchain && input.length) {
-          const service = getBlockchainServiceLib(blockchain)
+          try {
+            const service = getBlockchainServiceLib(blockchain)
 
-          isValid = service.validateAddress(input)
+            isValid = service.validateAddress(input)
 
-          if (!isValid && hasNNS(service) && service.validateNNSFormat(input)) {
-            try {
+            if (!isValid && hasNNS(service) && service.validateNNSFormat(input)) {
               const nnsAddress = await service.getOwnerOfNNS(input)
               setNNSAddress(nnsAddress)
               isValid = true
-            } catch {}
-          }
+            }
+          } catch {}
         }
-        setAddressOrDomainIsValid(isValid)
+        setAddressIsValid(isValid)
       } finally {
         setValidating(false)
       }
@@ -74,25 +75,33 @@ export const AddContactAddressModal = (props: Props) => {
       params: {
         onSelect: (blockchain: BlockchainServiceKey) => {
           setSelectedBlockchain(blockchain)
-          validateAddressOrNSS(addressOrDomain, blockchain)
+          validateAddressOrNSS(address, blockchain)
         },
       },
     })
   }
 
-  const handleChangeAddress = (input: string) => {
-    setAddressOrDomain(input)
-    validateAddressOrNSS(input, selectedBlockchain)
+  const handleChangeAddress = (input: string, blockchain?: BlockchainServiceKey) => {
+    setAddress(input)
+    validateAddressOrNSS(input, blockchain ?? selectedBlockchain)
   }
 
   const add = () => {
     controller.close()
-    if (onAdd && selectedBlockchain && addressOrDomain) onAdd({ blockchain: selectedBlockchain, addressOrDomain })
+    if (onAdd && selectedBlockchain && address) onAdd({ blockchain: selectedBlockchain, address })
   }
+
+  useEffect(() => {
+    if (!editAddress) return
+    setSelectedBlockchain(editAddress.blockchain)
+    handleChangeAddress(editAddress.address, editAddress.blockchain)
+  }, [editAddress])
 
   return (
     <SwiperPanel
-      title={i18n.t('modals.addContactAddressModal.title')}
+      title={i18n.t(
+        editAddress ? 'modals.addContactAddressModal.title.edit' : 'modals.addContactAddressModal.title.create'
+      )}
       rightButton={<CloseButton onPress={controller.close} />}
       onClose={props.navigation.goBack}
       controller={controller}
@@ -139,21 +148,21 @@ export const AddContactAddressModal = (props: Props) => {
             onChangeText={handleChangeAddress}
             title={NNSAddress}
             color="text.0"
-            isValid={addressOrDomainIsValid}
-            value={addressOrDomain}
+            isValid={addressIsValid}
+            value={address}
             invalidColor="quinary"
             invalidSeparatorColor="quinary"
             separatorColor="background.3"
             invalidMessageColor="quinary"
             sideMargins={0}
-            onScan={setAddressOrDomain}
+            onScan={setAddress}
           />
         </LinearLayout>
 
         <ThemedButton
-          label={i18n.t('app.add')}
+          label={i18n.t(editAddress ? 'app.save' : 'app.add')}
           onPress={add}
-          disabled={!addressOrDomainIsValid || !selectedBlockchain}
+          disabled={!addressIsValid || !selectedBlockchain}
         />
       </LinearLayout>
     </SwiperPanel>

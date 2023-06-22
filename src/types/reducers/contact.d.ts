@@ -8,4 +8,4 @@ export interface ContactState {
 
 export type ContactAddressesList = ContactAddresses[]
 
-export type ContactAddresses = { addressOrDomain: string; blockchain: BlockchainServiceKey }
+export type ContactAddresses = { address: string; blockchain: BlockchainServiceKey }

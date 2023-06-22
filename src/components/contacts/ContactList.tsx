@@ -67,7 +67,7 @@ const AddressItem = React.memo(({ address, onPress, contact, pressType }: Addres
         </TextView>
 
         <TextView color="primary" fontSize="16px" numberOfLines={1} ellipsizeMode="middle">
-          {address.addressOrDomain}
+          {address.address}
         </TextView>
       </LinearLayout>
     </ButtonView>
@@ -114,7 +114,7 @@ const Item = React.memo(({ contact, onPress, pressType }: ItemProps) => {
             <AddressItem address={item} onPress={onPress} contact={contact} pressType={pressType} />
           )}
           ItemSeparatorComponent={() => <LinearLayout height="1px" bg="background.10" />}
-          keyExtractor={(item, index) => `${contact.id}-${item.addressOrDomain}-${index}`}
+          keyExtractor={(item, index) => `${contact.id}-${item.address}-${index}`}
         />
       </LinearLayout>
     </ButtonView>
@@ -150,13 +150,13 @@ export const ContactList = ({
     return contactsCopy
       .filter(contact => contact.addresses.length > 0)
       .map(contact => {
-        contact.addresses.filter(({ blockchain }) => {
+        contact.addresses = contact.addresses.filter(({ blockchain }) => {
           return blockchain === filterByBlockchain
         })
 
         return contact
       })
-  }, [contacts, getBlockchainByAddress])
+  }, [contacts, getBlockchainByAddress, filterByBlockchain])
 
   const data = useMemo<SectionListData<Contact>[]>(() => {
     let items = filteredByBlockchain
@@ -167,7 +167,7 @@ export const ContactList = ({
       items = items.filter(
         contact =>
           contact.name?.toLowerCase().includes(filterLowercase) ||
-          contact.addresses.find(({ addressOrDomain }) => addressOrDomain.toLowerCase().includes(filterLowercase))
+          contact.addresses.find(({ address }) => address.toLowerCase().includes(filterLowercase))
       )
     }
 

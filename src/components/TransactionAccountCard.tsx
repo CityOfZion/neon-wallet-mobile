@@ -34,7 +34,7 @@ export const TransactionAccountCard = (props: Props) => {
     navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.PersistContactModal.name,
       params: {
-        startingAddress: { addressOrDomain: props.address, blockchain },
+        startingAddress: { address: props.address, blockchain },
       },
     })
   }

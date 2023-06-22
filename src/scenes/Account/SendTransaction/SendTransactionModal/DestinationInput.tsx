@@ -35,7 +35,7 @@ type Props = {
 }
 
 type HandleChange = {
-  addressOrDomain: string
+  address: string
   selectedAccount?: Account
   selectedWallet?: Wallet
   selectedContact?: Contact
@@ -81,45 +81,44 @@ export const DestinationInput = ({
   }, [destinationContact, destinationWallet, destinationAccount, destinationAddressAlias])
 
   const validateAddressOrNSS = useCallback(
-    debounce(async ({ addressOrDomain, selectedAccount, selectedContact, selectedWallet }: HandleChange) => {
+    debounce(async ({ address, selectedAccount, selectedContact, selectedWallet }: HandleChange) => {
       onAddressAliasChange(undefined)
 
       let isValid = false
-      let address: string | undefined
+      let resovedAddress: string | undefined
 
       const serviceLib = getBlockchainServiceLib(account.blockchain)
-      if (hasNNS(serviceLib) && serviceLib.validateNNSFormat(addressOrDomain)) {
+      if (hasNNS(serviceLib) && serviceLib.validateNNSFormat(address)) {
         try {
           setLoading(true)
-          const nnsAddress = await serviceLib.getOwnerOfNNS(addressOrDomain.toLowerCase())
-          onAddressAliasChange(addressOrDomain.toLowerCase())
+          resovedAddress = await serviceLib.getOwnerOfNNS(address.toLowerCase())
+          onAddressAliasChange(address.toLowerCase())
           isValid = true
-          address = nnsAddress
-          onAddressChange(nnsAddress)
+          onAddressChange(resovedAddress)
         } finally {
           setLoading(false)
         }
-      } else if (blockchainService.validateAddress(addressOrDomain)) {
+      } else if (blockchainService.validateAddress(address)) {
         isValid = true
-        address = addressOrDomain
+        resovedAddress = address
       }
 
       onAddressValidation(isValid)
       const foundedAccount = selectedAccount
         ? selectedAccount
-        : address
+        : resovedAddress
         ? accounts.find(account => account.address === address)
         : undefined
 
       const foundedWallet = selectedWallet
         ? selectedWallet
-        : address && foundedAccount
+        : resovedAddress && foundedAccount
         ? foundedAccount.getWallet(wallets)
         : undefined
 
       const foundedContact = selectedContact
         ? selectedContact
-        : contacts.find(contact => contact.addresses.some(address => address.addressOrDomain === addressOrDomain))
+        : contacts.find(contact => contact.addresses.some(contactAddress => contactAddress.address === address))
 
       onAccountChange(foundedAccount)
       onWalletChange(foundedWallet)
@@ -128,10 +127,10 @@ export const DestinationInput = ({
     [getBlockchainServiceLib, blockchainService]
   )
 
-  const handleSelectContactDestination = (selectedContact: Contact, { addressOrDomain }: ContactAddresses) => {
-    onAddressChange(addressOrDomain)
+  const handleSelectContactDestination = (selectedContact: Contact, { address }: ContactAddresses) => {
+    onAddressChange(address)
     validateAddressOrNSS({
-      addressOrDomain,
+      address,
       selectedContact,
     })
   }
@@ -140,7 +139,7 @@ export const DestinationInput = ({
     if (!selectedAccount.address) return
     onAddressChange(selectedAccount.address)
     validateAddressOrNSS({
-      addressOrDomain: selectedAccount.address,
+      address: selectedAccount.address,
       selectedAccount,
     })
   }
@@ -148,14 +147,14 @@ export const DestinationInput = ({
   const handleAddressDestinationChange = (text: string) => {
     onAddressChange(text)
     validateAddressOrNSS({
-      addressOrDomain: text,
+      address: text,
     })
   }
 
   const handleScan = (data: IURI | string) => {
-    const addressOrDomain = typeof data === 'string' ? data : data.address
-    onAddressChange(addressOrDomain)
-    validateAddressOrNSS({ addressOrDomain })
+    const address = typeof data === 'string' ? data : data.address
+    onAddressChange(address)
+    validateAddressOrNSS({ address })
   }
 
   return (

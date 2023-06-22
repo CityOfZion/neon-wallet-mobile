@@ -31,14 +31,14 @@ interface ContactDetailsProps {
 }
 
 interface ItemProps {
-  addressOrDomain: string
+  address: string
   blockchain: BlockchainServiceKey
 }
 
-const Item = React.memo(({ addressOrDomain, blockchain }: ItemProps) => {
+const Item = React.memo(({ address, blockchain }: ItemProps) => {
   return (
     <ButtonView
-      onPress={() => UtilsHelper.copyToClipboard(addressOrDomain)}
+      onPress={() => UtilsHelper.copyToClipboard(address)}
       paddingY="18px"
       orientation="horiz"
       alignItems="center"
@@ -51,7 +51,7 @@ const Item = React.memo(({ addressOrDomain, blockchain }: ItemProps) => {
         </TextView>
 
         <TextView color="primary" fontSize="16px" numberOfLines={1} ellipsizeMode="middle">
-          {addressOrDomain}
+          {address}
         </TextView>
       </LinearLayout>
 
@@ -114,9 +114,9 @@ export const ContactDetails = (props: ContactDetailsProps) => {
         <FlatList
           style={{ width: '100%' }}
           data={contact.addresses}
-          renderItem={({ item }) => <Item addressOrDomain={item.addressOrDomain} blockchain={item.blockchain} />}
+          renderItem={({ item }) => <Item address={item.address} blockchain={item.blockchain} />}
           ItemSeparatorComponent={() => <ListSeparator />}
-          keyExtractor={(item, index) => `${item.addressOrDomain}-${index}`}
+          keyExtractor={(item, index) => `${item.address}-${index}`}
         />
       </LinearLayout>
     </ScreenLayout>
