@@ -58,15 +58,29 @@ export const PersistContactModal = (props: Props) => {
     })
   }
 
+  const handleEditAddress = (index: number, address: ContactAddresses) => {
+    props.navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.AddContactAddressModal.name,
+      params: {
+        onAdd: (newAddress: ContactAddresses) => {
+          setAddresses(prevState =>
+            prevState.map((prevAddress, prevIndex) => (prevIndex === index ? newAddress : prevAddress))
+          )
+        },
+        address,
+      },
+    })
+  }
+
   const handleDeleteAddress = (index: number) => {
     setAddresses(prevState => prevState.filter((_, stateIndex) => stateIndex !== index))
   }
 
-  const handleValidateName = (name: string) => {
-    const isValid = name.length > 0 && name.length <= 20
+  const handleChangeName = (input: string) => {
+    setName(input)
 
+    const isValid = input.length > 0 && input.length <= 20
     setNameIsValid(isValid)
-    return isValid
   }
 
   const save = async () => {
@@ -114,7 +128,7 @@ export const PersistContactModal = (props: Props) => {
 
   return (
     <SwiperPanel
-      title={contact ? i18n.t('modals.editAccount.title') : i18n.t('persistContact.title.create')}
+      title={contact ? i18n.t('persistContact.title.edit') : i18n.t('persistContact.title.create')}
       rightButton={
         <LabelButton
           label={i18n.t('persistContact.save')}
@@ -132,10 +146,10 @@ export const PersistContactModal = (props: Props) => {
             <InputLabel title={i18n.t('persistContact.name')} marginBottom="8px" />
             <InputWithValidation
               placeholder={i18n.t('persistContact.namePlaceholder')}
-              onChangeText={setName}
+              onChangeText={handleChangeName}
               color="white"
               value={name}
-              validator={handleValidateName}
+              isValid={nameIsValid}
               separatorColor="background.3"
               invalidColor="background.3"
               invalidMessageColor="quinary"
@@ -146,7 +160,7 @@ export const PersistContactModal = (props: Props) => {
 
             <InputLabel title={i18n.t('persistContact.address')} marginTop="12px" />
             {addresses.map((address, index) => (
-              <LinearLayout
+              <ButtonView
                 orientation="horiz"
                 alignItems="center"
                 borderColor="background.10"
@@ -154,6 +168,7 @@ export const PersistContactModal = (props: Props) => {
                 py="6px"
                 mb={index < addresses.length - 1 ? '36px' : '0px'}
                 key={index}
+                onPress={() => handleEditAddress(index, address)}
               >
                 <ImageView
                   source={BlockchainHelper.getIcon(address.blockchain)}
@@ -171,7 +186,7 @@ export const PersistContactModal = (props: Props) => {
                   ellipsizeMode="middle"
                   mx="12px"
                 >
-                  {address.addressOrDomain}
+                  {address.address}
                 </TextView>
 
                 <ButtonView onPress={() => handleDeleteAddress(index)}>
@@ -182,7 +197,7 @@ export const PersistContactModal = (props: Props) => {
                     resizeMode="contain"
                   />
                 </ButtonView>
-              </LinearLayout>
+              </ButtonView>
             ))}
 
             <ButtonView
@@ -195,7 +210,7 @@ export const PersistContactModal = (props: Props) => {
               borderRadius="8px"
               paddingY="16px"
               mt="36px"
-              onPress={handleAddAddress}
+              onPress={() => handleAddAddress()}
             >
               <ImageView
                 resizeMode="contain"

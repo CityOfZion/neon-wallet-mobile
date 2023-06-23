@@ -65,7 +65,7 @@ export const AddressScanQuickToolsModal = (props: Props) => {
       params: {
         startingAddress: {
           blockchain,
-          addressOrDomain: props.route.params.address,
+          address: props.route.params.address,
         },
       },
     })

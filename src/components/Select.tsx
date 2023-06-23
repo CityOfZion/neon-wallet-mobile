@@ -24,10 +24,10 @@ export const Select = ({ value, onPress, placeholder, withoutIcon }: Props) => {
       {isPlaceholder || typeof value === 'string' ? (
         <TextView
           color={isPlaceholder ? 'text.10' : 'text.0'}
-          fontSize="16px"
           flexGrow={1}
           flexShrink={1}
           numberOfLines={1}
+          fontSize={18}
           ellipsizeMode="middle"
         >
           {isPlaceholder ? placeholder : value}

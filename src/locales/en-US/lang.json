@@ -431,7 +431,10 @@
       "title": "Select chain"
     },
     "addContactAddressModal": {
-      "title": "Add an address",
+      "title": {
+        "create": "Add an address",
+        "edit": "Edit an address"
+      },
       "chainLabel": "CHAIN",
       "addressLabel": "ADDRESS",
       "chainPlaceholder": "Select Chain associated with address",
@@ -929,7 +932,7 @@
   "persistContact": {
     "title": {
       "create": "Create contact",
-      "edit": "Edit contact"
+      "edit": "Edit"
     },
     "name": "NAME",
     "namePlaceholder": "Enter contact name",
