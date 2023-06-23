@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Alert } from 'react-native'
 import { useDispatch } from 'react-redux'
 
@@ -39,11 +39,9 @@ export const PersistContactModal = (props: Props) => {
   const controller = useSwiperController(true)
   const dispatch = useDispatch<DispatchResult>()
 
-  const [name, setName] = useState(contact?.name ?? '')
-  const [nameIsValid, setNameIsValid] = useState(!!contact?.name)
-  const [addresses, setAddresses] = useState<ContactAddresses[]>(
-    contact?.addresses ? contact?.addresses : startingAddress ? [startingAddress] : []
-  )
+  const [name, setName] = useState('')
+  const [nameIsValid, setNameIsValid] = useState<boolean>()
+  const [addresses, setAddresses] = useState<ContactAddresses[]>([])
 
   const saving = useRef(false)
 
@@ -125,6 +123,19 @@ export const PersistContactModal = (props: Props) => {
       { cancelable: true }
     )
   }
+
+  useEffect(() => {
+    if (!contact || !contact.name) return
+
+    handleChangeName(contact.name)
+    setAddresses(contact.addresses)
+  }, [contact])
+
+  useEffect(() => {
+    if (!startingAddress) return
+
+    setAddresses([startingAddress])
+  }, [])
 
   return (
     <SwiperPanel
