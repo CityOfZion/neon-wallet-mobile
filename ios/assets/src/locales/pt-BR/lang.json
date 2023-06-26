@@ -298,22 +298,34 @@
     }
   },
   "modals": {
+    "sendSelectionModal": {
+      "wallet": {
+        "title": "#translateme",
+        "subtitle": "#translateme"
+      },
+      "account": {
+        "title": "#translateme",
+        "label": "#translateme",
+        "subtitle": "#translateme"
+      }
+    },
+    "receiveSelectionModal": {
+      "account": {
+        "title": "#translateme",
+        "subtitle": "#translateme",
+        "label": "#translateme"
+      },
+      "wallet": {
+        "title": "#translateme",
+        "subtitle": "#translateme"
+      }
+    },
     "backupInfoModal": {
       "title": "#translateme",
       "description1": "#translateme",
       "description2": "#translateme",
       "description3": "#translateme",
       "buttonLabel": "#translateme"
-    },
-    "receiveTransactionAccountSelectionModal": {
-      "title": "#translateme",
-      "subtitle": "#translateme",
-      "label": "#translateme"
-    },
-    "receiveTransactionWalletSelectionModal": {
-      "title": "#translateme",
-      "subtitle": "#translateme",
-      "label": "#translateme"
     },
     "receiveTransactionModal": {
       "title": "#translateme",
@@ -339,11 +351,6 @@
       "shareOrCopy": "#translateme",
       "paymentRequestDetails": "#translateme"
     },
-    "sendTransactionAccountSelectionModal": {
-      "title": "#translateme",
-      "label": "#translateme",
-      "subtitle": "#translateme"
-    },
     "sendTransactionConfirmationModal": {
       "title": "#translateme",
       "header": "#translateme",
@@ -358,11 +365,6 @@
       "fee": "%{tokenSymbol} #translateme",
       "sender": "#translateme",
       "recipient": "#translateme"
-    },
-    "sendTransactionWalletSelectionModal": {
-      "title": "#translateme",
-      "subtitle": "#translateme",
-      "noFunds": "#translateme"
     },
     "sendTransactionModal": {
       "title": "#translateme",
@@ -454,7 +456,8 @@
     "WCTransactionRequestModal": {
       "unsupportedMethod": "#translateme",
       "errorToGetAccount": "#translateme",
-      "unexpectedError": "#translateme"
+      "unexpectedError": "#translateme",
+      "rejectByUser": "#translateme"
     },
     "transactionRequest": {
       "title": "#translateme",
@@ -472,6 +475,12 @@
     }
   },
   "components": {
+    "bars": {
+      "customMode": "#translateme",
+      "testnetMode": "#translateme",
+      "noInternet": "#translateme",
+      "warning": "#translateme"
+    },
     "contractDetailsBox": {
       "hash": "Hash",
       "method": "Método"
@@ -493,7 +502,6 @@
       "token": "#translateme",
       "value": "#translateme"
     },
-
     "transactionInput": {
       "selectDifferentAccount": "Select a different Account",
       "transactionDetails": "TRANSACTION DETAILS",
@@ -567,6 +575,7 @@
   "walletconnect": {
     "alert": {
       "text": "#translateme",
+      "description": "#translateme",
       "unexpectedErrorToSelectAccount": "#translateme"
     },
     "noDAppsConnected": "#translateme",
