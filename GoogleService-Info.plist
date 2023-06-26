@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>920980203165-ibrgstu3iold5ur7etupvcthdt27h332.apps.googleusercontent.com</string>
+	<string>209775750653-f2dvvc0cs024rcca06ldn0d0in3ipub1.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.920980203165-ibrgstu3iold5ur7etupvcthdt27h332</string>
+	<string>com.googleusercontent.apps.209775750653-f2dvvc0cs024rcca06ldn0d0in3ipub1</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAlW6ad7LX-NtCUX7yCxK2Zxary8z-6q-Y</string>
+	<string>AIzaSyCwP2gRfPdVLXvjJNifrkMzORqzT1RRZ9M</string>
 	<key>GCM_SENDER_ID</key>
-	<string>920980203165</string>
+	<string>209775750653</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>io.cityofzion.neon</string>
+	<string>io.coz.neonwallet</string>
 	<key>PROJECT_ID</key>
-	<string>neon-wallet-mobile</string>
+	<string>neon-wallet-2ec5d</string>
 	<key>STORAGE_BUCKET</key>
-	<string>neon-wallet-mobile.appspot.com</string>
+	<string>neon-wallet-2ec5d.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:920980203165:ios:1f74b0af14eabe35175674</string>
+	<string>1:209775750653:ios:fb9e0b32b1430051c17d94</string>
+	<key>DATABASE_URL</key>
+	<string>https://neon-wallet-2ec5d.firebaseio.com</string>
 </dict>
 </plist>

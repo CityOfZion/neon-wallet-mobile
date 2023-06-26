@@ -35,7 +35,6 @@
 		FAC4877125800A790076ACC1 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = FAC4877025800A790076ACC1 /* assets */; };
 		FAD7DCB7257FC2C00092EF9B /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		FAE7F48325A4ECB40014C2EC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAE7F48225A4ECB40014C2EC /* GoogleService-Info.plist */; };
-		FB7B86252A30D28D006F21D5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FB7B86242A30D28D006F21D5 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,7 +75,6 @@
 		FA142A9025DC580D00FEFBC8 /* NeoSwift.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NeoSwift.m; sourceTree = "<group>"; };
 		FAC4877025800A790076ACC1 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		FAE7F48225A4ECB40014C2EC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
-		FB7B86242A30D28D006F21D5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,7 +149,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				FB7B86242A30D28D006F21D5 /* GoogleService-Info.plist */,
 				712203FA288EFB3600F60089 /* Resources */,
 				71A4DE0A25DB334E0003DCD9 /* Neon-Bridging-Header.h */,
 				FAC4877025800A790076ACC1 /* assets */,
@@ -305,7 +302,6 @@
 				71220402288EFB7500F60089 /* sofiapro-light.otf in Resources */,
 				FAE7F48325A4ECB40014C2EC /* GoogleService-Info.plist in Resources */,
 				71220405288EFB7500F60089 /* sofiapro-semibold.otf in Resources */,
-				FB7B86252A30D28D006F21D5 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

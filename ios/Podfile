@@ -23,9 +23,6 @@ target 'Neon' do
     :hermes_enabled => podfile_properties['expo.jsEngine'] == 'hermes'
   )
 
-  use_frameworks! :linkage => :static
-  $RNFirebaseAsStaticFramework = true
-  
   # Uncomment to opt-in to using Flipper
    #
    # if !ENV['CI']
