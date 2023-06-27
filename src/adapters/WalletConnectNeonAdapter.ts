@@ -1,11 +1,11 @@
-import { TAdapterMethodParam, WalletConnectNeo3Adapter } from '@cityofzion/wallet-connect-sdk-wallet-react'
+import { TAdapterMethodParam, AbstractWalletConnectNeonAdapter } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { plainToClass } from 'class-transformer'
 
 import { WalletConnectHelper } from '../helpers/WalletConnectHelper'
 import { Account } from '../models/redux/Account'
 import { RootStore } from '../store/RootStore'
 
-export class WalletConnectNeonAdapter extends WalletConnectNeo3Adapter {
+export class WalletConnectNeonAdapter extends AbstractWalletConnectNeonAdapter {
   async getAccountString({ session }: TAdapterMethodParam): Promise<string> {
     const {
       account: { data: accounts },
