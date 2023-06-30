@@ -23,7 +23,7 @@ jobs:
         with:
           cache: gradle
           distribution: temurin
-          java-version: 17    
+          java-version: 16    
 
       - name: Install yarn
         run: npm install --global yarn    
