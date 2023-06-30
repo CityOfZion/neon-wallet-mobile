@@ -44,7 +44,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
           NODE_OPTIONS: "--max_old_space_size=4096"
-        run: yarn detox build --configuration android.emu.release
+        run: yarn detox build --configuration android.emu.release --stacktrace
 
       - name: Get device name
         id: device
