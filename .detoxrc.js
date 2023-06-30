@@ -25,7 +25,7 @@ module.exports = {
     'ios.release': {
       type: 'ios.app',
       binaryPath: 'ios/build/Build/Products/Release-iphonesimulator/neon.app',
-      build: 'yarn build:ios && cd ios && pod install && cd .. && xcodebuild -workspace ./ios/Neon.xcworkspace -scheme Neon-release archive -archivePath ./Neon.xcarchive'
+      build: 'xcodebuild -workspace ./ios/Neon.xcworkspace -scheme Neon-release archive -archivePath ./Neon.xcarchive'
     },
   },
   configurations: {
