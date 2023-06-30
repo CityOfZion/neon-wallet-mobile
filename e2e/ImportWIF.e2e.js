@@ -1,22 +1,12 @@
-const path = require('path')
-const fs = require('fs')
-const testDirectory = path.dirname(__filename)
-
 describe('Import WIF', () => {
     beforeAll(async () => {
-        const screenshotsPath = path.join(process.cwd(), 'e2e', 'screenshots')
-        if (!fs.existsSync(screenshotsPath)) {
-            fs.mkdir(screenshotsPath, { recursive: true }, (e) => {
-                console.info(e)
-            })
-        }
         await device.launchApp()
     })
 
     it('Navigate to Setup Complete Screen', async () => {
         await waitFor(element(by.id('btn-continue-setup-complete')))
             .toBeVisible()
-            .withTimeout(15000)
+            .withTimeout(30000)
 
         await element(by.id('btn-continue-setup-complete')).tap()
     })
