@@ -25,7 +25,7 @@ module.exports = {
     'ios.release': {
       type: 'ios.app',
       binaryPath: 'ios/build/Build/Products/Release-iphonesimulator/neon.app',
-      build: 'xcodebuild -workspace ./ios/Neon.xcworkspace -scheme Neon-release archive -archivePath ./Neon.xcarchive'
+      build: 'xcodebuild -workspace ios/Neon.xcworkspace -configuration Release -scheme Neon-release -sdk iphonesimulator -derivedDataPath ios/build'
     },
   },
   configurations: {
