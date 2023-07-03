@@ -196,9 +196,10 @@ const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
   )
 }
 
-const TabButton = (props: BottomTabBarProps & TabButtonProps) => {
+const TabButton = (props: BottomTabBarProps & TabButtonProps & { testID?: string }) => {
   return (
     <ButtonView
+      testID={props.testID}
       onPress={() => {
         props.controller.close()
         props.navigation.navigate(props.route.name)
@@ -342,6 +343,7 @@ const FooterBar: React.FC<BottomTabBarProps> = (props: BottomTabBarProps) => {
           />
 
           <TabButton
+            testID="tab-btn-more"
             activeSource={require('~src/assets/images/button-more-white.png')}
             source={require('~src/assets/images/button-more-disabled.png')}
             route={wrapper.route.More}

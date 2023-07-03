@@ -70,6 +70,7 @@ interface Props {
   forceClearButton?: boolean
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters'
   loading?: boolean
+  testID?: string
 }
 
 const InputWithValidation = (props: Props) => {
@@ -142,6 +143,7 @@ const InputWithValidation = (props: Props) => {
           p={props.fromImportKey ? '2%' : undefined}
         >
           <InputTextView
+            testID={props.testID}
             autoCapitalize={props.autoCapitalize ?? 'none'}
             onChangeText={handleChangeText}
             color={fontColor}

@@ -93,6 +93,7 @@ export const ListWalletView = (props: WalletProps) => {
 
   return (
     <ScreenLayout
+      testID="scene-list-wallet-view"
       withoutHeader
       contentStyle={{
         padding: 0,

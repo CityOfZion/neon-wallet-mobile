@@ -251,7 +251,15 @@ const OnboardingPage = (props: OnboardingPageProps) => {
       <LinearLayout mt={currentProgress >= 1 ? '2%' : '6%'}>
         <ProgressBar progressBarStatus={currentProgress} show={currentProgress < 1} text={progressMessage} />
         {currentProgress >= 1 && (
-          <ButtonView onPress={finish} border={1} borderColor="primary" borderRadius={7} width="90%" alignSelf="center">
+          <ButtonView
+            testID="btn-continue-setup-complete"
+            onPress={finish}
+            border={1}
+            borderColor="primary"
+            borderRadius={7}
+            width="90%"
+            alignSelf="center"
+          >
             <TextView fontSize="19px" py="3%" color="primary" textAlign="center">
               Continue
             </TextView>

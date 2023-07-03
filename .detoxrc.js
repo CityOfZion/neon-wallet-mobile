@@ -1,5 +1,3 @@
-require('dotenv').config()
-const {ANDROID_EMULATOR, IOS_SIMULATOR} = process.env
 module.exports = {
   testRunner: "jest",
   runnerConfig: "e2e/config.json",
@@ -8,13 +6,13 @@ module.exports = {
     simulator: {
       type: 'ios.simulator',
       device: {
-        type:  IOS_SIMULATOR
+        type:  'iPhone 14'
       }
     },
     emulator: {
       type: "android.emulator",
       device: {
-        avdName: ANDROID_EMULATOR
+        avdName: "Pixel_6_API_31"
       }
     }
   },

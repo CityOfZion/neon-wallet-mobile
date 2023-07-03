@@ -26,6 +26,7 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 .watchmanconfig
+*.log
 
 # Android/IntelliJ
 #
@@ -81,3 +82,6 @@ ios/assets/src/assets/tokens/images/
 # private network feature
 default.neo-express
 invoke-files
+
+# tests screenshots
+e2e/screenshots

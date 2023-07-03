@@ -42,6 +42,7 @@ interface Props {
   labelPx?: string | number
   adjustsFontSizeToFit?: boolean
   isDark?: boolean
+  testID?: string
 }
 
 const LabelComponent = (props: Props) => {
@@ -132,6 +133,7 @@ const ThemedButton: React.FC<Props> = props => {
 
   return (
     <ButtonView
+      testID={props.testID}
       onHideUnderlay={() => {
         setSelected(false)
       }}
