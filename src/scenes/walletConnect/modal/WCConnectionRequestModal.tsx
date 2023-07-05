@@ -26,6 +26,7 @@ import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { RootState } from '~/src/store/RootStore'
 import { settingsReducerActions } from '~/src/store/settings/SettingsReducer'
+import { selectWallets } from '~/src/store/wallet/SelectorWallet'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
@@ -51,6 +52,7 @@ const WCConnectionRequestModal = (props: Props) => {
   const networks = useSelector((state: RootState) => state.settings.blockchainNetworks)
   const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
   const dispatch = useDispatch()
+  const wallets = useSelector(selectWallets)
 
   const switchedNetwork = useRef<TNetworkType>()
 
@@ -101,12 +103,13 @@ const WCConnectionRequestModal = (props: Props) => {
 
   const navigateToSelection = useCallback(() => {
     props.navigation.navigate(wrapper.route.Modal.name, {
-      screen: wrapper.route.WalletSelectionModal.name,
+      screen: wallets.length === 1 ? wrapper.route.AccountSelectionModal.name : wrapper.route.WalletSelectionModal.name,
       params: {
         textSchema: 'modals.walletConnectSelectionModal',
         onFinish: handleFinishSelect,
         filter: 'walletConnect',
         style: 'alter',
+        wallet: wallets.length === 1 ? wallets[0] : undefined,
       },
     })
   }, [handleFinishSelect])
