@@ -11,7 +11,6 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { RootState } from '~/src/store/RootStore'
-import { LinearLayoutProps } from '~/src/types/styled-components'
 import { ButtonWithoutFeedbackView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 import { RouteName } from '~src/types/wrappers/route'
 
