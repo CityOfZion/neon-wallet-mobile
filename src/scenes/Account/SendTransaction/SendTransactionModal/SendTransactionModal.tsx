@@ -67,7 +67,7 @@ export const SendTransactionModal = (props: Props) => {
   const [isRequestingFee, setIsRequestFee] = useState(false)
 
   const [tip, setTip] = useState<number>()
-  const [tipIsChecked, setTipIsChecked] = useState<boolean>(true)
+  const [tipIsChecked, setTipIsChecked] = useState<boolean>(false)
   const [tipIsDisabled, setTipIsDisabled] = useState<boolean>(false)
 
   const feeTokenBalance = useMemo(
