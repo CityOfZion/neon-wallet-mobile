@@ -1,12 +1,13 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React from 'react'
-import { Alert, TouchableWithoutFeedback } from 'react-native'
+import React, { useState } from 'react'
+import { TouchableWithoutFeedback } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
+import { Alert, AlertButton } from '~/src/components/Alert'
 import MenuItem, { RightIconType } from '~/src/components/MenuItem'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import { useLocalAuthentication } from '~/src/hooks/useLocalAuthentication'
@@ -40,7 +41,11 @@ export const WalletSettingsView = (props: Props) => {
 
   const dispatch = useDispatch<DispatchResult>()
 
+  const [deleteModalIsVisible, setDeleteModalIsVisible] = useState(false)
+
   const deleteAction = async () => {
+    setDeleteModalIsVisible(false)
+
     if (!wallet.id) {
       return
     }
@@ -60,24 +65,6 @@ export const WalletSettingsView = (props: Props) => {
     })
 
     props.navigation.navigate(wrapper.route.ListWalletsPage.name)
-  }
-
-  const alertDelete = () => {
-    Alert.alert(
-      '',
-      i18n.t('screens.walletSettingsView.deleteAlert'),
-      [
-        {
-          text: i18n.t('screens.walletSettingsView.navigation.cancel'),
-          style: 'cancel',
-        },
-        {
-          text: i18n.t('screens.walletSettingsView.navigation.delete'),
-          onPress: deleteAction,
-        },
-      ],
-      { cancelable: true }
-    )
   }
 
   const handlePressOnBackup = async () => {
@@ -126,7 +113,7 @@ export const WalletSettingsView = (props: Props) => {
           {i18n.t('screens.walletSettingsView.deleteSubtitle')}
         </TextView>
 
-        <TouchableWithoutFeedback onPress={alertDelete}>
+        <TouchableWithoutFeedback onPress={() => setDeleteModalIsVisible(true)}>
           <LinearLayout
             width="100%"
             borderRadius="4px"
@@ -149,6 +136,18 @@ export const WalletSettingsView = (props: Props) => {
           </LinearLayout>
         </TouchableWithoutFeedback>
       </LinearLayout>
+
+      <Alert
+        subtitle={i18n.t('screens.walletSettingsView.deleteAlert')}
+        visible={deleteModalIsVisible}
+        onRequestClose={() => setDeleteModalIsVisible(false)}
+      >
+        <AlertButton
+          label={i18n.t('screens.walletSettingsView.navigation.cancel')}
+          onPress={() => setDeleteModalIsVisible(false)}
+        />
+        <AlertButton label={i18n.t('screens.walletSettingsView.navigation.delete')} onPress={deleteAction} />
+      </Alert>
     </ScreenLayout>
   )
 }

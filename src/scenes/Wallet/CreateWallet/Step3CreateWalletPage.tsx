@@ -4,9 +4,10 @@ import i18n from 'i18n-js'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React, { useState, useCallback } from 'react'
-import { Alert, FlatList } from 'react-native'
+import { FlatList } from 'react-native'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
+import { Alert, AlertButton } from '~/src/components/Alert'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
@@ -25,22 +26,25 @@ const Step3CreateWalletPage: React.FC<Props> = props => {
   const words = props.route.params.mnemonic
   const [formedWords, setFormedWords] = useState<string[]>([])
   const [shuffledWords] = useState<string[]>(_.shuffle(words))
+  const [skipModalIsVisible, setSkipModalIsVisible] = useState(false)
+  const [incorrectOrderModalIsVisible, setIncorrectOrderModalIsVisible] = useState(false)
+
+  const handlePressRetry = () => {
+    setIncorrectOrderModalIsVisible(false)
+    setFormedWords([])
+  }
+
+  const handlePressSkip = () => {
+    setSkipModalIsVisible(false)
+
+    props.navigation.navigate(wrapper.route.Step4CreateWallet.name, {
+      hasBackup: false,
+      mnemonic: words.join(' '),
+    })
+  }
 
   const skipDialog = useCallback(() => {
-    Alert.alert(i18n.t('step3CreateWallet.dialog_1_title'), i18n.t('step3CreateWallet.dialog_1_body'), [
-      {
-        text: i18n.t('boolean.true'),
-        onPress: () =>
-          props.navigation.navigate(wrapper.route.Step4CreateWallet.name, {
-            hasBackup: false,
-            mnemonic: words.join(' '),
-          }),
-      },
-      {
-        text: i18n.t('boolean.false'),
-        style: 'cancel',
-      },
-    ])
+    setSkipModalIsVisible(true)
   }, [])
 
   const validateAndNext = useCallback(() => {
@@ -50,12 +54,7 @@ const Step3CreateWalletPage: React.FC<Props> = props => {
         mnemonic: words.join(' '),
       })
     } else {
-      Alert.alert(i18n.t('step3CreateWallet.dialog_2_title'), i18n.t('step3CreateWallet.dialog_2_body'), [
-        {
-          text: i18n.t('app.retry'),
-          onPress: () => setFormedWords([]),
-        },
-      ])
+      setIncorrectOrderModalIsVisible(true)
     }
   }, [formedWords, words])
 
@@ -146,6 +145,25 @@ const Step3CreateWalletPage: React.FC<Props> = props => {
       <LinearLayout mt={5} mb={7} px={5} width="100%">
         <ThemedButton onPress={() => validateAndNext()} label={i18n.t('app.continue')} disabled={isDisabled()} />
       </LinearLayout>
+
+      <Alert
+        title={i18n.t('step3CreateWallet.dialog_1_title')}
+        subtitle={i18n.t('step3CreateWallet.dialog_1_body')}
+        visible={skipModalIsVisible}
+        onRequestClose={() => setSkipModalIsVisible(false)}
+      >
+        <AlertButton label={i18n.t('boolean.true')} onPress={handlePressSkip} />
+        <AlertButton label={i18n.t('boolean.false')} onPress={() => setSkipModalIsVisible(false)} />
+      </Alert>
+
+      <Alert
+        title={i18n.t('step3CreateWallet.dialog_2_title')}
+        subtitle={i18n.t('step3CreateWallet.dialog_2_body')}
+        visible={incorrectOrderModalIsVisible}
+        onRequestClose={() => setIncorrectOrderModalIsVisible(false)}
+      >
+        <AlertButton label={i18n.t('app.retry')} onPress={handlePressRetry} />
+      </Alert>
     </ScreenLayout>
   )
 }

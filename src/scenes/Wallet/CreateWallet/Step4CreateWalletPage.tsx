@@ -4,10 +4,10 @@ import { AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
-import { Alert } from 'react-native'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { BlockchainServiceKey } from '~/src/blockchain'
+import { Alert, AlertButton } from '~/src/components/Alert'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedInputText from '~src/components/themed/ThemedInputText'
@@ -27,10 +27,11 @@ interface Props {
 
 const Step4CreateWalletPage: React.FC<Props> = props => {
   const [walletName, setWalletName] = useState<string>()
+  const [warningModalIsVisible, setWarningModalIsVisible] = useState(false)
 
   const next = async () => {
     if (!walletName) {
-      Alert.alert(i18n.t('step4CreateWallet.setName'))
+      setWarningModalIsVisible(true)
       return
     }
 
@@ -79,6 +80,14 @@ const Step4CreateWalletPage: React.FC<Props> = props => {
           <ThemedButton onPress={next} label={i18n.t('app.continue')} />
         </AwaitActivity>
       </LinearLayout>
+
+      <Alert
+        subtitle={i18n.t('step4CreateWallet.setName')}
+        visible={warningModalIsVisible}
+        onRequestClose={() => setWarningModalIsVisible(false)}
+      >
+        <AlertButton label={i18n.t('app.ok')} onPress={() => setWarningModalIsVisible(false)} />
+      </Alert>
     </ScreenLayout>
   )
 }

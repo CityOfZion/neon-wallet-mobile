@@ -3,7 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react'
-import { Alert, Platform } from 'react-native'
+import { Platform } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
@@ -17,6 +17,7 @@ import { selectAccounts } from '../store/account/SelectorAccount'
 import { selectWalletIds } from '../store/wallet/SelectorWallet'
 import { MnemonicSelectionInfo } from './MnemonicSelectionList'
 
+import { Alert, AlertButton } from '~/src/components/Alert'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import AddressesImportList, { AddressInfo } from '~src/components/AddressesImportList'
 import InputWithValidation from '~src/components/InputWithValidation'
@@ -69,6 +70,7 @@ const ImportKey = (props: ImportKeyProps) => {
   const [inputIsValid, setInputIsValid] = useState<boolean>(false)
   const [addressesSelected, setAddressesSelected] = useState<AddressInfo[]>([])
   const [isMnemonic, setIsMnemonic] = useState<boolean>(false)
+  const [alertModalIsVisible, setAlertModalIsVisible] = useState(false)
 
   const inputType = useRef<InputType>()
 
@@ -171,26 +173,16 @@ const ImportKey = (props: ImportKeyProps) => {
     [addressAlreadyExist, getBlockchainServices]
   )
 
-  const persistWhenAddress = useCallback((address: string) => {
-    Alert.alert(
-      '',
-      i18n.t('importKey.alertText'),
-      [
-        {
-          text: i18n.t('importKey.alertCancelButton'),
-          style: 'cancel',
-        },
-        {
-          text: i18n.t('importKey.alertConfirmButton'),
-          onPress: () =>
-            props.navigation.navigate(wrapper.route.ImportReadAccount.name, {
-              address,
-            }),
-        },
-      ],
-      { cancelable: true }
-    )
+  const persistWhenAddress = useCallback(() => {
+    setAlertModalIsVisible(true)
   }, [])
+
+  const confirmPersistAddress = () => {
+    setAlertModalIsVisible(false)
+    props.navigation.navigate(wrapper.route.ImportReadAccount.name, {
+      address: inputValue,
+    })
+  }
 
   const persistWhenEncryptedKey = useCallback((encryptedKey: string) => {
     props.navigation.navigate(wrapper.route.BlockchainListPage.name, {
@@ -465,6 +457,15 @@ const ImportKey = (props: ImportKeyProps) => {
           </LinearLayout>
         </LinearLayout>
       </AwaitActivity>
+
+      <Alert
+        subtitle={i18n.t('importKey.alertText')}
+        visible={alertModalIsVisible}
+        onRequestClose={() => setAlertModalIsVisible(false)}
+      >
+        <AlertButton label={i18n.t('importKey.alertCancelButton')} onPress={() => setAlertModalIsVisible(false)} />
+        <AlertButton label={i18n.t('importKey.alertConfirmButton')} onPress={confirmPersistAddress} />
+      </Alert>
     </ScreenLayout>
   )
 }
