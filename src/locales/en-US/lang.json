@@ -129,7 +129,7 @@
     "progressMessageStep4": "Wrapping everything up...",
     "feature1": {
       "header": "Easily organize your assets",
-      "subtitle": "Create multiple Accounts inside a Wallet, each with it's unique address."
+      "subtitle": "Create multiple Accounts inside a Wallet, each with its unique address."
     },
     "feature2": {
       "header": "The most flexible Wallet App in Neo",
@@ -162,14 +162,14 @@
     "label_2": "Confirm security phrase",
     "body_2": "It’s really important you remember your phrase correctly so we will help you with that. If you’re in a rush you can do it another time.",
     "label_3": "Give your wallet a name",
-    "body_3": "Give your wallet a memorable name and your ready to go!",
+    "body_3": "Give your wallet a memorable name and you're ready to go!",
     "createWallet": "Create Wallet"
   },
   "step2CreateWallet": {
     "oneOfThree": "1 of 3",
     "label_1": "Generate security phrase",
     "body_1": "Below you will find your secret phrase",
-    "body_2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it below but be sure to keep it safe.",
+    "body_2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it above but be sure to keep it safe.",
     "body_3": "Anyone with this phrase will be able to steal your hard earned assets and you won’t be able to get them back! ",
     "dialog_title": "Make sure you keep your security phrase safe",
     "dialog_body": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
@@ -317,7 +317,7 @@
       "oneOfThree": "1 of 3",
       "label_1": "Security phrase",
       "body_1": "Below you will find your secret phrase",
-      "body_2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it below but be sure to keep it safe.",
+      "body_2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it above but be sure to keep it safe.",
       "body_3": "Anyone with this phrase will be able to steal your hard earned assets and you won’t be able to get them back!",
       "dialog_title": "Make sure you keep your security phrase safe",
       "dialog_body": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
@@ -340,7 +340,7 @@
       "incompleteBalanceWarningButton": "OK, I understand",
       "isFirstWallet": {
         "title": "Take a look inside!",
-        "subtitle": "Your new account are waiting"
+        "subtitle": "Your new account is waiting"
       }
     },
     "getWallet": {
