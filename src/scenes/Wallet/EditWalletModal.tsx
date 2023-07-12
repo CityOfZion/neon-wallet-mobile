@@ -3,9 +3,9 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import React, { useState } from 'react'
-import { Alert } from 'react-native'
 import { useDispatch } from 'react-redux'
 
+import { Alert, AlertButton } from '~/src/components/Alert'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
@@ -34,13 +34,14 @@ export const EditWalletModal = (props: EditWalletModalProps & EditWalletParams) 
   const wallet = props.route.params?.wallet
 
   const [name, setName] = useState(wallet?.name ?? '')
+  const [warningModalIsVisible, setWarningModalIsVisible] = useState(false)
   const controller = useSwiperController(true)
 
   const dispatch = useDispatch()
 
   const submit = async () => {
     if (name.length === 0 || name.length > 20) {
-      Alert.alert(i18n.t('modals.editWallet.invalidName'))
+      setWarningModalIsVisible(true)
       return
     }
     wallet.name = name
@@ -80,6 +81,14 @@ export const EditWalletModal = (props: EditWalletModalProps & EditWalletParams) 
           />
         </LinearLayout>
       </AwaitActivity>
+
+      <Alert
+        subtitle={i18n.t('modals.editWallet.invalidName')}
+        visible={warningModalIsVisible}
+        onRequestClose={() => setWarningModalIsVisible(false)}
+      >
+        <AlertButton label={i18n.t('app.ok')} onPress={() => setWarningModalIsVisible(false)} />
+      </Alert>
     </SwiperPanel>
   )
 }

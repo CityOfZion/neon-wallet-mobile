@@ -4,10 +4,10 @@ import * as Print from 'expo-print'
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
-import { Alert } from 'react-native'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
+import { Alert, AlertButton } from '~/src/components/Alert'
 import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -31,6 +31,7 @@ const WordComponent = (props: { value: string }) => {
 
 const Step2CreateWalletPage: React.FC<Props> = props => {
   const [words, setWords] = useState<string[]>([])
+  const [modalIsVisible, setModalIsVisible] = useState(false)
 
   const seeds = words.join(' ')
 
@@ -38,16 +39,18 @@ const Step2CreateWalletPage: React.FC<Props> = props => {
     setWords(AsteroidHelper.generateMnemonic() ?? [])
   }
 
-  const infoDialog = () => {
-    Alert.alert(i18n.t('step2CreateWallet.dialog_title'), i18n.t('step2CreateWallet.dialog_body'), [
-      {
-        text: i18n.t('step2CreateWallet.dialog_dismiss'),
-        onPress: () =>
-          props.navigation.navigate(wrapper.route.Step3CreateWallet.name, {
-            mnemonic: words,
-          }),
-      },
-    ])
+  const handlePressContinue = () => {
+    setModalIsVisible(true)
+  }
+
+  const handlePressConfirmation = () => {
+    setModalIsVisible(false)
+
+    if (!words) return
+
+    props.navigation.navigate(wrapper.route.Step3CreateWallet.name, {
+      mnemonic: words,
+    })
   }
 
   useEffect(() => {
@@ -139,9 +142,18 @@ const Step2CreateWalletPage: React.FC<Props> = props => {
         </LinearLayout>
 
         <LinearLayout mt={5} mb={7} px={5} width="100%">
-          <ThemedButton onPress={() => infoDialog()} label={i18n.t('app.continue')} />
+          <ThemedButton onPress={handlePressContinue} label={i18n.t('app.continue')} />
         </LinearLayout>
       </AwaitActivity>
+
+      <Alert
+        title={i18n.t('step2CreateWallet.dialog_title')}
+        subtitle={i18n.t('step2CreateWallet.dialog_body')}
+        visible={modalIsVisible}
+        onRequestClose={() => setModalIsVisible(false)}
+      >
+        <AlertButton label={i18n.t('step2CreateWallet.dialog_dismiss')} onPress={handlePressConfirmation} />
+      </Alert>
     </ScreenLayout>
   )
 }

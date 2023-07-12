@@ -8,7 +8,7 @@ import { Separator } from './Separator'
 type Props = {
   visible: boolean
   onRequestClose?: () => void
-  title: string
+  title?: string
   subtitle?: string
   children?: React.ReactNode
 }
@@ -43,9 +43,11 @@ export const Alert = ({ onRequestClose, visible, children, title, subtitle }: Pr
   return (
     <AlertBox visible={visible} onRequestClose={onRequestClose}>
       <LinearLayout px="18px" pt="18px">
-        <TextView color="primary" fontFamily="medium" fontSize="xl" textAlign="center">
-          {title}
-        </TextView>
+        {title && (
+          <TextView color="primary" fontFamily="medium" fontSize="xl" textAlign="center">
+            {title}
+          </TextView>
+        )}
 
         {subtitle && (
           <TextView color="text.0" fontFamily="regular" fontSize="md" textAlign="center" mt="12px">

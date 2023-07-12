@@ -37,7 +37,8 @@
       "mainnet": "MainNet",
       "testnet": "TestNet",
       "custom": "Custom"
-    }
+    },
+    "ok": "OK"
   },
   "routes": {
     "GetWallet": "Wallet",

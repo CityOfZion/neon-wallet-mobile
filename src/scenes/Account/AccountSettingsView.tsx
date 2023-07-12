@@ -1,12 +1,13 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React from 'react'
-import { Alert, TouchableWithoutFeedback } from 'react-native'
+import React, { useState } from 'react'
+import { TouchableWithoutFeedback } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
+import { Alert, AlertButton } from '~/src/components/Alert'
 import MenuItem, { RightIconType } from '~/src/components/MenuItem'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import { useLocalAuthentication } from '~/src/hooks/useLocalAuthentication'
@@ -38,6 +39,8 @@ export const AccountSettingsView = (props: Props) => {
 
   const dispatch = useDispatch()
 
+  const [deleteModalIsVisible, setDeleteModalIsVisible] = useState(false)
+
   const deleteAction = async () => {
     if (account?.address) {
       dispatch(accountReducerActions.deleteAccount(account.address))
@@ -48,24 +51,6 @@ export const AccountSettingsView = (props: Props) => {
       routes: [{ name: wrapper.route.Tab.name }],
     })
     props.navigation.navigate(wrapper.route.GetWallet.name, { wallet })
-  }
-
-  const alertDelete = () => {
-    Alert.alert(
-      '',
-      i18n.t('screens.accountSettingsView.deleteAlert'),
-      [
-        {
-          text: i18n.t('screens.accountSettingsView.navigation.cancel'),
-          style: 'cancel',
-        },
-        {
-          text: i18n.t('screens.accountSettingsView.navigation.delete'),
-          onPress: deleteAction,
-        },
-      ],
-      { cancelable: true }
-    )
   }
 
   const handlePressExportWif = async () => {
@@ -117,7 +102,7 @@ export const AccountSettingsView = (props: Props) => {
           {i18n.t('screens.accountSettingsView.deleteSubtitle')}
         </TextView>
 
-        <TouchableWithoutFeedback onPress={alertDelete}>
+        <TouchableWithoutFeedback onPress={() => setDeleteModalIsVisible(true)}>
           <LinearLayout
             width="100%"
             borderRadius="4px"
@@ -140,6 +125,18 @@ export const AccountSettingsView = (props: Props) => {
           </LinearLayout>
         </TouchableWithoutFeedback>
       </LinearLayout>
+
+      <Alert
+        subtitle={i18n.t('screens.accountSettingsView.deleteAlert')}
+        visible={deleteModalIsVisible}
+        onRequestClose={() => setDeleteModalIsVisible(false)}
+      >
+        <AlertButton
+          label={i18n.t('screens.accountSettingsView.navigation.cancel')}
+          onPress={() => setDeleteModalIsVisible(false)}
+        />
+        <AlertButton label={i18n.t('screens.accountSettingsView.navigation.delete')} onPress={deleteAction} />
+      </Alert>
     </ScreenLayout>
   )
 }
