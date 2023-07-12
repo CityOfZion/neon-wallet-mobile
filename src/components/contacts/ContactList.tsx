@@ -198,6 +198,11 @@ export const ContactList = ({
 
   return (
     <LinearLayout {...props}>
+      {(!emptyHideHeader || (emptyHideHeader && contacts.length > 0)) && (
+        <LinearLayout paddingX="20px">
+          <SearchBar onFilter={setFilter} />
+        </LinearLayout>
+      )}
       <SectionList
         contentContainerStyle={{ flexGrow: 1 }}
         sections={data}
@@ -205,17 +210,10 @@ export const ContactList = ({
         renderItem={({ item }) => <Item contact={item} onPress={onSelect} pressType={pressType} />}
         renderSectionHeader={({ section }) => <SectionHeader label={section.key ?? ''} />}
         ItemSeparatorComponent={() => <ListSeparator marginX="16px" />}
-        ListHeaderComponent={
-          <>
-            {(!emptyHideHeader || (emptyHideHeader && data.length > 0)) && (
-              <LinearLayout paddingX="20px">
-                <SearchBar onFilter={setFilter} />
-              </LinearLayout>
-            )}
-          </>
-        }
         ListEmptyComponent={
-          emptyComponent ?? (
+          contacts.length === 0 ? (
+            emptyComponent
+          ) : (
             <TextView fontWeight={600} color="text.0" fontSize="18px" pt="4px" textAlign="center">
               {i18n.t('persistContact.noResultsFound')}
             </TextView>
