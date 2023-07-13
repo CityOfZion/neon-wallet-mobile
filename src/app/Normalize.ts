@@ -15,7 +15,7 @@ export abstract class Normalize {
       size = Number(value)
     }
 
-    const scale = Dimensions.get('screen').width / 414
+    const scale = Dimensions.get('screen').width / 600
     const newSize = size * scale
 
     if (isNaN(newSize)) {

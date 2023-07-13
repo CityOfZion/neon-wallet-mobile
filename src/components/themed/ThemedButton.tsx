@@ -118,7 +118,7 @@ const ThemedButton: React.FC<Props> = props => {
       paddingBottom: 0,
       paddingLeft: Normalize.scale(props.px!),
       paddingRight: Normalize.scale(props.px!),
-      height: Normalize.scale(props.height!),
+      height: '100%',
     }
 
     const styleActive = {
