@@ -4,10 +4,10 @@ import { AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
+import { showMessage } from 'react-native-flash-message'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { BlockchainServiceKey } from '~/src/blockchain'
-import { Alert, AlertButton } from '~/src/components/Alert'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedInputText from '~src/components/themed/ThemedInputText'
@@ -26,15 +26,9 @@ interface Props {
 }
 
 const Step4CreateWalletPage: React.FC<Props> = props => {
-  const [walletName, setWalletName] = useState<string>()
-  const [warningModalIsVisible, setWarningModalIsVisible] = useState(false)
+  const [walletName, setWalletName] = useState<string>('')
 
   const next = async () => {
-    if (!walletName) {
-      setWarningModalIsVisible(true)
-      return
-    }
-
     props.navigation.navigate(wrapper.route.BlockchainListPage.name, {
       config: {
         creatingWallet: {
@@ -77,17 +71,9 @@ const Step4CreateWalletPage: React.FC<Props> = props => {
 
       <LinearLayout mt={5} mb={7} px={5} width="100%">
         <AwaitActivity name="submit" size="large">
-          <ThemedButton onPress={next} label={i18n.t('app.continue')} />
+          <ThemedButton onPress={next} label={i18n.t('app.continue')} disabled={!walletName} />
         </AwaitActivity>
       </LinearLayout>
-
-      <Alert
-        subtitle={i18n.t('step4CreateWallet.setName')}
-        visible={warningModalIsVisible}
-        onRequestClose={() => setWarningModalIsVisible(false)}
-      >
-        <AlertButton label={i18n.t('app.ok')} onPress={() => setWarningModalIsVisible(false)} />
-      </Alert>
     </ScreenLayout>
   )
 }

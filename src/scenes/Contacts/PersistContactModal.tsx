@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { Alert, AlertButton } from '~/src/components/Alert'
+import { showAlert } from '~/src/components/Alert'
 import { Button } from '~/src/components/Button'
 import { Separator } from '~/src/components/Separator'
 import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
@@ -42,7 +42,6 @@ export const PersistContactModal = (props: Props) => {
   const [name, setName] = useState('')
   const [nameIsValid, setNameIsValid] = useState<boolean>()
   const [addresses, setAddresses] = useState<ContactAddresses[]>([])
-  const [deleteModalIsVisible, setDeleteModalIsVisible] = useState(false)
 
   const saving = useRef(false)
 
@@ -100,14 +99,23 @@ export const PersistContactModal = (props: Props) => {
   }
 
   const handleDelete = () => {
-    setDeleteModalIsVisible(false)
-
-    if (!contact?.id) return
-    dispatch(contactReducerActions.deleteContact(contact.id))
-    controller.close()
-    props.navigation.replace(wrapper.route.Contacts.name, {
-      screen: wrapper.route.Contacts.name,
-      initial: true,
+    showAlert({
+      subtitle: i18n.t('persistContact.deleteContactAlert'),
+      buttons: [
+        { label: i18n.t('persistContact.cancel') },
+        {
+          label: i18n.t('persistContact.delete'),
+          onPress: () => {
+            if (!contact?.id) return
+            dispatch(contactReducerActions.deleteContact(contact.id))
+            controller.close()
+            props.navigation.replace(wrapper.route.Contacts.name, {
+              screen: wrapper.route.Contacts.name,
+              initial: true,
+            })
+          },
+        },
+      ],
     })
   }
 
@@ -236,21 +244,12 @@ export const PersistContactModal = (props: Props) => {
                 icon={require('~/src/assets/images/icon-trash-can-primary.png')}
                 iconStyle={{ width: 20, height: 20 }}
                 labelStyle={{ fontSize: 20 }}
-                onPress={() => setDeleteModalIsVisible(true)}
+                onPress={handleDelete}
               />
             </LinearLayout>
           )}
         </LinearLayout>
       </AwaitActivity>
-
-      <Alert
-        subtitle={i18n.t('persistContact.deleteContactAlert')}
-        visible={deleteModalIsVisible}
-        onRequestClose={() => setDeleteModalIsVisible(false)}
-      >
-        <AlertButton label={i18n.t('persistContact.cancel')} onPress={() => setDeleteModalIsVisible(false)} />
-        <AlertButton label={i18n.t('persistContact.delete')} onPress={handleDelete} />
-      </Alert>
     </SwiperPanel>
   )
 }

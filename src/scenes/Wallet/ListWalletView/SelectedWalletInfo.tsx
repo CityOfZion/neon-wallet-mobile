@@ -1,9 +1,9 @@
 import i18n from 'i18n-js'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { Animated } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { Alert, AlertButton } from '~/src/components/Alert'
+import { showAlert } from '~/src/components/Alert'
 import { Skeleton } from '~/src/components/Skeleton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
@@ -37,7 +37,13 @@ export const SelectedWalletInfo = ({ selectedWallet, selectedWalletBalanceExchan
     [totalTokensBalances, currency, language]
   )
 
-  const [warningModalIsVisible, setWarningModalIsVisible] = useState(false)
+  const handlePress = () => {
+    showAlert({
+      title: i18n.t('screens.listWallets.incompleteBalanceWarningTitle'),
+      subtitle: i18n.t('screens.listWallets.incompleteBalanceWarningText'),
+      buttons: [{ label: i18n.t('screens.listWallets.incompleteBalanceWarningButton') }],
+    })
+  }
 
   return (
     <Animated.View style={{ opacity, flexGrow: 1 }}>
@@ -55,7 +61,7 @@ export const SelectedWalletInfo = ({ selectedWallet, selectedWalletBalanceExchan
               {formattedTotalTokensBalances}
             </TextView>
 
-            <ButtonView onPress={() => setWarningModalIsVisible(true)}>
+            <ButtonView onPress={handlePress}>
               <ImageView
                 mt="8px"
                 mx="4px"
@@ -69,18 +75,6 @@ export const SelectedWalletInfo = ({ selectedWallet, selectedWalletBalanceExchan
       </LinearLayout>
 
       <BalanceList mt="24px" px="16px" balanceExchange={selectedWalletBalanceExchange} showBlockchain />
-
-      <Alert
-        title={i18n.t('screens.listWallets.incompleteBalanceWarningTitle')}
-        subtitle={i18n.t('screens.listWallets.incompleteBalanceWarningText')}
-        visible={warningModalIsVisible}
-        onRequestClose={() => setWarningModalIsVisible(false)}
-      >
-        <AlertButton
-          label={i18n.t('screens.listWallets.incompleteBalanceWarningButton')}
-          onPress={() => setWarningModalIsVisible(false)}
-        />
-      </Alert>
     </Animated.View>
   )
 }

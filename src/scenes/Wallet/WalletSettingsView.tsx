@@ -1,13 +1,13 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
-import React, { useState } from 'react'
+import React from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
-import { Alert, AlertButton } from '~/src/components/Alert'
+import { showAlert } from '~/src/components/Alert'
 import MenuItem, { RightIconType } from '~/src/components/MenuItem'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import { useLocalAuthentication } from '~/src/hooks/useLocalAuthentication'
@@ -38,33 +38,37 @@ export const WalletSettingsView = (props: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const accountsPool = useSelector(selectAccounts)
   const { authenticate } = useLocalAuthentication()
-
   const dispatch = useDispatch<DispatchResult>()
 
-  const [deleteModalIsVisible, setDeleteModalIsVisible] = useState(false)
+  const handleDelete = () => {
+    showAlert({
+      subtitle: i18n.t('screens.walletSettingsView.deleteAlert'),
+      buttons: [
+        {
+          label: i18n.t('screens.walletSettingsView.navigation.cancel'),
+        },
+        {
+          label: i18n.t('screens.walletSettingsView.navigation.delete'),
+          onPress: () => {
+            if (!wallet.id) return
 
-  const deleteAction = async () => {
-    setDeleteModalIsVisible(false)
+            const accounts = wallet.getAccounts(accountsPool)
+            accounts.forEach(account => {
+              if (!account.address) return
+              dispatch(accountReducerActions.deleteAccount(account.address))
+            })
 
-    if (!wallet.id) {
-      return
-    }
-    const accounts = wallet.getAccounts(accountsPool)
+            dispatch(walletReducerActions.deleteWallet(wallet.id))
 
-    accounts.forEach(account => {
-      if (!account.address) return
-
-      dispatch(accountReducerActions.deleteAccount(account.address))
+            props.navigation.reset({
+              index: 0,
+              routes: [{ name: wrapper.route.ListWalletsPage.name }],
+            })
+            props.navigation.navigate(wrapper.route.ListWalletsPage.name)
+          },
+        },
+      ],
     })
-
-    dispatch(walletReducerActions.deleteWallet(wallet.id))
-
-    props.navigation.reset({
-      index: 0,
-      routes: [{ name: wrapper.route.ListWalletsPage.name }],
-    })
-
-    props.navigation.navigate(wrapper.route.ListWalletsPage.name)
   }
 
   const handlePressOnBackup = async () => {
@@ -113,7 +117,7 @@ export const WalletSettingsView = (props: Props) => {
           {i18n.t('screens.walletSettingsView.deleteSubtitle')}
         </TextView>
 
-        <TouchableWithoutFeedback onPress={() => setDeleteModalIsVisible(true)}>
+        <TouchableWithoutFeedback onPress={handleDelete}>
           <LinearLayout
             width="100%"
             borderRadius="4px"
@@ -136,18 +140,6 @@ export const WalletSettingsView = (props: Props) => {
           </LinearLayout>
         </TouchableWithoutFeedback>
       </LinearLayout>
-
-      <Alert
-        subtitle={i18n.t('screens.walletSettingsView.deleteAlert')}
-        visible={deleteModalIsVisible}
-        onRequestClose={() => setDeleteModalIsVisible(false)}
-      >
-        <AlertButton
-          label={i18n.t('screens.walletSettingsView.navigation.cancel')}
-          onPress={() => setDeleteModalIsVisible(false)}
-        />
-        <AlertButton label={i18n.t('screens.walletSettingsView.navigation.delete')} onPress={deleteAction} />
-      </Alert>
     </ScreenLayout>
   )
 }

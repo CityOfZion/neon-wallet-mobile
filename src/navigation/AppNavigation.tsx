@@ -4,6 +4,7 @@ import { StatusBar } from 'react-native'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
+import { Alert } from '../components/Alert'
 import { DeepLinkingConfig } from '../config/DeepLinkingConfig'
 import { useAfterStartApp } from '../hooks/useAfterStartApp'
 import SetupCompletePage, { SetupCompleteParamList } from '../scenes/SetupCompletePage'
@@ -65,6 +66,7 @@ const AppNavigation = () => {
           <RootStack.Screen name={wrapper.route.Modal.name} component={ModalStackNavigation} />
         </RootStack.Navigator>
       </NavigationContainer>
+      <Alert />
     </ThemeProvider>
   )
 }
