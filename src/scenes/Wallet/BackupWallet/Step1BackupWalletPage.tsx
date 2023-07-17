@@ -6,7 +6,7 @@ import i18n from 'i18n-js'
 import React, { useCallback, useEffect, useState } from 'react'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { Alert, AlertButton } from '~/src/components/Alert'
+import { showAlert } from '~/src/components/Alert'
 import { Button } from '~/src/components/Button'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
@@ -28,7 +28,6 @@ interface Props {
 const Step1BackupWalletPage: React.FC<Props> = props => {
   const { wallet } = props.route.params
   const [mnemonic, setMnemonic] = useState<string>()
-  const [modalIsVisible, setModalIsVisible] = useState(false)
 
   const words = mnemonic?.split(' ')
 
@@ -49,17 +48,22 @@ const Step1BackupWalletPage: React.FC<Props> = props => {
   }
 
   const handlePressContinue = () => {
-    setModalIsVisible(true)
-  }
+    showAlert({
+      title: i18n.t('screens.step1BackupWallet.dialog_title'),
+      subtitle: i18n.t('screens.step1BackupWallet.dialog_body'),
+      buttons: [
+        {
+          label: i18n.t('screens.step1BackupWallet.dialog_dismiss'),
+          onPress: () => {
+            if (!mnemonic) return
 
-  const handlePressConfirmation = () => {
-    setModalIsVisible(false)
-
-    if (!mnemonic) return
-
-    props.navigation.navigate(wrapper.route.Step2BackupWallet.name, {
-      wallet,
-      mnemonic,
+            props.navigation.navigate(wrapper.route.Step2BackupWallet.name, {
+              wallet,
+              mnemonic,
+            })
+          },
+        },
+      ],
     })
   }
 
@@ -154,15 +158,6 @@ const Step1BackupWalletPage: React.FC<Props> = props => {
           />
         </LinearLayout>
       </AwaitActivity>
-
-      <Alert
-        title={i18n.t('screens.step1BackupWallet.dialog_title')}
-        subtitle={i18n.t('screens.step1BackupWallet.dialog_body')}
-        visible={modalIsVisible}
-        onRequestClose={() => setModalIsVisible(false)}
-      >
-        <AlertButton label={i18n.t('screens.step1BackupWallet.dialog_dismiss')} onPress={handlePressConfirmation} />
-      </Alert>
     </ScreenLayout>
   )
 }

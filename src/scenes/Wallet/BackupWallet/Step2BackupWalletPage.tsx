@@ -4,9 +4,9 @@ import i18n from 'i18n-js'
 import _ from 'lodash'
 import React, { useState, useMemo } from 'react'
 import { FlatList } from 'react-native'
+import { showMessage } from 'react-native-flash-message'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { Alert } from '~/src/components/Alert'
 import { Button } from '~/src/components/Button'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import { Wallet } from '~/src/models/redux/Wallet'
@@ -31,7 +31,6 @@ const Step2BackupWalletPage: React.FC<Props> = props => {
   const shuffledWords = useMemo(() => _.shuffle(words), [words])
 
   const [pressedWords, setPressedWords] = useState<string[]>([])
-  const [alertIsVisible, setAlertIsVisible] = useState(false)
 
   const isActive = (word: string) => pressedWords.some(pressedWord => pressedWord === word)
 
@@ -43,13 +42,13 @@ const Step2BackupWalletPage: React.FC<Props> = props => {
     setPressedWords(prevState => (exist ? prevState.filter(state => state !== word) : [...prevState, word]))
   }
 
-  const handleRetry = () => {
-    setPressedWords([])
-  }
-
   const validateAndNext = async () => {
     if (pressedWords.join() !== words.join()) {
-      setAlertIsVisible(true)
+      showMessage({
+        message: i18n.t('screens.step2BackupWallet.dialog_1_title'),
+        description: i18n.t('screens.step2BackupWallet.dialog_1_body'),
+      })
+      setPressedWords([])
       return
     }
 
@@ -134,15 +133,6 @@ const Step2BackupWalletPage: React.FC<Props> = props => {
           onPress={validateAndNext}
         />
       </LinearLayout>
-
-      <Alert
-        title={i18n.t('screens.step2BackupWallet.dialog_1_title')}
-        subtitle={i18n.t('screens.step2BackupWallet.dialog_1_body')}
-        buttonLabel={i18n.t('app.retry')}
-        onRequestClose={() => setAlertIsVisible(false)}
-        visible={alertIsVisible}
-        onPress={handleRetry}
-      />
     </ScreenLayout>
   )
 }

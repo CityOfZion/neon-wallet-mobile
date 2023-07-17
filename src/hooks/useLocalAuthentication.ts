@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import { Alert } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '../app/ApplicationWrapper'
+import { showAlert } from '../components/Alert'
 import { Security } from '../enums/Security'
 import { RootState } from '../store/RootStore'
 
@@ -16,25 +16,18 @@ export const useLocalAuthentication = () => {
 
   const alertDialog = () => {
     return new Promise<void>((resolve, reject) => {
-      Alert.alert(
-        i18n.t('hooks.useLocalAuthentication.dialog.title'),
-        i18n.t('hooks.useLocalAuthentication.dialog.subtitle'),
-        [
+      showAlert({
+        title: i18n.t('hooks.useLocalAuthentication.dialog.title'),
+        subtitle: i18n.t('hooks.useLocalAuthentication.dialog.subtitle'),
+        buttons: [
+          { label: i18n.t('hooks.useLocalAuthentication.dialog.confirm'), onPress: () => resolve() },
           {
-            text: i18n.t('hooks.useLocalAuthentication.dialog.confirm'),
-            onPress: () => resolve(),
-          },
-          {
-            text: i18n.t('hooks.useLocalAuthentication.dialog.cancel'),
-            style: 'cancel',
+            label: i18n.t('hooks.useLocalAuthentication.dialog.cancel'),
             onPress: () => reject(new Error(i18n.t('hooks.useLocalAuthentication.errorDismiss'))),
           },
         ],
-        {
-          cancelable: true,
-          onDismiss: () => reject(new Error(i18n.t('hooks.useLocalAuthentication.errorDismiss'))),
-        }
-      )
+        onHide: () => reject(new Error(i18n.t('hooks.useLocalAuthentication.errorDismiss'))),
+      })
     })
   }
 

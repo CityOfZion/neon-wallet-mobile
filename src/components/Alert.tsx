@@ -1,66 +1,127 @@
-import React from 'react'
+import { BlurView } from 'expo-blur'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Modal } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import { LinearLayout, TextView } from '../styles/styled-components'
-import { AlertBox } from './AlertBox'
+import { wrapper } from '../app/ApplicationWrapper'
+import { RootState } from '../store/RootStore'
+import { ButtonView, LinearLayout, TextView } from '../styles/styled-components'
 import { Button } from './Button'
 import { Separator } from './Separator'
 
-type Props = {
-  visible: boolean
-  onRequestClose?: () => void
-  title?: string
-  subtitle?: string
-  children?: React.ReactNode
-}
-
-type AlertButtonProps = {
+type AlertShowButtonOption = {
   onPress?: () => void
   label: string
 }
 
-type AlertButtonGroupProps = {
-  children: React.ReactNode[]
+type AlertThis = {
+  show: (options: AlertShowOptions) => void
+  hide: () => void
 }
 
-export const AlertButton = ({ onPress, label }: AlertButtonProps) => {
-  return <Button onPress={onPress} label={label} p="12px" labelStyle={{ fontSize: 'xl' }} weight={1} />
+type AlertShowOptions = {
+  title?: string
+  subtitle?: string
+  buttons?: AlertShowButtonOption[]
+  hideable?: boolean
+  onHide?: () => void
 }
 
-export const AlertButtonGroup = ({ children }: AlertButtonGroupProps) => {
+let activatedAlert: AlertThis | undefined
+
+export const showAlert = (options: AlertShowOptions) => {
+  if (!activatedAlert) return
+  activatedAlert.show(options)
+}
+
+export const hideAlert = () => {
+  if (!activatedAlert) return
+  activatedAlert.hide()
+}
+
+export const Alert = () => {
+  const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const [visible, setVisible] = useState(false)
+  const showOptions = useRef<AlertShowOptions>()
+
+  const show = useCallback((options: AlertShowOptions) => {
+    showOptions.current = options
+    setVisible(true)
+  }, [])
+
+  const hide = useCallback(() => {
+    if (!showOptions.current?.hideable === false) return
+    setVisible(false)
+
+    if (showOptions.current?.onHide) showOptions.current.onHide()
+  }, [])
+
+  const thisRef = useRef<AlertThis>({ show, hide })
+
+  const handlePressButon = (option: AlertShowButtonOption) => {
+    hide()
+    option.onPress?.()
+  }
+
+  useEffect(() => {
+    activatedAlert = thisRef.current
+
+    return () => {
+      activatedAlert = undefined
+    }
+  }, [])
+
   return (
-    <LinearLayout orientation="horiz" justifyContent="space-between" p="3px" width="100%">
-      {children.map((it, index) => (
-        <>
-          {it}
-          {index !== children.length - 1 && <Separator type="vert" />}
-        </>
-      ))}
-    </LinearLayout>
-  )
-}
+    <Modal visible={visible} transparent onRequestClose={hide}>
+      <ButtonView onPress={hide} activeOpacity={0}>
+        <BlurView
+          style={{
+            width: '100%',
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          intensity={100}
+          tint="dark"
+        >
+          <ButtonView activeOpacity={0} maxWidth="75%">
+            <LinearLayout backgroundColor={`${theme.colors.black}B3`} borderRadius="14px">
+              <LinearLayout px="18px" pt="18px">
+                {showOptions.current?.title && (
+                  <TextView color={theme.colors.primary} fontFamily="medium" fontSize="xl" textAlign="center">
+                    {showOptions.current.title}
+                  </TextView>
+                )}
 
-export const Alert = ({ onRequestClose, visible, children, title, subtitle }: Props) => {
-  return (
-    <AlertBox visible={visible} onRequestClose={onRequestClose}>
-      <LinearLayout px="18px" pt="18px">
-        {title && (
-          <TextView color="primary" fontFamily="medium" fontSize="xl" textAlign="center">
-            {title}
-          </TextView>
-        )}
+                {showOptions.current?.subtitle && (
+                  <TextView color="text.0" fontFamily="regular" fontSize="md" textAlign="center" mt="12px">
+                    {showOptions.current.subtitle}
+                  </TextView>
+                )}
+              </LinearLayout>
 
-        {subtitle && (
-          <TextView color="text.0" fontFamily="regular" fontSize="md" textAlign="center" mt="12px">
-            {subtitle}
-          </TextView>
-        )}
-      </LinearLayout>
+              <Separator mt="28px" />
 
-      <Separator mt="28px" />
-
-      <LinearLayout orientation="horiz" width="100%">
-        {children}
-      </LinearLayout>
-    </AlertBox>
+              <LinearLayout orientation="horiz" width="100%">
+                <LinearLayout orientation="horiz" justifyContent="space-between" p="3px" width="100%">
+                  {showOptions.current?.buttons?.map((it, index, array) => (
+                    <>
+                      <Button
+                        onPress={() => handlePressButon(it)}
+                        label={it.label}
+                        p="12px"
+                        labelStyle={{ fontSize: 'xl' }}
+                        weight={1}
+                      />
+                      {index !== array.length - 1 && <Separator type="vert" />}
+                    </>
+                  ))}
+                </LinearLayout>
+              </LinearLayout>
+            </LinearLayout>
+          </ButtonView>
+        </BlurView>
+      </ButtonView>
+    </Modal>
   )
 }

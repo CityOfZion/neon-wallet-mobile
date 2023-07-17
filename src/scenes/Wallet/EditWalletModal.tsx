@@ -5,7 +5,6 @@ import i18n from 'i18n-js'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { Alert, AlertButton } from '~/src/components/Alert'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
@@ -34,16 +33,11 @@ export const EditWalletModal = (props: EditWalletModalProps & EditWalletParams) 
   const wallet = props.route.params?.wallet
 
   const [name, setName] = useState(wallet?.name ?? '')
-  const [warningModalIsVisible, setWarningModalIsVisible] = useState(false)
-  const controller = useSwiperController(true)
 
+  const controller = useSwiperController(true)
   const dispatch = useDispatch()
 
   const submit = async () => {
-    if (name.length === 0 || name.length > 20) {
-      setWarningModalIsVisible(true)
-      return
-    }
     wallet.name = name
     dispatch(walletReducerActions.saveWallet(wallet))
 
@@ -57,7 +51,13 @@ export const EditWalletModal = (props: EditWalletModalProps & EditWalletParams) 
   return (
     <SwiperPanel
       title={i18n.t('modals.editWallet.title')}
-      rightButton={<LabelButton label={i18n.t('modals.editWallet.navigation.save')} onPress={save} />}
+      rightButton={
+        <LabelButton
+          label={i18n.t('modals.editWallet.navigation.save')}
+          onPress={save}
+          disabled={name.length === 0 || name.length > 20}
+        />
+      }
       leftButton={<LabelButton label={i18n.t('modals.editWallet.navigation.cancel')} onPress={controller.close} />}
       onClose={props.navigation.goBack}
       controller={controller}
@@ -81,14 +81,6 @@ export const EditWalletModal = (props: EditWalletModalProps & EditWalletParams) 
           />
         </LinearLayout>
       </AwaitActivity>
-
-      <Alert
-        subtitle={i18n.t('modals.editWallet.invalidName')}
-        visible={warningModalIsVisible}
-        onRequestClose={() => setWarningModalIsVisible(false)}
-      >
-        <AlertButton label={i18n.t('app.ok')} onPress={() => setWarningModalIsVisible(false)} />
-      </Alert>
     </SwiperPanel>
   )
 }

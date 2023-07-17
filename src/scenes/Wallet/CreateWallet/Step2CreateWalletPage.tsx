@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
-import { Alert, AlertButton } from '~/src/components/Alert'
+import { showAlert } from '~/src/components/Alert'
 import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
@@ -31,7 +31,6 @@ const WordComponent = (props: { value: string }) => {
 
 const Step2CreateWalletPage: React.FC<Props> = props => {
   const [words, setWords] = useState<string[]>([])
-  const [modalIsVisible, setModalIsVisible] = useState(false)
 
   const seeds = words.join(' ')
 
@@ -40,16 +39,21 @@ const Step2CreateWalletPage: React.FC<Props> = props => {
   }
 
   const handlePressContinue = () => {
-    setModalIsVisible(true)
-  }
+    showAlert({
+      title: i18n.t('step2CreateWallet.dialog_title'),
+      subtitle: i18n.t('step2CreateWallet.dialog_body'),
+      buttons: [
+        {
+          label: i18n.t('step2CreateWallet.dialog_dismiss'),
+          onPress: () => {
+            if (!words) return
 
-  const handlePressConfirmation = () => {
-    setModalIsVisible(false)
-
-    if (!words) return
-
-    props.navigation.navigate(wrapper.route.Step3CreateWallet.name, {
-      mnemonic: words,
+            props.navigation.navigate(wrapper.route.Step3CreateWallet.name, {
+              mnemonic: words,
+            })
+          },
+        },
+      ],
     })
   }
 
@@ -145,15 +149,6 @@ const Step2CreateWalletPage: React.FC<Props> = props => {
           <ThemedButton onPress={handlePressContinue} label={i18n.t('app.continue')} />
         </LinearLayout>
       </AwaitActivity>
-
-      <Alert
-        title={i18n.t('step2CreateWallet.dialog_title')}
-        subtitle={i18n.t('step2CreateWallet.dialog_body')}
-        visible={modalIsVisible}
-        onRequestClose={() => setModalIsVisible(false)}
-      >
-        <AlertButton label={i18n.t('step2CreateWallet.dialog_dismiss')} onPress={handlePressConfirmation} />
-      </Alert>
     </ScreenLayout>
   )
 }
