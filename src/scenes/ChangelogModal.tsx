@@ -2,11 +2,11 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, useWindowDimensions } from 'react-native'
 
 import changelogData from '~src/Changelog.json'
 import { Storage } from '~src/app/Storage'
-import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
+import SwiperPanel, { CloseButton, DEFAULT_PADDING, useSwiperController } from '~src/components/SwiperPanel'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~src/navigation/TabNavigation'
@@ -30,9 +30,12 @@ interface ItemProps {
 }
 
 const Item = (props: ItemProps) => {
+  const { width } = useWindowDimensions()
+
+  const sideWidth = width / 2 - DEFAULT_PADDING - 14
   return (
     <LinearLayout orientation="horiz" justifyContent="center">
-      <LinearLayout width={`${10 * props.biggestVersionLength}px`} alignItems="flex-end">
+      <LinearLayout width={`${sideWidth}px`} alignItems="flex-end">
         <LinearLayout borderRadius="12px" backgroundColor="primary">
           <TextView color="text.1" p="4px" fontSize="lg">
             {props.version}
@@ -40,19 +43,21 @@ const Item = (props: ItemProps) => {
         </LinearLayout>
       </LinearLayout>
 
-      <LinearLayout
-        width="20px"
-        height="20px"
-        borderRadius="10px"
-        backgroundColor="primary"
-        position="relative"
-        left="10px"
-        zIndex={2}
-      />
+      <LinearLayout orientation="horiz" paddingX="6px">
+        <LinearLayout
+          width="20px"
+          height="20px"
+          borderRadius="10px"
+          backgroundColor="primary"
+          position="relative"
+          left="0px"
+          zIndex={2}
+        />
 
-      <LinearLayout backgroundColor="background.3" width="2px" />
+        <LinearLayout backgroundColor="background.3" width="2px" position="relative" left="-10px" />
+      </LinearLayout>
 
-      <LinearLayout ml="20px" width="120px" mb="12px">
+      <LinearLayout width={`${sideWidth}px`} mb="12px">
         <TextView fontSize="lg" color="text.0" fontWeight="bold" mb="12px">
           {props.date}
         </TextView>
