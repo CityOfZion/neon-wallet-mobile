@@ -51,18 +51,18 @@ const AddressImportItem = <T extends AddressInfo = AddressInfo>(props: AddressIm
           justifyContent: 'space-between',
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', flexGrow: 1, flexShrink: 1 }}>
           <Image
-            style={{ marginRight: 10, width: 25, height: 26 }}
+            style={{ width: 25, height: 26 }}
             source={BlockchainHelper.getIcon(props.item.blockchain)}
             width={25}
             height={26}
           />
-          <View>
+          <View style={{ flexGrow: 1, flexShrink: 1, marginHorizontal: 10 }}>
             <TextView fontSize="10px" color="text.3">
               {i18n.t(`blockchainServices.${props.item.blockchain}.label`)}
             </TextView>
-            <TextView color="#fff" fontFamily="medium" fontSize="14px">
+            <TextView color="text.0" fontFamily="medium" fontSize="14px" numberOfLines={1} ellipsizeMode="middle">
               {props.item.address}
             </TextView>
           </View>

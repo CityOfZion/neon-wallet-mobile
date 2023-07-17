@@ -152,9 +152,11 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
           />
 
           <LinearLayout>
-            <TextView color="#7d929a" fontSize="16px" mb={5}>
-              {i18n.t('importReadAccount.headerText2')}
-            </TextView>
+            {addressesList.length > 0 && (
+              <TextView color="text.10" fontSize="16px" mb={5}>
+                {i18n.t('importReadAccount.headerText2')}
+              </TextView>
+            )}
             <AddressesImportList
               items={addressesList}
               selectedItems={addressesListSelected}
