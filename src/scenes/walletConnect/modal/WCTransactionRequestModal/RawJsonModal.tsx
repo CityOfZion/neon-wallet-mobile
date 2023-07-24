@@ -32,6 +32,8 @@ const RawJsonModal = (props: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const controller = useSwiperController(true)
 
+  const dataJson = JSON.stringify(request, null, 2)
+
   return (
     <SwiperPanel
       controller={controller}
@@ -50,7 +52,7 @@ const RawJsonModal = (props: Props) => {
           {i18n.t('modals.rawJson.data')}
         </TextView>
 
-        <CopyButton text="props.route.params.dataJson" />
+        <CopyButton text={dataJson} />
       </LinearLayout>
 
       <ScrollView
@@ -63,7 +65,7 @@ const RawJsonModal = (props: Props) => {
         }}
       >
         <TextView fontFamily="light" fontSize="16px" color="white">
-          {JSON.stringify(request, null, 2)}
+          {dataJson}
         </TextView>
       </ScrollView>
     </SwiperPanel>
