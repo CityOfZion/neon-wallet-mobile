@@ -86,19 +86,26 @@ export const DestinationInput = ({
 
       let isValid = false
       let resovedAddress: string | undefined
+      let isNNS = false
 
-      const serviceLib = getBlockchainServiceLib(account.blockchain)
-      if (hasNNS(serviceLib) && serviceLib.validateNNSFormat(address)) {
-        try {
-          setLoading(true)
-          resovedAddress = await serviceLib.getOwnerOfNNS(address.toLowerCase())
-          onAddressAliasChange(address.toLowerCase())
-          isValid = true
-          onAddressChange(resovedAddress)
-        } finally {
-          setLoading(false)
+      try {
+        const serviceLib = getBlockchainServiceLib(account.blockchain)
+
+        if (hasNNS(serviceLib) && serviceLib.validateNNSFormat(address)) {
+          try {
+            isNNS = true
+            setLoading(true)
+            resovedAddress = await serviceLib.getOwnerOfNNS(address.toLowerCase())
+            onAddressAliasChange(address.toLowerCase())
+            isValid = true
+            onAddressChange(resovedAddress)
+          } finally {
+            setLoading(false)
+          }
         }
-      } else if (blockchainService.validateAddress(address)) {
+      } catch {}
+
+      if (!isNNS && blockchainService.validateAddress(address)) {
         isValid = true
         resovedAddress = address
       }
