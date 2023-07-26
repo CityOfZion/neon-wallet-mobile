@@ -200,7 +200,7 @@ export const ContactList = ({
     <LinearLayout {...props}>
       {(!emptyHideHeader || (emptyHideHeader && contacts.length > 0)) && (
         <LinearLayout paddingX="20px">
-          <SearchBar onFilter={setFilter} />
+          <SearchBar onFilter={setFilter} hasClearButton />
         </LinearLayout>
       )}
       <SectionList

@@ -1,10 +1,11 @@
 import i18n from 'i18n-js'
-import React from 'react'
+import React, { useState } from 'react'
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '../app/ApplicationWrapper'
 import { RootState } from '../store/RootStore'
+import { InputClearButton } from './input/InputClearButton'
 
 import { Normalize } from '~/src/app/Normalize'
 import { ImageView, InputTextView, LinearLayout } from '~/src/styles/styled-components'
@@ -14,13 +15,21 @@ type Props = {
   onFilter: (text: string) => void
   lighterColor?: boolean
   isDisabled?: boolean
+  hasClearButton?: boolean
 } & LinearLayoutProps
 
-export const SearchBar = ({ onFilter, lighterColor, isDisabled = false, ...props }: Props) => {
+export const SearchBar = ({ onFilter, lighterColor, isDisabled = false, hasClearButton = false, ...props }: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const [searchText, setSearchText] = useState<string>('')
 
   const handleFilter = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    setSearchText(event.nativeEvent.text)
     if (onFilter) onFilter(event.nativeEvent.text)
+  }
+
+  const clearFilter = () => {
+    setSearchText('')
+    if (onFilter) onFilter('')
   }
 
   return (
@@ -46,6 +55,7 @@ export const SearchBar = ({ onFilter, lighterColor, isDisabled = false, ...props
       <InputTextView
         onChange={handleFilter}
         placeholder={i18n.t('persistContact.search')}
+        value={searchText}
         flex={1}
         height="100%"
         color="text.6"
@@ -56,6 +66,7 @@ export const SearchBar = ({ onFilter, lighterColor, isDisabled = false, ...props
         placeholderTextColor={theme.colors.text[6]}
         editable={!isDisabled}
       />
+      {hasClearButton && searchText.length > 0 && <InputClearButton onPress={clearFilter} />}
     </LinearLayout>
   )
 }
