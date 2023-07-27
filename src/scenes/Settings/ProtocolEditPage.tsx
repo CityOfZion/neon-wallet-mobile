@@ -89,14 +89,19 @@ export const ProtocolEditPage = (props: Props) => {
         {availableNetworks.includes('custom') && (
           <>
             <Separator />
-            <ButtonView orientation="horiz" paddingY="18px" onPress={handleAddCustomNetwork}>
+            <ButtonView
+              orientation="horiz"
+              paddingY="18px"
+              justifyContent="space-between"
+              onPress={handleAddCustomNetwork}
+            >
               <ImageView
                 width={20}
                 height={20}
                 resizeMode="contain"
                 source={require('~src/assets/images/icon-unlink-green.png')}
               />
-              <TextView marginX="12px" fontSize="18px" color="text.0" weight={1}>
+              <TextView marginX="12px" fontSize="18px" color="text.0" textAlign="center" weight={1}>
                 {i18n.t('screens.protocolEditPage.addLabel')}
               </TextView>
               <ImageView

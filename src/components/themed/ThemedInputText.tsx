@@ -24,6 +24,7 @@ const ThemedInputText: React.FC<Props> = props => {
         height={40}
         borderBottomColor="text.2"
         borderBottomWidth={1}
+        placeholderTextColor="background.3"
       />
     </LinearLayout>
   )
