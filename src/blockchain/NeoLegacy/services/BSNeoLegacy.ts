@@ -189,7 +189,7 @@ export class BSNeoLegacy implements IClaimable, IBlockchainService {
     const balances = await this.provider.getBalance(account.address)
     const NEOBalance = balances.find(balance => balance.symbol === 'NEO')
 
-    const apiProvider = new api.neoscan.instance(this.network.url)
+    const apiProvider = new api.neoCli.instance(this.network.url)
 
     if (NEOBalance) {
       await this.sendNativeAsset(account.address, account.address, 'NEO', NEOBalance.amount)
