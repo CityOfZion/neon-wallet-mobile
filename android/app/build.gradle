@@ -136,8 +136,8 @@ android {
         applicationId 'io.cityofzion.neon'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1221
-        versionName "1.2.2"
+        versionCode 1256
+        versionName "1.2.5"
         multiDexEnabled true
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         testBuildType System.getProperty('testBuildType', 'debug')

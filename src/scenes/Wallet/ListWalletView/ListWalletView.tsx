@@ -4,6 +4,7 @@ import React, { useMemo, useRef, useState } from 'react'
 import { Animated, RefreshControl } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
+import OTAHelper from '../../../helpers/OTAHelper'
 import { EmptyList } from './EmptyList'
 import { FirstWalletAlert } from './FirstWalletAlert'
 import { Header } from './Header'
@@ -91,6 +92,11 @@ export const ListWalletView = (props: WalletProps) => {
     setPressedWallet(wallets[0])
   }
 
+  const handleRefresh = async () => {
+    await selectedWalletBalanceExchange.refetch()
+    await OTAHelper.handleOTAUpdates()
+  }
+
   return (
     <ScreenLayout
       testID="scene-list-wallet-view"
@@ -102,7 +108,7 @@ export const ListWalletView = (props: WalletProps) => {
         <RefreshControl
           tintColor="#fff"
           refreshing={selectedWalletBalanceExchange.isLoading ?? selectedWalletBalanceExchange.isRefetchingByUser}
-          onRefresh={selectedWalletBalanceExchange.refetch}
+          onRefresh={handleRefresh}
         />
       }
     >

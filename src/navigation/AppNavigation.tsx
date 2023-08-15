@@ -1,10 +1,11 @@
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
 import React, { useRef, useState } from 'react'
-import { StatusBar } from 'react-native'
+import { StatusBar, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
 import { Alert } from '../components/Alert'
+import { Loader } from '../components/loader/loader'
 import { DeepLinkingConfig } from '../config/DeepLinkingConfig'
 import { useAfterStartApp } from '../hooks/useAfterStartApp'
 import SetupCompletePage, { SetupCompleteParamList } from '../scenes/SetupCompletePage'
@@ -57,7 +58,7 @@ const AppNavigation = () => {
   return (
     <ThemeProvider theme={theme}>
       <StatusBar barStyle={theme.statusBarStyle} translucent backgroundColor="rgba(255,255,255,0)" />
-      <NavigationContainer linking={linking} onReady={handleNavigationReady} ref={navigationRef}>
+      <NavigationContainer fallback={<Loader />} linking={linking} onReady={handleNavigationReady} ref={navigationRef}>
         <RootStack.Navigator initialRouteName={getInitialRouteName()} headerMode="none" screenOptions={screenConfig}>
           <RootStack.Screen name={wrapper.route.Tab.name} component={TabNavigation} />
           <RootStack.Screen name={wrapper.route.Onboarding.name} component={OnboardingPage} />
