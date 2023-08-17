@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "neon.app"
+               BuildableName = "Neon.app"
                BlueprintName = "Neon"
                ReferencedContainer = "container:Neon.xcodeproj">
             </BuildableReference>
@@ -55,7 +55,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "neon.app"
+            BuildableName = "Neon.app"
             BlueprintName = "Neon"
             ReferencedContainer = "container:Neon.xcodeproj">
          </BuildableReference>
@@ -72,7 +72,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "neon.app"
+            BuildableName = "Neon.app"
             BlueprintName = "Neon"
             ReferencedContainer = "container:Neon.xcodeproj">
          </BuildableReference>

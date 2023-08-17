@@ -1,7 +1,6 @@
 import { useWalletConnectWallet } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import NetInfo from '@react-native-community/netinfo'
 import { NavigationContainerRef } from '@react-navigation/native'
-import * as SplashScreen from 'expo-splash-screen'
 import i18n from 'i18n-js'
 import { useCallback, useEffect, useState } from 'react'
 import { showMessage } from 'react-native-flash-message'
@@ -9,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { appBus } from '../app/AppBus'
 import { wrapper } from '../app/ApplicationWrapper'
+import OTAHelper from '../helpers/OTAHelper'
 import { Account } from '../models/redux/Account'
 import { accountReducerActions } from '../store/account/AccountReducer'
 import { contactReducerActions } from '../store/contact/ContactReducer'
@@ -135,7 +135,6 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
 
   useEffect(() => {
     if (!started || !navigationStarted) return
-
-    SplashScreen.hideAsync()
+    OTAHelper.handleOTAUpdates()
   }, [started, navigationStarted])
 }

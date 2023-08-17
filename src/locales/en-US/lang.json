@@ -1019,5 +1019,9 @@
     "offline": "You need to be online to connect to a dApp",
     "invalidSession": "Trying to connect to unsupported network",
     "internetConnectionLost": "Internet connection lost. You were disconnected from all dapps."
+  },
+  "OTA": {
+    "alertUpdate": "A new update has been installed, please restart the app",
+    "alertButton": "Ok"
   }
 }

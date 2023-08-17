@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>EXUpdatesCheckOnLaunch</key>
-	<string>ALWAYS</string>
-	<key>EXUpdatesEnabled</key>
-	<true/>
-	<key>EXUpdatesLaunchWaitMs</key>
-	<integer>0</integer>
-	<key>EXUpdatesSDKVersion</key>
-	<string>39.0.0</string>
-	<key>EXUpdatesURL</key>
-	<string>https://exp.host/@ricardokobayashi/neon</string>
-</dict>
+  <dict>
+    <key>EXUpdatesCheckOnLaunch</key>
+    <string>ALWAYS</string>
+    <key>EXUpdatesEnabled</key>
+    <true/>
+    <key>EXUpdatesLaunchWaitMs</key>
+    <integer>0</integer>
+    <key>EXUpdatesRequestHeaders</key>
+    <dict>
+      <key>expo-channel-name</key>
+      <string>preview</string>
+      <key>expo-runtime-version</key>
+      <string>1.0.0</string>
+      <key>expo-platform</key>
+      <string>ios</string>
+    </dict>
+    <key>EXUpdatesRuntimeVersion</key>
+    <string>1.0.0</string>
+    <key>EXUpdatesURL</key>
+    <string>https://u.expo.dev/e3527b9c-81e6-4b6b-a770-342d8b0a96bb</string>
+  </dict>
 </plist>
