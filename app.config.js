@@ -1,3 +1,4 @@
+require('dotenv').config()
 module.exports = {
   expo: {
     name: 'Neon',
@@ -42,7 +43,7 @@ module.exports = {
         },
       },
     },
-    owner: 'endkeycodersimpli',
+    owner: 'cityofzion',
     ...(process.env.MODE !== "dev" ? {
       extra: {
         eas: {
@@ -52,7 +53,8 @@ module.exports = {
       updates: {
         url: "https://u.expo.dev/e3527b9c-81e6-4b6b-a770-342d8b0a96bb",
         requestHeaders: {
-          "expo-channel": "preview",
+          "expo-channel": process.env.CHANNEL,
+          "expo-platform": process.env.PLATFORM,
         }
       },
       runtimeVersion: "1.0.0"
