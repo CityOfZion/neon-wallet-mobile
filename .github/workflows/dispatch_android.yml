@@ -1,0 +1,62 @@
+name: Dispatch Test Build Android
+
+on:
+  workflow_dispatch:
+    inputs:
+        environment:
+          description: 'Environment for the build (iOS or Android)'
+          required: true
+          type: choice
+          options:
+            - production
+            - staging
+            - beta
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16.20.0
+
+    - name: Install yarn
+      run: npm install --global yarn
+
+    - name: Install dependencies
+      run: yarn --force
+      
+    - name: Fix Android 31 links
+      run: ln -s ${ANDROID_HOME}/build-tools/31.0.0/d8 ${ANDROID_HOME}/build-tools/31.0.0/dx && ln -s ${ANDROID_HOME}/build-tools/31.0.0/lib/d8.jar ${ANDROID_HOME}/build-tools/31.0.0/lib/dx.jar
+
+    - name: Create keystore file
+      run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > android/app/keystore.jks
+    
+    - name: Prebuild
+      run: yarn expo prebuild
+
+    - name: Log Environment
+      run: |
+          echo ${{ github.event.inputs.environment }}
+          echo $ENVIRONMENT
+
+    - name: Build release APK
+      env:
+          KEYSTORE_PATH: keystore.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+          NODE_OPTIONS: "--max_old_space_size=4096"
+          CHANNEL: ${{ github.event.inputs.environment }}
+      run: npm run android-release
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-release.apk
+        path: android/app/build/outputs/apk/release/app-release.apk
+        retention-days: 5
