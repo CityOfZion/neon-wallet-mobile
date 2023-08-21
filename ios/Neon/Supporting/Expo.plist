@@ -10,10 +10,12 @@
     <integer>0</integer>
     <key>EXUpdatesRequestHeaders</key>
     <dict>
-      <key>expo-channel</key>
+      <key>expo-channel-name</key>
       <string>beta</string>
       <key>expo-platform</key>
       <string>ios</string>
+      <key>expo-runtime-version</key>
+      <string>1.0.0</string>
     </dict>
     <key>EXUpdatesRuntimeVersion</key>
     <string>1.0.0</string>
