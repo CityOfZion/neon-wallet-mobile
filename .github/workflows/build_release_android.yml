@@ -30,7 +30,7 @@ jobs:
       run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > android/app/keystore.jks
     
     - name: Prebuild
-      run: yarn expo prebuild
+      run: yarn prebuild:android
 
     - name: Build release APK
       env:
