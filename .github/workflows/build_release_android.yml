@@ -28,6 +28,10 @@ jobs:
 
     - name: Create keystore file
       run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > android/app/keystore.jks
+    
+    - name: Prebuild
+      run: yarn expo prebuild
+
     - name: Build release APK
       env:
           KEYSTORE_PATH: keystore.jks
@@ -35,6 +39,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
           NODE_OPTIONS: "--max_old_space_size=4096"
+          CHANNEL: "beta"
       run: npm run android-release
 
     - name: Upload APK
