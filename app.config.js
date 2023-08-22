@@ -53,7 +53,7 @@ module.exports = {
       updates: {
         url: "https://u.expo.dev/e3527b9c-81e6-4b6b-a770-342d8b0a96bb",
         requestHeaders: {
-          "expo-channel-name": process.env.CHANNEL,
+          "expo-channel-name": 'beta',
           "expo-platform": process.env.PLATFORM,
           "expo-runtime-version": "1.0.0"
         }
