@@ -108,7 +108,10 @@ const AccountTransactionsScreen = (props: Props) => {
                   if (transfer.type === TransactionTransferType.ASSET) {
                     return {
                       ...transfer,
-                      amount: String(transfer.amount / 10 ** transfer.decimals),
+                      amount:
+                        account.blockchain === 'neo3'
+                          ? String(transfer.amount / 10 ** transfer.decimals)
+                          : String(transfer.amount),
                     }
                   }
 

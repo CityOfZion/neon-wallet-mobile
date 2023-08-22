@@ -35,7 +35,9 @@ export class DoraSDKProvider implements NeoLegacyProvider {
       entries.map(async ({ address_from, address_to, amount, asset, block_height, time, txid }) => {
         if (address_from !== address && address_to !== address) return
 
-        const assetInfo = await api.NeoLegacyREST.asset(asset, this.network.type)
+        const assetHash = asset.startsWith('0x') ? asset : '0x' + asset
+
+        const assetInfo = await api.NeoLegacyREST.asset(assetHash, this.network.type)
         const decimals = assetInfo.decimals ?? 0
         const symbol = assetInfo.symbol ?? ''
 
@@ -43,10 +45,10 @@ export class DoraSDKProvider implements NeoLegacyProvider {
 
         const transfer = new TransactionAddressAsset({
           amount: Number(amountConverted),
-          hash: asset,
+          hash: assetHash,
           from: address_from ?? 'Mint',
           to: address_to ?? 'Burn',
-          decimals: assetInfo.decimals ?? 0,
+          decimals,
           symbol,
         })
 
