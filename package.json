@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "neon-wallet-mobile",
-  "version": "1.2.2",
+  "version": "1.2.6",
   "scripts": {
     "serve": "cross-env MODE=dev expo start",
     "android": "react-native run-android",
@@ -18,10 +18,10 @@
     "build:ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
     "fix:dependencies": "expo doctor --fix-dependencies",
     "postinstall": "node_modules/.bin/rn-nodeify --install crypto,assert,url,stream,events --hack",
-    "ota:production": "yarn prebuild:android && eas update --channel=production -p android && yarn prebuild:ios && eas update --channel=production -p ios && eas logout",
-    "ota:staging": "yarn prebuild:android && eas update --channel=staging -p android && yarn prebuild:ios && eas update --channel=staging -p ios && eas logout",
-    "ota:beta": "yarn prebuild:android && eas update --channel=beta -p android && yarn prebuild:ios && eas update --channel=beta -p ios && eas logout",
-    "ota:preview": "yarn prebuild:android && eas update --channel=preview -p android && yarn prebuild:ios && eas update --channel=preview -p ios && eas logout",
+    "ota:production": "cross-env CHANNEL=production yarn prebuild:android && eas update --channel=production -p android && yarn prebuild:ios && eas update --channel=production -p ios && eas logout",
+    "ota:staging": "cross-env CHANNEL=staging yarn prebuild:android && eas update --channel=staging -p android && yarn prebuild:ios && eas update --channel=staging -p ios && eas logout",
+    "ota:beta": "cross-env CHANNEL=beta yarn prebuild:android && eas update --channel=beta -p android && yarn prebuild:ios && eas update --channel=beta -p ios && eas logout",
+    "ota:preview": "cross-env CHANNEL=preview yarn prebuild:android && eas update --channel=preview -p android && yarn prebuild:ios && eas update --channel=preview -p ios && eas logout",
     "prebuild:android": "cross-env PLATFORM=android eas build:configure -p android",
     "prebuild:ios": "cross-env PLATFORM=ios eas build:configure -p ios"
   },

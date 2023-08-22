@@ -3,16 +3,16 @@ module.exports = {
   expo: {
     name: 'Neon',
     slug: 'neon',
-    version: '1.2.5',
+    version: '1.2.6',
     orientation: 'portrait',
     android: {
       package: 'io.cityofzion.neon',
-      versionCode: 1256,
+      versionCode: 1261,
       adaptiveIcon: { foregroundImage: 'src/assets/ic_launcher_foreground.png', backgroundColor: '#1f2b2d' },
       googleServicesFile: './google-services.json',
     },
     ios: {
-      buildNumber: "9",
+      buildNumber: "12",
       infoPlist: {
         NSFaceIDUsageDescription:
           'This app uses face ID to authenticate the user when dealing with sensitive transactions.',
