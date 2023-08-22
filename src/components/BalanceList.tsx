@@ -47,7 +47,7 @@ const BalanceListItem = React.memo(
     return (
       <ButtonView onPress={handlePress} disabled={!onPress}>
         <LinearLayout orientation="horiz" alignItems="center" justifyContent="space-between" mt={5} mb={5}>
-          <LinearLayout orientation="horiz" alignItems="center" width="100px">
+          <LinearLayout orientation="horiz" alignItems="center" width={showHoldingValue ? '40%' : undefined}>
             <TokenIcon marginRight={8} resizeMode="contain" width={24} height={24} {...tokenBalanceConverted} />
 
             <LinearLayout>
@@ -70,36 +70,33 @@ const BalanceListItem = React.memo(
           </LinearLayout>
 
           {showHoldingValue && (
-            <LinearLayout>
-              <LinearLayout justifyContent="center">
-                <TextView
-                  mb="-6px"
-                  color="text.2"
-                  fontSize="sm"
-                  allowFontScaling
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                  mr={4}
-                >
-                  {i18n.t('components.balanceList.holdings')}
-                </TextView>
-                <TextView
-                  mt={1}
-                  color="text.2"
-                  fontSize="sm"
-                  fontFamily="medium"
-                  allowFontScaling
-                  adjustsFontSizeToFit
-                  numberOfLines={1}
-                >
-                  {i18n.t('components.balanceList.value')}
-                </TextView>
-              </LinearLayout>
+            <LinearLayout flexGrow={1}>
+              <TextView mb="-6px" color="text.2" fontSize="sm" allowFontScaling numberOfLines={1} ellipsizeMode="tail">
+                {i18n.t('components.balanceList.holdings')}
+              </TextView>
+              <TextView
+                mt={1}
+                color="text.2"
+                fontSize="sm"
+                fontFamily="medium"
+                allowFontScaling
+                adjustsFontSizeToFit
+                numberOfLines={1}
+              >
+                {i18n.t('components.balanceList.value')}
+              </TextView>
             </LinearLayout>
           )}
 
-          <LinearLayout width="80px">
+          <LinearLayout
+            flexGrow={!showHoldingValue ? 1 : undefined}
+            flexShrink={!showHoldingValue ? 1 : undefined}
+            width={showHoldingValue ? '40%' : undefined}
+            pl="8px"
+          >
             <TextView
+              flexGrow={1}
+              flexShrink={1}
               color="text.0"
               fontSize="md"
               allowFontScaling
@@ -110,6 +107,8 @@ const BalanceListItem = React.memo(
               {String(tokenBalanceConverted.amount)}
             </TextView>
             <TextView
+              flexGrow={1}
+              flexShrink={1}
               color="primary"
               fontSize="md"
               fontFamily="medium"
