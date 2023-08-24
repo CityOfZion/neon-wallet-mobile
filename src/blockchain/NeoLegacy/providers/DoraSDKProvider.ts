@@ -41,10 +41,8 @@ export class DoraSDKProvider implements NeoLegacyProvider {
         const decimals = assetInfo.decimals ?? 0
         const symbol = assetInfo.symbol ?? ''
 
-        const amountConverted = this.convertScientifcNotationToDecimal(amount, decimals)
-
         const transfer = new TransactionAddressAsset({
-          amount: Number(amountConverted),
+          amount: amount * 10 ** decimals,
           hash: assetHash,
           from: address_from ?? 'Mint',
           to: address_to ?? 'Burn',
@@ -113,11 +111,5 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     result.address = address
     result.unclaimed = unclaimed
     return result
-  }
-
-  private convertScientifcNotationToDecimal(scientificNotation: number, decimals: number) {
-    return String(scientificNotation).includes('e')
-      ? new Number(scientificNotation).toFixed(decimals)
-      : scientificNotation
   }
 }
