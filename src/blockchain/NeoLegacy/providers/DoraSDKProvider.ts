@@ -35,18 +35,18 @@ export class DoraSDKProvider implements NeoLegacyProvider {
       entries.map(async ({ address_from, address_to, amount, asset, block_height, time, txid }) => {
         if (address_from !== address && address_to !== address) return
 
-        const assetInfo = await api.NeoLegacyREST.asset(asset, this.network.type)
+        const assetHash = asset.startsWith('0x') ? asset : '0x' + asset
+
+        const assetInfo = await api.NeoLegacyREST.asset(assetHash, this.network.type)
         const decimals = assetInfo.decimals ?? 0
         const symbol = assetInfo.symbol ?? ''
 
-        const amountConverted = this.convertScientifcNotationToDecimal(amount, decimals)
-
         const transfer = new TransactionAddressAsset({
-          amount: Number(amountConverted),
-          hash: asset,
+          amount: amount * 10 ** decimals,
+          hash: assetHash,
           from: address_from ?? 'Mint',
           to: address_to ?? 'Burn',
-          decimals: assetInfo.decimals ?? 0,
+          decimals,
           symbol,
         })
 
@@ -111,11 +111,5 @@ export class DoraSDKProvider implements NeoLegacyProvider {
     result.address = address
     result.unclaimed = unclaimed
     return result
-  }
-
-  private convertScientifcNotationToDecimal(scientificNotation: number, decimals: number) {
-    return String(scientificNotation).includes('e')
-      ? new Number(scientificNotation).toFixed(decimals)
-      : scientificNotation
   }
 }
