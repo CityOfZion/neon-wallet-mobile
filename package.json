@@ -117,7 +117,7 @@
     "react-native-tab-view": "^2.15.2",
     "react-native-view-shot": "3.1.2",
     "react-native-web": "0.17.1",
-    "react-native-webview": "11.15.0",
+    "react-native-webview": "11.22.7",
     "react-navigation": "latest",
     "react-query": "^3.39.1",
     "react-redux": "^7.2.0",
@@ -138,6 +138,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.18.2",
+    "@babel/preset-typescript": "^7.22.11",
     "@eslint/create-config": "^0.2.0",
     "@react-native-community/cli-platform-android": "^8.0.2",
     "@types/i18n-js": "^3.0.3",
