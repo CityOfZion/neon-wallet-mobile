@@ -1,6 +1,7 @@
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 import React, { useRef, useState } from 'react'
-import { StatusBar, View } from 'react-native'
+import { StatusBar } from 'react-native'
 import { useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 
@@ -11,7 +12,6 @@ import { useAfterStartApp } from '../hooks/useAfterStartApp'
 import SetupCompletePage, { SetupCompleteParamList } from '../scenes/SetupCompletePage'
 import { RootState } from '../store/RootStore'
 
-import { createStackNavigator } from '~/node_modules/@react-navigation/stack'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { screenConfig } from '~src/config/ScreenConfig'
 import ModalStackNavigation, { ModalParams } from '~src/navigation/ModalStackNavigation'

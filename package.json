@@ -26,6 +26,7 @@
     "prebuild:ios": "cross-env PLATFORM=ios eas build:configure -p ios"
   },
   "dependencies": {
+    "@babel/preset-typescript": "^7.22.11",
     "@cityofzion/blockchain-service": "0.4.2",
     "@cityofzion/bs-neo-legacy": "0.4.2",
     "@cityofzion/bs-neo3": "0.4.2",
@@ -117,7 +118,7 @@
     "react-native-tab-view": "^2.15.2",
     "react-native-view-shot": "3.1.2",
     "react-native-web": "0.17.1",
-    "react-native-webview": "11.15.0",
+    "react-native-webview": "11.22.7",
     "react-navigation": "latest",
     "react-query": "^3.39.1",
     "react-redux": "^7.2.0",
