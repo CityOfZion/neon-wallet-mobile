@@ -138,7 +138,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.18.2",
-    "@babel/preset-typescript": "^7.22.11",
     "@eslint/create-config": "^0.2.0",
     "@react-native-community/cli-platform-android": "^8.0.2",
     "@types/i18n-js": "^3.0.3",
