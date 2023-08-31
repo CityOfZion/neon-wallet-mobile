@@ -1,6 +1,7 @@
+import { ContractResponse } from '@cityofzion/blockchain-service'
 import { Signer, ContractInvocation, ContractInvocationMulti } from '@cityofzion/neo3-invoker'
 import { tx } from '@cityofzion/neon-core/'
-import { TSession } from '@cityofzion/wallet-connect-sdk-wallet-react'
+import { TSession, TSessionRequest } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -15,13 +16,11 @@ import { InvokeFunctionFailed } from './InvokeFunctionFailed'
 import { InvokeFunctionSuccess } from './InvokeFunctionSuccess'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { BlockchainServiceKey } from '~/src/blockchain'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
-import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
-import { Account } from '~/src/models/redux/Account'
-import { ContractResponse } from '~/src/models/response/ContractResponse'
+import { WalletConnectNeonAdapter } from '~/src/libs/WalletConnectNeonAdapter'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
+import { TBlockchainServiceKey } from '~/src/types/blockchain'
 
 type SignerBoxProps = {
   signer: Signer
@@ -35,8 +34,8 @@ type ContractDetailsProps = {
 }
 
 type TransactionFeeProps = {
-  account: Account
-  requestParams: ContractInvocationMulti
+  request: TSessionRequest
+  session: TSession
 }
 
 const SignerBox = ({ signer, showWarning, session }: SignerBoxProps) => {
@@ -76,7 +75,7 @@ const SignerBox = ({ signer, showWarning, session }: SignerBoxProps) => {
             />
           )}
           <TextView
-            color={showWarning ? '#ea5d8e' : 'white'}
+            color={showWarning ? 'danger' : 'white'}
             alignSelf="flex-end"
             pb="3px"
             fontSize={12}
@@ -100,23 +99,14 @@ const SignerBox = ({ signer, showWarning, session }: SignerBoxProps) => {
 
 const ContractDetails = ({ contract, session }: ContractDetailsProps) => {
   const navigation = useNavigation()
-  const blockchain = useMemo<BlockchainServiceKey>(
+  const blockchain = useMemo<TBlockchainServiceKey>(
     () => WalletConnectHelper.getAccountInformationFromSession(session)[0].blockchain,
     [session]
   )
-
-  const { blockchainService } = useBlockchainService(blockchain)
-
+  const blockchainService = useSelector(
+    (state: RootState) => state.blockchain.bsAggregator.blockchainServicesByName[blockchain]
+  )
   const [contractInfo, setContractInfo] = useState<ContractResponse>()
-
-  const handleGetContractInfo = useCallback(async () => {
-    if (!blockchainService.hasWalletConnectIntegration()) return
-
-    if (blockchain && session) {
-      const info = await blockchainService.getContract(contract.scriptHash)
-      setContractInfo(info)
-    }
-  }, [session])
 
   const handlePressRightButton = () => {
     if (!contractInfo) return
@@ -132,8 +122,8 @@ const ContractDetails = ({ contract, session }: ContractDetailsProps) => {
   }
 
   useEffect(() => {
-    handleGetContractInfo()
-  }, [handleGetContractInfo])
+    blockchainService.blockchainDataService.getContract(contract.scriptHash).then(setContractInfo)
+  }, [blockchainService])
 
   return (
     <ContractDetailsBox
@@ -146,20 +136,15 @@ const ContractDetails = ({ contract, session }: ContractDetailsProps) => {
   )
 }
 
-const TransactionFee = ({ account, requestParams }: TransactionFeeProps) => {
+const TransactionFee = ({ request, session }: TransactionFeeProps) => {
   const [feeRequest, setFeeRequest] = useState<number>()
-  const { blockchainService } = useBlockchainService(account.blockchain)
 
   const handleCalculateFee = useCallback(async () => {
-    if (!blockchainService.hasWalletConnectIntegration()) return
-
-    const wif = await account.getWif()
-    if (!wif) return
-
-    const fee = await blockchainService.calculateRequestFee(requestParams, wif)
+    const adapter = new WalletConnectNeonAdapter()
+    const fee = await adapter.calculateFee({ request, session })
 
     setFeeRequest(fee)
-  }, [account, requestParams])
+  }, [request, session])
 
   useEffect(() => {
     handleCalculateFee()
@@ -234,7 +219,7 @@ export const InvokeFunctionTransactionRequest = ({
         <SignerBox key={`${signer.scopes}-${index}`} session={session} showWarning={showWarning} signer={signer} />
       ))}
 
-      <TransactionFee account={account} requestParams={requestParams} />
+      <TransactionFee session={session} request={request} />
 
       <TouchableWithoutFeedback
         onPress={() => {

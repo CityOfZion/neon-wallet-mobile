@@ -1,17 +1,17 @@
 import i18n from 'i18n-js'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 
+import { blockchainConfig } from '../config/BlockchainConfig'
 import { FilterHelper } from '../helpers/FilterHelper'
-import { useBlockchainService } from '../hooks/useBlockchainServices'
-import { Account } from '../models/redux/Account'
 import { RootState } from '../store/RootStore'
+import { Account } from '../store/account/Account'
 import { LinearLayout, TextView } from '../styles/styled-components'
 import { HeaderColumn } from './HeaderColumn'
 import { TokenIcon } from './TokenIcon'
 
 interface Props {
-  tip: number
+  tip: string
   account: Account
   ratio?: number
 }
@@ -19,17 +19,18 @@ interface Props {
 export const TransactionTipCard = ({ account, tip, ratio }: Props) => {
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
-  const { blockchainService } = useBlockchainService(account.blockchain)
+  const selectedNetwork = useSelector(
+    (state: RootState) => state.settings.selectedBlockchainNetworks[account.blockchain]
+  )
 
-  const tipFiat = useMemo(() => {
-    if (!ratio) return
+  const tipFiat = ratio ? FilterHelper.currency(ratio * Number(tip), currency, language) : undefined
+  const blockchainTip = blockchainConfig.mainnetTipByBlockchain[account.blockchain]
 
-    const price = ratio * tip
+  if (selectedNetwork.type !== 'mainnet' || !blockchainTip) {
+    return <></>
+  }
 
-    return FilterHelper.currency(price, currency, language)
-  }, [ratio, currency, language, tip])
-
-  return blockchainService.cozTip ? (
+  return (
     <LinearLayout
       orientation="verti"
       borderRadius="7px"
@@ -44,30 +45,17 @@ export const TransactionTipCard = ({ account, tip, ratio }: Props) => {
         Tip
       </TextView>
       <LinearLayout orientation="horiz">
-        <TokenIcon
-          blockchain={account.blockchain}
-          hash={blockchainService.cozTip.hash}
-          symbol={blockchainService.cozTip.symbol}
-          width={18}
-          height={18}
-          resizeMode="contain"
-        />
+        <TokenIcon blockchain={account.blockchain} width={18} height={18} {...blockchainTip.token} />
 
         <TextView ml="4px" fontFamily="medium" color="text.0" fontSize="16px">
-          {blockchainService.cozTip.symbol}
+          {blockchainTip.token.symbol}
         </TextView>
       </LinearLayout>
 
       <LinearLayout orientation="horiz">
-        <HeaderColumn
-          weight={2}
-          title={i18n.t('components.transactionTipCard.qty')}
-          value={tip.toFixed(blockchainService.cozTip.decimals)}
-        />
+        <HeaderColumn weight={2} title={i18n.t('components.transactionTipCard.qty')} value={tip} />
         {tipFiat && <HeaderColumn weight={1.6} title={i18n.t('components.transactionTipCard.value')} value={tipFiat} />}
       </LinearLayout>
     </LinearLayout>
-  ) : (
-    <></>
   )
 }

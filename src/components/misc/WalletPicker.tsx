@@ -3,10 +3,10 @@ import { Animated } from 'react-native'
 import Carousel from 'react-native-reanimated-carousel'
 
 import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { LinearLayout } from '~/src/styles/styled-components'
 import { UseMultipleBalanceAndExchangeResult } from '~/src/types/query'
 import { WalletCard, walletCardHeight, walletCardWidth } from '~src/components/WalletCard/WalletCard'
-import { Wallet } from '~src/models/redux/Wallet'
 
 interface Props {
   onPress?: (wallet: Wallet) => void

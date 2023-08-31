@@ -1,3 +1,4 @@
+import { ContractResponse } from '@cityofzion/blockchain-service'
 import { ContractInvocation } from '@cityofzion/neo3-invoker'
 import { TSession } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { RouteProp } from '@react-navigation/native'
@@ -13,7 +14,6 @@ import InvocationDetailsParametersBox from '../components/InvocationDetailsParam
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
-import { ContractResponse } from '~/src/models/response/ContractResponse'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'
 import { TextView } from '~/src/styles/styled-components'

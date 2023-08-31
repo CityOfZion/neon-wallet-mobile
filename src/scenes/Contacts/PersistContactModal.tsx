@@ -7,15 +7,14 @@ import { useDispatch } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { showAlert } from '~/src/components/Alert'
+import { BlockchainIcon } from '~/src/components/BlockchainIcon'
 import { Button } from '~/src/components/Button'
 import { Separator } from '~/src/components/Separator'
-import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
-import { Contact } from '~/src/models/redux/Contact'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
+import { Contact } from '~/src/store/contact/Contact'
 import { contactReducerActions } from '~/src/store/contact/ContactReducer'
-import { ContactAddresses } from '~/src/types/reducers/contact'
-import { DispatchResult } from '~/src/types/reducers/root'
+import { ContactAddresses } from '~/src/types/store'
 import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, { LabelButton, useSwiperController } from '~src/components/SwiperPanel'
@@ -37,7 +36,7 @@ export const PersistContactModal = (props: Props) => {
   const { contact, startingAddress } = props.route.params
 
   const controller = useSwiperController(true)
-  const dispatch = useDispatch<DispatchResult>()
+  const dispatch = useDispatch()
 
   const [name, setName] = useState('')
   const [nameIsValid, setNameIsValid] = useState<boolean>()
@@ -87,10 +86,17 @@ export const PersistContactModal = (props: Props) => {
       saving.current = true
 
       await Await.run('submit', async () => {
-        const contactToSave = contact ?? new Contact()
-        contactToSave.name = name
-        contactToSave.addresses = addresses
-        dispatch(contactReducerActions.saveContact(contactToSave.deserialize()))
+        let contactToSave: Contact
+
+        if (contact) {
+          contact.name = name
+          contact.addresses = addresses
+          contactToSave = contact
+        } else {
+          contactToSave = new Contact({ name, addresses })
+        }
+
+        dispatch(contactReducerActions.saveContact(contactToSave))
         controller.close()
       })
     } catch {
@@ -176,12 +182,7 @@ export const PersistContactModal = (props: Props) => {
                 key={index}
                 onPress={() => handleEditAddress(index, address)}
               >
-                <ImageView
-                  source={BlockchainHelper.getIcon(address.blockchain)}
-                  resizeMode="contain"
-                  width={16}
-                  height={16}
-                />
+                <BlockchainIcon blockchain={address.blockchain} width={16} height={16} />
 
                 <TextView
                   color="primary"

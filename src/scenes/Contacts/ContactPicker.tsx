@@ -3,18 +3,18 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
 
-import { BlockchainServiceKey } from '~/src/blockchain'
 import { TabSelectorContact } from '~/src/components/TabSelectorContacts'
-import { ContactAddresses } from '~/src/types/reducers/contact'
+import { Account } from '~/src/store/account/Account'
+import { Contact } from '~/src/store/contact/Contact'
+import { TBlockchainServiceKey } from '~/src/types/blockchain'
+import { ContactAddresses } from '~/src/types/store'
 import SwiperPanel, { useSwiperController, CloseButton } from '~src/components/SwiperPanel'
-import { Account } from '~src/models/redux/Account'
-import { Contact } from '~src/models/redux/Contact'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { TextView } from '~src/styles/styled-components'
 export interface ContactsModalParams {
   onContactSelected?: (contact: Contact, address: ContactAddresses) => void
   onAccountSelected?: (account: Account) => void
-  filterByBlockchain?: BlockchainServiceKey
+  filterByBlockchain?: TBlockchainServiceKey
 }
 
 interface ContactsModalProps {

@@ -4,20 +4,20 @@ import React, { useState, useMemo } from 'react'
 import { FlatList, SectionList, SectionListData } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { BlockchainServiceKey } from '~/src/blockchain'
-import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
-import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
+import { BlockchainIcon } from '../BlockchainIcon'
+
 import ListSeparator from '~/src/scenes/walletConnect/components/ListSeparator'
+import { Contact } from '~/src/store/contact/Contact'
 import { selectContacts } from '~/src/store/contact/SelectorContact'
-import { ContactAddresses } from '~/src/types/reducers/contact'
+import { TBlockchainServiceKey } from '~/src/types/blockchain'
+import { ContactAddresses } from '~/src/types/store'
 import { LinearLayoutProps } from '~/src/types/styled-components'
 import { SearchBar } from '~src/components/SearchBar'
-import { Contact } from '~src/models/redux/Contact'
-import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ButtonView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface ContactListProps extends LinearLayoutProps {
   onSelect?: (contact: Contact, address?: ContactAddresses) => void
-  filterByBlockchain?: BlockchainServiceKey
+  filterByBlockchain?: TBlockchainServiceKey
   emptyComponent?: JSX.Element
   emptyHideHeader?: boolean
   pressType?: 'all' | 'address'
@@ -53,13 +53,7 @@ const AddressItem = React.memo(({ address, onPress, contact, pressType }: Addres
       orientation="horiz"
       alignItems="center"
     >
-      <ImageView
-        source={BlockchainHelper.getIcon(address.blockchain)}
-        resizeMode="contain"
-        mr="14px"
-        width={20}
-        height={20}
-      />
+      <BlockchainIcon blockchain={address.blockchain} mr="14px" width={20} height={20} />
 
       <LinearLayout flex={1}>
         <TextView color="text.10" fontSize="14px">
@@ -138,7 +132,6 @@ export const ContactList = ({
   ...props
 }: ContactListProps) => {
   const contacts = useSelector(selectContacts)
-  const { getBlockchainByAddress } = useBlockchainServiceUtils()
 
   const [filter, setFilter] = useState('')
 
@@ -156,7 +149,7 @@ export const ContactList = ({
 
         return contact
       })
-  }, [contacts, getBlockchainByAddress, filterByBlockchain])
+  }, [contacts, filterByBlockchain])
 
   const data = useMemo<SectionListData<Contact>[]>(() => {
     let items = filteredByBlockchain

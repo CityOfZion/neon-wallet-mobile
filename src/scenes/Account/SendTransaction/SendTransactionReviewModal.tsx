@@ -1,8 +1,8 @@
+import { Token } from '@cityofzion/blockchain-service'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import moment from 'moment'
 import React, { useMemo } from 'react'
 import { showMessage } from 'react-native-flash-message'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,18 +12,17 @@ import { Normalize } from '~/src/app/Normalize'
 import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
 import { TransactionTipCard } from '~/src/components/TransactionTipCard'
 import { TransactionTokenCard } from '~/src/components/TransactionTokenCard'
+import { blockchainConfig } from '~/src/config/BlockchainConfig'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
 import { useExchange } from '~/src/hooks/useExchange'
 import { useLocalAuthentication } from '~/src/hooks/useLocalAuthentication'
-import { Token } from '~/src/models/Token'
-import { Account, PendingTransactions } from '~/src/models/redux/Account'
-import { Contact } from '~/src/models/redux/Contact'
-import { Wallet } from '~/src/models/redux/Wallet'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'
+import { Account } from '~/src/store/account/Account'
 import { accountReducerActions } from '~/src/store/account/AccountReducer'
+import { Contact } from '~/src/store/contact/Contact'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { HeaderColumn } from '~src/components/HeaderColumn'
 import { TransactionAccountCard } from '~src/components/TransactionAccountCard'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
@@ -33,13 +32,13 @@ import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components
 
 export interface SendTransactionReviewModalParams {
   amount: string
-  fee: number
+  fee: string
   account: Account
   wallet: Wallet
   token: Token
   destinationAddress: string
   fiat?: string
-  tip?: number
+  tip?: string
   destinationAddressAlias?: string
   destinationAccount?: Account
   destinationWallet?: Wallet
@@ -71,13 +70,24 @@ export const SendTransactionReviewModal = (props: Props) => {
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
+  const blockchainService = useSelector(
+    (state: RootState) => state.blockchain.bsAggregator.blockchainServicesByName[account.blockchain]
+  )
+
   const dispatch = useDispatch()
   const controller = useSwiperController(true)
-  const { blockchainService } = useBlockchainService(account.blockchain)
+
   const { data: exchange } = useExchange()
 
+  const amountNumber = Number(amount) + Number(tip ?? 0) + Number(fee)
+
   const currencyAmount = BalanceHelper.convertBalanceToCurrency(
-    { amount: Number(amount) + fee + (tip ?? 0), ...token },
+    {
+      amountNumber: Number(amount) + Number(tip ?? 0),
+      amount: amountNumber.toString(),
+      blockchain: account.blockchain,
+      token,
+    },
     exchange
   )
   const convertedAmount = currencyAmount?.convertedAmount ?? 0
@@ -85,7 +95,7 @@ export const SendTransactionReviewModal = (props: Props) => {
   const ratio = useMemo(() => {
     if (!exchange) return
 
-    return BalanceHelper.getExchangeRatio(token.symbol, token.blockchain, exchange)
+    return BalanceHelper.getExchangeRatio(token.symbol, account.blockchain, exchange)
   }, [exchange, currency, token])
 
   const submit = async () => {
@@ -93,8 +103,8 @@ export const SendTransactionReviewModal = (props: Props) => {
       return
     }
 
-    const wif = await account.getWif()
-    if (!wif) return
+    const senderKey = await account.getKey()
+    if (!senderKey) return
 
     try {
       await authenticate()
@@ -102,32 +112,48 @@ export const SendTransactionReviewModal = (props: Props) => {
       return
     }
 
+    const tipConfig = blockchainConfig.mainnetTipByBlockchain[account.blockchain]
     try {
-      const transactionHash = await blockchainService.sendTransaction({
-        receiverAddress: destinationAddress,
-        senderWif: wif,
-        tokenHash: token.hash,
-        tokenDecimals: token.decimals,
-        amount: Number(amount),
-        fee,
-        tip,
+      const transactionHash = await blockchainService.transfer({
+        tipIntent:
+          tip && tipConfig
+            ? {
+                amount: tip,
+                receiverAddress: tipConfig.address,
+                tokenHash: tipConfig.token.hash,
+                tokenDecimals: tipConfig.token.decimals,
+              }
+            : undefined,
+        senderAccount: {
+          address: account.address,
+          key: senderKey,
+          type: 'wif',
+        },
+        intent: {
+          amount,
+          receiverAddress: destinationAddress,
+          tokenHash: token.hash,
+          tokenDecimals: token.decimals,
+        },
       })
 
-      if (!transactionHash) {
-        throw new Error(i18n.t('modals.sendTransactionReviewModal.transactionFailed'))
-      }
-
-      const pendingTransaction: PendingTransactions = {
+      account.addPendingTransaction({
         hash: transactionHash,
-        senderAddress: account.address,
-        receiverAddress: destinationAddress,
-        token,
-        amount: Number(amount),
+        block: 0,
+        notifications: [],
+        transfers: [
+          {
+            amount,
+            type: 'token',
+            contractHash: token.hash,
+            from: account.address,
+            to: destinationAddress,
+            token,
+          },
+        ],
         fee,
-        time: moment().unix(),
-      }
+      })
 
-      account.pendingTransactions = [...account.pendingTransactions, pendingTransaction]
       dispatch(accountReducerActions.saveAccount(account))
       dispatch(accountReducerActions.watchPendingTransaction({ account, transactionHash, isClaim: false }))
 
@@ -139,7 +165,8 @@ export const SendTransactionReviewModal = (props: Props) => {
           transactionHash,
         },
       })
-    } catch {
+    } catch (error) {
+      console.log(error)
       showMessage({
         message: i18n.t('modals.sendTransactionReviewModal.transactionFailed'),
         type: 'danger',
@@ -194,9 +221,9 @@ export const SendTransactionReviewModal = (props: Props) => {
             </LinearLayout>
             <LinearLayout width="100%">
               <TransactionAccountCard
-                address={account.address ?? undefined}
-                accountName={account.name ?? undefined}
-                walletName={wallet.name ?? undefined}
+                address={account.address}
+                accountName={account.name}
+                walletName={wallet.name}
                 hideButton
               />
               <LinearLayout orientation="horiz">

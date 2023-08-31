@@ -1,3 +1,4 @@
+import { Token, isCalculableFee } from '@cityofzion/blockchain-service'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
@@ -16,17 +17,16 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import AccountCard from '~/src/components/AccountCard'
 import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
 import ThemedButton from '~/src/components/themed/ThemedButton'
+import { blockchainConfig } from '~/src/config/BlockchainConfig'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
-import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
-import { Token } from '~/src/models/Token'
-import { Account } from '~/src/models/redux/Account'
-import { Contact } from '~/src/models/redux/Contact'
-import { Wallet } from '~/src/models/redux/Wallet'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
 import { RootState } from '~/src/store/RootStore'
+import { Account } from '~/src/store/account/Account'
+import { Contact } from '~/src/store/contact/Contact'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { LinearLayout, TextView } from '~/src/styles/styled-components'
 
 export interface SendTransactionModalParams {
@@ -46,8 +46,10 @@ export const SendTransactionModal = (props: Props) => {
 
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const currency = useSelector((state: RootState) => state.settings.currency)
+  const blockchainService = useSelector(
+    (state: RootState) => state.blockchain.bsAggregator.blockchainServicesByName[account.blockchain]
+  )
   const controller = useSwiperController(true)
-  const { blockchainService } = useBlockchainService(account.blockchain)
 
   const balanceExchange = useBalancesAndExchange(account)
 
@@ -63,15 +65,15 @@ export const SendTransactionModal = (props: Props) => {
   const [fiat, setFiat] = useState<string>()
   const [amountIsValid, setAmountIsValid] = useState<boolean>()
 
-  const [fee, setFee] = useState<number>()
+  const [fee, setFee] = useState<string>()
   const [isRequestingFee, setIsRequestFee] = useState(false)
 
-  const [tip, setTip] = useState<number>()
+  const [tip, setTip] = useState<string>()
   const [tipIsChecked, setTipIsChecked] = useState<boolean>(false)
   const [tipIsDisabled, setTipIsDisabled] = useState<boolean>(false)
 
   const feeTokenBalance = useMemo(
-    () => BalanceHelper.getTokenBalanceBySymbol(blockchainService.feeToken.token, balanceExchange.balance.data),
+    () => BalanceHelper.getTokenBalanceBySymbol(blockchainService.feeToken.symbol, balanceExchange.balance.data),
     [balanceExchange, account]
   )
   const tokenBalance = useMemo(() => {
@@ -83,7 +85,7 @@ export const SendTransactionModal = (props: Props) => {
   const ratio = useMemo(() => {
     if (!token) return
 
-    return BalanceHelper.getExchangeRatio(token.symbol, token.blockchain, balanceExchange.exchange.data)
+    return BalanceHelper.getExchangeRatio(token.symbol, account.blockchain, balanceExchange.exchange.data)
   }, [balanceExchange, currency])
 
   const handleSelectToken = (token: Token) => {
@@ -183,16 +185,16 @@ export const SendTransactionModal = (props: Props) => {
               onAmountValidation={setAmountIsValid}
               tokenBalance={tokenBalance}
               feeTokenBalance={feeTokenBalance}
-              fee={fee}
+              fee={Number(fee ?? 0)}
             />
 
             {account.blockchain === 'neoLegacy' && <FeePriorityTab onFeeChange={setFee} account={account} />}
 
-            {account.blockchain === 'neo3' && (
+            {isCalculableFee(blockchainService) && (
               <TotalFee
                 ratio={ratio}
                 account={account}
-                amount={amount ? Number(amount) : undefined}
+                amount={amount}
                 tip={!tipIsDisabled && tipIsChecked ? tip : undefined}
                 fee={fee}
                 destinationAddress={destinationAddress}
@@ -204,19 +206,22 @@ export const SendTransactionModal = (props: Props) => {
               />
             )}
 
-            <TipCheckbox
-              account={account}
-              amount={Number(amount)}
-              token={token}
-              fee={fee}
-              tip={tip}
-              disabled={tipIsDisabled}
-              checked={tipIsChecked}
-              onTipChange={setTip}
-              onCheckChange={setTipIsChecked}
-              onDisableChange={setTipIsDisabled}
-              tokenBalance={tokenBalance}
-            />
+            {blockchainService.network.type === 'mainnet' &&
+              blockchainConfig.mainnetTipByBlockchain[account.blockchain] && (
+                <TipCheckbox
+                  account={account}
+                  amount={Number(amount)}
+                  token={token}
+                  fee={Number(fee ?? 0)}
+                  tip={Number(tip ?? 0)}
+                  disabled={tipIsDisabled}
+                  checked={tipIsChecked}
+                  onTipChange={setTip}
+                  onCheckChange={setTipIsChecked}
+                  onDisableChange={setTipIsDisabled}
+                  tokenBalance={tokenBalance}
+                />
+              )}
           </LinearLayout>
           <LinearLayout mt={30} mb={20} alignSelf="center" width="100%">
             <ThemedButton label={i18n.t('app.next')} onPress={submit} disabled={!validateField() || !isConnected} />

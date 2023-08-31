@@ -91,4 +91,27 @@ export abstract class UtilsHelper {
   static fixDecimalPlaces(value: number, decimalPlaces: number) {
     return value / 10 ** decimalPlaces
   }
+
+  static isValidMnemonic(word: string | string[]) {
+    const wordArray = Array.isArray(word) ? word : word.trim().split(' ')
+    return wordArray.length === 12
+  }
+
+  static isMnemonic(word: string | string[]) {
+    const wordArray = Array.isArray(word) ? word : word.trim().split(' ')
+    return wordArray.length > 1
+  }
+
+  static generateBlockchainColor(symbol: string) {
+    const mandatoryColors: Record<string, string> = {
+      NEO: '#56f33f',
+      GAS: '#02c797',
+    }
+
+    return mandatoryColors[symbol] ?? `#${(0x1000000 + Math.random() * 0xffffff).toString(16).substr(1, 6)}`
+  }
+
+  static generateColor() {
+    return '#' + Math.floor(Math.random() * 16777215).toString(16)
+  }
 }

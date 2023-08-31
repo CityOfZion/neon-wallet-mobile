@@ -1,3 +1,4 @@
+import { Token } from '@cityofzion/blockchain-service'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
@@ -8,11 +9,10 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import InputLabel from '~/src/components/InputLabel'
 import { TokenIcon } from '~/src/components/TokenIcon'
-import { Token } from '~/src/models/Token'
-import { Account } from '~/src/models/redux/Account'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'
+import { Account } from '~/src/store/account/Account'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {
@@ -45,7 +45,16 @@ export const TokenSelect = ({ onTokenSelect, account, token }: Props) => {
 
       <ButtonView onPress={handlePress}>
         <LinearLayout borderBottomWidth={1} borderBottomColor={theme.colors.background[13]} orientation="horiz">
-          {!!token && <TokenIcon resizeMode="contain" width={24} height={24} marginRight={8} {...token} />}
+          {!!token && (
+            <TokenIcon
+              resizeMode="contain"
+              width={24}
+              height={24}
+              marginRight={8}
+              blockchain={account.blockchain}
+              {...token}
+            />
+          )}
 
           <TextView
             fontSize={18}

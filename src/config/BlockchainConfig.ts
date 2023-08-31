@@ -1,46 +1,33 @@
-import { BlockchainServiceKey, TNetwork, TNetworkType } from '../blockchain'
+import { NetworkType, Token } from '@cityofzion/blockchain-service'
 
-export type TBlockchainNetwork = TNetwork & {
+import { TBlockchainServiceKey } from '../types/blockchain'
+
+export type TBlockchainNetwork = {
   name: string
   id: string
+  type: NetworkType
+  url?: string
 }
 
-export type TBlockchainNetworks = Record<BlockchainServiceKey, TBlockchainNetwork[]>
+export type TBlockchainNetworks = Record<TBlockchainServiceKey, TBlockchainNetwork[]>
 
-export type TBlockchainNetworksURLS = Record<BlockchainServiceKey, Record<TNetworkType, string>>
+export type TSelectedBlockchainNetworks = Record<TBlockchainServiceKey, TBlockchainNetwork>
 
-export type TSelectedBlockchainNetworks = Record<BlockchainServiceKey, TBlockchainNetwork>
+export type TAvailableBlockchainNetworks = Record<TBlockchainServiceKey, NetworkType[]>
 
-export type TAvailableBlockchainNetworks = Record<BlockchainServiceKey, TNetworkType[]>
-
-export type TMandatorySymbols = Record<BlockchainServiceKey, string[]>
+export type TMandatorySymbols = Record<TBlockchainServiceKey, string[]>
 
 export class BlockchainConfig {
-  readonly defaultNetworksURLs: TBlockchainNetworksURLS = {
-    neo3: {
-      mainnet: 'https://mainnet1.neo.coz.io:443',
-      testnet: 'https://testnet1.neo.coz.io:443',
-      custom: 'http://127.0.0.1:50012',
-    },
-    neoLegacy: {
-      mainnet: 'http://seed9.ngd.network:10332',
-      testnet: 'http://seed5.ngd.network:20332',
-      custom: '',
-    },
-  }
-
   readonly defaultNetworks: TBlockchainNetworks = {
     neo3: [
       {
         id: 'neo3-mainnet',
         type: 'mainnet',
-        url: this.defaultNetworksURLs.neo3.mainnet,
         name: 'Mainnet',
       },
       {
         id: 'neo3-testnet',
         type: 'testnet',
-        url: this.defaultNetworksURLs.neo3.testnet,
         name: 'Testnet',
       },
     ],
@@ -48,13 +35,23 @@ export class BlockchainConfig {
       {
         id: 'neo-legacy-mainnet',
         type: 'mainnet',
-        url: this.defaultNetworksURLs.neoLegacy.mainnet,
         name: 'Mainnet',
       },
       {
         id: 'neo-legacy-testnet',
         type: 'testnet',
-        url: this.defaultNetworksURLs.neoLegacy.testnet,
+        name: 'Testnet',
+      },
+    ],
+    ethereum: [
+      {
+        id: 'ethereum-mainnet',
+        type: 'mainnet',
+        name: 'Mainnet',
+      },
+      {
+        id: 'ethereum-testnet',
+        type: 'testnet',
         name: 'Testnet',
       },
     ],
@@ -63,16 +60,40 @@ export class BlockchainConfig {
   readonly defaultSelectedNetworks: TSelectedBlockchainNetworks = {
     neo3: this.defaultNetworks.neo3[0],
     neoLegacy: this.defaultNetworks.neoLegacy[0],
+    ethereum: this.defaultNetworks.ethereum[0],
   }
 
   readonly availableNetworks: TAvailableBlockchainNetworks = {
     neo3: ['mainnet', 'testnet', 'custom'],
     neoLegacy: ['mainnet', 'testnet'],
+    ethereum: ['mainnet', 'testnet', 'custom'],
   }
 
-  readonly mandatorySymbols: Record<BlockchainServiceKey, string[]> = {
+  readonly mandatorySymbols: Record<TBlockchainServiceKey, string[]> = {
     neo3: ['NEO', 'GAS', 'FLM', 'GM', 'fUSDT', 'bNEO', 'fWBTC'],
     neoLegacy: [],
+    ethereum: [],
+  }
+
+  readonly mainnetTipByBlockchain: Partial<Record<TBlockchainServiceKey, { token: Token; address: string }>> = {
+    neo3: {
+      address: 'NXWJfovnpRaj2r3yrYQXDMvBLixv9zJZsk',
+      token: {
+        symbol: 'GAS',
+        hash: 'd2a4cff31913016155e38e474a2c06d08be276cf',
+        decimals: 8,
+        name: 'GasToken',
+      },
+    },
+    neoLegacy: {
+      address: 'AVav2pJu9S5rpsLyne2iC4vG63ngqT7uv9',
+      token: {
+        symbol: 'GAS',
+        hash: '602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
+        decimals: 8,
+        name: 'GasToken',
+      },
+    },
   }
 }
 

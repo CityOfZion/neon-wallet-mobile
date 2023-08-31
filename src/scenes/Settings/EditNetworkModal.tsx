@@ -4,16 +4,15 @@ import I18n from 'i18n-js'
 import { debounce } from 'lodash'
 import React, { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, Keyboard, Platform } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { BlockchainServiceKey } from '~/src/blockchain'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import { Separator } from '~/src/components/Separator'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import { TBlockchainNetwork } from '~/src/config/BlockchainConfig'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
-import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
+import { RootState } from '~/src/store/RootStore'
 import { settingsReducerActions } from '~/src/store/settings/SettingsReducer'
 import {
   ButtonWithoutFeedbackView,
@@ -22,11 +21,12 @@ import {
   LinearLayout,
   TextView,
 } from '~/src/styles/styled-components'
+import { TBlockchainServiceKey } from '~/src/types/blockchain'
 import SwiperPanel, { useSwiperController, CloseButton } from '~src/components/SwiperPanel'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 
 export interface EditNetworkModalParams {
-  blockchain: BlockchainServiceKey
+  blockchain: TBlockchainServiceKey
   network?: TBlockchainNetwork
 }
 
@@ -39,7 +39,9 @@ export const EditNetworkModal = (props: Props) => {
   const { blockchain, network } = props.route.params
   const controller = useSwiperController(true)
   const dispatch = useDispatch()
-  const { getBlockchainService } = useBlockchainServiceUtils()
+  const blockchainService = useSelector(
+    (state: RootState) => state.blockchain.bsAggregator.blockchainServicesByName[blockchain]
+  )
 
   const [networkName, setNetworkName] = useState('')
   const [networkUrl, setNetworkUrl] = useState('')
@@ -57,8 +59,8 @@ export const EditNetworkModal = (props: Props) => {
       }
       setIsValidating(true)
       try {
-        const service = getBlockchainService(blockchain, { type: 'custom', url: text })
-        await service.getBlockCount()
+        blockchainService.setNetwork({ type: 'custom', url: text })
+        await blockchainService.blockchainDataService.getBlockHeight()
         setUrlIsValid(true)
         setMessage(I18n.t('modals.editNetworkModal.connected'))
         return true
@@ -69,7 +71,7 @@ export const EditNetworkModal = (props: Props) => {
         setIsValidating(false)
       }
     }, 1000),
-    [getBlockchainService]
+    [blockchainService]
   )
 
   const validateNetworkName = useCallback(() => {
@@ -115,8 +117,9 @@ export const EditNetworkModal = (props: Props) => {
 
   useEffect(() => {
     if (!network) return
-
     setNetworkName(network.name)
+
+    if (!network.url) return
     setNetworkUrl(network.url)
     validateURL(network.url)
   }, [network])

@@ -3,10 +3,10 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
 
+import { Account } from '~/src/store/account/Account'
 import InputLabel from '~src/components/InputLabel'
 import { QRCodeWithCopyButton } from '~src/components/QRCodeWithCopyButton'
 import SwiperPanel, { useSwiperController, CloseButton } from '~src/components/SwiperPanel'
-import { Account } from '~src/models/redux/Account'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
 
@@ -25,7 +25,7 @@ export const AccountQRCode = (props: AccountQRCodeProps) => {
   return (
     <SwiperPanel
       controller={controller}
-      title={props.route.params.account.name ?? ''}
+      title={props.route.params.account.name}
       rightButton={<CloseButton onPress={controller.close} />}
       onClose={props.navigation.goBack}
     >

@@ -6,7 +6,6 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { BlockchainServiceKey } from '~/src/blockchain'
 import SelectorList, { SelectorItem } from '~/src/components/SelectorList'
 import { Separator } from '~/src/components/Separator'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
@@ -15,12 +14,14 @@ import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { SettingsStackParamList } from '~/src/navigation/SettingsStackNavigation'
+import { blockchainReducerActions } from '~/src/store/blockchain/BlockchainReducer'
 import { settingsReducerActions } from '~/src/store/settings/SettingsReducer'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
+import { TBlockchainServiceKey } from '~/src/types/blockchain'
 import { RootState } from '~src/store/RootStore'
 
 export interface ProtocolEditPageParams {
-  blockchain: BlockchainServiceKey
+  blockchain: TBlockchainServiceKey
 }
 
 interface Props {
@@ -48,6 +49,7 @@ export const ProtocolEditPage = (props: Props) => {
         id: value.id,
       })
     )
+    dispatch(blockchainReducerActions.updateBSAggregatorNetwork({ blockchain, ...value }))
   }
 
   const handleAddCustomNetwork = () => {

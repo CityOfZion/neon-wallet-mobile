@@ -1,11 +1,10 @@
+import { Token } from '@cityofzion/blockchain-service'
 import i18n from 'i18n-js'
 import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
-import { useLocalTokensUtils } from '../hooks/useTokens'
-import { Token } from '../models/Token'
-import { Account } from '../models/redux/Account'
 import { RootState } from '../store/RootStore'
+import { Account } from '../store/account/Account'
 import { TokenIcon } from './TokenIcon'
 
 import { HeaderColumn } from '~src/components/HeaderColumn'
@@ -17,7 +16,7 @@ interface Props {
   token: Token
   amount: string
   fiat?: string
-  fee: number
+  fee: string
   hideSingleTokenPrice?: boolean
   hideFee?: boolean
   ratio?: number
@@ -35,9 +34,6 @@ export const TransactionTokenCard = ({
 }: Props) => {
   const currency = useSelector((state: RootState) => state.settings.currency)
   const language = useSelector((state: RootState) => state.settings.language)
-  const { getTokenBySymbol } = useLocalTokensUtils()
-
-  const supportedToken = useMemo(() => getTokenBySymbol(token.symbol, token.blockchain), [getTokenBySymbol])
 
   const singlePrice = useMemo(() => {
     if (!ratio) return
@@ -60,7 +56,7 @@ export const TransactionTokenCard = ({
     >
       <LinearLayout orientation="horiz" justifyContent="space-between">
         <LinearLayout orientation="horiz" alignItems="center">
-          <TokenIcon width={18} height={18} resizeMode="contain" {...token} />
+          <TokenIcon width={18} height={18} resizeMode="contain" blockchain={account.blockchain} {...token} />
 
           <TextView ml="4px" color="text.0" fontFamily="medium" fontSize="16px">
             {token.symbol}
@@ -80,11 +76,7 @@ export const TransactionTokenCard = ({
       </LinearLayout>
 
       <LinearLayout orientation="horiz">
-        <HeaderColumn
-          weight={2}
-          title={i18n.t('components.transactionTokenCard.qty')}
-          value={supportedToken?.decimals ? Number(amount).toFixed(8) : amount}
-        />
+        <HeaderColumn weight={2} title={i18n.t('components.transactionTokenCard.qty')} value={amount} />
 
         {fiat && (
           <HeaderColumn

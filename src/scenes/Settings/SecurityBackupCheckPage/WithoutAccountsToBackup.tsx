@@ -8,7 +8,7 @@ import { Item } from './Item'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Button } from '~/src/components/Button'
 import { Separator } from '~/src/components/Separator'
-import { Wallet } from '~/src/models/redux/Wallet'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { LinearLayout, ImageView, TextView } from '~/src/styles/styled-components'
 
 type Props = {

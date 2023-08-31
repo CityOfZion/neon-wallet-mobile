@@ -1,13 +1,12 @@
 import { CaseReducer, PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import { RootState } from '../RootStore'
+import { Account } from './Account'
 
 import { appBus } from '~/src/app/AppBus'
 import { Storage } from '~/src/app/Storage'
-import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
 import { PollingHelper } from '~/src/helpers/PollingHelper'
-import { Account } from '~/src/models/redux/Account'
-import { AccountState } from '~/src/types/reducers/account'
+import { AccountState } from '~/src/types/store'
 
 interface IAccountReducer {
   data: AccountState[]
@@ -26,10 +25,6 @@ const migrateAccountsFromStorage = createAsyncThunk('accounts/migrateAccountsFro
 })
 
 const saveAccount = createAsyncThunk('accounts/save', async (account: Account) => {
-  if (!account.address) throw new Error('address is undefined')
-
-  if (!account.idWallet) throw new Error('wallet not found to create account')
-
   return account.deserialize
 })
 
@@ -44,12 +39,9 @@ const watchPendingTransaction = createAsyncThunk(
       polling.run(async () => {
         attemptCounter++
 
-        const service = BlockchainHelper.getBlockchainService({
-          blockchain: account.blockchain,
-          network: state.settings.selectedBlockchainNetworks[account.blockchain],
-        })
         try {
-          await service.provider.getTransaction(transactionHash)
+          const service = state.blockchain.bsAggregator.getBlockchainByName(account.blockchain)
+          await service.blockchainDataService.getTransaction(transactionHash)
 
           account.removePendingTransactions(transactionHash)
           appBus.emit(isClaim ? 'claimGasEnd' : 'pendingTransactionConfirmed', account)
@@ -82,7 +74,7 @@ const AccountReducer = createSlice({
   extraReducers(builder) {
     builder
       .addCase(migrateAccountsFromStorage.fulfilled, (state, action) => {
-        const accounts = action.payload?.map(it => {
+        const accounts = action.payload?.map((it: any) => {
           it.adaptToMultichain()
           return it.deserialize
         })
@@ -100,6 +92,7 @@ const AccountReducer = createSlice({
               }
             })
           } else {
+            // @ts-ignore
             state.data = accounts
           }
           Storage.accounts.erase()
@@ -108,6 +101,7 @@ const AccountReducer = createSlice({
       .addCase(saveAccount.fulfilled, (state, action) => {
         const account = action.payload
         if (!('data' in state)) {
+          // @ts-ignore
           state.data = [account]
         } else {
           const findIndex = state.data.findIndex(it => it.address === account.address)
@@ -121,6 +115,7 @@ const AccountReducer = createSlice({
       .addCase(watchPendingTransaction.fulfilled, (state, action) => {
         const account = action.payload
         if (!('data' in state)) {
+          // @ts-ignore
           state.data = [account]
         } else {
           const findIndex = state.data.findIndex(it => it.address === account.address)

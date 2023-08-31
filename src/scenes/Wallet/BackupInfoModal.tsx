@@ -6,11 +6,11 @@ import React from 'react'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Button } from '~/src/components/Button'
 import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
-import { Wallet } from '~/src/models/redux/Wallet'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { ImageView, TextView } from '~/src/styles/styled-components'
 
 export interface BackupInfoModalParams {

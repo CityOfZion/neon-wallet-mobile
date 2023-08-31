@@ -1,11 +1,11 @@
 import i18n from 'i18n-js'
 import React, { useState } from 'react'
 
-import { BlockchainServiceKey } from '../blockchain'
-import { Account } from '../models/redux/Account'
-import { Contact } from '../models/redux/Contact'
+import { Account } from '../store/account/Account'
+import { Contact } from '../store/contact/Contact'
 import { LinearLayout } from '../styles/styled-components'
-import { ContactAddresses } from '../types/reducers/contact'
+import { TBlockchainServiceKey } from '../types/blockchain'
+import { ContactAddresses } from '../types/store'
 import { LinearLayoutProps } from '../types/styled-components'
 import { TabSelector } from './TabSelector'
 import { AccountList } from './accounts/AccountList'
@@ -16,7 +16,7 @@ export type TabSelectorContactType = 'contacts' | 'accounts'
 type Props = {
   onContactSelected?: (contact: Contact, address?: ContactAddresses) => void
   onAccountSelected?: (account: Account) => void
-  filterByBlockchain?: BlockchainServiceKey
+  filterByBlockchain?: TBlockchainServiceKey
 } & LinearLayoutProps
 
 export const TabSelectorContact = ({ filterByBlockchain, onAccountSelected, onContactSelected, ...props }: Props) => {

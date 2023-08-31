@@ -11,9 +11,9 @@ import { Button } from '~/src/components/Button'
 import ThemedButton from '~/src/components/themed/ThemedButton'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import { Wallet } from '~src/models/redux/Wallet'
 import { TextView, LinearLayout } from '~src/styles/styled-components'
 
 export interface Step1BackupWalletPageParams {

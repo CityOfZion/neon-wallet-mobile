@@ -4,11 +4,11 @@ import i18n from 'i18n-js'
 import React, { useState } from 'react'
 
 import { useBalancesAndExchange } from '../hooks/useBalancesAndExchange'
+import { Account } from '../store/account/Account'
 
 import AccountCard from '~src/components/AccountCard'
 import SwiperPanel, { LabelButton, useSwiperController } from '~src/components/SwiperPanel'
 import ColorPicker from '~src/components/misc/ColorPicker'
-import { Account } from '~src/models/redux/Account'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
 export interface CustomColorPageParam {

@@ -1,9 +1,11 @@
+import { NftResponse, hasNft } from '@cityofzion/blockchain-service'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import I18n from 'i18n-js'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { FlatList } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import { NFTItem } from './NFTItem'
 
@@ -12,11 +14,10 @@ import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 import { FlatListFooter } from '~/src/components/FlatListFooter'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
-import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
-import { Account } from '~/src/models/redux/Account'
-import { NFTResponse } from '~/src/models/response/NFTResponse'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
+import { RootState } from '~/src/store/RootStore'
+import { Account } from '~/src/store/account/Account'
 import { LinearLayout } from '~/src/styles/styled-components'
 
 export interface AccountNFTSScreenParams {
@@ -31,40 +32,30 @@ interface Props {
 const AccountNFTSScreen = (props: Props) => {
   const { account } = props.route.params
 
-  const [NFTS, setNFTS] = useState<NFTResponse[]>([])
+  const [NFTS, setNFTS] = useState<NftResponse[]>([])
   const [showMoreLoading, setShowMoreLoading] = useState(false)
-  const onEndReachedCalledDuringMomentum = useRef(true)
-  const { blockchainService } = useBlockchainService(account.blockchain)
-
-  const pageControl = useRef<number>(1)
-
-  const handleEndReached = () => {
-    if (onEndReachedCalledDuringMomentum.current) {
-      handleLoadNFTS()
-    }
-  }
-
-  const handleMomentumScrollBegin = () => {
-    if (!onEndReachedCalledDuringMomentum.current) {
-      onEndReachedCalledDuringMomentum.current = true
-    }
-  }
+  const blockchainService = useSelector(
+    (state: RootState) => state.blockchain.bsAggregator.blockchainServicesByName[account.blockchain]
+  )
+  const nextControl = useRef<string | undefined>()
 
   const handleLoadNFTS = useCallback(async () => {
     try {
-      if (!blockchainService.hasNFTIntegration() || !account.address) return
+      if (!hasNft(blockchainService)) return
 
-      const { items, totalPages } = await blockchainService.getNFTS(account.address, pageControl.current)
+      const response = await blockchainService.nftDataService.getNftsByAddress({
+        address: account.address,
+        cursor: nextControl.current,
+      })
 
-      setNFTS(prevState => [...prevState, ...items])
+      nextControl.current = response.nextCursor
+      setNFTS(prevState => [...prevState, ...response.items])
 
-      if (totalPages && pageControl.current < totalPages) {
-        setShowMoreLoading(true)
-      } else {
+      if (!response.nextCursor) {
         setShowMoreLoading(false)
+      } else {
+        setShowMoreLoading(true)
       }
-
-      pageControl.current += 1
     } catch {}
   }, [account])
 
@@ -80,12 +71,11 @@ const AccountNFTSScreen = (props: Props) => {
           <FlatList
             data={NFTS}
             renderItem={({ item }) => <NFTItem nft={item} navigation={props.navigation} />}
-            ListFooterComponent={showMoreLoading ? <FlatListFooter /> : undefined}
+            ListFooterComponent={<FlatListFooter hide={!showMoreLoading} />}
             ListEmptyComponent={<FlatListEmpty label={I18n.t('screens.accountNFT.emptyList')} />}
             keyExtractor={({ id }, index) => `${id}-${index}`}
-            onEndReached={handleEndReached}
+            onEndReached={handleLoadNFTS}
             onEndReachedThreshold={0.5}
-            onMomentumScrollBegin={handleMomentumScrollBegin}
           />
         </LinearLayout>
       </AwaitActivity>

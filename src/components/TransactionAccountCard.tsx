@@ -2,9 +2,10 @@ import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import I18n from 'i18n-js'
 import React from 'react'
+import { useSelector } from 'react-redux'
 
-import { useBlockchainServiceUtils } from '../hooks/useBlockchainServices'
 import { RootStackParamList } from '../navigation/AppNavigation'
+import { RootState } from '../store/RootStore'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Normalize } from '~src/app/Normalize'
@@ -23,18 +24,19 @@ interface Props {
 
 export const TransactionAccountCard = (props: Props) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList & ModalStackParamList>>()
-  const { getBlockchainByAddress } = useBlockchainServiceUtils()
-  const blockchain = props.address ? getBlockchainByAddress(props.address) : undefined
+  const bsAggregator = useSelector((state: RootState) => state.blockchain.bsAggregator)
+
+  const blockchainService = props.address ? bsAggregator.getBlockchainByAddress(props.address) : undefined
 
   const handlePress = () => {
-    if (!props.address || !blockchain) {
+    if (!props.address || !blockchainService) {
       return
     }
 
     navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.PersistContactModal.name,
       params: {
-        startingAddress: { address: props.address, blockchain },
+        startingAddress: { address: props.address, blockchain: blockchainService?.blockchainName },
       },
     })
   }
@@ -82,9 +84,9 @@ export const TransactionAccountCard = (props: Props) => {
       {props.address && (
         <LinearLayout>
           <LinearLayout orientation="horiz" alignItems="center">
-            {blockchain && (
+            {blockchainService?.blockchainName && (
               <TextView color="text.10" fontSize="14px">
-                {I18n.t(`blockchainServices.${blockchain}.id`)}
+                {I18n.t(`blockchainServices.${blockchainService.blockchainName}.id`)}
               </TextView>
             )}
 

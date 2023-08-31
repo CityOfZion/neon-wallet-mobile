@@ -14,7 +14,6 @@ import Step5CreateWalletPage, {
   Step5CreateWalletPageParams,
 } from '~/src/scenes/Wallet/CreateWallet/Step5CreateWalletPage'
 import { wrapper } from '~src/app/ApplicationWrapper'
-import { HeaderActionButtonProps } from '~src/components/layout/HeaderActionButton'
 import BlockchainListPage, { BlockchainListPageParams } from '~src/scenes/BlockchainListPage'
 import ImportKey, { ImportKeyParams } from '~src/scenes/ImportKey'
 import MnemonicSelectionList, { MnemonicSelectionListParams } from '~src/scenes/MnemonicSelectionList'
@@ -31,7 +30,7 @@ export type MoreStackParamList = {
   MorePage?: undefined
   Step1CreateWallet: Step1CreateWalletParams
   Step2CreateWallet: undefined
-  Step3CreateWallet: HeaderActionButtonProps & ParamsCreateWalletPage
+  Step3CreateWallet: ParamsCreateWalletPage
   Step4CreateWallet: Step4CreateWalletParams
   Step5CreateWallet: Step5CreateWalletPageParams | undefined
   ImportKey: ImportKeyParams | undefined

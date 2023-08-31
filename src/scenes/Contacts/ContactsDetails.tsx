@@ -10,13 +10,13 @@ import ListSeparator from '../walletConnect/components/ListSeparator'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
-import { BlockchainServiceKey } from '~/src/blockchain'
+import { BlockchainIcon } from '~/src/components/BlockchainIcon'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
+import { Contact } from '~/src/store/contact/Contact'
 import { selectContactById } from '~/src/store/contact/SelectorContact'
+import { TBlockchainServiceKey } from '~/src/types/blockchain'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import { Contact } from '~src/models/redux/Contact'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ContactsStackParamList } from '~src/navigation/ContactsStackNavigation'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
@@ -32,7 +32,7 @@ interface ContactDetailsProps {
 
 interface ItemProps {
   address: string
-  blockchain: BlockchainServiceKey
+  blockchain: TBlockchainServiceKey
 }
 
 const Item = React.memo(({ address, blockchain }: ItemProps) => {
@@ -43,7 +43,7 @@ const Item = React.memo(({ address, blockchain }: ItemProps) => {
       orientation="horiz"
       alignItems="center"
     >
-      <ImageView source={BlockchainHelper.getIcon(blockchain)} resizeMode="contain" width={20} height={20} />
+      <BlockchainIcon blockchain={blockchain} width={20} height={20} />
 
       <LinearLayout flexGrow={1} flexShrink={1} mx="14px">
         <TextView color="text.10" fontSize="14px">

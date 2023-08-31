@@ -2,13 +2,14 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, { useRef } from 'react'
+import { useSelector } from 'react-redux'
 
 import { wrapper } from '../app/ApplicationWrapper'
 import { AlterMenuItem } from '../components/AlterMenuItem'
 import SwiperPanel, { useSwiperController } from '../components/SwiperPanel'
-import { useBlockchainServiceUtils } from '../hooks/useBlockchainServices'
 import { RootStackParamList } from '../navigation/AppNavigation'
 import { ModalStackParamList } from '../navigation/ModalStackNavigation'
+import { RootState } from '../store/RootStore'
 
 export interface AddressScanQuickToolsModalParams {
   address: string
@@ -21,7 +22,7 @@ export interface Props {
 
 export const AddressScanQuickToolsModal = (props: Props) => {
   const controller = useSwiperController(true)
-  const { getBlockchainByAddress } = useBlockchainServiceUtils()
+  const bsAggregator = useSelector((state: RootState) => state.blockchain.bsAggregator)
 
   const callback = useRef<() => Promise<void> | void>()
 
@@ -58,13 +59,14 @@ export const AddressScanQuickToolsModal = (props: Props) => {
   }
 
   const handlePressContact = () => {
-    const blockchain = getBlockchainByAddress(props.route.params.address)
+    const blockchain = bsAggregator.getBlockchainByAddress(props.route.params.address)
     if (!blockchain) return
+
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.PersistContactModal.name,
       params: {
         startingAddress: {
-          blockchain,
+          blockchain: blockchain.blockchainName,
           address: props.route.params.address,
         },
       },

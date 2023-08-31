@@ -2,7 +2,7 @@ import { TOptions } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import i18n from 'i18n-js'
 import { QueryClient } from 'react-query'
 
-import { WalletConnectNeonAdapter } from '../adapters/WalletConnectNeonAdapter'
+import { WalletConnectNeonAdapter } from '../libs/WalletConnectNeonAdapter'
 import { RootStore } from '../store/RootStore'
 
 export class ContextsConfig {

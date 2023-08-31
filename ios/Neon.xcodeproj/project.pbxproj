@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -22,17 +22,6 @@
 		71220406288EFB7500F60089 /* sofiapro-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 71220400288EFB7500F60089 /* sofiapro-bold.otf */; };
 		90A84349EB50AF046272353E /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E742A5274A549EA5D538EADB /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		FA03CA0829253D90003BAF3B /* neoutils.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA03CA0729253D90003BAF3B /* neoutils.xcframework */; };
-		FA142A3025DC4F3500FEFBC8 /* Base58.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A2A25DC4F3400FEFBC8 /* Base58.swift */; };
-		FA142A3125DC4F3500FEFBC8 /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A2B25DC4F3400FEFBC8 /* AES.swift */; };
-		FA142A3225DC4F3500FEFBC8 /* Scrypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A2C25DC4F3400FEFBC8 /* Scrypt.swift */; };
-		FA142A3425DC4F3500FEFBC8 /* NEP2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A2E25DC4F3500FEFBC8 /* NEP2.swift */; };
-		FA142A3525DC4F3500FEFBC8 /* PBKDF2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A2F25DC4F3500FEFBC8 /* PBKDF2.swift */; };
-		FA142A3E25DC4F5200FEFBC8 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A3B25DC4F5200FEFBC8 /* ArrayExtension.swift */; };
-		FA142A3F25DC4F5200FEFBC8 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A3C25DC4F5200FEFBC8 /* StringExtension.swift */; };
-		FA142A4025DC4F5200FEFBC8 /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A3D25DC4F5200FEFBC8 /* DataExtension.swift */; };
-		FA142A8D25DC57B800FEFBC8 /* NEPReturn.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA142A8C25DC57B800FEFBC8 /* NEPReturn.swift */; };
-		FA142A9125DC580D00FEFBC8 /* NeoSwift.m in Sources */ = {isa = PBXBuildFile; fileRef = FA142A9025DC580D00FEFBC8 /* NeoSwift.m */; };
 		FAC4877125800A790076ACC1 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = FAC4877025800A790076ACC1 /* assets */; };
 		FAD7DCB7257FC2C00092EF9B /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		FAE7F48325A4ECB40014C2EC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAE7F48225A4ECB40014C2EC /* GoogleService-Info.plist */; };
@@ -63,18 +52,6 @@
 		E742A5274A549EA5D538EADB /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Neon/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		FA03CA0729253D90003BAF3B /* neoutils.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = neoutils.xcframework; sourceTree = "<group>"; };
-		FA142A2A25DC4F3400FEFBC8 /* Base58.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base58.swift; sourceTree = "<group>"; };
-		FA142A2B25DC4F3400FEFBC8 /* AES.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AES.swift; sourceTree = "<group>"; };
-		FA142A2C25DC4F3400FEFBC8 /* Scrypt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scrypt.swift; sourceTree = "<group>"; };
-		FA142A2E25DC4F3500FEFBC8 /* NEP2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NEP2.swift; sourceTree = "<group>"; };
-		FA142A2F25DC4F3500FEFBC8 /* PBKDF2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBKDF2.swift; sourceTree = "<group>"; };
-		FA142A3B25DC4F5200FEFBC8 /* ArrayExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
-		FA142A3C25DC4F5200FEFBC8 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
-		FA142A3D25DC4F5200FEFBC8 /* DataExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataExtension.swift; sourceTree = "<group>"; };
-		FA142A8C25DC57B800FEFBC8 /* NEPReturn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NEPReturn.swift; sourceTree = "<group>"; };
-		FA142A8F25DC580D00FEFBC8 /* NeoSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NeoSwift.h; sourceTree = "<group>"; };
-		FA142A9025DC580D00FEFBC8 /* NeoSwift.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NeoSwift.m; sourceTree = "<group>"; };
 		FAC4877025800A790076ACC1 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		FAE7F48225A4ECB40014C2EC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,7 +61,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA03CA0829253D90003BAF3B /* neoutils.xcframework in Frameworks */,
 				6FFB27929068B0CE580359C2 /* libPods-Neon.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -121,7 +97,6 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FA03CA0729253D90003BAF3B /* neoutils.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				0D7238D9EC1DF36460FB3223 /* libPods-Neon.a */,
@@ -157,7 +132,6 @@
 				FAC4877025800A790076ACC1 /* assets */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				FA1429CD25DC490100FEFBC8 /* Neo-swift */,
 				13B07FAE1A68108700A75B9A /* Neon */,
 				D65327D7A22EEC0BE12398D9 /* Pods */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -202,32 +176,6 @@
 			name = Neon;
 			sourceTree = "<group>";
 		};
-		FA1429CD25DC490100FEFBC8 /* Neo-swift */ = {
-			isa = PBXGroup;
-			children = (
-				FA142A3825DC4F4900FEFBC8 /* Extension */,
-				FA142A2B25DC4F3400FEFBC8 /* AES.swift */,
-				FA142A2A25DC4F3400FEFBC8 /* Base58.swift */,
-				FA142A2E25DC4F3500FEFBC8 /* NEP2.swift */,
-				FA142A8C25DC57B800FEFBC8 /* NEPReturn.swift */,
-				FA142A2F25DC4F3500FEFBC8 /* PBKDF2.swift */,
-				FA142A2C25DC4F3400FEFBC8 /* Scrypt.swift */,
-				FA142A8F25DC580D00FEFBC8 /* NeoSwift.h */,
-				FA142A9025DC580D00FEFBC8 /* NeoSwift.m */,
-			);
-			path = "Neo-swift";
-			sourceTree = "<group>";
-		};
-		FA142A3825DC4F4900FEFBC8 /* Extension */ = {
-			isa = PBXGroup;
-			children = (
-				FA142A3B25DC4F5200FEFBC8 /* ArrayExtension.swift */,
-				FA142A3D25DC4F5200FEFBC8 /* DataExtension.swift */,
-				FA142A3C25DC4F5200FEFBC8 /* StringExtension.swift */,
-			);
-			path = Extension;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -263,7 +211,9 @@
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 5DRRKCU6DK;
 						LastSwiftMigration = 1240;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -421,18 +371,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA142A4025DC4F5200FEFBC8 /* DataExtension.swift in Sources */,
-				FA142A3125DC4F3500FEFBC8 /* AES.swift in Sources */,
-				FA142A3425DC4F3500FEFBC8 /* NEP2.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				FA142A3E25DC4F5200FEFBC8 /* ArrayExtension.swift in Sources */,
-				FA142A3025DC4F3500FEFBC8 /* Base58.swift in Sources */,
-				FA142A9125DC580D00FEFBC8 /* NeoSwift.m in Sources */,
-				FA142A8D25DC57B800FEFBC8 /* NEPReturn.swift in Sources */,
-				FA142A3525DC4F3500FEFBC8 /* PBKDF2.swift in Sources */,
-				FA142A3F25DC4F5200FEFBC8 /* StringExtension.swift in Sources */,
-				FA142A3225DC4F3500FEFBC8 /* Scrypt.swift in Sources */,
 				90A84349EB50AF046272353E /* ExpoModulesProvider.swift in Sources */,
 				0FC3B744A092488391AF8B01 /* noop-file.swift in Sources */,
 			);
@@ -475,10 +415,7 @@
 				);
 				INFOPLIST_FILE = Neon/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.2.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -486,12 +423,12 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
-				PRODUCT_NAME = "Neon";
+				PRODUCT_NAME = Neon;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -514,10 +451,7 @@
 				);
 				INFOPLIST_FILE = Neon/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.2.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -525,11 +459,11 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.cityofzion.neon;
-				PRODUCT_NAME = "Neon";
+				PRODUCT_NAME = Neon;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -585,10 +519,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					/usr/lib/swift,
-					"$(inherited)",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
@@ -600,7 +531,7 @@
 				PRODUCT_NAME = neon;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -648,10 +579,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					/usr/lib/swift,
-					"$(inherited)",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
@@ -662,7 +590,7 @@
 				PRODUCT_NAME = neon;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Neon-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

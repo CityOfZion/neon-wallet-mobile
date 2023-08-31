@@ -1,6 +1,7 @@
 const { Platform } = require('react-native')
 const { fetch } = require('whatwg-fetch')
 require('@walletconnect/react-native-compat')
+require("@ethersproject/shims")
 
 if (typeof __dirname === 'undefined') global.__dirname = '/'
 if (typeof __filename === 'undefined') global.__filename = ''

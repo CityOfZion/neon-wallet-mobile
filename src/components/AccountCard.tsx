@@ -7,16 +7,16 @@ import { LayoutChangeEvent, NativeSyntheticEvent, NativeTouchEvent, Animated } f
 import { useSelector } from 'react-redux'
 
 import { BalanceHelper } from '../helpers/BalanceHelper'
-import { BlockchainHelper } from '../helpers/BlockchainHelper'
 import { RootStackParamList } from '../navigation/AppNavigation'
 import { RootState } from '../store/RootStore'
+import { Account } from '../store/account/Account'
 import { UseUniqueBalanceAndExchangeResult } from '../types/query'
+import { BlockchainIcon } from './BlockchainIcon'
 import { Skeleton } from './Skeleton'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { FilterHelper } from '~src/helpers/FilterHelper'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
-import { Account } from '~src/models/redux/Account'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
@@ -162,8 +162,6 @@ const AccountCard = ({
   }
 
   const handlePressCopy = () => {
-    if (!account.address) return
-
     UtilsHelper.copyToClipboard(account.address)
   }
 
@@ -231,14 +229,11 @@ const AccountCard = ({
             justifyContent={!isStack ? 'space-between' : undefined}
           >
             <LinearLayout orientation="horiz" alignItems="center">
-              <ImageView
-                source={BlockchainHelper.getIcon(account.blockchain, 'white')}
-                resizeMode="contain"
-                alignSelf="center"
-                style={{
-                  width: treatSize(24, unit),
-                  height: treatSize(24, unit),
-                }}
+              <BlockchainIcon
+                width={treatSize(24, unit)}
+                height={treatSize(24, unit)}
+                blockchain={account.blockchain}
+                type="white"
               />
 
               <LinearLayout orientation="verti" flex={1} paddingX={treatSizePx(8, unit)}>

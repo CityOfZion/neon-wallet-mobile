@@ -3,14 +3,13 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import * as LocalAuthentication from 'expo-local-authentication'
 import i18n from 'i18n-js'
 import React from 'react'
-import { Platform } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { SecurityHelper } from '~/src/helpers/SecurityHelper'
 import { settingsReducerActions } from '~/src/store/settings/SettingsReducer'
 import SelectorList, { SelectorItem } from '~src/components/SelectorList'
-import SwiperPanel, { useSwiperController, CloseButton } from '~src/components/SwiperPanel' //precisa modificar essa tela para exibir opções de segurança
+import SwiperPanel, { useSwiperController, CloseButton } from '~src/components/SwiperPanel'
 import { Security } from '~src/enums/Security'
 import { useLocalAuthentication } from '~src/hooks/useLocalAuthentication'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
@@ -47,20 +46,13 @@ const SecurityPickerModal = (props: Props) => {
 
   const handleHardwareSecurity = async () => {
     const canUseHardware = await LocalAuthentication.hasHardwareAsync()
-
     if (!canUseHardware) return
 
-    const result = await LocalAuthentication.authenticateAsync(
-      Platform.OS === 'android'
-        ? {
-            disableDeviceFallback: true, // Responsable for terminate the process after several failed attempts
-            // Those properties need to be set, otherwise it shows an error
-            cancelLabel: 'cancel',
-            promptMessage: 'Authentication',
-          }
-        : undefined
-    )
-
+    const result = await LocalAuthentication.authenticateAsync({
+      disableDeviceFallback: true,
+      cancelLabel: 'cancel',
+      promptMessage: 'Authentication',
+    })
     if (!result.success) return
 
     dispatch(settingsReducerActions.setSecurity(Security.hardware))

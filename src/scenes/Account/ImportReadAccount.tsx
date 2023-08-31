@@ -5,7 +5,6 @@ import i18n from 'i18n-js'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import AddressesImportList, { AddressInfo } from '~src/components/AddressesImportList'
@@ -33,8 +32,9 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const accounts = useSelector(selectAccounts)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
+  const bsAggregator = useSelector((state: RootState) => state.blockchain.bsAggregator)
+
   const blockchainActions = useBlockchainActions()
-  const { getBlockchainServices, validateAddressAllBlockchains } = useBlockchainServiceUtils()
 
   const [inputValue, setInputValue] = useState('')
   const [errorMessage, setErrorMessage] = useState(i18n.t('components.inputTextWithValidation.incorrectFormat'))
@@ -82,7 +82,7 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   }
 
   function validateInput(text: string) {
-    let isValid = validateAddressAllBlockchains(text)
+    let isValid = bsAggregator.validateAddressAllBlockchains(text)
 
     if (!isValid) {
       setErrorMessage(i18n.t('components.inputTextWithValidation.incorrectFormat'))
@@ -98,21 +98,19 @@ const ImportReadAccount = (props: ImportReadAccountProps) => {
   const handleChangeInput = useCallback(
     (value: string) => {
       setInputValue(value)
-      const services = getBlockchainServices()
-
       const addresses: AddressInfo[] = []
 
-      for (const service of services) {
+      for (const service of bsAggregator.blockchainServices) {
         const addressIsValid = service.validateAddress(value)
         if (!addressIsValid) continue
 
-        addresses.push({ address: value, blockchain: service.key })
+        addresses.push({ address: value, blockchain: service.blockchainName })
       }
 
       setAddressesList(addresses)
       setAddressesListSelected(addresses)
     },
-    [getBlockchainServices]
+    [bsAggregator]
   )
 
   useEffect(() => {

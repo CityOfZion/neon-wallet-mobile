@@ -13,12 +13,12 @@ import { TabStackParamList } from '../../navigation/TabNavigation'
 import { AccountCards } from '~/src/components/AccountCards'
 import ThemedMoreButton from '~/src/components/themed/ThemedMoreButton'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
+import { Account } from '~/src/store/account/Account'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import { Account } from '~src/models/redux/Account'
-import { Wallet } from '~src/models/redux/Wallet'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
 import { ButtonWithoutFeedbackView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
@@ -110,7 +110,7 @@ const GetWalletView = (props: GetWalletProps) => {
         />
       }
       onLayout={handleLayout}
-      title={wallet.name ?? '-'}
+      title={wallet.name}
       rightButton={<ThemedMoreButton onPress={handleMorePress} />}
     >
       <Animated.View

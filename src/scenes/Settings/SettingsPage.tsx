@@ -8,7 +8,7 @@ import { DefaultTheme } from 'styled-components'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { RootState } from '~/src/store/RootStore'
 import { wrapper } from '~src/app/ApplicationWrapper'
-import MenuItem, { RightIconType } from '~src/components/MenuItem'
+import MenuItem, { MenuItemIcon, RightIconType } from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { SettingsStackParamList } from '~src/navigation/SettingsStackNavigation'
@@ -30,20 +30,14 @@ const SettingsPage = (props: SettingsProps) => {
     <ScreenLayout>
       <MenuItem
         title={i18n.t('settings.security')}
-        icon={require('~/src/assets/images/security-icon-green.png')}
-        iconWidth={18}
-        iconMarginLeft={2}
-        iconMarginRight={18}
+        icon={<MenuItemIcon source={require('~/src/assets/images/security-icon-green.png')} />}
         arrowDirection={RightIconType.ARROW_RIGHT}
         onPress={() => props.navigation.navigate(wrapper.route.SecurityBackupCheckPage.name)}
       />
 
       <MenuItem
         title={i18n.t('settings.currency')}
-        icon={require('~src/assets/images/icon-currency-green.png')}
-        iconWidth={22}
-        iconMarginLeft={2}
-        iconMarginRight={16}
+        icon={<MenuItemIcon source={require('~src/assets/images/icon-currency-green.png')} />}
         arrowDirection={RightIconType.ARROW_DOWN}
         subtitle={currency}
         onPress={() =>
@@ -56,10 +50,7 @@ const SettingsPage = (props: SettingsProps) => {
       {showLanguage && (
         <MenuItem
           title={i18n.t('settings.language')}
-          icon={require('~src/assets/images/icon-language-green.png')}
-          iconWidth={16}
-          iconMarginLeft={2}
-          iconMarginRight={22}
+          icon={<MenuItemIcon source={require('~src/assets/images/icon-language-green.png')} />}
           arrowDirection={RightIconType.ARROW_DOWN}
           subtitle={i18n.t(`languages.${language}`)}
           onPress={() =>
@@ -85,11 +76,8 @@ const SettingsPage = (props: SettingsProps) => {
 
       <MenuItem
         title={i18n.t('settings.protocols')}
-        icon={require('~src/assets/images/protocols-green.png')}
+        icon={<MenuItemIcon source={require('~src/assets/images/protocols-green.png')} />}
         arrowDirection={RightIconType.ARROW_RIGHT}
-        iconWidth={22}
-        iconMarginLeft={2}
-        iconMarginRight={16}
         onPress={() => props.navigation.navigate(wrapper.route.ProtocolsPage.name)}
       />
     </ScreenLayout>

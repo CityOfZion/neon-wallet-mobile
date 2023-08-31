@@ -1,26 +1,26 @@
+import { Token, isCalculableFee } from '@cityofzion/blockchain-service'
 import i18n from 'i18n-js'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Normalize } from '~/src/app/Normalize'
 import { TokenIcon } from '~/src/components/TokenIcon'
-import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
-import { Token } from '~/src/models/Token'
-import { Account } from '~/src/models/redux/Account'
+import { blockchainConfig } from '~/src/config/BlockchainConfig'
 import { RootState } from '~/src/store/RootStore'
+import { Account } from '~/src/store/account/Account'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 import { TokenBalance } from '~/src/types/query'
 
 type Props = {
   ratio?: number
-  amount?: number
-  tip?: number
-  fee?: number
+  amount?: string
+  tip?: string
+  fee?: string
   token?: Token
   account: Account
   destinationAddress?: string
   destinationAddressIsValid?: boolean
-  onFeeChange(fee?: number): void
+  onFeeChange(fee?: string): void
   onRequest(isRequesting: boolean): void
   feeTokenBalance?: TokenBalance
 }
@@ -38,7 +38,9 @@ export const TotalFee = ({
   onRequest,
   feeTokenBalance,
 }: Props) => {
-  const { blockchainService } = useBlockchainService(account.blockchain)
+  const blockchainService = useSelector(
+    (state: RootState) => state.blockchain.bsAggregator.blockchainServicesByName[account.blockchain]
+  )
   const currency = useSelector((state: RootState) => state.settings.currency)
 
   const fiatFee = useMemo(() => {
@@ -46,16 +48,17 @@ export const TotalFee = ({
       return
     }
 
-    return ratio * fee
+    return ratio * Number(fee)
   }, [fee, token, account, currency])
 
   const isInsuficientFunds = useMemo(() => {
-    if (!token || !amount || amount <= 0 || !fee || !feeTokenBalance) return
+    const amountNumber = parseFloat(amount ?? '0')
+    if (!token || !amount || amountNumber <= 0 || !fee || !feeTokenBalance) return
 
-    let calculatedFee = feeTokenBalance.amount - fee
+    let calculatedFee = feeTokenBalance.amountNumber - Number(fee)
 
-    if (token.symbol === feeTokenBalance.symbol) {
-      calculatedFee -= amount
+    if (token.symbol === feeTokenBalance.token.symbol) {
+      calculatedFee -= amountNumber
     }
 
     if (calculatedFee <= 0) {
@@ -66,22 +69,44 @@ export const TotalFee = ({
   }, [fee, account, token, amount])
 
   const calculateFee = useCallback(async () => {
-    const senderWif = await account.getWif()
-
-    if (!destinationAddressIsValid || !destinationAddress || !senderWif || !token || !amount) {
+    const senderKey = await account.getKey()
+    if (
+      !destinationAddressIsValid ||
+      !destinationAddress ||
+      !senderKey ||
+      !token ||
+      !amount ||
+      !isCalculableFee(blockchainService)
+    ) {
       onFeeChange(undefined)
       return
     }
 
     onRequest(true)
 
+    const tipConfig = blockchainConfig.mainnetTipByBlockchain[account.blockchain]
+
     const calculatedFee = await blockchainService.calculateTransferFee({
-      receiverAddress: destinationAddress,
-      senderWif,
-      amount,
-      tokenHash: token.hash,
-      tokenDecimals: token.decimals,
-      tip,
+      tipIntent:
+        tipConfig && tip
+          ? {
+              amount: tip,
+              receiverAddress: tipConfig.address,
+              tokenHash: tipConfig.token.hash,
+              tokenDecimals: tipConfig.token.decimals,
+            }
+          : undefined,
+      senderAccount: {
+        address: account.address,
+        key: senderKey,
+        type: 'wif',
+      },
+      intent: {
+        amount,
+        receiverAddress: destinationAddress,
+        tokenHash: token.hash,
+        tokenDecimals: token.decimals,
+      },
     })
 
     onRequest(false)
@@ -122,7 +147,7 @@ export const TotalFee = ({
         paddingY="8px"
       >
         <LinearLayout width="48%" orientation="horiz" alignItems="center">
-          <LinearLayout orientation="horiz" paddingX="8px">
+          <LinearLayout orientation="horiz" paddingX="8px" flexGrow={1} flexShrink={1}>
             <TokenIcon
               marginRight={4}
               marginTop={1}
@@ -130,11 +155,11 @@ export const TotalFee = ({
               height={20}
               resizeMode="contain"
               blockchain={account.blockchain}
-              symbol={blockchainService.feeToken.token}
+              symbol={blockchainService.feeToken.symbol}
               hash={blockchainService.feeToken.hash}
             />
-            <TextView color="text.0" fontFamily="semibold" fontSize="18px">
-              {fee ? fee.toFixed(8) : 0}
+            <TextView color="text.0" fontFamily="semibold" fontSize="18px" flexGrow={1} flexShrink={1}>
+              {fee ?? 0}
             </TextView>
           </LinearLayout>
         </LinearLayout>

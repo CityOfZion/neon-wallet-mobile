@@ -1,62 +1,52 @@
+import { TransactionResponse } from '@cityofzion/blockchain-service'
 import I18n from 'i18n-js'
 import moment from 'moment'
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { FlatList } from 'react-native'
 
-import { FormattedTransaction } from './AccountTransactionsScreen'
 import { TransactionListItem } from './TransactionListItem'
 
 import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 import { FlatListFooter } from '~/src/components/FlatListFooter'
-import { Account } from '~/src/models/redux/Account'
+import { Account } from '~/src/store/account/Account'
 import { LinearLayout } from '~/src/styles/styled-components'
 import { MultiExchange } from '~/src/types/query'
 
 interface TransactionsListDateProps {
-  completedTransactions: FormattedTransaction[]
-  pendingTransactions: FormattedTransaction[]
+  transactions: TransactionResponse[]
   account: Account
   onEndReached(): Promise<void>
   showMoreLoading: boolean
   exchange?: MultiExchange
 }
 
+const separateTransactionsPerDate = (transactions: TransactionResponse[]) => {
+  const transactionsPerDate: Record<string, TransactionResponse[]> = {}
+
+  transactions.forEach(transaction => {
+    const { time } = transaction
+    const date = moment.unix(time).format('YYYY-MM-DD')
+
+    if (date in transactionsPerDate) {
+      transactionsPerDate[date].push(transaction)
+      return
+    }
+
+    transactionsPerDate[date] = [transaction]
+  })
+
+  return transactionsPerDate
+}
+
 export const TransactionsList = ({
-  pendingTransactions,
-  completedTransactions,
+  transactions,
   account,
   onEndReached,
   showMoreLoading,
   exchange,
 }: TransactionsListDateProps) => {
-  const separateTransactionsPerDate = useCallback((transactions: FormattedTransaction[]) => {
-    const transactionsPerDate: Record<string, FormattedTransaction[]> = {}
-
-    transactions.forEach(transaction => {
-      const { time } = transaction
-
-      const date = moment.unix(time).format('YYYY-MM-DD')
-
-      if (date in transactionsPerDate) {
-        transactionsPerDate[date].push(transaction)
-        return
-      }
-
-      transactionsPerDate[date] = [transaction]
-    })
-
-    return transactionsPerDate
-  }, [])
-
-  const completedTransactionsPerDate = useMemo(
-    () => separateTransactionsPerDate(completedTransactions),
-    [separateTransactionsPerDate, completedTransactions]
-  )
-
-  const pendingTransactionsPerDate = useMemo(
-    () => separateTransactionsPerDate(pendingTransactions),
-    [separateTransactionsPerDate, pendingTransactions]
-  )
+  const completedTransactionsPerDate = useMemo(() => separateTransactionsPerDate(transactions), [transactions])
+  const pendingTransactionsPerDate = useMemo(() => separateTransactionsPerDate(account.pendingTransactions), [account])
 
   const dates = useMemo(
     () =>

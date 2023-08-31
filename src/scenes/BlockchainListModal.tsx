@@ -7,14 +7,14 @@ import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
 import { selectAccounts } from '../store/account/SelectorAccount'
+import { Wallet } from '../store/wallet/Wallet'
+import { TBlockchainServiceKey } from '../types/blockchain'
 
-import { BlockchainServiceKey } from '~src/blockchain'
 import BlockchainList from '~src/components/BlockchainList'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { useBlockchainActions } from '~src/hooks/useBlockchainActions'
-import { Wallet } from '~src/models/redux/Wallet'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
 export interface BlockchainListModalParams {
@@ -33,9 +33,9 @@ const BlockchainListModal = (props: IBlockchainListModal) => {
   const blockchainActions = useBlockchainActions()
   const accounts = useSelector(selectAccounts)
 
-  const [blockchainSelected, setBlockchainSelected] = useState<BlockchainServiceKey>()
+  const [blockchainSelected, setBlockchainSelected] = useState<TBlockchainServiceKey>()
 
-  const handleSelect = (blockchains: BlockchainServiceKey[]) => {
+  const handleSelect = (blockchains: TBlockchainServiceKey[]) => {
     setBlockchainSelected(blockchains[0])
   }
 

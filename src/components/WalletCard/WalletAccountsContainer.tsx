@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux'
 
 import AccountCard from '../AccountCard'
 
-import { Wallet } from '~/src/models/redux/Wallet'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { LinearLayout } from '~src/styles/styled-components'
 
 type Props = {

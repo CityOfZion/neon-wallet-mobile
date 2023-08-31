@@ -1,3 +1,4 @@
+import { Token } from '@cityofzion/blockchain-service'
 import i18n from 'i18n-js'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -6,7 +7,6 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { Token } from '~/src/models/Token'
 import { RootState } from '~/src/store/RootStore'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 import { TokenBalance } from '~/src/types/query'
@@ -48,7 +48,7 @@ export const AmountInput = ({
       return false
     }
 
-    const isValid = tokenBalance.amount >= Number(text)
+    const isValid = tokenBalance.amountNumber >= Number(text)
 
     onAmountValidation(isValid)
 
@@ -86,11 +86,11 @@ export const AmountInput = ({
 
   const handleValidateFiat = (text: string) => {
     if (!token || text.length <= 0 || !tokenBalance || !ratio || !amount) return false
-    if (tokenBalance.symbol === feeTokenBalance?.symbol) {
+    if (tokenBalance.token.symbol === feeTokenBalance?.token.symbol) {
       if (!fee) return false
-      return Number(text) + fee * ratio <= tokenBalance.amount * ratio
+      return Number(text) + fee * ratio <= tokenBalance.amountNumber * ratio
     }
-    return Number(text) <= tokenBalance.amount * ratio
+    return Number(text) <= tokenBalance.amountNumber * ratio
   }
 
   const handleChangeFiat = (text: string) => {
@@ -128,7 +128,7 @@ export const AmountInput = ({
   const handlePressMaxButton = () => {
     if (!token || !tokenBalance) return
 
-    handleChangeAmount(String(tokenBalance.amount))
+    handleChangeAmount(tokenBalance.amount)
   }
 
   useEffect(() => {
@@ -137,7 +137,7 @@ export const AmountInput = ({
       return
     }
 
-    const remaining = tokenBalance.amount - (amount ? Number(amount) : 0)
+    const remaining = tokenBalance.amountNumber - (amount ? Number(amount) : 0)
 
     setRemaining(remaining > 0 ? remaining : undefined)
   }, [amount, token])

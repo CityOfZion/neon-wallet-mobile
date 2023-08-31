@@ -239,7 +239,7 @@
       "completedTransactions": "#translateme",
       "invocationsLabel": "#translateme",
       "notificationsLabel": "#translateme",
-      "asset": "#translateme",
+      "token": "#translateme",
       "nft": "#translateme",
       "errorToGetTransactions": "#translateme",
       "emptyList": "#translateme"
@@ -282,7 +282,7 @@
     "accountSettingsView": {
       "title": "#translateme",
       "customize": "#translateme",
-      "exportWif": "#translateme",
+      "exportKey": "#translateme",
       "deleteTitle": "#translateme",
       "deleteSubtitle": "#translateme",
       "deleteButtom": "#translateme",

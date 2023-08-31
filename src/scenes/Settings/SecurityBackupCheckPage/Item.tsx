@@ -5,7 +5,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { IconButton } from '~/src/components/IconButton'
 import { WalletCardIcon } from '~/src/components/WalletCardIcon'
 import { useLocalAuthentication } from '~/src/hooks/useLocalAuthentication'
-import { Wallet } from '~/src/models/redux/Wallet'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { ButtonView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {

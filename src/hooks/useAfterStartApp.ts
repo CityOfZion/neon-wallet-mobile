@@ -9,8 +9,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { appBus } from '../app/AppBus'
 import { wrapper } from '../app/ApplicationWrapper'
 import OTAHelper from '../helpers/OTAHelper'
-import { Account } from '../models/redux/Account'
+import { Account } from '../store/account/Account'
 import { accountReducerActions } from '../store/account/AccountReducer'
+import { blockchainReducerActions } from '../store/blockchain/BlockchainReducer'
 import { contactReducerActions } from '../store/contact/ContactReducer'
 import { networkReducerActions } from '../store/network/NetworkReducer'
 import { settingsReducerActions } from '../store/settings/SettingsReducer'
@@ -33,6 +34,7 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
     dispatch(accountReducerActions.migrateAccountsFromStorage())
     dispatch(contactReducerActions.migrateContactsFromStorage())
     dispatch(settingsReducerActions.migrateSettingsStorage())
+    dispatch(blockchainReducerActions.setInitialBSAggregator())
   }, [])
 
   const watchNetwork = useCallback(() => {

@@ -1,20 +1,20 @@
+import { TransactionResponse } from '@cityofzion/blockchain-service'
 import i18n from 'i18n-js'
 import moment from 'moment'
 import React from 'react'
-import { Linking, View, TouchableWithoutFeedback } from 'react-native'
+import { Linking, TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { FormattedTransaction } from './AccountTransactionsScreen'
 import { TransferItem } from './TransferItem'
 
 import { BoxLabelNumber } from '~/src/components/BoxLabelNumber'
 import { DoraHelper } from '~/src/helpers/DoraHelper'
-import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
-import { ImageView, TextView } from '~/src/styles/styled-components'
+import { Account } from '~/src/store/account/Account'
+import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 import { MultiExchange } from '~/src/types/query'
 
-type Props = FormattedTransaction & {
+type Props = TransactionResponse & {
   hideLinkDora?: boolean
   account: Account
   exchange?: MultiExchange
@@ -26,30 +26,11 @@ export const TransactionItem = React.memo((props: Props) => {
   )
 
   return (
-    <View style={{ marginBottom: 5 }}>
-      <View
-        style={{
-          backgroundColor: '#0f0f10',
-          borderRadius: 8,
-          paddingHorizontal: 14,
-          marginTop: 15,
-          paddingBottom: 20,
-        }}
-      >
-        <View
-          style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            marginVertical: 10,
-            justifyContent: 'space-between',
-          }}
-        >
-          <View
-            style={{
-              flexDirection: 'row',
-            }}
-          >
-            <TextView color="#fff" fontFamily="medium" fontSize="18px">
+    <LinearLayout mb="6px">
+      <LinearLayout borderRadius="8px" paddingX="14px" mt="15px" pb="20px" backgroundColor="background.21">
+        <LinearLayout flexDirection="row" flexWrap="wrap" marginY="10px" justifyContent="space-between">
+          <LinearLayout flexDirection="row">
+            <TextView color="text.0" fontFamily="medium" fontSize="18px">
               {i18n.t('screens.accountTransaction.txidLabel')}
             </TextView>
             <TextView
@@ -63,37 +44,36 @@ export const TransactionItem = React.memo((props: Props) => {
             >
               {props.hash}
             </TextView>
-          </View>
-          <TextView color="#fff" fontFamily="medium" fontSize="16px">
+          </LinearLayout>
+          <TextView color="text.0" fontFamily="medium" fontSize="16px">
             {moment.unix(props.time).format(i18n.t('formatters.transactionTime'))}
           </TextView>
-        </View>
+        </LinearLayout>
 
-        <View>
-          {props.transfers.map(transfer => (
-            <TransferItem key={transfer.hash} account={props.account} exchange={props.exchange} {...transfer} />
+        <LinearLayout>
+          {props.transfers.map((transfer, index) => (
+            <TransferItem
+              key={`${props.hash}-${index}`}
+              account={props.account}
+              exchange={props.exchange}
+              {...transfer}
+            />
           ))}
-        </View>
+        </LinearLayout>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: 10,
-          }}
-        >
-          <View style={{ flexDirection: 'row' }}>
+        <LinearLayout flexDirection="row" justifyContent="space-between" mt="10px">
+          <LinearLayout flexDirection="row">
             <BoxLabelNumber
               color="#1f2b33"
               label={i18n.t('screens.accountTransaction.invocationsLabel')}
-              number={props.qtyInvocations}
+              number={props.transfers.length}
             />
             <BoxLabelNumber
               color="#1f2b33"
               label={i18n.t('screens.accountTransaction.notificationsLabel')}
-              number={props.qtyNotifications}
+              number={props.notifications.length}
             />
-          </View>
+          </LinearLayout>
 
           {!props.hideLinkDora && (
             <TouchableWithoutFeedback
@@ -107,15 +87,13 @@ export const TransactionItem = React.memo((props: Props) => {
                 resizeMode="contain"
                 alignSelf="center"
                 source={require('~src/assets/images/dora-link.png')}
-                style={{
-                  width: 28,
-                  height: 28,
-                }}
+                width={28}
+                height={28}
               />
             </TouchableWithoutFeedback>
           )}
-        </View>
-      </View>
-    </View>
+        </LinearLayout>
+      </LinearLayout>
+    </LinearLayout>
   )
 })

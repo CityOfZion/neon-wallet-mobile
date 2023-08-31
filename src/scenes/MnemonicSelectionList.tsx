@@ -1,211 +1,164 @@
+import { AccountWithDerivationPath } from '@cityofzion/blockchain-service'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, { useState, useCallback, useEffect } from 'react'
-import { View, Text, Image, FlatList, TouchableWithoutFeedback, ScrollView } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { TouchableWithoutFeedback } from 'react-native'
 import Accordion from 'react-native-collapsible/Accordion'
+import { useSelector } from 'react-redux'
 
-import { BlockchainHelper } from '../helpers/BlockchainHelper'
-import { useBlockchainService } from '../hooks/useBlockchainServices'
+import { wrapper } from '../app/ApplicationWrapper'
+import { BlockchainIcon } from '../components/BlockchainIcon'
+import ThemedButton from '../components/themed/ThemedButton'
 import { RootStackParamList } from '../navigation/AppNavigation'
 import { WalletStackParamList } from '../navigation/WalletsStackNavigation'
+import { RootState } from '../store/RootStore'
+import { ImageView, LinearLayout, TextView } from '../styles/styled-components'
+import { TBlockchainServiceKey } from '../types/blockchain'
 
-import { wrapper } from '~src/app/ApplicationWrapper'
-import { BlockchainServiceKey } from '~src/blockchain'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import ThemedButton from '~src/components/themed/ThemedButton'
-import { useBlockchainActions, AccountToImport } from '~src/hooks/useBlockchainActions'
+import { AccountToImport, useBlockchainActions } from '~src/hooks/useBlockchainActions'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
-export type MnemonicSelectionInfo = Map<
-  BlockchainServiceKey,
-  { address: string; wif: string; derivationIndex: number }[]
->
 
+export interface MnemonicSelectionListParams {
+  mnemonic: string
+}
+
+type AccountWithBlockchain = AccountWithDerivationPath & { blockchain: TBlockchainServiceKey }
 interface Props {
   navigation: StackNavigationProp<RootStackParamList & WalletStackParamList & MoreStackParamList>
   route: RouteProp<MoreStackParamList, 'MnemonicSelectionList'>
 }
 
-interface HeaderMnemonicSelectionProps {
-  data: [
-    BlockchainServiceKey,
-    {
-      address: string
-      wif: string
-    }[]
-  ]
-  qtyAddressesSelected: number
-  totAddresses: number
+type HeaderProps = {
+  accounts: AccountWithDerivationPath[]
+  blockchain: TBlockchainServiceKey
+  totalAddressesSelected: number
   isActive: boolean
 }
-const HeaderMnemonicSelection = (props: HeaderMnemonicSelectionProps) => {
-  const [blockchainName] = props.data
+
+type ContentItemProps = {
+  data: AccountWithDerivationPath[]
+  blockchain: TBlockchainServiceKey
+  onPress: (account: AccountWithBlockchain) => void
+  isSelected: (account: AccountWithBlockchain) => boolean
+}
+
+const Header = (props: HeaderProps) => {
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingVertical: 10,
-        paddingHorizontal: 5,
-        borderBottomWidth: 1,
-        borderColor: '#ffffff44',
-      }}
+    <LinearLayout
+      flexDirection="row"
+      justifyContent="space-between"
+      py="10px"
+      px="5px"
+      borderBottomWidth="1px"
+      borderColor="background.10"
     >
-      <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-        <Image
-          source={BlockchainHelper.getIcon(blockchainName)}
-          width={32}
-          height={33}
-          style={{ height: 28, width: 27, marginHorizontal: 10 }}
-        />
-        <View>
-          <Text style={{ color: '#899fa8', fontSize: 12, fontFamily: 'medium' }}>
-            {i18n.t(`blockchainServices.${blockchainName}.id`)}
-          </Text>
-          <Text style={{ color: '#fff', fontSize: 18, fontFamily: 'bold' }}>
-            {i18n.t(`blockchainServices.${blockchainName}.label`)}
-          </Text>
-        </View>
-      </View>
-      <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-        <Text style={{ color: '#899fa8', marginRight: 15, fontFamily: 'medium' }}>
+      <LinearLayout flexDirection="row" alignItems="flex-end">
+        <BlockchainIcon blockchain={props.blockchain} width={32} height={32} mx="10px" />
+
+        <LinearLayout>
+          <TextView color="text.6" fontSize="10px" fontWeight="500">
+            {i18n.t(`blockchainServices.${props.blockchain}.id`)}
+          </TextView>
+          <TextView color="text.0" fontSize="16px" fontWeight="bold">
+            {i18n.t(`blockchainServices.${props.blockchain}.label`)}
+          </TextView>
+        </LinearLayout>
+      </LinearLayout>
+
+      <LinearLayout flexDirection="row" alignItems="flex-end">
+        <TextView color="text.6" marginRight="14px" fontWeight="500" fontSize="12px">
           {i18n.t('mnemonicSelectionList.qtySelectedOfTotal', {
-            qtySelected: props.qtyAddressesSelected,
-            total: props.totAddresses,
+            qtySelected: props.totalAddressesSelected,
+            total: props.accounts.length,
           })}
-        </Text>
-        {props.isActive ? (
-          <Text style={{ fontSize: 30, color: '#4cffb3' }}>-</Text>
-        ) : (
-          <Text style={{ fontSize: 30, color: '#4cffb3' }}>+</Text>
-        )}
-      </View>
-    </View>
+        </TextView>
+
+        <TextView fontSize="30px" color="primary">
+          {props.isActive ? '-' : '+'}
+        </TextView>
+      </LinearLayout>
+    </LinearLayout>
   )
 }
 
-interface ContentMnemonicItemProps {
-  data: {
-    address: string
-    wif: string
-    derivationIndex: number
+const Content = (props: ContentItemProps) => {
+  const handlePress = (account: AccountWithDerivationPath) => {
+    props.onPress({ ...account, blockchain: props.blockchain })
   }
-  blockchain: BlockchainServiceKey
-  onAddressChange: (address: string, wif: string, isSelected: boolean, blockchain: BlockchainServiceKey) => void
-}
 
-const ContentMnemonicItem = (props: ContentMnemonicItemProps) => {
-  const { blockchainService } = useBlockchainService(props.blockchain)
-  const [addressIsSelected, setAddressIsSelected] = useState<boolean>(true)
+  const isSelected = (account: AccountWithDerivationPath) => {
+    return props.isSelected({ ...account, blockchain: props.blockchain })
+  }
 
-  const handleIsSelected = useCallback(() => {
-    setAddressIsSelected(!addressIsSelected)
-  }, [addressIsSelected])
-
-  useEffect(() => {
-    props.onAddressChange(props.data.address, props.data.wif, addressIsSelected, props.blockchain)
-  }, [addressIsSelected])
   return (
-    <TouchableWithoutFeedback onPress={handleIsSelected}>
-      <View
-        style={{
-          backgroundColor: '#13191D',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          padding: 10,
-        }}
-      >
-        <View style={{ backgroundColor: '#13191D' }}>
-          <Text style={{ fontFamily: 'medium', color: '#899fa8', fontSize: 16 }}>
-            {blockchainService.derivationPath.replace('?', String(props.data.derivationIndex))}
-          </Text>
-          <Text style={{ fontFamily: 'medium', color: '#fff', fontSize: 16 }}>{props.data.address}</Text>
-        </View>
-        {addressIsSelected && (
-          <Image
-            width={30}
-            height={30}
-            style={{ width: 18, height: 18, alignSelf: 'center' }}
-            source={require('~src/assets/images/icon-check-green.png')}
-          />
-        )}
-      </View>
-    </TouchableWithoutFeedback>
+    <LinearLayout>
+      {props.data.map(item => (
+        <TouchableWithoutFeedback onPress={() => handlePress(item)} key={item.address}>
+          <LinearLayout
+            backgroundColor="background.12"
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            paddingX="10px"
+            paddingY="10px"
+          >
+            <LinearLayout flexGrow={1} flexShrink={1}>
+              <TextView fontWeight="500" color="text.6" fontSize="14px">
+                {item.derivationPath}
+              </TextView>
+              <TextView fontWeight="500" color="text.0" fontSize="14px">
+                {item.address}
+              </TextView>
+            </LinearLayout>
+
+            {isSelected(item) && (
+              <ImageView
+                style={{ width: 22, height: 22 }}
+                ml="8px"
+                resizeMode="contain"
+                source={require('~src/assets/images/icon-check-green.png')}
+              />
+            )}
+          </LinearLayout>
+        </TouchableWithoutFeedback>
+      ))}
+    </LinearLayout>
   )
-}
-
-interface ContentMnemonicSelectionProps {
-  data: { address: string; wif: string; derivationIndex: number }[]
-  blockchain: BlockchainServiceKey
-  onAddressChange: (address: string, wif: string, isSelected: boolean, blockchain: BlockchainServiceKey) => void
-}
-
-const ContentMnemonicSelection = (props: ContentMnemonicSelectionProps) => {
-  return (
-    <FlatList
-      ItemSeparatorComponent={() => (
-        <View
-          style={{
-            backgroundColor: '#ffffff11',
-            height: 1,
-            marginHorizontal: 20,
-          }}
-        />
-      )}
-      data={props.data}
-      renderItem={({ item }) => (
-        <ContentMnemonicItem
-          data={item}
-          blockchain={props.blockchain}
-          onAddressChange={(address, wif, isSelected, blockchain) => {
-            props.onAddressChange(address, wif, isSelected, blockchain)
-          }}
-        />
-      )}
-    />
-  )
-}
-
-export interface MnemonicSelectionListParams {
-  data: MnemonicSelectionInfo
-  mnemonic: string
 }
 
 const MnemonicSelectionList = (props: Props) => {
   const { mnemonic } = props.route.params
-  const [itensActives, setItemActives] = useState<number[]>([0])
-  const handleActiveItens = (itens: number[]) => {
-    setItemActives(itens)
-  }
-  const [addressesSelected, setAddressesSelected] = useState<
-    { address: string; blockchain: BlockchainServiceKey; wif: string }[]
-  >([])
+
+  const bsAggregator = useSelector((state: RootState) => state.blockchain.bsAggregator)
+  const accountAddresses = useSelector((state: RootState) => state.account.data.map(it => it.address))
+
   const blockchainActions = useBlockchainActions()
-  const handleSelectAddress = useCallback(
-    (address: string, wif: string, blockchain: BlockchainServiceKey) => {
-      setAddressesSelected(prevState => {
-        const data = prevState
-        data.push({ address, wif, blockchain })
-        return [...data]
-      })
-    },
-    [addressesSelected]
-  )
 
-  const handleUnselectAddress = useCallback(
-    (address: string) => {
-      setAddressesSelected(prevState => {
-        const data = prevState
-        return [...data.filter(it => it.address !== address)]
-      })
-    },
-    [addressesSelected]
-  )
+  const [itemsActives, setItemActives] = useState<number[]>([0])
+  const [mnemonicAccounts, setMnemonicAccounts] = useState<Map<TBlockchainServiceKey, AccountWithDerivationPath[]>>()
+  const [accountsSelected, setAccountsSelected] = useState<AccountWithBlockchain[]>([])
 
-  const handleImportAccounts = useCallback(async () => {
+  const handlePressAccount = (accountWithBlockchain: AccountWithBlockchain) => {
+    setAccountsSelected(prev => {
+      if (prev.find(it => it.address === accountWithBlockchain.address)) {
+        return prev.filter(it => it.address !== accountWithBlockchain.address)
+      }
+
+      return [...prev, accountWithBlockchain]
+    })
+  }
+
+  const isSelected = (accountWithBlockchain: AccountWithBlockchain) => {
+    return !!accountsSelected.find(it => it.address === accountWithBlockchain.address)
+  }
+
+  const handleImportAccounts = async () => {
     Await.init('importMnemonic')
+
     const wallet = await blockchainActions.createWallet(
       i18n.t('defaultNameWallet.mnemonicWallet'),
       'standard',
@@ -213,18 +166,19 @@ const MnemonicSelectionList = (props: Props) => {
       true
     )
 
-    const accountsToImport = addressesSelected.map(
-      ({ address, blockchain, wif }): AccountToImport => ({
+    const accountsToImport = accountsSelected.map(
+      ({ address, blockchain, key }): AccountToImport => ({
         wallet,
         address,
         blockchain,
-        wif,
+        key,
         type: 'standard',
       })
     )
-
     await blockchainActions.importAccounts(accountsToImport)
+
     Await.done('importMnemonic')
+
     props.navigation.replace(wrapper.route.Tab.name, {
       screen: wrapper.route.ListWallets.name,
       params: {
@@ -232,66 +186,69 @@ const MnemonicSelectionList = (props: Props) => {
         params: { wallet },
       },
     })
-  }, [addressesSelected])
+  }
+
+  useEffect(() => {
+    Await.run(
+      'importMnemonic',
+      async () => {
+        const accounts = await bsAggregator.generateAccountFromMnemonicAllBlockchains(mnemonic, accountAddresses)
+        setMnemonicAccounts(accounts)
+        const accountsArray = Array.from(accounts.entries())
+          .map(([blockchain, accounts]) => {
+            return accounts.map(account => ({ ...account, blockchain }))
+          })
+          .flat()
+        setAccountsSelected(accountsArray)
+      },
+      500
+    )
+  }, [])
 
   return (
     <ScreenLayout>
-      <AwaitActivity name="importMnemonic" loadingView={<ScreenLoader />}>
-        <View style={{ height: '100%' }}>
-          <ScrollView>
-            <Text
-              style={{
-                color: '#fff',
-                fontFamily: 'regular',
-                alignSelf: 'center',
-                fontSize: 18,
-                marginVertical: 30,
-              }}
-            >
-              {i18n.t('importKey.foundAccountsMnemonic')}
-            </Text>
+      <AwaitActivity name="importMnemonic" loadingView={<ScreenLoader transparent />}>
+        <LinearLayout flexGrow={1}>
+          <TextView color="text.0" fontSize="18px" my="30px" alignSelf="center">
+            {i18n.t('importKey.foundAccountsMnemonic')}
+          </TextView>
+
+          {mnemonicAccounts && mnemonicAccounts.size > 0 && (
             <Accordion
+              containerStyle={{ flexGrow: 1 }}
               expandMultiple
-              activeSections={itensActives}
-              sections={Array.from(props.route.params.data.entries())}
+              activeSections={itemsActives}
+              sections={Array.from(mnemonicAccounts.entries())}
               renderHeader={(content, _, isActive) => {
-                const [blockchain, data] = content
-                const qtyAddressesSelected = addressesSelected.filter(it => it.blockchain === blockchain).length
-                return (
-                  <HeaderMnemonicSelection
-                    data={content}
-                    qtyAddressesSelected={qtyAddressesSelected}
-                    totAddresses={data.length}
-                    isActive={isActive}
-                  />
-                )
-              }}
-              onChange={indexes => handleActiveItens(indexes)}
-              renderContent={content => {
-                const [blockchain, data] = content
+                const totalAddressesSelected = accountsSelected.filter(it => it.blockchain === content[0]).length
 
                 return (
-                  <ContentMnemonicSelection
-                    blockchain={blockchain}
-                    data={data}
-                    onAddressChange={(address, wif, isSelected, blockchain) => {
-                      if (isSelected) {
-                        handleSelectAddress(address, wif, blockchain)
-                      } else {
-                        handleUnselectAddress(address)
-                      }
-                    }}
+                  <Header
+                    accounts={content[1]}
+                    blockchain={content[0]}
+                    isActive={isActive}
+                    totalAddressesSelected={totalAddressesSelected}
                   />
                 )
               }}
+              onChange={setItemActives}
+              renderContent={content => (
+                <Content
+                  blockchain={content[0]}
+                  data={content[1]}
+                  onPress={handlePressAccount}
+                  isSelected={isSelected}
+                />
+              )}
             />
-          </ScrollView>
+          )}
+
           <ThemedButton
-            disabled={addressesSelected.length < 1}
+            disabled={accountsSelected.length < 1}
             label={i18n.t('routes.ImportKey')}
             onPress={handleImportAccounts}
           />
-        </View>
+        </LinearLayout>
       </AwaitActivity>
     </ScreenLayout>
   )

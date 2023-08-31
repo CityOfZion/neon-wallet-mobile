@@ -2,29 +2,27 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 import { View } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
-import { BlockchainServiceKey } from '../blockchain'
-import { useBlockchainServiceUtils } from '../hooks/useBlockchainServices'
 import { selectAccounts } from '../store/account/SelectorAccount'
+import { TBlockchainServiceKey } from '../types/blockchain'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
-import { AddressInfo } from '~src/components/AddressesImportList'
 import InputWithValidation from '~src/components/InputWithValidation'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { useBlockchainActions, AccountToImport } from '~src/hooks/useBlockchainActions'
+import { useBlockchainActions } from '~src/hooks/useBlockchainActions'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
 import { RootState } from '~src/store/RootStore'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
 export interface PassphraseParams {
-  encryptedKey: string
-  blockchain: BlockchainServiceKey
+  encrypted: string
+  blockchain: TBlockchainServiceKey
 }
 
 interface PassphraseProps {
@@ -32,66 +30,34 @@ interface PassphraseProps {
   route: RouteProp<MoreStackParamList, 'Passphrase'>
 }
 
-type AddressInfoWithWif = AddressInfo & { wif: string }
-
 const Passphrase = (props: PassphraseProps) => {
-  const encryptedKey = props.route.params.encryptedKey
-  const blockchain = props.route.params.blockchain
+  const { blockchain, encrypted } = props.route.params
+
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const accounts = useSelector(selectAccounts)
+  const blockchainService = useSelector(
+    (state: RootState) => state.blockchain.bsAggregator.blockchainServicesByName[blockchain]
+  )
+
   const blockchainActions = useBlockchainActions()
-  const { getBlockchainService } = useBlockchainServiceUtils()
 
-  const [inputValue, setInputValue] = useState('')
+  const [password, setPassword] = useState('')
 
-  const validatePassword = useCallback(async () => {
-    try {
-      const service = getBlockchainService(blockchain)
-
-      const isEncryptedKey = service.validatePrivateKeyWithPassword(encryptedKey)
-
-      if (!isEncryptedKey) {
-        showMessage({
-          message: i18n.t('blockchainServices.errorMessages.keyWrongOrAddressesImported'),
-          type: 'danger',
-          duration: 4000,
-        })
-        return false
-      }
-      return true
-    } catch {
-      showMessage({
-        message: i18n.t('blockchainServices.errorMessages.keyWrongOrAddressesImported'),
-        type: 'danger',
-        duration: 4000,
-      })
-    }
-  }, [inputValue, getBlockchainService, blockchain])
-
-  const persist = useCallback(async () => {
+  const persist = async () => {
     Await.init('importEncryptedKey')
-    const passwordIsValid = await validatePassword()
-    if (!passwordIsValid) return
-    try {
-      const service = getBlockchainService(blockchain)
-      const newAddressesInfo: AddressInfoWithWif[] = []
-      const { address, wif } = await service.decryptKey(encryptedKey, inputValue)
-      const addressExist = accounts.some(acc => acc.address === address)
 
-      if (addressExist) {
+    try {
+      const { address, key } = await blockchainService.decrypt(encrypted, password)
+      const addressAlreadyExist = accounts.some(acc => acc.address === address)
+
+      if (addressAlreadyExist) {
         showMessage({
           message: i18n.t('blockchainServices.errorMessages.keyWrongOrAddressesImported'),
           type: 'danger',
           duration: 4000,
         })
-        throw new Error('Address already exists')
+        return
       }
-
-      newAddressesInfo.push({ address, blockchain, wif })
-
-      if (newAddressesInfo.length < 1) throw new Error("Can't decrypt key")
-
-      setInputValue('')
 
       const wallet = await blockchainActions.createWallet(
         i18n.t('modals.blockchainList.encryptedWallet'),
@@ -99,18 +65,7 @@ const Passphrase = (props: PassphraseProps) => {
         undefined,
         true
       )
-
-      const accountsToImport = newAddressesInfo.map(
-        ({ address, blockchain, wif }): AccountToImport => ({
-          address,
-          blockchain,
-          wallet,
-          wif,
-          type: 'legacy',
-        })
-      )
-
-      await blockchainActions.importAccounts(accountsToImport)
+      await blockchainActions.importAccount({ address, blockchain, wallet, key, type: 'legacy' })
 
       props.navigation.replace(wrapper.route.Tab.name, {
         screen: wrapper.route.ListWallets.name,
@@ -119,16 +74,16 @@ const Passphrase = (props: PassphraseProps) => {
           params: { wallet },
         },
       })
-    } catch (e) {
-      console.log(e)
+    } catch {
       showMessage({
         message: i18n.t('messages.problemToGenerateWallet'),
         type: 'danger',
       })
     } finally {
+      setPassword('')
       Await.done('importEncryptedKey')
     }
-  }, [inputValue, encryptedKey])
+  }
 
   return (
     <ScreenLayout>
@@ -148,8 +103,8 @@ const Passphrase = (props: PassphraseProps) => {
 
           <View style={{ minHeight: 100 }}>
             <InputWithValidation
-              value={inputValue}
-              onChangeText={setInputValue}
+              value={password}
+              onChangeText={setPassword}
               validator={() => true}
               color={theme.colors.primary}
               invalidColor={theme.colors.primary}
@@ -162,7 +117,7 @@ const Passphrase = (props: PassphraseProps) => {
           </View>
 
           <LinearLayout mt={80} width="90%" alignSelf="center">
-            <ThemedButton disabled={inputValue.length <= 0} label={i18n.t('routes.ImportKey')} onPress={persist} />
+            <ThemedButton disabled={password.length <= 0} label={i18n.t('routes.ImportKey')} onPress={persist} />
           </LinearLayout>
         </LinearLayout>
       </AwaitActivity>

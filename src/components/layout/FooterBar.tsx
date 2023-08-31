@@ -15,7 +15,6 @@ import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { GenericWalletURLHelper } from '~/src/helpers/GenericWalletURLHelper'
 import { UriHelper } from '~/src/helpers/UriHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
-import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { MoreStackParamList } from '~/src/navigation/MoreStackNavigation'
@@ -45,26 +44,25 @@ type NavigationProps = StackNavigationProp<
 
 const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
   const navigation = useNavigation<NavigationProps>()
-  const { validateAddressAllBlockchains, validatePrivateKeyWithPasswordAllBlockchains, validateWifAllBlockchains } =
-    useBlockchainServiceUtils()
+  const bsAggregator = useSelector((state: RootState) => state.blockchain.bsAggregator)
 
   const handleScanQrCode = (data: string) => {
-    const urlWIF = GenericWalletURLHelper.validateAndParse(data)
-    if (urlWIF && validateWifAllBlockchains(urlWIF)) {
+    const urlKey = GenericWalletURLHelper.validateAndParse(data)
+    if (urlKey && bsAggregator.validateKeyAllBlockchains(urlKey)) {
       navigation.navigate(wrapper.route.Tab.name, {
         screen: wrapper.route.More.name,
         params: {
           screen: wrapper.route.ImportKey.name,
           initial: false,
           params: {
-            data: urlWIF,
+            data: urlKey,
           } as any,
         },
       })
     }
 
     const sendUri = UriHelper.validateAndParse(data)
-    if (sendUri && validateAddressAllBlockchains(sendUri.address)) {
+    if (sendUri && bsAggregator.validateAddressAllBlockchains(sendUri.address)) {
       navigation.navigate(wrapper.route.Modal.name, {
         screen: wrapper.route.WalletSelectionModal.name,
         params: {
@@ -96,7 +94,7 @@ const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
       return
     }
 
-    if (validateAddressAllBlockchains(data)) {
+    if (bsAggregator.validateAddressAllBlockchains(data)) {
       navigation.navigate(wrapper.route.Modal.name, {
         screen: wrapper.route.AddressScanQuickToolsModal.name,
         params: {
@@ -106,7 +104,7 @@ const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
       return
     }
 
-    if (validatePrivateKeyWithPasswordAllBlockchains(data) || validateWifAllBlockchains(data)) {
+    if (bsAggregator.validateEncryptedAllBlockchains(data) || bsAggregator.validateKeyAllBlockchains(data)) {
       navigation.navigate(wrapper.route.Tab.name, {
         screen: wrapper.route.More.name,
         params: {

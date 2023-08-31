@@ -2,7 +2,6 @@ import { createSlice, CaseReducer, PayloadAction, createAsyncThunk } from '@redu
 import { cloneDeep } from 'lodash'
 
 import { Storage } from '~/src/app/Storage'
-import { BlockchainServiceKey } from '~/src/blockchain'
 import { blockchainConfig, TBlockchainNetwork } from '~/src/config/BlockchainConfig'
 import { localeConfig } from '~/src/config/LocaleConfig'
 import { Currency } from '~/src/enums/Currency'
@@ -10,26 +9,27 @@ import { Lang } from '~/src/enums/Lang'
 import { Security } from '~/src/enums/Security'
 import { Theme } from '~/src/enums/Theme'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
-import { SettingsState } from '~/src/types/reducers/settings'
+import { TBlockchainServiceKey } from '~/src/types/blockchain'
+import { SettingsState } from '~/src/types/store'
 
 type TSetNetworkPayload = Omit<TBlockchainNetwork, 'id'> & {
-  blockchain: BlockchainServiceKey
+  blockchain: TBlockchainServiceKey
 }
 
 type TEditNetworkPayload = {
   id: string
-  blockchain: BlockchainServiceKey
+  blockchain: TBlockchainServiceKey
   data: Partial<Omit<TBlockchainNetwork, 'id'>>
 }
 
 type TSelectNetworkPayload = {
   id: string
-  blockchain: BlockchainServiceKey
+  blockchain: TBlockchainServiceKey
 }
 
 type TDeleteNetworkPayload = {
   id: string
-  blockchain: BlockchainServiceKey
+  blockchain: TBlockchainServiceKey
 }
 
 export const settingsReducerName = 'settingsReducer'
@@ -163,6 +163,27 @@ const SettingsReducer = createSlice({
         }
       }
       Storage.settings.erase()
+
+      const blockchainNetworks = {
+        ...state.blockchainNetworks,
+      }
+
+      const selectedBlockchainNetworks = {
+        ...state.selectedBlockchainNetworks,
+      }
+
+      Object.entries(blockchainConfig.defaultNetworks).forEach(([blockchain, networks]) => {
+        if (blockchain in blockchainNetworks) return
+        blockchainNetworks[blockchain as TBlockchainServiceKey] = networks
+      })
+
+      Object.entries(blockchainConfig.defaultSelectedNetworks).forEach(([blockchain, network]) => {
+        if (blockchain in selectedBlockchainNetworks) return
+        selectedBlockchainNetworks[blockchain as TBlockchainServiceKey] = network
+      })
+
+      state.blockchainNetworks = blockchainNetworks
+      state.selectedBlockchainNetworks = selectedBlockchainNetworks
     })
   },
 })

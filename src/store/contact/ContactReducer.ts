@@ -1,8 +1,9 @@
 import { CaseReducer, PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
+import { Contact } from './Contact'
+
 import { Storage } from '~/src/app/Storage'
-import { UtilsHelper } from '~/src/helpers/UtilsHelper'
-import { ContactState } from '~/src/types/reducers/contact'
+import { ContactState } from '~/src/types/store'
 
 interface IContactReducer {
   data: ContactState[]
@@ -18,17 +19,18 @@ const migrateContactsFromStorage = createAsyncThunk('contacts/migrateContactFrom
   return Storage.contacts.load()
 })
 
-const saveContact: CaseReducer<IContactReducer, PayloadAction<ContactState>> = (state, action) => {
-  const contactState = action.payload
-  contactState.id = contactState.id === null ? UtilsHelper.uuid() : contactState.id
+const saveContact: CaseReducer<IContactReducer, PayloadAction<Contact>> = (state, action) => {
+  const contact = action.payload
+
   if (!('data' in state)) {
-    state.data = [contactState]
+    // @ts-ignore
+    state.data = [contact]
   } else {
-    const findIndex = state.data.findIndex(it => it.id === contactState.id)
+    const findIndex = state.data.findIndex(it => it.id === contact.id)
     if (findIndex < 0) {
-      state.data = [...state.data, contactState]
+      state.data = [...state.data, contact]
     } else {
-      state.data[findIndex] = contactState
+      state.data[findIndex] = contact
     }
   }
 }
@@ -67,6 +69,7 @@ const ContactReducer = createSlice({
             }
           })
         } else {
+          // @ts-ignore
           state.data = contacts
         }
         Storage.contacts.erase()

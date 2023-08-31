@@ -3,18 +3,19 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
 import { FlatList } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import ListSeparator from '../walletConnect/components/ListSeparator'
 
-import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
-import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
-import { BlockchainServiceKey } from '~src/blockchain'
+import { BlockchainIcon } from '~/src/components/BlockchainIcon'
+import { RootState } from '~/src/store/RootStore'
+import { TBlockchainServiceKey } from '~/src/types/blockchain'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { ButtonView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface SelectChainModalParams {
-  onSelect?: (blockchain: BlockchainServiceKey) => void
+  onSelect?: (blockchain: TBlockchainServiceKey) => void
 }
 
 interface Props {
@@ -23,14 +24,14 @@ interface Props {
 }
 
 type ItemProps = {
-  blockchain: BlockchainServiceKey
-  onPress: (blockchain: BlockchainServiceKey) => void
+  blockchain: TBlockchainServiceKey
+  onPress: (blockchain: TBlockchainServiceKey) => void
 }
 
 const Item = React.memo(({ blockchain, onPress }: ItemProps) => {
   return (
     <ButtonView py="12px" onPress={() => onPress(blockchain)} orientation="horiz" alignItems="center">
-      <ImageView source={BlockchainHelper.getIcon(blockchain)} resizeMode="contain" mr="12px" width={32} height={32} />
+      <BlockchainIcon blockchain={blockchain} width={32} height={32} mr="12px" />
 
       <LinearLayout>
         <TextView color="text.11" fontSize="12px" fontWeight={500}>
@@ -48,10 +49,13 @@ const Item = React.memo(({ blockchain, onPress }: ItemProps) => {
 export const SelectChainModal = (props: Props) => {
   const { onSelect } = props.route.params
 
-  const controller = useSwiperController(true)
-  const { blockchainKeyList } = useBlockchainServiceUtils()
+  const blockchainServicesKeys = useSelector(
+    (state: RootState) => Object.keys(state.blockchain.bsAggregator.blockchainServicesByName) as TBlockchainServiceKey[]
+  )
 
-  const handleSelect = (blockchain: BlockchainServiceKey) => {
+  const controller = useSwiperController(true)
+
+  const handleSelect = (blockchain: TBlockchainServiceKey) => {
     controller.close()
     if (onSelect) onSelect(blockchain)
   }
@@ -65,7 +69,7 @@ export const SelectChainModal = (props: Props) => {
       withoutScrollView
     >
       <FlatList
-        data={blockchainKeyList}
+        data={blockchainServicesKeys}
         ItemSeparatorComponent={ListSeparator}
         keyExtractor={item => item}
         renderItem={({ item }) => <Item onPress={handleSelect} blockchain={item} />}

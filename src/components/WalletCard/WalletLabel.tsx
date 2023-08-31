@@ -4,9 +4,9 @@ import { ImageSourcePropType } from 'react-native'
 
 import { TANimationType } from './WalletCard'
 
-import { Wallet } from '~/src/models/redux/Wallet'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
-import { WalletType } from '~/src/types/reducers/wallet'
+import { WalletType } from '~/src/types/store'
 
 type Props = {
   wallet: Wallet
@@ -61,7 +61,7 @@ export const WalletLabel = ({ wallet, isInactive, width, height }: Props) => {
                 numberOfLines={1}
                 ml="6px"
               >
-                {wallet.name?.toUpperCase()}
+                {wallet.name.toUpperCase()}
               </TextView>
               <TextView
                 fontFamily="bold"

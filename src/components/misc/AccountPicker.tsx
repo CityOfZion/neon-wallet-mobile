@@ -3,9 +3,9 @@ import { Animated } from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 
 import { applicationConfig } from '~/src/config/ApplicationConfig'
+import { Account } from '~/src/store/account/Account'
 import { UseMultipleBalanceAndExchangeResult } from '~/src/types/query'
 import AccountCard from '~src/components/AccountCard'
-import { Account } from '~src/models/redux/Account'
 import { LinearLayout } from '~src/styles/styled-components'
 
 interface Props {
@@ -29,8 +29,6 @@ const AccountPicker: React.FC<Props> = ({ accounts, onPress, onSelect, balancesE
   }
 
   const getAccountBalanceExchange = (account: Account) => {
-    if (!account.address) return
-
     return balancesExchange.findByBalanceKey(account.address)
   }
 

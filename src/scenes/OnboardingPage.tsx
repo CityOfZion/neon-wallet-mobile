@@ -1,3 +1,4 @@
+import { generateMnemonic } from '@cityofzion/bs-asteroid-sdk'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, { useRef, useCallback, useState, useEffect } from 'react'
@@ -6,12 +7,12 @@ import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { useSelector } from 'react-redux'
 
 import { ProgressBar } from '../components/ProgressBar'
-import { AsteroidHelper } from '../helpers/AsteroidHelper'
 import { UtilsHelper } from '../helpers/UtilsHelper'
 import { useProgress } from '../hooks/useProgress'
-import { Wallet } from '../models/redux/Wallet'
+import { RootState } from '../store/RootStore'
 import { selectAccounts } from '../store/account/SelectorAccount'
 import { selectWallets } from '../store/wallet/SelectorWallet'
+import { Wallet } from '../store/wallet/Wallet'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { applicationConfig } from '~src/config/ApplicationConfig'
@@ -55,13 +56,21 @@ const OnboardingSlide = (props: OnboardingSlideProps) => {
 }
 
 const OnboardingPage = (props: OnboardingPageProps) => {
-  const carousel = useRef<Carousel<any>>(null)
-  const blockchainActions = useBlockchainActions()
-  const { currentProgress, increment } = useProgress()
-  const [progressMessage, setProgressMessage] = useState<string>(i18n.t('onboarding.progressMessageStep1'))
-  const [currentPage, setCurrentPage] = useState<number>(0)
   const wallets = useSelector(selectWallets)
   const accounts = useSelector(selectAccounts)
+
+  //by requirements create just account neo 3,
+  const blockchainService = useSelector(
+    (state: RootState) => state.blockchain.bsAggregator.blockchainServicesByName.neo3
+  )
+
+  const blockchainActions = useBlockchainActions()
+  const { currentProgress, increment } = useProgress()
+
+  const carousel = useRef<Carousel<any>>(null)
+
+  const [progressMessage, setProgressMessage] = useState<string>(i18n.t('onboarding.progressMessageStep1'))
+  const [currentPage, setCurrentPage] = useState<number>(0)
 
   const finish = async () => {
     props.navigation.replace(wrapper.route.SetupCompletePage.name, {})
@@ -74,7 +83,8 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const step2 = async () => {
     await UtilsHelper.sleep(1500)
     if (wallets.length > 0) return
-    const words = AsteroidHelper.generateMnemonic() ?? []
+
+    const words = generateMnemonic()
     return blockchainActions.createWallet(i18n.t('onboarding.firstWalletName'), 'standard', words.join(' '))
   }
 
@@ -86,7 +96,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
       i18n.t('modals.blockchainList.countAccount', {
         count: 1,
       }),
-      'neo3', //by requirements create just account neo 3,
+      blockchainService.blockchainName,
       undefined,
       true
     )
