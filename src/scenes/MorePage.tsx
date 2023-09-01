@@ -30,6 +30,12 @@ const MorePage = (props: MoreProps) => {
     const result = await WebBrowser.openBrowserAsync('https://app.pipefy.com/public/form/wUJ8xQoC?embedded=true')
     return result
   }
+
+  const handlePressPrivacyPolicy = async () => {
+    const result = await WebBrowser.openBrowserAsync('https://www.coz.io/privacy-policy')
+    return result
+  }
+
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -93,10 +99,18 @@ const MorePage = (props: MoreProps) => {
             iconWidth={21}
             iconMarginLeft={1}
             iconMarginRight={17}
-            arrowDirection={RightIconType.NONE}
-            onPress={() => {
-              handlePressHelp()
-            }}
+            arrowDirection={RightIconType.EXTERNAL}
+            onPress={handlePressHelp}
+          />
+
+          <MenuItem
+            title={i18n.t('more.privatePolicy')}
+            icon={require('~/src/assets/images/icon-privacy-policy-green.png')}
+            iconWidth={18}
+            iconMarginLeft={2}
+            iconMarginRight={17}
+            arrowDirection={RightIconType.EXTERNAL}
+            onPress={handlePressPrivacyPolicy}
           />
         </LinearLayout>
         <TouchableWithoutFeedback

@@ -205,7 +205,8 @@
     "createWatchAccount": "Create watch account",
     "import": "Import",
     "settings": "Settings",
-    "help": "Help"
+    "help": "Help",
+    "privatePolicy": "Privacy Policy"
   },
   "importKey": {
     "enterAnAddress": "Enter an address, encrypted key, private key or mnemonic words",

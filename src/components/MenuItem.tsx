@@ -9,6 +9,7 @@ export enum RightIconType {
   ARROW_RIGHT,
   ARROW_DOWN,
   CHECK,
+  EXTERNAL,
 }
 
 export interface MenuItemProps {
@@ -42,6 +43,13 @@ const MenuItem = (props: MenuItemProps) => {
       arrowIcon = require('~/src/assets/images/icon-check-green.png')
       rightIconWidth = 23
       rightIconHeight = 17
+      rightIconRightMargin = 3
+      rightIconTopMargin = 2
+      break
+    case RightIconType.EXTERNAL:
+      arrowIcon = require('~/src/assets/images/icon-external-green.png')
+      rightIconWidth = 18
+      rightIconHeight = 16
       rightIconRightMargin = 3
       rightIconTopMargin = 2
       break
