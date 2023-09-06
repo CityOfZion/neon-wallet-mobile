@@ -38,7 +38,7 @@
     "@cityofzion/neon-js": "^5.3.0",
     "@cityofzion/neon-parser": "^1.5.2",
     "@cityofzion/neon-signer": "^1.0.1",
-    "@cityofzion/wallet-connect-sdk-wallet-react": "2.5.2",
+    "@cityofzion/wallet-connect-sdk-wallet-react": "2.6.0",
     "@moonlight-io/asteroid-sdk-js": "git+https://github.com/Moonlight-io/asteroid-sdk-js",
     "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-community/clipboard": "^1.2.2",
