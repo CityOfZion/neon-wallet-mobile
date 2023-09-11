@@ -2045,16 +2045,6 @@
   resolved "https://registry.yarnpkg.com/@cityofzion/neo3-invoker/-/neo3-invoker-1.4.0.tgz#00fff375a47d73d406e9d5ba47868bbd4cbe894f"
   integrity sha512-BOqJA2e6Kq3QPL/kaMYEjpPCeh9fdKTzRjEi9oIxi0MY5B7nj4rhAVl4l2A06jGNboi+VhToo/gJ/ZVzW/GaeQ==
 
-"@cityofzion/neo3-invoker@1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neo3-invoker/-/neo3-invoker-1.4.1.tgz#70b617dd73574682f6e3f0b775ab8df2120e49e1"
-  integrity sha512-2BNSQRydNuGZi7wam/kdvCoTw8m3wq1zbC6QBkkS9maRO/gliLEgDj0hjBazaP+slqtwR8DMdQsgbonJ9oIYEA==
-
-"@cityofzion/neo3-invoker@1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neo3-invoker/-/neo3-invoker-1.5.1.tgz#13a0f448aac13afa305a806a724fd0a4764915f0"
-  integrity sha512-P1w9Ajxa3S5lT+cvsjF/ZDpZFuvvg3e/bVC87PBbpD+FysVFsONlZCIomevkSV4LnzCgrxDQ00KzmYOiNHvWcg==
-
 "@cityofzion/neo3-parser@1.5.2":
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/@cityofzion/neo3-parser/-/neo3-parser-1.5.2.tgz#25eafbc1e9f2f22efeaf84d18794c6580322a57b"
@@ -2064,21 +2054,6 @@
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/@cityofzion/neo3-parser/-/neo3-parser-1.6.0.tgz#154d60baa6e6c541321f0d1fa796b38f6bed6aa3"
   integrity sha512-K+j3qaZEuq1cxit+fFziwAAc0hMQTdACbtllU1HUKJZ89dw7z/FY3Bmg12cyZ8tXuiktCloXvUT0Mg/IzoYqdg==
-
-"@cityofzion/neo3-parser@1.6.5":
-  version "1.6.5"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neo3-parser/-/neo3-parser-1.6.5.tgz#3744cb18c6ed310604d8bd15ac6286cfe84ec01b"
-  integrity sha512-0pv+odXwLA0X661f4UJZO7HErkt/2KZ22M9lHd98OAUT99M22i+XBaGrK2GqbLuzVAvoOEW73kSyhhz6Z9uUYg==
-
-"@cityofzion/neo3-signer@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neo3-signer/-/neo3-signer-1.1.0.tgz#3fa81977e1778b6acc863c85788a0525ecc4c21a"
-  integrity sha512-mUJNF5gOuX1aGdbuOwZ+nke03y2GavzYwnti8dr8kzm6lNbn5npLsy4vSHxfgS+gt+TYEeZTtnlf87QkjkEiNQ==
-
-"@cityofzion/neo3-signer@1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neo3-signer/-/neo3-signer-1.1.1.tgz#f3435578ec73a6ba170aaa108418dbb0ba17aa85"
-  integrity sha512-f0JtZajh+brWzXTAp8O9HgM6uLRTHnj6SIGdT/sb9UYHXBd2zB/phrAd9SDJ+tvUFSz7D6Jrek/crCUIaka0Fg==
 
 "@cityofzion/neo3-signer@^1.0.1":
   version "1.0.1"
@@ -2110,6 +2085,11 @@
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-api/-/neon-api-5.2.2.tgz#21554ddb7ece6f0a73df08ad0aaf59bae8668d95"
   integrity sha512-zNaGI+0C3r/w0olV6cpbdl1OarvX/Qen8bnEO3Xlqybc8uswu0AoL/mhfjXPFd75UkWmQTC7JCziKQULTfLblg==
 
+"@cityofzion/neon-api@^5.4.0":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-api/-/neon-api-5.4.0.tgz#58870b5e76a8c2cab75cac3546aa157820fdc58d"
+  integrity sha512-FHjdq2RnZLK37Hpd71yhVMkmbhl/iyPrmmAiEKb4mf5/rLtbNaKEEEJsxRkSNasio9+14cd7+BecIZ/35L1Sbg==
+
 "@cityofzion/neon-core@5.3.0", "@cityofzion/neon-core@^5.2.0", "@cityofzion/neon-core@^5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-core/-/neon-core-5.3.0.tgz#ce3bede855e39d8d153b4f9c3a491803603019e3"
@@ -2126,6 +2106,22 @@
     loglevel "1.8.0"
     loglevel-plugin-prefix "0.8.4"
     scrypt-js "3.0.1"
+
+"@cityofzion/neon-core@5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-core/-/neon-core-5.5.0.tgz#a66a18cecc9b174cb6e1a0f5ae7dea3a23696267"
+  integrity sha512-jIE/fHIHjzSI5Lw2KpxctOx7i93vDziZ9swQt7nYjp4Stv09aXNDHHPKhDZNeGdINw+vjvmfu8Wp9uHEjwXzMQ==
+  dependencies:
+    bn.js "5.2.1"
+    bs58 "5.0.0"
+    buffer "6.0.3"
+    cross-fetch "^3.1.5"
+    crypto-js "4.1.1"
+    elliptic "6.5.4"
+    ethereum-cryptography "2.0.0"
+    lodash "4.17.21"
+    loglevel "1.8.1"
+    loglevel-plugin-prefix "0.8.4"
 
 "@cityofzion/neon-core@^4.8.0", "@cityofzion/neon-core@^4.9.0":
   version "4.9.0"
@@ -2171,6 +2167,39 @@
     secure-random "1.1.2"
     wif "2.0.6"
 
+"@cityofzion/neon-core@^5.5.0":
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-core/-/neon-core-5.5.1.tgz#80ee2caeef5e1e65dcd98a2a77b7eee4d12d8801"
+  integrity sha512-cqJ+RYTdUVoUl2e3I5bqgAvYFuqGd2M8lmgUgH/+kf0zS0b8EuKwliauJ2EA56fudwaXtCmmHZTfRBFs+RJ2vw==
+  dependencies:
+    bn.js "5.2.1"
+    bs58 "5.0.0"
+    buffer "6.0.3"
+    cross-fetch "^3.1.5"
+    crypto-js "4.1.1"
+    elliptic "6.5.4"
+    ethereum-cryptography "2.0.0"
+    lodash "4.17.21"
+    loglevel "1.8.1"
+    loglevel-plugin-prefix "0.8.4"
+
+"@cityofzion/neon-dappkit-types@0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-dappkit-types/-/neon-dappkit-types-0.0.5.tgz#97abeacf09971bc318e864871549f5a00545bc09"
+  integrity sha512-SRjmfzgI1aNhXdKby4gRrJBveFeSAdttSaLwNfQ/Xq19VwM2NOf2NATg7wDrtTY4sQLKwCyPjPaAePZwKLP8Xw==
+
+"@cityofzion/neon-dappkit@0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-dappkit/-/neon-dappkit-0.0.5.tgz#f85e3cc0688f4918adc7ebad2e40213ce9f088ef"
+  integrity sha512-rbGp0Fq1VkeZhXvrQUsfYUarqUL6a1Swb9e485RWbHxMbwwjIP2Sq0JotnM8gYyGRoMYhziDUuVqt4eEGkpRYQ==
+  dependencies:
+    "@cityofzion/neon-core" "5.5.0"
+    "@cityofzion/neon-dappkit-types" "0.0.5"
+    "@cityofzion/neon-js" "5.5.0"
+    crypto-js "^4.1.1"
+    elliptic "^6.5.4"
+    randombytes "^2.1.0"
+
 "@cityofzion/neon-invoker@1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-invoker/-/neon-invoker-1.4.0.tgz#a3177ad66c4b84bb57228418f5c451bc901c1549"
@@ -2179,16 +2208,6 @@
     "@cityofzion/neo3-invoker" "1.4.0"
     "@cityofzion/neon-core" "^5.3.0"
     "@cityofzion/neon-js" "^5.3.0"
-
-"@cityofzion/neon-invoker@1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neon-invoker/-/neon-invoker-1.5.1.tgz#ba849357b54b717d4b741a8c48f4c6e64a84fe45"
-  integrity sha512-71eUsYTSm9MzuZcrNspzak+CQ2s4XHQAqNV+M++rwCCSSKqxMWb8GKuLGAI7muEBZv4l8a19PSlbMASWDfegKA==
-  dependencies:
-    "@cityofzion/neo3-invoker" "1.5.1"
-    "@cityofzion/neon-core" "5.3.0"
-    "@cityofzion/neon-js" "5.3.0"
-    chai "~4.3.7"
 
 "@cityofzion/neon-invoker@^1.3.1":
   version "1.3.1"
@@ -2206,6 +2225,14 @@
   dependencies:
     "@cityofzion/neon-api" "^5.2.2"
     "@cityofzion/neon-core" "^5.3.0"
+
+"@cityofzion/neon-js@5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@cityofzion/neon-js/-/neon-js-5.5.0.tgz#87ee6321ed7c5c8eda96a55134919e78d30faea0"
+  integrity sha512-S6lYJa9+2UQnRAkCytoNbQaynMsPhdJBTrsvvV1PoAUhVVaaO5aR0rJB+mMMk686y537Bn8vJFXbT+HSAdw1Kg==
+  dependencies:
+    "@cityofzion/neon-api" "^5.4.0"
+    "@cityofzion/neon-core" "^5.5.0"
 
 "@cityofzion/neon-js@^4.7.1":
   version "4.8.1"
@@ -2240,15 +2267,6 @@
     "@cityofzion/neo3-parser" "1.6.0"
     "@cityofzion/neon-js" "^5.3.0"
 
-"@cityofzion/neon-parser@1.6.5":
-  version "1.6.5"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neon-parser/-/neon-parser-1.6.5.tgz#8a246630609e25553d2ecb717cb514508006e4c8"
-  integrity sha512-ekSHeYJdbf+07+X3gK2AS1LVT4xyxBBfgJmgENYbaVjIXQrGHAyZUy+vA9vocR5hJ3ABPjYoa4a5lCqWrQv0Iw==
-  dependencies:
-    "@cityofzion/neo3-parser" "1.6.5"
-    "@cityofzion/neon-core" "5.3.0"
-    "@cityofzion/neon-js" "5.3.0"
-
 "@cityofzion/neon-parser@^1.5.2":
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/@cityofzion/neon-parser/-/neon-parser-1.5.2.tgz#ab08fccb3591511b93684bdd62ecf783e16570cd"
@@ -2256,16 +2274,6 @@
   dependencies:
     "@cityofzion/neo3-parser" "1.5.2"
     "@cityofzion/neon-js" "^5.2.0"
-
-"@cityofzion/neon-signer@1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/neon-signer/-/neon-signer-1.1.1.tgz#5c779c02825ce19c4f060d8e23b7c998891ee2c7"
-  integrity sha512-lOQF9B1XsGwkkHbUuSprWfE+HOhlgbLdoLQeFpvnqmb4NA806wWXxbAgRKN4Xt1SLu7Z8MioM4JOVBxXVooO4Q==
-  dependencies:
-    "@cityofzion/neo3-signer" "1.1.1"
-    "@cityofzion/neon-core" "5.3.0"
-    "@cityofzion/neon-js" "5.3.0"
-    randombytes "^2.1.0"
 
 "@cityofzion/neon-signer@^1.0.1":
   version "1.0.1"
@@ -2277,41 +2285,35 @@
     "@cityofzion/neon-js" "^5.2.0"
     randombytes "^2.1.0"
 
-"@cityofzion/wallet-connect-sdk-core@2.5.2":
-  version "2.5.2"
-  resolved "https://registry.yarnpkg.com/@cityofzion/wallet-connect-sdk-core/-/wallet-connect-sdk-core-2.5.2.tgz#d9d0d1f58294b697f5e893496ca8f3c76cea7901"
-  integrity sha512-43LaJBz1H4QPDo91T6uurzhxyp6HtMlFqhIt8qX8Iwv0byh88WU0kzPyf/3e4oh/2jLfK/Dq9oAL/aU8MixgAA==
+"@cityofzion/wallet-connect-sdk-core@2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@cityofzion/wallet-connect-sdk-core/-/wallet-connect-sdk-core-2.6.0.tgz#4f8e6fc4f2599cc30d92521194bce616dfc3b44d"
+  integrity sha512-CJn9kK3ILEbSg4qh7RdJVV1PWgM2v7BquSREkQfD+YFsUkdsHMeJzuPzrrC93q+hTlNKSwOpdVDLhlKs92fvoA==
   dependencies:
-    "@cityofzion/neo3-invoker" "1.4.1"
-    "@cityofzion/neo3-signer" "1.1.0"
     "@cityofzion/neon-core" "5.3.0"
+    "@cityofzion/neon-dappkit-types" "0.0.5"
     "@walletconnect/sign-client" "2.0.0-rc.3"
     "@walletconnect/types" "2.0.0-rc.3"
 
-"@cityofzion/wallet-connect-sdk-wallet-core@2.5.2":
-  version "2.5.2"
-  resolved "https://registry.yarnpkg.com/@cityofzion/wallet-connect-sdk-wallet-core/-/wallet-connect-sdk-wallet-core-2.5.2.tgz#66b58343520baffef45e74b022bca08a8264c94c"
-  integrity sha512-LqTmgFyliA0aUay9cOUUzMTpFQNNfjjMBp9kZKvFteT+Nxw1SlicTxUmgYU2r75A1SW8BDyHcNOID85emmjOgw==
+"@cityofzion/wallet-connect-sdk-wallet-core@2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@cityofzion/wallet-connect-sdk-wallet-core/-/wallet-connect-sdk-wallet-core-2.6.0.tgz#797267422020019d105d2459e54b66e9488bc94b"
+  integrity sha512-R4uvaodnuyF07RlM/a0hfrkHJd2Nx+8aME96uRAmpmrLJhHzefnQRn4o/0hcXv2HqClSTfu+LjB6zSQ+ZBtNcg==
   dependencies:
-    "@cityofzion/neo3-invoker" "1.5.1"
-    "@cityofzion/neo3-parser" "1.6.5"
-    "@cityofzion/neo3-signer" "1.1.1"
-    "@cityofzion/neon-core" "5.3.0"
-    "@cityofzion/neon-invoker" "1.5.1"
-    "@cityofzion/neon-js" "5.3.0"
-    "@cityofzion/neon-parser" "1.6.5"
-    "@cityofzion/neon-signer" "1.1.1"
-    "@cityofzion/wallet-connect-sdk-core" "2.5.2"
+    "@cityofzion/neon-core" "5.5.0"
+    "@cityofzion/neon-dappkit" "0.0.5"
+    "@cityofzion/neon-js" "5.5.0"
+    "@cityofzion/wallet-connect-sdk-core" "2.6.0"
     "@walletconnect/sign-client" "2.7.3"
     "@walletconnect/types" "2.7.3"
     moment "^2.29.4"
 
-"@cityofzion/wallet-connect-sdk-wallet-react@2.5.2":
-  version "2.5.2"
-  resolved "https://registry.yarnpkg.com/@cityofzion/wallet-connect-sdk-wallet-react/-/wallet-connect-sdk-wallet-react-2.5.2.tgz#d7868934f98cf1dd2a11caae5bb77face1865918"
-  integrity sha512-fZZ03stzfrH2golADC4b8P1sqCYG65KGRx1L+vWmLuiLvjVf/zYm7Zz/xEatnLqGQZ9c1EevE4t/ICr0KE8SfA==
+"@cityofzion/wallet-connect-sdk-wallet-react@2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@cityofzion/wallet-connect-sdk-wallet-react/-/wallet-connect-sdk-wallet-react-2.6.0.tgz#81203088501b5382fadc3c0d357e1363fe3f843a"
+  integrity sha512-XKBjJTH/oFenMTka2c8aJq5HP/eLeqKQoAu0fmzWy78dhFPSQjrq2FjdM4HxHb0Grd5oO5CF3s7SebwHfjsFJA==
   dependencies:
-    "@cityofzion/wallet-connect-sdk-wallet-core" "2.5.2"
+    "@cityofzion/wallet-connect-sdk-wallet-core" "2.6.0"
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
@@ -3483,6 +3485,23 @@
     lodash "^4.17.19"
     node-log-it "^2.0.0"
 
+"@noble/curves@1.0.0", "@noble/curves@~1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.0.0.tgz#e40be8c7daf088aaf291887cbc73f43464a92932"
+  integrity sha512-2upgEu0iLiDVDZkNLeFV2+ht0BAVgQnEmCk6JsOch9Rp8xfkMCbvbAZlA2pBHQc73dbl+vFOXfqkf4uemdn0bw==
+  dependencies:
+    "@noble/hashes" "1.3.0"
+
+"@noble/hashes@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.3.0.tgz#085fd70f6d7d9d109671090ccae1d3bec62554a1"
+  integrity sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg==
+
+"@noble/hashes@~1.3.0":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.3.2.tgz#6f26dbc8fbc7205873ce3cee2f690eba0d421b39"
+  integrity sha512-MVC8EAQp7MvEcm30KWENFjgR+Mkmf+D189XJTkFIlwohU5hcBbn1ZkKq7KVTi2Hme3PMGF390DaL52beVrIihQ==
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"
@@ -3806,6 +3825,28 @@
     redux "^4.1.2"
     redux-thunk "^2.4.1"
     reselect "^4.1.5"
+
+"@scure/base@~1.1.0":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@scure/base/-/base-1.1.3.tgz#8584115565228290a6c6c4961973e0903bb3df2f"
+  integrity sha512-/+SgoRjLq7Xlf0CWuLHq2LUZeL/w65kfzAPG5NH9pcmBhs+nunQTn4gvdwgMTIXnt9b2C/1SeL2XiysZEyIC9Q==
+
+"@scure/bip32@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@scure/bip32/-/bip32-1.3.0.tgz#6c8d980ef3f290987736acd0ee2e0f0d50068d87"
+  integrity sha512-bcKpo1oj54hGholplGLpqPHRbIsnbixFtc06nwuNM5/dwSXOq/AAYoIBRsBmnZJSdfeNW5rnff7NTAz3ZCqR9Q==
+  dependencies:
+    "@noble/curves" "~1.0.0"
+    "@noble/hashes" "~1.3.0"
+    "@scure/base" "~1.1.0"
+
+"@scure/bip39@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@scure/bip39/-/bip39-1.2.0.tgz#a207e2ef96de354de7d0002292ba1503538fc77b"
+  integrity sha512-SX/uKq52cuxm4YFXWFaVByaSHJh2w3BnokVSeUJVCv6K7WulT9u2BuNRBhuFl8vAuYnzx9bEu9WgpcNYTrYieg==
+  dependencies:
+    "@noble/hashes" "~1.3.0"
+    "@scure/base" "~1.1.0"
 
 "@segment/loosely-validate-event@^2.0.0":
   version "2.0.0"
@@ -5853,11 +5894,6 @@ assert@^1.1.1:
     object-assign "^4.1.1"
     util "0.10.3"
 
-assertion-error@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/assertion-error/-/assertion-error-1.1.0.tgz#e60b6b0e8f301bd97e5375215bda406c85118c0b"
-  integrity sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==
-
 assign-symbols@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/assign-symbols/-/assign-symbols-1.0.0.tgz#59667f41fadd4f20ccbc2bb96b8d4f7f78ec0367"
@@ -6421,6 +6457,11 @@ bn.js@5.2.0, bn.js@^5.0.0, bn.js@^5.1.1:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-5.2.0.tgz#358860674396c6997771a9d051fcc1b57d4ae002"
   integrity sha512-D7iWRBvnZE8ecXiLj/9wbxH7Tk79fAh8IHaTNq1RWRixsS02W+5qS+iE9yq6RYl0asXx5tw0bLhmT5pIfbSquw==
+
+bn.js@5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-5.2.1.tgz#0bc527a6a0d18d0aa8d5b0538ce4a77dccfa7b70"
+  integrity sha512-eXRvHzWyYPBuB4NBy0cmYQjGitUrtqwbvlzP3G6VFnNRbsZQIxQ10PbKKHt8gZ/HW/D/747aDl+QkDqg3KQLMQ==
 
 bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.11.9:
   version "4.12.0"
@@ -7033,19 +7074,6 @@ capture-stack-trace@^1.0.0:
   resolved "https://registry.yarnpkg.com/capture-stack-trace/-/capture-stack-trace-1.0.1.tgz#a6c0bbe1f38f3aa0b92238ecb6ff42c344d4135d"
   integrity sha512-mYQLZnx5Qt1JgB1WEiMCf2647plpGeQ2NMR/5L0HNZzGQo4fuSPnK+wjfPnKZV0aiJDgzmWqqkV/g7JD+DW0qw==
 
-chai@~4.3.7:
-  version "4.3.7"
-  resolved "https://registry.yarnpkg.com/chai/-/chai-4.3.7.tgz#ec63f6df01829088e8bf55fca839bcd464a8ec51"
-  integrity sha512-HLnAzZ2iupm25PlN0xFreAlBA5zaBSv3og0DdeGA4Ar6h6rJ3A0rolRUKJhSF2V10GZKDgWF/VmAEsNWjCRB+A==
-  dependencies:
-    assertion-error "^1.1.0"
-    check-error "^1.0.2"
-    deep-eql "^4.1.2"
-    get-func-name "^2.0.0"
-    loupe "^2.3.1"
-    pathval "^1.1.1"
-    type-detect "^4.0.5"
-
 chalk@2.4.2, chalk@^2.0.0, chalk@^2.0.1, chalk@^2.4.1, chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
@@ -7093,11 +7121,6 @@ charenc@0.0.2, charenc@~0.0.1:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/charenc/-/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
   integrity sha512-yrLQ/yVUFXkzg7EDQsPieE/53+0RlaWTs+wBrvW36cyilJ2SaDWfl4Yj7MtLTXleV9uEKefbAGUPv2/iWSooRA==
-
-check-error@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/check-error/-/check-error-1.0.2.tgz#574d312edd88bb5dd8912e9286dd6c0aed4aac82"
-  integrity sha512-BrgHpW9NURQgzoNyjfq0Wu6VFO6D7IZEmJNdtgNqpzGG8RuNFHt2jQxWlAs4HMe119chBnv+34syEZtc6IhLtA==
 
 child-process-promise@^2.2.0:
   version "2.2.1"
@@ -7866,7 +7889,7 @@ crypto-js@4.0.0:
   resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.0.0.tgz#2904ab2677a9d042856a2ea2ef80de92e4a36dcc"
   integrity sha512-bzHZN8Pn+gS7DQA6n+iUmBfl0hO5DJq++QP3U6uTucDtk/0iGpXd/Gg7CGR0p8tJhofJyaKoWBuJI4eAO00BBg==
 
-crypto-js@4.1.1:
+crypto-js@4.1.1, crypto-js@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.1.1.tgz#9e485bcf03521041bd85844786b83fb7619736cf"
   integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
@@ -8233,13 +8256,6 @@ deep-diff@^0.3.5:
   version "0.3.8"
   resolved "https://registry.yarnpkg.com/deep-diff/-/deep-diff-0.3.8.tgz#c01de63efb0eec9798801d40c7e0dae25b582c84"
   integrity sha1-wB3mPvsO7JeYgB1Ax+Da4ltYLIQ=
-
-deep-eql@^4.1.2:
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/deep-eql/-/deep-eql-4.1.3.tgz#7c7775513092f7df98d8df9996dd085eb668cc6d"
-  integrity sha512-WaEtAOpRA1MQ0eohqZjpGD8zdI0Ovsm8mmFhaDN8dvDZzyoUMcYDnf5Y6iu7HTXxf8JDS23qWa4a+hKCDyOPzw==
-  dependencies:
-    type-detect "^4.0.0"
 
 deep-equal@^1.0.0, deep-equal@^1.0.1:
   version "1.1.1"
@@ -8733,7 +8749,7 @@ elliptic@6.5.3, elliptic@^6.5.3:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.0"
 
-elliptic@6.5.4:
+elliptic@6.5.4, elliptic@^6.5.4:
   version "6.5.4"
   resolved "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.4.tgz#da37cebd31e79a1367e941b592ed1fbebd58abbb"
   integrity sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==
@@ -9273,6 +9289,16 @@ etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
+
+ethereum-cryptography@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/ethereum-cryptography/-/ethereum-cryptography-2.0.0.tgz#e052b49fa81affae29402e977b8d3a31f88612b6"
+  integrity sha512-g25m4EtfQGjstWgVE1aIz7XYYjf3kH5kG17ULWVB5dH6uLahsoltOhACzSxyDV+fhn4gbR4xRrOXGe6r2uh4Bg==
+  dependencies:
+    "@noble/curves" "1.0.0"
+    "@noble/hashes" "1.3.0"
+    "@scure/bip32" "1.3.0"
+    "@scure/bip39" "1.2.0"
 
 event-target-shim@^5.0.0, event-target-shim@^5.0.1:
   version "5.0.1"
@@ -10515,11 +10541,6 @@ get-caller-file@^2.0.1, get-caller-file@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-2.0.5.tgz#4f94412a82db32f36e3b0b9741f8a97feb031f7e"
   integrity sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==
-
-get-func-name@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/get-func-name/-/get-func-name-2.0.0.tgz#ead774abee72e20409433a066366023dd6887a41"
-  integrity sha512-Hm0ixYtaSZ/V7C8FJrtZIuBBI+iSgL+1Aq82zSu8VQNB4S3Gk8e7Qs3VwBDJAhmRZcFqkl3tQu36g/Foh5I5ig==
 
 get-intrinsic@^1.0.2, get-intrinsic@^1.1.0, get-intrinsic@^1.1.1:
   version "1.1.1"
@@ -13724,19 +13745,17 @@ loglevel@1.8.0, loglevel@^1.6.8:
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.8.0.tgz#e7ec73a57e1e7b419cb6c6ac06bf050b67356114"
   integrity sha512-G6A/nJLRgWOuuwdNuA6koovfEV1YpqqAG4pRUlFaz3jj2QNZ8M4vBqnVA+HBTmU/AMNUtlOsMmSpF6NyOjztbA==
 
+loglevel@1.8.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.8.1.tgz#5c621f83d5b48c54ae93b6156353f555963377b4"
+  integrity sha512-tCRIJM51SHjAayKwC+QAg8hT8vg6z7GSgLJKGvzuPb1Wc+hLzqtuVLxp6/HzSPOozuK+8ErAhy7U/sVzw8Dgfg==
+
 loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.3.1, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
-
-loupe@^2.3.1:
-  version "2.3.6"
-  resolved "https://registry.yarnpkg.com/loupe/-/loupe-2.3.6.tgz#76e4af498103c532d1ecc9be102036a21f787b53"
-  integrity sha512-RaPMZKiMy8/JruncMU5Bt6na1eftNoo++R4Y+N2FrxkDVTrGvcyzFTsaGif4QTeKESheMGegbhw6iUAq+5A8zA==
-  dependencies:
-    get-func-name "^2.0.0"
 
 lower-case@^2.0.2:
   version "2.0.2"
@@ -15608,11 +15627,6 @@ paths-js@^0.4.10:
   version "0.4.11"
   resolved "https://registry.yarnpkg.com/paths-js/-/paths-js-0.4.11.tgz#b2a9d5f94ee9949aa8fee945f78a12abff44599e"
   integrity sha512-3mqcLomDBXOo7Fo+UlaenG6f71bk1ZezPQy2JCmYHy2W2k5VKpP+Jbin9H0bjXynelTbglCqdFhSEkeIkKTYUA==
-
-pathval@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/pathval/-/pathval-1.1.1.tgz#8534e77a77ce7ac5a2512ea21e0fdb8fcf6c3d8d"
-  integrity sha512-Dp6zGqpTdETdR63lehJYPeIOqpiNBNtc7BpWSLrOje7UaIsE5aY92r/AunQA7rsXvet3lrJ3JnZX29UPTKXyKQ==
 
 pbkdf2@3.0.8:
   version "3.0.8"
@@ -19507,7 +19521,7 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-type-detect@4.0.8, type-detect@^4.0.0, type-detect@^4.0.5:
+type-detect@4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-4.0.8.tgz#7646fb5f18871cfbb7749e69bd39a6388eb7450c"
   integrity sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==
