@@ -5,7 +5,7 @@ import { FlatList } from 'react-native'
 import { Item } from './Item'
 
 import { Separator } from '~/src/components/Separator'
-import { Wallet } from '~/src/models/redux/Wallet'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {

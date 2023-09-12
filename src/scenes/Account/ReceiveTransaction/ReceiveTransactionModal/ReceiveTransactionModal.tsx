@@ -1,3 +1,4 @@
+import { Token } from '@cityofzion/blockchain-service'
 import { RouteProp } from '@react-navigation/native'
 import i18n from 'i18n-js'
 import React, { useState } from 'react'
@@ -10,15 +11,14 @@ import { TokenSelect } from './TokenSelect'
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
-import { Token } from '~/src/models/Token'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
+import { Account } from '~/src/store/account/Account'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import AccountCard from '~src/components/AccountCard'
 import { QRCodeWithCopyButton } from '~src/components/QRCodeWithCopyButton'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import { TabSelector } from '~src/components/TabSelector'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { Account } from '~src/models/redux/Account'
-import { Wallet } from '~src/models/redux/Wallet'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
 
@@ -83,7 +83,7 @@ const ReceiveTransactionModal = (props: Props) => {
       >
         <LinearLayout>
           <TextView mb="24px" alignSelf="center" color="text.3" fontSize="md" fontFamily="bold">
-            {wallet.name?.toUpperCase() ?? ''}
+            {wallet.name.toUpperCase()}
           </TextView>
 
           <AccountCard

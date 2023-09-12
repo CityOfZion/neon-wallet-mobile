@@ -16,8 +16,10 @@ import {
 } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { BlockchainServiceKey } from '../blockchain'
-import { ContactAddresses } from '../types/reducers/contact'
+import { Account } from '../store/account/Account'
+import { Contact } from '../store/contact/Contact'
+import { TBlockchainServiceKey } from '../types/blockchain'
+import { ContactAddresses } from '../types/store'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { Normalize } from '~src/app/Normalize'
@@ -26,8 +28,6 @@ import { InputClearButton } from '~src/components/input/InputClearButton'
 import { PasteButton } from '~src/components/input/PasteButton'
 import { ScanButton } from '~src/components/input/ScanButton'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
-import { Account } from '~src/models/redux/Account'
-import { Contact } from '~src/models/redux/Contact'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { RootState } from '~src/store/RootStore'
@@ -50,7 +50,7 @@ interface Props {
   hidePaste?: boolean
   hideScan?: boolean
   showContacts?: boolean
-  filterBlockchain?: BlockchainServiceKey
+  filterBlockchain?: TBlockchainServiceKey
   onClearPress?: () => void
   onScan?: (data: string) => void
   onSelectContact?: (contact: Contact, address: ContactAddresses) => void
@@ -68,6 +68,7 @@ interface Props {
   fromImportKey?: boolean
   addressSelected?: string
   forceClearButton?: boolean
+  forceMultiLine?: boolean
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters'
   loading?: boolean
   testID?: string
@@ -163,7 +164,7 @@ const InputWithValidation = (props: Props) => {
             keyboardType={props.keyboardType}
             returnKeyType="done"
             onSubmitEditing={Keyboard.dismiss}
-            multiline={UtilsHelper.isIos ? true : props.isMultiline}
+            multiline={props.forceMultiLine ?? props.isMultiline}
             numberOfLines={props.isMultiline ? 10 : 1}
             style={{ textAlignVertical: props.isMultiline ? 'top' : 'auto' }}
             clearTextOnFocus={false}

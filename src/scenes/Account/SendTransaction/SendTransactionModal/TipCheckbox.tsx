@@ -1,14 +1,14 @@
+import { Token } from '@cityofzion/blockchain-service'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React, { useEffect } from 'react'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
-import { Token } from '~/src/models/Token'
-import { Account } from '~/src/models/redux/Account'
+import { blockchainConfig } from '~/src/config/BlockchainConfig'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
+import { Account } from '~/src/store/account/Account'
 import { LinearLayout } from '~/src/styles/styled-components'
 import { TokenBalance } from '~/src/types/query'
 import ThemedCheckBox from '~src/components/themed/ThemedCheckbox'
@@ -19,7 +19,7 @@ type Props = {
   amount?: number
   disabled: boolean
   checked: boolean
-  onTipChange: (tip?: number) => void
+  onTipChange: (tip?: string) => void
   onDisableChange: (value: boolean) => void
   onCheckChange: (value: boolean) => void
   token?: Token
@@ -42,8 +42,7 @@ export const TipCheckbox = ({
   account,
   tokenBalance,
 }: Props) => {
-  const { blockchainService } = useBlockchainService(account.blockchain)
-
+  const tipConfig = blockchainConfig.mainnetTipByBlockchain[account.blockchain]
   const navigation = useNavigation<StackNavigationProp<RootStackParamList & ModalStackParamList>>()
 
   const handleOnPress = () => {
@@ -69,18 +68,18 @@ export const TipCheckbox = ({
     const newTip = (amount / 100) * PERCENTAGE
 
     if (onTipChange) {
-      onTipChange(newTip)
+      onTipChange(newTip.toFixed(tipConfig?.token.decimals))
     }
   }, [amount])
 
   useEffect(() => {
-    if (!token || !amount || fee === undefined || !tip || !tokenBalance || !blockchainService.cozTip) {
+    if (!token || !amount || fee === undefined || !tip || !tokenBalance) {
       onDisableChange(true)
       return
     }
 
-    if (token.symbol === blockchainService.cozTip.symbol) {
-      if (tokenBalance.amount >= tip + amount + fee) {
+    if (tipConfig && token.symbol === tipConfig.token.symbol) {
+      if (tokenBalance.amountNumber >= tip + amount + fee) {
         onDisableChange(false)
         return
       }
@@ -89,7 +88,7 @@ export const TipCheckbox = ({
       return
     }
 
-    if (tokenBalance.amount - fee >= tip) {
+    if (tokenBalance.amountNumber - fee >= tip) {
       onDisableChange(false)
       return
     }
@@ -101,7 +100,7 @@ export const TipCheckbox = ({
     <LinearLayout mt={30}>
       <ThemedCheckBox
         label={i18n.t('modals.sendTransactionModal.tipCheckboxLabel', {
-          tipValue: tip ? tip.toFixed(8) : '0',
+          tipValue: tip ?? '0',
         })}
         checked={disabled ? false : checked}
         onPress={handleOnPress}

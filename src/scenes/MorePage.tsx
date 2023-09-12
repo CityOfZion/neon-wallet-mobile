@@ -12,7 +12,7 @@ import { RootStackParamList } from '../navigation/AppNavigation'
 import { settingsReducerActions } from '../store/settings/SettingsReducer'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
-import MenuItem, { RightIconType } from '~src/components/MenuItem'
+import MenuItem, { MenuItemIcon, RightIconType } from '~src/components/MenuItem'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { MoreStackParamList } from '~src/navigation/MoreStackNavigation'
@@ -26,6 +26,8 @@ interface MoreProps {
 }
 
 const MorePage = (props: MoreProps) => {
+  const dispatch = useDispatch()
+
   const handlePressHelp = async () => {
     const result = await WebBrowser.openBrowserAsync('https://app.pipefy.com/public/form/wUJ8xQoC?embedded=true')
     return result
@@ -35,8 +37,6 @@ const MorePage = (props: MoreProps) => {
     const result = await WebBrowser.openBrowserAsync('https://www.coz.io/privacy-policy')
     return result
   }
-
-  const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(settingsReducerActions.setIsFirstTime(false))
@@ -48,9 +48,7 @@ const MorePage = (props: MoreProps) => {
         <LinearLayout>
           <MenuItem
             title={i18n.t('more.createWallet')}
-            icon={require('~/src/assets/images/wallet-icon-green.png')}
-            iconMarginRight={3}
-            iconHeight={26}
+            icon={<MenuItemIcon source={require('~/src/assets/images/wallet-icon-green.png')} />}
             arrowDirection={RightIconType.NONE}
             onPress={() => {
               props.navigation.navigate(wrapper.route.Step1CreateWallet.name, {})
@@ -58,11 +56,7 @@ const MorePage = (props: MoreProps) => {
           />
           <MenuItem
             title={i18n.t('more.createWatchAccount')}
-            icon={require('~/src/assets/images/icon-watch-green.png')}
-            iconHeight={20}
-            iconWidth={20}
-            iconMarginRight={5}
-            iconMarginLeft={2}
+            icon={<MenuItemIcon source={require('~/src/assets/images/icon-watch-green.png')} />}
             arrowDirection={RightIconType.NONE}
             onPress={() => {
               props.navigation.navigate(wrapper.route.ImportReadAccount.name, {})
@@ -71,11 +65,7 @@ const MorePage = (props: MoreProps) => {
           <MenuItem
             testID="menu-item-import-key"
             title={i18n.t('more.import')}
-            icon={require('~/src/assets/images/icon-import-green.png')}
-            iconHeight={22}
-            iconWidth={22}
-            iconMarginRight={15}
-            iconMarginLeft={1}
+            icon={<MenuItemIcon source={require('~/src/assets/images/icon-import-green.png')} />}
             arrowDirection={RightIconType.NONE}
             onPress={() => {
               props.navigation.navigate(wrapper.route.ImportKey.name, {})
@@ -83,11 +73,7 @@ const MorePage = (props: MoreProps) => {
           />
           <MenuItem
             title={i18n.t('more.settings')}
-            icon={require('~/src/assets/images/icon-settings-green.png')}
-            iconHeight={22}
-            iconWidth={22}
-            iconMarginRight={15}
-            iconMarginLeft={1}
+            icon={<MenuItemIcon source={require('~/src/assets/images/icon-settings-green.png')} />}
             arrowDirection={RightIconType.NONE}
             onPress={() => {
               props.navigation.navigate(wrapper.route.Settings.name)
@@ -95,24 +81,19 @@ const MorePage = (props: MoreProps) => {
           />
           <MenuItem
             title={i18n.t('more.help')}
-            icon={require('~/src/assets/images/icon-help-green.png')}
-            iconWidth={21}
-            iconMarginLeft={1}
-            iconMarginRight={17}
+            icon={<MenuItemIcon source={require('~/src/assets/images/icon-help-green.png')} />}
             arrowDirection={RightIconType.EXTERNAL}
             onPress={handlePressHelp}
           />
 
           <MenuItem
             title={i18n.t('more.privatePolicy')}
-            icon={require('~/src/assets/images/icon-privacy-policy-green.png')}
-            iconWidth={18}
-            iconMarginLeft={2}
-            iconMarginRight={17}
+            icon={<MenuItemIcon source={require('~/src/assets/images/icon-privacy-policy-green.png')} />}
             arrowDirection={RightIconType.EXTERNAL}
             onPress={handlePressPrivacyPolicy}
           />
         </LinearLayout>
+
         <TouchableWithoutFeedback
           onPress={() => {
             props.navigation.navigate(wrapper.route.Modal.name, {

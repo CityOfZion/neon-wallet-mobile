@@ -2,10 +2,9 @@
  * Wrapper Configuration
  */
 import { DarkTheme } from '~src/themes/DarkTheme'
-import { LightTheme } from '~src/themes/LightTheme'
 
 export class WrapperConfig {
-  readonly themes = [DarkTheme, LightTheme] as const
+  readonly themes = [DarkTheme] as const
 
   readonly dataKeys = [
     '@onboarding_seen',
@@ -104,7 +103,7 @@ export class WrapperConfig {
     'WebViewModal',
     'WalletSettingsView',
     'AccountSettingsView',
-    'ExportWIFModal',
+    'ExportKeyModal',
     'SetupCompletePage',
     'BackupInfoModal',
     'SecurityBackupCheckPage',

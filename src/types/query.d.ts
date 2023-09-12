@@ -1,7 +1,7 @@
-import { BlockchainServiceKey } from '~src/blockchain'
-import { ExchangeInfo } from '../models/response/ExchangeInfo'
-import { BalanceInfo } from '../models/response/BalanceInfo'
+import { BalanceResponse, TokenPricesResponse } from '@cityofzion/blockchain-service'
 import { QueryKey, UseQueryOptions } from 'react-query'
+
+import { TBlockchainServiceKey } from './blockchain'
 
 type BaseResult = {
   isLoading: boolean
@@ -11,10 +11,10 @@ type BaseResult = {
 
 export type BaseOptions<T = unknown> = Omit<UseQueryOptions<T, unknown, T, QueryKey>, 'queryKey' | 'queryFn'>
 
-export type Exchange = ExchangeInfo
-export type MultiExchange = Record<BlockchainServiceKey, Exchange[]>
+export type Exchange = TokenPricesResponse
+export type MultiExchange = Record<TBlockchainServiceKey, Exchange[]>
 
-export type TokenBalance = BalanceInfo & { blockchain: BlockchainServiceKey }
+export type TokenBalance = BalanceResponse & { blockchain: TBlockchainServiceKey; amountNumber: number }
 export type Balance = {
   address: string
   tokensBalances: TokenBalance[]
@@ -24,7 +24,7 @@ export type UseExchangeResult = BaseResult & { data: MultiExchange | undefined }
 
 export type UseBalancesParams = {
   address: string | null
-  blockchain: BlockchainServiceKey
+  blockchain: TBlockchainServiceKey
 }
 export type UseUniqueBalancesResult = BaseResult & { data: Balance | undefined; type: 'unique' }
 export type UseMultipleBalancesResult = BaseResult & {

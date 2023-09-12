@@ -9,14 +9,11 @@ import { useSelector } from 'react-redux'
 
 import { Normalize } from '../app/Normalize'
 import { showAlert } from '../components/Alert'
-import { BlockchainHelper } from '../helpers/BlockchainHelper'
 import { GenericWalletURLHelper } from '../helpers/GenericWalletURLHelper'
 import { SecurityHelper } from '../helpers/SecurityHelper'
-import { useBlockchainServiceUtils } from '../hooks/useBlockchainServices'
 import { TabStackParamList } from '../navigation/TabNavigation'
 import { selectAccounts } from '../store/account/SelectorAccount'
 import { selectWalletIds } from '../store/wallet/SelectorWallet'
-import { MnemonicSelectionInfo } from './MnemonicSelectionList'
 
 import { wrapper } from '~src/app/ApplicationWrapper'
 import AddressesImportList, { AddressInfo } from '~src/components/AddressesImportList'
@@ -41,7 +38,7 @@ interface ImportKeyProps {
   route: RouteProp<MoreStackParamList, 'ImportKey'>
 }
 
-type InputType = 'address' | 'wif' | 'encryptedKey' | 'mnemonic'
+type InputType = 'address' | 'key' | 'encryptedKey' | 'mnemonic'
 
 type FunctionsByInputType = {
   validation(value: string): boolean
@@ -54,16 +51,9 @@ const ImportKey = (props: ImportKeyProps) => {
   const accounts = useSelector(selectAccounts)
   const walletIds = useSelector(selectWalletIds)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
-  const selectedBlockchainNetworks = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks)
+  const bsAggregator = useSelector((state: RootState) => state.blockchain.bsAggregator)
+
   const blockchainActions = useBlockchainActions()
-  const {
-    getBlockchainServices,
-    validateAddressAllBlockchains,
-    validatePrivateKeyWithPasswordAllBlockchains,
-    validateWifAllBlockchains,
-    getBlockchainByAddress,
-    validateMnemonic,
-  } = useBlockchainServiceUtils()
 
   const [inputValue, setInputValue] = useState('')
   const [addressesFound, setAddressesFound] = useState<AddressInfo[]>([])
@@ -83,23 +73,9 @@ const ImportKey = (props: ImportKeyProps) => {
 
   const handleOnScan = (data: string) => {
     if (typeof data !== 'string') return
-    const urlWIF = GenericWalletURLHelper.validateAndParse(data)
-    handleChangeInput(UtilsHelper.removeAccents(urlWIF ?? data))
+    const urlKey = GenericWalletURLHelper.validateAndParse(data)
+    handleChangeInput(UtilsHelper.removeAccents(urlKey ?? data))
   }
-
-  const mnemonicIsImported = useCallback(
-    async (mnemonic: string) => {
-      for (const walletId of walletIds) {
-        const mnemonicWallet = await SecurityHelper.loadMnemonic(walletId)
-        if (mnemonicWallet === mnemonic) {
-          return true
-        }
-      }
-
-      return false
-    },
-    [walletIds]
-  )
 
   const addressAlreadyExist = useCallback(
     (address: string) => accounts.some(account => account.address === address),
@@ -108,9 +84,9 @@ const ImportKey = (props: ImportKeyProps) => {
 
   const handleChangeWhenAddress = useCallback(
     (address: string) => {
-      const blockchainName = getBlockchainByAddress(address)
+      const blockchain = bsAggregator.getBlockchainByAddress(address)
 
-      if (!blockchainName) {
+      if (!blockchain) {
         showMessage({
           message: i18n.t('blockchainServices.errorMessages.blockchainNotFound'),
           type: 'danger',
@@ -129,47 +105,52 @@ const ImportKey = (props: ImportKeyProps) => {
 
       setInputIsValid(true)
     },
-    [addressAlreadyExist, getBlockchainByAddress]
+    [addressAlreadyExist, bsAggregator]
   )
 
-  const handleChangeWhenEncryptedKey = useCallback(() => {
+  const handleChangeWhenEncrypted = useCallback(() => {
     setInputIsValid(true)
   }, [])
 
-  const handleChangeWhenMnemonic = useCallback(() => {
+  const handleChangeWhenMnemonic = useCallback(async (mnemonic: string) => {
+    for (const walletId of walletIds) {
+      const mnemonicWallet = await SecurityHelper.loadMnemonic(walletId)
+      if (mnemonicWallet === mnemonic) {
+        showMessage({
+          message: i18n.t('importKey.mnemonicAlreadyExists'),
+          type: 'danger',
+        })
+        setInputIsValid(false)
+        return
+      }
+    }
+
     setInputIsValid(true)
   }, [])
 
-  const handleChangeWhenWIF = useCallback(
-    (wif: string) => {
-      const services = getBlockchainServices()
-
+  const handleChangeWhenKey = useCallback(
+    (key: string) => {
       const addresses: AddressInfo[] = []
 
-      for (const service of services) {
-        if (!service.validateWif(wif)) return
-
-        const addressFromWif = service.generateAccountFromWif(wif)
-        if (addressAlreadyExist(addressFromWif)) {
-          showMessage({
-            message: `${i18n.t('importKey.accountAlreadyExists', {
-              account: addressFromWif,
-            })}`,
-            type: 'danger',
-          })
-          return
+      for (const service of bsAggregator.blockchainServices) {
+        if (!service.validateKey(key)) {
+          continue
         }
 
-        addresses.push({ address: addressFromWif, blockchain: service.key })
-      }
+        const account = service.generateAccountFromKey(key)
 
-      if (addresses.length === 0) return
+        if (addressAlreadyExist(account.address)) {
+          continue
+        }
+
+        addresses.push({ address: account.address, blockchain: service.blockchainName })
+      }
 
       setAddressesFound(addresses)
       setAddressesSelected(addresses)
-      setInputIsValid(true)
+      setInputIsValid(addresses.length > 0)
     },
-    [addressAlreadyExist, getBlockchainServices]
+    [addressAlreadyExist, bsAggregator]
   )
 
   const persistWhenAddress = useCallback((address: string) => {
@@ -189,14 +170,14 @@ const ImportKey = (props: ImportKeyProps) => {
     })
   }, [])
 
-  const persistWhenEncryptedKey = useCallback((encryptedKey: string) => {
+  const persistWhenEncrypted = useCallback((encrypted: string) => {
     props.navigation.navigate(wrapper.route.BlockchainListPage.name, {
       config: {
         custom: {
           btnLabel: i18n.t('app.next'),
           btnOnPress: async blockchain => {
             props.navigation.navigate(wrapper.route.Passphrase.name, {
-              encryptedKey,
+              encrypted,
               blockchain,
             })
           },
@@ -206,8 +187,8 @@ const ImportKey = (props: ImportKeyProps) => {
     })
   }, [])
 
-  const persistWhenWIF = useCallback(
-    async (wif: string, addresses: AddressInfo[]) => {
+  const persistWhenKey = useCallback(
+    async (key: string, addresses: AddressInfo[]) => {
       const wallet = await blockchainActions.createWallet(
         i18n.t('defaultNameWallet.importedWallet'),
         'legacy',
@@ -220,11 +201,10 @@ const ImportKey = (props: ImportKeyProps) => {
           address,
           blockchain,
           wallet,
-          wif,
+          key,
           type: 'legacy',
         })
       )
-
       await blockchainActions.importAccounts(accountToImport)
 
       props.navigation.replace(wrapper.route.Tab.name, {
@@ -239,53 +219,7 @@ const ImportKey = (props: ImportKeyProps) => {
   )
 
   const persistWhenMnemonic = useCallback(async (mnemonic: string) => {
-    const IsImported = await mnemonicIsImported(mnemonic)
-
-    if (IsImported) {
-      showMessage({
-        message: i18n.t('importKey.mnemonicAlreadyExists'),
-        type: 'danger',
-      })
-      return
-    }
-
-    const allAccountsInfo: MnemonicSelectionInfo = new Map()
-    const services = getBlockchainServices()
-
-    for (const service of services) {
-      let index = 0
-      const accountsInfo: {
-        address: string
-        wif: string
-        derivationIndex: number
-      }[] = []
-
-      while (isConnected) {
-        const { wif, address } = await service.generateAccount(mnemonic, index)
-
-        if (!accounts.find(account => account.address === address)) {
-          await UtilsHelper.sleep(200)
-
-          if (index !== 0) {
-            if (selectedBlockchainNetworks[service.key].type === 'custom') {
-              // When the user is using a custom network, we can't check if the address has transactions
-              break
-            }
-
-            const { totalEntries } = await service.provider.getAddressAbstracts(address, 1)
-            if (!totalEntries || totalEntries <= 0) break
-          }
-
-          accountsInfo.push({ address, wif, derivationIndex: index })
-        }
-
-        index++
-      }
-      allAccountsInfo.set(service.key, accountsInfo)
-    }
-
     props.navigation.navigate(wrapper.route.MnemonicSelectionList.name, {
-      data: allAccountsInfo,
       mnemonic,
     })
   }, [])
@@ -293,22 +227,22 @@ const ImportKey = (props: ImportKeyProps) => {
   const functionsByInputTypes = useMemo<Record<InputType, FunctionsByInputType>>(
     () => ({
       address: {
-        validation: validateAddressAllBlockchains,
+        validation: bsAggregator.validateAddressAllBlockchains.bind(bsAggregator),
         handle: handleChangeWhenAddress,
         persist: persistWhenAddress,
       },
       encryptedKey: {
-        validation: validatePrivateKeyWithPasswordAllBlockchains,
-        handle: handleChangeWhenEncryptedKey,
-        persist: persistWhenEncryptedKey,
+        validation: bsAggregator.validateEncryptedAllBlockchains.bind(bsAggregator),
+        handle: handleChangeWhenEncrypted,
+        persist: persistWhenEncrypted,
       },
-      wif: {
-        validation: validateWifAllBlockchains,
-        handle: handleChangeWhenWIF,
-        persist: persistWhenWIF,
+      key: {
+        validation: bsAggregator.validateKeyAllBlockchains.bind(bsAggregator),
+        handle: handleChangeWhenKey,
+        persist: persistWhenKey,
       },
       mnemonic: {
-        validation: validateMnemonic,
+        validation: UtilsHelper.isValidMnemonic,
         handle: handleChangeWhenMnemonic,
         persist: persistWhenMnemonic,
       },
@@ -316,13 +250,13 @@ const ImportKey = (props: ImportKeyProps) => {
     [
       handleChangeWhenAddress,
       persistWhenAddress,
-      handleChangeWhenEncryptedKey,
-      persistWhenEncryptedKey,
-      handleChangeWhenWIF,
-      persistWhenWIF,
+      handleChangeWhenEncrypted,
+      persistWhenEncrypted,
+      handleChangeWhenKey,
+      persistWhenKey,
       handleChangeWhenMnemonic,
       persistWhenMnemonic,
-      validateMnemonic,
+      bsAggregator,
     ]
   )
 
@@ -332,16 +266,17 @@ const ImportKey = (props: ImportKeyProps) => {
       setInputIsValid(false)
 
       const textWithOutAccents = UtilsHelper.removeAccents(text)
-      const isMnemonic = BlockchainHelper.isMnemonic(text)
+      const isMnemonic = UtilsHelper.isMnemonic(text)
       const textValue = isMnemonic ? textWithOutAccents.toLowerCase() : textWithOutAccents
       setInputValue(textValue)
       setIsMnemonic(isMnemonic)
 
       const functionsByInputType = Object.entries(functionsByInputTypes).find(([, values]) => {
         const isValid = values.validation(textValue)
-
         return isValid
       })
+
+      console.log(functionsByInputType)
 
       if (!functionsByInputType) return
       const [key, functions] = functionsByInputType
@@ -432,6 +367,7 @@ const ImportKey = (props: ImportKeyProps) => {
             invalidSeparatorColor={theme.colors.background[4]}
             invalidMessageColor={theme.colors.quinary}
             isMultiline={isMnemonic}
+            forceMultiLine={UtilsHelper.isIos}
             fromImportKey
             sideMargins={0}
             onScan={handleOnScan}

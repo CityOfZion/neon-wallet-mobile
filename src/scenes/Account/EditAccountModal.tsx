@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
 import { Await, AwaitActivity } from '~/node_modules/@simpli/react-native-await'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
+import { Account } from '~/src/store/account/Account'
 import { accountReducerActions } from '~/src/store/account/AccountReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import AccountCard from '~src/components/AccountCard'
@@ -14,7 +15,6 @@ import InputLabel from '~src/components/InputLabel'
 import InputWithValidation from '~src/components/InputWithValidation'
 import SwiperPanel, { LabelButton, useSwiperController } from '~src/components/SwiperPanel'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
-import { Account } from '~src/models/redux/Account'
 import { RootStackParamList } from '~src/navigation/AppNavigation'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { WalletStackParamList } from '~src/navigation/WalletsStackNavigation'
@@ -39,7 +39,7 @@ const EditAccountModal = (props: Props) => {
   const controller = useSwiperController(true)
   const dispatch = useDispatch()
 
-  const [name, setName] = useState<string>(account.name ?? '')
+  const [name, setName] = useState<string>(account.name)
   const [color, setColor] = useState<string>(account.backgroundColor)
   const [showInvalid, setShowInvalid] = useState<boolean>(false)
 
@@ -51,16 +51,13 @@ const EditAccountModal = (props: Props) => {
   const submit = async () => {
     if (!isValid()) return
 
-    const address = account.address
-    if (!address) throw new Error('Address not defined')
-
     dispatch(accountReducerActions.saveAccount(account))
 
     props.navigation.goBack()
   }
 
   const isValid = () => {
-    const conditions: boolean[] = [!!name, !!color, !!account.address]
+    const conditions: boolean[] = [!!name, !!color]
 
     return conditions.every(it => it)
   }

@@ -8,17 +8,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import { showAlert } from '~/src/components/Alert'
-import MenuItem, { RightIconType } from '~/src/components/MenuItem'
+import MenuItem, { MenuItemIcon, RightIconType } from '~/src/components/MenuItem'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import { useLocalAuthentication } from '~/src/hooks/useLocalAuthentication'
-import { Account } from '~/src/models/redux/Account'
-import { Wallet } from '~/src/models/redux/Wallet'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
 import { RootState } from '~/src/store/RootStore'
+import { Account } from '~/src/store/account/Account'
 import { accountReducerActions } from '~/src/store/account/AccountReducer'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 export interface AccountSettingsViewParams {
@@ -60,12 +60,12 @@ export const AccountSettingsView = (props: Props) => {
     })
   }
 
-  const handlePressExportWif = async () => {
+  const handlePressExportKey = async () => {
     try {
       await authenticate()
 
       props.navigation.navigate(wrapper.route.Modal.name, {
-        screen: wrapper.route.ExportWIFModal.name,
+        screen: wrapper.route.ExportKeyModal.name,
         params: {
           account,
         },
@@ -77,8 +77,7 @@ export const AccountSettingsView = (props: Props) => {
     <ScreenLayout>
       <MenuItem
         title={i18n.t('screens.accountSettingsView.customize')}
-        icon={require('~src/assets/images/icon-palette-green.png')}
-        iconMarginRight={4}
+        icon={<MenuItemIcon source={require('~src/assets/images/icon-palette-green.png')} />}
         arrowDirection={RightIconType.ARROW_RIGHT}
         onPress={() =>
           props.navigation.navigate(wrapper.route.Modal.name, {
@@ -92,12 +91,10 @@ export const AccountSettingsView = (props: Props) => {
 
       {account.accountType !== 'watch' && (
         <MenuItem
-          title={i18n.t('screens.accountSettingsView.exportWif')}
-          icon={require('~src/assets/images/icon-screen-lock-green.png')}
-          iconMarginLeft={2}
-          iconMarginRight={4}
+          title={i18n.t('screens.accountSettingsView.exportKey')}
+          icon={<MenuItemIcon source={require('~src/assets/images/icon-screen-lock-green.png')} />}
           arrowDirection={RightIconType.ARROW_RIGHT}
-          onPress={handlePressExportWif}
+          onPress={handlePressExportKey}
         />
       )}
 

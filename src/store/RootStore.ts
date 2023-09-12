@@ -3,6 +3,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistReducer, FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistStore } from 'redux-persist'
 
 import AccountReducer, { accountReducerName } from './account/AccountReducer'
+import BlockchainReducer from './blockchain/BlockchainReducer'
 import NetworkReducer from './network/NetworkReducer'
 
 import ContactReducer, { contactReducerName } from '~/src/store/contact/ContactReducer'
@@ -23,6 +24,7 @@ export abstract class RootStore {
     account: persistedAccountReducer,
     contact: persistedContactReducer,
     settings: persistedSettingsReducer,
+    blockchain: BlockchainReducer,
   })
 
   static store = configureStore({
@@ -30,6 +32,7 @@ export abstract class RootStore {
     middleware: getDefaultMiddleware => [
       ...getDefaultMiddleware({
         serializableCheck: {
+          ignoredPaths: ['blockchain.bsAggregator'],
           ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
         },
       }),

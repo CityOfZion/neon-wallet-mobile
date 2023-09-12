@@ -32,12 +32,6 @@ const ThemePickerModal = (props: Props) => {
       onClick: changeTheme,
       isSelected,
     },
-    {
-      title: i18n.t('themes.LIGHT'),
-      data: Theme.LIGHT,
-      onClick: changeTheme,
-      isSelected,
-    },
   ]
 
   return (

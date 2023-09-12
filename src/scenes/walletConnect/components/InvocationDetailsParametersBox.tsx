@@ -8,7 +8,7 @@ import { Param } from '../modal/WCInvocationDetailsModal'
 import WalletConnectBox from './WalletConnectBox'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { DoraTypeColors, doraTypeColors } from '~/src/assets/doraTypeColors'
+import { DoraHelper } from '~/src/helpers/DoraHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
@@ -35,10 +35,9 @@ const CopyButton = ({ onPress, disabled }: { onPress?: () => void; disabled: boo
 }
 
 const InvocationDetailsParametersBox = ({ data, count }: Props) => {
-  const typeColor = data.type ? doraTypeColors[data.type as DoraTypeColors] : null
-
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
+  const typeColor = data.type ? DoraHelper.parametersColors[data.type] : null
   const value = !data.value ? null : typeof data.value === 'string' ? data.value : JSON.stringify(data.value)
 
   const handleRightButtonPress = (text: string) => {

@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux'
 
 import { UtilsHelper } from '../helpers/UtilsHelper'
 import { selectAccounts } from '../store/account/SelectorAccount'
+import { Wallet } from '../store/wallet/Wallet'
 
-import { Wallet } from '~src/models/redux/Wallet'
 import { ImageView, LinearLayout } from '~src/styles/styled-components'
 
 type Props = {

@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import i18n from 'i18n-js'
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { StackNavigationProp } from '~/node_modules/@react-navigation/stack/lib/typescript/src/types'
@@ -8,17 +8,17 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Skeleton } from '~/src/components/Skeleton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
+import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
-import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
-import { Account } from '~/src/models/redux/Account'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
+import { Account } from '~/src/store/account/Account'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { selectWallets } from '~/src/store/wallet/SelectorWallet'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { TokenBalance } from '~/src/types/query'
 import SwiperPanel, { CloseButton, DEFAULT_PADDING, useSwiperController } from '~src/components/SwiperPanel'
 import WalletPicker from '~src/components/misc/WalletPicker'
-import { Wallet } from '~src/models/redux/Wallet'
 import { RootState } from '~src/store/RootStore'
 import { TextView } from '~src/styles/styled-components'
 
@@ -53,7 +53,6 @@ const WalletSelectionModal = (props: Props) => {
   const language = useSelector((state: RootState) => state.settings.language)
   const currency = useSelector((state: RootState) => state.settings.currency)
   const accounts = useSelector(selectAccounts)
-  const { getBlockchainService } = useBlockchainServiceUtils()
 
   const validWallets = useMemo(
     () =>
@@ -64,8 +63,7 @@ const WalletSelectionModal = (props: Props) => {
           const walletAccounts = wallet.getAccounts(accounts)
 
           const hasAccountWithWalletConnect = walletAccounts.some(account => {
-            const service = getBlockchainService(account.blockchain)
-            return service.hasWalletConnectIntegration()
+            return !!WalletConnectHelper.blockchainsByBlockchainServiceKey[account.blockchain]
           })
 
           return hasAccountWithWalletConnect
@@ -73,7 +71,7 @@ const WalletSelectionModal = (props: Props) => {
 
         return true
       }),
-    [wallets, getBlockchainService]
+    [wallets]
   )
 
   const [selectedWallet, setSelectedWallet] = useState<Wallet>(validWallets[0])

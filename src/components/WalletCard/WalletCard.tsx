@@ -7,10 +7,10 @@ import { WalletBalanceBar } from './WalletBalanceBar'
 import { WalletLabel } from './WalletLabel'
 import { WalletOverlay } from './WalletOverlay'
 
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { UseMultipleBalanceAndExchangeResult } from '~/src/types/query'
 import { LinearLayoutProps } from '~/src/types/styled-components'
 import { UtilsHelper } from '~src/helpers/UtilsHelper'
-import { Wallet } from '~src/models/redux/Wallet'
 import { ButtonView, LinearLayout } from '~src/styles/styled-components'
 
 type WithBalanceBarProps = {

@@ -6,14 +6,14 @@ import React, { useCallback, useMemo } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import { BlockchainIcon } from '~/src/components/BlockchainIcon'
 import { ConnectedAccountAndWallet } from '~/src/components/ConnectionItem'
-import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { RootState } from '~/src/store/RootStore'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
-import { LinearLayout, TextView, ImageView } from '~src/styles/styled-components'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface WCConnectionDetailsModalParams {
   session: TSession
@@ -86,15 +86,8 @@ const WCConnectionDetailsModal = (props: Props) => {
               {i18n.t('modals.WCConnectionDetails.chain')}
             </TextView>
             <LinearLayout orientation="horiz" mt={3}>
-              <ImageView
-                source={BlockchainHelper.getIcon(blockchain)}
-                resizeMode="contain"
-                mr={1}
-                style={{
-                  width: 20,
-                  height: 20,
-                }}
-              />
+              <BlockchainIcon blockchain={blockchain} mr="2px" width={20} height={20} />
+
               <TextView fontFamily="medium" color="#fff" fontSize="16px">
                 {i18n.t(`blockchainServices.${blockchain}.id`)}
               </TextView>

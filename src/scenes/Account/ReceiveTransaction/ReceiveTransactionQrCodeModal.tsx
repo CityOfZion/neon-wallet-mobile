@@ -1,3 +1,4 @@
+import { Token } from '@cityofzion/blockchain-service'
 import { RouteProp } from '@react-navigation/native'
 import i18n from 'i18n-js'
 import React, { useRef, useMemo } from 'react'
@@ -11,15 +12,14 @@ import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
 import { UriHelper } from '~/src/helpers/UriHelper'
 import { useExchange } from '~/src/hooks/useExchange'
-import { Token } from '~/src/models/Token'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { RootState } from '~/src/store/RootStore'
+import { Account } from '~/src/store/account/Account'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import InputLabel from '~src/components/InputLabel'
 import NeonQRCode from '~src/components/NeonQRCode'
 import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/SwiperPanel'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { Account } from '~src/models/redux/Account'
-import { Wallet } from '~src/models/redux/Wallet'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
 
@@ -47,13 +47,13 @@ const ReceiveTransactionQrCodeModal = (props: Props) => {
   const { data: exchange } = useExchange()
 
   const fiat = useMemo(() => {
-    const ratio = BalanceHelper.getExchangeRatio(token.symbol, token.blockchain, exchange)
+    const ratio = BalanceHelper.getExchangeRatio(token.symbol, account.blockchain, exchange)
 
     return FilterHelper.currency(ratio ? Number(amount) * ratio : 0, currency, language)
   }, [exchange, currency, language, amount])
 
   const qrCodeContent = useMemo(
-    () => UriHelper.generate(account.address ?? '', amount, token.hash, reference),
+    () => UriHelper.generate(account.address, amount, token.hash, reference),
     [account, amount, token, reference]
   )
 
@@ -63,7 +63,7 @@ const ReceiveTransactionQrCodeModal = (props: Props) => {
     const uri = await qrCodeView.current?.capture?.()
     props.navigation.navigate(wrapper.route.CopyContextModal.name, {
       qrCode: uri ?? '',
-      address: account.address ?? '',
+      address: account.address,
     })
   }
 
@@ -98,7 +98,7 @@ const ReceiveTransactionQrCodeModal = (props: Props) => {
               <InputLabel title={i18n.t('modals.ReceiveTransactionQrCodeModal.token')} lightText />
 
               <LinearLayout orientation="horiz" alignItems="center">
-                <TokenIcon width={18} height={18} resizeMode="contain" {...token} />
+                <TokenIcon width={18} height={18} resizeMode="contain" blockchain={account.blockchain} {...token} />
 
                 <TextView color="text.0" ml="4px" fontFamily="semibold" fontSize="18px">
                   {token.name}

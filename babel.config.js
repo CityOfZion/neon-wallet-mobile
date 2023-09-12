@@ -13,7 +13,8 @@ module.exports = function (api) {
           },
         },
       ],
-      'react-native-reanimated/plugin'
+      'react-native-reanimated/plugin',
+      "@babel/plugin-proposal-async-generator-functions"
     ],
   }
 }

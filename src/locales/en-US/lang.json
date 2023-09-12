@@ -283,7 +283,8 @@
     "protocolsPage": {
       "labels": {
         "neo3": "Neo (N3)",
-        "neoLegacy": "Neo Legacy"
+        "neoLegacy": "Neo Legacy",
+        "ethereum": "Ethereum"
       }
     },
     "listWalletView": {
@@ -366,7 +367,7 @@
       "completedTransactions": "COMPLETED TRANSACTIONS",
       "invocationsLabel": "Invocations",
       "notificationsLabel": "Notifications",
-      "asset": "Asset",
+      "token": "Asset",
       "nft": "NFT",
       "errorToGetTransactions": "Unexpected error to get transactions",
       "emptyList": "No transaction to list"
@@ -413,7 +414,7 @@
     },
     "accountSettingsView": {
       "customize": "Customize account",
-      "exportWif": "Export WIF",
+      "exportKey": "Export Key",
       "deleteTitle": "Delete Wallet",
       "deleteSubtitle": "This will remove your account and all transaction history.",
       "deleteButtom": "Delete Account",
@@ -829,10 +830,10 @@
         "ok": "OK, I understand"
       }
     },
-    "ExportWIFModal": {
-      "title": "Export WIF",
-      "unexpectedError": "Unexpected error to get WIF",
-      "details": "WIF DETAILS"
+    "ExportKeyModal": {
+      "title": "Export Key",
+      "unexpectedError": "Unexpected error to get key",
+      "details": "KEY DETAILS"
     }
   },
   "components": {
@@ -994,6 +995,11 @@
       "label": "Neo Legacy",
       "id": "Neo Legacy",
       "accountName": "Neo Legacy Account"
+    },
+    "ethereum": {
+      "label": "Ethereum",
+      "id": "Ethereum",
+      "accountName": "Ethereum Account"
     },
     "errorMessages": {
       "keyWrongOrAddressesImported": "Encrypted key is not valid or all address has been imported",

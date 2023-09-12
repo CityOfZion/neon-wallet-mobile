@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 
 import AccountSelectionModal, { AccountSelectionModalParams } from '../scenes/Account/AccountSelectionModal'
-import { ExportWIFModal, ExportWIFModalParams } from '../scenes/Account/ExportWIFModal'
+import { ExportKeyModal, ExportKeyModalParams } from '../scenes/Account/ExportKeyModal'
 import ReceiveTransactionModal, {
   ReceiveTransactionModalParams,
 } from '../scenes/Account/ReceiveTransaction/ReceiveTransactionModal/ReceiveTransactionModal'
@@ -100,7 +100,7 @@ export type ModalStackParamList = {
   WCInvocationDetailsModal: WCInvocationDetailsModalParams
   SignatureScopeModal: SignatureScopeModalParams
   WebViewModal: WebViewModalParams
-  ExportWIFModal: ExportWIFModalParams
+  ExportKeyModal: ExportKeyModalParams
   SendTransactionModal: SendTransactionModalParams
   SendTransactionReviewModal: SendTransactionReviewModalParams
   SendTransactionConfirmationModal: SendTransactionConfirmationModalParams
@@ -138,7 +138,7 @@ export type ModalParams =
   | DefaultNavigationParam<SignatureScopeModalParams>
   | DefaultNavigationParam<WCInvocationDetailsModalParams>
   | DefaultNavigationParam<WebViewModalParams>
-  | DefaultNavigationParam<ExportWIFModalParams>
+  | DefaultNavigationParam<ExportKeyModalParams>
   | DefaultNavigationParam<TipConfirmationModalParams>
   | DefaultNavigationParam<SendTransactionModalParams>
   | DefaultNavigationParam<SendTransactionReviewModalParams>
@@ -187,7 +187,7 @@ const ModalStackNavigation = () => {
       <ModalStack.Screen name={wrapper.route.SignatureScopeModal.name} component={SignatureScopeModal} />
       <ModalStack.Screen name={wrapper.route.WCInvocationDetailsModal.name} component={WCInvocationDetailsModal} />
       <ModalStack.Screen name={wrapper.route.WebViewModal.name} component={WebViewModal} />
-      <ModalStack.Screen name={wrapper.route.ExportWIFModal.name} component={ExportWIFModal} />
+      <ModalStack.Screen name={wrapper.route.ExportKeyModal.name} component={ExportKeyModal} />
       <ModalStack.Screen name={wrapper.route.SendTransactionModal.name} component={SendTransactionModal} />
       <ModalStack.Screen name={wrapper.route.SendTransactionReviewModal.name} component={SendTransactionReviewModal} />
       <ModalStack.Screen

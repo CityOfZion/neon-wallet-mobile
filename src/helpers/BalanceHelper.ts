@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash'
 
-import { BlockchainServiceKey } from '../blockchain'
-import { Account } from '../models/redux/Account'
+import { Account } from '../store/account/Account'
+import { TBlockchainServiceKey } from '../types/blockchain'
 import { Balance, TokenBalance, MultiExchange } from '../types/query'
 
 export type BalanceConvertedToExchange = TokenBalance & {
@@ -15,13 +15,13 @@ export class BalanceHelper {
     const tokensBalances = this.getTokensBalance(balances)
 
     return tokensBalances.reduce((prev, actual) => {
-      const ratio = this.getExchangeRatio(actual.symbol, actual.blockchain, multiExchange)
+      const ratio = this.getExchangeRatio(actual.token.symbol, actual.blockchain, multiExchange)
 
-      return prev + actual.amount * ratio
+      return prev + actual.amountNumber * ratio
     }, 0)
   }
 
-  static getExchangeRatio(symbol: string, blockchain: BlockchainServiceKey, multiExchange?: MultiExchange): number {
+  static getExchangeRatio(symbol: string, blockchain: TBlockchainServiceKey, multiExchange?: MultiExchange): number {
     if (!multiExchange) return 0
 
     const blockchainExchange = multiExchange[blockchain]
@@ -29,7 +29,7 @@ export class BalanceHelper {
 
     const exchange = blockchainExchange.find(exchange => exchange.symbol === symbol)
 
-    return exchange?.amount ?? 0
+    return exchange?.price ?? 0
   }
 
   static convertBalanceToCurrency(
@@ -38,11 +38,11 @@ export class BalanceHelper {
   ): BalanceConvertedToExchange | undefined {
     if (!balance || !multiExchange) return
 
-    const ratio = this.getExchangeRatio(balance.symbol, balance.blockchain, multiExchange)
+    const ratio = this.getExchangeRatio(balance.token.symbol, balance.blockchain, multiExchange)
 
     return {
       ...balance,
-      convertedAmount: balance.amount * ratio,
+      convertedAmount: balance.amountNumber * ratio,
     }
   }
 
@@ -55,7 +55,7 @@ export class BalanceHelper {
     const tokensBalances = this.getTokensBalance(balances)
 
     const tokenBalanceWithoutRepeated = cloneDeep(tokensBalances).reduce<TokenBalance[]>((prev, current) => {
-      const tokenBalance = prev.find(tokenBalance => tokenBalance.symbol === current.symbol)
+      const tokenBalance = prev.find(tokenBalance => tokenBalance.token.symbol === current.token.symbol)
 
       if (tokenBalance) {
         tokenBalance.amount += current.amount
@@ -76,7 +76,7 @@ export class BalanceHelper {
 
     const tokensBalances = this.getTokensBalance(balances)
 
-    return tokensBalances.find(tokenBalance => tokenBalance.symbol === symbol)
+    return tokensBalances.find(tokenBalance => tokenBalance.token.symbol === symbol)
   }
 
   static getTokensBalance(balances: Balance[] | Balance) {
@@ -94,6 +94,6 @@ export class BalanceHelper {
 
     const tokensBalances = BalanceHelper.getTokensBalance(balances)
 
-    return tokensBalances.some(tokenBalance => tokenBalance.amount > 0)
+    return tokensBalances.some(tokenBalance => tokenBalance.amountNumber > 0)
   }
 }

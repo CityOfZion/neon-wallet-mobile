@@ -1,27 +1,27 @@
 import i18n from 'i18n-js'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { TouchableWithoutFeedback, FlatList } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { BlockchainHelper } from '../helpers/BlockchainHelper'
-import { useBlockchainServiceUtils } from '../hooks/useBlockchainServices'
+import { RootState } from '../store/RootStore'
 import { selectAccounts } from '../store/account/SelectorAccount'
+import { Wallet } from '../store/wallet/Wallet'
+import { TBlockchainServiceKey } from '../types/blockchain'
+import { BlockchainIcon } from './BlockchainIcon'
 
-import { BlockchainServiceKey } from '~src/blockchain'
 import { SearchBar } from '~src/components/SearchBar'
-import { Wallet } from '~src/models/redux/Wallet'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface IBlockchainList {
-  onSelect: (items: BlockchainServiceKey[]) => void
+  onSelect: (items: TBlockchainServiceKey[]) => void
   isMulti?: boolean
   hideQtyAccounts?: boolean
   wallet?: Wallet
 }
 
 interface IBlockchainItem {
-  item: BlockchainServiceKey
-  onPress: (item: BlockchainServiceKey) => void
+  item: TBlockchainServiceKey
+  onPress: (item: TBlockchainServiceKey) => void
   isSelected: boolean
   wallet?: Wallet
   hideQtyAccounts?: boolean
@@ -38,13 +38,8 @@ const BlockchainItem = ({ onPress, item, isSelected, hideQtyAccounts, wallet }: 
     <TouchableWithoutFeedback onPress={handlePress}>
       <LinearLayout marginY="10px" orientation="horiz" alignItems="center" justifyContent="space-between">
         <LinearLayout orientation="horiz" alignItems="center">
-          <ImageView
-            marginRight="8px"
-            height={28}
-            width={28}
-            resizeMode="contain"
-            source={BlockchainHelper.getIcon(item)}
-          />
+          <BlockchainIcon blockchain={item} marginRight="8px" height={28} width={28} />
+
           <LinearLayout>
             <TextView fontSize="9px" color="text.6">
               {i18n.t(`blockchainServices.${item}.id`)}
@@ -77,13 +72,19 @@ const BlockchainItem = ({ onPress, item, isSelected, hideQtyAccounts, wallet }: 
 }
 
 const BlockchainList = ({ isMulti, hideQtyAccounts, onSelect, wallet }: IBlockchainList) => {
-  const { blockchainKeyList } = useBlockchainServiceUtils()
-  const [blockchainSelected, setBlockchainSelected] = useState<BlockchainServiceKey[]>(
-    isMulti ? blockchainKeyList : ['neo3']
-  )
-  const [blockchainFiltered, setBlockchainFiltered] = useState<BlockchainServiceKey[]>(blockchainKeyList)
+  const bsAggregator = useSelector((state: RootState) => state.blockchain.bsAggregator)
 
-  const handlePress = (blockchain: BlockchainServiceKey) => {
+  const blockchainKeys = useMemo(
+    () => Object.keys(bsAggregator.blockchainServicesByName) as TBlockchainServiceKey[],
+    []
+  )
+
+  const [blockchainSelected, setBlockchainSelected] = useState<TBlockchainServiceKey[]>(
+    isMulti ? blockchainKeys : ['neo3']
+  )
+  const [blockchainFiltered, setBlockchainFiltered] = useState<TBlockchainServiceKey[]>(blockchainKeys)
+
+  const handlePress = (blockchain: TBlockchainServiceKey) => {
     const foundBlockchain = blockchainSelected.some(it => it === blockchain)
 
     if (foundBlockchain) {
@@ -96,11 +97,11 @@ const BlockchainList = ({ isMulti, hideQtyAccounts, onSelect, wallet }: IBlockch
 
   const handleFilter = (filter: string) => {
     if (!filter) {
-      setBlockchainFiltered(blockchainKeyList)
+      setBlockchainFiltered(blockchainKeys)
       return
     }
 
-    const filtered = blockchainKeyList.filter(blockchain => {
+    const filtered = blockchainKeys.filter(blockchain => {
       const label = i18n.t(`blockchainServices.${blockchain}.label`).toLowerCase()
 
       return label.includes(filter.toLowerCase())

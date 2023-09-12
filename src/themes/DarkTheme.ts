@@ -19,7 +19,7 @@ export class DarkTheme extends ApplicationTheme {
     quinary: '#d355e7',
 
     success: '#4cffb3',
-    danger: '#db5860',
+    danger: '#ea5d8e',
 
     black: '#000000',
 

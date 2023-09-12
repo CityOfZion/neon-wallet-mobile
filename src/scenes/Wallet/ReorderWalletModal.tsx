@@ -39,7 +39,7 @@ export default function ReorderWalletModal(props: Props) {
 
   const [order, setOrder] = useState<number[]>([])
 
-  const data = useMemo<DataByNumber<string>>(() => wallets.map(wallet => wallet.name ?? ''), [wallets])
+  const data = useMemo<DataByNumber<string>>(() => wallets.map(wallet => wallet.name), [wallets])
 
   const commitAndClose = async () => {
     if (order.length > 0) {

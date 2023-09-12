@@ -8,12 +8,11 @@ import { showMessage } from 'react-native-flash-message'
 import { useDispatch } from 'react-redux'
 
 import { useBlockchainActions } from '../hooks/useBlockchainActions'
-import { DispatchResult } from '../types/reducers/root'
-import { WalletType } from '../types/reducers/wallet'
+import { TBlockchainServiceKey } from '../types/blockchain'
+import { WalletType } from '../types/store'
 
 import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
-import { BlockchainServiceKey } from '~src/blockchain'
 import BlockchainList from '~src/components/BlockchainList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
@@ -34,7 +33,7 @@ export interface BlockchainListPageParams {
     }
     custom?: {
       btnLabel?: string
-      btnOnPress?: (blockchain: BlockchainServiceKey) => Promise<void>
+      btnOnPress?: (blockchain: TBlockchainServiceKey) => Promise<void>
       hideIsMulti?: boolean
     }
   }
@@ -46,9 +45,9 @@ interface Props {
 }
 
 const BlockchainListPage = (props: Props) => {
-  const dispatch = useDispatch<DispatchResult>()
+  const dispatch = useDispatch()
   const blockchainActions = useBlockchainActions()
-  const [blockchainsSelected, setBlockchainsSelected] = useState<BlockchainServiceKey[]>([])
+  const [blockchainsSelected, setBlockchainsSelected] = useState<TBlockchainServiceKey[]>([])
 
   const handlePress = async () => {
     if (props.route.params.config?.custom?.btnOnPress) {

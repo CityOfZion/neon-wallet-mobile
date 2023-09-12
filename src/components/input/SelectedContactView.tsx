@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import { Contact } from '~src/models/redux/Contact'
+import { Contact } from '~/src/store/contact/Contact'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface ISelectedContactView {

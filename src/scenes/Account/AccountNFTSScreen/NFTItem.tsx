@@ -1,19 +1,19 @@
+import { NftResponse } from '@cityofzion/blockchain-service'
 import { StackNavigationProp } from '@react-navigation/stack'
-import React, { useState } from 'react'
+import React from 'react'
 import { Dimensions, TouchableWithoutFeedback } from 'react-native'
 import { SvgUri } from 'react-native-svg'
 import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { useImageError } from '~/src/hooks/useImageError'
-import { NFTResponse } from '~/src/models/response/NFTResponse'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {
-  nft: NFTResponse
+  nft: NftResponse
   navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>
 }
 

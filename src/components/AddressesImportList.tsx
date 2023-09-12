@@ -1,16 +1,16 @@
 import i18n from 'i18n-js'
-import React, { useState } from 'react'
+import React from 'react'
 import { View, ScrollView, FlatList, Image, TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { BlockchainHelper } from '../helpers/BlockchainHelper'
 import { RootState } from '../store/RootStore'
+import { TBlockchainServiceKey } from '../types/blockchain'
+import { BlockchainIcon } from './BlockchainIcon'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { BlockchainServiceKey } from '~src/blockchain'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
 
-export type AddressInfo = { address: string; blockchain: BlockchainServiceKey }
+export type AddressInfo = { address: string; blockchain: TBlockchainServiceKey }
 
 export type AddressesImportListProps<T extends AddressInfo> = {
   blockSelection?: boolean
@@ -52,12 +52,8 @@ const AddressImportItem = <T extends AddressInfo = AddressInfo>(props: AddressIm
         }}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center', flexGrow: 1, flexShrink: 1 }}>
-          <Image
-            style={{ width: 25, height: 26 }}
-            source={BlockchainHelper.getIcon(props.item.blockchain)}
-            width={25}
-            height={26}
-          />
+          <BlockchainIcon blockchain={props.item.blockchain} width={26} height={26} />
+
           <View style={{ flexGrow: 1, flexShrink: 1, marginHorizontal: 10 }}>
             <TextView fontSize="10px" color="text.3">
               {i18n.t(`blockchainServices.${props.item.blockchain}.label`)}

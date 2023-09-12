@@ -1,7 +1,9 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useQueries, UseQueryOptions, QueryKey, UseQueryResult } from 'react-query'
+import { useSelector } from 'react-redux'
 
-import { BlockchainServiceKey } from '../blockchain'
+import { RootState } from '../store/RootStore'
+import { TBlockchainServiceKey } from '../types/blockchain'
 import {
   Balance,
   BaseOptions,
@@ -10,7 +12,6 @@ import {
   UseUniqueBalancesResult,
   UseBalancesResult,
 } from '../types/query'
-import { useBlockchainServiceUtils } from './useBlockchainServices'
 
 export function useBalances(params: UseBalancesParams[], queryOptions?: BaseOptions<Balance>): UseMultipleBalancesResult
 
@@ -25,21 +26,24 @@ export function useBalances(
   params: UseBalancesParams | UseBalancesParams[],
   queryOptions?: BaseOptions<Balance>
 ): UseBalancesResult {
-  const { getBlockchainService } = useBlockchainServiceUtils()
   const [isRefetchingByUser, setIsRefetchingByUser] = useState(false)
+  const bsAggregator = useSelector((state: RootState) => state.blockchain.bsAggregator)
 
-  const fetchBalance = useCallback(
-    async (address: string, blockchain: BlockchainServiceKey): Promise<Balance> => {
-      const service = getBlockchainService(blockchain)
-      const balance = await service.provider.getBalance(address)
+  const fetchBalance = useCallback(async (address: string, blockchain: TBlockchainServiceKey): Promise<Balance> => {
+    const service = bsAggregator.getBlockchainByName(blockchain)
+    const balance = await service.blockchainDataService.getBalance(address)
+    const tokensBalances = balance.map(balance => ({
+      ...balance,
+      blockchain,
+      amount: balance.amount,
+      amountNumber: Number(balance.amount),
+    }))
 
-      return {
-        address,
-        tokensBalances: balance,
-      }
-    },
-    [getBlockchainService]
-  )
+    return {
+      address,
+      tokensBalances,
+    }
+  }, [])
 
   const generateQuery = useCallback(
     (param: UseBalancesParams): UseQueryOptions<Balance, unknown, Balance, QueryKey> => {
@@ -56,7 +60,7 @@ export function useBalances(
     if (!Array.isArray(params)) return [generateQuery(params)]
 
     return params.map(param => generateQuery(param))
-  }, [params, queryOptions])
+  }, [params, queryOptions, generateQuery])
 
   const results = useQueries(queries)
 

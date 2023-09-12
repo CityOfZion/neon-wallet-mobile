@@ -8,8 +8,8 @@ export class GenericWalletURLHelper {
     if (!urlIsValid) return
 
     const { query } = queryString.parseUrl(url)
-    if (!('wif' in query) || !query.wif || Array.isArray(query.wif)) return
+    if (!('key' in query) || !query.key || Array.isArray(query.key)) return
 
-    return query.wif
+    return query.key
   }
 }

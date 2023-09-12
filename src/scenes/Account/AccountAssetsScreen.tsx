@@ -9,9 +9,9 @@ import AccountSubTitle from '~/src/components/AccountSubTitle'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
+import { Account } from '~/src/store/account/Account'
 import BalanceList from '~src/components/BalanceList'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
-import { Account } from '~src/models/redux/Account'
 import { RootState } from '~src/store/RootStore'
 
 export interface AccountAssetScreenParams {
@@ -41,7 +41,13 @@ const AccountAssetScreen = ({ route }: Props) => {
     >
       <AccountSubTitle account={account} />
 
-      <BalanceList balanceExchange={balanceExchange} my="16px" showHoldingValue={false} showBlockchain />
+      <BalanceList
+        balanceExchange={balanceExchange}
+        my="16px"
+        showHoldingValue={false}
+        showBlockchain
+        blockchainFilter={account.blockchain}
+      />
     </ScreenLayout>
   )
 }

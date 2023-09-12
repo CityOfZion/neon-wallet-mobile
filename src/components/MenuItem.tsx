@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity } from 'react-native'
+import { ImageSourcePropType, TouchableOpacity } from 'react-native'
 
 import { Normalize } from '~src/app/Normalize'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
@@ -15,14 +15,18 @@ export enum RightIconType {
 export interface MenuItemProps {
   title: string
   subtitle?: string
-  icon?: any
-  iconWidth?: number
-  iconHeight?: number
-  iconMarginRight?: number
-  iconMarginLeft?: number
+  icon?: React.ReactNode
   arrowDirection: RightIconType
   onPress?: () => void
   testID?: string
+}
+
+type MenuItemIconProps = {
+  source: ImageSourcePropType
+}
+
+export const MenuItemIcon = ({ source }: MenuItemIconProps) => {
+  return <ImageView width={Normalize.scale(20)} height={Normalize.scale(20)} source={source} resizeMode="contain" />
 }
 
 const MenuItem = (props: MenuItemProps) => {
@@ -65,16 +69,7 @@ const MenuItem = (props: MenuItemProps) => {
           width="100%"
           pl={Normalize.scale(1)}
         >
-          {props.icon && (
-            <ImageView
-              height={props.iconHeight}
-              width={props.iconWidth}
-              ml={props.iconMarginLeft}
-              mr={props.iconMarginRight}
-              source={props.icon}
-              resizeMode="contain"
-            />
-          )}
+          {props.icon && <LinearLayout mr="12px">{props.icon}</LinearLayout>}
 
           <TextView
             weight={1}

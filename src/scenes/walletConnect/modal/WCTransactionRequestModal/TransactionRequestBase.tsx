@@ -8,7 +8,7 @@ import ConnectionHeader from '../../components/ConnectionHeader'
 
 import SwiperPanel, { CloseButton, useSwiperController } from '~/src/components/SwiperPanel'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import { Account } from '~/src/models/redux/Account'
+import { Account } from '~/src/store/account/Account'
 import { LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type SuccessOrFailedValues = {
@@ -108,7 +108,6 @@ export const TransactionRequestBase = ({
         value: transactionId,
       })
     } catch (error: any) {
-      console.log(error)
       setSuccessOrFailedValues({
         type: 'failed',
         value: error.message,

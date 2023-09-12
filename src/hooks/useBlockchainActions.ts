@@ -4,24 +4,24 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { SecurityHelper } from '../helpers/SecurityHelper'
 import { UtilsHelper } from '../helpers/UtilsHelper'
-import { Account } from '../models/redux/Account'
-import { Wallet } from '../models/redux/Wallet'
+import { Account } from '../store/account/Account'
 import { selectAccounts } from '../store/account/SelectorAccount'
-import { WalletType } from '../types/reducers/wallet'
-import { useBlockchainServiceUtils } from './useBlockchainServices'
+import { Wallet } from '../store/wallet/Wallet'
+import { TBlockchainServiceKey } from '../types/blockchain'
+import { WalletType } from '../types/store'
 
 import { accountReducerActions } from '~/src/store/account/AccountReducer'
 import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { wrapper } from '~src/app/ApplicationWrapper'
-import { BlockchainServiceKey } from '~src/blockchain'
 import { RootState } from '~src/store/RootStore'
 
 export type AccountToImport = {
   address: string
-  blockchain: BlockchainServiceKey
+  blockchain: TBlockchainServiceKey
   wallet: Wallet
   type: WalletType
-  wif?: string
+  key?: string
+  name?: string
 }
 
 export function useBlockchainActions() {
@@ -30,23 +30,22 @@ export function useBlockchainActions() {
   const dispatch = useDispatch()
   const accounts = useSelector(selectAccounts)
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
-  const { getBlockchainService } = useBlockchainServiceUtils()
+  const bsAggregator = useSelector((state: RootState) => state.blockchain.bsAggregator)
 
   const createWallet = useCallback(
-    async (name: string, type: WalletType, securityPhrase?: string, hasBackup?: boolean) => {
-      const walletId = UtilsHelper.uuid()
+    async (name: string, walletType: WalletType, securityPhrase?: string, hasBackup?: boolean) => {
+      const id = UtilsHelper.uuid()
 
-      const newWallet = new Wallet()
+      const newWallet = new Wallet({
+        name,
+        walletType,
+        id,
+        backupStatus: hasBackup ? 'successful' : 'unsuccessful',
+      })
 
-      newWallet.id = walletId
-      newWallet.name = name
-      newWallet.walletType = type
-      newWallet.backupStatus = hasBackup ? 'successful' : 'unsuccessful'
-
-      if (type === 'standard') {
+      if (walletType === 'standard') {
         if (!securityPhrase) throw new Error('Standard Wallet needs to have a security phrase')
-
-        await SecurityHelper.saveMnemonic(walletId, securityPhrase)
+        await SecurityHelper.saveMnemonic(id, securityPhrase)
       }
 
       dispatch(saveWallet(newWallet))
@@ -57,65 +56,49 @@ export function useBlockchainActions() {
   )
 
   const createAccount = useCallback(
-    async (wallet: Wallet, name: string, blockchain: BlockchainServiceKey, index?: number, colorDefault?: boolean) => {
-      if (!wallet.id) throw new Error('Account needs wallet id')
-
-      const newAccount = new Account()
-      newAccount.idWallet = wallet.id
-      newAccount.name = name
-      newAccount.blockchain = blockchain
-      newAccount.backgroundColor = colorDefault
-        ? theme.colors.card[0]
-        : theme.colors.card[UtilsHelper.getRandomNumber(6)]
-
+    async (wallet: Wallet, name: string, blockchain: TBlockchainServiceKey, index?: number, colorDefault?: boolean) => {
       const mnemonic = await SecurityHelper.loadMnemonic(wallet.id)
-
       if (!mnemonic) throw new Error('Problem to create account')
 
       const accountIndex =
         index ?? accounts.filter(account => account.idWallet === wallet.id && account.blockchain === blockchain).length
 
-      const service = getBlockchainService(blockchain)
-      const generatedAccount = await service.generateAccount(mnemonic, accountIndex)
+      const service = bsAggregator.getBlockchainByName(blockchain)
+      const generatedAccount = service.generateAccountFromMnemonic(mnemonic, accountIndex)
 
-      newAccount.address = generatedAccount.address
+      const newAccount = new Account({
+        idWallet: wallet.id,
+        name,
+        blockchain,
+        backgroundColor: colorDefault ? theme.colors.card[0] : theme.colors.card[UtilsHelper.getRandomNumber(6)],
+        address: generatedAccount.address,
+        accountType: wallet.walletType,
+      })
 
-      await SecurityHelper.saveWif(generatedAccount.address, generatedAccount.wif)
-
+      await SecurityHelper.saveKey(generatedAccount.address, generatedAccount.key)
       dispatch(saveAccount(newAccount))
 
-      return newAccount.address
+      return newAccount
     },
-    [theme, accounts, getBlockchainService]
+    [theme, accounts]
   )
 
   const importAccount = useCallback(
-    async (
-      wallet: Wallet,
-      name: string,
-      address: string,
-      blockchain: BlockchainServiceKey,
-      type: WalletType,
-      wif?: string
-    ) => {
-      const newAccount = new Account()
-      newAccount.idWallet = wallet.id ?? ''
-      newAccount.name = name
-      newAccount.blockchain = blockchain
-      newAccount.backgroundColor = theme.colors.card[UtilsHelper.getRandomNumber(6)]
-      newAccount.address = address
-      newAccount.accountType = type
-
-      const service = getBlockchainService(blockchain)
-      const mnemonic = service.generateMnemonic()
-
-      if (!mnemonic) throw new Error('Problem to import account')
-
+    async ({ address, blockchain, type, wallet, key, name }: AccountToImport) => {
       if (type === 'standard' || type === 'legacy') {
-        if (!wif) throw new Error('Wif not defined')
+        if (!key) throw new Error('Key not defined')
 
-        await SecurityHelper.saveWif(address, wif)
+        await SecurityHelper.saveKey(address, key)
       }
+
+      const newAccount = new Account({
+        idWallet: wallet.id,
+        name: name ?? `${i18n.t(`blockchainServices.${blockchain}.accountName`)} 1`,
+        blockchain,
+        backgroundColor: theme.colors.card[UtilsHelper.getRandomNumber(6)],
+        address,
+        accountType: type,
+      })
 
       dispatch(saveAccount(newAccount))
       return newAccount
@@ -125,16 +108,7 @@ export function useBlockchainActions() {
 
   const importAccounts = useCallback(
     async (accounts: AccountToImport[]) => {
-      const promises = accounts.map(account =>
-        importAccount(
-          account.wallet,
-          `${i18n.t(`blockchainServices.${account.blockchain}.accountName`)} 1`,
-          account.address,
-          account.blockchain,
-          account.type,
-          account.wif
-        )
-      )
+      const promises = accounts.map(account => importAccount(account))
 
       return await Promise.allSettled(promises)
     },

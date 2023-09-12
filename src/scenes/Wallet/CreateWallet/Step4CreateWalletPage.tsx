@@ -4,10 +4,9 @@ import { AwaitActivity } from '@simpli/react-native-await'
 import i18n from 'i18n-js'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
-import { showMessage } from 'react-native-flash-message'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { BlockchainServiceKey } from '~/src/blockchain'
+import { TBlockchainServiceKey } from '~/src/types/blockchain'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ThemedButton from '~src/components/themed/ThemedButton'
 import ThemedInputText from '~src/components/themed/ThemedInputText'
@@ -16,7 +15,7 @@ import { TextView, LinearLayout } from '~src/styles/styled-components'
 
 export interface Step4CreateWalletParams {
   hasBackup?: boolean
-  blockchain?: BlockchainServiceKey
+  blockchain?: TBlockchainServiceKey
   mnemonic: string
 }
 

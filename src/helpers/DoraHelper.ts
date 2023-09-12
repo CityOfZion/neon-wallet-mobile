@@ -1,13 +1,81 @@
-import { BlockchainServiceKey, TNetworkType } from '../blockchain'
+import { NetworkType } from '@cityofzion/blockchain-service'
 
+import { TBlockchainServiceKey } from '../types/blockchain'
+
+type DoraTypeColorValue = { color: string; textColor: 'dark' | 'light' }
 export class DoraHelper {
-  static buildTransactionUrl(network: TNetworkType, blockchain: BlockchainServiceKey, hash: string) {
-    if (network !== 'mainnet' && network !== 'testnet') throw new Error('Dora does not supports custom networks')
+  static parametersColors: Record<string, DoraTypeColorValue> = {
+    Signature: {
+      color: '#E9265C',
+      textColor: 'dark',
+    },
+    Boolean: {
+      color: '#D355E7',
+      textColor: 'dark',
+    },
+    Integer: {
+      color: '#B167F2',
+      textColor: 'dark',
+    },
+    Hash160: {
+      color: '#008529',
+      textColor: 'light',
+    },
+    Null: {
+      color: 'rgba(255, 255, 255, 0.08)',
+      textColor: 'dark',
+    },
+    Hash256: {
+      color: '#1DB5FF',
+      textColor: 'dark',
+    },
+    ByteArray: {
+      color: '#0DCDFF',
+      textColor: 'dark',
+    },
+    PublicKey: {
+      color: '#00D69D',
+      textColor: 'dark',
+    },
+    String: {
+      color: '#67DD8B',
+      textColor: 'dark',
+    },
+    ByteString: {
+      color: '#67DD8B',
+      textColor: 'dark',
+    },
+    Array: {
+      color: '#F28F00',
+      textColor: 'dark',
+    },
+    Buffer: {
+      color: '#F28F00',
+      textColor: 'dark',
+    },
+    InteropInterface: {
+      color: '#A50000',
+      textColor: 'light',
+    },
+    Void: {
+      color: '#528D93',
+      textColor: 'dark',
+    },
+    Any: {
+      color: '#00D69D',
+      textColor: 'dark',
+    },
+  }
 
-    const blockchains: Partial<Record<BlockchainServiceKey, string>> = {
+  static buildTransactionUrl(network: NetworkType, blockchain: TBlockchainServiceKey, hash: string) {
+    if (network === 'custom') throw new Error('Dora does not supports custom networks')
+
+    const blockchains: Partial<Record<TBlockchainServiceKey, string>> = {
       neo3: 'neo3',
       neoLegacy: 'neo2',
     }
+
+    if (!blockchains[blockchain]) throw new Error('Dora does not supports this blockchain')
 
     return `https://dora.coz.io/transaction/${blockchains[blockchain]}/${network}/${hash}`
   }

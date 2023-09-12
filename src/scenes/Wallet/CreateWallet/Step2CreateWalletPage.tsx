@@ -1,3 +1,4 @@
+import { generateMnemonic } from '@cityofzion/bs-asteroid-sdk'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { Await, AwaitActivity } from '@simpli/react-native-await'
 import * as Print from 'expo-print'
@@ -8,7 +9,6 @@ import React, { useEffect, useState } from 'react'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import { showAlert } from '~/src/components/Alert'
-import { AsteroidHelper } from '~/src/helpers/AsteroidHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import ScreenLayout from '~src/components/layout/ScreenLayout'
 import ScreenLoader from '~src/components/loader/ScreenLoader'
@@ -35,7 +35,8 @@ const Step2CreateWalletPage: React.FC<Props> = props => {
   const seeds = words.join(' ')
 
   const populate = async () => {
-    setWords(AsteroidHelper.generateMnemonic() ?? [])
+    const mnemonic = await generateMnemonic()
+    setWords(mnemonic)
   }
 
   const handlePressContinue = () => {

@@ -1,5 +1,4 @@
-import { ContractInvocation } from '@cityofzion/neo3-invoker'
-import { TSession } from '@cityofzion/wallet-connect-sdk-wallet-react'
+import { ContractInvocation, TSession } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import * as WebBrowser from 'expo-web-browser'
 import i18n from 'i18n-js'
 import React from 'react'

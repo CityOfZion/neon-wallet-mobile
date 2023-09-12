@@ -10,9 +10,9 @@ import { ConnectionItem } from '~/src/components/ConnectionItem'
 import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
-import { Account } from '~/src/models/redux/Account'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
+import { Account } from '~/src/store/account/Account'
 import { LinearLayout } from '~/src/styles/styled-components'
 
 export type AccountConnectionsScreenParams = {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { FlatList, StyleProp, ViewStyle } from 'react-native'
 
-import { Account } from '../models/redux/Account'
+import { Account } from '../store/account/Account'
 import { LinearLayout } from '../styles/styled-components'
 import { UseMultipleBalanceAndExchangeResult } from '../types/query'
 import AccountCard from './AccountCard'
@@ -23,8 +23,6 @@ const Cell = React.memo((props: CellProps) => (
 
 export const AccountCards = ({ accounts, balanceExchange, onPress, contentContainerStyle }: Props) => {
   const getBalanceExchange = (account: Account) => {
-    if (!account.address) return
-
     return balanceExchange.findByBalanceKey(account.address)
   }
 

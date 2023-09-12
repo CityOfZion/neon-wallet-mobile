@@ -3,19 +3,20 @@ import React, { useMemo, useState } from 'react'
 import { FlatList } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { BlockchainServiceKey } from '~/src/blockchain'
-import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
+import { BlockchainIcon } from '../BlockchainIcon'
+
+import { Account } from '~/src/store/account/Account'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { selectWallets } from '~/src/store/wallet/SelectorWallet'
+import { Wallet } from '~/src/store/wallet/Wallet'
+import { TBlockchainServiceKey } from '~/src/types/blockchain'
 import { LinearLayoutProps } from '~/src/types/styled-components'
 import { SearchBar } from '~src/components/SearchBar'
-import { Account } from '~src/models/redux/Account'
-import { Wallet } from '~src/models/redux/Wallet'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
 interface AccountListProps extends LinearLayoutProps {
   onSelect?: (account: Account) => void
-  filterByBlockchain?: BlockchainServiceKey
+  filterByBlockchain?: TBlockchainServiceKey
 }
 
 interface ItemProps {
@@ -62,13 +63,8 @@ const Item = React.memo(({ account, onPress, wallet }: ItemProps) => {
           </LinearLayout>
 
           <LinearLayout orientation="horiz">
-            <ImageView
-              width={22}
-              height={23}
-              source={BlockchainHelper.getIcon(account.blockchain)}
-              mr={3}
-              alignSelf="center"
-            />
+            <BlockchainIcon width={22} height={22} mr={3} blockchain={account.blockchain} />
+
             <LinearLayout orientation="verti" width="92%">
               <TextView color="text.2" fontFamily="regular" fontSize={14}>
                 {i18n.t(`blockchainServices.${account.blockchain}.id`)}
@@ -99,8 +95,7 @@ export const AccountList = ({ filterByBlockchain, onSelect, ...props }: AccountL
   const accountsFiltered = useMemo(() => {
     return accountFilterByBlockchain.filter(account => {
       const wallet = account.getWallet(wallets)
-
-      if (!account.name || !account.address || !wallet?.name) return false
+      if (!wallet) return false
 
       const filterLowerCase = filter.toLowerCase()
 

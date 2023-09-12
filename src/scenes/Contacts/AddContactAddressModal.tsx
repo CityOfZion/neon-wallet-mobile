@@ -1,23 +1,25 @@
+import { hasNameService } from '@cityofzion/blockchain-service'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import { debounce } from 'lodash'
 import React, { useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { BlockchainServiceKey } from '~/src/blockchain'
+import { BlockchainIcon } from '~/src/components/BlockchainIcon'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import { Select } from '~/src/components/Select'
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
-import { useBlockchainServiceLib } from '~/src/hooks/useBlockchainServiceLib'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
-import { ContactAddresses } from '~/src/types/reducers/contact'
+import { RootState } from '~/src/store/RootStore'
+import { TBlockchainServiceKey } from '~/src/types/blockchain'
+import { ContactAddresses } from '~/src/types/store'
 import InputLabel from '~src/components/InputLabel'
 import SwiperPanel, { useSwiperController, CloseButton } from '~src/components/SwiperPanel'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
-import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface AddContactAddressModalParams {
   onAdd?: (address: ContactAddresses) => void
@@ -32,17 +34,17 @@ interface Props {
 export const AddContactAddressModal = (props: Props) => {
   const { onAdd, address: editAddress } = props.route.params
 
+  const bsAggregator = useSelector((state: RootState) => state.blockchain.bsAggregator)
   const controller = useSwiperController(true)
-  const { getBlockchainServiceLib, hasNNS } = useBlockchainServiceLib()
 
-  const [selectedBlockchain, setSelectedBlockchain] = useState<BlockchainServiceKey>()
+  const [selectedBlockchain, setSelectedBlockchain] = useState<TBlockchainServiceKey>()
   const [address, setAddress] = useState<string>('')
   const [addressIsValid, setAddressIsValid] = useState<boolean>()
   const [validating, setValidating] = useState(false)
   const [NNSAddress, setNNSAddress] = useState<string>('')
 
   const validateAddressOrNSS = useCallback(
-    debounce(async (input: string, blockchain?: BlockchainServiceKey) => {
+    debounce(async (input: string, blockchain?: TBlockchainServiceKey) => {
       try {
         setValidating(true)
         setNNSAddress('')
@@ -50,12 +52,10 @@ export const AddContactAddressModal = (props: Props) => {
         let isValid = false
         if (blockchain && input.length) {
           try {
-            const service = getBlockchainServiceLib(blockchain)
-
+            const service = bsAggregator.getBlockchainByName(blockchain)
             isValid = service.validateAddress(input)
-
-            if (!isValid && hasNNS(service) && service.validateNNSFormat(input)) {
-              const nnsAddress = await service.getOwnerOfNNS(input)
+            if (!isValid && hasNameService(service) && service.validateNameServiceDomainFormat(input)) {
+              const nnsAddress = await service.resolveNameServiceDomain(input)
               setNNSAddress(nnsAddress)
               isValid = true
             }
@@ -66,14 +66,14 @@ export const AddContactAddressModal = (props: Props) => {
         setValidating(false)
       }
     }, 1000),
-    [getBlockchainServiceLib, hasNNS]
+    [bsAggregator]
   )
 
   const handleSelectBlockchain = () => {
     props.navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.SelectChainModal.name,
       params: {
-        onSelect: (blockchain: BlockchainServiceKey) => {
+        onSelect: (blockchain: TBlockchainServiceKey) => {
           setSelectedBlockchain(blockchain)
           validateAddressOrNSS(address, blockchain)
         },
@@ -81,7 +81,7 @@ export const AddContactAddressModal = (props: Props) => {
     })
   }
 
-  const handleChangeAddress = (input: string, blockchain?: BlockchainServiceKey) => {
+  const handleChangeAddress = (input: string, blockchain?: TBlockchainServiceKey) => {
     setAddress(input)
     validateAddressOrNSS(input, blockchain ?? selectedBlockchain)
   }
@@ -113,13 +113,7 @@ export const AddContactAddressModal = (props: Props) => {
             value={
               selectedBlockchain && (
                 <LinearLayout orientation="horiz" alignItems="center" flexGrow={1} flexShrink={1}>
-                  <ImageView
-                    source={BlockchainHelper.getIcon(selectedBlockchain)}
-                    resizeMode="contain"
-                    mr="12px"
-                    width={28}
-                    height={28}
-                  />
+                  <BlockchainIcon blockchain={selectedBlockchain} width={28} height={28} mr="12px" />
 
                   <LinearLayout>
                     <TextView color="text.11" fontSize="12px" fontWeight={500}>

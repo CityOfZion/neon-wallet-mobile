@@ -3,11 +3,11 @@ import React, { useMemo } from 'react'
 import { FlatList, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { BlockchainServiceKey } from '../blockchain'
 import { blockchainConfig } from '../config/BlockchainConfig'
 import { BalanceConvertedToExchange, BalanceHelper } from '../helpers/BalanceHelper'
 import { useLocalTokensUtils } from '../hooks/useTokens'
 import { RootState } from '../store/RootStore'
+import { TBlockchainServiceKey } from '../types/blockchain'
 import { UseBalanceExchangeResult, TokenBalance } from '../types/query'
 import { LinearLayoutProps } from '../types/styled-components'
 import { Skeleton } from './Skeleton'
@@ -33,6 +33,7 @@ interface Props extends LinearLayoutProps {
   showHoldingValue?: boolean
   onPress?: (token: TokenBalance) => void
   contentContainerStyle?: StyleProp<ViewStyle>
+  blockchainFilter?: TBlockchainServiceKey
 }
 
 const BalanceListItem = React.memo(
@@ -48,7 +49,14 @@ const BalanceListItem = React.memo(
       <ButtonView onPress={handlePress} disabled={!onPress}>
         <LinearLayout orientation="horiz" alignItems="center" justifyContent="space-between" mt={5} mb={5}>
           <LinearLayout orientation="horiz" alignItems="center" width={showHoldingValue ? '40%' : undefined}>
-            <TokenIcon marginRight={8} resizeMode="contain" width={24} height={24} {...tokenBalanceConverted} />
+            <TokenIcon
+              marginRight={8}
+              resizeMode="contain"
+              width={24}
+              height={24}
+              blockchain={tokenBalanceConverted.blockchain}
+              {...tokenBalanceConverted.token}
+            />
 
             <LinearLayout>
               <TextView
@@ -58,7 +66,7 @@ const BalanceListItem = React.memo(
                 numberOfLines={1}
                 mb={showBlockchain ? '-5px' : undefined}
               >
-                {tokenBalanceConverted.symbol}
+                {tokenBalanceConverted.token.symbol}
               </TextView>
 
               {showBlockchain && (
@@ -153,22 +161,24 @@ const BalanceList = ({
       tokenBalances = tokenBalances.filter(token => token.amount > 0)
     }
 
-    const mandatoryBlockchains = Object.keys(blockchainConfig.mandatorySymbols) as BlockchainServiceKey[]
+    const mandatoryBlockchains = Object.keys(blockchainConfig.mandatorySymbols) as TBlockchainServiceKey[]
 
     mandatoryBlockchains.forEach(blockchainKey => {
+      if (props.blockchainFilter && props.blockchainFilter !== blockchainKey) return
+
       blockchainConfig.mandatorySymbols[blockchainKey].forEach(symbol => {
-        const balanceAlreadyHas = tokenBalances.some(
-          token => token.symbol === symbol && token.blockchain === blockchainKey
+        const balanceAlreadyExist = tokenBalances.some(
+          balance => balance.token.symbol === symbol && balance.blockchain === blockchainKey
         )
-        if (balanceAlreadyHas) return
+        if (balanceAlreadyExist) return
 
         const token = getTokenBySymbol(symbol, blockchainKey)
         if (!token) return
-
         tokenBalances.push({
           amount: 0,
           convertedAmount: 0,
-          ...token,
+          token,
+          blockchain: blockchainKey,
         })
       })
     })
@@ -201,7 +211,7 @@ const BalanceList = ({
       >
         <FlatList
           data={validAndOrdedTokensBalances}
-          keyExtractor={item => item.hash}
+          keyExtractor={item => item.token.hash}
           contentContainerStyle={contentContainerStyle}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={

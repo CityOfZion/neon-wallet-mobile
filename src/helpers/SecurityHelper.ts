@@ -13,15 +13,15 @@ export abstract class SecurityHelper {
     await SecureStore.deleteItemAsync(idWallet)
   }
 
-  static async saveWif(address: string, wif: string) {
-    await SecureStore.setItemAsync(address, wif)
+  static async saveKey(address: string, key: string) {
+    await SecureStore.setItemAsync(address, key)
   }
 
-  static async loadWif(address: string) {
+  static async loadKey(address: string) {
     return await SecureStore.getItemAsync(address)
   }
 
-  static async removeWif(address: string) {
+  static async removeKey(address: string) {
     return await SecureStore.deleteItemAsync(address)
   }
 

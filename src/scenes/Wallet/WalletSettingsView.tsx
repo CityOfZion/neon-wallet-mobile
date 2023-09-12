@@ -8,10 +8,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Normalize } from '~/src/app/Normalize'
 import { showAlert } from '~/src/components/Alert'
-import MenuItem, { RightIconType } from '~/src/components/MenuItem'
+import MenuItem, { MenuItemIcon, RightIconType } from '~/src/components/MenuItem'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import { useLocalAuthentication } from '~/src/hooks/useLocalAuthentication'
-import { Wallet } from '~/src/models/redux/Wallet'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { TabStackParamList } from '~/src/navigation/TabNavigation'
@@ -19,9 +18,9 @@ import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
 import { RootState } from '~/src/store/RootStore'
 import { accountReducerActions } from '~/src/store/account/AccountReducer'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
-import { DispatchResult } from '~/src/types/reducers/root'
 
 export interface WalletSettingViewParams {
   wallet: Wallet
@@ -38,7 +37,7 @@ export const WalletSettingsView = (props: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const accountsPool = useSelector(selectAccounts)
   const { authenticate } = useLocalAuthentication()
-  const dispatch = useDispatch<DispatchResult>()
+  const dispatch = useDispatch()
 
   const handleDelete = () => {
     showAlert({
@@ -54,7 +53,6 @@ export const WalletSettingsView = (props: Props) => {
 
             const accounts = wallet.getAccounts(accountsPool)
             accounts.forEach(account => {
-              if (!account.address) return
               dispatch(accountReducerActions.deleteAccount(account.address))
             })
 
@@ -85,8 +83,7 @@ export const WalletSettingsView = (props: Props) => {
     <ScreenLayout>
       <MenuItem
         title={i18n.t('screens.walletSettingsView.customize')}
-        icon={require('~src/assets/images/icon-palette-green.png')}
-        iconMarginRight={4}
+        icon={<MenuItemIcon source={require('~src/assets/images/icon-palette-green.png')} />}
         arrowDirection={RightIconType.ARROW_RIGHT}
         onPress={() =>
           props.navigation.navigate(wrapper.route.Modal.name, {
@@ -101,9 +98,7 @@ export const WalletSettingsView = (props: Props) => {
       {wallet.walletType === 'standard' && (
         <MenuItem
           title={i18n.t('screens.walletSettingsView.backup')}
-          icon={require('~src/assets/images/icon-screen-lock-green.png')}
-          iconMarginLeft={2}
-          iconMarginRight={4}
+          icon={<MenuItemIcon source={require('~src/assets/images/icon-screen-lock-green.png')} />}
           arrowDirection={RightIconType.ARROW_RIGHT}
           onPress={handlePressOnBackup}
         />

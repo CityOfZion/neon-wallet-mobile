@@ -25,3 +25,5 @@ export interface DefaultNavigationParam<T = undefined> {
 export type NavParam<ParamList> = ParamList[keyof ParamList] extends undefined
   ? [keyof ParamList] | [keyof ParamList, ParamList[keyof ParamList]]
   : [keyof ParamList, ParamList[keyof ParamList]]
+
+export type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>

@@ -1,9 +1,10 @@
 import { CaseReducer, PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
+import { Wallet } from './Wallet'
+
 import { Storage } from '~/src/app/Storage'
 import { SecurityHelper } from '~/src/helpers/SecurityHelper'
-import { Wallet } from '~/src/models/redux/Wallet'
-import { WalletState } from '~/src/types/reducers/wallet'
+import { WalletState } from '~/src/types/store'
 
 export const walletReducerName = 'walletReducer'
 
@@ -52,7 +53,7 @@ const WalletReducer = createSlice({
   extraReducers(builder) {
     builder
       .addCase(migrateWalletsFromStorage.fulfilled, (state, action) => {
-        const wallets = action.payload?.map(it => it.deserialize)
+        const wallets = action.payload?.map((it: any) => it.deserialize)
         if (wallets) {
           if ('data' in state) {
             const appWallets = [...state.data, ...wallets]
@@ -67,6 +68,7 @@ const WalletReducer = createSlice({
               }
             })
           } else {
+            // @ts-ignore
             state.data = wallets
           }
           Storage.wallets.erase()
@@ -75,6 +77,7 @@ const WalletReducer = createSlice({
       .addCase(saveWallet.fulfilled, (state, action) => {
         const wallet = action.payload
         if (!('data' in state)) {
+          // @ts-ignore
           state.data = [wallet]
         } else {
           const indexWallet = state.data.findIndex(it => it.id === wallet.id)

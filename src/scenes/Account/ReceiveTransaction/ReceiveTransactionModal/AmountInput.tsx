@@ -1,3 +1,4 @@
+import { Token } from '@cityofzion/blockchain-service'
 import i18n from 'i18n-js'
 import React from 'react'
 import { useSelector } from 'react-redux'
@@ -5,9 +6,8 @@ import { useSelector } from 'react-redux'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
-import { Token } from '~/src/models/Token'
-import { Account } from '~/src/models/redux/Account'
 import { RootState } from '~/src/store/RootStore'
+import { Account } from '~/src/store/account/Account'
 
 interface Props {
   amount?: string

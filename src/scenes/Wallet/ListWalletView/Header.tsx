@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Button } from '~/src/components/Button'
 import { IconButton } from '~/src/components/IconButton'
-import { Wallet } from '~/src/models/redux/Wallet'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { walletReducerActions } from '~/src/store/wallet/WalletReducer'
 import { ImageView, LinearLayout } from '~/src/styles/styled-components'
 

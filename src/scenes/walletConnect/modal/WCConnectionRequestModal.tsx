@@ -1,3 +1,4 @@
+import { NetworkType } from '@cityofzion/blockchain-service'
 import {
   DEFAULT_BLOCKCHAIN,
   EStatus,
@@ -16,10 +17,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { TOnFinishSelectionParams } from '../../Wallet/WalletSelectionModal'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { TNetworkType } from '~/src/blockchain'
 import { showAlert } from '~/src/components/Alert'
+import { BlockchainIcon } from '~/src/components/BlockchainIcon'
 import ScreenLoader from '~/src/components/loader/ScreenLoader'
-import { BlockchainHelper } from '~/src/helpers/BlockchainHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useWalletConnectFlow } from '~/src/hooks/useWalletConnectFlow'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
@@ -31,7 +31,7 @@ import SwiperPanel, { CloseButton, useSwiperController } from '~src/components/S
 import ThemedButton from '~src/components/themed/ThemedButton'
 import { ModalStackParamList } from '~src/navigation/ModalStackNavigation'
 import ConnectionHeader from '~src/scenes/walletConnect/components/ConnectionHeader'
-import { LinearLayout, TextView, ImageView } from '~src/styles/styled-components'
+import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface WCConnectionRequestModalParams {
   uri: string
@@ -54,7 +54,7 @@ const WCConnectionRequestModal = (props: Props) => {
   const dispatch = useDispatch()
   const wallets = useSelector(selectWallets)
 
-  const switchedNetwork = useRef<TNetworkType>()
+  const switchedNetwork = useRef<NetworkType>()
 
   const proposal = useMemo<TSessionProposal | undefined>(() => proposals[0], [proposals])
   const sessionNetwork = useMemo(() => {
@@ -71,7 +71,7 @@ const WCConnectionRequestModal = (props: Props) => {
         props.navigation.goBack()
         props.navigation.goBack()
 
-        if (!proposal || !account?.address) {
+        if (!proposal) {
           throw new Error(i18n.t('walletconnect.alert.unexpectedErrorToSelectAccount'))
         }
 
@@ -225,13 +225,8 @@ const WCConnectionRequestModal = (props: Props) => {
                   </TextView>
 
                   <LinearLayout orientation="horiz" mt="6px">
-                    <ImageView
-                      source={BlockchainHelper.getIcon(sessionNetwork.blockchain)}
-                      resizeMode="contain"
-                      width={20}
-                      height={20}
-                      mr="2px"
-                    />
+                    <BlockchainIcon blockchain={sessionNetwork.blockchain} width={20} height={20} mr="2px" />
+
                     <TextView fontFamily="medium" color="#fff" fontSize="16px">
                       {i18n.t(`blockchainServices.${sessionNetwork.blockchain}.id`)}
                     </TextView>

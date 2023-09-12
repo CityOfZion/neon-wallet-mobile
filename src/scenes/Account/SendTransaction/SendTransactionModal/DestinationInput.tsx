@@ -1,3 +1,4 @@
+import { hasNameService } from '@cityofzion/blockchain-service'
 import i18n from 'i18n-js'
 import { debounce } from 'lodash'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -7,16 +8,14 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import InputLabel from '~/src/components/InputLabel'
 import InputWithValidation from '~/src/components/InputWithValidation'
 import { IURI } from '~/src/helpers/UriHelper'
-import { useBlockchainServiceLib } from '~/src/hooks/useBlockchainServiceLib'
-import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
-import { Account } from '~/src/models/redux/Account'
-import { Contact } from '~/src/models/redux/Contact'
-import { Wallet } from '~/src/models/redux/Wallet'
 import { RootState } from '~/src/store/RootStore'
+import { Account } from '~/src/store/account/Account'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
+import { Contact } from '~/src/store/contact/Contact'
 import { selectContacts } from '~/src/store/contact/SelectorContact'
 import { selectWallets } from '~/src/store/wallet/SelectorWallet'
-import { ContactAddresses } from '~/src/types/reducers/contact'
+import { Wallet } from '~/src/store/wallet/Wallet'
+import { ContactAddresses } from '~/src/types/store'
 
 type Props = {
   destinationAddress?: string
@@ -56,8 +55,10 @@ export const DestinationInput = ({
   onAddressValidation,
   onAddressAliasChange,
 }: Props) => {
-  const { blockchainService } = useBlockchainService(account.blockchain)
-  const { getBlockchainServiceLib, hasNNS } = useBlockchainServiceLib()
+  const blockchainService = useSelector(
+    (state: RootState) => state.blockchain.bsAggregator.blockchainServicesByName[account.blockchain]
+  )
+
   const accounts = useSelector(selectAccounts)
   const wallets = useSelector(selectWallets)
   const contacts = useSelector(selectContacts)
@@ -75,7 +76,7 @@ export const DestinationInput = ({
       return destinationContact.name
     }
 
-    if (destinationWallet?.name && destinationAccount && destinationAccount.address) {
+    if (destinationWallet?.name && destinationAccount) {
       return `${destinationWallet.name} / ${destinationAccount.name}`
     }
   }, [destinationContact, destinationWallet, destinationAccount, destinationAddressAlias])
@@ -85,20 +86,18 @@ export const DestinationInput = ({
       onAddressAliasChange(undefined)
 
       let isValid = false
-      let resovedAddress: string | undefined
+      let resolvedAddress: string | undefined
       let isNNS = false
 
       try {
-        const serviceLib = getBlockchainServiceLib(account.blockchain)
-
-        if (hasNNS(serviceLib) && serviceLib.validateNNSFormat(address)) {
+        if (hasNameService(blockchainService) && blockchainService.validateNameServiceDomainFormat(address)) {
           try {
             isNNS = true
             setLoading(true)
-            resovedAddress = await serviceLib.getOwnerOfNNS(address.toLowerCase())
+            resolvedAddress = await blockchainService.resolveNameServiceDomain(address.toLowerCase())
             onAddressAliasChange(address.toLowerCase())
             isValid = true
-            onAddressChange(resovedAddress)
+            onAddressChange(resolvedAddress)
           } finally {
             setLoading(false)
           }
@@ -107,19 +106,19 @@ export const DestinationInput = ({
 
       if (!isNNS && blockchainService.validateAddress(address)) {
         isValid = true
-        resovedAddress = address
+        resolvedAddress = address
       }
 
       onAddressValidation(isValid)
       const foundedAccount = selectedAccount
         ? selectedAccount
-        : resovedAddress
+        : resolvedAddress
         ? accounts.find(account => account.address === address)
         : undefined
 
       const foundedWallet = selectedWallet
         ? selectedWallet
-        : resovedAddress && foundedAccount
+        : resolvedAddress && foundedAccount
         ? foundedAccount.getWallet(wallets)
         : undefined
 
@@ -131,7 +130,7 @@ export const DestinationInput = ({
       onWalletChange(foundedWallet)
       onContactChange(foundedContact)
     }, 1000),
-    [getBlockchainServiceLib, blockchainService]
+    [blockchainService]
   )
 
   const handleSelectContactDestination = (selectedContact: Contact, { address }: ContactAddresses) => {
@@ -143,7 +142,6 @@ export const DestinationInput = ({
   }
 
   const handleSelectAccountDestination = (selectedAccount: Account) => {
-    if (!selectedAccount.address) return
     onAddressChange(selectedAccount.address)
     validateAddressOrNSS({
       address: selectedAccount.address,

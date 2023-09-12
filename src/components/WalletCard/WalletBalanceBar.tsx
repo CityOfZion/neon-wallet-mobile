@@ -5,7 +5,7 @@ import { Shadow } from 'react-native-shadow-2'
 import { Skeleton } from '../Skeleton'
 
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
-import { TokenHelper } from '~/src/helpers/TokenHelper'
+import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { UseMultipleBalanceAndExchangeResult } from '~/src/types/query'
 import { ImageView, LinearLayout } from '~src/styles/styled-components'
 
@@ -54,6 +54,8 @@ export const WalletBalanceBar = ({ balanceExchange }: Props) => {
               />
               <LinearLayout orientation="horiz" width="100%" px="1px">
                 {tokensBalancesConverted.map((tokenBalances, index) => {
+                  const color = UtilsHelper.generateBlockchainColor(tokenBalances.token.symbol)
+
                   return (
                     <LinearLayout
                       key={index}
@@ -62,17 +64,8 @@ export const WalletBalanceBar = ({ balanceExchange }: Props) => {
                       minWidth="4px"
                       mx="1px"
                     >
-                      <Shadow
-                        distance={9}
-                        startColor={`${TokenHelper.getColor(tokenBalances.symbol)}1A`}
-                        viewStyle={{ width: '100%', height: '100%' }}
-                      >
-                        <LinearLayout
-                          height="100%"
-                          width="100%"
-                          borderRadius="2.5px"
-                          backgroundColor={TokenHelper.getColor(tokenBalances.symbol)}
-                        />
+                      <Shadow distance={9} startColor={`${color}1A`} viewStyle={{ width: '100%', height: '100%' }}>
+                        <LinearLayout height="100%" width="100%" borderRadius="2.5px" backgroundColor={color} />
                       </Shadow>
                     </LinearLayout>
                   )

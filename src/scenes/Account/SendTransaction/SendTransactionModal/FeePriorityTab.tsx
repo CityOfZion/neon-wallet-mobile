@@ -1,36 +1,40 @@
 import i18n from 'i18n-js'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
-import { BlockchainServiceKey } from '~/src/blockchain'
-import { useBlockchainService } from '~/src/hooks/useBlockchainServices'
-import { Account } from '~/src/models/redux/Account'
+import { RootState } from '~/src/store/RootStore'
+import { Account } from '~/src/store/account/Account'
 import { ButtonView, ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
+import { TBlockchainServiceKey } from '~/src/types/blockchain'
 import { ButtonViewProps } from '~/src/types/styled-components'
 
 type ButtonProps = {
   name: string
-  fee: number
+  fee: string
   isSelected: boolean
-  blockchain: BlockchainServiceKey
+  blockchain: TBlockchainServiceKey
   onPress(): void
 } & ButtonViewProps
 
 type Props = {
-  onFeeChange(fee: number): void
+  onFeeChange(fee: string): void
   account: Account
 }
 
 type PriorityName = 'none' | 'fast' | 'faster' | 'fastest'
 
-const feeByPriority: Record<PriorityName, number> = {
-  fast: 0.001,
-  faster: 0.05,
-  fastest: 0.1,
-  none: 0,
+const feeByPriority: Record<PriorityName, string> = {
+  fast: '0.001',
+  faster: '0.05',
+  fastest: '0.1',
+  none: '0',
 }
 
 const Button = ({ fee, name, isSelected, onPress, blockchain, ...props }: ButtonProps) => {
-  const { blockchainService } = useBlockchainService(blockchain)
+  const blockchainService = useSelector(
+    (state: RootState) => state.blockchain.bsAggregator.blockchainServicesByName[blockchain]
+  )
+
   return (
     <ButtonView
       weight={1}
@@ -54,7 +58,7 @@ const Button = ({ fee, name, isSelected, onPress, blockchain, ...props }: Button
           </TextView>
           <TextView color={isSelected ? 'primary' : 'text.3'} fontSize="12px">
             {fee}
-            {blockchainService.feeToken.token}
+            {blockchainService.feeToken.symbol}
           </TextView>
         </LinearLayout>
       </LinearLayout>

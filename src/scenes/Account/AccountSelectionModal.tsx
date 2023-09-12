@@ -12,12 +12,14 @@ import { AccountCards } from '~/src/components/AccountCards'
 import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
+import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
-import { useBlockchainServiceUtils } from '~/src/hooks/useBlockchainServices'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { RootState } from '~/src/store/RootStore'
+import { Account } from '~/src/store/account/Account'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
+import { Wallet } from '~/src/store/wallet/Wallet'
 import { TokenBalance } from '~/src/types/query'
 import BalanceList from '~src/components/BalanceList'
 import SwiperPanel, {
@@ -30,8 +32,6 @@ import SwiperPanel, {
 } from '~src/components/SwiperPanel'
 import AccountPicker from '~src/components/misc/AccountPicker'
 import ThemedButton from '~src/components/themed/ThemedButton'
-import { Account } from '~src/models/redux/Account'
-import { Wallet } from '~src/models/redux/Wallet'
 import { LinearLayout, TextView } from '~src/styles/styled-components'
 
 export interface AccountSelectionModalParams {
@@ -64,19 +64,17 @@ const AccountSelectionModal = (props: Props) => {
   const accounts = useSelector(selectAccounts)
   const isConnected = useSelector((state: RootState) => state.network.isConnected)
   const controller = useSwiperController(true)
-  const { getBlockchainService } = useBlockchainServiceUtils()
 
   const validAccounts = useMemo(
     () =>
       wallet.getAccounts(accounts).filter(account => {
         if (filter === 'walletConnect') {
-          const service = getBlockchainService(account.blockchain)
-          return service.hasWalletConnectIntegration()
+          return !!WalletConnectHelper.blockchainsByBlockchainServiceKey[account.blockchain]
         }
 
         return true
       }),
-    [accounts, getBlockchainService]
+    [accounts]
   )
 
   const [selectedAccount, setSelectedAccount] = useState<Account>(validAccounts[0])
@@ -128,7 +126,7 @@ const AccountSelectionModal = (props: Props) => {
               paddingBottom={`${DEFAULT_PADDING_BOTTOM + DEFAULT_PADDING + PANEL_BOUNCE_OFFSET + 10}px`}
             >
               <TextView mb={4} color="text.2" fontSize="14px" fontFamily="bold" textAlign="center">
-                {props.route.params.wallet.name?.toUpperCase()}
+                {props.route.params.wallet.name.toUpperCase()}
               </TextView>
 
               <TextView color="text.0" fontSize="18px" fontFamily="medium" textAlign="center" mb="28px">
@@ -155,6 +153,7 @@ const AccountSelectionModal = (props: Props) => {
                     hideEmptyMessage
                     hideTitle
                     balanceExchange={selectedAccountBalanceExchange}
+                    blockchainFilter={selectedAccount.blockchain}
                   />
                 </>
               ) : (

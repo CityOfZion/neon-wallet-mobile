@@ -1,10 +1,10 @@
 import { createSelector } from '@reduxjs/toolkit'
-import { plainToClass } from 'class-transformer'
 
 import { RootState } from '../RootStore'
-
-import { Account } from '~/src/models/redux/Account'
+import { Account } from './Account'
 
 const rootState = (state: RootState) => state
 
-export const selectAccounts = createSelector(rootState, state => plainToClass(Account, state.account.data))
+export const selectAccounts = createSelector(rootState, state =>
+  state.account.data.map(account => new Account(account))
+)

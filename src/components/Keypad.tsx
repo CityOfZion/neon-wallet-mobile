@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import PropTypes from 'prop-types'
-import React, { Fragment } from 'react'
+import React from 'react'
 import { TouchableOpacity } from 'react-native'
 
 import { LinearLayout, TextView } from '~src/styles/styled-components'

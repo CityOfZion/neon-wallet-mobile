@@ -25,8 +25,6 @@ const AnimatedSplashScreen: React.FC<Props> = ({ children, image }) => {
   const onImageLoaded = useCallback(async () => {
     try {
       await SplashScreen.hideAsync()
-    } catch (e) {
-      // handle errors
     } finally {
       setAppReady(true)
     }

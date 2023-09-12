@@ -1,24 +1,25 @@
+import { NetworkType } from '@cityofzion/blockchain-service'
 import { u } from '@cityofzion/neon-core'
 import { TSession, TSessionProposal, Chain, Blockchain } from '@cityofzion/wallet-connect-sdk-wallet-react'
 
-import { BlockchainServiceKey, TNetworkType } from '../blockchain'
+import { TBlockchainServiceKey } from '../types/blockchain'
 
 type AccountInformation = {
   namespace: string
   reference: string
   address: string
   chainId: string
-  blockchain: BlockchainServiceKey
+  blockchain: TBlockchainServiceKey
 }
 
 export abstract class WalletConnectHelper {
-  static networks: Record<TNetworkType, Chain> = {
+  static networks: Record<NetworkType, Chain> = {
     custom: 'private',
     mainnet: 'mainnet',
     testnet: 'testnet',
   }
 
-  static blockchainsByBlockchainServiceKey: Partial<Record<BlockchainServiceKey, Blockchain>> = {
+  static blockchainsByBlockchainServiceKey: Partial<Record<TBlockchainServiceKey, Blockchain>> = {
     neo3: 'neo3',
   }
 
@@ -28,7 +29,7 @@ export abstract class WalletConnectHelper {
       const [namespace, reference, address] = account.split(':')
 
       const blockchain = (
-        Object.entries(this.blockchainsByBlockchainServiceKey) as [BlockchainServiceKey, Blockchain][]
+        Object.entries(this.blockchainsByBlockchainServiceKey) as [TBlockchainServiceKey, Blockchain][]
       ).find(([, value]) => value === namespace)
       if (!blockchain) throw new Error('Blockchain not supported')
 
@@ -62,24 +63,24 @@ export abstract class WalletConnectHelper {
     return uri
   }
 
-  static convertChain(network: TNetworkType): Chain {
+  static convertChain(network: NetworkType): Chain {
     return this.networks[network]
   }
 
   static getNetworkFromProposal(proposal: TSessionProposal): {
-    blockchain: BlockchainServiceKey
-    network: TNetworkType
+    blockchain: TBlockchainServiceKey
+    network: NetworkType
   } {
     const chainId = Object.values(proposal.params.requiredNamespaces)[0].chains?.[0]
     if (!chainId) throw new Error('ChainId not found')
     const [proposalBlockchain, proposalNetwork] = chainId.split(':') as [Blockchain, Chain]
 
     const blockchain = (
-      Object.entries(this.blockchainsByBlockchainServiceKey) as [BlockchainServiceKey, Blockchain][]
+      Object.entries(this.blockchainsByBlockchainServiceKey) as [TBlockchainServiceKey, Blockchain][]
     ).find(([, value]) => value === proposalBlockchain)
     if (!blockchain) throw new Error('Blockchain not supported')
 
-    const network = (Object.entries(this.networks) as [TNetworkType, Chain][]).find(
+    const network = (Object.entries(this.networks) as [NetworkType, Chain][]).find(
       ([, value]) => value === proposalNetwork
     )
     if (!network) throw new Error('Network not supported')

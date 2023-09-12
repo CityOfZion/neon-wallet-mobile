@@ -1,6 +1,6 @@
 import { createSlice, CaseReducer, PayloadAction } from '@reduxjs/toolkit'
 
-import { NetworkState } from '~/src/types/reducers/network'
+import { NetworkState } from '~/src/types/store'
 
 export const networkReducername = 'networkReducer'
 
