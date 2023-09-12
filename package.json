@@ -17,7 +17,6 @@
     "e2e:android": "detox test -c android.emu.release --artifacts-location=e2e/screenshots --take-screenshots=all",
     "build:ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
     "fix:dependencies": "expo doctor --fix-dependencies",
-    "postinstall": "node_modules/.bin/rn-nodeify --install crypto,assert,url,stream,events,net,http,https,zlib --hack",
     "ota:production": "cross-env CHANNEL=production yarn prebuild:android && eas update --channel=production -p android && cross-env CHANNEL=production yarn prebuild:ios && eas update --channel=production -p ios && eas logout",
     "ota:staging": "cross-env CHANNEL=staging yarn prebuild:android && eas update --channel=staging -p android && cross-env CHANNEL=staging yarn prebuild:ios && eas update --channel=staging -p ios && eas logout",
     "ota:beta": "cross-env CHANNEL=beta yarn prebuild:android && eas update --channel=beta -p android && cross-env CHANNEL=beta yarn prebuild:ios && eas update --channel=beta -p ios && eas logout",
@@ -52,6 +51,7 @@
     "big-integer": "^1.6.51",
     "browserify-zlib": "~0.1.4",
     "class-transformer": "^0.2.3",
+    "crypto-browserify": "^3.12.0",
     "events": "^3.3.0",
     "expo": "^44.0.0",
     "expo-app-loading": "~1.3.0",
@@ -171,7 +171,6 @@
     "react-devtools": "^4.10.0",
     "react-native-testing-library": "^1.14.0",
     "react-test-renderer": "^16.13.1",
-    "rn-nodeify": "^10.3.0",
     "typescript": "~4.3.5",
     "uri-scheme": "^1.0.111"
   },
@@ -189,18 +188,5 @@
       "eslint --fix .",
       "git add ."
     ]
-  },
-  "react-native": {
-    "crypto": "react-native-crypto",
-    "_stream_transform": "readable-stream/transform",
-    "_stream_readable": "readable-stream/readable",
-    "_stream_writable": "readable-stream/writable",
-    "_stream_duplex": "readable-stream/duplex",
-    "_stream_passthrough": "readable-stream/passthrough",
-    "stream": "stream-browserify",
-    "net": "react-native-tcp",
-    "zlib": "browserify-zlib",
-    "http": "@tradle/react-native-http",
-    "https": "https-browserify"
   }
 }

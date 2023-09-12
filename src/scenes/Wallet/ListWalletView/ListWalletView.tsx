@@ -1,6 +1,7 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import React, { useMemo, useRef, useState } from 'react'
+import crypto from 'crypto'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Animated, RefreshControl } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -96,6 +97,10 @@ export const ListWalletView = (props: WalletProps) => {
     await selectedWalletBalanceExchange.refetch()
     await OTAHelper.handleOTAUpdates()
   }
+
+  useEffect(() => {
+    console.log(JSON.stringify(Object.keys({ crypto })))
+  }, [])
 
   return (
     <ScreenLayout
