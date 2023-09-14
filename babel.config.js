@@ -19,10 +19,6 @@ module.exports = function (api) {
             "_stream_duplex": "./node_modules/readable-stream/duplex",
             "_stream_passthrough": "./node_modules/readable-stream/passthrough",
             "stream": "./node_modules/stream-browserify",
-            "net": "./node_modules/react-native-tcp",
-            "zlib": "./node_modules/browserify-zlib",
-            "http": "./node_modules/@tradle/react-native-http",
-            "https": "./node_modules/https-browserify"
           },
         },
       ],
