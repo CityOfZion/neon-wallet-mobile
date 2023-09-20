@@ -1,3 +1,4 @@
+import { waitForTransaction } from '@cityofzion/blockchain-service'
 import { CaseReducer, PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import { RootState } from '../RootStore'
@@ -5,7 +6,6 @@ import { Account } from './Account'
 
 import { appBus } from '~/src/app/AppBus'
 import { Storage } from '~/src/app/Storage'
-import { PollingHelper } from '~/src/helpers/PollingHelper'
 import { AccountState } from '~/src/types/store'
 
 interface IAccountReducer {
@@ -24,39 +24,30 @@ const migrateAccountsFromStorage = createAsyncThunk('accounts/migrateAccountsFro
   return Storage.accounts.load()
 })
 
+const watchPendingTransaction = createAsyncThunk(
+  'accounts/watchPendingTransaction',
+  async ({ account, transactionHash, isClaim }: TWatchPendingTransactionParams, { getState }) => {
+    const state = getState() as RootState
+    const service = state.blockchain.bsAggregator.getBlockchainByName(account.blockchain)
+    const success = await waitForTransaction(service, transactionHash)
+
+    if (success) {
+      appBus.emit(isClaim ? 'pendingClaimConfirmed' : 'pendingTransactionConfirmed', account)
+    } else {
+      appBus.emit('pendingTransactionFailed')
+    }
+    account.removePendingTransactions(transactionHash)
+    return account.deserialize
+  }
+)
+
+const removeAllPendingTransactions: CaseReducer<IAccountReducer> = state => {
+  state.data = state.data.map(account => ({ ...account, pendingTransactions: [] }))
+}
+
 const saveAccount = createAsyncThunk('accounts/save', async (account: Account) => {
   return account.deserialize
 })
-
-const watchPendingTransaction = createAsyncThunk(
-  'accounts/watchPendingTransaction',
-  ({ account, transactionHash, isClaim }: TWatchPendingTransactionParams, { getState }) => {
-    const polling = new PollingHelper()
-    const state = getState() as RootState
-
-    return new Promise<AccountState>((resolve, reject) => {
-      let attemptCounter = 0
-      polling.run(async () => {
-        attemptCounter++
-
-        try {
-          const service = state.blockchain.bsAggregator.getBlockchainByName(account.blockchain)
-          await service.blockchainDataService.getTransaction(transactionHash)
-
-          account.removePendingTransactions(transactionHash)
-          appBus.emit(isClaim ? 'claimGasEnd' : 'pendingTransactionConfirmed', account)
-          resolve(account.deserialize)
-          polling.stop()
-        } catch {
-          if (attemptCounter > 10) {
-            reject(new Error(`transaction ${transactionHash} not found`))
-            polling.stop()
-          }
-        }
-      })
-    })
-  }
-)
 
 const deleteAccount: CaseReducer<IAccountReducer, PayloadAction<string>> = (state, action) => {
   if ('data' in state) {
@@ -70,6 +61,7 @@ const AccountReducer = createSlice({
   initialState,
   reducers: {
     deleteAccount,
+    removeAllPendingTransactions,
   },
   extraReducers(builder) {
     builder
@@ -114,17 +106,12 @@ const AccountReducer = createSlice({
       })
       .addCase(watchPendingTransaction.fulfilled, (state, action) => {
         const account = action.payload
-        if (!('data' in state)) {
-          // @ts-ignore
-          state.data = [account]
-        } else {
-          const findIndex = state.data.findIndex(it => it.address === account.address)
-          if (findIndex < 0) {
-            state.data = [...state.data, account]
-          } else {
-            state.data[findIndex] = account
-          }
+        const findIndex = state.data.findIndex(it => it.address === account.address)
+        if (findIndex < 0) {
+          return
         }
+
+        state.data[findIndex] = account
       })
   },
 })

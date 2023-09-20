@@ -2216,24 +2216,24 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cityofzion/blockchain-service@0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/blockchain-service/-/blockchain-service-0.7.1.tgz#9bc2b4cb3d339131ccf842d4c928c1b280f95b8d"
-  integrity sha512-btnegObWtYBN92kDz/FixSvQUn3uNT7gteh0EzeuTiUfqvDJDyJyBNiTwNUAnD0uLrKC6TLHRSF7ebbxFTBl7Q==
+"@cityofzion/blockchain-service@0.7.3":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/@cityofzion/blockchain-service/-/blockchain-service-0.7.3.tgz#7338f1fad08ee575b4a161a2191bfd5ecd500077"
+  integrity sha512-/43KKW/88p0IGelVMWqFFZA+zabN1npPGQBCe+UnqH6H8oHZywnmTjKTsc2vtFAKuPF/LSsuqmXsTpq8wQ17Rw==
 
-"@cityofzion/bs-asteroid-sdk@0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/bs-asteroid-sdk/-/bs-asteroid-sdk-0.7.1.tgz#42429ac18d61e4ee7afd0217eaa27950348ac435"
-  integrity sha512-oh7wnIduvtOHTUjIi+9otF+qk8TBo8fkTmNTD4TRcn3Ljj5wZv4m+MHsBUV6w8k1Z/HgsfD2VWPR3V5EyJY9Lw==
+"@cityofzion/bs-asteroid-sdk@0.7.3":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/@cityofzion/bs-asteroid-sdk/-/bs-asteroid-sdk-0.7.3.tgz#8f91a547b1a438c76fe5608909751b0130d03f96"
+  integrity sha512-3JGHGpKC+hq6Gv7civ8l4hqctRZievwkeBgzVJ7P8rz+ZF5772yurt4nj8+3iY9sXS41ztZm73RppXO0yLGw7A==
   dependencies:
     "@moonlight-io/asteroid-sdk-js" "git+https://github.com/Moonlight-io/asteroid-sdk-js"
 
-"@cityofzion/bs-ethereum@0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/bs-ethereum/-/bs-ethereum-0.7.1.tgz#452265d5e748d00cefa260b4bbdaa81f76bf2711"
-  integrity sha512-gr022jZ02GXzN/6QJecmct+kLt/bDxJexuKzoMn8pkFS5ni9zocyFNLg3V+rvEnC/mDTul0E/V/rirhhtXxm1g==
+"@cityofzion/bs-ethereum@0.7.3":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/@cityofzion/bs-ethereum/-/bs-ethereum-0.7.3.tgz#44c05ea31c42221a4c21638db5d3251f5e2889e1"
+  integrity sha512-/BwlZuoYpupIZUzPYTlnvB2qmLnIJ0t8Mw6wGl6SVUU5nJ2UZxgPMsXwSSJ1+NxNveGH1ZnMWMKlPDWbP25/Cw==
   dependencies:
-    "@cityofzion/blockchain-service" "0.7.1"
+    "@cityofzion/blockchain-service" "0.7.3"
     "@ethersproject/bignumber" "5.7.0"
     "@ethersproject/bytes" "5.7.0"
     "@ethersproject/json-wallets" "5.7.0"
@@ -2244,23 +2244,23 @@
     node-fetch "2.6.4"
     query-string "7.1.3"
 
-"@cityofzion/bs-neo-legacy@0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/bs-neo-legacy/-/bs-neo-legacy-0.7.1.tgz#016376d6df1f4db7b3a7018e411761912c42d352"
-  integrity sha512-D7J2F1nVhWgFDt6ADcqzlJvifesa45Fp7lOZ2TeGBVL/eW8AYfabfiHdv+p0U2k0ZEBQ5W47v0hefULBPx34vg==
+"@cityofzion/bs-neo-legacy@0.7.3":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/@cityofzion/bs-neo-legacy/-/bs-neo-legacy-0.7.3.tgz#86171d510b71af11cf21fdf78a197a41c8597c09"
+  integrity sha512-DZDtLQZ1HdqNKmEX5f4qI5EEDvkAsnh6O5bnGC7nsKaRO10cnEYvcI5zuBOT52PvyyImWlfFEYZw7G5hXLAhEQ==
   dependencies:
-    "@cityofzion/blockchain-service" "0.7.1"
-    "@cityofzion/bs-asteroid-sdk" "0.7.1"
+    "@cityofzion/blockchain-service" "0.7.3"
+    "@cityofzion/bs-asteroid-sdk" "0.7.3"
     "@cityofzion/dora-ts" "0.0.11"
     "@cityofzion/neon-js" "4.8.3"
 
-"@cityofzion/bs-neo3@0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/bs-neo3/-/bs-neo3-0.7.1.tgz#ab59e3834f6d069a8064db6d9dde635eac0db873"
-  integrity sha512-QcBZnnbLuMyBsSwd+A++iIcB9a/5hpMPlxHj/KBUkitKAUpl7GR3ocV08LRHxABmZkrlmbCxVvvZbMaVSxpXEQ==
+"@cityofzion/bs-neo3@0.7.3":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/@cityofzion/bs-neo3/-/bs-neo3-0.7.3.tgz#25fc1eb47797b60562205c38b37f39bc29ceacd4"
+  integrity sha512-xlzDQZcNcRiec+bfz4aVkfjMeLevW9XLVtq07PwyU613ua0F5lyLI8kObh6OcMsgamSEdw7QX4f+V3ViQbxeNA==
   dependencies:
-    "@cityofzion/blockchain-service" "0.7.1"
-    "@cityofzion/bs-asteroid-sdk" "0.7.1"
+    "@cityofzion/blockchain-service" "0.7.3"
+    "@cityofzion/bs-asteroid-sdk" "0.7.3"
     "@cityofzion/dora-ts" "0.0.11"
     "@cityofzion/neo3-invoker" "1.6.0"
     "@cityofzion/neo3-parser" "1.6.0"
@@ -2270,10 +2270,10 @@
     "@cityofzion/neon-parser" "1.6.2"
     query-string "7.1.3"
 
-"@cityofzion/bs-react-native-decrypt@0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/bs-react-native-decrypt/-/bs-react-native-decrypt-0.7.1.tgz#20309f7e9a844d1d6857fca76e10b5cdb2c8cc46"
-  integrity sha512-qjeIymlmxkvxi2srmQgtGGscuCVPOKK2mlGNzbdUrxR2pcT75iaaTH7eQl9Ukj2OT4O3jt5CNQzG4Jv1tzZcvA==
+"@cityofzion/bs-react-native-decrypt@0.7.3":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/@cityofzion/bs-react-native-decrypt/-/bs-react-native-decrypt-0.7.3.tgz#5f599dffa0baaa64699d370df215df034dae3c4d"
+  integrity sha512-RQCWbwe4dUk/N1zoUgWN44m6WcPLcoQExPnOSb3EfTHq+ns54KCsKt3g1wHpBMb4rkRHKq8HW808bYFXLtEe0A==
 
 "@cityofzion/dora-ts@0.0.11":
   version "0.0.11"
@@ -4059,9 +4059,9 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@moonlight-io/asteroid-sdk-js@git+https://github.com/Moonlight-io/asteroid-sdk-js":
+"@moonlight-io/asteroid-sdk-js@git+https://github.com/Moonlight-io/asteroid-sdk-js.git":
   version "0.25.0"
-  resolved "git+https://github.com/Moonlight-io/asteroid-sdk-js#7f067dc2f6be0bf77cabc10771c204035770be52"
+  resolved "git+https://github.com/Moonlight-io/asteroid-sdk-js.git#7f067dc2f6be0bf77cabc10771c204035770be52"
   dependencies:
     "@cityofzion/neon-js" "^4.7.1"
     "@types/lodash" "^4.14.157"

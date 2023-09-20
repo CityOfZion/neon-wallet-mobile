@@ -70,7 +70,7 @@ const AccountNFTSScreen = (props: Props) => {
         <LinearLayout my="44px">
           <FlatList
             data={NFTS}
-            renderItem={({ item }) => <NFTItem nft={item} navigation={props.navigation} />}
+            renderItem={({ item }) => <NFTItem nft={item} account={account} />}
             ListFooterComponent={<FlatListFooter hide={!showMoreLoading} />}
             ListEmptyComponent={<FlatListEmpty label={I18n.t('screens.accountNFT.emptyList')} />}
             keyExtractor={({ id }, index) => `${id}-${index}`}

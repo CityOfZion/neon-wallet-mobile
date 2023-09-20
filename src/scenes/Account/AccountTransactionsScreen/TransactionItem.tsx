@@ -1,29 +1,48 @@
-import { TransactionResponse } from '@cityofzion/blockchain-service'
+import { TransactionResponse, hasExplorerService } from '@cityofzion/blockchain-service'
+import { useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import moment from 'moment'
 import React from 'react'
-import { Linking, TouchableWithoutFeedback } from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { TransferItem } from './TransferItem'
 
+import { wrapper } from '~/src/app/ApplicationWrapper'
 import { BoxLabelNumber } from '~/src/components/BoxLabelNumber'
-import { DoraHelper } from '~/src/helpers/DoraHelper'
+import { RootStackParamList } from '~/src/navigation/AppNavigation'
+import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
 import { RootState } from '~/src/store/RootStore'
 import { Account } from '~/src/store/account/Account'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 import { MultiExchange } from '~/src/types/query'
 
 type Props = TransactionResponse & {
-  hideLinkDora?: boolean
+  withExplorer?: boolean
   account: Account
   exchange?: MultiExchange
 }
 
-export const TransactionItem = React.memo((props: Props) => {
-  const selectedNetwork = useSelector(
-    (state: RootState) => state.settings.selectedBlockchainNetworks[props.account.blockchain]
+export const TransactionItem = React.memo(({ withExplorer = true, ...props }: Props) => {
+  const service = useSelector(
+    (state: RootState) => state.blockchain.bsAggregator.blockchainServicesByName[props.account.blockchain]
   )
+  const navigation = useNavigation<StackNavigationProp<WalletStackParamList & RootStackParamList>>()
+
+  const explorerURI = hasExplorerService(service) ? service.explorerService.buildTransactionUrl(props.hash) : undefined
+
+  function handleOnPressButtonExplorer() {
+    if (!explorerURI) return
+
+    navigation.navigate(wrapper.route.Modal.name, {
+      screen: wrapper.route.WebViewModal.name,
+      params: {
+        uri: explorerURI,
+        title: 'Transaction Information',
+      },
+    })
+  }
 
   return (
     <LinearLayout mb="6px">
@@ -75,14 +94,8 @@ export const TransactionItem = React.memo((props: Props) => {
             />
           </LinearLayout>
 
-          {!props.hideLinkDora && (
-            <TouchableWithoutFeedback
-              onPress={() => {
-                Linking.openURL(
-                  DoraHelper.buildTransactionUrl(selectedNetwork.type, props.account.blockchain, props.hash)
-                )
-              }}
-            >
+          {withExplorer && explorerURI && (
+            <TouchableWithoutFeedback onPress={handleOnPressButtonExplorer}>
               <ImageView
                 resizeMode="contain"
                 alignSelf="center"

@@ -1,3 +1,4 @@
+import { hasExplorerService } from '@cityofzion/blockchain-service'
 import { useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
 import React from 'react'
@@ -7,7 +8,6 @@ import { useSelector } from 'react-redux'
 import { TransactionRequestSuccessElementProps } from '../TransactionRequestBase'
 
 import ThemedButton from '~/src/components/themed/ThemedButton'
-import { DoraHelper } from '~/src/helpers/DoraHelper'
 import { RootState } from '~/src/store/RootStore'
 import { selectWalletByID } from '~/src/store/wallet/SelectorWallet'
 import { wrapper } from '~src/app/ApplicationWrapper'
@@ -18,13 +18,14 @@ import { ButtonView, ImageView, LinearLayout, TextView } from '~src/styles/style
 export const InvokeFunctionSuccess = ({ account, transactionId }: TransactionRequestSuccessElementProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const wallet = useSelector(selectWalletByID(account.idWallet))
-  const selectedNetwork = useSelector(
-    (state: RootState) => state.settings.selectedBlockchainNetworks[account.blockchain]
+  const service = useSelector(
+    (state: RootState) => state.blockchain.bsAggregator.blockchainServicesByName[account.blockchain]
   )
+
   const navigation = useNavigation()
 
   const navigateToTransactions = () => {
-    if (!wallet || selectedNetwork.type === 'custom') {
+    if (!wallet || service.network.type === 'custom') {
       return
     }
 
@@ -37,6 +38,10 @@ export const InvokeFunctionSuccess = ({ account, transactionId }: TransactionReq
     navigation.navigate(wrapper.route.GetAccount.name, { account, wallet })
     navigation.navigate(wrapper.route.AccountTransactionsScreen.name, { account })
   }
+
+  const explorerUrl = hasExplorerService(service)
+    ? service.explorerService.buildTransactionUrl(transactionId)
+    : undefined
 
   return (
     <LinearLayout orientation="verti" alignItems="center" width="100%" height="100%">
@@ -108,18 +113,18 @@ export const InvokeFunctionSuccess = ({ account, transactionId }: TransactionReq
         <ThemedButton
           onPress={navigateToTransactions}
           label={i18n.t('modals.transactionSent.viewTransaction')}
-          disabled={!wallet || selectedNetwork.type === 'custom'}
+          disabled={!wallet || service.network.type === 'custom'}
         />
       </LinearLayout>
 
-      <LinearLayout width="100%" mt="10px">
-        <ThemedButton
-          onPress={() =>
-            Linking.openURL(DoraHelper.buildTransactionUrl(selectedNetwork.type, account.blockchain, transactionId))
-          }
-          label={i18n.t('modals.transactionSent.viewOnDora')}
-        />
-      </LinearLayout>
+      {explorerUrl && (
+        <LinearLayout width="100%" mt="10px">
+          <ThemedButton
+            onPress={() => Linking.openURL(explorerUrl)}
+            label={i18n.t('modals.transactionSent.viewOnDora')}
+          />
+        </LinearLayout>
+      )}
     </LinearLayout>
   )
 }

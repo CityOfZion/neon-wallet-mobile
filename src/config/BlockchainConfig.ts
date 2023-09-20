@@ -66,7 +66,7 @@ export class BlockchainConfig {
   readonly availableNetworks: TAvailableBlockchainNetworks = {
     neo3: ['mainnet', 'testnet', 'custom'],
     neoLegacy: ['mainnet', 'testnet'],
-    ethereum: ['mainnet', 'testnet', 'custom'],
+    ethereum: ['mainnet', 'testnet'],
   }
 
   readonly mandatorySymbols: Record<TBlockchainServiceKey, string[]> = {

@@ -14,6 +14,7 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { applicationConfig } from '~/src/config/ApplicationConfig'
 import { GenericWalletURLHelper } from '~/src/helpers/GenericWalletURLHelper'
 import { UriHelper } from '~/src/helpers/UriHelper'
+import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
@@ -104,7 +105,11 @@ const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
       return
     }
 
-    if (bsAggregator.validateEncryptedAllBlockchains(data) || bsAggregator.validateKeyAllBlockchains(data)) {
+    if (
+      UtilsHelper.isValidMnemonic(data) ||
+      bsAggregator.validateEncryptedAllBlockchains(data) ||
+      bsAggregator.validateKeyAllBlockchains(data)
+    ) {
       navigation.navigate(wrapper.route.Tab.name, {
         screen: wrapper.route.More.name,
         params: {

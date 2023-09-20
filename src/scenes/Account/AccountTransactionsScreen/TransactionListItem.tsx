@@ -7,7 +7,7 @@ import { View, Image, FlatList } from 'react-native'
 import { TransactionItem } from './TransactionItem'
 
 import { Account } from '~/src/store/account/Account'
-import { LinearLayout, TextView } from '~/src/styles/styled-components'
+import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 import { MultiExchange } from '~/src/types/query'
 
 interface Props {
@@ -22,25 +22,26 @@ export const TransactionListItem = React.memo(
   ({ account, completedTransactions, pendingTransactions, date, exchange }: Props) => {
     return (
       <LinearLayout mb="10px">
-        <TextView mb="20px" color="text.0" fontFamily="semibold" fontSize="30px">
+        <TextView color="text.0" fontFamily="semibold" fontSize="30px">
           {moment(date).format(i18n.t('formatters.transactionsPerDate'))}
         </TextView>
 
         {pendingTransactions && pendingTransactions.length > 0 && (
           <>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Image
-                style={{ marginRight: 5, width: 18, height: 18 }}
+            <LinearLayout flexDirection="row" alignItems="center" mt="20px">
+              <ImageView
+                mr="6px"
+                style={{ width: 18, height: 18 }}
                 source={require('src/assets/images/icon-pending-white.png')}
               />
               <TextView color="text.6">{i18n.t('screens.accountTransaction.pendingTransactions')}</TextView>
-            </View>
+            </LinearLayout>
             <FlatList
               data={pendingTransactions}
               listKey={`pendingTransaction-${date}`}
               keyExtractor={item => item.hash}
               renderItem={({ item }) => (
-                <TransactionItem exchange={exchange} account={account} hideLinkDora {...item} />
+                <TransactionItem exchange={exchange} account={account} withExplorer={false} {...item} />
               )}
             />
           </>
@@ -48,13 +49,14 @@ export const TransactionListItem = React.memo(
 
         {completedTransactions && completedTransactions.length > 0 && (
           <>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Image
-                style={{ marginRight: 5, width: 18, height: 18 }}
+            <LinearLayout flexDirection="row" alignItems="center" mt="20px">
+              <ImageView
+                mr="6px"
+                style={{ width: 18, height: 18 }}
                 source={require('src/assets/images/icon-check-white.png')}
               />
               <TextView color="text.6">{i18n.t('screens.accountTransaction.completedTransactions')}</TextView>
-            </View>
+            </LinearLayout>
             <FlatList
               data={completedTransactions}
               listKey={`completedTransaction-${date}`}

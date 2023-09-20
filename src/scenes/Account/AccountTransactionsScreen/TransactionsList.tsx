@@ -2,7 +2,7 @@ import { TransactionResponse } from '@cityofzion/blockchain-service'
 import I18n from 'i18n-js'
 import moment from 'moment'
 import React, { useMemo, useRef } from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, RefreshControl } from 'react-native'
 
 import { TransactionListItem } from './TransactionListItem'
 
@@ -15,7 +15,9 @@ import { MultiExchange } from '~/src/types/query'
 interface TransactionsListDateProps {
   transactions: TransactionResponse[]
   account: Account
-  onEndReached(): Promise<void>
+  onEndReached(): Promise<void> | void
+  refetch(): Promise<any>
+  isRefetching: boolean
   showMoreLoading: boolean
   exchange?: MultiExchange
 }
@@ -44,6 +46,8 @@ export const TransactionsList = ({
   onEndReached,
   showMoreLoading,
   exchange,
+  isRefetching,
+  refetch,
 }: TransactionsListDateProps) => {
   const completedTransactionsPerDate = useMemo(() => separateTransactionsPerDate(transactions), [transactions])
   const pendingTransactionsPerDate = useMemo(() => separateTransactionsPerDate(account.pendingTransactions), [account])
@@ -79,6 +83,7 @@ export const TransactionsList = ({
         onEndReached={handleEndReached}
         onMomentumScrollBegin={handleMomentumScrollBegin}
         onEndReachedThreshold={0.5}
+        refreshControl={<RefreshControl tintColor="#fff" refreshing={isRefetching} onRefresh={refetch} />}
         keyExtractor={item => item}
         renderItem={({ item: date }) => (
           <TransactionListItem

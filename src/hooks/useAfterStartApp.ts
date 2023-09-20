@@ -35,6 +35,7 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
     dispatch(contactReducerActions.migrateContactsFromStorage())
     dispatch(settingsReducerActions.migrateSettingsStorage())
     dispatch(blockchainReducerActions.setInitialBSAggregator())
+    dispatch(accountReducerActions.removeAllPendingTransactions())
   }, [])
 
   const watchNetwork = useCallback(() => {
@@ -91,7 +92,7 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
       })
     }
 
-    const claimGasEndCallback = () => {
+    const pendingClaimConfirmedCallback = () => {
       showMessage({
         message: i18n.t('toast.gasClaimSuccess'),
         type: 'success',
@@ -99,13 +100,24 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
       })
     }
 
+    const pendingTransactionFailedCallback = () => {
+      showMessage({
+        message: i18n.t('toast.transactionFailed'),
+        type: 'danger',
+        duration: 2000,
+      })
+    }
+
     appBus.on('pendingTransactionConfirmed', pendingTransactionConfirmedCallback)
 
-    appBus.on('claimGasEnd', claimGasEndCallback)
+    appBus.on('pendingClaimConfirmed', pendingClaimConfirmedCallback)
+
+    appBus.on('pendingTransactionFailed', pendingTransactionFailedCallback)
 
     return () => {
       appBus.off('pendingTransactionConfirmed', pendingTransactionConfirmedCallback)
-      appBus.off('claimGasEnd', claimGasEndCallback)
+      appBus.off('pendingClaimConfirmed', pendingClaimConfirmedCallback)
+      appBus.off('pendingTransactionFailed', pendingTransactionFailedCallback)
     }
   }, [])
 

@@ -48,7 +48,7 @@ export function useBalances(
   const generateQuery = useCallback(
     (param: UseBalancesParams): UseQueryOptions<Balance, unknown, Balance, QueryKey> => {
       return {
-        queryKey: ['balance', param.address ?? ''],
+        queryKey: ['balance', param.blockchain, param.address],
         queryFn: () => fetchBalance(param.address ?? '', param.blockchain),
         ...queryOptions,
       }
