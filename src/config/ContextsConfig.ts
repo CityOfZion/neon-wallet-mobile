@@ -28,8 +28,19 @@ export class ContextsConfig {
       'getWalletInfo',
       'traverseIterator',
       'getNetworkVersion',
+      'encrypt',
+      'decrypt',
+      'decryptFromArray',
     ],
-    autoAcceptMethods: ['testInvoke', 'getWalletInfo', 'traverseIterator', 'getNetworkVersion'],
+    autoAcceptMethods: [
+      'testInvoke',
+      'getWalletInfo',
+      'traverseIterator',
+      'getNetworkVersion',
+      'encrypt',
+      'decrypt',
+      'decryptFromArray',
+    ],
     adapter: new WalletConnectNeonAdapter(),
   }
 

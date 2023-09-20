@@ -32,7 +32,7 @@
     "@cityofzion/bs-neo3": "0.7.1",
     "@cityofzion/bs-react-native-decrypt": "0.7.1",
     "@cityofzion/neon-dappkit": "^0.0.2",
-    "@cityofzion/wallet-connect-sdk-wallet-react": "2.5.2",
+    "@cityofzion/wallet-connect-sdk-wallet-react": "2.6.2",
     "@ethersproject/shims": "^5.7.0",
     "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-community/clipboard": "^1.2.2",
