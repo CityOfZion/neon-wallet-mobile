@@ -11,7 +11,7 @@ import { wrapper } from '~src/app/ApplicationWrapper'
 import { Normalize } from '~src/app/Normalize'
 import { ImageView, LinearLayout, TextView } from '~src/styles/styled-components'
 
-export const EncryptFailed = ({ errorMessage }: TransactionRequestFailedElementProps) => {
+export const DecryptFromArrayFailed = ({ errorMessage }: TransactionRequestFailedElementProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const navigation = useNavigation()
 
@@ -43,7 +43,7 @@ export const EncryptFailed = ({ errorMessage }: TransactionRequestFailedElementP
               textAlign="center"
               mb={15}
             >
-              {i18n.t('modals.encrypt.encryptFailed')}
+              {i18n.t('modals.decrypt.decryptFailed')}
             </TextView>
 
             <TextView

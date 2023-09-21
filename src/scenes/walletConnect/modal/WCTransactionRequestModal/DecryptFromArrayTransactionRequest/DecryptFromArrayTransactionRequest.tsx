@@ -2,31 +2,36 @@ import i18n from 'i18n-js'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
+import { DecryptPayload, TDecryptPayload } from '../../../components/DecryptPayload'
 import { TransactionRequestBase } from '../TransactionRequestBase'
 import { TransactionRequestMethodComponentProps } from '../WCTransactionRequestModal'
-import { EncryptFailed } from './EncryptFailed'
-import { EncryptSuccess } from './EncryptSuccess'
+import { DecryptFromArrayFailed } from './DecryptFromArrayFailed'
+import { DecryptFromArraySuccess } from './DecryptFromSuccess'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { RootState } from '~/src/store/RootStore'
 import { LinearLayout, TextView } from '~/src/styles/styled-components'
 
-export const EncryptTransactionRequest = ({ request, session, account }: TransactionRequestMethodComponentProps) => {
-  const message = request.params.request.params[0] as string
+export const DecryptFromArrayTransactionRequest = ({
+  request,
+  session,
+  account,
+}: TransactionRequestMethodComponentProps) => {
+  const payloads = request.params.request.params[0] as TDecryptPayload[]
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   return (
     <TransactionRequestBase
-      acceptButtonLabel={i18n.t('modals.encrypt.button.accept')}
+      acceptButtonLabel={i18n.t('modals.decrypt.button.accept')}
       rejectButtonLabel={i18n.t('modals.transactionRequest.buttom.decline')}
-      title={i18n.t('modals.encrypt.title', {
+      title={i18n.t('modals.decrypt.title', {
         dAppName: session.peer.metadata.name,
       })}
       hideDappName
       request={request}
       session={session}
       account={account}
-      successElement={EncryptSuccess}
-      failedElement={EncryptFailed}
+      successElement={DecryptFromArraySuccess}
+      failedElement={DecryptFromArrayFailed}
     >
       <LinearLayout orientation="verti" alignItems="center">
         <TextView
@@ -38,24 +43,11 @@ export const EncryptTransactionRequest = ({ request, session, account }: Transac
           mb={4}
           borderRadius={5}
         >
-          {i18n.t('modals.encrypt.labelMessage')}
+          {i18n.t('modals.decrypt.labelMessage')}
         </TextView>
-        <TextView
-          color={theme.colors.text[0]}
-          fontSize={16}
-          fontWeight={300}
-          lineHeight="20px"
-          fontFamily="light"
-          width="90%"
-          minHeight="73px"
-          bg={theme.colors.background[7]}
-          px={5}
-          py={2}
-          mb="auto"
-          borderRadius={5}
-        >
-          {message}
-        </TextView>
+        {payloads.map(payload => (
+          <DecryptPayload {...payload} />
+        ))}
       </LinearLayout>
     </TransactionRequestBase>
   )

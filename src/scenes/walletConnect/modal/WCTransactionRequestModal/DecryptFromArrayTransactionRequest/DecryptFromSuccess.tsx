@@ -9,7 +9,7 @@ import ThemedButton from '~/src/components/themed/ThemedButton'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
-export const EncryptSuccess = () => {
+export const DecryptFromArraySuccess = () => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const navigation = useNavigation()
 
@@ -40,7 +40,7 @@ export const EncryptSuccess = () => {
             textAlign="center"
             mb={15}
           >
-            {i18n.t('modals.encrypt.encryptSuccess')}
+            {i18n.t('modals.decrypt.decryptSuccess')}
           </TextView>
         </LinearLayout>
         <ThemedButton label="Done" onPress={handleOnPress} />

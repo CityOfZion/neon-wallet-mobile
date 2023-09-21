@@ -6,6 +6,8 @@ import React, { useEffect, useMemo } from 'react'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
+import { DecryptFromArrayTransactionRequest } from './DecryptFromArrayTransactionRequest/DecryptFromArrayTransactionRequest'
+import { DecryptTransactionRequest } from './DecryptTransactionRequest/DecryptTransactionRequest'
 import { EncryptTransactionRequest } from './EncryptTransactionRequest/EncryptTransactionRequest'
 import { InvokeFunctionTransactionRequest } from './InvokeFunctionTransactionRequest/InvokeFunctionTransactionRequest'
 import { SignMessageTransactionRequest } from './SignMessageTransactionRequest/SignMessageTransactionRequest'
@@ -40,6 +42,8 @@ const componentsByMethod: Record<string, React.FC<TransactionRequestMethodCompon
   signMessage: SignMessageTransactionRequest,
   verifyMessage: VerifyMessageTransactionRequest,
   encrypt: EncryptTransactionRequest,
+  decrypt: DecryptTransactionRequest,
+  decryptFromArray: DecryptFromArrayTransactionRequest,
 }
 
 const WCTransactionRequestModal = ({ navigation, route }: Props) => {
