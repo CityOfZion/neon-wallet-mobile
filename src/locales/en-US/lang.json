@@ -741,6 +741,24 @@
       "signMessageSucess": "Message Successfully Signed",
       "signMessageFailed": "Message Signing Failed"
     },
+    "encrypt": {
+      "button": {
+        "accept": "Encrypt Message"
+      },
+      "title": "%{dAppName} asks for authentication",
+      "labelMessage": "message",
+      "encryptSuccess": "Message Successfully Encrypted",
+      "encryptFailed": "Message Encryption Failed"
+    },
+    "decrypt": {
+      "button": {
+        "accept": "Decrypt Message"
+      },
+      "title": "%{dAppName} asks for authentication",
+      "labelMessage": "message",
+      "decryptSuccess": "Message Successfully Decrypted",
+      "decryptFailed": "Message Decryption Failed"
+    },
     "connectDApp": {
       "title": "Connect a dApp",
       "subtitle": "All transactions requested by a connected Dapp will be presented for signing before being broadcast to the blockchain. No action from the Dapp will happen without your direct approval.",
