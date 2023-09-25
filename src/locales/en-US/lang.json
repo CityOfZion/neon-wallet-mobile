@@ -966,6 +966,7 @@
     "gasClaimSuccess": "GAS claim successful!",
     "gasClaimGapError": "You must wait at least 5 minutes for next claim",
     "transactionCompleted": "Transaction completed!",
+    "transactionFailed": "We couldn't check the transaction in the blockchain.",
     "transactionError": "Transaction incompleted! Please, try again.",
     "copiedToClipboard": "Copied to clipboard",
     "transactionWarning": "Transaction is pending"

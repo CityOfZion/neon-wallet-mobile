@@ -42,7 +42,7 @@ type InputType = 'address' | 'key' | 'encryptedKey' | 'mnemonic'
 
 type FunctionsByInputType = {
   validation(value: string): boolean
-  handle(value: string): void | Promise<void>
+  handle(value: string): boolean | Promise<boolean>
   persist(value: string, addressSelected: AddressInfo[]): void | Promise<void>
 }
 
@@ -91,7 +91,7 @@ const ImportKey = (props: ImportKeyProps) => {
           message: i18n.t('blockchainServices.errorMessages.blockchainNotFound'),
           type: 'danger',
         })
-        return
+        return false
       }
 
       if (addressAlreadyExist(address)) {
@@ -100,16 +100,16 @@ const ImportKey = (props: ImportKeyProps) => {
             account: address,
           }),
         })
-        return
+        return false
       }
 
-      setInputIsValid(true)
+      return true
     },
     [addressAlreadyExist, bsAggregator]
   )
 
   const handleChangeWhenEncrypted = useCallback(() => {
-    setInputIsValid(true)
+    return true
   }, [])
 
   const handleChangeWhenMnemonic = useCallback(async (mnemonic: string) => {
@@ -120,12 +120,12 @@ const ImportKey = (props: ImportKeyProps) => {
           message: i18n.t('importKey.mnemonicAlreadyExists'),
           type: 'danger',
         })
-        setInputIsValid(false)
-        return
+
+        return false
       }
     }
 
-    setInputIsValid(true)
+    return true
   }, [])
 
   const handleChangeWhenKey = useCallback(
@@ -148,7 +148,8 @@ const ImportKey = (props: ImportKeyProps) => {
 
       setAddressesFound(addresses)
       setAddressesSelected(addresses)
-      setInputIsValid(addresses.length > 0)
+
+      return addresses.length > 0
     },
     [addressAlreadyExist, bsAggregator]
   )
@@ -263,7 +264,6 @@ const ImportKey = (props: ImportKeyProps) => {
   const handleChangeInput = useCallback(
     async (text: string) => {
       setAddressesFound([])
-      setInputIsValid(false)
 
       const textWithOutAccents = UtilsHelper.removeAccents(text)
       const isMnemonic = UtilsHelper.isMnemonic(text)
@@ -276,12 +276,15 @@ const ImportKey = (props: ImportKeyProps) => {
         return isValid
       })
 
-      console.log(functionsByInputType)
+      if (!functionsByInputType) {
+        setInputIsValid(false)
+        return
+      }
 
-      if (!functionsByInputType) return
       const [key, functions] = functionsByInputType
 
-      await functions.handle(textValue)
+      const inputIsValid = await functions.handle(textValue)
+      setInputIsValid(inputIsValid)
 
       inputType.current = key as InputType
     },

@@ -8,7 +8,6 @@ import { Param } from '../modal/WCInvocationDetailsModal'
 import WalletConnectBox from './WalletConnectBox'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
-import { DoraHelper } from '~/src/helpers/DoraHelper'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
@@ -16,6 +15,71 @@ import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-component
 export type Props = {
   data: Param
   count: number
+}
+
+type ColorsByType = { color: string; textColor: 'dark' | 'light' }
+
+const colorsByType: Record<string, ColorsByType> = {
+  Signature: {
+    color: '#E9265C',
+    textColor: 'dark',
+  },
+  Boolean: {
+    color: '#D355E7',
+    textColor: 'dark',
+  },
+  Integer: {
+    color: '#B167F2',
+    textColor: 'dark',
+  },
+  Hash160: {
+    color: '#008529',
+    textColor: 'light',
+  },
+  Null: {
+    color: 'rgba(255, 255, 255, 0.08)',
+    textColor: 'dark',
+  },
+  Hash256: {
+    color: '#1DB5FF',
+    textColor: 'dark',
+  },
+  ByteArray: {
+    color: '#0DCDFF',
+    textColor: 'dark',
+  },
+  PublicKey: {
+    color: '#00D69D',
+    textColor: 'dark',
+  },
+  String: {
+    color: '#67DD8B',
+    textColor: 'dark',
+  },
+  ByteString: {
+    color: '#67DD8B',
+    textColor: 'dark',
+  },
+  Array: {
+    color: '#F28F00',
+    textColor: 'dark',
+  },
+  Buffer: {
+    color: '#F28F00',
+    textColor: 'dark',
+  },
+  InteropInterface: {
+    color: '#A50000',
+    textColor: 'light',
+  },
+  Void: {
+    color: '#528D93',
+    textColor: 'dark',
+  },
+  Any: {
+    color: '#00D69D',
+    textColor: 'dark',
+  },
 }
 
 const CopyButton = ({ onPress, disabled }: { onPress?: () => void; disabled: boolean }) => {
@@ -37,7 +101,7 @@ const CopyButton = ({ onPress, disabled }: { onPress?: () => void; disabled: boo
 const InvocationDetailsParametersBox = ({ data, count }: Props) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
 
-  const typeColor = data.type ? DoraHelper.parametersColors[data.type] : null
+  const typeColor = data.type ? colorsByType[data.type] : null
   const value = !data.value ? null : typeof data.value === 'string' ? data.value : JSON.stringify(data.value)
 
   const handleRightButtonPress = (text: string) => {

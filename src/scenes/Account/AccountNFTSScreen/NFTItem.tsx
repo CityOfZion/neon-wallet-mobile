@@ -1,4 +1,5 @@
-import { NftResponse } from '@cityofzion/blockchain-service'
+import { NftResponse, hasExplorerService } from '@cityofzion/blockchain-service'
+import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React from 'react'
 import { Dimensions, TouchableWithoutFeedback } from 'react-native'
@@ -10,25 +11,37 @@ import { useImageError } from '~/src/hooks/useImageError'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { WalletStackParamList } from '~/src/navigation/WalletsStackNavigation'
 import { RootState } from '~/src/store/RootStore'
+import { Account } from '~/src/store/account/Account'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
 
 type Props = {
   nft: NftResponse
-  navigation: StackNavigationProp<WalletStackParamList & RootStackParamList>
+  account: Account
 }
 
-export const NFTItem = React.memo(({ nft, navigation }: Props) => {
+export const NFTItem = React.memo(({ nft, account }: Props) => {
+  const service = useSelector(
+    (state: RootState) => state.blockchain.bsAggregator.blockchainServicesByName[account.blockchain]
+  )
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
+  const navigation = useNavigation<StackNavigationProp<WalletStackParamList & RootStackParamList>>()
   const { imageSource, handleError, isDefault } = useImageError({
     source: { uri: nft.image },
     defaultSource: require('~/src/assets/images/diamond-green.png'),
   })
-  function handleOnPressButtonDora() {
+
+  const explorerURI = hasExplorerService(service)
+    ? service.explorerService.buildNftUrl({ contractHash: nft.contractHash, tokenId: nft.id })
+    : undefined
+
+  function handleOnPressButtonExplorer() {
+    if (!explorerURI) return
+
     navigation.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.WebViewModal.name,
       params: {
-        uri: `https://dora.coz.io/nft/neo3/mainnet/${nft.contractHash}/${nft.id}`,
-        title: 'Dora | NFT Information',
+        uri: explorerURI,
+        title: 'NFT Information',
       },
     })
   }
@@ -122,17 +135,19 @@ export const NFTItem = React.memo(({ nft, navigation }: Props) => {
         </TextView>
       </LinearLayout>
 
-      <TouchableWithoutFeedback onPress={handleOnPressButtonDora}>
-        <ImageView
-          resizeMode="contain"
-          alignSelf="center"
-          source={require('~src/assets/images/dora-link.png')}
-          style={{
-            width: 28,
-            height: 28,
-          }}
-        />
-      </TouchableWithoutFeedback>
+      {explorerURI && (
+        <TouchableWithoutFeedback onPress={handleOnPressButtonExplorer}>
+          <ImageView
+            resizeMode="contain"
+            alignSelf="center"
+            source={require('~src/assets/images/dora-link.png')}
+            style={{
+              width: 28,
+              height: 28,
+            }}
+          />
+        </TouchableWithoutFeedback>
+      )}
     </LinearLayout>
   )
 })

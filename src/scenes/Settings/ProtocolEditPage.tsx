@@ -3,6 +3,7 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import i18n from 'i18n-js'
 import React from 'react'
+import { useQueryClient } from 'react-query'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
@@ -39,9 +40,16 @@ export const ProtocolEditPage = (props: Props) => {
   const selectedNetwork = useSelector((state: RootState) => state.settings.selectedBlockchainNetworks[blockchain])
   const dispatch = useDispatch()
   const { sessions, disconnect } = useWalletConnectWallet()
+  const queryClient = useQueryClient()
 
   const handleClick = (value: TBlockchainNetwork) => {
-    Promise.allSettled(sessions.map(session => disconnect(session)))
+    const promises = [
+      queryClient.removeQueries(['transactions', blockchain]),
+      queryClient.removeQueries(['balance', blockchain]),
+      queryClient.removeQueries(['exchange']),
+      ...sessions.map(session => disconnect(session)),
+    ]
+    Promise.allSettled(promises)
 
     dispatch(
       settingsReducerActions.setSelectNetwork({

@@ -1,10 +1,7 @@
-import { TransactionResponse } from '@cityofzion/blockchain-service'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import { Await, AwaitActivity } from '@simpli/react-native-await'
-import i18n from 'i18n-js'
-import React, { useCallback, useState, useEffect, useRef } from 'react'
-import { showMessage } from 'react-native-flash-message'
+import React, { useMemo, useRef } from 'react'
+import { useInfiniteQuery } from 'react-query'
 import { useSelector } from 'react-redux'
 
 import { TransactionsList } from './TransactionsList'
@@ -34,57 +31,48 @@ const AccountTransactionsScreen = (props: Props) => {
   )
   const { data: exchange } = useExchange()
 
-  const [transactions, setTransactions] = useState<TransactionResponse[]>([])
-  const [showMoreLoading, setShowMoreLoading] = useState(true)
-
   const pageControl = useRef<number>(1)
 
-  const handleEndReached = async () => {
-    loadCompletedTransactions()
-  }
-
-  const loadCompletedTransactions = useCallback(async () => {
-    if (!showMoreLoading) return
-
-    try {
-      const { transactions, totalCount, limit } =
-        await blockchainService.blockchainDataService.getTransactionsByAddress({
-          address: account.address,
-          page: pageControl.current,
-        })
-
-      setTransactions(prevState => [...transactions, ...prevState])
-      pageControl.current += 1
-      const totalPages = Math.ceil(totalCount / limit)
-
-      setShowMoreLoading(pageControl.current < totalPages)
-    } catch {
-      showMessage({
-        message: i18n.t('screens.accountTransaction.errorToGetTransactions'),
-        type: 'danger',
+  const { isFetchingNextPage, isFetching, fetchNextPage, isLoading, data, isRefetching, refetch } = useInfiniteQuery({
+    queryKey: ['transactions', account.blockchain, account.address],
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await blockchainService.blockchainDataService.getTransactionsByAddress({
+        address: account.address,
+        page: pageParam,
       })
-      setShowMoreLoading(false)
-    }
-  }, [account, blockchainService])
+      return { pageParam, ...response }
+    },
+    getNextPageParam: lastPage => {
+      const nextPage = lastPage.pageParam + 1
+      const totalPages = Math.ceil(lastPage.totalCount / lastPage.limit)
 
-  useEffect(() => {
-    Await.run('populateTransactions', async () => {
-      await loadCompletedTransactions()
-    })
-  }, [])
+      return pageControl.current < totalPages ? nextPage : undefined
+    },
+  })
+
+  const transactions = useMemo(() => data?.pages.flatMap(page => page.transactions), [data])
+
+  const handleEndReached = () => {
+    if (isFetching) return
+    fetchNextPage()
+  }
 
   return (
     <ScreenLayout withoutScrollView>
       <AccountSubTitle account={account} />
-      <AwaitActivity name="populateTransactions" loadingView={<ScreenLoader />}>
+      {isLoading ? (
+        <ScreenLoader transparent />
+      ) : (
         <TransactionsList
           account={account}
           exchange={exchange}
-          transactions={transactions}
+          transactions={transactions ?? []}
           onEndReached={handleEndReached}
-          showMoreLoading={showMoreLoading}
+          showMoreLoading={isFetchingNextPage}
+          isRefetching={isRefetching}
+          refetch={refetch}
         />
-      </AwaitActivity>
+      )}
     </ScreenLayout>
   )
 }

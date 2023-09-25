@@ -23,7 +23,7 @@ export type Balance = {
 export type UseExchangeResult = BaseResult & { data: MultiExchange | undefined }
 
 export type UseBalancesParams = {
-  address: string | null
+  address: string
   blockchain: TBlockchainServiceKey
 }
 export type UseUniqueBalancesResult = BaseResult & { data: Balance | undefined; type: 'unique' }

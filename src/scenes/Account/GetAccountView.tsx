@@ -343,7 +343,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
   }
 
   useEffect(() => {
-    appBus.on('claimGasEnd', async () => {
+    appBus.on('pendingClaimConfirmed', async () => {
       await populateUnclaimed()
       Await.done(`ClaimGas@${account.address}`)
     })
@@ -351,7 +351,7 @@ const GetAccountView = (props: GetAccountViewProps) => {
     populateUnclaimed()
 
     return () => {
-      appBus.off('claimGasEnd', () => {
+      appBus.off('pendingClaimConfirmed', () => {
         Await.done(`ClaimGas@${account.address}`)
       })
     }
