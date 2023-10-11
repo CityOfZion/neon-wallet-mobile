@@ -37,11 +37,4 @@ export class WalletConnectNeonAdapter extends AbstractWalletConnectNeonAdapter {
 
     return bsAggregator.getBlockchainByName(blockchain).network.url
   }
-
-  async calculateFee(params: TAdapterMethodParam) {
-    const { invoker } = await this.getServices(params)
-    const { total } = await invoker.calculateFee(params.request.params.request.params)
-
-    return total
-  }
 }

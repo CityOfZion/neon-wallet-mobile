@@ -1,5 +1,5 @@
-import { Signer } from '@cityofzion/neo3-invoker'
 import { tx } from '@cityofzion/neon-core'
+import { Signer } from '@cityofzion/neon-dappkit-types'
 import { TSession } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'

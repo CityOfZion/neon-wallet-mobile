@@ -1,5 +1,5 @@
 import { ContractResponse } from '@cityofzion/blockchain-service'
-import { ContractInvocation } from '@cityofzion/neo3-invoker'
+import { ContractInvocation } from '@cityofzion/neon-dappkit-types'
 import { TSession } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'

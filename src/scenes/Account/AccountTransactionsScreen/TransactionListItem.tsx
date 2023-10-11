@@ -2,7 +2,7 @@ import { TransactionResponse } from '@cityofzion/blockchain-service'
 import i18n from 'i18n-js'
 import moment from 'moment'
 import React from 'react'
-import { View, Image, FlatList } from 'react-native'
+import { FlatList } from 'react-native'
 
 import { TransactionItem } from './TransactionItem'
 
