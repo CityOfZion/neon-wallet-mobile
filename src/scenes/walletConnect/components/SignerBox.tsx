@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux'
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { RootState } from '~/src/store/RootStore'
 import { ImageView, LinearLayout, TextView } from '~/src/styles/styled-components'
+import { WalletConnectHelper } from '~src/helpers/WalletConnectHelper'
 
 type SignerBoxProps = {
   signer: Signer
@@ -19,6 +20,8 @@ type SignerBoxProps = {
 export const SignerBox = ({ signer, showWarning, session }: SignerBoxProps) => {
   const theme = useSelector((state: RootState) => wrapper.theme[state.settings.theme])
   const navigation = useNavigation()
+
+  const resolveScope = WalletConnectHelper.resolveScope(signer.scopes)
 
   return (
     <TouchableWithoutFeedback
@@ -59,7 +62,7 @@ export const SignerBox = ({ signer, showWarning, session }: SignerBoxProps) => {
             fontSize={12}
             fontFamily="bold"
           >
-            {i18n.t(`modals.signatureScope.${signer.scopes}.scope`)}
+            {i18n.t(`modals.signatureScope.${resolveScope}.scope`)}
           </TextView>
           <ImageView
             alignSelf="center"

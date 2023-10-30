@@ -1,6 +1,7 @@
 import { TSession, TSessionRequest, useWalletConnectWallet } from '@cityofzion/wallet-connect-sdk-wallet-react'
 import { useNavigation } from '@react-navigation/native'
 import i18n from 'i18n-js'
+import { isString } from 'lodash'
 import React, { useRef, useState } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 
@@ -97,8 +98,8 @@ export const TransactionRequestBase = ({
         throw new Error(i18n.t('modals.WCTransactionRequestModal.unexpectedError'))
       }
 
-      const { result: transactionId } = response
-
+      const { result } = response
+      const transactionId = isString(result) ? result : ''
       if (onAccept) {
         onAccept(transactionId)
       }

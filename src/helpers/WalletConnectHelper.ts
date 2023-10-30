@@ -1,8 +1,17 @@
 import { NetworkType } from '@cityofzion/blockchain-service'
-import { u } from '@cityofzion/neon-core'
+import { u, tx } from '@cityofzion/neon-core'
 import { TSession, TSessionProposal, Chain, Blockchain } from '@cityofzion/wallet-connect-sdk-wallet-react'
 
 import { TBlockchainServiceKey } from '../types/blockchain'
+
+const scopeListByName: Record<string, tx.WitnessScope> = {
+  None: tx.WitnessScope.None,
+  CalledByEntry: tx.WitnessScope.CalledByEntry,
+  CustomContracts: tx.WitnessScope.CustomContracts,
+  CustomGroups: tx.WitnessScope.CustomGroups,
+  WitnessRules: tx.WitnessScope.WitnessRules,
+  Global: tx.WitnessScope.Global,
+}
 
 type AccountInformation = {
   namespace: string
@@ -89,5 +98,12 @@ export abstract class WalletConnectHelper {
       blockchain: blockchain[0],
       network: network[0],
     }
+  }
+
+  static resolveScope(scope: string | number) {
+    const isString = isNaN(Number(scope))
+    const queryScope = isString ? scopeListByName[scope] ?? null : scope
+    if (!queryScope) throw Error('unsupported scope')
+    return queryScope
   }
 }
