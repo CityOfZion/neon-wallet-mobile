@@ -11,6 +11,7 @@ import { DecryptTransactionRequest } from './DecryptTransactionRequest/DecryptTr
 import { EncryptTransactionRequest } from './EncryptTransactionRequest/EncryptTransactionRequest'
 import { InvokeFunctionTransactionRequest } from './InvokeFunctionTransactionRequest/InvokeFunctionTransactionRequest'
 import { SignMessageTransactionRequest } from './SignMessageTransactionRequest/SignMessageTransactionRequest'
+import { SignTransactionRequest } from './SignTransactionRequest/SignTransactionRequest'
 import { VerifyMessageTransactionRequest } from './VerifyMessageTransactionRequest/VerifyMessageTransactionRequest'
 
 import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
@@ -44,6 +45,7 @@ const componentsByMethod: Record<string, React.FC<TransactionRequestMethodCompon
   encrypt: EncryptTransactionRequest,
   decrypt: DecryptTransactionRequest,
   decryptFromArray: DecryptFromArrayTransactionRequest,
+  signTransaction: SignTransactionRequest,
 }
 
 const WCTransactionRequestModal = ({ navigation, route }: Props) => {
