@@ -15,19 +15,19 @@ export class BalanceHelper {
     const tokensBalances = this.getTokensBalance(balances)
 
     return tokensBalances.reduce((prev, actual) => {
-      const ratio = this.getExchangeRatio(actual.token.symbol, actual.blockchain, multiExchange)
+      const ratio = this.getExchangeRatio(actual.token.hash, actual.blockchain, multiExchange)
 
       return prev + actual.amountNumber * ratio
     }, 0)
   }
 
-  static getExchangeRatio(symbol: string, blockchain: TBlockchainServiceKey, multiExchange?: MultiExchange): number {
+  static getExchangeRatio(hash: string, blockchain: TBlockchainServiceKey, multiExchange?: MultiExchange): number {
     if (!multiExchange) return 0
 
     const blockchainExchange = multiExchange[blockchain]
     if (!blockchainExchange) return 0
 
-    const exchange = blockchainExchange.find(exchange => exchange.symbol === symbol)
+    const exchange = blockchainExchange.find(exchange => exchange.hash === hash)
 
     return exchange?.price ?? 0
   }
@@ -38,7 +38,7 @@ export class BalanceHelper {
   ): BalanceConvertedToExchange | undefined {
     if (!balance || !multiExchange) return
 
-    const ratio = this.getExchangeRatio(balance.token.symbol, balance.blockchain, multiExchange)
+    const ratio = this.getExchangeRatio(balance.token.hash, balance.blockchain, multiExchange)
 
     return {
       ...balance,
@@ -55,7 +55,7 @@ export class BalanceHelper {
     const tokensBalances = this.getTokensBalance(balances)
 
     const tokenBalanceWithoutRepeated = cloneDeep(tokensBalances).reduce<TokenBalance[]>((prev, current) => {
-      const tokenBalance = prev.find(tokenBalance => tokenBalance.token.symbol === current.token.symbol)
+      const tokenBalance = prev.find(tokenBalance => tokenBalance.token.hash === current.token.hash)
 
       if (tokenBalance) {
         tokenBalance.amount += current.amount
@@ -71,12 +71,12 @@ export class BalanceHelper {
       .filter((tokenBalance): tokenBalance is BalanceConvertedToExchange => !!tokenBalance)
   }
 
-  static getTokenBalanceBySymbol(symbol: string, balances?: Balance[] | Balance) {
+  static getTokenBalanceByHash(hash: string, balances?: Balance[] | Balance) {
     if (!balances) return
 
     const tokensBalances = this.getTokensBalance(balances)
 
-    return tokensBalances.find(tokenBalance => tokenBalance.token.symbol === symbol)
+    return tokensBalances.find(tokenBalance => tokenBalance.token.hash === hash)
   }
 
   static getTokensBalance(balances: Balance[] | Balance) {

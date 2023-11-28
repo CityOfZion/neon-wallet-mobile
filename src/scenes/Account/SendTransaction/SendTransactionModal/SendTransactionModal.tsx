@@ -73,13 +73,13 @@ export const SendTransactionModal = (props: Props) => {
   const [tipIsDisabled, setTipIsDisabled] = useState<boolean>(false)
 
   const feeTokenBalance = useMemo(
-    () => BalanceHelper.getTokenBalanceBySymbol(blockchainService.feeToken.symbol, balanceExchange.balance.data),
+    () => BalanceHelper.getTokenBalanceByHash(blockchainService.feeToken.hash, balanceExchange.balance.data),
     [balanceExchange, account]
   )
   const tokenBalance = useMemo(() => {
     if (!token) return
 
-    return BalanceHelper.getTokenBalanceBySymbol(token.symbol, balanceExchange.balance.data)
+    return BalanceHelper.getTokenBalanceByHash(token.hash, balanceExchange.balance.data)
   }, [balanceExchange, token])
 
   const ratio = useMemo(() => {

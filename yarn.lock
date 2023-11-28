@@ -2194,10 +2194,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cityofzion/blockchain-service@0.7.3":
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/@cityofzion/blockchain-service/-/blockchain-service-0.7.3.tgz#7338f1fad08ee575b4a161a2191bfd5ecd500077"
-  integrity sha512-/43KKW/88p0IGelVMWqFFZA+zabN1npPGQBCe+UnqH6H8oHZywnmTjKTsc2vtFAKuPF/LSsuqmXsTpq8wQ17Rw==
+"@cityofzion/blockchain-service@0.8.0", "@cityofzion/blockchain-service@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@cityofzion/blockchain-service/-/blockchain-service-0.8.0.tgz#0e074aa96968ac3785a9d8c79418dda618a5bb0e"
+  integrity sha512-8OaX0hXTK/vqV1QYbPeZoVjB9AM8YPbnzKMx4kdmm7zKHXppfFeUnMMXbjnx/4GuvOLs4IjAw+6Q78J9FDHe9A==
 
 "@cityofzion/bs-asteroid-sdk@0.7.3":
   version "0.7.3"
@@ -2206,12 +2206,12 @@
   dependencies:
     "@moonlight-io/asteroid-sdk-js" "git+https://github.com/Moonlight-io/asteroid-sdk-js"
 
-"@cityofzion/bs-ethereum@0.7.3":
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/@cityofzion/bs-ethereum/-/bs-ethereum-0.7.3.tgz#44c05ea31c42221a4c21638db5d3251f5e2889e1"
-  integrity sha512-/BwlZuoYpupIZUzPYTlnvB2qmLnIJ0t8Mw6wGl6SVUU5nJ2UZxgPMsXwSSJ1+NxNveGH1ZnMWMKlPDWbP25/Cw==
+"@cityofzion/bs-ethereum@0.8.2":
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/@cityofzion/bs-ethereum/-/bs-ethereum-0.8.2.tgz#dd05b2142f8b67640a3ceb6c9d2336d26a9af2b2"
+  integrity sha512-MaQvPzIW4U8PYj2aSfVIAuB5H/pa+G3HvMCDpodDlUKVnmg3ypKafxOAeDg00AUd5AWobztoTjtDpzGRdGyOxQ==
   dependencies:
-    "@cityofzion/blockchain-service" "0.7.3"
+    "@cityofzion/blockchain-service" "^0.8.0"
     "@ethersproject/bignumber" "5.7.0"
     "@ethersproject/bytes" "5.7.0"
     "@ethersproject/json-wallets" "5.7.0"
@@ -2222,22 +2222,23 @@
     node-fetch "2.6.4"
     query-string "7.1.3"
 
-"@cityofzion/bs-neo-legacy@0.7.3":
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/@cityofzion/bs-neo-legacy/-/bs-neo-legacy-0.7.3.tgz#86171d510b71af11cf21fdf78a197a41c8597c09"
-  integrity sha512-DZDtLQZ1HdqNKmEX5f4qI5EEDvkAsnh6O5bnGC7nsKaRO10cnEYvcI5zuBOT52PvyyImWlfFEYZw7G5hXLAhEQ==
+"@cityofzion/bs-neo-legacy@0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@cityofzion/bs-neo-legacy/-/bs-neo-legacy-0.8.0.tgz#52aedfb8f4617a89cb6e5df735e59f8b4914db50"
+  integrity sha512-dqJOpzzbPjSwb/69gULbTbrAmOfPGLMsy7SZeUaxlhYqmhi+eZz6K37gFT75jzqzQ+CAvVd6TSsfzOk8lAUT4A==
   dependencies:
-    "@cityofzion/blockchain-service" "0.7.3"
+    "@cityofzion/blockchain-service" "0.8.0"
     "@cityofzion/bs-asteroid-sdk" "0.7.3"
     "@cityofzion/dora-ts" "0.0.11"
     "@cityofzion/neon-js" "4.8.3"
+    axios "1.5.1"
 
-"@cityofzion/bs-neo3@0.7.3":
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/@cityofzion/bs-neo3/-/bs-neo3-0.7.3.tgz#25fc1eb47797b60562205c38b37f39bc29ceacd4"
-  integrity sha512-xlzDQZcNcRiec+bfz4aVkfjMeLevW9XLVtq07PwyU613ua0F5lyLI8kObh6OcMsgamSEdw7QX4f+V3ViQbxeNA==
+"@cityofzion/bs-neo3@0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@cityofzion/bs-neo3/-/bs-neo3-0.8.0.tgz#f2995e69a68011807ae0847734670354509604d5"
+  integrity sha512-qCbPTG6OQ5gFzhZnRrzvWkTgDtmg8M1lOLAIf9tPyow8MlFLNauTst1igTxcKm67etx0X0khGmpjkCkficjHDw==
   dependencies:
-    "@cityofzion/blockchain-service" "0.7.3"
+    "@cityofzion/blockchain-service" "0.8.0"
     "@cityofzion/bs-asteroid-sdk" "0.7.3"
     "@cityofzion/dora-ts" "0.0.11"
     "@cityofzion/neo3-invoker" "1.6.0"
@@ -2246,6 +2247,7 @@
     "@cityofzion/neon-invoker" "1.6.0"
     "@cityofzion/neon-js" "5.3.0"
     "@cityofzion/neon-parser" "1.6.2"
+    axios "1.5.1"
     query-string "7.1.3"
 
 "@cityofzion/bs-react-native-decrypt@0.7.3":
@@ -6296,6 +6298,15 @@ axios@0.21.1, axios@^0.21.1:
   integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
   dependencies:
     follow-redirects "^1.10.0"
+
+axios@1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.5.1.tgz#11fbaa11fc35f431193a9564109c88c1f27b585f"
+  integrity sha512-Q28iYCWzNHjAm+yEAot5QaAMxhMghWLFVf7rRdwhUI+c2jix2DUXjAHXVi+s1ibs3mjPO/cCgbA++3BjD0vP/A==
+  dependencies:
+    follow-redirects "^1.15.0"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
 
 babel-core@^7.0.0-bridge.0:
   version "7.0.0-bridge.0"
@@ -10590,6 +10601,11 @@ follow-redirects@^1.10.0:
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.1.tgz#d9114ded0a1cfdd334e164e6662ad02bfd91ff43"
   integrity sha512-HWqDgT7ZEkqRzBvc2s64vSZ/hfOceEol3ac/7tKwzuvEyWx3/4UegXh5oBOIotkGsObyk3xznnSRVADBgWSQVg==
 
+follow-redirects@^1.15.0:
+  version "1.15.3"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.3.tgz#fe2f3ef2690afce7e82ed0b44db08165b207123a"
+  integrity sha512-1VzOtuEM8pC9SFU1E+8KfTjZyMztRsgEfwQl44z8A25uy13jSzTj6dyK2Df52iV0vgHCfBwLhDWevLn95w5v6Q==
+
 fontfaceobserver@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/fontfaceobserver/-/fontfaceobserver-2.1.0.tgz#e2705d293e2c585a6531c2a722905657317a2991"
@@ -10645,6 +10661,15 @@ form-data@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-3.0.1.tgz#ebd53791b78356a99af9a300d4282c4d5eb9755f"
   integrity sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==
+  dependencies:
+    asynckit "^0.4.0"
+    combined-stream "^1.0.8"
+    mime-types "^2.1.12"
+
+form-data@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.0.tgz#93919daeaf361ee529584b9b31664dc12c9fa452"
+  integrity sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.8"
@@ -16612,6 +16637,11 @@ proxy-addr@~2.0.4, proxy-addr@~2.0.7:
   dependencies:
     forwarded "0.2.0"
     ipaddr.js "1.9.1"
+
+proxy-from-env@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
+  integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
 
 prr@~1.0.1:
   version "1.0.1"
