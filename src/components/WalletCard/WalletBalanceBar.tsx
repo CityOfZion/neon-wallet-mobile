@@ -14,15 +14,36 @@ type Props = {
 }
 
 export const WalletBalanceBar = ({ balanceExchange }: Props) => {
+  const marginPercent = 0.4
+
   const totalTokensBalances = useMemo(
     () => BalanceHelper.calculateTotalBalances(balanceExchange.balance.data, balanceExchange.exchange.data),
     [balanceExchange]
   )
 
-  const tokensBalancesConverted = useMemo(
-    () => BalanceHelper.convertBalancesToCurrency(balanceExchange.balance.data, balanceExchange.exchange.data),
-    [balanceExchange]
-  )
+  const bars = useMemo(() => {
+    if (!totalTokensBalances) return
+
+    const balancesConverted = BalanceHelper.convertBalancesToCurrency(
+      balanceExchange.balance.data,
+      balanceExchange.exchange.data
+    )
+
+    if (!balancesConverted) return
+
+    return balancesConverted
+      ?.filter(balancesConverted => balancesConverted.convertedAmount > 0)
+      .map((balanceConverted, index) => {
+        const color = UtilsHelper.generateBlockchainColor(balanceConverted.token.symbol)
+        const totalMarginPercent = (1 + index) * marginPercent * 2
+        const widthPercent = (balanceConverted.convertedAmount * (100 - totalMarginPercent)) / totalTokensBalances
+
+        return {
+          color,
+          widthPercent,
+        }
+      })
+  }, [balanceExchange])
 
   const opacityValue = useRef(new Animated.Value(0)).current
 
@@ -41,7 +62,7 @@ export const WalletBalanceBar = ({ balanceExchange }: Props) => {
           isLoading={balanceExchange.isLoading}
           layout={{ width: '100%', height: 12, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
         >
-          {!!totalTokensBalances && tokensBalancesConverted && (
+          {!!bars && (
             <LinearLayout>
               <ImageView
                 position="absolute"
@@ -52,24 +73,14 @@ export const WalletBalanceBar = ({ balanceExchange }: Props) => {
                   width: '100%',
                 }}
               />
-              <LinearLayout orientation="horiz" width="100%" px="1px">
-                {tokensBalancesConverted.map((tokenBalances, index) => {
-                  const color = UtilsHelper.generateBlockchainColor(tokenBalances.token.symbol)
-
-                  return (
-                    <LinearLayout
-                      key={index}
-                      height="4px"
-                      weight={(tokenBalances.convertedAmount * 100) / totalTokensBalances}
-                      minWidth="4px"
-                      mx="1px"
-                    >
-                      <Shadow distance={9} startColor={`${color}1A`} viewStyle={{ width: '100%', height: '100%' }}>
-                        <LinearLayout height="100%" width="100%" borderRadius="2.5px" backgroundColor={color} />
-                      </Shadow>
-                    </LinearLayout>
-                  )
-                })}
+              <LinearLayout orientation="horiz" width="98%" px="1px">
+                {bars.map((bar, index) => (
+                  <LinearLayout key={index} height="4px" width={`${bar.widthPercent}%`} mx={`${marginPercent}%`}>
+                    <Shadow distance={9} startColor={`${bar.color}1A`} viewStyle={{ width: '100%', height: '100%' }}>
+                      <LinearLayout height="100%" width="100%" borderRadius="2.5px" backgroundColor={bar.color} />
+                    </Shadow>
+                  </LinearLayout>
+                ))}
               </LinearLayout>
             </LinearLayout>
           )}
