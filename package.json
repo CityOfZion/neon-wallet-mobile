@@ -25,11 +25,11 @@
     "prebuild:ios": "cross-env PLATFORM=ios eas build:configure -p ios"
   },
   "dependencies": {
-    "@cityofzion/blockchain-service": "0.8.0",
+    "@cityofzion/blockchain-service": "0.9.0",
     "@cityofzion/bs-asteroid-sdk": "0.7.3",
-    "@cityofzion/bs-ethereum": "0.8.2",
-    "@cityofzion/bs-neo-legacy": "0.8.0",
-    "@cityofzion/bs-neo3": "0.8.0",
+    "@cityofzion/bs-ethereum": "0.9.0",
+    "@cityofzion/bs-neo-legacy": "0.9.0",
+    "@cityofzion/bs-neo3": "0.9.1",
     "@cityofzion/bs-react-native-decrypt": "0.7.3",
     "@cityofzion/neon-dappkit": "0.3.0",
     "@cityofzion/neon-dappkit-types": "^0.3.0",
