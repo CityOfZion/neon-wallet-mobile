@@ -298,6 +298,15 @@
     }
   },
   "modals": {
+    "EthereumRawJsonTransactionRequest": {
+      "titleByMethods": {
+        "eth_sendTransaction": "#translateme",
+        "eth_signTypedData": "#translateme",
+        "eth_signTypedData_v3": "#translateme",
+        "eth_signTypedData_v4": "#translateme",
+        "eth_signTransaction": "#translateme"
+      }
+    },
     "sendSelectionModal": {
       "wallet": {
         "title": "#translateme",
@@ -475,6 +484,9 @@
     }
   },
   "components": {
+    "AccountCards": {
+      "noAccounts": "#translateme"
+    },
     "bars": {
       "customMode": "#translateme",
       "testnetMode": "#translateme",

@@ -32,23 +32,25 @@ import WalletSelectionModal, { WalletSelectionModalParams } from '../scenes/Wall
 import WebViewModal, { WebViewModalParams } from '../scenes/WebViewModal'
 import WCInvocationDetailsModal, {
   WCInvocationDetailsModalParams,
-} from '../scenes/walletConnect/modal/WCInvocationDetailsModal'
+} from '../scenes/walletConnect/WCInvocationDetailsModal'
 import { DefaultNavigationParam } from '../types/global'
 
 import EditAccountModal, { EditAccountModalParam } from '~/src/scenes/Account/EditAccountModal'
 import EditWalletModal, { EditWalletParams } from '~/src/scenes/Wallet/EditWalletModal'
 import ReorderWalletModal from '~/src/scenes/Wallet/ReorderWalletModal'
 import WalletContextModal, { WalletContextModalParams } from '~/src/scenes/Wallet/WalletContextModal'
-import { WCConnectDappModal } from '~/src/scenes/walletConnect/modal/WCConnectDappModal'
-import RawJsonModal, {
-  RawJsonModalParams,
-} from '~/src/scenes/walletConnect/modal/WCTransactionRequestModal/RawJsonModal'
-import SignatureScopeModal, {
-  SignatureScopeModalParams,
-} from '~/src/scenes/walletConnect/modal/WCTransactionRequestModal/SignatureScopeModal'
+import RawJsonModal, { RawJsonModalParams } from '~/src/scenes/walletConnect/RawJsonModal'
+import SignatureScopeModal, { SignatureScopeModalParams } from '~/src/scenes/walletConnect/SignatureScopeModal'
+import { WCConnectDappModal } from '~/src/scenes/walletConnect/WCConnectDappModal'
+import WCConnectionDetailsModal, {
+  WCConnectionDetailsModalParams,
+} from '~/src/scenes/walletConnect/WCConnectionDetailsModal'
+import WCConnectionRequestModal, {
+  WCConnectionRequestModalParams,
+} from '~/src/scenes/walletConnect/WCConnectionRequestModal'
 import WCTransactionRequestModal, {
   WCTransactionRequestModalParams,
-} from '~/src/scenes/walletConnect/modal/WCTransactionRequestModal/WCTransactionRequestModal'
+} from '~/src/scenes/walletConnect/WCTransactionRequestModal'
 import { wrapper } from '~src/app/ApplicationWrapper'
 import { screenConfig } from '~src/config/ScreenConfig'
 import { AccountQRCode, AccountQRCodeParams } from '~src/scenes/Account/AccountQRCode'
@@ -64,12 +66,6 @@ import SecurityPickerModal from '~src/scenes/Settings/SecurityPickerModal'
 import VerifyPasscodePage, { VerifyPasscodePageParams } from '~src/scenes/Settings/VerifyPasscodePage'
 import ThemePickerModal from '~src/scenes/ThemePickerModal'
 import TipConfirmationModal, { TipConfirmationModalParams } from '~src/scenes/TipConfirmationModal'
-import WCConnectionDetailsModal, {
-  WCConnectionDetailsModalParams,
-} from '~src/scenes/walletConnect/modal/WCConnectionDetailsModal'
-import WCConnectionRequestModal, {
-  WCConnectionRequestModalParams,
-} from '~src/scenes/walletConnect/modal/WCConnectionRequestModal'
 
 export type ModalStackParamList = {
   CreateAccountModal: undefined

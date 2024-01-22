@@ -5,14 +5,13 @@ import i18n from 'i18n-js'
 import React, { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { TFilterSelectionType, TOnFinishSelectionParams, TStyleSelectionType } from '../Wallet/WalletSelectionModal'
+import { TOnFinishSelectionParams, TStyleSelectionType } from '../Wallet/WalletSelectionModal'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'
 import { AccountCards } from '~/src/components/AccountCards'
 import { FlatListEmpty } from '~/src/components/FlatListEmpty'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
@@ -20,6 +19,7 @@ import { RootState } from '~/src/store/RootStore'
 import { Account } from '~/src/store/account/Account'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { Wallet } from '~/src/store/wallet/Wallet'
+import { TBlockchainServiceKey } from '~/src/types/blockchain'
 import { TokenBalance } from '~/src/types/query'
 import BalanceList from '~src/components/BalanceList'
 import SwiperPanel, {
@@ -38,7 +38,7 @@ export interface AccountSelectionModalParams {
   wallet: Wallet
   textSchema: string
   onFinish(params: TOnFinishSelectionParams): void
-  filter?: TFilterSelectionType
+  blockchainFilter?: TBlockchainServiceKey
   disconnectDisable?: boolean
   noBalanceDisable?: boolean
   style?: TStyleSelectionType
@@ -55,7 +55,7 @@ const AccountSelectionModal = (props: Props) => {
     textSchema,
     onFinish,
     disconnectDisable = true,
-    filter,
+    blockchainFilter,
     noBalanceDisable = true,
     style = 'normal',
   } = props.route.params
@@ -68,8 +68,8 @@ const AccountSelectionModal = (props: Props) => {
   const validAccounts = useMemo(
     () =>
       wallet.getAccounts(accounts).filter(account => {
-        if (filter === 'walletConnect') {
-          return !!WalletConnectHelper.blockchainsByBlockchainServiceKey[account.blockchain]
+        if (blockchainFilter) {
+          return account.blockchain === blockchainFilter
         }
 
         return true
@@ -77,12 +77,12 @@ const AccountSelectionModal = (props: Props) => {
     [accounts]
   )
 
-  const [selectedAccount, setSelectedAccount] = useState<Account>(validAccounts[0])
+  const [selectedAccount, setSelectedAccount] = useState<Account | undefined>(validAccounts[0])
 
   const balancesExchange = useBalancesAndExchange(validAccounts)
 
   const selectedAccountBalanceExchange = useMemo(() => {
-    if (!selectedAccount.address) return
+    if (!selectedAccount || !selectedAccount.address) return
 
     return balancesExchange.findByBalanceKey(selectedAccount.address)
   }, [selectedAccount, balancesExchange])
@@ -99,9 +99,8 @@ const AccountSelectionModal = (props: Props) => {
   }, [disconnectDisable, isConnected, noBalanceDisable, selectedAccountBalanceExchange])
 
   const handleNext = (token?: TokenBalance) => {
-    if (!disableButton) {
-      onFinish({ wallet, account: selectedAccount, token })
-    }
+    if (disableButton || !selectedAccount) return
+    onFinish({ wallet, account: selectedAccount, token })
   }
 
   return (
@@ -153,7 +152,7 @@ const AccountSelectionModal = (props: Props) => {
                     hideEmptyMessage
                     hideTitle
                     balanceExchange={selectedAccountBalanceExchange}
-                    blockchainFilter={selectedAccount.blockchain}
+                    blockchainFilter={selectedAccount?.blockchain}
                   />
                 </>
               ) : (
