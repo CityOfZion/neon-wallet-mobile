@@ -132,6 +132,15 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    configurations {
+         all {
+            resolutionStrategy {
+                force 'com.squareup.okhttp3:okhttp:4.7.2'
+                force 'com.squareup.okhttp3:logging-interceptor:4.7.2'
+            }
+        }    
+    }
+
     defaultConfig {
         applicationId 'io.cityofzion.neon'
         minSdkVersion rootProject.ext.minSdkVersion
