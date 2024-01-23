@@ -158,7 +158,7 @@ const BalanceList = ({
     let tokenBalances = tokensBalancesConverted
 
     if (removeZeroBalance) {
-      tokenBalances = tokenBalances.filter(token => token.amount > 0)
+      tokenBalances = tokenBalances.filter(token => token.amountNumber > 0)
     }
 
     const mandatoryBlockchains = Object.keys(blockchainConfig.mandatorySymbols) as TBlockchainServiceKey[]
@@ -175,7 +175,8 @@ const BalanceList = ({
         const token = getTokenBySymbol(symbol, blockchainKey)
         if (!token) return
         tokenBalances.push({
-          amount: 0,
+          amount: '0',
+          amountNumber: 0,
           convertedAmount: 0,
           token,
           blockchain: blockchainKey,
