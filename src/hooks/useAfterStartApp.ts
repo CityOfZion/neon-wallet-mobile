@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { appBus } from '../app/AppBus'
 import { wrapper } from '../app/ApplicationWrapper'
 import OTAHelper from '../helpers/OTAHelper'
+import { UtilsHelper } from '../helpers/UtilsHelper'
 import { Account } from '../store/account/Account'
 import { accountReducerActions } from '../store/account/AccountReducer'
 import { blockchainReducerActions } from '../store/blockchain/BlockchainReducer'
@@ -46,7 +47,7 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
     return unsubscribe
   }, [])
 
-  const detectWalletConnectRequest = useCallback(() => {
+  const detectWalletConnectRequest = useCallback(async () => {
     if (!requests.length || !navigationRef) {
       return
     }
@@ -56,6 +57,15 @@ export const useAfterStartApp = ({ navigationRef, navigationStarted }: Props) =>
 
     const session = sessions.find(session => session.topic === request.topic)
     if (!session) return
+
+    const currentRoute = navigationRef.getCurrentRoute()
+    if (
+      currentRoute?.name === wrapper.route.WCTransactionRequestModal.name &&
+      (currentRoute?.params as any)?.request.id !== request.id
+    ) {
+      await UtilsHelper.sleep(1000)
+      navigationRef.goBack()
+    }
 
     navigationRef.navigate(wrapper.route.Modal.name, {
       screen: wrapper.route.WCTransactionRequestModal.name,
