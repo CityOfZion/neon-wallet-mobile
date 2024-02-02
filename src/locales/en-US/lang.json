@@ -223,7 +223,8 @@
     "offline": "You need to be online to import informations",
     "genericError": "Occurs a generic error. Try Again",
     "selectAccountTitile": "These are the accounts that will be imported",
-    "foundAccountsMnemonic": "We found the following"
+    "foundAccountsMnemonic": "We found the following",
+    "allAddressesAreAlreadyImported": "All addresses are already imported"
   },
   "passphrase": {
     "enterPassphrase": "Enter a Passphrase for your encrypted key",
