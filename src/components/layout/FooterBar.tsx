@@ -47,7 +47,7 @@ const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
   const navigation = useNavigation<NavigationProps>()
   const bsAggregator = useSelector((state: RootState) => state.blockchain.bsAggregator)
 
-  const handleScanQrCode = (data: string) => {
+  const handleScanQrCode = async (data: string) => {
     const urlKey = GenericWalletURLHelper.validateAndParse(data)
     if (urlKey && bsAggregator.validateKeyAllBlockchains(urlKey)) {
       navigation.navigate(wrapper.route.Tab.name, {
@@ -63,19 +63,26 @@ const QuickToolsMenu = ({ controller }: QuickToolsMenuProps) => {
     }
 
     const sendUri = UriHelper.validateAndParse(data)
-    if (sendUri && bsAggregator.validateAddressAllBlockchains(sendUri.address)) {
+    if (sendUri) {
+      const service = bsAggregator.getBlockchainByAddress(sendUri.address)
+      if (!service) return
+
+      const token = sendUri.tokenHash ? await service.blockchainDataService.getTokenInfo(sendUri.tokenHash) : undefined
       navigation.navigate(wrapper.route.Modal.name, {
         screen: wrapper.route.WalletSelectionModal.name,
         params: {
           textSchema: 'modals.sendSelectionModal',
           disconnectDisable: true,
           noBalanceDisable: true,
+          disabledTokenClick: !!token,
           onFinish: params => {
             navigation.navigate(wrapper.route.Modal.name, {
               screen: wrapper.route.SendTransactionModal.name,
               params: {
                 ...params,
                 address: sendUri.address,
+                token: token ?? params.token?.token,
+                amount: sendUri.amount,
               },
             })
           },
