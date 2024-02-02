@@ -4,7 +4,7 @@ import { TouchableWithoutFeedback } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import { useSelector } from 'react-redux'
 
-import { Param } from '../modal/WCInvocationDetailsModal'
+import { Param } from '../WCInvocationDetailsModal'
 import WalletConnectBox from './WalletConnectBox'
 
 import { wrapper } from '~/src/app/ApplicationWrapper'

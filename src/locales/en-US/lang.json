@@ -430,6 +430,15 @@
     }
   },
   "modals": {
+    "EthereumRawJsonTransactionRequest": {
+      "titleByMethods": {
+        "eth_sendTransaction": "%{dAppName} wants to send a transaction",
+        "eth_signTypedData": "%{dAppName} wants to sign a message",
+        "eth_signTypedData_v3": "%{dAppName} wants to sign a message",
+        "eth_signTypedData_v4": "%{dAppName} wants to sign a message",
+        "eth_signTransaction": "%{dAppName} wants to sign a transaction"
+      }
+    },
     "selectChainModal": {
       "title": "Select chain"
     },
@@ -864,6 +873,9 @@
     }
   },
   "components": {
+    "AccountCards": {
+      "noAccounts": "No accounts"
+    },
     "bars": {
       "customMode": "Custom Network Mode",
       "testnetMode": "Testnet Network Mode",

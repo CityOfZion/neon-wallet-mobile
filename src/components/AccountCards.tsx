@@ -1,3 +1,4 @@
+import i18n from 'i18n-js'
 import React from 'react'
 import { FlatList, StyleProp, ViewStyle } from 'react-native'
 
@@ -5,6 +6,7 @@ import { Account } from '../store/account/Account'
 import { LinearLayout } from '../styles/styled-components'
 import { UseMultipleBalanceAndExchangeResult } from '../types/query'
 import AccountCard from './AccountCard'
+import { FlatListEmpty } from './FlatListEmpty'
 
 interface Props {
   accounts: Account[]
@@ -42,6 +44,7 @@ export const AccountCards = ({ accounts, balanceExchange, onPress, contentContai
           onPress={() => onPress(item)}
         />
       )}
+      ListEmptyComponent={<FlatListEmpty alignY="center" label={i18n.t('components.AccountCards.noAccounts')} />}
     />
   )
 }

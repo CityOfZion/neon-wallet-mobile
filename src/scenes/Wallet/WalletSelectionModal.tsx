@@ -8,7 +8,6 @@ import { wrapper } from '~/src/app/ApplicationWrapper'
 import { Skeleton } from '~/src/components/Skeleton'
 import { BalanceHelper } from '~/src/helpers/BalanceHelper'
 import { FilterHelper } from '~/src/helpers/FilterHelper'
-import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { useBalancesAndExchange } from '~/src/hooks/useBalancesAndExchange'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
@@ -16,6 +15,7 @@ import { Account } from '~/src/store/account/Account'
 import { selectAccounts } from '~/src/store/account/SelectorAccount'
 import { selectWallets } from '~/src/store/wallet/SelectorWallet'
 import { Wallet } from '~/src/store/wallet/Wallet'
+import { TBlockchainServiceKey } from '~/src/types/blockchain'
 import { TokenBalance } from '~/src/types/query'
 import SwiperPanel, { CloseButton, DEFAULT_PADDING, useSwiperController } from '~src/components/SwiperPanel'
 import WalletPicker from '~src/components/misc/WalletPicker'
@@ -28,14 +28,12 @@ export type TOnFinishSelectionParams = {
   token?: TokenBalance
 }
 
-export type TFilterSelectionType = 'walletConnect'
-
 export type TStyleSelectionType = 'normal' | 'alter'
 
 export interface WalletSelectionModalParams {
   textSchema: string
   onFinish?: (params: TOnFinishSelectionParams) => void
-  filter?: TFilterSelectionType
+  blockchainFilter?: TBlockchainServiceKey
   disconnectDisable?: boolean
   noBalanceDisable?: boolean
   style?: TStyleSelectionType
@@ -47,7 +45,7 @@ interface Props {
 }
 
 const WalletSelectionModal = (props: Props) => {
-  const { textSchema, onFinish, filter, disconnectDisable, noBalanceDisable, style } = props.route.params
+  const { textSchema, onFinish, blockchainFilter, disconnectDisable, noBalanceDisable, style } = props.route.params
   const controller = useSwiperController(true)
   const wallets = useSelector(selectWallets)
   const language = useSelector((state: RootState) => state.settings.language)
@@ -59,13 +57,9 @@ const WalletSelectionModal = (props: Props) => {
       wallets.filter((wallet: Wallet) => {
         if (wallet.walletType === 'watch') return false
 
-        if (filter === 'walletConnect') {
+        if (blockchainFilter) {
           const walletAccounts = wallet.getAccounts(accounts)
-
-          const hasAccountWithWalletConnect = walletAccounts.some(account => {
-            return !!WalletConnectHelper.blockchainsByBlockchainServiceKey[account.blockchain]
-          })
-
+          const hasAccountWithWalletConnect = walletAccounts.some(account => account.blockchain === blockchainFilter)
           return hasAccountWithWalletConnect
         }
 
@@ -74,9 +68,9 @@ const WalletSelectionModal = (props: Props) => {
     [wallets]
   )
 
-  const [selectedWallet, setSelectedWallet] = useState<Wallet>(validWallets[0])
+  const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(validWallets[0])
 
-  const selectedWalletBalanceExchange = useBalancesAndExchange(selectedWallet.getAccounts(accounts))
+  const selectedWalletBalanceExchange = useBalancesAndExchange(selectedWallet?.getAccounts(accounts) ?? [])
 
   const formattedAllBalance = useMemo(() => {
     const totalBalance = BalanceHelper.calculateTotalBalances(
@@ -94,7 +88,7 @@ const WalletSelectionModal = (props: Props) => {
         wallet,
         textSchema,
         onFinish,
-        filter,
+        blockchainFilter,
         disconnectDisable,
         noBalanceDisable,
         style,

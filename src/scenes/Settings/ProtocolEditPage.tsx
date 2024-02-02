@@ -12,6 +12,7 @@ import { Separator } from '~/src/components/Separator'
 import ScreenLayout from '~/src/components/layout/ScreenLayout'
 import { blockchainConfig, TBlockchainNetwork } from '~/src/config/BlockchainConfig'
 import { UtilsHelper } from '~/src/helpers/UtilsHelper'
+import { WalletConnectHelper } from '~/src/helpers/WalletConnectHelper'
 import { RootStackParamList } from '~/src/navigation/AppNavigation'
 import { ModalStackParamList } from '~/src/navigation/ModalStackNavigation'
 import { SettingsStackParamList } from '~/src/navigation/SettingsStackNavigation'
@@ -43,11 +44,17 @@ export const ProtocolEditPage = (props: Props) => {
   const queryClient = useQueryClient()
 
   const handleClick = (value: TBlockchainNetwork) => {
+    const disconnectPromises = sessions.map(async session => {
+      const [infos] = WalletConnectHelper.getAccountInformationFromSession(session)
+      if (infos.blockchain !== blockchain) return
+      await disconnect(session)
+    })
+
     const promises = [
       queryClient.removeQueries(['transactions', blockchain]),
       queryClient.removeQueries(['balance', blockchain]),
       queryClient.removeQueries(['exchange']),
-      ...sessions.map(session => disconnect(session)),
+      ...disconnectPromises,
     ]
     Promise.allSettled(promises)
 
