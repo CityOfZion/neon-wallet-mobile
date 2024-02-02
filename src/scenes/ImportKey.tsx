@@ -149,6 +149,11 @@ const ImportKey = (props: ImportKeyProps) => {
       setAddressesFound(addresses)
       setAddressesSelected(addresses)
 
+      if (addresses.length === 0) {
+        showMessage({
+          message: i18n.t('importKey.allAddressesAreAlreadyImported'),
+        })
+      }
       return addresses.length > 0
     },
     [addressAlreadyExist, bsAggregator]
