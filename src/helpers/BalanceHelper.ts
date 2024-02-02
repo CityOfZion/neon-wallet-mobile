@@ -54,21 +54,21 @@ export class BalanceHelper {
 
     const tokensBalances = this.getTokensBalance(balances)
 
-    const tokenBalanceWithoutRepeated = cloneDeep(tokensBalances).reduce<TokenBalance[]>((prev, current) => {
-      const tokenBalance = prev.find(tokenBalance => tokenBalance.token.hash === current.token.hash)
+    const clonedTokenBalances = cloneDeep(tokensBalances)
 
-      if (tokenBalance) {
-        tokenBalance.amount += current.amount
-      } else {
-        prev.push(current)
-      }
+    const convertedBalancesToCurrency: BalanceConvertedToExchange[] = []
 
-      return prev
-    }, [])
+    clonedTokenBalances.forEach((item, index, array) => {
+      const isRepeated = array.findIndex(tokenBalance => tokenBalance.token.hash === item.token.hash) !== index
+      if (isRepeated) return
 
-    return tokenBalanceWithoutRepeated
-      .map(tokenBalance => this.convertBalanceToCurrency(tokenBalance, multiExchange))
-      .filter((tokenBalance): tokenBalance is BalanceConvertedToExchange => !!tokenBalance)
+      const converted = this.convertBalanceToCurrency(item, multiExchange)
+      if (!converted) return
+
+      convertedBalancesToCurrency.push(converted)
+    })
+
+    return convertedBalancesToCurrency
   }
 
   static getTokenBalanceByHash(hash: string, balances?: Balance[] | Balance) {
