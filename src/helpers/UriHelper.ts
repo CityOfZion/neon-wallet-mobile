@@ -1,8 +1,9 @@
 export interface IURI {
   address: string
   tokenHash?: string
-  amount?: number
+  amount?: string
   reference?: string
+  prefix: string
 }
 
 export abstract class UriHelper {
@@ -29,10 +30,11 @@ export abstract class UriHelper {
   static validateAndParse(str: string): IURI | undefined {
     if (!this.isValid(str)) return
 
-    const [address, params] = str.substring(3).split('?')
+    const [prefix, info] = str.split(':')
+    const [address, params] = info.split('?')
 
     let tokenHash: string | undefined
-    let amount: number | undefined
+    let amount: string | undefined
     let reference: string | undefined
 
     if (params) {
@@ -44,7 +46,7 @@ export abstract class UriHelper {
       reference = this.getParam(splitedParams, 'remark')
     }
 
-    return { address, tokenHash, amount, reference }
+    return { address, tokenHash, amount, reference, prefix }
   }
 
   private static getParam<T extends string | number>(params: string[], param: string): T | undefined {

@@ -41,6 +41,7 @@ export interface AccountSelectionModalParams {
   blockchainFilter?: TBlockchainServiceKey
   disconnectDisable?: boolean
   noBalanceDisable?: boolean
+  disabledTokenClick?: boolean
   style?: TStyleSelectionType
 }
 
@@ -57,6 +58,7 @@ const AccountSelectionModal = (props: Props) => {
     disconnectDisable = true,
     blockchainFilter,
     noBalanceDisable = true,
+    disabledTokenClick = false,
     style = 'normal',
   } = props.route.params
 
@@ -98,6 +100,12 @@ const AccountSelectionModal = (props: Props) => {
     )
   }, [disconnectDisable, isConnected, noBalanceDisable, selectedAccountBalanceExchange])
 
+  const handleTokenPress = (token: TokenBalance) => {
+    if (disabledTokenClick || !selectedAccount) return
+
+    onFinish({ wallet, account: selectedAccount, token })
+  }
+
   const handleNext = (token?: TokenBalance) => {
     if (disableButton || !selectedAccount) return
     onFinish({ wallet, account: selectedAccount, token })
@@ -138,7 +146,7 @@ const AccountSelectionModal = (props: Props) => {
                 onSelect={handleChangeAccount}
               />
 
-              {!disableButton && !!selectedAccountBalanceExchange ? (
+              {selectedAccountBalanceExchange ? (
                 <>
                   <TextView my={4} color="text.3" fontSize="md" textAlign="center">
                     {i18n.t(`${textSchema}.account.label`)}
@@ -148,7 +156,7 @@ const AccountSelectionModal = (props: Props) => {
                     flexGrow={1}
                     flexShrink={1}
                     contentContainerStyle={{ paddingBottom: 24, paddingHorizontal: DEFAULT_PADDING }}
-                    onPress={handleNext}
+                    onPress={handleTokenPress}
                     hideEmptyMessage
                     hideTitle
                     balanceExchange={selectedAccountBalanceExchange}

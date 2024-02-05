@@ -36,6 +36,7 @@ export interface WalletSelectionModalParams {
   blockchainFilter?: TBlockchainServiceKey
   disconnectDisable?: boolean
   noBalanceDisable?: boolean
+  disabledTokenClick?: boolean
   style?: TStyleSelectionType
 }
 
@@ -45,7 +46,8 @@ interface Props {
 }
 
 const WalletSelectionModal = (props: Props) => {
-  const { textSchema, onFinish, blockchainFilter, disconnectDisable, noBalanceDisable, style } = props.route.params
+  const { textSchema, onFinish, blockchainFilter, disconnectDisable, noBalanceDisable, style, disabledTokenClick } =
+    props.route.params
   const controller = useSwiperController(true)
   const wallets = useSelector(selectWallets)
   const language = useSelector((state: RootState) => state.settings.language)
@@ -91,6 +93,7 @@ const WalletSelectionModal = (props: Props) => {
         blockchainFilter,
         disconnectDisable,
         noBalanceDisable,
+        disabledTokenClick,
         style,
       },
     })
