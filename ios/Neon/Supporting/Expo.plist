@@ -15,10 +15,10 @@
       <key>expo-platform</key>
       <string>ios</string>
       <key>expo-runtime-version</key>
-      <string>1.0.0</string>
+      <string>2.0.0</string>
     </dict>
     <key>EXUpdatesRuntimeVersion</key>
-    <string>1.0.0</string>
+    <string>2.0.0</string>
     <key>EXUpdatesURL</key>
     <string>https://u.expo.dev/e3527b9c-81e6-4b6b-a770-342d8b0a96bb</string>
   </dict>
