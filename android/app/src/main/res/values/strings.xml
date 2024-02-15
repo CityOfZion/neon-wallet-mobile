@@ -1,4 +1,4 @@
 <resources>
   <string name="app_name">Neon</string>
-  <string name="expo_runtime_version">1.0.0</string>
+  <string name="expo_runtime_version">2.0.0</string>
 </resources>

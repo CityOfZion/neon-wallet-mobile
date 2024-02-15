@@ -55,10 +55,10 @@ module.exports = {
         requestHeaders: {
           "expo-channel-name": 'beta',
           "expo-platform": process.env.PLATFORM,
-          "expo-runtime-version": "1.0.0"
+          "expo-runtime-version": "2.0.0"
         }
       },
-      runtimeVersion: "1.0.0"
+      runtimeVersion: "2.0.0"
     } : {}),
     "plugins": ["expo-splash-screen"]
   },
