@@ -17,21 +17,21 @@ jobs:
       with:
         node-version: 16.20.0
 
+    - name: Change expo-updates version
+      run: sed -i 's/~0\.24\.11/~0.11.7/g' package.json
+
     - name: Install yarn
       run: npm install --global yarn
 
     - name: Install dependencies
       run: yarn --force
       
-    - name: Fix Android 31 links
-      run: ln -s ${ANDROID_HOME}/build-tools/31.0.0/d8 ${ANDROID_HOME}/build-tools/31.0.0/dx && ln -s ${ANDROID_HOME}/build-tools/31.0.0/lib/d8.jar ${ANDROID_HOME}/build-tools/31.0.0/lib/dx.jar
+    - name: Fix Android 33 links
+      run: ln -s ${ANDROID_HOME}/build-tools/33.0.0/d8 ${ANDROID_HOME}/build-tools/33.0.0/dx && ln -s ${ANDROID_HOME}/build-tools/33.0.0/lib/d8.jar ${ANDROID_HOME}/build-tools/33.0.0/lib/dx.jar
 
     - name: Create keystore file
       run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > android/app/keystore.jks
     
-    - name: Prebuild
-      run: yarn precompile:android
-
     - name: Build release APK
       env:
           KEYSTORE_PATH: keystore.jks
@@ -39,7 +39,6 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
           NODE_OPTIONS: "--max_old_space_size=4096"
-          CHANNEL: "beta"
       run: npm run android-release
 
     - name: Upload APK

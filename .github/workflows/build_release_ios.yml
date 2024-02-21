@@ -27,7 +27,6 @@ jobs:
     - name: Install Dependencies
       run: |
         brew install node
-        npm install -g detox-cli
 
     - name: Install Node.js
       uses: actions/setup-node@v2
@@ -40,13 +39,23 @@ jobs:
     - name: Checkout and Install Project Dependencies
       uses: actions/checkout@v2
 
-    - name: Install and Build Project
+    - name: Install yarn dep
       run: |
         yarn
+        sed -i.bo 's/    node->getLayout()\.hadOverflow() |/    node->getLayout()\.hadOverflow() ||/' ./node_modules/react-native/ReactCommon/yoga/yoga/Yoga.cpp
+
+    - name: Build yarn ios
+      run: |
         yarn build:ios
+
+    - name: Install pod dep
+      run: |
         cd ios
         pod install
         cd ..
+
+    - name: Build Project
+      run: |
         xcodebuild -workspace ./ios/Neon.xcworkspace -scheme Neon-release archive -archivePath ./Neon.xcarchive
 
     - name: Export Archive

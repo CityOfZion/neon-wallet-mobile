@@ -205,7 +205,8 @@
     "createWatchAccount": "Create watch account",
     "import": "Import",
     "settings": "Settings",
-    "help": "Help"
+    "help": "Help",
+    "privatePolicy": "Privacy Policy"
   },
   "importKey": {
     "enterAnAddress": "Enter an address, encrypted key, private key or mnemonic words",
@@ -222,7 +223,8 @@
     "offline": "You need to be online to import informations",
     "genericError": "Occurs a generic error. Try Again",
     "selectAccountTitile": "These are the accounts that will be imported",
-    "foundAccountsMnemonic": "We found the following"
+    "foundAccountsMnemonic": "We found the following",
+    "allAddressesAreAlreadyImported": "All addresses are already imported"
   },
   "passphrase": {
     "enterPassphrase": "Enter a Passphrase for your encrypted key",
@@ -282,7 +284,8 @@
     "protocolsPage": {
       "labels": {
         "neo3": "Neo (N3)",
-        "neoLegacy": "Neo Legacy"
+        "neoLegacy": "Neo Legacy",
+        "ethereum": "Ethereum"
       }
     },
     "listWalletView": {
@@ -365,7 +368,7 @@
       "completedTransactions": "COMPLETED TRANSACTIONS",
       "invocationsLabel": "Invocations",
       "notificationsLabel": "Notifications",
-      "asset": "Asset",
+      "token": "Asset",
       "nft": "NFT",
       "errorToGetTransactions": "Unexpected error to get transactions",
       "emptyList": "No transaction to list"
@@ -412,7 +415,7 @@
     },
     "accountSettingsView": {
       "customize": "Customize account",
-      "exportWif": "Export WIF",
+      "exportKey": "Export Key",
       "deleteTitle": "Delete Wallet",
       "deleteSubtitle": "This will remove your account and all transaction history.",
       "deleteButtom": "Delete Account",
@@ -428,6 +431,15 @@
     }
   },
   "modals": {
+    "EthereumRawJsonTransactionRequest": {
+      "titleByMethods": {
+        "eth_sendTransaction": "%{dAppName} wants to send a transaction",
+        "eth_signTypedData": "%{dAppName} wants to sign a message",
+        "eth_signTypedData_v3": "%{dAppName} wants to sign a message",
+        "eth_signTypedData_v4": "%{dAppName} wants to sign a message",
+        "eth_signTransaction": "%{dAppName} wants to sign a transaction"
+      }
+    },
     "selectChainModal": {
       "title": "Select chain"
     },
@@ -739,6 +751,33 @@
       "signMessageSucess": "Message Successfully Signed",
       "signMessageFailed": "Message Signing Failed"
     },
+    "encrypt": {
+      "button": {
+        "accept": "Encrypt Message"
+      },
+      "title": "%{dAppName} asks for authentication",
+      "labelMessage": "message",
+      "encryptSuccess": "Message Successfully Encrypted",
+      "encryptFailed": "Message Encryption Failed"
+    },
+    "decrypt": {
+      "button": {
+        "accept": "Decrypt Message"
+      },
+      "title": "%{dAppName} asks for authentication",
+      "labelMessage": "message",
+      "decryptSuccess": "Message Successfully Decrypted",
+      "decryptFailed": "Message Decryption Failed"
+    },
+    "signTransaction": {
+      "button": {
+        "accept": "Sign Transaction"
+      },
+      "title": "%{dAppName} asks for authentication",
+      "labelMessage": "Transaction",
+      "SignTransactionSuccess": "Transaction Successfully Signed",
+      "signTransactionFailed": "Transaction Signed Failed"
+    },
     "connectDApp": {
       "title": "Connect a dApp",
       "subtitle": "All transactions requested by a connected Dapp will be presented for signing before being broadcast to the blockchain. No action from the Dapp will happen without your direct approval.",
@@ -828,13 +867,16 @@
         "ok": "OK, I understand"
       }
     },
-    "ExportWIFModal": {
-      "title": "Export WIF",
-      "unexpectedError": "Unexpected error to get WIF",
-      "details": "WIF DETAILS"
+    "ExportKeyModal": {
+      "title": "Export Key",
+      "unexpectedError": "Unexpected error to get key",
+      "details": "KEY DETAILS"
     }
   },
   "components": {
+    "AccountCards": {
+      "noAccounts": "No accounts"
+    },
     "bars": {
       "customMode": "Custom Network Mode",
       "testnetMode": "Testnet Network Mode",
@@ -964,6 +1006,7 @@
     "gasClaimSuccess": "GAS claim successful!",
     "gasClaimGapError": "You must wait at least 5 minutes for next claim",
     "transactionCompleted": "Transaction completed!",
+    "transactionFailed": "We couldn't check the transaction in the blockchain.",
     "transactionError": "Transaction incompleted! Please, try again.",
     "copiedToClipboard": "Copied to clipboard",
     "transactionWarning": "Transaction is pending"
@@ -994,6 +1037,11 @@
       "id": "Neo Legacy",
       "accountName": "Neo Legacy Account"
     },
+    "ethereum": {
+      "label": "Ethereum",
+      "id": "Ethereum",
+      "accountName": "Ethereum Account"
+    },
     "errorMessages": {
       "keyWrongOrAddressesImported": "Encrypted key is not valid or all address has been imported",
       "blockchainNotFound": "Blockchain not found",
@@ -1019,5 +1067,9 @@
     "offline": "You need to be online to connect to a dApp",
     "invalidSession": "Trying to connect to unsupported network",
     "internetConnectionLost": "Internet connection lost. You were disconnected from all dapps."
+  },
+  "OTA": {
+    "alertUpdate": "A new update has been installed, please restart the app",
+    "alertButton": "Ok"
   }
 }

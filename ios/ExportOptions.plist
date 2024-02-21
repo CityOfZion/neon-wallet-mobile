@@ -11,7 +11,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>io.cityofzion.neon</key>
-		<string>Koba Appstore 2023 07 07</string>
+		<string>Koba Appstore</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>Apple Distribution</string>
