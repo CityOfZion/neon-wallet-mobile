@@ -15,19 +15,24 @@ export class BalanceHelper {
     const tokensBalances = this.getTokensBalance(balances)
 
     return tokensBalances.reduce((prev, actual) => {
-      const ratio = this.getExchangeRatio(actual.token.hash, actual.blockchain, multiExchange)
+      const ratio = this.getExchangeRatio(actual.token.hash, actual.token.symbol, actual.blockchain, multiExchange)
 
       return prev + actual.amountNumber * ratio
     }, 0)
   }
 
-  static getExchangeRatio(hash: string, blockchain: TBlockchainServiceKey, multiExchange?: MultiExchange): number {
+  static getExchangeRatio(
+    hash: string,
+    symbol: string,
+    blockchain: TBlockchainServiceKey,
+    multiExchange?: MultiExchange
+  ): number {
     if (!multiExchange) return 0
 
     const blockchainExchange = multiExchange[blockchain]
     if (!blockchainExchange) return 0
 
-    const exchange = blockchainExchange.find(exchange => exchange.hash === hash)
+    const exchange = blockchainExchange.find(exchange => exchange.hash === hash && exchange.symbol === symbol)
 
     return exchange?.price ?? 0
   }
@@ -38,7 +43,7 @@ export class BalanceHelper {
   ): BalanceConvertedToExchange | undefined {
     if (!balance || !multiExchange) return
 
-    const ratio = this.getExchangeRatio(balance.token.hash, balance.blockchain, multiExchange)
+    const ratio = this.getExchangeRatio(balance.token.hash, balance.token.symbol, balance.blockchain, multiExchange)
 
     return {
       ...balance,

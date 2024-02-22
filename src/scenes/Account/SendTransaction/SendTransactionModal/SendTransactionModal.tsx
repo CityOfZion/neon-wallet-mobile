@@ -86,7 +86,7 @@ export const SendTransactionModal = (props: Props) => {
   const ratio = useMemo(() => {
     if (!token) return
 
-    return BalanceHelper.getExchangeRatio(token.hash, account.blockchain, balanceExchange.exchange.data)
+    return BalanceHelper.getExchangeRatio(token.hash, token.symbol, account.blockchain, balanceExchange.exchange.data)
   }, [balanceExchange, currency])
 
   const handleSelectToken = (token: Token) => {

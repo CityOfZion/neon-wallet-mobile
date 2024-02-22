@@ -3,6 +3,7 @@ import { BSEthereum } from '@cityofzion/bs-ethereum'
 import { BSNeoLegacy } from '@cityofzion/bs-neo-legacy'
 import { BSNeo3 } from '@cityofzion/bs-neo3'
 import { CaseReducer, PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import Constants from 'expo-constants'
 
 import { RootState } from '../RootStore'
 
@@ -22,7 +23,11 @@ const initialState = {
   bsAggregator: new BSAggregator<TBlockchainServiceKey>({
     neo3: new BSNeo3('neo3', { type: blockchainConfig.defaultSelectedNetworks.neo3.type }),
     neoLegacy: new BSNeoLegacy('neoLegacy', { type: blockchainConfig.defaultSelectedNetworks.neoLegacy.type }),
-    ethereum: new BSEthereum('ethereum', { type: blockchainConfig.defaultSelectedNetworks.ethereum.type }),
+    ethereum: new BSEthereum(
+      'ethereum',
+      { type: blockchainConfig.defaultSelectedNetworks.ethereum.type },
+      Constants.manifest?.extra?.BITQUERY_API_KEY ?? ''
+    ),
   }),
 } as BlockchainState
 
