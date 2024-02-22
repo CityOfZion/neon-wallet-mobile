@@ -23,7 +23,12 @@ export const TransferAssetItem = React.memo((props: Props) => {
     let amount = 0
 
     if (props.token?.symbol) {
-      const ratio = BalanceHelper.getExchangeRatio(props.token.hash, props.account.blockchain, props.exchange)
+      const ratio = BalanceHelper.getExchangeRatio(
+        props.token.hash,
+        props.token.symbol,
+        props.account.blockchain,
+        props.exchange
+      )
       amount = ratio ? ratio * Number(props.amount) : 0
     }
 

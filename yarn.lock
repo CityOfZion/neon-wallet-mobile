@@ -2206,10 +2206,10 @@
   dependencies:
     "@moonlight-io/asteroid-sdk-js" "git+https://github.com/Moonlight-io/asteroid-sdk-js"
 
-"@cityofzion/bs-ethereum@0.9.1":
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/@cityofzion/bs-ethereum/-/bs-ethereum-0.9.1.tgz#8b05b821ebbb10677488f2d337338e41d647f031"
-  integrity sha512-zcoRlIT1jAqy7dkkgORi0Bzvw/GoPlfFQ0OtfCZ46haWoYz5iL4imfvEVaC/cALveo40aQpz6+3uVy4CP9MbIg==
+"@cityofzion/bs-ethereum@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@cityofzion/bs-ethereum/-/bs-ethereum-1.0.1.tgz#a74b23f4d9c56232179cda0b075abc952c2ea868"
+  integrity sha512-ac/xnpGuMMUr5xRQ9iNUZ+VFG3l8VgApYz/QTFY+qNerCmXN9B+SzH8NPEGovxQpOLLTCKu3aa4txVoshnZwuQ==
   dependencies:
     "@cityofzion/blockchain-service" "0.9.0"
     "@ethersproject/bignumber" "5.7.0"
@@ -9057,10 +9057,10 @@ dot-prop@^5.2.0:
   dependencies:
     is-obj "^2.0.0"
 
-dotenv@^16.0.3:
-  version "16.0.3"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.3.tgz#115aec42bac5053db3c456db30cc243a5a836a07"
-  integrity sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==
+dotenv@^16.4.5:
+  version "16.4.5"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.5.tgz#cdd3b3b604cb327e286b4762e13502f717cb099f"
+  integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
 
 dtrace-provider@~0.8:
   version "0.8.8"

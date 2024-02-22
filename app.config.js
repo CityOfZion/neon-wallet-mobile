@@ -1,4 +1,5 @@
 require('dotenv').config()
+
 module.exports = {
   expo: {
     name: 'Neon',
@@ -60,6 +61,9 @@ module.exports = {
       },
       runtimeVersion: "2.0.0"
     } : {}),
-    "plugins": ["expo-splash-screen"]
+    "plugins": ["expo-splash-screen"],
+    extra: {
+      BITQUERY_API_KEY: process.env.BITQUERY_API_KEY
+    }
   },
 }
