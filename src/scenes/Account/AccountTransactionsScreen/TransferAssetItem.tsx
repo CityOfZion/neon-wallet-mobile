@@ -20,37 +20,45 @@ export const TransferAssetItem = React.memo((props: Props) => {
   const language = useSelector((state: RootState) => state.settings.language)
 
   const fiatAmount = useMemo(() => {
-    if (!props.token?.symbol) return
+    let amount = 0
 
-    const ratio = BalanceHelper.getExchangeRatio(props.token.symbol, props.account.blockchain, props.exchange)
+    if (props.token?.symbol) {
+      const ratio = BalanceHelper.getExchangeRatio(props.token.hash, props.account.blockchain, props.exchange)
+      amount = ratio ? ratio * Number(props.amount) : 0
+    }
 
-    const calculateAmount = ratio ? ratio * Number(props.amount) : undefined
-
-    return FilterHelper.currency(calculateAmount, currency, language)
+    return FilterHelper.currency(amount, currency, language)
   }, [currency, language, props.exchange, props.token, props.amount])
 
   return (
-    <LinearLayout orientation="horiz">
-      <LinearLayout orientation="horiz" width="80px" marginRight="8px">
+    <LinearLayout orientation="horiz" justifyContent="space-between">
+      <LinearLayout orientation="horiz" width="30%" alignItems="center">
         {props.token ? (
-          <TokenIcon width={20} height={20} marginRight={12} blockchain={props.account.blockchain} {...props.token} />
+          <TokenIcon width={20} height={20} marginRight={4} blockchain={props.account.blockchain} {...props.token} />
         ) : (
-          <LinearLayout width="20px" />
+          <LinearLayout width="20px" marginRight={4} />
         )}
 
-        <TextView color="text.0" fontFamily="bold" fontSize="16px" numberOfLines={1} ellipsizeMode="middle">
+        <TextView
+          color="text.0"
+          fontFamily="bold"
+          fontSize="md"
+          numberOfLines={1}
+          flexShrink={1}
+          flexGrow={1}
+          ellipsizeMode="middle"
+        >
           {props.token?.symbol ?? props.contractHash}
         </TextView>
       </LinearLayout>
 
-      <LinearLayout orientation="horiz" justifyContent="space-between" flex={1}>
-        <TextView color="text.0" fontSize="16px" width="100px" fontFamily="medium" numberOfLines={1} textAlign="right">
-          {props.amount}
-        </TextView>
-        <TextView color="text.0" fontSize="16px" width="100px" numberOfLines={1} fontFamily="medium" textAlign="right">
-          {fiatAmount}
-        </TextView>
-      </LinearLayout>
+      <TextView color="text.0" width="35%" fontSize="md" fontFamily="medium" numberOfLines={1} textAlign="right">
+        {props.amount}
+      </TextView>
+
+      <TextView color="text.0" fontSize="md" width="30%" numberOfLines={1} fontFamily="medium" textAlign="right">
+        {fiatAmount}
+      </TextView>
     </LinearLayout>
   )
 })

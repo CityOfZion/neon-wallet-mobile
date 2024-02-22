@@ -47,7 +47,7 @@ const ReceiveTransactionQrCodeModal = (props: Props) => {
   const { data: exchange } = useExchange()
 
   const fiat = useMemo(() => {
-    const ratio = BalanceHelper.getExchangeRatio(token.symbol, account.blockchain, exchange)
+    const ratio = BalanceHelper.getExchangeRatio(token.hash, account.blockchain, exchange)
 
     return FilterHelper.currency(ratio ? Number(amount) * ratio : 0, currency, language)
   }, [exchange, currency, language, amount])

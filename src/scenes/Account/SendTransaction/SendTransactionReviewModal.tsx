@@ -95,7 +95,7 @@ export const SendTransactionReviewModal = (props: Props) => {
   const ratio = useMemo(() => {
     if (!exchange) return
 
-    return BalanceHelper.getExchangeRatio(token.symbol, account.blockchain, exchange)
+    return BalanceHelper.getExchangeRatio(token.hash, account.blockchain, exchange)
   }, [exchange, currency, token])
 
   const submit = async () => {
