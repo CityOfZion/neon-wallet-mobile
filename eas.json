@@ -1,0 +1,30 @@
+{
+  "cli": {
+    "version": ">= 12.5.2",
+    "appVersionSource": "remote",
+    "promptToConfigurePushNotifications": false
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "store",
+      "channel": "development",
+      "prebuildCommand": "npm run check"
+    },
+    "preview": {
+      "autoIncrement": true,
+      "channel": "preview",
+      "prebuildCommand": "npm run check"
+    },
+    "production": {
+      "autoIncrement": true,
+      "channel": "production",
+      "prebuildCommand": "npm run check"
+    }
+  },
+  "submit": {
+    "production": {},
+    "preview": {},
+    "development": {}
+  }
+}

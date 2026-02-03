@@ -1,0 +1,93 @@
+import type { NavigationProp } from '@react-navigation/native'
+import type { Event } from '@sentry/react-native'
+import type { CoreTypes } from '@walletconnect/types'
+
+import type { TBlockchainServiceKey } from './blockchain'
+import type { Optional } from './global'
+import type { IAccountState, TCurrency, TLanguage } from './store'
+import type { TToasterToastOptions } from './toaster'
+
+export type TWalletConnectRedirectParams = {
+  navigation: NavigationProp<ReactNavigation.RootParamList>
+  metadata: CoreTypes.Metadata
+  fromDeeplink?: boolean
+}
+
+export type TAccountHelperPredicateParams = {
+  address: string
+  blockchain: TBlockchainServiceKey
+}
+
+export type TToastHelperParams = Optional<Omit<TToasterToastOptions, 'component'>, 'duration' | 'id'>
+
+export type TClickupHelperCreateSupportTicketParams = {
+  email: string
+  name: string
+  description: string
+}
+
+export type TBuyAndSellTokensHelperBuildIframeParams = {
+  currency: TCurrency
+  account?: IAccountState
+  baseUrl: string
+  id: string
+}
+
+export type TDateHelperFormatLocalizedOptions = {
+  format: string
+  language: TLanguage
+}
+
+export type TSkinHelperLocalSkin = {
+  blockchain: TBlockchainServiceKey
+  collectionHash: string
+  imageUrl: string
+}
+
+export type TCurrencyHelperFormatOptions = {
+  currency: TCurrency
+  minimumFractionDigits?: number
+  maximumFractionDigits?: number
+  showZero?: boolean
+  approximateSymbol?: boolean
+}
+
+export type TStringHelperRemoveSpecialCharacterOptions = {
+  allowSpaces?: boolean
+  allowDots?: boolean
+  removeDoubleSpaces?: boolean
+  trimText?: boolean
+}
+
+export type THardwareWalletHelperGetAccountParams = {
+  blockchain: TBlockchainServiceKey
+  index: number
+}
+
+export type THardwareWalletHelperConnectByUsbParams = {
+  abortSignal?: AbortSignal
+}
+
+export type TExportTransactionsHelperCalculateDateSelectionMaxOneYearParams = {
+  dateFrom: Date
+  dateTo: Date
+}
+
+export type TExportTransactionsHelperCalculateDateToSelectionMaxOneYearResponse = {
+  dateTo: Date
+  dateFrom?: Date
+}
+
+export type TExportTransactionsHelperCalculateDateFromSelectionMaxOneYearResponse = {
+  dateFrom: Date
+  dateTo?: Date
+}
+
+export type TLoggerHelperOptions = {
+  where: string
+  operation: string
+}
+
+export type TSentryHelperOptions = TLoggerHelperOptions & {
+  level: Event['level']
+}

@@ -1,0 +1,39 @@
+import React from 'react'
+
+import { BSBigNumberHelper } from '@cityofzion/blockchain-service'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+
+import { TwBlockchainIcon } from '@/components/TwBlockchainIcon'
+
+import type { TBlockchainServiceKey } from '@/types/blockchain'
+
+type TProps = {
+  symbol: string
+  amount: string
+  blockchain?: TBlockchainServiceKey
+  decimals?: number
+}
+
+export const SwapDetailsTokenItem = ({ symbol, amount, blockchain, decimals = 0 }: TProps) => {
+  const { t: commonT } = useTranslation('common')
+
+  return (
+    <View className="flex-row items-center justify-between gap-2">
+      <View className="flex-row items-center gap-2">
+        {blockchain && <TwBlockchainIcon blockchain={blockchain} type="gray" className="h-4 w-4" />}
+
+        <Text className="font-sans-regular text-lg uppercase text-white">
+          {symbol}
+          {blockchain && (
+            <Text className="font-sans-regular uppercase text-gray-100">
+              {` | ${commonT(`blockchainServices.${blockchain}.id`)}`}
+            </Text>
+          )}
+        </Text>
+      </View>
+
+      <Text className="font-sans-regular text-lg text-white">{BSBigNumberHelper.format(amount, { decimals })}</Text>
+    </View>
+  )
+}

@@ -1,0 +1,103 @@
+{
+  "useFileSystem": {
+    "errors": {
+      "directory": "Você deve selecionar um diretório"
+    }
+  },
+  "useImportAction": {
+    "errors": {
+      "empty": "Digite algo",
+      "invalid": "Texto inválido",
+      "mnemonicIncomplete": "Mnemônico incompleto"
+    }
+  },
+  "useItemNfiAuthentication": {
+    "authenticateMessage": "Escaneie seu objeto NFI ATUAL",
+    "confirmLinkMessage": "Por favor, reconfirme seu objeto NFI",
+    "createPasswordModal": {
+      "confirmPasswordInputLabel": "Confirme seu código",
+      "confirmPasswordInputPlaceholder": "Digite seu código…",
+      "description": "Se você perder seu NFI, este código permitirá que você conclua transações ou registre um novo NFI.",
+      "formDescription": "Defina um código:",
+      "keepSafeAlertMessage": "Você precisará deste código para alterar seu NFI. <1>Por favor, mantenha-o seguro!</1>",
+      "passwordInputLabel": "Defina o código",
+      "passwordInputPlaceholder": "Digite seu código…",
+      "submitButtonLabel": "Definir código NFI",
+      "title": "Código de acesso NFI"
+    },
+    "invalidSignatureError": "Assinatura NFI inválida",
+    "linkMessage": "Vincular um objeto NFI",
+    "nfcNotEnabledError": "Por favor, ative NFC nas configurações do seu dispositivo",
+    "nfcRequestNotFoundError": "Requisição NFC cancelada ou falhou",
+    "noNfiObjectError": "Nenhum objeto NFI encontrado",
+    "passwordModal": {
+      "alert": "Você precisa de um código para alterar/remover seu NFI",
+      "description": "Se você perdeu seu NFI, digite seu código para removê-lo",
+      "inputLabel": "Digite o código",
+      "inputPlaceholder": "Digite seu código…",
+      "submitButtonLabel": "Confirmar",
+      "title": "Código de acesso NFI"
+    },
+    "twinNfiError": "Não foi possível obter as informações do twin ITEM. Entre em contato com o suporte.",
+    "wrongNfiPasscodeError": "Código de acesso NFI incorreto"
+  },
+  "useMediaLibrary": {
+    "errors": {
+      "permissionRequired": "É necessário ter permissão da biblioteca de mídia para salvar arquivos."
+    }
+  },
+  "useNeonImportBackup": {
+    "errors": {
+      "deprecatedFile": "Você selecionou um arquivo de backup obsoleto. Tente gerar um novo backup na versão mais recente da Neon.",
+      "importData": "Houve um erro ao importar os dados (Pode ter sido importado parcialmente).",
+      "wrongFile": "Você selecionou o arquivo errado. Selecione um arquivo com extensão '{{extension}}'.",
+      "wrongPassword": "A senha está incorreta. Tente novamente.",
+      "wrongVersion": "A versão do arquivo de backup não é suportada. Tente gerar um novo backup na versão mais recente da Neon."
+    }
+  },
+  "usePasswordAuthentication": {
+    "createPasswordModal": {
+      "confirmPasswordInputLabel": "Confirme sua senha",
+      "confirmPasswordInputPlaceholder": "Digite sua senha…",
+      "description": "Esta senha permitirá proteger sua carteira e autorizar ações.",
+      "formDescription": "Defina uma senha:",
+      "keepSafeAlertMessage": "Você precisará desta senha para autorizar ações. <1>Por favor, mantenha segura!</1>",
+      "passwordInputLabel": "Defina a senha",
+      "passwordInputPlaceholder": "Digite sua senha…",
+      "submitButtonLabel": "Definir senha",
+      "title": "Senha"
+    },
+    "getPasswordError": "Erro ao obter a senha. Entre em contato com o suporte.",
+    "passwordModal": {
+      "alert": "Você precisa de uma senha para autorizar esta ação",
+      "description": "Para autenticar, forneça sua senha",
+      "inputLabel": "Digite a senha",
+      "inputPlaceholder": "Digite sua senha…",
+      "submitButtonLabel": "Confirmar",
+      "title": "Senha"
+    },
+    "wrongPasswordError": "Senha incorreta. Tente novamente."
+  },
+  "useQrCode": {
+    "errors": {
+      "cameraUnavailable": "A câmera não está disponível.",
+      "permissionNotGranted": "Permissão para filmagem não concedida."
+    }
+  },
+  "useUnclaimedMutation": {
+    "errors": {
+      "claimError": "Houve um erro ao tentar dar claim. Por favor, tente novamente."
+    },
+    "failureNotification": {
+      "previewBody": "Não conseguimos verificar a conclusão do seu claim",
+      "title": "Erro no claim"
+    },
+    "messages": {
+      "claimedSuccess": "Claim feito com sucesso"
+    },
+    "successNotification": {
+      "previewBody": "Claim feito com sucesso.",
+      "title": "Claim bem-sucedido"
+    }
+  }
+}

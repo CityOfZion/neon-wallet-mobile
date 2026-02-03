@@ -1,0 +1,141 @@
+{
+  "blockchainServices": {
+    "arbitrum": {
+      "accountName": "Arbitrum 账户",
+      "id": "Arbitrum",
+      "label": "Arbitrum"
+    },
+    "base": {
+      "accountName": "Base 账户",
+      "id": "Base",
+      "label": "Base"
+    },
+    "bnb": {
+      "accountName": "BNB 账户",
+      "id": "BNB",
+      "label": "BNB"
+    },
+    "ethereum": {
+      "accountName": "以太坊账户",
+      "id": "Ethereum",
+      "label": "以太坊"
+    },
+    "neo3": {
+      "accountName": "NEO 账户",
+      "id": "Neo N3",
+      "label": "Neo（N3）"
+    },
+    "neoLegacy": {
+      "accountName": "Neo 传统账户",
+      "id": "Neo Legacy",
+      "label": "Neo 传统版"
+    },
+    "neox": {
+      "accountName": "NeoX 账户",
+      "id": "NeoX",
+      "label": "NeoX"
+    },
+    "polygon": {
+      "accountName": "Polygon 账户",
+      "id": "Polygon",
+      "label": "Polygon"
+    }
+  },
+  "deeplink": {
+    "errors": {
+      "firstTime": "您必须先完成初始引导流程。完成后请重试。"
+    }
+  },
+  "errors": {
+    "blockchainDoesNotSupportEncryption": "该账户区块链不支持加密",
+    "blockchainIsNotClaimable": "该账户区块链不可认领",
+    "mustHaveKey": "标准账户需要有密钥",
+    "mustHaveMnemonic": "标准钱包需要一个助记符",
+    "noKey": "无法找到密钥：{{address}}",
+    "unauthorized": "未经授权。请重试或联系客服。",
+    "unexpected": "发生意外错误。如果问题仍然存在，请联系技术支持。",
+    "watchAccountUnauthorized": "您目前使用的是仅观看账户。此操作未经授权。"
+  },
+  "general": {
+    "accept": "接受",
+    "add": "添加",
+    "cancel": "取消",
+    "clear": "清除",
+    "continue": "继续",
+    "copiedToClipboard": "已复制到剪贴板",
+    "copy": "复制",
+    "copyToClipboard": "复制到剪贴板",
+    "decline": "拒绝",
+    "delete": "删除",
+    "disconnect": "断开连接",
+    "done": "完成",
+    "edit": "编辑",
+    "errorOpenLink": "打开此链接时出现问题",
+    "next": "下一步",
+    "no": "否",
+    "retry": "重试",
+    "save": "保存",
+    "saveAndContinue": "保存并继续",
+    "skip": "跳过",
+    "yes": "是"
+  },
+  "hardwareWallet": {
+    "errors": {
+      "accountIsNotHardware": "所选账户不是硬件钱包账户。",
+      "accountsNotFound": "硬件钱包上未找到任何账户。",
+      "blockchainNotFound": "我们无法确定此钱包的区块链。",
+      "blockchainNotSupported": "区块链不支持硬件钱包。",
+      "disconnectFirst": "请先断开当前连接的硬件钱包。",
+      "hardwareWalletIsNotConnectOrUnlocked": "硬件钱包未连接或已锁定，请验证您的设备并重试。",
+      "hardwareWalletNotFound": "未连接任何硬件钱包",
+      "missingBip44Path": "硬件钱包账户缺少 BIP44 路径"
+    }
+  },
+  "overTheAir": {
+    "downloading": "发现新更新… {{progress}}%",
+    "error": "安装更新时出错，请稍后再试。",
+    "success": "更新已成功安装！请重新启动应用以应用更新。"
+  },
+  "synonyms": {
+    "acquire": ["获得", "获取"],
+    "add": ["添加", "附加", "包含", "增加"],
+    "buy": ["购买", "获取"],
+    "connect": ["连接", "加入", "联合", "关联"],
+    "connection": ["连接", "关联", "关系"],
+    "create": ["创建", "构建", "制作", "生成"],
+    "crypto": ["代币", "加密代币"],
+    "exchange": ["交易", "交换", "切换", "变更"],
+    "generate": ["生成", "创建", "产生"],
+    "link": ["链接", "连接", "关联"],
+    "liquidate": ["清算", "偿还", "浪费"],
+    "list": ["列出", "目录", "清单"],
+    "load": ["加载", "装载", "填充"],
+    "lock": ["锁定", "固定", "关闭"],
+    "pair": ["配对", "匹配", "双胞胎"],
+    "purchase": ["购买", "获取"],
+    "recover": ["找回", "取回", "恢复", "康复"],
+    "restore": ["恢复", "重建"],
+    "save": ["保存", "保留", "存储", "节省"],
+    "secure": ["确保", "保证", "安全", "不可侵犯", "无惧", "投保", "保护"],
+    "sell": ["出售", "交易"],
+    "send": ["传送", "邮寄", "投递", "提交"],
+    "swap": ["交换", "切换"],
+    "trade": ["交易", "以物易物", "交换", "商品", "商业", "买卖"],
+    "transfer": ["转移", "传输", "运输", "更换", "受让方", "转让", "运输"],
+    "view": ["查看", "看", "观察", "观看"]
+  },
+  "wallet": {
+    "encryptedName": "加密钱包",
+    "firstWalletName": "我的第一个钱包",
+    "importedName": "导入的钱包",
+    "ledgerName": "Ledger 钱包",
+    "mnemonicWalletName": "助记词钱包",
+    "watchAccount": "只读账户"
+  },
+  "walletConnect": {
+    "errorsByCode": {
+      "NO_SERVICE": "该 dApp 尝试连接到与所选区块链或网络不同的区块链或网络。",
+      "UNEXPECTED_ERROR": "发生意外错误。请重试或联系客服。"
+    }
+  }
+}

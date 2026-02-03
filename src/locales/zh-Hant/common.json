@@ -1,0 +1,141 @@
+{
+  "blockchainServices": {
+    "arbitrum": {
+      "accountName": "Arbitrum 帳戶",
+      "id": "Arbitrum",
+      "label": "Arbitrum"
+    },
+    "base": {
+      "accountName": "Base 帳戶",
+      "id": "Base",
+      "label": "Base"
+    },
+    "bnb": {
+      "accountName": "BNB 帳戶",
+      "id": "BNB",
+      "label": "BNB"
+    },
+    "ethereum": {
+      "accountName": "以太坊帳戶",
+      "id": "Ethereum",
+      "label": "以太坊"
+    },
+    "neo3": {
+      "accountName": "NEO 帳戶",
+      "id": "Neo N3",
+      "label": "Neo（N3）"
+    },
+    "neoLegacy": {
+      "accountName": "Neo 傳統帳戶",
+      "id": "Neo Legacy",
+      "label": "Neo 傳統版"
+    },
+    "neox": {
+      "accountName": "NeoX 帳戶",
+      "id": "NeoX",
+      "label": "NeoX"
+    },
+    "polygon": {
+      "accountName": "Polygon 帳戶",
+      "id": "Polygon",
+      "label": "Polygon"
+    }
+  },
+  "deeplink": {
+    "errors": {
+      "firstTime": "您必須先完成初始引導流程。完成後請重試。"
+    }
+  },
+  "errors": {
+    "blockchainDoesNotSupportEncryption": "該帳戶區塊鏈不支援加密",
+    "blockchainIsNotClaimable": "該帳戶區塊鏈不可認領",
+    "mustHaveKey": "標準帳戶需要有密鑰",
+    "mustHaveMnemonic": "標準錢包需要一個助記符",
+    "noKey": "找不到金鑰：{{address}}",
+    "unauthorized": "未經授權。請重試或聯絡客服。",
+    "unexpected": "發生意外錯誤。如果問題仍然存在，請聯絡技術支援。",
+    "watchAccountUnauthorized": "您目前使用的是僅觀看帳戶。此操作未經授權。"
+  },
+  "general": {
+    "accept": "接受",
+    "add": "新增",
+    "cancel": "取消",
+    "clear": "清除",
+    "continue": "繼續",
+    "copiedToClipboard": "已複製到剪貼簿",
+    "copy": "複製",
+    "copyToClipboard": "複製到剪貼簿",
+    "decline": "拒絕",
+    "delete": "刪除",
+    "disconnect": "中斷連線",
+    "done": "完成",
+    "edit": "編輯",
+    "errorOpenLink": "開啟此連結時發生問題",
+    "next": "下一步",
+    "no": "否",
+    "retry": "重試",
+    "save": "儲存",
+    "saveAndContinue": "儲存並繼續",
+    "skip": "跳過",
+    "yes": "是"
+  },
+  "hardwareWallet": {
+    "errors": {
+      "accountIsNotHardware": "所選帳戶不是硬體錢包帳戶。",
+      "accountsNotFound": "硬體錢包上未找到任何帳戶。",
+      "blockchainNotFound": "我們無法確定此錢包的區塊鏈。",
+      "blockchainNotSupported": "區塊鏈不支援硬體錢包。",
+      "disconnectFirst": "請先斷開目前連接的硬體錢包。",
+      "hardwareWalletIsNotConnectOrUnlocked": "硬體錢包未連接或已鎖定，請驗證您的裝置並重試。",
+      "hardwareWalletNotFound": "未連接任何硬體錢包",
+      "missingBip44Path": "硬體錢包帳戶缺少 BIP44 路徑"
+    }
+  },
+  "overTheAir": {
+    "downloading": "發現新更新… {{progress}}%",
+    "error": "安裝更新時發生錯誤，請稍後再試。",
+    "success": "更新已成功安裝！請重新啟動應用程式以套用更新。"
+  },
+  "synonyms": {
+    "acquire": ["獲得", "取得"],
+    "add": ["新增", "附加", "包含", "增加"],
+    "buy": ["購買", "取得"],
+    "connect": ["連接", "加入", "聯合", "關聯"],
+    "connection": ["連接", "關聯", "關係"],
+    "create": ["創建", "構建", "製作", "生成"],
+    "crypto": ["代幣", "加密代幣"],
+    "exchange": ["交易", "交換", "切換", "變更"],
+    "generate": ["生成", "創建", "產生"],
+    "link": ["連結", "連接", "關聯"],
+    "liquidate": ["清算", "償還", "浪費"],
+    "list": ["列出", "目錄", "清單"],
+    "load": ["載入", "裝載", "填充"],
+    "lock": ["鎖定", "固定", "關閉"],
+    "pair": ["配對", "匹配", "雙胞胎"],
+    "purchase": ["購買", "取得"],
+    "recover": ["找回", "取回", "恢復", "康復"],
+    "restore": ["恢復", "重建"],
+    "save": ["儲存", "保留", "儲存", "節省"],
+    "secure": ["確保", "保證", "安全", "不可侵犯", "無懼", "投保", "保護"],
+    "sell": ["出售", "交易"],
+    "send": ["傳送", "郵寄", "投遞", "提交"],
+    "swap": ["交換", "切換"],
+    "trade": ["交易", "以物易物", "交換", "商品", "商業", "買賣"],
+    "transfer": ["轉移", "傳輸", "運輸", "更換", "受讓方", "轉讓", "運輸"],
+    "view": ["查看", "看", "觀察", "觀看"]
+  },
+  "wallet": {
+    "encryptedName": "加密錢包",
+    "firstWalletName": "我的第一個錢包",
+    "importedName": "已匯入錢包",
+    "ledgerName": "Ledger 錢包",
+    "mnemonicWalletName": "助記詞錢包",
+    "watchAccount": "只讀帳戶"
+  },
+  "walletConnect": {
+    "errorsByCode": {
+      "NO_SERVICE": "該 dApp 嘗試連接到與所選區區塊鏈或網路不同的區塊鏈或網路。",
+      "UNEXPECTED_ERROR": "發生意外錯誤。請重試或聯絡客服。"
+    }
+  }
+}

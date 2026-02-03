@@ -1,0 +1,103 @@
+{
+  "useFileSystem": {
+    "errors": {
+      "directory": "您必须选择一个目录"
+    }
+  },
+  "useImportAction": {
+    "errors": {
+      "empty": "请输入一些文本",
+      "invalid": "文本无效",
+      "mnemonicIncomplete": "助记词不完整"
+    }
+  },
+  "useItemNfiAuthentication": {
+    "authenticateMessage": "扫描您当前的 NFI 对象",
+    "confirmLinkMessage": "请重新确认您的 NFI 对象",
+    "createPasswordModal": {
+      "confirmPasswordInputLabel": "确认密码",
+      "confirmPasswordInputPlaceholder": "请输入您的密码…",
+      "description": "如果您丢失了 NFI，此密码将允许您完成交易或注册新的 NFI。",
+      "formDescription": "请设置一个密码：",
+      "keepSafeAlertMessage": "更改 NFI 时需要此密码。<1>请妥善保管！</1>",
+      "passwordInputLabel": "设置密码",
+      "passwordInputPlaceholder": "请输入您的密码…",
+      "submitButtonLabel": "设置 NFI 密码",
+      "title": "NFI 密码"
+    },
+    "invalidSignatureError": "NFI 签名无效",
+    "linkMessage": "链接一个 NFI 对象",
+    "nfcNotEnabledError": "请在设备设置中启用 NFC",
+    "nfcRequestNotFoundError": "NFC 请求已取消或失败",
+    "noNfiObjectError": "未找到 NFI 对象",
+    "passwordModal": {
+      "alert": "您需要密码才能更改/移除您的 NFI",
+      "description": "如果您丢失了 NFI，请输入密码以将其移除",
+      "inputLabel": "输入密码",
+      "inputPlaceholder": "请输入您的密码…",
+      "submitButtonLabel": "确认密码",
+      "title": "NFI 密码"
+    },
+    "twinNfiError": "无法获取您的 ITEM 双生信息。请联系支持。",
+    "wrongNfiPasscodeError": "NFI 密码错误"
+  },
+  "useMediaLibrary": {
+    "errors": {
+      "permissionRequired": "保存文件需要媒体库权限"
+    }
+  },
+  "useNeonImportBackup": {
+    "errors": {
+      "deprecatedFile": "您选择了已弃用的备份文件。请尝试在最新的 NEON 版本中生成新的备份。",
+      "importData": "导入数据时出错（可能已部分导入）。",
+      "wrongFile": "您选择了错误的文件。请选择扩展名为 '{{extension}}' 的文件。",
+      "wrongPassword": "密码不正确。请再试一次。",
+      "wrongVersion": "不支持该备份文件版本。请尝试在最新的 NEON 版本中生成新的备份。"
+    }
+  },
+  "usePasswordAuthentication": {
+    "createPasswordModal": {
+      "confirmPasswordInputLabel": "确认密码",
+      "confirmPasswordInputPlaceholder": "请输入您的密码…",
+      "description": "此密码将保护您的钱包并授权操作。",
+      "formDescription": "请设置一个密码：",
+      "keepSafeAlertMessage": "您需要此密码才能授权操作。<1>请妥善保管！</1>",
+      "passwordInputLabel": "设置密码",
+      "passwordInputPlaceholder": "请输入您的密码…",
+      "submitButtonLabel": "设置密码",
+      "title": "密码"
+    },
+    "getPasswordError": "获取密码时出错。请联系支持。",
+    "passwordModal": {
+      "alert": "您需要密码才能授权此操作",
+      "description": "为进行身份验证，请输入您的密码",
+      "inputLabel": "输入密码",
+      "inputPlaceholder": "请输入您的密码…",
+      "submitButtonLabel": "确认密码",
+      "title": "密码"
+    },
+    "wrongPasswordError": "密码错误。请重试。"
+  },
+  "useQrCode": {
+    "errors": {
+      "cameraUnavailable": "摄像头不可用",
+      "permissionNotGranted": "未授予相机权限"
+    }
+  },
+  "useUnclaimedMutation": {
+    "errors": {
+      "claimError": "尝试领取时出错。请再试一次。"
+    },
+    "failureNotification": {
+      "previewBody": "我们无法验证您的领取是否完成",
+      "title": "领取错误"
+    },
+    "messages": {
+      "claimedSuccess": "领取成功"
+    },
+    "successNotification": {
+      "previewBody": "您已成功领取未领取的代币。",
+      "title": "领取成功"
+    }
+  }
+}

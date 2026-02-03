@@ -1,0 +1,103 @@
+{
+  "useFileSystem": {
+    "errors": {
+      "directory": "Sie müssen ein Verzeichnis auswählen"
+    }
+  },
+  "useImportAction": {
+    "errors": {
+      "empty": "Bitte geben Sie etwas Text ein",
+      "invalid": "Ungültiger Text",
+      "mnemonicIncomplete": "Mnemonic unvollständig"
+    }
+  },
+  "useItemNfiAuthentication": {
+    "authenticateMessage": "Scannen Sie Ihr AKTUELLES NFI Objekt",
+    "confirmLinkMessage": "Bitte bestätigen Sie Ihr NFI Objekt erneut",
+    "createPasswordModal": {
+      "confirmPasswordInputLabel": "Passcode bestätigen",
+      "confirmPasswordInputPlaceholder": "Geben Sie Ihren Passcode ein…",
+      "description": "Wenn Sie Ihr NFI verlieren, ermöglicht Ihnen dieser Passcode, Transaktionen abzuschließen oder ein neues NFI zu registrieren.",
+      "formDescription": "Bitte legen Sie einen Passcode fest:",
+      "keepSafeAlertMessage": "Sie benötigen diesen Passcode, um Ihr NFI zu ändern. <1>Bitte bewahren Sie ihn sicher auf!</1>",
+      "passwordInputLabel": "Passcode festlegen",
+      "passwordInputPlaceholder": "Geben Sie Ihren Passcode ein…",
+      "submitButtonLabel": "NFI Passcode festlegen",
+      "title": "NFI Passcode"
+    },
+    "invalidSignatureError": "Ungültige NFI Signatur",
+    "linkMessage": "NFI Objekt verknüpfen",
+    "nfcNotEnabledError": "Bitte aktivieren Sie NFC in Ihren Geräteeinstellungen",
+    "nfcRequestNotFoundError": "NFC Anfrage abgebrochen oder fehlgeschlagen",
+    "noNfiObjectError": "Kein NFI Objekt gefunden",
+    "passwordModal": {
+      "alert": "Sie benötigen einen Passcode, um Ihr NFI zu ändern/entfernen",
+      "description": "Wenn Sie Ihr NFI verloren haben, geben Sie Ihren Passcode ein, um es zu entfernen",
+      "inputLabel": "Passcode eingeben",
+      "inputPlaceholder": "Geben Sie Ihren Passcode ein…",
+      "submitButtonLabel": "Passcode bestätigen",
+      "title": "NFI Passcode"
+    },
+    "twinNfiError": "Ihre ITEM Twin Informationen konnten nicht abgerufen werden. Bitte kontaktieren Sie den Support.",
+    "wrongNfiPasscodeError": "Falscher NFI Passcode"
+  },
+  "useMediaLibrary": {
+    "errors": {
+      "permissionRequired": "Für das Speichern von Dateien wird die Berechtigung zur Medienbibliothek benötigt."
+    }
+  },
+  "useNeonImportBackup": {
+    "errors": {
+      "deprecatedFile": "Sie haben eine veraltete Backup-Datei ausgewählt. Bitte erstellen Sie ein neues Backup in der neuesten NEON Version.",
+      "importData": "Beim Importieren der Daten ist ein Fehler aufgetreten (Möglicherweise wurde es teilweise importiert).",
+      "wrongFile": "Sie haben die falsche Datei ausgewählt. Bitte wählen Sie eine Datei mit der Erweiterung '{{extension}}'.",
+      "wrongPassword": "Das Passwort ist falsch. Bitte versuchen Sie es erneut.",
+      "wrongVersion": "Die Backup-Datei Version wird nicht unterstützt. Bitte erstellen Sie ein neues Backup in der neuesten NEON Version."
+    }
+  },
+  "usePasswordAuthentication": {
+    "createPasswordModal": {
+      "confirmPasswordInputLabel": "Passwort bestätigen",
+      "confirmPasswordInputPlaceholder": "Geben Sie Ihr Passwort ein…",
+      "description": "Dieses Passwort schützt Ihr Wallet und autorisiert Aktionen.",
+      "formDescription": "Bitte legen Sie ein Passwort fest:",
+      "keepSafeAlertMessage": "Sie benötigen dieses Passwort, um Aktionen zu autorisieren. <1>Bitte bewahren Sie es sicher auf!</1>",
+      "passwordInputLabel": "Passwort festlegen",
+      "passwordInputPlaceholder": "Geben Sie Ihr Passwort ein…",
+      "submitButtonLabel": "Passwort festlegen",
+      "title": "Passwort"
+    },
+    "getPasswordError": "Fehler beim Abrufen des Passworts. Bitte kontaktieren Sie den Support.",
+    "passwordModal": {
+      "alert": "Sie benötigen einen Passcode, um diese Aktion zu autorisieren",
+      "description": "Um sich zu authentifizieren, geben Sie bitte Ihr Passwort ein",
+      "inputLabel": "Passwort eingeben",
+      "inputPlaceholder": "Geben Sie Ihr Passwort ein…",
+      "submitButtonLabel": "Passwort bestätigen",
+      "title": "Passwort"
+    },
+    "wrongPasswordError": "Falsches Passwort. Bitte versuchen Sie es erneut."
+  },
+  "useQrCode": {
+    "errors": {
+      "cameraUnavailable": "Die Kamera ist nicht verfügbar.",
+      "permissionNotGranted": "Kameraerlaubnis nicht erteilt"
+    }
+  },
+  "useUnclaimedMutation": {
+    "errors": {
+      "claimError": "Beim Claimen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
+    },
+    "failureNotification": {
+      "previewBody": "Wir konnten den Abschluss Ihres Claims nicht überprüfen",
+      "title": "Claim Fehler"
+    },
+    "messages": {
+      "claimedSuccess": "Erfolgreich geclaimed"
+    },
+    "successNotification": {
+      "previewBody": "Sie haben Ihre unclaimten Tokens erfolgreich geclaimed.",
+      "title": "Claim erfolgreich"
+    }
+  }
+}

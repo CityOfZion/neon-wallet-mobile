@@ -1,0 +1,89 @@
+{
+  "accountCard": {
+    "accountPlaceholder": "我的帳戶",
+    "address": "地址",
+    "balance": "餘額"
+  },
+  "accountSelectionAccordion": {
+    "notFoundLabel": "找不到帳戶或已存在，請檢查您的輸入並稍後再試。",
+    "selectedOfTotal": "已選擇 {{selectedCount}} / 共 {{totalCount}} 個地址"
+  },
+  "actionInput": {
+    "maxButtonLabel": "最大"
+  },
+  "balanceList": {
+    "empty": "您的錢包目前是空的，何不今天就添加一些資金？",
+    "holdings": "持有資產",
+    "value": "價值"
+  },
+  "blockchainList": {
+    "xExisting": "已有 {{amount}} 個"
+  },
+  "nfcModal": {
+    "description": "請輕觸 NFC 標籤",
+    "title": "準備掃描"
+  },
+  "screenLayoutBars": {
+    "customMode": "自訂網路模式",
+    "noInternet": "沒有網路連線",
+    "testnetMode": "測試網路模式",
+    "warning": "警告"
+  },
+  "setup": {
+    "accountTasksManager": {
+      "useFraudulentTokensNotificationProcess": {
+        "notificationDescription": "我們已識別出「{{ value }}」，它已被社群標記為詐騙代幣。我們建議隱藏它並避免任何形式的互動。",
+        "notificationTitle": "「{{ value }}」是詐騙代幣！"
+      },
+      "useVotingNeo3NotificationProcess": {
+        "notificationDescription": "只需點這裡，立即投票",
+        "notificationTitle": "你正在錯過免費的 GAS！"
+      }
+    },
+    "hardwareWalletManager": {
+      "detectedHardwareByUsb": "我們偵測到透過 USB 連接的硬體錢包。是否要嘗試連接？",
+      "requestingPermission": "請在您的硬體錢包設備上確認。"
+    },
+    "walletConnectManagerSetup": {
+      "autoAcceptErrorMessage": "WalletConnect 請求處理失敗",
+      "autoAcceptProcessingMessage": "正在處理 WalletConnect 請求…",
+      "autoAcceptSuccessMessage": "WalletConnect 請求已成功處理"
+    },
+    "walletTasksManager": {
+      "useBackupReminderNotificationProcess": {
+        "notificationDescription": "我們建議在\"更多 > 設定 > 安全性 > 備份 NEON\"中建立新的備份檔案以保護您的錢包。為了增強安全性，您還可以在\"錢包 > 三點 > 備份助記詞\"中手動匯出助記詞，並在\"錢包 > 帳戶 > 三點 > 匯出金鑰\"中匯出私密金鑰。",
+        "notificationTitle": "建立新的備份檔案！"
+      }
+    }
+  },
+  "tabStackBar": {
+    "connectionsStackButtonLabel": "連接",
+    "moreStackButtonLabel": "更多",
+    "quickToolsButtonLabel": "快速工具",
+    "searchStackButtonLabel": "搜尋",
+    "walletsStackButtonLabel": "錢包"
+  },
+  "twAccountList": {
+    "emptyList": "找不到帳戶"
+  },
+  "twContactList": {
+    "emptyList": "找不到聯絡人",
+    "searchInputPlaceholder": "輸入聯絡人姓名…"
+  },
+  "twDappDetailsCard": {
+    "connectionDetailsHeaderLabel": "鏈",
+    "methodsDetailsLabel": "功能"
+  },
+  "twInput": {
+    "labels": {
+      "clearButton": "清除輸入",
+      "hideButton": "隱藏輸入",
+      "showButton": "顯示輸入"
+    }
+  },
+  "twModalLayoutCloseIconButton": {
+    "labels": {
+      "closeButton": "關閉視窗"
+    }
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "notes": [
+    {
+      "changes": [],
+      "date": "2026-01-27",
+      "version": "1.12.0"
+    },
+    {
+      "changes": ["Improved Wallet Connect Error Handling", "Minor UI Improvement"],
+      "date": "2026-01-08",
+      "version": "1.11.1"
+    },
+    {
+      "changes": [
+        "Language Support - Brazilian Portuguese",
+        "Language Support - Deutsch",
+        "Performance improvements",
+        "Improved OTA",
+        "Improved UX for Menu Navigation",
+        "New Notification - Backup reminder",
+        "Minor bugfixes"
+      ],
+      "date": "2025-12-22",
+      "version": "1.11.0"
+    },
+    {
+      "changes": ["Update crypto libraries", "Migration improvements", "Bridge Neo 3 and Neo X feature", "Bug fixes"],
+      "date": "2025-09-30",
+      "version": "1.10.1"
+    },
+    {
+      "changes": ["Update Android API level", "Improved NFI authentication", "Bug fixes"],
+      "date": "2025-08-18",
+      "version": "1.10.0"
+    },
+    {
+      "changes": [
+        "Support for 24 word mnemonic",
+        "New Notification: Malicious Token Identified",
+        "Removal of 'claim gas' requirement before enabling Neo Legacy > Neo N3 Migration",
+        "New Feature: Import Mnemonic through deeplinks"
+      ],
+      "date": "2025-07-31",
+      "version": "1.9.1"
+    },
+    {
+      "changes": [
+        "New Feature: Neo Governance Voting",
+        "New Notification: Neo Governance Reminder",
+        "Multi-language Support: Chinese",
+        "New Feature: NFI as Security Option",
+        "Minor Bugfixes"
+      ],
+      "date": "2025-06-30",
+      "version": "1.9.0"
+    },
+    {
+      "changes": [
+        "Fix to issue impacting transaction fee calculation when doing a swap",
+        "Fix to pending transaction being listed twice in the transaction list",
+        "Quick access to legacy migration via Action Search"
+      ],
+      "date": "2025-06-06",
+      "version": "1.8.1"
+    },
+    {
+      "changes": [
+        "New Feature: Action Search - Quick access to existing wallet actions",
+        "New Feature: Export Transaction History",
+        "Enhancement to Claim GAS UX",
+        "Fix to issue that prevented NNS usage in some scenarios",
+        "Minor Bugfixes"
+      ],
+      "date": "2025-05-29",
+      "version": "1.8.0"
+    },
+    {
+      "changes": [
+        "Improved parsing when upgrading localstorage structure",
+        "UX Improvement for Ledger users using Legacy > N3 migration tool",
+        "Improvement to message presented when importing a mnemonic returns no accounts",
+        "Improvement to message presented when migration check timeout",
+        "Improved approach to parsing swap option tickers returned by swap partner",
+        "Change default node for Polygon"
+      ],
+      "date": "2025-04-30",
+      "version": "1.7.1"
+    },
+    {
+      "changes": [
+        "On-Ramp / Off-Ramp Feature (Android Only)",
+        "New Native Migration (Legacy > N3)",
+        "Notifications (Migrate Now and Migration Completed)",
+        "FTW Pricing Data Integration",
+        "Hide Token Feature",
+        "Ledger Session UX Enhancement - Persist Account Indexes",
+        "Minor UX Enhancements",
+        "Minor Bugfixes"
+      ],
+      "date": "2025-04-17",
+      "version": "1.7.0"
+    },
+    {
+      "changes": [
+        "Arbitrum Support",
+        "BASE Support",
+        "USB and Bluetooth Ledger Support",
+        "Performance Enhancements",
+        "Minor bugfixes"
+      ],
+      "date": "2025-02-17",
+      "version": "1.6.0"
+    },
+    {
+      "changes": ["Polygon Network Support", "Swap UI Enhancements", "Minor bugfixes"],
+      "date": "2025-01-23",
+      "version": "1.5.0"
+    },
+    {
+      "changes": [
+        "Cross-chain Swap Feature Implementation",
+        "Offline Sync Compatibility with Neon Wallet Mobile by using Neon Backups",
+        "Enhancement to Skins Feature",
+        "Help Feature Initial Implementation",
+        "Minor bugfixes"
+      ],
+      "date": "2024-12-24",
+      "version": "1.4.0"
+    },
+    {
+      "changes": ["Small input enhancement to amount decimals"],
+      "date": "2024-11-24",
+      "version": "1.3.1"
+    },
+    {
+      "changes": [
+        "Performance improvements",
+        "Neo X Support",
+        "Enhanced Ethereum Support",
+        "EVM Support",
+        "Improvements to Pricing Data",
+        "Fix minor bugs"
+      ],
+      "date": "2024-11-19",
+      "version": "1.3.0"
+    },
+    {
+      "changes": [
+        "Upgrade to WcSDK version",
+        "Support for unlockable Account Cards NFI Skins",
+        "Fix to issue when selecting a token in the account list available in our SEND process",
+        "Fix to WC issue related to ByteArray properties in some scenarios"
+      ],
+      "date": "2024-08-27",
+      "version": "1.2.10-1"
+    },
+    {
+      "changes": ["Fix minor bugs", "Performance improvements", "WC Enhancement - Multi sign"],
+      "date": "2024-05-07",
+      "version": "1.2.8-1"
+    },
+    {
+      "changes": [
+        "Major App Performance Optimization",
+        "Flamingo integration",
+        "Enhanced Backup and Security Flow",
+        "Enhanced Welcome Flow",
+        "Upgrade Wallet Connect Integration to use 2.0.0-rc.3",
+        "Minor Bugfixes"
+      ],
+      "date": "2022-09-27",
+      "version": "1.1.4-1"
+    },
+    {
+      "changes": [
+        "New export WIF Feature",
+        "Enhanced Security Check Before Backup",
+        "Enhanced Wallet Menu",
+        "Enhanced Account Menu"
+      ],
+      "date": "2022-08-24",
+      "version": "1.1.1-2"
+    },
+    {
+      "changes": ["Basic NFT Features:", "View owned NFTs", "View NFT transfers", "Minor Bugfixes"],
+      "date": "2022-06-09",
+      "version": "1.0.31-1"
+    },
+    {
+      "changes": ["Bugfixes"],
+      "date": "2022-06-06",
+      "version": "1.0.30-1"
+    },
+    {
+      "changes": [
+        "Support for WalletConnect authentication methods:",
+        "signMessage",
+        "verifyMessage",
+        "Minor bugfixes"
+      ],
+      "date": "2022-05-20",
+      "version": "1.0.29-1"
+    },
+    {
+      "changes": ["Wallet Connect Integration", "Design Enhancements", "Minor bugfixes"],
+      "date": "2022-04-08",
+      "version": "1.0.28-1"
+    },
+    {
+      "changes": ["N3 support and minor bugfixes"],
+      "date": "2021-12-13",
+      "version": "1.0.27-1"
+    },
+    {
+      "changes": ["N3 support and minor bugfixes"],
+      "date": "2021-11-16",
+      "version": "1.0.25-1"
+    },
+    {
+      "changes": ["Presenting the Neon Wallet Mobile"],
+      "date": "2021-08-20",
+      "version": "1.0.16-54"
+    }
+  ]
+}

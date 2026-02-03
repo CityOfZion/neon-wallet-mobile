@@ -1,0 +1,141 @@
+{
+  "blockchainServices": {
+    "arbitrum": {
+      "accountName": "Arbitrum Account",
+      "id": "Arbitrum",
+      "label": "Arbitrum"
+    },
+    "base": {
+      "accountName": "Base Account",
+      "id": "Base",
+      "label": "Base"
+    },
+    "bnb": {
+      "accountName": "BNB Account",
+      "id": "BNB",
+      "label": "BNB"
+    },
+    "ethereum": {
+      "accountName": "Ethereum Account",
+      "id": "Ethereum",
+      "label": "Ethereum"
+    },
+    "neo3": {
+      "accountName": "NEO Account",
+      "id": "Neo N3",
+      "label": "Neo (N3)"
+    },
+    "neoLegacy": {
+      "accountName": "Neo Legacy Account",
+      "id": "Neo Legacy",
+      "label": "Neo Legacy"
+    },
+    "neox": {
+      "accountName": "NeoX Account",
+      "id": "NeoX",
+      "label": "NeoX"
+    },
+    "polygon": {
+      "accountName": "Polygon Account",
+      "id": "Polygon",
+      "label": "Polygon"
+    }
+  },
+  "deeplink": {
+    "errors": {
+      "firstTime": "You must go to the onboarding process first. Try again after you finish it."
+    }
+  },
+  "errors": {
+    "blockchainDoesNotSupportEncryption": "The account blockchain does not support encryption",
+    "blockchainIsNotClaimable": "The account blockchain is not claimable",
+    "mustHaveKey": "Standard account needs to have a key",
+    "mustHaveMnemonic": "Standard wallet needs to have a mnemonic",
+    "noKey": "It was not possible to find the key: {{address}}",
+    "unauthorized": "Unauthorized. Please try again or contact support.",
+    "unexpected": "An unexpected error occurred. Please contact support if the problem persists.",
+    "watchAccountUnauthorized": "You are using a watch-only account. This action is not authorized."
+  },
+  "general": {
+    "accept": "Accept",
+    "add": "Add",
+    "cancel": "Cancel",
+    "clear": "Clear",
+    "continue": "Continue",
+    "copiedToClipboard": "Copied to clipboard",
+    "copy": "Copy",
+    "copyToClipboard": "Copy to clipboard",
+    "decline": "Decline",
+    "delete": "Delete",
+    "disconnect": "Disconnect",
+    "done": "Done",
+    "edit": "Edit",
+    "errorOpenLink": "There is a problem opening this link",
+    "next": "Next",
+    "no": "No",
+    "retry": "Retry",
+    "save": "Save",
+    "saveAndContinue": "Save & continue",
+    "skip": "Skip",
+    "yes": "Yes"
+  },
+  "hardwareWallet": {
+    "errors": {
+      "accountIsNotHardware": "The selected account is not a hardware wallet account",
+      "accountsNotFound": "No accounts were found on the hardware wallet",
+      "blockchainNotFound": "We could not determine the blockchain for this wallet",
+      "blockchainNotSupported": "The blockchain {{blockchain}} does not support hardware wallets",
+      "disconnectFirst": "Please disconnect the currently connected hardware wallet first",
+      "hardwareWalletIsNotConnectOrUnlocked": "Hardware wallet isn't connected or is locked, verify your device and try again",
+      "hardwareWalletNotFound": "There is no hardware wallet connected",
+      "missingBip44Path": "BIP44 path is missing for the hardware wallet account"
+    }
+  },
+  "overTheAir": {
+    "downloading": "New update found… {{progress}}%",
+    "error": "There was an error installing the update, please try again later",
+    "success": "Update installed successfully! Please restart the app to apply the update."
+  },
+  "synonyms": {
+    "acquire": ["obtain", "get"],
+    "add": ["append", "include", "increase", "sum"],
+    "buy": ["purchase", "acquire"],
+    "connect": ["link", "join", "unite", "associate"],
+    "connection": ["link", "association", "relation"],
+    "create": ["produce", "build", "make", "generate"],
+    "crypto": ["token", "tokens"],
+    "exchange": ["trade", "swap", "switch", "change"],
+    "generate": ["produce", "create", "yield"],
+    "link": ["connect", "join", "associate"],
+    "liquidate": ["settle", "pay off", "waste"],
+    "list": ["enumerate", "catalog", "listing"],
+    "load": ["charge", "loading", "fill"],
+    "lock": ["secure", "fasten", "close"],
+    "pair": ["couple", "match", "twin"],
+    "purchase": ["buy", "acquire"],
+    "recover": ["regain", "back", "retrieve", "recuperate"],
+    "restore": ["rebuild", "regenerate"],
+    "save": ["preserve", "keep", "store", "economize"],
+    "secure": ["ensure", "guarantee", "safe", "inviolable", "unafraid", "insure", "protect"],
+    "sell": ["market", "deal"],
+    "send": ["transmit", "ship", "deliver", "commit"],
+    "swap": ["exchange", "switch"],
+    "trade": ["exchange", "barter", "switch", "merchandise", "business", "deal"],
+    "transfer": ["transpose", "transmit", "transport", "change", "transferee", "transference", "transportation"],
+    "view": ["see", "look at", "observe", "watch"]
+  },
+  "wallet": {
+    "encryptedName": "Encrypted Wallet",
+    "firstWalletName": "My First Wallet",
+    "importedName": "Imported Wallet",
+    "ledgerName": "Ledger Wallet",
+    "mnemonicWalletName": "Mnemonic Wallet",
+    "watchAccount": "Watch Account"
+  },
+  "walletConnect": {
+    "errorsByCode": {
+      "NO_SERVICE": "The dApp is trying to connect to a different blockchain or network than the one selected.",
+      "UNEXPECTED_ERROR": "An unexpected error occurred. Please try again or contact support."
+    }
+  }
+}

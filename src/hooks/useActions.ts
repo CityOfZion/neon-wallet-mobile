@@ -1,0 +1,172 @@
+import { useCallback, useMemo, useRef, useState } from 'react'
+
+import { cloneDeep } from 'lodash'
+
+import type {
+  TUseActionsActionState,
+  TUseActionsChanged,
+  TUseActionsData,
+  TUseActionsErrors,
+  TUseActionsOptions,
+  TUseActionsSetDataValues,
+} from '@/types/hooks'
+
+const resolveOptions = (options?: TUseActionsOptions) => {
+  return Object.assign({ clearErrorsOnChange: true }, options)
+}
+
+export const useActions = <T extends TUseActionsData>(initialData: T, options?: TUseActionsOptions) => {
+  const initialState = useMemo(() => {
+    const initialDataKeys = Object.keys(initialData) as (keyof T)[]
+
+    return {
+      isValid: false,
+      isActing: false,
+      hasActed: false,
+      hasChanged: false,
+      errors: {} as TUseActionsErrors<T>,
+      changed: initialDataKeys.reduce((acc, key) => {
+        const value = initialData?.[key] as any
+
+        return { ...acc, [key]: value?.trim?.() !== '' && value !== null }
+      }, {} as TUseActionsChanged<T>),
+    }
+  }, [initialData])
+
+  const [actionData, setPrivateActionData] = useState<T>(initialData)
+  const [actionState, setPrivateActionState] = useState<TUseActionsActionState<T>>(initialState)
+
+  const actionDataRef = useRef<T>(actionData)
+  const actionStateRef = useRef<TUseActionsActionState<T>>(actionState)
+
+  const setState = useCallback(
+    (
+      values:
+        | Partial<TUseActionsActionState<T>>
+        | ((prev: TUseActionsActionState<T>) => Partial<TUseActionsActionState<T>>)
+    ) => {
+      let newValues: Partial<TUseActionsActionState<T>>
+
+      if (typeof values === 'function') {
+        newValues = values(actionStateRef.current)
+      } else {
+        newValues = values
+      }
+
+      setPrivateActionState(prev => ({ ...prev, ...newValues }))
+      actionStateRef.current = { ...actionStateRef.current, ...newValues }
+    },
+    []
+  )
+
+  const checkIsValid = useCallback(() => {
+    const hasSomeError = Object.keys(actionStateRef.current.errors).length > 0
+    const hasSomeNotChanged = Object.values(actionStateRef.current.changed).some(value => value !== true)
+    if (hasSomeError || hasSomeNotChanged) {
+      setState({ isValid: false })
+      return
+    }
+
+    setState({ isValid: true })
+  }, [setState])
+
+  const clearErrors = useCallback(
+    (key?: keyof T | (keyof T)[]) => {
+      let newErrors = {} as TUseActionsErrors<T>
+      const keys = key ? (Array.isArray(key) ? key : [key]) : undefined
+
+      if (keys) {
+        newErrors = cloneDeep(actionStateRef.current.errors)
+        keys.forEach(k => {
+          delete newErrors[k]
+        })
+      }
+
+      setState({ errors: newErrors })
+      checkIsValid()
+    },
+    [setState, checkIsValid]
+  )
+
+  const setData = useCallback(
+    (values: TUseActionsSetDataValues<T>) => {
+      let newValues: Partial<T>
+
+      if (typeof values === 'function') {
+        newValues = values(actionDataRef.current)
+      } else {
+        newValues = values
+      }
+
+      setPrivateActionData({ ...actionDataRef.current, ...newValues })
+      actionDataRef.current = { ...actionDataRef.current, ...newValues }
+
+      setState(prev => ({
+        hasActed: false,
+        hasChanged: true,
+        changed: {
+          ...prev.changed,
+          ...Object.keys(newValues).reduce((acc, key) => ({ ...acc, [key]: true }), {} as Record<keyof T, boolean>),
+        },
+      }))
+
+      const resolvedOptions = resolveOptions(options)
+
+      if (resolvedOptions.clearErrorsOnChange) {
+        clearErrors(Object.keys(newValues) as (keyof T)[])
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [clearErrors, setState]
+  )
+
+  const setDataWrapper = useCallback(
+    <K extends keyof T>(key: K) => {
+      return (value: T[K]) => {
+        setData({ [key]: value } as unknown as Partial<T>)
+      }
+    },
+    [setData]
+  )
+
+  const setError = useCallback(
+    (key: keyof T, error: string) => {
+      setState(prev => ({ errors: { ...prev.errors, [key]: error } }))
+      checkIsValid()
+    },
+    [setState, checkIsValid]
+  )
+
+  const handleAct = useCallback((callback: (data: T) => void | Promise<void>) => {
+    return async () => {
+      if (actionStateRef.current.isActing) return
+
+      try {
+        setPrivateActionState(prev => ({ ...prev, isActing: true }))
+        await callback(actionDataRef.current)
+      } finally {
+        setPrivateActionState(prev => ({ ...prev, isActing: false, hasActed: true }))
+      }
+    }
+  }, [])
+
+  const reset = useCallback(() => {
+    setPrivateActionData(initialData)
+    actionDataRef.current = { ...initialData }
+    setPrivateActionState(initialState)
+    actionStateRef.current = { ...initialState }
+  }, [initialData, initialState])
+
+  return {
+    actionData,
+    setData,
+    setError,
+    setDataWrapper,
+    clearErrors,
+    actionState,
+    handleAct,
+    reset,
+    actionDataRef,
+    actionStateRef,
+  }
+}

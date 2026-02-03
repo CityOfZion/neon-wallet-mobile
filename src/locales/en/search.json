@@ -1,0 +1,100 @@
+{
+  "actions": [
+    {
+      "id": "transfer",
+      "label": "Transfer tokens",
+      "nonVerbs": ["token", "crypto"],
+      "verbs": ["transfer", "send", "crypto"]
+    },
+    {
+      "id": "connect",
+      "label": "Create connection",
+      "nonVerbs": ["link", "connection", "wc", "dapp"],
+      "verbs": ["connect", "create", "pair"]
+    },
+    {
+      "id": "createContact",
+      "label": "Create contact",
+      "nonVerbs": ["contact", "address"],
+      "verbs": ["add", "create", "address"]
+    },
+    {
+      "id": "viewContacts",
+      "label": "View contacts",
+      "nonVerbs": ["contact", "address"],
+      "verbs": ["list", "view", "address"]
+    },
+    {
+      "id": "swap",
+      "label": "Swap tokens",
+      "nonVerbs": ["token", "swap", "crypto"],
+      "verbs": ["exchange", "trade", "receive", "crypto"]
+    },
+    {
+      "id": "buy",
+      "label": "Buy tokens",
+      "nonVerbs": ["token", "purchase", "crypto", "on ramp", "ramps"],
+      "verbs": ["buy", "acquire", "ramp", "crypto"]
+    },
+    {
+      "id": "sell",
+      "label": "Sell tokens",
+      "nonVerbs": ["token", "off ramp", "ramps", "crypto"],
+      "verbs": ["sell", "trade", "liquidate", "receive", "ramp", "crypto"]
+    },
+    {
+      "id": "voteNeo3",
+      "label": "Vote (Neo 3)",
+      "nonVerbs": ["voting", "neo", "n3", "node", "member", "consensus", "council", "governance"],
+      "verbs": ["vote"]
+    },
+    {
+      "id": "receive",
+      "label": "Receive tokens",
+      "nonVerbs": ["token", "account", "address", "crypto"],
+      "verbs": ["address", "transfer", "crypto"]
+    },
+    {
+      "id": "createWallet",
+      "label": "Create wallet",
+      "nonVerbs": ["wallet"],
+      "verbs": ["create", "generate"]
+    },
+    {
+      "id": "createBackup",
+      "label": "Create backup",
+      "nonVerbs": ["backup"],
+      "verbs": ["save", "export", "secure"]
+    },
+    {
+      "id": "import",
+      "label": "Import wallet/account",
+      "nonVerbs": ["wallet", "account", "address", "key", "import"],
+      "verbs": ["address", "restore", "recover", "import", "restore", "load", "add", "create"]
+    },
+    {
+      "id": "restoreBackup",
+      "label": "Restore backup",
+      "nonVerbs": ["backup"],
+      "verbs": ["restore", "recover", "import", "restore", "load"]
+    },
+    {
+      "id": "connectHardwareWallet",
+      "label": "Connect hardware wallet",
+      "nonVerbs": ["hardware", "usb", "ledger"],
+      "verbs": ["connect", "pair"]
+    },
+    {
+      "id": "exportFullTransactions",
+      "label": "Export transactions",
+      "nonVerbs": ["transactions", "transaction", "activity", "activities"],
+      "verbs": ["export", "download"]
+    },
+    {
+      "id": "bridgeNeo3NeoX",
+      "label": "Bridge tokens (Neo 3 and Neo X)",
+      "nonVerbs": ["bridge", "swap", "neox", "neo3", "n3", "token", "crypto"],
+      "verbs": ["bridge", "exchange", "receive", "send", "move"]
+    }
+  ]
+}

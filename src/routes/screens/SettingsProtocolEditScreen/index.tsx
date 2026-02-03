@@ -1,0 +1,156 @@
+import React, { Fragment } from 'react'
+
+import { hasWalletConnect } from '@cityofzion/blockchain-service'
+import { WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
+import type { ListRenderItem } from 'react-native'
+import { FlatList } from 'react-native'
+
+import { TwMenuButton } from '@/components/TwMenuButton'
+import { TwSeparator } from '@/components/TwSeparator'
+
+import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
+import { I18nextHelper } from '@/helpers/I18nextHelper'
+import { WalletKitHelper } from '@/helpers/WalletKitHelper'
+
+import { useAppDispatch } from '@/hooks/useRedux'
+import { useCustomNetworksSelector, useSelectedNetworkSelector } from '@/hooks/useSettingsSelector'
+
+import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+
+import TbCheck from '@/assets/images/tb-check.svg'
+import TbCube3dSphere from '@/assets/images/tb-cube-3d-sphere.svg'
+import TbPencil from '@/assets/images/tb-pencil.svg'
+import TbPlus from '@/assets/images/tb-plus.svg'
+
+import { settingsReducerActions } from '@/store/reducers/settings'
+import type { TBlockchainServiceKey, TNetwork } from '@/types/blockchain'
+import type { TMoreStackScreenProps } from '@/types/stacks'
+
+type TItem = {
+  blockchain: TBlockchainServiceKey
+  network: TNetwork
+  selectedNetwork: TNetwork
+  isDefault?: boolean
+  onPress(): void
+}
+
+const { t } = I18nextHelper.get()
+
+const renderItem: ListRenderItem<TItem> = ({ item }) => {
+  const isSelected = item.network.id === item.selectedNetwork.id
+
+  return (
+    <TwMenuButton
+      label={item.network.name}
+      labelProps={{ className: 'capitalize' }}
+      subtitle={item.isDefault ? t('screens:settingsProtocolEditScreen.default') : undefined}
+      subtitleClassName="flex-grow"
+      rightElement={isSelected ? <TbCheck aria-hidden className="h-6 w-6 text-neon" /> : undefined}
+      onPress={item.onPress}
+    />
+  )
+}
+
+export const SettingsProtocolEditScreen = ({
+  navigation,
+  route,
+}: TMoreStackScreenProps<'SettingsProtocolEditScreen'>) => {
+  const { blockchain } = route.params
+
+  const dispatch = useAppDispatch()
+  const { selectedNetwork } = useSelectedNetworkSelector(blockchain)
+  const { customNetworks } = useCustomNetworksSelector(blockchain)
+
+  const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
+
+  const isSelectedNetworkCustom = selectedNetwork.type === 'custom'
+
+  const handlePress = async (network: TNetwork) => {
+    dispatch(
+      settingsReducerActions.setSelectNetwork({
+        blockchain,
+        network,
+      })
+    )
+
+    const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
+    if (!hasWalletConnect(service)) return
+
+    const sessions = WalletKitHelper.kit.getActiveSessions()
+    const accountSessions = BSWalletKitHelper.filterSessions(Object.values(sessions), {
+      chains: [service.walletConnectService.chain],
+    })
+    await Promise.allSettled(
+      accountSessions.map(session =>
+        WalletKitHelper.kit.disconnectSession({
+          topic: session.topic,
+          reason: BSWalletKitHelper.getError('USER_DISCONNECTED'),
+        })
+      )
+    )
+  }
+
+  const handleAddCustomNetwork = () => {
+    navigation.navigate('PersistNetworkModal', {
+      blockchain,
+    })
+  }
+
+  const handleEditCustomNetwork = async () => {
+    navigation.navigate('PersistNetworkModal', {
+      blockchain,
+      network: selectedNetwork,
+    })
+  }
+
+  const handleSelectNode = async () => {
+    navigation.navigate('NodeSelectionModal', {
+      blockchain,
+    })
+  }
+
+  const data = service.availableNetworks
+    .concat(customNetworks)
+    .map<TItem>(network => {
+      return {
+        blockchain,
+        network,
+        selectedNetwork,
+        onPress: handlePress.bind(null, network),
+        isDefault: network.id === service.defaultNetwork.id,
+      }
+    })
+    .sort(item => (service.defaultNetwork.id === item.network.id ? -1 : 1))
+
+  return (
+    <TwScreenLayout title={t(`common:blockchainServices.${blockchain}.label`)} withoutScroll>
+      <FlatList data={data} renderItem={renderItem} ItemSeparatorComponent={TwSeparator} />
+
+      <TwSeparator />
+
+      <TwMenuButton
+        label={t('screens:settingsProtocolEditScreen.selectNodeButtonLabel')}
+        description={selectedNetwork.url}
+        leftElement={<TbCube3dSphere aria-hidden />}
+        onPress={handleSelectNode}
+        disabled={service.rpcNetworkUrls.length <= 0}
+      />
+
+      {service.isCustomNetworkSupported && (
+        <Fragment>
+          <TwSeparator />
+
+          <TwMenuButton
+            label={
+              isSelectedNetworkCustom
+                ? t('screens:settingsProtocolEditScreen.editCustomNetworkButtonLabel')
+                : t('screens:settingsProtocolEditScreen.addCustomNetworkButtonLabel')
+            }
+            leftElement={isSelectedNetworkCustom ? <TbPencil aria-hidden /> : <TbPlus aria-hidden />}
+            onPress={isSelectedNetworkCustom ? handleEditCustomNetwork : handleAddCustomNetwork}
+          />
+        </Fragment>
+      )}
+    </TwScreenLayout>
+  )
+}

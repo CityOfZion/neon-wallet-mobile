@@ -1,0 +1,89 @@
+{
+  "accountCard": {
+    "accountPlaceholder": "我的账户",
+    "address": "地址",
+    "balance": "余额"
+  },
+  "accountSelectionAccordion": {
+    "notFoundLabel": "未找到账户或已存在，请检查输入稍后再试。",
+    "selectedOfTotal": "已选择{{selectedCount}}个，共{{totalCount}}个地址"
+  },
+  "actionInput": {
+    "maxButtonLabel": "最大"
+  },
+  "balanceList": {
+    "empty": "您的钱包目前为空，何不今天添加一些资金？",
+    "holdings": "持有量",
+    "value": "价值"
+  },
+  "blockchainList": {
+    "xExisting": "已有{{amount}}个"
+  },
+  "nfcModal": {
+    "description": "请轻触NFC标签",
+    "title": "准备扫描"
+  },
+  "screenLayoutBars": {
+    "customMode": "自定义网络模式",
+    "noInternet": "无网络连接",
+    "testnetMode": "测试网模式",
+    "warning": "警告"
+  },
+  "setup": {
+    "accountTasksManager": {
+      "useFraudulentTokensNotificationProcess": {
+        "notificationDescription": "我们已识别出 “{{ value }}”，它已被社区标记为欺诈代币。我们建议隐藏它并避免任何形式的交互。",
+        "notificationTitle": "“{{ value }}” 是欺诈代币！"
+      },
+      "useVotingNeo3NotificationProcess": {
+        "notificationDescription": "只需点这里，立即投票",
+        "notificationTitle": "你正在错过免费的 GAS！"
+      }
+    },
+    "hardwareWalletManager": {
+      "detectedHardwareByUsb": "我们检测到通过 USB 连接的硬件钱包。是否尝试连接？",
+      "requestingPermission": "请在您的硬件钱包设备上确认。"
+    },
+    "walletConnectManagerSetup": {
+      "autoAcceptErrorMessage": "WalletConnect 请求处理失败",
+      "autoAcceptProcessingMessage": "正在处理 WalletConnect 请求…",
+      "autoAcceptSuccessMessage": "WalletConnect 请求已成功处理"
+    },
+    "walletTasksManager": {
+      "useBackupReminderNotificationProcess": {
+        "notificationDescription": "我们建议在\"更多 > 设置 > 安全 > 备份 NEON\"中创建新的备份文件以保护您的钱包。为了增强安全性，您还可以在\"钱包 > 三点 > 备份助记词\"中手动导出助记词，并在\"钱包 > 账户 > 三点 > 导出密钥\"中导出私钥。",
+        "notificationTitle": "创建新的备份文件！"
+      }
+    }
+  },
+  "tabStackBar": {
+    "connectionsStackButtonLabel": "连接",
+    "moreStackButtonLabel": "更多",
+    "quickToolsButtonLabel": "快捷工具",
+    "searchStackButtonLabel": "搜索",
+    "walletsStackButtonLabel": "钱包"
+  },
+  "twAccountList": {
+    "emptyList": "未找到账户"
+  },
+  "twContactList": {
+    "emptyList": "未找到联系人",
+    "searchInputPlaceholder": "输入联系人姓名…"
+  },
+  "twDappDetailsCard": {
+    "connectionDetailsHeaderLabel": "链",
+    "methodsDetailsLabel": "功能"
+  },
+  "twInput": {
+    "labels": {
+      "clearButton": "清除输入",
+      "hideButton": "隐藏输入",
+      "showButton": "显示输入"
+    }
+  },
+  "twModalLayoutCloseIconButton": {
+    "labels": {
+      "closeButton": "关闭弹窗"
+    }
+  }
+}

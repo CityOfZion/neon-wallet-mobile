@@ -1,0 +1,128 @@
+diff --git a/node_modules/@ethersproject/sha2/LICENSE.md b/node_modules/@ethersproject/sha2/LICENSE.md
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/README.md b/node_modules/@ethersproject/sha2/README.md
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/_version.d.ts b/node_modules/@ethersproject/sha2/lib.esm/_version.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/_version.d.ts.map b/node_modules/@ethersproject/sha2/lib.esm/_version.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/_version.js b/node_modules/@ethersproject/sha2/lib.esm/_version.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/_version.js.map b/node_modules/@ethersproject/sha2/lib.esm/_version.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/index.d.ts b/node_modules/@ethersproject/sha2/lib.esm/index.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/index.d.ts.map b/node_modules/@ethersproject/sha2/lib.esm/index.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/index.js b/node_modules/@ethersproject/sha2/lib.esm/index.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/index.js.map b/node_modules/@ethersproject/sha2/lib.esm/index.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/sha2.d.ts b/node_modules/@ethersproject/sha2/lib.esm/sha2.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/sha2.d.ts.map b/node_modules/@ethersproject/sha2/lib.esm/sha2.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/sha2.js b/node_modules/@ethersproject/sha2/lib.esm/sha2.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/sha2.js.map b/node_modules/@ethersproject/sha2/lib.esm/sha2.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/types.d.ts b/node_modules/@ethersproject/sha2/lib.esm/types.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/types.d.ts.map b/node_modules/@ethersproject/sha2/lib.esm/types.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/types.js b/node_modules/@ethersproject/sha2/lib.esm/types.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib.esm/types.js.map b/node_modules/@ethersproject/sha2/lib.esm/types.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/_version.d.ts b/node_modules/@ethersproject/sha2/lib/_version.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/_version.d.ts.map b/node_modules/@ethersproject/sha2/lib/_version.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/_version.js b/node_modules/@ethersproject/sha2/lib/_version.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/_version.js.map b/node_modules/@ethersproject/sha2/lib/_version.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/browser-sha2.d.ts b/node_modules/@ethersproject/sha2/lib/browser-sha2.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/browser-sha2.d.ts.map b/node_modules/@ethersproject/sha2/lib/browser-sha2.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/browser-sha2.js b/node_modules/@ethersproject/sha2/lib/browser-sha2.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/browser-sha2.js.map b/node_modules/@ethersproject/sha2/lib/browser-sha2.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/index.d.ts b/node_modules/@ethersproject/sha2/lib/index.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/index.d.ts.map b/node_modules/@ethersproject/sha2/lib/index.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/index.js b/node_modules/@ethersproject/sha2/lib/index.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/index.js.map b/node_modules/@ethersproject/sha2/lib/index.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/sha2.d.ts b/node_modules/@ethersproject/sha2/lib/sha2.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/sha2.d.ts.map b/node_modules/@ethersproject/sha2/lib/sha2.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/sha2.js b/node_modules/@ethersproject/sha2/lib/sha2.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/sha2.js.map b/node_modules/@ethersproject/sha2/lib/sha2.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/types.d.ts b/node_modules/@ethersproject/sha2/lib/types.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/types.d.ts.map b/node_modules/@ethersproject/sha2/lib/types.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/types.js b/node_modules/@ethersproject/sha2/lib/types.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/lib/types.js.map b/node_modules/@ethersproject/sha2/lib/types.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/sha2/package.json b/node_modules/@ethersproject/sha2/package.json
+index 0ede36e..ec66f38 100644
+--- a/node_modules/@ethersproject/sha2/package.json
++++ b/node_modules/@ethersproject/sha2/package.json
+@@ -3,9 +3,6 @@
+     "sha2.js": "browser-sha2.js"
+   },
+   "author": "Richard Moore <me@ricmoo.com>",
+-  "browser": {
+-    "./lib/sha2": "./lib/browser-sha2.js"
+-  },
+   "dependencies": {
+     "@ethersproject/bytes": "^5.8.0",
+     "@ethersproject/logger": "^5.8.0",

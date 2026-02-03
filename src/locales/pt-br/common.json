@@ -1,0 +1,141 @@
+{
+  "blockchainServices": {
+    "arbitrum": {
+      "accountName": "Conta Arbitrum",
+      "id": "Arbitrum",
+      "label": "Arbitrum"
+    },
+    "base": {
+      "accountName": "Conta Base",
+      "id": "Base",
+      "label": "Base"
+    },
+    "bnb": {
+      "accountName": "Conta BNB",
+      "id": "BNB",
+      "label": "BNB"
+    },
+    "ethereum": {
+      "accountName": "Conta Ethereum",
+      "id": "Ethereum",
+      "label": "Ethereum"
+    },
+    "neo3": {
+      "accountName": "Conta NEO",
+      "id": "Neo N3",
+      "label": "Neo (N3)"
+    },
+    "neoLegacy": {
+      "accountName": "Conta Neo Legacy",
+      "id": "Neo Legacy",
+      "label": "Neo Legacy"
+    },
+    "neox": {
+      "accountName": "Conta NeoX",
+      "id": "NeoX",
+      "label": "NeoX"
+    },
+    "polygon": {
+      "accountName": "Conta Polygon",
+      "id": "Polygon",
+      "label": "Polygon"
+    }
+  },
+  "deeplink": {
+    "errors": {
+      "firstTime": "Você precisa passar pelo processo de onboarding primeiro. Tente novamente após completá-lo."
+    }
+  },
+  "errors": {
+    "blockchainDoesNotSupportEncryption": "A blockchain da conta não suporta criptografia.",
+    "blockchainIsNotClaimable": "A blockchain da conta não pode ser reivindicada.",
+    "mustHaveKey": "Uma conta padrão precisa ter uma chave.",
+    "mustHaveMnemonic": "Uma carteira padrão precisa ter uma frase mnemônica.",
+    "noKey": "A chave não pôde ser encontrada: {{address}}",
+    "unauthorized": "Acesso não autorizado. Tente novamente ou entre em contato com o suporte.",
+    "unexpected": "Ocorreu um erro inesperado. Se o problema persistir, entre em contato com o suporte.",
+    "watchAccountUnauthorized": "Você está usando uma conta somente para visualização. Esta ação não está autorizada."
+  },
+  "general": {
+    "accept": "Aceitar",
+    "add": "Adicionar",
+    "cancel": "Cancelar",
+    "clear": "Limpar",
+    "continue": "Continuar",
+    "copiedToClipboard": "Copiado para a área de transferência",
+    "copy": "Copiar",
+    "copyToClipboard": "Copiar para a área de transferência",
+    "decline": "Recusar",
+    "delete": "Deletar",
+    "disconnect": "Desconectar",
+    "done": "Pronto",
+    "edit": "Editar",
+    "errorOpenLink": "Houve um problema ao abrir este link",
+    "next": "Próximo",
+    "no": "Não",
+    "retry": "Tentar novamente",
+    "save": "Salvar",
+    "saveAndContinue": "Salvar & continuar",
+    "skip": "Pular",
+    "yes": "Sim"
+  },
+  "hardwareWallet": {
+    "errors": {
+      "accountIsNotHardware": "A conta selecionada não é uma conta de carteira de hardware.",
+      "accountsNotFound": "Nenhuma conta foi encontrada na carteira de hardware.",
+      "blockchainNotFound": "Não foi possível determinar a blockchain desta carteira.",
+      "blockchainNotSupported": "A blockchain {{blockchain}} não suporta carteiras de hardware.",
+      "disconnectFirst": "Por favor, desconecte primeiro a carteira de hardware que está conectada no momento.",
+      "hardwareWalletIsNotConnectOrUnlocked": "A carteira de hardware não está conectada ou está bloqueada. Verifique seu dispositivo e tente novamente.",
+      "hardwareWalletNotFound": "Nenhuma carteira de hardware conectada",
+      "missingBip44Path": "O caminho BIP44 está ausente para a conta da carteira de hardware."
+    }
+  },
+  "overTheAir": {
+    "downloading": "Nova atualização encontrada… {{progress}}%",
+    "error": "Houve um erro ao instalar a atualização. Tente novamente mais tarde",
+    "success": "Atualização instalada com sucesso! Reinicie a aplicação para aplicar a atualização."
+  },
+  "synonyms": {
+    "acquire": ["adquirir", "obter"],
+    "add": ["adicionar", "inserir", "aumentar", "somar"],
+    "buy": ["comprar", "adquirir"],
+    "connect": ["conectar", "vincular", "unir", "ligar"],
+    "connection": ["conexão", "vínculo", "relacionamento"],
+    "create": ["criar", "produzir", "fazer", "gerar"],
+    "crypto": ["Token", "Tokens"],
+    "exchange": ["trocar", "negociar", "intercambiar", "permutar"],
+    "generate": ["gerar", "produzir", "criar"],
+    "link": ["vincular", "conectar", "lincar"],
+    "liquidate": ["liquidar", "acertar", "dissolver"],
+    "list": ["listar", "catalogar", "lista"],
+    "load": ["carregar", "ativar", "preencher"],
+    "lock": ["trancar", "bloquear", "fechar"],
+    "pair": ["parear", "emparelhar", "associar"],
+    "purchase": ["comprar", "adquirir"],
+    "recover": ["recuperar", "resgatar", "obter", "reparar"],
+    "restore": ["restaurar", "recuperar"],
+    "save": ["salvar", "guardar", "preservar", "poupar"],
+    "secure": ["proteger", "garantir", "seguro", "salvaguardar", "resguardar", "assegurar", "defender"],
+    "sell": ["vender", "negociar"],
+    "send": ["enviar", "remeter", "entregar", "fornecer"],
+    "swap": ["swap", "trocar"],
+    "trade": ["trocar", "negociar", "intercambiar", "comércio", "transação", "oferta"],
+    "transfer": ["transferir", "enviar", "deslocar", "alterar", "movimentação", "encaminhamento", "transporte"],
+    "view": ["ver", "visualizar", "observar", "verificar"]
+  },
+  "wallet": {
+    "encryptedName": "Carteira Criptografada",
+    "firstWalletName": "Minha Primeira Carteira",
+    "importedName": "Carteira Importada",
+    "ledgerName": "Carteira Ledger",
+    "mnemonicWalletName": "Carteira Mnemônica",
+    "watchAccount": "Conta watch"
+  },
+  "walletConnect": {
+    "errorsByCode": {
+      "NO_SERVICE": "O aplicativo descentralizado (dApp) está tentando se conectar a uma blockchain ou rede diferente da selecionada.",
+      "UNEXPECTED_ERROR": "Ocorreu um erro inesperado. Tente novamente ou entre em contato com o suporte."
+    }
+  }
+}

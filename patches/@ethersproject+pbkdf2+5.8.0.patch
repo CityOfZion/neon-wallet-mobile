@@ -1,0 +1,104 @@
+diff --git a/node_modules/@ethersproject/pbkdf2/LICENSE.md b/node_modules/@ethersproject/pbkdf2/LICENSE.md
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/README.md b/node_modules/@ethersproject/pbkdf2/README.md
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib.esm/_version.d.ts b/node_modules/@ethersproject/pbkdf2/lib.esm/_version.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib.esm/_version.d.ts.map b/node_modules/@ethersproject/pbkdf2/lib.esm/_version.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib.esm/_version.js b/node_modules/@ethersproject/pbkdf2/lib.esm/_version.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib.esm/_version.js.map b/node_modules/@ethersproject/pbkdf2/lib.esm/_version.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib.esm/index.d.ts b/node_modules/@ethersproject/pbkdf2/lib.esm/index.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib.esm/index.d.ts.map b/node_modules/@ethersproject/pbkdf2/lib.esm/index.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib.esm/index.js b/node_modules/@ethersproject/pbkdf2/lib.esm/index.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib.esm/index.js.map b/node_modules/@ethersproject/pbkdf2/lib.esm/index.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib.esm/pbkdf2.d.ts b/node_modules/@ethersproject/pbkdf2/lib.esm/pbkdf2.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib.esm/pbkdf2.d.ts.map b/node_modules/@ethersproject/pbkdf2/lib.esm/pbkdf2.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib.esm/pbkdf2.js b/node_modules/@ethersproject/pbkdf2/lib.esm/pbkdf2.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib.esm/pbkdf2.js.map b/node_modules/@ethersproject/pbkdf2/lib.esm/pbkdf2.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/_version.d.ts b/node_modules/@ethersproject/pbkdf2/lib/_version.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/_version.d.ts.map b/node_modules/@ethersproject/pbkdf2/lib/_version.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/_version.js b/node_modules/@ethersproject/pbkdf2/lib/_version.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/_version.js.map b/node_modules/@ethersproject/pbkdf2/lib/_version.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/browser-pbkdf2.d.ts b/node_modules/@ethersproject/pbkdf2/lib/browser-pbkdf2.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/browser-pbkdf2.d.ts.map b/node_modules/@ethersproject/pbkdf2/lib/browser-pbkdf2.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/browser-pbkdf2.js b/node_modules/@ethersproject/pbkdf2/lib/browser-pbkdf2.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/browser-pbkdf2.js.map b/node_modules/@ethersproject/pbkdf2/lib/browser-pbkdf2.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/index.d.ts b/node_modules/@ethersproject/pbkdf2/lib/index.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/index.d.ts.map b/node_modules/@ethersproject/pbkdf2/lib/index.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/index.js b/node_modules/@ethersproject/pbkdf2/lib/index.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/index.js.map b/node_modules/@ethersproject/pbkdf2/lib/index.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/pbkdf2.d.ts b/node_modules/@ethersproject/pbkdf2/lib/pbkdf2.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/pbkdf2.d.ts.map b/node_modules/@ethersproject/pbkdf2/lib/pbkdf2.d.ts.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/pbkdf2.js b/node_modules/@ethersproject/pbkdf2/lib/pbkdf2.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/lib/pbkdf2.js.map b/node_modules/@ethersproject/pbkdf2/lib/pbkdf2.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/@ethersproject/pbkdf2/package.json b/node_modules/@ethersproject/pbkdf2/package.json
+index 3ec4743..854d8d8 100644
+--- a/node_modules/@ethersproject/pbkdf2/package.json
++++ b/node_modules/@ethersproject/pbkdf2/package.json
+@@ -3,9 +3,6 @@
+     "pbkdf2.js": "browser-pbkdf2.js"
+   },
+   "author": "Richard Moore <me@ricmoo.com>",
+-  "browser": {
+-    "./lib/pbkdf2": "./lib/browser-pbkdf2.js"
+-  },
+   "dependencies": {
+     "@ethersproject/bytes": "^5.8.0",
+     "@ethersproject/sha2": "^5.8.0"

@@ -1,0 +1,27 @@
+<svg viewBox="0 0 24 24" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path
+    stroke="currentColor"
+    stroke-width="1.5"
+    d="m12.2 7.043-.54-.54a1.226 1.226 0 0 0-1.735.005L2.87 13.563a1.226 1.226 0 0 0-.006 1.734l6.05 6.05a1.226 1.226 0 0 0 1.734-.006l7.055-7.055c.48-.48.483-1.257.006-1.734l-.497-.497"
+  />
+  <rect
+    width="10.456"
+    height="2.444"
+    x="7.829"
+    y="12.925"
+    stroke="currentColor"
+    stroke-width="1.5"
+    rx="1"
+    transform="rotate(-45 7.83 12.925)"
+  />
+  <rect
+    width="10.456"
+    height="2.444"
+    x="11.732"
+    y="12.479"
+    stroke="currentColor"
+    stroke-width="1.5"
+    rx="1"
+    transform="rotate(-45 11.732 12.479)"
+  />
+</svg>

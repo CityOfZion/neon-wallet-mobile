@@ -1,0 +1,577 @@
+{
+  "accountAssetsScreen": {
+    "balanceLabel": "Saldo",
+    "lastUpdatedLabel": "Última atualização",
+    "tabs": {
+      "activeLabel": "Ativo",
+      "hiddenLabel": "Oculto"
+    },
+    "title": "Tokens"
+  },
+  "accountConnectionsScreen": {
+    "connectDappLabel": "Conectar um dApp",
+    "emptyList": "Nenhum dApp conectado",
+    "labels": {
+      "addConnection": "Adicionar conexão"
+    },
+    "title": "Conexões"
+  },
+  "accountNftsScreen": {
+    "emptyList": "Nenhum NFT para listar",
+    "title": "NFTS"
+  },
+  "accountScreen": {
+    "blockHeightTitle": "Altura do bloco {{ blockchain }}",
+    "buttons": {
+      "bridgeNeo3NeoX": "Bridge",
+      "buyAndSell": "Comprar + Vender",
+      "receive": "Receber",
+      "send": "Enviar",
+      "swap": "Swap",
+      "voteNeo3": "Votação Neo 3"
+    },
+    "claimAsset": "<1>Fazer claim</1> {{ amount }} {{ symbol }}",
+    "connections": "Conexões",
+    "gasUnavailable": "GAS indisponível",
+    "nfts": "NFTs",
+    "tokens": "Tokens",
+    "transactions": "Transações",
+    "warningClaimModal": {
+      "buttons": {
+        "no": "Não",
+        "yes": "Sim"
+      },
+      "claimAmount": "Valor a dar claim",
+      "claimFee": "Taxa de claim",
+      "highClaimFee": {
+        "question": "Deseja prosseguir?",
+        "subtitle": "Isso será deduzido do seu saldo.",
+        "title": "Taxa de Claim Alta"
+      }
+    }
+  },
+  "accountSettingsScreen": {
+    "customize": "Personalizar conta",
+    "deleteAlert": "Tem certeza que deseja deletar esta conta?",
+    "deleteButton": "Deletar Conta",
+    "deleteSubtitle": "Isso removerá sua conta e todo o histórico de transações.",
+    "deleteTitle": "Deletar Carteira",
+    "exportKey": "Exportar Chave",
+    "navigation": {
+      "cancel": "Cancelar",
+      "delete": "Deletar"
+    },
+    "title": "Configurações da Conta"
+  },
+  "accountTransactionsScreen": {
+    "bridgeNeo3NeoXDetailsButtonLabel": "Bridge",
+    "completedTransactions": "Transações Concluídas",
+    "doraButtonLabel": "Ir para explorador Dora",
+    "emptyList": "Nenhuma transação para listar",
+    "exportButtonLabel": "Exportar",
+    "invocationsLabel": "Invocações",
+    "notificationsLabel": "Notificações",
+    "pendingTransactions": "Transações Pendentes",
+    "receivedFromLabel": "Recebido de",
+    "sentToLabel": "Enviado para",
+    "swapDetailsButtonLabel": "Ir para detalhes do swap",
+    "title": "Transações",
+    "txidLabel": "ID da Tx:",
+    "type": {
+      "nft": "NFT",
+      "token": "Ativo"
+    }
+  },
+  "bridgeNeo3NeoXScreen": {
+    "aboutButtonLabel": "Sobre",
+    "errorsByCode": {
+      "ACCOUNT_NOT_COMPATIBLE_WITH_TOKEN": "A conta selecionada não é compatível com o token selecionado",
+      "AMOUNT_ABOVE_MAXIMUM": "A quantidade está acima do máximo",
+      "AMOUNT_BELOW_MINIMUM": "A quantidade está abaixo do mínimo",
+      "BRIDGE_NOT_READY": "O bridge não está pronto ainda, por favor, preencha todos os campos",
+      "INSUFFICIENT_FEE_TOKEN_BALANCE": "Saldo insuficiente para cobrir a taxa de bridge",
+      "NO_AVAILABLE_TOKENS": "Nenhum token disponível para bridge",
+      "PAIR_TOKEN_NOT_FOUND": "O token de par não foi encontrado",
+      "TOKEN_NOT_AVAILABLE": "O token selecionado não está disponível para bridge",
+      "UNEXPECTED_ERROR": "Erro inesperado, por favor, tente novamente"
+    },
+    "form": {
+      "accountDetailsStepLabel": "Detalhes da conta",
+      "accountToUseLabel": "Bridge daqui",
+      "accountToUseModalTitle": "Selecione uma conta",
+      "addressToReceiveLabel": "Receber aqui",
+      "addressToReceiveModalTitle": "Selecione uma conta de recebimento",
+      "amountPlaceholder": "0.00",
+      "amountToReceiveAfterFeesLabel": "(depois das taxas)",
+      "amountToReceiveLabel": "Quantidade que você receberá",
+      "amountToReceivePlaceholder": "0.00000000",
+      "amountToUseLabel": "Quantidade",
+      "amountToUseMinLabel": "Mínimo {{amount}}",
+      "amountToUseMinPlaceholder": "0.00000000",
+      "amountsStepLabel": "Quantidades",
+      "assetsStepLabel": "Ativos",
+      "balanceLabel": "Saldo",
+      "balancePlaceholder": "0.00",
+      "bridgeFeeLabel": "Taxa de transação",
+      "bridgeFeePlaceholder": "0.00",
+      "selectPlaceholder": "Selecionar…",
+      "submitButtonLabel": "Fazer bridge agora",
+      "switchTokensButtonLabel": "Trocar tokens",
+      "tokenToReceiveLabel": "Bridge para este",
+      "tokenToUseLabel": "Bridge deste",
+      "tokenToUseModalTitle": "Selecione um token para fazer bridge"
+    },
+    "messages": {
+      "bridgeError": "Houve um problema ao fazer bridge, por favor, tente novamente mais tarde",
+      "networksShouldBeMainnet": "Neo 3 e Neo X devem estar usando Mainnet",
+      "selectAccountToUseError": "Problema ao selecionar conta a usar"
+    },
+    "restartButtonLabel": "Reiniciar",
+    "title": "Bridge de tokens"
+  },
+  "buyAndSellTokensScreen": {
+    "buttons": {
+      "accounts": "Contas",
+      "deposit": "Depósito",
+      "info": "Informações do recurso"
+    },
+    "iframeContent": {
+      "buttons": {
+        "back": "Voltar",
+        "restart": "Reiniciar"
+      },
+      "error": "Há um erro com o conteúdo, por favor, tente novamente",
+      "restartAlert": {
+        "noButtonLabel": "Não, manter dados",
+        "subtitleLabel": "Se reiniciar, você perderá todos os dados que já preencheu e retornará ao início do processo.",
+        "titleLabel": "Deseja reiniciar a tela?",
+        "yesButtonLabel": "Sim, reiniciar"
+      }
+    },
+    "leaveAlert": {
+      "buttons": {
+        "cancel": "Cancelar",
+        "continue": "Continuar"
+      },
+      "subtitle": "Se você sair desta visualização, o formulário será redefinido e todos os seus dados serão removidos do formulário. Tem certeza?",
+      "title": "Sair e redefinir formulário?"
+    },
+    "tabs": {
+      "buyTokens": "Comprar tokens",
+      "sellTokens": "Vender tokens"
+    },
+    "title": "Comprar + Vender"
+  },
+  "contactScreen": {
+    "title": "Contato",
+    "walletAddressLabel": "Endereços da carteira"
+  },
+  "contactsScreen": {
+    "title": "Contatos"
+  },
+  "createWalletStep1Screen": {
+    "body_1": "Este conjunto de palavras secretas facilita o backup e a restauração de sua conta. Isso torna sua carteira realmente segura",
+    "body_2": "É muito importante que você lembre sua frase corretamente, então iremos ajudá-lo com isso. Se estiver com pressa, pode fazer isso em outro momento.",
+    "body_3": "Dê à sua carteira um nome memorável e está pronto para começar!",
+    "createWallet": "Criar Carteira",
+    "label_1": "Gerar frase de segurança",
+    "label_2": "Confirmar frase de segurança",
+    "label_3": "Dê um nome à sua carteira",
+    "title": "Criar Carteira"
+  },
+  "createWalletStep2Screen": {
+    "body_1": "Abaixo você encontrará sua frase secreta",
+    "body_2": "Anote esta frase em um pedaço de papel ou registre em uma nota digital segura. Você também pode baixá-la acima, mas certifique-se de mantê-la segura.",
+    "body_3": "Qualquer pessoa com esta frase poderá roubar seus ativos conquistados e você não conseguirá recuperá-los!",
+    "dialog_body": "Para manter sua frase de segurança segura, certifique-se de que está salva em uma nota criptografada.",
+    "dialog_dismiss": "OK, eu entendo",
+    "dialog_title": "Certifique-se de manter sua frase de segurança segura",
+    "label_1": "Gerar frase de segurança",
+    "oneOfThree": "1 de 3",
+    "title": "Criar Carteira"
+  },
+  "createWalletStep3Screen": {
+    "body_1": "Por favor, selecione cada frase na ordem correta para garantir que você acertou.",
+    "dialog_1_body": "Confirmar que você fez backup corretamente de sua frase de segurança é altamente recomendado",
+    "dialog_1_title": "Tem certeza que deseja pular a confirmação de backup?",
+    "dialog_2_body": "Por favor, tente novamente para confirmar seu backup",
+    "dialog_2_title": "Ordem de palavras incorreta",
+    "label_1": "Confirmar frase de segurança",
+    "title": "Criar Carteira",
+    "twoOfThree": "2 de 3"
+  },
+  "createWalletStep4Screen": {
+    "body_1": "Dê à sua carteira um nome memorável, talvez pudesse ser relacionado ao que você quer usar a carteira, como \"trading\" ou \"investimentos\".",
+    "errors": {
+      "name": "Deve ter no mínimo 1 caractere e menos de 21 caracteres"
+    },
+    "label_1": "Dê um nome à sua carteira",
+    "label_walletName": "Nome da Carteira",
+    "threeOfThree": "3 de 3",
+    "title": "Criar Carteira"
+  },
+  "createWalletStep5Screen": {
+    "continueButtonLabel": "Criar Agora",
+    "subtitle": "Selecione a blockchain desejada para sua nova conta",
+    "title": "Criar Carteira"
+  },
+  "createWalletStep6Screen": {
+    "body_1": "Lembre-se de manter sua frase secreta segura, ter vários backups é sempre uma boa ideia.",
+    "body_2": "Se você precisar descobrir a frase secreta de uma carteira, você pode encontrá-la na página de configurações dessa carteira.",
+    "label_1": "Parabéns, você é o orgulhoso proprietário de uma carteira nova e brilhante!",
+    "title": "Criar Carteira",
+    "viewWallet": "Ver carteira"
+  },
+  "dappConnectionsScreen": {
+    "connectDappLabel": "Conectar um dApp",
+    "connectNewDappLabel": "Conectar um novo dApp",
+    "noDappsConnected": "Nenhum dApp conectado",
+    "title": "Conexões"
+  },
+  "importBlockchainSelectionScreen": {
+    "subtitle": "Selecione a blockchain desejada para descriptografar sua chave",
+    "title": "Importar"
+  },
+  "importMnemonicSelectionScreen": {
+    "buttonLabel": "Importar",
+    "foundAccountsMnemonic": "Encontramos a(s) seguinte(s) conta(s) para importar:",
+    "title": "Importar"
+  },
+  "importPassphraseScreen": {
+    "accountAlreadyExists": "Conta já existe",
+    "decryptError": "Erro ao descriptografar a chave",
+    "enterPassphrase": "Digite uma Frase-passe para sua chave criptografada",
+    "inputPlaceholder": "Por favor, digite a Frase-passe",
+    "title": "Importar"
+  },
+  "importScreen": {
+    "enterAnAddress": "Digite um endereço, chave criptografada, chave privada ou palavras mnemônicas",
+    "mnemonicComplete": "Mnemônico completo",
+    "mnemonicIncorrect": "Mnemônico incorreto",
+    "placeholder": "Digite aqui…",
+    "title": "Importar"
+  },
+  "moreScreen": {
+    "chatWithUsButtonLabel": "Converse conosco",
+    "contactsButtonLabel": "Contatos",
+    "createWalletButtonLabel": "Criar carteira",
+    "helpButtonLabel": "Ajuda",
+    "importButtonLabel": "Importar",
+    "openSupportTicketButtonLabel": "Abrir ticket de suporte",
+    "privatePolicyButtonLabel": "Política de privacidade",
+    "settingsButtonLabel": "Configurações",
+    "title": "Mais opções"
+  },
+  "notificationsScreen": {
+    "actions": {
+      "error": {
+        "accountNotFound": "Não conseguimos encontrar a conta para esta notificação",
+        "walletNotFound": "Não conseguimos encontrar a carteira para esta notificação"
+      }
+    },
+    "actionsButtonLabel": "Ações",
+    "emptyListBody": "Você está atualizado!",
+    "emptyListTitle": "Nada para ver aqui",
+    "relatedAccountLabel": "Conta:",
+    "relatedAddressLabel": "Endereço:",
+    "title": "Notificações"
+  },
+  "onboardingCompletedScreen": {
+    "buttonLabel": "Ver Carteira",
+    "subtitle": "Sua nova carteira e conta estão prontas para usar.",
+    "title": "Configuração Concluída!",
+    "titleAddressList": "Endereços da conta"
+  },
+  "onboardingScreen": {
+    "buttonLabel": "Concluir",
+    "creatingWallet": "Estamos criando sua Carteira com uma Conta dentro. Enquanto isso, aqui está um resumo dos muitos recursos que você encontrará no aplicativo.",
+    "feature1": {
+      "header": "Organize facilmente seus ativos",
+      "subtitle": "Crie várias Contas dentro de uma Carteira, cada uma com seu endereço único."
+    },
+    "feature2": {
+      "header": "O Aplicativo de Carteira Mais Flexível na Neo",
+      "subtitle": "Traga facilmente suas Chaves Privadas para a Neon ou adicione qualquer endereço como conta watch para ficar de olho em suas transações públicas."
+    },
+    "feature3": {
+      "header": "Conexão Mobile Dapp",
+      "subtitle": "Interaja com segurança com vários Dapps diretamente do seu dispositivo através do protocolo Wallet Connect estabelecido."
+    },
+    "feature4": {
+      "header": "Apresentando suporte a NFT",
+      "subtitle": "Veja sua coleção e acompanhe todas as suas transações de NFT em um único lugar"
+    },
+    "initialSetup": "Configuração Inicial",
+    "messagesByActions": {
+      "account": "Criando suas contas…",
+      "finalizing": "Finalizando tudo…",
+      "wallet": "Criando sua carteira…"
+    },
+    "welcomeNW": "Bem-vindo à Neon Wallet"
+  },
+  "receiveScreen": {
+    "accountSelectPlaceholder": "Selecione…",
+    "accountSelectionModalTitle": "Selecione uma conta de recebimento.",
+    "accountStepTitle": "Conta de recebimento",
+    "addressInputPlaceholder": "O endereço de entrega aparecerá aqui…",
+    "downloadButtonLabel": "Baixar código QR",
+    "noAccountSelectAlert": "Selecione uma conta para gerar um código!",
+    "qrCodeStepTitle": "Seu endereço de entrega",
+    "successfulDownloadMessage": "Código QR salvo na sua galeria!",
+    "title": "Receba fichas"
+  },
+  "searchScreen": {
+    "emptyResultDescription": "Nada encontrado!",
+    "errors": {
+      "execute": "Houve um erro ao tentar executar a ação. Por favor, contate nosso suporte.",
+      "noFunction": "Não há ação disponível para este item. Por favor, contate nosso suporte."
+    },
+    "idleResultDescription": "Procurando por algo?",
+    "inputPlaceholder": "Digite sua busca…",
+    "resetButtonLabel": "Redefinir",
+    "resultDescription": "Você pode estar interessado nestes tópicos:",
+    "title": "Procurar na Neon"
+  },
+  "sendScreen": {
+    "failureNotification": {
+      "previewBody": "Não conseguimos verificar a conclusão de sua transferência",
+      "title": "Transferência falhou"
+    },
+    "form": {
+      "accountToUseModalTitle": "Selecione uma conta",
+      "addRecipientButtonLabel": "Adicionar destinatário",
+      "recipient": {
+        "accountToReceiveModalTitle": "Selecione uma conta para receber",
+        "amountLabel": "Valor",
+        "amountPlaceholder": "0.00",
+        "balanceLabel": "Saldo",
+        "fiatLabel": "Valor fiat ({{currency}} estimado)",
+        "maxButtonLabel": "Máximo",
+        "maximumLabel": "Saldo {{amount}}",
+        "receivingAddressLabel": "Endereço para receber",
+        "recipientLabel": "Destinatário {{order}}",
+        "removeRecipientButtonLabel": "Remover",
+        "selectButtonLabel": "Selecionar…",
+        "tokenToReceiveModalTitle": "Selecione um token para receber",
+        "tokenToSendLabel": "Token para enviar"
+      },
+      "sendSuccessContentTitle": "Detalhes do envio",
+      "sendTokensButtonLabel": "Enviar tokens",
+      "sourceAccountLabel": "Conta de origem",
+      "totalFeeLabel": "Taxa total",
+      "totalFeePlaceholder": "0.00"
+    },
+    "messages": {
+      "amountIsLessOrEqualZero": "O valor deve ser maior que zero",
+      "calculateMaxAmount": "Erro ao calcular o valor máximo",
+      "feeError": "Erro ao calcular a taxa",
+      "insufficientFunds": "Você não tem saldo suficiente",
+      "invalidKey": "Houve um erro com a chave da conta",
+      "noAmountToTip": "Não há saldo suficiente para pagar a gorjeta",
+      "noFiatPriceToTip": "Preço fiat não encontrado para a gorjeta",
+      "noTokenToTip": "Sem token para pagar a gorjeta",
+      "sendError": "Falha ao enviar a transação",
+      "sendSuccess": "Transação enviada com sucesso"
+    },
+    "restartButtonLabel": "Reiniciar",
+    "successNotification": {
+      "previewBody": "Sua transferência foi concluída com sucesso",
+      "title": "Transferência concluída"
+    },
+    "tipCheckbox": {
+      "tipCheckboxLabel": "Desejo apoiar a COZ com uma gorjeta de {{ amount }} {{ tokenSymbol }} ({{ fiatAmount }})",
+      "tipCheckboxOptionalLabel": "*Opcional"
+    },
+    "title": "Enviar tokens"
+  },
+  "settingsProtocolEditScreen": {
+    "addCustomNetworkButtonLabel": "Adicionar rede customizada",
+    "default": "(Padrão)",
+    "editCustomNetworkButtonLabel": "Editar rede customizada",
+    "selectNodeButtonLabel": "Selecionar nó"
+  },
+  "settingsProtocolsScreen": {
+    "title": "Protocolos"
+  },
+  "settingsScreen": {
+    "tabs": {
+      "personalisation": {
+        "currencyButtonLabel": "Moeda",
+        "languageButtonLabel": "Idioma",
+        "networkConfigurationButtonLabel": "Configuração de Rede",
+        "title": "Personalização"
+      },
+      "security": {
+        "backupButtonLabel": "Backup NEON",
+        "importBackupButtonLabel": "Importar Backup NEON",
+        "title": "Segurança",
+        "verificationButtonLabel": "Verificação",
+        "verificationSubtitle": {
+          "device": "Dispositivo",
+          "disabled": "Desligada",
+          "nfi": "Objeto NFI",
+          "password": "Senha"
+        }
+      }
+    },
+    "title": "Configurações"
+  },
+  "settingsSecurityBackupScreen": {
+    "title": "Segurança",
+    "withAccountsToBackup": {
+      "description_1": "Um requisito para proteger sua carteira através de autenticação de senha ou biométrica é fazer backup de suas carteiras primeiro.",
+      "description_2": "Este é um passo de precaução para evitar que você perca sua senha ou não consiga autenticar e perca acesso a todos os seus fundos.",
+      "description_3": "Por favor, faça backup das seguintes carteiras",
+      "description_4": "Se você tem várias carteiras, você será trazido de volta aqui após cada backup para fazer backup da próxima carteira."
+    },
+    "withoutAccountsToBackup": {
+      "button_label": "Continuar para Segurança",
+      "description": "Backup já realizado para todas as carteiras, continue para configurar segurança"
+    }
+  },
+  "supportTicketScreen": {
+    "descriptionLabel": "Descrição",
+    "descriptionPlaceholder": "Descreva seu problema…",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Digite seu email…",
+    "errors": {
+      "descriptionRequired": "É necessário descrever o processo.",
+      "emailRequired": "Email é obrigatório",
+      "invalidEmail": "Por favor, digite um endereço de email válido",
+      "nameRequired": "Nome é obrigatório",
+      "submitError": "Ocorreu um erro ao enviar seu ticket. Tente novamente mais tarde."
+    },
+    "nameLabel": "Nome",
+    "namePlaceholder": "Digite seu nome…",
+    "submitTicketButtonLabel": "Enviar ticket",
+    "successToast": "Recebemos seu ticket de suporte e entraremos em contato em breve.",
+    "title": "Abrir ticket de suporte"
+  },
+  "swapScreen": {
+    "form": {
+      "accountToUseModalTitle": "Selecione uma conta de origem",
+      "accountToUseTitle": "Enviar daqui",
+      "addressToReceiveModalTitle": "Selecione uma conta de recebimento",
+      "addressToReceiveTitle": "Receber aqui",
+      "amountPlaceholder": "0.00",
+      "amountToReceiveDescription": "(depois das taxas)",
+      "amountToReceiveTitle": "Quantidade que você receberá",
+      "amountToUseTitle": "Quantidade",
+      "amounts": "Quantidades",
+      "assets": "Ativos",
+      "balanceLabel": "Saldo",
+      "buttonSubmitLabel": "Fazer swap agora",
+      "errors": {
+        "amountMax": "Quantidade muito alta. Quantidade máxima é {{amount}}",
+        "amountMin": "Quantidade muito baixa. Quantidade mínima é {{amount}}",
+        "insufficientFunds": "Você não tem saldo suficiente",
+        "insufficientFundsFee": "Você não tem saldo suficiente para pagar a taxa",
+        "invalidAddress": "Endereço do destinatário inválido",
+        "invalidExtraIdToReceive": "Tag de destino/memo inválida"
+      },
+      "extraIdToReceive": "Tag de dest./memo",
+      "extraIdToReceiveLabel": "Tag de destino/memo",
+      "extraIdToReceivePlaceholder": "Digite…",
+      "feePlaceholder": "0.00",
+      "minimumAmountTitle": "Mínimo {{amount}}",
+      "openAboutExtraIdToReceiveModal": "Abrir modal sobre tag de destino/memo",
+      "selectPlaceholder": "Selecionar…",
+      "source": "Detalhes da conta",
+      "tokenToReceiveModalTitle": "Selecione um token a receber",
+      "tokenToReceiveTitle": "Por este",
+      "tokenToUseModalTitle": "Selecione um token para fazer swap",
+      "tokenToUseTitle": "Fazer swap deste",
+      "transactionFee": "Taxa de transação"
+    },
+    "restartButtonLabel": "Reiniciar",
+    "title": "Fazer swap de tokens",
+    "tooltips": {
+      "experimentHigherAmounts": "As taxas de câmbio são melhores com valores de swap maiores, experimente!"
+    }
+  },
+  "voteNeo3Screen": {
+    "account": {
+      "changeLabel": "Mudar",
+      "noAccountSelectedLabel": "Nenhuma conta selecionada",
+      "selectLabel": "Selecionar",
+      "selectNeo3AccountTitle": "Selecione conta Neo 3"
+    },
+    "availableVotes": {
+      "availableVotesLabel": "Votos disponíveis",
+      "noAvailableVotesLabel": "Nenhum voto"
+    },
+    "howItWorksButtonLabel": "Como funciona",
+    "list": {
+      "nameColumnLabel": "Candidato",
+      "positionColumnLabel": "Posição",
+      "voteColumnLabel": "Voto"
+    },
+    "listItem": {
+      "castVoteButtonLabel": "Dar voto",
+      "detailsButtonLabel": "Informações do candidato",
+      "votedButtonLabel": "Votado!"
+    },
+    "listNotFound": {
+      "text": "Não há candidatos para votar ou houve um problema ao obtê-los. Verifique sua rede Neo 3 e, por favor, tente novamente.",
+      "title": "Nenhum candidato para exibir"
+    },
+    "searchLabel": "Procurar",
+    "searchPlaceholder": "Procure por um candidato…",
+    "title": "Votação",
+    "voteErrorMessages": {
+      "accountCanNotBeWatchLabel": "Sua conta Neo 3 está no modo watch",
+      "noNeo3AccountsLabel": "Não há nenhuma conta Neo 3 que não seja watch",
+      "selectNeo3AccountLabel": "Selecione uma conta Neo 3",
+      "shouldHaveEnoughGasToPayFeeLabel": "Você não tem GAS suficiente para pagar a taxa",
+      "shouldUseMainnetLabel": "Você deve usar uma rede Mainnet para votar",
+      "thereIsNoNeoLabel": "Sua conta Neo 3 deve ter NEO"
+    }
+  },
+  "walletBackupStep1Screen": {
+    "body_1": "Abaixo você encontrará sua frase secreta",
+    "body_2": "Anote esta frase em um pedaço de papel ou registre em uma nota digital segura. Você também pode baixá-la acima, mas certifique-se de mantê-la segura.",
+    "body_3": "Qualquer pessoa com esta frase poderá roubar seus ativos conquistados e você não conseguirá recuperá-los!",
+    "dialog_body": "Para manter sua frase de segurança segura, certifique-se de que está salva em uma nota criptografada.",
+    "dialog_dismiss": "OK, eu entendo",
+    "dialog_title": "Certifique-se de manter sua frase de segurança segura",
+    "label_1": "Frase de segurança",
+    "oneOfThree": "1 de 3",
+    "title": "Fazer backup da carteira"
+  },
+  "walletBackupStep2Screen": {
+    "body_1": "Para confirmar que fez backup de suas palavras-chave, por favor, selecione suas palavras na ordem correta da lista abaixo.",
+    "errors": {
+      "incorrectWordOrder": "Ordem das palavras incorreta. Tente novamente para confirmar seu backup."
+    },
+    "label_1": "Confirmar backup",
+    "title": "Fazer backup da carteira",
+    "twoOfThree": "2 de 3"
+  },
+  "walletBackupStep3Screen": {
+    "label_1": "Parabéns, você confirmou seu backup",
+    "title": "Fazer backup da carteira"
+  },
+  "walletScreen": {
+    "addNewAccount": "Adicionar nova conta"
+  },
+  "walletSettingsScreen": {
+    "backup": "Backup de Mnemônico",
+    "customize": "Personalizar carteira",
+    "deleteAlert": "Tem certeza que deseja deletar esta carteira?",
+    "deleteButton": "Deletar Carteira",
+    "deleteSubtitle": "Isso removerá sua carteira e todo o histórico de transações.",
+    "deleteTitle": "Deletar Carteira",
+    "navigation": {
+      "cancel": "Cancelar",
+      "delete": "Deletar"
+    },
+    "title": "Configurações da Carteira"
+  },
+  "walletsScreen": {
+    "createFirstWallet": "Criar primeira carteira",
+    "incompleteBalanceWarningButton": "OK, eu entendo",
+    "incompleteBalanceWarningText": "Não conseguimos recuperar dados de preço para todos os seus tokens, portanto o total pode não ser preciso",
+    "incompleteBalanceWarningTitle": "Dados de preço incompletos",
+    "walletBackupButtonLabel": "carteira sem backup"
+  }
+}

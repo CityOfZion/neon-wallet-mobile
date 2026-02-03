@@ -1,0 +1,103 @@
+{
+  "useFileSystem": {
+    "errors": {
+      "directory": "You must select a directory"
+    }
+  },
+  "useImportAction": {
+    "errors": {
+      "empty": "Please enter some text",
+      "invalid": "Invalid text",
+      "mnemonicIncomplete": "Mnemonic incomplete"
+    }
+  },
+  "useItemNfiAuthentication": {
+    "authenticateMessage": "Scan your CURRENT NFI object",
+    "confirmLinkMessage": "Please re-confirm your NFI object",
+    "createPasswordModal": {
+      "confirmPasswordInputLabel": "Confirm your passcode",
+      "confirmPasswordInputPlaceholder": "Enter your passcode…",
+      "description": "If you lose your NFI, this passcode will allow you to complete transactions or register a new NFI.",
+      "formDescription": "Please set a passcode:",
+      "keepSafeAlertMessage": "You’ll need this passcode to change your NFI. <1>Please keep it safe!</1>",
+      "passwordInputLabel": "Set passcode",
+      "passwordInputPlaceholder": "Enter your passcode…",
+      "submitButtonLabel": "Set NFI passcode",
+      "title": "NFI passcode"
+    },
+    "invalidSignatureError": "Invalid NFI signature",
+    "linkMessage": "Link an NFI object",
+    "nfcNotEnabledError": "Please enable NFC in your device settings",
+    "nfcRequestNotFoundError": "NFC request cancelled or failed",
+    "noNfiObjectError": "No NFI object found",
+    "passwordModal": {
+      "alert": "You need a passcode to change/remove your NFI",
+      "description": "If you’ve lost your NFI, enter your passcode to remove it",
+      "inputLabel": "Enter passcode",
+      "inputPlaceholder": "Enter your passcode…",
+      "submitButtonLabel": "Confirm passcode",
+      "title": "NFI passcode"
+    },
+    "twinNfiError": "It was not possible to get your ITEM twin information. Please contact support.",
+    "wrongNfiPasscodeError": "Wrong NFI passcode"
+  },
+  "useMediaLibrary": {
+    "errors": {
+      "permissionRequired": "Media library permission is required to save files"
+    }
+  },
+  "useNeonImportBackup": {
+    "errors": {
+      "deprecatedFile": "You have selected a deprecated backup file. Please try to generate a new backup in the latest NEON version.",
+      "importData": "There was an error importing the data (It might imported partially).",
+      "wrongFile": "You have selected the wrong file. Please select a file with '{{extension}}' extension.",
+      "wrongPassword": "The password is incorrect. Please try again.",
+      "wrongVersion": "The backup file version is not supported. Please try to generate a new backup in the latest NEON version."
+    }
+  },
+  "usePasswordAuthentication": {
+    "createPasswordModal": {
+      "confirmPasswordInputLabel": "Confirm your password",
+      "confirmPasswordInputPlaceholder": "Enter your password…",
+      "description": "This password will allow you to protect your wallet and authorize actions.",
+      "formDescription": "Please set a password:",
+      "keepSafeAlertMessage": "You’ll need this password to authorize actions. <1>Please keep it safe!</1>",
+      "passwordInputLabel": "Set password",
+      "passwordInputPlaceholder": "Enter your password…",
+      "submitButtonLabel": "Set password",
+      "title": "Password"
+    },
+    "getPasswordError": "Error to get the password. Please contact support.",
+    "passwordModal": {
+      "alert": "You need a passcode to authorize this action",
+      "description": "In order to authenticate, please provide your password",
+      "inputLabel": "Enter password",
+      "inputPlaceholder": "Enter your password…",
+      "submitButtonLabel": "Confirm password",
+      "title": "Password"
+    },
+    "wrongPasswordError": "Wrong password. Please try again."
+  },
+  "useQrCode": {
+    "errors": {
+      "cameraUnavailable": "Camera is not available",
+      "permissionNotGranted": "Camera permission not granted"
+    }
+  },
+  "useUnclaimedMutation": {
+    "errors": {
+      "claimError": "There was an error trying to claim. Please, try again."
+    },
+    "failureNotification": {
+      "previewBody": "We couldn't verify the completion of your claim",
+      "title": "Claim error"
+    },
+    "messages": {
+      "claimedSuccess": "Successfully claimed"
+    },
+    "successNotification": {
+      "previewBody": "You have successfully claimed your unclaimed tokens.",
+      "title": "Claim successful"
+    }
+  }
+}

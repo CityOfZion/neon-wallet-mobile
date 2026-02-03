@@ -1,0 +1,149 @@
+{
+  "blockchainServices": {
+    "arbitrum": {
+      "accountName": "Arbitrum Konto",
+      "id": "Arbitrum",
+      "label": "Arbitrum"
+    },
+    "base": {
+      "accountName": "Base Konto",
+      "id": "Base",
+      "label": "Base"
+    },
+    "bnb": {
+      "accountName": "BNB Konto",
+      "id": "BNB",
+      "label": "BNB"
+    },
+    "ethereum": {
+      "accountName": "Ethereum Konto",
+      "id": "Ethereum",
+      "label": "Ethereum"
+    },
+    "neo3": {
+      "accountName": "NEO Konto",
+      "id": "Neo N3",
+      "label": "Neo (N3)"
+    },
+    "neoLegacy": {
+      "accountName": "Neo Legacy Konto",
+      "id": "Neo Legacy",
+      "label": "Neo Legacy"
+    },
+    "neox": {
+      "accountName": "NeoX Konto",
+      "id": "NeoX",
+      "label": "NeoX"
+    },
+    "polygon": {
+      "accountName": "Polygon Konto",
+      "id": "Polygon",
+      "label": "Polygon"
+    }
+  },
+  "deeplink": {
+    "errors": {
+      "firstTime": "Sie müssen zuerst den Onboarding-Prozess durchlaufen. Versuchen Sie es erneut, nachdem Sie ihn abgeschlossen haben."
+    }
+  },
+  "errors": {
+    "blockchainDoesNotSupportEncryption": "Die Konto-Blockchain unterstützt keine Verschlüsselung.",
+    "blockchainIsNotClaimable": "Die Konto-Blockchain kann nicht beansprucht werden.",
+    "mustHaveKey": "Ein Standardkonto benötigt einen Schlüssel.",
+    "mustHaveMnemonic": "Eine Standard-Wallet benötigt eine Mnemonik.",
+    "noKey": "Der Schlüssel konnte nicht gefunden werden: {{address}}",
+    "unauthorized": "Nicht autorisiert. Bitte versuchen Sie es erneut oder kontaktieren Sie den Support.",
+    "unexpected": "Es ist ein unerwarteter Fehler aufgetreten. Bitte kontaktieren Sie den Support, falls das Problem weiterhin besteht.",
+    "watchAccountUnauthorized": "Sie verwenden ein Konto mit Lesezugriff. Diese Aktion ist nicht autorisiert."
+  },
+  "general": {
+    "accept": "Akzeptieren",
+    "add": "Hinzufügen",
+    "cancel": "Abbrechen",
+    "clear": "Löschen",
+    "continue": "Weiter",
+    "copiedToClipboard": "In Zwischenablage kopiert",
+    "copy": "Kopieren",
+    "copyToClipboard": "In Zwischenablage kopieren",
+    "decline": "Ablehnen",
+    "delete": "Löschen",
+    "disconnect": "Trennen",
+    "done": "Fertig",
+    "edit": "Bearbeiten",
+    "errorOpenLink": "Beim Öffnen dieses Links ist ein Problem aufgetreten",
+    "next": "Weiter",
+    "no": "Nein",
+    "retry": "Erneut versuchen",
+    "save": "Speichern",
+    "saveAndContinue": "Speichern & weiter",
+    "skip": "Überspringen",
+    "yes": "Ja"
+  },
+  "hardwareWallet": {
+    "errors": {
+      "accountIsNotHardware": "Das ausgewählte Konto ist kein Hardware-Wallet-Konto.",
+      "accountsNotFound": "Auf der Hardware-Wallet wurden keine Konten gefunden.",
+      "blockchainNotFound": "Die Blockchain für diese Wallet konnte nicht ermittelt werden.",
+      "blockchainNotSupported": "Die Blockchain {{blockchain}} unterstützt keine Hardware-Wallets.",
+      "disconnectFirst": "Bitte trennen Sie zuerst die aktuell angeschlossene Hardware-Wallet.",
+      "hardwareWalletIsNotConnectOrUnlocked": "Ihre Hardware-Wallet ist nicht verbunden oder gesperrt. Überprüfen Sie Ihr Gerät und versuchen Sie es erneut.",
+      "hardwareWalletNotFound": "Es ist kein Hardware Wallet verbunden",
+      "missingBip44Path": "Der BIP44-Pfad fehlt für das Hardware-Wallet-Konto."
+    }
+  },
+  "overTheAir": {
+    "downloading": "Neues Update gefunden… {{progress}}%",
+    "error": "Bei der Installation des Updates ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut",
+    "success": "Update erfolgreich installiert! Bitte starten Sie die App neu, um das Update anzuwenden."
+  },
+  "synonyms": {
+    "acquire": ["erwerben", "erlangen"],
+    "add": ["hinzufügen", "ergänzen", "erhöhen", "addieren"],
+    "buy": ["kaufen", "erwerben"],
+    "connect": ["verbinden", "verknüpfen", "vereinen", "vernetzen"],
+    "connection": ["Verbindung", "Verknüpfung", "Beziehung"],
+    "create": ["erstellen", "erzeugen", "schaffen", "generieren"],
+    "crypto": ["Token", "Tokens"],
+    "exchange": ["tauschen", "handeln", "wechseln", "austauschen"],
+    "generate": ["generieren", "erzeugen", "erstellen"],
+    "link": ["verbinden", "verknüpfen", "verlinken"],
+    "liquidate": ["liquidieren", "abrechnen", "auflösen"],
+    "list": ["auflisten", "katalogisieren", "Liste"],
+    "load": ["laden", "beladen", "füllen"],
+    "lock": ["sperren", "verschließen", "schließen"],
+    "pair": ["paaren", "koppeln", "zuordnen"],
+    "purchase": ["kaufen", "erwerben"],
+    "recover": ["wiederherstellen", "zurückgewinnen", "abrufen", "erholen"],
+    "restore": ["wiederherstellen", "regenerieren"],
+    "save": ["speichern", "bewahren", "aufbewahren", "sparen"],
+    "secure": ["sichern", "garantieren", "sicher", "geschützt", "beruhigt", "versichern", "schützen"],
+    "sell": ["verkaufen", "handeln"],
+    "send": ["senden", "versenden", "übermitteln", "liefern"],
+    "swap": ["tauschen", "wechseln"],
+    "trade": ["tauschen", "handeln", "wechseln", "Handel", "Geschäft", "Deal"],
+    "transfer": [
+      "übertragen",
+      "transferieren",
+      "transportieren",
+      "ändern",
+      "Übertragung",
+      "Weiterleitung",
+      "Transport"
+    ],
+    "view": ["sehen", "ansehen", "beobachten", "betrachten"]
+  },
+  "wallet": {
+    "encryptedName": "Verschlüsseltes Wallet",
+    "firstWalletName": "Mein erstes Wallet",
+    "importedName": "Importiertes Wallet",
+    "ledgerName": "Ledger Wallet",
+    "mnemonicWalletName": "Mnemonic Wallet",
+    "watchAccount": "Watch Konto"
+  },
+  "walletConnect": {
+    "errorsByCode": {
+      "NO_SERVICE": "Die dApp versucht, eine Verbindung zu einer anderen Blockchain oder einem anderen Netzwerk als dem ausgewählten herzustellen.",
+      "UNEXPECTED_ERROR": "Es ist ein unerwarteter Fehler aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie den Support."
+    }
+  }
+}

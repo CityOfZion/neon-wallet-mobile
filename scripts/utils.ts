@@ -1,0 +1,45 @@
+import { exec } from 'child_process'
+import { promisify } from 'util'
+
+export const execAsync = promisify(exec)
+
+export async function verifyIfGitIsClean() {
+  const { stdout } = await execAsync('git status --porcelain')
+
+  if (stdout) {
+    console.error('Git is not clean. It may cause issues with the release process.')
+    process.exit(1)
+  }
+}
+
+export async function verifyIfBranchIsDev() {
+  const { stdout } = await execAsync('git rev-parse --abbrev-ref HEAD')
+  const branchName = stdout.trim()
+
+  if (branchName !== 'development') {
+    console.error('You must be on the development branch to create a release.')
+    process.exit(1)
+  }
+}
+
+export async function verifyBranchExists(branchName: string) {
+  const result = await execAsync(`git branch --list ${branchName}`, { encoding: 'utf-8' })
+  return result.stdout.trim().length > 0
+}
+
+export async function runCommand(command: string) {
+  const { stdout } = await execAsync(command)
+  return stdout
+}
+
+export async function getProductionVersion() {
+  const { stdout } = await execAsync('git show master:package.json')
+
+  if (!stdout) {
+    console.error('Failed to get the production version from the master branch.')
+    process.exit(1)
+  }
+
+  const masterPackageJson = JSON.parse(stdout)
+  return masterPackageJson.version
+}

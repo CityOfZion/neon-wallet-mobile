@@ -1,0 +1,89 @@
+{
+  "accountCard": {
+    "accountPlaceholder": "Minha Conta",
+    "address": "ENDEREÇO",
+    "balance": "SALDO"
+  },
+  "accountSelectionAccordion": {
+    "notFoundLabel": "Nenhuma conta encontrada ou conta(s) já existente.",
+    "selectedOfTotal": "{{selectedCount}} selecionada(s) de {{totalCount}} endereço(s)"
+  },
+  "actionInput": {
+    "maxButtonLabel": "Máx"
+  },
+  "balanceList": {
+    "empty": "Sua carteira está vazia. Por que não adicionar fundos hoje?",
+    "holdings": "Saldo",
+    "value": "Valor"
+  },
+  "blockchainList": {
+    "xExisting": "{{amount}} existente(s)"
+  },
+  "nfcModal": {
+    "description": "Por favor, toque nas tags NFC",
+    "title": "Pronto para Escanear"
+  },
+  "screenLayoutBars": {
+    "customMode": "Modo Rede Customizada",
+    "noInternet": "Sem conexão com a internet",
+    "testnetMode": "Modo Rede Testnet",
+    "warning": "AVISO"
+  },
+  "setup": {
+    "accountTasksManager": {
+      "useFraudulentTokensNotificationProcess": {
+        "notificationDescription": "Identificamos \"{{ value }}\" que foi sinalizado como token fraudulento pela comunidade. Sugerimos ocultá-lo e evitar qualquer outro tipo de interação com ele.",
+        "notificationTitle": "\"{{ value }}\" é um token fraudulento!"
+      },
+      "useVotingNeo3NotificationProcess": {
+        "notificationDescription": "Toque aqui e vote agora",
+        "notificationTitle": "Você está deixando de ganhar GAS!"
+      }
+    },
+    "hardwareWalletManager": {
+      "detectedHardwareByUsb": "Detectamos uma carteira de hardware conectada via USB. Deseja tentar conectá-la?",
+      "requestingPermission": "Por favor, confirme no seu dispositivo de carteira de hardware."
+    },
+    "walletConnectManagerSetup": {
+      "autoAcceptErrorMessage": "Falha ao processar requisição WalletConnect",
+      "autoAcceptProcessingMessage": "Requisição WalletConnect sendo processada…",
+      "autoAcceptSuccessMessage": "Requisição WalletConnect processada com sucesso"
+    },
+    "walletTasksManager": {
+      "useBackupReminderNotificationProcess": {
+        "notificationDescription": "Recomendamos criar um novo arquivo de backup em \"Mais > Configurações > Segurança > Backup da Neon\" para proteger suas carteiras. Para segurança adicional, você também pode exportar manualmente seus mnemônicos em \"Carteira > 3 pontos > Backup mnemônico\" e chaves privadas em \"Carteira > Conta > 3 pontos > Exportar chave\".",
+        "notificationTitle": "Crie um novo arquivo de backup!"
+      }
+    }
+  },
+  "tabStackBar": {
+    "connectionsStackButtonLabel": "Conexões",
+    "moreStackButtonLabel": "Mais",
+    "quickToolsButtonLabel": "Ferramentas",
+    "searchStackButtonLabel": "Buscar",
+    "walletsStackButtonLabel": "Carteiras"
+  },
+  "twAccountList": {
+    "emptyList": "Nenhuma conta encontrada"
+  },
+  "twContactList": {
+    "emptyList": "Nenhum contato encontrado",
+    "searchInputPlaceholder": "Digite o nome do contato…"
+  },
+  "twDappDetailsCard": {
+    "connectionDetailsHeaderLabel": "Detalhes da conexão",
+    "methodsDetailsLabel": "Métodos"
+  },
+  "twInput": {
+    "labels": {
+      "clearButton": "Limpar entrada",
+      "hideButton": "Ocultar entrada",
+      "showButton": "Mostrar entrada"
+    }
+  },
+  "twModalLayoutCloseIconButton": {
+    "labels": {
+      "closeButton": "Fechar modal"
+    }
+  }
+}

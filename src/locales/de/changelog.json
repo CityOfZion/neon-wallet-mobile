@@ -1,0 +1,238 @@
+{
+  "notes": [
+    {
+      "date": "27.01.2026",
+      "version": "1.12.0"
+    },
+    {
+      "changes": ["Verbesserte Fehlerbehandlung bei Wallet Connect", "Kleinere Verbesserung der Benutzeroberfläche"],
+      "date": "08.01.2026",
+      "version": "1.11.1"
+    },
+    {
+      "changes": [
+        "Sprachunterstützung – Brasilianisches Portugiesisch",
+        "Sprachunterstützung - Deutsch",
+        "Leistungsverbesserungen",
+        "Verbesserte OTA",
+        "Verbesserte Benutzerfreundlichkeit der Menünavigation",
+        "Neue Benachrichtigung – Backup-Erinnerung",
+        "Kleinere Fehlerbehebungen"
+      ],
+      "date": "22.12.2025",
+      "version": "1.11.0"
+    },
+    {
+      "changes": [
+        "Kryptobibliotheken aktualisieren",
+        "Verbesserungen bei der Migration",
+        "Bridge Neo 3 und Neo X Funktion",
+        "Fehlerbehebungen"
+      ],
+      "date": "30.09.2025",
+      "version": "1.10.1"
+    },
+    {
+      "changes": ["Android-API-Level aktualisieren", "Verbesserte NFI-Authentifizierung", "Fehlerbehebungen"],
+      "date": "18.08.2025",
+      "version": "1.10.0"
+    },
+    {
+      "changes": [
+        "Unterstützung für 24-Wort-Mnemotechnik",
+        "Neue Benachrichtigung: Schadcode identifiziert",
+        "Entfernung der Anforderung „Gasanspruch geltend machen“ vor der Aktivierung von Neo Legacy > Neo N3 Migration",
+        "Neue Funktion: Mnemonik über Deeplinks importieren"
+      ],
+      "date": "31.07.2025",
+      "version": "1.9.1"
+    },
+    {
+      "changes": [
+        "Neue Funktion: Neo Governance-Abstimmung",
+        "Neue Benachrichtigung: Neo Governance-Erinnerung",
+        "Mehrsprachige Unterstützung: Chinesisch",
+        "Neue Funktion: NFI als Sicherheitsoption",
+        "Kleinere Fehlerbehebungen"
+      ],
+      "date": "30.06.2025",
+      "version": "1.9.0"
+    },
+    {
+      "changes": [
+        "Behebung eines Problems, das die Berechnung der Transaktionsgebühren bei einem Tausch beeinflusste.",
+        "Behebung des Problems, dass ausstehende Transaktionen doppelt in der Transaktionsliste aufgeführt wurden.",
+        "Schneller Zugriff auf Legacy-Migration über die Aktionssuche"
+      ],
+      "date": "06.06.2025",
+      "version": "1.8.1"
+    },
+    {
+      "changes": [
+        "Neue Funktion: Aktionssuche – Schneller Zugriff auf bestehende Wallet-Aktionen",
+        "Neue Funktion: Transaktionsverlauf exportieren",
+        "Verbesserung der GAS-Abrechnungs-UX",
+        "Behebung eines Problems, das die Nutzung von NNS in bestimmten Szenarien verhinderte.",
+        "Kleinere Fehlerbehebungen"
+      ],
+      "date": "2025-05-29",
+      "version": "1.8.0"
+    },
+    {
+      "changes": [
+        "Verbesserte Datenanalyse beim Aktualisieren der lokalen Speicherstruktur",
+        "UX-Verbesserung für Ledger-Benutzer durch Verwendung des Migrationstools Legacy > N3",
+        "Verbesserung der Fehlermeldung beim Importieren einer Mnemonik, die keine Konten zurückgibt",
+        "Verbesserung der Meldung, die bei einem Timeout der Migrationsprüfung angezeigt wird",
+        "Verbesserter Ansatz zum Parsen von Swap-Optionssymbolen, die vom Swap-Partner zurückgegeben werden",
+        "Standardknoten für Polygon ändern"
+      ],
+      "date": "30.04.2025",
+      "version": "1.7.1"
+    },
+    {
+      "changes": [
+        "On-Ramp-/Off-Ramp-Funktion (nur Android)",
+        "Neue einheimische Migration (Legacy > N3)",
+        "Benachrichtigungen (Jetzt migrieren und Migration abgeschlossen)",
+        "FTW-Preisdatenintegration",
+        "Token-Funktion ausblenden",
+        "Verbesserung der Benutzerfreundlichkeit von Ledger-Sitzungen – Beibehalten von Kontoindizes",
+        "Kleinere UX-Verbesserungen",
+        "Kleinere Fehlerbehebungen"
+      ],
+      "date": "17.04.2025",
+      "version": "1.7.0"
+    },
+    {
+      "changes": [
+        "Schiedsrichterunterstützung",
+        "BASE-Unterstützung",
+        "USB- und Bluetooth-Ledger-Unterstützung",
+        "Leistungsverbesserungen",
+        "Kleinere Fehlerbehebungen"
+      ],
+      "date": "17.02.2025",
+      "version": "1.6.0"
+    },
+    {
+      "changes": [
+        "Polygon-Netzwerkunterstützung",
+        "Verbesserungen der Benutzeroberfläche beim Tauschen",
+        "Kleinere Fehlerbehebungen"
+      ],
+      "date": "23.01.2025",
+      "version": "1.5.0"
+    },
+    {
+      "changes": [
+        "Implementierung der Cross-Chain-Swap-Funktion",
+        "Offline-Synchronisierungskompatibilität mit Neon Wallet Mobile durch Verwendung von Neon Backups",
+        "Verbesserung der Skins-Funktion",
+        "Hilfefunktion – Erste Implementierung",
+        "Kleinere Fehlerbehebungen"
+      ],
+      "date": "24.12.2024",
+      "version": "1.4.0"
+    },
+    {
+      "changes": ["Kleine Eingabeverbesserung zur Beträgen mit Dezimalstellen"],
+      "date": "24.11.2024",
+      "version": "1.3.1"
+    },
+    {
+      "changes": [
+        "Leistungsverbesserungen",
+        "Neo X-Unterstützung",
+        "Erweiterte Ethereum-Unterstützung",
+        "EVM-Unterstützung",
+        "Verbesserungen der Preisdaten",
+        "Kleinere Fehler behoben"
+      ],
+      "date": "19.11.2024",
+      "version": "1.3.0"
+    },
+    {
+      "changes": [
+        "Upgrade auf WcSDK-Version",
+        "Unterstützung für freischaltbare Kontokarten-NFI-Skins",
+        "Behebung des Problems bei der Auswahl eines Tokens aus der im SEND-Prozess verfügbaren Kontoliste",
+        "Behebung eines WC-Problems im Zusammenhang mit ByteArray-Eigenschaften in bestimmten Szenarien"
+      ],
+      "date": "27.08.2024",
+      "version": "1.2.10-1"
+    },
+    {
+      "changes": ["Kleinere Fehler behoben", "Leistungsverbesserungen", "WC-Erweiterung – Mehrfachbeschilderung"],
+      "date": "07.05.2024",
+      "version": "1.2.8-1"
+    },
+    {
+      "changes": [
+        "Optimierung der App-Performance",
+        "Flamingo-Integration",
+        "Verbesserter Backup- und Sicherheitsablauf",
+        "Verbesserter Begrüßungsablauf",
+        "Aktualisieren Sie die Wallet Connect-Integration auf Version 2.0.0-rc.3.",
+        "Kleinere Fehlerbehebungen"
+      ],
+      "date": "27.09.2022",
+      "version": "1.1.4-1"
+    },
+    {
+      "changes": [
+        "Neue WIF-Exportfunktion",
+        "Erweiterte Sicherheitsprüfung vor der Datensicherung",
+        "Erweitertes Wallet-Menü",
+        "Erweitertes Kontomenü"
+      ],
+      "date": "24.08.2022",
+      "version": "1.1.1-2"
+    },
+    {
+      "changes": [
+        "Grundlegende NFT-Funktionen:",
+        "Besitz von NFTs anzeigen",
+        "NFT-Überweisungen anzeigen",
+        "Kleinere Fehlerbehebungen"
+      ],
+      "date": "09.06.2022",
+      "version": "1.0.31-1"
+    },
+    {
+      "changes": ["Fehlerbehebungen"],
+      "date": "06.06.2022",
+      "version": "1.0.30-1"
+    },
+    {
+      "changes": [
+        "Unterstützung für WalletConnect-Authentifizierungsmethoden:",
+        "Nachricht signieren",
+        "Nachricht überprüfen",
+        "Kleinere Fehlerbehebungen"
+      ],
+      "date": "20.05.2022",
+      "version": "1.0.29-1"
+    },
+    {
+      "changes": ["Wallet Connect-Integration", "Designverbesserungen", "Kleinere Fehlerbehebungen"],
+      "date": "08.04.2022",
+      "version": "1.0.28-1"
+    },
+    {
+      "changes": ["N3-Unterstützung und kleinere Fehlerbehebungen"],
+      "date": "13.12.2021",
+      "version": "1.0.27-1"
+    },
+    {
+      "changes": ["N3-Unterstützung und kleinere Fehlerbehebungen"],
+      "date": "16.11.2021",
+      "version": "1.0.25-1"
+    },
+    {
+      "changes": ["Wir präsentieren die Neon Wallet Mobile"],
+      "date": "20.08.2021",
+      "version": "1.0.16-54"
+    }
+  ]
+}

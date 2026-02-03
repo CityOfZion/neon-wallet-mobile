@@ -1,0 +1,89 @@
+{
+  "accountCard": {
+    "accountPlaceholder": "Mein Konto",
+    "address": "ADRESSE",
+    "balance": "GUTHABEN"
+  },
+  "accountSelectionAccordion": {
+    "notFoundLabel": "Keine Kontos gefunden oder bereits vorhanden. Bitte überprüfen Sie Ihre Eingabe und versuchen Sie es später erneut.",
+    "selectedOfTotal": "{{selectedCount}} von {{totalCount}} Adressen ausgewählt"
+  },
+  "actionInput": {
+    "maxButtonLabel": "Max"
+  },
+  "balanceList": {
+    "empty": "Ihr Wallet ist derzeit leer. Warum fügen Sie nicht heute etwas hinzu?",
+    "holdings": "Bestände",
+    "value": "Wert"
+  },
+  "blockchainList": {
+    "xExisting": "{{amount}} vorhanden"
+  },
+  "nfcModal": {
+    "description": "Bitte NFC-Tags antippen",
+    "title": "Bereit zum Scannen"
+  },
+  "screenLayoutBars": {
+    "customMode": "Custom Network Modus",
+    "noInternet": "Keine Internetverbindung",
+    "testnetMode": "Testnet Network Modus",
+    "warning": "WARNUNG"
+  },
+  "setup": {
+    "accountTasksManager": {
+      "useFraudulentTokensNotificationProcess": {
+        "notificationDescription": "Wir haben \"{{ value }}\" identifiziert, der von der Community als betrügerischer Token markiert wurde. Wir empfehlen, ihn auszublenden und jegliche Interaktion damit zu vermeiden.",
+        "notificationTitle": "\"{{ value }}\" ist ein betrügerischer Token!"
+      },
+      "useVotingNeo3NotificationProcess": {
+        "notificationDescription": "Tippen Sie hier und stimmen Sie noch heute ab",
+        "notificationTitle": "Sie verpassen kostenloses GAS!"
+      }
+    },
+    "hardwareWalletManager": {
+      "detectedHardwareByUsb": "Wir haben ein Hardware Wallet per USB erkannt. Möchten Sie versuchen, es zu verbinden?",
+      "requestingPermission": "Bitte bestätigen Sie dies auf Ihrem Hardware-Wallet-Gerät."
+    },
+    "walletConnectManagerSetup": {
+      "autoAcceptErrorMessage": "Verarbeitung der WalletConnect Anfrage fehlgeschlagen",
+      "autoAcceptProcessingMessage": "WalletConnect Anfrage wird verarbeitet…",
+      "autoAcceptSuccessMessage": "WalletConnect Anfrage erfolgreich verarbeitet"
+    },
+    "walletTasksManager": {
+      "useBackupReminderNotificationProcess": {
+        "notificationDescription": "Wir empfehlen, eine neue Backup-Datei unter \"Mehr > Einstellungen > Sicherheit > NEON Backup\" zu erstellen, um Ihre Wallets zu schützen. Für zusätzliche Sicherheit können Sie Ihre Mnemonics auch manuell unter \"Wallet > 3 Punkte > Mnemonic sichern\" und Private Keys unter \"Wallet > Konto > 3 Punkte > Key exportieren\" exportieren.",
+        "notificationTitle": "Erstellen Sie eine neue Backup-Datei!"
+      }
+    }
+  },
+  "tabStackBar": {
+    "connectionsStackButtonLabel": "Verbindungen",
+    "moreStackButtonLabel": "Mehr",
+    "quickToolsButtonLabel": "Schnellzugriff",
+    "searchStackButtonLabel": "Suche",
+    "walletsStackButtonLabel": "Wallets"
+  },
+  "twAccountList": {
+    "emptyList": "Keine Kontos gefunden"
+  },
+  "twContactList": {
+    "emptyList": "Keine Kontakte gefunden",
+    "searchInputPlaceholder": "Kontaktnamen eingeben…"
+  },
+  "twDappDetailsCard": {
+    "connectionDetailsHeaderLabel": "Verbindungsdetails",
+    "methodsDetailsLabel": "Methoden"
+  },
+  "twInput": {
+    "labels": {
+      "clearButton": "Eingabe löschen",
+      "hideButton": "Eingabe verbergen",
+      "showButton": "Eingabe anzeigen"
+    }
+  },
+  "twModalLayoutCloseIconButton": {
+    "labels": {
+      "closeButton": "Modal schließen"
+    }
+  }
+}

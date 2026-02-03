@@ -1,0 +1,112 @@
+import React from 'react'
+
+import { useTranslation } from 'react-i18next'
+
+import { TwBlockchainIcon } from '@/components/TwBlockchainIcon'
+import { TwButton } from '@/components/TwButton'
+import { TwInput } from '@/components/TwInput'
+import { TwSelectButton } from '@/components/TwSelectButton'
+
+import { StringHelper } from '@/helpers/StringHelper'
+
+import { useActions } from '@/hooks/useActions'
+import { useNameService } from '@/hooks/useNameService'
+
+import { TwModalLayout } from '@/layouts/TwModalLayout'
+import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+
+import type { TBlockchainServiceKey } from '@/types/blockchain'
+import type { TRootStackScreenProps } from '@/types/stacks'
+
+type TActionData = {
+  address: string
+  blockchain?: TBlockchainServiceKey
+}
+
+export const PersistContactAddressModal = ({
+  navigation,
+  route,
+}: TRootStackScreenProps<'PersistContactAddressModal'>) => {
+  const onAdd = route.params?.onAdd
+  const address = route.params?.address
+
+  const { t } = useTranslation('modals', { keyPrefix: 'persistContactAddressModal' })
+  const { t: commonT } = useTranslation('common')
+
+  const {
+    validateAddressOrNS,
+    isValidatingAddressOrDomainAddress,
+    isValidAddressOrDomainAddress,
+    isNameService,
+    validatedAddress,
+  } = useNameService()
+
+  const { actionData, setData } = useActions<TActionData>({
+    address: address?.address ?? '',
+    blockchain: address?.blockchain,
+  })
+
+  const handleSelectBlockchain = () => {
+    navigation.navigate('BlockchainSelectionModal', {
+      onSelect: (blockchain: TBlockchainServiceKey) => {
+        setData({ blockchain })
+
+        if (actionData.address) validateAddressOrNS(actionData.address, blockchain)
+      },
+    })
+  }
+
+  const handleChangeAddress = (value: string) => {
+    value = StringHelper.removeSpecialCharacters(value, { allowSpaces: false, allowDots: true })
+
+    setData({ address: value })
+    validateAddressOrNS(value, actionData.blockchain)
+  }
+
+  const handleAdd = () => {
+    navigation.goBack()
+    const newAddress = { blockchain: actionData.blockchain!, address: actionData.address }
+    onAdd?.(newAddress)
+  }
+
+  return (
+    <TwModalLayout
+      title={address ? t('title.edit') : t('title.create')}
+      rightElement={<TwModalLayoutCloseIconButton />}
+      contentContainerClassName="gap-6"
+    >
+      <TwSelectButton
+        value={actionData.blockchain ? commonT(`blockchainServices.${actionData.blockchain}.label`) : undefined}
+        leftElement={actionData.blockchain ? <TwBlockchainIcon blockchain={actionData.blockchain} /> : undefined}
+        label={t('chainLabel')}
+        placeholder={t('chainPlaceholder')}
+        onPress={handleSelectBlockchain}
+      />
+
+      <TwInput
+        label={t('addressLabel')}
+        labelDescription={isNameService ? validatedAddress : undefined}
+        placeholder={t('addressPlaceholder')}
+        onChangeText={handleChangeAddress}
+        value={actionData.address}
+        error={isValidAddressOrDomainAddress === false ? t('invalidMessage') : undefined}
+        success={isValidAddressOrDomainAddress === true ? t('successMessage') : undefined}
+        disabled={!actionData.blockchain}
+        loading={isValidatingAddressOrDomainAddress}
+        scannable
+        pastable
+        autoCapitalize="none"
+        autoCorrect={false}
+        autoComplete="off"
+      />
+
+      <TwButton
+        className="mt-auto"
+        variant="contained-light"
+        label={address ? commonT('general.save') : commonT('general.add')}
+        onPress={handleAdd}
+        disabled={!isValidAddressOrDomainAddress}
+      />
+    </TwModalLayout>
+  )
+}

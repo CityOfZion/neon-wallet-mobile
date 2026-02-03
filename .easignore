@@ -1,0 +1,3 @@
+# Ignore native folders (We are using EAS Build)
+/android
+/ios

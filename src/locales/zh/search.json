@@ -1,0 +1,100 @@
+{
+  "actions": [
+    {
+      "id": "transfer",
+      "label": "转账代币",
+      "nonVerbs": ["代币", "加密货币"],
+      "verbs": ["转账", "发送", "加密货币"]
+    },
+    {
+      "id": "connect",
+      "label": "创建连接",
+      "nonVerbs": ["链接", "连接", "钱包连接", "去中心化应用"],
+      "verbs": ["连接", "创建", "配对"]
+    },
+    {
+      "id": "createContact",
+      "label": "创建联系人",
+      "nonVerbs": ["联系人", "地址"],
+      "verbs": ["添加", "创建", "地址"]
+    },
+    {
+      "id": "viewContacts",
+      "label": "查看联系人",
+      "nonVerbs": ["联系人", "地址"],
+      "verbs": ["列表", "查看", "地址"]
+    },
+    {
+      "id": "swap",
+      "label": "兑换代币",
+      "nonVerbs": ["代币", "兑换", "加密货币"],
+      "verbs": ["兑换", "交易", "接收", "加密货币"]
+    },
+    {
+      "id": "buy",
+      "label": "购买代币",
+      "nonVerbs": ["代币", "购买", "加密货币", "法币通道", "通道"],
+      "verbs": ["购买", "获取", "法币通道", "加密货币"]
+    },
+    {
+      "id": "sell",
+      "label": "出售代币",
+      "nonVerbs": ["代币", "法币通道", "通道", "加密货币"],
+      "verbs": ["出售", "交易", "变现", "接收", "法币通道", "加密货币"]
+    },
+    {
+      "id": "voteNeo3",
+      "label": "投票（Neo 3）",
+      "nonVerbs": ["投票中", "NEO", "N3", "节点", "成员", "共识", "委员会", "治理"],
+      "verbs": ["投票"]
+    },
+    {
+      "id": "receive",
+      "label": "接收代币",
+      "nonVerbs": ["代币", "账户", "地址", "加密货币"],
+      "verbs": ["地址", "转账", "加密货币"]
+    },
+    {
+      "id": "createWallet",
+      "label": "创建钱包",
+      "nonVerbs": ["钱包"],
+      "verbs": ["创建", "生成"]
+    },
+    {
+      "id": "createBackup",
+      "label": "创建备份",
+      "nonVerbs": ["备份"],
+      "verbs": ["保存", "导出", "安全"]
+    },
+    {
+      "id": "import",
+      "label": "导入钱包/账户",
+      "nonVerbs": ["钱包", "账户", "地址", "密钥", "导入"],
+      "verbs": ["地址", "恢复", "找回", "导入", "恢复", "加载", "添加", "创建"]
+    },
+    {
+      "id": "restoreBackup",
+      "label": "恢复备份",
+      "nonVerbs": ["备份"],
+      "verbs": ["恢复", "找回", "导入", "恢复", "加载"]
+    },
+    {
+      "id": "connectHardwareWallet",
+      "label": "连接硬件钱包",
+      "nonVerbs": ["硬件", "USB", "Ledger"],
+      "verbs": ["连接", "配对"]
+    },
+    {
+      "id": "exportFullTransactions",
+      "label": "导出交易记录",
+      "nonVerbs": ["交易记录", "交易", "活动", "操作"],
+      "verbs": ["导出", "下载"]
+    },
+    {
+      "id": "bridgeNeo3NeoX",
+      "label": "桥接代币 (Neo 3 和 Neo X)",
+      "nonVerbs": ["桥接", "交换", "neox", "neo3", "n3", "代币", "加密货币"],
+      "verbs": ["桥接", "交换", "接收", "发送", "转移"]
+    }
+  ]
+}

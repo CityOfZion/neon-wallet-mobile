@@ -1,0 +1,577 @@
+{
+  "accountAssetsScreen": {
+    "balanceLabel": "Balance",
+    "lastUpdatedLabel": "Last updated",
+    "tabs": {
+      "activeLabel": "Active",
+      "hiddenLabel": "Hidden"
+    },
+    "title": "Tokens"
+  },
+  "accountConnectionsScreen": {
+    "connectDappLabel": "Connect a dApp",
+    "emptyList": "No dApps connected",
+    "labels": {
+      "addConnection": "Add connection"
+    },
+    "title": "Connections"
+  },
+  "accountNftsScreen": {
+    "emptyList": "No NFT to list",
+    "title": "NFTS"
+  },
+  "accountScreen": {
+    "blockHeightTitle": "{{ blockchain }} block height",
+    "buttons": {
+      "bridgeNeo3NeoX": "Bridge",
+      "buyAndSell": "Buy + Sell",
+      "receive": "Receive",
+      "send": "Send",
+      "swap": "Swap",
+      "voteNeo3": "Voting Neo 3"
+    },
+    "claimAsset": "<1>Claim</1> {{ amount }} {{ symbol }}",
+    "connections": "Connections",
+    "gasUnavailable": "GAS unavailable",
+    "nfts": "NFTs",
+    "tokens": "Tokens",
+    "transactions": "Transactions",
+    "warningClaimModal": {
+      "buttons": {
+        "no": "No",
+        "yes": "Yes"
+      },
+      "claimAmount": "Claim amount",
+      "claimFee": "Claim fee",
+      "highClaimFee": {
+        "question": "Do you wish to proceed?",
+        "subtitle": "This will be deducted from your balance.",
+        "title": "High Claim Fee"
+      }
+    }
+  },
+  "accountSettingsScreen": {
+    "customize": "Customize account",
+    "deleteAlert": "Are you sure you want to delete this account?",
+    "deleteButton": "Delete Account",
+    "deleteSubtitle": "This will remove your account and all transaction history.",
+    "deleteTitle": "Delete Wallet",
+    "exportKey": "Export Key",
+    "navigation": {
+      "cancel": "Cancel",
+      "delete": "Delete"
+    },
+    "title": "Account Settings"
+  },
+  "accountTransactionsScreen": {
+    "bridgeNeo3NeoXDetailsButtonLabel": "Bridge",
+    "completedTransactions": "Completed Transactions",
+    "doraButtonLabel": "Go to Dora explorer",
+    "emptyList": "No transaction to list",
+    "exportButtonLabel": "Export",
+    "invocationsLabel": "Invocations",
+    "notificationsLabel": "Notifications",
+    "pendingTransactions": "Pending Transactions",
+    "receivedFromLabel": "Received from",
+    "sentToLabel": "Sent to",
+    "swapDetailsButtonLabel": "Go to swap details",
+    "title": "Transactions",
+    "txidLabel": "Tx id:",
+    "type": {
+      "nft": "NFT",
+      "token": "Asset"
+    }
+  },
+  "bridgeNeo3NeoXScreen": {
+    "aboutButtonLabel": "About",
+    "errorsByCode": {
+      "ACCOUNT_NOT_COMPATIBLE_WITH_TOKEN": "The selected account is not compatible with the selected token",
+      "AMOUNT_ABOVE_MAXIMUM": "The amount is above the maximum",
+      "AMOUNT_BELOW_MINIMUM": "The amount is below the minimum",
+      "BRIDGE_NOT_READY": "The bridge is not ready yet, please fill all the fields",
+      "INSUFFICIENT_FEE_TOKEN_BALANCE": "Insufficient balance to cover the bridge fee",
+      "NO_AVAILABLE_TOKENS": "No available tokens to bridge",
+      "PAIR_TOKEN_NOT_FOUND": "The pair token was not found",
+      "TOKEN_NOT_AVAILABLE": "The selected token is not available to bridge",
+      "UNEXPECTED_ERROR": "Unexpected error, please try again"
+    },
+    "form": {
+      "accountDetailsStepLabel": "Account details",
+      "accountToUseLabel": "Bridge from here",
+      "accountToUseModalTitle": "Select an account",
+      "addressToReceiveLabel": "Receive here",
+      "addressToReceiveModalTitle": "Select a receiving account",
+      "amountPlaceholder": "0.00",
+      "amountToReceiveAfterFeesLabel": "(after fees)",
+      "amountToReceiveLabel": "Amount you'll get",
+      "amountToReceivePlaceholder": "0.00000000",
+      "amountToUseLabel": "Amount",
+      "amountToUseMinLabel": "Minimum {{amount}}",
+      "amountToUseMinPlaceholder": "0.00000000",
+      "amountsStepLabel": "Amounts",
+      "assetsStepLabel": "Assets",
+      "balanceLabel": "Balance",
+      "balancePlaceholder": "0.00",
+      "bridgeFeeLabel": "Transaction fee",
+      "bridgeFeePlaceholder": "0.00",
+      "selectPlaceholder": "Select…",
+      "submitButtonLabel": "Bridge now",
+      "switchTokensButtonLabel": "Switch tokens",
+      "tokenToReceiveLabel": "Bridge to this",
+      "tokenToUseLabel": "Bridge from this",
+      "tokenToUseModalTitle": "Select a token to bridge"
+    },
+    "messages": {
+      "bridgeError": "There was a problem to bridge, please, try again later",
+      "networksShouldBeMainnet": "Neo 3 and Neo X should be using Mainnet",
+      "selectAccountToUseError": "Problem on select account to use"
+    },
+    "restartButtonLabel": "Restart",
+    "title": "Bridge tokens"
+  },
+  "buyAndSellTokensScreen": {
+    "buttons": {
+      "accounts": "Accounts",
+      "deposit": "Deposit",
+      "info": "Feature information"
+    },
+    "iframeContent": {
+      "buttons": {
+        "back": "Back",
+        "restart": "Restart"
+      },
+      "error": "There is an error with the content, please, try again",
+      "restartAlert": {
+        "noButtonLabel": "No, keep data",
+        "subtitleLabel": "If you restart, you'll lose all the data you've already filled and will return to the beginning of the process.",
+        "titleLabel": "Do you want to restart the screen?",
+        "yesButtonLabel": "Yes, restart"
+      }
+    },
+    "leaveAlert": {
+      "buttons": {
+        "cancel": "Cancel",
+        "continue": "Continue"
+      },
+      "subtitle": "If you leave this view, the form will reset and all of your data will be removed from the form. Are you sure?",
+      "title": "Exit and reset form?"
+    },
+    "tabs": {
+      "buyTokens": "Buy tokens",
+      "sellTokens": "Sell tokens"
+    },
+    "title": "Buy + Sell"
+  },
+  "contactScreen": {
+    "title": "Contact",
+    "walletAddressLabel": "Wallet addresses"
+  },
+  "contactsScreen": {
+    "title": "Contacts"
+  },
+  "createWalletStep1Screen": {
+    "body_1": "This set of secret words make it easy to back up and restore your account. This makes your wallet really secure ",
+    "body_2": "It’s really important you remember your phrase correctly so we will help you with that. If you’re in a rush you can do it another time.",
+    "body_3": "Give your wallet a memorable name and you're ready to go!",
+    "createWallet": "Create Wallet",
+    "label_1": "Generate security phrase",
+    "label_2": "Confirm security phrase",
+    "label_3": "Give your wallet a name",
+    "title": "Create Wallet"
+  },
+  "createWalletStep2Screen": {
+    "body_1": "Below you will find your secret phrase",
+    "body_2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it above but be sure to keep it safe.",
+    "body_3": "Anyone with this phrase will be able to steal your hard earned assets and you won’t be able to get them back! ",
+    "dialog_body": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
+    "dialog_dismiss": "OK, I understand",
+    "dialog_title": "Make sure you keep your security phrase safe",
+    "label_1": "Generate security phrase",
+    "oneOfThree": "1 of 3",
+    "title": "Create Wallet"
+  },
+  "createWalletStep3Screen": {
+    "body_1": "Please select each phrase in the correct order to make sure you’ve got it right. ",
+    "dialog_1_body": "Confirming that you have correctly backed up your security phrase is highly recommended",
+    "dialog_1_title": "Are you sure you want to skip back up confirmation?",
+    "dialog_2_body": "Please try again to confirm your back up",
+    "dialog_2_title": "Incorrect word order",
+    "label_1": "Confirm security phrase",
+    "title": "Create Wallet",
+    "twoOfThree": "2 of 3"
+  },
+  "createWalletStep4Screen": {
+    "body_1": "Give your wallet a memorable name, maybe it could be related to what you want to use the wallet for like “trading” or “investments”.",
+    "errors": {
+      "name": "Must be at least 1 character and less than 21 characters"
+    },
+    "label_1": "Give your wallet a name",
+    "label_walletName": "Wallet Name",
+    "threeOfThree": "3 of 3",
+    "title": "Create Wallet"
+  },
+  "createWalletStep5Screen": {
+    "continueButtonLabel": "Create Now",
+    "subtitle": "Select the desired blockchain for your new account",
+    "title": "Create Wallet"
+  },
+  "createWalletStep6Screen": {
+    "body_1": "Remember to keep your secret phrase safe, having several backups is always a good idea.",
+    "body_2": "If you need to find out a wallets secret phrase you can find it in the settings page for that wallet. ",
+    "label_1": "Congratulations, You’re the proud owner of a shiny new wallet!",
+    "title": "Create Wallet",
+    "viewWallet": "View wallet"
+  },
+  "dappConnectionsScreen": {
+    "connectDappLabel": "Connect a dApp",
+    "connectNewDappLabel": "Connect a new dApp",
+    "noDappsConnected": "No dApps connected",
+    "title": "Connections"
+  },
+  "importBlockchainSelectionScreen": {
+    "subtitle": "Select the desired blockchain to decrypt your key",
+    "title": "Import"
+  },
+  "importMnemonicSelectionScreen": {
+    "buttonLabel": "Import",
+    "foundAccountsMnemonic": "We found the following account(s) to import:",
+    "title": "Import"
+  },
+  "importPassphraseScreen": {
+    "accountAlreadyExists": "Account already exists",
+    "decryptError": "Error decrypting the key",
+    "enterPassphrase": "Enter a Passphrase for your encrypted key",
+    "inputPlaceholder": "Please enter Passphrase",
+    "title": "Import"
+  },
+  "importScreen": {
+    "enterAnAddress": "Enter an address, encrypted key, private key or mnemonic words",
+    "mnemonicComplete": "Mnemonic complete",
+    "mnemonicIncorrect": "Mnemonic incorrect",
+    "placeholder": "Please enter information",
+    "title": "Import"
+  },
+  "moreScreen": {
+    "chatWithUsButtonLabel": "Chat with us",
+    "contactsButtonLabel": "Contacts",
+    "createWalletButtonLabel": "Create wallet",
+    "helpButtonLabel": "Help",
+    "importButtonLabel": "Import",
+    "openSupportTicketButtonLabel": "Open support ticket",
+    "privatePolicyButtonLabel": "Privacy policy",
+    "settingsButtonLabel": "Settings",
+    "title": "More options"
+  },
+  "notificationsScreen": {
+    "actions": {
+      "error": {
+        "accountNotFound": "We couldn't find the account for this notification",
+        "walletNotFound": "We couldn't find the wallet for this notification"
+      }
+    },
+    "actionsButtonLabel": "Actions",
+    "emptyListBody": "You’re caught up!",
+    "emptyListTitle": "Nothing to see here",
+    "relatedAccountLabel": "Account:",
+    "relatedAddressLabel": "Address:",
+    "title": "Notifications"
+  },
+  "onboardingCompletedScreen": {
+    "buttonLabel": "View Wallet",
+    "subtitle": "Your new wallet and account are ready to go.",
+    "title": "Setup Complete!",
+    "titleAddressList": "Account addresses"
+  },
+  "onboardingScreen": {
+    "buttonLabel": "Complete",
+    "creatingWallet": "We are creating your Wallet with an Account inside. In the meanwhile here's an overview of the many features you'll find in the app.",
+    "feature1": {
+      "header": "Easily organize your assets",
+      "subtitle": "Create multiple Accounts inside a Wallet, each with its unique address."
+    },
+    "feature2": {
+      "header": "The most flexible Wallet App in Neo",
+      "subtitle": "Easily bring your Private Keys to Neon or add any address as a watch account to keep an eye on their public transactions."
+    },
+    "feature3": {
+      "header": "Mobile Dapp Connection",
+      "subtitle": "Safely interact with multiple Dapps directly from your device through the established Wallet Connect Protocol."
+    },
+    "feature4": {
+      "header": "Introducing NFT support",
+      "subtitle": "View your collection and keep track of all your NFT transactions in a single place"
+    },
+    "initialSetup": "Initial Setup",
+    "messagesByActions": {
+      "account": "Creating your accounts…",
+      "finalizing": "Wrapping everything up…",
+      "wallet": "Creating your wallet…"
+    },
+    "welcomeNW": "Welcome to Neon Wallet"
+  },
+  "receiveScreen": {
+    "accountSelectPlaceholder": "Select…",
+    "accountSelectionModalTitle": "Select a receiving account",
+    "accountStepTitle": "Receiving account",
+    "addressInputPlaceholder": "Receiving address will appears here…",
+    "downloadButtonLabel": "Download QR Code",
+    "noAccountSelectAlert": "Select an account to generate a code!",
+    "qrCodeStepTitle": "Your receiving address",
+    "successfulDownloadMessage": "QR code saved to your gallery!",
+    "title": "Receive tokens"
+  },
+  "searchScreen": {
+    "emptyResultDescription": "Nothing found!",
+    "errors": {
+      "execute": "There was an error trying to execute the action. Please, contact our support.",
+      "noFunction": "There is no action available for this item. Please, contact our support."
+    },
+    "idleResultDescription": "Looking for something?",
+    "inputPlaceholder": "Enter your search…",
+    "resetButtonLabel": "Reset",
+    "resultDescription": "You may be interested in these topics:",
+    "title": "Search Neon"
+  },
+  "sendScreen": {
+    "failureNotification": {
+      "previewBody": "We couldn't verify the completion of your transfer",
+      "title": "Transfer failed"
+    },
+    "form": {
+      "accountToUseModalTitle": "Select an account",
+      "addRecipientButtonLabel": "Add recipient",
+      "recipient": {
+        "accountToReceiveModalTitle": "Select a receiving account",
+        "amountLabel": "Amount",
+        "amountPlaceholder": "0.00",
+        "balanceLabel": "Balance",
+        "fiatLabel": "Fiat value ({{currency}} estimated)",
+        "maxButtonLabel": "Max",
+        "maximumLabel": "Balance {{amount}}",
+        "receivingAddressLabel": "Receive here",
+        "recipientLabel": "Recipient {{order}}",
+        "removeRecipientButtonLabel": "Remove",
+        "selectButtonLabel": "Select…",
+        "tokenToReceiveModalTitle": "Select a token to receive",
+        "tokenToSendLabel": "Token to send"
+      },
+      "sendSuccessContentTitle": "Send details",
+      "sendTokensButtonLabel": "Send tokens",
+      "sourceAccountLabel": "Source account",
+      "totalFeeLabel": "Total fee",
+      "totalFeePlaceholder": "0.00"
+    },
+    "messages": {
+      "amountIsLessOrEqualZero": "The amount must be greater than zero",
+      "calculateMaxAmount": "Error calculating the maximum amount",
+      "feeError": "Error calculating the fee",
+      "insufficientFunds": "You don't have enough balance",
+      "invalidKey": "There was an error with the account key",
+      "noAmountToTip": "Not enough amount to pay the tip",
+      "noFiatPriceToTip": "Fiat price not found to the tip",
+      "noTokenToTip": "No token to pay the tip",
+      "sendError": "Transaction failed to send",
+      "sendSuccess": "Transaction sent successfully"
+    },
+    "restartButtonLabel": "Restart",
+    "successNotification": {
+      "previewBody": "Your transfer has been completed successfully",
+      "title": "Transfer completed"
+    },
+    "tipCheckbox": {
+      "tipCheckboxLabel": "I want to support COZ with a tip of {{ amount }} {{ tokenSymbol }} ({{ fiatAmount }})",
+      "tipCheckboxOptionalLabel": "*Optional"
+    },
+    "title": "Send tokens"
+  },
+  "settingsProtocolEditScreen": {
+    "addCustomNetworkButtonLabel": "Add custom network",
+    "default": "(Default)",
+    "editCustomNetworkButtonLabel": "Edit custom network",
+    "selectNodeButtonLabel": "Select node"
+  },
+  "settingsProtocolsScreen": {
+    "title": "Protocols"
+  },
+  "settingsScreen": {
+    "tabs": {
+      "personalisation": {
+        "currencyButtonLabel": "Currency",
+        "languageButtonLabel": "Language",
+        "networkConfigurationButtonLabel": "Network Configuration",
+        "title": "Personalisation"
+      },
+      "security": {
+        "backupButtonLabel": "Backup NEON",
+        "importBackupButtonLabel": "Import NEON Backup",
+        "title": "Security",
+        "verificationButtonLabel": "Verification",
+        "verificationSubtitle": {
+          "device": "Device",
+          "disabled": "Off",
+          "nfi": "NFI object",
+          "password": "Password"
+        }
+      }
+    },
+    "title": "Settings"
+  },
+  "settingsSecurityBackupScreen": {
+    "title": "Security",
+    "withAccountsToBackup": {
+      "description_1": "A requirement of securing your wallet through password or biometric authentication is to first back up your wallets.",
+      "description_2": "This is a precautionary step to prevent you from losing your password or otherwise not be able to authenticate and losing access to all your funds.",
+      "description_3": "Please back up the following wallets",
+      "description_4": "If you have multiple wallets you will be brought back here after each back up to back up the next wallet."
+    },
+    "withoutAccountsToBackup": {
+      "button_label": "Continue to Security",
+      "description": "All wallets are backed up, please continue to setup security"
+    }
+  },
+  "supportTicketScreen": {
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Describe your issue…",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Enter your email…",
+    "errors": {
+      "descriptionRequired": "Description is required",
+      "emailRequired": "Email is required",
+      "invalidEmail": "Please enter a valid email address",
+      "nameRequired": "Name is required",
+      "submitError": "There was an error trying to submit your ticket. Please try again later."
+    },
+    "nameLabel": "Name",
+    "namePlaceholder": "Enter your name…",
+    "submitTicketButtonLabel": "Submit ticket",
+    "successToast": "We've received your support ticket and will get back to you soon.",
+    "title": "Open support ticket"
+  },
+  "swapScreen": {
+    "form": {
+      "accountToUseModalTitle": "Select a source account",
+      "accountToUseTitle": "Send from here",
+      "addressToReceiveModalTitle": "Select a receiving account",
+      "addressToReceiveTitle": "Receive here",
+      "amountPlaceholder": "0.00",
+      "amountToReceiveDescription": "(after fees)",
+      "amountToReceiveTitle": "Amount you'll get",
+      "amountToUseTitle": "Amount",
+      "amounts": "Amounts",
+      "assets": "Assets",
+      "balanceLabel": "Balance",
+      "buttonSubmitLabel": "Swap now",
+      "errors": {
+        "amountMax": "Amount is too high. Maximum amount is {{amount}}",
+        "amountMin": "Amount is too low. Minimum amount is {{amount}}",
+        "insufficientFunds": "You don't have enough balance",
+        "insufficientFundsFee": "You don't have enough balance to pay the fee",
+        "invalidAddress": "Invalid receiver address",
+        "invalidExtraIdToReceive": "Invalid destination tag/memo"
+      },
+      "extraIdToReceive": "Dest. tag/memo",
+      "extraIdToReceiveLabel": "Destination tag/memo",
+      "extraIdToReceivePlaceholder": "Enter…",
+      "feePlaceholder": "0.00",
+      "minimumAmountTitle": "Minimum {{amount}}",
+      "openAboutExtraIdToReceiveModal": "Open destination tag/memo about modal",
+      "selectPlaceholder": "Select…",
+      "source": "Account details",
+      "tokenToReceiveModalTitle": "Select a token to receive",
+      "tokenToReceiveTitle": "For this",
+      "tokenToUseModalTitle": "Select a token to swap",
+      "tokenToUseTitle": "Swap this",
+      "transactionFee": "Transaction fee"
+    },
+    "restartButtonLabel": "Restart",
+    "title": "Swap tokens",
+    "tooltips": {
+      "experimentHigherAmounts": "Exchange rates are better with higher swap amounts, experiment!"
+    }
+  },
+  "voteNeo3Screen": {
+    "account": {
+      "changeLabel": "Change",
+      "noAccountSelectedLabel": "No account selected",
+      "selectLabel": "Select",
+      "selectNeo3AccountTitle": "Select Neo 3 account"
+    },
+    "availableVotes": {
+      "availableVotesLabel": "Available votes",
+      "noAvailableVotesLabel": "No votes"
+    },
+    "howItWorksButtonLabel": "How it works",
+    "list": {
+      "nameColumnLabel": "Candidate",
+      "positionColumnLabel": "Position",
+      "voteColumnLabel": "Vote"
+    },
+    "listItem": {
+      "castVoteButtonLabel": "Cast vote",
+      "detailsButtonLabel": "Candidate information",
+      "votedButtonLabel": "Voted!"
+    },
+    "listNotFound": {
+      "text": "There are no candidates to vote for or there was a problem obtaining them. Verify your Neo 3 network, and please, try again.",
+      "title": "No candidates to display"
+    },
+    "searchLabel": "Search",
+    "searchPlaceholder": "Search for a candidate…",
+    "title": "Voting",
+    "voteErrorMessages": {
+      "accountCanNotBeWatchLabel": "Your Neo 3 account is in watch mode",
+      "noNeo3AccountsLabel": "There isn't any non-watch Neo 3 account",
+      "selectNeo3AccountLabel": "Select a Neo 3 account",
+      "shouldHaveEnoughGasToPayFeeLabel": "You don't have enough GAS to pay the fee",
+      "shouldUseMainnetLabel": "You should use a Mainnet network to vote",
+      "thereIsNoNeoLabel": "Your Neo 3 account should have NEO"
+    }
+  },
+  "walletBackupStep1Screen": {
+    "body_1": "Below you will find your secret phrase",
+    "body_2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it above but be sure to keep it safe.",
+    "body_3": "Anyone with this phrase will be able to steal your hard earned assets and you won’t be able to get them back!",
+    "dialog_body": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
+    "dialog_dismiss": "OK, I understand",
+    "dialog_title": "Make sure you keep your security phrase safe",
+    "label_1": "Security phrase",
+    "oneOfThree": "1 of 3",
+    "title": "Backup wallet"
+  },
+  "walletBackupStep2Screen": {
+    "body_1": "To confirm you have backed up you key words please select your words in the correct order from the list below.",
+    "errors": {
+      "incorrectWordOrder": "Incorrect word order. Please try again to confirm your back up"
+    },
+    "label_1": "Confirm back up",
+    "title": "Backup wallet",
+    "twoOfThree": "2 of 3"
+  },
+  "walletBackupStep3Screen": {
+    "label_1": "Congratulations, You have confirmed your back up",
+    "title": "Backup wallet"
+  },
+  "walletScreen": {
+    "addNewAccount": "Add new account"
+  },
+  "walletSettingsScreen": {
+    "backup": "Backup Mnemonic",
+    "customize": "Customize wallet",
+    "deleteAlert": "Are you sure you want to delete this wallet?",
+    "deleteButton": "Delete Wallet",
+    "deleteSubtitle": "This will remove your wallet and all transaction history.",
+    "deleteTitle": "Delete Wallet",
+    "navigation": {
+      "cancel": "Cancel",
+      "delete": "Delete"
+    },
+    "title": "Wallet Settings"
+  },
+  "walletsScreen": {
+    "createFirstWallet": "Create first wallet",
+    "incompleteBalanceWarningButton": "OK, I understand",
+    "incompleteBalanceWarningText": "We haven't been able to retrieve price data for all your tokens so the total may not be accurate",
+    "incompleteBalanceWarningTitle": "Incomplete price data",
+    "walletBackupButtonLabel": "wallet not backed up"
+  }
+}
