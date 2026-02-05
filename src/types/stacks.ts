@@ -32,6 +32,7 @@ import type {
   THideFraudulentTokenModalParams,
   TNodeSelectionModalParams,
   TNotificationContextModalParams,
+  TOnboardingBackupMnemonicModalParams,
   TPasswordModalParams,
   TPersistContactAddressModalParams,
   TPersistContactModalParams,
@@ -180,6 +181,7 @@ export type TRootStackParamList = {
   OnboardingScreen: undefined
   OnboardingCompletedScreen: undefined
 
+  OnboardingBackupMnemonicModal: TOnboardingBackupMnemonicModalParams
   QRCodeAddressContextModal: TQRCodeAddressContextModalParams
   QuickToolsModal: undefined
   BlockchainSelectionModal: TBlockchainSelectionModalParams

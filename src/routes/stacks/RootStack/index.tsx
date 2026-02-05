@@ -35,6 +35,10 @@ export const RootStack = () => {
         }}
       >
         <RootNavigator.Screen
+          name="OnboardingBackupMnemonicModal"
+          getComponent={() => require('@/routes/modals/OnboardingBackupMnemonicModal').OnboardingBackupMnemonicModal}
+        />
+        <RootNavigator.Screen
           name="BlockchainSelectionModal"
           getComponent={() => require('@/routes/modals/BlockchainSelectionModal').BlockchainSelectionModal}
         />

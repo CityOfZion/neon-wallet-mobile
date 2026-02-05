@@ -403,6 +403,12 @@
     "markAsReadButtonLabel": "Als gelesen markieren",
     "markAsUnreadButtonLabel": "Als ungelesen markieren"
   },
+  "onboardingBackupMnemonicModal": {
+    "backupAndContinueButtonLabel": "Sicherung und Fortfahren",
+    "description": "Bitte sichern Sie Ihre Mn-Phrase. Dies ist wichtig, um Ihre Brieftasche wiederherzustellen, wenn Sie den Zugriff verlieren oder die App deinstallieren.",
+    "title": "Mn-Phrase sichern",
+    "warningLabel": "Jeder mit dieser Phrase kann auf Ihre Brieftasche zugreifen, daher halten Sie sie sicher."
+  },
   "persistContactAddressModal": {
     "addressLabel": "Adresse oder Alias",
     "addressPlaceholder": "Adresse oder Alias eingeben",

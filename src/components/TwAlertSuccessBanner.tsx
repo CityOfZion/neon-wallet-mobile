@@ -1,13 +1,13 @@
 import { cloneElement } from 'react'
 
-import type { JSX } from 'react'
+import type { JSX, ReactNode } from 'react'
 import type { ViewProps } from 'react-native'
 import { Text, View } from 'react-native'
 
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 type TProps = Omit<ViewProps, 'children'> & {
-  message: string
+  message: ReactNode
   icon: JSX.Element
 }
 
@@ -22,7 +22,11 @@ export const TwAlertSuccessBanner = ({ message, className, icon, ...props }: TPr
         'aria-hidden': true,
       })}
 
-      <Text className="flex-shrink font-sans-regular text-lg text-white">{message}</Text>
+      {typeof message === 'object' ? (
+        message
+      ) : (
+        <Text className="flex-shrink font-sans-regular text-lg text-white">{message}</Text>
+      )}
     </View>
   )
 }

@@ -12,14 +12,12 @@ import { WalletCard } from '@/components/WalletCard'
 import { ClipboardHelper } from '@/helpers/ClipboardHelper'
 
 import { useAccountsByWalletIdSelector } from '@/hooks/useAccountSelector'
-import { useAppDispatch } from '@/hooks/useRedux'
 import { useWalletsSelector } from '@/hooks/useWalletSelector'
 
 import { TwScreenLayout } from '@/layouts/TwScreenLayout'
 
 import TbCopy from '@/assets/images/tb-copy.svg'
 
-import { settingsReducerActions } from '@/store/reducers/settings'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 export const OnboardingCompletedScreen = ({ navigation }: TRootStackScreenProps<'OnboardingCompletedScreen'>) => {
@@ -27,7 +25,6 @@ export const OnboardingCompletedScreen = ({ navigation }: TRootStackScreenProps<
   const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
   const { bottom } = useSafeAreaInsets()
   const { wallets } = useWalletsSelector()
-  const dispatch = useAppDispatch()
 
   const ref = useRef<TWalletCardRef>(null)
 
@@ -36,14 +33,11 @@ export const OnboardingCompletedScreen = ({ navigation }: TRootStackScreenProps<
   const { accountsByWalletId } = useAccountsByWalletIdSelector(wallet.id)
 
   const handlePressViewWallet = () => {
-    dispatch(settingsReducerActions.setIsFirstTime(false))
-
-    navigation.replace('TabStack', {
-      screen: 'WalletsStack',
-      params: {
-        screen: 'WalletsScreen',
-      },
-    })
+    if (wallet) {
+      navigation.navigate('OnboardingBackupMnemonicModal', {
+        wallet,
+      })
+    }
   }
 
   useLayoutEffect(() => {
@@ -94,7 +88,12 @@ export const OnboardingCompletedScreen = ({ navigation }: TRootStackScreenProps<
         </View>
       </View>
 
-      <TwButton label={t('buttonLabel')} className="mt-auto w-full" onPress={handlePressViewWallet} />
+      <TwButton
+        label={t('buttonLabel')}
+        className="mt-auto w-full"
+        onPress={handlePressViewWallet}
+        disabled={wallet.backupStatus === 'successful'}
+      />
     </TwScreenLayout>
   )
 }

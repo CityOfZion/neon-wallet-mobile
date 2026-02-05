@@ -18,6 +18,7 @@ export interface ISettingsReducer {
     currency: TCurrency
     security: TSecurity
     isFirstTime: boolean
+    isOnboardingCompleted: boolean
     customNetworksByBlockchain: TCustomNetwork
     selectedNetworkByBlockchain: TSelectedNetworks
     language: TLanguage
@@ -34,6 +35,7 @@ export function getSettingsReducer() {
     data: {
       currency: CurrencyHelper.defaultCurrency,
       isFirstTime: true,
+      isOnboardingCompleted: false,
       security: { type: 'disabled' },
       customNetworksByBlockchain: {
         ethereum: [],
@@ -63,7 +65,7 @@ export function getSettingsReducer() {
     storage,
     timeout: 0,
     migrate: createMigrate(settingsMigrations),
-    version: 10,
+    version: 11,
   }
 
   const settingsSlice = createSlice({

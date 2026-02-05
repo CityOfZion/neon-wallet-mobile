@@ -17,6 +17,7 @@ import { I18nextHelper } from '@/helpers/I18nextHelper'
 import { useCreateAccount } from '@/hooks/useAccountActions'
 import { useAccountsSelector } from '@/hooks/useAccountSelector'
 import { useMount } from '@/hooks/useMount'
+import { useAppDispatch } from '@/hooks/useRedux'
 import { useCreateWallet } from '@/hooks/useWalletActions'
 import { useWalletsSelector } from '@/hooks/useWalletSelector'
 
@@ -25,6 +26,7 @@ import { TwScreenLayout } from '@/layouts/TwScreenLayout'
 import { OnboardingScreenPagination } from './OnboardingScreenPagination'
 import { OnboardingScreenProgress } from './OnboardingScreenProgress'
 
+import { settingsReducerActions } from '@/store/reducers/settings'
 import type { TRootStackScreenProps } from '@/types/stacks'
 import type { IWalletState } from '@/types/store'
 
@@ -79,6 +81,7 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
   const { createAccount } = useCreateAccount()
   const { width } = useWindowDimensions()
   const { top, bottom } = useSafeAreaInsets()
+  const dispatch = useAppDispatch()
 
   const activeCarouselPage = useSharedValue<number>(0)
 
@@ -117,6 +120,7 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
       await Promise.allSettled(accountPromises)
     }
 
+    dispatch(settingsReducerActions.setIsFirstTime(false))
     setStep('finalizing')
   })
 

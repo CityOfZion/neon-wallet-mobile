@@ -124,5 +124,12 @@ export function getSettingsMigrations() {
         },
       },
     }),
+    11: (state: any) => ({
+      ...state,
+      data: {
+        ...state.data,
+        isOnboardingCompleted: true,
+      },
+    }),
   }
 }
