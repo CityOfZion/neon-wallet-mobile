@@ -92,7 +92,7 @@ export const ExportFullTransactionsModal = ({
         language,
         format,
       })
-      const filename = `NEON3-ACTV-${selectedAccount.address}-${selectedAccount.blockchain}-${localizedFileDateFrom}-${localizedFileDateTo}`
+      const filename = `NWM-ACTV-${selectedAccount.address}-${selectedAccount.blockchain}-${localizedFileDateFrom}-${localizedFileDateTo}`
       await writeFile(filename, result, 'text/csv')
 
       navigation.navigate('SuccessModal', {

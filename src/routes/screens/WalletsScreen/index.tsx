@@ -1,4 +1,4 @@
-import React, { Fragment, useLayoutEffect, useState } from 'react'
+import React, { Fragment, useEffect, useLayoutEffect, useState } from 'react'
 
 import { LinearGradient } from 'expo-linear-gradient'
 
@@ -11,6 +11,7 @@ import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useAccountsByWalletIdSelector } from '@/hooks/useAccountSelector'
 import { useRefetch } from '@/hooks/useQuery'
+import { useAppDispatch } from '@/hooks/useRedux'
 import { useWalletsSelector } from '@/hooks/useWalletSelector'
 
 import { TwScreenLayout } from '@/layouts/TwScreenLayout'
@@ -19,12 +20,14 @@ import { WalletsScreenEmptyList } from './WalletsScreenEmptyList'
 import { WalletsScreenHeader } from './WalletsScreenHeader'
 import { WalletsScreenWalletInfo } from './WalletsScreenWalletInfo'
 
+import { settingsReducerActions } from '@/store/reducers/settings'
 import type { TWalletsStackScreenProps } from '@/types/stacks'
 import type { IWalletState } from '@/types/store'
 
 export const WalletsScreen = ({ navigation }: TWalletsStackScreenProps<'WalletsScreen'>) => {
   const { wallets } = useWalletsSelector()
   const { refetch, isRefetching } = useRefetch()
+  const dispatch = useAppDispatch()
 
   const [selectedWallet, setSelectedWallet] = useState<IWalletState | undefined>(wallets[0])
 
@@ -52,6 +55,10 @@ export const WalletsScreen = ({ navigation }: TWalletsStackScreenProps<'WalletsS
       return updatedSelectedWallet || firstWallet
     })
   }, [wallets])
+
+  useEffect(() => {
+    dispatch(settingsReducerActions.setIsOnboardingCompleted(true))
+  }, [dispatch])
 
   return (
     <LinearGradient

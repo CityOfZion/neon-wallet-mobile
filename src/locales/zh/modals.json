@@ -403,6 +403,12 @@
     "markAsReadButtonLabel": "标记为已读",
     "markAsUnreadButtonLabel": "标记为未读"
   },
+  "onboardingBackupMnemonicModal": {
+    "backupAndContinueButtonLabel": "备份并继续",
+    "description": "请备份您的助记词。如果您失去访问权限或卸载应用程序，这对于恢复您的钱包很重要。",
+    "title": "备份助记词",
+    "warningLabel": "任何拥有此短语的人都可以访问您的钱包，因此请妥善保管。"
+  },
   "persistContactAddressModal": {
     "addressLabel": "地址或别名",
     "addressPlaceholder": "输入地址或别名",

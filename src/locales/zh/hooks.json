@@ -1,4 +1,7 @@
 {
+  "useExportMnemonic": {
+    "fileTemplate": "重要：请保持此文件安全，切勿与任何人分享！任何拥有此助记词的人都可以访问您的资产。\n\n--- 助记词 ---\n\n{{mnemonic}}\n\n-----------------------\n\n{{generatedAt}}"
+  },
   "useFileSystem": {
     "errors": {
       "directory": "您必须选择一个目录"

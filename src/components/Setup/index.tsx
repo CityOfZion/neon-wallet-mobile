@@ -2,7 +2,7 @@ import { Fragment, Suspense } from 'react'
 
 import { LazyHelper } from '@/helpers/LazyHelper'
 
-import { useIsFirstTimeSelector } from '@/hooks/useSettingsSelector'
+import { useIsOnboardingCompletedSelector } from '@/hooks/useSettingsSelector'
 
 import InternetManagerSetup from './InternetManagerSetup'
 
@@ -15,8 +15,8 @@ const AccountTasksManagerSetup = LazyHelper.delayedLazy(() => import('./AccountT
 const WalletTasksManagerSetup = LazyHelper.delayedLazy(() => import('./WalletTasksManagerSetup'), 15000)
 
 export const Setup = () => {
-  const { isFirstTime } = useIsFirstTimeSelector()
-  if (isFirstTime) {
+  const { isOnboardingCompleted } = useIsOnboardingCompletedSelector()
+  if (!isOnboardingCompleted) {
     return null
   }
 

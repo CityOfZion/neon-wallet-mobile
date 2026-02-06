@@ -403,6 +403,12 @@
     "markAsReadButtonLabel": "Mark as read",
     "markAsUnreadButtonLabel": "Mark as unread"
   },
+  "onboardingBackupMnemonicModal": {
+    "backupAndContinueButtonLabel": "Backup and continue",
+    "description": "Please back up your mnemonic phrase. This is important to recover your wallet if you lose access or uninstall the app.",
+    "title": "Backup mnemonic",
+    "warningLabel": "Anyone with this phrase can access your wallet, so keep it secure."
+  },
   "persistContactAddressModal": {
     "addressLabel": "Address or alias",
     "addressPlaceholder": "Enter address or alias",

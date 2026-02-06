@@ -403,6 +403,12 @@
     "markAsReadButtonLabel": "Marcar como lido",
     "markAsUnreadButtonLabel": "Marcar como não lido"
   },
+  "onboardingBackupMnemonicModal": {
+    "backupAndContinueButtonLabel": "Fazer backup e continuar",
+    "description": "Faça backup de sua frase mnemônica. Isso é importante para recuperar sua carteira se você perder o acesso ou desinstalar o aplicativo.",
+    "title": "Backup de frase mnemônica",
+    "warningLabel": "Qualquer pessoa com essa frase pode acessar sua carteira, portanto, mantenha-a segura."
+  },
   "persistContactAddressModal": {
     "addressLabel": "Endereço ou alias",
     "addressPlaceholder": "Digite o endereço ou alias",

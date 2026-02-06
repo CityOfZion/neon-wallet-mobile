@@ -1,4 +1,7 @@
 {
+  "useExportMnemonic": {
+    "fileTemplate": "Importante: Mantenha este arquivo seguro e nunca o compartilhe com ninguém! Qualquer pessoa com este mnemônico poderá acessar seus ativos.\n\n--- FRASE MNEMÔNICA ---\n\n{{mnemonic}}\n\n-----------------------\n\n{{generatedAt}}"
+  },
   "useFileSystem": {
     "errors": {
       "directory": "Você deve selecionar um diretório"

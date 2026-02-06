@@ -27,6 +27,14 @@ export const useIsFirstTimeSelector = () => {
   }
 }
 
+export const useIsOnboardingCompletedSelector = () => {
+  const { ref, value } = useAppSelector(state => state.settings.data.isOnboardingCompleted)
+  return {
+    isOnboardingCompleted: value,
+    isOnboardingCompletedRef: ref,
+  }
+}
+
 export const useCustomNetworksSelector = (blockchain: TBlockchainServiceKey) => {
   const { ref, value } = useAppSelector(state => state.settings.data.customNetworksByBlockchain[blockchain])
   return {

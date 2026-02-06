@@ -102,6 +102,10 @@ const dontShowVoteNeo3SupportUsModalAgain: CaseReducer<ISettingsReducer> = ({ da
   data.canShowVoteNeo3SupportUsModal = false
 }
 
+const setIsOnboardingCompleted: CaseReducer<ISettingsReducer, PayloadAction<boolean>> = (state, action) => {
+  state.data.isOnboardingCompleted = action.payload
+}
+
 export const settingsSliceReducers = {
   setSecurity,
   setCurrency,
@@ -113,4 +117,5 @@ export const settingsSliceReducers = {
   setSelectedNetworkUrl,
   dontShowVoteNeo3SupportUsModalAgain,
   setSelectedNetworkByBlockchain,
+  setIsOnboardingCompleted,
 }

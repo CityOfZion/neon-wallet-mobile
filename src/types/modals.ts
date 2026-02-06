@@ -28,6 +28,10 @@ import type {
   TWalletType,
 } from './store'
 
+export type TOnboardingBackupMnemonicModalParams = {
+  wallet: IWalletState
+}
+
 export type TEditAccountModalParams = {
   account: IAccountState
 }
