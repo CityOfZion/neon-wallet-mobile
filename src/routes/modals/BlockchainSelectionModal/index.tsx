@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { useTranslation } from 'react-i18next'
+import { Text } from 'react-native'
 
 import { BlockchainList } from '@/components/BlockchainList'
 import { TwButton } from '@/components/TwButton'
@@ -18,7 +19,7 @@ type TActionData = {
 }
 
 export const BlockchainSelectionModal = ({ route, navigation }: TRootStackScreenProps<'BlockchainSelectionModal'>) => {
-  const { onSelect } = route.params
+  const { onSelect, isMulti = false, description, title } = route.params
 
   const { t } = useTranslation('modals', { keyPrefix: 'blockchainSelectionModal' })
   const { t: commonT } = useTranslation('common')
@@ -32,12 +33,14 @@ export const BlockchainSelectionModal = ({ route, navigation }: TRootStackScreen
 
   const handleSubmit = () => {
     navigation.goBack()
-    onSelect(actionData.blockchains[0])
+    onSelect(actionData.blockchains)
   }
 
   return (
-    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
-      <BlockchainList onSelect={handleSelect} selectedBlockchains={actionData.blockchains} isMulti={false} />
+    <TwModalLayout title={title || t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
+      {description && <Text className="mb-6 text-center font-sans-medium text-lg text-white">{description}</Text>}
+
+      <BlockchainList onSelect={handleSelect} selectedBlockchains={actionData.blockchains} isMulti={isMulti} />
 
       <TwButton
         className="mt-auto"

@@ -283,8 +283,7 @@
     "titleAddressList": "Endereços da conta"
   },
   "onboardingScreen": {
-    "buttonLabel": "Concluir",
-    "creatingWallet": "Estamos criando sua Carteira com uma Conta dentro. Enquanto isso, aqui está um resumo dos muitos recursos que você encontrará no aplicativo.",
+    "cancelAllButtonLabel": "Cancelar tudo",
     "feature1": {
       "header": "Organize facilmente seus ativos",
       "subtitle": "Crie várias Contas dentro de uma Carteira, cada uma com seu endereço único."
@@ -307,6 +306,10 @@
       "finalizing": "Finalizando tudo…",
       "wallet": "Criando sua carteira…"
     },
+    "overviewDescription": "Aqui está uma visão geral dos muitos recursos que você encontrará no aplicativo.",
+    "selectBlockchainsButtonLabel": "Começar",
+    "selectBlockchainsModalDescription": "Selecione as blockchains para as quais você deseja criar contas",
+    "selectBlockchainsModalTitle": "Selecionar Blockchains",
     "welcomeNW": "Bem-vindo à Neon Wallet"
   },
   "receiveScreen": {

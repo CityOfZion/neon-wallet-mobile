@@ -283,8 +283,7 @@
     "titleAddressList": "Konto Adressen"
   },
   "onboardingScreen": {
-    "buttonLabel": "Abschließen",
-    "creatingWallet": "Wir erstellen Ihr Wallet mit einem Konto darin. In der Zwischenzeit hier ein Überblick über die vielen Funktionen, die Sie in der App finden werden.",
+    "cancelAllButtonLabel": "Alle abbrechen",
     "feature1": {
       "header": "Organisieren Sie Ihre Assets ganz einfach",
       "subtitle": "Erstellen Sie mehrere Kontos innerhalb eines Wallets, jeder mit seiner eindeutigen Adresse."
@@ -305,8 +304,12 @@
     "messagesByActions": {
       "account": "Ihre Kontos werden erstellt…",
       "finalizing": "Alles wird fertiggestellt…",
-      "wallet": "Ihr Wallet wird erstellt…"
+      "wallet": "Ihr Portemonnaie wird erstellt…"
     },
+    "overviewDescription": "Hier ist ein Überblick über die vielen Funktionen, die Sie in der App finden werden.",
+    "selectBlockchainsButtonLabel": "Erste Schritte",
+    "selectBlockchainsModalDescription": "Wählen Sie die Blockchains aus, für die Sie Kontos erstellen möchten",
+    "selectBlockchainsModalTitle": "Blockchains auswählen",
     "welcomeNW": "Willkommen bei Neon Wallet"
   },
   "receiveScreen": {

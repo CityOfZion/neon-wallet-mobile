@@ -283,8 +283,7 @@
     "titleAddressList": "Account addresses"
   },
   "onboardingScreen": {
-    "buttonLabel": "Complete",
-    "creatingWallet": "We are creating your Wallet with an Account inside. In the meanwhile here's an overview of the many features you'll find in the app.",
+    "cancelAllButtonLabel": "Cancel all",
     "feature1": {
       "header": "Easily organize your assets",
       "subtitle": "Create multiple Accounts inside a Wallet, each with its unique address."
@@ -307,6 +306,10 @@
       "finalizing": "Wrapping everything up…",
       "wallet": "Creating your wallet…"
     },
+    "overviewDescription": "Here's an overview of the many features you'll find in the app.",
+    "selectBlockchainsButtonLabel": "Get started",
+    "selectBlockchainsModalDescription": "Select the blockchains which you want to create an account for",
+    "selectBlockchainsModalTitle": "Select Blockchains",
     "welcomeNW": "Welcome to Neon Wallet"
   },
   "receiveScreen": {

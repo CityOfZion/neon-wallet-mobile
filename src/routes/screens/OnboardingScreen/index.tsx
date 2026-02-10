@@ -11,12 +11,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { TwButton } from '@/components/TwButton'
 
-import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { I18nextHelper } from '@/helpers/I18nextHelper'
+import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useCreateAccount } from '@/hooks/useAccountActions'
 import { useAccountsSelector } from '@/hooks/useAccountSelector'
-import { useMount } from '@/hooks/useMount'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { useCreateWallet } from '@/hooks/useWalletActions'
 import { useWalletsSelector } from '@/hooks/useWalletSelector'
@@ -85,44 +84,49 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
 
   const activeCarouselPage = useSharedValue<number>(0)
 
-  const [step, setStep] = useState<TStep>('wallet')
+  const [step, setStep] = useState<TStep>()
 
-  const handleFinish = async () => {
-    navigation.replace('OnboardingCompletedScreen')
+  const handleSelectBlockchains = () => {
+    navigation.navigate('BlockchainSelectionModal', {
+      title: t('screens:onboardingScreen.selectBlockchainsModalTitle'),
+      description: t('screens:onboardingScreen.selectBlockchainsModalDescription'),
+      isMulti: true,
+      onSelect: async selectedBlockchains => {
+        if (accounts.length > 0) {
+          setStep('finalizing')
+          return
+        }
+
+        setStep('wallet')
+
+        let wallet: IWalletState | undefined = wallets[0]
+        let mnemonic = ''
+
+        if (!wallet) {
+          mnemonic = BSKeychainHelper.generateMnemonic()
+
+          wallet = await createWallet({
+            name: t('common:wallet.firstWalletName'),
+            mnemonic,
+            type: 'standard',
+          })
+        }
+
+        setStep('account')
+
+        const accountPromises = selectedBlockchains.map(blockchain => createAccount({ blockchain, wallet }))
+
+        await Promise.allSettled(accountPromises)
+
+        setStep('finalizing')
+
+        await UtilsHelper.sleep(500)
+
+        dispatch(settingsReducerActions.setIsFirstTime(false))
+        navigation.replace('OnboardingCompletedScreen')
+      },
+    })
   }
-
-  useMount(async () => {
-    if (accounts.length > 0) {
-      setStep('finalizing')
-      return
-    }
-
-    let wallet: IWalletState | undefined = wallets[0]
-    let mnemonic = ''
-
-    if (!wallet) {
-      mnemonic = BSKeychainHelper.generateMnemonic()
-
-      wallet = await createWallet({
-        name: t('common:wallet.firstWalletName'),
-        mnemonic,
-        type: 'standard',
-      })
-    }
-
-    setStep('account')
-
-    if (accounts.length === 0) {
-      const accountPromises = BlockchainServiceHelper.blockchainNames.map(blockchain =>
-        createAccount({ blockchain, wallet })
-      )
-
-      await Promise.allSettled(accountPromises)
-    }
-
-    dispatch(settingsReducerActions.setIsFirstTime(false))
-    setStep('finalizing')
-  })
 
   return (
     <TwScreenLayout
@@ -138,7 +142,7 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
         <Text className="font-sans-bold text-xs uppercase text-neon">{t('screens:onboardingScreen.initialSetup')}</Text>
         <Text className="font-sans-bold text-3xl text-white">{t('screens:onboardingScreen.welcomeNW')}</Text>
         <Text className="w-4/5 font-sans-regular text-sm text-white">
-          {t('screens:onboardingScreen.creatingWallet')}
+          {t('screens:onboardingScreen.overviewDescription')}
         </Text>
       </View>
 
@@ -160,8 +164,12 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
       <OnboardingScreenPagination activePage={activeCarouselPage} totalPages={DATA.length} />
 
       <View className="items-center gap-2 bg-gray-900 px-6 py-4" style={{ paddingBottom: Math.max(20, bottom) }}>
-        {step === 'finalizing' ? (
-          <TwButton variant="outline" label={t('screens:onboardingScreen.buttonLabel')} onPress={handleFinish} />
+        {!step ? (
+          <TwButton
+            variant="contained"
+            label={t('screens:onboardingScreen.selectBlockchainsButtonLabel')}
+            onPress={handleSelectBlockchains}
+          />
         ) : (
           <Fragment>
             <OnboardingScreenProgress progress={PROGRESS_BY_STEP[step]} />

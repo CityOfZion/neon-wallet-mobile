@@ -48,7 +48,9 @@ export const PersistContactAddressModal = ({
 
   const handleSelectBlockchain = () => {
     navigation.navigate('BlockchainSelectionModal', {
-      onSelect: (blockchain: TBlockchainServiceKey) => {
+      onSelect: (blockchains: TBlockchainServiceKey[]) => {
+        const [blockchain] = blockchains
+
         setData({ blockchain })
 
         if (actionData.address) validateAddressOrNS(actionData.address, blockchain)

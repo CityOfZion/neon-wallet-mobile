@@ -283,8 +283,7 @@
     "titleAddressList": "帳戶地址"
   },
   "onboardingScreen": {
-    "buttonLabel": "完成",
-    "creatingWallet": "我們正在為您建立錢包與帳戶，同時為您介紹應用程式的多項功能。",
+    "cancelAllButtonLabel": "全部取消",
     "feature1": {
       "header": "輕鬆管理您的資產",
       "subtitle": "在一個錢包中建立多個帳戶，每個帳戶都有獨立地址。"
@@ -305,8 +304,12 @@
     "messagesByActions": {
       "account": "正在建立帳戶…",
       "finalizing": "正在完成所有設定…",
-      "wallet": "正在建立錢包…"
+      "wallet": "正在建立您的錢包…"
     },
+    "overviewDescription": "這裡是應用程式內眾多功能的概覽。",
+    "selectBlockchainsButtonLabel": "開始設定",
+    "selectBlockchainsModalDescription": "選擇您想要為其建立帳戶的區塊鏈",
+    "selectBlockchainsModalTitle": "選擇區塊鏈",
     "welcomeNW": "歡迎使用 Neon 錢包"
   },
   "receiveScreen": {
