@@ -55,7 +55,10 @@ export type TPersistContactAddressModalParams = {
 }
 
 export type TBlockchainSelectionModalParams = {
-  onSelect: (blockchain: TBlockchainServiceKey) => void
+  title?: string
+  description?: string
+  isMulti?: boolean
+  onSelect: (blockchain: TBlockchainServiceKey[]) => void
 }
 
 export type TEditWalletModalParams = {
