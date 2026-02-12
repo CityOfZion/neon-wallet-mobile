@@ -19,7 +19,7 @@ import { useAccountsSelector } from './useAccountSelector'
 import { useContactsSelector } from './useContactSelector'
 import { useFileSystem } from './useFileSystem'
 import { useAppDispatch } from './useRedux'
-import { useSwapRecordsSelector } from './useSwapRecordsSelector'
+import { useSwapRecordsSelector } from './useUtilitySelector'
 import { useCreateWallet, useEditWallet } from './useWalletActions'
 import { useWalletsSelector } from './useWalletSelector'
 

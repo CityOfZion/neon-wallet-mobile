@@ -1,3 +1,4 @@
+import { hasFullTransactions } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text } from 'react-native'
 
@@ -50,7 +51,18 @@ export const ExportFullTransactionsModal = ({
   const formattedDateFrom = dateFrom ? DateHelper.formatLocalized(dateFrom, { format: 'LLL do', language }) : undefined
   const formattedDateTo = dateTo ? DateHelper.formatLocalized(dateTo, { format: 'LLL do', language }) : undefined
 
-  const isDisabled = !selectedAccount || !dateFrom || !dateTo || !formattedDateFrom || !formattedDateTo
+  const service = selectedAccount
+    ? BlockchainServiceHelper.bsAggregator.blockchainServicesByName[selectedAccount.blockchain]
+    : undefined
+
+  const isDisabled =
+    !selectedAccount ||
+    !dateFrom ||
+    !dateTo ||
+    !formattedDateFrom ||
+    !formattedDateTo ||
+    !service ||
+    !hasFullTransactions(service)
 
   const handleAccountSelectionPress = () => {
     navigation.navigate('AccountSelectionModal', {
@@ -75,9 +87,7 @@ export const ExportFullTransactionsModal = ({
     try {
       if (isDisabled) return
 
-      const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[selectedAccount.blockchain]
-
-      const result = await service.blockchainDataService.exportFullTransactionsByAddress({
+      const result = await service.fullTransactionsDataService.exportFullTransactionsByAddress({
         address: selectedAccount.address,
         dateFrom: dateFrom.toISOString(),
         dateTo: dateTo.toISOString(),

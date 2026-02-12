@@ -53,7 +53,7 @@ export const SendTipCheckbox = ({
     <Pressable
       onPress={handleOnPress}
       disabled={isInternalDisabled}
-      className={StyleHelper.mergeStyles('flex flex-row gap-x-4 bg-green-700 p-4', className)}
+      className={StyleHelper.mergeStyles('flex flex-row gap-x-4 rounded bg-green-700/50 p-4', className)}
     >
       <CheckboxPrimitive.Root
         checked={isChecked}
@@ -69,15 +69,16 @@ export const SendTipCheckbox = ({
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
 
-      <View className="flex flex-1 gap-x-2">
-        <Text className="text-lg text-neon">
+      <View className="-mt-1 flex flex-1 gap-x-2">
+        <Text className="font-sans-regular text-lg text-neon">
           {t('tipCheckboxLabel', {
             amount: BSBigNumberHelper.format(amountBn, { decimals: tokenSymbol?.decimals }),
             tokenSymbol: tokenSymbol?.symbol,
             fiatAmount: CurrencyHelper.format(fiatPriceBn.toFixed(), { currency, maximumFractionDigits: 2 }),
           })}
         </Text>
-        <Text className="text-lg italic text-gray-400">{t('tipCheckboxOptionalLabel')}</Text>
+
+        <Text className="font-sans-medium text-lg italic text-gray-400">{t('tipCheckboxOptionalLabel')}</Text>
       </View>
     </Pressable>
   )

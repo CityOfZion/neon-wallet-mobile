@@ -1,6 +1,6 @@
 import React from 'react'
 
-import type { TTransactionTransferAsset } from '@cityofzion/blockchain-service'
+import type { TTransactionTokenEvent } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -23,9 +23,8 @@ export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'
   const { t } = useTranslation('modals', { keyPrefix: 'sellTokensDepositSuccessModal' })
   const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
 
-  const { pendingTransaction } = route.params
-  const { token, ...transfer } = pendingTransaction.transfers[0] as TTransactionTransferAsset
-  const { blockchain } = pendingTransaction.account
+  const { transaction } = route.params
+  const event = transaction.events[0] as TTransactionTokenEvent
 
   return (
     <TwModalLayout
@@ -57,7 +56,7 @@ export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'
               numberOfLines={1}
               ellipsizeMode="middle"
             >
-              {transfer.to}
+              {event.to}
             </Text>
 
             <TwIconButton
@@ -65,7 +64,7 @@ export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'
               size="sm"
               className="mt-1 h-4 w-4"
               icon={<TbCopy aria-hidden className="text-neon" />}
-              onPress={() => ClipboardHelper.write(transfer.to)}
+              onPress={() => ClipboardHelper.write(event.to)}
             />
           </View>
         </View>
@@ -76,21 +75,21 @@ export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'
           <Text className="font-sans-medium text-xs uppercase text-gray-100">{t('amount.label')}</Text>
 
           <View className="flex w-full flex-row items-center gap-x-2">
-            <TwBlockchainIcon blockchain={blockchain} type="gray" className="h-3 w-3" />
+            <TwBlockchainIcon blockchain={transaction.blockchain} type="gray" className="h-3 w-3" />
 
             <Text
               className="flex-shrink flex-grow font-sans-regular text-sm text-white"
               numberOfLines={1}
               ellipsizeMode="middle"
             >
-              {token!.symbol}{' '}
+              {event.token!.symbol}{' '}
               <Text className="font-sans-regular text-sm uppercase text-gray-100">
-                | {tCommonBlockchainServices(`${blockchain}.label`)}
+                | {tCommonBlockchainServices(`${transaction.blockchain}.label`)}
               </Text>
             </Text>
 
             <Text className="max-w-[50%] font-sans-regular text-sm text-white" numberOfLines={1}>
-              {transfer.amount}
+              {event.amount}
             </Text>
           </View>
         </View>
@@ -102,7 +101,7 @@ export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'
 
           <View className="flex w-full flex-row items-center gap-x-3">
             <Text className="flex-shrink flex-grow break-all font-sans-regular text-sm text-white">
-              {pendingTransaction.hash}
+              {transaction.txId}
             </Text>
 
             <TwIconButton
@@ -110,7 +109,7 @@ export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'
               size="sm"
               className="mt-1 h-4 w-4"
               icon={<TbCopy aria-hidden className="text-neon" />}
-              onPress={() => ClipboardHelper.write(pendingTransaction.hash)}
+              onPress={() => ClipboardHelper.write(transaction.txId)}
             />
           </View>
         </View>

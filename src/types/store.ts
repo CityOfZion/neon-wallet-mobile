@@ -1,4 +1,11 @@
-import type { TSwapServiceStatusResponse, TSwapToken, TTransactionResponse } from '@cityofzion/blockchain-service'
+import type {
+  TSwapServiceStatusResponse,
+  TSwapToken,
+  TTransactionBase,
+  TTransactionBridgeNeo3NeoX,
+  TTransactionNftEvent,
+  TTransactionTokenEvent,
+} from '@cityofzion/blockchain-service'
 
 import type { TBlockchainServiceKey, TNetwork } from './blockchain'
 import type { Optional } from './global'
@@ -98,12 +105,22 @@ export type TCustomNetwork = {
   [K in TBlockchainServiceKey]: TNetwork[]
 }
 
-export type TTransaction = TTransactionResponse & {
+export type TUseTransactionsTransactionEvent = (TTransactionTokenEvent | TTransactionNftEvent) & {
+  fromAccount?: IAccountState
+  toAccount?: IAccountState
+}
+
+export type TUseTransactionsTransaction = TTransactionBase & {
   account: IAccountState
-  isClaim?: boolean
-  swapRecord?: TSwapRecord
-  isPending?: boolean
-  transactionUrl?: string
+  blockchain: TBlockchainServiceKey
+  isPending: boolean
+  events: TUseTransactionsTransactionEvent[]
+} & ({ type: 'default' } | { type: 'claim' } | { type: 'vote' } | TTransactionBridgeNeo3NeoX<TBlockchainServiceKey>)
+
+export type TUseTransactionsGroupedTransactionsByDate = {
+  date: string
+  formattedDate: string
+  data: TUseTransactionsTransaction[]
 }
 
 export type TSwapRecord = {

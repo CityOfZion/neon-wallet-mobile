@@ -242,10 +242,7 @@ export const RootStack = () => {
         />
         <RootNavigator.Screen
           name="SellTokensDepositSuccessModal"
-          getComponent={() =>
-            require('@/routes/modals/SellTokensDepositModal/SellTokensDepositSuccessModal')
-              .SellTokensDepositSuccessModal
-          }
+          getComponent={() => require('@/routes/modals/SellTokensDepositSuccessModal').SellTokensDepositSuccessModal}
         />
         <RootNavigator.Screen
           name="NotificationContextModal"

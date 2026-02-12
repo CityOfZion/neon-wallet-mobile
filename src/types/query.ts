@@ -3,7 +3,6 @@ import type { QueryKey, UseQueryOptions } from '@tanstack/react-query'
 
 import type { TBlockchainServiceKey } from './blockchain'
 import type { Optional } from './global'
-import type { TTransaction } from './store'
 
 export type TBaseOptions<T = unknown> = Omit<UseQueryOptions<T, unknown, T, QueryKey>, 'queryKey' | 'queryFn'>
 
@@ -26,6 +25,7 @@ export type TMultiExchange = Record<TBlockchainServiceKey, Map<string, TExchange
 export type TUseExchangeResult = {
   data: TMultiExchange | undefined
   isLoading: boolean
+  convertAmount: (amount: string | number, hash: string, blockchain: TBlockchainServiceKey) => number
 }
 
 export type TTokenBalance = {
@@ -85,10 +85,3 @@ export type TUseBalancesFetchResult = {
 }
 
 export type TNode = Optional<TPingNetworkResponse, 'height' | 'latency'>
-
-export type TUseTransactionsQueryAggregatedData = {
-  data: TTransaction[]
-  pendingData: TTransaction[]
-  date: Date
-  localizedDate: string
-}

@@ -14,8 +14,8 @@ import type { IAccountState } from '@/types/store'
 const buildUniqueQueryKey = (
   blockchain: TBlockchainServiceKey,
   network: TNetwork,
-  tokenHash: string,
-  collectionHash: string
+  tokenHash?: string,
+  collectionHash?: string
 ) => ['nft', blockchain, network, tokenHash, collectionHash]
 
 async function fetchNfts(
@@ -36,7 +36,7 @@ async function fetchNfts(
   const queryCache = queryClient.getQueryCache()
 
   response.items.forEach(item => {
-    const queryKey = buildUniqueQueryKey(account.blockchain, network, item.hash, item.collection.hash)
+    const queryKey = buildUniqueQueryKey(account.blockchain, network, item.hash, item.collection?.hash)
     const defaultedOptions = queryClient.defaultQueryOptions({ queryKey })
 
     queryCache.build(queryClient, defaultedOptions).setData(item, { manual: true })
@@ -45,10 +45,10 @@ async function fetchNfts(
   return response
 }
 
-async function fetchNft(blockchain: TBlockchainServiceKey, tokenHash: string, collectionHash: string) {
+async function fetchNft(blockchain: TBlockchainServiceKey, tokenHash?: string, collectionHash?: string) {
   const blockchainService = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
 
-  if (!hasNft(blockchainService)) return
+  if (!hasNft(blockchainService) || !tokenHash) return
 
   return await blockchainService.nftDataService.getNft({ tokenHash, collectionHash })
 }
@@ -61,7 +61,7 @@ export const useNftsQuery = (account: IAccountState) => {
     queryKey: ['nfts', account.blockchain, account.address, selectedNetwork],
     queryFn: ({ pageParam }) => fetchNfts(account, selectedNetwork, queryClient, pageParam),
     initialPageParam: undefined as string | undefined,
-    getNextPageParam: lastPage => lastPage.nextCursor,
+    getNextPageParam: lastPage => lastPage.nextPageParams,
   })
 
   const aggregatedData = useMemo(() => {
@@ -71,10 +71,11 @@ export const useNftsQuery = (account: IAccountState) => {
   return { aggregatedData, ...query }
 }
 
-export const useNftQuery = (blockchain: TBlockchainServiceKey, tokenHash: string, collectionHash: string) => {
+export const useNftQuery = (blockchain: TBlockchainServiceKey, tokenHash?: string, collectionHash?: string) => {
   const { selectedNetwork } = useSelectedNetworkSelector(blockchain)
 
   return useQuery({
+    enabled: !!tokenHash,
     queryKey: buildUniqueQueryKey(blockchain, selectedNetwork, tokenHash, collectionHash),
     queryFn: fetchNft.bind(null, blockchain, tokenHash, collectionHash),
   })

@@ -7,8 +7,13 @@ import type { IAccountState } from '@/types/store'
 const selectHasClaimPendingTransaction = (account: IAccountState) =>
   createAppSelector([state => state.utility.inMemoryData.pendingTransactions], pendingTransactions => {
     return pendingTransactions.some(
-      transaction => !!transaction.isClaim && AccountHelper.predicate(account)(transaction.account)
+      transaction => transaction.type === 'claim' && AccountHelper.predicate(account)(transaction.account)
     )
+  })
+
+const selectSwapRecord = (txId: string) =>
+  createAppSelector([state => state.utility.data.swapRecords], swapRecords => {
+    return swapRecords.find(swapRecord => swapRecord.txFrom === txId)
   })
 
 export const useIsConnectedSelector = () => {
@@ -57,4 +62,16 @@ export const useLastIndexesByWallet = () => {
     lastIndexesByWallet: value,
     lastIndexesByWalletRef: ref,
   }
+}
+
+export const useSwapRecordsSelector = () => {
+  const { ref: swapRecordsRef, value: swapRecords } = useAppSelector(state => state.utility.data.swapRecords)
+
+  return { swapRecords, swapRecordsRef }
+}
+
+export const useSwapRecordSelector = (txId: string) => {
+  const { value: swapRecord, ref: swapRecordRef } = useAppSelector(selectSwapRecord(txId))
+
+  return { swapRecord, swapRecordRef }
 }

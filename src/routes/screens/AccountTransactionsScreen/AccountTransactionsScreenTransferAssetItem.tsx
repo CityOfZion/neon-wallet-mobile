@@ -1,6 +1,6 @@
 import React from 'react'
 
-import type { TTransactionTransferAsset } from '@cityofzion/blockchain-service'
+import { BSBigNumberHelper, type TTransactionTokenEvent } from '@cityofzion/blockchain-service'
 import { Text, View } from 'react-native'
 
 import { TwSkeleton } from '@/components/TwSkeleton'
@@ -16,42 +16,39 @@ import type { IAccountState } from '@/types/store'
 
 type TProps = {
   account: IAccountState
-  transfer: TTransactionTransferAsset
+  event: TTransactionTokenEvent
 }
 
-export const AccountTransactionsScreenTransferAssetItem = ({ account, transfer }: TProps) => {
+export const AccountTransactionsScreenTransferAssetItem = ({ account, event }: TProps) => {
   const { currency } = useCurrencySelector()
 
-  const exchange = useExchange([{ blockchain: account.blockchain, tokens: transfer.token ? [transfer.token] : [] }])
+  const exchange = useExchange([{ blockchain: account.blockchain, tokens: event.token ? [event.token] : [] }])
 
   let fiatAmount = 0
 
-  if (transfer.token) {
-    const convertedPrice = ExchangeHelper.getExchangeConvertedPrice(
-      transfer.token.hash,
-      account.blockchain,
-      exchange.data
-    )
-
-    fiatAmount = convertedPrice * Number(transfer.amount)
+  if (event.token) {
+    const convertedPrice = ExchangeHelper.getExchangeConvertedPrice(event.token.hash, account.blockchain, exchange.data)
+    fiatAmount = BSBigNumberHelper.fromNumber(convertedPrice)
+      .multipliedBy(event.amount ?? 0)
+      .toNumber()
   }
 
   const fiatAmountFormatted = CurrencyHelper.format(fiatAmount, { currency })
 
   return (
     <View className="mt-4 flex-row items-center gap-2.5">
-      {transfer.token ? (
-        <TwTokenIcon width={16} height={16} {...transfer.token} blockchain={account.blockchain} className="rounded" />
+      {event.token ? (
+        <TwTokenIcon width={20} height={20} {...event.token} blockchain={account.blockchain} className="rounded" />
       ) : (
         <View className="h-5 w-5" />
       )}
 
       <Text className="w-14 font-sans-regular text-lg text-white" numberOfLines={1} ellipsizeMode="middle">
-        {transfer.token?.symbol ?? transfer.contractHash}
+        {event.token?.symbol ?? event.contractHash}
       </Text>
 
       <Text className="flex-1 font-sans-regular text-lg text-gray-100" numberOfLines={1}>
-        {transfer.amount}
+        {event.amount}
       </Text>
 
       <TwSkeleton isLoading={exchange.isLoading} layout={{ width: 56, height: 24 }}>

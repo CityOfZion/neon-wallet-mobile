@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Text } from 'react-native'
 
+import { Details } from '@/components/Details'
 import { Loader } from '@/components/Loader'
-import { TwDetailsCard } from '@/components/TwDetailsCard'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { AppError } from '@/helpers/ErrorHelper'
@@ -50,8 +50,8 @@ export const DappPermissionGenericContentFee = ({
   }, [feeQuery.error])
 
   return (
-    <TwDetailsCard.Root className="mt-3">
-      <TwDetailsCard.Header
+    <Details.Root className="mt-3">
+      <Details.Header
         leftElement={<TbReceipt aria-hidden className="text-blue" />}
         rightElement={
           <Fragment>
@@ -65,8 +65,8 @@ export const DappPermissionGenericContentFee = ({
           </Fragment>
         }
       >
-        <Text className="font-sans-regular text-base capitalize text-white">{t('feeLabel')}</Text>
-      </TwDetailsCard.Header>
-    </TwDetailsCard.Root>
+        {t('feeLabel')}
+      </Details.Header>
+    </Details.Root>
   )
 }

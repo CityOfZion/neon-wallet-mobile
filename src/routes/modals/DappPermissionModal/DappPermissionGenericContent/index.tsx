@@ -5,9 +5,9 @@ import mapValues from 'lodash/mapValues'
 import { Trans, useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
+import { Details } from '@/components/Details'
 import { TwButton } from '@/components/TwButton'
 import { TwDappHeader } from '@/components/TwDappHeader'
-import { TwDetailsCard } from '@/components/TwDetailsCard'
 import { TwIconButton } from '@/components/TwIconButton'
 
 import { ClipboardHelper } from '@/helpers/ClipboardHelper'
@@ -49,18 +49,18 @@ export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
 
       <Text className="mt-2 text-center font-sans-regular text-base text-gray-100">{t('description2')}</Text>
 
-      <TwDetailsCard.Root className="mt-5">
-        <TwDetailsCard.Header leftElement={<TbArrowsSort aria-hidden className="rotate-90" />}>
-          <Text className="font-sans-regular text-base capitalize text-white">{request.params.request.method}</Text>
-        </TwDetailsCard.Header>
-      </TwDetailsCard.Root>
+      <Details.Root className="mt-5">
+        <Details.Header labelClassName="capitalize" leftElement={<TbArrowsSort aria-hidden className="rotate-90" />}>
+          {request.params.request.method}
+        </Details.Header>
+      </Details.Root>
 
       {Object.entries(parsedParams).map(([key, value]) => {
         const content = typeof value === 'string' ? value : JSON.stringify(value, null, 2)
 
         return (
-          <TwDetailsCard.Root className="mt-3" key={key}>
-            <TwDetailsCard.Header
+          <Details.Root className="mt-3" key={key}>
+            <Details.Header
               rightElement={
                 <TwIconButton
                   aria-label={commonT('general.copy')}
@@ -70,18 +70,17 @@ export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
                 />
               }
               leftElement={<TbCodeCircle aria-hidden className="text-gray-300" />}
+              labelClassName="capitalize text-gray-100"
             >
-              <Text className="font-sans-regular text-base capitalize text-gray-100">{key}</Text>
-            </TwDetailsCard.Header>
+              {key}
+            </Details.Header>
 
-            <TwDetailsCard.HeaderSeparator />
+            <Details.HeaderSeparator />
 
-            <TwDetailsCard.Row>
-              <Text className="w-full whitespace-pre-wrap break-words rounded bg-gray-700/60 px-5 py-2.5 font-sans-medium text-base text-white">
-                {typeof value === 'string' ? value : JSON.stringify(value, null, 2)}
-              </Text>
-            </TwDetailsCard.Row>
-          </TwDetailsCard.Root>
+            <Details.Item contentClassName="bg-gray-700/60 px-5 py-2.5 rounded whitespace-pre-wrap break-words">
+              {typeof value === 'string' ? value : JSON.stringify(value, null, 2)}
+            </Details.Item>
+          </Details.Root>
         )
       })}
 

@@ -2,10 +2,10 @@ import type { Signer } from '@cityofzion/bs-neo3'
 import { BSNeo3NeonJsSingletonHelper } from '@cityofzion/bs-neo3'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { Text, View } from 'react-native'
 
-import { TwDetailsCard } from '@/components/TwDetailsCard'
-import { TwIconButton } from '@/components/TwIconButton'
+import { Details } from '@/components/Details'
+import { PressableScale } from '@/components/PressableScale'
 
 import MdChevronRight from '@/assets/images/md-chevron-right.svg'
 import TbCube3dSphere from '@/assets/images/tb-cube-3d-sphere.svg'
@@ -45,28 +45,21 @@ export const DappPermissionInvokeNeo3ContentSigner = ({ signer, session }: TProp
   }
 
   return (
-    <TouchableOpacity onPress={handleViewSignatureScope} activeOpacity={0.9}>
-      <TwDetailsCard.Root>
-        <TwDetailsCard.Header
+    <PressableScale onPress={handleViewSignatureScope}>
+      <Details.Root>
+        <Details.Header
           leftElement={<TbCube3dSphere aria-hidden />}
           rightElement={
             <View className="flex flex-row items-center gap-2">
               <Text className="font-sans-semibold text-base capitalize text-gray-100">{scope}</Text>
-
-              <TwIconButton
-                className="p-0"
-                aria-label={t('viewSignatureScopeButtonLabel')}
-                icon={<MdChevronRight aria-hidden />}
-                onPress={handleViewSignatureScope}
-              />
+              <MdChevronRight className="size-6 text-gray-100" aria-hidden />
             </View>
           }
+          labelClassName="capitalize"
         >
-          <Text className="font-sans-regular text-base capitalize text-white">
-            {t('signatureScopeDetailsHeaderLabel')}
-          </Text>
-        </TwDetailsCard.Header>
-      </TwDetailsCard.Root>
-    </TouchableOpacity>
+          {t('signatureScopeDetailsHeaderLabel')}
+        </Details.Header>
+      </Details.Root>
+    </PressableScale>
   )
 }

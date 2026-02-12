@@ -4,10 +4,10 @@ import { WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
+import { DappDetailsCard } from '@/components/DappDetailsCard'
+import { Details } from '@/components/Details'
 import { TwButton } from '@/components/TwButton'
-import { TwDappDetailsCard } from '@/components/TwDappDetailsCard'
 import { TwDappHeader } from '@/components/TwDappHeader'
-import { TwDetailsCard } from '@/components/TwDetailsCard'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
@@ -65,44 +65,38 @@ export const DappConnectionDetailsModal = ({
         uri={session.peer.metadata.icons[0]}
       />
 
-      <TwDappDetailsCard
+      <DappDetailsCard
         chain={sessionDetails.service.walletConnectService.chain}
         methods={sessionDetails.methods}
         className="my-6"
       >
-        <TwDetailsCard.Row>
-          <TwDetailsCard.ItemPanel label={t('expiresAtPanelTitle')}>
-            <Text className="font-sans-medium text-sm text-white">
-              {DateHelper.formatLocalized(new Date(session.expiry * 1000), { format: 'PPPp', language })}
-            </Text>
-          </TwDetailsCard.ItemPanel>
-        </TwDetailsCard.Row>
+        <Details.Panel label={t('expiresAtPanelTitle')}>
+          <Details.Item>
+            {DateHelper.formatLocalized(new Date(session.expiry * 1000), { format: 'PPPp', language })}
+          </Details.Item>
+        </Details.Panel>
 
         {wallet && (
-          <TwDetailsCard.Row>
-            <TwDetailsCard.ItemPanel label={t('walletPanelTitle')}>
-              <Text className="font-sans-medium text-sm text-white">{wallet.name}</Text>
-            </TwDetailsCard.ItemPanel>
-          </TwDetailsCard.Row>
+          <Details.Panel label={t('walletPanelTitle')}>
+            <Details.Item>{wallet.name}</Details.Item>
+          </Details.Panel>
         )}
 
         {account && (
-          <TwDetailsCard.Row>
-            <TwDetailsCard.ItemPanel label={t('accountPanelTitle')}>
-              <View className="flex flex-row items-center gap-2">
-                <View
-                  className={StyleHelper.mergeStyles('size-2 rounded-full bg-neon', account.skin.id)}
-                  style={{
-                    backgroundColor: account.skin.type === 'color' ? account.skin.id : undefined,
-                  }}
-                />
+          <Details.Panel label={t('accountPanelTitle')}>
+            <Details.Item contentClassName="justify-start">
+              <View
+                className={StyleHelper.mergeStyles('size-3 rounded-full bg-neon', account.skin.id)}
+                style={{
+                  backgroundColor: account.skin.type === 'color' ? account.skin.id : undefined,
+                }}
+              />
 
-                <Text className="font-sans-medium text-sm text-white">{account.name}</Text>
-              </View>
-            </TwDetailsCard.ItemPanel>
-          </TwDetailsCard.Row>
+              <Text className="font-sans-medium text-sm text-white">{account.name}</Text>
+            </Details.Item>
+          </Details.Panel>
         )}
-      </TwDappDetailsCard>
+      </DappDetailsCard>
 
       <TwButton
         className="mt-auto"

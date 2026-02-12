@@ -13,6 +13,7 @@ import { TwAlertErrorBanner } from '@/components/TwAlertErrorBanner'
 import { TwButton } from '@/components/TwButton'
 import { TwStepSeparator } from '@/components/TwStepSeparator'
 
+import { AccountHelper } from '@/helpers/AccountHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ConstantsHelper } from '@/helpers/ConstantsHelper'
 import { AppError } from '@/helpers/ErrorHelper'
@@ -20,8 +21,10 @@ import { ExchangeHelper } from '@/helpers/ExchangeHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
+import { TransactionHelper } from '@/helpers/TransactionHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
+import { useAccountMapSelector } from '@/hooks/useAccountSelector'
 import { useActions } from '@/hooks/useActions'
 import { useAuthentication } from '@/hooks/useAuthentication'
 import { useBalance } from '@/hooks/useBalances'
@@ -31,17 +34,16 @@ import { useSelectedNetworkByBlockchainSelector } from '@/hooks/useSettingsSelec
 
 import { TwScreenLayout } from '@/layouts/TwScreenLayout'
 
-import { SendConfirmSuccessContent } from '@/routes/modals/SendConfirmModal/SendConfirmSuccessContent'
-
 import TbPlus from '@/assets/images/tb-plus.svg'
 import TbStepOut from '@/assets/images/tb-step-out.svg'
 
 import { SendRecipient, type TSendRecipient } from './SendRecipient'
+import { SendSuccessContent } from './SendSuccessContent'
 import { SendTipCheckbox } from './SendTipCheckbox'
 
 import { thunks } from '@/store/thunks'
 import type { TRootStackScreenProps, TWalletsStackScreenProps } from '@/types/stacks'
-import type { IAccountState, TTransaction } from '@/types/store'
+import type { IAccountState, TUseTransactionsTransaction } from '@/types/store'
 
 type TActionsData = {
   selectedAccount?: IAccountState
@@ -61,6 +63,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
   const { t } = useTranslation('screens', { keyPrefix: 'sendScreen' })
   const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()
   const { authenticate } = useAuthentication()
+  const { accountsMapRef } = useAccountMapSelector()
   const dispatch = useAppDispatch()
 
   const currentRecipientAddress = useRef(undefined)
@@ -126,8 +129,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
     const intents = actionData.recipients.map<TIntentTransferParam>(recipient => ({
       amount: recipient.amount!,
       receiverAddress: recipient.address!,
-      tokenHash: recipient.token!.token.hash,
-      tokenDecimals: recipient.token!.token.decimals,
+      token: recipient.token!.token,
     }))
 
     const key = await SecureStoreHelper.getKey(selectedAccount!)
@@ -137,15 +139,56 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
 
     const { isTipChecked, isTipDisabled, tipAmountBn, tipFiatPriceBn } = actionData
 
-    let tipIntent: TIntentTransferParam | undefined
-
     if (isTipChecked && !isTipDisabled && tipAmountBn && tipFiatPriceBn && tipConfig) {
-      tipIntent = {
+      intents.push({
         amount: tipAmountBn.toFixed(),
         receiverAddress: tipConfig.address,
-        tokenHash: tipConfig.token.hash,
-        tokenDecimals: tipConfig.token.decimals,
-      }
+        token: tipConfig.token,
+      })
+    }
+
+    const transactions: TUseTransactionsTransaction[] = []
+
+    if (service.isMultiTransferSupported) {
+      transactions.push(
+        TransactionHelper.buildPendingTransaction({
+          fromAccount: selectedAccount,
+          txId: '',
+          events: intents.map(intent => ({
+            amount: intent.amount,
+            toAddress: intent.receiverAddress,
+            token: intent.token,
+            toAccount: accountsMapRef.current.get(
+              AccountHelper.buildAccountKey({
+                address: intent.receiverAddress,
+                blockchain: service.name,
+              })
+            ),
+          })),
+        })
+      )
+    } else {
+      intents.forEach(intent => {
+        transactions.push(
+          TransactionHelper.buildPendingTransaction({
+            fromAccount: selectedAccount,
+            txId: '',
+            events: [
+              {
+                amount: intent.amount,
+                toAddress: intent.receiverAddress,
+                token: intent.token,
+                toAccount: accountsMapRef.current.get(
+                  AccountHelper.buildAccountKey({
+                    address: intent.receiverAddress,
+                    blockchain: service.name,
+                  })
+                ),
+              },
+            ],
+          })
+        )
+      })
     }
 
     return {
@@ -153,7 +196,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
       serviceAccount,
       selectedAccount,
       intents,
-      tipIntent,
+      transactions,
     }
   }
 
@@ -269,12 +312,12 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
       const intents = actionData.recipients
         .map(currentRecipient => {
           const receiverAddress = currentRecipient.address
-          const tokenHash = currentRecipient.token?.token?.hash
+          const token = currentRecipient.token?.token
           const amount = currentRecipient.id === recipient.id ? currentRecipient.token?.amount : currentRecipient.amount
 
-          if (!receiverAddress || !tokenHash || !amount) return null
+          if (!receiverAddress || !token || !amount) return null
 
-          return { receiverAddress, tokenHash, amount, tokenDecimals: currentRecipient.token!.token.decimals }
+          return { receiverAddress, amount, token }
         })
         .filter(recipient => recipient !== null) as TIntentTransferParam[]
 
@@ -308,11 +351,9 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
 
     if (!fields || isCalculatingForm || actionState.isActing || isFeeInvalid) return
 
-    const { recipients, fee } = actionData
-
     navigation.navigate('SendConfirmModal', {
-      recipients,
-      fee: fee!,
+      transactions: fields.transactions,
+      fee: actionData.fee,
       service: service!,
       onConfirm: handleConfirm,
     })
@@ -322,8 +363,6 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
     try {
       const fields = await getSendFields()
 
-      const { recipients, fee } = actionData
-
       if (!fields || isCalculatingForm || actionState.isActing || isFeeInvalid) return
 
       await authenticate(fields.selectedAccount)
@@ -331,34 +370,13 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
       const transactionHashes = await fields.service.transfer({
         senderAccount: fields.serviceAccount,
         intents: fields.intents,
-        tipIntent: fields.tipIntent,
       })
 
-      transactionHashes.map((hash, index) => {
-        if (!hash) return
-        const recipient = recipients[index]
-        const token = recipient.token!.token
+      fields.transactions.forEach((transaction, index) => {
+        transaction.txId = transactionHashes[index] ?? ''
+      })
 
-        const transaction: TTransaction = {
-          account: fields.selectedAccount,
-          hash,
-          block: 0,
-          time: new Date().getTime() / 1000,
-          notifications: [],
-          type: 'default',
-          transfers: [
-            {
-              amount: recipient.amount!,
-              type: 'token',
-              contractHash: token.hash,
-              from: fields.selectedAccount.address,
-              to: recipient.address!,
-              token,
-            },
-          ],
-          fee,
-        }
-
+      fields.transactions.forEach(transaction => {
         dispatch(
           thunks.waitTransaction({
             transaction,
@@ -382,9 +400,9 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
       modalNavigation.replace('SuccessModal', {
         title: t('form.sendSuccessContentTitle'),
         content: (
-          <SendConfirmSuccessContent
-            recipients={recipients}
-            hashes={transactionHashes}
+          <SendSuccessContent
+            transactions={fields.transactions}
+            fee={actionData.fee}
             selectedAccount={actionData.selectedAccount!}
             navigation={navigation}
           />
@@ -413,7 +431,6 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
         const fee = await fields.service.calculateTransferFee({
           senderAccount: fields.serviceAccount,
           intents: fields.intents,
-          tipIntent: fields.tipIntent,
         })
 
         setData({ fee })
@@ -421,8 +438,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
         let totalFeeAmountBn = BSBigNumberHelper.fromNumber(fee)
 
         fields.intents.forEach(intent => {
-          if (!fields.service.tokenService.predicateByHash(fields.service.feeToken, intent.tokenHash)) return
-
+          if (!fields.service.tokenService.predicateByHash(fields.service.feeToken, intent.token.hash)) return
           totalFeeAmountBn = totalFeeAmountBn.plus(intent.amount)
         })
 

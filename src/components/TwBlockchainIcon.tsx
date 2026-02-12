@@ -25,6 +25,9 @@ import NeoxWhite from '@/assets/blockchain/neox_white.svg'
 import PolygonDefault from '@/assets/blockchain/polygon_default.svg'
 import PolygonGray from '@/assets/blockchain/polygon_gray.svg'
 import PolygonWhite from '@/assets/blockchain/polygon_white.svg'
+import SolanaDefault from '@/assets/blockchain/solana_default.svg'
+import SolanaGray from '@/assets/blockchain/solana_gray.svg'
+import SolanaWhite from '@/assets/blockchain/solana_white.svg'
 
 import type { TBlockchainImageColor, TBlockchainServiceKey } from '../types/blockchain'
 
@@ -63,6 +66,11 @@ export const ICONS_BY_BLOCKCHAIN: Record<TBlockchainServiceKey, Record<TBlockcha
     default: ArbitrumDefault,
     gray: ArbitrumGray,
     white: ArbitrumWhite,
+  },
+  solana: {
+    default: SolanaDefault,
+    gray: SolanaGray,
+    white: SolanaWhite,
   },
 }
 

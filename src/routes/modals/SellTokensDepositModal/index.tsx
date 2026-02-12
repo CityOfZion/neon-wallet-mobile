@@ -16,6 +16,7 @@ import { TwInput } from '@/components/TwInput'
 import { TwSeparator } from '@/components/TwSeparator'
 import { TwStepSeparator } from '@/components/TwStepSeparator'
 
+import { AccountHelper } from '@/helpers/AccountHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
 import { AppError } from '@/helpers/ErrorHelper'
@@ -24,8 +25,10 @@ import { NumberHelper } from '@/helpers/NumberHelper'
 import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
 import { StringHelper } from '@/helpers/StringHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
+import { TransactionHelper } from '@/helpers/TransactionHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
+import { useAccountMapSelector } from '@/hooks/useAccountSelector'
 import { useActions } from '@/hooks/useActions'
 import { useAuthentication } from '@/hooks/useAuthentication'
 import { useBalance } from '@/hooks/useBalances'
@@ -45,7 +48,7 @@ import VscCircleFilled from '@/assets/images/vsc-circle-filled.svg'
 import { thunks } from '@/store/thunks'
 import type { TTokenSelectionModalToken } from '@/types/modals'
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IAccountState, TTransaction } from '@/types/store'
+import type { IAccountState } from '@/types/store'
 
 export const SellTokensDepositModal = ({
   navigation,
@@ -59,7 +62,7 @@ export const SellTokensDepositModal = ({
   const { authenticate } = useAuthentication()
   const debounceAddress = useDebounceFunction()
   const debounceAmount = useDebounceFunction()
-
+  const { accountsMapRef } = useAccountMapSelector()
   const amountTextInputRef = useRef<TextInput>(null)
   const isTransactionCompleted = useRef(false)
 
@@ -178,32 +181,34 @@ export const SellTokensDepositModal = ({
 
       const [transactionHash] = await service.transfer({
         senderAccount: serviceAccount,
-        intents: [
-          {
-            amount,
-            receiverAddress: address,
-            tokenHash: token.hash,
-            tokenDecimals: token.decimals,
-          },
-        ],
+        intents: [{ amount, receiverAddress: address, token }],
       })
 
       isTransactionCompleted.current = true
 
-      const pendingTransaction: TTransaction = {
-        account,
-        hash: transactionHash,
-        block: 0,
-        time: new Date().getTime() / 1000,
-        notifications: [],
-        fee: actionData.fee,
-        type: 'default',
-        transfers: [{ amount, type: 'token', contractHash: token.hash, from: account.address, to: address, token }],
-      }
+      const toAccount = accountsMapRef.current.get(
+        AccountHelper.buildAccountKey({
+          address,
+          blockchain: account.blockchain,
+        })
+      )
+
+      const transaction = TransactionHelper.buildPendingTransaction({
+        fromAccount: account,
+        txId: transactionHash,
+        events: [
+          {
+            amount,
+            toAccount: toAccount,
+            toAddress: address,
+            token,
+          },
+        ],
+      })
 
       dispatch(
         thunks.waitTransaction({
-          transaction: pendingTransaction,
+          transaction,
           failureNotification: {
             title: 'modals:sellTokensDepositModal.failureNotification.title',
             previewBody: 'modals:sellTokensDepositModal.failureNotification.previewBody',
@@ -220,7 +225,7 @@ export const SellTokensDepositModal = ({
 
       await UtilsHelper.sleep(500)
 
-      navigation.navigate('SellTokensDepositSuccessModal', { pendingTransaction })
+      navigation.navigate('SellTokensDepositSuccessModal', { transaction })
     } catch (error) {
       LoggerHelper.sentry(error, { where: 'SellTokensDepositModal', operation: 'submitDeposit' })
       ToastHelper.error({ message: AppError.wrap(error, t('messages.transactionFailed')).message })
@@ -280,8 +285,7 @@ export const SellTokensDepositModal = ({
             {
               amount: BSBigNumberHelper.format(actionData.amount, { decimals: token.decimals }),
               receiverAddress: actionData.address,
-              tokenHash: token.hash,
-              tokenDecimals: token.decimals,
+              token,
             },
           ],
         })

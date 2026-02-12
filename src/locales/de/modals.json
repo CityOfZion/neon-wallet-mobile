@@ -601,6 +601,7 @@
     },
     "title": "Versand bestätigen",
     "totalFeeLabel": "Gesamtgebühr",
+    "transactionHashLabel": "Transaktions-Hash",
     "transactionLabel": "Transaktion {{ order }}"
   },
   "sendTipUncheckedConfirmationModal": {

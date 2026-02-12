@@ -38,9 +38,11 @@ const renderItem: ListRenderItem<TNftResponse> = ({ item }) => {
             <Image contentFit="cover" source={{ uri: item.collection.image }} className="size-4 rounded-full" />
           )}
 
-          <Text numberOfLines={1} ellipsizeMode="tail" className="max-w-28 font-sans-medium text-xs text-gray-300">
-            {item.collection.name}
-          </Text>
+          {item.collection?.name && (
+            <Text numberOfLines={1} ellipsizeMode="tail" className="max-w-28 font-sans-medium text-xs text-gray-300">
+              {item.collection.name}
+            </Text>
+          )}
 
           <Text ellipsizeMode="middle" numberOfLines={1} className="max-w-16 font-sans-medium text-xs text-neon">
             #{item.hash}

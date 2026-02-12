@@ -78,7 +78,7 @@ export const ActionStep = ({
           <View className="relative">
             <Text
               className={StyleHelper.mergeStyles(
-                'absolute w-full font-sans-italic text-sm text-gray-300',
+                'absolute w-full font-sans-regular text-sm italic text-gray-300',
                 descriptionClassName
               )}
               numberOfLines={1}

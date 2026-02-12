@@ -29,6 +29,16 @@
     "testnetMode": "測試網路模式",
     "warning": "警告"
   },
+  "sendDetails": {
+    "amountLabel": "數量",
+    "detailsLabel": "交易詳情",
+    "recipientLabel": "接受者",
+    "saveContactButtonLabel": "保存聯絡人",
+    "totalFeeLabel": "總費用",
+    "transactionHashLabel": "交易哈希",
+    "transactionLabel": "交易 {{ order }}",
+    "transferLabel": "轉帳 {{ order }}"
+  },
   "setup": {
     "accountTasksManager": {
       "useFraudulentTokensNotificationProcess": {
@@ -71,6 +81,7 @@
     "searchInputPlaceholder": "輸入聯絡人姓名…"
   },
   "twDappDetailsCard": {
+    "chainDetailsLabel": "鏈",
     "connectionDetailsHeaderLabel": "鏈",
     "methodsDetailsLabel": "功能"
   },

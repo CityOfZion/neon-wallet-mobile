@@ -29,6 +29,16 @@
     "testnetMode": "Testnet Network Mode",
     "warning": "WARNING"
   },
+  "sendDetails": {
+    "amountLabel": "Amount",
+    "detailsLabel": "Transaction details",
+    "recipientLabel": "Recipient",
+    "saveContactButtonLabel": "Save contact",
+    "totalFeeLabel": "Total fee",
+    "transactionHashLabel": "Transaction hash",
+    "transactionLabel": "Transaction {{ order }}",
+    "transferLabel": "Transfer {{ order }} "
+  },
   "setup": {
     "accountTasksManager": {
       "useFraudulentTokensNotificationProcess": {
@@ -71,6 +81,7 @@
     "searchInputPlaceholder": "Enter contact name…"
   },
   "twDappDetailsCard": {
+    "chainDetailsLabel": "Chain",
     "connectionDetailsHeaderLabel": "Connection details",
     "methodsDetailsLabel": "Methods"
   },

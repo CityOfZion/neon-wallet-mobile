@@ -29,7 +29,6 @@ import { TwStepSeparator } from '@/components/TwStepSeparator'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
-import { DateHelper } from '@/helpers/DateHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { NumberHelper } from '@/helpers/NumberHelper'
@@ -38,6 +37,7 @@ import { StringHelper } from '@/helpers/StringHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 import { SwapHelper } from '@/helpers/SwapHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
+import { TransactionHelper } from '@/helpers/TransactionHelper'
 
 import { useAccountsSelector } from '@/hooks/useAccountSelector'
 import { useActions } from '@/hooks/useActions'
@@ -61,7 +61,7 @@ import { utilityReducerActions } from '@/store/reducers/utility'
 import { thunks } from '@/store/thunks'
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TWalletsStackScreenProps } from '@/types/stacks'
-import type { IAccountState, TSwapRecord, TTransaction } from '@/types/store'
+import type { IAccountState, TSwapRecord } from '@/types/store'
 
 type TActionsData = {
   availableTokensToUse: TSwapLoadableValue<TSwapToken<TBlockchainServiceKey>[]>
@@ -304,26 +304,17 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
       swapRecord.log = swapResponse.log
 
       if (swapRecord.txFrom) {
-        const transaction: TTransaction = {
-          account: actionData.selectedAccountToUse.value,
-          block: 0,
-          hash: swapRecord.txFrom,
-          notifications: [],
-          time: DateHelper.getNowUnix(),
-          fee: actionData.fee,
-          type: 'default',
-          transfers: [
+        const transaction = TransactionHelper.buildPendingTransaction({
+          fromAccount: actionData.selectedAccountToUse.value,
+          txId: swapRecord.txFrom,
+          events: [
             {
               amount: actionData.selectedAmountToUse.value,
               token: actionData.selectedTokenToUse.value as TBSToken,
-              from: swapRecord.account.address,
-              to: swapRecord.addressTo,
-              contractHash: swapRecord.tokenFrom.hash as string,
-              type: 'token',
+              toAddress: swapRecord.addressTo,
             },
           ],
-          swapRecord,
-        }
+        })
 
         dispatch(thunks.waitTransaction({ transaction }))
       } else {
@@ -670,28 +661,37 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
           className="items-start"
           error={!!actionState.errors.selectedAmountToUse}
         >
-          <Tooltip
-            title={t('tooltips.experimentHigherAmounts')}
-            className="-top-15 right-1 w-[264px]"
-            arrowClassName="right-12"
-            leftElement={<TbWand aria-hidden className="h-5 w-5 text-blue" />}
-          >
-            <ActionInput
-              onChangeText={handleChangeAmountToUse}
-              placeholder={t('form.amountPlaceholder')}
-              value={actionData.selectedAmountToUse.value ?? ''}
-              disabled={isAmountsDisabled}
-              editable={!isAmountsDisabled}
-              keyboardType="decimal-pad"
-              error={!!actionState.errors.selectedAmountToUse}
-              ref={selectedAmountToUseInputRef}
-            />
-          </Tooltip>
+          <Tooltip.Root type="focus">
+            <Tooltip.Trigger>
+              <ActionInput
+                onChangeText={handleChangeAmountToUse}
+                placeholder={t('form.amountPlaceholder')}
+                value={actionData.selectedAmountToUse.value ?? ''}
+                disabled={isAmountsDisabled}
+                editable
+                autoCorrect={false}
+                spellCheck={false}
+                autoCapitalize="none"
+                autoComplete="off"
+                keyboardType="decimal-pad"
+                error={!!actionState.errors.selectedAmountToUse}
+                ref={selectedAmountToUseInputRef}
+              />
+            </Tooltip.Trigger>
+            <Tooltip.Content className="w-60 items-center gap-3">
+              <TbWand aria-hidden className="size-5 text-blue" />
+              <Text className="flex-shrink font-sans-regular text-sm text-white">
+                {t('tooltips.experimentHigherAmounts')}
+              </Text>
+            </Tooltip.Content>
+          </Tooltip.Root>
         </ActionStep>
 
         <View className="-mt-1 flex-row justify-between pb-4 pl-9.5 pr-3">
-          <Text className="font-sans-italic text-sm text-gray-300">{t('form.balanceLabel')}</Text>
-          <Text className="font-sans-italic text-sm text-gray-300">{selectedTokenBalance?.amount ?? '0.00'}</Text>
+          <Text className="font-sans-regular text-sm italic text-gray-300">{t('form.balanceLabel')}</Text>
+          <Text className="font-sans-regular text-sm italic text-gray-300">
+            {selectedTokenBalance?.amount ?? '0.00'}
+          </Text>
         </View>
 
         <TwSeparator />

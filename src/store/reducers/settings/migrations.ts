@@ -129,6 +129,14 @@ export function getSettingsMigrations() {
       data: {
         ...state.data,
         isOnboardingCompleted: true,
+        customNetworksByBlockchain: {
+          ...state.data.customNetworksByBlockchain,
+          solana: [],
+        },
+        selectedNetworkByBlockchain: {
+          ...state.data.selectedNetworkByBlockchain,
+          solana: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.solana.defaultNetwork,
+        },
       },
     }),
   }

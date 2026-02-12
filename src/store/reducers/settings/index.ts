@@ -45,6 +45,7 @@ export function getSettingsReducer() {
         polygon: [],
         base: [],
         arbitrum: [],
+        solana: [],
       },
       selectedNetworkByBlockchain: {
         neo3: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.neo3.defaultNetwork,
@@ -54,6 +55,7 @@ export function getSettingsReducer() {
         polygon: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.polygon.defaultNetwork,
         base: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.base.defaultNetwork,
         arbitrum: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.arbitrum.defaultNetwork,
+        solana: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.solana.defaultNetwork,
       },
       language: LanguageHelper.defaultLanguage,
       canShowVoteNeo3SupportUsModal: true,

@@ -1,11 +1,12 @@
 import { useMemo } from 'react'
 
-import type { TBSToken, TTokenPricesResponse } from '@cityofzion/blockchain-service'
+import { BSBigNumberHelper, type TBSToken, type TTokenPricesResponse } from '@cityofzion/blockchain-service'
 import type { Query, QueryClient } from '@tanstack/react-query'
 import { useQueries, useQueryClient } from '@tanstack/react-query'
 import lodash from 'lodash'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
+import { ExchangeHelper } from '@/helpers/ExchangeHelper'
 
 import { useCurrencyRatio } from './useCurrencyRatio'
 import { useCurrencySelector, useSelectedNetworkByBlockchainSelector } from './useSettingsSelector'
@@ -140,9 +141,18 @@ export function useExchange(params: TUseExchangeParams[]): TUseExchangeResult {
         enabled: !isCurrencyRatioLoading && typeof currencyRatio === 'number',
       }
     }),
-    combine: result => ({
-      isLoading: isCurrencyRatioLoading || result.some(query => query.isLoading),
-      data: lodash.assign(emptyObject, ...result.map(query => query.data ?? {})) as TMultiExchange,
-    }),
+    combine: result => {
+      const data = lodash.assign(emptyObject, ...result.map(query => query.data ?? {})) as TMultiExchange
+
+      return {
+        isLoading: isCurrencyRatioLoading || result.some(query => query.isLoading),
+        data,
+        convertAmount: (amount: string | number, hash: string, blockchain: TBlockchainServiceKey) => {
+          const convertedPrice = ExchangeHelper.getExchangeConvertedPrice(hash, blockchain, data)
+          if (convertedPrice === 0) return 0
+          return BSBigNumberHelper.fromNumber(amount).multipliedBy(convertedPrice).toNumber()
+        },
+      }
+    },
   })
 }

@@ -5,9 +5,9 @@ import type { ErrorResponse } from '@walletconnect/jsonrpc-utils'
 import { Trans, useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
+import { DappDetailsCard } from '@/components/DappDetailsCard'
 import { ScreenLoader } from '@/components/ScreenLoader'
 import { TwButton } from '@/components/TwButton'
-import { TwDappDetailsCard } from '@/components/TwDappDetailsCard'
 import { TwDappHeader } from '@/components/TwDappHeader'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
@@ -109,7 +109,7 @@ export const DappConnectionRequestModal = ({
               uri={proposal.proposer.metadata.icons[0]}
             />
 
-            <TwDappDetailsCard
+            <DappDetailsCard
               chain={proposalDetails.service.walletConnectService.chain}
               methods={proposalDetails.methods}
             />
