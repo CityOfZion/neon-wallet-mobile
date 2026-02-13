@@ -66,7 +66,11 @@ export const AccountScreenClaimButton = ({ account }: TProps) => {
     text = t('gasUnavailable')
     disabled = true
   } else {
-    if (unclaimedQuery.data.unclaimedNumber <= 0 || feeTokenBalance.amountNumber < unclaimedQuery.data.feeNumber) {
+    if (
+      account.type === 'watch' ||
+      unclaimedQuery.data.unclaimedNumber <= 0 ||
+      feeTokenBalance.amountNumber < unclaimedQuery.data.feeNumber
+    ) {
       disabled = true
     } else if (unclaimedQuery.data.unclaimedNumber < unclaimedQuery.data.feeNumber) {
       disabled = false

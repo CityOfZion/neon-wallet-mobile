@@ -46,23 +46,21 @@ const getUnclaimedInfos = async (
     const key = await SecureStoreHelper.getKey(account)
     const { address } = account
 
-    if (!key) {
-      return null
+    if (key) {
+      const serviceAccount = BlockchainServiceHelper.getServiceAccount({ account, key })
+
+      fee = await blockchainService.calculateTransferFee({
+        senderAccount: serviceAccount,
+        intents: [
+          {
+            amount: '0',
+            receiverAddress: address,
+            tokenHash: blockchainService.burnToken.hash,
+            tokenDecimals: blockchainService.burnToken.decimals,
+          },
+        ],
+      })
     }
-
-    const serviceAccount = BlockchainServiceHelper.getServiceAccount({ account, key })
-
-    fee = await blockchainService.calculateTransferFee({
-      senderAccount: serviceAccount,
-      intents: [
-        {
-          amount: '0',
-          receiverAddress: address,
-          tokenHash: blockchainService.burnToken.hash,
-          tokenDecimals: blockchainService.burnToken.decimals,
-        },
-      ],
-    })
   }
 
   return { unclaimed, unclaimedNumber, fee, feeNumber: parseFloat(fee) }
