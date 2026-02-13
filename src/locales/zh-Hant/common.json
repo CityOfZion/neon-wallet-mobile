@@ -47,6 +47,7 @@
     }
   },
   "errors": {
+    "analyticsEventLoggingFailed": "分析事件日誌記錄失敗。",
     "blockchainDoesNotSupportEncryption": "該帳戶區塊鏈不支援加密",
     "blockchainIsNotClaimable": "該帳戶區塊鏈不可認領",
     "mustHaveKey": "標準帳戶需要有密鑰",

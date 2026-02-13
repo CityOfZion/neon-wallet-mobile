@@ -8,6 +8,8 @@ const envSchema = z.object({
   EXPO_PUBLIC_UNLIMIT_BUY_TOKENS_IFRAME_URL: z.url(),
   EXPO_PUBLIC_UNLIMIT_SELL_TOKENS_IFRAME_URL: z.url(),
   EXPO_PUBLIC_SENTRY_DSN: z.string().optional(),
+  EXPO_PUBLIC_GA_MEASUREMENT_ID: z.string().nonempty().optional(),
+  EXPO_PUBLIC_GA_API_SECRET: z.string().nonempty().optional(),
 })
 
 type EnvSchema = z.infer<typeof envSchema>
