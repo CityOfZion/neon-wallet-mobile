@@ -47,6 +47,7 @@
     }
   },
   "errors": {
+    "analyticsEventLoggingFailed": "Falha ao registrar o evento de análise.",
     "blockchainDoesNotSupportEncryption": "A blockchain da conta não suporta criptografia.",
     "blockchainIsNotClaimable": "A blockchain da conta não pode ser reivindicada.",
     "mustHaveKey": "Uma conta padrão precisa ter uma chave.",

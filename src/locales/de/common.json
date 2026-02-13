@@ -47,6 +47,7 @@
     }
   },
   "errors": {
+    "analyticsEventLoggingFailed": "Fehler beim Protokollieren des Analyseereignisses.",
     "blockchainDoesNotSupportEncryption": "Die Konto-Blockchain unterstützt keine Verschlüsselung.",
     "blockchainIsNotClaimable": "Die Konto-Blockchain kann nicht beansprucht werden.",
     "mustHaveKey": "Ein Standardkonto benötigt einen Schlüssel.",

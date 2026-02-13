@@ -47,6 +47,7 @@
     }
   },
   "errors": {
+    "analyticsEventLoggingFailed": "分析事件日志记录失败。",
     "blockchainDoesNotSupportEncryption": "该账户区块链不支持加密",
     "blockchainIsNotClaimable": "该账户区块链不可认领",
     "mustHaveKey": "标准账户需要有密钥",

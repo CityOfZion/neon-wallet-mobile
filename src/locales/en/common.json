@@ -47,6 +47,7 @@
     }
   },
   "errors": {
+    "analyticsEventLoggingFailed": "Failed to log analytics event.",
     "blockchainDoesNotSupportEncryption": "The account blockchain does not support encryption",
     "blockchainIsNotClaimable": "The account blockchain is not claimable",
     "mustHaveKey": "Standard account needs to have a key",

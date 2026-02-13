@@ -35,6 +35,7 @@ yarn-error.*
 .env
 credentials.json
 google-services.json
+GoogleService-Info.plist
 
 # typescript
 *.tsbuildinfo
