@@ -9,6 +9,8 @@ import { TwButton } from '@/components/TwButton'
 import { TwInput } from '@/components/TwInput'
 import { TwSeparator } from '@/components/TwSeparator'
 
+import { AnalyticsHelper } from '@/helpers/AnalyticsHelper'
+
 import { useActions } from '@/hooks/useActions'
 import { useNeonCreateBackup } from '@/hooks/useNeonBackup'
 
@@ -40,6 +42,8 @@ export const CreateBackupModal = ({ navigation }: TRootStackScreenProps<'CreateB
 
   const handleSubmit = async () => {
     await handleCreateBackup(actionData.password)
+
+    AnalyticsHelper.logEvent('backup_done')
 
     navigation.navigate('SuccessModal', {
       title: t('title'),

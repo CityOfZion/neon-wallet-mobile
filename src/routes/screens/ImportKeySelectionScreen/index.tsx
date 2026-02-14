@@ -9,6 +9,7 @@ import { ScreenLoader } from '@/components/ScreenLoader'
 import { TwButton } from '@/components/TwButton'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
+import { AnalyticsHelper } from '@/helpers/AnalyticsHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
 import { useImportAccounts } from '@/hooks/useAccountActions'
@@ -51,6 +52,8 @@ export const ImportKeySelectionScreen = ({ navigation, route }: TMoreStackScreen
       }))
 
       await importAccounts({ wallet, accounts: accountsToImport })
+
+      AnalyticsHelper.logEvent('wallet_imported')
 
       navigation.popToTop()
       navigation.jumpTo('WalletsStack', { screen: 'WalletsScreen', params: { wallet } })

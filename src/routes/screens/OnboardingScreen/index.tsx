@@ -11,6 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { TwButton } from '@/components/TwButton'
 
+import { AnalyticsHelper } from '@/helpers/AnalyticsHelper'
 import { I18nextHelper } from '@/helpers/I18nextHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
@@ -123,6 +124,9 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
         await UtilsHelper.sleep(500)
 
         dispatch(settingsReducerActions.setIsFirstTime(false))
+
+        AnalyticsHelper.logEvent('onboarding_completed')
+
         navigation.replace('OnboardingCompletedScreen')
       },
     })
