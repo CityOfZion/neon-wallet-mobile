@@ -3,13 +3,11 @@ import React, { useTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
+import { BlockchainIconWithLabel } from '@/components/BlockchainIconWithLabel'
+import { Details } from '@/components/Details'
 import { TwButton } from '@/components/TwButton'
-import { TwDetailsCard } from '@/components/TwDetailsCard'
-import { TwSeparator } from '@/components/TwSeparator'
 
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
-import { ExchangeHelper } from '@/helpers/ExchangeHelper'
-import { NumberHelper } from '@/helpers/NumberHelper'
 
 import { useExchange } from '@/hooks/useExchanges'
 import { useCurrencySelector } from '@/hooks/useSettingsSelector'
@@ -21,7 +19,6 @@ import TbArrowRight from '@/assets/images/tb-arrow-right.svg'
 import TbCheck from '@/assets/images/tb-check.svg'
 import TbReceipt from '@/assets/images/tb-receipt.svg'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 export const BridgeNeo3NeoXConfirmationModal = ({
@@ -50,14 +47,6 @@ export const BridgeNeo3NeoXConfirmationModal = ({
 
   const [isSubmitting, startSubmitTransition] = useTransition()
 
-  const getPrice = (amount: string, hash: string, blockchain: TBlockchainServiceKey) => {
-    const convertedPrice = ExchangeHelper.getExchangeConvertedPrice(hash, blockchain, exchange.data)
-
-    if (convertedPrice === 0) return '--'
-
-    return CurrencyHelper.format(NumberHelper.number(amount) * convertedPrice, { currency })
-  }
-
   const handleSubmit = () => {
     if (isSubmitting) return
 
@@ -68,102 +57,80 @@ export const BridgeNeo3NeoXConfirmationModal = ({
 
   return (
     <TwModalLayout title={t('title')} titleClassName="text-xl" rightElement={<TwModalLayoutCloseIconButton />}>
-      <Text className="text-md mb-6 mt-1 text-left leading-5 text-white">{t('description')}</Text>
+      <Text className="mb-6 font-sans-medium text-base text-white">{t('description')}</Text>
 
-      <View className="mb-3 flex flex-col rounded bg-asphalt p-3">
-        <View className="flex flex-row items-center gap-x-2 pb-3">
-          <TbReceipt aria-hidden className="h-5 w-5 text-blue" />
-          <Text className="text-md font-sans-medium text-white">{t('details')}</Text>
-        </View>
+      <Details.Root>
+        <Details.Header leftElement={<TbReceipt aria-hidden />}>{t('details')}</Details.Header>
 
-        <TwSeparator />
+        <Details.HeaderSeparator />
 
-        <TwDetailsCard.Content title={t('wantBridgeLabel')} className="py-4">
-          <View className="flex flex-row items-center gap-x-3">
-            <TwDetailsCard.BlockchainToken token={tokenToUse} blockchain={tokenToUse.blockchain} />
-
+        <Details.Body>
+          <Details.Item label={t('wantBridgeLabel')} contentClassName="justify-start">
+            <BlockchainIconWithLabel token={tokenToUse} blockchain={tokenToUse.blockchain} />
             <TbArrowRight aria-hidden className="mt-0.5 h-5 w-5 text-orange" />
+            <BlockchainIconWithLabel token={tokenToReceive} blockchain={tokenToReceive.blockchain} />
+          </Details.Item>
 
-            <TwDetailsCard.BlockchainToken token={tokenToReceive} blockchain={tokenToReceive.blockchain} />
-          </View>
-        </TwDetailsCard.Content>
+          <Details.Panel label={t('bridgeFromLabel')}>
+            <Details.Item label={t('sendingAddressLabel')}>{accountToUse.address}</Details.Item>
 
-        <TwDetailsCard.Step label={t('bridgeFromLabel')} />
+            <Details.ItemSeparator />
 
-        <TwDetailsCard.Content title={t('sendingAddressLabel')} className="py-4">
-          <Text
-            className="text-md w-full max-w-52 font-sans-regular text-white"
-            numberOfLines={1}
-            ellipsizeMode="middle"
+            <Details.Item
+              label={t('tokenLabel')}
+              description={CurrencyHelper.format(
+                exchange.convertAmount(amountToUse, tokenToUse.hash, tokenToUse.blockchain),
+                { currency, showZero: false }
+              )}
+            >
+              <BlockchainIconWithLabel token={tokenToUse} blockchain={tokenToUse.blockchain} />
+              <Text className="text-md font-sans-regular text-white">{amountToUse}</Text>
+            </Details.Item>
+          </Details.Panel>
+
+          <Details.Panel label={t('bridgeToLabel')}>
+            <Details.Item label={t('receivingAddressLabel')}>{addressToReceive}</Details.Item>
+
+            <Details.ItemSeparator />
+
+            <Details.Item
+              label={t('tokenLabel')}
+              description={CurrencyHelper.format(
+                exchange.convertAmount(amountToUse, tokenToUse.hash, tokenToUse.blockchain),
+                { currency, showZero: false }
+              )}
+            >
+              <BlockchainIconWithLabel token={tokenToReceive} blockchain={tokenToReceive.blockchain} />
+              <Text className="text-md font-sans-regular text-white">{amountToReceive}</Text>
+            </Details.Item>
+          </Details.Panel>
+        </Details.Body>
+      </Details.Root>
+
+      <Details.Root className="mt-2">
+        <Details.Body>
+          <Details.Item
+            label={t('totalFeeLabel')}
+            description={CurrencyHelper.format(
+              exchange.convertAmount(bridgeFee, fromService.feeToken.hash, fromService.name),
+              { currency, showZero: false }
+            )}
           >
-            {accountToUse.address}
-          </Text>
-        </TwDetailsCard.Content>
+            <BlockchainIconWithLabel token={fromService.feeToken} blockchain={fromService.name} />
+            <Text className="font-sans-medium text-base text-white">{bridgeFee}</Text>
+          </Details.Item>
+        </Details.Body>
+      </Details.Root>
 
-        <TwSeparator />
-
-        <TwDetailsCard.Content
-          title={t('tokenLabel')}
-          subtitle={getPrice(amountToUse, tokenToUse.hash, tokenToUse.blockchain)}
-          className="py-4"
-        >
-          <View className="flex flex-row items-center justify-between gap-x-2">
-            <TwDetailsCard.BlockchainToken token={tokenToUse} blockchain={tokenToUse.blockchain} />
-
-            <Text className="text-md font-sans-regular text-white">{amountToUse}</Text>
-          </View>
-        </TwDetailsCard.Content>
-
-        <TwDetailsCard.Step label={t('bridgeToLabel')} />
-
-        <TwDetailsCard.Content title={t('receivingAddressLabel')} className="py-4">
-          <Text
-            className="text-md w-full max-w-52 font-sans-regular text-white"
-            numberOfLines={1}
-            ellipsizeMode="middle"
-          >
-            {addressToReceive}
-          </Text>
-        </TwDetailsCard.Content>
-
-        <TwSeparator />
-
-        <TwDetailsCard.Content
-          title={t('tokenLabel')}
-          subtitle={getPrice(amountToReceive, tokenToReceive.hash, tokenToReceive.blockchain)}
-          className="pb-1 pt-4"
-        >
-          <View className="flex flex-row items-center justify-between gap-x-2">
-            <TwDetailsCard.BlockchainToken token={tokenToReceive} blockchain={tokenToReceive.blockchain} />
-
-            <Text className="text-md font-sans-regular text-white">{amountToReceive}</Text>
-          </View>
-        </TwDetailsCard.Content>
+      <View className="mt-auto py-4">
+        <TwButton
+          label={t('submitButtonLabel')}
+          variant="contained-light"
+          isLoading={isSubmitting}
+          leftElement={<TbCheck aria-hidden className="text-green" />}
+          onPress={handleSubmit}
+        />
       </View>
-
-      <View className="flex flex-col gap-y-2 rounded bg-asphalt p-3">
-        <View className="flex flex-row justify-between gap-x-2">
-          <Text className="text-md font-sans-medium text-blue">{t('totalFeeLabel')}</Text>
-          <Text className="font-sans-regular text-xs text-gray-100">
-            {getPrice(bridgeFee, fromService.feeToken.hash, fromService.name)}
-          </Text>
-        </View>
-
-        <View className="flex flex-row justify-between gap-x-2">
-          <TwDetailsCard.BlockchainToken token={fromService.feeToken} blockchain={fromService.name} />
-
-          <Text className="text-md font-sans-medium text-white">{bridgeFee}</Text>
-        </View>
-      </View>
-
-      <TwButton
-        label={t('submitButtonLabel')}
-        variant="contained-light"
-        className="mx-4 mb-12 mt-8"
-        isLoading={isSubmitting}
-        leftElement={<TbCheck aria-hidden className="text-green" />}
-        onPress={handleSubmit}
-      />
     </TwModalLayout>
   )
 }

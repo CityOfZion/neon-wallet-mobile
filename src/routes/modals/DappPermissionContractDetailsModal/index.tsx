@@ -2,12 +2,12 @@ import { useMemo } from 'react'
 
 import { hasExplorerService } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { Text, View } from 'react-native'
 
+import { Details } from '@/components/Details'
+import { PressableScale } from '@/components/PressableScale'
 import { ScreenLoader } from '@/components/ScreenLoader'
 import { TwDappHeader } from '@/components/TwDappHeader'
-import { TwDetailsCard } from '@/components/TwDetailsCard'
-import { TwIconButton } from '@/components/TwIconButton'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ClipboardHelper } from '@/helpers/ClipboardHelper'
@@ -120,7 +120,7 @@ export const DappPermissionContractDetailsModal = ({
       const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
       if (!hasExplorerService(service)) return
 
-      LinkHelper.open(service.explorerService.buildContractUrl(hash))
+      LinkHelper.open(service.explorerService.buildContractUrl(hash) ?? '')
     })
   }
 
@@ -132,85 +132,76 @@ export const DappPermissionContractDetailsModal = ({
         <View>
           <TwDappHeader uri={session.peer.metadata.icons[0]} title={session.peer.metadata.name} />
 
-          <TwDetailsCard.Root className="mt-5">
-            <TwDetailsCard.Header
-              leftElement={<TbArrowsSort className="rotate-90" aria-hidden />}
-              rightElement={
-                <Text className="font-sans-semibold text-base capitalize text-gray-100">
-                  {contractQuery.data?.name}
+          <PressableScale onPress={handleOpenContractHashUrl} className="mt-5">
+            <Details.Root>
+              <Details.Header
+                labelClassName="capitalize"
+                leftElement={<TbArrowsSort className="rotate-90" aria-hidden />}
+                rightElement={
+                  <View className="flex-row gap-2">
+                    <Text className="font-sans-semibold text-base capitalize text-gray-100">
+                      {contractQuery.data?.name}
+                    </Text>
+                    <TbExternalLink aria-hidden className="size-6 text-neon" />
+                  </View>
+                }
+              >
+                {operation}
+              </Details.Header>
+
+              <Details.HeaderSeparator />
+
+              <Details.Item
+                label={t('hashDetailsHeaderLabel')}
+                contentClassName="gap-3 rounded bg-gray-700/60 px-3 py-1.5"
+              >
+                <Text
+                  className="flex-shrink font-sans-semibold text-base text-white"
+                  numberOfLines={1}
+                  ellipsizeMode="middle"
+                >
+                  {hash}
                 </Text>
-              }
-            >
-              <Text className="font-sans-regular text-base capitalize text-white">{operation}</Text>
-            </TwDetailsCard.Header>
-
-            <TwDetailsCard.HeaderSeparator />
-
-            <TwDetailsCard.Row>
-              <TwDetailsCard.Item label={t('hashDetailsHeaderLabel')}>
-                <View className="flex-shrink flex-grow flex-row items-center justify-between gap-3 rounded bg-gray-700/60 px-3 py-1.5">
-                  <Text
-                    className="flex-shrink font-sans-semibold text-base text-white"
-                    numberOfLines={1}
-                    ellipsizeMode="middle"
-                  >
-                    {hash}
-                  </Text>
-
-                  <TwIconButton
-                    aria-label={t('externalButtonLabel')}
-                    className="p-0"
-                    icon={<TbExternalLink aria-hidden className="text-neon" />}
-                    onPress={handleOpenContractHashUrl}
-                  />
-                </View>
-              </TwDetailsCard.Item>
-            </TwDetailsCard.Row>
-          </TwDetailsCard.Root>
+              </Details.Item>
+            </Details.Root>
+          </PressableScale>
 
           <Text className="mt-3 font-sans-bold text-sm uppercase text-gray-300">{t('parametersDetailsLabel')}</Text>
           {params.map(param => {
             const color = COLORS_BY_TYPE[param.type]
 
             return (
-              <TwDetailsCard.Root className="mt-3" key={param.name}>
-                <TwDetailsCard.Header>
-                  <View className="flex flex-row items-center gap-2.5">
-                    <Text className="font-sans-regular text-base capitalize text-gray-100">{param.name}</Text>
+              <PressableScale onPress={() => ClipboardHelper.write(param.value)} className="mt-3" key={param.name}>
+                <Details.Root>
+                  <Details.Header rightElement={<TbCopy aria-hidden className="size-6 text-neon" />}>
+                    <View className="flex flex-row items-center gap-2.5">
+                      <Text className="font-sans-medium text-base capitalize text-white">{param.name}</Text>
 
-                    <Text
-                      className="rounded-full px-3.5 py-1 font-sans-bold text-sm text-asphalt"
-                      style={{
-                        backgroundColor: color.color,
-                        color: color.textColor,
-                      }}
-                    >
-                      {param.type}
-                    </Text>
-                  </View>
-                </TwDetailsCard.Header>
-
-                <TwDetailsCard.HeaderSeparator />
-
-                <TwDetailsCard.Row>
-                  <TwDetailsCard.Item>
-                    <TouchableOpacity
-                      className="flex-shrink flex-grow flex-row items-center justify-between gap-3 rounded bg-gray-700/60 px-3 py-1.5"
-                      onPress={() => ClipboardHelper.write(param.value)}
-                    >
                       <Text
-                        className="flex-shrink font-sans-semibold text-base text-white"
-                        numberOfLines={1}
-                        ellipsizeMode="middle"
+                        className="rounded-full px-3.5 py-1 font-sans-bold text-sm text-asphalt"
+                        style={{
+                          backgroundColor: color.color,
+                          color: color.textColor,
+                        }}
                       >
-                        {param.value}
+                        {param.type}
                       </Text>
+                    </View>
+                  </Details.Header>
 
-                      <TbCopy aria-hidden className="size-4 text-neon" />
-                    </TouchableOpacity>
-                  </TwDetailsCard.Item>
-                </TwDetailsCard.Row>
-              </TwDetailsCard.Root>
+                  <Details.HeaderSeparator />
+
+                  <Details.Item contentClassName="gap-3 rounded bg-gray-700/60 px-3 py-1.5">
+                    <Text
+                      className="flex-shrink font-sans-semibold text-base text-white"
+                      numberOfLines={1}
+                      ellipsizeMode="middle"
+                    >
+                      {param.value}
+                    </Text>
+                  </Details.Item>
+                </Details.Root>
+              </PressableScale>
             )
           })}
         </View>

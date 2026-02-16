@@ -601,6 +601,7 @@
     },
     "title": "Confirmar envio",
     "totalFeeLabel": "Taxa total",
+    "transactionHashLabel": "Hash da transação",
     "transactionLabel": "Transação {{ order }}"
   },
   "sendTipUncheckedConfirmationModal": {

@@ -29,6 +29,16 @@
     "testnetMode": "Modo Rede Testnet",
     "warning": "AVISO"
   },
+  "sendDetails": {
+    "amountLabel": "Quantia",
+    "detailsLabel": "Detalhes da transação",
+    "recipientLabel": "Destinatário",
+    "saveContactButtonLabel": "Salvar contato",
+    "totalFeeLabel": "Taxa total",
+    "transactionHashLabel": "Hash da transação",
+    "transactionLabel": "Transação {{ order }}",
+    "transferLabel": "Transferir {{ order }}"
+  },
   "setup": {
     "accountTasksManager": {
       "useFraudulentTokensNotificationProcess": {
@@ -71,6 +81,7 @@
     "searchInputPlaceholder": "Digite o nome do contato…"
   },
   "twDappDetailsCard": {
+    "chainDetailsLabel": "Corrente",
     "connectionDetailsHeaderLabel": "Detalhes da conexão",
     "methodsDetailsLabel": "Métodos"
   },

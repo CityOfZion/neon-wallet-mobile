@@ -1,6 +1,5 @@
 import React from 'react'
 
-import type { TTransactionTransferAsset, TTransactionTransferNft } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -9,25 +8,25 @@ import { StyleHelper } from '@/helpers/StyleHelper'
 import { AccountTransactionsScreenTransferAssetItem } from './AccountTransactionsScreenTransferAssetItem'
 import { AccountTransactionsScreenTransferNFTItem } from './AccountTransactionsScreenTransferNFTItem'
 
-import type { IAccountState } from '@/types/store'
+import type { IAccountState, TUseTransactionsTransactionEvent } from '@/types/store'
 
 type TProps = {
   account: IAccountState
-  transfer: TTransactionTransferAsset | TTransactionTransferNft
+  event: TUseTransactionsTransactionEvent
 }
 
-export const AccountTransactionsScreenTransferItem = ({ account, transfer }: TProps) => {
+export const AccountTransactionsScreenTransferItem = ({ account, event }: TProps) => {
   const { t } = useTranslation('screens', { keyPrefix: 'accountTransactionsScreen' })
 
-  const isReceiver = transfer.to === account.address
+  const isReceiver = event.to === account.address
   const label = isReceiver ? t('receivedFromLabel') : t('sentToLabel')
-  const address = isReceiver ? transfer.from : transfer.to
+  const address = isReceiver ? event.from : event.to
 
   return (
     <View>
       <View className="flex-row items-center justify-between">
         <Text className="font-sans-regular text-sm uppercase text-gray-300">{label}</Text>
-        <Text className="font-sans-regular text-sm uppercase text-gray-300">{t(`type.${transfer.type}`)}</Text>
+        <Text className="font-sans-regular text-sm uppercase text-gray-300">{t(`type.${event.eventType}`)}</Text>
       </View>
 
       <Text
@@ -41,10 +40,10 @@ export const AccountTransactionsScreenTransferItem = ({ account, transfer }: TPr
         {address || '--'}
       </Text>
 
-      {transfer.type === 'token' ? (
-        <AccountTransactionsScreenTransferAssetItem account={account} transfer={transfer} />
+      {event.eventType === 'token' ? (
+        <AccountTransactionsScreenTransferAssetItem account={account} event={event} />
       ) : (
-        <AccountTransactionsScreenTransferNFTItem account={account} transfer={transfer} />
+        <AccountTransactionsScreenTransferNFTItem account={account} event={event} />
       )}
     </View>
   )

@@ -26,6 +26,7 @@ const accountSchema = zod.object({
     zod.literal('polygon'),
     zod.literal('base'),
     zod.literal('arbitrum'),
+    zod.literal('solana'),
   ]),
   order: zod.number(),
   skin: zod.union([

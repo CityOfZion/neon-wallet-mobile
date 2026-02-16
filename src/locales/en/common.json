@@ -39,6 +39,11 @@
       "accountName": "Polygon Account",
       "id": "Polygon",
       "label": "Polygon"
+    },
+    "solana": {
+      "accountName": "Solana Account",
+      "id": "Solana",
+      "label": "Solana"
     }
   },
   "deeplink": {

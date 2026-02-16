@@ -29,6 +29,16 @@
     "testnetMode": "测试网模式",
     "warning": "警告"
   },
+  "sendDetails": {
+    "amountLabel": "数量",
+    "detailsLabel": "交易详情",
+    "recipientLabel": "接受者",
+    "saveContactButtonLabel": "保存联系人",
+    "totalFeeLabel": "总费用",
+    "transactionHashLabel": "交易哈希",
+    "transactionLabel": "交易 {{ order }}",
+    "transferLabel": "转账 {{ order }}"
+  },
   "setup": {
     "accountTasksManager": {
       "useFraudulentTokensNotificationProcess": {
@@ -71,6 +81,7 @@
     "searchInputPlaceholder": "输入联系人姓名…"
   },
   "twDappDetailsCard": {
+    "chainDetailsLabel": "链",
     "connectionDetailsHeaderLabel": "链",
     "methodsDetailsLabel": "功能"
   },

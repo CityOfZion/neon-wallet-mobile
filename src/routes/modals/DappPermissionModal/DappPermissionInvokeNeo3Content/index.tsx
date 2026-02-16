@@ -4,9 +4,9 @@ import type { ContractInvocationMulti } from '@cityofzion/bs-neo3'
 import { Trans, useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
+import { Details } from '@/components/Details'
 import { TwButton } from '@/components/TwButton'
 import { TwDappHeader } from '@/components/TwDappHeader'
-import { TwDetailsCard } from '@/components/TwDetailsCard'
 
 import { ToastHelper } from '@/helpers/ToastHelper'
 
@@ -45,11 +45,15 @@ export const DappPermissionInvokeNeo3Content = (props: TDappPermissionProps) => 
 
       <Text className="mt-2 text-center font-sans-regular text-base text-gray-100">{t('description2')}</Text>
 
-      <TwDetailsCard.Root className="mt-5">
-        <TwDetailsCard.Header leftElement={<TbArrowsSort aria-hidden className="rotate-90" />}>
-          <Text className="font-sans-regular text-base capitalize text-white">{request.params.request.method}</Text>
-        </TwDetailsCard.Header>
-      </TwDetailsCard.Root>
+      <Details.Root className="mt-5">
+        <Details.Header
+          className="border-b-0 pb-0"
+          labelClassName="capitalize"
+          leftElement={<TbArrowsSort aria-hidden className="rotate-90" />}
+        >
+          {request.params.request.method}
+        </Details.Header>
+      </Details.Root>
 
       <View className="mt-3 w-full gap-2.5">
         {params.invocations.map((invocation, index) => (

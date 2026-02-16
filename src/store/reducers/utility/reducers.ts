@@ -9,7 +9,7 @@ import { TokenHelper } from '@/helpers/TokenHelper'
 import type { IUtilityReducer } from './index'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { TSwapRecord, TTransaction } from '@/types/store'
+import type { TSwapRecord, TUseTransactionsTransaction } from '@/types/store'
 
 type THiddenTokenParams = {
   hash: string
@@ -22,13 +22,16 @@ const setIsConnected: CaseReducer<IUtilityReducer, PayloadAction<boolean>> = (st
   state.inMemoryData.isConnected = action.payload
 }
 
-const addPendingTransaction: CaseReducer<IUtilityReducer, PayloadAction<TTransaction>> = (state, action) => {
+const addPendingTransaction: CaseReducer<IUtilityReducer, PayloadAction<TUseTransactionsTransaction>> = (
+  state,
+  action
+) => {
   state.inMemoryData.pendingTransactions = [...state.inMemoryData.pendingTransactions, action.payload]
 }
 
 const removePendingTransaction: CaseReducer<IUtilityReducer, PayloadAction<string>> = (state, action) => {
   state.inMemoryData.pendingTransactions = state.inMemoryData.pendingTransactions.filter(
-    transaction => transaction.hash !== action.payload
+    transaction => transaction.txId !== action.payload
   )
 }
 

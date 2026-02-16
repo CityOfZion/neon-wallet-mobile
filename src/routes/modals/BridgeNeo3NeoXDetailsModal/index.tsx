@@ -7,15 +7,13 @@ import type { BSNeoX } from '@cityofzion/bs-neox'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
+import { BlockchainIconWithLabel } from '@/components/BlockchainIconWithLabel'
+import { Details } from '@/components/Details'
 import { Loader } from '@/components/Loader'
 import { TwButton } from '@/components/TwButton'
-import { TwDetailsCard } from '@/components/TwDetailsCard'
-import { TwIconButton } from '@/components/TwIconButton'
-import { TwSeparator } from '@/components/TwSeparator'
 import { TwStepper } from '@/components/TwStepper'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
-import { ClipboardHelper } from '@/helpers/ClipboardHelper'
 import { ConstantsHelper } from '@/helpers/ConstantsHelper'
 import { LinkHelper } from '@/helpers/LinkHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
@@ -27,7 +25,6 @@ import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLay
 
 import MdOpenInNew from '@/assets/images/md-open-in-new.svg'
 import PiSealCheck from '@/assets/images/pi-seal-check.svg'
-import TbCopy from '@/assets/images/tb-copy.svg'
 import TbReceipt from '@/assets/images/tb-receipt.svg'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
@@ -56,18 +53,9 @@ export const BridgeNeo3NeoXDetailsModal = ({
   },
 }: TRootStackScreenProps<'BridgeNeo3NeoXDetailsModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'bridgeNeo3NeoXDetailsModal' })
-  const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
 
   const [status, setStatus] = useState<TStatus>('confirming')
   const [errorMessage, setErrorMessage] = useState<string>()
-
-  const handleCopyUseAddress = () => {
-    ClipboardHelper.write(accountToUse.address)
-  }
-
-  const handleCopyReceiveAddress = () => {
-    ClipboardHelper.write(addressToReceive)
-  }
 
   const handleOpenHelpLink = () => {
     LinkHelper.open(ConstantsHelper.cozDiscordUrl)
@@ -113,103 +101,71 @@ export const BridgeNeo3NeoXDetailsModal = ({
     >
       <PiSealCheck aria-hidden className="mx-auto mt-2 h-24 w-24 text-blue" />
 
-      <View className="mt-8 flex w-full flex-col rounded bg-asphalt p-3">
-        <View className="flex flex-row items-center gap-x-2 pb-3">
-          <TbReceipt aria-hidden className="h-5 w-5 text-blue" />
+      <Details.Root className="mt-8">
+        <Details.Header
+          leftElement={<TbReceipt aria-hidden />}
+          rightElement={status === 'confirming' ? <Loader className="size-5 text-orange" /> : undefined}
+        >
+          {t('details')}
+        </Details.Header>
 
-          <Text className="text-md flex-grow font-sans-medium text-white">{t('details')}</Text>
+        <Details.HeaderSeparator />
 
-          {status === 'confirming' && <Loader className="h-5 w-5 text-orange" containerClassName="w-fit" />}
-        </View>
+        <Details.Body>
+          <Details.Panel label={t('statusLabel')}>
+            <TwStepper
+              className="mb-2 mt-7"
+              theme="neon"
+              currentState={status === 'error' ? 'error' : 'success'}
+              currentStep={stepsByStatus[status]}
+              steps={t('steps', { returnObjects: true })}
+            />
 
-        <TwSeparator containerClassName="mb-4" />
+            {errorMessage && (
+              <Text className="mx-auto text-center font-sans-regular text-base text-pink">{errorMessage}</Text>
+            )}
+          </Details.Panel>
+        </Details.Body>
+      </Details.Root>
 
-        <TwDetailsCard.Step label={t('statusLabel')} />
-
-        <TwStepper
-          className="mb-2 mt-7"
-          theme="neon"
-          currentState={status === 'error' ? 'error' : 'success'}
-          currentStep={stepsByStatus[status]}
-          steps={t('steps', { returnObjects: true })}
-        />
-
-        {errorMessage && <Text className="mx-auto mb-3 mt-4 w-full text-center text-sm text-pink">{errorMessage}</Text>}
-      </View>
-
-      <View className="mt-3 flex w-full flex-col rounded bg-asphalt p-3">
-        <TwDetailsCard.Step label={t('bridgeFromLabel')} />
-
-        <TwDetailsCard.Content title={t('tokenLabel')} className="py-4">
-          <View className="flex flex-row items-center justify-between gap-x-2">
-            <TwDetailsCard.BlockchainToken token={tokenToUse} blockchain={tokenToUse.blockchain} />
-
-            <Text className="text-md font-sans-regular text-white">{amountToUse}</Text>
-          </View>
-        </TwDetailsCard.Content>
-
-        <TwSeparator />
-
-        <TwDetailsCard.Content title={t('sendingAddressLabel')} className="py-4">
-          <View className="relative flex flex-row items-center justify-between gap-x-2">
-            <Text
-              className="text-md w-full max-w-44 font-sans-regular text-white"
-              numberOfLines={1}
-              ellipsizeMode="middle"
-            >
+      <Details.Root className="mt-2">
+        <Details.Body>
+          <Details.Panel label={t('bridgeFromLabel')}>
+            <Details.Item label={t('sendingAddressLabel')} textToCopy={accountToUse.address}>
               {accountToUse.address}
-            </Text>
+            </Details.Item>
 
-            <TwIconButton
-              aria-label={tCommonGeneral('copy')}
-              size="sm"
-              className="absolute -right-2 top-1/2 -translate-y-1/2"
-              icon={<TbCopy aria-hidden className="text-neon" />}
-              onPress={handleCopyUseAddress}
-            />
-          </View>
-        </TwDetailsCard.Content>
+            <Details.ItemSeparator />
 
-        <TwDetailsCard.Step label={t('bridgeToLabel')} />
+            <Details.Item label={t('tokenLabel')}>
+              <BlockchainIconWithLabel token={tokenToUse} blockchain={tokenToUse.blockchain} />
+              <Text className="text-md font-sans-regular text-white">{amountToUse}</Text>
+            </Details.Item>
+          </Details.Panel>
 
-        <TwDetailsCard.Content title={t('tokenLabel')} className="py-4">
-          <View className="flex flex-row items-center justify-between gap-x-2">
-            <TwDetailsCard.BlockchainToken token={tokenToReceive} blockchain={tokenToReceive.blockchain} />
-
-            <Text className="text-md font-sans-regular text-white">{amountToReceive}</Text>
-          </View>
-        </TwDetailsCard.Content>
-
-        <TwSeparator />
-
-        <TwDetailsCard.Content title={t('receivingAddressLabel')} className="pb-1 pt-4">
-          <View className="relative flex flex-row items-center justify-between">
-            <Text
-              className="text-md w-full max-w-44 font-sans-regular text-white"
-              numberOfLines={1}
-              ellipsizeMode="middle"
-            >
+          <Details.Panel label={t('bridgeToLabel')}>
+            <Details.Item label={t('receivingAddressLabel')} textToCopy={addressToReceive}>
               {addressToReceive}
-            </Text>
+            </Details.Item>
 
-            <TwIconButton
-              aria-label={tCommonGeneral('copy')}
-              size="sm"
-              className="absolute -right-2 top-1/2 -translate-y-1/2"
-              icon={<TbCopy aria-hidden className="text-neon" />}
-              onPress={handleCopyReceiveAddress}
-            />
-          </View>
-        </TwDetailsCard.Content>
+            <Details.ItemSeparator />
+
+            <Details.Item label={t('tokenLabel')}>
+              <BlockchainIconWithLabel token={tokenToReceive} blockchain={tokenToReceive.blockchain} />
+              <Text className="text-md font-sans-regular text-white">{amountToReceive}</Text>
+            </Details.Item>
+          </Details.Panel>
+        </Details.Body>
+      </Details.Root>
+
+      <View className="mt-auto py-4">
+        <TwButton
+          label={t('helpButtonLabel')}
+          variant="contained-light"
+          leftElement={<MdOpenInNew aria-hidden className="text-neon" />}
+          onPress={handleOpenHelpLink}
+        />
       </View>
-
-      <TwButton
-        label={t('helpButtonLabel')}
-        variant="contained-light"
-        className="mx-4 mb-14 mt-8"
-        leftElement={<MdOpenInNew aria-hidden className="text-neon" />}
-        onPress={handleOpenHelpLink}
-      />
     </TwModalLayout>
   )
 }

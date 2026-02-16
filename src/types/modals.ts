@@ -11,7 +11,6 @@ import type { TTwButtonProps } from '@/components/TwButton'
 import type { TTwInputProps } from '@/components/TwInput'
 
 import type { TDepositActionsData } from '@/routes/screens/BuyAndSellTokensScreen'
-import type { TSendRecipient } from '@/routes/screens/SendScreen/SendRecipient'
 
 import type { TBlockchainServiceKey, TNetwork } from './blockchain'
 import type { TTokenBalance, TUseBalanceOptionShowType } from './query'
@@ -24,7 +23,7 @@ import type {
   TContactAddress,
   TNotification,
   TSwapRecord,
-  TTransaction,
+  TUseTransactionsTransaction,
   TWalletType,
 } from './store'
 
@@ -168,8 +167,8 @@ export type TSendTipUncheckedConfirmationModalParams = {
 
 export type TSendConfirmModalParams = {
   onConfirm: (navigation: TRootStackScreenProps<'SendConfirmModal'>['navigation']) => Promise<void>
-  recipients: TSendRecipient[]
-  fee: string
+  transactions: TUseTransactionsTransaction[]
+  fee?: string
   service: IBlockchainService<TBlockchainServiceKey>
 }
 
@@ -232,7 +231,7 @@ export type TSellTokensDepositModalParams = {
 }
 
 export type TSellTokensDepositSuccessModalParams = {
-  pendingTransaction: TTransaction
+  transaction: TUseTransactionsTransaction
 }
 
 export type TNotificationContextModalParams = {

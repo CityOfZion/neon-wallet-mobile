@@ -1,4 +1,4 @@
-import type { GestureResponderEvent, PressableProps } from 'react-native'
+import type { GestureResponderEvent, PressableProps, View } from 'react-native'
 import { Pressable } from 'react-native'
 import Animated, {
   cancelAnimation,
@@ -26,7 +26,11 @@ const LONG_PRESS_SCALE_VALUE = 1.05
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
-export const PressableScale = ({ onLongPress, onPress, disabled, style, ...props }: PressableProps) => {
+type TProps = PressableProps & {
+  ref?: React.Ref<View>
+}
+
+export const PressableScale = ({ onLongPress, onPress, disabled, style, ...props }: TProps) => {
   const scale = useSharedValue(1)
   const opacity = useSharedValue(1)
 

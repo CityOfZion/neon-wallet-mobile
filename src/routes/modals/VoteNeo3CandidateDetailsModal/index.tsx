@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { match, P } from 'ts-pattern'
 
+import { Details } from '@/components/Details'
 import { TwAlertErrorBanner } from '@/components/TwAlertErrorBanner'
 import { TwButton } from '@/components/TwButton'
-import { TwDetailsCard } from '@/components/TwDetailsCard'
 import { TwSeparator } from '@/components/TwSeparator'
 
 import { ConstantsHelper } from '@/helpers/ConstantsHelper'
@@ -91,49 +91,19 @@ export const VoteNeo3CandidateDetailsModal = ({
           </View>
         )}
 
-        <TwDetailsCard.Root role="list" className="p-4">
-          <TwDetailsCard.Row role="listitem">
-            <TwDetailsCard.Item
-              label={t('positionLabel')}
-              labelClassName="uppercase text-sm font-sans-semibold"
-              value={position.toString()}
-              valueProps={{ className: 'text-sm font-sans-regular' }}
-            />
-          </TwDetailsCard.Row>
-
-          <TwSeparator />
-
-          <TwDetailsCard.Row role="listitem">
-            <TwDetailsCard.Item
-              label={t('nameLabel')}
-              labelClassName="uppercase text-sm font-sans-semibold"
-              value={name}
-              valueProps={{ className: 'text-sm font-sans-regular' }}
-            />
-          </TwDetailsCard.Row>
-
-          <TwSeparator />
-
-          <TwDetailsCard.Row role="listitem">
-            <TwDetailsCard.Item
-              label={t('pubKeyLabel')}
-              labelClassName="uppercase text-sm font-sans-semibold"
-              value={pubKey}
-              valueProps={{ className: 'text-sm font-sans-regular' }}
-            />
-          </TwDetailsCard.Row>
-
-          <TwSeparator />
-
-          <TwDetailsCard.Row role="listitem">
-            <TwDetailsCard.Item
-              label={t('votesLabel')}
-              labelClassName="uppercase text-sm font-sans-semibold"
-              value={`${NumberHelper.localeNumber(votes)} (${candidateVotePercentage})`}
-              valueProps={{ className: 'text-sm font-sans-regular' }}
-            />
-          </TwDetailsCard.Row>
-        </TwDetailsCard.Root>
+        <Details.Root>
+          <Details.Body>
+            <Details.Item label={t('positionLabel')}>{position}</Details.Item>
+            <Details.ItemSeparator />
+            <Details.Item label={t('nameLabel')}>{name}</Details.Item>
+            <Details.ItemSeparator />
+            <Details.Item label={t('pubKeyLabel')}>{pubKey}</Details.Item>
+            <Details.ItemSeparator />
+            <Details.Item label={t('votesLabel')}>
+              {`${NumberHelper.localeNumber(votes)} (${candidateVotePercentage})`}
+            </Details.Item>
+          </Details.Body>
+        </Details.Root>
 
         <View className="mx-auto flex w-[92%] flex-col gap-y-4">
           <TwButton

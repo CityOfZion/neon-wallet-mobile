@@ -3,11 +3,12 @@ import { Fragment } from 'react'
 import type { ContractInvocation, IBSNeo3 } from '@cityofzion/bs-neo3'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { Text, View } from 'react-native'
 import { match, P } from 'ts-pattern'
 
+import { Details } from '@/components/Details'
 import { Loader } from '@/components/Loader'
-import { TwDetailsCard } from '@/components/TwDetailsCard'
+import { PressableScale } from '@/components/PressableScale'
 import { TwIconButton } from '@/components/TwIconButton'
 
 import { LinkHelper } from '@/helpers/LinkHelper'
@@ -38,7 +39,7 @@ export const DappPermissionInvokeNeo3ContentInvocation = ({ invocation, sessionD
       : null
 
   const handleOpenContractHashUrl = () => {
-    LinkHelper.open(service.explorerService.buildContractUrl(invocation.scriptHash))
+    LinkHelper.open(service.explorerService.buildContractUrl(invocation.scriptHash) ?? '')
   }
 
   const handleViewContractDetails = () => {
@@ -52,63 +53,61 @@ export const DappPermissionInvokeNeo3ContentInvocation = ({ invocation, sessionD
   }
 
   return (
-    <TouchableOpacity onPress={handleViewContractDetails} activeOpacity={0.9}>
-      <TwDetailsCard.Root>
-        <TwDetailsCard.Header
+    <PressableScale onPress={handleViewContractDetails}>
+      <Details.Root>
+        <Details.Header
           leftElement={<TbArrowsSort className="rotate-90" aria-hidden />}
+          labelClassName="capitalize"
           rightElement={match(contractQuery)
             .with({ isLoading: true }, () => <Loader className="h-4 w-4" containerClassName="w-fit" />)
             .with({ data: P.nullish }, () => <Fragment />)
             .otherwise(({ data }) => (
               <View className="flex flex-row items-center gap-2">
                 <Text className="font-sans-semibold text-base capitalize text-gray-100">{data.name}</Text>
-
                 <MdChevronRight className="size-6 text-gray-100" aria-hidden />
               </View>
             ))}
         >
-          <Text className="font-sans-regular text-base capitalize text-white">{invocation.operation}</Text>
-        </TwDetailsCard.Header>
+          {invocation.operation}
+        </Details.Header>
 
-        <TwDetailsCard.HeaderSeparator />
+        <Details.HeaderSeparator />
 
-        <TwDetailsCard.Row>
-          <TwDetailsCard.Item label={t('hashDetailsItemLabel')}>
-            <View className="flex-shrink flex-grow flex-row items-center justify-between gap-3 rounded bg-gray-700/60 px-3 py-1.5">
-              <Text
-                className="flex-shrink font-sans-semibold text-base text-white"
-                numberOfLines={1}
-                ellipsizeMode="middle"
-              >
-                {invocation.scriptHash}
-              </Text>
+        <Details.Item
+          label={t('hashDetailsItemLabel')}
+          contentClassName="bg-gray-700/60 px-3 py-1.5 rounded gap-3 items-center"
+        >
+          <Text
+            className="flex-shrink font-sans-semibold text-base text-white"
+            numberOfLines={1}
+            ellipsizeMode="middle"
+          >
+            {invocation.scriptHash}
+          </Text>
 
-              <TwIconButton
-                aria-label={t('externalButtonLabel')}
-                className="p-0"
-                icon={<TbExternalLink aria-hidden className="text-neon" />}
-                onPress={handleOpenContractHashUrl}
-              />
-            </View>
-          </TwDetailsCard.Item>
-        </TwDetailsCard.Row>
+          <TwIconButton
+            aria-label={t('externalButtonLabel')}
+            className="p-0"
+            icon={<TbExternalLink aria-hidden className="text-neon" />}
+            onPress={handleOpenContractHashUrl}
+          />
+        </Details.Item>
 
-        <TwDetailsCard.Row>
-          {amount && (
-            <TwDetailsCard.Item label={t('amountDetailsItemLabel')}>
-              <View className="flex-shrink flex-grow flex-row items-center justify-between gap-3 rounded bg-gray-700/60 px-3 py-1.5">
-                <Text
-                  className="flex-shrink font-sans-semibold text-base text-white"
-                  numberOfLines={1}
-                  ellipsizeMode="middle"
-                >
-                  {amount}
-                </Text>
-              </View>
-            </TwDetailsCard.Item>
-          )}
-        </TwDetailsCard.Row>
-      </TwDetailsCard.Root>
-    </TouchableOpacity>
+        {amount && (
+          <Details.Item
+            label={t('amountDetailsItemLabel')}
+            contentClassName="bg-gray-700/60 px-3 py-1.5 rounded gap-3 items-center"
+          >
+            <Text
+              className="flex-shrink font-sans-semibold text-base text-white"
+              numberOfLines={1}
+              ellipsizeMode="middle"
+            >
+              {amount}
+            </Text>
+          </Details.Item>
+        )}
+      </Details.Root>
+    </PressableScale>
   )
 }

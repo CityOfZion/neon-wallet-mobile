@@ -1,6 +1,6 @@
 import React from 'react'
 
-import type { TTransactionTransferNft } from '@cityofzion/blockchain-service'
+import type { TTransactionNftEvent } from '@cityofzion/blockchain-service'
 import { Image } from 'expo-image'
 import { Text, View } from 'react-native'
 
@@ -12,11 +12,11 @@ import type { IAccountState } from '@/types/store'
 
 type TProps = {
   account: IAccountState
-  transfer: TTransactionTransferNft
+  event: TTransactionNftEvent
 }
 
-export const AccountTransactionsScreenTransferNFTItem = ({ account, transfer }: TProps) => {
-  const { data, isLoading } = useNftQuery(account.blockchain, transfer.tokenHash, transfer.collectionHash)
+export const AccountTransactionsScreenTransferNFTItem = ({ account, event }: TProps) => {
+  const { data, isLoading } = useNftQuery(account.blockchain, event.tokenHash, event.collectionHash)
 
   return (
     <View className="mt-4 flex-row items-center gap-2.5">
@@ -37,12 +37,12 @@ export const AccountTransactionsScreenTransferNFTItem = ({ account, transfer }: 
           <View className="flex-row">
             {data?.collection?.name && (
               <Text className="max-w-14 text-xs text-gray-300" numberOfLines={1}>
-                {data.collection.name}
+                {`${data.collection.name} - `}
               </Text>
             )}
 
             <Text className="max-w-36 font-sans-regular text-xs text-gray-100" numberOfLines={1}>
-              {data?.collection?.name ? ` - #${transfer.tokenHash}` : transfer.tokenHash}
+              #{event.tokenHash}
             </Text>
           </View>
         </View>

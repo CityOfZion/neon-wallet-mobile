@@ -7,11 +7,16 @@ import { createMigrate, getStoredState, persistReducer } from 'redux-persist'
 import { getUtilityMigrations } from './migrations'
 import { utilitySliceReducers } from './reducers'
 
-import type { THiddenTokenByBlockchain, TLastIndexesByWallet, TSwapRecord, TTransaction } from '@/types/store'
+import type {
+  THiddenTokenByBlockchain,
+  TLastIndexesByWallet,
+  TSwapRecord,
+  TUseTransactionsTransaction,
+} from '@/types/store'
 
 export interface IUtilityReducer {
   inMemoryData: {
-    pendingTransactions: TTransaction[]
+    pendingTransactions: TUseTransactionsTransaction[]
     isConnected?: boolean
   }
   data: {

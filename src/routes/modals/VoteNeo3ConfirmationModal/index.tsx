@@ -1,26 +1,24 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 
-import { BSBigNumberHelper } from '@cityofzion/blockchain-service'
 import type { BSNeo3 } from '@cityofzion/bs-neo3'
-import { BSNeo3Constants } from '@cityofzion/bs-neo3'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { match } from 'ts-pattern'
 
+import { Details } from '@/components/Details'
 import { TwAlertErrorBanner } from '@/components/TwAlertErrorBanner'
+import { TwBlockchainIcon } from '@/components/TwBlockchainIcon'
 import { TwButton } from '@/components/TwButton'
 import { TwDashedSeparator } from '@/components/TwDashedSeparator'
-import { TwDetailsCard } from '@/components/TwDetailsCard'
 import { TwSkeleton } from '@/components/TwSkeleton'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
-import { DateHelper } from '@/helpers/DateHelper'
 import { AppError } from '@/helpers/ErrorHelper'
-import { ExchangeHelper } from '@/helpers/ExchangeHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
+import { TransactionHelper } from '@/helpers/TransactionHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useAuthentication } from '@/hooks/useAuthentication'
@@ -41,19 +39,20 @@ import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLay
 
 import TbCheckbox from '@/assets/images/tb-checkbox.svg'
 
+import { VoteNeo3ConfirmationDetailsLabel } from './VoteNeo3ConfirmationDetailsLabel'
 import { VoteNeo3ConfirmationSuccessContent } from './VoteNeo3ConfirmationSuccessContent'
 import { VoteNeo3ConfirmationSummary } from './VoteNeo3ConfirmationSummary'
 
 import { thunks } from '@/store/thunks'
+import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { TTransaction } from '@/types/store'
 
 export const VoteNeo3ConfirmationModal = ({
   navigation,
-  route: {
-    params: { neo3Account, candidate },
-  },
+  route,
 }: TRootStackScreenProps<'VoteNeo3ConfirmationModal'>) => {
+  const { neo3Account, candidate } = route.params
+
   const { t } = useTranslation('modals', { keyPrefix: 'voteNeo3ConfirmationModal' })
   const dispatch = useAppDispatch()
   const { authenticate } = useAuthentication()
@@ -65,7 +64,7 @@ export const VoteNeo3ConfirmationModal = ({
   const { wallet } = useWalletByIdSelector(neo3Account.idWallet)
   const [isSubmitting, setSubmitting] = useState(false)
 
-  const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName.neo3 as BSNeo3
+  const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName.neo3 as BSNeo3<TBlockchainServiceKey>
 
   const exchangeQuery = useExchange([{ blockchain: 'neo3', tokens: [service.feeToken] }])
 
@@ -94,22 +93,6 @@ export const VoteNeo3ConfirmationModal = ({
     .with({ isWatchAccount: true }, () => t('voteErrorMessages.watchAccountLabel'))
     .with({ hasEnoughGasToPayFee: false }, () => t('voteErrorMessages.canNotPayGasFeeLabel'))
     .otherwise(() => undefined)
-
-  const feeFiatPrice = useMemo(() => {
-    let fiatBn = BSBigNumberHelper.fromNumber(0)
-
-    if (exchangeQuery.data && fee) {
-      const feeBn = BSBigNumberHelper.fromNumber(fee)
-
-      fiatBn = feeBn.multipliedBy(
-        ExchangeHelper.getExchangeConvertedPrice(service.feeToken.hash, 'neo3', exchangeQuery.data)
-      )
-    }
-
-    return CurrencyHelper.format(fiatBn.toNumber(), { currency, maximumFractionDigits: 3 })
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [exchangeQuery.data, fee, currency.label])
 
   const handleSuccessClose = async () => {
     handleErase()
@@ -163,27 +146,9 @@ export const VoteNeo3ConfirmationModal = ({
 
       const account = BlockchainServiceHelper.getServiceAccount({ account: neo3Account, key })
 
-      const transactionHash = await service.voteService.vote({ account, candidatePubKey: candidate.pubKey })
+      const txId = await service.voteService.vote({ account, candidatePubKey: candidate.pubKey })
 
-      const transaction: TTransaction = {
-        account: neo3Account,
-        hash: transactionHash,
-        block: 0,
-        time: DateHelper.getNowUnix(),
-        notifications: [],
-        fee,
-        type: 'default',
-        transfers: [
-          {
-            amount: '0',
-            type: 'token',
-            contractHash: BSNeo3Constants.NEO_TOKEN.hash,
-            from: 'Mint',
-            to: neo3Account.address,
-            token: BSNeo3Constants.NEO_TOKEN,
-          },
-        ],
-      }
+      const transaction = TransactionHelper.buildPendingTransaction({ txId, fromAccount: neo3Account, type: 'vote' })
 
       dispatch(
         thunks.waitTransaction({
@@ -247,23 +212,24 @@ export const VoteNeo3ConfirmationModal = ({
         />
 
         <TwSkeleton isLoading={isCalculateVoteFeeLoading} layout={{ width: '100%', height: 68 }}>
-          <TwDetailsCard.Root className="bg-asphalt/50 p-4">
-            <TwDetailsCard.Row>
-              <TwDetailsCard.Item
-                className="flex-row justify-between gap-x-3"
-                labelClassName="text-blue text-lg font-sans-regular"
-                label={t('detailsFeeLabel')}
-                value={
-                  <View className="flex flex-col items-end gap-y-0.5">
-                    <Text className="font-sans-regular text-lg text-white">
-                      {fee || '0'} {service.feeToken.symbol}
-                    </Text>
-                    <Text className="font-sans-regular text-lg text-gray-100">{feeFiatPrice}</Text>
-                  </View>
-                }
-              />
-            </TwDetailsCard.Row>
-          </TwDetailsCard.Root>
+          <Details.Root className="bg-asphalt/50">
+            <Details.Body>
+              <Details.Item
+                label={<VoteNeo3ConfirmationDetailsLabel>{t('detailsFeeLabel')}</VoteNeo3ConfirmationDetailsLabel>}
+                description={CurrencyHelper.format(
+                  exchangeQuery.convertAmount(fee ?? 0, service.feeToken.hash, service.name),
+                  { currency, maximumFractionDigits: 3, showZero: false }
+                )}
+              >
+                <View className="flex-row items-center">
+                  <TwBlockchainIcon blockchain={neo3Account.blockchain} type="gray" className="mr-2 mt-0.5 size-3.5" />
+                  <Text className="font-sans-regular text-base text-white">{service.feeToken.name}</Text>
+                </View>
+
+                <Text className="font-sans-medium text-base text-white">{fee}</Text>
+              </Details.Item>
+            </Details.Body>
+          </Details.Root>
 
           {!!voteErrorMessage && (
             <TwAlertErrorBanner

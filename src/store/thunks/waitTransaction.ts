@@ -1,18 +1,17 @@
-import { hasExplorerService, waitForAccountTransaction } from '@cityofzion/blockchain-service'
+import { waitForAccountTransaction } from '@cityofzion/blockchain-service'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ReactQueryHelper } from '@/helpers/ReactQueryHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { notificationReducerActions } from '../reducers/notification'
 import { utilityReducerActions } from '../reducers/utility'
 
 import type { TRootState } from '@/types/redux'
-import type { TNotification, TSaveNotification, TTransaction } from '@/types/store'
+import type { TNotification, TSaveNotification, TUseTransactionsTransaction } from '@/types/store'
 
 type TWaitTransactionParams = {
-  transaction: TTransaction
+  transaction: TUseTransactionsTransaction
   successNotification?: Pick<TNotification, 'title' | 'previewBody'>
   failureNotification?: Pick<TNotification, 'title' | 'previewBody'>
 }
@@ -27,13 +26,6 @@ export const waitTransaction = createAsyncThunk<void, TWaitTransactionParams>(
 
     const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[transaction.account.blockchain]
 
-    const [transactionUrl] = UtilsHelper.tryCatch(() => {
-      if (hasExplorerService(service)) {
-        return service.explorerService.buildTransactionUrl(transaction.hash)
-      }
-    })
-
-    transaction.transactionUrl = transactionUrl
     transaction.isPending = true
 
     const withNotification = successNotification && failureNotification
@@ -55,7 +47,7 @@ export const waitTransaction = createAsyncThunk<void, TWaitTransactionParams>(
 
       const response = await waitForAccountTransaction({
         service,
-        txId: transaction.hash,
+        txId: transaction.txId,
         address: transaction.account.address,
         maxAttempts: 20,
       })
@@ -82,6 +74,6 @@ export const waitTransaction = createAsyncThunk<void, TWaitTransactionParams>(
       dispatch(notificationReducerActions.saveNotification(notification))
     }
 
-    dispatch(utilityReducerActions.removePendingTransaction(transaction.hash))
+    dispatch(utilityReducerActions.removePendingTransaction(transaction.txId))
   }
 )

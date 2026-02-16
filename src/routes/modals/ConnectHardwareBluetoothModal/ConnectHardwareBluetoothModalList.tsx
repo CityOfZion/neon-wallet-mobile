@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
+import type { Device as BleDevice } from '@sfourdrinier/react-native-ble-plx'
 import { useTranslation } from 'react-i18next'
 import type { ListRenderItem } from 'react-native'
 import { FlatList, Text, View } from 'react-native'
-import type { Device as BleDevice } from 'react-native-ble-plx'
 
 import { Loader } from '@/components/Loader'
 import { TwMenuButton } from '@/components/TwMenuButton'

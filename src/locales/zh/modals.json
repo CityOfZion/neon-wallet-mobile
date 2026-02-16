@@ -601,6 +601,7 @@
     },
     "title": "确认发送",
     "totalFeeLabel": "总费用",
+    "transactionHashLabel": "交易哈希",
     "transactionLabel": "交易 {{ order }}"
   },
   "sendTipUncheckedConfirmationModal": {

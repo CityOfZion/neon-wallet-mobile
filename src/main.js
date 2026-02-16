@@ -1,12 +1,11 @@
 /* eslint-disable import/first */
 
-import 'react-native-get-random-values'
-import 'react-native-quick-base64'
-
 const { install } = require('react-native-quick-crypto')
 install()
 
-import 'whatwg-fetch'
+import 'react-native-quick-base64'
+import 'react-native-get-random-values'
+import 'react-native-url-polyfill/auto'
 import '@walletconnect/react-native-compat'
 import '@ethersproject/shims'
 

@@ -5,9 +5,10 @@ import { BSNeo3Constants } from '@cityofzion/bs-neo3'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
-import { TwDetailsCard } from '@/components/TwDetailsCard'
-import { TwSeparator } from '@/components/TwSeparator'
+import { Details } from '@/components/Details'
 import { TwSkeleton } from '@/components/TwSkeleton'
+
+import { VoteNeo3ConfirmationDetailsLabel } from './VoteNeo3ConfirmationDetailsLabel'
 
 import type { IAccountState } from '@/types/store'
 
@@ -27,60 +28,51 @@ export const VoteNeo3ConfirmationSummary = ({ title, neo3Account, candidate, neo
       <Text className="w-full font-sans-regular text-sm uppercase text-gray-100">{title}</Text>
 
       <TwSkeleton isLoading={isLoading} layout={{ width: '100%', height: 386 }}>
-        <TwDetailsCard.Root className="gap-y-3 bg-asphalt/50 p-4">
-          <TwDetailsCard.Row>
-            <TwDetailsCard.Item
-              label={t('detailsAccountNameLabel')}
-              labelClassName="text-blue text-lg font-sans-regular"
-              value={neo3Account.name}
-              valueProps={{ className: 'text-lg font-sans-regular' }}
-            />
-          </TwDetailsCard.Row>
+        <Details.Root className="bg-asphalt/50">
+          <Details.Body>
+            <Details.Item
+              label={
+                <VoteNeo3ConfirmationDetailsLabel>{t('detailsAccountNameLabel')}</VoteNeo3ConfirmationDetailsLabel>
+              }
+            >
+              {neo3Account.name}
+            </Details.Item>
 
-          <TwSeparator containerClassName="mt-1" />
+            <Details.ItemSeparator />
 
-          <TwDetailsCard.Row>
-            <TwDetailsCard.Item
-              label={t('detailsAccountAddressLabel')}
-              labelClassName="text-blue text-lg font-sans-regular"
-              value={neo3Account.address}
-              valueProps={{ className: 'text-lg font-sans-regular' }}
-            />
-          </TwDetailsCard.Row>
+            <Details.Item
+              label={
+                <VoteNeo3ConfirmationDetailsLabel>{t('detailsAccountAddressLabel')}</VoteNeo3ConfirmationDetailsLabel>
+              }
+            >
+              {neo3Account.address}
+            </Details.Item>
 
-          <TwSeparator containerClassName="mt-1" />
+            <Details.ItemSeparator />
 
-          <TwDetailsCard.Row>
-            <TwDetailsCard.Item
-              label={t('detailsCandidateLabel')}
-              labelClassName="text-blue text-lg font-sans-regular"
-              value={candidate.name}
-              valueProps={{ className: 'text-lg font-sans-regular' }}
-            />
-          </TwDetailsCard.Row>
+            <Details.Item
+              label={<VoteNeo3ConfirmationDetailsLabel>{t('detailsCandidateLabel')}</VoteNeo3ConfirmationDetailsLabel>}
+            >
+              {candidate.name}
+            </Details.Item>
 
-          <TwSeparator containerClassName="mt-1" />
+            <Details.ItemSeparator />
 
-          <TwDetailsCard.Row>
-            <TwDetailsCard.Item
-              label={t('detailsPubKeyLabel')}
-              labelClassName="text-blue text-lg font-sans-regular"
-              value={candidate.pubKey}
-              valueProps={{ className: 'text-lg font-sans-regular' }}
-            />
-          </TwDetailsCard.Row>
+            <Details.Item
+              label={<VoteNeo3ConfirmationDetailsLabel>{t('detailsPubKeyLabel')}</VoteNeo3ConfirmationDetailsLabel>}
+            >
+              {candidate.pubKey}
+            </Details.Item>
 
-          <TwSeparator containerClassName="mt-1" />
+            <Details.ItemSeparator />
 
-          <TwDetailsCard.Row>
-            <TwDetailsCard.Item
-              label={t('detailsVotesLabel')}
-              labelClassName="text-blue text-lg font-sans-regular"
-              value={`${neoAmount} ${BSNeo3Constants.NEO_TOKEN.symbol}`}
-              valueProps={{ className: 'text-lg font-sans-regular' }}
-            />
-          </TwDetailsCard.Row>
-        </TwDetailsCard.Root>
+            <Details.Item
+              label={<VoteNeo3ConfirmationDetailsLabel>{t('detailsVotesLabel')}</VoteNeo3ConfirmationDetailsLabel>}
+            >
+              {`${neoAmount} ${BSNeo3Constants.NEO_TOKEN.symbol}`}
+            </Details.Item>
+          </Details.Body>
+        </Details.Root>
       </TwSkeleton>
     </View>
   )
