@@ -6,6 +6,7 @@ import { TwButton } from '@/components/TwButton'
 import { TwInput } from '@/components/TwInput'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
+import { AnalyticsHelper } from '@/helpers/AnalyticsHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
@@ -61,6 +62,8 @@ export const ImportPassphraseScreen = ({ navigation, route }: TMoreStackScreenPr
       })
 
       await importAccount({ address, blockchain, wallet, key, type: 'standard' })
+
+      AnalyticsHelper.logEvent('wallet_imported')
 
       navigation.popToTop()
       navigation.jumpTo('WalletsStack', { screen: 'WalletsScreen', params: { wallet } })

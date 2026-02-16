@@ -14,6 +14,7 @@ import { TwButton } from '@/components/TwButton'
 import { TwStepSeparator } from '@/components/TwStepSeparator'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
+import { AnalyticsHelper } from '@/helpers/AnalyticsHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ConstantsHelper } from '@/helpers/ConstantsHelper'
 import { AppError } from '@/helpers/ErrorHelper'
@@ -391,6 +392,8 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
           })
         )
       })
+
+      AnalyticsHelper.logEvent('transaction_executed')
 
       currentRecipientAddress.current = undefined
       handleSelectAccount()
