@@ -1,5 +1,12 @@
 import packageJson from '../package.json'
-import { getProductionVersion, runCommand, verifyBranchExists, verifyIfBranchIsDev, verifyIfGitIsClean } from './utils'
+import {
+  DEV_BRANCH_NAME,
+  getProductionVersion,
+  runCommand,
+  verifyBranchExists,
+  verifyIfBranchIsDev,
+  verifyIfGitIsClean,
+} from './utils'
 
 async function getReleaseCandidateBranchName(currentVersion: string) {
   const output = await runCommand(`git branch --list "${currentVersion}-rc*" --format="%(refname:short)"`)
@@ -8,7 +15,7 @@ async function getReleaseCandidateBranchName(currentVersion: string) {
 }
 
 async function exit() {
-  await runCommand('git checkout development').catch(() => {})
+  await runCommand(`git checkout ${DEV_BRANCH_NAME}`).catch(() => {})
   process.exit(1)
 }
 

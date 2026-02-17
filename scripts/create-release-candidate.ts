@@ -5,7 +5,7 @@ import lodash from 'lodash'
 import path from 'path'
 
 import packageJson from '../package.json'
-import { getProductionVersion, runCommand, verifyIfBranchIsDev, verifyIfGitIsClean } from './utils'
+import { DEV_BRANCH_NAME, getProductionVersion, runCommand, verifyIfBranchIsDev, verifyIfGitIsClean } from './utils'
 
 async function bumpVersion(isOta: boolean) {
   const { value: selectedBumpType } = await inquirer.prompt([
@@ -32,10 +32,10 @@ async function bumpVersion(isOta: boolean) {
     await runCommand(`npx -y json -I -f app.json -e 'this.expo.version="${bumpedVersion}"'`)
   }
 
-  // Directly commit the changes to the development branch because it is important to keep the development branch updated
+  // Directly commit the changes to the dev branch because it is important to keep the dev branch updated
   await runCommand('git add .')
   await runCommand(`git commit -m "Bump version to ${bumpedVersion}" --no-verify`)
-  await runCommand('git push origin development --no-verify')
+  await runCommand(`git push origin ${DEV_BRANCH_NAME} --no-verify`)
 
   return bumpedVersion
 }
@@ -108,16 +108,16 @@ export async function createOrUpdateChangelog(bumpedVersion: string) {
   }
 
   if (!lodash.isEqual(lastChangelog, updatedChangelog)) {
-    // Directly commit the changes to the development branch because it is important to keep the development branch updated
+    // Directly commit the changes to the dev branch because it is important to keep the dev branch updated
     await runCommand('git add .')
     await runCommand(`git commit -m "Update changelog for version ${bumpedVersion}" --no-verify`)
-    await runCommand('git push origin development --no-verify')
+    await runCommand(`git push origin ${DEV_BRANCH_NAME} --no-verify`)
   }
 }
 
 async function exit(version?: string, removeReleaseCandidateBranch?: boolean) {
   await runCommand('rm -fr ".git/rebase-merge"').catch(() => {})
-  await runCommand('git checkout development').catch(() => {})
+  await runCommand(`git checkout ${DEV_BRANCH_NAME}`).catch(() => {})
 
   if (version) {
     await runCommand(`git branch -D release-temp`).catch(() => {})
@@ -137,7 +137,7 @@ async function main() {
     await verifyIfGitIsClean()
     await verifyIfBranchIsDev()
 
-    // Fetch the development branch latest changes
+    // Fetch the dev branch latest changes
     await runCommand('git pull')
 
     console.log('Installing dependencies…')
