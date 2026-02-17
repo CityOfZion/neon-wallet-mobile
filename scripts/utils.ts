@@ -3,6 +3,8 @@ import { promisify } from 'util'
 
 export const execAsync = promisify(exec)
 
+export const DEV_BRANCH_NAME = 'dev'
+
 export async function verifyIfGitIsClean() {
   const { stdout } = await execAsync('git status --porcelain')
 
@@ -16,8 +18,8 @@ export async function verifyIfBranchIsDev() {
   const { stdout } = await execAsync('git rev-parse --abbrev-ref HEAD')
   const branchName = stdout.trim()
 
-  if (branchName !== 'development') {
-    console.error('You must be on the development branch to create a release.')
+  if (branchName !== DEV_BRANCH_NAME) {
+    console.error(`You must be on the ${DEV_BRANCH_NAME} branch to create a release.`)
     process.exit(1)
   }
 }
