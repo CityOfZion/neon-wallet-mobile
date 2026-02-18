@@ -7,7 +7,7 @@ import path from 'path'
 import packageJson from '../package.json'
 import { DEV_BRANCH_NAME, getProductionVersion, runCommand, verifyIfBranchIsDev, verifyIfGitIsClean } from './utils'
 
-async function bumpVersion(isOta: boolean) {
+async function bumpVersion() {
   const { value: selectedBumpType } = await inquirer.prompt([
     {
       type: 'select',
@@ -26,11 +26,6 @@ async function bumpVersion(isOta: boolean) {
   const stdout = await runCommand(`npm version ${selectedBumpType} --no-git-tag-version --no-commit-hooks --json`)
 
   const bumpedVersion = stdout.slice(1, -1)
-
-  // We should not update the app.json version if we are creating an OTA update because it should have the last runtime version
-  if (!isOta) {
-    await runCommand(`npx -y json -I -f app.json -e 'this.expo.version="${bumpedVersion}"'`)
-  }
 
   // Directly commit the changes to the dev branch because it is important to keep the dev branch updated
   await runCommand('git add .')
@@ -160,7 +155,7 @@ async function main() {
 
     // It means this is the first release candidate and we need to bump the version
     if (isFirstReleaseCandidate) {
-      version = await bumpVersion(isOta)
+      version = await bumpVersion()
     } else {
       version = currentVersion
     }
