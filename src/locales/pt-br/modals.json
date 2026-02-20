@@ -611,6 +611,20 @@
     "subtitle": "Benefícios da gorjeta",
     "title": "Gorjeta"
   },
+  "surveyModal": {
+    "descriptionFeedbackSubmitted": "Agradecemos pelo feedback!",
+    "detailsInputLabel": "O que podemos melhorar?",
+    "detailsInputPlaceholder": "Adicione mais detalhes aqui…",
+    "dislikeButtonLabel": "Não gostei",
+    "error": {
+      "storeReviewNotAvailable": "Avaliação da loja não está disponível."
+    },
+    "likeButtonLabel": "Gostei",
+    "notNowButtonLabel": "Não agora",
+    "submitButtonLabel": "Enviar",
+    "title": "Como foi sua experiência?",
+    "titleFeedbackSubmitted": "Obrigado!"
+  },
   "swapDetailsLogModal": {
     "copySwapLog": "Copiar log do swap para a área de transferência",
     "thereIsNoLog": "Não há log do swap",

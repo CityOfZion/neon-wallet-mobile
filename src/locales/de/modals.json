@@ -611,6 +611,20 @@
     "subtitle": "Vorteile von Trinkgeldern",
     "title": "Trinkgeld"
   },
+  "surveyModal": {
+    "descriptionFeedbackSubmitted": "Ihr Feedback wird sehr geschätzt!",
+    "detailsInputLabel": "Was können wir besser machen?",
+    "detailsInputPlaceholder": "Fügen Sie hier weitere Details hinzu…",
+    "dislikeButtonLabel": "Mag ich nicht",
+    "error": {
+      "storeReviewNotAvailable": "Store Review ist nicht verfügbar."
+    },
+    "likeButtonLabel": "Mag ich",
+    "notNowButtonLabel": "Jetzt nicht",
+    "submitButtonLabel": "Senden",
+    "title": "Wie war Ihre Erfahrung?",
+    "titleFeedbackSubmitted": "Vielen Dank!"
+  },
   "swapDetailsLogModal": {
     "copySwapLog": "Swap Log in Zwischenablage kopieren",
     "thereIsNoLog": "Es gibt kein Swap Log",

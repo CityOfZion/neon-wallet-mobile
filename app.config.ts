@@ -22,6 +22,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     infoPlist: {
       ITSAppUsesNonExemptEncryption: false,
     },
+    appStoreUrl: 'https://apps.apple.com/app/id1530111452',
   },
   android: {
     allowBackup: false,
@@ -38,6 +39,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'android.permission.BLUETOOTH_CONNECT',
       'android.permission.NFC',
     ],
+    playStoreUrl: 'https://play.google.com/store/apps/details?id=io.cityofzion.neon',
   },
   splash: {
     backgroundColor: '#1A2026',
