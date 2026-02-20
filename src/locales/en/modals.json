@@ -611,6 +611,20 @@
     "subtitle": "Benefits of tipping",
     "title": "Tipping"
   },
+  "surveyModal": {
+    "descriptionFeedbackSubmitted": "Your feedback is really appreciated!",
+    "detailsInputLabel": "What can we do better?",
+    "detailsInputPlaceholder": "Add some more details here…",
+    "dislikeButtonLabel": "Dislike",
+    "error": {
+      "storeReviewNotAvailable": "Store review is not available."
+    },
+    "likeButtonLabel": "Like",
+    "notNowButtonLabel": "Not now",
+    "submitButtonLabel": "Submit",
+    "title": "How was your experience?",
+    "titleFeedbackSubmitted": "Thank you!"
+  },
   "swapDetailsLogModal": {
     "copySwapLog": "Copy swap log to clipboard",
     "thereIsNoLog": "There is no swap log",

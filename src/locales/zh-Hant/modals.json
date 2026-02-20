@@ -611,6 +611,20 @@
     "subtitle": "提示的好處",
     "title": "提示"
   },
+  "surveyModal": {
+    "descriptionFeedbackSubmitted": "非常感謝您的反饋！",
+    "detailsInputLabel": "我們可以改進什麼？",
+    "detailsInputPlaceholder": "在此處添加更多詳細資訊…",
+    "dislikeButtonLabel": "不喜歡",
+    "error": {
+      "storeReviewNotAvailable": "商店評價不可用。"
+    },
+    "likeButtonLabel": "喜歡",
+    "notNowButtonLabel": "暫不",
+    "submitButtonLabel": "提交",
+    "title": "您覺得體驗如何？",
+    "titleFeedbackSubmitted": "謝謝！"
+  },
   "swapDetailsLogModal": {
     "copySwapLog": "複製兌換日誌到剪貼簿",
     "thereIsNoLog": "沒有兌換日誌",

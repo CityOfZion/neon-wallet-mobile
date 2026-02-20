@@ -27,7 +27,7 @@ export type TTwButtonProps = Omit<TouchableOpacityProps, 'style' | 'children' | 
   contentProps?: ViewProps
   labelProps?: TextProps
   style?: ViewStyle
-  colorSchema?: 'neon' | 'pink' | 'white'
+  colorSchema?: 'neon' | 'pink' | 'white' | 'gray'
 }
 
 type TBaseProps = TTwButtonProps & {
@@ -50,6 +50,7 @@ export const ContainedButton = ({
         {
           'bg-neon': colorSchema === 'neon',
           'bg-pink': colorSchema === 'pink',
+          'bg-gray-400': colorSchema === 'gray',
         },
         className
       )}
@@ -85,6 +86,7 @@ export const OutlineButton = ({ className, style, colorSchema, ...props }: TTwBu
           'border-pink': colorSchema === 'pink',
           'border-neon': colorSchema === 'neon',
           'border-white': colorSchema === 'white',
+          'border-gray-400': colorSchema === 'gray',
         },
         className
       )}
@@ -207,6 +209,7 @@ const BaseButton = ({
               'text-neon': colorSchema === 'neon',
               'text-pink': colorSchema === 'pink',
               'text-white': colorSchema === 'white',
+              'text-gray-400': colorSchema === 'gray',
             })}
           />
         ) : (
@@ -220,6 +223,7 @@ const BaseButton = ({
                     'text-neon': colorSchema === 'neon',
                     'text-pink': colorSchema === 'pink',
                     'text-white': colorSchema === 'white',
+                    'text-gray-400': colorSchema === 'gray',
                   },
                   leftElement.props?.className
                 ),
@@ -235,6 +239,7 @@ const BaseButton = ({
                     'text-neon': colorSchema === 'neon',
                     'text-pink': colorSchema === 'pink',
                     'text-white': colorSchema === 'white',
+                    'text-gray-400': colorSchema === 'gray',
                   },
                   labelProps?.className
                 )}
@@ -255,6 +260,7 @@ const BaseButton = ({
                     'text-neon': colorSchema === 'neon',
                     'text-pink': colorSchema === 'pink',
                     'text-white': colorSchema === 'white',
+                    'text-gray-400': colorSchema === 'gray',
                   },
                   rightElement.props?.className
                 ),

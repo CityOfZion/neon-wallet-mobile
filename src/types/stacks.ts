@@ -262,6 +262,8 @@ export type TRootStackParamList = {
   BridgeNeo3NeoXAboutModal: undefined
   BridgeNeo3NeoXConfirmationModal: TBridgeNeo3NeoXConfirmationModalParams
   BridgeNeo3NeoXDetailsModal: TBridgeNeo3NeoXDetailsModalParams
+
+  SurveyModal: undefined
 }
 
 export type TRootStackScreenProps<T extends keyof TRootStackParamList> = NativeStackScreenProps<TRootStackParamList, T>

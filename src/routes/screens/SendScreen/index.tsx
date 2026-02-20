@@ -410,6 +410,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
             navigation={navigation}
           />
         ),
+        onClose: () => modalNavigation.replace('SurveyModal'),
       })
     } catch (error: any) {
       LoggerHelper.sentry(error, { where: 'SendScreen', operation: 'processSend' })

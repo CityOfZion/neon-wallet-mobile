@@ -611,6 +611,20 @@
     "subtitle": "提示的好处",
     "title": "提示"
   },
+  "surveyModal": {
+    "descriptionFeedbackSubmitted": "非常感谢您的反馈！",
+    "detailsInputLabel": "我们可以改进什么？",
+    "detailsInputPlaceholder": "在此处添加更多详细信息…",
+    "dislikeButtonLabel": "不喜欢",
+    "error": {
+      "storeReviewNotAvailable": "商店评价不可用。"
+    },
+    "likeButtonLabel": "喜欢",
+    "notNowButtonLabel": "暂不",
+    "submitButtonLabel": "提交",
+    "title": "您觉得体验如何？",
+    "titleFeedbackSubmitted": "谢谢！"
+  },
   "swapDetailsLogModal": {
     "copySwapLog": "复制兑换日志到剪贴板",
     "thereIsNoLog": "没有兑换日志",

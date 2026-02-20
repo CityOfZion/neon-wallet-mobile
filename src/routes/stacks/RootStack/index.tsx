@@ -309,6 +309,10 @@ export const RootStack = () => {
           name="BridgeNeo3NeoXDetailsModal"
           getComponent={() => require('@/routes/modals/BridgeNeo3NeoXDetailsModal').BridgeNeo3NeoXDetailsModal}
         />
+        <RootNavigator.Screen
+          name="SurveyModal"
+          getComponent={() => require('@/routes/modals/SurveyModal').SurveyModal}
+        />
       </RootNavigator.Group>
     </RootNavigator.Navigator>
   )
