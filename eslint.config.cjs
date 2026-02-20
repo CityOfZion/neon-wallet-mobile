@@ -2,7 +2,6 @@ const { defineConfig } = require('eslint/config')
 const expoConfig = require('eslint-config-expo/flat')
 const prettierRecommended = require('eslint-plugin-prettier/recommended')
 const simpleImportSortPlugin = require('eslint-plugin-simple-import-sort')
-const tseslint = require('typescript-eslint')
 const jsoncPlugin = require('eslint-plugin-jsonc')
 const jsoncParser = require('jsonc-eslint-parser')
 
@@ -14,7 +13,6 @@ module.exports = defineConfig([
 
   {
     files: ['**/*.ts', '**/*.tsx'],
-    extends: [...tseslint.configs.recommended],
     rules: {
       'no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'off',

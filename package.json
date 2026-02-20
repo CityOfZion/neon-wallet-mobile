@@ -13,6 +13,7 @@
   "private": true,
   "scripts": {
     "postinstall": "patch-package",
+    "eas-build-post-install": "npm run check",
     "prepare": "husky",
     "translate": "tsx scripts/translate.ts",
     "lint": "expo lint . --fix",
@@ -21,7 +22,7 @@
     "icon": "svg-icons",
     "dev": "expo start --dev-client",
     "prebuild": "expo prebuild",
-    "check": "npm run lint && npm run typecheck  && npm run check-env",
+    "check": "npm run lint && npm run typecheck && npm run check-env",
     "android": "expo run:android --no-build-cache",
     "ios": "expo run:ios --no-build-cache",
     "create-release:candidate": "tsx scripts/create-release-candidate.ts",
@@ -45,6 +46,7 @@
     "@ledgerhq/react-native-hw-transport-ble": "6.36.0",
     "@raulduartep/expo-minimizer": "~1.0.0",
     "@react-native-async-storage/async-storage": "~2.2.0",
+    "@react-native-community/netinfo": "^12.0.1",
     "@react-navigation/bottom-tabs": "~7.9.0",
     "@react-navigation/native": "~7.1.26",
     "@react-navigation/native-stack": "~7.9.0",
@@ -60,7 +62,7 @@
     "@walletconnect/react-native-compat": "~2.23.1",
     "classnames": "~2.5.1",
     "date-fns": "~4.1.0",
-    "expo": "~54.0.31",
+    "expo": "~54.0.33",
     "expo-application": "~7.0.8",
     "expo-blur": "~15.0.8",
     "expo-camera": "~17.0.10",
@@ -92,8 +94,8 @@
     "nativewind": "~4.2.1",
     "patch-package": "~8.0.1",
     "querystring-es3": "~0.2.1",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "react": "~19.2.4",
+    "react-dom": "~19.2.4",
     "react-i18next": "~16.5.1",
     "react-native": "~0.81.5",
     "react-native-collapsible": "~1.6.2",
@@ -133,7 +135,7 @@
     "@google-cloud/translate": "^9.3.0",
     "@types/i18n-js": "~4.0.1",
     "@types/lodash": "~4.17.21",
-    "@types/react": "~19.2.7",
+    "@types/react": "~19.2.14",
     "@types/stopword": "~2.0.3",
     "@types/uuid": "~11.0.0",
     "@walletconnect/types": "~2.23.1",
@@ -158,7 +160,10 @@
   },
   "overrides": {
     "readable-stream": "4.5.2",
-    "axios": "1.13.2"
+    "axios": "1.13.2",
+    "@react-native-async-storage/async-storage": "~2.2.0",
+    "react": "~19.2.4",
+    "react-dom": "~19.2.4"
   },
   "expo": {
     "doctor": {

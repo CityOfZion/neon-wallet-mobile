@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-redeclare */
-/* eslint-disable @typescript-eslint/no-namespace */
+
 /* eslint-disable import/export */
 import { z } from 'zod'
 
