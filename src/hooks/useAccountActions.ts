@@ -38,7 +38,7 @@ export const useCreateAccount = () => {
 
       const order = AccountHelper.getNextOrderOrMissing(accountsRef.current, blockchain, wallet.id)
       const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
-      const serviceAccount = service.generateAccountFromMnemonic(mnemonic, order)
+      const serviceAccount = await service.generateAccountFromMnemonic(mnemonic, order)
 
       const newAccount: IAccountState = {
         id: id ?? UtilsHelper.uuid(),
@@ -55,7 +55,7 @@ export const useCreateAccount = () => {
 
       dispatch(accountReducerActions.saveAccount(newAccount))
 
-      const firstAccount = service.generateAccountFromMnemonic(mnemonic, 0)
+      const firstAccount = await service.generateAccountFromMnemonic(mnemonic, 0)
       dispatch(
         utilityReducerActions.saveLastIndexByWallet({
           firstAccountAddress: firstAccount.address,

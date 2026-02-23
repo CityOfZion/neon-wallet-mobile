@@ -47,7 +47,7 @@ const getUnclaimedInfos = async (
     const { address } = account
 
     if (key) {
-      const serviceAccount = BlockchainServiceHelper.getServiceAccount({ account, key })
+      const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account, key })
 
       fee = await blockchainService.calculateTransferFee({
         senderAccount: serviceAccount,
@@ -94,7 +94,7 @@ export const useUnclaimedMutation = () => {
         throw new AppError(t('common:errors.noKey', { address: account.address }))
       }
 
-      const serviceAccount = BlockchainServiceHelper.getServiceAccount({ account, key })
+      const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account, key })
       const txId = await blockchainService.claim(serviceAccount)
 
       const transaction = TransactionHelper.buildPendingTransaction({

@@ -53,7 +53,7 @@ export const WalletConnectManagerSetup = () => {
           const key = await SecureStoreHelper.getKey(sessionAccount!)
           if (!key) throw new AppError(commonT('errors.noKey'))
 
-          const serviceAccount = BlockchainServiceHelper.getServiceAccount({ account: sessionAccount!, key })
+          const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account: sessionAccount!, key })
 
           const response = await BSWalletKitHelper.processRequest({
             account: serviceAccount,
