@@ -31,7 +31,7 @@ export const DappPermissionGenericContentFee = ({
       const key = await SecureStoreHelper.getKey(sessionAccount)
       if (!key) throw new AppError(commonT('errors.noKey'))
 
-      const serviceAccount = BlockchainServiceHelper.getServiceAccount({ account: sessionAccount, key })
+      const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account: sessionAccount, key })
 
       return await sessionDetails.service.walletConnectService.calculateRequestFee({
         account: serviceAccount,

@@ -144,7 +144,7 @@ export const useVoteNeo3CalculateVoteFee = ({ neo3Account, candidatePubKey }: TC
 
       if (!key) return
 
-      const account = BlockchainServiceHelper.getServiceAccount({ account: neo3Account!, key })
+      const account = await BlockchainServiceHelper.getServiceAccount({ account: neo3Account!, key })
 
       const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName.neo3 as BSNeo3
       return await service.voteService.calculateVoteFee({ account, candidatePubKey })

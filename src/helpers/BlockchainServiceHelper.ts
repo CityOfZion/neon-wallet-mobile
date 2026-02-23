@@ -57,16 +57,16 @@ export class BlockchainServiceHelper {
     this.blockchainNames = Object.values(services).map(service => service.name)
   }
 
-  static getServiceAccount({ account, key }: TGetServiceAccountParams) {
+  static async getServiceAccount({ account, key }: TGetServiceAccountParams) {
     const service = this.bsAggregator.blockchainServicesByName[account.blockchain]
     let serviceAccount: TBSAccount<TBlockchainServiceKey>
 
     if (account.type === 'hardware' && hasLedger(service)) {
-      serviceAccount = service.generateAccountFromPublicKey(key)
+      serviceAccount = await service.generateAccountFromPublicKey(key)
       serviceAccount.isHardware = true
       serviceAccount.bip44Path = BSKeychainHelper.getBip44Path(service.bip44DerivationPath, account.order)
     } else {
-      serviceAccount = service.generateAccountFromKey(key)
+      serviceAccount = await service.generateAccountFromKey(key)
     }
 
     return serviceAccount

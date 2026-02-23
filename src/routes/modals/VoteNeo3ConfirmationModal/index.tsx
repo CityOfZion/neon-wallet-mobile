@@ -144,7 +144,7 @@ export const VoteNeo3ConfirmationModal = ({
         return
       }
 
-      const account = BlockchainServiceHelper.getServiceAccount({ account: neo3Account, key })
+      const account = await BlockchainServiceHelper.getServiceAccount({ account: neo3Account, key })
 
       const txId = await service.voteService.vote({ account, candidatePubKey: candidate.pubKey })
 

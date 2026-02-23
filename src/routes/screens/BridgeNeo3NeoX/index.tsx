@@ -180,7 +180,7 @@ export const BridgeNeo3NeoXScreen = ({
       const key = await SecureStoreHelper.getKey(account)
       if (!key) throw new AppError(tCommonErrors('noKey'))
 
-      const serviceAccount = BlockchainServiceHelper.getServiceAccount({ account, key })
+      const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account, key })
 
       await bridgeOrchestratorRef.current.setAccountToUse(serviceAccount)
 

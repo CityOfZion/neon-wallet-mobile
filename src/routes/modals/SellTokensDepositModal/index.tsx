@@ -177,7 +177,7 @@ export const SellTokensDepositModal = ({
       const token = tokenBalance!.token
       const amount = actionData.amount
       const address = actionData.address
-      const serviceAccount = BlockchainServiceHelper.getServiceAccount({ account, key })
+      const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account, key })
 
       const [transactionHash] = await service.transfer({
         senderAccount: serviceAccount,
@@ -277,7 +277,7 @@ export const SellTokensDepositModal = ({
           throw new AppError(message)
         }
 
-        const serviceAccount = BlockchainServiceHelper.getServiceAccount({ account, key })
+        const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account, key })
 
         const fee = await service.calculateTransferFee({
           senderAccount: serviceAccount,

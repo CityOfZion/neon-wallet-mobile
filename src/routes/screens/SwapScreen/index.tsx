@@ -238,10 +238,11 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
 
   const handleSelectAccountToUse = async (account: IAccountState) => {
     const key = await SecureStoreHelper.getKey(account)
-
     if (!key) return
 
-    swapOrchestratorRef.current?.setAccountToUse(BlockchainServiceHelper.getServiceAccount({ account, key }))
+    const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account, key })
+
+    swapOrchestratorRef.current?.setAccountToUse(serviceAccount)
   }
 
   const handleChangeAmountToUse = (amount: string) => {

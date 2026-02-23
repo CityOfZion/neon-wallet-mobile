@@ -79,12 +79,16 @@ export const ImportKeySelectionScreen = ({ navigation, route }: TMoreStackScreen
     async () => {
       const generatedAccounts: TAccountSelectionAccordionAccount[] = []
 
-      Object.values(BlockchainServiceHelper.bsAggregator.blockchainServicesByName).forEach(service => {
-        if (!service.validateKey(key)) return
+      const promises = Object.values(BlockchainServiceHelper.bsAggregator.blockchainServicesByName).map(
+        async service => {
+          if (!service.validateKey(key)) return
 
-        const account = service.generateAccountFromKey(key)
-        generatedAccounts.push({ ...account, blockchain: service.name })
-      })
+          const account = await service.generateAccountFromKey(key)
+          generatedAccounts.push({ ...account, blockchain: service.name })
+        }
+      )
+
+      await Promise.allSettled(promises)
 
       setGeneratedAccounts(generatedAccounts)
 

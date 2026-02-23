@@ -136,7 +136,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
     const key = await SecureStoreHelper.getKey(selectedAccount!)
     if (!key) throw new AppError(t('messages.invalidKey'))
 
-    const serviceAccount = BlockchainServiceHelper.getServiceAccount({ account: selectedAccount!, key })
+    const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account: selectedAccount!, key })
 
     const { isTipChecked, isTipDisabled, tipAmountBn, tipFiatPriceBn } = actionData
 
@@ -326,7 +326,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
 
       if (!key || !selectedAccount) throw new AppError(t('messages.invalidKey'))
 
-      const senderAccount = BlockchainServiceHelper.getServiceAccount({ account: selectedAccount, key })
+      const senderAccount = await BlockchainServiceHelper.getServiceAccount({ account: selectedAccount, key })
 
       const fee = await service.calculateTransferFee({ senderAccount, intents })
 
