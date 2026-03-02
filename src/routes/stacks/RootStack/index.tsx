@@ -35,6 +35,10 @@ export const RootStack = () => {
         }}
       >
         <RootNavigator.Screen
+          name="OnboardingImportModal"
+          getComponent={() => require('@/routes/modals/OnboardingImportModal').OnboardingImportModal}
+        />
+        <RootNavigator.Screen
           name="OnboardingBackupMnemonicModal"
           getComponent={() => require('@/routes/modals/OnboardingBackupMnemonicModal').OnboardingBackupMnemonicModal}
         />
@@ -293,6 +297,28 @@ export const RootStack = () => {
         <RootNavigator.Screen
           name="HideFraudulentTokenModal"
           getComponent={() => require('@/routes/modals/HideFraudulentTokenModal').HideFraudulentTokenModal}
+        />
+
+        <RootNavigator.Screen
+          name="ImportAddressSelectionModal"
+          getComponent={() => require('@/routes/modals/ImportAddressSelectionModal').ImportAddressSelectionModal}
+        />
+
+        <RootNavigator.Screen
+          name="ImportEncryptedKeySelectionModal"
+          getComponent={() =>
+            require('@/routes/modals/ImportEncryptedKeySelectionModal').ImportEncryptedKeySelectionModal
+          }
+        />
+
+        <RootNavigator.Screen
+          name="ImportKeySelectionModal"
+          getComponent={() => require('@/routes/modals/ImportKeySelectionModal').ImportKeySelectionModal}
+        />
+
+        <RootNavigator.Screen
+          name="ImportMnemonicSelectionModal"
+          getComponent={() => require('@/routes/modals/ImportMnemonicSelectionModal').ImportMnemonicSelectionModal}
         />
 
         <RootNavigator.Screen

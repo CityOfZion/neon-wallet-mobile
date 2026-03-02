@@ -37,7 +37,7 @@ export type TUseImportAccountParams = {
 
 export type TUseImportAccountsParams = {
   wallet: IWalletState
-  accounts: Omit<TUseImportAccountParams, 'wallet'>[]
+  accountsToImport: Omit<TUseImportAccountParams, 'wallet'>[]
 }
 
 export type TUseCreateAccountParams = {

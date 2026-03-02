@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { AppError } from '@/helpers/ErrorHelper'
-import { StringHelper } from '@/helpers/StringHelper'
 
 import { useActions } from './useActions'
 
@@ -33,8 +32,6 @@ export const useImportAction = (
   }
 
   const handleChange = (value: string) => {
-    value = StringHelper.removeSpecialCharacters(value, { removeDoubleSpaces: true })
-
     setData({ text: value, inputType: undefined })
 
     try {
@@ -84,9 +81,9 @@ export const useImportAction = (
         throw new AppError(t('errors.invalid'))
       }
 
-      const fixedText = data.text.trim().replace(/[^a-zA-Z0-9 ]/g, '') // Remove all special characters except spaces
+      const trimmedText = data.text.trim()
 
-      await submitByInputType[data.inputType](fixedText, data.inputType)
+      await submitByInputType[data.inputType](trimmedText, data.inputType)
     } catch (error) {
       setError('text', AppError.wrap(error).message)
     } finally {

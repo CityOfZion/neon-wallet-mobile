@@ -32,6 +32,10 @@ export type TOnboardingBackupMnemonicModalParams = {
   onSuccess: () => void
 }
 
+export type TOnboardingImportModalParams = {
+  onConfirm: () => void
+}
+
 export type TEditAccountModalParams = {
   account: IAccountState
 }
@@ -58,6 +62,7 @@ export type TBlockchainSelectionModalParams = {
   title?: string
   description?: string
   isMulti?: boolean
+  buttonProps?: TTwButtonProps
   onSelect: (blockchain: TBlockchainServiceKey[]) => void
 }
 
@@ -316,6 +321,26 @@ export type TBridgeNeo3NeoXConfirmationModalParams = {
   bridgeFee: string
   fromService: IBlockchainService<TBlockchainServiceKey>
   onSubmit: (navigation: NativeStackNavigationProp<any>) => Promise<void>
+}
+
+export type TImportAddressSelectionModalParams = {
+  address: string
+  onConfirm: () => void
+}
+
+export type TImportMnemonicSelectionModalParams = {
+  mnemonic: string
+  onConfirm: () => void
+}
+
+export type TImportKeySelectionModalParams = {
+  key: string
+  onConfirm: () => void
+}
+
+export type TImportEncryptedKeySelectionModalParams = {
+  encryptedKey: string
+  onConfirm: () => void
 }
 
 export type TBridgeNeo3NeoXDetailsModalParams = {

@@ -4,7 +4,6 @@ import { TwAlertErrorBanner } from '@/components/TwAlertErrorBanner'
 import { TwBanner } from '@/components/TwBanner'
 import { TwButton } from '@/components/TwButton'
 import { TwInput } from '@/components/TwInput'
-import { TwSeparator } from '@/components/TwSeparator'
 
 import { AppError } from '@/helpers/ErrorHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
@@ -55,9 +54,7 @@ export const PasswordModal = ({ route, navigation }: TRootStackScreenProps<'Pass
       rightElement={<TwModalLayoutCloseIconButton onPress={handleClose} />}
     >
       <View>
-        {description && <Text className="font-sans-regular text-lg text-white">{description}</Text>}
-
-        <TwSeparator className="my-7" />
+        {description && <Text className="mb-6 px-6 font-sans-regular text-lg text-white">{description}</Text>}
 
         <TwInput
           secureTextEntry

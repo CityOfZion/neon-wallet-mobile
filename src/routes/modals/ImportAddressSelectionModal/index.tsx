@@ -18,19 +18,17 @@ import { useMount } from '@/hooks/useMount'
 import { usePressOnce } from '@/hooks/usePressOnce'
 import { useCreateWallet } from '@/hooks/useWalletActions'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { TwModalLayout } from '@/layouts/TwModalLayout'
+import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
 
 import type { TUseImportAccountsParams } from '@/types/hooks'
-import type { TMoreStackScreenProps } from '@/types/stacks'
+import type { TRootStackScreenProps } from '@/types/stacks'
 
-export const ImportAddressSelectionScreen = ({
-  navigation,
-  route,
-}: TMoreStackScreenProps<'ImportAddressSelectionScreen'>) => {
-  const { address } = route.params
+export const ImportAddressSelectionModal = ({ route }: TRootStackScreenProps<'ImportAddressSelectionModal'>) => {
+  const { address, onConfirm } = route.params
 
   const { accountsRef } = useAccountsSelector()
-  const { t } = useTranslation('screens', { keyPrefix: 'importMnemonicSelectionScreen' })
+  const { t } = useTranslation('modals', { keyPrefix: 'importMnemonicSelectionModal' })
   const { t: tCommon } = useTranslation('common')
 
   const { createWallet } = useCreateWallet()
@@ -46,17 +44,16 @@ export const ImportAddressSelectionScreen = ({
       backupStatus: 'successful',
     })
 
-    const accountsToImport: TUseImportAccountsParams['accounts'] = selectedAccounts.map(account => ({
+    const accountsToImport: TUseImportAccountsParams['accountsToImport'] = selectedAccounts.map(account => ({
       ...account,
       type: 'watch',
     }))
 
-    await importAccounts({ wallet, accounts: accountsToImport })
+    await importAccounts({ wallet, accountsToImport })
 
     AnalyticsHelper.logEvent('wallet_imported')
 
-    navigation.popToTop()
-    navigation.jumpTo('WalletsStack', { screen: 'WalletsScreen', params: { wallet } })
+    onConfirm()
   })
 
   const handleSelectAccount = (account: TAccountSelectionAccordionAccount) => {
@@ -94,14 +91,18 @@ export const ImportAddressSelectionScreen = ({
   )
 
   return (
-    <TwScreenLayout title={t('title')} contentContainerClassName="justify-between">
+    <TwModalLayout
+      title={t('title')}
+      rightElement={<TwModalLayoutCloseIconButton />}
+      contentContainerClassName="justify-between"
+    >
       {isMounting ? (
         <ScreenLoader />
       ) : (
         <Fragment>
           <View>
             <Text className="my-8 px-6 text-center font-sans-regular text-lg text-white">
-              {t('foundAccountsMnemonic')}
+              {t('foundAccountsMnemonicLabel')}
             </Text>
 
             <AccountSelectionAccordion
@@ -121,6 +122,6 @@ export const ImportAddressSelectionScreen = ({
           />
         </Fragment>
       )}
-    </TwScreenLayout>
+    </TwModalLayout>
   )
 }

@@ -231,22 +231,6 @@
     "noDappsConnected": "沒有已連線的 dApp",
     "title": "連線"
   },
-  "importBlockchainSelectionScreen": {
-    "subtitle": "選擇所需的區塊鏈以解密您的金鑰",
-    "title": "匯入"
-  },
-  "importMnemonicSelectionScreen": {
-    "buttonLabel": "匯入",
-    "foundAccountsMnemonic": "我們找到以下可匯入的帳戶：",
-    "title": "匯入"
-  },
-  "importPassphraseScreen": {
-    "accountAlreadyExists": "帳戶已存在",
-    "decryptError": "解密金鑰時發生錯誤",
-    "enterPassphrase": "請輸入加密金鑰的密碼",
-    "inputPlaceholder": "請輸入密碼",
-    "title": "匯入"
-  },
   "importScreen": {
     "enterAnAddress": "請輸入地址、加密金鑰、私鑰或助記詞",
     "mnemonicComplete": "助記詞正確",
@@ -287,6 +271,7 @@
   },
   "onboardingScreen": {
     "cancelAllButtonLabel": "全部取消",
+    "createWalletButtonLabel": "建立錢包",
     "feature1": {
       "header": "輕鬆管理您的資產",
       "subtitle": "在一個錢包中建立多個帳戶，每個帳戶都有獨立地址。"
@@ -303,6 +288,7 @@
       "header": "全新 NFT 支援",
       "subtitle": "集中查看您的收藏，並追蹤所有 NFT 交易"
     },
+    "importWalletButtonLabel": "匯入錢包",
     "initialSetup": "初始設定",
     "messagesByActions": {
       "account": "正在建立帳戶…",
@@ -310,7 +296,6 @@
       "wallet": "正在建立您的錢包…"
     },
     "overviewDescription": "這裡是應用程式內眾多功能的概覽。",
-    "selectBlockchainsButtonLabel": "開始設定",
     "selectBlockchainsModalDescription": "選擇您想要為其建立帳戶的區塊鏈",
     "selectBlockchainsModalTitle": "選擇區塊鏈",
     "welcomeNW": "歡迎使用 Neon 錢包"

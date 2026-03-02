@@ -54,6 +54,7 @@ export const PersistContactAddressModal = ({
         setData({ blockchain })
 
         if (actionData.address) validateAddressOrNS(actionData.address, blockchain)
+        navigation.goBack()
       },
     })
   }

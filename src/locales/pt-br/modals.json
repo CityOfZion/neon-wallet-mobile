@@ -386,6 +386,19 @@
     },
     "title": "Importar Backup NEON"
   },
+  "importEncryptedKeySelectionModal": {
+    "accountAlreadyExists": "Esta conta já existe",
+    "decryptError": "Erro ao decriptografar a chave",
+    "description": "Selecione a blockchain da chave criptografada que deseja importar",
+    "importEncryptedConfirmPasswordLabel": "Para continuar, você precisará inserir a senha usada para criptografar a chave:",
+    "importEncryptedKeyInputPlaceholder": "Digite a senha",
+    "title": "Importar carteira"
+  },
+  "importMnemonicSelectionModal": {
+    "buttonLabel": "Importar",
+    "foundAccountsMnemonicLabel": "Encontramos a(s) seguinte(s) conta(s) para importar:",
+    "title": "Importar"
+  },
   "languageSelectionModal": {
     "title": "Idioma"
   },
@@ -405,9 +418,31 @@
   },
   "onboardingBackupMnemonicModal": {
     "backupAndContinueButtonLabel": "Fazer backup e continuar",
-    "description": "Faça backup de sua frase mnemônica. Isso é importante para recuperar sua carteira se você perder o acesso ou desinstalar o aplicativo.",
-    "title": "Backup de frase mnemônica",
-    "warningLabel": "Qualquer pessoa com essa frase pode acessar sua carteira, portanto, mantenha-a segura."
+    "description": "Uma frase mnemônica é <1>essencial</1> para restaurar sua carteira se você perder o acesso ou desinstalar o aplicativo!",
+    "subtitle": "Faça backup da sua mnemônica!",
+    "title": "Sua frase mnemônica",
+    "warningLabel": "Qualquer pessoa com sua frase mnemônica pode acessar sua carteira… mantenha-a segura!"
+  },
+  "onboardingImportModal": {
+    "backupImportDescription": "Você também pode restaurar uma carteira a partir de um arquivo de backup Neon",
+    "importBackupConfirmPassword": {
+      "backupPasswordLabel": "Senha de backup",
+      "backupPasswordPlaceholder": "Digite a senha de backup…",
+      "description": "Para importar seu arquivo de backup, forneça a senha que você usou para criar o backup",
+      "importBackupButtonLabel": "Importar backup",
+      "importBackupTitle": "Importar backup Neon"
+    },
+    "importDescription": "Digite um endereço, chave criptografada, chave privada ou mnemônico: ",
+    "importDetailsLabel": "Detalhes de importação",
+    "importDetailsPlaceholder": "Digite os detalhes…",
+    "locateButtonLabel": "Localizar backup",
+    "messages": {
+      "mnemonicComplete": "Mnemônico completo",
+      "mnemonicIncorrect": "Mnemônico incorreto",
+      "successFile": "Backup localizado!"
+    },
+    "scanButtonLabel": "Escanear QR code",
+    "title": "Importar carteira"
   },
   "persistContactAddressModal": {
     "addressLabel": "Endereço ou alias",

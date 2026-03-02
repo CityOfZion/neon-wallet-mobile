@@ -231,22 +231,6 @@
     "noDappsConnected": "No dApps connected",
     "title": "Connections"
   },
-  "importBlockchainSelectionScreen": {
-    "subtitle": "Select the desired blockchain to decrypt your key",
-    "title": "Import"
-  },
-  "importMnemonicSelectionScreen": {
-    "buttonLabel": "Import",
-    "foundAccountsMnemonic": "We found the following account(s) to import:",
-    "title": "Import"
-  },
-  "importPassphraseScreen": {
-    "accountAlreadyExists": "Account already exists",
-    "decryptError": "Error decrypting the key",
-    "enterPassphrase": "Enter a Passphrase for your encrypted key",
-    "inputPlaceholder": "Please enter Passphrase",
-    "title": "Import"
-  },
   "importScreen": {
     "enterAnAddress": "Enter an address, encrypted key, private key or mnemonic words",
     "mnemonicComplete": "Mnemonic complete",
@@ -287,6 +271,7 @@
   },
   "onboardingScreen": {
     "cancelAllButtonLabel": "Cancel all",
+    "createWalletButtonLabel": "Create wallet",
     "feature1": {
       "header": "Easily organize your assets",
       "subtitle": "Create multiple Accounts inside a Wallet, each with its unique address."
@@ -303,6 +288,7 @@
       "header": "Introducing NFT support",
       "subtitle": "View your collection and keep track of all your NFT transactions in a single place"
     },
+    "importWalletButtonLabel": "Import wallet",
     "initialSetup": "Initial Setup",
     "messagesByActions": {
       "account": "Creating your accounts…",
@@ -310,7 +296,6 @@
       "wallet": "Creating your wallet…"
     },
     "overviewDescription": "Here's an overview of the many features you'll find in the app.",
-    "selectBlockchainsButtonLabel": "Get started",
     "selectBlockchainsModalDescription": "Select the blockchains which you want to create an account for",
     "selectBlockchainsModalTitle": "Select Blockchains",
     "welcomeNW": "Welcome to Neon Wallet"
