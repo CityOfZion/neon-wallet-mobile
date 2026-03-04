@@ -17,10 +17,10 @@ type EnvSchema = z.infer<typeof envSchema>
 class EnvHelperClass {
   static schema = envSchema
 
-  static setup(): EnvSchema {
-    const result = this.schema.parse(process.env) as EnvSchema
+  static async setup() {
+    const result = await this.schema.parseAsync(process.env)
     Object.assign(this, result)
-    return result
+    return result as EnvSchema
   }
 }
 
