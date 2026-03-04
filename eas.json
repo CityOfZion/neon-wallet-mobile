@@ -1,6 +1,6 @@
 {
   "cli": {
-    "version": ">= 12.5.2",
+    "version": "18.0.5",
     "appVersionSource": "remote",
     "promptToConfigurePushNotifications": false
   },
@@ -8,15 +8,18 @@
     "development": {
       "developmentClient": true,
       "distribution": "store",
-      "channel": "development"
+      "channel": "development",
+      "node": "22.14.0"
     },
     "preview": {
       "autoIncrement": true,
-      "channel": "preview"
+      "channel": "preview",
+      "node": "22.14.0"
     },
     "production": {
       "autoIncrement": true,
-      "channel": "production"
+      "channel": "production",
+      "node": "22.14.0"
     }
   },
   "submit": {
