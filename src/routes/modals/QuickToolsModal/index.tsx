@@ -10,9 +10,10 @@ import { TwSeparator } from '@/components/TwSeparator'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { HardwareWalletHelper } from '@/helpers/HardwareWalletHelper'
+import { QrCodeScanModalHelper } from '@/helpers/QrCodeScanModalHelper'
+import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useHasHardwareAccountSelector } from '@/hooks/useAccountSelector'
-import { useQrCode } from '@/hooks/useQrCode'
 
 import { TwModalLayout } from '@/layouts/TwModalLayout'
 
@@ -33,39 +34,41 @@ const isIos = Platform.OS === 'ios'
 export const QuickToolsModal = ({ navigation }: TRootStackScreenProps<'QuickToolsModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'quickToolsModal' })
   const { hasHardwareAccount } = useHasHardwareAccountSelector()
-  const { launchScanner } = useQrCode()
 
   const handlePressQrCode = async () => {
-    const data = await launchScanner()
-    if (!data) return
+    navigation.goBack()
+    await UtilsHelper.sleep(500)
+    QrCodeScanModalHelper.show({
+      onScan(data) {
+        if (WalletKitHelper.isValidURI(data)) {
+          navigation.navigate('DappConnectionModal', {
+            uri: data,
+          })
+          return
+        }
 
-    if (WalletKitHelper.isValidURI(data)) {
-      navigation.navigate('DappConnectionModal', {
-        uri: data,
-      })
-      return
-    }
+        if (BlockchainServiceHelper.bsAggregator.validateAddressAllBlockchains(data)) {
+          navigation.navigate('QRCodeAddressContextModal', {
+            address: data,
+          })
+          return
+        }
 
-    if (BlockchainServiceHelper.bsAggregator.validateAddressAllBlockchains(data)) {
-      navigation.navigate('QRCodeAddressContextModal', {
-        address: data,
-      })
-      return
-    }
-
-    if (
-      BSKeychainHelper.isValidMnemonic(data) ||
-      BlockchainServiceHelper.bsAggregator.validateEncryptedAllBlockchains(data) ||
-      BlockchainServiceHelper.bsAggregator.validateKeyAllBlockchains(data)
-    ) {
-      navigation.navigate('TabStack', {
-        screen: 'MoreStack',
-        params: {
-          screen: 'ImportScreen',
-          params: { data },
-        },
-      })
-    }
+        if (
+          BSKeychainHelper.isValidMnemonic(data) ||
+          BlockchainServiceHelper.bsAggregator.validateEncryptedAllBlockchains(data) ||
+          BlockchainServiceHelper.bsAggregator.validateKeyAllBlockchains(data)
+        ) {
+          navigation.navigate('TabStack', {
+            screen: 'MoreStack',
+            params: {
+              screen: 'ImportScreen',
+              params: { data },
+            },
+          })
+        }
+      },
+    })
   }
 
   const handlePressSend = () => {

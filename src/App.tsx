@@ -26,6 +26,8 @@ import { RootStack } from './routes/stacks/RootStack'
 import './styles/global.css'
 
 const Alert = lazy(() => import('./components/Alert'))
+const QrCodeScanModal = lazy(() => import('./components/QrCodeScanModal'))
+
 const Toaster = lazy(() => import('./components/Toaster'))
 const NfcModal = lazy(() => import('./components/NfcModal'))
 
@@ -77,6 +79,7 @@ export const App = () => {
             <Suspense fallback={null}>
               <Alert />
               <Toaster />
+              <QrCodeScanModal />
 
               {/* IOS already has a native NFC modal */}
               {Platform.OS === 'android' && <NfcModal />}

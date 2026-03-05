@@ -23,6 +23,11 @@
     "description": "Bitte NFC-Tags antippen",
     "title": "Bereit zum Scannen"
   },
+  "qrCodeScanModal": {
+    "closeButtonLabel": "QR-Code-Scanner schließen",
+    "permissionOffMessage": "Zum Scannen von QR-Codes ist die Kameraberechtigung erforderlich. Bitte erteilen Sie diese in den Geräteeinstellungen.",
+    "permissionOffTitle": "Kamerazugriff erforderlich"
+  },
   "screenLayoutBars": {
     "customMode": "Custom Network Modus",
     "noInternet": "Keine Internetverbindung",

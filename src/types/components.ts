@@ -25,3 +25,12 @@ export type TMotiSkeletonProps = {
   radius?: number | 'square' | 'round'
   colors?: string[]
 }
+
+export type TQrCodeScanModalShowOptions = {
+  onScan: (data: string) => void
+}
+
+export type TQrCodeScanModalThis = {
+  isShowing: boolean
+  show: (options: TQrCodeScanModalShowOptions) => void
+}

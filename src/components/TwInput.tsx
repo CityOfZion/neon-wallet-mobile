@@ -6,9 +6,8 @@ import type { TextInputProps, ViewProps } from 'react-native'
 import { Platform, Text, TextInput, View } from 'react-native'
 
 import { ClipboardHelper } from '@/helpers/ClipboardHelper'
+import { QrCodeScanModalHelper } from '@/helpers/QrCodeScanModalHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
-
-import { useQrCode } from '@/hooks/useQrCode'
 
 import MdCancel from '@/assets/images/md-cancel.svg'
 import MdVisibility from '@/assets/images/md-visibility.svg'
@@ -63,7 +62,6 @@ export const TwInput = ({
   ...props
 }: TTwInputProps) => {
   const { t } = useTranslation('components', { keyPrefix: 'twInput' })
-  const { launchScanner } = useQrCode()
 
   const [secureTextEntryInternal, setSecureTextEntryInternal] = useState<boolean | undefined>(secureTextEntry)
 
@@ -77,15 +75,18 @@ export const TwInput = ({
   }
 
   const handleScan = async () => {
-    const data = await launchScanner()
-    if (!data) return
+    QrCodeScanModalHelper.show({
+      onScan: (data: string) => {
+        if (!data) return
 
-    if (onScan) {
-      onScan(data)
-      return
-    }
+        if (onScan) {
+          onScan(data)
+          return
+        }
 
-    props.onChangeText?.(data)
+        props.onChangeText?.(data)
+      },
+    })
   }
 
   return (

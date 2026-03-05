@@ -81,12 +81,6 @@
     },
     "wrongPasswordError": "Falsches Passwort. Bitte versuchen Sie es erneut."
   },
-  "useQrCode": {
-    "errors": {
-      "cameraUnavailable": "Die Kamera ist nicht verfügbar.",
-      "permissionNotGranted": "Kameraerlaubnis nicht erteilt"
-    }
-  },
   "useUnclaimedMutation": {
     "errors": {
       "claimError": "Beim Claimen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."

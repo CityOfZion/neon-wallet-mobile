@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-import { BleManager } from '@sfourdrinier/react-native-ble-plx'
 import { AppState, PermissionsAndroid, Platform } from 'react-native'
+import { BleManager } from 'react-native-ble-plx'
 
 import { useMount } from './useMount'
 
