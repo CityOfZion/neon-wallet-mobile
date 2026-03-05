@@ -1,16 +1,19 @@
 import { Fragment } from 'react'
 
-import * as StoreReview from 'expo-store-review'
+import * as Linking from 'expo-linking'
+import { storeUrl } from 'expo-store-review'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import { TwButton } from '@/components/TwButton'
 import { TwInput } from '@/components/TwInput'
 
+import { ClickupHelper } from '@/helpers/ClickupHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
 
 import { useActions } from '@/hooks/useActions'
+import { useAppDispatch } from '@/hooks/useRedux'
 
 import { TwModalLayout } from '@/layouts/TwModalLayout'
 import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
@@ -22,6 +25,7 @@ import TbThumbUpFilled from '@/assets/images/tb-filled-thumb-up.svg'
 import TbThumbDown from '@/assets/images/tb-thumb-down.svg'
 import TbThumbUp from '@/assets/images/tb-thumb-up.svg'
 
+import { settingsReducerActions } from '@/store/reducers/settings'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 type TActionsData = {
@@ -32,6 +36,7 @@ type TActionsData = {
 
 export const SurveyModal = ({ navigation }: TRootStackScreenProps<'SurveyModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'surveyModal' })
+  const dispatch = useAppDispatch()
 
   const { actionData, handleAct, actionState, setData, setDataWrapper } = useActions<TActionsData>({
     rating: undefined,
@@ -44,22 +49,27 @@ export const SurveyModal = ({ navigation }: TRootStackScreenProps<'SurveyModal'>
   const handlePressThumbsUp = async () => {
     setData({ rating: 'up' })
 
-    const isStoreReviewAvailable = await StoreReview.isAvailableAsync()
-    const hasStoreReviewActions = await StoreReview.hasAction()
+    const expoStoreUrl = storeUrl()
 
-    if (!isStoreReviewAvailable || !hasStoreReviewActions) {
+    const canOpen = expoStoreUrl ? await Linking.canOpenURL(expoStoreUrl) : false
+
+    if (!canOpen) {
       ToastHelper.error({ message: t('error.storeReviewNotAvailable') })
       return
     }
 
-    StoreReview.requestReview()
+    await Linking.openURL(expoStoreUrl!)
+
+    dispatch(settingsReducerActions.setSurveyInfo('submitted-positive'))
 
     navigation.goBack()
   }
 
   const handleSubmitFeedback = async () => {
-    if (actionData.rating === 'down') {
-      // TODO: handle negative feedback
+    if (actionData.rating === 'down' && actionData.description) {
+      await ClickupHelper.createFeedbackTicket(actionData.description)
+
+      dispatch(settingsReducerActions.setSurveyInfo('submitted-negative'))
 
       setData({ negativeFeedbackSubmitted: true })
     }
@@ -81,7 +91,9 @@ export const SurveyModal = ({ navigation }: TRootStackScreenProps<'SurveyModal'>
         </View>
       ) : (
         <Fragment>
-          <View className="mb-10 w-full flex-row justify-center">
+          <Text className="mb-8 font-sans-regular text-base text-white">{t('requestReview')}</Text>
+
+          <View className="mb-8 w-full flex-row justify-center">
             <TwButton
               aria-label={t('likeButtonLabel')}
               variant="text"
@@ -142,6 +154,7 @@ export const SurveyModal = ({ navigation }: TRootStackScreenProps<'SurveyModal'>
                 variant="contained-light"
                 onPress={handleAct(handleSubmitFeedback)}
                 disabled={isSubmitFeedbackDisabled}
+                isLoading={actionState.isActing}
               />
             </Fragment>
           ) : (

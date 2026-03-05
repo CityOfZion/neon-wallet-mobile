@@ -6,7 +6,14 @@ import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import type { ISettingsReducer } from './index'
 
 import type { TBlockchainServiceKey, TNetwork } from '@/types/blockchain'
-import type { TCurrency, TCustomNetwork, TLanguage, TSecurity, TSelectedNetworks } from '@/types/store'
+import type {
+  TCurrency,
+  TCustomNetwork,
+  TLanguage,
+  TSecurity,
+  TSelectedNetworks,
+  TSurveyInfoStatus,
+} from '@/types/store'
 
 const setSecurity: CaseReducer<ISettingsReducer, PayloadAction<TSecurity>> = (state, action) => {
   state.data.security = action.payload
@@ -22,6 +29,11 @@ const setLanguage: CaseReducer<ISettingsReducer, PayloadAction<TLanguage>> = (st
 
 const setIsFirstTime: CaseReducer<ISettingsReducer, PayloadAction<boolean>> = (state, action) => {
   state.data.isFirstTime = action.payload
+}
+
+const setSurveyInfo: CaseReducer<ISettingsReducer, PayloadAction<TSurveyInfoStatus>> = (state, action) => {
+  state.data.surveyInfo.status = action.payload
+  state.data.surveyInfo.updatedAt = Date.now()
 }
 
 const setSelectNetwork = <T extends TBlockchainServiceKey>(
@@ -111,6 +123,7 @@ export const settingsSliceReducers = {
   setCurrency,
   setLanguage,
   setIsFirstTime,
+  setSurveyInfo,
   setSelectNetwork,
   saveCustomNetwork,
   deleteCustomNetwork,

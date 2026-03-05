@@ -14,6 +14,8 @@ export class ConstantsHelper {
 
   static readonly voteNeo3CozPubKey = '02946248f71bdf14933e6735da9867e81cc9eea0b5895329aa7f71e7745cf40659'
 
+  static readonly surveyExpiryMs = 90 * 24 * 60 * 60 * 1000 // 90 days
+
   static readonly fraudulentTokenHashesByBlockchain: Map<TBlockchainServiceKey, Set<string>> = new Map([
     ['neo3', new Set(['0x42e6b0379e39a428362e08cf9d7e40903cdb0fe7'])],
   ])

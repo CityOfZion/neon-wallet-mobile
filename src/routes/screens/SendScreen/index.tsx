@@ -31,7 +31,7 @@ import { useAuthentication } from '@/hooks/useAuthentication'
 import { useBalance } from '@/hooks/useBalances'
 import { useExchange } from '@/hooks/useExchanges'
 import { useAppDispatch } from '@/hooks/useRedux'
-import { useSelectedNetworkByBlockchainSelector } from '@/hooks/useSettingsSelector'
+import { useSelectedNetworkByBlockchainSelector, useSurveyInfoSelector } from '@/hooks/useSettingsSelector'
 
 import { TwScreenLayout } from '@/layouts/TwScreenLayout'
 
@@ -65,6 +65,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
   const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()
   const { authenticate } = useAuthentication()
   const { accountsMapRef } = useAccountMapSelector()
+  const { surveyInfoRef } = useSurveyInfoSelector()
   const dispatch = useAppDispatch()
 
   const currentRecipientAddress = useRef(undefined)
@@ -410,7 +411,13 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
             navigation={navigation}
           />
         ),
-        onClose: () => modalNavigation.replace('SurveyModal'),
+        onClose: () => {
+          if (surveyInfoRef.current.status === 'not-submitted') {
+            modalNavigation.replace('SurveyModal')
+          } else {
+            modalNavigation.goBack()
+          }
+        },
       })
     } catch (error: any) {
       LoggerHelper.sentry(error, { where: 'SendScreen', operation: 'processSend' })
@@ -618,6 +625,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
           <ActionAddressButton
             label={t('form.recipient.selectButtonLabel')}
             address={actionData.selectedAccount?.address}
+            contentProps={{ className: 'px-3' }}
             blockchain={actionData.selectedAccount?.blockchain}
             onPress={() =>
               navigation.navigate('AccountSelectionModal', {

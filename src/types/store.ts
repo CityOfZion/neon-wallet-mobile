@@ -198,3 +198,10 @@ export type TSaveNotification = Optional<TNotification, 'id' | 'date' | 'provide
 export type THiddenTokenByBlockchain = Partial<Record<TBlockchainServiceKey, string[]>>
 
 export type TLastIndexesByWallet = Partial<Record<TBlockchainServiceKey, Record<string, number>>>
+
+export type TSurveyInfoStatus = 'not-submitted' | 'submitted-positive' | 'submitted-negative'
+
+export type TSurveyInfo = {
+  status: TSurveyInfoStatus
+  updatedAt: number
+}
