@@ -1,3 +1,4 @@
+import { CameraView } from 'expo-camera'
 import { Image } from 'expo-image'
 import { LinearGradient } from 'expo-linear-gradient'
 import { cssInterop } from 'nativewind'
@@ -26,6 +27,10 @@ export class NativeWindHelper {
 
     cssInterop(WebView, {
       containerClassName: 'containerStyle',
+    })
+
+    cssInterop(CameraView, {
+      className: 'style',
     })
   }
 }

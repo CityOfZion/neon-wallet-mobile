@@ -23,6 +23,11 @@
     "description": "請輕觸 NFC 標籤",
     "title": "準備掃描"
   },
+  "qrCodeScanModal": {
+    "closeButtonLabel": "關閉二維碼掃描器",
+    "permissionOffMessage": "掃描二維碼需要相機權限。請在設備設定中授予權限。",
+    "permissionOffTitle": "需要攝影機存取權限"
+  },
   "screenLayoutBars": {
     "customMode": "自訂網路模式",
     "noInternet": "沒有網路連線",

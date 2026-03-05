@@ -81,12 +81,6 @@
     },
     "wrongPasswordError": "Senha incorreta. Tente novamente."
   },
-  "useQrCode": {
-    "errors": {
-      "cameraUnavailable": "A câmera não está disponível.",
-      "permissionNotGranted": "Permissão para filmagem não concedida."
-    }
-  },
   "useUnclaimedMutation": {
     "errors": {
       "claimError": "Houve um erro ao tentar dar claim. Por favor, tente novamente."

@@ -3,9 +3,9 @@ import { BSKeychainHelper, hasLedger } from '@cityofzion/blockchain-service'
 import type Transport from '@ledgerhq/hw-transport'
 import HIDTransport from '@ledgerhq/react-native-hid'
 import BleTransport from '@ledgerhq/react-native-hw-transport-ble'
-import type { Device as BleDevice } from '@sfourdrinier/react-native-ble-plx'
 import { cloneDeep } from 'lodash'
 import { DeviceEventEmitter } from 'react-native'
+import type { Device as BleDevice } from 'react-native-ble-plx'
 
 import { I18nextHelper } from '@/helpers/I18nextHelper'
 

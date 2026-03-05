@@ -23,6 +23,11 @@
     "description": "请轻触NFC标签",
     "title": "准备扫描"
   },
+  "qrCodeScanModal": {
+    "closeButtonLabel": "关闭二维码扫描器",
+    "permissionOffMessage": "扫描二维码需要相机权限。请在设备设置中授予权限。",
+    "permissionOffTitle": "需要摄像头访问权限"
+  },
   "screenLayoutBars": {
     "customMode": "自定义网络模式",
     "noInternet": "无网络连接",

@@ -100,7 +100,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     [
-      '@sfourdrinier/react-native-ble-plx',
+      'react-native-ble-plx',
       {
         bluetoothAlwaysPermission:
           'Giving $(PRODUCT_NAME) access to bluetooth will allow you to connect to hardware wallets',

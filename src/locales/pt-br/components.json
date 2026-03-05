@@ -23,6 +23,11 @@
     "description": "Por favor, toque nas tags NFC",
     "title": "Pronto para Escanear"
   },
+  "qrCodeScanModal": {
+    "closeButtonLabel": "Fechar leitor de código QR",
+    "permissionOffMessage": "É necessário conceder permissão à câmera para ler códigos QR. Por favor, conceda essa permissão nas configurações do seu dispositivo.",
+    "permissionOffTitle": "Acesso à câmera necessário"
+  },
   "screenLayoutBars": {
     "customMode": "Modo Rede Customizada",
     "noInternet": "Sem conexão com a internet",

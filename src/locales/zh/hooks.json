@@ -81,12 +81,6 @@
     },
     "wrongPasswordError": "密码错误。请重试。"
   },
-  "useQrCode": {
-    "errors": {
-      "cameraUnavailable": "摄像头不可用",
-      "permissionNotGranted": "未授予相机权限"
-    }
-  },
   "useUnclaimedMutation": {
     "errors": {
       "claimError": "尝试领取时出错。请再试一次。"
