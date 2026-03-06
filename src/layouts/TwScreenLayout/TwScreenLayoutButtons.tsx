@@ -9,6 +9,7 @@ export const TwScreenLayoutButton = ({ contentProps, labelProps, ...props }: TTw
       labelProps={{ ...labelProps, className: StyleHelper.mergeStyles('text-base', labelProps?.className) }}
       contentProps={{ ...contentProps, className: StyleHelper.mergeStyles('px-5', contentProps?.className) }}
       variant="text"
+      animation="opacity"
       {...props}
     />
   )

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text } from 'react-native'
 
-import { TwSkeleton } from '@/components/TwSkeleton'
+import { Skeleton } from '@/components/Skeleton'
 import type { TWalletCardRef } from '@/components/WalletCard'
 import { WalletCarousel } from '@/components/WalletCarousel'
 
@@ -91,11 +91,17 @@ export const WalletSelectionModal = ({ navigation, route }: TRootStackScreenProp
         blockchains={blockchains}
       />
 
-      <TwSkeleton isLoading={balances.isLoading} layout={{ width: 100, height: 36 }} className="mt-6 items-center">
-        <Text className="mt-6 text-center font-sans-medium text-4xl text-white">
-          {CurrencyHelper.format(balances.exchangeTotal, { currency })}
-        </Text>
-      </TwSkeleton>
+      <Skeleton.Root loading={balances.isLoading} className="mt-6 items-center">
+        <Skeleton.Group>
+          <Skeleton.Item className="h-9 w-24" />
+        </Skeleton.Group>
+
+        <Skeleton.Content>
+          <Text className="font-sans-medium text-4xl text-white">
+            {CurrencyHelper.format(balances.exchangeTotal, { currency })}
+          </Text>
+        </Skeleton.Content>
+      </Skeleton.Root>
     </TwModalLayout>
   )
 }

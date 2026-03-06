@@ -3,9 +3,9 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
+import { Skeleton } from '@/components/Skeleton'
 import { TwBlockchainIcon } from '@/components/TwBlockchainIcon'
 import { TwIconButton } from '@/components/TwIconButton'
-import { TwSkeleton } from '@/components/TwSkeleton'
 
 import { ClipboardHelper } from '@/helpers/ClipboardHelper'
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
@@ -56,11 +56,17 @@ export const AccountAccordionItem = ({ account }: TProps) => {
         </View>
       </View>
 
-      <TwSkeleton isLoading={isLoading} layout={{ width: 56, height: 24 }}>
-        <Text className="font-sans-regular text-lg text-white">
-          {CurrencyHelper.format(data?.exchangeTotal ?? 0, { currency })}
-        </Text>
-      </TwSkeleton>
+      <Skeleton.Root loading={isLoading} className="h-6 w-14">
+        <Skeleton.Group>
+          <Skeleton.Item />
+        </Skeleton.Group>
+
+        <Skeleton.Content>
+          <Text className="font-sans-regular text-lg text-white">
+            {CurrencyHelper.format(data?.exchangeTotal ?? 0, { currency })}
+          </Text>
+        </Skeleton.Content>
+      </Skeleton.Root>
     </View>
   )
 }

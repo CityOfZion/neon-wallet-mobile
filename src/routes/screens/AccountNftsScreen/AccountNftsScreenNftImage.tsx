@@ -18,7 +18,7 @@ export const AccountNftsScreenNftImage = ({ image }: TProps) => {
   })
 
   return (
-    <View className="size-12 items-center justify-center overflow-hidden rounded bg-gray-900 p-1">
+    <View className="size-12 items-center justify-center overflow-hidden rounded-md bg-gray-900 p-1">
       <Image contentFit="cover" source={imageSource} onError={handleError} className="size-full" />
     </View>
   )

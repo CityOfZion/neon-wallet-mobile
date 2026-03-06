@@ -5,15 +5,21 @@ import { Text, View } from 'react-native'
 import { match } from 'ts-pattern'
 
 import { ImageFallback } from '@/components/ImageFallback'
+import { Skeleton } from '@/components/Skeleton'
 import { TwInputLabel } from '@/components/TwInputLabel'
-import { TwSkeleton } from '@/components/TwSkeleton'
 
 import { SkinHelper } from '@/helpers/SkinHelper'
 
 import { useItemNeo3NftSkins } from '@/hooks/useItemNeo3NftSkins'
 import { useUnlockedSkinIdsSelector } from '@/hooks/useUnlockedSkinIdsSelector'
 
-import { SKIN_CONTAINER_GAP, SKIN_CONTAINER_WINDOW_SIZE, SKIN_ITEM_SIZE, SkinSelectorItem } from './SkinSelectorItem'
+import {
+  MAX_ITEM_ROW,
+  SKIN_CONTAINER_GAP,
+  SKIN_CONTAINER_WINDOW_SIZE,
+  SKIN_ITEM_SIZE,
+  SkinSelectorItem,
+} from './SkinSelectorItem'
 
 import type { IAccountState, TLocalSkin, TNftSkin, TSkin } from '@/types/store'
 
@@ -37,20 +43,18 @@ export const PremiumSkinSelector = ({ selectedSkin, onPress, account }: TProps) 
     <View className="mt-6">
       <TwInputLabel label={t('selectPremiumThemesTitle')} />
 
-      <TwSkeleton
-        isLoading={isLoading}
-        className="flex flex-row flex-wrap justify-between gap-4"
-        layout={[
-          { width: SKIN_ITEM_SIZE, height: SKIN_ITEM_SIZE, radius: 8 },
-          { width: SKIN_ITEM_SIZE, height: SKIN_ITEM_SIZE, radius: 8 },
-          { width: SKIN_ITEM_SIZE, height: SKIN_ITEM_SIZE, radius: 8 },
-          { width: SKIN_ITEM_SIZE, height: SKIN_ITEM_SIZE, radius: 8 },
-        ]}
-      >
-        <View
-          className="flex flex-row flex-wrap"
-          style={{ gap: SKIN_CONTAINER_GAP, width: SKIN_CONTAINER_WINDOW_SIZE }}
-        >
+      <Skeleton.Root loading={isLoading} style={{ width: SKIN_CONTAINER_WINDOW_SIZE }}>
+        <Skeleton.Group className="flex-row" style={{ gap: SKIN_CONTAINER_GAP }}>
+          {Array.from({ length: MAX_ITEM_ROW }).map((_, index) => (
+            <Skeleton.Item
+              key={`premium-skeleton-${index}`}
+              className="rounded-lg"
+              style={{ height: SKIN_ITEM_SIZE, width: SKIN_ITEM_SIZE }}
+            />
+          ))}
+        </Skeleton.Group>
+
+        <Skeleton.Content className="flex flex-row flex-wrap" style={{ gap: SKIN_CONTAINER_GAP }}>
           {skins.length === 0 ? (
             <Text className="w-full text-center font-sans-regular text-sm text-gray-300">{t('noPremiumThemes')}</Text>
           ) : (
@@ -80,8 +84,8 @@ export const PremiumSkinSelector = ({ selectedSkin, onPress, account }: TProps) 
               )
             })
           )}
-        </View>
-      </TwSkeleton>
+        </Skeleton.Content>
+      </Skeleton.Root>
     </View>
   )
 }

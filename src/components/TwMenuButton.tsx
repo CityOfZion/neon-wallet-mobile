@@ -90,6 +90,7 @@ export const TwMenuButton = ({
           )}
         </View>
       }
+      animation="opacity"
       rightElement={isLoading ? <Loader /> : <MdChevronRight className="text-gray-300" />}
       disabled={isLoading}
       leftElement={

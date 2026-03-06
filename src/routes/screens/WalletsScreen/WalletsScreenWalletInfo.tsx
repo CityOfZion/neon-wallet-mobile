@@ -1,10 +1,10 @@
 import React from 'react'
 
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { Text } from 'react-native'
 
+import { Skeleton } from '@/components/Skeleton'
 import { TwIconButton } from '@/components/TwIconButton'
-import { TwSkeleton } from '@/components/TwSkeleton'
 
 import { AlertHelper } from '@/helpers/AlertHelper'
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
@@ -38,18 +38,20 @@ export const WalletsScreenWalletInfo = ({ selectedWalletAccounts }: Props) => {
   }
 
   return (
-    <View className="mb-6 mt-9 w-full items-center">
-      <TwSkeleton isLoading={balances.isLoading} layout={{ width: 100, height: 36 }}>
-        <View className="flex-row items-center">
-          <Text className="font-sans-regular text-4xl text-white">
-            {CurrencyHelper.format(balances.exchangeTotal, { currency })}
-          </Text>
+    <Skeleton.Root loading={balances.isLoading} className="mb-6 mt-9 h-10 items-center">
+      <Skeleton.Group>
+        <Skeleton.Item className="w-48" />
+      </Skeleton.Group>
 
-          {showBalanceAlert && (
-            <TwIconButton icon={<TbAlertTriangle aria-hidden className="h-5 w-5 text-neon" />} onPress={handlePress} />
-          )}
-        </View>
-      </TwSkeleton>
-    </View>
+      <Skeleton.Content className="flex-row items-center">
+        <Text className="font-sans-regular text-4xl text-white">
+          {CurrencyHelper.format(balances.exchangeTotal, { currency })}
+        </Text>
+
+        {showBalanceAlert && (
+          <TwIconButton icon={<TbAlertTriangle aria-hidden className="size-5 text-neon" />} onPress={handlePress} />
+        )}
+      </Skeleton.Content>
+    </Skeleton.Root>
   )
 }

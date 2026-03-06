@@ -3,13 +3,14 @@ import React, { useRef } from 'react'
 import type { TNftResponse } from '@cityofzion/blockchain-service'
 import { Image } from 'expo-image'
 import { useTranslation } from 'react-i18next'
-import { FlatList, type ListRenderItem, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, type LayoutChangeEvent, type ListRenderItem, Text, View } from 'react-native'
 
 import { AccountSubTitle } from '@/components/AccountSubTitle'
 import { FlatListEmpty } from '@/components/FlatListEmpty'
-import { FlatListFooter } from '@/components/FlatListFooter'
+import { PressableScale } from '@/components/PressableScale'
 import { RefreshControl } from '@/components/RefreshControl'
 import { ScreenLoader } from '@/components/ScreenLoader'
+import { Skeleton } from '@/components/Skeleton'
 
 import { LinkHelper } from '@/helpers/LinkHelper'
 
@@ -25,7 +26,7 @@ import type { TWalletsStackScreenProps } from '@/types/stacks'
 
 const renderItem: ListRenderItem<TNftResponse> = ({ item }) => {
   return (
-    <TouchableOpacity
+    <PressableScale
       disabled={!item.explorerUri}
       onPress={LinkHelper.open.bind(null, item.explorerUri!)}
       className="flex-row items-center gap-4 rounded-lg bg-gray-800 p-3"
@@ -55,15 +56,18 @@ const renderItem: ListRenderItem<TNftResponse> = ({ item }) => {
       </View>
 
       {item.explorerUri && <DoraIcon aria-hidden className="size-6 text-neon" />}
-    </TouchableOpacity>
+    </PressableScale>
   )
 }
 
 export const AccountNftsSScreen = (props: TWalletsStackScreenProps<'AccountNftsScreen'>) => {
   const { account } = props.route.params
   const { t } = useTranslation('screens', { keyPrefix: 'accountNftsScreen' })
-  const { aggregatedData, isLoading, isFetchingNextPage, fetchNextPage, refetch, isRefetching } = useNftsQuery(account)
+  const { aggregatedData, hasNextPage, isLoading, isFetchingNextPage, fetchNextPage, refetch, isRefetching } =
+    useNftsQuery(account)
+
   const onEndReachedCalledDuringMomentum = useRef(true)
+  const listHeightRef = useRef(0)
 
   const handleEndReached = () => {
     if (onEndReachedCalledDuringMomentum.current || isFetchingNextPage || isLoading || isRefetching) return
@@ -75,6 +79,23 @@ export const AccountNftsSScreen = (props: TWalletsStackScreenProps<'AccountNftsS
 
   const handleMomentumScrollBegin = () => {
     onEndReachedCalledDuringMomentum.current = false
+  }
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    listHeightRef.current = event.nativeEvent.layout.height
+  }
+
+  const handleContentSizeChange = (_width: number, contentHeight: number) => {
+    if (
+      listHeightRef.current > 0 &&
+      contentHeight < listHeightRef.current &&
+      hasNextPage &&
+      !isFetchingNextPage &&
+      !isLoading &&
+      !isRefetching
+    ) {
+      fetchNextPage()
+    }
   }
 
   return (
@@ -91,10 +112,22 @@ export const AccountNftsSScreen = (props: TWalletsStackScreenProps<'AccountNftsS
           data={aggregatedData}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
-          ListFooterComponent={isFetchingNextPage ? <FlatListFooter /> : undefined}
+          ListFooterComponent={
+            isLoading || isFetchingNextPage ? (
+              <Skeleton.Root>
+                <Skeleton.Group>
+                  {Array.from({ length: 2 }).map((_, index) => (
+                    <Skeleton.Item key={`transaction-skeleton-${index}`} className="h-16 w-full rounded-lg" />
+                  ))}
+                </Skeleton.Group>
+              </Skeleton.Root>
+            ) : undefined
+          }
           ListEmptyComponent={<FlatListEmpty label={t('emptyList')} />}
           keyExtractor={(_, index) => `nft-item-${index}`}
           onMomentumScrollBegin={handleMomentumScrollBegin}
+          onLayout={handleLayout}
+          onContentSizeChange={handleContentSizeChange}
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.5}
         />

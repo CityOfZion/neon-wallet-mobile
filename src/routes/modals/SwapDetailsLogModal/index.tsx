@@ -1,12 +1,12 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import { SimpleSwapService } from '@cityofzion/bs-multichain'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, Text, View } from 'react-native'
+import { ScrollView, Text } from 'react-native'
 
-import { TwIconButton } from '@/components/TwIconButton'
-import { TwSkeleton } from '@/components/TwSkeleton'
+import { Skeleton } from '@/components/Skeleton'
+import { TwButton } from '@/components/TwButton'
 
 import { ClipboardHelper } from '@/helpers/ClipboardHelper'
 
@@ -21,7 +21,6 @@ const swapService = new SimpleSwapService()
 
 export const SwapDetailsLogModal = ({ route }: TRootStackScreenProps<'SwapDetailsLogModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'swapDetailsLogModal' })
-  const { t: tCommon } = useTranslation('common', { keyPrefix: 'general' })
 
   const {
     swapRecord: { swapId, ...swapRecord },
@@ -44,29 +43,15 @@ export const SwapDetailsLogModal = ({ route }: TRootStackScreenProps<'SwapDetail
 
   return (
     <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
-      <TwSkeleton
-        className="mt-2 flex-grow"
-        isLoading={isLoading}
-        layout={[
-          { width: '100%', height: 48 },
-          { width: '100%', height: 232 },
-        ]}
-      >
-        {log ? (
-          <Fragment>
-            <View className="my-4 w-full flex-row items-center justify-between gap-2">
-              <Text className="font-sans-medium text-lg text-gray-300">{t('copySwapLog')}</Text>
+      <Skeleton.Root loading={isLoading} className="w-full flex-1">
+        <Skeleton.Group>
+          <Skeleton.Item />
+        </Skeleton.Group>
 
-              <TwIconButton
-                aria-label={tCommon('copy')}
-                size="sm"
-                icon={<TbCopy aria-hidden className="text-neon" />}
-                onPress={() => ClipboardHelper.write(log)}
-              />
-            </View>
-
+        <Skeleton.Content className="w-full flex-1 rounded-lg bg-gray-900/75 p-4">
+          {log ? (
             <ScrollView
-              contentContainerClassName="w-full flex-grow p-4 rounded bg-gray-900/75"
+              className="w-full flex-1"
               alwaysBounceVertical={false}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
@@ -74,11 +59,20 @@ export const SwapDetailsLogModal = ({ route }: TRootStackScreenProps<'SwapDetail
             >
               <Text className="font-sans-regular text-sm text-white">{log}</Text>
             </ScrollView>
-          </Fragment>
-        ) : (
-          <Text className="text-center font-sans-medium text-lg text-gray-300">{t('thereIsNoLog')}</Text>
-        )}
-      </TwSkeleton>
+          ) : (
+            <Text className="text-center font-sans-medium text-lg text-gray-300">{t('thereIsNoLog')}</Text>
+          )}
+        </Skeleton.Content>
+      </Skeleton.Root>
+
+      <TwButton
+        variant="contained-light"
+        className="mt-6"
+        label={t('copySwapLog')}
+        rightElement={<TbCopy aria-hidden />}
+        disabled={!log}
+        onPress={() => ClipboardHelper.write(log ?? '')}
+      />
     </TwModalLayout>
   )
 }

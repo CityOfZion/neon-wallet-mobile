@@ -4,7 +4,7 @@ import type { TTransactionNftEvent } from '@cityofzion/blockchain-service'
 import { Image } from 'expo-image'
 import { Text, View } from 'react-native'
 
-import { TwSkeleton } from '@/components/TwSkeleton'
+import { Skeleton } from '@/components/Skeleton'
 
 import { useNftQuery } from '@/hooks/useNftsQuery'
 
@@ -19,24 +19,23 @@ export const AccountTransactionsScreenTransferNFTItem = ({ account, event }: TPr
   const { data, isLoading } = useNftQuery(account.blockchain, event.tokenHash, event.collectionHash)
 
   return (
-    <View className="mt-4 flex-row items-center gap-2.5">
-      <TwSkeleton
-        isLoading={isLoading}
-        layout={[
-          { width: 28, height: 28 },
-          { width: 128, height: 36 },
-        ]}
-        className="flex-row"
-      >
+    <Skeleton.Root loading={isLoading} className="mt-4 items-start gap-2.5">
+      <Skeleton.Group className="flex-row">
+        <Skeleton.Item className="size-7" />
+        <Skeleton.Item className="h-9 w-32" />
+      </Skeleton.Group>
+
+      <Skeleton.Content className="flex-row gap-2.5">
         {data?.image && (
           <Image contentFit="contain" className="h-7 w-7 rounded bg-gray-800" source={{ uri: data.image }} />
         )}
 
         <View>
-          {data?.name && <Text className="font-sans-regular text-sm text-white">{data.name}</Text>}
+          {data?.name && <Text className="font-sans-regular text-sm capitalize text-white">{data.name}</Text>}
+
           <View className="flex-row">
             {data?.collection?.name && (
-              <Text className="max-w-14 text-xs text-gray-300" numberOfLines={1}>
+              <Text className="max-w-14 font-sans-regular text-xs text-gray-300" numberOfLines={1}>
                 {`${data.collection.name} - `}
               </Text>
             )}
@@ -46,7 +45,7 @@ export const AccountTransactionsScreenTransferNFTItem = ({ account, event }: TPr
             </Text>
           </View>
         </View>
-      </TwSkeleton>
-    </View>
+      </Skeleton.Content>
+    </Skeleton.Root>
   )
 }

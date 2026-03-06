@@ -4,10 +4,7 @@ import { useTranslation } from 'react-i18next'
 import type { ListRenderItem } from 'react-native'
 import { FlatList, Text, View } from 'react-native'
 
-import { TwSkeleton } from '@/components/TwSkeleton'
-
 import { useAccountsSelector } from '@/hooks/useAccountSelector'
-import { useMount } from '@/hooks/useMount'
 import { useWalletsSelector } from '@/hooks/useWalletSelector'
 
 import { TwModalLayout } from '@/layouts/TwModalLayout'
@@ -39,8 +36,6 @@ export const BuyAndSellTokensAccountsModal = () => {
     [wallets, accounts]
   )
 
-  const { isMounting } = useMount(() => {}, [])
-
   return (
     <TwModalLayout
       title={t('title')}
@@ -51,29 +46,18 @@ export const BuyAndSellTokensAccountsModal = () => {
     >
       {data.length !== 0 && <Text className="mx-3 mb-4 font-sans-regular text-lg text-white">{t('description')}</Text>}
 
-      <TwSkeleton
-        className="flex flex-col gap-y-2"
-        isLoading={isMounting}
-        layout={[
-          { width: '100%', height: 46 },
-          { width: '100%', height: 46 },
-          { width: '100%', height: 46 },
-          { width: '100%', height: 46 },
-        ]}
-      >
-        <FlatList
-          data={data}
-          contentContainerClassName="pb-24 gap-y-2"
-          showsVerticalScrollIndicator={false}
-          keyExtractor={({ wallet }) => wallet.id}
-          renderItem={renderItem}
-          ListEmptyComponent={
-            <View className="mt-2 flex w-full items-center justify-center rounded-lg bg-asphalt/50 p-4">
-              <Text className="text-center font-sans-medium text-sm text-white">{t('labels.emptyList')}</Text>
-            </View>
-          }
-        />
-      </TwSkeleton>
+      <FlatList
+        data={data}
+        contentContainerClassName="pb-24 gap-y-2"
+        showsVerticalScrollIndicator={false}
+        keyExtractor={({ wallet }) => wallet.id}
+        renderItem={renderItem}
+        ListEmptyComponent={
+          <View className="mt-2 flex w-full items-center justify-center rounded-lg bg-asphalt/50 p-4">
+            <Text className="text-center font-sans-medium text-sm text-white">{t('labels.emptyList')}</Text>
+          </View>
+        }
+      />
     </TwModalLayout>
   )
 }

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { Text } from 'react-native'
 
-import { TwSkeleton } from '@/components/TwSkeleton'
+import { Skeleton } from '@/components/Skeleton'
 
 import { useBlockHeightQuery } from '@/hooks/useBlockHeightQuery'
 
@@ -17,18 +17,18 @@ export const AccountScreenTitle = ({ account: { blockchain } }: TProps) => {
   const { data, isLoading } = useBlockHeightQuery(blockchain)
 
   return (
-    <TwSkeleton
-      isLoading={isLoading}
-      className="mx-auto -mt-4 flex items-center justify-center"
-      layout={{ width: 100, height: 40 }}
-    >
-      <View className="-mt-4 flex w-full flex-col items-center justify-center">
+    <Skeleton.Root loading={isLoading}>
+      <Skeleton.Group>
+        <Skeleton.Item className="h-10 w-30" />
+      </Skeleton.Group>
+
+      <Skeleton.Content className="flex w-full flex-col items-center justify-center">
         <Text className="text-center font-sans-regular text-1xs uppercase text-gray-300">
           {t('blockHeightTitle', { blockchain: tCommonBlockchainServices(`${blockchain}.label`) })}
         </Text>
 
         <Text className="text-center font-sans-medium text-lg text-white">{data}</Text>
-      </View>
-    </TwSkeleton>
+      </Skeleton.Content>
+    </Skeleton.Root>
   )
 }
