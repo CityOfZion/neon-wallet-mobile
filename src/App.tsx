@@ -19,6 +19,7 @@ import { NativeWindHelper } from './helpers/NativeWindHelper'
 import { ReactNavigationHelper } from './helpers/ReactNavigationHelper'
 import { ReactQueryHelper } from './helpers/ReactQueryHelper'
 import { ReduxHelper } from './helpers/ReduxHelper'
+import { SentryHelper } from './helpers/SentryHelper'
 import { WalletKitHelper } from './helpers/WalletKitHelper'
 import { useMount } from './hooks/useMount'
 import { RootStack } from './routes/stacks/RootStack'
@@ -43,8 +44,9 @@ export const App = () => {
 
   useMount(async () => {
     try {
-      await Promise.allSettled([
-        EnvHelper.setup(),
+      await EnvHelper.setup()
+      await Promise.all([
+        SentryHelper.setup(),
         I18nextHelper.setup(),
         BlockchainServiceHelper.setup(),
         NativeWindHelper.setup(),
