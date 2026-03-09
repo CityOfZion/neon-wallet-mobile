@@ -39,7 +39,7 @@ export const AccountAccordionItem = ({ account }: TProps) => {
 
         <View className="mt-1 flex flex-row items-center gap-1.5">
           <Text
-            className="w-full max-w-[50%] font-sans-regular text-base text-gray-100"
+            className="w-full max-w-[64%] font-sans-regular text-base text-gray-100"
             ellipsizeMode="middle"
             numberOfLines={1}
           >
@@ -56,13 +56,13 @@ export const AccountAccordionItem = ({ account }: TProps) => {
         </View>
       </View>
 
-      <Skeleton.Root loading={isLoading} className="h-6 w-14">
+      <Skeleton.Root loading={isLoading} className="h-6 w-16">
         <Skeleton.Group>
           <Skeleton.Item />
         </Skeleton.Group>
 
         <Skeleton.Content>
-          <Text className="font-sans-regular text-lg text-white">
+          <Text className="font-sans-regular text-lg text-white" numberOfLines={1}>
             {CurrencyHelper.format(data?.exchangeTotal ?? 0, { currency })}
           </Text>
         </Skeleton.Content>
