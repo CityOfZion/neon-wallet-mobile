@@ -6,44 +6,52 @@ import { TouchableOpacity } from 'react-native'
 
 import { StyleHelper } from '@/helpers/StyleHelper'
 
-type TTwSize = 'xs' | 'sm' | 'md'
+import { PressableScale } from './PressableScale'
+
+type TTwIconButtonSize = 'xs' | 'sm' | 'md'
+type TTwIconButtonAnimation = 'opacity' | 'scale'
 
 export type TTwIconButtonProps = TouchableHighlightProps & {
   icon: JSX.Element
-  size?: TTwSize
+  size?: TTwIconButtonSize
+  animation?: TTwIconButtonAnimation
 }
 
-export const TwIconButton = forwardRef<View, TTwIconButtonProps>(({ icon, size = 'md', className, ...rest }, ref) => {
-  const isXs = size === 'xs'
-  const isSm = size === 'sm'
-  const isMd = size === 'md'
+export const TwIconButton = forwardRef<View, TTwIconButtonProps>(
+  ({ icon, size = 'md', className, animation = 'scale', ...rest }, ref) => {
+    const isXs = size === 'xs'
+    const isSm = size === 'sm'
+    const isMd = size === 'md'
 
-  return (
-    <TouchableOpacity
-      ref={ref}
-      className={StyleHelper.mergeStyles(
-        'items-center justify-center disabled:opacity-50',
-        {
-          'p-1.5': isXs,
-          'p-2': isSm,
-          'p-3': isMd,
-        },
-        className
-      )}
-      {...rest}
-    >
-      {cloneElement(icon, {
-        ...icon.props,
-        className: StyleHelper.mergeStyles(
-          'text-white',
+    const Container = animation === 'scale' ? PressableScale : TouchableOpacity
+
+    return (
+      <Container
+        ref={ref}
+        className={StyleHelper.mergeStyles(
+          'items-center justify-center disabled:opacity-50',
           {
-            'w-3.5 h-3.5': isXs,
-            'w-5 h-5': isSm,
-            'w-6 h-6': isMd,
+            'p-1.5': isXs,
+            'p-2': isSm,
+            'p-3': isMd,
           },
-          icon.props.className
-        ),
-      })}
-    </TouchableOpacity>
-  )
-})
+          className
+        )}
+        {...rest}
+      >
+        {cloneElement(icon, {
+          ...icon.props,
+          className: StyleHelper.mergeStyles(
+            'text-white',
+            {
+              'size-3.5': isXs,
+              'size-5': isSm,
+              'size-6': isMd,
+            },
+            icon.props.className
+          ),
+        })}
+      </Container>
+    )
+  }
+)

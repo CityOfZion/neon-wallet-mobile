@@ -15,8 +15,8 @@ import { useBalances } from '@/hooks/useBalances'
 import { useCurrencySelector } from '@/hooks/useSettingsSelector'
 
 import { PressableScale } from './PressableScale'
+import { Skeleton } from './Skeleton'
 import { TwSeparator } from './TwSeparator'
-import { TwSkeleton } from './TwSkeleton'
 import { TwTokenIcon } from './TwTokenIcon'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
@@ -53,6 +53,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
       onPress={item.onPress ? () => item.onPress?.(item) : undefined}
       onLongPress={item.onLongPress ? () => item.onLongPress?.(item) : undefined}
       disabled={!item.onPress && !item.onLongPress}
+      opacity={1}
     >
       <View className="flex-1 flex-row gap-4">
         <TwTokenIcon
@@ -154,14 +155,13 @@ export const BalanceList = ({ onItemPress, onItemLongPress, accounts, className,
         ) : undefined
       }
       ListFooterComponent={
-        <TwSkeleton
-          isLoading={balances.isLoading}
-          layout={[
-            { width: '100%', height: 48 },
-            { width: '100%', height: 48 },
-            { width: '100%', height: 48 },
-          ]}
-        />
+        <Skeleton.Root loading={balances.isLoading}>
+          <Skeleton.Group>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <Skeleton.Item key={`balance-skeleton-${index}`} className="h-12 w-full rounded-md" />
+            ))}
+          </Skeleton.Group>
+        </Skeleton.Root>
       }
       {...props}
     />

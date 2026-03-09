@@ -1,13 +1,13 @@
-import { cloneElement, useMemo, useRef } from 'react'
+import { cloneElement, type RefObject, useMemo, useRef } from 'react'
 
 import type { TVoteServiceCandidate } from '@cityofzion/bs-neo3'
 import { useNavigation } from '@react-navigation/native'
-import type { MutableRefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DimensionValue, ListRenderItem } from 'react-native'
 import { FlatList, Text, TouchableWithoutFeedback, View } from 'react-native'
-import { match, P } from 'ts-pattern'
+import { match } from 'ts-pattern'
 
+import { Skeleton } from '@/components/Skeleton'
 import { TwButton } from '@/components/TwButton'
 import { TwDashedSeparator } from '@/components/TwDashedSeparator'
 
@@ -25,7 +25,6 @@ import TbAlertTriangleFilled from '@/assets/images/tb-filled-alert-triangle.svg'
 import TbPackages from '@/assets/images/tb-packages.svg'
 
 import { VoteNeo3ListNotFound } from './VoteNeo3ListNotFound'
-import { VoteNeo3ListSkeleton } from './VoteNeo3ListSkeleton'
 
 import type { IAccountState } from '@/types/store'
 
@@ -45,7 +44,7 @@ type TProps = {
   search: string
   voteErrorMessage?: string
   canVote: boolean
-  canScrollToCandidateRef: MutableRefObject<boolean>
+  canScrollToCandidateRef: RefObject<boolean>
 }
 
 const { t } = I18nextHelper.get()
@@ -281,46 +280,61 @@ export const VoteNeo3List = ({ neo3Account, search, voteErrorMessage, canVote, c
   }, [neo3Account, currentCandidatePubKey, filteredCandidates])
 
   return (
-    <FlatList
-      ref={listRef}
-      role="list"
-      className="mb-2 flex w-full flex-col"
-      data={items}
-      keyExtractor={({ candidate }) => candidate.pubKey}
-      showsVerticalScrollIndicator={false}
-      renderItem={renderItem}
-      ListHeaderComponent={match({ isLoading, candidates: filteredCandidates })
-        .with({ isLoading: true }, () => <VoteNeo3ListSkeleton />)
-        .with({ candidates: P.when(value => value.length === 0) }, () => <VoteNeo3ListNotFound />)
-        .otherwise(() => (
-          <View aria-hidden className="mb-2 flex w-full flex-row items-center">
-            <Text
-              className="flex w-16 min-w-16 max-w-16 flex-row items-center pr-1 font-sans-bold text-xs uppercase text-gray-100"
-              role="columnheader"
-              id="column-position"
-            >
-              {t('positionColumnLabel')}
-            </Text>
+    <Skeleton.Root loading={isLoading} className="w-full">
+      <Skeleton.Group>
+        <Skeleton.Item className="h-7 w-full" />
+        <Skeleton.Item className="h-10 w-full" />
 
-            <Text
-              className="flex flex-grow flex-row items-center font-sans-bold text-xs uppercase text-gray-100"
-              role="columnheader"
-              id="column-name"
-            >
-              {t('nameColumnLabel')}
-            </Text>
+        <TwDashedSeparator className="my-2" />
 
-            <View
-              className="flex w-20 min-w-20 max-w-20 flex-row items-center gap-x-2 pl-1"
-              role="columnheader"
-              id="column-vote"
-            >
-              <Text className="font-sans-bold text-xs uppercase text-gray-100">{t('voteColumnLabel')}</Text>
-
-              {!!voteErrorMessage && <TbAlertTriangleFilled aria-hidden className="h-4 w-4 text-pink" />}
-            </View>
-          </View>
+        {Array.from({ length: 16 }).map((_, index) => (
+          <Skeleton.Item key={`vote-neo3-list-skeleton-${index}`} className="h-10 w-full" />
         ))}
-    />
+      </Skeleton.Group>
+
+      <Skeleton.Content>
+        <FlatList
+          ref={listRef}
+          role="list"
+          className="mb-2 flex w-full flex-col"
+          data={items}
+          keyExtractor={({ candidate }) => candidate.pubKey}
+          showsVerticalScrollIndicator={false}
+          renderItem={renderItem}
+          ListEmptyComponent={VoteNeo3ListNotFound}
+          ListHeaderComponent={
+            items.length > 0 ? (
+              <View aria-hidden className="mb-2 flex w-full flex-row items-center">
+                <Text
+                  className="flex w-16 min-w-16 max-w-16 flex-row items-center pr-1 font-sans-bold text-xs uppercase text-gray-100"
+                  role="columnheader"
+                  id="column-position"
+                >
+                  {t('positionColumnLabel')}
+                </Text>
+
+                <Text
+                  className="flex flex-grow flex-row items-center font-sans-bold text-xs uppercase text-gray-100"
+                  role="columnheader"
+                  id="column-name"
+                >
+                  {t('nameColumnLabel')}
+                </Text>
+
+                <View
+                  className="flex w-20 min-w-20 max-w-20 flex-row items-center gap-x-2 pl-1"
+                  role="columnheader"
+                  id="column-vote"
+                >
+                  <Text className="font-sans-bold text-xs uppercase text-gray-100">{t('voteColumnLabel')}</Text>
+
+                  {!!voteErrorMessage && <TbAlertTriangleFilled aria-hidden className="size-4 text-pink" />}
+                </View>
+              </View>
+            ) : null
+          }
+        />
+      </Skeleton.Content>
+    </Skeleton.Root>
   )
 }

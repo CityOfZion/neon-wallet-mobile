@@ -6,11 +6,11 @@ import { Text, View } from 'react-native'
 import { match } from 'ts-pattern'
 
 import { Details } from '@/components/Details'
+import { Skeleton } from '@/components/Skeleton'
 import { TwAlertErrorBanner } from '@/components/TwAlertErrorBanner'
 import { TwBlockchainIcon } from '@/components/TwBlockchainIcon'
 import { TwButton } from '@/components/TwButton'
 import { TwDashedSeparator } from '@/components/TwDashedSeparator'
-import { TwSkeleton } from '@/components/TwSkeleton'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
@@ -211,35 +211,51 @@ export const VoteNeo3ConfirmationModal = ({
           isLoading={isDataLoading}
         />
 
-        <TwSkeleton isLoading={isCalculateVoteFeeLoading} layout={{ width: '100%', height: 68 }}>
-          <Details.Root className="bg-asphalt/50">
-            <Details.Body>
-              <Details.Item
-                label={<VoteNeo3ConfirmationDetailsLabel>{t('detailsFeeLabel')}</VoteNeo3ConfirmationDetailsLabel>}
-                description={CurrencyHelper.format(
-                  exchangeQuery.convertAmount(fee ?? 0, service.feeToken.hash, service.name),
-                  { currency, maximumFractionDigits: 3, showZero: false }
-                )}
-              >
-                <View className="flex-row items-center">
-                  <TwBlockchainIcon blockchain={neo3Account.blockchain} type="gray" className="mr-2 mt-0.5 size-3.5" />
-                  <Text className="font-sans-regular text-base text-white">{service.feeToken.name}</Text>
-                </View>
+        <Details.Root className="bg-asphalt/50">
+          <Details.Body>
+            <Details.Item
+              label={<VoteNeo3ConfirmationDetailsLabel>{t('detailsFeeLabel')}</VoteNeo3ConfirmationDetailsLabel>}
+              description={
+                <Skeleton.Root loading={isCalculateVoteFeeLoading}>
+                  <Skeleton.Group>
+                    <Skeleton.Item className="h-5 w-24" />
+                  </Skeleton.Group>
+                  <Skeleton.Content>
+                    <Text className="font-sans-medium text-sm uppercase text-gray-100" accessibilityRole="text">
+                      {CurrencyHelper.format(
+                        exchangeQuery.convertAmount(fee ?? 0, service.feeToken.hash, service.name),
+                        { currency, maximumFractionDigits: 3, showZero: false }
+                      )}
+                    </Text>
+                  </Skeleton.Content>
+                </Skeleton.Root>
+              }
+            >
+              <View className="flex-row items-center">
+                <TwBlockchainIcon blockchain={neo3Account.blockchain} type="gray" className="mr-2 mt-0.5 size-3.5" />
+                <Text className="font-sans-regular text-base text-white">{service.feeToken.name}</Text>
+              </View>
 
-                <Text className="font-sans-medium text-base text-white">{fee}</Text>
-              </Details.Item>
-            </Details.Body>
-          </Details.Root>
+              <Skeleton.Root loading={isCalculateVoteFeeLoading}>
+                <Skeleton.Group>
+                  <Skeleton.Item className="h-5 w-30" />
+                </Skeleton.Group>
+                <Skeleton.Content>
+                  <Text className="font-sans-medium text-base text-white">{fee}</Text>
+                </Skeleton.Content>
+              </Skeleton.Root>
+            </Details.Item>
+          </Details.Body>
+        </Details.Root>
 
-          {!!voteErrorMessage && (
-            <TwAlertErrorBanner
-              className="w-full gap-x-3 px-4"
-              iconClassName="text-pink"
-              messageClassName="text-lg font-sans-regular"
-              message={voteErrorMessage}
-            />
-          )}
-        </TwSkeleton>
+        {!!voteErrorMessage && (
+          <TwAlertErrorBanner
+            className="w-full gap-x-3 px-4"
+            iconClassName="text-pink"
+            messageClassName="text-lg font-sans-regular"
+            message={voteErrorMessage}
+          />
+        )}
 
         <TwButton
           label={t('castVoteButtonLabel')}

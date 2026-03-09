@@ -2,9 +2,9 @@ import React, { Fragment } from 'react'
 
 import { Text, View } from 'react-native'
 
+import { Skeleton } from '@/components/Skeleton'
 import { TwAccordion } from '@/components/TwAccordion'
 import { TwSeparator } from '@/components/TwSeparator'
-import { TwSkeleton } from '@/components/TwSkeleton'
 
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
 
@@ -37,11 +37,17 @@ export const WalletAccordionItem = ({ wallet, accounts, defaultOpened }: TProps)
               {wallet.name}
             </Text>
 
-            <TwSkeleton isLoading={isLoading} layout={{ width: 64, height: 24 }}>
-              <Text className="font-sans-regular text-gray-100" numberOfLines={1}>
-                {CurrencyHelper.format(exchangeTotal, { currency })}
-              </Text>
-            </TwSkeleton>
+            <Skeleton.Root loading={isLoading} className="h-6 w-16 justify-center">
+              <Skeleton.Group>
+                <Skeleton.Item />
+              </Skeleton.Group>
+
+              <Skeleton.Content>
+                <Text className="font-sans-regular text-gray-100" numberOfLines={1}>
+                  {CurrencyHelper.format(exchangeTotal, { currency })}
+                </Text>
+              </Skeleton.Content>
+            </Skeleton.Root>
           </Fragment>
         }
       />

@@ -6,8 +6,8 @@ import { Text, View } from 'react-native'
 import { AccountSubTitle } from '@/components/AccountSubTitle'
 import { BalanceList } from '@/components/BalanceList'
 import { RefreshControl } from '@/components/RefreshControl'
+import { Skeleton } from '@/components/Skeleton'
 import { TwIconButton } from '@/components/TwIconButton'
-import { TwSkeleton } from '@/components/TwSkeleton'
 import { TwTabs } from '@/components/TwTabs'
 
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
@@ -83,11 +83,17 @@ const AccountAssetScreen = ({ route, navigation }: TWalletsStackScreenProps<'Acc
                   {t('balanceLabel')}
                 </Text>
 
-                <TwSkeleton isLoading={balanceQuery.isLoading} layout={{ width: 200, height: 40 }} className="mt-2">
-                  <Text className="font-sans-regular text-4xl text-white" numberOfLines={1}>
-                    {CurrencyHelper.format(balanceQuery.data?.exchangeTotal, { currency })}
-                  </Text>
-                </TwSkeleton>
+                <Skeleton.Root loading={balanceQuery.isLoading} className="mt-2 h-9 items-center">
+                  <Skeleton.Group>
+                    <Skeleton.Item className="w-24" />
+                  </Skeleton.Group>
+
+                  <Skeleton.Content>
+                    <Text className="font-sans-regular text-4xl text-white" numberOfLines={1}>
+                      {CurrencyHelper.format(balanceQuery.data?.exchangeTotal, { currency })}
+                    </Text>
+                  </Skeleton.Content>
+                </Skeleton.Root>
 
                 <Text className="mt-1 font-sans-regular text-xs text-gray-300">{`${t('lastUpdatedLabel')} ${DateHelper.formatLocalized(balanceQuery.dataUpdatedAt, { format: 'p', language })}`}</Text>
               </View>

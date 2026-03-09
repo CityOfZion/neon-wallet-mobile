@@ -6,9 +6,8 @@ import { SectionList, Text } from 'react-native'
 
 import { AccountSubTitle } from '@/components/AccountSubTitle'
 import { FlatListEmpty } from '@/components/FlatListEmpty'
-import { FlatListFooter } from '@/components/FlatListFooter'
 import { RefreshControl } from '@/components/RefreshControl'
-import { ScreenLoader } from '@/components/ScreenLoader'
+import { Skeleton } from '@/components/Skeleton'
 
 import { StyleHelper } from '@/helpers/StyleHelper'
 
@@ -75,25 +74,31 @@ const AccountTransactionsScreen = (props: TWalletsStackScreenProps<'AccountTrans
     >
       <AccountSubTitle account={account} />
 
-      {isLoading ? (
-        <ScreenLoader />
-      ) : (
-        <SectionList
-          stickySectionHeadersEnabled={false}
-          className="mt-2 w-full"
-          contentContainerClassName="pb-4.5 flex-grow"
-          sections={aggregatedData}
-          ListFooterComponent={isFetchingNextPage ? <FlatListFooter /> : undefined}
-          ListEmptyComponent={<FlatListEmpty label={t('emptyList')} />}
-          onEndReached={handleEndReached}
-          onMomentumScrollBegin={handleMomentumScrollBegin}
-          renderSectionHeader={renderSectionHeader}
-          showsVerticalScrollIndicator={false}
-          onEndReachedThreshold={0.5}
-          refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
-          renderItem={renderItem}
-        />
-      )}
+      <SectionList
+        stickySectionHeadersEnabled={false}
+        className="mt-2 w-full"
+        contentContainerClassName="pb-4.5 flex-grow"
+        sections={aggregatedData}
+        ListFooterComponent={
+          isLoading || isFetchingNextPage ? (
+            <Skeleton.Root className="mt-2.5">
+              <Skeleton.Group>
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <Skeleton.Item key={`transaction-skeleton-${index}`} className="h-52 w-full" />
+                ))}
+              </Skeleton.Group>
+            </Skeleton.Root>
+          ) : undefined
+        }
+        ListEmptyComponent={!isLoading ? <FlatListEmpty label={t('emptyList')} /> : undefined}
+        onEndReached={handleEndReached}
+        onMomentumScrollBegin={handleMomentumScrollBegin}
+        renderSectionHeader={renderSectionHeader}
+        showsVerticalScrollIndicator={false}
+        onEndReachedThreshold={0.5}
+        refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+        renderItem={renderItem}
+      />
     </TwScreenLayout>
   )
 }

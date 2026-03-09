@@ -12,22 +12,28 @@ import { StyleHelper } from '@/helpers/StyleHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
 
 import { Loader } from './Loader'
+import { PressableScale } from './PressableScale'
 
-type TButtonVariant = 'text' | 'text-slim' | 'contained' | 'outline' | 'contained-light' | 'contained-darker' | 'card'
+type TTwButtonVariant = 'text' | 'text-slim' | 'contained' | 'outline' | 'contained-light' | 'contained-darker' | 'card'
+
+type TTwButtonColorSchema = 'neon' | 'pink' | 'white' | 'gray'
+
+type TTwButtonAnimation = 'opacity' | 'scale'
 
 export type TTwButtonProps = Omit<TouchableOpacityProps, 'style' | 'children' | 'onPress'> & {
   leftElement?: JSX.Element
   rightElement?: JSX.Element
   label?: ReactNode
   onPress?: ((event: GestureResponderEvent) => void) | ((event: GestureResponderEvent) => Promise<void>)
-  variant?: TButtonVariant
+  variant?: TTwButtonVariant
   disabled?: boolean
   iconsOnEdge?: boolean
   isLoading?: boolean
   contentProps?: ViewProps
   labelProps?: TextProps
   style?: ViewStyle
-  colorSchema?: 'neon' | 'pink' | 'white' | 'gray'
+  colorSchema?: TTwButtonColorSchema
+  animation?: TTwButtonAnimation
 }
 
 type TBaseProps = TTwButtonProps & {
@@ -158,6 +164,7 @@ const BaseButton = ({
   className,
   style,
   colorSchema,
+  animation,
   ...rest
 }: TBaseProps) => {
   const isDisabled = disabled || isLoading
@@ -180,14 +187,14 @@ const BaseButton = ({
     isPressing.current = false
   }
 
+  const Container = animation === 'opacity' ? TouchableOpacity : PressableScale
+
   return (
-    <TouchableOpacity
+    <Container
       onPress={handlePress}
       className={StyleHelper.mergeStyles(
         'h-[52px] flex-row items-center justify-center overflow-hidden rounded-lg',
-        {
-          'opacity-50': isDisabled,
-        },
+        { 'opacity-50': isDisabled },
         className
       )}
       disabled={isDisabled}
@@ -268,17 +275,18 @@ const BaseButton = ({
           </Fragment>
         )}
       </View>
-    </TouchableOpacity>
+    </Container>
   )
 }
 
 export const TwButton = (props: TTwButtonProps) => {
-  const { colorSchema = 'neon', variant = 'contained', ...rest } = props
+  const { colorSchema = 'neon', variant = 'contained', animation = 'scale', ...rest } = props
 
   const fixedProps: TTwButtonProps = {
     ...rest,
     colorSchema,
     variant,
+    animation,
   }
 
   return match(props.variant)

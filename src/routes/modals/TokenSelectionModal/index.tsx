@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next'
 import type { ListRenderItem } from 'react-native'
 import { FlatList, Pressable, Text, View } from 'react-native'
 
+import { Skeleton } from '@/components/Skeleton'
 import { TokenSelectionTokenIcon } from '@/components/TokenSelectionTokenIcon'
 import { TwInput } from '@/components/TwInput'
-import { TwSkeleton } from '@/components/TwSkeleton'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { NumberHelper } from '@/helpers/NumberHelper'
@@ -134,42 +134,38 @@ export const TokenSelectionModal = ({ navigation, route }: TRootStackScreenProps
         autoCapitalize="none"
       />
 
-      <TwSkeleton
-        isLoading={isLoading}
-        className="mt-9 flex-grow"
-        layout={[
-          { width: '100%', height: 48 },
-          { width: '100%', height: 48 },
-          { width: '100%', height: 48 },
-          { width: '100%', height: 48 },
-          { width: '100%', height: 48 },
-          { width: '100%', height: 48 },
-          { width: '100%', height: 48 },
-        ]}
-      >
-        <FlatList
-          data={filteredTokensByText}
-          className="mt-9"
-          keyExtractor={(item, index) => `${item.symbol}-${index}`}
-          renderItem={renderItem}
-          getItemLayout={(_data, index) => ({ length: 52, offset: 52 * index, index })}
-          removeClippedSubviews
-          initialNumToRender={15}
-          showsVerticalScrollIndicator={false}
-          windowSize={11}
-          ListHeaderComponent={
-            filteredTokensByText.length > 0 ? (
-              <View className="flex-row justify-between px-4.5 pb-4">
-                <Text className="font-sans-bold text-sm text-gray-300">{t('tokenLabel')}</Text>
-                {!hideBalance && <Text className="font-sans-bold text-sm text-gray-300">{t('balanceLabel')}</Text>}
-              </View>
-            ) : undefined
-          }
-          ListEmptyComponent={
-            <Text className="mt-5 text-center font-sans-medium text-lg text-white">{t('emptyList')}</Text>
-          }
-        />
-      </TwSkeleton>
+      <Skeleton.Root loading={isLoading} className="mt-9">
+        <Skeleton.Group>
+          {Array.from({ length: 6 }).map((_, index) => (
+            <Skeleton.Item key={`token-skeleton-${index}`} className="h-12 w-full rounded-md" />
+          ))}
+        </Skeleton.Group>
+
+        <Skeleton.Content>
+          <FlatList
+            className="w-full"
+            data={filteredTokensByText}
+            keyExtractor={(item, index) => `${item.symbol}-${index}`}
+            renderItem={renderItem}
+            getItemLayout={(_data, index) => ({ length: 52, offset: 52 * index, index })}
+            removeClippedSubviews
+            initialNumToRender={15}
+            showsVerticalScrollIndicator={false}
+            windowSize={11}
+            ListHeaderComponent={
+              filteredTokensByText.length > 0 ? (
+                <View className="flex-row justify-between px-4.5">
+                  <Text className="font-sans-bold text-sm text-gray-300">{t('tokenLabel')}</Text>
+                  {!hideBalance && <Text className="font-sans-bold text-sm text-gray-300">{t('balanceLabel')}</Text>}
+                </View>
+              ) : undefined
+            }
+            ListEmptyComponent={
+              <Text className="mt-5 text-center font-sans-medium text-lg text-white">{t('emptyList')}</Text>
+            }
+          />
+        </Skeleton.Content>
+      </Skeleton.Root>
     </TwModalLayout>
   )
 }

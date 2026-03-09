@@ -19,9 +19,9 @@ import TbCopy from '@/assets/images/tb-copy.svg'
 import TbBinocularsFilled from '@/assets/images/tb-filled-binoculars.svg'
 import TbQrcode from '@/assets/images/tb-qrcode.svg'
 
+import { Skeleton } from '../Skeleton'
 import { TwBlockchainIcon } from '../TwBlockchainIcon'
 import { TwIconButton } from '../TwIconButton'
-import { TwSkeleton } from '../TwSkeleton'
 import type { TAccountCardNoContentProps } from './AccountCardNoContent'
 import { ACCOUNT_CARD_HEIGHT, ACCOUNT_CARD_WIDTH, AccountCardNoContent } from './AccountCardNoContent'
 
@@ -114,11 +114,17 @@ const AccountCardComponent = ({
           {isCompacted || isStack ? (
             <Fragment>
               {!hideBalance && (
-                <TwSkeleton isLoading={balance.isLoading} layout={{ width: 64, height: 24 }}>
-                  <Text className="font-sans-regular text-lg text-white" numberOfLines={1}>
-                    {CurrencyHelper.format(balance.data?.exchangeTotal, { currency })}
-                  </Text>
-                </TwSkeleton>
+                <Skeleton.Root loading={balance.isLoading}>
+                  <Skeleton.Group>
+                    <Skeleton.Item className="h-6 w-16" />
+                  </Skeleton.Group>
+
+                  <Skeleton.Content>
+                    <Text className="font-sans-regular text-lg text-white" numberOfLines={1}>
+                      {CurrencyHelper.format(balance.data?.exchangeTotal, { currency })}
+                    </Text>
+                  </Skeleton.Content>
+                </Skeleton.Root>
               )}
             </Fragment>
           ) : (
@@ -147,11 +153,17 @@ const AccountCardComponent = ({
             <View className="gap-1">
               <Text className="font-sans-bold text-sm uppercase text-white/60">{t('balance')}</Text>
 
-              <TwSkeleton isLoading={balance.isLoading} layout={{ width: 144, height: 48 }}>
-                <Text className="font-sans-regular text-5xl text-white" numberOfLines={1}>
-                  {CurrencyHelper.format(balance.data?.exchangeTotal, { currency })}
-                </Text>
-              </TwSkeleton>
+              <Skeleton.Root loading={balance.isLoading}>
+                <Skeleton.Group>
+                  <Skeleton.Item className="h-12 w-32 rounded-md" />
+                </Skeleton.Group>
+
+                <Skeleton.Content>
+                  <Text className="font-sans-regular text-5xl text-white" numberOfLines={1}>
+                    {CurrencyHelper.format(balance.data?.exchangeTotal, { currency })}
+                  </Text>
+                </Skeleton.Content>
+              </Skeleton.Root>
             </View>
           </View>
         )}

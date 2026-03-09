@@ -3,7 +3,7 @@ import React from 'react'
 import { BSBigNumberHelper, type TTransactionTokenEvent } from '@cityofzion/blockchain-service'
 import { Text, View } from 'react-native'
 
-import { TwSkeleton } from '@/components/TwSkeleton'
+import { Skeleton } from '@/components/Skeleton'
 import { TwTokenIcon } from '@/components/TwTokenIcon'
 
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
@@ -51,11 +51,17 @@ export const AccountTransactionsScreenTransferAssetItem = ({ account, event }: T
         {event.amount}
       </Text>
 
-      <TwSkeleton isLoading={exchange.isLoading} layout={{ width: 56, height: 24 }}>
-        <Text className="max-w-28 text-right font-sans-regular text-lg text-white" numberOfLines={1}>
-          {fiatAmountFormatted}
-        </Text>
-      </TwSkeleton>
+      <Skeleton.Root loading={exchange.isLoading}>
+        <Skeleton.Group>
+          <Skeleton.Item className="h-6 w-14" />
+        </Skeleton.Group>
+
+        <Skeleton.Content>
+          <Text className="max-w-28 text-right font-sans-regular text-lg text-white" numberOfLines={1}>
+            {fiatAmountFormatted}
+          </Text>
+        </Skeleton.Content>
+      </Skeleton.Root>
     </View>
   )
 }

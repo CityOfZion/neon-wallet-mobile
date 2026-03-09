@@ -1,14 +1,13 @@
 import React, { useMemo } from 'react'
 
 import { View } from 'react-native'
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 
 import { StyleHelper } from '@/helpers/StyleHelper'
 import { TokenHelper } from '@/helpers/TokenHelper'
 
 import { useBalances } from '@/hooks/useBalances'
 
-import { TwSkeleton } from '../TwSkeleton'
+import { Skeleton } from '../Skeleton'
 
 import type { IAccountState } from '@/types/store'
 
@@ -48,20 +47,24 @@ export const WalletCardBalanceBar = React.memo(({ accounts }: TProps) => {
     })
   }, [balances.data, balances.exchangeTotal])
 
-  const loading = balances.isLoading || !bars
+  const isBarsLoading = balances.isLoading || !bars
 
   return (
-    <Animated.View
-      entering={FadeIn}
-      exiting={FadeOut}
-      className={StyleHelper.mergeStyles(
-        'absolute bottom-[40px] left-0 h-2.5 w-[232px] flex-row items-center overflow-hidden rounded-r-full',
-        {
-          'gap-1 bg-gray-700 px-1': !loading,
-        }
-      )}
+    <Skeleton.Root
+      loading={balances.isLoading}
+      className={StyleHelper.mergeStyles('absolute bottom-[40px] left-0 h-2.5 w-[232px] rounded-r-full', {
+        'gap-1 bg-gray-700 px-1': !isBarsLoading,
+      })}
     >
-      <TwSkeleton isLoading={balances.isLoading} layout={{ width: '100%', height: '100%', radius: 'square' }}>
+      <Skeleton.Group className="h-full w-full">
+        <Skeleton.Item className="h-full w-full" />
+      </Skeleton.Group>
+
+      <Skeleton.Content
+        className={StyleHelper.mergeStyles('h-full w-full flex-row', {
+          'gap-1 bg-gray-700 px-1': !isBarsLoading,
+        })}
+      >
         {bars &&
           bars.map((bar, index) => (
             <View
@@ -70,7 +73,7 @@ export const WalletCardBalanceBar = React.memo(({ accounts }: TProps) => {
               style={{ flexGrow: bar.weight, backgroundColor: bar.color }}
             />
           ))}
-      </TwSkeleton>
-    </Animated.View>
+      </Skeleton.Content>
+    </Skeleton.Root>
   )
 })

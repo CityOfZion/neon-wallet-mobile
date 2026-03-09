@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import WebView from 'react-native-webview'
 
+import { Skeleton } from '@/components/Skeleton'
 import { TwButton } from '@/components/TwButton'
-import { TwSkeleton } from '@/components/TwSkeleton'
 
 import { AlertHelper } from '@/helpers/AlertHelper'
 import { BuyAndSellTokensHelper } from '@/helpers/BuyAndSellTokensHelper'
@@ -83,36 +83,36 @@ export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDep
         'fixed top-[-9999px] h-0 max-h-0 min-h-0 w-0 min-w-0 max-w-0': hidden,
       })}
     >
-      {isIframeLoading && (
-        <View className="flex-1">
-          <TwSkeleton
-            isLoading
-            className="flex w-full"
-            layout={{
-              width: '100%',
-              colors: ['#ffffff08', 'transparent'],
-            }}
-          />
-        </View>
-      )}
+      <Skeleton.Root loading={isIframeLoading} className="relative flex-1">
+        <Skeleton.Group>
+          <Skeleton.Item />
+        </Skeleton.Group>
 
-      {hasIframeError ? (
-        <Text className="mt-2 flex-grow px-4 text-center font-sans-regular text-lg text-white">{t('error')}</Text>
-      ) : (
-        <WebView
-          source={{ uri: url }}
-          nestedScrollEnabled
-          originWhitelist={['*']}
-          style={{ flex: 1 }}
-          containerStyle={{
-            ...(isIframeLoading ? { position: 'absolute', top: -9999, height: 0 } : {}),
-          }}
-          onLoad={handleLoad}
-          onError={handleError}
-        />
-      )}
+        <Skeleton.Content
+          forceMount
+          className={StyleHelper.mergeStyles(
+            'flex-1 overflow-hidden rounded-lg border border-gray-300/15 opacity-100',
+            {
+              'absolute left-0 top-0': isIframeLoading,
+            }
+          )}
+        >
+          {hasIframeError ? (
+            <Text className="mt-2 flex-grow px-4 text-center font-sans-regular text-lg text-white">{t('error')}</Text>
+          ) : (
+            <WebView
+              source={{ uri: url }}
+              nestedScrollEnabled
+              containerClassName="h-full w-full"
+              originWhitelist={['*']}
+              onLoad={handleLoad}
+              onError={handleError}
+            />
+          )}
+        </Skeleton.Content>
+      </Skeleton.Root>
 
-      <View className="mb-2 mt-4 flex w-full flex-row items-center justify-between">
+      <View className="mt-4 flex w-full flex-row items-center justify-between">
         <TwButton
           label={t('buttons.back')}
           variant="card"
