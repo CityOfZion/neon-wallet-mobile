@@ -15,16 +15,20 @@ export class SentryHelper {
     })
   }
 
-  static setup(RootComponent: ComponentType<Record<string, unknown>>) {
-    if (__DEV__) {
-      return RootComponent
-    }
+  static setup() {
+    if (__DEV__) return
 
     Sentry.init({
       dsn: EnvHelper.EXPO_PUBLIC_SENTRY_DSN,
       sendDefaultPii: false,
     })
+  }
 
-    return Sentry.wrap(RootComponent)
+  static wrap(Component: ComponentType<Record<string, unknown>>) {
+    if (__DEV__) {
+      return Component
+    }
+
+    return Sentry.wrap(Component)
   }
 }
