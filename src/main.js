@@ -27,4 +27,4 @@ if (typeof Promise.allSettled !== 'function') {
   }
 }
 
-registerRootComponent(SentryHelper.setup(App))
+registerRootComponent(SentryHelper.wrap(App))
