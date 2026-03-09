@@ -32,13 +32,13 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
     <Pressable
       onPress={item.onPress}
       className={StyleHelper.mergeStyles(
-        'h-[52px] flex-row items-center justify-between gap-6 border-l-4 border-transparent pl-3.5 pr-4.5',
+        'h-[52px] flex-row items-center justify-between gap-4 border-l-4 border-transparent pl-3.5 pr-4.5',
         {
           'border-neon bg-gray-900/50': item.isSelected,
         }
       )}
     >
-      <View className="flex-shrink flex-grow flex-row items-center gap-5">
+      <View className="flex-shrink flex-grow flex-row items-center gap-3">
         <TwBlockchainIcon blockchain={item.blockchain} type="gray" className="mt-0.5 h-3.5 w-3.5" />
 
         <Text className="flex-shrink font-sans-medium text-lg text-white" numberOfLines={1} ellipsizeMode="middle">
@@ -46,7 +46,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
         </Text>
       </View>
 
-      <View className="min-w-[50%] flex-shrink flex-row items-center">
+      <View className="min-w-[26%] flex-shrink flex-row items-center">
         <Text className="font-sans-regular text-sm uppercase text-gray-100">{item.name}</Text>
         <Text
           className="flex-shrink font-sans-regular text-sm uppercase text-gray-300"
