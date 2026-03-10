@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 
+import { hasFullTransactions } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import type { SectionListData, SectionListRenderItem } from 'react-native'
 import { SectionList, Text } from 'react-native'
@@ -9,6 +10,7 @@ import { FlatListEmpty } from '@/components/FlatListEmpty'
 import { RefreshControl } from '@/components/RefreshControl'
 import { Skeleton } from '@/components/Skeleton'
 
+import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 import { useTransactionsQuery } from '@/hooks/useTransactionsQuery'
@@ -48,6 +50,9 @@ const AccountTransactionsScreen = (props: TWalletsStackScreenProps<'AccountTrans
 
   const onEndReachedCalledDuringMomentum = useRef(true)
 
+  const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[account.blockchain]
+  const shouldShowExportButton = hasFullTransactions(service)
+
   const handleEndReached = () => {
     if (!onEndReachedCalledDuringMomentum.current && !isFetchingNextPage && !isLoading && !isRefetching) {
       fetchNextPage()
@@ -69,7 +74,11 @@ const AccountTransactionsScreen = (props: TWalletsStackScreenProps<'AccountTrans
     <TwScreenLayout
       title={t('title')}
       withoutScroll
-      rightElement={<TwScreenLayoutButton label={t('exportButtonLabel')} onPress={handleExportPress} />}
+      rightElement={
+        shouldShowExportButton ? (
+          <TwScreenLayoutButton label={t('exportButtonLabel')} onPress={handleExportPress} />
+        ) : undefined
+      }
       contentContainerClassName="pb-0"
     >
       <AccountSubTitle account={account} />
