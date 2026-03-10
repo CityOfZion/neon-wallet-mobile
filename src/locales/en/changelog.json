@@ -1,8 +1,33 @@
 {
   "notes": [
     {
-      "changes": [],
-      "date": "2026-01-27",
+      "changes": [
+        "Solana blockchain support",
+        "Neo X Anti-MEV protection",
+        "Improved onboarding with mandatory mnemonic backup on first access",
+        "Network selection during onboarding",
+        "Support ticket creation directly within the wallet",
+        "Authentication required for actions executed via WalletConnect",
+        "Improved input validation to explicitly allow special characters",
+        "Stronger backup reminders to help secure user assets",
+        "Added buildAddressUrl to ExplorerService to improve routing to external blockchain explorers",
+        "Enhanced WalletConnect stability and improved multi-chain support for Neo N3 and Neo X",
+        "Solana blockchain support",
+        "Neo X Anti-MEV protection",
+        "Improved onboarding with mandatory mnemonic backup on first access",
+        "Network selection during onboarding",
+        "Support ticket creation directly within the wallet",
+        "Authentication required for actions executed via WalletConnect",
+        "Improved input validation to explicitly allow special characters",
+        "Stronger backup reminders to help secure user assets",
+        "Added buildAddressUrl to ExplorerService to improve routing to external blockchain explorers",
+        "Enhanced WalletConnect stability and improved multi-chain support for Neo N3 and Neo X",
+        "Revamped Send screen",
+        "Display unclaimed GAS on watch-only accounts",
+        "Performance improvements for a faster and more responsive UX",
+        "Minor bug fixes"
+      ],
+      "date": "2026-03-10",
       "version": "1.12.0"
     },
     {
