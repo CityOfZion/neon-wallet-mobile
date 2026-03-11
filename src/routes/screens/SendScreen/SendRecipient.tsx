@@ -142,6 +142,7 @@ export const SendRecipient = ({
         <ActionTokenButton
           label={t('selectButtonLabel')}
           isLoading={balance?.isLoading}
+          contentProps={{ className: 'px-3' }}
           token={recipient.token?.token}
           disabled={isDisabled}
           onPress={() =>
@@ -168,6 +169,7 @@ export const SendRecipient = ({
           label={t('selectButtonLabel')}
           address={recipient.address}
           disabled={isDisabled}
+          contentProps={{ className: 'px-3' }}
           isLoading={isValidatingAddressOrDomainAddress}
           onPress={() =>
             navigation.navigate('AddressSelectionModal', {
@@ -194,11 +196,11 @@ export const SendRecipient = ({
           onChangeText={handleChangeAmount}
           editable={!isAmountDisabled}
           containerClassName="justify-end"
-          className="w-24"
+          className="text-md w-24"
           maxButtonProps={{
             isLoading: isLoadingMaxAmount,
             disabled: isAmountDisabled,
-            contentProps: { className: 'w-14' },
+            contentProps: { className: 'w-16' },
             onPress: () => onMaxAmount(recipient),
           }}
         />

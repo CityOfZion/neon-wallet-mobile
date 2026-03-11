@@ -74,3 +74,9 @@ export const useCanShowVoteNeo3SupportUsModalSelector = () => {
 
   return { canShowVoteNeo3SupportUsModal, canShowVoteNeo3SupportUsModalRef }
 }
+
+export const useSurveyInfoSelector = () => {
+  const { ref, value } = useAppSelector(({ settings }) => settings.data.surveyInfo)
+
+  return { surveyInfo: value, surveyInfoRef: ref }
+}

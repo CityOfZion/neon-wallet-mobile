@@ -137,6 +137,7 @@ export function getSettingsMigrations() {
           ...state.data.selectedNetworkByBlockchain,
           solana: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.solana.defaultNetwork,
         },
+        surveyInfo: { status: 'not-submitted', updatedAt: Date.now() },
       },
     }),
   }

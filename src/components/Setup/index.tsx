@@ -13,6 +13,7 @@ const NetworkManagerSetup = LazyHelper.delayedLazy(() => import('./NetworkManage
 const OverTheAirManagerSetup = LazyHelper.delayedLazy(() => import('./OverTheAirManagerSetup'), 5000)
 const AccountTasksManagerSetup = LazyHelper.delayedLazy(() => import('./AccountTasksManagerSetup'), 10000)
 const WalletTasksManagerSetup = LazyHelper.delayedLazy(() => import('./WalletTasksManagerSetup'), 15000)
+const SettingsManagerSetup = LazyHelper.delayedLazy(() => import('./SettingsManagerSetup'), 10000)
 
 export const Setup = () => {
   const { isOnboardingCompleted } = useIsOnboardingCompletedSelector()
@@ -41,6 +42,10 @@ export const Setup = () => {
 
       <Suspense fallback={null}>
         <WalletTasksManagerSetup />
+      </Suspense>
+
+      <Suspense>
+        <SettingsManagerSetup />
       </Suspense>
     </Fragment>
   )

@@ -11,7 +11,7 @@ import { LanguageHelper } from '@/helpers/LanguageHelper'
 import { getSettingsMigrations } from './migrations'
 import { settingsSliceReducers } from './reducers'
 
-import type { TCurrency, TCustomNetwork, TLanguage, TSecurity, TSelectedNetworks } from '@/types/store'
+import type { TCurrency, TCustomNetwork, TLanguage, TSecurity, TSelectedNetworks, TSurveyInfo } from '@/types/store'
 
 export interface ISettingsReducer {
   data: {
@@ -23,6 +23,7 @@ export interface ISettingsReducer {
     selectedNetworkByBlockchain: TSelectedNetworks
     language: TLanguage
     canShowVoteNeo3SupportUsModal: boolean
+    surveyInfo: TSurveyInfo
   }
 }
 
@@ -59,6 +60,7 @@ export function getSettingsReducer() {
       },
       language: LanguageHelper.defaultLanguage,
       canShowVoteNeo3SupportUsModal: true,
+      surveyInfo: { status: 'not-submitted', updatedAt: Date.now() },
     },
   } as ISettingsReducer
 
