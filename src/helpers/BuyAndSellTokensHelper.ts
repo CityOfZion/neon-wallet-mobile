@@ -20,6 +20,10 @@ export class BuyAndSellTokensHelper {
   }
 
   static buildIframeUrl({ currency, account, id, baseUrl }: TBuyAndSellTokensHelperBuildIframeParams) {
+    if (!EnvHelper.EXPO_PUBLIC_UNLIMIT_MERCHANT_ID) {
+      return
+    }
+
     const params = new URLSearchParams({
       merchantId: EnvHelper.EXPO_PUBLIC_UNLIMIT_MERCHANT_ID,
       fiatCurrency: this.#getValidCurrencyLabel(currency.label),

@@ -248,7 +248,7 @@ const AccountTasksManagerSetup = () => {
   const accountsAlreadyProcessedRef = useRef<Set<string>>(new Set())
 
   useMount(() => {
-    requestIdleCallback(
+    const callbackId = requestIdleCallback(
       async () => {
         for (const notification of unreadNotificationsRef.current) {
           fraudulentTokenProcess.processNotification(notification)
@@ -274,6 +274,10 @@ const AccountTasksManagerSetup = () => {
       },
       { timeout: 15000 }
     )
+
+    return () => {
+      cancelIdleCallback(callbackId)
+    }
   }, [ownAccounts.length])
 
   return null

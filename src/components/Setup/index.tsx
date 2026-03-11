@@ -27,25 +27,34 @@ export const Setup = () => {
 
       <Suspense fallback={null}>
         <NotificationManagerSetup />
+      </Suspense>
+
+      <Suspense fallback={null}>
         <HardwareWalletManagerSetup />
+      </Suspense>
+
+      <Suspense fallback={null}>
         <WalletConnectManagerSetup />
       </Suspense>
 
       <Suspense fallback={null}>
         <NetworkManagerSetup />
+      </Suspense>
+
+      <Suspense fallback={null}>
         <OverTheAirManagerSetup />
       </Suspense>
 
       <Suspense fallback={null}>
-        <AccountTasksManagerSetup />
+        <SettingsManagerSetup />
       </Suspense>
 
       <Suspense fallback={null}>
         <WalletTasksManagerSetup />
       </Suspense>
 
-      <Suspense>
-        <SettingsManagerSetup />
+      <Suspense fallback={null}>
+        <AccountTasksManagerSetup />
       </Suspense>
     </Fragment>
   )

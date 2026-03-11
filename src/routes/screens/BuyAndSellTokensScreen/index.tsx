@@ -157,18 +157,22 @@ export const BuyAndSellTokensScreen = ({ navigation, route }: TWalletsStackScree
         </View>
 
         {/* We aren't using the <TwTabs.Content /> because we need to load the two <WebView /> in the same screen */}
-        <BuyAndSellTokensIframeContent
-          baseUrl={EnvHelper.EXPO_PUBLIC_UNLIMIT_BUY_TOKENS_IFRAME_URL}
-          hidden={EBuyAndSellTokensScreenTabValue.BUY_TOKENS !== tabValue}
-          account={account}
-        />
+        {EnvHelper.EXPO_PUBLIC_UNLIMIT_BUY_TOKENS_IFRAME_URL && (
+          <BuyAndSellTokensIframeContent
+            baseUrl={EnvHelper.EXPO_PUBLIC_UNLIMIT_BUY_TOKENS_IFRAME_URL}
+            hidden={EBuyAndSellTokensScreenTabValue.BUY_TOKENS !== tabValue}
+            account={account}
+          />
+        )}
 
-        <BuyAndSellTokensIframeContent
-          baseUrl={EnvHelper.EXPO_PUBLIC_UNLIMIT_SELL_TOKENS_IFRAME_URL}
-          hidden={EBuyAndSellTokensScreenTabValue.SELL_TOKENS !== tabValue}
-          account={account}
-          setDepositActionsData={setDepositActionsData}
-        />
+        {EnvHelper.EXPO_PUBLIC_UNLIMIT_SELL_TOKENS_IFRAME_URL && (
+          <BuyAndSellTokensIframeContent
+            baseUrl={EnvHelper.EXPO_PUBLIC_UNLIMIT_SELL_TOKENS_IFRAME_URL}
+            hidden={EBuyAndSellTokensScreenTabValue.SELL_TOKENS !== tabValue}
+            account={account}
+            setDepositActionsData={setDepositActionsData}
+          />
+        )}
       </Fragment>
     </TwScreenLayout>
   )
