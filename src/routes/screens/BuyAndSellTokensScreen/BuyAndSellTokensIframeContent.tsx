@@ -97,7 +97,7 @@ export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDep
             }
           )}
         >
-          {hasIframeError ? (
+          {hasIframeError || !url ? (
             <Text className="mt-2 flex-grow px-4 text-center font-sans-regular text-lg text-white">{t('error')}</Text>
           ) : (
             <WebView

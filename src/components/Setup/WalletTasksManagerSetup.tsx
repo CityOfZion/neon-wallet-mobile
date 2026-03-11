@@ -79,7 +79,7 @@ const WalletTasksManagerSetup = () => {
   const walletsAlreadyProcessedRef = useRef<Set<string>>(new Set())
 
   useMount(() => {
-    requestIdleCallback(
+    const callbackId = requestIdleCallback(
       async () => {
         for (const notification of unreadNotificationsRef.current) {
           backupReminderNotificationProcess.processNotification(notification)
@@ -97,6 +97,10 @@ const WalletTasksManagerSetup = () => {
       },
       { timeout: 20000 }
     )
+
+    return () => {
+      cancelIdleCallback(callbackId)
+    }
   }, [wallets.length])
 
   return null

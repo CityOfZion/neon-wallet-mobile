@@ -54,10 +54,11 @@ export const App = () => {
       ])
       ReduxHelper.setup()
       await ReduxHelper.waitForBootstrap()
-    } catch (error) {
+      setReady(true)
+    } catch (error: any) {
+      alert(JSON.stringify(error.message))
       LoggerHelper.sentry(error, { operation: 'setup', where: 'App' })
     } finally {
-      setReady(true)
       ExpoSplashScreen.hide()
     }
   }, [])
