@@ -234,7 +234,7 @@ const useCheckItemNeo3NftSkinOwnership = () => {
   return { process }
 }
 
-const AccountTasksManagerSetup = () => {
+export const AccountTasksManagerSetup = () => {
   const { ownAccounts } = useOwnAccountsSelector()
   const { unreadNotificationsRef } = useUnreadNotificationsSelector()
 
@@ -282,5 +282,3 @@ const AccountTasksManagerSetup = () => {
 
   return null
 }
-
-export default AccountTasksManagerSetup

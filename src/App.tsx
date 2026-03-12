@@ -10,7 +10,6 @@ import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-c
 import { Provider as StoreProvider } from 'react-redux'
 
 import ScreenLoader from './components/ScreenLoader'
-import { Setup } from './components/Setup'
 import { BlockchainServiceHelper } from './helpers/BlockchainServiceHelper'
 import { EnvHelper } from './helpers/EnvHelper'
 import { I18nextHelper } from './helpers/I18nextHelper'
@@ -28,6 +27,7 @@ import './styles/global.css'
 
 const Alert = lazy(() => import('./components/Alert'))
 const QrCodeScanModal = lazy(() => import('./components/QrCodeScanModal'))
+const Setup = lazy(() => import('./components/Setup'))
 
 const Toaster = lazy(() => import('./components/Toaster'))
 const NfcModal = lazy(() => import('./components/NfcModal'))

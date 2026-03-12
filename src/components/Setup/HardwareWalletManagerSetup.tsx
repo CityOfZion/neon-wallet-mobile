@@ -11,7 +11,7 @@ import { useEditAccount } from '@/hooks/useAccountActions'
 import { useAccountsSelector } from '@/hooks/useAccountSelector'
 import { useMount } from '@/hooks/useMount'
 
-const HardwareWalletManagerSetup = () => {
+export const HardwareWalletManagerSetup = () => {
   const { t } = useTranslation('components', { keyPrefix: 'setup.hardwareWalletManager' })
   const { t: commonT } = useTranslation('common')
   const navigation = useNavigation()
@@ -19,72 +19,91 @@ const HardwareWalletManagerSetup = () => {
   const { editAccount } = useEditAccount()
 
   useMount(() => {
-    Object.values(BlockchainServiceHelper.bsAggregator.blockchainServicesByName).forEach(service => {
-      if (!hasLedger(service)) return
+    const callbackId = requestIdleCallback(
+      () => {
+        Object.values(BlockchainServiceHelper.bsAggregator.blockchainServicesByName).forEach(service => {
+          if (!hasLedger(service)) return
 
-      service.ledgerService.emitter.on('getSignatureStart', () => {
-        ToastHelper.loading({ message: t('requestingPermission'), id: 'hardware-signature' })
-      })
-
-      service.ledgerService.emitter.on('getSignatureEnd', () => {
-        ToastHelper.dismiss('hardware-signature')
-      })
-    })
-
-    const transformHardwareWalletAccountsToWatch = async () => {
-      await Promise.allSettled(
-        accountsRef.current
-          .filter(account => account.type === 'hardware')
-          .map(account => {
-            editAccount({
-              account,
-              data: {
-                type: 'watch',
-              },
-            })
+          service.ledgerService.emitter.on('getSignatureStart', () => {
+            ToastHelper.loading({ message: t('requestingPermission'), id: 'hardware-signature' })
           })
-      )
-    }
 
-    HardwareWalletHelper.onHardwareWalletDisconnect = async () => {
-      await transformHardwareWalletAccountsToWatch()
-    }
+          service.ledgerService.emitter.on('getSignatureEnd', () => {
+            ToastHelper.dismiss('hardware-signature')
+          })
+        })
 
-    transformHardwareWalletAccountsToWatch()
+        const transformHardwareWalletAccountsToWatch = async () => {
+          await Promise.allSettled(
+            accountsRef.current
+              .filter(account => account.type === 'hardware')
+              .map(account => {
+                editAccount({
+                  account,
+                  data: {
+                    type: 'watch',
+                  },
+                })
+              })
+          )
+        }
+
+        HardwareWalletHelper.onHardwareWalletDisconnect = async () => {
+          await transformHardwareWalletAccountsToWatch()
+        }
+
+        transformHardwareWalletAccountsToWatch()
+      },
+      { timeout: 0 }
+    )
+
+    return () => {
+      cancelIdleCallback(callbackId)
+    }
   })
 
   useMount(() => {
-    const removeOnHardwareWalletAttachedListener = HardwareWalletHelper.listenForUsbDeviceAttached(() => {
-      const state = navigation.getState()
-      const currentRoute = state ? state.routes[state.index] : undefined
+    const callbackId = requestIdleCallback(
+      () => {
+        const removeOnHardwareWalletAttachedListener = HardwareWalletHelper.listenForUsbDeviceAttached(() => {
+          const state = navigation.getState()
+          const currentRoute = state ? state.routes[state.index] : undefined
 
-      /*
+          /*
           These screens and modals won't show the hardware wallet USB alert on top of them because it
           either doesn't make sense to show it or already has a connection component
         */
-      if (currentRoute && (currentRoute.name === 'OnboardingScreen' || currentRoute.name.startsWith('ConnectHardware')))
-        return
+          if (
+            currentRoute &&
+            (currentRoute.name === 'OnboardingScreen' || currentRoute.name.startsWith('ConnectHardware'))
+          )
+            return
 
-      AlertHelper.show({
-        title: t('detectedHardwareByUsb'),
-        buttons: [
-          {
-            label: commonT('general.yes'),
-            onPress: () => {
-              navigation.navigate('ConnectHardwareUsbModal')
-            },
-          },
-          { label: commonT('general.no') },
-        ],
-      })
-    })
+          AlertHelper.show({
+            title: t('detectedHardwareByUsb'),
+            buttons: [
+              {
+                label: commonT('general.yes'),
+                onPress: () => {
+                  navigation.navigate('ConnectHardwareUsbModal')
+                },
+              },
+              { label: commonT('general.no') },
+            ],
+          })
+        })
+
+        return () => {
+          removeOnHardwareWalletAttachedListener()
+        }
+      },
+      { timeout: 0 }
+    )
 
     return () => {
-      removeOnHardwareWalletAttachedListener()
+      cancelIdleCallback(callbackId)
     }
   })
 
   return null
 }
-
-export default HardwareWalletManagerSetup

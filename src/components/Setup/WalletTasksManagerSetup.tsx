@@ -71,7 +71,7 @@ const useBackupReminderNotificationProcess = () => {
   return { processNotification, processWallet, finish }
 }
 
-const WalletTasksManagerSetup = () => {
+export const WalletTasksManagerSetup = () => {
   const { wallets } = useWalletsSelector()
   const { unreadNotificationsRef } = useUnreadNotificationsSelector()
   const backupReminderNotificationProcess = useBackupReminderNotificationProcess()
@@ -95,7 +95,7 @@ const WalletTasksManagerSetup = () => {
 
         backupReminderNotificationProcess.finish()
       },
-      { timeout: 20000 }
+      { timeout: 30000 }
     )
 
     return () => {
@@ -105,5 +105,3 @@ const WalletTasksManagerSetup = () => {
 
   return null
 }
-
-export default WalletTasksManagerSetup

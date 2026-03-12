@@ -1,21 +1,18 @@
-import { Fragment, Suspense } from 'react'
-
-import { LazyHelper } from '@/helpers/LazyHelper'
+import { Fragment } from 'react'
 
 import { useIsOnboardingCompletedSelector } from '@/hooks/useSettingsSelector'
 
-import InternetManagerSetup from './InternetManagerSetup'
+import { AccountTasksManagerSetup } from './AccountTasksManagerSetup'
+import { HardwareWalletManagerSetup } from './HardwareWalletManagerSetup'
+import { InternetManagerSetup } from './InternetManagerSetup'
+import { NetworkManagerSetup } from './NetworkManagerSetup'
+import { NotificationManagerSetup } from './NotificationManagerSetup'
+import { OverTheAirManagerSetup } from './OverTheAirManagerSetup'
+import { SettingsManagerSetup } from './SettingsManagerSetup'
+import { WalletConnectManagerSetup } from './WalletConnectManagerSetup'
+import { WalletTasksManagerSetup } from './WalletTasksManagerSetup'
 
-const NotificationManagerSetup = LazyHelper.delayedLazy(() => import('./NotificationManagerSetup'), 0)
-const HardwareWalletManagerSetup = LazyHelper.delayedLazy(() => import('./HardwareWalletManagerSetup'), 0)
-const WalletConnectManagerSetup = LazyHelper.delayedLazy(() => import('./WalletConnectManagerSetup'), 1000)
-const NetworkManagerSetup = LazyHelper.delayedLazy(() => import('./NetworkManagerSetup'), 1000)
-const OverTheAirManagerSetup = LazyHelper.delayedLazy(() => import('./OverTheAirManagerSetup'), 5000)
-const AccountTasksManagerSetup = LazyHelper.delayedLazy(() => import('./AccountTasksManagerSetup'), 10000)
-const WalletTasksManagerSetup = LazyHelper.delayedLazy(() => import('./WalletTasksManagerSetup'), 15000)
-const SettingsManagerSetup = LazyHelper.delayedLazy(() => import('./SettingsManagerSetup'), 10000)
-
-export const Setup = () => {
+const Setup = () => {
   const { isOnboardingCompleted } = useIsOnboardingCompletedSelector()
   if (!isOnboardingCompleted) {
     return null
@@ -23,39 +20,25 @@ export const Setup = () => {
 
   return (
     <Fragment>
+      <SettingsManagerSetup />
+
       <InternetManagerSetup />
 
-      <Suspense fallback={null}>
-        <NotificationManagerSetup />
-      </Suspense>
+      <NotificationManagerSetup />
 
-      <Suspense fallback={null}>
-        <HardwareWalletManagerSetup />
-      </Suspense>
+      <HardwareWalletManagerSetup />
 
-      <Suspense fallback={null}>
-        <WalletConnectManagerSetup />
-      </Suspense>
+      <WalletConnectManagerSetup />
 
-      <Suspense fallback={null}>
-        <NetworkManagerSetup />
-      </Suspense>
+      <NetworkManagerSetup />
 
-      <Suspense fallback={null}>
-        <OverTheAirManagerSetup />
-      </Suspense>
+      <OverTheAirManagerSetup />
 
-      <Suspense fallback={null}>
-        <SettingsManagerSetup />
-      </Suspense>
+      <AccountTasksManagerSetup />
 
-      <Suspense fallback={null}>
-        <WalletTasksManagerSetup />
-      </Suspense>
-
-      <Suspense fallback={null}>
-        <AccountTasksManagerSetup />
-      </Suspense>
+      <WalletTasksManagerSetup />
     </Fragment>
   )
 }
+
+export default Setup

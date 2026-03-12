@@ -10,42 +10,49 @@ import { useSelectedNetworkByBlockchainSelector } from '@/hooks/useSettingsSelec
 
 import { settingsReducerActions } from '@/store/reducers/settings'
 
-const NetworkManagerSetup = () => {
+export const NetworkManagerSetup = () => {
   const dispatch = useAppDispatch()
   const { getPingNodes } = useLazyPingNodes()
   const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()
 
-  useMount(async () => {
-    const services = Object.values(BlockchainServiceHelper.bsAggregator.blockchainServicesByName)
+  useMount(() => {
+    const callbackId = requestIdleCallback(
+      async () => {
+        const services = Object.values(BlockchainServiceHelper.bsAggregator.blockchainServicesByName)
 
-    const updatedNetworks = cloneDeep(selectedNetworkByBlockchain)
+        const updatedNetworks = cloneDeep(selectedNetworkByBlockchain)
 
-    const promises = services.map(async service => {
-      const currentNetwork = updatedNetworks[service.name]
+        const promises = services.map(async service => {
+          const currentNetwork = updatedNetworks[service.name]
 
-      try {
-        await service.pingNode(currentNetwork.url)
-      } catch {
-        const nodes = await getPingNodes(service.name)
+          try {
+            await service.pingNode(currentNetwork.url)
+          } catch {
+            const nodes = await getPingNodes(service.name)
 
-        const newNode = nodes[0]
-        if (!newNode) return
+            const newNode = nodes[0]
+            if (!newNode) return
 
-        updatedNetworks[service.name] = {
-          ...currentNetwork,
-          url: newNode.url,
+            updatedNetworks[service.name] = {
+              ...currentNetwork,
+              url: newNode.url,
+            }
+          }
+        })
+
+        await Promise.allSettled(promises)
+
+        if (!isEqual(updatedNetworks, selectedNetworkByBlockchain)) {
+          dispatch(settingsReducerActions.setSelectedNetworkByBlockchain(updatedNetworks))
         }
-      }
-    })
+      },
+      { timeout: 2000 }
+    )
 
-    await Promise.allSettled(promises)
-
-    if (!isEqual(updatedNetworks, selectedNetworkByBlockchain)) {
-      dispatch(settingsReducerActions.setSelectedNetworkByBlockchain(updatedNetworks))
+    return () => {
+      cancelIdleCallback(callbackId)
     }
   })
 
   return null
 }
-
-export default NetworkManagerSetup

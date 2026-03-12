@@ -7,7 +7,7 @@ import { useSurveyInfoSelector } from '@/hooks/useSettingsSelector'
 
 import { settingsReducerActions } from '@/store/reducers/settings'
 
-const SettingsManagerSetup = () => {
+export const SettingsManagerSetup = () => {
   const dispatch = useAppDispatch()
   const { surveyInfo } = useSurveyInfoSelector()
 
@@ -22,5 +22,3 @@ const SettingsManagerSetup = () => {
 
   return null
 }
-
-export default SettingsManagerSetup
