@@ -23,7 +23,7 @@ export const WalletConnectManagerSetup = () => {
   const { t } = useTranslation('components', { keyPrefix: 'setup.walletConnectManagerSetup' })
   const { t: commonT } = useTranslation('common')
 
-  useMount(async () => {
+  useMount(() => {
     async function handleRequest(request: PendingRequestTypes.Struct) {
       const sessions = WalletKitHelper.kit.getActiveSessions()
 
@@ -122,20 +122,24 @@ export const WalletConnectManagerSetup = () => {
       )
     }
 
+    const callbackId = requestIdleCallback(
+      () => {
+        const pendingRequests = WalletKitHelper.kit.getPendingSessionRequests()
+        const startPendingRequest = pendingRequests[0]
+        if (startPendingRequest) {
+          handleRequest(startPendingRequest)
+        }
+      },
+      { timeout: 1000 }
+    )
+
     WalletKitHelper.kit.on('session_request', handleRequest)
 
-    const pendingRequests = WalletKitHelper.kit.getPendingSessionRequests()
-    const startPendingRequest = pendingRequests[0]
-    if (startPendingRequest) {
-      handleRequest(startPendingRequest)
-    }
-
     return () => {
+      cancelIdleCallback(callbackId)
       WalletKitHelper.kit.off('session_request', handleRequest)
     }
   })
 
   return null
 }
-
-export default WalletConnectManagerSetup

@@ -7,7 +7,7 @@ import { useAppDispatch } from '@/hooks/useRedux'
 
 import { utilityReducerActions } from '@/store/reducers/utility'
 
-const InternetManagerSetup = () => {
+export const InternetManagerSetup = () => {
   const dispatch = useAppDispatch()
   const { isConnected, isInternetReachable } = useNetworkState()
 
@@ -20,5 +20,3 @@ const InternetManagerSetup = () => {
 
   return null
 }
-
-export default InternetManagerSetup

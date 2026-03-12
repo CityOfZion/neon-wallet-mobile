@@ -28,32 +28,39 @@ async function requestPermissions() {
   }
 }
 
-const NotificationManagerSetup = () => {
+export const NotificationManagerSetup = () => {
   const navigation = useNavigation()
 
   useMount(() => {
-    requestPermissions()
+    const callbackId = requestIdleCallback(
+      () => {
+        requestPermissions()
 
-    const notificationResponseReceivedSubscription = ExpoNotifications.addNotificationResponseReceivedListener(
-      event => {
-        // Some devices throw an invalid notification when hardware wallet is connected
-        if (event.notification.date === 0) return
+        const notificationResponseReceivedSubscription = ExpoNotifications.addNotificationResponseReceivedListener(
+          event => {
+            // Some devices throw an invalid notification when hardware wallet is connected
+            if (event.notification.date === 0) return
 
-        navigation.navigate('TabStack', {
-          screen: 'MoreStack',
-          params: {
-            screen: 'NotificationsScreen',
-          },
-        })
-      }
+            navigation.navigate('TabStack', {
+              screen: 'MoreStack',
+              params: {
+                screen: 'NotificationsScreen',
+              },
+            })
+          }
+        )
+
+        return () => {
+          notificationResponseReceivedSubscription.remove()
+        }
+      },
+      { timeout: 0 }
     )
 
     return () => {
-      notificationResponseReceivedSubscription.remove()
+      cancelIdleCallback(callbackId)
     }
   })
 
   return null
 }
-
-export default NotificationManagerSetup

@@ -8,7 +8,7 @@ import { ToastHelper } from '@/helpers/ToastHelper'
 
 import { useMount } from '@/hooks/useMount'
 
-const OverTheAirManagerSetup = () => {
+export const OverTheAirManagerSetup = () => {
   const { t } = useTranslation('common', { keyPrefix: 'overTheAir' })
   const { isDownloading, downloadError, downloadProgress, downloadedUpdate } = ExpoUpdates.useUpdates()
 
@@ -32,23 +32,30 @@ const OverTheAirManagerSetup = () => {
     }
   }, [downloadError, downloadProgress, downloadedUpdate, isDownloading, t])
 
-  useMount(async () => {
-    try {
-      if (!ExpoUpdates.isEnabled || __DEV__) return
+  useMount(() => {
+    const callbackId = requestIdleCallback(
+      async () => {
+        try {
+          if (!ExpoUpdates.isEnabled || __DEV__) return
 
-      const update = await ExpoUpdates.checkForUpdateAsync()
-      if (!update.isAvailable) return
+          const update = await ExpoUpdates.checkForUpdateAsync()
+          if (!update.isAvailable) return
 
-      await ExpoUpdates.fetchUpdateAsync()
-    } catch (error) {
-      LoggerHelper.sentry(error, {
-        where: 'OverTheAirManagerSetup',
-        operation: 'checkForUpdateAsync/fetchUpdateAsync',
-      })
+          await ExpoUpdates.fetchUpdateAsync()
+        } catch (error) {
+          LoggerHelper.sentry(error, {
+            where: 'OverTheAirManagerSetup',
+            operation: 'checkForUpdateAsync/fetchUpdateAsync',
+          })
+        }
+      },
+      { timeout: 3000 }
+    )
+
+    return () => {
+      cancelIdleCallback(callbackId)
     }
   })
 
   return null
 }
-
-export default OverTheAirManagerSetup
