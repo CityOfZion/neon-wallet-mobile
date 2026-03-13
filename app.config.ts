@@ -122,13 +122,5 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         selectIdentifiers: ['D2760000850100', 'D2760000850101'],
       },
     ],
-    [
-      'expo-media-library',
-      {
-        savePhotosPermission: 'Giving $(PRODUCT_NAME) access to save photos will allow you to save QR codes.',
-        preventAutomaticLimitedAccessAlert: true,
-        granularPermissions: ['photo'],
-      },
-    ],
   ],
 })

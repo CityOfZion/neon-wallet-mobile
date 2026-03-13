@@ -44,11 +44,6 @@
     "twinNfiError": "Ihre ITEM Twin Informationen konnten nicht abgerufen werden. Bitte kontaktieren Sie den Support.",
     "wrongNfiPasscodeError": "Falscher NFI Passcode"
   },
-  "useMediaLibrary": {
-    "errors": {
-      "permissionRequired": "Für das Speichern von Dateien wird die Berechtigung zur Medienbibliothek benötigt."
-    }
-  },
   "useNeonImportBackup": {
     "errors": {
       "deprecatedFile": "Sie haben eine veraltete Backup-Datei ausgewählt. Bitte erstellen Sie ein neues Backup in der neuesten NEON Version.",
