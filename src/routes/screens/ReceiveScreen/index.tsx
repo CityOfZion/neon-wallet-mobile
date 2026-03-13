@@ -14,7 +14,7 @@ import { TwSeparator } from '@/components/TwSeparator'
 import { ToastHelper } from '@/helpers/ToastHelper'
 
 import { useActions } from '@/hooks/useActions'
-import { useMediaLibrary } from '@/hooks/useMediaLibrary'
+import { useFileSystem } from '@/hooks/useFileSystem'
 
 import { TwScreenLayout } from '@/layouts/TwScreenLayout'
 
@@ -33,7 +33,7 @@ const { theme } = resolveConfig(tailwindConfig)
 
 export const ReceiveScreen = ({ navigation, route }: TWalletsStackScreenProps<'ReceiveScreen'>) => {
   const { t } = useTranslation('screens', { keyPrefix: 'receiveScreen' })
-  const { writeMedia } = useMediaLibrary()
+  const { writeFile } = useFileSystem()
 
   const { actionData, setDataWrapper } = useActions<TActionData>({
     selectedAccount: route.params?.account,
@@ -45,7 +45,7 @@ export const ReceiveScreen = ({ navigation, route }: TWalletsStackScreenProps<'R
     if (!qrRef.current || !actionData.selectedAccount?.address) return
 
     qrRef.current.toDataURL(async (dataURL: string) => {
-      await writeMedia(dataURL, `qr_code_${actionData.selectedAccount?.address}`)
+      await writeFile(`qr_code_${actionData.selectedAccount?.address}`, dataURL, 'image/png')
       ToastHelper.success({ message: t('successfulDownloadMessage') })
     })
   }

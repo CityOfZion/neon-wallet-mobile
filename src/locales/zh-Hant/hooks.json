@@ -44,11 +44,6 @@
     "twinNfiError": "無法取得您的 ITEM 雙生資訊。請聯繫支援。",
     "wrongNfiPasscodeError": "NFI 密碼錯誤"
   },
-  "useMediaLibrary": {
-    "errors": {
-      "permissionRequired": "儲存檔案需要媒體庫權限"
-    }
-  },
   "useNeonImportBackup": {
     "errors": {
       "deprecatedFile": "您選擇了一個已棄用的備份檔案。請嘗試在最新的 NEON 版本中生成新的備份。",
