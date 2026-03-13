@@ -29,6 +29,7 @@ import type {
 
 export type TOnboardingBackupMnemonicModalParams = {
   wallet: IWalletState
+  onSuccess: () => void
 }
 
 export type TEditAccountModalParams = {

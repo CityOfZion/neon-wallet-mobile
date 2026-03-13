@@ -8,6 +8,7 @@ import { TwSeparator } from '@/components/TwSeparator'
 import { AppError } from '@/helpers/ErrorHelper'
 import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
+import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useExportMnemonic } from '@/hooks/useExportMnemonic'
 import { usePressOnce } from '@/hooks/usePressOnce'
@@ -24,9 +25,12 @@ export const OnboardingBackupMnemonicModal = ({
   navigation,
   route,
 }: TRootStackScreenProps<'OnboardingBackupMnemonicModal'>) => {
-  const { saveMnemonicToTextFile } = useExportMnemonic()
+  const { wallet, onSuccess } = route.params
+
   const { t } = useTranslation('modals', { keyPrefix: 'onboardingBackupMnemonicModal' })
   const dispatch = useAppDispatch()
+  const { saveMnemonicToTextFile } = useExportMnemonic()
+
   const [isSubmitting, startSubmitting] = usePressOnce(async () => {
     try {
       const mnemonic = await SecureStoreHelper.getMnemonic(wallet)
@@ -34,18 +38,15 @@ export const OnboardingBackupMnemonicModal = ({
 
       dispatch(walletReducerActions.saveWallet({ ...wallet, backupStatus: 'successful' }))
 
-      navigation.replace('TabStack', {
-        screen: 'WalletsStack',
-        params: {
-          screen: 'WalletsScreen',
-        },
-      })
+      navigation.goBack()
+
+      await UtilsHelper.sleep(500)
+
+      onSuccess()
     } catch (error) {
       ToastHelper.error({ message: AppError.wrap(error).message })
     }
   })
-
-  const { wallet } = route.params
 
   return (
     <TwModalLayout title={t('title')} contentContainerClassName="flex-col flex-1 gap-y-6">
