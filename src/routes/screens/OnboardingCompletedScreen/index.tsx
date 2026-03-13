@@ -36,6 +36,14 @@ export const OnboardingCompletedScreen = ({ navigation }: TRootStackScreenProps<
     if (wallet) {
       navigation.navigate('OnboardingBackupMnemonicModal', {
         wallet,
+        onSuccess: () => {
+          navigation.replace('TabStack', {
+            screen: 'WalletsStack',
+            params: {
+              screen: 'WalletsScreen',
+            },
+          })
+        },
       })
     }
   }
@@ -92,7 +100,7 @@ export const OnboardingCompletedScreen = ({ navigation }: TRootStackScreenProps<
         label={t('buttonLabel')}
         className="mt-auto w-full"
         onPress={handlePressViewWallet}
-        disabled={wallet.backupStatus === 'successful'}
+        isLoading={wallet.backupStatus === 'successful'}
       />
     </TwScreenLayout>
   )
