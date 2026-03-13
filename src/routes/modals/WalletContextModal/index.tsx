@@ -32,7 +32,7 @@ export const WalletContextModal = ({ navigation, route }: TRootStackScreenProps<
   const { authenticate } = useAuthentication()
 
   const handlePressCreate = () => {
-    navigation.navigate('TabStack', {
+    navigation.replace('TabStack', {
       screen: 'MoreStack',
       params: {
         screen: 'CreateWalletStep1Screen',
@@ -47,7 +47,7 @@ export const WalletContextModal = ({ navigation, route }: TRootStackScreenProps<
     try {
       await authenticate()
 
-      navigation.navigate('TabStack', {
+      navigation.replace('TabStack', {
         screen: 'MoreStack',
         params: {
           screen: 'SettingsWalletBackupStep1Screen',
