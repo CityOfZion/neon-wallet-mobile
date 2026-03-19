@@ -264,41 +264,40 @@
     "title": "通知"
   },
   "onboardingCompletedScreen": {
-    "buttonLabel": "查看錢包",
-    "subtitle": "您的新錢包與帳戶已準備就緒。",
-    "title": "設定完成！",
-    "titleAddressList": "帳戶地址"
+    "backupMnemonicButtonLabel": "備份您的新錢包",
+    "subtitleImport": "您匯入的錢包與帳戶已準備就緒！",
+    "subtitleNew": "您的新錢包與帳戶已準備就緒！",
+    "titleImport": "匯入完成",
+    "titleNew": "設定完成",
+    "viewWalletButtonLabel": "查看錢包"
   },
   "onboardingScreen": {
     "cancelAllButtonLabel": "全部取消",
-    "createWalletButtonLabel": "建立錢包",
+    "createWalletButtonLabel": "建立新錢包",
     "feature1": {
-      "header": "輕鬆管理您的資產",
-      "subtitle": "在一個錢包中建立多個帳戶，每個帳戶都有獨立地址。"
+      "header": "原創錢包隨時隨地",
+      "subtitle": "我們桌面錢包的所有最佳功能，以及更多功能就在您的手掌心中"
     },
     "feature2": {
-      "header": "Neo 上最靈活的錢包應用",
-      "subtitle": "輕鬆將私鑰導入 Neon，或新增任何地址作為觀察帳戶，隨時掌握其公開交易。"
+      "header": "一流的使用者體驗",
+      "subtitle": "Neon錢包的設計使管理您的加密資產盡可能直觀"
     },
     "feature3": {
-      "header": "行動 Dapp 連線",
-      "subtitle": "透過 Wallet Connect 協議，直接在裝置上安全地與多個 Dapp 互動。"
+      "header": "BIP39錢包",
+      "subtitle": "BIP39標準允許您使用單個助記符建立無限個子帳戶"
     },
     "feature4": {
-      "header": "全新 NFT 支援",
-      "subtitle": "集中查看您的收藏，並追蹤所有 NFT 交易"
+      "header": "充足的更新管道",
+      "subtitle": "團隊夜以繼日地為您提供最新功能"
     },
     "importWalletButtonLabel": "匯入錢包",
-    "initialSetup": "初始設定",
     "messagesByActions": {
       "account": "正在建立帳戶…",
       "finalizing": "正在完成所有設定…",
       "wallet": "正在建立您的錢包…"
     },
-    "overviewDescription": "這裡是應用程式內眾多功能的概覽。",
     "selectBlockchainsModalDescription": "選擇您想要為其建立帳戶的區塊鏈",
-    "selectBlockchainsModalTitle": "選擇區塊鏈",
-    "welcomeNW": "歡迎使用 Neon 錢包"
+    "selectBlockchainsModalTitle": "選擇區塊鏈"
   },
   "receiveScreen": {
     "accountSelectPlaceholder": "選擇…",

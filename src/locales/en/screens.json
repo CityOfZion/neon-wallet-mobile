@@ -264,41 +264,40 @@
     "title": "Notifications"
   },
   "onboardingCompletedScreen": {
-    "buttonLabel": "View Wallet",
-    "subtitle": "Your new wallet and account are ready to go.",
-    "title": "Setup Complete!",
-    "titleAddressList": "Account addresses"
+    "backupMnemonicButtonLabel": "Backup your new wallet",
+    "subtitleImport": "Your imported wallet and accounts are now ready to go!",
+    "subtitleNew": "Your new wallet and accounts are now ready to go!",
+    "titleImport": "Import Complete",
+    "titleNew": "Setup Complete",
+    "viewWalletButtonLabel": "View wallet"
   },
   "onboardingScreen": {
     "cancelAllButtonLabel": "Cancel all",
-    "createWalletButtonLabel": "Create wallet",
+    "createWalletButtonLabel": "Create a new wallet",
     "feature1": {
-      "header": "Easily organize your assets",
-      "subtitle": "Create multiple Accounts inside a Wallet, each with its unique address."
+      "header": "The original wallet on the move",
+      "subtitle": "All the best features of our desktop wallet plus more in the palm of your hand"
     },
     "feature2": {
-      "header": "The most flexible Wallet App in Neo",
-      "subtitle": "Easily bring your Private Keys to Neon or add any address as a watch account to keep an eye on their public transactions."
+      "header": "First class user experience",
+      "subtitle": "Neon Wallet has been designed to make managing your crypto assets as intuitive as possible"
     },
     "feature3": {
-      "header": "Mobile Dapp Connection",
-      "subtitle": "Safely interact with multiple Dapps directly from your device through the established Wallet Connect Protocol."
+      "header": "BIP39 wallets",
+      "subtitle": "The BIP39 standard allows you to create infinite child accounts using a single mnemonic"
     },
     "feature4": {
-      "header": "Introducing NFT support",
-      "subtitle": "View your collection and keep track of all your NFT transactions in a single place"
+      "header": "Packed pipeline of updates",
+      "subtitle": "The team is working around the clock to bring you the latest features"
     },
-    "importWalletButtonLabel": "Import wallet",
-    "initialSetup": "Initial Setup",
+    "importWalletButtonLabel": "Import a wallet",
     "messagesByActions": {
       "account": "Creating your accounts…",
       "finalizing": "Wrapping everything up…",
       "wallet": "Creating your wallet…"
     },
-    "overviewDescription": "Here's an overview of the many features you'll find in the app.",
     "selectBlockchainsModalDescription": "Select the blockchains which you want to create an account for",
-    "selectBlockchainsModalTitle": "Select Blockchains",
-    "welcomeNW": "Welcome to Neon Wallet"
+    "selectBlockchainsModalTitle": "Select Blockchains"
   },
   "receiveScreen": {
     "accountSelectPlaceholder": "Select…",
