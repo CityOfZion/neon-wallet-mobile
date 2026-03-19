@@ -264,41 +264,40 @@
     "title": "Benachrichtigungen"
   },
   "onboardingCompletedScreen": {
-    "buttonLabel": "Wallet ansehen",
-    "subtitle": "Ihr neues Wallet und Konto sind bereit.",
-    "title": "Einrichtung abgeschlossen!",
-    "titleAddressList": "Konto Adressen"
+    "backupMnemonicButtonLabel": "Machen Sie ein Backup Ihres neuen Wallets",
+    "subtitleImport": "Ihr importiertes Wallet und Ihre Konten sind bereit!",
+    "subtitleNew": "Ihr neues Wallet und Ihre Konten sind bereit!",
+    "titleImport": "Import abgeschlossen",
+    "titleNew": "Einrichtung abgeschlossen",
+    "viewWalletButtonLabel": "Wallet ansehen"
   },
   "onboardingScreen": {
     "cancelAllButtonLabel": "Alle abbrechen",
-    "createWalletButtonLabel": "Wallet erstellen",
+    "createWalletButtonLabel": "Neues Wallet erstellen",
     "feature1": {
-      "header": "Organisieren Sie Ihre Assets ganz einfach",
-      "subtitle": "Erstellen Sie mehrere Kontos innerhalb eines Wallets, jeder mit seiner eindeutigen Adresse."
+      "header": "Das ursprüngliche Wallet für unterwegs",
+      "subtitle": "Alle besten Funktionen unseres Desktop-Wallets und noch mehr in Ihrer Handfläche"
     },
     "feature2": {
-      "header": "Die flexibelste Wallet App in Neo",
-      "subtitle": "Bringen Sie Ihre Private Keys ganz einfach zu Neon oder fügen Sie eine beliebige Adresse als Watch Konto hinzu, um deren öffentliche Transaktionen im Auge zu behalten."
+      "header": "Erstklassiges Benutzererlebnis",
+      "subtitle": "Neon Wallet wurde so gestaltet, dass die Verwaltung Ihrer Kryptowerte so intuitiv wie möglich ist"
     },
     "feature3": {
-      "header": "Mobile Dapp Verbindung",
-      "subtitle": "Interagieren Sie sicher mit mehreren Dapps direkt von Ihrem Gerät über das etablierte Wallet Connect Protokoll."
+      "header": "BIP39-Wallets",
+      "subtitle": "Der BIP39-Standard ermöglicht es Ihnen, mit einem einzigen Mnemonic unbegrenzte Unterkonten zu erstellen"
     },
     "feature4": {
-      "header": "Einführung NFT Unterstützung",
-      "subtitle": "Sehen Sie Ihre Sammlung und behalten Sie alle Ihre NFT-Transaktionen an einem Ort im Blick"
+      "header": "Gut gefüllte Update-Pipeline",
+      "subtitle": "Das Team arbeitet rund um die Uhr, um Ihnen die neuesten Funktionen zu bringen"
     },
     "importWalletButtonLabel": "Wallet importieren",
-    "initialSetup": "Ersteinrichtung",
     "messagesByActions": {
       "account": "Ihre Kontos werden erstellt…",
       "finalizing": "Alles wird fertiggestellt…",
       "wallet": "Ihr Portemonnaie wird erstellt…"
     },
-    "overviewDescription": "Hier ist ein Überblick über die vielen Funktionen, die Sie in der App finden werden.",
     "selectBlockchainsModalDescription": "Wählen Sie die Blockchains aus, für die Sie Kontos erstellen möchten",
-    "selectBlockchainsModalTitle": "Blockchains auswählen",
-    "welcomeNW": "Willkommen bei Neon Wallet"
+    "selectBlockchainsModalTitle": "Blockchains auswählen"
   },
   "receiveScreen": {
     "accountSelectPlaceholder": "Wählen…",

@@ -26,7 +26,7 @@ export const OnboardingScreenProgress = (props: TProps) => {
       }}
     >
       <Animated.View
-        className="h-full rounded-full bg-neon"
+        className="h-full rounded-full bg-yellow"
         style={[progressStyle, { boxShadow: `0px 0px 8px 0px ${fullConfig.theme.colors.neon.DEFAULT}5C` }]}
       />
     </View>
