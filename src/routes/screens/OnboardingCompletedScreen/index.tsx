@@ -20,7 +20,10 @@ import TbCopy from '@/assets/images/tb-copy.svg'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
-export const OnboardingCompletedScreen = ({ navigation }: TRootStackScreenProps<'OnboardingCompletedScreen'>) => {
+export const OnboardingCompletedScreen = ({
+  navigation,
+  route,
+}: TRootStackScreenProps<'OnboardingCompletedScreen'>) => {
   const { t } = useTranslation('screens', { keyPrefix: 'onboardingCompletedScreen' })
   const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
   const { bottom } = useSafeAreaInsets()
@@ -32,8 +35,11 @@ export const OnboardingCompletedScreen = ({ navigation }: TRootStackScreenProps<
 
   const { accountsByWalletId } = useAccountsByWalletIdSelector(wallet.id)
 
+  const isImport = route.params?.isImport
+  const isDisabled = wallet.backupStatus === 'successful' && !isImport
+
   const handlePressViewWallet = () => {
-    if (wallet) {
+    if (wallet && !isImport) {
       navigation.navigate('OnboardingBackupMnemonicModal', {
         wallet,
         onSuccess: () => {
@@ -45,7 +51,15 @@ export const OnboardingCompletedScreen = ({ navigation }: TRootStackScreenProps<
           })
         },
       })
+      return
     }
+
+    navigation.replace('TabStack', {
+      screen: 'WalletsStack',
+      params: {
+        screen: 'WalletsScreen',
+      },
+    })
   }
 
   useLayoutEffect(() => {
@@ -100,7 +114,7 @@ export const OnboardingCompletedScreen = ({ navigation }: TRootStackScreenProps<
         label={t('buttonLabel')}
         className="mt-auto w-full"
         onPress={handlePressViewWallet}
-        isLoading={wallet.backupStatus === 'successful'}
+        disabled={isDisabled}
       />
     </TwScreenLayout>
   )

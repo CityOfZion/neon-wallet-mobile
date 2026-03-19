@@ -23,23 +23,35 @@ export const ImportScreen = ({ navigation, route }: TMoreStackScreenProps<'Impor
   const { t } = useTranslation('screens', { keyPrefix: 'importScreen' })
   const { t: commonT } = useTranslation('common')
 
+  const handleNavigateToWalletsScreen = () => {
+    navigation.navigate('TabStack', { screen: 'WalletsStack', params: { screen: 'WalletsScreen' } })
+  }
+
   const handleSubmitAddress = async (address: string) => {
-    navigation.navigate('ImportAddressSelectionScreen', { address })
+    navigation.navigate('ImportAddressSelectionModal', {
+      address,
+      onConfirm: handleNavigateToWalletsScreen,
+    })
   }
 
   const handleSubmitEncryptedKey = async (encryptedKey: string) => {
-    navigation.navigate('ImportBlockchainSelectionScreen', { encryptedKey })
+    navigation.navigate('ImportEncryptedKeySelectionModal', {
+      encryptedKey,
+      onConfirm: handleNavigateToWalletsScreen,
+    })
   }
 
   const handleSubmitKey = async (key: string) => {
-    navigation.navigate('ImportKeySelectionScreen', {
+    navigation.navigate('ImportKeySelectionModal', {
       key,
+      onConfirm: handleNavigateToWalletsScreen,
     })
   }
 
   const handleSubmitMnemonic = async (mnemonic: string) => {
-    navigation.navigate('ImportMnemonicSelectionScreen', {
+    navigation.navigate('ImportMnemonicSelectionModal', {
       mnemonic,
+      onConfirm: handleNavigateToWalletsScreen,
     })
   }
 
@@ -82,7 +94,7 @@ export const ImportScreen = ({ navigation, route }: TMoreStackScreenProps<'Impor
 
           <Text
             className={StyleHelper.mergeStyles('font-sans-regular text-base text-neon', {
-              'text-magenta': actionState.errors.text,
+              'text-magenta': !!actionState.errors.text,
             })}
           >
             {t(!actionState.errors.text ? 'mnemonicComplete' : 'mnemonicIncorrect')}

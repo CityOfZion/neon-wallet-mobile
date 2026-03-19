@@ -4,6 +4,10 @@ import type { TSettingsTab } from '@/routes/screens/SettingsScreen'
 import type { TBlockchainServiceKey } from './blockchain'
 import type { IAccountState, IContactState, IWalletState } from './store'
 
+export type TOnboardingCompletedScreenParams = {
+  isImport?: boolean
+}
+
 export type TWalletsScreenParams = {
   wallet?: IWalletState
 }
@@ -78,27 +82,6 @@ export type TCreateWalletStep6ScreenParams = {
 
 export type TImportScreen = {
   data: string
-}
-
-export type TImportPassphraseScreenParams = {
-  encryptedKey: string
-  blockchain: TBlockchainServiceKey
-}
-
-export type TImportBlockchainSelectionScreenParams = {
-  encryptedKey: string
-}
-
-export type TImportMnemonicSelectionScreenParams = {
-  mnemonic: string
-}
-
-export type TImportKeySelectionScreenParams = {
-  key: string
-}
-
-export type TImportAddressSelectionScreenParams = {
-  address: string
 }
 
 export type TSendScreenParams = {

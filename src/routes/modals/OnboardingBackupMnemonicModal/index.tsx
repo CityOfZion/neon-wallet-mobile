@@ -1,9 +1,8 @@
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import { TwBanner } from '@/components/TwBanner'
 import { TwButton } from '@/components/TwButton'
-import { TwSeparator } from '@/components/TwSeparator'
 
 import { AppError } from '@/helpers/ErrorHelper'
 import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
@@ -16,7 +15,7 @@ import { useAppDispatch } from '@/hooks/useRedux'
 
 import { TwModalLayout } from '@/layouts/TwModalLayout'
 
-import TbDeviceFloppy from '@/assets/images/tb-device-floppy.svg'
+import NeonWalletIcon from '@/assets/images/neon-wallet-icon.svg'
 
 import { walletReducerActions } from '@/store/reducers/wallet'
 import type { TRootStackScreenProps } from '@/types/stacks'
@@ -50,19 +49,27 @@ export const OnboardingBackupMnemonicModal = ({
 
   return (
     <TwModalLayout title={t('title')} contentContainerClassName="flex-col flex-1 gap-y-6">
-      <Text className="font-sans-medium text-base text-white">{t('description')}</Text>
+      <View className="mt-8 flex-col items-center gap-y-6">
+        <NeonWalletIcon aria-hidden className="size-20 text-neon" />
+        <Text className="font-sans-regular text-2xl text-neon">{t('subtitle')}</Text>
 
-      <TwBanner type="warning" textClassName="text-base">
-        {t('warningLabel')}
-      </TwBanner>
+        <Text className="text-center font-sans-medium text-base text-white">
+          <Trans t={t} i18nKey="description">
+            start
+            <Text className="italic">middle</Text>
+            end
+          </Trans>
+        </Text>
+      </View>
 
       <View className="mb-4 mt-auto flex-col gap-7">
-        <TwSeparator />
+        <TwBanner type="warning" textClassName="text-base">
+          {t('warningLabel')}
+        </TwBanner>
 
         <TwButton
           variant="contained-light"
           label={t('backupAndContinueButtonLabel')}
-          leftElement={<TbDeviceFloppy aria-hidden />}
           onPress={startSubmitting}
           isLoading={isSubmitting}
         />

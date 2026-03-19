@@ -51,7 +51,7 @@
     "title": "錢包備份"
   },
   "blockchainSelectionModal": {
-    "title": "選擇鏈"
+    "title": "選擇區塊鏈"
   },
   "bridgeNeo3NeoXAboutModal": {
     "description": "輕鬆在網絡之間橋接您的加密資產，無需離開您的錢包。",
@@ -386,6 +386,19 @@
     },
     "title": "匯入 NEON 備份"
   },
+  "importEncryptedKeySelectionModal": {
+    "accountAlreadyExists": "帳戶已存在",
+    "decryptError": "解密金鑰時發生錯誤",
+    "description": "選擇您要匯入的加密金鑰所對應的區塊鏈",
+    "importEncryptedConfirmPasswordLabel": "若要繼續，請輸入用於加密金鑰的密碼：",
+    "importEncryptedKeyInputPlaceholder": "輸入密碼",
+    "title": "匯入錢包"
+  },
+  "importMnemonicSelectionModal": {
+    "buttonLabel": "匯入",
+    "foundAccountsMnemonicLabel": "我們找到以下可匯入的帳戶：",
+    "title": "匯入"
+  },
   "languageSelectionModal": {
     "title": "語言"
   },
@@ -405,9 +418,31 @@
   },
   "onboardingBackupMnemonicModal": {
     "backupAndContinueButtonLabel": "備份並繼續",
-    "description": "請備份您的助記詞。如果您失去訪問權限或卸載應用程序，這對於恢復您的錢包很重要。",
-    "title": "備份助記詞",
-    "warningLabel": "任何擁有此短語的人都可以訪問您的錢包，因此請妥善保管。"
+    "description": "助記詞對於在您失去存取權限或解除安裝應用程式後復原錢包<1>至關重要</1>！",
+    "subtitle": "備份您的助記詞！",
+    "title": "您的助記詞短語",
+    "warningLabel": "任何擁有您助記詞短語的人都可以存取您的錢包…請妥善保管！"
+  },
+  "onboardingImportModal": {
+    "backupImportDescription": "或者，您也可以從Neon備份檔案復原錢包",
+    "importBackupConfirmPassword": {
+      "backupPasswordLabel": "備份密碼",
+      "backupPasswordPlaceholder": "輸入備份密碼…",
+      "description": "為了匯入您的備份檔案，請提供您建立備份時使用的密碼",
+      "importBackupButtonLabel": "匯入備份",
+      "importBackupTitle": "匯入Neon備份"
+    },
+    "importDescription": "輸入地址、加密金鑰、私鑰或助記詞：",
+    "importDetailsLabel": "匯入詳情",
+    "importDetailsPlaceholder": "輸入詳情…",
+    "locateButtonLabel": "定位備份",
+    "messages": {
+      "mnemonicComplete": "助記詞完成",
+      "mnemonicIncorrect": "助記詞不正確",
+      "successFile": "備份已找到！"
+    },
+    "scanButtonLabel": "掃描QR碼",
+    "title": "匯入錢包"
   },
   "persistContactAddressModal": {
     "addressLabel": "地址或別名",

@@ -112,7 +112,7 @@ export const useImportAccounts = () => {
   const { importAccount } = useImportAccount()
 
   const importAccounts = useCallback(
-    async ({ accounts: accountsToImport, wallet }: TUseImportAccountsParams) => {
+    async ({ accountsToImport, wallet }: TUseImportAccountsParams) => {
       const accounts = []
 
       for (const accountToImport of accountsToImport) accounts.push(await importAccount({ ...accountToImport, wallet }))

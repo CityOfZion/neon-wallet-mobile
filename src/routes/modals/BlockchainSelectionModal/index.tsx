@@ -18,8 +18,8 @@ type TActionData = {
   blockchains: TBlockchainServiceKey[]
 }
 
-export const BlockchainSelectionModal = ({ route, navigation }: TRootStackScreenProps<'BlockchainSelectionModal'>) => {
-  const { onSelect, isMulti = false, description, title } = route.params
+export const BlockchainSelectionModal = ({ route }: TRootStackScreenProps<'BlockchainSelectionModal'>) => {
+  const { onSelect, isMulti = false, description, title, buttonProps } = route.params
 
   const { t } = useTranslation('modals', { keyPrefix: 'blockchainSelectionModal' })
   const { t: commonT } = useTranslation('common')
@@ -32,7 +32,6 @@ export const BlockchainSelectionModal = ({ route, navigation }: TRootStackScreen
   }
 
   const handleSubmit = () => {
-    navigation.goBack()
     onSelect(actionData.blockchains)
   }
 
@@ -43,11 +42,12 @@ export const BlockchainSelectionModal = ({ route, navigation }: TRootStackScreen
       <BlockchainList onSelect={handleSelect} selectedBlockchains={actionData.blockchains} isMulti={isMulti} />
 
       <TwButton
-        className="mt-auto"
+        className="mb-4 mt-auto"
         variant="contained-light"
         label={commonT('general.done')}
         disabled={!actionData.blockchains.length}
         onPress={handleAct(handleSubmit)}
+        {...buttonProps}
       />
     </TwModalLayout>
   )

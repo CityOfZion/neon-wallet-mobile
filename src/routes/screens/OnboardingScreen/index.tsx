@@ -98,6 +98,7 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
           return
         }
 
+        navigation.goBack()
         setStep('wallet')
 
         let wallet: IWalletState | undefined = wallets[0]
@@ -128,6 +129,14 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
         AnalyticsHelper.logEvent('onboarding_completed')
 
         navigation.replace('OnboardingCompletedScreen')
+      },
+    })
+  }
+
+  const handleImportWallet = () => {
+    navigation.navigate('OnboardingImportModal', {
+      onConfirm: () => {
+        setStep('finalizing')
       },
     })
   }
@@ -169,11 +178,18 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
 
       <View className="items-center gap-2 bg-gray-900 px-6 py-4" style={{ paddingBottom: Math.max(20, bottom) }}>
         {!step ? (
-          <TwButton
-            variant="contained"
-            label={t('screens:onboardingScreen.selectBlockchainsButtonLabel')}
-            onPress={handleSelectBlockchains}
-          />
+          <View className="w-full flex-col gap-y-4">
+            <TwButton
+              variant="contained"
+              label={t('screens:onboardingScreen.createWalletButtonLabel')}
+              onPress={handleSelectBlockchains}
+            />
+            <TwButton
+              variant="outline"
+              label={t('screens:onboardingScreen.importWalletButtonLabel')}
+              onPress={handleImportWallet}
+            />
+          </View>
         ) : (
           <Fragment>
             <OnboardingScreenProgress progress={PROGRESS_BY_STEP[step]} />

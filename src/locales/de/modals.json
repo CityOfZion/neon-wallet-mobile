@@ -51,7 +51,7 @@
     "title": "Wallet Backup"
   },
   "blockchainSelectionModal": {
-    "title": "Chain auswählen"
+    "title": "Blockchain auswählen"
   },
   "bridgeNeo3NeoXAboutModal": {
     "description": "Bridgen Sie Ihre Crypto Assets einfach zwischen Networks, ohne Ihr Wallet zu verlassen.",
@@ -386,6 +386,19 @@
     },
     "title": "NEON Backup importieren"
   },
+  "importEncryptedKeySelectionModal": {
+    "accountAlreadyExists": "Konto existiert bereits",
+    "decryptError": "Fehler beim Entschlüsseln des Schlüssels",
+    "description": "Wähle die Blockchain des verschlüsselten Schlüssels aus, den du importieren möchtest",
+    "importEncryptedConfirmPasswordLabel": "Um fortzufahren, gib bitte das Passwort ein, das zur Verschlüsselung des Schlüssels verwendet wurde:",
+    "importEncryptedKeyInputPlaceholder": "Passwort eingeben",
+    "title": "Wallet importieren"
+  },
+  "importMnemonicSelectionModal": {
+    "buttonLabel": "Importieren",
+    "foundAccountsMnemonicLabel": "Wir haben folgende(n) Account(s) zum Importieren gefunden:",
+    "title": "Importieren"
+  },
   "languageSelectionModal": {
     "title": "Sprache"
   },
@@ -404,10 +417,32 @@
     "markAsUnreadButtonLabel": "Als ungelesen markieren"
   },
   "onboardingBackupMnemonicModal": {
-    "backupAndContinueButtonLabel": "Sicherung und Fortfahren",
-    "description": "Bitte sichern Sie Ihre Mn-Phrase. Dies ist wichtig, um Ihre Brieftasche wiederherzustellen, wenn Sie den Zugriff verlieren oder die App deinstallieren.",
-    "title": "Mn-Phrase sichern",
-    "warningLabel": "Jeder mit dieser Phrase kann auf Ihre Brieftasche zugreifen, daher halten Sie sie sicher."
+    "backupAndContinueButtonLabel": "Backup & weiter",
+    "description": "Eine mnemonische Phrase ist <1>unerlässlich</1>, um deine Wallet wiederherzustellen, falls du den Zugriff verlierst oder die App deinstallierst!",
+    "subtitle": "Sichere deine Mnemonik!",
+    "title": "Deine mnemonische Phrase",
+    "warningLabel": "Jeder, der deine mnemonische Phrase kennt, kann auf deine Wallet zugreifen… halte sie sicher!"
+  },
+  "onboardingImportModal": {
+    "backupImportDescription": "Alternativ können Sie ein Wallet aus einer Neon-Sicherungsdatei wiederherstellen",
+    "importBackupConfirmPassword": {
+      "backupPasswordLabel": "Sicherungskennwort",
+      "backupPasswordPlaceholder": "Sicherungskennwort eingeben…",
+      "description": "Um Ihre Sicherungsdatei zu importieren, geben Sie bitte das Kennwort ein, das Sie zum Erstellen der Sicherung verwendet haben",
+      "importBackupButtonLabel": "Sicherung importieren",
+      "importBackupTitle": "Neon-Sicherung importieren"
+    },
+    "importDescription": "Adresse, verschlüsselten Schlüssel, privaten Schlüssel oder Mnemonik eingeben: ",
+    "importDetailsLabel": "Importdetails",
+    "importDetailsPlaceholder": "Details eingeben…",
+    "locateButtonLabel": "Sicherung suchen",
+    "messages": {
+      "mnemonicComplete": "Mnemonisches Wort vollständig",
+      "mnemonicIncorrect": "Mnemonisches Wort falsch",
+      "successFile": "Sicherung gefunden!"
+    },
+    "scanButtonLabel": "QR-Code scannen",
+    "title": "Wallet importieren"
   },
   "persistContactAddressModal": {
     "addressLabel": "Adresse oder Alias",

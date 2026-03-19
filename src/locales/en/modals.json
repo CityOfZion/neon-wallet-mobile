@@ -51,7 +51,7 @@
     "title": "Wallet backup"
   },
   "blockchainSelectionModal": {
-    "title": "Select chain"
+    "title": "Select blockchain"
   },
   "bridgeNeo3NeoXAboutModal": {
     "description": "Easily bridge your crypto assets between networks, without ever leaving your wallet.",
@@ -386,6 +386,19 @@
     },
     "title": "Import NEON Backup"
   },
+  "importEncryptedKeySelectionModal": {
+    "accountAlreadyExists": "Account already exists",
+    "decryptError": "Error decrypting the key",
+    "description": "Select the blockchain of the encrypted key you want to import",
+    "importEncryptedConfirmPasswordLabel": "To continue, you'll need to enter the password used to encrypt the key:",
+    "importEncryptedKeyInputPlaceholder": "Enter password…",
+    "title": "Import wallet"
+  },
+  "importMnemonicSelectionModal": {
+    "buttonLabel": "Import",
+    "foundAccountsMnemonicLabel": "We found the following account(s) to import:",
+    "title": "Import"
+  },
   "languageSelectionModal": {
     "title": "Language"
   },
@@ -404,10 +417,32 @@
     "markAsUnreadButtonLabel": "Mark as unread"
   },
   "onboardingBackupMnemonicModal": {
-    "backupAndContinueButtonLabel": "Backup and continue",
-    "description": "Please back up your mnemonic phrase. This is important to recover your wallet if you lose access or uninstall the app.",
-    "title": "Backup mnemonic",
-    "warningLabel": "Anyone with this phrase can access your wallet, so keep it secure."
+    "backupAndContinueButtonLabel": "Backup & continue",
+    "description": "A mnemonic phrase is <1>essential</1> for restoring your wallet if you lose access to it or uninstall the app!",
+    "subtitle": "Backup your mnemonic!",
+    "title": "Your mnemonic phrase",
+    "warningLabel": "Anyone with your mnemonic phrase can access your wallet… keep it safe!"
+  },
+  "onboardingImportModal": {
+    "backupImportDescription": "Alternatively, you can restore a wallet from a Neon backup file",
+    "importBackupConfirmPassword": {
+      "backupPasswordLabel": "Backup password",
+      "backupPasswordPlaceholder": "Enter backup password…",
+      "description": "In order to import your backup file, please provide the password you used to create the backup",
+      "importBackupButtonLabel": "Import backup",
+      "importBackupTitle": "Import Neon backup"
+    },
+    "importDescription": "Enter an address, encrypted key, private key or mnemonic: ",
+    "importDetailsLabel": "Import details",
+    "importDetailsPlaceholder": "Enter details…",
+    "locateButtonLabel": "Locate backup",
+    "messages": {
+      "mnemonicComplete": "Mnemonic complete",
+      "mnemonicIncorrect": "Mnemonic incorrect",
+      "successFile": "Backup located!"
+    },
+    "scanButtonLabel": "Scan QR code",
+    "title": "Import wallet"
   },
   "persistContactAddressModal": {
     "addressLabel": "Address or alias",

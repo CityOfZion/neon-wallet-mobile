@@ -231,22 +231,6 @@
     "noDappsConnected": "Nenhum dApp conectado",
     "title": "Conexões"
   },
-  "importBlockchainSelectionScreen": {
-    "subtitle": "Selecione a blockchain desejada para descriptografar sua chave",
-    "title": "Importar"
-  },
-  "importMnemonicSelectionScreen": {
-    "buttonLabel": "Importar",
-    "foundAccountsMnemonic": "Encontramos a(s) seguinte(s) conta(s) para importar:",
-    "title": "Importar"
-  },
-  "importPassphraseScreen": {
-    "accountAlreadyExists": "Conta já existe",
-    "decryptError": "Erro ao descriptografar a chave",
-    "enterPassphrase": "Digite uma Frase-passe para sua chave criptografada",
-    "inputPlaceholder": "Por favor, digite a Frase-passe",
-    "title": "Importar"
-  },
   "importScreen": {
     "enterAnAddress": "Digite um endereço, chave criptografada, chave privada ou palavras mnemônicas",
     "mnemonicComplete": "Mnemônico completo",
@@ -287,6 +271,7 @@
   },
   "onboardingScreen": {
     "cancelAllButtonLabel": "Cancelar tudo",
+    "createWalletButtonLabel": "Criar carteira",
     "feature1": {
       "header": "Organize facilmente seus ativos",
       "subtitle": "Crie várias Contas dentro de uma Carteira, cada uma com seu endereço único."
@@ -303,6 +288,7 @@
       "header": "Apresentando suporte a NFT",
       "subtitle": "Veja sua coleção e acompanhe todas as suas transações de NFT em um único lugar"
     },
+    "importWalletButtonLabel": "Importar carteira",
     "initialSetup": "Configuração Inicial",
     "messagesByActions": {
       "account": "Criando suas contas…",
@@ -310,7 +296,6 @@
       "wallet": "Criando sua carteira…"
     },
     "overviewDescription": "Aqui está uma visão geral dos muitos recursos que você encontrará no aplicativo.",
-    "selectBlockchainsButtonLabel": "Começar",
     "selectBlockchainsModalDescription": "Selecione as blockchains para as quais você deseja criar contas",
     "selectBlockchainsModalTitle": "Selecionar Blockchains",
     "welcomeNW": "Bem-vindo à Neon Wallet"

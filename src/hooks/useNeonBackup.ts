@@ -218,7 +218,7 @@ export const useNeonImportBackup = () => {
       })
 
       for (const backupWallet of data.wallets) {
-        const accountsToImport: TUseImportAccountsParams['accounts'] = []
+        const accountsToImport: TUseImportAccountsParams['accountsToImport'] = []
 
         backupWallet.accounts.forEach(backupAccount => {
           const fixedAccount = NeonBackupHelper.fixAccountProperties(backupAccount)
@@ -233,7 +233,7 @@ export const useNeonImportBackup = () => {
         const fixedWallet = NeonBackupHelper.fixWalletProperties(backupWallet)
         const newWallet = await createWallet({ ...fixedWallet, mnemonic: backupWallet.mnemonic })
 
-        await importAccounts({ wallet: newWallet, accounts: accountsToImport })
+        await importAccounts({ wallet: newWallet, accountsToImport })
       }
     } catch (error) {
       throw new AppError(t('errors.importData'), error)

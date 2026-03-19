@@ -29,9 +29,14 @@ import type {
   TExportFullTransactionsModalParams,
   TExportKeyModalParams,
   THideFraudulentTokenModalParams,
+  TImportAddressSelectionModalParams,
+  TImportEncryptedKeySelectionModalParams,
+  TImportKeySelectionModalParams,
+  TImportMnemonicSelectionModalParams,
   TNodeSelectionModalParams,
   TNotificationContextModalParams,
   TOnboardingBackupMnemonicModalParams,
+  TOnboardingImportModalParams,
   TPasswordModalParams,
   TPersistContactAddressModalParams,
   TPersistContactModalParams,
@@ -67,13 +72,9 @@ import type {
   TCreateWalletStep5ScreenParams,
   TCreateWalletStep6ScreenParams,
   TDappConnectionsScreenParams,
-  TImportAddressSelectionScreenParams,
-  TImportBlockchainSelectionScreenParams,
-  TImportKeySelectionScreenParams,
-  TImportMnemonicSelectionScreenParams,
-  TImportPassphraseScreenParams,
   TImportScreen,
   TMoreScreenParams,
+  TOnboardingCompletedScreenParams,
   TReceiveScreenParams,
   TSendScreenParams,
   TSettingsProtocolEditScreen,
@@ -138,11 +139,6 @@ export type TMoreStackParamList = {
   CreateWalletStep5Screen: TCreateWalletStep5ScreenParams
   CreateWalletStep6Screen: TCreateWalletStep6ScreenParams
   ImportScreen: TImportScreen | undefined
-  ImportBlockchainSelectionScreen: TImportBlockchainSelectionScreenParams
-  ImportMnemonicSelectionScreen: TImportMnemonicSelectionScreenParams
-  ImportKeySelectionScreen: TImportKeySelectionScreenParams
-  ImportAddressSelectionScreen: TImportAddressSelectionScreenParams
-  ImportPassphraseScreen: TImportPassphraseScreenParams
   SettingsScreen?: TSettingsScreenParams
   SettingsSecurityBackupScreen: undefined
   SettingsProtocolEditScreen: TSettingsProtocolEditScreen
@@ -178,7 +174,8 @@ export type TTabStackScreenProps<T extends keyof TTabStackParamList> = Composite
 export type TRootStackParamList = {
   TabStack: NavigatorScreenParams<TTabStackParamList>
   OnboardingScreen: undefined
-  OnboardingCompletedScreen: undefined
+  OnboardingCompletedScreen: TOnboardingCompletedScreenParams | undefined
+  OnboardingImportModal: TOnboardingImportModalParams
 
   OnboardingBackupMnemonicModal: TOnboardingBackupMnemonicModalParams
   QRCodeAddressContextModal: TQRCodeAddressContextModalParams
@@ -258,6 +255,11 @@ export type TRootStackParamList = {
   RemoveNfiModal: TRemoveNfiModalParams
 
   HideFraudulentTokenModal: THideFraudulentTokenModalParams
+
+  ImportAddressSelectionModal: TImportAddressSelectionModalParams
+  ImportEncryptedKeySelectionModal: TImportEncryptedKeySelectionModalParams
+  ImportKeySelectionModal: TImportKeySelectionModalParams
+  ImportMnemonicSelectionModal: TImportMnemonicSelectionModalParams
 
   BridgeNeo3NeoXAboutModal: undefined
   BridgeNeo3NeoXConfirmationModal: TBridgeNeo3NeoXConfirmationModalParams

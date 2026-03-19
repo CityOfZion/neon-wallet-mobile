@@ -15,52 +15,46 @@ import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { useImportAccounts } from '@/hooks/useAccountActions'
 import { useAccountsSelector } from '@/hooks/useAccountSelector'
 import { useMount } from '@/hooks/useMount'
+import { usePressOnce } from '@/hooks/usePressOnce'
 import { useCreateWallet } from '@/hooks/useWalletActions'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { TwModalLayout } from '@/layouts/TwModalLayout'
+import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
 
 import type { TUseImportAccountsParams } from '@/types/hooks'
-import type { TMoreStackScreenProps } from '@/types/stacks'
+import type { TRootStackScreenProps } from '@/types/stacks'
 
-export const ImportKeySelectionScreen = ({ navigation, route }: TMoreStackScreenProps<'ImportKeySelectionScreen'>) => {
-  const { key } = route.params
+export const ImportKeySelectionModal = ({ route }: TRootStackScreenProps<'ImportKeySelectionModal'>) => {
+  const { key, onConfirm } = route.params
 
   const { accountsRef } = useAccountsSelector()
-  const { t } = useTranslation('screens', { keyPrefix: 'importMnemonicSelectionScreen' })
+  const { t } = useTranslation('modals', { keyPrefix: 'importMnemonicSelectionModal' })
   const { t: commonT } = useTranslation('common')
 
   const { createWallet } = useCreateWallet()
   const { importAccounts } = useImportAccounts()
 
-  const [isImporting, setIsImporting] = useState(false)
   const [generatedAccounts, setGeneratedAccounts] = useState<TAccountSelectionAccordionAccount[]>([])
   const [selectedAccounts, setSelectedAccounts] = useState<TAccountSelectionAccordionAccount[]>([])
 
-  const handlePressImport = async () => {
-    try {
-      setIsImporting(true)
+  const [isImporting, startImport] = usePressOnce(async () => {
+    const wallet = await createWallet({
+      name: commonT('wallet.importedName'),
+      backupStatus: 'successful',
+      type: 'non-standard',
+    })
 
-      const wallet = await createWallet({
-        name: commonT('wallet.importedName'),
-        backupStatus: 'successful',
-        type: 'non-standard',
-      })
+    const accountsToImport: TUseImportAccountsParams['accountsToImport'] = selectedAccounts.map(account => ({
+      ...account,
+      type: 'standard',
+    }))
 
-      const accountsToImport: TUseImportAccountsParams['accounts'] = selectedAccounts.map(account => ({
-        ...account,
-        type: 'standard',
-      }))
+    await importAccounts({ wallet, accountsToImport })
 
-      await importAccounts({ wallet, accounts: accountsToImport })
+    AnalyticsHelper.logEvent('wallet_imported')
 
-      AnalyticsHelper.logEvent('wallet_imported')
-
-      navigation.popToTop()
-      navigation.jumpTo('WalletsStack', { screen: 'WalletsScreen', params: { wallet } })
-    } finally {
-      setIsImporting(false)
-    }
-  }
+    onConfirm()
+  })
 
   const handleSelectAccount = (account: TAccountSelectionAccordionAccount) => {
     setSelectedAccounts(prev => {
@@ -103,14 +97,18 @@ export const ImportKeySelectionScreen = ({ navigation, route }: TMoreStackScreen
   )
 
   return (
-    <TwScreenLayout title={t('title')} contentContainerClassName="justify-between">
+    <TwModalLayout
+      title={t('title')}
+      rightElement={<TwModalLayoutCloseIconButton />}
+      contentContainerClassName="justify-between"
+    >
       {isMounting ? (
         <ScreenLoader />
       ) : (
         <Fragment>
           <View>
             <Text className="my-8 px-6 text-center font-sans-regular text-lg text-white">
-              {t('foundAccountsMnemonic')}
+              {t('foundAccountsMnemonicLabel')}
             </Text>
 
             <AccountSelectionAccordion
@@ -126,10 +124,10 @@ export const ImportKeySelectionScreen = ({ navigation, route }: TMoreStackScreen
             label={t('buttonLabel')}
             isLoading={isImporting}
             disabled={selectedAccounts.length === 0}
-            onPress={handlePressImport}
+            onPress={startImport}
           />
         </Fragment>
       )}
-    </TwScreenLayout>
+    </TwModalLayout>
   )
 }

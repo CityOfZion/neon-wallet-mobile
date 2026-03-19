@@ -38,26 +38,6 @@ export const MoreStack = () => {
         name="ImportScreen"
         getComponent={() => require('@/routes/screens/ImportScreen').ImportScreen}
       />
-      <MoreNavigator.Screen
-        name="ImportBlockchainSelectionScreen"
-        getComponent={() => require('@/routes/screens/ImportBlockchainSelectionScreen').ImportBlockchainSelectionScreen}
-      />
-      <MoreNavigator.Screen
-        name="ImportPassphraseScreen"
-        getComponent={() => require('@/routes/screens/ImportPassphraseScreen').ImportPassphraseScreen}
-      />
-      <MoreNavigator.Screen
-        name="ImportMnemonicSelectionScreen"
-        getComponent={() => require('@/routes/screens/ImportMnemonicSelectionScreen').ImportMnemonicSelectionScreen}
-      />
-      <MoreNavigator.Screen
-        name="ImportKeySelectionScreen"
-        getComponent={() => require('@/routes/screens/ImportKeySelectionScreen').ImportKeySelectionScreen}
-      />
-      <MoreNavigator.Screen
-        name="ImportAddressSelectionScreen"
-        getComponent={() => require('@/routes/screens/ImportAddressSelectionScreen').ImportAddressSelectionScreen}
-      />
 
       <MoreNavigator.Screen
         name="SettingsScreen"

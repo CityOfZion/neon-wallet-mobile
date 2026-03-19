@@ -231,22 +231,6 @@
     "noDappsConnected": "Keine dApps verbunden",
     "title": "Verbindungen"
   },
-  "importBlockchainSelectionScreen": {
-    "subtitle": "Wählen Sie die gewünschte Blockchain, um Ihren Key zu entschlüsseln",
-    "title": "Importieren"
-  },
-  "importMnemonicSelectionScreen": {
-    "buttonLabel": "Importieren",
-    "foundAccountsMnemonic": "Wir haben folgende(n) Account(s) zum Importieren gefunden:",
-    "title": "Importieren"
-  },
-  "importPassphraseScreen": {
-    "accountAlreadyExists": "Konto existiert bereits",
-    "decryptError": "Fehler beim Entschlüsseln des Keys",
-    "enterPassphrase": "Geben Sie eine Passphrase für Ihren verschlüsselten Key ein",
-    "inputPlaceholder": "Bitte Passphrase eingeben",
-    "title": "Importieren"
-  },
   "importScreen": {
     "enterAnAddress": "Geben Sie eine Adresse, verschlüsselten Key, Private Key oder Mnemonic Wörter ein",
     "mnemonicComplete": "Mnemonic vollständig",
@@ -287,6 +271,7 @@
   },
   "onboardingScreen": {
     "cancelAllButtonLabel": "Alle abbrechen",
+    "createWalletButtonLabel": "Wallet erstellen",
     "feature1": {
       "header": "Organisieren Sie Ihre Assets ganz einfach",
       "subtitle": "Erstellen Sie mehrere Kontos innerhalb eines Wallets, jeder mit seiner eindeutigen Adresse."
@@ -303,6 +288,7 @@
       "header": "Einführung NFT Unterstützung",
       "subtitle": "Sehen Sie Ihre Sammlung und behalten Sie alle Ihre NFT-Transaktionen an einem Ort im Blick"
     },
+    "importWalletButtonLabel": "Wallet importieren",
     "initialSetup": "Ersteinrichtung",
     "messagesByActions": {
       "account": "Ihre Kontos werden erstellt…",
@@ -310,7 +296,6 @@
       "wallet": "Ihr Portemonnaie wird erstellt…"
     },
     "overviewDescription": "Hier ist ein Überblick über die vielen Funktionen, die Sie in der App finden werden.",
-    "selectBlockchainsButtonLabel": "Erste Schritte",
     "selectBlockchainsModalDescription": "Wählen Sie die Blockchains aus, für die Sie Kontos erstellen möchten",
     "selectBlockchainsModalTitle": "Blockchains auswählen",
     "welcomeNW": "Willkommen bei Neon Wallet"
