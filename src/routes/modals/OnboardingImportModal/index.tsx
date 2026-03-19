@@ -145,24 +145,6 @@ export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenPro
       <View className="mb-8">
         <Text className="my-6 text-center font-sans-regular text-lg text-white">{t('importDescription')}</Text>
 
-        {isMnemonic && (
-          <View className="mb-5 flex-row items-center justify-center gap-2.5">
-            {actionState.errors.text ? (
-              <TbX aria-hidden className="size-5 text-magenta" />
-            ) : (
-              <TbCheck aria-hidden className="size-5 text-neon" />
-            )}
-
-            <Text
-              className={StyleHelper.mergeStyles('font-sans-regular text-base text-neon', {
-                'text-magenta': actionState.errors.text,
-              })}
-            >
-              {t(!actionState.errors.text ? 'messages.mnemonicComplete' : 'messages.mnemonicIncorrect')}
-            </Text>
-          </View>
-        )}
-
         <TwInput
           placeholder={t('importDetailsPlaceholder')}
           aria-label={t('importDetailsLabel')}
@@ -190,6 +172,24 @@ export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenPro
           autoComplete="off"
           autoCorrect={false}
         />
+
+        {isMnemonic && (
+          <View className="mb-3 mt-4 flex-row items-center justify-center gap-2.5">
+            {actionState.errors.text ? (
+              <TbX aria-hidden className="size-5 text-magenta" />
+            ) : (
+              <TbCheck aria-hidden className="size-5 text-neon" />
+            )}
+
+            <Text
+              className={StyleHelper.mergeStyles('font-sans-regular text-base text-neon', {
+                'text-magenta': actionState.errors.text,
+              })}
+            >
+              {t(!actionState.errors.text ? 'messages.mnemonicComplete' : 'messages.mnemonicIncorrect')}
+            </Text>
+          </View>
+        )}
 
         <TwButton
           label={t('scanButtonLabel')}

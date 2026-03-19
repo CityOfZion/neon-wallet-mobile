@@ -44,7 +44,7 @@ export const BlockchainSelectionModal = ({ route }: TRootStackScreenProps<'Block
       <TwButton
         className="mb-4 mt-auto"
         variant="contained-light"
-        label={commonT('general.done')}
+        label={commonT('general.continue')}
         disabled={!actionData.blockchains.length}
         onPress={handleAct(handleSubmit)}
         {...buttonProps}
