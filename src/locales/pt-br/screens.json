@@ -264,41 +264,40 @@
     "title": "Notificações"
   },
   "onboardingCompletedScreen": {
-    "buttonLabel": "Ver Carteira",
-    "subtitle": "Sua nova carteira e conta estão prontas para usar.",
-    "title": "Configuração Concluída!",
-    "titleAddressList": "Endereços da conta"
+    "backupMnemonicButtonLabel": "Fazer backup da carteira",
+    "subtitleImport": "Sua carteira e contas importadas agora estão prontas para usar!",
+    "subtitleNew": "Sua nova carteira e contas agora estão prontas para usar!",
+    "titleImport": "Importação Concluída",
+    "titleNew": "Configuração Concluída",
+    "viewWalletButtonLabel": "Ver Carteira"
   },
   "onboardingScreen": {
     "cancelAllButtonLabel": "Cancelar tudo",
-    "createWalletButtonLabel": "Criar carteira",
+    "createWalletButtonLabel": "Criar uma nova carteira",
     "feature1": {
-      "header": "Organize facilmente seus ativos",
-      "subtitle": "Crie várias Contas dentro de uma Carteira, cada uma com seu endereço único."
+      "header": "A carteira original em movimento",
+      "subtitle": "Todos os melhores recursos de nossa carteira desktop e muito mais na palma da sua mão"
     },
     "feature2": {
-      "header": "O Aplicativo de Carteira Mais Flexível na Neo",
-      "subtitle": "Traga facilmente suas Chaves Privadas para a Neon ou adicione qualquer endereço como conta watch para ficar de olho em suas transações públicas."
+      "header": "Experiência de primeira classe",
+      "subtitle": "Neon Wallet foi projetada para tornar o gerenciamento de seus ativos criptográficos o mais intuitivo possível"
     },
     "feature3": {
-      "header": "Conexão Mobile Dapp",
-      "subtitle": "Interaja com segurança com vários Dapps diretamente do seu dispositivo através do protocolo Wallet Connect estabelecido."
+      "header": "Carteiras BIP39",
+      "subtitle": "O padrão BIP39 permite que você crie contas filhas infinitas usando uma única frase mnemônica"
     },
     "feature4": {
-      "header": "Apresentando suporte a NFT",
-      "subtitle": "Veja sua coleção e acompanhe todas as suas transações de NFT em um único lugar"
+      "header": "Pipeline repleto de atualizações",
+      "subtitle": "O time está trabalhando arduamente para trazer os recursos mais recentes"
     },
-    "importWalletButtonLabel": "Importar carteira",
-    "initialSetup": "Configuração Inicial",
+    "importWalletButtonLabel": "Importar uma carteira",
     "messagesByActions": {
       "account": "Criando suas contas…",
       "finalizing": "Finalizando tudo…",
       "wallet": "Criando sua carteira…"
     },
-    "overviewDescription": "Aqui está uma visão geral dos muitos recursos que você encontrará no aplicativo.",
     "selectBlockchainsModalDescription": "Selecione as blockchains para as quais você deseja criar contas",
-    "selectBlockchainsModalTitle": "Selecionar Blockchains",
-    "welcomeNW": "Bem-vindo à Neon Wallet"
+    "selectBlockchainsModalTitle": "Selecionar Blockchains"
   },
   "receiveScreen": {
     "accountSelectPlaceholder": "Selecione…",

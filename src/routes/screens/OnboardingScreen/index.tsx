@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 
 import { BSKeychainHelper } from '@cityofzion/blockchain-service'
 import { Image } from 'expo-image'
@@ -22,6 +22,8 @@ import { useCreateWallet } from '@/hooks/useWalletActions'
 import { useWalletsSelector } from '@/hooks/useWalletSelector'
 
 import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+
+import MdOutlineAutoAwesome from '@/assets/images/md-outline-auto-awesome.svg'
 
 import { OnboardingScreenPagination } from './OnboardingScreenPagination'
 import { OnboardingScreenProgress } from './OnboardingScreenProgress'
@@ -65,11 +67,11 @@ const PROGRESS_BY_STEP: Record<TStep, number> = {
 
 const renderItem: CarouselRenderItem<(typeof DATA)[0]> = ({ item }) => (
   <View className="h-full w-full">
-    <Image contentFit="cover" source={item.image} className="h-full w-full" />
+    <Image contentFit="contain" contentPosition="top" source={item.image} className="h-full w-full" />
 
-    <View className="absolute bottom-4 px-4">
-      <Text className="font-sans-bold text-base text-neon">{item.header}</Text>
-      <Text className="font-sans-bold text-base text-white">{item.subtitle}</Text>
+    <View className="absolute bottom-10 w-full flex-col items-center gap-3 px-4">
+      <Text className="text-center font-sans-medium text-2xl text-white">{item.header}</Text>
+      <Text className="text-center font-sans-regular text-lg text-gray-100">{item.subtitle}</Text>
     </View>
   </View>
 )
@@ -146,24 +148,15 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
       withoutBackButton
       withoutHeader
       withoutBars
-      className="bg-black"
+      className="bg-asphalt"
       contentContainerClassName="px-0 pb-0"
-      containerProps={{ className: 'bg-gray-900' }}
-      style={{ paddingTop: top + 15 }}
+      style={{ paddingTop: top + 30 }}
     >
-      <View className="px-4">
-        <Text className="font-sans-bold text-xs uppercase text-neon">{t('screens:onboardingScreen.initialSetup')}</Text>
-        <Text className="font-sans-bold text-3xl text-white">{t('screens:onboardingScreen.welcomeNW')}</Text>
-        <Text className="w-4/5 font-sans-regular text-sm text-white">
-          {t('screens:onboardingScreen.overviewDescription')}
-        </Text>
-      </View>
-
       <Carousel
         data={DATA}
         width={width}
         autoPlay
-        autoPlayInterval={2000}
+        autoPlayInterval={3000}
         containerStyle={{ flex: 1 }}
         mode="parallax"
         onProgressChange={activeCarouselPage}
@@ -176,28 +169,28 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
 
       <OnboardingScreenPagination activePage={activeCarouselPage} totalPages={DATA.length} />
 
-      <View className="items-center gap-2 bg-gray-900 px-6 py-4" style={{ paddingBottom: Math.max(20, bottom) }}>
+      <View className="min-h-40 items-center gap-2 px-6 py-4" style={{ paddingBottom: Math.max(32, bottom) }}>
         {!step ? (
           <View className="w-full flex-col gap-y-4">
             <TwButton
-              variant="contained"
-              label={t('screens:onboardingScreen.createWalletButtonLabel')}
-              onPress={handleSelectBlockchains}
-            />
-            <TwButton
-              variant="outline"
+              variant="card"
               label={t('screens:onboardingScreen.importWalletButtonLabel')}
               onPress={handleImportWallet}
             />
+            <TwButton
+              variant="contained-light"
+              label={t('screens:onboardingScreen.createWalletButtonLabel')}
+              onPress={handleSelectBlockchains}
+              rightElement={<MdOutlineAutoAwesome aria-hidden />}
+            />
           </View>
         ) : (
-          <Fragment>
-            <OnboardingScreenProgress progress={PROGRESS_BY_STEP[step]} />
-
-            <Text className="text-center font-sans-medium text-base text-white">
-              {t(`screens:onboardingScreen.messagesByActions.${step}`)}
+          <View className="w-full flex-col items-center justify-evenly">
+            <OnboardingScreenProgress progress={PROGRESS_BY_STEP['finalizing']} />
+            <Text className="mt-10 text-center font-sans-medium text-base text-gray-100">
+              {t(`screens:onboardingScreen.messagesByActions.finalizing`)}
             </Text>
-          </Fragment>
+          </View>
         )}
       </View>
     </TwScreenLayout>
