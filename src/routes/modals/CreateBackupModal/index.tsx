@@ -48,9 +48,7 @@ export const CreateBackupModal = ({ navigation }: TRootStackScreenProps<'CreateB
     navigation.navigate('SuccessModal', {
       title: t('title'),
       content: <CreateBackupModalSuccessContent password={actionData.password} />,
-      buttonProps: {
-        label: t('successModal.submitButtonLabel'),
-      },
+      buttonLabel: t('successModal.submitButtonLabel'),
     })
   }
 

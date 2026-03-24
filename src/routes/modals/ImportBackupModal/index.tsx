@@ -52,9 +52,7 @@ export const ImportBackupModal = ({ navigation }: TRootStackScreenProps<'ImportB
         navigation.navigate('SuccessModal', {
           title: t('title'),
           content: t('successModal.description'),
-          buttonProps: {
-            label: t('successModal.submitButtonLabel'),
-          },
+          buttonLabel: t('successModal.submitButtonLabel'),
         })
       },
     })
