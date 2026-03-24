@@ -15,7 +15,7 @@ import PiSealCheck from '@/assets/images/pi-seal-check.svg'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 export const SuccessModal = ({ route }: TRootStackScreenProps<'SuccessModal'>) => {
-  const { buttonProps, content, title, className, titleClassName, onClose } = route.params
+  const { buttonLabel, content, title, className, titleClassName, onClose } = route.params
   const { handleErase } = useModalErase()
 
   const handleClose = () => {
@@ -41,16 +41,11 @@ export const SuccessModal = ({ route }: TRootStackScreenProps<'SuccessModal'>) =
         )}
       </View>
 
-      {buttonProps && (
+      {buttonLabel && (
         <View className="w-full gap-7">
           <TwSeparator />
 
-          <TwButton
-            onPress={handleClose}
-            {...buttonProps}
-            className={StyleHelper.mergeStyles('w-full', buttonProps?.className)}
-            variant="contained-light"
-          />
+          <TwButton label={buttonLabel} className="w-full" variant="contained-light" onPress={handleClose} />
         </View>
       )}
     </TwModalLayout>
