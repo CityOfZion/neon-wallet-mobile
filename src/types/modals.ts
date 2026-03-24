@@ -215,14 +215,14 @@ export type TSuccessModalParams = {
   className?: string
   titleClassName?: string
   content: ReactNode
-  buttonProps?: TTwButtonProps
+  buttonLabel?: string
   onClose?(): void
 }
 
 export type TErrorModalParams = {
   title: string
   content: ReactNode
-  buttonProps?: TTwButtonProps
+  buttonLabel?: string
   onClose?(): void
 }
 

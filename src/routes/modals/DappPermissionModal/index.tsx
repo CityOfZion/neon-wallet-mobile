@@ -69,10 +69,7 @@ export const DappPermissionModal = ({ navigation, route }: TRootStackScreenProps
       navigation.replace('SuccessModal', {
         title: t('successContent.title'),
         content: <DappPermissionSuccessContent response={response} />,
-        buttonProps: {
-          label: t('successContent.doneButtonLabel'),
-          onPress: handleErase,
-        },
+        buttonLabel: t('successContent.doneButtonLabel'),
       })
     } catch (error: any) {
       LoggerHelper.error(error, { where: 'DappPermissionModal', operation: 'startAccept' })
@@ -95,10 +92,7 @@ export const DappPermissionModal = ({ navigation, route }: TRootStackScreenProps
           title: t('successContent.title'),
           // Don't translate the response, because this property isn't translated, it comes from RPC
           content: <DappPermissionSuccessContent response="Transaction cached" />,
-          buttonProps: {
-            label: t('successContent.doneButtonLabel'),
-            onPress: handleErase,
-          },
+          buttonLabel: t('successContent.doneButtonLabel'),
         })
 
         return
@@ -107,10 +101,7 @@ export const DappPermissionModal = ({ navigation, route }: TRootStackScreenProps
       navigation.replace('ErrorModal', {
         title: t('errorContent.title'),
         content: <DappPermissionErrorContent error={error} />,
-        buttonProps: {
-          label: t('errorContent.doneButtonLabel'),
-          onPress: handleErase,
-        },
+        buttonLabel: t('errorContent.doneButtonLabel'),
       })
     }
   })
