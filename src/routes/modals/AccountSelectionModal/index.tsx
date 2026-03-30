@@ -9,7 +9,7 @@ import { TwBlockchainIcon } from '@/components/TwBlockchainIcon'
 import { TwButton } from '@/components/TwButton'
 import { TwSeparator } from '@/components/TwSeparator'
 
-import { selectAccountByWalletId } from '@/hooks/useAccountSelector'
+import { selectAccountsByWalletId } from '@/hooks/useAccountSelector'
 import { useActions } from '@/hooks/useActions'
 import { createAppSelector, useAppSelector } from '@/hooks/useRedux'
 import { useOwnWalletsSelector } from '@/hooks/useWalletSelector'
@@ -21,17 +21,17 @@ import TbX from '@/assets/images/tb-x.svg'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IAccountState, IWalletState } from '@/types/store'
+import type { TAccount, TWallet } from '@/types/store'
 
 type TActionData = {
-  selectedAccount?: IAccountState
-  selectedWallet?: IWalletState
+  selectedAccount?: TAccount
+  selectedWallet?: TWallet
   walletAccordionIsOpen: boolean
   accountAccordionIsOpen: boolean
 }
 
 const selectOwnAccountsByWalletId = (walletId?: string, blockchains?: TBlockchainServiceKey[]) =>
-  createAppSelector([selectAccountByWalletId(walletId)], accounts =>
+  createAppSelector([selectAccountsByWalletId(walletId)], accounts =>
     accounts.filter(account => {
       if (account.type === 'watch') return false
       if (blockchains && !blockchains.includes(account.blockchain)) return false
@@ -63,7 +63,7 @@ export const AccountSelectionModal = ({ navigation, route }: TRootStackScreenPro
 
   const isDisabled = !selectedAccount || !selectedWallet
 
-  const handleWalletChange = (wallet: IWalletState) => {
+  const handleWalletChange = (wallet: TWallet) => {
     setData({
       selectedWallet: wallet,
       selectedAccount: selectedWallet?.id === wallet.id ? selectedAccount : undefined,
@@ -72,7 +72,7 @@ export const AccountSelectionModal = ({ navigation, route }: TRootStackScreenPro
     })
   }
 
-  const handleAccountChange = (account: IAccountState) => {
+  const handleAccountChange = (account: TAccount) => {
     setData({ selectedAccount: account, accountAccordionIsOpen: false })
   }
 
@@ -88,9 +88,7 @@ export const AccountSelectionModal = ({ navigation, route }: TRootStackScreenPro
   }
 
   return (
-    <TwModalLayout title={title ?? t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
-      <Text className="text-center font-sans-regular text-lg text-white">{t('description')}</Text>
-
+    <TwModalLayout title={title || t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
       <SelectAccordion.Root
         className="mt-8"
         value={selectedWallet?.name}
@@ -147,7 +145,7 @@ export const AccountSelectionModal = ({ navigation, route }: TRootStackScreenPro
                   }
                   leftElement={
                     <View className="h-full pt-1.5">
-                      <TwBlockchainIcon blockchain={account.blockchain} type="gray" className="h-4 w-4" />
+                      <TwBlockchainIcon blockchain={account.blockchain} type="gray" className="size-4" />
                     </View>
                   }
                 />

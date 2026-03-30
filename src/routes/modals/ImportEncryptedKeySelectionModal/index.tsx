@@ -22,7 +22,7 @@ import TbArrowRight from '@/assets/images/tb-arrow-right.svg'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
 type TActionsData = {
   blockchain: TBlockchainServiceKey[]
@@ -53,7 +53,7 @@ export const ImportEncryptedKeySelectionModal = ({
 
     if (!hasEncryption(service)) throw new AppError(tCommon('errors.blockchainDoesNotSupportEncryption'))
 
-    let wallet: IWalletState
+    let wallet: TWallet
 
     navigation.navigate('PasswordModal', {
       title: t('title'),

@@ -7,7 +7,7 @@ import { TwAccountList } from '@/components/TwAccountList'
 import { TwButton } from '@/components/TwButton'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
   onSelect: (address: string) => void
@@ -17,7 +17,7 @@ type TProps = {
 export const AddressSelectionModalAccountsContent = ({ onSelect, blockchain }: TProps) => {
   const { t } = useTranslation('modals', { keyPrefix: 'addressSelectionModal' })
 
-  const [selectedAccount, setSelectedAccount] = useState<IAccountState>()
+  const [selectedAccount, setSelectedAccount] = useState<TAccount>()
 
   const handleSelect = () => {
     if (!selectedAccount) return

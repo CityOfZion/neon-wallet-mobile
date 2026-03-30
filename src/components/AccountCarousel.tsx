@@ -9,16 +9,16 @@ import { UtilsHelper } from '@/helpers/UtilsHelper'
 import { getAccountCardDimensions } from './AccountCard/AccountCardNoContent'
 import { AccountCard } from './AccountCard'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
-  onPress?: (account: IAccountState) => void
-  onSelect?: (account: IAccountState) => void
-  accounts: IAccountState[]
+  onPress?: (account: TAccount) => void
+  onSelect?: (account: TAccount) => void
+  accounts: TAccount[]
 } & Omit<TCarouselProps, 'data' | 'renderItem' | 'mode'>
 
-type TItem = IAccountState & {
-  onPress: (account: IAccountState) => void
+type TItem = TAccount & {
+  onPress: (account: TAccount) => void
 }
 
 const accountCardDimensions = getAccountCardDimensions(Dimensions.get('window').width * 0.7)

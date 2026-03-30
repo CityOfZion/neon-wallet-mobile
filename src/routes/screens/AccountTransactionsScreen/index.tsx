@@ -45,6 +45,7 @@ const renderItem: SectionListRenderItem<TUseTransactionsTransaction, TUseTransac
 const AccountTransactionsScreen = (props: TWalletsStackScreenProps<'AccountTransactionsScreen'>) => {
   const { account } = props.route.params
   const { t } = useTranslation('screens', { keyPrefix: 'accountTransactionsScreen' })
+
   const { isFetchingNextPage, fetchNextPage, isLoading, aggregatedData, isRefetching, refetch } =
     useTransactionsQuery(account)
 
@@ -93,7 +94,7 @@ const AccountTransactionsScreen = (props: TWalletsStackScreenProps<'AccountTrans
             <Skeleton.Root className="mt-2.5">
               <Skeleton.Group>
                 {Array.from({ length: 4 }).map((_, index) => (
-                  <Skeleton.Item key={`transaction-skeleton-${index}`} className="h-52 w-full" />
+                  <Skeleton.Item key={`transaction-skeleton-${index}`} className="h-44 w-full" />
                 ))}
               </Skeleton.Group>
             </Skeleton.Root>

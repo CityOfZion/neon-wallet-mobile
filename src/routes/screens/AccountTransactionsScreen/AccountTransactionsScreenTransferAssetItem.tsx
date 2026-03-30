@@ -12,10 +12,10 @@ import { ExchangeHelper } from '@/helpers/ExchangeHelper'
 import { useExchange } from '@/hooks/useExchanges'
 import { useCurrencySelector } from '@/hooks/useSettingsSelector'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
-  account: IAccountState
+  account: TAccount
   event: TTransactionTokenEvent
 }
 
@@ -29,7 +29,7 @@ export const AccountTransactionsScreenTransferAssetItem = ({ account, event }: T
   if (event.token) {
     const convertedPrice = ExchangeHelper.getExchangeConvertedPrice(event.token.hash, account.blockchain, exchange.data)
     fiatAmount = BSBigNumberHelper.fromNumber(convertedPrice)
-      .multipliedBy(event.amount ?? 0)
+      .multipliedBy(event.amount || 0)
       .toNumber()
   }
 
@@ -40,12 +40,14 @@ export const AccountTransactionsScreenTransferAssetItem = ({ account, event }: T
       {event.token ? (
         <TwTokenIcon width={20} height={20} {...event.token} blockchain={account.blockchain} className="rounded" />
       ) : (
-        <View className="h-5 w-5" />
+        <View className="size-5" />
       )}
 
-      <Text className="w-14 font-sans-regular text-lg text-white" numberOfLines={1} ellipsizeMode="middle">
-        {event.token?.symbol ?? event.contractHash}
-      </Text>
+      {(event.token?.symbol || event.token?.hash) && (
+        <Text className="w-14 font-sans-regular text-lg text-white" numberOfLines={1} ellipsizeMode="middle">
+          {event.token.symbol || event.token.hash}
+        </Text>
+      )}
 
       <Text className="flex-1 font-sans-regular text-lg text-gray-100" numberOfLines={1}>
         {event.amount}

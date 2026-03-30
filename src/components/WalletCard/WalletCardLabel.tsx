@@ -7,10 +7,10 @@ import WalletIconLedger from '@/assets/images/wallet-icon-ledger.svg'
 import WalletIconNonStandard from '@/assets/images/wallet-icon-non-standard.svg'
 import WalletIconStandard from '@/assets/images/wallet-icon-standard.svg'
 
-import type { IWalletState, TWalletType } from '@/types/store'
+import type { TWallet, TWalletType } from '@/types/store'
 
 type TProps = {
-  wallet: IWalletState
+  wallet: TWallet
   isInactive?: boolean
 }
 

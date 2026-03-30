@@ -27,7 +27,7 @@ export const OverTheAirManagerSetup = () => {
     }
 
     if (isDownloading) {
-      const progress = Math.floor((downloadProgress ?? 0) * 100)
+      const progress = Math.floor((downloadProgress || 0) * 100)
       ToastHelper.loading({ message: t('downloading', { progress }), id: 'over-the-air' })
     }
   }, [downloadError, downloadProgress, downloadedUpdate, isDownloading, t])

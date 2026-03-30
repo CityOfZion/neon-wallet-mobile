@@ -3,6 +3,7 @@ import { Text, View } from 'react-native'
 import { TwButton } from '@/components/TwButton'
 import { TwSeparator } from '@/components/TwSeparator'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 import { useModalErase } from '@/hooks/useModalErase'
@@ -34,7 +35,7 @@ export const SuccessModal = ({ route }: TRootStackScreenProps<'SuccessModal'>) =
       <PiSealCheck className="mt-3.5 size-32 text-blue" aria-hidden />
 
       <View className={StyleHelper.mergeStyles('my-7 w-full flex-shrink flex-grow items-center', className)}>
-        {typeof content === 'string' ? (
+        {ElementHelper.isTextContentValid(content) ? (
           <Text className="text-center font-sans-medium text-2xl text-white">{content}</Text>
         ) : (
           content

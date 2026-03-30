@@ -79,11 +79,11 @@ export const useNeonCreateBackup = () => {
         name: account.name,
         order: account.order,
         type: account.type,
-        key: key ?? undefined,
+        key: key || undefined,
         skin: account.skin,
       }
 
-      const walletAccounts = backupAccountsByWalletId.get(backupAccount.idWallet) ?? []
+      const walletAccounts = backupAccountsByWalletId.get(backupAccount.idWallet) || []
       backupAccountsByWalletId.set(backupAccount.idWallet, [...walletAccounts, backupAccount])
     })
 
@@ -94,14 +94,14 @@ export const useNeonCreateBackup = () => {
 
       await editWallet({ wallet, data: { backupStatus: 'successful' } })
 
-      const walletAccounts = backupAccountsByWalletId.get(wallet.id) ?? []
+      const walletAccounts = backupAccountsByWalletId.get(wallet.id) || []
 
       backupFile.wallets.push({
         id: wallet.id,
         name: wallet.name,
         // It is always standard because we are following the NWD format
         type: 'standard',
-        mnemonic: mnemonic ?? undefined,
+        mnemonic: mnemonic || undefined,
         accounts: walletAccounts,
       })
     })

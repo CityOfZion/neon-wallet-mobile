@@ -55,13 +55,13 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[account.blockchain]
   const isServiceClaimable = isClaimable(service)
 
-  const tokenBalances = balanceQuery.data?.tokensBalances ?? []
+  const tokenBalances = balanceQuery.data?.tokensBalances || []
 
   const isIos = Platform.OS === 'ios'
   const isAndroid = Platform.OS === 'android'
 
   const isCustomNetwork = selectedNetwork.type === 'custom'
-  const isWatchAccount = account.type === 'watch'
+  const isWatchAccount = account?.type === 'watch'
 
   const isSendDisabled =
     isNotConnected ||
@@ -69,7 +69,7 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
     tokenBalances.length === 0 ||
     tokenBalances.every(balance => balance.amountNumber <= 0)
 
-  const isNeo3Account = account.blockchain === 'neo3'
+  const isNeo3Account = account?.blockchain === 'neo3'
 
   const handleRefetch = () => {
     balanceQuery.refetch()
@@ -168,7 +168,7 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
             'w-full': !isServiceClaimable,
           })}
           disabled={isWatchAccount}
-          icon={<TbShoppingBag aria-hidden className="h-5 w-5 text-neon" />}
+          icon={<TbShoppingBag aria-hidden className="size-5 text-neon" />}
           onPress={handlePressBuyAndSellButton}
         />
       </View>
@@ -177,7 +177,7 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
         <AccountScreenActionButton
           label={t('buttons.receive')}
           className="w-full"
-          icon={<TbStepInto aria-hidden className="h-5 w-5 text-neon" />}
+          icon={<TbStepInto aria-hidden className="size-5 text-neon" />}
           onPress={handlePressReceiveButton}
         />
 
@@ -185,7 +185,7 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
           label={t('buttons.send')}
           className="w-full"
           disabled={isSendDisabled}
-          icon={<TbStepOut aria-hidden className="h-5 w-5 text-neon" />}
+          icon={<TbStepOut aria-hidden className="size-5 text-neon" />}
           onPress={handlePressSendButton}
         />
       </View>
@@ -197,7 +197,7 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
               label={t('buttons.swap')}
               className="w-full"
               disabled={isWatchAccount}
-              icon={<TbTransform aria-hidden className="h-5 w-5 text-neon" />}
+              icon={<TbTransform aria-hidden className="size-5 text-neon" />}
               onPress={handlePressSwapButton}
             />
           )}
@@ -207,7 +207,7 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
               label={t('buttons.bridgeNeo3NeoX')}
               className="w-full"
               disabled={isWatchAccount}
-              icon={<TbReplace2 aria-hidden className="h-5 w-5 text-neon" />}
+              icon={<TbReplace2 aria-hidden className="size-5 text-neon" />}
               onPress={handlePressBridgeNeo3NeoXButton}
             />
           )}
@@ -219,7 +219,7 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
           <AccountScreenActionButton
             label={t('buttons.voteNeo3')}
             className="w-full"
-            icon={<TbChartBarPopular aria-hidden className="h-5 w-5 text-neon" />}
+            icon={<TbChartBarPopular aria-hidden className="size-5 text-neon" />}
             onPress={handlePressVoteNeo3Button}
           />
         </View>

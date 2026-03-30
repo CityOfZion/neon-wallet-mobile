@@ -40,7 +40,7 @@ export const DappPermissionInvokeNeo3ContentSigner = ({ signer, session }: TProp
     navigation.navigate('DappPermissionSignatureScopeModal', {
       session,
       scope,
-      allowedList: signer.allowedContracts ?? signer.allowedGroups,
+      allowedList: signer.allowedContracts || signer.allowedGroups,
     })
   }
 

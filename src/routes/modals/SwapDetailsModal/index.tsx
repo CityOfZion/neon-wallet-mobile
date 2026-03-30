@@ -167,7 +167,7 @@ export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'S
     >
       {isBadStatus ? (
         <View className="items-center gap-2 px-4">
-          <PiXCircle className="h-28 w-28 text-pink" aria-hidden />
+          <PiXCircle className="size-28 text-pink" aria-hidden />
 
           <Text className="text-center font-sans-regular text-gray-100">
             {t('errors.initialPart')} {txFrom ? t('errors.swap') : t('errors.transfer')}
@@ -176,12 +176,12 @@ export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'S
           {status === 'refunded' && <Text className="font-sans-medium text-lg text-white">{t('errors.refunded')}</Text>}
         </View>
       ) : (
-        <PiSealCheck className="h-28 w-28 text-blue" aria-hidden />
+        <PiSealCheck className="size-28 text-blue" aria-hidden />
       )}
 
       <View className="mt-8 w-full gap-2 rounded bg-asphalt p-2 py-3">
         <View className="flex-row items-center gap-1">
-          <TbReceipt className="h-5 w-5 text-blue" aria-hidden />
+          <TbReceipt className="size-5 text-blue" aria-hidden />
           <Text className="font-sans-regular text-lg text-white">{t('details')}</Text>
         </View>
 
@@ -215,7 +215,7 @@ export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'S
                   {txFrom ? (
                     <Fragment>
                       {tokenFrom.blockchain && (
-                        <TwBlockchainIcon blockchain={tokenFrom.blockchain} type="gray" className="h-3 w-3" />
+                        <TwBlockchainIcon blockchain={tokenFrom.blockchain} type="gray" className="size-3" />
                       )}
                       {tokenFrom.txTemplateUrl ? (
                         <SwapDetailsModalLinkButton
@@ -249,7 +249,7 @@ export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'S
                 {match({ txTo, isProcessingStatus, isBadStatus })
                   .with({ txTo: P.string.minLength(1) }, ({ txTo }) => (
                     <View className="flex-row items-center gap-2">
-                      <TwBlockchainIcon blockchain={blockchain} type="gray" className="h-3 w-3" />
+                      <TwBlockchainIcon blockchain={blockchain} type="gray" className="size-3" />
                       {tokenTo.txTemplateUrl ? (
                         <SwapDetailsModalLinkButton
                           label={txTo}
@@ -275,14 +275,14 @@ export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'S
                     <View className="flex-row items-center gap-2">
                       <Text className="font-sans-medium text-orange">{t('pending')}</Text>
 
-                      <FaRotateRight aria-hidden className="h-4 w-4 text-orange" />
+                      <FaRotateRight aria-hidden className="size-4 text-orange" />
                     </View>
                   ))
                   .with({ isBadStatus: true }, () => (
                     <View className="flex-row items-center gap-2">
                       <Text className="font-sans-medium text-pink">{t('failed')}</Text>
 
-                      <TbAlertTriangleFilled aria-hidden className="h-4 w-4 text-pink" />
+                      <TbAlertTriangleFilled aria-hidden className="size-4 text-pink" />
                     </View>
                   ))
                   .otherwise(() => (
@@ -378,7 +378,7 @@ export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'S
             <View className="p-2">
               <TouchableOpacity onPress={handleGoToCreateContact} activeOpacity={0.6}>
                 <View className="flex-row items-center gap-2">
-                  <TbUsers aria-hidden className="h-4 w-4 text-neon" />
+                  <TbUsers aria-hidden className="size-4 text-neon" />
                   <Text className="font-sans-medium text-neon">{t('saveContact')}</Text>
                 </View>
               </TouchableOpacity>

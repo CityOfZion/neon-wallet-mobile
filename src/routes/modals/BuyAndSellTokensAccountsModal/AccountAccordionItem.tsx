@@ -15,10 +15,10 @@ import { useCurrencySelector } from '@/hooks/useSettingsSelector'
 
 import TbCopy from '@/assets/images/tb-copy.svg'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
-  account: IAccountState
+  account: TAccount
 }
 
 export const AccountAccordionItem = ({ account }: TProps) => {
@@ -30,7 +30,7 @@ export const AccountAccordionItem = ({ account }: TProps) => {
 
   return (
     <View className="my-2 flex flex-row items-center gap-x-3 gap-y-1.5">
-      <TwBlockchainIcon blockchain={account.blockchain} type="gray" className="mt-1 h-4.5 w-4.5 self-start" />
+      <TwBlockchainIcon blockchain={account.blockchain} type="gray" className="mt-1 size-4.5 self-start" />
 
       <View className="flex flex-shrink flex-grow flex-col">
         <Text className="max-w-[80%] font-sans-medium text-lg text-white" numberOfLines={1}>
@@ -63,7 +63,7 @@ export const AccountAccordionItem = ({ account }: TProps) => {
 
         <Skeleton.Content>
           <Text className="font-sans-regular text-lg text-white" numberOfLines={1}>
-            {CurrencyHelper.format(data?.exchangeTotal ?? 0, { currency })}
+            {CurrencyHelper.format(data?.exchangeTotal || 0, { currency })}
           </Text>
         </Skeleton.Content>
       </Skeleton.Root>

@@ -140,5 +140,19 @@ export function getSettingsMigrations() {
         surveyInfo: { status: 'not-submitted', updatedAt: Date.now() },
       },
     }),
+    12: (state: any) => ({
+      ...state,
+      data: {
+        ...state.data,
+        customNetworksByBlockchain: {
+          ...state.data.customNetworksByBlockchain,
+          bitcoin: [],
+        },
+        selectedNetworkByBlockchain: {
+          ...state.data.selectedNetworkByBlockchain,
+          bitcoin: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.bitcoin.defaultNetwork,
+        },
+      },
+    }),
   }
 }

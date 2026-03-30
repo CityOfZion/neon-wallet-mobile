@@ -46,7 +46,7 @@ export const ActionFeeStep = ({
       ? ExchangeHelper.getExchangeConvertedPrice(service.feeToken.hash, service.name, exchange.data)
       : 0
 
-  const fiatFee = NumberHelper.number(fee ?? 0) * convertedFeeTokenPrice
+  const fiatFee = NumberHelper.number(fee || 0) * convertedFeeTokenPrice
 
   return (
     <View className={StyleHelper.mergeStyles('mt-3 rounded bg-gray-700/60 px-1 py-2', className)}>
@@ -59,7 +59,7 @@ export const ActionFeeStep = ({
           <Loader />
         ) : (
           <Text className="max-w-[60%] font-sans-regular text-lg text-white" numberOfLines={1} ellipsizeMode="middle">
-            {fee ?? feePlaceholder}
+            {fee || feePlaceholder}
           </Text>
         )}
       </ActionStep>

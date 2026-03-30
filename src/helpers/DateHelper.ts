@@ -3,6 +3,8 @@ import * as dateFnsLocales from 'date-fns/locale'
 
 import type { TDateHelperFormatLocalizedOptions } from '@/types/helpers'
 
+type TDate = Date | string | number
+
 export class DateHelper {
   static readonly #dateFnsLocaleByLanguage: Record<string, dateFns.Locale> = {
     en: dateFnsLocales.enUS,
@@ -12,11 +14,11 @@ export class DateHelper {
     'zh-Hant': dateFnsLocales.zhTW,
   }
 
-  static getNowUnix = (): number => {
+  static getNowUnix(): number {
     return Date.now() / 1000
   }
 
-  static formatLocalized = (date: Date | string | number, options: TDateHelperFormatLocalizedOptions): string => {
+  static formatLocalized(date: TDate, options: TDateHelperFormatLocalizedOptions): string {
     if (typeof date === 'string') {
       date = new Date(date)
     } else if (typeof date === 'number') {
@@ -28,13 +30,13 @@ export class DateHelper {
     })
   }
 
-  static format(date: Date | string | number, formatStr: string): string {
+  static format(date: TDate, formatString: string): string {
     if (typeof date === 'string') {
       date = new Date(date)
     } else if (typeof date === 'number') {
       date *= 1000
     }
 
-    return dateFns.format(date, formatStr)
+    return dateFns.format(date, formatString)
   }
 }

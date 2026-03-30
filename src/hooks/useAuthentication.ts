@@ -9,7 +9,7 @@ import { useItemNfiAuthentication } from './useItemNfiAuthentication'
 import { usePasswordAuthentication } from './usePasswordAuthentication'
 import { useSecuritySelector } from './useSettingsSelector'
 
-import type { IAccountState, TSecurityType } from '@/types/store'
+import type { TAccount, TSecurityType } from '@/types/store'
 
 export const useAuthentication = () => {
   const { t: commonT } = useTranslation('common')
@@ -18,7 +18,7 @@ export const useAuthentication = () => {
   const { authenticatePassword } = usePasswordAuthentication()
   const { authenticateNfi } = useItemNfiAuthentication()
 
-  const authenticate = useCallback(async (account?: IAccountState) => {
+  const authenticate = useCallback(async (account?: TAccount) => {
     const authenticateFnBySecurityType: Record<TSecurityType, () => Promise<void>> = {
       device: authenticateDevice,
       password: authenticatePassword,

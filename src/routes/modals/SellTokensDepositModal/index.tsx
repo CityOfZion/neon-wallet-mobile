@@ -28,7 +28,7 @@ import { ToastHelper } from '@/helpers/ToastHelper'
 import { TransactionHelper } from '@/helpers/TransactionHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
-import { useAccountMapSelector } from '@/hooks/useAccountSelector'
+import { useAccountsMapSelector } from '@/hooks/useAccountSelector'
 import { useActions } from '@/hooks/useActions'
 import { useAuthentication } from '@/hooks/useAuthentication'
 import { useBalance } from '@/hooks/useBalances'
@@ -48,7 +48,7 @@ import VscCircleFilled from '@/assets/images/vsc-circle-filled.svg'
 import { thunks } from '@/store/thunks'
 import type { TTokenSelectionModalToken } from '@/types/modals'
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 export const SellTokensDepositModal = ({
   navigation,
@@ -62,12 +62,12 @@ export const SellTokensDepositModal = ({
   const { authenticate } = useAuthentication()
   const debounceAddress = useDebounceFunction()
   const debounceAmount = useDebounceFunction()
-  const { accountsMapRef } = useAccountMapSelector()
+  const { accountsMapRef } = useAccountsMapSelector()
   const amountTextInputRef = useRef<TextInput>(null)
   const isTransactionCompleted = useRef(false)
 
   const { actionData, actionState, setData, setError, clearErrors, handleAct } = useActions<TDepositActionsData>(
-    params.depositActionsData ?? {
+    params.depositActionsData || {
       amount: '',
       isAmountLoading: false,
       address: '',
@@ -78,7 +78,7 @@ export const SellTokensDepositModal = ({
 
   const { data: balanceData, isLoading: isBalanceLoading } = useBalance(actionData.account)
 
-  const tokenBalances = useMemo(() => balanceData?.tokensBalances ?? [], [balanceData])
+  const tokenBalances = useMemo(() => balanceData?.tokensBalances || [], [balanceData])
 
   const service = useMemo(
     () =>
@@ -94,7 +94,7 @@ export const SellTokensDepositModal = ({
     const hash = token?.hash
     if (tokenBalances.length === 0 || !hash || !service) return null
 
-    return tokenBalances.find(balance => service.tokenService.predicateByHash(hash, balance.token)) ?? null
+    return tokenBalances.find(balance => service.tokenService.predicateByHash(hash, balance.token)) || null
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actionData.token, tokenBalances, service])
@@ -118,7 +118,7 @@ export const SellTokensDepositModal = ({
     isInvalidForm ||
     (isServiceCalculableFee && !actionData.fee)
 
-  const handleChangeAccount = (account: IAccountState) => {
+  const handleChangeAccount = (account: TAccount) => {
     setData({
       account,
       fee: undefined,
@@ -158,7 +158,7 @@ export const SellTokensDepositModal = ({
       account: actionData.account,
       blockchain,
       selectedToken: actionData.token,
-      tokens: tokenBalances.map(({ token }) => token) ?? [],
+      tokens: tokenBalances.map(({ token }) => token) || [],
       onSelect: handleChangeToken,
     })
   }
@@ -172,6 +172,7 @@ export const SellTokensDepositModal = ({
       await authenticate(account)
 
       const key = await SecureStoreHelper.getKey(account)
+
       if (!key) throw new AppError(commonT('errors.noKey'))
 
       const token = tokenBalance!.token
@@ -179,53 +180,51 @@ export const SellTokensDepositModal = ({
       const address = actionData.address
       const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account, key })
 
-      const [transactionHash] = await service.transfer({
+      const [transaction] = await service.transfer({
         senderAccount: serviceAccount,
         intents: [{ amount, receiverAddress: address, token }],
       })
 
-      isTransactionCompleted.current = true
-
-      const toAccount = accountsMapRef.current.get(
+      const receiverAccount = accountsMapRef.current.get(
         AccountHelper.buildAccountKey({
           address,
           blockchain: account.blockchain,
         })
       )
 
-      const transaction = TransactionHelper.buildPendingTransaction({
-        fromAccount: account,
-        txId: transactionHash,
-        events: [
-          {
-            amount,
-            toAccount: toAccount,
-            toAddress: address,
-            token,
-          },
-        ],
+      const pendingTransaction = TransactionHelper.buildPendingTransaction({
+        transaction,
+        account,
+        senderAccount: account,
+        receiverAccounts: receiverAccount ? [receiverAccount] : undefined,
       })
 
+      const notificationPrefix = 'modals:sellTokensDepositModal'
+      const notificationSuccessPrefix = `${notificationPrefix}.successNotification`
+      const notificationFailurePrefix = `${notificationPrefix}.failureNotification`
+
       dispatch(
-        thunks.waitTransaction({
-          transaction,
-          failureNotification: {
-            title: 'modals:sellTokensDepositModal.failureNotification.title',
-            previewBody: 'modals:sellTokensDepositModal.failureNotification.previewBody',
-          },
+        thunks.waitPendingTransaction({
+          pendingTransaction,
           successNotification: {
-            title: 'modals:sellTokensDepositModal.successNotification.title',
-            previewBody: 'modals:sellTokensDepositModal.successNotification.previewBody',
+            title: `${notificationSuccessPrefix}.title`,
+            previewBody: `${notificationSuccessPrefix}.previewBody`,
+          },
+          failureNotification: {
+            title: `${notificationFailurePrefix}.title`,
+            previewBody: `${notificationFailurePrefix}.previewBody`,
           },
         })
       )
+
+      isTransactionCompleted.current = true
 
       params.setDepositActionsData(null)
       navigation.popToTop()
 
       await UtilsHelper.sleep(500)
 
-      navigation.navigate('SellTokensDepositSuccessModal', { transaction })
+      navigation.navigate('SellTokensDepositSuccessModal', { transaction: pendingTransaction })
     } catch (error) {
       LoggerHelper.sentry(error, { where: 'SellTokensDepositModal', operation: 'submitDeposit' })
       ToastHelper.error({ message: AppError.wrap(error, t('messages.transactionFailed')).message })
@@ -273,7 +272,9 @@ export const SellTokensDepositModal = ({
 
         if (!token || !amount) {
           const message = t('messages.insufficientFunds')
+
           setError('amount', message)
+
           throw new AppError(message)
         }
 
@@ -307,8 +308,8 @@ export const SellTokensDepositModal = ({
         if (amountBn.isZero() || amountBn.isNegative()) {
           setError('amount', t('messages.invalidAmount'))
         } else if (
-          amountBn.isGreaterThan(tokenBalance?.amount ?? '0') ||
-          feeWithAmountBn.isGreaterThan(feeTokenBalance?.amount ?? '0')
+          amountBn.isGreaterThan(tokenBalance?.amount || '0') ||
+          feeWithAmountBn.isGreaterThan(feeTokenBalance?.amount || '0')
         ) {
           setError('amount', t('messages.insufficientFunds'))
         } else {
@@ -376,7 +377,7 @@ export const SellTokensDepositModal = ({
         <ActionStep
           title={t('form.account.label')}
           className="pb-6"
-          leftElement={<TbStepOut aria-hidden className="h-5 w-5 text-blue" />}
+          leftElement={<TbStepOut aria-hidden className="size-5 text-blue" />}
         >
           <ActionAddressButton
             label={t('form.select.placeholder')}
@@ -397,7 +398,7 @@ export const SellTokensDepositModal = ({
         <ActionStep
           title={t('form.recipient.label')}
           className="pb-6 pt-4"
-          leftElement={<TbStepInto aria-hidden className="h-5 w-5 text-blue" />}
+          leftElement={<TbStepInto aria-hidden className="size-5 text-blue" />}
         />
 
         <TwSeparator containerClassName="px-1" />
@@ -405,7 +406,7 @@ export const SellTokensDepositModal = ({
         <ActionStep
           title={t('form.token.label')}
           error={!!tokenError}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
         >
           <ActionTokenButton
             label={t('form.select.placeholder')}
@@ -423,7 +424,7 @@ export const SellTokensDepositModal = ({
         <ActionStep
           title={t('form.address.label')}
           error={!!addressError}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
         >
           <TwInput
             aria-label={t('form.address.label')}
@@ -443,7 +444,7 @@ export const SellTokensDepositModal = ({
         <ActionStep
           title={t('form.amount.label')}
           error={!!amountError}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
         >
           <ActionInput
             ref={amountTextInputRef}
@@ -475,7 +476,7 @@ export const SellTokensDepositModal = ({
           title={t('form.totalFee.label')}
           feePlaceholder={t('form.totalFee.placeholder')}
           className="mt-3 bg-gray-300/15"
-          iconClassName="w-5 h-5"
+          iconClassName="size-5"
           isCalculatingFee={actionData.isFeeLoading}
           fee={actionData.fee}
           service={service}

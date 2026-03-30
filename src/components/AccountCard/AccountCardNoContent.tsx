@@ -1,17 +1,18 @@
 import { Image } from 'expo-image'
+import type { ReactNode } from 'react'
 import type { PressableProps, ViewStyle } from 'react-native'
 import { Dimensions, Pressable, View } from 'react-native'
 
 import { SkinHelper } from '@/helpers/SkinHelper'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 export type TAccountCardNoContentProps = {
-  account: IAccountState
+  account: TAccount
   width?: number
   height?: number
   style?: ViewStyle
-  children?: React.ReactNode
+  children?: ReactNode
   withShadow?: boolean
 } & Omit<PressableProps, 'style' | 'children'>
 
@@ -50,7 +51,6 @@ export const AccountCardNoContent = ({
   ...props
 }: TAccountCardNoContentProps) => {
   const accountCardDimensions = getAccountCardDimensions(width, height)
-
   const scaleX = accountCardDimensions.width / ACCOUNT_CARD_WIDTH
   const scaleY = accountCardDimensions.height / ACCOUNT_CARD_HEIGHT
 

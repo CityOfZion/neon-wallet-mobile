@@ -30,7 +30,7 @@ const AccountConnectionsScreen = ({ navigation, route }: TWalletsStackScreenProp
 
   const sessionsQuery = useWalletConnectSessions(account)
 
-  const sessions = sessionsQuery.data ?? []
+  const sessions = sessionsQuery.data || []
 
   const handlePressAdd = () => {
     navigation.navigate('DappConnectionModal', { account })
@@ -43,7 +43,7 @@ const AccountConnectionsScreen = ({ navigation, route }: TWalletsStackScreenProp
       rightElement={
         <TwIconButton
           aria-label={t('labels.addConnection')}
-          icon={<MdAdd aria-hidden className="h-10 w-10 text-white" />}
+          icon={<MdAdd aria-hidden className="size-10 text-white" />}
           onPress={handlePressAdd}
         />
       }
@@ -66,13 +66,13 @@ const AccountConnectionsScreen = ({ navigation, route }: TWalletsStackScreenProp
                     className: 'text-white',
                   }}
                   label={t('connectDappLabel')}
-                  leftElement={<MdAdd aria-hidden className="h-9 w-9 text-white" />}
+                  leftElement={<MdAdd aria-hidden className="size-9 text-white" />}
                   onPress={handlePressAdd}
                 />
               }
             />
           }
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(_, index) => index.toString()}
         />
       </View>
     </TwScreenLayout>

@@ -24,10 +24,10 @@ type TFunctionByNotificationActionType = {
 
 const { t } = I18nextHelper.get()
 
-const getAccountAndWallet = (predicate: TAccountHelperPredicateParams) => {
+const getAccountAndWallet = (params: TAccountHelperPredicateParams) => {
   const state = ReduxHelper.store.getState()
   const accounts = selectAccounts(state)
-  const account = accounts.find(AccountHelper.predicate(predicate))
+  const account = accounts.find(AccountHelper.predicate(params))
 
   if (!account) {
     throw new AppError(t('screens:notificationsScreen.actions.error.accountNotFound'))
@@ -44,10 +44,13 @@ const getAccountAndWallet = (predicate: TAccountHelperPredicateParams) => {
 export const functionByNotificationActionType: TFunctionByNotificationActionType = {
   navigate: async ({ navigation, notificationAction }) => {
     match(notificationAction.payload)
-      .with({ to: 'account-transaction' }, payload => {
+      .with({ to: 'account-transaction' }, async payload => {
         const { account } = getAccountAndWallet(payload)
 
         navigation.goBack()
+
+        await UtilsHelper.sleep(500)
+
         navigation.navigate('TabStack', {
           screen: 'WalletsStack',
           params: {
@@ -86,10 +89,13 @@ export const functionByNotificationActionType: TFunctionByNotificationActionType
           },
         })
       })
-      .with({ to: 'vote-neo3' }, payload => {
+      .with({ to: 'vote-neo3' }, async payload => {
         const { account } = getAccountAndWallet(payload)
 
         navigation.goBack()
+
+        await UtilsHelper.sleep(500)
+
         navigation.navigate('TabStack', {
           screen: 'WalletsStack',
           params: {

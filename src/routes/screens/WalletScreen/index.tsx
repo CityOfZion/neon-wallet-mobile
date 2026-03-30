@@ -28,7 +28,7 @@ import MdMoreHoriz from '@/assets/images/md-more-horiz.svg'
 
 import { walletReducerActions } from '@/store/reducers/wallet'
 import type { TWalletsStackScreenProps } from '@/types/stacks'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 const accountCardDimensions = getAccountCardDimensions()
 
@@ -76,7 +76,7 @@ export const WalletScreen = ({ navigation, route }: TWalletsStackScreenProps<'Wa
     opacityValue.value = withTiming(1, { duration: 500 })
   }
 
-  const handlePress = (account: IAccountState) => {
+  const handlePress = (account: TAccount) => {
     navigation.navigate('AccountScreen', {
       account,
       wallet,

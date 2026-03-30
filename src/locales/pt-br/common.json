@@ -10,10 +10,10 @@
       "id": "Base",
       "label": "Base"
     },
-    "bnb": {
-      "accountName": "Conta BNB",
-      "id": "BNB",
-      "label": "BNB"
+    "bitcoin": {
+      "accountName": "Conta Bitcoin",
+      "id": "Bitcoin",
+      "label": "Bitcoin"
     },
     "ethereum": {
       "accountName": "Conta Ethereum",
@@ -76,6 +76,7 @@
     "disconnect": "Desconectar",
     "done": "Pronto",
     "edit": "Editar",
+    "emptyData": "--",
     "errorOpenLink": "Houve um problema ao abrir este link",
     "next": "Próximo",
     "no": "Não",
@@ -94,7 +95,7 @@
       "disconnectFirst": "Por favor, desconecte primeiro a carteira de hardware que está conectada no momento.",
       "hardwareWalletIsNotConnectOrUnlocked": "A carteira de hardware não está conectada ou está bloqueada. Verifique seu dispositivo e tente novamente.",
       "hardwareWalletNotFound": "Nenhuma carteira de hardware conectada",
-      "missingBip44Path": "O caminho BIP44 está ausente para a conta da carteira de hardware."
+      "missingBipPath": "O caminho BIP está ausente para a conta da carteira de hardware."
     }
   },
   "overTheAir": {

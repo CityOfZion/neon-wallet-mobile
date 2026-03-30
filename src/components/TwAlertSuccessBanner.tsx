@@ -4,6 +4,7 @@ import type { JSX, ReactNode } from 'react'
 import type { ViewProps } from 'react-native'
 import { Text, View } from 'react-native'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 type TProps = Omit<ViewProps, 'children'> & {
@@ -18,14 +19,14 @@ export const TwAlertSuccessBanner = ({ message, className, icon, ...props }: TPr
       {...props}
     >
       {cloneElement(icon, {
-        className: StyleHelper.mergeStyles(icon.props.className, 'text-neon h-6 w-6'),
+        className: StyleHelper.mergeStyles(icon.props.className, 'text-neon size-6'),
         'aria-hidden': true,
       })}
 
-      {typeof message === 'object' ? (
-        message
-      ) : (
+      {ElementHelper.isTextContentValid(message) ? (
         <Text className="flex-shrink font-sans-regular text-lg text-white">{message}</Text>
+      ) : (
+        message
       )}
     </View>
   )

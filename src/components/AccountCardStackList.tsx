@@ -5,17 +5,17 @@ import { FlatList } from 'react-native'
 
 import { AccountCard } from './AccountCard'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
-type TItem = IAccountState & {
-  onPress: (account: IAccountState) => void
+type TItem = TAccount & {
+  onPress: (account: TAccount) => void
   isStack: boolean
   width?: number
 }
 
 type TProps = {
-  accounts: IAccountState[]
-  onPress: (account: IAccountState) => void
+  accounts: TAccount[]
+  onPress: (account: TAccount) => void
   width?: number
 } & Omit<FlatListProps<TItem>, 'data' | 'keyExtractor' | 'CellRendererComponent' | 'renderItem'>
 

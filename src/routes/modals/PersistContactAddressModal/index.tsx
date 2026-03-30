@@ -42,7 +42,7 @@ export const PersistContactAddressModal = ({
   } = useNameService()
 
   const { actionData, setData } = useActions<TActionData>({
-    address: address?.address ?? '',
+    address: address?.address || '',
     blockchain: address?.blockchain,
   })
 

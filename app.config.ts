@@ -13,7 +13,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: './assets/icon.png',
   primaryColor: '#4CFFB3',
   newArchEnabled: true,
-  jsEngine: 'hermes',
   platforms: ['ios', 'android'],
   scheme: ['neon', 'neon3', 'wc'],
   ios: {

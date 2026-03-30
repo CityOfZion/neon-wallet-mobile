@@ -34,7 +34,7 @@ export const DappConnectionsScreen = ({
   const { isNotConnected } = useIsConnectedSelector()
   const sessionsQuery = useWalletConnectSessions()
 
-  const sessions = sessionsQuery.data ?? []
+  const sessions = sessionsQuery.data || []
 
   const handlePressAdd = () => {
     navigation.navigate('DappConnectionModal')

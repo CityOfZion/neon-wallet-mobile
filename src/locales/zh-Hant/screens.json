@@ -378,7 +378,7 @@
     "addCustomNetworkButtonLabel": "新增自訂網路",
     "default": "（預設）",
     "editCustomNetworkButtonLabel": "編輯自訂網路",
-    "selectNodeButtonLabel": "選擇節點"
+    "selectNetworkUrlButtonLabel": "選擇網路 URL"
   },
   "settingsProtocolsScreen": {
     "title": "協議"

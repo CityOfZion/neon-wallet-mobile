@@ -8,15 +8,16 @@ import { StyleHelper } from '@/helpers/StyleHelper'
 import { AccountTransactionsScreenTransferAssetItem } from './AccountTransactionsScreenTransferAssetItem'
 import { AccountTransactionsScreenTransferNFTItem } from './AccountTransactionsScreenTransferNFTItem'
 
-import type { IAccountState, TUseTransactionsTransactionEvent } from '@/types/store'
+import type { TAccount, TUseTransactionsTransactionEvent } from '@/types/store'
 
 type TProps = {
-  account: IAccountState
+  account: TAccount
   event: TUseTransactionsTransactionEvent
 }
 
 export const AccountTransactionsScreenTransferItem = ({ account, event }: TProps) => {
   const { t } = useTranslation('screens', { keyPrefix: 'accountTransactionsScreen' })
+  const { t: tCommon } = useTranslation('common', { keyPrefix: 'general' })
 
   const isReceiver = event.to === account.address
   const label = isReceiver ? t('receivedFromLabel') : t('sentToLabel')
@@ -37,7 +38,7 @@ export const AccountTransactionsScreenTransferItem = ({ account, event }: TProps
         ellipsizeMode="middle"
         numberOfLines={1}
       >
-        {address || '--'}
+        {address || tCommon('emptyData')}
       </Text>
 
       {event.eventType === 'token' ? (

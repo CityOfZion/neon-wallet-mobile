@@ -29,7 +29,7 @@ type TItem = {
 }
 
 const renderItem: ListRenderItem<TItem> = ({ item }) => {
-  return <TwMenuButton label={item.device.name ?? ''} onPress={item.onPress} isLoading={item.isLoading} />
+  return <TwMenuButton label={item.device.name || ''} onPress={item.onPress} isLoading={item.isLoading} />
 }
 
 export const ConnectHardwareBluetoothModalList = ({
@@ -89,14 +89,14 @@ export const ConnectHardwareBluetoothModalList = ({
     <View className="flex-grow items-center">
       <Text className="text-center font-sans-medium text-2xl text-white">{t('title')}</Text>
 
-      <TbBluetooth aria-hidden className="my-9 h-28 w-28 stroke-1 text-blue" />
+      <TbBluetooth aria-hidden className="my-9 size-28 stroke-1 text-blue" />
 
       <FlatList
         className="flex-shrink flex-grow"
         data={items}
         renderItem={renderItem}
         ItemSeparatorComponent={TwSeparator}
-        ListFooterComponent={<Loader className="h-10 w-10" />}
+        ListFooterComponent={<Loader className="size-10" />}
         showsVerticalScrollIndicator={false}
       />
 

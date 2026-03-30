@@ -1,10 +1,11 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 
 import type { JSX, ReactNode } from 'react'
 import type { GestureResponderEvent } from 'react-native'
 import { Text, View } from 'react-native'
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 import MdChevronRight from '@/assets/images/md-chevron-right.svg'
@@ -79,18 +80,12 @@ export const TwAccordionMenuButton = ({
                 {label}
               </Text>
 
-              {subtitle && (
-                <Fragment>
-                  {typeof subtitle === 'string' ? (
-                    <Text
-                      className={StyleHelper.mergeStyles('font-sans-bold text-base text-gray-400', subtitleClassName)}
-                    >
-                      {subtitle}
-                    </Text>
-                  ) : (
-                    subtitle
-                  )}
-                </Fragment>
+              {ElementHelper.isTextContentValid(subtitle) ? (
+                <Text className={StyleHelper.mergeStyles('font-sans-bold text-base text-gray-400', subtitleClassName)}>
+                  {subtitle}
+                </Text>
+              ) : (
+                subtitle
               )}
             </View>
 
