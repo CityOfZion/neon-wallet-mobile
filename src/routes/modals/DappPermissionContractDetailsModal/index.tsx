@@ -12,7 +12,6 @@ import { TwDappHeader } from '@/components/TwDappHeader'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ClipboardHelper } from '@/helpers/ClipboardHelper'
 import { LinkHelper } from '@/helpers/LinkHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useContractQuery } from '@/hooks/useContractQuery'
 
@@ -103,7 +102,7 @@ export const DappPermissionContractDetailsModal = ({
     const methodsInfo = contractQuery.data.methods.find(method => method.name === operation)
     if (!methodsInfo) return []
 
-    const params = methodsInfo.parameters.map((parameter, index) => {
+    return methodsInfo.parameters.map((parameter, index) => {
       const value = values[index]
       const stringifiedValue = Array.isArray(value) ? JSON.stringify(value, null, 4) : value
       return {
@@ -111,17 +110,18 @@ export const DappPermissionContractDetailsModal = ({
         value: stringifiedValue,
       }
     })
-
-    return params
   }, [contractQuery.data, contractQuery.isLoading, operation, values])
 
   const handleOpenContractHashUrl = () => {
-    UtilsHelper.tryCatch(() => {
-      const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
-      if (!hasExplorerService(service)) return
+    const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
 
-      LinkHelper.open(service.explorerService.buildContractUrl(hash) ?? '')
-    })
+    if (!hasExplorerService(service)) return
+
+    const contractUrl = service.explorerService.buildContractUrl(hash)
+
+    if (!contractUrl) return
+
+    LinkHelper.open(contractUrl)
   }
 
   return (

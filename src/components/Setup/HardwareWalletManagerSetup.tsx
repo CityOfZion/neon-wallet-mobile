@@ -14,14 +14,16 @@ import { useMount } from '@/hooks/useMount'
 export const HardwareWalletManagerSetup = () => {
   const { t } = useTranslation('components', { keyPrefix: 'setup.hardwareWalletManager' })
   const { t: commonT } = useTranslation('common')
-  const navigation = useNavigation()
-  const { accountsRef } = useAccountsSelector()
   const { editAccount } = useEditAccount()
+  const { accountsRef } = useAccountsSelector()
+  const navigation = useNavigation()
 
   useMount(() => {
+    const services = Object.values(BlockchainServiceHelper.bsAggregator.blockchainServicesByName)
+
     const callbackId = requestIdleCallback(
       () => {
-        Object.values(BlockchainServiceHelper.bsAggregator.blockchainServicesByName).forEach(service => {
+        services.forEach(service => {
           if (!hasLedger(service)) return
 
           service.ledgerService.emitter.on('getSignatureStart', () => {
@@ -40,9 +42,7 @@ export const HardwareWalletManagerSetup = () => {
               .map(account => {
                 editAccount({
                   account,
-                  data: {
-                    type: 'watch',
-                  },
+                  data: { type: 'watch' },
                 })
               })
           )
@@ -70,9 +70,9 @@ export const HardwareWalletManagerSetup = () => {
           const currentRoute = state ? state.routes[state.index] : undefined
 
           /*
-          These screens and modals won't show the hardware wallet USB alert on top of them because it
-          either doesn't make sense to show it or already has a connection component
-        */
+            These screens and modals won't show the hardware wallet USB alert on top of them because it
+            either doesn't make sense to show it or already has a connection component
+          */
           if (
             currentRoute &&
             (currentRoute.name === 'OnboardingScreen' || currentRoute.name.startsWith('ConnectHardware'))

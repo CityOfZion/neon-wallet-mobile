@@ -3,13 +3,14 @@ import type { TBSNetwork } from '@cityofzion/blockchain-service'
 export type TBlockchainServiceKey =
   | 'neo3'
   | 'neoLegacy'
-  | 'ethereum'
   | 'neox'
+  | 'bitcoin'
+  | 'solana'
+  | 'ethereum'
   | 'polygon'
   | 'base'
   | 'arbitrum'
-  | 'solana'
 
 export type TNetwork = { isAutomatic?: boolean } & TBSNetwork
 
-export type TBlockchainImageColor = 'white' | 'default' | 'gray'
+export type TBlockchainImageColor = 'default' | 'white' | 'gray'

@@ -29,9 +29,9 @@ export class CurrencyHelper {
       maximumFractionDigits = 2,
       showZero = true,
       approximateSymbol = false,
-    } = options ?? {}
+    } = options || {}
 
-    const number = Number(input ?? 0)
+    const number = Number(input || 0)
     let result = '0'
 
     try {

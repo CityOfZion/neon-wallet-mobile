@@ -25,10 +25,10 @@ import MdLooksTwo from '@/assets/images/md-looks-two.svg'
 import { ExportFullTransactionsSuccessModalContent } from './ExportFullTransactionsSuccessModalContent'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TActionData = {
-  selectedAccount?: IAccountState
+  selectedAccount?: TAccount
   dateFrom?: Date
   dateTo?: Date
 }
@@ -94,15 +94,19 @@ export const ExportFullTransactionsModal = ({
       })
 
       const format = 'yyyyMMdd'
+
       const localizedFileDateFrom = DateHelper.formatLocalized(dateFrom, {
         language,
         format,
       })
+
       const localizedFileDateTo = DateHelper.formatLocalized(dateTo, {
         language,
         format,
       })
-      const filename = `NWM-ACTV-${selectedAccount.address}-${selectedAccount.blockchain}-${localizedFileDateFrom}-${localizedFileDateTo}`
+
+      const filename = `NWM-transactions-${selectedAccount.address}-${selectedAccount.blockchain}-${localizedFileDateFrom}-${localizedFileDateTo}`
+
       await writeFile(filename, result, 'text/csv')
 
       navigation.navigate('SuccessModal', {

@@ -25,7 +25,7 @@ import TbStepInto from '@/assets/images/tb-step-into.svg'
 import VscCircleFilled from '@/assets/images/vsc-circle-filled.svg'
 
 import type { TTokenBalance, TUseBalanceResult } from '@/types/query'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 export type TSendRecipient = {
   id: string
@@ -38,7 +38,7 @@ export type TSendRecipient = {
 
 type TProps = {
   order: number
-  selectedAccount?: IAccountState
+  selectedAccount?: TAccount
   recipient: TSendRecipient
   onUpdateRecipient: (recipient: Partial<TSendRecipient>) => void
   onRemoveRecipient: () => void
@@ -142,7 +142,7 @@ export const SendRecipient = ({
         <ActionTokenButton
           label={t('selectButtonLabel')}
           isLoading={balance?.isLoading}
-          contentProps={{ className: 'px-3' }}
+          contentProps={{ className: 'px-3 gap-x-2' }}
           token={recipient.token?.token}
           disabled={isDisabled}
           onPress={() =>
@@ -151,7 +151,7 @@ export const SendRecipient = ({
               onSelect: handleSelectToken,
               selectedToken: recipient.token?.token,
               title: t('tokenToReceiveModalTitle'),
-              tokens: balance?.data?.tokensBalances.map(tokenBalance => tokenBalance.token) ?? [],
+              tokens: balance?.data?.tokensBalances.map(tokenBalance => tokenBalance.token) || [],
             })
           }
         />
@@ -169,7 +169,7 @@ export const SendRecipient = ({
           label={t('selectButtonLabel')}
           address={recipient.address}
           disabled={isDisabled}
-          contentProps={{ className: 'px-3' }}
+          contentProps={{ className: 'px-3 gap-x-2' }}
           isLoading={isValidatingAddressOrDomainAddress}
           onPress={() =>
             navigation.navigate('AddressSelectionModal', {
@@ -191,7 +191,7 @@ export const SendRecipient = ({
       >
         <ActionInput
           placeholder="0"
-          value={recipient.amount ?? ''}
+          value={recipient.amount || ''}
           keyboardType="decimal-pad"
           onChangeText={handleChangeAmount}
           editable={!isAmountDisabled}

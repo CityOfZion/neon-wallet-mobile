@@ -35,7 +35,9 @@ export const SettingsWalletBackupStep1Screen = ({
   const words = mnemonic.split(' ')
 
   const handlePressCopy = () => {
-    ClipboardHelper.write(mnemonic ?? '')
+    if (!mnemonic) return
+
+    ClipboardHelper.write(mnemonic)
   }
 
   const handlePressPrint = () => {
@@ -66,7 +68,8 @@ export const SettingsWalletBackupStep1Screen = ({
 
   const { isMounting } = useMount(async () => {
     const walletMnemonic = await SecureStoreHelper.getMnemonic(wallet)
-    setMnemonic(walletMnemonic ?? '')
+
+    setMnemonic(walletMnemonic || '')
   }, [])
 
   return (

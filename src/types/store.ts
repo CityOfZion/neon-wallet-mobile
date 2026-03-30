@@ -1,10 +1,11 @@
 import type {
   TSwapServiceStatusResponse,
   TSwapToken,
-  TTransactionBase,
-  TTransactionBridgeNeo3NeoX,
+  TTransactionDefault,
+  TTransactionInputOutput,
   TTransactionNftEvent,
   TTransactionTokenEvent,
+  TTransactionUtxo,
 } from '@cityofzion/blockchain-service'
 
 import type { TBlockchainServiceKey, TNetwork } from './blockchain'
@@ -30,7 +31,8 @@ export type TNftSkin = {
 export type TSkin = TColorSkin | TLocalSkin | TNftSkin
 
 export type TAccountType = 'standard' | 'watch' | 'hardware'
-export interface IAccountState {
+
+export type TAccount = {
   id: string
   address: string
   type: TAccountType
@@ -42,9 +44,10 @@ export interface IAccountState {
 }
 
 export type TWalletType = 'standard' | 'non-standard' | 'hardware'
+
 export type TWalletBackupStatus = 'successful' | 'unsuccessful' | 'unsuccessful_with_knowledge'
 
-export interface IWalletState {
+export type TWallet = {
   id: string
   name: string
   type: TWalletType
@@ -52,10 +55,11 @@ export interface IWalletState {
   backupStatus: TWalletBackupStatus
 }
 
-export type TAccountWithWallet = IAccountState & { wallet: IWalletState }
+export type TAccountWithWallet = TAccount & { wallet: TWallet }
 
 export type TContactAddress = { address: string; blockchain: TBlockchainServiceKey }
-export interface IContactState {
+
+export type TContact = {
   id: string
   name: string
   addresses: TContactAddress[]
@@ -101,21 +105,43 @@ export type TSelectedNetworks = {
   [K in TBlockchainServiceKey]: TNetwork
 }
 
-export type TCustomNetwork = {
+export type TCustomNetworks = {
   [K in TBlockchainServiceKey]: TNetwork[]
 }
 
-export type TUseTransactionsTransactionEvent = (TTransactionTokenEvent | TTransactionNftEvent) & {
-  fromAccount?: IAccountState
-  toAccount?: IAccountState
+type TUseTransactionsTransactionEventBase = {
+  fromAccount?: TAccount
+  toAccount?: TAccount
 }
 
-export type TUseTransactionsTransaction = TTransactionBase & {
-  account: IAccountState
+export type TUseTransactionsTransactionEventToken = TUseTransactionsTransactionEventBase & TTransactionTokenEvent
+
+export type TUseTransactionsTransactionEventNft = TUseTransactionsTransactionEventBase & TTransactionNftEvent
+
+export type TUseTransactionsTransactionEvent =
+  | TUseTransactionsTransactionEventToken
+  | TUseTransactionsTransactionEventNft
+
+export type TUseTransactionsTransactionInputOutput = TTransactionInputOutput & {
+  account?: TAccount
+}
+
+type TUseTransactionsTransactionBase = {
+  account: TAccount
   blockchain: TBlockchainServiceKey
   isPending: boolean
-  events: TUseTransactionsTransactionEvent[]
-} & ({ type: 'default' } | { type: 'claim' } | { type: 'vote' } | TTransactionBridgeNeo3NeoX<TBlockchainServiceKey>)
+}
+
+export type TUseTransactionsTransactionDefault = TUseTransactionsTransactionBase &
+  TTransactionDefault<TBlockchainServiceKey> & { events: TUseTransactionsTransactionEvent[] }
+
+export type TUseTransactionsTransactionUtxo = TUseTransactionsTransactionBase &
+  TTransactionUtxo<TBlockchainServiceKey> & {
+    inputs: TUseTransactionsTransactionInputOutput[]
+    outputs: TUseTransactionsTransactionInputOutput[]
+  }
+
+export type TUseTransactionsTransaction = TUseTransactionsTransactionDefault | TUseTransactionsTransactionUtxo
 
 export type TUseTransactionsGroupedTransactionsByDate = {
   date: string
@@ -124,7 +150,7 @@ export type TUseTransactionsGroupedTransactionsByDate = {
 }
 
 export type TSwapRecord = {
-  account: IAccountState
+  account: TAccount
   txFrom?: string
   txTo?: string
   swapProvider: 'simpleswap'

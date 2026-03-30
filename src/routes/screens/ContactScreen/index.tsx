@@ -26,7 +26,7 @@ type TItem = TContactAddress & {
 const renderItem: ListRenderItem<TItem> = ({ item }) => {
   return (
     <TouchableOpacity className="flex-row items-center gap-3" onPress={() => ClipboardHelper.write(item.address)}>
-      <TwBlockchainIcon blockchain={item.blockchain} className="h-5 w-5" />
+      <TwBlockchainIcon blockchain={item.blockchain} className="size-5" />
 
       <View className="flex-1">
         <Text className="font-sans-regular text-sm text-gray-300">{item.blockchainLabel}</Text>
@@ -35,7 +35,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
         </Text>
       </View>
 
-      <TbCopy aria-hidden className="h-6 w-6 text-neon" />
+      <TbCopy aria-hidden className="size-6 text-neon" />
     </TouchableOpacity>
   )
 }
@@ -75,7 +75,7 @@ export const ContactScreen = ({ navigation, route }: TMoreStackScreenProps<'Cont
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
             <Fragment>
-              <View className="mt-12 h-32 w-32 items-center justify-center rounded-full bg-asphalt shadow-xl shadow-black">
+              <View className="mt-12 size-32 items-center justify-center rounded-full bg-asphalt shadow-xl shadow-black">
                 <Text className="font-sans-semibold text-4xl uppercase text-gray-300">
                   {contactById.name.charAt(0)}
                 </Text>

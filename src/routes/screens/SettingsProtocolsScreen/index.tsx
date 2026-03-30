@@ -26,7 +26,7 @@ type TItem = {
 
 const renderItem: ListRenderItem<TItem> = ({ item }) => (
   <TwMenuButton
-    leftElement={<TwBlockchainIcon blockchain={item.blockchain} className="h-6 w-6" />}
+    leftElement={<TwBlockchainIcon blockchain={item.blockchain} className="size-6" />}
     label={item.label}
     subtitle={item.subtitle}
     onPress={item.onPress}

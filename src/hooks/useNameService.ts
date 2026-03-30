@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react'
 
 import { hasNameService } from '@cityofzion/blockchain-service'
-import type { QueryClient } from '@tanstack/react-query'
 import { useQueryClient } from '@tanstack/react-query'
 import { debounce } from 'lodash'
 
@@ -14,12 +13,10 @@ function buildQueryKey(blockchain: TBlockchainServiceKey, domain: string, networ
 }
 
 export const useNameServiceLazy = () => {
-  const queryClientHook = useQueryClient()
+  const queryClient = useQueryClient()
 
   const validateAddressOrNS = useCallback(
-    async (domainOrAddress: string, blockchain: TBlockchainServiceKey, queryClient?: QueryClient) => {
-      queryClient = queryClient ?? queryClientHook
-
+    async (domainOrAddress: string, blockchain: TBlockchainServiceKey) => {
       const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
 
       let isValid: boolean
@@ -64,7 +61,7 @@ export const useNameServiceLazy = () => {
         isNS,
       }
     },
-    [queryClientHook]
+    [queryClient]
   )
 
   return { validateAddressOrNS }
@@ -72,7 +69,6 @@ export const useNameServiceLazy = () => {
 
 export const useNameService = (debounceTime = 1000) => {
   const { validateAddressOrNS: validateAddressOrNSLazy } = useNameServiceLazy()
-  const queryClient = useQueryClient()
 
   const [isValidatingAddressOrDomainAddress, setIsValidatingAddressOrDomainAddress] = useState(false)
   const [validatedAddress, setValidatedAddress] = useState<string>()
@@ -81,8 +77,8 @@ export const useNameService = (debounceTime = 1000) => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const validateAddressOrNSDebounce = useCallback(
-    debounce(async (domainOrAddress: string, blockchain: TBlockchainServiceKey, queryClient: QueryClient) => {
-      const { address, isNS, isValid } = await validateAddressOrNSLazy(domainOrAddress, blockchain, queryClient)
+    debounce(async (domainOrAddress: string, blockchain: TBlockchainServiceKey) => {
+      const { address, isNS, isValid } = await validateAddressOrNSLazy(domainOrAddress, blockchain)
 
       setValidatedAddress(address)
       setIsValidAddressOrDomainAddress(isValid)
@@ -105,9 +101,9 @@ export const useNameService = (debounceTime = 1000) => {
         return
       }
 
-      validateAddressOrNSDebounce(domainOrAddress, blockchain, queryClient)
+      validateAddressOrNSDebounce(domainOrAddress, blockchain)
     },
-    [validateAddressOrNSDebounce, queryClient]
+    [validateAddressOrNSDebounce]
   )
 
   return {

@@ -2,15 +2,16 @@ import { Text, View } from 'react-native'
 
 import { StyleHelper } from '@/helpers/StyleHelper'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
-  account: IAccountState
+  account: TAccount
+  className?: string
 }
 
-export const AccountSubTitle = ({ account }: TProps) => {
+export const AccountSubTitle = ({ account, className }: TProps) => {
   return (
-    <View className="flex-row items-center justify-center gap-2.5">
+    <View className={StyleHelper.mergeStyles('flex-row items-center justify-center gap-2.5', className)}>
       <View
         className={StyleHelper.mergeStyles('size-3 rounded-full bg-neon')}
         style={{

@@ -4,6 +4,7 @@ import type { JSX, ReactNode } from 'react'
 import type { ViewProps } from 'react-native'
 import { Text, View } from 'react-native'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 import MdInfoOutline from '@/assets/images/md-info-outline.svg'
@@ -26,17 +27,17 @@ export type TTwBannerProps = {
 type TProps = TTwBannerProps & ViewProps
 
 const iconsByType: Record<TTwBannerType, JSX.Element> = {
-  error: <TbAlertHexagonFilled className="h-6 w-6 text-pink" />,
-  info: <MdInfoOutline className="h-6 w-6 text-blue" />,
-  success: <MdVerified className="h-6 w-6 text-green" />,
-  warning: <TbAlertTriangle className="h-6 w-6 text-yellow" />,
+  error: <TbAlertHexagonFilled className="size-6 text-pink" />,
+  info: <MdInfoOutline className="size-6 text-blue" />,
+  success: <MdVerified className="size-6 text-green" />,
+  warning: <TbAlertTriangle className="size-6 text-yellow" />,
   warningOrange: (
     <View className="relative flex items-center justify-center">
-      <TbAlertSmall className="h-6 w-6 text-orange" />
-      <View className="absolute h-5 w-5 rotate-45 rounded-sm border-2 border-orange" />
+      <TbAlertSmall className="size-6 text-orange" />
+      <View className="absolute size-5 rotate-45 rounded-sm border-2 border-orange" />
     </View>
   ),
-  alert: <PiWarningDiamondFill className="h-6 w-6 text-pink" />,
+  alert: <PiWarningDiamondFill className="size-6 text-pink" />,
 }
 
 export const TwBanner = ({
@@ -67,7 +68,7 @@ export const TwBanner = ({
         })}
       </View>
 
-      {typeof childrenContent === 'string' ? (
+      {ElementHelper.isTextContentValid(childrenContent) ? (
         <Text
           className={StyleHelper.mergeStyles(
             'flex-shrink px-5 py-3.5 font-sans-regular text-lg text-white',

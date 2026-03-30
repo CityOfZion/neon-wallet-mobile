@@ -378,7 +378,7 @@
     "addCustomNetworkButtonLabel": "添加自定义网络",
     "default": "（默认）",
     "editCustomNetworkButtonLabel": "编辑自定义网络",
-    "selectNodeButtonLabel": "选择节点"
+    "selectNetworkUrlButtonLabel": "选择网络 URL"
   },
   "settingsProtocolsScreen": {
     "title": "协议"

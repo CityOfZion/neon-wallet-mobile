@@ -72,7 +72,7 @@ export const VoteNeo3ConfirmationModal = ({
 
   const { hasEnoughGasToPayFee } = useVoteNeo3Validations({ balanceQuery, gasFee: fee })
 
-  const neoAmount = voteDetailsByAddressQuery.data?.neoBalance ?? 0
+  const neoAmount = voteDetailsByAddressQuery.data?.neoBalance || 0
   const hasNeoAmount = neoAmount > 0
   const isWatchAccount = neo3Account.type === 'watch'
   const isDataLoading = voteDetailsByAddressQuery.isLoading || balanceQuery.isLoading || exchangeQuery.isLoading
@@ -145,26 +145,30 @@ export const VoteNeo3ConfirmationModal = ({
       }
 
       const account = await BlockchainServiceHelper.getServiceAccount({ account: neo3Account, key })
+      const transaction = await service.voteService.vote({ account, candidatePubKey: candidate.pubKey })
 
-      const txId = await service.voteService.vote({ account, candidatePubKey: candidate.pubKey })
+      const pendingTransaction = TransactionHelper.buildPendingTransaction({ transaction, account: neo3Account })
 
-      const transaction = TransactionHelper.buildPendingTransaction({ txId, fromAccount: neo3Account, type: 'vote' })
+      const notificationPrefix = 'modals:voteNeo3ConfirmationModal.notifications'
+      const notificationSuccessPrefix = `${notificationPrefix}.voteSuccessNotification`
+      const notificationFailurePrefix = `${notificationPrefix}.voteFailureNotification`
 
       dispatch(
-        thunks.waitTransaction({
-          transaction,
+        thunks.waitPendingTransaction({
+          pendingTransaction,
           successNotification: {
-            title: 'modals:voteNeo3ConfirmationModal.notifications.voteSuccessNotification.title',
-            previewBody: 'modals:voteNeo3ConfirmationModal.notifications.voteSuccessNotification.previewBody',
+            title: `${notificationSuccessPrefix}.title`,
+            previewBody: `${notificationSuccessPrefix}.previewBody`,
           },
           failureNotification: {
-            title: 'modals:voteNeo3ConfirmationModal.notifications.voteFailureNotification.title',
-            previewBody: 'modals:voteNeo3ConfirmationModal.notifications.voteFailureNotification.previewBody',
+            title: `${notificationFailurePrefix}.title`,
+            previewBody: `${notificationFailurePrefix}.previewBody`,
           },
         })
       )
 
       navigation.popToTop()
+
       await UtilsHelper.sleep(500)
 
       navigation.navigate('SuccessModal', {
@@ -223,7 +227,7 @@ export const VoteNeo3ConfirmationModal = ({
                   <Skeleton.Content>
                     <Text className="font-sans-medium text-sm uppercase text-gray-100" accessibilityRole="text">
                       {CurrencyHelper.format(
-                        exchangeQuery.convertAmount(fee ?? 0, service.feeToken.hash, service.name),
+                        exchangeQuery.convertAmount(fee || 0, service.feeToken.hash, service.name),
                         { currency, maximumFractionDigits: 3, showZero: false }
                       )}
                     </Text>

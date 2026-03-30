@@ -8,13 +8,13 @@ import { PressableScale } from './PressableScale'
 import { TwBlockchainIcon } from './TwBlockchainIcon'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
   selectedBlockchains?: TBlockchainServiceKey[]
   onSelect: (blockchains: TBlockchainServiceKey[]) => void
   isMulti?: boolean
-  walletAccounts?: IAccountState[]
+  walletAccounts?: TAccount[]
   blockchains?: TBlockchainServiceKey[]
 } & ViewProps
 
@@ -30,7 +30,7 @@ export const BlockchainList = ({
   const { t: commonT } = useTranslation('common', { keyPrefix: 'blockchainServices' })
   const { t } = useTranslation('components', { keyPrefix: 'blockchainList' })
 
-  const blockchainsToIterate = blockchains ?? BlockchainServiceHelper.blockchainNames
+  const blockchainsToIterate = blockchains || BlockchainServiceHelper.blockchainNames
 
   const handlePress = (blockchain: TBlockchainServiceKey) => {
     if (isMulti) {
@@ -61,7 +61,7 @@ export const BlockchainList = ({
               }
             )}
           >
-            <TwBlockchainIcon blockchain={blockchain} className="h-4 w-4" />
+            <TwBlockchainIcon blockchain={blockchain} className="size-4" />
 
             <Text className="flex-1 font-sans-bold text-base text-white">{commonT(`${blockchain}.label`)}</Text>
 

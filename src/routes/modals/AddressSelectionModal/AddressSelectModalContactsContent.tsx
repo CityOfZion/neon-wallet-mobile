@@ -9,7 +9,7 @@ import { TwContactList } from '@/components/TwContactList'
 import { useNameServiceLazy } from '@/hooks/useNameService'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { IContactState, TContactAddress } from '@/types/store'
+import type { TContact, TContactAddress } from '@/types/store'
 
 type TProps = {
   onSelect: (address: string) => void
@@ -20,11 +20,11 @@ export const AddressSelectionModalContactsContent = ({ onSelect, blockchain }: T
   const { t } = useTranslation('modals', { keyPrefix: 'addressSelectionModal' })
   const { validateAddressOrNS } = useNameServiceLazy()
 
-  const [selectedContact, setSelectedContact] = useState<IContactState>()
+  const [selectedContact, setSelectedContact] = useState<TContact>()
   const [selectedContactAddress, setSelectedContactAddress] = useState<TContactAddress>()
   const [isLoading, setIsLoading] = useState(false)
 
-  const handlePress = (contact?: IContactState, address?: TContactAddress) => {
+  const handlePress = (contact?: TContact, address?: TContactAddress) => {
     setSelectedContact(contact)
     setSelectedContactAddress(address)
   }

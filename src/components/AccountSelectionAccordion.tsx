@@ -20,7 +20,7 @@ import type { TBlockchainServiceKey } from '@/types/blockchain'
 export type TAccountSelectionAccordionAccount = {
   blockchain: TBlockchainServiceKey
   address: string
-  bip44Path?: string
+  bipPath?: string
   key?: string
 }
 
@@ -81,9 +81,9 @@ const AccountSelectionAccordionHeader = ({
         </Text>
 
         {isOpened ? (
-          <TbMinus aria-hidden className="h-6 w-6 text-neon" />
+          <TbMinus aria-hidden className="size-6 text-neon" />
         ) : (
-          <TbPlus aria-hidden className="h-6 w-6 text-neon" />
+          <TbPlus aria-hidden className="size-6 text-neon" />
         )}
       </View>
     </View>
@@ -113,12 +113,12 @@ const AccountSelectionAccordionContent = ({
             })}
           >
             <View className="flex-shrink flex-grow">
-              {account.bip44Path && <Text className="font-sans-medium text-sm text-gray-300">{account.bip44Path}</Text>}
+              {account.bipPath && <Text className="font-sans-medium text-sm text-gray-300">{account.bipPath}</Text>}
 
               <Text className="font-sans-medium text-sm text-white">{account.address}</Text>
             </View>
 
-            {isSelected && <TbCheck className="h-6 w-6 text-neon" />}
+            {isSelected && <TbCheck className="size-6 text-neon" />}
           </Pressable>
         )
       })}
@@ -134,7 +134,8 @@ export const AccountSelectionAccordion = ({ accounts, onPressAccount, selectedAc
     const accountsByBlockchain = new Map<TBlockchainServiceKey, TAccountSelectionAccordionAccount[]>()
 
     accounts.forEach(account => {
-      const accountsForBlockchain = accountsByBlockchain.get(account.blockchain) ?? []
+      const accountsForBlockchain = accountsByBlockchain.get(account.blockchain) || []
+
       accountsByBlockchain.set(account.blockchain, [...accountsForBlockchain, account])
     })
 
@@ -145,7 +146,8 @@ export const AccountSelectionAccordion = ({ accounts, onPressAccount, selectedAc
     const selectedAccountsByBlockchain = new Map<TBlockchainServiceKey, TAccountSelectionAccordionAccount[]>()
 
     selectedAccounts.forEach(account => {
-      const accountsForBlockchain = selectedAccountsByBlockchain.get(account.blockchain) ?? []
+      const accountsForBlockchain = selectedAccountsByBlockchain.get(account.blockchain) || []
+
       selectedAccountsByBlockchain.set(account.blockchain, [...accountsForBlockchain, account])
     })
 
@@ -171,14 +173,14 @@ export const AccountSelectionAccordion = ({ accounts, onPressAccount, selectedAc
           blockchain={content[0]}
           isOpened={isOpened}
           accountsCount={content[1].length}
-          accountsSelectedCount={selectedAccountsByBlockchain.get(content[0])?.length ?? 0}
+          accountsSelectedCount={selectedAccountsByBlockchain.get(content[0])?.length || 0}
         />
       )}
       renderContent={content => (
         <AccountSelectionAccordionContent
           accounts={content[1]}
           onPress={onPressAccount}
-          selectedAccounts={selectedAccountsByBlockchain.get(content[0]) ?? []}
+          selectedAccounts={selectedAccountsByBlockchain.get(content[0]) || []}
         />
       )}
     />

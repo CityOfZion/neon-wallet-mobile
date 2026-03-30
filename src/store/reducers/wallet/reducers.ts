@@ -2,28 +2,30 @@ import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit'
 
 import { ValidationSchemaHelper } from '@/helpers/ValidationSchemaHelper'
 
-import type { IWalletReducer } from './index'
+import type { TWalletReducer } from './index'
 
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
-const saveWallet: CaseReducer<IWalletReducer, PayloadAction<IWalletState>> = (state, action) => {
+const saveWallet: CaseReducer<TWalletReducer, PayloadAction<TWallet>> = (state, action) => {
   const wallet = ValidationSchemaHelper.parseWallet(action.payload)
+  const walletIndex = state.data.findIndex(({ id }) => id === wallet.id)
 
-  const indexWallet = state.data.findIndex(it => it.id === wallet.id)
-  if (indexWallet < 0) {
+  if (walletIndex < 0) {
     state.data = [...state.data, wallet]
+
     return
   }
 
-  state.data[indexWallet] = wallet
+  state.data[walletIndex] = wallet
 }
 
-const deleteWallet: CaseReducer<IWalletReducer, PayloadAction<string>> = (state, action) => {
-  const idWallet = action.payload
-  state.data = state.data.filter(it => it.id !== idWallet)
+const deleteWallet: CaseReducer<TWalletReducer, PayloadAction<string>> = (state, action) => {
+  const walletId = action.payload
+
+  state.data = state.data.filter(({ id }) => id !== walletId)
 }
 
-const reorder: CaseReducer<IWalletReducer, PayloadAction<IWalletState[]>> = (state, action) => {
+const reorder: CaseReducer<TWalletReducer, PayloadAction<TWallet[]>> = (state, action) => {
   state.data = action.payload
 }
 

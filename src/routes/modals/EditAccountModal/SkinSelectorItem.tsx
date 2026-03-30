@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { Dimensions, type PressableProps, View, type ViewStyle } from 'react-native'
 
 import { PressableScale } from '@/components/PressableScale'
@@ -8,7 +9,7 @@ import MdCheckCircle from '@/assets/images/md-check-circle.svg'
 
 type TItemProps = {
   isSelected: boolean
-  children?: React.ReactNode
+  children?: ReactNode
   style?: ViewStyle
 } & PressableProps
 

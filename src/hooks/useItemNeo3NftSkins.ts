@@ -8,11 +8,11 @@ import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { useSelectedNetworkSelector } from '@/hooks/useSettingsSelector'
 
 import type { TNetwork } from '@/types/blockchain'
-import type { IAccountState, TNftSkin } from '@/types/store'
+import type { TAccount, TNftSkin } from '@/types/store'
 
 const MAX_COUNT = 100
 
-async function fetchItemNeo3Skins(account: IAccountState, network: TNetwork): Promise<TNftSkin[]> {
+async function fetchItemNeo3Skins(account: TAccount, network: TNetwork): Promise<TNftSkin[]> {
   const allNfts: TNftSkin[] = []
 
   if (account.blockchain !== 'neo3') return allNfts
@@ -73,7 +73,7 @@ async function fetchItemNeo3Skins(account: IAccountState, network: TNetwork): Pr
   return allNfts
 }
 
-async function fetchOwnerOfItemNeo3NftSkin(account: IAccountState, nftSkin: TNftSkin) {
+async function fetchOwnerOfItemNeo3NftSkin(account: TAccount, nftSkin: TNftSkin) {
   if (account.blockchain !== 'neo3') return null
 
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[account.blockchain]
@@ -103,7 +103,7 @@ async function fetchOwnerOfItemNeo3NftSkin(account: IAccountState, nftSkin: TNft
   return address
 }
 
-export const useItemNeo3NftSkins = (account: IAccountState) => {
+export const useItemNeo3NftSkins = (account: TAccount) => {
   const { selectedNetwork } = useSelectedNetworkSelector(account.blockchain)
 
   return useQuery<TNftSkin[]>({
@@ -118,13 +118,11 @@ export const useLazyOwnershipOfItemNeo3NftSkin = () => {
   const queryClient = useQueryClient()
 
   const getOwnership = useCallback(
-    async (account: IAccountState, nftSkin: TNftSkin) => {
-      const data = await queryClient.ensureQueryData({
+    async (account: TAccount, nftSkin: TNftSkin) => {
+      return await queryClient.ensureQueryData({
         queryKey: ['nft-skin-owner', nftSkin.contractHash, nftSkin.id],
         queryFn: fetchOwnerOfItemNeo3NftSkin.bind(null, account, nftSkin),
       })
-
-      return data
     },
     [queryClient]
   )

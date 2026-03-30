@@ -8,18 +8,18 @@ import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { useSelectedNetworkByBlockchainSelector, useSelectedNetworkSelector } from './useSettingsSelector'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { TBaseOptions, TNode } from '@/types/query'
+import type { TBaseOptions, TPingNetwork } from '@/types/query'
 
-const buildNodesQueryKey = (blockchain: TBlockchainServiceKey, id: TBSNetworkId) => {
-  return ['nodes', blockchain, id]
+const buildPingNetworksQueryKey = (blockchain: TBlockchainServiceKey, id: TBSNetworkId) => {
+  return ['ping-networks', blockchain, id]
 }
 
-const pingNodes = async (blockchain: TBlockchainServiceKey): Promise<TNode[]> => {
+const pingNetworks = async (blockchain: TBlockchainServiceKey): Promise<TPingNetwork[]> => {
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
 
-  const promises = service.rpcNetworkUrls.map(async url => {
+  const promises = service.networkUrls.map(async url => {
     try {
-      return await service.pingNode(url)
+      return await service.pingNetwork(url)
     } catch {
       return { height: undefined, latency: undefined, url }
     }
@@ -28,47 +28,45 @@ const pingNodes = async (blockchain: TBlockchainServiceKey): Promise<TNode[]> =>
   const data = await Promise.all(promises)
 
   return data.sort((a, b) => {
-    // Prioritize successful requests over failed ones
-    if (a && !b) return -1
-    if (!a && b) return 1
+    const latencyA = a.latency
+    const latencyB = b.latency
+    const isLatencyAInvalid = typeof latencyA !== 'number' || isNaN(latencyA)
+    const isLatencyBInvalid = typeof latencyB !== 'number' || isNaN(latencyB)
 
-    // If both failed, maintain original order
-    if (!a && !b) return 0
-
-    // Both successful - sort by latency (ascending)
-    const latencyA = a?.latency ?? Infinity
-    const latencyB = b?.latency ?? Infinity
+    if (isLatencyAInvalid && isLatencyBInvalid) return 0
+    if (isLatencyAInvalid) return 1
+    if (isLatencyBInvalid) return -1
 
     return latencyA - latencyB
   })
 }
 
-export const usePingNodes = (blockchain: TBlockchainServiceKey, queryOptions?: TBaseOptions<TNode[]>) => {
+export const usePingNetworks = (blockchain: TBlockchainServiceKey, queryOptions?: TBaseOptions<TPingNetwork[]>) => {
   const { selectedNetwork } = useSelectedNetworkSelector(blockchain)
 
   return useQuery({
-    queryKey: buildNodesQueryKey(blockchain, selectedNetwork.id),
-    queryFn: pingNodes.bind(null, blockchain),
+    queryKey: buildPingNetworksQueryKey(blockchain, selectedNetwork.id),
+    queryFn: pingNetworks.bind(null, blockchain),
     ...queryOptions,
   })
 }
 
-export const useLazyPingNodes = () => {
+export const useLazyPingNetworks = () => {
   const queryClient = useQueryClient()
   const { selectedNetworkByBlockchainRef } = useSelectedNetworkByBlockchainSelector()
 
-  const getPingNodes = useCallback(
+  const getPingNetworks = useCallback(
     async (blockchain: TBlockchainServiceKey) => {
       const selectedNetwork = selectedNetworkByBlockchainRef.current[blockchain]
 
       return await queryClient.ensureQueryData({
-        queryKey: buildNodesQueryKey(blockchain, selectedNetwork.id),
-        queryFn: pingNodes.bind(null, blockchain),
+        queryKey: buildPingNetworksQueryKey(blockchain, selectedNetwork.id),
+        queryFn: pingNetworks.bind(null, blockchain),
         staleTime: 0,
       })
     },
     [queryClient, selectedNetworkByBlockchainRef]
   )
 
-  return { getPingNodes }
+  return { getPingNetworks }
 }

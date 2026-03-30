@@ -67,7 +67,7 @@ export const BridgeNeo3NeoXConfirmationModal = ({
         <Details.Body>
           <Details.Item label={t('wantBridgeLabel')} contentClassName="justify-start">
             <BlockchainIconWithLabel token={tokenToUse} blockchain={tokenToUse.blockchain} />
-            <TbArrowRight aria-hidden className="mt-0.5 h-5 w-5 text-orange" />
+            <TbArrowRight aria-hidden className="mt-0.5 size-5 text-orange" />
             <BlockchainIconWithLabel token={tokenToReceive} blockchain={tokenToReceive.blockchain} />
           </Details.Item>
 

@@ -38,7 +38,7 @@ export class SkinHelper {
   static getSkinColor(index?: number) {
     const newIndex = index ?? NumberHelper.getRandomNumber(this.accountColorSkinsSet.size)
     const colors = Array.from(this.accountColorSkinsSet.values())
-    return colors[newIndex] ?? colors[0]
+    return colors[newIndex] || colors[0]
   }
 
   static isColorSkin(value: string) {

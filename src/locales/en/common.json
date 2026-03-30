@@ -10,10 +10,10 @@
       "id": "Base",
       "label": "Base"
     },
-    "bnb": {
-      "accountName": "BNB Account",
-      "id": "BNB",
-      "label": "BNB"
+    "bitcoin": {
+      "accountName": "Bitcoin Account",
+      "id": "Bitcoin",
+      "label": "Bitcoin"
     },
     "ethereum": {
       "accountName": "Ethereum Account",
@@ -76,6 +76,7 @@
     "disconnect": "Disconnect",
     "done": "Done",
     "edit": "Edit",
+    "emptyData": "--",
     "errorOpenLink": "There is a problem opening this link",
     "next": "Next",
     "no": "No",
@@ -94,7 +95,7 @@
       "disconnectFirst": "Please disconnect the currently connected hardware wallet first",
       "hardwareWalletIsNotConnectOrUnlocked": "Hardware wallet isn't connected or is locked, verify your device and try again",
       "hardwareWalletNotFound": "There is no hardware wallet connected",
-      "missingBip44Path": "BIP44 path is missing for the hardware wallet account"
+      "missingBipPath": "BIP path is missing for the hardware wallet account"
     }
   },
   "overTheAir": {

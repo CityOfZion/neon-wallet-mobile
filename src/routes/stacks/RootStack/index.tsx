@@ -85,8 +85,8 @@ export const RootStack = () => {
         />
 
         <RootNavigator.Screen
-          name="NodeSelectionModal"
-          getComponent={() => require('@/routes/modals/NodeSelectionModal').NodeSelectionModal}
+          name="NetworkUrlSelectionModal"
+          getComponent={() => require('@/routes/modals/NetworkUrlSelectionModal').NetworkUrlSelectionModal}
         />
         <RootNavigator.Screen
           name="EditAccountModal"

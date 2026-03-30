@@ -57,7 +57,7 @@ export const AccountTransactionsScreenTransactionItem = React.memo(({ transactio
   }))
 
   const isBridgeNeo3NeoX = transaction.type === 'bridgeNeo3NeoX'
-  const feeBn = BSBigNumberHelper.fromNumber(transaction.networkFeeAmount ?? 0).plus(transaction.systemFeeAmount ?? 0)
+  const feeBn = BSBigNumberHelper.fromNumber(transaction.networkFeeAmount || 0).plus(transaction.systemFeeAmount || 0)
 
   const handleGoSwapDetails = () => {
     if (!swapRecord) return
@@ -163,13 +163,13 @@ export const AccountTransactionsScreenTransactionItem = React.memo(({ transactio
             icon={<TbCoin aria-hidden />}
             value={feeBn.toString()}
             label={t('feeTooltipLabel', {
-              networkFee: transaction.networkFeeAmount,
-              systemFee: transaction.systemFeeAmount,
+              networkFee: transaction.networkFeeAmount || '0',
+              systemFee: transaction.systemFeeAmount || '0',
             })}
           />
         )}
 
-        {transaction.block > 0 && (
+        {typeof transaction.block === 'number' && (
           <AccountTransactionsScreenCardDetails
             icon={<TbCube aria-hidden />}
             value={transaction.block}
@@ -177,7 +177,7 @@ export const AccountTransactionsScreenTransactionItem = React.memo(({ transactio
           />
         )}
 
-        {transaction.invocationCount > 0 && (
+        {typeof transaction.invocationCount === 'number' && (
           <AccountTransactionsScreenCardDetails
             icon={<TbCodeCircle aria-hidden />}
             value={transaction.invocationCount}
@@ -185,7 +185,7 @@ export const AccountTransactionsScreenTransactionItem = React.memo(({ transactio
           />
         )}
 
-        {transaction.notificationCount > 0 && (
+        {typeof transaction.notificationCount === 'number' && (
           <AccountTransactionsScreenCardDetails
             icon={<TbBell aria-hidden />}
             value={transaction.notificationCount}
@@ -194,7 +194,8 @@ export const AccountTransactionsScreenTransactionItem = React.memo(({ transactio
         )}
       </View>
 
-      {transaction.events.length > 0 && (
+      {/* TODO: add UTXO layout */}
+      {transaction.view === 'default' && transaction.events.length > 0 && (
         <View className="mt-4 gap-6">
           {transaction.events.map((event, index) => (
             <AccountTransactionsScreenTransferItem

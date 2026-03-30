@@ -34,12 +34,12 @@ import { functionByNotificationActionType } from './functionByNotificationAction
 
 import { notificationReducerActions } from '@/store/reducers/notification'
 import type { TMoreStackScreenProps } from '@/types/stacks'
-import type { IAccountState, TNotification, TNotificationPriority } from '@/types/store'
+import type { TAccount, TNotification, TNotificationPriority } from '@/types/store'
 
 type TItem = {
   notification: TNotification
   localizedDate: string
-  relatedAccount?: IAccountState
+  relatedAccount?: TAccount
   onPress(notification: TNotification): void
   onMorePress(notification: TNotification): void
 }
@@ -65,7 +65,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
     >
       {cloneElement(icon, {
         'aria-hidden': true,
-        className: StyleHelper.mergeStyles(icon.props?.className, 'w-5 h-5 mt-7', {
+        className: StyleHelper.mergeStyles(icon.props?.className, 'size-5 mt-7', {
           'text-gray-300': item.notification.read,
         }),
       })}
@@ -203,7 +203,7 @@ export const NotificationsScreen = ({ navigation }: TMoreStackScreenProps<'Notif
     <TwScreenLayout title={t('title')} contentContainerClassName="items-center" withoutScroll onBack={handleBack}>
       {!items.length ? (
         <Fragment>
-          <TbBell className="mt-20 h-28 w-28 stroke-1 text-gray-300" aria-hidden />
+          <TbBell className="mt-20 size-28 stroke-1 text-gray-300" aria-hidden />
           <Text className="mt-7 font-sans-medium text-2xl text-white">{t('emptyListTitle')}</Text>
           <Text className="mt-3.5 font-sans-regular text-lg text-gray-100">{t('emptyListBody')}</Text>
         </Fragment>

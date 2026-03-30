@@ -20,7 +20,7 @@ import { BuyAndSellTokensIframeContent } from './BuyAndSellTokensIframeContent'
 
 import type { TTokenSelectionModalToken } from '@/types/modals'
 import type { TWalletsStackScreenProps } from '@/types/stacks'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 export type TDepositActionsData = {
   amount: string
@@ -29,7 +29,7 @@ export type TDepositActionsData = {
   isFeeLoading: boolean
   fee?: string
   token?: TTokenSelectionModalToken
-  account?: IAccountState
+  account?: TAccount
 }
 
 export enum EBuyAndSellTokensScreenTabValue {
@@ -38,10 +38,10 @@ export enum EBuyAndSellTokensScreenTabValue {
 }
 
 export const BuyAndSellTokensScreen = ({ navigation, route }: TWalletsStackScreenProps<'BuyAndSellTokensScreen'>) => {
-  const { account, screenType } = route.params ?? {}
+  const { account, screenType } = route.params || {}
 
   const { t } = useTranslation('screens', { keyPrefix: 'buyAndSellTokensScreen' })
-  const [tabValue, setTabValue] = useState(screenType ?? EBuyAndSellTokensScreenTabValue.BUY_TOKENS)
+  const [tabValue, setTabValue] = useState(screenType || EBuyAndSellTokensScreenTabValue.BUY_TOKENS)
   const [depositActionsData, setDepositActionsData] = useState<TDepositActionsData | null>(null)
   const nextActionRef = useRef<NavigationAction | null>(null)
 

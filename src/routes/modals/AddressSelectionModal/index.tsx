@@ -26,7 +26,7 @@ export const AddressSelectionModal = ({ navigation, route }: TRootStackScreenPro
   }
 
   return (
-    <TwModalLayout title={title ?? t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
+    <TwModalLayout title={title || t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
       <TwTabs.Root value={value} onValueChange={setValue} className="mt-5 flex-grow">
         <TwTabs.List>
           <TwTabs.Trigger value="address" label={t('addressTabLabel')} />

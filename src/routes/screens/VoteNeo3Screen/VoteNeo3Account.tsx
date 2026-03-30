@@ -11,12 +11,12 @@ import { StyleHelper } from '@/helpers/StyleHelper'
 
 import MdCircle from '@/assets/images/md-circle.svg'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
-  neo3Account?: IAccountState
+  neo3Account?: TAccount
   isDisabled: boolean
-  onSelect(neo3Account: IAccountState): void
+  onSelect(neo3Account: TAccount): void
 }
 
 export const VoteNeo3Account = ({ neo3Account, isDisabled, onSelect }: TProps) => {
@@ -34,7 +34,7 @@ export const VoteNeo3Account = ({ neo3Account, isDisabled, onSelect }: TProps) =
   return (
     <View className="flex w-full flex-row gap-x-2">
       <MdCircle
-        className="mt-1 h-3.5 w-3.5 text-neon"
+        className="mt-1 size-3.5 text-neon"
         style={
           neo3Account?.skin?.type === 'color' && !!neo3Account?.skin?.id
             ? ({ color: neo3Account.skin.id } as StyleProp<ViewStyle>)

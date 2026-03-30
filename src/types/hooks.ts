@@ -1,7 +1,7 @@
 import type { ImageURISource } from 'react-native'
 
 import type { TBlockchainServiceKey } from './blockchain'
-import type { IAccountState, IWalletState, TAccountType, TSkin, TWalletBackupStatus, TWalletType } from './store'
+import type { TAccount, TAccountType, TSkin, TWallet, TWalletBackupStatus, TWalletType } from './store'
 
 export type TUseActionsData = Record<string, any>
 
@@ -27,7 +27,7 @@ export type TUseActionsOptions = {
 export type TUseImportAccountParams = {
   address: string
   blockchain: TBlockchainServiceKey
-  wallet: IWalletState
+  wallet: TWallet
   type: TAccountType
   skin?: TSkin
   key?: string
@@ -36,12 +36,12 @@ export type TUseImportAccountParams = {
 }
 
 export type TUseImportAccountsParams = {
-  wallet: IWalletState
+  wallet: TWallet
   accountsToImport: Omit<TUseImportAccountParams, 'wallet'>[]
 }
 
 export type TUseCreateAccountParams = {
-  wallet: IWalletState
+  wallet: TWallet
   name?: string
   id?: string
   blockchain: TBlockchainServiceKey
@@ -56,13 +56,13 @@ export type TUseCreateWalletParams = {
 }
 
 export type TUseEditAccountParams = {
-  account: IAccountState
-  data: Partial<Omit<IAccountState, 'id'>> & { key?: string }
+  account: TAccount
+  data: Partial<Omit<TAccount, 'id'>> & { key?: string }
 }
 
 export type TUseEditWalletParams = {
-  wallet: IWalletState
-  data: Partial<Omit<IWalletState, 'id'>> & { mnemonic?: string }
+  wallet: TWallet
+  data: Partial<Omit<TWallet, 'id'>> & { mnemonic?: string }
 }
 
 export type TUseImportActionInputType = 'key' | 'mnemonic' | 'encrypted' | 'address'
