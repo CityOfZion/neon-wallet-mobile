@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useTranslation } from 'react-i18next'
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 
 import { BlockchainList } from '@/components/BlockchainList'
 import { TwButton } from '@/components/TwButton'
@@ -36,19 +36,20 @@ export const BlockchainSelectionModal = ({ route }: TRootStackScreenProps<'Block
   }
 
   return (
-    <TwModalLayout title={title || t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
+    <TwModalLayout title={title || t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
       {description && <Text className="mb-6 text-center font-sans-medium text-lg text-white">{description}</Text>}
 
       <BlockchainList onSelect={handleSelect} selectedBlockchains={actionData.blockchains} isMulti={isMulti} />
 
-      <TwButton
-        className="mb-4 mt-auto"
-        variant="contained-light"
-        label={commonT('general.continue')}
-        disabled={!actionData.blockchains.length}
-        onPress={handleAct(handleSubmit)}
-        {...buttonProps}
-      />
+      <View className="mt-auto py-4">
+        <TwButton
+          variant="contained-light"
+          label={commonT('general.continue')}
+          disabled={!actionData.blockchains.length}
+          onPress={handleAct(handleSubmit)}
+          {...buttonProps}
+        />
+      </View>
     </TwModalLayout>
   )
 }
